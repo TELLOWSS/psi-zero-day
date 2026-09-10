@@ -1,0 +1,12 @@
+# PSI : ZERO DAY — 개발 기본 규칙
+
+- Lead Software Engineer는 Director의 명세를 구현한다. 세계관·게임성·캐릭터·스토리·아트·교육철학은 Director 소유다.
+- 모호하거나 충돌하는 기획은 추측하지 말고 TODO/Director 확인사항으로 남긴다. 다음 TASK를 임의로 시작하지 않는다.
+- TypeScript + Vite + React. Phaser는 presentation 전용이다. Game Logic과 GameState 변경은 순수 TypeScript domain/engine만 소유한다.
+- UI/Phaser에 규칙·본편 콘텐츠·GameState 변경을 넣지 않는다. domain/engine은 React, Phaser, Zod, 브라우저, 저장소 API에 의존하지 않는다.
+- 텍스트는 localization의 text_id를 참조한다. 기본 화면은 16:9 Landscape. 시간 기준은 day + PRE_WORK/MORNING/AFTERNOON/EVENING이며 display_time은 표시용이다.
+- Offline-first, 향후 Capacitor Android. ECS·event sourcing·plugin framework·backend·cloud save는 도입하지 않는다.
+- Career/Dark Path/PSI의 공식·임계치는 확정 전 구현하지 않는다. LIFE ARCHIVE 1차 범위는 엔딩/CG/주요 기록 해금이다.
+- TASK-001 범위는 foundation이다. 실제 캐릭터·이벤트·Episode 01·Phaser 장면·Android 빌드는 금지한다. fixture는 tests 안의 최소 합성 데이터로 제한한다.
+- 검증: npm test, npm run typecheck. 실행 기반 변경은 npm run build와 개발 서버 로딩도 확인한다.
+- 완료보고는 IMPLEMENTED / FILES / TEST / TODO / DIRECTOR REVIEW 다섯 항목만 짧게 작성한다.
