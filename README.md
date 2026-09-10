@@ -49,6 +49,6 @@ RNG 알고리즘 ID는 `mulberry32-v1`. seed는 uint32(0 포함)이며 snapshot�
 - Android는 방향만 유지한다. 네이티브 android/ 프로젝트, Capacitor 플러그인, 장면 연출을 생성하지 않았다.
 - CoreEngine은 동결된 GameState를 소유하고 dispatch로만 교체한다. UI 연결은 이번 범위 밖이다. typecheck는 React/DOM/Node 타입 없이 domain/engine만 별도 검사한다.
 
-사용 계약과 미확정 사항은 [TASK-002 기록](docs/TASK-002.md)에 정리했다. 본편 초기값·공정 수치 범위·게임 공식은 지정하지 않는다.
+사용 계약과 미확정 사항은 [TASK-002 기록](docs/TASK-002.md), 정의/Runtime 분리와 완료 이력 변경은 [TASK-002A 기록](docs/TASK-002A.md)에 정리했다. 본편 초기값·공정 수치 범위·게임 공식은 지정하지 않는다.
 
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).

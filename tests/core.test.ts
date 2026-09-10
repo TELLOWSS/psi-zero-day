@@ -23,7 +23,9 @@ describe('initialization and clock', () => {
     expect(state.characters['fixture.a']?.stats).not.toBe(content.characters[0]?.stats);
     expect(state.audio).not.toBe(config.audio);
     expect(Object.isFrozen(state.characters['fixture.a']?.stats)).toBe(true);
-    expect(() => createRun(content, { ...config, character_runtime: {} }, bounds)).toThrow('baseline');
+    const invalid = validFixture();
+    const { initial_state: _initial, ...withoutInitial } = invalid.characters[0]!;
+    expect(() => new ContentRegistry({ ...invalid, characters: [withoutInitial, invalid.characters[1]!] })).toThrow();
     expect(() => createRun(content, config, {})).toThrow('bounds');
   });
   it('advances four slots and rolls into next DAY without display_time math', () => {
@@ -79,6 +81,7 @@ describe('read-only conditions', () => {
     const { state } = runtimeFixture();
     const history: GameState = { ...state, event_runtime: { ...state.event_runtime,
       occurrence_history: [{ event_id: 'fixture.event', instance_id: 'old', occurred_at: state.clock }],
+      completion_history: [{ event_id: 'fixture.event', instance_id: 'old', completed_at: state.clock }],
       choice_history: [{ instance_id: 'old', choice_id: 'choose' }, { instance_id: 'old', choice_id: 'choose' }] } };
     expect(evaluateCondition(history, { kind: 'event_completed', event_id: 'fixture.event', minimum_count: 1 })).toBe(true);
     expect(evaluateCondition(history, { kind: 'choice_selected', event_id: 'fixture.event', choice_id: 'choose', minimum_count: 1 })).toBe(true);

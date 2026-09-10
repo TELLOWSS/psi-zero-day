@@ -15,6 +15,13 @@ export interface CharacterDefinition {
   readonly appearance_conditions: readonly Condition[];
   readonly exit_conditions: readonly Condition[];
   readonly asset_bindings: Readonly<Record<Id, Id>>;
+  readonly initial_state: {
+    readonly morale: number;
+    readonly fatigue: number;
+    readonly availability: { readonly available: boolean; readonly reason_text_id?: TextId };
+    readonly revealed_fields: readonly Id[];
+    readonly story_flags?: FlagMap;
+  };
 }
 
 export interface CharacterState {
@@ -32,6 +39,18 @@ export interface CharacterState {
 }
 
 /** Directed relation: A -> B and B -> A are separate records. */
+export interface RelationDefinition {
+  readonly from_id: Id;
+  readonly to_id: Id;
+  readonly initial_state: {
+    readonly relationship_values: StatMap;
+    readonly trust: number;
+    readonly respect: number;
+    readonly reporting: number;
+    readonly flags: FlagMap;
+  };
+}
+
 export interface RelationState {
   readonly from_id: Id;
   readonly to_id: Id;
@@ -147,7 +166,7 @@ export interface ContentBundle {
   readonly default_locale: string;
   readonly localizations: readonly LocalizationCatalog[];
   readonly characters: readonly CharacterDefinition[];
-  readonly relations: readonly RelationState[];
+  readonly relations: readonly RelationDefinition[];
   readonly events: readonly EventDefinition[];
   readonly endings: readonly EndingRule[];
   readonly asset_manifest: AssetManifest;

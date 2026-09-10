@@ -23,9 +23,10 @@ export function validFixture(): Mutable<ContentBundle> {
       trade_text_id: 'fixture.text', age_group_text_id: 'fixture.text', nationality_text_id: 'fixture.text',
       experience: 0, stats: { test_stat: 0 }, traits: [], weaknesses: [],
       appearance_conditions: [], exit_conditions: [], asset_bindings: { base: 'fixture.image' },
+      initial_state: { morale: 0, fatigue: 0, availability: { available: true }, revealed_fields: [] },
     })),
-    relations: [{ from_id: 'fixture.a', to_id: 'fixture.b', relationship_values: {},
-      trust: 0, respect: 0, reporting: 0, flags: {}, history: [] }],
+    relations: [{ from_id: 'fixture.a', to_id: 'fixture.b', initial_state: { relationship_values: {},
+      trust: 0, respect: 0, reporting: 0, flags: {} } }],
     events: [{
       ...nextEvent, event_id: 'fixture.event',
       participants: [{ role_id: 'subject', character_id: 'fixture.a' }],

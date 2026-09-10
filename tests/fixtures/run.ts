@@ -17,7 +17,6 @@ export function runOptions(seed = 42): NewRunOptions {
     player: { character_id: 'fixture.b', archetype_id: 'test.type', health: 10, fatigue: 0, stress: 0,
       money: 0, family: {}, company_evaluation: 0, reputation: 0, integrity: 0,
       career: { flags: {}, values: {} }, dark_path: { flags: {}, values: {} }, legal_status: {}, safety_record: {} },
-    character_runtime: { 'fixture.a': { morale: 0, fatigue: 0, availability: { available: true }, revealed_fields: [] } },
     construction: { stage_id: 'FOUNDATION', progress_by_stage: { FOUNDATION: 10 }, milestones: [] },
     audio: { bgm: null, ambience: [], sfx_bus: [], event_bus: [],
       volumes: { master: 1, bgm: 1, ambience: 1, sfx: 1, event: 1 }, muted: false, suspended: false },

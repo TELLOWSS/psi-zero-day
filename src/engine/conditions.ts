@@ -35,7 +35,7 @@ export function evaluateCondition(state: GameState, condition: Condition): boole
     case 'relation': return compare(getRelation(state.relations, c.from_id, c.to_id)?.[c.field], c.operator, c.value);
     case 'construction_stage': return compare(canonicalStage(state.construction.stage_id), c.operator, canonicalStage(c.stage_id));
     case 'construction_progress': return compare(getProgress(state.construction, c.stage_id), c.operator, c.value);
-    case 'event_completed': return new Set(state.event_runtime.occurrence_history
+    case 'event_completed': return new Set(state.event_runtime.completion_history
       .filter(e => e.event_id === c.event_id).map(e => e.instance_id)).size >= c.minimum_count;
     case 'choice_selected': {
       const occurrences = new Set(state.event_runtime.occurrence_history.filter(e => e.event_id === c.event_id).map(e => e.instance_id));

@@ -83,8 +83,9 @@ describe('ContentRegistry', () => {
 
   it('keeps directional relations independent and rejects duplicate directed pairs', () => {
     const input = validFixture();
-    input.relations.push({ ...input.relations[0]!, from_id: 'fixture.b', to_id: 'fixture.a', trust: 3 });
-    expect(new ContentRegistry(input).bundle.relations.map(r => r.trust)).toEqual([0, 3]);
+    input.relations.push({ ...input.relations[0]!, from_id: 'fixture.b', to_id: 'fixture.a',
+      initial_state: { ...input.relations[0]!.initial_state, trust: 3 } });
+    expect(new ContentRegistry(input).bundle.relations.map(r => r.initial_state.trust)).toEqual([0, 3]);
     input.relations.push(structuredClone(input.relations[0]!));
     expect(() => new ContentRegistry(input)).toThrow('Duplicate ID');
   });

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { TIME_SLOTS, CORE_STAGES, CONSTRUCTION_STAGES } from '../domain';
 import type {
   AssetManifest, CharacterDefinition, Condition, ContentBundle, Effect, EffectBundle,
-  EndingRule, EventDefinition, FollowUpDefinition, GameTime, LocalizationCatalog, RelationState,
+  EndingRule, EventDefinition, FollowUpDefinition, GameTime, LocalizationCatalog, RelationState, RelationDefinition,
 } from '../domain';
 
 export const idSchema = z.string().regex(/^[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*$/);
@@ -68,6 +68,15 @@ export const characterDefinitionSchema: z.ZodType<CharacterDefinition> = z.stric
   traits: z.array(textIdSchema), weaknesses: z.array(textIdSchema),
   appearance_conditions: conditions, exit_conditions: conditions,
   asset_bindings: z.record(idSchema, idSchema),
+  initial_state: z.strictObject({
+    morale: finite, fatigue: finite,
+    availability: z.strictObject({ available: z.boolean(), reason_text_id: textIdSchema.optional() }),
+    revealed_fields: z.array(idSchema), story_flags: flags.optional(),
+  }),
+});
+export const relationDefinitionSchema: z.ZodType<RelationDefinition> = z.strictObject({
+  from_id: idSchema, to_id: idSchema,
+  initial_state: z.strictObject({ relationship_values: stats, trust: finite, respect: finite, reporting: finite, flags }),
 });
 export const relationStateSchema: z.ZodType<RelationState> = z.strictObject({
   from_id: idSchema, to_id: idSchema, relationship_values: stats,
@@ -112,7 +121,7 @@ export const localizationCatalogSchema: z.ZodType<LocalizationCatalog> = z.stric
 export const contentBundleSchema: z.ZodType<ContentBundle> = z.strictObject({
   schema_version: z.literal(1), content_version: z.string().min(1), default_locale: locale,
   localizations: z.array(localizationCatalogSchema).min(1),
-  characters: z.array(characterDefinitionSchema), relations: z.array(relationStateSchema),
+  characters: z.array(characterDefinitionSchema), relations: z.array(relationDefinitionSchema),
   events: z.array(eventDefinitionSchema), endings: z.array(endingRuleSchema),
   asset_manifest: assetManifestSchema,
 });

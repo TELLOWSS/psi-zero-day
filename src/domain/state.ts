@@ -65,6 +65,8 @@ export interface GameState {
       readonly node_id: Id; readonly participant_bindings: Readonly<Record<Id, Id>> } | null;
     readonly occurrence_history: readonly { readonly instance_id: Id; readonly event_id: Id;
       readonly occurred_at: GameTime }[];
+    readonly completion_history: readonly { readonly instance_id: Id; readonly event_id: Id;
+      readonly completed_at: GameTime }[];
     readonly choice_history: readonly { readonly instance_id: Id; readonly choice_id: Id }[];
     readonly applied_effect_ids: readonly Id[];
   };

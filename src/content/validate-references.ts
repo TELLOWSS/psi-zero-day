@@ -18,6 +18,12 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
     if (id !== undefined && !ids.has(id)) error(path, `Unknown reference: ${id}`);
   }
   const characters = index(bundle.characters.map(x => x.id), 'characters');
+  const directedRelations = index(bundle.relations.map(r => `${r.from_id}->${r.to_id}`), 'relations');
+  function relation(from: string, to: string, path: string) {
+    ref(characters, from, `${path}.from_id`);
+    ref(characters, to, `${path}.to_id`);
+    if (!directedRelations.has(`${from}->${to}`)) error(path, `Unknown directed relation: ${from}->${to}`);
+  }
   const events = index(bundle.events.map(x => x.event_id), 'events');
   index(bundle.endings.map(x => x.ending_id), 'endings');
   const assets = index(bundle.asset_manifest.assets.map(x => x.asset_id), 'asset_manifest.assets');
@@ -40,7 +46,7 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
       case 'stat': stat(c.character_id, c.stat_id, path); break;
       case 'event_completed': ref(events, c.event_id, `${path}.event_id`); break;
       case 'relation':
-        ref(characters, c.from_id, `${path}.from_id`); ref(characters, c.to_id, `${path}.to_id`); break;
+        relation(c.from_id, c.to_id, path); break;
       case 'choice_selected': {
         ref(events, c.event_id, `${path}.event_id`);
         const choices = new Set(bundle.events.find(e => e.event_id === c.event_id)?.choices.map(v => v.choice_id) ?? []);
@@ -57,7 +63,7 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
       case 'stat': stat(e.character_id, e.stat_id, path); break;
       case 'reveal': ref(characters, e.character_id, `${path}.character_id`); break;
       case 'relation':
-        ref(characters, e.from_id, `${path}.from_id`); ref(characters, e.to_id, `${path}.to_id`); break;
+        relation(e.from_id, e.to_id, path); break;
       case 'flag': break;
     }
   }
@@ -79,16 +85,15 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
     }
     c.traits.forEach((id, n) => text(id, `${p}.traits[${n}]`));
     c.weaknesses.forEach((id, n) => text(id, `${p}.weaknesses[${n}]`));
+    const reason = c.initial_state.availability.reason_text_id;
+    if (reason !== undefined) text(reason, `${p}.initial_state.availability.reason_text_id`);
     conditions(c.appearance_conditions, `${p}.appearance_conditions`);
     conditions(c.exit_conditions, `${p}.exit_conditions`);
     for (const [key, id] of Object.entries(c.asset_bindings)) ref(imageAssets, id, `${p}.asset_bindings.${key}`);
   });
-  index(bundle.relations.map(r => `${r.from_id}->${r.to_id}`), 'relations');
   bundle.relations.forEach((r, i) => {
     ref(characters, r.from_id, `relations[${i}].from_id`);
     ref(characters, r.to_id, `relations[${i}].to_id`);
-    // Initial content cannot contain runtime event-instance history.
-    if (r.history.length) error(`relations[${i}].history`, 'Initial relation history must be empty');
   });
   function event(e: EventDefinition, i: number) {
     const p = `events[${i}]`;

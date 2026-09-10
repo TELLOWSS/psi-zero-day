@@ -6,7 +6,7 @@
 
 `ContentRegistry.getValidatedContent()` → `createRun(content, options, bounds)` → `new CoreEngine(state, content, bounds)` 순서다. Registry가 만든 검증 타입을 통해 콘텐츠 입력 경계를 표시한다. engine은 Zod/React/DOM/저장소를 import하지 않는다.
 
-초기화는 run_id, seed, rules_version, playthrough, clock, 플레이어 기본 수치, NPC morale/fatigue/availability/공개 정보, 공정 초기값·범위, audio 설정을 명시적으로 받는다. 정의에서 stats/experience/traits/weaknesses와 초기 관계를 복사한다. seed로 능력치 보정이나 게임 공식을 만들지 않는다. 같은 콘텐츠·설정·seed에서 같은 결과를 반환한다.
+초기화는 run_id, seed, rules_version, playthrough, clock, 플레이어 기본 수치, 공정 초기값·범위, audio 설정을 명시적으로 받는다. TASK-002A부터 NPC morale/fatigue/availability/공개 정보는 CharacterDefinition.initial_state에서 읽고, RelationDefinition.initial_state에서 새 관계 Runtime을 생성한다. 정의에서 stats/experience/traits/weaknesses를 복사한다. seed로 능력치 보정이나 게임 공식을 만들지 않는다. 같은 콘텐츠·설정·seed에서 같은 결과를 반환한다.
 
 선택한 플레이어 정의의 stats는 PlayerState만 소유하고 characters에는 NPC만 담는다. 기존 `stat` 연산이 플레이어 ID를 가리키면 PlayerState.stats를 사용하여 중복 상태를 만들지 않는다. NPC 정보 해금은 revealed_fields에 저장한다. Career/Dark Path/PSI는 계산하지 않는다.
 
@@ -16,7 +16,7 @@
 
 - Clock: PRE_WORK → MORNING → AFTERNOON → EVENING → 다음 DAY PRE_WORK. day는 기존 스키마와 같은 1 이상 정수이고 안전한 정수 범위를 검사한다. display_time은 계산하지 않는다. 주/월 없음.
 - Condition: 기존 all/any/not/flag/stat/event_completed를 유지하고 player_stat/relation/construction_stage/construction_progress/choice_selected/compare/flag_compare를 추가했다. eq/ne는 타입이 같은 숫자·문자열·불리언, 순서 비교는 유한 숫자에 적용한다. 누락·타입 불일치는 false. 빈 all=true, any=false. 조건은 상태를 수정하지 않는다.
-- History: 기존 occurrence_history를 event_completed의 기록 원천으로 사용한다. choice_selected는 occurrence_history의 event_id와 choice_history의 instance_id를 연결한다. 동일 인스턴스 중복 기록은 한 번만 센다. 이 TASK는 이력 작성이나 실제 이벤트 완료 처리를 하지 않는다.
+- History: TASK-002A부터 event_completed는 completion_history만 읽는다. occurrence_history는 발생/시작, completion_history는 정상 완료 기록이다. choice_selected는 occurrence_history의 event_id와 choice_history의 instance_id를 연결한다. 동일 인스턴스 중복 기록은 한 번만 센다. 실제 완료 기록 작성은 TASK-003 범위이며 아직 구현하지 않았다.
 - Effects: player_stat/stat/relation/flag/flag_change/reveal/construction_progress와 기존 EffectBundle.followup_events를 실행한다. flag_change는 기존 숫자 플래그의 delta 변경이다. 없는 stat/관계/숫자 플래그에 임의 기준값을 생성하지 않는다.
 - 관계: from_id→to_id 정확한 한 레코드만 변경한다. trust/respect/reporting 이외 공식·자동 역방향 변화는 없다.
 - 공정: bounds의 min/max를 호출자가 제공해야 한다. 범위 초과·비유한 결과는 실패하며 자동 clamp·단계 전환을 하지 않는다. 테스트의 0~100은 fixture 전용이다.
