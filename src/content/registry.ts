@@ -1,4 +1,4 @@
-import type { ContentBundle } from '../domain';
+import type { ContentBundle, ValidatedContent } from '../domain';
 import { contentBundleSchema } from './schemas';
 import { validateReferences } from './validate-references';
 import type { ReferenceIssue } from './validate-references';
@@ -39,6 +39,7 @@ export class ContentRegistry {
   }
 
   getCharacter(id: string) { return this.#characters.get(id); }
+  getValidatedContent(): ValidatedContent { return this.bundle as ValidatedContent; }
   getEvent(id: string) { return this.#events.get(id); }
   getEnding(id: string) { return this.#endings.get(id); }
   getAsset(id: string) { return this.#assets.get(id); }

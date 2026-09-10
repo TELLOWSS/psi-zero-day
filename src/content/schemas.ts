@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TIME_SLOTS } from '../domain';
+import { TIME_SLOTS, CORE_STAGES, CONSTRUCTION_STAGES } from '../domain';
 import type {
   AssetManifest, CharacterDefinition, Condition, ContentBundle, Effect, EffectBundle,
   EndingRule, EventDefinition, FollowUpDefinition, GameTime, LocalizationCatalog, RelationState,
@@ -13,6 +13,8 @@ const flagValue = z.union([z.boolean(), finite, z.string()]);
 const flags = z.record(idSchema, flagValue);
 const stats = z.record(idSchema, finite);
 const locale = z.string().regex(/^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/);
+const operator = z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte']);
+const stage = z.enum([...CORE_STAGES, ...CONSTRUCTION_STAGES]);
 export const gameTimeSchema: z.ZodType<GameTime> = z.strictObject({
   day: z.number().int().min(1), slot: z.enum(TIME_SLOTS),
   display_time: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/).optional(),
@@ -23,9 +25,18 @@ export const conditionSchema: z.ZodType<Condition> = z.lazy(() => z.union([
   z.strictObject({ kind: z.literal('not'), condition: conditionSchema }),
   z.strictObject({ kind: z.literal('flag'), flag_id: idSchema, equals: flagValue }),
   z.strictObject({ kind: z.literal('stat'), character_id: idSchema, stat_id: idSchema,
-    operator: z.enum(['eq', 'gte', 'lte']), value: finite }),
+    operator, value: finite }),
   z.strictObject({ kind: z.literal('event_completed'), event_id: idSchema,
     minimum_count: z.number().int().min(1) }),
+  z.strictObject({ kind: z.literal('player_stat'), stat_id: idSchema, operator, value: finite }),
+  z.strictObject({ kind: z.literal('relation'), from_id: idSchema, to_id: idSchema,
+    field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite }),
+  z.strictObject({ kind: z.literal('construction_stage'), stage_id: stage, operator: z.enum(['eq', 'ne']) }),
+  z.strictObject({ kind: z.literal('construction_progress'), stage_id: stage, operator, value: finite }),
+  z.strictObject({ kind: z.literal('choice_selected'), event_id: idSchema, choice_id: idSchema,
+    minimum_count: z.number().int().min(1) }),
+  z.strictObject({ kind: z.literal('compare'), left: flagValue, operator, right: flagValue }),
+  z.strictObject({ kind: z.literal('flag_compare'), flag_id: idSchema, operator, value: flagValue }),
 ]));
 const conditions = z.array(conditionSchema);
 const statEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('stat'),
@@ -36,6 +47,9 @@ export const effectSchema: z.ZodType<Effect> = z.union([
   statEffect, relationEffect,
   z.strictObject({ effect_id: idSchema, kind: z.literal('flag'), flag_id: idSchema, value: flagValue }),
   z.strictObject({ effect_id: idSchema, kind: z.literal('reveal'), character_id: idSchema, field_id: idSchema }),
+  z.strictObject({ effect_id: idSchema, kind: z.literal('player_stat'), stat_id: idSchema, delta: finite }),
+  z.strictObject({ effect_id: idSchema, kind: z.literal('flag_change'), flag_id: idSchema, delta: finite }),
+  z.strictObject({ effect_id: idSchema, kind: z.literal('construction_progress'), stage_id: stage, delta: finite }),
 ]);
 export const followUpDefinitionSchema: z.ZodType<FollowUpDefinition> = z.strictObject({
   followup_id: idSchema, event_id: idSchema,

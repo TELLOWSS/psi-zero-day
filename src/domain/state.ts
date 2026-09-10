@@ -1,4 +1,4 @@
-import type { ConstructionStage, FlagMap, GameTime, Id, RngSnapshot, StatMap } from './common';
+import type { StageId, FlagMap, GameTime, Id, RngSnapshot, StatMap } from './common';
 import type { CharacterState, FollowUpEvent, RelationState } from './content';
 
 /** Opaque progression data only. No progression rules or initial values. */
@@ -54,8 +54,8 @@ export interface GameState {
     readonly task_id: Id; readonly delegated_to_id?: Id }[];
   readonly characters: Readonly<Record<Id, CharacterState>>;
   readonly relations: readonly RelationState[];
-  readonly construction: { readonly stage_id: ConstructionStage;
-    readonly progress_by_stage: Readonly<Partial<Record<ConstructionStage, number>>>;
+  readonly construction: { readonly stage_id: StageId;
+    readonly progress_by_stage: Readonly<Partial<Record<StageId, number>>>;
     readonly milestones: readonly Id[] };
   readonly psi: { readonly unlocked_node_ids: readonly Id[]; readonly progress: ProgressionState };
   readonly flags: FlagMap;

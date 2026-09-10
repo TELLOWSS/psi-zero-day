@@ -55,7 +55,7 @@ export interface FollowUpDefinition {
 export interface FollowUpEvent extends FollowUpDefinition {
   readonly instance_id: Id;
   readonly source_instance_id: Id;
-  readonly source_choice_id: Id;
+  readonly source_choice_id?: Id;
   readonly participant_bindings: Readonly<Record<Id, Id>>;
   readonly created_at: GameTime;
   readonly due_at: GameTime;
@@ -152,3 +152,7 @@ export interface ContentBundle {
   readonly endings: readonly EndingRule[];
   readonly asset_manifest: AssetManifest;
 }
+
+declare const validatedContent: unique symbol;
+/** Only ContentRegistry creates this compile-time validation proof. */
+export type ValidatedContent = ContentBundle & { readonly [validatedContent]: true };

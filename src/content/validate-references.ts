@@ -39,6 +39,13 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
       case 'not': condition(c.condition, `${path}.condition`); break;
       case 'stat': stat(c.character_id, c.stat_id, path); break;
       case 'event_completed': ref(events, c.event_id, `${path}.event_id`); break;
+      case 'relation':
+        ref(characters, c.from_id, `${path}.from_id`); ref(characters, c.to_id, `${path}.to_id`); break;
+      case 'choice_selected': {
+        ref(events, c.event_id, `${path}.event_id`);
+        const choices = new Set(bundle.events.find(e => e.event_id === c.event_id)?.choices.map(v => v.choice_id) ?? []);
+        ref(choices, c.choice_id, `${path}.choice_id`); break;
+      }
       case 'flag': break; // Open state keys; no flag catalog or game rule is invented here.
     }
   }
