@@ -1,0 +1,39 @@
+import { useState } from 'react';
+import type { CSSProperties } from 'react';
+import visuals from '../../content/episode01/visuals.json';
+
+interface Slot { uri: string | null; accent?: string }
+export function characterVisual(id: string): Slot | undefined {
+  return (visuals.characters as Record<string, Slot>)[id];
+}
+export function sceneVisual(chapter = 'foundation'): Slot | undefined {
+  return (visuals.backgrounds as Record<string, Slot>)[chapter];
+}
+export function textStyle(id: string): string | undefined {
+  return (visuals.text_styles as Record<string, string>)[id];
+}
+export function VisualImage({ uri, alt, className }: { uri?: string | null; alt: string; className?: string }) {
+  const [failed, setFailed] = useState<string | null>(null);
+  if (!uri || failed === uri) return null;
+  const src = /^(?:https?:|data:)/.test(uri) ? uri : `${import.meta.env.BASE_URL}${uri.replace(/^\/?(?:public\/)?/, '')}`;
+  return <img className={className} src={src} alt={alt} onError={() => setFailed(uri)} />;
+}
+export function CharacterCard({ person }: { person: { id: string; name: string; role: string } }) {
+  const visual = characterVisual(person.id);
+  return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={`${person.name} · ${person.role}`}>
+    <div className="portrait-slot">
+      <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
+      <VisualImage uri={visual?.uri} alt={person.name} className="portrait-image" />
+    </div>
+    <div className="character-identity"><span className="identity-rule" /><strong>{person.name}</strong><span>{person.role}</span></div>
+  </aside>;
+}
+
+/** CSS scene remains behind a future manifest image; failed/missing files never show a broken icon. */
+export function SiteScene({ chapter }: { chapter?: string }) {
+  return <div className="site-scene" aria-hidden="true">
+    <div className="site-horizon" /><div className="site-building building-back" /><div className="site-building building-front" />
+    <div className="crane"><i /><b /><span /></div><div className="site-fence" /><div className="site-ground" />
+    <VisualImage uri={sceneVisual(chapter)?.uri} alt="" className="background-image" />
+  </div>;
+}

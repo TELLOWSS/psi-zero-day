@@ -1,10 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { FoundationScreen } from '../ui/FoundationScreen';
-import { translate } from './bootstrap';
-import '../ui/foundation.css';
+import { PlayableEpisode } from '../ui/PlayableEpisode';
+import { EpisodeSession } from './episode-session';
+import '../ui/playable.css';
 
-document.title = translate('app.title');
+const session = new EpisodeSession();
+document.title = session.t('ui.brand');
 createRoot(document.getElementById('root')!).render(
-  <StrictMode><FoundationScreen t={translate} /></StrictMode>,
+  <StrictMode><PlayableEpisode session={session} /></StrictMode>,
 );

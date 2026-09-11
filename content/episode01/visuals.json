@@ -1,0 +1,14 @@
+{
+  "characters": {
+    "player": { "uri": null, "accent": "#d4bd70" },
+    "kang_taesik": { "uri": null, "accent": "#b99b76" },
+    "yoon_sungho": { "uri": null, "accent": "#94aeb0" },
+    "lee_jaehoon": { "uri": null, "accent": "#b3b9bd" },
+    "lim_junho": { "uri": null, "accent": "#acb98a" },
+    "choi_minseok": { "uri": null, "accent": "#d1a879" }
+  },
+  "backgrounds": { "foundation": { "uri": null } },
+  "cg": {},
+  "ui": {},
+  "text_styles": { "ep01.evening.field_note.record": "note" }
+}

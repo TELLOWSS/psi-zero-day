@@ -1,6 +1,6 @@
 # PSI : ZERO DAY — Foundation / Core Rule Engine
 
-Episode 01 실행 콘텐츠와 Headless 검증을 포함한 실행 기반. React는 정적인 부팅 화면만 표시하고 Phaser는 의존성만 준비되어 있다.
+Episode 01을 클릭으로 끝까지 플레이할 수 있는 React Vertical Slice. Headless 검증과 동일한 CoreEngine을 사용하며 Phaser는 의존성만 준비되어 있다.
 
 ## 실행
 
@@ -24,7 +24,7 @@ npm run build
 | src/engine | 초기화, Clock, 조건/효과, 관계/공정 primitive, 예약 큐, 이벤트 후보/노드 실행, RNG, 명령 경계 |
 | src/content | Zod 스키마, 참조 검사, 불변 ContentRegistry |
 | src/localization | 로컬 사전과 기본 언어 fallback |
-| src/app · src/ui | 데이터 검증 후 16:9 부팅 화면 표시 |
+| src/app · src/ui | EpisodeSession과 16:9 대화·선택·완료 UI |
 | src/presentation | Phaser 전용 경계 예약; 장면 구현 없음 |
 | src/platform | StoragePort와 web/android 어댑터 위치 |
 | src/persistence | 향후 저장 검증·마이그레이션 위치 |
@@ -47,14 +47,16 @@ RNG 알고리즘 ID는 `mulberry32-v1`. seed는 uint32(0 포함)이며 snapshot�
 - fixture의 수치·75 DAY 지연은 테스트 입력이며 본편 규칙이 아니다. fixture 자산은 메타데이터만 존재한다. 파일 존재·용량·해시 검증은 자산 파이프라인 구축 시 추가한다.
 - 런타임 네트워크 요청·외부 폰트·CDN은 사용하지 않는다. 브라우저 최초 설치/오프라인 재실행을 위한 service worker와 Android 패키징은 아직 없다.
 - Android는 방향만 유지한다. 네이티브 android/ 프로젝트, Capacitor 플러그인, 장면 연출을 생성하지 않았다.
-- CoreEngine은 동결된 GameState를 소유하고 dispatch로만 교체한다. UI 연결은 이번 범위 밖이다. typecheck는 React/DOM/Node 타입 없이 domain/engine만 별도 검사한다.
+- CoreEngine은 동결된 GameState를 소유하고 dispatch로만 교체한다. React는 Session snapshot을 읽고 명령을 제출한다. typecheck는 React/DOM/Node 타입 없이 domain/engine만 별도 검사한다.
 
 사용 계약과 미확정 사항은 [TASK-002 기록](docs/TASK-002.md), 정의/Runtime 분리와 완료 이력 변경은 [TASK-002A 기록](docs/TASK-002A.md)에 정리했다. Episode 01 승인값 외 공정 범위·게임 공식은 지정하지 않는다.
 
-이벤트 실행 정책, 명령과 저장/복원 계약은 [TASK-003 기록](docs/TASK-003.md)을 따른다. 기존 부팅 화면은 변경하지 않았다.
+이벤트 실행 정책, 명령과 저장/복원 계약은 [TASK-003 기록](docs/TASK-003.md)을 따른다.
 
 participant 컨텍스트·역할별 고유 바인딩·후속 미충족 처리와 최신 회귀 검증은 [TASK-003A 기록](docs/TASK-003A.md)을 따른다.
 
-Episode 01은 `src/content/episode01.ts`의 `createEpisode01Registry()`로 로드한다. `npm test -- tests/episode01.test.ts`로 4개 경로와 45개 낮 판단 조합을 Headless 검증한다. [Episode 01 기록](docs/EPISODE-01.md)에 콘텐츠 계약을 정리했다. 게임 UI 연결은 포함하지 않는다.
+Episode 01은 `src/content/episode01.ts`의 `createEpisode01Registry()`로 로드한다. `npm test -- tests/episode01.test.ts`로 4개 경로와 45개 낮 판단 조합을 Headless 검증한다. [Episode 01 기록](docs/EPISODE-01.md)에 콘텐츠 계약을 정리했다.
+
+`npm run dev`에서 시작하기를 누르면 플레이한다. Enter/Space는 계속, 1~4는 현재 선택이다. 개발 정보는 개발 모드의 읽기 전용 패널이며 새로고침 시 진행은 초기화된다. UI·Asset slot·검증은 [TASK-005 기록](docs/TASK-005.md)을 따른다.
 
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).

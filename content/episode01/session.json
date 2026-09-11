@@ -1,0 +1,22 @@
+{
+  "run": {
+    "run_id": "ep01.run", "seed": 42, "playthrough": 1, "rules_version": "ep01.slice.v1",
+    "chapter_id": "foundation", "clock": { "day": 1, "slot": "PRE_WORK" },
+    "player": {
+      "character_id": "player", "archetype_id": "unassigned", "health": 0, "fatigue": 0, "stress": 0,
+      "money": 0, "family": {}, "company_evaluation": 0, "reputation": 0, "integrity": 0,
+      "career": { "values": {}, "flags": {} }, "dark_path": { "values": {}, "flags": {} },
+      "legal_status": {}, "safety_record": {}
+    },
+    "construction": { "stage_id": "FOUNDATION", "progress_by_stage": { "FOUNDATION": 10 }, "milestones": [] },
+    "audio": { "bgm": null, "ambience": [], "sfx_bus": [], "event_bus": [],
+      "volumes": { "master": 1, "bgm": 1, "ambience": 1, "sfx": 1, "event": 1 }, "muted": false, "suspended": false }
+  },
+  "bounds": { "FOUNDATION": { "min": 0, "max": 100 } },
+  "clock_before": {
+    "e01_03_plan_breaks": { "day": 1, "slot": "MORNING" },
+    "e01_07_first_pour": { "day": 1, "slot": "AFTERNOON" },
+    "e01_09_evening": { "day": 1, "slot": "EVENING" },
+    "e01_10_next_day_tease": { "day": 2, "slot": "PRE_WORK" }
+  }
+}
