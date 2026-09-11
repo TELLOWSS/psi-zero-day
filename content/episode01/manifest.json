@@ -1,0 +1,35 @@
+{
+  "canonical_id": "EP01_FIRST_POUR",
+  "runtime_id": "ep01_first_pour",
+  "title_text_id": "ep01.title",
+  "chapter": "FOUNDATION",
+  "runtime_chapter_id": "foundation",
+  "target_minutes": 15,
+  "bundle": {
+    "schema_version": 1,
+    "content_version": "ep01.vertical-slice.v1",
+    "default_locale": "ko",
+    "endings": [],
+    "asset_manifest": { "schema_version": 1, "assets": [] }
+  },
+  "cast": [
+    { "canonical_id": "PLAYER", "runtime_id": "player", "name_text_id": "cast.player.name", "role_text_id": "cast.player.role" },
+    { "canonical_id": "KANG_TAESIK", "runtime_id": "kang_taesik", "name_text_id": "cast.kang_taesik.name", "role_text_id": "cast.kang_taesik.role", "age": 52 },
+    { "canonical_id": "YOON_SUNGHO", "runtime_id": "yoon_sungho", "name_text_id": "cast.yoon_sungho.name", "role_text_id": "cast.yoon_sungho.role", "age": 48 },
+    { "canonical_id": "LEE_JAEHOON", "runtime_id": "lee_jaehoon", "name_text_id": "cast.lee_jaehoon.name", "role_text_id": "cast.lee_jaehoon.role", "age": 33 },
+    { "canonical_id": "LIM_JUNHO", "runtime_id": "lim_junho", "name_text_id": "cast.lim_junho.name", "role_text_id": "cast.lim_junho.role", "age": 23 },
+    { "canonical_id": "CHOI_MINSEOK", "runtime_id": "choi_minseok", "name_text_id": "cast.choi_minseok.name", "role_text_id": "cast.choi_minseok.role", "age": 39 }
+  ],
+  "event_flow": [
+    "E01_01_ARRIVAL",
+    "E01_02_MEET_KANG",
+    "E01_03_PLAN_BREAKS",
+    "E01_04_JUNHO_SIGNAL",
+    "E01_05_COMMAND",
+    "E01_06_PUMP_ARRIVAL",
+    "E01_07_FIRST_POUR",
+    "E01_08_REACTIONS",
+    "E01_09_EVENING",
+    "E01_10_NEXT_DAY_TEASE"
+  ]
+}

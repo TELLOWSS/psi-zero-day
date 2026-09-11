@@ -1,0 +1,1886 @@
+[
+  {
+    "schema_version": 1,
+    "event_id": "e01_01_arrival",
+    "title_text_id": "ep01.1.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [],
+    "participants": [],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "arrival",
+    "dialogue": [
+      {
+        "node_id": "arrival",
+        "type": "RESULT",
+        "text_id": "ep01.arrival",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 10
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_02_meet_kang",
+    "title_text_id": "ep01.2.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_01_arrival",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "player",
+        "character_id": "player"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "kang",
+    "dialogue": [
+      {
+        "node_id": "kang",
+        "type": "DIALOGUE",
+        "text_id": "ep01.meet.kang",
+        "speaker_role_id": "kang",
+        "next_node_id": "player",
+        "choice_ids": []
+      },
+      {
+        "node_id": "player",
+        "type": "DIALOGUE",
+        "text_id": "ep01.meet.player",
+        "speaker_role_id": "player",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 9
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_03_plan_breaks",
+    "title_text_id": "ep01.3.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_02_meet_kang",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "lee",
+        "character_id": "lee_jaehoon"
+      },
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "yoon",
+        "character_id": "yoon_sungho"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "situation",
+    "dialogue": [
+      {
+        "node_id": "situation",
+        "type": "RESULT",
+        "text_id": "ep01.plan.situation",
+        "next_node_id": "lee",
+        "choice_ids": []
+      },
+      {
+        "node_id": "lee",
+        "type": "DIALOGUE",
+        "text_id": "ep01.plan.lee",
+        "speaker_role_id": "lee",
+        "next_node_id": "kang",
+        "choice_ids": []
+      },
+      {
+        "node_id": "kang",
+        "type": "DIALOGUE",
+        "text_id": "ep01.plan.kang",
+        "speaker_role_id": "kang",
+        "next_node_id": "yoon",
+        "choice_ids": []
+      },
+      {
+        "node_id": "yoon",
+        "type": "DIALOGUE",
+        "text_id": "ep01.plan.yoon",
+        "speaker_role_id": "yoon",
+        "next_node_id": "plan",
+        "choice_ids": []
+      },
+      {
+        "node_id": "plan",
+        "type": "CHOICE",
+        "text_id": "ep01.plan.prompt",
+        "choice_ids": [
+          "delegate_kang",
+          "negotiate_yoon",
+          "coordinate_schedule",
+          "follow_junho"
+        ]
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 8
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "delegate_kang",
+        "text_id": "ep01.plan.a",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "kang_taesik.trust.increase",
+              "kind": "relation",
+              "from_id": "kang_taesik",
+              "to_id": "player",
+              "field": "trust",
+              "delta": 8
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "delegated_cleanup_kang": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "negotiate_yoon",
+        "text_id": "ep01.plan.b",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "yoon_sungho.respect.increase",
+              "kind": "relation",
+              "from_id": "yoon_sungho",
+              "to_id": "player",
+              "field": "respect",
+              "delta": 8
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "negotiated_rebar": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "coordinate_schedule",
+        "text_id": "ep01.plan.c",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "player.negotiation",
+              "kind": "player_stat",
+              "stat_id": "negotiation",
+              "delta": 2
+            },
+            {
+              "effect_id": "lee_jaehoon.respect.increase",
+              "kind": "relation",
+              "from_id": "lee_jaehoon",
+              "to_id": "player",
+              "field": "respect",
+              "delta": 4
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "schedule_first": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "follow_junho",
+        "text_id": "ep01.plan.d",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "lim_junho.reporting.increase",
+              "kind": "relation",
+              "from_id": "lim_junho",
+              "to_id": "player",
+              "field": "reporting",
+              "delta": 8
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "followed_junho": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_04_junho_signal",
+    "title_text_id": "ep01.4.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_03_plan_breaks",
+        "minimum_count": 1
+      },
+      {
+        "kind": "flag",
+        "flag_id": "followed_junho",
+        "equals": true
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "junho",
+        "character_id": "lim_junho"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "signal",
+    "dialogue": [
+      {
+        "node_id": "signal",
+        "type": "DIALOGUE",
+        "text_id": "ep01.junho.signal",
+        "speaker_role_id": "junho",
+        "next_node_id": "listen",
+        "choice_ids": []
+      },
+      {
+        "node_id": "listen",
+        "type": "CHOICE",
+        "text_id": "ep01.junho.prompt",
+        "choice_ids": [
+          "listen_more",
+          "dismiss"
+        ]
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 7
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "listen_more",
+        "text_id": "ep01.junho.listen_more",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "junho.reporting.increase",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "junho"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": 8
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "junho_opened_up": true,
+            "ramp_signal_known": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "dismiss",
+        "text_id": "ep01.junho.dismiss",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "junho_opened_up": false,
+            "ramp_signal_known": false
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_05_command",
+    "title_text_id": "ep01.5.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_03_plan_breaks",
+        "minimum_count": 1
+      },
+      {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "not",
+            "condition": {
+              "kind": "flag",
+              "flag_id": "followed_junho",
+              "equals": true
+            }
+          },
+          {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "flag",
+                "flag_id": "followed_junho",
+                "equals": true
+              },
+              {
+                "kind": "event_completed",
+                "event_id": "e01_04_junho_signal",
+                "minimum_count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "kang",
+        "selector": {
+          "role_text_id": "cast.kang_taesik.role",
+          "stats": [],
+          "relations": []
+        }
+      },
+      {
+        "role_id": "yoon",
+        "selector": {
+          "role_text_id": "cast.yoon_sungho.role",
+          "stats": [],
+          "relations": []
+        }
+      },
+      {
+        "role_id": "lee",
+        "selector": {
+          "role_text_id": "cast.lee_jaehoon.role",
+          "stats": [],
+          "relations": []
+        }
+      },
+      {
+        "role_id": "minseok",
+        "selector": {
+          "role_text_id": "cast.choi_minseok.role",
+          "stats": [],
+          "relations": []
+        }
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "situation",
+    "dialogue": [
+      {
+        "node_id": "situation",
+        "type": "RESULT",
+        "text_id": "ep01.command.situation",
+        "next_node_id": "ramp",
+        "choice_ids": []
+      },
+      {
+        "node_id": "ramp",
+        "type": "CHOICE",
+        "text_id": "ep01.command.ramp",
+        "choice_ids": [
+          "check_self",
+          "ask_minseok",
+          "keep_schedule"
+        ]
+      },
+      {
+        "node_id": "entrance",
+        "type": "CHOICE",
+        "text_id": "ep01.command.entrance",
+        "choice_ids": [
+          "assign_crew",
+          "request_delay",
+          "force_clear"
+        ]
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 6
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "check_self",
+        "text_id": "ep01.command.check_self",
+        "next_node_id": "entrance",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "ramp_verified": true,
+            "direct_ramp_check": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "ask_minseok",
+        "text_id": "ep01.command.ask_minseok",
+        "next_node_id": "entrance",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "minseok.reporting.increase",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "minseok"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": 3
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "ramp_verified": true,
+            "minseok_checked_ramp": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "keep_schedule",
+        "text_id": "ep01.command.keep_schedule",
+        "next_node_id": "entrance",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "ramp_unverified": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "assign_crew",
+        "text_id": "ep01.command.assign_crew",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "kang.trust.increase",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "kang"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": 3
+            },
+            {
+              "effect_id": "yoon.respect.increase",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "yoon"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": 3
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "entrance_controlled": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "request_delay",
+        "text_id": "ep01.command.request_delay",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "lee.respect.increase",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": 3
+            },
+            {
+              "effect_id": "player.negotiation",
+              "kind": "player_stat",
+              "stat_id": "negotiation",
+              "delta": 1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "pump_delayed": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "force_clear",
+        "text_id": "ep01.command.force_clear",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "kang.trust.decrease",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "kang"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": -5
+            },
+            {
+              "effect_id": "yoon.respect.decrease",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "yoon"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": -5
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "entrance_controlled": true,
+            "relation_conflict": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_06_pump_arrival",
+    "title_text_id": "ep01.6.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_05_command",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      {
+        "node_id": "resolve",
+        "type": "CHOICE",
+        "text_id": "ep01.pump.prompt",
+        "choice_ids": [
+          "relation_conflict",
+          "best_control",
+          "near_miss",
+          "controlled_delay"
+        ]
+      },
+      {
+        "node_id": "relation_conflict",
+        "type": "RESULT",
+        "text_id": "ep01.pump.relation_conflict",
+        "next_node_id": "end",
+        "choice_ids": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "pump_result": "RELATION_CONFLICT"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "node_id": "best_control",
+        "type": "RESULT",
+        "text_id": "ep01.pump.best_control",
+        "next_node_id": "end",
+        "choice_ids": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "pump_result": "BEST_CONTROL"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "node_id": "near_miss",
+        "type": "RESULT",
+        "text_id": "ep01.pump.near_miss",
+        "next_node_id": "end",
+        "choice_ids": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "pump_result": "NEAR_MISS"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "node_id": "controlled_delay",
+        "type": "RESULT",
+        "text_id": "ep01.pump.controlled_delay",
+        "next_node_id": "end",
+        "choice_ids": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "pump_result": "CONTROLLED_DELAY"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 5
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "relation_conflict",
+        "text_id": "ep01.pump.continue",
+        "next_node_id": "relation_conflict",
+        "requirements": [
+          {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "flag",
+                "flag_id": "relation_conflict",
+                "equals": true
+              },
+              {
+                "kind": "flag",
+                "flag_id": "entrance_controlled",
+                "equals": true
+              }
+            ]
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "best_control",
+        "text_id": "ep01.pump.continue",
+        "next_node_id": "best_control",
+        "requirements": [
+          {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "relation_conflict",
+                      "equals": true
+                    },
+                    {
+                      "kind": "flag",
+                      "flag_id": "entrance_controlled",
+                      "equals": true
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "all",
+                "conditions": [
+                  {
+                    "kind": "flag",
+                    "flag_id": "ramp_signal_known",
+                    "equals": true
+                  },
+                  {
+                    "kind": "flag",
+                    "flag_id": "ramp_verified",
+                    "equals": true
+                  },
+                  {
+                    "kind": "any",
+                    "conditions": [
+                      {
+                        "kind": "flag",
+                        "flag_id": "entrance_controlled",
+                        "equals": true
+                      },
+                      {
+                        "kind": "flag",
+                        "flag_id": "pump_delayed",
+                        "equals": true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "near_miss",
+        "text_id": "ep01.pump.continue",
+        "next_node_id": "near_miss",
+        "requirements": [
+          {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "relation_conflict",
+                      "equals": true
+                    },
+                    {
+                      "kind": "flag",
+                      "flag_id": "entrance_controlled",
+                      "equals": true
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "ramp_signal_known",
+                      "equals": true
+                    },
+                    {
+                      "kind": "flag",
+                      "flag_id": "ramp_verified",
+                      "equals": true
+                    },
+                    {
+                      "kind": "any",
+                      "conditions": [
+                        {
+                          "kind": "flag",
+                          "flag_id": "entrance_controlled",
+                          "equals": true
+                        },
+                        {
+                          "kind": "flag",
+                          "flag_id": "pump_delayed",
+                          "equals": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "all",
+                "conditions": [
+                  {
+                    "kind": "flag",
+                    "flag_id": "schedule_first",
+                    "equals": true
+                  },
+                  {
+                    "kind": "not",
+                    "condition": {
+                      "kind": "flag",
+                      "flag_id": "ramp_signal_known",
+                      "equals": true
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "condition": {
+                      "kind": "flag",
+                      "flag_id": "ramp_verified",
+                      "equals": true
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "controlled_delay",
+        "text_id": "ep01.pump.continue",
+        "next_node_id": "controlled_delay",
+        "requirements": [
+          {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "relation_conflict",
+                      "equals": true
+                    },
+                    {
+                      "kind": "flag",
+                      "flag_id": "entrance_controlled",
+                      "equals": true
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "ramp_signal_known",
+                      "equals": true
+                    },
+                    {
+                      "kind": "flag",
+                      "flag_id": "ramp_verified",
+                      "equals": true
+                    },
+                    {
+                      "kind": "any",
+                      "conditions": [
+                        {
+                          "kind": "flag",
+                          "flag_id": "entrance_controlled",
+                          "equals": true
+                        },
+                        {
+                          "kind": "flag",
+                          "flag_id": "pump_delayed",
+                          "equals": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "not",
+                "condition": {
+                  "kind": "all",
+                  "conditions": [
+                    {
+                      "kind": "flag",
+                      "flag_id": "schedule_first",
+                      "equals": true
+                    },
+                    {
+                      "kind": "not",
+                      "condition": {
+                        "kind": "flag",
+                        "flag_id": "ramp_signal_known",
+                        "equals": true
+                      }
+                    },
+                    {
+                      "kind": "not",
+                      "condition": {
+                        "kind": "flag",
+                        "flag_id": "ramp_verified",
+                        "equals": true
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "kind": "any",
+                "conditions": [
+                  {
+                    "kind": "flag",
+                    "flag_id": "ramp_verified",
+                    "equals": true
+                  },
+                  {
+                    "kind": "flag",
+                    "flag_id": "pump_delayed",
+                    "equals": true
+                  },
+                  {
+                    "kind": "flag",
+                    "flag_id": "entrance_controlled",
+                    "equals": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_07_first_pour",
+    "title_text_id": "ep01.7.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_06_pump_arrival",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "pour",
+    "dialogue": [
+      {
+        "node_id": "pour",
+        "type": "RESULT",
+        "text_id": "ep01.pour",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "foundation.pour",
+              "kind": "construction_progress",
+              "stage_id": "FOUNDATION",
+              "delta": 4
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "first_pour_completed": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 4
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_08_reactions",
+    "title_text_id": "ep01.8.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_07_first_pour",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "yoon",
+        "character_id": "yoon_sungho"
+      },
+      {
+        "role_id": "junho",
+        "character_id": "lim_junho"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "kang.branch",
+    "dialogue": [
+      {
+        "node_id": "kang.branch",
+        "type": "CHOICE",
+        "text_id": "ep01.reactions.kang.prompt",
+        "choice_ids": [
+          "kang.high",
+          "kang.low"
+        ]
+      },
+      {
+        "node_id": "kang.high",
+        "type": "DIALOGUE",
+        "text_id": "ep01.reactions.kang.high",
+        "speaker_role_id": "kang",
+        "next_node_id": "yoon.branch",
+        "choice_ids": []
+      },
+      {
+        "node_id": "kang.low",
+        "type": "DIALOGUE",
+        "text_id": "ep01.reactions.kang.low",
+        "speaker_role_id": "kang",
+        "next_node_id": "yoon.branch",
+        "choice_ids": []
+      },
+      {
+        "node_id": "yoon.branch",
+        "type": "CHOICE",
+        "text_id": "ep01.reactions.yoon.prompt",
+        "choice_ids": [
+          "yoon.high",
+          "yoon.low"
+        ]
+      },
+      {
+        "node_id": "yoon.high",
+        "type": "DIALOGUE",
+        "text_id": "ep01.reactions.yoon.high",
+        "speaker_role_id": "yoon",
+        "next_node_id": "junho.branch",
+        "choice_ids": []
+      },
+      {
+        "node_id": "yoon.low",
+        "type": "DIALOGUE",
+        "text_id": "ep01.reactions.yoon.low",
+        "speaker_role_id": "yoon",
+        "next_node_id": "junho.branch",
+        "choice_ids": []
+      },
+      {
+        "node_id": "junho.branch",
+        "type": "CHOICE",
+        "text_id": "ep01.reactions.junho.prompt",
+        "choice_ids": [
+          "junho.high",
+          "junho.low"
+        ]
+      },
+      {
+        "node_id": "junho.high",
+        "type": "DIALOGUE",
+        "text_id": "ep01.reactions.junho.high",
+        "speaker_role_id": "junho",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "junho.low",
+        "type": "RESULT",
+        "text_id": "ep01.reactions.junho.low",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 3
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "kang.high",
+        "text_id": "ep01.reactions.kang.continue",
+        "next_node_id": "kang.high",
+        "requirements": [
+          {
+            "kind": "context_relation",
+            "from": {
+              "kind": "participant",
+              "role_id": "kang"
+            },
+            "to": {
+              "kind": "player"
+            },
+            "field": "trust",
+            "operator": "gte",
+            "value": 38
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "kang.low",
+        "text_id": "ep01.reactions.kang.continue",
+        "next_node_id": "kang.low",
+        "requirements": [
+          {
+            "kind": "not",
+            "condition": {
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "kang"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "operator": "gte",
+              "value": 38
+            }
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "yoon.high",
+        "text_id": "ep01.reactions.yoon.continue",
+        "next_node_id": "yoon.high",
+        "requirements": [
+          {
+            "kind": "context_relation",
+            "from": {
+              "kind": "participant",
+              "role_id": "yoon"
+            },
+            "to": {
+              "kind": "player"
+            },
+            "field": "respect",
+            "operator": "gte",
+            "value": 33
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "yoon.low",
+        "text_id": "ep01.reactions.yoon.continue",
+        "next_node_id": "yoon.low",
+        "requirements": [
+          {
+            "kind": "not",
+            "condition": {
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "yoon"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "operator": "gte",
+              "value": 33
+            }
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "junho.high",
+        "text_id": "ep01.reactions.junho.continue",
+        "next_node_id": "junho.high",
+        "requirements": [
+          {
+            "kind": "context_relation",
+            "from": {
+              "kind": "participant",
+              "role_id": "junho"
+            },
+            "to": {
+              "kind": "player"
+            },
+            "field": "reporting",
+            "operator": "gte",
+            "value": 28
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "junho.low",
+        "text_id": "ep01.reactions.junho.continue",
+        "next_node_id": "junho.low",
+        "requirements": [
+          {
+            "kind": "not",
+            "condition": {
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "junho"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "operator": "gte",
+              "value": 28
+            }
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_09_evening",
+    "title_text_id": "ep01.9.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_08_reactions",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "evening",
+    "dialogue": [
+      {
+        "node_id": "evening",
+        "type": "CHOICE",
+        "text_id": "ep01.evening.prompt",
+        "choice_ids": [
+          "rest",
+          "family",
+          "study",
+          "field_note"
+        ]
+      },
+      {
+        "node_id": "rest",
+        "type": "RESULT",
+        "text_id": "ep01.evening.rest.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "family",
+        "type": "RESULT",
+        "text_id": "ep01.evening.family.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "study",
+        "type": "RESULT",
+        "text_id": "ep01.evening.study.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "field_note",
+        "type": "RESULT",
+        "text_id": "ep01.evening.field_note.record",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {},
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 2
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "rest",
+        "text_id": "ep01.evening.rest",
+        "next_node_id": "rest",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "evening_rest": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "family",
+        "text_id": "ep01.evening.family",
+        "next_node_id": "family",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "evening_family": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "study",
+        "text_id": "ep01.evening.study",
+        "next_node_id": "study",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "player.learning",
+              "kind": "player_stat",
+              "stat_id": "learning",
+              "delta": 1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "evening_study": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "field_note",
+        "text_id": "ep01.evening.field_note",
+        "next_node_id": "field_note",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "player.analysis",
+              "kind": "player_stat",
+              "stat_id": "analysis",
+              "delta": 1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "evening_field_note": true,
+            "psi_seed_day01": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_10_next_day_tease",
+    "title_text_id": "ep01.10.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_09_evening",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "tease",
+    "dialogue": [
+      {
+        "node_id": "tease",
+        "type": "RESULT",
+        "text_id": "ep01.tease",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep01.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "episode01_completed": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 1
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [],
+    "failure_conditions": []
+  }
+]

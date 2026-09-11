@@ -7,6 +7,7 @@
 - 텍스트는 localization의 text_id를 참조한다. 기본 화면은 16:9 Landscape. 시간 기준은 day + PRE_WORK/MORNING/AFTERNOON/EVENING이며 display_time은 표시용이다.
 - Offline-first, 향후 Capacitor Android. ECS·event sourcing·plugin framework·backend·cloud save는 도입하지 않는다.
 - Career/Dark Path/PSI의 공식·임계치는 확정 전 구현하지 않는다. LIFE ARCHIVE 1차 범위는 엔딩/CG/주요 기록 해금이다.
-- TASK-001 범위는 foundation이다. 실제 캐릭터·이벤트·Episode 01·Phaser 장면·Android 빌드는 금지한다. fixture는 tests 안의 최소 합성 데이터로 제한한다.
+- TASK-001 당시 본편 콘텐츠 금지는 역사적 범위 제한이다. 이후 Director가 명시적으로 승인한 TASK에서는 해당 범위의 실제 캐릭터·이벤트·콘텐츠 구현을 허용한다. 임의 콘텐츠 추가·확장은 여전히 금지한다. 합성 fixture는 tests 안의 최소 데이터로 제한하며 승인된 본편 콘텐츠와 구분한다.
+- UI·Phaser·Android·PSI·Dark Path·Ending은 각각 별도 Director 승인이 있을 때만 구현한다.
 - 검증: npm test, npm run typecheck. 실행 기반 변경은 npm run build와 개발 서버 로딩도 확인한다.
 - 완료보고는 IMPLEMENTED / FILES / TEST / TODO / DIRECTOR REVIEW 다섯 항목만 짧게 작성한다.

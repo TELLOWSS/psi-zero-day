@@ -1,6 +1,6 @@
 # PSI : ZERO DAY — Foundation / Core Rule Engine
 
-본편 콘텐츠 없는 실행 기반. React는 정적인 부팅 화면만 표시하고 Phaser는 의존성만 준비되어 있다.
+Episode 01 실행 콘텐츠와 Headless 검증을 포함한 실행 기반. React는 정적인 부팅 화면만 표시하고 Phaser는 의존성만 준비되어 있다.
 
 ## 실행
 
@@ -28,7 +28,7 @@ npm run build
 | src/presentation | Phaser 전용 경계 예약; 장면 구현 없음 |
 | src/platform | StoragePort와 web/android 어댑터 위치 |
 | src/persistence | 향후 저장 검증·마이그레이션 위치 |
-| content | 빈 본편 목록 + 화면용 localization |
+| content | Foundation 데이터와 화면용 localization, Episode 01 JSON 콘텐츠 팩 |
 | public/assets | 향후 로컬 패키징 자산 위치 |
 | tests/fixtures | 테스트 전용: NPC 2, 이벤트 2, 엔딩 1, 자산 메타데이터 1 |
 
@@ -43,16 +43,18 @@ RNG 알고리즘 ID는 `mulberry32-v1`. seed는 uint32(0 포함)이며 snapshot�
 
 - 13개 핵심 타입과 관련 구조를 정의했다. Zod는 **콘텐츠 입력과 GameTime**을 검증한다. GameState/SaveEnvelope 전체 런타임 검증·checksum·마이그레이션·실제 저장 어댑터는 이번 범위에 포함하지 않는다.
 - 정의된 콘텐츠 ID 참조는 검사한다. flag_id, field_id, group_id 등 독립 상태/분류 키는 형식만 검사한다. 별도 규칙 사전과 해금 필드 목록은 Bible 수령 후 정의한다.
-- TASK-003에서 데이터 기반 이벤트 후보/참가자 바인딩/다단계 노드 실행/완료 이력/후속 시작 연결을 추가했다. 인생 엔딩 판정과 본편 콘텐츠는 구현하지 않았다.
+- TASK-003에서 데이터 기반 이벤트 후보/참가자 바인딩/다단계 노드 실행/완료 이력/후속 시작 연결을 추가했다. TASK-004A에서 Episode 01 콘텐츠를 구현했다. 인생 엔딩 판정은 구현하지 않았다.
 - fixture의 수치·75 DAY 지연은 테스트 입력이며 본편 규칙이 아니다. fixture 자산은 메타데이터만 존재한다. 파일 존재·용량·해시 검증은 자산 파이프라인 구축 시 추가한다.
 - 런타임 네트워크 요청·외부 폰트·CDN은 사용하지 않는다. 브라우저 최초 설치/오프라인 재실행을 위한 service worker와 Android 패키징은 아직 없다.
 - Android는 방향만 유지한다. 네이티브 android/ 프로젝트, Capacitor 플러그인, 장면 연출을 생성하지 않았다.
 - CoreEngine은 동결된 GameState를 소유하고 dispatch로만 교체한다. UI 연결은 이번 범위 밖이다. typecheck는 React/DOM/Node 타입 없이 domain/engine만 별도 검사한다.
 
-사용 계약과 미확정 사항은 [TASK-002 기록](docs/TASK-002.md), 정의/Runtime 분리와 완료 이력 변경은 [TASK-002A 기록](docs/TASK-002A.md)에 정리했다. 본편 초기값·공정 수치 범위·게임 공식은 지정하지 않는다.
+사용 계약과 미확정 사항은 [TASK-002 기록](docs/TASK-002.md), 정의/Runtime 분리와 완료 이력 변경은 [TASK-002A 기록](docs/TASK-002A.md)에 정리했다. Episode 01 승인값 외 공정 범위·게임 공식은 지정하지 않는다.
 
 이벤트 실행 정책, 명령과 저장/복원 계약은 [TASK-003 기록](docs/TASK-003.md)을 따른다. 기존 부팅 화면은 변경하지 않았다.
 
 participant 컨텍스트·역할별 고유 바인딩·후속 미충족 처리와 최신 회귀 검증은 [TASK-003A 기록](docs/TASK-003A.md)을 따른다.
+
+Episode 01은 `src/content/episode01.ts`의 `createEpisode01Registry()`로 로드한다. `npm test -- tests/episode01.test.ts`로 4개 경로와 45개 낮 판단 조합을 Headless 검증한다. [Episode 01 기록](docs/EPISODE-01.md)에 콘텐츠 계약을 정리했다. 게임 UI 연결은 포함하지 않는다.
 
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).

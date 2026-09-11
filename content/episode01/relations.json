@@ -1,0 +1,112 @@
+[
+  {
+    "from_id": "kang_taesik",
+    "to_id": "player",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 30,
+      "respect": 25,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "player",
+    "to_id": "kang_taesik",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 35,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "yoon_sungho",
+    "to_id": "player",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 30,
+      "respect": 25,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "player",
+    "to_id": "yoon_sungho",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 35,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "lee_jaehoon",
+    "to_id": "player",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 30,
+      "reporting": 35,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "player",
+    "to_id": "lee_jaehoon",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 35,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "lim_junho",
+    "to_id": "player",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 25,
+      "respect": 20,
+      "reporting": 20,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "player",
+    "to_id": "lim_junho",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 35,
+      "reporting": 30,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "choi_minseok",
+    "to_id": "player",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 40,
+      "reporting": 45,
+      "flags": {}
+    }
+  },
+  {
+    "from_id": "player",
+    "to_id": "choi_minseok",
+    "initial_state": {
+      "relationship_values": {},
+      "trust": 35,
+      "respect": 35,
+      "reporting": 30,
+      "flags": {}
+    }
+  }
+]

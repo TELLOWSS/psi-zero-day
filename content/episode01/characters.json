@@ -1,0 +1,161 @@
+[
+  {
+    "schema_version": 1,
+    "id": "player",
+    "name_text_id": "cast.player.name",
+    "role_text_id": "cast.player.role",
+    "trade_text_id": "cast.player.role",
+    "age_group_text_id": "cast.unspecified",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 0,
+    "stats": {
+      "field": 35,
+      "process": 30,
+      "people": 32,
+      "judgment": 28,
+      "negotiation": 30,
+      "response": 30,
+      "learning": 40,
+      "analysis": 38
+    },
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 0,
+      "fatigue": 0,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "kang_taesik",
+    "name_text_id": "cast.kang_taesik.name",
+    "role_text_id": "cast.kang_taesik.role",
+    "trade_text_id": "cast.kang_taesik.role",
+    "age_group_text_id": "cast.kang_taesik.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 90,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 75,
+      "fatigue": 20,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "yoon_sungho",
+    "name_text_id": "cast.yoon_sungho.name",
+    "role_text_id": "cast.yoon_sungho.role",
+    "trade_text_id": "cast.yoon_sungho.role",
+    "age_group_text_id": "cast.yoon_sungho.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 86,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 72,
+      "fatigue": 22,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "lee_jaehoon",
+    "name_text_id": "cast.lee_jaehoon.name",
+    "role_text_id": "cast.lee_jaehoon.role",
+    "trade_text_id": "cast.lee_jaehoon.role",
+    "age_group_text_id": "cast.lee_jaehoon.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 55,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 68,
+      "fatigue": 25,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "lim_junho",
+    "name_text_id": "cast.lim_junho.name",
+    "role_text_id": "cast.lim_junho.role",
+    "trade_text_id": "cast.lim_junho.role",
+    "age_group_text_id": "cast.lim_junho.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 12,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 60,
+      "fatigue": 15,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "choi_minseok",
+    "name_text_id": "cast.choi_minseok.name",
+    "role_text_id": "cast.choi_minseok.role",
+    "trade_text_id": "cast.choi_minseok.role",
+    "age_group_text_id": "cast.choi_minseok.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 76,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 74,
+      "fatigue": 18,
+      "availability": {
+        "available": true
+      },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  }
+]
