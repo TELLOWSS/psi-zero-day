@@ -7,3 +7,6 @@ export * from './effects';
 export * from './scheduler';
 export * from './runtime';
 export * from './rng';
+export * from './event-candidates';
+export * from './event-runtime';
+export * from './character-reference';

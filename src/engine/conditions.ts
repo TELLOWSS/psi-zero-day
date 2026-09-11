@@ -1,4 +1,5 @@
-import type { ComparisonOperator, Condition, FlagValue, GameState } from '../domain';
+import type { ComparisonOperator, Condition, FlagValue, GameState, ParticipantContext } from '../domain';
+import { assertConditionContext, resolveCharacter } from './character-reference';
 import { canonicalStage, getProgress } from './construction';
 import { getRelation } from './relations';
 import { own } from './data';
@@ -18,12 +19,27 @@ export function compare(left: FlagValue | undefined, op: ComparisonOperator, rig
     default: throw new Error('Unknown comparison operator');
   }
 }
-export function evaluateCondition(state: GameState, condition: Condition): boolean {
+export function evaluateCondition(state: GameState, condition: Condition, context?: ParticipantContext): boolean {
+  assertConditionContext(state, condition, context);
+  return evaluate(state, condition, context);
+}
+export function evaluateConditions(state: GameState, conditions: readonly Condition[], context?: ParticipantContext): boolean {
+  conditions.forEach(c => assertConditionContext(state, c, context));
+  return conditions.every(c => evaluate(state, c, context));
+}
+function evaluate(state: GameState, condition: Condition, context?: ParticipantContext): boolean {
   const c = condition;
   switch (c.kind) {
-    case 'all': return c.conditions.every(v => evaluateCondition(state, v));
-    case 'any': return c.conditions.some(v => evaluateCondition(state, v));
-    case 'not': return !evaluateCondition(state, c.condition);
+    case 'all': return c.conditions.every(v => evaluate(state, v, context));
+    case 'any': return c.conditions.some(v => evaluate(state, v, context));
+    case 'not': return !evaluate(state, c.condition, context);
+    case 'context_stat': {
+      const id = resolveCharacter(state, c.target, context);
+      const stats = id === state.player.character_id ? state.player.stats : own(state.characters, id)!.stats;
+      return compare(own(stats, c.stat_id), c.operator, c.value);
+    }
+    case 'context_relation': return compare(getRelation(state.relations,
+      resolveCharacter(state, c.from, context), resolveCharacter(state, c.to, context))?.[c.field], c.operator, c.value);
     case 'compare': return compare(c.left, c.operator, c.right);
     case 'flag': return compare(own(state.flags, c.flag_id), 'eq', c.equals);
     case 'flag_compare': return compare(own(state.flags, c.flag_id), c.operator, c.value);

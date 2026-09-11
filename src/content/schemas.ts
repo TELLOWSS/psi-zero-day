@@ -15,6 +15,11 @@ const stats = z.record(idSchema, finite);
 const locale = z.string().regex(/^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/);
 const operator = z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte']);
 const stage = z.enum([...CORE_STAGES, ...CONSTRUCTION_STAGES]);
+export const characterReferenceSchema = z.union([
+  z.strictObject({ kind: z.literal('player') }),
+  z.strictObject({ kind: z.literal('character'), character_id: idSchema }),
+  z.strictObject({ kind: z.literal('participant'), role_id: idSchema }),
+]);
 export const gameTimeSchema: z.ZodType<GameTime> = z.strictObject({
   day: z.number().int().min(1), slot: z.enum(TIME_SLOTS),
   display_time: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/).optional(),
@@ -37,14 +42,22 @@ export const conditionSchema: z.ZodType<Condition> = z.lazy(() => z.union([
     minimum_count: z.number().int().min(1) }),
   z.strictObject({ kind: z.literal('compare'), left: flagValue, operator, right: flagValue }),
   z.strictObject({ kind: z.literal('flag_compare'), flag_id: idSchema, operator, value: flagValue }),
+  z.strictObject({ kind: z.literal('context_stat'), target: characterReferenceSchema, stat_id: idSchema, operator, value: finite }),
+  z.strictObject({ kind: z.literal('context_relation'), from: characterReferenceSchema, to: characterReferenceSchema,
+    field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite }),
 ]));
 const conditions = z.array(conditionSchema);
 const statEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('stat'),
   character_id: idSchema, stat_id: idSchema, delta: finite });
 const relationEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('relation'),
   from_id: idSchema, to_id: idSchema, field: z.enum(['trust', 'respect', 'reporting']), delta: finite });
+const contextualStatEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('context_stat'),
+  target: characterReferenceSchema, stat_id: idSchema, delta: finite });
+const contextualRelationEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('context_relation'),
+  from: characterReferenceSchema, to: characterReferenceSchema, field: z.enum(['trust', 'respect', 'reporting']), delta: finite });
 export const effectSchema: z.ZodType<Effect> = z.union([
-  statEffect, relationEffect,
+  statEffect, relationEffect, contextualStatEffect, contextualRelationEffect,
+  z.strictObject({ effect_id: idSchema, kind: z.literal('context_reveal'), target: characterReferenceSchema, field_id: idSchema }),
   z.strictObject({ effect_id: idSchema, kind: z.literal('flag'), flag_id: idSchema, value: flagValue }),
   z.strictObject({ effect_id: idSchema, kind: z.literal('reveal'), character_id: idSchema, field_id: idSchema }),
   z.strictObject({ effect_id: idSchema, kind: z.literal('player_stat'), stat_id: idSchema, delta: finite }),
@@ -86,11 +99,31 @@ export const eventDefinitionSchema: z.ZodType<EventDefinition> = z.strictObject(
   schema_version: z.literal(1), event_id: idSchema,
   title_text_id: textIdSchema, category_text_id: textIdSchema, chapter_text_id: textIdSchema,
   conditions,
-  participants: z.array(z.strictObject({ role_id: idSchema, character_id: idSchema })),
+  participants: z.array(z.strictObject({ role_id: idSchema, character_id: idSchema.optional(),
+    selector: z.strictObject({ role_text_id: textIdSchema.optional(), trade_text_id: textIdSchema.optional(),
+      nationality_text_id: textIdSchema.optional(),
+      stats: z.array(z.strictObject({ stat_id: idSchema, operator, value: finite })),
+      relations: z.array(z.strictObject({ character_id: idSchema, direction: z.enum(['outgoing', 'incoming']),
+        field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite })),
+    }).optional(),
+  }).refine(p => (p.character_id === undefined) !== (p.selector === undefined), 'Specify character_id or selector')),
   scene: z.strictObject({ background_asset_id: idSchema.optional(), character_asset_ids: z.array(idSchema) }),
   entry_node_id: idSchema,
   dialogue: z.array(z.strictObject({ node_id: idSchema, text_id: textIdSchema,
-    speaker_role_id: idSchema.optional(), next_node_id: idSchema.optional(), choice_ids: z.array(idSchema) })).min(1),
+    speaker_role_id: idSchema.optional(), next_node_id: idSchema.optional(), choice_ids: z.array(idSchema),
+    type: z.enum(['DIALOGUE', 'CHOICE', 'RESULT', 'END']).optional(), effects: effectBundleSchema.optional(),
+    outcome: z.enum(['completed', 'failed']).optional(),
+    presentation_cues: z.array(z.union([
+      z.strictObject({ type: z.enum(['SCENE_CHANGE', 'CG_CHANGE', 'AUDIO_CUE']), asset_id: idSchema }),
+      z.strictObject({ type: z.enum(['CHARACTER_ENTER', 'CHARACTER_EXIT']), role_id: idSchema }),
+    ])).optional(),
+  })).min(1),
+  runtime: z.strictObject({ chapter_id: idSchema, trigger: z.enum(['normal', 'followup', 'both']), allow_reuse: z.boolean().optional(),
+    repeat_policy: z.union([z.strictObject({ kind: z.enum(['once', 'repeatable']) }),
+      z.strictObject({ kind: z.literal('max_occurrences'), count: z.number().int().positive() })]),
+    required_flags: flags, selection_policy: z.strictObject({ priority: finite }),
+    missing_participant_policy: z.enum(['exclude', 'fail']),
+  }).optional(),
   choices: z.array(z.strictObject({ choice_id: idSchema, text_id: textIdSchema,
     requirements: conditions, next_node_id: idSchema.optional(), effects: effectBundleSchema })),
   failure_conditions: conditions, failure_effects: effectBundleSchema.optional(),

@@ -1,4 +1,6 @@
-import type { EffectBundle, FollowUpEvent, GameState, ValidatedContent } from '../domain';
+import type { EffectBundle, FollowUpEvent, GameState, PresentationCommand, ValidatedContent } from '../domain';
+import { executeEventCommand } from './event-runtime';
+import type { EventCommand } from './event-runtime';
 import type { ProgressBounds } from './construction';
 import type { EffectContext } from './scheduler';
 import { nextSlot, assertTime } from './clock';
@@ -11,8 +13,8 @@ export type EngineCommand =
   | { readonly type: 'advance_slot' }
   | { readonly type: 'apply_effects'; readonly bundle: EffectBundle; readonly context: EffectContext }
   | { readonly type: 'followup_status'; readonly instance_id: string; readonly status: FollowUpEvent['status'] }
-  | { readonly type: 'draw_random' };
-export interface CommandResult { readonly state: GameState; readonly value?: number }
+  | { readonly type: 'draw_random' } | EventCommand;
+export interface CommandResult { readonly state: GameState; readonly value?: number; readonly presentation?: readonly PresentationCommand[] }
 
 /** Single owner; no bus, UI subscription framework, DOM or rendering dependency. */
 export class CoreEngine {
@@ -30,6 +32,7 @@ export class CoreEngine {
   dispatch(command: EngineCommand): CommandResult {
     let next = this.#state;
     let value: number | undefined;
+    let presentation: readonly PresentationCommand[] | undefined;
     switch (command.type) {
       case 'advance_slot': next = freezeData({ ...next, clock: freezeData(nextSlot(next.clock)) }); break;
       case 'apply_effects': next = applyEffectBundle(next, command.bundle, command.context, this.#content, this.#bounds); break;
@@ -38,9 +41,13 @@ export class CoreEngine {
         const rng = restoreRng(next.run.rng); value = rng.next();
         next = freezeData({ ...next, run: { ...next.run, rng: rng.snapshot() } }); break;
       }
+      case 'start_event': case 'advance_event': case 'choose_event': case 'cancel_event': {
+        const result = executeEventCommand(next, command, this.#content, this.#bounds);
+        next = result.state; presentation = result.presentation; break;
+      }
       default: throw new Error('Unsupported engine command');
     }
     this.#state = next; // Never reached when any primitive throws.
-    return Object.freeze(value === undefined ? { state: next } : { state: next, value });
+    return Object.freeze({ state: next, ...(value === undefined ? {} : { value }), ...(presentation === undefined ? {} : { presentation }) });
   }
 }

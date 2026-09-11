@@ -15,6 +15,7 @@ export interface NewRunOptions {
   readonly construction: GameState['construction'];
   readonly audio: GameState['audio'];
   readonly flags?: GameState['flags'];
+  readonly chapter_id?: string;
 }
 
 export function createRun(content: ValidatedContent, options: NewRunOptions, bounds: ProgressBounds): GameState {
@@ -54,7 +55,8 @@ export function createRun(content: ValidatedContent, options: NewRunOptions, bou
     })), construction: config.construction, audio: config.audio,
     schedule: {}, assignments: [], psi: { unlocked_node_ids: [], progress: { values: {}, flags: {} } },
     flags: config.flags ?? {}, ending_flags: {}, followups: [],
-    event_runtime: { active_instance: null, occurrence_history: [], completion_history: [], choice_history: [], applied_effect_ids: [] },
+    event_runtime: { ...(config.chapter_id === undefined ? {} : { chapter_id: config.chapter_id }),
+      active_instance: null, finished_instances: [], occurrence_history: [], completion_history: [], choice_history: [], applied_effect_ids: [] },
     ending_runtime: { unlocked_path_ids: [], satisfied_rule_ids: [] }, presentation_resume: null,
   };
   return freezeData(copyData(state));

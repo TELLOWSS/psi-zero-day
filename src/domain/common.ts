@@ -25,6 +25,13 @@ export type CoreStage = (typeof CORE_STAGES)[number];
 export type StageId = CoreStage | ConstructionStage;
 export type ComparisonOperator = 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte';
 export type RelationField = 'trust' | 'respect' | 'reporting';
+export type CharacterReference =
+  | { readonly kind: 'player' }
+  | { readonly kind: 'character'; readonly character_id: Id }
+  | { readonly kind: 'participant'; readonly role_id: Id };
+export interface ParticipantContext {
+  readonly participant_bindings: Readonly<Record<Id, Id>>;
+}
 
 export type Condition =
   | { readonly kind: 'all' | 'any'; readonly conditions: readonly Condition[] }
@@ -40,7 +47,10 @@ export type Condition =
   | { readonly kind: 'construction_progress'; readonly stage_id: StageId; readonly operator: ComparisonOperator; readonly value: number }
   | { readonly kind: 'choice_selected'; readonly event_id: Id; readonly choice_id: Id; readonly minimum_count: number }
   | { readonly kind: 'compare'; readonly left: FlagValue; readonly operator: ComparisonOperator; readonly right: FlagValue }
-  | { readonly kind: 'flag_compare'; readonly flag_id: Id; readonly operator: ComparisonOperator; readonly value: FlagValue };
+  | { readonly kind: 'flag_compare'; readonly flag_id: Id; readonly operator: ComparisonOperator; readonly value: FlagValue }
+  | { readonly kind: 'context_stat'; readonly target: CharacterReference; readonly stat_id: Id; readonly operator: ComparisonOperator; readonly value: number }
+  | { readonly kind: 'context_relation'; readonly from: CharacterReference; readonly to: CharacterReference;
+      readonly field: RelationField; readonly operator: ComparisonOperator; readonly value: number };
 
 /** Serializable rule operations; implementations belong to engine only. */
 export type Effect =
@@ -52,7 +62,11 @@ export type Effect =
   | { readonly effect_id: Id; readonly kind: 'reveal'; readonly character_id: Id; readonly field_id: Id }
   | { readonly effect_id: Id; readonly kind: 'player_stat'; readonly stat_id: Id; readonly delta: number }
   | { readonly effect_id: Id; readonly kind: 'flag_change'; readonly flag_id: Id; readonly delta: number }
-  | { readonly effect_id: Id; readonly kind: 'construction_progress'; readonly stage_id: StageId; readonly delta: number };
+  | { readonly effect_id: Id; readonly kind: 'construction_progress'; readonly stage_id: StageId; readonly delta: number }
+  | { readonly effect_id: Id; readonly kind: 'context_stat'; readonly target: CharacterReference; readonly stat_id: Id; readonly delta: number }
+  | { readonly effect_id: Id; readonly kind: 'context_relation'; readonly from: CharacterReference; readonly to: CharacterReference;
+      readonly field: RelationField; readonly delta: number }
+  | { readonly effect_id: Id; readonly kind: 'context_reveal'; readonly target: CharacterReference; readonly field_id: Id };
 
 export interface RngSnapshot {
   readonly algorithm: 'mulberry32-v1';

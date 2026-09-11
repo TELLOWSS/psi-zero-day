@@ -6,9 +6,17 @@ import { changeRelation } from './relations';
 import { createFollowUp, instanceKey, validateContext } from './scheduler';
 import { add, copyData, freezeData, own } from './data';
 import type { Mutable } from './data';
+import { resolveCharacter } from './character-reference';
 
-function apply(draft: Mutable<GameState>, effect: Effect, bounds: ProgressBounds): void {
+function apply(draft: Mutable<GameState>, effect: Effect, bounds: ProgressBounds, context: EffectContext): void {
   switch (effect.kind) {
+    case 'context_stat': apply(draft, { kind: 'stat', effect_id: effect.effect_id,
+      character_id: resolveCharacter(draft, effect.target, context), stat_id: effect.stat_id, delta: effect.delta }, bounds, context); break;
+    case 'context_relation': apply(draft, { kind: 'relation', effect_id: effect.effect_id,
+      from_id: resolveCharacter(draft, effect.from, context), to_id: resolveCharacter(draft, effect.to, context),
+      field: effect.field, delta: effect.delta }, bounds, context); break;
+    case 'context_reveal': apply(draft, { kind: 'reveal', effect_id: effect.effect_id,
+      character_id: resolveCharacter(draft, effect.target, context), field_id: effect.field_id }, bounds, context); break;
     case 'player_stat':
       draft.player.stats[effect.stat_id] = add(own(draft.player.stats, effect.stat_id), effect.delta); break;
     case 'stat': {
@@ -55,7 +63,7 @@ export function applyEffectBundle(state: GameState, bundle: EffectBundle, contex
     const key = instanceKey(draft, ctx, kind, id);
     if (!ledger.has(key)) { operation(); ledger.add(key); }
   }
-  for (const effect of effects) once('effect', effect.effect_id, () => apply(draft, effect, bounds));
+  for (const effect of effects) once('effect', effect.effect_id, () => apply(draft, effect, bounds, ctx));
   for (const [key, value] of Object.entries(input.flags)) once('flags', JSON.stringify([ctx.bundle_id, key]), () => { draft.flags[key] = value; });
   for (const [key, value] of Object.entries(input.ending_flags)) once('ending_flags', JSON.stringify([ctx.bundle_id, key]), () => { draft.ending_flags[key] = value; });
   for (const followup of input.followup_events) once('followup', followup.followup_id, () => {

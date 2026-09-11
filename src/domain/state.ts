@@ -1,5 +1,6 @@
 import type { StageId, FlagMap, GameTime, Id, RngSnapshot, StatMap } from './common';
 import type { CharacterState, FollowUpEvent, RelationState } from './content';
+import type { EventInstance } from './events';
 
 /** Opaque progression data only. No progression rules or initial values. */
 export interface ProgressionState {
@@ -61,8 +62,9 @@ export interface GameState {
   readonly flags: FlagMap;
   readonly ending_flags: FlagMap;
   readonly event_runtime: {
-    readonly active_instance: { readonly instance_id: Id; readonly event_id: Id;
-      readonly node_id: Id; readonly participant_bindings: Readonly<Record<Id, Id>> } | null;
+    readonly chapter_id?: Id;
+    readonly active_instance: EventInstance | null;
+    readonly finished_instances: readonly EventInstance[];
     readonly occurrence_history: readonly { readonly instance_id: Id; readonly event_id: Id;
       readonly occurred_at: GameTime }[];
     readonly completion_history: readonly { readonly instance_id: Id; readonly event_id: Id;

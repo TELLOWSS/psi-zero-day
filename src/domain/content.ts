@@ -1,4 +1,5 @@
 import type { Condition, Effect, FlagMap, GameTime, Id, StatMap, TextId, TimeSlot } from './common';
+import type { EventNode, EventParticipant, EventRuntimePolicy } from './events';
 
 export interface CharacterDefinition {
   readonly schema_version: 1;
@@ -107,16 +108,12 @@ export interface EventDefinition {
   readonly category_text_id: TextId;
   readonly chapter_text_id: TextId;
   readonly conditions: readonly Condition[];
-  readonly participants: readonly { readonly role_id: Id; readonly character_id: Id }[];
+  readonly participants: readonly EventParticipant[];
   readonly scene: { readonly background_asset_id?: Id; readonly character_asset_ids: readonly Id[] };
   readonly entry_node_id: Id;
-  readonly dialogue: readonly {
-    readonly node_id: Id;
-    readonly text_id: TextId;
-    readonly speaker_role_id?: Id;
-    readonly next_node_id?: Id;
-    readonly choice_ids: readonly Id[];
-  }[];
+  readonly dialogue: readonly EventNode[];
+  /** Absent on legacy data: valid for tooling, never auto-executed. */
+  readonly runtime?: EventRuntimePolicy;
   readonly choices: readonly EventChoice[];
   readonly failure_conditions: readonly Condition[];
   readonly failure_effects?: EffectBundle;
