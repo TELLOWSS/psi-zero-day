@@ -1,11 +1,11 @@
 {
   "characters": {
-    "player": { "uri": null, "accent": "#d4bd70" },
-    "kang_taesik": { "uri": null, "accent": "#b99b76" },
-    "yoon_sungho": { "uri": null, "accent": "#94aeb0" },
-    "lee_jaehoon": { "uri": null, "accent": "#b3b9bd" },
-    "lim_junho": { "uri": null, "accent": "#acb98a" },
-    "choi_minseok": { "uri": null, "accent": "#d1a879" }
+    "player": { "uri": null, "accent": "#a69c78", "silhouette": "supervisor" },
+    "kang_taesik": { "uri": null, "accent": "#ad9471", "silhouette": "foreman" },
+    "yoon_sungho": { "uri": null, "accent": "#829997", "silhouette": "trade_lead" },
+    "lee_jaehoon": { "uri": null, "accent": "#abb2af", "silhouette": "coordinator" },
+    "lim_junho": { "uri": null, "accent": "#9ca884", "silhouette": "newcomer" },
+    "choi_minseok": { "uri": null, "accent": "#b39c70", "silhouette": "specialist" }
   },
   "backgrounds": { "foundation": { "uri": null } },
   "cg": {},

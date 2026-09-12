@@ -17,6 +17,7 @@
     "ui.dialogue": "대화",
     "ui.narration": "현장",
     "ui.portrait": "인물",
+    "ui.speaking": "말하는 사람",
     "ui.keyboard": "Enter · Space 계속   /   1–4 선택",
     "ui.start_hint": "하루의 시작, 첫 번째 판단.",
     "ui.end_hint": "오늘의 현장을 뒤로하고.",

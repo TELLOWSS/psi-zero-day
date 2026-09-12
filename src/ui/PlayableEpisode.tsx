@@ -39,7 +39,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [session, snapshot.revision, snapshot.phase, presentation]);
 
-  return <main className={`game-frame phase-${snapshot.phase}`}>
+  return <main className={`game-frame phase-${snapshot.phase}${person ? ' has-speaker' : ''}`}>
     <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />
     <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
@@ -55,10 +55,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
-        {person ? <CharacterCard person={person} portraitUri={portrait?.kind === 'asset' ? session.assetUri(portrait.id) : undefined} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
+        {person ? <CharacterCard person={person} speakerLabel={t('ui.speaking')} portraitUri={portrait?.kind === 'asset' ? session.assetUri(portrait.id) : undefined} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
           {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
-            {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
+            {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span data-npc-id={npc_id} key={delta.source.effect_instance_id}>
               <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
               <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
             </span>)}

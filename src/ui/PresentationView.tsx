@@ -12,6 +12,7 @@ export function PresentationView({ commands, t, send, assetUri }: {
       <span className="eyebrow">{t('ui.choice')}</span>
       <h2>{t(p.text_id)}</h2>
       <div className="choice-panel">{p.choices.map((c, i) => <button key={c.choice_id} type="button" disabled={!c.enabled}
+        data-choice-state={c.enabled ? 'available' : 'disabled'}
         onClick={e => { if (e.detail < 2) send({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: c.choice_id }); }}>
         <span className="choice-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
         <span>{t(c.text_id)}</span><span className="choice-arrow" aria-hidden="true">↗</span>

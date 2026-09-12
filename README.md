@@ -61,4 +61,6 @@ Episode 01은 `src/content/episode01.ts`의 `createEpisode01Registry()`로 로�
 
 TASK-006은 기존 Event/Session 위에 네 관계 지표·변경 이력·대화 조회·관계 피드백을 연결한다. 구현 범위, 설정값과 248개 테스트 결과는 [TASK-006 기록](docs/TASK-006.md)을 따른다. 전체 저장/로드 기능은 아직 없다.
 
+TASK-006A의 산업 현장 비주얼·인물 실루엣·대화 구도와 실제 플레이 기준 화면은 [TASK-006A 기록](docs/TASK-006A.md)에 정리했다. 현재 벡터 자산은 최종 원화로 교체 가능한 플레이스홀더다.
+
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).
