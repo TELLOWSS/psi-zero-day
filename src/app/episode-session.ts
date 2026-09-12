@@ -1,6 +1,8 @@
-import type { GameState, PresentationCommand, GameTime } from '../domain';
+import type { GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
 import { createEpisode01Registry, episode01Manifest } from '../content/episode01';
 import { CoreEngine, createRun, eventCandidates, eventPresentation } from '../engine';
+import { getDialogueView } from '../engine/dialogue';
+import type { DialogueView } from '../engine/dialogue';
 import type { EngineCommand, NewRunOptions, ProgressBounds } from '../engine';
 import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
@@ -16,6 +18,8 @@ export interface SessionSnapshot {
   readonly chapterTitle: string;
   readonly completed: number;
   readonly total: number;
+  readonly dialogue: DialogueView | null;
+  readonly relationshipFeedback: readonly { readonly npc_id: string; readonly delta: RelationshipDelta }[];
 }
 
 /** Application boundary only. All run changes go through CoreEngine commands. */
@@ -74,21 +78,28 @@ export class EpisodeSession {
   #act(revision: number, operation: () => boolean): boolean {
     if (this.#busy || revision !== this.#snapshot.revision) return false;
     this.#busy = true;
+    const previous = this.#engine?.getState();
     try {
       if (!operation()) return false;
       const phase = this.#engine === null ? 'start' : this.#engine.getState().flags.episode01_completed === true ? 'complete' : 'playing';
-      this.#snapshot = this.#view(phase, revision + 1);
+      const oldEffects = new Set(previous?.relations.flatMap(r => r.delta_history?.map(d => d.source.effect_instance_id) ?? []) ?? []);
+      const current = this.#engine?.getState();
+      const feedback = current?.relations.filter(r => r.to_id === current.player.character_id).flatMap(r =>
+        (r.delta_history ?? []).filter(d => !oldEffects.has(d.source.effect_instance_id) && d.applied_delta !== 0)
+          .map(delta => ({ npc_id: r.from_id, delta }))) ?? [];
+      this.#snapshot = this.#view(phase, revision + 1, freezeData(feedback));
     } catch {
       this.#snapshot = this.#view('error', revision + 1);
     } finally { this.#busy = false; }
     for (const listener of this.#listeners) listener();
     return true;
   }
-  #view(phase: SessionSnapshot['phase'], revision: number): SessionSnapshot {
+  #view(phase: SessionSnapshot['phase'], revision: number, feedback: SessionSnapshot['relationshipFeedback'] = Object.freeze([])): SessionSnapshot {
     const state = this.#engine?.getState() ?? null;
     const id = state?.event_runtime.active_instance?.event_id;
     const event = id ? this.#registry.getEvent(id) : undefined;
     return Object.freeze({ revision, phase, state, presentation: state ? eventPresentation(state, this.#content) : Object.freeze([]),
+      dialogue: state ? getDialogueView(state, this.#content) : null, relationshipFeedback: feedback,
       eventTitle: this.t(event?.title_text_id ?? 'ep01.title'), chapterTitle: this.t(event?.chapter_text_id ?? 'ep01.chapter'),
       completed: state?.event_runtime.completion_history.length ?? 0, total: episode01Manifest.event_flow.length });
   }

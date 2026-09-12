@@ -52,6 +52,10 @@ export function createRun(content: ValidatedContent, options: NewRunOptions, bou
       relationship_values: definition.initial_state.relationship_values,
       trust: definition.initial_state.trust, respect: definition.initial_state.respect,
       reporting: definition.initial_state.reporting, flags: definition.initial_state.flags, history: [],
+      ...(content.relationship_policy ? {
+        compliance: content.relationship_policy.initial_compliance,
+        bounds: content.relationship_policy.bounds, delta_history: [],
+      } : {}),
     })), construction: config.construction, audio: config.audio,
     schedule: {}, assignments: [], psi: { unlocked_node_ids: [], progress: { values: {}, flags: {} } },
     flags: config.flags ?? {}, ending_flags: {}, followups: [],

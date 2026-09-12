@@ -24,7 +24,12 @@ function apply(draft: Mutable<GameState>, effect: Effect, bounds: ProgressBounds
       if (!stats) throw new Error('Unknown character');
       stats[effect.stat_id] = add(own(stats, effect.stat_id), effect.delta); break;
     }
-    case 'relation': draft.relations = copyData(changeRelation(draft.relations, effect.from_id, effect.to_id, effect.field, effect.delta)); break;
+    case 'relation': draft.relations = copyData(changeRelation(draft.relations, effect.from_id, effect.to_id, effect.field, effect.delta, {
+      effect_instance_id: instanceKey(draft, context, 'effect', effect.effect_id), event_id: context.event_id,
+      event_instance_id: context.event_instance_id, effect_id: effect.effect_id,
+      ...(context.choice_id === undefined ? {} : { choice_id: context.choice_id }),
+      at: { day: draft.clock.day, slot: draft.clock.slot },
+    })); break;
     case 'flag': draft.flags[effect.flag_id] = effect.value; break;
     case 'flag_change': {
       const value = own(draft.flags, effect.flag_id);

@@ -18,12 +18,12 @@ export function VisualImage({ uri, alt, className }: { uri?: string | null; alt:
   const src = /^(?:https?:|data:)/.test(uri) ? uri : `${import.meta.env.BASE_URL}${uri.replace(/^\/?(?:public\/)?/, '')}`;
   return <img className={className} src={src} alt={alt} onError={() => setFailed(uri)} />;
 }
-export function CharacterCard({ person }: { person: { id: string; name: string; role: string } }) {
+export function CharacterCard({ person, portraitUri }: { person: { id: string; name: string; role: string }; portraitUri?: string }) {
   const visual = characterVisual(person.id);
   return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={`${person.name} · ${person.role}`}>
     <div className="portrait-slot">
       <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
-      <VisualImage uri={visual?.uri} alt={person.name} className="portrait-image" />
+      <VisualImage uri={portraitUri ?? visual?.uri} alt={person.name} className="portrait-image" />
     </div>
     <div className="character-identity"><span className="identity-rule" /><strong>{person.name}</strong><span>{person.role}</span></div>
   </aside>;

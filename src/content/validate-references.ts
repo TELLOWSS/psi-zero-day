@@ -51,6 +51,7 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
     if (from.kind === 'character' && to.kind === 'character') relation(from.character_id, to.character_id, path);
   }
   function condition(c: Condition, path: string, roles?: ReadonlySet<string>): void {
+    if ('field' in c && c.field === 'compliance' && !bundle.relationship_policy) error(path, 'COMPLIANCE requires relationship_policy');
     switch (c.kind) {
       case 'all': case 'any': c.conditions.forEach((v, i) => condition(v, `${path}.conditions[${i}]`, roles)); break;
       case 'not': condition(c.condition, `${path}.condition`, roles); break;
@@ -75,6 +76,7 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
     values.forEach((c, i) => condition(c, `${path}[${i}]`, roles));
   }
   function effect(e: Effect, path: string, roles?: ReadonlySet<string>) {
+    if ('field' in e && e.field === 'compliance' && !bundle.relationship_policy) error(path, 'COMPLIANCE requires relationship_policy');
     switch (e.kind) {
       case 'context_stat':
         characterReference(e.target, `${path}.target`, roles);
@@ -118,6 +120,10 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
   bundle.relations.forEach((r, i) => {
     ref(characters, r.from_id, `relations[${i}].from_id`);
     ref(characters, r.to_id, `relations[${i}].to_id`);
+    const bounds = bundle.relationship_policy?.bounds;
+    if (bounds && [r.initial_state.trust, r.initial_state.respect, r.initial_state.reporting].some(v => v < bounds.min || v > bounds.max)) {
+      error(`relations[${i}].initial_state`, 'Initial relationship outside policy bounds');
+    }
   });
   function event(e: EventDefinition, i: number) {
     const p = `events[${i}]`;
@@ -135,6 +141,7 @@ export function validateReferences(bundle: ContentBundle): ReferenceIssue[] {
         if (v.selector[key] !== undefined) text(v.selector[key], `${sp}.${key}`);
       }
       v.selector.relations.forEach((r, j) => ref(characters, r.character_id, `${sp}.relations[${j}].character_id`));
+      if (!bundle.relationship_policy && v.selector.relations.some(r => r.field === 'compliance')) error(sp, 'COMPLIANCE requires relationship_policy');
       const selector = v.selector;
       const feasible = bundle.characters.some(candidate =>
         (['role_text_id', 'trade_text_id', 'nationality_text_id'] as const).every(key => selector[key] === undefined || selector[key] === candidate[key]) &&

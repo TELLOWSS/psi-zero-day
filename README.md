@@ -27,7 +27,7 @@ npm run build
 | src/app · src/ui | EpisodeSession과 16:9 대화·선택·완료 UI |
 | src/presentation | Phaser 전용 경계 예약; 장면 구현 없음 |
 | src/platform | StoragePort와 web/android 어댑터 위치 |
-| src/persistence | 향후 저장 검증·마이그레이션 위치 |
+| src/persistence | 관계 JSON 직렬화·복원 검증; 전체 저장·마이그레이션은 후속 범위 |
 | content | Foundation 데이터와 화면용 localization, Episode 01 JSON 콘텐츠 팩 |
 | public/assets | 향후 로컬 패키징 자산 위치 |
 | tests/fixtures | 테스트 전용: NPC 2, 이벤트 2, 엔딩 1, 자산 메타데이터 1 |
@@ -58,5 +58,7 @@ participant 컨텍스트·역할별 고유 바인딩·후속 미충족 처리와
 Episode 01은 `src/content/episode01.ts`의 `createEpisode01Registry()`로 로드한다. `npm test -- tests/episode01.test.ts`로 4개 경로와 45개 낮 판단 조합을 Headless 검증한다. [Episode 01 기록](docs/EPISODE-01.md)에 콘텐츠 계약을 정리했다.
 
 `npm run dev`에서 시작하기를 누르면 플레이한다. Enter/Space는 계속, 1~4는 현재 선택이다. 개발 정보는 개발 모드의 읽기 전용 패널이며 새로고침 시 진행은 초기화된다. UI·Asset slot·검증은 [TASK-005 기록](docs/TASK-005.md)을 따른다.
+
+TASK-006은 기존 Event/Session 위에 네 관계 지표·변경 이력·대화 조회·관계 피드백을 연결한다. 구현 범위, 설정값과 248개 테스트 결과는 [TASK-006 기록](docs/TASK-006.md)을 따른다. 전체 저장/로드 기능은 아직 없다.
 
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).

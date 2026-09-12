@@ -24,7 +24,7 @@ export type CoreStage = (typeof CORE_STAGES)[number];
 /** TASK-001 labels remain accepted; TASK-002 commands use canonical IDs. */
 export type StageId = CoreStage | ConstructionStage;
 export type ComparisonOperator = 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte';
-export type RelationField = 'trust' | 'respect' | 'reporting';
+export type RelationField = 'trust' | 'respect' | 'reporting' | 'compliance';
 export type CharacterReference =
   | { readonly kind: 'player' }
   | { readonly kind: 'character'; readonly character_id: Id }
@@ -58,7 +58,7 @@ export type Effect =
       readonly stat_id: Id; readonly delta: number }
   | { readonly effect_id: Id; readonly kind: 'flag'; readonly flag_id: Id; readonly value: FlagValue }
   | { readonly effect_id: Id; readonly kind: 'relation'; readonly from_id: Id;
-      readonly to_id: Id; readonly field: 'trust' | 'respect' | 'reporting'; readonly delta: number }
+      readonly to_id: Id; readonly field: RelationField; readonly delta: number }
   | { readonly effect_id: Id; readonly kind: 'reveal'; readonly character_id: Id; readonly field_id: Id }
   | { readonly effect_id: Id; readonly kind: 'player_stat'; readonly stat_id: Id; readonly delta: number }
   | { readonly effect_id: Id; readonly kind: 'flag_change'; readonly flag_id: Id; readonly delta: number }

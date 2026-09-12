@@ -11,8 +11,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const focusRef = useRef<HTMLElement>(null);
   const t = session.t;
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
-  const person = presentation?.type === 'SHOW_DIALOGUE' && presentation.speaker_character_id
-    ? session.character(presentation.speaker_character_id) : undefined;
+  const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
+  const portrait = snapshot.dialogue?.visual_reference;
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
 
@@ -55,8 +55,14 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
-        {person ? <CharacterCard person={person} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
+        {person ? <CharacterCard person={person} portraitUri={portrait?.kind === 'asset' ? session.assetUri(portrait.id) : undefined} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
+          {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
+            {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
+              <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
+              <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
+            </span>)}
+          </div> : null}
           <PresentationView commands={snapshot.presentation} t={t} send={command => { session.dispatch(command, snapshot.revision); }} assetUri={id => session.assetUri(id)} />
         </div>
       </section>
@@ -69,6 +75,6 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       <span className="keyboard-hint">{t('ui.keyboard')}</span>
       {import.meta.env.DEV ? <button className="debug-toggle" type="button" aria-expanded={debugOpen} onClick={() => setDebugOpen(v => !v)}>{t('ui.debug')}</button> : null}
     </footer>
-    {import.meta.env.DEV && debugOpen && DebugPanel ? <Suspense fallback={null}><DebugPanel state={snapshot.state} t={t} close={() => setDebugOpen(false)} /></Suspense> : null}
+    {import.meta.env.DEV && debugOpen && DebugPanel ? <Suspense fallback={null}><DebugPanel state={snapshot.state} dialogue={snapshot.dialogue} t={t} close={() => setDebugOpen(false)} /></Suspense> : null}
   </main>;
 }

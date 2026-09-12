@@ -35,7 +35,7 @@ export const conditionSchema: z.ZodType<Condition> = z.lazy(() => z.union([
     minimum_count: z.number().int().min(1) }),
   z.strictObject({ kind: z.literal('player_stat'), stat_id: idSchema, operator, value: finite }),
   z.strictObject({ kind: z.literal('relation'), from_id: idSchema, to_id: idSchema,
-    field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite }),
+    field: z.enum(['trust', 'respect', 'reporting', 'compliance']), operator, value: finite }),
   z.strictObject({ kind: z.literal('construction_stage'), stage_id: stage, operator: z.enum(['eq', 'ne']) }),
   z.strictObject({ kind: z.literal('construction_progress'), stage_id: stage, operator, value: finite }),
   z.strictObject({ kind: z.literal('choice_selected'), event_id: idSchema, choice_id: idSchema,
@@ -44,17 +44,17 @@ export const conditionSchema: z.ZodType<Condition> = z.lazy(() => z.union([
   z.strictObject({ kind: z.literal('flag_compare'), flag_id: idSchema, operator, value: flagValue }),
   z.strictObject({ kind: z.literal('context_stat'), target: characterReferenceSchema, stat_id: idSchema, operator, value: finite }),
   z.strictObject({ kind: z.literal('context_relation'), from: characterReferenceSchema, to: characterReferenceSchema,
-    field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite }),
+    field: z.enum(['trust', 'respect', 'reporting', 'compliance']), operator, value: finite }),
 ]));
 const conditions = z.array(conditionSchema);
 const statEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('stat'),
   character_id: idSchema, stat_id: idSchema, delta: finite });
 const relationEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('relation'),
-  from_id: idSchema, to_id: idSchema, field: z.enum(['trust', 'respect', 'reporting']), delta: finite });
+  from_id: idSchema, to_id: idSchema, field: z.enum(['trust', 'respect', 'reporting', 'compliance']), delta: finite });
 const contextualStatEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('context_stat'),
   target: characterReferenceSchema, stat_id: idSchema, delta: finite });
 const contextualRelationEffect = z.strictObject({ effect_id: idSchema, kind: z.literal('context_relation'),
-  from: characterReferenceSchema, to: characterReferenceSchema, field: z.enum(['trust', 'respect', 'reporting']), delta: finite });
+  from: characterReferenceSchema, to: characterReferenceSchema, field: z.enum(['trust', 'respect', 'reporting', 'compliance']), delta: finite });
 export const effectSchema: z.ZodType<Effect> = z.union([
   statEffect, relationEffect, contextualStatEffect, contextualRelationEffect,
   z.strictObject({ effect_id: idSchema, kind: z.literal('context_reveal'), target: characterReferenceSchema, field_id: idSchema }),
@@ -94,6 +94,14 @@ export const relationDefinitionSchema: z.ZodType<RelationDefinition> = z.strictO
 export const relationStateSchema: z.ZodType<RelationState> = z.strictObject({
   from_id: idSchema, to_id: idSchema, relationship_values: stats,
   trust: finite, respect: finite, reporting: finite, flags, history: z.array(idSchema),
+  compliance: finite.optional(),
+  bounds: z.strictObject({ min: finite, max: finite }).refine(b => b.min <= b.max, 'Invalid relationship bounds').optional(),
+  delta_history: z.array(z.strictObject({
+    field: z.enum(['trust', 'respect', 'reporting', 'compliance']), requested_delta: finite, applied_delta: finite,
+    before: finite, after: finite,
+    source: z.strictObject({ effect_instance_id: z.string().min(1), event_id: idSchema, event_instance_id: idSchema,
+      effect_id: idSchema, choice_id: idSchema.optional(), at: gameTimeSchema }),
+  })).optional(),
 });
 export const eventDefinitionSchema: z.ZodType<EventDefinition> = z.strictObject({
   schema_version: z.literal(1), event_id: idSchema,
@@ -104,7 +112,7 @@ export const eventDefinitionSchema: z.ZodType<EventDefinition> = z.strictObject(
       nationality_text_id: textIdSchema.optional(),
       stats: z.array(z.strictObject({ stat_id: idSchema, operator, value: finite })),
       relations: z.array(z.strictObject({ character_id: idSchema, direction: z.enum(['outgoing', 'incoming']),
-        field: z.enum(['trust', 'respect', 'reporting']), operator, value: finite })),
+        field: z.enum(['trust', 'respect', 'reporting', 'compliance']), operator, value: finite })),
     }).optional(),
   }).refine(p => (p.character_id === undefined) !== (p.selector === undefined), 'Specify character_id or selector')),
   scene: z.strictObject({ background_asset_id: idSchema.optional(), character_asset_ids: z.array(idSchema) }),
@@ -153,6 +161,9 @@ export const localizationCatalogSchema: z.ZodType<LocalizationCatalog> = z.stric
 });
 export const contentBundleSchema: z.ZodType<ContentBundle> = z.strictObject({
   schema_version: z.literal(1), content_version: z.string().min(1), default_locale: locale,
+  relationship_policy: z.strictObject({ bounds: z.strictObject({ min: finite, max: finite }), initial_compliance: finite })
+    .refine(p => p.bounds.min <= p.bounds.max && p.initial_compliance >= p.bounds.min && p.initial_compliance <= p.bounds.max,
+      'Invalid relationship policy bounds/default').optional(),
   localizations: z.array(localizationCatalogSchema).min(1),
   characters: z.array(characterDefinitionSchema), relations: z.array(relationDefinitionSchema),
   events: z.array(eventDefinitionSchema), endings: z.array(endingRuleSchema),

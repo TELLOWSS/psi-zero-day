@@ -10,3 +10,5 @@ export * from './rng';
 export * from './event-candidates';
 export * from './event-runtime';
 export * from './character-reference';
+export * from './npc-relationships';
+export * from './dialogue';

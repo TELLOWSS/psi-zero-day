@@ -1,5 +1,6 @@
 import type { Condition, Effect, FlagMap, GameTime, Id, StatMap, TextId, TimeSlot } from './common';
 import type { EventNode, EventParticipant, EventRuntimePolicy } from './events';
+import type { RelationshipBounds, RelationshipDelta, RelationshipPolicy } from './relationships';
 
 export interface CharacterDefinition {
   readonly schema_version: 1;
@@ -61,6 +62,10 @@ export interface RelationState {
   readonly reporting: number;
   readonly flags: FlagMap;
   readonly history: readonly Id[];
+  /** Absent only on legacy three-value content that has no relationship_policy. */
+  readonly compliance?: number;
+  readonly bounds?: RelationshipBounds;
+  readonly delta_history?: readonly RelationshipDelta[];
 }
 
 export interface FollowUpDefinition {
@@ -160,6 +165,7 @@ export interface LocalizationCatalog {
 export interface ContentBundle {
   readonly schema_version: 1;
   readonly content_version: string;
+  readonly relationship_policy?: RelationshipPolicy;
   readonly default_locale: string;
   readonly localizations: readonly LocalizationCatalog[];
   readonly characters: readonly CharacterDefinition[];

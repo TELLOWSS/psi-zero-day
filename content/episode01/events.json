@@ -193,6 +193,7 @@
       {
         "node_id": "plan",
         "type": "CHOICE",
+        "speaker_role_id": "lee",
         "text_id": "ep01.plan.prompt",
         "choice_ids": [
           "delegate_kang",
@@ -384,6 +385,7 @@
       {
         "node_id": "listen",
         "type": "CHOICE",
+        "speaker_role_id": "junho",
         "text_id": "ep01.junho.prompt",
         "choice_ids": [
           "listen_more",
