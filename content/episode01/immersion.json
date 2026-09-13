@@ -1,0 +1,32 @@
+{
+  "characters": {
+    "player": { "name_text_id": "ui.protagonist", "domain_text_id": "ui.domain.safety", "function_text_id": "ui.function.player" },
+    "kang_taesik": { "domain_text_id": "ui.domain.formwork", "function_text_id": "ui.function.kang" },
+    "yoon_sungho": { "domain_text_id": "ui.domain.rebar", "function_text_id": "ui.function.yoon" },
+    "lee_jaehoon": { "domain_text_id": "ui.domain.foundation", "function_text_id": "ui.function.lee" },
+    "lim_junho": { "domain_text_id": "ui.domain.site", "function_text_id": "ui.function.junho" },
+    "choi_minseok": { "domain_text_id": "ui.domain.lifting", "function_text_id": "ui.function.choi" }
+  },
+  "scenes": {
+    "e01_01_arrival": { "focus": "site", "location_text_id": "ui.location.entry", "tension_text_id": "ui.tension.arrival" },
+    "e01_02_meet_kang": { "focus": "formwork", "location_text_id": "ui.location.formwork", "tension_text_id": "ui.tension.meet" },
+    "e01_03_plan_breaks": { "focus": "coordination", "location_text_id": "ui.location.access", "tension_text_id": "ui.tension.plan" },
+    "e01_04_junho_signal": { "focus": "path", "location_text_id": "ui.location.ramp", "tension_text_id": "ui.tension.junho" },
+    "e01_05_command": { "focus": "path", "location_text_id": "ui.location.access", "tension_text_id": "ui.tension.command" },
+    "e01_06_pump_arrival": { "focus": "rebar", "location_text_id": "ui.location.entry", "tension_text_id": "ui.tension.pump" },
+    "e01_07_first_pour": { "focus": "site", "location_text_id": "ui.location.foundation", "tension_text_id": "ui.tension.pour" },
+    "e01_08_reactions": { "focus": "formwork", "location_text_id": "ui.location.foundation", "tension_text_id": "ui.tension.reactions" },
+    "e01_09_evening": { "focus": "site", "location_text_id": "ui.location.outside", "tension_text_id": "ui.tension.evening" },
+    "e01_10_next_day_tease": { "focus": "site", "location_text_id": "ui.location.entry", "tension_text_id": "ui.tension.tease" }
+  },
+  "shots": {
+    "ep01.arrival": { "opening": true },
+    "ep01.meet.kang": { "introduction": true },
+    "ep01.meet.player": { "introduction": true },
+    "ep01.plan.lee": { "introduction": true, "focus": "coordination" },
+    "ep01.plan.kang": { "focus": "formwork" },
+    "ep01.plan.yoon": { "introduction": true, "focus": "rebar" },
+    "ep01.junho.signal": { "introduction": true, "focus": "path" },
+    "ep01.reactions.junho.high": { "focus": "path" }
+  }
+}

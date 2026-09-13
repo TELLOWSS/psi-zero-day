@@ -1,5 +1,7 @@
 # TASK-006A — Visual Quality & Art Direction
 
+이 문서는 최초 비주얼 패스의 기록이다. 현재 브랜치의 오프닝·인물 소개·장면 맥락·오디오 보강 및 259개 검증 결과는 [TASK-006A-REFINE](TASK-006A-REFINE.md)을 따른다.
+
 ## IMPLEMENTED VISUAL SYSTEM
 
 ### 방향과 구성

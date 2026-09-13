@@ -3,9 +3,10 @@ import type { PresentationCommand } from '../domain';
 import type { Translate } from '../localization/translator';
 import { textStyle, VisualImage } from './VisualSlot';
 
-export function PresentationView({ commands, t, send, assetUri }: {
+export function PresentationView({ commands, t, send, assetUri, onChoiceFocus }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
+  onChoiceFocus?: () => void;
 }) {
   return <>{commands.map((p, index) => {
     if (p.type === 'SHOW_CHOICE') return <div className="choice-content" key={`${p.instance_id}/${p.node_id}`}>
@@ -13,6 +14,7 @@ export function PresentationView({ commands, t, send, assetUri }: {
       <h2>{t(p.text_id)}</h2>
       <div className="choice-panel">{p.choices.map((c, i) => <button key={c.choice_id} type="button" disabled={!c.enabled}
         data-choice-state={c.enabled ? 'available' : 'disabled'}
+        onPointerEnter={() => { if (c.enabled) onChoiceFocus?.(); }} onFocus={() => { if (c.enabled) onChoiceFocus?.(); }}
         onClick={e => { if (e.detail < 2) send({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: c.choice_id }); }}>
         <span className="choice-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
         <span>{t(c.text_id)}</span><span className="choice-arrow" aria-hidden="true">↗</span>

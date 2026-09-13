@@ -1,7 +1,8 @@
 import { useId } from 'react';
+import type { SceneFocus } from './scene-context';
 
 /** Original architectural study. Decorative geometry, not navigable gameplay space. */
-export function IndustrialScene() {
+export function IndustrialScene({ focus = 'site' }: { focus?: SceneFocus }) {
   const id = useId();
   return <svg className="industrial-scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>
@@ -49,6 +50,30 @@ export function IndustrialScene() {
     <path d="M442 0V226L474 232" fill="none" stroke="#171f1d" strokeWidth="3"/>
     <path d="M461 230L503 234L505 244L460 240z" fill="#ccc4a6"/>
     <path d="M1090 217L1420 148L1140 739L548 798z" fill="#e9d5aa" opacity=".07"/>
+    {/* Presentation-only focus cues reuse the same work zone and perspective. */}
+    <g key={focus} className="scene-focus-object" data-focus-object={focus}>
+      {focus === 'formwork' ? <g stroke="#b1a18a" strokeWidth="2">
+        <path d="M1050 394L1284 365L1415 412L1170 453Z" fill="#676657"/>
+        <path d="M1050 394V475L1170 540V453Z" fill="#4e5349"/><path d="M1170 453L1415 412V493L1170 540Z" fill="#7c7760"/>
+        <path d="M1050 415L1170 475L1415 434M1050 436L1170 497L1415 455M1050 456L1170 518L1415 475M1110 387L1236 442M1180 379L1311 428M1240 372L1375 418" fill="none"/>
+        <path d="M1080 389L1209 447V533M1230 372L1360 422V505" fill="none" stroke="#363f37" strokeWidth="8"/>
+      </g> : focus === 'rebar' ? <g>
+        <path d="M1022 404L1355 390L1415 418V460L1022 477Z" fill="#616b5e" stroke="#a5ac96" strokeWidth="2"/>
+        <path d="M1355 390V345H1425L1470 402V453L1415 460V418Z" fill="#8e9985"/><path d="M1370 355H1417L1446 394H1370Z" fill="#384b46"/>
+        <g fill="#273730" stroke="#798775" strokeWidth="5"><circle cx="1097" cy="474" r="25"/><circle cx="1320" cy="467" r="24"/><circle cx="1435" cy="453" r="23"/></g>
+        <path d="M1004 386L1350 372M1004 379L1350 365M1004 372L1350 358M1004 365L1350 351M1004 358L1350 344" stroke="#495a51" strokeWidth="5"/>
+        <path d="M1100 351V405M1260 345V398" stroke="#9c987c" strokeWidth="4"/>
+      </g> : focus === 'coordination' ? <g transform="translate(1215 240) rotate(-4)">
+        <path d="M0 0H220V190H0z" fill="#5f6c60" stroke="#99a18e" strokeWidth="4"/>
+        <path d="M16 20H205V166H16z" fill="#b2b5a0"/><path d="M20 190L8 290M199 190L221 288" stroke="#5f6b5b" strokeWidth="8"/>
+        <g fill="none" stroke="#65776b" strokeWidth="2"><path d="M32 40H185M32 66H185M32 92H185M32 118H185M64 32V150M116 32V150M164 32V150"/><path d="M37 48H99M87 75H145M126 103H186" strokeWidth="6"/></g>
+        <path d="M180 10L192 22M192 10L180 22" stroke="#d4c385" strokeWidth="2"/>
+      </g> : focus === 'path' ? <g>
+        <path d="M815 631L1210 466L1338 474L1095 663Z" fill="#b6b49a" opacity=".3"/>
+        <path d="M865 595L1224 456M1039 643L1339 463M908 577V630M1085 509V564M1210 463V504M1090 608V660M1252 512V551M1331 475V501" stroke="#b3ad8d" strokeWidth="4" fill="none"/>
+        <path d="M815 631L1210 466M1095 663L1338 474" stroke="#d0c597" strokeWidth="3" fill="none"/>
+      </g> : null}
+    </g>
     <path d="M0 0H1600V900H0z" filter={`url(#${id}-grain)`} opacity=".045" style={{ mixBlendMode: 'soft-light' }}/>
   </svg>;
 }

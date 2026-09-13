@@ -63,4 +63,6 @@ TASK-006은 기존 Event/Session 위에 네 관계 지표·변경 이력·대화
 
 TASK-006A의 산업 현장 비주얼·인물 실루엣·대화 구도와 실제 플레이 기준 화면은 [TASK-006A 기록](docs/TASK-006A.md)에 정리했다. 현재 벡터 자산은 최종 원화로 교체 가능한 플레이스홀더다.
 
+오프닝·인물 소개·판단 문구·장면 단서의 후속 보강은 [TASK-006A-REFINE](docs/TASK-006A-REFINE.md)에 정리했다. 소리는 기본 음소거이며 화면의 ‘소리 켜기’로 초기 합성 앰비언스·타이틀 음색·조작음을 들을 수 있다. 최종 원화·녹음·음악은 후속 범위다.
+
 기술 문서: [Vite](https://vite.dev/guide/), [Zod](https://zod.dev/api), [Vitest](https://vitest.dev/guide/), [Phaser](https://docs.phaser.io/), [Capacitor](https://capacitorjs.com/docs).
