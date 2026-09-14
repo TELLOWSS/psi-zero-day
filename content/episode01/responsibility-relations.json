@@ -1,0 +1,12 @@
+[
+  {
+    "from_id": "oh_seungjae",
+    "to_id": "player",
+    "initial_state": { "relationship_values": {}, "trust": 30, "respect": 30, "reporting": 25, "flags": {} }
+  },
+  {
+    "from_id": "player",
+    "to_id": "oh_seungjae",
+    "initial_state": { "relationship_values": {}, "trust": 35, "respect": 35, "reporting": 30, "flags": {} }
+  }
+]
