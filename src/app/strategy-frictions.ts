@@ -36,6 +36,19 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
   e01_08a_reporting_return: [
     { friction_id: 'friction.reporting.aftershock', kind: 'reporting_hesitation', label_text_id: 'ui.friction.aftershock', detail_text_id: 'ui.friction.aftershock.reporting' },
   ],
+  e01_08b_inspection_find: [
+    { friction_id: 'friction.inspection.first', kind: 'inspection_pressure', label_text_id: 'ui.friction.inspection', detail_text_id: 'ui.friction.inspection.first' },
+    { friction_id: 'friction.schedule.remaining_vehicle', kind: 'schedule_pressure', label_text_id: 'ui.friction.schedule', detail_text_id: 'ui.friction.schedule.remaining_vehicle' },
+    { friction_id: 'friction.responsibility.inspection', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.inspection' },
+  ],
+  e01_08c_site_pushback: [
+    { friction_id: 'friction.coordination.after_fix', kind: 'coordination_conflict', label_text_id: 'ui.friction.coordination', detail_text_id: 'ui.friction.coordination.after_fix' },
+    { friction_id: 'friction.responsibility.pushback', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.pushback' },
+  ],
+  e01_08d_reinspection: [
+    { friction_id: 'friction.inspection.recheck', kind: 'inspection_pressure', label_text_id: 'ui.friction.inspection', detail_text_id: 'ui.friction.inspection.recheck' },
+    { friction_id: 'friction.responsibility.rework', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.rework' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
