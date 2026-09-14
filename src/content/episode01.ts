@@ -14,6 +14,7 @@ import reportReturnEvent from '../../content/episode01/report-return-event.json'
 import ko from '../../content/episode01/ko.json';
 import inspectionKo from '../../content/episode01/inspection-ko.json';
 import responsibilityKo from '../../content/episode01/responsibility-ko.json';
+import playableKo from '../../content/localization/playable-ko.json';
 import { episode01TbmGapEvents, episode01TbmGapMessages } from './episode01-tbm';
 import { episode01RestartEvents, episode01RestartMessages } from './episode01-restart';
 import { episode01StopworkEvents, episode01StopworkMessages } from './episode01-stopwork';
@@ -50,6 +51,7 @@ export function createEpisode01Registry(): ContentRegistry {
       ...episode01StopworkMessages,
       ...episode01InstructionMessages,
       ...episode01RecordMessages,
+      ...playableKo.messages,
     } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
