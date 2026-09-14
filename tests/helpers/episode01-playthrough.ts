@@ -29,6 +29,7 @@ export interface EpisodeDecisions {
   responsibility?: 'report_one_sided' | 'report_defensive' | 'report_verify_timeline';
   tbm?: 'tbm_form_first' | 'tbm_worker_blame' | 'tbm_change_control';
   restart?: 'restart_follow_verbal' | 'restart_trace_instruction' | 'restart_verify_controls';
+  stopwork?: 'stopwork_ignore_social' | 'stopwork_public_boundary' | 'stopwork_protect_process';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -64,6 +65,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_08e_responsibility_clash/report': decisions.responsibility ?? 'report_verify_timeline',
     'e01_08g_tbm_field_gap/tbm_action': decisions.tbm ?? 'tbm_change_control',
     'e01_08i_restart_pressure/restart_action': decisions.restart ?? 'restart_verify_controls',
+    'e01_08k_stopwork_aftershock/culture_action': decisions.stopwork ?? 'stopwork_protect_process',
     'e01_09_evening/evening': decisions.evening,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
@@ -73,7 +75,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     e01_09_evening: { day: 1, slot: 'EVENING' },
     e01_10_next_day_tease: { day: 2, slot: 'PRE_WORK' },
   };
-  for (let step = 0; step < 360; step++) {
+  for (let step = 0; step < 400; step++) {
     const state = engine.getState();
     if (state.flags.episode01_completed === true) return { initial, state, trace, checkpoints };
     const active = state.event_runtime.active_instance;
