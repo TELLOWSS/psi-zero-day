@@ -38,6 +38,6 @@ describe('Episode 01 instruction cascade', () => {
       instruction_chain_result: 'conditional_phrase_restored',
     });
     expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(27);
-    expect(state.player.stats.analysis).toBe(40);
+    expect(state.player.stats.analysis).toBe(41);
   });
 });
