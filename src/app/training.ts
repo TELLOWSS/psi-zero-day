@@ -1,11 +1,11 @@
 import training from '../../content/episode01/training.json';
 import items from '../../content/episode01/items.json';
-import type { FlagMap, Id } from '../domain';
+import type { FlagMap, Id, TextId } from '../domain';
 
 export interface TrainingStatusView {
   readonly training_id: Id;
   readonly character_id: Id;
-  readonly title: string;
+  readonly title_text_id: TextId;
   readonly completed: boolean;
   readonly growth_stage: string;
   readonly rewards: readonly { readonly item_id: Id; readonly name: string }[];
@@ -21,7 +21,7 @@ export function projectTrainingStatuses(flags: FlagMap, characterId: Id): readon
     .map(item => Object.freeze({
       training_id: item.training_id,
       character_id: item.character_id,
-      title: item.title,
+      title_text_id: item.title_text_id,
       completed: flags[item.completion_flag] === true,
       growth_stage: item.growth_stage,
       rewards: Object.freeze(item.rewards.map(itemId => Object.freeze({
