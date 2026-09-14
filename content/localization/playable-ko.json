@@ -48,7 +48,11 @@
     "ui.strategy.assignments": "작업 배치",
     "ui.strategy.roster": "현장 인원",
     "ui.strategy.site": "현장",
-    "ui.strategy.events": "현장 이벤트",
-    "ui.strategy.progress": "공정률"
+    "ui.strategy.events": "위험 신호",
+    "ui.strategy.progress": "공정률",
+    "ui.signal.entry_congestion": "진입통로 혼잡",
+    "ui.signal.ramp_movement": "경사로 이상 신호",
+    "ui.signal.work_vehicle_overlap": "차량·작업 동선 겹침",
+    "ui.signal.pump_entry": "펌프카 진입"
   }
 }
