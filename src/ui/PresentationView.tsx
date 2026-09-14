@@ -3,20 +3,33 @@ import type { PresentationCommand } from '../domain';
 import type { Translate } from '../localization/translator';
 import { textStyle, VisualImage } from './VisualSlot';
 
+function ChoiceButtons({ p, t, send }: {
+  p: Extract<PresentationCommand, { type: 'SHOW_CHOICE' }>;
+  t: Translate;
+  send: (command: EngineCommand) => void;
+}) {
+  return <div className="choice-panel">{p.choices.map((c, i) => <button key={c.choice_id} type="button" disabled={!c.enabled}
+    onClick={e => { if (e.detail < 2) send({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: c.choice_id }); }}>
+    <span className="choice-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+    <span>{t(c.text_id)}</span><span className="choice-arrow" aria-hidden="true">↗</span>
+  </button>)}</div>;
+}
+
 export function PresentationView({ commands, t, send, assetUri, choiceFallback = false }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   choiceFallback?: boolean;
 }) {
   return <>{commands.map((p, index) => {
-    if (p.type === 'SHOW_CHOICE') return <div className={`choice-content${choiceFallback ? ' map-choice-fallback' : ''}`} key={`${p.instance_id}/${p.node_id}`}>
-      <span className="eyebrow">{choiceFallback ? t('ui.strategy.text_fallback') : t('ui.choice')}</span>
+    if (p.type === 'SHOW_CHOICE' && choiceFallback) return <details className="choice-content map-choice-fallback" key={`${p.instance_id}/${p.node_id}`}>
+      <summary>{t('ui.strategy.text_fallback')}</summary>
       <h2>{t(p.text_id)}</h2>
-      <div className="choice-panel">{p.choices.map((c, i) => <button key={c.choice_id} type="button" disabled={!c.enabled}
-        onClick={e => { if (e.detail < 2) send({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: c.choice_id }); }}>
-        <span className="choice-number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-        <span>{t(c.text_id)}</span><span className="choice-arrow" aria-hidden="true">↗</span>
-      </button>)}</div>
+      <ChoiceButtons p={p} t={t} send={send} />
+    </details>;
+    if (p.type === 'SHOW_CHOICE') return <div className="choice-content" key={`${p.instance_id}/${p.node_id}`}>
+      <span className="eyebrow">{t('ui.choice')}</span>
+      <h2>{t(p.text_id)}</h2>
+      <ChoiceButtons p={p} t={t} send={send} />
     </div>;
     if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <div className={`dialogue-content ${textStyle(p.text_id) ?? ''}`} key={`${p.instance_id}/${p.node_id}`}>
       <span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>
