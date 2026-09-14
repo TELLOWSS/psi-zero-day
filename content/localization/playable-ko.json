@@ -63,6 +63,7 @@
     "ui.friction.hierarchy": "위계 압박",
     "ui.friction.responsibility": "책임 공방",
     "ui.friction.inspection": "감리·검측 압박",
+    "ui.friction.aftershock": "지난 판단의 여파",
     "ui.friction.schedule.early_rebar": "철근차가 예정보다 일찍 들어왔는데 펌프카 시간도 다가온다.",
     "ui.friction.coordination.overlap": "자재 정리, 철근 하역, 펌프카 진입 준비가 한 동선에서 겹친다.",
     "ui.friction.reporting.hesitation": "이상 신호를 본 사람이 말을 꺼냈다가 멈춘다. 작은 보고가 묻힐 수 있다.",
@@ -71,6 +72,7 @@
     "ui.friction.coordination.crews": "형틀·철근·차량 동선이 서로 먼저 하겠다고 겹친다.",
     "ui.friction.responsibility.command": "멈추면 공정 지연 책임, 그대로 진행하면 안전 책임이 남는다.",
     "ui.friction.schedule.waiting_vehicle": "펌프카가 입구에 도착했다. 차량이 기다릴수록 현장의 압박이 커진다.",
-    "ui.friction.responsibility.entry": "진입을 허용할지 멈출지 결정하는 순간, 결과 책임도 함께 따라온다."
+    "ui.friction.responsibility.entry": "진입을 허용할지 멈출지 결정하는 순간, 결과 책임도 함께 따라온다.",
+    "ui.friction.aftershock.reporting": "위험은 지나가도 사람은 기억한다. 앞선 대응이 다음 보고 행동으로 되돌아온다."
   }
 }
