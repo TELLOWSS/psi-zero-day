@@ -17,6 +17,7 @@ const SIGNALS_BY_EVENT: Readonly<Record<Id, readonly StrategySignal[]>> = {
   e01_06_pump_arrival: [{ signal_id: 'signal.pump_entry', kind: 'vehicle', anchor: 'gate', label_text_id: 'ui.signal.pump_entry' }],
   e01_08b_inspection_find: [{ signal_id: 'signal.inspection_access', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.inspection_access' }],
   e01_08d_reinspection: [{ signal_id: 'signal.reinspection_access', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.reinspection_access' }],
+  e01_08g_tbm_field_gap: [{ signal_id: 'signal.tbm_field_gap', kind: 'access', anchor: 'yard', label_text_id: 'ui.signal.tbm_field_gap' }],
 };
 
 export function projectEpisode01Signals(activeEventId: Id | null): readonly StrategySignal[] {
