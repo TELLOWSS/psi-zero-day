@@ -4,7 +4,7 @@ Purpose: finish the game without drifting back into endless concept-image work.
 
 ## Locked visual direction
 
-The approved commercial-style casual strategy construction-site screen is the target. Concept images are now references, not the main workstream.
+The approved commercial-style casual strategy construction-site screen is the target. Concept images are references, not the main workstream. The generated vector pass is an implementation asset layer, **not a downgrade of the final visual target**. Final painted/3D-quality WebP art can replace it through the same asset IDs without gameplay changes.
 
 ## Execution order
 
@@ -29,28 +29,34 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Skill choices remain normal authored event choices and use the existing `choose_event` path.
 - No hidden XP formula, PSI threshold or new engine rule.
 
-### TASK-010D — Approved art export integration — NEXT
-- Export 8 approved character portraits/map sprites.
-- Export foundation 2.5D map.
-- Register through `assets.json` and existing fallback pipeline.
-- Stop using CSS silhouettes where final art exists.
+### TASK-010D — Production art integration — IMPLEMENTED
+- Eight distinct character portraits and map sprites have a deterministic generated SVG production pass.
+- Foundation map has an actual casual-strategy construction-site background asset.
+- `assets.json` now registers 17 image assets.
+- Normal `dev`, `test` and `build` commands generate the vector files and refresh the manifest first.
+- Final WebP art remains the preferred target; manifest generation automatically prefers WebP and uses SVG only when WebP is absent.
+- CSS silhouettes remain only as failure fallback.
+- Character silhouettes, props and roles remain deliberately distinct.
 
-### TASK-011A — Core strategy loop completion
+### TASK-011A — Core strategy loop completion — NEXT
 - Select site target.
 - Inspect signal.
 - Assign person/action.
-- Spend time/resources only after Director-approved values exist.
-- Resolve event consequence.
+- Resolve the consequence and return to the map.
+- Make this loop readable without relying on long dialogue.
+- Spend time/resources only after Director-approved values exist; do not invent economy or PSI formulas.
 
 ### TASK-011B — Episode 01 vertical-slice polish
 - 11–16 event routed playthrough.
 - Casual strategy map first, dialogue second.
+- Replace vector production art with final painted/3D WebP where final art is approved.
 - Sound/BGM hooks, feedback, transitions, save/resume check.
 
 ### TASK-012 — Executable verification
 - `npm test`
 - `npm run typecheck`
 - `npm run build`
+- `npm run assets:check`
 - fix all failures before release packaging.
 
 ### TASK-013 — Android/Web release preparation
