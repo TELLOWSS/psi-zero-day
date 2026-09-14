@@ -80,6 +80,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const trainingReward = snapshot.state && rewardCharacterId
     ? completedTraining(snapshot.state.flags, rewardCharacterId)
     : undefined;
+  const equippedTrainingRewards = trainingReward && snapshot.state && rewardCharacterId
+    ? [...trainingReward.auto_equipped, ...trainingReward.equip_options.filter(item =>
+      snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
+    : [];
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
@@ -125,7 +129,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           {trainingReward ? <div className="training-reward-panel" role="status" data-training={trainingReward.training_id}>
             <span>{t('ui.training.complete')}</span><strong>{t(trainingReward.title_text_id)}</strong>
             <div><b>{t('ui.training.reward')}</b>{trainingReward.rewards.map(item => <em key={item.item_id}>{item.name}</em>)}</div>
-            <div><b>{t('ui.training.equipped')}</b>{trainingReward.equipped.map(item => <em key={item.slot}>{item.name}</em>)}</div>
+            {equippedTrainingRewards.length ? <div><b>{t('ui.training.equipped')}</b>{equippedTrainingRewards.map(item => <em key={item.slot}>{item.name}</em>)}</div> : null}
           </div> : null}
           <PresentationView
             commands={snapshot.presentation}
