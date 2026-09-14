@@ -20,13 +20,19 @@ const copy = {
   brand: 'PSI : ZERO DAY', day: 'DAY', stage: 'STAGE', psi: 'PSI', objectives: 'OBJECTIVES',
   assignments: 'ASSIGNMENTS', roster: 'ROSTER', site: 'SITE', events: 'SIGNALS', progress: 'PROGRESS',
   pressures: 'FIELD PRESSURE', focus: 'FOCUS', focusHint: 'Select a worker or signal.',
-  actions: 'FIELD ACTIONS', actionHint: 'Act through the map.',
+  actions: 'FIELD ACTIONS', actionHint: 'Select a map target first.',
 };
 const labels: Readonly<Record<string, string>> = {
   'ui.signal.ramp_movement': '경사로 이상 신호',
   'ui.friction.reporting': '보고 위축',
   'ui.friction.reporting.hesitation': '이상 신호를 본 사람이 말을 꺼냈다가 멈춘다.',
-  'ep01.junho.listen_more': '조금 더 들어본다.',
+  'ui.strategy.zones': '작업구역 선택',
+  'ui.strategy.zone_hint': '이 작업구역에서 가능한 행동을 확인합니다.',
+  'ui.strategy.zone.entry': '진입부',
+  'ui.strategy.zone.ramp': '경사로',
+  'ui.strategy.zone.yard': '자재 야적장',
+  'ui.strategy.zone.gate': '현장 게이트',
+  'ui.strategy.no_actions': '현재 선택한 대상에는 실행할 행동이 없습니다.',
 };
 const text = (id: string) => labels[id] ?? id;
 const person = (id: string) => id === 'lim_junho' ? { name: '임준호', role: '신입근로자' } : undefined;
@@ -37,22 +43,20 @@ const actions: readonly StrategyAction[] = [{
 }];
 
 describe('StrategyMapShell', () => {
-  it('renders localized characters, signals, field pressure and executable field actions', () => {
+  it('marks actionable people/signals/zones and waits for a target selection before listing actions', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
     expect(html).toContain('data-stage="TYPICAL_FLOOR"');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('data-character="lim_junho"');
-    expect(html).toContain('data-scene-participant="true"');
+    expect(html).toContain('data-action-count="1"');
+    expect(html).toContain('has-actions');
     expect(html).toContain('임준호');
-    expect(html).toContain('신입근로자');
     expect(html).toContain('data-signal="signal.ramp_movement"');
     expect(html).toContain('경사로 이상 신호');
-    expect(html).toContain('data-friction="friction.reporting.hesitation"');
-    expect(html).toContain('보고 위축');
-    expect(html).toContain('FOCUS');
+    expect(html).toContain('data-zone="ramp"');
+    expect(html).toContain('자재 야적장');
     expect(html).toContain('FIELD ACTIONS');
-    expect(html).toContain('data-choice="listen_more"');
-    expect(html).toContain('data-action-target="lim_junho"');
-    expect(html).toContain('조금 더 들어본다.');
+    expect(html).toContain('Select a map target first.');
+    expect(html).not.toContain('data-choice="listen_more"');
   });
 });
