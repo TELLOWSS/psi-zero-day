@@ -1,4 +1,5 @@
 import type { StrategyView } from '../app/strategy-view';
+import type { StrategySignalKind } from '../app/strategy-signals';
 
 export interface StrategyMapCopy {
   readonly brand: string;
@@ -13,7 +14,20 @@ export interface StrategyMapCopy {
   readonly progress: string;
 }
 
-export function StrategyMapShell({ view, copy }: { readonly view: StrategyView; readonly copy: StrategyMapCopy }) {
+function signalIcon(kind: StrategySignalKind): string {
+  switch (kind) {
+    case 'ramp': return '↗';
+    case 'vehicle': return '▣';
+    case 'overlap': return '⇄';
+    case 'access': return '!';
+  }
+}
+
+export function StrategyMapShell({ view, copy, text }: {
+  readonly view: StrategyView;
+  readonly copy: StrategyMapCopy;
+  readonly text: (textId: string) => string;
+}) {
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const psiScore = Math.max(0, Math.min(100, Number(view.psi.values.score ?? 0)));
@@ -35,7 +49,7 @@ export function StrategyMapShell({ view, copy }: { readonly view: StrategyView; 
         <p>{copy.progress}<strong>{progress}%</strong></p>
       </section>
       <button type="button"><span aria-hidden="true">⌖</span>{copy.site}</button>
-      <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.runtime.active_event_id ? 1 : 0}</b></button>
+      <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.signals.length}</b></button>
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
     </aside>
 
@@ -53,7 +67,17 @@ export function StrategyMapShell({ view, copy }: { readonly view: StrategyView; 
         <strong>{view.construction.stage_id}</strong>
         <progress value={progress} max={100} aria-label={copy.progress} />
       </div>
-      {view.runtime.active_event_id ? <div className="strategy-event-beacon" role="status"><span aria-hidden="true">!</span>{view.runtime.active_event_id}</div> : null}
+      <div className="strategy-signal-layer" aria-live="polite">
+        {view.signals.map(signal => <div
+          className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}`}
+          data-signal={signal.signal_id}
+          key={signal.signal_id}
+          role="status"
+        >
+          <span aria-hidden="true">{signalIcon(signal.kind)}</span>
+          <strong>{text(signal.label_text_id)}</strong>
+        </div>)}
+      </div>
     </section>
 
     <footer className="strategy-roster" aria-label={copy.roster}>
