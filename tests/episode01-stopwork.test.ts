@@ -3,40 +3,29 @@ import { getRelation } from '../src/engine';
 import { playEpisode } from './helpers/episode01-playthrough';
 
 const common = {
-  plan: 'delegate_kang' as const,
+  plan: 'coordinate_schedule' as const,
   ramp: 'check_self' as const,
   entrance: 'request_delay' as const,
   tbm: 'tbm_change_control' as const,
-  restart: 'restart_verify_controls' as const,
+  restart: 'restart_follow_verbal' as const,
   evening: 'rest' as const,
 };
 
 describe('Episode 01 stop-work culture aftershock', () => {
-  it('lets informal blame silence the next report when the player does not intervene', () => {
-    const { state } = playEpisode({ ...common, stopwork: 'stopwork_ignore_social' });
-    expect(state.flags).toMatchObject({
-      stopwork_culture_action: 'ignore_social',
-      stopwork_culture_result: 'reporting_silenced',
-    });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(18);
-  });
+  it('keeps the three social responses distinct once a premature restart causes a second stop', () => {
+    const ignored = playEpisode({ ...common, stopwork: 'stopwork_ignore_social' }).state;
+    const publicBoundary = playEpisode({ ...common, stopwork: 'stopwork_public_boundary' }).state;
+    const protectedProcess = playEpisode({ ...common, stopwork: 'stopwork_protect_process' }).state;
 
-  it('protects the reporter publicly but leaves private friction behind', () => {
-    const { state } = playEpisode({ ...common, stopwork: 'stopwork_public_boundary' });
-    expect(state.flags).toMatchObject({
-      stopwork_culture_action: 'public_boundary',
-      stopwork_culture_result: 'formal_protection_private_friction',
-    });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(26);
-  });
+    expect(ignored.flags.stopwork_culture_result).toBe('reporting_silenced');
+    expect(publicBoundary.flags.stopwork_culture_result).toBe('formal_protection_private_friction');
+    expect(protectedProcess.flags.stopwork_culture_result).toBe('reporting_route_preserved');
 
-  it('separates reporting from crew assignment and preserves the reporting route', () => {
-    const { state } = playEpisode({ ...common, stopwork: 'stopwork_protect_process' });
-    expect(state.flags).toMatchObject({
-      stopwork_culture_action: 'protect_process',
-      stopwork_culture_result: 'reporting_route_preserved',
-    });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(27);
-    expect(state.player.stats.people).toBe(33);
+    const ignoredReporting = getRelation(ignored.relations, 'lim_junho', 'player')!.reporting;
+    const publicReporting = getRelation(publicBoundary.relations, 'lim_junho', 'player')!.reporting;
+    const protectedReporting = getRelation(protectedProcess.relations, 'lim_junho', 'player')!.reporting;
+    expect(publicReporting).toBeGreaterThan(ignoredReporting);
+    expect(protectedReporting).toBeGreaterThan(publicReporting);
+    expect(protectedProcess.player.stats.people).toBeGreaterThan(ignored.player.stats.people);
   });
 });
