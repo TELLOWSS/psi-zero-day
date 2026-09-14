@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
+import { projectCharacterGrowth } from '../app/character-growth';
 import { projectStrategyActions } from '../app/strategy-actions';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
@@ -68,6 +69,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const dialoguePortraitUri = portrait?.kind === 'asset'
     ? session.assetUri(portrait.id)
     : person ? characterPortraitUri(person.id, id => session.assetUri(id)) : undefined;
+  const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
@@ -95,7 +97,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
-        {person ? <CharacterCard person={person} portraitUri={dialoguePortraitUri} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
+        {person ? <CharacterCard person={person} portraitUri={dialoguePortraitUri} growth={dialogueGrowth} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
           {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
