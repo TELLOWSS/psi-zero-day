@@ -31,6 +31,7 @@ export interface EpisodeDecisions {
   restart?: 'restart_follow_verbal' | 'restart_trace_instruction' | 'restart_verify_controls';
   stopwork?: 'stopwork_ignore_social' | 'stopwork_public_boundary' | 'stopwork_protect_process';
   instruction?: 'instruction_accept_top' | 'instruction_blame_worker' | 'instruction_reconstruct_chain';
+  record?: 'record_minimize_scope' | 'record_retrofit_paper' | 'record_preserve_timeline';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -68,6 +69,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_08i_restart_pressure/restart_action': decisions.restart ?? 'restart_verify_controls',
     'e01_08k_stopwork_aftershock/culture_action': decisions.stopwork ?? 'stopwork_protect_process',
     'e01_08m_instruction_cascade/instruction_action': decisions.instruction ?? 'instruction_reconstruct_chain',
+    'e01_08o_record_pressure/record_action': decisions.record ?? 'record_preserve_timeline',
     'e01_09_evening/evening': decisions.evening,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
@@ -77,7 +79,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     e01_09_evening: { day: 1, slot: 'EVENING' },
     e01_10_next_day_tease: { day: 2, slot: 'PRE_WORK' },
   };
-  for (let step = 0; step < 440; step++) {
+  for (let step = 0; step < 480; step++) {
     const state = engine.getState();
     if (state.flags.episode01_completed === true) return { initial, state, trace, checkpoints };
     const active = state.event_runtime.active_instance;
