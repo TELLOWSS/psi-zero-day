@@ -86,10 +86,100 @@ function addPlayerEquipmentSelection(event: EventDefinition): EventDefinition {
   };
 }
 
+function addNextDaySkillSelection(event: EventDefinition): EventDefinition {
+  if (event.event_id !== 'e01_10_next_day_tease') return event;
+  return {
+    ...event,
+    entry_node_id: 'next_day_action',
+    dialogue: [
+      {
+        node_id: 'next_day_action',
+        type: 'CHOICE',
+        text_id: 'ui.skill.next_day.prompt',
+        choice_ids: ['next_day_standard_check', 'next_day_camera_compare', 'next_day_radio_checkin'],
+      },
+      {
+        node_id: 'next_day_standard',
+        type: 'RESULT',
+        text_id: 'ui.skill.next_day.standard.result',
+        next_node_id: 'end',
+        choice_ids: [],
+      },
+      {
+        node_id: 'next_day_camera',
+        type: 'RESULT',
+        text_id: 'ui.skill.next_day.camera.result',
+        next_node_id: 'end',
+        choice_ids: [],
+      },
+      {
+        node_id: 'next_day_radio',
+        type: 'RESULT',
+        text_id: 'ui.skill.next_day.radio.result',
+        next_node_id: 'end',
+        choice_ids: [],
+      },
+      ...event.dialogue.filter(node => node.node_id === 'end'),
+    ],
+    choices: [
+      {
+        choice_id: 'next_day_standard_check',
+        text_id: 'ui.skill.next_day.standard',
+        next_node_id: 'next_day_standard',
+        requirements: [],
+        effects: {
+          ...emptyEffects(),
+          flags: { 'next_day.precheck': 'standard' },
+        },
+      },
+      {
+        choice_id: 'next_day_camera_compare',
+        text_id: 'ui.skill.next_day.camera',
+        next_node_id: 'next_day_camera',
+        requirements: [{
+          kind: 'all',
+          conditions: [
+            { kind: 'flag', flag_id: 'growth.player', equals: 'focused' },
+            { kind: 'flag', flag_id: 'equipment.player.secondary_tool', equals: 'item.inspection_camera' },
+          ],
+        }],
+        effects: {
+          ...emptyEffects(),
+          flags: {
+            'skill.player.camera_compare.used': true,
+            'next_day.precheck': 'camera_compare',
+            'next_day.evidence_ready': true,
+          },
+        },
+      },
+      {
+        choice_id: 'next_day_radio_checkin',
+        text_id: 'ui.skill.next_day.radio',
+        next_node_id: 'next_day_radio',
+        requirements: [{
+          kind: 'all',
+          conditions: [
+            { kind: 'flag', flag_id: 'growth.lim_junho', equals: 'focused' },
+            { kind: 'flag', flag_id: 'equipment.lim_junho.communication', equals: 'item.site_radio' },
+          ],
+        }],
+        effects: {
+          ...emptyEffects(),
+          flags: {
+            'skill.lim_junho.radio_report.used': true,
+            'next_day.precheck': 'radio_checkin',
+            'next_day.report_channel_ready': true,
+          },
+        },
+      },
+    ],
+  };
+}
+
 /**
  * Authored progression hooks only: no XP thresholds or hidden formulas.
- * Training rewards and equipment changes still happen through normal event choices.
+ * Training rewards, equipment changes and skill unlocks still happen through normal event choices.
  */
 export function applyEpisode01ProgressionHooks(events: readonly EventDefinition[]): readonly EventDefinition[] {
-  return events.map(event => addPlayerEquipmentSelection(attachRewardFlags(event)));
+  return events.map(event => addNextDaySkillSelection(addPlayerEquipmentSelection(attachRewardFlags(event))));
 }
