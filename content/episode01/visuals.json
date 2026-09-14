@@ -1,14 +1,72 @@
 {
+  "schema_version": 1,
   "characters": {
-    "player": { "uri": null, "accent": "#d4bd70" },
-    "kang_taesik": { "uri": null, "accent": "#b99b76" },
-    "yoon_sungho": { "uri": null, "accent": "#94aeb0" },
-    "lee_jaehoon": { "uri": null, "accent": "#b3b9bd" },
-    "lim_junho": { "uri": null, "accent": "#acb98a" },
-    "choi_minseok": { "uri": null, "accent": "#d1a879" }
+    "player": {
+      "portrait_asset_id": "ep01.character.player.portrait",
+      "map_asset_id": "ep01.character.player.map",
+      "portrait_path": "assets/episode01/characters/player-portrait.webp",
+      "map_path": "assets/episode01/characters/player-map.webp",
+      "accent": "#d4bd70"
+    },
+    "kang_taesik": {
+      "portrait_asset_id": "ep01.character.kang_taesik.portrait",
+      "map_asset_id": "ep01.character.kang_taesik.map",
+      "portrait_path": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "map_path": "assets/episode01/characters/kang-taesik-map.webp",
+      "accent": "#b99b76"
+    },
+    "yoon_sungho": {
+      "portrait_asset_id": "ep01.character.yoon_sungho.portrait",
+      "map_asset_id": "ep01.character.yoon_sungho.map",
+      "portrait_path": "assets/episode01/characters/yoon-sungho-portrait.webp",
+      "map_path": "assets/episode01/characters/yoon-sungho-map.webp",
+      "accent": "#94aeb0"
+    },
+    "lee_jaehoon": {
+      "portrait_asset_id": "ep01.character.lee_jaehoon.portrait",
+      "map_asset_id": "ep01.character.lee_jaehoon.map",
+      "portrait_path": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "map_path": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "accent": "#b3b9bd"
+    },
+    "lim_junho": {
+      "portrait_asset_id": "ep01.character.lim_junho.portrait",
+      "map_asset_id": "ep01.character.lim_junho.map",
+      "portrait_path": "assets/episode01/characters/lim-junho-portrait.webp",
+      "map_path": "assets/episode01/characters/lim-junho-map.webp",
+      "accent": "#acb98a"
+    },
+    "choi_minseok": {
+      "portrait_asset_id": "ep01.character.choi_minseok.portrait",
+      "map_asset_id": "ep01.character.choi_minseok.map",
+      "portrait_path": "assets/episode01/characters/choi-minseok-portrait.webp",
+      "map_path": "assets/episode01/characters/choi-minseok-map.webp",
+      "accent": "#d1a879"
+    },
+    "seo_jeongmin": {
+      "portrait_asset_id": "ep01.character.seo_jeongmin.portrait",
+      "map_asset_id": "ep01.character.seo_jeongmin.map",
+      "portrait_path": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "map_path": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "accent": "#7d8b98"
+    },
+    "oh_seungjae": {
+      "portrait_asset_id": "ep01.character.oh_seungjae.portrait",
+      "map_asset_id": "ep01.character.oh_seungjae.map",
+      "portrait_path": "assets/episode01/characters/oh-seungjae-portrait.webp",
+      "map_path": "assets/episode01/characters/oh-seungjae-map.webp",
+      "accent": "#59718a"
+    }
   },
-  "backgrounds": { "foundation": { "uri": null } },
+  "backgrounds": {
+    "foundation": {
+      "map_asset_id": "ep01.background.foundation.map",
+      "path": "assets/episode01/backgrounds/foundation-map.webp"
+    }
+  },
   "cg": {},
   "ui": {},
-  "text_styles": { "ep01.evening.field_note.record": "note" }
+  "text_styles": {
+    "ep01.evening.field_note.record": "note"
+  }
 }
