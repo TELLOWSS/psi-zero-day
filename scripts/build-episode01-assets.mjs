@@ -35,27 +35,42 @@ for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {}))
   });
 }
 
+async function readPlannedAsset(uri) {
+  const diskPath = path.join(root, 'public', uri);
+  try {
+    return { uri, bytes: await readFile(diskPath) };
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error;
+  }
+
+  // TASK-010D production fallback. visuals.json keeps the final WebP target,
+  // while the repository can generate a deterministic SVG pass until final painted art lands.
+  const extension = path.extname(uri).toLowerCase();
+  if (extension !== '.webp') return undefined;
+  const fallbackUri = uri.replace(/\.webp$/i, '.svg');
+  try {
+    return { uri: fallbackUri, bytes: await readFile(path.join(root, 'public', fallbackUri)) };
+  } catch (error) {
+    if (error?.code === 'ENOENT') return undefined;
+    throw error;
+  }
+}
+
 const assets = [];
 for (const item of planned) {
   if (!item.asset_id || !item.uri) continue;
-  const diskPath = path.join(root, 'public', item.uri);
-  let bytes;
-  try {
-    bytes = await readFile(diskPath);
-  } catch (error) {
-    if (error?.code === 'ENOENT') continue;
-    throw error;
-  }
-  const extension = path.extname(item.uri).slice(1).toLowerCase();
+  const resolved = await readPlannedAsset(item.uri);
+  if (!resolved) continue;
+  const extension = path.extname(resolved.uri).slice(1).toLowerCase();
   assets.push({
     asset_id: item.asset_id,
     type: 'image',
     group_id: item.group_id,
     variants: [{
-      uri: item.uri,
+      uri: resolved.uri,
       format: extension,
-      bytes: bytes.length,
-      hash: createHash('sha256').update(bytes).digest('hex'),
+      bytes: resolved.bytes.length,
+      hash: createHash('sha256').update(resolved.bytes).digest('hex'),
     }],
     dependencies: [],
     preload_policy: item.preload_policy,
