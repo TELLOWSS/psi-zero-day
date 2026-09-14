@@ -1,0 +1,22 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ep01.8m.title": "말이 내려갈수록 달라진다",
+    "ep01.8n.title": "사라진 한마디",
+    "ep01.instruction.situation": "공사팀은 '안전대 설치 후 작업'이라고 지시했다고 한다. 하지만 작업조에는 '오늘 물량부터 빨리 끝내라'는 말만 남아 있었다.",
+    "ep01.instruction.lee": "나는 분명 안전대 설치 확인하고 하라고 했습니다. 그냥 하라고 한 적 없어요.",
+    "ep01.instruction.kang": "저도 조장한테 안전대 걸고 하라고 했습니다. 다만 물량 밀린다고 빨리 해달라고 한 건 맞습니다.",
+    "ep01.instruction.junho": "저희는 빨리 마감하라는 말만 들었습니다. 안전대 확인 얘기는 못 들었습니다.",
+    "ep01.instruction.prompt": "같은 지시가 단계마다 다르게 남았다. 어떻게 정리할까?",
+    "ep01.instruction.accept_top": "공사팀 원지시는 정상이라고 보고, 작업반 전달 문제로 정리한다.",
+    "ep01.instruction.blame_worker": "최종 작업자가 지시를 지키지 않은 것으로 정리하고 재교육한다.",
+    "ep01.instruction.reconstruct": "공사팀→반장→작업조→근로자 단계별로 실제 전달 문구와 시각을 맞춰본다.",
+    "ep01.instruction_return.prompt": "지시 전달 과정을 정리한 결과가 드러난다.",
+    "ep01.instruction_return.choice.gap": "조건 누락을 끝까지 확인하지 못한 결과가 남는다.",
+    "ep01.instruction_return.choice.chilled": "작업자 개인책임으로 닫은 결과가 남는다.",
+    "ep01.instruction_return.choice.reconstructed": "사라진 조건이 어느 단계에서 빠졌는지 확인된다.",
+    "ep01.instruction_return.gap": "원지시는 안전했지만 실제 전달경로는 그대로 남았다. 다음 작업에서도 '빨리 하라'는 말이 안전조건보다 먼저 전달된다.",
+    "ep01.instruction_return.chilled": "작업자는 '어차피 마지막에 우리 책임이 된다'고 느끼고, 모호한 지시를 다시 묻지 않게 된다.",
+    "ep01.instruction_return.reconstructed": "공사팀의 '안전대 설치 후' 조건은 반장 단계까지 있었지만 작업조 전달에서 빠졌다. 일정압박 문구만 남으면서 현장 행동이 바뀐 것이 확인된다."
+  }
+}
