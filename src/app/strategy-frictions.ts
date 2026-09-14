@@ -33,6 +33,9 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
     { friction_id: 'friction.schedule.waiting_vehicle', kind: 'schedule_pressure', label_text_id: 'ui.friction.schedule', detail_text_id: 'ui.friction.schedule.waiting_vehicle' },
     { friction_id: 'friction.responsibility.entry', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.entry' },
   ],
+  e01_08a_reporting_return: [
+    { friction_id: 'friction.reporting.aftershock', kind: 'reporting_hesitation', label_text_id: 'ui.friction.aftershock', detail_text_id: 'ui.friction.aftershock.reporting' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
