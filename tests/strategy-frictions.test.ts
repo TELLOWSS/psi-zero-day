@@ -62,6 +62,14 @@ describe('Episode 01 field frictions', () => {
       .toEqual(['friction.instruction.return']);
   });
 
+  it('shows wording pressure, retroactive paper fitting and evidence mismatch around the report', () => {
+    expect(projectEpisode01Frictions('e01_08o_record_pressure').map(item => item.friction_id)).toEqual([
+      'friction.record.wording', 'friction.record.retrofit', 'friction.record.evidence',
+    ]);
+    expect(projectEpisode01Frictions('e01_08p_record_return').map(item => item.friction_id))
+      .toEqual(['friction.record.return']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
