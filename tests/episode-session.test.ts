@@ -27,10 +27,10 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
 }
 
 describe('Episode application session', () => {
-  it('creates a stable start snapshot, then exposes the first engine presentation', () => {
+  it('creates a stable start snapshot with a run-facing progress target', () => {
     const session = new EpisodeSession();
     const start = session.getSnapshot();
-    expect(start.phase).toBe('start'); expect(start.state).toBeNull();
+    expect(start.phase).toBe('start'); expect(start.state).toBeNull(); expect(start.total).toBe(10);
     expect(session.getSnapshot()).toBe(start);
     session.start(start.revision);
     expect(session.getSnapshot().presentation[0]).toMatchObject({ type: 'SHOW_RESULT', text_id: 'ep01.arrival' });
@@ -40,7 +40,7 @@ describe('Episode application session', () => {
     expect(() => Object.assign(session.getSnapshot().state!.flags, { altered: true })).toThrow();
   });
 
-  it.each(uiPaths)('matches complete headless state for $plan / $entrance / $evening', decisions => {
+  it.each(uiPaths)('matches complete headless state and closes progress for $plan / $entrance / $evening', decisions => {
     const session = new EpisodeSession(episodeOptions(815), episodeBounds);
     session.start(0);
     for (let i = 0; i < 310 && session.getSnapshot().phase === 'playing'; i++) {
@@ -53,8 +53,11 @@ describe('Episode application session', () => {
         session.dispatch({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }, s.revision);
       }
     }
-    expect(session.getSnapshot().phase).toBe('complete');
-    expect(session.getSnapshot().state).toEqual(playEpisode(decisions, { seed: 815 }).state);
+    const complete = session.getSnapshot();
+    expect(complete.phase).toBe('complete');
+    expect(complete.state).toEqual(playEpisode(decisions, { seed: 815 }).state);
+    expect(complete.total).toBe(complete.completed);
+    expect(complete.total).toBeLessThan(26);
   });
 
   it('rejects stale input, invalid choices, and arbitrary effect commands without state changes', () => {
