@@ -16,6 +16,14 @@
     "ui.friction.stopwork_reporting": "다음 보고 위축",
     "ui.friction.stopwork_reporting.detail": "한 번 보고한 뒤 현장 분위기가 나빠지면 다음 위험신호를 보고하지 않을 가능성이 커진다.",
     "ui.friction.stopwork_return": "작업중지 문화의 후폭풍",
-    "ui.friction.stopwork_return.detail": "제도상 보호보다 실제 현장 관계가 다음 보고 행동을 결정할 수 있다."
+    "ui.friction.stopwork_return.detail": "제도상 보호보다 실제 현장 관계가 다음 보고 행동을 결정할 수 있다.",
+    "ui.friction.instruction_schedule": "일정 압박이 지시를 덮음",
+    "ui.friction.instruction_schedule.detail": "안전조건과 일정요구가 함께 전달되면 마지막 작업자에게는 급한 말만 남을 수 있다.",
+    "ui.friction.instruction_loss": "지시 조건 누락",
+    "ui.friction.instruction_loss.detail": "‘안전대 설치 후’ 같은 조건이 전달 단계에서 빠지면 원지시와 실제 행동이 달라진다.",
+    "ui.friction.instruction_hierarchy": "위계 전달 왜곡",
+    "ui.friction.instruction_hierarchy.detail": "하위 작업자는 모호한 지시를 되묻기보다 윗사람의 급한 요구를 우선할 수 있다.",
+    "ui.friction.instruction_return": "전달 왜곡의 후폭풍",
+    "ui.friction.instruction_return.detail": "마지막 작업자만 탓하면 지시 전달 경로의 빈틈은 다음 작업에도 그대로 남는다."
   }
 }
