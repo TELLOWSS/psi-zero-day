@@ -66,6 +66,20 @@ const FIELD_ACTION_EVENTS = new Set<Id>([
   'e01_08o_record_pressure',
 ]);
 
+export function strategyActionTargetKey(target: StrategyActionTarget): string {
+  switch (target.kind) {
+    case 'character': return target.character_id;
+    case 'signal': return target.signal_id;
+    case 'anchor': return `anchor:${target.anchor}`;
+    case 'site': return 'site';
+  }
+}
+
+export function strategyActionsForTarget(actions: readonly StrategyAction[], targetKey: string | null): readonly StrategyAction[] {
+  if (!targetKey) return [];
+  return Object.freeze(actions.filter(action => strategyActionTargetKey(action.target) === targetKey));
+}
+
 /** Read-only UI projection. Executing an action still uses the original choose_event command. */
 export function projectStrategyActions(activeEventId: Id | null, presentation: PresentationCommand | undefined): readonly StrategyAction[] {
   if (!activeEventId || !FIELD_ACTION_EVENTS.has(activeEventId) || presentation?.type !== 'SHOW_CHOICE') return [];
