@@ -46,6 +46,14 @@ describe('Episode 01 field frictions', () => {
       .toEqual(['friction.restart.return']);
   });
 
+  it('shows social blame and reporting chill after a stop-work intervention', () => {
+    expect(projectEpisode01Frictions('e01_08k_stopwork_aftershock').map(item => item.friction_id)).toEqual([
+      'friction.stopwork.schedule_blame', 'friction.stopwork.social_pressure', 'friction.stopwork.reporting_chill',
+    ]);
+    expect(projectEpisode01Frictions('e01_08l_stopwork_return').map(item => item.friction_id))
+      .toEqual(['friction.stopwork.return']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
