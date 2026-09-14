@@ -1,0 +1,45 @@
+/* TASK-007D: presentation-only signal markers. */
+.strategy-signal-layer { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+.strategy-risk-signal {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 190px;
+  padding: 8px 11px 8px 8px;
+  border-radius: 999px;
+  background: rgba(119, 44, 35, .94);
+  color: #fff;
+  box-shadow: 0 7px 18px rgba(71, 30, 23, .3);
+  font-size: clamp(10px, .8vw, 14px);
+  font-weight: 800;
+  white-space: nowrap;
+  animation: strategy-signal-pulse 1.8s ease-in-out infinite;
+}
+.strategy-risk-signal > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: #8a342b;
+  font-size: 16px;
+  font-weight: 900;
+}
+.strategy-risk-signal > strong { overflow: hidden; text-overflow: ellipsis; }
+.signal-entry { left: 58%; top: 63%; }
+.signal-ramp { left: 43%; top: 53%; }
+.signal-yard { left: 30%; top: 67%; }
+.signal-gate { left: 76%; top: 70%; }
+@keyframes strategy-signal-pulse {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.03); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strategy-risk-signal { animation: none; }
+}
+@media (max-width: 760px) {
+  .strategy-risk-signal { max-width: 130px; padding: 6px 8px 6px 6px; font-size: 9px; }
+  .strategy-risk-signal > span { width: 22px; height: 22px; font-size: 12px; }
+}
