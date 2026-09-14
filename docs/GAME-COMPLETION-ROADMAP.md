@@ -13,16 +13,18 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Growth through expression, posture, equipment and confidence.
 - First live story unlock: Lim Junho `initial -> focused`.
 
-### TASK-010B — Training + inventory/loadout actions — NEXT
-- Add a playable training/equipment interaction.
-- Equip/unequip authored safety tools.
+### TASK-010B — Training + inventory/loadout actions — IMPLEMENTED
+- Playable training/equipment interaction added.
+- Growth, owned inventory and equipped loadout are separate states.
+- Player training grants a field camera and asks whether to equip it.
+- Junho reporting training grants and equips a radio.
 - No loot-box/random monetization logic.
-- Equipment must have clear field-purpose tags.
+- Equipment carries explicit field-purpose slots.
 
-### TASK-010C — Growth/skill action unlocks
-- Growth stage can expose additional field actions.
+### TASK-010C — Growth/skill action unlocks — NEXT
+- Growth stage and equipped gear can expose additional field actions.
 - Keep rules explicit and deterministic.
-- No hidden formula or PSI threshold invention.
+- Use authored requirements; no hidden formula or PSI threshold invention.
 
 ### TASK-010D — Approved art export integration
 - Export 8 approved character portraits/map sprites.
