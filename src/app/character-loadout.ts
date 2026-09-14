@@ -26,10 +26,11 @@ export interface CharacterLoadoutView {
 type ItemConfig = { readonly item_id: string; readonly name: string; readonly category: string; readonly equip_slot: EquipmentSlot };
 const itemById = new Map((items.items as readonly ItemConfig[]).map(item => [item.item_id, item] as const));
 
-function rewardItemIds(flags: FlagMap): readonly string[] {
+function rewardItemIds(flags: FlagMap, characterId: Id): readonly string[] {
+  const prefix = `inventory.${characterId}.`;
   return Object.entries(flags)
-    .filter(([key, value]) => key.startsWith('inventory.') && value === true)
-    .map(([key]) => key.slice('inventory.'.length));
+    .filter(([key, value]) => key.startsWith(prefix) && value === true)
+    .map(([key]) => key.slice(prefix.length));
 }
 
 function sourceFor(itemId: string, growthItems: readonly string[], rewardIds: readonly string[]): InventoryItemView['source'] {
@@ -43,7 +44,7 @@ export function projectCharacterLoadout(flags: FlagMap, characterId: Id): Charac
   if (!growthView) return undefined;
   const growthConfig = (growth.characters as Record<string, { stages: Record<string, { items: readonly string[] }> }>)[characterId];
   const growthItems = growthConfig?.stages[growthView.stage]?.items ?? [];
-  const rewardIds = rewardItemIds(flags);
+  const rewardIds = rewardItemIds(flags, characterId);
   const ownedIds = [...new Set([...growthItems, ...rewardIds])];
 
   const inventory = Object.freeze(ownedIds.map(itemId => {
