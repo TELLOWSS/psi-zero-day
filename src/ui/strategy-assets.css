@@ -22,7 +22,7 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(220,238,250,.12), rgba(25,48,74,.08));
+  background: linear-gradient(180deg, rgba(220,238,250,.05), rgba(25,48,74,.07));
 }
 .strategy-map.has-background-art .strategy-map-stage-card,
 .strategy-map.has-background-art .strategy-zone-layer,
@@ -32,19 +32,28 @@
   z-index: 3;
 }
 .strategy-map-worker.has-art {
-  min-width: 132px;
+  min-width: 146px;
+  min-height: 82px;
+  padding-left: 4px;
 }
 .strategy-worker-art {
-  width: 52px;
-  height: 64px;
-  flex: 0 0 52px;
+  width: 66px;
+  height: 86px;
+  flex: 0 0 66px;
   object-fit: contain;
   object-position: center bottom;
-  filter: drop-shadow(0 7px 5px rgba(31,49,54,.28));
+  transform-origin: center bottom;
+  filter: drop-shadow(0 8px 6px rgba(31,49,54,.3));
+  transition: transform .14s ease, filter .14s ease;
 }
-.strategy-map-worker.has-art.is-scene-participant .strategy-worker-art,
-.strategy-map-worker.has-art.is-focused .strategy-worker-art {
-  transform: scale(1.06);
+.strategy-map-worker.has-art.is-scene-participant .strategy-worker-art {
+  transform: scale(1.05);
+}
+.strategy-map-worker.has-art.is-focused .strategy-worker-art,
+.strategy-map-worker.has-art:hover .strategy-worker-art,
+.strategy-map-worker.has-art:focus-visible .strategy-worker-art {
+  transform: translateY(-3px) scale(1.12);
+  filter: drop-shadow(0 11px 8px rgba(31,49,54,.36));
 }
 .character-token {
   overflow: hidden;
@@ -61,9 +70,10 @@
 .strategy-shell[data-visual-mode="art"] .strategy-day,
 .strategy-shell[data-visual-mode="art"] .strategy-panel,
 .strategy-shell[data-visual-mode="art"] .strategy-roster {
-  background: rgba(247,252,255,.86);
+  background: rgba(247,252,255,.88);
+  backdrop-filter: blur(10px);
 }
 @media (max-width: 760px) {
-  .strategy-worker-art { width: 42px; height: 52px; flex-basis: 42px; }
-  .strategy-map-worker.has-art { min-width: 88px; }
+  .strategy-worker-art { width: 48px; height: 62px; flex-basis: 48px; }
+  .strategy-map-worker.has-art { min-width: 96px; min-height: 62px; }
 }
