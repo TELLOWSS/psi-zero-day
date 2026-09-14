@@ -32,6 +32,11 @@
   text-align: left;
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
+.strategy-action-list button[data-action-skill="equipment"] {
+  border-color: rgba(213,127,41,.72);
+  background: linear-gradient(180deg,#fffdf7,#f5ead5);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75);
+}
 .strategy-action-list button:hover:not(:disabled),
 .strategy-action-list button:focus-visible {
   transform: translateY(-1px);
@@ -45,6 +50,19 @@
 .strategy-action-copy strong, .strategy-action-copy small { display: block; }
 .strategy-action-copy strong { font-size: clamp(10px,.84vw,14px); line-height: 1.35; word-break: keep-all; }
 .strategy-action-copy small { margin-top: 2px; font-size: .66rem; opacity: .62; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.strategy-action-skill {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 1px 6px;
+  border: 1px solid rgba(213,127,41,.55);
+  border-radius: 999px;
+  background: rgba(255,244,220,.86);
+  color: #a35f20;
+  font-size: .56rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
 
 .strategy-zone-layer { position: absolute; inset: 0; z-index: 9; pointer-events: none; }
 .strategy-zone-target {
