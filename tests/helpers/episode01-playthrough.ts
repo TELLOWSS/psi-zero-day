@@ -26,6 +26,7 @@ export interface EpisodeDecisions {
   ramp: 'check_self' | 'ask_minseok' | 'keep_schedule';
   entrance: 'assign_crew' | 'request_delay' | 'force_clear';
   inspection?: 'inspection_full_stop' | 'inspection_quick_photo' | 'inspection_sequence_agreement';
+  responsibility?: 'report_one_sided' | 'report_defensive' | 'report_verify_timeline';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -58,6 +59,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_05_command/ramp': decisions.ramp,
     'e01_05_command/entrance': decisions.entrance,
     'e01_08b_inspection_find/action': decisions.inspection ?? 'inspection_sequence_agreement',
+    'e01_08e_responsibility_clash/report': decisions.responsibility ?? 'report_verify_timeline',
     'e01_09_evening/evening': decisions.evening,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
@@ -67,7 +69,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     e01_09_evening: { day: 1, slot: 'EVENING' },
     e01_10_next_day_tease: { day: 2, slot: 'PRE_WORK' },
   };
-  for (let step = 0; step < 240; step++) {
+  for (let step = 0; step < 280; step++) {
     const state = engine.getState();
     if (state.flags.episode01_completed === true) return { initial, state, trace, checkpoints };
     const active = state.event_runtime.active_instance;
@@ -90,7 +92,6 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
       const enabled = choice.choices.filter(item => item.enabled);
       const requested = decisionsByNode[key];
       if (Object.hasOwn(decisionsByNode, key) && requested === undefined) throw new Error(`Missing player decision: ${key}`);
-      // Branch gates are existing CHOICE nodes with mutually exclusive requirements.
       const selected = requested ?? (enabled.length === 1 ? enabled[0]!.choice_id : undefined);
       if (!selected || !enabled.some(item => item.choice_id === selected)) throw new Error(`Unresolved choice: ${key}`);
       send({ type: 'choose_event', instance_id: active.instance_id, node_id: active.current_node_id, choice_id: selected });
