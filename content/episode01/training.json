@@ -8,9 +8,10 @@
       "completion_flag": "training.player.site_basics",
       "growth_stage": "focused",
       "rewards": ["item.inspection_camera"],
-      "auto_equip": [
+      "equip_options": [
         { "slot": "secondary_tool", "item_id": "item.inspection_camera" }
-      ]
+      ],
+      "auto_equip": []
     },
     {
       "training_id": "training.lim_junho.reporting",
@@ -19,6 +20,7 @@
       "completion_flag": "training.lim_junho.reporting",
       "growth_stage": "focused",
       "rewards": ["item.site_radio"],
+      "equip_options": [],
       "auto_equip": [
         { "slot": "communication", "item_id": "item.site_radio" }
       ]
