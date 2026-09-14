@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createEpisode01Registry } from '../src/content/episode01';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../src/app/strategy-assets';
 
 const available: Readonly<Record<string, string>> = {
@@ -8,8 +9,13 @@ const available: Readonly<Record<string, string>> = {
 };
 const resolve = (id: string) => available[id];
 
+const cast = [
+  'player', 'kang_taesik', 'yoon_sungho', 'lee_jaehoon',
+  'lim_junho', 'choi_minseok', 'seo_jeongmin', 'oh_seungjae',
+] as const;
+
 describe('Episode 01 strategy visual assets', () => {
-  it('resolves available map/background art through asset ids', () => {
+  it('keeps final WebP asset ids compatible with the resolver contract', () => {
     const visuals = projectStrategyVisualAssets(['lim_junho', 'kang_taesik'], resolve);
     expect(visuals.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
     expect(visuals.characters.lim_junho).toMatchObject({
@@ -18,10 +24,25 @@ describe('Episode 01 strategy visual assets', () => {
       portrait_uri: 'assets/episode01/characters/lim-junho-portrait.webp',
     });
     expect(visuals.characters.kang_taesik?.map_uri).toBeUndefined();
-    expect(visuals.characters.kang_taesik?.accent).toBe('#b99b76');
+    expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
   });
 
-  it('falls back cleanly when no production files are registered', () => {
+  it('registers the generated production-vector background plus map/portrait art for all eight characters', () => {
+    const registry = createEpisode01Registry();
+    const content = registry.getValidatedContent();
+    expect(content.asset_manifest.assets).toHaveLength(17);
+    expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
+      .toBe('assets/episode01/backgrounds/foundation-map.svg');
+
+    const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
+    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.svg');
+    for (const characterId of cast) {
+      expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait\.svg$/);
+      expect(art.characters[characterId]?.map_uri).toMatch(/-map\.svg$/);
+    }
+  });
+
+  it('still falls back cleanly when no production files are registered', () => {
     const visuals = projectStrategyVisualAssets(['kang_taesik'], () => undefined);
     expect(visuals.background_uri).toBeUndefined();
     expect(visuals.characters.kang_taesik?.map_uri).toBeUndefined();
