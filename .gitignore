@@ -3,3 +3,5 @@ dist/
 coverage/
 .verification/
 *.local
+public/assets/episode01/characters/*.svg
+public/assets/episode01/backgrounds/*.svg
