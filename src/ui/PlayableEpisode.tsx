@@ -28,6 +28,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     site: t('ui.strategy.site'),
     events: t('ui.strategy.events'),
     progress: t('ui.strategy.progress'),
+    pressures: t('ui.strategy.pressures'),
+    focus: t('ui.strategy.focus'),
+    focusHint: t('ui.strategy.focus_hint'),
   };
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
