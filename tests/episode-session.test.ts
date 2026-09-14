@@ -10,6 +10,13 @@ export const uiPaths: EpisodeDecisions[] = [
   { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
 ];
 export function inputFor(node: string, decisions: EpisodeDecisions): string | undefined {
+  const defaultNextDay = decisions.nextDay ?? (
+    decisions.evening === 'study' && (decisions.equipment ?? 'training_equip_camera') === 'training_equip_camera'
+      ? 'next_day_camera_compare'
+      : decisions.plan === 'follow_junho' && decisions.signal === 'listen_more'
+        ? 'next_day_radio_checkin'
+        : 'next_day_standard_check'
+  );
   return ({
     plan: decisions.plan,
     listen: decisions.signal,
@@ -24,6 +31,7 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
     record_action: decisions.record ?? 'record_preserve_timeline',
     evening: decisions.evening,
     training_equipment: decisions.equipment ?? 'training_equip_camera',
+    next_day_action: defaultNextDay,
   } as Record<string, string | undefined>)[node];
 }
 
