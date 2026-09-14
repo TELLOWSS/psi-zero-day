@@ -15,6 +15,7 @@ import inspectionKo from '../../content/episode01/inspection-ko.json';
 import responsibilityKo from '../../content/episode01/responsibility-ko.json';
 import { episode01TbmGapEvents, episode01TbmGapMessages } from './episode01-tbm';
 import { episode01RestartEvents, episode01RestartMessages } from './episode01-restart';
+import { episode01StopworkEvents, episode01StopworkMessages } from './episode01-stopwork';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 
@@ -28,6 +29,7 @@ export function createEpisode01Registry(): ContentRegistry {
       ...responsibilityKo.messages,
       ...episode01TbmGapMessages,
       ...episode01RestartMessages,
+      ...episode01StopworkMessages,
     } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
@@ -38,6 +40,7 @@ export function createEpisode01Registry(): ContentRegistry {
       [responsibilityClashEvent, reportReturnEvent],
       episode01TbmGapEvents,
       episode01RestartEvents,
+      episode01StopworkEvents,
     ),
   });
 }
