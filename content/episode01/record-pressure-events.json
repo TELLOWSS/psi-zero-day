@@ -1,0 +1,100 @@
+[
+  {
+    "schema_version": 1,
+    "event_id": "e01_08o_record_pressure",
+    "title_text_id": "ep01.8o.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [{ "kind": "event_completed", "event_id": "e01_08n_instruction_return", "minimum_count": 1 }],
+    "participants": [
+      { "role_id": "oh", "character_id": "oh_seungjae" },
+      { "role_id": "lee", "character_id": "lee_jaehoon" },
+      { "role_id": "kang", "character_id": "kang_taesik" },
+      { "role_id": "player", "character_id": "player" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "situation",
+    "dialogue": [
+      { "node_id": "situation", "type": "RESULT", "text_id": "ep01.record.situation", "next_node_id": "oh", "choice_ids": [] },
+      { "node_id": "oh", "type": "DIALOGUE", "text_id": "ep01.record.oh", "speaker_role_id": "oh", "next_node_id": "lee", "choice_ids": [] },
+      { "node_id": "lee", "type": "DIALOGUE", "text_id": "ep01.record.lee", "speaker_role_id": "lee", "next_node_id": "kang", "choice_ids": [] },
+      { "node_id": "kang", "type": "DIALOGUE", "text_id": "ep01.record.kang", "speaker_role_id": "kang", "next_node_id": "record_action", "choice_ids": [] },
+      { "node_id": "record_action", "type": "CHOICE", "text_id": "ep01.record.prompt", "choice_ids": ["record_minimize_scope", "record_retrofit_paper", "record_preserve_timeline"] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "record_minimize_scope", "text_id": "ep01.record.minimize", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "oh.trust.record_minimize", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "trust", "delta": 1 },
+          { "effect_id": "kang.reporting.record_minimize", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": -1 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_action": "minimize_scope" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "record_retrofit_paper", "text_id": "ep01.record.retrofit", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "kang.reporting.record_retrofit", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": -2 },
+          { "effect_id": "lee.respect.record_retrofit", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -1 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_action": "retrofit_paper" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "record_preserve_timeline", "text_id": "ep01.record.preserve", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "player.analysis.record_preserve", "kind": "player_stat", "stat_id": "analysis", "delta": 1 },
+          { "effect_id": "oh.respect.record_preserve", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_action": "preserve_timeline" }, "ending_flags": {}, "followup_events": [] }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_08p_record_return",
+    "title_text_id": "ep01.8p.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [{ "kind": "event_completed", "event_id": "e01_08o_record_pressure", "minimum_count": 1 }],
+    "participants": [
+      { "role_id": "oh", "character_id": "oh_seungjae" },
+      { "role_id": "lee", "character_id": "lee_jaehoon" },
+      { "role_id": "kang", "character_id": "kang_taesik" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      { "node_id": "resolve", "type": "CHOICE", "text_id": "ep01.record_return.prompt", "choice_ids": ["record_return_correction", "record_return_conflict", "record_return_preserved"] },
+      { "node_id": "correction", "type": "RESULT", "text_id": "ep01.record_return.correction", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "conflict", "type": "RESULT", "text_id": "ep01.record_return.conflict", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "preserved", "type": "RESULT", "text_id": "ep01.record_return.preserved", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "record_return_correction", "text_id": "ep01.record_return.choice.correction", "next_node_id": "correction",
+        "requirements": [{ "kind": "flag", "flag_id": "record_action", "equals": "minimize_scope" }],
+        "effects": { "immediate_effects": [
+          { "effect_id": "oh.trust.record_correction", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "trust", "delta": -2 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_result": "evidence_forces_correction" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "record_return_conflict", "text_id": "ep01.record_return.choice.conflict", "next_node_id": "conflict",
+        "requirements": [{ "kind": "flag", "flag_id": "record_action", "equals": "retrofit_paper" }],
+        "effects": { "immediate_effects": [
+          { "effect_id": "oh.trust.record_conflict", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "trust", "delta": -2 },
+          { "effect_id": "kang.reporting.record_conflict", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": -1 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_result": "retroactive_record_conflict" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "record_return_preserved", "text_id": "ep01.record_return.choice.preserved", "next_node_id": "preserved",
+        "requirements": [{ "kind": "flag", "flag_id": "record_action", "equals": "preserve_timeline" }],
+        "effects": { "immediate_effects": [
+          { "effect_id": "oh.trust.record_preserved", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "trust", "delta": 1 },
+          { "effect_id": "lee.respect.record_preserved", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_result": "factual_record_preserved" }, "ending_flags": {}, "followup_events": [] }
+      }
+    ],
+    "failure_conditions": []
+  }
+]
