@@ -222,6 +222,7 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
             disabled={!action.enabled}
             data-choice={action.choice_id}
             data-action-target={strategyActionTargetKey(action.target)}
+            data-action-skill={action.skill?.source}
             onMouseEnter={() => setActionFocusId(strategyActionTargetKey(action.target))}
             onMouseLeave={() => setActionFocusId(null)}
             onFocus={() => setActionFocusId(strategyActionTargetKey(action.target))}
@@ -230,7 +231,11 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
           >
             <span className="strategy-action-number">{index + 1}</span>
             <span className="strategy-action-icon" aria-hidden="true">{actionIcon(action.intent)}</span>
-            <span className="strategy-action-copy"><strong>{text(action.label_text_id)}</strong><small>{actionTargetLabel(action)}</small></span>
+            <span className="strategy-action-copy">
+              <strong>{text(action.label_text_id)}</strong>
+              {action.skill ? <em className="strategy-action-skill">{text(action.skill.label_text_id)}</em> : null}
+              <small>{actionTargetLabel(action)}</small>
+            </span>
             <span aria-hidden="true">↗</span>
           </button>)}
         </div> : <p className="strategy-action-empty">{text('ui.strategy.no_actions')}</p>
