@@ -41,6 +41,14 @@
     "ui.slot.pre_work": "작업 전",
     "ui.slot.morning": "오전",
     "ui.slot.afternoon": "오후",
-    "ui.slot.evening": "저녁"
+    "ui.slot.evening": "저녁",
+    "ui.strategy.stage": "공정 단계",
+    "ui.strategy.psi": "PSI",
+    "ui.strategy.objectives": "현장 목표",
+    "ui.strategy.assignments": "작업 배치",
+    "ui.strategy.roster": "현장 인원",
+    "ui.strategy.site": "현장",
+    "ui.strategy.events": "현장 이벤트",
+    "ui.strategy.progress": "공정률"
   }
 }

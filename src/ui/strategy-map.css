@@ -1,10 +1,11 @@
-/* TASK-007B: visual shell only. No game rules live in this stylesheet. */
+/* TASK-007B/007C: presentation shell only. No game rules live in this stylesheet. */
 .strategy-shell {
-  position: relative;
-  width: min(100vw, 177.78vh);
-  aspect-ratio: 16 / 9;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  margin: 0 auto;
   color: #19304a;
   background: linear-gradient(180deg, #dceefa 0%, #b7d5e2 44%, #d6c19d 44%, #cbb187 100%);
   font-family: Inter, Pretendard, system-ui, sans-serif;
@@ -18,7 +19,7 @@
   grid-template-columns: 1.15fr 1.4fr .55fr;
   gap: 1%;
 }
-.strategy-brand, .strategy-meter, .strategy-day, .strategy-panel, .strategy-rail button, .map-stage-card, .strategy-roster {
+.strategy-brand, .strategy-meter, .strategy-day, .strategy-panel, .strategy-rail button, .strategy-map-stage-card, .strategy-roster {
   border: 1px solid rgba(255,255,255,.72);
   background: rgba(247,252,255,.9);
   box-shadow: 0 10px 24px rgba(22,54,76,.16);
@@ -76,41 +77,41 @@
   overflow: hidden;
   perspective: 1000px;
 }
-.map-sky { position: absolute; inset: 0; background: radial-gradient(circle at 80% 15%, rgba(255,255,255,.9), transparent 23%); }
-.map-road { position: absolute; background: rgba(109,114,113,.48); border: 2px solid rgba(255,255,255,.38); transform: rotate(-25deg); }
-.map-road-a { width: 96%; height: 10%; left: 8%; top: 68%; }
-.map-road-b { width: 70%; height: 8%; left: 30%; top: 45%; transform: rotate(64deg); }
+.strategy-map-sky { position: absolute; inset: 0; background: radial-gradient(circle at 80% 15%, rgba(255,255,255,.9), transparent 23%); }
+.strategy-map-road { position: absolute; background: rgba(109,114,113,.48); border: 2px solid rgba(255,255,255,.38); transform: rotate(-25deg); }
+.strategy-map-road-a { width: 96%; height: 10%; left: 8%; top: 68%; }
+.strategy-map-road-b { width: 70%; height: 8%; left: 30%; top: 45%; transform: rotate(64deg); }
 
-.site-building {
+.strategy-site-building {
   position: absolute;
   transform: skewY(-5deg);
   border: 4px solid #2c6b91;
   background: linear-gradient(90deg, #f1f2ed 0 72%, #c7d7df 72%);
   box-shadow: 16px 22px 24px rgba(31,49,54,.24);
 }
-.site-building span { position: absolute; top: 8px; right: 10px; padding: 4px 7px; border-radius: 7px; background: #2f76ad; color: #fff; font-weight: 800; }
-.site-building i { display: block; height: 17%; margin: 3.5% 5%; border: 3px solid #e18a26; border-left-width: 8px; background: repeating-linear-gradient(90deg, #bfd2dc 0 7%, transparent 7% 18%); }
-.building-main { width: 34%; height: 48%; left: 35%; top: 17%; }
-.building-side { width: 25%; height: 31%; left: 67%; top: 42%; }
-.site-core { position: absolute; left: 24%; top: 43%; width: 17%; height: 27%; border: 4px solid #3b739a; background: #d8dde0; box-shadow: 10px 14px 20px rgba(31,49,54,.2); display: grid; place-items: center; font-weight: 900; }
+.strategy-site-building span { position: absolute; top: 8px; right: 10px; padding: 4px 7px; border-radius: 7px; background: #2f76ad; color: #fff; font-weight: 800; }
+.strategy-site-building i { display: block; height: 17%; margin: 3.5% 5%; border: 3px solid #e18a26; border-left-width: 8px; background: repeating-linear-gradient(90deg, #bfd2dc 0 7%, transparent 7% 18%); }
+.strategy-building-main { width: 34%; height: 48%; left: 35%; top: 17%; }
+.strategy-building-side { width: 25%; height: 31%; left: 67%; top: 42%; }
+.strategy-site-core { position: absolute; left: 24%; top: 43%; width: 17%; height: 27%; border: 4px solid #3b739a; background: #d8dde0; box-shadow: 10px 14px 20px rgba(31,49,54,.2); display: grid; place-items: center; font-weight: 900; }
 
-.tower-crane { position: absolute; left: 70%; top: 8%; width: 20%; height: 54%; pointer-events: none; }
-.tower-crane i { position: absolute; left: 28%; width: 9%; height: 100%; background: repeating-linear-gradient(0deg,#e99a24 0 7%,#b76615 7% 10%); }
-.tower-crane b { position: absolute; left: 0; top: 7%; width: 100%; height: 6%; background: #e99a24; transform: skewX(-12deg); }
-.tower-crane em { position: absolute; top: 12%; right: 13%; width: 2px; height: 35%; background: #45535c; }
+.strategy-tower-crane { position: absolute; left: 70%; top: 8%; width: 20%; height: 54%; pointer-events: none; }
+.strategy-tower-crane i { position: absolute; left: 28%; width: 9%; height: 100%; background: repeating-linear-gradient(0deg,#e99a24 0 7%,#b76615 7% 10%); }
+.strategy-tower-crane b { position: absolute; left: 0; top: 7%; width: 100%; height: 6%; background: #e99a24; transform: skewX(-12deg); }
+.strategy-tower-crane em { position: absolute; top: 12%; right: 13%; width: 2px; height: 35%; background: #45535c; }
 
-.site-yard { position: absolute; left: 15%; bottom: 7%; width: 20%; height: 14%; display: flex; gap: 8px; align-items: center; justify-content: center; border: 3px dashed rgba(36,109,151,.6); border-radius: 18px; background: rgba(242,224,185,.74); }
-.site-yard span { font-size: 2rem; font-weight: 900; }
-.site-yard small { font-weight: 700; }
+.strategy-site-yard { position: absolute; left: 15%; bottom: 7%; width: 20%; height: 14%; display: flex; gap: 8px; align-items: center; justify-content: center; border: 3px dashed rgba(36,109,151,.6); border-radius: 18px; background: rgba(242,224,185,.74); }
+.strategy-site-yard span { font-size: 2rem; font-weight: 900; }
+.strategy-site-yard small { font-weight: 700; }
 
-.map-stage-card { position: absolute; top: 3%; right: 2%; width: 20%; min-width: 150px; padding: 12px 14px; border-radius: 16px; }
-.map-stage-card span, .map-stage-card strong { display: block; }
-.map-stage-card span { font-size: .7rem; opacity: .65; }
-.map-stage-card strong { margin: 2px 0 7px; font-size: clamp(12px, 1.1vw, 20px); }
-.map-stage-card progress { width: 100%; }
+.strategy-map-stage-card { position: absolute; top: 3%; right: 2%; width: 20%; min-width: 150px; padding: 12px 14px; border-radius: 16px; }
+.strategy-map-stage-card span, .strategy-map-stage-card strong { display: block; }
+.strategy-map-stage-card span { font-size: .7rem; opacity: .65; }
+.strategy-map-stage-card strong { margin: 2px 0 7px; font-size: clamp(12px, 1.1vw, 20px); }
+.strategy-map-stage-card progress { width: 100%; }
 
-.event-beacon { position: absolute; left: 61%; top: 31%; display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 999px; background: #91382c; color: #fff; box-shadow: 0 5px 14px rgba(92,27,20,.28); font-weight: 800; }
-.event-beacon span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: #91382c; }
+.strategy-event-beacon { position: absolute; left: 61%; top: 31%; display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 999px; background: #91382c; color: #fff; box-shadow: 0 5px 14px rgba(92,27,20,.28); font-weight: 800; }
+.strategy-event-beacon span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: #91382c; }
 
 .strategy-roster {
   position: absolute;
@@ -135,10 +136,56 @@
 .strategy-character strong { font-size: clamp(10px, .85vw, 16px); }
 .strategy-character span { margin-top: 3px; font-size: .68rem; opacity: .72; }
 
+.strategy-active .scene-heading {
+  position: absolute;
+  z-index: 24;
+  top: 11.5%;
+  left: 24%;
+  max-width: 42%;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: rgba(25,48,74,.82);
+  box-shadow: 0 8px 20px rgba(25,48,74,.18);
+}
+.strategy-active .scene-heading h1 { margin-top: 3px; font-size: clamp(15px, 1.45vw, 24px); color: #fff; }
+.strategy-active .scene-heading .eyebrow { color: #d8ecf8; }
+.strategy-active .play-panel {
+  position: absolute;
+  z-index: 30;
+  left: 24%;
+  right: 2%;
+  bottom: 17%;
+  margin: 0;
+  min-height: 25%;
+  max-height: 39%;
+  overflow: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.36);
+  border-top: 1px solid rgba(255,255,255,.65);
+  background: rgba(17,30,39,.92);
+  box-shadow: 0 16px 32px rgba(21,44,59,.28);
+  backdrop-filter: blur(14px);
+}
+.strategy-active .game-footer {
+  position: absolute;
+  z-index: 50;
+  top: 10.5%;
+  right: 1.4%;
+  margin: 0;
+  width: auto;
+  height: auto;
+}
+.strategy-active .game-footer .progress-block,
+.strategy-active .game-footer .keyboard-hint { display: none; }
+.strategy-active .debug-toggle { border-radius: 12px; background: rgba(247,252,255,.9); color: #19304a; box-shadow: 0 6px 16px rgba(22,54,76,.12); }
+.strategy-active .debug-panel { z-index: 60; }
+
 @media (max-width: 760px) {
   .strategy-rail { width: 24%; }
   .strategy-rail button { grid-template-columns: 24px 1fr auto; padding-inline: 8px; font-size: 10px; }
   .strategy-panel { padding: 9px; }
   .strategy-roster { left: 26%; }
   .strategy-character:nth-of-type(n+5) { display: none; }
+  .strategy-active .scene-heading { left: 27%; max-width: 50%; }
+  .strategy-active .play-panel { left: 27%; right: 1.5%; padding: 14px; grid-template-columns: 112px minmax(0, 1fr); }
 }

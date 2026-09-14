@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } fro
 import type { EpisodeSession } from '../app/episode-session';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
+import { StrategyMapShell } from './StrategyMapShell';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -15,6 +16,19 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const portrait = snapshot.dialogue?.visual_reference;
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
+  const strategy = snapshot.strategy;
+  const strategyCopy = {
+    brand: t('ui.brand'),
+    day: t('ui.day'),
+    stage: t('ui.strategy.stage'),
+    psi: t('ui.strategy.psi'),
+    objectives: t('ui.strategy.objectives'),
+    assignments: t('ui.strategy.assignments'),
+    roster: t('ui.strategy.roster'),
+    site: t('ui.strategy.site'),
+    events: t('ui.strategy.events'),
+    progress: t('ui.strategy.progress'),
+  };
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
   useEffect(() => {
@@ -39,13 +53,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [session, snapshot.revision, snapshot.phase, presentation]);
 
-  return <main className={`game-frame phase-${snapshot.phase}`}>
-    <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />
-    <header className="game-header">
+  const strategyActive = isPlaying && strategy !== null;
+
+  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}`}>
+    {strategyActive ? <StrategyMapShell view={strategy} copy={strategyCopy} /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
+    {!strategyActive ? <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
       <span className="header-episode">{t('ui.episode')}</span>
-    </header>
+    </header> : null}
     {snapshot.phase === 'start' ? <section className="title-screen">
       <div className="title-copy"><span className="eyebrow">{t('ui.episode')} <i /> {t('ui.site')}</span>
         <h1>{t('ui.brand')}</h1><p className="tagline">{t('ui.tagline')}</p></div>

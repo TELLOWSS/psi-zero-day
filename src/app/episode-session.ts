@@ -6,6 +6,8 @@ import type { DialogueView } from '../engine/dialogue';
 import type { EngineCommand, NewRunOptions, ProgressBounds } from '../engine';
 import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
+import { projectStrategyView } from './strategy-view';
+import type { StrategyView } from './strategy-view';
 import config from '../../content/episode01/session.json';
 import uiKo from '../../content/localization/playable-ko.json';
 
@@ -13,6 +15,7 @@ export interface SessionSnapshot {
   readonly revision: number;
   readonly phase: 'start' | 'playing' | 'complete' | 'error';
   readonly state: GameState | null;
+  readonly strategy: StrategyView | null;
   readonly presentation: readonly PresentationCommand[];
   readonly eventTitle: string;
   readonly chapterTitle: string;
@@ -98,7 +101,8 @@ export class EpisodeSession {
     const state = this.#engine?.getState() ?? null;
     const id = state?.event_runtime.active_instance?.event_id;
     const event = id ? this.#registry.getEvent(id) : undefined;
-    return Object.freeze({ revision, phase, state, presentation: state ? eventPresentation(state, this.#content) : Object.freeze([]),
+    return Object.freeze({ revision, phase, state, strategy: state ? projectStrategyView(state) : null,
+      presentation: state ? eventPresentation(state, this.#content) : Object.freeze([]),
       dialogue: state ? getDialogueView(state, this.#content) : null, relationshipFeedback: feedback,
       eventTitle: this.t(event?.title_text_id ?? 'ep01.title'), chapterTitle: this.t(event?.chapter_text_id ?? 'ep01.chapter'),
       completed: state?.event_runtime.completion_history.length ?? 0, total: episode01Manifest.event_flow.length });
