@@ -1,0 +1,25 @@
+[
+  {
+    "schema_version": 1,
+    "id": "oh_seungjae",
+    "name_text_id": "cast.oh_seungjae.name",
+    "role_text_id": "cast.oh_seungjae.role",
+    "trade_text_id": "cast.oh_seungjae.role",
+    "age_group_text_id": "cast.oh_seungjae.age",
+    "nationality_text_id": "cast.unspecified",
+    "experience": 68,
+    "stats": {},
+    "traits": [],
+    "weaknesses": [],
+    "appearance_conditions": [],
+    "exit_conditions": [],
+    "asset_bindings": {},
+    "initial_state": {
+      "morale": 70,
+      "fatigue": 24,
+      "availability": { "available": true },
+      "revealed_fields": [],
+      "story_flags": {}
+    }
+  }
+]
