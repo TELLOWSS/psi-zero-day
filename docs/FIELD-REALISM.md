@@ -5,7 +5,7 @@ PSI : ZERO DAY must feel like a real construction site, not a safety quiz with o
 A technically correct safety action may create schedule delay, resistance, reinspection, reporting pressure, or relationship consequences.
 
 ## Core rule
-`hazard -> people -> instruction/inspection -> action -> schedule impact -> relationship impact -> follow-up/reinspection -> fact-check/report`
+`hazard -> people -> instruction/inspection -> action -> schedule impact -> relationship impact -> follow-up/reinspection -> fact-check/report -> changed-work control`
 
 A choice is not complete when the player presses the safe answer. The consequence should continue through people, work and records.
 
@@ -31,6 +31,8 @@ A choice is not complete when the player presses the safe answer. The consequenc
 10. Never treat the loudest or highest-ranking person's statement as automatically true. Conflicting instructions must be reconstructable by time, source and delivery path.
 11. A report can be fast and still be wrong. One-sided reporting should be able to return later as correction, evidence request or loss of trust.
 12. When instructions change, distinguish: original instruction / changed instruction / actual delivery / actual field action.
+13. A signed TBM confirms that a briefing occurred; it does not prove that a later changed task was re-briefed, understood or controlled.
+14. When work sequence, equipment, manpower or access conditions change materially, the game should check whether the working method and safety controls changed with them.
 
 ## Evidence discipline
 When a responsibility dispute occurs, the game should encourage the player to compare evidence rather than choose a faction.
@@ -44,7 +46,7 @@ Useful evidence types include:
 - worker/foreman statements,
 - reinspection result.
 
-Evidence itself can conflict. A photo proves what the camera saw at that moment, not what the whole site looked like. A chat message proves a message existed, not that every worker received or understood it.
+Evidence itself can conflict. A photo proves what the camera saw at that moment, not what the whole site looked like. A chat message proves a message existed, not that every worker received or understood it. A TBM signature proves attendance or acknowledgment at that time, not that later work changes were automatically covered.
 
 ## Required recurring scenario families
 ### Inspection / reinspection
@@ -74,8 +76,10 @@ Evidence itself can conflict. A photo proves what the camera saw at that moment,
 ### TBM / real-work gap
 - Everyone acknowledges the TBM instruction.
 - Work changes after manpower/equipment/sequence changes.
-- The protected condition is removed or bypassed.
-- Player must notice the change rather than assume training equals compliance.
+- The protected condition is removed, bypassed or no longer matches the changed work.
+- “TBM was done” must not close the event by itself.
+- The player must distinguish worker non-compliance from a changed-work control failure.
+- Rebriefing only the individual worker is not equivalent to updating the changed work method for the crew.
 
 ## Implemented vertical-slice examples
 ### Reporting aftershock — TASK-008A
@@ -98,6 +102,16 @@ Evidence itself can conflict. A photo proves what the camera saw at that moment,
 - One-sided reporting later returns for correction; defensive reporting triggers an evidence request.
 - Timeline verification resolves the case as a mixed cause: changed-instruction delivery failure plus insufficient field control.
 - The purpose is not to teach “always blame both sides.” The purpose is to teach that causation must be reconstructed from evidence.
+
+### TBM / changed-work gap — TASK-008D
+- Morning TBM includes a rule against arbitrary safety-facility removal and requires changed work to be rechecked.
+- Later the work sequence changes for material movement and the field condition no longer matches the morning briefing.
+- Lee Jaehoon argues that the crew already signed the TBM; Kang Taesik says the afternoon work was different; Lim Junho says the changed method was never explained again.
+- The player may rely on the signed TBM, blame and retrain the individual worker, or stop/restore/reconfirm the changed work before resuming.
+- Paper-first handling leaves a paper-field gap that can recur.
+- Worker-blame handling restores the condition but chills later reporting.
+- Changed-work control restores the condition and re-establishes a reporting route, at the cost of stopping and re-coordinating the work.
+- A previously suppressed worker can partially regain reporting confidence after a later good change-control response. Relationships are therefore recoverable, not permanent labels.
 
 ## Tone
 The game may be cute and approachable visually, but field problems must remain adult, frustrating and credible.
