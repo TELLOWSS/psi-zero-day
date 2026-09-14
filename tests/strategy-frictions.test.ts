@@ -54,6 +54,14 @@ describe('Episode 01 field frictions', () => {
       .toEqual(['friction.stopwork.return']);
   });
 
+  it('shows schedule compression, condition loss and hierarchy distortion through the instruction chain', () => {
+    expect(projectEpisode01Frictions('e01_08m_instruction_cascade').map(item => item.friction_id)).toEqual([
+      'friction.instruction.schedule', 'friction.instruction.condition_loss', 'friction.instruction.hierarchy',
+    ]);
+    expect(projectEpisode01Frictions('e01_08n_instruction_return').map(item => item.friction_id))
+      .toEqual(['friction.instruction.return']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
