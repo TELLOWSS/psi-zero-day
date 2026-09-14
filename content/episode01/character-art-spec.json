@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "visual_target": "commercial casual-strategy construction game, polished 2.5D chibi-realistic 3D, adult-friendly, bright but credible Korean construction-site atmosphere",
+  "global_rules": {
+    "recognition_rule": "Every character must remain identifiable with the name label hidden by at least three of: silhouette, face, age, helmet, clothing, prop, pose.",
+    "proportion_rule": "Use one shared stylized world scale, but vary shoulder width, height impression, head/face shape and stance. Do not reuse one base body for the full cast.",
+    "helmet_rule": "Helmets may share realistic site colors, but helmet color alone must never be the primary identity cue. No pseudo-text or gibberish marks.",
+    "face_rule": "No two characters may share the same eye shape + jaw shape + nose/mouth combination.",
+    "pose_rule": "Default map pose must communicate job function before reading the role label.",
+    "tone_rule": "Cute and approachable, not childish or slapstick. Accidents and hazards remain credible.",
+    "render_rule": "Portrait and map sprite must clearly depict the same person, clothing family and signature prop."
+  },
+  "characters": {
+    "player": {
+      "role": "현장 안전관리자 / PLAYER",
+      "gender_presentation": "female",
+      "age_impression": "late 20s to early 30s",
+      "silhouette": "medium height, compact athletic build, centered confident stance",
+      "face": "soft oval face, large focused eyes, short dark bob tucked behind ears; clearly different from every male NPC",
+      "helmet": "clean white safety helmet with one simple blue abstract safety emblem",
+      "clothing": "blue safety jacket or vest over dark workwear, neat practical styling",
+      "signature_prop": "black safety tablet/inspection pad",
+      "default_pose": "tablet in one hand, other hand ready to point or signal stop",
+      "expression": "alert, empathetic, decisive",
+      "palette": ["white", "safety blue", "navy", "small lime reflective accents"],
+      "do_not": ["male-coded clone of Lee Jaehoon", "long hair flowing outside PPE", "medical cross logo"]
+    },
+    "kang_taesik": {
+      "role": "형틀반장",
+      "age_impression": "early 50s",
+      "silhouette": "short-to-medium, very broad shoulders, heavy sturdy torso",
+      "face": "square weathered face, thick eyebrows, prominent moustache with short grizzled beard",
+      "helmet": "burnt-orange safety helmet, visibly used",
+      "clothing": "charcoal work jacket, orange reflective vest, heavy gloves",
+      "signature_prop": "tape measure clipped to belt and rolled work glove/tool pouch",
+      "default_pose": "one arm pointing toward the workface, feet planted wide",
+      "expression": "experienced, stubborn but responsible",
+      "palette": ["burnt orange", "charcoal", "dark navy", "tan leather"],
+      "do_not": ["slim young face", "clean-shaven office-worker look"]
+    },
+    "yoon_sungho": {
+      "role": "철근반장",
+      "age_impression": "late 40s",
+      "silhouette": "tall, muscular forearms, tapered athletic torso",
+      "face": "longer angular face, narrow eyes, short dark stubble; no moustache-heavy Kang look",
+      "helmet": "mustard-yellow helmet with dark chin strap",
+      "clothing": "brown/khaki heavy workwear with black forearm guards and gloves",
+      "signature_prop": "short bundled rebar sample / rebar hook",
+      "default_pose": "one forearm resting against rebar, other hand checking alignment",
+      "expression": "quiet, confident, technically proud",
+      "palette": ["mustard yellow", "brown", "black", "steel gray"],
+      "do_not": ["orange Kang palette", "boyish round face"]
+    },
+    "lee_jaehoon": {
+      "role": "공사대리",
+      "age_impression": "early 30s",
+      "silhouette": "tall and slim, long limbs, upright office-to-field posture",
+      "face": "clean-shaven youthful rectangular face, straight eyebrows, smaller eyes, neat dark hair",
+      "helmet": "white helmet, plain and clean",
+      "clothing": "blue field jacket, white or pale shirt, slim dark work pants",
+      "signature_prop": "rolled drawings plus schedule clipboard",
+      "default_pose": "drawings under one arm while checking schedule with the other hand",
+      "expression": "quick-thinking, schedule-conscious, occasionally pressured",
+      "palette": ["white", "royal blue", "navy", "paper gray"],
+      "do_not": ["older than mid-30s", "beard", "same female-player facial structure"]
+    },
+    "lim_junho": {
+      "role": "신입근로자",
+      "age_impression": "early 20s",
+      "silhouette": "shorter, slim youthful frame, slightly inward shoulders",
+      "face": "round youthful face, wide eyes, small nose, visibly younger than all supervisors",
+      "helmet": "bright yellow helmet slightly large-looking on him",
+      "clothing": "green high-visibility vest over dark T-shirt/workwear",
+      "signature_prop": "compact radio and small tool bag",
+      "default_pose": "radio held close while glancing toward a supervisor or hazard",
+      "expression": "earnest, observant, slightly hesitant but capable of courage",
+      "palette": ["bright yellow", "green", "dark gray", "orange tool accents"],
+      "do_not": ["mature moustache", "broad foreman body", "aggressive hero pose"]
+    },
+    "choi_minseok": {
+      "role": "크레인 신호수",
+      "age_impression": "late 30s",
+      "silhouette": "lean athletic body, arms held wide for signaling, dynamic open stance",
+      "face": "triangular lively face, expressive smile lines, energetic eyes",
+      "helmet": "high-visibility orange helmet",
+      "clothing": "bright orange reflective signal vest over black workwear",
+      "signature_prop": "pair of red illuminated signal wands",
+      "default_pose": "both signal wands clearly raised in a crane-hand-signal posture",
+      "expression": "energetic, vigilant, communicative",
+      "palette": ["high-vis orange", "black", "red signal light", "silver reflective stripe"],
+      "do_not": ["static clipboard pose", "same stocky silhouette as Kang"]
+    },
+    "seo_jeongmin": {
+      "role": "건축감리",
+      "age_impression": "mid 40s",
+      "silhouette": "slim medium height, straight reserved posture",
+      "face": "narrow oval face, rectangular glasses, thin lips, clean-shaven",
+      "helmet": "white helmet with simple dark inspection stripe only",
+      "clothing": "dark navy blazer-style site jacket, muted vest, clean trousers",
+      "signature_prop": "inspection clipboard with pen",
+      "default_pose": "clipboard against chest, pen raised while checking a detail",
+      "expression": "precise, skeptical, calm rather than hostile",
+      "palette": ["white", "navy", "slate gray", "muted blue"],
+      "do_not": ["round youthful Lee face", "comedic angry inspector caricature"]
+    },
+    "oh_seungjae": {
+      "role": "원도급 공사과장",
+      "age_impression": "early 40s",
+      "silhouette": "medium-tall, slightly broad management build, one shoulder often angled as if taking a call",
+      "face": "broad cheekbones, slightly tired eyes, defined jaw, clean-shaven",
+      "helmet": "white helmet with dark blue band",
+      "clothing": "navy manager field jacket over light shirt, radio clipped at chest",
+      "signature_prop": "smartphone / radio headset plus folded coordination note",
+      "default_pose": "phone or radio at one ear while gesturing toward the site",
+      "expression": "authoritative, busy, relationship-conscious",
+      "palette": ["white", "deep navy", "steel blue", "small orange coordination accent"],
+      "do_not": ["glasses-and-clipboard Seo clone", "young Lee silhouette"]
+    }
+  }
+}
