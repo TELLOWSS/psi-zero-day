@@ -49,6 +49,14 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
     { friction_id: 'friction.inspection.recheck', kind: 'inspection_pressure', label_text_id: 'ui.friction.inspection', detail_text_id: 'ui.friction.inspection.recheck' },
     { friction_id: 'friction.responsibility.rework', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.rework' },
   ],
+  e01_08e_responsibility_clash: [
+    { friction_id: 'friction.responsibility.crossfire', kind: 'responsibility_shift', label_text_id: 'ui.friction.responsibility', detail_text_id: 'ui.friction.responsibility.crossfire' },
+    { friction_id: 'friction.timeline.changed_instruction', kind: 'coordination_conflict', label_text_id: 'ui.friction.timeline', detail_text_id: 'ui.friction.timeline.detail' },
+    { friction_id: 'friction.paper_gap.report', kind: 'responsibility_shift', label_text_id: 'ui.friction.paper_gap', detail_text_id: 'ui.friction.paper_gap.report' },
+  ],
+  e01_08f_report_return: [
+    { friction_id: 'friction.paper_gap.returned', kind: 'responsibility_shift', label_text_id: 'ui.friction.paper_gap', detail_text_id: 'ui.friction.paper_gap.returned' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
