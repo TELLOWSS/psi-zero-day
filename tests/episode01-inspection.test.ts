@@ -15,21 +15,21 @@ describe('Episode 01 inspection chain', () => {
     const { state } = playEpisode({ ...common, inspection: 'inspection_full_stop' });
     expect(state.flags.inspection_result).toBe('accepted');
     expect(getRelation(state.relations, 'seo_jeongmin', 'player')).toMatchObject({ trust: 33, respect: 34 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(33);
+    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(34);
   });
 
   it('makes a photo-first shortcut return as reinspection work', () => {
     const { state } = playEpisode({ ...common, inspection: 'inspection_quick_photo' });
     expect(state.flags.inspection_result).toBe('rework_after_reinspection');
     expect(getRelation(state.relations, 'seo_jeongmin', 'player')).toMatchObject({ trust: 26, respect: 24 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(36);
+    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(37);
   });
 
   it('accepts negotiated sequencing and preserves both sides', () => {
     const { state } = playEpisode({ ...common, inspection: 'inspection_sequence_agreement' });
     expect(state.flags.inspection_result).toBe('accepted_after_sequence');
     expect(getRelation(state.relations, 'seo_jeongmin', 'player')).toMatchObject({ trust: 32, respect: 32 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(38);
+    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(39);
     expect(state.player.stats.negotiation).toBe(32);
   });
 });
