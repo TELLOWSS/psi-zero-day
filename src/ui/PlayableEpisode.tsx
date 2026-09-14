@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
+import { projectCharacterLoadout } from '../app/character-loadout';
+import { completedTraining } from '../app/training';
 import { projectStrategyActions } from '../app/strategy-actions';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
@@ -70,6 +72,14 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? session.assetUri(portrait.id)
     : person ? characterPortraitUri(person.id, id => session.assetUri(id)) : undefined;
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
+  const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
+  const activeEventId = snapshot.state?.event_runtime.active_instance?.event_id;
+  const rewardCharacterId = activeEventId === 'e01_09_evening'
+    ? 'player'
+    : activeEventId === 'e01_08a_reporting_return' ? 'lim_junho' : undefined;
+  const trainingReward = snapshot.state && rewardCharacterId
+    ? completedTraining(snapshot.state.flags, rewardCharacterId)
+    : undefined;
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
@@ -97,13 +107,25 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
-        {person ? <CharacterCard person={person} portraitUri={dialoguePortraitUri} growth={dialogueGrowth} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
+        {person ? <CharacterCard
+          person={person}
+          portraitUri={dialoguePortraitUri}
+          growth={dialogueGrowth}
+          loadout={dialogueLoadout}
+          equipmentTitle={t('ui.equipment.title')}
+          slotLabel={slot => t(`ui.equipment.${slot}`)}
+        /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
           {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
               <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
               <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
             </span>)}
+          </div> : null}
+          {trainingReward ? <div className="training-reward-panel" role="status" data-training={trainingReward.training_id}>
+            <span>{t('ui.training.complete')}</span><strong>{t(trainingReward.title_text_id)}</strong>
+            <div><b>{t('ui.training.reward')}</b>{trainingReward.rewards.map(item => <em key={item.item_id}>{item.name}</em>)}</div>
+            <div><b>{t('ui.training.equipped')}</b>{trainingReward.equipped.map(item => <em key={item.slot}>{item.name}</em>)}</div>
           </div> : null}
           <PresentationView
             commands={snapshot.presentation}
