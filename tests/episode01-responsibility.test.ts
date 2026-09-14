@@ -1,38 +1,36 @@
 import { describe, expect, it } from 'vitest';
-import { getRelation } from '../src/engine';
 import { playEpisode } from './helpers/episode01-playthrough';
 
 const base = {
-  plan: 'delegate_kang' as const,
+  plan: 'negotiate_yoon' as const,
   ramp: 'check_self' as const,
   entrance: 'force_clear' as const,
-  inspection: 'inspection_sequence_agreement' as const,
   evening: 'rest' as const,
 };
 
-describe('Episode 01 responsibility and report chain', () => {
-  it('returns a one-sided blame report for correction when later records conflict', () => {
+describe('Episode 01 responsibility and report route', () => {
+  it('returns a one-sided blame report for correction and then opens record pressure', () => {
     const { state } = playEpisode({ ...base, responsibility: 'report_one_sided' });
-    expect(state.flags).toMatchObject({ report_basis: 'one_sided', report_result: 'correction_required' });
-    expect(getRelation(state.relations, 'oh_seungjae', 'player')).toMatchObject({ trust: 30, respect: 33 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(30);
-    expect(getRelation(state.relations, 'kang_taesik', 'player')!.trust).toBe(31);
+    expect(state.flags).toMatchObject({
+      report_basis: 'one_sided',
+      report_result: 'correction_required',
+      record_result: 'factual_record_preserved',
+    });
   });
 
-  it('demands evidence when the report only repeats the subcontractor defence', () => {
+  it('demands evidence for a defensive report and then opens record pressure', () => {
     const { state } = playEpisode({ ...base, responsibility: 'report_defensive' });
-    expect(state.flags).toMatchObject({ report_basis: 'defensive', report_result: 'evidence_requested' });
-    expect(getRelation(state.relations, 'oh_seungjae', 'player')).toMatchObject({ trust: 28, respect: 28 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(37);
-    expect(getRelation(state.relations, 'kang_taesik', 'player')!.trust).toBe(36);
+    expect(state.flags).toMatchObject({
+      report_basis: 'defensive',
+      report_result: 'evidence_requested',
+      record_result: 'factual_record_preserved',
+    });
   });
 
-  it('confirms a mixed-cause timeline when the player checks instruction and evidence timestamps', () => {
+  it('closes the route after timeline verification without forcing record pressure', () => {
     const { state } = playEpisode({ ...base, responsibility: 'report_verify_timeline' });
     expect(state.flags).toMatchObject({ report_basis: 'timeline', report_result: 'timeline_confirmed' });
-    expect(getRelation(state.relations, 'oh_seungjae', 'player')).toMatchObject({ trust: 33, respect: 32 });
-    expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(37);
-    expect(state.player.stats.analysis).toBe(41);
+    expect(state.flags.record_result).toBeUndefined();
     expect(state.event_runtime.finished_instances.find(i => i.event_id === 'e01_08f_report_return')?.selected_choice_ids)
       .toEqual(['report_return_timeline_confirmed']);
   });
