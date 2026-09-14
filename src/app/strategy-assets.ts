@@ -42,8 +42,7 @@ export function projectStrategyVisualAssets(characterIds: readonly Id[], resolve
     });
   }
 
-  const backgroundPlan = visuals.backgrounds.foundation;
-  const backgroundUri = resolve(backgroundPlan.map_asset_id);
+  const backgroundUri = episode01BackgroundUri(resolve);
   return Object.freeze({
     ...(backgroundUri ? { background_uri: backgroundUri } : {}),
     characters: Object.freeze(characters),
@@ -53,4 +52,8 @@ export function projectStrategyVisualAssets(characterIds: readonly Id[], resolve
 export function characterPortraitUri(characterId: Id, resolve: AssetResolver): string | undefined {
   const plan = (visuals.characters as Readonly<Record<string, CharacterVisualPlan>>)[characterId];
   return plan ? resolve(plan.portrait_asset_id) : undefined;
+}
+
+export function episode01BackgroundUri(resolve: AssetResolver): string | undefined {
+  return resolve(visuals.backgrounds.foundation.map_asset_id);
 }
