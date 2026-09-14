@@ -20,9 +20,22 @@ import { episode01InstructionEvents, episode01InstructionMessages } from './epis
 import { episode01RecordEvents, episode01RecordMessages } from './episode01-record';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
+import { structureEpisode01PlayableFlow } from './episode01-play-structure';
 
 /** Offline content entry point. Run identity and unrelated player baselines remain caller inputs. */
 export function createEpisode01Registry(): ContentRegistry {
+  const assembledEvents = assembleEpisode01Consequences(
+    events,
+    consequenceEvents,
+    inspectionEvents,
+    [responsibilityClashEvent, reportReturnEvent],
+    episode01TbmGapEvents,
+    episode01RestartEvents,
+    episode01StopworkEvents,
+    episode01InstructionEvents,
+    episode01RecordEvents,
+  );
+
   return new ContentRegistry({
     ...manifest.bundle,
     localizations: [{ ...ko, messages: {
@@ -37,17 +50,7 @@ export function createEpisode01Registry(): ContentRegistry {
     } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
-    events: assembleEpisode01Consequences(
-      events,
-      consequenceEvents,
-      inspectionEvents,
-      [responsibilityClashEvent, reportReturnEvent],
-      episode01TbmGapEvents,
-      episode01RestartEvents,
-      episode01StopworkEvents,
-      episode01InstructionEvents,
-      episode01RecordEvents,
-    ),
+    events: structureEpisode01PlayableFlow(assembledEvents),
   });
 }
 
