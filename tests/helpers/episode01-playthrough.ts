@@ -25,6 +25,7 @@ export interface EpisodeDecisions {
   signal?: 'listen_more' | 'dismiss';
   ramp: 'check_self' | 'ask_minseok' | 'keep_schedule';
   entrance: 'assign_crew' | 'request_delay' | 'force_clear';
+  inspection?: 'inspection_full_stop' | 'inspection_quick_photo' | 'inspection_sequence_agreement';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -56,6 +57,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_04_junho_signal/listen': decisions.signal,
     'e01_05_command/ramp': decisions.ramp,
     'e01_05_command/entrance': decisions.entrance,
+    'e01_08b_inspection_find/action': decisions.inspection ?? 'inspection_sequence_agreement',
     'e01_09_evening/evening': decisions.evening,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
@@ -65,7 +67,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     e01_09_evening: { day: 1, slot: 'EVENING' },
     e01_10_next_day_tease: { day: 2, slot: 'PRE_WORK' },
   };
-  for (let step = 0; step < 200; step++) {
+  for (let step = 0; step < 240; step++) {
     const state = engine.getState();
     if (state.flags.episode01_completed === true) return { initial, state, trace, checkpoints };
     const active = state.event_runtime.active_instance;
