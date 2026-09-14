@@ -4,7 +4,7 @@
     {
       "training_id": "training.player.site_basics",
       "character_id": "player",
-      "title": "현장안전 기본훈련",
+      "title_text_id": "training.player.site_basics.title",
       "completion_flag": "training.player.site_basics",
       "growth_stage": "focused",
       "rewards": ["item.inspection_camera"],
@@ -15,7 +15,7 @@
     {
       "training_id": "training.lim_junho.reporting",
       "character_id": "lim_junho",
-      "title": "위험신호 보고훈련",
+      "title_text_id": "training.lim_junho.reporting.title",
       "completion_flag": "training.lim_junho.reporting",
       "growth_stage": "focused",
       "rewards": ["item.site_radio"],
