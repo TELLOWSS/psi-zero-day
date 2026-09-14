@@ -9,6 +9,7 @@ describe('Episode 01 strategy signals', () => {
     ['e01_06_pump_arrival', 'signal.pump_entry', 'gate'],
     ['e01_08b_inspection_find', 'signal.inspection_access', 'entry'],
     ['e01_08d_reinspection', 'signal.reinspection_access', 'entry'],
+    ['e01_08g_tbm_field_gap', 'signal.tbm_field_gap', 'yard'],
   ] as const)('maps %s to approved presentation metadata', (eventId, signalId, anchor) => {
     expect(projectEpisode01Signals(eventId)).toEqual([
       expect.objectContaining({ signal_id: signalId, anchor }),
