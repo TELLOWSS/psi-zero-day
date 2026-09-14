@@ -3,8 +3,8 @@ import { createEpisode01Registry } from '../src/content/episode01';
 import { playEpisode } from './helpers/episode01-playthrough';
 
 describe('Episode 01 integrated flow', () => {
-  it('loads the 18-event vertical slice', () => {
-    expect(createEpisode01Registry().getValidatedContent().events).toHaveLength(18);
+  it('loads the 20-event vertical slice', () => {
+    expect(createEpisode01Registry().getValidatedContent().events).toHaveLength(20);
   });
 
   it('completes the default realism chain', () => {
@@ -18,6 +18,7 @@ describe('Episode 01 integrated flow', () => {
       inspection_closed: true,
       report_result: 'timeline_confirmed',
       tbm_gap_result: 'changed_work_rebriefed',
+      restart_result: 'controlled_restart',
       episode01_completed: true,
     });
   });
