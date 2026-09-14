@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { strategyActionsForTarget, strategyActionTargetKey } from '../app/strategy-actions';
 import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
+import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
 import type { StrategySignalKind } from '../app/strategy-signals';
@@ -59,13 +60,14 @@ function actionIcon(intent: StrategyActionIntent): string {
   }
 }
 
-export function StrategyMapShell({ view, copy, text, person, actions = [], onAction }: {
+export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
   readonly person: (characterId: string) => StrategyPersonLabel | undefined;
   readonly actions?: readonly StrategyAction[];
   readonly onAction?: (action: StrategyAction) => void;
+  readonly visualAssets?: StrategyVisualAssets;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
@@ -97,8 +99,9 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   };
 
   const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
+  const hasBackgroundArt = visualAssets?.background_uri !== undefined;
 
-  return <main className="strategy-shell" data-stage={view.construction.stage_id}>
+  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'}>
     <header className="strategy-hud">
       <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><strong>{copy.brand}</strong></div>
       <div className="strategy-meter" aria-label={copy.psi}>
@@ -137,15 +140,18 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
     </aside>
 
-    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}`} aria-label={copy.site}>
-      <div className="strategy-map-sky" />
-      <div className="strategy-map-road strategy-map-road-a" />
-      <div className="strategy-map-road strategy-map-road-b" />
-      <div className="strategy-site-building strategy-building-main"><span>5F</span><i /><i /><i /><i /></div>
-      <div className="strategy-site-building strategy-building-side"><span>3F</span><i /><i /><i /></div>
-      <div className="strategy-site-core"><span>CORE</span></div>
-      <div className="strategy-tower-crane" aria-hidden="true"><i /><b /><em /></div>
-      <div className="strategy-site-yard"><span>{view.assignments.length}</span><small>{copy.assignments}</small></div>
+    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site}>
+      {visualAssets?.background_uri ? <img className="strategy-map-background-art" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
+      <div className="strategy-map-css-scene" aria-hidden={hasBackgroundArt ? 'true' : undefined}>
+        <div className="strategy-map-sky" />
+        <div className="strategy-map-road strategy-map-road-a" />
+        <div className="strategy-map-road strategy-map-road-b" />
+        <div className="strategy-site-building strategy-building-main"><span>5F</span><i /><i /><i /><i /></div>
+        <div className="strategy-site-building strategy-building-side"><span>3F</span><i /><i /><i /></div>
+        <div className="strategy-site-core"><span>CORE</span></div>
+        <div className="strategy-tower-crane"><i /><b /><em /></div>
+        <div className="strategy-site-yard"><span>{view.assignments.length}</span><small>{copy.assignments}</small></div>
+      </div>
       <div className="strategy-map-stage-card">
         <span>{copy.stage}</span>
         <strong>{view.construction.stage_id}</strong>
@@ -170,17 +176,21 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
           const label = person(placement.character_id);
           const nearSignal = placement.nearby_signal_ids.length > 0;
           const key = placement.character_id;
+          const visual = visualAssets?.characters[placement.character_id];
           return <button
-            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
+            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}${visual?.map_uri ? ' has-art' : ''}`}
             data-character={placement.character_id}
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
             data-action-count={strategyActionsForTarget(actions, key).length}
+            data-visual={visual?.map_uri ? 'asset' : 'css'}
             key={placement.character_id}
             type="button"
             onClick={() => setFocusId(key)}
           >
-            <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>
-            <span className="strategy-worker-label"><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></span>
+            {visual?.map_uri
+              ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
+              : <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>}
+            <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
           </button>;
         })}
@@ -232,8 +242,9 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
       {roster.map((character, index) => {
         const label = person(character.character_id);
+        const visual = visualAssets?.characters[character.character_id];
         return <article className="strategy-character" key={character.character_id}>
-          <div className="character-token" aria-hidden="true">{index + 1}</div>
+          <div className="character-token" aria-hidden="true">{visual?.portrait_uri ? <img src={visual.portrait_uri} alt="" /> : index + 1}</div>
           <div><strong>{label?.name ?? character.character_id}</strong><span>{label?.role ?? ''} · {character.available ? '●' : '○'} {character.experience}</span></div>
         </article>;
       })}
