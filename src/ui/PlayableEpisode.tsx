@@ -56,7 +56,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategyActive = isPlaying && strategy !== null;
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}`}>
-    {strategyActive ? <StrategyMapShell view={strategy} copy={strategyCopy} text={t} /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
+    {strategyActive ? <StrategyMapShell view={strategy} copy={strategyCopy} text={t} person={id => session.character(id)} /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
     {!strategyActive ? <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
