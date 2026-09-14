@@ -80,6 +80,14 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
   e01_08l_stopwork_return: [
     { friction_id: 'friction.stopwork.return', kind: 'reporting_hesitation', label_text_id: 'ui.friction.stopwork_return', detail_text_id: 'ui.friction.stopwork_return.detail' },
   ],
+  e01_08m_instruction_cascade: [
+    { friction_id: 'friction.instruction.schedule', kind: 'schedule_pressure', label_text_id: 'ui.friction.instruction_schedule', detail_text_id: 'ui.friction.instruction_schedule.detail' },
+    { friction_id: 'friction.instruction.condition_loss', kind: 'coordination_conflict', label_text_id: 'ui.friction.instruction_loss', detail_text_id: 'ui.friction.instruction_loss.detail' },
+    { friction_id: 'friction.instruction.hierarchy', kind: 'hierarchy_pressure', label_text_id: 'ui.friction.instruction_hierarchy', detail_text_id: 'ui.friction.instruction_hierarchy.detail' },
+  ],
+  e01_08n_instruction_return: [
+    { friction_id: 'friction.instruction.return', kind: 'reporting_hesitation', label_text_id: 'ui.friction.instruction_return', detail_text_id: 'ui.friction.instruction_return.detail' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
