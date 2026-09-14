@@ -1,0 +1,13 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ui.friction.record_wording": "보고 문구 압박",
+    "ui.friction.record_wording.detail": "표현을 부드럽게 하자는 요구가 사실범위 축소로 이어질 수 있다.",
+    "ui.friction.record_retrofit": "사후 문서 맞추기",
+    "ui.friction.record_retrofit.detail": "이미 바뀐 작업을 기존 TBM·계획에 들어 있었던 것처럼 정리하자는 압박이 생긴다.",
+    "ui.friction.record_evidence": "증거-문서 불일치",
+    "ui.friction.record_evidence.detail": "사진·통화시각·TBM·변경지시 기록이 보고서 문구와 다르면 나중에 다시 설명해야 한다.",
+    "ui.friction.record_return": "기록의 후폭풍",
+    "ui.friction.record_return.detail": "한 번 줄이거나 맞춘 문구는 나중 증거와 대조될 때 더 큰 수정 부담으로 돌아올 수 있다."
+  }
+}
