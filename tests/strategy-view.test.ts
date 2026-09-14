@@ -17,7 +17,9 @@ describe('StrategyView adapter', () => {
     expect(view.psi.values).toEqual(state.psi.progress.values);
     expect(view.assignments).toHaveLength(state.assignments.length);
     expect(view.roster).toHaveLength(Object.keys(state.characters).length);
+    expect(view.placements).toHaveLength(view.roster.filter(character => character.available).length);
     expect(view.runtime.active_event_id).toBe(state.event_runtime.active_instance?.event_id ?? null);
+    expect(view.runtime.participant_bindings).toEqual(state.event_runtime.active_instance?.participant_bindings ?? {});
     expect(view.runtime.completed_event_count).toBe(state.event_runtime.completion_history.length);
   });
 
@@ -30,6 +32,7 @@ describe('StrategyView adapter', () => {
     expect(Object.isFrozen(view)).toBe(true);
     expect(Object.isFrozen(view.clock)).toBe(true);
     expect(Object.isFrozen(view.roster)).toBe(true);
+    expect(Object.isFrozen(view.placements)).toBe(true);
     expect(() => Object.assign(view.clock, { day: 999 })).toThrow();
     expect(session.getSnapshot().state).toBe(state);
     expect(session.getSnapshot().state!.clock.day).not.toBe(999);
