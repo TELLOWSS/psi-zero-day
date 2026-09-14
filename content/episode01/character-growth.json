@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "identity_locked": true,
+    "age_visual_change": false,
+    "growth_changes": ["expression", "posture", "equipment", "confidence"],
+    "stage_order": ["initial", "focused", "skilled"]
+  },
+  "characters": {
+    "player": {
+      "stage_flag": "growth.player",
+      "stages": {
+        "initial": { "expression": "attentive", "posture": "careful", "items": ["item.safety_tablet"] },
+        "focused": { "expression": "resolved", "posture": "decisive", "items": ["item.safety_tablet", "item.inspection_camera"] },
+        "skilled": { "expression": "calm_confident", "posture": "commanding", "items": ["item.safety_tablet", "item.inspection_camera", "item.stopwork_card"] }
+      }
+    },
+    "kang_taesik": {
+      "stage_flag": "growth.kang_taesik",
+      "stages": {
+        "initial": { "expression": "guarded", "posture": "arms_folded", "items": ["item.work_gloves"] },
+        "focused": { "expression": "engaged", "posture": "directing", "items": ["item.work_gloves", "item.foreman_radio"] },
+        "skilled": { "expression": "trusting", "posture": "mentoring", "items": ["item.work_gloves", "item.foreman_radio", "item.tbm_board"] }
+      }
+    },
+    "yoon_sungho": {
+      "stage_flag": "growth.yoon_sungho",
+      "stages": {
+        "initial": { "expression": "serious", "posture": "work_ready", "items": ["item.rebar_tie_tool"] },
+        "focused": { "expression": "assured", "posture": "checking", "items": ["item.rebar_tie_tool", "item.rebar_gauge"] },
+        "skilled": { "expression": "mentor", "posture": "coaching", "items": ["item.rebar_tie_tool", "item.rebar_gauge", "item.tbm_board"] }
+      }
+    },
+    "lee_jaehoon": {
+      "stage_flag": "growth.lee_jaehoon",
+      "stages": {
+        "initial": { "expression": "busy", "posture": "checking_drawings", "items": ["item.drawing_roll"] },
+        "focused": { "expression": "composed", "posture": "coordinating", "items": ["item.drawing_roll", "item.schedule_tablet"] },
+        "skilled": { "expression": "confident", "posture": "leading_brief", "items": ["item.drawing_roll", "item.schedule_tablet", "item.coordination_folder"] }
+      }
+    },
+    "lim_junho": {
+      "stage_flag": "growth.lim_junho",
+      "stages": {
+        "initial": { "expression": "uncertain", "posture": "careful", "items": ["item.beginner_toolbox"] },
+        "focused": { "expression": "eager", "posture": "reporting", "items": ["item.beginner_toolbox", "item.site_radio"] },
+        "skilled": { "expression": "confident", "posture": "proactive", "items": ["item.beginner_toolbox", "item.site_radio", "item.tbm_board"] }
+      }
+    },
+    "choi_minseok": {
+      "stage_flag": "growth.choi_minseok",
+      "stages": {
+        "initial": { "expression": "focused", "posture": "signal_ready", "items": ["item.signal_batons"] },
+        "focused": { "expression": "alert", "posture": "wide_signal", "items": ["item.signal_batons", "item.signal_whistle"] },
+        "skilled": { "expression": "commanding", "posture": "traffic_control", "items": ["item.signal_batons", "item.signal_whistle", "item.site_radio"] }
+      }
+    },
+    "seo_jeongmin": {
+      "stage_flag": "growth.seo_jeongmin",
+      "stages": {
+        "initial": { "expression": "skeptical", "posture": "observing", "items": ["item.inspection_clipboard"] },
+        "focused": { "expression": "analytical", "posture": "measuring", "items": ["item.inspection_clipboard", "item.measurement_kit"] },
+        "skilled": { "expression": "approving", "posture": "reviewing_with_team", "items": ["item.inspection_clipboard", "item.measurement_kit", "item.inspection_camera"] }
+      }
+    },
+    "oh_seungjae": {
+      "stage_flag": "growth.oh_seungjae",
+      "stages": {
+        "initial": { "expression": "pressured", "posture": "phone_call", "items": ["item.manager_phone"] },
+        "focused": { "expression": "measured", "posture": "coordinating", "items": ["item.manager_phone", "item.coordination_folder"] },
+        "skilled": { "expression": "supportive", "posture": "team_brief", "items": ["item.manager_phone", "item.coordination_folder", "item.schedule_tablet"] }
+      }
+    }
+  }
+}
