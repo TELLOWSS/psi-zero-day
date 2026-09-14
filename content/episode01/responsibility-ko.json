@@ -1,0 +1,24 @@
+{
+  "locale": "ko",
+  "messages": {
+    "cast.oh_seungjae.name": "오승재",
+    "cast.oh_seungjae.role": "원도급 공사과장",
+    "cast.oh_seungjae.age": "41세",
+    "ep01.8e.title": "누구 말이 맞나",
+    "ep01.8f.title": "보고서가 돌아오다",
+    "ep01.responsibility.gc": "오승재가 말한다. ‘이건 협력사 관리 문제 아닌가요? 통로 확보는 협력사에서 관리했어야죠.’",
+    "ep01.responsibility.lee": "이재훈이 바로 받는다. ‘아침에는 공정팀에서 철근차부터 받으라고 했고, 중간에 펌프카 동선을 먼저 보라고 지시가 바뀌었습니다.’",
+    "ep01.responsibility.kang": "강태식이 고개를 젓는다. ‘나는 아침 조회 때 들은 대로 한 겁니다. 지시 바뀌었다는 말은 나중에 들었어요.’",
+    "ep01.responsibility.prompt": "원도급은 협력사 관리 문제라고 하고, 협력사는 변경 지시 때문이라고 한다. 안전팀에는 지금 바로 사실확인과 조치사진, 보고를 올리라고 한다.",
+    "ep01.responsibility.one_sided": "원도급 요구대로 협력사 관리 미흡으로 우선 보고한다.",
+    "ep01.responsibility.defensive": "공정팀 변경지시가 원인이라고 협력사 입장 중심으로 보고한다.",
+    "ep01.responsibility.verify_timeline": "조회내용, 통화시각, 지시 전달, 조치사진 시각을 먼저 맞춰본다.",
+    "ep01.report_return.prompt": "보고를 올린 뒤 추가 자료가 들어온다.",
+    "ep01.report_return.choice.correction": "보고서 수정 요청이 온다.",
+    "ep01.report_return.choice.evidence_requested": "근거자료 제출 요청이 온다.",
+    "ep01.report_return.choice.timeline_confirmed": "시간순 사실관계가 정리된다.",
+    "ep01.report_return.correction": "강태식이 아침 조회 내용을 보여준다. 이어서 공정팀의 변경 지시 시각도 확인된다. 협력사 단독 귀책으로 올린 1차 보고는 다시 수정하라는 요청이 내려온다.",
+    "ep01.report_return.evidence_requested": "오승재가 되묻는다. ‘공정팀 지시 때문이라는 근거가 뭡니까? 통화기록, 전달시각, 조치 전후 사진까지 같이 주세요.’ 방어적으로 올린 보고는 근거자료 요구와 함께 멈춘다.",
+    "ep01.report_return.timeline_confirmed": "기록을 맞추니 아침 조회와 이후 변경 지시가 달랐고, 변경 내용이 반장에게 제때 전달된 기록은 없다. 보고서는 ‘변경지시 전달 누락과 현장통제 미흡이 겹친 상황’으로 정리된다. 누구 한 명 탓으로는 끝나지 않는다."
+  }
+}
