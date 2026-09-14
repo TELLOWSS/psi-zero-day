@@ -1,0 +1,98 @@
+[
+  {
+    "schema_version": 1,
+    "event_id": "e01_08g_tbm_field_gap",
+    "title_text_id": "ep01.8g.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [{ "kind": "event_completed", "event_id": "e01_08f_report_return", "minimum_count": 1 }],
+    "participants": [
+      { "role_id": "lee", "character_id": "lee_jaehoon" },
+      { "role_id": "kang", "character_id": "kang_taesik" },
+      { "role_id": "junho", "character_id": "lim_junho" },
+      { "role_id": "player", "character_id": "player" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "situation",
+    "dialogue": [
+      { "node_id": "situation", "type": "RESULT", "text_id": "ep01.tbm_gap.situation", "next_node_id": "lee", "choice_ids": [] },
+      { "node_id": "lee", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.lee", "speaker_role_id": "lee", "next_node_id": "kang", "choice_ids": [] },
+      { "node_id": "kang", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.kang", "speaker_role_id": "kang", "next_node_id": "junho", "choice_ids": [] },
+      { "node_id": "junho", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.junho", "speaker_role_id": "junho", "next_node_id": "action", "choice_ids": [] },
+      { "node_id": "action", "type": "CHOICE", "text_id": "ep01.tbm_gap.prompt", "choice_ids": ["tbm_form_first", "tbm_worker_blame", "tbm_change_control"] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "tbm_form_first", "text_id": "ep01.tbm_gap.form_first", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "lee.respect.tbm_form", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+          { "effect_id": "junho.reporting.tbm_form", "kind": "context_relation", "from": { "kind": "participant", "role_id": "junho" }, "to": { "kind": "player" }, "field": "reporting", "delta": -2 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_action": "form_first" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "tbm_worker_blame", "text_id": "ep01.tbm_gap.worker_blame", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "kang.trust.tbm_blame", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "trust", "delta": -3 },
+          { "effect_id": "junho.reporting.tbm_blame", "kind": "context_relation", "from": { "kind": "participant", "role_id": "junho" }, "to": { "kind": "player" }, "field": "reporting", "delta": -4 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_action": "worker_blame" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "tbm_change_control", "text_id": "ep01.tbm_gap.change_control", "next_node_id": "end", "requirements": [],
+        "effects": { "immediate_effects": [
+          { "effect_id": "player.judgment.tbm_change", "kind": "player_stat", "stat_id": "judgment", "delta": 1 },
+          { "effect_id": "lee.respect.tbm_change", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+          { "effect_id": "kang.trust.tbm_change", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "trust", "delta": 1 },
+          { "effect_id": "junho.reporting.tbm_change", "kind": "context_relation", "from": { "kind": "participant", "role_id": "junho" }, "to": { "kind": "player" }, "field": "reporting", "delta": 2 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_action": "change_control" }, "ending_flags": {}, "followup_events": [] }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_08h_tbm_return",
+    "title_text_id": "ep01.8h.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [{ "kind": "event_completed", "event_id": "e01_08g_tbm_field_gap", "minimum_count": 1 }],
+    "participants": [
+      { "role_id": "lee", "character_id": "lee_jaehoon" },
+      { "role_id": "kang", "character_id": "kang_taesik" },
+      { "role_id": "junho", "character_id": "lim_junho" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      { "node_id": "resolve", "type": "CHOICE", "text_id": "ep01.tbm_return.prompt", "choice_ids": ["tbm_return_paper_gap", "tbm_return_silenced", "tbm_return_controlled"] },
+      { "node_id": "paper", "type": "RESULT", "text_id": "ep01.tbm_return.paper_gap", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "silenced", "type": "RESULT", "text_id": "ep01.tbm_return.silenced", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "controlled", "type": "RESULT", "text_id": "ep01.tbm_return.controlled", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "tbm_return_paper_gap", "text_id": "ep01.tbm_return.choice.paper_gap", "next_node_id": "paper",
+        "requirements": [{ "kind": "flag", "flag_id": "tbm_gap_action", "equals": "form_first" }],
+        "effects": { "immediate_effects": [
+          { "effect_id": "lee.respect.tbm_paper_return", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -2 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_result": "paper_field_gap_remains" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "tbm_return_silenced", "text_id": "ep01.tbm_return.choice.silenced", "next_node_id": "silenced",
+        "requirements": [{ "kind": "flag", "flag_id": "tbm_gap_action", "equals": "worker_blame" }],
+        "effects": { "immediate_effects": [
+          { "effect_id": "junho.reporting.tbm_silenced_return", "kind": "context_relation", "from": { "kind": "participant", "role_id": "junho" }, "to": { "kind": "player" }, "field": "reporting", "delta": -2 }
+        ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_result": "reporting_chilled" }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "tbm_return_controlled", "text_id": "ep01.tbm_return.choice.controlled", "next_node_id": "controlled",
+        "requirements": [{ "kind": "flag", "flag_id": "tbm_gap_action", "equals": "change_control" }],
+        "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "tbm_gap_result": "changed_work_rebriefed" }, "ending_flags": {}, "followup_events": [] }
+      }
+    ],
+    "failure_conditions": []
+  }
+]
