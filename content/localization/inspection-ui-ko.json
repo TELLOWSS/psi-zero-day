@@ -1,0 +1,14 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ui.signal.inspection_access": "통로 조치 지적",
+    "ui.signal.reinspection_access": "통로 재확인",
+    "ui.friction.inspection.first": "감리가 통로 분리와 정리를 지적했다. 조치사진까지 요구한다.",
+    "ui.friction.schedule.remaining_vehicle": "철근차가 아직 빠져야 해 즉시 전면조치하면 차량 동선이 막힌다.",
+    "ui.friction.responsibility.inspection": "지적을 바로 막으면 공정 반발, 미루면 미조치 책임이 남는다.",
+    "ui.friction.coordination.after_fix": "조치 직후 공사팀은 일정 손실을 문제 삼고, 현장은 다시 움직여야 한다.",
+    "ui.friction.responsibility.pushback": "안전조치는 끝났어도 누가 지연을 설명할지를 두고 책임이 남는다.",
+    "ui.friction.inspection.recheck": "감리가 조치사진이 아니라 실제 현장을 다시 확인한다.",
+    "ui.friction.responsibility.rework": "임시조치가 재지적되면 결국 다시 작업하고 일정 손실도 두 번 발생한다."
+  }
+}
