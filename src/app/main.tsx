@@ -4,6 +4,7 @@ import { PlayableEpisode } from '../ui/PlayableEpisode';
 import { EpisodeSession } from './episode-session';
 import '../ui/playable.css';
 import '../ui/strategy-map.css';
+import '../ui/strategy-signals.css';
 
 const session = new EpisodeSession();
 document.title = session.t('ui.brand');
