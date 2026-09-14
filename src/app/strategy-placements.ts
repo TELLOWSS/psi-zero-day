@@ -18,6 +18,7 @@ const EPISODE01_ANCHORS: Readonly<Record<Id, StrategyCharacterAnchor>> = {
   lee_jaehoon: 'core',
   lim_junho: 'ramp',
   choi_minseok: 'gate',
+  seo_jeongmin: 'entry',
 };
 
 const FALLBACK_ANCHORS: readonly StrategyCharacterAnchor[] = ['overview', 'yard', 'entry', 'core', 'ramp', 'gate'];
