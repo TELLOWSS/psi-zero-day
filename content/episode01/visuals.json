@@ -1,61 +1,154 @@
 {
   "schema_version": 1,
+  "visual_direction": {
+    "style": "friendly 2.5D casual-strategy construction diorama",
+    "rule": "Every character must remain identifiable by silhouette plus at least two of face, outfit, prop, posture before reading a name label.",
+    "forbidden": ["same-face cast", "helmet-color-only differentiation", "real company logos", "pseudo text on helmets", "childlike proportions"]
+  },
   "characters": {
     "player": {
       "portrait_asset_id": "ep01.character.player.portrait",
       "map_asset_id": "ep01.character.player.map",
       "portrait_path": "assets/episode01/characters/player-portrait.webp",
       "map_path": "assets/episode01/characters/player-map.webp",
-      "accent": "#d4bd70"
+      "accent": "#2f86b8",
+      "identity": {
+        "visual_role": "female rookie safety manager / player avatar",
+        "age_read": "late 20s to early 30s",
+        "silhouette": "compact athletic, upright",
+        "face": "soft oval face, alert large eyes, short-to-medium black hair visible below helmet",
+        "helmet": "white helmet with simple blue PSI stripe, no text",
+        "outfit": "clean navy-blue safety vest over practical field clothes",
+        "signature_prop": "black inspection tablet",
+        "default_pose": "tablet in one hand, other hand open while directing attention",
+        "expression": "focused but approachable"
+      }
     },
     "kang_taesik": {
       "portrait_asset_id": "ep01.character.kang_taesik.portrait",
       "map_asset_id": "ep01.character.kang_taesik.map",
       "portrait_path": "assets/episode01/characters/kang-taesik-portrait.webp",
       "map_path": "assets/episode01/characters/kang-taesik-map.webp",
-      "accent": "#b99b76"
+      "accent": "#c86f2b",
+      "identity": {
+        "visual_role": "veteran formwork foreman",
+        "age_read": "early 50s",
+        "silhouette": "stocky square torso, heavy shoulders",
+        "face": "weathered round face, thick moustache, strong brows",
+        "helmet": "orange helmet",
+        "outfit": "dark charcoal vest with orange reflective trim",
+        "signature_prop": "work gloves and pointing hand",
+        "default_pose": "feet planted wide, one arm pointing toward work",
+        "expression": "gruff, decisive, protective of crew"
+      }
     },
     "yoon_sungho": {
       "portrait_asset_id": "ep01.character.yoon_sungho.portrait",
       "map_asset_id": "ep01.character.yoon_sungho.map",
       "portrait_path": "assets/episode01/characters/yoon-sungho-portrait.webp",
       "map_path": "assets/episode01/characters/yoon-sungho-map.webp",
-      "accent": "#94aeb0"
+      "accent": "#b68b42",
+      "identity": {
+        "visual_role": "rebar foreman",
+        "age_read": "late 40s",
+        "silhouette": "muscular V-shape, thick forearms",
+        "face": "angular tanned face, trimmed beard shadow",
+        "helmet": "yellow helmet with simple dark round mark",
+        "outfit": "brown work shirt, black forearm gloves",
+        "signature_prop": "short bundle of rebar ties / rebar offcuts",
+        "default_pose": "arms folded or carrying rebar at shoulder",
+        "expression": "quiet, stubborn, calculating"
+      }
     },
     "lee_jaehoon": {
       "portrait_asset_id": "ep01.character.lee_jaehoon.portrait",
       "map_asset_id": "ep01.character.lee_jaehoon.map",
       "portrait_path": "assets/episode01/characters/lee-jaehoon-portrait.webp",
       "map_path": "assets/episode01/characters/lee-jaehoon-map.webp",
-      "accent": "#b3b9bd"
+      "accent": "#5c82aa",
+      "identity": {
+        "visual_role": "young construction assistant manager",
+        "age_read": "early 30s",
+        "silhouette": "tall slim vertical silhouette",
+        "face": "narrow youthful face, neat side-part hair, clean shaven",
+        "helmet": "white helmet with thin navy stripe",
+        "outfit": "light field shirt with navy vest, cleaner than trade crews",
+        "signature_prop": "rolled drawing set",
+        "default_pose": "one arm holding drawings, other hand checking schedule",
+        "expression": "pressed for time, professional, not villainous"
+      }
     },
     "lim_junho": {
       "portrait_asset_id": "ep01.character.lim_junho.portrait",
       "map_asset_id": "ep01.character.lim_junho.map",
       "portrait_path": "assets/episode01/characters/lim-junho-portrait.webp",
       "map_path": "assets/episode01/characters/lim-junho-map.webp",
-      "accent": "#acb98a"
+      "accent": "#59a477",
+      "identity": {
+        "visual_role": "rookie worker",
+        "age_read": "early 20s",
+        "silhouette": "small narrow frame, slightly forward shoulders",
+        "face": "round youthful face, open eyes, no facial hair",
+        "helmet": "bright yellow helmet",
+        "outfit": "green vest and practical workwear",
+        "signature_prop": "compact radio / small tool case",
+        "default_pose": "one hand near radio, body slightly hesitant",
+        "expression": "observant, earnest, unsure whether to speak"
+      }
     },
     "choi_minseok": {
       "portrait_asset_id": "ep01.character.choi_minseok.portrait",
       "map_asset_id": "ep01.character.choi_minseok.map",
       "portrait_path": "assets/episode01/characters/choi-minseok-portrait.webp",
       "map_path": "assets/episode01/characters/choi-minseok-map.webp",
-      "accent": "#d1a879"
+      "accent": "#ef7b2d",
+      "identity": {
+        "visual_role": "crane signalman",
+        "age_read": "late 30s",
+        "silhouette": "lean energetic frame with raised arms",
+        "face": "long friendly face, lively eyes",
+        "helmet": "orange helmet",
+        "outfit": "high-visibility orange vest with dark sleeves",
+        "signature_prop": "two red signal batons",
+        "default_pose": "both arms raised in an unmistakable crane signal",
+        "expression": "energetic, alert, vocal"
+      }
     },
     "seo_jeongmin": {
       "portrait_asset_id": "ep01.character.seo_jeongmin.portrait",
       "map_asset_id": "ep01.character.seo_jeongmin.map",
       "portrait_path": "assets/episode01/characters/seo-jeongmin-portrait.webp",
       "map_path": "assets/episode01/characters/seo-jeongmin-map.webp",
-      "accent": "#7d8b98"
+      "accent": "#667687",
+      "identity": {
+        "visual_role": "architectural inspector",
+        "age_read": "mid 40s",
+        "silhouette": "lean formal frame, compact stance",
+        "face": "rectangular face, black-rim glasses, composed brows",
+        "helmet": "plain white helmet",
+        "outfit": "dark inspection jacket over white shirt",
+        "signature_prop": "clipboard and pen",
+        "default_pose": "clipboard close to chest while visually checking field",
+        "expression": "calm, precise, difficult to bluff"
+      }
     },
     "oh_seungjae": {
       "portrait_asset_id": "ep01.character.oh_seungjae.portrait",
       "map_asset_id": "ep01.character.oh_seungjae.map",
       "portrait_path": "assets/episode01/characters/oh-seungjae-portrait.webp",
       "map_path": "assets/episode01/characters/oh-seungjae-map.webp",
-      "accent": "#59718a"
+      "accent": "#405b78",
+      "identity": {
+        "visual_role": "general-contractor construction manager",
+        "age_read": "early 40s",
+        "silhouette": "broad formal frame, squared coat line",
+        "face": "broad face, slightly tired eyes, distinctive swept-back hair",
+        "helmet": "white helmet with dark navy underside",
+        "outfit": "navy field jacket with office-grade shirt",
+        "signature_prop": "smartphone / radio held at ear",
+        "default_pose": "one hand on phone, other hand behind back",
+        "expression": "controlled, busy, responsibility-conscious"
+      }
     }
   },
   "backgrounds": {
