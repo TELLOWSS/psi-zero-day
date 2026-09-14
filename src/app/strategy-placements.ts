@@ -1,7 +1,7 @@
 import type { Id } from '../domain/common';
 import type { StrategySignal } from './strategy-signals';
 
-export type StrategyCharacterAnchor = 'overview' | 'yard' | 'entry' | 'core' | 'ramp' | 'gate' | 'inspection';
+export type StrategyCharacterAnchor = 'overview' | 'yard' | 'entry' | 'core' | 'ramp' | 'gate' | 'inspection' | 'office';
 
 export interface StrategyCharacterPlacement {
   readonly character_id: Id;
@@ -19,6 +19,7 @@ const EPISODE01_ANCHORS: Readonly<Record<Id, StrategyCharacterAnchor>> = {
   lim_junho: 'ramp',
   choi_minseok: 'gate',
   seo_jeongmin: 'inspection',
+  oh_seungjae: 'office',
 };
 
 const FALLBACK_ANCHORS: readonly StrategyCharacterAnchor[] = ['overview', 'yard', 'entry', 'core', 'ramp', 'gate'];
