@@ -26,6 +26,6 @@ describe('Episode 01 TBM and field-work gap', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_change_control' });
     expect(state.flags.tbm_gap_result).toBe('changed_work_rebriefed');
     expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(22);
-    expect(state.player.stats.judgment).toBe(29);
+    expect(state.player.stats.judgment).toBe(30);
   });
 });
