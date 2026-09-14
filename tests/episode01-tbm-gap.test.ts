@@ -13,19 +13,19 @@ describe('Episode 01 TBM and field-work gap', () => {
   it('leaves the paper-field gap when the response relies on the signed TBM', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_form_first' });
     expect(state.flags.tbm_gap_result).toBe('paper_field_gap_remains');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(18);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(22);
   });
 
   it('chills reporting when the changed work is reduced to worker blame', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_worker_blame' });
     expect(state.flags.tbm_gap_result).toBe('reporting_chilled');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(14);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(18);
   });
 
-  it('rebriefs the changed work and preserves a route for later reporting', () => {
+  it('rebriefs the changed work and later protection preserves a reporting route', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_change_control' });
     expect(state.flags.tbm_gap_result).toBe('changed_work_rebriefed');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(22);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(26);
     expect(state.player.stats.judgment).toBe(30);
   });
 });
