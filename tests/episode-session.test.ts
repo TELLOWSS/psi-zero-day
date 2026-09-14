@@ -10,7 +10,14 @@ export const uiPaths: EpisodeDecisions[] = [
   { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
 ];
 export function inputFor(node: string, decisions: EpisodeDecisions): string | undefined {
-  return ({ plan: decisions.plan, listen: decisions.signal, ramp: decisions.ramp, entrance: decisions.entrance, evening: decisions.evening } as Record<string, string | undefined>)[node];
+  return ({
+    plan: decisions.plan,
+    listen: decisions.signal,
+    ramp: decisions.ramp,
+    entrance: decisions.entrance,
+    action: decisions.inspection ?? 'inspection_sequence_agreement',
+    evening: decisions.evening,
+  } as Record<string, string | undefined>)[node];
 }
 
 describe('Episode application session', () => {
@@ -30,7 +37,7 @@ describe('Episode application session', () => {
   it.each(uiPaths)('matches complete headless state for $plan / $entrance / $evening', decisions => {
     const session = new EpisodeSession(episodeOptions(815), episodeBounds);
     session.start(0);
-    for (let i = 0; i < 100 && session.getSnapshot().phase === 'playing'; i++) {
+    for (let i = 0; i < 130 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot();
       const p = s.presentation.find(c => 'node_id' in c)!;
       if (p.type === 'SHOW_CHOICE') {
