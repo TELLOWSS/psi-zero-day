@@ -1,6 +1,8 @@
 import type { FlagMap, Id, StageId, StatMap, TimeSlot } from '../domain/common';
 import type { GameState } from '../domain/state';
 import { copyData, freezeData } from '../engine/data';
+import { projectEpisode01Signals } from './strategy-signals';
+import type { StrategySignal } from './strategy-signals';
 
 export interface StrategyClockView {
   readonly day: number;
@@ -29,7 +31,7 @@ export interface StrategyCharacterView {
 export interface StrategyConstructionView {
   readonly stage_id: StageId;
   readonly current_stage_progress: number;
-  readonly progress_by_stage: Readonly<Partial<Record<StageId, number>>;
+  readonly progress_by_stage: Readonly<Partial<Record<StageId, number>>>;
   readonly milestones: readonly Id[];
 }
 
@@ -52,11 +54,13 @@ export interface StrategyView {
   readonly psi: StrategyPsiView;
   readonly assignments: readonly StrategyAssignmentView[];
   readonly roster: readonly StrategyCharacterView[];
+  readonly signals: readonly StrategySignal[];
   readonly runtime: StrategyRuntimeView;
 }
 
 export function projectStrategyView(state: GameState): StrategyView {
   const active = state.event_runtime.active_instance;
+  const activeEventId = active?.event_id ?? null;
   const stageProgress = state.construction.progress_by_stage[state.construction.stage_id] ?? 0;
   const view: StrategyView = {
     clock: {
@@ -93,8 +97,9 @@ export function projectStrategyView(state: GameState): StrategyView {
       stats: character.stats,
       story_flags: character.story_flags,
     })),
+    signals: projectEpisode01Signals(activeEventId),
     runtime: {
-      active_event_id: active?.event_id ?? null,
+      active_event_id: activeEventId,
       active_instance_id: active?.instance_id ?? null,
       completed_event_count: state.event_runtime.completion_history.length,
       pending_followup_count: state.followups.filter(followup => followup.status === 'pending').length,
