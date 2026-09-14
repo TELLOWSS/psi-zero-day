@@ -16,7 +16,7 @@ function advanceToFirstPlayerChoice(session: EpisodeSession) {
 }
 
 describe('Casual strategy session integration', () => {
-  it('projects the live EpisodeSession into the strategy map without replacing engine state', () => {
+  it('projects the live EpisodeSession into the strategy map and keeps CSS fallback while the asset manifest is empty', () => {
     const session = new EpisodeSession();
     session.start(0);
     const snapshot = session.getSnapshot();
@@ -25,9 +25,11 @@ describe('Casual strategy session integration', () => {
     expect(snapshot.strategy).not.toBeNull();
     expect(snapshot.strategy?.clock.day).toBe(snapshot.state?.clock.day);
     expect(snapshot.strategy?.construction.stage_id).toBe(snapshot.state?.construction.stage_id);
+    expect(session.assetUri('ep01.background.foundation.map')).toBeUndefined();
 
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
     expect(html).toContain('strategy-shell');
+    expect(html).toContain('data-visual-mode="css"');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('현장 목표');
     expect(html).toContain(snapshot.eventTitle);
