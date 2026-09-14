@@ -1,0 +1,44 @@
+/* TASK-007F: field-pressure context only. No rule evaluation or scoring. */
+.strategy-friction-panel { max-height: 31%; overflow: hidden; }
+.strategy-friction-list { display: grid; gap: 6px; }
+.strategy-friction-list article {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 7px;
+  align-items: start;
+  padding: 6px 7px;
+  border-radius: 10px;
+  background: rgba(235,244,248,.82);
+  border: 1px solid rgba(81,124,146,.15);
+}
+.strategy-friction-list article > span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8a343;
+  color: #fff;
+  font-weight: 900;
+}
+.strategy-friction-list strong,
+.strategy-friction-list small { display: block; }
+.strategy-friction-list strong { font-size: clamp(9px, .72vw, 13px); color: #294459; }
+.strategy-friction-list small { margin-top: 2px; font-size: clamp(7px, .58vw, 10px); line-height: 1.35; color: #617684; }
+.strategy-friction-empty { justify-content: center !important; opacity: .5; }
+
+.strategy-focus-panel { min-height: 78px; }
+.strategy-focus-panel > small { display: block; font-size: clamp(8px, .65vw, 11px); line-height: 1.45; color: #6b7d88; }
+.strategy-focus-panel > p { display: block; margin: 0; }
+.strategy-focus-panel > p strong,
+.strategy-focus-panel > p span { display: block; }
+.strategy-focus-panel > p strong { font-size: clamp(10px, .78vw, 14px); color: #25465c; }
+.strategy-focus-panel > p span { margin-top: 3px; font-size: clamp(8px, .62vw, 11px); color: #6a7c87; }
+
+@media (max-width: 760px) {
+  .strategy-friction-panel { max-height: 26%; }
+  .strategy-friction-list article { grid-template-columns: 18px minmax(0,1fr); gap: 4px; padding: 4px; }
+  .strategy-friction-list article > span { width: 18px; height: 18px; font-size: 9px; }
+  .strategy-friction-list small { display: none; }
+  .strategy-focus-panel { min-height: 58px; }
+}
