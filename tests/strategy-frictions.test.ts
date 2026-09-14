@@ -38,6 +38,14 @@ describe('Episode 01 field frictions', () => {
       .toEqual(['friction.tbm.return']);
   });
 
+  it('shows restart pressure, lost conditions and the restart aftershock', () => {
+    expect(projectEpisode01Frictions('e01_08i_restart_pressure').map(item => item.friction_id)).toEqual([
+      'friction.restart.schedule', 'friction.restart.condition_lost', 'friction.restart.who_ordered',
+    ]);
+    expect(projectEpisode01Frictions('e01_08j_restart_return').map(item => item.friction_id))
+      .toEqual(['friction.restart.return']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
