@@ -1,6 +1,8 @@
 import type { FlagMap, Id, StageId, StatMap, TimeSlot } from '../domain/common';
 import type { GameState } from '../domain/state';
 import { copyData, freezeData } from '../engine/data';
+import { projectEpisode01Frictions } from './strategy-frictions';
+import type { FieldFriction } from './strategy-frictions';
 import { projectEpisode01CharacterPlacements } from './strategy-placements';
 import type { StrategyCharacterPlacement } from './strategy-placements';
 import { projectEpisode01Signals } from './strategy-signals';
@@ -59,6 +61,7 @@ export interface StrategyView {
   readonly roster: readonly StrategyCharacterView[];
   readonly signals: readonly StrategySignal[];
   readonly placements: readonly StrategyCharacterPlacement[];
+  readonly frictions: readonly FieldFriction[];
   readonly runtime: StrategyRuntimeView;
 }
 
@@ -85,6 +88,7 @@ export function projectStrategyView(state: GameState): StrategyView {
     participantBindings,
     signals,
   );
+  const frictions = projectEpisode01Frictions(activeEventId);
 
   const view: StrategyView = {
     clock: {
@@ -112,6 +116,7 @@ export function projectStrategyView(state: GameState): StrategyView {
     roster,
     signals,
     placements,
+    frictions,
     runtime: {
       active_event_id: activeEventId,
       active_instance_id: active?.instance_id ?? null,
