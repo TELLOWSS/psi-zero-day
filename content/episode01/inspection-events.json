@@ -1,0 +1,164 @@
+[
+  {
+    "schema_version": 1,
+    "event_id": "e01_08b_inspection_find",
+    "title_text_id": "ep01.8b.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      { "kind": "event_completed", "event_id": "e01_08a_reporting_return", "minimum_count": 1 }
+    ],
+    "participants": [
+      { "role_id": "inspector", "character_id": "seo_jeongmin" },
+      { "role_id": "lee", "character_id": "lee_jaehoon" },
+      { "role_id": "player", "character_id": "player" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "inspection",
+    "dialogue": [
+      { "node_id": "inspection", "type": "DIALOGUE", "text_id": "ep01.inspection.find", "speaker_role_id": "inspector", "next_node_id": "lee", "choice_ids": [] },
+      { "node_id": "lee", "type": "DIALOGUE", "text_id": "ep01.inspection.lee", "speaker_role_id": "lee", "next_node_id": "action", "choice_ids": [] },
+      { "node_id": "action", "type": "CHOICE", "text_id": "ep01.inspection.prompt", "choice_ids": ["inspection_full_stop", "inspection_quick_photo", "inspection_sequence_agreement"] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "inspection_full_stop",
+        "text_id": "ep01.inspection.full_stop",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            { "effect_id": "inspector.respect.full_stop", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "respect", "delta": 4 },
+            { "effect_id": "lee.respect.full_stop", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -3 }
+          ],
+          "hidden_effects": [], "relationship_effects": [], "stat_effects": [],
+          "flags": { "inspection_action": "full_stop" }, "ending_flags": {}, "followup_events": []
+        }
+      },
+      {
+        "choice_id": "inspection_quick_photo",
+        "text_id": "ep01.inspection.quick_photo",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            { "effect_id": "lee.respect.quick_photo", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 }
+          ],
+          "hidden_effects": [], "relationship_effects": [], "stat_effects": [],
+          "flags": { "inspection_action": "quick_photo" }, "ending_flags": {}, "followup_events": []
+        }
+      },
+      {
+        "choice_id": "inspection_sequence_agreement",
+        "text_id": "ep01.inspection.sequence_agreement",
+        "next_node_id": "end",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            { "effect_id": "inspector.respect.sequence", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 },
+            { "effect_id": "lee.respect.sequence", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+            { "effect_id": "player.negotiation.inspection", "kind": "player_stat", "stat_id": "negotiation", "delta": 1 }
+          ],
+          "hidden_effects": [], "relationship_effects": [], "stat_effects": [],
+          "flags": { "inspection_action": "sequence" }, "ending_flags": {}, "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_08c_site_pushback",
+    "title_text_id": "ep01.8c.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      { "kind": "event_completed", "event_id": "e01_08b_inspection_find", "minimum_count": 1 }
+    ],
+    "participants": [
+      { "role_id": "lee", "character_id": "lee_jaehoon" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      { "node_id": "resolve", "type": "CHOICE", "text_id": "ep01.pushback.prompt", "choice_ids": ["pushback_full_stop", "pushback_quick_photo", "pushback_sequence"] },
+      { "node_id": "full_stop", "type": "DIALOGUE", "text_id": "ep01.pushback.full_stop", "speaker_role_id": "lee", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "quick_photo", "type": "DIALOGUE", "text_id": "ep01.pushback.quick_photo", "speaker_role_id": "lee", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "sequence", "type": "DIALOGUE", "text_id": "ep01.pushback.sequence", "speaker_role_id": "lee", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      { "choice_id": "pushback_full_stop", "text_id": "ep01.pushback.choice.full_stop", "next_node_id": "full_stop", "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "full_stop" }], "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "inspection_pushback": "schedule_blame" }, "ending_flags": {}, "followup_events": [] } },
+      { "choice_id": "pushback_quick_photo", "text_id": "ep01.pushback.choice.quick_photo", "next_node_id": "quick_photo", "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "quick_photo" }], "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "inspection_pushback": "move_on" }, "ending_flags": {}, "followup_events": [] } },
+      { "choice_id": "pushback_sequence", "text_id": "ep01.pushback.choice.sequence", "next_node_id": "sequence", "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "sequence" }], "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "inspection_pushback": "coordinated" }, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e01_08d_reinspection",
+    "title_text_id": "ep01.8d.title",
+    "category_text_id": "ep01.category",
+    "chapter_text_id": "ep01.chapter",
+    "conditions": [
+      { "kind": "event_completed", "event_id": "e01_08c_site_pushback", "minimum_count": 1 }
+    ],
+    "participants": [
+      { "role_id": "inspector", "character_id": "seo_jeongmin" },
+      { "role_id": "lee", "character_id": "lee_jaehoon" }
+    ],
+    "scene": { "character_asset_ids": [] },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      { "node_id": "resolve", "type": "CHOICE", "text_id": "ep01.reinspection.prompt", "choice_ids": ["reinspection_accept_full", "reinspection_reject_photo", "reinspection_accept_sequence"] },
+      { "node_id": "full", "type": "DIALOGUE", "text_id": "ep01.reinspection.accept_full", "speaker_role_id": "inspector", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "reject", "type": "DIALOGUE", "text_id": "ep01.reinspection.reject_photo", "speaker_role_id": "inspector", "next_node_id": "lee_rework", "choice_ids": [] },
+      { "node_id": "lee_rework", "type": "DIALOGUE", "text_id": "ep01.reinspection.lee_rework", "speaker_role_id": "lee", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "sequence", "type": "DIALOGUE", "text_id": "ep01.reinspection.accept_sequence", "speaker_role_id": "inspector", "next_node_id": "end", "choice_ids": [] },
+      { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+    ],
+    "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+    "choices": [
+      {
+        "choice_id": "reinspection_accept_full",
+        "text_id": "ep01.reinspection.choice.accept_full",
+        "next_node_id": "full",
+        "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "full_stop" }],
+        "effects": { "immediate_effects": [{ "effect_id": "inspector.trust.full_accept", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "trust", "delta": 3 }], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "inspection_result": "accepted", "inspection_closed": true }, "ending_flags": {}, "followup_events": [] }
+      },
+      {
+        "choice_id": "reinspection_reject_photo",
+        "text_id": "ep01.reinspection.choice.reject_photo",
+        "next_node_id": "reject",
+        "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "quick_photo" }],
+        "effects": {
+          "immediate_effects": [
+            { "effect_id": "inspector.respect.photo_reject", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "respect", "delta": -6 },
+            { "effect_id": "inspector.trust.photo_reject", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "trust", "delta": -4 },
+            { "effect_id": "lee.respect.photo_rework", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -2 }
+          ],
+          "hidden_effects": [], "relationship_effects": [], "stat_effects": [],
+          "flags": { "inspection_result": "rework_after_reinspection", "inspection_closed": true }, "ending_flags": {}, "followup_events": []
+        }
+      },
+      {
+        "choice_id": "reinspection_accept_sequence",
+        "text_id": "ep01.reinspection.choice.accept_sequence",
+        "next_node_id": "sequence",
+        "requirements": [{ "kind": "flag", "flag_id": "inspection_action", "equals": "sequence" }],
+        "effects": {
+          "immediate_effects": [
+            { "effect_id": "inspector.trust.sequence_accept", "kind": "context_relation", "from": { "kind": "participant", "role_id": "inspector" }, "to": { "kind": "player" }, "field": "trust", "delta": 2 },
+            { "effect_id": "lee.respect.sequence_accept", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 }
+          ],
+          "hidden_effects": [], "relationship_effects": [], "stat_effects": [],
+          "flags": { "inspection_result": "accepted_after_sequence", "inspection_closed": true }, "ending_flags": {}, "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  }
+]
