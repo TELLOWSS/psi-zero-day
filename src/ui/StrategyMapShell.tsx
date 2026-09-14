@@ -14,6 +14,11 @@ export interface StrategyMapCopy {
   readonly progress: string;
 }
 
+export interface StrategyPersonLabel {
+  readonly name: string;
+  readonly role: string;
+}
+
 function signalIcon(kind: StrategySignalKind): string {
   switch (kind) {
     case 'ramp': return '↗';
@@ -23,10 +28,11 @@ function signalIcon(kind: StrategySignalKind): string {
   }
 }
 
-export function StrategyMapShell({ view, copy, text }: {
+export function StrategyMapShell({ view, copy, text, person }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
+  readonly person: (characterId: string) => StrategyPersonLabel | undefined;
 }) {
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
@@ -67,6 +73,24 @@ export function StrategyMapShell({ view, copy, text }: {
         <strong>{view.construction.stage_id}</strong>
         <progress value={progress} max={100} aria-label={copy.progress} />
       </div>
+
+      <div className="strategy-worker-layer">
+        {view.placements.map(placement => {
+          const label = person(placement.character_id);
+          const nearSignal = placement.nearby_signal_ids.length > 0;
+          return <div
+            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}`}
+            data-character={placement.character_id}
+            data-scene-participant={placement.scene_participant ? 'true' : 'false'}
+            key={placement.character_id}
+          >
+            <div className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></div>
+            <div className="strategy-worker-label"><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></div>
+            {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
+          </div>;
+        })}
+      </div>
+
       <div className="strategy-signal-layer" aria-live="polite">
         {view.signals.map(signal => <div
           className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}`}
@@ -82,10 +106,13 @@ export function StrategyMapShell({ view, copy, text }: {
 
     <footer className="strategy-roster" aria-label={copy.roster}>
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
-      {roster.map((character, index) => <article className="strategy-character" key={character.character_id}>
-        <div className="character-token" aria-hidden="true">{index + 1}</div>
-        <div><strong>{character.character_id}</strong><span>{character.available ? '●' : '○'} {character.experience}</span></div>
-      </article>)}
+      {roster.map((character, index) => {
+        const label = person(character.character_id);
+        return <article className="strategy-character" key={character.character_id}>
+          <div className="character-token" aria-hidden="true">{index + 1}</div>
+          <div><strong>{label?.name ?? character.character_id}</strong><span>{label?.role ?? ''} · {character.available ? '●' : '○'} {character.experience}</span></div>
+        </article>;
+      })}
     </footer>
   </main>;
 }
