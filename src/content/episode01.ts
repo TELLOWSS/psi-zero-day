@@ -22,6 +22,7 @@ import { episode01RecordEvents, episode01RecordMessages } from './episode01-reco
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 import { structureEpisode01PlayableFlow } from './episode01-play-structure';
+import { applyEpisode01ProgressionHooks } from './episode01-progression';
 
 /** Offline content entry point. Run identity and unrelated player baselines remain caller inputs. */
 export function createEpisode01Registry(): ContentRegistry {
@@ -52,7 +53,7 @@ export function createEpisode01Registry(): ContentRegistry {
     } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
-    events: structureEpisode01PlayableFlow(assembledEvents),
+    events: structureEpisode01PlayableFlow(applyEpisode01ProgressionHooks(assembledEvents)),
   });
 }
 
