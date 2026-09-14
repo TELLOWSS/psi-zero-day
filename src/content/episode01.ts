@@ -13,6 +13,7 @@ import reportReturnEvent from '../../content/episode01/report-return-event.json'
 import ko from '../../content/episode01/ko.json';
 import inspectionKo from '../../content/episode01/inspection-ko.json';
 import responsibilityKo from '../../content/episode01/responsibility-ko.json';
+import { episode01TbmGapEvents, episode01TbmGapMessages } from './episode01-tbm';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 
@@ -20,10 +21,16 @@ import { assembleEpisode01Consequences } from './episode01-consequences';
 export function createEpisode01Registry(): ContentRegistry {
   return new ContentRegistry({
     ...manifest.bundle,
-    localizations: [{ ...ko, messages: { ...ko.messages, ...inspectionKo.messages, ...responsibilityKo.messages } }],
+    localizations: [{ ...ko, messages: { ...ko.messages, ...inspectionKo.messages, ...responsibilityKo.messages, ...episode01TbmGapMessages } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
-    events: assembleEpisode01Consequences(events, consequenceEvents, inspectionEvents, [responsibilityClashEvent, reportReturnEvent]),
+    events: assembleEpisode01Consequences(
+      events,
+      consequenceEvents,
+      inspectionEvents,
+      [responsibilityClashEvent, reportReturnEvent],
+      episode01TbmGapEvents,
+    ),
   });
 }
 
