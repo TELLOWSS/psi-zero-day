@@ -1,4 +1,4 @@
-/* TASK-007E/007F: presentation-only character placement and focus. No gameplay rules. */
+/* TASK-007E/007F + TASK-009E: presentation-only character placement and distinct fallback silhouettes. */
 .strategy-worker-layer { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 .strategy-map-worker {
   position: absolute;
@@ -23,7 +23,7 @@
 .strategy-map-worker.is-near-signal .strategy-worker-label { border-color: rgba(183,73,55,.55); }
 .strategy-map-worker.is-focused .strategy-worker-label { outline: 3px solid rgba(47,134,184,.34); outline-offset: 2px; }
 
-.strategy-worker-figure { position: relative; flex: 0 0 38px; width: 38px; height: 49px; filter: drop-shadow(0 5px 4px rgba(31,49,54,.2)); }
+.strategy-worker-figure { position: relative; flex: 0 0 38px; width: 38px; height: 49px; filter: drop-shadow(0 5px 4px rgba(31,49,54,.2)); transform-origin: center bottom; }
 .worker-head { position: absolute; z-index: 2; left: 11px; top: 13px; width: 17px; height: 19px; border-radius: 7px 7px 9px 9px; background: #d8a47e; }
 .worker-helmet { position: absolute; z-index: 3; left: 7px; top: 7px; width: 25px; height: 13px; border-radius: 16px 16px 3px 3px; background: #f2b83f; border-bottom: 3px solid rgba(125,79,14,.22); }
 .worker-body { position: absolute; z-index: 1; left: 4px; bottom: 0; width: 31px; height: 25px; border-radius: 13px 13px 4px 4px; background: #4b91b9; border-left: 5px solid rgba(31,69,91,.28); border-right: 5px solid rgba(31,69,91,.28); }
@@ -51,25 +51,66 @@
 .worker-ramp { left: 39%; top: 47%; }
 .worker-gate { left: 72%; top: 64%; }
 
+/* PLAYER — compact female safety manager, white/blue helmet, visible hair and tablet. */
+.strategy-map-worker[data-character="player"] .strategy-worker-figure { transform: scale(.94,1.02); }
+.strategy-map-worker[data-character="player"] .worker-helmet { background: #fff; border-bottom-color: #3f86b5; }
+.strategy-map-worker[data-character="player"] .worker-head::before { content: ""; position: absolute; left: -3px; right: -3px; top: 2px; height: 13px; border-radius: 8px 8px 6px 6px; background: #263746; z-index: -1; }
+.strategy-map-worker[data-character="player"] .worker-body { left: 6px; width: 27px; background: #2f86b8; }
+.strategy-map-worker[data-character="player"] .strategy-worker-figure::after { content: ""; position: absolute; z-index: 4; right: -2px; bottom: 2px; width: 8px; height: 15px; border-radius: 2px; background: #263746; transform: rotate(-8deg); }
+
+/* KANG — older stocky foreman, moustache, broad torso and orange helmet. */
+.strategy-map-worker[data-character="kang_taesik"] .strategy-worker-figure { transform: scale(1.12,.98); }
 .strategy-map-worker[data-character="kang_taesik"] .worker-helmet { background: #e88932; }
-.strategy-map-worker[data-character="kang_taesik"] .worker-body { background: #5b7180; }
+.strategy-map-worker[data-character="kang_taesik"] .worker-head { left: 10px; width: 19px; }
+.strategy-map-worker[data-character="kang_taesik"] .worker-head::after { content: ""; position: absolute; left: 4px; top: 10px; width: 11px; height: 3px; border-radius: 6px; background: #65402d; }
+.strategy-map-worker[data-character="kang_taesik"] .worker-body { left: 1px; width: 37px; background: #5b7180; }
+
+/* YOON — muscular rebar foreman, wide chest, dark forearm guards. */
+.strategy-map-worker[data-character="yoon_sungho"] .strategy-worker-figure { transform: scale(1.08,1.04); }
 .strategy-map-worker[data-character="yoon_sungho"] .worker-helmet { background: #f0c743; }
-.strategy-map-worker[data-character="yoon_sungho"] .worker-body { background: #927052; }
-.strategy-map-worker[data-character="lee_jaehoon"] .worker-helmet { background: #f3f4ed; }
-.strategy-map-worker[data-character="lee_jaehoon"] .worker-body { background: #407aa7; }
+.strategy-map-worker[data-character="yoon_sungho"] .worker-body { left: 1px; width: 37px; height: 27px; background: #927052; border-left-color: #303840; border-right-color: #303840; }
+.strategy-map-worker[data-character="yoon_sungho"] .strategy-worker-figure::after { content: ""; position: absolute; right: -7px; bottom: 6px; width: 17px; height: 3px; background: #39434a; box-shadow: 0 -5px #39434a, 0 -10px #39434a; transform: rotate(-18deg); }
+
+/* LEE — younger tall/slim construction assistant with rolled drawings. */
+.strategy-map-worker[data-character="lee_jaehoon"] .strategy-worker-figure { transform: scale(.88,1.09); }
+.strategy-map-worker[data-character="lee_jaehoon"] .worker-helmet { background: #f3f4ed; border-bottom-color: #526d87; }
+.strategy-map-worker[data-character="lee_jaehoon"] .worker-body { left: 7px; width: 25px; height: 28px; background: #407aa7; }
+.strategy-map-worker[data-character="lee_jaehoon"] .strategy-worker-figure::after { content: ""; position: absolute; right: -3px; bottom: 1px; width: 5px; height: 25px; border-radius: 5px; background: #f1ede2; border: 1px solid #99a6ad; transform: rotate(13deg); }
+
+/* LIM — youngest, smaller/narrow frame and green vest with radio. */
+.strategy-map-worker[data-character="lim_junho"] .strategy-worker-figure { transform: scale(.80,.90); }
 .strategy-map-worker[data-character="lim_junho"] .worker-helmet { background: #f1ba39; }
-.strategy-map-worker[data-character="lim_junho"] .worker-body { background: #5ca17b; }
-.strategy-map-worker[data-character="choi_minseok"] .worker-helmet { background: #dfedf4; }
-.strategy-map-worker[data-character="choi_minseok"] .worker-body { background: #bb684d; }
-.strategy-map-worker[data-character="player"] .worker-helmet { background: #ffffff; }
-.strategy-map-worker[data-character="player"] .worker-body { background: #2f86b8; }
+.strategy-map-worker[data-character="lim_junho"] .worker-body { left: 6px; width: 27px; background: #5ca17b; }
+.strategy-map-worker[data-character="lim_junho"] .strategy-worker-figure::after { content: ""; position: absolute; right: 0; bottom: 8px; width: 5px; height: 9px; border-radius: 2px; background: #2f414a; }
+
+/* CHOI — signalman, orange PPE and unmistakable twin batons. */
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-figure { transform: scale(.94,1.02); }
+.strategy-map-worker[data-character="choi_minseok"] .worker-helmet { background: #ef7b2d; }
+.strategy-map-worker[data-character="choi_minseok"] .worker-body { background: #c96e45; }
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-figure::before,
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-figure::after { content: ""; position: absolute; z-index: 4; top: 5px; width: 3px; height: 22px; border-radius: 3px; background: #e7432e; box-shadow: 0 0 0 1px rgba(120,20,10,.12); }
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-figure::before { left: 0; transform: rotate(-28deg); }
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-figure::after { right: 0; transform: rotate(28deg); }
+
+/* SEO — lean formal inspector with glasses and clipboard. */
+.strategy-map-worker[data-character="seo_jeongmin"] .strategy-worker-figure { transform: scale(.90,1.04); }
+.strategy-map-worker[data-character="seo_jeongmin"] .worker-helmet { background: #f5f7f8; }
+.strategy-map-worker[data-character="seo_jeongmin"] .worker-body { left: 6px; width: 27px; background: #596979; }
+.strategy-map-worker[data-character="seo_jeongmin"] .worker-head::after { content: ""; position: absolute; left: 1px; top: 6px; width: 15px; height: 5px; border-top: 2px solid #28343c; border-bottom: 1px solid #28343c; }
+.strategy-map-worker[data-character="seo_jeongmin"] .strategy-worker-figure::after { content: ""; position: absolute; right: -4px; bottom: 1px; width: 9px; height: 16px; border-radius: 2px; background: #ece8dc; border: 1px solid #66737b; }
+
+/* OH — broad office/field manager, phone at ear, heavier formal jacket. */
+.strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-figure { transform: scale(1.04,1.02); }
+.strategy-map-worker[data-character="oh_seungjae"] .worker-helmet { background: #fff; border-bottom-color: #344d67; }
+.strategy-map-worker[data-character="oh_seungjae"] .worker-body { left: 2px; width: 35px; background: #415a73; }
+.strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-figure::after { content: ""; position: absolute; right: -3px; top: 15px; width: 4px; height: 12px; border-radius: 3px; background: #26333d; transform: rotate(-8deg); }
 
 @media (prefers-reduced-motion: reduce) {
   .strategy-map-worker { transition: none; }
 }
 @media (max-width: 760px) {
   .strategy-map-worker { min-width: 72px; gap: 4px; }
-  .strategy-worker-figure { transform: scale(.78); transform-origin: right center; margin-left: -7px; }
+  .strategy-worker-figure { transform-origin: right center; margin-left: -7px; }
   .strategy-worker-label { min-width: 56px; max-width: 80px; padding: 4px 5px; }
   .strategy-worker-alert { left: 20px; }
 }
