@@ -16,6 +16,7 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
     ramp: decisions.ramp,
     entrance: decisions.entrance,
     action: decisions.inspection ?? 'inspection_sequence_agreement',
+    report: decisions.responsibility ?? 'report_verify_timeline',
     evening: decisions.evening,
   } as Record<string, string | undefined>)[node];
 }
@@ -37,7 +38,7 @@ describe('Episode application session', () => {
   it.each(uiPaths)('matches complete headless state for $plan / $entrance / $evening', decisions => {
     const session = new EpisodeSession(episodeOptions(815), episodeBounds);
     session.start(0);
-    for (let i = 0; i < 130 && session.getSnapshot().phase === 'playing'; i++) {
+    for (let i = 0; i < 160 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot();
       const p = s.presentation.find(c => 'node_id' in c)!;
       if (p.type === 'SHOW_CHOICE') {
