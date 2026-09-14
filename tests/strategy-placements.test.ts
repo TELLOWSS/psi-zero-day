@@ -18,4 +18,15 @@ describe('Episode 01 character placements', () => {
     expect(placements[0]).toMatchObject({ anchor: 'yard', scene_participant: false });
     expect(placements[1]).toMatchObject({ anchor: 'entry', scene_participant: false });
   });
+
+  it('offsets the inspector from the entry crew while keeping the access finding linked', () => {
+    const placements = projectEpisode01CharacterPlacements(
+      ['yoon_sungho', 'seo_jeongmin'],
+      { inspector: 'seo_jeongmin' },
+      [{ signal_id: 'signal.inspection_access', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.inspection_access' }],
+    );
+    const inspector = placements.find(item => item.character_id === 'seo_jeongmin');
+    expect(inspector).toMatchObject({ anchor: 'inspection', scene_participant: true, role_id: 'inspector' });
+    expect(inspector?.nearby_signal_ids).toEqual(['signal.inspection_access']);
+  });
 });
