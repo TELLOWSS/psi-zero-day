@@ -17,6 +17,13 @@
     "ep01.tbm_return.choice.controlled": "변경작업 기준이 다시 공유된다.",
     "ep01.tbm_return.paper_gap": "TBM 서명은 그대로지만 작업방법이 바뀐 이유와 변경 기준은 정리되지 않았다. 다른 작업자가 같은 상황에서 다시 안전시설을 손대려 한다.",
     "ep01.tbm_return.silenced": "작업자들은 ‘괜히 말했다가 내가 잘못한 사람이 된다’며 작업변경을 먼저 알리지 않는다. 복구는 됐지만 다음 변화는 더 늦게 보이게 됐다.",
-    "ep01.tbm_return.controlled": "변경된 작업순서와 통제방법을 다시 공유한 뒤 작업이 재개된다. 아침 TBM과 오후 작업 사이의 빈틈이 실제 작업 기준으로 메워진다."
+    "ep01.tbm_return.controlled": "변경된 작업순서와 통제방법을 다시 공유한 뒤 작업이 재개된다. 아침 TBM과 오후 작업 사이의 빈틈이 실제 작업 기준으로 메워진다.",
+    "ui.signal.tbm_field_gap": "안전시설 상태 변경",
+    "ui.friction.tbm_gap": "TBM-실작업 괴리",
+    "ui.friction.tbm_gap.detail": "아침 교육 내용은 남아 있지만 오후 작업방법이 바뀌어 실제 통제기준과 맞지 않는다.",
+    "ui.friction.change_not_shared": "작업변경 미전파",
+    "ui.friction.change_not_shared.detail": "작업순서가 바뀌었지만 변경된 작업방법과 안전조치가 작업자에게 다시 전달되지 않았다.",
+    "ui.friction.tbm_return": "변경관리 후폭풍",
+    "ui.friction.tbm_return.detail": "앞선 대응 방식이 다음 작업변경 때 보고·복구·재확인 행동으로 되돌아온다."
   }
 }
