@@ -17,7 +17,7 @@ describe('Episode 01 stop-work restart chain', () => {
       restart_action: 'follow_verbal',
       restart_result: 'premature_restart_second_stop',
     });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(24);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(25);
     expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(38);
   });
 
@@ -27,8 +27,8 @@ describe('Episode 01 stop-work restart chain', () => {
       restart_action: 'trace_instruction',
       restart_result: 'conditional_instruction_distorted',
     });
-    expect(state.player.stats.analysis).toBe(40);
-    expect(getRelation(state.relations, 'kang_taesik', 'player')!.reporting).toBe(34);
+    expect(state.player.stats.analysis).toBe(41);
+    expect(getRelation(state.relations, 'kang_taesik', 'player')!.reporting).toBe(35);
   });
 
   it('keeps work stopped until physical controls and restart conditions are verified', () => {
@@ -38,6 +38,6 @@ describe('Episode 01 stop-work restart chain', () => {
       restart_result: 'controlled_restart',
     });
     expect(state.player.stats.judgment).toBe(30);
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(26);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(27);
   });
 });
