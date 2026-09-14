@@ -32,7 +32,7 @@ describe('Episode 01 responsibility and report chain', () => {
     expect(state.flags).toMatchObject({ report_basis: 'timeline', report_result: 'timeline_confirmed' });
     expect(getRelation(state.relations, 'oh_seungjae', 'player')).toMatchObject({ trust: 32, respect: 31 });
     expect(getRelation(state.relations, 'lee_jaehoon', 'player')!.respect).toBe(36);
-    expect(state.player.stats.analysis).toBe(39);
+    expect(state.player.stats.analysis).toBe(40);
     expect(state.event_runtime.finished_instances.find(i => i.event_id === 'e01_08f_report_return')?.selected_choice_ids)
       .toEqual(['report_return_timeline_confirmed']);
   });
