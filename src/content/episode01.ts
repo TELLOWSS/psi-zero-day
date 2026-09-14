@@ -14,6 +14,7 @@ import ko from '../../content/episode01/ko.json';
 import inspectionKo from '../../content/episode01/inspection-ko.json';
 import responsibilityKo from '../../content/episode01/responsibility-ko.json';
 import { episode01TbmGapEvents, episode01TbmGapMessages } from './episode01-tbm';
+import { episode01RestartEvents, episode01RestartMessages } from './episode01-restart';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 
@@ -21,7 +22,13 @@ import { assembleEpisode01Consequences } from './episode01-consequences';
 export function createEpisode01Registry(): ContentRegistry {
   return new ContentRegistry({
     ...manifest.bundle,
-    localizations: [{ ...ko, messages: { ...ko.messages, ...inspectionKo.messages, ...responsibilityKo.messages, ...episode01TbmGapMessages } }],
+    localizations: [{ ...ko, messages: {
+      ...ko.messages,
+      ...inspectionKo.messages,
+      ...responsibilityKo.messages,
+      ...episode01TbmGapMessages,
+      ...episode01RestartMessages,
+    } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
     events: assembleEpisode01Consequences(
@@ -30,6 +37,7 @@ export function createEpisode01Registry(): ContentRegistry {
       inspectionEvents,
       [responsibilityClashEvent, reportReturnEvent],
       episode01TbmGapEvents,
+      episode01RestartEvents,
     ),
   });
 }
