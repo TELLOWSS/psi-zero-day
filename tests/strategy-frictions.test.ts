@@ -29,6 +29,14 @@ describe('Episode 01 field frictions', () => {
       .toEqual(['inspection_pressure', 'responsibility_shift']);
   });
 
+  it('shows responsibility crossfire, changed instructions and paper-field mismatch together', () => {
+    expect(projectEpisode01Frictions('e01_08e_responsibility_clash').map(item => item.friction_id)).toEqual([
+      'friction.responsibility.crossfire', 'friction.timeline.changed_instruction', 'friction.paper_gap.report',
+    ]);
+    expect(projectEpisode01Frictions('e01_08f_report_return').map(item => item.friction_id))
+      .toEqual(['friction.paper_gap.returned']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
