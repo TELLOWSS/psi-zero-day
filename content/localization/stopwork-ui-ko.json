@@ -1,0 +1,13 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ui.friction.stopwork_blame": "작업중지 책임 전가",
+    "ui.friction.stopwork_blame.detail": "작업이 밀린 이유가 위험요인보다 신고자나 작업중지 제기자에게 돌아가기 시작한다.",
+    "ui.friction.stopwork_social": "현장 눈치·배치 압박",
+    "ui.friction.stopwork_social.detail": "공식적인 불이익은 아니어도 배치 제외·냉대·말 줄이기 같은 비공식 압박이 생길 수 있다.",
+    "ui.friction.stopwork_reporting": "다음 보고 위축",
+    "ui.friction.stopwork_reporting.detail": "한 번 보고한 뒤 현장 분위기가 나빠지면 다음 위험신호를 보고하지 않을 가능성이 커진다.",
+    "ui.friction.stopwork_return": "작업중지 문화의 후폭풍",
+    "ui.friction.stopwork_return.detail": "제도상 보호보다 실제 현장 관계가 다음 보고 행동을 결정할 수 있다."
+  }
+}
