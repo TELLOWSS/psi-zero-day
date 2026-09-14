@@ -16,11 +16,16 @@ export interface StrategyAction {
   readonly enabled: boolean;
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
+  readonly skill?: {
+    readonly source: 'equipment' | 'growth';
+    readonly label_text_id: TextId;
+  };
 }
 
 interface ActionMetadata {
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
+  readonly skill?: StrategyAction['skill'];
 }
 
 const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
@@ -57,13 +62,22 @@ const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
   record_minimize_scope: { intent: 'record', target: { kind: 'character', character_id: 'oh_seungjae' } },
   record_retrofit_paper: { intent: 'record', target: { kind: 'character', character_id: 'lee_jaehoon' } },
   record_preserve_timeline: { intent: 'record', target: { kind: 'site' } },
+  next_day_standard_check: { intent: 'inspect', target: { kind: 'site' } },
+  next_day_camera_compare: {
+    intent: 'record', target: { kind: 'site' },
+    skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+  },
+  next_day_radio_checkin: {
+    intent: 'report', target: { kind: 'character', character_id: 'lim_junho' },
+    skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+  },
 };
 
 const FIELD_ACTION_EVENTS = new Set<Id>([
   'e01_03_plan_breaks', 'e01_04_junho_signal', 'e01_05_command',
   'e01_08b_inspection_find', 'e01_08e_responsibility_clash', 'e01_08g_tbm_field_gap',
   'e01_08i_restart_pressure', 'e01_08k_stopwork_aftershock', 'e01_08m_instruction_cascade',
-  'e01_08o_record_pressure',
+  'e01_08o_record_pressure', 'e01_10_next_day_tease',
 ]);
 
 export function strategyActionTargetKey(target: StrategyActionTarget): string {
@@ -94,6 +108,7 @@ export function projectStrategyActions(activeEventId: Id | null, presentation: P
       enabled: choice.enabled,
       intent: metadata.intent,
       target: metadata.target,
+      ...(metadata.skill ? { skill: metadata.skill } : {}),
     });
   }));
 }
