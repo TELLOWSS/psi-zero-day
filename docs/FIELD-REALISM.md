@@ -2,10 +2,10 @@
 
 ## Purpose
 PSI : ZERO DAY must feel like a real construction site, not a safety quiz with obvious right answers.
-A technically correct safety action may create schedule delay, resistance, reinspection, reporting pressure, relationship consequences or instruction distortion.
+A technically correct safety action may create schedule delay, resistance, reinspection, reporting pressure, relationship consequences, instruction distortion or record pressure.
 
 ## Core rule
-`hazard -> people -> instruction/inspection -> action -> schedule impact -> relationship impact -> follow-up/reinspection -> fact-check/report -> changed-work control -> restart control -> reporting culture -> instruction delivery`
+`hazard -> people -> instruction/inspection -> action -> schedule impact -> relationship impact -> follow-up/reinspection -> fact-check/report -> changed-work control -> restart control -> reporting culture -> instruction delivery -> record integrity`
 
 A choice is not complete when the player presses the safe answer. The consequence should continue through people, work, records and the next instruction.
 
@@ -18,6 +18,7 @@ A choice is not complete when the player presses the safe answer. The consequenc
 - Responsibility shifting: general contractor/subcontractor/foreman/safety staff each argue where responsibility sits.
 - Paper-field gap: TBM, plans, photos and forms say one thing while the actual work changes minutes later.
 - Instruction loss: a safe instruction can become unsafe when conditions disappear during verbal handoff.
+- Record pressure: report wording, classification or paperwork is pushed toward a cleaner story than the surviving evidence supports.
 
 ## Reality requirements
 1. Do not make supervisors/inspectors or foremen simple villains. Give them different incentives, competence and personalities.
@@ -39,9 +40,13 @@ A choice is not complete when the player presses the safe answer. The consequenc
 17. A safe instruction at the top of the chain is not proof that the worker received the same instruction. Track each handoff separately.
 18. When schedule language and safety conditions travel together, test which part survives at the last worker.
 19. Do not resolve instruction failures by blaming only the last worker unless evidence supports that conclusion.
+20. Neutral wording is allowed; changing the underlying timeline, cause, instruction history or evidence is not the same thing as neutral wording.
+21. Never treat a later-edited form as proof that the changed work had been controlled earlier. Time matters.
+22. If a report is softened or retrofitted beyond what the evidence supports, the mismatch must be able to return later as correction, credibility loss or renewed fact-checking.
+23. Preserve the distinction between what was known at the time and what was reconstructed afterward.
 
 ## Evidence discipline
-When a responsibility or instruction dispute occurs, the game should encourage the player to compare evidence rather than choose a faction.
+When a responsibility, instruction or record dispute occurs, the game should encourage the player to compare evidence rather than choose a faction.
 Useful evidence types include:
 - morning TBM or briefing content,
 - call/message time,
@@ -52,9 +57,11 @@ Useful evidence types include:
 - vehicle or work sequence,
 - worker/foreman statements,
 - reinspection result,
-- restart approval and attached conditions.
+- restart approval and attached conditions,
+- report draft history,
+- source-record timestamp versus later edited wording.
 
-Evidence itself can conflict. A photo proves what the camera saw at that moment, not what the whole site looked like. A chat message proves a message existed, not that every worker received or understood it. A TBM signature proves attendance or acknowledgment at that time, not that later work changes were automatically covered. A manager's statement proves what they intended to say, not necessarily what the last worker heard.
+Evidence itself can conflict. A photo proves what the camera saw at that moment, not what the whole site looked like. A chat message proves a message existed, not that every worker received or understood it. A TBM signature proves attendance or acknowledgment at that time, not that later work changes were automatically covered. A manager's statement proves what they intended to say, not necessarily what the last worker heard. A later report proves what was written later, not what the field looked like earlier.
 
 ## Required recurring scenario families
 ### Inspection / reinspection
@@ -102,6 +109,13 @@ Evidence itself can conflict. A photo proves what the camera saw at that moment,
 - Afterward each level says its own version was correct.
 - Player reconstructs wording, time and receiver at each step rather than automatically blaming the final worker.
 
+### Post-incident record pressure
+- The field sequence is mostly known, but the first report draft is politically uncomfortable.
+- Someone asks for softer wording or a narrower classification.
+- Someone suggests treating a later changed task as if the original TBM or work plan already covered it.
+- The player must separate neutral language from alteration of fact, time, cause or evidence.
+- Later source records can force correction if the draft no longer matches the surviving evidence.
+
 ## Implemented vertical-slice examples
 ### TASK-008A — Reporting aftershock
 Earlier handling of Lim Junho's weak signal returns as reinforced, suppressed or missed reporting behavior.
@@ -123,6 +137,9 @@ Formal stop-work rights can coexist with informal blame, reassignment pressure a
 
 ### TASK-008G — Instruction cascade
 Lee Jaehoon says “work after fall-protection confirmation”; Kang Taesik repeats the safety condition but adds schedule urgency; the work group relays only the urgent phrase. The player can accept the top-level account, blame the last worker, or reconstruct the full handoff chain. The intended learning point is **not who lied, but where the safety condition disappeared**.
+
+### TASK-008H — Record pressure
+After the instruction chain is reconstructed, the report itself becomes the next conflict. The player may minimize the scope, retrofit later paperwork to the changed task, or keep neutral wording while preserving time, cause and evidence. The intended learning point is **not to write dramatic reports; it is to keep the factual spine stable even when wording is negotiated**.
 
 ## Tone
 The game may be cute and approachable visually, but field problems must remain adult, frustrating and credible.
