@@ -57,6 +57,13 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
   e01_08f_report_return: [
     { friction_id: 'friction.paper_gap.returned', kind: 'responsibility_shift', label_text_id: 'ui.friction.paper_gap', detail_text_id: 'ui.friction.paper_gap.returned' },
   ],
+  e01_08g_tbm_field_gap: [
+    { friction_id: 'friction.tbm.field_gap', kind: 'coordination_conflict', label_text_id: 'ui.friction.tbm_gap', detail_text_id: 'ui.friction.tbm_gap.detail' },
+    { friction_id: 'friction.tbm.change_not_shared', kind: 'responsibility_shift', label_text_id: 'ui.friction.change_not_shared', detail_text_id: 'ui.friction.change_not_shared.detail' },
+  ],
+  e01_08h_tbm_return: [
+    { friction_id: 'friction.tbm.return', kind: 'reporting_hesitation', label_text_id: 'ui.friction.tbm_return', detail_text_id: 'ui.friction.tbm_return.detail' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
