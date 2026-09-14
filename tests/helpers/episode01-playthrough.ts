@@ -28,6 +28,7 @@ export interface EpisodeDecisions {
   inspection?: 'inspection_full_stop' | 'inspection_quick_photo' | 'inspection_sequence_agreement';
   responsibility?: 'report_one_sided' | 'report_defensive' | 'report_verify_timeline';
   tbm?: 'tbm_form_first' | 'tbm_worker_blame' | 'tbm_change_control';
+  restart?: 'restart_follow_verbal' | 'restart_trace_instruction' | 'restart_verify_controls';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -62,6 +63,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_08b_inspection_find/action': decisions.inspection ?? 'inspection_sequence_agreement',
     'e01_08e_responsibility_clash/report': decisions.responsibility ?? 'report_verify_timeline',
     'e01_08g_tbm_field_gap/tbm_action': decisions.tbm ?? 'tbm_change_control',
+    'e01_08i_restart_pressure/restart_action': decisions.restart ?? 'restart_verify_controls',
     'e01_09_evening/evening': decisions.evening,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
@@ -71,7 +73,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     e01_09_evening: { day: 1, slot: 'EVENING' },
     e01_10_next_day_tease: { day: 2, slot: 'PRE_WORK' },
   };
-  for (let step = 0; step < 320; step++) {
+  for (let step = 0; step < 360; step++) {
     const state = engine.getState();
     if (state.flags.episode01_completed === true) return { initial, state, trace, checkpoints };
     const active = state.event_runtime.active_instance;
