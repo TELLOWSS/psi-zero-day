@@ -33,28 +33,33 @@ function rewardItemIds(flags: FlagMap, characterId: Id): readonly string[] {
     .map(([key]) => key.slice(prefix.length));
 }
 
-function sourceFor(itemId: string, growthItems: readonly string[], rewardIds: readonly string[]): InventoryItemView['source'] {
+function sourceFor(itemId: string, starterItems: readonly string[], growthItems: readonly string[], rewardIds: readonly string[]): InventoryItemView['source'] {
   if (rewardIds.includes(itemId)) return 'reward';
-  return growthItems[0] === itemId ? 'starter' : 'growth';
+  if (starterItems.includes(itemId)) return 'starter';
+  return growthItems.includes(itemId) ? 'growth' : 'reward';
 }
 
-/** Presentation projection only. Ownership/equipment are authored flags; there is no hidden item formula. */
+/**
+ * Presentation projection only. Growth can unlock inventory, but equipment changes only through explicit equipment flags.
+ * Starter items remain equipped by default; newly unlocked items never auto-equip unless authored that way.
+ */
 export function projectCharacterLoadout(flags: FlagMap, characterId: Id): CharacterLoadoutView | undefined {
   const growthView = projectCharacterGrowth(flags, characterId);
   if (!growthView) return undefined;
   const growthConfig = (growth.characters as Record<string, { stages: Record<string, { items: readonly string[] }> }>)[characterId];
-  const growthItems = growthConfig?.stages[growthView.stage]?.items ?? [];
+  const starterItems = growthConfig?.stages.initial?.items ?? [];
+  const growthItems = growthConfig?.stages[growthView.stage]?.items ?? starterItems;
   const rewardIds = rewardItemIds(flags, characterId);
   const ownedIds = [...new Set([...growthItems, ...rewardIds])];
 
   const inventory = Object.freeze(ownedIds.map(itemId => {
     const item = itemById.get(itemId);
     if (!item) throw new Error(`Unknown inventory item: ${itemId}`);
-    return Object.freeze({ ...item, source: sourceFor(itemId, growthItems, rewardIds) });
+    return Object.freeze({ ...item, source: sourceFor(itemId, starterItems, growthItems, rewardIds) });
   }));
 
   const equippedBySlot = new Map<EquipmentSlot, string>();
-  for (const itemId of growthItems) {
+  for (const itemId of starterItems) {
     const item = itemById.get(itemId);
     if (item) equippedBySlot.set(item.equip_slot, itemId);
   }
