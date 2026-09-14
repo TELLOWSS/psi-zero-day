@@ -13,6 +13,7 @@ import uiKo from '../../content/localization/playable-ko.json';
 import inspectionUiKo from '../../content/localization/inspection-ui-ko.json';
 import responsibilityUiKo from '../../content/localization/responsibility-ui-ko.json';
 import stopworkUiKo from '../../content/localization/stopwork-ui-ko.json';
+import recordUiKo from '../../content/localization/record-ui-ko.json';
 
 export interface SessionSnapshot {
   readonly revision: number;
@@ -44,6 +45,7 @@ export class EpisodeSession {
     ...inspectionUiKo.messages,
     ...responsibilityUiKo.messages,
     ...stopworkUiKo.messages,
+    ...recordUiKo.messages,
   } }], 'ko');
 
   constructor(options: NewRunOptions = config.run as NewRunOptions, bounds: ProgressBounds = config.bounds) {
