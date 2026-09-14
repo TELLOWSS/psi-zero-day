@@ -5,88 +5,273 @@
       "asset_id": "ep01.background.foundation.map",
       "type": "image",
       "group_id": "ep01.backgrounds",
-      "variants": [{ "uri": "assets/episode01/backgrounds/foundation-map.svg", "format": "svg", "bytes": 3380, "hash": "3225e821c6d1825ff4098d18f84071e0576263492aeaa2f2f8e426d9d12d1077" }],
-      "dependencies": [], "preload_policy": "required", "version": "1"
+      "variants": [
+        {
+          "uri": "assets/episode01/backgrounds/foundation-map.svg",
+          "format": "svg",
+          "bytes": 3380,
+          "hash": "3225e821c6d1825ff4098d18f84071e0576263492aeaa2f2f8e426d9d12d1077"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "required",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.choi_minseok.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/choi-minseok-map.svg", "format": "svg", "bytes": 2200, "hash": "a1959fa5aa7fe3d9c85ecadd706dbbfaed49d7e6ca3743607d82bb5a43a1c0eb" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.choi_minseok.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/choi-minseok-map.svg",
+          "format": "svg",
+          "bytes": 2200,
+          "hash": "a1959fa5aa7fe3d9c85ecadd706dbbfaed49d7e6ca3743607d82bb5a43a1c0eb"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.choi_minseok.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/choi-minseok-portrait.svg", "format": "svg", "bytes": 2427, "hash": "308dd68f716800228444f8697b839bdcb0aac526a925f83344eb91941c6d8da1" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.choi_minseok.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/choi-minseok-portrait.svg",
+          "format": "svg",
+          "bytes": 2427,
+          "hash": "308dd68f716800228444f8697b839bdcb0aac526a925f83344eb91941c6d8da1"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.kang_taesik.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/kang-taesik-map.svg", "format": "svg", "bytes": 2231, "hash": "770f243c588da236512e767046ed850f502a93bd2d060570b75546ffb4f6de95" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.kang_taesik.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/kang-taesik-map.svg",
+          "format": "svg",
+          "bytes": 2231,
+          "hash": "770f243c588da236512e767046ed850f502a93bd2d060570b75546ffb4f6de95"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.kang_taesik.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/kang-taesik-portrait.svg", "format": "svg", "bytes": 2478, "hash": "1390f9128be7637ec386ef9cc5dbb7deb852220a0e5891c96546a858dec61210" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.kang_taesik.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/kang-taesik-portrait.svg",
+          "format": "svg",
+          "bytes": 2478,
+          "hash": "1390f9128be7637ec386ef9cc5dbb7deb852220a0e5891c96546a858dec61210"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.lee_jaehoon.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/lee-jaehoon-map.svg", "format": "svg", "bytes": 2375, "hash": "5ce4670368807f8d3a8bcf1c7fffb530b5ee7b196d19b829825891cf848a1974" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.lee_jaehoon.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/lee-jaehoon-map.svg",
+          "format": "svg",
+          "bytes": 2375,
+          "hash": "5ce4670368807f8d3a8bcf1c7fffb530b5ee7b196d19b829825891cf848a1974"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.lee_jaehoon.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/lee-jaehoon-portrait.svg", "format": "svg", "bytes": 2585, "hash": "a53128f77db7aa78f547351fbc5a1691044abf3ee754168f3a65291046998265" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.lee_jaehoon.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/lee-jaehoon-portrait.svg",
+          "format": "svg",
+          "bytes": 2585,
+          "hash": "a53128f77db7aa78f547351fbc5a1691044abf3ee754168f3a65291046998265"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.lim_junho.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/lim-junho-map.svg", "format": "svg", "bytes": 2246, "hash": "5e538f4ded2a0e3ab9c6052656b4c2049dcb0f78f7df57c68d3a81df06bcae80" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.lim_junho.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/lim-junho-map.svg",
+          "format": "svg",
+          "bytes": 2246,
+          "hash": "5e538f4ded2a0e3ab9c6052656b4c2049dcb0f78f7df57c68d3a81df06bcae80"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.lim_junho.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/lim-junho-portrait.svg", "format": "svg", "bytes": 2519, "hash": "d234bc64f15aabeb9b0169d05d1bcf8f6317dd81f3eea1a4fc7639bd5f39f434" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.lim_junho.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/lim-junho-portrait.svg",
+          "format": "svg",
+          "bytes": 2519,
+          "hash": "d234bc64f15aabeb9b0169d05d1bcf8f6317dd81f3eea1a4fc7639bd5f39f434"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.oh_seungjae.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/oh-seungjae-map.svg", "format": "svg", "bytes": 2233, "hash": "1bf5da60303fffeaed616efd7e13cceb314bc095280a92d634536673fa94b1b3" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.oh_seungjae.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/oh-seungjae-map.svg",
+          "format": "svg",
+          "bytes": 2233,
+          "hash": "1bf5da60303fffeaed616efd7e13cceb314bc095280a92d634536673fa94b1b3"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.oh_seungjae.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/oh-seungjae-portrait.svg", "format": "svg", "bytes": 2541, "hash": "897229ac1daa0f1fc8d54667aa5bd72e9d5252f904ff3a2bfa42387aef7a0f57" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.oh_seungjae.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/oh-seungjae-portrait.svg",
+          "format": "svg",
+          "bytes": 2541,
+          "hash": "897229ac1daa0f1fc8d54667aa5bd72e9d5252f904ff3a2bfa42387aef7a0f57"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.player.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/player-map.svg", "format": "svg", "bytes": 2334, "hash": "a42c65c5bc953e090332db8a2834eb862592cdfbabfcae34450fc755abc42778" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.player.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/player-map.svg",
+          "format": "svg",
+          "bytes": 2334,
+          "hash": "a42c65c5bc953e090332db8a2834eb862592cdfbabfcae34450fc755abc42778"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.player.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/player-portrait.svg", "format": "svg", "bytes": 2575, "hash": "2ce9b2d8524b3e2457e4549a5186a9303bfa94a3952f5e43d9b2052b8a20e4c4" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.player.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/player-portrait.svg",
+          "format": "svg",
+          "bytes": 2575,
+          "hash": "2ce9b2d8524b3e2457e4549a5186a9303bfa94a3952f5e43d9b2052b8a20e4c4"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.seo_jeongmin.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/seo-jeongmin-map.svg", "format": "svg", "bytes": 2479, "hash": "8fb9209e42bdcc62612f016a82a0588c0781e5c49d66bc505836c55732139eda" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.seo_jeongmin.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/seo-jeongmin-map.svg",
+          "format": "svg",
+          "bytes": 2479,
+          "hash": "8fb9209e42bdcc62612f016a82a0588c0781e5c49d66bc505836c55732139eda"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.seo_jeongmin.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/seo-jeongmin-portrait.svg", "format": "svg", "bytes": 2688, "hash": "164c2ab1607fe0679a0b94d7dbcb17b46be46c071ce4debd2adb6fa7781aeced" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.seo_jeongmin.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/seo-jeongmin-portrait.svg",
+          "format": "svg",
+          "bytes": 2688,
+          "hash": "164c2ab1607fe0679a0b94d7dbcb17b46be46c071ce4debd2adb6fa7781aeced"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.yoon_sungho.map", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/yoon-sungho-map.svg", "format": "svg", "bytes": 2188, "hash": "d8ac8639d5befe92eeafeb5f7f6ce980afee08b3410ceb4d85fca470bd3d0058" }],
-      "dependencies": [], "preload_policy": "next_scene", "version": "1"
+      "asset_id": "ep01.character.yoon_sungho.map",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/yoon-sungho-map.svg",
+          "format": "svg",
+          "bytes": 2188,
+          "hash": "d8ac8639d5befe92eeafeb5f7f6ce980afee08b3410ceb4d85fca470bd3d0058"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
-      "asset_id": "ep01.character.yoon_sungho.portrait", "type": "image", "group_id": "ep01.characters",
-      "variants": [{ "uri": "assets/episode01/characters/yoon-sungho-portrait.svg", "format": "svg", "bytes": 2507, "hash": "e4c376551d83e04d88dfc19dd6962f4943665da4e3ee20ed23fdcb482d33236f" }],
-      "dependencies": [], "preload_policy": "on_demand", "version": "1"
+      "asset_id": "ep01.character.yoon_sungho.portrait",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/yoon-sungho-portrait.svg",
+          "format": "svg",
+          "bytes": 2507,
+          "hash": "e4c376551d83e04d88dfc19dd6962f4943665da4e3ee20ed23fdcb482d33236f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
     }
   ]
 }
