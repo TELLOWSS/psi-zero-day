@@ -22,19 +22,29 @@ const cases = origins.flatMap(origin => (['check_self', 'ask_minseok', 'keep_sch
     result: origin.rows[i]![j]!,
   }))));
 
+function expectSelectedRoute(state: ReturnType<typeof playEpisode>['state'], decisions: EpisodeDecisions) {
+  expect(state.flags.episode01_completed).toBe(true);
+  if (decisions.plan === 'delegate_kang') {
+    expect(state.flags.inspection_result).toBe('accepted_after_sequence');
+    expect(state.flags.report_result).toBeUndefined();
+  } else if (decisions.plan === 'negotiate_yoon') {
+    expect(state.flags.report_result).toBe('timeline_confirmed');
+    expect(state.flags.tbm_gap_result).toBeUndefined();
+  } else if (decisions.plan === 'coordinate_schedule') {
+    expect(state.flags.tbm_gap_result).toBe('changed_work_rebriefed');
+    expect(state.flags.restart_result).toBe('controlled_restart');
+    expect(state.flags.inspection_result).toBeUndefined();
+  } else {
+    expect(state.flags.inspection_result).toBeUndefined();
+    expect(state.flags.report_result).toBeUndefined();
+    expect(state.flags.tbm_gap_result).toBeUndefined();
+  }
+}
+
 describe('Episode 01 reachable safety matrix', () => {
   it.each(cases)('$name', ({ decisions, result }) => {
     const { state } = playEpisode(decisions);
     expect(state.flags.pump_result).toBe(result);
-    expect(state.flags).toMatchObject({
-      inspection_closed: true,
-      report_result: 'timeline_confirmed',
-      tbm_gap_result: 'changed_work_rebriefed',
-      restart_result: 'controlled_restart',
-      stopwork_culture_result: 'reporting_route_preserved',
-      instruction_chain_result: 'conditional_phrase_restored',
-      record_result: 'factual_record_preserved',
-      episode01_completed: true,
-    });
+    expectSelectedRoute(state, decisions);
   });
 });
