@@ -20,6 +20,7 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
     tbm_action: decisions.tbm ?? 'tbm_change_control',
     restart_action: decisions.restart ?? 'restart_verify_controls',
     culture_action: decisions.stopwork ?? 'stopwork_protect_process',
+    instruction_action: decisions.instruction ?? 'instruction_reconstruct_chain',
     evening: decisions.evening,
   } as Record<string, string | undefined>)[node];
 }
@@ -41,7 +42,7 @@ describe('Episode application session', () => {
   it.each(uiPaths)('matches complete headless state for $plan / $entrance / $evening', decisions => {
     const session = new EpisodeSession(episodeOptions(815), episodeBounds);
     session.start(0);
-    for (let i = 0; i < 250 && session.getSnapshot().phase === 'playing'; i++) {
+    for (let i = 0; i < 280 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot();
       const p = s.presentation.find(c => 'node_id' in c)!;
       if (p.type === 'SHOW_CHOICE') {
