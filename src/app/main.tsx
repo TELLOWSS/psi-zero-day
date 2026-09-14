@@ -8,6 +8,7 @@ import '../ui/strategy-signals.css';
 import '../ui/strategy-workers.css';
 import '../ui/strategy-inspector.css';
 import '../ui/strategy-frictions.css';
+import '../ui/strategy-actions.css';
 
 const session = new EpisodeSession();
 document.title = session.t('ui.brand');
