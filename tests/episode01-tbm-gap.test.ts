@@ -1,31 +1,34 @@
 import { describe, expect, it } from 'vitest';
-import { getRelation } from '../src/engine';
 import { playEpisode } from './helpers/episode01-playthrough';
 
 const common = {
-  plan: 'delegate_kang' as const,
+  plan: 'coordinate_schedule' as const,
   ramp: 'check_self' as const,
   entrance: 'request_delay' as const,
   evening: 'rest' as const,
 };
 
-describe('Episode 01 TBM and field-work gap', () => {
-  it('leaves the paper-field gap when the response relies on the signed TBM', () => {
+describe('Episode 01 TBM and field-work route', () => {
+  it('ends the route at TBM return when the response relies on signed paperwork', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_form_first' });
     expect(state.flags.tbm_gap_result).toBe('paper_field_gap_remains');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(23);
+    expect(state.flags.restart_result).toBeUndefined();
   });
 
-  it('chills reporting when the changed work is reduced to worker blame', () => {
+  it('ends the route at TBM return when changed work is reduced to worker blame', () => {
     const { state } = playEpisode({ ...common, tbm: 'tbm_worker_blame' });
     expect(state.flags.tbm_gap_result).toBe('reporting_chilled');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(19);
+    expect(state.flags.restart_result).toBeUndefined();
   });
 
-  it('rebriefs the changed work and later protection preserves a reporting route', () => {
-    const { state } = playEpisode({ ...common, tbm: 'tbm_change_control' });
-    expect(state.flags.tbm_gap_result).toBe('changed_work_rebriefed');
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(27);
-    expect(state.player.stats.judgment).toBe(30);
+  it('opens restart control only after the player chooses changed-work control', () => {
+    const { state } = playEpisode({ ...common, tbm: 'tbm_change_control', restart: 'restart_verify_controls' });
+    expect(state.flags).toMatchObject({
+      tbm_gap_result: 'changed_work_rebriefed',
+      restart_result: 'controlled_restart',
+    });
+    expect(state.event_runtime.completion_history.map(item => item.event_id)).toEqual(expect.arrayContaining([
+      'e01_08g_tbm_field_gap', 'e01_08h_tbm_return', 'e01_08i_restart_pressure', 'e01_08j_restart_return',
+    ]));
   });
 });
