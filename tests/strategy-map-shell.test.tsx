@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { StrategyAction } from '../src/app/strategy-actions';
+import type { StrategyVisualAssets } from '../src/app/strategy-assets';
 import type { StrategyView } from '../src/app/strategy-view';
 import { StrategyMapShell } from '../src/ui/StrategyMapShell';
 
@@ -41,11 +42,23 @@ const actions: readonly StrategyAction[] = [{
   choice_id: 'listen_more', label_text_id: 'ep01.junho.listen_more', enabled: true, intent: 'inspect',
   target: { kind: 'character', character_id: 'lim_junho' },
 }];
+const visualAssets: StrategyVisualAssets = {
+  background_uri: 'assets/episode01/backgrounds/foundation-map.webp',
+  characters: {
+    lim_junho: {
+      character_id: 'lim_junho',
+      map_uri: 'assets/episode01/characters/lim-junho-map.webp',
+      portrait_uri: 'assets/episode01/characters/lim-junho-portrait.webp',
+      accent: '#acb98a',
+    },
+  },
+};
 
 describe('StrategyMapShell', () => {
   it('marks actionable people/signals/zones and waits for a target selection before listing actions', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
     expect(html).toContain('data-stage="TYPICAL_FLOOR"');
+    expect(html).toContain('data-visual-mode="css"');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('data-character="lim_junho"');
     expect(html).toContain('data-action-count="1"');
@@ -58,5 +71,18 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('FIELD ACTIONS');
     expect(html).toContain('Select a map target first.');
     expect(html).not.toContain('data-choice="listen_more"');
+  });
+
+  it('switches to production-art mode when registered assets resolve', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell
+      view={view} copy={copy} text={text} person={person} actions={actions} visualAssets={visualAssets}
+    />);
+    expect(html).toContain('data-visual-mode="art"');
+    expect(html).toContain('strategy-map-background-art');
+    expect(html).toContain('foundation-map.webp');
+    expect(html).toContain('data-visual="asset"');
+    expect(html).toContain('strategy-worker-art');
+    expect(html).toContain('lim-junho-map.webp');
+    expect(html).toContain('lim-junho-portrait.webp');
   });
 });
