@@ -72,6 +72,14 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
   e01_08j_restart_return: [
     { friction_id: 'friction.restart.return', kind: 'responsibility_shift', label_text_id: 'ui.friction.restart_return', detail_text_id: 'ui.friction.restart_return.detail' },
   ],
+  e01_08k_stopwork_aftershock: [
+    { friction_id: 'friction.stopwork.schedule_blame', kind: 'schedule_pressure', label_text_id: 'ui.friction.stopwork_blame', detail_text_id: 'ui.friction.stopwork_blame.detail' },
+    { friction_id: 'friction.stopwork.social_pressure', kind: 'hierarchy_pressure', label_text_id: 'ui.friction.stopwork_social', detail_text_id: 'ui.friction.stopwork_social.detail' },
+    { friction_id: 'friction.stopwork.reporting_chill', kind: 'reporting_hesitation', label_text_id: 'ui.friction.stopwork_reporting', detail_text_id: 'ui.friction.stopwork_reporting.detail' },
+  ],
+  e01_08l_stopwork_return: [
+    { friction_id: 'friction.stopwork.return', kind: 'reporting_hesitation', label_text_id: 'ui.friction.stopwork_return', detail_text_id: 'ui.friction.stopwork_return.detail' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
