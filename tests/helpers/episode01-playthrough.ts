@@ -32,6 +32,7 @@ export interface EpisodeDecisions {
   stopwork?: 'stopwork_ignore_social' | 'stopwork_public_boundary' | 'stopwork_protect_process';
   instruction?: 'instruction_accept_top' | 'instruction_blame_worker' | 'instruction_reconstruct_chain';
   record?: 'record_minimize_scope' | 'record_retrofit_paper' | 'record_preserve_timeline';
+  equipment?: 'training_equip_camera' | 'training_keep_loadout';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -71,6 +72,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_08m_instruction_cascade/instruction_action': decisions.instruction ?? 'instruction_reconstruct_chain',
     'e01_08o_record_pressure/record_action': decisions.record ?? 'record_preserve_timeline',
     'e01_09_evening/evening': decisions.evening,
+    'e01_09_evening/training_equipment': decisions.equipment ?? 'training_equip_camera',
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
   const clockBefore: Record<string, GameState['clock']> = {
