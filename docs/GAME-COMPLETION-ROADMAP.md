@@ -21,12 +21,15 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - No loot-box/random monetization logic.
 - Equipment carries explicit field-purpose slots.
 
-### TASK-010C — Growth/skill action unlocks — NEXT
-- Growth stage and equipped gear can expose additional field actions.
-- Keep rules explicit and deterministic.
-- Use authored requirements; no hidden formula or PSI threshold invention.
+### TASK-010C — Growth/skill action unlocks — IMPLEMENTED
+- Growth stage + actually equipped gear expose additional field actions.
+- Player camera unlocks next-day photo/state comparison.
+- Junho radio unlocks a next-day radio reporting-channel check.
+- Keeping an earned item in inventory without equipping it does not unlock the equipment skill.
+- Skill choices remain normal authored event choices and use the existing `choose_event` path.
+- No hidden XP formula, PSI threshold or new engine rule.
 
-### TASK-010D — Approved art export integration
+### TASK-010D — Approved art export integration — NEXT
 - Export 8 approved character portraits/map sprites.
 - Export foundation 2.5D map.
 - Register through `assets.json` and existing fallback pipeline.
