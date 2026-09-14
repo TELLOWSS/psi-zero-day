@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "event_id": "e01_08e_responsibility_clash",
+  "title_text_id": "ep01.8e.title",
+  "category_text_id": "ep01.category",
+  "chapter_text_id": "ep01.chapter",
+  "conditions": [{ "kind": "event_completed", "event_id": "e01_08d_reinspection", "minimum_count": 1 }],
+  "participants": [
+    { "role_id": "gc", "character_id": "oh_seungjae" },
+    { "role_id": "lee", "character_id": "lee_jaehoon" },
+    { "role_id": "kang", "character_id": "kang_taesik" },
+    { "role_id": "player", "character_id": "player" }
+  ],
+  "scene": { "character_asset_ids": [] },
+  "entry_node_id": "gc",
+  "dialogue": [
+    { "node_id": "gc", "type": "DIALOGUE", "text_id": "ep01.responsibility.gc", "speaker_role_id": "gc", "next_node_id": "lee", "choice_ids": [] },
+    { "node_id": "lee", "type": "DIALOGUE", "text_id": "ep01.responsibility.lee", "speaker_role_id": "lee", "next_node_id": "kang", "choice_ids": [] },
+    { "node_id": "kang", "type": "DIALOGUE", "text_id": "ep01.responsibility.kang", "speaker_role_id": "kang", "next_node_id": "report", "choice_ids": [] },
+    { "node_id": "report", "type": "CHOICE", "text_id": "ep01.responsibility.prompt", "choice_ids": ["report_one_sided", "report_defensive", "report_verify_timeline"] },
+    { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+  ],
+  "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+  "choices": [
+    {
+      "choice_id": "report_one_sided", "text_id": "ep01.responsibility.one_sided", "next_node_id": "end", "requirements": [],
+      "effects": { "immediate_effects": [
+        { "effect_id": "gc.respect.one_sided", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 },
+        { "effect_id": "lee.respect.one_sided", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -4 },
+        { "effect_id": "kang.trust.one_sided", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "trust", "delta": -3 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_basis": "one_sided" }, "ending_flags": {}, "followup_events": [] }
+    },
+    {
+      "choice_id": "report_defensive", "text_id": "ep01.responsibility.defensive", "next_node_id": "end", "requirements": [],
+      "effects": { "immediate_effects": [
+        { "effect_id": "gc.respect.defensive", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "respect", "delta": -3 },
+        { "effect_id": "lee.respect.defensive", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 },
+        { "effect_id": "kang.trust.defensive", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "trust", "delta": 2 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_basis": "defensive" }, "ending_flags": {}, "followup_events": [] }
+    },
+    {
+      "choice_id": "report_verify_timeline", "text_id": "ep01.responsibility.verify_timeline", "next_node_id": "end", "requirements": [],
+      "effects": { "immediate_effects": [
+        { "effect_id": "player.analysis.timeline", "kind": "player_stat", "stat_id": "analysis", "delta": 1 },
+        { "effect_id": "gc.respect.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+        { "effect_id": "lee.respect.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+        { "effect_id": "kang.reporting.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": 2 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_basis": "timeline" }, "ending_flags": {}, "followup_events": [] }
+    }
+  ],
+  "failure_conditions": []
+}
