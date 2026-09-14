@@ -5,3 +5,11 @@
 .strategy-map-worker[data-character="seo_jeongmin"].is-scene-participant .strategy-worker-label {
   box-shadow: 0 7px 16px rgba(48, 61, 72, .22);
 }
+
+.worker-office { left: 78%; top: 36%; }
+.strategy-map-worker[data-character="oh_seungjae"] .worker-helmet { background: #ffffff; }
+.strategy-map-worker[data-character="oh_seungjae"] .worker-body { background: #415a73; }
+.strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-label { border-color: rgba(52, 79, 105, .42); }
+.strategy-map-worker[data-character="oh_seungjae"].is-scene-participant .strategy-worker-label {
+  box-shadow: 0 7px 16px rgba(45, 70, 94, .24);
+}
