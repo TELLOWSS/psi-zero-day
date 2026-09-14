@@ -17,6 +17,18 @@ describe('Episode 01 field frictions', () => {
     expect(frictions.map(item => item.friction_id)).toEqual(['friction.reporting.aftershock']);
   });
 
+  it('shows inspection, schedule and responsibility pressure together at the first finding', () => {
+    expect(projectEpisode01Frictions('e01_08b_inspection_find').map(item => item.kind))
+      .toEqual(['inspection_pressure', 'schedule_pressure', 'responsibility_shift']);
+  });
+
+  it('keeps responsibility pressure alive through pushback and reinspection', () => {
+    expect(projectEpisode01Frictions('e01_08c_site_pushback').map(item => item.kind))
+      .toEqual(['coordination_conflict', 'responsibility_shift']);
+    expect(projectEpisode01Frictions('e01_08d_reinspection').map(item => item.kind))
+      .toEqual(['inspection_pressure', 'responsibility_shift']);
+  });
+
   it('does not invent field pressure for unrelated scenes', () => {
     expect(projectEpisode01Frictions('e01_01_arrival')).toEqual([]);
     expect(projectEpisode01Frictions(null)).toEqual([]);
