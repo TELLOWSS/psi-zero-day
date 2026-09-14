@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
 import type { StrategySignalKind } from '../app/strategy-signals';
@@ -17,6 +18,8 @@ export interface StrategyMapCopy {
   readonly pressures: string;
   readonly focus: string;
   readonly focusHint: string;
+  readonly actions: string;
+  readonly actionHint: string;
 }
 
 export interface StrategyPersonLabel {
@@ -44,25 +47,57 @@ function frictionIcon(kind: FieldFrictionKind): string {
   }
 }
 
-export function StrategyMapShell({ view, copy, text, person }: {
+function actionIcon(intent: StrategyActionIntent): string {
+  switch (intent) {
+    case 'inspect': return '⌕';
+    case 'coordinate': return '⇆';
+    case 'control': return '■';
+    case 'report': return '▤';
+    case 'protect': return '⛨';
+    case 'record': return '▧';
+  }
+}
+
+function actionFocusKey(action: StrategyAction): string {
+  switch (action.target.kind) {
+    case 'character': return action.target.character_id;
+    case 'signal': return action.target.signal_id;
+    case 'anchor': return `anchor:${action.target.anchor}`;
+    case 'site': return 'site';
+  }
+}
+
+export function StrategyMapShell({ view, copy, text, person, actions = [], onAction }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
   readonly person: (characterId: string) => StrategyPersonLabel | undefined;
+  readonly actions?: readonly StrategyAction[];
+  readonly onAction?: (action: StrategyAction) => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const effectiveFocusId = actionFocusId ?? focusId;
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const psiScore = Math.max(0, Math.min(100, Number(view.psi.values.score ?? 0)));
-  const focusedSignal = view.signals.find(signal => signal.signal_id === focusId);
-  const focusedPlacement = view.placements.find(placement => placement.character_id === focusId);
+  const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
+  const focusedPlacement = view.placements.find(placement => placement.character_id === effectiveFocusId);
   const focusedPerson = focusedPlacement ? person(focusedPlacement.character_id) : undefined;
   const focusTitle = focusedSignal
     ? text(focusedSignal.label_text_id)
-    : focusedPerson?.name ?? focusedPlacement?.character_id ?? null;
+    : focusedPerson?.name ?? focusedPlacement?.character_id ?? (effectiveFocusId === 'site' ? copy.site : null);
   const focusDetail = focusedPlacement
     ? focusedPerson?.role ?? focusedPlacement.role_id ?? ''
-    : focusedSignal ? copy.events : '';
+    : focusedSignal ? copy.events : effectiveFocusId === 'site' ? copy.actionHint : '';
+  const actionTargetLabel = (action: StrategyAction): string => {
+    if (action.target.kind === 'character') return person(action.target.character_id)?.name ?? action.target.character_id;
+    if (action.target.kind === 'signal') {
+      const signal = view.signals.find(item => item.signal_id === action.target.signal_id);
+      return signal ? text(signal.label_text_id) : copy.site;
+    }
+    return copy.site;
+  };
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id}>
     <header className="strategy-hud">
@@ -101,7 +136,7 @@ export function StrategyMapShell({ view, copy, text, person }: {
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
     </aside>
 
-    <section className="strategy-map" aria-label={copy.site}>
+    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}`} aria-label={copy.site}>
       <div className="strategy-map-sky" />
       <div className="strategy-map-road strategy-map-road-a" />
       <div className="strategy-map-road strategy-map-road-b" />
@@ -120,8 +155,9 @@ export function StrategyMapShell({ view, copy, text, person }: {
         {view.placements.map(placement => {
           const label = person(placement.character_id);
           const nearSignal = placement.nearby_signal_ids.length > 0;
+          const actionAnchorFocused = effectiveFocusId === `anchor:${placement.anchor}`;
           return <button
-            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${focusId === placement.character_id ? ' is-focused' : ''}`}
+            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === placement.character_id || actionAnchorFocused ? ' is-focused' : ''}`}
             data-character={placement.character_id}
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
             key={placement.character_id}
@@ -136,17 +172,43 @@ export function StrategyMapShell({ view, copy, text, person }: {
       </div>
 
       <div className="strategy-signal-layer" aria-live="polite">
-        {view.signals.map(signal => <button
-          className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${focusId === signal.signal_id ? ' is-focused' : ''}`}
-          data-signal={signal.signal_id}
-          key={signal.signal_id}
-          type="button"
-          onClick={() => setFocusId(signal.signal_id)}
-        >
-          <span aria-hidden="true">{signalIcon(signal.kind)}</span>
-          <strong>{text(signal.label_text_id)}</strong>
-        </button>)}
+        {view.signals.map(signal => {
+          const actionAnchorFocused = effectiveFocusId === `anchor:${signal.anchor}`;
+          return <button
+            className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${effectiveFocusId === signal.signal_id || actionAnchorFocused ? ' is-focused' : ''}`}
+            data-signal={signal.signal_id}
+            key={signal.signal_id}
+            type="button"
+            onClick={() => setFocusId(signal.signal_id)}
+          >
+            <span aria-hidden="true">{signalIcon(signal.kind)}</span>
+            <strong>{text(signal.label_text_id)}</strong>
+          </button>;
+        })}
       </div>
+
+      {actions.length ? <aside className="strategy-action-tray" aria-label={copy.actions}>
+        <div className="strategy-action-heading"><strong>{copy.actions}</strong><span>{copy.actionHint}</span></div>
+        <div className="strategy-action-list">
+          {actions.map((action, index) => <button
+            key={action.choice_id}
+            type="button"
+            disabled={!action.enabled}
+            data-choice={action.choice_id}
+            data-action-target={actionFocusKey(action)}
+            onMouseEnter={() => setActionFocusId(actionFocusKey(action))}
+            onMouseLeave={() => setActionFocusId(null)}
+            onFocus={() => setActionFocusId(actionFocusKey(action))}
+            onBlur={() => setActionFocusId(null)}
+            onClick={event => { if (event.detail < 2 && action.enabled) onAction?.(action); }}
+          >
+            <span className="strategy-action-number">{index + 1}</span>
+            <span className="strategy-action-icon" aria-hidden="true">{actionIcon(action.intent)}</span>
+            <span className="strategy-action-copy"><strong>{text(action.label_text_id)}</strong><small>{actionTargetLabel(action)}</small></span>
+            <span aria-hidden="true">↗</span>
+          </button>)}
+        </div>
+      </aside> : null}
     </section>
 
     <footer className="strategy-roster" aria-label={copy.roster}>
