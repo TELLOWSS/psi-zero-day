@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { EpisodeSession } from '../src/app/episode-session';
-import { projectStrategyView } from '../src/app/strategy-view';
+import { projectStrategyView } from '../src/app/strategy-view';
 
 describe('StrategyView adapter', () => {
   it('projects the current engine state without owning game rules', () => {
