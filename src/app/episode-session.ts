@@ -1,5 +1,5 @@
 import type { GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
-import { createEpisode01Registry, episode01Manifest } from '../content/episode01';
+import { createEpisode01Registry } from '../content/episode01';
 import { CoreEngine, createRun, eventCandidates, eventPresentation } from '../engine';
 import { getDialogueView } from '../engine/dialogue';
 import type { DialogueView } from '../engine/dialogue';
@@ -8,6 +8,7 @@ import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
 import { projectStrategyView } from './strategy-view';
 import type { StrategyView } from './strategy-view';
+import { episode01ExpectedRunTotal } from './episode01-run-progress';
 import config from '../../content/episode01/session.json';
 import uiKo from '../../content/localization/playable-ko.json';
 import inspectionUiKo from '../../content/localization/inspection-ui-ko.json';
@@ -77,7 +78,6 @@ export class EpisodeSession {
   dispatch = (command: EngineCommand, revision: number): boolean => this.#act(revision, () => {
     if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
     const p = this.#snapshot.presentation.find(c => 'node_id' in c);
-    // Public UI boundary accepts presentation-driven input, never arbitrary rule/effect commands.
     if (!p || !('node_id' in p) || !('instance_id' in command) || command.instance_id !== p.instance_id) return false;
     if (command.type === 'choose_event') {
       if (p.type !== 'SHOW_CHOICE' || command.node_id !== p.node_id || !p.choices.some(c => c.choice_id === command.choice_id && c.enabled)) return false;
@@ -114,12 +114,11 @@ export class EpisodeSession {
       presentation: state ? eventPresentation(state, this.#content) : Object.freeze([]),
       dialogue: state ? getDialogueView(state, this.#content) : null, relationshipFeedback: feedback,
       eventTitle: this.t(event?.title_text_id ?? 'ep01.title'), chapterTitle: this.t(event?.chapter_text_id ?? 'ep01.chapter'),
-      completed: state?.event_runtime.completion_history.length ?? 0, total: episode01Manifest.event_flow.length });
+      completed: state?.event_runtime.completion_history.length ?? 0,
+      total: state ? episode01ExpectedRunTotal(state) : 10 });
   }
   #settle(): void {
     const engine = this.#engine!;
-    // Same candidate selection, clock inputs and single-enabled gates as the approved headless driver.
-    // No graph traversal, condition evaluation or outcome computation in the application/UI.
     for (let steps = 0; steps < 50; steps++) {
       const state = engine.getState();
       if (state.flags.episode01_completed === true) return;
