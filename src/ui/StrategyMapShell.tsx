@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { strategyActionsForTarget, strategyActionTargetKey } from '../app/strategy-actions';
 import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
@@ -58,15 +59,6 @@ function actionIcon(intent: StrategyActionIntent): string {
   }
 }
 
-function actionFocusKey(action: StrategyAction): string {
-  switch (action.target.kind) {
-    case 'character': return action.target.character_id;
-    case 'signal': return action.target.signal_id;
-    case 'anchor': return `anchor:${action.target.anchor}`;
-    case 'site': return 'site';
-  }
-}
-
 export function StrategyMapShell({ view, copy, text, person, actions = [], onAction }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
@@ -78,26 +70,33 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
   const effectiveFocusId = actionFocusId ?? focusId;
+  const selectedActions = strategyActionsForTarget(actions, focusId);
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const psiScore = Math.max(0, Math.min(100, Number(view.psi.values.score ?? 0)));
   const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
   const focusedPlacement = view.placements.find(placement => placement.character_id === effectiveFocusId);
   const focusedPerson = focusedPlacement ? person(focusedPlacement.character_id) : undefined;
+  const focusedAnchor = effectiveFocusId?.startsWith('anchor:') ? effectiveFocusId.slice(7) : null;
+  const anchorTitle = focusedAnchor ? text(`ui.strategy.zone.${focusedAnchor}`) : null;
   const focusTitle = focusedSignal
     ? text(focusedSignal.label_text_id)
-    : focusedPerson?.name ?? focusedPlacement?.character_id ?? (effectiveFocusId === 'site' ? copy.site : null);
+    : focusedPerson?.name ?? focusedPlacement?.character_id ?? anchorTitle ?? (effectiveFocusId === 'site' ? copy.site : null);
   const focusDetail = focusedPlacement
     ? focusedPerson?.role ?? focusedPlacement.role_id ?? ''
-    : focusedSignal ? copy.events : effectiveFocusId === 'site' ? copy.actionHint : '';
+    : focusedSignal ? copy.events : focusedAnchor ? text('ui.strategy.zone_hint') : effectiveFocusId === 'site' ? copy.actionHint : '';
+  const hasActionsFor = (targetKey: string): boolean => strategyActionsForTarget(actions, targetKey).length > 0;
   const actionTargetLabel = (action: StrategyAction): string => {
     if (action.target.kind === 'character') return person(action.target.character_id)?.name ?? action.target.character_id;
     if (action.target.kind === 'signal') {
       const signal = view.signals.find(item => item.signal_id === action.target.signal_id);
       return signal ? text(signal.label_text_id) : copy.site;
     }
+    if (action.target.kind === 'anchor') return text(`ui.strategy.zone.${action.target.anchor}`);
     return copy.site;
   };
+
+  const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id}>
     <header className="strategy-hud">
@@ -131,7 +130,9 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
         {focusTitle ? <p><strong>{focusTitle}</strong><span>{focusDetail}</span></p> : <small>{copy.focusHint}</small>}
       </section>
 
-      <button type="button"><span aria-hidden="true">⌖</span>{copy.site}</button>
+      <button type="button" className={hasActionsFor('site') ? 'has-actions' : ''} onClick={() => setFocusId('site')}>
+        <span aria-hidden="true">⌖</span>{copy.site}{hasActionsFor('site') ? <b>{strategyActionsForTarget(actions, 'site').length}</b> : null}
+      </button>
       <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.signals.length}</b></button>
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
     </aside>
@@ -151,18 +152,32 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
         <progress value={progress} max={100} aria-label={copy.progress} />
       </div>
 
+      <div className="strategy-zone-layer" aria-label={text('ui.strategy.zones')}>
+        {zones.map(zone => {
+          const key = `anchor:${zone}`;
+          return <button
+            key={zone}
+            type="button"
+            data-zone={zone}
+            className={`strategy-zone-target zone-${zone}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
+            onClick={() => setFocusId(key)}
+          ><span>{text(`ui.strategy.zone.${zone}`)}</span>{hasActionsFor(key) ? <b>{strategyActionsForTarget(actions, key).length}</b> : null}</button>;
+        })}
+      </div>
+
       <div className="strategy-worker-layer">
         {view.placements.map(placement => {
           const label = person(placement.character_id);
           const nearSignal = placement.nearby_signal_ids.length > 0;
-          const actionAnchorFocused = effectiveFocusId === `anchor:${placement.anchor}`;
+          const key = placement.character_id;
           return <button
-            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === placement.character_id || actionAnchorFocused ? ' is-focused' : ''}`}
+            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-character={placement.character_id}
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
+            data-action-count={strategyActionsForTarget(actions, key).length}
             key={placement.character_id}
             type="button"
-            onClick={() => setFocusId(placement.character_id)}
+            onClick={() => setFocusId(key)}
           >
             <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>
             <span className="strategy-worker-label"><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></span>
@@ -173,13 +188,14 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
 
       <div className="strategy-signal-layer" aria-live="polite">
         {view.signals.map(signal => {
-          const actionAnchorFocused = effectiveFocusId === `anchor:${signal.anchor}`;
+          const key = signal.signal_id;
           return <button
-            className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${effectiveFocusId === signal.signal_id || actionAnchorFocused ? ' is-focused' : ''}`}
+            className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-signal={signal.signal_id}
+            data-action-count={strategyActionsForTarget(actions, key).length}
             key={signal.signal_id}
             type="button"
-            onClick={() => setFocusId(signal.signal_id)}
+            onClick={() => setFocusId(key)}
           >
             <span aria-hidden="true">{signalIcon(signal.kind)}</span>
             <strong>{text(signal.label_text_id)}</strong>
@@ -188,17 +204,17 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
       </div>
 
       {actions.length ? <aside className="strategy-action-tray" aria-label={copy.actions}>
-        <div className="strategy-action-heading"><strong>{copy.actions}</strong><span>{copy.actionHint}</span></div>
-        <div className="strategy-action-list">
-          {actions.map((action, index) => <button
+        <div className="strategy-action-heading"><strong>{copy.actions}</strong><span>{focusId ? focusTitle ?? copy.site : copy.actionHint}</span></div>
+        {focusId ? selectedActions.length ? <div className="strategy-action-list">
+          {selectedActions.map((action, index) => <button
             key={action.choice_id}
             type="button"
             disabled={!action.enabled}
             data-choice={action.choice_id}
-            data-action-target={actionFocusKey(action)}
-            onMouseEnter={() => setActionFocusId(actionFocusKey(action))}
+            data-action-target={strategyActionTargetKey(action.target)}
+            onMouseEnter={() => setActionFocusId(strategyActionTargetKey(action.target))}
             onMouseLeave={() => setActionFocusId(null)}
-            onFocus={() => setActionFocusId(actionFocusKey(action))}
+            onFocus={() => setActionFocusId(strategyActionTargetKey(action.target))}
             onBlur={() => setActionFocusId(null)}
             onClick={event => { if (event.detail < 2 && action.enabled) onAction?.(action); }}
           >
@@ -207,7 +223,8 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
             <span className="strategy-action-copy"><strong>{text(action.label_text_id)}</strong><small>{actionTargetLabel(action)}</small></span>
             <span aria-hidden="true">↗</span>
           </button>)}
-        </div>
+        </div> : <p className="strategy-action-empty">{text('ui.strategy.no_actions')}</p>
+        : <p className="strategy-action-empty">{copy.actionHint}</p>}
       </aside> : null}
     </section>
 
