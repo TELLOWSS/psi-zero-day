@@ -33,7 +33,7 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain(snapshot.eventTitle);
   });
 
-  it('turns the first multi-choice field decision into map actions while keeping a collapsed text fallback', () => {
+  it('marks actionable map targets first while keeping a collapsed text fallback', () => {
     const session = new EpisodeSession();
     session.start(0);
     advanceToFirstPlayerChoice(session);
@@ -43,8 +43,13 @@ describe('Casual strategy session integration', () => {
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
     expect(html).toContain('strategy-action-tray');
     expect(html).toContain('현장 행동');
-    expect(html).toContain('data-choice="delegate_kang"');
-    expect(html).toContain('data-action-target="kang_taesik"');
+    expect(html).toContain('먼저 사람·위험신호·작업구역을 선택하세요.');
+    expect(html).toContain('data-character="kang_taesik"');
+    expect(html).toContain('data-character="yoon_sungho"');
+    expect(html).toContain('data-character="lee_jaehoon"');
+    expect(html).toContain('data-character="lim_junho"');
+    expect(html).toContain('data-action-count="1"');
+    expect(html).not.toContain('data-choice="delegate_kang"');
     expect(html).toContain('텍스트 선택지 열기');
     expect(html).toContain('map-choice-fallback');
   });
