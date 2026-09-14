@@ -15,16 +15,28 @@
   letter-spacing: .04em;
 }
 .character-growth-summary > div span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #aeb7a8; }
-.character-growth-summary ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; padding: 7px 0 0; margin: 0; }
-.character-growth-summary li {
-  border-radius: 4px;
-  padding: 2px 5px;
-  background: rgba(91,110,81,.35);
-  color: #e5e8dd;
-  white-space: nowrap;
+.character-loadout-summary { margin-top: 8px; font-size: 9px; color: #c8d1c2; }
+.character-loadout-summary > strong { display: block; margin-bottom: 4px; color: #eef0e8; font-size: 9px; }
+.character-loadout-summary ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.character-loadout-summary li { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: 5px; align-items: center; }
+.character-loadout-summary li span { color: #90a394; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.training-reward-panel {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 12px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(216,192,120,.65);
+  background: rgba(55,66,48,.82);
+  color: #e9ecdf;
+  font-size: 11px;
 }
-.character-growth-summary[data-growth-stage="focused"] li { background: rgba(74,119,128,.36); }
-.character-growth-summary[data-growth-stage="skilled"] li { background: rgba(145,119,55,.4); }
+.training-reward-panel > span { color: #d8c078; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+.training-reward-panel > strong { color: #fff7d4; font-size: 12px; }
+.training-reward-panel > div { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 5px 8px; align-items: center; }
+.training-reward-panel b { color: #b9c7ae; font-weight: 500; }
+.training-reward-panel em { font-style: normal; padding: 2px 6px; border-radius: 4px; background: rgba(50,104,110,.45); color: #f0f4e9; }
 @media (max-width: 900px) {
-  .character-growth-summary { display: none; }
+  .character-growth-summary, .character-loadout-summary { display: none; }
+  .training-reward-panel { font-size: 9px; padding: 7px 9px; }
 }
