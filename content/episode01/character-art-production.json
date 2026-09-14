@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "approved_visual_direction": "commercial_casual_strategy_2_5d_construction",
+  "expression_set": ["neutral", "concern", "resolve", "relief", "conflict"],
+  "characters": [
+    {
+      "id": "player",
+      "portrait_path": "assets/episode01/characters/player-portrait.webp",
+      "map_path": "assets/episode01/characters/player-map.webp",
+      "silhouette": "compact_athletic",
+      "face_key": "young_woman_soft_v_face_focused_eyes",
+      "helmet_key": "white_blue_stripe",
+      "wardrobe_key": "blue_safety_vest",
+      "signature_prop": "inspection_tablet",
+      "signature_pose": "tablet_in_one_hand_other_hand_pointing",
+      "must_not_resemble": ["lee_jaehoon", "lim_junho"]
+    },
+    {
+      "id": "kang_taesik",
+      "portrait_path": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "map_path": "assets/episode01/characters/kang-taesik-map.webp",
+      "silhouette": "broad_heavy_square",
+      "face_key": "older_round_face_thick_mustache_weathered",
+      "helmet_key": "orange",
+      "wardrobe_key": "dark_field_jacket_orange_vest",
+      "signature_prop": "work_gloves",
+      "signature_pose": "wide_stance_pointing_instruction",
+      "must_not_resemble": ["yoon_sungho", "oh_seungjae"]
+    },
+    {
+      "id": "yoon_sungho",
+      "portrait_path": "assets/episode01/characters/yoon-sungho-portrait.webp",
+      "map_path": "assets/episode01/characters/yoon-sungho-map.webp",
+      "silhouette": "muscular_v_shape",
+      "face_key": "angular_tanned_face_short_beard",
+      "helmet_key": "yellow",
+      "wardrobe_key": "brown_rebar_workwear",
+      "signature_prop": "rebar_bundle",
+      "signature_pose": "rebar_on_shoulder_or_crossed_arms",
+      "must_not_resemble": ["kang_taesik"]
+    },
+    {
+      "id": "lee_jaehoon",
+      "portrait_path": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "map_path": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "silhouette": "tall_slim_vertical",
+      "face_key": "early_thirties_clean_narrow_face",
+      "helmet_key": "white",
+      "wardrobe_key": "blue_site_jacket_clean",
+      "signature_prop": "rolled_drawing",
+      "signature_pose": "standing_straight_drawing_under_arm",
+      "must_not_resemble": ["player", "lim_junho", "seo_jeongmin"]
+    },
+    {
+      "id": "lim_junho",
+      "portrait_path": "assets/episode01/characters/lim-junho-portrait.webp",
+      "map_path": "assets/episode01/characters/lim-junho-map.webp",
+      "silhouette": "small_narrow_young",
+      "face_key": "early_twenty_round_face_large_bright_eyes",
+      "helmet_key": "yellow_small",
+      "wardrobe_key": "green_high_visibility_vest",
+      "signature_prop": "handheld_radio",
+      "signature_pose": "slightly_forward_eager_posture_radio_in_hand",
+      "must_not_resemble": ["player", "lee_jaehoon"]
+    },
+    {
+      "id": "choi_minseok",
+      "portrait_path": "assets/episode01/characters/choi-minseok-portrait.webp",
+      "map_path": "assets/episode01/characters/choi-minseok-map.webp",
+      "silhouette": "dynamic_raised_arms",
+      "face_key": "late_thirties_lively_face_strong_brows",
+      "helmet_key": "orange_signalman",
+      "wardrobe_key": "high_visibility_orange_vest",
+      "signature_prop": "dual_red_signal_batons",
+      "signature_pose": "both_signal_batons_raised_asymmetric",
+      "must_not_resemble": ["kang_taesik"]
+    },
+    {
+      "id": "seo_jeongmin",
+      "portrait_path": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "map_path": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "silhouette": "lean_formal",
+      "face_key": "mid_forties_thin_face_rectangular_glasses",
+      "helmet_key": "white_inspector",
+      "wardrobe_key": "dark_inspection_jacket",
+      "signature_prop": "clipboard",
+      "signature_pose": "clipboard_close_to_chest_observing",
+      "must_not_resemble": ["lee_jaehoon", "oh_seungjae"]
+    },
+    {
+      "id": "oh_seungjae",
+      "portrait_path": "assets/episode01/characters/oh-seungjae-portrait.webp",
+      "map_path": "assets/episode01/characters/oh-seungjae-map.webp",
+      "silhouette": "broad_managerial",
+      "face_key": "early_forties_broad_tired_manager_face",
+      "helmet_key": "white_manager",
+      "wardrobe_key": "navy_manager_site_jacket",
+      "signature_prop": "smartphone_or_radio",
+      "signature_pose": "phone_at_ear_other_hand_on_hip",
+      "must_not_resemble": ["seo_jeongmin", "kang_taesik"]
+    }
+  ]
+}
