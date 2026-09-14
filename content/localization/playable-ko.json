@@ -45,6 +45,8 @@
     "ui.training.complete": "훈련 완료",
     "ui.training.reward": "획득",
     "ui.training.equipped": "장착",
+    "training.player.site_basics.title": "현장안전 기본훈련",
+    "training.lim_junho.reporting.title": "위험신호 보고훈련",
     "ui.equipment.title": "장착 장비",
     "ui.equipment.primary_tool": "주도구",
     "ui.equipment.secondary_tool": "보조도구",
