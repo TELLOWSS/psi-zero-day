@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { StrategyView } from '../app/strategy-view';
+import type { FieldFrictionKind } from '../app/strategy-frictions';
 import type { StrategySignalKind } from '../app/strategy-signals';
 
 export interface StrategyMapCopy {
@@ -12,6 +14,9 @@ export interface StrategyMapCopy {
   readonly site: string;
   readonly events: string;
   readonly progress: string;
+  readonly pressures: string;
+  readonly focus: string;
+  readonly focusHint: string;
 }
 
 export interface StrategyPersonLabel {
@@ -28,15 +33,36 @@ function signalIcon(kind: StrategySignalKind): string {
   }
 }
 
+function frictionIcon(kind: FieldFrictionKind): string {
+  switch (kind) {
+    case 'schedule_pressure': return '◷';
+    case 'coordination_conflict': return '⇆';
+    case 'reporting_hesitation': return '…';
+    case 'hierarchy_pressure': return '▲';
+    case 'responsibility_shift': return '↔';
+    case 'inspection_pressure': return '✓';
+  }
+}
+
 export function StrategyMapShell({ view, copy, text, person }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
   readonly person: (characterId: string) => StrategyPersonLabel | undefined;
 }) {
+  const [focusId, setFocusId] = useState<string | null>(null);
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const psiScore = Math.max(0, Math.min(100, Number(view.psi.values.score ?? 0)));
+  const focusedSignal = view.signals.find(signal => signal.signal_id === focusId);
+  const focusedPlacement = view.placements.find(placement => placement.character_id === focusId);
+  const focusedPerson = focusedPlacement ? person(focusedPlacement.character_id) : undefined;
+  const focusTitle = focusedSignal
+    ? text(focusedSignal.label_text_id)
+    : focusedPerson?.name ?? focusedPlacement?.character_id ?? null;
+  const focusDetail = focusedPlacement
+    ? focusedPerson?.role ?? focusedPlacement.role_id ?? ''
+    : focusedSignal ? copy.events : '';
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id}>
     <header className="strategy-hud">
@@ -54,6 +80,22 @@ export function StrategyMapShell({ view, copy, text, person }: {
         <p>{copy.stage}<strong>{view.construction.stage_id}</strong></p>
         <p>{copy.progress}<strong>{progress}%</strong></p>
       </section>
+
+      <section className="strategy-panel strategy-friction-panel" aria-label={copy.pressures}>
+        <h2>{copy.pressures}</h2>
+        <div className="strategy-friction-list">
+          {view.frictions.length ? view.frictions.map(friction => <article key={friction.friction_id} data-friction={friction.friction_id}>
+            <span aria-hidden="true">{frictionIcon(friction.kind)}</span>
+            <div><strong>{text(friction.label_text_id)}</strong><small>{text(friction.detail_text_id)}</small></div>
+          </article>) : <p className="strategy-friction-empty">-</p>}
+        </div>
+      </section>
+
+      <section className="strategy-panel strategy-focus-panel" aria-live="polite">
+        <h2>{copy.focus}</h2>
+        {focusTitle ? <p><strong>{focusTitle}</strong><span>{focusDetail}</span></p> : <small>{copy.focusHint}</small>}
+      </section>
+
       <button type="button"><span aria-hidden="true">⌖</span>{copy.site}</button>
       <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.signals.length}</b></button>
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
@@ -78,29 +120,32 @@ export function StrategyMapShell({ view, copy, text, person }: {
         {view.placements.map(placement => {
           const label = person(placement.character_id);
           const nearSignal = placement.nearby_signal_ids.length > 0;
-          return <div
-            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}`}
+          return <button
+            className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${focusId === placement.character_id ? ' is-focused' : ''}`}
             data-character={placement.character_id}
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
             key={placement.character_id}
+            type="button"
+            onClick={() => setFocusId(placement.character_id)}
           >
-            <div className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></div>
-            <div className="strategy-worker-label"><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></div>
+            <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>
+            <span className="strategy-worker-label"><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
-          </div>;
+          </button>;
         })}
       </div>
 
       <div className="strategy-signal-layer" aria-live="polite">
-        {view.signals.map(signal => <div
-          className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}`}
+        {view.signals.map(signal => <button
+          className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${focusId === signal.signal_id ? ' is-focused' : ''}`}
           data-signal={signal.signal_id}
           key={signal.signal_id}
-          role="status"
+          type="button"
+          onClick={() => setFocusId(signal.signal_id)}
         >
           <span aria-hidden="true">{signalIcon(signal.kind)}</span>
           <strong>{text(signal.label_text_id)}</strong>
-        </div>)}
+        </button>)}
       </div>
     </section>
 
