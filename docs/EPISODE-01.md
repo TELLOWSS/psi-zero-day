@@ -1,24 +1,34 @@
 # EPISODE 01 — 첫 타설
 
-상태: **Vertical Slice Content v1 implemented**. 작업 브랜치 `astra/task-004-episode01-content`. 목표 플레이타임은 약 15분이며 실제 플레이 시간은 UI 없이 측정하지 않았다.
+상태: **Vertical Slice + Casual Strategy/Field Realism integration in progress**. 현재 작업 브랜치 `astra/task-007-casual-strategy-foundation`.
 
 ## 핵심 출연진
 
-PLAYER(현장 안전관리자), 강태식(형틀반장·52), 윤성호(철근반장·48), 이재훈(공사대리·33), 임준호(신입근로자·23), 최민석(크레인 신호수·39). 추가 출연진 없음.
+PLAYER(현장 안전관리자), 강태식(형틀반장·52), 윤성호(철근반장·48), 이재훈(공사대리·33), 임준호(신입근로자·23), 최민석(크레인 신호수·39). 실존 회사·현장·인물을 직접 사용하지 않는다.
 
 ## 이벤트 흐름
 
-ARRIVAL → MEET_KANG → PLAN_BREAKS → JUNHO_SIGNAL(임준호를 따라간 경우) → COMMAND → PUMP_ARRIVAL → FIRST_POUR → REACTIONS → EVENING → NEXT_DAY_TEASE.
+ARRIVAL → MEET_KANG → PLAN_BREAKS → JUNHO_SIGNAL(임준호를 따라간 경우) → COMMAND → PUMP_ARRIVAL → FIRST_POUR → REACTIONS → **REPORTING_RETURN** → EVENING → NEXT_DAY_TEASE.
 
-`content/episode01/manifest.json`의 bundle 정보와 characters/relations/events/ko JSON을 `src/content/episode01.ts`의 `createEpisode01Registry()`가 실제 ContentBundle로 조합·검증한다. 기존 manifest와 ko 데이터를 확장했으며 대문자 원본 식별자를 보존하고 실제 ID는 소문자로 대응한다.
+`REPORTING_RETURN(e01_08a_reporting_return)`은 TASK-008A에서 추가된 지연 결과 장면이다. 플레이어에게 새 정답 문제를 제시하지 않는다. 앞선 선택을 기존 condition/flag/relationship 규칙으로 판정해 활성 선택지 하나만 남기고, headless driver와 EpisodeSession이 그 선택을 자동 처리한 뒤 결과 장면만 보여준다.
 
-10개 이벤트를 이전 completion과 flag로 연결한다. JUNHO_SIGNAL은 followed_junho일 때만 진입하며 이 경우 COMMAND는 신호 이벤트 완료를 기다린다. COMMAND는 경사로 대응과 진입 통제를 서로 다른 CHOICE 노드에서 처리한다. 네 NPC를 기존 selector로 바인딩하고 context_relation으로 NPC → PLAYER 관계를 변경한다.
+`content/episode01/consequence-events.json`에 후속 사건을 별도 보관하며 `src/content/episode01-consequences.ts`가 기존 이벤트를 보존한 채 REACTIONS 뒤에 삽입한다. 기존 `e01_09_evening`은 REPORTING_RETURN 완료 이후에만 진입하도록 조립 단계에서 게이트된다. CoreEngine 규칙은 변경하지 않는다.
 
-PUMP_ARRIVAL은 RELATION_CONFLICT → BEST_CONTROL → NEAR_MISS → CONTROLLED_DELAY 순서로 상위 조건을 제외한다. 기존 CHOICE requirements를 배타적인 분기 게이트로 사용한다. Headless 드라이버는 유일하게 활성화된 선택을 제출하며 결과를 계산하거나 상태를 직접 수정하지 않는다. 결과 분기와 반응 분기의 선택도 기존 choice_history에 남는다. 새 자동 분기 primitive나 UI 동작은 추가하지 않았다.
+## 첫 번째 지연 관계 체인
 
-FIRST_POUR 완료 시 FOUNDATION progress만 +4. REACTIONS는 강태식 trust 38, 윤성호 respect 33, 임준호 reporting 28을 경계로 다른 text_id를 출력한다. OPENNESS는 승인된 reporting으로 표현한다. 일정 우선 선택은 negotiation +2와 이재훈 respect +4이며 회사평가 전용 필드를 변경하지 않는다.
+임준호의 초기 신호에 대한 대응이 작업이 끝난 뒤 다시 관계 결과로 돌아온다.
 
-NPC experience/morale/fatigue와 양방향 초기 관계는 승인값이다. 필요 없는 NPC stat·성격·약점은 추가하지 않았다. 미정 국적·PLAYER 나이는 미정으로 표기한다. CharacterDefinition의 PLAYER experience/morale/fatigue는 createRun이 사용하지 않는 필수 스키마 자리값 0이며 게임 능력 기본값이 아니다. Run의 나머지 플레이어 수치·공정 시작값 10·검증 범위 0~100은 테스트 helper의 명시 입력으로만 둔다. 공정 전환 임계값을 정의하지 않는다.
+- `follow_junho → listen_more`: 보고 관계가 기존 36에서 **40**으로 추가 강화되고 `reporting_return_state=reinforced`.
+- `follow_junho → dismiss`: REACTIONS 시점에는 reporting 28이어서 긍정 반응이 가능하지만, 이후 결과 장면에서 **22**로 하락하고 `reporting_return_state=suppressed`.
+- 임준호를 따라가지 않음: 관계값을 억지로 감점하지 않고 기존 20을 유지하되 `reporting_return_state=missed`로 기록.
+
+이 구조의 목적은 ‘올바른 안전 선택 = 즉시 점수 획득’이 아니라 **사람이 다음에 위험을 말할지 말지에 앞선 대응이 영향을 준다**는 현장 관계를 게임 상태로 남기는 것이다. 향후 에피소드에서는 이 flag/관계 상태를 조건으로 재보고, 재지적, 작업중지 협조, 책임 공방 같은 후속 사건을 연결할 수 있다.
+
+## 기존 주요 흐름
+
+JUNHO_SIGNAL은 `followed_junho`일 때만 진입하며 이 경우 COMMAND는 신호 이벤트 완료를 기다린다. COMMAND는 경사로 대응과 진입 통제를 서로 다른 CHOICE 노드에서 처리한다. 네 NPC를 selector로 바인딩하고 context_relation으로 NPC → PLAYER 관계를 변경한다.
+
+PUMP_ARRIVAL은 RELATION_CONFLICT → BEST_CONTROL → NEAR_MISS → CONTROLLED_DELAY 우선순위로 배타 분기한다. FIRST_POUR 완료 시 FOUNDATION progress만 +4. REACTIONS는 강태식 trust 38, 윤성호 respect 33, 임준호 reporting 28을 경계로 다른 text_id를 출력한다.
 
 ## 주요 flag
 
@@ -27,27 +37,27 @@ NPC experience/morale/fatigue와 양방향 초기 관계는 승인값이다. 필
 - `ramp_verified`, `direct_ramp_check`, `minseok_checked_ramp`, `ramp_unverified`: 경사로 판단.
 - `entrance_controlled`, `pump_delayed`, `relation_conflict`: 진입 통제 판단.
 - `pump_result`, `first_pour_completed`, `episode01_completed`: 결과·타설·에피소드 완료.
+- `reporting_return_state`: `reinforced | suppressed | missed`. TASK-008A의 지연 관계 결과.
 - `evening_rest`, `evening_family`, `evening_study`, `evening_field_note`: 저녁 선택.
 - `psi_seed_day01`: FIELD_NOTE를 선택한 경우에만 true.
 
-## 4개 headless 경로
+## 대표 4개 headless 경로
 
-- A: follow_junho → listen_more → ask_minseok → assign_crew → BEST_CONTROL → field_note.
-- B: negotiate_yoon → check_self → request_delay → CONTROLLED_DELAY → study.
-- C: coordinate_schedule → keep_schedule → assign_crew → NEAR_MISS → family. 인명사고 없음.
-- D: delegate_kang → check_self → force_clear → RELATION_CONFLICT → rest.
+- A: follow_junho → listen_more → ask_minseok → assign_crew → BEST_CONTROL → **REPORTING_RETURN reinforced** → field_note.
+- B: negotiate_yoon → check_self → request_delay → CONTROLLED_DELAY → **REPORTING_RETURN missed** → study.
+- C: coordinate_schedule → keep_schedule → assign_crew → NEAR_MISS → **REPORTING_RETURN missed** → family. 인명사고 없음.
+- D: delegate_kang → check_self → force_clear → RELATION_CONFLICT → **REPORTING_RETURN missed** → rest.
 
-`tests/helpers/episode01-playthrough.ts`가 실제 Registry 데이터와 CoreEngine 명령만 사용한다. 네 경로의 전체 발생·완료·선택 이력, 관계 수치와 방향, 전체 flag, 공정 +4, 반응 text_id를 검사한다. 동일 seed 재실행 및 매 명령 후 JSON 저장/복원 결과가 동일하며 effect 중복이 없다. 총 45개 도달 가능한 낮 판단 조합을 끝까지 실행하여 결과 공백·중복과 우선순위를 검사한다.
+`tests/helpers/episode01-playthrough.ts`는 실제 Registry 데이터와 CoreEngine 명령만 사용한다. TASK-008A 이후 `tests/episode01-consequence.test.ts`가 reinforced/suppressed/missed 세 갈래와 최종 reporting 값을 별도로 검증하며, `tests/episode01.test.ts`의 대표 경로 및 45개 도달 가능한 낮 판단 조합에도 새 자동 결과 선택을 포함했다.
 
-Headless 시간 입력은 E03 오전, E07 오후, E09 저녁, E10 DAY 02 PRE_WORK로 명시하여 advance_slot 명령으로 진행한다. 콘텐츠의 실행 자격은 요청대로 completion/flag 기반이며 별도 시각 조건은 도입하지 않는다. E10은 다음 날 암시 문장과 완료 flag만 실행한다.
+## 캐주얼 전략/현장 현실감 연결
 
-## PSI seed 처리
+StrategyView는 기존 엔진 상태를 읽기 전용으로 투영한다. 위험신호, 캐릭터 위치, 현장 압박을 UI에서 보여주지만 결과 계산은 하지 않는다. REPORTING_RETURN 장면에서는 `지난 판단의 여파`가 현장 압박 카드에 나타나며, “위험은 지나가도 사람은 기억한다”는 관계 후폭풍을 표현한다.
 
-FIELD_NOTE의 기록 문장은 ko locale의 `ep01.evening.field_note.record`에 원문 그대로 보존했다. 숨은 psi_seed_day01=true와 analysis +1만 반영한다. 다른 저녁 선택은 seed를 설정하지 않는다. STUDY는 learning +1. 모든 경로에서 PSI/Ending Runtime은 초기 상태를 유지하며 표시 텍스트에 PSI 기능·점수·명칭이나 GOOD/BAD 결과 표기를 넣지 않는다.
+현장 현실성 기준은 `docs/FIELD-REALISM.md`를 따른다. 이후 감리 지적·재지적, 임시조치 불인정, 공정팀 반발, 협력업체/원도급 책임공방, TBM과 실제 작업의 괴리, 근로자 보고 위축 등을 같은 방식의 후속 결과 체인으로 확장한다.
 
-## 테스트 결과
+## 검증 상태
 
-- `npm test`: 8개 파일, **197개 PASS**(기존 128개 + Episode 01 신규 69개).
-- `npm run typecheck`: PASS. 기존 React/DOM 없는 엔진 검사도 유지.
-- `npm run build`: PASS.
-- 실제 콘텐츠의 character/relation/event/node/choice/text/participant/effect 참조를 고의로 훼손하는 9개 검증 실패 테스트 포함. 기존 테스트와 domain/engine 구현은 수정하지 않았다.
+TASK-004 시점 기준 기록은 `npm test` 197 PASS, `npm run typecheck` PASS, `npm run build` PASS였다.
+
+TASK-007~008A에서는 신규 StrategyView/UI/현실성/후속 결과 테스트를 추가했다. 현재 연결된 GitHub 저장소에는 자동 CI 체크가 없어 이 브랜치의 최신 `npm test`, `npm run typecheck`, `npm run build` 실행 결과는 아직 확보하지 못했다. 따라서 최신 PASS 수를 문서에 임의로 기재하지 않는다.
