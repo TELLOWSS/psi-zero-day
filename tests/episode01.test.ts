@@ -10,33 +10,40 @@ import type { EpisodeDecisions } from './helpers/episode01-playthrough';
 import ko from '../content/episode01/ko.json';
 import approvedText from './fixtures/episode01-approved-text.json';
 
-const paths: { name: string; decisions: EpisodeDecisions; result: string;
+const paths: { name: string; decisions: EpisodeDecisions; result: string; consequence: 'reinforced' | 'missed';
   relations: [number, number, number, number, number]; negotiation: number; reaction: string[] }[] = [
   { name: 'A', decisions: { plan: 'follow_junho', signal: 'listen_more', ramp: 'ask_minseok', entrance: 'assign_crew', evening: 'field_note' },
-    result: 'BEST_CONTROL', relations: [33, 28, 30, 36, 48], negotiation: 30, reaction: ['kang.low', 'yoon.low', 'junho.high'] },
+    result: 'BEST_CONTROL', consequence: 'reinforced', relations: [33, 28, 30, 40, 48], negotiation: 30,
+    reaction: ['kang.low', 'yoon.low', 'junho.high'] },
   { name: 'B', decisions: { plan: 'negotiate_yoon', ramp: 'check_self', entrance: 'request_delay', evening: 'study' },
-    result: 'CONTROLLED_DELAY', relations: [30, 33, 33, 20, 45], negotiation: 31, reaction: ['kang.low', 'yoon.high', 'junho.low'] },
+    result: 'CONTROLLED_DELAY', consequence: 'missed', relations: [30, 33, 33, 20, 45], negotiation: 31,
+    reaction: ['kang.low', 'yoon.high', 'junho.low'] },
   { name: 'C', decisions: { plan: 'coordinate_schedule', ramp: 'keep_schedule', entrance: 'assign_crew', evening: 'family' },
-    result: 'NEAR_MISS', relations: [33, 28, 34, 20, 45], negotiation: 32, reaction: ['kang.low', 'yoon.low', 'junho.low'] },
+    result: 'NEAR_MISS', consequence: 'missed', relations: [33, 28, 34, 20, 45], negotiation: 32,
+    reaction: ['kang.low', 'yoon.low', 'junho.low'] },
   { name: 'D', decisions: { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
-    result: 'RELATION_CONFLICT', relations: [33, 20, 30, 20, 45], negotiation: 30, reaction: ['kang.low', 'yoon.low', 'junho.low'] },
+    result: 'RELATION_CONFLICT', consequence: 'missed', relations: [33, 20, 30, 20, 45], negotiation: 30,
+    reaction: ['kang.low', 'yoon.low', 'junho.low'] },
 ];
 const relationFields = [
   ['kang_taesik', 'trust'], ['yoon_sungho', 'respect'], ['lee_jaehoon', 'respect'],
   ['lim_junho', 'reporting'], ['choi_minseok', 'reporting'],
 ] as const;
 const historyEvents = (state: GameState) => state.event_runtime.completion_history.map(item => item.event_id);
-const pathFlags: Record<string, Record<string, boolean>> = {
+const pathFlags: Record<string, Record<string, boolean | string>> = {
   A: { followed_junho: true, junho_opened_up: true, ramp_signal_known: true, ramp_verified: true,
-    minseok_checked_ramp: true, entrance_controlled: true, evening_field_note: true, psi_seed_day01: true },
-  B: { negotiated_rebar: true, ramp_verified: true, direct_ramp_check: true, pump_delayed: true, evening_study: true },
-  C: { schedule_first: true, ramp_unverified: true, entrance_controlled: true, evening_family: true },
+    minseok_checked_ramp: true, entrance_controlled: true, reporting_return_state: 'reinforced',
+    evening_field_note: true, psi_seed_day01: true },
+  B: { negotiated_rebar: true, ramp_verified: true, direct_ramp_check: true, pump_delayed: true,
+    reporting_return_state: 'missed', evening_study: true },
+  C: { schedule_first: true, ramp_unverified: true, entrance_controlled: true,
+    reporting_return_state: 'missed', evening_family: true },
   D: { delegated_cleanup_kang: true, ramp_verified: true, direct_ramp_check: true, entrance_controlled: true,
-    relation_conflict: true, evening_rest: true },
+    relation_conflict: true, reporting_return_state: 'missed', evening_rest: true },
 };
 
 describe('Episode 01 actual content', () => {
-  it('loads the approved cast, all ten event definitions and directed initial relationships', () => {
+  it('loads the approved cast, all eleven event definitions and directed initial relationships', () => {
     const content = createEpisode01Registry().getValidatedContent();
     expect(content.characters.map(c => c.id)).toEqual(episode01Manifest.cast.map(c => c.runtime_id));
     expect(content.events.map(e => e.event_id)).toEqual(eventOrder);
@@ -91,16 +98,20 @@ describe('Episode 01 actual content', () => {
     expect(state.ending_runtime).toEqual(initial.ending_runtime);
     expect(state.clock).toEqual({ day: 2, slot: 'PRE_WORK' });
     const expectedChoices = [path.decisions.plan, ...(path.decisions.signal ? [path.decisions.signal] : []),
-      path.decisions.ramp, path.decisions.entrance, path.result.toLowerCase(), ...path.reaction, path.decisions.evening];
+      path.decisions.ramp, path.decisions.entrance, path.result.toLowerCase(), ...path.reaction,
+      `reporting_return_${path.consequence}`, path.decisions.evening];
     expect(state.event_runtime.choice_history.map(item => item.choice_id)).toEqual(expectedChoices);
     expect(state.event_runtime.choice_history).toEqual(trace.flatMap(item => item.command.type === 'choose_event'
       ? [{ instance_id: item.command.instance_id, choice_id: item.command.choice_id }] : []));
     expect(new Set(state.event_runtime.applied_effect_ids).size).toBe(state.event_runtime.applied_effect_ids.length);
     const reactions = state.event_runtime.finished_instances.find(i => i.event_id === 'e01_08_reactions')!;
     expect(reactions.selected_choice_ids).toEqual(path.reaction);
+    const consequence = state.event_runtime.finished_instances.find(i => i.event_id === 'e01_08a_reporting_return')!;
+    expect(consequence.selected_choice_ids).toEqual([`reporting_return_${path.consequence}`]);
     const texts = trace.flatMap(item => item.presentation.flatMap(p => 'text_id' in p ? [p.text_id] : []));
     for (const reaction of path.reaction) expect(texts).toContain(`ep01.reactions.${reaction}`);
     expect(texts).toContain(`ep01.pump.${path.result.toLowerCase()}`);
+    expect(texts).toContain(`ep01.reporting_return.${path.consequence}`);
     expect(texts.includes('ep01.evening.field_note.record')).toBe(path.decisions.evening === 'field_note');
     expect(eventCandidates(state, episodeContent, 'foundation')).toEqual([]);
     expect(JSON.parse(JSON.stringify(state))).toEqual(state);
@@ -157,7 +168,7 @@ describe('Episode 01 actual content', () => {
     expect(instance.visited_node_ids).toEqual(['situation', 'ramp', 'entrance', 'end']);
     expect(episodeContent.events.find(e => e.event_id === instance.event_id)!.participants.every(p => p.selector !== undefined)).toBe(true);
     expect(run.state.flags).toMatchObject({ followed_junho: true, junho_opened_up: true, ramp_signal_known: true,
-      ramp_verified: true, minseok_checked_ramp: true, entrance_controlled: true });
+      ramp_verified: true, minseok_checked_ramp: true, entrance_controlled: true, reporting_return_state: 'reinforced' });
   });
 });
 
@@ -186,20 +197,26 @@ describe('Episode 01 exhaustive reachable command decisions', () => {
     expect(state.flags.episode01_completed).toBe(true);
     expect(state.event_runtime.finished_instances.every(i => i.status === 'COMPLETED')).toBe(true);
     for (const item of trace) for (const p of item.presentation) {
-      if (p.type === 'SHOW_CHOICE' && (p.instance_id.endsWith('e01_06_pump_arrival') || p.instance_id.endsWith('e01_08_reactions'))) {
+      if (p.type === 'SHOW_CHOICE' && (p.instance_id.endsWith('e01_06_pump_arrival') ||
+        p.instance_id.endsWith('e01_08_reactions') || p.instance_id.endsWith('e01_08a_reporting_return'))) {
         expect(p.choices.filter(c => c.enabled)).toHaveLength(1);
       }
     }
-    if (decisions.signal === 'dismiss') expect(state.flags).toMatchObject({ junho_opened_up: false, ramp_signal_known: false });
+    if (decisions.signal === 'dismiss') {
+      expect(state.flags).toMatchObject({ junho_opened_up: false, ramp_signal_known: false, reporting_return_state: 'suppressed' });
+      expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(22);
+    }
   });
 
-  it('shows Kang positive response at the exact trust boundary and Junho opening at 28', () => {
+  it('shows Kang positive response at the trust boundary and delayed reporting fallout after dismissal', () => {
     const kang = playEpisode({ plan: 'delegate_kang', ramp: 'check_self', entrance: 'request_delay', evening: 'rest' }).state;
     expect(getRelation(kang.relations, 'kang_taesik', 'player')!.trust).toBe(38);
     expect(kang.event_runtime.finished_instances.find(i => i.event_id === 'e01_08_reactions')!.selected_choice_ids).toContain('kang.high');
     const junho = playEpisode({ plan: 'follow_junho', signal: 'dismiss', ramp: 'check_self', entrance: 'request_delay', evening: 'rest' }).state;
-    expect(getRelation(junho.relations, 'lim_junho', 'player')!.reporting).toBe(28);
     expect(junho.event_runtime.finished_instances.find(i => i.event_id === 'e01_08_reactions')!.selected_choice_ids).toContain('junho.high');
+    expect(junho.event_runtime.finished_instances.find(i => i.event_id === 'e01_08a_reporting_return')!.selected_choice_ids)
+      .toEqual(['reporting_return_suppressed']);
+    expect(getRelation(junho.relations, 'lim_junho', 'player')!.reporting).toBe(22);
   });
 });
 
