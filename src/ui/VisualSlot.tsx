@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { CharacterGrowthView } from '../app/character-growth';
+import type { CharacterLoadoutView } from '../app/character-loadout';
 import visuals from '../../content/episode01/visuals.json';
 
 interface CharacterVisualPlan { accent?: string }
@@ -16,10 +17,11 @@ export function VisualImage({ uri, alt, className }: { uri?: string | null; alt:
   const src = /^(?:https?:|data:)/.test(uri) ? uri : `${import.meta.env.BASE_URL}${uri.replace(/^\/?(?:public\/)?/, '')}`;
   return <img className={className} src={src} alt={alt} onError={() => setFailed(uri)} />;
 }
-export function CharacterCard({ person, portraitUri, growth }: {
+export function CharacterCard({ person, portraitUri, growth, loadout }: {
   person: { id: string; name: string; role: string };
   portraitUri?: string;
   growth?: CharacterGrowthView;
+  loadout?: CharacterLoadoutView;
 }) {
   const visual = characterVisual(person.id);
   return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={`${person.name} · ${person.role}`}>
@@ -30,7 +32,10 @@ export function CharacterCard({ person, portraitUri, growth }: {
     <div className="character-identity"><span className="identity-rule" /><strong>{person.name}</strong><span>{person.role}</span></div>
     {growth ? <div className="character-growth-summary" data-growth-stage={growth.stage}>
       <div><strong>{growth.stage_label}</strong><span>{growth.expression}</span></div>
-      <ul>{growth.items.map(item => <li key={item.item_id}>{item.name}</li>)}</ul>
+    </div> : null}
+    {loadout?.equipped.length ? <div className="character-loadout-summary" aria-label="장착 장비">
+      <strong>장착</strong>
+      <ul>{loadout.equipped.map(item => <li key={item.slot}><span>{item.slot}</span>{item.name}</li>)}</ul>
     </div> : null}
   </aside>;
 }
