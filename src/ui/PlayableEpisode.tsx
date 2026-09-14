@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
+import { projectStrategyActions } from '../app/strategy-actions';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
@@ -17,6 +18,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
+  const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
   const strategyCopy = {
     brand: t('ui.brand'),
     day: t('ui.day'),
@@ -31,6 +33,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     pressures: t('ui.strategy.pressures'),
     focus: t('ui.strategy.focus'),
     focusHint: t('ui.strategy.focus_hint'),
+    actions: t('ui.strategy.actions'),
+    actionHint: t('ui.strategy.action_hint'),
   };
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
@@ -58,8 +62,17 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   const strategyActive = isPlaying && strategy !== null;
 
-  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}`}>
-    {strategyActive ? <StrategyMapShell view={strategy} copy={strategyCopy} text={t} person={id => session.character(id)} /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
+  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
+    {strategyActive ? <StrategyMapShell
+      view={strategy}
+      copy={strategyCopy}
+      text={t}
+      person={id => session.character(id)}
+      actions={strategyActions}
+      onAction={action => session.dispatch({
+        type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
+      }, snapshot.revision)}
+    /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
     {!strategyActive ? <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
@@ -82,7 +95,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
               <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
             </span>)}
           </div> : null}
-          <PresentationView commands={snapshot.presentation} t={t} send={command => { session.dispatch(command, snapshot.revision); }} assetUri={id => session.assetUri(id)} />
+          <PresentationView
+            commands={snapshot.presentation}
+            t={t}
+            send={command => { session.dispatch(command, snapshot.revision); }}
+            assetUri={id => session.assetUri(id)}
+            choiceFallback={strategyActions.length > 0}
+          />
         </div>
       </section>
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
