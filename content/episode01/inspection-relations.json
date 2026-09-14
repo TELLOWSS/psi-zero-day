@@ -1,0 +1,12 @@
+[
+  {
+    "from_id": "seo_jeongmin",
+    "to_id": "player",
+    "initial_state": { "relationship_values": {}, "trust": 30, "respect": 30, "reporting": 25, "flags": {} }
+  },
+  {
+    "from_id": "player",
+    "to_id": "seo_jeongmin",
+    "initial_state": { "relationship_values": {}, "trust": 30, "respect": 35, "reporting": 25, "flags": {} }
+  }
+]
