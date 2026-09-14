@@ -1,4 +1,4 @@
-/* TASK-007E: presentation-only character placement. No gameplay rules. */
+/* TASK-007E/007F: presentation-only character placement and focus. No gameplay rules. */
 .strategy-worker-layer { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
 .strategy-map-worker {
   position: absolute;
@@ -9,10 +9,19 @@
   opacity: .8;
   transform: translate(-50%, -50%);
   transition: transform .18s ease, opacity .18s ease;
+  pointer-events: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 }
+.strategy-map-worker:hover { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
 .strategy-map-worker.is-scene-participant { z-index: 2; opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
 .strategy-map-worker.is-scene-participant .strategy-worker-label { border-color: rgba(52,123,166,.54); box-shadow: 0 6px 14px rgba(31,74,99,.18); }
 .strategy-map-worker.is-near-signal .strategy-worker-label { border-color: rgba(183,73,55,.55); }
+.strategy-map-worker.is-focused .strategy-worker-label { outline: 3px solid rgba(47,134,184,.34); outline-offset: 2px; }
 
 .strategy-worker-figure { position: relative; flex: 0 0 38px; width: 38px; height: 49px; filter: drop-shadow(0 5px 4px rgba(31,49,54,.2)); }
 .worker-head { position: absolute; z-index: 2; left: 11px; top: 13px; width: 17px; height: 19px; border-radius: 7px 7px 9px 9px; background: #d8a47e; }
