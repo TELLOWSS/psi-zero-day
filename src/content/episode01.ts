@@ -17,6 +17,7 @@ import { episode01TbmGapEvents, episode01TbmGapMessages } from './episode01-tbm'
 import { episode01RestartEvents, episode01RestartMessages } from './episode01-restart';
 import { episode01StopworkEvents, episode01StopworkMessages } from './episode01-stopwork';
 import { episode01InstructionEvents, episode01InstructionMessages } from './episode01-instruction';
+import { episode01RecordEvents, episode01RecordMessages } from './episode01-record';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 
@@ -32,6 +33,7 @@ export function createEpisode01Registry(): ContentRegistry {
       ...episode01RestartMessages,
       ...episode01StopworkMessages,
       ...episode01InstructionMessages,
+      ...episode01RecordMessages,
     } }],
     characters: [...characters, ...inspectionCharacters, ...responsibilityCharacters],
     relations: [...relations, ...inspectionRelations, ...responsibilityRelations],
@@ -44,6 +46,7 @@ export function createEpisode01Registry(): ContentRegistry {
       episode01RestartEvents,
       episode01StopworkEvents,
       episode01InstructionEvents,
+      episode01RecordEvents,
     ),
   });
 }
