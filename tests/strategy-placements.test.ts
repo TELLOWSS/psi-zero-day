@@ -13,7 +13,7 @@ describe('Episode 01 character placements', () => {
     expect(junho?.nearby_signal_ids).toEqual(['signal.ramp_movement']);
   });
 
-  it('keeps the other cast members on their presentation anchors', () => {
+  it('keeps the existing crews on their presentation anchors', () => {
     const placements = projectEpisode01CharacterPlacements(['kang_taesik', 'yoon_sungho'], {}, []);
     expect(placements[0]).toMatchObject({ anchor: 'yard', scene_participant: false });
     expect(placements[1]).toMatchObject({ anchor: 'entry', scene_participant: false });
@@ -28,5 +28,15 @@ describe('Episode 01 character placements', () => {
     const inspector = placements.find(item => item.character_id === 'seo_jeongmin');
     expect(inspector).toMatchObject({ anchor: 'inspection', scene_participant: true, role_id: 'inspector' });
     expect(inspector?.nearby_signal_ids).toEqual(['signal.inspection_access']);
+  });
+
+  it('keeps the general contractor staff separate from the field crew during responsibility conflict', () => {
+    const placements = projectEpisode01CharacterPlacements(
+      ['lee_jaehoon', 'kang_taesik', 'oh_seungjae'],
+      { gc: 'oh_seungjae', lee: 'lee_jaehoon', kang: 'kang_taesik' },
+      [],
+    );
+    expect(placements.find(item => item.character_id === 'oh_seungjae'))
+      .toMatchObject({ anchor: 'office', scene_participant: true, role_id: 'gc' });
   });
 });
