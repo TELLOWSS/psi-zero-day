@@ -88,6 +88,14 @@ const FRICTIONS_BY_EVENT: Readonly<Record<Id, readonly FieldFriction[]>> = {
   e01_08n_instruction_return: [
     { friction_id: 'friction.instruction.return', kind: 'reporting_hesitation', label_text_id: 'ui.friction.instruction_return', detail_text_id: 'ui.friction.instruction_return.detail' },
   ],
+  e01_08o_record_pressure: [
+    { friction_id: 'friction.record.wording', kind: 'hierarchy_pressure', label_text_id: 'ui.friction.record_wording', detail_text_id: 'ui.friction.record_wording.detail' },
+    { friction_id: 'friction.record.retrofit', kind: 'responsibility_shift', label_text_id: 'ui.friction.record_retrofit', detail_text_id: 'ui.friction.record_retrofit.detail' },
+    { friction_id: 'friction.record.evidence', kind: 'coordination_conflict', label_text_id: 'ui.friction.record_evidence', detail_text_id: 'ui.friction.record_evidence.detail' },
+  ],
+  e01_08p_record_return: [
+    { friction_id: 'friction.record.return', kind: 'responsibility_shift', label_text_id: 'ui.friction.record_return', detail_text_id: 'ui.friction.record_return.detail' },
+  ],
 };
 
 export function projectEpisode01Frictions(activeEventId: Id | null): readonly FieldFriction[] {
