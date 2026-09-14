@@ -20,7 +20,8 @@
     { "canonical_id": "LEE_JAEHOON", "runtime_id": "lee_jaehoon", "name_text_id": "cast.lee_jaehoon.name", "role_text_id": "cast.lee_jaehoon.role", "age": 33 },
     { "canonical_id": "LIM_JUNHO", "runtime_id": "lim_junho", "name_text_id": "cast.lim_junho.name", "role_text_id": "cast.lim_junho.role", "age": 23 },
     { "canonical_id": "CHOI_MINSEOK", "runtime_id": "choi_minseok", "name_text_id": "cast.choi_minseok.name", "role_text_id": "cast.choi_minseok.role", "age": 39 },
-    { "canonical_id": "SEO_JEONGMIN", "runtime_id": "seo_jeongmin", "name_text_id": "cast.seo_jeongmin.name", "role_text_id": "cast.seo_jeongmin.role", "age": 46 }
+    { "canonical_id": "SEO_JEONGMIN", "runtime_id": "seo_jeongmin", "name_text_id": "cast.seo_jeongmin.name", "role_text_id": "cast.seo_jeongmin.role", "age": 46 },
+    { "canonical_id": "OH_SEUNGJAE", "runtime_id": "oh_seungjae", "name_text_id": "cast.oh_seungjae.name", "role_text_id": "cast.oh_seungjae.role", "age": 41 }
   ],
   "event_flow": [
     "E01_01_ARRIVAL",
@@ -35,6 +36,8 @@
     "E01_08B_INSPECTION_FIND",
     "E01_08C_SITE_PUSHBACK",
     "E01_08D_REINSPECTION",
+    "E01_08E_RESPONSIBILITY_CLASH",
+    "E01_08F_REPORT_RETURN",
     "E01_09_EVENING",
     "E01_10_NEXT_DAY_TEASE"
   ]
