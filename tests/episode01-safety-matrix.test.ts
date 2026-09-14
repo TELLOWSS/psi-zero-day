@@ -33,6 +33,7 @@ describe('Episode 01 reachable safety matrix', () => {
       restart_result: 'controlled_restart',
       stopwork_culture_result: 'reporting_route_preserved',
       instruction_chain_result: 'conditional_phrase_restored',
+      record_result: 'factual_record_preserved',
       episode01_completed: true,
     });
   });
