@@ -1,6 +1,14 @@
 {
   "locale": "ko",
   "messages": {
+    "ui.signal.restart_unverified": "재개 전 안전조치 미확인",
+    "ui.friction.restart": "작업 재개 압박",
+    "ui.friction.restart.schedule": "작업중지 시간이 길어지며 재개를 서두르는 압박이 커진다.",
+    "ui.friction.restart_condition": "재개 조건 누락",
+    "ui.friction.restart_condition.detail": "안전조치 확인 후 재개라는 조건이 전달 과정에서 빠질 수 있다.",
+    "ui.friction.restart.who_ordered": "재개 지시의 출처와 조건을 함께 확인해야 한다.",
+    "ui.friction.restart_return": "재개 판단의 후폭풍",
+    "ui.friction.restart_return.detail": "재개는 실제 복구 상태와 통제조건으로 다시 확인된다.",
     "ui.friction.stopwork_blame": "작업중지 책임 전가",
     "ui.friction.stopwork_blame.detail": "작업이 밀린 이유가 위험요인보다 신고자나 작업중지 제기자에게 돌아가기 시작한다.",
     "ui.friction.stopwork_social": "현장 눈치·배치 압박",
