@@ -1,0 +1,7 @@
+.worker-inspection { left: 64%; top: 55%; }
+.strategy-map-worker[data-character="seo_jeongmin"] .worker-helmet { background: #f5f7f8; }
+.strategy-map-worker[data-character="seo_jeongmin"] .worker-body { background: #596979; }
+.strategy-map-worker[data-character="seo_jeongmin"] .strategy-worker-label { border-color: rgba(63, 79, 94, .42); }
+.strategy-map-worker[data-character="seo_jeongmin"].is-scene-participant .strategy-worker-label {
+  box-shadow: 0 7px 16px rgba(48, 61, 72, .22);
+}
