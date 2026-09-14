@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import type { StrategyAction } from '../src/app/strategy-actions';
 import type { StrategyView } from '../src/app/strategy-view';
 import { StrategyMapShell } from '../src/ui/StrategyMapShell';
 
@@ -19,18 +20,25 @@ const copy = {
   brand: 'PSI : ZERO DAY', day: 'DAY', stage: 'STAGE', psi: 'PSI', objectives: 'OBJECTIVES',
   assignments: 'ASSIGNMENTS', roster: 'ROSTER', site: 'SITE', events: 'SIGNALS', progress: 'PROGRESS',
   pressures: 'FIELD PRESSURE', focus: 'FOCUS', focusHint: 'Select a worker or signal.',
+  actions: 'FIELD ACTIONS', actionHint: 'Act through the map.',
 };
 const labels: Readonly<Record<string, string>> = {
   'ui.signal.ramp_movement': '경사로 이상 신호',
   'ui.friction.reporting': '보고 위축',
   'ui.friction.reporting.hesitation': '이상 신호를 본 사람이 말을 꺼냈다가 멈춘다.',
+  'ep01.junho.listen_more': '조금 더 들어본다.',
 };
 const text = (id: string) => labels[id] ?? id;
 const person = (id: string) => id === 'lim_junho' ? { name: '임준호', role: '신입근로자' } : undefined;
+const actions: readonly StrategyAction[] = [{
+  event_id: 'e01_04_junho_signal', instance_id: 'run.e01_04_junho_signal', node_id: 'listen',
+  choice_id: 'listen_more', label_text_id: 'ep01.junho.listen_more', enabled: true, intent: 'inspect',
+  target: { kind: 'character', character_id: 'lim_junho' },
+}];
 
 describe('StrategyMapShell', () => {
-  it('renders localized characters, signals, and field pressure context', () => {
-    const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} />);
+  it('renders localized characters, signals, field pressure and executable field actions', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
     expect(html).toContain('data-stage="TYPICAL_FLOOR"');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('data-character="lim_junho"');
@@ -42,5 +50,9 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('data-friction="friction.reporting.hesitation"');
     expect(html).toContain('보고 위축');
     expect(html).toContain('FOCUS');
+    expect(html).toContain('FIELD ACTIONS');
+    expect(html).toContain('data-choice="listen_more"');
+    expect(html).toContain('data-action-target="lim_junho"');
+    expect(html).toContain('조금 더 들어본다.');
   });
 });
