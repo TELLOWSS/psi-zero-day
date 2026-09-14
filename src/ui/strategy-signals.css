@@ -1,4 +1,4 @@
-/* TASK-007D: presentation-only signal markers. */
+/* TASK-007D/007F: presentation-only signal markers and focus. */
 .strategy-signal-layer { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
 .strategy-risk-signal {
   position: absolute;
@@ -7,6 +7,7 @@
   gap: 7px;
   max-width: 190px;
   padding: 8px 11px 8px 8px;
+  border: 0;
   border-radius: 999px;
   background: rgba(119, 44, 35, .94);
   color: #fff;
@@ -15,7 +16,11 @@
   font-weight: 800;
   white-space: nowrap;
   animation: strategy-signal-pulse 1.8s ease-in-out infinite;
+  pointer-events: auto;
+  cursor: pointer;
 }
+.strategy-risk-signal:hover,
+.strategy-risk-signal.is-focused { box-shadow: 0 0 0 4px rgba(255,255,255,.72), 0 9px 22px rgba(71,30,23,.36); }
 .strategy-risk-signal > span {
   display: grid;
   place-items: center;
