@@ -76,7 +76,6 @@ describe('Episode application session', () => {
     expect(session.getSnapshot().phase).toBe('start');
     expect(session.getSnapshot().state).toBeNull();
     session.start(session.getSnapshot().revision);
-    expect(inspectRelationshipDeltas?.(undefined as never)).toBeUndefined;
     expect(session.getSnapshot().state).toEqual(first);
     expect(updates).toBe(1);
   });
