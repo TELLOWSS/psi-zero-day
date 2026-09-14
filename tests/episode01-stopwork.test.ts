@@ -18,7 +18,7 @@ describe('Episode 01 stop-work culture aftershock', () => {
       stopwork_culture_action: 'ignore_social',
       stopwork_culture_result: 'reporting_silenced',
     });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(17);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(18);
   });
 
   it('protects the reporter publicly but leaves private friction behind', () => {
@@ -27,7 +27,7 @@ describe('Episode 01 stop-work culture aftershock', () => {
       stopwork_culture_action: 'public_boundary',
       stopwork_culture_result: 'formal_protection_private_friction',
     });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(25);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(26);
   });
 
   it('separates reporting from crew assignment and preserves the reporting route', () => {
@@ -36,7 +36,7 @@ describe('Episode 01 stop-work culture aftershock', () => {
       stopwork_culture_action: 'protect_process',
       stopwork_culture_result: 'reporting_route_preserved',
     });
-    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(26);
+    expect(getRelation(state.relations, 'lim_junho', 'player')!.reporting).toBe(27);
     expect(state.player.stats.people).toBe(33);
   });
 });
