@@ -1,4 +1,5 @@
 import manifest from '../../content/episode01/manifest.json';
+import assets from '../../content/episode01/assets.json';
 import characters from '../../content/episode01/characters.json';
 import inspectionCharacters from '../../content/episode01/inspection-characters.json';
 import responsibilityCharacters from '../../content/episode01/responsibility-characters.json';
@@ -38,6 +39,7 @@ export function createEpisode01Registry(): ContentRegistry {
 
   return new ContentRegistry({
     ...manifest.bundle,
+    asset_manifest: assets,
     localizations: [{ ...ko, messages: {
       ...ko.messages,
       ...inspectionKo.messages,
