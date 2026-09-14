@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectStrategyActions } from '../app/strategy-actions';
+import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
@@ -19,6 +20,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
   const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
+  const visualAssets = strategy
+    ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), id => session.assetUri(id))
+    : undefined;
   const strategyCopy = {
     brand: t('ui.brand'),
     day: t('ui.day'),
@@ -61,6 +65,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [session, snapshot.revision, snapshot.phase, presentation]);
 
   const strategyActive = isPlaying && strategy !== null;
+  const dialoguePortraitUri = portrait?.kind === 'asset'
+    ? session.assetUri(portrait.id)
+    : person ? characterPortraitUri(person.id, id => session.assetUri(id)) : undefined;
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
@@ -69,6 +76,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       text={t}
       person={id => session.character(id)}
       actions={strategyActions}
+      visualAssets={visualAssets}
       onAction={action => session.dispatch({
         type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
       }, snapshot.revision)}
@@ -87,7 +95,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
-        {person ? <CharacterCard person={person} portraitUri={portrait?.kind === 'asset' ? session.assetUri(portrait.id) : undefined} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
+        {person ? <CharacterCard person={person} portraitUri={dialoguePortraitUri} /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
           {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
