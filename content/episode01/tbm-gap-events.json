@@ -18,8 +18,8 @@
       { "node_id": "situation", "type": "RESULT", "text_id": "ep01.tbm_gap.situation", "next_node_id": "lee", "choice_ids": [] },
       { "node_id": "lee", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.lee", "speaker_role_id": "lee", "next_node_id": "kang", "choice_ids": [] },
       { "node_id": "kang", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.kang", "speaker_role_id": "kang", "next_node_id": "junho", "choice_ids": [] },
-      { "node_id": "junho", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.junho", "speaker_role_id": "junho", "next_node_id": "action", "choice_ids": [] },
-      { "node_id": "action", "type": "CHOICE", "text_id": "ep01.tbm_gap.prompt", "choice_ids": ["tbm_form_first", "tbm_worker_blame", "tbm_change_control"] },
+      { "node_id": "junho", "type": "DIALOGUE", "text_id": "ep01.tbm_gap.junho", "speaker_role_id": "junho", "next_node_id": "tbm_action", "choice_ids": [] },
+      { "node_id": "tbm_action", "type": "CHOICE", "text_id": "ep01.tbm_gap.prompt", "choice_ids": ["tbm_form_first", "tbm_worker_blame", "tbm_change_control"] },
       { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
     ],
     "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
