@@ -1,7 +1,7 @@
 import type { Id } from '../domain/common';
 import type { StrategySignal } from './strategy-signals';
 
-export type StrategyCharacterAnchor = 'overview' | 'yard' | 'entry' | 'core' | 'ramp' | 'gate';
+export type StrategyCharacterAnchor = 'overview' | 'yard' | 'entry' | 'core' | 'ramp' | 'gate' | 'inspection';
 
 export interface StrategyCharacterPlacement {
   readonly character_id: Id;
@@ -18,7 +18,7 @@ const EPISODE01_ANCHORS: Readonly<Record<Id, StrategyCharacterAnchor>> = {
   lee_jaehoon: 'core',
   lim_junho: 'ramp',
   choi_minseok: 'gate',
-  seo_jeongmin: 'entry',
+  seo_jeongmin: 'inspection',
 };
 
 const FALLBACK_ANCHORS: readonly StrategyCharacterAnchor[] = ['overview', 'yard', 'entry', 'core', 'ramp', 'gate'];
@@ -34,12 +34,13 @@ export function projectEpisode01CharacterPlacements(
   return characterIds.map((characterId, index) => {
     const anchor = EPISODE01_ANCHORS[characterId] ?? FALLBACK_ANCHORS[index % FALLBACK_ANCHORS.length]!;
     const roleId = roleByCharacter.get(characterId);
+    const signalAnchor = characterId === 'seo_jeongmin' ? 'entry' : anchor;
     return {
       character_id: characterId,
       anchor,
       scene_participant: roleId !== undefined,
       ...(roleId === undefined ? {} : { role_id: roleId }),
-      nearby_signal_ids: signals.filter(signal => signal.anchor === anchor).map(signal => signal.signal_id),
+      nearby_signal_ids: signals.filter(signal => signal.anchor === signalAnchor).map(signal => signal.signal_id),
     };
   });
 }
