@@ -9,11 +9,17 @@ export interface TrainingStatusView {
   readonly completed: boolean;
   readonly growth_stage: string;
   readonly rewards: readonly { readonly item_id: Id; readonly name: string }[];
-  readonly equipped: readonly { readonly slot: string; readonly item_id: Id; readonly name: string }[];
+  readonly equip_options: readonly { readonly slot: string; readonly item_id: Id; readonly name: string }[];
+  readonly auto_equipped: readonly { readonly slot: string; readonly item_id: Id; readonly name: string }[];
 }
 
 type ItemConfig = { readonly item_id: string; readonly name: string };
 const itemById = new Map((items.items as readonly ItemConfig[]).map(item => [item.item_id, item] as const));
+const itemView = (entry: { readonly slot: string; readonly item_id: string }) => Object.freeze({
+  slot: entry.slot,
+  item_id: entry.item_id,
+  name: itemById.get(entry.item_id)?.name ?? entry.item_id,
+});
 
 export function projectTrainingStatuses(flags: FlagMap, characterId: Id): readonly TrainingStatusView[] {
   return Object.freeze(training.trainings
@@ -28,11 +34,8 @@ export function projectTrainingStatuses(flags: FlagMap, characterId: Id): readon
         item_id: itemId,
         name: itemById.get(itemId)?.name ?? itemId,
       }))),
-      equipped: Object.freeze(item.auto_equip.map(entry => Object.freeze({
-        slot: entry.slot,
-        item_id: entry.item_id,
-        name: itemById.get(entry.item_id)?.name ?? entry.item_id,
-      }))),
+      equip_options: Object.freeze(item.equip_options.map(itemView)),
+      auto_equipped: Object.freeze(item.auto_equip.map(itemView)),
     })));
 }
 
