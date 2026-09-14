@@ -5,7 +5,7 @@ import type { EpisodeDecisions } from './helpers/episode01-playthrough';
 
 export const uiPaths: EpisodeDecisions[] = [
   { plan: 'follow_junho', signal: 'listen_more', ramp: 'ask_minseok', entrance: 'assign_crew', evening: 'field_note' },
-  { plan: 'negotiate_yoon', ramp: 'check_self', entrance: 'request_delay', evening: 'study' },
+  { plan: 'negotiate_yoon', ramp: 'check_self', entrance: 'request_delay', evening: 'study', equipment: 'training_equip_camera' },
   { plan: 'coordinate_schedule', ramp: 'keep_schedule', entrance: 'assign_crew', evening: 'family' },
   { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
 ];
@@ -23,6 +23,7 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
     instruction_action: decisions.instruction ?? 'instruction_reconstruct_chain',
     record_action: decisions.record ?? 'record_preserve_timeline',
     evening: decisions.evening,
+    training_equipment: decisions.equipment ?? 'training_equip_camera',
   } as Record<string, string | undefined>)[node];
 }
 
