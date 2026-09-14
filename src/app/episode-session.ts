@@ -11,6 +11,7 @@ import type { StrategyView } from './strategy-view';
 import config from '../../content/episode01/session.json';
 import uiKo from '../../content/localization/playable-ko.json';
 import inspectionUiKo from '../../content/localization/inspection-ui-ko.json';
+import responsibilityUiKo from '../../content/localization/responsibility-ui-ko.json';
 
 export interface SessionSnapshot {
   readonly revision: number;
@@ -37,7 +38,7 @@ export class EpisodeSession {
   #busy = false;
   #snapshot: SessionSnapshot;
   readonly t = createTranslator([{ locale: 'ko', messages: {
-    ...this.#content.localizations[0]!.messages, ...uiKo.messages, ...inspectionUiKo.messages,
+    ...this.#content.localizations[0]!.messages, ...uiKo.messages, ...inspectionUiKo.messages, ...responsibilityUiKo.messages,
   } }], 'ko');
 
   constructor(options: NewRunOptions = config.run as NewRunOptions, bounds: ProgressBounds = config.bounds) {
