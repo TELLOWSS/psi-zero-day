@@ -1,6 +1,8 @@
 import type { FlagMap, Id, StageId, StatMap, TimeSlot } from '../domain/common';
 import type { GameState } from '../domain/state';
 import { copyData, freezeData } from '../engine/data';
+import { projectEpisode01CharacterPlacements } from './strategy-placements';
+import type { StrategyCharacterPlacement } from './strategy-placements';
 import { projectEpisode01Signals } from './strategy-signals';
 import type { StrategySignal } from './strategy-signals';
 
@@ -44,6 +46,7 @@ export interface StrategyPsiView {
 export interface StrategyRuntimeView {
   readonly active_event_id: Id | null;
   readonly active_instance_id: Id | null;
+  readonly participant_bindings: Readonly<Record<Id, Id>>;
   readonly completed_event_count: number;
   readonly pending_followup_count: number;
 }
@@ -55,13 +58,34 @@ export interface StrategyView {
   readonly assignments: readonly StrategyAssignmentView[];
   readonly roster: readonly StrategyCharacterView[];
   readonly signals: readonly StrategySignal[];
+  readonly placements: readonly StrategyCharacterPlacement[];
   readonly runtime: StrategyRuntimeView;
 }
 
 export function projectStrategyView(state: GameState): StrategyView {
   const active = state.event_runtime.active_instance;
   const activeEventId = active?.event_id ?? null;
+  const participantBindings = active?.participant_bindings ?? {};
   const stageProgress = state.construction.progress_by_stage[state.construction.stage_id] ?? 0;
+  const roster: readonly StrategyCharacterView[] = Object.values(state.characters).map(character => ({
+    character_id: character.character_id,
+    experience: character.experience,
+    morale: character.morale,
+    fatigue: character.fatigue,
+    available: character.availability.available,
+    ...(character.availability.reason_text_id === undefined
+      ? {}
+      : { unavailable_reason_text_id: character.availability.reason_text_id }),
+    stats: character.stats,
+    story_flags: character.story_flags,
+  }));
+  const signals = projectEpisode01Signals(activeEventId);
+  const placements = projectEpisode01CharacterPlacements(
+    roster.filter(character => character.available).map(character => character.character_id),
+    participantBindings,
+    signals,
+  );
+
   const view: StrategyView = {
     clock: {
       day: state.clock.day,
@@ -85,22 +109,13 @@ export function projectStrategyView(state: GameState): StrategyView {
       task_id: assignment.task_id,
       ...(assignment.delegated_to_id === undefined ? {} : { delegated_to_id: assignment.delegated_to_id }),
     })),
-    roster: Object.values(state.characters).map(character => ({
-      character_id: character.character_id,
-      experience: character.experience,
-      morale: character.morale,
-      fatigue: character.fatigue,
-      available: character.availability.available,
-      ...(character.availability.reason_text_id === undefined
-        ? {}
-        : { unavailable_reason_text_id: character.availability.reason_text_id }),
-      stats: character.stats,
-      story_flags: character.story_flags,
-    })),
-    signals: projectEpisode01Signals(activeEventId),
+    roster,
+    signals,
+    placements,
     runtime: {
       active_event_id: activeEventId,
       active_instance_id: active?.instance_id ?? null,
+      participant_bindings: participantBindings,
       completed_event_count: state.event_runtime.completion_history.length,
       pending_followup_count: state.followups.filter(followup => followup.status === 'pending').length,
     },
