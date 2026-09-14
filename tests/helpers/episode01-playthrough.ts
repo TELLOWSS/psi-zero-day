@@ -33,6 +33,7 @@ export interface EpisodeDecisions {
   instruction?: 'instruction_accept_top' | 'instruction_blame_worker' | 'instruction_reconstruct_chain';
   record?: 'record_minimize_scope' | 'record_retrofit_paper' | 'record_preserve_timeline';
   equipment?: 'training_equip_camera' | 'training_keep_loadout';
+  nextDay?: 'next_day_standard_check' | 'next_day_camera_compare' | 'next_day_radio_checkin';
   evening: 'rest' | 'family' | 'study' | 'field_note';
 }
 export interface TraceEntry {
@@ -59,6 +60,13 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
       }
     }
   };
+  const defaultNextDay = decisions.nextDay ?? (
+    decisions.evening === 'study' && (decisions.equipment ?? 'training_equip_camera') === 'training_equip_camera'
+      ? 'next_day_camera_compare'
+      : decisions.plan === 'follow_junho' && decisions.signal === 'listen_more'
+        ? 'next_day_radio_checkin'
+        : 'next_day_standard_check'
+  );
   const decisionsByNode: Record<string, string | undefined> = {
     'e01_03_plan_breaks/plan': decisions.plan,
     'e01_04_junho_signal/listen': decisions.signal,
@@ -73,6 +81,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
     'e01_08o_record_pressure/record_action': decisions.record ?? 'record_preserve_timeline',
     'e01_09_evening/evening': decisions.evening,
     'e01_09_evening/training_equipment': decisions.equipment ?? 'training_equip_camera',
+    'e01_10_next_day_tease/next_day_action': defaultNextDay,
   };
   // Explicit test clock inputs. Content eligibility remains completion/flag based as specified.
   const clockBefore: Record<string, GameState['clock']> = {
