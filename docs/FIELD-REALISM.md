@@ -26,6 +26,8 @@ A choice is not complete when the player presses the safe answer. The consequenc
 5. A rushed instruction can solve the immediate hazard while damaging trust or cooperation.
 6. A negotiated solution can take longer but improve later coordination.
 7. Avoid real company, project and identifiable person names. Scenarios are fictional composites of construction-site realities.
+8. Inspection scenes must distinguish evidence from reality: a corrective-action photo is evidence, not proof that the whole field condition is actually corrected.
+9. A technically valid inspector finding can still create real schedule conflict. The inspector is not therefore a villain, and the construction side is not automatically anti-safety.
 
 ## Required recurring scenario families
 ### Inspection / reinspection
@@ -56,6 +58,20 @@ A choice is not complete when the player presses the safe answer. The consequenc
 - Work changes after manpower/equipment/sequence changes.
 - The protected condition is removed or bypassed.
 - Player must notice the change rather than assume training equals compliance.
+
+## Implemented vertical-slice examples
+### Reporting aftershock — TASK-008A
+- The player may listen to, dismiss, or entirely miss Lim Junho's weak signal.
+- The earlier interaction returns later as reinforced, suppressed or missed reporting behavior.
+- The delayed consequence changes the worker-to-player reporting relationship rather than ending at the original dialogue.
+
+### Inspection correction chain — TASK-008B
+- Fictional building inspector Seo Jeongmin identifies incomplete access-route separation and requests corrective evidence.
+- Lee Jaehoon pushes back because a remaining rebar truck still needs the same route.
+- The player can fully stop and correct, send a quick photo-first correction, or negotiate the work sequence.
+- A later reinspection checks the actual field condition rather than accepting the photo automatically.
+- The photo-first shortcut returns as reinspection and rework, while full correction can still create schedule blame from the construction side.
+- Negotiated sequencing preserves more cooperation but requires time and negotiation capability.
 
 ## Tone
 The game may be cute and approachable visually, but field problems must remain adult, frustrating and credible.
