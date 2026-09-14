@@ -7,6 +7,7 @@ import events from '../../content/episode01/events.json';
 import consequenceEvents from '../../content/episode01/consequence-events.json';
 import inspectionEvents from '../../content/episode01/inspection-events.json';
 import ko from '../../content/episode01/ko.json';
+import inspectionKo from '../../content/episode01/inspection-ko.json';
 import { ContentRegistry } from './registry';
 import { assembleEpisode01Consequences } from './episode01-consequences';
 
@@ -14,7 +15,7 @@ import { assembleEpisode01Consequences } from './episode01-consequences';
 export function createEpisode01Registry(): ContentRegistry {
   return new ContentRegistry({
     ...manifest.bundle,
-    localizations: [ko],
+    localizations: [{ ...ko, messages: { ...ko.messages, ...inspectionKo.messages } }],
     characters: [...characters, ...inspectionCharacters],
     relations: [...relations, ...inspectionRelations],
     events: assembleEpisode01Consequences(events, consequenceEvents, inspectionEvents),
