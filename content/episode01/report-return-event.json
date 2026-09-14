@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "event_id": "e01_08f_report_return",
+  "title_text_id": "ep01.8f.title",
+  "category_text_id": "ep01.category",
+  "chapter_text_id": "ep01.chapter",
+  "conditions": [{ "kind": "event_completed", "event_id": "e01_08e_responsibility_clash", "minimum_count": 1 }],
+  "participants": [
+    { "role_id": "gc", "character_id": "oh_seungjae" },
+    { "role_id": "lee", "character_id": "lee_jaehoon" },
+    { "role_id": "kang", "character_id": "kang_taesik" }
+  ],
+  "scene": { "character_asset_ids": [] },
+  "entry_node_id": "resolve",
+  "dialogue": [
+    { "node_id": "resolve", "type": "CHOICE", "text_id": "ep01.report_return.prompt", "choice_ids": ["report_return_correction", "report_return_evidence_requested", "report_return_timeline_confirmed"] },
+    { "node_id": "correction", "type": "RESULT", "text_id": "ep01.report_return.correction", "next_node_id": "end", "choice_ids": [] },
+    { "node_id": "evidence", "type": "RESULT", "text_id": "ep01.report_return.evidence_requested", "next_node_id": "end", "choice_ids": [] },
+    { "node_id": "timeline", "type": "RESULT", "text_id": "ep01.report_return.timeline_confirmed", "next_node_id": "end", "choice_ids": [] },
+    { "node_id": "end", "type": "END", "text_id": "ep01.transition", "choice_ids": [], "outcome": "completed", "effects": { "immediate_effects": [], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": {}, "ending_flags": {}, "followup_events": [] } }
+  ],
+  "runtime": { "chapter_id": "foundation", "trigger": "normal", "repeat_policy": { "kind": "once" }, "required_flags": {}, "selection_policy": { "priority": 2 }, "missing_participant_policy": "exclude" },
+  "choices": [
+    {
+      "choice_id": "report_return_correction", "text_id": "ep01.report_return.choice.correction", "next_node_id": "correction",
+      "requirements": [{ "kind": "flag", "flag_id": "report_basis", "equals": "one_sided" }],
+      "effects": { "immediate_effects": [
+        { "effect_id": "gc.trust.correction", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "trust", "delta": -1 },
+        { "effect_id": "lee.respect.correction", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": -1 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_result": "correction_required" }, "ending_flags": {}, "followup_events": [] }
+    },
+    {
+      "choice_id": "report_return_evidence_requested", "text_id": "ep01.report_return.choice.evidence_requested", "next_node_id": "evidence",
+      "requirements": [{ "kind": "flag", "flag_id": "report_basis", "equals": "defensive" }],
+      "effects": { "immediate_effects": [
+        { "effect_id": "gc.trust.evidence_requested", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "trust", "delta": -3 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_result": "evidence_requested" }, "ending_flags": {}, "followup_events": [] }
+    },
+    {
+      "choice_id": "report_return_timeline_confirmed", "text_id": "ep01.report_return.choice.timeline_confirmed", "next_node_id": "timeline",
+      "requirements": [{ "kind": "flag", "flag_id": "report_basis", "equals": "timeline" }],
+      "effects": { "immediate_effects": [
+        { "effect_id": "gc.trust.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "trust", "delta": 2 },
+        { "effect_id": "lee.respect.timeline_confirmed", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 }
+      ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_result": "timeline_confirmed" }, "ending_flags": {}, "followup_events": [] }
+    }
+  ],
+  "failure_conditions": []
+}
