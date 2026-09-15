@@ -80,6 +80,7 @@ export function StrategyLoopPanel({
             data-choice={action.choice_id}
             data-action-target={strategyActionTargetKey(action.target)}
             data-action-actor={action.actor_character_id}
+            data-action-skill={action.skill?.source}
             onMouseEnter={() => onActionFocus?.(strategyActionTargetKey(action.target))}
             onMouseLeave={() => onActionFocus?.(null)}
             onFocus={() => onActionFocus?.(strategyActionTargetKey(action.target))}
