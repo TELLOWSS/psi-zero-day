@@ -35,25 +35,35 @@ for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {}))
   });
 }
 
-async function readPlannedAsset(uri) {
-  const diskPath = path.join(root, 'public', uri);
+async function tryRead(uri) {
   try {
-    return { uri, bytes: await readFile(diskPath) };
-  } catch (error) {
-    if (error?.code !== 'ENOENT') throw error;
-  }
-
-  // TASK-010D production fallback. visuals.json keeps the final WebP target,
-  // while the repository can generate a deterministic SVG pass until final painted art lands.
-  const extension = path.extname(uri).toLowerCase();
-  if (extension !== '.webp') return undefined;
-  const fallbackUri = uri.replace(/\.webp$/i, '.svg');
-  try {
-    return { uri: fallbackUri, bytes: await readFile(path.join(root, 'public', fallbackUri)) };
+    return { uri, bytes: await readFile(path.join(root, 'public', uri)) };
   } catch (error) {
     if (error?.code === 'ENOENT') return undefined;
     throw error;
   }
+}
+
+async function readPlannedAsset(uri) {
+  // Final commercial art always wins when present.
+  const exact = await tryRead(uri);
+  if (exact) return exact;
+
+  // TASK-014A release-candidate art: a hand-authored visual slice used before final WebP lands.
+  // Example: player-portrait.webp -> player-portrait-rc.svg.
+  const extension = path.extname(uri).toLowerCase();
+  if (extension === '.webp') {
+    const rcUri = uri.replace(/\.webp$/i, '-rc.svg');
+    const rc = await tryRead(rcUri);
+    if (rc) return rc;
+
+    // TASK-010D deterministic generated fallback remains the last-resort art path.
+    const fallbackUri = uri.replace(/\.webp$/i, '.svg');
+    const fallback = await tryRead(fallbackUri);
+    if (fallback) return fallback;
+  }
+
+  return undefined;
 }
 
 const assets = [];
