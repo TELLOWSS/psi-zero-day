@@ -65,8 +65,17 @@ describe('TASK-016B Batch A production art brief', () => {
       const representative = variants[0];
       expect(representative).toBeDefined();
       if (!representative) throw new Error(`Missing Batch A variants for ${characterId}`);
-      silhouettes.add(representative.silhouette);
-      props.add(representative.signature_prop);
+
+      const silhouette = representative.silhouette;
+      const signatureProp = representative.signature_prop;
+      expect(silhouette).toBeTruthy();
+      expect(signatureProp).toBeTruthy();
+      if (!silhouette || !signatureProp) {
+        throw new Error(`Incomplete Batch A identity contract for ${characterId}`);
+      }
+
+      silhouettes.add(silhouette);
+      props.add(signatureProp);
     }
 
     expect(silhouettes.size).toBe(3);
