@@ -20,6 +20,19 @@
     "ui.paid_item.confirm_replan": "이 결과를 확정하지 않고 직전 현장 판단으로 돌아갑니다.",
     "ui.paid_item.confirm": "재판단",
     "ui.paid_item.keep_result": "결과 유지",
-    "ui.paid_item.replan_guard": "결과 확정 전 판단만 되돌릴 수 있습니다. 이미 발생·기록된 사고는 되돌릴 수 없습니다."
+    "ui.paid_item.replan_guard": "결과 확정 전 판단만 되돌릴 수 있습니다. 이미 발생·기록된 사고는 되돌릴 수 없습니다.",
+    "ui.paid_item.support_title": "현장 지원",
+    "ui.paid_item.support_empty": "보유한 시설·용품이 없습니다.",
+    "ui.paid_item.facility": "시설",
+    "ui.paid_item.equipment": "용품",
+    "ui.paid_item.deploy": "배치",
+    "ui.paid_item.commit": "투입",
+    "ui.paid_item.active": "적용 중",
+    "ui.paid_item.facility.access_lane": "임시 안전통로",
+    "ui.paid_item.facility.lighting_pack": "추가 조명 패키지",
+    "ui.paid_item.facility.logistics_zone": "추가 자재 야적구역",
+    "ui.paid_item.equipment.radio_pack": "추가 무전기 세트",
+    "ui.paid_item.equipment.inspection_kit": "현장 검측 키트",
+    "ui.paid_item.equipment.traffic_control_pack": "동선 통제 세트"
   }
 }
