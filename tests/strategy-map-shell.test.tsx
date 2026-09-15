@@ -79,7 +79,7 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('경사로 이상 신호');
     expect(html).toContain('data-zone="ramp"');
     expect(html).toContain('1 대상 선택');
-    expect(html).toContain('Select a map target first.');
+    expect(html).toContain('먼저 대상을 선택하세요.');
     expect(html).not.toContain('data-choice="listen_more"');
   });
 
