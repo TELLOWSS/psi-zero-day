@@ -15,7 +15,10 @@
     "same-face cast",
     "helmet-color-only differentiation",
     "real company logos",
+    "real or invented company, project, apartment, site, or building names rendered as readable text inside the artwork",
     "pseudo text or meaningless lettering on helmets, PPE, signs, or equipment",
+    "baked-in HUD, title logo, dialogue box, mission panel, resource counter, map label, or navigation UI inside a production art slot",
+    "multi-asset contact sheet, mockup board, screenshot collage, or composite presentation submitted as a single production asset",
     "childlike body proportions",
     "anime school-uniform styling",
     "fantasy or sci-fi construction equipment",
@@ -31,7 +34,7 @@
       "kind": "background",
       "minimum_size": { "width": 1920, "height": 1080 },
       "transparent_background": false,
-      "production_brief": "Landscape 16:9 construction foundation-stage strategy map. Apartment structure, tower crane, material yard, temporary access road, gate, rebar/formwork zones and worker circulation should create a readable playable diorama with foreground/midground/background depth. Keep the central worksite clear enough for interactive markers and characters. No readable brand or company text."
+      "production_brief": "Landscape 16:9 construction foundation-stage strategy map. Apartment structure, tower crane, material yard, temporary access road, gate, rebar/formwork zones and worker circulation should create a readable playable diorama with foreground/midground/background depth. Keep the central worksite clear enough for interactive markers and characters. Artwork only: no baked-in HUD, title, dialogue, mission cards, resource counters, map labels, readable company/project/site/building names, logos, or signage text."
     },
     {
       "source": "player:portrait",
