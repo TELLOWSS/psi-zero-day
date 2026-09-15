@@ -141,8 +141,8 @@
 
 @media (max-width: 760px) {
   .title-hero-cast {
+    left: 34%;
     opacity: .6;
-    inset-left: 34%;
   }
   .title-screen-commercial .title-copy {
     width: 72%;
