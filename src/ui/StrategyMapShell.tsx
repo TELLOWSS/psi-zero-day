@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { strategyActionsForTarget, strategyActionTargetKey } from '../app/strategy-actions';
-import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
+import { strategyActionsForTarget } from '../app/strategy-actions';
+import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
 import type { StrategySignalKind } from '../app/strategy-signals';
+import { StrategyLoopPanel } from './StrategyLoopPanel';
+import type { StrategyMapOutcome } from './StrategyLoopPanel';
 
 export interface StrategyMapCopy {
   readonly brand: string;
@@ -49,18 +51,7 @@ function frictionIcon(kind: FieldFrictionKind): string {
   }
 }
 
-function actionIcon(intent: StrategyActionIntent): string {
-  switch (intent) {
-    case 'inspect': return '⌕';
-    case 'coordinate': return '⇆';
-    case 'control': return '■';
-    case 'report': return '▤';
-    case 'protect': return '⛨';
-    case 'record': return '▧';
-  }
-}
-
-export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets }: {
+export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
@@ -68,6 +59,8 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   readonly actions?: readonly StrategyAction[];
   readonly onAction?: (action: StrategyAction) => void;
   readonly visualAssets?: StrategyVisualAssets;
+  readonly outcome?: StrategyMapOutcome;
+  readonly onOutcomeContinue?: () => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
@@ -101,7 +94,7 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
   const hasBackgroundArt = visualAssets?.background_uri !== undefined;
 
-  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'}>
+  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={outcome ? 'result' : focusId ? 'action' : 'target'}>
     <header className="strategy-hud">
       <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><strong>{copy.brand}</strong></div>
       <div className="strategy-meter" aria-label={copy.psi}>
@@ -213,34 +206,19 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
         })}
       </div>
 
-      {actions.length ? <aside className="strategy-action-tray" aria-label={copy.actions}>
-        <div className="strategy-action-heading"><strong>{copy.actions}</strong><span>{focusId ? focusTitle ?? copy.site : copy.actionHint}</span></div>
-        {focusId ? selectedActions.length ? <div className="strategy-action-list">
-          {selectedActions.map((action, index) => <button
-            key={action.choice_id}
-            type="button"
-            disabled={!action.enabled}
-            data-choice={action.choice_id}
-            data-action-target={strategyActionTargetKey(action.target)}
-            data-action-skill={action.skill?.source}
-            onMouseEnter={() => setActionFocusId(strategyActionTargetKey(action.target))}
-            onMouseLeave={() => setActionFocusId(null)}
-            onFocus={() => setActionFocusId(strategyActionTargetKey(action.target))}
-            onBlur={() => setActionFocusId(null)}
-            onClick={event => { if (event.detail < 2 && action.enabled) onAction?.(action); }}
-          >
-            <span className="strategy-action-number">{index + 1}</span>
-            <span className="strategy-action-icon" aria-hidden="true">{actionIcon(action.intent)}</span>
-            <span className="strategy-action-copy">
-              <strong>{text(action.label_text_id)}</strong>
-              {action.skill ? <em className="strategy-action-skill">{text(action.skill.label_text_id)}</em> : null}
-              <small>{actionTargetLabel(action)}</small>
-            </span>
-            <span aria-hidden="true">↗</span>
-          </button>)}
-        </div> : <p className="strategy-action-empty">{text('ui.strategy.no_actions')}</p>
-        : <p className="strategy-action-empty">{copy.actionHint}</p>}
-      </aside> : null}
+      <StrategyLoopPanel
+        actions={actions}
+        selectedActions={selectedActions}
+        focusId={focusId}
+        focusTitle={focusTitle}
+        text={text}
+        personName={id => person(id)?.name ?? id}
+        targetLabel={actionTargetLabel}
+        onAction={onAction}
+        outcome={outcome}
+        onOutcomeContinue={onOutcomeContinue}
+        onActionFocus={setActionFocusId}
+      />
     </section>
 
     <footer className="strategy-roster" aria-label={copy.roster}>
