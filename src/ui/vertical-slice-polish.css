@@ -1,0 +1,64 @@
+@keyframes psi-scene-enter {
+  from { opacity: 0; transform: translateY(5px) scale(.997); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes psi-panel-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes psi-save-pulse {
+  0%, 100% { opacity: .62; }
+  50% { opacity: 1; }
+}
+
+.strategy-shell {
+  animation: psi-scene-enter .28s cubic-bezier(.2,.75,.25,1) both;
+}
+.strategy-action-tray,
+.strategy-outcome-card,
+.training-reward-panel,
+.relationship-feedback {
+  animation: psi-panel-enter .2s ease-out both;
+}
+.scene-heading h1,
+.presentation-area > * {
+  animation: psi-panel-enter .18s ease-out both;
+}
+.save-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: 1px solid rgba(124,166,183,.28);
+  border-radius: 999px;
+  color: rgba(219,238,243,.76);
+  font-size: 10px;
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+.save-hint::first-letter {
+  color: #7fd0a2;
+}
+.phase-playing .save-hint {
+  animation: psi-save-pulse 2.4s ease-in-out infinite;
+}
+.map-outcome-support {
+  margin: 0;
+  opacity: .7;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strategy-shell,
+  .strategy-action-tray,
+  .strategy-outcome-card,
+  .training-reward-panel,
+  .relationship-feedback,
+  .scene-heading h1,
+  .presentation-area > *,
+  .phase-playing .save-hint {
+    animation: none !important;
+    transition: none !important;
+  }
+}
