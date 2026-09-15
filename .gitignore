@@ -5,3 +5,10 @@ coverage/
 *.local
 public/assets/episode01/characters/*.svg
 public/assets/episode01/backgrounds/*.svg
+android/.gradle/
+android/.idea/
+android/local.properties
+android/build/
+android/app/build/
+*.jks
+*.keystore
