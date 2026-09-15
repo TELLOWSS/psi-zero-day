@@ -1,0 +1,22 @@
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+html[lang="ko"] body,
+html[lang="ko"] button,
+html[lang="ko"] input,
+html[lang="ko"] textarea,
+html[lang="ko"] select {
+  font-family: inherit;
+}
+
+html[lang="ko"] p,
+html[lang="ko"] button,
+html[lang="ko"] .dialogue-text,
+html[lang="ko"] .choice-panel,
+html[lang="ko"] .strategy-panel,
+html[lang="ko"] .mission-panel {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
