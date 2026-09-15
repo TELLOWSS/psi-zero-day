@@ -1,0 +1,84 @@
+/* TASK-014C — professional growth visual treatment. Presentation only; no age change. */
+
+/* Growth reads through confidence/equipment framing, never through wrinkles/grey hair/age shifts. */
+.character-card:has(.character-growth-summary[data-growth-stage="initial"]) .portrait-slot {
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 7px 18px rgba(12,28,32,.14);
+}
+
+.character-card:has(.character-growth-summary[data-growth-stage="focused"]) .portrait-slot {
+  border-color: rgba(93,205,194,.55);
+  box-shadow: 0 0 0 2px rgba(93,205,194,.12), 0 9px 21px rgba(30,111,105,.19);
+}
+
+.character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .portrait-slot {
+  border-color: rgba(240,197,91,.7);
+  box-shadow: 0 0 0 2px rgba(240,197,91,.15), 0 10px 24px rgba(127,88,24,.22);
+}
+
+.character-growth-summary[data-growth-stage="initial"] > div strong {
+  color: #c7d6d8;
+  border-color: rgba(199,214,216,.28);
+  background: rgba(199,214,216,.06);
+}
+
+.character-growth-summary[data-growth-stage="focused"] > div strong {
+  color: #8de0d1;
+  border-color: rgba(93,205,194,.46);
+  background: rgba(49,143,134,.13);
+}
+
+.character-growth-summary[data-growth-stage="skilled"] > div strong {
+  color: #f3cf72;
+  border-color: rgba(240,197,91,.52);
+  background: rgba(171,121,28,.14);
+}
+
+/* Equipment-confidence cue: attached to the frame, never to the person's age or face. */
+.character-card:has(.character-growth-summary[data-growth-stage="focused"]) .portrait-slot::after,
+.character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .portrait-slot::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 2px 7px rgba(8,25,28,.28);
+}
+
+.character-card:has(.character-growth-summary[data-growth-stage="focused"]) .portrait-slot::after {
+  background: radial-gradient(circle at 35% 35%, #d9fff7 0 20%, #5bc9b7 23% 62%, #277f75 65% 100%);
+}
+
+.character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .portrait-slot::after {
+  width: 17px;
+  height: 17px;
+  background: radial-gradient(circle at 35% 35%, #fff6cd 0 18%, #efc957 21% 60%, #a9751f 63% 100%);
+}
+
+/* More equipped tools read as organized professional kit, not a fantasy power-up. */
+.character-card:has(.character-growth-summary[data-growth-stage="focused"]) .character-loadout-summary li,
+.character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .character-loadout-summary li {
+  border: 1px solid rgba(116,196,191,.12);
+}
+
+.character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .character-loadout-summary li {
+  border-color: rgba(240,197,91,.16);
+  background: linear-gradient(90deg, rgba(240,197,91,.075), rgba(255,255,255,.035));
+}
+
+@media (max-width: 900px), (max-height: 600px) {
+  .character-card:has(.character-growth-summary[data-growth-stage="focused"]) .portrait-slot::after,
+  .character-card:has(.character-growth-summary[data-growth-stage="skilled"]) .portrait-slot::after {
+    width: 11px;
+    height: 11px;
+    right: 4px;
+    bottom: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-card .portrait-slot,
+  .character-growth-summary > div strong { transition: none !important; }
+}
