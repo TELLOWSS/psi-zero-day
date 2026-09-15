@@ -50,7 +50,7 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain('data-loop-phase="target"');
     expect(html).toContain('1 대상 선택');
     expect(html).toContain('현장 행동');
-    expect(html).toContain('먼저 사람·위험신호·작업구역을 선택하세요.');
+    expect(html).toContain('먼저 사람·위험 신호·작업 구역을 선택하세요.');
     expect(html).toContain('data-character="kang_taesik"');
     expect(html).toContain('data-character="yoon_sungho"');
     expect(html).toContain('data-character="lee_jaehoon"');
