@@ -1,11 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="480" viewBox="0 0 320 480">
-<defs><linearGradient id="v" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6cbb83"/><stop offset="1" stop-color="#377b58"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#183c36" flood-opacity=".26"/></filter></defs>
-<ellipse cx="160" cy="442" rx="76" ry="18" fill="#183f47" opacity=".17"/>
-<g filter="url(#s)"><path d="M131 329l-18 101h31l20-101Z" fill="#314b56"/><path d="M188 329l19 101h-31l-18-101Z" fill="#2a414b"/><path d="M93 427h52v25H85q-7-15 8-25Zm82 0h52q15 9 8 25h-60Z" fill="#24343d"/></g>
-<path d="M108 300q7-59 52-64q48 4 54 64l-8 51h-90Z" fill="url(#v)"/><path d="M116 288h90" stroke="#f2efad" stroke-width="9"/><path d="M113 270l-26 59M207 270l22 52" stroke="#e2aa84" stroke-width="19" stroke-linecap="round"/>
-<rect x="145" y="208" width="30" height="35" rx="11" fill="#e2aa84"/><ellipse cx="160" cy="166" rx="48" ry="58" fill="#e2aa84"/>
-<path d="M116 155q10-61 45-63q41 2 46 65l-16 27q-16-48-61-4Z" fill="#2e3c45"/><circle cx="142" cy="165" r="5" fill="#253540"/><circle cx="178" cy="165" r="5" fill="#253540"/><path d="M145 191q15 11 30 0" fill="none" stroke="#96594a" stroke-width="5" stroke-linecap="round"/>
-<g filter="url(#s)"><path d="M100 119q7-59 60-62q57 3 63 62Z" fill="#f4bf2e"/><rect x="93" y="111" width="136" height="18" rx="9" fill="#f4bf2e"/><path d="M119 107h84" stroke="#d69f18" stroke-width="7"/></g>
-<g transform="translate(222 282)"><rect width="39" height="62" rx="7" fill="#273b46"/><rect x="7" y="10" width="25" height="17" rx="3" fill="#95d2c7"/><path d="M31 0v-19" stroke="#273b46" stroke-width="5" stroke-linecap="round"/></g>
-<path d="M117 301h22v44h-22Zm49 0h34v44h-34Z" fill="#eef0a9" opacity=".48"/>
+<defs>
+  <linearGradient id="vest" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7dce91"/><stop offset=".58" stop-color="#4a9b6e"/><stop offset="1" stop-color="#2e6a4f"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f1c19f"/><stop offset="1" stop-color="#db9975"/></linearGradient>
+  <linearGradient id="helmet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffdc59"/><stop offset=".6" stop-color="#f2ba2c"/><stop offset="1" stop-color="#cb8c12"/></linearGradient>
+  <filter id="s" x="-40%" y="-40%" width="190%" height="200%"><feDropShadow dx="0" dy="9" stdDeviation="7" flood-color="#173c36" flood-opacity=".27"/></filter>
+</defs>
+<ellipse cx="160" cy="443" rx="77" ry="18" fill="#173f47" opacity=".17"/>
+<g filter="url(#s)"><path d="M130 330l-18 101h32l20-101Z" fill="#314b56"/><path d="M189 330l19 101h-32l-18-101Z" fill="#2a414b"/><path d="M92 428h54v25H84q-7-15 8-25Zm83 0h54q15 9 8 25h-62Z" fill="#24343d"/></g>
+<!-- slim rookie torso -->
+<path d="M107 301q7-60 53-65q49 4 55 65l-8 52h-92Z" fill="url(#vest)"/>
+<path d="M115 289h92" stroke="#f3efad" stroke-width="10"/>
+<path d="M127 301l13 52M193 301l-13 52" stroke="#f3efad" stroke-width="8"/>
+<path d="M159 300v53" stroke="#2e6a4f" stroke-width="4"/>
+<rect x="145" y="208" width="30" height="36" rx="11" fill="url(#skin)"/>
+<!-- youthful face -->
+<ellipse cx="160" cy="166" rx="49" ry="59" fill="url(#skin)"/>
+<path d="M115 155q11-62 46-64q42 2 47 66l-17 27q-17-48-61-4Z" fill="#2d3c45"/>
+<circle cx="142" cy="165" r="5" fill="#253540"/><circle cx="178" cy="165" r="5" fill="#253540"/>
+<path d="M145 191q15 11 30 0" fill="none" stroke="#96594a" stroke-width="5" stroke-linecap="round"/>
+<!-- helmet -->
+<g filter="url(#s)"><path d="M99 119q7-60 61-63q58 3 64 63Z" fill="url(#helmet)"/><rect x="92" y="111" width="138" height="18" rx="9" fill="url(#helmet)"/><path d="M118 107h86" stroke="#d39b18" stroke-width="7"/><path d="M160 64v39" stroke="#e0a71f" stroke-width="6"/></g>
+<!-- arms / radio -->
+<path d="M112 270l-26 60M208 270l22 52" stroke="url(#skin)" stroke-width="19" stroke-linecap="round"/>
+<g transform="translate(221 280)" filter="url(#s)"><rect width="41" height="67" rx="7" fill="#273b46"/><rect x="7" y="10" width="27" height="19" rx="3" fill="#95d2c7"/><circle cx="20" cy="46" r="4" fill="#80939b"/><path d="M32 0v-20" stroke="#273b46" stroke-width="5" stroke-linecap="round"/></g>
+<g transform="translate(110 305)" filter="url(#s)"><path d="M0 0h38l6 23H5Z" fill="#365561"/><path d="M7 5h24M9 12h21" stroke="#a4bdc1" stroke-width="3"/></g>
+<circle cx="118" cy="314" r="8" fill="#59a374" stroke="#fff" stroke-width="3"/>
 </svg>
