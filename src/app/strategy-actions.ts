@@ -16,6 +16,7 @@ export interface StrategyAction {
   readonly enabled: boolean;
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
+  readonly actor_character_id: Id;
   readonly skill?: {
     readonly source: 'equipment' | 'growth';
     readonly label_text_id: TextId;
@@ -25,20 +26,21 @@ export interface StrategyAction {
 interface ActionMetadata {
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
+  readonly actor_character_id?: Id;
   readonly skill?: StrategyAction['skill'];
 }
 
 const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
-  delegate_kang: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' } },
-  negotiate_yoon: { intent: 'coordinate', target: { kind: 'character', character_id: 'yoon_sungho' } },
-  coordinate_schedule: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' } },
+  delegate_kang: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' }, actor_character_id: 'kang_taesik' },
+  negotiate_yoon: { intent: 'coordinate', target: { kind: 'character', character_id: 'yoon_sungho' }, actor_character_id: 'yoon_sungho' },
+  coordinate_schedule: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, actor_character_id: 'lee_jaehoon' },
   follow_junho: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
   listen_more: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
   dismiss: { intent: 'control', target: { kind: 'character', character_id: 'lim_junho' } },
   check_self: { intent: 'inspect', target: { kind: 'anchor', anchor: 'ramp' } },
-  ask_minseok: { intent: 'coordinate', target: { kind: 'character', character_id: 'choi_minseok' } },
+  ask_minseok: { intent: 'coordinate', target: { kind: 'character', character_id: 'choi_minseok' }, actor_character_id: 'choi_minseok' },
   keep_schedule: { intent: 'control', target: { kind: 'character', character_id: 'lee_jaehoon' } },
-  assign_crew: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' } },
+  assign_crew: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' }, actor_character_id: 'kang_taesik' },
   request_delay: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' } },
   force_clear: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.work_vehicle_overlap' } },
   inspection_full_stop: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.inspection_access' } },
@@ -80,6 +82,10 @@ const FIELD_ACTION_EVENTS = new Set<Id>([
   'e01_08o_record_pressure', 'e01_10_next_day_tease',
 ]);
 
+export function isStrategyFieldActionEvent(eventId: Id | null): boolean {
+  return eventId !== null && FIELD_ACTION_EVENTS.has(eventId);
+}
+
 export function strategyActionTargetKey(target: StrategyActionTarget): string {
   switch (target.kind) {
     case 'character': return target.character_id;
@@ -96,11 +102,11 @@ export function strategyActionsForTarget(actions: readonly StrategyAction[], tar
 
 /** Read-only UI projection. Executing an action still uses the original choose_event command. */
 export function projectStrategyActions(activeEventId: Id | null, presentation: PresentationCommand | undefined): readonly StrategyAction[] {
-  if (!activeEventId || !FIELD_ACTION_EVENTS.has(activeEventId) || presentation?.type !== 'SHOW_CHOICE') return [];
+  if (!isStrategyFieldActionEvent(activeEventId) || presentation?.type !== 'SHOW_CHOICE') return [];
   return Object.freeze(presentation.choices.map(choice => {
     const metadata = ACTION_METADATA[choice.choice_id] ?? { intent: 'control' as const, target: { kind: 'site' as const } };
     return Object.freeze({
-      event_id: activeEventId,
+      event_id: activeEventId!,
       instance_id: presentation.instance_id,
       node_id: presentation.node_id,
       choice_id: choice.choice_id,
@@ -108,6 +114,7 @@ export function projectStrategyActions(activeEventId: Id | null, presentation: P
       enabled: choice.enabled,
       intent: metadata.intent,
       target: metadata.target,
+      actor_character_id: metadata.actor_character_id ?? 'player',
       ...(metadata.skill ? { skill: metadata.skill } : {}),
     });
   }));
