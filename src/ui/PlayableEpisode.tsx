@@ -114,6 +114,16 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     }
     : undefined;
 
+  const chooseEvent = (instanceId: string, nodeId: string, choiceId: string): boolean => {
+    const fieldAction = strategyActions.find(action => action.instance_id === instanceId && action.node_id === nodeId && action.choice_id === choiceId);
+    if (fieldAction && snapshot.state) {
+      setExecutedFieldAction({ action: fieldAction, source_revision: snapshot.revision, checkpoint: snapshot.state });
+    }
+    const accepted = session.dispatch({ type: 'choose_event', instance_id: instanceId, node_id: nodeId, choice_id: choiceId }, snapshot.revision);
+    if (!accepted && fieldAction) setExecutedFieldAction(null);
+    return accepted;
+  };
+
   const continueMapOutcome = () => {
     if (!mapOutcomeActive) return;
     playUiCue('continue');
@@ -166,8 +176,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         const choice = presentation.choices[Number(e.key) - 1];
         if (choice?.enabled) {
           playUiCue('execute');
-          session.dispatch({ type: 'choose_event', instance_id: presentation.instance_id,
-            node_id: presentation.node_id, choice_id: choice.choice_id }, snapshot.revision);
+          chooseEvent(presentation.instance_id, presentation.node_id, choice.choice_id);
         }
       } else if (presentation.type !== 'SHOW_CHOICE' && (e.key === 'Enter' || e.code === 'Space')) {
         if (target?.closest('button') && !target.closest('.continue-button')) return;
@@ -210,13 +219,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       onOutcomeContinue={continueMapOutcome}
       onOutcomeReconsider={reconsiderMapOutcome}
       onAction={action => {
-        if (!snapshot.state) return;
         playUiCue('execute');
-        setExecutedFieldAction({ action, source_revision: snapshot.revision, checkpoint: snapshot.state });
-        const accepted = session.dispatch({
-          type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
-        }, snapshot.revision);
-        if (!accepted) setExecutedFieldAction(null);
+        chooseEvent(action.instance_id, action.node_id, action.choice_id);
       }}
     /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
@@ -259,9 +263,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
               commands={snapshot.presentation}
               t={t}
               send={command => {
-                if (command.type === 'choose_event') playUiCue('execute');
-                else if (command.type === 'advance_event') playUiCue('continue');
-                session.dispatch(command, snapshot.revision);
+                if (command.type === 'choose_event') {
+                  playUiCue('execute');
+                  chooseEvent(command.instance_id, command.node_id, command.choice_id);
+                } else {
+                  if (command.type === 'advance_event') playUiCue('continue');
+                  session.dispatch(command, snapshot.revision);
+                }
               }}
               assetUri={resolveAsset}
               choiceFallback={strategyActions.length > 0}
