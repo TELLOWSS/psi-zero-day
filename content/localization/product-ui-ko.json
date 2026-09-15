@@ -1,0 +1,17 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ui.resource.money": "돈",
+    "ui.resource.time": "시간",
+    "ui.resource.schedule": "공정",
+    "ui.resource.safety": "안전",
+    "ui.resource.impact": "연결 자원",
+    "ui.resource.money_value": "보유금",
+    "ui.resource.safety_signals": "위험신호",
+    "ui.resource.pressures": "압박",
+    "ui.psi.related": "관련 PSI",
+    "ui.paid_item.replan": "현장 재판단권",
+    "ui.paid_item.internal_nickname": "까방권",
+    "ui.paid_item.balance_pending": "가격·효과 수치 조정 중"
+  }
+}
