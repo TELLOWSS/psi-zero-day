@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
 import { strategyActionTargetKey } from '../app/strategy-actions';
+import type { PsiIndicatorId } from '../app/product-contract';
+import { psiIndicatorTextId } from '../app/strategy-psi';
 
 export interface StrategyMapOutcome {
   readonly key: string;
   readonly text: string;
   readonly relationship_lines?: readonly string[];
+  readonly psi_cues?: readonly PsiIndicatorId[];
 }
 
 function actionIcon(intent: StrategyActionIntent): string {
@@ -65,6 +68,10 @@ export function StrategyLoopPanel({
       <p>{outcome.text}</p>
       {outcome.relationship_lines?.length ? <div className="strategy-outcome-relations">
         {outcome.relationship_lines.map(line => <span key={line}>{line}</span>)}
+      </div> : null}
+      {outcome.psi_cues?.length ? <div className="strategy-outcome-psi" aria-label={text('ui.psi.related')}>
+        <strong>{text('ui.psi.related')}</strong>
+        <div>{outcome.psi_cues.map(indicator => <span key={indicator}>{text(psiIndicatorTextId(indicator))}</span>)}</div>
       </div> : null}
       <button type="button" className="strategy-execute-button" onClick={onOutcomeContinue}>{text('ui.strategy.return_map')} <b aria-hidden="true">↗</b></button>
     </div> : <>
