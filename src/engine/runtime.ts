@@ -13,8 +13,30 @@ export type EngineCommand =
   | { readonly type: 'advance_slot' }
   | { readonly type: 'apply_effects'; readonly bundle: EffectBundle; readonly context: EffectContext }
   | { readonly type: 'followup_status'; readonly instance_id: string; readonly status: FollowUpEvent['status'] }
-  | { readonly type: 'draw_random' } | EventCommand;
+  | { readonly type: 'draw_random' }
+  | { readonly type: 'restore_decision_checkpoint'; readonly checkpoint: GameState }
+  | EventCommand;
 export interface CommandResult { readonly state: GameState; readonly value?: number; readonly presentation?: readonly PresentationCommand[] }
+
+function assertDecisionCheckpoint(current: GameState, checkpoint: GameState): void {
+  if (checkpoint.run.content_version !== current.run.content_version
+    || checkpoint.run.rules_version !== current.run.rules_version
+    || checkpoint.run.run_id !== current.run.run_id) throw new Error('Decision checkpoint run mismatch');
+  const active = current.event_runtime.active_instance;
+  const previous = checkpoint.event_runtime.active_instance;
+  if (!active || !previous || active.instance_id !== previous.instance_id || active.event_id !== previous.event_id) {
+    throw new Error('Decision checkpoint event mismatch');
+  }
+  if (current.event_runtime.completion_history.length !== checkpoint.event_runtime.completion_history.length) {
+    throw new Error('Completed events cannot be reconsidered');
+  }
+  if (current.event_runtime.occurrence_history.length !== checkpoint.event_runtime.occurrence_history.length) {
+    throw new Error('Decision checkpoint occurrence mismatch');
+  }
+  if (JSON.stringify(current.player.safety_record) !== JSON.stringify(checkpoint.player.safety_record)) {
+    throw new Error('Recorded safety incidents cannot be erased');
+  }
+}
 
 /** Single owner; no bus, UI subscription framework, DOM or rendering dependency. */
 export class CoreEngine {
@@ -40,6 +62,11 @@ export class CoreEngine {
       case 'draw_random': {
         const rng = restoreRng(next.run.rng); value = rng.next();
         next = freezeData({ ...next, run: { ...next.run, rng: rng.snapshot() } }); break;
+      }
+      case 'restore_decision_checkpoint': {
+        assertDecisionCheckpoint(next, command.checkpoint);
+        next = freezeData(copyData(command.checkpoint));
+        break;
       }
       case 'start_event': case 'advance_event': case 'choose_event': case 'cancel_event': {
         const result = executeEventCommand(next, command, this.#content, this.#bounds);
