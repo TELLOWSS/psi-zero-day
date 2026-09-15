@@ -2,6 +2,118 @@
   "schema_version": 1,
   "assets": [
     {
+      "asset_id": "ep01.audio.ambience.site_morning",
+      "type": "audio",
+      "group_id": "ep01.audio.ambience",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/site-morning.wav",
+          "format": "wav",
+          "bytes": 529244,
+          "hash": "bd2cb80e69ea7819e009c816046d8d39eaa97f7a14d3ea59a701915aec2eb3ea"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "required",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.bgm.foundation_shift",
+      "type": "audio",
+      "group_id": "ep01.audio.bgm",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/foundation-shift.wav",
+          "format": "wav",
+          "bytes": 882044,
+          "hash": "2397a65be099c30d8af40b0f4a4537eb45f82b18463428e55bab1c29acbd277a"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "required",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.continue",
+      "type": "audio",
+      "group_id": "ep01.audio.sfx",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/continue.wav",
+          "format": "wav",
+          "bytes": 6660,
+          "hash": "9dd02a8ae981b436cf44bd48241fb58bf52ecf85da629b4e80a13ce466cf2fa7"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "required",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.execute",
+      "type": "audio",
+      "group_id": "ep01.audio.sfx",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/execute.wav",
+          "format": "wav",
+          "bytes": 8864,
+          "hash": "dcd9f25e160589f7b802b99c9f722547eb84da855b03ad2bd0a0607394855827"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "required",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_negative",
+      "type": "audio",
+      "group_id": "ep01.audio.sfx",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/result-negative.wav",
+          "format": "wav",
+          "bytes": 20330,
+          "hash": "c7d7ceda03e7221279fc0b76a394837ac6eb9da0e488fb2db40f3ab1df1c022c"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_neutral",
+      "type": "audio",
+      "group_id": "ep01.audio.sfx",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/result-neutral.wav",
+          "format": "wav",
+          "bytes": 15038,
+          "hash": "0a544303cd778a6ea110076019971555302f6a3f6b855d5007ce1b5a915b0569"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_positive",
+      "type": "audio",
+      "group_id": "ep01.audio.sfx",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/result-positive.wav",
+          "format": "wav",
+          "bytes": 21212,
+          "hash": "5e0352634a9cad05c22175cf6224c93bc42009e2f58deb26245af138e1b5636b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.background.foundation.map",
       "type": "image",
       "group_id": "ep01.backgrounds",
