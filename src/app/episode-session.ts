@@ -117,7 +117,7 @@ export class EpisodeSession {
     if (!checkpointPresentation.some(command => command.type === 'SHOW_CHOICE')) return false;
     const currentChoices = current.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
     const checkpointChoices = checkpoint.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
-    if (currentChoices !== checkpointChoices + 1) return false;
+    if (currentChoices <= checkpointChoices) return false;
     this.#engine.dispatch({ type: 'restore_decision_checkpoint', checkpoint });
     return true;
   });
