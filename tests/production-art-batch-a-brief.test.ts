@@ -61,8 +61,12 @@ describe('TASK-016B Batch A production art brief', () => {
       expect(new Set(variants.map(asset => asset.kind))).toEqual(new Set(['portrait', 'map']));
       expect(new Set(variants.map(asset => asset.silhouette)).size).toBe(1);
       expect(new Set(variants.map(asset => asset.signature_prop)).size).toBe(1);
-      silhouettes.add(variants[0].silhouette);
-      props.add(variants[0].signature_prop);
+
+      const representative = variants[0];
+      expect(representative).toBeDefined();
+      if (!representative) throw new Error(`Missing Batch A variants for ${characterId}`);
+      silhouettes.add(representative.silhouette);
+      props.add(representative.signature_prop);
     }
 
     expect(silhouettes.size).toBe(3);
