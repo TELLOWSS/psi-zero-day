@@ -22,13 +22,21 @@ function assertDecisionCheckpoint(current: GameState, checkpoint: GameState): vo
   if (checkpoint.run.content_version !== current.run.content_version
     || checkpoint.run.rules_version !== current.run.rules_version
     || checkpoint.run.run_id !== current.run.run_id) throw new Error('Decision checkpoint run mismatch');
-  const active = current.event_runtime.active_instance;
+
   const previous = checkpoint.event_runtime.active_instance;
-  if (!active || !previous || active.instance_id !== previous.instance_id || active.event_id !== previous.event_id) {
-    throw new Error('Decision checkpoint event mismatch');
-  }
-  if (current.event_runtime.completion_history.length !== checkpoint.event_runtime.completion_history.length) {
-    throw new Error('Completed events cannot be reconsidered');
+  if (!previous) throw new Error('Decision checkpoint event missing');
+  const active = current.event_runtime.active_instance;
+  const sameActiveEvent = active?.instance_id === previous.instance_id && active.event_id === previous.event_id;
+  const lastFinished = current.event_runtime.finished_instances.at(-1);
+  const justFinishedEvent = active === null
+    && lastFinished?.instance_id === previous.instance_id
+    && lastFinished.event_id === previous.event_id
+    && lastFinished.status === 'COMPLETED';
+  if (!sameActiveEvent && !justFinishedEvent) throw new Error('Decision checkpoint event mismatch');
+
+  const completionDelta = current.event_runtime.completion_history.length - checkpoint.event_runtime.completion_history.length;
+  if ((sameActiveEvent && completionDelta !== 0) || (justFinishedEvent && completionDelta !== 1)) {
+    throw new Error('Decision checkpoint completion mismatch');
   }
   if (current.event_runtime.occurrence_history.length !== checkpoint.event_runtime.occurrence_history.length) {
     throw new Error('Decision checkpoint occurrence mismatch');
