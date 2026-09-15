@@ -4,6 +4,7 @@ import { PlayableEpisode } from '../ui/PlayableEpisode';
 import { EpisodeSession } from './episode-session';
 import { clearEpisodeSave, loadEpisodeSave, saveEpisodeState, type EpisodeSaveStorage } from './episode-save';
 import '../ui/playable.css';
+import '../ui/korean-typography.css';
 import '../ui/strategy-map.css';
 import '../ui/strategy-signals.css';
 import '../ui/strategy-workers.css';
