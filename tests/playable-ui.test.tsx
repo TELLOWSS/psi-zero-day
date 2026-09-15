@@ -73,9 +73,14 @@ describe('Playable Episode React UI', () => {
     click(session.t('ui.start'));
     const seen: string[] = [];
     const stages: string[] = [];
-    for (let i = 0; i < 160 && session.getSnapshot().phase === 'playing'; i++) {
-      const s = session.getSnapshot(); const p = s.presentation.find(c => 'node_id' in c)!;
+    for (let i = 0; i < 190 && session.getSnapshot().phase === 'playing'; i++) {
+      const s = session.getSnapshot(); const p = s.presentation.find(c => 'node_id' in c);
       expect(container.textContent).not.toMatch(hiddenEngineTerms);
+      if (!p) {
+        expect(container.textContent).toContain(session.t('ui.strategy.return_map'));
+        continueCurrent(session);
+        continue;
+      }
       if ('text_id' in p) {
         seen.push(p.text_id);
         expect(container.textContent).toContain(session.t(p.text_id));
@@ -151,12 +156,14 @@ describe('Playable Episode React UI', () => {
     key(' ', 'Space'); expect(session.getSnapshot().revision).toBe(beforeRepeat.revision + 1);
     for (let i = 0; i < 15; i++) {
       if (session.getSnapshot().presentation.some(p => p.type === 'SHOW_CHOICE')) break;
-      click(session.t('ui.continue'));
+      continueCurrent(session);
     }
     key('4', 'Digit4');
     expect(session.getSnapshot().state!.flags.followed_junho).toBe(true);
-    expect(session.getSnapshot().presentation[0]).toMatchObject({ text_id: 'ep01.junho.signal' });
+    expect(session.getSnapshot().presentation).toEqual([]);
     expect(session.getSnapshot().state!.event_runtime.choice_history).toHaveLength(1);
+    click(session.t('ui.strategy.return_map'));
+    expect(session.getSnapshot().presentation[0]).toMatchObject({ text_id: 'ep01.junho.signal' });
   });
 
   it('resolves portraits through the asset registry and hides failed images while retaining identity', () => {
