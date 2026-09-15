@@ -9,7 +9,8 @@ const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
 const fullProductionCheck = process.argv.includes('--production-check');
 const batchAProductionCheck = process.argv.includes('--production-batch-a-check');
-const productionCheck = fullProductionCheck || batchAProductionCheck;
+const playerProductionCheck = process.argv.includes('--production-player-check');
+const productionCheck = fullProductionCheck || batchAProductionCheck || playerProductionCheck;
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
 
 const planned = [];
@@ -48,6 +49,7 @@ const batchASources = new Set([
   'lim_junho:portrait',
   'lim_junho:map',
 ]);
+const playerSources = new Set(['player:portrait', 'player:map']);
 
 async function tryRead(uri) {
   try {
@@ -92,11 +94,17 @@ async function readPlannedAsset(uri) {
 }
 
 if (productionCheck) {
-  const productionItems = batchAProductionCheck
-    ? planned.filter(item => batchASources.has(item.source))
-    : planned;
-  const expectedCount = batchAProductionCheck ? 7 : 17;
-  const scopeLabel = batchAProductionCheck ? 'Batch A production art' : 'Episode 01 production art';
+  const productionItems = playerProductionCheck
+    ? planned.filter(item => playerSources.has(item.source))
+    : batchAProductionCheck
+      ? planned.filter(item => batchASources.has(item.source))
+      : planned;
+  const expectedCount = playerProductionCheck ? 2 : batchAProductionCheck ? 7 : 17;
+  const scopeLabel = playerProductionCheck
+    ? 'Player production art'
+    : batchAProductionCheck
+      ? 'Batch A production art'
+      : 'Episode 01 production art';
   const missing = [];
   const invalid = [];
 
