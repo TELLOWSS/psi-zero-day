@@ -51,7 +51,7 @@ function frictionIcon(kind: FieldFrictionKind): string {
   }
 }
 
-export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue }: {
+export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
@@ -61,6 +61,7 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   readonly visualAssets?: StrategyVisualAssets;
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
+  readonly onOutcomeReconsider?: () => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
@@ -222,6 +223,7 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
         onAction={onAction}
         outcome={outcome}
         onOutcomeContinue={onOutcomeContinue}
+        onOutcomeReconsider={onOutcomeReconsider}
         onActionFocus={setActionFocusId}
       />
     </section>
