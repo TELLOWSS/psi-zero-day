@@ -1,0 +1,232 @@
+/* TASK-014A — visual-only release-candidate polish. No game rules live here. */
+.strategy-shell[data-visual-mode="art"] {
+  color: #183348;
+  background: #b9dbe8;
+}
+
+/* Make the site the visual hero instead of the white-card dashboard. */
+.strategy-hud {
+  inset: 1.1% 1.3% auto;
+  height: 7.2%;
+  grid-template-columns: 1.05fr 1.55fr .42fr;
+  gap: .7%;
+}
+.strategy-shell[data-visual-mode="art"] .strategy-brand,
+.strategy-shell[data-visual-mode="art"] .strategy-meter,
+.strategy-shell[data-visual-mode="art"] .strategy-day {
+  border: 1px solid rgba(255,255,255,.34);
+  background: linear-gradient(180deg, rgba(26,52,70,.91), rgba(22,42,58,.86));
+  color: #f4f8f8;
+  box-shadow: 0 10px 26px rgba(21,48,64,.18);
+  backdrop-filter: blur(12px);
+}
+.strategy-brand, .strategy-meter, .strategy-day { border-radius: 15px; }
+.strategy-brand { font-size: clamp(14px,1.28vw,23px); letter-spacing: .02em; }
+.strategy-hardhat { color: #f2c24b; }
+.strategy-meter-track { height: 8px; background: rgba(255,255,255,.15); }
+.strategy-meter-track i { background: linear-gradient(90deg,#54c4df,#77d79d,#f1d36a); box-shadow: 0 0 12px rgba(104,210,190,.32); }
+.strategy-day span { color: #b9cbd5; }
+.strategy-day strong { color: #f2d274; font-size: 1.35rem; }
+
+.strategy-rail {
+  top: 9.4%;
+  left: 1.25%;
+  bottom: 15.6%;
+  width: 18.6%;
+  gap: .8%;
+}
+.strategy-shell[data-visual-mode="art"] .strategy-panel,
+.strategy-shell[data-visual-mode="art"] .strategy-rail button {
+  border: 1px solid rgba(255,255,255,.36);
+  background: linear-gradient(180deg, rgba(246,251,250,.88), rgba(233,243,242,.81));
+  box-shadow: 0 10px 24px rgba(28,58,68,.13);
+  backdrop-filter: blur(12px);
+}
+.strategy-panel { border-radius: 16px; padding: 11px 13px; }
+.strategy-panel h2 { margin-bottom: 7px; font-size: clamp(13px,1.12vw,20px); }
+.strategy-panel p { margin: 3px 0; }
+.strategy-friction-panel { max-height: 24%; overflow: hidden; }
+.strategy-focus-panel { min-height: 11%; }
+.strategy-rail button { min-height: 10.5%; border-radius: 14px; }
+.strategy-rail button.has-actions { border-color: rgba(223,142,45,.55); box-shadow: 0 9px 23px rgba(173,103,29,.17); }
+
+.strategy-map {
+  inset: 8.6% 0 14.3% 15.8%;
+  border-radius: 0 0 0 22px;
+  overflow: hidden;
+  background: #b9dae6;
+}
+.strategy-map.has-background-art::before {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 68% 28%, rgba(255,248,213,.22), transparent 29%),
+    linear-gradient(180deg, rgba(255,255,255,.02) 0 57%, rgba(20,44,55,.08) 100%);
+}
+.strategy-map.has-background-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.17), inset 0 -70px 90px rgba(29,47,50,.08);
+}
+.strategy-map-background-art {
+  transform: scale(1.025);
+  filter: saturate(1.08) contrast(1.035) brightness(1.015);
+}
+.strategy-map-stage-card {
+  top: 2.1%;
+  right: 1.4%;
+  width: 17.5%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.32);
+  background: rgba(27,52,67,.88) !important;
+  color: #f5f8f7;
+  box-shadow: 0 10px 26px rgba(21,48,64,.2);
+}
+.strategy-map-stage-card span { color: #bdd0d9; }
+.strategy-map-stage-card progress { accent-color: #efb847; }
+
+/* RC character art should read as game pieces, not tiny UI icons. */
+.strategy-map-worker.has-art {
+  min-width: 168px;
+  min-height: 108px;
+  gap: 4px;
+}
+.strategy-worker-art {
+  width: 82px;
+  height: 112px;
+  flex-basis: 82px;
+  filter: drop-shadow(0 11px 8px rgba(23,44,53,.32));
+}
+.strategy-map-worker.has-art.is-scene-participant .strategy-worker-art { transform: translateY(-2px) scale(1.08); }
+.strategy-map-worker.has-art.is-focused .strategy-worker-art,
+.strategy-map-worker.has-art:hover .strategy-worker-art,
+.strategy-map-worker.has-art:focus-visible .strategy-worker-art {
+  transform: translateY(-8px) scale(1.18);
+  filter: drop-shadow(0 15px 10px rgba(23,44,53,.38));
+}
+.strategy-worker-label {
+  min-width: 78px;
+  max-width: 108px;
+  padding: 5px 7px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.58);
+  background: rgba(26,49,62,.82);
+  box-shadow: 0 7px 18px rgba(20,45,57,.18);
+  backdrop-filter: blur(7px);
+}
+.strategy-worker-label strong { color: #fff; font-size: clamp(9px,.7vw,13px); }
+.strategy-worker-label span { color: #c7d9df; }
+.strategy-map-worker.is-focused .strategy-worker-label {
+  outline: 2px solid rgba(244,190,72,.8);
+  outline-offset: 2px;
+  background: rgba(20,43,56,.94);
+}
+.strategy-worker-alert { left: 57px; top: 4px; box-shadow: 0 4px 10px rgba(110,33,24,.28); }
+
+/* Three first-hour anchors: each silhouette/scale reads differently without labels. */
+.strategy-map-worker[data-character="player"] .strategy-worker-art { width: 78px; height: 116px; }
+.strategy-map-worker[data-character="kang_taesik"] .strategy-worker-art { width: 96px; height: 116px; }
+.strategy-map-worker[data-character="lim_junho"] .strategy-worker-art { width: 70px; height: 101px; }
+.strategy-map-worker[data-character="kang_taesik"] .strategy-worker-label { border-left: 3px solid #e57d2d; }
+.strategy-map-worker[data-character="player"] .strategy-worker-label { border-left: 3px solid #3ca1cf; }
+.strategy-map-worker[data-character="lim_junho"] .strategy-worker-label { border-left: 3px solid #65ad7b; }
+
+.strategy-risk-signal {
+  box-shadow: 0 8px 20px rgba(90,42,25,.18);
+  backdrop-filter: blur(7px);
+}
+.strategy-zone-target span {
+  background: rgba(30,53,64,.7);
+  color: #eaf3f4;
+  border-color: rgba(255,255,255,.24);
+}
+
+/* Dialogue is support UI: compact, readable, never the dominant object. */
+.strategy-active .scene-heading {
+  top: 9.3%;
+  left: 21.2%;
+  max-width: 37%;
+}
+.strategy-active .scene-heading h1 {
+  padding: 7px 13px;
+  border-radius: 11px;
+  background: rgba(25,49,64,.88);
+  box-shadow: 0 9px 22px rgba(20,42,53,.18);
+}
+.strategy-active .play-panel {
+  left: 21.6%;
+  right: 1.7%;
+  bottom: 14.8%;
+  min-height: 112px;
+  max-height: 19%;
+  grid-template-columns: 126px minmax(0,1fr);
+  gap: 15px;
+  padding: 11px 15px;
+  border-radius: 17px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-top: 1px solid rgba(241,208,126,.42);
+  background: linear-gradient(180deg, rgba(16,35,38,.93), rgba(15,30,32,.96));
+  box-shadow: 0 14px 32px rgba(17,35,40,.27);
+}
+.strategy-active .portrait-slot {
+  height: 66px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.strategy-active .portrait-image { object-position: center 20%; }
+.strategy-active .character-card { padding-right: 14px; }
+.strategy-active .character-identity { margin-top: 7px; gap: 2px; }
+.strategy-active .character-identity strong { font-size: 15px; }
+.strategy-active .dialogue-content { min-height: 74px; }
+.strategy-active .dialogue-text {
+  padding: 5px 0 7px;
+  font-size: clamp(13px,1.12vw,17px);
+  line-height: 1.55;
+  max-width: 940px;
+}
+.strategy-active .continue-button {
+  min-height: 30px;
+  min-width: 118px;
+  padding: 3px 0 4px 12px;
+}
+
+/* Roster remains available but stops competing with the site. */
+.strategy-roster {
+  left: 20.6%;
+  right: 1.3%;
+  bottom: 1%;
+  height: 11.5%;
+  padding: 7px;
+  gap: 6px;
+  border-radius: 16px;
+}
+.strategy-shell[data-visual-mode="art"] .strategy-roster {
+  border-color: rgba(255,255,255,.28);
+  background: rgba(25,47,59,.88);
+  color: #f1f6f5;
+}
+.roster-title { border-right-color: rgba(255,255,255,.14); }
+.strategy-character {
+  background: rgba(255,255,255,.08);
+  color: #edf5f5;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.character-token { width: 42px; height: 42px; }
+.strategy-character span { color: #bfd0d5; }
+
+@media (max-width: 900px), (max-height: 600px) {
+  .strategy-rail { width: 21%; bottom: 13%; }
+  .strategy-map { inset: 8.6% 0 12% 18%; }
+  .strategy-map-worker.has-art { min-width: 124px; min-height: 82px; }
+  .strategy-worker-art { width: 58px; height: 79px; flex-basis: 58px; }
+  .strategy-worker-label { min-width: 62px; max-width: 80px; }
+  .strategy-active .play-panel { left: 23%; bottom: 12.5%; max-height: 22%; grid-template-columns: 102px minmax(0,1fr); }
+  .strategy-roster { left: 22%; height: 10.5%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strategy-worker-art, .strategy-map-background-art { transition: none !important; }
+}
