@@ -86,6 +86,11 @@ describe('Playable Episode React UI', () => {
       // Field outcomes intentionally cover the next engine presentation until the player confirms the result.
       // Follow what is actually visible before inspecting the underlying presentation snapshot.
       if (buttons().some(button => button.textContent?.includes(session.t('ui.strategy.return_map')))) {
+        const visibleResult = s.presentation.find(command => command.type === 'SHOW_RESULT');
+        if (visibleResult?.type === 'SHOW_RESULT') {
+          seen.push(visibleResult.text_id);
+          expect(container.textContent).toContain(session.t(visibleResult.text_id));
+        }
         continueCurrent(session);
         continue;
       }
