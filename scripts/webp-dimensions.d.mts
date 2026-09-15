@@ -7,3 +7,4 @@ export interface WebPDimensions {
 
 export declare function isWebP(bytes: Buffer): boolean;
 export declare function webPDimensions(bytes: Buffer): WebPDimensions | undefined;
+export declare function webPHasAlpha(bytes: Buffer): boolean | undefined;
