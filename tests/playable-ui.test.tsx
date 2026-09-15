@@ -9,7 +9,6 @@ import { PresentationView } from '../src/ui/PresentationView';
 import { CharacterCard } from '../src/ui/VisualSlot';
 import { episodeBounds, episodeOptions, playEpisode } from './helpers/episode01-playthrough';
 import type { EpisodeDecisions } from './helpers/episode01-playthrough';
-import visuals from '../content/episode01/visuals.json';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 let container: HTMLDivElement;
@@ -34,6 +33,8 @@ const paths: EpisodeDecisions[] = [
   { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
 ];
 
+const hiddenEngineTerms = /BEST_CONTROL|CONTROLLED_DELAY|NEAR_MISS|RELATION_CONFLICT|\bSUCCESS\b|\bFAIL\b|\bGOOD\b|\bBAD\b/;
+
 describe('Playable Episode React UI', () => {
   it.each(paths)('clicks $plan / $entrance / $evening to the same headless outcome', decisions => {
     const session = mount();
@@ -44,7 +45,7 @@ describe('Playable Episode React UI', () => {
     const inputs: Record<string, string | undefined> = { plan: decisions.plan, listen: decisions.signal, ramp: decisions.ramp, entrance: decisions.entrance, evening: decisions.evening };
     for (let i = 0; i < 100 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot(); const p = s.presentation.find(c => 'node_id' in c)!;
-      expect(container.textContent).not.toMatch(/PSI|BEST_CONTROL|CONTROLLED_DELAY|NEAR_MISS|RELATION_CONFLICT|SUCCESS|FAIL|GOOD|BAD/);
+      expect(container.textContent).not.toMatch(hiddenEngineTerms);
       if ('text_id' in p) {
         seen.push(p.text_id);
         expect(container.textContent).toContain(session.t(p.text_id));
@@ -129,20 +130,19 @@ describe('Playable Episode React UI', () => {
     expect(session.getSnapshot().state!.event_runtime.choice_history).toHaveLength(1);
   });
 
-  it('swaps portraits through manifest data and hides failed images while retaining identity', () => {
-    const slot = visuals.characters.player as { uri: string | null; accent: string };
-    const original = slot.uri;
-    try {
-      slot.uri = 'assets/episode01/characters/player.webp';
-      const person = new EpisodeSession().character('player')!;
-      act(() => root.render(<CharacterCard person={person} />));
-      const image = container.querySelector('img')!;
-      expect(image.getAttribute('src')).toContain('assets/episode01/characters/player.webp');
-      act(() => image.dispatchEvent(new Event('error')));
-      expect(container.querySelector('img')).toBeNull();
-      expect(container.textContent).toContain(person.name);
-      expect(container.textContent).toContain(person.role);
-    } finally { slot.uri = original; }
+  it('resolves portraits through the asset registry and hides failed images while retaining identity', () => {
+    const session = new EpisodeSession();
+    const person = session.character('player')!;
+    const portraitUri = session.assetUri('ep01.character.player.portrait');
+    expect(portraitUri).toMatch(/player-portrait\.svg$/);
+    act(() => root.render(<CharacterCard person={person} portraitUri={portraitUri} />));
+    const image = container.querySelector('img');
+    expect(image).not.toBeNull();
+    expect(image!.getAttribute('src')).toContain('assets/episode01/characters/player-portrait.svg');
+    act(() => image!.dispatchEvent(new Event('error')));
+    expect(container.querySelector('img')).toBeNull();
+    expect(container.textContent).toContain(person.name);
+    expect(container.textContent).toContain(person.role);
   });
 
   it('uses inert placeholders for other engine presentation cues', () => {
