@@ -97,8 +97,14 @@ export function projectStrategyView(state: GameState): StrategyView {
     story_flags: character.story_flags,
   }));
   const signals = projectEpisode01Signals(activeEventId);
+  // Player state is intentionally separate from NPC character state, but the avatar belongs on
+  // the strategy-map presentation layer. This adds no gameplay actor or engine-owned character.
+  const placementCharacterIds = [
+    'player',
+    ...roster.filter(character => character.available).map(character => character.character_id),
+  ];
   const placements = projectEpisode01CharacterPlacements(
-    roster.filter(character => character.available).map(character => character.character_id),
+    placementCharacterIds,
     participantBindings,
     signals,
   );
