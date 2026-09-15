@@ -25,12 +25,12 @@ describe('Casual strategy session integration', () => {
     expect(snapshot.strategy).not.toBeNull();
     expect(snapshot.strategy?.clock.day).toBe(snapshot.state?.clock.day);
     expect(snapshot.strategy?.construction.stage_id).toBe(snapshot.state?.construction.stage_id);
-    expect(session.assetUri('ep01.background.foundation.map')).toContain('foundation-map.svg');
+    expect(session.assetUri('ep01.background.foundation.map')).toContain('foundation-map-rc.svg');
 
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
     expect(html).toContain('strategy-shell');
     expect(html).toContain('data-visual-mode="art"');
-    expect(html).toContain('foundation-map.svg');
+    expect(html).toContain('foundation-map-rc.svg');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('현장 목표');
     expect(html).toContain('자동 저장');
