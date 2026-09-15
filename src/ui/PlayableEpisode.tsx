@@ -3,6 +3,7 @@ import type { GameState } from '../domain';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
 import { projectCharacterLoadout } from '../app/character-loadout';
+import { FIELD_SUPPORT_ITEMS, isFieldSupportItemActive } from '../app/field-support-items';
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
@@ -63,6 +64,18 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const mapOutcomeActive = executedOutcomeReady || fallbackEngineOutcome;
   const outcomePsiCues = psiCuesForChoice(executedFieldAction?.action.choice_id ?? fallbackChoiceId);
   const replanBalance = paidItemQuantity(paidItemWallet, REPLAN_PASS_ITEM_ID);
+  const supportItems = snapshot.state
+    ? FIELD_SUPPORT_ITEMS.map(item => {
+      const remaining = paidItemQuantity(paidItemWallet, item.item_id);
+      const active = isFieldSupportItemActive(snapshot.state!.flags, item.item_id);
+      return {
+        ...item,
+        remaining,
+        active,
+        enabled: remaining > 0 && !active && !mapOutcomeActive && activeEventId !== null && isStrategyFieldActionEvent(activeEventId),
+      };
+    }).filter(item => item.remaining > 0 || item.active)
+    : [];
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
     : undefined;
@@ -114,6 +127,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     }
     : undefined;
 
+  const saveWallet = (nextWallet: typeof paidItemWallet) => {
+    setPaidItemWallet(nextWallet);
+    if (typeof window !== 'undefined') {
+      try { savePaidItemWallet(window.localStorage, nextWallet); } catch { /* storage unavailable */ }
+    }
+  };
+
   const chooseEvent = (instanceId: string, nodeId: string, choiceId: string): boolean => {
     const fieldAction = strategyActions.find(action => action.instance_id === instanceId && action.node_id === nodeId && action.choice_id === choiceId);
     if (fieldAction && snapshot.state) {
@@ -151,13 +171,17 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     if (!executedFieldAction || replanBalance <= 0) return;
     const accepted = session.reconsider(executedFieldAction.checkpoint, snapshot.revision);
     if (!accepted) return;
-    const nextWallet = consumePaidItem(paidItemWallet, REPLAN_PASS_ITEM_ID);
-    setPaidItemWallet(nextWallet);
-    if (typeof window !== 'undefined') {
-      try { savePaidItemWallet(window.localStorage, nextWallet); } catch { /* storage unavailable */ }
-    }
+    saveWallet(consumePaidItem(paidItemWallet, REPLAN_PASS_ITEM_ID));
     setExecutedFieldAction(null);
     playUiCue('continue');
+  };
+
+  const useSupportItem = (itemId: string) => {
+    if (paidItemQuantity(paidItemWallet, itemId) <= 0) return;
+    const accepted = session.activateSupportItem(itemId, snapshot.revision);
+    if (!accepted) return;
+    saveWallet(consumePaidItem(paidItemWallet, itemId));
+    playUiCue('execute');
   };
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
@@ -225,6 +249,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       outcome={strategyOutcome}
       onOutcomeContinue={continueMapOutcome}
       onOutcomeReconsider={reconsiderMapOutcome}
+      supportItems={supportItems}
+      onSupportItemUse={useSupportItem}
       onAction={action => {
         playUiCue('execute');
         chooseEvent(action.instance_id, action.node_id, action.choice_id);
