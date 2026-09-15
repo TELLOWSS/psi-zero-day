@@ -1,12 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="480" viewBox="0 0 320 480">
-<defs><linearGradient id="v" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#39a8d8"/><stop offset="1" stop-color="#1f628f"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#18384a" flood-opacity=".3"/></filter></defs>
-<ellipse cx="160" cy="442" rx="85" ry="19" fill="#1a3d50" opacity=".18"/>
-<g filter="url(#s)"><path d="M125 327l-21 103h35l24-103Z" fill="#274255"/><path d="M192 327l24 103h-35l-22-103Z" fill="#22394b"/><path d="M84 426h60v27H75q-7-16 9-27ZM177 426h60q16 10 9 27h-69Z" fill="#1e2d39"/></g>
-<path d="M101 299q8-65 59-70q54 4 61 70l-9 55H111Z" fill="url(#v)"/><path d="M111 286h101" stroke="#f2efad" stroke-width="10"/>
-<path d="M108 269l-31 62M213 270l25 57" stroke="#e2aa86" stroke-width="21" stroke-linecap="round"/>
-<rect x="143" y="207" width="34" height="38" rx="12" fill="#e2aa86"/><ellipse cx="160" cy="166" rx="52" ry="61" fill="#e2aa86"/>
-<path d="M109 163q9-70 51-72q49 3 54 76l-19 30q-18-62-69-7Z" fill="#293640"/><circle cx="141" cy="166" r="5" fill="#243440"/><circle cx="179" cy="166" r="5" fill="#243440"/><path d="M144 193q16 10 31 0" fill="none" stroke="#955849" stroke-width="5" stroke-linecap="round"/>
-<g filter="url(#s)"><path d="M96 119q8-61 64-64q60 4 66 64Z" fill="#fff"/><rect x="88" y="111" width="145" height="18" rx="9" fill="#fff"/><path d="M112 107h96" stroke="#2e8abd" stroke-width="8" stroke-linecap="round"/></g>
-<g transform="translate(221 283) rotate(10)"><rect width="48" height="68" rx="7" fill="#22313d"/><rect x="6" y="7" width="36" height="48" rx="4" fill="#8dd2e8"/></g>
-<path d="M111 304h23v43h-23Zm75 0h25v43h-25Z" fill="#f2efad" opacity=".55"/>
+<defs>
+  <linearGradient id="vest" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#58b9de"/><stop offset=".55" stop-color="#2f8fbd"/><stop offset="1" stop-color="#1c5b87"/></linearGradient>
+  <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0c09e"/><stop offset="1" stop-color="#d99672"/></linearGradient>
+  <linearGradient id="helmet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#cbd9de"/></linearGradient>
+  <filter id="s" x="-40%" y="-40%" width="190%" height="200%"><feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#17394c" flood-opacity=".3"/></filter>
+</defs>
+<ellipse cx="160" cy="445" rx="85" ry="20" fill="#163d4d" opacity=".18"/>
+<g filter="url(#s)">
+  <path d="M126 328l-21 104h36l23-104Z" fill="#273f51"/><path d="M191 328l24 104h-36l-21-104Z" fill="#223747"/>
+  <path d="M82 427h62v28H73q-7-17 9-28ZM177 427h62q16 11 9 28h-71Z" fill="#1d2d39"/>
+</g>
+<!-- torso -->
+<path d="M100 301q8-66 60-72q55 4 62 72l-10 56H110Z" fill="url(#vest)"/>
+<path d="M111 286h101" stroke="#f4efad" stroke-width="11"/>
+<path d="M127 302l15 55M194 302l-15 55" stroke="#f4efad" stroke-width="9"/>
+<path d="M159 299v58" stroke="#174e72" stroke-width="4"/>
+<rect x="143" y="208" width="34" height="39" rx="12" fill="url(#skin)"/>
+<!-- face -->
+<ellipse cx="160" cy="166" rx="52" ry="62" fill="url(#skin)"/>
+<path d="M109 163q10-70 51-73q49 3 55 77l-20 29q-18-59-69-7Z" fill="#293640"/>
+<circle cx="141" cy="166" r="5" fill="#243440"/><circle cx="179" cy="166" r="5" fill="#243440"/>
+<path d="M144 192q16 11 31 0" fill="none" stroke="#98594b" stroke-width="5" stroke-linecap="round"/>
+<!-- helmet -->
+<g filter="url(#s)"><path d="M96 119q8-61 64-65q60 4 66 65Z" fill="url(#helmet)"/><rect x="88" y="111" width="145" height="18" rx="9" fill="url(#helmet)"/><path d="M112 107h96" stroke="#2e8abd" stroke-width="8" stroke-linecap="round"/><path d="M160 61v43" stroke="#d5e1e4" stroke-width="6"/></g>
+<!-- arms / tablet -->
+<path d="M108 270l-31 64M213 270l25 58" stroke="url(#skin)" stroke-width="21" stroke-linecap="round"/>
+<g transform="translate(219 281) rotate(9)" filter="url(#s)"><rect width="52" height="74" rx="8" fill="#22323e"/><rect x="7" y="8" width="38" height="53" rx="4" fill="#92d8ec"/><path d="M13 21h26M13 31h20M13 41h24" stroke="#397f9d" stroke-width="3" stroke-linecap="round"/></g>
+<!-- radio -->
+<g transform="translate(91 300)" filter="url(#s)"><rect width="24" height="40" rx="5" fill="#20343f"/><path d="M17 0v-13" stroke="#20343f" stroke-width="4" stroke-linecap="round"/></g>
+<circle cx="118" cy="309" r="8" fill="#2e91c0" stroke="#fff" stroke-width="3"/>
 </svg>
