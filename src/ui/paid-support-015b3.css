@@ -1,0 +1,93 @@
+/* TASK-015B3 — compact paid facility/equipment deployment tray. No pricing or balance values. */
+
+.strategy-support-panel {
+  margin-top: 7px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(42, 77, 91, .15);
+  background: rgba(247, 251, 252, .82);
+  box-shadow: 0 4px 14px rgba(28, 58, 72, .06);
+}
+
+.strategy-support-panel h2 {
+  margin: 0 0 6px;
+  color: #233f50;
+  font-size: clamp(9px, .66vw, 12px);
+  letter-spacing: .02em;
+}
+
+.strategy-support-list {
+  display: grid;
+  gap: 5px;
+}
+
+.strategy-support-list article {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 5px 6px;
+  border-radius: 9px;
+  background: rgba(225, 238, 243, .62);
+}
+
+.strategy-support-list article > span {
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: rgba(43, 80, 97, .1);
+  color: #4b6774;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.strategy-support-list article > strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #24404e;
+  font-size: 9px;
+}
+
+.strategy-support-list article > em,
+.strategy-support-list article > button {
+  flex: 0 0 auto;
+  border-radius: 8px;
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.strategy-support-list article > em {
+  padding: 3px 5px;
+  background: rgba(63, 128, 99, .12);
+  color: #2f6b55;
+}
+
+.strategy-support-list article > button {
+  min-height: 24px;
+  padding: 3px 6px;
+  border: 1px solid rgba(38, 82, 101, .22);
+  background: #eef5f7;
+  color: #294e60;
+  cursor: pointer;
+}
+
+.strategy-support-list article > button:disabled {
+  opacity: .42;
+  cursor: default;
+}
+
+.strategy-support-list article[data-support-active="true"] {
+  border: 1px solid rgba(60, 132, 105, .16);
+  background: rgba(224, 241, 232, .58);
+}
+
+@media (max-width: 1100px), (max-height: 680px) {
+  .strategy-support-panel { padding: 5px; margin-top: 4px; }
+  .strategy-support-list { gap: 3px; }
+  .strategy-support-list article { padding: 3px 4px; }
+  .strategy-support-list article > span { display: none; }
+  .strategy-support-list article { grid-template-columns: 1fr auto; }
+}
