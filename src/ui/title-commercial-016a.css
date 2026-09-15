@@ -1,0 +1,161 @@
+/* TASK-016A — title screen uses the same world/cast art as gameplay. */
+.phase-start .site-scene::after {
+  background:
+    linear-gradient(90deg, rgba(8, 14, 16, .88) 0%, rgba(8, 14, 16, .68) 37%, rgba(8, 14, 16, .18) 68%, rgba(8, 14, 16, .34) 100%),
+    linear-gradient(0deg, rgba(8, 14, 16, .64) 0%, rgba(8, 14, 16, 0) 46%);
+}
+
+.title-screen-commercial {
+  position: relative;
+  overflow: hidden;
+  padding: 5.2% 5.5% 3.4%;
+}
+
+.title-screen-commercial .title-copy {
+  position: relative;
+  z-index: 4;
+  width: min(51%, 720px);
+}
+
+.title-screen-commercial .title-copy h1 {
+  max-width: 720px;
+  text-shadow: 0 8px 26px rgba(0, 0, 0, .34);
+}
+
+.title-screen-commercial .tagline {
+  max-width: 560px;
+  color: rgba(239, 243, 235, .86);
+  text-shadow: 0 4px 18px rgba(0, 0, 0, .48);
+}
+
+.title-hero-cast {
+  position: absolute;
+  z-index: 2;
+  inset: 7% 1.8% 14% 43%;
+  pointer-events: none;
+}
+
+.title-hero-ground {
+  position: absolute;
+  z-index: 0;
+  left: 16%;
+  right: 1%;
+  bottom: 2%;
+  height: 22%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(5, 12, 13, .64) 0%, rgba(5, 12, 13, .18) 56%, transparent 72%);
+  filter: blur(7px);
+}
+
+.title-hero-character {
+  position: absolute;
+  bottom: 1%;
+  width: 31%;
+  height: 78%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .34));
+  transform-origin: bottom center;
+}
+
+.title-hero-character-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.title-hero-character-1 {
+  z-index: 3;
+  left: 35%;
+  width: 34%;
+  height: 88%;
+}
+
+.title-hero-character-2 {
+  z-index: 2;
+  left: 8%;
+  width: 34%;
+  height: 82%;
+  transform: scale(.96);
+  opacity: .96;
+}
+
+.title-hero-character-3 {
+  z-index: 1;
+  right: 0;
+  width: 30%;
+  height: 74%;
+  transform: scale(.94);
+  opacity: .94;
+}
+
+.title-screen-commercial .start-block {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  padding: 18px 20px 0;
+  margin: 0 -2px;
+  background: linear-gradient(90deg, rgba(13, 20, 20, .62), rgba(13, 20, 20, .16) 64%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.title-screen-commercial .start-block > div {
+  max-width: 620px;
+}
+
+.title-screen-commercial .primary-button {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+}
+
+@media (max-width: 1100px), (max-height: 680px) {
+  .title-screen-commercial {
+    padding: 4% 4% 2.4%;
+  }
+  .title-screen-commercial .title-copy {
+    width: 54%;
+  }
+  .title-hero-cast {
+    inset: 8% 1% 16% 43%;
+  }
+  .title-screen-commercial .title-copy h1 {
+    margin-top: 8px;
+    font-size: clamp(34px, 6vw, 66px);
+  }
+  .title-screen-commercial .tagline {
+    font-size: clamp(11px, 1.4vw, 16px);
+  }
+  .title-screen-commercial .start-block {
+    padding-top: 10px;
+  }
+  .title-screen-commercial .start-block h2 {
+    font-size: clamp(19px, 2.4vw, 30px);
+    margin: 3px 0 5px;
+  }
+  .title-screen-commercial .primary-button {
+    min-height: 48px;
+    padding: 12px 18px;
+  }
+}
+
+@media (max-width: 760px) {
+  .title-hero-cast {
+    opacity: .6;
+    inset-left: 34%;
+  }
+  .title-screen-commercial .title-copy {
+    width: 72%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .title-hero-character-1 { animation: title-cast-settle 480ms ease-out both; }
+  .title-hero-character-2 { animation: title-cast-settle 560ms 40ms ease-out both; }
+  .title-hero-character-3 { animation: title-cast-settle 620ms 80ms ease-out both; }
+}
+
+@keyframes title-cast-settle {
+  from { opacity: 0; translate: 0 14px; }
+  to { translate: 0 0; }
+}
