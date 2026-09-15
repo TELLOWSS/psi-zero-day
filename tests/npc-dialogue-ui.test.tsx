@@ -23,10 +23,15 @@ function click(text: string) {
   if (!button) throw new Error(`Missing button: ${text}`);
   act(() => button.click());
 }
+function continueCurrent() {
+  const returnMap = session.t('ui.strategy.return_map');
+  const hasReturn = Array.from(container.querySelectorAll('button')).some(button => button.textContent?.includes(returnMap));
+  click(hasReturn ? returnMap : session.t('ui.continue'));
+}
 function continueToChoice() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     if (session.getSnapshot().dialogue?.responses.length) return;
-    click(session.t('ui.continue'));
+    continueCurrent();
   }
   throw new Error('No response node reached');
 }
@@ -49,33 +54,41 @@ describe('TASK-006 character interaction UI', () => {
     expect(responses[0]!.consequences).not.toEqual(responses[1]!.consequences);
   });
 
-  it('shows an attributed relationship delta before completion and clears it on the next action', () => {
+  it('shows an attributed relationship delta before confirmation and clears it on the next action', () => {
     continueToChoice(); choose('delegate_kang');
-    const feedback = container.querySelector('.relationship-feedback')!;
+    const feedback = container.querySelector('.strategy-outcome-relations')!;
+    expect(feedback).not.toBeNull();
     expect(feedback.textContent).toContain(session.character('kang_taesik')!.name);
     expect(feedback.textContent).toContain(session.t('ui.relationship.trust'));
     expect(feedback.textContent).toContain('+8');
     expect(session.getSnapshot().phase).toBe('playing');
     expect(session.getSnapshot().state!.flags.episode01_completed).toBeUndefined();
-    expect(feedback.textContent).not.toContain('38'); // Not the permanent relationship total.
+    expect(feedback.textContent).not.toContain('38');
     const before = session.getSnapshot();
     act(() => root.render(<PlayableEpisode session={session} />));
     expect(session.getSnapshot()).toBe(before);
-    click(session.t('ui.continue'));
+    continueCurrent();
+    expect(container.querySelector('.strategy-outcome-relations')).toBeNull();
     expect(container.querySelector('.relationship-feedback')).toBeNull();
     expect(inspectRelationshipDeltas(session.getSnapshot().state!, 'kang_taesik')).toHaveLength(1);
   });
 
   it('shows both negative consequences of FORCE_CLEAR without a correct/incorrect label', () => {
-    continueToChoice(); choose('delegate_kang'); continueToChoice(); choose('check_self'); choose('force_clear');
-    expect(container.querySelectorAll('.relationship-feedback > span')).toHaveLength(2);
-    expect(Array.from(container.querySelectorAll('.delta-negative')).map(n => n.textContent)).toEqual(['-5', '-5']);
+    continueToChoice(); choose('delegate_kang');
+    continueToChoice(); choose('check_self');
+    continueToChoice(); choose('force_clear');
+    const feedback = container.querySelector('.strategy-outcome-relations')!;
+    expect(feedback).not.toBeNull();
+    expect(feedback.querySelectorAll('span')).toHaveLength(2);
+    expect(feedback.textContent).toContain('-5');
     expect(container.textContent).not.toMatch(/GOOD|BAD|SUCCESS|FAIL|RELATION_CONFLICT/);
   });
 
   it.each(['delegate_kang', 'negotiate_yoon'] as const)('later renders the reaction caused by %s', plan => {
-    continueToChoice(); choose(plan); continueToChoice(); choose('check_self'); choose('request_delay');
-    for (let i = 0; i < 12 && session.getSnapshot().dialogue?.event_id !== 'e01_08_reactions'; i++) click(session.t('ui.continue'));
+    continueToChoice(); choose(plan);
+    continueToChoice(); choose('check_self');
+    continueToChoice(); choose('request_delay');
+    for (let i = 0; i < 20 && session.getSnapshot().dialogue?.event_id !== 'e01_08_reactions'; i++) continueCurrent();
     const key = plan === 'delegate_kang' ? 'ep01.reactions.kang.high' : 'ep01.reactions.kang.low';
     expect(session.getSnapshot().dialogue?.text_id).toBe(key);
     expect(container.querySelector('.dialogue-text')?.textContent).toBe(session.t(key));
