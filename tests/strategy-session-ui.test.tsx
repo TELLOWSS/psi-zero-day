@@ -16,7 +16,7 @@ function advanceToFirstPlayerChoice(session: EpisodeSession) {
 }
 
 describe('Casual strategy session integration', () => {
-  it('projects the live EpisodeSession into the strategy map with registered generated art', () => {
+  it('projects the live EpisodeSession into art-mode strategy UI with autosave feedback', () => {
     const session = new EpisodeSession();
     session.start(0);
     const snapshot = session.getSnapshot();
@@ -33,6 +33,8 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain('foundation-map.svg');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('현장 목표');
+    expect(html).toContain('자동 저장');
+    expect(html).toContain('save-hint');
     expect(html).toContain(snapshot.eventTitle);
   });
 
