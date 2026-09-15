@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e7f1f8"/><stop offset="1" stop-color="#c5d3e2"/></linearGradient><linearGradient id="j" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#537fae"/><stop offset="1" stop-color="#304b70"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="9" stdDeviation="9" flood-color="#1e3550" flood-opacity=".23"/></filter></defs>
+<rect width="512" height="512" rx="58" fill="url(#bg)"/><circle cx="256" cy="242" r="190" fill="#f2f6fa" opacity=".9"/>
+<g filter="url(#s)"><path d="M161 496l17-105q18-57 78-62q61 5 79 62l18 105Z" fill="url(#j)"/><path d="M188 426h136" stroke="#edf0b2" stroke-width="12"/></g>
+<ellipse cx="256" cy="246" rx="64" ry="84" fill="#e0a886"/><path d="M198 215q14-72 59-74q49 2 59 74q-31-22-58-15q-28-8-60 15Z" fill="#253440"/>
+<ellipse cx="233" cy="244" rx="7" ry="9" fill="#21323f"/><ellipse cx="280" cy="244" rx="7" ry="9" fill="#21323f"/><path d="M220 226q13-7 27 0M266 225q14-7 28 1" fill="none" stroke="#283945" stroke-width="6" stroke-linecap="round"/><path d="M252 252q-6 20 4 23" fill="none" stroke="#ac7258" stroke-width="4"/><path d="M233 291q24 14 47 0" fill="none" stroke="#95594d" stroke-width="6" stroke-linecap="round"/>
+<g filter="url(#s)"><path d="M170 165q8-82 86-86q81 4 89 86Z" fill="#fafcfc"/><rect x="160" y="155" width="195" height="25" rx="12" fill="#fafcfc"/><path d="M195 151h122" stroke="#4e759c" stroke-width="9"/></g>
+<path d="M182 390q-33 26-44 66" stroke="#e0a886" stroke-width="21" stroke-linecap="round"/><path d="M330 389q32 23 44 63" stroke="#e0a886" stroke-width="21" stroke-linecap="round"/>
+<g transform="translate(343 352) rotate(-10)" filter="url(#s)"><rect width="86" height="112" rx="9" fill="#faf4df" stroke="#536a82" stroke-width="5"/><path d="M13 24h59M13 45h39M13 65h51M13 84h44" stroke="#86a8bd" stroke-width="5"/><path d="M74 8l18 10v93l-18-5Z" fill="#e1e6e7"/></g>
+<circle cx="181" cy="415" r="12" fill="#5c82aa" stroke="#fff" stroke-width="4"/>
+</svg>
