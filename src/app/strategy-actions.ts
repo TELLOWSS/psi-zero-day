@@ -1,4 +1,4 @@
-import type { Id, PresentationCommand, TextId } from '../domain';
+import type { FlagMap, Id, PresentationCommand, TextId } from '../domain';
 import type { FieldResourceAxisId } from './product-contract';
 
 export type StrategyActionIntent = 'inspect' | 'coordinate' | 'control' | 'report' | 'protect' | 'record';
@@ -12,7 +12,10 @@ export interface StrategyAction {
   readonly event_id: Id;
   readonly instance_id: Id;
   readonly node_id: Id;
+  /** UI identity. Support-assisted shortcuts may differ from the engine choice they execute. */
   readonly choice_id: Id;
+  /** Existing content choice reused by a support shortcut. Omitted for ordinary actions. */
+  readonly execution_choice_id?: Id;
   readonly label_text_id: TextId;
   readonly enabled: boolean;
   readonly intent: StrategyActionIntent;
@@ -32,6 +35,16 @@ interface ActionMetadata {
   readonly actor_character_id?: Id;
   readonly resource_axes?: readonly FieldResourceAxisId[];
   readonly skill?: StrategyAction['skill'];
+}
+
+interface SupportShortcut {
+  readonly action_id: Id;
+  readonly required_flag_id: Id;
+  readonly event_id: Id;
+  readonly node_id: Id;
+  readonly execution_choice_id: Id;
+  readonly label_text_id: TextId;
+  readonly metadata: ActionMetadata;
 }
 
 const RESOURCE_AXES_BY_INTENT: Readonly<Record<StrategyActionIntent, readonly FieldResourceAxisId[]>> = {
@@ -88,6 +101,69 @@ const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
   },
 };
 
+/**
+ * Paid support never creates a better safety outcome than the existing free choice.
+ * It only surfaces a convenience path that executes an already-approved content choice.
+ */
+const SUPPORT_SHORTCUTS: readonly SupportShortcut[] = [
+  {
+    action_id: 'support.inspection_kit.verify_ramp',
+    required_flag_id: 'support.equipment.inspection_kit.active',
+    event_id: 'e01_05_command',
+    node_id: 'ramp',
+    execution_choice_id: 'check_self',
+    label_text_id: 'ui.paid_item.action.inspection_kit_check',
+    metadata: {
+      intent: 'inspect',
+      target: { kind: 'anchor', anchor: 'ramp' },
+      resource_axes: ['time', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+    },
+  },
+  {
+    action_id: 'support.access_lane.control_entrance',
+    required_flag_id: 'support.facility.access_lane.active',
+    event_id: 'e01_05_command',
+    node_id: 'entrance',
+    execution_choice_id: 'assign_crew',
+    label_text_id: 'ui.paid_item.action.access_lane_control',
+    metadata: {
+      intent: 'control',
+      target: { kind: 'anchor', anchor: 'entry' },
+      resource_axes: ['time', 'schedule', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+    },
+  },
+  {
+    action_id: 'support.traffic_control.control_entrance',
+    required_flag_id: 'support.equipment.traffic_control_pack.active',
+    event_id: 'e01_05_command',
+    node_id: 'entrance',
+    execution_choice_id: 'assign_crew',
+    label_text_id: 'ui.paid_item.action.traffic_control',
+    metadata: {
+      intent: 'control',
+      target: { kind: 'signal', signal_id: 'signal.work_vehicle_overlap' },
+      resource_axes: ['time', 'schedule', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+    },
+  },
+  {
+    action_id: 'support.radio.verify_instruction_chain',
+    required_flag_id: 'support.equipment.radio_pack.active',
+    event_id: 'e01_08m_instruction_cascade',
+    node_id: 'instruction_action',
+    execution_choice_id: 'instruction_reconstruct_chain',
+    label_text_id: 'ui.paid_item.action.radio_chain_check',
+    metadata: {
+      intent: 'inspect',
+      target: { kind: 'site' },
+      resource_axes: ['time', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' },
+    },
+  },
+] as const;
+
 const FIELD_ACTION_EVENTS = new Set<Id>([
   'e01_03_plan_breaks', 'e01_04_junho_signal', 'e01_05_command',
   'e01_08b_inspection_find', 'e01_08e_responsibility_clash', 'e01_08g_tbm_field_gap',
@@ -108,28 +184,60 @@ export function strategyActionTargetKey(target: StrategyActionTarget): string {
   }
 }
 
+export function strategyActionExecutionChoiceId(action: StrategyAction): Id {
+  return action.execution_choice_id ?? action.choice_id;
+}
+
 export function strategyActionsForTarget(actions: readonly StrategyAction[], targetKey: string | null): readonly StrategyAction[] {
   if (!targetKey) return [];
   return Object.freeze(actions.filter(action => strategyActionTargetKey(action.target) === targetKey));
 }
 
-/** Read-only UI projection. Executing an action still uses the original choose_event command. */
-export function projectStrategyActions(activeEventId: Id | null, presentation: PresentationCommand | undefined): readonly StrategyAction[] {
-  if (!isStrategyFieldActionEvent(activeEventId) || presentation?.type !== 'SHOW_CHOICE') return [];
-  return Object.freeze(presentation.choices.map(choice => {
-    const metadata = ACTION_METADATA[choice.choice_id] ?? { intent: 'control' as const, target: { kind: 'site' as const } };
-    return Object.freeze({
-      event_id: activeEventId!,
+function projectedAction(activeEventId: Id, presentation: Extract<PresentationCommand, { type: 'SHOW_CHOICE' }>,
+  choice: Extract<PresentationCommand, { type: 'SHOW_CHOICE' }>['choices'][number]): StrategyAction {
+  const metadata = ACTION_METADATA[choice.choice_id] ?? { intent: 'control' as const, target: { kind: 'site' as const } };
+  return Object.freeze({
+    event_id: activeEventId,
+    instance_id: presentation.instance_id,
+    node_id: presentation.node_id,
+    choice_id: choice.choice_id,
+    label_text_id: choice.text_id,
+    enabled: choice.enabled,
+    intent: metadata.intent,
+    target: metadata.target,
+    actor_character_id: metadata.actor_character_id ?? 'player',
+    resource_axes: Object.freeze([...(metadata.resource_axes ?? RESOURCE_AXES_BY_INTENT[metadata.intent])]),
+    ...(metadata.skill ? { skill: metadata.skill } : {}),
+  });
+}
+
+function supportActions(activeEventId: Id, presentation: Extract<PresentationCommand, { type: 'SHOW_CHOICE' }>, flags: FlagMap): readonly StrategyAction[] {
+  return Object.freeze(SUPPORT_SHORTCUTS.flatMap(shortcut => {
+    if (shortcut.event_id !== activeEventId || shortcut.node_id !== presentation.node_id || flags[shortcut.required_flag_id] !== true) return [];
+    const engineChoice = presentation.choices.find(choice => choice.choice_id === shortcut.execution_choice_id);
+    if (!engineChoice) return [];
+    const metadata = shortcut.metadata;
+    return [Object.freeze({
+      event_id: activeEventId,
       instance_id: presentation.instance_id,
       node_id: presentation.node_id,
-      choice_id: choice.choice_id,
-      label_text_id: choice.text_id,
-      enabled: choice.enabled,
+      choice_id: shortcut.action_id,
+      execution_choice_id: shortcut.execution_choice_id,
+      label_text_id: shortcut.label_text_id,
+      enabled: engineChoice.enabled,
       intent: metadata.intent,
       target: metadata.target,
       actor_character_id: metadata.actor_character_id ?? 'player',
       resource_axes: Object.freeze([...(metadata.resource_axes ?? RESOURCE_AXES_BY_INTENT[metadata.intent])]),
       ...(metadata.skill ? { skill: metadata.skill } : {}),
-    });
+    })];
   }));
+}
+
+/** Read-only UI projection. Executing an action still uses an approved choose_event choice. */
+export function projectStrategyActions(activeEventId: Id | null, presentation: PresentationCommand | undefined,
+  flags: FlagMap = Object.freeze({})): readonly StrategyAction[] {
+  if (!isStrategyFieldActionEvent(activeEventId) || presentation?.type !== 'SHOW_CHOICE') return [];
+  const base = presentation.choices.map(choice => projectedAction(activeEventId!, presentation, choice));
+  return Object.freeze([...base, ...supportActions(activeEventId!, presentation, flags)]);
 }
