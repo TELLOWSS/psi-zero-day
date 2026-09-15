@@ -4,11 +4,18 @@ import { strategyActionTargetKey } from '../app/strategy-actions';
 import type { PsiIndicatorId } from '../app/product-contract';
 import { psiIndicatorTextId } from '../app/strategy-psi';
 
+export interface StrategyOutcomeReconsideration {
+  readonly item_id: string;
+  readonly remaining: number;
+  readonly enabled: boolean;
+}
+
 export interface StrategyMapOutcome {
   readonly key: string;
   readonly text: string;
   readonly relationship_lines?: readonly string[];
   readonly psi_cues?: readonly PsiIndicatorId[];
+  readonly reconsideration?: StrategyOutcomeReconsideration;
 }
 
 function actionIcon(intent: StrategyActionIntent): string {
@@ -33,6 +40,7 @@ export function StrategyLoopPanel({
   onAction,
   outcome,
   onOutcomeContinue,
+  onOutcomeReconsider,
   onActionFocus,
 }: {
   readonly actions: readonly StrategyAction[];
@@ -45,12 +53,14 @@ export function StrategyLoopPanel({
   readonly onAction?: (action: StrategyAction) => void;
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
+  readonly onOutcomeReconsider?: () => void;
   readonly onActionFocus?: (targetKey: string | null) => void;
 }) {
   const [pending, setPending] = useState<StrategyAction | null>(null);
+  const [reconsiderConfirm, setReconsiderConfirm] = useState(false);
   const actionSetKey = useMemo(() => actions.map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`).join('|'), [actions]);
 
-  useEffect(() => { setPending(null); }, [actionSetKey, focusId, outcome?.key]);
+  useEffect(() => { setPending(null); setReconsiderConfirm(false); }, [actionSetKey, focusId, outcome?.key]);
 
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
 
@@ -72,6 +82,26 @@ export function StrategyLoopPanel({
       {outcome.psi_cues?.length ? <div className="strategy-outcome-psi" aria-label={text('ui.psi.related')}>
         <strong>{text('ui.psi.related')}</strong>
         <div>{outcome.psi_cues.map(indicator => <span key={indicator}>{text(psiIndicatorTextId(indicator))}</span>)}</div>
+      </div> : null}
+      {outcome.reconsideration ? <div className="strategy-replan-card" data-paid-item={outcome.reconsideration.item_id}>
+        <div className="strategy-replan-heading">
+          <strong>{text('ui.paid_item.replan')}</strong>
+          <span>{text('ui.paid_item.owned')} {outcome.reconsideration.remaining}</span>
+        </div>
+        <small>{text('ui.paid_item.replan_guard')}</small>
+        {!reconsiderConfirm ? <button
+          type="button"
+          className="strategy-replan-button"
+          disabled={!outcome.reconsideration.enabled}
+          onClick={() => setReconsiderConfirm(true)}
+        >{outcome.reconsideration.enabled ? text('ui.paid_item.use') : text('ui.paid_item.unavailable')}</button>
+          : <div className="strategy-replan-confirm" role="group" aria-label={text('ui.paid_item.confirm_title')}>
+            <p>{text('ui.paid_item.confirm_replan')}</p>
+            <div>
+              <button type="button" className="strategy-cancel-button" onClick={() => setReconsiderConfirm(false)}>{text('ui.paid_item.keep_result')}</button>
+              <button type="button" className="strategy-replan-button" onClick={onOutcomeReconsider}>{text('ui.paid_item.confirm')}</button>
+            </div>
+          </div>}
       </div> : null}
       <button type="button" className="strategy-execute-button" onClick={onOutcomeContinue}>{text('ui.strategy.return_map')} <b aria-hidden="true">↗</b></button>
     </div> : <>
