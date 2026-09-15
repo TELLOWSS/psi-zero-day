@@ -1,0 +1,89 @@
+name: TASK-014D finalize production WebP
+
+on:
+  push:
+    branches:
+      - astra/task-007-casual-strategy-foundation
+    paths:
+      - 'public/assets/episode01/characters/*-rc.svg'
+      - 'public/assets/episode01/backgrounds/*-rc.svg'
+      - '.github/workflows/task-014d-finalize-webp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-webp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout task branch
+        uses: actions/checkout@v4
+        with:
+          ref: astra/task-007-casual-strategy-foundation
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Install deterministic SVG and WebP converters
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends librsvg2-bin webp
+
+      - name: Promote approved RC art to final WebP
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          convert_one() {
+            local src="$1"
+            local dst="${src%-rc.svg}.webp"
+            local png="${dst%.webp}.png"
+            rsvg-convert --format=png --output="$png" "$src"
+            cwebp -quiet -q 92 -m 6 -alpha_q 100 -metadata none "$png" -o "$dst"
+            rm -f "$png"
+            echo "finalized: $dst"
+          }
+
+          for src in public/assets/episode01/characters/*-rc.svg; do
+            convert_one "$src"
+          done
+          for src in public/assets/episode01/backgrounds/*-rc.svg; do
+            convert_one "$src"
+          done
+
+          character_count=$(find public/assets/episode01/characters -maxdepth 1 -name '*.webp' -type f | wc -l)
+          background_count=$(find public/assets/episode01/backgrounds -maxdepth 1 -name '*.webp' -type f | wc -l)
+          test "$character_count" -eq 16
+          test "$background_count" -eq 1
+
+      - name: Rebuild asset manifest from final WebP
+        run: npm run assets:manifest
+
+      - name: Verify production art and full release gate
+        run: npm run release:production-check
+
+      - name: Commit TASK-014D production assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/assets/episode01/characters/*.webp
+          git add public/assets/episode01/backgrounds/*.webp
+          git add content/episode01/assets.json
+
+          if git diff --cached --quiet; then
+            echo 'No production asset changes to commit.'
+            exit 0
+          fi
+
+          git commit -m 'TASK-014D: finalize production WebP assets'
+          git push origin HEAD:astra/task-007-casual-strategy-foundation
