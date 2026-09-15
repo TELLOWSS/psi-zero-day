@@ -151,16 +151,21 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Disabled/free-action requirements are inherited; paid support cannot bypass a disabled legitimate action.
 - Core Episode 01 remains completable without purchase.
 
-### TASK-016A — Commercial title/main screen using live game art — IN PROGRESS
+### TASK-016A — Commercial title/main screen using live game art — IMPLEMENTED / VERIFIED
 - Main page uses the same Foundation world art as gameplay.
 - Player, Kang Taesik and Lim Junho are layered from the same live character asset slots used in the game.
-- Final WebP replacement will therefore update title and gameplay together without a second art system.
-- Title UI is being shifted from a minimalist web-like splash toward an adult-friendly casual-strategy game start screen.
+- Final WebP replacement therefore updates title and gameplay together without a second art system.
+- Commercial title styling is loaded from the application entry point and covered by a regression test.
+- Production deployment was checked after the final title-style import and the built CSS contains the commercial title rules.
 
-### TASK-016B — Final production WebP replacement — NEXT AFTER TITLE ACCEPTANCE
-- Replace one Foundation map + eight portrait + eight map-piece slots with final commercial WebP.
+### TASK-016B — Final production WebP replacement — IN PROGRESS / FINAL MEDIA PENDING
+- Exact production contract remains one Foundation map + eight portrait + eight map-piece slots = 17 final WebP assets.
 - Preserve `final WebP -> RC SVG -> deterministic SVG` fallback order.
-- Run `npm run assets:production-check` and `npm run release:production-check`.
+- Production validation now checks WebP structure/dimensions in addition to presence and header: portraits must be at least `1024x1024`, map characters at least `768x1024`.
+- Batch A is the seven title/first-play assets: Foundation + Player/Kang Taesik/Lim Junho portrait/map pairs.
+- Batch B is the remaining ten portrait/map assets for Yoon Sungho, Lee Jaehoon, Choi Minseok, Seo Jeongmin and Oh Seungjae.
+- Final media itself is not yet committed; RC/fallback media remains active until approved WebP files land.
+- After all 17 files land, run `npm run assets:production-check` and `npm run release:production-check`.
 
 ### TASK-016C — Final BGM / ambience / SFX
 - Replace procedural/placeholder cues with approved final audio.
