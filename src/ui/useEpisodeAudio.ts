@@ -24,6 +24,15 @@ export function uiAudioAssetId(cue: UiAudioCue): string {
   return UI_CUE_ASSET_IDS[cue];
 }
 
+function playElement(element: HTMLAudioElement, onReject: () => void = () => {}) {
+  try {
+    const playback = element.play() as Promise<void> | undefined;
+    if (playback && typeof playback.catch === 'function') void playback.catch(onReject);
+  } catch {
+    onReject();
+  }
+}
+
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
 export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: AssetResolver) {
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -50,7 +59,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     if (!element) return;
     element.loop = track.loop;
     element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
-    void element.play().catch(() => { /* browser gesture policy; retry occurs on the next state change */ });
+    playElement(element);
   }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
@@ -68,7 +77,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
         ambienceRef.current.set(track.asset_id, element);
       }
       element.volume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
-      void element.play().catch(() => {});
+      playElement(element);
     }
     for (const [assetId, element] of ambienceRef.current) {
       if (!desired.has(assetId) || audio?.muted || audio?.suspended) {
@@ -89,7 +98,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       const element = new Audio(uri);
       element.preload = 'auto';
       element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
-      void element.play().catch(() => {});
+      playElement(element);
     }
   }, [audio?.sfx_bus, audio?.event_bus, audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
@@ -126,7 +135,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       const element = new Audio(uri);
       element.preload = 'auto';
       element.volume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.sfx ?? 1)));
-      void element.play().catch(() => playFallbackCue(cue));
+      playElement(element, () => playFallbackCue(cue));
       return;
     }
     playFallbackCue(cue);

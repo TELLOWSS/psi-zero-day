@@ -30,7 +30,8 @@ describe('Episode 01 strategy visual assets', () => {
   it('uses final TASK-014 WebP art for the foundation and all eight characters before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
-    expect(content.asset_manifest.assets).toHaveLength(17);
+    expect(content.asset_manifest.assets.filter(asset => asset.type === 'image')).toHaveLength(17);
+    expect(content.asset_manifest.assets.filter(asset => asset.type === 'audio')).toHaveLength(7);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');
