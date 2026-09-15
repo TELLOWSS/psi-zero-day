@@ -4,6 +4,7 @@ import { projectCharacterGrowth } from '../app/character-growth';
 import { projectCharacterLoadout } from '../app/character-loadout';
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
+import type { StrategyAction } from '../app/strategy-actions';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
@@ -11,9 +12,15 @@ import { StrategyMapShell } from './StrategyMapShell';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
+interface ExecutedFieldAction {
+  readonly action: StrategyAction;
+  readonly source_revision: number;
+}
+
 export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [debugOpen, setDebugOpen] = useState(false);
+  const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
   const focusRef = useRef<HTMLElement>(null);
   const t = session.t;
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
@@ -26,7 +33,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeEventId = activeInstance?.event_id ?? null;
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
   const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
-  const mapOutcomeActive = isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
+  const executedOutcomeReady = executedFieldAction !== null && snapshot.revision > executedFieldAction.source_revision;
+  const executedEngineResult = executedOutcomeReady && presentation?.type === 'SHOW_RESULT' && presentation.instance_id === executedFieldAction?.action.instance_id;
+  const fallbackEngineOutcome = !executedOutcomeReady && isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
+  const mapOutcomeActive = executedOutcomeReady || fallbackEngineOutcome;
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), id => session.assetUri(id))
     : undefined;
@@ -47,10 +57,19 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     actions: t('ui.strategy.actions'),
     actionHint: t('ui.strategy.action_hint'),
   };
-  const strategyOutcome = mapOutcomeActive && presentation?.type === 'SHOW_RESULT'
+  const outcomeText = executedOutcomeReady && executedFieldAction
+    ? executedEngineResult && presentation?.type === 'SHOW_RESULT'
+      ? t(presentation.text_id)
+      : `${t(executedFieldAction.action.label_text_id)} · ${t('ui.strategy.action_applied')}`
+    : fallbackEngineOutcome && presentation?.type === 'SHOW_RESULT'
+      ? t(presentation.text_id)
+      : '';
+  const strategyOutcome = mapOutcomeActive
     ? {
-      key: `${presentation.instance_id}:${presentation.node_id}:${snapshot.revision}`,
-      text: t(presentation.text_id),
+      key: executedFieldAction
+        ? `${executedFieldAction.action.instance_id}:${executedFieldAction.action.choice_id}:${snapshot.revision}`
+        : `${activeInstance?.instance_id ?? 'field'}:${presentation && 'node_id' in presentation ? presentation.node_id : 'result'}:${snapshot.revision}`,
+      text: outcomeText,
       relationship_lines: snapshot.relationshipFeedback.map(({ npc_id, delta }) => {
         const name = session.character(npc_id)?.name ?? npc_id;
         const field = t(`ui.relationship.${delta.field}`);
@@ -60,13 +79,28 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     }
     : undefined;
 
+  const continueMapOutcome = () => {
+    if (!mapOutcomeActive) return;
+    if ((executedEngineResult || fallbackEngineOutcome) && presentation?.type === 'SHOW_RESULT') {
+      const accepted = session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
+      if (accepted) setExecutedFieldAction(null);
+      return;
+    }
+    setExecutedFieldAction(null);
+  };
+
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
+  useEffect(() => { if (!isPlaying) setExecutedFieldAction(null); }, [isPlaying]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target instanceof Element ? e.target : null;
       if (target?.closest('input, textarea, select, [contenteditable="true"], .debug-panel')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.repeat) { if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); return; }
+      if (mapOutcomeActive) {
+        if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); continueMapOutcome(); }
+        return;
+      }
       if (snapshot.phase !== 'playing' || !presentation || !('node_id' in presentation)) return;
       if (presentation.type === 'SHOW_CHOICE' && /^[1-4]$/.test(e.key)) {
         e.preventDefault();
@@ -81,7 +115,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome]);
 
   const strategyActive = isPlaying && strategy !== null;
   const dialoguePortraitUri = portrait?.kind === 'asset'
@@ -106,15 +140,17 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       copy={strategyCopy}
       text={t}
       person={id => session.character(id)}
-      actions={strategyActions}
+      actions={mapOutcomeActive ? [] : strategyActions}
       visualAssets={visualAssets}
       outcome={strategyOutcome}
-      onOutcomeContinue={mapOutcomeActive && presentation?.type === 'SHOW_RESULT' ? () => session.dispatch({
-        type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id,
-      }, snapshot.revision) : undefined}
-      onAction={action => session.dispatch({
-        type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
-      }, snapshot.revision)}
+      onOutcomeContinue={continueMapOutcome}
+      onAction={action => {
+        setExecutedFieldAction({ action, source_revision: snapshot.revision });
+        const accepted = session.dispatch({
+          type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
+        }, snapshot.revision);
+        if (!accepted) setExecutedFieldAction(null);
+      }}
     /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
     {!strategyActive ? <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
