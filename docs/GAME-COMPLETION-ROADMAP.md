@@ -116,16 +116,21 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - No `src/engine/**` rule change is required for the art slice.
 - Latest verification remains **319 tests PASS / typecheck PASS / build PASS**, and checked RC assets return HTTP 200 on Vercel Preview.
 
-### TASK-014B — Remaining cast RC art + field visual language — NEXT
-- Expand matching RC portrait/map art to Yoon Sungho, Lee Jaehoon, Choi Minseok, Seo Jeongmin and Oh Seungjae.
-- Preserve distinct silhouette + face + outfit + prop + posture; no helmet-color-only clones.
-- Lock field-risk marker and equipment/item visual language so warnings feel like game affordances, not dashboard badges.
-- Character progression must never make a character older: same apparent age/identity, growth only through expression, posture, confidence and role-appropriate equipment.
+### TASK-014B — Remaining cast RC art + field visual language — IMPLEMENTED / VERIFIED
+- Matching RC portrait/map art is present for Yoon Sungho, Lee Jaehoon, Choi Minseok, Seo Jeongmin and Oh Seungjae.
+- Full cast keeps distinct silhouette + face + outfit + prop + posture; helmet color is not the sole differentiator.
+- Field-risk markers and equipment/item treatment read as world-space game affordances rather than dashboard counters.
+- Roster and map-piece sizing are tuned per character so roles remain distinguishable at gameplay scale.
+- Character progression is explicitly non-aging: same apparent age/identity, growth only through expression, posture, confidence and role-appropriate equipment.
 
-### TASK-014C — Growth variants + final commercial asset pass
-- Apply approved visual progression to initial/focused/skilled variants without chronological aging.
-- Replace approved RC slots with final commercial WebP art where quality is locked.
-- Final BGM/ambience/SFX replace procedural feedback only after scene fit is approved.
+### TASK-014C — Growth variants + final commercial asset pass — IN PROGRESS
+- Initial/focused/skilled growth presentation is live without chronological aging.
+- Stage differences are expressed through professional-confidence framing and equipment organization rather than facial aging.
+- Final art precedence remains `final WebP -> RC SVG -> deterministic SVG`.
+- A strict production-art gate now requires all 17 final WebP slots before commercial release: one foundation map plus portrait/map art for all eight characters.
+- `npm run assets:production-check` rejects missing/non-WebP final files; RC/fallback art does not satisfy the production gate.
+- `npm run release:production-check` combines the final-art gate with the existing full release verification.
+- Final commercial WebP files and final BGM/ambience/SFX are still pending; RC/procedural media must not be mislabeled as final production media.
 
 ### TASK-014D — Real browser + Android visual/device acceptance
 - Full Episode 01 manual playthrough on desktop browser and real Android device.
