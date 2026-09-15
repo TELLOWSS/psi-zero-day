@@ -5,6 +5,8 @@ coverage/
 *.local
 public/assets/episode01/characters/*.svg
 public/assets/episode01/backgrounds/*.svg
+# TASK-016B: Foundation final WebP is deterministically materialized from embedded source parts.
+public/assets/episode01/backgrounds/foundation-map.webp
 android/.gradle/
 android/.idea/
 android/local.properties

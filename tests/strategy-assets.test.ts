@@ -27,16 +27,16 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
   });
 
-  it('uses TASK-014 RC art for the foundation and all eight characters before deterministic fallback', () => {
+  it('uses final Foundation WebP while keeping TASK-014 RC character art before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
     expect(content.asset_manifest.assets).toHaveLength(17);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
-      .toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+      .toBe('assets/episode01/backgrounds/foundation-map.webp');
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
-    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
 
     for (const characterId of cast) {
       expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait-rc\.svg$/);
