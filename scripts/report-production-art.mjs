@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { isWebP, webPDimensions } from './webp-dimensions.mjs';
+import { isWebP, webPDimensions, webPHasAlpha } from './webp-dimensions.mjs';
 
 const root = process.cwd();
 const briefPath = path.join(root, 'content/episode01/production-art-batch-a.json');
@@ -36,10 +36,20 @@ async function inspect(asset) {
     };
   }
 
+  const hasAlpha = webPHasAlpha(bytes);
+  if (asset.transparent_background === true && hasAlpha !== true) {
+    return {
+      asset,
+      status: 'NO_ALPHA',
+      detail: `${dimensions.width}x${dimensions.height}; transparent character background required`,
+    };
+  }
+
+  const alphaDetail = asset.transparent_background === true ? ', alpha' : '';
   return {
     asset,
     status: 'READY',
-    detail: `${dimensions.width}x${dimensions.height}, ${bytes.length.toLocaleString('en-US')} bytes`,
+    detail: `${dimensions.width}x${dimensions.height}${alphaDetail}, ${bytes.length.toLocaleString('en-US')} bytes`,
   };
 }
 
