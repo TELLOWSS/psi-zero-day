@@ -16,7 +16,7 @@ function advanceToFirstPlayerChoice(session: EpisodeSession) {
 }
 
 describe('Casual strategy session integration', () => {
-  it('projects the live EpisodeSession into the strategy map and keeps CSS fallback while the asset manifest is empty', () => {
+  it('projects the live EpisodeSession into the strategy map with registered generated art', () => {
     const session = new EpisodeSession();
     session.start(0);
     const snapshot = session.getSnapshot();
@@ -25,17 +25,18 @@ describe('Casual strategy session integration', () => {
     expect(snapshot.strategy).not.toBeNull();
     expect(snapshot.strategy?.clock.day).toBe(snapshot.state?.clock.day);
     expect(snapshot.strategy?.construction.stage_id).toBe(snapshot.state?.construction.stage_id);
-    expect(session.assetUri('ep01.background.foundation.map')).toBeUndefined();
+    expect(session.assetUri('ep01.background.foundation.map')).toContain('foundation-map.svg');
 
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
     expect(html).toContain('strategy-shell');
-    expect(html).toContain('data-visual-mode="css"');
+    expect(html).toContain('data-visual-mode="art"');
+    expect(html).toContain('foundation-map.svg');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('현장 목표');
     expect(html).toContain(snapshot.eventTitle);
   });
 
-  it('marks actionable map targets first while keeping a collapsed text fallback', () => {
+  it('starts actionable scenes at target selection while keeping the text fallback', () => {
     const session = new EpisodeSession();
     session.start(0);
     advanceToFirstPlayerChoice(session);
@@ -44,6 +45,8 @@ describe('Casual strategy session integration', () => {
     expect(snapshot.state?.event_runtime.active_instance?.event_id).toBe('e01_03_plan_breaks');
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
     expect(html).toContain('strategy-action-tray');
+    expect(html).toContain('data-loop-phase="target"');
+    expect(html).toContain('1 대상 선택');
     expect(html).toContain('현장 행동');
     expect(html).toContain('먼저 사람·위험신호·작업구역을 선택하세요.');
     expect(html).toContain('data-character="kang_taesik"');
