@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0dfbf"/><stop offset="1" stop-color="#b9c9bf"/></linearGradient><linearGradient id="work" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9a7350"/><stop offset="1" stop-color="#5f4939"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#26383a" flood-opacity=".25"/></filter></defs>
+<rect width="512" height="512" rx="58" fill="url(#bg)"/><circle cx="256" cy="244" r="190" fill="#f4ead8" opacity=".86"/>
+<g filter="url(#s)"><path d="M112 496l20-105q31-69 124-74q96 4 126 74l20 105Z" fill="#4d443d"/><path d="M139 407q116-44 234 1l-14 88H154Z" fill="url(#work)"/><path d="M163 433h190" stroke="#f0e9ad" stroke-width="14"/></g>
+<ellipse cx="256" cy="247" rx="77" ry="86" fill="#b97c58"/><path d="M185 215q17-70 73-73q61 3 72 76q-39-29-73-13q-34-13-72 10Z" fill="#292f32"/>
+<ellipse cx="228" cy="245" rx="8" ry="9" fill="#232a2d"/><ellipse cx="288" cy="245" rx="8" ry="9" fill="#232a2d"/><path d="M210 224q18-10 36 0M269 222q18-10 37 1" fill="none" stroke="#292f32" stroke-width="7" stroke-linecap="round"/><path d="M252 254q-8 22 5 25" fill="none" stroke="#8d5d45" stroke-width="5"/>
+<path d="M216 292q40 31 80 0q-6 47-40 53q-34-7-40-53Z" fill="#3e332e" opacity=".55"/><path d="M232 300q25 8 49 0" fill="none" stroke="#75483e" stroke-width="7" stroke-linecap="round"/>
+<g filter="url(#s)"><path d="M160 164q8-84 96-88q91 4 99 88Z" fill="#f0c33a"/><rect x="149" y="154" width="217" height="26" rx="13" fill="#f0c33a"/><path d="M186 151h144" stroke="#d9a91f" stroke-width="9"/></g>
+<path d="M149 393q-51 25-69 66" stroke="#b97c58" stroke-width="28" stroke-linecap="round"/><path d="M363 392q51 25 70 66" stroke="#b97c58" stroke-width="28" stroke-linecap="round"/>
+<g stroke="#4c595e" stroke-width="13" stroke-linecap="round" filter="url(#s)"><path d="M356 347l75 132"/><path d="M378 338l75 132"/><path d="M400 330l74 131"/></g>
+<g fill="#4c595e"><circle cx="382" cy="383" r="5"/><circle cx="403" cy="374" r="5"/><circle cx="425" cy="365" r="5"/></g>
+<circle cx="151" cy="419" r="12" fill="#b68b42" stroke="#fff" stroke-width="4"/>
+</svg>
