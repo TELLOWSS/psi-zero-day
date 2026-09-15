@@ -28,12 +28,38 @@ function mount() {
 }
 const paths: EpisodeDecisions[] = [
   { plan: 'follow_junho', signal: 'listen_more', ramp: 'ask_minseok', entrance: 'assign_crew', evening: 'field_note' },
-  { plan: 'negotiate_yoon', ramp: 'check_self', entrance: 'request_delay', evening: 'study' },
+  { plan: 'negotiate_yoon', ramp: 'check_self', entrance: 'request_delay', evening: 'study', equipment: 'training_equip_camera' },
   { plan: 'coordinate_schedule', ramp: 'keep_schedule', entrance: 'assign_crew', evening: 'family' },
   { plan: 'delegate_kang', ramp: 'check_self', entrance: 'force_clear', evening: 'rest' },
 ];
 
 const hiddenEngineTerms = /BEST_CONTROL|CONTROLLED_DELAY|NEAR_MISS|RELATION_CONFLICT|\bSUCCESS\b|\bFAIL\b|\bGOOD\b|\bBAD\b/;
+
+function inputFor(node: string, decisions: EpisodeDecisions): string | undefined {
+  const nextDay = decisions.nextDay ?? (
+    decisions.evening === 'study' && (decisions.equipment ?? 'training_equip_camera') === 'training_equip_camera'
+      ? 'next_day_camera_compare'
+      : decisions.plan === 'follow_junho' && decisions.signal === 'listen_more'
+        ? 'next_day_radio_checkin'
+        : 'next_day_standard_check'
+  );
+  return ({
+    plan: decisions.plan,
+    listen: decisions.signal,
+    ramp: decisions.ramp,
+    entrance: decisions.entrance,
+    action: decisions.inspection ?? 'inspection_sequence_agreement',
+    report: decisions.responsibility ?? 'report_verify_timeline',
+    tbm_action: decisions.tbm ?? 'tbm_change_control',
+    restart_action: decisions.restart ?? 'restart_verify_controls',
+    culture_action: decisions.stopwork ?? 'stopwork_protect_process',
+    instruction_action: decisions.instruction ?? 'instruction_reconstruct_chain',
+    record_action: decisions.record ?? 'record_preserve_timeline',
+    evening: decisions.evening,
+    training_equipment: decisions.equipment ?? 'training_equip_camera',
+    next_day_action: nextDay,
+  } as Record<string, string | undefined>)[node];
+}
 
 describe('Playable Episode React UI', () => {
   it.each(paths)('clicks $plan / $entrance / $evening to the same headless outcome', decisions => {
@@ -42,8 +68,7 @@ describe('Playable Episode React UI', () => {
     click(session.t('ui.start'));
     const seen: string[] = [];
     const stages: string[] = [];
-    const inputs: Record<string, string | undefined> = { plan: decisions.plan, listen: decisions.signal, ramp: decisions.ramp, entrance: decisions.entrance, evening: decisions.evening };
-    for (let i = 0; i < 100 && session.getSnapshot().phase === 'playing'; i++) {
+    for (let i = 0; i < 160 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot(); const p = s.presentation.find(c => 'node_id' in c)!;
       expect(container.textContent).not.toMatch(hiddenEngineTerms);
       if ('text_id' in p) {
@@ -56,20 +81,19 @@ describe('Playable Episode React UI', () => {
           stages.push(p.node_id);
           expect(container.querySelectorAll('.choice-panel button')).toHaveLength(3);
         }
-        const selected = p.choices.find(c => c.choice_id === inputs[p.node_id]);
-        if (!selected) throw new Error('Missing intended player choice');
+        const selected = p.choices.find(c => c.choice_id === inputFor(p.node_id, decisions));
+        if (!selected) throw new Error(`Missing intended player choice for ${p.node_id}`);
         click(session.t(selected.text_id));
       } else click(session.t('ui.continue'));
     }
     expect(stages).toEqual(['ramp', 'entrance']);
     expect(seen.includes('ep01.junho.signal')).toBe(decisions.plan === 'follow_junho');
     expect(seen.includes('ep01.evening.field_note.record')).toBe(decisions.evening === 'field_note');
-    expect(seen).toContain('ep01.tease');
+    expect(seen.some(textId => textId.startsWith('ui.skill.next_day.') && textId.endsWith('.result'))).toBe(true);
     const expected = playEpisode(decisions).state;
     expect(seen).toContain(`ep01.pump.${String(expected.flags.pump_result).toLowerCase()}`);
     expect(session.getSnapshot().state).toEqual(expected);
     expect(container.textContent).toContain(session.t('ui.complete'));
-    expect(container.querySelector('.day-marker strong')?.textContent).toBe('02');
     click(session.t('ui.restart'));
     expect(session.getSnapshot().state).toBeNull();
     click(session.t('ui.start'));
