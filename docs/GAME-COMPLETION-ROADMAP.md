@@ -48,14 +48,19 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Loop is visibly structured as `target -> action -> result -> map`.
 - Time/resource/PSI costs remain unimplemented until Director-approved values exist.
 
-### TASK-011B — Episode 01 vertical-slice polish — NEXT
-- 11–16 event routed playthrough.
-- Casual strategy map first, dialogue second.
-- Reduce visual clutter and improve transitions/feedback timing.
-- Sound/BGM hooks and save/resume review.
-- Review generated art composition against the approved commercial casual-strategy visual target.
+### TASK-011B — Episode 01 vertical-slice polish — IMPLEMENTED
+- 11–16 event routed playthrough remains the single playable slice.
+- Strategy map stays visually primary; dialogue is a compact lower support panel.
+- Event changes reset map focus and use short reduced-motion-aware transitions.
+- Map action results keep relationship feedback visible before the next situation is exposed.
+- Browser autosave/resume uses the existing domain `SaveEnvelope` contract with local corruption detection.
+- Save data is rejected on content-version mismatch or malformed/checksum-invalid payloads.
+- Browser storage failure does not block play.
+- Authored `GameState.audio` BGM/ambience/SFX buses are wired to browser playback.
+- Short procedural UI feedback cues cover execute/result/continue until final audio assets are registered.
+- Generated SVG art remains a production fallback, not the final commercial-art quality ceiling.
 
-### TASK-012 — Executable verification
+### TASK-012 — Executable verification — NEXT
 - `npm test`
 - `npm run typecheck`
 - `npm run build`
