@@ -30,6 +30,7 @@ jobs:
       - name: Generate deterministic Episode 01 assets
         run: |
           npm run assets:vector
+          npm run audio:generate
           npm run assets:manifest
 
       - name: Verify generated assets

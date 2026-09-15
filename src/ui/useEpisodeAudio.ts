@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import type { AudioState } from '../domain';
+import audioPlan from '../../content/episode01/audio.json';
 
 export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue';
 
@@ -13,8 +14,14 @@ const CUE_PROFILE: Readonly<Record<UiAudioCue, readonly [number, number, number]
   continue: [520, 650, 0.045],
 };
 
+const UI_CUE_ASSET_IDS = audioPlan.ui_cues as Readonly<Record<UiAudioCue, string>>;
+
 export function uiAudioCueProfile(cue: UiAudioCue): readonly [number, number, number] {
   return CUE_PROFILE[cue];
+}
+
+export function uiAudioAssetId(cue: UiAudioCue): string {
+  return UI_CUE_ASSET_IDS[cue];
 }
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
@@ -28,7 +35,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     if (typeof Audio === 'undefined') return;
     const track = audio?.bgm;
     const uri = track ? resolve(track.asset_id) : undefined;
-    if (!track || !uri || audio?.muted) {
+    if (!track || !uri || audio?.muted || audio?.suspended) {
       bgmRef.current?.pause();
       return;
     }
@@ -36,6 +43,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       bgmRef.current?.pause();
       const element = new Audio(uri);
       element.dataset.assetId = track.asset_id;
+      element.preload = 'auto';
       bgmRef.current = element;
     }
     const element = bgmRef.current;
@@ -43,7 +51,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     element.loop = track.loop;
     element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
     void element.play().catch(() => { /* browser gesture policy; retry occurs on the next state change */ });
-  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, audio?.muted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
+  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
@@ -51,26 +59,27 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     for (const track of audio?.ambience ?? []) {
       desired.add(track.asset_id);
       const uri = resolve(track.asset_id);
-      if (!uri || audio?.muted) continue;
+      if (!uri || audio?.muted || audio?.suspended) continue;
       let element = ambienceRef.current.get(track.asset_id);
       if (!element) {
         element = new Audio(uri);
         element.loop = track.loop;
+        element.preload = 'auto';
         ambienceRef.current.set(track.asset_id, element);
       }
       element.volume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
       void element.play().catch(() => {});
     }
     for (const [assetId, element] of ambienceRef.current) {
-      if (!desired.has(assetId) || audio?.muted) {
+      if (!desired.has(assetId) || audio?.muted || audio?.suspended) {
         element.pause();
         if (!desired.has(assetId)) ambienceRef.current.delete(assetId);
       }
     }
-  }, [audio?.ambience, audio?.muted, audio?.volumes.master, audio?.volumes.ambience, resolve]);
+  }, [audio?.ambience, audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.ambience, resolve]);
 
   useEffect(() => {
-    if (typeof Audio === 'undefined' || !audio || audio.muted) return;
+    if (typeof Audio === 'undefined' || !audio || audio.muted || audio.suspended) return;
     const buses = [...audio.sfx_bus, ...audio.event_bus];
     for (const cue of buses) {
       if (seenCueIds.current.has(cue.cue_id)) continue;
@@ -78,10 +87,11 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       const uri = resolve(cue.asset_id);
       if (!uri) continue;
       const element = new Audio(uri);
+      element.preload = 'auto';
       element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
       void element.play().catch(() => {});
     }
-  }, [audio?.sfx_bus, audio?.event_bus, audio?.muted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
+  }, [audio?.sfx_bus, audio?.event_bus, audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
   useEffect(() => () => {
     bgmRef.current?.pause();
@@ -89,8 +99,8 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     void contextRef.current?.close();
   }, []);
 
-  const playUiCue = useCallback((cue: UiAudioCue) => {
-    if (audio?.muted || typeof window === 'undefined' || typeof window.AudioContext === 'undefined') return;
+  const playFallbackCue = useCallback((cue: UiAudioCue) => {
+    if (typeof window === 'undefined' || typeof window.AudioContext === 'undefined') return;
     const [startHz, endHz, duration] = CUE_PROFILE[cue];
     const context = contextRef.current ?? new window.AudioContext();
     contextRef.current = context;
@@ -107,7 +117,20 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     oscillator.connect(gain).connect(context.destination);
     oscillator.start(now);
     oscillator.stop(now + duration);
-  }, [audio?.muted, audio?.volumes.master, audio?.volumes.sfx]);
+  }, [audio?.volumes.master, audio?.volumes.sfx]);
+
+  const playUiCue = useCallback((cue: UiAudioCue) => {
+    if (audio?.muted || audio?.suspended) return;
+    const uri = resolve(uiAudioAssetId(cue));
+    if (uri && typeof Audio !== 'undefined') {
+      const element = new Audio(uri);
+      element.preload = 'auto';
+      element.volume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.sfx ?? 1)));
+      void element.play().catch(() => playFallbackCue(cue));
+      return;
+    }
+    playFallbackCue(cue);
+  }, [audio?.muted, audio?.suspended, audio?.volumes.master, audio?.volumes.sfx, playFallbackCue, resolve]);
 
   return { playUiCue } as const;
 }

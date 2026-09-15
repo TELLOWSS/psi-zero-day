@@ -9,8 +9,16 @@
       "legal_status": {}, "safety_record": {}
     },
     "construction": { "stage_id": "FOUNDATION", "progress_by_stage": { "FOUNDATION": 10 }, "milestones": [] },
-    "audio": { "bgm": null, "ambience": [], "sfx_bus": [], "event_bus": [],
-      "volumes": { "master": 1, "bgm": 1, "ambience": 1, "sfx": 1, "event": 1 }, "muted": false, "suspended": false }
+    "audio": {
+      "context_id": "ep01.foundation",
+      "bgm": { "asset_id": "ep01.audio.bgm.foundation_shift", "loop": true, "gain": 0.48 },
+      "ambience": [
+        { "asset_id": "ep01.audio.ambience.site_morning", "loop": true, "gain": 0.24 }
+      ],
+      "sfx_bus": [], "event_bus": [],
+      "volumes": { "master": 1, "bgm": 0.7, "ambience": 0.55, "sfx": 0.85, "event": 0.85 },
+      "muted": false, "suspended": false
+    }
   },
   "bounds": { "FOUNDATION": { "min": 0, "max": 100 } },
   "clock_before": {

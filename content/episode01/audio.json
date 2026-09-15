@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "origin": "project_original_procedural",
+  "sample_rate": 22050,
+  "assets": [
+    {
+      "asset_id": "ep01.audio.bgm.foundation_shift",
+      "uri": "assets/episode01/audio/foundation-shift.wav",
+      "group_id": "ep01.audio.bgm",
+      "preload_policy": "required",
+      "generator": "foundation_bgm"
+    },
+    {
+      "asset_id": "ep01.audio.ambience.site_morning",
+      "uri": "assets/episode01/audio/site-morning.wav",
+      "group_id": "ep01.audio.ambience",
+      "preload_policy": "required",
+      "generator": "site_ambience"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.execute",
+      "uri": "assets/episode01/audio/execute.wav",
+      "group_id": "ep01.audio.sfx",
+      "preload_policy": "required",
+      "generator": "ui_execute"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_positive",
+      "uri": "assets/episode01/audio/result-positive.wav",
+      "group_id": "ep01.audio.sfx",
+      "preload_policy": "on_demand",
+      "generator": "result_positive"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_negative",
+      "uri": "assets/episode01/audio/result-negative.wav",
+      "group_id": "ep01.audio.sfx",
+      "preload_policy": "on_demand",
+      "generator": "result_negative"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.result_neutral",
+      "uri": "assets/episode01/audio/result-neutral.wav",
+      "group_id": "ep01.audio.sfx",
+      "preload_policy": "on_demand",
+      "generator": "result_neutral"
+    },
+    {
+      "asset_id": "ep01.audio.sfx.continue",
+      "uri": "assets/episode01/audio/continue.wav",
+      "group_id": "ep01.audio.sfx",
+      "preload_policy": "required",
+      "generator": "ui_continue"
+    }
+  ],
+  "ui_cues": {
+    "execute": "ep01.audio.sfx.execute",
+    "result_positive": "ep01.audio.sfx.result_positive",
+    "result_negative": "ep01.audio.sfx.result_negative",
+    "result_neutral": "ep01.audio.sfx.result_neutral",
+    "continue": "ep01.audio.sfx.continue"
+  }
+}
