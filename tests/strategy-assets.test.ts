@@ -27,30 +27,30 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
   });
 
-  it('uses TASK-014 RC art for the foundation and all eight characters before deterministic fallback', () => {
+  it('uses final TASK-014 WebP art for the foundation and all eight characters before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
     expect(content.asset_manifest.assets).toHaveLength(17);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
-      .toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+      .toBe('assets/episode01/backgrounds/foundation-map.webp');
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
-    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
 
     for (const characterId of cast) {
-      expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait-rc\.svg$/);
-      expect(art.characters[characterId]?.map_uri).toMatch(/-map-rc\.svg$/);
+      expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait\.webp$/);
+      expect(art.characters[characterId]?.map_uri).toMatch(/-map\.webp$/);
     }
 
-    expect(art.characters.player?.map_uri).toContain('player-map-rc.svg');
-    expect(art.characters.kang_taesik?.portrait_uri).toContain('kang-taesik-portrait-rc.svg');
-    expect(art.characters.yoon_sungho?.map_uri).toContain('yoon-sungho-map-rc.svg');
-    expect(art.characters.lee_jaehoon?.portrait_uri).toContain('lee-jaehoon-portrait-rc.svg');
-    expect(art.characters.lim_junho?.map_uri).toContain('lim-junho-map-rc.svg');
-    expect(art.characters.choi_minseok?.portrait_uri).toContain('choi-minseok-portrait-rc.svg');
-    expect(art.characters.seo_jeongmin?.map_uri).toContain('seo-jeongmin-map-rc.svg');
-    expect(art.characters.oh_seungjae?.portrait_uri).toContain('oh-seungjae-portrait-rc.svg');
+    expect(art.characters.player?.map_uri).toContain('player-map.webp');
+    expect(art.characters.kang_taesik?.portrait_uri).toContain('kang-taesik-portrait.webp');
+    expect(art.characters.yoon_sungho?.map_uri).toContain('yoon-sungho-map.webp');
+    expect(art.characters.lee_jaehoon?.portrait_uri).toContain('lee-jaehoon-portrait.webp');
+    expect(art.characters.lim_junho?.map_uri).toContain('lim-junho-map.webp');
+    expect(art.characters.choi_minseok?.portrait_uri).toContain('choi-minseok-portrait.webp');
+    expect(art.characters.seo_jeongmin?.map_uri).toContain('seo-jeongmin-map.webp');
+    expect(art.characters.oh_seungjae?.portrait_uri).toContain('oh-seungjae-portrait.webp');
   });
 
   it('still falls back cleanly when no production files are registered', () => {

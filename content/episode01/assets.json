@@ -7,10 +7,10 @@
       "group_id": "ep01.backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/backgrounds/foundation-map.svg",
-          "format": "svg",
-          "bytes": 3380,
-          "hash": "3225e821c6d1825ff4098d18f84071e0576263492aeaa2f2f8e426d9d12d1077"
+          "uri": "assets/episode01/backgrounds/foundation-map.webp",
+          "format": "webp",
+          "bytes": 82776,
+          "hash": "6064e4f554b798ed3813e879acc1fe5aa792242f6946c1f5a06721c843d578c7"
         }
       ],
       "dependencies": [],
@@ -23,10 +23,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/choi-minseok-map.svg",
-          "format": "svg",
-          "bytes": 2200,
-          "hash": "a1959fa5aa7fe3d9c85ecadd706dbbfaed49d7e6ca3743607d82bb5a43a1c0eb"
+          "uri": "assets/episode01/characters/choi-minseok-map.webp",
+          "format": "webp",
+          "bytes": 19896,
+          "hash": "a4f6749954e62c77708dd0485e1455222d537478b5677787672bd2eb49e8fe6f"
         }
       ],
       "dependencies": [],
@@ -39,10 +39,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/choi-minseok-portrait.svg",
-          "format": "svg",
-          "bytes": 2427,
-          "hash": "308dd68f716800228444f8697b839bdcb0aac526a925f83344eb91941c6d8da1"
+          "uri": "assets/episode01/characters/choi-minseok-portrait.webp",
+          "format": "webp",
+          "bytes": 16736,
+          "hash": "be9dbaac3dfb3251067ed4c1fd14a8d05cca19b782b1983191bf0849f12b6a3d"
         }
       ],
       "dependencies": [],
@@ -55,10 +55,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/kang-taesik-map.svg",
-          "format": "svg",
-          "bytes": 2231,
-          "hash": "770f243c588da236512e767046ed850f502a93bd2d060570b75546ffb4f6de95"
+          "uri": "assets/episode01/characters/kang-taesik-map.webp",
+          "format": "webp",
+          "bytes": 20236,
+          "hash": "6996bd1dc22494efef8593825fa02c138e385c25a4195f197056a83a1adea29e"
         }
       ],
       "dependencies": [],
@@ -71,10 +71,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/kang-taesik-portrait.svg",
-          "format": "svg",
-          "bytes": 2478,
-          "hash": "1390f9128be7637ec386ef9cc5dbb7deb852220a0e5891c96546a858dec61210"
+          "uri": "assets/episode01/characters/kang-taesik-portrait.webp",
+          "format": "webp",
+          "bytes": 18424,
+          "hash": "ac6db36de91d787bb48824c3ced1cd07f373c79e853f9a5a6ad7c2984673c5d2"
         }
       ],
       "dependencies": [],
@@ -87,10 +87,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/lee-jaehoon-map.svg",
-          "format": "svg",
-          "bytes": 2375,
-          "hash": "5ce4670368807f8d3a8bcf1c7fffb530b5ee7b196d19b829825891cf848a1974"
+          "uri": "assets/episode01/characters/lee-jaehoon-map.webp",
+          "format": "webp",
+          "bytes": 17268,
+          "hash": "a95d9c35a302de25cf07afd762bd9cdd03699b2713965cf65a111a624c778a5d"
         }
       ],
       "dependencies": [],
@@ -103,10 +103,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/lee-jaehoon-portrait.svg",
-          "format": "svg",
-          "bytes": 2585,
-          "hash": "a53128f77db7aa78f547351fbc5a1691044abf3ee754168f3a65291046998265"
+          "uri": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+          "format": "webp",
+          "bytes": 15284,
+          "hash": "7bcc68204ac749446c6b0f3de94e1da328be63902dd784486056f31b6a05b401"
         }
       ],
       "dependencies": [],
@@ -119,10 +119,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/lim-junho-map.svg",
-          "format": "svg",
-          "bytes": 2246,
-          "hash": "5e538f4ded2a0e3ab9c6052656b4c2049dcb0f78f7df57c68d3a81df06bcae80"
+          "uri": "assets/episode01/characters/lim-junho-map.webp",
+          "format": "webp",
+          "bytes": 16586,
+          "hash": "d84e09afe250adbcec5909d47cf71d18718f17fae14314fcfb6f925af767f1f3"
         }
       ],
       "dependencies": [],
@@ -135,10 +135,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/lim-junho-portrait.svg",
-          "format": "svg",
-          "bytes": 2519,
-          "hash": "d234bc64f15aabeb9b0169d05d1bcf8f6317dd81f3eea1a4fc7639bd5f39f434"
+          "uri": "assets/episode01/characters/lim-junho-portrait.webp",
+          "format": "webp",
+          "bytes": 15336,
+          "hash": "b3dcf3758880b29ee69f469fe9b9dd0ea2a5dbb92f4277845efbfbcd99f76dc2"
         }
       ],
       "dependencies": [],
@@ -151,10 +151,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/oh-seungjae-map.svg",
-          "format": "svg",
-          "bytes": 2233,
-          "hash": "1bf5da60303fffeaed616efd7e13cceb314bc095280a92d634536673fa94b1b3"
+          "uri": "assets/episode01/characters/oh-seungjae-map.webp",
+          "format": "webp",
+          "bytes": 19500,
+          "hash": "9da786af44a1259b0519d39be010e84c4884a10b97e0a8c1e1e847bc862fe3f5"
         }
       ],
       "dependencies": [],
@@ -167,10 +167,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/oh-seungjae-portrait.svg",
-          "format": "svg",
-          "bytes": 2541,
-          "hash": "897229ac1daa0f1fc8d54667aa5bd72e9d5252f904ff3a2bfa42387aef7a0f57"
+          "uri": "assets/episode01/characters/oh-seungjae-portrait.webp",
+          "format": "webp",
+          "bytes": 14608,
+          "hash": "576d56c5d91329299176ba71504bd18e18f8ed5349b57741225418e6929b8de6"
         }
       ],
       "dependencies": [],
@@ -183,10 +183,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/player-map.svg",
-          "format": "svg",
-          "bytes": 2334,
-          "hash": "a42c65c5bc953e090332db8a2834eb862592cdfbabfcae34450fc755abc42778"
+          "uri": "assets/episode01/characters/player-map.webp",
+          "format": "webp",
+          "bytes": 19018,
+          "hash": "ae5810afde20cbfb1f9ecf4157319aeb32a1b4f744d82c0e36fbdff9423fb0f8"
         }
       ],
       "dependencies": [],
@@ -199,10 +199,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/player-portrait.svg",
-          "format": "svg",
-          "bytes": 2575,
-          "hash": "2ce9b2d8524b3e2457e4549a5186a9303bfa94a3952f5e43d9b2052b8a20e4c4"
+          "uri": "assets/episode01/characters/player-portrait.webp",
+          "format": "webp",
+          "bytes": 17204,
+          "hash": "db03f0e8c15d2beaa2dc0f778c7f3121f0f9e162e9f69b10cbae8585e0badc54"
         }
       ],
       "dependencies": [],
@@ -215,10 +215,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/seo-jeongmin-map.svg",
-          "format": "svg",
-          "bytes": 2479,
-          "hash": "8fb9209e42bdcc62612f016a82a0588c0781e5c49d66bc505836c55732139eda"
+          "uri": "assets/episode01/characters/seo-jeongmin-map.webp",
+          "format": "webp",
+          "bytes": 14926,
+          "hash": "22ad7b4c34f581e5ecf3797719a32161e8499e21fb29a8b3c1103c1501f3f3c8"
         }
       ],
       "dependencies": [],
@@ -231,10 +231,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/seo-jeongmin-portrait.svg",
-          "format": "svg",
-          "bytes": 2688,
-          "hash": "164c2ab1607fe0679a0b94d7dbcb17b46be46c071ce4debd2adb6fa7781aeced"
+          "uri": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+          "format": "webp",
+          "bytes": 13048,
+          "hash": "301e978023e475ff36e3ad82c4f727126380cebb1ed086324f45346b3f821be8"
         }
       ],
       "dependencies": [],
@@ -247,10 +247,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/yoon-sungho-map.svg",
-          "format": "svg",
-          "bytes": 2188,
-          "hash": "d8ac8639d5befe92eeafeb5f7f6ce980afee08b3410ceb4d85fca470bd3d0058"
+          "uri": "assets/episode01/characters/yoon-sungho-map.webp",
+          "format": "webp",
+          "bytes": 21822,
+          "hash": "8f2b6f81e501f2dd4161dc2624be14990a614803cec5395f1c8af24d54930a4c"
         }
       ],
       "dependencies": [],
@@ -263,10 +263,10 @@
       "group_id": "ep01.characters",
       "variants": [
         {
-          "uri": "assets/episode01/characters/yoon-sungho-portrait.svg",
-          "format": "svg",
-          "bytes": 2507,
-          "hash": "e4c376551d83e04d88dfc19dd6962f4943665da4e3ee20ed23fdcb482d33236f"
+          "uri": "assets/episode01/characters/yoon-sungho-portrait.webp",
+          "format": "webp",
+          "bytes": 19354,
+          "hash": "207d5ed02cdb4d080a28b2945539fd55a96f11cd11159c7d0db2bd065a94ff1e"
         }
       ],
       "dependencies": [],
