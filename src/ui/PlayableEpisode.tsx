@@ -6,6 +6,7 @@ import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
 import { characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
+import { psiCuesForChoice } from '../app/strategy-psi';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
@@ -35,11 +36,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
+  const fallbackChoiceId = activeInstance
+    ? (snapshot.state?.event_runtime.choice_history.slice().reverse().find(item => item.instance_id === activeInstance.instance_id)?.choice_id)
+    : undefined;
   const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
   const executedOutcomeReady = executedFieldAction !== null && snapshot.revision > executedFieldAction.source_revision;
   const executedEngineResult = executedOutcomeReady && presentation?.type === 'SHOW_RESULT' && presentation.instance_id === executedFieldAction?.action.instance_id;
   const fallbackEngineOutcome = !executedOutcomeReady && isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
   const mapOutcomeActive = executedOutcomeReady || fallbackEngineOutcome;
+  const outcomePsiCues = psiCuesForChoice(executedFieldAction?.action.choice_id ?? fallbackChoiceId);
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
     : undefined;
@@ -80,6 +85,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         const amount = `${delta.applied_delta > 0 ? '+' : ''}${delta.applied_delta}`;
         return `${name} · ${field} ${amount}`;
       }),
+      psi_cues: outcomePsiCues,
     }
     : undefined;
 
