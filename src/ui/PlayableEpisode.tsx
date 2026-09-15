@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
 import { projectCharacterLoadout } from '../app/character-loadout';
 import { completedTraining } from '../app/training';
-import { projectStrategyActions } from '../app/strategy-actions';
+import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
@@ -22,7 +22,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
+  const activeEventId = snapshot.state?.event_runtime.active_instance?.event_id ?? null;
   const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
+  const mapOutcomeActive = isPlaying && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), id => session.assetUri(id))
     : undefined;
@@ -43,6 +45,18 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     actions: t('ui.strategy.actions'),
     actionHint: t('ui.strategy.action_hint'),
   };
+  const strategyOutcome = mapOutcomeActive && presentation?.type === 'SHOW_RESULT'
+    ? {
+      key: `${presentation.instance_id}:${presentation.node_id}:${snapshot.revision}`,
+      text: t(presentation.text_id),
+      relationship_lines: snapshot.relationshipFeedback.map(({ npc_id, delta }) => {
+        const name = session.character(npc_id)?.name ?? npc_id;
+        const field = t(`ui.relationship.${delta.field}`);
+        const amount = `${delta.applied_delta > 0 ? '+' : ''}${delta.applied_delta}`;
+        return `${name} · ${field} ${amount}`;
+      }),
+    }
+    : undefined;
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
   useEffect(() => {
@@ -73,7 +87,6 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     : person ? characterPortraitUri(person.id, id => session.assetUri(id)) : undefined;
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
   const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
-  const activeEventId = snapshot.state?.event_runtime.active_instance?.event_id;
   const rewardCharacterId = activeEventId === 'e01_09_evening'
     ? 'player'
     : activeEventId === 'e01_08a_reporting_return' ? 'lim_junho' : undefined;
@@ -85,7 +98,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
 
-  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length ? ' strategy-action-active' : ''}`}>
+  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
       view={strategy}
       copy={strategyCopy}
@@ -93,6 +106,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       person={id => session.character(id)}
       actions={strategyActions}
       visualAssets={visualAssets}
+      outcome={strategyOutcome}
+      onOutcomeContinue={mapOutcomeActive && presentation?.type === 'SHOW_RESULT' ? () => session.dispatch({
+        type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id,
+      }, snapshot.revision) : undefined}
       onAction={action => session.dispatch({
         type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
       }, snapshot.revision)}
@@ -120,7 +137,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           slotLabel={slot => t(`ui.equipment.${slot}`)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
-          {snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
+          {!mapOutcomeActive && snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
               <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
               <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
@@ -131,13 +148,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
             <div><b>{t('ui.training.reward')}</b>{trainingReward.rewards.map(item => <em key={item.item_id}>{item.name}</em>)}</div>
             {equippedTrainingRewards.length ? <div><b>{t('ui.training.equipped')}</b>{equippedTrainingRewards.map(item => <em key={item.slot}>{item.name}</em>)}</div> : null}
           </div> : null}
-          <PresentationView
-            commands={snapshot.presentation}
-            t={t}
-            send={command => { session.dispatch(command, snapshot.revision); }}
-            assetUri={id => session.assetUri(id)}
-            choiceFallback={strategyActions.length > 0}
-          />
+          {mapOutcomeActive
+            ? <p className="map-outcome-support">{t('ui.strategy.result_on_map')}</p>
+            : <PresentationView
+              commands={snapshot.presentation}
+              t={t}
+              send={command => { session.dispatch(command, snapshot.revision); }}
+              assetUri={id => session.assetUri(id)}
+              choiceFallback={strategyActions.length > 0}
+            />}
         </div>
       </section>
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
