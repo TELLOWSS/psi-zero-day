@@ -22,7 +22,7 @@ function webPChunk(type: 'VP8X' | 'VP8 ' | 'VP8L' | 'ALPH', payload: Buffer) {
 
 function vp8x(width: number, height: number, alpha = false) {
   const payload = Buffer.alloc(10);
-  if (alpha) payload[0] |= 0x10;
+  if (alpha) payload[0] = (payload[0] ?? 0) | 0x10;
   writeUint24LE(payload, 4, width - 1);
   writeUint24LE(payload, 7, height - 1);
   return webPChunk('VP8X', payload);
