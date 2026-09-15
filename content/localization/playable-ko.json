@@ -87,6 +87,7 @@
     "ui.strategy.execute": "조치 실행",
     "ui.strategy.cancel": "다시 선택",
     "ui.strategy.result": "현장 결과",
+    "ui.strategy.action_applied": "조치가 현장에 반영되었습니다. 다음 상황을 확인하세요.",
     "ui.strategy.return_map": "맵으로 복귀",
     "ui.strategy.result_on_map": "조치 결과를 현장맵에서 확인하세요.",
     "ui.signal.entry_congestion": "진입통로 혼잡",
