@@ -22,9 +22,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
-  const activeEventId = snapshot.state?.event_runtime.active_instance?.event_id ?? null;
+  const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
+  const activeEventId = activeInstance?.event_id ?? null;
+  const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
   const strategyActions = projectStrategyActions(strategy?.runtime.active_event_id ?? null, presentation);
-  const mapOutcomeActive = isPlaying && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
+  const mapOutcomeActive = isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), id => session.assetUri(id))
     : undefined;
