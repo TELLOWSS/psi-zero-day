@@ -1,6 +1,6 @@
 # PSI : ZERO DAY — Player Visual Lock
 
-Status: LOCKED for TASK-016B production media.
+Status: LOCKED for TASK-016C production media.
 
 ## Purpose
 This document is the single production-art identity contract for the Player character. The portrait and map asset must depict the same person and must remain consistent across title, dialogue, map, tutorial, store creative and future expression variants.
@@ -110,9 +110,19 @@ A final Player pair is accepted only when all are true:
 - no clipping is introduced in title/dialogue/map placements,
 - Player is visibly distinct from every other Episode 01 cast member before reading any name label.
 
+## Automated production gate
+After both final files are placed at the locked production paths, run:
+
+`npm run assets:production-player-check`
+
+The Player gate passes only when both exact final paths exist and both files are valid WebP assets. It also enforces the minimum portrait/map dimensions above and requires alpha transparency for both files. RC SVG or deterministic fallback art never satisfies this gate and must not be relabeled as final production art.
+
+After the Player gate passes, regenerate the manifest with `npm run assets:manifest`. The existing runtime precedence automatically promotes the final WebP pair over the RC SVG pair without changing gameplay code or asset IDs.
+
 ## Production order
 1. `player-portrait.webp`
 2. visual acceptance against this lock
 3. `player-map.webp` derived from the accepted portrait identity
-4. pair consistency check
-5. Batch A integration gate
+4. `npm run assets:production-player-check`
+5. pair consistency / reduced-scale UI check
+6. Batch A integration gate
