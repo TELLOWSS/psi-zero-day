@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { isWebP, webPDimensions } from './webp-dimensions.mjs';
+import { isWebP, webPDimensions, webPHasAlpha } from './webp-dimensions.mjs';
 
 const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
@@ -65,6 +65,10 @@ function minimumDimensions(item) {
   return undefined;
 }
 
+function requiresTransparentBackground(item) {
+  return item.source.endsWith(':portrait') || item.source.endsWith(':map');
+}
+
 async function readPlannedAsset(uri) {
   // Final commercial art always wins when present.
   const exact = await tryRead(uri);
@@ -125,6 +129,13 @@ if (productionCheck) {
         `${item.asset_id}: ${dimensions.width}x${dimensions.height} is below minimum `
         + `${minimum.width}x${minimum.height} (${item.uri})`,
       );
+    }
+
+    if (requiresTransparentBackground(item)) {
+      const hasAlpha = webPHasAlpha(exact.bytes);
+      if (hasAlpha !== true) {
+        invalid.push(`${item.asset_id}: character production art must include WebP alpha transparency (${item.uri})`);
+      }
     }
   }
 
