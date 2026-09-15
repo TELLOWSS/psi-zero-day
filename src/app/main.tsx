@@ -13,6 +13,7 @@ import '../ui/strategy-actions.css';
 import '../ui/strategy-assets.css';
 import '../ui/character-growth.css';
 import '../ui/vertical-slice-polish.css';
+import '../ui/art-slice-014a.css';
 
 const session = new EpisodeSession();
 let storage: EpisodeSaveStorage | null = null;
