@@ -27,16 +27,29 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
   });
 
-  it('registers the generated production-vector background plus map/portrait art for all eight characters', () => {
+  it('uses TASK-014A RC art for the foundation plus Player/Kang/Junho while retaining generated SVG fallback for the rest', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
     expect(content.asset_manifest.assets).toHaveLength(17);
+
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
-      .toBe('assets/episode01/backgrounds/foundation-map.svg');
+      .toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+    expect(registry.getAsset('ep01.character.player.map')?.variants[0]?.uri)
+      .toBe('assets/episode01/characters/player-map-rc.svg');
+    expect(registry.getAsset('ep01.character.player.portrait')?.variants[0]?.uri)
+      .toBe('assets/episode01/characters/player-portrait-rc.svg');
+    expect(registry.getAsset('ep01.character.kang_taesik.map')?.variants[0]?.uri)
+      .toBe('assets/episode01/characters/kang-taesik-map-rc.svg');
+    expect(registry.getAsset('ep01.character.lim_junho.portrait')?.variants[0]?.uri)
+      .toBe('assets/episode01/characters/lim-junho-portrait-rc.svg');
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
-    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.svg');
-    for (const characterId of cast) {
+    expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map-rc.svg');
+    expect(art.characters.player?.map_uri).toMatch(/player-map-rc\.svg$/);
+    expect(art.characters.kang_taesik?.portrait_uri).toMatch(/kang-taesik-portrait-rc\.svg$/);
+    expect(art.characters.lim_junho?.map_uri).toMatch(/lim-junho-map-rc\.svg$/);
+
+    for (const characterId of ['yoon_sungho', 'lee_jaehoon', 'choi_minseok', 'seo_jeongmin', 'oh_seungjae'] as const) {
       expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait\.svg$/);
       expect(art.characters[characterId]?.map_uri).toMatch(/-map\.svg$/);
     }
