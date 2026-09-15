@@ -5,7 +5,7 @@ import { projectCharacterLoadout } from '../app/character-loadout';
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
-import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strategy-assets';
+import { characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
@@ -43,6 +43,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const visualAssets = strategy
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
     : undefined;
+  const titleBackgroundUri = episode01BackgroundUri(resolveAsset);
   const strategyCopy = {
     brand: t('ui.brand'),
     day: t('ui.day'),
@@ -166,7 +167,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         }, snapshot.revision);
         if (!accepted) setExecutedFieldAction(null);
       }}
-    /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} />}
+    /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
