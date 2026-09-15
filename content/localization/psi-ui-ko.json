@@ -1,0 +1,13 @@
+{
+  "locale": "ko",
+  "messages": {
+    "ui.psi.related": "관련 PSI",
+    "ui.psi.definition": "사고 전 신호를 모아 다음 위험을 먼저 읽는 안전지능.",
+    "ui.psi.indicator.risk_awareness": "위험인지도",
+    "ui.psi.indicator.training_comprehension": "교육이해도",
+    "ui.psi.indicator.practice_participation": "실천참여도",
+    "ui.psi.indicator.ppe_rule_compliance": "보호구·수칙준수",
+    "ui.psi.indicator.communication_reporting": "소통·보고성",
+    "ui.psi.indicator.stop_work_acceptance": "작업중지 감수성"
+  }
+}
