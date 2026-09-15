@@ -68,7 +68,6 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   const selectedActions = strategyActionsForTarget(actions, focusId);
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
-  const psiScore = Math.max(0, Math.min(100, Number(view.psi.values.score ?? 0)));
   const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
   const focusedPlacement = view.placements.find(placement => placement.character_id === effectiveFocusId);
   const focusedPerson = focusedPlacement ? person(focusedPlacement.character_id) : undefined;
@@ -94,13 +93,18 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
 
   const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
   const hasBackgroundArt = visualAssets?.background_uri !== undefined;
+  const moneyValue = `₩${Math.max(0, view.resources.money).toLocaleString('ko-KR')}`;
+  const timeValue = view.resources.display_time ?? text(`ui.slot.${view.resources.time_slot.toLowerCase()}`);
+  const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={outcome ? 'result' : focusId ? 'action' : 'target'}>
     <header className="strategy-hud">
       <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><strong>{copy.brand}</strong></div>
-      <div className="strategy-meter" aria-label={copy.psi}>
-        <span>{copy.psi}</span>
-        <div className="strategy-meter-track"><i style={{ width: `${psiScore}%` }} /></div>
+      <div className="strategy-resource-bar" aria-label={`${text('ui.resource.money')} ${text('ui.resource.time')} ${text('ui.resource.schedule')} ${text('ui.resource.safety')}`}>
+        <article data-resource="money"><span>{text('ui.resource.money')}</span><strong>{moneyValue}</strong></article>
+        <article data-resource="time"><span>{text('ui.resource.time')}</span><strong>{timeValue}</strong></article>
+        <article data-resource="schedule"><span>{text('ui.resource.schedule')}</span><strong>{view.resources.schedule_progress}%</strong></article>
+        <article data-resource="safety" data-signal-count={view.resources.safety_signal_count}><span>{text('ui.resource.safety')}</span><strong>{safetyValue}</strong></article>
       </div>
       <div className="strategy-day"><span>{copy.day}</span><strong>{view.clock.day}</strong></div>
     </header>
