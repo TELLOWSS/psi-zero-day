@@ -1,4 +1,5 @@
 import type { Id, PresentationCommand, TextId } from '../domain';
+import type { FieldResourceAxisId } from './product-contract';
 
 export type StrategyActionIntent = 'inspect' | 'coordinate' | 'control' | 'report' | 'protect' | 'record';
 export type StrategyActionTarget =
@@ -17,6 +18,8 @@ export interface StrategyAction {
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
   readonly actor_character_id: Id;
+  /** Related field resources only. Direction/magnitude remains balance-pending. */
+  readonly resource_axes: readonly FieldResourceAxisId[];
   readonly skill?: {
     readonly source: 'equipment' | 'growth';
     readonly label_text_id: TextId;
@@ -27,37 +30,47 @@ interface ActionMetadata {
   readonly intent: StrategyActionIntent;
   readonly target: StrategyActionTarget;
   readonly actor_character_id?: Id;
+  readonly resource_axes?: readonly FieldResourceAxisId[];
   readonly skill?: StrategyAction['skill'];
 }
+
+const RESOURCE_AXES_BY_INTENT: Readonly<Record<StrategyActionIntent, readonly FieldResourceAxisId[]>> = {
+  inspect: ['time', 'safety'],
+  coordinate: ['time', 'schedule'],
+  control: ['schedule', 'safety'],
+  report: ['time', 'safety'],
+  protect: ['schedule', 'safety'],
+  record: ['time', 'safety'],
+};
 
 const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
   delegate_kang: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' }, actor_character_id: 'kang_taesik' },
   negotiate_yoon: { intent: 'coordinate', target: { kind: 'character', character_id: 'yoon_sungho' }, actor_character_id: 'yoon_sungho' },
-  coordinate_schedule: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, actor_character_id: 'lee_jaehoon' },
+  coordinate_schedule: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, actor_character_id: 'lee_jaehoon', resource_axes: ['time', 'schedule', 'safety'] },
   follow_junho: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
   listen_more: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
   dismiss: { intent: 'control', target: { kind: 'character', character_id: 'lim_junho' } },
   check_self: { intent: 'inspect', target: { kind: 'anchor', anchor: 'ramp' } },
   ask_minseok: { intent: 'coordinate', target: { kind: 'character', character_id: 'choi_minseok' }, actor_character_id: 'choi_minseok' },
-  keep_schedule: { intent: 'control', target: { kind: 'character', character_id: 'lee_jaehoon' } },
+  keep_schedule: { intent: 'control', target: { kind: 'character', character_id: 'lee_jaehoon' }, resource_axes: ['time', 'schedule', 'safety'] },
   assign_crew: { intent: 'coordinate', target: { kind: 'character', character_id: 'kang_taesik' }, actor_character_id: 'kang_taesik' },
-  request_delay: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' } },
-  force_clear: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.work_vehicle_overlap' } },
-  inspection_full_stop: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.inspection_access' } },
+  request_delay: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, resource_axes: ['time', 'schedule', 'safety'] },
+  force_clear: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.work_vehicle_overlap' }, resource_axes: ['time', 'schedule', 'safety'] },
+  inspection_full_stop: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.inspection_access' }, resource_axes: ['time', 'schedule', 'safety'] },
   inspection_quick_photo: { intent: 'record', target: { kind: 'signal', signal_id: 'signal.inspection_access' } },
-  inspection_sequence_agreement: { intent: 'coordinate', target: { kind: 'character', character_id: 'seo_jeongmin' } },
+  inspection_sequence_agreement: { intent: 'coordinate', target: { kind: 'character', character_id: 'seo_jeongmin' }, resource_axes: ['time', 'schedule', 'safety'] },
   report_one_sided: { intent: 'report', target: { kind: 'character', character_id: 'oh_seungjae' } },
   report_defensive: { intent: 'report', target: { kind: 'character', character_id: 'kang_taesik' } },
   report_verify_timeline: { intent: 'inspect', target: { kind: 'site' } },
   tbm_form_first: { intent: 'record', target: { kind: 'signal', signal_id: 'signal.tbm_field_gap' } },
   tbm_worker_blame: { intent: 'report', target: { kind: 'character', character_id: 'kang_taesik' } },
-  tbm_change_control: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.tbm_field_gap' } },
-  restart_follow_verbal: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' } },
+  tbm_change_control: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.tbm_field_gap' }, resource_axes: ['time', 'schedule', 'safety'] },
+  restart_follow_verbal: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, resource_axes: ['time', 'schedule', 'safety'] },
   restart_trace_instruction: { intent: 'inspect', target: { kind: 'character', character_id: 'kang_taesik' } },
-  restart_verify_controls: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.restart_unverified' } },
-  stopwork_ignore_social: { intent: 'control', target: { kind: 'character', character_id: 'lim_junho' } },
-  stopwork_public_boundary: { intent: 'protect', target: { kind: 'character', character_id: 'kang_taesik' } },
-  stopwork_protect_process: { intent: 'protect', target: { kind: 'character', character_id: 'lim_junho' } },
+  restart_verify_controls: { intent: 'control', target: { kind: 'signal', signal_id: 'signal.restart_unverified' }, resource_axes: ['time', 'schedule', 'safety'] },
+  stopwork_ignore_social: { intent: 'control', target: { kind: 'character', character_id: 'lim_junho' }, resource_axes: ['time', 'schedule', 'safety'] },
+  stopwork_public_boundary: { intent: 'protect', target: { kind: 'character', character_id: 'kang_taesik' }, resource_axes: ['time', 'schedule', 'safety'] },
+  stopwork_protect_process: { intent: 'protect', target: { kind: 'character', character_id: 'lim_junho' }, resource_axes: ['time', 'schedule', 'safety'] },
   instruction_accept_top: { intent: 'report', target: { kind: 'character', character_id: 'lee_jaehoon' } },
   instruction_blame_worker: { intent: 'report', target: { kind: 'character', character_id: 'lim_junho' } },
   instruction_reconstruct_chain: { intent: 'inspect', target: { kind: 'character', character_id: 'kang_taesik' } },
@@ -115,6 +128,7 @@ export function projectStrategyActions(activeEventId: Id | null, presentation: P
       intent: metadata.intent,
       target: metadata.target,
       actor_character_id: metadata.actor_character_id ?? 'player',
+      resource_axes: Object.freeze([...(metadata.resource_axes ?? RESOURCE_AXES_BY_INTENT[metadata.intent])]),
       ...(metadata.skill ? { skill: metadata.skill } : {}),
     });
   }));
