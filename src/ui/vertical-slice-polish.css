@@ -24,6 +24,71 @@
 .presentation-area > * {
   animation: psi-panel-enter .18s ease-out both;
 }
+
+/* Map first, dialogue second. Keep narrative readable without covering the site. */
+.strategy-active .scene-heading {
+  position: relative;
+  z-index: 22;
+  padding-top: 18px;
+  pointer-events: none;
+}
+.strategy-active .scene-heading h1 {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(18,42,58,.72);
+  color: #f2f8fb;
+  box-shadow: 0 8px 18px rgba(16,39,55,.14);
+  font-size: clamp(17px,1.65vw,25px);
+}
+.strategy-active .play-panel {
+  z-index: 24;
+  min-height: 132px;
+  max-height: 24%;
+  grid-template-columns: 138px minmax(0,1fr);
+  gap: 18px;
+  padding: 14px 18px;
+  background: rgba(19,31,30,.92);
+  backdrop-filter: blur(9px);
+}
+.strategy-active .dialogue-content {
+  min-height: 96px;
+}
+.strategy-active .dialogue-text {
+  max-width: 900px;
+  padding: 7px 0 9px;
+  font-size: clamp(14px,1.25vw,18px);
+  line-height: 1.65;
+}
+.strategy-active .continue-button {
+  min-height: 34px;
+  padding-block: 5px;
+}
+.strategy-active .portrait-slot {
+  height: 74px;
+}
+.strategy-active .worker-mark {
+  height: 74px;
+  transform: scale(.72);
+  transform-origin: center bottom;
+}
+.strategy-active .character-identity {
+  margin-top: 9px;
+}
+.strategy-active .character-identity strong {
+  font-size: 16px;
+}
+.strategy-active .character-identity > span:last-child {
+  font-size: 10px;
+}
+.strategy-active .narrator-mark {
+  font-size: 38px;
+}
+.strategy-action-active .play-panel {
+  min-height: 82px;
+  max-height: 17%;
+}
+
 .save-hint {
   display: inline-flex;
   align-items: center;
@@ -47,6 +112,21 @@
   opacity: .7;
   font-size: 12px;
   line-height: 1.6;
+}
+
+@media (max-width: 900px), (max-height: 550px) {
+  .strategy-active .play-panel {
+    min-height: 104px;
+    max-height: none;
+    grid-template-columns: 104px minmax(0,1fr);
+    padding: 10px 12px;
+    gap: 12px;
+  }
+  .strategy-active .dialogue-content { min-height: 76px; }
+  .strategy-active .dialogue-text { font-size: 13px; line-height: 1.55; }
+  .strategy-active .portrait-slot { height: 56px; }
+  .strategy-active .character-identity strong { font-size: 14px; }
+  .save-hint { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
