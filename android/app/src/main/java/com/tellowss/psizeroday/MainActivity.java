@@ -1,0 +1,5 @@
+package com.tellowss.psizeroday;
+
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PSI : ZERO DAY</string>
+    <string name="title_activity_main">PSI : ZERO DAY</string>
+    <string name="package_name">com.tellowss.psizeroday</string>
+    <string name="custom_url_scheme">com.tellowss.psizeroday</string>
+</resources>
