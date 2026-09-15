@@ -53,6 +53,15 @@ const labels: Readonly<Record<string, string>> = {
   'ui.resource.safety_signals': '위험신호',
   'ui.resource.impact': '연결 자원',
   'ui.slot.morning': '오전',
+  'ui.paid_item.replan': '현장 재판단권',
+  'ui.paid_item.owned': '보유',
+  'ui.paid_item.use': '재판단권 사용',
+  'ui.paid_item.unavailable': '보유권 없음',
+  'ui.paid_item.replan_guard': '이미 발생·기록된 사고는 되돌릴 수 없습니다.',
+  'ui.paid_item.confirm_title': '결과 확정 전 재판단',
+  'ui.paid_item.confirm_replan': '직전 현장 판단으로 돌아갑니다.',
+  'ui.paid_item.keep_result': '결과 유지',
+  'ui.paid_item.confirm': '재판단',
 };
 const text = (id: string) => labels[id] ?? id;
 const person = (id: string) => id === 'lim_junho' ? { name: '임준호', role: '신입근로자' } : id === 'player' ? { name: '현장 안전관리자', role: '안전관리' } : undefined;
@@ -113,6 +122,21 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('임준호의 위험신호를 확인했다.');
     expect(html).toContain('임준호 · 보고 +4');
     expect(html).toContain('맵으로 복귀');
+  });
+
+  it('shows the replan pass lifecycle on an unresolved field result without erasing incident language', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell
+      view={view} copy={copy} text={text} person={person} actions={[]}
+      outcome={{
+        key: 'result.replan', text: '현장 조치 결과',
+        reconsideration: { item_id: 'action.replan_pass', remaining: 1, enabled: true },
+      }}
+    />);
+    expect(html).toContain('data-paid-item="action.replan_pass"');
+    expect(html).toContain('현장 재판단권');
+    expect(html).toContain('보유 1');
+    expect(html).toContain('재판단권 사용');
+    expect(html).toContain('이미 발생·기록된 사고는 되돌릴 수 없습니다.');
   });
 
   it('switches to production-art mode when registered assets resolve', () => {
