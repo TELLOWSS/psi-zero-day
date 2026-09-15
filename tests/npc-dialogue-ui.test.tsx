@@ -23,13 +23,21 @@ function click(text: string) {
   if (!button) throw new Error(`Missing button: ${text}`);
   act(() => button.click());
 }
-function continueCurrent() {
+function hasVisibleFieldOutcome() {
   const returnMap = session.t('ui.strategy.return_map');
-  const hasReturn = Array.from(container.querySelectorAll('button')).some(button => button.textContent?.includes(returnMap));
-  click(hasReturn ? returnMap : session.t('ui.continue'));
+  return Array.from(container.querySelectorAll('button')).some(button => button.textContent?.includes(returnMap));
+}
+function continueCurrent() {
+  click(hasVisibleFieldOutcome() ? session.t('ui.strategy.return_map') : session.t('ui.continue'));
 }
 function continueToChoice() {
   for (let i = 0; i < 30; i++) {
+    // A held field outcome intentionally covers the next engine presentation.
+    // Dismiss what the player can actually see before reading the next dialogue choice.
+    if (hasVisibleFieldOutcome()) {
+      continueCurrent();
+      continue;
+    }
     if (session.getSnapshot().dialogue?.responses.length) return;
     continueCurrent();
   }
