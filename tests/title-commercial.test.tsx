@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { EpisodeSession } from '../src/app/episode-session';
@@ -15,5 +16,11 @@ describe('TASK-016A commercial title screen', () => {
     expect(html).toContain('data-character="lim_junho"');
     expect(html).toContain('title-hero-character-image');
     expect(html).toContain('background-image');
+  });
+
+  it('loads the commercial title stylesheet from the application entry point', () => {
+    const appEntrySource = readFileSync(new URL('../src/app/main.tsx', import.meta.url), 'utf8');
+
+    expect(appEntrySource).toContain("import '../ui/title-commercial-016a.css';");
   });
 });
