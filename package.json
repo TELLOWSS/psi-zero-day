@@ -21,12 +21,15 @@
     "release:check": "npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.2",
+    "@capacitor/core": "8.5.2",
     "phaser": "4.2.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "4.6.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.5.2",
     "@types/node": "22.20.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
