@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8fd4f2"/><stop offset=".52" stop-color="#d7f0f7"/><stop offset="1" stop-color="#f7edd8"/></linearGradient>
+  <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d4b67d"/><stop offset="1" stop-color="#a98451"/></linearGradient>
+  <linearGradient id="slabTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f3e8"/><stop offset="1" stop-color="#d8e2e5"/></linearGradient>
+  <linearGradient id="slabFront" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dfe7e7"/><stop offset="1" stop-color="#aebec1"/></linearGradient>
+  <linearGradient id="slabSide" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c8d4d5"/><stop offset="1" stop-color="#91a4a8"/></linearGradient>
+  <linearGradient id="road" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#657175"/><stop offset="1" stop-color="#465257"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffac2f"/><stop offset="1" stop-color="#d86c14"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="180%" height="190%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#173447" flood-opacity=".25"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+</defs>
+<rect width="1920" height="1080" fill="url(#sky)"/>
+<circle cx="1580" cy="150" r="170" fill="#fff7d8" opacity=".36" filter="url(#soft)"/>
+<g opacity=".16" fill="#6aa0b3">
+  <rect x="80" y="285" width="150" height="320" rx="8"/><rect x="255" y="350" width="120" height="250" rx="8"/><rect x="1540" y="280" width="118" height="315" rx="8"/><rect x="1680" y="340" width="150" height="250" rx="8"/>
+</g>
+<path d="M0 570L1920 540V1080H0Z" fill="url(#ground)"/>
+<path d="M0 915L500 710L945 812L1515 620L1920 705V936L1510 842L980 1068L485 952L0 1080Z" fill="url(#road)"/>
+<path d="M38 945L505 762L944 854L1518 668L1875 742" fill="none" stroke="#f0f0ce" stroke-width="13" stroke-dasharray="52 38" opacity=".9"/>
+<path d="M188 766L501 642L780 701" fill="none" stroke="#cf7b24" stroke-width="8" opacity=".6"/>
+
+<!-- main apartment frame -->
+<g filter="url(#shadow)">
+  <path d="M585 256L1128 256L1305 350L760 350Z" fill="url(#slabTop)"/>
+  <path d="M760 350H1305V733H760Z" fill="url(#slabFront)"/>
+  <path d="M585 256L760 350V733L585 638Z" fill="url(#slabSide)"/>
+  <path d="M603 325L760 409H1305" fill="none" stroke="#ef861d" stroke-width="9"/>
+  <path d="M603 401L760 484H1305M603 478L760 561H1305M603 554L760 638H1305M603 630L760 714H1305" fill="none" stroke="#ef861d" stroke-width="9"/>
+  <g stroke="#8ca5ad" stroke-width="13"><path d="M818 350V733"/><path d="M908 350V733"/><path d="M998 350V733"/><path d="M1088 350V733"/><path d="M1178 350V733"/><path d="M1268 350V733"/></g>
+  <g fill="#b9c8cb" opacity=".7"><rect x="784" y="382" width="20" height="42"/><rect x="874" y="459" width="20" height="42"/><rect x="1053" y="535" width="20" height="42"/><rect x="1233" y="612" width="20" height="42"/></g>
+</g>
+
+<!-- core / office -->
+<g filter="url(#shadow)">
+  <path d="M220 548L405 548L460 585L276 585Z" fill="#eef3ef"/><path d="M276 585H460V718H276Z" fill="#cbd8d8"/><path d="M220 548L276 585V718L220 681Z" fill="#a9bcc0"/>
+  <rect x="312" y="616" width="88" height="102" fill="#7ab6ce"/><rect x="329" y="630" width="53" height="69" fill="#aee0ee"/>
+</g>
+<g filter="url(#shadow)">
+  <path d="M1388 420L1617 420L1742 490L1510 490Z" fill="url(#slabTop)"/><path d="M1510 490H1742V735H1510Z" fill="#c5d3d4"/><path d="M1388 420L1510 490V735L1388 665Z" fill="#a8babd"/>
+  <path d="M1411 516H1510M1411 585H1510M1411 654H1510" stroke="#ef861d" stroke-width="8"/>
+</g>
+
+<!-- crane -->
+<g filter="url(#shadow)" stroke="url(#orange)" fill="none">
+  <path d="M1390 146V610" stroke-width="30"/><path d="M1038 172H1730" stroke-width="24"/><path d="M1390 146l-170 26M1390 146l140 26" stroke-width="11"/>
+  <path d="M1377 210l26 32l-26 32l26 32l-26 32l26 32l-26 32l26 32l-26 32l26 32l-26 32" stroke="#8f5d1d" stroke-width="6"/>
+  <path d="M1614 184v228" stroke="#5e6770" stroke-width="5"/>
+</g>
+<rect x="1594" y="405" width="40" height="46" rx="6" fill="#d97916"/>
+
+<!-- rebar/formwork yard -->
+<g filter="url(#shadow)">
+  <path d="M455 790L661 723L822 761L617 832Z" fill="#ad7b4f" opacity=".55"/>
+  <g stroke="#46565d" stroke-width="7"><path d="M500 772l175-45"/><path d="M520 790l175-45"/><path d="M540 808l175-45"/><path d="M560 826l175-45"/></g>
+  <g fill="#4a88ab"><rect x="735" y="745" width="92" height="21" rx="4" transform="rotate(-12 735 745)"/><rect x="742" y="775" width="92" height="21" rx="4" transform="rotate(-12 742 775)"/><rect x="751" y="805" width="92" height="21" rx="4" transform="rotate(-12 751 805)"/></g>
+</g>
+
+<!-- gate / barriers / cones -->
+<g stroke="#3f6576" stroke-width="13" fill="none"><path d="M112 854V702H405V854"/><path d="M118 736H399"/></g>
+<g fill="#ef8b22" stroke="#d76f15" stroke-width="3">
+  <path d="M534 884l24-50l24 50Z"/><path d="M596 884l24-50l24 50Z"/><path d="M659 884l24-50l24 50Z"/><path d="M1235 850l24-50l24 50Z"/><path d="M1302 850l24-50l24 50Z"/><path d="M1370 850l24-50l24 50Z"/><path d="M1660 836l24-50l24 50Z"/><path d="M1720 836l24-50l24 50Z"/>
+</g>
+
+<!-- foreground depth -->
+<path d="M0 1018L500 915L978 1032L1523 815L1920 890V1080H0Z" fill="#243740" opacity=".16"/>
+<path d="M0 1070L500 952L975 1076L1520 850L1920 932" fill="none" stroke="#172c35" stroke-width="3" opacity=".25"/>
+</svg>
