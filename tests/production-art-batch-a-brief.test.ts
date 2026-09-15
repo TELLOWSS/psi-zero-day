@@ -82,12 +82,24 @@ describe('TASK-016B Batch A production art brief', () => {
     expect(props.size).toBe(3);
   });
 
-  it('explicitly rejects the defects already found during character review', () => {
+  it('explicitly rejects known character and generated-mockup defects', () => {
     const rejects = batchA.shared_reject_conditions.join(' | ');
     expect(rejects).toMatch(/same-face cast/i);
     expect(rejects).toMatch(/helmet-color-only differentiation/i);
     expect(rejects).toMatch(/pseudo text/i);
     expect(rejects).toMatch(/childlike body proportions/i);
     expect(rejects).toMatch(/duplicated limbs/i);
+    expect(rejects).toMatch(/company, project, apartment, site, or building names/i);
+    expect(rejects).toMatch(/baked-in HUD/i);
+    expect(rejects).toMatch(/mockup board/i);
+    expect(rejects).toMatch(/screenshot collage/i);
+  });
+
+  it('keeps the Foundation slot as raw world art instead of a composed game screenshot', () => {
+    const foundation = batchA.assets.find(asset => asset.source === 'foundation:background');
+    expect(foundation).toBeDefined();
+    expect(foundation?.production_brief).toMatch(/Artwork only/i);
+    expect(foundation?.production_brief).toMatch(/no baked-in HUD/i);
+    expect(foundation?.production_brief).toMatch(/readable company\/project\/site\/building names/i);
   });
 });
