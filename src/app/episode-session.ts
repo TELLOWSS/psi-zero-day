@@ -55,6 +55,7 @@ export class EpisodeSession {
     this.#snapshot = this.#view('start', 0);
   }
   getSnapshot = (): SessionSnapshot => this.#snapshot;
+  get contentVersion(): string { return this.#content.content_version; }
   subscribe = (listener: () => void): (() => void) => {
     this.#listeners.add(listener);
     return () => { this.#listeners.delete(listener); };
@@ -70,6 +71,17 @@ export class EpisodeSession {
     if (this.#snapshot.phase !== 'start') return false;
     this.#engine = new CoreEngine(createRun(this.#content, this.#options, this.#bounds), this.#content, this.#bounds);
     this.#settle(); return true;
+  });
+  resume = (state: GameState, revision: number): boolean => this.#act(revision, () => {
+    if (this.#snapshot.phase !== 'start' || state.run.content_version !== this.#content.content_version) return false;
+    try {
+      this.#engine = new CoreEngine(state, this.#content, this.#bounds);
+      this.#settle();
+      return true;
+    } catch {
+      this.#engine = null;
+      return false;
+    }
   });
   restart = (revision: number): boolean => this.#act(revision, () => {
     this.#engine = null;
