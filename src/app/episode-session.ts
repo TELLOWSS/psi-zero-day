@@ -16,6 +16,7 @@ import responsibilityUiKo from '../../content/localization/responsibility-ui-ko.
 import stopworkUiKo from '../../content/localization/stopwork-ui-ko.json';
 import recordUiKo from '../../content/localization/record-ui-ko.json';
 import psiUiKo from '../../content/localization/psi-ui-ko.json';
+import productUiKo from '../../content/localization/product-ui-ko.json';
 
 export interface SessionSnapshot {
   readonly revision: number;
@@ -49,6 +50,7 @@ export class EpisodeSession {
     ...stopworkUiKo.messages,
     ...recordUiKo.messages,
     ...psiUiKo.messages,
+    ...productUiKo.messages,
   } }], 'ko');
 
   constructor(options: NewRunOptions = config.run as NewRunOptions, bounds: ProgressBounds = config.bounds) {
