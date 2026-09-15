@@ -6,6 +6,7 @@ import type { DialogueView } from '../engine/dialogue';
 import type { EngineCommand, NewRunOptions, ProgressBounds } from '../engine';
 import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
+import { isStrategyFieldActionEvent } from './strategy-actions';
 import { projectStrategyView } from './strategy-view';
 import type { StrategyView } from './strategy-view';
 import { episode01ExpectedRunTotal } from './episode01-run-progress';
@@ -102,6 +103,23 @@ export class EpisodeSession {
     } else return false;
     this.#engine.dispatch(command);
     this.#settle(); return true;
+  });
+  reconsider = (checkpoint: GameState, revision: number): boolean => this.#act(revision, () => {
+    if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
+    const current = this.#engine.getState();
+    const active = current.event_runtime.active_instance;
+    const previousActive = checkpoint.event_runtime.active_instance;
+    if (!active || !previousActive || active.instance_id !== previousActive.instance_id || active.event_id !== previousActive.event_id) return false;
+    if (!isStrategyFieldActionEvent(active.event_id)) return false;
+    const currentPresentation = eventPresentation(current, this.#content);
+    const checkpointPresentation = eventPresentation(checkpoint, this.#content);
+    if (!currentPresentation.some(command => command.type === 'SHOW_RESULT')) return false;
+    if (!checkpointPresentation.some(command => command.type === 'SHOW_CHOICE')) return false;
+    const currentChoices = current.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
+    const checkpointChoices = checkpoint.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
+    if (currentChoices !== checkpointChoices + 1) return false;
+    this.#engine.dispatch({ type: 'restore_decision_checkpoint', checkpoint });
+    return true;
   });
   #act(revision: number, operation: () => boolean): boolean {
     if (this.#busy || revision !== this.#snapshot.revision) return false;
