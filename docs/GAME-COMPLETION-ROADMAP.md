@@ -74,27 +74,57 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Web title/description metadata is production-ready.
 - `npm run release:check` provides one local release gate.
 - GitHub Actions uploads the exact verified `dist/` as `psi-zero-day-web-dist` only after tests/typecheck/build pass.
-- First Vercel review deployment is intentionally kept on the active feature branch until preview approval.
 
-### TASK-013B — Vercel Preview deployment + browser smoke test — NEXT
-- One-time Vercel project import/link for `TELLOWSS/psi-zero-day` is required.
-- Trigger Preview from `astra/task-007-casual-strategy-foundation`.
-- Verify page load, fallback art, strategy actions, autosave/resume, audio fallback, and full Episode 01 completion.
-- Do not promote the old `main` branch to production before the completed branch is reviewed/merged.
+### TASK-013B — Vercel Preview deployment — DEPLOYED / TRANSPORT SMOKE VERIFIED
+- Vercel project `psi-zero-day` is linked to `TELLOWSS/psi-zero-day`.
+- Feature-branch Preview deployments are READY.
+- Latest Preview returns HTTP 200 with the expected title, metadata, JS and CSS bundle references.
+- Vercel runtime-error query reports no runtime errors for the checked 24-hour window.
+- Full pointer-by-pointer interactive playthrough still requires a real browser/device manual smoke pass before production promotion.
+- Old `main` remains unsuitable for production promotion until the completed branch is reviewed/merged.
 
-### TASK-013C — Capacitor / Android packaging
-- Add Capacitor only after the deployed web slice passes browser smoke testing.
-- Prepare Android package identity, build config, keystore/AAB workflow, and device checks.
+### TASK-013C — Capacitor / Android debug packaging — IMPLEMENTED / VERIFIED
+- Capacitor 8.5.2 is integrated.
+- Application ID: `com.tellowss.psizeroday`.
+- Android landscape configuration is applied.
+- Android native project is generated and committed.
+- Java 21 CI runs `assembleDebug` successfully.
+- `psi-zero-day-debug-apk` artifact is generated successfully.
+- Android target/compile SDK is API 36.
 
-### TASK-013D — Store release assets
-- app icon, feature graphic, screenshots, privacy policy and store metadata.
-- final commercial WebP art/audio can replace fallback assets without changing game logic.
+### TASK-013D — Android release AAB foundation — IMPLEMENTED / UNSIGNED VERIFIED
+- Release signing is conditional and reads credentials only from environment/GitHub Secrets.
+- `Build Android Release Bundle` CI runs `bundleRelease` successfully.
+- Unsigned `psi-zero-day-release-aab` artifact is generated successfully for packaging verification.
+- Required signing secrets are documented; no keystore or password is committed.
+- Signed AAB verification becomes active automatically after release secrets are configured.
+
+### TASK-013E — Store listing + privacy foundation — IMPLEMENTED
+- Public `/privacy.html` policy page is committed and ships with the Vite build.
+- Korean Play Store listing copy foundation is committed.
+- Google Play technical/release checklist is committed.
+- Current Android target API 36 meets the 2026 new-app submission target requirement.
+
+### TASK-013F — Release signing + real-device internal test — NEXT
+- Finalize upload keystore.
+- Configure GitHub Actions signing secrets.
+- Generate and verify signed AAB.
+- Upload to Play Console Internal testing.
+- Test on real Android devices in landscape.
+- Verify app restart save/resume, full Episode 01 route, sound fallback and common aspect ratios.
+
+### TASK-013G — Final store creatives / production decision
+- 512 x 512 store icon.
+- 1024 x 500 feature graphic.
+- At least 3 strong landscape in-game screenshots for the game listing.
+- Final commercial WebP art/audio replace fallbacks only where approved.
+- Final Play Console declarations, content rating, data safety and production rollout decision.
 
 ## Do not drift into
 
 - endless character redesign after identity is approved,
 - unrelated new episodes before Episode 01 is playable and verified,
 - new PSI/career/economy formulas without Director approval,
-- visual mockups that are not tied to an implementation task.
+- visual mockups that are not tied to an implementation or release task.
 
 Every next task should either improve the playable slice, connect final assets, verify execution, or prepare release.
