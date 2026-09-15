@@ -131,12 +131,13 @@ export class EpisodeSession {
     if (!sameActiveEvent && !justFinishedEvent) return false;
     const currentPresentation = eventPresentation(current, this.#content);
     const checkpointPresentation = eventPresentation(checkpoint, this.#content);
-    if (sameActiveEvent && !currentPresentation.some(command => command.type === 'SHOW_RESULT')) return false;
     if (justFinishedEvent && currentPresentation.length !== 0) return false;
     if (!checkpointPresentation.some(command => command.type === 'SHOW_CHOICE')) return false;
     const currentChoices = current.event_runtime.choice_history.filter(item => item.instance_id === previousActive.instance_id).length;
     const checkpointChoices = checkpoint.event_runtime.choice_history.filter(item => item.instance_id === previousActive.instance_id).length;
-    if (currentChoices <= checkpointChoices) return false;
+    // Reconsider exactly the decision made from this checkpoint. This also supports multi-step
+    // field events where the next presentation is another choice instead of a terminal result.
+    if (currentChoices !== checkpointChoices + 1) return false;
     this.#engine.dispatch({ type: 'restore_decision_checkpoint', checkpoint });
     return true;
   });
