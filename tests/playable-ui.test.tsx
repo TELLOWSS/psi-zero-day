@@ -73,14 +73,19 @@ describe('Playable Episode React UI', () => {
     click(session.t('ui.start'));
     const seen: string[] = [];
     const stages: string[] = [];
-    for (let i = 0; i < 190 && session.getSnapshot().phase === 'playing'; i++) {
-      const s = session.getSnapshot(); const p = s.presentation.find(c => 'node_id' in c);
+    for (let i = 0; i < 210 && session.getSnapshot().phase === 'playing'; i++) {
+      const s = session.getSnapshot();
       expect(container.textContent).not.toMatch(hiddenEngineTerms);
-      if (!p) {
-        expect(container.textContent).toContain(session.t('ui.strategy.return_map'));
+
+      // Field outcomes intentionally cover the next engine presentation until the player confirms the result.
+      // Follow what is actually visible before inspecting the underlying presentation snapshot.
+      if (buttons().some(button => button.textContent?.includes(session.t('ui.strategy.return_map')))) {
         continueCurrent(session);
         continue;
       }
+
+      const p = s.presentation.find(c => 'node_id' in c);
+      if (!p) throw new Error('No visible presentation or field outcome');
       if ('text_id' in p) {
         seen.push(p.text_id);
         expect(container.textContent).toContain(session.t(p.text_id));
