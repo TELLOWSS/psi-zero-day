@@ -52,14 +52,18 @@ describe('Episode application session', () => {
   it.each(uiPaths)('matches complete headless state and closes progress for $plan / $entrance / $evening', decisions => {
     const session = new EpisodeSession(episodeOptions(815), episodeBounds);
     session.start(0);
-    for (let i = 0; i < 310 && session.getSnapshot().phase === 'playing'; i++) {
+    for (let i = 0; i < 340 && session.getSnapshot().phase === 'playing'; i++) {
       const s = session.getSnapshot();
-      const p = s.presentation.find(c => 'node_id' in c)!;
-      if (p.type === 'SHOW_CHOICE') {
+      const p = s.presentation.find(c => 'node_id' in c);
+      if (!p) {
+        const finished = s.state?.event_runtime.finished_instances.at(-1);
+        if (!finished) throw new Error('Missing field outcome source');
+        expect(session.confirmFieldOutcome(finished.instance_id, s.revision)).toBe(true);
+      } else if (p.type === 'SHOW_CHOICE') {
         expect(p.choices.filter(c => c.enabled).length).toBeGreaterThan(1);
         expect(session.dispatch({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: inputFor(p.node_id, decisions)! }, s.revision)).toBe(true);
       } else if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') {
-        session.dispatch({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }, s.revision);
+        expect(session.dispatch({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }, s.revision)).toBe(true);
       }
     }
     const complete = session.getSnapshot();
@@ -69,7 +73,7 @@ describe('Episode application session', () => {
     expect(complete.total).toBeLessThan(26);
   });
 
-  it('restores the same unresolved field decision before its result is confirmed', () => {
+  it('holds a terminal field result until the player confirms or reconsiders it', () => {
     const session = new EpisodeSession(episodeOptions(916), episodeBounds);
     session.start(0);
     let choiceSnapshot = session.getSnapshot();
@@ -87,16 +91,30 @@ describe('Episode application session', () => {
     expect(session.dispatch({
       type: 'choose_event', instance_id: planChoice.instance_id, node_id: planChoice.node_id, choice_id: 'delegate_kang',
     }, choiceSnapshot.revision)).toBe(true);
-    const result = session.getSnapshot();
-    expect(result.presentation.some(item => item.type === 'SHOW_RESULT')).toBe(true);
-    expect(result.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
+    const held = session.getSnapshot();
+    expect(held.presentation).toEqual([]);
+    expect(held.state?.event_runtime.active_instance).toBeNull();
+    expect(held.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
+    expect(held.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
 
-    expect(session.reconsider(checkpoint, result.revision)).toBe(true);
+    expect(session.reconsider(checkpoint, held.revision)).toBe(true);
     const restored = session.getSnapshot();
     expect(restored.state).toEqual(checkpoint);
     expect(restored.presentation.some(item => item.type === 'SHOW_CHOICE')).toBe(true);
     expect(restored.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(false);
     expect(session.reconsider(checkpoint, restored.revision)).toBe(false);
+
+    const restoredChoice = restored.presentation.find(item => item.type === 'SHOW_CHOICE');
+    if (restoredChoice?.type !== 'SHOW_CHOICE') throw new Error('Expected restored plan choice');
+    expect(session.dispatch({
+      type: 'choose_event', instance_id: restoredChoice.instance_id, node_id: restoredChoice.node_id, choice_id: 'delegate_kang',
+    }, restored.revision)).toBe(true);
+    const secondHeld = session.getSnapshot();
+    expect(secondHeld.state?.event_runtime.active_instance).toBeNull();
+    expect(session.confirmFieldOutcome(restoredChoice.instance_id, secondHeld.revision)).toBe(true);
+    const confirmed = session.getSnapshot();
+    expect(confirmed.state?.event_runtime.active_instance?.event_id).not.toBe('e01_03_plan_breaks');
+    expect(confirmed.presentation.length).toBeGreaterThan(0);
   });
 
   it('rejects stale input, invalid choices, and arbitrary effect commands without state changes', () => {
