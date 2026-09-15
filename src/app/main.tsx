@@ -14,6 +14,7 @@ import '../ui/strategy-assets.css';
 import '../ui/character-growth.css';
 import '../ui/vertical-slice-polish.css';
 import '../ui/art-slice-014a.css';
+import '../ui/art-slice-014b.css';
 
 const session = new EpisodeSession();
 let storage: EpisodeSaveStorage | null = null;
