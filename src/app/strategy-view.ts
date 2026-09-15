@@ -45,6 +45,19 @@ export interface StrategyPsiView {
   readonly flags: FlagMap;
 }
 
+/**
+ * Factual resource snapshot only. No money↔time↔schedule↔safety conversion formula lives here.
+ * Safety is represented by current observable signal/pressure counts, not a synthetic score.
+ */
+export interface StrategyResourceView {
+  readonly money: number;
+  readonly time_slot: TimeSlot;
+  readonly display_time?: string;
+  readonly schedule_progress: number;
+  readonly safety_signal_count: number;
+  readonly pressure_count: number;
+}
+
 export interface StrategyRuntimeView {
   readonly active_event_id: Id | null;
   readonly active_instance_id: Id | null;
@@ -57,6 +70,7 @@ export interface StrategyView {
   readonly clock: StrategyClockView;
   readonly construction: StrategyConstructionView;
   readonly psi: StrategyPsiView;
+  readonly resources: StrategyResourceView;
   readonly assignments: readonly StrategyAssignmentView[];
   readonly roster: readonly StrategyCharacterView[];
   readonly signals: readonly StrategySignal[];
@@ -106,6 +120,14 @@ export function projectStrategyView(state: GameState): StrategyView {
       unlocked_node_ids: state.psi.unlocked_node_ids,
       values: state.psi.progress.values,
       flags: state.psi.progress.flags,
+    },
+    resources: {
+      money: state.player.money,
+      time_slot: state.clock.slot,
+      ...(state.clock.display_time === undefined ? {} : { display_time: state.clock.display_time }),
+      schedule_progress: stageProgress,
+      safety_signal_count: signals.length,
+      pressure_count: frictions.length,
     },
     assignments: state.assignments.map(assignment => ({
       assignment_id: assignment.assignment_id,
