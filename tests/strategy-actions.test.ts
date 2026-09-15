@@ -13,19 +13,23 @@ function choice(eventId: string, choices: readonly { choice_id: string; text_id:
 }
 
 describe('Episode 01 strategy actions', () => {
-  it('maps planning choices to explicit actors and field targets', () => {
+  it('maps planning choices to explicit actors, field targets and resource axes', () => {
     const [eventId, presentation] = choice('e01_03_plan_breaks', [
       { choice_id: 'delegate_kang', text_id: 'ep01.plan.a', enabled: true },
       { choice_id: 'follow_junho', text_id: 'ep01.plan.d', enabled: true },
+      { choice_id: 'coordinate_schedule', text_id: 'ep01.plan.c', enabled: true },
     ]);
     const actions = projectStrategyActions(eventId, presentation);
     expect(actions[0]).toMatchObject({
       choice_id: 'delegate_kang', intent: 'coordinate', actor_character_id: 'kang_taesik',
-      target: { kind: 'character', character_id: 'kang_taesik' },
+      target: { kind: 'character', character_id: 'kang_taesik' }, resource_axes: ['time', 'schedule'],
     });
     expect(actions[1]).toMatchObject({
       choice_id: 'follow_junho', intent: 'inspect', actor_character_id: 'player',
-      target: { kind: 'character', character_id: 'lim_junho' },
+      target: { kind: 'character', character_id: 'lim_junho' }, resource_axes: ['time', 'safety'],
+    });
+    expect(actions[2]).toMatchObject({
+      choice_id: 'coordinate_schedule', resource_axes: ['time', 'schedule', 'safety'],
     });
     expect(strategyActionsForTarget(actions, 'kang_taesik').map(action => action.choice_id)).toEqual(['delegate_kang']);
     expect(strategyActionsForTarget(actions, 'lim_junho').map(action => action.choice_id)).toEqual(['follow_junho']);
@@ -42,6 +46,7 @@ describe('Episode 01 strategy actions', () => {
       intent: 'control',
       actor_character_id: 'player',
       target: { kind: 'signal', signal_id: 'signal.restart_unverified' },
+      resource_axes: ['time', 'schedule', 'safety'],
     });
     expect(strategyActionTargetKey(action.target)).toBe('signal.restart_unverified');
   });
@@ -53,6 +58,7 @@ describe('Episode 01 strategy actions', () => {
     const zoneAction = projectStrategyActions(eventId, presentation)[0]!;
     expect(strategyActionTargetKey(zoneAction.target)).toBe('anchor:ramp');
     expect(zoneAction.actor_character_id).toBe('player');
+    expect(zoneAction.resource_axes).toEqual(['time', 'safety']);
     expect(strategyActionsForTarget([zoneAction], 'anchor:ramp')).toHaveLength(1);
 
     const [recordEventId, recordPresentation] = choice('e01_08o_record_pressure', [
@@ -61,6 +67,7 @@ describe('Episode 01 strategy actions', () => {
     const siteAction = projectStrategyActions(recordEventId, recordPresentation)[0]!;
     expect(strategyActionTargetKey(siteAction.target)).toBe('site');
     expect(siteAction.actor_character_id).toBe('player');
+    expect(siteAction.resource_axes).toEqual(['time', 'safety']);
   });
 
   it('preserves disabled choices and the original command identity', () => {
@@ -75,6 +82,7 @@ describe('Episode 01 strategy actions', () => {
       enabled: false,
       actor_character_id: 'player',
       target: { kind: 'character', character_id: 'seo_jeongmin' },
+      resource_axes: ['time', 'schedule', 'safety'],
     });
   });
 
