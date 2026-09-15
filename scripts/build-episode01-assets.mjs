@@ -7,7 +7,9 @@ const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
-const productionCheck = process.argv.includes('--production-check');
+const fullProductionCheck = process.argv.includes('--production-check');
+const batchAProductionCheck = process.argv.includes('--production-batch-a-check');
+const productionCheck = fullProductionCheck || batchAProductionCheck;
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
 
 const planned = [];
@@ -36,6 +38,16 @@ for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {}))
     source: `${backgroundId}:background`,
   });
 }
+
+const batchASources = new Set([
+  'foundation:background',
+  'player:portrait',
+  'player:map',
+  'kang_taesik:portrait',
+  'kang_taesik:map',
+  'lim_junho:portrait',
+  'lim_junho:map',
+]);
 
 async function tryRead(uri) {
   try {
@@ -75,10 +87,15 @@ async function readPlannedAsset(uri) {
 }
 
 if (productionCheck) {
+  const productionItems = batchAProductionCheck
+    ? planned.filter(item => batchASources.has(item.source))
+    : planned;
+  const expectedCount = batchAProductionCheck ? 7 : 17;
+  const scopeLabel = batchAProductionCheck ? 'Batch A production art' : 'Episode 01 production art';
   const missing = [];
   const invalid = [];
 
-  for (const item of planned) {
+  for (const item of productionItems) {
     if (!item.asset_id || !item.uri) continue;
     if (path.extname(item.uri).toLowerCase() !== '.webp') {
       invalid.push(`${item.asset_id}: planned production path must be .webp (${item.uri})`);
@@ -110,15 +127,17 @@ if (productionCheck) {
     }
   }
 
-  if (planned.length !== 17) invalid.push(`expected 17 production image slots, found ${planned.length}`);
+  if (productionItems.length !== expectedCount) {
+    invalid.push(`expected ${expectedCount} production image slots, found ${productionItems.length}`);
+  }
 
   if (missing.length || invalid.length) {
-    console.error('Episode 01 production art is NOT release-ready.');
+    console.error(`${scopeLabel} is NOT ready.`);
     if (missing.length) console.error(`Missing final WebP files (${missing.length}):\n- ${missing.join('\n- ')}`);
     if (invalid.length) console.error(`Invalid production art entries (${invalid.length}):\n- ${invalid.join('\n- ')}`);
     process.exitCode = 1;
   } else {
-    console.log(`Episode 01 production art is release-ready (${planned.length} final WebP assets).`);
+    console.log(`${scopeLabel} is ready (${productionItems.length} final WebP assets).`);
   }
 } else {
   const assets = [];

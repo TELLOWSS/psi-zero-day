@@ -18,6 +18,7 @@
     "assets:vector": "node scripts/generate-episode01-vector-art.mjs",
     "assets:manifest": "node scripts/build-episode01-assets.mjs",
     "assets:check": "node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
+    "assets:production-batch-a-check": "node scripts/build-episode01-assets.mjs --production-batch-a-check",
     "assets:production-check": "node scripts/build-episode01-assets.mjs --production-check",
     "release:check": "npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
     "release:production-check": "npm run assets:production-check && npm run release:check",
