@@ -33,6 +33,10 @@
     "ui.paid_item.facility.logistics_zone": "추가 자재 야적구역",
     "ui.paid_item.equipment.radio_pack": "추가 무전기 세트",
     "ui.paid_item.equipment.inspection_kit": "현장 검측 키트",
-    "ui.paid_item.equipment.traffic_control_pack": "동선 통제 세트"
+    "ui.paid_item.equipment.traffic_control_pack": "동선 통제 세트",
+    "ui.paid_item.action.inspection_kit_check": "검측 키트로 즉시 확인",
+    "ui.paid_item.action.access_lane_control": "임시 안전통로로 동선 분리",
+    "ui.paid_item.action.traffic_control": "동선 통제 세트 즉시 전개",
+    "ui.paid_item.action.radio_chain_check": "추가 무전기로 지시계통 동시 확인"
   }
 }
