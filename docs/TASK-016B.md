@@ -1,6 +1,17 @@
 # TASK-016B — Final Production WebP Replacement
 
-Status: IN PROGRESS
+Status: IN PROGRESS — verified checkpoint: Foundation 1/17 integrated; 16 character slots pending.
+
+## Verified checkpoint — 2026-09-16
+
+- Authoritative branch: `main`.
+- Verified HEAD before this status update: `b545a380fd68f8ed8d17521be997aa28d37b06bc` (`TASK-016B: connect final Foundation WebP`).
+- Final Foundation media is deterministically materialized at `public/assets/episode01/backgrounds/foundation-map.webp`.
+- Foundation final media is locked to 1920×1080 and validated by byte size, dimensions, format, and SHA-256.
+- The latest verified vertical-slice workflow passed 363 tests, typecheck, production build, asset integrity, and bundle verification.
+- No final character WebP is committed/materialized in the production paths yet; character runtime resolution therefore remains RC SVG → deterministic SVG fallback until each final slot lands.
+- Next production slot: `public/assets/episode01/characters/player-portrait.webp`.
+- Do not advance gameplay features, a new episode, final audio, Android signing, or store rollout until the visual production order below is completed.
 
 ## Objective
 
@@ -14,7 +25,7 @@ Exactly 17 final WebP files are required.
 
 ### Foundation background — 1
 
-- `public/assets/episode01/backgrounds/foundation-map.webp`
+- `public/assets/episode01/backgrounds/foundation-map.webp` — **FINAL / VERIFIED**
 
 ### Character portrait/map pairs — 16
 
@@ -65,6 +76,8 @@ After all 17 files are accepted, run:
 6. PPE and trade details must remain plausible for a Korean construction-site setting while staying within the approved stylized casual-strategy art direction.
 7. Character art should use transparent background so map placement and title composition remain reusable.
 8. Final art must not be mislabeled from RC/fallback media.
+9. Human proportions must read as adult stylized strategy-game characters, not chibi/child characters.
+10. Portrait and map variants must keep the same facial structure, age read, helmet geometry, outfit language, and signature prop.
 
 ## Batch order
 
@@ -72,8 +85,8 @@ After all 17 files are accepted, run:
 
 These assets affect the commercial title screen and the earliest playable impression first:
 
-- `foundation-map.webp`
-- `player-portrait.webp`
+- `foundation-map.webp` — **FINAL / VERIFIED**
+- `player-portrait.webp` — **NEXT**
 - `player-map.webp`
 - `kang-taesik-portrait.webp`
 - `kang-taesik-map.webp`
