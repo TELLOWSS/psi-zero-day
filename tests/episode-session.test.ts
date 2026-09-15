@@ -69,6 +69,36 @@ describe('Episode application session', () => {
     expect(complete.total).toBeLessThan(26);
   });
 
+  it('restores the same unresolved field decision before its result is confirmed', () => {
+    const session = new EpisodeSession(episodeOptions(916), episodeBounds);
+    session.start(0);
+    let choiceSnapshot = session.getSnapshot();
+    for (let step = 0; step < 40; step++) {
+      choiceSnapshot = session.getSnapshot();
+      const active = choiceSnapshot.state?.event_runtime.active_instance;
+      const command = choiceSnapshot.presentation.find(item => 'node_id' in item);
+      if (active?.event_id === 'e01_03_plan_breaks' && command?.type === 'SHOW_CHOICE') break;
+      if (!command || command.type === 'SHOW_CHOICE') throw new Error('Unexpected choice before plan decision');
+      expect(session.dispatch({ type: 'advance_event', instance_id: command.instance_id, node_id: command.node_id }, choiceSnapshot.revision)).toBe(true);
+    }
+    const planChoice = choiceSnapshot.presentation.find(item => item.type === 'SHOW_CHOICE');
+    if (planChoice?.type !== 'SHOW_CHOICE' || !choiceSnapshot.state) throw new Error('Expected plan choice');
+    const checkpoint = choiceSnapshot.state;
+    expect(session.dispatch({
+      type: 'choose_event', instance_id: planChoice.instance_id, node_id: planChoice.node_id, choice_id: 'delegate_kang',
+    }, choiceSnapshot.revision)).toBe(true);
+    const result = session.getSnapshot();
+    expect(result.presentation.some(item => item.type === 'SHOW_RESULT')).toBe(true);
+    expect(result.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
+
+    expect(session.reconsider(checkpoint, result.revision)).toBe(true);
+    const restored = session.getSnapshot();
+    expect(restored.state).toEqual(checkpoint);
+    expect(restored.presentation.some(item => item.type === 'SHOW_CHOICE')).toBe(true);
+    expect(restored.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(false);
+    expect(session.reconsider(checkpoint, restored.revision)).toBe(false);
+  });
+
   it('rejects stale input, invalid choices, and arbitrary effect commands without state changes', () => {
     const session = new EpisodeSession(); session.start(0);
     const before = session.getSnapshot(); const p = before.presentation[0]!;
