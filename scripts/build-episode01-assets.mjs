@@ -6,6 +6,7 @@ const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
+const productionCheck = process.argv.includes('--production-check');
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
 
 const planned = [];
@@ -44,6 +45,12 @@ async function tryRead(uri) {
   }
 }
 
+function isWebP(bytes) {
+  return bytes.length >= 12
+    && bytes.subarray(0, 4).toString('ascii') === 'RIFF'
+    && bytes.subarray(8, 12).toString('ascii') === 'WEBP';
+}
+
 async function readPlannedAsset(uri) {
   // Final commercial art always wins when present.
   const exact = await tryRead(uri);
@@ -66,39 +73,70 @@ async function readPlannedAsset(uri) {
   return undefined;
 }
 
-const assets = [];
-for (const item of planned) {
-  if (!item.asset_id || !item.uri) continue;
-  const resolved = await readPlannedAsset(item.uri);
-  if (!resolved) continue;
-  const extension = path.extname(resolved.uri).slice(1).toLowerCase();
-  assets.push({
-    asset_id: item.asset_id,
-    type: 'image',
-    group_id: item.group_id,
-    variants: [{
-      uri: resolved.uri,
-      format: extension,
-      bytes: resolved.bytes.length,
-      hash: createHash('sha256').update(resolved.bytes).digest('hex'),
-    }],
-    dependencies: [],
-    preload_policy: item.preload_policy,
-    version: '1',
-  });
-}
-assets.sort((a, b) => a.asset_id.localeCompare(b.asset_id));
+if (productionCheck) {
+  const missing = [];
+  const invalid = [];
 
-const generated = `${JSON.stringify({ schema_version: 1, assets }, null, 2)}\n`;
-if (checkOnly) {
-  const current = await readFile(outputPath, 'utf8');
-  if (current !== generated) {
-    console.error('Episode 01 asset manifest is out of date. Run: npm run assets:manifest');
+  for (const item of planned) {
+    if (!item.asset_id || !item.uri) continue;
+    if (path.extname(item.uri).toLowerCase() !== '.webp') {
+      invalid.push(`${item.asset_id}: planned production path must be .webp (${item.uri})`);
+      continue;
+    }
+
+    const exact = await tryRead(item.uri);
+    if (!exact) {
+      missing.push(`${item.asset_id}: public/${item.uri}`);
+      continue;
+    }
+    if (!isWebP(exact.bytes)) invalid.push(`${item.asset_id}: invalid WebP header (${item.uri})`);
+  }
+
+  if (planned.length !== 17) invalid.push(`expected 17 production image slots, found ${planned.length}`);
+
+  if (missing.length || invalid.length) {
+    console.error('Episode 01 production art is NOT release-ready.');
+    if (missing.length) console.error(`Missing final WebP files (${missing.length}):\n- ${missing.join('\n- ')}`);
+    if (invalid.length) console.error(`Invalid production art entries (${invalid.length}):\n- ${invalid.join('\n- ')}`);
     process.exitCode = 1;
   } else {
-    console.log(`Episode 01 asset manifest is current (${assets.length} assets).`);
+    console.log(`Episode 01 production art is release-ready (${planned.length} final WebP assets).`);
   }
 } else {
-  await writeFile(outputPath, generated, 'utf8');
-  console.log(`Wrote ${assets.length} Episode 01 assets to content/episode01/assets.json.`);
+  const assets = [];
+  for (const item of planned) {
+    if (!item.asset_id || !item.uri) continue;
+    const resolved = await readPlannedAsset(item.uri);
+    if (!resolved) continue;
+    const extension = path.extname(resolved.uri).slice(1).toLowerCase();
+    assets.push({
+      asset_id: item.asset_id,
+      type: 'image',
+      group_id: item.group_id,
+      variants: [{
+        uri: resolved.uri,
+        format: extension,
+        bytes: resolved.bytes.length,
+        hash: createHash('sha256').update(resolved.bytes).digest('hex'),
+      }],
+      dependencies: [],
+      preload_policy: item.preload_policy,
+      version: '1',
+    });
+  }
+  assets.sort((a, b) => a.asset_id.localeCompare(b.asset_id));
+
+  const generated = `${JSON.stringify({ schema_version: 1, assets }, null, 2)}\n`;
+  if (checkOnly) {
+    const current = await readFile(outputPath, 'utf8');
+    if (current !== generated) {
+      console.error('Episode 01 asset manifest is out of date. Run: npm run assets:manifest');
+      process.exitCode = 1;
+    } else {
+      console.log(`Episode 01 asset manifest is current (${assets.length} assets).`);
+    }
+  } else {
+    await writeFile(outputPath, generated, 'utf8');
+    console.log(`Wrote ${assets.length} Episode 01 assets to content/episode01/assets.json.`);
+  }
 }
