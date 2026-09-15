@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
 import { projectCharacterLoadout } from '../app/character-loadout';
@@ -9,6 +9,7 @@ import { characterPortraitUri, projectStrategyVisualAssets } from '../app/strate
 import { CharacterCard, SiteScene } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
+import { useEpisodeAudio } from './useEpisodeAudio';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -23,6 +24,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
   const focusRef = useRef<HTMLElement>(null);
   const t = session.t;
+  const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
+  const { playUiCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -38,7 +41,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const fallbackEngineOutcome = !executedOutcomeReady && isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
   const mapOutcomeActive = executedOutcomeReady || fallbackEngineOutcome;
   const visualAssets = strategy
-    ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), id => session.assetUri(id))
+    ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
     : undefined;
   const strategyCopy = {
     brand: t('ui.brand'),
@@ -81,6 +84,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   const continueMapOutcome = () => {
     if (!mapOutcomeActive) return;
+    playUiCue('continue');
     if ((executedEngineResult || fallbackEngineOutcome) && presentation?.type === 'SHOW_RESULT') {
       const accepted = session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
       if (accepted) setExecutedFieldAction(null);
@@ -91,6 +95,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
   useEffect(() => { if (!isPlaying) setExecutedFieldAction(null); }, [isPlaying]);
+  useEffect(() => {
+    if (!strategyOutcome) return;
+    const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
+    playUiCue(relationDelta > 0 ? 'result_positive' : relationDelta < 0 ? 'result_negative' : 'result_neutral');
+  }, [strategyOutcome?.key, playUiCue]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target instanceof Element ? e.target : null;
@@ -105,22 +114,26 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       if (presentation.type === 'SHOW_CHOICE' && /^[1-4]$/.test(e.key)) {
         e.preventDefault();
         const choice = presentation.choices[Number(e.key) - 1];
-        if (choice?.enabled) session.dispatch({ type: 'choose_event', instance_id: presentation.instance_id,
-          node_id: presentation.node_id, choice_id: choice.choice_id }, snapshot.revision);
+        if (choice?.enabled) {
+          playUiCue('execute');
+          session.dispatch({ type: 'choose_event', instance_id: presentation.instance_id,
+            node_id: presentation.node_id, choice_id: choice.choice_id }, snapshot.revision);
+        }
       } else if (presentation.type !== 'SHOW_CHOICE' && (e.key === 'Enter' || e.code === 'Space')) {
         if (target?.closest('button') && !target.closest('.continue-button')) return;
         e.preventDefault();
+        playUiCue('continue');
         session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
 
   const strategyActive = isPlaying && strategy !== null;
   const dialoguePortraitUri = portrait?.kind === 'asset'
-    ? session.assetUri(portrait.id)
-    : person ? characterPortraitUri(person.id, id => session.assetUri(id)) : undefined;
+    ? resolveAsset(portrait.id)
+    : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
   const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
   const rewardCharacterId = activeEventId === 'e01_09_evening'
@@ -136,6 +149,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
     {strategyActive ? <StrategyMapShell
+      key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}
       copy={strategyCopy}
       text={t}
@@ -145,6 +159,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       outcome={strategyOutcome}
       onOutcomeContinue={continueMapOutcome}
       onAction={action => {
+        playUiCue('execute');
         setExecutedFieldAction({ action, source_revision: snapshot.revision });
         const accepted = session.dispatch({
           type: 'choose_event', instance_id: action.instance_id, node_id: action.node_id, choice_id: action.choice_id,
@@ -161,7 +176,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       <div className="title-copy"><span className="eyebrow">{t('ui.episode')} <i /> {t('ui.site')}</span>
         <h1>{t('ui.brand')}</h1><p className="tagline">{t('ui.tagline')}</p></div>
       <div className="start-block"><div><span className="eyebrow">{t('ui.day')} 01</span><h2>{t('ep01.title')}</h2><p>{t('ui.start_hint')}</p></div>
-        <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) session.start(snapshot.revision); }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
+        <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.start(snapshot.revision); } }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
       </div>
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
@@ -191,18 +206,23 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
             : <PresentationView
               commands={snapshot.presentation}
               t={t}
-              send={command => { session.dispatch(command, snapshot.revision); }}
-              assetUri={id => session.assetUri(id)}
+              send={command => {
+                if (command.type === 'choose_event') playUiCue('execute');
+                else if (command.type === 'advance_event') playUiCue('continue');
+                session.dispatch(command, snapshot.revision);
+              }}
+              assetUri={resolveAsset}
               choiceFallback={strategyActions.length > 0}
             />}
         </div>
       </section>
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
       <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
-      <p className="end-line">{t('ui.end_hint')}</p><button className="primary-button" type="button" onClick={e => { if (e.detail < 2) session.restart(snapshot.revision); }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
+      <p className="end-line">{t('ui.end_hint')}</p><button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
     </section> : <section className="complete-screen" role="alert"><p>{t('ui.error')}</p><button className="primary-button" type="button" onClick={() => session.restart(snapshot.revision)}>{t('ui.restart')}</button></section>}
     <footer className="game-footer"><div className="progress-block"><span>{t('ui.progress')}</span>
       <progress aria-label={t('ui.progress')} value={snapshot.phase === 'complete' ? snapshot.total : snapshot.completed} max={snapshot.total} /></div>
+      {snapshot.phase === 'playing' ? <span className="save-hint" aria-label={t('ui.autosave')}>● {t('ui.autosave')}</span> : null}
       <span className="keyboard-hint">{t('ui.keyboard')}</span>
       {import.meta.env.DEV ? <button className="debug-toggle" type="button" aria-expanded={debugOpen} onClick={() => setDebugOpen(v => !v)}>{t('ui.debug')}</button> : null}
     </footer>
