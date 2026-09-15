@@ -67,6 +67,40 @@ jobs:
       - name: Rebuild asset manifest from final WebP
         run: npm run assets:manifest
 
+      - name: Promote test contract from RC SVG to final WebP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('tests/playable-ui.test.tsx'): [
+                  ('player-portrait-rc\\.svg', 'player-portrait\\.webp'),
+                  ('player-portrait-rc.svg', 'player-portrait.webp'),
+              ],
+              Path('tests/strategy-session-ui.test.tsx'): [
+                  ('foundation-map-rc.svg', 'foundation-map.webp'),
+              ],
+              Path('tests/strategy-assets.test.ts'): [
+                  ('uses TASK-014 RC art for the foundation and all eight characters before deterministic fallback',
+                   'uses final TASK-014 WebP art for the foundation and all eight characters before deterministic fallback'),
+                  ('-portrait-rc\\.svg', '-portrait\\.webp'),
+                  ('-map-rc\\.svg', '-map\\.webp'),
+                  ('-rc.svg', '.webp'),
+              ],
+          }
+
+          for path, pairs in replacements.items():
+              text = path.read_text(encoding='utf-8')
+              for old, new in pairs:
+                  if old not in text:
+                      raise SystemExit(f'Expected test contract token not found in {path}: {old}')
+                  text = text.replace(old, new)
+              path.write_text(text, encoding='utf-8')
+              print(f'updated contract: {path}')
+          PY
+
       - name: Verify production art and full release gate
         run: npm run release:production-check
 
@@ -79,6 +113,7 @@ jobs:
           git add public/assets/episode01/characters/*.webp
           git add public/assets/episode01/backgrounds/*.webp
           git add content/episode01/assets.json
+          git add tests/playable-ui.test.tsx tests/strategy-assets.test.ts tests/strategy-session-ui.test.tsx
 
           if git diff --cached --quiet; then
             echo 'No production asset changes to commit.'
