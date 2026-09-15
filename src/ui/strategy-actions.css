@@ -1,23 +1,27 @@
 .strategy-action-tray {
   position: absolute;
   z-index: 19;
-  top: 13%;
+  top: 10%;
   right: 2%;
-  width: min(35%, 460px);
-  max-height: 36%;
+  width: min(37%, 480px);
+  max-height: 54%;
   padding: 12px;
   border: 1px solid rgba(255,255,255,.82);
   border-radius: 18px;
-  background: rgba(247,252,255,.94);
+  background: rgba(247,252,255,.95);
   box-shadow: 0 14px 30px rgba(22,54,76,.2);
   backdrop-filter: blur(12px);
   color: #19304a;
 }
+.strategy-loop-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; margin-bottom: 10px; }
+.strategy-loop-steps span { padding: 5px 4px; border-radius: 999px; background: #e8f0f4; color: #668090; font-size: .6rem; font-weight: 800; text-align: center; }
+.strategy-loop-steps span.is-active { background: #19304a; color: #fff; box-shadow: 0 4px 10px rgba(25,48,74,.18); }
+.strategy-loop-steps span.is-done { background: #dcefe6; color: #2f7355; }
 .strategy-action-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
 .strategy-action-heading strong { font-size: clamp(13px, 1.15vw, 19px); }
 .strategy-action-heading span { font-size: .68rem; opacity: .62; text-align: right; }
 .strategy-action-empty { margin: 0; padding: 14px 10px; border: 1px dashed rgba(78,127,156,.32); border-radius: 12px; font-size: .72rem; line-height: 1.55; opacity: .7; }
-.strategy-action-list { display: grid; gap: 7px; overflow: auto; max-height: 25vh; padding-right: 2px; }
+.strategy-action-list { display: grid; gap: 7px; overflow: auto; max-height: 22vh; padding-right: 2px; }
 .strategy-action-list button {
   display: grid;
   grid-template-columns: 24px 30px minmax(0,1fr) 18px;
@@ -32,54 +36,38 @@
   text-align: left;
   transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
 }
-.strategy-action-list button[data-action-skill="equipment"] {
-  border-color: rgba(213,127,41,.72);
-  background: linear-gradient(180deg,#fffdf7,#f5ead5);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.75);
-}
+.strategy-action-list button[data-action-skill="equipment"] { border-color: rgba(213,127,41,.72); background: linear-gradient(180deg,#fffdf7,#f5ead5); box-shadow: inset 0 0 0 1px rgba(255,255,255,.75); }
 .strategy-action-list button:hover:not(:disabled),
-.strategy-action-list button:focus-visible {
-  transform: translateY(-1px);
-  border-color: #2f76ad;
-  box-shadow: 0 7px 16px rgba(32,91,126,.16);
-}
+.strategy-action-list button:focus-visible,
+.strategy-action-list button.is-pending { transform: translateY(-1px); border-color: #2f76ad; box-shadow: 0 7px 16px rgba(32,91,126,.16); }
+.strategy-action-list button.is-pending { background: linear-gradient(180deg,#f8fcff,#dceef8); }
 .strategy-action-list button:disabled { opacity: .42; }
 .strategy-action-number { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #19304a; color: white; font-size: .68rem; font-weight: 800; }
 .strategy-action-icon { font-size: 1.2rem; color: #d8782e; text-align: center; }
 .strategy-action-copy { min-width: 0; }
 .strategy-action-copy strong, .strategy-action-copy small { display: block; }
 .strategy-action-copy strong { font-size: clamp(10px,.84vw,14px); line-height: 1.35; word-break: keep-all; }
-.strategy-action-copy small { margin-top: 2px; font-size: .66rem; opacity: .62; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.strategy-action-skill {
-  display: inline-block;
-  margin-top: 3px;
-  padding: 1px 6px;
-  border: 1px solid rgba(213,127,41,.55);
-  border-radius: 999px;
-  background: rgba(255,244,220,.86);
-  color: #a35f20;
-  font-size: .56rem;
-  font-style: normal;
-  font-weight: 800;
-  letter-spacing: .03em;
-}
+.strategy-action-copy small { margin-top: 2px; font-size: .62rem; opacity: .68; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.strategy-action-skill, .strategy-skill-badge { display: inline-block; margin-top: 3px; padding: 1px 6px; border: 1px solid rgba(213,127,41,.55); border-radius: 999px; background: rgba(255,244,220,.86); color: #a35f20; font-size: .56rem; font-style: normal; font-weight: 800; letter-spacing: .03em; }
+.strategy-action-confirm { margin-top: 9px; padding: 10px; border: 1px solid rgba(47,118,173,.3); border-radius: 14px; background: linear-gradient(180deg,rgba(241,249,253,.98),rgba(229,241,247,.98)); box-shadow: inset 0 1px 0 #fff; }
+.strategy-action-confirm > div:not(.strategy-action-confirm-buttons) { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 3px; font-size: .65rem; }
+.strategy-action-confirm > div span { opacity: .58; }
+.strategy-action-confirm > div strong { text-align: right; }
+.strategy-action-confirm p { margin: 8px 0 9px; padding-top: 8px; border-top: 1px solid rgba(78,127,156,.15); font-size: .72rem; font-weight: 750; line-height: 1.45; }
+.strategy-action-confirm-buttons { display: grid; grid-template-columns: 1fr 1.35fr; gap: 7px; }
+.strategy-action-confirm-buttons button, .strategy-outcome-card .strategy-execute-button { min-height: 36px; border-radius: 10px; font-size: .68rem; font-weight: 850; }
+.strategy-cancel-button { border: 1px solid rgba(78,127,156,.28); background: #fff; color: #496879; }
+.strategy-execute-button { border: 0; background: #19304a; color: #fff; box-shadow: 0 6px 13px rgba(25,48,74,.18); }
+.strategy-execute-button:hover { background: #285a7c; }
+.strategy-outcome-card { padding: 11px; border: 1px solid rgba(66,139,101,.34); border-radius: 14px; background: linear-gradient(180deg,#f7fff9,#e3f2e8); }
+.strategy-outcome-kicker { display: block; color: #397458; font-size: .62rem; font-weight: 900; letter-spacing: .05em; }
+.strategy-outcome-card p { margin: 7px 0 10px; color: #1e4435; font-size: .76rem; font-weight: 750; line-height: 1.55; word-break: keep-all; }
+.strategy-outcome-relations { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }
+.strategy-outcome-relations span { padding: 3px 7px; border-radius: 999px; background: rgba(255,255,255,.8); color: #416756; font-size: .59rem; font-weight: 750; }
+.strategy-outcome-card .strategy-execute-button { width: 100%; }
 
 .strategy-zone-layer { position: absolute; inset: 0; z-index: 9; pointer-events: none; }
-.strategy-zone-target {
-  position: absolute;
-  pointer-events: auto;
-  min-width: 74px;
-  min-height: 30px;
-  padding: 5px 8px;
-  border: 1px dashed rgba(30,88,124,.38);
-  border-radius: 999px;
-  background: rgba(247,252,255,.58);
-  color: #244b68;
-  font-size: .66rem;
-  font-weight: 750;
-  opacity: .62;
-  box-shadow: 0 4px 10px rgba(22,54,76,.08);
-}
+.strategy-zone-target { position: absolute; pointer-events: auto; min-width: 74px; min-height: 30px; padding: 5px 8px; border: 1px dashed rgba(30,88,124,.38); border-radius: 999px; background: rgba(247,252,255,.58); color: #244b68; font-size: .66rem; font-weight: 750; opacity: .62; box-shadow: 0 4px 10px rgba(22,54,76,.08); }
 .strategy-zone-target:hover,
 .strategy-zone-target:focus-visible,
 .strategy-zone-target.is-focused { opacity: 1; border-style: solid; border-color: #2f76ad; background: rgba(247,252,255,.95); }
@@ -92,53 +80,18 @@
 
 .strategy-map-worker.has-actions,
 .strategy-risk-signal.has-actions { filter: drop-shadow(0 0 7px rgba(220,122,49,.55)); }
-.strategy-map-worker.has-actions::after {
-  content: "•";
-  position: absolute;
-  right: -4px;
-  top: -4px;
-  width: 17px;
-  height: 17px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #dc7a31;
-  color: #fff;
-  font-size: 13px;
-  line-height: 1;
-  box-shadow: 0 2px 6px rgba(75,39,15,.28);
-}
+.strategy-map-worker.has-actions::after { content: "•"; position: absolute; right: -4px; top: -4px; width: 17px; height: 17px; display: grid; place-items: center; border-radius: 50%; background: #dc7a31; color: #fff; font-size: 13px; line-height: 1; box-shadow: 0 2px 6px rgba(75,39,15,.28); }
 .strategy-risk-signal.has-actions { outline: 3px solid rgba(220,122,49,.22); outline-offset: 3px; }
 .strategy-rail button.has-actions { border-color: rgba(220,122,49,.72); }
 
-.strategy-map.is-site-focused::after {
-  content: "";
-  position: absolute;
-  inset: 3% 2%;
-  z-index: 8;
-  pointer-events: none;
-  border: 3px solid rgba(47,118,173,.42);
-  border-radius: 24px;
-  box-shadow: inset 0 0 0 3px rgba(255,255,255,.22);
-}
-.strategy-action-active .play-panel {
-  min-height: 82px;
-  max-height: 20%;
-  grid-template-columns: 115px minmax(0,1fr);
-  padding-block: 12px;
-}
+.strategy-map.is-site-focused::after { content: ""; position: absolute; inset: 3% 2%; z-index: 8; pointer-events: none; border: 3px solid rgba(47,118,173,.42); border-radius: 24px; box-shadow: inset 0 0 0 3px rgba(255,255,255,.22); }
+.strategy-action-active .play-panel { min-height: 82px; max-height: 20%; grid-template-columns: 115px minmax(0,1fr); padding-block: 12px; }
 .strategy-action-active .play-panel .character-card,
 .strategy-action-active .play-panel .narrator-card { justify-content: center; }
 .strategy-action-active .play-panel .portrait-slot,
 .strategy-action-active .play-panel .worker-mark { display: none; }
 .map-choice-fallback { color: #dfe6df; }
-.map-choice-fallback > summary {
-  cursor: pointer;
-  color: #c9d3c1;
-  font-size: 12px;
-  letter-spacing: .04em;
-  list-style: none;
-}
+.map-choice-fallback > summary { cursor: pointer; color: #c9d3c1; font-size: 12px; letter-spacing: .04em; list-style: none; }
 .map-choice-fallback > summary::-webkit-details-marker { display: none; }
 .map-choice-fallback > summary::after { content: " +"; color: #d8c078; }
 .map-choice-fallback[open] > summary::after { content: " −"; }
@@ -146,9 +99,9 @@
 .map-choice-fallback .choice-panel { grid-template-columns: repeat(2,minmax(0,1fr)); }
 .map-choice-fallback .choice-panel button { min-height: 44px; padding: 8px 10px; font-size: 12px; }
 @media (max-width: 900px) {
-  .strategy-action-tray { top: 20%; width: 42%; right: 1.5%; padding: 9px; }
+  .strategy-action-tray { top: 17%; width: 44%; right: 1.5%; padding: 9px; max-height: 58%; }
   .strategy-action-heading span { display: none; }
-  .strategy-action-list { max-height: 28vh; }
+  .strategy-action-list { max-height: 24vh; }
   .strategy-action-list button { grid-template-columns: 20px 24px minmax(0,1fr) 14px; min-height: 42px; padding: 6px 7px; }
   .strategy-action-active .play-panel { max-height: 24%; }
   .strategy-zone-target { min-width: 58px; min-height: 26px; padding: 4px 6px; font-size: .58rem; }
