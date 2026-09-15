@@ -95,28 +95,47 @@ export class EpisodeSession {
   dispatch = (command: EngineCommand, revision: number): boolean => this.#act(revision, () => {
     if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
     const p = this.#snapshot.presentation.find(c => 'node_id' in c);
+    const before = this.#engine.getState();
+    const beforeEventId = before.event_runtime.active_instance?.event_id ?? null;
     if (!p || !('node_id' in p) || !('instance_id' in command) || command.instance_id !== p.instance_id) return false;
     if (command.type === 'choose_event') {
       if (p.type !== 'SHOW_CHOICE' || command.node_id !== p.node_id || !p.choices.some(c => c.choice_id === command.choice_id && c.enabled)) return false;
     } else if (command.type === 'advance_event') {
       if (p.type === 'SHOW_CHOICE' || command.node_id !== p.node_id) return false;
     } else return false;
+    const holdFieldOutcome = command.type === 'choose_event' && isStrategyFieldActionEvent(beforeEventId);
     this.#engine.dispatch(command);
-    this.#settle(); return true;
+    if (!holdFieldOutcome) this.#settle();
+    return true;
+  });
+  confirmFieldOutcome = (sourceInstanceId: string, revision: number): boolean => this.#act(revision, () => {
+    if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
+    const state = this.#engine.getState();
+    if (state.event_runtime.active_instance) return false;
+    const finished = state.event_runtime.finished_instances.at(-1);
+    if (!finished || finished.instance_id !== sourceInstanceId || !isStrategyFieldActionEvent(finished.event_id)) return false;
+    this.#settle();
+    return true;
   });
   reconsider = (checkpoint: GameState, revision: number): boolean => this.#act(revision, () => {
     if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
     const current = this.#engine.getState();
-    const active = current.event_runtime.active_instance;
     const previousActive = checkpoint.event_runtime.active_instance;
-    if (!active || !previousActive || active.instance_id !== previousActive.instance_id || active.event_id !== previousActive.event_id) return false;
-    if (!isStrategyFieldActionEvent(active.event_id)) return false;
+    if (!previousActive || !isStrategyFieldActionEvent(previousActive.event_id)) return false;
+    const active = current.event_runtime.active_instance;
+    const sameActiveEvent = active?.instance_id === previousActive.instance_id && active.event_id === previousActive.event_id;
+    const lastFinished = current.event_runtime.finished_instances.at(-1);
+    const justFinishedEvent = active === null
+      && lastFinished?.instance_id === previousActive.instance_id
+      && lastFinished.event_id === previousActive.event_id;
+    if (!sameActiveEvent && !justFinishedEvent) return false;
     const currentPresentation = eventPresentation(current, this.#content);
     const checkpointPresentation = eventPresentation(checkpoint, this.#content);
-    if (!currentPresentation.some(command => command.type === 'SHOW_RESULT')) return false;
+    if (sameActiveEvent && !currentPresentation.some(command => command.type === 'SHOW_RESULT')) return false;
+    if (justFinishedEvent && currentPresentation.length !== 0) return false;
     if (!checkpointPresentation.some(command => command.type === 'SHOW_CHOICE')) return false;
-    const currentChoices = current.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
-    const checkpointChoices = checkpoint.event_runtime.choice_history.filter(item => item.instance_id === active.instance_id).length;
+    const currentChoices = current.event_runtime.choice_history.filter(item => item.instance_id === previousActive.instance_id).length;
+    const checkpointChoices = checkpoint.event_runtime.choice_history.filter(item => item.instance_id === previousActive.instance_id).length;
     if (currentChoices <= checkpointChoices) return false;
     this.#engine.dispatch({ type: 'restore_decision_checkpoint', checkpoint });
     return true;
