@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { projectStrategyActions, strategyActionsForTarget, strategyActionTargetKey } from '../src/app/strategy-actions';
+import {
+  projectStrategyActions,
+  projectSupportAssistedActions,
+  strategyActionExecutionChoiceId,
+  strategyActionsForTarget,
+  strategyActionTargetKey,
+} from '../src/app/strategy-actions';
 import type { PresentationCommand } from '../src/domain';
 
-function choice(eventId: string, choices: readonly { choice_id: string; text_id: string; enabled: boolean }[]): readonly [string, PresentationCommand] {
+function choice(eventId: string, choices: readonly { choice_id: string; text_id: string; enabled: boolean }[], nodeId = 'action'): readonly [string, PresentationCommand] {
   return [eventId, {
     type: 'SHOW_CHOICE',
     instance_id: `run.${eventId}`,
-    node_id: 'action',
+    node_id: nodeId,
     text_id: 'prompt',
     choices,
   }];
@@ -84,6 +90,55 @@ describe('Episode 01 strategy actions', () => {
       target: { kind: 'character', character_id: 'seo_jeongmin' },
       resource_axes: ['time', 'schedule', 'safety'],
     });
+  });
+
+  it('adds support shortcuts without removing or changing the free safety choice', () => {
+    const [eventId, presentation] = choice('e01_05_command', [
+      { choice_id: 'check_self', text_id: 'ep01.command.check_self', enabled: true },
+      { choice_id: 'ask_minseok', text_id: 'ep01.command.ask_minseok', enabled: true },
+      { choice_id: 'keep_schedule', text_id: 'ep01.command.keep_schedule', enabled: true },
+    ], 'ramp');
+    const base = projectStrategyActions(eventId, presentation);
+    const noSupport = projectSupportAssistedActions(base, []);
+    expect(noSupport).toBe(base);
+
+    const withKit = projectSupportAssistedActions(base, ['equipment.inspection_kit']);
+    expect(withKit.map(action => action.choice_id)).toContain('check_self');
+    expect(withKit).toHaveLength(base.length + 1);
+    const shortcut = withKit.find(action => action.choice_id === 'support.inspection_kit.verify_ramp')!;
+    expect(shortcut).toMatchObject({
+      execution_choice_id: 'check_self',
+      label_text_id: 'ui.paid_item.action.inspection_kit_check',
+      enabled: true,
+      target: { kind: 'anchor', anchor: 'ramp' },
+      resource_axes: ['time', 'safety'],
+      skill: { source: 'equipment' },
+    });
+    expect(strategyActionExecutionChoiceId(shortcut)).toBe('check_self');
+    expect(strategyActionExecutionChoiceId(base[0]!)).toBe('check_self');
+  });
+
+  it('reuses the same free entrance-control outcome for access-lane and traffic-control shortcuts', () => {
+    const [eventId, presentation] = choice('e01_05_command', [
+      { choice_id: 'assign_crew', text_id: 'ep01.command.assign_crew', enabled: true },
+      { choice_id: 'request_delay', text_id: 'ep01.command.request_delay', enabled: true },
+      { choice_id: 'force_clear', text_id: 'ep01.command.force_clear', enabled: true },
+    ], 'entrance');
+    const base = projectStrategyActions(eventId, presentation);
+    const actions = projectSupportAssistedActions(base, ['facility.access_lane', 'equipment.traffic_control_pack']);
+    const shortcuts = actions.filter(action => action.execution_choice_id !== undefined);
+    expect(shortcuts).toHaveLength(2);
+    expect(shortcuts.every(action => strategyActionExecutionChoiceId(action) === 'assign_crew')).toBe(true);
+    expect(actions.some(action => action.choice_id === 'assign_crew' && action.execution_choice_id === undefined)).toBe(true);
+  });
+
+  it('inherits disabled state from the free choice instead of bypassing its requirements', () => {
+    const [eventId, presentation] = choice('e01_05_command', [
+      { choice_id: 'check_self', text_id: 'ep01.command.check_self', enabled: false },
+    ], 'ramp');
+    const actions = projectSupportAssistedActions(projectStrategyActions(eventId, presentation), ['equipment.inspection_kit']);
+    const shortcut = actions.find(action => action.choice_id === 'support.inspection_kit.verify_ramp')!;
+    expect(shortcut.enabled).toBe(false);
   });
 
   it('does not turn evening or non-choice presentation into fake map gameplay', () => {
