@@ -17,7 +17,7 @@ import {
   REPLAN_PASS_ITEM_ID,
   savePaidItemWallet,
 } from '../app/paid-item-wallet';
-import { CharacterCard, SiteScene } from './VisualSlot';
+import { CharacterCard, SiteScene, VisualImage } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
 import { useEpisodeAudio } from './useEpisodeAudio';
@@ -80,6 +80,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
     : undefined;
   const titleBackgroundUri = episode01BackgroundUri(resolveAsset);
+  const titleHeroCast = snapshot.phase === 'start'
+    ? (['player', 'kang_taesik', 'lim_junho'] as const).map((characterId, index) => ({
+      characterId,
+      index,
+      uri: characterPortraitUri(characterId, resolveAsset),
+    }))
+    : [];
   const strategyCopy = {
     brand: t('ui.brand'),
     day: t('ui.day'),
@@ -261,9 +268,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
       <span className="header-episode">{t('ui.episode')}</span>
     </header> : null}
-    {snapshot.phase === 'start' ? <section className="title-screen">
+    {snapshot.phase === 'start' ? <section className="title-screen title-screen-commercial">
       <div className="title-copy"><span className="eyebrow">{t('ui.episode')} <i /> {t('ui.site')}</span>
         <h1>{t('ui.brand')}</h1><p className="tagline">{t('ui.tagline')}</p></div>
+      <div className="title-hero-cast" aria-hidden="true">
+        {titleHeroCast.map(({ characterId, index, uri }) => <div className={`title-hero-character title-hero-character-${index + 1}`} data-character={characterId} key={characterId}>
+          <VisualImage uri={uri} alt="" className="title-hero-character-image" />
+        </div>)}
+        <span className="title-hero-ground" />
+      </div>
       <div className="start-block"><div><span className="eyebrow">{t('ui.day')} 01</span><h2>{t('ep01.title')}</h2><p>{t('ui.start_hint')}</p></div>
         <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.start(snapshot.revision); } }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
       </div>
