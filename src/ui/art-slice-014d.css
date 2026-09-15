@@ -1,0 +1,162 @@
+/* TASK-014D — production visual lock: maximize world readability and reduce dashboard density. Presentation only. */
+
+/* Header becomes a slimmer game HUD. */
+.strategy-hud {
+  inset: .8% .9% auto;
+  height: 6.5%;
+  grid-template-columns: .92fr 1.7fr .38fr;
+  gap: .55%;
+}
+.strategy-brand,
+.strategy-meter,
+.strategy-day { border-radius: 13px; }
+.strategy-brand { font-size: clamp(13px,1.08vw,20px); }
+.strategy-day strong { font-size: 1.18rem; }
+
+/* Give the site more horizontal space. */
+.strategy-rail {
+  top: 8.2%;
+  left: .75%;
+  bottom: 12.8%;
+  width: 15.2%;
+  gap: .55%;
+}
+.strategy-panel {
+  border-radius: 13px;
+  padding: 8px 10px;
+}
+.strategy-panel h2 {
+  margin-bottom: 5px;
+  font-size: clamp(12px,.98vw,17px);
+}
+.strategy-panel p,
+.strategy-focus-panel small,
+.strategy-friction-list { font-size: clamp(9px,.68vw,12px); }
+.strategy-friction-panel { max-height: 20%; }
+.strategy-focus-panel { min-height: 9%; }
+.strategy-rail button {
+  min-height: 8.8%;
+  border-radius: 12px;
+  font-size: clamp(10px,.82vw,14px);
+}
+
+.strategy-map {
+  inset: 7.4% .55% 11.8% 14.1%;
+  border-radius: 0 0 0 20px;
+}
+.strategy-map-background-art {
+  transform: scale(1.035);
+  filter: saturate(1.1) contrast(1.045) brightness(1.015);
+}
+.strategy-map-stage-card {
+  top: 1.5%;
+  right: 1.1%;
+  width: 14.5%;
+  padding: 7px 10px;
+  border-radius: 12px;
+}
+.strategy-map-stage-card span { font-size: clamp(8px,.55vw,10px); }
+.strategy-map-stage-card strong { font-size: clamp(12px,.95vw,17px); }
+
+/* Event title is a cue, not a billboard. */
+.strategy-active .scene-heading {
+  top: 8.5%;
+  left: 16.6%;
+  max-width: 29%;
+  padding-top: 8px;
+}
+.strategy-active .scene-heading h1 {
+  padding: 5px 10px;
+  border-radius: 9px;
+  font-size: clamp(15px,1.28vw,21px);
+  line-height: 1.2;
+}
+.strategy-active .scene-heading .eyebrow {
+  font-size: clamp(8px,.56vw,10px);
+  letter-spacing: .08em;
+}
+
+/* Dialogue stays readable while revealing more of the construction site. */
+.strategy-active .play-panel {
+  left: 17.2%;
+  right: 1.15%;
+  bottom: 1.1%;
+  min-height: 86px;
+  max-height: 14.5%;
+  grid-template-columns: 102px minmax(0,1fr);
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 14px;
+}
+.strategy-active .portrait-slot { height: 55px; border-radius: 8px; }
+.strategy-active .character-card { padding-right: 10px; }
+.strategy-active .character-identity { margin-top: 5px; gap: 1px; }
+.strategy-active .character-identity strong { font-size: 13px; }
+.strategy-active .character-identity > span:last-child { font-size: 9px; }
+.strategy-active .dialogue-content { min-height: 58px; }
+.strategy-active .dialogue-text {
+  max-width: 1000px;
+  padding: 2px 0 4px;
+  font-size: clamp(12px,1vw,15px);
+  line-height: 1.42;
+}
+.strategy-active .continue-button {
+  min-height: 25px;
+  min-width: 96px;
+  padding: 2px 0 3px 9px;
+  font-size: 12px;
+}
+.strategy-active .character-growth-summary,
+.strategy-active .character-loadout-summary { margin-top: 3px; }
+
+/* Names stay visible; roles appear only when the player is inspecting that person. */
+.strategy-worker-label {
+  min-width: 58px;
+  max-width: 88px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background: rgba(24,47,59,.84);
+}
+.strategy-worker-label strong { font-size: clamp(8px,.64vw,11px); }
+.strategy-worker-label span { display: none; }
+.strategy-map-worker:hover .strategy-worker-label span,
+.strategy-map-worker:focus-visible .strategy-worker-label span,
+.strategy-map-worker.is-focused .strategy-worker-label span {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(7px,.52vw,9px);
+}
+.strategy-map-worker.has-art {
+  min-width: 116px;
+  min-height: 96px;
+  gap: 2px;
+}
+.strategy-worker-art {
+  filter: drop-shadow(0 10px 8px rgba(20,42,50,.32));
+}
+
+/* Small per-character offsets keep the center of the map from becoming a label pile. */
+.strategy-map-worker[data-character="lee_jaehoon"] { margin-left: -24px; margin-top: -12px; }
+.strategy-map-worker[data-character="lim_junho"] { margin-left: 18px; margin-top: 13px; }
+.strategy-map-worker[data-character="yoon_sungho"] { margin-left: -18px; margin-top: 19px; }
+.strategy-map-worker[data-character="seo_jeongmin"] { margin-left: 24px; margin-top: -15px; }
+.strategy-map-worker[data-character="choi_minseok"] { margin-left: 13px; margin-top: 12px; }
+.strategy-map-worker[data-character="oh_seungjae"] { margin-left: 15px; margin-top: -14px; }
+
+/* Roster is secondary during active dialogue; map remains dominant. */
+.strategy-active .strategy-roster { opacity: .42; }
+.strategy-active .strategy-roster:hover,
+.strategy-active .strategy-roster:focus-within { opacity: .92; }
+
+@media (max-width: 1100px), (max-height: 680px) {
+  .strategy-rail { width: 17.2%; bottom: 11.5%; }
+  .strategy-map { inset: 7.2% .4% 10.8% 15.5%; }
+  .strategy-active .scene-heading { left: 19%; max-width: 31%; }
+  .strategy-active .play-panel { left: 19%; bottom: .8%; max-height: 16%; grid-template-columns: 88px minmax(0,1fr); }
+  .strategy-active .portrait-slot { height: 48px; }
+  .strategy-map-worker[data-character] { margin-left: 0; margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strategy-roster { transition: none !important; }
+}
