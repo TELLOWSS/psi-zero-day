@@ -3,6 +3,7 @@ name: Verify vertical slice
 on:
   push:
     branches:
+      - main
       - astra/task-007-casual-strategy-foundation
   workflow_dispatch:
 
