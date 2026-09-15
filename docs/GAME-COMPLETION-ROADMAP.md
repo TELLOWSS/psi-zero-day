@@ -78,10 +78,9 @@ The approved commercial-style casual strategy construction-site screen is the ta
 ### TASK-013B — Vercel Preview deployment — DEPLOYED / TRANSPORT SMOKE VERIFIED
 - Vercel project `psi-zero-day` is linked to `TELLOWSS/psi-zero-day`.
 - Feature-branch Preview deployments are READY.
-- Latest Preview returns HTTP 200 with the expected title, metadata, JS and CSS bundle references.
-- Vercel runtime-error query reports no runtime errors for the checked 24-hour window.
+- Preview returns HTTP 200 with the expected title, metadata, JS/CSS bundles and checked RC art assets.
+- Vercel runtime-error query reports no runtime errors for the checked window.
 - Full pointer-by-pointer interactive playthrough still requires a real browser/device manual smoke pass before production promotion.
-- Old `main` remains unsuitable for production promotion until the completed branch is reviewed/merged.
 
 ### TASK-013C — Capacitor / Android debug packaging — IMPLEMENTED / VERIFIED
 - Capacitor 8.5.2 is integrated.
@@ -105,19 +104,45 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Google Play technical/release checklist is committed.
 - Current Android target API 36 meets the 2026 new-app submission target requirement.
 
-### TASK-013F — Release signing + real-device internal test — NEXT
+### TASK-014A — Vertical Art Slice RC — IMPLEMENTED / VERIFIED
+- The real gameplay screenshots, not concept boards, are the visual baseline for improvement.
+- Foundation construction map has a hand-authored 2.5D RC asset with stronger depth, road, crane, apartment frame, yard, gate and foreground hierarchy.
+- Player, Kang Taesik and Lim Junho have distinct RC portrait + map art.
+- Player reads as a young female safety manager with tablet; Kang as a broad veteran formwork foreman with moustache/gloves; Junho as a smaller young rookie with radio.
+- HUD/rail/roster were reduced so the site map becomes the visual hero.
+- Worker pieces are larger and dark translucent labels replace oversized white name cards.
+- Dialogue panel is shorter and less dominant.
+- Asset precedence is now `final WebP -> hand-authored RC SVG -> deterministic generated SVG`.
+- No `src/engine/**` rule change is required for the art slice.
+- Latest verification remains **319 tests PASS / typecheck PASS / build PASS**, and checked RC assets return HTTP 200 on Vercel Preview.
+
+### TASK-014B — Remaining cast RC art + field visual language — NEXT
+- Expand matching RC portrait/map art to Yoon Sungho, Lee Jaehoon, Choi Minseok, Seo Jeongmin and Oh Seungjae.
+- Preserve distinct silhouette + face + outfit + prop + posture; no helmet-color-only clones.
+- Lock field-risk marker and equipment/item visual language so warnings feel like game affordances, not dashboard badges.
+- Character progression must never make a character older: same apparent age/identity, growth only through expression, posture, confidence and role-appropriate equipment.
+
+### TASK-014C — Growth variants + final commercial asset pass
+- Apply approved visual progression to initial/focused/skilled variants without chronological aging.
+- Replace approved RC slots with final commercial WebP art where quality is locked.
+- Final BGM/ambience/SFX replace procedural feedback only after scene fit is approved.
+
+### TASK-014D — Real browser + Android visual/device acceptance
+- Full Episode 01 manual playthrough on desktop browser and real Android device.
+- Check common landscape aspect ratios, touch targets, text clipping, save/resume, sound and visual readability.
+- Capture final in-game store screenshots only after this pass.
+
+### TASK-015A — Release signing + internal test
 - Finalize upload keystore.
 - Configure GitHub Actions signing secrets.
 - Generate and verify signed AAB.
 - Upload to Play Console Internal testing.
-- Test on real Android devices in landscape.
-- Verify app restart save/resume, full Episode 01 route, sound fallback and common aspect ratios.
+- Test restart/save/resume and a full Episode 01 route on installed build.
 
-### TASK-013G — Final store creatives / production decision
+### TASK-015B — Final store creatives / production decision
 - 512 x 512 store icon.
 - 1024 x 500 feature graphic.
 - At least 3 strong landscape in-game screenshots for the game listing.
-- Final commercial WebP art/audio replace fallbacks only where approved.
 - Final Play Console declarations, content rating, data safety and production rollout decision.
 
 ## Do not drift into
