@@ -104,7 +104,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         return `${name} · ${field} ${amount}`;
       }),
       psi_cues: outcomePsiCues,
-      ...(executedFieldAction && executedEngineResult ? {
+      ...(executedFieldAction ? {
         reconsideration: {
           item_id: REPLAN_PASS_ITEM_ID,
           remaining: replanBalance,
@@ -122,11 +122,16 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       if (accepted) setExecutedFieldAction(null);
       return;
     }
+    if (executedFieldAction) {
+      const accepted = session.confirmFieldOutcome(executedFieldAction.action.instance_id, snapshot.revision);
+      if (accepted) setExecutedFieldAction(null);
+      return;
+    }
     setExecutedFieldAction(null);
   };
 
   const reconsiderMapOutcome = () => {
-    if (!executedFieldAction || !executedEngineResult || replanBalance <= 0) return;
+    if (!executedFieldAction || replanBalance <= 0) return;
     const accepted = session.reconsider(executedFieldAction.checkpoint, snapshot.revision);
     if (!accepted) return;
     const nextWallet = consumePaidItem(paidItemWallet, REPLAN_PASS_ITEM_ID);
