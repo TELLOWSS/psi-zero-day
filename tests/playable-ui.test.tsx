@@ -21,6 +21,12 @@ function click(text: string, detail = 1) {
   if (!button) throw new Error(`Button not found: ${text}`);
   act(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, detail })));
 }
+function clickPresentationChoice(text: string) {
+  const button = Array.from(container.querySelectorAll<HTMLButtonElement>('.choice-panel button'))
+    .find(item => !item.disabled && item.textContent?.includes(text));
+  if (!button) throw new Error(`Presentation choice not found: ${text}`);
+  act(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
+}
 function continueCurrent(session: EpisodeSession) {
   const mapReturn = session.t('ui.strategy.return_map');
   if (buttons().some(button => button.textContent?.includes(mapReturn))) click(mapReturn);
@@ -98,7 +104,10 @@ describe('Playable Episode React UI', () => {
         }
         const selected = p.choices.find(c => c.choice_id === inputFor(p.node_id, decisions));
         if (!selected) throw new Error(`Missing intended player choice for ${p.node_id}`);
-        click(session.t(selected.text_id));
+        // During strategy events the same label can exist in both the map action tray and
+        // the text fallback. This test is specifically exercising the presentation path,
+        // so click its choice button rather than an unrelated map action button.
+        clickPresentationChoice(session.t(selected.text_id));
       } else continueCurrent(session);
     }
     expect(stages).toEqual(['ramp', 'entrance']);
