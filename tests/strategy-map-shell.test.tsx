@@ -9,6 +9,7 @@ const view: StrategyView = {
   clock: { day: 3, slot: 'MORNING' },
   construction: { stage_id: 'TYPICAL_FLOOR', current_stage_progress: 42, progress_by_stage: { TYPICAL_FLOOR: 42 }, milestones: [] },
   psi: { unlocked_node_ids: [], values: { score: 78 }, flags: {} },
+  resources: { money: 150000, time_slot: 'MORNING', schedule_progress: 42, safety_signal_count: 1, pressure_count: 1 },
   assignments: [{ assignment_id: 'a1', character_id: 'lim_junho', task_id: 'task.1' }],
   roster: [{ character_id: 'lim_junho', experience: 12, morale: 60, fatigue: 15, available: true, stats: {}, story_flags: {} }],
   signals: [{ signal_id: 'signal.ramp_movement', kind: 'ramp', anchor: 'ramp', label_text_id: 'ui.signal.ramp_movement' }],
@@ -45,13 +46,20 @@ const labels: Readonly<Record<string, string>> = {
   'ui.strategy.target': '대상',
   'ui.strategy.execute': '조치 실행',
   'ui.strategy.cancel': '다시 선택',
+  'ui.resource.money': '돈',
+  'ui.resource.time': '시간',
+  'ui.resource.schedule': '공정',
+  'ui.resource.safety': '안전',
+  'ui.resource.safety_signals': '위험신호',
+  'ui.resource.impact': '연결 자원',
+  'ui.slot.morning': '오전',
 };
 const text = (id: string) => labels[id] ?? id;
 const person = (id: string) => id === 'lim_junho' ? { name: '임준호', role: '신입근로자' } : id === 'player' ? { name: '현장 안전관리자', role: '안전관리' } : undefined;
 const actions: readonly StrategyAction[] = [{
   event_id: 'e01_04_junho_signal', instance_id: 'run.e01_04_junho_signal', node_id: 'listen',
   choice_id: 'listen_more', label_text_id: 'ep01.junho.listen_more', enabled: true, intent: 'inspect',
-  target: { kind: 'character', character_id: 'lim_junho' }, actor_character_id: 'player',
+  target: { kind: 'character', character_id: 'lim_junho' }, actor_character_id: 'player', resource_axes: ['time', 'safety'],
 }];
 const visualAssets: StrategyVisualAssets = {
   background_uri: 'assets/episode01/backgrounds/foundation-map.webp',
@@ -81,6 +89,17 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('1 대상 선택');
     expect(html).toContain('먼저 대상을 선택하세요.');
     expect(html).not.toContain('data-choice="listen_more"');
+  });
+
+  it('renders factual money/time/schedule/safety resources without a synthetic PSI score meter', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
+    expect(html).toContain('strategy-resource-bar');
+    expect(html).toContain('₩150,000');
+    expect(html).toContain('오전');
+    expect(html).toContain('42%');
+    expect(html).toContain('위험신호 1');
+    expect(html).not.toContain('strategy-meter-track');
+    expect(html).not.toContain('width:78%');
   });
 
   it('renders field results on the map as the third loop step', () => {
