@@ -21,6 +21,12 @@ describe('StrategyView adapter', () => {
     expect(view.runtime.active_event_id).toBe(state.event_runtime.active_instance?.event_id ?? null);
     expect(view.runtime.participant_bindings).toEqual(state.event_runtime.active_instance?.participant_bindings ?? {});
     expect(view.runtime.completed_event_count).toBe(state.event_runtime.completion_history.length);
+
+    expect(view.resources.money).toBe(state.player.money);
+    expect(view.resources.time_slot).toBe(state.clock.slot);
+    expect(view.resources.schedule_progress).toBe(state.construction.progress_by_stage[state.construction.stage_id] ?? 0);
+    expect(view.resources.safety_signal_count).toBe(view.signals.length);
+    expect(view.resources.pressure_count).toBe(view.frictions.length);
   });
 
   it('returns an immutable snapshot that cannot mutate engine state', () => {
@@ -31,9 +37,11 @@ describe('StrategyView adapter', () => {
 
     expect(Object.isFrozen(view)).toBe(true);
     expect(Object.isFrozen(view.clock)).toBe(true);
+    expect(Object.isFrozen(view.resources)).toBe(true);
     expect(Object.isFrozen(view.roster)).toBe(true);
     expect(Object.isFrozen(view.placements)).toBe(true);
     expect(() => Object.assign(view.clock, { day: 999 })).toThrow();
+    expect(() => Object.assign(view.resources, { money: 999999 })).toThrow();
     expect(session.getSnapshot().state).toBe(state);
     expect(session.getSnapshot().state!.clock.day).not.toBe(999);
   });
