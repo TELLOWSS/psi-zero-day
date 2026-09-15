@@ -31,6 +31,10 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain('strategy-shell');
     expect(html).toContain('data-visual-mode="art"');
     expect(html).toContain('foundation-map.webp');
+    expect(html).toContain('data-character="player"');
+    expect(html).toContain('player-map-rc.svg');
+    expect(html).toContain('플레이어');
+    expect(html).toContain('현장 안전관리자');
     expect(html).toContain('PSI : ZERO DAY');
     expect(html).toContain('현장 목표');
     expect(html).toContain('자동 저장');
@@ -51,6 +55,7 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain('1 대상 선택');
     expect(html).toContain('현장 행동');
     expect(html).toContain('먼저 사람·위험 신호·작업 구역을 선택하세요.');
+    expect(html).toContain('data-character="player"');
     expect(html).toContain('data-character="kang_taesik"');
     expect(html).toContain('data-character="yoon_sungho"');
     expect(html).toContain('data-character="lee_jaehoon"');
