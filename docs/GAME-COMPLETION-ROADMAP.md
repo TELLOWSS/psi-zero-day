@@ -69,10 +69,25 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - CI workflow completed all verification steps successfully before release preparation.
 - Generated SVG files remain intentionally gitignored; generator/spec + committed manifest remain the source of truth until final WebP art replaces the fallback.
 
-### TASK-013 — Android/Web release preparation — NEXT
-- Vercel web deployment/build review.
-- Capacitor/Android packaging when the web slice is stable.
-- app icon/banner/screenshots/privacy policy/store metadata.
+### TASK-013A — Web release bundle + Vercel contract — IMPLEMENTED
+- Explicit Vercel Vite build contract is committed.
+- Web title/description metadata is production-ready.
+- `npm run release:check` provides one local release gate.
+- GitHub Actions uploads the exact verified `dist/` as `psi-zero-day-web-dist` only after tests/typecheck/build pass.
+- First Vercel review deployment is intentionally kept on the active feature branch until preview approval.
+
+### TASK-013B — Vercel Preview deployment + browser smoke test — NEXT
+- One-time Vercel project import/link for `TELLOWSS/psi-zero-day` is required.
+- Trigger Preview from `astra/task-007-casual-strategy-foundation`.
+- Verify page load, fallback art, strategy actions, autosave/resume, audio fallback, and full Episode 01 completion.
+- Do not promote the old `main` branch to production before the completed branch is reviewed/merged.
+
+### TASK-013C — Capacitor / Android packaging
+- Add Capacitor only after the deployed web slice passes browser smoke testing.
+- Prepare Android package identity, build config, keystore/AAB workflow, and device checks.
+
+### TASK-013D — Store release assets
+- app icon, feature graphic, screenshots, privacy policy and store metadata.
 - final commercial WebP art/audio can replace fallback assets without changing game logic.
 
 ## Do not drift into
