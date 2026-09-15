@@ -84,7 +84,8 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   const actionTargetLabel = (action: StrategyAction): string => {
     if (action.target.kind === 'character') return person(action.target.character_id)?.name ?? action.target.character_id;
     if (action.target.kind === 'signal') {
-      const signal = view.signals.find(item => item.signal_id === action.target.signal_id);
+      const signalId = action.target.signal_id;
+      const signal = view.signals.find(item => item.signal_id === signalId);
       return signal ? text(signal.label_text_id) : copy.site;
     }
     if (action.target.kind === 'anchor') return text(`ui.strategy.zone.${action.target.anchor}`);
