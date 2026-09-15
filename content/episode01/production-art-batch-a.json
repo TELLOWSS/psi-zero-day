@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "task": "TASK-016B",
+  "batch": "A",
+  "status": "production-media-pending",
+  "purpose": "commercial title and first-play visual slice",
+  "style_contract": {
+    "style": "adult-friendly high-quality 2.5D casual-strategy construction-site diorama",
+    "tone": "approachable and game-like without becoming childish, comic slapstick, or generic corporate illustration",
+    "consistency": "portrait and map art must depict the same person with the same face, age, PPE, outfit language, and signature prop",
+    "readability": "character identity must survive small in-game scale through silhouette plus at least two of face, outfit, prop, and posture",
+    "world_rule": "construction details, access routes, temporary works, materials, equipment, and safety cues must feel plausible rather than decorative"
+  },
+  "shared_reject_conditions": [
+    "same-face cast",
+    "helmet-color-only differentiation",
+    "real company logos",
+    "pseudo text or meaningless lettering on helmets, PPE, signs, or equipment",
+    "childlike body proportions",
+    "anime school-uniform styling",
+    "fantasy or sci-fi construction equipment",
+    "extra fingers, duplicated limbs, broken PPE geometry, or fused tools",
+    "portrait and map variants that no longer read as the same person",
+    "slapstick treatment of hazards or incidents"
+  ],
+  "assets": [
+    {
+      "source": "foundation:background",
+      "asset_id": "ep01.background.foundation.map",
+      "path": "assets/episode01/backgrounds/foundation-map.webp",
+      "kind": "background",
+      "minimum_size": { "width": 1920, "height": 1080 },
+      "transparent_background": false,
+      "production_brief": "Landscape 16:9 construction foundation-stage strategy map. Apartment structure, tower crane, material yard, temporary access road, gate, rebar/formwork zones and worker circulation should create a readable playable diorama with foreground/midground/background depth. Keep the central worksite clear enough for interactive markers and characters. No readable brand or company text."
+    },
+    {
+      "source": "player:portrait",
+      "character_id": "player",
+      "asset_id": "ep01.character.player.portrait",
+      "path": "assets/episode01/characters/player-portrait.webp",
+      "kind": "portrait",
+      "minimum_size": { "width": 1024, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "compact athletic, upright",
+      "signature_prop": "black inspection tablet",
+      "production_brief": "Young female safety manager, late 20s to early 30s. Soft oval face, alert eyes, short-to-medium black hair visible below a white helmet with a simple blue stripe and no text. Clean navy-blue safety vest. Focused but approachable. Upper-body portrait; one hand holds the inspection tablet and the other directs attention."
+    },
+    {
+      "source": "player:map",
+      "character_id": "player",
+      "asset_id": "ep01.character.player.map",
+      "path": "assets/episode01/characters/player-map.webp",
+      "kind": "map",
+      "minimum_size": { "width": 768, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "compact athletic, upright",
+      "signature_prop": "black inspection tablet",
+      "production_brief": "Same player identity as the portrait in a full-body 3/4 strategy-map pose. Helmet, navy safety vest and black inspection tablet must remain legible at small scale. Stable planted stance, active field-lead posture, no chibi proportions."
+    },
+    {
+      "source": "kang_taesik:portrait",
+      "character_id": "kang_taesik",
+      "asset_id": "ep01.character.kang_taesik.portrait",
+      "path": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "kind": "portrait",
+      "minimum_size": { "width": 1024, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "stocky square torso, heavy shoulders",
+      "signature_prop": "work gloves and pointing hand",
+      "production_brief": "Veteran formwork foreman in his early 50s. Weathered round face, thick moustache and strong brows. Orange helmet without lettering. Dark charcoal vest with orange reflective trim. Broad stocky build. Gruff and decisive but not villainous; protective of the crew. Upper-body portrait with a clear pointing gesture and work gloves."
+    },
+    {
+      "source": "kang_taesik:map",
+      "character_id": "kang_taesik",
+      "asset_id": "ep01.character.kang_taesik.map",
+      "path": "assets/episode01/characters/kang-taesik-map.webp",
+      "kind": "map",
+      "minimum_size": { "width": 768, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "stocky square torso, heavy shoulders",
+      "signature_prop": "work gloves and pointing hand",
+      "production_brief": "Same Kang Taesik identity as the portrait in a full-body 3/4 strategy-map pose. Wide planted feet, heavy square torso and one arm pointing toward work. Orange helmet and work gloves remain readable at small scale."
+    },
+    {
+      "source": "lim_junho:portrait",
+      "character_id": "lim_junho",
+      "asset_id": "ep01.character.lim_junho.portrait",
+      "path": "assets/episode01/characters/lim-junho-portrait.webp",
+      "kind": "portrait",
+      "minimum_size": { "width": 1024, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "small narrow frame, slightly forward shoulders",
+      "signature_prop": "compact radio or small tool case",
+      "production_brief": "Rookie worker in his early 20s. Round youthful face, open observant eyes, no facial hair. Bright yellow helmet and green vest. Small narrow frame with slightly hesitant shoulders. Earnest expression as if deciding whether to speak. Upper-body portrait with compact radio or small tool case clearly visible."
+    },
+    {
+      "source": "lim_junho:map",
+      "character_id": "lim_junho",
+      "asset_id": "ep01.character.lim_junho.map",
+      "path": "assets/episode01/characters/lim-junho-map.webp",
+      "kind": "map",
+      "minimum_size": { "width": 768, "height": 1024 },
+      "transparent_background": true,
+      "silhouette": "small narrow frame, slightly forward shoulders",
+      "signature_prop": "compact radio or small tool case",
+      "production_brief": "Same Lim Junho identity as the portrait in a full-body 3/4 strategy-map pose. Smaller narrower body than other male cast, slight forward shoulders, one hand close to the radio. Yellow helmet and green vest remain instantly readable at small scale."
+    }
+  ]
+}
