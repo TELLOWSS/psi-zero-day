@@ -26,7 +26,7 @@ function advanceToFirstChoice(session: EpisodeSession) {
 }
 
 describe('Episode 01 offline save', () => {
-  it('round-trips an in-progress GameState and resumes the exact presentation', () => {
+  it('round-trips an in-progress GameState through the domain SaveEnvelope and resumes the exact presentation', () => {
     const original = new EpisodeSession();
     original.start(0);
     advanceToFirstChoice(original);
@@ -39,9 +39,12 @@ describe('Episode 01 offline save', () => {
     expect(saveEpisodeState(storage, before.state!)).toBe(true);
     const loaded = loadEpisodeSave(storage);
     expect(loaded?.content_version).toBe(original.contentVersion);
+    expect(loaded?.rules_version).toBe(before.state?.run.rules_version);
+    expect(loaded?.slot_id).toBe('episode01.autosave');
+    expect(loaded?.checksum).toMatch(/^fnv1a32:[a-f0-9]{8}$/);
 
     const restored = new EpisodeSession();
-    expect(restored.resume(loaded!.state, 0)).toBe(true);
+    expect(restored.resume(loaded!.payload, 0)).toBe(true);
     const after = restored.getSnapshot();
     expect(after.phase).toBe('playing');
     expect(after.state).toEqual(before.state);
@@ -50,7 +53,7 @@ describe('Episode 01 offline save', () => {
     expect(after.completed).toBe(before.completed);
   });
 
-  it('rejects corrupt envelopes and content-version mismatches without entering an error screen', () => {
+  it('rejects corrupt, tampered and content-version-mismatched data without entering an error screen', () => {
     const storage = new MemoryStorage();
     storage.setItem(EPISODE01_SAVE_KEY, '{broken');
     expect(loadEpisodeSave(storage)).toBeNull();
@@ -58,6 +61,11 @@ describe('Episode 01 offline save', () => {
 
     const source = new EpisodeSession();
     source.start(0);
+    saveEpisodeState(storage, source.getSnapshot().state!);
+    const tampered = JSON.parse(storage.getItem(EPISODE01_SAVE_KEY)!) as Record<string, unknown>;
+    tampered.checksum = 'fnv1a32:00000000';
+    expect(decodeEpisodeSave(JSON.stringify(tampered))).toBeNull();
+
     const raw = JSON.parse(JSON.stringify(source.getSnapshot().state)) as GameState;
     const stale = {
       ...raw,
