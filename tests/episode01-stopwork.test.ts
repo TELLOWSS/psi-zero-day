@@ -26,6 +26,6 @@ describe('Episode 01 stop-work culture aftershock', () => {
     const protectedReporting = getRelation(protectedProcess.relations, 'lim_junho', 'player')!.reporting;
     expect(publicReporting).toBeGreaterThan(ignoredReporting);
     expect(protectedReporting).toBeGreaterThan(publicReporting);
-    expect(protectedProcess.player.stats.people).toBeGreaterThan(ignored.player.stats.people);
+    expect(protectedProcess.player.stats.people ?? 0).toBeGreaterThan(ignored.player.stats.people ?? 0);
   });
 });
