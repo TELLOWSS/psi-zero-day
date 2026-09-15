@@ -161,10 +161,14 @@ The approved commercial-style casual strategy construction-site screen is the ta
 ### TASK-016B — Final production WebP replacement — IN PROGRESS / FINAL MEDIA PENDING
 - Exact production contract remains one Foundation map + eight portrait + eight map-piece slots = 17 final WebP assets.
 - Preserve `final WebP -> RC SVG -> deterministic SVG` fallback order.
-- Production validation now checks WebP structure/dimensions in addition to presence and header: portraits must be at least `1024x1024`, map characters at least `768x1024`.
+- Production validation checks WebP structure, dimensions and character transparency: portraits must be at least `1024x1024`, map characters at least `768x1024`, Foundation at least `1920x1080`, and every portrait/map WebP must expose alpha transparency.
+- WebP metadata parsing covers VP8X, VP8L and ALPH transparency signals; truncated/invalid structures fail closed.
+- Runtime visual slots expose `data-asset-tier` so the active asset can be identified as `final`, `rc` or `fallback` instead of assuming a filename was adopted.
+- `npm run assets:active-report` reports the currently resolved art tier for all Episode 01 slots; `npm run assets:production-batch-a-status` reports Batch A binary readiness including `NO_ALPHA` failures.
 - Batch A is the seven title/first-play assets: Foundation + Player/Kang Taesik/Lim Junho portrait/map pairs.
 - Batch B is the remaining ten portrait/map assets for Yoon Sungho, Lee Jaehoon, Choi Minseok, Seo Jeongmin and Oh Seungjae.
-- Final media itself is not yet committed; RC/fallback media remains active until approved WebP files land.
+- Foundation final-art candidate selection/cleanup is complete, but the production WebP slot is still pending binary intake; RC/fallback media remains active until an approved WebP is actually committed.
+- Final media itself is not yet committed; no RC/fallback file may be relabeled as production media.
 - After all 17 files land, run `npm run assets:production-check` and `npm run release:production-check`.
 
 ### TASK-016C — Final BGM / ambience / SFX
