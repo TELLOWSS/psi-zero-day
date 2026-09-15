@@ -11,11 +11,33 @@ export function characterVisual(id: string): CharacterVisualPlan | undefined {
 export function textStyle(id: string): string | undefined {
   return (visuals.text_styles as Record<string, string>)[id];
 }
+
+export type VisualAssetTier = 'final' | 'rc' | 'fallback' | 'other';
+
+/**
+ * Presentation provenance only. This deliberately follows the locked art precedence:
+ * final WebP -> hand-authored RC SVG -> deterministic SVG fallback.
+ */
+export function visualAssetTier(uri?: string | null): VisualAssetTier | undefined {
+  if (!uri) return undefined;
+  const clean = uri.split(/[?#]/, 1)[0]?.toLowerCase() ?? '';
+  if (clean.endsWith('.webp')) return 'final';
+  if (clean.endsWith('-rc.svg')) return 'rc';
+  if (clean.endsWith('.svg')) return 'fallback';
+  return 'other';
+}
+
 export function VisualImage({ uri, alt, className }: { uri?: string | null; alt: string; className?: string }) {
   const [failed, setFailed] = useState<string | null>(null);
   if (!uri || failed === uri) return null;
   const src = /^(?:https?:|data:)/.test(uri) ? uri : `${import.meta.env.BASE_URL}${uri.replace(/^\/?(?:public\/)?/, '')}`;
-  return <img className={className} src={src} alt={alt} onError={() => setFailed(uri)} />;
+  return <img
+    className={className}
+    src={src}
+    alt={alt}
+    data-asset-tier={visualAssetTier(uri)}
+    onError={() => setFailed(uri)}
+  />;
 }
 export function CharacterCard({ person, portraitUri, growth, loadout, equipmentTitle, slotLabel }: {
   person: { id: string; name: string; role: string };
