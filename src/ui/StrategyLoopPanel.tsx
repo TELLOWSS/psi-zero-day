@@ -99,6 +99,9 @@ export function StrategyLoopPanel({
             <span className="strategy-action-copy">
               <strong>{text(action.label_text_id)}</strong>
               <small>{text('ui.strategy.actor')} · {personName(action.actor_character_id)} / {text('ui.strategy.target')} · {targetLabel(action)}</small>
+              <span className="strategy-resource-cues" aria-label={text('ui.resource.impact')}>
+                {action.resource_axes.map(axis => <i key={axis} data-axis={axis}>{text(`ui.resource.${axis}`)}</i>)}
+              </span>
               {action.skill ? <em className="strategy-skill-badge">{text(action.skill.label_text_id)}</em> : null}
             </span>
             <span aria-hidden="true">›</span>
@@ -109,6 +112,10 @@ export function StrategyLoopPanel({
         <div><span>{text('ui.strategy.actor')}</span><strong>{personName(pending.actor_character_id)}</strong></div>
         <div><span>{text('ui.strategy.target')}</span><strong>{targetLabel(pending)}</strong></div>
         <p>{text(pending.label_text_id)}</p>
+        <div className="strategy-action-resource-impact">
+          <span>{text('ui.resource.impact')}</span>
+          <div>{pending.resource_axes.map(axis => <strong key={axis} data-axis={axis}>{text(`ui.resource.${axis}`)}</strong>)}</div>
+        </div>
         <div className="strategy-action-confirm-buttons">
           <button type="button" className="strategy-cancel-button" onClick={() => setPending(null)}>{text('ui.strategy.cancel')}</button>
           <button type="button" className="strategy-execute-button" onClick={() => pending.enabled && onAction?.(pending)}>{text('ui.strategy.execute')} <b aria-hidden="true">↗</b></button>
