@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/task-007-casual-strategy-foundation
+      - task-016b-foundation-embedded
   workflow_dispatch:
 
 permissions:
