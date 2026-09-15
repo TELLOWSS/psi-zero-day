@@ -19,7 +19,7 @@ const storage = window.localStorage;
 const saved = loadEpisodeSave(storage);
 if (saved) {
   const restored = saved.content_version === session.contentVersion
-    && session.resume(saved.state, session.getSnapshot().revision);
+    && session.resume(saved.payload, session.getSnapshot().revision);
   if (!restored) clearEpisodeSave(storage);
 }
 
