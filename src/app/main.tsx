@@ -12,6 +12,7 @@ import '../ui/strategy-frictions.css';
 import '../ui/strategy-actions.css';
 import '../ui/strategy-assets.css';
 import '../ui/character-growth.css';
+import '../ui/vertical-slice-polish.css';
 
 const session = new EpisodeSession();
 const storage = window.localStorage;
