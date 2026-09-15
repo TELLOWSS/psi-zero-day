@@ -1,16 +1,14 @@
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { isWebP, webPDimensions } from './webp-dimensions.mjs';
 
 const root = process.cwd();
 const checkOnly = process.argv.includes('--check');
 const sourceDir = path.join(root, 'content/episode01/embedded-media');
-const prefix = 'foundation-map.webp.b64.';
 const target = path.join(root, 'public/assets/episode01/backgrounds/foundation-map.webp');
 
 const EXPECTED = Object.freeze({
-  parts: 16,
   encodedLength: 150248,
   bytes: 112686,
   width: 1920,
@@ -18,18 +16,21 @@ const EXPECTED = Object.freeze({
   sha256: 'ee9aefea829ddbdcd5883fab68144ae85759538f83b3ec5bfe4af43c7ad2d74d',
 });
 
-const files = (await readdir(sourceDir))
-  .filter(name => name.startsWith(prefix) && /^\d{2}$/.test(name.slice(prefix.length)))
-  .sort((a, b) => a.localeCompare(b));
-
-if (files.length !== EXPECTED.parts) {
-  throw new Error(`Foundation embedded media requires ${EXPECTED.parts} parts; found ${files.length}.`);
-}
+const orderedSources = [
+  ...Array.from({ length: 12 }, (_, index) => `foundation-map.webp.b64.${String(index + 1).padStart(2, '0')}`),
+  'foundation-map.webp.b64.13a',
+  'foundation-map.webp.b64.13b',
+  'foundation-map.webp.b64.13c',
+  'foundation-map.webp.b64.13d',
+  'foundation-map.webp.b64.14',
+  'foundation-map.webp.b64.15',
+  'foundation-map.webp.b64.16',
+];
 
 const chunks = [];
-for (const [index, file] of files.entries()) {
+for (const file of orderedSources) {
   const text = (await readFile(path.join(sourceDir, file), 'utf8')).trim();
-  const expectedPartLength = index === EXPECTED.parts - 1 ? 248 : 10000;
+  const expectedPartLength = file.endsWith('.16') ? 248 : file.includes('.13') ? 2500 : 10000;
   if (text.length !== expectedPartLength) {
     throw new Error(`${file} has ${text.length} chars; expected ${expectedPartLength}.`);
   }
