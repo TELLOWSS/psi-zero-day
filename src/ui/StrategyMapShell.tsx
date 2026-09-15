@@ -31,6 +31,15 @@ export interface StrategyPersonLabel {
   readonly role: string;
 }
 
+export interface StrategySupportItem {
+  readonly item_id: string;
+  readonly category: 'facility' | 'equipment';
+  readonly name_text_id: string;
+  readonly remaining: number;
+  readonly active: boolean;
+  readonly enabled: boolean;
+}
+
 function signalIcon(kind: StrategySignalKind): string {
   switch (kind) {
     case 'ramp': return '↗';
@@ -51,7 +60,10 @@ function frictionIcon(kind: FieldFrictionKind): string {
   }
 }
 
-export function StrategyMapShell({ view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider }: {
+export function StrategyMapShell({
+  view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider,
+  supportItems = [], onSupportItemUse,
+}: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
   readonly text: (textId: string) => string;
@@ -62,6 +74,8 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
+  readonly supportItems?: readonly StrategySupportItem[];
+  readonly onSupportItemUse?: (itemId: string) => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
@@ -137,6 +151,21 @@ export function StrategyMapShell({ view, copy, text, person, actions = [], onAct
       </button>
       <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.signals.length}</b></button>
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
+
+      {supportItems.length ? <section className="strategy-support-panel" aria-label={text('ui.paid_item.support_title')}>
+        <h2>{text('ui.paid_item.support_title')}</h2>
+        <div className="strategy-support-list">
+          {supportItems.map(item => <article key={item.item_id} data-support-item={item.item_id} data-support-active={item.active ? 'true' : 'false'}>
+            <span>{text(`ui.paid_item.${item.category}`)}</span>
+            <strong>{text(item.name_text_id)}</strong>
+            {item.active ? <em>{text('ui.paid_item.active')}</em> : <button
+              type="button"
+              disabled={!item.enabled}
+              onClick={() => item.enabled && onSupportItemUse?.(item.item_id)}
+            >{item.category === 'facility' ? text('ui.paid_item.deploy') : text('ui.paid_item.commit')} · {text('ui.paid_item.owned')} {item.remaining}</button>}
+          </article>)}
+        </div>
+      </section> : null}
     </aside>
 
     <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site}>
