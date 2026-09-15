@@ -26,6 +26,6 @@ describe('Episode 01 instruction cascade', () => {
     const reconstructedReporting = getRelation(reconstructed.relations, 'lim_junho', 'player')!.reporting;
     expect(topReporting).toBeGreaterThan(blamedReporting);
     expect(reconstructedReporting).toBeGreaterThan(blamedReporting);
-    expect(reconstructed.player.stats.analysis).toBeGreaterThan(topOnly.player.stats.analysis);
+    expect(reconstructed.player.stats.analysis ?? 0).toBeGreaterThan(topOnly.player.stats.analysis ?? 0);
   });
 });
