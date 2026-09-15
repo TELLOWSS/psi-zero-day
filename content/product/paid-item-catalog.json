@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "balance_pending",
+  "pricing": null,
+  "items": [
+    {
+      "item_id": "action.replan_pass",
+      "category": "action",
+      "working_name": "현장 재판단권",
+      "internal_nickname": "까방권",
+      "effect_intent": "irreversible_result_before_reconsideration",
+      "time_is_money_role": "판단 실수를 사고가 확정되기 전에 재조정할 기회를 산다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "action.expert_support",
+      "category": "action",
+      "working_name": "전문가 긴급지원",
+      "effect_intent": "expert_support_window",
+      "time_is_money_role": "현장 판단에 필요한 조율 시간을 단축한다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "facility.access_lane",
+      "category": "facility",
+      "working_name": "임시 안전통로",
+      "effect_intent": "separate_worker_vehicle_flow",
+      "time_is_money_role": "초기 설치비를 쓰고 이후 동선 충돌과 작업지연 가능성을 줄인다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "facility.lighting_pack",
+      "category": "facility",
+      "working_name": "추가 조명 패키지",
+      "effect_intent": "improve_visibility",
+      "time_is_money_role": "가시성을 확보해 점검·작업 준비 시간을 줄이는 선택지를 만든다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "facility.logistics_zone",
+      "category": "facility",
+      "working_name": "추가 자재 야적구역",
+      "effect_intent": "reduce_logistics_congestion",
+      "time_is_money_role": "공간 확보 비용으로 자재 재이동과 차량 대기시간을 줄이는 선택지를 만든다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "equipment.radio_pack",
+      "category": "equipment",
+      "working_name": "추가 무전기 세트",
+      "effect_intent": "improve_field_communication",
+      "time_is_money_role": "보고·지시 전달 지연을 줄이는 선택지를 만든다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "equipment.inspection_kit",
+      "category": "equipment",
+      "working_name": "현장 검측 키트",
+      "effect_intent": "speed_evidence_and_verification",
+      "time_is_money_role": "사진·측정·확인에 드는 재작업 시간을 줄이는 선택지를 만든다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    },
+    {
+      "item_id": "equipment.traffic_control_pack",
+      "category": "equipment",
+      "working_name": "동선 통제 세트",
+      "effect_intent": "speed_safe_separation_setup",
+      "time_is_money_role": "콘·바리케이드·표지 준비시간을 줄여 통제 조치를 빠르게 실행하게 한다.",
+      "may_erase_occurred_incident": false,
+      "may_buy_psi_score": false
+    }
+  ]
+}
