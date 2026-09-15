@@ -80,34 +80,39 @@
 .strategy-active .play-panel {
   left: 17.2%;
   right: 1.15%;
-  bottom: 1.1%;
-  min-height: 86px;
-  max-height: 14.5%;
-  grid-template-columns: 102px minmax(0,1fr);
-  gap: 12px;
-  padding: 8px 12px;
+  bottom: 2.2%;
+  min-height: 74px;
+  max-height: 11.5%;
+  grid-template-columns: 92px minmax(0,1fr);
+  gap: 10px;
+  padding: 7px 11px;
   border-radius: 14px;
+  overflow: hidden;
 }
-.strategy-active .portrait-slot { height: 55px; border-radius: 8px; }
-.strategy-active .character-card { padding-right: 10px; }
-.strategy-active .character-identity { margin-top: 5px; gap: 1px; }
-.strategy-active .character-identity strong { font-size: 13px; }
-.strategy-active .character-identity > span:last-child { font-size: 9px; }
-.strategy-active .dialogue-content { min-height: 58px; }
+.strategy-active .portrait-slot { height: 48px; border-radius: 8px; }
+.strategy-active .character-card { padding-right: 9px; justify-content: center; }
+.strategy-active .character-identity { margin-top: 4px; gap: 1px; }
+.strategy-active .character-identity strong { font-size: 12px; }
+.strategy-active .character-identity > span:last-child { font-size: 8px; }
+.strategy-active .dialogue-content { min-height: 48px; }
 .strategy-active .dialogue-text {
   max-width: 1000px;
-  padding: 2px 0 4px;
-  font-size: clamp(12px,1vw,15px);
-  line-height: 1.42;
+  padding: 1px 0 3px;
+  font-size: clamp(11px,.92vw,14px);
+  line-height: 1.36;
 }
 .strategy-active .continue-button {
-  min-height: 25px;
-  min-width: 96px;
-  padding: 2px 0 3px 9px;
-  font-size: 12px;
+  min-height: 23px;
+  min-width: 92px;
+  padding: 1px 0 2px 8px;
+  font-size: 11px;
 }
+/* Growth/loadout remain part of character state but do not expand the live dialogue strip. */
 .strategy-active .character-growth-summary,
-.strategy-active .character-loadout-summary { margin-top: 3px; }
+.strategy-active .character-loadout-summary { display: none; }
+.strategy-active .presentation-area { min-height: 0; }
+.strategy-active .relationship-feedback { padding-bottom: 4px; font-size: 10px; }
+.strategy-active .training-reward-panel { max-height: 54px; overflow: auto; }
 
 /* Names stay visible; roles appear only when the player is inspecting that person. */
 .strategy-worker-label {
@@ -144,16 +149,38 @@
 .strategy-map-worker[data-character="oh_seungjae"] { margin-left: 15px; margin-top: -14px; }
 
 /* Roster is secondary during active dialogue; map remains dominant. */
-.strategy-active .strategy-roster { opacity: .42; }
+.strategy-active .strategy-roster { opacity: .34; }
 .strategy-active .strategy-roster:hover,
 .strategy-active .strategy-roster:focus-within { opacity: .92; }
+
+/* Normal desktop browser chrome reduces usable height: keep every interaction above the fold. */
+@media (min-width: 1101px) and (max-height: 900px) {
+  .strategy-map { inset: 7.4% .55% 10.2% 14.1%; }
+  .strategy-active .play-panel {
+    bottom: 1.8%;
+    min-height: 70px;
+    max-height: 10.5%;
+    grid-template-columns: 86px minmax(0,1fr);
+    padding: 6px 10px;
+  }
+  .strategy-active .portrait-slot { height: 43px; }
+  .strategy-active .dialogue-text { font-size: clamp(10px,.84vw,13px); }
+  .strategy-active .strategy-roster { height: 7.5%; }
+}
 
 @media (max-width: 1100px), (max-height: 680px) {
   .strategy-rail { width: 17.2%; bottom: 11.5%; }
   .strategy-map { inset: 7.2% .4% 10.8% 15.5%; }
   .strategy-active .scene-heading { left: 19%; max-width: 31%; }
-  .strategy-active .play-panel { left: 19%; bottom: .8%; max-height: 16%; grid-template-columns: 88px minmax(0,1fr); }
-  .strategy-active .portrait-slot { height: 48px; }
+  .strategy-active .play-panel {
+    left: 19%;
+    bottom: 1.4%;
+    min-height: 66px;
+    max-height: 13%;
+    grid-template-columns: 78px minmax(0,1fr);
+    padding: 6px 9px;
+  }
+  .strategy-active .portrait-slot { height: 40px; }
   .strategy-map-worker[data-character] { margin-left: 0; margin-top: 0; }
 }
 
