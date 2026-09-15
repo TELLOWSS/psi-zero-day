@@ -1,0 +1,42 @@
+name: Generate Capacitor lockfile
+
+on:
+  push:
+    branches:
+      - astra/task-007-casual-strategy-foundation
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install current dependencies
+        run: npm ci
+
+      - name: Resolve Capacitor 8.5.2
+        run: |
+          npm install --package-lock-only --save-exact @capacitor/core@8.5.2 @capacitor/android@8.5.2
+          npm install --package-lock-only --save-dev --save-exact @capacitor/cli@8.5.2
+
+      - name: Upload resolved package metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: capacitor-package-metadata
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 3
