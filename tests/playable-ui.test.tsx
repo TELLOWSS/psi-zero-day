@@ -21,6 +21,11 @@ function click(text: string, detail = 1) {
   if (!button) throw new Error(`Button not found: ${text}`);
   act(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, detail })));
 }
+function continueCurrent(session: EpisodeSession) {
+  const mapReturn = session.t('ui.strategy.return_map');
+  if (buttons().some(button => button.textContent?.includes(mapReturn))) click(mapReturn);
+  else click(session.t('ui.continue'));
+}
 function mount() {
   const session = new EpisodeSession(episodeOptions(42), episodeBounds);
   act(() => root.render(<StrictMode><PlayableEpisode session={session} /></StrictMode>));
@@ -84,7 +89,7 @@ describe('Playable Episode React UI', () => {
         const selected = p.choices.find(c => c.choice_id === inputFor(p.node_id, decisions));
         if (!selected) throw new Error(`Missing intended player choice for ${p.node_id}`);
         click(session.t(selected.text_id));
-      } else click(session.t('ui.continue'));
+      } else continueCurrent(session);
     }
     expect(stages).toEqual(['ramp', 'entrance']);
     expect(seen.includes('ep01.junho.signal')).toBe(decisions.plan === 'follow_junho');
