@@ -1,0 +1,100 @@
+/* TASK-014B — full-cast silhouette lock + field affordance polish. Presentation only. */
+
+/* Remaining five characters keep different proportions even at map scale. */
+.strategy-map-worker[data-character="yoon_sungho"] .strategy-worker-art { width: 94px; height: 116px; }
+.strategy-map-worker[data-character="lee_jaehoon"] .strategy-worker-art { width: 69px; height: 119px; }
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-art { width: 91px; height: 116px; }
+.strategy-map-worker[data-character="seo_jeongmin"] .strategy-worker-art { width: 68px; height: 113px; }
+.strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-art { width: 91px; height: 116px; }
+
+.strategy-map-worker[data-character="yoon_sungho"] .strategy-worker-label { border-left: 3px solid #b68b42; }
+.strategy-map-worker[data-character="lee_jaehoon"] .strategy-worker-label { border-left: 3px solid #5c82aa; }
+.strategy-map-worker[data-character="choi_minseok"] .strategy-worker-label { border-left: 3px solid #ef7b2d; }
+.strategy-map-worker[data-character="seo_jeongmin"] .strategy-worker-label { border-left: 3px solid #667687; }
+.strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-label { border-left: 3px solid #405b78; }
+
+/* Risk signals should feel like interactable field alerts rather than dashboard counters. */
+.strategy-risk-signal {
+  min-height: 38px;
+  padding: 5px 12px 5px 6px;
+  border: 1px solid rgba(255,224,194,.48);
+  background: linear-gradient(180deg, rgba(143,54,39,.96), rgba(102,39,33,.97));
+  box-shadow: 0 9px 22px rgba(69,30,25,.28), inset 0 1px rgba(255,255,255,.18);
+  font-weight: 750;
+  letter-spacing: -.01em;
+}
+.strategy-risk-signal > span {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(180deg,#fff8e8,#f1d8bd);
+  color: #8a342b;
+  border: 1px solid rgba(255,255,255,.58);
+  box-shadow: 0 3px 8px rgba(45,24,20,.22);
+}
+.strategy-risk-signal:hover,
+.strategy-risk-signal.is-focused {
+  transform: translateY(-4px) scale(1.035);
+  box-shadow: 0 0 0 3px rgba(255,209,100,.7), 0 13px 28px rgba(69,30,25,.35);
+}
+
+/* Site targets read like selectable world-space plaques. */
+.strategy-zone-target span {
+  padding: 5px 10px;
+  border: 1px solid rgba(255,255,255,.26);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(28,54,66,.78), rgba(20,44,55,.82));
+  box-shadow: 0 5px 12px rgba(17,40,50,.18);
+  backdrop-filter: blur(6px);
+}
+.strategy-zone-target:hover span,
+.strategy-zone-target.is-focused span {
+  color: #fff6d0;
+  border-color: rgba(244,199,93,.72);
+  box-shadow: 0 0 0 2px rgba(244,199,93,.2), 0 7px 15px rgba(17,40,50,.22);
+}
+
+/* Growth/loadout information becomes compact equipment chips. */
+.character-growth-summary {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top-color: rgba(255,255,255,.12);
+}
+.character-growth-summary > div strong {
+  color: #f2cf73;
+  background: rgba(242,207,115,.08);
+  border-color: rgba(242,207,115,.48);
+}
+.character-loadout-summary { margin-top: 5px; }
+.character-loadout-summary > strong { color: #dfe9e8; }
+.character-loadout-summary li {
+  grid-template-columns: 43px minmax(0,1fr);
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.045);
+}
+.character-loadout-summary li span { color: #8eaaae; }
+.training-reward-panel {
+  border-radius: 12px;
+  border-color: rgba(238,190,76,.5);
+  background: linear-gradient(180deg, rgba(43,69,63,.93), rgba(28,49,47,.95));
+  box-shadow: 0 9px 22px rgba(15,34,34,.2);
+}
+.training-reward-panel em {
+  border: 1px solid rgba(116,196,191,.25);
+  border-radius: 999px;
+  background: rgba(51,117,116,.42);
+}
+
+/* Character roster preserves instant role recognition by showing more of each RC face. */
+.character-token img { object-position: center 16%; transform: scale(1.04); }
+.strategy-character[data-character="kang_taesik"] .character-token img,
+.strategy-character[data-character="yoon_sungho"] .character-token img,
+.strategy-character[data-character="oh_seungjae"] .character-token img { transform: scale(1.09); }
+
+@media (max-width: 900px), (max-height: 600px) {
+  .strategy-map-worker[data-character] .strategy-worker-art { width: 58px; height: 79px; }
+  .strategy-map-worker[data-character="kang_taesik"] .strategy-worker-art,
+  .strategy-map-worker[data-character="yoon_sungho"] .strategy-worker-art,
+  .strategy-map-worker[data-character="oh_seungjae"] .strategy-worker-art { width: 66px; height: 81px; }
+  .strategy-risk-signal { min-height: 31px; }
+}
