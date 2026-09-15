@@ -1,0 +1,35 @@
+/* TASK-015A — PSI is learned through field outcomes, not a lecture/dashboard. */
+.strategy-outcome-psi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+  font-size: 10px;
+}
+.strategy-outcome-psi > strong {
+  flex: 0 0 auto;
+  color: rgba(226,239,240,.68);
+  font-weight: 650;
+  letter-spacing: .02em;
+}
+.strategy-outcome-psi > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.strategy-outcome-psi span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 21px;
+  padding: 2px 7px;
+  border: 1px solid rgba(104,201,188,.28);
+  border-radius: 999px;
+  background: rgba(51,124,118,.16);
+  color: #bce7df;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px), (max-height: 680px) {
+  .strategy-outcome-psi { gap: 5px; margin-top: 4px; font-size: 8px; }
+  .strategy-outcome-psi span { min-height: 18px; padding: 1px 5px; }
+}
