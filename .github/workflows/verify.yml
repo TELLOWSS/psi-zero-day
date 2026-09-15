@@ -26,20 +26,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Regenerate Episode 01 assets
+      - name: Generate deterministic Episode 01 assets
         run: |
           npm run assets:vector
           npm run assets:manifest
-
-      - name: Upload regenerated assets
-        uses: actions/upload-artifact@v4
-        with:
-          name: episode01-generated-assets
-          path: |
-            public/assets/episode01
-            content/episode01/assets.json
-          if-no-files-found: error
-          retention-days: 3
 
       - name: Verify generated assets
         run: npm run assets:check
