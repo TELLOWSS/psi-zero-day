@@ -60,17 +60,20 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Short procedural UI feedback cues cover execute/result/continue until final audio assets are registered.
 - Generated SVG art remains a production fallback, not the final commercial-art quality ceiling.
 
-### TASK-012 — Executable verification — NEXT
-- `npm test`
-- `npm run typecheck`
-- `npm run build`
-- `npm run assets:check`
-- fix all failures before release packaging.
+### TASK-012 — Executable verification — IMPLEMENTED
+- GitHub Actions `Verify vertical slice` runs on Node 22.
+- Deterministic Episode 01 SVG fallback assets are regenerated, then `npm run assets:check` verifies 17 generated assets and the committed manifest.
+- `npm test`: **39 test files / 319 tests PASS**.
+- `npm run typecheck`: **PASS** for app/tests and engine tsconfig.
+- `npm run build`: **PASS**.
+- CI workflow completed all verification steps successfully before release preparation.
+- Generated SVG files remain intentionally gitignored; generator/spec + committed manifest remain the source of truth until final WebP art replaces the fallback.
 
-### TASK-013 — Android/Web release preparation
-- Vercel web build.
-- Capacitor/Android packaging when web slice is stable.
+### TASK-013 — Android/Web release preparation — NEXT
+- Vercel web deployment/build review.
+- Capacitor/Android packaging when the web slice is stable.
 - app icon/banner/screenshots/privacy policy/store metadata.
+- final commercial WebP art/audio can replace fallback assets without changing game logic.
 
 ## Do not drift into
 
