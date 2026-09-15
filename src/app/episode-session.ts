@@ -1,4 +1,4 @@
-import type { GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
+import type { EffectBundle, GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
 import { createEpisode01Registry } from '../content/episode01';
 import { CoreEngine, createRun, eventCandidates, eventPresentation } from '../engine';
 import { getDialogueView } from '../engine/dialogue';
@@ -6,6 +6,7 @@ import type { DialogueView } from '../engine/dialogue';
 import type { EngineCommand, NewRunOptions, ProgressBounds } from '../engine';
 import { copyData, freezeData } from '../engine/data';
 import { createTranslator } from '../localization/translator';
+import { fieldSupportItem } from './field-support-items';
 import { isStrategyFieldActionEvent } from './strategy-actions';
 import { projectStrategyView } from './strategy-view';
 import type { StrategyView } from './strategy-view';
@@ -139,6 +140,35 @@ export class EpisodeSession {
     // field events where the next presentation is another choice instead of a terminal result.
     if (currentChoices !== checkpointChoices + 1) return false;
     this.#engine.dispatch({ type: 'restore_decision_checkpoint', checkpoint });
+    return true;
+  });
+  activateSupportItem = (itemId: string, revision: number): boolean => this.#act(revision, () => {
+    if (!this.#engine || this.#snapshot.phase !== 'playing') return false;
+    const definition = fieldSupportItem(itemId);
+    if (!definition) return false;
+    const state = this.#engine.getState();
+    if (state.flags[definition.active_flag_id] === true) return false;
+    const active = state.event_runtime.active_instance;
+    if (!active || !isStrategyFieldActionEvent(active.event_id)) return false;
+    const bundle: EffectBundle = {
+      immediate_effects: [],
+      hidden_effects: [],
+      relationship_effects: [],
+      stat_effects: [],
+      flags: { [definition.active_flag_id]: true },
+      ending_flags: {},
+      followup_events: [],
+    };
+    this.#engine.dispatch({
+      type: 'apply_effects',
+      bundle,
+      context: {
+        event_id: active.event_id,
+        event_instance_id: active.instance_id,
+        bundle_id: `paid-support:${definition.item_id}`,
+        participant_bindings: active.participant_bindings,
+      },
+    });
     return true;
   });
   #act(revision: number, operation: () => boolean): boolean {
