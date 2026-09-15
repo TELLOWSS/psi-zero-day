@@ -4,7 +4,7 @@ Purpose: finish the game without drifting back into endless concept-image work.
 
 ## Locked visual direction
 
-The approved commercial-style casual strategy construction-site screen is the target. Concept images are references, not the main workstream. The generated vector pass is an implementation asset layer, **not a downgrade of the final visual target**. Final painted/3D-quality WebP art can replace it through the same asset IDs without gameplay changes.
+The approved commercial-style casual strategy construction-site screen is the target. Concept images are references, not the main workstream.
 
 ## Execution order
 
@@ -29,28 +29,31 @@ The approved commercial-style casual strategy construction-site screen is the ta
 - Skill choices remain normal authored event choices and use the existing `choose_event` path.
 - No hidden XP formula, PSI threshold or new engine rule.
 
-### TASK-010D — Production art integration — IMPLEMENTED
-- Eight distinct character portraits and map sprites have a deterministic generated SVG production pass.
-- Foundation map has an actual casual-strategy construction-site background asset.
-- `assets.json` now registers 17 image assets.
-- Normal `dev`, `test` and `build` commands generate the vector files and refresh the manifest first.
-- Final WebP art remains the preferred target; manifest generation automatically prefers WebP and uses SVG only when WebP is absent.
-- CSS silhouettes remain only as failure fallback.
-- Character silhouettes, props and roles remain deliberately distinct.
+### TASK-010D — Approved art export integration — IMPLEMENTED
+- 8-character portrait/map asset slots are live.
+- Foundation map asset slot is live.
+- Production-generated SVG art replaces CSS silhouettes/map when final WebP is absent.
+- Approved final WebP can replace SVG through the same asset IDs without changing game logic.
+- Asset generation and manifest update are wired into dev/test/build scripts.
 
-### TASK-011A — Core strategy loop completion — NEXT
-- Select site target.
-- Inspect signal.
-- Assign person/action.
-- Resolve the consequence and return to the map.
-- Make this loop readable without relying on long dialogue.
-- Spend time/resources only after Director-approved values exist; do not invent economy or PSI formulas.
+### TASK-011A — Core strategy loop completion — IMPLEMENTED
+- Select a person, risk signal, work zone or whole site first.
+- Inspect the current field context on the map.
+- Field actions carry both an explicit actor and a target.
+- Choosing an action opens a confirmation card instead of executing immediately.
+- Confirmation shows `actor / target / action` before dispatch.
+- Execution still uses the existing `choose_event` command.
+- Relationship changes and authored results return through the map result card.
+- Actions that end an event immediately still receive UI-level action feedback before the next situation is exposed.
+- Loop is visibly structured as `target -> action -> result -> map`.
+- Time/resource/PSI costs remain unimplemented until Director-approved values exist.
 
-### TASK-011B — Episode 01 vertical-slice polish
+### TASK-011B — Episode 01 vertical-slice polish — NEXT
 - 11–16 event routed playthrough.
 - Casual strategy map first, dialogue second.
-- Replace vector production art with final painted/3D WebP where final art is approved.
-- Sound/BGM hooks, feedback, transitions, save/resume check.
+- Reduce visual clutter and improve transitions/feedback timing.
+- Sound/BGM hooks and save/resume review.
+- Review generated art composition against the approved commercial casual-strategy visual target.
 
 ### TASK-012 — Executable verification
 - `npm test`
