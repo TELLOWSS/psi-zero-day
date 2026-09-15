@@ -20,6 +20,7 @@
     "assets:manifest": "node scripts/build-episode01-assets.mjs",
     "assets:check": "node scripts/materialize-embedded-media.mjs --check && node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
     "assets:active-report": "npm run assets:embedded && npm run assets:manifest && node scripts/report-active-art.mjs",
+    "assets:production-status": "npm run assets:embedded && node scripts/report-production-art-full.mjs",
     "assets:production-batch-a-status": "npm run assets:embedded && node scripts/report-production-art.mjs",
     "assets:production-batch-a-check": "npm run assets:embedded && node scripts/build-episode01-assets.mjs --production-batch-a-check",
     "assets:production-check": "npm run assets:embedded && node scripts/build-episode01-assets.mjs --production-check",
