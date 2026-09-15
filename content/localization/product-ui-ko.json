@@ -12,6 +12,14 @@
     "ui.psi.related": "관련 PSI",
     "ui.paid_item.replan": "현장 재판단권",
     "ui.paid_item.internal_nickname": "까방권",
-    "ui.paid_item.balance_pending": "가격·효과 수치 조정 중"
+    "ui.paid_item.balance_pending": "가격·효과 수치 조정 중",
+    "ui.paid_item.owned": "보유",
+    "ui.paid_item.use": "재판단권 사용",
+    "ui.paid_item.unavailable": "보유권 없음",
+    "ui.paid_item.confirm_title": "결과 확정 전 재판단",
+    "ui.paid_item.confirm_replan": "이 결과를 확정하지 않고 직전 현장 판단으로 돌아갑니다.",
+    "ui.paid_item.confirm": "재판단",
+    "ui.paid_item.keep_result": "결과 유지",
+    "ui.paid_item.replan_guard": "결과 확정 전 판단만 되돌릴 수 있습니다. 이미 발생·기록된 사고는 되돌릴 수 없습니다."
   }
 }
