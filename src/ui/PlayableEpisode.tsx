@@ -133,6 +133,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       return;
     }
     if (executedFieldAction) {
+      // A field choice can lead to another node in the same event (for example ramp -> entrance).
+      // In that case the engine is already positioned on the next presentation; confirming the
+      // visible action result should only uncover it, not require the whole event to be finished.
+      if (activeInstance?.instance_id === executedFieldAction.action.instance_id) {
+        setExecutedFieldAction(null);
+        return;
+      }
       const accepted = session.confirmFieldOutcome(executedFieldAction.action.instance_id, snapshot.revision);
       if (accepted) setExecutedFieldAction(null);
       return;
