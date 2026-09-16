@@ -148,6 +148,57 @@
 .strategy-map-worker[data-character="choi_minseok"] { margin-left: 13px; margin-top: 12px; }
 .strategy-map-worker[data-character="oh_seungjae"] { margin-left: 15px; margin-top: -14px; }
 
+/* Reusable physical scene elements sit below actors/signals and never own gameplay actions. */
+.strategy-scene-element-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.strategy-scene-element {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 150px;
+  padding: 4px 7px;
+  border: 1px solid rgba(255,255,255,.56);
+  border-radius: 9px;
+  background: rgba(36,54,58,.78);
+  color: #f7f2df;
+  box-shadow: 0 6px 14px rgba(18,37,43,.2);
+  backdrop-filter: blur(5px);
+}
+.strategy-scene-element > span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.15);
+  font-size: 13px;
+  font-weight: 900;
+}
+.strategy-scene-element small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(8px,.58vw,10px);
+  font-weight: 750;
+}
+.scene-element-hazard { border-color: rgba(230,113,72,.68); background: rgba(107,47,37,.82); }
+.scene-element-control { border-color: rgba(83,173,200,.62); background: rgba(33,78,92,.82); }
+.scene-element-prop { border-color: rgba(222,181,95,.64); background: rgba(82,67,39,.8); }
+.scene-element-overview { left: 54%; top: 42%; }
+.scene-element-entry { left: 29%; top: 62%; }
+.scene-element-ramp { left: 48%; top: 66%; }
+.scene-element-yard { left: 39%; top: 73%; }
+.scene-element-gate { left: 77%; top: 70%; }
+.scene-element-core { left: 46%; top: 36%; }
+.scene-element-inspection { left: 63%; top: 52%; }
+.scene-element-office { left: 78%; top: 27%; }
+
 /* Roster is secondary during active dialogue; map remains dominant. */
 .strategy-active .strategy-roster { opacity: .34; }
 .strategy-active .strategy-roster:hover,
@@ -182,6 +233,9 @@
   }
   .strategy-active .portrait-slot { height: 40px; }
   .strategy-map-worker[data-character] { margin-left: 0; margin-top: 0; }
+  .strategy-scene-element { max-width: 110px; padding: 3px 5px; }
+  .strategy-scene-element > span { width: 18px; height: 18px; flex-basis: 18px; font-size: 11px; }
+  .strategy-scene-element small { font-size: 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
