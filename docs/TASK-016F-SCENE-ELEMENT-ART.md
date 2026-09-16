@@ -1,6 +1,6 @@
 # TASK-016F — Scene Element Production Art
 
-Status: CONTRACT COMPLETE / FINAL ART 1 OF 10 / MATERIAL STACK ACCEPTED
+Status: CONTRACT COMPLETE / FINAL ART 1 OF 10 / MATERIAL STACK ACCEPTED / ACCESS BARRIER BRIEF LOCKED
 
 ## Objective
 Promote reusable physical construction-site props and hazards from lightweight CSS placeholders to commercial transparent WebP cutouts without changing engine rules, event outcomes, or scene recipes.
@@ -17,7 +17,7 @@ There is no RC SVG layer for scene elements. This prevents production props from
 | Element | Status | Final path | Minimum | Map max | Pivot |
 | --- | --- | --- | ---: | ---: | --- |
 | material_stack | FINAL / ACCEPTED | `assets/episode01/scene-elements/material-stack.webp` | 768×512 | 132 px | 0.50, 0.94 |
-| access_barrier | NEXT | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
+| access_barrier | NEXT / BRIEF LOCKED | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
 | vehicle_overlap_zone | pending | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
 | harness_unclipped | pending | `assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
 | platform_cut_edge | pending | `assets/episode01/scene-elements/platform-cut-edge.webp` | 768×512 | 148 px | 0.50, 0.86 |
@@ -50,6 +50,28 @@ Gameplay rendering acceptance is locked by automated tests:
 - map width: 132 px
 - pivot translation: 0.50 / 0.94
 - CSS token is not rendered when the final asset resolves
+
+## Access-barrier visual contract
+`access_barrier` is deliberately generic because it must be reusable across foundation, typical-floor, scaffold, basement, and lifting scenes without implying a specific hazard that the authored event did not contain.
+
+Production brief:
+- catalog key: `access_barrier`
+- final path: `public/assets/episode01/scene-elements/access-barrier.webp`
+- minimum: 768×512 transparent WebP
+- map width: 140 px
+- pivot: 0.50 / 0.92
+- form: freestanding modular construction barrier
+- material: high-visibility polymer body
+- stabilization: clearly readable weighted feet/base
+- visibility: reflective marking must remain readable at gameplay scale
+- integrated Korean/English text: forbidden
+- integrated warning/sign board: forbidden
+- warning lamps/beacons: forbidden in the generic reusable cutout
+- people, vehicles, opening/pit, scaffolding, floor slab, background, scenery and unrelated props: forbidden
+
+The previously generated orange barricade concepts with Korean copy, warning sign boards, lamps, sandbags, dark studio background, or an opening/pit are concept references only and must not be promoted to the production slot.
+
+The barrier shape itself is not a safety verdict. Gameplay evaluation must separately consider whether barriers are continuous, stable against overturning/movement, placed around the actual restricted area, preserve a safe bypass route, and match the applicable work plan.
 
 ## Fall-protection visual contract
 The reusable fall-protection hazard must visually match contemporary site practice without embedding a commercial brand.
@@ -107,7 +129,7 @@ Normal development/release verification runs:
 
 `npm run assets:scene-elements-contract`
 
-This validates slot count, unique IDs/paths, WebP destination paths, minimum dimensions, normalized pivots, map scale, required alpha metadata, lifting-rigging profile rules, the twin-lanyard fall-protection profile, and the material-stack storage/binding profile. Any slot promoted to `final` must also have a real WebP present and pass its dimensions/alpha checks during the normal contract check.
+This validates slot count, unique IDs/paths, WebP destination paths, minimum dimensions, normalized pivots, map scale, required alpha metadata, lifting-rigging profile rules, the twin-lanyard fall-protection profile, the material-stack storage/binding profile, and the reusable access-barrier profile. Any slot promoted to `final` must also have a real WebP present and pass its dimensions/alpha checks during the normal contract check.
 
 When all final scene-element art is ready, run the strict binary gate:
 
@@ -130,9 +152,10 @@ At gameplay scale each final cutout must:
 - avoid visually implying a hazard not present in the authored episode data,
 - show the correct lifting gear and hitch method for the authored scene profile when the element is a lifting asset,
 - show two distinct lanyards and two distinct hooks for the fall-protection asset while remaining brand-neutral,
-- keep different material dimensions/specifications in separate bundles and show the authored central binding for `material_stack`.
+- keep different material dimensions/specifications in separate bundles and show the authored central binding for `material_stack`,
+- keep `access_barrier` generic: weighted freestanding body + reflective marking, with no baked sign/text/lamp or hazard-specific surroundings.
 
 ## Next named production slot
 `public/assets/episode01/scene-elements/access-barrier.webp`
 
-Produce exactly one reusable transparent cutout for this slot, not a sheet or full gameplay screen. It must contain no Korean copy, warning text, site name, logo, HUD, background scenery, people, vehicles, or unrelated props. Final acceptance will use the same binary, alpha, pivot, map-scale, manifest, UI-rendering, TypeScript, and production-build gates used for `material_stack`.
+Produce exactly one reusable transparent cutout for this slot, not a sheet or full gameplay screen. It must satisfy the access-barrier contract above. Final acceptance will use the same binary, alpha, pivot, map-scale, manifest, UI-rendering, TypeScript, and production-build gates used for `material_stack`.
