@@ -37,8 +37,8 @@ describe('Episode 01 reusable scene element catalog', () => {
       .toContain('결속 형상만으로 안전을 판정하지 않고');
   });
 
-  it('locks access-barrier art to a generic reusable freestanding control without baked signage', () => {
-    expect(catalog.elements.access_barrier.production_status).toBe('css-placeholder');
+  it('promotes the approved access barrier while keeping it generic and free of baked signage', () => {
+    expect(catalog.elements.access_barrier.production_status).toBe('final');
     expect(catalog.elements.access_barrier.access_control_profile).toMatchObject({
       barrier_form: 'freestanding_modular',
       body_material: 'high_visibility_polymer',
