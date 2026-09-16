@@ -14,10 +14,12 @@ Episode screens are not authored as one-off full-screen images. A playable scene
 
 ## Current implementation
 - `content/episode01/scene-composition.json` owns event-to-scene recipes.
+- `content/episode01/background-catalog.json` owns the reusable construction-environment catalog.
 - `src/app/strategy-scene.ts` projects the active recipe without changing engine rules.
 - `StrategyView.scene` exposes the active composition to the presentation layer.
 - `PlayableEpisode` passes `StrategyView.scene.background_asset_id` into the visual asset resolver for the live strategy map.
 - `projectStrategyVisualAssets()` resolves the requested scene background while preserving Foundation as the backward-compatible default when no scene-specific ID is supplied.
+- Planned catalog backgrounds explicitly fall back to the approved Foundation background until their final art is registered.
 - The title/start screen remains independently bound to the approved Foundation background and is not affected by gameplay scene switching.
 - Existing signal IDs become the scene hazard layer; they are not duplicated as separate gameplay rules.
 
@@ -25,6 +27,19 @@ Episode screens are not authored as one-off full-screen images. A playable scene
 Full-screen generated mockups are reference-only. Image generation is allowed for reusable production assets only: clean backgrounds, transparent character art, and later reusable hazard/prop art when needed.
 
 Korean dialogue, labels, objectives, warnings and choices remain localization/UI data. They are not embedded in generated images.
+
+## Reusable background catalog
+The minimum environment set is intentionally small so each production background is reused across multiple hazards and episodes.
+
+| Key | Production asset | Status | Primary reuse |
+| --- | --- | --- | --- |
+| `foundation` | `ep01.background.foundation.map` | FINAL | arrival, access, ramp, yard, inspection, restart verification |
+| `typical_floor` | `ep01.background.typical_floor.map` | PLANNED | formwork, rebar, slab, concrete, open edge, housekeeping |
+| `scaffold` | `ep01.background.scaffold.map` | PLANNED | scaffold, gangform, work platform, fall protection, dropped materials |
+| `basement` | `ep01.background.basement.map` | PLANNED | vehicle/pedestrian overlap, storage, restricted routes, wet floor, low visibility |
+| `lifting` | `ep01.background.lifting.map` | PLANNED | crane lifting, suspended load, signalman, exclusion zone, material hoisting |
+
+Foundation is the only registered final background today. The four planned asset IDs are catalog contracts, not production-ready files and do not increase the 17-slot production-art count.
 
 ## Episode 01 recipe examples
 - `e01_03_plan_breaks` → Foundation + entry focus + access signal + field pressures + dialogue.
@@ -40,7 +55,16 @@ A gameplay background change now requires only:
 
 No event rule, dialogue node, choice outcome, character binding or strategy-map component rewrite is required.
 
-If the requested background asset is unavailable, the visual resolver returns no art and the existing CSS scene fallback remains available; gameplay state is unaffected.
+If a recipe requests one of the planned catalog backgrounds before its art is registered, the resolver uses that catalog entry's `fallback_asset_id`. This prevents blank scenes while keeping the requested environment explicit in data. Unknown asset IDs outside the catalog still resolve to no art so configuration mistakes are visible rather than silently hidden.
+
+## Production order for reusable backgrounds
+1. Foundation — DONE.
+2. Typical floor — highest reuse across formwork/rebar/slab/concrete hazards.
+3. Scaffold — fall/platform/gangform hazards.
+4. Lifting — crane/suspended-load/exclusion-zone hazards.
+5. Basement — vehicle/storage/route/visibility hazards.
+
+This order is a background-art queue only. It does not redefine the separate TASK-016B character production gate or count planned files as completed art.
 
 ## Next implementation step
-Define the reusable Episode 01 environment/background catalog before producing more background art, then map future environments such as structure floor, scaffold, underground and lifting zone to scene recipes without creating one image per episode.
+Define the reusable hazard/prop layer contract so hazards such as unsecured materials, missing fall protection, suspended loads and restricted access can be composed over these backgrounds instead of being baked into one-off episode images.
