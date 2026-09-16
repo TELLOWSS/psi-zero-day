@@ -1,5 +1,5 @@
 {
-  "schema_version": 7,
+  "schema_version": 8,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -61,6 +61,19 @@
       "visual_token": "⇄",
       "production_status": "css-placeholder",
       "planned_asset_id": "ep01.scene_element.vehicle_overlap",
+      "traffic_conflict_profile": {
+        "render_mode": "route_overlay",
+        "vehicle_path_style": "wide_drive_path",
+        "pedestrian_path_style": "narrow_walk_path",
+        "conflict_marker": "highlighted_overlap",
+        "directional_markings": "chevrons_and_lane_edges",
+        "vehicle_object_allowed": false,
+        "pedestrian_object_allowed": false,
+        "integrated_text_allowed": false,
+        "branding_allowed": false,
+        "site_practice_note": "차량 통행로와 근로자 보행동선이 교차하거나 동일 공간을 공유하는 지점을 넓은 차량경로와 좁은 보행경로의 중첩으로 표현하고, 중첩부 자체가 즉시 식별되도록 강조한다.",
+        "safety_evaluation_note": "동선 중첩 표현만으로 위험도를 확정하지 않고 물리적 동선 분리, 바리케이드, 유도자·신호수 배치, 차량 속도와 후진, 운전자 시야와 사각지대, 조도, 주정차·자재적치 상태 및 작업계획을 함께 평가한다."
+      },
       "art": {
         "path": "assets/episode01/scene-elements/vehicle-overlap.webp",
         "minimum_width": 768,
