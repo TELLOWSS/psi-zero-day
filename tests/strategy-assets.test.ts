@@ -7,6 +7,7 @@ const available: Readonly<Record<string, string>> = {
   'ep01.background.scaffold.map': 'assets/episode01/backgrounds/scaffold-map.webp',
   'ep01.character.lim_junho.map': 'assets/episode01/characters/lim-junho-map.webp',
   'ep01.character.lim_junho.portrait': 'assets/episode01/characters/lim-junho-portrait.webp',
+  'ep01.scene_element.material_stack': 'assets/episode01/scene-elements/material-stack.webp',
 };
 const resolve = (id: string) => available[id];
 
@@ -38,6 +39,18 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.characters.lim_junho?.map_uri).toBe('assets/episode01/characters/lim-junho-map.webp');
   });
 
+  it('promotes a final scene-element WebP with its catalog pivot and map scale', () => {
+    const visuals = projectStrategyVisualAssets([], resolve);
+    expect(visuals.scene_elements?.['scene.prop.material_stack']).toEqual({
+      element_id: 'scene.prop.material_stack',
+      uri: 'assets/episode01/scene-elements/material-stack.webp',
+      pivot_x: 0.5,
+      pivot_y: 0.94,
+      map_max_px: 132,
+    });
+    expect(visuals.scene_elements?.['scene.hazard.harness_unclipped']).toBeUndefined();
+  });
+
   it('uses final Foundation WebP while keeping TASK-014 RC character art before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
@@ -48,6 +61,7 @@ describe('Episode 01 strategy visual assets', () => {
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
     expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
+    expect(art.scene_elements).toBeUndefined();
 
     for (const characterId of cast) {
       expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait-rc\.svg$/);
@@ -69,6 +83,7 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.background_uri).toBeUndefined();
     expect(visuals.characters.kang_taesik?.map_uri).toBeUndefined();
     expect(visuals.characters.kang_taesik?.portrait_uri).toBeUndefined();
+    expect(visuals.scene_elements).toBeUndefined();
   });
 
   it('uses the same planned portrait binding for dialogue cards', () => {
