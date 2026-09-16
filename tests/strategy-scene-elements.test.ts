@@ -58,8 +58,8 @@ describe('Episode 01 reusable scene element catalog', () => {
       .toContain('형상만으로 통제가 완료된 것으로 판정하지 않고');
   });
 
-  it('locks vehicle-pedestrian overlap to a reusable route overlay instead of a specific vehicle scene', () => {
-    expect(catalog.elements.vehicle_overlap_zone.production_status).toBe('css-placeholder');
+  it('promotes vehicle-pedestrian overlap as a reusable route overlay instead of a specific vehicle scene', () => {
+    expect(catalog.elements.vehicle_overlap_zone.production_status).toBe('final');
     expect(catalog.elements.vehicle_overlap_zone.traffic_conflict_profile).toMatchObject({
       render_mode: 'route_overlay',
       vehicle_path_style: 'wide_drive_path',
