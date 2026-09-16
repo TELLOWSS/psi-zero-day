@@ -107,6 +107,35 @@ function validateStorageProfile(key, definition) {
   }
 }
 
+function validateAccessControlProfile(key, definition) {
+  const profile = definition.access_control_profile;
+  if (!profile) return;
+  if (profile.barrier_form !== 'freestanding_modular') {
+    errors.push(`${key}: access_control_profile.barrier_form must be freestanding_modular`);
+  }
+  if (profile.body_material !== 'high_visibility_polymer') {
+    errors.push(`${key}: access_control_profile.body_material must be high_visibility_polymer`);
+  }
+  if (profile.stabilization !== 'weighted_feet') {
+    errors.push(`${key}: access_control_profile.stabilization must be weighted_feet`);
+  }
+  if (profile.reflective_marking !== true) {
+    errors.push(`${key}: access barrier must keep visible reflective marking`);
+  }
+  if (profile.integrated_text_allowed !== false || profile.integrated_sign_allowed !== false) {
+    errors.push(`${key}: reusable access barrier art must not bake text or a situation-specific sign into the cutout`);
+  }
+  if (profile.warning_lamps_allowed !== false) {
+    errors.push(`${key}: reusable access barrier art must not bake warning lamps into the generic cutout`);
+  }
+  if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) {
+    errors.push(`${key}: access_control_profile.site_practice_note is required`);
+  }
+  if (typeof profile.control_evaluation_note !== 'string' || !profile.control_evaluation_note.trim()) {
+    errors.push(`${key}: access_control_profile.control_evaluation_note is required`);
+  }
+}
+
 for (const [key, definition] of definitions) {
   const art = definition.art;
   const assetId = definition.planned_asset_id;
@@ -118,6 +147,7 @@ for (const [key, definition] of definitions) {
   validateLiftingProfile(key, definition);
   validateFallProtectionProfile(key, definition);
   validateStorageProfile(key, definition);
+  validateAccessControlProfile(key, definition);
 
   if (!art || typeof art !== 'object') {
     errors.push(`${key}: art production spec is required`);
@@ -189,6 +219,22 @@ if (materialProfile?.dimension_grouping !== 'same_spec_only' || materialProfile?
 }
 if (materialProfile?.binding_method !== 'center_ratchet_or_equivalent' || materialProfile?.binding_position !== 'center') {
   errors.push('material_stack: a central ratchet buckle or equivalent separate binding must be visible');
+}
+
+const accessProfile = catalog.elements?.access_barrier?.access_control_profile;
+if (!accessProfile) {
+  errors.push('access_barrier: reusable access-control profile is required before final art production');
+} else {
+  if (accessProfile.barrier_form !== 'freestanding_modular'
+    || accessProfile.stabilization !== 'weighted_feet'
+    || accessProfile.reflective_marking !== true) {
+    errors.push('access_barrier: final visual must be a stable freestanding modular barrier with weighted feet and reflective marking');
+  }
+  if (accessProfile.integrated_text_allowed !== false
+    || accessProfile.integrated_sign_allowed !== false
+    || accessProfile.warning_lamps_allowed !== false) {
+    errors.push('access_barrier: generic production cutout must exclude baked text, signs, and warning lamps');
+  }
 }
 
 const harnessProfile = catalog.elements?.harness_unclipped?.fall_protection_profile;
