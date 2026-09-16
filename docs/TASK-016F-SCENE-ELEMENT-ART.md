@@ -19,7 +19,7 @@ There is no RC SVG layer for scene elements. This prevents production props from
 | material_stack | `assets/episode01/scene-elements/material-stack.webp` | 768×512 | 132 px | 0.50, 0.94 |
 | access_barrier | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
 | vehicle_overlap_zone | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
-| harness_unclipped | `assets/episode01/scene-elements/harness-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
+| harness_unclipped | `assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
 | platform_cut_edge | `assets/episode01/scene-elements/platform-cut-edge.webp` | 768×512 | 148 px | 0.50, 0.86 |
 | suspended_load | `assets/episode01/scene-elements/suspended-load-round-sling-choker.webp` | 768×768 | 136 px | 0.50, 0.62 |
 | gangform_lift_wire22 | `assets/episode01/scene-elements/gangform-lift-wire22.webp` | 768×768 | 156 px | 0.50, 0.66 |
@@ -28,6 +28,24 @@ There is no RC SVG layer for scene elements. This prevents production props from
 | open_edge | `assets/episode01/scene-elements/open-edge.webp` | 768×512 | 154 px | 0.50, 0.82 |
 
 All ten slots require WebP alpha transparency. No text, labels, warnings, site names, logos, floor plate, background scenery, or UI may be baked into the cutout.
+
+## Fall-protection visual contract
+The reusable fall-protection hazard must visually match contemporary site practice without embedding a commercial brand.
+
+### Twin-lanyard harness
+- catalog key: `harness_unclipped`
+- harness type: full-body harness
+- lanyard configuration: twin/Y lanyard
+- visible lanyards: 2
+- visible large hooks: 2
+- connection intent: one connection can remain attached while the second lanyard transfers to the next suitable anchorage
+- internal ergonomic reference: SWELOCK double-lanyard products may inform strap/hook proportions only
+- branding rule: no SWELOCK logo, trademark, product name, fake label, or manufacturer-specific marking in final art
+- final path: `harness-twin-lanyard-unclipped.webp`
+
+The twin-lanyard shape is a site-default visual profile, not a claim that two lanyards alone make the work safe. Gameplay evaluation must still consider whether the worker is actually connected, the suitability/location/strength of the anchorage, hook engagement, fall-clearance distance, swing-fall exposure, energy absorber/lanyard condition and the applicable work condition.
+
+When the hazard state is `harness_unclipped`, the final cutout must still show both lanyards and both hooks clearly so the player can understand that available protection exists but is not correctly connected.
 
 ## Lifting visual contract
 The lifting element is split so the game does not present one generic rigging method for all loads.
@@ -67,7 +85,7 @@ Normal development/release verification checks only the production contract:
 
 `npm run assets:scene-elements-contract`
 
-This validates slot count, unique IDs/paths, WebP destination paths, minimum dimensions, normalized pivots, map scale, required alpha metadata, and lifting-rigging profile rules. It does not require final binary files yet.
+This validates slot count, unique IDs/paths, WebP destination paths, minimum dimensions, normalized pivots, map scale, required alpha metadata, lifting-rigging profile rules, and the twin-lanyard fall-protection profile. It does not require final binary files yet.
 
 When all final scene-element art is ready, run the strict binary gate:
 
@@ -88,7 +106,8 @@ At gameplay scale each final cutout must:
 - sit below actors and interactive risk signals,
 - contain no Korean text or pseudo-glyphs,
 - avoid visually implying a hazard not present in the authored episode data,
-- show the correct lifting gear and hitch method for the authored scene profile when the element is a lifting asset.
+- show the correct lifting gear and hitch method for the authored scene profile when the element is a lifting asset,
+- show two distinct lanyards and two distinct hooks for the fall-protection asset while remaining brand-neutral.
 
 ## Next named production asset
 `public/assets/episode01/scene-elements/material-stack.webp`
