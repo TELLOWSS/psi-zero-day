@@ -1,6 +1,6 @@
 # TASK-016F — Scene Element Production Art
 
-Status: CONTRACT COMPLETE / FINAL ART 1 OF 10
+Status: CONTRACT COMPLETE / FINAL ART 1 OF 10 / MATERIAL STACK ACCEPTED
 
 ## Objective
 Promote reusable physical construction-site props and hazards from lightweight CSS placeholders to commercial transparent WebP cutouts without changing engine rules, event outcomes, or scene recipes.
@@ -16,8 +16,8 @@ There is no RC SVG layer for scene elements. This prevents production props from
 ## Production slots
 | Element | Status | Final path | Minimum | Map max | Pivot |
 | --- | --- | --- | ---: | ---: | --- |
-| material_stack | FINAL | `assets/episode01/scene-elements/material-stack.webp` | 768×512 | 132 px | 0.50, 0.94 |
-| access_barrier | pending | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
+| material_stack | FINAL / ACCEPTED | `assets/episode01/scene-elements/material-stack.webp` | 768×512 | 132 px | 0.50, 0.94 |
+| access_barrier | NEXT | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
 | vehicle_overlap_zone | pending | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
 | harness_unclipped | pending | `assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
 | platform_cut_edge | pending | `assets/episode01/scene-elements/platform-cut-edge.webp` | 768×512 | 148 px | 0.50, 0.86 |
@@ -34,14 +34,22 @@ The first final scene element is `material_stack`, because it is already used by
 
 Approved final asset:
 - final path: `public/assets/episode01/scene-elements/material-stack.webp`
-- output size: 1024×775
-- alpha: required and present
+- deterministic embedded output: 768×581, 51,984 bytes
+- binary SHA-256: `88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0`
+- alpha: required and verified
 - visual content: one homogeneous material specification per bundle
 - mixed dimensions/specifications: not allowed in one visual bundle
 - binding: central ratchet buckle or equivalent separate binding must be visibly identifiable
 - no lifting hook/slings, text, signs, UI, site scenery or other material specification mixed into the cutout
 
 The bundle/profile is a site-visual practice, not a standalone safety verdict. Gameplay evaluation must still consider stack stability, dunnage/support, actual binding condition, passage encroachment, and the applicable work plan.
+
+Gameplay rendering acceptance is locked by automated tests:
+- `e01_03_plan_breaks`: same final WebP at `entry`
+- `e01_05_command`: same final WebP at `yard`
+- map width: 132 px
+- pivot translation: 0.50 / 0.94
+- CSS token is not rendered when the final asset resolves
 
 ## Fall-protection visual contract
 The reusable fall-protection hazard must visually match contemporary site practice without embedding a commercial brand.
@@ -110,7 +118,7 @@ The strict gate requires all 10 files, valid WebP headers, each per-slot minimum
 ## Manifest behavior
 Scene-element asset IDs are part of the planned asset pipeline but are emitted into `content/episode01/assets.json` only when an exact final WebP exists. Missing scene-element art does not create an RC/fallback image manifest entry, so the runtime naturally falls back to the existing CSS placeholder.
 
-The original Episode 01 core production gate remains exactly 17 files (1 background + 16 character images). Scene-element production is a separate 10-slot gate and does not distort the core release count.
+The original Episode 01 core production gate remains exactly 17 files (1 background + 16 character images). Scene-element production is a separate 10-slot gate and does not distort the core release count. With `material_stack` final, the normal Episode 01 manifest currently resolves 18 assets.
 
 ## Rendering acceptance
 At gameplay scale each final cutout must:
@@ -124,5 +132,7 @@ At gameplay scale each final cutout must:
 - show two distinct lanyards and two distinct hooks for the fall-protection asset while remaining brand-neutral,
 - keep different material dimensions/specifications in separate bundles and show the authored central binding for `material_stack`.
 
-## Next checkpoint
-Do not generate another scene-element sheet yet. First verify the final `material_stack.webp` resolves through the asset manifest and renders in the two Episode 01 scenes at the configured 132 px map scale. Only after that acceptance should the next reusable scene-element production slot advance.
+## Next named production slot
+`public/assets/episode01/scene-elements/access-barrier.webp`
+
+Produce exactly one reusable transparent cutout for this slot, not a sheet or full gameplay screen. It must contain no Korean copy, warning text, site name, logo, HUD, background scenery, people, vehicles, or unrelated props. Final acceptance will use the same binary, alpha, pivot, map-scale, manifest, UI-rendering, TypeScript, and production-build gates used for `material_stack`.
