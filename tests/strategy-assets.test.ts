@@ -4,6 +4,7 @@ import { characterPortraitUri, projectStrategyVisualAssets } from '../src/app/st
 
 const available: Readonly<Record<string, string>> = {
   'ep01.background.foundation.map': 'assets/episode01/backgrounds/foundation-map.webp',
+  'ep01.background.scaffold.map': 'assets/episode01/backgrounds/scaffold-map.webp',
   'ep01.character.lim_junho.map': 'assets/episode01/characters/lim-junho-map.webp',
   'ep01.character.lim_junho.portrait': 'assets/episode01/characters/lim-junho-portrait.webp',
 };
@@ -25,6 +26,16 @@ describe('Episode 01 strategy visual assets', () => {
     });
     expect(visuals.characters.kang_taesik?.map_uri).toBeUndefined();
     expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
+  });
+
+  it('lets a scene recipe select a reusable background without changing character bindings', () => {
+    const visuals = projectStrategyVisualAssets(
+      ['lim_junho'],
+      resolve,
+      'ep01.background.scaffold.map',
+    );
+    expect(visuals.background_uri).toBe('assets/episode01/backgrounds/scaffold-map.webp');
+    expect(visuals.characters.lim_junho?.map_uri).toBe('assets/episode01/characters/lim-junho-map.webp');
   });
 
   it('uses final Foundation WebP while keeping TASK-014 RC character art before deterministic fallback', () => {
