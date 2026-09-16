@@ -77,7 +77,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     }).filter(item => item.remaining > 0 || item.active)
     : [];
   const visualAssets = strategy
-    ? projectStrategyVisualAssets(strategy.placements.map(item => item.character_id), resolveAsset)
+    ? projectStrategyVisualAssets(
+      strategy.placements.map(item => item.character_id),
+      resolveAsset,
+      strategy.scene.background_asset_id,
+    )
     : undefined;
   const titleBackgroundUri = episode01BackgroundUri(resolveAsset);
   const titleHeroCast = snapshot.phase === 'start'
