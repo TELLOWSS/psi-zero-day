@@ -14,8 +14,28 @@
       "parts": [
         {
           "file": "player-portrait.webp.b64.01",
-          "length": 72656,
-          "sha256": "c431ad4b8f29e7088714f1d5fd942846e5496a18ad6883ec23c172353fb1253c"
+          "length": 18000,
+          "sha256": "0f96c58b64dc22480f5bf672f43a05f8292ef6d2e62bbd8eef570e064a72dede"
+        },
+        {
+          "file": "player-portrait.webp.b64.02",
+          "length": 18000,
+          "sha256": "22146965669141d430149935976b95f990929423617760649bbfeab5ff3b1887"
+        },
+        {
+          "file": "player-portrait.webp.b64.03",
+          "length": 18000,
+          "sha256": "5aca892390611557c6e8e68f1500575e393d5c57fd37979a36bdd033f2a4d29c"
+        },
+        {
+          "file": "player-portrait.webp.b64.04",
+          "length": 18000,
+          "sha256": "6e03967391051e79dcc91a7bc4a0a419cc8d01ff27b7dd3feec15667b8c33123"
+        },
+        {
+          "file": "player-portrait.webp.b64.05",
+          "length": 656,
+          "sha256": "77695447fc42ea57405fc3a921938030266e6f29bb2a5544e1586c2b7a8841db"
         }
       ]
     }
