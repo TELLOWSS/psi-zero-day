@@ -84,6 +84,29 @@ function validateFallProtectionProfile(key, definition) {
   }
 }
 
+function validateStorageProfile(key, definition) {
+  const profile = definition.storage_profile;
+  if (!profile) return;
+  if (profile.dimension_grouping !== 'same_spec_only') {
+    errors.push(`${key}: storage_profile.dimension_grouping must be same_spec_only`);
+  }
+  if (profile.mixed_dimensions_allowed !== false) {
+    errors.push(`${key}: mixed-dimension materials must be separated into different bundles`);
+  }
+  if (profile.binding_method !== 'center_ratchet_or_equivalent') {
+    errors.push(`${key}: storage_profile.binding_method must be center_ratchet_or_equivalent`);
+  }
+  if (profile.binding_position !== 'center') {
+    errors.push(`${key}: storage_profile.binding_position must be center`);
+  }
+  if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) {
+    errors.push(`${key}: storage_profile.site_practice_note is required`);
+  }
+  if (typeof profile.safety_evaluation_note !== 'string' || !profile.safety_evaluation_note.trim()) {
+    errors.push(`${key}: storage_profile.safety_evaluation_note is required`);
+  }
+}
+
 for (const [key, definition] of definitions) {
   const art = definition.art;
   const assetId = definition.planned_asset_id;
@@ -94,6 +117,7 @@ for (const [key, definition] of definitions) {
 
   validateLiftingProfile(key, definition);
   validateFallProtectionProfile(key, definition);
+  validateStorageProfile(key, definition);
 
   if (!art || typeof art !== 'object') {
     errors.push(`${key}: art production spec is required`);
@@ -128,7 +152,9 @@ for (const [key, definition] of definitions) {
     errors.push(`${key}: requires_alpha must be true for transparent scene cutouts`);
   }
 
-  if (!productionCheck || !art.path) continue;
+  // Strict production check requires all slots. Normal contract checks every slot already promoted to final.
+  const requireBinary = productionCheck || definition.production_status === 'final';
+  if (!requireBinary || !art.path) continue;
   const bytes = await tryRead(art.path);
   if (!bytes) {
     errors.push(`${key}: missing final WebP public/${art.path}`);
@@ -152,6 +178,17 @@ for (const [key, definition] of definitions) {
   if (art.requires_alpha && webPHasAlpha(bytes) !== true) {
     errors.push(`${key}: production scene element must include WebP alpha transparency (${art.path})`);
   }
+}
+
+const materialProfile = catalog.elements?.material_stack?.storage_profile;
+if (catalog.elements?.material_stack?.production_status !== 'final') {
+  errors.push('material_stack: approved production asset must remain final');
+}
+if (materialProfile?.dimension_grouping !== 'same_spec_only' || materialProfile?.mixed_dimensions_allowed !== false) {
+  errors.push('material_stack: different material dimensions/specifications must be separated');
+}
+if (materialProfile?.binding_method !== 'center_ratchet_or_equivalent' || materialProfile?.binding_position !== 'center') {
+  errors.push('material_stack: a central ratchet buckle or equivalent separate binding must be visible');
 }
 
 const harnessProfile = catalog.elements?.harness_unclipped?.fall_protection_profile;
@@ -196,5 +233,6 @@ if (errors.length) {
 } else if (productionCheck) {
   console.log(`Scene element production art is ready (${definitions.length} transparent WebP assets).`);
 } else {
-  console.log(`Scene element art contract is valid (${definitions.length} reusable slots).`);
+  const finalCount = definitions.filter(([, definition]) => definition.production_status === 'final').length;
+  console.log(`Scene element art contract is valid (${definitions.length} reusable slots, ${finalCount} final).`);
 }
