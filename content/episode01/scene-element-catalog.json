@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -55,12 +55,23 @@
     "harness_unclipped": {
       "element_id": "scene.hazard.harness_unclipped",
       "kind": "hazard",
-      "label": "안전대 미체결",
+      "label": "더블 랜야드 안전대 미체결",
       "visual_token": "!",
       "production_status": "planned",
       "planned_asset_id": "ep01.scene_element.harness_unclipped",
+      "fall_protection_profile": {
+        "harness_type": "full_body",
+        "lanyard_configuration": "twin_y",
+        "lanyard_count": 2,
+        "hook_count": 2,
+        "connection_intent": "continuous_attachment_during_transfer",
+        "design_reference": "SWELOCK double-lanyard ergonomics only; final game art must be brand-neutral.",
+        "branding_policy": "no_logo_no_trademark",
+        "site_practice_note": "고소 이동 작업에서는 두 줄 중 하나의 체결을 유지하면서 다른 한 줄을 다음 부착점으로 옮길 수 있는 더블(Y) 랜야드형 전체식 안전대를 기본 시각 기준으로 표현한다.",
+        "safety_evaluation_note": "두 줄 자체만으로 안전을 판정하지 않고 부착설비 위치와 강도, 훅 체결상태, 추락여유거리, 진자추락 가능성, 충격흡수장치, 랜야드 손상 및 작업조건을 함께 평가한다."
+      },
       "art": {
-        "path": "assets/episode01/scene-elements/harness-unclipped.webp",
+        "path": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
         "minimum_width": 512,
         "minimum_height": 768,
         "pivot": { "x": 0.5, "y": 0.96 },
