@@ -7,7 +7,7 @@ const catalogPath = path.join(root, 'content/episode01/scene-element-catalog.jso
 const productionCheck = process.argv.includes('--production-check');
 const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
 const definitions = Object.entries(catalog.elements ?? {});
-const expectedCount = 9;
+const expectedCount = 10;
 const errors = [];
 const assetIds = new Set();
 const paths = new Set();
@@ -25,6 +25,30 @@ function validNormalized(value) {
   return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1;
 }
 
+function validateLiftingProfile(key, definition) {
+  const profile = definition.lifting_profile;
+  if (!profile) return;
+  if (!['general_material', 'gangform'].includes(profile.load_family)) {
+    errors.push(`${key}: lifting_profile.load_family must be general_material or gangform`);
+  }
+  if (!['round_sling', 'wire_rope'].includes(profile.rigging_method)) {
+    errors.push(`${key}: lifting_profile.rigging_method must be round_sling or wire_rope`);
+  }
+  if (profile.rigging_method === 'round_sling' && profile.wire_rope_diameter_mm !== null) {
+    errors.push(`${key}: round_sling profile must not define wire_rope_diameter_mm`);
+  }
+  if (profile.rigging_method === 'wire_rope'
+    && (!Number.isFinite(profile.wire_rope_diameter_mm) || profile.wire_rope_diameter_mm <= 0)) {
+    errors.push(`${key}: wire_rope profile requires a positive wire_rope_diameter_mm`);
+  }
+  if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) {
+    errors.push(`${key}: lifting_profile.site_practice_note is required`);
+  }
+  if (typeof profile.safety_evaluation_note !== 'string' || !profile.safety_evaluation_note.trim()) {
+    errors.push(`${key}: lifting_profile.safety_evaluation_note is required`);
+  }
+}
+
 for (const [key, definition] of definitions) {
   const art = definition.art;
   const assetId = definition.planned_asset_id;
@@ -32,6 +56,8 @@ for (const [key, definition] of definitions) {
   if (!assetId || typeof assetId !== 'string') errors.push(`${key}: planned_asset_id is required`);
   else if (assetIds.has(assetId)) errors.push(`${key}: duplicate planned_asset_id ${assetId}`);
   else assetIds.add(assetId);
+
+  validateLiftingProfile(key, definition);
 
   if (!art || typeof art !== 'object') {
     errors.push(`${key}: art production spec is required`);
@@ -90,6 +116,15 @@ for (const [key, definition] of definitions) {
   if (art.requires_alpha && webPHasAlpha(bytes) !== true) {
     errors.push(`${key}: production scene element must include WebP alpha transparency (${art.path})`);
   }
+}
+
+const generalLift = catalog.elements?.suspended_load?.lifting_profile;
+if (generalLift?.rigging_method !== 'round_sling') {
+  errors.push('suspended_load: general lifting must use round_sling visual profile');
+}
+const gangformLift = catalog.elements?.gangform_lift_wire22?.lifting_profile;
+if (gangformLift?.rigging_method !== 'wire_rope' || gangformLift?.wire_rope_diameter_mm !== 22) {
+  errors.push('gangform_lift_wire22: gangform lifting must use 22 mm wire_rope visual profile');
 }
 
 if (definitions.length !== expectedCount) {
