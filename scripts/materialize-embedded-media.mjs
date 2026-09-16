@@ -26,7 +26,7 @@ const MATERIAL_STACK_EXPECTED = Object.freeze({
   sha256: '88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0',
 });
 
-const sources = [
+const foundationSources = [
   ['01a', 2500, '57304588009d1633a068db5f64db546a7f02adb202f08baba104e1294973809f'],
   ['01b', 2500, '05a98baae3d0a08cf924d109a6d441816e5584dace14056100735e00b929ef85'],
   ['01c', 2500, 'a7d0f3ba457e3bbe929c50c8e24bc6a5fde3bd0c9d62267c6406575d74399103'],
@@ -51,6 +51,33 @@ const sources = [
   ['16', 248, '4b433a15ea656728d6d0c8ffe3a6addbc383ecbd2e86043a2ad0a0d5dd098510'],
 ];
 
+const materialStackSources = [
+  ['01', 10000, 'c98fe8f218b30208e161a28de2c86057cdf34bbece1c6426da8c1426da53aadf'],
+  ['02', 10000, '444900f8943bdb70cfc74269e9865f24e582d98a4642910efaed4f7c5f9d2807'],
+  ['03', 10000, '867b94079aefaa6cd8019fd0e2c56460308487dddca5316f2cbbb7aecd0c76b6'],
+  ['04', 10000, '018cd1d7b75d4b176741291795ac464191271eb89ea923acf7a9f28cea602042'],
+  ['05', 10000, '590513b55d2d0707aceba177d246fe4d1886db8042573a11136d7feaa0d36c42'],
+  ['06', 10000, '3234be9d2497ac8f8f86b700955f65e1f7122a7e54f8b8874d1e7ccc236e6a39'],
+  ['07', 9312, 'aa22bba77413075225d23a6f035f3ad21eb899fa26b456c0f501e26fb1e88e84'],
+];
+
+async function readEmbeddedParts(prefix, specs) {
+  const parts = [];
+  const mismatches = [];
+  for (const [suffix, expectedLength, expectedSha] of specs) {
+    const file = `${prefix}.b64.${suffix}`;
+    const text = (await readFile(path.join(sourceDir, file), 'utf8')).trim();
+    const actualSha = createHash('sha256').update(text).digest('hex');
+    if (text.length !== expectedLength || actualSha !== expectedSha) {
+      mismatches.push(`${file}: length ${text.length}/${expectedLength}, sha ${actualSha}/${expectedSha}`);
+    }
+    if (!/^[A-Za-z0-9+/=]+$/.test(text)) mismatches.push(`${file}: contains non-base64 characters`);
+    parts.push(text);
+  }
+  if (mismatches.length) throw new Error(`${prefix} embedded source mismatch:\n${mismatches.join('\n')}`);
+  return parts.join('');
+}
+
 async function writeIfChanged(target, bytes) {
   await mkdir(path.dirname(target), { recursive: true });
   let unchanged = false;
@@ -64,93 +91,42 @@ async function writeIfChanged(target, bytes) {
   return unchanged;
 }
 
-const chunks = [];
-const mismatches = [];
-for (const [suffix, expectedLength, expectedSha] of sources) {
-  const file = `foundation-map.webp.b64.${suffix}`;
-  const text = (await readFile(path.join(sourceDir, file), 'utf8')).trim();
-  const actualSha = createHash('sha256').update(text).digest('hex');
-  if (text.length !== expectedLength || actualSha !== expectedSha) {
-    mismatches.push(`${file}: length ${text.length}/${expectedLength}, sha ${actualSha}/${expectedSha}`);
-  }
-  if (!/^[A-Za-z0-9+/=]+$/.test(text)) {
-    mismatches.push(`${file}: contains non-base64 characters`);
-  }
-  chunks.push(text);
-}
-
-if (mismatches.length) {
-  throw new Error(`Foundation embedded source mismatch:\n${mismatches.join('\n')}`);
-}
-
-const encoded = chunks.join('');
+const encoded = await readEmbeddedParts('foundation-map.webp', foundationSources);
 if (encoded.length !== EXPECTED.encodedLength) {
   throw new Error(`Foundation base64 length ${encoded.length}; expected ${EXPECTED.encodedLength}.`);
 }
-
 const bytes = Buffer.from(encoded, 'base64');
-if (bytes.length !== EXPECTED.bytes) {
-  throw new Error(`Foundation WebP size ${bytes.length}; expected ${EXPECTED.bytes}.`);
-}
+if (bytes.length !== EXPECTED.bytes) throw new Error(`Foundation WebP size ${bytes.length}; expected ${EXPECTED.bytes}.`);
 if (!isWebP(bytes)) throw new Error('Materialized Foundation asset is not a WebP file.');
-
 const dimensions = webPDimensions(bytes);
 if (!dimensions || dimensions.width !== EXPECTED.width || dimensions.height !== EXPECTED.height) {
-  throw new Error(
-    `Foundation dimensions ${dimensions ? `${dimensions.width}x${dimensions.height}` : 'unreadable'}; `
-    + `expected ${EXPECTED.width}x${EXPECTED.height}.`,
-  );
+  throw new Error(`Foundation dimensions ${dimensions ? `${dimensions.width}x${dimensions.height}` : 'unreadable'}; expected ${EXPECTED.width}x${EXPECTED.height}.`);
 }
-
 const hash = createHash('sha256').update(bytes).digest('hex');
-if (hash !== EXPECTED.sha256) {
-  throw new Error(`Foundation SHA-256 mismatch: ${hash}.`);
-}
+if (hash !== EXPECTED.sha256) throw new Error(`Foundation SHA-256 mismatch: ${hash}.`);
 
-const materialStackFile = 'material-stack.webp.b64.01';
-const materialStackEncoded = (await readFile(path.join(sourceDir, materialStackFile), 'utf8')).trim();
-const materialStackEncodedHash = createHash('sha256').update(materialStackEncoded).digest('hex');
+const materialStackEncoded = await readEmbeddedParts('material-stack.webp', materialStackSources);
 if (materialStackEncoded.length !== MATERIAL_STACK_EXPECTED.encodedLength) {
-  throw new Error(
-    `${materialStackFile} has ${materialStackEncoded.length} chars; expected ${MATERIAL_STACK_EXPECTED.encodedLength}.`,
-  );
+  throw new Error(`Material stack base64 length ${materialStackEncoded.length}; expected ${MATERIAL_STACK_EXPECTED.encodedLength}.`);
 }
+const materialStackEncodedHash = createHash('sha256').update(materialStackEncoded).digest('hex');
 if (materialStackEncodedHash !== MATERIAL_STACK_EXPECTED.encodedSha256) {
-  throw new Error(
-    `${materialStackFile} SHA-256 mismatch: ${materialStackEncodedHash}; `
-    + `expected ${MATERIAL_STACK_EXPECTED.encodedSha256}.`,
-  );
+  throw new Error(`Material stack base64 SHA-256 mismatch: ${materialStackEncodedHash}.`);
 }
-if (!/^[A-Za-z0-9+/=]+$/.test(materialStackEncoded)) {
-  throw new Error(`${materialStackFile} contains non-base64 characters.`);
-}
-
 const materialStackBytes = Buffer.from(materialStackEncoded, 'base64');
 if (materialStackBytes.length !== MATERIAL_STACK_EXPECTED.bytes) {
-  throw new Error(
-    `Material stack WebP size ${materialStackBytes.length}; expected ${MATERIAL_STACK_EXPECTED.bytes}.`,
-  );
+  throw new Error(`Material stack WebP size ${materialStackBytes.length}; expected ${MATERIAL_STACK_EXPECTED.bytes}.`);
 }
-if (!isWebP(materialStackBytes)) {
-  throw new Error('Materialized material stack asset is not a WebP file.');
-}
+if (!isWebP(materialStackBytes)) throw new Error('Materialized material stack asset is not a WebP file.');
 const materialStackDimensions = webPDimensions(materialStackBytes);
 if (!materialStackDimensions
   || materialStackDimensions.width !== MATERIAL_STACK_EXPECTED.width
   || materialStackDimensions.height !== MATERIAL_STACK_EXPECTED.height) {
-  throw new Error(
-    `Material stack dimensions ${materialStackDimensions
-      ? `${materialStackDimensions.width}x${materialStackDimensions.height}`
-      : 'unreadable'}; expected ${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}.`,
-  );
+  throw new Error(`Material stack dimensions ${materialStackDimensions ? `${materialStackDimensions.width}x${materialStackDimensions.height}` : 'unreadable'}; expected ${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}.`);
 }
-if (webPHasAlpha(materialStackBytes) !== true) {
-  throw new Error('Material stack final WebP must include alpha transparency.');
-}
+if (webPHasAlpha(materialStackBytes) !== true) throw new Error('Material stack final WebP must include alpha transparency.');
 const materialStackHash = createHash('sha256').update(materialStackBytes).digest('hex');
-if (materialStackHash !== MATERIAL_STACK_EXPECTED.sha256) {
-  throw new Error(`Material stack SHA-256 mismatch: ${materialStackHash}.`);
-}
+if (materialStackHash !== MATERIAL_STACK_EXPECTED.sha256) throw new Error(`Material stack SHA-256 mismatch: ${materialStackHash}.`);
 
 if (!checkOnly) {
   const foundationUnchanged = await writeIfChanged(foundationTarget, bytes);
