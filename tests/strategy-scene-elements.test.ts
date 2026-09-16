@@ -40,6 +40,23 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(catalog.elements.exclusion_zone.production_status).toBe('planned');
   });
 
+  it('locks the fall-protection visual to a brand-neutral twin-Y full-body harness', () => {
+    expect(catalog.elements.harness_unclipped.fall_protection_profile).toMatchObject({
+      harness_type: 'full_body',
+      lanyard_configuration: 'twin_y',
+      lanyard_count: 2,
+      hook_count: 2,
+      connection_intent: 'continuous_attachment_during_transfer',
+      branding_policy: 'no_logo_no_trademark',
+    });
+    expect(catalog.elements.harness_unclipped.fall_protection_profile.design_reference).toContain('SWELOCK');
+    expect(catalog.elements.harness_unclipped.art.path).toBe(
+      'assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp',
+    );
+    expect(catalog.elements.harness_unclipped.fall_protection_profile.safety_evaluation_note)
+      .toContain('두 줄 자체만으로 안전을 판정하지 않고');
+  });
+
   it('locks general lifting to round-sling choker hitch while keeping gangform hitch site-defined', () => {
     expect(catalog.elements.suspended_load.lifting_profile).toMatchObject({
       load_family: 'general_material',
