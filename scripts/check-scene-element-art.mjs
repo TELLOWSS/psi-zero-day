@@ -34,6 +34,12 @@ function validateLiftingProfile(key, definition) {
   if (!['round_sling', 'wire_rope'].includes(profile.rigging_method)) {
     errors.push(`${key}: lifting_profile.rigging_method must be round_sling or wire_rope`);
   }
+  if (!['choker', 'site_defined'].includes(profile.hitch_method)) {
+    errors.push(`${key}: lifting_profile.hitch_method must be choker or site_defined`);
+  }
+  if (!['manufacturer_choker_wll', 'work_plan_and_rated_capacity'].includes(profile.capacity_basis)) {
+    errors.push(`${key}: lifting_profile.capacity_basis is invalid`);
+  }
   if (profile.rigging_method === 'round_sling' && profile.wire_rope_diameter_mm !== null) {
     errors.push(`${key}: round_sling profile must not define wire_rope_diameter_mm`);
   }
@@ -122,9 +128,18 @@ const generalLift = catalog.elements?.suspended_load?.lifting_profile;
 if (generalLift?.rigging_method !== 'round_sling') {
   errors.push('suspended_load: general lifting must use round_sling visual profile');
 }
+if (generalLift?.hitch_method !== 'choker') {
+  errors.push('suspended_load: general lifting must use choker hitch as the site default profile');
+}
+if (generalLift?.capacity_basis !== 'manufacturer_choker_wll') {
+  errors.push('suspended_load: general lifting capacity must reference manufacturer choker WLL');
+}
 const gangformLift = catalog.elements?.gangform_lift_wire22?.lifting_profile;
 if (gangformLift?.rigging_method !== 'wire_rope' || gangformLift?.wire_rope_diameter_mm !== 22) {
   errors.push('gangform_lift_wire22: gangform lifting must use 22 mm wire_rope visual profile');
+}
+if (gangformLift?.hitch_method !== 'site_defined') {
+  errors.push('gangform_lift_wire22: gangform hitch method must remain site_defined until an authored work plan specifies it');
 }
 
 if (definitions.length !== expectedCount) {
