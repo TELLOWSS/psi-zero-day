@@ -3,10 +3,20 @@ import type { Id } from '../domain/common';
 import type { StrategySceneAnchor } from './strategy-scene';
 
 export type StrategySceneElementKind = 'hazard' | 'prop' | 'control';
+export type StrategyLiftingLoadFamily = 'general_material' | 'gangform';
+export type StrategyRiggingMethod = 'round_sling' | 'wire_rope';
 
 export interface StrategySceneElementPivot {
   readonly x: number;
   readonly y: number;
+}
+
+export interface StrategyLiftingProfile {
+  readonly load_family: StrategyLiftingLoadFamily;
+  readonly rigging_method: StrategyRiggingMethod;
+  readonly wire_rope_diameter_mm: number | null;
+  readonly site_practice_note: string;
+  readonly safety_evaluation_note: string;
 }
 
 export interface StrategySceneElement {
@@ -20,6 +30,7 @@ export interface StrategySceneElement {
   readonly planned_asset_id?: Id;
   readonly pivot?: StrategySceneElementPivot;
   readonly map_max_px?: number;
+  readonly lifting_profile?: StrategyLiftingProfile;
 }
 
 type ElementArtDefinition = {
@@ -39,6 +50,7 @@ type ElementDefinition = {
   readonly production_status: 'css-placeholder' | 'planned' | 'final';
   readonly planned_asset_id?: string;
   readonly art?: ElementArtDefinition;
+  readonly lifting_profile?: StrategyLiftingProfile;
   readonly reuse_for: readonly string[];
 };
 
@@ -53,6 +65,7 @@ const eventElements = elementCatalog.event_elements as Readonly<Record<string, r
 /**
  * Presentation-only physical scene elements. These are reusable visual props/hazards and do not
  * create new engine hazards, outcomes, or choices. Unknown catalog keys are ignored safely.
+ * Lifting profiles describe the authored site/visual rigging method; they are not a safety verdict.
  */
 export function projectEpisode01SceneElements(activeEventId: Id | null): readonly StrategySceneElement[] {
   if (!activeEventId) return Object.freeze([]);
@@ -74,6 +87,9 @@ export function projectEpisode01SceneElements(activeEventId: Id | null): readonl
       ...(definition.art ? {
         pivot: Object.freeze({ ...definition.art.pivot }),
         map_max_px: definition.art.map_max_px,
+      } : {}),
+      ...(definition.lifting_profile ? {
+        lifting_profile: Object.freeze({ ...definition.lifting_profile }),
       } : {}),
     }));
   }
