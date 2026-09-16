@@ -117,6 +117,7 @@ export function StrategyMapShell({
 
   const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
   const hasBackgroundArt = visualAssets?.background_uri !== undefined;
+  const sceneElements = view.scene.elements ?? [];
   const moneyValue = `₩${Math.max(0, view.resources.money).toLocaleString('ko-KR')}`;
   const timeValue = view.resources.display_time ?? text(`ui.slot.${view.resources.time_slot.toLowerCase()}`);
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
@@ -177,7 +178,7 @@ export function StrategyMapShell({
       </section> : null}
     </aside>
 
-    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site}>
+    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment}>
       {visualAssets?.background_uri ? <img className="strategy-map-background-art" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
       <div className="strategy-map-css-scene" aria-hidden={hasBackgroundArt ? 'true' : undefined}>
         <div className="strategy-map-sky" />
@@ -207,6 +208,20 @@ export function StrategyMapShell({
           ><span>{text(`ui.strategy.zone.${zone}`)}</span>{hasActionsFor(key) ? <b>{strategyActionsForTarget(effectiveActions, key).length}</b> : null}</button>;
         })}
       </div>
+
+      {sceneElements.length ? <div className="strategy-scene-element-layer" aria-label="현장 위험요소 및 소품">
+        {sceneElements.map(element => <div
+          className={`strategy-scene-element scene-element-${element.anchor} scene-element-${element.kind}`}
+          data-scene-element={element.element_id}
+          data-scene-element-key={element.catalog_key}
+          data-production-status={element.production_status}
+          key={`${element.element_id}:${element.anchor}`}
+          title={element.label}
+        >
+          <span aria-hidden="true">{element.visual_token}</span>
+          <small>{element.label}</small>
+        </div>)}
+      </div> : null}
 
       <div className="strategy-worker-layer">
         {view.placements.map(placement => {
