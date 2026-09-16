@@ -22,10 +22,15 @@ type CharacterVisualPlan = {
 };
 
 /**
- * Presentation-only resolver. Asset IDs are authored in visuals.json and are resolved through
- * the validated content asset manifest. Missing art cleanly falls back to CSS silhouettes/map.
+ * Presentation-only resolver. Asset IDs are authored in visuals.json / scene-composition.json
+ * and are resolved through the validated content asset manifest. Missing art cleanly falls back
+ * to CSS silhouettes/map without changing gameplay rules.
  */
-export function projectStrategyVisualAssets(characterIds: readonly Id[], resolve: AssetResolver): StrategyVisualAssets {
+export function projectStrategyVisualAssets(
+  characterIds: readonly Id[],
+  resolve: AssetResolver,
+  backgroundAssetId: Id = visuals.backgrounds.foundation.map_asset_id,
+): StrategyVisualAssets {
   const characters: Record<Id, StrategyCharacterVisual> = {};
   const plans = visuals.characters as Readonly<Record<string, CharacterVisualPlan>>;
 
@@ -42,7 +47,7 @@ export function projectStrategyVisualAssets(characterIds: readonly Id[], resolve
     });
   }
 
-  const backgroundUri = episode01BackgroundUri(resolve);
+  const backgroundUri = backgroundAssetUri(backgroundAssetId, resolve);
   return Object.freeze({
     ...(backgroundUri ? { background_uri: backgroundUri } : {}),
     characters: Object.freeze(characters),
@@ -54,6 +59,10 @@ export function characterPortraitUri(characterId: Id, resolve: AssetResolver): s
   return plan ? resolve(plan.portrait_asset_id) : undefined;
 }
 
+export function backgroundAssetUri(assetId: Id, resolve: AssetResolver): string | undefined {
+  return resolve(assetId);
+}
+
 export function episode01BackgroundUri(resolve: AssetResolver): string | undefined {
-  return resolve(visuals.backgrounds.foundation.map_asset_id);
+  return backgroundAssetUri(visuals.backgrounds.foundation.map_asset_id, resolve);
 }
