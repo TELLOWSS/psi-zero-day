@@ -51,17 +51,25 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.scene_elements?.['scene.hazard.harness_unclipped']).toBeUndefined();
   });
 
-  it('uses final Foundation WebP while keeping TASK-014 RC character art before deterministic fallback', () => {
+  it('uses final Foundation and material-stack WebPs while keeping TASK-014 RC character art before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
-    expect(content.asset_manifest.assets).toHaveLength(17);
+    expect(content.asset_manifest.assets).toHaveLength(18);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');
+    expect(registry.getAsset('ep01.scene_element.material_stack')?.variants[0]?.uri)
+      .toBe('assets/episode01/scene-elements/material-stack.webp');
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
     expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
-    expect(art.scene_elements).toBeUndefined();
+    expect(art.scene_elements?.['scene.prop.material_stack']).toMatchObject({
+      element_id: 'scene.prop.material_stack',
+      uri: 'assets/episode01/scene-elements/material-stack.webp',
+      pivot_x: 0.5,
+      pivot_y: 0.94,
+      map_max_px: 132,
+    });
 
     for (const characterId of cast) {
       expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait-rc\.svg$/);
