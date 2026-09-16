@@ -12,10 +12,12 @@ describe('Episode 01 reusable scene element catalog', () => {
       'harness_unclipped',
       'platform_cut_edge',
       'suspended_load',
+      'gangform_lift_wire22',
       'exclusion_zone',
       'wet_floor',
       'open_edge',
     ]));
+    expect(elements).toHaveLength(10);
     expect(new Set(elements.map(item => item.element_id)).size).toBe(elements.length);
     expect(new Set(elements.map(item => item.planned_asset_id)).size).toBe(elements.length);
   });
@@ -34,7 +36,35 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(catalog.elements.harness_unclipped.production_status).toBe('planned');
     expect(catalog.elements.platform_cut_edge.production_status).toBe('planned');
     expect(catalog.elements.suspended_load.production_status).toBe('planned');
+    expect(catalog.elements.gangform_lift_wire22.production_status).toBe('planned');
     expect(catalog.elements.exclusion_zone.production_status).toBe('planned');
+  });
+
+  it('separates general lifting and gangform lifting visual rigging profiles', () => {
+    expect(catalog.elements.suspended_load.lifting_profile).toMatchObject({
+      load_family: 'general_material',
+      rigging_method: 'round_sling',
+      wire_rope_diameter_mm: null,
+    });
+    expect(catalog.elements.suspended_load.art.path).toBe(
+      'assets/episode01/scene-elements/suspended-load-round-sling.webp',
+    );
+
+    expect(catalog.elements.gangform_lift_wire22.lifting_profile).toMatchObject({
+      load_family: 'gangform',
+      rigging_method: 'wire_rope',
+      wire_rope_diameter_mm: 22,
+    });
+    expect(catalog.elements.gangform_lift_wire22.art.path).toBe(
+      'assets/episode01/scene-elements/gangform-lift-wire22.webp',
+    );
+  });
+
+  it('keeps rigging type separate from the final safety evaluation', () => {
+    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note)
+      .toContain('중량');
+    expect(catalog.elements.gangform_lift_wire22.lifting_profile.safety_evaluation_note)
+      .toContain('직경만으로 안전을 판정하지 않고');
   });
 
   it('ignores unknown future events without creating a visual hazard', () => {
