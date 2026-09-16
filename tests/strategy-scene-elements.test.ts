@@ -40,19 +40,23 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(catalog.elements.exclusion_zone.production_status).toBe('planned');
   });
 
-  it('separates general lifting and gangform lifting visual rigging profiles', () => {
+  it('locks general lifting to round-sling choker hitch while keeping gangform hitch site-defined', () => {
     expect(catalog.elements.suspended_load.lifting_profile).toMatchObject({
       load_family: 'general_material',
       rigging_method: 'round_sling',
+      hitch_method: 'choker',
+      capacity_basis: 'manufacturer_choker_wll',
       wire_rope_diameter_mm: null,
     });
     expect(catalog.elements.suspended_load.art.path).toBe(
-      'assets/episode01/scene-elements/suspended-load-round-sling.webp',
+      'assets/episode01/scene-elements/suspended-load-round-sling-choker.webp',
     );
 
     expect(catalog.elements.gangform_lift_wire22.lifting_profile).toMatchObject({
       load_family: 'gangform',
       rigging_method: 'wire_rope',
+      hitch_method: 'site_defined',
+      capacity_basis: 'work_plan_and_rated_capacity',
       wire_rope_diameter_mm: 22,
     });
     expect(catalog.elements.gangform_lift_wire22.art.path).toBe(
@@ -60,9 +64,11 @@ describe('Episode 01 reusable scene element catalog', () => {
     );
   });
 
-  it('keeps rigging type separate from the final safety evaluation', () => {
+  it('keeps rigging method separate from the final safety evaluation', () => {
     expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note)
-      .toContain('중량');
+      .toContain('Choker WLL');
+    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note)
+      .toContain('초크각');
     expect(catalog.elements.gangform_lift_wire22.lifting_profile.safety_evaluation_note)
       .toContain('직경만으로 안전을 판정하지 않고');
   });
