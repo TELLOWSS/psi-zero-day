@@ -210,17 +210,29 @@ export function StrategyMapShell({
       </div>
 
       {sceneElements.length ? <div className="strategy-scene-element-layer" aria-label="현장 위험요소 및 소품">
-        {sceneElements.map(element => <div
-          className={`strategy-scene-element scene-element-${element.anchor} scene-element-${element.kind}`}
-          data-scene-element={element.element_id}
-          data-scene-element-key={element.catalog_key}
-          data-production-status={element.production_status}
-          key={`${element.element_id}:${element.anchor}`}
-          title={element.label}
-        >
-          <span aria-hidden="true">{element.visual_token}</span>
-          <small>{element.label}</small>
-        </div>)}
+        {sceneElements.map(element => {
+          const visual = visualAssets?.scene_elements?.[element.element_id];
+          const artStyle = visual
+            ? {
+              width: `${visual.map_max_px}px`,
+              transform: `translate(${-visual.pivot_x * 100}%, ${-visual.pivot_y * 100}%)`,
+            }
+            : undefined;
+          return <div
+            className={`strategy-scene-element scene-element-${element.anchor} scene-element-${element.kind}${visual ? ' has-art' : ''}`}
+            data-scene-element={element.element_id}
+            data-scene-element-key={element.catalog_key}
+            data-production-status={element.production_status}
+            data-visual={visual ? 'asset' : 'css'}
+            key={`${element.element_id}:${element.anchor}`}
+            title={element.label}
+            style={artStyle}
+          >
+            {visual
+              ? <img className="strategy-scene-element-art" src={visual.uri} alt="" aria-hidden="true" />
+              : <><span aria-hidden="true">{element.visual_token}</span><small>{element.label}</small></>}
+          </div>;
+        })}
       </div> : null}
 
       <div className="strategy-worker-layer">
