@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "elements": {
+    "material_stack": {
+      "element_id": "scene.prop.material_stack",
+      "kind": "prop",
+      "label": "통로 인접 적재 자재",
+      "visual_token": "▤",
+      "production_status": "css-placeholder",
+      "planned_asset_id": "ep01.scene_element.material_stack",
+      "reuse_for": ["foundation", "typical_floor", "basement"]
+    },
+    "access_barrier": {
+      "element_id": "scene.control.access_barrier",
+      "kind": "control",
+      "label": "출입 통제 바리케이드",
+      "visual_token": "▥",
+      "production_status": "css-placeholder",
+      "planned_asset_id": "ep01.scene_element.access_barrier",
+      "reuse_for": ["foundation", "typical_floor", "scaffold", "basement", "lifting"]
+    },
+    "vehicle_overlap_zone": {
+      "element_id": "scene.hazard.vehicle_overlap",
+      "kind": "hazard",
+      "label": "차량·보행 동선 중첩",
+      "visual_token": "⇄",
+      "production_status": "css-placeholder",
+      "planned_asset_id": "ep01.scene_element.vehicle_overlap",
+      "reuse_for": ["foundation", "basement", "lifting"]
+    },
+    "harness_unclipped": {
+      "element_id": "scene.hazard.harness_unclipped",
+      "kind": "hazard",
+      "label": "안전대 미체결",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.harness_unclipped",
+      "reuse_for": ["scaffold", "typical_floor"]
+    },
+    "platform_cut_edge": {
+      "element_id": "scene.hazard.platform_cut_edge",
+      "kind": "hazard",
+      "label": "작업발판 절단부",
+      "visual_token": "▰",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.platform_cut_edge",
+      "reuse_for": ["scaffold"]
+    },
+    "suspended_load": {
+      "element_id": "scene.hazard.suspended_load",
+      "kind": "hazard",
+      "label": "매달린 중량물",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.suspended_load",
+      "reuse_for": ["lifting", "typical_floor"]
+    },
+    "exclusion_zone": {
+      "element_id": "scene.control.exclusion_zone",
+      "kind": "control",
+      "label": "출입금지 구역",
+      "visual_token": "⊘",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.exclusion_zone",
+      "reuse_for": ["lifting", "scaffold", "typical_floor"]
+    },
+    "wet_floor": {
+      "element_id": "scene.hazard.wet_floor",
+      "kind": "hazard",
+      "label": "습윤·미끄럼 구간",
+      "visual_token": "≈",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.wet_floor",
+      "reuse_for": ["basement", "foundation"]
+    },
+    "open_edge": {
+      "element_id": "scene.hazard.open_edge",
+      "kind": "hazard",
+      "label": "개구부·단부",
+      "visual_token": "□",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.open_edge",
+      "reuse_for": ["typical_floor", "scaffold"]
+    }
+  },
+  "event_elements": {
+    "e01_03_plan_breaks": [
+      { "element_key": "material_stack", "anchor": "entry" }
+    ],
+    "e01_05_command": [
+      { "element_key": "material_stack", "anchor": "yard" }
+    ]
+  }
+}
