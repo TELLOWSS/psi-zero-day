@@ -8,6 +8,7 @@ const checkOnly = process.argv.includes('--check');
 const sourceDir = path.join(root, 'content/episode01/embedded-media');
 const foundationTarget = path.join(root, 'public/assets/episode01/backgrounds/foundation-map.webp');
 const materialStackTarget = path.join(root, 'public/assets/episode01/scene-elements/material-stack.webp');
+const accessBarrierTarget = path.join(root, 'public/assets/episode01/scene-elements/access-barrier.webp');
 
 const EXPECTED = Object.freeze({
   encodedLength: 150248,
@@ -24,6 +25,15 @@ const MATERIAL_STACK_EXPECTED = Object.freeze({
   width: 768,
   height: 581,
   sha256: '88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0',
+});
+
+const ACCESS_BARRIER_EXPECTED = Object.freeze({
+  encodedLength: 74404,
+  encodedSha256: 'a5e161bce8d653e53873861e4a444cef454c8c4af62d3fc3f7a7748c378bf960',
+  bytes: 55802,
+  width: 820,
+  height: 514,
+  sha256: 'acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542',
 });
 
 const foundationSources = [
@@ -59,6 +69,17 @@ const materialStackSources = [
   ['05', 10000, '590513b55d2d0707aceba177d246fe4d1886db8042573a11136d7feaa0d36c42'],
   ['06', 10000, '3234be9d2497ac8f8f86b700955f65e1f7122a7e54f8b8874d1e7ccc236e6a39'],
   ['07', 9312, 'aa22bba77413075225d23a6f035f3ad21eb899fa26b456c0f501e26fb1e88e84'],
+];
+
+const accessBarrierSources = [
+  ['01', 10000, '6043aeb1afafd17486c3f53ec780494f92102ab2465163b26b13181d4291a1f7'],
+  ['02', 10000, 'f593907c5bde2f1f7f4c1fd08264a9ff5aacfc4e2b09d0ffb73ed9c8db7f1ab1'],
+  ['03', 10000, 'f2be09e9cec944630aedbfe713914cbc20ddbb499f86dc4160369d066e8b3ae9'],
+  ['04', 10000, '5310dd3e1f03a23f597144d5b9f7adabf87cdac37f9ff2c1876697b72c59864b'],
+  ['05', 10000, 'f639406480c0e13677ea8689f9d2025dc76ac8da4e2b78e91959aeaf396c04d7'],
+  ['06', 10000, '1f0d9fa1168349662787ea921dc6239180f74538e312ff31bf04a2efefd50fe7'],
+  ['07', 10000, 'ecff91a611fe33b32e667097e81f4f9237d7b93674b66b147b2a6f550d6cc093'],
+  ['08', 4404, 'f6e7fba0239cdf5edd3e4f6024ab9e3ec060a78ae238de864088ef7c3a17ba03'],
 ];
 
 async function readEmbeddedParts(prefix, specs) {
@@ -128,12 +149,38 @@ if (webPHasAlpha(materialStackBytes) !== true) throw new Error('Material stack f
 const materialStackHash = createHash('sha256').update(materialStackBytes).digest('hex');
 if (materialStackHash !== MATERIAL_STACK_EXPECTED.sha256) throw new Error(`Material stack SHA-256 mismatch: ${materialStackHash}.`);
 
+const accessBarrierEncoded = await readEmbeddedParts('access-barrier.webp', accessBarrierSources);
+if (accessBarrierEncoded.length !== ACCESS_BARRIER_EXPECTED.encodedLength) {
+  throw new Error(`Access barrier base64 length ${accessBarrierEncoded.length}; expected ${ACCESS_BARRIER_EXPECTED.encodedLength}.`);
+}
+const accessBarrierEncodedHash = createHash('sha256').update(accessBarrierEncoded).digest('hex');
+if (accessBarrierEncodedHash !== ACCESS_BARRIER_EXPECTED.encodedSha256) {
+  throw new Error(`Access barrier base64 SHA-256 mismatch: ${accessBarrierEncodedHash}.`);
+}
+const accessBarrierBytes = Buffer.from(accessBarrierEncoded, 'base64');
+if (accessBarrierBytes.length !== ACCESS_BARRIER_EXPECTED.bytes) {
+  throw new Error(`Access barrier WebP size ${accessBarrierBytes.length}; expected ${ACCESS_BARRIER_EXPECTED.bytes}.`);
+}
+if (!isWebP(accessBarrierBytes)) throw new Error('Materialized access barrier asset is not a WebP file.');
+const accessBarrierDimensions = webPDimensions(accessBarrierBytes);
+if (!accessBarrierDimensions
+  || accessBarrierDimensions.width !== ACCESS_BARRIER_EXPECTED.width
+  || accessBarrierDimensions.height !== ACCESS_BARRIER_EXPECTED.height) {
+  throw new Error(`Access barrier dimensions ${accessBarrierDimensions ? `${accessBarrierDimensions.width}x${accessBarrierDimensions.height}` : 'unreadable'}; expected ${ACCESS_BARRIER_EXPECTED.width}x${ACCESS_BARRIER_EXPECTED.height}.`);
+}
+if (webPHasAlpha(accessBarrierBytes) !== true) throw new Error('Access barrier final WebP must include alpha transparency.');
+const accessBarrierHash = createHash('sha256').update(accessBarrierBytes).digest('hex');
+if (accessBarrierHash !== ACCESS_BARRIER_EXPECTED.sha256) throw new Error(`Access barrier SHA-256 mismatch: ${accessBarrierHash}.`);
+
 if (!checkOnly) {
   const foundationUnchanged = await writeIfChanged(foundationTarget, bytes);
   const materialStackUnchanged = await writeIfChanged(materialStackTarget, materialStackBytes);
+  const accessBarrierUnchanged = await writeIfChanged(accessBarrierTarget, accessBarrierBytes);
   console.log(`${foundationUnchanged ? 'Verified' : 'Materialized'} Foundation final WebP (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${materialStackUnchanged ? 'Verified' : 'Materialized'} material stack final WebP (${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}, ${MATERIAL_STACK_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  console.log(`${accessBarrierUnchanged ? 'Verified' : 'Materialized'} access barrier final WebP (${ACCESS_BARRIER_EXPECTED.width}x${ACCESS_BARRIER_EXPECTED.height}, ${ACCESS_BARRIER_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
 } else {
   console.log(`Foundation embedded media source verified (sha256 ${hash}).`);
   console.log(`Material stack embedded media source verified (sha256 ${materialStackHash}).`);
+  console.log(`Access barrier embedded media source verified (sha256 ${accessBarrierHash}).`);
 }
