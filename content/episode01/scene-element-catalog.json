@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -89,19 +89,21 @@
     "suspended_load": {
       "element_id": "scene.hazard.suspended_load",
       "kind": "hazard",
-      "label": "일반 중량물 양중 · 라운드 슬링",
+      "label": "일반 중량물 양중 · 라운드 슬링 초크걸이",
       "visual_token": "◆",
       "production_status": "planned",
       "planned_asset_id": "ep01.scene_element.suspended_load",
       "lifting_profile": {
         "load_family": "general_material",
         "rigging_method": "round_sling",
+        "hitch_method": "choker",
+        "capacity_basis": "manufacturer_choker_wll",
         "wire_rope_diameter_mm": null,
-        "site_practice_note": "일반 중량물 양중은 라운드 슬링 벨트를 기본 시각 기준으로 표현한다.",
-        "safety_evaluation_note": "슬링 종류만으로 안전을 판정하지 않고 중량, 정격하중, 인양각도, 체결상태, 인양점, 작업계획을 함께 평가한다."
+        "site_practice_note": "일반 중량물 양중은 라운드 슬링 벨트의 초크걸이를 기본 현장·시각 기준으로 표현한다.",
+        "safety_evaluation_note": "초크걸이 사용 시 슬링 태그와 제조사 Choker WLL을 기준으로 확인하고, 중량, 초크각, 인양각도, 슬링 손상, 모서리 보호, 체결상태, 인양점 및 작업계획을 함께 평가한다."
       },
       "art": {
-        "path": "assets/episode01/scene-elements/suspended-load-round-sling.webp",
+        "path": "assets/episode01/scene-elements/suspended-load-round-sling-choker.webp",
         "minimum_width": 768,
         "minimum_height": 768,
         "pivot": { "x": 0.5, "y": 0.62 },
@@ -120,9 +122,11 @@
       "lifting_profile": {
         "load_family": "gangform",
         "rigging_method": "wire_rope",
+        "hitch_method": "site_defined",
+        "capacity_basis": "work_plan_and_rated_capacity",
         "wire_rope_diameter_mm": 22,
-        "site_practice_note": "갱폼 양중은 현장 운용 기준에 따라 Ø22 mm 와이어로프가 식별되도록 표현한다.",
-        "safety_evaluation_note": "직경만으로 안전을 판정하지 않고 와이어로프 상태, 정격하중, 샤클·인양점, 체결상태, 인양각도, 작업계획을 함께 평가한다."
+        "site_practice_note": "갱폼 양중은 현장 운용 기준에 따라 Ø22 mm 와이어로프가 식별되도록 표현하며, 구체 체결방식은 해당 작업계획에 따른다.",
+        "safety_evaluation_note": "직경만으로 안전을 판정하지 않고 와이어로프 상태, 정격하중, 샤클·인양점, 체결상태, 인양각도 및 작업계획을 함께 평가한다."
       },
       "art": {
         "path": "assets/episode01/scene-elements/gangform-lift-wire22.webp",
