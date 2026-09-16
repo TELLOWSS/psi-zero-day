@@ -12,6 +12,12 @@ const view: StrategyView = {
   resources: { money: 150000, time_slot: 'MORNING', schedule_progress: 42, safety_signal_count: 1, pressure_count: 1 },
   assignments: [{ assignment_id: 'a1', character_id: 'lim_junho', task_id: 'task.1' }],
   roster: [{ character_id: 'lim_junho', experience: 12, morale: 60, fatigue: 15, available: true, stats: {}, story_flags: {} }],
+  scene: {
+    scene_id: 'foundation.ramp-signal', event_id: 'e01_04_junho_signal',
+    background_asset_id: 'ep01.background.foundation.map', environment: 'foundation', primary_anchor: 'ramp',
+    active_layers: ['background', 'characters', 'signals', 'pressures', 'dialogue'],
+    hazard_signal_ids: ['signal.ramp_movement'],
+  },
   signals: [{ signal_id: 'signal.ramp_movement', kind: 'ramp', anchor: 'ramp', label_text_id: 'ui.signal.ramp_movement' }],
   placements: [{ character_id: 'lim_junho', anchor: 'ramp', scene_participant: true, role_id: 'junho', nearby_signal_ids: ['signal.ramp_movement'] }],
   frictions: [{ friction_id: 'friction.reporting.hesitation', kind: 'reporting_hesitation', label_text_id: 'ui.friction.reporting', detail_text_id: 'ui.friction.reporting.hesitation' }],
