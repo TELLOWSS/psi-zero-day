@@ -17,6 +17,11 @@ export type StrategyMaterialBindingPosition = 'center';
 export type StrategyAccessBarrierForm = 'freestanding_modular';
 export type StrategyAccessBarrierMaterial = 'high_visibility_polymer';
 export type StrategyAccessBarrierStabilization = 'weighted_feet';
+export type StrategyTrafficRenderMode = 'route_overlay';
+export type StrategyVehiclePathStyle = 'wide_drive_path';
+export type StrategyPedestrianPathStyle = 'narrow_walk_path';
+export type StrategyTrafficConflictMarker = 'highlighted_overlap';
+export type StrategyTrafficDirectionalMarkings = 'chevrons_and_lane_edges';
 
 export interface StrategySceneElementPivot {
   readonly x: number;
@@ -66,6 +71,20 @@ export interface StrategyAccessControlProfile {
   readonly control_evaluation_note: string;
 }
 
+export interface StrategyTrafficConflictProfile {
+  readonly render_mode: StrategyTrafficRenderMode;
+  readonly vehicle_path_style: StrategyVehiclePathStyle;
+  readonly pedestrian_path_style: StrategyPedestrianPathStyle;
+  readonly conflict_marker: StrategyTrafficConflictMarker;
+  readonly directional_markings: StrategyTrafficDirectionalMarkings;
+  readonly vehicle_object_allowed: false;
+  readonly pedestrian_object_allowed: false;
+  readonly integrated_text_allowed: false;
+  readonly branding_allowed: false;
+  readonly site_practice_note: string;
+  readonly safety_evaluation_note: string;
+}
+
 export interface StrategySceneElement {
   readonly element_id: Id;
   readonly catalog_key: Id;
@@ -81,6 +100,7 @@ export interface StrategySceneElement {
   readonly fall_protection_profile?: StrategyFallProtectionProfile;
   readonly storage_profile?: StrategyStorageProfile;
   readonly access_control_profile?: StrategyAccessControlProfile;
+  readonly traffic_conflict_profile?: StrategyTrafficConflictProfile;
 }
 
 type ElementArtDefinition = {
@@ -104,6 +124,7 @@ type ElementDefinition = {
   readonly fall_protection_profile?: StrategyFallProtectionProfile;
   readonly storage_profile?: StrategyStorageProfile;
   readonly access_control_profile?: StrategyAccessControlProfile;
+  readonly traffic_conflict_profile?: StrategyTrafficConflictProfile;
   readonly reuse_for: readonly string[];
 };
 
@@ -118,8 +139,8 @@ const eventElements = elementCatalog.event_elements as Readonly<Record<string, r
 /**
  * Presentation-only physical scene elements. These are reusable visual props/hazards and do not
  * create new engine hazards, outcomes, or choices. Unknown catalog keys are ignored safely.
- * Lifting, fall-protection, storage, and access-control profiles describe authored site/visual practice;
- * they are not standalone safety verdicts.
+ * Lifting, fall-protection, storage, access-control, and traffic-conflict profiles describe authored
+ * site/visual practice; they are not standalone safety verdicts.
  */
 export function projectEpisode01SceneElements(activeEventId: Id | null): readonly StrategySceneElement[] {
   if (!activeEventId) return Object.freeze([]);
@@ -153,6 +174,9 @@ export function projectEpisode01SceneElements(activeEventId: Id | null): readonl
       } : {}),
       ...(definition.access_control_profile ? {
         access_control_profile: Object.freeze({ ...definition.access_control_profile }),
+      } : {}),
+      ...(definition.traffic_conflict_profile ? {
+        traffic_conflict_profile: Object.freeze({ ...definition.traffic_conflict_profile }),
       } : {}),
     }));
   }
