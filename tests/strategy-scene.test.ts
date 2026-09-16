@@ -13,8 +13,9 @@ describe('Episode 01 strategy scene composition', () => {
       environment: 'foundation',
       primary_anchor: 'overview',
     });
-    expect(scene.active_layers).toEqual(['background', 'characters', 'signals', 'pressures', 'dialogue']);
+    expect(scene.active_layers).toEqual(['background', 'characters', 'elements', 'signals', 'pressures', 'dialogue']);
     expect(scene.hazard_signal_ids).toEqual([]);
+    expect(scene.elements).toEqual([]);
   });
 
   it('recomposes the same background around event-specific anchors and hazard signals', () => {
@@ -30,6 +31,21 @@ describe('Episode 01 strategy scene composition', () => {
       primary_anchor: 'ramp',
     });
     expect(scene.hazard_signal_ids).toEqual(['signal.ramp_movement']);
+    expect(scene.elements).toEqual([]);
+  });
+
+  it('adds only story-grounded physical props to the visual composition', () => {
+    const eventId = 'e01_03_plan_breaks';
+    const scene = projectEpisode01Scene(eventId, projectEpisode01Signals(eventId));
+
+    expect(scene.elements).toEqual([
+      expect.objectContaining({
+        element_id: 'scene.prop.material_stack',
+        kind: 'prop',
+        label: '통로 인접 적재 자재',
+        anchor: 'entry',
+      }),
+    ]);
   });
 
   it('falls back safely for events that have no dedicated visual recipe', () => {
@@ -38,5 +54,6 @@ describe('Episode 01 strategy scene composition', () => {
     expect(scene.scene_id).toBe('foundation.default');
     expect(scene.event_id).toBe('e01_unknown_future_event');
     expect(scene.background_asset_id).toBe('ep01.background.foundation.map');
+    expect(scene.elements).toEqual([]);
   });
 });
