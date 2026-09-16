@@ -19,7 +19,7 @@
     "assets:embedded": "node scripts/materialize-embedded-media.mjs",
     "assets:vector": "node scripts/generate-episode01-vector-art.mjs",
     "assets:manifest": "node scripts/build-episode01-assets.mjs",
-    "assets:check": "node scripts/materialize-embedded-media.mjs --check && node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
+    "assets:check": "npm run assets:embedded && node scripts/materialize-embedded-media.mjs --check && node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
     "assets:visual-contract": "node scripts/check-visual-contract.mjs",
     "assets:scene-elements-contract": "node scripts/check-scene-element-art.mjs",
     "assets:active-report": "npm run assets:embedded && npm run assets:manifest && node scripts/report-active-art.mjs",
