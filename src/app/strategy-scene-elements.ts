@@ -11,6 +11,9 @@ export type StrategyHarnessType = 'full_body';
 export type StrategyLanyardConfiguration = 'twin_y';
 export type StrategyFallConnectionIntent = 'continuous_attachment_during_transfer';
 export type StrategyBrandingPolicy = 'no_logo_no_trademark';
+export type StrategyMaterialDimensionGrouping = 'same_spec_only';
+export type StrategyMaterialBindingMethod = 'center_ratchet_or_equivalent';
+export type StrategyMaterialBindingPosition = 'center';
 
 export interface StrategySceneElementPivot {
   readonly x: number;
@@ -39,6 +42,15 @@ export interface StrategyFallProtectionProfile {
   readonly safety_evaluation_note: string;
 }
 
+export interface StrategyStorageProfile {
+  readonly dimension_grouping: StrategyMaterialDimensionGrouping;
+  readonly mixed_dimensions_allowed: false;
+  readonly binding_method: StrategyMaterialBindingMethod;
+  readonly binding_position: StrategyMaterialBindingPosition;
+  readonly site_practice_note: string;
+  readonly safety_evaluation_note: string;
+}
+
 export interface StrategySceneElement {
   readonly element_id: Id;
   readonly catalog_key: Id;
@@ -52,6 +64,7 @@ export interface StrategySceneElement {
   readonly map_max_px?: number;
   readonly lifting_profile?: StrategyLiftingProfile;
   readonly fall_protection_profile?: StrategyFallProtectionProfile;
+  readonly storage_profile?: StrategyStorageProfile;
 }
 
 type ElementArtDefinition = {
@@ -73,6 +86,7 @@ type ElementDefinition = {
   readonly art?: ElementArtDefinition;
   readonly lifting_profile?: StrategyLiftingProfile;
   readonly fall_protection_profile?: StrategyFallProtectionProfile;
+  readonly storage_profile?: StrategyStorageProfile;
   readonly reuse_for: readonly string[];
 };
 
@@ -87,7 +101,7 @@ const eventElements = elementCatalog.event_elements as Readonly<Record<string, r
 /**
  * Presentation-only physical scene elements. These are reusable visual props/hazards and do not
  * create new engine hazards, outcomes, or choices. Unknown catalog keys are ignored safely.
- * Lifting and fall-protection profiles describe authored site/visual practice; they are not safety verdicts.
+ * Lifting, fall-protection, and storage profiles describe authored site/visual practice; they are not safety verdicts.
  */
 export function projectEpisode01SceneElements(activeEventId: Id | null): readonly StrategySceneElement[] {
   if (!activeEventId) return Object.freeze([]);
@@ -115,6 +129,9 @@ export function projectEpisode01SceneElements(activeEventId: Id | null): readonl
       } : {}),
       ...(definition.fall_protection_profile ? {
         fall_protection_profile: Object.freeze({ ...definition.fall_protection_profile }),
+      } : {}),
+      ...(definition.storage_profile ? {
+        storage_profile: Object.freeze({ ...definition.storage_profile }),
       } : {}),
     }));
   }
