@@ -30,9 +30,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       binding_method: 'center_ratchet_or_equivalent',
       binding_position: 'center',
     });
-    expect(catalog.elements.material_stack.art.path).toBe(
-      'assets/episode01/scene-elements/material-stack.webp',
-    );
+    expect(catalog.elements.material_stack.art.path).toBe('assets/episode01/scene-elements/material-stack.webp');
     expect(catalog.elements.material_stack.storage_profile.safety_evaluation_note)
       .toContain('결속 형상만으로 안전을 판정하지 않고');
   });
@@ -58,6 +56,33 @@ describe('Episode 01 reusable scene element catalog', () => {
     });
     expect(catalog.elements.access_barrier.access_control_profile.control_evaluation_note)
       .toContain('형상만으로 통제가 완료된 것으로 판정하지 않고');
+  });
+
+  it('locks vehicle-pedestrian overlap to a reusable route overlay instead of a specific vehicle scene', () => {
+    expect(catalog.elements.vehicle_overlap_zone.production_status).toBe('css-placeholder');
+    expect(catalog.elements.vehicle_overlap_zone.traffic_conflict_profile).toMatchObject({
+      render_mode: 'route_overlay',
+      vehicle_path_style: 'wide_drive_path',
+      pedestrian_path_style: 'narrow_walk_path',
+      conflict_marker: 'highlighted_overlap',
+      directional_markings: 'chevrons_and_lane_edges',
+      vehicle_object_allowed: false,
+      pedestrian_object_allowed: false,
+      integrated_text_allowed: false,
+      branding_allowed: false,
+    });
+    expect(catalog.elements.vehicle_overlap_zone.art).toMatchObject({
+      path: 'assets/episode01/scene-elements/vehicle-overlap.webp',
+      minimum_width: 768,
+      minimum_height: 512,
+      pivot: { x: 0.5, y: 0.5 },
+      map_max_px: 168,
+      requires_alpha: true,
+    });
+    expect(catalog.elements.vehicle_overlap_zone.traffic_conflict_profile.safety_evaluation_note)
+      .toContain('물리적 동선 분리');
+    expect(catalog.elements.vehicle_overlap_zone.traffic_conflict_profile.safety_evaluation_note)
+      .toContain('사각지대');
   });
 
   it('projects the final material stack only where Episode 01 text already establishes it', () => {
@@ -98,9 +123,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       branding_policy: 'no_logo_no_trademark',
     });
     expect(catalog.elements.harness_unclipped.fall_protection_profile.design_reference).toContain('SWELOCK');
-    expect(catalog.elements.harness_unclipped.art.path).toBe(
-      'assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp',
-    );
+    expect(catalog.elements.harness_unclipped.art.path).toBe('assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp');
     expect(catalog.elements.harness_unclipped.fall_protection_profile.safety_evaluation_note)
       .toContain('두 줄 자체만으로 안전을 판정하지 않고');
   });
@@ -113,9 +136,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       capacity_basis: 'manufacturer_choker_wll',
       wire_rope_diameter_mm: null,
     });
-    expect(catalog.elements.suspended_load.art.path).toBe(
-      'assets/episode01/scene-elements/suspended-load-round-sling-choker.webp',
-    );
+    expect(catalog.elements.suspended_load.art.path).toBe('assets/episode01/scene-elements/suspended-load-round-sling-choker.webp');
 
     expect(catalog.elements.gangform_lift_wire22.lifting_profile).toMatchObject({
       load_family: 'gangform',
@@ -124,16 +145,12 @@ describe('Episode 01 reusable scene element catalog', () => {
       capacity_basis: 'work_plan_and_rated_capacity',
       wire_rope_diameter_mm: 22,
     });
-    expect(catalog.elements.gangform_lift_wire22.art.path).toBe(
-      'assets/episode01/scene-elements/gangform-lift-wire22.webp',
-    );
+    expect(catalog.elements.gangform_lift_wire22.art.path).toBe('assets/episode01/scene-elements/gangform-lift-wire22.webp');
   });
 
   it('keeps rigging method separate from the final safety evaluation', () => {
-    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note)
-      .toContain('Choker WLL');
-    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note)
-      .toContain('초크각');
+    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note).toContain('Choker WLL');
+    expect(catalog.elements.suspended_load.lifting_profile.safety_evaluation_note).toContain('초크각');
     expect(catalog.elements.gangform_lift_wire22.lifting_profile.safety_evaluation_note)
       .toContain('직경만으로 안전을 판정하지 않고');
   });
