@@ -1,12 +1,13 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { isWebP, webPDimensions } from './webp-dimensions.mjs';
+import { isWebP, webPDimensions, webPHasAlpha } from './webp-dimensions.mjs';
 
 const root = process.cwd();
 const checkOnly = process.argv.includes('--check');
 const sourceDir = path.join(root, 'content/episode01/embedded-media');
-const target = path.join(root, 'public/assets/episode01/backgrounds/foundation-map.webp');
+const foundationTarget = path.join(root, 'public/assets/episode01/backgrounds/foundation-map.webp');
+const materialStackTarget = path.join(root, 'public/assets/episode01/scene-elements/material-stack.webp');
 
 const EXPECTED = Object.freeze({
   encodedLength: 150248,
@@ -14,6 +15,15 @@ const EXPECTED = Object.freeze({
   width: 1920,
   height: 1080,
   sha256: 'ee9aefea829ddbdcd5883fab68144ae85759538f83b3ec5bfe4af43c7ad2d74d',
+});
+
+const MATERIAL_STACK_EXPECTED = Object.freeze({
+  encodedLength: 69312,
+  encodedSha256: '13a6d1119b53d2576d1956542af5eae4548e257bf427f8ed53a1bc6971503c6f',
+  bytes: 51984,
+  width: 768,
+  height: 581,
+  sha256: '88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0',
 });
 
 const sources = [
@@ -40,6 +50,19 @@ const sources = [
   ['15', 10000, 'e01fffc02964e3a9fb91124890a04b2cb8c632b3b473027a06e5f4ed978751cd'],
   ['16', 248, '4b433a15ea656728d6d0c8ffe3a6addbc383ecbd2e86043a2ad0a0d5dd098510'],
 ];
+
+async function writeIfChanged(target, bytes) {
+  await mkdir(path.dirname(target), { recursive: true });
+  let unchanged = false;
+  try {
+    const current = await readFile(target);
+    unchanged = current.length === bytes.length && current.equals(bytes);
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error;
+  }
+  if (!unchanged) await writeFile(target, bytes);
+  return unchanged;
+}
 
 const chunks = [];
 const mismatches = [];
@@ -84,17 +107,57 @@ if (hash !== EXPECTED.sha256) {
   throw new Error(`Foundation SHA-256 mismatch: ${hash}.`);
 }
 
+const materialStackFile = 'material-stack.webp.b64.01';
+const materialStackEncoded = (await readFile(path.join(sourceDir, materialStackFile), 'utf8')).trim();
+const materialStackEncodedHash = createHash('sha256').update(materialStackEncoded).digest('hex');
+if (materialStackEncoded.length !== MATERIAL_STACK_EXPECTED.encodedLength) {
+  throw new Error(
+    `${materialStackFile} has ${materialStackEncoded.length} chars; expected ${MATERIAL_STACK_EXPECTED.encodedLength}.`,
+  );
+}
+if (materialStackEncodedHash !== MATERIAL_STACK_EXPECTED.encodedSha256) {
+  throw new Error(
+    `${materialStackFile} SHA-256 mismatch: ${materialStackEncodedHash}; `
+    + `expected ${MATERIAL_STACK_EXPECTED.encodedSha256}.`,
+  );
+}
+if (!/^[A-Za-z0-9+/=]+$/.test(materialStackEncoded)) {
+  throw new Error(`${materialStackFile} contains non-base64 characters.`);
+}
+
+const materialStackBytes = Buffer.from(materialStackEncoded, 'base64');
+if (materialStackBytes.length !== MATERIAL_STACK_EXPECTED.bytes) {
+  throw new Error(
+    `Material stack WebP size ${materialStackBytes.length}; expected ${MATERIAL_STACK_EXPECTED.bytes}.`,
+  );
+}
+if (!isWebP(materialStackBytes)) {
+  throw new Error('Materialized material stack asset is not a WebP file.');
+}
+const materialStackDimensions = webPDimensions(materialStackBytes);
+if (!materialStackDimensions
+  || materialStackDimensions.width !== MATERIAL_STACK_EXPECTED.width
+  || materialStackDimensions.height !== MATERIAL_STACK_EXPECTED.height) {
+  throw new Error(
+    `Material stack dimensions ${materialStackDimensions
+      ? `${materialStackDimensions.width}x${materialStackDimensions.height}`
+      : 'unreadable'}; expected ${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}.`,
+  );
+}
+if (webPHasAlpha(materialStackBytes) !== true) {
+  throw new Error('Material stack final WebP must include alpha transparency.');
+}
+const materialStackHash = createHash('sha256').update(materialStackBytes).digest('hex');
+if (materialStackHash !== MATERIAL_STACK_EXPECTED.sha256) {
+  throw new Error(`Material stack SHA-256 mismatch: ${materialStackHash}.`);
+}
+
 if (!checkOnly) {
-  await mkdir(path.dirname(target), { recursive: true });
-  let unchanged = false;
-  try {
-    const current = await readFile(target);
-    unchanged = current.length === bytes.length && current.equals(bytes);
-  } catch (error) {
-    if (error?.code !== 'ENOENT') throw error;
-  }
-  if (!unchanged) await writeFile(target, bytes);
-  console.log(`${unchanged ? 'Verified' : 'Materialized'} Foundation final WebP (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  const foundationUnchanged = await writeIfChanged(foundationTarget, bytes);
+  const materialStackUnchanged = await writeIfChanged(materialStackTarget, materialStackBytes);
+  console.log(`${foundationUnchanged ? 'Verified' : 'Materialized'} Foundation final WebP (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  console.log(`${materialStackUnchanged ? 'Verified' : 'Materialized'} material stack final WebP (${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}, ${MATERIAL_STACK_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
 } else {
   console.log(`Foundation embedded media source verified (sha256 ${hash}).`);
+  console.log(`Material stack embedded media source verified (sha256 ${materialStackHash}).`);
 }
