@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "default_scene": {
+    "scene_id": "foundation.default",
+    "background_asset_id": "ep01.background.foundation.map",
+    "environment": "foundation",
+    "primary_anchor": "overview",
+    "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+  },
+  "events": {
+    "e01_03_plan_breaks": {
+      "scene_id": "foundation.access-conflict",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "entry",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_04_junho_signal": {
+      "scene_id": "foundation.ramp-signal",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "ramp",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_05_command": {
+      "scene_id": "foundation.work-overlap",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_06_pump_arrival": {
+      "scene_id": "foundation.vehicle-entry",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "gate",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_08b_inspection_find": {
+      "scene_id": "foundation.inspection-find",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "inspection",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_08d_reinspection": {
+      "scene_id": "foundation.reinspection",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "inspection",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_08g_tbm_field_gap": {
+      "scene_id": "foundation.tbm-field-gap",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    },
+    "e01_08i_restart_pressure": {
+      "scene_id": "foundation.restart-pressure",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": ["background", "characters", "signals", "pressures", "dialogue"]
+    }
+  }
+}
