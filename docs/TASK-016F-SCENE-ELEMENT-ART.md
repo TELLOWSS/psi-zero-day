@@ -21,7 +21,7 @@ There is no RC SVG layer for scene elements. This prevents production props from
 | vehicle_overlap_zone | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
 | harness_unclipped | `assets/episode01/scene-elements/harness-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
 | platform_cut_edge | `assets/episode01/scene-elements/platform-cut-edge.webp` | 768×512 | 148 px | 0.50, 0.86 |
-| suspended_load | `assets/episode01/scene-elements/suspended-load-round-sling.webp` | 768×768 | 136 px | 0.50, 0.62 |
+| suspended_load | `assets/episode01/scene-elements/suspended-load-round-sling-choker.webp` | 768×768 | 136 px | 0.50, 0.62 |
 | gangform_lift_wire22 | `assets/episode01/scene-elements/gangform-lift-wire22.webp` | 768×768 | 156 px | 0.50, 0.66 |
 | exclusion_zone | `assets/episode01/scene-elements/exclusion-zone.webp` | 768×512 | 160 px | 0.50, 0.76 |
 | wet_floor | `assets/episode01/scene-elements/wet-floor.webp` | 768×512 | 150 px | 0.50, 0.50 |
@@ -35,13 +35,20 @@ The lifting element is split so the game does not present one generic rigging me
 ### General material lifting
 - catalog key: `suspended_load`
 - visual rigging method: round sling
-- final path: `suspended-load-round-sling.webp`
+- site-default hitch method: choker hitch (초크걸이)
+- capacity basis in game metadata: manufacturer sling tag / Choker WLL, not the vertical rating
+- final path: `suspended-load-round-sling-choker.webp`
 - intended use: ordinary construction material lifting scenes
+
+The choker hitch is the authored site-default presentation for general heavy-load scenes in PSI : ZERO DAY. It is not encoded as a universal statement that every load must be choked. A scene may override the authored rigging profile when its work plan or load geometry requires another method.
+
+When a choker hitch is shown, gameplay safety evaluation must not treat the rigging method itself as proof of safety. The evaluation must consider the sling tag/manufacturer choker rating, load mass and center of gravity, choke angle, sling and stitching/cover condition, sharp-edge protection, sling angle, connection condition, lifting point, hook/shackle hardware and the applicable work plan.
 
 ### Gangform lifting
 - catalog key: `gangform_lift_wire22`
 - visual rigging method: wire rope
 - wire-rope diameter represented in the site visual profile: Ø22 mm
+- hitch method: `site_defined` until the authored gangform work plan specifies the connection method
 - final path: `gangform-lift-wire22.webp`
 - intended use: gangform lifting scenes
 
@@ -81,7 +88,7 @@ At gameplay scale each final cutout must:
 - sit below actors and interactive risk signals,
 - contain no Korean text or pseudo-glyphs,
 - avoid visually implying a hazard not present in the authored episode data,
-- show the correct lifting gear for the scene profile when the element is a lifting asset.
+- show the correct lifting gear and hitch method for the authored scene profile when the element is a lifting asset.
 
 ## Next named production asset
 `public/assets/episode01/scene-elements/material-stack.webp`
