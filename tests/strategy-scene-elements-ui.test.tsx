@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import type { StrategyVisualAssets } from '../src/app/strategy-assets';
 import type { StrategyView } from '../src/app/strategy-view';
 import { StrategyMapShell } from '../src/ui/StrategyMapShell';
 
@@ -27,6 +28,8 @@ const view: StrategyView = {
       anchor: 'entry',
       production_status: 'css-placeholder',
       planned_asset_id: 'ep01.scene_element.material_stack',
+      pivot: { x: 0.5, y: 0.94 },
+      map_max_px: 132,
     }],
   },
   signals: [{ signal_id: 'signal.entry_congestion', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.entry_congestion' }],
@@ -44,7 +47,7 @@ const copy = {
 const text = (id: string) => id;
 
 describe('Reusable scene element map layer', () => {
-  it('renders physical props separately from actionable risk signals', () => {
+  it('renders a CSS physical prop separately from actionable risk signals when final art is absent', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={() => undefined} />);
 
     expect(html).toContain('data-scene="foundation.access-conflict"');
@@ -52,7 +55,35 @@ describe('Reusable scene element map layer', () => {
     expect(html).toContain('strategy-scene-element-layer');
     expect(html).toContain('data-scene-element="scene.prop.material_stack"');
     expect(html).toContain('data-scene-element-key="material_stack"');
+    expect(html).toContain('data-visual="css"');
     expect(html).toContain('통로 인접 적재 자재');
+    expect(html).not.toContain('strategy-scene-element-art');
     expect(html).toContain('data-signal="signal.entry_congestion"');
+  });
+
+  it('promotes the same physical prop to final transparent art without changing scene data', () => {
+    const visualAssets: StrategyVisualAssets = {
+      characters: {},
+      scene_elements: {
+        'scene.prop.material_stack': {
+          element_id: 'scene.prop.material_stack',
+          uri: 'assets/episode01/scene-elements/material-stack.webp',
+          pivot_x: 0.5,
+          pivot_y: 0.94,
+          map_max_px: 132,
+        },
+      },
+    };
+    const html = renderToStaticMarkup(<StrategyMapShell
+      view={view} copy={copy} text={text} person={() => undefined} visualAssets={visualAssets}
+    />);
+
+    expect(html).toContain('data-scene-element="scene.prop.material_stack"');
+    expect(html).toContain('data-visual="asset"');
+    expect(html).toContain('strategy-scene-element-art');
+    expect(html).toContain('material-stack.webp');
+    expect(html).toContain('width:132px');
+    expect(html).toContain('translate(-50%, -94%)');
+    expect(html).not.toContain('>▤<');
   });
 });
