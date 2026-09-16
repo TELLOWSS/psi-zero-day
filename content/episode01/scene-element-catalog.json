@@ -59,7 +59,7 @@
       "kind": "hazard",
       "label": "차량·보행 동선 중첩",
       "visual_token": "⇄",
-      "production_status": "css-placeholder",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.vehicle_overlap",
       "traffic_conflict_profile": {
         "render_mode": "route_overlay",
