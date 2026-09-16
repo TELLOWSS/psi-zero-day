@@ -29,6 +29,7 @@ jobs:
 
       - name: Generate deterministic Episode 01 assets
         run: |
+          npm run assets:embedded
           npm run assets:vector
           npm run assets:manifest
 
