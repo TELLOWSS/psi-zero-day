@@ -1,0 +1,56 @@
+/* Interaction safety pass — keep pointer/touch controls above the fold without changing game rules. */
+
+/* Absolute strategy overlays must stop inheriting their original grid rows. Keeping grid-row: 3/4
+   makes bottom/top offsets resolve against those small grid areas and can push controls off-screen. */
+.strategy-active .play-panel {
+  grid-row: auto;
+  min-height: 104px;
+  max-height: 18%;
+  overflow: auto;
+}
+
+.strategy-active .game-footer {
+  grid-row: auto;
+}
+
+/* Autosave is status-only UI; it must never become the pointer target over gameplay controls. */
+.strategy-active .save-hint {
+  pointer-events: none;
+}
+
+/* Preserve a usable pointer/touch target after the compact art-slice overrides. */
+.strategy-active .continue-button {
+  min-height: 44px;
+  padding: 8px 0 8px 10px;
+}
+
+.strategy-action-list button,
+.strategy-action-confirm-buttons button,
+.strategy-outcome-card .strategy-execute-button,
+.map-choice-fallback .choice-panel button {
+  min-height: 44px;
+}
+
+/* The resource strip sits over a bright site background. Give each resource a stable dark backing
+   instead of relying on a translucent white tile whose text contrast changes with the scene. */
+.strategy-resource-bar article {
+  background: rgba(18, 42, 58, .84);
+  border-color: rgba(255, 255, 255, .26);
+  color: #f5fbfd;
+}
+
+.strategy-resource-bar article span {
+  opacity: .88;
+}
+
+.strategy-resource-bar article[data-resource="safety"][data-signal-count="0"] strong {
+  color: #e1f2e9;
+}
+
+@media (max-width: 1100px), (max-height: 680px) {
+  .strategy-active .play-panel {
+    min-height: 96px;
+    max-height: 30%;
+    overflow: auto;
+  }
+}
