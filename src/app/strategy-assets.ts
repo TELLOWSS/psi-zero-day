@@ -1,3 +1,4 @@
+import backgroundCatalog from '../../content/episode01/background-catalog.json';
 import visuals from '../../content/episode01/visuals.json';
 import type { Id } from '../domain';
 
@@ -21,10 +22,19 @@ type CharacterVisualPlan = {
   readonly accent: string;
 };
 
+type BackgroundPlan = {
+  readonly environment: string;
+  readonly asset_id: string;
+  readonly production_status: 'final' | 'planned';
+  readonly fallback_asset_id: string | null;
+};
+
+const backgroundPlans = backgroundCatalog.backgrounds as Readonly<Record<string, BackgroundPlan>>;
+
 /**
  * Presentation-only resolver. Asset IDs are authored in visuals.json / scene-composition.json
- * and are resolved through the validated content asset manifest. Missing art cleanly falls back
- * to CSS silhouettes/map without changing gameplay rules.
+ * and are resolved through the validated content asset manifest. Planned site backgrounds may
+ * explicitly fall back to an already registered background until their final art lands.
  */
 export function projectStrategyVisualAssets(
   characterIds: readonly Id[],
@@ -60,7 +70,11 @@ export function characterPortraitUri(characterId: Id, resolve: AssetResolver): s
 }
 
 export function backgroundAssetUri(assetId: Id, resolve: AssetResolver): string | undefined {
-  return resolve(assetId);
+  const direct = resolve(assetId);
+  if (direct) return direct;
+
+  const plan = Object.values(backgroundPlans).find(candidate => candidate.asset_id === assetId);
+  return plan?.fallback_asset_id ? resolve(plan.fallback_asset_id) : undefined;
 }
 
 export function episode01BackgroundUri(resolve: AssetResolver): string | undefined {
