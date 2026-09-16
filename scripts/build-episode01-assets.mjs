@@ -5,6 +5,7 @@ import { isWebP, webPDimensions, webPHasAlpha } from './webp-dimensions.mjs';
 
 const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
+const elementCatalogPath = path.join(root, 'content/episode01/scene-element-catalog.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
 const fullProductionCheck = process.argv.includes('--production-check');
@@ -12,6 +13,7 @@ const batchAProductionCheck = process.argv.includes('--production-batch-a-check'
 const playerProductionCheck = process.argv.includes('--production-player-check');
 const productionCheck = fullProductionCheck || batchAProductionCheck || playerProductionCheck;
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
+const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
 
 const planned = [];
 for (const [characterId, character] of Object.entries(plan.characters ?? {})) {
@@ -21,6 +23,8 @@ for (const [characterId, character] of Object.entries(plan.characters ?? {})) {
     group_id: 'ep01.characters',
     preload_policy: 'on_demand',
     source: `${characterId}:portrait`,
+    production_scope: 'core',
+    allow_rc_fallback: true,
   });
   planned.push({
     asset_id: character.map_asset_id,
@@ -28,6 +32,8 @@ for (const [characterId, character] of Object.entries(plan.characters ?? {})) {
     group_id: 'ep01.characters',
     preload_policy: 'next_scene',
     source: `${characterId}:map`,
+    production_scope: 'core',
+    allow_rc_fallback: true,
   });
 }
 for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {})) {
@@ -37,6 +43,20 @@ for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {}))
     group_id: 'ep01.backgrounds',
     preload_policy: 'required',
     source: `${backgroundId}:background`,
+    production_scope: 'core',
+    allow_rc_fallback: true,
+  });
+}
+for (const [elementKey, definition] of Object.entries(elementCatalog.elements ?? {})) {
+  if (!definition?.planned_asset_id || !definition?.art?.path) continue;
+  planned.push({
+    asset_id: definition.planned_asset_id,
+    uri: definition.art.path,
+    group_id: 'ep01.scene_elements',
+    preload_policy: 'next_scene',
+    source: `scene_element:${elementKey}`,
+    production_scope: 'scene-element',
+    allow_rc_fallback: false,
   });
 }
 
@@ -71,21 +91,24 @@ function requiresTransparentBackground(item) {
   return item.source.endsWith(':portrait') || item.source.endsWith(':map');
 }
 
-async function readPlannedAsset(uri) {
+async function readPlannedAsset(item) {
   // Final commercial art always wins when present.
-  const exact = await tryRead(uri);
+  const exact = await tryRead(item.uri);
   if (exact) return exact;
+
+  // Scene elements intentionally have no RC image layer: final WebP -> CSS placeholder.
+  if (item.allow_rc_fallback === false) return undefined;
 
   // TASK-014A release-candidate art: a hand-authored visual slice used before final WebP lands.
   // Example: player-portrait.webp -> player-portrait-rc.svg.
-  const extension = path.extname(uri).toLowerCase();
+  const extension = path.extname(item.uri).toLowerCase();
   if (extension === '.webp') {
-    const rcUri = uri.replace(/\.webp$/i, '-rc.svg');
+    const rcUri = item.uri.replace(/\.webp$/i, '-rc.svg');
     const rc = await tryRead(rcUri);
     if (rc) return rc;
 
     // TASK-010D deterministic generated fallback remains the last-resort art path.
-    const fallbackUri = uri.replace(/\.webp$/i, '.svg');
+    const fallbackUri = item.uri.replace(/\.webp$/i, '.svg');
     const fallback = await tryRead(fallbackUri);
     if (fallback) return fallback;
   }
@@ -94,11 +117,12 @@ async function readPlannedAsset(uri) {
 }
 
 if (productionCheck) {
+  const coreProductionItems = planned.filter(item => item.production_scope === 'core');
   const productionItems = playerProductionCheck
-    ? planned.filter(item => playerSources.has(item.source))
+    ? coreProductionItems.filter(item => playerSources.has(item.source))
     : batchAProductionCheck
-      ? planned.filter(item => batchASources.has(item.source))
-      : planned;
+      ? coreProductionItems.filter(item => batchASources.has(item.source))
+      : coreProductionItems;
   const expectedCount = playerProductionCheck ? 2 : batchAProductionCheck ? 7 : 17;
   const scopeLabel = playerProductionCheck
     ? 'Player production art'
@@ -163,7 +187,7 @@ if (productionCheck) {
   const assets = [];
   for (const item of planned) {
     if (!item.asset_id || !item.uri) continue;
-    const resolved = await readPlannedAsset(item.uri);
+    const resolved = await readPlannedAsset(item);
     if (!resolved) continue;
     const extension = path.extname(resolved.uri).slice(1).toLowerCase();
     assets.push({
