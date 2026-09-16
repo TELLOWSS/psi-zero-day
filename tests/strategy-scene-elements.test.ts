@@ -37,6 +37,29 @@ describe('Episode 01 reusable scene element catalog', () => {
       .toContain('결속 형상만으로 안전을 판정하지 않고');
   });
 
+  it('locks access-barrier art to a generic reusable freestanding control without baked signage', () => {
+    expect(catalog.elements.access_barrier.production_status).toBe('css-placeholder');
+    expect(catalog.elements.access_barrier.access_control_profile).toMatchObject({
+      barrier_form: 'freestanding_modular',
+      body_material: 'high_visibility_polymer',
+      stabilization: 'weighted_feet',
+      reflective_marking: true,
+      integrated_text_allowed: false,
+      integrated_sign_allowed: false,
+      warning_lamps_allowed: false,
+    });
+    expect(catalog.elements.access_barrier.art).toMatchObject({
+      path: 'assets/episode01/scene-elements/access-barrier.webp',
+      minimum_width: 768,
+      minimum_height: 512,
+      pivot: { x: 0.5, y: 0.92 },
+      map_max_px: 140,
+      requires_alpha: true,
+    });
+    expect(catalog.elements.access_barrier.access_control_profile.control_evaluation_note)
+      .toContain('형상만으로 통제가 완료된 것으로 판정하지 않고');
+  });
+
   it('projects the final material stack only where Episode 01 text already establishes it', () => {
     expect(projectEpisode01SceneElements('e01_03_plan_breaks')).toEqual([
       expect.objectContaining({
