@@ -1,5 +1,5 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -33,6 +33,17 @@
       "visual_token": "▥",
       "production_status": "css-placeholder",
       "planned_asset_id": "ep01.scene_element.access_barrier",
+      "access_control_profile": {
+        "barrier_form": "freestanding_modular",
+        "body_material": "high_visibility_polymer",
+        "stabilization": "weighted_feet",
+        "reflective_marking": true,
+        "integrated_text_allowed": false,
+        "integrated_sign_allowed": false,
+        "warning_lamps_allowed": false,
+        "site_practice_note": "여러 공종에서 재사용할 수 있도록 고휘도 독립형 모듈 바리케이드와 안정형 중량 발판, 반사 표시를 기본 형상으로 표현한다.",
+        "control_evaluation_note": "바리케이드 형상만으로 통제가 완료된 것으로 판정하지 않고 설치 연속성, 전도·이동 방지, 실제 출입통제 범위, 우회동선 및 작업계획을 함께 평가한다."
+      },
       "art": {
         "path": "assets/episode01/scene-elements/access-barrier.webp",
         "minimum_width": 768,
