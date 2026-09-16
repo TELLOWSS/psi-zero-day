@@ -22,9 +22,34 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(new Set(elements.map(item => item.planned_asset_id)).size).toBe(elements.length);
   });
 
-  it('projects the material stack only where Episode 01 text already establishes it', () => {
+  it('promotes the approved material stack and locks same-spec central binding', () => {
+    expect(catalog.elements.material_stack.production_status).toBe('final');
+    expect(catalog.elements.material_stack.storage_profile).toMatchObject({
+      dimension_grouping: 'same_spec_only',
+      mixed_dimensions_allowed: false,
+      binding_method: 'center_ratchet_or_equivalent',
+      binding_position: 'center',
+    });
+    expect(catalog.elements.material_stack.art.path).toBe(
+      'assets/episode01/scene-elements/material-stack.webp',
+    );
+    expect(catalog.elements.material_stack.storage_profile.safety_evaluation_note)
+      .toContain('결속 형상만으로 안전을 판정하지 않고');
+  });
+
+  it('projects the final material stack only where Episode 01 text already establishes it', () => {
     expect(projectEpisode01SceneElements('e01_03_plan_breaks')).toEqual([
-      expect.objectContaining({ catalog_key: 'material_stack', anchor: 'entry', label: '통로 인접 적재 자재' }),
+      expect.objectContaining({
+        catalog_key: 'material_stack',
+        anchor: 'entry',
+        label: '통로 인접 적재 자재',
+        production_status: 'final',
+        storage_profile: expect.objectContaining({
+          dimension_grouping: 'same_spec_only',
+          mixed_dimensions_allowed: false,
+          binding_method: 'center_ratchet_or_equivalent',
+        }),
+      }),
     ]);
     expect(projectEpisode01SceneElements('e01_05_command')).toEqual([
       expect.objectContaining({ catalog_key: 'material_stack', anchor: 'yard', label: '통로 인접 적재 자재' }),
