@@ -1,6 +1,6 @@
 # TASK-016F — Scene Element Production Art
 
-Status: CONTRACT COMPLETE / FINAL ART 2 OF 10 / MATERIAL STACK + ACCESS BARRIER ACCEPTED
+Status: CONTRACT COMPLETE / FINAL ART 2 OF 10 / VEHICLE OVERLAP BRIEF LOCKED
 
 ## Objective
 Promote reusable physical construction-site props and hazards from lightweight CSS placeholders to commercial transparent WebP cutouts without changing engine rules, event outcomes, or scene recipes.
@@ -18,7 +18,7 @@ There is no RC SVG layer for scene elements. This prevents production props from
 | --- | --- | --- | ---: | ---: | --- |
 | material_stack | FINAL / ACCEPTED | `assets/episode01/scene-elements/material-stack.webp` | 768×512 | 132 px | 0.50, 0.94 |
 | access_barrier | FINAL / ACCEPTED | `assets/episode01/scene-elements/access-barrier.webp` | 768×512 | 140 px | 0.50, 0.92 |
-| vehicle_overlap_zone | NEXT | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
+| vehicle_overlap_zone | NEXT / BRIEF LOCKED | `assets/episode01/scene-elements/vehicle-overlap.webp` | 768×512 | 168 px | 0.50, 0.50 |
 | harness_unclipped | pending | `assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp` | 512×768 | 112 px | 0.50, 0.96 |
 | platform_cut_edge | pending | `assets/episode01/scene-elements/platform-cut-edge.webp` | 768×512 | 148 px | 0.50, 0.86 |
 | suspended_load | pending | `assets/episode01/scene-elements/suspended-load-round-sling-choker.webp` | 768×768 | 136 px | 0.50, 0.62 |
@@ -30,136 +30,125 @@ There is no RC SVG layer for scene elements. This prevents production props from
 All ten slots require WebP alpha transparency. No text, labels, warnings, site names, logos, floor plate, background scenery, or UI may be baked into the cutout.
 
 ## Material-stack visual contract
-The first final scene element is `material_stack`, because it is already used by Episode 01 (`e01_03_plan_breaks` and `e01_05_command`).
-
 Approved final asset:
 - final path: `public/assets/episode01/scene-elements/material-stack.webp`
 - deterministic embedded output: 768×581, 51,984 bytes
 - binary SHA-256: `88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0`
 - alpha: required and verified
-- visual content: one homogeneous material specification per bundle
-- mixed dimensions/specifications: not allowed in one visual bundle
-- binding: central ratchet buckle or equivalent separate binding must be visibly identifiable
-- no lifting hook/slings, text, signs, UI, site scenery or other material specification mixed into the cutout
+- one homogeneous material specification per bundle
+- different dimensions/specifications separated
+- central ratchet buckle or equivalent binding visibly identifiable
 
-The bundle/profile is a site-visual practice, not a standalone safety verdict. Gameplay evaluation must still consider stack stability, dunnage/support, actual binding condition, passage encroachment, and the applicable work plan.
-
-Gameplay rendering acceptance is locked by automated tests:
-- `e01_03_plan_breaks`: same final WebP at `entry`
-- `e01_05_command`: same final WebP at `yard`
-- map width: 132 px
-- pivot translation: 0.50 / 0.94
-- CSS token is not rendered when the final asset resolves
+Gameplay rendering acceptance remains locked at `entry` for `e01_03_plan_breaks` and `yard` for `e01_05_command`, 132 px, pivot 0.50/0.94.
 
 ## Access-barrier visual contract
-`access_barrier` is deliberately generic because it must be reusable across foundation, typical-floor, scaffold, basement, and lifting scenes without implying a specific hazard that the authored event did not contain.
-
 Approved final asset:
-- catalog key: `access_barrier`
 - final path: `public/assets/episode01/scene-elements/access-barrier.webp`
 - deterministic embedded output: 820×514, 55,802 bytes
 - binary SHA-256: `acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542`
 - alpha: required and verified
 - map width: 140 px
 - pivot: 0.50 / 0.92
-- form: freestanding modular construction barrier
-- body: high-visibility yellow/black polymer-style modular barrier
-- stabilization: two clearly readable weighted feet/base blocks
-- visibility: reflective side marking remains readable at gameplay scale
-- integrated Korean/English text: none
-- integrated warning/sign board: none
-- warning lamps/beacons: none
-- people, vehicles, opening/pit, scaffolding, floor slab, background scenery and unrelated props: none
+- freestanding high-visibility modular barrier
+- clearly readable weighted feet/base blocks and reflective marking
+- no text, sign board, warning lamp, people, vehicles, pit/opening, scenery, or branding
 
-The earlier orange barricade concepts with Korean copy, warning sign boards, lamps, sandbags, dark studio background, or an opening/pit remain concept references only and are not production assets.
+The asset is registered for reusable rendering but is not injected into an Episode 01 event that does not already author an access-control barrier.
 
-The barrier shape itself is not a safety verdict. Gameplay evaluation must separately consider whether barriers are continuous, stable against overturning/movement, placed around the actual restricted area, preserve a safe bypass route, and match the applicable work plan.
+## Vehicle–pedestrian overlap visual contract
+`vehicle_overlap_zone` is a reusable hazard overlay, not a picture of one specific forklift, truck, worker, or project. This keeps the same asset usable in foundation access routes, basement logistics, material yards, and lifting areas.
 
-The asset is registered for reusable rendering but is not injected into an Episode 01 event that does not already author an access-control barrier. This preserves story/hazard fidelity while making the final asset available to future scene recipes.
+Production brief:
+- catalog key: `vehicle_overlap_zone`
+- final path: `public/assets/episode01/scene-elements/vehicle-overlap.webp`
+- minimum: 768×512 transparent WebP
+- map width: 168 px
+- pivot: 0.50 / 0.50
+- render mode: route overlay
+- vehicle route: wide drive path
+- pedestrian route: narrower walk path
+- overlap: clearly highlighted intersection/shared zone
+- directional language: simple chevrons and lane-edge markings only
+- baked vehicle object: forbidden
+- baked worker/pedestrian figure: forbidden
+- Korean/English text or pseudo-glyphs: forbidden
+- vehicle/manufacturer/site branding: forbidden
+- scene-specific floor slab, parking bay, building, background, cones, barriers, or signs: forbidden
+
+The overlay must communicate **where vehicle and pedestrian movement conflict**, not claim that a particular vehicle model or worker action is the hazard. At gameplay scale the wide vehicle route, narrow pedestrian route, and overlap hotspot must remain distinguishable.
+
+The overlay itself is not a safety verdict. Gameplay evaluation must separately consider physical route separation, barricades, guide/signal personnel, vehicle speed, reversing movement, driver sightlines and blind spots, lighting, parking, material storage encroachment, and the applicable work plan.
+
+The final asset will remain reusable and will not be injected into an Episode 01 event unless that event explicitly authors vehicle/pedestrian route conflict.
 
 ## Fall-protection visual contract
-The reusable fall-protection hazard must visually match contemporary site practice without embedding a commercial brand.
-
 ### Twin-lanyard harness
 - catalog key: `harness_unclipped`
-- harness type: full-body harness
-- lanyard configuration: twin/Y lanyard
-- visible lanyards: 2
-- visible large hooks: 2
-- connection intent: one connection can remain attached while the second lanyard transfers to the next suitable anchorage
-- internal ergonomic reference: SWELOCK double-lanyard products may inform strap/hook proportions only
-- branding rule: no SWELOCK logo, trademark, product name, fake label, or manufacturer-specific marking in final art
+- full-body harness
+- twin/Y lanyard: 2 lanyards, 2 large hooks
+- internal ergonomic reference: SWELOCK double-lanyard products may inform proportions only
+- branding: no logo, trademark, product name, or fake manufacturer label
 - final path: `harness-twin-lanyard-unclipped.webp`
 
-The twin-lanyard shape is a site-default visual profile, not a claim that two lanyards alone make the work safe. Gameplay evaluation must still consider whether the worker is actually connected, the suitability/location/strength of the anchorage, hook engagement, fall-clearance distance, swing-fall exposure, energy absorber/lanyard condition and the applicable work condition.
-
-When the hazard state is `harness_unclipped`, the final cutout must still show both lanyards and both hooks clearly so the player can understand that available protection exists but is not correctly connected.
+The twin-lanyard shape is a site-default visual profile, not a standalone safety verdict. Gameplay evaluation still considers actual attachment, anchorage, hook engagement, fall clearance, swing-fall exposure, absorber/lanyard condition, and work conditions.
 
 ## Lifting visual contract
-The lifting element is split so the game does not present one generic rigging method for all loads.
-
 ### General material lifting
 - catalog key: `suspended_load`
-- visual rigging method: round sling
-- site-default hitch method: choker hitch (초크걸이)
-- capacity basis in game metadata: manufacturer sling tag / Choker WLL, not the vertical rating
+- round sling
+- site-default hitch: choker hitch (초크걸이)
+- capacity basis: manufacturer sling tag / Choker WLL
 - final path: `suspended-load-round-sling-choker.webp`
-- intended use: ordinary construction material lifting scenes
 
-The choker hitch is the authored site-default presentation for general heavy-load scenes in PSI : ZERO DAY. It is not encoded as a universal statement that every load must be choked. A scene may override the authored rigging profile when its work plan or load geometry requires another method.
-
-When a choker hitch is shown, gameplay safety evaluation must not treat the rigging method itself as proof of safety. The evaluation must consider the sling tag/manufacturer choker rating, load mass and center of gravity, choke angle, sling and stitching/cover condition, sharp-edge protection, sling angle, connection condition, lifting point, hook/shackle hardware and the applicable work plan.
+The rigging method itself is not a safety verdict. Evaluation considers load, center of gravity, choke angle, sling condition, edge protection, sling angle, lifting point, hardware, and work plan.
 
 ### Gangform lifting
 - catalog key: `gangform_lift_wire22`
-- visual rigging method: wire rope
-- wire-rope diameter represented in the site visual profile: Ø22 mm
-- hitch method: `site_defined` until the authored gangform work plan specifies the connection method
+- wire rope
+- site visual profile: Ø22 mm
+- hitch: `site_defined`
 - final path: `gangform-lift-wire22.webp`
-- intended use: gangform lifting scenes
 
-The rigging method is a visual/site-practice profile, not a standalone safety verdict. Gameplay safety evaluation must consider the load, rated capacity, rigging condition, lifting angle, connection condition, lifting points, shackles/related hardware, and work plan as applicable. Wire-rope diameter alone must never produce a safe/unsafe result.
+Diameter alone must never produce a safe/unsafe result. Evaluation considers rated capacity, rope condition, angles, connections, lifting points, shackles/hardware, and work plan.
 
 ## Pivot contract
 `pivot.x` and `pivot.y` are normalized values from 0 to 1. The scene anchor marks a world point; the cutout is translated by the negative pivot percentage so the authored contact/suspension point aligns to that world point.
 
-Examples:
-- ground props use a pivot near the lower center,
-- a suspended load uses an interior suspension/readability point,
-- area overlays such as wet floor or vehicle overlap use a centered pivot.
+Ground props use a lower-center pivot; suspended loads use an interior suspension/readability point; area overlays such as vehicle overlap use a centered pivot.
 
 ## Automated gates
 Normal development/release verification runs:
 
 `npm run assets:scene-elements-contract`
 
-This validates slot count, unique IDs/paths, WebP destination paths, minimum dimensions, normalized pivots, map scale, required alpha metadata, lifting-rigging profile rules, the twin-lanyard fall-protection profile, the material-stack storage/binding profile, and the reusable access-barrier profile. Any slot promoted to `final` must also have a real WebP present and pass its dimensions/alpha checks during the normal contract check.
+This validates slot count, unique IDs/paths, WebP destinations, minimum dimensions, normalized pivots, map scale, required alpha metadata, lifting profiles, twin-lanyard profile, material storage/binding profile, access-barrier profile, and the vehicle/pedestrian traffic-conflict profile. Any slot promoted to `final` must have a real WebP and pass dimensions/alpha checks.
 
-When all final scene-element art is ready, run the strict binary gate:
+Strict all-art gate:
 
 `npm run assets:production-scene-elements-check`
 
-The strict gate requires all 10 files, valid WebP headers, each per-slot minimum dimension, and actual WebP alpha transparency.
+This requires all 10 files, valid WebP headers, each minimum dimension, and actual WebP alpha transparency.
 
 ## Manifest behavior
-Scene-element asset IDs are part of the planned asset pipeline but are emitted into `content/episode01/assets.json` only when an exact final WebP exists. Missing scene-element art does not create an RC/fallback image manifest entry, so the runtime naturally falls back to the existing CSS placeholder.
+Scene-element asset IDs enter `content/episode01/assets.json` only when an exact final WebP exists. Missing scene-element art keeps the runtime on the CSS placeholder. The original core production gate remains 17 files; scene-element production remains a separate 10-slot gate.
 
-The original Episode 01 core production gate remains exactly 17 files (1 background + 16 character images). Scene-element production is a separate 10-slot gate and does not distort the core release count. With `material_stack` and `access_barrier` final, the normal Episode 01 manifest resolves 19 assets.
+With `material_stack` and `access_barrier` final, the normal Episode 01 manifest resolves 19 assets.
 
 ## Rendering acceptance
 At gameplay scale each final cutout must:
-- remain identifiable at its configured `map_max_px`,
-- align to its scene anchor via the catalog pivot,
-- preserve clean transparent edges with no rectangular halo,
+- remain identifiable at configured `map_max_px`,
+- align through the catalog pivot,
+- preserve clean transparent edges,
 - sit below actors and interactive risk signals,
 - contain no Korean text or pseudo-glyphs,
-- avoid visually implying a hazard not present in the authored episode data,
-- show the correct lifting gear and hitch method for the authored scene profile when the element is a lifting asset,
-- show two distinct lanyards and two distinct hooks for the fall-protection asset while remaining brand-neutral,
-- keep different material dimensions/specifications in separate bundles and show the authored central binding for `material_stack`,
-- keep `access_barrier` generic: weighted freestanding body + reflective marking, with no baked sign/text/lamp or hazard-specific surroundings.
+- avoid implying a hazard not authored by the event,
+- preserve correct lifting gear/hitch when applicable,
+- preserve two lanyards/two hooks for the fall-protection asset,
+- keep material specifications separated and central binding visible for `material_stack`,
+- keep `access_barrier` generic and sign-free,
+- keep `vehicle_overlap_zone` as a route-conflict overlay with no baked vehicle, worker, text, or branding.
 
 ## Next named production slot
 `public/assets/episode01/scene-elements/vehicle-overlap.webp`
 
-Advance `vehicle_overlap_zone` next. First lock the reusable visual contract so the asset communicates vehicle/pedestrian path overlap without hard-coding a particular site, vehicle brand, Korean sign, or Episode 01-specific event. Then produce exactly one transparent cutout/overlay and pass the same binary, alpha, pivot, map-scale, manifest, TypeScript, test, and production-build gates used for the first two final scene elements.
+Produce exactly one transparent route-overlap asset that satisfies the locked contract above. Do not produce a sheet or full gameplay screen. Final acceptance uses the same binary, alpha, pivot, map-scale, manifest, TypeScript, test, and production-build gates used for the first two final scene elements.
