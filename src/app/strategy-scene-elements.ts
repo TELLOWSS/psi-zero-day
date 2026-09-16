@@ -5,6 +5,8 @@ import type { StrategySceneAnchor } from './strategy-scene';
 export type StrategySceneElementKind = 'hazard' | 'prop' | 'control';
 export type StrategyLiftingLoadFamily = 'general_material' | 'gangform';
 export type StrategyRiggingMethod = 'round_sling' | 'wire_rope';
+export type StrategyHitchMethod = 'choker' | 'site_defined';
+export type StrategyCapacityBasis = 'manufacturer_choker_wll' | 'work_plan_and_rated_capacity';
 
 export interface StrategySceneElementPivot {
   readonly x: number;
@@ -14,6 +16,8 @@ export interface StrategySceneElementPivot {
 export interface StrategyLiftingProfile {
   readonly load_family: StrategyLiftingLoadFamily;
   readonly rigging_method: StrategyRiggingMethod;
+  readonly hitch_method: StrategyHitchMethod;
+  readonly capacity_basis: StrategyCapacityBasis;
   readonly wire_rope_diameter_mm: number | null;
   readonly site_practice_note: string;
   readonly safety_evaluation_note: string;
