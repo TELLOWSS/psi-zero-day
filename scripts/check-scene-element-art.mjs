@@ -55,6 +55,35 @@ function validateLiftingProfile(key, definition) {
   }
 }
 
+function validateFallProtectionProfile(key, definition) {
+  const profile = definition.fall_protection_profile;
+  if (!profile) return;
+  if (profile.harness_type !== 'full_body') {
+    errors.push(`${key}: fall_protection_profile.harness_type must be full_body`);
+  }
+  if (profile.lanyard_configuration !== 'twin_y') {
+    errors.push(`${key}: fall_protection_profile.lanyard_configuration must be twin_y`);
+  }
+  if (profile.lanyard_count !== 2 || profile.hook_count !== 2) {
+    errors.push(`${key}: twin_y fall protection profile requires two lanyards and two hooks`);
+  }
+  if (profile.connection_intent !== 'continuous_attachment_during_transfer') {
+    errors.push(`${key}: fall_protection_profile.connection_intent is invalid`);
+  }
+  if (profile.branding_policy !== 'no_logo_no_trademark') {
+    errors.push(`${key}: final harness art must remain brand-neutral`);
+  }
+  if (typeof profile.design_reference !== 'string' || !profile.design_reference.trim()) {
+    errors.push(`${key}: fall_protection_profile.design_reference is required`);
+  }
+  if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) {
+    errors.push(`${key}: fall_protection_profile.site_practice_note is required`);
+  }
+  if (typeof profile.safety_evaluation_note !== 'string' || !profile.safety_evaluation_note.trim()) {
+    errors.push(`${key}: fall_protection_profile.safety_evaluation_note is required`);
+  }
+}
+
 for (const [key, definition] of definitions) {
   const art = definition.art;
   const assetId = definition.planned_asset_id;
@@ -64,6 +93,7 @@ for (const [key, definition] of definitions) {
   else assetIds.add(assetId);
 
   validateLiftingProfile(key, definition);
+  validateFallProtectionProfile(key, definition);
 
   if (!art || typeof art !== 'object') {
     errors.push(`${key}: art production spec is required`);
@@ -122,6 +152,19 @@ for (const [key, definition] of definitions) {
   if (art.requires_alpha && webPHasAlpha(bytes) !== true) {
     errors.push(`${key}: production scene element must include WebP alpha transparency (${art.path})`);
   }
+}
+
+const harnessProfile = catalog.elements?.harness_unclipped?.fall_protection_profile;
+if (harnessProfile?.lanyard_configuration !== 'twin_y'
+  || harnessProfile?.lanyard_count !== 2
+  || harnessProfile?.hook_count !== 2) {
+  errors.push('harness_unclipped: site-default harness visual must use a twin-Y two-lanyard/two-hook profile');
+}
+if (catalog.elements?.harness_unclipped?.art?.path !== 'assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp') {
+  errors.push('harness_unclipped: production art path must identify the twin-lanyard profile');
+}
+if (harnessProfile?.branding_policy !== 'no_logo_no_trademark') {
+  errors.push('harness_unclipped: final game art must not embed SWELOCK or other manufacturer branding');
 }
 
 const generalLift = catalog.elements?.suspended_load?.lifting_profile;
