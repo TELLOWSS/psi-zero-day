@@ -99,7 +99,7 @@ describe('Reusable scene element map layer', () => {
         scene_id: 'foundation.command-yard',
         event_id: 'e01_05_command',
         primary_anchor: 'yard',
-        elements: baseView.scene.elements.map(element => ({ ...element, anchor: 'yard' as const })),
+        elements: (baseView.scene.elements ?? []).map(element => ({ ...element, anchor: 'yard' as const })),
       },
       runtime: {
         ...baseView.runtime,
