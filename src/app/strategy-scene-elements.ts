@@ -4,6 +4,11 @@ import type { StrategySceneAnchor } from './strategy-scene';
 
 export type StrategySceneElementKind = 'hazard' | 'prop' | 'control';
 
+export interface StrategySceneElementPivot {
+  readonly x: number;
+  readonly y: number;
+}
+
 export interface StrategySceneElement {
   readonly element_id: Id;
   readonly catalog_key: Id;
@@ -13,7 +18,18 @@ export interface StrategySceneElement {
   readonly anchor: StrategySceneAnchor;
   readonly production_status: 'css-placeholder' | 'planned' | 'final';
   readonly planned_asset_id?: Id;
+  readonly pivot?: StrategySceneElementPivot;
+  readonly map_max_px?: number;
 }
+
+type ElementArtDefinition = {
+  readonly path: string;
+  readonly minimum_width: number;
+  readonly minimum_height: number;
+  readonly pivot: StrategySceneElementPivot;
+  readonly map_max_px: number;
+  readonly requires_alpha: true;
+};
 
 type ElementDefinition = {
   readonly element_id: string;
@@ -22,6 +38,7 @@ type ElementDefinition = {
   readonly visual_token: string;
   readonly production_status: 'css-placeholder' | 'planned' | 'final';
   readonly planned_asset_id?: string;
+  readonly art?: ElementArtDefinition;
   readonly reuse_for: readonly string[];
 };
 
@@ -54,6 +71,10 @@ export function projectEpisode01SceneElements(activeEventId: Id | null): readonl
       anchor: placement.anchor,
       production_status: definition.production_status,
       ...(definition.planned_asset_id ? { planned_asset_id: definition.planned_asset_id } : {}),
+      ...(definition.art ? {
+        pivot: Object.freeze({ ...definition.art.pivot }),
+        map_max_px: definition.art.map_max_px,
+      } : {}),
     }));
   }
 
