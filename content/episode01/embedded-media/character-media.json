@@ -12,46 +12,19 @@
       "encoded_length": 72656,
       "encoded_sha256": "c431ad4b8f29e7088714f1d5fd942846e5496a18ad6883ec23c172353fb1253c",
       "parts": [
-        {
-          "file": "player-portrait.webp.b64.01",
-          "length": 18000,
-          "sha256": "4fb520a966ceb822ce6330f3ca1e83d94d9b939ab3e6eb1e7d885b598ecac00e"
-        },
-        {
-          "file": "player-portrait.webp.b64.02",
-          "length": 18000,
-          "sha256": "8b971ac536c3bac38a1da569dcfff9ceb21fc3c32f757a9fa5e4d3b63be7ecd4"
-        },
-        {
-          "file": "player-portrait.webp.b64.03",
-          "length": 4500,
-          "sha256": "2305f6983a722308fa915d58de23fc5c59b76ccb421405778f5aeceba787e449"
-        },
-        {
-          "file": "player-portrait.webp.b64.03b",
-          "length": 4500,
-          "sha256": "13a8819a5ebb3dfa80a0ae8ebbc5dd01e709e3f3f326b1de156eeeb3ca75274b"
-        },
-        {
-          "file": "player-portrait.webp.b64.03c",
-          "length": 4500,
-          "sha256": "d37cf847aff5ae1574b53a060a47b70df3b8b8030a0792186be042342d89e325"
-        },
-        {
-          "file": "player-portrait.webp.b64.03d",
-          "length": 4500,
-          "sha256": "8fcf620316df039c293d1462366ca7cab6fed1cec7faa117c8792b7d9495c187"
-        },
-        {
-          "file": "player-portrait.webp.b64.04",
-          "length": 18000,
-          "sha256": "5551f75a1951e206dbaeea2227710691e1a0a879b76832aaea356e0c76bc7afd"
-        },
-        {
-          "file": "player-portrait.webp.b64.05",
-          "length": 656,
-          "sha256": "d93f91711bff2459f427634b315fe639dc8e6cd006fc59ca8b25bf3793cff285"
-        }
+        {"file":"player-portrait.webp.b64.01","length":18000,"sha256":"4fb520a966ceb822ce6330f3ca1e83d94d9b939ab3e6eb1e7d885b598ecac00e"},
+        {"file":"player-portrait.webp.b64.02","length":18000,"sha256":"8b971ac536c3bac38a1da569dcfff9ceb21fc3c32f757a9fa5e4d3b63be7ecd4"},
+        {"file":"player-portrait.webp.b64.03","length":4500,"sha256":"2305f6983a722308fa915d58de23fc5c59b76ccb421405778f5aeceba787e449"},
+        {"file":"player-portrait.webp.b64.03b","length":4500,"sha256":"13a8819a5ebb3dfa80a0ae8ebbc5dd01e709e3f3f326b1de156eeeb3ca75274b"},
+        {"file":"player-portrait.webp.b64.03ca","length":750,"sha256":"3097396b595f4db49eac197ac560789d1dbf76c07d393fa1f94af304c6a62ac1"},
+        {"file":"player-portrait.webp.b64.03cb","length":750,"sha256":"5769502b99914d43af6c7f4fb7d0c701321fb59d972ce79dd740d6372815a471"},
+        {"file":"player-portrait.webp.b64.03cc","length":750,"sha256":"63b753631f9574baf26de603e3c579dc9b514ce5e7d35632cf107d4ae83f2fab"},
+        {"file":"player-portrait.webp.b64.03cd","length":750,"sha256":"1cb6b4702b815dbb8ce4d1357bd01d42887109ccf36c0a382a12a0421994d09d"},
+        {"file":"player-portrait.webp.b64.03ce","length":750,"sha256":"a75fce66c1e8dafc20fec8f63b951fb6d98855124c064490292008d304da66bd"},
+        {"file":"player-portrait.webp.b64.03cf","length":750,"sha256":"fe47a0da8d081af4f221ff628443d2a43a8e2208c06717b41d4930ad6761577f"},
+        {"file":"player-portrait.webp.b64.03d","length":4500,"sha256":"8fcf620316df039c293d1462366ca7cab6fed1cec7faa117c8792b7d9495c187"},
+        {"file":"player-portrait.webp.b64.04","length":18000,"sha256":"5551f75a1951e206dbaeea2227710691e1a0a879b76832aaea356e0c76bc7afd"},
+        {"file":"player-portrait.webp.b64.05","length":656,"sha256":"d93f91711bff2459f427634b315fe639dc8e6cd006fc59ca8b25bf3793cff285"}
       ]
     }
   ]
