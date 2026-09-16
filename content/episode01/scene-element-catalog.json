@@ -31,7 +31,7 @@
       "kind": "control",
       "label": "출입 통제 바리케이드",
       "visual_token": "▥",
-      "production_status": "css-placeholder",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.access_barrier",
       "access_control_profile": {
         "barrier_form": "freestanding_modular",
