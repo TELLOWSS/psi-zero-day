@@ -3,20 +3,24 @@
 ## Goal
 Finish final production WebP integration without drifting into repeated concept-image generation or unrelated gameplay expansion.
 
-## Current checkpoint — verified 2026-09-16
+## Current checkpoint — verified 2026-09-17
 - Core engine and Episode 01 gameplay remain preserved.
 - Commercial title/game layout is already implemented.
 - Final Foundation background WebP is integrated and verified at 1920×1080.
-- RC/fallback art remains active and valid for all character slots until final WebPs land.
-- Character production media is the current blocker: 16 character WebP slots remain.
+- RC/fallback art remains active and valid for character slots until each final WebP lands.
+- `player-portrait.webp` has a registered 1024×1024 alpha WebP source in the character embedded-media pipeline. Its visual acceptance remains governed by `PLAYER-VISUAL-LOCK.md`.
+- 15 character WebP slots do not yet have registered final binary sources.
+- The previous Player map embedded chunks/candidate staging were inconsistent or incomplete and have been removed from `main`; they must not be restored or labeled FINAL.
+- `player-map-rc.svg` remains the valid runtime fallback while the final Player map WebP is recreated.
+- New final character WebPs must enter through `npm run assets:character-stage -- --id <name-map|name-portrait> --file <input.webp>` so chunking, dimensions, alpha, hashes and manifest registration come from one source file.
 - Generated full-screen mockups/contact sheets are reference material only and are not production assets.
-- Next named production slot: `player-portrait.webp`.
+- Next named production slot: `player-map.webp`.
 
 ## Fixed execution order
 1. Batch A final media
    - Foundation background — **DONE**
-   - Player portrait — **NEXT**
-   - Player map character
+   - Player portrait — **BINARY INTEGRATED; VISUAL LOCK STILL APPLIES**
+   - Player map character — **NEXT**
    - Kang Taesik portrait
    - Kang Taesik map character
    - Lim Junho portrait
@@ -36,6 +40,20 @@ Finish final production WebP integration without drifting into repeated concept-
 A request such as “next”, “continue”, or “proceed” advances the first incomplete item in the fixed order above. Do not jump to unrelated features or new episodes.
 
 The visual production lane is locked until TASK-016B completes. Engine/gameplay changes are allowed only when required to correctly display an approved production asset; otherwise they wait.
+
+## Binary intake rule
+Do not hand-edit base64 chunks for final character art.
+
+For a new or replacement final character WebP:
+1. Keep one authoritative source WebP.
+2. Stage it with `npm run assets:character-stage -- --id <asset-id> --file <source.webp>`.
+3. The staging tool must validate WebP format, minimum dimensions and alpha transparency before writing anything.
+4. New chunks use content-addressed filenames derived from the source SHA-256.
+5. Chunks are written before the manifest is atomically replaced; superseded chunks are removed only after the new manifest is active.
+6. Run `npm run assets:embedded` to materialize and re-verify the registered WebP.
+7. Run the applicable production gate before calling the asset FINAL.
+
+This rule exists specifically to prevent mixed chunks, partial uploads, stale candidate metadata or abbreviated staging text from being mistaken for production art.
 
 ## Image-generation rule
 Image generation is used only when creating a named production slot. Do not generate another full UI mockup merely to explore the look.
