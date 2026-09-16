@@ -4,7 +4,7 @@ import type { StrategyVisualAssets } from '../src/app/strategy-assets';
 import type { StrategyView } from '../src/app/strategy-view';
 import { StrategyMapShell } from '../src/ui/StrategyMapShell';
 
-const view: StrategyView = {
+const baseView: StrategyView = {
   clock: { day: 1, slot: 'MORNING' },
   construction: { stage_id: 'FOUNDATION', current_stage_progress: 12, progress_by_stage: { FOUNDATION: 12 }, milestones: [] },
   psi: { unlocked_node_ids: [], values: {}, flags: {} },
@@ -26,7 +26,7 @@ const view: StrategyView = {
       label: '통로 인접 적재 자재',
       visual_token: '▤',
       anchor: 'entry',
-      production_status: 'css-placeholder',
+      production_status: 'final',
       planned_asset_id: 'ep01.scene_element.material_stack',
       pivot: { x: 0.5, y: 0.94 },
       map_max_px: 132,
@@ -36,6 +36,19 @@ const view: StrategyView = {
   placements: [],
   frictions: [],
   runtime: { active_event_id: 'e01_03_plan_breaks', active_instance_id: 'run.e01_03_plan_breaks', participant_bindings: {}, completed_event_count: 0, pending_followup_count: 0 },
+};
+
+const visualAssets: StrategyVisualAssets = {
+  characters: {},
+  scene_elements: {
+    'scene.prop.material_stack': {
+      element_id: 'scene.prop.material_stack',
+      uri: 'assets/episode01/scene-elements/material-stack.webp',
+      pivot_x: 0.5,
+      pivot_y: 0.94,
+      map_max_px: 132,
+    },
+  },
 };
 
 const copy = {
@@ -48,42 +61,61 @@ const text = (id: string) => id;
 
 describe('Reusable scene element map layer', () => {
   it('renders a CSS physical prop separately from actionable risk signals when final art is absent', () => {
-    const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={() => undefined} />);
+    const html = renderToStaticMarkup(<StrategyMapShell view={baseView} copy={copy} text={text} person={() => undefined} />);
 
     expect(html).toContain('data-scene="foundation.access-conflict"');
     expect(html).toContain('data-environment="foundation"');
     expect(html).toContain('strategy-scene-element-layer');
     expect(html).toContain('data-scene-element="scene.prop.material_stack"');
     expect(html).toContain('data-scene-element-key="material_stack"');
+    expect(html).toContain('data-production-status="final"');
     expect(html).toContain('data-visual="css"');
     expect(html).toContain('통로 인접 적재 자재');
     expect(html).not.toContain('strategy-scene-element-art');
     expect(html).toContain('data-signal="signal.entry_congestion"');
   });
 
-  it('promotes the same physical prop to final transparent art without changing scene data', () => {
-    const visualAssets: StrategyVisualAssets = {
-      characters: {},
-      scene_elements: {
-        'scene.prop.material_stack': {
-          element_id: 'scene.prop.material_stack',
-          uri: 'assets/episode01/scene-elements/material-stack.webp',
-          pivot_x: 0.5,
-          pivot_y: 0.94,
-          map_max_px: 132,
-        },
-      },
-    };
+  it('renders the final material-stack WebP at the authored entry anchor and 132 px scale', () => {
     const html = renderToStaticMarkup(<StrategyMapShell
-      view={view} copy={copy} text={text} person={() => undefined} visualAssets={visualAssets}
+      view={baseView} copy={copy} text={text} person={() => undefined} visualAssets={visualAssets}
     />);
 
+    expect(html).toContain('scene-element-entry');
     expect(html).toContain('data-scene-element="scene.prop.material_stack"');
+    expect(html).toContain('data-production-status="final"');
     expect(html).toContain('data-visual="asset"');
     expect(html).toContain('strategy-scene-element-art');
     expect(html).toContain('material-stack.webp');
     expect(html).toContain('width:132px');
     expect(html).toContain('translate(-50%, -94%)');
     expect(html).not.toContain('>▤<');
+  });
+
+  it('reuses the same final material-stack WebP at the yard anchor for e01_05_command', () => {
+    const yardView: StrategyView = {
+      ...baseView,
+      scene: {
+        ...baseView.scene,
+        scene_id: 'foundation.command-yard',
+        event_id: 'e01_05_command',
+        primary_anchor: 'yard',
+        elements: baseView.scene.elements.map(element => ({ ...element, anchor: 'yard' as const })),
+      },
+      runtime: {
+        ...baseView.runtime,
+        active_event_id: 'e01_05_command',
+        active_instance_id: 'run.e01_05_command',
+      },
+    };
+    const html = renderToStaticMarkup(<StrategyMapShell
+      view={yardView} copy={copy} text={text} person={() => undefined} visualAssets={visualAssets}
+    />);
+
+    expect(html).toContain('data-scene="foundation.command-yard"');
+    expect(html).toContain('scene-element-yard');
+    expect(html).toContain('data-scene-element="scene.prop.material_stack"');
+    expect(html).toContain('material-stack.webp');
+    expect(html).toContain('width:132px');
+    expect(html).toContain('translate(-50%, -94%)');
   });
 });
