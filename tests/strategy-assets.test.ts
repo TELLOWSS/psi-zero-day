@@ -8,6 +8,7 @@ const available: Readonly<Record<string, string>> = {
   'ep01.character.lim_junho.map': 'assets/episode01/characters/lim-junho-map.webp',
   'ep01.character.lim_junho.portrait': 'assets/episode01/characters/lim-junho-portrait.webp',
   'ep01.scene_element.material_stack': 'assets/episode01/scene-elements/material-stack.webp',
+  'ep01.scene_element.access_barrier': 'assets/episode01/scene-elements/access-barrier.webp',
 };
 const resolve = (id: string) => available[id];
 
@@ -39,7 +40,7 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.characters.lim_junho?.map_uri).toBe('assets/episode01/characters/lim-junho-map.webp');
   });
 
-  it('promotes a final scene-element WebP with its catalog pivot and map scale', () => {
+  it('promotes final scene-element WebPs with catalog pivots and map scales', () => {
     const visuals = projectStrategyVisualAssets([], resolve);
     expect(visuals.scene_elements?.['scene.prop.material_stack']).toEqual({
       element_id: 'scene.prop.material_stack',
@@ -48,18 +49,27 @@ describe('Episode 01 strategy visual assets', () => {
       pivot_y: 0.94,
       map_max_px: 132,
     });
+    expect(visuals.scene_elements?.['scene.control.access_barrier']).toEqual({
+      element_id: 'scene.control.access_barrier',
+      uri: 'assets/episode01/scene-elements/access-barrier.webp',
+      pivot_x: 0.5,
+      pivot_y: 0.92,
+      map_max_px: 140,
+    });
     expect(visuals.scene_elements?.['scene.hazard.harness_unclipped']).toBeUndefined();
   });
 
-  it('uses final Foundation and material-stack WebPs while keeping TASK-014 RC character art before deterministic fallback', () => {
+  it('uses final Foundation and two scene-element WebPs while keeping TASK-014 RC character art before deterministic fallback', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
-    expect(content.asset_manifest.assets).toHaveLength(18);
+    expect(content.asset_manifest.assets).toHaveLength(19);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');
     expect(registry.getAsset('ep01.scene_element.material_stack')?.variants[0]?.uri)
       .toBe('assets/episode01/scene-elements/material-stack.webp');
+    expect(registry.getAsset('ep01.scene_element.access_barrier')?.variants[0]?.uri)
+      .toBe('assets/episode01/scene-elements/access-barrier.webp');
 
     const art = projectStrategyVisualAssets(cast, id => registry.getAsset(id)?.variants[0]?.uri);
     expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
@@ -69,6 +79,13 @@ describe('Episode 01 strategy visual assets', () => {
       pivot_x: 0.5,
       pivot_y: 0.94,
       map_max_px: 132,
+    });
+    expect(art.scene_elements?.['scene.control.access_barrier']).toMatchObject({
+      element_id: 'scene.control.access_barrier',
+      uri: 'assets/episode01/scene-elements/access-barrier.webp',
+      pivot_x: 0.5,
+      pivot_y: 0.92,
+      map_max_px: 140,
     });
 
     for (const characterId of cast) {
