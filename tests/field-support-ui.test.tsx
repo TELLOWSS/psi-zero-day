@@ -8,7 +8,13 @@ const view: StrategyView = {
   construction: { stage_id: 'FOUNDATION', current_stage_progress: 10, progress_by_stage: { FOUNDATION: 10 }, milestones: [] },
   psi: { unlocked_node_ids: [], values: {}, flags: {} },
   resources: { money: 0, time_slot: 'MORNING', schedule_progress: 10, safety_signal_count: 0, pressure_count: 0 },
-  assignments: [], roster: [], signals: [], placements: [], frictions: [],
+  assignments: [], roster: [],
+  scene: {
+    scene_id: 'foundation.access-conflict', event_id: 'e01_03_plan_breaks',
+    background_asset_id: 'ep01.background.foundation.map', environment: 'foundation', primary_anchor: 'entry',
+    active_layers: ['background', 'characters', 'signals', 'pressures', 'dialogue'], hazard_signal_ids: [],
+  },
+  signals: [], placements: [], frictions: [],
   runtime: { active_event_id: 'e01_03_plan_breaks', active_instance_id: 'run.e01_03_plan_breaks', participant_bindings: {}, completed_event_count: 1, pending_followup_count: 0 },
 };
 
