@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "default_key": "foundation",
+  "backgrounds": {
+    "foundation": {
+      "environment": "foundation",
+      "asset_id": "ep01.background.foundation.map",
+      "production_status": "final",
+      "fallback_asset_id": null,
+      "reuse_for": [
+        "site-arrival",
+        "access-control",
+        "ramp-movement",
+        "yard-coordination",
+        "inspection",
+        "restart-verification"
+      ],
+      "episode01_events": [
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_05_command",
+        "e01_06_pump_arrival",
+        "e01_08b_inspection_find",
+        "e01_08d_reinspection",
+        "e01_08g_tbm_field_gap",
+        "e01_08i_restart_pressure"
+      ]
+    },
+    "typical_floor": {
+      "environment": "typical_floor",
+      "asset_id": "ep01.background.typical_floor.map",
+      "production_status": "planned",
+      "fallback_asset_id": "ep01.background.foundation.map",
+      "reuse_for": [
+        "formwork",
+        "rebar",
+        "slab-work",
+        "concrete-pour",
+        "open-edge",
+        "housekeeping"
+      ],
+      "episode01_events": []
+    },
+    "scaffold": {
+      "environment": "scaffold",
+      "asset_id": "ep01.background.scaffold.map",
+      "production_status": "planned",
+      "fallback_asset_id": "ep01.background.foundation.map",
+      "reuse_for": [
+        "scaffold-work",
+        "gangform",
+        "work-platform",
+        "fall-protection",
+        "material-drop"
+      ],
+      "episode01_events": []
+    },
+    "basement": {
+      "environment": "basement",
+      "asset_id": "ep01.background.basement.map",
+      "production_status": "planned",
+      "fallback_asset_id": "ep01.background.foundation.map",
+      "reuse_for": [
+        "vehicle-pedestrian-overlap",
+        "material-storage",
+        "restricted-route",
+        "wet-floor",
+        "low-visibility"
+      ],
+      "episode01_events": []
+    },
+    "lifting": {
+      "environment": "lifting",
+      "asset_id": "ep01.background.lifting.map",
+      "production_status": "planned",
+      "fallback_asset_id": "ep01.background.foundation.map",
+      "reuse_for": [
+        "crane-lifting",
+        "suspended-load",
+        "signalman",
+        "exclusion-zone",
+        "material-hoisting"
+      ],
+      "episode01_events": []
+    }
+  }
+}
