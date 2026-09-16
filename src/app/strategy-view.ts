@@ -5,6 +5,8 @@ import { projectEpisode01Frictions } from './strategy-frictions';
 import type { FieldFriction } from './strategy-frictions';
 import { projectEpisode01CharacterPlacements } from './strategy-placements';
 import type { StrategyCharacterPlacement } from './strategy-placements';
+import { projectEpisode01Scene } from './strategy-scene';
+import type { StrategySceneComposition } from './strategy-scene';
 import { projectEpisode01Signals } from './strategy-signals';
 import type { StrategySignal } from './strategy-signals';
 
@@ -73,6 +75,7 @@ export interface StrategyView {
   readonly resources: StrategyResourceView;
   readonly assignments: readonly StrategyAssignmentView[];
   readonly roster: readonly StrategyCharacterView[];
+  readonly scene: StrategySceneComposition;
   readonly signals: readonly StrategySignal[];
   readonly placements: readonly StrategyCharacterPlacement[];
   readonly frictions: readonly FieldFriction[];
@@ -97,6 +100,7 @@ export function projectStrategyView(state: GameState): StrategyView {
     story_flags: character.story_flags,
   }));
   const signals = projectEpisode01Signals(activeEventId);
+  const scene = projectEpisode01Scene(activeEventId, signals);
   // Player state is intentionally separate from NPC character state, but the avatar belongs on
   // the strategy-map presentation layer. This adds no gameplay actor or engine-owned character.
   const placementCharacterIds = [
@@ -142,6 +146,7 @@ export function projectStrategyView(state: GameState): StrategyView {
       ...(assignment.delegated_to_id === undefined ? {} : { delegated_to_id: assignment.delegated_to_id }),
     })),
     roster,
+    scene,
     signals,
     placements,
     frictions,
