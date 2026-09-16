@@ -1,13 +1,21 @@
 {
-  "schema_version": 5,
+  "schema_version": 6,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
       "kind": "prop",
       "label": "통로 인접 적재 자재",
       "visual_token": "▤",
-      "production_status": "css-placeholder",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.material_stack",
+      "storage_profile": {
+        "dimension_grouping": "same_spec_only",
+        "mixed_dimensions_allowed": false,
+        "binding_method": "center_ratchet_or_equivalent",
+        "binding_position": "center",
+        "site_practice_note": "서로 규격이 다른 자재는 별도 묶음으로 분리하고, 동일 규격 묶음 중앙에는 라쳇버클 또는 동등한 별도 결속이 식별되도록 표현한다.",
+        "safety_evaluation_note": "결속 형상만으로 안전을 판정하지 않고 적재 안정성, 받침목, 결속 상태, 통로 침범 여부 및 작업계획을 함께 평가한다."
+      },
       "art": {
         "path": "assets/episode01/scene-elements/material-stack.webp",
         "minimum_width": 768,
