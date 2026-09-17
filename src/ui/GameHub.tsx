@@ -10,6 +10,11 @@ import { PlayableEpisode } from './PlayableEpisode';
 type HubPage = 'home' | 'map' | 'people' | 'journal';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal'];
 const featured = ['kang_taesik', 'player', 'lim_junho'] as const;
+const sceneArtIds = [
+  'ep01.scene_element.material_stack', 'ep01.scene_element.access_barrier', 'ep01.scene_element.vehicle_overlap',
+  'ep01.scene_element.harness_unclipped', 'ep01.scene_element.platform_cut_edge', 'ep01.scene_element.suspended_load',
+  'ep01.scene_element.gangform_lift_wire22', 'ep01.scene_element.exclusion_zone', 'ep01.scene_element.wet_floor', 'ep01.scene_element.open_edge',
+] as const;
 
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
   const paths = {
@@ -51,6 +56,7 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
   const castDetail = castPlan.characters.find(character => character.id === selectedPerson);
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
+  const finalSceneArt = sceneArtIds.filter(id => Boolean(resolve(id))).length;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   return <main className={`game-hub hub-page-${page}`}>
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
@@ -81,7 +87,7 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
           <VisualImage uri={characterPortraitUri(step.character, resolve)} alt="" /><span className="chapter-number">{String(index + 1).padStart(2, '0')}</span><div><small>{t(`ui.hub.step.${step.status}`)}</small><strong>{t(step.title)}</strong></div><HubIcon kind={step.status === 'done' ? 'check' : step.status === 'locked' ? 'lock' : 'play'} />
         </button>)}</div>
       </> : page === 'map' ? <>
-        <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
+        <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p><span className="hub-art-readiness">{t('ui.hub.art_readiness').replace('{count}', String(finalSceneArt)).replace('{total}', String(sceneArtIds.length))}</span></div>
         <div className="hub-route">
           <svg className="hub-route-line" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M150 100 L470 120 L810 155 L660 335 L300 340" /></svg>
           {journey.map((step, index) => <button className={`hub-route-node route-${index}`} key={step.id} type="button" data-status={step.status} aria-pressed={detail.id === step.id} onClick={() => setSelectedStep(step.id)}>

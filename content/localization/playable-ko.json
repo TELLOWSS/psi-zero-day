@@ -147,6 +147,7 @@
     "ui.hub.step.current": "현재 진행",
     "ui.hub.step.locked": "진행 대기",
     "ui.hub.route_hint": "에피소드 01의 다섯 이정표 · 선택한 경로에 따라 중간 사건이 달라집니다.",
+    "ui.hub.art_readiness": "현장 소품 최종 아트 {count}/{total} · 다음 제작: 더블 랜야드 안전대",
     "ui.hub.locked_hint": "앞선 이야기를 진행하면 열립니다.",
     "ui.hub.people.intro": "입장도 경험도 다른 여덟 사람. 함께 일할수록 보이는 것이 달라집니다.",
     "ui.hub.team_tag": "PSI ZERO DAY · 현장 동료",
