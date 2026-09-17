@@ -2,6 +2,13 @@
   "schema_version": 1,
   "variants": [
     {
+      "character_id": "yoon_sungho",
+      "expression": "appreciative",
+      "asset_id": "ep01.character.yoon_sungho.appreciative",
+      "uri": "assets/episode01/characters/yoon-sungho-appreciative.webp",
+      "text_ids": ["ep01.reactions.yoon.high"]
+    },
+    {
       "character_id": "lim_junho",
       "expression": "concerned",
       "asset_id": "ep01.character.lim_junho.concerned",

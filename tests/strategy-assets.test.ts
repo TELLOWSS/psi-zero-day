@@ -95,7 +95,7 @@ describe('Episode 01 strategy visual assets', () => {
   it('uses integrated production art through the registry without changing asset identities', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
-    expect(content.asset_manifest.assets).toHaveLength(29);
+    expect(content.asset_manifest.assets).toHaveLength(30);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');

@@ -233,9 +233,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
 
   const strategyActive = isPlaying && strategy !== null;
-  const dialoguePortraitUri = dialogueExpressionUri(person?.id, snapshot.dialogue?.text_id, resolveAsset) ?? (portrait?.kind === 'asset'
+  const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
-    : person ? characterPortraitUri(person.id, resolveAsset) : undefined);
+    : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
+  const dialoguePortraitUri = dialogueExpressionUri(person?.id, snapshot.dialogue?.text_id, resolveAsset) ?? basePortraitUri;
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
   const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
   const rewardCharacterId = activeEventId === 'e01_09_evening'
@@ -291,6 +292,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         {person ? <CharacterCard
           person={person}
           portraitUri={dialoguePortraitUri}
+          fallbackPortraitUri={basePortraitUri}
           growth={dialogueGrowth}
           loadout={dialogueLoadout}
           equipmentTitle={t('ui.equipment.title')}

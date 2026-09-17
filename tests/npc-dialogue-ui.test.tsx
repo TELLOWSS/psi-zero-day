@@ -107,6 +107,16 @@ describe('TASK-006 character interaction UI', () => {
     expect(session.getSnapshot().phase).toBe('playing');
   });
 
+  it.each(['delegate_kang', 'negotiate_yoon'] as const)('shows Yoon’s reaction portrait for the actual %s branch', plan => {
+    continueToChoice(); choose(plan);
+    continueToChoice(); choose('check_self');
+    continueToChoice(); choose('request_delay');
+    for (let i = 0; i < 30 && !session.getSnapshot().dialogue?.text_id.startsWith('ep01.reactions.yoon.'); i++) continueCurrent();
+    const cooperative = plan === 'negotiate_yoon';
+    expect(session.getSnapshot().dialogue?.text_id).toBe(cooperative ? 'ep01.reactions.yoon.high' : 'ep01.reactions.yoon.low');
+    expect(container.querySelector('.portrait-image')?.getAttribute('src')).toContain(cooperative ? 'yoon-sungho-appreciative.webp' : 'yoon-sungho-portrait.webp');
+  });
+
   it('inspects canonical values, delta history and dialogue conditions without changing state', async () => {
     continueToChoice(); choose('follow_junho'); continueToChoice();
     const before = session.getSnapshot();
