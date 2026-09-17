@@ -91,6 +91,10 @@
       {
         "type": "branding_and_pseudo_text",
         "reason": "helmet/chest/site labels and PSI branding violate final cutout rules"
+      },
+      {
+        "type": "lim_map_off_lock_2026-09-17",
+        "reason": "single-cutout format passed, but the asset used a white/blue hard hat, blue vest and tablet; Lim requires a yellow hard hat, green high-visibility vest and handheld radio with no tablet"
       }
     ]
   },
