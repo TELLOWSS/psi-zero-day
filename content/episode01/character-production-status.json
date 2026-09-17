@@ -147,7 +147,7 @@
   "next_asset": null,
   "rule": "Preserve integrated cast identity. Use batch staging for replacements. File gates prove technical readiness; expression variants and human playtesting remain separate release work.",
   "integration_status": "integrated",
-  "next_work": "Complete remaining seven world-prop finals, then expression/action variants and external playtesting. See docs/PRODUCTION-INTEGRATION-2026-09-18.md.",
+  "next_work": "Complete the remaining six world-prop finals, starting with platform cut edge, then expression/action variants and external playtesting. See docs/PRODUCTION-INTEGRATION-2026-09-18.md.",
   "batch_b": {
     "status": "integrated",
     "assets": [

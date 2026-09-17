@@ -20,11 +20,18 @@
         "path": "assets/episode01/scene-elements/material-stack.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.94 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.94
+        },
         "map_max_px": 132,
         "requires_alpha": true
       },
-      "reuse_for": ["foundation", "typical_floor", "basement"]
+      "reuse_for": [
+        "foundation",
+        "typical_floor",
+        "basement"
+      ]
     },
     "access_barrier": {
       "element_id": "scene.control.access_barrier",
@@ -48,11 +55,20 @@
         "path": "assets/episode01/scene-elements/access-barrier.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.92 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.92
+        },
         "map_max_px": 140,
         "requires_alpha": true
       },
-      "reuse_for": ["foundation", "typical_floor", "scaffold", "basement", "lifting"]
+      "reuse_for": [
+        "foundation",
+        "typical_floor",
+        "scaffold",
+        "basement",
+        "lifting"
+      ]
     },
     "vehicle_overlap_zone": {
       "element_id": "scene.hazard.vehicle_overlap",
@@ -78,18 +94,25 @@
         "path": "assets/episode01/scene-elements/vehicle-overlap.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.5 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
         "map_max_px": 168,
         "requires_alpha": true
       },
-      "reuse_for": ["foundation", "basement", "lifting"]
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "lifting"
+      ]
     },
     "harness_unclipped": {
       "element_id": "scene.hazard.harness_unclipped",
       "kind": "hazard",
       "label": "더블 랜야드 안전대 미체결",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.harness_unclipped",
       "fall_protection_profile": {
         "harness_type": "full_body",
@@ -106,11 +129,18 @@
         "path": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
         "minimum_width": 512,
         "minimum_height": 768,
-        "pivot": { "x": 0.5, "y": 0.96 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.96
+        },
         "map_max_px": 112,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18"
       },
-      "reuse_for": ["scaffold", "typical_floor"]
+      "reuse_for": [
+        "scaffold",
+        "typical_floor"
+      ]
     },
     "platform_cut_edge": {
       "element_id": "scene.hazard.platform_cut_edge",
@@ -123,11 +153,16 @@
         "path": "assets/episode01/scene-elements/platform-cut-edge.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.86 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.86
+        },
         "map_max_px": 148,
         "requires_alpha": true
       },
-      "reuse_for": ["scaffold"]
+      "reuse_for": [
+        "scaffold"
+      ]
     },
     "suspended_load": {
       "element_id": "scene.hazard.suspended_load",
@@ -149,11 +184,17 @@
         "path": "assets/episode01/scene-elements/suspended-load-round-sling-choker.webp",
         "minimum_width": 768,
         "minimum_height": 768,
-        "pivot": { "x": 0.5, "y": 0.62 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.62
+        },
         "map_max_px": 136,
         "requires_alpha": true
       },
-      "reuse_for": ["lifting", "typical_floor"]
+      "reuse_for": [
+        "lifting",
+        "typical_floor"
+      ]
     },
     "gangform_lift_wire22": {
       "element_id": "scene.hazard.gangform_lift_wire22",
@@ -175,11 +216,17 @@
         "path": "assets/episode01/scene-elements/gangform-lift-wire22.webp",
         "minimum_width": 768,
         "minimum_height": 768,
-        "pivot": { "x": 0.5, "y": 0.66 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.66
+        },
         "map_max_px": 156,
         "requires_alpha": true
       },
-      "reuse_for": ["lifting", "typical_floor"]
+      "reuse_for": [
+        "lifting",
+        "typical_floor"
+      ]
     },
     "exclusion_zone": {
       "element_id": "scene.control.exclusion_zone",
@@ -192,11 +239,18 @@
         "path": "assets/episode01/scene-elements/exclusion-zone.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.76 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.76
+        },
         "map_max_px": 160,
         "requires_alpha": true
       },
-      "reuse_for": ["lifting", "scaffold", "typical_floor"]
+      "reuse_for": [
+        "lifting",
+        "scaffold",
+        "typical_floor"
+      ]
     },
     "wet_floor": {
       "element_id": "scene.hazard.wet_floor",
@@ -209,11 +263,17 @@
         "path": "assets/episode01/scene-elements/wet-floor.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.5 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.5
+        },
         "map_max_px": 150,
         "requires_alpha": true
       },
-      "reuse_for": ["basement", "foundation"]
+      "reuse_for": [
+        "basement",
+        "foundation"
+      ]
     },
     "open_edge": {
       "element_id": "scene.hazard.open_edge",
@@ -226,19 +286,31 @@
         "path": "assets/episode01/scene-elements/open-edge.webp",
         "minimum_width": 768,
         "minimum_height": 512,
-        "pivot": { "x": 0.5, "y": 0.82 },
+        "pivot": {
+          "x": 0.5,
+          "y": 0.82
+        },
         "map_max_px": 154,
         "requires_alpha": true
       },
-      "reuse_for": ["typical_floor", "scaffold"]
+      "reuse_for": [
+        "typical_floor",
+        "scaffold"
+      ]
     }
   },
   "event_elements": {
     "e01_03_plan_breaks": [
-      { "element_key": "material_stack", "anchor": "entry" }
+      {
+        "element_key": "material_stack",
+        "anchor": "entry"
+      }
     ],
     "e01_05_command": [
-      { "element_key": "material_stack", "anchor": "yard" }
+      {
+        "element_key": "material_stack",
+        "anchor": "yard"
+      }
     ]
   }
 }

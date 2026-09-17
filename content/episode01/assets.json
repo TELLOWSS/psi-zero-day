@@ -290,6 +290,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.harness_unclipped",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
+          "format": "webp",
+          "bytes": 389334,
+          "hash": "69b4f5fad24fa17fa18aef0a97c77be0043cb91499885d5ba8a8a68afe209990"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.material_stack",
       "type": "image",
       "group_id": "ep01.scene_elements",
