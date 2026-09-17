@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "render_lock": {
+    "style": "adult-friendly premium casual-strategy 2.5D stylized realism",
+    "camera": "consistent 3/4 character view",
+    "lighting": "soft physically plausible daylight/studio-neutral",
+    "final_background": "transparent",
+    "forbid": [
+      "anime/chibi drift",
+      "company branding",
+      "site/project names",
+      "pseudo-text",
+      "presentation sheet",
+      "multiple final slots in one file",
+      "baked environment",
+      "floor plate",
+      "UI",
+      "malformed anatomy",
+      "childlike proportions"
+    ]
+  },
+  "player_master": {
+    "status": "locked",
+    "identity": "adult Korean female field safety manager",
+    "silhouette": "compact athletic",
+    "helmet": "white hard hat with one plain blue stripe",
+    "wardrobe": "navy practical workwear with blue/reflective safety vest",
+    "signature_prop": "black inspection tablet",
+    "portrait": {
+      "minimum": "1024x1024",
+      "framing": "upper-body 3/4, full helmet, shoulders visible, tablet identifiable"
+    },
+    "map": {
+      "minimum": "768x1024",
+      "framing": "single full-body 3/4 cutout, stable planted field-lead stance, height greater than width"
+    }
+  },
+  "batch_a": {
+    "status": "active",
+    "intake_scope": "batch-a",
+    "characters": [
+      {
+        "id": "kang_taesik",
+        "assets": ["kang-taesik-portrait.webp", "kang-taesik-map.webp"],
+        "age_role": "male, 50s veteran worker",
+        "silhouette": "broad heavy square",
+        "face": "weathered older face with thick moustache",
+        "helmet": "orange",
+        "wardrobe": "dark practical field workwear with orange safety vest",
+        "signature_prop": "work gloves",
+        "map_pose": "wide planted stance with pointing or instruction gesture",
+        "must_not_resemble": ["yoon_sungho", "oh_seungjae"]
+      },
+      {
+        "id": "lim_junho",
+        "assets": ["lim-junho-portrait.webp", "lim-junho-map.webp"],
+        "age_role": "male, early 20s rookie",
+        "silhouette": "small narrow young",
+        "face": "young round face with bright eyes",
+        "helmet": "yellow",
+        "wardrobe": "green high-visibility vest",
+        "signature_prop": "handheld radio",
+        "map_pose": "slightly forward eager posture",
+        "must_not_resemble": ["lee_jaehoon", "player"]
+      }
+    ],
+    "review": [
+      "all four Kang/Lim assets reviewed together",
+      "age and role readable before color cues",
+      "silhouettes distinct from Player and each other",
+      "portrait/map identity matches for each character",
+      "PPE and signature prop are physically plausible",
+      "no text/logo/background/UI",
+      "only rejected assets are regenerated"
+    ]
+  },
+  "batch_b": {
+    "status": "queued",
+    "intake_scope": "batch-b",
+    "characters": ["yoon_sungho", "lee_jaehoon", "choi_minseok", "seo_jeongmin", "oh_seungjae"],
+    "asset_count": 10
+  }
+}
