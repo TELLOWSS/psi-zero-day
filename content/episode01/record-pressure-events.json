@@ -42,7 +42,9 @@
         "choice_id": "record_preserve_timeline", "text_id": "ep01.record.preserve", "next_node_id": "end", "requirements": [],
         "effects": { "immediate_effects": [
           { "effect_id": "player.analysis.record_preserve", "kind": "player_stat", "stat_id": "analysis", "delta": 1 },
-          { "effect_id": "oh.respect.record_preserve", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 }
+          { "effect_id": "oh.respect.record_preserve", "kind": "context_relation", "from": { "kind": "participant", "role_id": "oh" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+          { "effect_id": "lee.respect.record_preserve", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+          { "effect_id": "kang.reporting.record_preserve", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": 1 }
         ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "record_action": "preserve_timeline" }, "ending_flags": {}, "followup_events": [] }
       }
     ],
