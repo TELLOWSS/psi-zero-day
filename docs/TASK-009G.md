@@ -58,3 +58,4 @@ TASK-009E/009F에서 승인된 상용 캐주얼 전략 비주얼을 실제 게�
 
 첫 산출물은 **8인 Character Master Sheet**다.
 한 화면에서 8명 전신과 대표 소품을 비교해 silhouette collision을 잡은 후, 캐릭터별 portrait와 map sprite를 개별 export한다.
+

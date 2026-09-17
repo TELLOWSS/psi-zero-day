@@ -2,7 +2,7 @@
   "locale": "ko",
   "messages": {
     "cast.oh_seungjae.name": "오승재",
-    "cast.oh_seungjae.role": "원도급 공사과장",
+    "cast.oh_seungjae.role": "현장 공사팀장",
     "cast.oh_seungjae.age": "41세",
     "ep01.8e.title": "누구 말이 맞나",
     "ep01.8f.title": "보고서가 돌아오다",
@@ -22,3 +22,4 @@
     "ep01.report_return.timeline_confirmed": "기록을 맞추니 아침 조회와 이후 변경 지시가 달랐고, 변경 내용이 반장에게 제때 전달된 기록은 없다. 보고서는 ‘변경지시 전달 누락과 현장통제 미흡이 겹친 상황’으로 정리된다. 누구 한 명 탓으로는 끝나지 않는다."
   }
 }
+
