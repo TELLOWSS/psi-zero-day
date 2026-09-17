@@ -42,8 +42,9 @@
       "choice_id": "report_verify_timeline", "text_id": "ep01.responsibility.verify_timeline", "next_node_id": "end", "requirements": [],
       "effects": { "immediate_effects": [
         { "effect_id": "player.analysis.timeline", "kind": "player_stat", "stat_id": "analysis", "delta": 1 },
+        { "effect_id": "gc.trust.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "trust", "delta": 2 },
         { "effect_id": "gc.respect.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "gc" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
-        { "effect_id": "lee.respect.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 1 },
+        { "effect_id": "lee.respect.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 },
         { "effect_id": "kang.reporting.timeline", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "reporting", "delta": 2 }
       ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "report_basis": "timeline" }, "ending_flags": {}, "followup_events": [] }
     }

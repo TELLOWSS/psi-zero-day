@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { playEpisode } from './helpers/episode01-playthrough';
+import { getRelation } from '../src/engine/relations';
 
 const base = {
   plan: 'negotiate_yoon' as const,
@@ -33,5 +34,7 @@ describe('Episode 01 responsibility and report route', () => {
     expect(state.flags.record_result).toBeUndefined();
     expect(state.event_runtime.finished_instances.find(i => i.event_id === 'e01_08f_report_return')?.selected_choice_ids)
       .toEqual(['report_return_timeline_confirmed']);
+    expect(getRelation(state.relations, 'oh_seungjae', 'player')?.trust).toBeGreaterThan(0);
+    expect(getRelation(state.relations, 'lee_jaehoon', 'player')?.respect).toBeGreaterThan(0);
   });
 });
