@@ -147,7 +147,7 @@
   "next_asset": null,
   "rule": "Preserve integrated cast identity. Use batch staging for replacements. File gates prove technical readiness; expression variants and human playtesting remain separate release work.",
   "integration_status": "integrated",
-  "next_work": "Ten world props and two dialogue variants (Junho concerned, Kang supportive) are integrated. Next: remaining cast expressions and action animation, rigging geometry review, external playtesting. See docs/DIALOGUE-ART-INTEGRATION-2026-09-18.md.",
+  "next_work": "Ten world props and three dialogue variants (Junho concerned, Kang supportive, Yoon appreciative) are integrated. Next: remaining cast expressions and action animation, rigging geometry review, external playtesting. See docs/DIALOGUE-ART-INTEGRATION-2026-09-18.md.",
   "batch_b": {
     "status": "integrated",
     "assets": [
