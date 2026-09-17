@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createEpisode01Registry } from '../src/content/episode01';
 import { characterPortraitUri, projectStrategyVisualAssets } from '../src/app/strategy-assets';
+import { visualAssetTier } from '../src/ui/VisualSlot';
 
 const available: Readonly<Record<string, string>> = {
   'ep01.background.foundation.map': 'assets/episode01/backgrounds/foundation-map.webp',
@@ -29,6 +30,30 @@ describe('Episode 01 strategy visual assets', () => {
     });
     expect(visuals.characters.kang_taesik?.map_uri).toBeUndefined();
     expect(visuals.characters.kang_taesik?.accent).toBe('#c86f2b');
+  });
+
+  it('supports mixed final and RC character tiers while production art lands in batches', () => {
+    const mixedAvailable: Readonly<Record<string, string>> = {
+      'ep01.character.player.map': 'assets/episode01/characters/player-map.webp',
+      'ep01.character.player.portrait': 'assets/episode01/characters/player-portrait.webp',
+      'ep01.character.kang_taesik.map': 'assets/episode01/characters/kang-taesik-map.webp',
+      'ep01.character.kang_taesik.portrait': 'assets/episode01/characters/kang-taesik-portrait.webp',
+      'ep01.character.lim_junho.map': 'assets/episode01/characters/lim-junho-map-rc.svg',
+      'ep01.character.lim_junho.portrait': 'assets/episode01/characters/lim-junho-portrait-rc.svg',
+    };
+    const mixedResolve = (id: string) => mixedAvailable[id];
+    const art = projectStrategyVisualAssets(['player', 'kang_taesik', 'lim_junho'], mixedResolve);
+
+    expect(visualAssetTier(art.characters.player?.map_uri)).toBe('final');
+    expect(visualAssetTier(art.characters.player?.portrait_uri)).toBe('final');
+    expect(visualAssetTier(art.characters.kang_taesik?.map_uri)).toBe('final');
+    expect(visualAssetTier(art.characters.kang_taesik?.portrait_uri)).toBe('final');
+    expect(visualAssetTier(art.characters.lim_junho?.map_uri)).toBe('rc');
+    expect(visualAssetTier(art.characters.lim_junho?.portrait_uri)).toBe('rc');
+
+    expect(art.characters.player?.map_uri).toContain('player-map.webp');
+    expect(art.characters.kang_taesik?.portrait_uri).toContain('kang-taesik-portrait.webp');
+    expect(art.characters.lim_junho?.map_uri).toContain('lim-junho-map-rc.svg');
   });
 
   it('lets a scene recipe select a reusable background without changing character bindings', () => {
