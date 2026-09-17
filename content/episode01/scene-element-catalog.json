@@ -147,7 +147,7 @@
       "kind": "hazard",
       "label": "작업발판 절단부",
       "visual_token": "▰",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.platform_cut_edge",
       "art": {
         "path": "assets/episode01/scene-elements/platform-cut-edge.webp",
@@ -158,7 +158,8 @@
           "y": 0.86
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18"
       },
       "reuse_for": [
         "scaffold"

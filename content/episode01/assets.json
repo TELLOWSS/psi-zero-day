@@ -322,6 +322,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.platform_cut_edge",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/platform-cut-edge.webp",
+          "format": "webp",
+          "bytes": 299746,
+          "hash": "f35e2fa801ca203f62db83e74d5953e3561734c4576021e4bf25fe0b89f083cf"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.vehicle_overlap",
       "type": "image",
       "group_id": "ep01.scene_elements",
