@@ -1,94 +1,119 @@
 # TASK-016B — Final Production Art Execution Plan
 
-## Goal
-Finish final production WebP integration without drifting into repeated concept-image generation or unrelated gameplay expansion.
+## Operating source of truth
+Current day-to-day execution is controlled by `docs/PRODUCTION-CONTROL-BOARD.md`.
 
-## Current checkpoint — verified 2026-09-17
+The purpose of TASK-016B is to finish final production art without falling back into repeated concept-image work or character-by-character binary repair.
+
+## Current checkpoint — 2026-09-17
 - Core engine and Episode 01 gameplay remain preserved.
-- Commercial title/game layout is already implemented.
-- Final Foundation background WebP is integrated and verified at 1920×1080.
-- RC/fallback art remains active and valid for character slots until each final WebP lands.
-- `player-portrait.webp` has a registered 1024×1024 alpha WebP source in the character embedded-media pipeline. Its visual acceptance remains governed by `PLAYER-VISUAL-LOCK.md`.
-- 15 character WebP slots do not yet have registered final binary sources.
-- The previous Player map embedded chunks/candidate staging were inconsistent or incomplete and have been removed from `main`; they must not be restored or labeled FINAL.
-- `player-map-rc.svg` remains the valid runtime fallback while the final Player map WebP is recreated.
-- New final character WebPs must enter through `npm run assets:character-stage -- --id <name-map|name-portrait> --file <input.webp>` so chunking, dimensions, alpha, hashes and manifest registration come from one source file.
-- Generated full-screen mockups/contact sheets are reference material only and are not production assets.
-- Next named production slot: `player-map.webp`.
+- Foundation final WebP source is embedded and deterministically materialized at 1920x1080.
+- RC/fallback art remains active until approved final character WebPs land.
+- Player portrait binary source is registered; Player pair visual acceptance is still open.
+- Player map has no approved final binary registered and is the current visual-master task.
+- Previous inconsistent Player map staging chunks were removed and must not be restored.
+- Single-asset staging is automated by `assets:character-stage`.
+- Multi-character intake is automated by `assets:character-batch-stage`.
 
-## Fixed execution order
-1. Batch A final media
-   - Foundation background — **DONE**
-   - Player portrait — **BINARY INTEGRATED; VISUAL LOCK STILL APPLIES**
-   - Player map character — **NEXT**
-   - Kang Taesik portrait
-   - Kang Taesik map character
-   - Lim Junho portrait
-   - Lim Junho map character
-2. Batch A binary intake/status
-3. Batch A production gate
-4. Batch A browser visual acceptance at actual title/gameplay scale
-5. Batch B final media for the remaining five characters
-6. Full 17-slot production-art gate
-7. Full production release check
-8. TASK-016C final audio
-9. TASK-016D browser/Android acceptance
-10. TASK-017A signing/internal test
-11. TASK-017B store creatives and rollout decision
+## Production rhythm
+Do not finish one character through art generation, chunking, manifest work, build checks and cleanup before starting the next character.
 
-## Working rule
-A request such as “next”, “continue”, or “proceed” advances the first incomplete item in the fixed order above. Do not jump to unrelated features or new episodes.
+Use this rhythm instead:
 
-The visual production lane is locked until TASK-016B completes. Engine/gameplay changes are allowed only when required to correctly display an approved production asset; otherwise they wait.
+`STYLE LOCK -> BATCH ART -> BATCH REVIEW -> BATCH INTAKE -> BATCH GATE -> NEXT BATCH`
 
-## Binary intake rule
-Do not hand-edit base64 chunks for final character art.
+Player is the only one-character exception because Player establishes the render master.
 
-For a new or replacement final character WebP:
-1. Keep one authoritative source WebP.
-2. Stage it with `npm run assets:character-stage -- --id <asset-id> --file <source.webp>`.
-3. The staging tool must validate WebP format, minimum dimensions and alpha transparency before writing anything.
-4. New chunks use content-addressed filenames derived from the source SHA-256.
-5. Chunks are written before the manifest is atomically replaced; superseded chunks are removed only after the new manifest is active.
-6. Run `npm run assets:embedded` to materialize and re-verify the registered WebP.
-7. Run the applicable production gate before calling the asset FINAL.
+## Fixed milestones
 
-This rule exists specifically to prevent mixed chunks, partial uploads, stale candidate metadata or abbreviated staging text from being mistaken for production art.
+### P1 — Player visual master lock — ACTIVE
+- Player portrait + Player map must read as the same adult Korean female field safety manager.
+- Lock face age, hair silhouette, white helmet with one blue stripe, navy/blue workwear and black inspection tablet.
+- Lock the render language: adult-friendly premium casual-strategy 2.5D stylized realism; not anime/chibi.
+- Run Player production gate only after the pair is visually accepted.
 
-## Image-generation rule
-Image generation is used only when creating a named production slot. Do not generate another full UI mockup merely to explore the look.
+### P2 — Batch A character sprint
+Produce and review together:
+- Kang Taesik portrait + map
+- Lim Junho portrait + map
 
-Each production slot must be delivered as an individual source asset:
-- Foundation: clean world art only, 16:9, minimum 1920x1080.
-- Portrait: transparent WebP, minimum 1024x1024.
-- Map character: transparent WebP, minimum 768x1024.
+Then stage them together and run Batch A gate once.
 
-### Shared render lock
-All character slots use the same commercial render language:
-- adult-friendly premium casual-strategy 2.5D game art,
-- stylized realism rather than anime/chibi/cartoon slapstick,
-- soft physically plausible daylight and clean readable materials,
-- slightly exaggerated silhouette for small-screen readability,
-- realistic Korean construction PPE/workwear cues without company branding,
-- consistent 3/4 camera language and character proportions across the cast,
-- clean transparent cutout edges with no halo, floor, scenery, text, UI, or cast-shadow plate baked into character assets.
+Batch A exit target is seven production slots: Foundation + Player/Kang/Lim portrait/map.
 
-Reject any asset containing:
-- baked-in game HUD/title/dialogue/mission/navigation UI,
-- real or invented company/project/site/building names,
-- company logos or meaningless pseudo-text,
-- a contact sheet, screenshot collage or multiple production slots composed into one image,
-- character identity drift, same-face cast, broken PPE/anatomy or childlike proportions,
-- portrait/map mismatch in face, age, helmet, clothing language, body type, or signature prop.
+### P3 — Batch B cast sprint
+Produce and review together:
+- Yoon Sungho portrait + map
+- Lee Jaehoon portrait + map
+- Choi Minseok portrait + map
+- Seo Jeongmin portrait + map
+- Oh Seungjae portrait + map
 
-## Batch A exit criteria
-Batch A is complete only when all seven target WebPs are individually present in their locked paths and:
-1. `npm run assets:production-batch-a-status` reports 7/7 READY.
-2. `npm run assets:production-batch-a-check` passes.
-3. Title and first-play screens resolve the final WebPs through the existing asset IDs without changing game logic.
-4. A production build succeeds.
-5. Desktop visual acceptance confirms no clipping, incorrect identity, baked-in labels, duplicate characters or fallback leakage in the seven slots.
-6. Player / Kang Taesik / Lim Junho remain instantly distinguishable at actual map scale, not only at source-art scale.
+Then stage once and run the full character-art gate.
 
-## TASK-016B exit criteria
-TASK-016B is complete only when all 17 final WebP slots pass `npm run assets:production-check` and `npm run release:production-check`, followed by browser visual acceptance of title, map, dialogue, PSI HUD, and STOP→FIX→VERIFY→RESUME gameplay states.
+### P4 — Visual production closeout
+- Full 17-slot production-art gate.
+- Remaining necessary world/scene-element finals handled as one world-polish batch, not interleaved with character production.
+- Production build and browser visual acceptance.
+
+After P4 continue to final audio, browser/Android acceptance, signing/internal test and store release work as defined in the production control board.
+
+## Binary intake rules
+- Never hand-edit character base64 chunks.
+- One authoritative WebP source per asset.
+- New/replacement assets go through staging scripts only.
+- Batch staging preflights the whole selected batch before staging begins.
+- Minimum portrait size: 1024x1024.
+- Minimum map size: 768x1024.
+- Character assets require alpha transparency.
+- Map assets require portrait canvas orientation (`height > width`).
+- Production gates, not filenames, determine readiness.
+
+## Shared visual lock
+All final characters use:
+- adult-friendly premium casual-strategy 2.5D stylized realism,
+- clean mobile-readable silhouette,
+- physically plausible PPE/workwear,
+- consistent 3/4 camera language,
+- transparent cutout only,
+- no company/site branding,
+- no pseudo-text,
+- no UI/background/contact sheet,
+- no childlike proportions,
+- no same-face drift.
+
+## Batch review rule
+Review a batch side by side before binary intake. Check:
+1. identity/age,
+2. silhouette,
+3. PPE/wardrobe,
+4. signature prop,
+5. portrait/map identity consistency,
+6. small map-scale readability,
+7. no duplicate faces.
+
+Only rejected assets return to art correction. Accepted assets remain locked.
+
+## Commands
+Single asset:
+`npm run assets:character-stage -- --id <asset-id> --file <source.webp>`
+
+Batch A:
+`npm run assets:character-batch-stage -- --scope batch-a --dir <approved-source-dir>`
+
+Batch B:
+`npm run assets:character-batch-stage -- --scope batch-b --dir <approved-source-dir>`
+
+Full batch:
+`npm run assets:character-batch-stage -- --scope all --dir <approved-source-dir>`
+
+Production gates:
+`npm run assets:production-player-check`
+`npm run assets:production-batch-a-check`
+`npm run assets:production-check`
+`npm run release:production-check`
+
+## Working rule for user commands
+“다음진행 / 진행 / continue / next” advances the active milestone, not merely the next image file.
+
+Current active milestone: **P1 — Player visual master lock**.
