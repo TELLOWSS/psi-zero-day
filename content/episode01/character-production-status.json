@@ -95,6 +95,10 @@
       {
         "type": "lim_map_off_lock_2026-09-17",
         "reason": "single-cutout format passed, but the asset used a white/blue hard hat, blue vest and tablet; Lim requires a yellow hard hat, green high-visibility vest and handheld radio with no tablet"
+      },
+      {
+        "type": "lim_batch_sheet_regression_2026-09-17",
+        "reason": "the output regressed to a four-asset presentation sheet and kept the rejected white/blue PPE and tablet; it is reference-only and must never be staged"
       }
     ]
   },
