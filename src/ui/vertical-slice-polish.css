@@ -109,8 +109,12 @@
 }
 .map-outcome-support {
   margin: 0;
-  opacity: .7;
-  font-size: 12px;
+  padding: 10px 12px;
+  border-left: 3px solid #f0b55b;
+  border-radius: 6px;
+  background: rgba(43,75,87,.7);
+  color: #e6f1f2;
+  font-size: 13px;
   line-height: 1.6;
 }
 
