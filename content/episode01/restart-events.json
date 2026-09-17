@@ -41,7 +41,10 @@
       {
         "choice_id": "restart_verify_controls", "text_id": "ep01.restart.verify_controls", "next_node_id": "end", "requirements": [],
         "effects": { "immediate_effects": [
-          { "effect_id": "player.judgment.restart_verify", "kind": "player_stat", "stat_id": "judgment", "delta": 1 }
+          { "effect_id": "player.judgment.restart_verify", "kind": "player_stat", "stat_id": "judgment", "delta": 1 },
+          { "effect_id": "lee.respect.restart_verified", "kind": "context_relation", "from": { "kind": "participant", "role_id": "lee" }, "to": { "kind": "player" }, "field": "respect", "delta": 2 },
+          { "effect_id": "kang.trust.restart_verified", "kind": "context_relation", "from": { "kind": "participant", "role_id": "kang" }, "to": { "kind": "player" }, "field": "trust", "delta": 1 },
+          { "effect_id": "junho.reporting.restart_verified", "kind": "context_relation", "from": { "kind": "participant", "role_id": "junho" }, "to": { "kind": "player" }, "field": "reporting", "delta": 1 }
         ], "hidden_effects": [], "relationship_effects": [], "stat_effects": [], "flags": { "restart_action": "verify_controls" }, "ending_flags": {}, "followup_events": [] }
       }
     ],

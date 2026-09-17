@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { playEpisode } from './helpers/episode01-playthrough';
+import { getRelation } from '../src/engine/relations';
 
 const common = {
   plan: 'coordinate_schedule' as const,
@@ -38,5 +39,12 @@ describe('Episode 01 stop-work restart route', () => {
     });
     expect(state.flags.stopwork_culture_result).toBeUndefined();
     expect(state.flags.instruction_chain_result).toBeUndefined();
+    expect(getRelation(state.relations, 'lee_jaehoon', 'player')?.respect).toBe(40);
+    expect(getRelation(state.relations, 'kang_taesik', 'player')?.trust).toBe(32);
+    expect(getRelation(state.relations, 'lim_junho', 'player')?.reporting).toBe(23);
   });
 });
+
+
+
+
