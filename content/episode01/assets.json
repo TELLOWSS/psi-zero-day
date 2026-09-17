@@ -274,6 +274,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.yoon_sungho.appreciative",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/yoon-sungho-appreciative.webp",
+          "format": "webp",
+          "bytes": 268852,
+          "hash": "667bb7bc013deff6ab28b1c97b9a9a5f68e40024b9d5de7496e440575eab2af2"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.yoon_sungho.map",
       "type": "image",
       "group_id": "ep01.characters",
