@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { PlayableEpisode } from '../ui/PlayableEpisode';
+import { GameShell } from '../ui/GameHub';
 import { EpisodeSession } from './episode-session';
 import { clearEpisodeSave, loadEpisodeSave, saveEpisodeState, type EpisodeSaveStorage } from './episode-save';
 import '../ui/playable.css';
@@ -24,6 +24,8 @@ import '../ui/replan-pass-015b2.css';
 import '../ui/paid-support-015b3.css';
 import '../ui/title-commercial-016a.css';
 import '../ui/interaction-safety.css';
+import '../ui/production-readability.css';
+import '../ui/game-hub.css';
 
 const session = new EpisodeSession();
 let storage: EpisodeSaveStorage | null = null;
@@ -39,12 +41,12 @@ if (storage) {
 
   session.subscribe(() => {
     const snapshot = session.getSnapshot();
-    if (snapshot.phase === 'playing' && snapshot.state) saveEpisodeState(storage!, snapshot.state);
-    else if (snapshot.phase === 'start' || snapshot.phase === 'complete') clearEpisodeSave(storage!);
+    if ((snapshot.phase === 'playing' || snapshot.phase === 'complete') && snapshot.state) saveEpisodeState(storage!, snapshot.state);
+    else if (snapshot.phase === 'start') clearEpisodeSave(storage!);
   });
 }
 
 document.title = session.t('ui.brand');
 createRoot(document.getElementById('root')!).render(
-  <StrictMode><PlayableEpisode session={session} /></StrictMode>,
+  <StrictMode><GameShell session={session} /></StrictMode>,
 );

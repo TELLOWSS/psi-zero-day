@@ -15,6 +15,17 @@ const batches = JSON.parse(await readFile(batchesPath, 'utf8'));
 
 if (status.schema_version !== 1) fail('unsupported status schema.');
 if (batches.schema_version !== 1) fail('unsupported batch schema.');
+if (status.integration_status === 'integrated' && status.next_asset === null) {
+  const manifest = JSON.parse(await readFile(path.join(root, 'content/episode01/embedded-media/character-media.json'), 'utf8'));
+  const expected = Object.values(status).flatMap(value => value && Array.isArray(value.assets) ? value.assets : []);
+  if (expected.length !== 16 || expected.some(asset => !manifest.assets.some(item => item.id === asset.id))) {
+    fail('integrated status requires all sixteen character assets in the embedded manifest.');
+  }
+  console.log('Character production: 16/16 integrated. Do not regenerate the cast.');
+  console.log(`Next milestone: ${status.active_milestone}`);
+  console.log(status.next_work);
+  process.exit(0);
+}
 if (!status.active_milestone || !status.active_batch || !status.next_asset) {
   fail('active milestone, batch and next_asset are required.');
 }

@@ -328,7 +328,18 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       </section>
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
       <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
-      <p className="end-line">{t('ui.end_hint')}</p><button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
+      <p className="end-line">{t('ui.end_hint')}</p>
+      <section className="episode-review" aria-label={t('ui.review.title')}>
+        <h2>{t('ui.review.title')}</h2>
+        <p>{t('ui.review.hint')}</p>
+        <ol>{session.review().map(entry => <li key={entry.key}>
+          <strong>{t(entry.event_text_id)}</strong>
+          <span>{t(entry.choice_text_id)}</span>
+          {entry.result_text_id ? <p>{t(entry.result_text_id)}</p> : null}
+        </li>)}</ol>
+      </section>
+      <p className="replay-hint">{t('ui.review.replay')}</p>
+      <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>
     </section> : <section className="complete-screen" role="alert"><p>{t('ui.error')}</p><button className="primary-button" type="button" onClick={() => session.restart(snapshot.revision)}>{t('ui.restart')}</button></section>}
     <footer className="game-footer"><div className="progress-block"><span>{t('ui.progress')}</span>
       <progress aria-label={t('ui.progress')} value={snapshot.phase === 'complete' ? snapshot.total : snapshot.completed} max={snapshot.total} /></div>

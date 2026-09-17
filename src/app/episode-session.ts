@@ -9,6 +9,7 @@ import { createTranslator } from '../localization/translator';
 import { fieldSupportItem } from './field-support-items';
 import { isStrategyFieldActionEvent } from './strategy-actions';
 import { projectStrategyView } from './strategy-view';
+import { projectEpisodeReview } from './episode-review';
 import type { StrategyView } from './strategy-view';
 import { episode01ExpectedRunTotal } from './episode01-run-progress';
 import config from '../../content/episode01/session.json';
@@ -62,6 +63,10 @@ export class EpisodeSession {
   }
   getSnapshot = (): SessionSnapshot => this.#snapshot;
   get contentVersion(): string { return this.#content.content_version; }
+  review() {
+    const state = this.#snapshot.state;
+    return state ? projectEpisodeReview(state, this.#content.events) : [];
+  }
   subscribe = (listener: () => void): (() => void) => {
     this.#listeners.add(listener);
     return () => { this.#listeners.delete(listener); };

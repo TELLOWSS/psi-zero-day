@@ -92,7 +92,7 @@ describe('Episode 01 strategy visual assets', () => {
     expect(visuals.scene_elements?.['scene.hazard.harness_unclipped']).toBeUndefined();
   });
 
-  it('uses final Foundation and three scene-element WebPs while keeping TASK-014 RC character art before deterministic fallback', () => {
+  it('uses integrated production art through the registry without changing asset identities', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
     expect(content.asset_manifest.assets).toHaveLength(20);
@@ -131,18 +131,11 @@ describe('Episode 01 strategy visual assets', () => {
     });
 
     for (const characterId of cast) {
-      expect(art.characters[characterId]?.portrait_uri).toMatch(/-portrait-rc\.svg$/);
-      expect(art.characters[characterId]?.map_uri).toMatch(/-map-rc\.svg$/);
+      const file = characterId.replaceAll('_', '-');
+      expect(art.characters[characterId]?.portrait_uri).toBe(`assets/episode01/characters/${file}-portrait.webp`);
+      expect(art.characters[characterId]?.map_uri).toBe(`assets/episode01/characters/${file}-map.webp`);
     }
 
-    expect(art.characters.player?.map_uri).toContain('player-map-rc.svg');
-    expect(art.characters.kang_taesik?.portrait_uri).toContain('kang-taesik-portrait-rc.svg');
-    expect(art.characters.yoon_sungho?.map_uri).toContain('yoon-sungho-map-rc.svg');
-    expect(art.characters.lee_jaehoon?.portrait_uri).toContain('lee-jaehoon-portrait-rc.svg');
-    expect(art.characters.lim_junho?.map_uri).toContain('lim-junho-map-rc.svg');
-    expect(art.characters.choi_minseok?.portrait_uri).toContain('choi-minseok-portrait-rc.svg');
-    expect(art.characters.seo_jeongmin?.map_uri).toContain('seo-jeongmin-map-rc.svg');
-    expect(art.characters.oh_seungjae?.portrait_uri).toContain('oh-seungjae-portrait-rc.svg');
   });
 
   it('still falls back cleanly when no production files are registered', () => {

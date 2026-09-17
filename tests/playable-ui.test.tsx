@@ -189,11 +189,11 @@ describe('Playable Episode React UI', () => {
     const session = new EpisodeSession();
     const person = session.character('player')!;
     const portraitUri = session.assetUri('ep01.character.player.portrait');
-    expect(portraitUri).toMatch(/player-portrait-rc\.svg$/);
+    expect(portraitUri).toBe('assets/episode01/characters/player-portrait.webp');
     act(() => root.render(<CharacterCard person={person} portraitUri={portraitUri} />));
     const image = container.querySelector('img');
     expect(image).not.toBeNull();
-    expect(image!.getAttribute('src')).toContain('assets/episode01/characters/player-portrait-rc.svg');
+    expect(image!.getAttribute('src')).toBe(`/${portraitUri}`);
     act(() => image!.dispatchEvent(new Event('error')));
     expect(container.querySelector('img')).toBeNull();
     expect(container.textContent).toContain(person.name);

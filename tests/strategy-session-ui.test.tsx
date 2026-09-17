@@ -32,7 +32,7 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain('data-visual-mode="art"');
     expect(html).toContain('foundation-map.webp');
     expect(html).toContain('data-character="player"');
-    expect(html).toContain('player-map-rc.svg');
+    expect(html).toContain('player-map.webp');
     expect(html).toContain('플레이어');
     expect(html).toContain('현장 안전관리자');
     expect(html).toContain('PSI : ZERO DAY');

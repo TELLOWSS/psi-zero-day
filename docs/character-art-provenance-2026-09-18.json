@@ -1,0 +1,199 @@
+[
+  {
+    "id": "player-map",
+    "source": "exec-60dd37fc-a1f9-4487-8297-f5023ffa72f1.png",
+    "source_sha256": "ab1665bb6150b12d64d10fa52acd89b531b5fef560488dc3f3f18b045212668c",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "kang-taesik-map",
+    "source": "exec-19418005-832b-44df-8b66-65b0b9a61f1f.png",
+    "source_sha256": "f13495d8c55845260812dfbf436ee47154477e493ee003584dc828e502db0fc9",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "kang-taesik-portrait",
+    "source": "exec-4cafb323-1ca3-4826-8800-f7c58860928a.png",
+    "source_sha256": "8effd7e8b64f088b95fb08c2002542d398a9e8d03e6ddd72ea5b97dfad1c5f6c",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "lim-junho-map",
+    "source": "exec-3816b324-cd14-45fd-8ae8-3cf91b65fe3a.png",
+    "source_sha256": "1b5c2e40a2eeb0c8a51d3712551dc903fa06ae72e92cb2ce149e2463a3ccc0af",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "lim-junho-portrait",
+    "source": "exec-d21bf576-59d6-4fae-b856-277a7b3e091a.png",
+    "source_sha256": "885f576295e2cb196ffb302dc170f647e2505ed8a37348ed5f24104bc99774a9",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "yoon-sungho-map",
+    "source": "exec-e6fcd535-f4ad-4e14-ab83-15d353b55d7f.png",
+    "source_sha256": "613f7bd7e3886afa5c564a02a7c08cc48b1a69fafd0c31afcafd9dd15f929c02",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "yoon-sungho-portrait",
+    "source": "exec-36952907-830d-4a1b-8b57-0777f3002d49.png",
+    "source_sha256": "d0b01252282c737f500ba495fe803ca785e7a3dc58b08665231c29545e65d05c",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "correction": "Role-specific prop corrected; previous portrait rejected for traffic batons."
+  },
+  {
+    "id": "lee-jaehoon-map",
+    "source": "exec-5bd6c511-5b4a-457a-8260-aa2586cf99e1.png",
+    "source_sha256": "96a4cc48b3e78691430f92799f1263ebe32f41177245357ce7439bcb60d5ada4",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "lee-jaehoon-portrait",
+    "source": "exec-d40e6ba0-7702-46a3-bba8-925586c56218.png",
+    "source_sha256": "786f40f8b5a79e59d704850e4c5b12bc4e7ada02e63a382efaed73f4f41c1e42",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "correction": "Role-specific prop corrected; previous portrait rejected for traffic batons."
+  },
+  {
+    "id": "choi-minseok-map",
+    "source": "exec-27704ecb-e03a-4dce-9a64-84e237f10c3a.png",
+    "source_sha256": "90774f4d11322275d37a3db2a2d37c65d11dc67ed0d6158eafdc99a938f91413",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "choi-minseok-portrait",
+    "source": "exec-d2e6c10b-8d8b-4dbe-b450-21dc5400dfc3.png",
+    "source_sha256": "0f8b2ae20e2d7f269c8fc2ae29960f2ec3de2c175a04ba513f703012b765d8d7",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "seo-jeongmin-map",
+    "source": "exec-9775ca2b-8dfd-4401-94e8-d2d53de28d05.png",
+    "source_sha256": "1a77bfe4df1b116f0c085c65fa68378a88fbd5604d47a7431486b9654a9f26d8",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "seo-jeongmin-portrait",
+    "source": "exec-472caeae-ae6c-4976-a4f6-7533a8b40e4d.png",
+    "source_sha256": "a20472fad7da7c5d131eb5bcdd6c345903fec5dacd283f2a82cef8803c078840",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "oh-seungjae-map",
+    "source": "exec-bfa49f9c-a658-47bf-a965-93b1aea09650.png",
+    "source_sha256": "f34c8be3cabdfdf834dbd9f1a7a71168cb60b5117a6c967d210a38746a73874a",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha_extrema": [
+      0,
+      254
+    ]
+  },
+  {
+    "id": "oh-seungjae-portrait",
+    "source": "exec-61f5da22-86d2-4fcd-bf35-8bc047b8f60a.png",
+    "source_sha256": "630b9ffe820700a46da5cb37d530ca81585def27c44e56a52d0748068f019e16",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ]
+  }
+]

@@ -1,6 +1,12 @@
 # PSI : ZERO DAY — Production Control Board
 
-Updated: 2026-09-17
+Updated: 2026-09-18
+
+## Current delivery override
+
+Character Batch A and B are integrated: 16/16 WebP files, with 17/17 background + character technical art gates passing. The prior pending-art entries below are historical specifications, not the current queue. The active work is P4 world props, followed by expression/action variants and player validation. See [integration report](PRODUCTION-INTEGRATION-2026-09-18.md).
+
+Home, five checkpoint map, eight-person roster, choice journal and resume navigation are implemented. Public production deployment is not part of this local delivery.
 
 This is the current operational source of truth for finishing Episode 01.
 
@@ -55,7 +61,7 @@ Exit achieved:
 - Do not reopen global style unless a concrete production defect is found.
 - Player binary intake is intentionally deferred to the Batch A intake so the project no longer performs per-character integration.
 
-## P2 — Batch A character sprint — ACTIVE
+## P2 — Batch A character sprint — INTEGRATED
 
 Assets to produce and review together:
 - `kang-taesik-portrait.webp`

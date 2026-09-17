@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-17",
-  "active_milestone": "P2",
-  "active_batch": "batch-a",
+  "updated": "2026-09-18",
+  "active_milestone": "P4",
+  "active_batch": "all",
   "player_master": {
     "status": "locked",
-    "binary_intake": "deferred_to_batch_a"
+    "binary_intake": "integrated"
   },
   "batch_a": {
-    "status": "art_in_progress",
+    "status": "integrated",
     "assets": [
       {
         "id": "kang-taesik-map",
         "file": "kang-taesik-map.webp",
-        "status": "approved_source_ready",
+        "status": "integrated",
         "source": {
-          "normalized_size": "768x1248",
-          "sha256": "bd6c30e5c5adbe0b1fadfc121b2bb53bfd5e36c3bc5e72730e7a02c65eb5f143",
-          "local_batch_intake": "deferred_until_all_p2_assets_approved"
+          "sha256": "7ba8a41c20cf4e1f96fe962a28c6d24568abb9655fa446750ac00bd819cdc343",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
         },
         "requirements": [
           "single full-body 3/4 transparent cutout",
@@ -30,16 +30,21 @@
           "wide planted instruction stance",
           "no tablet",
           "no text, logo, UI, background, floor plate or additional poses"
-        ]
+        ],
+        "previous_source_record": {
+          "normalized_size": "768x1248",
+          "sha256": "bd6c30e5c5adbe0b1fadfc121b2bb53bfd5e36c3bc5e72730e7a02c65eb5f143",
+          "local_batch_intake": "deferred_until_all_p2_assets_approved"
+        }
       },
       {
         "id": "kang-taesik-portrait",
         "file": "kang-taesik-portrait.webp",
-        "status": "approved_source_ready",
+        "status": "integrated",
         "source": {
+          "sha256": "3c668afbb4e3649bb7ee23d5d0e8b337af1fcb75e5be9e80807c3a23375dc359",
           "normalized_size": "1024x1024",
-          "sha256": "1fb5bae9ab1241fabfb1dd1570edcaaec7bb88b62b751c86a3c6aa4c6533c23c",
-          "local_batch_intake": "deferred_until_all_p2_assets_approved"
+          "local_batch_intake": "integrated_2026-09-18"
         },
         "requirements": [
           "same identity as approved Kang map",
@@ -47,12 +52,22 @@
           "full orange helmet visible",
           "work gloves or instruction gesture readable",
           "no text, logo, UI or background"
-        ]
+        ],
+        "previous_source_record": {
+          "normalized_size": "1024x1024",
+          "sha256": "1fb5bae9ab1241fabfb1dd1570edcaaec7bb88b62b751c86a3c6aa4c6533c23c",
+          "local_batch_intake": "deferred_until_all_p2_assets_approved"
+        }
       },
       {
         "id": "lim-junho-map",
         "file": "lim-junho-map.webp",
-        "status": "next",
+        "status": "integrated",
+        "source": {
+          "sha256": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        },
         "requirements": [
           "single full-body 3/4 transparent cutout",
           "male in early 20s, rookie",
@@ -64,19 +79,46 @@
           "slightly forward eager posture",
           "no tablet",
           "no text, logo, UI, background, floor plate or additional poses"
-        ]
+        ],
+        "previous_source_record": null
       },
       {
         "id": "lim-junho-portrait",
         "file": "lim-junho-portrait.webp",
-        "status": "queued",
+        "status": "integrated",
+        "source": {
+          "sha256": "2a5a4fddd9e5103ec2fb40de97648d154c563045879d44de6cbac923bb2e7d01",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        },
         "requirements": [
           "same identity as approved Lim map",
           "upper-body 3/4 transparent cutout",
           "yellow helmet and handheld radio readable",
           "young rookie expression",
           "no text, logo, UI or background"
-        ]
+        ],
+        "previous_source_record": null
+      },
+      {
+        "id": "player-map",
+        "file": "player-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "75c3a8d7b73978501525aa2304bc4eeca763913260eba433d6861ad5f20f38dc",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "player-portrait",
+        "file": "player-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "6f6f73bf636590ed560e250104b32537a0b28444f3b1c0b8a084ae2b064ab066",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
       }
     ],
     "rejected_attempts": [
@@ -102,6 +144,113 @@
       }
     ]
   },
-  "next_asset": "lim-junho-map.webp",
-  "rule": "Advance only next_asset until approved or explicitly rejected; do not generate presentation sheets. After approval, advance to the next queued asset. Integrate only after all four P2 assets pass batch review."
+  "next_asset": null,
+  "rule": "Preserve integrated cast identity. Use batch staging for replacements. File gates prove technical readiness; expression variants and human playtesting remain separate release work.",
+  "integration_status": "integrated",
+  "next_work": "Complete remaining seven world-prop finals, then expression/action variants and external playtesting. See docs/PRODUCTION-INTEGRATION-2026-09-18.md.",
+  "batch_b": {
+    "status": "integrated",
+    "assets": [
+      {
+        "id": "choi-minseok-map",
+        "file": "choi-minseok-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "choi-minseok-portrait",
+        "file": "choi-minseok-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "0e3e6bc6d40294dea3c3c2d12fc0efb3b5e27af5151620efe3dbc1419f44c905",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "lee-jaehoon-map",
+        "file": "lee-jaehoon-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "227f7dcb643fe0af3f5fb930a12ec515d8442730b2ca350ad1f4a2841766e5f6",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "lee-jaehoon-portrait",
+        "file": "lee-jaehoon-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "oh-seungjae-map",
+        "file": "oh-seungjae-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "b704f86b3e580be833dfd56752995989c8d2af8fb6550dff1f7a40b3619b350c",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "oh-seungjae-portrait",
+        "file": "oh-seungjae-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "9c395505bd7ce38438fb961335f8973e0053f092708fae5f25a0fe876f0966e3",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "seo-jeongmin-map",
+        "file": "seo-jeongmin-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "seo-jeongmin-portrait",
+        "file": "seo-jeongmin-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "cca1f44c70275f285e37cf58dff5dd2f94b262d617d09108bd7ad9021a592634",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "yoon-sungho-map",
+        "file": "yoon-sungho-map.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "61a30d31aeedd4d9e9535f6433d50f602291230a44fe8582d732f9fefcdc3a68",
+          "normalized_size": "1024x1536",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      },
+      {
+        "id": "yoon-sungho-portrait",
+        "file": "yoon-sungho-portrait.webp",
+        "status": "integrated",
+        "source": {
+          "sha256": "b9a33b02504aca22548990d8684096a5fafdd66354aeb1ad16753ce0ec4ab458",
+          "normalized_size": "1024x1024",
+          "local_batch_intake": "integrated_2026-09-18"
+        }
+      }
+    ]
+  }
 }

@@ -2,6 +2,884 @@
   "schema_version": 1,
   "assets": [
     {
+      "id": "choi-minseok-map",
+      "target": "assets/episode01/characters/choi-minseok-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 202410,
+      "sha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+      "encoded_length": 269880,
+      "encoded_sha256": "bc761a88388804cc2e9e724b5c7cd7e5bb233d3c78cd8be71b1cb278bff60da2",
+      "parts": [
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.01",
+          "length": 18000,
+          "sha256": "a599505ca0468c95762489d91b9129af875a33bad4c306275b0dcbf04ee3f6e8"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.02",
+          "length": 18000,
+          "sha256": "bf80d2ff80bf981f05bfd7810d88383afac082f794c2c884eea2648cced2bdb7"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.03",
+          "length": 18000,
+          "sha256": "02a0a6d1df12f83c421882f8ab3471abd9b815e4352ac53d5475f98c92423951"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.04",
+          "length": 18000,
+          "sha256": "a14476faaa3850698036cbf970edeea89a84b261ff1c1d0eb0df6d99d1a6ca17"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.05",
+          "length": 18000,
+          "sha256": "7d7756b58d7b95533f0840441c2d4416505c46d4ee88f08dcc899403a3de7d8d"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.06",
+          "length": 18000,
+          "sha256": "f866cd24fe076b4c7d105fe7138b8414a8f24c13bbb83697ee4f141f50056c32"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.07",
+          "length": 18000,
+          "sha256": "a23749f68c90b8ed0259e3649b593e3d59f56255ec6e2ecd8eb99bcc2bb0230a"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.08",
+          "length": 18000,
+          "sha256": "58df9538fcec0154af228a3724c5681c265aafa4e6435d7118cb68eadf2ae6a4"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.09",
+          "length": 18000,
+          "sha256": "8d4c6ff1612acaa268a1c46fb02bcc0fcde163c36793adffd326856b55112c6d"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.10",
+          "length": 18000,
+          "sha256": "141b72664fd937df3ca6004cb89e21a2de2650d0e35f7c5eaaabb75343209998"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.11",
+          "length": 18000,
+          "sha256": "c9d3ac1d6735cd52f2ab88c13e73d5ce9c9d42293c7705684b9af585710ba3f9"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.12",
+          "length": 18000,
+          "sha256": "789ac2a370efbe85c075ff1d8742784b35dacd08a3171797308c260c58160b4a"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.13",
+          "length": 18000,
+          "sha256": "9eba05490a56235bb0f7f0f7f36fe594c6cc7d7bc50bac15e6bd0a3971ec09d6"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.14",
+          "length": 18000,
+          "sha256": "7f5a753899dd44fb55c6945e7be04b3b69b75c26b63a6c4aaf4309afeda54462"
+        },
+        {
+          "file": "choi-minseok-map.webp.2461c6490491.b64.15",
+          "length": 17880,
+          "sha256": "97b9d981838d144f6d3a0c42c5696ce9e1f7ca1a2d56509d8c5b08846c178a38"
+        }
+      ]
+    },
+    {
+      "id": "choi-minseok-portrait",
+      "target": "assets/episode01/characters/choi-minseok-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 218992,
+      "sha256": "0e3e6bc6d40294dea3c3c2d12fc0efb3b5e27af5151620efe3dbc1419f44c905",
+      "encoded_length": 291992,
+      "encoded_sha256": "f8aa80350e197bea3f3b5bf8d347ab82a72147db5eebd9b775a23194c95674fc",
+      "parts": [
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.01",
+          "length": 18000,
+          "sha256": "ba18587f94c2c47186c09edb082213b433d268b9c6290523be7da8761ac7a345"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.02",
+          "length": 18000,
+          "sha256": "65f69b9d91e9c2e82308173003d388d571aa18d5eb9a9a37a18c8f4af999e3ce"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.03",
+          "length": 18000,
+          "sha256": "9f1f21799876c7e440d2066cbd155ef8ba57614540d7f08e484bd3ead5df63ce"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.04",
+          "length": 18000,
+          "sha256": "271e76be5903e1ed44e0cf01e5f246ce0e3e0efcc394e9bc7d3df51bf1073af9"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.05",
+          "length": 18000,
+          "sha256": "53d9578c01bea63db40b2ce11b5a698eee34d9a65f5e2f2ad1817743dcf3478a"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.06",
+          "length": 18000,
+          "sha256": "5fa71cdd9a79f8c9db7bada10316c4d2ca7dd0a6cc91f2ad075a51f758887e43"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.07",
+          "length": 18000,
+          "sha256": "65cb0048cb5728849f7011a71fd822972084fbfed570f03ac0b906f15837b121"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.08",
+          "length": 18000,
+          "sha256": "266ac34c07d679634a863d8e88df25c6df5487c2aede1e96302d5d58f2aff00f"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.09",
+          "length": 18000,
+          "sha256": "92ce4a721d21b898f9a963f540b11a073114ce930ef056c41eaf391ffe987196"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.10",
+          "length": 18000,
+          "sha256": "9ceb619581f5cfe869ab501f8c29261a254466f814c9852af267a5379b64a046"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.11",
+          "length": 18000,
+          "sha256": "892f2716096bfa6e35f716f02c79f203f687a234cdbfb79cc3e4c80ae7deb8ff"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.12",
+          "length": 18000,
+          "sha256": "0f707d1d9f7bb1f183602e2f65d5503ac58fe0709bd63e2a8800db14184f53a1"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.13",
+          "length": 18000,
+          "sha256": "f7ce3d015d2e135d5161459073e520a702fffcd79796c55968645e72cfe8f90e"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.14",
+          "length": 18000,
+          "sha256": "d57662700d8d23297c7c84ca96b8008f907f4dfaf70dd0e7d412b1e0e5291188"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.15",
+          "length": 18000,
+          "sha256": "e54219c2b37b99fc2390f81c69350053d20ed4b8600aacab26b4b0808deade01"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.16",
+          "length": 18000,
+          "sha256": "7e6cd0cbb045500a434dbbf743fc4f5df0c97964ba06929267ff2fc44bcaf751"
+        },
+        {
+          "file": "choi-minseok-portrait.webp.0e3e6bc6d402.b64.17",
+          "length": 3992,
+          "sha256": "1ad72f8f6a3115a9d2e836578a2dc0821ea850485bd743f1f47587023a8cee2d"
+        }
+      ]
+    },
+    {
+      "id": "kang-taesik-map",
+      "target": "assets/episode01/characters/kang-taesik-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 216506,
+      "sha256": "7ba8a41c20cf4e1f96fe962a28c6d24568abb9655fa446750ac00bd819cdc343",
+      "encoded_length": 288676,
+      "encoded_sha256": "f76239f049c18339332cad31fd2cb4f5919e75a1e03cfa5a77e6aef04a2331e6",
+      "parts": [
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.01",
+          "length": 18000,
+          "sha256": "4d17116be9e3ec4af232f653521e7cb0fe16fd488e1830838ac9542c965c5c98"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.02",
+          "length": 18000,
+          "sha256": "02e06622ed2c453df75c46751b26bea8cabc3765224417d7df3a15e467db2dfa"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.03",
+          "length": 18000,
+          "sha256": "3b159688be559efd0322603d72edb59805ea8af587a6da1491dcb021f5f73149"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.04",
+          "length": 18000,
+          "sha256": "f62927417b9758c274850f0f4fe831ca37012f1dc182ab3b3b022b29be1a2692"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.05",
+          "length": 18000,
+          "sha256": "ac24da04d3aded794c864801074f781eff3786a1a309c73773dc4e611b2c976b"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.06",
+          "length": 18000,
+          "sha256": "2900f5ec8406b394dcdca823d1bf38905273f3962a9b25b2fa729b957c7e3a01"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.07",
+          "length": 18000,
+          "sha256": "9f2bb65f54b5a3e4bb9b83d3f76028a5f8989a51f17a68843643b8bb3ce7cb83"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.08",
+          "length": 18000,
+          "sha256": "5aaa0f173f5642096355d32cdcd9d4c70316f15502dfa76e6888e119073ef6b4"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.09",
+          "length": 18000,
+          "sha256": "728de6cdb0dcc1f62a54b299aad96a4a8c788fc350924e129063de551e7f25b3"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.10",
+          "length": 18000,
+          "sha256": "9bdb6218156057a5bc24e6ac1eca45cc3f054fa89bc964434f0f82e8e7367e7b"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.11",
+          "length": 18000,
+          "sha256": "573c0ec682248be7251e6c30ad0129857ba232ab175e2d5a7caa563d869b997e"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.12",
+          "length": 18000,
+          "sha256": "182d8c15999486fde914b843e204e56da3f55db431605a4b7717521156fc7575"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.13",
+          "length": 18000,
+          "sha256": "ab7c8bbe4cb0ed62ba0f5c5210758300fed913fdc55c98c7e65417f06e3ef587"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.14",
+          "length": 18000,
+          "sha256": "fc26efa97df011021ed0a12f9da825ce40fb662930d56481dc445d60196e3ca2"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.15",
+          "length": 18000,
+          "sha256": "c1a41353dfdc72242898d46be261591ecd2c0b6c13391b78d30f4a864172e3cd"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.16",
+          "length": 18000,
+          "sha256": "0fdd19528fa602ff3edc3de2cd1c6efc8fecf0e959bf095f92592368fd7a7eab"
+        },
+        {
+          "file": "kang-taesik-map.webp.7ba8a41c20cf.b64.17",
+          "length": 676,
+          "sha256": "c8bfa666110d3e922aab050fe9476db7b44787895eb78d228ff92b7557f89e48"
+        }
+      ]
+    },
+    {
+      "id": "kang-taesik-portrait",
+      "target": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 181498,
+      "sha256": "3c668afbb4e3649bb7ee23d5d0e8b337af1fcb75e5be9e80807c3a23375dc359",
+      "encoded_length": 242000,
+      "encoded_sha256": "62640d9332c634da3f360e53b780208fda6c8cb80bc68cee0a91676d7f1514ec",
+      "parts": [
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.01",
+          "length": 18000,
+          "sha256": "dfc6c09db883805a3d2e6ee6e0f6e3b78290e76adc7149daef018f6eaaea4be5"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.02",
+          "length": 18000,
+          "sha256": "180494d025188c3c9a8f69811a7203aaf42dd52609ea919bc5bcee238b90da09"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.03",
+          "length": 18000,
+          "sha256": "543d75b0ecc3cb86a7104b8682ec87dfe4629ab21f36a0d7ea4f59c7b19d9065"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.04",
+          "length": 18000,
+          "sha256": "3ae298a572d7c1d19f60fe97c03df972562a034cb952a2ada1f6bdc6841195b9"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.05",
+          "length": 18000,
+          "sha256": "ce4beb9a2baf81877bc5f44b7c083421408fe7bae94dc01b128461cdd41a7d5d"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.06",
+          "length": 18000,
+          "sha256": "0a6d433ce57954cae7b35ff74f38e4cfeff8f0c8c9bba25d9aca563d0d73fb9c"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.07",
+          "length": 18000,
+          "sha256": "076a6838accc5f4087920b4d426396802958eb67edc9713c64a2b3b0fceda9f2"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.08",
+          "length": 18000,
+          "sha256": "212174f436cad2706e5160f57b7408ab770ffc29db058dd5a296008110afe53d"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.09",
+          "length": 18000,
+          "sha256": "08c9329ad6a800b002acd316c93088ccd280e1986bf72b97261ecbade093b882"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.10",
+          "length": 18000,
+          "sha256": "ae5169bb6d73a8be55b667f54589132a9f7c63b3b579448179c97a7a5a4cbcf9"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.11",
+          "length": 18000,
+          "sha256": "50a48aac4f24cb88711d072eb5571b74631b5928f1987674fa53dac340f026cf"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.12",
+          "length": 18000,
+          "sha256": "6f39a017cc25e19426e659353fa6b850835cbf27306e6d37deb4eee5db2dd0ea"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.13",
+          "length": 18000,
+          "sha256": "2717573d7b0e8ce86a2c4692601f5dc81fae51c7b2179cb78f5efc58ce98a4a1"
+        },
+        {
+          "file": "kang-taesik-portrait.webp.3c668afbb4e3.b64.14",
+          "length": 8000,
+          "sha256": "9fcae69fd94ddfe0313c302fe63270cea8a929359c0e996649c2ca9ee92641dd"
+        }
+      ]
+    },
+    {
+      "id": "lee-jaehoon-map",
+      "target": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 163458,
+      "sha256": "227f7dcb643fe0af3f5fb930a12ec515d8442730b2ca350ad1f4a2841766e5f6",
+      "encoded_length": 217944,
+      "encoded_sha256": "7b23d7ac4f10e541680952592ecaa3adc9d9de3deffb94716b329a2dc081d45d",
+      "parts": [
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.01",
+          "length": 18000,
+          "sha256": "8984651a556b4d28e41409ecdd34a6f10570b1a12e35ad3f9a4ce03086a4f0e0"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.02",
+          "length": 18000,
+          "sha256": "510a47182d8d568ef0977d7fcbe398873b2e3fe5b10c5576744850b649b6f826"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.03",
+          "length": 18000,
+          "sha256": "4324c45fef129d3da8368970cbf0c223aa0b5b30c8f908be3f959f12dfe0685a"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.04",
+          "length": 18000,
+          "sha256": "1bad5eac2b68daf0e0e07e470670d4585bcc8fe9d4abf91ff18b20e53d6c28db"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.05",
+          "length": 18000,
+          "sha256": "b02213b72315866fd0a74f98cc86adf6cb016c659333ebb44217cd2fdea51a41"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.06",
+          "length": 18000,
+          "sha256": "e6bd18d29bc2a22e6e0f32016a08bdc52ff19a2882fe1a4e6c3264d113fbd293"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.07",
+          "length": 18000,
+          "sha256": "c31999bd661b4ca97e221746b70896fb489a68eaf23bdbc5a98367b9396ffed1"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.08",
+          "length": 18000,
+          "sha256": "78dcce981a4a2f04bd42735fbb9b28af239f208c72c9e9070301691fd77ec502"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.09",
+          "length": 18000,
+          "sha256": "2cf266240a79a224ae5c18f581e34458be0ce7ecfdc78e70bc3fab33a4ad219a"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.10",
+          "length": 18000,
+          "sha256": "273f37a56eefa2a5b1891228e07b503bcb9cdefef84a5a7bbe9047c63e023fa8"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.11",
+          "length": 18000,
+          "sha256": "bb9731393fa46686f60f395ac04fdf29b490f372b1b0c6313b4ade0a403b1e7f"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.12",
+          "length": 18000,
+          "sha256": "96a0afb08a07eb5529747897da577506f609f86d7e0892eb117d1f89c0467b3f"
+        },
+        {
+          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.13",
+          "length": 1944,
+          "sha256": "fa96e42246023dbb79522b8c841fd8cb3bd1c6e48deb66e91d937af9b5463a4a"
+        }
+      ]
+    },
+    {
+      "id": "lee-jaehoon-portrait",
+      "target": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 155636,
+      "sha256": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d",
+      "encoded_length": 207516,
+      "encoded_sha256": "c60c1e7a56abe56af4dd130d9026998b496a4620f58d57a31a75736782840f34",
+      "parts": [
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.01",
+          "length": 18000,
+          "sha256": "3e08066f5c33c54d97d3b98354d06cc05eb331bb4281ee0ab6f5012519d5ffc7"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.02",
+          "length": 18000,
+          "sha256": "851e9687c4bd40817be2012f4ba303e2135e78d7f572aa4005ca8dc9c4cc66a1"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.03",
+          "length": 18000,
+          "sha256": "4abe14001114107cbd3a19d894f52bc3165e1dba695f97f585f90d80cca37782"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.04",
+          "length": 18000,
+          "sha256": "ff6ff6814d89a8e98ab0b08975fba3af89c775074c9aaeabcc5f8c7649f78843"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.05",
+          "length": 18000,
+          "sha256": "9b91f3fdaa1358a3251dec0d980b6bad43d47547a07a889a4ba753e9410c7f7b"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.06",
+          "length": 18000,
+          "sha256": "71dc605dcf0e980f15c7291e9a3da0cbe8ddb6cdd9471009179df482c27a87fd"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.07",
+          "length": 18000,
+          "sha256": "a783fbb4aa7309463964f469ee803e6acf1d1a54de14b66017a899139c8aa28b"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.08",
+          "length": 18000,
+          "sha256": "67c6edcaa7672edd4bf52dc435c4929fb5423dbaec41caf66aeaedd9c2c4092d"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.09",
+          "length": 18000,
+          "sha256": "76d4b2739431b884e901a6545a5e9e385040e4f61a8bd4e274b060af351ecdc5"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.10",
+          "length": 18000,
+          "sha256": "3e5b1d9698bcc9d0270cb2eaf3a8fcf842b26772fb6601bf14a1352c976e9192"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.11",
+          "length": 18000,
+          "sha256": "ae52e6cae8c0b7fca4c65b4d369b18bcbc06b9534277de3291ffe2b9a41b4b2e"
+        },
+        {
+          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.12",
+          "length": 9516,
+          "sha256": "1e7884b4f595760e97affd1f7987bca358dcf078c8de516d0ad34abeb2696631"
+        }
+      ]
+    },
+    {
+      "id": "lim-junho-map",
+      "target": "assets/episode01/characters/lim-junho-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 155694,
+      "sha256": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d",
+      "encoded_length": 207592,
+      "encoded_sha256": "a34bc52b17a79c770310541ec1a6b4a3028893269ff785f6f3925e438cc9fdc7",
+      "parts": [
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.01",
+          "length": 18000,
+          "sha256": "5b83a4187e2192b7c5ab767bd52c7cf7c94eb7d04faff57f669255eb066ee303"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.02",
+          "length": 18000,
+          "sha256": "3113a71ef364a36a50ff35f47d6f75096fa3ac024eaffbff4fdd7512db85d19c"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.03",
+          "length": 18000,
+          "sha256": "3c2f1939a2d4abe2d2324df46d6cc8492a0f8060eafefcc435393e311c11addb"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.04",
+          "length": 18000,
+          "sha256": "058505f86b1eab7c161db502c2c6f2af2411786a65a6cb96a8e0d2a57aac604f"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.05",
+          "length": 18000,
+          "sha256": "9b6aa4e4bd47d5dce7ec6bf0357b43aef1fa66a0db431e89b8a135294339132b"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.06",
+          "length": 18000,
+          "sha256": "485e915a51e2aa9722c69355073949508dc28b95a421042ec35c332a8dce5d4b"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.07",
+          "length": 18000,
+          "sha256": "8fc2e7a7033b4cf38dae2a1917661ca1f46a783ea09712e05405cfdb30efa282"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.08",
+          "length": 18000,
+          "sha256": "d8b4ca93f67eebe7f85578fa81d6fc4b348077edb52f3d3ff438db8916bbdffa"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.09",
+          "length": 18000,
+          "sha256": "fdd74cc99028b645f058686dae35bf8a2152600710aabb3fea8b8444568b1fa3"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.10",
+          "length": 18000,
+          "sha256": "bcc2bbc8af683d3d6278d812d4639ee521443c06b9b58aa8e35f7cabd712b7a8"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.11",
+          "length": 18000,
+          "sha256": "94985c57e140651b117b7e3f2d6288758c4ec9daed847ab8c07271f28ff42808"
+        },
+        {
+          "file": "lim-junho-map.webp.12f7806e6a5a.b64.12",
+          "length": 9592,
+          "sha256": "3997e9c46da95ed2560423ee3f19e74b9deaba4f8352160700f7c101d6213cbf"
+        }
+      ]
+    },
+    {
+      "id": "lim-junho-portrait",
+      "target": "assets/episode01/characters/lim-junho-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 168184,
+      "sha256": "2a5a4fddd9e5103ec2fb40de97648d154c563045879d44de6cbac923bb2e7d01",
+      "encoded_length": 224248,
+      "encoded_sha256": "9ea9d23ba102f01914053ae1850f9ac310ef358f29a10ceb80a70f74578f62ec",
+      "parts": [
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.01",
+          "length": 18000,
+          "sha256": "4893b8b20a267e09699430f8d1b03bc5bea889b2e9dfc466c02f76a90c70fd20"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.02",
+          "length": 18000,
+          "sha256": "6ef94a853fec201521a3be42036dda736e2cc1e91f4a071910d635a78bece04a"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.03",
+          "length": 18000,
+          "sha256": "dd7cd15f6fe59fe7ca2cf4466b51e5d3f0239943024b8fff219818a6528a7790"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.04",
+          "length": 18000,
+          "sha256": "3857627339a92a68f34e62372cddd66eeb03994e8ba4dcbda12289f76e508ba9"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.05",
+          "length": 18000,
+          "sha256": "2fa416e80f72652e507024da7b1b2b7d875e68ffcbbd9d65091a52a0820449b1"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.06",
+          "length": 18000,
+          "sha256": "fd87637a8427cd02bfc13cb2696e769d0e40888b52588d96f9a6141aaf311fca"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.07",
+          "length": 18000,
+          "sha256": "b2ef40ebeff3f35d79f83ca687fa925b4b86558f044e89fdb98a1020276291e7"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.08",
+          "length": 18000,
+          "sha256": "57ff1b6803ecac4898df745cba2c95f61cdc338d2b495539e389514856f33641"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.09",
+          "length": 18000,
+          "sha256": "1a3bb2692a2834f836f8dce675550a3852879df18281bfcd02d3e9f1583475a8"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.10",
+          "length": 18000,
+          "sha256": "ba903c272efee6d3fb8f50feb96f2ba2606ec3b60f75126dc979a67f3aa5f00e"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.11",
+          "length": 18000,
+          "sha256": "d3f9f1df1c43ea0c629d2807988c2060977be8d9a7e8484692e2e3cdb070a661"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.12",
+          "length": 18000,
+          "sha256": "82b296af04d884bb12300ce57e89724b5a76c56319190a9896a68e2c911c98bd"
+        },
+        {
+          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.13",
+          "length": 8248,
+          "sha256": "8ff8c379ed10006ceebefef658a9234164b4e8a24efe7fb1396a71566d090856"
+        }
+      ]
+    },
+    {
+      "id": "oh-seungjae-map",
+      "target": "assets/episode01/characters/oh-seungjae-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 160120,
+      "sha256": "b704f86b3e580be833dfd56752995989c8d2af8fb6550dff1f7a40b3619b350c",
+      "encoded_length": 213496,
+      "encoded_sha256": "81fcd2334b5318f0ac9969d890402628e1ab0e85c495afdbb0f58b491466563c",
+      "parts": [
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.01",
+          "length": 18000,
+          "sha256": "81e82aa1160d44ea8238a126b13ea2a354f9f4b4db734376e778f1d1bbe0e181"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.02",
+          "length": 18000,
+          "sha256": "a8120b3a280fe4bb979831be22bd5f0048145d0ef55ce9f15029457cc1b111cd"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.03",
+          "length": 18000,
+          "sha256": "38d07d8cd08c500344a634d7602edb73728613dbdef9e92706d8720de56396ce"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.04",
+          "length": 18000,
+          "sha256": "4ab65acc7984879c40087ba016d08fe068e9ca965e013f470a655e2c648a59ba"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.05",
+          "length": 18000,
+          "sha256": "2c99999363e8c731a3b2eeb8dc9d7da8593a7edac36dc8ef7d151a8bddbad79d"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.06",
+          "length": 18000,
+          "sha256": "5bd4a9f094d002065067c48922085baa216b9aeceef8d539331480a300f12e34"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.07",
+          "length": 18000,
+          "sha256": "c90b624de219c2dce80e5187808851995dfeb3bfbb6491486f4f6fe818dc3407"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.08",
+          "length": 18000,
+          "sha256": "1877061ba10c7b53db93661a5d0be39f261d31b9500cc4c5f4c144d991a012ce"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.09",
+          "length": 18000,
+          "sha256": "96a151b04db4c8c6e64487ab0e0071784e76b506bd8f365e37caa587031297cd"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.10",
+          "length": 18000,
+          "sha256": "cef1835edb6b2fa115829e4ce722ee68ccb4499f894c6ae3038b85e9e57efea8"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.11",
+          "length": 18000,
+          "sha256": "89b12e137d5123edf7ab492c50ae1d96accab2cb6c776093d94e1ff8e99c9073"
+        },
+        {
+          "file": "oh-seungjae-map.webp.b704f86b3e58.b64.12",
+          "length": 15496,
+          "sha256": "20ed49f2d1a1950982a6611f714cb83fed4b0e2e28c20eb6dfe94ee278753be8"
+        }
+      ]
+    },
+    {
+      "id": "oh-seungjae-portrait",
+      "target": "assets/episode01/characters/oh-seungjae-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 143820,
+      "sha256": "9c395505bd7ce38438fb961335f8973e0053f092708fae5f25a0fe876f0966e3",
+      "encoded_length": 191760,
+      "encoded_sha256": "79f86666ce914f47801dacd3dfb45cd22497bbcb70da2546fb5336464bf75799",
+      "parts": [
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.01",
+          "length": 18000,
+          "sha256": "1a4f8c5ddcd05c06424c97e63755caedb7e2b0fc92c41c829a6758efeb176611"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.02",
+          "length": 18000,
+          "sha256": "2c2fdcad16df41826d41e8588494b3e673bc202ce60bbdab46b1626c0123fd77"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.03",
+          "length": 18000,
+          "sha256": "7e5d2dcb79c64e8d4f8d42edd700fc4280bfe295b0b6ceb70596c178bc62c975"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.04",
+          "length": 18000,
+          "sha256": "5140d0056f98b0ac39893ff193906ee5b3051dfe7c1351f56ac56718abe9a717"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.05",
+          "length": 18000,
+          "sha256": "87d2683217ba000da7b59c9d194d6d00ed38ea71a1a67825581fecc5ba859450"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.06",
+          "length": 18000,
+          "sha256": "c82a13670e7c0430fc45fba95da68d923a2525252157b319fc4cae36894289a6"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.07",
+          "length": 18000,
+          "sha256": "cf41e3e134a900af28f22b38f4d3fd1f752ac1baa3a8c3f85ab8d28744786ea5"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.08",
+          "length": 18000,
+          "sha256": "07376d9a541b46695c70e0822ff5f8d4206319a174503a9c1da70657635ccbfb"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.09",
+          "length": 18000,
+          "sha256": "9b7fbc030f8bf999ce8b43798acbd06cd2ee293cd676e940a99a9a06f2178a95"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.10",
+          "length": 18000,
+          "sha256": "b81ed8551b2aad45ccb3b7bac1af23a17b23888ace6408257d5540e18e4915ad"
+        },
+        {
+          "file": "oh-seungjae-portrait.webp.9c395505bd7c.b64.11",
+          "length": 11760,
+          "sha256": "7f3211c24779804653e328cefee9bda563f077d29a7e9ba53286939574114d7d"
+        }
+      ]
+    },
+    {
+      "id": "player-map",
+      "target": "assets/episode01/characters/player-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 140258,
+      "sha256": "75c3a8d7b73978501525aa2304bc4eeca763913260eba433d6861ad5f20f38dc",
+      "encoded_length": 187012,
+      "encoded_sha256": "cc15a4e0b9e787db5762fd730692454bd0ddb6f503c74a2cc9890ca28303cc1c",
+      "parts": [
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.01",
+          "length": 18000,
+          "sha256": "59870631920eac44991322cf74f4127353c053b955098872584ee9c18fb66311"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.02",
+          "length": 18000,
+          "sha256": "54464ed7e8181908847c3893b80a4377c3ef7f051c7511a0d592eac75520151b"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.03",
+          "length": 18000,
+          "sha256": "5e013473a8ec844e8b1fe5b487687cddbbab7c38b51b22dcccae7436111526bc"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.04",
+          "length": 18000,
+          "sha256": "db512244f34b052a6397081aca5369bda8b6a1dc9f88744c19fbefe112ff0693"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.05",
+          "length": 18000,
+          "sha256": "2dff5f9e155b4f0484968f8b5898359363ad3bf1ff0bf934febf86d7fbb71c68"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.06",
+          "length": 18000,
+          "sha256": "169318d3b740fe29c5f9a11f202b0da07a00ceb0d8b66c271c2a7a9d526801f6"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.07",
+          "length": 18000,
+          "sha256": "8d857c37ce9d469ddacc69d7b15bcb3f9dedfd7fef9ca81b2deb096830cd1f5b"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.08",
+          "length": 18000,
+          "sha256": "0c25778876e07af0a1aa8982f72c0d127f7f36c858abea724c8a7299e2aa26c2"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.09",
+          "length": 18000,
+          "sha256": "ddb615706fbc9ce5550db5d726fe97ccc6af4981f090ec9b29580b41664bffc9"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.10",
+          "length": 18000,
+          "sha256": "93ff82b1611d107cf2cf0d268edc440030445ed81dee04618732e40ed36d3f43"
+        },
+        {
+          "file": "player-map.webp.75c3a8d7b739.b64.11",
+          "length": 7012,
+          "sha256": "46f851408cca0deb439fff7a08cd58368b8fb12dffa852f60bb8306644211ca7"
+        }
+      ]
+    },
+    {
       "id": "player-portrait",
       "target": "assets/episode01/characters/player-portrait.webp",
       "width": 1024,
@@ -12,19 +890,378 @@
       "encoded_length": 72656,
       "encoded_sha256": "c431ad4b8f29e7088714f1d5fd942846e5496a18ad6883ec23c172353fb1253c",
       "parts": [
-        {"file":"player-portrait.webp.b64.01","length":18000,"sha256":"4fb520a966ceb822ce6330f3ca1e83d94d9b939ab3e6eb1e7d885b598ecac00e"},
-        {"file":"player-portrait.webp.b64.02","length":18000,"sha256":"8b971ac536c3bac38a1da569dcfff9ceb21fc3c32f757a9fa5e4d3b63be7ecd4"},
-        {"file":"player-portrait.webp.b64.03","length":4500,"sha256":"2305f6983a722308fa915d58de23fc5c59b76ccb421405778f5aeceba787e449"},
-        {"file":"player-portrait.webp.b64.03b","length":4500,"sha256":"13a8819a5ebb3dfa80a0ae8ebbc5dd01e709e3f3f326b1de156eeeb3ca75274b"},
-        {"file":"player-portrait.webp.b64.03ca","length":750,"sha256":"3097396b595f4db49eac197ac560789d1dbf76c07d393fa1f94af304c6a62ac1"},
-        {"file":"player-portrait.webp.b64.03cb","length":750,"sha256":"5769502b99914d43af6c7f4fb7d0c701321fb59d972ce79dd740d6372815a471"},
-        {"file":"player-portrait.webp.b64.03cc","length":750,"sha256":"63b753631f9574baf26de603e3c579dc9b514ce5e7d35632cf107d4ae83f2fab"},
-        {"file":"player-portrait.webp.b64.03cd","length":750,"sha256":"1cb6b4702b815dbb8ce4d1357bd01d42887109ccf36c0a382a12a0421994d09d"},
-        {"file":"player-portrait.webp.b64.03ce","length":750,"sha256":"a75fce66c1e8dafc20fec8f63b951fb6d98855124c064490292008d304da66bd"},
-        {"file":"player-portrait.webp.b64.03cf","length":750,"sha256":"fe47a0da8d081af4f221ff628443d2a43a8e2208c06717b41d4930ad6761577f"},
-        {"file":"player-portrait.webp.b64.03d","length":4500,"sha256":"8fcf620316df039c293d1462366ca7cab6fed1cec7faa117c8792b7d9495c187"},
-        {"file":"player-portrait.webp.b64.04","length":18000,"sha256":"5551f75a1951e206dbaeea2227710691e1a0a879b76832aaea356e0c76bc7afd"},
-        {"file":"player-portrait.webp.b64.05","length":656,"sha256":"d93f91711bff2459f427634b315fe639dc8e6cd006fc59ca8b25bf3793cff285"}
+        {
+          "file": "player-portrait.webp.b64.01",
+          "length": 18000,
+          "sha256": "4fb520a966ceb822ce6330f3ca1e83d94d9b939ab3e6eb1e7d885b598ecac00e"
+        },
+        {
+          "file": "player-portrait.webp.b64.02",
+          "length": 18000,
+          "sha256": "8b971ac536c3bac38a1da569dcfff9ceb21fc3c32f757a9fa5e4d3b63be7ecd4"
+        },
+        {
+          "file": "player-portrait.webp.b64.03",
+          "length": 4500,
+          "sha256": "2305f6983a722308fa915d58de23fc5c59b76ccb421405778f5aeceba787e449"
+        },
+        {
+          "file": "player-portrait.webp.b64.03b",
+          "length": 4500,
+          "sha256": "13a8819a5ebb3dfa80a0ae8ebbc5dd01e709e3f3f326b1de156eeeb3ca75274b"
+        },
+        {
+          "file": "player-portrait.webp.b64.03ca",
+          "length": 750,
+          "sha256": "3097396b595f4db49eac197ac560789d1dbf76c07d393fa1f94af304c6a62ac1"
+        },
+        {
+          "file": "player-portrait.webp.b64.03cb",
+          "length": 750,
+          "sha256": "5769502b99914d43af6c7f4fb7d0c701321fb59d972ce79dd740d6372815a471"
+        },
+        {
+          "file": "player-portrait.webp.b64.03cc",
+          "length": 750,
+          "sha256": "63b753631f9574baf26de603e3c579dc9b514ce5e7d35632cf107d4ae83f2fab"
+        },
+        {
+          "file": "player-portrait.webp.b64.03cd",
+          "length": 750,
+          "sha256": "1cb6b4702b815dbb8ce4d1357bd01d42887109ccf36c0a382a12a0421994d09d"
+        },
+        {
+          "file": "player-portrait.webp.b64.03ce",
+          "length": 750,
+          "sha256": "a75fce66c1e8dafc20fec8f63b951fb6d98855124c064490292008d304da66bd"
+        },
+        {
+          "file": "player-portrait.webp.b64.03cf",
+          "length": 750,
+          "sha256": "fe47a0da8d081af4f221ff628443d2a43a8e2208c06717b41d4930ad6761577f"
+        },
+        {
+          "file": "player-portrait.webp.b64.03d",
+          "length": 4500,
+          "sha256": "8fcf620316df039c293d1462366ca7cab6fed1cec7faa117c8792b7d9495c187"
+        },
+        {
+          "file": "player-portrait.webp.b64.04",
+          "length": 18000,
+          "sha256": "5551f75a1951e206dbaeea2227710691e1a0a879b76832aaea356e0c76bc7afd"
+        },
+        {
+          "file": "player-portrait.webp.b64.05",
+          "length": 656,
+          "sha256": "d93f91711bff2459f427634b315fe639dc8e6cd006fc59ca8b25bf3793cff285"
+        }
+      ]
+    },
+    {
+      "id": "seo-jeongmin-map",
+      "target": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 116298,
+      "sha256": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3",
+      "encoded_length": 155064,
+      "encoded_sha256": "442961750a7529a319bbecd6403cdc0df3fd949b179553a828ec40d2f4147c09",
+      "parts": [
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.01",
+          "length": 18000,
+          "sha256": "1461146aea056a6a8e749a9ef32bf71e73119745d0d9310f3f76ae3b0aa19276"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.02",
+          "length": 18000,
+          "sha256": "f49e9a7dbcdae31da3a3f53eeb0b416df0dc57b53b81b0abdea413e895ea5bd1"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.03",
+          "length": 18000,
+          "sha256": "6d5c764cfba9f36807dbd99fb31f016a7ee84e8b739adcd0a6ca851a4f342b8f"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.04",
+          "length": 18000,
+          "sha256": "dc528ab88570e2ec1d474e0d9c53b22ea8d0f91d52531c87441a5380cb1c072c"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.05",
+          "length": 18000,
+          "sha256": "946ac842a901714df28a177db481ccb355c1deaa9bcf5fc9c2833c100e36ec8b"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.06",
+          "length": 18000,
+          "sha256": "3f4a5eeb2f084c2fee2f99e3182202c3b33127eaa08e2510bd30a411f0738e36"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.07",
+          "length": 18000,
+          "sha256": "92d7d18d2797a073ddd9bc57e6c6544f00efbd3484dcc977c0c54a22c94d7186"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.08",
+          "length": 18000,
+          "sha256": "2b892a4df0a39471327e2f6c8847e0cdad38357439a8a09fcddc018ad364f20c"
+        },
+        {
+          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.09",
+          "length": 11064,
+          "sha256": "bb2a739dda6def44c349c7897dced13e3b95788b5f5434e069b9d582944cde09"
+        }
+      ]
+    },
+    {
+      "id": "seo-jeongmin-portrait",
+      "target": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 122206,
+      "sha256": "cca1f44c70275f285e37cf58dff5dd2f94b262d617d09108bd7ad9021a592634",
+      "encoded_length": 162944,
+      "encoded_sha256": "93161624eb66c6091ce8860b703f1e2b271df0d93d1137679b439bb320e6d1c9",
+      "parts": [
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.01",
+          "length": 18000,
+          "sha256": "1a84781b0d2f659913196d4f2a5bad7cad14084fbf5f348a1bf19d3f119c7b10"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.02",
+          "length": 18000,
+          "sha256": "307bd6ee05bd5f829acf5d373ab8c826f8821c42b57c70df5db3e60be9bc4ff4"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.03",
+          "length": 18000,
+          "sha256": "1dd6a1eb073c9f3cb52f4b822a2baf3af5926a49fc08956442ae9d3e328edfdf"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.04",
+          "length": 18000,
+          "sha256": "93a6e853adf08b2d37cd10a407800f8cf299e255f85b4a3728a4dae9ede50d5e"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.05",
+          "length": 18000,
+          "sha256": "aaf7b9a4226b57e8b5a40092064a2990590697b6213f6802f6a27ea45c70dfa0"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.06",
+          "length": 18000,
+          "sha256": "78a690f229be338b35799ffc467b1f41ccef83926294754843a2066b9c1052c5"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.07",
+          "length": 18000,
+          "sha256": "46955d637e8af0deadb1fc935655a24930538c4bc382e2dc2d0c1d84c38a4970"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.08",
+          "length": 18000,
+          "sha256": "d5796b900f0a2db0947b7f21ba822a27ef3dcd2f1537fa4a6050b992683fe26e"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.09",
+          "length": 18000,
+          "sha256": "59eed918dd2b27be0e2506095922d86f593024ce1ba9326d7bbbfb36340643b7"
+        },
+        {
+          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.10",
+          "length": 944,
+          "sha256": "20198ec97cbee6e6a8c4a726c3b6d131d5b66655f62c2cafda8e5e28fdd6ade4"
+        }
+      ]
+    },
+    {
+      "id": "yoon-sungho-map",
+      "target": "assets/episode01/characters/yoon-sungho-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 207572,
+      "sha256": "61a30d31aeedd4d9e9535f6433d50f602291230a44fe8582d732f9fefcdc3a68",
+      "encoded_length": 276764,
+      "encoded_sha256": "20922ce5d9108e1a113918470c589c7922f9df956023fb9b816f434e0d607f9a",
+      "parts": [
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.01",
+          "length": 18000,
+          "sha256": "0e78e5448277620b00c84c70caafdc825638296c945461cf3cce6864189a5f0f"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.02",
+          "length": 18000,
+          "sha256": "b3c54065f6965f2fc968b2262e63001f7d5cdf7868fdd5721fc808819fe3adda"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.03",
+          "length": 18000,
+          "sha256": "255cf50c5862948640bc52ac30806ab4c3e807fef4e4d013dee9cc9379d45553"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.04",
+          "length": 18000,
+          "sha256": "0456d7e71814760d5612f0442bfdd603afe4aaf7b9fbf0ca56c1c5935994d334"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.05",
+          "length": 18000,
+          "sha256": "a52f7dfed12126d2c50668e2aa5c5734d8c563c76ee93cb1cd3cfd5176ac7613"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.06",
+          "length": 18000,
+          "sha256": "b079152ad84008c55ffccdc44e7c4cc6f09c61cbc38d76aaad7f607a5d79e362"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.07",
+          "length": 18000,
+          "sha256": "e26f101e38850575ecf480142c873b8d3c8ec8904dd519e5ac2410c4bd5463de"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.08",
+          "length": 18000,
+          "sha256": "805bae0a3f1f9e5e4f1e7e285318c70d3a67381177cea947cd97cae29b5f085f"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.09",
+          "length": 18000,
+          "sha256": "4585d2910b54048ec75b74a0b3a46485ca40d364b1be8d43ca3691122c49ce0b"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.10",
+          "length": 18000,
+          "sha256": "09c81e5d81aa85745899fe63a2ddafee2d752fe1115f2ceff491f702ee7fd209"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.11",
+          "length": 18000,
+          "sha256": "1286e0e0e5374fdbb3f679d839e7d14c6ebe5f0f7e122214d3f571bcf7586348"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.12",
+          "length": 18000,
+          "sha256": "34d2c1979dac71fe84ff8c6198844a7ffaee53416431bf98b812ea4f646a090a"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.13",
+          "length": 18000,
+          "sha256": "61ec50792d8d30b5220508e482be079a578675dc32eb1d8bb6819562be1089e1"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.14",
+          "length": 18000,
+          "sha256": "0a0d57288d1d156f4cae07cd57f6f0f39a5e3101206635cb0d7ee2c3466ad842"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.15",
+          "length": 18000,
+          "sha256": "6f3a0f6c27c22fd88838775fb512ab1df253c3207f5726e5536959c2d0aa3e59"
+        },
+        {
+          "file": "yoon-sungho-map.webp.61a30d31aeed.b64.16",
+          "length": 6764,
+          "sha256": "600caee69d3c450d2a09d9bdd307dc097e32907fc5713def0c2774ddb885d90a"
+        }
+      ]
+    },
+    {
+      "id": "yoon-sungho-portrait",
+      "target": "assets/episode01/characters/yoon-sungho-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 208644,
+      "sha256": "b9a33b02504aca22548990d8684096a5fafdd66354aeb1ad16753ce0ec4ab458",
+      "encoded_length": 278192,
+      "encoded_sha256": "38bb88be2688735075eb65eefd1b376fbc5608fa30b95523374fdd859673b464",
+      "parts": [
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.01",
+          "length": 18000,
+          "sha256": "fe9a04466dee004e69bed890c4594d2df83e037066398d3d262600535348f96b"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.02",
+          "length": 18000,
+          "sha256": "831a005a395ea3734a29fa9f7004722268cc79c92f8aa51e3c4ff09c62af2a2b"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.03",
+          "length": 18000,
+          "sha256": "6302cfc3f538a1a63f1b904d2a0cc10d1da010107b78bb287ec4a8f2627db791"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.04",
+          "length": 18000,
+          "sha256": "a55fc87d1a9f8f51e283b8c1faeb48954f81cc79a30ebd96634316843df46609"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.05",
+          "length": 18000,
+          "sha256": "4ca1a88cacf3d23c7b7525b6b9a957313725dc29e3235b8a4c9ab2471cd27eda"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.06",
+          "length": 18000,
+          "sha256": "eb0bf08945cbb53202c2a727859caf62a79dd8ea7d51b07c17112a70f5aaa43e"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.07",
+          "length": 18000,
+          "sha256": "69486543c2c5cbeb61e41e04070a4256d3d69634b75acd38c29280f3b68418e0"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.08",
+          "length": 18000,
+          "sha256": "d57881693d0b5ddc1ec6a9170b2dd0227cd584fdeb1cde2c8e6a3c81cefd3fe8"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.09",
+          "length": 18000,
+          "sha256": "94d5a37c2ae88f0ea6c0de6f5f075f4a1dcc2e96e29a2bab34e1b9537068cd1b"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.10",
+          "length": 18000,
+          "sha256": "b206e0d181cbcd170dc4f3333c378a931bdb0a3071e49f723fdc2faebb184b29"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.11",
+          "length": 18000,
+          "sha256": "4f69fbdf35a1efb93a56759cea9b2085bcbd4c3eb32d6dce092a18fa658da5e0"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.12",
+          "length": 18000,
+          "sha256": "fff12f9554dea0e2b2af9387ce0ec4927bb97af6a924d2ac9055355110f77b8b"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.13",
+          "length": 18000,
+          "sha256": "7428714d01c27d3af74b90615096946a3e6f7b64ee18a5ddd392dc77da22732e"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.14",
+          "length": 18000,
+          "sha256": "88c9a4a9dc9bdb3ed56e51a9b1d52d388856e41b25c0754cad48820c3c717966"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.15",
+          "length": 18000,
+          "sha256": "7282557c2f297d38e568f2d5fe6f858a8dd7d9b6d88b6b0aeeb575427519f9b8"
+        },
+        {
+          "file": "yoon-sungho-portrait.webp.b9a33b02504a.b64.16",
+          "length": 8192,
+          "sha256": "1af12afeb23430a3f34b01eedcf141af73517b21f827ae23711aaaa0551fc136"
+        }
       ]
     }
   ]

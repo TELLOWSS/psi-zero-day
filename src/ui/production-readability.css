@@ -1,0 +1,132 @@
+/* Production art integration: preserve the engine and anchor sprites by their feet. */
+.strategy-map.has-background-art .strategy-action-tray { background: #142b3bf5; color: #f1f6fa; border-color: #638298; }
+.strategy-action-tray .strategy-action-empty { opacity: 1; color: #d1e2ec; }
+.strategy-action-tray .strategy-action-heading span { opacity: 1; color: #c4d8e4; }
+.strategy-friction-list article { background: #294656; border-color: #567185; }
+.strategy-friction-list strong { color: #ffe0ad; }
+.strategy-friction-list small { color: #d0e0e8; font-size: 11px; }
+.strategy-shell .strategy-focus-panel > p strong { color: #f0f6fa; }
+.strategy-shell .strategy-focus-panel > p span { color: #c9dce7; }
+.strategy-action-confirm-buttons button { min-height: 44px; }
+.map-choice-fallback > summary { min-height: 44px; display: flex; align-items: center; }
+.strategy-active .strategy-rail { bottom: 82px; }
+.complete-screen:has(.episode-review) { width: min(760px, 92%); max-height: 90vh; overflow-y: auto; padding: 24px; border: 1px solid #426071; border-radius: 18px; background: #142d3af5; }
+.complete-screen:has(.episode-review) h1 { font-size: 32px; margin: 8px; }
+.complete-screen:has(.episode-review) .end-line { margin-bottom: 18px; }
+.episode-review { text-align: left; }
+.episode-review h2 { font-size: 18px; }
+.episode-review > p, .replay-hint { font-size: 13px; line-height: 1.7; color: #c5dbe5; }
+.episode-review ol { max-height: 34vh; overflow-y: auto; padding: 0 0 0 24px; }
+.episode-review li { padding: 10px 12px; margin-bottom: 8px; background: #244452; border-radius: 8px; font-size: 13px; line-height: 1.6; }
+.episode-review li strong, .episode-review li span { display: block; }
+.episode-review li strong { color: #e9cf8b; font-size: 12px; }
+.episode-review li p { margin: 5px 0 0; color: #c5dbe5; }
+.strategy-active .strategy-shell { background: #142735; }
+.strategy-hud { inset: 10px 12px auto; height: 48px; grid-template-columns: 220px minmax(0, 1fr) 90px; gap: 8px; }
+.strategy-brand { padding: 0 14px; font-size: 15px; }
+.strategy-shell[data-visual-mode="art"] .strategy-panel,
+.strategy-shell[data-visual-mode="art"] .strategy-brand,
+.strategy-shell[data-visual-mode="art"] .strategy-day,
+.strategy-rail button { background: #203c4b; color: #eff6f8; border-color: #426071; }
+.strategy-rail { top: 70px; left: 12px; bottom: 22px; width: 178px; gap: 8px; overflow-y: auto; }
+.strategy-panel { padding: 12px; border-radius: 12px; }
+.strategy-panel h2 { font-size: 14px; }
+.strategy-panel p, .strategy-focus-panel small, .strategy-friction-list { font-size: 12px; line-height: 1.5; }
+.strategy-panel p { flex-wrap: wrap; }
+.strategy-friction-panel { max-height: none; flex-shrink: 0; }
+.strategy-rail button { min-height: 44px; flex-shrink: 0; font-size: 13px; }
+.strategy-active .strategy-shell .strategy-rail > button { background: #254858; color: #eff6f8; }
+.strategy-shell .strategy-focus-panel small { color: #c8dce6; }
+.strategy-map { inset: 68px 12px 176px 202px; border-radius: 14px; overflow: clip; }
+.strategy-map-background-art { transform: none; filter: saturate(.92) contrast(1.02); }
+.strategy-map-stage-card { display: none; }
+.strategy-active .scene-heading { grid-row: auto; top: 80px; left: 216px; max-width: 40%; width: auto; padding: 0; pointer-events: none; background: transparent; }
+.strategy-active .scene-heading .eyebrow { display: none; }
+.strategy-active .scene-heading h1 { margin: 0; padding: 8px 14px; font-size: 17px; background: #183543ed; }
+.strategy-map-worker.has-art {
+  width: 76px; height: 100px; min-width: 0; min-height: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 0; margin: 0;
+  opacity: 1; transform: translate(-50%, -100%); transform-origin: center bottom;
+}
+.strategy-map-worker.has-art[data-character] { margin: 0; }
+.strategy-map-worker.has-art:hover,
+.strategy-map-worker.has-art.is-scene-participant,
+.strategy-map-worker.has-art.is-focused { transform: translate(-50%, -100%); }
+.strategy-map-worker.has-art .strategy-worker-art {
+  width: 100%; height: 100%; flex: 0 0 100%; object-fit: contain;
+  object-position: center bottom; transform: none;
+  filter: drop-shadow(0 3px 2px #14212b70);
+}
+.strategy-map-worker.has-art .strategy-worker-label {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  min-width: 56px; max-width: 110px; padding: 4px 7px;
+  background: #183543ed; border: 1px solid #7c9baa; text-align: center;
+}
+.strategy-worker-label strong { color: #fff; font-size: 11px; white-space: nowrap; }
+.strategy-map-worker .strategy-worker-label span { color: #dae6ec; font-size: 10px; }
+.strategy-map-worker.has-actions .strategy-worker-label { border-color: #ffbd69; }
+.strategy-map-worker.is-focused .strategy-worker-label { outline: 2px solid #7bcaf4; }
+/* Normalized walkable ground positions for the locked Foundation background. */
+.strategy-map .worker-overview { left: 52%; top: 77%; }
+.strategy-map .worker-yard { left: 29%; top: 78%; }
+.strategy-map .worker-entry { left: 38%; top: 58%; }
+.strategy-map .worker-core { left: 48%; top: 47%; }
+.strategy-map .worker-ramp { left: 42%; top: 76%; }
+.strategy-map .worker-gate { left: 72%; top: 82%; }
+.strategy-map .worker-inspection { left: 63%; top: 66%; }
+.strategy-map .worker-office { left: 76%; top: 53%; }
+.strategy-zone-target { min-height: 44px; background: #183543dd; color: #fff; font-size: 11px; opacity: .92; }
+.strategy-map .zone-entry { left: 33%; top: 47%; }
+.strategy-map .zone-ramp { left: 38%; top: 84%; }
+.strategy-map .zone-yard { left: 17%; top: 86%; }
+.strategy-map .zone-gate { left: 78%; top: 83%; }
+.strategy-active .strategy-roster { display: none; }
+.strategy-active .play-panel {
+  left: 202px; right: 12px; bottom: 14px; min-height: 148px; max-height: 148px;
+  grid-template-columns: 142px minmax(0, 1fr); gap: 18px; padding: 10px 18px;
+  background: #132d3bf5; border: 1px solid #456878; border-radius: 14px;
+  overflow-y: auto;
+}
+.strategy-active .character-card { padding-right: 10px; justify-content: start; }
+.strategy-active .portrait-slot { display: block; height: 94px; min-height: 94px; border-radius: 8px; }
+.strategy-active .portrait-image { object-fit: contain; object-position: center; }
+.strategy-active .character-identity { margin-top: 4px; }
+.strategy-active .character-identity strong { font-size: 14px; }
+.strategy-active .character-identity > span:last-child { font-size: 11px; }
+.strategy-active .dialogue-content { min-height: 120px; display: flex; flex-direction: column; }
+.strategy-active .dialogue-text { padding: 4px 0; font-size: 16px; line-height: 1.65; }
+.strategy-active .continue-button { margin-top: auto; align-self: flex-end; min-width: 132px; min-height: 44px; font-size: 14px; }
+.strategy-active .narrator-card { justify-content: center; }
+.strategy-active .narrator-mark { font-size: 32px; }
+.strategy-active .game-footer { pointer-events: none; }
+.strategy-active .game-footer .debug-toggle { pointer-events: auto; }
+.strategy-active .save-hint { position: fixed; left: 24px; bottom: 8px; font-size: 10px; }
+.strategy-action-tray { max-height: calc(100% - 70px); overflow-y: auto; }
+.strategy-action-list button { font-size: 13px; }
+.strategy-outcome-card p { font-size: 14px; }
+@media (max-width: 1000px), (max-height: 560px) {
+  .strategy-hud { inset: 6px 8px auto; height: 38px; grid-template-columns: 154px minmax(0, 1fr) 60px; gap: 5px; }
+  .strategy-brand { font-size: 12px; padding: 0 8px; }
+  .strategy-rail { top: 52px; left: 8px; width: 130px; bottom: 12px; gap: 5px; }
+  .strategy-panel { padding: 8px; }
+  .strategy-panel h2 { font-size: 12px; }
+  .strategy-panel p, .strategy-focus-panel small, .strategy-friction-list { font-size: 10px; }
+  .strategy-map { inset: 50px 8px 118px 146px; }
+  .strategy-active .scene-heading { top: 58px; left: 154px; }
+  .strategy-active .scene-heading h1 { font-size: 13px; padding: 5px 9px; }
+  .strategy-map-worker.has-art { width: 50px; height: 66px; }
+  .strategy-map-worker.has-art .strategy-worker-label { font-size: 9px; min-width: 44px; padding: 2px 4px; }
+  .strategy-worker-label strong { font-size: 9px; }
+  .strategy-zone-target { min-height: 30px; padding: 3px 5px; font-size: 9px; }
+  .strategy-active .play-panel { left: 146px; right: 8px; bottom: 8px; min-height: 102px; max-height: 102px; grid-template-columns: 88px minmax(0,1fr); padding: 6px 10px; gap: 10px; }
+  .strategy-active .portrait-slot { height: 58px; min-height: 58px; }
+  .strategy-active .character-identity strong { font-size: 12px; }
+  .strategy-active .character-identity > span:last-child { font-size: 9px; }
+  .strategy-active .dialogue-content { min-height: 88px; }
+  .strategy-active .dialogue-text { font-size: 12px; line-height: 1.45; padding: 0; }
+  .strategy-active .continue-button { min-height: 44px; font-size: 12px; padding: 4px 8px; }
+  .strategy-action-tray { top: 4px; right: 4px; max-height: calc(100% - 8px); width: 54%; }
+  .strategy-friction-list article { grid-template-columns: 1fr; padding: 5px; }
+  .strategy-friction-list article > span { display: none; }
+  .strategy-friction-list small { font-size: 10px; line-height: 1.5; word-break: normal; }
+}
