@@ -57,6 +57,7 @@ describe('TASK-006 character interaction UI', () => {
     expect(card.textContent).toContain(session.character('lim_junho')!.name);
     expect(card.textContent).toContain(session.character('lim_junho')!.role);
     expect(card.querySelector('.worker-mark')).not.toBeNull();
+    expect(card.querySelector('.portrait-image')?.getAttribute('src')).toContain('lim-junho-concerned.webp');
     expect(container.querySelectorAll('.choice-panel button')).toHaveLength(2);
     const responses = session.getSnapshot().dialogue!.responses;
     expect(responses[0]!.consequences).not.toEqual(responses[1]!.consequences);
@@ -100,6 +101,9 @@ describe('TASK-006 character interaction UI', () => {
     const key = plan === 'delegate_kang' ? 'ep01.reactions.kang.high' : 'ep01.reactions.kang.low';
     expect(session.getSnapshot().dialogue?.text_id).toBe(key);
     expect(container.querySelector('.dialogue-text')?.textContent).toBe(session.t(key));
+    expect(container.querySelector('.portrait-image')?.getAttribute('src')).toContain(
+      plan === 'delegate_kang' ? 'kang-taesik-supportive.webp' : 'kang-taesik-portrait.webp',
+    );
     expect(session.getSnapshot().phase).toBe('playing');
   });
 

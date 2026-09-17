@@ -16,6 +16,12 @@ const plan = JSON.parse(await readFile(planPath, 'utf8'));
 const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
 
 const planned = [];
+const dialogueArt = JSON.parse(await readFile(path.join(root, 'content/episode01/dialogue-art.json'), 'utf8'));
+for (const variant of dialogueArt.variants) {
+  planned.push({ asset_id: variant.asset_id, uri: variant.uri, group_id: 'ep01.characters',
+    preload_policy: 'on_demand', source: `${variant.character_id}:${variant.expression}`,
+    production_scope: 'expression', allow_rc_fallback: false });
+}
 for (const [characterId, character] of Object.entries(plan.characters ?? {})) {
   planned.push({
     asset_id: character.portrait_asset_id,

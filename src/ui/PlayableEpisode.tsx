@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExtern
 import type { GameState } from '../domain';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
+import { dialogueExpressionUri } from '../app/dialogue-art';
 import { projectCharacterLoadout } from '../app/character-loadout';
 import { FIELD_SUPPORT_ITEMS, isFieldSupportItemActive } from '../app/field-support-items';
 import { completedTraining } from '../app/training';
@@ -232,9 +233,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
 
   const strategyActive = isPlaying && strategy !== null;
-  const dialoguePortraitUri = portrait?.kind === 'asset'
+  const dialoguePortraitUri = dialogueExpressionUri(person?.id, snapshot.dialogue?.text_id, resolveAsset) ?? (portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
-    : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
+    : person ? characterPortraitUri(person.id, resolveAsset) : undefined);
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
   const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
   const rewardCharacterId = activeEventId === 'e01_09_evening'

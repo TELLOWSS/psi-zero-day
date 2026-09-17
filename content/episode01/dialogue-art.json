@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "variants": [
+    {
+      "character_id": "lim_junho",
+      "expression": "concerned",
+      "asset_id": "ep01.character.lim_junho.concerned",
+      "uri": "assets/episode01/characters/lim-junho-concerned.webp",
+      "text_ids": ["ep01.junho.signal", "ep01.junho.prompt"]
+    },
+    {
+      "character_id": "kang_taesik",
+      "expression": "supportive",
+      "asset_id": "ep01.character.kang_taesik.supportive",
+      "uri": "assets/episode01/characters/kang-taesik-supportive.webp",
+      "text_ids": ["ep01.reactions.kang.high"]
+    }
+  ]
+}

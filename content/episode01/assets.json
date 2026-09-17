@@ -82,6 +82,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.kang_taesik.supportive",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/kang-taesik-supportive.webp",
+          "format": "webp",
+          "bytes": 249026,
+          "hash": "62f98f93b267cc62bd340f9eec21e15dcd78912d2f65bf73dd2337628251e8bf"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.lee_jaehoon.map",
       "type": "image",
       "group_id": "ep01.characters",
@@ -107,6 +123,22 @@
           "format": "webp",
           "bytes": 155636,
           "hash": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.character.lim_junho.concerned",
+      "type": "image",
+      "group_id": "ep01.characters",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/lim-junho-concerned.webp",
+          "format": "webp",
+          "bytes": 219658,
+          "hash": "4dfd1cdf3fb6bb146ecd28e54a0b2a83b93678be2e4ee89be8e2af51513d0344"
         }
       ],
       "dependencies": [],
