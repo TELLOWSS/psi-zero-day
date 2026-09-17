@@ -13,7 +13,12 @@
       {
         "id": "kang-taesik-map",
         "file": "kang-taesik-map.webp",
-        "status": "next",
+        "status": "approved_source_ready",
+        "source": {
+          "normalized_size": "768x1248",
+          "sha256": "bd6c30e5c5adbe0b1fadfc121b2bb53bfd5e36c3bc5e72730e7a02c65eb5f143",
+          "local_batch_intake": "deferred_until_all_p2_assets_approved"
+        },
         "requirements": [
           "single full-body 3/4 transparent cutout",
           "male in his 50s, veteran worker",
@@ -30,7 +35,7 @@
       {
         "id": "kang-taesik-portrait",
         "file": "kang-taesik-portrait.webp",
-        "status": "queued",
+        "status": "next",
         "requirements": [
           "same identity as approved Kang map",
           "upper-body 3/4 transparent cutout",
@@ -84,6 +89,6 @@
       }
     ]
   },
-  "next_asset": "kang-taesik-map.webp",
+  "next_asset": "kang-taesik-portrait.webp",
   "rule": "Advance only next_asset until approved or explicitly rejected; do not generate presentation sheets. After approval, advance to the next queued asset. Integrate only after all four P2 assets pass batch review."
 }
