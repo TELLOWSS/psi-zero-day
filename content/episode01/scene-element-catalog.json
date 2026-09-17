@@ -159,7 +159,7 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "source": "generated_2026-09-18"
+        "source": "generated_2026-09-18/exec-414949ea-7c4e-4757-9f5d-60bb4f42182f.png"
       },
       "reuse_for": [
         "scaffold"
@@ -170,7 +170,7 @@
       "kind": "hazard",
       "label": "일반 중량물 양중 · 라운드 슬링 초크걸이",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.suspended_load",
       "lifting_profile": {
         "load_family": "general_material",
@@ -190,7 +190,8 @@
           "y": 0.62
         },
         "map_max_px": 136,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18/exec-41f7ba8f-99ad-40e4-ba34-180a66f278d0.png"
       },
       "reuse_for": [
         "lifting",
@@ -202,7 +203,7 @@
       "kind": "hazard",
       "label": "갱폼 양중 · Ø22 mm 와이어로프",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.gangform_lift_wire22",
       "lifting_profile": {
         "load_family": "gangform",
@@ -222,7 +223,8 @@
           "y": 0.66
         },
         "map_max_px": 156,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18/exec-f9df42d3-0b3e-4724-8827-cf64ad17fec2.png"
       },
       "reuse_for": [
         "lifting",
@@ -234,7 +236,7 @@
       "kind": "control",
       "label": "출입금지 구역",
       "visual_token": "⊘",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.exclusion_zone",
       "art": {
         "path": "assets/episode01/scene-elements/exclusion-zone.webp",
@@ -245,7 +247,8 @@
           "y": 0.76
         },
         "map_max_px": 160,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18/exec-4fcc93e4-9b26-4de3-a416-7f8266a02cf8.png"
       },
       "reuse_for": [
         "lifting",
@@ -258,7 +261,7 @@
       "kind": "hazard",
       "label": "습윤·미끄럼 구간",
       "visual_token": "≈",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.wet_floor",
       "art": {
         "path": "assets/episode01/scene-elements/wet-floor.webp",
@@ -269,7 +272,8 @@
           "y": 0.5
         },
         "map_max_px": 150,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18/exec-6e8780fe-dae0-466e-809f-d9eb28463e7e.png"
       },
       "reuse_for": [
         "basement",
@@ -281,7 +285,7 @@
       "kind": "hazard",
       "label": "개구부·단부",
       "visual_token": "□",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.open_edge",
       "art": {
         "path": "assets/episode01/scene-elements/open-edge.webp",
@@ -292,7 +296,8 @@
           "y": 0.82
         },
         "map_max_px": 154,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "source": "generated_2026-09-18/exec-6a2427d0-1d43-4ef2-a688-b1998ac1bb1f.png"
       },
       "reuse_for": [
         "typical_floor",

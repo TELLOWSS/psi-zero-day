@@ -5,22 +5,18 @@ import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage, characterVisual } from './VisualSlot';
+import { FieldGuide } from './FieldGuide';
 import { PlayableEpisode } from './PlayableEpisode';
 
-type HubPage = 'home' | 'map' | 'people' | 'journal';
-const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal'];
+type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
+const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = ['kang_taesik', 'player', 'lim_junho'] as const;
-const sceneArtIds = [
-  'ep01.scene_element.material_stack', 'ep01.scene_element.access_barrier', 'ep01.scene_element.vehicle_overlap',
-  'ep01.scene_element.harness_unclipped', 'ep01.scene_element.platform_cut_edge', 'ep01.scene_element.suspended_load',
-  'ep01.scene_element.gangform_lift_wire22', 'ep01.scene_element.exclusion_zone', 'ep01.scene_element.wet_floor', 'ep01.scene_element.open_edge',
-] as const;
-
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
   const paths = {
     home: 'M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10',
     map: 'm3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16',
     people: 'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 10v-3a6 6 0 0 1 12 0v3m3-17a4 4 0 0 1 0 8m1 3a5 5 0 0 1 4 5v1',
+    guide: 'M12 5C8 2 4 3 2 4v16c3-2 6-2 10 0 4-2 7-2 10 0V4c-3-1-6-2-10 1Zm0 0v15',
     journal: 'M6 3h14v18H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm0 0v18m4-13h6m-6 4h6m-6 4h4',
     play: 'm8 4 12 8-12 8Z', lock: 'M6 10h12v11H6Zm2 0V6a4 4 0 0 1 8 0v4m-4 5v2', check: 'm4 12 5 5L20 6',
   };
@@ -56,7 +52,6 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
   const castDetail = castPlan.characters.find(character => character.id === selectedPerson);
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
-  const finalSceneArt = sceneArtIds.filter(id => Boolean(resolve(id))).length;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   return <main className={`game-hub hub-page-${page}`}>
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
@@ -87,7 +82,7 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
           <VisualImage uri={characterPortraitUri(step.character, resolve)} alt="" /><span className="chapter-number">{String(index + 1).padStart(2, '0')}</span><div><small>{t(`ui.hub.step.${step.status}`)}</small><strong>{t(step.title)}</strong></div><HubIcon kind={step.status === 'done' ? 'check' : step.status === 'locked' ? 'lock' : 'play'} />
         </button>)}</div>
       </> : page === 'map' ? <>
-        <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p><span className="hub-art-readiness">{t('ui.hub.art_readiness').replace('{count}', String(finalSceneArt)).replace('{total}', String(sceneArtIds.length))}</span></div>
+        <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
           <svg className="hub-route-line" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M150 100 L470 120 L810 155 L660 335 L300 340" /></svg>
           {journey.map((step, index) => <button className={`hub-route-node route-${index}`} key={step.id} type="button" data-status={step.status} aria-pressed={detail.id === step.id} onClick={() => setSelectedStep(step.id)}>
@@ -103,7 +98,7 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
           <VisualImage uri={characterPortraitUri(character.id, resolve)} alt="" /><strong>{session.character(character.id)?.name}</strong><small>{session.character(character.id)?.role}</small>
         </button>)}</div>
         <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
-      </div> : <div className="hub-journal">
+      </div> : page === 'guide' ? <FieldGuide session={session} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <ol>{review.map(entry => <li key={entry.key}><strong>{t(entry.event_text_id)}</strong><h2>{t(entry.choice_text_id)}</h2>{entry.result_text_id ? <p>{t(entry.result_text_id)}</p> : null}</li>)}</ol> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
         <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>

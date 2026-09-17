@@ -27,6 +27,12 @@ describe('game hub navigation', () => {
       expect(host.querySelectorAll('.hub-person-grid button')).toHaveLength(8);
       click('.hub-person-grid button:last-child');
       expect(host.querySelector('.hub-person-detail')?.textContent).toContain(session.character('oh_seungjae')!.name);
+      click('.hub-nav button:nth-child(5)');
+      expect(host.querySelectorAll('.field-guide-list button')).toHaveLength(10);
+      click('.field-guide-list button:last-child');
+      expect(host.querySelector('.field-guide-detail h2')?.textContent).toBe(session.t('ui.guide.open_edge.title'));
+      expect(host.querySelector('.field-guide-preview img')?.getAttribute('src')).toContain('open-edge.webp');
+      expect(host.querySelectorAll('.field-guide-list img')).toHaveLength(10);
       expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
     } finally { act(() => root.unmount()); }
   });

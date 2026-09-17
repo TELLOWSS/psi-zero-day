@@ -105,12 +105,11 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(projectEpisode01SceneElements('e01_04_junho_signal')).toEqual([]);
   });
 
-  it('keeps future scaffold/lifting hazards planned instead of pretending they are current Episode 01 assets', () => {
-    expect(catalog.elements.harness_unclipped.production_status).toBe('planned');
-    expect(catalog.elements.platform_cut_edge.production_status).toBe('planned');
-    expect(catalog.elements.suspended_load.production_status).toBe('planned');
-    expect(catalog.elements.gangform_lift_wire22.production_status).toBe('planned');
-    expect(catalog.elements.exclusion_zone.production_status).toBe('planned');
+  it('makes all ten props available without inserting future hazards into current events', () => {
+    expect(Object.values(catalog.elements)).toHaveLength(10);
+    expect(Object.values(catalog.elements).every(element => element.production_status === 'final')).toBe(true);
+    const placed = Object.values(catalog.event_elements).flat().map(element => element.element_key);
+    expect(placed).toEqual(['material_stack', 'material_stack']);
   });
 
   it('locks the fall-protection visual to a brand-neutral twin-Y full-body harness', () => {

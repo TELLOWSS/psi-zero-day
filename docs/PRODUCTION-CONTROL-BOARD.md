@@ -6,7 +6,7 @@ Updated: 2026-09-18
 
 Character Batch A and B are integrated: 16/16 WebP files, with 17/17 background + character technical art gates passing. The prior pending-art entries below are historical specifications, not the current queue. The active work is P4 world props, followed by expression/action variants and player validation. See [integration report](PRODUCTION-INTEGRATION-2026-09-18.md).
 
-Home, five checkpoint map, eight-person roster, choice journal and resume navigation are implemented. Public production deployment is not part of this local delivery.
+Home, five checkpoint map, eight-person roster, choice journal, resume navigation and a ten-prop field guide are implemented. All ten prop files pass technical checks. Rigging geometry still needs visual review before release; file readiness is not safety validation. See [field guide integration](FIELD-GUIDE-INTEGRATION-2026-09-18.md). Public production deployment is not part of this local delivery.
 
 This is the current operational source of truth for finishing Episode 01.
 

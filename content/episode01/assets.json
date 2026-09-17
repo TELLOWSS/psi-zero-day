@@ -290,6 +290,38 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.exclusion_zone",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/exclusion-zone.webp",
+          "format": "webp",
+          "bytes": 183608,
+          "hash": "83381b209496fb77027b4c21458aa25daa36abafa7ebfed2da756c93189fec95"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.gangform_lift_wire22",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/gangform-lift-wire22.webp",
+          "format": "webp",
+          "bytes": 231530,
+          "hash": "bbae0a5e9849a10133003782089994e7f0dfcb7c68d554fe285533ceb65ba129"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.harness_unclipped",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -322,6 +354,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.open_edge",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/open-edge.webp",
+          "format": "webp",
+          "bytes": 299746,
+          "hash": "f35e2fa801ca203f62db83e74d5953e3561734c4576021e4bf25fe0b89f083cf"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.platform_cut_edge",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -329,8 +377,24 @@
         {
           "uri": "assets/episode01/scene-elements/platform-cut-edge.webp",
           "format": "webp",
-          "bytes": 299746,
-          "hash": "f35e2fa801ca203f62db83e74d5953e3561734c4576021e4bf25fe0b89f083cf"
+          "bytes": 281240,
+          "hash": "8de0c514e72cd2a41b0e4993c34cfb2d7b9fedfeaefe27c80be9524508888d07"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.suspended_load",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/suspended-load-round-sling-choker.webp",
+          "format": "webp",
+          "bytes": 246702,
+          "hash": "a79d0c6e2ea15052691130dbbb7f0db927f993c88377a2ef5191feea919b44b8"
         }
       ],
       "dependencies": [],
@@ -347,6 +411,22 @@
           "format": "webp",
           "bytes": 3972,
           "hash": "3de85114ac9eee95034d2c39e9f88d7bb6b6f7e8b9c39bdc9669674709a2287f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.wet_floor",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/wet-floor.webp",
+          "format": "webp",
+          "bytes": 213458,
+          "hash": "566968b3778dccfb2aa09fc6bdd855a3d2fd45140cbc1bdc192046dda02d6da8"
         }
       ],
       "dependencies": [],
