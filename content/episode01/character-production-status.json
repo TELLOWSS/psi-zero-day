@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "updated": "2026-09-17",
+  "active_milestone": "P2",
+  "active_batch": "batch-a",
+  "player_master": {
+    "status": "locked",
+    "binary_intake": "deferred_to_batch_a"
+  },
+  "batch_a": {
+    "status": "art_in_progress",
+    "assets": [
+      {
+        "id": "kang-taesik-map",
+        "file": "kang-taesik-map.webp",
+        "status": "next",
+        "requirements": [
+          "single full-body 3/4 transparent cutout",
+          "male in his 50s, veteran worker",
+          "broad heavy square silhouette",
+          "weathered face with thick moustache",
+          "orange hard hat",
+          "dark practical workwear with orange safety vest",
+          "work gloves",
+          "wide planted instruction stance",
+          "no tablet",
+          "no text, logo, UI, background, floor plate or additional poses"
+        ]
+      },
+      {
+        "id": "kang-taesik-portrait",
+        "file": "kang-taesik-portrait.webp",
+        "status": "queued",
+        "requirements": [
+          "same identity as approved Kang map",
+          "upper-body 3/4 transparent cutout",
+          "full orange helmet visible",
+          "work gloves or instruction gesture readable",
+          "no text, logo, UI or background"
+        ]
+      },
+      {
+        "id": "lim-junho-map",
+        "file": "lim-junho-map.webp",
+        "status": "queued",
+        "requirements": [
+          "single full-body 3/4 transparent cutout",
+          "male in early 20s, rookie",
+          "small narrow youthful silhouette",
+          "young round face with bright eyes",
+          "yellow hard hat",
+          "green high-visibility vest",
+          "handheld radio",
+          "slightly forward eager posture",
+          "no tablet",
+          "no text, logo, UI, background, floor plate or additional poses"
+        ]
+      },
+      {
+        "id": "lim-junho-portrait",
+        "file": "lim-junho-portrait.webp",
+        "status": "queued",
+        "requirements": [
+          "same identity as approved Lim map",
+          "upper-body 3/4 transparent cutout",
+          "yellow helmet and handheld radio readable",
+          "young rookie expression",
+          "no text, logo, UI or background"
+        ]
+      }
+    ],
+    "rejected_attempts": [
+      {
+        "type": "character_sheet",
+        "reason": "multiple poses, labels, UI and presentation layout are not production assets"
+      },
+      {
+        "type": "shared_player_equipment_language",
+        "reason": "Kang and Lim used white/blue Player-like PPE and props, so role and silhouette separation failed"
+      },
+      {
+        "type": "branding_and_pseudo_text",
+        "reason": "helmet/chest/site labels and PSI branding violate final cutout rules"
+      }
+    ]
+  },
+  "next_asset": "kang-taesik-map.webp",
+  "rule": "Advance only next_asset until approved or explicitly rejected; do not generate presentation sheets. After approval, advance to the next queued asset. Integrate only after all four P2 assets pass batch review."
+}
