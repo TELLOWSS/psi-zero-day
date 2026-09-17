@@ -16,6 +16,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
     "copy:ko-check": "node scripts/check-korean-copy.mjs",
+    "production:next": "node scripts/report-production-next.mjs",
     "assets:character-stage": "node scripts/stage-character-media.mjs",
     "assets:character-batch-stage": "node scripts/stage-character-batch.mjs",
     "assets:embedded": "node scripts/materialize-embedded-media.mjs && node scripts/materialize-vehicle-overlap.mjs && node scripts/materialize-character-media.mjs",
