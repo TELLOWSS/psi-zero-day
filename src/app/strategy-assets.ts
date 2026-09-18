@@ -109,6 +109,11 @@ export function characterPortraitUri(characterId: Id, resolve: AssetResolver): s
   return plan ? resolve(plan.portrait_asset_id) : undefined;
 }
 
+export function characterMapUri(characterId: Id, resolve: AssetResolver): string | undefined {
+  const plan = (visuals.characters as Readonly<Record<string, CharacterVisualPlan>>)[characterId];
+  return plan ? resolve(plan.map_asset_id) : undefined;
+}
+
 export function backgroundAssetUri(assetId: Id, resolve: AssetResolver): string | undefined {
   const direct = resolve(assetId);
   if (direct) return direct;

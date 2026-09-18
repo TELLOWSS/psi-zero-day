@@ -1,7 +1,7 @@
 import { useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectEpisodeJourney } from '../app/episode-journey';
-import { characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
+import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { FieldGuide } from './FieldGuide';
@@ -11,7 +11,7 @@ import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
-const featured = ['kang_taesik', 'player', 'lim_junho'] as const;
+const featured = ['choi_minseok', 'player', 'seo_jeongmin'] as const;
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
   const paths = {
     home: 'M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10',
@@ -33,9 +33,8 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const cinematicBackground = episode01BackgroundUri(resolve);
   const preloadUris = [
     cinematicBackground,
+    ...featured.map(id => characterMapUri(id, resolve)),
     characterPortraitUri('player', resolve),
-    characterPortraitUri('kang_taesik', resolve),
-    characterPortraitUri('lim_junho', resolve),
   ].filter((uri): uri is string => Boolean(uri));
 
   const play = () => setLoading(true);
@@ -125,7 +124,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     </aside>
 
     <div className="commercial-title-cast" aria-hidden="true">
-      {featured.map((id, index) => <VisualImage key={id} uri={characterPortraitUri(id, resolve)} alt="" className={`commercial-title-worker worker-${index}`} />)}
+      {featured.map((id, index) => <VisualImage key={id} uri={characterMapUri(id, resolve)} alt="" data-character={id} className={`commercial-title-worker worker-${index}`} />)}
     </div>
 
     <div className="commercial-title-site-plaque" aria-hidden="true">

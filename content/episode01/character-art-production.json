@@ -1,7 +1,13 @@
 {
   "schema_version": 1,
   "approved_visual_direction": "commercial_casual_strategy_2_5d_construction",
-  "expression_set": ["neutral", "concern", "resolve", "relief", "conflict"],
+  "expression_set": [
+    "neutral",
+    "concern",
+    "resolve",
+    "relief",
+    "conflict"
+  ],
   "characters": [
     {
       "id": "player",
@@ -13,7 +19,10 @@
       "wardrobe_key": "blue_safety_vest",
       "signature_prop": "inspection_tablet",
       "signature_pose": "tablet_in_one_hand_other_hand_pointing",
-      "must_not_resemble": ["lee_jaehoon", "lim_junho"]
+      "must_not_resemble": [
+        "lee_jaehoon",
+        "lim_junho"
+      ]
     },
     {
       "id": "kang_taesik",
@@ -25,7 +34,10 @@
       "wardrobe_key": "dark_field_jacket_orange_vest",
       "signature_prop": "work_gloves",
       "signature_pose": "wide_stance_pointing_instruction",
-      "must_not_resemble": ["yoon_sungho", "oh_seungjae"]
+      "must_not_resemble": [
+        "yoon_sungho",
+        "oh_seungjae"
+      ]
     },
     {
       "id": "yoon_sungho",
@@ -37,7 +49,9 @@
       "wardrobe_key": "brown_rebar_workwear",
       "signature_prop": "rebar_bundle",
       "signature_pose": "rebar_on_shoulder_or_crossed_arms",
-      "must_not_resemble": ["kang_taesik"]
+      "must_not_resemble": [
+        "kang_taesik"
+      ]
     },
     {
       "id": "lee_jaehoon",
@@ -49,7 +63,11 @@
       "wardrobe_key": "blue_site_jacket_clean",
       "signature_prop": "rolled_drawing",
       "signature_pose": "standing_straight_drawing_under_arm",
-      "must_not_resemble": ["player", "lim_junho", "seo_jeongmin"]
+      "must_not_resemble": [
+        "player",
+        "lim_junho",
+        "seo_jeongmin"
+      ]
     },
     {
       "id": "lim_junho",
@@ -61,7 +79,10 @@
       "wardrobe_key": "green_high_visibility_vest",
       "signature_prop": "handheld_radio",
       "signature_pose": "slightly_forward_eager_posture_radio_in_hand",
-      "must_not_resemble": ["player", "lee_jaehoon"]
+      "must_not_resemble": [
+        "player",
+        "lee_jaehoon"
+      ]
     },
     {
       "id": "choi_minseok",
@@ -73,7 +94,9 @@
       "wardrobe_key": "high_visibility_orange_vest",
       "signature_prop": "dual_red_signal_batons",
       "signature_pose": "both_signal_batons_raised_asymmetric",
-      "must_not_resemble": ["kang_taesik"]
+      "must_not_resemble": [
+        "kang_taesik"
+      ]
     },
     {
       "id": "seo_jeongmin",
@@ -85,7 +108,10 @@
       "wardrobe_key": "dark_inspection_jacket",
       "signature_prop": "clipboard",
       "signature_pose": "clipboard_close_to_chest_observing",
-      "must_not_resemble": ["lee_jaehoon", "oh_seungjae"]
+      "must_not_resemble": [
+        "lee_jaehoon",
+        "oh_seungjae"
+      ]
     },
     {
       "id": "oh_seungjae",
@@ -97,7 +123,46 @@
       "wardrobe_key": "navy_manager_site_jacket",
       "signature_prop": "smartphone_or_radio",
       "signature_pose": "phone_at_ear_other_hand_on_hip",
-      "must_not_resemble": ["seo_jeongmin", "kang_taesik"]
+      "must_not_resemble": [
+        "seo_jeongmin",
+        "kang_taesik"
+      ]
     }
-  ]
+  ],
+  "visual_uniqueness": {
+    "version": 2,
+    "rule": "No two primary characters may share the same apparent face template, age silhouette, helmet color, body proportion, outerwear color, and signature prop at the same time.",
+    "main_title_cast": [
+      "choi_minseok",
+      "player",
+      "seo_jeongmin"
+    ],
+    "main_title_asset_mode": "map_full_body",
+    "main_title_reason": "Use three maximally distinct silhouettes: signalman with orange helmet/batons, female safety manager with tablet, inspector with glasses/clipboard.",
+    "differentiation_axes": [
+      "sex_or_gender_presentation",
+      "age_band",
+      "face_shape",
+      "eye_shape",
+      "nose_and_jaw",
+      "hair_visibility",
+      "body_build_and_height",
+      "helmet_color_and_marking",
+      "outerwear_color",
+      "signature_prop",
+      "stance_and_pose"
+    ],
+    "forbidden": [
+      "same_face_template_with_only_hair_or_helmet_change",
+      "three_white_helmets_in_primary_title_cast",
+      "three_green_safety_vests_in_primary_title_cast",
+      "same_bust_crop_and_front_facing_pose_for_all",
+      "near_identical_skin_tone_face_ratio_and_eye_shape_across_primary_cast"
+    ],
+    "title_screen_targets": {
+      "choi_minseok": "late-30s male, energetic signalman, orange helmet and orange vest, dual red signal batons, raised asymmetric arms, lively strong-brow face",
+      "player": "young female safety manager, compact athletic silhouette, clearly feminine face, dark hair visible beneath white/blue helmet, navy/blue safety vest, inspection tablet",
+      "seo_jeongmin": "mid-40s male inspector, lean formal silhouette, narrow mature face, rectangular glasses, white inspector helmet, dark inspection jacket, clipboard held to chest"
+    }
+  }
 }

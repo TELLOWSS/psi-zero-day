@@ -170,3 +170,39 @@
 @media(prefers-reduced-motion:reduce){
   .commercial-title-logo,.commercial-title-copy h1,.commercial-title-copy>p,.commercial-title-actions,.commercial-title-message,.commercial-title-cast{animation:none!important}
 }
+
+/* PSI ZERO DAY character differentiation v1 */
+.commercial-title-cast{
+  right:.4%;
+  width:45%;
+  height:60%;
+  justify-content:flex-end;
+  align-items:flex-end;
+}
+.commercial-title-worker{
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 18px 26px rgba(0,0,0,.58));
+  transform-origin:center bottom;
+}
+.commercial-title-worker[data-character="choi_minseok"]{
+  width:39%;height:88%;margin-right:-9%;
+  transform:translateX(-4%) scale(.98);
+  z-index:1;
+}
+.commercial-title-worker[data-character="player"]{
+  width:38%;height:105%;margin-right:-10%;
+  transform:translateY(1%);
+  z-index:3;
+}
+.commercial-title-worker[data-character="seo_jeongmin"]{
+  width:34%;height:92%;margin-right:0;
+  transform:translateX(2%) scale(.96);
+  z-index:2;
+}
+.commercial-title-worker[data-character="choi_minseok"]{filter:drop-shadow(0 18px 28px rgba(0,0,0,.6)) saturate(1.08)}
+.commercial-title-worker[data-character="player"]{filter:drop-shadow(0 20px 30px rgba(0,0,0,.62)) saturate(.98)}
+.commercial-title-worker[data-character="seo_jeongmin"]{filter:drop-shadow(0 18px 28px rgba(0,0,0,.58)) saturate(.88) contrast(1.05)}
+@media(max-width:1000px),(max-height:650px){
+  .commercial-title-cast{width:43%;height:54%}
+}
