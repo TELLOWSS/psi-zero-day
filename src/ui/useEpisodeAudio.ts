@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import type { AudioState } from '../domain';
 
-export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue';
+export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue' | 'character_intro' | 'radio_signal' | 'pressure' | 'scene_shift';
 
 type AssetResolver = (assetId: string) => string | undefined;
 
@@ -11,6 +11,10 @@ const CUE_PROFILE: Readonly<Record<UiAudioCue, readonly [number, number, number]
   result_negative: [300, 220, 0.11],
   result_neutral: [430, 430, 0.07],
   continue: [520, 650, 0.045],
+  character_intro: [360, 620, 0.085],
+  radio_signal: [980, 1320, 0.055],
+  pressure: [210, 170, 0.13],
+  scene_shift: [290, 470, 0.12],
 };
 
 export function uiAudioCueProfile(cue: UiAudioCue): readonly [number, number, number] {

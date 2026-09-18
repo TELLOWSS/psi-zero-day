@@ -169,3 +169,39 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 .episode-memory-callback p{margin:0;color:#b9c8ca;font-size:11px;line-height:1.55}
 .episode-memory-callback p::before{content:"—";margin-right:7px;color:#7399a5}
 @media(max-width:720px){.episode-memory-callback{padding:10px 11px}.episode-memory-callback p{font-size:10px}}
+
+/* First-contact cinematic character entrance */
+.character-card[data-first-contact="true"]{
+  animation:first-contact-card-in .48s cubic-bezier(.18,.78,.2,1) both;
+}
+.character-card[data-first-contact="true"] .portrait-image{
+  animation:first-contact-portrait-in .58s cubic-bezier(.18,.78,.18,1) both;
+}
+.character-card[data-first-contact="true"] .character-identity-line{
+  animation:first-contact-identity-in .42s .12s ease-out both;
+}
+.character-card[data-first-contact="true"] .character-first-contact{
+  animation:first-contact-note-in .38s .22s ease-out both;
+}
+@keyframes first-contact-card-in{
+  0%{opacity:.2;transform:translateX(-16px);filter:brightness(.72)}
+  100%{opacity:1;transform:translateX(0);filter:brightness(1)}
+}
+@keyframes first-contact-portrait-in{
+  0%{opacity:.1;transform:translateY(10px) scale(.985)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes first-contact-identity-in{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes first-contact-note-in{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .character-card[data-first-contact="true"],
+  .character-card[data-first-contact="true"] .portrait-image,
+  .character-card[data-first-contact="true"] .character-identity-line,
+  .character-card[data-first-contact="true"] .character-first-contact{animation:none!important}
+}

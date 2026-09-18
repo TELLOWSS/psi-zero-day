@@ -54,7 +54,9 @@ describe('TASK-006 character interaction UI', () => {
     continueToChoice(); choose('follow_junho');
     for (let i = 0; i < 20 && session.getSnapshot().dialogue?.text_id !== 'ep01.junho.signal'; i++) continueCurrent();
     expect(session.getSnapshot().dialogue?.text_id).toBe('ep01.junho.signal');
+    const card = container.querySelector('.character-card')!;
     const intro = container.querySelector('.character-first-contact')!;
+    expect(card.getAttribute('data-first-contact')).toBe('true');
     expect(intro).not.toBeNull();
     expect(intro.textContent).toContain(session.t('ui.character.first_appearance'));
     expect(intro.textContent).toContain(session.t('cast.lim_junho.intro'));
@@ -63,6 +65,7 @@ describe('TASK-006 character interaction UI', () => {
     continueCurrent();
     expect(session.getSnapshot().dialogue?.text_id).toBe('ep01.junho.detail');
     expect(container.querySelector('.character-first-contact')).toBeNull();
+    expect(container.querySelector('.character-card')?.hasAttribute('data-first-contact')).toBe(false);
   });
 
   it('retains the NPC identity and silhouette while asking two different Junho responses', () => {

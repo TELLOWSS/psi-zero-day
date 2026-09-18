@@ -51,7 +51,7 @@ function ResolvedImage({ uri, fallbackUri, alt, className }: VisualImageProps) {
     onError={() => setFailed(previous => [...previous, activeUri])}
   />;
 }
-export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth, loadout, equipmentTitle, slotLabel, introLabel, introLine }: {
+export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth, loadout, equipmentTitle, slotLabel, introLabel, introLine, firstContact = false }: {
   person: { id: string; name: string; role: string };
   portraitUri?: string;
   fallbackPortraitUri?: string;
@@ -61,9 +61,10 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
   slotLabel?: (slot: EquipmentSlot) => string;
   introLabel?: string;
   introLine?: string;
+  firstContact?: boolean;
 }) {
   const visual = characterVisual(person.id);
-  return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
+  return <aside className="character-card" data-first-contact={firstContact || undefined} style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
     <div className="portrait-slot">
       <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
       <VisualImage uri={portraitUri} fallbackUri={fallbackPortraitUri} alt={person.name} className="portrait-image" />
