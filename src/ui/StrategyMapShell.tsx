@@ -96,7 +96,7 @@ export function StrategyMapShell({
     ? text(focusedSignal.label_text_id)
     : focusedPerson ? formatCharacterIdentity(focusedPerson) : focusedPlacement?.character_id ?? anchorTitle ?? (effectiveFocusId === 'site' ? copy.site : null);
   const focusDetail = focusedPlacement
-    ? text(`ui.strategy.zone.${focusedPlacement.anchor}`)
+    ? ''
     : focusedSignal ? copy.events : focusedAnchor ? text('ui.strategy.zone_hint') : effectiveFocusId === 'site' ? copy.actionHint : '';
   const hasActionsFor = (targetKey: string): boolean => strategyActionsForTarget(effectiveActions, targetKey).length > 0;
   const actionTargetLabel = (action: StrategyAction): string => {
@@ -263,7 +263,9 @@ export function StrategyMapShell({
             {visual?.map_uri
               ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
               : <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>}
-            <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}><strong>{label?.name ?? placement.character_id}</strong><span>{label?.role ?? placement.role_id ?? ''}</span></span>
+            <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}>
+              <strong>{label?.name ?? placement.character_id}{(label?.role ?? placement.role_id) ? <em> · {label?.role ?? placement.role_id}</em> : null}</strong>
+            </span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
           </button>;
         })}
