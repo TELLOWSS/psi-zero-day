@@ -155,17 +155,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       <p className="hub-nav-note">{t('ui.hub.note')}</p>
     </nav>
     <section className="hub-main" aria-label={t(`ui.hub.${page}`)}>
-      {page === 'home' ? <>
-        <div className="hub-intro"><span className="hub-kicker">EPISODE 01 / {t('ep01.title')}</span><h1>{t('ui.hub.hero')}</h1><p>{t('ui.hub.hero.hint')}</p>
-          <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}<b>›</b></button>
-        </div>
-        <div className="hub-cast">{featured.map((id, index) => <button key={id} type="button" className={`hub-hero-person hero-${index}`} style={{ '--cast-accent': characterVisual(id)?.accent } as CSSProperties} onClick={() => { setSelectedPerson(id); setPage('people'); }}>
-          <VisualImage uri={characterPortraitUri(id, resolve)} alt="" /><span><strong>{session.character(id)?.name}</strong><small>{session.character(id)?.role}</small></span>
-        </button>)}</div>
-        <div className="hub-chapter-strip">{journey.map((step, index) => <button key={step.id} type="button" data-status={step.status} onClick={() => { setSelectedStep(step.id); setPage('map'); }}>
-          <VisualImage uri={characterPortraitUri(step.character, resolve)} alt="" /><span className="chapter-number">{String(index + 1).padStart(2, '0')}</span><div><small>{t(`ui.hub.step.${step.status}`)}</small><strong>{t(step.title)}</strong></div><HubIcon kind={step.status === 'done' ? 'check' : step.status === 'locked' ? 'lock' : 'play'} />
-        </button>)}</div>
-      </> : page === 'map' ? <>
+      {page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
           <svg className="hub-route-line" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M150 100 L470 120 L810 155 L660 335 L300 340" /></svg>
