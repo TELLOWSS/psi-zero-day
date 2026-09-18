@@ -53,5 +53,7 @@
       "Presenting a consequence-free morally obvious option as the only meaningful choice.",
       "Punishing the player with hidden arbitrary information that no role could reasonably know."
     ]
-  }
+  },
+  "enforcement_version": 1,
+  "enforcement": "REQUIRED_FOR_ALL_NEW_AND_REVISED_CHOICE_SETS"
 }
