@@ -206,3 +206,165 @@
 @media(max-width:1000px),(max-height:650px){
   .commercial-title-cast{width:43%;height:54%}
 }
+
+/* PSI ZERO DAY commercial title cinematic polish v4 */
+.commercial-title-home{
+  min-height:640px;
+  background:#06111a;
+}
+.commercial-title-backdrop{
+  inset:-4%;
+  width:108%;
+  height:108%;
+  object-position:52% 47%;
+  filter:saturate(.96) contrast(1.08) brightness(.82) sepia(.05);
+  transform-origin:57% 50%;
+  animation:psi-commercial-camera-v4 24s cubic-bezier(.4,0,.2,1) infinite alternate;
+}
+.commercial-title-grade{
+  background:
+    radial-gradient(circle at 31% 42%,rgba(255,184,68,.25),transparent 18%),
+    radial-gradient(circle at 70% 28%,rgba(109,166,203,.1),transparent 28%),
+    linear-gradient(90deg,rgba(3,9,15,.96) 0%,rgba(4,12,20,.78) 30%,rgba(5,15,24,.18) 58%,rgba(4,12,19,.28) 100%),
+    linear-gradient(0deg,rgba(3,9,15,.94) 0%,rgba(4,11,18,.34) 33%,transparent 64%,rgba(3,9,15,.14) 100%);
+}
+.commercial-title-sun-glow{
+  position:absolute;z-index:-1;left:24%;top:33%;width:19vw;height:19vw;max-width:330px;max-height:330px;
+  border-radius:50%;pointer-events:none;opacity:.65;
+  background:radial-gradient(circle,rgba(255,227,160,.45) 0%,rgba(255,184,62,.16) 28%,rgba(255,166,43,0) 68%);
+  filter:blur(7px);animation:psi-sun-breathe 5.2s ease-in-out infinite alternate;
+}
+.commercial-title-depth{
+  position:absolute;z-index:1;left:39%;right:0;bottom:0;height:38%;pointer-events:none;
+  background:linear-gradient(0deg,rgba(2,7,12,.48),rgba(3,10,16,.08) 54%,transparent);
+}
+.commercial-title-scan{
+  position:absolute;z-index:2;left:0;right:0;top:67%;height:1px;opacity:.15;pointer-events:none;
+  background:linear-gradient(90deg,transparent 7%,rgba(78,211,244,.65) 30%,rgba(255,220,105,.4) 51%,rgba(78,211,244,.45) 77%,transparent 94%);
+  box-shadow:0 0 11px rgba(79,206,241,.38);
+}
+.commercial-title-topline{top:3.1%;left:3.6%;right:3.6%;padding-bottom:11px}
+.commercial-title-copy{
+  left:4.2%;
+  top:11.2%;
+  width:min(43vw,690px);
+}
+.commercial-title-logo{
+  font-size:clamp(52px,5.9vw,98px);
+  letter-spacing:-.058em;
+  text-shadow:0 10px 30px rgba(0,0,0,.52);
+}
+.commercial-title-copy h1{
+  margin:16px 0 10px;
+  font-size:clamp(27px,2.9vw,47px);
+  text-shadow:0 5px 18px rgba(0,0,0,.45);
+}
+.commercial-title-copy>p{
+  color:#e2eaed;
+  font-size:clamp(12px,1vw,16px);
+  text-shadow:0 3px 14px rgba(0,0,0,.5);
+}
+.commercial-title-actions{
+  width:min(325px,29vw);
+  gap:8px;
+  margin-top:38px;
+}
+.commercial-title-action{
+  min-height:54px;
+  padding:0 18px;
+  border-radius:6px;
+  background:linear-gradient(90deg,rgba(10,29,41,.92),rgba(12,31,43,.78));
+  box-shadow:0 10px 28px rgba(0,0,0,.26);
+}
+.commercial-title-action.is-primary{
+  background:linear-gradient(104deg,#e7a627 0%,#ffd35d 58%,#e6a02b 100%);
+  box-shadow:0 13px 34px rgba(231,163,40,.28),inset 0 1px rgba(255,255,255,.52);
+}
+.commercial-title-guide{margin-top:2px}
+.commercial-title-message{
+  right:3.6%;
+  top:10.2%;
+  width:min(250px,17.5vw);
+  padding-left:18px;
+  text-shadow:0 3px 12px rgba(0,0,0,.45);
+}
+.commercial-title-cast{
+  right:.8%;
+  bottom:-1.5%;
+  width:48%;
+  height:67%;
+  z-index:3;
+  overflow:visible;
+}
+.commercial-title-worker{
+  filter:drop-shadow(0 22px 31px rgba(0,0,0,.62));
+  transition:filter .25s ease;
+}
+.commercial-title-worker.worker-0{
+  width:40%;
+  height:96%;
+  margin-right:-11%;
+  transform:translateX(-3%) translateY(2%) scale(1.01);
+  z-index:2;
+}
+.commercial-title-worker.worker-1{
+  width:39%;
+  height:107%;
+  margin-right:-12%;
+  transform:translateY(1.5%);
+  z-index:4;
+}
+.commercial-title-worker.worker-2{
+  width:33%;
+  height:90%;
+  margin-right:1.5%;
+  transform:translateY(1%) scale(.96);
+  z-index:3;
+  filter:drop-shadow(0 20px 29px rgba(0,0,0,.58)) saturate(.9) contrast(1.05);
+}
+.commercial-title-cast::after{
+  content:'';
+  position:absolute;z-index:5;left:6%;right:1%;bottom:0;height:16%;
+  background:linear-gradient(0deg,rgba(3,9,14,.65),transparent);
+  pointer-events:none;
+}
+.commercial-title-site-plaque{
+  left:4.2%;
+  bottom:9.1%;
+  min-width:300px;
+}
+.commercial-title-open-menu{right:3.7%;bottom:10.5%}
+.commercial-title-footer{left:3.2%;right:3.2%;bottom:2.3%}
+@keyframes psi-commercial-camera-v4{
+  from{transform:scale(1.025) translate3d(-.55%,.15%,0)}
+  to{transform:scale(1.075) translate3d(1.05%,-.55%,0)}
+}
+@keyframes psi-sun-breathe{
+  from{opacity:.48;transform:scale(.94)}
+  to{opacity:.72;transform:scale(1.06)}
+}
+@media(max-width:1180px){
+  .commercial-title-copy{width:47vw}
+  .commercial-title-logo{font-size:clamp(48px,5.7vw,80px)}
+  .commercial-title-cast{width:45%;height:61%}
+  .commercial-title-message{width:190px}
+}
+@media(max-width:1000px),(max-height:650px){
+  .commercial-title-copy{top:10.2%;width:48vw}
+  .commercial-title-logo{font-size:clamp(42px,5.4vw,70px)}
+  .commercial-title-copy h1{font-size:30px}
+  .commercial-title-actions{margin-top:25px;width:278px}
+  .commercial-title-action{min-height:46px}
+  .commercial-title-cast{width:44%;height:56%;right:0}
+  .commercial-title-site-plaque{bottom:6.9%}
+}
+@media(max-width:720px){
+  .commercial-title-sun-glow{left:42%;top:31%;width:46vw;height:46vw}
+  .commercial-title-scan{display:none}
+  .commercial-title-copy{top:14%;left:7%;right:7%;width:auto}
+  .commercial-title-logo{font-size:clamp(42px,11.5vw,70px)}
+  .commercial-title-actions{width:min(86vw,360px);margin-top:36px}
+}
+@media(prefers-reduced-motion:reduce){
+  .commercial-title-backdrop,.commercial-title-sun-glow{animation:none!important}
+}

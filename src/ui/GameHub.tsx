@@ -88,6 +88,9 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
+    <div className="commercial-title-sun-glow" aria-hidden="true" />
+    <div className="commercial-title-depth" aria-hidden="true" />
+    <div className="commercial-title-scan" aria-hidden="true" />
 
     <header className="commercial-title-topline">
       <span>{t('ui.title.topline')}</span>
