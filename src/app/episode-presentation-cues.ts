@@ -38,6 +38,7 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
   e01_08k_stopwork_aftershock: cue('stopwork_silence_drop', 'scene_shift', 'ep01.audio.stopwork_silence_drop', 0.62),
   e01_08l_stopwork_return: cue('radio_burst', 'radio_signal', 'ep01.audio.radio_burst', 0.27),
   e01_08m_instruction_cascade: cue('radio_burst', 'radio_signal', 'ep01.audio.radio_burst', 0.48),
+  e01_08n_instruction_return: cue('office_report_roomtone', 'scene_shift', 'ep01.audio.office_report_roomtone', 0.26),
   e01_08o_record_pressure: cue('office_report_roomtone', 'scene_shift', 'ep01.audio.office_report_roomtone', 0.32),
   e01_09_evening: cue('home_night', 'scene_shift', 'ep01.audio.home_night', 0.34),
   e01_10_next_day_tease: cue('gate_queue', 'scene_shift', 'ep01.audio.gate_queue', 0.46),

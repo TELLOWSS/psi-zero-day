@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-instruction-field-reality-v1",
+  "doctrine_id": "field-reality-doctrine-v1",
+  "window": "15:32–16:24",
+  "intent": "Apply the absolute field-reality doctrine to instruction loss: preserve the non-negotiable fall-protection floor while listening to each role's actual received message before closing cause or responsibility.",
+  "reads": [
+    "flags.stopwork_culture_result",
+    "flags.instruction_chain_action",
+    "flags.instruction_chain_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only",
+    "doctrine": "field-reality-doctrine-v1"
+  },
+  "presentation_rules": [
+    "The fall-protection condition is a non-negotiable safety floor.",
+    "Do not treat the written top instruction as a complete explanation of what the last worker actually received.",
+    "Listen to role-specific field accounts before assigning cause or blame.",
+    "Site relationships and schedule pressure explain behavior but never exempt the safety floor.",
+    "Every responsible route must expose time, relationship, evidence, or production costs; do not add a consequence-free correct-answer badge."
+  ]
+}

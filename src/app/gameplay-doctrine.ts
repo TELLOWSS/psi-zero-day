@@ -1,0 +1,17 @@
+export const FIELD_REALITY_DOCTRINE_ID = 'field-reality-doctrine-v1' as const;
+
+export const FIELD_REALITY_DOCTRINE = Object.freeze({
+  id: FIELD_REALITY_DOCTRINE_ID,
+  absolute: true,
+  statement: '정답을 아는 것과 현장에서 정답이 작동하게 만드는 것은 다른 문제다.',
+  rules: Object.freeze([
+    Object.freeze({ id: 'safety_floor', text: '법·생명보호·중대위험 통제의 하한선은 일정, 관계, 관행 때문에 낮추지 않는다.' }),
+    Object.freeze({ id: 'law_is_floor_not_full_story', text: '법과 절차는 최소 기준이자 경계선이지, 현장의 원인·책임·실행방법 전체를 자동으로 설명하지 않는다.' }),
+    Object.freeze({ id: 'listen_before_judgment', text: '원인과 책임을 닫기 전에 영향을 받은 작업자·반장·관리자 등 현장 당사자가 실제로 보고 들은 사실을 확인한다.' }),
+    Object.freeze({ id: 'practice_is_evidence_not_exemption', text: '현장 관행과 유대관계는 왜 행동이 그렇게 되었는지 이해하는 증거로 다루되 안전 하한선을 무시하는 면허로 사용하지 않는다.' }),
+    Object.freeze({ id: 'relationships_are_system_state', text: '신뢰, 체면, 팀 호흡, 보고 위축, 반장 권한 같은 관계요소를 실제 안전성과 정보흐름을 바꾸는 상태로 취급한다.' }),
+    Object.freeze({ id: 'no_frictionless_correct_answer', text: '책임 있는 선택에도 시간·공정·관계·설명책임의 비용을 보여주며, 법적으로 허용되지 않는 위험한 타협은 가짜 선택지로 미화하지 않는다.' }),
+    Object.freeze({ id: 'consequences_return_later', text: '선택의 평가는 즉시 점수보다 이후 보고행동, 재개조건, 전달정확도, 관계변화처럼 지연된 결과로 보여준다.' }),
+    Object.freeze({ id: 'difficulty_from_reality', text: '어려움은 임의의 함정이 아니라 불완전한 정보, 서로 다른 역할의 부분적 사실, 시간압박과 실제 trade-off에서 만든다.' }),
+  ]),
+});
