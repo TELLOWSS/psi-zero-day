@@ -17,6 +17,8 @@ const cue = (
 });
 
 const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = Object.freeze({
+  e01_01_arrival: cue('gate_queue', 'scene_shift', 'ep01.audio.gate_queue', 0.38),
+  e01_02_meet_kang: cue('workface_pressure', 'scene_shift', 'ep01.audio.workface_pressure', 0.28),
   e01_03_plan_breaks: cue('gate_queue', 'scene_shift', 'ep01.audio.gate_queue', 0.5),
   e01_04_junho_signal: cue('radio_burst', 'radio_signal', 'ep01.audio.radio_burst', 0.55),
   e01_05_command: cue('workface_pressure', 'pressure', 'ep01.audio.workface_pressure', 0.45),

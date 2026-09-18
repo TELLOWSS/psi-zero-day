@@ -299,6 +299,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
+      {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
     </div> : null}
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}

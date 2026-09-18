@@ -5,16 +5,17 @@ export interface EpisodeCinematicBeat {
   readonly zone: string;
   readonly label: string;
   readonly tone: EpisodeCinematicTone;
+  readonly detail?: string;
 }
 
 const BEATS: Readonly<Record<string, EpisodeCinematicBeat>> = Object.freeze({
-  e01_01_arrival: { time: '06:47', zone: 'GATE', label: '첫 출근', tone: 'arrival' },
-  e01_02_meet_kang: { time: '07:02', zone: 'FOUNDATION', label: '현장의 첫 얼굴', tone: 'arrival' },
-  e01_03_plan_breaks: { time: '07:18', zone: 'ENTRY', label: '세 일이 동시에 겹친다', tone: 'pressure' },
-  e01_04_junho_signal: { time: '07:21', zone: 'RAMP', label: '작은 신호', tone: 'signal' },
-  e01_05_command: { time: '07:27', zone: 'WORKFACE', label: '확인과 통제를 동시에', tone: 'decision' },
-  e01_06_pump_arrival: { time: '07:36', zone: 'GATE', label: '판단의 결과가 돌아온다', tone: 'consequence' },
-  e01_07_first_pour: { time: '07:48', zone: 'POUR', label: '첫 타설', tone: 'release' },
+  e01_01_arrival: { time: '06:47', zone: 'GATE', label: '첫 출근', tone: 'arrival', detail: '세 채널의 무전이 사람보다 먼저 하루를 시작한다' },
+  e01_02_meet_kang: { time: '07:02', zone: 'FOUNDATION', label: '현장의 첫 얼굴', tone: 'arrival', detail: '첫 관계가 다음 보고의 온도를 만든다' },
+  e01_03_plan_breaks: { time: '07:18', zone: 'ENTRY', label: '세 일이 동시에 겹친다', tone: 'pressure', detail: '답하지 않은 3분도 현장에서는 하나의 선택이다' },
+  e01_04_junho_signal: { time: '07:21', zone: 'RAMP', label: '작은 신호', tone: 'signal', detail: '확실하지 않은 말도 사고 전 신호일 수 있다' },
+  e01_05_command: { time: '07:27', zone: 'WORKFACE', label: '확인과 통제를 동시에', tone: 'decision', detail: '한 곳을 직접 보면 다른 한 곳은 누군가에게 맡겨진다' },
+  e01_06_pump_arrival: { time: '07:36', zone: 'GATE', label: '판단의 결과가 돌아온다', tone: 'consequence', detail: '앞선 선택들이 차량 한 대 앞에서 동시에 만난다' },
+  e01_07_first_pour: { time: '07:48', zone: 'POUR', label: '첫 타설', tone: 'release', detail: '작업 시작은 안전 판단의 끝이 아니라 다음 상태의 시작이다' },
   e01_08b_inspection_find: { time: '10:16', zone: 'INSPECTION', label: '조치와 공정이 충돌한다', tone: 'pressure' },
   e01_08c_site_pushback: { time: '10:24', zone: 'INSPECTION', label: '선택의 비용이 돌아온다', tone: 'consequence' },
   e01_08d_reinspection: { time: '10:39', zone: 'INSPECTION', label: '사진이 아니라 현장을 다시 본다', tone: 'consequence' },

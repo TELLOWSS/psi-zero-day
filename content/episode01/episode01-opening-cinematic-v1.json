@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-opening-cinematic-v1",
+  "scope": [
+    "e01_01_arrival",
+    "e01_02_meet_kang",
+    "e01_03_plan_breaks",
+    "e01_04_junho_signal",
+    "e01_05_command",
+    "e01_06_pump_arrival",
+    "e01_07_first_pour"
+  ],
+  "intent": "Make the first playable minutes feel like a live construction shift rather than an exposition/tutorial sequence, without changing branch topology or save-state rules.",
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "save_compatibility": "unchanged"
+  },
+  "presentation_rules": [
+    "Use concrete time, sound, movement and competing work priorities before explaining safety concepts.",
+    "Every choice should expose what the player gains and what becomes temporarily unattended.",
+    "Character voices should reveal role pressure instead of reciting a safety answer.",
+    "Cinematic stamps should tell the player why the next scene matters without labeling a choice correct or incorrect."
+  ]
+}

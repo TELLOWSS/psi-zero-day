@@ -129,7 +129,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 /* Episode 01 director-pass scene beats */
 .episode-scene-stamp{
   position:absolute;z-index:28;top:72px;left:50%;transform:translateX(-50%);
-  display:grid;grid-template-columns:auto auto;grid-template-areas:"time zone" "label label";
+  display:grid;grid-template-columns:auto auto;grid-template-areas:"time zone" "label label" "detail detail";
   gap:2px 10px;min-width:250px;padding:10px 14px 11px;
   border:1px solid rgba(225,235,224,.34);border-left:3px solid var(--accent);
   background:linear-gradient(90deg,rgba(7,18,22,.94),rgba(8,22,28,.78));
@@ -139,6 +139,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 .episode-scene-stamp span{grid-area:time;color:#ffd062;font:700 10px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em}
 .episode-scene-stamp b{grid-area:zone;color:#8fb6c7;font-size:9px;letter-spacing:.18em;font-weight:700}
 .episode-scene-stamp strong{grid-area:label;margin-top:4px;color:#f1f4ec;font-size:13px;letter-spacing:-.01em;font-weight:700}
+.episode-scene-stamp small{grid-area:detail;margin-top:2px;color:#aebec1;font-size:9px;line-height:1.35;letter-spacing:-.01em}
 .episode-scene-stamp[data-tone="pressure"],.episode-scene-stamp[data-tone="consequence"]{border-left-color:#f0a33a}
 .episode-scene-stamp[data-tone="signal"]{border-left-color:#65d8dd}
 .presentation-area[data-presentation="SHOW_CHOICE"] .choice-content{animation:episode-choice-enter .34s cubic-bezier(.2,.8,.2,1) both}
