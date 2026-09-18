@@ -8,6 +8,7 @@ import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
 import type { StrategySignalKind } from '../app/strategy-signals';
 import { StrategyLoopPanel } from './StrategyLoopPanel';
+import { StrategyPsiSixPanel } from './StrategyPsiSixPanel';
 import type { StrategyMapOutcome } from './StrategyLoopPanel';
 
 export interface StrategyMapCopy {
@@ -144,6 +145,8 @@ export function StrategyMapShell({
     </header>
 
     <aside className="strategy-rail" aria-label={copy.objectives}>
+      <StrategyPsiSixPanel psi={view.psi} text={text} />
+
       <section className="strategy-panel strategy-objectives">
         <h2>{copy.objectives}</h2>
         <p>{copy.stage}<strong>{view.construction.stage_id}</strong></p>

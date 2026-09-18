@@ -255,3 +255,52 @@
   .strategy-roster{left:25%}
   .strategy-active .scene-heading,.strategy-active .play-panel{left:25%}
 }
+
+
+/* EP01 PSI 6 observation HUD */
+.strategy-rail{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(109,158,174,.35) transparent}
+.strategy-psi-six{padding:10px 11px 9px;border-left:3px solid #4db5d2}
+.strategy-psi-six>header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:7px}
+.strategy-psi-six>header>div{min-width:0}
+.strategy-psi-six>header strong{display:block;color:#f5f7f4;font-size:18px;letter-spacing:.06em}
+.strategy-psi-six>header small{
+  display:block;margin-top:2px;color:#8fa7ad;font-size:7px;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.strategy-psi-six>header>span{
+  display:grid;place-items:center;min-width:25px;height:25px;border-radius:50%;
+  border:1px solid rgba(89,189,215,.42);background:rgba(44,128,151,.2);
+  color:#87d5e6;font-size:9px;font-weight:800
+}
+.strategy-psi-six-list{display:grid;gap:4px}
+.strategy-psi-six-list article{
+  display:grid;grid-template-columns:20px 1fr;align-items:center;gap:7px;
+  min-height:25px;padding:2px 0
+}
+.strategy-psi-icon{
+  display:grid;place-items:center;width:18px;height:18px;border-radius:4px;
+  color:#d9e7e8;background:rgba(166,201,209,.08);font-size:10px;font-weight:800
+}
+.strategy-psi-label{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:3px}
+.strategy-psi-label strong{color:#dfe8e7;font-size:8px;font-weight:700;letter-spacing:-.01em}
+.strategy-psi-label em{color:#8fb4bd;font-size:7px;font-style:normal;font-weight:800}
+.strategy-psi-track{
+  display:block;height:5px;overflow:hidden;border-radius:99px;background:rgba(171,202,209,.12)
+}
+.strategy-psi-track i{
+  display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#37a8c6,#62d2b2);
+  box-shadow:0 0 8px rgba(69,187,201,.2);transition:width .28s ease
+}
+.strategy-psi-six-list article[data-psi-indicator="training_comprehension"] .strategy-psi-track i{background:linear-gradient(90deg,#d3a33e,#e6c258)}
+.strategy-psi-six-list article[data-psi-indicator="practice_participation"] .strategy-psi-track i{background:linear-gradient(90deg,#dd8749,#e5b05b)}
+.strategy-psi-six-list article[data-psi-indicator="ppe_rule_compliance"] .strategy-psi-track i{background:linear-gradient(90deg,#7dbb8b,#9fd26c)}
+.strategy-psi-six-list article[data-psi-indicator="communication_reporting"] .strategy-psi-track i{background:linear-gradient(90deg,#8c75c9,#aa8de0)}
+.strategy-psi-six-list article[data-psi-indicator="stop_work_acceptance"] .strategy-psi-track i{background:linear-gradient(90deg,#d6574c,#ef735e)}
+.strategy-psi-six>footer{margin-top:7px;padding-top:6px;border-top:1px solid rgba(213,229,232,.1);color:#80959a;font-size:7px}
+@media(max-height:720px){
+  .strategy-psi-six{padding:7px 8px 6px}
+  .strategy-psi-six-list{gap:1px}
+  .strategy-psi-six-list article{min-height:21px}
+  .strategy-psi-six>header small,.strategy-psi-six>footer{display:none}
+}
+@media(prefers-reduced-motion:reduce){.strategy-psi-track i{transition:none!important}}

@@ -8,6 +8,8 @@ import type { StrategyCharacterPlacement } from './strategy-placements';
 import { projectEpisode01Scene } from './strategy-scene';
 import type { StrategySceneComposition } from './strategy-scene';
 import { projectEpisode01Signals } from './strategy-signals';
+import { projectPsiObservations } from './strategy-psi';
+import type { PsiIndicatorId } from './product-contract';
 import type { StrategySignal } from './strategy-signals';
 
 export interface StrategyClockView {
@@ -45,6 +47,9 @@ export interface StrategyPsiView {
   readonly unlocked_node_ids: readonly Id[];
   readonly values: StatMap;
   readonly flags: FlagMap;
+  readonly observation_counts: Readonly<Record<PsiIndicatorId, number>>;
+  readonly observed_choice_count: number;
+  readonly max_observation_count: number;
 }
 
 /**
@@ -101,6 +106,7 @@ export function projectStrategyView(state: GameState): StrategyView {
   }));
   const signals = projectEpisode01Signals(activeEventId);
   const scene = projectEpisode01Scene(activeEventId, signals);
+  const psiObservations = projectPsiObservations(state.event_runtime.choice_history.map(item => item.choice_id));
   // Player state is intentionally separate from NPC character state, but the avatar belongs on
   // the strategy-map presentation layer. This adds no gameplay actor or engine-owned character.
   const placementCharacterIds = [
@@ -130,6 +136,9 @@ export function projectStrategyView(state: GameState): StrategyView {
       unlocked_node_ids: state.psi.unlocked_node_ids,
       values: state.psi.progress.values,
       flags: state.psi.progress.flags,
+      observation_counts: psiObservations.counts,
+      observed_choice_count: psiObservations.observed_choice_count,
+      max_observation_count: psiObservations.max_count,
     },
     resources: {
       money: state.player.money,

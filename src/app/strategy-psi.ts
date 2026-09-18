@@ -1,4 +1,4 @@
-import type { PsiIndicatorId } from './product-contract';
+import { PSI_INDICATORS, type PsiIndicatorId } from './product-contract';
 
 const PSI_CUES_BY_CHOICE: Readonly<Record<string, readonly PsiIndicatorId[]>> = Object.freeze({
   delegate_kang: ['practice_participation', 'communication_reporting'],
@@ -54,4 +54,28 @@ export function psiCuesForChoice(choiceId: string | undefined): readonly PsiIndi
 
 export function psiIndicatorTextId(indicator: PsiIndicatorId): string {
   return `ui.psi.indicator.${indicator}`;
+}
+
+
+export interface PsiObservationSnapshot {
+  readonly counts: Readonly<Record<PsiIndicatorId, number>>;
+  readonly observed_choice_count: number;
+  readonly max_count: number;
+}
+
+/**
+ * Presentation-only evidence projection.
+ * Counts which PSI axes were touched by recorded choices; it is deliberately not a safety score.
+ */
+export function projectPsiObservations(choiceIds: readonly string[]): PsiObservationSnapshot {
+  const counts = Object.fromEntries(PSI_INDICATORS.map(indicator => [indicator.id, 0])) as Record<PsiIndicatorId, number>;
+  for (const choiceId of choiceIds) {
+    for (const indicator of psiCuesForChoice(choiceId)) counts[indicator] += 1;
+  }
+  const maxCount = Math.max(0, ...Object.values(counts));
+  return Object.freeze({
+    counts: Object.freeze({ ...counts }),
+    observed_choice_count: choiceIds.length,
+    max_count: maxCount,
+  });
 }
