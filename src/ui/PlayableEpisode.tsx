@@ -8,7 +8,7 @@ import { FIELD_SUPPORT_ITEMS, isFieldSupportItemActive } from '../app/field-supp
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
-import { characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
+import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import {
   consumePaidItem,
@@ -88,10 +88,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     : undefined;
   const titleBackgroundUri = episode01BackgroundUri(resolveAsset);
   const titleHeroCast = snapshot.phase === 'start'
-    ? (['player', 'kang_taesik', 'lim_junho'] as const).map((characterId, index) => ({
+    ? (['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const).map((characterId, index) => ({
       characterId,
       index,
-      uri: characterPortraitUri(characterId, resolveAsset),
+      uri: characterMapUri(characterId, resolveAsset),
     }))
     : [];
   const strategyCopy = {

@@ -2,7 +2,7 @@
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, it } from 'vitest';
-import { GameShell } from '../src/ui/GameHub';
+import { GameHub } from '../src/ui/GameHub';
 import { EpisodeSession } from '../src/app/episode-session';
 import { projectEpisodeJourney } from '../src/app/episode-journey';
 import { episodeBounds, episodeOptions, playEpisode } from './helpers/episode01-playthrough';
@@ -15,13 +15,14 @@ describe('game hub navigation', () => {
     const root = createRoot(host);
     const click = (selector: string) => act(() => host.querySelector<HTMLButtonElement>(selector)!.click());
     try {
-      act(() => root.render(<GameShell session={session} />));
-      expect(host.querySelectorAll('.hub-chapter-strip button')).toHaveLength(5);
-      click('.hub-primary');
+      expect(session.start(session.getSnapshot().revision)).toBe(true);
+      act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} />));
+      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(5);
+      expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
-      click('.game-hub-return');
-      click('.hub-nav button:nth-child(2)');
+      click('.commercial-title-action:nth-child(3)');
+      expect(host.querySelector('.hub-page-map')).not.toBeNull();
       expect(host.querySelectorAll('.hub-route-node')).toHaveLength(5);
       click('.hub-nav button:nth-child(3)');
       expect(host.querySelectorAll('.hub-person-grid button')).toHaveLength(8);
