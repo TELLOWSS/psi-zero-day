@@ -124,7 +124,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     </aside>
 
     <div className="commercial-title-cast" aria-hidden="true">
-      {featured.map((id, index) => <VisualImage key={id} uri={characterMapUri(id, resolve)} alt="" data-character={id} className={`commercial-title-worker worker-${index}`} />)}
+      {featured.map((id, index) => <VisualImage key={id} uri={characterMapUri(id, resolve)} alt="" className={`commercial-title-worker worker-${index}`} />)}
     </div>
 
     <div className="commercial-title-site-plaque" aria-hidden="true">
