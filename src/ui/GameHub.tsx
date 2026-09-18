@@ -40,6 +40,11 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   ].filter((uri): uri is string => Boolean(uri));
 
   const play = () => setLoading(true);
+  const newGame = () => {
+    const current = session.getSnapshot();
+    if (current.phase !== 'start') session.restart(current.revision);
+    setLoading(true);
+  };
   const enterGame = () => {
     const current = session.getSnapshot();
     if (current.phase === 'start' && !session.start(current.revision)) {
@@ -60,10 +65,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     <PlayableEpisode session={session} />
     <button className="game-hub-return" onClick={() => setInGame(false)} type="button"><HubIcon kind="home" />{session.t('ui.hub.return')}</button>
   </>;
-  return <GameHub session={session} onPlay={play} />;
+  return <GameHub session={session} onPlay={play} onNewGame={newGame} />;
 }
 
-export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: () => void }) {
+export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
@@ -78,6 +83,60 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
+  const canContinue = snapshot.phase !== 'start';
+
+  if (page === 'home') return <main className="commercial-title-home">
+    <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
+    <div className="commercial-title-grade" aria-hidden="true" />
+    <div className="commercial-title-grain" aria-hidden="true" />
+
+    <header className="commercial-title-topline">
+      <span>{t('ui.title.topline')}</span>
+      <small>CONSTRUCTION × PEOPLE × A SAFER TOMORROW</small>
+    </header>
+
+    <section className="commercial-title-copy">
+      <div className="commercial-title-logo"><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
+      <h1>{t('ui.tagline')}</h1>
+      <p>{t('ui.title.subcopy')}</p>
+
+      <div className="commercial-title-actions">
+        <button className="commercial-title-action is-primary" type="button" onClick={onNewGame}>
+          <span>{t('ui.title.new_game')}</span><b>›</b>
+        </button>
+        <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
+          <span>{t('ui.title.continue')}</span><b>›</b>
+        </button>
+        <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
+          <span>{t('ui.title.map')}</span><b>›</b>
+        </button>
+        <button className="commercial-title-guide" type="button" onClick={() => setPage('guide')}>
+          <HubIcon kind="guide" /><span>{t('ui.title.guide')}</span>
+        </button>
+      </div>
+    </section>
+
+    <aside className="commercial-title-message">
+      <p>{t('ui.title.brand_copy')}</p>
+      <i aria-hidden="true" />
+      <small>BUILD<br/>PEOPLE<br/>A SAFER<br/>TOMORROW</small>
+    </aside>
+
+    <div className="commercial-title-cast" aria-hidden="true">
+      {featured.map((id, index) => <VisualImage key={id} uri={characterPortraitUri(id, resolve)} alt="" className={`commercial-title-worker worker-${index}`} />)}
+    </div>
+
+    <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
+      <span>PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
+    </button>
+
+    <footer className="commercial-title-footer">
+      <span>PSI : ZERO DAY · ver 1.0.0</span>
+      <b>{t('ui.title.footer')}</b>
+      <span>EPISODE 01 · {t('ep01.title')}</span>
+    </footer>
+  </main>;
+
   return <main className={`game-hub hub-page-${page}`}>
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
     <div className="hub-shade" />

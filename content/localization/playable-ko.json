@@ -412,6 +412,14 @@
     "ui.guide.permit_board.title": "작업허가·계획 확인판",
     "ui.guide.permit_board.body": "화기·밀폐·양중 등 작업 전 확인이 서류와 현장에서 일치하는지 봅니다.",
     "ui.guide.near_miss_marker.title": "아차사고 흔적",
-    "ui.guide.near_miss_marker.body": "작은 이상·파손·움직임 같은 사고 전 신호를 놓치지 않는지 확인합니다."
+    "ui.guide.near_miss_marker.body": "작은 이상·파손·움직임 같은 사고 전 신호를 놓치지 않는지 확인합니다.",
+    "ui.title.topline": "사람이 짓는 내일, 더 안전한 일터",
+    "ui.title.subcopy": "작은 확인이, 더 큰 내일을 만듭니다.",
+    "ui.title.new_game": "새 게임",
+    "ui.title.continue": "이어하기",
+    "ui.title.map": "현장 MAP",
+    "ui.title.guide": "현장 도감",
+    "ui.title.brand_copy": "오늘도, 사람이 있는 현장이 대한민국의 내일을 만듭니다.",
+    "ui.title.footer": "사람 · 안전 · 현장 · 그리고, 더 나은 내일"
   }
 }
