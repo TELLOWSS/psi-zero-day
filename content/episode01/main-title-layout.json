@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "profile_id": "main-title-cinematic-v6",
-  "status": "runtime-aligned",
+  "profile_id": "main-title-cinematic-v7",
+  "status": "runtime-aligned-loading-map-continuity",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -56,5 +56,22 @@
     "desktop": "four character foreground plus four feature cards",
     "compact": "reduce captions and character scale",
     "mobile": "hide character foreground and use two-column feature cards"
+  },
+  "loading": {
+    "background": "same episode background focus as title",
+    "team_cast": [
+      "lim_junho",
+      "player",
+      "lee_jaehoon",
+      "seo_jeongmin"
+    ],
+    "progress": "real asset preload + animated 0–100 display",
+    "exit": "620ms fade/zoom handoff"
+  },
+  "map_entry": {
+    "slate": "PSI FIELD / DAY + construction stage",
+    "duration_ms": 1850,
+    "camera": "loading zoom resolves into live strategy map",
+    "rule": "entry slate is decorative only; gameplay remains interactive after handoff"
   }
 }

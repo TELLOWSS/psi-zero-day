@@ -36,6 +36,15 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     ...featured.map(id => characterMapUri(id, resolve)),
     characterPortraitUri('player', resolve),
   ].filter((uri): uri is string => Boolean(uri));
+  const loadingCrew = featured.map(id => {
+    const member = session.character(id);
+    return {
+      id,
+      uri: characterMapUri(id, resolve),
+      name: member?.name ?? id,
+      role: member?.role ?? '',
+    };
+  });
 
   const play = () => setLoading(true);
   const newGame = () => {
@@ -56,6 +65,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   if (loading) return <CinematicLoadingScreen
     backgroundUri={cinematicBackground}
     preloadUris={preloadUris}
+    crew={loadingCrew}
     onComplete={enterGame}
   />;
 

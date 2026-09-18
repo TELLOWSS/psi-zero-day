@@ -3,10 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 export function CinematicLoadingScreen({
   backgroundUri,
   preloadUris,
+  crew = [],
   onComplete,
 }: {
   readonly backgroundUri?: string;
   readonly preloadUris: readonly string[];
+  readonly crew?: readonly { readonly id: string; readonly uri?: string; readonly name: string; readonly role: string }[];
   readonly onComplete: () => void;
 }) {
   const [progress, setProgress] = useState(6);
@@ -95,6 +97,14 @@ export function CinematicLoadingScreen({
       </div>
       <p>{status}</p>
     </section>
+
+    {crew.length ? <section className="cinematic-loading-team" aria-label="현장 투입 인원">
+      <header><span>FIELD TEAM</span><strong>{String(crew.length).padStart(2, '0')}</strong></header>
+      <div>{crew.map((member, index) => <article key={member.id} className={`crew-${index}`}>
+        {member.uri ? <img src={member.uri} alt="" aria-hidden="true" /> : <span aria-hidden="true" />}
+        <p><strong>{member.name}</strong><small>{member.role}</small></p>
+      </article>)}</div>
+    </section> : null}
 
     <aside className="cinematic-loading-tip">
       <b>TIP</b>

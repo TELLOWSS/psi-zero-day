@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "batch_id": "character-identity-replacement-a",
+  "priority": "high",
+  "purpose": "Replace visually similar legacy faces without blocking current playable build.",
+  "current_runtime_policy": "keep existing production assets until an approved replacement passes identity and shape checks",
+  "batch": [
+    {
+      "id": "player",
+      "priority": 1,
+      "state": "spec_locked_asset_pending",
+      "required": [
+        "portrait",
+        "map_full_body",
+        "5_expressions"
+      ],
+      "identity_anchor": "female safety manager / soft V face / white-blue helmet / tablet"
+    },
+    {
+      "id": "lim_junho",
+      "priority": 2,
+      "state": "spec_locked_asset_pending",
+      "required": [
+        "portrait",
+        "map_full_body",
+        "5_expressions"
+      ],
+      "identity_anchor": "early-20s male / round youthful face / yellow helmet / green vest / radio"
+    },
+    {
+      "id": "lee_jaehoon",
+      "priority": 3,
+      "state": "spec_locked_asset_pending",
+      "required": [
+        "portrait",
+        "map_full_body",
+        "5_expressions"
+      ],
+      "identity_anchor": "early-30s tall slim male / long narrow face / white helmet / rolled drawing"
+    },
+    {
+      "id": "seo_jeongmin",
+      "priority": 4,
+      "state": "spec_locked_asset_pending",
+      "required": [
+        "portrait",
+        "map_full_body",
+        "5_expressions"
+      ],
+      "identity_anchor": "mid-40s lean male / thin oblong face / rectangular glasses / clipboard"
+    }
+  ],
+  "acceptance": [
+    "identity contract passes",
+    "portrait and map art depict the same face",
+    "transparent map background",
+    "role readable at 60px thumbnail",
+    "no pair reads as same base face with gear swap"
+  ],
+  "integration_order": [
+    "stage media",
+    "shape check",
+    "identity check",
+    "visual contract",
+    "asset manifest",
+    "main title QA",
+    "map QA"
+  ]
+}

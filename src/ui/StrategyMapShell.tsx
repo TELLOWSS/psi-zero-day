@@ -125,6 +125,11 @@ export function StrategyMapShell({
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={outcome ? 'result' : focusId ? 'action' : 'target'}>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
     <div className="strategy-world-atmosphere" aria-hidden="true" />
+    <div className="strategy-entry-slate" aria-hidden="true">
+      <span>PSI FIELD / DAY {view.clock.day}</span>
+      <strong>{copy.stage} · {view.construction.stage_id}</strong>
+      <small>SCAN COMPLETE · OBSERVE · ANALYZE · PLAN</small>
+    </div>
     <header className="strategy-hud">
       <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><strong>{copy.brand}</strong></div>
       <div className="strategy-resource-bar" aria-label={`${text('ui.resource.money')} ${text('ui.resource.time')} ${text('ui.resource.schedule')} ${text('ui.resource.safety')}`}>
