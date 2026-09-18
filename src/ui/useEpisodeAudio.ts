@@ -3,6 +3,12 @@ import type { AudioState } from '../domain';
 
 export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue' | 'character_intro' | 'radio_signal' | 'pressure' | 'scene_shift';
 
+export interface PresentationAudioCue {
+  readonly fallback: UiAudioCue;
+  readonly asset_id?: string;
+  readonly gain?: number;
+}
+
 type AssetResolver = (assetId: string) => string | undefined;
 
 const CUE_PROFILE: Readonly<Record<UiAudioCue, readonly [number, number, number]>> = {
@@ -113,5 +119,19 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     oscillator.stop(now + duration);
   }, [audio?.muted, audio?.volumes.master, audio?.volumes.sfx]);
 
-  return { playUiCue } as const;
+  const playPresentationCue = useCallback((cue: PresentationAudioCue) => {
+    if (audio?.muted) return;
+    const uri = cue.asset_id ? resolve(cue.asset_id) : undefined;
+    if (!uri || typeof Audio === 'undefined') {
+      playUiCue(cue.fallback);
+      return;
+    }
+    const element = new Audio(uri);
+    const gain = cue.gain ?? 1;
+    element.volume = Math.max(0, Math.min(1,
+      (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
+    void element.play().catch(() => playUiCue(cue.fallback));
+  }, [audio?.muted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
+
+  return { playUiCue, playPresentationCue } as const;
 }

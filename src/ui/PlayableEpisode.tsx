@@ -54,7 +54,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const { playUiCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
+  const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -237,8 +237,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     const key = `${runIdentity}:${activeEventId}`;
     if (playedSceneCues.current.has(key)) return;
     playedSceneCues.current.add(key);
-    playUiCue(cue);
-  }, [activeEventId, runIdentity, playUiCue]);
+    playPresentationCue(cue);
+  }, [activeEventId, runIdentity, playPresentationCue]);
   useEffect(() => {
     if (!firstContactTextId || !dialogueNodeIdentity) return;
     playUiCue('character_intro');

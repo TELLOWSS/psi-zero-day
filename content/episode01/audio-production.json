@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "production_id": "ep01-audio-core-v1",
+  "status": "runtime_slots_wired_binaries_pending",
+  "game_title": "PSI : ZERO DAY",
+  "company_name": "NEW PSI",
+  "final_asset_count": 0,
+  "required_core_assets": 8,
+  "mix_target": {
+    "principle": "Field realism first. Dialogue must remain intelligible; avoid trailer-style over-scoring.",
+    "loudness_note": "Keep one-shot field SFX below dialogue and UI confirmation cues. Final mastering is deferred until real recordings exist.",
+    "mobile_note": "Prefer compact mono for radio/office detail and stereo only where space materially improves immersion."
+  },
+  "format_target": {
+    "preferred": "ogg/opus",
+    "fallback": "mp3",
+    "sample_rate_hz": 48000,
+    "delivery_rule": "Do not add an asset to the runtime manifest until the real binary exists and has been reviewed."
+  },
+  "assets": [
+    {
+      "key": "gate_queue",
+      "asset_id": "ep01.audio.gate_queue",
+      "target_uri": "assets/episode01/audio/gate-queue.ogg",
+      "kind": "ambience_sting",
+      "target_duration_sec": [
+        4,
+        8
+      ],
+      "loop_candidate": true,
+      "events": [
+        "e01_03_plan_breaks",
+        "e01_10_next_day_tease"
+      ],
+      "direction": "Early-morning construction gate: idling diesel vehicles, distant reverse alarm, tire/road texture, no intelligible speech.",
+      "reject": [
+        "music",
+        "brand jingle",
+        "loud horn jump scare",
+        "clearly identifiable real company radio call"
+      ]
+    },
+    {
+      "key": "radio_burst",
+      "asset_id": "ep01.audio.radio_burst",
+      "target_uri": "assets/episode01/audio/radio-burst.ogg",
+      "kind": "sfx",
+      "target_duration_sec": [
+        0.7,
+        1.6
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_04_junho_signal",
+        "e01_08g_tbm_field_gap",
+        "e01_08m_instruction_cascade"
+      ],
+      "direction": "Short construction-radio squelch, clipped push-to-talk texture and faint unintelligible voice tail.",
+      "reject": [
+        "clear copyrighted dispatch audio",
+        "long dialogue baked into file",
+        "emergency siren"
+      ]
+    },
+    {
+      "key": "workface_pressure",
+      "asset_id": "ep01.audio.workface_pressure",
+      "target_uri": "assets/episode01/audio/workface-pressure.ogg",
+      "kind": "ambience_sting",
+      "target_duration_sec": [
+        3,
+        6
+      ],
+      "loop_candidate": true,
+      "events": [
+        "e01_05_command",
+        "e01_08b_inspection_find",
+        "e01_08i_restart_pressure"
+      ],
+      "direction": "Foundation workface tension: metal contact, footsteps on temporary path, distant machinery and compressed work rhythm.",
+      "reject": [
+        "cinematic braam",
+        "exaggerated impact",
+        "continuous alarm"
+      ]
+    },
+    {
+      "key": "pump_engine_boom",
+      "asset_id": "ep01.audio.pump_engine_boom",
+      "target_uri": "assets/episode01/audio/pump-engine-boom.ogg",
+      "kind": "set_piece",
+      "target_duration_sec": [
+        4,
+        9
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_06_pump_arrival"
+      ],
+      "direction": "Concrete pump truck entering, low diesel idle rising slightly, hydraulic boom movement beginning, exterior construction acoustics.",
+      "reject": [
+        "full-speed engine rev",
+        "collision sound",
+        "horn blast used as scare"
+      ]
+    },
+    {
+      "key": "concrete_pour",
+      "asset_id": "ep01.audio.concrete_pour",
+      "target_uri": "assets/episode01/audio/concrete-pour.ogg",
+      "kind": "set_piece",
+      "target_duration_sec": [
+        5,
+        10
+      ],
+      "loop_candidate": true,
+      "events": [
+        "e01_07_first_pour"
+      ],
+      "direction": "Wet concrete through hose with pump pulse, hose movement, rebar/workface texture; energetic but not deafening.",
+      "reject": [
+        "waterfall-like generic water",
+        "music",
+        "worker dialogue baked into file"
+      ]
+    },
+    {
+      "key": "stopwork_silence_drop",
+      "asset_id": "ep01.audio.stopwork_silence_drop",
+      "target_uri": "assets/episode01/audio/stopwork-silence-drop.ogg",
+      "kind": "transition",
+      "target_duration_sec": [
+        1.5,
+        3.5
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_08k_stopwork_aftershock"
+      ],
+      "direction": "A short machinery tail/cut followed by sparse room/workface tone; the dramatic effect should come from reduced activity, not a loud hit.",
+      "reject": [
+        "bass drop",
+        "horror sting",
+        "alarm klaxon"
+      ]
+    },
+    {
+      "key": "office_report_roomtone",
+      "asset_id": "ep01.audio.office_report_roomtone",
+      "target_uri": "assets/episode01/audio/office-report-roomtone.ogg",
+      "kind": "ambience_sting",
+      "target_duration_sec": [
+        4,
+        8
+      ],
+      "loop_candidate": true,
+      "events": [
+        "e01_08e_responsibility_clash",
+        "e01_08o_record_pressure"
+      ],
+      "direction": "Site office room tone: HVAC/computer hum, distant site machinery through wall, light paper/keyboard texture.",
+      "reject": [
+        "busy open-office chatter",
+        "phone ringtone melody",
+        "clear external speech"
+      ]
+    },
+    {
+      "key": "home_night",
+      "asset_id": "ep01.audio.home_night",
+      "target_uri": "assets/episode01/audio/home-night.ogg",
+      "kind": "transition",
+      "target_duration_sec": [
+        4,
+        8
+      ],
+      "loop_candidate": true,
+      "events": [
+        "e01_09_evening"
+      ],
+      "direction": "Quiet Korean apartment-like night room tone without identifiable TV/music; far traffic optional.",
+      "reject": [
+        "licensed TV/audio",
+        "melodramatic music",
+        "prominent neighbor speech"
+      ]
+    }
+  ],
+  "integration": {
+    "current": "Each event first tries its production asset_id through EpisodeSession.assetUri(). If absent, a lightweight synthetic WebAudio cue plays instead.",
+    "finalization": "When a reviewed binary is added under public/assets/episode01/audio and registered in assets.json generation, no story or event rule changes are required.",
+    "qa_surfaces": [
+      "web production",
+      "Android WebView",
+      "muted mode",
+      "reduced motion has no audio coupling"
+    ]
+  }
+}
