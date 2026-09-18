@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-restart-gate-chain-v1",
+  "window": "13:56–14:11",
+  "intent": "Carry changed-work control into a restart gate where verbal authority, instruction fidelity, and verified field state are separated, then show the actual restart outcome.",
+  "stages": [
+    {
+      "time": "13:56",
+      "event_id": "e01_08h_tbm_return",
+      "purpose": "establish what the changed-work response left behind"
+    },
+    {
+      "time": "14:03",
+      "event_id": "e01_08i_restart_pressure",
+      "purpose": "decide how to authorize restart under schedule pressure"
+    },
+    {
+      "time": "14:11",
+      "event_id": "e01_08j_restart_return",
+      "purpose": "verify whether the restart instruction matched the actual control state"
+    }
+  ],
+  "reads": [
+    "flags.tbm_gap_result",
+    "flags.restart_action",
+    "flags.restart_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "presentation_rules": [
+    "Separate who said restart from whether field controls were actually closed.",
+    "Expose the time, information, and verification tradeoffs of every restart route without adding a correct-answer badge.",
+    "When restart_result is written, update the same 14:11 panel from verification focus to restart verdict."
+  ]
+}
