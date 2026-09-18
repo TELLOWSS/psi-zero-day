@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-inspection-handover-v1",
+  "window": "10:16 inspection entry",
+  "intent": "Make the inspection feel like the next state of the same workday by carrying earlier pump-entry and reporting outcomes into the player's visible context.",
+  "reads": [
+    "flags.pump_result",
+    "flags.reporting_return_state"
+  ],
+  "scope": [
+    "e01_08b_inspection_find"
+  ],
+  "presentation": [
+    "show up to two inherited-condition traces before the inspection dialogue",
+    "distinguish operational control from communication climate"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "rule": "The card explains inherited field conditions; it must not label a prior choice as correct or incorrect."
+}

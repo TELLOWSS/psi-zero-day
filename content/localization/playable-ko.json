@@ -502,6 +502,22 @@
     "ui.montage.ep01.outcome.delay.title": "지연을 만회하려 밀도가 올라간다",
     "ui.montage.ep01.outcome.delay.body": "확인에 쓴 시간을 되찾으려 작업 간격이 좁아진다. 안전하게 늦춘 선택이 이후 공정에서는 새로운 압박이 된다.",
     "ui.montage.ep01.cleanup.title": "세척·정리·검측 준비",
-    "ui.montage.ep01.cleanup.body": "자바라를 씻고 자재를 다시 묶는다. 큰 사고 없이 지나간 두 시간이지만, 아침 선택의 흔적은 사람의 말투와 다음 지시에 남아 있다."
+    "ui.montage.ep01.cleanup.body": "자바라를 씻고 자재를 다시 묶는다. 큰 사고 없이 지나간 두 시간이지만, 아침 선택의 흔적은 사람의 말투와 다음 지시에 남아 있다.",
+    "ui.inspection_context.eyebrow": "10:16 · INSPECTION HANDOVER",
+    "ui.inspection_context.title": "감리는 지금 상태를 보지만, 현장은 아침 선택을 들고 들어왔다",
+    "ui.inspection_context.pump.control.title": "진입 기준이 현장 습관으로 남았다",
+    "ui.inspection_context.pump.control.body": "경사로와 진입부를 같은 순서로 확인한 경험이 반복되어 차량 통제 기준이 이미 한 번 학습된 상태다.",
+    "ui.inspection_context.pump.near_miss.title": "멈췄던 장면이 반응 속도를 바꿨다",
+    "ui.inspection_context.pump.near_miss.body": "사고는 없었지만 경사로가 밀렸던 기억 때문에 차량 움직임과 손신호를 보는 시선이 훨씬 빨라졌다.",
+    "ui.inspection_context.pump.relation.title": "통제는 남았지만 말수가 줄었다",
+    "ui.inspection_context.pump.relation.body": "차량 흐름은 정리됐지만 앞선 대응의 긴장감이 남아 있어 현장 신호가 사람 사이에서 작아질 수 있다.",
+    "ui.inspection_context.pump.delay.title": "안전하게 늦춘 시간이 공정 압박으로 돌아왔다",
+    "ui.inspection_context.pump.delay.body": "확인에 쓴 시간을 되찾으려 작업 밀도가 올라간 상태라 작은 미완료도 곧바로 일정 문제와 연결된다.",
+    "ui.inspection_context.reporting.reinforced.title": "작은 이상을 다시 말할 통로가 열려 있다",
+    "ui.inspection_context.reporting.reinforced.body": "불완전한 보고라도 받아준 경험이 남아 있어 현장 변화가 감리 지적 전에 먼저 올라올 가능성이 높다.",
+    "ui.inspection_context.reporting.suppressed.title": "신호는 있어도 말이 늦어지는 상태다",
+    "ui.inspection_context.reporting.suppressed.body": "앞서 말을 꺼낸 뒤의 경험 때문에 작은 이상이 보여도 누가 먼저 말할지 계산하는 시간이 생긴다.",
+    "ui.inspection_context.reporting.missed.title": "사람보다 점검이 먼저 발견할 수 있다",
+    "ui.inspection_context.reporting.missed.body": "아침에 놓친 보고 접점이 그대로 남아 있어 작은 이상이 현장 대화보다 공식 점검에서 먼저 드러날 수 있다."
   }
 }
