@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import catalog from '../../content/episode01/scene-element-catalog.json';
 import { VisualImage } from './VisualSlot';
+import { FieldGuideArt } from './FieldGuideArt';
 import './field-guide.css';
 
 type GuideMeta = {
@@ -36,16 +37,16 @@ function orderedEntries() {
   });
 }
 
-function GuideVisual({ session, entry, alt, className }: {
+function GuideVisual({ session, entry, itemKey, alt, className }: {
   session: EpisodeSession;
   entry: CatalogEntry;
+  itemKey: string;
   alt: string;
   className?: string;
 }) {
   const uri = session.assetUri(entry.planned_asset_id);
   return <div className={`field-guide-visual ${className ?? ''}`.trim()}>
-    <VisualImage uri={uri} alt={alt} />
-    {!uri ? <span className="field-guide-token" aria-hidden="true">{entry.visual_token ?? '•'}</span> : null}
+    {uri ? <VisualImage uri={uri} alt={alt} /> : <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />}
   </div>;
 }
 
@@ -95,7 +96,7 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
         aria-pressed={id === activeVisible}
         onClick={() => setSelected(id)}
       >
-        <GuideVisual session={session} entry={item} alt="" />
+        <GuideVisual session={session} entry={item} itemKey={id} alt="" />
         <span>
           <small>{item.field_guide?.id ?? String(index + 1).padStart(2, '0')} · {item.field_guide?.episode ?? ''}</small>
           <strong>{session.t(`ui.guide.${id}.title`)}</strong>
@@ -105,7 +106,7 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
 
     <article className="field-guide-detail" aria-live="polite">
       <div className="field-guide-preview">
-        <GuideVisual session={session} entry={entry} alt={title} />
+        <GuideVisual session={session} entry={entry} itemKey={key} alt={title} />
       </div>
       <div className="field-guide-copy">
         {meta ? <div className="field-guide-meta">
