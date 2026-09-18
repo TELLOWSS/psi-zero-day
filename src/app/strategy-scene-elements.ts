@@ -1,4 +1,4 @@
-import elementCatalog from '../../content/episode01/scene-element-catalog.json';
+import elementCatalog from '../../content/episode01/scene-element-runtime.json';
 import type { Id } from '../domain/common';
 import type { StrategySceneAnchor } from './strategy-scene';
 

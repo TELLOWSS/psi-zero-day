@@ -1,4 +1,4 @@
-import sceneElementCatalog from '../../content/episode01/scene-element-catalog.json';
+import sceneElementCatalog from '../../content/episode01/scene-element-runtime.json';
 import type { Id } from '../domain';
 import {
   backgroundAssetUri,
