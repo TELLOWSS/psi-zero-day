@@ -10,6 +10,7 @@ import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strat
 import type { StrategyAction } from '../app/strategy-actions';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
+import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import {
   consumePaidItem,
   emptyPaidItemWallet,
@@ -56,6 +57,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
+  const cinematicBeat = episodeCinematicBeat(activeEventId);
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
   const fallbackChoiceId = activeInstance
     ? (snapshot.state?.event_runtime.choice_history.slice().reverse().find(item => item.instance_id === activeInstance.instance_id)?.choice_id)
@@ -253,6 +255,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     : [];
 
   return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
+    {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
+      <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
+    </div> : null}
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
       view={strategy}
@@ -300,7 +305,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           equipmentTitle={t('ui.equipment.title')}
           slotLabel={slot => t(`ui.equipment.${slot}`)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
-        <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
+        <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
           <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />
           {!mapOutcomeActive && snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
