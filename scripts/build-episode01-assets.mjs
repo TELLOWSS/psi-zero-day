@@ -70,10 +70,12 @@ const batchASources = new Set([
   'foundation:background',
   'player:portrait',
   'player:map',
-  'kang_taesik:portrait',
-  'kang_taesik:map',
   'lim_junho:portrait',
   'lim_junho:map',
+  'lee_jaehoon:portrait',
+  'lee_jaehoon:map',
+  'seo_jeongmin:portrait',
+  'seo_jeongmin:map',
 ]);
 const playerSources = new Set(['player:portrait', 'player:map']);
 
@@ -129,7 +131,7 @@ if (productionCheck) {
     : batchAProductionCheck
       ? coreProductionItems.filter(item => batchASources.has(item.source))
       : coreProductionItems;
-  const expectedCount = playerProductionCheck ? 2 : batchAProductionCheck ? 7 : 17;
+  const expectedCount = playerProductionCheck ? 2 : batchAProductionCheck ? 9 : 17;
   const scopeLabel = playerProductionCheck
     ? 'Player production art'
     : batchAProductionCheck

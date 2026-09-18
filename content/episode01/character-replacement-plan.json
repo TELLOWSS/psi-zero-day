@@ -3,12 +3,12 @@
   "batch_id": "character-identity-replacement-a",
   "priority": "high",
   "purpose": "Replace visually similar legacy faces without blocking current playable build.",
-  "current_runtime_policy": "keep existing production assets until an approved replacement passes identity and shape checks",
+  "current_runtime_policy": "keep existing production assets until all eight replacement portrait/map WebPs pass staging, transparency, size, identity-contract and runtime QA checks",
   "batch": [
     {
       "id": "player",
       "priority": 1,
-      "state": "reference_qa_locked_asset_pending",
+      "state": "pipeline_ready_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -19,7 +19,7 @@
     {
       "id": "lim_junho",
       "priority": 2,
-      "state": "reference_qa_locked_asset_pending",
+      "state": "pipeline_ready_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -30,7 +30,7 @@
     {
       "id": "lee_jaehoon",
       "priority": 3,
-      "state": "reference_qa_locked_asset_pending",
+      "state": "pipeline_ready_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -41,7 +41,7 @@
     {
       "id": "seo_jeongmin",
       "priority": 4,
-      "state": "reference_qa_locked_asset_pending",
+      "state": "pipeline_ready_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -73,5 +73,22 @@
     "source": "user-provided main-title concept screenshot 1672x941",
     "status": "layout_and_identity_targets_locked",
     "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries remain pending replacement."
+  },
+  "pipeline_status": "ready_for_new_webp_inputs",
+  "binary_replacement": {
+    "baseline_file": "content/episode01/character-replacement-baseline.json",
+    "status_command": "npm run assets:character-replacement-status",
+    "strict_command": "npm run assets:character-replacement-check",
+    "staging_commands": [
+      "npm run assets:character-stage -- --id player-portrait --file <new-player-portrait.webp>",
+      "npm run assets:character-stage -- --id player-map --file <new-player-map.webp>",
+      "npm run assets:character-stage -- --id lim-junho-portrait --file <new-lim-junho-portrait.webp>",
+      "npm run assets:character-stage -- --id lim-junho-map --file <new-lim-junho-map.webp>",
+      "npm run assets:character-stage -- --id lee-jaehoon-portrait --file <new-lee-jaehoon-portrait.webp>",
+      "npm run assets:character-stage -- --id lee-jaehoon-map --file <new-lee-jaehoon-map.webp>",
+      "npm run assets:character-stage -- --id seo-jeongmin-portrait --file <new-seo-jeongmin-portrait.webp>",
+      "npm run assets:character-stage -- --id seo-jeongmin-map --file <new-seo-jeongmin-map.webp>"
+    ],
+    "completion_rule": "Do not mark integrated until strict_command passes and main/loading/map visual QA is approved."
   }
 }

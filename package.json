@@ -40,7 +40,9 @@
     "android:configure": "node scripts/configure-android.mjs",
     "android:open": "npx cap open android",
     "android:doctor": "npx cap doctor",
-    "assets:character-identity-check": "node scripts/check-character-identity.mjs"
+    "assets:character-identity-check": "node scripts/check-character-identity.mjs",
+    "assets:character-replacement-status": "node scripts/check-character-replacement.mjs",
+    "assets:character-replacement-check": "node scripts/check-character-replacement.mjs --require-new"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

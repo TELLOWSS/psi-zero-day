@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "baseline_id": "title-cast-legacy-before-face-refresh",
+  "captured_from_commit": "217efc1af37fc5617825e04174179ca6794bd183",
+  "purpose": "Immutable fingerprint of the legacy four-character title cast. New art is only considered integrated when all eight core portrait/map WebP fingerprints change and production checks pass.",
+  "characters": [
+    "player",
+    "lim_junho",
+    "lee_jaehoon",
+    "seo_jeongmin"
+  ],
+  "assets": [
+    {
+      "id": "lee-jaehoon-map",
+      "target": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 163458,
+      "sha256": "227f7dcb643fe0af3f5fb930a12ec515d8442730b2ca350ad1f4a2841766e5f6"
+    },
+    {
+      "id": "lee-jaehoon-portrait",
+      "target": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 155636,
+      "sha256": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d"
+    },
+    {
+      "id": "lim-junho-map",
+      "target": "assets/episode01/characters/lim-junho-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 155694,
+      "sha256": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d"
+    },
+    {
+      "id": "lim-junho-portrait",
+      "target": "assets/episode01/characters/lim-junho-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 168184,
+      "sha256": "2a5a4fddd9e5103ec2fb40de97648d154c563045879d44de6cbac923bb2e7d01"
+    },
+    {
+      "id": "player-map",
+      "target": "assets/episode01/characters/player-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 140258,
+      "sha256": "75c3a8d7b73978501525aa2304bc4eeca763913260eba433d6861ad5f20f38dc"
+    },
+    {
+      "id": "player-portrait",
+      "target": "assets/episode01/characters/player-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 54490,
+      "sha256": "6f6f73bf636590ed560e250104b32537a0b28444f3b1c0b8a084ae2b064ab066"
+    },
+    {
+      "id": "seo-jeongmin-map",
+      "target": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "width": 1024,
+      "height": 1536,
+      "alpha": true,
+      "bytes": 116298,
+      "sha256": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3"
+    },
+    {
+      "id": "seo-jeongmin-portrait",
+      "target": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "width": 1024,
+      "height": 1024,
+      "alpha": true,
+      "bytes": 122206,
+      "sha256": "cca1f44c70275f285e37cf58dff5dd2f94b262d617d09108bd7ad9021a592634"
+    }
+  ]
+}
