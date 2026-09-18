@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-visual-completion-v1",
+  "status": "ACTIVE",
+  "live_scope": "EPISODE_01_ONLY",
+  "locks": {
+    "day02_runtime": "paused until Episode 01 visual completion",
+    "episode01_event_topology": "preserved",
+    "choice_ids": "preserved",
+    "effect_bundles": "preserved"
+  },
+  "coverage": {
+    "episode01_events": 26,
+    "immersive_event_scenes": 26,
+    "cinematic_environment_backgrounds": 8,
+    "choice_level_visual_previews": true,
+    "dialogue_speaker_spotlight": true,
+    "result_tone_variants": true,
+    "mobile_responsive": true
+  },
+  "quality_gates": [
+    "Every Episode 01 event renders an authored immersive scene.",
+    "Dialogue speaker changes visibly alter character focus.",
+    "Choice nodes render distinct visual previews before selection.",
+    "Result nodes alter visual tone/focus without labeling choices correct or incorrect.",
+    "Production typecheck and Vite build must pass before visual QA is considered deployable.",
+    "Episode 02 stays outside the live session until this pass is closed."
+  ],
+  "remaining": [
+    "Browser-level visual QA against Production after latest Git/Vercel SHA synchronization.",
+    "Replace RC SVG environments with final raster/production art only when each replacement is visually superior.",
+    "Refresh legacy test expectations to the current Episode 01 contract without weakening product behavior."
+  ]
+}
