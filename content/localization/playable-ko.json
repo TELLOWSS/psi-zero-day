@@ -149,7 +149,7 @@
     "ui.hub.route_hint": "에피소드 01의 다섯 이정표 · 선택한 경로에 따라 중간 사건이 달라집니다.",
     "ui.hub.locked_hint": "앞선 이야기를 진행하면 열립니다.",
     "ui.hub.people.intro": "입장도 경험도 다른 여덟 사람. 함께 일할수록 보이는 것이 달라집니다.",
-    "ui.hub.team_tag": "PSI ZERO DAY · 현장 동료",
+    "ui.hub.team_tag": "NEW PSI · 현장 동료",
     "ui.hub.person.player": "처음 맡은 현장에서 작은 신호를 읽고, 동료들과 함께 다음 행동을 결정하는 안전관리자.",
     "ui.hub.person.kang_taesik": "오랜 경험으로 현장을 이끄는 반장. 공정과 안전 사이에서 그의 신뢰를 얻어 보세요.",
     "ui.hub.person.lim_junho": "아직 현장이 낯선 신입 근로자. 망설이는 한마디에 중요한 단서가 숨어 있을 수 있습니다.",
@@ -456,6 +456,7 @@
     "ui.title.map.hint": "지도를 탐색하고 임무를 진행합니다.",
     "ui.title.guide.hint": "사람들과 장비, 안전지식을 확인합니다.",
     "ui.title.settings.menu_hint": "게임 환경과 화면 연출을 설정합니다.",
-    "ui.title.quick_settings": "메인 화면 빠른 설정"
+    "ui.title.quick_settings": "메인 화면 빠른 설정",
+    "ui.company": "NEW PSI"
   }
 }

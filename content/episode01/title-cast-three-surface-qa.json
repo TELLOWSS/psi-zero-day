@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "qa_id": "title-cast-three-surface-qa",
+  "status": "waiting_for_new_webp_binaries",
+  "company_name": "NEW PSI",
+  "game_title": "PSI : ZERO DAY",
+  "canonical_cast": [
+    "lim_junho",
+    "player",
+    "lee_jaehoon",
+    "seo_jeongmin"
+  ],
+  "required_new_core_assets": 8,
+  "surfaces": {
+    "main_title": {
+      "component": "src/ui/GameHub.tsx",
+      "asset_mode": "map_full_body",
+      "checks": [
+        "four distinct silhouettes",
+        "full helmets visible",
+        "signature props readable",
+        "NEW PSI is the only company mark",
+        "quotes/name/role remain live text"
+      ]
+    },
+    "cinematic_loading": {
+      "component": "src/ui/CinematicLoadingScreen.tsx",
+      "asset_mode": "same map_full_body assets passed by GameHub",
+      "checks": [
+        "same four identities as main title",
+        "no identity reorder",
+        "no face/crop mismatch",
+        "NEW PSI company label visible as live text"
+      ]
+    },
+    "strategy_map": {
+      "component": "src/ui/StrategyMapShell.tsx",
+      "asset_mode": "map_full_body for placed workers + portrait for roster",
+      "checks": [
+        "portrait/map identity pair matches",
+        "small-scale silhouette remains readable",
+        "NEW PSI company label is live UI text",
+        "no real company/project brand"
+      ]
+    }
+  },
+  "binary_gate": [
+    "npm run assets:character-replacement-status",
+    "npm run assets:character-replacement-check",
+    "npm run assets:production-batch-a-check",
+    "npm run release:check"
+  ],
+  "completion_rule": "Do not approve the refresh until all 8 hashes differ from legacy baseline and all three surfaces pass visual QA."
+}

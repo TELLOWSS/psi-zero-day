@@ -6,10 +6,12 @@
     "forbidden": [
       "same-face cast",
       "helmet-color-only differentiation",
-      "real company logos",
-      "pseudo text on helmets",
+      "real company logos or project names other than NEW PSI",
+      "random pseudo text on helmets; only the NEW PSI mark is allowed",
       "childlike proportions"
-    ]
+    ],
+    "company_brand": "NEW PSI",
+    "allowed_company_mark": "NEW PSI only; small, clean, readable fictional project/company mark"
   },
   "characters": {
     "player": {
@@ -23,11 +25,12 @@
         "age_read": "late 20s",
         "silhouette": "compact athletic, upright, clearly feminine",
         "face": "soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, dark low ponytail and side fringe visible below helmet",
-        "helmet": "white helmet with simple blue PSI stripe, no text",
+        "helmet": "white helmet with simple blue stripe and small NEW PSI mark",
         "outfit": "clean navy-blue safety vest over practical field clothes",
         "signature_prop": "black inspection tablet",
         "default_pose": "tablet in one hand, other hand open while directing attention",
-        "expression": "focused but approachable"
+        "expression": "focused but approachable",
+        "company_mark": "small NEW PSI fictional company mark on helmet or vest; no other company/project branding"
       }
     },
     "kang_taesik": {
@@ -77,11 +80,12 @@
         "age_read": "early 30s",
         "silhouette": "tall slim vertical silhouette",
         "face": "long narrow clean face, tapered jaw, calm horizontal eyes, straight long nose, neat side-part hair",
-        "helmet": "white helmet with thin navy stripe",
+        "helmet": "white helmet with thin navy stripe and small NEW PSI mark",
         "outfit": "light field shirt with navy vest, cleaner than trade crews",
         "signature_prop": "rolled drawing set",
         "default_pose": "one arm holding drawings, other hand checking schedule",
-        "expression": "pressed for time, professional, not villainous"
+        "expression": "pressed for time, professional, not villainous",
+        "company_mark": "small NEW PSI fictional company mark on helmet or vest; no other company/project branding"
       }
     },
     "lim_junho": {
@@ -95,11 +99,12 @@
         "age_read": "early 20s",
         "silhouette": "small narrow youthful frame, slightly forward shoulders",
         "face": "distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short messy fringe",
-        "helmet": "bright yellow helmet",
+        "helmet": "bright yellow helmet with small NEW PSI mark",
         "outfit": "green vest and practical workwear",
         "signature_prop": "compact radio / small tool case",
         "default_pose": "one hand near radio, body slightly hesitant",
-        "expression": "observant, earnest, unsure whether to speak"
+        "expression": "observant, earnest, unsure whether to speak",
+        "company_mark": "small NEW PSI fictional company mark on helmet or vest; no other company/project branding"
       }
     },
     "choi_minseok": {
@@ -131,11 +136,12 @@
         "age_read": "mid 40s",
         "silhouette": "lean formal frame, compact mature stance",
         "face": "thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, long sharp nose, rectangular glasses",
-        "helmet": "plain white helmet",
+        "helmet": "plain white inspector helmet with small NEW PSI mark",
         "outfit": "dark inspection jacket over white shirt",
         "signature_prop": "clipboard and pen",
         "default_pose": "clipboard close to chest while visually checking field",
-        "expression": "calm, precise, difficult to bluff"
+        "expression": "calm, precise, difficult to bluff",
+        "company_mark": "small NEW PSI fictional company mark on helmet or vest; no other company/project branding"
       }
     },
     "oh_seungjae": {

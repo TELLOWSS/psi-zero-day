@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "company_name": "NEW PSI",
+  "game_title": "PSI : ZERO DAY",
+  "tagline": "현장, 오늘도 무사히",
+  "company_role": "fictional/development company identity used where an otherwise anonymous company name is needed",
+  "runtime_surfaces": [
+    "main_title",
+    "cinematic_loading",
+    "strategy_map"
+  ],
+  "art_policy": {
+    "allowed_mark": "NEW PSI",
+    "allowed_locations": [
+      "hard_hat",
+      "safety_vest",
+      "site_sign",
+      "project_board"
+    ],
+    "rule": "Keep the mark small and secondary to the PSI : ZERO DAY game title.",
+    "forbidden": [
+      "real company logos",
+      "real project names",
+      "random pseudo text"
+    ]
+  }
+}

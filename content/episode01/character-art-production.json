@@ -48,8 +48,9 @@
         "tablet_silhouette",
         "white_blue_helmet"
       ],
-      "regeneration_prompt": "Young Korean female construction safety manager, late 20s, compact athletic build, soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, small straight nose, dark low ponytail and side fringe visible under a white hard hat with a blue stripe. Navy work jacket, blue safety vest, inspection tablet. Calm alert expression. Commercial casual 2.5D strategy game character, semi-realistic anime proportions, clean construction-site uniform details, full-body transparent-background map art.",
-      "negative_prompt": "male face, boyish male jaw, same face as young male worker, identical eye shape to Lim Junho, generic beauty-face template, orange helmet, green vest, radio prop"
+      "regeneration_prompt": "Young Korean female construction safety manager, late 20s, compact athletic build, soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, small straight nose, dark low ponytail and side fringe visible under a white hard hat with a blue stripe. Navy work jacket, blue safety vest, inspection tablet. Calm alert expression. Commercial casual 2.5D strategy game character, semi-realistic anime proportions, clean construction-site uniform details, full-body transparent-background map art. Add one small, clean NEW PSI fictional company mark on the hard hat or vest; no real company logos, project names, or random pseudo text.",
+      "negative_prompt": "male face, boyish male jaw, same face as young male worker, identical eye shape to Lim Junho, generic beauty-face template, orange helmet, green vest, radio prop, real company logo, project-specific brand, random pseudo text",
+      "company_mark": "NEW PSI"
     },
     {
       "id": "kang_taesik",
@@ -174,8 +175,9 @@
         "long_narrow_face",
         "rolled_drawing"
       ],
-      "regeneration_prompt": "Korean male site construction engineer, early 30s, tall slim vertical build, long narrow clean face, tapered jaw, calm horizontal eyes, neat brows, straight long nose, short black side-part hair. White hard hat, clean blue site jacket, rolled construction drawing under arm. Upright professional stance. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
-      "negative_prompt": "round youthful worker face, large bright eyes, green vest, radio, glasses, middle-aged inspector"
+      "regeneration_prompt": "Korean male site construction engineer, early 30s, tall slim vertical build, long narrow clean face, tapered jaw, calm horizontal eyes, neat brows, straight long nose, short black side-part hair. White hard hat, clean blue site jacket, rolled construction drawing under arm. Upright professional stance. Commercial casual 2.5D strategy game character, full-body transparent-background map art. Add one small, clean NEW PSI fictional company mark on the hard hat or vest; no real company logos, project names, or random pseudo text.",
+      "negative_prompt": "round youthful worker face, large bright eyes, green vest, radio, glasses, middle-aged inspector, real company logo, project-specific brand, random pseudo text",
+      "company_mark": "NEW PSI"
     },
     {
       "id": "lim_junho",
@@ -216,8 +218,9 @@
         "large_bright_eyes",
         "small_body"
       ],
-      "regeneration_prompt": "Young Korean male construction worker, early 20s, small narrow build, distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short small nose, messy black fringe under a small yellow hard hat. Green high-visibility vest, handheld radio, slightly forward eager posture. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
-      "negative_prompt": "female face, V jaw, mature narrow eyes, white-blue helmet, tablet, tall engineer silhouette"
+      "regeneration_prompt": "Young Korean male construction worker, early 20s, small narrow build, distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short small nose, messy black fringe under a small yellow hard hat. Green high-visibility vest, handheld radio, slightly forward eager posture. Commercial casual 2.5D strategy game character, full-body transparent-background map art. Add one small, clean NEW PSI fictional company mark on the hard hat or vest; no real company logos, project names, or random pseudo text.",
+      "negative_prompt": "female face, V jaw, mature narrow eyes, white-blue helmet, tablet, tall engineer silhouette, real company logo, project-specific brand, random pseudo text",
+      "company_mark": "NEW PSI"
     },
     {
       "id": "choi_minseok",
@@ -299,8 +302,9 @@
         "thin_mature_face",
         "formal_clipboard_pose"
       ],
-      "regeneration_prompt": "Korean male construction inspector, mid 40s, lean formal build, thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, thin straight brows, long sharp nose, grey at temples, rectangular glasses. White inspector hard hat, dark inspection jacket, clipboard held close to chest. Reserved analytical stance. Commercial casual 2.5D strategy character, full-body transparent-background map art.",
-      "negative_prompt": "young clean engineer, broad manager face, no glasses, orange vest, radio"
+      "regeneration_prompt": "Korean male construction inspector, mid 40s, lean formal build, thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, thin straight brows, long sharp nose, grey at temples, rectangular glasses. White inspector hard hat, dark inspection jacket, clipboard held close to chest. Reserved analytical stance. Commercial casual 2.5D strategy character, full-body transparent-background map art. Add one small, clean NEW PSI fictional company mark on the hard hat or vest; no real company logos, project names, or random pseudo text.",
+      "negative_prompt": "young clean engineer, broad manager face, no glasses, orange vest, radio, real company logo, project-specific brand, random pseudo text",
+      "company_mark": "NEW PSI"
     },
     {
       "id": "oh_seungjae",

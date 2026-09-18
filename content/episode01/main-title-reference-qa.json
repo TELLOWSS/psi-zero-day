@@ -18,7 +18,7 @@
   "observed_risks": [
     "anime-style face templates can still converge unless face geometry and age cues are enforced",
     "character captions and bottom cards compete vertically on shorter displays",
-    "real or pseudo company marks on helmets/signage must not enter production art",
+    "company/project markings must use NEW PSI only; no real company names or random pseudo text",
     "handwritten quote treatment needs live text, not baked text, for localization and readability"
   ],
   "runtime_actions": [
@@ -55,9 +55,24 @@
   ],
   "production_rejects": [
     "baked-in menu text or buttons",
-    "readable real company/project logos or names in art",
+    "readable real company/project logos or names other than the fictional NEW PSI brand",
     "same-face template with PPE swap",
     "cropped helmet or missing signature prop in title composition",
     "quote text baked into character image"
-  ]
+  ],
+  "branding": {
+    "company_name": "NEW PSI",
+    "game_title": "PSI : ZERO DAY",
+    "rule": "NEW PSI is the fictional/development company identity. PSI : ZERO DAY remains the game title.",
+    "allowed_in_art": [
+      "small helmet mark",
+      "small vest patch",
+      "site sign or project board where a company name is needed"
+    ],
+    "forbidden": [
+      "real contractor/company logos",
+      "real project names",
+      "random pseudo text"
+    ]
+  }
 }

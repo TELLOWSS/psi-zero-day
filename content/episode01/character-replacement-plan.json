@@ -58,7 +58,9 @@
     "no pair reads as same base face with gear swap",
     "four title characters remain distinguishable when names and role labels are hidden",
     "at least six primary identity axes differ between any must-not-resemble pair",
-    "title-screen crop preserves full helmet and signature prop for all four visible characters"
+    "title-screen crop preserves full helmet and signature prop for all four visible characters",
+    "if a company/project mark is visible, it reads NEW PSI only and remains small and clean",
+    "main title, cinematic loading and strategy MAP all resolve the approved identity without face-template drift"
   ],
   "integration_order": [
     "stage media",
@@ -67,6 +69,7 @@
     "visual contract",
     "asset manifest",
     "main title QA",
+    "loading QA",
     "map QA"
   ],
   "reference_qa": {
@@ -96,5 +99,10 @@
     "url": "https://github.com/TELLOWSS/psi-zero-day/issues/4",
     "title": "ART: Replace title cast with four distinct production characters"
   },
-  "next_required_input": "8 newly generated transparent WebP binaries (portrait + map for player, lim_junho, lee_jaehoon, seo_jeongmin)"
+  "next_required_input": "8 newly generated transparent WebP binaries (portrait + map for player, lim_junho, lee_jaehoon, seo_jeongmin)",
+  "branding": {
+    "company_name": "NEW PSI",
+    "game_title": "PSI : ZERO DAY",
+    "art_mark_policy": "NEW PSI only; no real company/project branding"
+  }
 }
