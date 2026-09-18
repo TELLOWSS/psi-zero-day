@@ -28,6 +28,8 @@ const BEATS: Readonly<Record<string, EpisodeCinematicBeat>> = Object.freeze({
   e01_08l_stopwork_return: { time: '15:32', zone: 'WORKFACE', label: '다음 보고가 결정된다', tone: 'consequence' },
   e01_08m_instruction_cascade: { time: '16:05', zone: 'WORKFACE', label: '말이 내려갈수록 짧아진다', tone: 'signal' },
   e01_08n_instruction_return: { time: '16:24', zone: 'RECORD', label: '사라진 조건을 찾는다', tone: 'consequence' },
+  e01_08o_record_pressure: { time: '16:42', zone: 'SITE OFFICE', label: '오늘을 어떤 문장으로 남길 것인가', tone: 'decision' },
+  e01_08p_record_return: { time: '17:08', zone: 'REPORT', label: '기록이 다시 질문한다', tone: 'consequence' },
 });
 
 export function episodeCinematicBeat(eventId: string | null | undefined): EpisodeCinematicBeat | undefined {
