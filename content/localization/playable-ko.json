@@ -439,6 +439,13 @@
     "ui.title.cast.lim_junho.quote": "오늘도 배우겠습니다.",
     "ui.title.cast.player.quote": "함께 만드는 무사한 하루.",
     "ui.title.cast.lee_jaehoon.quote": "계획이 현장을 지킵니다.",
-    "ui.title.cast.seo_jeongmin.quote": "안전은 타협하지 않습니다."
+    "ui.title.cast.seo_jeongmin.quote": "안전은 타협하지 않습니다.",
+    "ui.title.settings": "설정",
+    "ui.title.settings.hint": "메인 화면의 시네마틱 연출과 캐릭터 정보 표시를 조정합니다.",
+    "ui.title.settings.motion": "시네마틱 움직임",
+    "ui.title.settings.motion.hint": "배경 이동, 빛 번짐, 캐릭터 등장 연출을 사용합니다.",
+    "ui.title.settings.quotes": "캐릭터 한 줄 대사",
+    "ui.title.settings.quotes.hint": "메인 화면의 인물별 한 줄 메시지를 표시합니다.",
+    "ui.title.settings.close": "적용하고 닫기"
   }
 }

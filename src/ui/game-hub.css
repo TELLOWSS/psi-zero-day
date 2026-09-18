@@ -515,3 +515,47 @@
   .commercial-title-open-menu{bottom:29%;right:7%}
   .commercial-title-footer{display:none}
 }
+
+/* PSI ZERO DAY title settings and production layout v6 */
+.commercial-title-settings-button{margin-left:18px;color:#bfcdd3}
+.commercial-title-settings-glyph{width:22px;text-align:center;font-size:18px;line-height:1}
+.commercial-title-settings-backdrop{
+  position:absolute;z-index:24;inset:0;display:grid;place-items:center;
+  background:rgba(2,8,13,.66);backdrop-filter:blur(10px)
+}
+.commercial-title-settings{
+  width:min(480px,88vw);padding:28px;border:1px solid rgba(190,212,222,.55);border-radius:14px;
+  background:linear-gradient(145deg,rgba(14,31,42,.98),rgba(7,18,27,.98));
+  box-shadow:0 30px 90px rgba(0,0,0,.58);color:#edf4f6
+}
+.commercial-title-settings>span{font-size:10px;letter-spacing:.24em;color:#f3b53b}
+.commercial-title-settings h2{margin:10px 0 7px;font-size:26px}
+.commercial-title-settings>p{margin:0 0 20px;color:#b9c9d0;font-size:13px;line-height:1.65}
+.commercial-title-settings label{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;
+  border-top:1px solid rgba(178,199,209,.16);cursor:pointer
+}
+.commercial-title-settings label strong{display:block;font-size:14px}
+.commercial-title-settings label small{display:block;margin-top:4px;color:#9fb1ba;font-size:10px;line-height:1.45}
+.commercial-title-settings input{
+  width:42px;height:22px;accent-color:#f0b338;cursor:pointer
+}
+.commercial-title-settings>button{
+  width:100%;min-height:44px;margin-top:10px;border:1px solid #e9b747;border-radius:7px;
+  background:linear-gradient(105deg,#dfa12b,#f2c24f);color:#17242b;font:inherit;font-weight:800;cursor:pointer
+}
+.psi-title-motion-off .commercial-title-backdrop,
+.psi-title-motion-off .commercial-title-logo,
+.psi-title-motion-off .commercial-title-copy h1,
+.psi-title-motion-off .commercial-title-copy>p,
+.psi-title-motion-off .commercial-title-actions,
+.psi-title-motion-off .commercial-title-message,
+.psi-title-motion-off .commercial-title-cast,
+.psi-title-motion-off .commercial-title-sun-glow{
+  animation:none!important;
+}
+.psi-title-motion-off .commercial-title-backdrop{transform:none!important}
+.psi-title-quotes-off .commercial-title-worker figcaption small{display:none!important}
+@media(max-width:720px){
+  .commercial-title-settings-button{margin-left:10px}
+}

@@ -1,4 +1,4 @@
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
@@ -72,6 +72,9 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
   const [confirmNewGame, setConfirmNewGame] = useState(false);
+  const [showTitleSettings, setShowTitleSettings] = useState(false);
+  const [motionEnabled, setMotionEnabled] = useState(true);
+  const [castQuotesEnabled, setCastQuotesEnabled] = useState(true);
   const t = session.t;
   const resolve = (id: string) => session.assetUri(id);
   const journey = projectEpisodeJourney(snapshot.state);
@@ -83,6 +86,23 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const canContinue = snapshot.phase !== 'start';
+  useEffect(() => {
+    const storedMotion = window.localStorage.getItem('psi.title.motion');
+    const storedQuotes = window.localStorage.getItem('psi.title.castQuotes');
+    if (storedMotion === 'off') setMotionEnabled(false);
+    if (storedQuotes === 'off') setCastQuotesEnabled(false);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('psi-title-motion-off', !motionEnabled);
+    window.localStorage.setItem('psi.title.motion', motionEnabled ? 'on' : 'off');
+  }, [motionEnabled]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('psi-title-quotes-off', !castQuotesEnabled);
+    window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
+  }, [castQuotesEnabled]);
+
 
   if (page === 'home') return <main className="commercial-title-home">
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
@@ -116,6 +136,9 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
         </button>
         <button className="commercial-title-guide" type="button" onClick={() => setPage('guide')}>
           <HubIcon kind="guide" /><span>{t('ui.title.guide')}</span>
+        </button>
+        <button className="commercial-title-guide commercial-title-settings-button" type="button" onClick={() => setShowTitleSettings(true)}>
+          <span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span>
         </button>
       </div>
     </section>
@@ -166,6 +189,23 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
       <span>PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
     </button>
+
+    {showTitleSettings ? <div className="commercial-title-settings-backdrop" role="presentation" onMouseDown={() => setShowTitleSettings(false)}>
+      <section className="commercial-title-settings" role="dialog" aria-modal="true" aria-labelledby="title-settings-heading" onMouseDown={event => event.stopPropagation()}>
+        <span>PSI : ZERO DAY</span>
+        <h2 id="title-settings-heading">{t('ui.title.settings')}</h2>
+        <p>{t('ui.title.settings.hint')}</p>
+        <label>
+          <div><strong>{t('ui.title.settings.motion')}</strong><small>{t('ui.title.settings.motion.hint')}</small></div>
+          <input type="checkbox" checked={motionEnabled} onChange={event => setMotionEnabled(event.currentTarget.checked)} />
+        </label>
+        <label>
+          <div><strong>{t('ui.title.settings.quotes')}</strong><small>{t('ui.title.settings.quotes.hint')}</small></div>
+          <input type="checkbox" checked={castQuotesEnabled} onChange={event => setCastQuotesEnabled(event.currentTarget.checked)} />
+        </label>
+        <button type="button" onClick={() => setShowTitleSettings(false)}>{t('ui.title.settings.close')}</button>
+      </section>
+    </div> : null}
 
     {confirmNewGame ? <div className="commercial-title-dialog-backdrop" role="presentation" onMouseDown={() => setConfirmNewGame(false)}>
       <section className="commercial-title-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-confirm-title" onMouseDown={event => event.stopPropagation()}>

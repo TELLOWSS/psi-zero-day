@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "profile_id": "main-title-cinematic-v6",
+  "status": "runtime-aligned",
+  "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
+  "composition": {
+    "backdrop": {
+      "source": "episode01_background",
+      "focus": "52% 47%",
+      "motion": "slow_parallax_optional"
+    },
+    "left_menu": [
+      "new_game",
+      "continue",
+      "field_map",
+      "field_guide",
+      "settings"
+    ],
+    "cast": [
+      "lim_junho",
+      "player",
+      "lee_jaehoon",
+      "seo_jeongmin"
+    ],
+    "cast_mode": "full_body_live_assets",
+    "feature_strip": [
+      "story",
+      "missions",
+      "people",
+      "tomorrow"
+    ],
+    "right_copy": "brand_message",
+    "footer": "version_brand_episode"
+  },
+  "runtime_rules": [
+    "all menu controls must remain clickable DOM elements",
+    "generated concept images are art direction only and must not bake functional buttons into runtime",
+    "continue reflects save-state progress",
+    "new game requires confirmation when progress exists",
+    "motion setting must respect user choice and reduced-motion preference",
+    "character quotes can be hidden without changing gameplay"
+  ],
+  "character_separation": {
+    "primary_axes": [
+      "age",
+      "face_geometry",
+      "body_build",
+      "helmet",
+      "wardrobe",
+      "prop",
+      "pose"
+    ],
+    "minimum_distinct_axes": 6
+  },
+  "breakpoint_notes": {
+    "desktop": "four character foreground plus four feature cards",
+    "compact": "reduce captions and character scale",
+    "mobile": "hide character foreground and use two-column feature cards"
+  }
+}
