@@ -189,3 +189,69 @@
   .strategy-active .scene-heading { left: 27%; max-width: 50%; }
   .strategy-active .play-panel { left: 27%; right: 1.5%; padding: 14px; grid-template-columns: 112px minmax(0, 1fr); }
 }
+
+
+/* EP01 strategy HUD dark-field pass */
+.strategy-shell{
+  color:#eef4f3;
+  background:#0c171d;
+  font-family:"Segoe UI","Malgun Gothic",system-ui,sans-serif
+}
+.strategy-hud{
+  inset:1.2% 1.4% auto;height:7.2%;grid-template-columns:1.2fr 1.15fr .42fr;gap:.65%
+}
+.strategy-brand,.strategy-meter,.strategy-day,.strategy-panel,.strategy-rail button,.strategy-map-stage-card,.strategy-roster{
+  border-color:rgba(210,229,234,.2);
+  background:linear-gradient(180deg,rgba(9,28,36,.9),rgba(6,21,28,.84));
+  color:#edf4f3;box-shadow:0 10px 28px rgba(0,0,0,.24);backdrop-filter:blur(12px)
+}
+.strategy-brand,.strategy-meter,.strategy-day{border-radius:7px}
+.strategy-brand{font-size:clamp(14px,1.35vw,23px)}
+.strategy-meter-track{height:8px;background:rgba(193,214,219,.18)}
+.strategy-meter-track i{background:linear-gradient(90deg,#3eb9d6,#62d2aa)}
+.strategy-rail{top:9.4%;left:1.4%;bottom:15%;width:18%;gap:.8%}
+.strategy-panel{border-radius:8px;padding:11px 12px}
+.strategy-panel h2{font-size:clamp(12px,1.05vw,18px);color:#f1f4f1}
+.strategy-panel p{font-size:clamp(9px,.74vw,13px);color:#b8c6c8}
+.strategy-rail button{
+  min-height:10.5%;border-radius:7px;border-color:rgba(98,156,174,.28);padding:0 10px;color:#e9efee
+}
+.strategy-rail button b{background:#d84f42}
+.strategy-map{inset:8.6% 0 13.5% 16.5%;perspective:none;background:#14232a}
+.strategy-map-stage-card{
+  top:2%;right:1.5%;width:18%;border-radius:7px;background:rgba(7,24,31,.88)
+}
+.strategy-map-stage-card span{color:#a7b7bb}.strategy-map-stage-card strong{color:#f2f5f3}
+.strategy-event-beacon{
+  border-radius:6px;background:#c84036;box-shadow:0 8px 20px rgba(0,0,0,.28);font-size:11px
+}
+.strategy-roster{
+  left:20.5%;right:1.4%;bottom:1.1%;height:11.3%;border-radius:8px;padding:7px
+}
+.roster-title{border-right-color:rgba(209,227,232,.16)}
+.strategy-character{
+  border:1px solid rgba(203,224,230,.13);border-radius:7px;
+  background:linear-gradient(180deg,rgba(20,47,57,.88),rgba(11,34,43,.9));color:#edf4f3
+}
+.strategy-character span{color:#aebdc1}
+.character-token{width:38px;height:38px;background:#e5a33c}
+.strategy-active .scene-heading{
+  top:9.7%;left:20.5%;max-width:37%;padding:8px 12px;border-radius:7px;
+  border:1px solid rgba(214,230,233,.2);border-left:3px solid #e5a143;
+  background:rgba(7,24,31,.86);box-shadow:0 10px 26px rgba(0,0,0,.22)
+}
+.strategy-active .play-panel{
+  left:20.5%;right:1.4%;bottom:13.5%;min-height:18%;max-height:30%;
+  border-radius:8px;border-color:rgba(209,229,234,.22);
+  background:linear-gradient(90deg,rgba(6,20,27,.94),rgba(10,30,38,.91));
+  box-shadow:0 16px 36px rgba(0,0,0,.3)
+}
+.strategy-active .debug-toggle{border-radius:6px;background:rgba(7,24,31,.9);color:#dce7e8}
+.strategy-site-building{filter:saturate(.8) brightness(.8)}
+.strategy-site-yard{background:rgba(196,149,74,.18);border-color:rgba(218,170,86,.62);color:#f3d19b}
+@media(max-width:760px){
+  .strategy-rail{width:23%}
+  .strategy-map{left:20%}
+  .strategy-roster{left:25%}
+  .strategy-active .scene-heading,.strategy-active .play-panel{left:25%}
+}

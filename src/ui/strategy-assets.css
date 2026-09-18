@@ -77,3 +77,29 @@
   .strategy-worker-art { width: 48px; height: 62px; flex-basis: 48px; }
   .strategy-map-worker.has-art { min-width: 96px; min-height: 62px; }
 }
+
+
+/* Keep photographic/world art dominant; HUD should sit on top of the field, not replace it. */
+.strategy-map.has-background-art .strategy-map-background-art{
+  filter:saturate(.98) contrast(1.05) brightness(.78);
+  transform:scale(1.015)
+}
+.strategy-map.has-background-art::before{
+  background:
+    linear-gradient(180deg,rgba(2,10,14,.08),transparent 44%,rgba(2,9,13,.18)),
+    linear-gradient(90deg,rgba(3,12,17,.18),transparent 28%,transparent 76%,rgba(3,12,17,.12))
+}
+.strategy-shell[data-visual-mode="art"] .strategy-brand,
+.strategy-shell[data-visual-mode="art"] .strategy-meter,
+.strategy-shell[data-visual-mode="art"] .strategy-day,
+.strategy-shell[data-visual-mode="art"] .strategy-panel,
+.strategy-shell[data-visual-mode="art"] .strategy-roster{
+  background:linear-gradient(180deg,rgba(7,25,33,.9),rgba(5,19,26,.84));color:#edf4f3
+}
+.strategy-worker-label{
+  border-color:rgba(194,218,225,.2)!important;
+  background:rgba(7,25,33,.9)!important;color:#eef4f3!important;
+  box-shadow:0 7px 16px rgba(0,0,0,.25)!important
+}
+.strategy-worker-label strong{color:#f2f5f3!important}
+.strategy-worker-label strong em{color:#9fb4ba!important}

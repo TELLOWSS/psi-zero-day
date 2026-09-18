@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-fullscreen-field-hud-v1",
+  "status": "IMPLEMENTED",
+  "visual_target": "full-screen construction-site game HUD inspired by the user-provided reference composition",
+  "principles": [
+    "Field/world art occupies the majority of the screen.",
+    "HUD stays at screen edges and uses translucent dark glass instead of page-like white cards.",
+    "Dialogue and choices float over the field at the bottom.",
+    "Current situation/title is presented as a compact left-side field card.",
+    "Strategy view keeps actual site art dominant and places workers, risk signals and zones directly on the site.",
+    "Existing event topology, choice ids and effect bundles remain unchanged."
+  ],
+  "screens": {
+    "narrative": "full-bleed scene + top status bar + left situation card + bottom dialogue/choice HUD",
+    "strategy": "full-site art + dark top status bar + left control rail + direct worker/risk overlays + compact bottom roster/action HUD"
+  },
+  "next_art_requirement": [
+    "Replace remaining RC SVG environments with final cinematic construction-site raster/WebP art.",
+    "Produce dedicated TBM, stop-work, site-office/report, dusk-result and strategy-overview key art.",
+    "Keep character silhouettes, PPE, helmet colors and construction details consistent across scenes."
+  ]
+}

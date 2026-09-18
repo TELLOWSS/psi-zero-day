@@ -331,6 +331,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       }}
     /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
+      <div className="hud-brand"><strong>{t('ui.brand')}</strong><small>{t('ui.tagline')}</small></div>
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
       <span className="header-episode">{t('ui.episode')}</span>
