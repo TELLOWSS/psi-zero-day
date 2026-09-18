@@ -26,3 +26,7 @@
 - 그 선택의 결과는 이후 어떤 행동으로 검증되는가?
 
 이 문서와 `content/design/field-reality-doctrine-v1.json`, `src/app/gameplay-doctrine.ts`가 서로 같은 원칙의 사람용·콘텐츠용·코드용 기준이다.
+
+## 집행 규칙
+
+모든 신규 선택지 묶음은 반드시 `field-reality-doctrine-v1`을 설계 기준으로 확인하고, 안전 하한선·현장 진술·관계/공정 압박·선택 비용·지연 결과의 다섯 항목을 검토한다.
