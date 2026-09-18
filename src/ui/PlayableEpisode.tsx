@@ -28,6 +28,7 @@ import { StrategyMapShell } from './StrategyMapShell';
 import { useEpisodeAudio } from './useEpisodeAudio';
 import { EpisodeSceneBrief } from './EpisodeSceneBrief';
 import { EpisodeRecord } from './EpisodeRecord';
+import { TITLE_CAST_IDS } from '../app/title-cast';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -104,7 +105,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     : undefined;
   const titleBackgroundUri = episode01BackgroundUri(resolveAsset);
   const titleHeroCast = snapshot.phase === 'start'
-    ? (['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const).map((characterId, index) => ({
+    ? TITLE_CAST_IDS.map((characterId, index) => ({
       characterId,
       index,
       uri: characterMapUri(characterId, resolveAsset),

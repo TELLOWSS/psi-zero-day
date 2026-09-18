@@ -76,7 +76,12 @@ export class EpisodeSession {
     return c ? Object.freeze({ id: c.id, name: this.t(c.name_text_id), role: this.t(c.role_text_id) }) : undefined;
   }
   assetUri(id: string): string | undefined {
-    return this.#registry.getAsset(id)?.variants[0]?.uri;
+    const variant = this.#registry.getAsset(id)?.variants[0];
+    if (!variant?.uri) return undefined;
+    const fingerprint = variant.hash?.slice(0, 12);
+    if (!fingerprint) return variant.uri;
+    const joiner = variant.uri.includes('?') ? '&' : '?';
+    return `${variant.uri}${joiner}v=${fingerprint}`;
   }
   start = (revision: number): boolean => this.#act(revision, () => {
     if (this.#snapshot.phase !== 'start') return false;

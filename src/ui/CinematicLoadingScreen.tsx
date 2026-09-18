@@ -102,7 +102,7 @@ export function CinematicLoadingScreen({
 
     {crew.length ? <section className="cinematic-loading-team" aria-label="현장 투입 인원">
       <header><span>FIELD TEAM</span><strong>{String(crew.length).padStart(2, '0')}</strong></header>
-      <div>{crew.map((member, index) => <article key={member.id} className={`crew-${index}`}>
+      <div>{crew.map((member, index) => <article key={member.id} className={`crew-${index}`} data-art-surface="loading" data-character={member.id}>
         {member.uri ? <img src={member.uri} alt="" aria-hidden="true" /> : <span aria-hidden="true" />}
         <p><strong>{member.name}</strong><small>{member.role}</small></p>
       </article>)}</div>

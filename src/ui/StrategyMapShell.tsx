@@ -253,6 +253,7 @@ export function StrategyMapShell({
           return <button
             className={`strategy-map-worker worker-${placement.anchor}${placement.scene_participant ? ' is-scene-participant' : ''}${nearSignal ? ' is-near-signal' : ''}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}${visual?.map_uri ? ' has-art' : ''}`}
             data-character={placement.character_id}
+            data-art-surface="map"
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
             data-action-count={strategyActionsForTarget(effectiveActions, key).length}
             data-visual={visual?.map_uri ? 'asset' : 'css'}

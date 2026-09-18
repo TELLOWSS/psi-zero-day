@@ -95,6 +95,7 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('data-loop-phase="target"');
     expect(html).toContain('data-visual-mode="css"');
     expect(html).toContain('data-character="lim_junho"');
+    expect(html).toContain('data-art-surface="map"');
     expect(html).toContain('data-action-count="1"');
     expect(html).toContain('has-actions');
     expect(html).toContain('임준호');

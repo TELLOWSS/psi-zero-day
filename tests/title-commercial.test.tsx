@@ -17,6 +17,7 @@ describe('TASK-016A commercial title screen', () => {
     expect(html).toContain('data-character="seo_jeongmin"');
     expect(html).not.toContain('data-character="kang_taesik"');
     expect(html).toContain('title-hero-character-image');
+    expect(html).toContain('data-art-surface="main"');
     expect(html).toContain('background-image');
   });
 

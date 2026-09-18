@@ -7,10 +7,11 @@ import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
+import { TITLE_CAST_IDS } from '../app/title-cast';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
-const featured = ['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const;
+const featured = TITLE_CAST_IDS;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
 const loadFieldGuide = () => import('./FieldGuide');
@@ -208,7 +209,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <div className="commercial-title-cast">
       {featured.map((id, index) => {
         const member = session.character(id);
-        return <figure className={`commercial-title-worker worker-${index}`} key={id}>
+        return <figure className={`commercial-title-worker worker-${index}`} key={id} data-art-surface="main" data-character={id}>
           <VisualImage uri={characterMapUri(id, resolve)} alt="" />
           <blockquote>{t(`ui.title.cast.${id}.quote`)}</blockquote>
           <figcaption>
