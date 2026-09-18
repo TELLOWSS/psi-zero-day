@@ -37,8 +37,9 @@ describe('main title / loading / character production alignment', () => {
     const selected = titleCast.map(id => byId.get(id));
     expect(selected.every(Boolean)).toBe(true);
 
-    const axes = [
-      (character: NonNullable<(typeof selected)[number]>) => character.face_key,
+    type Character = NonNullable<(typeof selected)[number]>;
+    const axes: Array<(character: Character) => string> = [
+      character => character.face_key,
       character => character.silhouette,
       character => character.helmet_key,
       character => character.wardrobe_key,
