@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react
 import type { EpisodeSession } from '../app/episode-session';
 import { COMPANY_NAME } from '../app/brand';
 import { projectEpisodeJourney } from '../app/episode-journey';
-import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
+import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
