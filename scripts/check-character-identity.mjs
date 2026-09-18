@@ -59,7 +59,7 @@ for (const c of chars) {
 }
 
 const cast = data.visual_uniqueness?.main_title_cast ?? [];
-if (cast.length !== 3) errors.push('main_title_cast must contain exactly 3 characters');
+if (cast.length < 3 || cast.length > 4) errors.push('main_title_cast must contain 3 or 4 characters');
 const castChars = cast.map(id => byId.get(id)).filter(Boolean);
 if (new Set(castChars.map(c => c.silhouette)).size < castChars.length) errors.push('main_title_cast silhouettes must be unique');
 if (new Set(castChars.map(c => c.helmet_key)).size < 2) errors.push('main_title_cast needs at least two helmet identities');

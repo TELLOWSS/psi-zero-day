@@ -349,12 +349,13 @@
     "version": 3,
     "rule": "No two primary characters may share the same apparent face template, age silhouette, helmet color, body proportion, outerwear color, and signature prop at the same time.",
     "main_title_cast": [
-      "choi_minseok",
+      "lim_junho",
       "player",
+      "lee_jaehoon",
       "seo_jeongmin"
     ],
     "main_title_asset_mode": "map_full_body",
-    "main_title_reason": "Use three maximally distinct silhouettes: signalman with orange helmet/batons, female safety manager with tablet, inspector with glasses/clipboard.",
+    "main_title_reason": "Four-character commercial title composition with intentionally different age, face geometry, body proportion, helmet/wardrobe palette and signature prop: young worker / female safety manager / site engineer / mature inspector.",
     "differentiation_axes": [
       "sex_or_gender_presentation",
       "age_band",

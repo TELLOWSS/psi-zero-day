@@ -426,6 +426,19 @@
     "ui.title.confirm_new": "새 게임을 시작할까요?",
     "ui.title.confirm_new.hint": "현재 진행 기록이 초기화되고 에피소드 01을 처음부터 시작합니다.",
     "ui.title.cancel": "취소",
-    "ui.title.restart": "처음부터 시작"
+    "ui.title.restart": "처음부터 시작",
+    "ui.title.features": "메인 화면 바로가기",
+    "ui.title.feature.story": "현장 스토리",
+    "ui.title.feature.story.hint": "실제 현장을 따라 공정과 위험을 읽습니다.",
+    "ui.title.feature.missions": "다양한 임무",
+    "ui.title.feature.missions.hint": "작업 전 위험을 확인하고 대응합니다.",
+    "ui.title.feature.people": "사람들의 이야기",
+    "ui.title.feature.people.hint": "함께 만드는 안전한 현장을 만나보세요.",
+    "ui.title.feature.tomorrow": "더 나은 내일",
+    "ui.title.feature.tomorrow.hint": "당신의 판단과 기록이 변화를 만듭니다.",
+    "ui.title.cast.lim_junho.quote": "오늘도 배우겠습니다.",
+    "ui.title.cast.player.quote": "함께 만드는 무사한 하루.",
+    "ui.title.cast.lee_jaehoon.quote": "계획이 현장을 지킵니다.",
+    "ui.title.cast.seo_jeongmin.quote": "안전은 타협하지 않습니다."
   }
 }

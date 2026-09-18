@@ -11,7 +11,7 @@ import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
-const featured = ['choi_minseok', 'player', 'seo_jeongmin'] as const;
+const featured = ['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const;
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
   const paths = {
     home: 'M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10',
@@ -126,9 +126,38 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       <small>BUILD<br/>PEOPLE<br/>A SAFER<br/>TOMORROW</small>
     </aside>
 
-    <div className="commercial-title-cast" aria-hidden="true">
-      {featured.map((id, index) => <VisualImage key={id} uri={characterMapUri(id, resolve)} alt="" className={`commercial-title-worker worker-${index}`} />)}
+    <div className="commercial-title-cast">
+      {featured.map((id, index) => {
+        const member = session.character(id);
+        return <figure className={`commercial-title-worker worker-${index}`} key={id}>
+          <VisualImage uri={characterMapUri(id, resolve)} alt="" />
+          <figcaption>
+            <strong>{member?.name}</strong>
+            <span>{member?.role}</span>
+            <small>{t(`ui.title.cast.${id}.quote`)}</small>
+          </figcaption>
+        </figure>;
+      })}
     </div>
+
+    <section className="commercial-title-features" aria-label={t('ui.title.features')}>
+      <button type="button" onClick={() => setPage('map')}>
+        <span><HubIcon kind="map" /></span>
+        <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div>
+      </button>
+      <button type="button" onClick={() => setPage('guide')}>
+        <span><HubIcon kind="guide" /></span>
+        <div><strong>{t('ui.title.feature.missions')}</strong><small>{t('ui.title.feature.missions.hint')}</small></div>
+      </button>
+      <button type="button" onClick={() => setPage('people')}>
+        <span><HubIcon kind="people" /></span>
+        <div><strong>{t('ui.title.feature.people')}</strong><small>{t('ui.title.feature.people.hint')}</small></div>
+      </button>
+      <button type="button" onClick={() => setPage('journal')}>
+        <span><HubIcon kind="journal" /></span>
+        <div><strong>{t('ui.title.feature.tomorrow')}</strong><small>{t('ui.title.feature.tomorrow.hint')}</small></div>
+      </button>
+    </section>
 
     <div className="commercial-title-site-plaque" aria-hidden="true">
       <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
