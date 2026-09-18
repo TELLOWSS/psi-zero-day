@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "approved_visual_direction": "commercial_casual_strategy_2_5d_construction",
   "expression_set": [
     "neutral",
@@ -22,7 +22,34 @@
       "must_not_resemble": [
         "lee_jaehoon",
         "lim_junho"
-      ]
+      ],
+      "age_band": "late_20s",
+      "presentation": "female",
+      "face_geometry": {
+        "shape": "soft_v",
+        "jaw": "narrow_soft",
+        "cheekbones": "medium_high",
+        "eyes": "focused_almond",
+        "brows": "straight_fine",
+        "nose": "small_straight",
+        "mouth": "compact_neutral"
+      },
+      "hair": "dark_low_ponytail_with_side_fringe_visible_under_helmet",
+      "complexion": "light_neutral",
+      "body_build": "compact_athletic",
+      "palette": [
+        "navy",
+        "#2f6f9f",
+        "white",
+        "#d9e3ea"
+      ],
+      "render_priority": [
+        "distinct_feminine_face",
+        "tablet_silhouette",
+        "white_blue_helmet"
+      ],
+      "regeneration_prompt": "Young Korean female construction safety manager, late 20s, compact athletic build, soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, small straight nose, dark low ponytail and side fringe visible under a white hard hat with a blue stripe. Navy work jacket, blue safety vest, inspection tablet. Calm alert expression. Commercial casual 2.5D strategy game character, semi-realistic anime proportions, clean construction-site uniform details, full-body transparent-background map art.",
+      "negative_prompt": "male face, boyish male jaw, same face as young male worker, identical eye shape to Lim Junho, generic beauty-face template, orange helmet, green vest, radio prop"
     },
     {
       "id": "kang_taesik",
@@ -37,7 +64,34 @@
       "must_not_resemble": [
         "yoon_sungho",
         "oh_seungjae"
-      ]
+      ],
+      "age_band": "late_50s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "round_broad",
+        "jaw": "heavy_square_round",
+        "cheekbones": "low",
+        "eyes": "small_deep_set",
+        "brows": "thick_downward",
+        "nose": "broad",
+        "mouth": "firm_moustache"
+      },
+      "hair": "mostly_hidden_grey_sideburns",
+      "complexion": "weathered_warm",
+      "body_build": "broad_heavy",
+      "palette": [
+        "charcoal",
+        "orange",
+        "#7c5a3b",
+        "#d36b2a"
+      ],
+      "render_priority": [
+        "older_weathered_face",
+        "broad_square_body",
+        "moustache"
+      ],
+      "regeneration_prompt": "Veteran Korean male construction foreman, late 50s, broad heavy square build, round weathered face, heavy jaw, small deep-set eyes, thick downward brows, broad nose, visible moustache and grey sideburns. Orange hard hat, dark field jacket, orange safety vest, work gloves. Wide stance giving instruction. Commercial casual 2.5D strategy game character, rugged semi-realistic anime styling, full-body transparent-background map art.",
+      "negative_prompt": "young idol face, slim V jaw, clean-shaven youthful look, white helmet, glasses, tablet"
     },
     {
       "id": "yoon_sungho",
@@ -51,7 +105,34 @@
       "signature_pose": "rebar_on_shoulder_or_crossed_arms",
       "must_not_resemble": [
         "kang_taesik"
-      ]
+      ],
+      "age_band": "mid_40s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "angular_long",
+        "jaw": "strong_angled",
+        "cheekbones": "high",
+        "eyes": "narrow_squint",
+        "brows": "thick_arch",
+        "nose": "long_broad_bridge",
+        "mouth": "short_beard"
+      },
+      "hair": "short_black_crop",
+      "complexion": "deep_tan",
+      "body_build": "muscular_v",
+      "palette": [
+        "brown",
+        "#d8ad32",
+        "#3c4548",
+        "#8d5a37"
+      ],
+      "render_priority": [
+        "tanned_angular_face",
+        "muscular_shoulders",
+        "short_beard"
+      ],
+      "regeneration_prompt": "Korean male rebar worker, mid 40s, muscular V-shaped build, deeply tanned angular long face, strong angled jaw, high cheekbones, narrow squinting eyes, thick arched brows, long broad-bridge nose, short beard. Yellow hard hat, brown rebar workwear, heavy gloves, rebar bundle or crossed arms. Commercial casual 2.5D construction strategy character, full-body transparent-background map art.",
+      "negative_prompt": "round face, pale clean manager, orange signalman outfit, glasses, slim inspector"
     },
     {
       "id": "lee_jaehoon",
@@ -67,7 +148,34 @@
         "player",
         "lim_junho",
         "seo_jeongmin"
-      ]
+      ],
+      "age_band": "early_30s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "long_narrow",
+        "jaw": "clean_tapered",
+        "cheekbones": "medium",
+        "eyes": "horizontal_calm",
+        "brows": "medium_neat",
+        "nose": "straight_long",
+        "mouth": "thin_neutral"
+      },
+      "hair": "neat_short_black_side_part",
+      "complexion": "light_neutral",
+      "body_build": "tall_slim",
+      "palette": [
+        "white",
+        "#315b86",
+        "#20364b",
+        "#dce3e8"
+      ],
+      "render_priority": [
+        "tall_vertical_silhouette",
+        "long_narrow_face",
+        "rolled_drawing"
+      ],
+      "regeneration_prompt": "Korean male site construction engineer, early 30s, tall slim vertical build, long narrow clean face, tapered jaw, calm horizontal eyes, neat brows, straight long nose, short black side-part hair. White hard hat, clean blue site jacket, rolled construction drawing under arm. Upright professional stance. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
+      "negative_prompt": "round youthful worker face, large bright eyes, green vest, radio, glasses, middle-aged inspector"
     },
     {
       "id": "lim_junho",
@@ -82,7 +190,34 @@
       "must_not_resemble": [
         "player",
         "lee_jaehoon"
-      ]
+      ],
+      "age_band": "early_20s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "round_youthful",
+        "jaw": "small_rounded",
+        "cheekbones": "soft",
+        "eyes": "large_open",
+        "brows": "soft_upturned",
+        "nose": "short_small",
+        "mouth": "open_eager"
+      },
+      "hair": "short_messy_black_fringe",
+      "complexion": "light_warm",
+      "body_build": "small_narrow",
+      "palette": [
+        "yellow",
+        "#65a66f",
+        "#273b47",
+        "#d7e0e5"
+      ],
+      "render_priority": [
+        "young_round_face",
+        "large_bright_eyes",
+        "small_body"
+      ],
+      "regeneration_prompt": "Young Korean male construction worker, early 20s, small narrow build, distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short small nose, messy black fringe under a small yellow hard hat. Green high-visibility vest, handheld radio, slightly forward eager posture. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
+      "negative_prompt": "female face, V jaw, mature narrow eyes, white-blue helmet, tablet, tall engineer silhouette"
     },
     {
       "id": "choi_minseok",
@@ -96,7 +231,34 @@
       "signature_pose": "both_signal_batons_raised_asymmetric",
       "must_not_resemble": [
         "kang_taesik"
-      ]
+      ],
+      "age_band": "late_30s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "diamond_energetic",
+        "jaw": "medium_square",
+        "cheekbones": "high",
+        "eyes": "wide_alert",
+        "brows": "strong_rising",
+        "nose": "medium_hooked",
+        "mouth": "wide_expressive"
+      },
+      "hair": "short_black_hidden",
+      "complexion": "medium_warm",
+      "body_build": "medium_dynamic",
+      "palette": [
+        "orange",
+        "#e24f34",
+        "#212f37",
+        "#f4c342"
+      ],
+      "render_priority": [
+        "dynamic_asymmetric_pose",
+        "strong_rising_brows",
+        "signal_batons"
+      ],
+      "regeneration_prompt": "Korean male construction signalman, late 30s, medium dynamic build, diamond-shaped energetic face, medium square jaw, high cheekbones, wide alert eyes, strong rising brows, slightly hooked medium nose, expressive mouth. Orange signalman hard hat and orange high-visibility vest, dual red signal batons raised asymmetrically. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
+      "negative_prompt": "older moustached foreman, broad heavy body, static crossed arms, white helmet, clipboard"
     },
     {
       "id": "seo_jeongmin",
@@ -111,7 +273,34 @@
       "must_not_resemble": [
         "lee_jaehoon",
         "oh_seungjae"
-      ]
+      ],
+      "age_band": "mid_40s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "thin_oblong",
+        "jaw": "narrow_angular",
+        "cheekbones": "prominent",
+        "eyes": "narrow_observant",
+        "brows": "thin_straight",
+        "nose": "long_sharp",
+        "mouth": "tight_reserved"
+      },
+      "hair": "short_neat_black_grey_temples",
+      "complexion": "light_olive",
+      "body_build": "lean_formal",
+      "palette": [
+        "white",
+        "#1d2a34",
+        "#66737a",
+        "#c8d0d4"
+      ],
+      "render_priority": [
+        "rectangular_glasses",
+        "thin_mature_face",
+        "formal_clipboard_pose"
+      ],
+      "regeneration_prompt": "Korean male construction inspector, mid 40s, lean formal build, thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, thin straight brows, long sharp nose, grey at temples, rectangular glasses. White inspector hard hat, dark inspection jacket, clipboard held close to chest. Reserved analytical stance. Commercial casual 2.5D strategy character, full-body transparent-background map art.",
+      "negative_prompt": "young clean engineer, broad manager face, no glasses, orange vest, radio"
     },
     {
       "id": "oh_seungjae",
@@ -126,11 +315,38 @@
       "must_not_resemble": [
         "seo_jeongmin",
         "kang_taesik"
-      ]
+      ],
+      "age_band": "early_40s",
+      "presentation": "male",
+      "face_geometry": {
+        "shape": "broad_rectangular",
+        "jaw": "wide_heavy",
+        "cheekbones": "medium_low",
+        "eyes": "tired_hooded",
+        "brows": "flat_heavy",
+        "nose": "medium_broad",
+        "mouth": "pressed_tired"
+      },
+      "hair": "short_business_black",
+      "complexion": "medium_neutral",
+      "body_build": "broad_managerial",
+      "palette": [
+        "white",
+        "#182f48",
+        "#5d6d79",
+        "#313c45"
+      ],
+      "render_priority": [
+        "broad_manager_face",
+        "tired_hooded_eyes",
+        "phone_on_hip_pose"
+      ],
+      "regeneration_prompt": "Korean male construction manager, early 40s, broad managerial build, broad rectangular face, wide heavy jaw, tired hooded eyes, flat heavy brows, medium broad nose, short business haircut. White manager hard hat, navy site jacket, smartphone or radio at ear with other hand on hip. Slightly pressured managerial expression. Commercial casual 2.5D strategy game character, full-body transparent-background map art.",
+      "negative_prompt": "thin inspector face, rectangular glasses, youthful engineer, orange helmet, moustache"
     }
   ],
   "visual_uniqueness": {
-    "version": 2,
+    "version": 3,
     "rule": "No two primary characters may share the same apparent face template, age silhouette, helmet color, body proportion, outerwear color, and signature prop at the same time.",
     "main_title_cast": [
       "choi_minseok",
@@ -163,6 +379,10 @@
       "choi_minseok": "late-30s male, energetic signalman, orange helmet and orange vest, dual red signal batons, raised asymmetric arms, lively strong-brow face",
       "player": "young female safety manager, compact athletic silhouette, clearly feminine face, dark hair visible beneath white/blue helmet, navy/blue safety vest, inspection tablet",
       "seo_jeongmin": "mid-40s male inspector, lean formal silhouette, narrow mature face, rectangular glasses, white inspector helmet, dark inspection jacket, clipboard held to chest"
-    }
-  }
+    },
+    "minimum_distinct_axes": 6,
+    "face_geometry_required": true,
+    "production_gate": "scripts/check-character-identity.mjs"
+  },
+  "identity_contract_version": "3.0"
 }

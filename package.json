@@ -33,13 +33,14 @@
     "assets:production-batch-a-check": "npm run assets:visual-contract && npm run assets:embedded && node scripts/check-character-final-art-shape.mjs --batch-a && node scripts/build-episode01-assets.mjs --production-batch-a-check",
     "assets:production-check": "npm run assets:visual-contract && npm run assets:embedded && npm run assets:character-map-shape-check && node scripts/build-episode01-assets.mjs --production-check",
     "assets:production-scene-elements-check": "npm run assets:embedded && npm run assets:scene-elements-contract && node scripts/check-scene-element-art.mjs --production-check",
-    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:scene-elements-contract && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
+    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
     "release:production-check": "npm run assets:production-check && npm run release:check",
     "android:add": "npm run build && npx cap add android && npm run android:configure",
     "android:sync": "npm run build && npx cap sync android && npm run android:configure",
     "android:configure": "node scripts/configure-android.mjs",
     "android:open": "npx cap open android",
-    "android:doctor": "npx cap doctor"
+    "android:doctor": "npx cap doctor",
+    "assets:character-identity-check": "node scripts/check-character-identity.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
