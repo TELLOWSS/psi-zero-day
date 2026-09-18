@@ -5,7 +5,6 @@ import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
-import { FieldGuide } from './FieldGuide';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 
@@ -14,6 +13,8 @@ const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = ['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
+const loadFieldGuide = () => import('./FieldGuide');
+const FieldGuide = lazy(() => loadFieldGuide().then(module => ({ default: module.FieldGuide })));
 
 function GameplayChunkFallback() {
   return <main className="gameplay-chunk-fallback" role="status" aria-live="polite">
@@ -108,6 +109,11 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const canContinue = snapshot.phase !== 'start';
+  const openGuide = () => {
+    void loadFieldGuide();
+    setPage('guide');
+  };
+  const preloadGuide = () => { void loadFieldGuide(); };
   const titleFeatureVisuals = {
     story: episode01BackgroundUri(resolve),
     missions: resolve('ep01.scene_element.suspended_load'),
@@ -149,7 +155,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
         <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
         <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
-        <button type="button" onClick={() => setPage('guide')}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
+        <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
         <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
       </nav>
     </header>
@@ -180,7 +186,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
           <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>
           <b>›</b>
         </button>
-        <button className="commercial-title-action" type="button" onClick={() => setPage('guide')}>
+        <button className="commercial-title-action" type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}>
           <span className="commercial-title-action-icon"><HubIcon kind="guide" /></span>
           <span className="commercial-title-action-copy"><strong>{t('ui.title.guide')}</strong><small>{t('ui.title.guide.hint')}</small></span>
           <b>›</b>
@@ -219,7 +225,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
         <span className="commercial-title-feature-shade" aria-hidden="true" />
         <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div><b>›</b>
       </button>
-      <button type="button" onClick={() => setPage('guide')}>
+      <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}>
         <VisualImage uri={titleFeatureVisuals.missions} alt="" className="commercial-title-feature-art" />
         <span className="commercial-title-feature-shade" aria-hidden="true" />
         <div><strong>{t('ui.title.feature.missions')}</strong><small>{t('ui.title.feature.missions.hint')}</small></div><b>›</b>
@@ -324,7 +330,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
           <VisualImage uri={characterPortraitUri(character.id, resolve)} alt="" /><strong>{session.character(character.id)?.name}</strong><small>{session.character(character.id)?.role}</small>
         </button>)}</div>
         <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
-      </div> : page === 'guide' ? <FieldGuide session={session} /> : <div className="hub-journal">
+      </div> : page === 'guide' ? <Suspense fallback={<div className="hub-empty" role="status"><HubIcon kind="guide" /><h2>{t('ui.hub.guide')}</h2><p>현장 도감을 불러오고 있습니다.</p></div>}><FieldGuide session={session} /></Suspense> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
         <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>

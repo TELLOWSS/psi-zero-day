@@ -9,7 +9,7 @@ import { episodeBounds, episodeOptions, playEpisode } from './helpers/episode01-
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 describe('game hub navigation', () => {
-  it('opens the real run and preserves it when visiting the map and colleagues', () => {
+  it('opens the real run and preserves it when visiting the map and colleagues', async () => {
     const session = new EpisodeSession(episodeOptions(42), episodeBounds);
     const host = document.createElement('div');
     const root = createRoot(host);
@@ -29,6 +29,7 @@ describe('game hub navigation', () => {
       click('.hub-person-grid button:last-child');
       expect(host.querySelector('.hub-person-detail')?.textContent).toContain(session.character('oh_seungjae')!.name);
       click('.hub-nav button:nth-child(5)');
+      await act(async () => { await import('../src/ui/FieldGuide'); });
       expect(host.querySelectorAll('.field-guide-list button')).toHaveLength(10);
       click('.field-guide-list button:last-child');
       expect(host.querySelector('.field-guide-detail h2')?.textContent).toBe(session.t('ui.guide.open_edge.title'));
