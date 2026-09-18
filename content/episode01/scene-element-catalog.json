@@ -399,18 +399,19 @@
       "kind": "control",
       "label": "현장 출입 게이트",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.site_gate",
       "art": {
         "path": "assets/episode01/scene-elements/site-gate.webp",
-        "minimum_width": 768,
-        "minimum_height": 512,
+        "minimum_width": 384,
+        "minimum_height": 384,
         "pivot": {
           "x": 0.5,
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1"
       },
       "reuse_for": [
         "site_setup"
@@ -627,7 +628,7 @@
       "kind": "control",
       "label": "소화기 배치 지점",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.fire_extinguisher_station",
       "art": {
         "path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
@@ -638,7 +639,8 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1"
       },
       "reuse_for": [
         "site_setup",
