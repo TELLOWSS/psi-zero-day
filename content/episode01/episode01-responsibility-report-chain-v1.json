@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-responsibility-report-chain-v1",
+  "window": "10:39–11:31",
+  "intent": "Carry the verified inspection state into a responsibility dispute, then show how the chosen reporting basis is tested when additional evidence returns.",
+  "stages": [
+    {
+      "time": "10:39",
+      "event_id": "e01_08d_reinspection",
+      "purpose": "establish what is physically verified"
+    },
+    {
+      "time": "11:12",
+      "event_id": "e01_08e_responsibility_clash",
+      "purpose": "separate verified facts from competing explanations under a 15-minute reporting deadline"
+    },
+    {
+      "time": "11:31",
+      "event_id": "e01_08f_report_return",
+      "purpose": "test the first report basis against later timestamps, call records, photos, and sequence evidence"
+    }
+  ],
+  "reads": [
+    "flags.inspection_result",
+    "flags.report_basis",
+    "flags.report_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "presentation_rules": [
+    "Never label one speaker as the liar; show that statements can differ because people observed different times and roles.",
+    "Distinguish a verified field state from an explanation of why that state occurred.",
+    "When report_result is written, update the same 11:31 panel from verification question to evidence verdict."
+  ]
+}

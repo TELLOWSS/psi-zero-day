@@ -30,6 +30,7 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
   e01_08c_site_pushback: cue('workface_pressure', 'pressure', 'ep01.audio.workface_pressure', 0.34),
   e01_08d_reinspection: cue('workface_pressure', 'scene_shift', 'ep01.audio.workface_pressure', 0.26),
   e01_08e_responsibility_clash: cue('office_report_roomtone', 'pressure', 'ep01.audio.office_report_roomtone', 0.36),
+  e01_08f_report_return: cue('office_report_roomtone', 'scene_shift', 'ep01.audio.office_report_roomtone', 0.28),
   e01_08g_tbm_field_gap: cue('radio_burst', 'radio_signal', 'ep01.audio.radio_burst', 0.48),
   e01_08i_restart_pressure: cue('workface_pressure', 'pressure', 'ep01.audio.workface_pressure', 0.45),
   e01_08k_stopwork_aftershock: cue('stopwork_silence_drop', 'scene_shift', 'ep01.audio.stopwork_silence_drop', 0.62),
