@@ -2,6 +2,7 @@ import type { EventDefinition, GameState } from '../domain';
 
 export interface EpisodeReviewEntry {
   readonly key: string;
+  readonly event_id: string;
   readonly event_text_id: string;
   readonly choice_text_id: string;
   readonly result_text_id?: string;
@@ -20,6 +21,7 @@ export function projectEpisodeReview(state: GameState, events: readonly EventDef
       && node.type === 'RESULT' && instance.visited_node_ids.includes(node.node_id));
     return [{
       key: `${record.instance_id}/${record.choice_id}/${index}`,
+      event_id: event.event_id,
       event_text_id: event.title_text_id,
       choice_text_id: choice.text_id,
       ...(result ? { result_text_id: result.text_id } : {}),

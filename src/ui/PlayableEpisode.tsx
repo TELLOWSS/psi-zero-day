@@ -22,6 +22,8 @@ import { CharacterCard, SiteScene, VisualImage } from './VisualSlot';
 import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
 import { useEpisodeAudio } from './useEpisodeAudio';
+import { EpisodeSceneBrief } from './EpisodeSceneBrief';
+import { EpisodeRecord } from './EpisodeRecord';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -206,7 +208,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target instanceof Element ? e.target : null;
-      if (target?.closest('input, textarea, select, [contenteditable="true"], .debug-panel')) return;
+      if (target?.closest('input, textarea, select, summary, [contenteditable="true"], .debug-panel')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.repeat) { if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); return; }
       if (mapOutcomeActive) {
@@ -299,6 +301,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           slotLabel={slot => t(`ui.equipment.${slot}`)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" aria-live="polite" key={snapshot.revision}>
+          <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />
           {!mapOutcomeActive && snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
               <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
@@ -335,11 +338,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       <section className="episode-review" aria-label={t('ui.review.title')}>
         <h2>{t('ui.review.title')}</h2>
         <p>{t('ui.review.hint')}</p>
-        <ol>{session.review().map(entry => <li key={entry.key}>
-          <strong>{t(entry.event_text_id)}</strong>
-          <span>{t(entry.choice_text_id)}</span>
-          {entry.result_text_id ? <p>{t(entry.result_text_id)}</p> : null}
-        </li>)}</ol>
+        <EpisodeRecord entries={session.review()} t={t} />
       </section>
       <p className="replay-hint">{t('ui.review.replay')}</p>
       <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.restart(snapshot.revision); } }}>{t('ui.restart')}<span aria-hidden="true">↗</span></button>

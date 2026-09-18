@@ -7,6 +7,7 @@ import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage, characterVisual } from './VisualSlot';
 import { FieldGuide } from './FieldGuide';
 import { PlayableEpisode } from './PlayableEpisode';
+import { EpisodeRecord } from './EpisodeRecord';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -100,7 +101,7 @@ export function GameHub({ session, onPlay }: { session: EpisodeSession; onPlay: 
         <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
       </div> : page === 'guide' ? <FieldGuide session={session} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
-        {review.length ? <ol>{review.map(entry => <li key={entry.key}><strong>{t(entry.event_text_id)}</strong><h2>{t(entry.choice_text_id)}</h2>{entry.result_text_id ? <p>{t(entry.result_text_id)}</p> : null}</li>)}</ol> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
+        {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
         <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
       </div>}
     </section>

@@ -1,0 +1,19 @@
+.episode-scene-brief { margin-bottom: 10px; padding: 8px 12px; border: 1px solid #577382; border-left: 3px solid #efa94e; border-radius: 8px; background: #18313eea; color: #f1f5f7; }
+.episode-scene-brief summary { display: flex; justify-content: space-between; gap: 16px; cursor: pointer; font-size: 12px; min-height: 28px; align-items: center; }
+.episode-scene-brief summary strong { color: #f4c589; font-size: 11px; }
+.episode-scene-brief summary strong::after { content: ' +'; }
+.episode-scene-brief[open] summary strong::after { content: ' −'; }
+.episode-scene-brief p { margin: 8px 0; font-size: 13px; line-height: 1.65; word-break: keep-all; }
+.episode-scene-brief small { font-size: 11px; color: #b6cbd6; }
+.episode-scene-brief[data-scene="control"] { border-left-color: #ff8d74; }
+.episode-scene-brief[data-scene="meeting"] { border-left-color: #7ebfef; }
+.episode-scene-brief[data-scene="record"] { border-left-color: #91caae; }
+.episode-record-filters { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.episode-record-filters button { padding: 8px 12px; min-height: 44px; border: 1px solid #617b8b; border-radius: 8px; background: #193340; color: #e6eef3; font-size: 12px; }
+.episode-record-filters button[aria-pressed="true"] { background: #624324; border-color: #edb368; color: #fff0d8; }
+.episode-record-count { color: #bdced8; font-size: 12px; margin-bottom: 8px; }
+.episode-record ol { padding-left: 24px; }
+.episode-record li { margin-bottom: 10px; padding: 12px; border-radius: 8px; background: #244452; font-size: 13px; line-height: 1.65; }
+.episode-record li strong, .episode-record li span { display: block; }
+.episode-record li strong { color: #f0d49f; }
+.episode-record li p { color: #c5dbe5; margin-top: 6px; }
