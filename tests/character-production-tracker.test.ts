@@ -22,6 +22,7 @@ describe('character production tracker',()=>{
   it('has exactly one actionable next asset',()=>{
     const next=status.replacement_a.assets.filter(asset=>asset.status==='next');
     expect(next).toHaveLength(1);
-    expect(status.next_asset).toBe(next[0].file);
+    expect(next[0]).toBeDefined();
+    expect(status.next_asset).toBe(next[0]!.file);
   });
 });
