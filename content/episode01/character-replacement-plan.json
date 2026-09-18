@@ -90,5 +90,11 @@
       "npm run assets:character-stage -- --id seo-jeongmin-map --file <new-seo-jeongmin-map.webp>"
     ],
     "completion_rule": "Do not mark integrated until strict_command passes and main/loading/map visual QA is approved."
-  }
+  },
+  "tracking_issue": {
+    "number": 4,
+    "url": "https://github.com/TELLOWSS/psi-zero-day/issues/4",
+    "title": "ART: Replace title cast with four distinct production characters"
+  },
+  "next_required_input": "8 newly generated transparent WebP binaries (portrait + map for player, lim_junho, lee_jaehoon, seo_jeongmin)"
 }
