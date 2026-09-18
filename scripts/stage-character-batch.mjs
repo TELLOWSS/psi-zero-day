@@ -18,8 +18,8 @@ const { values } = parseArgs({
 });
 
 const scopeCharacterIds = Object.freeze({
-  'batch-a': ['player', 'kang_taesik', 'lim_junho'],
-  'batch-b': ['yoon_sungho', 'lee_jaehoon', 'choi_minseok', 'seo_jeongmin', 'oh_seungjae'],
+  'batch-a': ['player', 'lim_junho', 'lee_jaehoon', 'seo_jeongmin'],
+  'batch-b': ['kang_taesik', 'yoon_sungho', 'choi_minseok', 'oh_seungjae'],
   all: ['player', 'kang_taesik', 'lim_junho', 'yoon_sungho', 'lee_jaehoon', 'choi_minseok', 'seo_jeongmin', 'oh_seungjae'],
 });
 
@@ -53,7 +53,7 @@ if (!scopeCharacterIds[values.scope]) die(`unknown scope: ${values.scope}`);
 const sourceDir = path.resolve(root, values.dir);
 const production = JSON.parse(await readFile(productionPath, 'utf8'));
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
-if (production.schema_version !== 1 || !Array.isArray(production.characters)) die('character-art-production.json is invalid.');
+if (!Number.isInteger(production.schema_version) || production.schema_version < 1 || !Array.isArray(production.characters)) die('character-art-production.json is invalid.');
 if (manifest.schema_version !== 1 || !Array.isArray(manifest.assets)) die('character-media.json is invalid.');
 
 const registered = new Set(manifest.assets.map(asset => asset.id));

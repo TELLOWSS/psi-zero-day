@@ -6,7 +6,7 @@ const cast = [
   'lim_junho', 'choi_minseok', 'seo_jeongmin', 'oh_seungjae',
 ] as const;
 
-const batchA = ['player', 'kang_taesik', 'lim_junho'] as const;
+const batchA = ['player', 'lim_junho', 'lee_jaehoon', 'seo_jeongmin'] as const;
 
 describe('Episode 01 production art contract', () => {
   it('locks exactly seventeen final WebP slots: one map plus portrait/map for all eight characters', () => {
@@ -31,7 +31,7 @@ describe('Episode 01 production art contract', () => {
     expect(paths.some(path => /-rc\.svg$|\.svg$/i.test(path))).toBe(false);
   });
 
-  it('locks Batch A to the title/first-play seven final WebP assets', () => {
+  it('locks Batch A to the title/loading/first-play nine final WebP assets', () => {
     const paths = [
       visuals.backgrounds.foundation.path,
       ...batchA.flatMap(characterId => {
@@ -44,12 +44,14 @@ describe('Episode 01 production art contract', () => {
       'assets/episode01/backgrounds/foundation-map.webp',
       'assets/episode01/characters/player-portrait.webp',
       'assets/episode01/characters/player-map.webp',
-      'assets/episode01/characters/kang-taesik-portrait.webp',
-      'assets/episode01/characters/kang-taesik-map.webp',
       'assets/episode01/characters/lim-junho-portrait.webp',
       'assets/episode01/characters/lim-junho-map.webp',
+      'assets/episode01/characters/lee-jaehoon-portrait.webp',
+      'assets/episode01/characters/lee-jaehoon-map.webp',
+      'assets/episode01/characters/seo-jeongmin-portrait.webp',
+      'assets/episode01/characters/seo-jeongmin-map.webp',
     ]);
-    expect(new Set(paths).size).toBe(7);
+    expect(new Set(paths).size).toBe(9);
   });
 
   it('keeps production character file names stable and role-neutral for direct asset replacement', () => {

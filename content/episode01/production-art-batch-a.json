@@ -2,8 +2,8 @@
   "schema_version": 1,
   "task": "TASK-016B",
   "batch": "A",
-  "status": "production-media-pending",
-  "purpose": "commercial title and first-play visual slice",
+  "status": "production-media-refresh-pending",
+  "purpose": "commercial title, loading handoff and first-play visual slice",
   "style_contract": {
     "style": "adult-friendly high-quality 2.5D casual-strategy construction-site diorama",
     "tone": "approachable and game-like without becoming childish, comic slapstick, or generic corporate illustration",
@@ -24,7 +24,8 @@
     "fantasy or sci-fi construction equipment",
     "extra fingers, duplicated limbs, broken PPE geometry, or fused tools",
     "portrait and map variants that no longer read as the same person",
-    "slapstick treatment of hazards or incidents"
+    "slapstick treatment of hazards or incidents",
+    "portrait or map art that reuses another title-cast face geometry despite different PPE, hair, or outfit"
   ],
   "assets": [
     {
@@ -32,7 +33,10 @@
       "asset_id": "ep01.background.foundation.map",
       "path": "assets/episode01/backgrounds/foundation-map.webp",
       "kind": "background",
-      "minimum_size": { "width": 1920, "height": 1080 },
+      "minimum_size": {
+        "width": 1920,
+        "height": 1080
+      },
       "transparent_background": false,
       "production_brief": "Landscape 16:9 construction foundation-stage strategy map. Apartment structure, tower crane, material yard, temporary access road, gate, rebar/formwork zones and worker circulation should create a readable playable diorama with foreground/midground/background depth. Keep the central worksite clear enough for interactive markers and characters. Artwork only: no baked-in HUD, title, dialogue, mission cards, resource counters, map labels, readable company/project/site/building names, logos, or signage text."
     },
@@ -42,11 +46,14 @@
       "asset_id": "ep01.character.player.portrait",
       "path": "assets/episode01/characters/player-portrait.webp",
       "kind": "portrait",
-      "minimum_size": { "width": 1024, "height": 1024 },
+      "minimum_size": {
+        "width": 1024,
+        "height": 1024
+      },
       "transparent_background": true,
-      "silhouette": "compact athletic, upright",
+      "silhouette": "compact athletic, upright, clearly feminine",
       "signature_prop": "black inspection tablet",
-      "production_brief": "Young female safety manager, late 20s to early 30s. Soft oval face, alert eyes, short-to-medium black hair visible below a white helmet with a simple blue stripe and no text. Clean navy-blue safety vest. Focused but approachable. Upper-body portrait; one hand holds the inspection tablet and the other directs attention."
+      "production_brief": "Young Korean female safety manager, late 20s. Distinct soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, small straight nose, dark low ponytail and side fringe visible below a white helmet with a simple blue stripe and no text. Navy field jacket and blue safety vest. Calm, alert and approachable. Upper-body portrait with black inspection tablet. Must not resemble Lim Junho or Lee Jaehoon."
     },
     {
       "source": "player:map",
@@ -54,35 +61,14 @@
       "asset_id": "ep01.character.player.map",
       "path": "assets/episode01/characters/player-map.webp",
       "kind": "map",
-      "minimum_size": { "width": 768, "height": 1024 },
+      "minimum_size": {
+        "width": 768,
+        "height": 1024
+      },
       "transparent_background": true,
-      "silhouette": "compact athletic, upright",
+      "silhouette": "compact athletic, upright, clearly feminine",
       "signature_prop": "black inspection tablet",
-      "production_brief": "Same player identity as the portrait in a full-body 3/4 strategy-map pose. Helmet, navy safety vest and black inspection tablet must remain legible at small scale. Stable planted stance, active field-lead posture, no chibi proportions."
-    },
-    {
-      "source": "kang_taesik:portrait",
-      "character_id": "kang_taesik",
-      "asset_id": "ep01.character.kang_taesik.portrait",
-      "path": "assets/episode01/characters/kang-taesik-portrait.webp",
-      "kind": "portrait",
-      "minimum_size": { "width": 1024, "height": 1024 },
-      "transparent_background": true,
-      "silhouette": "stocky square torso, heavy shoulders",
-      "signature_prop": "work gloves and pointing hand",
-      "production_brief": "Veteran formwork foreman in his early 50s. Weathered round face, thick moustache and strong brows. Orange helmet without lettering. Dark charcoal vest with orange reflective trim. Broad stocky build. Gruff and decisive but not villainous; protective of the crew. Upper-body portrait with a clear pointing gesture and work gloves."
-    },
-    {
-      "source": "kang_taesik:map",
-      "character_id": "kang_taesik",
-      "asset_id": "ep01.character.kang_taesik.map",
-      "path": "assets/episode01/characters/kang-taesik-map.webp",
-      "kind": "map",
-      "minimum_size": { "width": 768, "height": 1024 },
-      "transparent_background": true,
-      "silhouette": "stocky square torso, heavy shoulders",
-      "signature_prop": "work gloves and pointing hand",
-      "production_brief": "Same Kang Taesik identity as the portrait in a full-body 3/4 strategy-map pose. Wide planted feet, heavy square torso and one arm pointing toward work. Orange helmet and work gloves remain readable at small scale."
+      "production_brief": "Same player identity as the portrait in a full-body 3/4 strategy-map pose. Compact athletic build, clearly feminine face and body read, white-blue helmet, navy/blue safety clothing and black inspection tablet must remain legible at small scale. No chibi proportions; must not reuse the male title-cast face template."
     },
     {
       "source": "lim_junho:portrait",
@@ -90,11 +76,14 @@
       "asset_id": "ep01.character.lim_junho.portrait",
       "path": "assets/episode01/characters/lim-junho-portrait.webp",
       "kind": "portrait",
-      "minimum_size": { "width": 1024, "height": 1024 },
+      "minimum_size": {
+        "width": 1024,
+        "height": 1024
+      },
       "transparent_background": true,
-      "silhouette": "small narrow frame, slightly forward shoulders",
-      "signature_prop": "compact radio or small tool case",
-      "production_brief": "Rookie worker in his early 20s. Round youthful face, open observant eyes, no facial hair. Bright yellow helmet and green vest. Small narrow frame with slightly hesitant shoulders. Earnest expression as if deciding whether to speak. Upper-body portrait with compact radio or small tool case clearly visible."
+      "silhouette": "small narrow youthful frame, slightly forward shoulders",
+      "signature_prop": "compact handheld radio",
+      "production_brief": "Young Korean male construction worker, early 20s. Distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short small nose, messy black fringe under a small yellow helmet. Green high-visibility vest. Earnest and slightly hesitant. Upper-body portrait with compact handheld radio. Must not resemble the player or Lee Jaehoon."
     },
     {
       "source": "lim_junho:map",
@@ -102,11 +91,80 @@
       "asset_id": "ep01.character.lim_junho.map",
       "path": "assets/episode01/characters/lim-junho-map.webp",
       "kind": "map",
-      "minimum_size": { "width": 768, "height": 1024 },
+      "minimum_size": {
+        "width": 768,
+        "height": 1024
+      },
       "transparent_background": true,
-      "silhouette": "small narrow frame, slightly forward shoulders",
-      "signature_prop": "compact radio or small tool case",
-      "production_brief": "Same Lim Junho identity as the portrait in a full-body 3/4 strategy-map pose. Smaller narrower body than other male cast, slight forward shoulders, one hand close to the radio. Yellow helmet and green vest remain instantly readable at small scale."
+      "silhouette": "small narrow youthful frame, slightly forward shoulders",
+      "signature_prop": "compact handheld radio",
+      "production_brief": "Same Lim Junho identity as the portrait in a full-body 3/4 strategy-map pose. Small narrow body, slightly forward eager posture, yellow helmet, green vest and handheld radio. Face must remain round and youthful, clearly different from the player's V-shaped face and Lee Jaehoon's long narrow face."
+    },
+    {
+      "source": "lee_jaehoon:portrait",
+      "character_id": "lee_jaehoon",
+      "asset_id": "ep01.character.lee_jaehoon.portrait",
+      "path": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "kind": "portrait",
+      "minimum_size": {
+        "width": 1024,
+        "height": 1024
+      },
+      "transparent_background": true,
+      "silhouette": "tall slim vertical",
+      "signature_prop": "rolled construction drawing",
+      "production_brief": "Korean male site construction engineer, early 30s. Long narrow clean face, tapered jaw, calm horizontal eyes, neat medium brows, straight long nose, short black side-part hair. White helmet, clean blue site jacket, rolled construction drawing. Upright professional stance, slightly pressed for time. Upper-body portrait. Must not resemble the player, Lim Junho, or Seo Jeongmin."
+    },
+    {
+      "source": "lee_jaehoon:map",
+      "character_id": "lee_jaehoon",
+      "asset_id": "ep01.character.lee_jaehoon.map",
+      "path": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "kind": "map",
+      "minimum_size": {
+        "width": 768,
+        "height": 1024
+      },
+      "transparent_background": true,
+      "silhouette": "tall slim vertical",
+      "signature_prop": "rolled construction drawing",
+      "production_brief": "Same Lee Jaehoon identity as the portrait in a full-body 3/4 strategy-map pose. Tall slim vertical silhouette, white helmet, clean blue site jacket and rolled drawing under one arm. Long narrow face remains readable; no glasses and no youthful round-face template."
+    },
+    {
+      "source": "seo_jeongmin:portrait",
+      "character_id": "seo_jeongmin",
+      "asset_id": "ep01.character.seo_jeongmin.portrait",
+      "path": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "kind": "portrait",
+      "minimum_size": {
+        "width": 1024,
+        "height": 1024
+      },
+      "transparent_background": true,
+      "silhouette": "lean formal compact stance",
+      "signature_prop": "clipboard and pen",
+      "production_brief": "Korean male construction inspector, mid 40s. Thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, thin straight brows, long sharp nose, black hair with grey temples and rectangular glasses. Plain white inspector helmet, dark inspection jacket, clipboard close to chest. Reserved analytical expression. Must not resemble Lee Jaehoon."
+    },
+    {
+      "source": "seo_jeongmin:map",
+      "character_id": "seo_jeongmin",
+      "asset_id": "ep01.character.seo_jeongmin.map",
+      "path": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "kind": "map",
+      "minimum_size": {
+        "width": 768,
+        "height": 1024
+      },
+      "transparent_background": true,
+      "silhouette": "lean formal compact stance",
+      "signature_prop": "clipboard and pen",
+      "production_brief": "Same Seo Jeongmin identity as the portrait in a full-body 3/4 strategy-map pose. Lean formal mature silhouette, rectangular glasses, white inspector helmet, dark jacket and clipboard close to chest. Thin oblong face and mature age read must remain distinct from Lee Jaehoon's younger long narrow face."
     }
+  ],
+  "title_cast": [
+    "lim_junho",
+    "player",
+    "lee_jaehoon",
+    "seo_jeongmin"
   ]
 }

@@ -6,27 +6,31 @@ const expectedSources = [
   'foundation:background',
   'player:portrait',
   'player:map',
-  'kang_taesik:portrait',
-  'kang_taesik:map',
   'lim_junho:portrait',
   'lim_junho:map',
+  'lee_jaehoon:portrait',
+  'lee_jaehoon:map',
+  'seo_jeongmin:portrait',
+  'seo_jeongmin:map',
 ] as const;
 
 const expectedPaths = [
   visuals.backgrounds.foundation.path,
   visuals.characters.player.portrait_path,
   visuals.characters.player.map_path,
-  visuals.characters.kang_taesik.portrait_path,
-  visuals.characters.kang_taesik.map_path,
   visuals.characters.lim_junho.portrait_path,
   visuals.characters.lim_junho.map_path,
+  visuals.characters.lee_jaehoon.portrait_path,
+  visuals.characters.lee_jaehoon.map_path,
+  visuals.characters.seo_jeongmin.portrait_path,
+  visuals.characters.seo_jeongmin.map_path,
 ];
 
 describe('TASK-016B Batch A production art brief', () => {
-  it('locks exactly the seven title and first-play production assets', () => {
+  it('locks exactly the nine title/loading/first-play production assets', () => {
     expect(batchA.task).toBe('TASK-016B');
     expect(batchA.batch).toBe('A');
-    expect(batchA.assets).toHaveLength(7);
+    expect(batchA.assets).toHaveLength(9);
     expect(batchA.assets.map(asset => asset.source)).toEqual(expectedSources);
     expect(batchA.assets.map(asset => asset.path)).toEqual(expectedPaths);
     expect(new Set(batchA.assets.map(asset => asset.path)).size).toBe(7);
@@ -49,9 +53,9 @@ describe('TASK-016B Batch A production art brief', () => {
     }
   });
 
-  it('keeps portrait/map identity paired while separating the three lead silhouettes', () => {
+  it('keeps portrait/map identity paired while separating the four title silhouettes', () => {
     const characterAssets = batchA.assets.filter(asset => 'character_id' in asset);
-    const characterIds = ['player', 'kang_taesik', 'lim_junho'] as const;
+    const characterIds = ['player', 'lim_junho', 'lee_jaehoon', 'seo_jeongmin'] as const;
     const silhouettes = new Set<string>();
     const props = new Set<string>();
 
@@ -78,8 +82,8 @@ describe('TASK-016B Batch A production art brief', () => {
       props.add(signatureProp);
     }
 
-    expect(silhouettes.size).toBe(3);
-    expect(props.size).toBe(3);
+    expect(silhouettes.size).toBe(4);
+    expect(props.size).toBe(4);
   });
 
   it('explicitly rejects known character and generated-mockup defects', () => {

@@ -8,7 +8,7 @@ const plan = JSON.parse(await readFile(planPath, 'utf8'));
 
 const playerOnly = process.argv.includes('--player');
 const batchAOnly = process.argv.includes('--batch-a');
-const batchACharacters = new Set(['player', 'kang_taesik', 'lim_junho']);
+const batchACharacters = new Set(['player', 'lim_junho', 'lee_jaehoon', 'seo_jeongmin']);
 
 function selectedCharacter(characterId) {
   if (playerOnly) return characterId === 'player';
