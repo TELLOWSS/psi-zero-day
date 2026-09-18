@@ -446,6 +446,16 @@
     "ui.title.settings.motion.hint": "배경 이동, 빛 번짐, 캐릭터 등장 연출을 사용합니다.",
     "ui.title.settings.quotes": "캐릭터 한 줄 대사",
     "ui.title.settings.quotes.hint": "메인 화면의 인물별 한 줄 메시지를 표시합니다.",
-    "ui.title.settings.close": "적용하고 닫기"
+    "ui.title.settings.close": "적용하고 닫기",
+    "ui.title.utility": "메인 바로가기",
+    "ui.title.utility.journal": "기록",
+    "ui.title.utility.people": "동료",
+    "ui.title.utility.guide": "도감",
+    "ui.title.new_game.hint": "새로운 현장을 시작합니다.",
+    "ui.title.continue.hint": "이전 기록으로 돌아갑니다.",
+    "ui.title.map.hint": "지도를 탐색하고 임무를 진행합니다.",
+    "ui.title.guide.hint": "사람들과 장비, 안전지식을 확인합니다.",
+    "ui.title.settings.menu_hint": "게임 환경과 화면 연출을 설정합니다.",
+    "ui.title.quick_settings": "메인 화면 빠른 설정"
   }
 }

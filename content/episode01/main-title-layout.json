@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "profile_id": "main-title-cinematic-v7",
-  "status": "runtime-aligned-loading-map-continuity",
+  "profile_id": "main-title-cinematic-v8",
+  "status": "reference-qa-aligned",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -24,10 +24,10 @@
     ],
     "cast_mode": "full_body_live_assets",
     "feature_strip": [
-      "story",
-      "missions",
-      "people",
-      "tomorrow"
+      "story_image_card",
+      "missions_image_card",
+      "people_image_card",
+      "tomorrow_image_card"
     ],
     "right_copy": "brand_message",
     "footer": "version_brand_episode"
@@ -73,5 +73,49 @@
     "duration_ms": 1850,
     "camera": "loading zoom resolves into live strategy map",
     "rule": "entry slate is decorative only; gameplay remains interactive after handoff"
+  },
+  "qa_reference": {
+    "source": "user-provided main-title concept screenshot, 1672x941",
+    "role": "art-direction and layout QA only; not shipped as baked UI",
+    "target_zones_percent": {
+      "meta_and_title": [
+        2.5,
+        2,
+        36,
+        28
+      ],
+      "primary_menu": [
+        2.5,
+        29,
+        23.5,
+        70
+      ],
+      "four_character_foreground": [
+        24,
+        15,
+        97,
+        72
+      ],
+      "feature_cards": [
+        2.5,
+        72,
+        97,
+        88.5
+      ],
+      "quick_settings": [
+        72,
+        89,
+        97,
+        95
+      ]
+    },
+    "required_hierarchy": [
+      "white PSI plus warm-yellow ZERO DAY title",
+      "five stacked left-side actions with icon, title and hint",
+      "four differentiated character silhouettes with quote plus name/role",
+      "four image-backed feature cards",
+      "visible quick motion and quote toggles",
+      "construction background remains readable but subordinate to foreground UI"
+    ]
   }
 }

@@ -2,8 +2,14 @@
   "schema_version": 1,
   "visual_direction": {
     "style": "friendly 2.5D casual-strategy construction diorama",
-    "rule": "Every character must remain identifiable by silhouette plus at least two of face, outfit, prop, posture before reading a name label.",
-    "forbidden": ["same-face cast", "helmet-color-only differentiation", "real company logos", "pseudo text on helmets", "childlike proportions"]
+    "rule": "Every primary character must remain identifiable by silhouette plus at least six distinct axes among face geometry, age, body build, helmet, wardrobe, prop, posture and expression before reading a name label.",
+    "forbidden": [
+      "same-face cast",
+      "helmet-color-only differentiation",
+      "real company logos",
+      "pseudo text on helmets",
+      "childlike proportions"
+    ]
   },
   "characters": {
     "player": {
@@ -14,9 +20,9 @@
       "accent": "#2f86b8",
       "identity": {
         "visual_role": "female rookie safety manager / player avatar",
-        "age_read": "late 20s to early 30s",
-        "silhouette": "compact athletic, upright",
-        "face": "soft oval face, alert large eyes, short-to-medium black hair visible below helmet",
+        "age_read": "late 20s",
+        "silhouette": "compact athletic, upright, clearly feminine",
+        "face": "soft V-shaped face, narrow soft jaw, focused almond eyes, fine straight brows, dark low ponytail and side fringe visible below helmet",
         "helmet": "white helmet with simple blue PSI stripe, no text",
         "outfit": "clean navy-blue safety vest over practical field clothes",
         "signature_prop": "black inspection tablet",
@@ -70,7 +76,7 @@
         "visual_role": "young construction assistant manager",
         "age_read": "early 30s",
         "silhouette": "tall slim vertical silhouette",
-        "face": "narrow youthful face, neat side-part hair, clean shaven",
+        "face": "long narrow clean face, tapered jaw, calm horizontal eyes, straight long nose, neat side-part hair",
         "helmet": "white helmet with thin navy stripe",
         "outfit": "light field shirt with navy vest, cleaner than trade crews",
         "signature_prop": "rolled drawing set",
@@ -87,8 +93,8 @@
       "identity": {
         "visual_role": "rookie worker",
         "age_read": "early 20s",
-        "silhouette": "small narrow frame, slightly forward shoulders",
-        "face": "round youthful face, open eyes, no facial hair",
+        "silhouette": "small narrow youthful frame, slightly forward shoulders",
+        "face": "distinctly round youthful face, small rounded jaw, large bright open eyes, soft upturned brows, short messy fringe",
         "helmet": "bright yellow helmet",
         "outfit": "green vest and practical workwear",
         "signature_prop": "compact radio / small tool case",
@@ -123,8 +129,8 @@
       "identity": {
         "visual_role": "architectural inspector",
         "age_read": "mid 40s",
-        "silhouette": "lean formal frame, compact stance",
-        "face": "rectangular face, black-rim glasses, composed brows",
+        "silhouette": "lean formal frame, compact mature stance",
+        "face": "thin oblong mature face, narrow angular jaw, prominent cheekbones, narrow observant eyes, long sharp nose, rectangular glasses",
         "helmet": "plain white helmet",
         "outfit": "dark inspection jacket over white shirt",
         "signature_prop": "clipboard and pen",

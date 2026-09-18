@@ -8,7 +8,7 @@
     {
       "id": "player",
       "priority": 1,
-      "state": "spec_locked_asset_pending",
+      "state": "reference_qa_locked_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -19,7 +19,7 @@
     {
       "id": "lim_junho",
       "priority": 2,
-      "state": "spec_locked_asset_pending",
+      "state": "reference_qa_locked_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -30,7 +30,7 @@
     {
       "id": "lee_jaehoon",
       "priority": 3,
-      "state": "spec_locked_asset_pending",
+      "state": "reference_qa_locked_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -41,7 +41,7 @@
     {
       "id": "seo_jeongmin",
       "priority": 4,
-      "state": "spec_locked_asset_pending",
+      "state": "reference_qa_locked_asset_pending",
       "required": [
         "portrait",
         "map_full_body",
@@ -55,7 +55,10 @@
     "portrait and map art depict the same face",
     "transparent map background",
     "role readable at 60px thumbnail",
-    "no pair reads as same base face with gear swap"
+    "no pair reads as same base face with gear swap",
+    "four title characters remain distinguishable when names and role labels are hidden",
+    "at least six primary identity axes differ between any must-not-resemble pair",
+    "title-screen crop preserves full helmet and signature prop for all four visible characters"
   ],
   "integration_order": [
     "stage media",
@@ -65,5 +68,10 @@
     "asset manifest",
     "main title QA",
     "map QA"
-  ]
+  ],
+  "reference_qa": {
+    "source": "user-provided main-title concept screenshot 1672x941",
+    "status": "layout_and_identity_targets_locked",
+    "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries remain pending replacement."
+  }
 }

@@ -96,6 +96,12 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const canContinue = snapshot.phase !== 'start';
+  const titleFeatureVisuals = {
+    story: episode01BackgroundUri(resolve),
+    missions: resolve('ep01.scene_element.suspended_load'),
+    people: characterPortraitUri('player', resolve),
+    tomorrow: resolve('ep01.scene_element.access_barrier'),
+  };
   useEffect(() => {
     const storedMotion = window.localStorage.getItem('psi.title.motion');
     const storedQuotes = window.localStorage.getItem('psi.title.castQuotes');
@@ -123,32 +129,53 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <div className="commercial-title-scan" aria-hidden="true" />
 
     <header className="commercial-title-topline">
-      <span>{t('ui.title.topline')}</span>
-      <small>CONSTRUCTION × PEOPLE × A SAFER TOMORROW</small>
+      <div className="commercial-title-meta">
+        <small>Ver. 0.1.0</small>
+        <span>{t('ui.title.topline')}</span>
+      </div>
+      <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
+        <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
+        <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
+        <button type="button" onClick={() => setPage('guide')}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
+        <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
+      </nav>
     </header>
 
     <section className="commercial-title-copy">
       <div className="commercial-title-logo"><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
       <h1>{t('ui.tagline')}</h1>
-      <p>{t('ui.title.subcopy')}</p>
+      <p className="commercial-title-english">Proactive Safety Intelligence</p>
+      <p className="commercial-title-subcopy">{t('ui.title.subcopy')}</p>
 
       <div className="commercial-title-actions">
         <button className="commercial-title-action is-primary" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
-          <span>{t('ui.title.new_game')}</span><b>›</b>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><strong>{t('ui.title.new_game')}</strong><small>{t('ui.title.new_game.hint')}</small></span>
+          <b>›</b>
         </button>
         <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
-          <span>{t('ui.title.continue')}</span>
-          {canContinue ? <small>EP.01 · {progress}%</small> : <small>{t('ui.title.no_save')}</small>}
+          <span className="commercial-title-action-icon"><HubIcon kind="journal" /></span>
+          <span className="commercial-title-action-copy">
+            <strong>{t('ui.title.continue')}</strong>
+            <small>{canContinue ? t('ui.title.continue.hint') : t('ui.title.no_save')}</small>
+          </span>
+          {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
         <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
-          <span>{t('ui.title.map')}</span><b>›</b>
+          <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
+          <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>
+          <b>›</b>
         </button>
-        <button className="commercial-title-guide" type="button" onClick={() => setPage('guide')}>
-          <HubIcon kind="guide" /><span>{t('ui.title.guide')}</span>
+        <button className="commercial-title-action" type="button" onClick={() => setPage('guide')}>
+          <span className="commercial-title-action-icon"><HubIcon kind="guide" /></span>
+          <span className="commercial-title-action-copy"><strong>{t('ui.title.guide')}</strong><small>{t('ui.title.guide.hint')}</small></span>
+          <b>›</b>
         </button>
-        <button className="commercial-title-guide commercial-title-settings-button" type="button" onClick={() => setShowTitleSettings(true)}>
-          <span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span>
+        <button className="commercial-title-action" type="button" onClick={() => setShowTitleSettings(true)}>
+          <span className="commercial-title-action-icon commercial-title-settings-glyph" aria-hidden="true">⚙</span>
+          <span className="commercial-title-action-copy"><strong>{t('ui.title.settings')}</strong><small>{t('ui.title.settings.menu_hint')}</small></span>
+          <b>›</b>
         </button>
       </div>
     </section>
@@ -164,10 +191,10 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
         const member = session.character(id);
         return <figure className={`commercial-title-worker worker-${index}`} key={id}>
           <VisualImage uri={characterMapUri(id, resolve)} alt="" />
+          <blockquote>{t(`ui.title.cast.${id}.quote`)}</blockquote>
           <figcaption>
             <strong>{member?.name}</strong>
             <span>{member?.role}</span>
-            <small>{t(`ui.title.cast.${id}.quote`)}</small>
           </figcaption>
         </figure>;
       })}
@@ -175,25 +202,38 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
 
     <section className="commercial-title-features" aria-label={t('ui.title.features')}>
       <button type="button" onClick={() => setPage('map')}>
-        <span><HubIcon kind="map" /></span>
-        <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div>
+        <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
+        <span className="commercial-title-feature-shade" aria-hidden="true" />
+        <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div><b>›</b>
       </button>
       <button type="button" onClick={() => setPage('guide')}>
-        <span><HubIcon kind="guide" /></span>
-        <div><strong>{t('ui.title.feature.missions')}</strong><small>{t('ui.title.feature.missions.hint')}</small></div>
+        <VisualImage uri={titleFeatureVisuals.missions} alt="" className="commercial-title-feature-art" />
+        <span className="commercial-title-feature-shade" aria-hidden="true" />
+        <div><strong>{t('ui.title.feature.missions')}</strong><small>{t('ui.title.feature.missions.hint')}</small></div><b>›</b>
       </button>
       <button type="button" onClick={() => setPage('people')}>
-        <span><HubIcon kind="people" /></span>
-        <div><strong>{t('ui.title.feature.people')}</strong><small>{t('ui.title.feature.people.hint')}</small></div>
+        <VisualImage uri={titleFeatureVisuals.people} alt="" className="commercial-title-feature-art" />
+        <span className="commercial-title-feature-shade" aria-hidden="true" />
+        <div><strong>{t('ui.title.feature.people')}</strong><small>{t('ui.title.feature.people.hint')}</small></div><b>›</b>
       </button>
       <button type="button" onClick={() => setPage('journal')}>
-        <span><HubIcon kind="journal" /></span>
-        <div><strong>{t('ui.title.feature.tomorrow')}</strong><small>{t('ui.title.feature.tomorrow.hint')}</small></div>
+        <VisualImage uri={titleFeatureVisuals.tomorrow} alt="" className="commercial-title-feature-art" />
+        <span className="commercial-title-feature-shade" aria-hidden="true" />
+        <div><strong>{t('ui.title.feature.tomorrow')}</strong><small>{t('ui.title.feature.tomorrow.hint')}</small></div><b>›</b>
       </button>
     </section>
 
     <div className="commercial-title-site-plaque" aria-hidden="true">
       <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
+    </div>
+
+    <div className="commercial-title-quick-settings" aria-label={t('ui.title.quick_settings')}>
+      <button type="button" aria-pressed={motionEnabled} onClick={() => setMotionEnabled(value => !value)}>
+        <span>{t('ui.title.settings.motion')}</span><b>{motionEnabled ? 'ON' : 'OFF'}</b>
+      </button>
+      <button type="button" aria-pressed={castQuotesEnabled} onClick={() => setCastQuotesEnabled(value => !value)}>
+        <span>{t('ui.title.settings.quotes')}</span><b>{castQuotesEnabled ? 'ON' : 'OFF'}</b>
+      </button>
     </div>
 
     <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>

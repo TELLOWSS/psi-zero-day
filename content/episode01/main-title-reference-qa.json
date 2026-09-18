@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "qa_id": "main-title-reference-2026-09-18",
+  "source_dimensions": {
+    "width": 1672,
+    "height": 941
+  },
+  "source_kind": "user_provided_concept_image",
+  "verdict": "approved_as_layout_target_with_character_identity_followup",
+  "observed_strengths": [
+    "clear title/menu/cast/feature-card hierarchy",
+    "warm sunset construction background supports cinematic tone",
+    "primary action is immediately visible through yellow emphasis",
+    "four-character foreground communicates people-first game identity",
+    "bottom image cards provide obvious secondary exploration routes",
+    "quick settings are visible without opening a modal"
+  ],
+  "observed_risks": [
+    "anime-style face templates can still converge unless face geometry and age cues are enforced",
+    "character captions and bottom cards compete vertically on shorter displays",
+    "real or pseudo company marks on helmets/signage must not enter production art",
+    "handwritten quote treatment needs live text, not baked text, for localization and readability"
+  ],
+  "runtime_actions": [
+    {
+      "id": "QA-01",
+      "action": "move version/motto to upper-left and keep utility actions upper-right",
+      "status": "implemented"
+    },
+    {
+      "id": "QA-02",
+      "action": "make all five primary menu items icon + title + hint live controls",
+      "status": "implemented"
+    },
+    {
+      "id": "QA-03",
+      "action": "separate character quote overlay from live name/role caption",
+      "status": "implemented"
+    },
+    {
+      "id": "QA-04",
+      "action": "use real runtime artwork inside four bottom feature cards",
+      "status": "implemented"
+    },
+    {
+      "id": "QA-05",
+      "action": "show motion and quote toggles directly on the title screen",
+      "status": "implemented"
+    },
+    {
+      "id": "QA-06",
+      "action": "replace four character binaries with face-geometry-locked production art",
+      "status": "asset_pending"
+    }
+  ],
+  "production_rejects": [
+    "baked-in menu text or buttons",
+    "readable real company/project logos or names in art",
+    "same-face template with PPE swap",
+    "cropped helmet or missing signature prop in title composition",
+    "quote text baked into character image"
+  ]
+}
