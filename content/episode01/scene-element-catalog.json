@@ -1,5 +1,5 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -31,7 +31,16 @@
         "foundation",
         "typical_floor",
         "basement"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG107",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.material_stack.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "access_barrier": {
       "element_id": "scene.control.access_barrier",
@@ -68,7 +77,16 @@
         "scaffold",
         "basement",
         "lifting"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG108",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.access_barrier.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "vehicle_overlap_zone": {
       "element_id": "scene.hazard.vehicle_overlap",
@@ -105,7 +123,16 @@
         "foundation",
         "basement",
         "lifting"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG109",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.vehicle_overlap_zone.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "harness_unclipped": {
       "element_id": "scene.hazard.harness_unclipped",
@@ -140,7 +167,16 @@
       "reuse_for": [
         "scaffold",
         "typical_floor"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG061",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP16",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.harness_unclipped.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "platform_cut_edge": {
       "element_id": "scene.hazard.platform_cut_edge",
@@ -163,7 +199,16 @@
       },
       "reuse_for": [
         "scaffold"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG117",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.platform_cut_edge.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "suspended_load": {
       "element_id": "scene.hazard.suspended_load",
@@ -196,7 +241,16 @@
       "reuse_for": [
         "lifting",
         "typical_floor"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG110",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.suspended_load.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "gangform_lift_wire22": {
       "element_id": "scene.hazard.gangform_lift_wire22",
@@ -229,7 +283,16 @@
       "reuse_for": [
         "lifting",
         "typical_floor"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG069",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.gangform_lift_wire22.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "exclusion_zone": {
       "element_id": "scene.control.exclusion_zone",
@@ -254,7 +317,16 @@
         "lifting",
         "scaffold",
         "typical_floor"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG073",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.exclusion_zone.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "wet_floor": {
       "element_id": "scene.hazard.wet_floor",
@@ -278,7 +350,16 @@
       "reuse_for": [
         "basement",
         "foundation"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG023",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP04",
+        "process_order": 13,
+        "observe_point_text_id": "ui.guide.wet_floor.body",
+        "unlock_policy": "episode_context"
+      }
     },
     "open_edge": {
       "element_id": "scene.hazard.open_edge",
@@ -302,7 +383,3421 @@
       "reuse_for": [
         "typical_floor",
         "scaffold"
-      ]
+      ],
+      "field_guide": {
+        "id": "FG118",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.open_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "site_gate": {
+      "element_id": "scene.control.site_gate",
+      "kind": "control",
+      "label": "현장 출입 게이트",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.site_gate",
+      "art": {
+        "path": "assets/episode01/scene-elements/site-gate.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup"
+      ],
+      "field_guide": {
+        "id": "FG001",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP00",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.site_gate.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "pedestrian_gate": {
+      "element_id": "scene.control.pedestrian_gate",
+      "kind": "control",
+      "label": "근로자 전용 출입구",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.pedestrian_gate",
+      "art": {
+        "path": "assets/episode01/scene-elements/pedestrian-gate.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup"
+      ],
+      "field_guide": {
+        "id": "FG002",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP00",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.pedestrian_gate.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "vehicle_pedestrian_separation": {
+      "element_id": "scene.control.vehicle_pedestrian_separation",
+      "kind": "control",
+      "label": "차량·보행 동선 분리시설",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
+      "art": {
+        "path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG003",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.vehicle_pedestrian_separation.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "material_yard": {
+      "element_id": "scene.prop.material_yard",
+      "kind": "prop",
+      "label": "자재 야적장",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.material_yard",
+      "art": {
+        "path": "assets/episode01/scene-elements/material-yard.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG004",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.material_yard.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_distribution_board": {
+      "element_id": "scene.equipment.temporary_distribution_board",
+      "kind": "equipment",
+      "label": "임시 분전반",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_distribution_board",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG005",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.temporary_distribution_board.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_lighting_pack": {
+      "element_id": "scene.control.temporary_lighting_pack",
+      "kind": "control",
+      "label": "임시조명",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_lighting_pack",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "basement",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG006",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "ppe_issue_station": {
+      "element_id": "scene.control.ppe_issue_station",
+      "kind": "control",
+      "label": "안전용품 지급·교체 지점",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.ppe_issue_station",
+      "art": {
+        "path": "assets/episode01/scene-elements/ppe-issue-station.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG007",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.ppe_issue_station.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "fire_extinguisher_station": {
+      "element_id": "scene.control.fire_extinguisher_station",
+      "kind": "control",
+      "label": "소화기 배치 지점",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.fire_extinguisher_station",
+      "art": {
+        "path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "hot_work",
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG008",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.fire_extinguisher_station.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "first_aid_aed": {
+      "element_id": "scene.equipment.first_aid_aed",
+      "kind": "equipment",
+      "label": "응급구호함·AED",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.first_aid_aed",
+      "art": {
+        "path": "assets/episode01/scene-elements/first-aid-aed.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG009",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.first_aid_aed.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "site_weather_station": {
+      "element_id": "scene.equipment.site_weather_station",
+      "kind": "equipment",
+      "label": "현장 풍속·기상 확인 지점",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.site_weather_station",
+      "art": {
+        "path": "assets/episode01/scene-elements/site-weather-station.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "site_setup",
+        "lifting",
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG010",
+        "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+        "section_order": 0,
+        "episode": "EP01",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.site_weather_station.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "foundation_blinding_edge": {
+      "element_id": "scene.hazard.foundation_blinding_edge",
+      "kind": "hazard",
+      "label": "버림타설 단부·단차",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.foundation_blinding_edge",
+      "art": {
+        "path": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG011",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP02",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.foundation_blinding_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "foundation_rebar_mat": {
+      "element_id": "scene.prop.foundation_rebar_mat",
+      "kind": "prop",
+      "label": "기초 철근 배근 구간",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.foundation_rebar_mat",
+      "art": {
+        "path": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG012",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.foundation_rebar_mat.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "rebar_chair_support": {
+      "element_id": "scene.prop.rebar_chair_support",
+      "kind": "prop",
+      "label": "철근 받침·스페이서",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.rebar_chair_support",
+      "art": {
+        "path": "assets/episode01/scene-elements/rebar-chair-support.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG013",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.rebar_chair_support.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "starter_rebar_protrusion": {
+      "element_id": "scene.hazard.starter_rebar_protrusion",
+      "kind": "hazard",
+      "label": "돌출 철근·스타터바",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.starter_rebar_protrusion",
+      "art": {
+        "path": "assets/episode01/scene-elements/starter-rebar-protrusion.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG014",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.starter_rebar_protrusion.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "rebar_lifting_bundle": {
+      "element_id": "scene.hazard.rebar_lifting_bundle",
+      "kind": "hazard",
+      "label": "철근 다발 양중",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.rebar_lifting_bundle",
+      "art": {
+        "path": "assets/episode01/scene-elements/rebar-lifting-bundle.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG015",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.rebar_lifting_bundle.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "ev_pit_opening": {
+      "element_id": "scene.hazard.ev_pit_opening",
+      "kind": "hazard",
+      "label": "EV PIT 개구부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.ev_pit_opening",
+      "art": {
+        "path": "assets/episode01/scene-elements/ev-pit-opening.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG016",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.ev_pit_opening.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "ev_pit_access_route": {
+      "element_id": "scene.control.ev_pit_access_route",
+      "kind": "control",
+      "label": "EV 구간 작업·이동 동선",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.ev_pit_access_route",
+      "art": {
+        "path": "assets/episode01/scene-elements/ev-pit-access-route.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG017",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.ev_pit_access_route.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "foundation_temporary_walkway": {
+      "element_id": "scene.control.foundation_temporary_walkway",
+      "kind": "control",
+      "label": "기초 임시통로",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.foundation_temporary_walkway",
+      "art": {
+        "path": "assets/episode01/scene-elements/foundation-temporary-walkway.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG018",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP03",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.foundation_temporary_walkway.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "pump_outrigger": {
+      "element_id": "scene.hazard.pump_outrigger",
+      "kind": "hazard",
+      "label": "펌프카 아웃트리거",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.pump_outrigger",
+      "art": {
+        "path": "assets/episode01/scene-elements/pump-outrigger.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG019",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP04",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.pump_outrigger.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "pump_hose_route": {
+      "element_id": "scene.hazard.pump_hose_route",
+      "kind": "hazard",
+      "label": "자바라 이동 동선",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.pump_hose_route",
+      "art": {
+        "path": "assets/episode01/scene-elements/pump-hose-route.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG020",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP04",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.pump_hose_route.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "concrete_vibrator_cable": {
+      "element_id": "scene.equipment.concrete_vibrator_cable",
+      "kind": "equipment",
+      "label": "바이브레이터·전선",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.concrete_vibrator_cable",
+      "art": {
+        "path": "assets/episode01/scene-elements/concrete-vibrator-cable.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG021",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP04",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.concrete_vibrator_cable.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "foundation_sump_pump": {
+      "element_id": "scene.equipment.foundation_sump_pump",
+      "kind": "equipment",
+      "label": "집수정·양수기",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.foundation_sump_pump",
+      "art": {
+        "path": "assets/episode01/scene-elements/foundation-sump-pump.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG022",
+        "section": "SECTION 1 — 기초공사",
+        "section_order": 1,
+        "episode": "EP04",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.foundation_sump_pump.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "euroform_wall_panel": {
+      "element_id": "scene.prop.euroform_wall_panel",
+      "kind": "prop",
+      "label": "유로폼 벽체 거푸집",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
+      "art": {
+        "path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG024",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP05",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.euroform_wall_panel.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "formwork_tie": {
+      "element_id": "scene.prop.formwork_tie",
+      "kind": "prop",
+      "label": "폼타이·연결철물",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.formwork_tie",
+      "art": {
+        "path": "assets/episode01/scene-elements/formwork-tie.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG025",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP05",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.formwork_tie.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "formwork_brace": {
+      "element_id": "scene.control.formwork_brace",
+      "kind": "control",
+      "label": "벽체 거푸집 전도방지 지지",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.formwork_brace",
+      "art": {
+        "path": "assets/episode01/scene-elements/formwork-brace.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG026",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP05",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.formwork_brace.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "formwork_work_platform": {
+      "element_id": "scene.control.formwork_work_platform",
+      "kind": "control",
+      "label": "거푸집 작업발판",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.formwork_work_platform",
+      "art": {
+        "path": "assets/episode01/scene-elements/formwork-work-platform.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG027",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP05",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.formwork_work_platform.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "system_shoring_jackbase": {
+      "element_id": "scene.prop.system_shoring_jackbase",
+      "kind": "prop",
+      "label": "시스템동바리 잭베이스",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.system_shoring_jackbase",
+      "art": {
+        "path": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG028",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP06",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.system_shoring_jackbase.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "system_shoring_standard": {
+      "element_id": "scene.prop.system_shoring_standard",
+      "kind": "prop",
+      "label": "시스템동바리 수직재",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.system_shoring_standard",
+      "art": {
+        "path": "assets/episode01/scene-elements/system-shoring-standard.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG029",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP06",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.system_shoring_standard.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "system_shoring_ledger": {
+      "element_id": "scene.prop.system_shoring_ledger",
+      "kind": "prop",
+      "label": "시스템동바리 수평재",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.system_shoring_ledger",
+      "art": {
+        "path": "assets/episode01/scene-elements/system-shoring-ledger.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG030",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP06",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.system_shoring_ledger.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "system_shoring_missing_brace": {
+      "element_id": "scene.hazard.system_shoring_missing_brace",
+      "kind": "hazard",
+      "label": "누락된 가새·연결재",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.system_shoring_missing_brace",
+      "art": {
+        "path": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG031",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP06",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.system_shoring_missing_brace.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "uhead_beam_alignment": {
+      "element_id": "scene.hazard.uhead_beam_alignment",
+      "kind": "hazard",
+      "label": "U-Head와 멍에 중심",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.uhead_beam_alignment",
+      "art": {
+        "path": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG032",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP06",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.uhead_beam_alignment.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "slab_formwork_edge": {
+      "element_id": "scene.hazard.slab_formwork_edge",
+      "kind": "hazard",
+      "label": "슬래브 판개 단부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.slab_formwork_edge",
+      "art": {
+        "path": "assets/episode01/scene-elements/slab-formwork-edge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG033",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP07",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.slab_formwork_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "slab_opening_cover": {
+      "element_id": "scene.control.slab_opening_cover",
+      "kind": "control",
+      "label": "슬래브 개구부 덮개",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.slab_opening_cover",
+      "art": {
+        "path": "assets/episode01/scene-elements/slab-opening-cover.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG034",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP07",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.slab_opening_cover.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_stair": {
+      "element_id": "scene.control.temporary_stair",
+      "kind": "control",
+      "label": "임시 계단·승강통로",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_stair",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-stair.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG035",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP07",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.temporary_stair.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "shoring_deformation_watch": {
+      "element_id": "scene.control.shoring_deformation_watch",
+      "kind": "control",
+      "label": "타설 중 동바리 감시",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.shoring_deformation_watch",
+      "art": {
+        "path": "assets/episode01/scene-elements/shoring-deformation-watch.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG036",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP08",
+        "process_order": 13,
+        "observe_point_text_id": "ui.guide.shoring_deformation_watch.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "concrete_pour_zone": {
+      "element_id": "scene.hazard.concrete_pour_zone",
+      "kind": "hazard",
+      "label": "슬래브 타설 작업구역",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.concrete_pour_zone",
+      "art": {
+        "path": "assets/episode01/scene-elements/concrete-pour-zone.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG037",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP08",
+        "process_order": 14,
+        "observe_point_text_id": "ui.guide.concrete_pour_zone.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "dismantle_drop_zone": {
+      "element_id": "scene.control.dismantle_drop_zone",
+      "kind": "control",
+      "label": "거푸집 해체 하부통제",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.dismantle_drop_zone",
+      "art": {
+        "path": "assets/episode01/scene-elements/dismantle-drop-zone.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG038",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP10",
+        "process_order": 15,
+        "observe_point_text_id": "ui.guide.dismantle_drop_zone.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "dismantled_formwork_stack": {
+      "element_id": "scene.hazard.dismantled_formwork_stack",
+      "kind": "hazard",
+      "label": "해체 거푸집 적치",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.dismantled_formwork_stack",
+      "art": {
+        "path": "assets/episode01/scene-elements/dismantled-formwork-stack.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG039",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP10",
+        "process_order": 16,
+        "observe_point_text_id": "ui.guide.dismantled_formwork_stack.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "confined_space_meter": {
+      "element_id": "scene.equipment.confined_space_meter",
+      "kind": "equipment",
+      "label": "밀폐공간 가스농도 측정기",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.confined_space_meter",
+      "art": {
+        "path": "assets/episode01/scene-elements/confined-space-meter.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG040",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP11",
+        "process_order": 17,
+        "observe_point_text_id": "ui.guide.confined_space_meter.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "ventilation_fan_duct": {
+      "element_id": "scene.control.ventilation_fan_duct",
+      "kind": "control",
+      "label": "환기팬·덕트",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.ventilation_fan_duct",
+      "art": {
+        "path": "assets/episode01/scene-elements/ventilation-fan-duct.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG041",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP11",
+        "process_order": 18,
+        "observe_point_text_id": "ui.guide.ventilation_fan_duct.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "confined_space_attendant": {
+      "element_id": "scene.control.confined_space_attendant",
+      "kind": "control",
+      "label": "밀폐공간 감시인 위치",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.confined_space_attendant",
+      "art": {
+        "path": "assets/episode01/scene-elements/confined-space-attendant.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement"
+      ],
+      "field_guide": {
+        "id": "FG042",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP11",
+        "process_order": 19,
+        "observe_point_text_id": "ui.guide.confined_space_attendant.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_electric_wet": {
+      "element_id": "scene.hazard.temporary_electric_wet",
+      "kind": "hazard",
+      "label": "습윤구간 임시전기",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_electric_wet",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-electric-wet.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "basement",
+        "foundation"
+      ],
+      "field_guide": {
+        "id": "FG043",
+        "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+        "section_order": 2,
+        "episode": "EP12",
+        "process_order": 20,
+        "observe_point_text_id": "ui.guide.temporary_electric_wet.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "transfer_floor_high_ceiling": {
+      "element_id": "scene.hazard.transfer_floor_high_ceiling",
+      "kind": "hazard",
+      "label": "전환층 고층고 구간",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.transfer_floor_high_ceiling",
+      "art": {
+        "path": "assets/episode01/scene-elements/transfer-floor-high-ceiling.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG044",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.transfer_floor_high_ceiling.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "mobile_work_platform": {
+      "element_id": "scene.equipment.mobile_work_platform",
+      "kind": "equipment",
+      "label": "고소작업대",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.mobile_work_platform",
+      "art": {
+        "path": "assets/episode01/scene-elements/mobile-work-platform.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG045",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.mobile_work_platform.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "system_scaffold_transition": {
+      "element_id": "scene.control.system_scaffold_transition",
+      "kind": "control",
+      "label": "전환층 시스템비계",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.system_scaffold_transition",
+      "art": {
+        "path": "assets/episode01/scene-elements/system-scaffold-transition.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor",
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG046",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.system_scaffold_transition.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "transfer_floor_opening": {
+      "element_id": "scene.hazard.transfer_floor_opening",
+      "kind": "hazard",
+      "label": "전환층 신규 개구부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.transfer_floor_opening",
+      "art": {
+        "path": "assets/episode01/scene-elements/transfer-floor-opening.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG047",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.transfer_floor_opening.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "mixed_formwork_interface": {
+      "element_id": "scene.hazard.mixed_formwork_interface",
+      "kind": "hazard",
+      "label": "재래식·시스템 거푸집 접점",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.mixed_formwork_interface",
+      "art": {
+        "path": "assets/episode01/scene-elements/mixed-formwork-interface.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG048",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.mixed_formwork_interface.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_support_transfer": {
+      "element_id": "scene.control.temporary_support_transfer",
+      "kind": "control",
+      "label": "전환층 임시서포트",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_support_transfer",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-support-transfer.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG049",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.temporary_support_transfer.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "material_lift_opening_transfer": {
+      "element_id": "scene.hazard.material_lift_opening_transfer",
+      "kind": "hazard",
+      "label": "전환층 자재인양구",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.material_lift_opening_transfer",
+      "art": {
+        "path": "assets/episode01/scene-elements/material-lift-opening-transfer.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG050",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.material_lift_opening_transfer.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_route_reroute": {
+      "element_id": "scene.control.temporary_route_reroute",
+      "kind": "control",
+      "label": "전환층 우회통로",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_route_reroute",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-route-reroute.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "field_guide": {
+        "id": "FG051",
+        "section": "SECTION 3 — 지상 전환층",
+        "section_order": 3,
+        "episode": "EP13",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.temporary_route_reroute.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_panel": {
+      "element_id": "scene.prop.alform_panel",
+      "kind": "prop",
+      "label": "AL Form 벽체·슬래브 패널",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_panel",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-panel.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG052",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.alform_panel.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_pin_wedge": {
+      "element_id": "scene.prop.alform_pin_wedge",
+      "kind": "prop",
+      "label": "알폼 핀·웨지",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_pin_wedge",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-pin-wedge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG053",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.alform_pin_wedge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_pin_flying": {
+      "element_id": "scene.hazard.alform_pin_flying",
+      "kind": "hazard",
+      "label": "알폼 핀 타격·비래",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_pin_flying",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-pin-flying.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG054",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP15",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.alform_pin_flying.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_support": {
+      "element_id": "scene.control.alform_support",
+      "kind": "control",
+      "label": "AL Form 하부 서포트",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_support",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-support.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG055",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.alform_support.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_deck_support": {
+      "element_id": "scene.prop.alform_deck_support",
+      "kind": "prop",
+      "label": "슬래브 데크 서포트",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_deck_support",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-deck-support.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG056",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.alform_deck_support.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "lifting_box": {
+      "element_id": "scene.prop.lifting_box",
+      "kind": "prop",
+      "label": "자재 인양 박스",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.lifting_box",
+      "art": {
+        "path": "assets/episode01/scene-elements/lifting-box.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG057",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.lifting_box.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "material_lift_opening": {
+      "element_id": "scene.hazard.material_lift_opening",
+      "kind": "hazard",
+      "label": "자재인양구 개방 상태",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.material_lift_opening",
+      "art": {
+        "path": "assets/episode01/scene-elements/material-lift-opening.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG058",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.material_lift_opening.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "pump_pipe_opening": {
+      "element_id": "scene.hazard.pump_pipe_opening",
+      "kind": "hazard",
+      "label": "압송관 개구부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.pump_pipe_opening",
+      "art": {
+        "path": "assets/episode01/scene-elements/pump-pipe-opening.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG059",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP14",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.pump_pipe_opening.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "perimeter_open_edge": {
+      "element_id": "scene.hazard.perimeter_open_edge",
+      "kind": "hazard",
+      "label": "기준층 외곽 단부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.perimeter_open_edge",
+      "art": {
+        "path": "assets/episode01/scene-elements/perimeter-open-edge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG060",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP16",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.perimeter_open_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "embedded_box_trip": {
+      "element_id": "scene.hazard.embedded_box_trip",
+      "kind": "hazard",
+      "label": "매립박스·돌출부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.embedded_box_trip",
+      "art": {
+        "path": "assets/episode01/scene-elements/embedded-box-trip.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG062",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP16",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.embedded_box_trip.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "alform_panel_stack": {
+      "element_id": "scene.hazard.alform_panel_stack",
+      "kind": "hazard",
+      "label": "알폼 패널 적치",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.alform_panel_stack",
+      "art": {
+        "path": "assets/episode01/scene-elements/alform-panel-stack.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG063",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP16",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.alform_panel_stack.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "housekeeping_typical_floor": {
+      "element_id": "scene.control.housekeeping_typical_floor",
+      "kind": "control",
+      "label": "기준층 정리정돈 상태",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.housekeeping_typical_floor",
+      "art": {
+        "path": "assets/episode01/scene-elements/housekeeping-typical-floor.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "field_guide": {
+        "id": "FG064",
+        "section": "SECTION 4 — 기준층 사이클·AL Form",
+        "section_order": 4,
+        "episode": "EP16",
+        "process_order": 13,
+        "observe_point_text_id": "ui.guide.housekeeping_typical_floor.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_panel": {
+      "element_id": "scene.prop.gangform_panel",
+      "kind": "prop",
+      "label": "갱폼 패널 본체",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_panel",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-panel.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG065",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP17",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.gangform_panel.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_platform": {
+      "element_id": "scene.control.gangform_platform",
+      "kind": "control",
+      "label": "갱폼 작업발판",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_platform",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-platform.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG066",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP17",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.gangform_platform.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_anchor_bolt": {
+      "element_id": "scene.prop.gangform_anchor_bolt",
+      "kind": "prop",
+      "label": "갱폼 고정볼트",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_anchor_bolt",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-anchor-bolt.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG067",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP17",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.gangform_anchor_bolt.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_shackle": {
+      "element_id": "scene.equipment.gangform_shackle",
+      "kind": "equipment",
+      "label": "갱폼 인양 샤클",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_shackle",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-shackle.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG068",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.gangform_shackle.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_turnbuckle_wire": {
+      "element_id": "scene.control.gangform_turnbuckle_wire",
+      "kind": "control",
+      "label": "전도방지 턴버클·와이어",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_turnbuckle_wire",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-turnbuckle-wire.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG070",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP17",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.gangform_turnbuckle_wire.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_tagline": {
+      "element_id": "scene.equipment.gangform_tagline",
+      "kind": "equipment",
+      "label": "갱폼 유도로프",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_tagline",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-tagline.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG071",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.gangform_tagline.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_platform_debris": {
+      "element_id": "scene.hazard.gangform_platform_debris",
+      "kind": "hazard",
+      "label": "갱폼 발판 위 적재물",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_platform_debris",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-platform-debris.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG072",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.gangform_platform_debris.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "wind_meter": {
+      "element_id": "scene.equipment.wind_meter",
+      "kind": "equipment",
+      "label": "풍속계",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.wind_meter",
+      "art": {
+        "path": "assets/episode01/scene-elements/wind-meter.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "roof",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG074",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP19",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.wind_meter.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_lift_interference": {
+      "element_id": "scene.hazard.gangform_lift_interference",
+      "kind": "hazard",
+      "label": "갱폼 인상 구조물 간섭",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_lift_interference",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-lift-interference.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG075",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP19",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.gangform_lift_interference.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_landing_fix": {
+      "element_id": "scene.control.gangform_landing_fix",
+      "kind": "control",
+      "label": "갱폼 인상 후 고정상태",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_landing_fix",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-landing-fix.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG076",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.gangform_landing_fix.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "gangform_signal_radio": {
+      "element_id": "scene.equipment.gangform_signal_radio",
+      "kind": "equipment",
+      "label": "갱폼 인상 무전·신호",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.gangform_signal_radio",
+      "art": {
+        "path": "assets/episode01/scene-elements/gangform-signal-radio.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG077",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP18",
+        "process_order": 13,
+        "observe_point_text_id": "ui.guide.gangform_signal_radio.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "flying_metal_eye": {
+      "element_id": "scene.hazard.flying_metal_eye",
+      "kind": "hazard",
+      "label": "금속 파편 비래",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.flying_metal_eye",
+      "art": {
+        "path": "assets/episode01/scene-elements/flying-metal-eye.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "gangform",
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG078",
+        "section": "SECTION 5 — 갱폼 설치·인상",
+        "section_order": 5,
+        "episode": "EP20",
+        "process_order": 14,
+        "observe_point_text_id": "ui.guide.flying_metal_eye.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "floor_change_edge": {
+      "element_id": "scene.hazard.floor_change_edge",
+      "kind": "hazard",
+      "label": "층변화 신규 단부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.floor_change_edge",
+      "art": {
+        "path": "assets/episode01/scene-elements/floor-change-edge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "floor_change",
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG079",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP27",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.floor_change_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "partial_gangform_dismantle": {
+      "element_id": "scene.hazard.partial_gangform_dismantle",
+      "kind": "hazard",
+      "label": "갱폼 부분탈형",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.partial_gangform_dismantle",
+      "art": {
+        "path": "assets/episode01/scene-elements/partial-gangform-dismantle.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "floor_change"
+      ],
+      "field_guide": {
+        "id": "FG080",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP27",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.partial_gangform_dismantle.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "changed_lifting_point": {
+      "element_id": "scene.hazard.changed_lifting_point",
+      "kind": "hazard",
+      "label": "변경된 인양고리 위치",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.changed_lifting_point",
+      "art": {
+        "path": "assets/episode01/scene-elements/changed-lifting-point.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "floor_change",
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG081",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP27",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.changed_lifting_point.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "irregular_platform_gap": {
+      "element_id": "scene.hazard.irregular_platform_gap",
+      "kind": "hazard",
+      "label": "비정형 작업발판 틈",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.irregular_platform_gap",
+      "art": {
+        "path": "assets/episode01/scene-elements/irregular-platform-gap.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG082",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP27",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.irregular_platform_gap.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_lifeline": {
+      "element_id": "scene.control.temporary_lifeline",
+      "kind": "control",
+      "label": "임시 생명줄",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_lifeline",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-lifeline.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG083",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP27",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.temporary_lifeline.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "roof_open_edge": {
+      "element_id": "scene.hazard.roof_open_edge",
+      "kind": "hazard",
+      "label": "Roof 외곽 단부",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.roof_open_edge",
+      "art": {
+        "path": "assets/episode01/scene-elements/roof-open-edge.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG084",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP28",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.roof_open_edge.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "penthouse_access": {
+      "element_id": "scene.control.penthouse_access",
+      "kind": "control",
+      "label": "옥탑 승강통로",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.penthouse_access",
+      "art": {
+        "path": "assets/episode01/scene-elements/penthouse-access.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG085",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP28",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.penthouse_access.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "roof_wind_exposure": {
+      "element_id": "scene.hazard.roof_wind_exposure",
+      "kind": "hazard",
+      "label": "옥상 강풍 노출구간",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.roof_wind_exposure",
+      "art": {
+        "path": "assets/episode01/scene-elements/roof-wind-exposure.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG086",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP28",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.roof_wind_exposure.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "final_gangform_dismantle": {
+      "element_id": "scene.hazard.final_gangform_dismantle",
+      "kind": "hazard",
+      "label": "최종 갱폼 해체구역",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.final_gangform_dismantle",
+      "art": {
+        "path": "assets/episode01/scene-elements/final-gangform-dismantle.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof",
+        "lifting"
+      ],
+      "field_guide": {
+        "id": "FG087",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP28",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.final_gangform_dismantle.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "roof_housekeeping": {
+      "element_id": "scene.control.roof_housekeeping",
+      "kind": "control",
+      "label": "Roof·옥탑 정리정돈",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.roof_housekeeping",
+      "art": {
+        "path": "assets/episode01/scene-elements/roof-housekeeping.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "roof"
+      ],
+      "field_guide": {
+        "id": "FG088",
+        "section": "SECTION 6 — 층변화·Roof·옥탑",
+        "section_order": 6,
+        "episode": "EP28",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.roof_housekeeping.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "surface_finishing_tools": {
+      "element_id": "scene.equipment.surface_finishing_tools",
+      "kind": "equipment",
+      "label": "견출 작업 공구",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.surface_finishing_tools",
+      "art": {
+        "path": "assets/episode01/scene-elements/surface-finishing-tools.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG089",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 1,
+        "observe_point_text_id": "ui.guide.surface_finishing_tools.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "chipping_breaker": {
+      "element_id": "scene.equipment.chipping_breaker",
+      "kind": "equipment",
+      "label": "할석 브레이커",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.chipping_breaker",
+      "art": {
+        "path": "assets/episode01/scene-elements/chipping-breaker.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG090",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 2,
+        "observe_point_text_id": "ui.guide.chipping_breaker.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "grinder_guard_switch": {
+      "element_id": "scene.equipment.grinder_guard_switch",
+      "kind": "equipment",
+      "label": "그라인더 덮개·스위치",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.grinder_guard_switch",
+      "art": {
+        "path": "assets/episode01/scene-elements/grinder-guard-switch.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "hot_work"
+      ],
+      "field_guide": {
+        "id": "FG091",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 3,
+        "observe_point_text_id": "ui.guide.grinder_guard_switch.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "mortar_mixer": {
+      "element_id": "scene.equipment.mortar_mixer",
+      "kind": "equipment",
+      "label": "미장용 믹서·교반기",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.mortar_mixer",
+      "art": {
+        "path": "assets/episode01/scene-elements/mortar-mixer.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG092",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 4,
+        "observe_point_text_id": "ui.guide.mortar_mixer.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "workhorse_platform": {
+      "element_id": "scene.prop.workhorse_platform",
+      "kind": "prop",
+      "label": "우마·간이 작업발판",
+      "visual_token": "▤",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.workhorse_platform",
+      "art": {
+        "path": "assets/episode01/scene-elements/workhorse-platform.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG093",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.workhorse_platform.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "mobile_scaffold": {
+      "element_id": "scene.control.mobile_scaffold",
+      "kind": "control",
+      "label": "이동식비계",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.mobile_scaffold",
+      "art": {
+        "path": "assets/episode01/scene-elements/mobile-scaffold.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG094",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.mobile_scaffold.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "dust_control": {
+      "element_id": "scene.control.dust_control",
+      "kind": "control",
+      "label": "분진 저감장치",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.dust_control",
+      "art": {
+        "path": "assets/episode01/scene-elements/dust-control.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing"
+      ],
+      "field_guide": {
+        "id": "FG095",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.dust_control.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "eye_face_ppe": {
+      "element_id": "scene.equipment.eye_face_ppe",
+      "kind": "equipment",
+      "label": "보안경·안면보호구",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.eye_face_ppe",
+      "art": {
+        "path": "assets/episode01/scene-elements/eye-face-ppe.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "gangform"
+      ],
+      "field_guide": {
+        "id": "FG096",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP29",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.eye_face_ppe.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "dismantled_guardrail": {
+      "element_id": "scene.hazard.dismantled_guardrail",
+      "kind": "hazard",
+      "label": "임의 해체된 안전난간",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.dismantled_guardrail",
+      "art": {
+        "path": "assets/episode01/scene-elements/dismantled-guardrail.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG097",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.dismantled_guardrail.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "dismantle_debris_route": {
+      "element_id": "scene.hazard.dismantle_debris_route",
+      "kind": "hazard",
+      "label": "해체자재와 이동통로",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.dismantle_debris_route",
+      "art": {
+        "path": "assets/episode01/scene-elements/dismantle-debris-route.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG098",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.dismantle_debris_route.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "waste_sorting_zone": {
+      "element_id": "scene.control.waste_sorting_zone",
+      "kind": "control",
+      "label": "폐자재 분리·반출구역",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.waste_sorting_zone",
+      "art": {
+        "path": "assets/episode01/scene-elements/waste-sorting-zone.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG099",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 11,
+        "observe_point_text_id": "ui.guide.waste_sorting_zone.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "forklift_blind_spot": {
+      "element_id": "scene.hazard.forklift_blind_spot",
+      "kind": "hazard",
+      "label": "지게차 사각지대",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.forklift_blind_spot",
+      "art": {
+        "path": "assets/episode01/scene-elements/forklift-blind-spot.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "logistics",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG100",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 12,
+        "observe_point_text_id": "ui.guide.forklift_blind_spot.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "traffic_control_pack": {
+      "element_id": "scene.equipment.traffic_control_pack",
+      "kind": "equipment",
+      "label": "차량통제 장비",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.traffic_control_pack",
+      "art": {
+        "path": "assets/episode01/scene-elements/traffic-control-pack.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "logistics",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG101",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 13,
+        "observe_point_text_id": "ui.guide.traffic_control_pack.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "chemical_msds_station": {
+      "element_id": "scene.control.chemical_msds_station",
+      "kind": "control",
+      "label": "화학물질·MSDS 관리지점",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.chemical_msds_station",
+      "art": {
+        "path": "assets/episode01/scene-elements/chemical-msds-station.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG102",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 14,
+        "observe_point_text_id": "ui.guide.chemical_msds_station.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "extension_ladder": {
+      "element_id": "scene.equipment.extension_ladder",
+      "kind": "equipment",
+      "label": "이동식 사다리",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.extension_ladder",
+      "art": {
+        "path": "assets/episode01/scene-elements/extension-ladder.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG103",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP30",
+        "process_order": 15,
+        "observe_point_text_id": "ui.guide.extension_ladder.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_facility_removal": {
+      "element_id": "scene.hazard.temporary_facility_removal",
+      "kind": "hazard",
+      "label": "가설 안전시설 철거",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_facility_removal",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-facility-removal.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG104",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP31",
+        "process_order": 16,
+        "observe_point_text_id": "ui.guide.temporary_facility_removal.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "temporary_power_removal": {
+      "element_id": "scene.hazard.temporary_power_removal",
+      "kind": "hazard",
+      "label": "임시전기 철거",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.temporary_power_removal",
+      "art": {
+        "path": "assets/episode01/scene-elements/temporary-power-removal.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG105",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP31",
+        "process_order": 17,
+        "observe_point_text_id": "ui.guide.temporary_power_removal.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "final_route_clearance": {
+      "element_id": "scene.control.final_route_clearance",
+      "kind": "control",
+      "label": "준공 전 최종 이동통로",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.final_route_clearance",
+      "art": {
+        "path": "assets/episode01/scene-elements/final-route-clearance.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "closeout"
+      ],
+      "field_guide": {
+        "id": "FG106",
+        "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+        "section_order": 7,
+        "episode": "EP31",
+        "process_order": 18,
+        "observe_point_text_id": "ui.guide.final_route_clearance.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "radio_pack": {
+      "element_id": "scene.equipment.radio_pack",
+      "kind": "equipment",
+      "label": "현장 무전기",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.radio_pack",
+      "art": {
+        "path": "assets/episode01/scene-elements/radio-pack.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG111",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 5,
+        "observe_point_text_id": "ui.guide.radio_pack.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "inspection_kit": {
+      "element_id": "scene.equipment.inspection_kit",
+      "kind": "equipment",
+      "label": "현장 점검 키트",
+      "visual_token": "◆",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.inspection_kit",
+      "art": {
+        "path": "assets/episode01/scene-elements/inspection-kit.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG112",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 6,
+        "observe_point_text_id": "ui.guide.inspection_kit.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "stop_work_marker": {
+      "element_id": "scene.control.stop_work_marker",
+      "kind": "control",
+      "label": "작업중지·통제 표시",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.stop_work_marker",
+      "art": {
+        "path": "assets/episode01/scene-elements/stop-work-marker.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG113",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 7,
+        "observe_point_text_id": "ui.guide.stop_work_marker.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "tbm_board": {
+      "element_id": "scene.control.tbm_board",
+      "kind": "control",
+      "label": "TBM 현황판",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.tbm_board",
+      "art": {
+        "path": "assets/episode01/scene-elements/tbm-board.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG114",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 8,
+        "observe_point_text_id": "ui.guide.tbm_board.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "permit_board": {
+      "element_id": "scene.control.permit_board",
+      "kind": "control",
+      "label": "작업허가·계획 확인판",
+      "visual_token": "▥",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.permit_board",
+      "art": {
+        "path": "assets/episode01/scene-elements/permit-board.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG115",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 9,
+        "observe_point_text_id": "ui.guide.permit_board.body",
+        "unlock_policy": "episode_context"
+      }
+    },
+    "near_miss_marker": {
+      "element_id": "scene.hazard.near_miss_marker",
+      "kind": "hazard",
+      "label": "아차사고 흔적",
+      "visual_token": "!",
+      "production_status": "planned",
+      "planned_asset_id": "ep01.scene_element.near_miss_marker",
+      "art": {
+        "path": "assets/episode01/scene-elements/near-miss-marker.webp",
+        "minimum_width": 768,
+        "minimum_height": 512,
+        "pivot": {
+          "x": 0.5,
+          "y": 0.88
+        },
+        "map_max_px": 148,
+        "requires_alpha": true
+      },
+      "reuse_for": [
+        "all"
+      ],
+      "field_guide": {
+        "id": "FG116",
+        "section": "SECTION 8 — 공통 안전·운영 아이템",
+        "section_order": 8,
+        "episode": "COMMON",
+        "process_order": 10,
+        "observe_point_text_id": "ui.guide.near_miss_marker.body",
+        "unlock_policy": "episode_context"
+      }
     }
   },
   "event_elements": {

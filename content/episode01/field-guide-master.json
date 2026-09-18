@@ -1,0 +1,1726 @@
+{
+  "title": "PSI : ZERO DAY — Field Guide Canonical Master",
+  "version": "2.1-live",
+  "policy": "VERBATIM_SOURCE_OF_TRUTH",
+  "total_items": 118,
+  "generated_from": "ChatGPT approved field-guide master, synchronized 2026-09-18",
+  "items": [
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP00",
+      "process_order": 1,
+      "key": "site_gate",
+      "kind": "control",
+      "title": "현장 출입 게이트",
+      "observe_point": "차량과 근로자 출입이 같은 지점에서 뒤엉키지 않는지, 출입통제와 안내가 실제 동선에 맞는지 확인합니다.",
+      "reuse_for": [
+        "site_setup"
+      ],
+      "planned_asset_id": "ep01.scene_element.site_gate",
+      "id": "FG001"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP00",
+      "process_order": 2,
+      "key": "pedestrian_gate",
+      "kind": "control",
+      "title": "근로자 전용 출입구",
+      "observe_point": "보행자 전용 출입구가 차량 진입부와 충분히 분리되어 있는지 확인합니다.",
+      "reuse_for": [
+        "site_setup"
+      ],
+      "planned_asset_id": "ep01.scene_element.pedestrian_gate",
+      "id": "FG002"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 3,
+      "key": "vehicle_pedestrian_separation",
+      "kind": "control",
+      "title": "차량·보행 동선 분리시설",
+      "observe_point": "통로가 선으로만 구분된 것인지, 물리적 분리와 우회동선이 실제로 확보되는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
+      "id": "FG003"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 4,
+      "key": "material_yard",
+      "kind": "prop",
+      "title": "자재 야적장",
+      "observe_point": "자재가 규격별로 정리되어 있는지, 붕괴·전도·통로침범 위험은 없는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.material_yard",
+      "id": "FG004"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 5,
+      "key": "temporary_distribution_board",
+      "kind": "equipment",
+      "title": "임시 분전반",
+      "observe_point": "분전반 위치, 방수·잠금, 회로 식별과 누전차단기 상태를 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "foundation",
+        "basement",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_distribution_board",
+      "id": "FG005"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 6,
+      "key": "temporary_lighting_pack",
+      "kind": "control",
+      "title": "임시조명",
+      "observe_point": "통로·계단·작업면에 사각지대가 없는지, 전선이 새로운 걸림·감전 위험을 만들지 않는지 봅니다.",
+      "reuse_for": [
+        "site_setup",
+        "basement",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_lighting_pack",
+      "id": "FG006"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 7,
+      "key": "ppe_issue_station",
+      "kind": "control",
+      "title": "안전용품 지급·교체 지점",
+      "observe_point": "보호구 비치보다 실제 지급·착용·손상교체가 관리되는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.ppe_issue_station",
+      "id": "FG007"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 8,
+      "key": "fire_extinguisher_station",
+      "kind": "control",
+      "title": "소화기 배치 지점",
+      "observe_point": "소화기가 보이는 곳에 있고 접근이 막히지 않는지, 작업구역 변화에 따라 이동되는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "hot_work",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.fire_extinguisher_station",
+      "id": "FG008"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 9,
+      "key": "first_aid_aed",
+      "kind": "equipment",
+      "title": "응급구호함·AED",
+      "observe_point": "작업자가 위치를 알고 있는지, 접근성·점검상태와 비상연락체계가 연결되는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.first_aid_aed",
+      "id": "FG009"
+    },
+    {
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "episode": "EP01",
+      "process_order": 10,
+      "key": "site_weather_station",
+      "kind": "equipment",
+      "title": "현장 풍속·기상 확인 지점",
+      "observe_point": "풍속·강우·기상 변화가 실제 작업중지 또는 계획조정과 연결되는지 확인합니다.",
+      "reuse_for": [
+        "site_setup",
+        "lifting",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.site_weather_station",
+      "id": "FG010"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP02",
+      "process_order": 1,
+      "key": "foundation_blinding_edge",
+      "kind": "hazard",
+      "title": "버림타설 단부·단차",
+      "observe_point": "버림 콘크리트 끝선, 굴착부 단차, 젖은 바닥이 이동동선과 겹치는지 확인합니다.",
+      "reuse_for": [
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.foundation_blinding_edge",
+      "id": "FG011"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 2,
+      "key": "foundation_rebar_mat",
+      "kind": "prop",
+      "title": "기초 철근 배근 구간",
+      "observe_point": "철근 간격뿐 아니라 작업자가 어디에 발을 디디고 이동하는지 함께 봅니다.",
+      "reuse_for": [
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.foundation_rebar_mat",
+      "id": "FG012"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 3,
+      "key": "rebar_chair_support",
+      "kind": "prop",
+      "title": "철근 받침·스페이서",
+      "observe_point": "배근 높이를 유지하는 받침이 불안정하거나 이동통로에서 걸림 위험이 되지 않는지 확인합니다.",
+      "reuse_for": [
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.rebar_chair_support",
+      "id": "FG013"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 4,
+      "key": "starter_rebar_protrusion",
+      "kind": "hazard",
+      "title": "돌출 철근·스타터바",
+      "observe_point": "통로 주변 돌출 철근이 넘어짐 시 찔림 위험을 키우지 않는지 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.starter_rebar_protrusion",
+      "id": "FG014"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 5,
+      "key": "rebar_lifting_bundle",
+      "kind": "hazard",
+      "title": "철근 다발 양중",
+      "observe_point": "줄걸이 위치·결속·수평 유지, 하부 통제와 신호수 위치를 함께 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.rebar_lifting_bundle",
+      "id": "FG015"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 6,
+      "key": "ev_pit_opening",
+      "kind": "hazard",
+      "title": "EV PIT 개구부",
+      "observe_point": "깊은 PIT 가장자리의 난간·덮개·추락방지조치와 임시 개방 상태를 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.ev_pit_opening",
+      "id": "FG016"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 7,
+      "key": "ev_pit_access_route",
+      "kind": "control",
+      "title": "EV 구간 작업·이동 동선",
+      "observe_point": "철근과 자재 때문에 EV 주변 통로가 끊기거나 협소해지지 않는지 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.ev_pit_access_route",
+      "id": "FG017"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP03",
+      "process_order": 8,
+      "key": "foundation_temporary_walkway",
+      "kind": "control",
+      "title": "기초 임시통로",
+      "observe_point": "굴착부와 철근 배근 사이에서 작업자가 안정적으로 이동할 수 있는 통로가 연속되는지 봅니다.",
+      "reuse_for": [
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.foundation_temporary_walkway",
+      "id": "FG018"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP04",
+      "process_order": 9,
+      "key": "pump_outrigger",
+      "kind": "hazard",
+      "title": "펌프카 아웃트리거",
+      "observe_point": "받침면·지반상태·작업반경과 보행자 동선 간섭을 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.pump_outrigger",
+      "id": "FG019"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP04",
+      "process_order": 10,
+      "key": "pump_hose_route",
+      "kind": "hazard",
+      "title": "자바라 이동 동선",
+      "observe_point": "철근 사이 발빠짐, 후진 이동, 호스 반동과 중량을 고려한 이동경로인지 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.pump_hose_route",
+      "id": "FG020"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP04",
+      "process_order": 11,
+      "key": "concrete_vibrator_cable",
+      "kind": "equipment",
+      "title": "바이브레이터·전선",
+      "observe_point": "전동공구 전선이 물기·철근·이동동선과 접촉하지 않는지 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.concrete_vibrator_cable",
+      "id": "FG021"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP04",
+      "process_order": 12,
+      "key": "foundation_sump_pump",
+      "kind": "equipment",
+      "title": "집수정·양수기",
+      "observe_point": "물고임 제거가 충분한지, 호스와 전선이 통로를 막거나 감전위험을 만들지 않는지 봅니다.",
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.foundation_sump_pump",
+      "id": "FG022"
+    },
+    {
+      "section": "SECTION 1 — 기초공사",
+      "episode": "EP04",
+      "process_order": 13,
+      "key": "wet_floor",
+      "kind": "hazard",
+      "title": "습윤·미끄럼 구간",
+      "observe_point": "물기와 시멘트 페이스트가 이동통로에서 미끄럼 위험을 만드는지 확인합니다.",
+      "reuse_for": [
+        "foundation",
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.wet_floor",
+      "id": "FG023"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP05",
+      "process_order": 1,
+      "key": "euroform_wall_panel",
+      "kind": "prop",
+      "title": "유로폼 벽체 거푸집",
+      "observe_point": "패널 연결, 버팀, 작업발판과 조립상태를 함께 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
+      "id": "FG024"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP05",
+      "process_order": 2,
+      "key": "formwork_tie",
+      "kind": "prop",
+      "title": "폼타이·연결철물",
+      "observe_point": "연결철물 누락·변형·임의대체가 없는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.formwork_tie",
+      "id": "FG025"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP05",
+      "process_order": 3,
+      "key": "formwork_brace",
+      "kind": "control",
+      "title": "벽체 거푸집 전도방지 지지",
+      "observe_point": "버팀재 방향과 바닥 고정이 실제 전도방지 기능을 하는지 봅니다.",
+      "reuse_for": [
+        "basement",
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.formwork_brace",
+      "id": "FG026"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP05",
+      "process_order": 4,
+      "key": "formwork_work_platform",
+      "kind": "control",
+      "title": "거푸집 작업발판",
+      "observe_point": "발판 폭, 지지, 단부와 승강 경로가 안전한지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.formwork_work_platform",
+      "id": "FG027"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP06",
+      "process_order": 5,
+      "key": "system_shoring_jackbase",
+      "kind": "prop",
+      "title": "시스템동바리 잭베이스",
+      "observe_point": "잭베이스의 받침면·수직상태·침하 흔적을 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.system_shoring_jackbase",
+      "id": "FG028"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP06",
+      "process_order": 6,
+      "key": "system_shoring_standard",
+      "kind": "prop",
+      "title": "시스템동바리 수직재",
+      "observe_point": "수직재 배열이 조립도와 맞는지, 손상재 사용은 없는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.system_shoring_standard",
+      "id": "FG029"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP06",
+      "process_order": 7,
+      "key": "system_shoring_ledger",
+      "kind": "prop",
+      "title": "시스템동바리 수평재",
+      "observe_point": "수평재가 빠짐없이 체결되고 임의 해체된 구간이 없는지 봅니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.system_shoring_ledger",
+      "id": "FG030"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP06",
+      "process_order": 8,
+      "key": "system_shoring_missing_brace",
+      "kind": "hazard",
+      "title": "누락된 가새·연결재",
+      "observe_point": "가새 하나의 누락이 전체 지지구조에 영향을 줄 수 있음을 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.system_shoring_missing_brace",
+      "id": "FG031"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP06",
+      "process_order": 9,
+      "key": "uhead_beam_alignment",
+      "kind": "hazard",
+      "title": "U-Head와 멍에 중심",
+      "observe_point": "U-Head와 멍에 중심이 벗어나 편심하중이 생기지 않는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.uhead_beam_alignment",
+      "id": "FG032"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP07",
+      "process_order": 10,
+      "key": "slab_formwork_edge",
+      "kind": "hazard",
+      "title": "슬래브 판개 단부",
+      "observe_point": "판개 중 생기는 임시 단부와 틈을 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.slab_formwork_edge",
+      "id": "FG033"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP07",
+      "process_order": 11,
+      "key": "slab_opening_cover",
+      "kind": "control",
+      "title": "슬래브 개구부 덮개",
+      "observe_point": "덮개 고정·식별과 임시 개방 후 복구상태를 확인합니다.",
+      "reuse_for": [
+        "basement",
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.slab_opening_cover",
+      "id": "FG034"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP07",
+      "process_order": 12,
+      "key": "temporary_stair",
+      "kind": "control",
+      "title": "임시 계단·승강통로",
+      "observe_point": "사다리 대체가 가능한 정식 승강통로가 연결되는지 봅니다.",
+      "reuse_for": [
+        "basement",
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_stair",
+      "id": "FG035"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP08",
+      "process_order": 13,
+      "key": "shoring_deformation_watch",
+      "kind": "control",
+      "title": "타설 중 동바리 감시",
+      "observe_point": "변형·침하·이상소음을 발견할 감시와 보고체계가 있는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.shoring_deformation_watch",
+      "id": "FG036"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP08",
+      "process_order": 14,
+      "key": "concrete_pour_zone",
+      "kind": "hazard",
+      "title": "슬래브 타설 작업구역",
+      "observe_point": "타설 순서, 인원 이동, 호스와 철근 사이 위험이 겹치지 않는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.concrete_pour_zone",
+      "id": "FG037"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP10",
+      "process_order": 15,
+      "key": "dismantle_drop_zone",
+      "kind": "control",
+      "title": "거푸집 해체 하부통제",
+      "observe_point": "해체재 낙하 구역과 하부 출입통제가 일치하는지 봅니다.",
+      "reuse_for": [
+        "basement",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.dismantle_drop_zone",
+      "id": "FG038"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP10",
+      "process_order": 16,
+      "key": "dismantled_formwork_stack",
+      "kind": "hazard",
+      "title": "해체 거푸집 적치",
+      "observe_point": "기대놓기·통로방치·전도 우려가 없는지 확인합니다.",
+      "reuse_for": [
+        "basement",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.dismantled_formwork_stack",
+      "id": "FG039"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP11",
+      "process_order": 17,
+      "key": "confined_space_meter",
+      "kind": "equipment",
+      "title": "밀폐공간 가스농도 측정기",
+      "observe_point": "측정기 존재보다 작업 전 측정·기록·재측정이 이뤄지는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.confined_space_meter",
+      "id": "FG040"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP11",
+      "process_order": 18,
+      "key": "ventilation_fan_duct",
+      "kind": "control",
+      "title": "환기팬·덕트",
+      "observe_point": "공기가 실제 작업점까지 공급되고 정체구역이 남지 않는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.ventilation_fan_duct",
+      "id": "FG041"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP11",
+      "process_order": 19,
+      "key": "confined_space_attendant",
+      "kind": "control",
+      "title": "밀폐공간 감시인 위치",
+      "observe_point": "감시인이 출입자를 볼 수 있고 비상연락을 즉시 할 수 있는지 확인합니다.",
+      "reuse_for": [
+        "basement"
+      ],
+      "planned_asset_id": "ep01.scene_element.confined_space_attendant",
+      "id": "FG042"
+    },
+    {
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "episode": "EP12",
+      "process_order": 20,
+      "key": "temporary_electric_wet",
+      "kind": "hazard",
+      "title": "습윤구간 임시전기",
+      "observe_point": "물고임·전선·접속부·누전차단기 상태를 함께 확인합니다.",
+      "reuse_for": [
+        "basement",
+        "foundation"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_electric_wet",
+      "id": "FG043"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 1,
+      "key": "transfer_floor_high_ceiling",
+      "kind": "hazard",
+      "title": "전환층 고층고 구간",
+      "observe_point": "층고가 달라지며 기존 발판·사다리 사용방식이 그대로 적용되고 있지 않은지 확인합니다.",
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.transfer_floor_high_ceiling",
+      "id": "FG044"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 2,
+      "key": "mobile_work_platform",
+      "kind": "equipment",
+      "title": "고소작업대",
+      "observe_point": "장비 위치, 전도·협착, 상부 구조물 간섭과 출입통제를 확인합니다.",
+      "reuse_for": [
+        "transfer_floor",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.mobile_work_platform",
+      "id": "FG045"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 3,
+      "key": "system_scaffold_transition",
+      "kind": "control",
+      "title": "전환층 시스템비계",
+      "observe_point": "비계와 구조체 사이 틈, 벽이음, 승강통로를 확인합니다.",
+      "reuse_for": [
+        "transfer_floor",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.system_scaffold_transition",
+      "id": "FG046"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 4,
+      "key": "transfer_floor_opening",
+      "kind": "hazard",
+      "title": "전환층 신규 개구부",
+      "observe_point": "기준층에는 없던 개구부와 단부가 새로 생겼는지 확인합니다.",
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.transfer_floor_opening",
+      "id": "FG047"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 5,
+      "key": "mixed_formwork_interface",
+      "kind": "hazard",
+      "title": "재래식·시스템 거푸집 접점",
+      "observe_point": "서로 다른 공법의 연결부에서 지지와 작업순서가 충돌하지 않는지 봅니다.",
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.mixed_formwork_interface",
+      "id": "FG048"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 6,
+      "key": "temporary_support_transfer",
+      "kind": "control",
+      "title": "전환층 임시서포트",
+      "observe_point": "특수 구간의 임시 지지상태와 제거시점을 확인합니다.",
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_support_transfer",
+      "id": "FG049"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 7,
+      "key": "material_lift_opening_transfer",
+      "kind": "hazard",
+      "title": "전환층 자재인양구",
+      "observe_point": "자재 인양 시 개방되는 개구부의 하부통제와 복구를 확인합니다.",
+      "reuse_for": [
+        "transfer_floor",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.material_lift_opening_transfer",
+      "id": "FG050"
+    },
+    {
+      "section": "SECTION 3 — 지상 전환층",
+      "episode": "EP13",
+      "process_order": 8,
+      "key": "temporary_route_reroute",
+      "kind": "control",
+      "title": "전환층 우회통로",
+      "observe_point": "공법 전환으로 기존 통로가 사라졌을 때 대체 동선이 확보되는지 봅니다.",
+      "reuse_for": [
+        "transfer_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_route_reroute",
+      "id": "FG051"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 1,
+      "key": "alform_panel",
+      "kind": "prop",
+      "title": "AL Form 벽체·슬래브 패널",
+      "observe_point": "패널 변형, 체결상태와 조립 순서를 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_panel",
+      "id": "FG052"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 2,
+      "key": "alform_pin_wedge",
+      "kind": "prop",
+      "title": "알폼 핀·웨지",
+      "observe_point": "핀과 웨지의 체결상태, 분실·임의대체를 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_pin_wedge",
+      "id": "FG053"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP15",
+      "process_order": 3,
+      "key": "alform_pin_flying",
+      "kind": "hazard",
+      "title": "알폼 핀 타격·비래",
+      "observe_point": "타격방향, 주변 인원, 안면·눈 보호와 무리한 타격 여부를 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_pin_flying",
+      "id": "FG054"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 4,
+      "key": "alform_support",
+      "kind": "control",
+      "title": "AL Form 하부 서포트",
+      "observe_point": "필요한 서포트가 완성되기 전 상부 작업이 시작되지 않는지 봅니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_support",
+      "id": "FG055"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 5,
+      "key": "alform_deck_support",
+      "kind": "prop",
+      "title": "슬래브 데크 서포트",
+      "observe_point": "서포트 간격과 수직상태가 작업계획과 맞는지 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_deck_support",
+      "id": "FG056"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 6,
+      "key": "lifting_box",
+      "kind": "prop",
+      "title": "자재 인양 박스",
+      "observe_point": "인양박스 적재상태와 결속, 하부 통제를 확인합니다.",
+      "reuse_for": [
+        "typical_floor",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.lifting_box",
+      "id": "FG057"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 7,
+      "key": "material_lift_opening",
+      "kind": "hazard",
+      "title": "자재인양구 개방 상태",
+      "observe_point": "개방 전 보호조치와 작업 후 즉시 복구 여부를 확인합니다.",
+      "reuse_for": [
+        "typical_floor",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.material_lift_opening",
+      "id": "FG058"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP14",
+      "process_order": 8,
+      "key": "pump_pipe_opening",
+      "kind": "hazard",
+      "title": "압송관 개구부",
+      "observe_point": "압송관 주변 빈틈과 덮개·난간 보강상태를 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.pump_pipe_opening",
+      "id": "FG059"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP16",
+      "process_order": 9,
+      "key": "perimeter_open_edge",
+      "kind": "hazard",
+      "title": "기준층 외곽 단부",
+      "observe_point": "외곽 난간 연속성과 임시 해체구간을 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.perimeter_open_edge",
+      "id": "FG060"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP16",
+      "process_order": 10,
+      "key": "harness_unclipped",
+      "kind": "hazard",
+      "title": "체결되지 않은 더블 랜야드",
+      "observe_point": "두 훅의 실제 체결 위치와 이동 중 연속체결 여부를 봅니다.",
+      "reuse_for": [
+        "typical_floor",
+        "scaffold"
+      ],
+      "planned_asset_id": "ep01.scene_element.harness_unclipped",
+      "id": "FG061"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP16",
+      "process_order": 11,
+      "key": "embedded_box_trip",
+      "kind": "hazard",
+      "title": "매립박스·돌출부",
+      "observe_point": "철근 사이 돌출물이 이동통로의 걸림 위험이 되는지 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.embedded_box_trip",
+      "id": "FG062"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP16",
+      "process_order": 12,
+      "key": "alform_panel_stack",
+      "kind": "hazard",
+      "title": "알폼 패널 적치",
+      "observe_point": "세워놓기·기대놓기·과다적치로 전도 위험이 없는지 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.alform_panel_stack",
+      "id": "FG063"
+    },
+    {
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "episode": "EP16",
+      "process_order": 13,
+      "key": "housekeeping_typical_floor",
+      "kind": "control",
+      "title": "기준층 정리정돈 상태",
+      "observe_point": "반복작업 중 폐핀·철물·목재가 통로에 누적되는지 확인합니다.",
+      "reuse_for": [
+        "typical_floor"
+      ],
+      "planned_asset_id": "ep01.scene_element.housekeeping_typical_floor",
+      "id": "FG064"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP17",
+      "process_order": 1,
+      "key": "gangform_panel",
+      "kind": "prop",
+      "title": "갱폼 패널 본체",
+      "observe_point": "패널 변형, 발판, 난간, 인양부가 작업계획과 일치하는지 확인합니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_panel",
+      "id": "FG065"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP17",
+      "process_order": 2,
+      "key": "gangform_platform",
+      "kind": "control",
+      "title": "갱폼 작업발판",
+      "observe_point": "발판 틈·난간·승강부와 적재물 상태를 확인합니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_platform",
+      "id": "FG066"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP17",
+      "process_order": 3,
+      "key": "gangform_anchor_bolt",
+      "kind": "prop",
+      "title": "갱폼 고정볼트",
+      "observe_point": "인양 전후 볼트 해체·체결 순서를 확인합니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_anchor_bolt",
+      "id": "FG067"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 4,
+      "key": "gangform_shackle",
+      "kind": "equipment",
+      "title": "갱폼 인양 샤클",
+      "observe_point": "핀 체결·마모·변형과 인양고리 정렬상태를 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_shackle",
+      "id": "FG068"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 5,
+      "key": "gangform_lift_wire22",
+      "kind": "equipment",
+      "title": "갱폼 양중 와이어로프",
+      "observe_point": "와이어 상태, 정격하중, 샤클·인양점과 작업계획을 함께 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_lift_wire22",
+      "id": "FG069"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP17",
+      "process_order": 6,
+      "key": "gangform_turnbuckle_wire",
+      "kind": "control",
+      "title": "전도방지 턴버클·와이어",
+      "observe_point": "갱폼 설치 후 전도방지 연결이 빠짐없이 유지되는지 봅니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_turnbuckle_wire",
+      "id": "FG070"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 7,
+      "key": "gangform_tagline",
+      "kind": "equipment",
+      "title": "갱폼 유도로프",
+      "observe_point": "인상 중 회전·흔들림을 제어할 유도로프와 작업자 위치를 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_tagline",
+      "id": "FG071"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 8,
+      "key": "gangform_platform_debris",
+      "kind": "hazard",
+      "title": "갱폼 발판 위 적재물",
+      "observe_point": "인상 전 공구·철물·잔재가 제거됐는지 확인합니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_platform_debris",
+      "id": "FG072"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 9,
+      "key": "exclusion_zone",
+      "kind": "control",
+      "title": "갱폼 인상 하부 통제구역",
+      "observe_point": "실제 인상 반경과 통제선 범위가 일치하는지 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.exclusion_zone",
+      "id": "FG073"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP19",
+      "process_order": 10,
+      "key": "wind_meter",
+      "kind": "equipment",
+      "title": "풍속계",
+      "observe_point": "현장 작업기준과 장비 법정기준을 혼동하지 않고 현재 작업조건을 판단합니다.",
+      "reuse_for": [
+        "gangform",
+        "roof",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.wind_meter",
+      "id": "FG074"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP19",
+      "process_order": 11,
+      "key": "gangform_lift_interference",
+      "kind": "hazard",
+      "title": "갱폼 인상 구조물 간섭",
+      "observe_point": "비계·돌출 구조물·배관 등 인상경로의 간섭을 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_lift_interference",
+      "id": "FG075"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 12,
+      "key": "gangform_landing_fix",
+      "kind": "control",
+      "title": "갱폼 인상 후 고정상태",
+      "observe_point": "볼트와 전도방지 조치 완료 전 인양로프를 먼저 해체하지 않는지 봅니다.",
+      "reuse_for": [
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_landing_fix",
+      "id": "FG076"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP18",
+      "process_order": 13,
+      "key": "gangform_signal_radio",
+      "kind": "equipment",
+      "title": "갱폼 인상 무전·신호",
+      "observe_point": "크레인 운전원·신호수·작업자의 지휘체계가 하나로 유지되는지 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.gangform_signal_radio",
+      "id": "FG077"
+    },
+    {
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "episode": "EP20",
+      "process_order": 14,
+      "key": "flying_metal_eye",
+      "kind": "hazard",
+      "title": "금속 파편 비래",
+      "observe_point": "타격 위치와 눈·안면 방향, 보호구와 주변 통제를 확인합니다.",
+      "reuse_for": [
+        "gangform",
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.flying_metal_eye",
+      "id": "FG078"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP27",
+      "process_order": 1,
+      "key": "floor_change_edge",
+      "kind": "hazard",
+      "title": "층변화 신규 단부",
+      "observe_point": "전 층과 달라진 구조형상 때문에 새 단부가 생겼는지 확인합니다.",
+      "reuse_for": [
+        "floor_change",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.floor_change_edge",
+      "id": "FG079"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP27",
+      "process_order": 2,
+      "key": "partial_gangform_dismantle",
+      "kind": "hazard",
+      "title": "갱폼 부분탈형",
+      "observe_point": "부분 해체 시 남은 구조가 불안정해지지 않는지 순서를 확인합니다.",
+      "reuse_for": [
+        "floor_change"
+      ],
+      "planned_asset_id": "ep01.scene_element.partial_gangform_dismantle",
+      "id": "FG080"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP27",
+      "process_order": 3,
+      "key": "changed_lifting_point",
+      "kind": "hazard",
+      "title": "변경된 인양고리 위치",
+      "observe_point": "층변화로 인양점이 달라졌을 때 임의 체결하지 않는지 확인합니다.",
+      "reuse_for": [
+        "floor_change",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.changed_lifting_point",
+      "id": "FG081"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP27",
+      "process_order": 4,
+      "key": "irregular_platform_gap",
+      "kind": "hazard",
+      "title": "비정형 작업발판 틈",
+      "observe_point": "Roof·옥탑에서 발판 형상이 달라져 틈이 생기지 않는지 봅니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.irregular_platform_gap",
+      "id": "FG082"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP27",
+      "process_order": 5,
+      "key": "temporary_lifeline",
+      "kind": "control",
+      "title": "임시 생명줄",
+      "observe_point": "안전대 부착설비의 위치와 연속 이동 가능성을 확인합니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_lifeline",
+      "id": "FG083"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP28",
+      "process_order": 6,
+      "key": "roof_open_edge",
+      "kind": "hazard",
+      "title": "Roof 외곽 단부",
+      "observe_point": "난간 설치 전 외곽 작업이 시작되지 않는지 확인합니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.roof_open_edge",
+      "id": "FG084"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP28",
+      "process_order": 7,
+      "key": "penthouse_access",
+      "kind": "control",
+      "title": "옥탑 승강통로",
+      "observe_point": "옥탑 비정형 구간에 안전한 승강경로가 있는지 확인합니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.penthouse_access",
+      "id": "FG085"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP28",
+      "process_order": 8,
+      "key": "roof_wind_exposure",
+      "kind": "hazard",
+      "title": "옥상 강풍 노출구간",
+      "observe_point": "높은 위치의 풍속·돌풍과 양중·발판 작업의 연계 위험을 봅니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.roof_wind_exposure",
+      "id": "FG086"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP28",
+      "process_order": 9,
+      "key": "final_gangform_dismantle",
+      "kind": "hazard",
+      "title": "최종 갱폼 해체구역",
+      "observe_point": "해체 순서, 인양, 하부통제와 잔여 안전시설을 확인합니다.",
+      "reuse_for": [
+        "roof",
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.final_gangform_dismantle",
+      "id": "FG087"
+    },
+    {
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "episode": "EP28",
+      "process_order": 10,
+      "key": "roof_housekeeping",
+      "kind": "control",
+      "title": "Roof·옥탑 정리정돈",
+      "observe_point": "해체 철물과 잔재가 바람에 날리거나 발걸림 위험을 만들지 않는지 확인합니다.",
+      "reuse_for": [
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.roof_housekeeping",
+      "id": "FG088"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 1,
+      "key": "surface_finishing_tools",
+      "kind": "equipment",
+      "title": "견출 작업 공구",
+      "observe_point": "작업면과 작업자 자세, 전동공구·분진·비산물 위험을 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.surface_finishing_tools",
+      "id": "FG089"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 2,
+      "key": "chipping_breaker",
+      "kind": "equipment",
+      "title": "할석 브레이커",
+      "observe_point": "비산·소음·진동과 전선, 주변 작업자 접근을 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.chipping_breaker",
+      "id": "FG090"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 3,
+      "key": "grinder_guard_switch",
+      "kind": "equipment",
+      "title": "그라인더 덮개·스위치",
+      "observe_point": "보호덮개, 조작방식, 숫돌 상태와 비산방향을 확인합니다.",
+      "reuse_for": [
+        "finishing",
+        "hot_work"
+      ],
+      "planned_asset_id": "ep01.scene_element.grinder_guard_switch",
+      "id": "FG091"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 4,
+      "key": "mortar_mixer",
+      "kind": "equipment",
+      "title": "미장용 믹서·교반기",
+      "observe_point": "회전체 접촉, 전선, 물기와 작업자 자세를 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.mortar_mixer",
+      "id": "FG092"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 5,
+      "key": "workhorse_platform",
+      "kind": "prop",
+      "title": "우마·간이 작업발판",
+      "observe_point": "수평·미끄럼·전도·임의적층 여부를 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.workhorse_platform",
+      "id": "FG093"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 6,
+      "key": "mobile_scaffold",
+      "kind": "control",
+      "title": "이동식비계",
+      "observe_point": "바퀴 잠금, 난간, 승강통로와 이동 전 사람 탑승 여부를 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.mobile_scaffold",
+      "id": "FG094"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 7,
+      "key": "dust_control",
+      "kind": "control",
+      "title": "분진 저감장치",
+      "observe_point": "집진·습식작업 등 분진 저감조치가 실제 발생점에서 작동하는지 확인합니다.",
+      "reuse_for": [
+        "finishing"
+      ],
+      "planned_asset_id": "ep01.scene_element.dust_control",
+      "id": "FG095"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP29",
+      "process_order": 8,
+      "key": "eye_face_ppe",
+      "kind": "equipment",
+      "title": "보안경·안면보호구",
+      "observe_point": "작업 종류에 맞는 눈·안면 보호가 실제로 착용되는지 확인합니다.",
+      "reuse_for": [
+        "finishing",
+        "gangform"
+      ],
+      "planned_asset_id": "ep01.scene_element.eye_face_ppe",
+      "id": "FG096"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 9,
+      "key": "dismantled_guardrail",
+      "kind": "hazard",
+      "title": "임의 해체된 안전난간",
+      "observe_point": "작업 편의를 위해 난간이 제거된 뒤 대체조치와 복구가 이뤄졌는지 봅니다.",
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.dismantled_guardrail",
+      "id": "FG097"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 10,
+      "key": "dismantle_debris_route",
+      "kind": "hazard",
+      "title": "해체자재와 이동통로",
+      "observe_point": "해체자재가 통로와 출입구를 막지 않는지 확인합니다.",
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.dismantle_debris_route",
+      "id": "FG098"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 11,
+      "key": "waste_sorting_zone",
+      "kind": "control",
+      "title": "폐자재 분리·반출구역",
+      "observe_point": "폐자재가 종류별로 분리되고 전도·비산 없이 반출되는지 확인합니다.",
+      "reuse_for": [
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.waste_sorting_zone",
+      "id": "FG099"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 12,
+      "key": "forklift_blind_spot",
+      "kind": "hazard",
+      "title": "지게차 사각지대",
+      "observe_point": "후진·코너·적재물 때문에 운전자와 보행자가 서로를 못 보는 지점을 확인합니다.",
+      "reuse_for": [
+        "logistics",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.forklift_blind_spot",
+      "id": "FG100"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 13,
+      "key": "traffic_control_pack",
+      "kind": "equipment",
+      "title": "차량통제 장비",
+      "observe_point": "라바콘·바리케이드·신호봉이 실제 동선분리에 맞게 배치되는지 확인합니다.",
+      "reuse_for": [
+        "logistics",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.traffic_control_pack",
+      "id": "FG101"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 14,
+      "key": "chemical_msds_station",
+      "kind": "control",
+      "title": "화학물질·MSDS 관리지점",
+      "observe_point": "사용물질 표시와 MSDS 접근성, 용기 라벨과 보호구가 맞는지 확인합니다.",
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.chemical_msds_station",
+      "id": "FG102"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP30",
+      "process_order": 15,
+      "key": "extension_ladder",
+      "kind": "equipment",
+      "title": "이동식 사다리",
+      "observe_point": "사다리를 작업발판처럼 장시간 사용하는지, 설치각도·고정과 승강 용도가 맞는지 확인합니다.",
+      "reuse_for": [
+        "finishing",
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.extension_ladder",
+      "id": "FG103"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP31",
+      "process_order": 16,
+      "key": "temporary_facility_removal",
+      "kind": "hazard",
+      "title": "가설 안전시설 철거",
+      "observe_point": "준공이 가까워졌다고 필요한 난간·조명·통로를 너무 일찍 제거하지 않는지 확인합니다.",
+      "reuse_for": [
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_facility_removal",
+      "id": "FG104"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP31",
+      "process_order": 17,
+      "key": "temporary_power_removal",
+      "kind": "hazard",
+      "title": "임시전기 철거",
+      "observe_point": "전원차단·회로확인·철거순서가 통제되는지 확인합니다.",
+      "reuse_for": [
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.temporary_power_removal",
+      "id": "FG105"
+    },
+    {
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "episode": "EP31",
+      "process_order": 18,
+      "key": "final_route_clearance",
+      "kind": "control",
+      "title": "준공 전 최종 이동통로",
+      "observe_point": "마감자재와 폐자재가 마지막까지 피난·이동통로를 막지 않는지 확인합니다.",
+      "reuse_for": [
+        "closeout"
+      ],
+      "planned_asset_id": "ep01.scene_element.final_route_clearance",
+      "id": "FG106"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 1,
+      "key": "material_stack",
+      "kind": "prop",
+      "title": "통로 옆 적재 자재",
+      "observe_point": "규격·결속·받침·통로 침범을 함께 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.material_stack",
+      "id": "FG107"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 2,
+      "key": "access_barrier",
+      "kind": "control",
+      "title": "출입 통제 바리케이드",
+      "observe_point": "바리케이드 연속성과 실제 통제범위를 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.access_barrier",
+      "id": "FG108"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 3,
+      "key": "vehicle_overlap_zone",
+      "kind": "hazard",
+      "title": "겹치는 차량·보행 동선",
+      "observe_point": "차량경로와 보행경로가 만나는 충돌지점을 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.vehicle_overlap_zone",
+      "id": "FG109"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 4,
+      "key": "suspended_load",
+      "kind": "hazard",
+      "title": "슬링에 매달린 중량물",
+      "observe_point": "중량·슬링·모서리보호·인양각도·하부통제를 확인합니다.",
+      "reuse_for": [
+        "lifting"
+      ],
+      "planned_asset_id": "ep01.scene_element.suspended_load",
+      "id": "FG110"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 5,
+      "key": "radio_pack",
+      "kind": "equipment",
+      "title": "현장 무전기",
+      "observe_point": "누가 누구에게 어떤 채널로 지시·보고하는지 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.radio_pack",
+      "id": "FG111"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 6,
+      "key": "inspection_kit",
+      "kind": "equipment",
+      "title": "현장 점검 키트",
+      "observe_point": "줄자·조도·가스·풍속 등 측정도구가 상황에 맞게 사용되는지 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.inspection_kit",
+      "id": "FG112"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 7,
+      "key": "stop_work_marker",
+      "kind": "control",
+      "title": "작업중지·통제 표시",
+      "observe_point": "멈춘 작업구역이 다른 근로자에게도 명확하게 전달되는지 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.stop_work_marker",
+      "id": "FG113"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 8,
+      "key": "tbm_board",
+      "kind": "control",
+      "title": "TBM 현황판",
+      "observe_point": "당일 작업·위험·대책이 실제 작업자에게 전달되고 있는지 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.tbm_board",
+      "id": "FG114"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 9,
+      "key": "permit_board",
+      "kind": "control",
+      "title": "작업허가·계획 확인판",
+      "observe_point": "화기·밀폐·양중 등 작업 전 확인이 서류와 현장에서 일치하는지 봅니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.permit_board",
+      "id": "FG115"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 10,
+      "key": "near_miss_marker",
+      "kind": "hazard",
+      "title": "아차사고 흔적",
+      "observe_point": "작은 이상·파손·움직임 같은 사고 전 신호를 놓치지 않는지 확인합니다.",
+      "reuse_for": [
+        "all"
+      ],
+      "planned_asset_id": "ep01.scene_element.near_miss_marker",
+      "id": "FG116"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 11,
+      "key": "platform_cut_edge",
+      "kind": "hazard",
+      "title": "끊어진 작업발판",
+      "observe_point": "작업발판의 끝과 지지부를 따라가 보세요. 발을 내딛는 곳에 틈이나 절단부가 있는지, 발판 연결과 지지가 연속되는지 확인합니다.",
+      "reuse_for": [
+        "scaffold",
+        "typical_floor",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.platform_cut_edge",
+      "id": "FG117"
+    },
+    {
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "episode": "COMMON",
+      "process_order": 12,
+      "key": "open_edge",
+      "kind": "hazard",
+      "title": "열린 콘크리트 단부",
+      "observe_point": "콘크리트 바닥 끝과 방호가 이어지지 않는 지점을 확인하세요. 작업·자재 이동 때문에 생긴 임시 개방부가 없는지 살펴봅니다.",
+      "reuse_for": [
+        "typical_floor",
+        "scaffold",
+        "roof"
+      ],
+      "planned_asset_id": "ep01.scene_element.open_edge",
+      "id": "FG118"
+    }
+  ]
+}
