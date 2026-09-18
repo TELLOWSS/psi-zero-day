@@ -198,6 +198,8 @@ describe('Playable Episode React UI', () => {
     expect(container.querySelector('img')).toBeNull();
     expect(container.textContent).toContain(person.name);
     expect(container.textContent).toContain(person.role);
+    expect(container.querySelector('.character-identity-line')?.textContent).toContain(person.name);
+    expect(container.querySelector('.character-identity-line')?.textContent).toContain(person.role);
   });
 
   it('uses inert placeholders for other engine presentation cues', () => {

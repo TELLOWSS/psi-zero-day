@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import type { CharacterGrowthView } from '../app/character-growth';
 import type { CharacterLoadoutView, EquipmentSlot } from '../app/character-loadout';
 import visuals from '../../content/episode01/visuals.json';
+import { formatCharacterIdentity } from '../app/character-label';
 
 interface CharacterVisualPlan { accent?: string }
 export function characterVisual(id: string): CharacterVisualPlan | undefined {
@@ -60,12 +61,12 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
   slotLabel?: (slot: EquipmentSlot) => string;
 }) {
   const visual = characterVisual(person.id);
-  return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={`${person.name} · ${person.role}`}>
+  return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
     <div className="portrait-slot">
       <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
       <VisualImage uri={portraitUri} fallbackUri={fallbackPortraitUri} alt={person.name} className="portrait-image" />
     </div>
-    <div className="character-identity"><span className="identity-rule" /><strong>{person.name}</strong><span>{person.role}</span></div>
+    <div className="character-identity"><span className="identity-rule" /><div className="character-identity-line"><strong>{person.name}</strong><span>{person.role}</span></div></div>
     {growth ? <div className="character-growth-summary" data-growth-stage={growth.stage}>
       <div><strong>{growth.stage_label}</strong><span>{growth.expression}</span></div>
     </div> : null}

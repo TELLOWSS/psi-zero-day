@@ -12,6 +12,7 @@ import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectS
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episode01MemoryCallback } from '../app/episode01-memory-callback';
+import { formatCharacterIdentity } from '../app/character-label';
 import {
   consumePaidItem,
   emptyPaidItemWallet,
@@ -129,10 +130,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         : `${activeInstance?.instance_id ?? 'field'}:${presentation && 'node_id' in presentation ? presentation.node_id : 'result'}:${snapshot.revision}`,
       text: outcomeText,
       relationship_lines: snapshot.relationshipFeedback.map(({ npc_id, delta }) => {
-        const name = session.character(npc_id)?.name ?? npc_id;
+        const character = session.character(npc_id);
+        const identity = character ? formatCharacterIdentity(character) : npc_id;
         const field = t(`ui.relationship.${delta.field}`);
         const amount = `${delta.applied_delta > 0 ? '+' : ''}${delta.applied_delta}`;
-        return `${name} · ${field} ${amount}`;
+        return `${identity} · ${field} ${amount}`;
       }),
       psi_cues: outcomePsiCues,
       ...(executedFieldAction ? {
@@ -316,7 +318,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           </aside> : null}
           {!mapOutcomeActive && snapshot.relationshipFeedback.length ? <div className="relationship-feedback" role="status" aria-label={t('ui.relationship_change')}>
             {snapshot.relationshipFeedback.map(({ npc_id, delta }) => <span key={delta.source.effect_instance_id}>
-              <strong>{session.character(npc_id)?.name}</strong> {t(`ui.relationship.${delta.field}`)}
+              <strong>{formatCharacterIdentity(session.character(npc_id))}</strong> {t(`ui.relationship.${delta.field}`)}
               <b className={delta.applied_delta > 0 ? 'delta-positive' : 'delta-negative'}>{delta.applied_delta > 0 ? '+' : ''}{delta.applied_delta}</b>
             </span>)}
           </div> : null}

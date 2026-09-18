@@ -98,6 +98,7 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('data-action-count="1"');
     expect(html).toContain('has-actions');
     expect(html).toContain('임준호');
+    expect(html).toContain('신입근로자');
     expect(html).toContain('data-signal="signal.ramp_movement"');
     expect(html).toContain('경사로 이상 신호');
     expect(html).toContain('data-zone="ramp"');

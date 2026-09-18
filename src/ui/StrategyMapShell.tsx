@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
+import { formatCharacterIdentity } from '../app/character-label';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForTarget } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
@@ -93,13 +94,13 @@ export function StrategyMapShell({
   const anchorTitle = focusedAnchor ? text(`ui.strategy.zone.${focusedAnchor}`) : null;
   const focusTitle = focusedSignal
     ? text(focusedSignal.label_text_id)
-    : focusedPerson?.name ?? focusedPlacement?.character_id ?? anchorTitle ?? (effectiveFocusId === 'site' ? copy.site : null);
+    : focusedPerson ? formatCharacterIdentity(focusedPerson) : focusedPlacement?.character_id ?? anchorTitle ?? (effectiveFocusId === 'site' ? copy.site : null);
   const focusDetail = focusedPlacement
-    ? focusedPerson?.role ?? focusedPlacement.role_id ?? ''
+    ? text(`ui.strategy.zone.${focusedPlacement.anchor}`)
     : focusedSignal ? copy.events : focusedAnchor ? text('ui.strategy.zone_hint') : effectiveFocusId === 'site' ? copy.actionHint : '';
   const hasActionsFor = (targetKey: string): boolean => strategyActionsForTarget(effectiveActions, targetKey).length > 0;
   const actionTargetLabel = (action: StrategyAction): string => {
-    if (action.target.kind === 'character') return person(action.target.character_id)?.name ?? action.target.character_id;
+    if (action.target.kind === 'character') return formatCharacterIdentity(person(action.target.character_id)) || action.target.character_id;
     if (action.target.kind === 'signal') {
       const signalId = action.target.signal_id;
       const signal = view.signals.find(item => item.signal_id === signalId);
@@ -291,7 +292,7 @@ export function StrategyMapShell({
         focusId={focusId}
         focusTitle={focusTitle}
         text={text}
-        personName={id => person(id)?.name ?? id}
+        personName={id => formatCharacterIdentity(person(id)) || id}
         targetLabel={actionTargetLabel}
         onAction={executeAction}
         outcome={outcome}
@@ -308,7 +309,7 @@ export function StrategyMapShell({
         const visual = visualAssets?.characters[character.character_id];
         return <article className="strategy-character" key={character.character_id}>
           <div className="character-token" aria-hidden="true">{visual?.portrait_uri ? <img src={visual.portrait_uri} alt="" /> : index + 1}</div>
-          <div><strong>{label?.name ?? character.character_id}</strong><span>{label?.role ?? ''} · {character.available ? '●' : '○'} {character.experience}</span></div>
+          <div><strong>{formatCharacterIdentity(label) || character.character_id}</strong><span>{character.available ? '●' : '○'} {character.experience}</span></div>
         </article>;
       })}
     </footer>
