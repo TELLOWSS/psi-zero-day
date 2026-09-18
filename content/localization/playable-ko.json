@@ -813,6 +813,11 @@
     "ui.immersive.tone.decision": "지금 선택이 다음 장면의 조건을 바꾼다",
     "ui.immersive.tone.pressure": "공정·관계·안전조건의 압박이 동시에 커진다",
     "ui.immersive.tone.resolved": "통제조건이 현장에서 어떻게 정리됐는지 보인다",
-    "ui.immersive.tone.reflective": "오늘의 선택이 기억과 다음 행동으로 남는다"
+    "ui.immersive.tone.reflective": "오늘의 선택이 기억과 다음 행동으로 남는다",
+    "ui.choice_visual.control": "통제·검증",
+    "ui.choice_visual.pressure": "공정·압박",
+    "ui.choice_visual.people": "현장·관계",
+    "ui.choice_visual.evidence": "기록·증거",
+    "ui.choice_visual.recovery": "회복·정리"
   }
 }

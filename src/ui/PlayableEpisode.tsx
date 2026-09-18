@@ -416,6 +416,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
                 }
               }}
               assetUri={resolveAsset}
+              eventId={activeEventId}
               choiceFallback={strategyActions.length > 0}
             />}
         </div>

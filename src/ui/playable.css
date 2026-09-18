@@ -549,3 +549,35 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-scene figcaption strong{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.episode-immersive-scene{animation:none!important}.episode-immersive-character{transition:none!important}}
+
+
+/* EP01 choice-level visual previews */
+.choice-panel button{position:relative;display:grid;grid-template-columns:minmax(86px,118px) 1fr auto;align-items:stretch;gap:12px;padding:9px 11px;overflow:hidden}
+.choice-visual{position:relative;display:block;min-height:72px;border:1px solid rgba(255,255,255,.09);border-radius:7px;overflow:hidden;background:#171d20;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.choice-visual-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.12);filter:saturate(.86) contrast(1.05) brightness(.78)}
+.choice-visual[data-crop="left"] .choice-visual-bg{object-position:28% center}
+.choice-visual[data-crop="right"] .choice-visual-bg{object-position:72% center}
+.choice-visual-prop{position:absolute;right:-8%;bottom:-10%;width:62%;height:78%;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(0,0,0,.48))}
+.choice-visual>i{position:absolute;inset:0;background:linear-gradient(180deg,transparent 32%,rgba(4,8,10,.76) 100%)}
+.choice-visual>em{position:absolute;left:6px;bottom:5px;font-style:normal;font-size:7px;font-weight:800;letter-spacing:.06em;color:#f1eee6;text-shadow:0 1px 3px #000}
+.choice-copy{display:grid;grid-template-columns:1.8em 1fr;align-items:start;gap:7px;align-self:center;min-width:0}
+.choice-text{min-width:0;line-height:1.55}
+.choice-panel button[data-choice-tone="control"] .choice-visual{border-color:rgba(135,177,150,.42)}
+.choice-panel button[data-choice-tone="pressure"] .choice-visual{border-color:rgba(198,101,74,.48)}
+.choice-panel button[data-choice-tone="people"] .choice-visual{border-color:rgba(109,158,183,.45)}
+.choice-panel button[data-choice-tone="evidence"] .choice-visual{border-color:rgba(189,162,105,.46)}
+.choice-panel button[data-choice-tone="recovery"] .choice-visual{border-color:rgba(137,133,183,.46)}
+.choice-panel button:hover:not(:disabled) .choice-visual-bg{transform:scale(1.18);filter:saturate(1) contrast(1.08) brightness(.9)}
+.choice-visual-bg{transition:transform .22s ease,filter .22s ease}
+@media(max-width:760px){
+  .choice-panel button{grid-template-columns:92px 1fr;padding:8px}
+  .choice-arrow{display:none}
+  .choice-visual{min-height:66px}
+  .choice-copy{gap:5px}
+}
+@media(max-width:440px){
+  .choice-panel button{grid-template-columns:78px 1fr;gap:8px}
+  .choice-visual{min-height:60px}
+  .choice-visual>em{font-size:6px}
+}
+@media(prefers-reduced-motion:reduce){.choice-visual-bg{transition:none!important}}
