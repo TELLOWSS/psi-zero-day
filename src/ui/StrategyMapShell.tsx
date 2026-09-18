@@ -119,6 +119,13 @@ export function StrategyMapShell({
   };
 
   const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
+  const zoneSummary = Object.fromEntries(zones.map(zone => [
+    zone,
+    {
+      workers: view.placements.filter(placement => placement.anchor === zone).length,
+      signals: view.signals.filter(signal => signal.anchor === zone).length,
+    },
+  ])) as Record<(typeof zones)[number], { workers: number; signals: number }>;
   const hasBackgroundArt = visualAssets?.background_uri !== undefined;
   const sceneElements = view.scene.elements ?? [];
   const moneyValue = `₩${Math.max(0, view.resources.money).toLocaleString('ko-KR')}`;
@@ -208,6 +215,22 @@ export function StrategyMapShell({
         <progress value={progress} max={100} aria-label={copy.progress} />
       </div>
 
+      <aside className="strategy-overview-minimap" aria-label="현장 전체도">
+        <header><strong>현장 전체도</strong><span>N</span></header>
+        <div className="strategy-minimap-plan" aria-hidden="true">
+          <i className="mini-building mini-building-a" />
+          <i className="mini-building mini-building-b" />
+          <i className="mini-building mini-building-c" />
+          {zones.map(zone => <b
+            key={zone}
+            className={`mini-zone mini-zone-${zone}`}
+            data-alert={zoneSummary[zone].signals > 0 ? 'true' : 'false'}
+          />)}
+          <em className="mini-player" />
+        </div>
+        <footer><span>● 작업구역</span><span>● 위험신호</span></footer>
+      </aside>
+
       <div className="strategy-zone-layer" aria-label={text('ui.strategy.zones')}>
         {zones.map(zone => {
           const key = `anchor:${zone}`;
@@ -217,7 +240,10 @@ export function StrategyMapShell({
             data-zone={zone}
             className={`strategy-zone-target zone-${zone}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             onClick={() => setFocusId(key)}
-          ><span>{text(`ui.strategy.zone.${zone}`)}</span>{hasActionsFor(key) ? <b>{strategyActionsForTarget(effectiveActions, key).length}</b> : null}</button>;
+          ><span className="strategy-zone-copy">
+            <strong>{text(`ui.strategy.zone.${zone}`)}</strong>
+            <small>배치 {zoneSummary[zone].workers} · 위험 {zoneSummary[zone].signals}</small>
+          </span>{hasActionsFor(key) ? <b>{strategyActionsForTarget(effectiveActions, key).length}</b> : null}</button>;
         })}
       </div>
 

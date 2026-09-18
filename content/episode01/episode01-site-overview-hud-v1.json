@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-site-overview-hud-v1",
+  "status": "IMPLEMENTED",
+  "source_of_truth": {
+    "psi6": "recorded choice_history mapped through authored PSI cues",
+    "personnel": "strategy placements",
+    "hazards": "strategy signals",
+    "zone_counts": "direct visual anchors only"
+  },
+  "surfaces": [
+    "PSI 6 observation bars",
+    "site minimap",
+    "zone cards with worker/hazard counts",
+    "existing direct worker markers and risk signals"
+  ],
+  "guardrail": "No invented safety score, worker count or hazard count is shown."
+}
