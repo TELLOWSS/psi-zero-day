@@ -203,6 +203,34 @@
         ]
       },
       {
+        "node_id": "delegate_kang_result",
+        "type": "RESULT",
+        "text_id": "ep01.plan.a.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "negotiate_yoon_result",
+        "type": "RESULT",
+        "text_id": "ep01.plan.b.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "coordinate_schedule_result",
+        "type": "RESULT",
+        "text_id": "ep01.plan.c.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "follow_junho_result",
+        "type": "RESULT",
+        "text_id": "ep01.plan.d.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
         "node_id": "end",
         "type": "END",
         "text_id": "ep01.transition",
@@ -235,7 +263,7 @@
       {
         "choice_id": "delegate_kang",
         "text_id": "ep01.plan.a",
-        "next_node_id": "end",
+        "next_node_id": "delegate_kang_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -261,7 +289,7 @@
       {
         "choice_id": "negotiate_yoon",
         "text_id": "ep01.plan.b",
-        "next_node_id": "end",
+        "next_node_id": "negotiate_yoon_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -287,7 +315,7 @@
       {
         "choice_id": "coordinate_schedule",
         "text_id": "ep01.plan.c",
-        "next_node_id": "end",
+        "next_node_id": "coordinate_schedule_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -319,7 +347,7 @@
       {
         "choice_id": "follow_junho",
         "text_id": "ep01.plan.d",
-        "next_node_id": "end",
+        "next_node_id": "follow_junho_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -367,6 +395,10 @@
       {
         "role_id": "junho",
         "character_id": "lim_junho"
+      },
+      {
+        "role_id": "minseok",
+        "character_id": "choi_minseok"
       }
     ],
     "scene": {
@@ -379,6 +411,14 @@
         "type": "DIALOGUE",
         "text_id": "ep01.junho.signal",
         "speaker_role_id": "junho",
+        "next_node_id": "detail",
+        "choice_ids": []
+      },
+      {
+        "node_id": "detail",
+        "type": "DIALOGUE",
+        "text_id": "ep01.junho.detail",
+        "speaker_role_id": "junho",
         "next_node_id": "listen",
         "choice_ids": []
       },
@@ -389,8 +429,31 @@
         "text_id": "ep01.junho.prompt",
         "choice_ids": [
           "listen_more",
+          "crosscheck_minseok",
           "dismiss"
         ]
+      },
+      {
+        "node_id": "listen_more_result",
+        "type": "RESULT",
+        "text_id": "ep01.junho.listen_more.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "crosscheck_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.junho.crosscheck.result",
+        "speaker_role_id": "minseok",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "dismiss_result",
+        "type": "RESULT",
+        "text_id": "ep01.junho.dismiss.result",
+        "next_node_id": "end",
+        "choice_ids": []
       },
       {
         "node_id": "end",
@@ -425,7 +488,7 @@
       {
         "choice_id": "listen_more",
         "text_id": "ep01.junho.listen_more",
-        "next_node_id": "end",
+        "next_node_id": "listen_more_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -448,7 +511,54 @@
           "stat_effects": [],
           "flags": {
             "junho_opened_up": true,
-            "ramp_signal_known": true
+            "ramp_signal_known": true,
+            "junho_signal_route": "direct_follow"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "crosscheck_minseok",
+        "text_id": "ep01.junho.crosscheck",
+        "next_node_id": "crosscheck_result",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "junho.reporting.crosscheck",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "junho"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": 4
+            },
+            {
+              "effect_id": "minseok.reporting.crosscheck",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "minseok"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": 2
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "junho_opened_up": true,
+            "ramp_signal_known": true,
+            "junho_signal_route": "crosscheck"
           },
           "ending_flags": {},
           "followup_events": []
@@ -457,7 +567,7 @@
       {
         "choice_id": "dismiss",
         "text_id": "ep01.junho.dismiss",
-        "next_node_id": "end",
+        "next_node_id": "dismiss_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [],
@@ -466,7 +576,8 @@
           "stat_effects": [],
           "flags": {
             "junho_opened_up": false,
-            "ramp_signal_known": false
+            "ramp_signal_known": false,
+            "junho_signal_route": "defer_until_repeat"
           },
           "ending_flags": {},
           "followup_events": []
@@ -573,6 +684,29 @@
         ]
       },
       {
+        "node_id": "check_self_result",
+        "type": "RESULT",
+        "text_id": "ep01.command.check_self.result",
+        "next_node_id": "entrance",
+        "choice_ids": []
+      },
+      {
+        "node_id": "ask_minseok_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.command.ask_minseok.result",
+        "speaker_role_id": "minseok",
+        "next_node_id": "entrance",
+        "choice_ids": []
+      },
+      {
+        "node_id": "keep_schedule_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.command.keep_schedule.result",
+        "speaker_role_id": "lee",
+        "next_node_id": "entrance",
+        "choice_ids": []
+      },
+      {
         "node_id": "entrance",
         "type": "CHOICE",
         "text_id": "ep01.command.entrance",
@@ -581,6 +715,30 @@
           "request_delay",
           "force_clear"
         ]
+      },
+      {
+        "node_id": "assign_crew_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.command.assign_crew.result",
+        "speaker_role_id": "kang",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "request_delay_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.command.request_delay.result",
+        "speaker_role_id": "lee",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "force_clear_result",
+        "type": "DIALOGUE",
+        "text_id": "ep01.command.force_clear.result",
+        "speaker_role_id": "yoon",
+        "next_node_id": "end",
+        "choice_ids": []
       },
       {
         "node_id": "end",
@@ -615,7 +773,7 @@
       {
         "choice_id": "check_self",
         "text_id": "ep01.command.check_self",
-        "next_node_id": "entrance",
+        "next_node_id": "check_self_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [],
@@ -633,7 +791,7 @@
       {
         "choice_id": "ask_minseok",
         "text_id": "ep01.command.ask_minseok",
-        "next_node_id": "entrance",
+        "next_node_id": "ask_minseok_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -665,7 +823,7 @@
       {
         "choice_id": "keep_schedule",
         "text_id": "ep01.command.keep_schedule",
-        "next_node_id": "entrance",
+        "next_node_id": "keep_schedule_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [],
@@ -673,7 +831,8 @@
           "relationship_effects": [],
           "stat_effects": [],
           "flags": {
-            "ramp_unverified": true
+            "ramp_unverified": true,
+            "entrance_watch_held": true
           },
           "ending_flags": {},
           "followup_events": []
@@ -682,7 +841,7 @@
       {
         "choice_id": "assign_crew",
         "text_id": "ep01.command.assign_crew",
-        "next_node_id": "end",
+        "next_node_id": "assign_crew_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -726,7 +885,7 @@
       {
         "choice_id": "request_delay",
         "text_id": "ep01.command.request_delay",
-        "next_node_id": "end",
+        "next_node_id": "request_delay_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -763,7 +922,7 @@
       {
         "choice_id": "force_clear",
         "text_id": "ep01.command.force_clear",
-        "next_node_id": "end",
+        "next_node_id": "force_clear_result",
         "requirements": [],
         "effects": {
           "immediate_effects": [
@@ -799,7 +958,8 @@
           "stat_effects": [],
           "flags": {
             "entrance_controlled": true,
-            "relation_conflict": true
+            "relation_conflict": true,
+            "full_stop_called": true
           },
           "ending_flags": {},
           "followup_events": []
@@ -821,7 +981,24 @@
         "minimum_count": 1
       }
     ],
-    "participants": [],
+    "participants": [
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "lee",
+        "character_id": "lee_jaehoon"
+      },
+      {
+        "role_id": "junho",
+        "character_id": "lim_junho"
+      },
+      {
+        "role_id": "minseok",
+        "character_id": "choi_minseok"
+      }
+    ],
     "scene": {
       "character_asset_ids": []
     },
@@ -842,7 +1019,7 @@
         "node_id": "relation_conflict",
         "type": "RESULT",
         "text_id": "ep01.pump.relation_conflict",
-        "next_node_id": "end",
+        "next_node_id": "relation_conflict_react",
         "choice_ids": [],
         "effects": {
           "immediate_effects": [],
@@ -857,10 +1034,18 @@
         }
       },
       {
+        "node_id": "relation_conflict_react",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pump.relation_conflict.react",
+        "speaker_role_id": "kang",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
         "node_id": "best_control",
         "type": "RESULT",
         "text_id": "ep01.pump.best_control",
-        "next_node_id": "end",
+        "next_node_id": "best_control_react",
         "choice_ids": [],
         "effects": {
           "immediate_effects": [],
@@ -875,10 +1060,18 @@
         }
       },
       {
+        "node_id": "best_control_react",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pump.best_control.react",
+        "speaker_role_id": "junho",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
         "node_id": "near_miss",
         "type": "RESULT",
         "text_id": "ep01.pump.near_miss",
-        "next_node_id": "end",
+        "next_node_id": "near_miss_react",
         "choice_ids": [],
         "effects": {
           "immediate_effects": [],
@@ -893,10 +1086,18 @@
         }
       },
       {
+        "node_id": "near_miss_react",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pump.near_miss.react",
+        "speaker_role_id": "minseok",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
         "node_id": "controlled_delay",
         "type": "RESULT",
         "text_id": "ep01.pump.controlled_delay",
-        "next_node_id": "end",
+        "next_node_id": "controlled_delay_react",
         "choice_ids": [],
         "effects": {
           "immediate_effects": [],
@@ -909,6 +1110,14 @@
           "ending_flags": {},
           "followup_events": []
         }
+      },
+      {
+        "node_id": "controlled_delay_react",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pump.controlled_delay.react",
+        "speaker_role_id": "lee",
+        "next_node_id": "end",
+        "choice_ids": []
       },
       {
         "node_id": "end",
@@ -1275,7 +1484,20 @@
         "minimum_count": 1
       }
     ],
-    "participants": [],
+    "participants": [
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "lee",
+        "character_id": "lee_jaehoon"
+      },
+      {
+        "role_id": "junho",
+        "character_id": "lim_junho"
+      }
+    ],
     "scene": {
       "character_asset_ids": []
     },
@@ -1285,6 +1507,36 @@
         "node_id": "pour",
         "type": "RESULT",
         "text_id": "ep01.pour",
+        "next_node_id": "kang",
+        "choice_ids": []
+      },
+      {
+        "node_id": "kang",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pour.kang",
+        "speaker_role_id": "kang",
+        "next_node_id": "pressure",
+        "choice_ids": []
+      },
+      {
+        "node_id": "pressure",
+        "type": "RESULT",
+        "text_id": "ep01.pour.pressure",
+        "next_node_id": "lee",
+        "choice_ids": []
+      },
+      {
+        "node_id": "lee",
+        "type": "DIALOGUE",
+        "text_id": "ep01.pour.lee",
+        "speaker_role_id": "lee",
+        "next_node_id": "after",
+        "choice_ids": []
+      },
+      {
+        "node_id": "after",
+        "type": "RESULT",
+        "text_id": "ep01.pour.after",
         "next_node_id": "end",
         "choice_ids": []
       },
@@ -1295,20 +1547,11 @@
         "choice_ids": [],
         "outcome": "completed",
         "effects": {
-          "immediate_effects": [
-            {
-              "effect_id": "foundation.pour",
-              "kind": "construction_progress",
-              "stage_id": "FOUNDATION",
-              "delta": 4
-            }
-          ],
+          "immediate_effects": [],
           "hidden_effects": [],
           "relationship_effects": [],
           "stat_effects": [],
-          "flags": {
-            "first_pour_completed": true
-          },
+          "flags": {},
           "ending_flags": {},
           "followup_events": []
         }

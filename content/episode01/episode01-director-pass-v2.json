@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-director-v2",
+  "title": "EP01 — 첫 타설 / 3분의 판단",
+  "intent": "Make the first episode play like a field drama and strategy scene, not a safety quiz.",
+  "dramatic_question": "When schedule, incomplete information and people all compete for attention, what do you choose to see first—and what does that choice make you miss?",
+  "design_rules": [
+    "No choice label may read as obviously safe/correct versus reckless/wrong.",
+    "Each primary option must solve one real problem while spending attention, time, authority or trust somewhere else.",
+    "Immediate feedback shows the local effect; later events reveal delayed social/operational consequences.",
+    "The player is not rewarded for stopping everything by default; precise coordination can be safer and faster than indiscriminate delay.",
+    "Near miss is a consequence branch, not a punishment animation or game-over.",
+    "Dialogue should contain field pressure, interruptions, incomplete observations and role-specific priorities.",
+    "Scene rhythm alternates: wide situation → close dialogue → choice → visible field consequence → later return."
+  ],
+  "live_beats": [
+    {
+      "event_id": "e01_03_plan_breaks",
+      "location": "entry",
+      "beat": "07:18 three-way work conflict",
+      "choice_shape": "4 attention-allocation choices",
+      "transition": "each choice gets an immediate trade-off result"
+    },
+    {
+      "event_id": "e01_04_junho_signal",
+      "location": "ramp",
+      "beat": "uncertain worker signal",
+      "choice_shape": "direct follow / cross-check / defer-until-repeat",
+      "transition": "signal becomes more or less actionable"
+    },
+    {
+      "event_id": "e01_05_command",
+      "location": "yard",
+      "beat": "verify while controlling access",
+      "choice_shape": "two linked 3-way decisions",
+      "transition": "first choice changes what is known; second changes how people move"
+    },
+    {
+      "event_id": "e01_06_pump_arrival",
+      "location": "gate",
+      "beat": "consequence reveal",
+      "choice_shape": "system routes to the earned result",
+      "transition": "result followed by character reaction"
+    },
+    {
+      "event_id": "e01_07_first_pour",
+      "location": "overview",
+      "beat": "set-piece",
+      "choice_shape": "no quiz",
+      "transition": "engine/noise/hose/movement montage closes the operational arc"
+    }
+  ],
+  "replay_branches": [
+    {
+      "choice_id": "delegate_kang",
+      "later_arc": "inspection / access-control realism"
+    },
+    {
+      "choice_id": "negotiate_yoon",
+      "later_arc": "conflicting accounts / reporting"
+    },
+    {
+      "choice_id": "coordinate_schedule",
+      "later_arc": "changed-work TBM / restart pressure"
+    },
+    {
+      "choice_id": "follow_junho",
+      "later_arc": "worker reporting return"
+    }
+  ]
+}

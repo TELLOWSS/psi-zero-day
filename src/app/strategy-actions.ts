@@ -62,6 +62,7 @@ const ACTION_METADATA: Readonly<Record<Id, ActionMetadata>> = {
   coordinate_schedule: { intent: 'coordinate', target: { kind: 'character', character_id: 'lee_jaehoon' }, actor_character_id: 'lee_jaehoon', resource_axes: ['time', 'schedule', 'safety'] },
   follow_junho: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
   listen_more: { intent: 'inspect', target: { kind: 'character', character_id: 'lim_junho' } },
+  crosscheck_minseok: { intent: 'coordinate', target: { kind: 'character', character_id: 'choi_minseok' }, actor_character_id: 'choi_minseok', resource_axes: ['time', 'safety'] },
   dismiss: { intent: 'control', target: { kind: 'character', character_id: 'lim_junho' } },
   check_self: { intent: 'inspect', target: { kind: 'anchor', anchor: 'ramp' } },
   ask_minseok: { intent: 'coordinate', target: { kind: 'character', character_id: 'choi_minseok' }, actor_character_id: 'choi_minseok' },

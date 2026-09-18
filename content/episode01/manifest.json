@@ -4,24 +4,80 @@
   "title_text_id": "ep01.title",
   "chapter": "FOUNDATION",
   "runtime_chapter_id": "foundation",
-  "target_minutes": 15,
+  "target_minutes": 22,
   "bundle": {
     "schema_version": 1,
-    "content_version": "ep01.relationship.v1",
-    "relationship_policy": { "bounds": { "min": 0, "max": 100 }, "initial_compliance": 50 },
+    "content_version": "ep01.director.v2",
+    "relationship_policy": {
+      "bounds": {
+        "min": 0,
+        "max": 100
+      },
+      "initial_compliance": 50
+    },
     "default_locale": "ko",
     "endings": [],
-    "asset_manifest": { "schema_version": 1, "assets": [] }
+    "asset_manifest": {
+      "schema_version": 1,
+      "assets": []
+    }
   },
   "cast": [
-    { "canonical_id": "PLAYER", "runtime_id": "player", "name_text_id": "cast.player.name", "role_text_id": "cast.player.role" },
-    { "canonical_id": "KANG_TAESIK", "runtime_id": "kang_taesik", "name_text_id": "cast.kang_taesik.name", "role_text_id": "cast.kang_taesik.role", "age": 52 },
-    { "canonical_id": "YOON_SUNGHO", "runtime_id": "yoon_sungho", "name_text_id": "cast.yoon_sungho.name", "role_text_id": "cast.yoon_sungho.role", "age": 48 },
-    { "canonical_id": "LEE_JAEHOON", "runtime_id": "lee_jaehoon", "name_text_id": "cast.lee_jaehoon.name", "role_text_id": "cast.lee_jaehoon.role", "age": 33 },
-    { "canonical_id": "LIM_JUNHO", "runtime_id": "lim_junho", "name_text_id": "cast.lim_junho.name", "role_text_id": "cast.lim_junho.role", "age": 23 },
-    { "canonical_id": "CHOI_MINSEOK", "runtime_id": "choi_minseok", "name_text_id": "cast.choi_minseok.name", "role_text_id": "cast.choi_minseok.role", "age": 39 },
-    { "canonical_id": "SEO_JEONGMIN", "runtime_id": "seo_jeongmin", "name_text_id": "cast.seo_jeongmin.name", "role_text_id": "cast.seo_jeongmin.role", "age": 46 },
-    { "canonical_id": "OH_SEUNGJAE", "runtime_id": "oh_seungjae", "name_text_id": "cast.oh_seungjae.name", "role_text_id": "cast.oh_seungjae.role", "age": 41 }
+    {
+      "canonical_id": "PLAYER",
+      "runtime_id": "player",
+      "name_text_id": "cast.player.name",
+      "role_text_id": "cast.player.role"
+    },
+    {
+      "canonical_id": "KANG_TAESIK",
+      "runtime_id": "kang_taesik",
+      "name_text_id": "cast.kang_taesik.name",
+      "role_text_id": "cast.kang_taesik.role",
+      "age": 52
+    },
+    {
+      "canonical_id": "YOON_SUNGHO",
+      "runtime_id": "yoon_sungho",
+      "name_text_id": "cast.yoon_sungho.name",
+      "role_text_id": "cast.yoon_sungho.role",
+      "age": 48
+    },
+    {
+      "canonical_id": "LEE_JAEHOON",
+      "runtime_id": "lee_jaehoon",
+      "name_text_id": "cast.lee_jaehoon.name",
+      "role_text_id": "cast.lee_jaehoon.role",
+      "age": 33
+    },
+    {
+      "canonical_id": "LIM_JUNHO",
+      "runtime_id": "lim_junho",
+      "name_text_id": "cast.lim_junho.name",
+      "role_text_id": "cast.lim_junho.role",
+      "age": 23
+    },
+    {
+      "canonical_id": "CHOI_MINSEOK",
+      "runtime_id": "choi_minseok",
+      "name_text_id": "cast.choi_minseok.name",
+      "role_text_id": "cast.choi_minseok.role",
+      "age": 39
+    },
+    {
+      "canonical_id": "SEO_JEONGMIN",
+      "runtime_id": "seo_jeongmin",
+      "name_text_id": "cast.seo_jeongmin.name",
+      "role_text_id": "cast.seo_jeongmin.role",
+      "age": 46
+    },
+    {
+      "canonical_id": "OH_SEUNGJAE",
+      "runtime_id": "oh_seungjae",
+      "name_text_id": "cast.oh_seungjae.name",
+      "role_text_id": "cast.oh_seungjae.role",
+      "age": 41
+    }
   ],
   "event_flow": [
     "E01_01_ARRIVAL",
