@@ -493,3 +493,36 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @keyframes day2-carryover-in{from{opacity:.55;transform:translateY(6px);filter:brightness(1.08)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}
 @media(max-width:760px){.day-carryover-cards{grid-template-columns:1fr}.day-carryover-cards article{min-height:0}.day-carryover-timeline span{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.episode-day-carryover[data-phase="day2"]{animation:none!important}}
+
+
+/* Episode 02 · first lift field-reality chain */
+.episode02-lift-reality{margin:0 0 14px;padding:12px;border:1px solid rgba(192,137,78,.34);border-radius:10px;background:linear-gradient(130deg,rgba(28,23,16,.95),rgba(18,23,26,.82));box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.episode02-lift-reality>header{display:grid;gap:3px;margin-bottom:10px}
+.episode02-lift-reality>header span{color:#d4a36d;font-size:8px;font-weight:800;letter-spacing:.13em}
+.episode02-lift-reality>header strong{color:#f2f0e9;font-size:11px;line-height:1.4}
+.episode02-lift-timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0 0 9px;padding:0;list-style:none}
+.episode02-lift-timeline li{position:relative;display:grid;gap:2px;padding:7px 8px 7px 14px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.018)}
+.episode02-lift-timeline li:first-child{border-left:1px solid rgba(255,255,255,.08);border-radius:7px 0 0 7px}
+.episode02-lift-timeline li:last-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 7px 7px 0}
+.episode02-lift-timeline li::before{content:"";position:absolute;left:6px;top:11px;width:4px;height:4px;border-radius:50%;background:#6e7373;box-shadow:0 0 0 3px rgba(110,115,115,.12)}
+.episode02-lift-timeline li[data-state="done"]::before{background:#8e9a86;box-shadow:0 0 0 3px rgba(142,154,134,.14)}
+.episode02-lift-timeline li[data-state="current"]{background:rgba(212,163,109,.07)}
+.episode02-lift-timeline li[data-state="current"]::before{background:#d4a36d;box-shadow:0 0 0 4px rgba(212,163,109,.16)}
+.episode02-lift-timeline time{color:#dfb684;font:700 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em}
+.episode02-lift-timeline span{color:#aeb1ad;font-size:8px;font-weight:700}
+.episode02-lift-timeline li[data-state="current"] span{color:#f2f1ec}
+.episode02-lift-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.episode02-lift-cards article{position:relative;min-height:86px;padding:9px 10px 9px 12px;border:1px solid rgba(255,255,255,.07);border-radius:8px;background:rgba(255,255,255,.025)}
+.episode02-lift-cards article::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;border-radius:2px;background:#939891}
+.episode02-lift-cards article[data-tone="carryover"]::before{background:#9d8db7}
+.episode02-lift-cards article[data-tone="floor"]::before{background:#d7aa57}
+.episode02-lift-cards article[data-tone="voices"]::before{background:#7faeb6}
+.episode02-lift-cards article[data-tone="action"]::before{background:#cf8759}
+.episode02-lift-cards article[data-tone="verification"]::before{background:#a6bd8c}
+.episode02-lift-cards article[data-tone="result"]::before{background:#72b58b}
+.episode02-lift-cards article strong{display:block;color:#ecece6;font-size:10px;line-height:1.35}
+.episode02-lift-cards article p{margin:4px 0 0;color:#b2b6b2;font-size:9px;line-height:1.5;word-break:keep-all}
+.episode02-lift-reality[data-phase="verdict"]{border-color:rgba(114,181,139,.4);animation:ep02-lift-verdict-in .38s ease-out both}
+@keyframes ep02-lift-verdict-in{from{opacity:.58;transform:translateY(5px);filter:brightness(1.08)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}
+@media(max-width:760px){.episode02-lift-cards{grid-template-columns:1fr}.episode02-lift-cards article{min-height:0}.episode02-lift-timeline span{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.episode02-lift-reality[data-phase="verdict"]{animation:none!important}}

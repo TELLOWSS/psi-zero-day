@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode02-first-lift-field-reality-v1",
+  "doctrine_id": "field-reality-doctrine-v1",
+  "window": "DAY 02 06:52–07:18",
+  "intent": "Turn yesterday's reporting, relationship, instruction and record residue into a new work decision where a compliant plan, veteran field knowledge and a jointly reset route each have real costs.",
+  "reads": [
+    "flags.stopwork_culture_result",
+    "flags.instruction_chain_result",
+    "flags.record_result",
+    "flags.day02_lift_action",
+    "flags.day02_lift_result"
+  ],
+  "locks": {
+    "episode01_content": "unchanged",
+    "episode01_completed_flag": "preserved as Day 01 checkpoint",
+    "doctrine": "field-reality-doctrine-v1"
+  },
+  "safety_floor": [
+    "Keep workers out of the suspended-load travel and controlled swing area.",
+    "Maintain a clearly designated signal function and observable stop authority.",
+    "Do not treat veteran familiarity as a substitute for controls that a replacement worker can understand."
+  ],
+  "authoring_gate_checked": {
+    "safety_floor": "Suspended-load exclusion and signal control remain non-negotiable regardless of route.",
+    "field_accounts": "Construction engineer, formwork foreman and crane signaler each hold partial field truth and are heard before the route is judged.",
+    "legitimate_pressure": "Crane standby, delivery traffic, material stacking, crew familiarity and new support workers all affect workability.",
+    "route_costs": "Plan route costs flow; veteran route costs transferability; shared reset costs time and coordination.",
+    "delayed_consequence": "The first two lifts reveal whether the chosen control lives in the document, in one person's experience, or in a shared field standard."
+  },
+  "presentation_rules": [
+    "Do not label the documented route as foolish or the veteran route as reckless by default.",
+    "Do not make the jointly reset route cost-free or automatically superior in every future change.",
+    "Show that compliance and workability are related but not identical.",
+    "Make the 07:18 consequence observable in actual work behavior rather than a score badge."
+  ]
+}

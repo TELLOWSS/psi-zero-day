@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "canonical_id": "EP02_FIELD_REALITY",
+  "runtime_id": "ep02_field_reality",
+  "title_text_id": "ep02.title",
+  "chapter": "FOUNDATION",
+  "runtime_chapter_id": "foundation",
+  "status": "OPENING_SLICE",
+  "doctrine_id": "field-reality-doctrine-v1",
+  "event_flow": [
+    "E02_01_LIFT_ROUTE_PRESSURE",
+    "E02_02_LIFT_ROUTE_RETURN"
+  ]
+}

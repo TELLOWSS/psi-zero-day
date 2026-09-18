@@ -1,0 +1,507 @@
+[
+  {
+    "schema_version": 1,
+    "event_id": "e02_01_lift_route_pressure",
+    "title_text_id": "ep02.1.title",
+    "category_text_id": "ep02.category",
+    "chapter_text_id": "ep02.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e01_10_next_day_tease",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "lee",
+        "character_id": "lee_jaehoon"
+      },
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "choi",
+        "character_id": "choi_minseok"
+      },
+      {
+        "role_id": "player",
+        "character_id": "player"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "situation",
+    "dialogue": [
+      {
+        "node_id": "situation",
+        "type": "RESULT",
+        "text_id": "ep02.lift.situation",
+        "next_node_id": "choi",
+        "choice_ids": []
+      },
+      {
+        "node_id": "choi",
+        "type": "DIALOGUE",
+        "text_id": "ep02.lift.choi",
+        "speaker_role_id": "choi",
+        "next_node_id": "lee",
+        "choice_ids": []
+      },
+      {
+        "node_id": "lee",
+        "type": "DIALOGUE",
+        "text_id": "ep02.lift.lee",
+        "speaker_role_id": "lee",
+        "next_node_id": "kang",
+        "choice_ids": []
+      },
+      {
+        "node_id": "kang",
+        "type": "DIALOGUE",
+        "text_id": "ep02.lift.kang",
+        "speaker_role_id": "kang",
+        "next_node_id": "lift_route",
+        "choice_ids": []
+      },
+      {
+        "node_id": "lift_route",
+        "type": "CHOICE",
+        "text_id": "ep02.lift.prompt",
+        "choice_ids": [
+          "day02_use_plan_route",
+          "day02_use_field_route",
+          "day02_walk_and_reset"
+        ]
+      },
+      {
+        "node_id": "plan_result",
+        "type": "RESULT",
+        "text_id": "ep02.lift.plan.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "field_result",
+        "type": "RESULT",
+        "text_id": "ep02.lift.field.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "shared_result",
+        "type": "RESULT",
+        "text_id": "ep02.lift.shared.result",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep02.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "episode02_started": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 3
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "day02_use_plan_route",
+        "text_id": "ep02.lift.plan",
+        "next_node_id": "plan_result",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "lee.respect.day02_plan",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": 1
+            },
+            {
+              "effect_id": "choi.reporting.day02_plan",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "choi"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": -1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_action": "plan_route"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "day02_use_field_route",
+        "text_id": "ep02.lift.field",
+        "next_node_id": "field_result",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "choi.trust.day02_field",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "choi"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": 2
+            },
+            {
+              "effect_id": "kang.trust.day02_field",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "kang"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": 1
+            },
+            {
+              "effect_id": "lee.respect.day02_field",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": 1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_action": "field_route"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "day02_walk_and_reset",
+        "text_id": "ep02.lift.shared",
+        "next_node_id": "shared_result",
+        "requirements": [],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "player.analysis.day02_shared",
+              "kind": "player_stat",
+              "stat_id": "analysis",
+              "delta": 1
+            },
+            {
+              "effect_id": "choi.trust.day02_shared",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "choi"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": 1
+            },
+            {
+              "effect_id": "kang.trust.day02_shared",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "kang"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "trust",
+              "delta": 1
+            },
+            {
+              "effect_id": "lee.respect.day02_shared",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": -1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_action": "shared_route"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  },
+  {
+    "schema_version": 1,
+    "event_id": "e02_02_lift_route_return",
+    "title_text_id": "ep02.2.title",
+    "category_text_id": "ep02.category",
+    "chapter_text_id": "ep02.chapter",
+    "conditions": [
+      {
+        "kind": "event_completed",
+        "event_id": "e02_01_lift_route_pressure",
+        "minimum_count": 1
+      }
+    ],
+    "participants": [
+      {
+        "role_id": "lee",
+        "character_id": "lee_jaehoon"
+      },
+      {
+        "role_id": "kang",
+        "character_id": "kang_taesik"
+      },
+      {
+        "role_id": "choi",
+        "character_id": "choi_minseok"
+      }
+    ],
+    "scene": {
+      "character_asset_ids": []
+    },
+    "entry_node_id": "resolve",
+    "dialogue": [
+      {
+        "node_id": "resolve",
+        "type": "CHOICE",
+        "text_id": "ep02.lift_return.prompt",
+        "choice_ids": [
+          "day02_return_plan_friction",
+          "day02_return_experience_dependency",
+          "day02_return_shared_route"
+        ]
+      },
+      {
+        "node_id": "plan",
+        "type": "RESULT",
+        "text_id": "ep02.lift_return.plan",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "field",
+        "type": "RESULT",
+        "text_id": "ep02.lift_return.field",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "shared",
+        "type": "RESULT",
+        "text_id": "ep02.lift_return.shared",
+        "next_node_id": "end",
+        "choice_ids": []
+      },
+      {
+        "node_id": "end",
+        "type": "END",
+        "text_id": "ep02.transition",
+        "choice_ids": [],
+        "outcome": "completed",
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_opening_completed": true
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "runtime": {
+      "chapter_id": "foundation",
+      "trigger": "normal",
+      "repeat_policy": {
+        "kind": "once"
+      },
+      "required_flags": {},
+      "selection_policy": {
+        "priority": 3
+      },
+      "missing_participant_policy": "exclude"
+    },
+    "choices": [
+      {
+        "choice_id": "day02_return_plan_friction",
+        "text_id": "ep02.lift_return.choice.plan",
+        "next_node_id": "plan",
+        "requirements": [
+          {
+            "kind": "flag",
+            "flag_id": "day02_lift_action",
+            "equals": "plan_route"
+          }
+        ],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "lee.respect.day02_plan_return",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": -1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_result": "plan_compliant_field_friction"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "day02_return_experience_dependency",
+        "text_id": "ep02.lift_return.choice.field",
+        "next_node_id": "field",
+        "requirements": [
+          {
+            "kind": "flag",
+            "flag_id": "day02_lift_action",
+            "equals": "field_route"
+          }
+        ],
+        "effects": {
+          "immediate_effects": [],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_result": "experience_route_dependency"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      },
+      {
+        "choice_id": "day02_return_shared_route",
+        "text_id": "ep02.lift_return.choice.shared",
+        "next_node_id": "shared",
+        "requirements": [
+          {
+            "kind": "flag",
+            "flag_id": "day02_lift_action",
+            "equals": "shared_route"
+          }
+        ],
+        "effects": {
+          "immediate_effects": [
+            {
+              "effect_id": "lee.respect.day02_shared_return",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "lee"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "respect",
+              "delta": 1
+            },
+            {
+              "effect_id": "choi.reporting.day02_shared_return",
+              "kind": "context_relation",
+              "from": {
+                "kind": "participant",
+                "role_id": "choi"
+              },
+              "to": {
+                "kind": "player"
+              },
+              "field": "reporting",
+              "delta": 1
+            }
+          ],
+          "hidden_effects": [],
+          "relationship_effects": [],
+          "stat_effects": [],
+          "flags": {
+            "day02_lift_result": "shared_route_controlled"
+          },
+          "ending_flags": {},
+          "followup_events": []
+        }
+      }
+    ],
+    "failure_conditions": []
+  }
+]
