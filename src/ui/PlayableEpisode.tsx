@@ -12,7 +12,7 @@ import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectS
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episode01MemoryCallback } from '../app/episode01-memory-callback';
-import { formatCharacterIdentity } from '../app/character-label';
+import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
   consumePaidItem,
   emptyPaidItemWallet,
@@ -48,12 +48,26 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
   const [paidItemWallet, setPaidItemWallet] = useState(initialPaidItemWallet);
   const focusRef = useRef<HTMLElement>(null);
+  const firstSpeakerNodeByRun = useRef(new Map<string, string>());
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
+  const runIdentity = snapshot.state ? `${snapshot.state.run.run_id}:${snapshot.state.run.playthrough}` : null;
+  const dialogueNodeIdentity = snapshot.dialogue && runIdentity
+    ? `${runIdentity}:${snapshot.dialogue.event_id}:${snapshot.dialogue.node_id}`
+    : null;
+  let firstContactTextId: string | undefined;
+  if (person && dialogueNodeIdentity && runIdentity) {
+    const speakerRunKey = `${runIdentity}:${person.id}`;
+    const firstNode = firstSpeakerNodeByRun.current.get(speakerRunKey);
+    if (!firstNode) firstSpeakerNodeByRun.current.set(speakerRunKey, dialogueNodeIdentity);
+    if ((firstNode ?? dialogueNodeIdentity) === dialogueNodeIdentity) {
+      firstContactTextId = characterIntroductionTextId(person.id);
+    }
+  }
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
@@ -308,6 +322,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           loadout={dialogueLoadout}
           equipmentTitle={t('ui.equipment.title')}
           slotLabel={slot => t(`ui.equipment.${slot}`)}
+          introLabel={firstContactTextId ? t('ui.character.first_appearance') : undefined}
+          introLine={firstContactTextId ? t(firstContactTextId) : undefined}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
           <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />

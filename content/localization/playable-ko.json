@@ -480,6 +480,15 @@
     "ui.memory.outcome.instruction.gap": "지시 — 원래 문장은 안전했지만 전달되는 동안 조건이 짧아져 실제 행동과 달라졌다.",
     "ui.memory.outcome.instruction.restored": "지시 — 사라진 조건의 위치를 찾고 ‘조건→확인자→작업’ 순서로 다시 읽게 됐다.",
     "ui.memory.outcome.reporting.reinforced": "소통 — 한 번 받아준 불완전한 보고가 다음 작은 신호를 먼저 말하게 만들었다.",
-    "ui.memory.outcome.reporting.suppressed": "소통 — 말을 꺼낸 뒤의 경험이 다음 보고를 망설이게 만들었다."
+    "ui.memory.outcome.reporting.suppressed": "소통 — 말을 꺼낸 뒤의 경험이 다음 보고를 망설이게 만들었다.",
+    "ui.character.first_appearance": "첫 등장",
+    "cast.player.intro": "현장 위험을 관찰하고 공정·사람·기록을 연결하는 안전관리자",
+    "cast.kang_taesik.intro": "형틀 작업조·통로·작업순서를 현장에서 총괄",
+    "cast.yoon_sungho.intro": "철근 배근·하역·철근 작업조의 흐름을 총괄",
+    "cast.lee_jaehoon.intro": "공정 조율·작업지시·현장 일정을 관리",
+    "cast.lim_junho.intro": "현장의 작은 이상을 먼저 체감하는 신규 작업자",
+    "cast.choi_minseok.intro": "차량·양중 동선의 신호와 접근통제를 담당",
+    "cast.seo_jeongmin.intro": "시공 상태와 조치 완료 여부를 확인하는 건축감리",
+    "cast.oh_seungjae.intro": "공사팀 의사결정·보고·공정 조율을 총괄"
   }
 }

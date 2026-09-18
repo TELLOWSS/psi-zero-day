@@ -50,6 +50,21 @@ function choose(id: string) {
 }
 
 describe('TASK-006 character interaction UI', () => {
+  it('shows the role context only on Junho’s first speaking node', () => {
+    continueToChoice(); choose('follow_junho');
+    for (let i = 0; i < 20 && session.getSnapshot().dialogue?.text_id !== 'ep01.junho.signal'; i++) continueCurrent();
+    expect(session.getSnapshot().dialogue?.text_id).toBe('ep01.junho.signal');
+    const intro = container.querySelector('.character-first-contact')!;
+    expect(intro).not.toBeNull();
+    expect(intro.textContent).toContain(session.t('ui.character.first_appearance'));
+    expect(intro.textContent).toContain(session.t('cast.lim_junho.intro'));
+    expect(container.querySelector('.character-identity-line')?.textContent).toContain('임준호');
+    expect(container.querySelector('.character-identity-line')?.textContent).toContain('신입근로자');
+    continueCurrent();
+    expect(session.getSnapshot().dialogue?.text_id).toBe('ep01.junho.detail');
+    expect(container.querySelector('.character-first-contact')).toBeNull();
+  });
+
   it('retains the NPC identity and silhouette while asking two different Junho responses', () => {
     continueToChoice(); choose('follow_junho'); continueToChoice();
     expect(session.getSnapshot().dialogue?.speaker_id).toBe('lim_junho');

@@ -51,7 +51,7 @@ function ResolvedImage({ uri, fallbackUri, alt, className }: VisualImageProps) {
     onError={() => setFailed(previous => [...previous, activeUri])}
   />;
 }
-export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth, loadout, equipmentTitle, slotLabel }: {
+export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth, loadout, equipmentTitle, slotLabel, introLabel, introLine }: {
   person: { id: string; name: string; role: string };
   portraitUri?: string;
   fallbackPortraitUri?: string;
@@ -59,6 +59,8 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
   loadout?: CharacterLoadoutView;
   equipmentTitle?: string;
   slotLabel?: (slot: EquipmentSlot) => string;
+  introLabel?: string;
+  introLine?: string;
 }) {
   const visual = characterVisual(person.id);
   return <aside className="character-card" style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
@@ -67,6 +69,10 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
       <VisualImage uri={portraitUri} fallbackUri={fallbackPortraitUri} alt={person.name} className="portrait-image" />
     </div>
     <div className="character-identity"><span className="identity-rule" /><div className="character-identity-line"><strong>{person.name}</strong><span>{person.role}</span></div></div>
+    {introLine ? <div className="character-first-contact" role="note">
+      {introLabel ? <span>{introLabel}</span> : null}
+      <p>{introLine}</p>
+    </div> : null}
     {growth ? <div className="character-growth-summary" data-growth-stage={growth.stage}>
       <div><strong>{growth.stage_label}</strong><span>{growth.expression}</span></div>
     </div> : null}
