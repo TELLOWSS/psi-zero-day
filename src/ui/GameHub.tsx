@@ -1,10 +1,9 @@
 import { useState, useSyncExternalStore } from 'react';
-import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
-import { VisualImage, characterVisual } from './VisualSlot';
+import { VisualImage } from './VisualSlot';
 import { FieldGuide } from './FieldGuide';
 import { PlayableEpisode } from './PlayableEpisode';
 import { EpisodeRecord } from './EpisodeRecord';
