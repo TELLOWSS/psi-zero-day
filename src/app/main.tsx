@@ -23,10 +23,11 @@ import '../ui/production-readability.css';
 import '../ui/game-hub.css';
 import '../ui/cinematic-world.css';
 
-const root = document.getElementById('root');
+const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
+const mount = root;
 
-root.innerHTML = `
+mount.innerHTML = `
   <main class="runtime-bootstrap" role="status" aria-live="polite">
     <div class="runtime-bootstrap-mark">NEW PSI</div>
     <strong>PSI : ZERO DAY</strong>
@@ -73,15 +74,15 @@ async function bootstrap() {
   }
 
   document.title = session.t('ui.brand');
-  root.replaceChildren();
-  reactDom.createRoot(root).render(
+  mount.replaceChildren();
+  reactDom.createRoot(mount).render(
     react.createElement(react.StrictMode, null, react.createElement(GameShell, { session })),
   );
 }
 
 void bootstrap().catch(error => {
   console.error('PSI runtime bootstrap failed', error);
-  root.innerHTML = `
+  mount.innerHTML = `
     <main class="runtime-bootstrap runtime-bootstrap-error" role="alert">
       <div class="runtime-bootstrap-mark">NEW PSI</div>
       <strong>PSI : ZERO DAY</strong>
