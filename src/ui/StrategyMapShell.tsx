@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { COMPANY_NAME } from '../app/brand';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForTarget } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
@@ -131,7 +132,7 @@ export function StrategyMapShell({
       <small>SCAN COMPLETE · OBSERVE · ANALYZE · PLAN</small>
     </div>
     <header className="strategy-hud">
-      <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><strong>{copy.brand}</strong></div>
+      <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><div><strong>{copy.brand}</strong><small>{COMPANY_NAME}</small></div></div>
       <div className="strategy-resource-bar" aria-label={`${text('ui.resource.money')} ${text('ui.resource.time')} ${text('ui.resource.schedule')} ${text('ui.resource.safety')}`}>
         <article data-resource="money"><span>{text('ui.resource.money')}</span><strong>{moneyValue}</strong></article>
         <article data-resource="time"><span>{text('ui.resource.time')}</span><strong>{timeValue}</strong></article>

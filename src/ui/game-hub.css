@@ -713,3 +713,11 @@
   .commercial-title-quick-settings button span{display:none}
   .commercial-title-footer{display:none}
 }
+
+/* NEW PSI company brand + gameplay split */
+.commercial-title-meta b{margin-top:1px;color:#f0b126;font-size:10px;letter-spacing:.2em;font-weight:800}
+.gameplay-chunk-fallback{min-height:100dvh;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 62% 28%,rgba(236,169,60,.14),transparent 34%),linear-gradient(145deg,#0c1e2a,#061019 68%);color:#eef5f7;text-align:center}
+.gameplay-chunk-fallback>div{min-width:min(420px,84vw);padding:28px;border:1px solid rgba(174,204,219,.32);border-radius:12px;background:rgba(7,21,31,.76);box-shadow:0 24px 70px rgba(0,0,0,.34)}
+.gameplay-chunk-fallback strong{display:block;font-size:clamp(24px,4vw,44px);letter-spacing:.04em}
+.gameplay-chunk-fallback span{display:block;margin-top:7px;color:#f0b126;font-size:11px;letter-spacing:.24em}
+.gameplay-chunk-fallback p{margin:18px 0 0;color:#bac9d0;font-size:13px}

@@ -453,3 +453,8 @@
   .strategy-entry-slate{display:none}
   .cinematic-loading-team{transition:none!important}
 }
+
+/* NEW PSI runtime brand */
+.cinematic-loading-brand small{color:#f1b63b;font-size:9px;letter-spacing:.24em;font-weight:800}
+.strategy-brand>div{display:flex;flex-direction:column;gap:1px}
+.strategy-brand>div small{font-size:7px;letter-spacing:.18em;color:#e8b448;font-weight:800}

@@ -1,17 +1,25 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
+import { COMPANY_NAME } from '../app/brand';
 import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/strategy-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { FieldGuide } from './FieldGuide';
-import { PlayableEpisode } from './PlayableEpisode';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = ['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const;
+const loadPlayableEpisode = () => import('./PlayableEpisode');
+const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
+
+function GameplayChunkFallback() {
+  return <main className="gameplay-chunk-fallback" role="status" aria-live="polite">
+    <div><strong>PSI : ZERO DAY</strong><span>{COMPANY_NAME}</span><p>현장을 불러오고 있습니다.</p></div>
+  </main>;
+}
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
   const paths = {
     home: 'M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10',
@@ -46,10 +54,14 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     };
   });
 
-  const play = () => setLoading(true);
+  const play = () => {
+    void loadPlayableEpisode();
+    setLoading(true);
+  };
   const newGame = () => {
     const current = session.getSnapshot();
     if (current.phase !== 'start') session.restart(current.revision);
+    void loadPlayableEpisode();
     setLoading(true);
   };
   const enterGame = () => {
@@ -69,10 +81,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     onComplete={enterGame}
   />;
 
-  if (inGame && snapshot.phase !== 'start') return <>
+  if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
     <PlayableEpisode session={session} />
     <button className="game-hub-return" onClick={() => setInGame(false)} type="button"><HubIcon kind="home" />{session.t('ui.hub.return')}</button>
-  </>;
+  </Suspense>;
   return <GameHub session={session} onPlay={play} onNewGame={newGame} />;
 }
 
@@ -131,6 +143,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <header className="commercial-title-topline">
       <div className="commercial-title-meta">
         <small>Ver. 0.1.0</small>
+        <b>{COMPANY_NAME}</b>
         <span>{t('ui.title.topline')}</span>
       </div>
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
