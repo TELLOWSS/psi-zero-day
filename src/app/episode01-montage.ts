@@ -28,12 +28,13 @@ const outcomeBeat = (flags: FlagMap): EpisodeMontageBeat => {
 
 export function episode01Montage(eventId: string | null | undefined, flags: FlagMap | undefined): EpisodeMontage | undefined {
   if (eventId !== 'e01_08_reactions' || !flags) return undefined;
+  const beats: readonly EpisodeMontageBeat[] = Object.freeze([
+    { time: '08:12', title_text_id: 'ui.montage.ep01.pour.title', body_text_id: 'ui.montage.ep01.pour.body', tone: 'work' },
+    outcomeBeat(flags),
+    { time: '09:42', title_text_id: 'ui.montage.ep01.cleanup.title', body_text_id: 'ui.montage.ep01.cleanup.body', tone: 'transition' },
+  ]);
   return Object.freeze({
     title_text_id: 'ui.montage.ep01.title',
-    beats: Object.freeze([
-      { time: '08:12', title_text_id: 'ui.montage.ep01.pour.title', body_text_id: 'ui.montage.ep01.pour.body', tone: 'work' },
-      outcomeBeat(flags),
-      { time: '09:42', title_text_id: 'ui.montage.ep01.cleanup.title', body_text_id: 'ui.montage.ep01.cleanup.body', tone: 'transition' },
-    ]),
+    beats,
   });
 }
