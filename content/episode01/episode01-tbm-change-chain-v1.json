@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-tbm-change-chain-v1",
+  "window": "11:31–13:56",
+  "intent": "Carry the morning lesson about evidence and actual state into an afternoon work-method change, then show whether the revised control becomes repeatable field behavior.",
+  "stages": [
+    {
+      "time": "11:31",
+      "event_id": "e01_08f_report_return",
+      "purpose": "establish that a written statement must match the evidence and actual state"
+    },
+    {
+      "time": "13:42",
+      "event_id": "e01_08g_tbm_field_gap",
+      "purpose": "contrast the still-valid morning TBM with an afternoon task condition that has changed"
+    },
+    {
+      "time": "13:56",
+      "event_id": "e01_08h_tbm_return",
+      "purpose": "observe whether the response leaves a paper gap, chills reporting, or creates a repeatable changed-work control"
+    }
+  ],
+  "reads": [
+    "flags.report_result",
+    "flags.tbm_gap_action",
+    "flags.tbm_gap_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "presentation_rules": [
+    "Do not describe the morning TBM as wrong; distinguish its original conditions from the changed afternoon conditions.",
+    "Show operational tradeoffs for every response without labeling a route correct or incorrect.",
+    "When tbm_gap_result is written, update the same 13:56 panel from verification focus to field verdict."
+  ]
+}
