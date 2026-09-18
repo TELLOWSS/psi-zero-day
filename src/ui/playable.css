@@ -751,3 +751,68 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .phase-playing:not(.strategy-active) .choice-panel{grid-template-columns:1fr}
   .phase-playing:not(.strategy-active) .choice-panel button{grid-template-columns:64px 1fr}
 }
+
+/* EP01 node-by-node director camera pass */
+.episode-immersive-scene[data-has-speaker="true"] .episode-immersive-character:not([data-speaker="true"]){
+  opacity:.62;
+  filter:grayscale(.16) saturate(.72) brightness(.72) drop-shadow(0 14px 12px rgba(0,0,0,.34));
+}
+.episode-immersive-scene[data-shot="dialogue"] .episode-immersive-background{
+  animation:immersive-dialogue-rack .38s ease-out both;
+}
+.episode-immersive-scene[data-shot="decision"] .episode-immersive-background{
+  animation:immersive-decision-push .46s cubic-bezier(.18,.72,.2,1) both;
+}
+.episode-immersive-scene[data-shot="result-pressure"] .episode-immersive-background{
+  animation:immersive-pressure-cut .34s cubic-bezier(.2,.68,.2,1) both;
+  filter:saturate(.88) contrast(1.1) brightness(.82);
+}
+.episode-immersive-scene[data-shot="result-resolved"] .episode-immersive-background{
+  animation:immersive-resolved-breathe .55s ease-out both;
+}
+.episode-immersive-scene[data-shot="reflection"] .episode-immersive-background{
+  animation:immersive-reflection-drift .7s ease-out both;
+  filter:saturate(.82) contrast(.98) brightness(.78);
+}
+.episode-immersive-scene[data-shot="decision"] .episode-immersive-character{
+  opacity:.86;
+}
+.episode-immersive-scene[data-shot="decision"] .episode-immersive-character[data-speaker="true"]{
+  opacity:1;
+}
+.phase-playing:not(.strategy-active) .episode-immersive-scene[data-shot="dialogue"] .episode-immersive-character[data-speaker="true"]{
+  transform:translateY(-2.2%) scale(1.115);
+}
+.phase-playing:not(.strategy-active) .episode-immersive-scene[data-shot="result-pressure"] .episode-immersive-grade{
+  background:
+    radial-gradient(circle at 50% 52%,transparent 28%,rgba(52,13,10,.18) 74%,rgba(20,6,6,.52) 100%),
+    linear-gradient(180deg,rgba(55,12,8,.05),rgba(18,5,5,.7));
+}
+.phase-playing:not(.strategy-active) .episode-immersive-scene[data-shot="result-resolved"] .episode-immersive-grade{
+  background:
+    linear-gradient(180deg,rgba(49,100,89,.03),rgba(7,22,20,.5)),
+    radial-gradient(circle at 52% 28%,rgba(128,188,157,.08),transparent 42%);
+}
+@keyframes immersive-dialogue-rack{
+  from{transform:scale(1.055);filter:saturate(.86) contrast(1.08) brightness(.84)}
+  to{transform:scale(1.035);filter:saturate(1.02) contrast(1.06) brightness(.92)}
+}
+@keyframes immersive-decision-push{
+  from{transform:scale(1.025);filter:saturate(.9) contrast(1.02) brightness(.88)}
+  to{transform:scale(1.075);filter:saturate(.96) contrast(1.08) brightness(.87)}
+}
+@keyframes immersive-pressure-cut{
+  0%{transform:scale(1.09);filter:saturate(.72) contrast(1.16) brightness(.72)}
+  100%{transform:scale(1.055);filter:saturate(.88) contrast(1.1) brightness(.82)}
+}
+@keyframes immersive-resolved-breathe{
+  from{transform:scale(1.06);filter:saturate(.94) contrast(1.05) brightness(.88)}
+  to{transform:scale(1.025);filter:saturate(1.02) contrast(1.03) brightness(.95)}
+}
+@keyframes immersive-reflection-drift{
+  from{transform:scale(1.035) translateX(0)}
+  to{transform:scale(1.055) translateX(-.8%)}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene[data-shot] .episode-immersive-background{animation:none!important}
+}

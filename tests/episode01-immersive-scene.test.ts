@@ -27,6 +27,25 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(scene?.cast).toContain('lim_junho');
   });
 
+  it('directs dialogue, choice and consequence nodes as different shots', () => {
+    const dialogue = episode01ImmersiveScene('e01_04_junho_signal', 'detail', 'SHOW_DIALOGUE', 'lim_junho');
+    expect(dialogue?.shot).toBe('dialogue');
+    expect(dialogue?.subject_character_id).toBe('lim_junho');
+    expect(dialogue?.focus).toBe('left');
+
+    const choice = episode01ImmersiveScene('e01_05_command', 'ramp', 'SHOW_CHOICE');
+    expect(choice?.shot).toBe('decision');
+    expect(choice?.camera).toBe('medium');
+
+    const pressure = episode01ImmersiveScene('e01_06_pump_arrival', 'near_miss', 'SHOW_RESULT');
+    expect(pressure?.shot).toBe('result-pressure');
+    expect(pressure?.camera).toBe('tight');
+
+    const resolved = episode01ImmersiveScene('e01_06_pump_arrival', 'best_control', 'SHOW_RESULT');
+    expect(resolved?.shot).toBe('result-resolved');
+    expect(resolved?.camera).toBe('wide');
+  });
+
   it('keeps evening reflection visually distinct from field pressure', () => {
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.tone).toBe('reflective');
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.background_uri).toContain('home-night');

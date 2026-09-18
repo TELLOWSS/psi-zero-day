@@ -40,6 +40,9 @@ export function EpisodeImmersiveScene({
     data-camera={scene.camera}
     data-focus={scene.focus}
     data-tone={scene.tone}
+    data-shot={scene.shot}
+    data-has-speaker={Boolean(scene.subject_character_id) || undefined}
+    data-subject={scene.subject_character_id ?? undefined}
     data-node={scene.node_id ?? undefined}
     key={`${scene.event_id}:${scene.node_id ?? 'entry'}:${scene.tone}`}
   >

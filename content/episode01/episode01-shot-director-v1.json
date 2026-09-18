@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-shot-director-v1",
+  "status": "IMPLEMENTED",
+  "scope": "EPISODE_01",
+  "intent": "Make dialogue, decision and consequence nodes feel like distinct camera cuts without changing event topology or gameplay rules.",
+  "shot_rules": {
+    "establishing": "Use the authored event camera.",
+    "dialogue": "Rack focus toward the active speaker and dim non-speakers.",
+    "decision": "Push the environment slightly forward while keeping choices visually neutral.",
+    "result_pressure": "Tighten framing and grade the scene for consequence pressure.",
+    "result_resolved": "Open framing and let the scene breathe after a controlled outcome.",
+    "reflection": "Use a wide, slower visual treatment for evening and next-day memory."
+  },
+  "locks": {
+    "event_topology": "preserved",
+    "choice_ids": "preserved",
+    "effect_bundles": "preserved",
+    "save_compatibility": "preserved"
+  },
+  "qa": [
+    "Speaker changes alter focus and subject emphasis.",
+    "Choice nodes do not visually mark a correct answer.",
+    "Pressure and resolved result nodes use visibly different camera rhythm.",
+    "Reduced-motion users receive the same information without animated camera motion."
+  ]
+}
