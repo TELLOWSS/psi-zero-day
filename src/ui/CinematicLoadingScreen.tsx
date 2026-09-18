@@ -11,6 +11,7 @@ export function CinematicLoadingScreen({
 }) {
   const [progress, setProgress] = useState(6);
   const [assetsReady, setAssetsReady] = useState(false);
+  const [exiting, setExiting] = useState(false);
   const uniqueUris = useMemo(() => [...new Set(preloadUris.filter(Boolean))], [preloadUris]);
 
   useEffect(() => {
@@ -52,7 +53,8 @@ export function CinematicLoadingScreen({
 
   useEffect(() => {
     if (progress < 100) return;
-    const done = window.setTimeout(onComplete, 260);
+    setExiting(true);
+    const done = window.setTimeout(onComplete, 620);
     return () => window.clearTimeout(done);
   }, [progress, onComplete]);
 
@@ -66,7 +68,7 @@ export function CinematicLoadingScreen({
           ? '현장 진입을 준비하고 있습니다.'
           : '진입 준비 완료';
 
-  return <main className="cinematic-loading" aria-label="현장 진입 준비">
+  return <main className={`cinematic-loading${exiting ? ' is-complete' : ''}`} aria-label="현장 진입 준비">
     {backgroundUri ? <img className="cinematic-loading-backdrop" src={backgroundUri} alt="" aria-hidden="true" /> : null}
     <div className="cinematic-loading-vignette" aria-hidden="true" />
     <div className="cinematic-scanline" aria-hidden="true"><i /></div>

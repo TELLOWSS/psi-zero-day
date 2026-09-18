@@ -271,3 +271,126 @@
     animation:none!important;
   }
 }
+
+/* PSI ZERO DAY scene-transition continuity v2 */
+.cinematic-loading{
+  --psi-warm:#f2b13a;
+  --psi-cool:#6fd4ef;
+}
+.cinematic-loading-backdrop{
+  object-position:52% 47%;
+  filter:saturate(.9) contrast(1.1) brightness(.62) sepia(.04);
+}
+.cinematic-loading-vignette{
+  background:
+    radial-gradient(circle at 31% 42%,rgba(255,185,70,.18),transparent 20%),
+    radial-gradient(circle at 72% 29%,rgba(105,177,214,.09),transparent 28%),
+    linear-gradient(90deg,rgba(2,8,13,.92),rgba(3,11,18,.3) 43%,rgba(2,9,15,.28)),
+    linear-gradient(0deg,rgba(2,8,13,.76),transparent 42%,rgba(3,10,17,.18));
+}
+.cinematic-loading-panel{
+  transition:opacity .42s ease,transform .52s cubic-bezier(.2,.8,.2,1),filter .42s ease;
+}
+.cinematic-loading-brand,
+.cinematic-loading-tip,
+.cinematic-scanline{
+  transition:opacity .35s ease,transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.cinematic-loading-backdrop{
+  transition:filter .55s ease,transform .62s cubic-bezier(.2,.8,.2,1),opacity .55s ease;
+}
+.cinematic-loading::after{
+  content:'';
+  position:absolute;z-index:20;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 52% 48%,rgba(255,224,157,.08),transparent 25%),
+    linear-gradient(90deg,rgba(7,19,29,.1),rgba(7,19,29,0) 50%,rgba(7,19,29,.1));
+  opacity:0;
+  transition:opacity .42s ease;
+}
+.cinematic-loading.is-complete::after{opacity:1}
+.cinematic-loading.is-complete .cinematic-loading-panel{
+  opacity:0;transform:translateY(-10px) scale(.985);filter:blur(3px)
+}
+.cinematic-loading.is-complete .cinematic-loading-brand{
+  opacity:0;transform:translateY(-8px)
+}
+.cinematic-loading.is-complete .cinematic-loading-tip{
+  opacity:0;transform:translate(-50%,10px)
+}
+.cinematic-loading.is-complete .cinematic-scanline{opacity:0}
+.cinematic-loading.is-complete .cinematic-loading-backdrop{
+  filter:saturate(.96) contrast(1.08) brightness(.77) sepia(.05);
+  transform:scale(1.045) translate3d(.45%,-.2%,0);
+}
+.cinematic-progress i{transition:width 110ms linear}
+.cinematic-progress strong{min-width:3.1ch;text-align:right}
+.strategy-shell{
+  overflow:hidden;
+  animation:psi-strategy-shell-enter .72s cubic-bezier(.2,.78,.2,1) both;
+}
+.strategy-world-backdrop{
+  object-position:52% 47%;
+  filter:saturate(.94) contrast(1.08) brightness(.75) sepia(.035);
+  animation:psi-map-enter-camera .9s cubic-bezier(.2,.8,.2,1) both,psi-map-breathe 22s .9s ease-in-out infinite alternate;
+  transform-origin:55% 48%;
+}
+.strategy-world-atmosphere{
+  background:
+    radial-gradient(circle at 31% 42%,rgba(255,186,67,.15),transparent 20%),
+    radial-gradient(circle at 70% 29%,rgba(102,174,211,.08),transparent 29%),
+    linear-gradient(90deg,rgba(3,12,19,.58),rgba(6,18,28,.12) 42%,rgba(3,12,19,.22)),
+    linear-gradient(0deg,rgba(4,12,19,.56),transparent 34%);
+  animation:psi-map-atmosphere-enter .82s ease both;
+}
+.strategy-hud{animation:psi-hud-enter .62s .16s cubic-bezier(.2,.8,.2,1) both}
+.strategy-rail{animation:psi-panel-enter-left .62s .22s cubic-bezier(.2,.8,.2,1) both}
+.strategy-roster{animation:psi-panel-enter-right .62s .28s cubic-bezier(.2,.8,.2,1) both}
+.strategy-map{animation:psi-map-ui-enter .65s .12s cubic-bezier(.2,.8,.2,1) both}
+.strategy-map::after{
+  content:'';
+  position:absolute;z-index:9;left:0;right:0;top:31%;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent 5%,rgba(95,220,248,.2) 29%,rgba(255,214,100,.14) 51%,rgba(95,220,248,.16) 72%,transparent 94%);
+  box-shadow:0 0 12px rgba(61,194,226,.16);
+  animation:psi-map-scan-fade 1.55s ease-out both;
+}
+@keyframes psi-strategy-shell-enter{
+  from{opacity:.1;filter:brightness(.72)}
+  to{opacity:1;filter:brightness(1)}
+}
+@keyframes psi-map-enter-camera{
+  from{transform:scale(1.085) translate3d(.8%,-.6%,0);opacity:.58}
+  to{transform:scale(1.025) translate3d(0,0,0);opacity:1}
+}
+@keyframes psi-map-atmosphere-enter{
+  from{opacity:.15}to{opacity:1}
+}
+@keyframes psi-hud-enter{
+  from{opacity:0;transform:translateY(-14px)}
+  to{opacity:1;transform:none}
+}
+@keyframes psi-panel-enter-left{
+  from{opacity:0;transform:translateX(-18px)}
+  to{opacity:1;transform:none}
+}
+@keyframes psi-panel-enter-right{
+  from{opacity:0;transform:translateX(18px)}
+  to{opacity:1;transform:none}
+}
+@keyframes psi-map-ui-enter{
+  from{opacity:.3;transform:scale(.995)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes psi-map-scan-fade{
+  0%{opacity:0;transform:translateY(-24px)}
+  25%{opacity:.78}
+  75%{opacity:.3}
+  100%{opacity:0;transform:translateY(54px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .cinematic-loading-panel,.cinematic-loading-brand,.cinematic-loading-tip,.cinematic-loading-backdrop,
+  .strategy-shell,.strategy-hud,.strategy-rail,.strategy-roster,.strategy-map,.strategy-world-atmosphere{
+    transition:none!important;animation:none!important
+  }
+  .strategy-map::after{display:none}
+}
