@@ -343,17 +343,182 @@ function TrafficScene({ forklift=false }: {forklift?:boolean}) {
   </SceneBase>;
 }
 
+
+function RichBase({ children, accent = orange }: { children: ReactNode; accent?: string }) {
+  return <svg className="field-guide-svg rich-field-guide-svg" viewBox="0 0 640 420" role="img" aria-hidden="true">
+    <defs>
+      <linearGradient id="rich-bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#17354a"/><stop offset="1" stopColor="#081722"/>
+      </linearGradient>
+      <linearGradient id="rich-steel" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#d7e2e8"/><stop offset=".25" stopColor="#8095a4"/><stop offset=".62" stopColor="#415a6c"/><stop offset="1" stopColor="#1e3445"/>
+      </linearGradient>
+      <linearGradient id="rich-dark" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#40566a"/><stop offset="1" stopColor="#142838"/>
+      </linearGradient>
+      <linearGradient id="rich-orange" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#ffc24d"/><stop offset=".48" stopColor="#f2a33a"/><stop offset="1" stopColor="#a65a15"/>
+      </linearGradient>
+      <linearGradient id="rich-concrete" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#d4d1c9"/><stop offset=".55" stopColor="#a4a7a5"/><stop offset="1" stopColor="#696f70"/>
+      </linearGradient>
+      <linearGradient id="rich-red" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#f47767"/><stop offset=".55" stopColor="#d85148"/><stop offset="1" stopColor="#8d2f2b"/>
+      </linearGradient>
+      <filter id="rich-shadow" x="-30%" y="-30%" width="160%" height="180%">
+        <feDropShadow dx="0" dy="11" stdDeviation="11" floodColor="#000" floodOpacity=".43"/>
+      </filter>
+    </defs>
+    <rect width="640" height="420" rx="28" fill="url(#rich-bg)"/>
+    <ellipse cx="320" cy="350" rx="225" ry="31" fill="#02080d" opacity=".55"/>
+    <path d="M112 319 286 247 531 305 346 383 112 331Z" fill="#223b4e" stroke="#56748a" strokeWidth="2"/>
+    <path d="M112 319 346 383 346 394 112 342Z" fill="#102331"/>
+    <path d="M346 383 531 305 531 317 346 394Z" fill="#0a1a25"/>
+    <path d="M139 329 177 318 191 322 152 334Z M199 307 237 296 251 300 212 312Z" fill={accent} opacity=".75"/>
+    <g filter="url(#rich-shadow)">{children}</g>
+  </svg>;
+}
+
+function RichMaterialYard() {
+  return <RichBase accent={orange}>
+    <path d="M146 292 470 292 494 307 171 347Z" fill="none" stroke={orange} strokeWidth="5"/>
+    <g stroke="#a7bac6" strokeWidth="3" fill="#203544">
+      <circle cx="188" cy="200" r="8"/><circle cx="207" cy="200" r="8"/><circle cx="226" cy="200" r="8"/><circle cx="245" cy="200" r="8"/><circle cx="264" cy="200" r="8"/>
+      <circle cx="192" cy="218" r="8"/><circle cx="211" cy="218" r="8"/><circle cx="230" cy="218" r="8"/><circle cx="249" cy="218" r="8"/><circle cx="268" cy="218" r="8"/>
+      <circle cx="196" cy="236" r="8"/><circle cx="215" cy="236" r="8"/><circle cx="234" cy="236" r="8"/><circle cx="253" cy="236" r="8"/>
+    </g>
+    <path d="M168 181h122M168 221h122" stroke="#1c2d38" strokeWidth="13"/>
+    <path d="M192 174v80M265 174v80" stroke="url(#rich-orange)" strokeWidth="9"/>
+    <path d="M312 257 442 235M312 249 442 227M312 241 442 219M312 233 442 211M312 225 442 203" stroke="#8498a5" strokeWidth="7" strokeLinecap="round"/>
+    <path d="M334 203 450 184" stroke="url(#rich-orange)" strokeWidth="10"/>
+    <path d="M342 286 458 266 480 274 362 296Z" fill="url(#rich-concrete)" stroke="#596a73" strokeWidth="2"/>
+    <path d="M342 272 458 252 480 260 362 282Z" fill="url(#rich-concrete)" stroke="#596a73" strokeWidth="2"/>
+    <path d="M342 258 458 238 480 246 362 268Z" fill="url(#rich-concrete)" stroke="#596a73" strokeWidth="2"/>
+    <path d="M342 244 458 224 480 232 362 254Z" fill="url(#rich-concrete)" stroke="#596a73" strokeWidth="2"/>
+    <path d="M378 218v82M446 207v80" stroke="url(#rich-orange)" strokeWidth="8"/>
+  </RichBase>;
+}
+
+function RichDistributionBoard() {
+  return <RichBase accent={orange}>
+    <path d="M238 135 402 148 402 302 238 291Z" fill="url(#rich-orange)" stroke="#6e4215" strokeWidth="4"/>
+    <path d="M402 148 439 129 439 281 402 302Z" fill="#a95d17" stroke="#6e4215" strokeWidth="4"/>
+    <path d="M238 135 275 116 439 129 402 148Z" fill="#ffc357" stroke="#80501f" strokeWidth="4"/>
+    <path d="M256 155 386 164 386 269 256 261Z" fill="#1e303d" stroke="#9fb0bc" strokeWidth="4"/>
+    <g fill="#eef1f2" stroke="#7b8b94" strokeWidth="2">
+      <rect x="270" y="177" width="18" height="30" rx="3"/><rect x="297" y="177" width="18" height="30" rx="3"/><rect x="324" y="177" width="18" height="30" rx="3"/><rect x="351" y="177" width="18" height="30" rx="3"/>
+    </g>
+    <g fill="#263640">
+      <rect x="275" y="185" width="8" height="14" rx="2"/><rect x="302" y="185" width="8" height="14" rx="2"/><rect x="329" y="185" width="8" height="14" rx="2"/><rect x="356" y="185" width="8" height="14" rx="2"/>
+    </g>
+    <circle cx="278" cy="233" r="11" fill={blue} stroke="#b9c4ca" strokeWidth="3"/><circle cx="308" cy="233" r="11" fill={blue} stroke="#b9c4ca" strokeWidth="3"/>
+    <circle cx="338" cy="233" r="11" fill={red} stroke="#b9c4ca" strokeWidth="3"/><circle cx="368" cy="233" r="11" fill={red} stroke="#b9c4ca" strokeWidth="3"/>
+    <path d="M278 244v24M308 244v24M338 244v24M368 244v24" stroke="#111e27" strokeWidth="6" strokeLinecap="round"/>
+    <path d="M269 294 244 344M383 303 408 350M300 299 282 345M354 302 368 348" stroke="#a95d17" strokeWidth="12" strokeLinecap="round"/>
+    <path d="M245 344h46M362 349h52" stroke="#1d3342" strokeWidth="11" strokeLinecap="round"/>
+  </RichBase>;
+}
+
+function RichLightingTower() {
+  return <RichBase accent={yellow}>
+    <path d="M287 308h80l18 23-117 2Z" fill="#203949" stroke="#5e788a" strokeWidth="3"/>
+    <path d="M302 306v-64h45v64" fill="url(#rich-dark)" stroke="#758b98" strokeWidth="3"/>
+    <path d="M320 242V130" stroke="url(#rich-steel)" strokeWidth="16"/>
+    <path d="M320 170h-83M320 170h83M320 138h-55M320 138h55" stroke="#536a79" strokeWidth="10"/>
+    <g fill="#273f51" stroke="#9eb0ba" strokeWidth="3">
+      <rect x="211" y="116" width="50" height="42" rx="8"/><rect x="261" y="116" width="50" height="42" rx="8"/><rect x="332" y="116" width="50" height="42" rx="8"/><rect x="382" y="116" width="50" height="42" rx="8"/>
+    </g>
+    <g fill="#fff1b7">
+      <rect x="218" y="123" width="36" height="28" rx="4"/><rect x="268" y="123" width="36" height="28" rx="4"/><rect x="339" y="123" width="36" height="28" rx="4"/><rect x="389" y="123" width="36" height="28" rx="4"/>
+    </g>
+    <path d="M299 311 249 337M367 311 417 337" stroke="#516b7b" strokeWidth="8"/>
+    <circle cx="303" cy="321" r="10" fill="#1f2e37"/><circle cx="365" cy="321" r="10" fill="#1f2e37"/>
+  </RichBase>;
+}
+
+function RichPPEStation() {
+  return <RichBase accent={yellow}>
+    <path d="M180 126 448 143 448 312 180 297Z" fill="url(#rich-dark)" stroke="#617989" strokeWidth="4"/>
+    <path d="M180 126 211 111 480 128 448 143Z" fill="#3a5265"/><path d="M448 143 480 128 480 297 448 312Z" fill="#132938"/>
+    <path d="M205 168h217" stroke="#8da1ac" strokeWidth="9"/>
+    <path d="M207 165q25-38 50 0v13h-50ZM279 165q25-38 50 0v13h-50ZM351 165q25-38 50 0v13h-50Z" fill="#f2b632" stroke="#7e551a" strokeWidth="3"/>
+    <path d="M214 201h36l-6 57h-24ZM286 201h36l-6 57h-24ZM358 201h36l-6 57h-24Z" fill={yellow} stroke="#6b5a25" strokeWidth="3"/>
+    <path d="M232 202v53M304 202v53M376 202v53" stroke="#eff3ef" strokeWidth="4" opacity=".8"/>
+    <path d="M217 274h65v42h-65Z M294 274h65v42h-65Z M371 274h50v42h-50Z" fill="#2b4354" stroke="#6f8694" strokeWidth="3"/>
+    <path d="M394 198c-22 0-29 28-5 46 24-18 17-46-5-46Z" fill="none" stroke={yellow} strokeWidth="7"/>
+  </RichBase>;
+}
+
+function RichAEDStation() {
+  return <RichBase accent={red}>
+    <path d="M198 143h114v150H198Z" fill="#e7ecee" stroke="#657b89" strokeWidth="4"/>
+    <rect x="218" y="165" width="74" height="70" rx="9" fill="#2f875c"/>
+    <path d="M255 179v42M234 200h42" stroke="#fff" strokeWidth="11"/>
+    <path d="M327 151h118v150H327Z" fill="#edf0f1" stroke="#657b89" strokeWidth="4"/>
+    <rect x="344" y="169" width="84" height="92" rx="9" fill="url(#rich-red)"/>
+    <path d="M386 190c-20-24-50 10 0 51 50-41 20-75 0-51Z" fill="#fff" opacity=".95"/>
+    <path d="M386 198 376 216h12l-8 17 22-24h-13l7-11Z" fill={red}/>
+    <circle cx="431" cy="160" r="10" fill={red}/>
+    <path d="M176 320h293" stroke="#243c4d" strokeWidth="11"/><path d="M191 320v-42M451 320v-42" stroke="#243c4d" strokeWidth="11"/>
+  </RichBase>;
+}
+
+function RichWeatherStation() {
+  return <RichBase accent={blue}>
+    <path d="M321 314V126" stroke="url(#rich-steel)" strokeWidth="15"/><path d="M321 160h-88M321 160h93" stroke="#566d7d" strokeWidth="9"/>
+    <circle cx="254" cy="116" r="10" fill="#253541"/><path d="M254 116h38M254 116 234 84M254 116 234 148" stroke="#6d8190" strokeWidth="7"/>
+    <circle cx="297" cy="116" r="17" fill="#263946"/><circle cx="231" cy="79" r="17" fill="#263946"/><circle cx="231" cy="153" r="17" fill="#263946"/>
+    <path d="M368 139h42" stroke="#5a7180" strokeWidth="8"/><path d="M410 127 461 139 410 151Z" fill="#273e4f"/>
+    <rect x="275" y="205" width="92" height="77" rx="8" fill="#e8eef0" stroke="#627b8a" strokeWidth="4"/>
+    <path d="M285 207 319 178 354 207Z" fill="#294f73" stroke="#71899a" strokeWidth="3"/><path d="M293 210h56l-20 37h-56Z" fill="#335f88"/>
+    <path d="M310 314 279 350M333 314 366 350" stroke="#6b7d87" strokeWidth="8"/><path d="M260 350h40M347 350h42" stroke="#213746" strokeWidth="10"/>
+  </RichBase>;
+}
+
+function RichFoundationStep() {
+  return <RichBase accent={yellow}>
+    <path d="M163 188 412 188 474 244 222 244Z" fill="url(#rich-concrete)" stroke="#6d787b" strokeWidth="4"/><path d="M222 244 474 244 474 293 222 293Z" fill="#737b7c"/>
+    <path d="M163 188 222 244 222 293 163 236Z" fill="#929896"/>
+    <path d="M137 257 339 257 391 306 186 306Z" fill="#bfc0ba" stroke="#777f80" strokeWidth="4"/><path d="M186 306 391 306 391 333 186 333Z" fill="#747d7e"/>
+    <path d="M192 270v-54M338 270v-54M443 226v-54" stroke="#313f47" strokeWidth="7"/>
+    <path d="M184 218h16l10 28h-36ZM330 218h16l10 28h-36ZM435 174h16l10 28h-36Z" fill={red} stroke="#8a3932" strokeWidth="2"/>
+    <path d="M169 262h46M315 262h46M420 218h46" stroke="#fff" strokeWidth="7"/><path d="M164 277h56M310 277h56M415 233h56" stroke={yellow} strokeWidth="7"/>
+    <path d="M155 317 202 303M205 303 245 292" stroke={yellow} strokeWidth="8" strokeLinecap="round"/>
+  </RichBase>;
+}
+
+function RichRebarMat() {
+  return <RichBase accent={yellow}>
+    <path d="M142 304 413 304 488 336 207 365Z" fill="#253d50" stroke="#56758a" strokeWidth="3"/>
+    <g stroke="url(#rich-steel)" strokeLinecap="round">
+      <path d="M158 190H430l47 26M158 207H435l43 22M158 224H440l38 18M158 241H445l33 14M158 258H450l28 10M158 275H455l23 6M158 292H460" strokeWidth="8"/>
+      <path d="M174 172v130M202 172v130M230 172v130M258 172v130M286 172v130M314 172v130M342 172v130M370 172v130M398 172v130M426 172v130" strokeWidth="7"/>
+      <path d="M188 169v-62M272 170V90M359 174v-68M444 207v-66" strokeWidth="9"/>
+    </g>
+    <ellipse cx="188" cy="107" rx="7" ry="4" fill="#dce4e7"/><ellipse cx="272" cy="90" rx="7" ry="4" fill="#dce4e7"/><ellipse cx="359" cy="106" rx="7" ry="4" fill="#dce4e7"/><ellipse cx="444" cy="141" rx="7" ry="4" fill="#dce4e7"/>
+    <path d="M188 192 444 192M188 245 464 257" stroke="#c2aa78" strokeWidth="4" opacity=".9"/>
+  </RichBase>;
+}
+
 function resolveScene(key:string) {
+  if(key==='foundation_blinding_edge') return <RichFoundationStep/>;
   if(key==='site_gate') return <GateScene/>;
   if(key==='pedestrian_gate') return <GateScene pedestrian/>;
   if(key.includes('vehicle_pedestrian') || key.includes('vehicle_overlap')) return <RouteScene/>;
-  if(key.includes('material_yard') || key==='material_stack') return <YardScene/>;
-  if(key.includes('distribution_board') || key.includes('temporary_power')) return <CabinetScene/>;
+  if(key==='material_yard') return <RichMaterialYard/>;
+  if(key==='material_stack') return <YardScene/>;
+  if(key==='temporary_distribution_board') return <RichDistributionBoard/>;
+  if(key.includes('temporary_power')) return <CabinetScene/>;
+  if(key==='temporary_lighting_pack') return <RichLightingTower/>;
   if(key.includes('lighting')) return <LightingScene/>;
-  if(key.includes('ppe_issue') || key.includes('eye_face_ppe')) return <CabinetScene variant="ppe"/>;
+  if(key==='ppe_issue_station') return <RichPPEStation/>;
+  if(key.includes('eye_face_ppe')) return <CabinetScene variant="ppe"/>;
   if(key.includes('fire_extinguisher')) return <CabinetScene variant="fire"/>;
+  if(key==='first_aid_aed') return <RichAEDStation/>;
   if(key.includes('first_aid') || key.includes('aed')) return <CabinetScene variant="aed"/>;
+  if(key==='site_weather_station') return <RichWeatherStation/>;
   if(key.includes('weather') || key.includes('wind_meter')) return <WeatherScene/>;
+  if(key==='foundation_rebar_mat') return <RichRebarMat/>;
   if(key.includes('rebar') || key.includes('starter')) return <RebarScene/>;
   if(key.includes('pit_opening') || key.includes('opening') || key.includes('open_edge') || key.includes('floor_change_edge')) return <EdgeScene cover={key.includes('cover')} roof={key.includes('roof')}/>;
   if(key.includes('walkway') || key.includes('access_route') || key.includes('temporary_route')) return <RebarScene walkway/>;
