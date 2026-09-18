@@ -19,8 +19,12 @@
       "childlike proportions"
     ]
   },
+  "legacy_runtime": {
+    "status": "preserved_until_replacement_passes",
+    "note": "Existing character binaries stay active to avoid breaking the playable build."
+  },
   "player_master": {
-    "status": "locked",
+    "status": "replacement_spec_locked",
     "identity": "adult Korean female field safety manager",
     "silhouette": "compact athletic",
     "helmet": "white hard hat with one plain blue stripe",
@@ -32,52 +36,105 @@
     },
     "map": {
       "minimum": "768x1024",
-      "framing": "single full-body 3/4 cutout, stable planted field-lead stance, height greater than width"
+      "framing": "single full-body 3/4 transparent cutout, stable planted field-lead stance, height greater than width"
     }
   },
   "batch_a": {
-    "status": "active",
-    "intake_scope": "batch-a",
+    "status": "active_replacement",
+    "intake_scope": "replacement-a",
+    "title_cast": [
+      "lim_junho",
+      "player",
+      "lee_jaehoon",
+      "seo_jeongmin"
+    ],
     "characters": [
       {
-        "id": "kang_taesik",
-        "assets": ["kang-taesik-portrait.webp", "kang-taesik-map.webp"],
-        "age_role": "male, 50s veteran worker",
-        "silhouette": "broad heavy square",
-        "face": "weathered older face with thick moustache",
-        "helmet": "orange",
-        "wardrobe": "dark practical field workwear with orange safety vest",
-        "signature_prop": "work gloves",
-        "map_pose": "wide planted stance with pointing or instruction gesture",
-        "must_not_resemble": ["yoon_sungho", "oh_seungjae"]
+        "id": "player",
+        "assets": [
+          "player-portrait.webp",
+          "player-map.webp"
+        ],
+        "age_role": "female, late 20s safety manager",
+        "silhouette": "compact athletic, clearly feminine",
+        "face": "soft V-shaped face, narrow soft jaw, focused almond eyes",
+        "helmet": "white with blue stripe",
+        "wardrobe": "navy/blue safety clothing",
+        "signature_prop": "black inspection tablet",
+        "must_not_resemble": [
+          "lim_junho",
+          "lee_jaehoon"
+        ]
       },
       {
         "id": "lim_junho",
-        "assets": ["lim-junho-portrait.webp", "lim-junho-map.webp"],
+        "assets": [
+          "lim-junho-portrait.webp",
+          "lim-junho-map.webp"
+        ],
         "age_role": "male, early 20s rookie",
-        "silhouette": "small narrow young",
-        "face": "young round face with bright eyes",
+        "silhouette": "small narrow youthful",
+        "face": "round youthful face, small rounded jaw, large bright eyes",
         "helmet": "yellow",
         "wardrobe": "green high-visibility vest",
         "signature_prop": "handheld radio",
-        "map_pose": "slightly forward eager posture",
-        "must_not_resemble": ["lee_jaehoon", "player"]
+        "must_not_resemble": [
+          "player",
+          "lee_jaehoon"
+        ]
+      },
+      {
+        "id": "lee_jaehoon",
+        "assets": [
+          "lee-jaehoon-portrait.webp",
+          "lee-jaehoon-map.webp"
+        ],
+        "age_role": "male, early 30s construction assistant manager",
+        "silhouette": "tall slim vertical",
+        "face": "long narrow clean face, tapered jaw, calm horizontal eyes",
+        "helmet": "white",
+        "wardrobe": "clean blue site jacket",
+        "signature_prop": "rolled construction drawing",
+        "must_not_resemble": [
+          "lim_junho",
+          "seo_jeongmin"
+        ]
+      },
+      {
+        "id": "seo_jeongmin",
+        "assets": [
+          "seo-jeongmin-portrait.webp",
+          "seo-jeongmin-map.webp"
+        ],
+        "age_role": "male, mid 40s inspector",
+        "silhouette": "lean formal mature",
+        "face": "thin oblong mature face, angular jaw, rectangular glasses",
+        "helmet": "plain white",
+        "wardrobe": "dark inspection jacket",
+        "signature_prop": "clipboard and pen",
+        "must_not_resemble": [
+          "lee_jaehoon"
+        ]
       }
     ],
     "review": [
-      "all four Kang/Lim assets reviewed together",
+      "all eight portrait/map files reviewed as one title-cast set",
+      "four faces remain distinguishable with name and role labels hidden",
       "age and role readable before color cues",
-      "silhouettes distinct from Player and each other",
       "portrait/map identity matches for each character",
       "PPE and signature prop are physically plausible",
-      "no text/logo/background/UI",
-      "only rejected assets are regenerated"
+      "no text/logo/background/UI baked into art",
+      "only technically and visually approved replacements are staged"
     ]
   },
   "batch_b": {
-    "status": "queued",
-    "intake_scope": "batch-b",
-    "characters": ["yoon_sungho", "lee_jaehoon", "choi_minseok", "seo_jeongmin", "oh_seungjae"],
-    "asset_count": 10
+    "status": "legacy_integrated_not_in_current_refresh",
+    "characters": [
+      "kang_taesik",
+      "yoon_sungho",
+      "choi_minseok",
+      "oh_seungjae"
+    ],
+    "asset_count": 8
   }
 }
