@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-director-v4",
+  "title": "EP01 — 선택 · 후폭풍 · 기억",
+  "builds_on": "episode01-director-v3",
+  "intent": "Close Episode 01 by turning record pressure, evening reflection and the next morning into memory of the player's actual route rather than a generic epilogue.",
+  "design_rules": [
+    "Record choices trade speed, document alignment and evidentiary completeness; none is written as falsification or an obvious bad answer.",
+    "The evening screen recalls the branch the player actually took at 07:18 and the deepest consequence that branch produced.",
+    "Rest, family time, study and field notes are all legitimate recovery/learning choices with different value.",
+    "The next morning begins from yesterday's trace and offers present-state inspection, photo comparison or worker reporting routes when unlocked.",
+    "The episode ends with a forward hook: yesterday's decision becomes today's starting condition."
+  ]
+}
