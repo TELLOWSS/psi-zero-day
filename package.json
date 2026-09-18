@@ -47,7 +47,9 @@
     "audio:production-status": "node scripts/check-audio-production.mjs",
     "audio:production-check": "node scripts/check-audio-production.mjs --require-final",
     "assets:scene-runtime": "node scripts/build-scene-element-runtime.mjs",
-    "assets:scene-runtime-check": "node scripts/build-scene-element-runtime.mjs --check"
+    "assets:scene-runtime-check": "node scripts/build-scene-element-runtime.mjs --check",
+    "assets:character-replacement-stage": "node scripts/stage-character-replacement.mjs",
+    "assets:character-replacement-preflight": "node scripts/stage-character-replacement.mjs --dry-run"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

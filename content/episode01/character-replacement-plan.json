@@ -92,7 +92,20 @@
       "npm run assets:character-stage -- --id seo-jeongmin-portrait --file <new-seo-jeongmin-portrait.webp>",
       "npm run assets:character-stage -- --id seo-jeongmin-map --file <new-seo-jeongmin-map.webp>"
     ],
-    "completion_rule": "Do not mark integrated until strict_command passes and main/loading/map visual QA is approved."
+    "completion_rule": "Do not mark integrated until strict_command passes and main/loading/map visual QA is approved.",
+    "batch_stage_command": "npm run assets:character-replacement-stage -- --dir <directory-containing-all-8-webps>",
+    "batch_preflight_command": "npm run assets:character-replacement-stage -- --dir <directory-containing-all-8-webps> --dry-run",
+    "required_filenames": [
+      "player-portrait.webp",
+      "player-map.webp",
+      "lim-junho-portrait.webp",
+      "lim-junho-map.webp",
+      "lee-jaehoon-portrait.webp",
+      "lee-jaehoon-map.webp",
+      "seo-jeongmin-portrait.webp",
+      "seo-jeongmin-map.webp"
+    ],
+    "atomic_intake_rule": "All eight files must be present before the replacement batch stages; legacy registered files cannot satisfy a missing replacement input."
   },
   "tracking_issue": {
     "number": 4,

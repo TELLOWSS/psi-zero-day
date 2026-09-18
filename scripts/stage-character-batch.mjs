@@ -13,6 +13,7 @@ const { values } = parseArgs({
     dir: { type: 'string' },
     scope: { type: 'string', default: 'batch-a' },
     'dry-run': { type: 'boolean', default: false },
+    'require-all': { type: 'boolean', default: false },
   },
   strict: true,
 });
@@ -47,7 +48,7 @@ async function exists(filePath) {
   }
 }
 
-if (!values.dir) die('usage: node scripts/stage-character-batch.mjs --dir <source-directory> [--scope batch-a|batch-b|all] [--dry-run]');
+if (!values.dir) die('usage: node scripts/stage-character-batch.mjs --dir <source-directory> [--scope batch-a|batch-b|all] [--require-all] [--dry-run]');
 if (!scopeCharacterIds[values.scope]) die(`unknown scope: ${values.scope}`);
 
 const sourceDir = path.resolve(root, values.dir);
@@ -73,6 +74,10 @@ for (const characterId of scopeCharacterIds[values.scope]) {
     const id = assetId(characterId, kind);
     const filePath = path.join(sourceDir, `${id}.webp`);
     if (!(await exists(filePath))) {
+      if (values['require-all']) {
+        problems.push(`${id}: replacement batch requires source file ${filePath}`);
+        continue;
+      }
       if (registered.has(id)) {
         alreadyRegistered.push(id);
         continue;
