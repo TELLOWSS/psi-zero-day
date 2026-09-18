@@ -420,6 +420,12 @@
     "ui.title.map": "현장 MAP",
     "ui.title.guide": "현장 도감",
     "ui.title.brand_copy": "오늘도, 사람이 있는 현장이 대한민국의 내일을 만듭니다.",
-    "ui.title.footer": "사람 · 안전 · 현장 · 그리고, 더 나은 내일"
+    "ui.title.footer": "사람 · 안전 · 현장 · 그리고, 더 나은 내일",
+    "ui.title.no_save": "저장 없음",
+    "ui.title.plaque": "함께 짓는 더 나은 내일",
+    "ui.title.confirm_new": "새 게임을 시작할까요?",
+    "ui.title.confirm_new.hint": "현재 진행 기록이 초기화되고 에피소드 01을 처음부터 시작합니다.",
+    "ui.title.cancel": "취소",
+    "ui.title.restart": "처음부터 시작"
   }
 }

@@ -72,6 +72,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
+  const [confirmNewGame, setConfirmNewGame] = useState(false);
   const t = session.t;
   const resolve = (id: string) => session.assetUri(id);
   const journey = projectEpisodeJourney(snapshot.state);
@@ -100,11 +101,13 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       <p>{t('ui.title.subcopy')}</p>
 
       <div className="commercial-title-actions">
-        <button className="commercial-title-action is-primary" type="button" onClick={onNewGame}>
+        <button className="commercial-title-action is-primary" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
           <span>{t('ui.title.new_game')}</span><b>›</b>
         </button>
         <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
-          <span>{t('ui.title.continue')}</span><b>›</b>
+          <span>{t('ui.title.continue')}</span>
+          {canContinue ? <small>EP.01 · {progress}%</small> : <small>{t('ui.title.no_save')}</small>}
+          <b>›</b>
         </button>
         <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
           <span>{t('ui.title.map')}</span><b>›</b>
@@ -125,9 +128,25 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       {featured.map((id, index) => <VisualImage key={id} uri={characterPortraitUri(id, resolve)} alt="" className={`commercial-title-worker worker-${index}`} />)}
     </div>
 
+    <div className="commercial-title-site-plaque" aria-hidden="true">
+      <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
+    </div>
+
     <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
       <span>PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
     </button>
+
+    {confirmNewGame ? <div className="commercial-title-dialog-backdrop" role="presentation" onMouseDown={() => setConfirmNewGame(false)}>
+      <section className="commercial-title-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-confirm-title" onMouseDown={event => event.stopPropagation()}>
+        <span>PSI : ZERO DAY</span>
+        <h2 id="new-game-confirm-title">{t('ui.title.confirm_new')}</h2>
+        <p>{t('ui.title.confirm_new.hint')}</p>
+        <div>
+          <button type="button" onClick={() => setConfirmNewGame(false)}>{t('ui.title.cancel')}</button>
+          <button className="is-danger" type="button" onClick={() => { setConfirmNewGame(false); onNewGame(); }}>{t('ui.title.restart')}</button>
+        </div>
+      </section>
+    </div> : null}
 
     <footer className="commercial-title-footer">
       <span>PSI : ZERO DAY · ver 1.0.0</span>
