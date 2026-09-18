@@ -26,5 +26,12 @@
     "Show speed, readability, relationship and evidence costs for every route.",
     "Do not label timeline preservation as a frictionless correct answer; it costs time, coordination, and exposure of disagreement.",
     "At 17:08 change the same panel from evidence-check focus to the actual record consequence."
-  ]
+  ],
+  "authoring_gate_checked": {
+    "safety_floor": "No backfilling or retroactive fabrication of facts, times, confirmations, or wording.",
+    "field_accounts": "Oh, Lee, Kang and prior instruction-chain accounts remain distinct from verified evidence.",
+    "legitimate_pressure": "25-minute reporting window, HQ speed demand, document consistency and end-of-shift fatigue.",
+    "route_costs": "Each route trades speed, document alignment, evidence strength, relationship exposure, or time.",
+    "delayed_consequence": "17:08 photo, call, TBM and change-history comparison reveals the reporting consequence."
+  }
 }
