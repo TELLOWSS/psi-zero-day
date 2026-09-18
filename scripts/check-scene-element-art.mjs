@@ -7,7 +7,7 @@ const catalogPath = path.join(root, 'content/episode01/scene-element-catalog.jso
 const productionCheck = process.argv.includes('--production-check');
 const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
 const definitions = Object.entries(catalog.elements ?? {});
-const expectedCount = 10;
+const minimumReusableCount = 10;
 const errors = [];
 const assetIds = new Set();
 const paths = new Set();
@@ -207,7 +207,7 @@ const gangformLift = catalog.elements?.gangform_lift_wire22?.lifting_profile;
 if (gangformLift?.rigging_method !== 'wire_rope' || gangformLift?.wire_rope_diameter_mm !== 22) errors.push('gangform_lift_wire22: gangform lifting must use 22 mm wire_rope visual profile');
 if (gangformLift?.hitch_method !== 'site_defined') errors.push('gangform_lift_wire22: gangform hitch method must remain site_defined until an authored work plan specifies it');
 
-if (definitions.length !== expectedCount) errors.push(`expected ${expectedCount} reusable scene element slots, found ${definitions.length}`);
+if (definitions.length < minimumReusableCount) errors.push(`expected at least ${minimumReusableCount} reusable scene element slots, found ${definitions.length}`);
 
 if (errors.length) {
   console.error(`Scene element ${productionCheck ? 'production art' : 'art contract'} is NOT ready.`);

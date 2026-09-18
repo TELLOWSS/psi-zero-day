@@ -14,9 +14,7 @@
       "cast": [
         "player"
       ],
-      "props": [
-        "assets/episode01/scene-elements/site-gate.webp"
-      ],
+      "props": [],
       "camera": "wide",
       "focus": "center"
     },
@@ -26,9 +24,7 @@
         "player",
         "kang_taesik"
       ],
-      "props": [
-        "assets/episode01/scene-elements/site-gate.webp"
-      ],
+      "props": [],
       "camera": "medium",
       "focus": "left"
     },
@@ -339,9 +335,7 @@
       "cast": [
         "player"
       ],
-      "props": [
-        "assets/episode01/scene-elements/site-gate.webp"
-      ],
+      "props": [],
       "camera": "wide",
       "focus": "center"
     }

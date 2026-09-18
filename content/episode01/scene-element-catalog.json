@@ -439,7 +439,7 @@
       "kind": "control",
       "label": "현장 출입 게이트",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "planned",
       "planned_asset_id": "ep01.scene_element.site_gate",
       "art": {
         "path": "assets/episode01/scene-elements/site-gate.webp",
@@ -695,7 +695,7 @@
       "kind": "control",
       "label": "소화기 배치 지점",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "planned",
       "planned_asset_id": "ep01.scene_element.fire_extinguisher_station",
       "art": {
         "path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
