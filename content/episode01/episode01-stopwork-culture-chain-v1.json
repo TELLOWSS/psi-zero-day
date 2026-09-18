@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-stopwork-culture-chain-v1",
+  "window": "14:11–15:32",
+  "intent": "Carry the technical restart outcome into the social aftershock of work stoppage, then verify the real reporting climate through the next hazard signal.",
+  "stages": [
+    {
+      "time": "14:11",
+      "event_id": "e01_08j_restart_return",
+      "purpose": "establish the technical outcome and the delay/communication history people remember"
+    },
+    {
+      "time": "15:10",
+      "event_id": "e01_08k_stopwork_aftershock",
+      "purpose": "separate reporting protection from crew assignment authority and social perception"
+    },
+    {
+      "time": "15:32",
+      "event_id": "e01_08l_stopwork_return",
+      "purpose": "observe whether the next abnormal condition is reported, chilled, or routed separately from assignment decisions"
+    }
+  ],
+  "reads": [
+    "flags.restart_result",
+    "flags.stopwork_culture_action",
+    "flags.stopwork_culture_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "presentation_rules": [
+    "Do not reduce the issue to whether a supervisor or worker is right; distinguish formal protection, legitimate assignment factors, and perceived retaliation.",
+    "Expose the social and operational tradeoffs of every intervention route without labeling a correct answer.",
+    "When stopwork_culture_result is written, update the same 15:32 panel from reporting focus to culture verdict."
+  ]
+}
