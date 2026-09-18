@@ -104,12 +104,8 @@ export interface StrategySceneElement {
 }
 
 type ElementArtDefinition = {
-  readonly path: string;
-  readonly minimum_width: number;
-  readonly minimum_height: number;
   readonly pivot: StrategySceneElementPivot;
   readonly map_max_px: number;
-  readonly requires_alpha: true;
 };
 
 type ElementDefinition = {
@@ -125,7 +121,7 @@ type ElementDefinition = {
   readonly storage_profile?: StrategyStorageProfile;
   readonly access_control_profile?: StrategyAccessControlProfile;
   readonly traffic_conflict_profile?: StrategyTrafficConflictProfile;
-  readonly reuse_for: readonly string[];
+  readonly reuse_for?: readonly string[];
 };
 
 type EventElementPlacement = {
