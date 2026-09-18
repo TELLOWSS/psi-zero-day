@@ -33,8 +33,8 @@ const BEATS: Readonly<Record<string, EpisodeCinematicBeat>> = Object.freeze({
   e01_08n_instruction_return: { time: '16:24', zone: 'RECORD', label: '사라진 조건을 찾는다', tone: 'consequence', detail: '누가 틀렸는지 단정하기 전에 각 단계가 실제로 들은 말을 맞추면 조건이 사라진 지점과 관계비용이 함께 보인다' },
   e01_08o_record_pressure: { time: '16:42', zone: 'SITE OFFICE', label: '오늘을 어떤 문장으로 남길 것인가', tone: 'decision', detail: '보고서는 현장을 정리하는 문서지만 당시 없던 사실을 뒤에서 만들어 넣는 순간 기록은 통제가 아니라 설명용 이야기가 된다' },
   e01_08p_record_return: { time: '17:08', zone: 'REPORT', label: '기록이 다시 질문한다', tone: 'consequence', detail: '사진·통화·TBM 시각을 함께 열면 문장보다 사실·판단·미확인이 어떻게 구분됐는지가 먼저 드러난다' },
-  e01_09_evening: { time: '20:41', zone: 'HOME', label: '현장이 끝난 뒤 남는 것', tone: 'release' },
-  e01_10_next_day_tease: { time: '06:52', zone: 'GATE · DAY 02', label: '어제의 선택이 오늘의 조건이 된다', tone: 'arrival' },
+  e01_09_evening: { time: '20:41', zone: 'HOME', label: '현장이 끝난 뒤 남는 것', tone: 'release', detail: '하루를 정답표로 닫지 않고 기록·사람·보고습관과 내가 회복하는 방식을 내일의 출발조건으로 남긴다' },
+  e01_10_next_day_tease: { time: '06:52', zone: 'GATE · DAY 02', label: '어제의 선택이 오늘의 조건이 된다', tone: 'arrival', detail: '같은 게이트로 들어와도 누가 먼저 말하고 무엇을 다시 확인하는지는 어제 남긴 관계·기록·회복방식에 따라 달라진다' },
 });
 
 export function episodeCinematicBeat(eventId: string | null | undefined): EpisodeCinematicBeat | undefined {

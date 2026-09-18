@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-day-carryover-field-reality-v1",
+  "doctrine_id": "field-reality-doctrine-v1",
+  "window": "17:08–DAY 02 06:52",
+  "intent": "End Episode 01 without a moral scorecard. Carry record quality, reporting climate, instruction habits, and the player's chosen recovery mode into the first observable conditions of Day 02.",
+  "reads": [
+    "flags.record_result",
+    "flags.stopwork_culture_result",
+    "flags.instruction_chain_result",
+    "flags.evening_rest",
+    "flags.evening_family",
+    "flags.evening_study",
+    "flags.evening_field_note"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only",
+    "doctrine": "field-reality-doctrine-v1"
+  },
+  "authoring_gate_checked": {
+    "safety_floor": "No prior success, relationship, recovery choice, or clean record grants automatic safety clearance on Day 02.",
+    "field_accounts": "Carry social reporting climate and instruction reception forward; do not reduce yesterday to management paperwork alone.",
+    "legitimate_pressure": "Fatigue, family life, need for sleep, desire to learn, and desire to record are all legitimate after-shift pressures.",
+    "route_costs": "Each evening route gains a different resource while leaving a different information or recovery gap.",
+    "delayed_consequence": "Day 02 begins by observing what workers say, what instructions reach the end user, and what unresolved record state has become accepted truth."
+  },
+  "presentation_rules": [
+    "Do not rank rest, family time, study, or field notes as morally better or worse recovery choices.",
+    "Do not summarize Episode 01 as a single score or correct-answer percentage.",
+    "Carry both technical records and human reporting climate into Day 02.",
+    "Even favorable Day 01 outcomes are starting conditions, not automatic clearance."
+  ]
+}
