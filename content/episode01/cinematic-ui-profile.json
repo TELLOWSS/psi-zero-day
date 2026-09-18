@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "profile_id": "cinematic-world-v1",
+  "based_on_user_concepts": [
+    "main-screen",
+    "loading-screen",
+    "live-map"
+  ],
+  "visual_intent": "생동감 있는 실제 건설현장 배경 위에 기존 인터랙티브 UI를 유지",
+  "implementation": {
+    "main": "기존 foundation background를 시네마틱 드리프트·일몰광·딥네이비 그라디언트로 재구성하고 기능성 메뉴는 live DOM 유지",
+    "loading": "실제 preloading과 최소 연출시간을 결합한 0–100 진행 게이지, PSI scan line, 단계별 status",
+    "map": "기존 foundation map을 전 화면 world backdrop으로 확대하고 worker/signal/zone DOM은 live overlay 유지"
+  },
+  "motion": {
+    "backdrop_seconds": 22,
+    "loading_tick_ms": 86,
+    "scan_seconds": 2.9,
+    "reduced_motion_supported": true
+  },
+  "safety": [
+    "baked concept UI를 클릭 요소로 사용하지 않음",
+    "실제 진행률은 React 상태로 렌더링",
+    "기존 게임 엔진/선택 로직은 변경하지 않음"
+  ]
+}

@@ -8,6 +8,7 @@ import { VisualImage, characterVisual } from './VisualSlot';
 import { FieldGuide } from './FieldGuide';
 import { PlayableEpisode } from './PlayableEpisode';
 import { EpisodeRecord } from './EpisodeRecord';
+import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -27,11 +28,34 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' })
 /** Navigation is presentation state; all run mutations remain in EpisodeSession/CoreEngine. */
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
+  const [loading, setLoading] = useState(false);
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
-  const play = () => {
-    if (snapshot.phase === 'start' && !session.start(snapshot.revision)) return;
+  const resolve = (id: string) => session.assetUri(id);
+  const cinematicBackground = episode01BackgroundUri(resolve);
+  const preloadUris = [
+    cinematicBackground,
+    characterPortraitUri('player', resolve),
+    characterPortraitUri('kang_taesik', resolve),
+    characterPortraitUri('lim_junho', resolve),
+  ].filter((uri): uri is string => Boolean(uri));
+
+  const play = () => setLoading(true);
+  const enterGame = () => {
+    const current = session.getSnapshot();
+    if (current.phase === 'start' && !session.start(current.revision)) {
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
     setInGame(true);
   };
+
+  if (loading) return <CinematicLoadingScreen
+    backgroundUri={cinematicBackground}
+    preloadUris={preloadUris}
+    onComplete={enterGame}
+  />;
+
   if (inGame && snapshot.phase !== 'start') return <>
     <PlayableEpisode session={session} />
     <button className="game-hub-return" onClick={() => setInGame(false)} type="button"><HubIcon kind="home" />{session.t('ui.hub.return')}</button>

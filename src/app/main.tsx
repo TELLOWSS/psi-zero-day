@@ -26,6 +26,7 @@ import '../ui/title-commercial-016a.css';
 import '../ui/interaction-safety.css';
 import '../ui/production-readability.css';
 import '../ui/game-hub.css';
+import '../ui/cinematic-world.css';
 
 const session = new EpisodeSession();
 let storage: EpisodeSaveStorage | null = null;
