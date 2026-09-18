@@ -47,9 +47,9 @@ export interface StrategyPsiView {
   readonly unlocked_node_ids: readonly Id[];
   readonly values: StatMap;
   readonly flags: FlagMap;
-  readonly observation_counts: Readonly<Record<PsiIndicatorId, number>>;
-  readonly observed_choice_count: number;
-  readonly max_observation_count: number;
+  readonly observation_counts?: Readonly<Record<PsiIndicatorId, number>>;
+  readonly observed_choice_count?: number;
+  readonly max_observation_count?: number;
 }
 
 /**
