@@ -1,8 +1,3 @@
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { GameShell } from '../ui/GameHub';
-import { EpisodeSession } from './episode-session';
-import { clearEpisodeSave, loadEpisodeSave, saveEpisodeState, type EpisodeSaveStorage } from './episode-save';
 import '../ui/playable.css';
 import '../ui/korean-typography.css';
 import '../ui/strategy-map.css';
@@ -28,26 +23,69 @@ import '../ui/production-readability.css';
 import '../ui/game-hub.css';
 import '../ui/cinematic-world.css';
 
-const session = new EpisodeSession();
-let storage: EpisodeSaveStorage | null = null;
-try { storage = window.localStorage; } catch { storage = null; }
+const root = document.getElementById('root');
+if (!root) throw new Error('Missing #root mount point');
 
-if (storage) {
-  const saved = loadEpisodeSave(storage);
-  if (saved) {
-    const restored = saved.content_version === session.contentVersion
-      && session.resume(saved.payload, session.getSnapshot().revision);
-    if (!restored) clearEpisodeSave(storage);
+root.innerHTML = `
+  <main class="runtime-bootstrap" role="status" aria-live="polite">
+    <div class="runtime-bootstrap-mark">NEW PSI</div>
+    <strong>PSI : ZERO DAY</strong>
+    <span>Proactive Safety Intelligence</span>
+    <p>현장을 준비하고 있습니다.</p>
+  </main>
+`;
+
+async function bootstrap() {
+  const [
+    react,
+    reactDom,
+    { GameShell },
+    { EpisodeSession },
+    saveModule,
+  ] = await Promise.all([
+    import('react'),
+    import('react-dom/client'),
+    import('../ui/GameHub'),
+    import('./episode-session'),
+    import('./episode-save'),
+  ]);
+
+  const session = new EpisodeSession();
+  let storage: import('./episode-save').EpisodeSaveStorage | null = null;
+  try { storage = window.localStorage; } catch { storage = null; }
+
+  if (storage) {
+    const saved = saveModule.loadEpisodeSave(storage);
+    if (saved) {
+      const restored = saved.content_version === session.contentVersion
+        && session.resume(saved.payload, session.getSnapshot().revision);
+      if (!restored) saveModule.clearEpisodeSave(storage);
+    }
+
+    session.subscribe(() => {
+      const snapshot = session.getSnapshot();
+      if ((snapshot.phase === 'playing' || snapshot.phase === 'complete') && snapshot.state) {
+        saveModule.saveEpisodeState(storage!, snapshot.state);
+      } else if (snapshot.phase === 'start') {
+        saveModule.clearEpisodeSave(storage!);
+      }
+    });
   }
 
-  session.subscribe(() => {
-    const snapshot = session.getSnapshot();
-    if ((snapshot.phase === 'playing' || snapshot.phase === 'complete') && snapshot.state) saveEpisodeState(storage!, snapshot.state);
-    else if (snapshot.phase === 'start') clearEpisodeSave(storage!);
-  });
+  document.title = session.t('ui.brand');
+  root.replaceChildren();
+  reactDom.createRoot(root).render(
+    react.createElement(react.StrictMode, null, react.createElement(GameShell, { session })),
+  );
 }
 
-document.title = session.t('ui.brand');
-createRoot(document.getElementById('root')!).render(
-  <StrictMode><GameShell session={session} /></StrictMode>,
-);
+void bootstrap().catch(error => {
+  console.error('PSI runtime bootstrap failed', error);
+  root.innerHTML = `
+    <main class="runtime-bootstrap runtime-bootstrap-error" role="alert">
+      <div class="runtime-bootstrap-mark">NEW PSI</div>
+      <strong>PSI : ZERO DAY</strong>
+      <p>현장을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</p>
+    </main>
+  `;
+});
