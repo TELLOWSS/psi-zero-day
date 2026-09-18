@@ -140,6 +140,132 @@
         "pressures",
         "dialogue"
       ]
+    },
+    "e01_08c_site_pushback": {
+      "scene_id": "foundation.inspection-pushback",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "inspection",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08e_responsibility_clash": {
+      "scene_id": "foundation.responsibility-clash",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08f_report_return": {
+      "scene_id": "foundation.report-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "overview",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08h_tbm_return": {
+      "scene_id": "foundation.tbm-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08j_restart_return": {
+      "scene_id": "foundation.restart-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08k_stopwork_aftershock": {
+      "scene_id": "foundation.stopwork-culture",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08l_stopwork_return": {
+      "scene_id": "foundation.stopwork-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "yard",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08m_instruction_cascade": {
+      "scene_id": "foundation.instruction-chain",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "overview",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08n_instruction_return": {
+      "scene_id": "foundation.instruction-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "overview",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
     }
   }
 }

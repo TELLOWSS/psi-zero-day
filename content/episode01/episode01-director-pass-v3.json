@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-director-v3",
+  "title": "EP01 — 늦게 돌아오는 결과",
+  "builds_on": "episode01-director-v2",
+  "intent": "Carry the no-obvious-answer field-drama standard from the opening into inspection, reporting, TBM change control, restart, stop-work culture and instruction-chain consequences.",
+  "rules": [
+    "A later choice must trade speed, certainty, authority, evidence quality or trust rather than offer a clean textbook answer.",
+    "Every major choice gets an immediate consequence beat before the delayed return event.",
+    "Delayed return events reveal what the earlier choice taught the site to do next.",
+    "Records, photos and verbal instructions are partial evidence whose meaning depends on time and context.",
+    "Workers and supervisors remember how the player handled earlier ambiguity; dialogue should sound like that memory is present."
+  ],
+  "arcs": [
+    {
+      "branch": "delegate_kang",
+      "events": [
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection"
+      ],
+      "question": "Can a corrective action be both physically true and accurately represented while work is still moving?"
+    },
+    {
+      "branch": "negotiate_yoon",
+      "events": [
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return"
+      ],
+      "question": "What can be responsibly reported before every account and timestamp agrees?"
+    },
+    {
+      "branch": "coordinate_schedule",
+      "events": [
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return",
+        "e01_08m_instruction_cascade",
+        "e01_08n_instruction_return"
+      ],
+      "question": "How does a site preserve changed conditions, restart criteria and willingness to report under schedule pressure?"
+    }
+  ]
+}

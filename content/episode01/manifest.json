@@ -4,10 +4,10 @@
   "title_text_id": "ep01.title",
   "chapter": "FOUNDATION",
   "runtime_chapter_id": "foundation",
-  "target_minutes": 22,
+  "target_minutes": 24,
   "bundle": {
     "schema_version": 1,
-    "content_version": "ep01.director.v2",
+    "content_version": "ep01.director.v3",
     "relationship_policy": {
       "bounds": {
         "min": 0,
