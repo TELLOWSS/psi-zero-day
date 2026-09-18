@@ -6,20 +6,22 @@
     "cast.oh_seungjae.age": "41세",
     "ep01.8e.title": "누구 말이 맞나",
     "ep01.8f.title": "보고서가 돌아오다",
-    "ep01.responsibility.gc": "오승재가 말한다. ‘이건 협력사 관리 문제 아닌가요? 통로 확보는 협력사에서 관리했어야죠.’",
-    "ep01.responsibility.lee": "이재훈이 바로 받는다. ‘아침에는 공정팀에서 철근차부터 받으라고 했고, 중간에 펌프카 동선을 먼저 보라고 지시가 바뀌었습니다.’",
-    "ep01.responsibility.kang": "강태식이 고개를 젓는다. ‘나는 아침 조회 때 들은 대로 한 겁니다. 지시 바뀌었다는 말은 나중에 들었어요.’",
-    "ep01.responsibility.prompt": "원도급은 협력사 관리 문제라고 하고, 협력사는 변경 지시 때문이라고 한다. 안전팀에는 지금 바로 사실확인과 조치사진, 보고를 올리라고 한다.",
-    "ep01.responsibility.one_sided": "원도급 요구대로 협력사 관리 미흡으로 우선 보고한다.",
-    "ep01.responsibility.defensive": "공정팀 변경지시가 원인이라고 협력사 입장 중심으로 보고한다.",
-    "ep01.responsibility.verify_timeline": "조회내용, 통화시각, 지시 전달, 조치사진 시각을 먼저 맞춰본다.",
+    "ep01.responsibility.gc": "오승재가 보고시계를 보며 말한다. “본사에 15분 안에 1차 경위 올려야 합니다. 통로 확보는 협력사 관리사항이었죠? 지금 확인된 것부터 먼저 주세요.”",
+    "ep01.responsibility.lee": "“아침에는 철근차 우선이었고 중간에 펌프카 동선 먼저 보라고 바뀌었습니다. 그 시각은 제 통화기록에 있습니다. 협력사 관리 한 줄로 쓰면 앞뒤가 안 맞아요.”",
+    "ep01.responsibility.kang": "“나는 조회 때 들은 순서대로 했어요. 바뀐 얘기는 차가 들어온 다음에 들었습니다. 내 잘못 없다는 게 아니라, 언제 무슨 말을 들었는지는 맞춰야죠.”",
+    "ep01.responsibility.prompt": "1차 보고까지 15분. 사실은 아직 완전히 맞지 않는다. 무엇을 기준으로 첫 문장을 쓸까?",
+    "ep01.responsibility.one_sided": "현재 확인된 협력사 통로관리 미흡을 1차 원인으로 올리고, 변경지시는 추가자료로 후속한다.",
+    "ep01.responsibility.defensive": "공정변경 지시를 핵심 원인으로 우선 보고하고, 협력사 조치사항은 별도 항목으로 남긴다.",
+    "ep01.responsibility.verify_timeline": "보고 시한 연장을 요청하고 조회·통화·지시·사진 시각을 10분 안에 한 줄 타임라인으로 맞춘다.",
     "ep01.report_return.prompt": "보고를 올린 뒤 추가 자료가 들어온다.",
     "ep01.report_return.choice.correction": "보고서 수정 요청이 온다.",
     "ep01.report_return.choice.evidence_requested": "근거자료 제출 요청이 온다.",
     "ep01.report_return.choice.timeline_confirmed": "시간순 사실관계가 정리된다.",
-    "ep01.report_return.correction": "강태식이 아침 조회 내용을 보여준다. 이어서 공정팀의 변경 지시 시각도 확인된다. 협력사 단독 귀책으로 올린 1차 보고는 다시 수정하라는 요청이 내려온다.",
-    "ep01.report_return.evidence_requested": "오승재가 되묻는다. ‘공정팀 지시 때문이라는 근거가 뭡니까? 통화기록, 전달시각, 조치 전후 사진까지 같이 주세요.’ 방어적으로 올린 보고는 근거자료 요구와 함께 멈춘다.",
-    "ep01.report_return.timeline_confirmed": "기록을 맞추니 아침 조회와 이후 변경 지시가 달랐고, 변경 내용이 반장에게 제때 전달된 기록은 없다. 보고서는 ‘변경지시 전달 누락과 현장통제 미흡이 겹친 상황’으로 정리된다. 누구 한 명 탓으로는 끝나지 않는다."
+    "ep01.report_return.correction": "추가자료가 도착하자 1차 보고의 단순한 ‘협력사 관리 미흡’ 문장으로는 설명되지 않는 시각이 나온다. 보고서는 수정 대상이 되고, 빠른 보고가 두 번째 설명을 요구한다.",
+    "ep01.report_return.evidence_requested": "오승재가 통화시각과 조치 전후 사진을 요구한다. 공정변경이라는 설명은 가능하지만, 근거가 연결되기 전까지 보고는 결론이 아니라 주장으로 남는다.",
+    "ep01.report_return.timeline_confirmed": "기록을 한 줄로 맞추자 조회 내용과 변경 지시, 전달 공백, 현장 조치가 순서대로 보인다. 결론은 한 사람의 실수가 아니라 ‘변경된 정보가 늦게 도착한 상태에서 통제가 겹친 것’으로 정리된다.",
+    "ep01.responsibility.one_sided.result": "보고서는 가장 빨리 올라간다. 오승재는 시한을 지켰다고 확인한다. 하지만 이재훈과 강태식은 같은 문장을 보고 서로 다른 이유로 표정이 굳는다.",
+    "ep01.responsibility.defensive.result": "공정변경 시각이 전면에 나온다. 협력사 쪽은 고개를 끄덕이지만 오승재는 곧바로 “그 지시가 통로상태와 직접 연결된 근거가 뭐죠?”라고 되묻는다.",
+    "ep01.responsibility.verify_timeline.result": "첫 보고는 몇 분 늦어진다. 대신 07:18, 07:27, 07:36의 기록이 한 화면에 놓인다. 누구의 말도 완전히 틀리지 않았고, 서로 다른 시점의 사실이 겹쳐 있었음이 보이기 시작한다."
   }
 }
-
