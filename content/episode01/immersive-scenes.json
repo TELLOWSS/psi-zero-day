@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "art_direction": "Episode 01 immersive scene compositor: hand-authored RC environment image + production character/prop WebP layers + node-specific mood/focus.",
+  "rules": [
+    "Every authored Episode 01 event has a visual scene.",
+    "Dialogue nodes spotlight the actual speaker.",
+    "Choice nodes visually tighten framing before the decision.",
+    "Result nodes change grade/focus from the selected result node instead of showing a generic static background.",
+    "Visuals never label a choice correct or incorrect."
+  ],
+  "events": {
+    "e01_01_arrival": {
+      "bg": "assets/episode01/cg/gate-dawn-rc.svg",
+      "cast": [
+        "player"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp"
+      ],
+      "camera": "wide",
+      "focus": "center"
+    },
+    "e01_02_meet_kang": {
+      "bg": "assets/episode01/cg/gate-dawn-rc.svg",
+      "cast": [
+        "player",
+        "kang_taesik"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp"
+      ],
+      "camera": "medium",
+      "focus": "left"
+    },
+    "e01_03_plan_breaks": {
+      "bg": "assets/episode01/cg/ramp-entry-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "yoon_sungho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/material-stack.webp"
+      ],
+      "camera": "wide",
+      "focus": "center"
+    },
+    "e01_04_junho_signal": {
+      "bg": "assets/episode01/cg/ramp-entry-rc.svg",
+      "cast": [
+        "player",
+        "lim_junho",
+        "choi_minseok"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/vehicle-overlap.webp"
+      ],
+      "camera": "medium",
+      "focus": "right"
+    },
+    "e01_05_command": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "choi_minseok"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/material-stack.webp",
+        "assets/episode01/scene-elements/vehicle-overlap.webp"
+      ],
+      "camera": "wide",
+      "focus": "center"
+    },
+    "e01_06_pump_arrival": {
+      "bg": "assets/episode01/cg/concrete-pour-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "choi_minseok"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/vehicle-overlap.webp"
+      ],
+      "camera": "wide",
+      "focus": "right"
+    },
+    "e01_07_first_pour": {
+      "bg": "assets/episode01/cg/concrete-pour-rc.svg",
+      "cast": [
+        "player",
+        "kang_taesik",
+        "lee_jaehoon",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "camera": "wide",
+      "focus": "center"
+    },
+    "e01_08_reactions": {
+      "bg": "assets/episode01/cg/concrete-pour-rc.svg",
+      "cast": [
+        "kang_taesik",
+        "yoon_sungho",
+        "lim_junho",
+        "player"
+      ],
+      "props": [],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08a_reporting_return": {
+      "bg": "assets/episode01/cg/ramp-entry-rc.svg",
+      "cast": [
+        "player",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/material-stack.webp"
+      ],
+      "camera": "medium",
+      "focus": "left"
+    },
+    "e01_08b_inspection_find": {
+      "bg": "assets/episode01/cg/inspection-zone-rc.svg",
+      "cast": [
+        "player",
+        "seo_jeongmin",
+        "lee_jaehoon"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/wet-floor.webp"
+      ],
+      "camera": "medium",
+      "focus": "right"
+    },
+    "e01_08c_site_pushback": {
+      "bg": "assets/episode01/cg/inspection-zone-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "seo_jeongmin"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "camera": "tight",
+      "focus": "center"
+    },
+    "e01_08d_reinspection": {
+      "bg": "assets/episode01/cg/inspection-zone-rc.svg",
+      "cast": [
+        "player",
+        "seo_jeongmin",
+        "lee_jaehoon"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp"
+      ],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08e_responsibility_clash": {
+      "bg": "assets/episode01/cg/site-office-rc.svg",
+      "cast": [
+        "player",
+        "oh_seungjae",
+        "lee_jaehoon",
+        "kang_taesik"
+      ],
+      "props": [],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08f_report_return": {
+      "bg": "assets/episode01/cg/site-office-rc.svg",
+      "cast": [
+        "oh_seungjae",
+        "lee_jaehoon",
+        "kang_taesik",
+        "player"
+      ],
+      "props": [],
+      "camera": "tight",
+      "focus": "center"
+    },
+    "e01_08g_tbm_field_gap": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp"
+      ],
+      "camera": "wide",
+      "focus": "right"
+    },
+    "e01_08h_tbm_return": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho",
+        "player"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08i_restart_pressure": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "camera": "wide",
+      "focus": "right"
+    },
+    "e01_08j_restart_return": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho",
+        "player"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08k_stopwork_aftershock": {
+      "bg": "assets/episode01/cg/break-area-rc.svg",
+      "cast": [
+        "player",
+        "kang_taesik",
+        "lee_jaehoon",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/exclusion-zone.webp"
+      ],
+      "camera": "medium",
+      "focus": "left"
+    },
+    "e01_08l_stopwork_return": {
+      "bg": "assets/episode01/cg/break-area-rc.svg",
+      "cast": [
+        "player",
+        "kang_taesik",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/exclusion-zone.webp"
+      ],
+      "camera": "tight",
+      "focus": "center"
+    },
+    "e01_08m_instruction_cascade": {
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
+      "cast": [
+        "player",
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp"
+      ],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08n_instruction_return": {
+      "bg": "assets/episode01/cg/site-office-rc.svg",
+      "cast": [
+        "lee_jaehoon",
+        "kang_taesik",
+        "lim_junho",
+        "player"
+      ],
+      "props": [],
+      "camera": "tight",
+      "focus": "center"
+    },
+    "e01_08o_record_pressure": {
+      "bg": "assets/episode01/cg/site-office-rc.svg",
+      "cast": [
+        "player",
+        "oh_seungjae",
+        "lee_jaehoon",
+        "kang_taesik"
+      ],
+      "props": [],
+      "camera": "medium",
+      "focus": "center"
+    },
+    "e01_08p_record_return": {
+      "bg": "assets/episode01/cg/site-office-rc.svg",
+      "cast": [
+        "oh_seungjae",
+        "lee_jaehoon",
+        "kang_taesik",
+        "player"
+      ],
+      "props": [],
+      "camera": "tight",
+      "focus": "center"
+    },
+    "e01_09_evening": {
+      "bg": "assets/episode01/cg/home-night-rc.svg",
+      "cast": [],
+      "props": [],
+      "camera": "wide",
+      "focus": "center"
+    },
+    "e01_10_next_day_tease": {
+      "bg": "assets/episode01/cg/gate-dawn-rc.svg",
+      "cast": [
+        "player"
+      ],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp"
+      ],
+      "camera": "wide",
+      "focus": "center"
+    }
+  }
+}

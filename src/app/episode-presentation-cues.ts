@@ -43,8 +43,6 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
   e01_08p_record_return: cue('office_report_roomtone', 'evidence_return', 'ep01.audio.office_report_roomtone', 0.22),
   e01_09_evening: cue('home_night', 'scene_shift', 'ep01.audio.home_night', 0.34),
   e01_10_next_day_tease: cue('gate_queue', 'scene_shift', 'ep01.audio.gate_queue', 0.46),
-  e02_01_lift_route_pressure: cue('crane_route_pressure', 'pressure', undefined, 0.42),
-  e02_02_lift_route_return: cue('crane_route_check', 'scene_shift', undefined, 0.28),
 });
 
 /**

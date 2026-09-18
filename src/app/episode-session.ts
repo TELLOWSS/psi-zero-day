@@ -1,5 +1,5 @@
 import type { EffectBundle, GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
-import { createCampaignRegistry } from '../content/campaign';
+import { createEpisode01Registry } from '../content/episode01';
 import { CoreEngine, createRun, eventCandidates, eventPresentation } from '../engine';
 import { getDialogueView } from '../engine/dialogue';
 import type { DialogueView } from '../engine/dialogue';
@@ -11,7 +11,7 @@ import { isStrategyFieldActionEvent } from './strategy-actions';
 import { projectStrategyView } from './strategy-view';
 import { projectEpisodeReview } from './episode-review';
 import type { StrategyView } from './strategy-view';
-import { campaignExpectedRunTotal } from './campaign-run-progress';
+import { episode01ExpectedRunTotal } from './episode01-run-progress';
 import config from '../../content/episode01/session.json';
 import uiKo from '../../content/localization/playable-ko.json';
 import inspectionUiKo from '../../content/localization/inspection-ui-ko.json';
@@ -37,7 +37,7 @@ export interface SessionSnapshot {
 
 /** Application boundary only. All run changes go through CoreEngine commands. */
 export class EpisodeSession {
-  readonly #registry = createCampaignRegistry();
+  readonly #registry = createEpisode01Registry();
   readonly #content = this.#registry.getValidatedContent();
   readonly #options: NewRunOptions;
   readonly #bounds: ProgressBounds;
@@ -187,7 +187,7 @@ export class EpisodeSession {
     const previous = this.#engine?.getState();
     try {
       if (!operation()) return false;
-      const phase = this.#engine === null ? 'start' : this.#engine.getState().flags.day02_opening_completed === true ? 'complete' : 'playing';
+      const phase = this.#engine === null ? 'start' : this.#engine.getState().flags.episode01_completed === true ? 'complete' : 'playing';
       const oldEffects = new Set(previous?.relations.flatMap(r => r.delta_history?.map(d => d.source.effect_instance_id) ?? []) ?? []);
       const current = this.#engine?.getState();
       const feedback = current?.relations.filter(r => r.to_id === current.player.character_id).flatMap(r =>
@@ -209,13 +209,13 @@ export class EpisodeSession {
       dialogue: state ? getDialogueView(state, this.#content) : null, relationshipFeedback: feedback,
       eventTitle: this.t(event?.title_text_id ?? 'ep01.title'), chapterTitle: this.t(event?.chapter_text_id ?? 'ep01.chapter'),
       completed: state?.event_runtime.completion_history.length ?? 0,
-      total: state ? campaignExpectedRunTotal(state) : 10 });
+      total: state ? episode01ExpectedRunTotal(state) : 10 });
   }
   #settle(): void {
     const engine = this.#engine!;
     for (let steps = 0; steps < 50; steps++) {
       const state = engine.getState();
-      if (state.flags.day02_opening_completed === true) return;
+      if (state.flags.episode01_completed === true) return;
       if (!state.event_runtime.active_instance) {
         const candidates = eventCandidates(state, this.#content, this.#options.chapter_id!);
         if (candidates.length !== 1) throw new Error('Expected one eligible episode event');

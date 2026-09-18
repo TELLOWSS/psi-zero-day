@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="break-area-title break-area-desc">
+<title id="break-area-title">PSI ZERO DAY construction scene</title>
+<desc id="break-area-desc">Stylized 2.5D construction-site environment for Episode 01.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#657780"/><stop offset="1" stop-color="#babeb8"/></linearGradient>
+  <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#514f49"/><stop offset="1" stop-color="#343a3b"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9d7e5" stop-opacity=".58"/><stop offset="1" stop-color="#6f8d9b" stop-opacity=".12"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#071017" flood-opacity=".35"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+  <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern>
+</defs>
+<rect width="1280" height="720" fill="url(#sky)"/>
+<circle cx="1090" cy="104" r="54" fill="#ffe2a8" opacity="0.92"/>
+<rect y="360" width="1280" height="360" fill="url(#ground)"/>
+<rect y="360" width="1280" height="360" fill="url(#grid)"/>
+
+ <g filter="url(#shadow)">
+  <rect x="120" y="310" width="610" height="230" rx="8" fill="#536069"/>
+  <path d="M100 310h650l-70-64H165Z" fill="#2c3941"/>
+  <g fill="#222e35"><rect x="170" y="355" width="145" height="92"/><rect x="350" y="355" width="145" height="92"/></g>
+  <rect x="535" y="352" width="142" height="188" fill="#adb5b4"/>
+ </g>
+ <g opacity=".9"><rect x="790" y="450" width="310" height="24" rx="5" fill="#735844"/><rect x="820" y="474" width="22" height="72" fill="#4f443a"/><rect x="1048" y="474" width="22" height="72" fill="#4f443a"/></g>
+ <g opacity=".72"><rect x="826" y="376" width="220" height="52" rx="8" fill="#23313a"/><circle cx="862" cy="402" r="10" fill="#d98256"/><path d="M886 402h124" stroke="#aeb9bc" stroke-width="6"/></g>
+ 
+<g opacity=".45"><path d="M0 650C210 610 430 682 640 642s430-4 640-34v112H0Z" fill="#071019"/></g>
+<g opacity=".72"><rect x="52" y="48" width="146" height="28" rx="14" fill="#0b141b"/><text x="125" y="67" fill="#f1a24f" font-family="Arial,sans-serif" font-size="14" text-anchor="middle" font-weight="700" letter-spacing="2">NEW PSI</text></g>
+</svg>

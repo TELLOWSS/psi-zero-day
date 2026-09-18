@@ -37,7 +37,7 @@ import { EpisodeStopworkCultureChain } from './EpisodeStopworkCultureChain';
 import { EpisodeInstructionRealityChain } from './EpisodeInstructionRealityChain';
 import { EpisodeRecordRealityChain } from './EpisodeRecordRealityChain';
 import { EpisodeDayCarryover } from './EpisodeDayCarryover';
-import { Episode02LiftReality } from './Episode02LiftReality';
+import { EpisodeImmersiveScene } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 
@@ -82,7 +82,6 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
-  const day02OpeningComplete = snapshot.state?.flags.day02_opening_completed === true;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
@@ -350,6 +349,17 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       </div>
     </section> : isPlaying ? <>
       <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
+      <EpisodeImmersiveScene
+        eventId={activeEventId}
+        nodeId={activeInstance?.current_node_id}
+        speakerId={snapshot.dialogue?.speaker_id}
+        presentationType={presentation?.type}
+        eventTitle={snapshot.eventTitle}
+        time={cinematicBeat?.time}
+        zone={cinematicBeat?.zone}
+        resolve={resolveAsset}
+        t={t}
+      />
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
         {person ? <CharacterCard
           person={person}
@@ -375,7 +385,6 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           <EpisodeInstructionRealityChain eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeRecordRealityChain eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeDayCarryover eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
-          <Episode02LiftReality eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           {memoryCallback ? <aside className="episode-memory-callback" aria-label={t(memoryCallback.title_text_id)}>
             <span>{t(memoryCallback.eyebrow_text_id)}</span>
             <strong>{t(memoryCallback.title_text_id)}</strong>
@@ -412,8 +421,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         </div>
       </section>
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
-      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t(day02OpeningComplete ? 'ep02.title' : 'ep01.title')}</h1>
-      <p className="end-line">{t(day02OpeningComplete ? 'ui.day02.opening_complete' : 'ui.end_hint')}</p>
+      <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
+      <p className="end-line">{t('ui.end_hint')}</p>
       <section className="episode-review" aria-label={t('ui.review.title')}>
         <h2>{t('ui.review.title')}</h2>
         <p>{t('ui.review.hint')}</p>

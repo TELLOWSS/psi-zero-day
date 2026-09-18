@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="ramp-entry-title ramp-entry-desc">
+<title id="ramp-entry-title">PSI ZERO DAY construction scene</title>
+<desc id="ramp-entry-desc">Stylized 2.5D construction-site environment for Episode 01.</desc>
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7892a2"/><stop offset="1" stop-color="#d3d3c7"/></linearGradient>
+  <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#625b50"/><stop offset="1" stop-color="#414847"/></linearGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b9d7e5" stop-opacity=".58"/><stop offset="1" stop-color="#6f8d9b" stop-opacity=".12"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#071017" flood-opacity=".35"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="18"/></filter>
+  <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#fff" stroke-opacity=".035"/></pattern>
+</defs>
+<rect width="1280" height="720" fill="url(#sky)"/>
+<circle cx="1090" cy="104" r="54" fill="#ffe2a8" opacity="0.92"/>
+<rect y="360" width="1280" height="360" fill="url(#ground)"/>
+<rect y="360" width="1280" height="360" fill="url(#grid)"/>
+
+ <g filter="url(#shadow)">
+  <path d="M110 500 420 280h455L1170 500Z" fill="#777166"/>
+  <path d="M196 488 468 315h365l257 173Z" fill="#555a56"/>
+  <path d="M426 286h450v30H426z" fill="#2b363d"/>
+  <path d="M225 468 474 322" stroke="#e6bd68" stroke-width="8" stroke-dasharray="18 16"/>
+  <path d="m1098 468-250-146" stroke="#e6bd68" stroke-width="8" stroke-dasharray="18 16"/>
+ </g>
+ <g fill="#adb7b8" opacity=".72"><rect x="74" y="248" width="20" height="254"/><rect x="122" y="220" width="20" height="282"/><rect x="1010" y="236" width="20" height="266"/></g>
+ <g stroke="#708089" stroke-width="5" opacity=".7"><path d="M84 248h160v12H84z"/><path d="M1020 236h150v12h-150z"/></g>
+ <g opacity=".65"><rect x="505" y="352" width="134" height="64" rx="4" fill="#ac6b3e"/><rect x="648" y="352" width="112" height="64" rx="4" fill="#8d5a37"/></g>
+ 
+<g opacity=".45"><path d="M0 650C210 610 430 682 640 642s430-4 640-34v112H0Z" fill="#071019"/></g>
+<g opacity=".72"><rect x="52" y="48" width="146" height="28" rx="14" fill="#0b141b"/><text x="125" y="67" fill="#f0ab55" font-family="Arial,sans-serif" font-size="14" text-anchor="middle" font-weight="700" letter-spacing="2">NEW PSI</text></g>
+</svg>

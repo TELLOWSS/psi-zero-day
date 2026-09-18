@@ -32,7 +32,6 @@ export function inputFor(node: string, decisions: EpisodeDecisions): string | un
     evening: decisions.evening,
     training_equipment: decisions.equipment ?? 'training_equip_camera',
     next_day_action: defaultNextDay,
-    lift_route: 'day02_walk_and_reset',
   } as Record<string, string | undefined>)[node];
 }
 
@@ -69,12 +68,7 @@ describe('Episode application session', () => {
     }
     const complete = session.getSnapshot();
     expect(complete.phase).toBe('complete');
-    const dayOne = playEpisode(decisions, { seed: 815 }).state;
-    expect(complete.state?.flags.episode01_completed).toBe(true);
-    expect(complete.state?.flags.day02_opening_completed).toBe(true);
-    expect(complete.state?.flags.day02_lift_result).toBe('shared_route_controlled');
-    const completedIds = new Set(complete.state?.event_runtime.completion_history.map(item => item.event_id));
-    for (const item of dayOne.event_runtime.completion_history) expect(completedIds.has(item.event_id)).toBe(true);
+    expect(complete.state).toEqual(playEpisode(decisions, { seed: 815 }).state);
     expect(complete.total).toBe(complete.completed);
     expect(complete.total).toBeLessThan(26);
   });

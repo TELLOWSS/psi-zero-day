@@ -495,34 +495,57 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @media(prefers-reduced-motion:reduce){.episode-day-carryover[data-phase="day2"]{animation:none!important}}
 
 
-/* Episode 02 · first lift field-reality chain */
-.episode02-lift-reality{margin:0 0 14px;padding:12px;border:1px solid rgba(192,137,78,.34);border-radius:10px;background:linear-gradient(130deg,rgba(28,23,16,.95),rgba(18,23,26,.82));box-shadow:0 10px 30px rgba(0,0,0,.18)}
-.episode02-lift-reality>header{display:grid;gap:3px;margin-bottom:10px}
-.episode02-lift-reality>header span{color:#d4a36d;font-size:8px;font-weight:800;letter-spacing:.13em}
-.episode02-lift-reality>header strong{color:#f2f0e9;font-size:11px;line-height:1.4}
-.episode02-lift-timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0 0 9px;padding:0;list-style:none}
-.episode02-lift-timeline li{position:relative;display:grid;gap:2px;padding:7px 8px 7px 14px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.018)}
-.episode02-lift-timeline li:first-child{border-left:1px solid rgba(255,255,255,.08);border-radius:7px 0 0 7px}
-.episode02-lift-timeline li:last-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 7px 7px 0}
-.episode02-lift-timeline li::before{content:"";position:absolute;left:6px;top:11px;width:4px;height:4px;border-radius:50%;background:#6e7373;box-shadow:0 0 0 3px rgba(110,115,115,.12)}
-.episode02-lift-timeline li[data-state="done"]::before{background:#8e9a86;box-shadow:0 0 0 3px rgba(142,154,134,.14)}
-.episode02-lift-timeline li[data-state="current"]{background:rgba(212,163,109,.07)}
-.episode02-lift-timeline li[data-state="current"]::before{background:#d4a36d;box-shadow:0 0 0 4px rgba(212,163,109,.16)}
-.episode02-lift-timeline time{color:#dfb684;font:700 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em}
-.episode02-lift-timeline span{color:#aeb1ad;font-size:8px;font-weight:700}
-.episode02-lift-timeline li[data-state="current"] span{color:#f2f1ec}
-.episode02-lift-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.episode02-lift-cards article{position:relative;min-height:86px;padding:9px 10px 9px 12px;border:1px solid rgba(255,255,255,.07);border-radius:8px;background:rgba(255,255,255,.025)}
-.episode02-lift-cards article::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;border-radius:2px;background:#939891}
-.episode02-lift-cards article[data-tone="carryover"]::before{background:#9d8db7}
-.episode02-lift-cards article[data-tone="floor"]::before{background:#d7aa57}
-.episode02-lift-cards article[data-tone="voices"]::before{background:#7faeb6}
-.episode02-lift-cards article[data-tone="action"]::before{background:#cf8759}
-.episode02-lift-cards article[data-tone="verification"]::before{background:#a6bd8c}
-.episode02-lift-cards article[data-tone="result"]::before{background:#72b58b}
-.episode02-lift-cards article strong{display:block;color:#ecece6;font-size:10px;line-height:1.35}
-.episode02-lift-cards article p{margin:4px 0 0;color:#b2b6b2;font-size:9px;line-height:1.5;word-break:keep-all}
-.episode02-lift-reality[data-phase="verdict"]{border-color:rgba(114,181,139,.4);animation:ep02-lift-verdict-in .38s ease-out both}
-@keyframes ep02-lift-verdict-in{from{opacity:.58;transform:translateY(5px);filter:brightness(1.08)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}
-@media(max-width:760px){.episode02-lift-cards{grid-template-columns:1fr}.episode02-lift-cards article{min-height:0}.episode02-lift-timeline span{font-size:7px}}
-@media(prefers-reduced-motion:reduce){.episode02-lift-reality[data-phase="verdict"]{animation:none!important}}
+/* EP01 immersive cinematic scene pass */
+.episode-immersive-scene{
+  position:relative;isolation:isolate;overflow:hidden;
+  width:min(1180px,calc(100% - 32px));aspect-ratio:16/7.1;
+  margin:0 auto 14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;
+  background:#12191e;box-shadow:0 18px 44px rgba(0,0,0,.28);
+  animation:immersive-scene-in .38s cubic-bezier(.2,.7,.2,1) both;
+}
+.episode-immersive-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.025);filter:saturate(.96) contrast(1.03)}
+.episode-immersive-scene[data-focus="left"] .episode-immersive-background{object-position:38% center}
+.episode-immersive-scene[data-focus="right"] .episode-immersive-background{object-position:62% center}
+.episode-immersive-atmosphere{position:absolute;inset:0;background:
+  radial-gradient(circle at 54% 20%,rgba(255,224,178,.14),transparent 34%),
+  linear-gradient(90deg,rgba(7,13,18,.38),transparent 30%,transparent 70%,rgba(7,13,18,.28));
+  mix-blend-mode:screen;pointer-events:none
+}
+.episode-immersive-props,.episode-immersive-cast{position:absolute;inset:0;pointer-events:none}
+.episode-immersive-prop{position:absolute;object-fit:contain;filter:drop-shadow(0 12px 14px rgba(0,0,0,.35));opacity:.94}
+.episode-immersive-prop.prop-1{right:4%;bottom:3%;width:min(28%,300px);height:52%}
+.episode-immersive-prop.prop-2{left:3%;bottom:2%;width:min(24%,260px);height:45%;opacity:.84}
+.episode-immersive-character{position:absolute;bottom:-3%;width:24%;height:86%;transform-origin:50% 100%;filter:drop-shadow(0 16px 12px rgba(0,0,0,.3));transition:filter .2s ease,opacity .2s ease,transform .2s ease}
+.episode-immersive-character img{width:100%;height:100%;object-fit:contain;object-position:center bottom}
+.episode-immersive-character.cast-1{left:4%;z-index:4;transform:scale(.94)}
+.episode-immersive-character.cast-2{left:22%;z-index:5;transform:scale(1.02)}
+.episode-immersive-character.cast-3{right:23%;z-index:5;transform:scale(1.02)}
+.episode-immersive-character.cast-4{right:4%;z-index:4;transform:scale(.94)}
+.episode-immersive-character.cast-5{left:39%;z-index:6;width:22%;transform:scale(1.05)}
+.episode-immersive-character[data-speaker="true"]{z-index:8!important;filter:drop-shadow(0 18px 14px rgba(0,0,0,.38)) drop-shadow(0 0 16px rgba(244,177,88,.28));transform:translateY(-1.5%) scale(1.07)}
+.episode-immersive-scene[data-camera="tight"] .episode-immersive-character{height:96%;width:27%}
+.episode-immersive-scene[data-camera="medium"] .episode-immersive-character{height:90%}
+.episode-immersive-grade{position:absolute;inset:0;z-index:10;pointer-events:none;background:linear-gradient(180deg,rgba(8,14,18,.08) 30%,rgba(6,10,14,.62) 100%)}
+.episode-immersive-scene[data-tone="decision"] .episode-immersive-grade{background:linear-gradient(180deg,rgba(211,153,73,.04),rgba(15,16,17,.68))}
+.episode-immersive-scene[data-tone="pressure"] .episode-immersive-grade{background:linear-gradient(180deg,rgba(90,25,19,.06),rgba(24,8,8,.7));box-shadow:inset 0 0 90px rgba(118,41,26,.18)}
+.episode-immersive-scene[data-tone="resolved"] .episode-immersive-grade{background:linear-gradient(180deg,rgba(49,100,89,.04),rgba(7,22,20,.64))}
+.episode-immersive-scene[data-tone="reflective"] .episode-immersive-grade{background:linear-gradient(180deg,rgba(43,54,82,.08),rgba(7,10,20,.68))}
+.episode-immersive-scene figcaption{position:absolute;z-index:12;left:18px;right:18px;bottom:15px;display:grid;gap:4px;color:#f5f5ef;text-shadow:0 2px 8px rgba(0,0,0,.65);pointer-events:none}
+.episode-immersive-scene figcaption>div{display:flex;align-items:center;gap:8px;font-size:8px;font-weight:800;letter-spacing:.09em}
+.episode-immersive-scene figcaption>div span{padding:3px 7px;border-radius:999px;background:rgba(9,15,19,.76);color:#eeb063}
+.episode-immersive-scene figcaption>div b{font-weight:800;color:#d6dde0}
+.episode-immersive-scene figcaption>div em{font-style:normal;color:#c5cbca}
+.episode-immersive-scene figcaption strong{font-size:14px;line-height:1.25;letter-spacing:-.015em}
+.episode-immersive-scene figcaption small{font-size:9px;color:#c4cbc9}
+@keyframes immersive-scene-in{from{opacity:.2;transform:translateY(7px) scale(.993);filter:brightness(.86)}to{opacity:1;transform:none;filter:brightness(1)}}
+@media(max-width:760px){
+  .episode-immersive-scene{width:calc(100% - 20px);aspect-ratio:16/9;border-radius:10px;margin-bottom:10px}
+  .episode-immersive-character{width:29%;height:78%}
+  .episode-immersive-character.cast-1{left:-2%}.episode-immersive-character.cast-2{left:18%}
+  .episode-immersive-character.cast-3{right:18%}.episode-immersive-character.cast-4{right:-2%}
+  .episode-immersive-character.cast-5{left:37%;width:26%}
+  .episode-immersive-prop.prop-1{right:0;width:32%}.episode-immersive-prop.prop-2{left:0;width:28%}
+  .episode-immersive-scene figcaption{left:12px;right:12px;bottom:10px}
+  .episode-immersive-scene figcaption strong{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.episode-immersive-scene{animation:none!important}.episode-immersive-character{transition:none!important}}
