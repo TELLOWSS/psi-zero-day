@@ -29,6 +29,7 @@ import { useEpisodeAudio } from './useEpisodeAudio';
 import { EpisodeSceneBrief } from './EpisodeSceneBrief';
 import { EpisodeTimeMontage } from './EpisodeTimeMontage';
 import { EpisodeInspectionContext } from './EpisodeInspectionContext';
+import { EpisodeInspectionAftermath } from './EpisodeInspectionAftermath';
 import { EpisodeRecord } from './EpisodeRecord';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 
@@ -357,6 +358,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           <EpisodeTimeMontage eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />
           <EpisodeInspectionContext eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
+          <EpisodeInspectionAftermath eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           {memoryCallback ? <aside className="episode-memory-callback" aria-label={t(memoryCallback.title_text_id)}>
             <span>{t(memoryCallback.eyebrow_text_id)}</span>
             <strong>{t(memoryCallback.title_text_id)}</strong>

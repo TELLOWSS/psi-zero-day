@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-inspection-aftermath-v1",
+  "window": "10:16–10:39",
+  "intent": "Turn inspection into a continuous three-beat consequence sequence: finding, field pushback, and reinspection verdict.",
+  "stages": [
+    {
+      "time": "10:16",
+      "event_id": "e01_08b_inspection_find",
+      "purpose": "commit to an inspection response"
+    },
+    {
+      "time": "10:24",
+      "event_id": "e01_08c_site_pushback",
+      "purpose": "show the operational cost or dependency created by that response"
+    },
+    {
+      "time": "10:39",
+      "event_id": "e01_08d_reinspection",
+      "purpose": "test the claim against the actual field condition and turn it into a visible verdict"
+    }
+  ],
+  "route_inputs": [
+    "flags.inspection_action",
+    "flags.inspection_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only"
+  },
+  "presentation_rules": [
+    "Keep the same 10:16→10:24→10:39 timeline visible across the aftermath.",
+    "Do not label any route as the correct answer; expose its tradeoff and what the reinspection actually verifies.",
+    "When inspection_result is written, update the same panel from verification focus to field verdict."
+  ]
+}
