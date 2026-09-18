@@ -7,7 +7,6 @@ type Props = {
 };
 
 const steel = '#9fb0bc';
-const steelDark = '#536775';
 const orange = '#f2a33a';
 const yellow = '#f1c84d';
 const red = '#d85148';
@@ -50,13 +49,6 @@ function HazardBadge() {
     <path d="M0 62 36 0 72 62Z" fill={yellow} stroke="#1a2730" strokeWidth="4"/>
     <rect x="32" y="20" width="8" height="25" rx="4" fill="#1b2730"/>
     <circle cx="36" cy="52" r="4.5" fill="#1b2730"/>
-  </g>;
-}
-
-function ControlBadge() {
-  return <g transform="translate(530 48)">
-    <circle cx="34" cy="34" r="30" fill={green} stroke="#d8ead8" strokeWidth="3"/>
-    <path d="m18 35 11 11 22-27" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
   </g>;
 }
 
@@ -189,7 +181,7 @@ function LightingScene() {
   return <SceneBase accent={orange}>
     <rect x="282" y="132" width="28" height="170" fill="url(#fg-steel)"/>
     <rect x="235" y="280" width="120" height="52" rx="8" fill={orange}/>
-    {[[-1,-1],[1,-1],[-1,1],[1,1]].map(([sx,sy],i)=><rect key={i} x={sx<0?210:315} y={sy<0?84:128} width="75" height="42" rx="5" fill="#f8f0cf" stroke="#5e6c74" strokeWidth="5"/>)}
+    {([[-1,-1],[1,-1],[-1,1],[1,1]] as const).map(([sx,sy],i)=><rect key={i} x={sx<0?210:315} y={sy<0?84:128} width="75" height="42" rx="5" fill="#f8f0cf" stroke="#5e6c74" strokeWidth="5"/>)}
     <rect x="245" y="115" width="105" height="10" fill="url(#fg-steel)"/>
   </SceneBase>;
 }
