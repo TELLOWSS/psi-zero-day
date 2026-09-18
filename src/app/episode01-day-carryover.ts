@@ -52,7 +52,7 @@ function instructionCard(flags:FlagMap):DayCarryoverCard|undefined{
   }
 }
 
-function eveningCard(flags:FlagMap,open:boolean):DayCarryoverCard{
+function eveningCard(flags:FlagMap):DayCarryoverCard{
   if(flags.evening_rest===true) return {title_text_id:'ui.day_carryover.evening.rest.title',body_text_id:'ui.day_carryover.evening.rest.body',tone:'recovery'};
   if(flags.evening_family===true) return {title_text_id:'ui.day_carryover.evening.family.title',body_text_id:'ui.day_carryover.evening.family.body',tone:'recovery'};
   if(flags.evening_study===true) return {title_text_id:'ui.day_carryover.evening.study.title',body_text_id:'ui.day_carryover.evening.study.body',tone:'recovery'};
@@ -93,7 +93,7 @@ export function episode01DayCarryover(eventId:string|null|undefined,flags:FlagMa
   if(!flags||(eventId!=='e01_09_evening'&&eventId!=='e01_10_next_day_tease')) return undefined;
   const base=[recordCard(flags),peopleCard(flags),instructionCard(flags)].filter((card):card is DayCarryoverCard=>Boolean(card));
   if(eventId==='e01_09_evening'){
-    const cards=[...base,eveningCard(flags,true)];
+    const cards=[...base,eveningCard(flags)];
     return Object.freeze({
       doctrine_id:FIELD_REALITY_DOCTRINE_ID,
       phase:'evening',
@@ -103,7 +103,7 @@ export function episode01DayCarryover(eventId:string|null|undefined,flags:FlagMa
       cards:Object.freeze(cards)
     });
   }
-  const cards=[...base,eveningCard(flags,false),firstCheckCard(flags)];
+  const cards=[...base,eveningCard(flags),firstCheckCard(flags)];
   return Object.freeze({
     doctrine_id:FIELD_REALITY_DOCTRINE_ID,
     phase:'day2',
