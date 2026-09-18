@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-record-field-reality-v1",
+  "doctrine_id": "field-reality-doctrine-v1",
+  "window": "16:24–17:08",
+  "intent": "Apply the absolute field-reality doctrine to end-of-shift reporting: preserve record truth, separate verified facts from contemporaneous judgment and unknowns, and expose the operational cost of concise, synchronized, or timeline-first reporting.",
+  "reads": [
+    "flags.instruction_chain_result",
+    "flags.record_action",
+    "flags.record_result"
+  ],
+  "locks": {
+    "event_topology": "unchanged",
+    "choice_ids": "unchanged",
+    "effect_bundles": "unchanged",
+    "existing_flags": "read-only",
+    "doctrine": "field-reality-doctrine-v1"
+  },
+  "record_floor": [
+    "Do not backfill facts, times, confirmations, or wording that did not exist at the time.",
+    "Document synchronization may link existing records and later change history, but must not rewrite historical source records as if later knowledge existed earlier.",
+    "Separate verified fact, contemporaneous judgment, role-specific statement, and still-unverified information."
+  ],
+  "presentation_rules": [
+    "Treat worker, foreman, construction-team and safety-team accounts as evidence to preserve, not automatically as identical to verified fact.",
+    "Show speed, readability, relationship and evidence costs for every route.",
+    "Do not label timeline preservation as a frictionless correct answer; it costs time, coordination, and exposure of disagreement.",
+    "At 17:08 change the same panel from evidence-check focus to the actual record consequence."
+  ]
+}

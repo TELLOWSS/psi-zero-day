@@ -31,8 +31,8 @@ const BEATS: Readonly<Record<string, EpisodeCinematicBeat>> = Object.freeze({
   e01_08l_stopwork_return: { time: '15:32', zone: 'WORKFACE', label: '다음 보고가 결정된다', tone: 'consequence', detail: '다음 이상신호에서 작업자가 무전을 드는지 내려놓는지가 현장의 실제 보고경로를 보여준다' },
   e01_08m_instruction_cascade: { time: '16:05', zone: 'WORKFACE', label: '말이 내려갈수록 짧아진다', tone: 'signal', detail: '원지시가 법과 절차에 맞아도 마지막 작업자에게 조건이 도착하지 않았다면 현장 통제는 완성되지 않는다' },
   e01_08n_instruction_return: { time: '16:24', zone: 'RECORD', label: '사라진 조건을 찾는다', tone: 'consequence', detail: '누가 틀렸는지 단정하기 전에 각 단계가 실제로 들은 말을 맞추면 조건이 사라진 지점과 관계비용이 함께 보인다' },
-  e01_08o_record_pressure: { time: '16:42', zone: 'SITE OFFICE', label: '오늘을 어떤 문장으로 남길 것인가', tone: 'decision' },
-  e01_08p_record_return: { time: '17:08', zone: 'REPORT', label: '기록이 다시 질문한다', tone: 'consequence' },
+  e01_08o_record_pressure: { time: '16:42', zone: 'SITE OFFICE', label: '오늘을 어떤 문장으로 남길 것인가', tone: 'decision', detail: '보고서는 현장을 정리하는 문서지만 당시 없던 사실을 뒤에서 만들어 넣는 순간 기록은 통제가 아니라 설명용 이야기가 된다' },
+  e01_08p_record_return: { time: '17:08', zone: 'REPORT', label: '기록이 다시 질문한다', tone: 'consequence', detail: '사진·통화·TBM 시각을 함께 열면 문장보다 사실·판단·미확인이 어떻게 구분됐는지가 먼저 드러난다' },
   e01_09_evening: { time: '20:41', zone: 'HOME', label: '현장이 끝난 뒤 남는 것', tone: 'release' },
   e01_10_next_day_tease: { time: '06:52', zone: 'GATE · DAY 02', label: '어제의 선택이 오늘의 조건이 된다', tone: 'arrival' },
 });

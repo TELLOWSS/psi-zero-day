@@ -428,3 +428,36 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @keyframes instruction-reality-verdict-in{from{opacity:.58;transform:translateY(5px);filter:brightness(1.08)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}
 @media(max-width:760px){.instruction-reality-cards{grid-template-columns:1fr}.instruction-reality-cards article{min-height:0}.instruction-reality-timeline span{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.episode-instruction-reality-chain[data-phase="verdict"]{animation:none!important}}
+
+
+/* Episode 01 instruction reality → record reality chain */
+.episode-record-reality-chain{margin:0 0 14px;padding:12px;border:1px solid rgba(156,132,92,.32);border-radius:10px;background:linear-gradient(130deg,rgba(25,22,17,.94),rgba(18,23,24,.78));box-shadow:0 10px 30px rgba(0,0,0,.17)}
+.episode-record-reality-chain>header{display:grid;gap:3px;margin-bottom:10px}
+.episode-record-reality-chain>header span{color:#c8a96d;font-size:8px;font-weight:800;letter-spacing:.13em}
+.episode-record-reality-chain>header strong{color:#f0f0ea;font-size:11px;line-height:1.4}
+.record-reality-timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0 0 9px;padding:0;list-style:none}
+.record-reality-timeline li{position:relative;display:grid;gap:2px;padding:7px 8px 7px 14px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.018)}
+.record-reality-timeline li:first-child{border-left:1px solid rgba(255,255,255,.08);border-radius:7px 0 0 7px}
+.record-reality-timeline li:last-child{border-right:1px solid rgba(255,255,255,.08);border-radius:0 7px 7px 0}
+.record-reality-timeline li::before{content:"";position:absolute;left:6px;top:11px;width:4px;height:4px;border-radius:50%;background:#6a7070;box-shadow:0 0 0 3px rgba(106,112,112,.12)}
+.record-reality-timeline li[data-state="done"]::before{background:#8d927f;box-shadow:0 0 0 3px rgba(141,146,127,.14)}
+.record-reality-timeline li[data-state="current"]{background:rgba(200,169,109,.07)}
+.record-reality-timeline li[data-state="current"]::before{background:#c8a96d;box-shadow:0 0 0 4px rgba(200,169,109,.16)}
+.record-reality-timeline time{color:#d2b87f;font:700 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em}
+.record-reality-timeline span{color:#a9aeaa;font-size:8px;font-weight:700}
+.record-reality-timeline li[data-state="current"] span{color:#f1f1ec}
+.record-reality-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.record-reality-cards article{position:relative;min-height:86px;padding:9px 10px 9px 12px;border:1px solid rgba(255,255,255,.07);border-radius:8px;background:rgba(255,255,255,.025)}
+.record-reality-cards article::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;border-radius:2px;background:#93968c}
+.record-reality-cards article[data-tone="previous"]::before{background:#81a7a0}
+.record-reality-cards article[data-tone="floor"]::before{background:#d7aa57}
+.record-reality-cards article[data-tone="layers"]::before{background:#88aab4}
+.record-reality-cards article[data-tone="action"]::before{background:#cf8f62}
+.record-reality-cards article[data-tone="verification"]::before{background:#a9bc91}
+.record-reality-cards article[data-tone="result"]::before{background:#72b58b}
+.record-reality-cards article strong{display:block;color:#eaebe6;font-size:10px;line-height:1.35}
+.record-reality-cards article p{margin:4px 0 0;color:#afb5b1;font-size:9px;line-height:1.5;word-break:keep-all}
+.episode-record-reality-chain[data-phase="verdict"]{border-color:rgba(114,181,139,.4);animation:record-reality-verdict-in .36s ease-out both}
+@keyframes record-reality-verdict-in{from{opacity:.58;transform:translateY(5px);filter:brightness(1.08)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}
+@media(max-width:760px){.record-reality-cards{grid-template-columns:1fr}.record-reality-cards article{min-height:0}.record-reality-timeline span{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.episode-record-reality-chain[data-phase="verdict"]{animation:none!important}}
