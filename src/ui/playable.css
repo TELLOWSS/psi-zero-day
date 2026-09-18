@@ -156,3 +156,12 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @media(prefers-reduced-motion:reduce){
   .episode-scene-stamp,.presentation-area[data-presentation]>*{animation:none!important}
 }
+
+/* Episode memory callback */
+.episode-memory-callback{margin:0 0 14px;padding:12px 14px 13px;border:1px solid rgba(144,187,200,.24);border-left:3px solid #d4a844;border-radius:8px;background:linear-gradient(100deg,rgba(10,27,34,.88),rgba(15,31,36,.58));box-shadow:0 12px 34px rgba(0,0,0,.18)}
+.episode-memory-callback>span{display:block;color:#d7ae50;font-size:9px;font-weight:800;letter-spacing:.18em}
+.episode-memory-callback>strong{display:block;margin-top:3px;color:#eef2ed;font-size:13px}
+.episode-memory-callback>div{display:grid;gap:5px;margin-top:8px}
+.episode-memory-callback p{margin:0;color:#b9c8ca;font-size:11px;line-height:1.55}
+.episode-memory-callback p::before{content:"—";margin-right:7px;color:#7399a5}
+@media(max-width:720px){.episode-memory-callback{padding:10px 11px}.episode-memory-callback p{font-size:10px}}
