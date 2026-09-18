@@ -500,6 +500,105 @@ function RichRebarMat() {
   </RichBase>;
 }
 
+
+function RichRebarChair() {
+  return <RichBase accent={yellow}>
+    <g stroke="url(#rich-steel)" strokeLinecap="round">
+      <path d="M160 210H455M160 240H465M160 270H475" strokeWidth="8"/>
+      <path d="M190 185v112M235 185v120M280 185v128M325 185v136M370 185v144M415 185v152" strokeWidth="7"/>
+    </g>
+    <path d="M210 282 225 245 240 282M305 292 320 250 335 292M400 302 415 260 430 302" fill="none" stroke={orange} strokeWidth="9" strokeLinejoin="round"/>
+    <path d="M196 309 445 337" stroke="#243d4e" strokeWidth="12" opacity=".45"/>
+  </RichBase>;
+}
+
+function RichStarterBars() {
+  return <RichBase accent={yellow}>
+    <path d="M164 286 423 286 480 318 215 351Z" fill="url(#rich-concrete)" stroke="#68767d" strokeWidth="4"/>
+    <g stroke="url(#rich-steel)" strokeWidth="10" strokeLinecap="round">
+      <path d="M205 278V132M250 283V116M295 289V145M340 294V124M385 300V151M430 305V138"/>
+    </g>
+    <g fill={yellow} stroke="#8f681f" strokeWidth="2">
+      <path d="M193 145q12-22 24 0v16h-24Z"/><path d="M238 129q12-22 24 0v16h-24Z"/><path d="M283 158q12-22 24 0v16h-24Z"/>
+      <path d="M328 137q12-22 24 0v16h-24Z"/><path d="M373 164q12-22 24 0v16h-24Z"/><path d="M418 151q12-22 24 0v16h-24Z"/>
+    </g>
+  </RichBase>;
+}
+
+function RichRebarLift() {
+  return <RichBase accent={yellow}>
+    <path d="M195 248 416 219" stroke="#6e818c" strokeWidth="14" strokeLinecap="round"/>
+    <path d="M195 258 416 229M195 268 416 239M195 278 416 249M195 288 416 259" stroke="#526875" strokeWidth="9" strokeLinecap="round"/>
+    <path d="M225 242 241 294M382 220 397 270" stroke="url(#rich-orange)" strokeWidth="10"/>
+    <path d="M275 243 320 130M354 232 320 130" stroke="#a7b3b8" strokeWidth="10" strokeLinecap="round"/>
+    <circle cx="320" cy="122" r="18" fill="#495e6d" stroke="#c0c9cd" strokeWidth="4"/>
+    <path d="M185 317 435 347" stroke="#253d4e" strokeWidth="7" strokeDasharray="15 10"/>
+  </RichBase>;
+}
+
+function RichEVPit() {
+  return <RichBase accent={red}>
+    <path d="M174 201 405 201 476 253 238 286Z" fill="#050a0e" stroke="#8d9ba3" strokeWidth="6"/>
+    <path d="M199 220 395 220 442 253 242 274Z" fill="#010407"/>
+    <path d="M165 187v-65M425 195v-65M165 128h260M165 161h260" stroke={yellow} strokeWidth="10"/>
+    <path d="M181 202 216 206M421 207 455 231" stroke={red} strokeWidth="8"/>
+    <path d="M154 300 215 286M439 285 492 309" stroke="#334c5e" strokeWidth="10"/>
+  </RichBase>;
+}
+
+function RichEVRoute() {
+  return <RichBase accent={blue}>
+    <path d="M158 296 406 296 486 329 232 359Z" fill="#293f50"/>
+    <path d="M186 281 221 273 427 298 394 307Z" fill={blue} opacity=".9"/>
+    <path d="M198 272 413 298" stroke="#e6edf0" strokeWidth="5" strokeDasharray="12 9"/>
+    <path d="M168 247v-82M435 277v-82M168 171h267M168 207h267" stroke={yellow} strokeWidth="9"/>
+    <path d="M286 197 338 204 361 232 309 225Z" fill="#060b0f" stroke="#a4b2ba" strokeWidth="4"/>
+  </RichBase>;
+}
+
+function RichFoundationWalkway() {
+  return <RichBase accent={yellow}>
+    <path d="M151 281 411 254 486 284 222 318Z" fill="#9b774d" stroke="#dbc191" strokeWidth="4"/>
+    <path d="M180 274 428 249" stroke="#d8c29b" strokeWidth="8"/>
+    <path d="M166 247v-86M439 257v-86M166 168h273M166 204h273" stroke={yellow} strokeWidth="9"/>
+    <path d="M213 313 246 306M278 299 311 292M344 285 377 278" stroke={orange} strokeWidth="7"/>
+  </RichBase>;
+}
+
+function RichPumpTruck({ hose=false }: { hose?: boolean }) {
+  return <RichBase accent={orange}>
+    <path d="M177 250 350 250 389 270 215 290Z" fill="#e6e9e8" stroke="#617580" strokeWidth="4"/>
+    <path d="M215 290 389 270 389 308 215 329Z" fill="#aab4b8"/>
+    <path d="M224 203 337 203 363 220 250 220Z" fill="#eef1ef" stroke="#617580" strokeWidth="4"/>
+    <circle cx="233" cy="318" r="25" fill="#172832"/><circle cx="351" cy="296" r="25" fill="#172832"/>
+    <path d="M191 281 132 328M369 286 430 329" stroke={orange} strokeWidth="14"/><path d="M112 331h55M412 332h56" stroke="#233a49" strokeWidth="12"/>
+    {hose ? <path d="M324 204c75-80 141-28 117 48-19 60 4 81 52 89" fill="none" stroke="#27343b" strokeWidth="18" strokeLinecap="round"/>
+      : <path d="M324 205c75-78 112-87 152-107" fill="none" stroke="#627886" strokeWidth="14" strokeLinecap="round"/>}
+  </RichBase>;
+}
+
+function RichVibratorCable() {
+  return <RichBase accent={orange}>
+    <rect x="219" y="199" width="151" height="65" rx="18" fill="url(#rich-orange)" stroke="#6c481f" strokeWidth="4"/>
+    <rect x="189" y="212" width="55" height="22" rx="10" fill="#283942"/>
+    <path d="M366 233c83-27 74 68 132 71" fill="none" stroke="#26363e" strokeWidth="13" strokeLinecap="round"/>
+    <path d="M214 267 194 318M352 266 377 321" stroke="#596d79" strokeWidth="8"/>
+    <path d="M177 319h44M359 322h41" stroke="#203643" strokeWidth="10"/>
+    <circle cx="454" cy="301" r="8" fill={yellow}/>
+  </RichBase>;
+}
+
+function RichSumpPump() {
+  return <RichBase accent={blue}>
+    <ellipse cx="315" cy="294" rx="173" ry="45" fill="#3b7fa7" opacity=".82"/>
+    <path d="M170 285c42-23 88-17 126 4s86 27 167-1" fill="none" stroke="#8bd0ee" strokeWidth="7" opacity=".85"/>
+    <rect x="270" y="185" width="92" height="105" rx="19" fill="#2d79a5" stroke="#a2b9c6" strokeWidth="5"/>
+    <rect x="292" y="158" width="48" height="35" rx="11" fill="#315d78"/>
+    <path d="M340 229c89 0 77-78 141-78" fill="none" stroke="#2a3b44" strokeWidth="20" strokeLinecap="round"/>
+    <path d="M281 257h70" stroke="#e1e8ea" strokeWidth="6" opacity=".7"/>
+  </RichBase>;
+}
+
 function resolveScene(key:string) {
   if(key==='foundation_blinding_edge') return <RichFoundationStep/>;
   if(key==='site_gate') return <GateScene/>;
@@ -519,12 +618,22 @@ function resolveScene(key:string) {
   if(key==='site_weather_station') return <RichWeatherStation/>;
   if(key.includes('weather') || key.includes('wind_meter')) return <WeatherScene/>;
   if(key==='foundation_rebar_mat') return <RichRebarMat/>;
+  if(key==='rebar_chair_support') return <RichRebarChair/>;
+  if(key==='starter_rebar_protrusion') return <RichStarterBars/>;
+  if(key==='rebar_lifting_bundle') return <RichRebarLift/>;
   if(key.includes('rebar') || key.includes('starter')) return <RebarScene/>;
+  if(key==='ev_pit_opening') return <RichEVPit/>;
   if(key.includes('pit_opening') || key.includes('opening') || key.includes('open_edge') || key.includes('floor_change_edge')) return <EdgeScene cover={key.includes('cover')} roof={key.includes('roof')}/>;
+  if(key==='ev_pit_access_route') return <RichEVRoute/>;
+  if(key==='foundation_temporary_walkway') return <RichFoundationWalkway/>;
   if(key.includes('walkway') || key.includes('access_route') || key.includes('temporary_route')) return <RebarScene walkway/>;
+  if(key==='pump_outrigger') return <RichPumpTruck/>;
   if(key.includes('pump_outrigger')) return <PumpScene/>;
+  if(key==='pump_hose_route') return <RichPumpTruck hose/>;
   if(key.includes('pump_hose')) return <PumpScene hose/>;
+  if(key==='foundation_sump_pump') return <RichSumpPump/>;
   if(key.includes('sump_pump')) return <PumpScene sump/>;
+  if(key==='concrete_vibrator_cable') return <RichVibratorCable/>;
   if(key.includes('vibrator')) return <ToolScene/>;
   if(key.includes('wet_floor')) return <SceneBase accent={blue}><ellipse cx="318" cy="270" rx="145" ry="48" fill="#3c82ac" opacity=".8"/><path d="M180 282c45-38 80-28 118 0s75 30 145-7" stroke="#9bd1ed" strokeWidth="8" fill="none" opacity=".8"/></SceneBase>;
   if(key.includes('euroform') || key.includes('formwork_tie') || key.includes('formwork_brace') || key.includes('formwork_work')) return <FormworkScene/>;
