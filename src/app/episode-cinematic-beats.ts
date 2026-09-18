@@ -16,6 +16,8 @@ const BEATS: Readonly<Record<string, EpisodeCinematicBeat>> = Object.freeze({
   e01_05_command: { time: '07:27', zone: 'WORKFACE', label: '확인과 통제를 동시에', tone: 'decision', detail: '한 곳을 직접 보면 다른 한 곳은 누군가에게 맡겨진다' },
   e01_06_pump_arrival: { time: '07:36', zone: 'GATE', label: '판단의 결과가 돌아온다', tone: 'consequence', detail: '앞선 선택들이 차량 한 대 앞에서 동시에 만난다' },
   e01_07_first_pour: { time: '07:48', zone: 'POUR', label: '첫 타설', tone: 'release', detail: '작업 시작은 안전 판단의 끝이 아니라 다음 상태의 시작이다' },
+  e01_08_reactions: { time: '08:12 → 09:58', zone: 'POUR · CLEANUP', label: '현장은 멈추지 않는다', tone: 'consequence', detail: '아침의 선택이 작업속도·대화·다음 보고 방식으로 남는다' },
+  e01_08a_reporting_return: { time: '10:07', zone: 'WORKFACE', label: '말했던 사람은 다시 말할까', tone: 'signal', detail: '보고를 받아준 방식이 다음 신호의 크기를 바꾼다' },
   e01_08b_inspection_find: { time: '10:16', zone: 'INSPECTION', label: '조치와 공정이 충돌한다', tone: 'pressure' },
   e01_08c_site_pushback: { time: '10:24', zone: 'INSPECTION', label: '선택의 비용이 돌아온다', tone: 'consequence' },
   e01_08d_reinspection: { time: '10:39', zone: 'INSPECTION', label: '사진이 아니라 현장을 다시 본다', tone: 'consequence' },

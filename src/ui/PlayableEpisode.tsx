@@ -27,6 +27,7 @@ import { PresentationView } from './PresentationView';
 import { StrategyMapShell } from './StrategyMapShell';
 import { useEpisodeAudio } from './useEpisodeAudio';
 import { EpisodeSceneBrief } from './EpisodeSceneBrief';
+import { EpisodeTimeMontage } from './EpisodeTimeMontage';
 import { EpisodeRecord } from './EpisodeRecord';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 
@@ -352,6 +353,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
+          <EpisodeTimeMontage eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />
           {memoryCallback ? <aside className="episode-memory-callback" aria-label={t(memoryCallback.title_text_id)}>
             <span>{t(memoryCallback.eyebrow_text_id)}</span>

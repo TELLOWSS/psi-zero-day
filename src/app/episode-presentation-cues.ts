@@ -24,6 +24,8 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
   e01_05_command: cue('workface_pressure', 'pressure', 'ep01.audio.workface_pressure', 0.45),
   e01_06_pump_arrival: cue('pump_engine_boom', 'pressure', 'ep01.audio.pump_engine_boom', 0.55),
   e01_07_first_pour: cue('concrete_pour', 'scene_shift', 'ep01.audio.concrete_pour', 0.58),
+  e01_08_reactions: cue('concrete_pour', 'scene_shift', 'ep01.audio.concrete_pour', 0.3),
+  e01_08a_reporting_return: cue('workface_pressure', 'radio_signal', 'ep01.audio.workface_pressure', 0.24),
   e01_08b_inspection_find: cue('workface_pressure', 'scene_shift', 'ep01.audio.workface_pressure', 0.4),
   e01_08e_responsibility_clash: cue('office_report_roomtone', 'pressure', 'ep01.audio.office_report_roomtone', 0.36),
   e01_08g_tbm_field_gap: cue('radio_burst', 'radio_signal', 'ep01.audio.radio_burst', 0.48),

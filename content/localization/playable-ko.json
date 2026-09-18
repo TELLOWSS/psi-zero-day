@@ -489,6 +489,19 @@
     "cast.lim_junho.intro": "현장의 작은 이상을 먼저 체감하는 신규 작업자",
     "cast.choi_minseok.intro": "차량·양중 동선의 신호와 접근통제를 담당",
     "cast.seo_jeongmin.intro": "시공 상태와 조치 완료 여부를 확인하는 건축감리",
-    "cast.oh_seungjae.intro": "공사팀 의사결정·보고·공정 조율을 총괄"
+    "cast.oh_seungjae.intro": "공사팀 의사결정·보고·공정 조율을 총괄",
+    "ui.montage.ep01.title": "첫 타설 뒤, 현장은 계속 움직였다",
+    "ui.montage.ep01.pour.title": "타설 리듬이 잡힌다",
+    "ui.montage.ep01.pour.body": "호스가 자리를 잡고 작업조 손이 빨라진다. 아침에 정한 통로와 신호 순서가 실제 움직임 속에서 시험된다.",
+    "ui.montage.ep01.outcome.control.title": "확인한 기준이 반복된다",
+    "ui.montage.ep01.outcome.control.body": "다음 차량이 들어올 때도 경사로와 진입부를 같은 순서로 확인한다. 누가 시키기 전에 먼저 보는 사람이 생긴다.",
+    "ui.montage.ep01.outcome.near_miss.title": "멈췄던 장면이 사람을 바꾼다",
+    "ui.montage.ep01.outcome.near_miss.body": "경사로는 다시 다져지고 차량은 더 천천히 움직인다. 사고는 없었지만 손신호 하나에 모두의 시선이 빨라졌다.",
+    "ui.montage.ep01.outcome.relation.title": "현장은 조용해졌지만 이유는 다르다",
+    "ui.montage.ep01.outcome.relation.body": "통제는 유지된다. 다만 작업자들의 말수가 줄어든 것이 정리 때문인지 압박 때문인지는 아직 구분되지 않는다.",
+    "ui.montage.ep01.outcome.delay.title": "지연을 만회하려 밀도가 올라간다",
+    "ui.montage.ep01.outcome.delay.body": "확인에 쓴 시간을 되찾으려 작업 간격이 좁아진다. 안전하게 늦춘 선택이 이후 공정에서는 새로운 압박이 된다.",
+    "ui.montage.ep01.cleanup.title": "세척·정리·검측 준비",
+    "ui.montage.ep01.cleanup.body": "자바라를 씻고 자재를 다시 묶는다. 큰 사고 없이 지나간 두 시간이지만, 아침 선택의 흔적은 사람의 말투와 다음 지시에 남아 있다."
   }
 }

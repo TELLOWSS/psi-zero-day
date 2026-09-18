@@ -350,6 +350,34 @@
         "pressures",
         "dialogue"
       ]
+    },
+    "e01_08_reactions": {
+      "scene_id": "foundation.time-compression",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "overview",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
+    },
+    "e01_08a_reporting_return": {
+      "scene_id": "foundation.reporting-return",
+      "background_asset_id": "ep01.background.foundation.map",
+      "environment": "foundation",
+      "primary_anchor": "ramp",
+      "active_layers": [
+        "background",
+        "characters",
+        "elements",
+        "signals",
+        "pressures",
+        "dialogue"
+      ]
     }
   }
 }

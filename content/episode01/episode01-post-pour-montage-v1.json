@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-post-pour-montage-v1",
+  "window": "07:48–10:16",
+  "intent": "Compress routine work time while preserving the memory of the player's earlier pump-entry outcome before inspection begins.",
+  "beats": [
+    {
+      "time": "08:12",
+      "purpose": "show work rhythm stabilizing"
+    },
+    {
+      "time": "08:56",
+      "purpose": "echo pump_result as an operational/social trace"
+    },
+    {
+      "time": "09:42",
+      "purpose": "move from pour cleanup into inspection readiness"
+    },
+    {
+      "time": "10:07",
+      "purpose": "return to whether the reporting channel stayed open"
+    },
+    {
+      "time": "10:16",
+      "purpose": "enter inspection with accumulated context"
+    }
+  ],
+  "rule": "Time compression must show consequences and changing field conditions, not imply that uneventful time had no safety decisions."
+}
