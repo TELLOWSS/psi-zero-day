@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "profile_id": "field-guide-isometric-v1",
+  "title_ko": "현장도감 이소메트릭 3D 픽토그램",
+  "status": "locked",
+  "purpose": "PSI : ZERO DAY 현장도감 전체 118개 아이템의 시각 일관성 기준",
+  "visual_language": {
+    "camera": "three-quarter isometric, slightly elevated, consistent 35–45 degree presentation",
+    "form": "real construction equipment/material proportions simplified into readable game pictograms",
+    "material": "painted steel, galvanized steel, concrete, rubber, timber and safety polymer with restrained highlights",
+    "outline": "clean dark navy edge definition; avoid comic black ink",
+    "palette": {
+      "base": [
+        "#12283A",
+        "#233E52",
+        "#526B7C",
+        "#9FB0BC"
+      ],
+      "safety": [
+        "#F2A33A",
+        "#F1C84D",
+        "#D85148",
+        "#3C83B6",
+        "#6EA76D"
+      ]
+    },
+    "lighting": "soft upper-left key light, subtle cool fill, compact contact shadow",
+    "background": "transparent alpha; no baked site photo or UI panel",
+    "text_policy": "no embedded Korean/English text except unavoidable universal equipment marks such as AED or pictograms",
+    "branding_policy": "no company logo, manufacturer logo or site name",
+    "framing": "single object or one compact work-state diorama; centered with 8–12% transparent breathing room",
+    "detail_level": "more detailed than flat icon, less complex than concept-art scene"
+  },
+  "output": {
+    "preferred_format": "webp",
+    "source_canvas_px": [
+      1254,
+      1254
+    ],
+    "delivery_px": [
+      768,
+      768
+    ],
+    "minimum_preview_px": [
+      384,
+      384
+    ],
+    "alpha_required": true,
+    "ui_usage": [
+      "field-guide-list-thumbnail",
+      "field-guide-detail-preview"
+    ]
+  },
+  "validation": [
+    "thumbnail at ~60 px must remain identifiable",
+    "detail preview must show the same object without switching art style",
+    "no photographic background",
+    "no floating generic warning icon unless the hazard itself cannot be represented physically",
+    "hazard/control meaning should come primarily from the construction object/state",
+    "existing final scene-element art is preserved unless explicitly replaced"
+  ],
+  "current_reference_assets": [
+    "ep01.scene_element.site_gate",
+    "ep01.scene_element.fire_extinguisher_station",
+    "ep01.scene_element.material_stack",
+    "ep01.scene_element.access_barrier",
+    "ep01.scene_element.vehicle_overlap",
+    "ep01.scene_element.harness_unclipped",
+    "ep01.scene_element.platform_cut_edge",
+    "ep01.scene_element.suspended_load",
+    "ep01.scene_element.gangform_lift_wire22",
+    "ep01.scene_element.exclusion_zone",
+    "ep01.scene_element.wet_floor",
+    "ep01.scene_element.open_edge"
+  ],
+  "next_asset_batch": [
+    {
+      "key": "material_yard",
+      "asset_id": "ep01.scene_element.material_yard",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "temporary_distribution_board",
+      "asset_id": "ep01.scene_element.temporary_distribution_board",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "temporary_lighting_pack",
+      "asset_id": "ep01.scene_element.temporary_lighting_pack",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "ppe_issue_station",
+      "asset_id": "ep01.scene_element.ppe_issue_station",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "first_aid_aed",
+      "asset_id": "ep01.scene_element.first_aid_aed",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "site_weather_station",
+      "asset_id": "ep01.scene_element.site_weather_station",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "foundation_blinding_edge",
+      "asset_id": "ep01.scene_element.foundation_blinding_edge",
+      "status": "art_ready_local"
+    },
+    {
+      "key": "foundation_rebar_mat",
+      "asset_id": "ep01.scene_element.foundation_rebar_mat",
+      "status": "art_ready_local"
+    }
+  ]
+}

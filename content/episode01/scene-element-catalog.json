@@ -25,7 +25,11 @@
           "y": 0.94
         },
         "map_max_px": 132,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -69,7 +73,11 @@
           "y": 0.92
         },
         "map_max_px": 140,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -117,7 +125,11 @@
           "y": 0.5
         },
         "map_max_px": 168,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -162,7 +174,11 @@
         },
         "map_max_px": 112,
         "requires_alpha": true,
-        "source": "generated_2026-09-18"
+        "source": "generated_2026-09-18",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "scaffold",
@@ -195,7 +211,11 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-414949ea-7c4e-4757-9f5d-60bb4f42182f.png"
+        "source": "generated_2026-09-18/exec-414949ea-7c4e-4757-9f5d-60bb4f42182f.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "scaffold"
@@ -236,7 +256,11 @@
         },
         "map_max_px": 136,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-41f7ba8f-99ad-40e4-ba34-180a66f278d0.png"
+        "source": "generated_2026-09-18/exec-41f7ba8f-99ad-40e4-ba34-180a66f278d0.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "lifting",
@@ -278,7 +302,11 @@
         },
         "map_max_px": 156,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-f9df42d3-0b3e-4724-8827-cf64ad17fec2.png"
+        "source": "generated_2026-09-18/exec-f9df42d3-0b3e-4724-8827-cf64ad17fec2.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "lifting",
@@ -311,7 +339,11 @@
         },
         "map_max_px": 160,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-4fcc93e4-9b26-4de3-a416-7f8266a02cf8.png"
+        "source": "generated_2026-09-18/exec-4fcc93e4-9b26-4de3-a416-7f8266a02cf8.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "lifting",
@@ -345,7 +377,11 @@
         },
         "map_max_px": 150,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-6e8780fe-dae0-466e-809f-d9eb28463e7e.png"
+        "source": "generated_2026-09-18/exec-6e8780fe-dae0-466e-809f-d9eb28463e7e.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -378,7 +414,11 @@
         },
         "map_max_px": 154,
         "requires_alpha": true,
-        "source": "generated_2026-09-18/exec-6a2427d0-1d43-4ef2-a688-b1998ac1bb1f.png"
+        "source": "generated_2026-09-18/exec-6a2427d0-1d43-4ef2-a688-b1998ac1bb1f.png",
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor",
@@ -411,7 +451,10 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1"
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup"
@@ -442,7 +485,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup"
@@ -473,7 +520,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -506,7 +557,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -540,7 +595,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -574,7 +633,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -607,7 +670,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -640,7 +707,10 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1"
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -673,7 +743,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -705,7 +779,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "site_setup",
@@ -738,7 +816,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation"
@@ -769,7 +851,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation"
@@ -800,7 +886,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation"
@@ -831,7 +921,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -864,7 +958,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -896,7 +994,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -928,7 +1030,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -960,7 +1066,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation"
@@ -991,7 +1101,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -1024,7 +1138,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -1057,7 +1175,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -1090,7 +1212,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "foundation",
@@ -1122,7 +1248,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1153,7 +1283,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1184,7 +1318,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1216,7 +1354,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1247,7 +1389,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1278,7 +1424,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1309,7 +1459,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1340,7 +1494,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1371,7 +1529,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1402,7 +1564,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1433,7 +1599,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1465,7 +1635,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1497,7 +1671,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1528,7 +1706,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1559,7 +1741,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1591,7 +1777,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1623,7 +1813,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1654,7 +1848,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1685,7 +1883,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement"
@@ -1716,7 +1918,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "basement",
@@ -1748,7 +1954,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor"
@@ -1779,7 +1989,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor",
@@ -1811,7 +2025,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor",
@@ -1843,7 +2061,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor"
@@ -1874,7 +2096,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor"
@@ -1905,7 +2131,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor"
@@ -1936,7 +2166,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor",
@@ -1968,7 +2202,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "transfer_floor"
@@ -1999,7 +2237,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2030,7 +2272,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2061,7 +2307,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2092,7 +2342,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2123,7 +2377,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2154,7 +2412,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor",
@@ -2186,7 +2448,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor",
@@ -2218,7 +2484,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2249,7 +2519,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2280,7 +2554,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2311,7 +2589,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2342,7 +2624,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "typical_floor"
@@ -2373,7 +2659,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2404,7 +2694,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2435,7 +2729,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2466,7 +2764,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2498,7 +2800,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2529,7 +2835,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2561,7 +2871,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2592,7 +2906,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2625,7 +2943,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2657,7 +2979,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform"
@@ -2688,7 +3014,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2720,7 +3050,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "gangform",
@@ -2752,7 +3086,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "floor_change",
@@ -2784,7 +3122,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "floor_change"
@@ -2815,7 +3157,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "floor_change",
@@ -2847,7 +3193,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -2878,7 +3228,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -2909,7 +3263,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -2940,7 +3298,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -2971,7 +3333,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -3002,7 +3368,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof",
@@ -3034,7 +3404,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "roof"
@@ -3065,7 +3439,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3096,7 +3474,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3127,7 +3509,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3159,7 +3545,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3190,7 +3580,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3221,7 +3615,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3252,7 +3650,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing"
@@ -3283,7 +3685,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3315,7 +3721,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3347,7 +3757,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3379,7 +3793,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "closeout"
@@ -3410,7 +3828,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "logistics",
@@ -3442,7 +3864,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "logistics",
@@ -3474,7 +3900,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3506,7 +3936,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "finishing",
@@ -3538,7 +3972,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "closeout"
@@ -3569,7 +4007,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "closeout"
@@ -3600,7 +4042,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "closeout"
@@ -3631,7 +4077,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
@@ -3662,7 +4112,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
@@ -3693,7 +4147,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
@@ -3724,7 +4182,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
@@ -3755,7 +4217,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
@@ -3786,7 +4252,11 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
+        "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
         "all"
