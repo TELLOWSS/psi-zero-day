@@ -120,7 +120,7 @@ export function StrategyMapShell({
     onAction(engineAction ?? action);
   };
 
-  const zones = ['entry', 'ramp', 'yard', 'gate'] as const;
+  const zones = ['entry', 'ramp', 'yard', 'gate', 'inspection'] as const;
   const zoneSummary = Object.fromEntries(zones.map(zone => [
     zone,
     {
