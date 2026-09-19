@@ -6,6 +6,7 @@ import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
 import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from '../app/episode01-character-performance';
 import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
+import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -88,6 +89,7 @@ export function EpisodeImmersiveScene({
   zone,
   resolve,
   t,
+  memoryVisualPlan,
 }: {
   readonly eventId: string | null | undefined;
   readonly nodeId: string | null | undefined;
@@ -101,6 +103,7 @@ export function EpisodeImmersiveScene({
   readonly zone?: string;
   readonly resolve: AssetResolver;
   readonly t: (id: string) => string;
+  readonly memoryVisualPlan?: Episode01MemoryVisualPlan;
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   useEpisode01ScenePreload(eventId, resolve);
@@ -147,10 +150,27 @@ export function EpisodeImmersiveScene({
         data-active={item.kind === cinematicTrace.active_kind || undefined}
       />)}
     </div> : null}
-    {showMemoryStrip ? <div className="episode-immersive-memory-strip" data-next-day={scene.event_id === 'e01_10_next_day_tease' || undefined} aria-hidden="true">
-      {EPISODE01_MEMORY_FRAMES.map((frame, index) => <span key={frame.assetId} className={`memory-frame memory-${index + 1}`}>
-        <VisualImage uri={resolve(frame.assetId) ?? frame.fallback} fallbackUri={frame.fallback} alt="" />
+    {showMemoryStrip ? <div
+      className="episode-immersive-memory-strip"
+      data-next-day={scene.event_id === 'e01_10_next_day_tease' || undefined}
+      data-memory-phase={memoryVisualPlan?.phase}
+      data-carryover={memoryVisualPlan?.carryover_key}
+      aria-hidden="true"
+    >
+      {(memoryVisualPlan?.frames ?? EPISODE01_MEMORY_FRAMES.map(frame => ({
+        key: frame.assetId,
+        asset_id: frame.assetId,
+        fallback_uri: frame.fallback,
+        primary: false,
+      }))).map((frame, index) => <span
+        key={frame.asset_id}
+        className={`memory-frame memory-${index + 1}`}
+        data-memory-key={frame.key}
+        data-primary={frame.primary || undefined}
+      >
+        <VisualImage uri={resolve(frame.asset_id) ?? frame.fallback_uri} fallbackUri={frame.fallback_uri} alt="" />
       </span>)}
+      {scene.event_id === 'e01_10_next_day_tease' ? <i className="episode-daybreak-threshold" /> : null}
     </div> : null}
     {showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
       <span className="evidence-sheet sheet-a" />
