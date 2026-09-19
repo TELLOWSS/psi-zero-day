@@ -2110,3 +2110,71 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-axis{left:10%;right:8%}
 }
 
+/* EP01 Production Cinematic HUD: neutral PSI observation trace, never a score or verdict. */
+.episode-psi-trace{
+  position:absolute;z-index:11;top:8%;width:min(25%,286px);padding:9px 10px 10px;
+  border:1px solid rgba(201,218,220,.2);border-radius:10px;
+  background:linear-gradient(180deg,rgba(8,18,23,.7),rgba(8,16,20,.42));
+  box-shadow:0 12px 30px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.025);
+  backdrop-filter:blur(3px);pointer-events:none;color:#edf3f1;
+}
+.episode-psi-trace[data-side="left"]{left:3.5%;right:auto}
+.episode-psi-trace[data-side="right"]{right:3.5%;left:auto}
+.episode-psi-trace>strong{
+  display:flex;align-items:center;gap:7px;margin-bottom:7px;
+  font-size:8px;line-height:1;letter-spacing:.14em;color:#d6e3e1;font-weight:900
+}
+.episode-psi-trace>strong i{
+  width:7px;height:7px;border:1px solid rgba(218,231,228,.7);border-radius:50%;
+  box-shadow:0 0 0 3px rgba(180,205,207,.08)
+}
+.episode-psi-trace>div{display:grid;gap:4px}
+.episode-psi-trace>div>span{
+  position:relative;display:grid;grid-template-columns:64px 1fr;align-items:center;gap:7px;
+  min-height:28px;padding:5px 7px 5px 12px;border-radius:6px;
+  background:rgba(255,255,255,.035);opacity:.56;
+  transition:opacity .2s ease,transform .2s ease,background .2s ease
+}
+.episode-psi-trace>div>span::before{
+  content:"";position:absolute;left:4px;top:7px;bottom:7px;width:2px;border-radius:2px;
+  background:rgba(183,204,205,.28)
+}
+.episode-psi-trace>div>span[data-active="true"]{
+  opacity:1;transform:translateX(2px);
+  background:linear-gradient(90deg,rgba(184,207,207,.13),rgba(255,255,255,.035))
+}
+.episode-psi-trace>div>span[data-active="true"]::before{
+  background:rgba(224,191,121,.82);box-shadow:0 0 9px rgba(224,191,121,.24)
+}
+.episode-psi-trace b{
+  font-size:7px;line-height:1.2;letter-spacing:.03em;color:#aebdbc;font-weight:800
+}
+.episode-psi-trace em{
+  font-style:normal;font-size:9px;line-height:1.25;color:#eef3f0;font-weight:750
+}
+.episode-immersive-scene[data-environment="site_office"] .episode-psi-trace{
+  left:3.5%;right:auto;top:9%;width:min(24%,270px)
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-psi-trace,
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-psi-trace,
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-psi-trace{
+  top:7%;width:min(23%,260px)
+}
+@media(max-width:760px){
+  .episode-psi-trace,
+  .episode-immersive-scene[data-environment="site_office"] .episode-psi-trace{
+    top:5%;left:2.5%;right:auto;width:min(47%,220px);padding:6px 7px 7px;border-radius:7px
+  }
+  .episode-psi-trace>strong{font-size:6px;margin-bottom:4px}
+  .episode-psi-trace>div{gap:2px}
+  .episode-psi-trace>div>span{
+    grid-template-columns:49px 1fr;gap:5px;min-height:22px;padding:3px 5px 3px 9px
+  }
+  .episode-psi-trace b{font-size:5.5px}
+  .episode-psi-trace em{font-size:7px}
+  .episode-psi-trace>div>span::before{left:3px;top:5px;bottom:5px}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-psi-trace>div>span{transition:none!important}
+}
+
