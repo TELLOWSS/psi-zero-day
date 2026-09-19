@@ -11,7 +11,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
-import { episode01StrategyOutcomeAudioCue, episodePresentationAudioCue } from '../app/episode-presentation-cues';
+import { episode01StrategyOutcomeAudioCue, episodeNodeAudioCue, episodePresentationAudioCue } from '../app/episode-presentation-cues';
 import { episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
@@ -63,6 +63,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const focusRef = useRef<HTMLElement>(null);
   const seenSpeakersByRun = useRef(new Set<string>());
   const playedSceneCues = useRef(new Set<string>());
+  const playedNodeCues = useRef(new Set<string>());
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
   const [choicePreviewId, setChoicePreviewId] = useState<string | null>(null);
   const t = session.t;
@@ -253,6 +254,16 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playedSceneCues.current.add(key);
     playPresentationCue(cue);
   }, [activeEventId, runIdentity, playPresentationCue]);
+  useEffect(() => {
+    const nodeId = activeInstance?.current_node_id;
+    if (!activeEventId || !nodeId || !runIdentity) return;
+    const cue = episodeNodeAudioCue(activeEventId, nodeId);
+    if (!cue) return;
+    const key = `${runIdentity}:${activeEventId}:${nodeId}`;
+    if (playedNodeCues.current.has(key)) return;
+    playedNodeCues.current.add(key);
+    playPresentationCue(cue);
+  }, [activeEventId, activeInstance?.current_node_id, runIdentity, playPresentationCue]);
   useEffect(() => {
     if (!firstContactTextId || !dialogueNodeIdentity) return;
     playUiCue('character_intro');
