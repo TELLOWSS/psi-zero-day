@@ -1,10 +1,12 @@
 import plan from '../../content/episode01/immersive-scenes.json';
 import direction from '../../content/episode01/choice-visual-direction.json';
+import sceneBackgroundCatalog from '../../content/episode01/scene-background-catalog.json';
 
 export type Episode01ChoiceVisualTone = 'control' | 'pressure' | 'people' | 'evidence' | 'recovery';
 
 export interface Episode01ChoiceVisual {
   readonly background_uri: string;
+  readonly background_asset_id?: string;
   readonly prop_uri?: string;
   readonly tone: Episode01ChoiceVisualTone;
   readonly crop: 'left' | 'center' | 'right';
@@ -18,6 +20,13 @@ type SceneRecord = {
 };
 
 const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
+
+const sceneBackgroundAssetByRc = Object.freeze(Object.fromEntries(
+  Object.values(sceneBackgroundCatalog.backgrounds).map(background => [
+    background.rc_path,
+    background.asset_id,
+  ]),
+) as Readonly<Record<string, string>>);
 
 type DirectionRecord = {
   readonly tone: Episode01ChoiceVisualTone;
@@ -59,8 +68,11 @@ export function episode01ChoiceVisual(
   const propIndex = authored?.prop_index ?? (tone === 'pressure' ? 1 : 0);
   const propUri = scene.props[propIndex] ?? scene.props[0];
 
+  const backgroundAssetId = sceneBackgroundAssetByRc[scene.bg];
+
   return Object.freeze({
     background_uri: scene.bg,
+    ...(backgroundAssetId ? { background_asset_id: backgroundAssetId } : {}),
     ...(propUri ? { prop_uri: propUri } : {}),
     tone,
     crop,

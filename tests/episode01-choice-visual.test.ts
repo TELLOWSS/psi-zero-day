@@ -42,4 +42,15 @@ describe('Episode 01 choice visual previews', () => {
     expect(a?.crop).not.toBe(b?.crop);
     expect(a?.prop_uri).not.toBe(b?.prop_uri);
   });
+
+  it('carries the stable production background asset id so choice previews auto-upgrade with final art', () => {
+    const ramp = episode01ChoiceVisual('e01_04_junho_signal', 'listen_more');
+    const pour = episode01ChoiceVisual('e01_06_pump_arrival', 'near_miss');
+    const office = episode01ChoiceVisual('e01_08o_record_pressure', 'record_preserve_timeline');
+
+    expect(ramp?.background_asset_id).toBe('ep01.scene_bg.ramp_entry');
+    expect(pour?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
+    expect(office?.background_asset_id).toBe('ep01.scene_bg.site_office');
+  });
+
 });
