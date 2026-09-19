@@ -12,6 +12,16 @@ export const PRODUCTION_MAP_ANCHOR_IDS = [
 ] as const;
 
 export type ProductionMapAnchorId = (typeof PRODUCTION_MAP_ANCHOR_IDS)[number];
+
+export const STRATEGY_ZONE_ANCHOR_IDS = [
+  'entry',
+  'ramp',
+  'yard',
+  'gate',
+  'inspection',
+] as const satisfies readonly ProductionMapAnchorId[];
+
+export type StrategyZoneAnchorId = (typeof STRATEGY_ZONE_ANCHOR_IDS)[number];
 export type ProductionMapLayer = 'zone' | 'character' | 'signal' | 'scene-element' | 'minimap' | 'player';
 
 export interface ProductionMapPoint {
