@@ -2678,3 +2678,128 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
 }
 
+/* Final polish: mobile HUD hierarchy keeps scene information readable without stacking panels. */
+@media(max-width:760px){
+  .episode-immersive-scene[data-has-trace="true"] .episode-psi-trace{
+    top:58px;
+    left:2.5%;
+    right:auto;
+    width:min(46%,208px);
+    max-height:116px;
+    overflow:hidden;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-immersive-speaker-tag{
+    top:58px;
+    left:auto;
+    right:2.5%;
+    max-width:46%;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-immersive-speaker-tag em{
+    display:none;
+  }
+
+  /* Full minimap becomes a location chip on phones; the strategy map still carries the full geography. */
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap{
+    top:58px;
+    bottom:auto;
+    width:auto;
+    min-width:82px;
+    max-width:34%;
+    padding:5px 7px;
+    opacity:.86;
+    border-radius:999px;
+    background:rgba(7,15,19,.72);
+  }
+  .episode-immersive-scene[data-has-locator="true"][data-has-trace="true"] .episode-scene-minimap{
+    top:122px;
+  }
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap>div{
+    display:none;
+  }
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap header{
+    margin:0;
+    gap:4px;
+  }
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap header strong{
+    display:none;
+  }
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap header span{
+    font-size:7px;
+    white-space:nowrap;
+  }
+
+  .episode-immersive-scene[data-has-memory="true"] .episode-immersive-speaker-tag,
+  .episode-immersive-scene[data-has-memory="true"] .episode-psi-trace{
+    display:none;
+  }
+}
+
+@media(max-width:620px){
+  .phase-playing:not(.strategy-active) .scene-heading{
+    top:58px;
+    width:min(48vw,230px);
+    padding:7px 9px;
+  }
+  .phase-playing:not(.strategy-active) .scene-heading h1{
+    font-size:14px;
+    line-height:1.2;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-psi-trace{
+    top:104px;
+    width:min(48%,190px);
+    max-height:103px;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-psi-trace>div>span{
+    grid-template-columns:43px 1fr;
+    min-height:20px;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-immersive-speaker-tag{
+    top:104px;
+    max-width:44%;
+  }
+  .episode-immersive-scene[data-has-locator="true"] .episode-scene-minimap{
+    top:62px;
+  }
+  .episode-immersive-scene[data-has-locator="true"][data-has-trace="true"] .episode-scene-minimap{
+    top:174px;
+  }
+
+  .phase-playing:not(.strategy-active) .play-panel{
+    max-height:44%;
+  }
+  .phase-playing:not(.strategy-active) .choice-panel button{
+    min-height:54px;
+    grid-template-columns:54px 1fr;
+    gap:7px;
+  }
+  .phase-playing:not(.strategy-active) .choice-visual{
+    min-height:48px;
+  }
+  .phase-playing:not(.strategy-active) .choice-text{
+    font-size:10px;
+    line-height:1.35;
+  }
+}
+
+@media(max-height:620px) and (orientation:landscape){
+  .phase-playing:not(.strategy-active) .choice-panel{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .phase-playing:not(.strategy-active) .choice-panel button{
+    grid-template-columns:52px 1fr;
+    min-height:52px;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-psi-trace{
+    top:60px;
+    max-height:92px;
+  }
+  .episode-immersive-scene[data-has-trace="true"] .episode-immersive-speaker-tag{
+    top:60px;
+  }
+  .episode-immersive-scene[data-has-locator="true"][data-has-trace="true"] .episode-scene-minimap{
+    top:60px;
+    right:2.5%;
+    left:auto;
+  }
+}
+
