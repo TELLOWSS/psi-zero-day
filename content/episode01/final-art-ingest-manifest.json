@@ -76,5 +76,11 @@
       "bytes": 216874,
       "sha256": "b994d768a856227aa62924824032951b9ac5cd95714b2ba75b77934c0880d22f"
     }
-  ]
+  ],
+  "archive": {
+    "filename": "PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip",
+    "bytes": 1402296,
+    "sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb"
+  },
+  "ingest_workflow": ".github/workflows/ingest-episode01-final-art.yml"
 }

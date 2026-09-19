@@ -1,0 +1,107 @@
+name: Ingest Episode 01 final art
+
+on:
+  workflow_dispatch:
+    inputs:
+      zip_url:
+        description: Public HTTPS URL for PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: episode01-final-art-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Download exact final-art batch
+        env:
+          ZIP_URL: ${{ inputs.zip_url }}
+        run: |
+          case "$ZIP_URL" in
+            https://*) ;;
+            *) echo "zip_url must use HTTPS"; exit 1 ;;
+          esac
+          curl --fail --location --silent --show-error \
+            --retry 3 --retry-all-errors \
+            --max-time 120 \
+            "$ZIP_URL" \
+            --output /tmp/episode01-final-art.zip
+
+      - name: Verify archive checksum
+        run: |
+          expected=$(node -p "require('./content/episode01/final-art-ingest-manifest.json').archive.sha256")
+          actual=$(sha256sum /tmp/episode01-final-art.zip | cut -d' ' -f1)
+          echo "Expected: $expected"
+          echo "Actual:   $actual"
+          test "$actual" = "$expected"
+
+      - name: Extract only contracted WebP files
+        run: |
+          python - <<'PY'
+          import json, pathlib, zipfile
+          root=pathlib.Path('.').resolve()
+          manifest=json.loads((root/'content/episode01/final-art-ingest-manifest.json').read_text())
+          with zipfile.ZipFile('/tmp/episode01-final-art.zip') as z:
+              names=set(z.namelist())
+              for asset in manifest['assets']:
+                  name=asset['filename']
+                  if name not in names:
+                      raise SystemExit(f'missing contracted file: {name}')
+                  info=z.getinfo(name)
+                  if info.file_size > 5_000_000:
+                      raise SystemExit(f'oversized image: {name}')
+                  target=root/asset['target_path']
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(z.read(name))
+          PY
+
+      - run: npm ci
+
+      - name: Verify exact generated art
+        run: |
+          npm run assets:final-art-ingest-check
+          npm run assets:scene-background-production-check
+          npm run assets:scene-background-brief-check
+          npm run assets:scene-background-imagegen-check
+
+      - name: Rebuild runtime asset manifest
+        run: |
+          npm run assets:scene-runtime
+          npm run assets:embedded
+          npm run assets:vector
+          npm run assets:manifest
+
+      - name: Run Episode 01 visual regression
+        run: npm run test:episode01-visual
+
+      - name: Typecheck final-art runtime
+        run: npm run typecheck
+
+      - name: Commit verified final backgrounds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/episode01/cg/*.webp content/episode01/assets.json
+          if git diff --cached --quiet; then
+            echo "Final art is already ingested."
+          else
+            git commit -m "art: ingest Episode 01 final backgrounds"
+            git push origin HEAD:main
+          fi
