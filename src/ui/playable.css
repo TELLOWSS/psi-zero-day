@@ -2276,3 +2276,99 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-scene-minimap-marker{width:7px;height:7px;border-width:1px}
 }
 
+/* EP01 cinematic character blocking: authored by character identity, not cast array order. */
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side]{
+  right:auto;
+  bottom:-4%;
+  width:25%;
+  transform:translateX(-50%) scale(var(--blocking-scale,.96));
+  transform-origin:50% 100%;
+  opacity:var(--blocking-opacity,.9);
+  z-index:var(--blocking-z,6);
+  transition:
+    left .34s cubic-bezier(.2,.72,.2,1),
+    height .3s ease,
+    opacity .24s ease,
+    filter .24s ease,
+    transform .34s cubic-bezier(.2,.72,.2,1);
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="far-left"]{left:11%}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="left"]{left:30%}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="center"]{left:50%}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="right"]{left:70%}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="far-right"]{left:89%}
+
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="foreground"]{
+  --blocking-scale:1.08;--blocking-opacity:1;--blocking-z:9;
+  height:96%;
+  filter:drop-shadow(0 22px 16px rgba(0,0,0,.42))
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="midground"]{
+  --blocking-scale:.96;--blocking-opacity:.86;--blocking-z:6;
+  height:88%;
+  filter:saturate(.9) brightness(.91) drop-shadow(0 17px 13px rgba(0,0,0,.36))
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="background"]{
+  --blocking-scale:.84;--blocking-opacity:.58;--blocking-z:4;
+  height:79%;
+  filter:saturate(.68) brightness(.78) drop-shadow(0 13px 10px rgba(0,0,0,.32))
+}
+.episode-immersive-scene[data-character-blocking="true"][data-has-speaker="true"]
+  .episode-immersive-character[data-blocking-side]:not([data-speaker="true"]){
+  opacity:calc(var(--blocking-opacity,.9) * .78);
+}
+.episode-immersive-scene[data-character-blocking="true"]
+  .episode-immersive-character[data-speaker="true"]{
+  --blocking-scale:1.14;--blocking-opacity:1;--blocking-z:12;
+  height:99%;
+  z-index:12!important;
+  opacity:1;
+  transform:translateX(-50%) translateY(-2.2%) scale(var(--blocking-scale))!important;
+  filter:drop-shadow(0 24px 18px rgba(0,0,0,.48)) drop-shadow(0 0 17px rgba(239,190,105,.2))
+}
+.episode-immersive-scene[data-character-blocking="true"]
+  .episode-immersive-character[data-relationship-cue="closer"]{
+  filter:saturate(1.01) brightness(1.015) drop-shadow(0 20px 15px rgba(0,0,0,.4))
+}
+.episode-immersive-scene[data-character-blocking="true"]
+  .episode-immersive-character[data-relationship-cue="strained"]:not([data-speaker="true"]){
+  opacity:calc(var(--blocking-opacity,.86) * .72);
+  filter:saturate(.6) brightness(.78) drop-shadow(0 14px 11px rgba(0,0,0,.33))
+}
+
+/* Consequence composition: social distance is visible without declaring a choice correct or wrong. */
+.episode-immersive-scene[data-character-blocking="true"][data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"]
+  .episode-immersive-character[data-character="lim_junho"]{
+  opacity:.4;filter:saturate(.5) brightness(.68) drop-shadow(0 11px 9px rgba(0,0,0,.3))
+}
+.episode-immersive-scene[data-character-blocking="true"][data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"]
+  .episode-immersive-character[data-character="kang_taesik"]{
+  opacity:.48
+}
+.episode-immersive-scene[data-character-blocking="true"][data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"]
+  .episode-immersive-character[data-character="lim_junho"],
+.episode-immersive-scene[data-character-blocking="true"][data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"]
+  .episode-immersive-character[data-character="player"]{
+  filter:saturate(1) brightness(.98) drop-shadow(0 20px 15px rgba(0,0,0,.4))
+}
+
+@media(max-width:760px){
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side]{
+    width:30%;bottom:-5%
+  }
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="far-left"]{left:8%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="left"]{left:27%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="center"]{left:50%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="right"]{left:73%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="far-right"]{left:92%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="foreground"]{height:88%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="midground"]{height:80%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="background"]{height:71%}
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-speaker="true"]{height:91%}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side]{
+    transition:none!important
+  }
+}
+
