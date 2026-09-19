@@ -1,4 +1,6 @@
 import plan from '../../content/episode01/immersive-scenes.json';
+import nodeDirectionA from '../../content/episode01/node-visual-direction-a.json';
+import nodeDirectionB from '../../content/episode01/node-visual-direction-b.json';
 import { episode01ChoiceVisual, type Episode01ChoiceVisualTone } from './episode01-choice-visual';
 
 export type ImmersiveSceneTone = 'neutral' | 'decision' | 'pressure' | 'resolved' | 'reflective';
@@ -18,6 +20,7 @@ export interface ImmersiveScenePlan {
   readonly node_id?: string;
   readonly preview_choice_id?: string;
   readonly preview_choice_tone?: Episode01ChoiceVisualTone;
+  readonly authored_node_direction: boolean;
 }
 
 type SceneRecord = {
@@ -28,11 +31,23 @@ type SceneRecord = {
   readonly focus: 'left' | 'center' | 'right';
 };
 
-const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
+type NodeDirectionRecord = {
+  readonly camera: 'wide' | 'medium' | 'tight';
+  readonly focus: 'left' | 'center' | 'right';
+  readonly tone: ImmersiveSceneTone;
+  readonly shot: ImmersiveSceneShot;
+  readonly subject_character_id?: string;
+};
 
-const pressurePattern = /(near_miss|conflict|reject|premature|silenced|blame|missed|suppressed|low|force_clear|keep_schedule|worker_blame|ignore_social|gap|chilled|correction|defensive|quick_photo)/i;
-const resolvedPattern = /(best_control|controlled|sequence|timeline|preserved|reinforced|listen_more|crosscheck|reconstruct|protect_process|reporting_route|verify_controls|change_control|assign_crew|request_delay|full_stop|accepted)/i;
-const reflectivePattern = /(evening|rest|family|study|field_note|tease)/i;
+const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
+const nodeDirections = Object.freeze({
+  ...(nodeDirectionA.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
+  ...(nodeDirectionB.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
+});
+
+const pressurePattern = /(?:^|[._-])(near_miss|conflict|reject|premature|silenced|blame|missed|suppressed|low|force_clear|keep_schedule|worker_blame|ignore_social|gap|chilled|defensive|one_sided|distorted|cold|dismiss)(?:$|[._-])/i;
+const resolvedPattern = /(?:^|[._-])(best_control|controlled|sequence|timeline|preserved|reinforced|listen_more|crosscheck|reconstruct|reconstructed|protect_process|reporting_route|verify_controls|change_control|request_delay|full_stop|accept_full|evidence|route)(?:$|[._-])/i;
+const reflectivePattern = /(?:^|[._-])(evening|rest|family|study|field_note|tease)(?:$|[._-])/i;
 
 function speakerFocus(cast: readonly string[], speakerId: string | null | undefined, fallback: 'left' | 'center' | 'right') {
   if (!speakerId) return fallback;
@@ -43,7 +58,7 @@ function speakerFocus(cast: readonly string[], speakerId: string | null | undefi
   return 'right' as const;
 }
 
-function shotFor(
+function fallbackShotFor(
   presentationType: string | null | undefined,
   tone: ImmersiveSceneTone,
   speakerId: string | null | undefined,
@@ -59,7 +74,7 @@ function shotFor(
   return 'establishing';
 }
 
-function cameraFor(
+function fallbackCameraFor(
   shot: ImmersiveSceneShot,
   base: 'wide' | 'medium' | 'tight',
   castSize: number,
@@ -83,27 +98,35 @@ export function episode01ImmersiveScene(
   if (!scene) return undefined;
 
   const key = nodeId ?? '';
-  let tone: ImmersiveSceneTone = 'neutral';
-  if (reflectivePattern.test(key) || eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease') tone = 'reflective';
-  else if (presentationType === 'SHOW_CHOICE') tone = 'decision';
-  else if (pressurePattern.test(key)) tone = 'pressure';
-  else if (resolvedPattern.test(key)) tone = 'resolved';
+  const nodeDirective = nodeId ? nodeDirections[eventId]?.[nodeId] : undefined;
+
+  let fallbackTone: ImmersiveSceneTone = 'neutral';
+  if (reflectivePattern.test(key) || eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease') fallbackTone = 'reflective';
+  else if (presentationType === 'SHOW_CHOICE') fallbackTone = 'decision';
+  else if (pressurePattern.test(key)) fallbackTone = 'pressure';
+  else if (resolvedPattern.test(key)) fallbackTone = 'resolved';
+
+  const tone = nodeDirective?.tone ?? fallbackTone;
+  const directedSubject = speakerId ?? nodeDirective?.subject_character_id;
 
   const cast = [...scene.cast];
-  if (speakerId && !cast.includes(speakerId)) cast.push(speakerId);
+  if (directedSubject && !cast.includes(directedSubject)) cast.push(directedSubject);
   const visibleCast = cast.slice(0, 5);
+
   const choicePreview = presentationType === 'SHOW_CHOICE' && previewChoiceId
     ? episode01ChoiceVisual(eventId, previewChoiceId)
     : undefined;
-  const shot = shotFor(presentationType, tone, speakerId);
-  const baseFocus = speakerFocus(visibleCast, speakerId, scene.focus);
-  const focus = choicePreview?.crop ?? baseFocus;
-  const baseCamera = cameraFor(shot, scene.camera, visibleCast.length);
+
+  const shot = nodeDirective?.shot ?? fallbackShotFor(presentationType, tone, directedSubject);
+  const authoredFocus = nodeDirective?.focus ?? speakerFocus(visibleCast, directedSubject, scene.focus);
+  const focus = choicePreview?.crop ?? authoredFocus;
+  const fallbackCamera = fallbackCameraFor(shot, scene.camera, visibleCast.length);
   const camera = choicePreview
     ? choicePreview.tone === 'evidence' ? 'tight'
       : choicePreview.tone === 'recovery' ? 'wide'
       : 'medium'
-    : baseCamera;
+    : nodeDirective?.camera ?? fallbackCamera;
+
   const propUris = choicePreview?.prop_uri
     ? [choicePreview.prop_uri, ...scene.props.filter(uri => uri !== choicePreview.prop_uri)]
     : [...scene.props];
@@ -117,7 +140,8 @@ export function episode01ImmersiveScene(
     focus,
     tone,
     shot,
-    ...(speakerId ? { subject_character_id: speakerId } : {}),
+    authored_node_direction: Boolean(nodeDirective),
+    ...(directedSubject ? { subject_character_id: directedSubject } : {}),
     ...(nodeId ? { node_id: nodeId } : {}),
     ...(choicePreview && previewChoiceId ? {
       preview_choice_id: previewChoiceId,
@@ -127,3 +151,5 @@ export function episode01ImmersiveScene(
 }
 
 export const episode01ImmersiveSceneCount = Object.keys(scenes).length;
+export const episode01DirectedNodeCount = Object.values(nodeDirections)
+  .reduce((total, event) => total + Object.keys(event).length, 0);
