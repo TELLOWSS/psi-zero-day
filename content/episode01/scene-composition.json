@@ -159,7 +159,7 @@
       "scene_id": "foundation.responsibility-clash",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "yard",
+      "primary_anchor": "office",
       "active_layers": [
         "background",
         "characters",
@@ -173,7 +173,7 @@
       "scene_id": "foundation.report-return",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "office",
       "active_layers": [
         "background",
         "characters",
@@ -243,7 +243,7 @@
       "scene_id": "foundation.instruction-chain",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "yard",
       "active_layers": [
         "background",
         "characters",
@@ -257,7 +257,7 @@
       "scene_id": "foundation.instruction-return",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "office",
       "active_layers": [
         "background",
         "characters",
@@ -271,7 +271,7 @@
       "scene_id": "foundation.record-pressure",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "office",
       "active_layers": [
         "background",
         "characters",
@@ -285,7 +285,7 @@
       "scene_id": "foundation.record-return",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "overview",
+      "primary_anchor": "office",
       "active_layers": [
         "background",
         "characters",
