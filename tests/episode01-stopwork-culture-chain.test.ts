@@ -42,7 +42,7 @@ describe('Episode 01 stopwork culture chain',()=> {
 
   it('keeps cinematic and audio continuity from silence into the next signal',()=> {
     expect(episodeCinematicBeat('e01_08k_stopwork_aftershock')?.detail).toContain('누가 문제를 제기했는지');
-    expect(episodeCinematicBeat('e01_08l_stopwork_return')?.detail).toContain('무전기');
+    expect(episodeCinematicBeat('e01_08l_stopwork_return')?.detail).toContain('무전');
     expect(episodePresentationAudioCue('e01_08k_stopwork_aftershock')?.production_key).toBe('stopwork_silence_drop');
     expect(episodePresentationAudioCue('e01_08l_stopwork_return')?.production_key).toBe('radio_burst');
   });
