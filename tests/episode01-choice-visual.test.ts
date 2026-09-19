@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { episode01ChoiceVisual } from '../src/app/episode01-choice-visual';
+import plan from '../content/episode01/immersive-scenes.json';
+import direction from '../content/episode01/choice-visual-direction.json';
+import backgroundCatalog from '../content/episode01/scene-background-catalog.json';
 
 describe('Episode 01 choice visual previews', () => {
   it('gives every major choice family a visual intent', () => {
@@ -51,6 +54,25 @@ describe('Episode 01 choice visual previews', () => {
     expect(ramp?.background_asset_id).toBe('ep01.scene_bg.ramp_entry');
     expect(pour?.background_asset_id).toBe('ep01.scene_bg.concrete_pour');
     expect(office?.background_asset_id).toBe('ep01.scene_bg.site_office');
+  });
+
+  it('keeps every authored choice preview on the same stable production background as its immersive event', () => {
+    const assetIdByRc = Object.fromEntries(
+      Object.values(backgroundCatalog.backgrounds).map(background => [background.rc_path, background.asset_id]),
+    );
+
+    for (const [eventId, choices] of Object.entries(direction.events)) {
+      const scene = plan.events[eventId as keyof typeof plan.events];
+      expect(scene, `missing immersive scene for ${eventId}`).toBeDefined();
+      const expectedAssetId = scene ? assetIdByRc[scene.bg] : undefined;
+      expect(expectedAssetId, `missing production background for ${eventId}`).toBeTruthy();
+
+      for (const choiceId of Object.keys(choices)) {
+        const visual = episode01ChoiceVisual(eventId, choiceId);
+        expect(visual?.background_asset_id, `${eventId}/${choiceId}`).toBe(expectedAssetId);
+        expect(visual?.background_uri, `${eventId}/${choiceId}`).toBe(scene?.bg);
+      }
+    }
   });
 
 });
