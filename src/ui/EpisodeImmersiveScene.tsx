@@ -3,6 +3,7 @@ import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-a
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
+import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -125,6 +126,7 @@ export function EpisodeImmersiveScene({
     data-environment={scene.background_environment ?? undefined}
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
+    data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -193,12 +195,15 @@ export function EpisodeImmersiveScene({
     <div className="episode-immersive-cast" aria-hidden="true">
       {scene.cast.map((characterId, index) => {
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
+        const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue);
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
         data-speaker={speakerId === characterId || undefined}
         data-character={characterId}
         data-relationship-cue={relationshipCue}
+        data-blocking-side={blocking?.side}
+        data-blocking-depth={blocking?.depth}
       >
         <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
       </div>;
