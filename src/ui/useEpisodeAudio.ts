@@ -65,6 +65,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   const preferenceMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const effectiveMuted = Boolean(audio?.muted || preferenceMuted);
   const bgmRef = useRef<HTMLAudioElement | null>(null);
+  const presentationRef = useRef<HTMLAudioElement | null>(null);
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
   const seenCueIds = useRef(new Set<string>());
   const contextRef = useRef<AudioContext | null>(null);
@@ -128,8 +129,16 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     }
   }, [audio?.sfx_bus, audio?.event_bus, effectiveMuted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
+  useEffect(() => {
+    if (!effectiveMuted) return;
+    presentationRef.current?.pause();
+    presentationRef.current = null;
+  }, [effectiveMuted]);
+
   useEffect(() => () => {
     bgmRef.current?.pause();
+    presentationRef.current?.pause();
+    presentationRef.current = null;
     for (const element of ambienceRef.current.values()) element.pause();
     void contextRef.current?.close();
   }, []);
@@ -184,6 +193,8 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.sfx]);
 
   const playPresentationCue = useCallback((cue: PresentationAudioCue) => {
+    presentationRef.current?.pause();
+    presentationRef.current = null;
     if (effectiveMuted) return;
     const uri = cue.asset_id ? resolve(cue.asset_id) : undefined;
     if (!uri || typeof Audio === 'undefined') {
@@ -191,12 +202,16 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       return;
     }
     const element = new Audio(uri);
+    presentationRef.current = element;
     const gain = cue.gain ?? 1;
     element.volume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
     const playback = element.play();
     if (playback && typeof playback.catch === 'function') {
-      void playback.catch(() => playUiCue(cue.fallback));
+      void playback.catch(() => {
+        if (presentationRef.current === element) presentationRef.current = null;
+        playUiCue(cue.fallback);
+      });
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
