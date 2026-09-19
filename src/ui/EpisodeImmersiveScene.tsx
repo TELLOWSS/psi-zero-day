@@ -133,6 +133,10 @@ export function EpisodeImmersiveScene({
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
     data-character-performance={episode01UsesCharacterPerformance(scene.event_id) || undefined}
+    data-has-trace={Boolean(cinematicTrace) || undefined}
+    data-has-locator={Boolean(locator) || undefined}
+    data-has-memory={showMemoryStrip || undefined}
+    data-has-evidence={showEvidenceBoard || undefined}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
