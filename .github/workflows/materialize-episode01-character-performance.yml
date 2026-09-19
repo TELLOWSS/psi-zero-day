@@ -28,24 +28,29 @@ jobs:
           node-version: '22.x'
           cache: npm
 
-      - name: Decode generated performance WebP batch
-        shell: bash
+      - name: Decode generated performance WebP batch from manifest
         run: |
-          set -euo pipefail
-          mkdir -p public/assets/episode01/characters/performance
-          expected=(
-            player-resolve
-            lee-jaehoon-concern
-            kang-taesik-conflict
-            seo-jeongmin-neutral
-            lim-junho-relief
-          )
-          for name in "${expected[@]}"; do
-            mapfile -t chunks < <(find .art-ingest/episode01-performance -maxdepth 1 -type f -name "${name}.webp.b64.*" | sort)
-            test "${#chunks[@]}" -gt 0 || { echo "Missing chunks for $name"; exit 1; }
-            cat "${chunks[@]}" | base64 --decode > "public/assets/episode01/characters/performance/${name}.webp"
-          done
-          rm -rf .art-ingest/episode01-performance
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const staging='.art-ingest/episode01-performance';
+          const production=JSON.parse(fs.readFileSync('content/episode01/character-performance-production.json','utf8'));
+          for (const asset of production.generated_wave_01.assets) {
+            const filename=path.basename(asset.path);
+            const prefix=filename + '.b64.';
+            const chunks=fs.readdirSync(staging)
+              .filter(name=>name.startsWith(prefix))
+              .sort();
+            if (!chunks.length) throw new Error(`Missing chunks for ${filename}`);
+            const encoded=chunks.map(name=>fs.readFileSync(path.join(staging,name),'utf8')).join('');
+            const bytes=Buffer.from(encoded,'base64');
+            const target=path.join('public',asset.path);
+            fs.mkdirSync(path.dirname(target),{recursive:true});
+            fs.writeFileSync(target,bytes);
+            console.log(`Decoded ${filename}: ${chunks.length} chunk(s), ${bytes.length} bytes`);
+          }
+          fs.rmSync(staging,{recursive:true,force:true});
+          NODE
 
       - run: npm ci
 
