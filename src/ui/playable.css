@@ -2178,3 +2178,50 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-psi-trace>div>span{transition:none!important}
 }
 
+/* Scene-space PSI markers connect the trace panel to authored field positions. */
+.episode-psi-field-markers{position:absolute;inset:0;z-index:6;pointer-events:none}
+.episode-psi-field-markers>span{
+  position:absolute;width:15px;height:15px;border:1px solid rgba(202,219,220,.32);border-radius:50%;
+  background:rgba(9,20,24,.42);box-shadow:0 0 0 5px rgba(174,202,204,.035);
+  opacity:.28;transform:translate(-50%,-50%) scale(.86);
+  transition:opacity .22s ease,transform .22s ease,box-shadow .22s ease,border-color .22s ease
+}
+.episode-psi-field-markers>span::before{
+  content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;
+  background:rgba(211,227,226,.62);transform:translate(-50%,-50%)
+}
+.episode-psi-field-markers>span::after{
+  content:"";position:absolute;left:13px;top:6px;width:28px;height:1px;
+  background:linear-gradient(90deg,rgba(189,207,208,.28),transparent)
+}
+.episode-psi-field-markers>span[data-active="true"]{
+  opacity:.95;transform:translate(-50%,-50%) scale(1.08);
+  border-color:rgba(229,201,137,.86);box-shadow:0 0 0 5px rgba(228,198,130,.075),0 0 16px rgba(228,198,130,.16)
+}
+.episode-psi-field-markers>span[data-active="true"]::before{background:#e2c784}
+.episode-psi-field-markers[data-trace="inspection"]>span[data-kind="signal"]{left:69%;top:34%}
+.episode-psi-field-markers[data-trace="inspection"]>span[data-kind="control"]{left:48%;top:66%}
+.episode-psi-field-markers[data-trace="inspection"]>span[data-kind="record"]{left:81%;top:59%}
+.episode-psi-field-markers[data-trace="tbm"]>span[data-kind="signal"]{left:57%;top:53%}
+.episode-psi-field-markers[data-trace="tbm"]>span[data-kind="control"]{left:39%;top:70%}
+.episode-psi-field-markers[data-trace="tbm"]>span[data-kind="record"]{left:74%;top:29%}
+.episode-psi-field-markers[data-trace="restart"]>span[data-kind="signal"]{left:69%;top:55%}
+.episode-psi-field-markers[data-trace="restart"]>span[data-kind="control"]{left:50%;top:68%}
+.episode-psi-field-markers[data-trace="restart"]>span[data-kind="record"]{left:25%;top:31%}
+.episode-psi-field-markers[data-trace="stopwork"]>span[data-kind="signal"]{left:51%;top:61%}
+.episode-psi-field-markers[data-trace="stopwork"]>span[data-kind="control"]{left:65%;top:46%}
+.episode-psi-field-markers[data-trace="stopwork"]>span[data-kind="record"]{left:28%;top:34%}
+.episode-psi-field-markers[data-trace="instruction"]>span[data-kind="signal"]{left:58%;top:54%}
+.episode-psi-field-markers[data-trace="instruction"]>span[data-kind="control"]{left:36%;top:65%}
+.episode-psi-field-markers[data-trace="instruction"]>span[data-kind="record"]{left:78%;top:30%}
+.episode-psi-field-markers[data-trace="record"]>span[data-kind="signal"]{left:44%;top:56%}
+.episode-psi-field-markers[data-trace="record"]>span[data-kind="control"]{left:62%;top:44%}
+.episode-psi-field-markers[data-trace="record"]>span[data-kind="record"]{left:80%;top:28%}
+@media(max-width:760px){
+  .episode-psi-field-markers>span{width:11px;height:11px}
+  .episode-psi-field-markers>span::after{left:10px;top:4px;width:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-psi-field-markers>span{transition:none!important}
+}
+
