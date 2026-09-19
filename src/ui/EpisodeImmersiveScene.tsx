@@ -175,7 +175,9 @@ export function EpisodeImmersiveScene({
     </aside> : null}
     {locator ? <aside
       className="episode-scene-minimap"
-      data-side={cinematicTrace ? (scene.focus === 'right' ? 'right' : 'left') : 'right'}
+      data-side={scene.background_environment === 'site_office'
+        ? 'right'
+        : cinematicTrace ? (scene.focus === 'right' ? 'right' : 'left') : 'right'}
       data-anchor={locator.anchor}
       aria-label={t('ui.scene_minimap.title')}
     >
