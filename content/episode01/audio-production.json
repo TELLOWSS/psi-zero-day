@@ -187,7 +187,7 @@
     }
   ],
   "integration": {
-    "current": "Each event first tries its production asset_id through EpisodeSession.assetUri(). If absent, a lightweight synthetic WebAudio cue plays instead.",
+    "current": "Each event first tries its production asset_id through EpisodeSession.assetUri(). If absent, a lightweight field-oriented WebAudio cue plays instead (clean/radio/pressure/air timbre families).",
     "finalization": "When a reviewed binary is added under public/assets/episode01/audio and registered in assets.json generation, no story or event rule changes are required.",
     "qa_surfaces": [
       "web production",
@@ -195,5 +195,16 @@
       "muted mode",
       "reduced motion has no audio coupling"
     ]
+  },
+  "event_cue_coverage": "26/26",
+  "synthetic_fallback": {
+    "status": "active_until_reviewed_binaries_exist",
+    "timbres": [
+      "clean",
+      "radio",
+      "pressure",
+      "air"
+    ],
+    "principle": "Fallback cues suggest field texture without competing with dialogue or pretending to be final recordings."
   }
 }
