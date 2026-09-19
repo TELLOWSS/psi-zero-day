@@ -28,7 +28,9 @@ export type Episode01MomentOverlay =
   | 'near-miss'
   | 'inspection-frame'
   | 'stopwork-gap'
-  | 'record-pressure';
+  | 'record-pressure'
+  | 'restart-trace'
+  | 'instruction-chain';
 
 export function episode01MomentOverlay(eventId: string | null | undefined, nodeId: string | null | undefined): Episode01MomentOverlay | undefined {
   if (eventId === 'e01_04_junho_signal') return 'signal-trace';
@@ -38,7 +40,9 @@ export function episode01MomentOverlay(eventId: string | null | undefined, nodeI
   if (eventId === 'e01_08b_inspection_find' || eventId === 'e01_08c_site_pushback' || eventId === 'e01_08d_reinspection') {
     return 'inspection-frame';
   }
+  if (eventId === 'e01_08i_restart_pressure' || eventId === 'e01_08j_restart_return') return 'restart-trace';
   if (eventId === 'e01_08k_stopwork_aftershock' || eventId === 'e01_08l_stopwork_return') return 'stopwork-gap';
+  if (eventId === 'e01_08m_instruction_cascade' || eventId === 'e01_08n_instruction_return') return 'instruction-chain';
   if (eventId === 'e01_08o_record_pressure' || eventId === 'e01_08p_record_return') return 'record-pressure';
   return undefined;
 }

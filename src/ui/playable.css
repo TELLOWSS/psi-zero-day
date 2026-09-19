@@ -1872,3 +1872,107 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-scene[data-event="e01_08o_record_pressure"][data-node="timeline_result"] .episode-immersive-evidence-board{right:1%;width:41%;height:49%}
 }
 
+/* EP01 restart and instruction-chain traces: geometry communicates continuity without scoring choices. */
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis{
+  left:18%;right:14%;top:57%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(199,214,213,.32) 12% 88%,transparent);
+}
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c{
+  top:calc(57% - 4px);width:9px;height:9px;border-radius:50%;
+  border:1px solid rgba(211,222,219,.48);background:rgba(16,26,30,.72);
+  box-shadow:0 0 0 4px rgba(201,216,214,.04);
+}
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-a{left:25%}
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b{left:50%}
+.episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c{left:75%}
+
+/* Verbal restart: the field moves before all three checkpoints share one trace. */
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="follow_verbal_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="premature"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis{
+  right:40%;
+}
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="follow_verbal_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="premature"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c{
+  opacity:.2;transform:translateY(9px);
+}
+
+/* Traced instruction: the middle handoff is visible but not geometrically identical to the source. */
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="trace_instruction_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="distorted"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b{
+  transform:translateY(-12px);
+}
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="trace_instruction_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="distorted"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis{
+  transform:skewY(-2deg);transform-origin:50% 50%;
+}
+
+/* Verified controls: the same three checkpoints remain visible on one spatial line, not green/red scored. */
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="verify_controls_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-a,
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="verify_controls_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b,
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"][data-node="verify_controls_result"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="controlled"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-a,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="controlled"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b,
+.episode-immersive-scene[data-event="e01_08j_restart_return"][data-node="controlled"] .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c{
+  box-shadow:0 0 0 6px rgba(205,218,215,.055);
+}
+
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-axis{
+  left:27%;top:26%;width:1px;height:44%;
+  background:linear-gradient(180deg,transparent,rgba(202,216,214,.28) 12% 88%,transparent);
+}
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{
+  left:calc(27% - 4px);width:9px;height:9px;border-radius:50%;
+  border:1px solid rgba(207,220,217,.46);background:rgba(15,25,29,.72);
+}
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a{top:31%}
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b{top:47%}
+.episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{top:63%}
+
+/* Accepting only the top instruction leaves the lower condition trace faint. */
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="accept_top_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="gap"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{
+  opacity:.18;transform:translateX(11px);
+}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="accept_top_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-axis,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="gap"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-axis{
+  height:28%;
+}
+
+/* Worker-blame route visually narrows at the final receiver instead of marking them as wrong. */
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="blame_worker_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a{
+  opacity:.34;
+}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="blame_worker_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="chilled"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b{
+  transform:translateX(10px);
+}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="blame_worker_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="chilled"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{
+  transform:translateX(18px);opacity:.42;
+}
+
+/* Reconstructed chain shows the three handoffs at equal weight; still neutral monochrome. */
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="reconstruct_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a,
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="reconstruct_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b,
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"][data-node="reconstruct_result"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="reconstructed"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="reconstructed"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b,
+.episode-immersive-scene[data-event="e01_08n_instruction_return"][data-node="reconstructed"] .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{
+  opacity:.9;box-shadow:0 0 0 5px rgba(204,217,214,.05);
+}
+
+@media(max-width:760px){
+  .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-axis{left:12%;right:8%}
+  .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-a{left:20%}
+  .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-b{left:48%}
+  .episode-immersive-moment-overlay[data-moment="restart-trace"] .moment-c{left:76%}
+  .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-axis{left:18%}
+  .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-a,
+  .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-b,
+  .episode-immersive-moment-overlay[data-moment="instruction-chain"] .moment-c{left:calc(18% - 4px)}
+}
+

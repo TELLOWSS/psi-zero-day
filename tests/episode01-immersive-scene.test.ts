@@ -89,7 +89,11 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'pump')).toBe('pump-approach');
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'near_miss')).toBe('near-miss');
     expect(episode01MomentOverlay('e01_08b_inspection_find', 'inspection')).toBe('inspection-frame');
+    expect(episode01MomentOverlay('e01_08i_restart_pressure', 'restart_action')).toBe('restart-trace');
+    expect(episode01MomentOverlay('e01_08j_restart_return', 'controlled')).toBe('restart-trace');
     expect(episode01MomentOverlay('e01_08k_stopwork_aftershock', 'aftershock')).toBe('stopwork-gap');
+    expect(episode01MomentOverlay('e01_08m_instruction_cascade', 'instruction_action')).toBe('instruction-chain');
+    expect(episode01MomentOverlay('e01_08n_instruction_return', 'reconstructed')).toBe('instruction-chain');
     expect(episode01MomentOverlay('e01_08o_record_pressure', 'pressure')).toBe('record-pressure');
     expect(episode01MomentOverlay('e01_09_evening', 'rest')).toBeUndefined();
   });
@@ -99,5 +103,13 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01RelationshipSceneCue(3)).toBe('closer');
     expect(episode01RelationshipSceneCue(-2)).toBe('strained');
     expect(episode01RelationshipSceneCue(0)).toBeUndefined();
+  });
+
+
+  it('maps restart and instruction-chain arcs to distinct neutral overlays', () => {
+    expect(episode01MomentOverlay('e01_08i_restart_pressure', 'follow_verbal_result')).toBe('restart-trace');
+    expect(episode01MomentOverlay('e01_08j_restart_return', 'distorted')).toBe('restart-trace');
+    expect(episode01MomentOverlay('e01_08m_instruction_cascade', 'blame_worker_result')).toBe('instruction-chain');
+    expect(episode01MomentOverlay('e01_08n_instruction_return', 'gap')).toBe('instruction-chain');
   });
 });
