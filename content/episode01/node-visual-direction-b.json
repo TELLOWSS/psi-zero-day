@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-node-direction-v1-b",
+  "events": {
+    "e01_08e_responsibility_clash": {
+      "gc": {
+        "camera": "tight",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "oh_seungjae"
+      },
+      "lee": {
+        "camera": "tight",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lee_jaehoon"
+      },
+      "kang": {
+        "camera": "tight",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "kang_taesik"
+      },
+      "report": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "one_sided_result": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "defensive_result": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "timeline_result": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08i_restart_pressure": {
+      "situation": {
+        "camera": "wide",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "kang": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "kang_taesik"
+      },
+      "lee": {
+        "camera": "medium",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lee_jaehoon"
+      },
+      "junho": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lim_junho"
+      },
+      "restart_action": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "follow_verbal_result": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "trace_instruction_result": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "verify_controls_result": {
+        "camera": "wide",
+        "focus": "right",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08j_restart_return": {
+      "resolve": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "premature": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "distorted": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "controlled": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08k_stopwork_aftershock": {
+      "situation": {
+        "camera": "wide",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "kang": {
+        "camera": "tight",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "kang_taesik"
+      },
+      "junho": {
+        "camera": "tight",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lim_junho"
+      },
+      "lee": {
+        "camera": "tight",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lee_jaehoon"
+      },
+      "culture_action": {
+        "camera": "medium",
+        "focus": "left",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "ignore_social_result": {
+        "camera": "tight",
+        "focus": "left",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "public_boundary_result": {
+        "camera": "medium",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "protect_process_result": {
+        "camera": "wide",
+        "focus": "left",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08l_stopwork_return": {
+      "resolve": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "silenced": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "cold": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "route": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08g_tbm_field_gap": {
+      "situation": {
+        "camera": "wide",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "lee": {
+        "camera": "medium",
+        "focus": "left",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lee_jaehoon"
+      },
+      "kang": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "kang_taesik"
+      },
+      "junho": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "dialogue",
+        "subject_character_id": "lim_junho"
+      },
+      "tbm_action": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "form_first_result": {
+        "camera": "medium",
+        "focus": "right",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "worker_blame_result": {
+        "camera": "tight",
+        "focus": "right",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "change_control_result": {
+        "camera": "wide",
+        "focus": "right",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08h_tbm_return": {
+      "resolve": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "paper": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "silenced": {
+        "camera": "tight",
+        "focus": "center",
+        "tone": "pressure",
+        "shot": "result-pressure"
+      },
+      "controlled": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    },
+    "e01_08f_report_return": {
+      "resolve": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "decision",
+        "shot": "decision"
+      },
+      "correction": {
+        "camera": "medium",
+        "focus": "center",
+        "tone": "neutral",
+        "shot": "result-neutral"
+      },
+      "evidence": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      },
+      "timeline": {
+        "camera": "wide",
+        "focus": "center",
+        "tone": "resolved",
+        "shot": "result-resolved"
+      }
+    }
+  }
+}
