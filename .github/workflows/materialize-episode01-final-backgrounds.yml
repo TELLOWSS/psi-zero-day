@@ -26,21 +26,27 @@ jobs:
         with:
           node-version: '22.x'
           cache: npm
-      - name: Decode final WebP batch
-        shell: bash
+      - name: Decode final WebP batch from manifest
         run: |
-          set -euo pipefail
-          mkdir -p public/assets/episode01/cg
-          expected=(
-            gate-dawn ramp-entry work-yard concrete-pour
-            inspection-zone site-office break-area home-night
-          )
-          for name in "${expected[@]}"; do
-            mapfile -t chunks < <(find .art-ingest/episode01 -maxdepth 1 -type f -name "${name}.webp.b64.*" | sort)
-            test "${#chunks[@]}" -gt 0 || { echo "Missing chunks for $name"; exit 1; }
-            cat "${chunks[@]}" | base64 --decode > "public/assets/episode01/cg/${name}.webp"
-          done
-          rm -rf .art-ingest/episode01
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const staging='.art-ingest/episode01';
+          const manifest=JSON.parse(fs.readFileSync('content/episode01/final-art-ingest-manifest.json','utf8'));
+          for (const asset of manifest.assets) {
+            const prefix=asset.filename + '.b64.';
+            const chunks=fs.readdirSync(staging)
+              .filter(name=>name.startsWith(prefix))
+              .sort();
+            if (!chunks.length) throw new Error(`Missing chunks for ${asset.filename}`);
+            const encoded=chunks.map(name=>fs.readFileSync(path.join(staging,name),'utf8')).join('');
+            const bytes=Buffer.from(encoded,'base64');
+            fs.mkdirSync(path.dirname(asset.target_path),{recursive:true});
+            fs.writeFileSync(asset.target_path,bytes);
+            console.log(`Decoded ${asset.filename}: ${chunks.length} chunk(s), ${bytes.length} bytes`);
+          }
+          fs.rmSync(staging,{recursive:true,force:true});
+          NODE
       - run: npm ci
       - name: Verify exact generated final production backgrounds
         run: |
