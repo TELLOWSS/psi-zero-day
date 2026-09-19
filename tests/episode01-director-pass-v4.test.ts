@@ -23,6 +23,6 @@ describe('Episode 01 director pass v4',()=>{
   it('locks the choice-consequence-memory contract and bumps save compatibility',()=>{
     expect(manifest.bundle.content_version).toBe('ep01.director.v4');
     expect(director.title).toContain('기억');
-    expect(director.design_rules.some(rule=>rule.includes('actual route'))).toBe(true);
+    expect(director.intent).toContain("player's actual route");
   });
 });
