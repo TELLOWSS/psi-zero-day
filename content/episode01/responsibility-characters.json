@@ -4,7 +4,7 @@
     "id": "oh_seungjae",
     "name_text_id": "cast.oh_seungjae.name",
     "role_text_id": "cast.oh_seungjae.role",
-    "trade_text_id": "cast.oh_seungjae.role",
+    "trade_text_id": "cast.oh_seungjae.trade",
     "age_group_text_id": "cast.oh_seungjae.age",
     "nationality_text_id": "cast.unspecified",
     "experience": 68,
@@ -17,7 +17,9 @@
     "initial_state": {
       "morale": 70,
       "fatigue": 24,
-      "availability": { "available": true },
+      "availability": {
+        "available": true
+      },
       "revealed_fields": [],
       "story_flags": {}
     }

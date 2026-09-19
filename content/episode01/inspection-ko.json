@@ -30,6 +30,7 @@
     "ep01.reinspection.accept_sequence": "서정민 감리가 차량 이탈 시각과 정리 상태를 확인한다. “합의한 순서대로 됐네요. 이렇게 실제 상태와 말이 맞으면 됩니다.”",
     "ep01.inspection.full_stop.result": "모든 이동이 멈추자 통로는 빠르게 정리된다. 대신 철근차가 8분 대기하고 뒤 차량 무전이 쌓인다. 현장은 깔끔해졌지만 일정 압박은 더 선명해진다.",
     "ep01.inspection.quick_photo.result": "입구 쪽 사진은 바로 확보된다. 철근차도 움직이기 시작한다. 하지만 사진에 잡힌 구간과 아직 손대지 않은 끝 구간 사이에 ‘조치완료’라는 말의 간격이 생긴다.",
-    "ep01.inspection.sequence_agreement.result": "서정민 감리가 시계를 보고 고개를 끄덕인다. 차량이 빠지는 시각과 재확인 시각이 정해졌다. 대신 세 팀이 같은 순서를 지켜야만 계획이 성립한다."
+    "ep01.inspection.sequence_agreement.result": "서정민 감리가 시계를 보고 고개를 끄덕인다. 차량이 빠지는 시각과 재확인 시각이 정해졌다. 대신 세 팀이 같은 순서를 지켜야만 계획이 성립한다.",
+    "cast.seo_jeongmin.trade": "건축"
   }
 }

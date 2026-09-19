@@ -4,7 +4,7 @@
     "id": "seo_jeongmin",
     "name_text_id": "cast.seo_jeongmin.name",
     "role_text_id": "cast.seo_jeongmin.role",
-    "trade_text_id": "cast.seo_jeongmin.role",
+    "trade_text_id": "cast.seo_jeongmin.trade",
     "age_group_text_id": "cast.seo_jeongmin.age",
     "nationality_text_id": "cast.unspecified",
     "experience": 82,
@@ -17,7 +17,9 @@
     "initial_state": {
       "morale": 70,
       "fatigue": 20,
-      "availability": { "available": true },
+      "availability": {
+        "available": true
+      },
       "revealed_fields": [],
       "story_flags": {}
     }
