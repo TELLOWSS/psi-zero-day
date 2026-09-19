@@ -451,6 +451,9 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
       <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
       <p className="end-line">{t('ui.end_hint')}</p>
+      <div className="episode-completion-carryover">
+        <EpisodeDayCarryover eventId="e01_10_next_day_tease" flags={snapshot.state?.flags} t={t} />
+      </div>
       <section className="episode-review" aria-label={t('ui.review.title')}>
         <h2>{t('ui.review.title')}</h2>
         <p>{t('ui.review.hint')}</p>
