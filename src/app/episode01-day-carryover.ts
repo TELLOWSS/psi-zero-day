@@ -3,6 +3,17 @@ import { FIELD_REALITY_DOCTRINE_ID } from './gameplay-doctrine';
 
 export type DayCarryoverPhase = 'evening' | 'day2';
 export type DayCarryoverTone = 'record' | 'people' | 'instruction' | 'recovery' | 'first';
+export type Episode01CarryoverKey = 'people' | 'instruction' | 'record' | 'stable';
+
+export function episode01CarryoverKey(flags: FlagMap): Episode01CarryoverKey {
+  if (flags.stopwork_culture_result === 'reporting_silenced'
+    || flags.stopwork_culture_result === 'formal_protection_private_friction') return 'people';
+  if (flags.instruction_chain_result === 'condition_loss_unresolved'
+    || flags.instruction_chain_result === 'worker_blame_hides_chain') return 'instruction';
+  if (flags.record_result === 'supplement_requested'
+    || flags.record_result === 'document_sync_required') return 'record';
+  return 'stable';
+}
 
 export interface DayCarryoverStage {
   readonly time: '17:08' | '20:41' | '06:52';
