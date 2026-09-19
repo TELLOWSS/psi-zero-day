@@ -847,3 +847,54 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-scene[data-preview-choice] .episode-immersive-background,
   .episode-immersive-scene[data-preview-choice] .episode-immersive-prop{transition:none!important;transform:none!important}
 }
+
+
+/* EP01 environment lighting pass — keeps RC fallbacks visually distinct while final WebP slots are produced. */
+.episode-immersive-scene:not([data-preview-choice])[data-environment="gate_dawn"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 22% 19%,rgba(255,190,105,.28),transparent 28%),
+    radial-gradient(circle at 76% 30%,rgba(120,178,205,.12),transparent 34%),
+    linear-gradient(180deg,rgba(27,45,56,.08),transparent 46%,rgba(16,18,20,.2));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="ramp_entry"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 30% 40%,rgba(224,157,80,.17),transparent 24%),
+    linear-gradient(90deg,rgba(20,35,43,.18),transparent 32%,transparent 68%,rgba(32,21,14,.16)),
+    linear-gradient(180deg,rgba(138,190,210,.07),transparent 44%,rgba(18,15,12,.16));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="work_yard"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 66% 18%,rgba(255,211,139,.18),transparent 31%),
+    linear-gradient(180deg,rgba(182,203,207,.05),transparent 42%,rgba(91,67,42,.15)),
+    linear-gradient(90deg,rgba(15,27,31,.12),transparent 70%,rgba(34,25,18,.11));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="concrete_pour"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 61% 20%,rgba(255,220,161,.22),transparent 30%),
+    radial-gradient(circle at 35% 72%,rgba(190,204,207,.11),transparent 34%),
+    linear-gradient(180deg,rgba(210,223,224,.04),transparent 46%,rgba(52,49,43,.16));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="inspection_zone"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 69% 28%,rgba(134,190,205,.15),transparent 30%),
+    radial-gradient(circle at 24% 66%,rgba(221,129,76,.1),transparent 24%),
+    linear-gradient(180deg,rgba(164,197,204,.05),transparent 43%,rgba(18,31,34,.2));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="site_office"] .episode-immersive-atmosphere{
+  background:
+    linear-gradient(180deg,rgba(174,211,222,.13),transparent 22%),
+    radial-gradient(circle at 50% 15%,rgba(220,238,241,.11),transparent 27%),
+    linear-gradient(90deg,rgba(21,37,44,.16),transparent 45%,rgba(26,35,38,.13));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="break_area"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 72% 24%,rgba(238,184,103,.18),transparent 31%),
+    radial-gradient(circle at 30% 68%,rgba(115,154,145,.09),transparent 33%),
+    linear-gradient(180deg,rgba(111,132,129,.04),transparent 50%,rgba(35,27,21,.16));
+}
+.episode-immersive-scene:not([data-preview-choice])[data-environment="home_night"] .episode-immersive-atmosphere{
+  background:
+    radial-gradient(circle at 30% 36%,rgba(232,172,95,.15),transparent 21%),
+    radial-gradient(circle at 72% 23%,rgba(91,112,181,.18),transparent 36%),
+    linear-gradient(180deg,rgba(27,32,65,.2),rgba(8,10,23,.28));
+}
