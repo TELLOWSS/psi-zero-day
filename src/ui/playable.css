@@ -2400,3 +2400,116 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   --blocking-shadow-opacity:.18;--blocking-shadow-scale:.78
 }
 
+/* EP01 character performance pass: pose/expression state works with today's single map art
+   and remains compatible with future expression-specific transparent WebP replacements. */
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character>img{
+  --pose-x:0%;
+  --pose-y:0%;
+  --pose-scale:1;
+  --pose-rotate:0deg;
+  transform:
+    translate(var(--pose-x),var(--pose-y))
+    scale(var(--pose-scale))
+    rotate(var(--pose-rotate));
+  transform-origin:50% 92%;
+  transition:transform .28s cubic-bezier(.2,.72,.2,1),filter .24s ease,opacity .24s ease;
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="inspect"]>img{
+  --pose-y:-.6%;--pose-scale:1.018;--pose-rotate:-.35deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="press"]>img{
+  --pose-y:-1.4%;--pose-scale:1.035;--pose-rotate:-.55deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="listen"]>img{
+  --pose-y:.2%;--pose-scale:.992;--pose-rotate:.22deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="hesitate"]>img{
+  --pose-y:1.5%;--pose-scale:.968;--pose-rotate:1deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="verify"]>img{
+  --pose-y:-.9%;--pose-scale:1.022;--pose-rotate:.18deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="brace"]>img{
+  --pose-y:.7%;--pose-scale:1.012;--pose-rotate:-.18deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="withdraw"]>img{
+  --pose-y:2.1%;--pose-scale:.94;--pose-rotate:1.3deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="reengage"]>img{
+  --pose-y:-1.1%;--pose-scale:1.034;--pose-rotate:-.15deg
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="document"]>img{
+  --pose-y:.15%;--pose-scale:1.006;--pose-rotate:.42deg
+}
+
+/* Expression IDs mirror character-art-production.json. Until expression WebPs land,
+   lighting treatment gives restrained scene feedback without pretending a new face asset exists. */
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-expression="neutral"]>img{
+  filter:saturate(.96) contrast(1)
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-expression="concern"]>img{
+  filter:saturate(.82) contrast(1.04) brightness(.94)
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-expression="resolve"]>img{
+  filter:saturate(1.02) contrast(1.055) brightness(1.015)
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-expression="relief"]>img{
+  filter:saturate(.98) contrast(.99) brightness(1.045)
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-expression="conflict"]>img{
+  filter:saturate(.87) contrast(1.09) brightness(.91)
+}
+
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-presence-motion="enter"]>img{
+  animation:character-performance-enter .38s cubic-bezier(.18,.74,.2,1) both
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-presence-motion="reengage"]>img{
+  animation:character-performance-reengage .32s cubic-bezier(.18,.76,.2,1) both
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-presence-motion="withdraw"]>img{
+  animation:character-performance-withdraw .36s cubic-bezier(.3,.1,.28,1) both
+}
+@keyframes character-performance-enter{
+  from{
+    opacity:.16;
+    transform:translate(var(--pose-x),var(--pose-y)) translateY(4%) scale(.93) rotate(var(--pose-rotate))
+  }
+  to{
+    opacity:1;
+    transform:translate(var(--pose-x),var(--pose-y)) scale(var(--pose-scale)) rotate(var(--pose-rotate))
+  }
+}
+@keyframes character-performance-reengage{
+  0%{
+    opacity:.72;
+    transform:translate(var(--pose-x),var(--pose-y)) translateY(1.8%) scale(.965) rotate(var(--pose-rotate))
+  }
+  100%{
+    opacity:1;
+    transform:translate(var(--pose-x),var(--pose-y)) scale(var(--pose-scale)) rotate(var(--pose-rotate))
+  }
+}
+@keyframes character-performance-withdraw{
+  0%{
+    opacity:1;
+    transform:translate(var(--pose-x),var(--pose-y)) scale(var(--pose-scale)) rotate(var(--pose-rotate))
+  }
+  100%{
+    opacity:.56;
+    transform:translate(var(--pose-x),var(--pose-y)) translateY(2.3%) scale(.94) rotate(var(--pose-rotate))
+  }
+}
+@media(max-width:760px){
+  .episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="press"]>img{
+    --pose-y:-.8%;--pose-scale:1.02
+  }
+  .episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-pose="withdraw"]>img{
+    --pose-y:1.4%;--pose-scale:.955
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene[data-character-performance="true"] .episode-immersive-character>img{
+    animation:none!important;transition:none!important
+  }
+}
+
