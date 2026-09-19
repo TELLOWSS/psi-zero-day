@@ -1,0 +1,42 @@
+name: Verify Episode 01 final art
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/assets/episode01/cg/*.webp'
+      - 'content/episode01/scene-background-catalog.json'
+      - 'content/episode01/scene-background-production-briefs.json'
+      - 'content/episode01/scene-background-imagegen-prompts.json'
+      - 'scripts/check-scene-background-production.mjs'
+      - 'scripts/check-scene-background-imagegen-prompts.mjs'
+      - 'scripts/build-episode01-assets.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-final-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - name: Verify art contracts
+        run: |
+          npm run assets:scene-background-brief-check
+          npm run assets:scene-background-imagegen-check
+          npm run assets:scene-background-production-check
+      - name: Rebuild and verify manifest
+        run: |
+          npm run assets:embedded
+          npm run assets:vector
+          npm run assets:manifest
+          node scripts/build-episode01-assets.mjs --check
+      - name: Visual regression tests
+        run: npm run test:episode01-visual

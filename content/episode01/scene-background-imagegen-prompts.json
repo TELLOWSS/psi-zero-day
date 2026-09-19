@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-final-imagegen-prompts-v1",
+  "model_intent": "Generate production-ready 16:9 environment art only. Named cast and focal gameplay props stay as runtime layers.",
+  "output_contract": {
+    "format": "webp",
+    "minimum_size": "1920x1080",
+    "aspect_ratio": "16:9",
+    "style": "commercial adult-friendly 2.5D casual-strategy construction drama; grounded Korean construction-site realism; painterly-realistic materials; restrained cinematic lighting; readable silhouettes; premium mobile/PC game background",
+    "continuity": "same fictional NEW PSI universe; no real company/site/apartment branding",
+    "composition": "reserve lower-center dialogue zone; support desktop and mobile landscape cover crops; avoid critical clues at extreme edges",
+    "negative": "no baked UI, no captions, no watermark, no real logos, no readable license plates, no disaster spectacle, no heroic safety poster pose, no obvious red=wrong green=right coding, no cyberpunk neon, no empty showroom site, no distorted construction equipment, no duplicated workers, no extra fingers or malformed PPE"
+  },
+  "backgrounds": {
+    "gate_dawn": {
+      "final_path": "assets/episode01/cg/gate-dawn.webp",
+      "prompt": "Korean construction site gate at 06:30 blue dawn, fictional NEW PSI world, humid cool air, warm temporary work lights, temporary fencing, checkpoint booth, imperfectly separated worker entry path and delivery vehicle flow, idling work trucks in a short queue, distant tower crane and concrete frame, a few anonymous workers only as small scale silhouettes, eye-level 30mm wide shot angled into the site, busy but not obviously dangerous, lower-center 38 percent visually quiet for dialogue UI, premium 2.5D casual-strategy game environment, grounded realism, restrained cinematic lighting."
+    },
+    "ramp_entry": {
+      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "prompt": "Constrained Korean construction-site temporary ramp and entry lane in early morning, material staging encroaching on movement space, truck turning radius overlapping a pedestrian desire line, cones and barriers present but imperfect, subtle schedule-pressure atmosphere without depicting a crash, neutral-cool daylight with warm reflected site lighting, 32mm wide-to-medium view looking along the ramp, strong depth toward right-center, lower center-left kept readable, premium 2.5D construction strategy drama background, realistic Korean temporary works."
+    },
+    "work_yard": {
+      "final_path": "assets/episode01/cg/work-yard.webp",
+      "prompt": "Active Korean construction work yard and staging area under structural frame, morning slightly dusty overcast light, mixed materials, temporary access path, changing work zones, incomplete exclusion boundaries that make operational sense, realistic rebar/formwork/scaffold context, room for later overlay of harness open-edge and access props, no giant central machine, worker-eye-level 30mm wide composition, lower-center 35 percent uncluttered, work moving efficiently while controls visibly lag sequence changes, premium adult-friendly 2.5D casual-strategy game art."
+    },
+    "concrete_pour": {
+      "final_path": "assets/episode01/cg/concrete-pour.webp",
+      "prompt": "High-energy first concrete pour on a Korean apartment construction site, fictional unbranded concrete pump truck and boom concentrated upper-right, slab and rebar workface extending left and center, hose/pour context, temporary access and exclusion boundaries, wet concrete reflections, anonymous distant workers as small scale silhouettes only, dynamic 28mm wide shot, productive spatial tension with limited maneuvering room but no accident frozen in progress, lower center clean for dialogue, premium 2.5D casual-strategy construction drama background."
+    },
+    "inspection_zone": {
+      "final_path": "assets/episode01/cg/inspection-zone.webp",
+      "prompt": "Korean construction inspection zone at midday where interior concrete meets exterior daylight, temporary edge/opening context, wet or messy floor possibility, barrier and guarding elements, active work continuing beyond the inspected area, clear physical reference points on both left and right so later reinspection can feel changed, no obvious visual verdict on adequacy, medium-wide 35mm shot, cool neutral concrete light, lower center clean for dialogue, premium grounded 2.5D strategy game environment."
+    },
+    "site_office": {
+      "final_path": "assets/episode01/cg/site-office.webp",
+      "prompt": "Modular Korean construction site office during daytime, cool fluorescent LED interior with warm daylight leak from window, meeting table corner viewpoint toward wall and window, paperwork space, monitor and keyboard, radio charger, active site faintly visible outside, abstract blank pinboard/document wall reserved for evidence overlay, administrative pressure but still close to the field, 38mm medium-wide composition, lower center uncluttered and upper-right usable for evidence UI, premium 2.5D construction drama background."
+    },
+    "break_area": {
+      "final_path": "assets/episode01/cg/break-area.webp",
+      "prompt": "Temporary worker break area on a Korean construction site in late-afternoon soft light, worn benches and table, water station or lockers, site visible through opening, believable spaces where small groups could talk separately, fatigue and social distance conveyed through environment rather than confrontation, no posed argument, 35mm medium-wide view, seating weighted to sides with center-lower clear for dialogue, grounded premium 2.5D casual-strategy construction drama art."
+    },
+    "home_night": {
+      "final_path": "assets/episode01/cg/home-night.webp",
+      "prompt": "Quiet modest Korean apartment-like home at night after a construction shift, warm practical lamp mixed with cool city window light, small table or desk for notes and study, distant traffic lights through window, ordinary non-identifying household details, calm decompression with lingering cognitive load, neither bleak nor triumphant, seated-eye-level 38mm medium-wide shot, lower center and left kept readable with upper-right room for memory-strip UI, premium grounded 2.5D narrative strategy game background."
+    }
+  }
+}
