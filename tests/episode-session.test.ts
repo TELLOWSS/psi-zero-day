@@ -92,7 +92,9 @@ describe('Episode application session', () => {
       type: 'choose_event', instance_id: planChoice.instance_id, node_id: planChoice.node_id, choice_id: 'delegate_kang',
     }, choiceSnapshot.revision)).toBe(true);
     const held = session.getSnapshot();
-    expect(held.presentation).toEqual([]);
+    expect(held.presentation).toEqual([
+      expect.objectContaining({ type: 'SHOW_RESULT', instance_id: planChoice.instance_id, text_id: 'ep01.plan.b.result' }),
+    ]);
     expect(held.state?.event_runtime.active_instance).toBeNull();
     expect(held.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
     expect(held.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
