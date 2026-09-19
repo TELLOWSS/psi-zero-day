@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import type { AudioState } from '../domain';
+import { readAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 
 export type UiAudioCue = 'execute' | 'result_positive' | 'result_negative' | 'result_neutral' | 'continue' | 'character_intro' | 'radio_signal' | 'pressure' | 'scene_shift';
 
@@ -61,6 +62,8 @@ function syntheticNoise(context: AudioContext, duration: number) {
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
 export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: AssetResolver) {
+  const preferenceMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
+  const effectiveMuted = Boolean(effectiveMuted || preferenceMuted);
   const bgmRef = useRef<HTMLAudioElement | null>(null);
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
   const seenCueIds = useRef(new Set<string>());
@@ -70,7 +73,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     if (typeof Audio === 'undefined') return;
     const track = audio?.bgm;
     const uri = track ? resolve(track.asset_id) : undefined;
-    if (!track || !uri || audio?.muted) {
+    if (!track || !uri || effectiveMuted) {
       bgmRef.current?.pause();
       return;
     }
@@ -85,7 +88,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     element.loop = track.loop;
     element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
     void element.play().catch(() => { /* browser gesture policy; retry occurs on the next state change */ });
-  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, audio?.muted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
+  }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
@@ -93,7 +96,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     for (const track of audio?.ambience ?? []) {
       desired.add(track.asset_id);
       const uri = resolve(track.asset_id);
-      if (!uri || audio?.muted) continue;
+      if (!uri || effectiveMuted) continue;
       let element = ambienceRef.current.get(track.asset_id);
       if (!element) {
         element = new Audio(uri);
@@ -104,15 +107,15 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       void element.play().catch(() => {});
     }
     for (const [assetId, element] of ambienceRef.current) {
-      if (!desired.has(assetId) || audio?.muted) {
+      if (!desired.has(assetId) || effectiveMuted) {
         element.pause();
         if (!desired.has(assetId)) ambienceRef.current.delete(assetId);
       }
     }
-  }, [audio?.ambience, audio?.muted, audio?.volumes.master, audio?.volumes.ambience, resolve]);
+  }, [audio?.ambience, effectiveMuted, audio?.volumes.master, audio?.volumes.ambience, resolve]);
 
   useEffect(() => {
-    if (typeof Audio === 'undefined' || !audio || audio.muted) return;
+    if (typeof Audio === 'undefined' || !audio || effectiveMuted) return;
     const buses = [...audio.sfx_bus, ...audio.event_bus];
     for (const cue of buses) {
       if (seenCueIds.current.has(cue.cue_id)) continue;
@@ -123,7 +126,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.sfx));
       void element.play().catch(() => {});
     }
-  }, [audio?.sfx_bus, audio?.event_bus, audio?.muted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
+  }, [audio?.sfx_bus, audio?.event_bus, effectiveMuted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
   useEffect(() => () => {
     bgmRef.current?.pause();
@@ -132,7 +135,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   }, []);
 
   const playUiCue = useCallback((cue: UiAudioCue) => {
-    if (audio?.muted || typeof window === 'undefined' || typeof window.AudioContext === 'undefined') return;
+    if (effectiveMuted || typeof window === 'undefined' || typeof window.AudioContext === 'undefined') return;
     const [startHz, endHz, duration] = CUE_PROFILE[cue];
     const timbre = CUE_TIMBRE[cue];
     const context = contextRef.current ?? new window.AudioContext();
@@ -178,10 +181,10 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
       noise.start(now);
       noise.stop(now + duration);
     }
-  }, [audio?.muted, audio?.volumes.master, audio?.volumes.sfx]);
+  }, [effectiveMuted, audio?.volumes.master, audio?.volumes.sfx]);
 
   const playPresentationCue = useCallback((cue: PresentationAudioCue) => {
-    if (audio?.muted) return;
+    if (effectiveMuted) return;
     const uri = cue.asset_id ? resolve(cue.asset_id) : undefined;
     if (!uri || typeof Audio === 'undefined') {
       playUiCue(cue.fallback);
@@ -192,7 +195,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     element.volume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
     void element.play().catch(() => playUiCue(cue.fallback));
-  }, [audio?.muted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
+  }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
   return { playUiCue, playPresentationCue } as const;
 }
