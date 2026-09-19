@@ -86,7 +86,7 @@ describe('Episode 01 cinematic character performance', () => {
       'strained',
     )).toEqual({
       expression: 'concern',
-      pose: 'withdraw',
+      pose: 'hesitate',
       motion: 'withdraw',
     });
   });
