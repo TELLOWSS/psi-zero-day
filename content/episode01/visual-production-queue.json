@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "queue_id": "episode01-visual-production-v2",
+  "schema_version": 2,
+  "queue_id": "episode01-visual-production-v3",
   "rule": "Do not spend repeated generations on near-identical site-overview maps. Keep one master Production Map plate, then move through distinct gameplay surfaces.",
   "master_map": {
     "asset_id": "ep01.background.foundation.map",
@@ -9,69 +9,177 @@
     "purpose": "single reusable strategic overview plate",
     "generation_limit_before_selection": 3
   },
-  "next_assets": [
+  "final_art_batch": {
+    "status": "exact_archive_verified_pending_github_binary_ingest",
+    "ingest_manifest": "content/episode01/final-art-ingest-manifest.json",
+    "archive_filename": "PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip",
+    "archive_sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb",
+    "required_surfaces": 8,
+    "repository_binaries_present": 0,
+    "note": "The exact eight-file archive has been checksum-verified against the ingest contract. Runtime stays on RC SVG until all eight WebPs land atomically in GitHub."
+  },
+  "production_surfaces": [
     {
       "order": 1,
-      "asset_id": "ep01.background.ramp.entry",
-      "surface": "ramp_entry",
-      "final_path": "assets/episode01/cg/ramp-entry.webp",
-      "camera": "worker-eye-level 32mm wide-to-medium",
-      "visual_goal": "constrained temporary ramp, pedestrian/vehicle desire-line overlap, realistic Korean temporary works",
-      "must_differ_from_master": ["eye-level camera", "tight spatial pressure", "no bird-eye whole-site composition"]
+      "key": "gate_dawn",
+      "asset_id": "ep01.scene_bg.gate_dawn",
+      "surface": "gate_dawn",
+      "final_path": "assets/episode01/cg/gate-dawn.webp",
+      "rc_path": "assets/episode01/cg/gate-dawn-rc.svg",
+      "used_by": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_10_next_day_tease"
+      ],
+      "camera": "worker-eye-level 32mm dawn establishing",
+      "visual_goal": "early shift arrival and next-day return at the site gate",
+      "must_differ_from_master": [
+        "dawn gate atmosphere",
+        "human-scale arrival",
+        "no bird-eye whole-site composition"
+      ]
     },
     {
       "order": 2,
-      "asset_id": "ep01.background.work.yard",
-      "surface": "work_yard",
-      "final_path": "assets/episode01/cg/work-yard.webp",
-      "camera": "worker-eye-level 30mm wide",
-      "visual_goal": "material staging under structure with changing work zones and practical access controls",
-      "must_differ_from_master": ["under-structure depth", "foreground materials", "human-scale circulation"]
+      "key": "ramp_entry",
+      "asset_id": "ep01.scene_bg.ramp_entry",
+      "surface": "ramp_entry",
+      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "rc_path": "assets/episode01/cg/ramp-entry-rc.svg",
+      "used_by": [
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_08a_reporting_return"
+      ],
+      "camera": "worker-eye-level 32mm wide-to-medium",
+      "visual_goal": "constrained temporary ramp, pedestrian/vehicle desire-line overlap, realistic Korean temporary works",
+      "must_differ_from_master": [
+        "eye-level camera",
+        "tight spatial pressure",
+        "no bird-eye whole-site composition"
+      ]
     },
     {
       "order": 3,
-      "asset_id": "ep01.background.concrete.pour",
-      "surface": "concrete_pour",
-      "final_path": "assets/episode01/cg/concrete-pour.webp",
-      "camera": "dynamic 28mm slab-level wide shot",
-      "visual_goal": "first-pour pressure with pump boom, rebar workface, hose route and limited maneuvering room",
-      "must_differ_from_master": ["active pour operation", "slab-level perspective", "dynamic machinery"]
+      "key": "work_yard",
+      "asset_id": "ep01.scene_bg.work_yard",
+      "surface": "work_yard",
+      "final_path": "assets/episode01/cg/work-yard.webp",
+      "rc_path": "assets/episode01/cg/work-yard-rc.svg",
+      "used_by": [
+        "e01_05_command",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08m_instruction_cascade"
+      ],
+      "camera": "worker-eye-level 30mm wide",
+      "visual_goal": "material staging under structure with changing work zones and practical access controls",
+      "must_differ_from_master": [
+        "under-structure depth",
+        "foreground materials",
+        "human-scale circulation"
+      ]
     },
     {
       "order": 4,
-      "asset_id": "ep01.background.inspection.zone",
-      "surface": "inspection_zone",
-      "final_path": "assets/episode01/cg/inspection-zone.webp",
-      "camera": "35mm medium-wide",
-      "visual_goal": "inspection/reinspection space with opening, edge and access-control references",
-      "must_differ_from_master": ["interior-exterior threshold", "inspection scale", "clear evidence landmarks"]
+      "key": "concrete_pour",
+      "asset_id": "ep01.scene_bg.concrete_pour",
+      "surface": "concrete_pour",
+      "final_path": "assets/episode01/cg/concrete-pour.webp",
+      "rc_path": "assets/episode01/cg/concrete-pour-rc.svg",
+      "used_by": [
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions"
+      ],
+      "camera": "dynamic 28mm slab-level wide shot",
+      "visual_goal": "first-pour pressure with pump boom, rebar workface, hose route and limited maneuvering room",
+      "must_differ_from_master": [
+        "active pour operation",
+        "slab-level perspective",
+        "dynamic machinery"
+      ]
     },
     {
       "order": 5,
-      "asset_id": "ep01.background.site.office",
-      "surface": "site_office",
-      "final_path": "assets/episode01/cg/site-office.webp",
-      "camera": "38mm medium-wide interior",
-      "visual_goal": "modular field office for reporting, coordination and responsibility dialogue",
-      "must_differ_from_master": ["interior", "paperwork/evidence space", "mixed fluorescent/daylight"]
+      "key": "inspection_zone",
+      "asset_id": "ep01.scene_bg.inspection_zone",
+      "surface": "inspection_zone",
+      "final_path": "assets/episode01/cg/inspection-zone.webp",
+      "rc_path": "assets/episode01/cg/inspection-zone-rc.svg",
+      "used_by": [
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection"
+      ],
+      "camera": "35mm medium-wide",
+      "visual_goal": "inspection/reinspection space with opening, edge and access-control references",
+      "must_differ_from_master": [
+        "interior-exterior threshold",
+        "inspection scale",
+        "clear evidence landmarks"
+      ]
     },
     {
       "order": 6,
-      "asset_id": "ep01.background.break.area",
-      "surface": "break_area",
-      "final_path": "assets/episode01/cg/break-area.webp",
-      "camera": "35mm medium-wide human-scale",
-      "visual_goal": "late-afternoon worker break area supporting social pressure and informal dialogue",
-      "must_differ_from_master": ["people-scale rest space", "late-afternoon mood", "no heavy equipment focus"]
+      "key": "site_office",
+      "asset_id": "ep01.scene_bg.site_office",
+      "surface": "site_office",
+      "final_path": "assets/episode01/cg/site-office.webp",
+      "rc_path": "assets/episode01/cg/site-office-rc.svg",
+      "used_by": [
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return"
+      ],
+      "camera": "38mm medium-wide interior",
+      "visual_goal": "modular field office for reporting, coordination and responsibility dialogue",
+      "must_differ_from_master": [
+        "interior",
+        "paperwork/evidence space",
+        "mixed fluorescent/daylight"
+      ]
     },
     {
       "order": 7,
-      "asset_id": "ep01.background.home.night",
+      "key": "break_area",
+      "asset_id": "ep01.scene_bg.break_area",
+      "surface": "break_area",
+      "final_path": "assets/episode01/cg/break-area.webp",
+      "rc_path": "assets/episode01/cg/break-area-rc.svg",
+      "used_by": [
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return"
+      ],
+      "camera": "35mm medium-wide human-scale",
+      "visual_goal": "late-afternoon worker break area supporting social pressure and informal dialogue",
+      "must_differ_from_master": [
+        "people-scale rest space",
+        "late-afternoon mood",
+        "no heavy equipment focus"
+      ]
+    },
+    {
+      "order": 8,
+      "key": "home_night",
+      "asset_id": "ep01.scene_bg.home_night",
       "surface": "home_night",
       "final_path": "assets/episode01/cg/home-night.webp",
+      "rc_path": "assets/episode01/cg/home-night-rc.svg",
+      "used_by": [
+        "e01_09_evening"
+      ],
       "camera": "38mm seated-eye-level interior",
       "visual_goal": "quiet post-shift home reflection scene with study/notes space",
-      "must_differ_from_master": ["night interior", "non-site environment", "reflective narrative tone"]
+      "must_differ_from_master": [
+        "night interior",
+        "non-site environment",
+        "reflective narrative tone"
+      ]
     }
   ],
   "runtime_rule": {

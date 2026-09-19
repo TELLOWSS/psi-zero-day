@@ -11,7 +11,7 @@
     "dev": "vite",
     "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -33,7 +33,7 @@
     "assets:production-batch-a-check": "npm run assets:visual-contract && npm run assets:embedded && node scripts/check-character-final-art-shape.mjs --batch-a && node scripts/build-episode01-assets.mjs --production-batch-a-check",
     "assets:production-check": "npm run assets:visual-contract && npm run assets:embedded && npm run assets:character-map-shape-check && node scripts/build-episode01-assets.mjs --production-check",
     "assets:production-scene-elements-check": "npm run assets:embedded && npm run assets:scene-elements-contract && node scripts/check-scene-element-art.mjs --production-check",
-    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:scene-runtime-check && npm run audio:contract-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
+    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:visual-production-queue-check && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:scene-runtime-check && npm run audio:contract-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
     "release:production-check": "npm run assets:production-check && npm run assets:production-scene-elements-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run audio:production-check && npm run release:check",
     "android:add": "npm run build && npx cap add android && npm run android:configure",
     "android:sync": "npm run build && npx cap sync android && npm run android:configure",
@@ -59,7 +59,8 @@
     "assets:scene-background-brief-check": "node scripts/check-scene-background-briefs.mjs",
     "assets:scene-background-imagegen-check": "node scripts/check-scene-background-imagegen-prompts.mjs",
     "assets:final-art-ingest-status": "node scripts/check-final-art-ingest.mjs",
-    "assets:final-art-ingest-check": "node scripts/check-final-art-ingest.mjs --require-final"
+    "assets:final-art-ingest-check": "node scripts/check-final-art-ingest.mjs --require-final",
+    "assets:visual-production-queue-check": "node scripts/check-visual-production-queue.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
