@@ -37,7 +37,7 @@ describe('game hub navigation', () => {
       act(() => guideButtons[0]!.click());
       expect(host.querySelector('.field-guide-detail h2')?.textContent?.trim().length).toBeGreaterThan(0);
       expect(host.querySelector('.field-guide-preview img')?.getAttribute('src')).toBe(selectedImage);
-      expect(host.querySelectorAll('.field-guide-list img').length).toBeGreaterThanOrEqual(10);
+      expect(host.querySelectorAll('.field-guide-list .field-guide-visual').length).toBeGreaterThanOrEqual(10);
       expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
     } finally { act(() => root.unmount()); }
   });
