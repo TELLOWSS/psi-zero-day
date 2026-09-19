@@ -667,14 +667,14 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 .phase-playing:not(.strategy-active) .play-panel{
   position:absolute;z-index:50;left:2.2%;right:2.2%;bottom:30px;
   margin:0;padding:13px 16px 14px;
-  min-height:0;max-height:34%;overflow:auto;
+  min-height:0;max-height:34%;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;
   display:grid;grid-template-columns:128px minmax(0,1fr);gap:16px;
   border:1px solid rgba(210,228,232,.28);border-top:1px solid rgba(242,247,245,.5);border-radius:8px;
   background:linear-gradient(90deg,rgba(5,17,23,.94),rgba(8,23,30,.9) 72%,rgba(8,22,29,.84));
   box-shadow:0 -8px 36px rgba(0,0,0,.28),0 18px 38px rgba(0,0,0,.32);
   backdrop-filter:blur(14px)
 }
-.phase-playing:not(.strategy-active) .presentation-area{align-self:center;max-height:29vh;overflow:auto;padding-right:3px}
+.phase-playing:not(.strategy-active) .presentation-area{align-self:center;max-height:29vh;overflow:auto;padding-right:3px;overscroll-behavior:contain;scrollbar-gutter:stable}
 .phase-playing:not(.strategy-active) .character-card{
   padding-right:13px;border-right:1px solid rgba(216,230,232,.18);justify-content:center
 }
