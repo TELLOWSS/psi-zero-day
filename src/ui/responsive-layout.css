@@ -1,0 +1,689 @@
+/* PSI : ZERO DAY responsive runtime layer
+   Presentation-only overrides. CoreEngine/content rules are intentionally untouched. */
+
+html, body, #root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+}
+html {
+  background: #050b10;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+#root {
+  width: 100%;
+  min-height: 100dvh;
+}
+img, svg, canvas {
+  max-width: 100%;
+}
+button, input, select, textarea {
+  max-width: 100%;
+}
+.game-frame,
+.game-hub,
+.commercial-title-home,
+.cinematic-loading,
+.gameplay-chunk-fallback {
+  max-width: 100vw;
+}
+
+/* Desktop / notebook: preserve the authored 16:9 composition while fitting the viewport. */
+@media (min-width: 901px) and (min-height: 651px) {
+  .game-frame {
+    width: min(100vw, 177.7778dvh);
+    max-height: 100dvh;
+  }
+}
+
+/* Phones and compact tablets in landscape: use every available pixel without letterboxing. */
+@media (orientation: landscape) and (max-height: 650px) {
+  #root {
+    min-height: 100dvh;
+    place-items: stretch;
+  }
+  .game-frame,
+  .game-hub,
+  .commercial-title-home,
+  .cinematic-loading {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    aspect-ratio: auto;
+  }
+  .game-frame {
+    overflow: hidden;
+  }
+  .commercial-title-home {
+    overflow: hidden;
+  }
+  .commercial-title-copy {
+    top: max(7%, env(safe-area-inset-top));
+  }
+  .commercial-title-features {
+    bottom: max(5.5%, calc(env(safe-area-inset-bottom) + 4px));
+  }
+  .game-hub-return {
+    left: max(10px, env(safe-area-inset-left));
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .strategy-hud {
+    left: max(8px, env(safe-area-inset-left));
+    right: max(8px, env(safe-area-inset-right));
+  }
+  .strategy-rail {
+    left: max(8px, env(safe-area-inset-left));
+  }
+  .strategy-map {
+    right: max(8px, env(safe-area-inset-right));
+  }
+  .strategy-active .play-panel {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Mobile portrait: make the title page a natural vertical page instead of a cropped desktop poster. */
+@media (orientation: portrait) and (max-width: 760px) {
+  body {
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+  #root {
+    display: block;
+    min-height: 100dvh;
+    padding:
+      env(safe-area-inset-top)
+      env(safe-area-inset-right)
+      env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
+  }
+
+  .commercial-title-home {
+    height: auto;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+  }
+  .commercial-title-backdrop {
+    position: fixed;
+    inset: -2%;
+    width: 104%;
+    height: 104dvh;
+    object-position: 57% 46%;
+  }
+  .commercial-title-grade,
+  .commercial-title-grain,
+  .commercial-title-sun-glow,
+  .commercial-title-depth,
+  .commercial-title-scan {
+    position: fixed;
+  }
+  .commercial-title-topline {
+    position: absolute;
+    top: 14px;
+    left: 5vw;
+    right: 5vw;
+    min-height: 44px;
+  }
+  .commercial-title-meta {
+    max-width: 52%;
+  }
+  .commercial-title-meta small,
+  .commercial-title-meta b {
+    font-size: 8px;
+  }
+  .commercial-title-meta span {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+  .commercial-title-utility {
+    gap: 2px;
+  }
+  .commercial-title-utility button {
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    justify-content: center;
+    padding: 6px;
+  }
+  .commercial-title-utility button span:last-child {
+    display: none;
+  }
+
+  .commercial-title-copy {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: auto;
+    padding: clamp(96px, 14dvh, 132px) 6vw 0;
+  }
+  .commercial-title-logo {
+    white-space: normal;
+    flex-wrap: wrap;
+    font-size: clamp(44px, 13.5vw, 68px);
+    line-height: .9;
+  }
+  .commercial-title-copy h1 {
+    margin-top: 12px;
+    font-size: clamp(29px, 8.6vw, 43px);
+    line-height: 1.08;
+  }
+  .commercial-title-english {
+    font-size: 11px !important;
+    line-height: 1.45;
+  }
+  .commercial-title-actions {
+    width: 100%;
+    max-width: 440px;
+    margin-top: 24px;
+    gap: 8px;
+  }
+  .commercial-title-action,
+  .commercial-title-action.is-primary {
+    min-height: 60px;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    padding: 7px 11px;
+  }
+  .commercial-title-action-copy strong {
+    font-size: 16px;
+  }
+  .commercial-title-action-copy small {
+    font-size: 9px;
+    line-height: 1.3;
+  }
+  .commercial-title-action em {
+    display: none;
+  }
+  .commercial-title-message,
+  .commercial-title-cast,
+  .commercial-title-site-plaque,
+  .commercial-title-open-menu,
+  .commercial-title-footer {
+    display: none !important;
+  }
+  .commercial-title-features {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    height: auto;
+    margin: 24px 6vw 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .commercial-title-features button {
+    min-height: 112px;
+  }
+  .commercial-title-features button > div {
+    left: 9px;
+    right: 34px;
+    bottom: 8px;
+  }
+  .commercial-title-features strong {
+    font-size: 12px;
+  }
+  .commercial-title-features small {
+    font-size: 8px;
+    white-space: normal;
+  }
+  .commercial-title-quick-settings {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: fit-content;
+    margin: 12px 6vw 4px auto;
+  }
+  .commercial-title-quick-settings button {
+    min-height: 36px;
+  }
+
+  .commercial-title-settings-backdrop,
+  .commercial-title-dialog-backdrop {
+    position: fixed;
+    padding:
+      max(16px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(16px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+    overflow-y: auto;
+  }
+  .commercial-title-settings,
+  .commercial-title-dialog {
+    width: min(100%, 480px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+  }
+
+  /* Non-strategy dialogue scenes remain readable without horizontal squeezing. */
+  .game-frame:not(.strategy-active) {
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    aspect-ratio: auto;
+    grid-template-rows: 52px minmax(64px, auto) auto 38px;
+    overflow-y: auto;
+  }
+  .game-header {
+    margin-inline: 4vw;
+    gap: 10px;
+  }
+  .hud-brand small,
+  .header-episode {
+    display: none;
+  }
+  .day-marker strong {
+    font-size: 24px;
+  }
+  .time-marker {
+    margin-left: auto;
+    gap: 7px;
+    font-size: 10px;
+  }
+  .scene-heading {
+    padding: 12px 4vw 8px;
+  }
+  .play-panel {
+    margin: 0 4vw;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 10px;
+    min-height: 0;
+    padding: 12px;
+  }
+  .portrait-slot,
+  .worker-mark {
+    height: 70px;
+  }
+  .dialogue-content {
+    min-height: 0;
+  }
+  .dialogue-text {
+    font-size: 14px;
+    line-height: 1.62;
+    padding: 5px 0 10px;
+  }
+  .choice-panel {
+    grid-template-columns: 1fr;
+  }
+  .choice-panel button {
+    min-height: 52px;
+  }
+  .game-footer {
+    margin-inline: 4vw;
+  }
+
+  /* Strategy mode: HUD -> compact horizontal info rail -> map -> dialogue/action sheet. */
+  .game-frame.strategy-active {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    aspect-ratio: auto;
+    overflow: hidden;
+  }
+  .strategy-shell {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .strategy-hud {
+    inset: 8px 8px auto;
+    height: 42px;
+    grid-template-columns: minmax(112px, 1fr) minmax(118px, 1.15fr) 54px;
+    gap: 5px;
+  }
+  .strategy-brand,
+  .strategy-meter,
+  .strategy-day {
+    min-width: 0;
+    padding: 0 8px;
+    border-radius: 7px;
+  }
+  .strategy-brand {
+    font-size: 11px;
+    gap: 5px;
+  }
+  .strategy-brand > div small,
+  .strategy-day span {
+    display: none;
+  }
+  .strategy-meter {
+    gap: 6px;
+    font-size: 9px;
+  }
+  .strategy-meter-track {
+    height: 6px;
+  }
+  .strategy-day strong {
+    font-size: 15px;
+  }
+
+  .strategy-rail {
+    top: 56px;
+    left: 8px;
+    right: 8px;
+    bottom: auto;
+    width: auto;
+    height: 78px;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    z-index: 22;
+  }
+  .strategy-rail::-webkit-scrollbar {
+    display: none;
+  }
+  .strategy-rail > * {
+    flex: 0 0 132px;
+    min-width: 132px;
+    height: 72px;
+    min-height: 72px;
+    overflow: hidden;
+  }
+  .strategy-panel {
+    padding: 7px 8px;
+  }
+  .strategy-panel h2 {
+    margin-bottom: 3px;
+    font-size: 10px;
+  }
+  .strategy-panel p {
+    margin: 2px 0;
+    font-size: 8px;
+    line-height: 1.25;
+  }
+  .strategy-rail button {
+    min-height: 72px;
+    grid-template-columns: 22px minmax(0,1fr) auto;
+    padding: 0 7px;
+    font-size: 9px;
+  }
+  .strategy-psi-six {
+    flex-basis: 220px;
+    min-width: 220px;
+    padding: 6px 8px;
+  }
+  .strategy-psi-six > header {
+    margin-bottom: 3px;
+  }
+  .strategy-psi-six > header strong {
+    font-size: 11px;
+  }
+  .strategy-psi-six > header small,
+  .strategy-psi-six > footer {
+    display: none;
+  }
+  .strategy-psi-six-list {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 2px 7px;
+  }
+  .strategy-psi-six-list article {
+    min-height: 18px;
+    grid-template-columns: 14px 1fr;
+    gap: 4px;
+  }
+  .strategy-psi-icon {
+    width: 13px;
+    height: 13px;
+    font-size: 7px;
+  }
+  .strategy-psi-label {
+    margin-bottom: 1px;
+  }
+  .strategy-psi-label strong,
+  .strategy-psi-label em {
+    font-size: 6px;
+  }
+  .strategy-psi-track {
+    height: 3px;
+  }
+
+  .strategy-map {
+    inset: 138px 0 42dvh 0;
+    min-height: 0;
+  }
+  .strategy-overview-minimap {
+    display: none;
+  }
+  .strategy-map-stage-card {
+    top: 6px;
+    right: 6px;
+    width: 110px;
+    min-width: 0;
+    padding: 6px 7px;
+  }
+  .strategy-map-stage-card span {
+    font-size: 7px;
+  }
+  .strategy-map-stage-card strong {
+    font-size: 9px;
+  }
+  .strategy-zone-target {
+    min-width: 70px;
+    min-height: 34px;
+    padding: 4px 5px;
+  }
+  .strategy-zone-copy strong {
+    font-size: 7px;
+  }
+  .strategy-zone-copy small {
+    display: none;
+  }
+  .strategy-map-worker.has-art {
+    width: 44px;
+    height: 58px;
+  }
+  .strategy-map-worker.has-art .strategy-worker-label {
+    min-width: 40px;
+    max-width: 76px;
+    padding: 2px 3px;
+  }
+  .strategy-worker-label strong {
+    font-size: 8px;
+  }
+  .strategy-map-worker .strategy-worker-label span {
+    display: none;
+  }
+
+  .strategy-active .scene-heading {
+    top: 143px;
+    left: 8px;
+    max-width: calc(100% - 132px);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    pointer-events: none;
+  }
+  .strategy-active .scene-heading h1 {
+    padding: 5px 8px;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .strategy-active .scene-heading .eyebrow {
+    display: none;
+  }
+
+  .strategy-active .play-panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 34dvh;
+    max-height: 42dvh;
+    margin: 0;
+    padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 10px;
+    border-radius: 14px 14px 0 0;
+    overflow-y: auto;
+  }
+  .strategy-active .portrait-slot {
+    height: 58px;
+    min-height: 58px;
+  }
+  .strategy-active .character-card {
+    padding-right: 7px;
+  }
+  .strategy-active .character-identity {
+    margin-top: 5px;
+  }
+  .strategy-active .character-identity strong {
+    font-size: 11px;
+  }
+  .strategy-active .character-identity > span:last-child,
+  .strategy-active .character-first-contact {
+    font-size: 8px;
+  }
+  .strategy-active .dialogue-content {
+    min-height: 0;
+  }
+  .strategy-active .dialogue-text {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 0 0 6px;
+  }
+  .strategy-active .continue-button {
+    min-width: 112px;
+    min-height: 44px;
+    font-size: 11px;
+  }
+
+  .strategy-action-tray,
+  .strategy-outcome-card {
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    bottom: calc(42dvh + 8px) !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 30dvh !important;
+    overflow-y: auto;
+    border-radius: 10px;
+  }
+  .strategy-action-list button,
+  .strategy-action-confirm-buttons button,
+  .strategy-outcome-card button {
+    min-height: 44px;
+  }
+  .strategy-active .game-footer {
+    top: 142px;
+    right: 6px;
+  }
+  .strategy-active .save-hint {
+    display: none;
+  }
+  .episode-scene-stamp {
+    top: 140px;
+    max-width: 76vw;
+    min-width: 0;
+  }
+  .game-hub-return {
+    left: max(8px, env(safe-area-inset-left));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    overflow: hidden;
+    color: transparent;
+    gap: 0;
+  }
+  .game-hub-return svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    flex: 0 0 auto;
+  }
+}
+
+/* Very narrow phones: one-column feature cards and simpler chrome. */
+@media (orientation: portrait) and (max-width: 420px) {
+  .commercial-title-copy {
+    padding-left: 5vw;
+    padding-right: 5vw;
+  }
+  .commercial-title-features {
+    margin-left: 5vw;
+    margin-right: 5vw;
+    grid-template-columns: 1fr;
+  }
+  .commercial-title-features button {
+    min-height: 96px;
+  }
+  .commercial-title-quick-settings {
+    margin-right: 5vw;
+  }
+  .strategy-hud {
+    grid-template-columns: minmax(105px,1fr) minmax(105px,1fr) 48px;
+  }
+  .strategy-brand {
+    font-size: 10px;
+  }
+  .strategy-rail > * {
+    flex-basis: 122px;
+    min-width: 122px;
+  }
+  .strategy-psi-six {
+    flex-basis: 208px;
+    min-width: 208px;
+  }
+  .strategy-active .play-panel {
+    grid-template-columns: 72px minmax(0,1fr);
+    padding-inline: 9px;
+  }
+}
+
+/* Tablets portrait: retain more of the tactical map and cast than on phones. */
+@media (orientation: portrait) and (min-width: 761px) and (max-width: 1100px) {
+  .game-frame {
+    width: 100%;
+    min-height: 100dvh;
+    height: 100dvh;
+    aspect-ratio: auto;
+  }
+  .strategy-map {
+    inset: 58px 8px 30dvh 168px;
+  }
+  .strategy-rail {
+    top: 58px;
+    left: 8px;
+    bottom: 12px;
+    width: 150px;
+  }
+  .strategy-active .play-panel {
+    left: 168px;
+    right: 8px;
+    bottom: 8px;
+    min-height: 24dvh;
+    max-height: 30dvh;
+  }
+  .strategy-active .scene-heading {
+    left: 176px;
+    top: 66px;
+  }
+}
+
+/* Rotation and accessibility should not leave stale transitions or inaccessible content. */
+@media (prefers-reduced-motion: reduce) {
+  .commercial-title-home,
+  .game-frame,
+  .strategy-shell,
+  .strategy-map,
+  .strategy-active .play-panel {
+    scroll-behavior: auto;
+  }
+}
