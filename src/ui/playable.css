@@ -1174,3 +1174,147 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   ) .episode-immersive-prop{animation:none!important}
   .episode-immersive-evidence-board,.episode-immersive-evidence-board *{transition:none!important}
 }
+
+
+/* EP01 late field-control arc: TBM -> restart -> stop-work -> instruction -> records. */
+.episode-immersive-scene:is(
+  [data-event="e01_08g_tbm_field_gap"],
+  [data-event="e01_08h_tbm_return"],
+  [data-event="e01_08i_restart_pressure"],
+  [data-event="e01_08j_restart_return"],
+  [data-event="e01_08m_instruction_cascade"]
+) .episode-immersive-prop{
+  animation:ep01-late-field-prop-in .4s cubic-bezier(.2,.74,.2,1) both
+}
+@keyframes ep01-late-field-prop-in{
+  from{opacity:.3;translate:0 8px;scale:.972}
+  to{translate:0 0;scale:1}
+}
+
+.episode-immersive-scene[data-event="e01_08g_tbm_field_gap"] .episode-immersive-background{object-position:59% center}
+.episode-immersive-scene[data-event="e01_08g_tbm_field_gap"] .episode-immersive-prop.prop-1{
+  left:6%;right:auto;bottom:-8%;width:34%;height:39%;opacity:.96;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08g_tbm_field_gap"] .episode-immersive-prop.prop-2{
+  left:auto;right:-3%;bottom:5%;width:31%;height:50%;opacity:.86;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08g_tbm_field_gap"] .episode-immersive-prop.prop-3{
+  left:36%;bottom:-9%;width:31%;height:35%;opacity:.83;z-index:1
+}
+
+.episode-immersive-scene[data-event="e01_08h_tbm_return"] .episode-immersive-background{object-position:53% center}
+.episode-immersive-scene[data-event="e01_08h_tbm_return"] .episode-immersive-prop.prop-1{
+  left:31%;right:auto;bottom:-8%;width:37%;height:37%;opacity:.97;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08h_tbm_return"] .episode-immersive-prop.prop-2{
+  left:auto;right:-3%;bottom:7%;width:28%;height:47%;opacity:.68;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08h_tbm_return"] .episode-immersive-prop.prop-3{
+  left:-4%;bottom:-9%;width:29%;height:35%;opacity:.76;z-index:2
+}
+
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"] .episode-immersive-background{object-position:62% center}
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"] .episode-immersive-prop.prop-1{
+  left:auto;right:-2%;bottom:5%;width:34%;height:55%;opacity:.95;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"] .episode-immersive-prop.prop-2{
+  left:4%;right:auto;bottom:-8%;width:35%;height:39%;opacity:.93;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08i_restart_pressure"] .episode-immersive-prop.prop-3{
+  left:37%;bottom:-9%;width:32%;height:36%;opacity:.9;z-index:3
+}
+
+.episode-immersive-scene[data-event="e01_08j_restart_return"] .episode-immersive-background{object-position:55% center}
+.episode-immersive-scene[data-event="e01_08j_restart_return"] .episode-immersive-prop.prop-1{
+  left:5%;right:auto;bottom:-8%;width:34%;height:38%;opacity:.98;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08j_restart_return"] .episode-immersive-prop.prop-2{
+  left:auto;right:-3%;bottom:5%;width:28%;height:48%;opacity:.72;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08j_restart_return"] .episode-immersive-prop.prop-3{
+  left:38%;bottom:-9%;width:31%;height:35%;opacity:.82;z-index:2
+}
+
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"] .episode-immersive-background{object-position:48% center}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"] .episode-immersive-prop.prop-1{
+  left:34%;right:auto;bottom:-8%;width:38%;height:36%;opacity:.92;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"] .episode-immersive-prop.prop-2{
+  left:-3%;right:auto;bottom:-7%;width:30%;height:35%;opacity:.76;z-index:2
+}
+
+.episode-immersive-scene[data-event="e01_08l_stopwork_return"] .episode-immersive-background{object-position:51% center}
+.episode-immersive-scene[data-event="e01_08l_stopwork_return"] .episode-immersive-prop.prop-1{
+  left:auto;right:-2%;bottom:-8%;width:37%;height:37%;opacity:.84;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08l_stopwork_return"] .episode-immersive-prop.prop-2{
+  left:4%;right:auto;bottom:-7%;width:32%;height:36%;opacity:.91;z-index:4
+}
+
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"] .episode-immersive-background{object-position:57% center}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"] .episode-immersive-prop.prop-1{
+  left:auto;right:1%;bottom:2%;width:31%;height:53%;opacity:.97;z-index:3
+}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"] .episode-immersive-prop.prop-2{
+  left:3%;right:auto;bottom:-9%;width:34%;height:37%;opacity:.9;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08m_instruction_cascade"] .episode-immersive-prop.prop-3{
+  left:38%;bottom:4%;width:27%;height:45%;opacity:.72;z-index:1
+}
+
+/* Record-board continuation for instruction and document-pressure returns. */
+.episode-immersive-scene:is(
+  [data-event="e01_08n_instruction_return"],
+  [data-event="e01_08o_record_pressure"],
+  [data-event="e01_08p_record_return"]
+) .episode-immersive-evidence-board{
+  right:5%;top:12%;width:34%;height:54%;opacity:.92;
+  transform:perspective(720px) rotateY(-2deg)
+}
+.episode-immersive-scene[data-event="e01_08n_instruction_return"] .episode-immersive-evidence-board{
+  right:4%;top:14%;width:31%;height:49%
+}
+.episode-immersive-scene[data-event="e01_08o_record_pressure"] .episode-immersive-evidence-board{
+  right:6%;top:11%;width:35%;height:55%
+}
+.episode-immersive-scene[data-event="e01_08p_record_return"] .episode-immersive-evidence-board{
+  right:4%;top:10%;width:36%;height:57%
+}
+.episode-immersive-scene[data-node="gap"] .sheet-a,
+.episode-immersive-scene[data-node="correction"] .sheet-a,
+.episode-immersive-scene[data-node="preserved"] .sheet-c{
+  transform:translateY(-5px) scale(1.06);filter:brightness(1.27);opacity:1
+}
+.episode-immersive-scene[data-node="chilled"] .sheet-b,
+.episode-immersive-scene[data-node="conflict"] .sheet-b{
+  transform:translateY(-5px) scale(1.06);filter:brightness(1.27);opacity:1
+}
+.episode-immersive-scene[data-node="reconstructed"] .evidence-timeline,
+.episode-immersive-scene[data-node="timeline_result"] .evidence-timeline,
+.episode-immersive-scene[data-node="timeline"] .evidence-timeline{
+  height:3px;filter:brightness(1.35);box-shadow:0 0 10px rgba(181,204,207,.18)
+}
+
+@media(max-width:760px){
+  .episode-immersive-scene:is(
+    [data-event="e01_08g_tbm_field_gap"],
+    [data-event="e01_08h_tbm_return"],
+    [data-event="e01_08i_restart_pressure"],
+    [data-event="e01_08j_restart_return"],
+    [data-event="e01_08m_instruction_cascade"]
+  ) .episode-immersive-prop.prop-3{width:36%;left:32%}
+  .episode-immersive-scene:is(
+    [data-event="e01_08n_instruction_return"],
+    [data-event="e01_08o_record_pressure"],
+    [data-event="e01_08p_record_return"]
+  ) .episode-immersive-evidence-board{right:1%;top:10%;width:38%;height:46%;opacity:.7}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene:is(
+    [data-event="e01_08g_tbm_field_gap"],
+    [data-event="e01_08h_tbm_return"],
+    [data-event="e01_08i_restart_pressure"],
+    [data-event="e01_08j_restart_return"],
+    [data-event="e01_08m_instruction_cascade"]
+  ) .episode-immersive-prop{animation:none!important}
+}
