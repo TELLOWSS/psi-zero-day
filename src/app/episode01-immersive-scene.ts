@@ -3,6 +3,7 @@ import nodeDirectionA from '../../content/episode01/node-visual-direction-a.json
 import nodeDirectionB from '../../content/episode01/node-visual-direction-b.json';
 import sceneBackgroundCatalog from '../../content/episode01/scene-background-catalog.json';
 import { episode01ChoiceVisual, type Episode01ChoiceVisualTone } from './episode01-choice-visual';
+import { episode01CharacterBlocking } from './episode01-character-blocking';
 
 export type ImmersiveSceneTone = 'neutral' | 'decision' | 'pressure' | 'resolved' | 'reflective';
 
@@ -68,6 +69,11 @@ function speakerFocus(cast: readonly string[], speakerId: string | null | undefi
   return 'right' as const;
 }
 
+function blockingFocus(side: 'far-left' | 'left' | 'center' | 'right' | 'far-right'): 'left' | 'center' | 'right' {
+  if (side === 'center') return 'center';
+  return side === 'far-left' || side === 'left' ? 'left' : 'right';
+}
+
 function fallbackShotFor(
   presentationType: string | null | undefined,
   tone: ImmersiveSceneTone,
@@ -129,7 +135,15 @@ export function episode01ImmersiveScene(
     : undefined;
 
   const shot = nodeDirective?.shot ?? fallbackShotFor(presentationType, tone, directedSubject);
-  const authoredFocus = nodeDirective?.focus ?? speakerFocus(visibleCast, directedSubject, scene.focus);
+  const subjectBlocking = directedSubject
+    ? episode01CharacterBlocking(eventId, directedSubject, directedSubject, undefined, nodeId)
+    : undefined;
+  const directedBlockingFocus = shot === 'dialogue' && subjectBlocking
+    ? blockingFocus(subjectBlocking.side)
+    : undefined;
+  const authoredFocus = directedBlockingFocus
+    ?? nodeDirective?.focus
+    ?? speakerFocus(visibleCast, directedSubject, scene.focus);
   const focus = choicePreview?.crop ?? authoredFocus;
   const fallbackCamera = fallbackCameraFor(shot, scene.camera, visibleCast.length);
   const camera = choicePreview
