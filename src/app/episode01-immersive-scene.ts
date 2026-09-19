@@ -1,6 +1,7 @@
 import plan from '../../content/episode01/immersive-scenes.json';
 import nodeDirectionA from '../../content/episode01/node-visual-direction-a.json';
 import nodeDirectionB from '../../content/episode01/node-visual-direction-b.json';
+import sceneBackgroundCatalog from '../../content/episode01/scene-background-catalog.json';
 import { episode01ChoiceVisual, type Episode01ChoiceVisualTone } from './episode01-choice-visual';
 
 export type ImmersiveSceneTone = 'neutral' | 'decision' | 'pressure' | 'resolved' | 'reflective';
@@ -10,6 +11,7 @@ export type ImmersiveSceneShot = 'establishing' | 'dialogue' | 'decision' | 'res
 export interface ImmersiveScenePlan {
   readonly event_id: string;
   readonly background_uri: string;
+  readonly background_asset_id?: string;
   readonly cast: readonly string[];
   readonly prop_uris: readonly string[];
   readonly camera: 'wide' | 'medium' | 'tight';
@@ -40,6 +42,10 @@ type NodeDirectionRecord = {
 };
 
 const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
+const sceneBackgroundByRc = Object.freeze(Object.fromEntries(
+  Object.values(sceneBackgroundCatalog.backgrounds).map(background => [background.rc_path, background.asset_id]),
+) as Readonly<Record<string, string>>);
+
 const nodeDirections = Object.freeze({
   ...(nodeDirectionA.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
   ...(nodeDirectionB.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
@@ -134,6 +140,7 @@ export function episode01ImmersiveScene(
   return Object.freeze({
     event_id: eventId,
     background_uri: scene.bg,
+    ...(sceneBackgroundByRc[scene.bg] ? { background_asset_id: sceneBackgroundByRc[scene.bg] } : {}),
     cast: Object.freeze(visibleCast),
     prop_uris: Object.freeze(propUris),
     camera,
