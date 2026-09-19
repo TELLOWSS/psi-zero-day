@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-scene-background-production-v1",
+  "intent": "Stable production slots for the eight Episode 01 immersive environments. Final WebP wins automatically; hand-authored RC SVG remains the release-candidate fallback until the final image lands.",
+  "requirements": {
+    "format": "webp",
+    "minimum_width": 1920,
+    "minimum_height": 1080,
+    "target_aspect_ratio": "16:9",
+    "visual_direction": "commercial adult-friendly 2.5D casual-strategy construction drama; realistic Korean construction-site detail without real company or site identifiers"
+  },
+  "backgrounds": {
+    "gate_dawn": {
+      "asset_id": "ep01.scene_bg.gate_dawn",
+      "final_path": "assets/episode01/cg/gate-dawn.webp",
+      "rc_path": "assets/episode01/cg/gate-dawn-rc.svg",
+      "used_by": [
+        "e01_01_arrival",
+        "e01_02_meet_kang",
+        "e01_10_next_day_tease"
+      ]
+    },
+    "ramp_entry": {
+      "asset_id": "ep01.scene_bg.ramp_entry",
+      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "rc_path": "assets/episode01/cg/ramp-entry-rc.svg",
+      "used_by": [
+        "e01_03_plan_breaks",
+        "e01_04_junho_signal",
+        "e01_08a_reporting_return"
+      ]
+    },
+    "work_yard": {
+      "asset_id": "ep01.scene_bg.work_yard",
+      "final_path": "assets/episode01/cg/work-yard.webp",
+      "rc_path": "assets/episode01/cg/work-yard-rc.svg",
+      "used_by": [
+        "e01_05_command",
+        "e01_08g_tbm_field_gap",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return",
+        "e01_08m_instruction_cascade"
+      ]
+    },
+    "concrete_pour": {
+      "asset_id": "ep01.scene_bg.concrete_pour",
+      "final_path": "assets/episode01/cg/concrete-pour.webp",
+      "rc_path": "assets/episode01/cg/concrete-pour-rc.svg",
+      "used_by": [
+        "e01_06_pump_arrival",
+        "e01_07_first_pour",
+        "e01_08_reactions"
+      ]
+    },
+    "inspection_zone": {
+      "asset_id": "ep01.scene_bg.inspection_zone",
+      "final_path": "assets/episode01/cg/inspection-zone.webp",
+      "rc_path": "assets/episode01/cg/inspection-zone-rc.svg",
+      "used_by": [
+        "e01_08b_inspection_find",
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection"
+      ]
+    },
+    "site_office": {
+      "asset_id": "ep01.scene_bg.site_office",
+      "final_path": "assets/episode01/cg/site-office.webp",
+      "rc_path": "assets/episode01/cg/site-office-rc.svg",
+      "used_by": [
+        "e01_08e_responsibility_clash",
+        "e01_08f_report_return",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return"
+      ]
+    },
+    "break_area": {
+      "asset_id": "ep01.scene_bg.break_area",
+      "final_path": "assets/episode01/cg/break-area.webp",
+      "rc_path": "assets/episode01/cg/break-area-rc.svg",
+      "used_by": [
+        "e01_08k_stopwork_aftershock",
+        "e01_08l_stopwork_return"
+      ]
+    },
+    "home_night": {
+      "asset_id": "ep01.scene_bg.home_night",
+      "final_path": "assets/episode01/cg/home-night.webp",
+      "rc_path": "assets/episode01/cg/home-night-rc.svg",
+      "used_by": [
+        "e01_09_evening"
+      ]
+    }
+  }
+}
