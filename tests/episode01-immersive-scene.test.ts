@@ -1,13 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import manifest from '../content/episode01/manifest.json';
 import plan from '../content/episode01/immersive-scenes.json';
-import { episode01ImmersiveScene, episode01ImmersiveSceneCount } from '../src/app/episode01-immersive-scene';
+import { episode01DirectedNodeCount, episode01ImmersiveScene, episode01ImmersiveSceneCount } from '../src/app/episode01-immersive-scene';
 
 describe('Episode 01 immersive scene coverage', () => {
   it('covers every authored Episode 01 event', () => {
     const ids = manifest.event_flow.map(id => id.toLowerCase());
     expect(episode01ImmersiveSceneCount).toBe(ids.length);
     for (const id of ids) expect(plan.events).toHaveProperty(id);
+  });
+
+  it('authors every live non-END node instead of relying on regex camera inference', () => {
+    expect(episode01DirectedNodeCount).toBe(146);
+    expect(episode01ImmersiveScene('e01_03_plan_breaks', 'follow_junho_result', 'SHOW_RESULT')?.authored_node_direction).toBe(true);
+    expect(episode01ImmersiveScene('e01_03_plan_breaks', 'follow_junho_result', 'SHOW_RESULT')?.tone).toBe('neutral');
+    expect(episode01ImmersiveScene('e01_08_reactions', 'kang.low', 'SHOW_DIALOGUE', 'kang_taesik')?.tone).toBe('pressure');
   });
 
   it('uses real scene art rather than the single foundation map for every event', () => {
