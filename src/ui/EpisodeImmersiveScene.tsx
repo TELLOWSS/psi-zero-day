@@ -4,6 +4,7 @@ import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
+import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from '../app/episode01-character-performance';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -127,6 +128,7 @@ export function EpisodeImmersiveScene({
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
+    data-character-performance={episode01UsesCharacterPerformance(scene.event_id) || undefined}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -196,6 +198,7 @@ export function EpisodeImmersiveScene({
       {scene.cast.map((characterId, index) => {
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
         const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
+        const performance = episode01CharacterPerformance(scene.event_id, scene.node_id, characterId, speakerId, relationshipCue);
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
@@ -204,6 +207,9 @@ export function EpisodeImmersiveScene({
         data-relationship-cue={relationshipCue}
         data-blocking-side={blocking?.side}
         data-blocking-depth={blocking?.depth}
+        data-expression={performance?.expression}
+        data-pose={performance?.pose}
+        data-presence-motion={performance?.motion}
       >
         <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
       </div>;
