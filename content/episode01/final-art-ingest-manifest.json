@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "batch_id": "episode01-final-backgrounds-generated-2026-09-19",
+  "status": "generated_locally_pending_github_binary_ingest",
+  "source": "ChatGPT image generation batch, converted to 1920x1080 WebP for runtime ingestion",
+  "assets": [
+    {
+      "filename": "break-area.webp",
+      "target_path": "public/assets/episode01/cg/break-area.webp",
+      "source_generated_file": "노을빛_건설_현장_휴게실.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 186994,
+      "sha256": "5aec396106763e0b4a8601bd450004baa8275603351ef7e78fbd816fffcf2118"
+    },
+    {
+      "filename": "concrete-pour.webp",
+      "target_path": "public/assets/episode01/cg/concrete-pour.webp",
+      "source_generated_file": "황혼의_도시_건설_현장.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 219648,
+      "sha256": "f8e3cbc6745c2b369d48b644cd9974901a85fe9ccee5ac54e74d441a59402333"
+    },
+    {
+      "filename": "gate-dawn.webp",
+      "target_path": "public/assets/episode01/cg/gate-dawn.webp",
+      "source_generated_file": "새벽_건설_현장의_관문.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 164000,
+      "sha256": "bf0d7f51abd1be209ea7d28d548cbf27f57c0cd85476dc36117ff120a8495021"
+    },
+    {
+      "filename": "home-night.webp",
+      "target_path": "public/assets/episode01/cg/home-night.webp",
+      "source_generated_file": "서울_야경이_보이는_아늑한_원룸.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 76944,
+      "sha256": "75c44aa554bfcdacbd10e4ca22bb2a5949cf8b08cedc5b8c07350a39badccf7c"
+    },
+    {
+      "filename": "inspection-zone.webp",
+      "target_path": "public/assets/episode01/cg/inspection-zone.webp",
+      "source_generated_file": "도시_건설현장과_크레인_풍경.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 216202,
+      "sha256": "29327423d047693f4015f0d5341d2ac906055fa29559489d7dc08dd31a120e95"
+    },
+    {
+      "filename": "ramp-entry.webp",
+      "target_path": "public/assets/episode01/cg/ramp-entry.webp",
+      "source_generated_file": "새벽_건설_현장_램프.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 229240,
+      "sha256": "382859fff69e1efadf21089031788f4fafc465601c7b9b006d2d333ecfa35906"
+    },
+    {
+      "filename": "site-office.webp",
+      "target_path": "public/assets/episode01/cg/site-office.webp",
+      "source_generated_file": "건설_현장_사무실_회의실_풍경.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 89936,
+      "sha256": "57fc86a99c4a28deb7d42b330a193ad67acbc7032c4534151dec9c91ae8f9434"
+    },
+    {
+      "filename": "work-yard.webp",
+      "target_path": "public/assets/episode01/cg/work-yard.webp",
+      "source_generated_file": "안개_낀_도시_건설_현장.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 216874,
+      "sha256": "b994d768a856227aa62924824032951b9ac5cd95714b2ba75b77934c0880d22f"
+    }
+  ]
+}
