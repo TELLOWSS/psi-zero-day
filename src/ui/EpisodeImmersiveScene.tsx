@@ -1,6 +1,7 @@
 import type { AssetResolver } from '../app/episode-visual-assets';
 import { characterMapUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
+import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
 const EPISODE01_MEMORY_FRAMES = [
@@ -97,6 +98,7 @@ export function EpisodeImmersiveScene({
   readonly t: (id: string) => string;
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
+  useEpisode01ScenePreload(eventId, resolve);
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
