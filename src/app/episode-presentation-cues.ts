@@ -45,6 +45,17 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
   e01_10_next_day_tease: cue('gate_queue', 'scene_shift', 'ep01.audio.gate_queue', 0.46),
 });
 
+const NODE_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = Object.freeze({
+  'e01_06_pump_arrival/near_miss': cue('stopwork_silence_drop', 'pressure', 'ep01.audio.stopwork_silence_drop', 0.48),
+});
+
+export function episodeNodeAudioCue(
+  eventId: string | null | undefined,
+  nodeId: string | null | undefined,
+): EpisodePresentationAudioCue | undefined {
+  return eventId && nodeId ? NODE_AUDIO_CUES[`${eventId}/${nodeId}`] : undefined;
+}
+
 /**
  * Presentation-only cue map. If a production audio asset has not been supplied yet,
  * useEpisodeAudio automatically falls back to the lightweight WebAudio cue.
