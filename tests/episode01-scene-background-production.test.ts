@@ -51,6 +51,18 @@ describe('Episode 01 immersive production background contract', () => {
     expect(episode01UsesEvidenceBoard('e01_08d_reinspection')).toBe(false);
   });
 
+  it('locks the late field-control arc to visible hazards, controls and record traces', () => {
+    for (const eventId of ['e01_08g_tbm_field_gap', 'e01_08h_tbm_return', 'e01_08i_restart_pressure', 'e01_08j_restart_return', 'e01_08m_instruction_cascade'] as const) {
+      expect(scenes.events[eventId].props.length, eventId).toBeGreaterThanOrEqual(3);
+    }
+    for (const eventId of ['e01_08k_stopwork_aftershock', 'e01_08l_stopwork_return'] as const) {
+      expect(scenes.events[eventId].props.length, eventId).toBeGreaterThanOrEqual(2);
+    }
+    expect(episode01UsesEvidenceBoard('e01_08n_instruction_return')).toBe(true);
+    expect(episode01UsesEvidenceBoard('e01_08o_record_pressure')).toBe(true);
+    expect(episode01UsesEvidenceBoard('e01_08p_record_return')).toBe(true);
+  });
+
   it('keeps catalog usage synchronized with the actual immersive event map', () => {
     const actualByRc = new Map<string, string[]>();
     for (const [eventId, scene] of Object.entries(scenes.events)) {
