@@ -6,6 +6,7 @@ import {
   episode01UsesCharacterPerformance,
 } from '../src/app/episode01-character-performance';
 import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
+import scenes from '../content/episode01/immersive-scenes.json';
 
 describe('Episode 01 cinematic character performance', () => {
   it('keeps the approved five-expression vocabulary', () => {
@@ -135,4 +136,38 @@ describe('Episode 01 cinematic character performance', () => {
     expect(html).toContain('lim-junho-concerned.webp');
   });
 
+  it('directs responsibility, instruction and record pressure as distinct human performances', () => {
+    expect(episode01CharacterPerformance('e01_08e_responsibility_clash', 'defensive_result', 'oh_seungjae')).toEqual({
+      expression: 'conflict',
+      pose: 'press',
+      motion: 'hold',
+    });
+    expect(episode01CharacterPerformance('e01_08m_instruction_cascade', 'blame_worker_result', 'lim_junho')).toEqual({
+      expression: 'concern',
+      pose: 'withdraw',
+      motion: 'withdraw',
+    });
+    expect(episode01CharacterPerformance('e01_08p_record_return', 'preserved', 'player')).toEqual({
+      expression: 'resolve',
+      pose: 'document',
+      motion: 'hold',
+    });
+  });
+
+  it('covers every cast member in the authored late responsibility-to-record arc', () => {
+    const events = [
+      'e01_08e_responsibility_clash',
+      'e01_08f_report_return',
+      'e01_08m_instruction_cascade',
+      'e01_08n_instruction_return',
+      'e01_08o_record_pressure',
+      'e01_08p_record_return',
+    ] as const;
+    for (const eventId of events) {
+      expect(episode01UsesCharacterPerformance(eventId)).toBe(true);
+      for (const characterId of scenes.events[eventId].cast) {
+        expect(episode01CharacterPerformance(eventId, null, characterId), `${eventId}:${characterId}`).toBeDefined();
+      }
+    }
+  });
 });
