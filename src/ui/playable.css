@@ -898,3 +898,84 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     radial-gradient(circle at 72% 23%,rgba(91,112,181,.18),transparent 36%),
     linear-gradient(180deg,rgba(27,32,65,.2),rgba(8,10,23,.28));
 }
+
+
+/* EP01 priority multi-plane staging: 07:18 conflict -> junior signal -> command -> pump -> first pour. */
+.episode-immersive-prop.prop-3{
+  position:absolute;object-fit:contain;left:35%;bottom:-3%;width:min(30%,320px);height:42%;
+  opacity:.88;filter:drop-shadow(0 14px 16px rgba(0,0,0,.4))
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-background{object-position:46% center}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-1{
+  left:-1%;right:auto;bottom:-7%;width:34%;height:54%;opacity:.98;z-index:3
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-2{
+  left:auto;right:-2%;bottom:5%;width:28%;height:48%;opacity:.92;z-index:2
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-3{
+  left:39%;bottom:28%;width:17%;height:28%;opacity:.72;z-index:1
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-character.cast-1{left:10%}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-character.cast-2{left:28%}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-character.cast-3{right:25%}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-character.cast-4{right:8%}
+
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background{object-position:58% center}
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1{
+  left:-4%;right:auto;bottom:3%;width:34%;height:52%;opacity:.92
+}
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-2{
+  left:auto;right:1%;bottom:-6%;width:32%;height:48%;opacity:.96
+}
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-character.cast-1{left:20%}
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-character.cast-2{left:46%;z-index:8;transform:scale(1.06)}
+.episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-character.cast-3{right:4%;opacity:.88}
+
+.episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-background{object-position:50% center}
+.episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-prop.prop-1{
+  left:-2%;right:auto;bottom:-8%;width:31%;height:48%;opacity:.94
+}
+.episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-prop.prop-2{
+  left:auto;right:-3%;bottom:9%;width:27%;height:43%;opacity:.88
+}
+.episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-prop.prop-3{
+  left:35%;bottom:-10%;width:32%;height:34%;opacity:.96
+}
+
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-background{object-position:63% center}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-prop.prop-1{
+  left:8%;right:auto;bottom:-10%;width:38%;height:38%;opacity:.98
+}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-prop.prop-2{
+  left:auto;right:-5%;bottom:8%;width:32%;height:50%;opacity:.93
+}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-prop.prop-3{
+  left:42%;bottom:-8%;width:30%;height:34%;opacity:.9
+}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-character.cast-1{left:4%}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-character.cast-2{left:23%}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-character.cast-3{right:25%}
+.episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-character.cast-4{right:6%}
+
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-background{object-position:54% center}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-prop.prop-1{
+  left:-2%;right:auto;bottom:-9%;width:39%;height:39%;opacity:.96
+}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-prop.prop-2{
+  left:auto;right:-2%;bottom:-5%;width:34%;height:40%;opacity:.91
+}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-character.cast-1{left:6%}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-character.cast-2{left:26%}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-character.cast-3{right:24%}
+.episode-immersive-scene[data-event="e01_07_first_pour"] .episode-immersive-character.cast-4{right:5%}
+
+@media(max-width:760px){
+  .episode-immersive-prop.prop-3{width:34%;height:35%}
+  .episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-1{width:37%;left:-5%}
+  .episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-2{width:31%;right:-6%}
+  .episode-immersive-scene[data-event="e01_03_plan_breaks"] .episode-immersive-prop.prop-3{left:39%;width:22%}
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1{width:38%;left:-8%}
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-2{width:35%;right:-5%}
+  .episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-prop.prop-3,
+  .episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-prop.prop-3{width:38%;left:31%}
+}
