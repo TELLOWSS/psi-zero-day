@@ -1,7 +1,8 @@
 import type { AssetResolver } from '../app/episode-visual-assets';
-import { characterMapUri } from '../app/episode-visual-assets';
+import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
+import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -106,6 +107,8 @@ export function EpisodeImmersiveScene({
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
   const cinematicTrace = episode01CinematicTrace(scene.event_id, scene.node_id);
+  const locator = episode01ImmersiveLocator(scene.event_id);
+  const productionMapUri = locator ? episode01BackgroundUri(resolve) : undefined;
 
   return <figure
     className="episode-immersive-scene"
@@ -168,6 +171,18 @@ export function EpisodeImmersiveScene({
           <b>{t(`ui.psi_trace.kind.${item.kind}`)}</b>
           <em>{t(item.label_text_id)}</em>
         </span>)}
+      </div>
+    </aside> : null}
+    {locator ? <aside
+      className="episode-scene-minimap"
+      data-side={cinematicTrace ? (scene.focus === 'right' ? 'right' : 'left') : 'right'}
+      data-anchor={locator.anchor}
+      aria-label={t('ui.scene_minimap.title')}
+    >
+      <header><strong>{t('ui.scene_minimap.title')}</strong><span>{t(`ui.strategy.zone.${locator.anchor}`)}</span></header>
+      <div>
+        <VisualImage uri={productionMapUri} alt="" className="episode-scene-minimap-art" />
+        <i className="episode-scene-minimap-marker" style={locator.marker_style} />
       </div>
     </aside> : null}
     <div className="episode-immersive-props" aria-hidden="true">
