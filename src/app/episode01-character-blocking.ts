@@ -51,6 +51,45 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
 
 
 const BLOCKING_BY_EVENT_NODE: Readonly<Record<string, Readonly<Record<string, BlockingMap>>>> = Object.freeze({
+  e01_08b_inspection_find: Object.freeze({
+    full_stop_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      seo_jeongmin: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+    quick_photo_result: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      seo_jeongmin: Object.freeze({ side: 'far-left', depth: 'background' }),
+      lee_jaehoon: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+    sequence_result: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      seo_jeongmin: Object.freeze({ side: 'left', depth: 'midground' }),
+      lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+    }),
+  }),
+  e01_08d_reinspection: Object.freeze({
+    full: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+      seo_jeongmin: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+    }),
+    reject: Object.freeze({
+      player: Object.freeze({ side: 'far-left', depth: 'background' }),
+      seo_jeongmin: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-right', depth: 'midground' }),
+    }),
+    lee_rework: Object.freeze({
+      player: Object.freeze({ side: 'far-left', depth: 'background' }),
+      seo_jeongmin: Object.freeze({ side: 'right', depth: 'midground' }),
+      lee_jaehoon: Object.freeze({ side: 'center', depth: 'foreground' }),
+    }),
+    sequence: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      seo_jeongmin: Object.freeze({ side: 'left', depth: 'midground' }),
+      lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+    }),
+  }),
   e01_08j_restart_return: Object.freeze({
     premature: Object.freeze({
       lee_jaehoon: Object.freeze({ side: 'left', depth: 'foreground' }),
