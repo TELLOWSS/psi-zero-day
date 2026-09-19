@@ -45,6 +45,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Report Episode 01 production readiness
+        run: npm run production:status
+
       - name: Upload verified web bundle
         uses: actions/upload-artifact@v4
         with:
