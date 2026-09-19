@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import sceneComposition from '../content/episode01/scene-composition.json';
 import backgrounds from '../content/episode01/scene-background-catalog.json';
 import { episode01ImmersiveLocator } from '../src/app/episode01-immersive-locator';
+import { projectEpisode01Signals } from '../src/app/strategy-signals';
+import { projectEpisode01CharacterPlacements } from '../src/app/strategy-placements';
 
 describe('Episode 01 map-to-immersive location coherence', () => {
   it('keeps site-office immersive events anchored to the office on the Production Map', () => {
@@ -41,6 +43,35 @@ describe('Episode 01 map-to-immersive location coherence', () => {
 
   it('does not show a construction-site locator during the home-night reflection scene', () => {
     expect(episode01ImmersiveLocator('e01_09_evening')).toBeUndefined();
+  });
+
+  it('keeps inspection strategy signals and inspector proximity on the inspection anchor', () => {
+    const inspectionSignals = projectEpisode01Signals('e01_08b_inspection_find');
+    expect(inspectionSignals).toEqual([
+      expect.objectContaining({
+        signal_id: 'signal.inspection_access',
+        anchor: 'inspection',
+      }),
+    ]);
+
+    const reinspectionSignals = projectEpisode01Signals('e01_08d_reinspection');
+    expect(reinspectionSignals).toEqual([
+      expect.objectContaining({
+        signal_id: 'signal.reinspection_access',
+        anchor: 'inspection',
+      }),
+    ]);
+
+    const placements = projectEpisode01CharacterPlacements(
+      ['seo_jeongmin'],
+      {},
+      inspectionSignals,
+    );
+    expect(placements[0]).toMatchObject({
+      character_id: 'seo_jeongmin',
+      anchor: 'inspection',
+      nearby_signal_ids: ['signal.inspection_access'],
+    });
   });
 
 });
