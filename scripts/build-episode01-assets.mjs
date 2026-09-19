@@ -6,6 +6,7 @@ import { isWebP, webPDimensions, webPHasAlpha } from './webp-dimensions.mjs';
 const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
 const elementCatalogPath = path.join(root, 'content/episode01/scene-element-catalog.json');
+const sceneBackgroundCatalogPath = path.join(root, 'content/episode01/scene-background-catalog.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
 const fullProductionCheck = process.argv.includes('--production-check');
@@ -14,6 +15,7 @@ const playerProductionCheck = process.argv.includes('--production-player-check')
 const productionCheck = fullProductionCheck || batchAProductionCheck || playerProductionCheck;
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
 const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
+const sceneBackgroundCatalog = JSON.parse(await readFile(sceneBackgroundCatalogPath, 'utf8'));
 
 const planned = [];
 const dialogueArt = JSON.parse(await readFile(path.join(root, 'content/episode01/dialogue-art.json'), 'utf8'));
@@ -50,6 +52,18 @@ for (const [backgroundId, background] of Object.entries(plan.backgrounds ?? {}))
     preload_policy: 'required',
     source: `${backgroundId}:background`,
     production_scope: 'core',
+    allow_rc_fallback: true,
+  });
+}
+for (const [backgroundKey, definition] of Object.entries(sceneBackgroundCatalog.backgrounds ?? {})) {
+  if (!definition?.asset_id || !definition?.final_path) continue;
+  planned.push({
+    asset_id: definition.asset_id,
+    uri: definition.final_path,
+    group_id: 'ep01.scene_backgrounds',
+    preload_policy: 'next_scene',
+    source: `scene_background:${backgroundKey}`,
+    production_scope: 'scene-background',
     allow_rc_fallback: true,
   });
 }
