@@ -8,6 +8,7 @@ import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
+import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -39,6 +40,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
   const [loading, setLoading] = useState(false);
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
+  const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const resolve = (id: string) => session.assetUri(id);
   const cinematicBackground = episode01BackgroundUri(resolve);
   const preloadUris = [
@@ -86,12 +88,20 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
     <PlayableEpisode session={session} />
     <button className="game-hub-return" onClick={() => setInGame(false)} type="button"><HubIcon kind="home" />{session.t('ui.hub.return')}</button>
+    <button
+      className="game-audio-toggle"
+      type="button"
+      aria-pressed={audioMuted}
+      aria-label={session.t(audioMuted ? 'ui.audio.toggle.off' : 'ui.audio.toggle.on')}
+      onClick={() => setAudioMuted(!audioMuted)}
+    ><span aria-hidden="true">SOUND</span><b>{audioMuted ? 'OFF' : 'ON'}</b></button>
   </Suspense>;
   return <GameHub session={session} onPlay={play} onNewGame={newGame} />;
 }
 
 export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
+  const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
@@ -254,6 +264,9 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
       <button type="button" aria-pressed={castQuotesEnabled} onClick={() => setCastQuotesEnabled(value => !value)}>
         <span>{t('ui.title.settings.quotes')}</span><b>{castQuotesEnabled ? 'ON' : 'OFF'}</b>
       </button>
+      <button type="button" aria-pressed={!audioMuted} onClick={() => setAudioMuted(!audioMuted)}>
+        <span>{t('ui.title.settings.audio')}</span><b>{audioMuted ? 'OFF' : 'ON'}</b>
+      </button>
     </div>
 
     <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
@@ -272,6 +285,10 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
         <label>
           <div><strong>{t('ui.title.settings.quotes')}</strong><small>{t('ui.title.settings.quotes.hint')}</small></div>
           <input type="checkbox" checked={castQuotesEnabled} onChange={event => setCastQuotesEnabled(event.currentTarget.checked)} />
+        </label>
+        <label>
+          <div><strong>{t('ui.title.settings.audio')}</strong><small>{t('ui.title.settings.audio.hint')}</small></div>
+          <input type="checkbox" checked={!audioMuted} onChange={event => setAudioMuted(!event.currentTarget.checked)} />
         </label>
         <button type="button" onClick={() => setShowTitleSettings(false)}>{t('ui.title.settings.close')}</button>
       </section>
