@@ -1,7 +1,8 @@
 import type { Id, TextId } from '../domain/common';
+import type { StrategyZoneAnchorId } from './production-map';
 
 export type StrategySignalKind = 'access' | 'ramp' | 'overlap' | 'vehicle';
-export type StrategySignalAnchor = 'entry' | 'ramp' | 'yard' | 'gate' | 'inspection';
+export type StrategySignalAnchor = StrategyZoneAnchorId;
 
 export interface StrategySignal {
   readonly signal_id: Id;
