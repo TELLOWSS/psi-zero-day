@@ -31,7 +31,19 @@ jobs:
         run: |
           npm run assets:scene-background-brief-check
           npm run assets:scene-background-imagegen-check
-          npm run assets:scene-background-production-check
+          npm run assets:scene-background-status
+      - name: Enforce complete final-art batch when WebP delivery starts
+        shell: bash
+        run: |
+          count=$(find public/assets/episode01/cg -maxdepth 1 -type f -name '*.webp' | wc -l | tr -d ' ')
+          if [ "$count" = "0" ]; then
+            echo "No final Episode 01 background batch has landed yet; RC fallback remains active."
+          elif [ "$count" = "8" ]; then
+            npm run assets:scene-background-production-check
+          else
+            echo "Partial final-art batch detected: $count/8 WebP backgrounds. Deliver either 0 or all 8."
+            exit 1
+          fi
       - name: Rebuild and verify manifest
         run: |
           npm run assets:embedded
