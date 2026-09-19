@@ -979,3 +979,48 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-scene[data-event="e01_05_command"] .episode-immersive-prop.prop-3,
   .episode-immersive-scene[data-event="e01_06_pump_arrival"] .episode-immersive-prop.prop-3{width:38%;left:31%}
 }
+
+
+/* EP01 priority scene cut motion: subtle depth cue on each node remount. */
+.episode-immersive-scene:is(
+  [data-event="e01_03_plan_breaks"],
+  [data-event="e01_04_junho_signal"],
+  [data-event="e01_05_command"],
+  [data-event="e01_06_pump_arrival"],
+  [data-event="e01_07_first_pour"]
+) .episode-immersive-background{
+  animation:ep01-priority-bg-cut .58s cubic-bezier(.2,.72,.2,1) both;
+}
+.episode-immersive-scene:is(
+  [data-event="e01_03_plan_breaks"],
+  [data-event="e01_04_junho_signal"],
+  [data-event="e01_05_command"],
+  [data-event="e01_06_pump_arrival"],
+  [data-event="e01_07_first_pour"]
+) .episode-immersive-prop{
+  animation:ep01-priority-prop-cut .48s cubic-bezier(.2,.76,.2,1) both;
+}
+.episode-immersive-scene:is(
+  [data-event="e01_03_plan_breaks"],
+  [data-event="e01_04_junho_signal"],
+  [data-event="e01_05_command"],
+  [data-event="e01_06_pump_arrival"],
+  [data-event="e01_07_first_pour"]
+) .episode-immersive-prop.prop-2{animation-delay:.035s}
+.episode-immersive-scene:is(
+  [data-event="e01_03_plan_breaks"],
+  [data-event="e01_05_command"],
+  [data-event="e01_06_pump_arrival"]
+) .episode-immersive-prop.prop-3{animation-delay:.07s}
+@keyframes ep01-priority-bg-cut{
+  from{filter:saturate(.92) contrast(1.02) brightness(.82);scale:1.045}
+  to{filter:saturate(1.02) contrast(1.06) brightness(.92);scale:1}
+}
+@keyframes ep01-priority-prop-cut{
+  from{opacity:.35;translate:0 10px;scale:.965}
+  to{translate:0 0;scale:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene .episode-immersive-background,
+  .episode-immersive-scene .episode-immersive-prop{animation:none!important}
+}
