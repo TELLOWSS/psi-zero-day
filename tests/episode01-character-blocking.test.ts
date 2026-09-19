@@ -1,8 +1,11 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import {
   episode01CharacterBlocking,
   episode01UsesCharacterBlocking,
 } from '../src/app/episode01-character-blocking';
+import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 cinematic character blocking', () => {
   it('uses authored identity-based positions for inspection scenes', () => {
@@ -69,4 +72,31 @@ describe('Episode 01 cinematic character blocking', () => {
     expect(episode01UsesCharacterBlocking('e01_07_first_pour')).toBe(false);
     expect(episode01CharacterBlocking('e01_07_first_pour', 'player')).toBeUndefined();
   });
+  it('renders authored blocking metadata into the immersive character layers', () => {
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_08k_stopwork_aftershock',
+      nodeId: 'protect_process_result',
+      eventTitle: '작업중지 이후',
+      resolve: () => undefined,
+      t: (id: string) => id,
+    }));
+
+    expect(html).toContain('data-character-blocking="true"');
+    expect(html).toContain('data-character="player"');
+    expect(html).toContain('data-character="lim_junho"');
+    expect(html).toContain('data-blocking-side="left" data-blocking-depth="foreground"');
+    expect(html).toContain('data-blocking-side="right" data-blocking-depth="foreground"');
+  });
+
+  it('keeps stop-work return outcomes spatially distinct', () => {
+    expect(episode01CharacterBlocking('e01_08l_stopwork_return', 'lim_junho', null, undefined, 'silenced')).toEqual({
+      side: 'far-right',
+      depth: 'background',
+    });
+    expect(episode01CharacterBlocking('e01_08l_stopwork_return', 'lim_junho', null, undefined, 'route')).toEqual({
+      side: 'right',
+      depth: 'foreground',
+    });
+  });
+
 });
