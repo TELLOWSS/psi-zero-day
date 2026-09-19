@@ -88,6 +88,17 @@ jobs:
           npm run assets:vector
           npm run assets:manifest
 
+      - name: Mark exact final-art batch as ingested
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path='content/episode01/final-art-ingest-manifest.json';
+          const manifest=JSON.parse(fs.readFileSync(path,'utf8'));
+          manifest.status='exact_archive_verified_github_ingested';
+          manifest.verification={...manifest.verification,ingested_at:new Date().toISOString()};
+          fs.writeFileSync(path,JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
       - name: Run Episode 01 visual regression
         run: npm run test:episode01-visual
 
@@ -98,7 +109,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/assets/episode01/cg/*.webp content/episode01/assets.json
+          git add public/assets/episode01/cg/*.webp content/episode01/assets.json content/episode01/final-art-ingest-manifest.json
           if git diff --cached --quiet; then
             echo "Final art is already ingested."
           else
