@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
-  "art_direction": "Episode 01 immersive scene compositor: stable production background asset slot (final WebP when present, hand-authored RC SVG fallback) + production character/prop WebP layers + node-specific mood/focus.",
+  "art_direction": "Episode 01 immersive scene compositor: stable production background asset slot + authored multi-plane field props + production character WebP layers + node-specific mood/focus.",
   "rules": [
     "Every authored Episode 01 event has a visual scene.",
     "Dialogue nodes spotlight the actual speaker.",
     "Choice nodes visually tighten framing before the decision.",
     "Result nodes change grade/focus from the selected result node instead of showing a generic static background.",
     "Visuals never label a choice correct or incorrect.",
-    "Each environment resolves through a stable production background asset id; final WebP replaces RC without event/content changes."
+    "Each environment resolves through a stable production background asset id; final WebP replaces RC without event/content changes.",
+    "Priority construction beats use at least two independently positioned foreground/midground field elements so the scene reads as a place, not a flat backdrop."
   ],
   "events": {
     "e01_01_arrival": {
@@ -38,7 +39,9 @@
         "yoon_sungho"
       ],
       "props": [
-        "assets/episode01/scene-elements/material-stack.webp"
+        "assets/episode01/scene-elements/material-stack.webp",
+        "assets/episode01/scene-elements/vehicle-overlap.webp",
+        "assets/episode01/scene-elements/site-gate.webp"
       ],
       "camera": "wide",
       "focus": "center"
@@ -51,7 +54,8 @@
         "choi_minseok"
       ],
       "props": [
-        "assets/episode01/scene-elements/vehicle-overlap.webp"
+        "assets/episode01/scene-elements/vehicle-overlap.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",
       "focus": "right"
@@ -66,7 +70,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/material-stack.webp",
-        "assets/episode01/scene-elements/vehicle-overlap.webp"
+        "assets/episode01/scene-elements/vehicle-overlap.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "wide",
       "focus": "center"
@@ -81,7 +86,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/access-barrier.webp",
-        "assets/episode01/scene-elements/vehicle-overlap.webp"
+        "assets/episode01/scene-elements/vehicle-overlap.webp",
+        "assets/episode01/scene-elements/exclusion-zone.webp"
       ],
       "camera": "wide",
       "focus": "right"
@@ -95,7 +101,8 @@
         "lim_junho"
       ],
       "props": [
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/exclusion-zone.webp"
       ],
       "camera": "wide",
       "focus": "center"
