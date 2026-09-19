@@ -36,6 +36,7 @@ export function EpisodeImmersiveScene({
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   if (!scene) return null;
+  const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
 
   return <figure
     className="episode-immersive-scene"
@@ -50,7 +51,7 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     key={`${scene.event_id}:${scene.node_id ?? 'entry'}:${scene.tone}`}
   >
-    <VisualImage uri={scene.background_uri} alt="" className="episode-immersive-background" />
+    <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
     <div className="episode-immersive-props" aria-hidden="true">
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
