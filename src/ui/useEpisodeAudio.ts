@@ -9,6 +9,8 @@ export interface PresentationAudioCue {
   readonly gain?: number;
 }
 
+export type UiAudioTimbre = 'clean' | 'radio' | 'pressure' | 'air';
+
 type AssetResolver = (assetId: string) => string | undefined;
 
 const CUE_PROFILE: Readonly<Record<UiAudioCue, readonly [number, number, number]>> = {
@@ -18,13 +20,43 @@ const CUE_PROFILE: Readonly<Record<UiAudioCue, readonly [number, number, number]
   result_neutral: [430, 430, 0.07],
   continue: [520, 650, 0.045],
   character_intro: [360, 620, 0.085],
-  radio_signal: [980, 1320, 0.055],
-  pressure: [210, 170, 0.13],
-  scene_shift: [290, 470, 0.12],
+  radio_signal: [980, 1320, 0.075],
+  pressure: [118, 82, 0.18],
+  scene_shift: [250, 430, 0.15],
+};
+
+const CUE_TIMBRE: Readonly<Record<UiAudioCue, UiAudioTimbre>> = {
+  execute: 'clean',
+  result_positive: 'clean',
+  result_negative: 'clean',
+  result_neutral: 'clean',
+  continue: 'clean',
+  character_intro: 'clean',
+  radio_signal: 'radio',
+  pressure: 'pressure',
+  scene_shift: 'air',
 };
 
 export function uiAudioCueProfile(cue: UiAudioCue): readonly [number, number, number] {
   return CUE_PROFILE[cue];
+}
+
+export function uiAudioCueTimbre(cue: UiAudioCue): UiAudioTimbre {
+  return CUE_TIMBRE[cue];
+}
+
+function syntheticNoise(context: AudioContext, duration: number) {
+  const frames = Math.max(1, Math.ceil(context.sampleRate * duration));
+  const buffer = context.createBuffer(1, frames, context.sampleRate);
+  const channel = buffer.getChannelData(0);
+  let seed = 0x505349;
+  for (let index = 0; index < frames; index += 1) {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    channel[index] = ((seed / 0xffffffff) * 2 - 1) * (1 - index / frames);
+  }
+  const source = context.createBufferSource();
+  source.buffer = buffer;
+  return source;
 }
 
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
@@ -102,21 +134,50 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   const playUiCue = useCallback((cue: UiAudioCue) => {
     if (audio?.muted || typeof window === 'undefined' || typeof window.AudioContext === 'undefined') return;
     const [startHz, endHz, duration] = CUE_PROFILE[cue];
+    const timbre = CUE_TIMBRE[cue];
     const context = contextRef.current ?? new window.AudioContext();
     contextRef.current = context;
     if (context.state === 'suspended') void context.resume();
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
+
     const now = context.currentTime;
-    const volume = Math.max(0.008, Math.min(0.035, (audio?.volumes.master ?? 1) * (audio?.volumes.sfx ?? 1) * 0.025));
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(startHz, now);
+    const baseVolume = Math.max(0.006, Math.min(0.036,
+      (audio?.volumes.master ?? 1) * (audio?.volumes.sfx ?? 1) * 0.026));
+
+    const oscillator = context.createOscillator();
+    const toneGain = context.createGain();
+    oscillator.type = timbre === 'radio' ? 'square' : timbre === 'pressure' ? 'triangle' : 'sine';
+    oscillator.frequency.setValueAtTime(Math.max(1, startHz), now);
     oscillator.frequency.exponentialRampToValueAtTime(Math.max(1, endHz), now + duration);
-    gain.gain.setValueAtTime(volume, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-    oscillator.connect(gain).connect(context.destination);
+    toneGain.gain.setValueAtTime(baseVolume * (timbre === 'pressure' ? 0.72 : 1), now);
+    toneGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    oscillator.connect(toneGain).connect(context.destination);
     oscillator.start(now);
     oscillator.stop(now + duration);
+
+    if (timbre !== 'clean') {
+      const noise = syntheticNoise(context, duration);
+      const filter = context.createBiquadFilter();
+      const noiseGain = context.createGain();
+      if (timbre === 'radio') {
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1450, now);
+        filter.Q.setValueAtTime(1.8, now);
+        noiseGain.gain.setValueAtTime(baseVolume * 0.72, now);
+      } else if (timbre === 'pressure') {
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(240, now);
+        noiseGain.gain.setValueAtTime(baseVolume * 0.55, now);
+      } else {
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(620, now);
+        filter.Q.setValueAtTime(0.65, now);
+        noiseGain.gain.setValueAtTime(baseVolume * 0.42, now);
+      }
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      noise.connect(filter).connect(noiseGain).connect(context.destination);
+      noise.start(now);
+      noise.stop(now + duration);
+    }
   }, [audio?.muted, audio?.volumes.master, audio?.volumes.sfx]);
 
   const playPresentationCue = useCallback((cue: PresentationAudioCue) => {
