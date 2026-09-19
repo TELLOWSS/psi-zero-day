@@ -119,7 +119,7 @@ export function EpisodeImmersiveScene({
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
     data-authored-node={scene.authored_node_direction || undefined}
-    key={`${scene.event_id}:${scene.node_id ?? 'entry'}:${scene.tone}`}
+    key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
