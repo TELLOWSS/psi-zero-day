@@ -33,10 +33,7 @@
   font-weight: 900;
 }
 .strategy-risk-signal > strong { overflow: hidden; text-overflow: ellipsis; }
-.signal-entry { left: 58%; top: 63%; }
-.signal-ramp { left: 43%; top: 53%; }
-.signal-yard { left: 30%; top: 67%; }
-.signal-gate { left: 76%; top: 70%; }
+/* Signal coordinates are supplied inline by the Production Map anchor contract. */
 @keyframes strategy-signal-pulse {
   0%, 100% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-3px) scale(1.03); }
