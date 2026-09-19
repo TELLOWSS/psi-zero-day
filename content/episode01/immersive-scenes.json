@@ -8,7 +8,9 @@
     "Result nodes change grade/focus from the selected result node instead of showing a generic static background.",
     "Visuals never label a choice correct or incorrect.",
     "Each environment resolves through a stable production background asset id; final WebP replaces RC without event/content changes.",
-    "Priority construction beats use at least two independently positioned foreground/midground field elements so the scene reads as a place, not a flat backdrop."
+    "Priority construction beats use at least two independently positioned foreground/midground field elements so the scene reads as a place, not a flat backdrop.",
+    "Inspection conflict beats keep hazard evidence and control measures visible at the same time so field pressure and safety control remain legible together.",
+    "Responsibility/report beats add a neutral evidence-board layer for records and timeline context; the board never marks a side as correct."
   ],
   "events": {
     "e01_01_arrival": {
@@ -140,7 +142,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/open-edge.webp",
-        "assets/episode01/scene-elements/wet-floor.webp"
+        "assets/episode01/scene-elements/wet-floor.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",
       "focus": "right"
@@ -153,7 +156,9 @@
         "seo_jeongmin"
       ],
       "props": [
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/wet-floor.webp"
       ],
       "camera": "tight",
       "focus": "center"
@@ -167,7 +172,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/access-barrier.webp",
-        "assets/episode01/scene-elements/open-edge.webp"
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/wet-floor.webp"
       ],
       "camera": "medium",
       "focus": "center"
