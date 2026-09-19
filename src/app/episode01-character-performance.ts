@@ -97,6 +97,9 @@ const EVENT_BASE = Object.freeze({
     kang_taesik: { pose: 'listen', expression: 'concern' },
     player: { pose: 'document', expression: 'neutral' },
   }),
+  e01_10_next_day_tease: Object.freeze({
+    player: { pose: 'reengage', expression: 'neutral', motion: 'enter' },
+  }),
 } satisfies Record<string, CharacterPatchMap>);
 
 const NODE_PATCHES = Object.freeze({
