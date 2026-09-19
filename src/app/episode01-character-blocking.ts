@@ -83,6 +83,9 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
     kang_taesik: Object.freeze({ side: 'right', depth: 'midground' }),
     player: Object.freeze({ side: 'far-right', depth: 'foreground' }),
   }),
+  e01_10_next_day_tease: Object.freeze({
+    player: Object.freeze({ side: 'center', depth: 'foreground' }),
+  }),
 });
 
 
