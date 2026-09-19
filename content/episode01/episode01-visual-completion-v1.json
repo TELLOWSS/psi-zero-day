@@ -33,7 +33,9 @@
     "production_scene_background_auto_upgrade": true,
     "inspection_responsibility_arc": "e01_08b-e01_08f multi-plane",
     "inspection_field_evidence_layers": "3/3 events",
-    "responsibility_evidence_board": "2/2 events"
+    "responsibility_evidence_board": "2/2 events",
+    "late_field_control_arc": "e01_08g-e01_08m multi-plane",
+    "late_record_trace_arc": "e01_08n-e01_08p evidence-board"
   },
   "quality_gates": [
     "Every Episode 01 event renders an authored immersive scene.",
@@ -59,6 +61,7 @@
     "responsive-pc-mobile-portrait-landscape-v1",
     "episode01-node-direction-v1-full-coverage",
     "episode01-scene-background-production-v1",
-    "episode01-inspection-responsibility-arc-v1"
+    "episode01-inspection-responsibility-arc-v1",
+    "episode01-late-control-record-arc-v1"
   ]
 }
