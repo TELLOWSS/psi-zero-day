@@ -1,6 +1,7 @@
 import type { AssetResolver } from '../app/episode-visual-assets';
 import { characterMapUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
+import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -104,6 +105,7 @@ export function EpisodeImmersiveScene({
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
+  const cinematicTrace = episode01CinematicTrace(scene.event_id, scene.node_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -142,6 +144,24 @@ export function EpisodeImmersiveScene({
       <i className="evidence-pin pin-b" />
       <b className="evidence-timeline" />
     </div> : null}
+    {cinematicTrace ? <aside
+      className="episode-psi-trace"
+      data-trace={cinematicTrace.trace_id}
+      data-side={scene.focus === 'right' ? 'left' : 'right'}
+      aria-label={t('ui.psi_trace.title')}
+    >
+      <strong><i aria-hidden="true" />{t('ui.psi_trace.title')}</strong>
+      <div>
+        {cinematicTrace.items.map(item => <span
+          key={item.kind}
+          data-kind={item.kind}
+          data-active={item.kind === cinematicTrace.active_kind || undefined}
+        >
+          <b>{t(`ui.psi_trace.kind.${item.kind}`)}</b>
+          <em>{t(item.label_text_id)}</em>
+        </span>)}
+      </div>
+    </aside> : null}
     <div className="episode-immersive-props" aria-hidden="true">
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
