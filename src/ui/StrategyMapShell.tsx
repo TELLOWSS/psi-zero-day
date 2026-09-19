@@ -6,6 +6,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
+import { PRODUCTION_MAP_ANCHOR_IDS, productionMapStyle } from '../app/production-map';
 import type { StrategySignalKind } from '../app/strategy-signals';
 import { StrategyLoopPanel } from './StrategyLoopPanel';
 import { StrategyPsiSixPanel } from './StrategyPsiSixPanel';
@@ -132,6 +133,7 @@ export function StrategyMapShell({
   const moneyValue = `₩${Math.max(0, view.resources.money).toLocaleString('ko-KR')}`;
   const timeValue = view.resources.display_time ?? text(`ui.slot.${view.resources.time_slot.toLowerCase()}`);
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
+  const playerMapAnchor = view.placements.find(placement => placement.character_id === 'player')?.anchor ?? 'overview';
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={outcome ? 'result' : focusId ? 'action' : 'target'}>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
@@ -198,7 +200,7 @@ export function StrategyMapShell({
       </section> : null}
     </aside>
 
-    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment}>
+    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment} data-production-map="v1">
       {visualAssets?.background_uri ? <img className="strategy-map-background-art" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
       <div className="strategy-map-css-scene" aria-hidden={hasBackgroundArt ? 'true' : undefined}>
         <div className="strategy-map-sky" />
@@ -216,18 +218,20 @@ export function StrategyMapShell({
         <progress value={progress} max={100} aria-label={copy.progress} />
       </div>
 
-      <aside className="strategy-overview-minimap" aria-label="현장 전체도">
+      <aside className="strategy-overview-minimap" aria-label="현장 전체도" data-production-map="v1">
         <header><strong>현장 전체도</strong><span>N</span></header>
         <div className="strategy-minimap-plan" aria-hidden="true">
           <i className="mini-building mini-building-a" />
           <i className="mini-building mini-building-b" />
           <i className="mini-building mini-building-c" />
-          {zones.map(zone => <b
-            key={zone}
-            className={`mini-zone mini-zone-${zone}`}
-            data-alert={zoneSummary[zone].signals > 0 ? 'true' : 'false'}
+          {PRODUCTION_MAP_ANCHOR_IDS.map(anchor => <b
+            key={anchor}
+            className={`mini-zone mini-zone-${anchor}`}
+            data-anchor={anchor}
+            data-alert={view.signals.some(signal => signal.anchor === anchor) ? 'true' : 'false'}
+            style={productionMapStyle(anchor, 'minimap')}
           />)}
-          <em className="mini-player" />
+          <em className="mini-player" data-anchor={playerMapAnchor} style={productionMapStyle(playerMapAnchor, 'player')} />
         </div>
         <footer><span>● 작업구역</span><span>● 위험신호</span></footer>
       </aside>
@@ -240,6 +244,8 @@ export function StrategyMapShell({
             type="button"
             data-zone={zone}
             className={`strategy-zone-target zone-${zone}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
+            data-production-anchor={zone}
+            style={productionMapStyle(zone, 'zone')}
             onClick={() => setFocusId(key)}
           ><span className="strategy-zone-copy">
             <strong>{text(`ui.strategy.zone.${zone}`)}</strong>
@@ -251,16 +257,18 @@ export function StrategyMapShell({
       {sceneElements.length ? <div className="strategy-scene-element-layer" aria-label="현장 위험요소 및 소품">
         {sceneElements.map(element => {
           const visual = visualAssets?.scene_elements?.[element.element_id];
-          const artStyle = visual
-            ? {
+          const artStyle = {
+            ...productionMapStyle(element.anchor, 'scene-element'),
+            ...(visual ? {
               width: `${visual.map_max_px}px`,
               transform: `translate(${-visual.pivot_x * 100}%, ${-visual.pivot_y * 100}%)`,
-            }
-            : undefined;
+            } : {}),
+          };
           return <div
             className={`strategy-scene-element scene-element-${element.anchor} scene-element-${element.kind}${visual ? ' has-art' : ''}`}
             data-scene-element={element.element_id}
             data-scene-element-key={element.catalog_key}
+            data-production-anchor={element.anchor}
             data-production-status={element.production_status}
             data-visual={visual ? 'asset' : 'css'}
             key={`${element.element_id}:${element.anchor}`}
@@ -286,9 +294,11 @@ export function StrategyMapShell({
             data-art-surface="map"
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
             data-action-count={strategyActionsForTarget(effectiveActions, key).length}
+            data-production-anchor={placement.anchor}
             data-visual={visual?.map_uri ? 'asset' : 'css'}
             key={placement.character_id}
             type="button"
+            style={productionMapStyle(placement.anchor, 'character')}
             onClick={() => setFocusId(key)}
           >
             {visual?.map_uri
@@ -309,8 +319,10 @@ export function StrategyMapShell({
             className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-signal={signal.signal_id}
             data-action-count={strategyActionsForTarget(effectiveActions, key).length}
+            data-production-anchor={signal.anchor}
             key={signal.signal_id}
             type="button"
+            style={productionMapStyle(signal.anchor, 'signal')}
             onClick={() => setFocusId(key)}
           >
             <span aria-hidden="true">{signalIcon(signal.kind)}</span>
