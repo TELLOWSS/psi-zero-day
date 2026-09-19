@@ -1,6 +1,9 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { GameState } from '../src/domain';
 import { episode01MemoryVisualPlan } from '../src/app/episode01-memory-visuals';
+import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 
 function state(flags: Record<string, unknown>): GameState {
   return { flags } as unknown as GameState;
@@ -80,4 +83,27 @@ describe('Episode 01 outcome-aware memory visuals', () => {
     expect(episode01MemoryVisualPlan(state({}), 'e01_08p_record_return')).toBeUndefined();
     expect(episode01MemoryVisualPlan(null, 'e01_09_evening')).toBeUndefined();
   });
+  it('renders the next-day carryover frame as the primary memory before re-entry', () => {
+    const plan = episode01MemoryVisualPlan(state({
+      stopwork_culture_result: 'reporting_route_preserved',
+      instruction_chain_result: 'conditional_phrase_restored',
+      record_result: 'document_sync_required',
+    }), 'e01_10_next_day_tease');
+
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_10_next_day_tease',
+      nodeId: 'tease',
+      eventTitle: '다음날',
+      resolve: () => undefined,
+      t: (id: string) => id,
+      memoryVisualPlan: plan,
+    }));
+
+    expect(html).toContain('data-memory-phase="next-day"');
+    expect(html).toContain('data-carryover="record"');
+    expect(html).toContain('data-memory-key="record"');
+    expect(html).toContain('data-primary="true"');
+    expect(html).toContain('episode-daybreak-threshold');
+  });
+
 });
