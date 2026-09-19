@@ -1024,3 +1024,153 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-scene .episode-immersive-background,
   .episode-immersive-scene .episode-immersive-prop{animation:none!important}
 }
+
+
+/* EP01 inspection -> responsibility arc: hazards, controls and records stay visible together. */
+.episode-immersive-scene:is(
+  [data-event="e01_08b_inspection_find"],
+  [data-event="e01_08c_site_pushback"],
+  [data-event="e01_08d_reinspection"]
+) .episode-immersive-prop{
+  animation:ep01-inspection-prop-in .38s cubic-bezier(.2,.74,.2,1) both;
+}
+@keyframes ep01-inspection-prop-in{
+  from{opacity:.25;translate:0 9px;scale:.975}
+  to{translate:0 0;scale:1}
+}
+
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-background{object-position:61% center}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-prop.prop-1{
+  left:auto;right:-1%;bottom:2%;width:35%;height:58%;opacity:.96;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-prop.prop-2{
+  left:-5%;right:auto;bottom:-13%;width:42%;height:46%;opacity:.82;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-prop.prop-3{
+  left:36%;bottom:-9%;width:32%;height:38%;opacity:.94;z-index:3
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character.cast-1{left:8%}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character.cast-2{left:39%;z-index:8}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character.cast-3{right:7%}
+
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-background{object-position:52% center}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-prop.prop-1{
+  left:29%;right:auto;bottom:-10%;width:42%;height:41%;opacity:.98;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-prop.prop-2{
+  left:auto;right:-4%;bottom:3%;width:32%;height:54%;opacity:.88;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-prop.prop-3{
+  left:-7%;bottom:-14%;width:39%;height:42%;opacity:.72;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character.cast-1{left:6%}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character.cast-2{left:39%;z-index:8}
+.episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character.cast-3{right:4%}
+
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-background{object-position:57% center}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-prop.prop-1{
+  left:5%;right:auto;bottom:-8%;width:34%;height:38%;opacity:.96;z-index:4
+}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-prop.prop-2{
+  left:auto;right:-2%;bottom:5%;width:28%;height:48%;opacity:.7;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-prop.prop-3{
+  left:38%;bottom:-13%;width:31%;height:36%;opacity:.58;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character.cast-1{left:8%}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character.cast-2{left:39%;z-index:8}
+.episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character.cast-3{right:6%}
+
+/* Neutral record/evidence plane. It visualizes the basis being attended to, never a score. */
+.episode-immersive-evidence-board{
+  position:absolute;z-index:2;right:7%;top:15%;width:29%;height:48%;
+  border:1px solid rgba(205,218,214,.27);border-radius:8px;
+  background:
+    linear-gradient(90deg,rgba(18,30,35,.86),rgba(26,37,39,.76)),
+    repeating-linear-gradient(0deg,transparent 0 24px,rgba(215,227,220,.04) 25px 26px);
+  box-shadow:0 16px 34px rgba(0,0,0,.25),inset 0 0 0 1px rgba(0,0,0,.16);
+  transform:perspective(700px) rotateY(-5deg);transform-origin:100% 50%;
+  opacity:.78;transition:opacity .22s ease,transform .22s ease,filter .22s ease;
+}
+.episode-immersive-evidence-board::before{
+  content:"";position:absolute;inset:8% 7%;
+  background:
+    linear-gradient(90deg,rgba(226,190,112,.16) 0 2px,transparent 2px 100%),
+    linear-gradient(180deg,transparent 0 30%,rgba(226,190,112,.12) 30% 31%,transparent 31% 64%,rgba(226,190,112,.1) 64% 65%,transparent 65%);
+  opacity:.7
+}
+.episode-immersive-evidence-board .evidence-sheet{
+  position:absolute;display:block;width:28%;height:36%;border:1px solid rgba(255,255,255,.28);
+  border-radius:3px;background:
+    repeating-linear-gradient(180deg,rgba(24,34,36,.92) 0 7px,rgba(204,215,210,.16) 8px 9px),
+    rgba(214,220,210,.12);
+  box-shadow:0 5px 12px rgba(0,0,0,.22);
+  transition:transform .2s ease,filter .2s ease,opacity .2s ease;
+}
+.episode-immersive-evidence-board .sheet-a{left:8%;top:12%;rotate:-3deg}
+.episode-immersive-evidence-board .sheet-b{left:37%;top:19%;rotate:2deg}
+.episode-immersive-evidence-board .sheet-c{right:7%;top:9%;rotate:-1deg}
+.episode-immersive-evidence-board .evidence-pin{
+  position:absolute;width:6px;height:6px;border-radius:50%;background:#c9b36e;
+  box-shadow:0 1px 3px rgba(0,0,0,.45)
+}
+.episode-immersive-evidence-board .pin-a{left:21%;top:10%}
+.episode-immersive-evidence-board .pin-b{right:20%;top:8%}
+.episode-immersive-evidence-board .evidence-timeline{
+  position:absolute;left:11%;right:10%;bottom:12%;height:2px;background:rgba(206,218,214,.36)
+}
+.episode-immersive-evidence-board .evidence-timeline::before,
+.episode-immersive-evidence-board .evidence-timeline::after{
+  content:"";position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:#879ca0
+}
+.episode-immersive-evidence-board .evidence-timeline::before{left:18%}
+.episode-immersive-evidence-board .evidence-timeline::after{right:14%}
+
+.episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character.cast-1{left:2%}
+.episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character.cast-2{left:19%}
+.episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character.cast-3{right:24%}
+.episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character.cast-4{right:5%}
+.episode-immersive-scene[data-event="e01_08e_responsibility_clash"][data-node="report"] .episode-immersive-evidence-board,
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-evidence-board{
+  opacity:.94;transform:perspective(700px) rotateY(-2deg) translateY(-1%);filter:drop-shadow(0 0 14px rgba(155,181,188,.1))
+}
+
+/* The selected basis receives focus only; no success/failure color coding. */
+.episode-immersive-scene[data-node="one_sided_result"] .sheet-a,
+.episode-immersive-scene[data-node="correction"] .sheet-a{
+  transform:translateY(-5px) scale(1.06);filter:brightness(1.28);opacity:1
+}
+.episode-immersive-scene[data-node="defensive_result"] .sheet-b,
+.episode-immersive-scene[data-node="evidence"] .sheet-b{
+  transform:translateY(-5px) scale(1.06);filter:brightness(1.28);opacity:1
+}
+.episode-immersive-scene[data-node="timeline_result"] .evidence-timeline,
+.episode-immersive-scene[data-node="timeline"] .evidence-timeline{
+  height:3px;filter:brightness(1.35);box-shadow:0 0 10px rgba(181,204,207,.18)
+}
+
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-evidence-board{
+  right:5%;top:13%;width:33%;height:52%
+}
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-character.cast-1{left:3%}
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-character.cast-2{left:22%}
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-character.cast-3{right:24%}
+.episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-character.cast-4{right:5%}
+
+@media(max-width:760px){
+  .episode-immersive-scene:is(
+    [data-event="e01_08b_inspection_find"],
+    [data-event="e01_08c_site_pushback"],
+    [data-event="e01_08d_reinspection"]
+  ) .episode-immersive-prop.prop-3{width:36%;left:32%}
+  .episode-immersive-evidence-board{right:2%;top:11%;width:34%;height:42%;opacity:.66}
+  .episode-immersive-scene[data-event="e01_08f_report_return"] .episode-immersive-evidence-board{right:1%;top:10%;width:37%;height:45%}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene:is(
+    [data-event="e01_08b_inspection_find"],
+    [data-event="e01_08c_site_pushback"],
+    [data-event="e01_08d_reinspection"]
+  ) .episode-immersive-prop{animation:none!important}
+  .episode-immersive-evidence-board,.episode-immersive-evidence-board *{transition:none!important}
+}
