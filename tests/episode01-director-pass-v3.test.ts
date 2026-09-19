@@ -36,7 +36,7 @@ describe('Episode 01 director pass v3',()=>{
   });
 
   it('bumps incompatible story state and locks the delayed-consequence contract',()=>{
-    expect(manifest.bundle.content_version).toBe('ep01.director.v3');
+    expect(manifest.bundle.content_version).toBe('ep01.director.v4');
     expect(director.rules.some(rule=>rule.includes('immediate consequence'))).toBe(true);
     expect(director.rules.some(rule=>rule.includes('Delayed return events'))).toBe(true);
   });
