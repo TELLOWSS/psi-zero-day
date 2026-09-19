@@ -204,6 +204,9 @@ export function EpisodeImmersiveScene({
         const characterUri = performanceAsset?.uri
           ?? performanceAsset?.fallback_uri
           ?? characterMapUri(characterId, resolve);
+        const characterFallbackUri = performanceAsset?.uri
+          ? performanceAsset.fallback_uri ?? characterMapUri(characterId, resolve)
+          : undefined;
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
@@ -217,7 +220,7 @@ export function EpisodeImmersiveScene({
         data-presence-motion={performance?.motion}
         data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
       >
-        <VisualImage uri={characterUri} alt="" />
+        <VisualImage uri={characterUri} fallbackUri={characterFallbackUri} alt="" />
       </div>;
       })}
     </div>
