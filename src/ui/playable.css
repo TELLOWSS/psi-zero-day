@@ -2528,3 +2528,27 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
 }
 
+/* Legacy cast-index isolation: authored identity blocking must outrank older node-specific cast-N rules. */
+.episode-immersive-scene[data-character-blocking="true"][data-event]
+  .episode-immersive-character[data-character][data-blocking-side="far-left"]{left:11%;right:auto}
+.episode-immersive-scene[data-character-blocking="true"][data-event]
+  .episode-immersive-character[data-character][data-blocking-side="left"]{left:30%;right:auto}
+.episode-immersive-scene[data-character-blocking="true"][data-event]
+  .episode-immersive-character[data-character][data-blocking-side="center"]{left:50%;right:auto}
+.episode-immersive-scene[data-character-blocking="true"][data-event]
+  .episode-immersive-character[data-character][data-blocking-side="right"]{left:70%;right:auto}
+.episode-immersive-scene[data-character-blocking="true"][data-event]
+  .episode-immersive-character[data-character][data-blocking-side="far-right"]{left:89%;right:auto}
+@media(max-width:760px){
+  .episode-immersive-scene[data-character-blocking="true"][data-event]
+    .episode-immersive-character[data-character][data-blocking-side="far-left"]{left:8%;right:auto}
+  .episode-immersive-scene[data-character-blocking="true"][data-event]
+    .episode-immersive-character[data-character][data-blocking-side="left"]{left:27%;right:auto}
+  .episode-immersive-scene[data-character-blocking="true"][data-event]
+    .episode-immersive-character[data-character][data-blocking-side="center"]{left:50%;right:auto}
+  .episode-immersive-scene[data-character-blocking="true"][data-event]
+    .episode-immersive-character[data-character][data-blocking-side="right"]{left:73%;right:auto}
+  .episode-immersive-scene[data-character-blocking="true"][data-event]
+    .episode-immersive-character[data-character][data-blocking-side="far-right"]{left:92%;right:auto}
+}
+
