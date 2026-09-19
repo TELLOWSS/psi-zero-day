@@ -12,6 +12,7 @@ export interface ImmersiveScenePlan {
   readonly event_id: string;
   readonly background_uri: string;
   readonly background_asset_id?: string;
+  readonly background_environment?: string;
   readonly cast: readonly string[];
   readonly prop_uris: readonly string[];
   readonly camera: 'wide' | 'medium' | 'tight';
@@ -43,8 +44,11 @@ type NodeDirectionRecord = {
 
 const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
 const sceneBackgroundByRc = Object.freeze(Object.fromEntries(
-  Object.values(sceneBackgroundCatalog.backgrounds).map(background => [background.rc_path, background.asset_id]),
-) as Readonly<Record<string, string>>);
+  Object.entries(sceneBackgroundCatalog.backgrounds).map(([key, background]) => [
+    background.rc_path,
+    { key, asset_id: background.asset_id },
+  ]),
+) as Readonly<Record<string, { readonly key: string; readonly asset_id: string }>>);
 
 const nodeDirections = Object.freeze({
   ...(nodeDirectionA.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
@@ -105,6 +109,7 @@ export function episode01ImmersiveScene(
 
   const key = nodeId ?? '';
   const nodeDirective = nodeId ? nodeDirections[eventId]?.[nodeId] : undefined;
+  const backgroundPlan = sceneBackgroundByRc[scene.bg];
 
   let fallbackTone: ImmersiveSceneTone = 'neutral';
   if (reflectivePattern.test(key) || eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease') fallbackTone = 'reflective';
@@ -140,7 +145,7 @@ export function episode01ImmersiveScene(
   return Object.freeze({
     event_id: eventId,
     background_uri: scene.bg,
-    ...(sceneBackgroundByRc[scene.bg] ? { background_asset_id: sceneBackgroundByRc[scene.bg] } : {}),
+    ...(backgroundPlan ? { background_asset_id: backgroundPlan.asset_id, background_environment: backgroundPlan.key } : {}),
     cast: Object.freeze(visibleCast),
     prop_uris: Object.freeze(propUris),
     camera,
