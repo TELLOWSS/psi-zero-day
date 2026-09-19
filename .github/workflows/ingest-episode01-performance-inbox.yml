@@ -1,0 +1,89 @@
+name: Ingest Episode 01 performance inbox
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.art-inbox/PSI_EP01_PERFORMANCE_WAVE01_GITHUB_READY.zip'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: episode01-performance-inbox
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    if: "!contains(github.event.head_commit.message, 'art: ingest Episode 01 performance inbox')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Verify and extract exact performance archive
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, zipfile
+          root=pathlib.Path('.').resolve()
+          inbox=root/'.art-inbox/PSI_EP01_PERFORMANCE_WAVE01_GITHUB_READY.zip'
+          production=json.loads((root/'content/episode01/character-performance-production.json').read_text())
+          wave=production['generated_wave_01']
+          archive=wave['archive']
+          raw=inbox.read_bytes()
+          actual=hashlib.sha256(raw).hexdigest()
+          if len(raw) != archive['bytes']:
+              raise SystemExit(f'archive byte mismatch: {len(raw)} != {archive["bytes"]}')
+          if actual != archive['sha256']:
+              raise SystemExit(f'archive sha256 mismatch: {actual} != {archive["sha256"]}')
+          with zipfile.ZipFile(inbox) as z:
+              names=z.namelist()
+              for asset in wave['assets']:
+                  suffix='/public/'+asset['path']
+                  matches=[name for name in names if ('/'+name).endswith(suffix)]
+                  if len(matches) != 1:
+                      raise SystemExit(f'expected one zip member for {asset["path"]}, found {len(matches)}')
+                  info=z.getinfo(matches[0])
+                  if info.file_size != asset['bytes']:
+                      raise SystemExit(f'zip member byte mismatch: {asset["path"]}')
+                  target=root/'public'/asset['path']
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(z.read(matches[0]))
+          inbox.unlink()
+          print(f'Archive verified: {actual}')
+          PY
+
+      - run: npm ci
+
+      - name: Verify generated performance binaries
+        run: npm run assets:character-performance-wave-status
+
+      - name: Register verified performance wave
+        run: npm run assets:character-performance-wave-ingest
+
+      - name: Require finalized performance wave
+        run: npm run assets:character-performance-wave-check
+
+      - name: Run Episode 01 visual regression
+        run: npm run test:episode01-visual
+
+      - name: Typecheck performance runtime
+        run: npm run typecheck
+
+      - name: Commit verified performance inbox
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A             .art-inbox             public/assets/episode01/characters/performance             content/episode01/assets.json             content/episode01/character-performance-production.json
+          if git diff --cached --quiet; then
+            echo "Performance inbox is already materialized."
+          else
+            git commit -m "art: ingest Episode 01 performance inbox"
+            git push
+          fi
