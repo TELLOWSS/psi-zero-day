@@ -153,4 +153,11 @@ describe('Episode 01 cinematic character blocking', () => {
       depth: 'foreground',
     });
   });
+  it('centers the player when Day 02 returns to the gate', () => {
+    expect(episode01CharacterBlocking('e01_10_next_day_tease', 'player')).toEqual({
+      side: 'center',
+      depth: 'foreground',
+    });
+  });
+
 });
