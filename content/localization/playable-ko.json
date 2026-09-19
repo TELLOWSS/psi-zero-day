@@ -845,6 +845,9 @@
     "ui.psi_trace.instruction.record": "지시 근거·변경점",
     "ui.psi_trace.record.signal": "말과 기록의 차이",
     "ui.psi_trace.record.control": "사실관계 교차확인",
-    "ui.psi_trace.record.record": "시점·근거 보존"
+    "ui.psi_trace.record.record": "시점·근거 보존",
+    "ui.scene_minimap.title": "현재 위치",
+    "ui.strategy.zone.inspection": "검측 구역",
+    "ui.strategy.zone.office": "현장사무실"
   }
 }
