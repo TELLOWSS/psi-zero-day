@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "production_status": "planned_expression_variants_with_map_fallback",
+  "purpose": "Stable transparent full-body expression slots for cinematic Episode 01 scenes. Runtime may request these IDs now; unresolved assets fall back to the approved map character art.",
+  "expression_set": [
+    "neutral",
+    "concern",
+    "resolve",
+    "relief",
+    "conflict"
+  ],
+  "render_contract": {
+    "format": "webp",
+    "transparent_background": true,
+    "same_identity_as_map_art": true,
+    "same_wardrobe_and_ppe_as_map_art": true,
+    "full_body": true,
+    "rule": "Expression variants may change face, shoulders, hands and weight distribution slightly, but must not redesign the character or PPE."
+  },
+  "characters": {
+    "player": {
+      "asset_id_prefix": "ep01.character.player.performance",
+      "path_prefix": "assets/episode01/characters/performance/player"
+    },
+    "kang_taesik": {
+      "asset_id_prefix": "ep01.character.kang_taesik.performance",
+      "path_prefix": "assets/episode01/characters/performance/kang-taesik"
+    },
+    "yoon_sungho": {
+      "asset_id_prefix": "ep01.character.yoon_sungho.performance",
+      "path_prefix": "assets/episode01/characters/performance/yoon-sungho"
+    },
+    "lee_jaehoon": {
+      "asset_id_prefix": "ep01.character.lee_jaehoon.performance",
+      "path_prefix": "assets/episode01/characters/performance/lee-jaehoon"
+    },
+    "lim_junho": {
+      "asset_id_prefix": "ep01.character.lim_junho.performance",
+      "path_prefix": "assets/episode01/characters/performance/lim-junho"
+    },
+    "choi_minseok": {
+      "asset_id_prefix": "ep01.character.choi_minseok.performance",
+      "path_prefix": "assets/episode01/characters/performance/choi-minseok"
+    },
+    "seo_jeongmin": {
+      "asset_id_prefix": "ep01.character.seo_jeongmin.performance",
+      "path_prefix": "assets/episode01/characters/performance/seo-jeongmin"
+    },
+    "oh_seungjae": {
+      "asset_id_prefix": "ep01.character.oh_seungjae.performance",
+      "path_prefix": "assets/episode01/characters/performance/oh-seungjae"
+    }
+  }
+}
