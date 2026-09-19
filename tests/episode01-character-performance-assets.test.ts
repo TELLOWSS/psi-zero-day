@@ -56,4 +56,21 @@ describe('Episode 01 character performance asset contract', () => {
     expect(asset?.asset_id).toBe('ep01.character.lim_junho.performance.concern');
   });
 
+  it('locks generated wave 01 metadata without claiming binary ingest is complete', () => {
+    expect(performanceProduction.production_status).toBe('generated_wave_01_pending_github_binary_ingest');
+    expect(performanceProduction.generated_wave_01.status).toBe('verified_local_files_pending_github_binary_ingest');
+    expect(performanceProduction.generated_wave_01.assets).toHaveLength(5);
+    expect(performanceProduction.generated_wave_01.assets.map(asset => asset.asset_id)).toEqual([
+      'ep01.character.player.performance.resolve',
+      'ep01.character.lee_jaehoon.performance.concern',
+      'ep01.character.kang_taesik.performance.conflict',
+      'ep01.character.seo_jeongmin.performance.neutral',
+      'ep01.character.lim_junho.performance.relief',
+    ]);
+    for (const asset of performanceProduction.generated_wave_01.assets) {
+      expect(asset.path).toMatch(/^assets\/episode01\/characters\/performance\/.+\.webp$/);
+      expect(asset.bytes).toBeGreaterThan(100000);
+      expect(asset.sha256).toMatch(/^[a-f0-9]{64}$/);
+    }
+  });
 });
