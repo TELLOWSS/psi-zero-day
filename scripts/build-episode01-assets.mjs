@@ -7,6 +7,7 @@ const root = process.cwd();
 const planPath = path.join(root, 'content/episode01/visuals.json');
 const elementCatalogPath = path.join(root, 'content/episode01/scene-element-catalog.json');
 const sceneBackgroundCatalogPath = path.join(root, 'content/episode01/scene-background-catalog.json');
+const audioProductionPath = path.join(root, 'content/episode01/audio-production.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
 const fullProductionCheck = process.argv.includes('--production-check');
@@ -16,6 +17,7 @@ const productionCheck = fullProductionCheck || batchAProductionCheck || playerPr
 const plan = JSON.parse(await readFile(planPath, 'utf8'));
 const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
 const sceneBackgroundCatalog = JSON.parse(await readFile(sceneBackgroundCatalogPath, 'utf8'));
+const audioProduction = JSON.parse(await readFile(audioProductionPath, 'utf8'));
 
 const planned = [];
 const dialogueArt = JSON.parse(await readFile(path.join(root, 'content/episode01/dialogue-art.json'), 'utf8'));
@@ -76,6 +78,19 @@ for (const [elementKey, definition] of Object.entries(elementCatalog.elements ??
     preload_policy: 'next_scene',
     source: `scene_element:${elementKey}`,
     production_scope: 'scene-element',
+    allow_rc_fallback: false,
+  });
+}
+for (const definition of audioProduction.assets ?? []) {
+  if (!definition?.asset_id || !definition?.target_uri) continue;
+  planned.push({
+    asset_id: definition.asset_id,
+    uri: definition.target_uri,
+    type: 'audio',
+    group_id: 'ep01.audio',
+    preload_policy: definition.loop_candidate ? 'next_scene' : 'on_demand',
+    source: `audio:${definition.key}`,
+    production_scope: 'audio',
     allow_rc_fallback: false,
   });
 }
@@ -214,7 +229,7 @@ if (productionCheck) {
     const extension = path.extname(resolved.uri).slice(1).toLowerCase();
     assets.push({
       asset_id: item.asset_id,
-      type: 'image',
+      type: item.type ?? 'image',
       group_id: item.group_id,
       variants: [{
         uri: resolved.uri,

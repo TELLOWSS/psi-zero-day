@@ -1,0 +1,50 @@
+name: Materialize Episode 01 production audio
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/generate_episode01_audio.py'
+      - 'scripts/build-episode01-assets.mjs'
+      - '.github/workflows/materialize-episode01-audio.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: episode01-production-audio
+  cancel-in-progress: true
+
+jobs:
+  materialize:
+    if: "!contains(github.event.head_commit.message, 'audio: materialize Episode 01 production v1 sounds')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check numpy
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: python tools/generate_episode01_audio.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.20.0'
+          cache: npm
+      - run: npm ci
+      - run: node scripts/build-episode01-assets.mjs
+      - run: node scripts/check-audio-production.mjs --require-final
+      - run: npm run test:episode01-audio
+      - name: Commit generated production audio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/episode01/audio content/episode01/audio-production.json content/episode01/assets.json
+          if git diff --cached --quiet; then
+            echo "Production audio already current."
+          else
+            git commit -m "audio: materialize Episode 01 production v1 sounds"
+            git push
+          fi

@@ -1,15 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import contract from '../content/episode01/audio-production.json';
 import immersiveScenes from '../content/episode01/immersive-scenes.json';
 import { episodePresentationAudioCue } from '../src/app/episode-presentation-cues';
 import { uiAudioCueTimbre } from '../src/ui/useEpisodeAudio';
 
+const root = process.cwd();
+const present = contract.assets.filter(item =>
+  fs.existsSync(path.join(root, 'public', item.target_uri)));
+
 describe('Episode 01 audio production contract', () => {
-  it('keeps exactly eight core audio slots while binaries are still pending', () => {
+  it('keeps exactly eight production slots and reports binary state truthfully', () => {
     expect(contract.required_core_assets).toBe(8);
     expect(contract.assets).toHaveLength(8);
-    expect(contract.final_asset_count).toBe(0);
-    expect(contract.status).toBe('runtime_slots_wired_binaries_pending');
+    expect(contract.final_asset_count).toBe(present.length);
+    if (present.length === 8) expect(contract.status).toBe('production_v1_binaries_present');
+    else expect(contract.status).toBe('runtime_slots_wired_binaries_pending');
   });
 
   it('uses unique stable runtime asset ids and audio target paths', () => {
@@ -19,11 +26,18 @@ describe('Episode 01 audio production contract', () => {
     expect(contract.assets.every(item => item.target_uri.startsWith('assets/episode01/audio/'))).toBe(true);
   });
 
+  it('validates every materialized binary as a non-trivial Ogg container', () => {
+    for (const item of present) {
+      const bytes = fs.readFileSync(path.join(root, 'public', item.target_uri));
+      expect(bytes.length, item.key).toBeGreaterThan(512);
+      expect(bytes.subarray(0, 4).toString('ascii'), item.key).toBe('OggS');
+    }
+  });
+
   it('maps all 26 immersive events to a production audio slot', () => {
     const assets = new Map(contract.assets.map(asset => [asset.asset_id, asset]));
     const eventIds = Object.keys(immersiveScenes.events);
     expect(eventIds).toHaveLength(26);
-
     for (const eventId of eventIds) {
       const cue = episodePresentationAudioCue(eventId);
       expect(cue, eventId).toBeTruthy();
@@ -35,15 +49,16 @@ describe('Episode 01 audio production contract', () => {
     }
   });
 
-  it('uses field-oriented synthetic timbres until reviewed binaries land', () => {
+  it('keeps field-oriented fallback timbres behind real binaries', () => {
     expect(uiAudioCueTimbre('radio_signal')).toBe('radio');
     expect(uiAudioCueTimbre('pressure')).toBe('pressure');
     expect(uiAudioCueTimbre('scene_shift')).toBe('air');
     expect(uiAudioCueTimbre('continue')).toBe('clean');
   });
 
-  it('does not claim final field recordings exist before their binaries are supplied', () => {
-    expect(contract.integration.current).toContain('If absent');
-    expect(contract.integration.finalization).toContain('reviewed binary');
+  it('declares the reproducible, project-owned production source', () => {
+    expect(contract.production_generation.method).toContain('procedural');
+    expect(contract.production_generation.generator).toBe('tools/generate_episode01_audio.py');
+    expect(contract.production_generation.rights).toContain('no external recordings');
   });
 });

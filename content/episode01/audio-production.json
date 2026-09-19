@@ -200,7 +200,7 @@
   ],
   "integration": {
     "current": "Each of the 26 Episode 01 immersive events resolves to one of eight production audio asset slots. If absent, the reviewed production binary is replaced by a lightweight field-oriented WebAudio cue (clean/radio/pressure/air timbre families).",
-    "finalization": "When a reviewed binary is added under public/assets/episode01/audio and registered in assets.json generation, no story or event rule changes are required.",
+    "finalization": "The repository generator materializes production-v1 audio at the stable target paths. Field-recorded Foley can later replace those same paths after listening QA without changing story or event rules.",
     "qa_surfaces": [
       "web production",
       "Android WebView",
@@ -218,5 +218,12 @@
       "air"
     ],
     "principle": "Fallback cues suggest field texture without competing with dialogue or pretending to be final recordings."
+  },
+  "production_generation": {
+    "method": "deterministic procedural synthesis",
+    "generator": "tools/generate_episode01_audio.py",
+    "rights": "project-owned generated audio; no external recordings, samples, speech, or music",
+    "target": "Ogg/Opus 48 kHz stereo 96 kbps VBR",
+    "state": "workflow_ready_binary_materialization_pending"
   }
 }
