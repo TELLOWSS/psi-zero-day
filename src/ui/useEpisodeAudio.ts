@@ -194,7 +194,10 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     const gain = cue.gain ?? 1;
     element.volume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
-    void element.play().catch(() => playUiCue(cue.fallback));
+    const playback = element.play();
+    if (playback && typeof playback.catch === 'function') {
+      void playback.catch(() => playUiCue(cue.fallback));
+    }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
   return { playUiCue, playPresentationCue } as const;
