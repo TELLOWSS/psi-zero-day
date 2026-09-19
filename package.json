@@ -34,7 +34,7 @@
     "assets:production-check": "npm run assets:visual-contract && npm run assets:embedded && npm run assets:character-map-shape-check && node scripts/build-episode01-assets.mjs --production-check",
     "assets:production-scene-elements-check": "npm run assets:embedded && npm run assets:scene-elements-contract && node scripts/check-scene-element-art.mjs --production-check",
     "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:visual-production-queue-check && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:scene-runtime-check && npm run audio:contract-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
-    "release:production-check": "npm run assets:production-check && npm run assets:production-scene-elements-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run audio:production-check && npm run release:check",
+    "release:production-check": "npm run assets:production-check && npm run assets:production-scene-elements-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && npm run release:check",
     "android:add": "npm run build && npx cap add android && npm run android:configure",
     "android:sync": "npm run build && npx cap sync android && npm run android:configure",
     "android:configure": "node scripts/configure-android.mjs",
@@ -60,7 +60,10 @@
     "assets:scene-background-imagegen-check": "node scripts/check-scene-background-imagegen-prompts.mjs",
     "assets:final-art-ingest-status": "node scripts/check-final-art-ingest.mjs",
     "assets:final-art-ingest-check": "node scripts/check-final-art-ingest.mjs --require-final",
-    "assets:visual-production-queue-check": "node scripts/check-visual-production-queue.mjs"
+    "assets:visual-production-queue-check": "node scripts/check-visual-production-queue.mjs",
+    "assets:character-performance-wave-status": "node scripts/stage-character-performance-wave.mjs --check",
+    "assets:character-performance-wave-ingest": "node scripts/stage-character-performance-wave.mjs",
+    "assets:character-performance-wave-check": "node scripts/stage-character-performance-wave.mjs --require-final"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
