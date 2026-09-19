@@ -37,10 +37,10 @@ describe('Episode 02 first lift reality chain', () => {
     expect(after?.cards.some(card => card.title_text_id.includes('result.field'))).toBe(true);
   });
 
-  it('keeps cinematic and audio continuity', () => {
-    expect(episodeCinematicBeat('e02_01_lift_route_pressure')?.detail).toContain('계획동선');
-    expect(episodeCinematicBeat('e02_02_lift_route_return')?.detail).toContain('첫 두 번');
-    expect(episodePresentationAudioCue('e02_01_lift_route_pressure')?.production_key).toBe('crane_route_pressure');
-    expect(episodePresentationAudioCue('e02_02_lift_route_return')?.production_key).toBe('crane_route_check');
+  it('does not silently reuse Episode 01 presentation contracts before Episode 02 cues are authored', () => {
+    expect(episodeCinematicBeat('e02_01_lift_route_pressure')).toBeUndefined();
+    expect(episodeCinematicBeat('e02_02_lift_route_return')).toBeUndefined();
+    expect(episodePresentationAudioCue('e02_01_lift_route_pressure')).toBeUndefined();
+    expect(episodePresentationAudioCue('e02_02_lift_route_return')).toBeUndefined();
   });
 });
