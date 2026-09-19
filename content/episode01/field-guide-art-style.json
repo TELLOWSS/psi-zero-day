@@ -75,44 +75,24 @@
   ],
   "next_asset_batch": [
     {
-      "key": "material_yard",
-      "asset_id": "ep01.scene_element.material_yard",
-      "status": "art_ready_local"
+      "key": "euroform_wall_panel",
+      "asset_id": "ep01.scene_element.euroform_wall_panel",
+      "status": "generation_ready"
     },
     {
-      "key": "temporary_distribution_board",
-      "asset_id": "ep01.scene_element.temporary_distribution_board",
-      "status": "art_ready_local"
+      "key": "formwork_tie",
+      "asset_id": "ep01.scene_element.formwork_tie",
+      "status": "generation_ready"
     },
     {
-      "key": "temporary_lighting_pack",
-      "asset_id": "ep01.scene_element.temporary_lighting_pack",
-      "status": "art_ready_local"
+      "key": "formwork_brace",
+      "asset_id": "ep01.scene_element.formwork_brace",
+      "status": "generation_ready"
     },
     {
-      "key": "ppe_issue_station",
-      "asset_id": "ep01.scene_element.ppe_issue_station",
-      "status": "art_ready_local"
-    },
-    {
-      "key": "first_aid_aed",
-      "asset_id": "ep01.scene_element.first_aid_aed",
-      "status": "art_ready_local"
-    },
-    {
-      "key": "site_weather_station",
-      "asset_id": "ep01.scene_element.site_weather_station",
-      "status": "art_ready_local"
-    },
-    {
-      "key": "foundation_blinding_edge",
-      "asset_id": "ep01.scene_element.foundation_blinding_edge",
-      "status": "art_ready_local"
-    },
-    {
-      "key": "foundation_rebar_mat",
-      "asset_id": "ep01.scene_element.foundation_rebar_mat",
-      "status": "art_ready_local"
+      "key": "formwork_work_platform",
+      "asset_id": "ep01.scene_element.formwork_work_platform",
+      "status": "generation_ready"
     }
   ]
 }

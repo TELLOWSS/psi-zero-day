@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "plan_id": "field-guide-section2-production-v1",
+  "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+  "section_order": 2,
+  "purpose": "현장도감 SECTION 2 실제 Production WebP 12종을 순차 생성·검증·GitHub 등록하기 위한 고정 생산계약",
+  "style_profile": "field-guide-isometric-v1",
+  "rule": "generated preview is not complete. Completion requires binary persistence, manifest registration, catalog final status, runtime resolution, and checksum validation.",
+  "acceptance_common": [
+    "transparent alpha; no baked photo/background",
+    "no company/manufacturer branding or site name",
+    "no embedded Korean/English text",
+    "object remains identifiable at 60px thumbnail",
+    "real Korean high-rise temporary-works proportions; avoid toy-like miniature styling",
+    "three-quarter isometric 35–45 degree presentation",
+    "dark navy edge definition; steel/navy/orange restrained palette",
+    "minimum 768x512; preferred source square 1254x1254 and delivery 768x768 where practical"
+  ],
+  "batches": [
+    {
+      "batch_id": "S2-A",
+      "status": "generation_ready",
+      "items": [
+        {
+          "key": "euroform_wall_panel",
+          "field_guide_id": "FG024",
+          "label_ko": "유로폼 벽체 거푸집",
+          "asset_id": "ep01.scene_element.euroform_wall_panel",
+          "final_path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram",
+          "generation_prompt": "Korean apartment basement RC construction euroform wall formwork panel assembly, realistic modular steel-frame plywood panels standing vertically as a compact wall-form section, believable tie-hole spacing and clamps, no workers, no text, clean three-quarter isometric construction pictogram, realistic proportions, commercial 2.5D game asset, dark navy edge definition, steel gray and warm plywood brown with restrained orange safety accents, soft upper-left key light, transparent alpha background, centered with 10% breathing room."
+        },
+        {
+          "key": "formwork_tie",
+          "field_guide_id": "FG025",
+          "label_ko": "폼타이·연결철물",
+          "asset_id": "ep01.scene_element.formwork_tie",
+          "final_path": "assets/episode01/scene-elements/formwork-tie.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram",
+          "generation_prompt": "Korean RC wall formwork tie and connection hardware shown as a compact exploded-but-physically-believable assembly: form tie rod passing through opposing euroform panels with cone/spacer, wing nuts and clamps clearly readable, no text, no labels, three-quarter isometric construction pictogram, realistic steel hardware scale, commercial 2.5D game asset, dark navy edge definition, galvanized steel with restrained orange accent, soft upper-left light, transparent alpha background."
+        },
+        {
+          "key": "formwork_brace",
+          "field_guide_id": "FG026",
+          "label_ko": "벽체 거푸집 전도방지 지지",
+          "asset_id": "ep01.scene_element.formwork_brace",
+          "final_path": "assets/episode01/scene-elements/formwork-brace.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram",
+          "generation_prompt": "Korean basement RC wall euroform stabilized by a proper diagonal push-pull brace / turnbuckle support anchored to slab, clearly showing anti-overturning geometry, one compact work-state diorama, no workers, no text, realistic temporary works proportions, three-quarter isometric commercial 2.5D construction game asset, navy/steel palette with orange safety accent, soft upper-left lighting, transparent alpha background."
+        },
+        {
+          "key": "formwork_work_platform",
+          "field_guide_id": "FG027",
+          "label_ko": "거푸집 작업발판",
+          "asset_id": "ep01.scene_element.formwork_work_platform",
+          "final_path": "assets/episode01/scene-elements/formwork-work-platform.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram",
+          "generation_prompt": "Korean RC wall formwork work platform attached to euroform, showing metal bracket platform, deck, guardrail top/mid rail and safe access relationship, physically believable compact assembly, no workers, no text, three-quarter isometric commercial 2.5D construction pictogram, realistic steel and timber materials, dark navy edge definition, orange safety details, soft upper-left light, transparent alpha background."
+        }
+      ]
+    },
+    {
+      "batch_id": "S2-B",
+      "status": "queued",
+      "items": [
+        {
+          "key": "system_shoring_jackbase",
+          "field_guide_id": "FG028",
+          "label_ko": "시스템동바리 잭베이스",
+          "asset_id": "ep01.scene_element.system_shoring_jackbase",
+          "final_path": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "system_shoring_standard",
+          "field_guide_id": "FG029",
+          "label_ko": "시스템동바리 수직재",
+          "asset_id": "ep01.scene_element.system_shoring_standard",
+          "final_path": "assets/episode01/scene-elements/system-shoring-standard.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "system_shoring_ledger",
+          "field_guide_id": "FG030",
+          "label_ko": "시스템동바리 수평재",
+          "asset_id": "ep01.scene_element.system_shoring_ledger",
+          "final_path": "assets/episode01/scene-elements/system-shoring-ledger.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "system_shoring_missing_brace",
+          "field_guide_id": "FG031",
+          "label_ko": "누락된 가새·연결재",
+          "asset_id": "ep01.scene_element.system_shoring_missing_brace",
+          "final_path": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "uhead_beam_alignment",
+          "field_guide_id": "FG032",
+          "label_ko": "U-Head와 멍에 중심",
+          "asset_id": "ep01.scene_element.uhead_beam_alignment",
+          "final_path": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        }
+      ]
+    },
+    {
+      "batch_id": "S2-C",
+      "status": "queued",
+      "items": [
+        {
+          "key": "slab_formwork_edge",
+          "field_guide_id": "FG033",
+          "label_ko": "슬래브 판개 단부",
+          "asset_id": "ep01.scene_element.slab_formwork_edge",
+          "final_path": "assets/episode01/scene-elements/slab-formwork-edge.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "slab_opening_cover",
+          "field_guide_id": "FG034",
+          "label_ko": "슬래브 개구부 덮개",
+          "asset_id": "ep01.scene_element.slab_opening_cover",
+          "final_path": "assets/episode01/scene-elements/slab-opening-cover.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        },
+        {
+          "key": "temporary_stair",
+          "field_guide_id": "FG035",
+          "label_ko": "임시 계단·승강통로",
+          "asset_id": "ep01.scene_element.temporary_stair",
+          "final_path": "assets/episode01/scene-elements/temporary-stair.webp",
+          "minimum_width": 768,
+          "minimum_height": 512,
+          "pivot": {
+            "x": 0.5,
+            "y": 0.88
+          },
+          "map_max_px": 148,
+          "requires_alpha": true,
+          "style_profile": "field-guide-isometric-v1",
+          "render_intent": "isolated_isometric_3d_pictogram"
+        }
+      ]
+    }
+  ],
+  "completion_contract": [
+    "generate/select production art",
+    "convert/store exact WebP with alpha",
+    "persist source safely in repository (embedded-media when direct binary ingest is unreliable)",
+    "materialize public/assets/episode01/scene-elements/<name>.webp",
+    "verify dimensions, alpha, bytes and SHA-256",
+    "register content/episode01/assets.json",
+    "set scene-element-catalog production_status=final only after binary validation",
+    "run scene-element asset contract"
+  ]
+}
