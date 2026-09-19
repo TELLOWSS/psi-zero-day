@@ -95,11 +95,16 @@ describe('Episode application session', () => {
     expect(held.presentation).toEqual([
       expect.objectContaining({ type: 'SHOW_RESULT', instance_id: planChoice.instance_id, text_id: 'ep01.plan.a.result' }),
     ]);
-    expect(held.state?.event_runtime.active_instance).toBeNull();
-    expect(held.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
+    expect(held.state?.event_runtime.active_instance?.current_node_id).toBe('delegate_kang_result');
     expect(held.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
+    expect(session.dispatch({
+      type: 'advance_event', instance_id: planChoice.instance_id, node_id: 'delegate_kang_result',
+    }, held.revision)).toBe(true);
+    const terminal = session.getSnapshot();
+    expect(terminal.state?.event_runtime.active_instance).toBeNull();
+    expect(terminal.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
 
-    expect(session.reconsider(checkpoint, held.revision)).toBe(true);
+    expect(session.reconsider(checkpoint, terminal.revision)).toBe(true);
     const restored = session.getSnapshot();
     expect(restored.state).toEqual(checkpoint);
     expect(restored.presentation.some(item => item.type === 'SHOW_CHOICE')).toBe(true);
@@ -111,6 +116,11 @@ describe('Episode application session', () => {
     expect(session.dispatch({
       type: 'choose_event', instance_id: restoredChoice.instance_id, node_id: restoredChoice.node_id, choice_id: 'delegate_kang',
     }, restored.revision)).toBe(true);
+    const secondResult = session.getSnapshot();
+    expect(secondResult.state?.event_runtime.active_instance?.current_node_id).toBe('delegate_kang_result');
+    expect(session.dispatch({
+      type: 'advance_event', instance_id: restoredChoice.instance_id, node_id: 'delegate_kang_result',
+    }, secondResult.revision)).toBe(true);
     const secondHeld = session.getSnapshot();
     expect(secondHeld.state?.event_runtime.active_instance).toBeNull();
     expect(session.confirmFieldOutcome(restoredChoice.instance_id, secondHeld.revision)).toBe(true);
