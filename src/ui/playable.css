@@ -2552,3 +2552,87 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     .episode-immersive-character[data-character][data-blocking-side="far-right"]{left:92%;right:auto}
 }
 
+/* Outcome-aware closure: memory frames follow the actual run, then yield to Day 02. */
+.episode-immersive-memory-strip[data-memory-phase="evening"] .memory-frame{
+  transition:transform .34s cubic-bezier(.2,.72,.2,1),opacity .28s ease,filter .28s ease
+}
+.episode-immersive-memory-strip[data-memory-phase="evening"] .memory-frame[data-memory-key="branch"]{transform:rotate(-.8deg)}
+.episode-immersive-memory-strip[data-memory-phase="evening"] .memory-frame[data-memory-key="field"]{transform:translateY(-2px) rotate(.35deg)}
+.episode-immersive-memory-strip[data-memory-phase="evening"] .memory-frame[data-memory-key="people"]{transform:translateX(2px) rotate(-.25deg)}
+.episode-immersive-memory-strip[data-memory-phase="evening"] .memory-frame[data-memory-key="record"]{transform:rotate(.65deg)}
+
+.episode-immersive-memory-strip[data-memory-phase="next-day"]{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  width:min(29%,290px);
+  opacity:.78;
+  transform:none;
+  background:linear-gradient(180deg,rgba(7,16,22,.64),rgba(7,15,20,.34));
+  border-color:rgba(221,232,230,.2)
+}
+.episode-immersive-memory-strip[data-memory-phase="next-day"] .memory-frame{
+  opacity:.28;
+  filter:blur(.15px);
+  transition:opacity .38s ease,transform .42s cubic-bezier(.2,.72,.2,1),filter .32s ease
+}
+.episode-immersive-memory-strip[data-memory-phase="next-day"] .memory-frame img{
+  filter:saturate(.42) contrast(1.03) brightness(.68)
+}
+.episode-immersive-memory-strip[data-memory-phase="next-day"] .memory-frame[data-primary="true"]{
+  order:-1;
+  grid-column:1/-1;
+  aspect-ratio:16/8.1;
+  opacity:.96;
+  filter:none;
+  transform:translateY(-2px) scale(1.018);
+  border-color:rgba(238,214,160,.42);
+  box-shadow:0 8px 18px rgba(0,0,0,.28),0 0 0 1px rgba(238,214,160,.08)
+}
+.episode-immersive-memory-strip[data-memory-phase="next-day"] .memory-frame[data-primary="true"] img{
+  filter:saturate(.82) contrast(1.055) brightness(.84)
+}
+.episode-daybreak-threshold{
+  position:absolute;
+  left:9%;
+  right:9%;
+  bottom:-10px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(233,205,147,.72),transparent);
+  box-shadow:0 0 16px rgba(233,205,147,.24)
+}
+.episode-daybreak-threshold::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-3px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:rgba(235,213,166,.9);
+  transform:translateX(-50%);
+  box-shadow:0 0 10px rgba(235,213,166,.46)
+}
+.episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-background{
+  animation:ep01-daybreak-reentry .72s cubic-bezier(.2,.72,.2,1) both
+}
+@keyframes ep01-daybreak-reentry{
+  from{filter:saturate(.58) contrast(1.01) brightness(.66);transform:scale(1.055)}
+  to{filter:saturate(.94) contrast(1.04) brightness(.98);transform:scale(1.025)}
+}
+@media(max-width:760px){
+  .episode-immersive-memory-strip[data-memory-phase="next-day"]{
+    width:36%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .episode-immersive-memory-strip[data-memory-phase="next-day"] .memory-frame[data-primary="true"]{
+    grid-column:1/-1
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-memory-strip[data-memory-phase] .memory-frame,
+  .episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-background{
+    animation:none!important;
+    transition:none!important
+  }
+}
+
