@@ -52,7 +52,7 @@ function ResolvedImage({ uri, fallbackUri, alt, className }: VisualImageProps) {
   />;
 }
 export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth, loadout, equipmentTitle, slotLabel, introLabel, introLine, firstContact = false }: {
-  person: { id: string; name: string; role: string };
+  person: { id: string; name: string; role: string; trade?: string };
   portraitUri?: string;
   fallbackPortraitUri?: string;
   growth?: CharacterGrowthView;
@@ -69,7 +69,7 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
       <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
       <VisualImage uri={portraitUri} fallbackUri={fallbackPortraitUri} alt={person.name} className="portrait-image" />
     </div>
-    <div className="character-identity"><span className="identity-rule" /><div className="character-identity-line"><strong>{person.name}</strong><span>{person.role}</span></div></div>
+    <div className="character-identity"><span className="identity-rule" /><div className="character-identity-line"><strong>{person.name}</strong><span>{person.role}</span>{person.trade ? <em>{person.trade}</em> : null}</div></div>
     {introLine ? <div className="character-first-contact" role="note">
       {introLabel ? <span>{introLabel}</span> : null}
       <p>{introLine}</p>

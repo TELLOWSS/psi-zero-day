@@ -73,7 +73,15 @@ export class EpisodeSession {
   };
   character(id: string) {
     const c = this.#registry.getCharacter(id);
-    return c ? Object.freeze({ id: c.id, name: this.t(c.name_text_id), role: this.t(c.role_text_id) }) : undefined;
+    if (!c) return undefined;
+    const role = this.t(c.role_text_id);
+    const trade = this.t(c.trade_text_id);
+    return Object.freeze({
+      id: c.id,
+      name: this.t(c.name_text_id),
+      role,
+      ...(c.trade_text_id !== c.role_text_id && trade !== role ? { trade } : {}),
+    });
   }
   assetUri(id: string): string | undefined {
     const variant = this.#registry.getAsset(id)?.variants[0];

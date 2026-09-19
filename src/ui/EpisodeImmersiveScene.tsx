@@ -75,7 +75,7 @@ export function EpisodeImmersiveScene({
   readonly time?: string;
   readonly zone?: string;
   readonly resolve: AssetResolver;
-  readonly person?: (id: string) => { readonly id: string; readonly name: string; readonly role: string } | undefined;
+  readonly person?: (id: string) => { readonly id: string; readonly name: string; readonly role: string; readonly trade?: string } | undefined;
   readonly t: (id: string) => string;
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
@@ -136,7 +136,7 @@ export function EpisodeImmersiveScene({
           <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
           {identity ? <span className="episode-immersive-nameplate" data-active={isSpeaker || undefined}>
             <strong>{identity.name}</strong>
-            <small>{identity.role}</small>
+            <small>{identity.role}{identity.trade ? ` · ${identity.trade}` : ''}</small>
           </span> : null}
         </div>;
       })}
