@@ -1,0 +1,99 @@
+name: Ingest Episode 01 background inbox
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.art-inbox/PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: episode01-background-inbox
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    if: "!contains(github.event.head_commit.message, 'art: ingest Episode 01 background inbox')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Verify and extract exact background archive
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, zipfile
+          root=pathlib.Path('.').resolve()
+          inbox=root/'.art-inbox/PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip'
+          manifest=json.loads((root/'content/episode01/final-art-ingest-manifest.json').read_text())
+          raw=inbox.read_bytes()
+          actual=hashlib.sha256(raw).hexdigest()
+          expected=manifest['archive']['sha256']
+          if len(raw) != manifest['archive']['bytes']:
+              raise SystemExit(f'archive byte mismatch: {len(raw)} != {manifest["archive"]["bytes"]}')
+          if actual != expected:
+              raise SystemExit(f'archive sha256 mismatch: {actual} != {expected}')
+          with zipfile.ZipFile(inbox) as z:
+              names=set(z.namelist())
+              for asset in manifest['assets']:
+                  name=asset['filename']
+                  if name not in names:
+                      raise SystemExit(f'missing contracted file: {name}')
+                  info=z.getinfo(name)
+                  if info.file_size != asset['bytes']:
+                      raise SystemExit(f'zip member byte mismatch: {name}')
+                  target=root/asset['target_path']
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(z.read(name))
+          inbox.unlink()
+          print(f'Archive verified: {actual}')
+          PY
+
+      - run: npm ci
+
+      - name: Verify exact final production backgrounds
+        run: |
+          npm run assets:final-art-ingest-check
+          npm run assets:scene-background-production-check
+          npm run assets:scene-background-brief-check
+          npm run assets:scene-background-imagegen-check
+
+      - name: Rebuild runtime asset manifest
+        run: npm run assets:manifest
+
+      - name: Mark exact final-art batch as ingested
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path='content/episode01/final-art-ingest-manifest.json';
+          const manifest=JSON.parse(fs.readFileSync(path,'utf8'));
+          manifest.status='exact_archive_verified_github_ingested';
+          manifest.verification={...manifest.verification,ingested_at:new Date().toISOString()};
+          fs.writeFileSync(path,JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+      - name: Run Episode 01 visual regression
+        run: npm run test:episode01-visual
+
+      - name: Typecheck final-art runtime
+        run: npm run typecheck
+
+      - name: Commit verified background inbox
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A             .art-inbox             public/assets/episode01/cg             content/episode01/assets.json             content/episode01/final-art-ingest-manifest.json
+          if git diff --cached --quiet; then
+            echo "Background inbox is already materialized."
+          else
+            git commit -m "art: ingest Episode 01 background inbox"
+            git push
+          fi
