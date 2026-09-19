@@ -15,7 +15,7 @@ describe('Episode 01 responsibility and report route', () => {
     expect(state.flags).toMatchObject({
       report_basis: 'one_sided',
       report_result: 'correction_required',
-      record_result: 'factual_record_preserved',
+      record_result: 'timeline_preserved',
     });
   });
 
@@ -24,7 +24,7 @@ describe('Episode 01 responsibility and report route', () => {
     expect(state.flags).toMatchObject({
       report_basis: 'defensive',
       report_result: 'evidence_requested',
-      record_result: 'factual_record_preserved',
+      record_result: 'timeline_preserved',
     });
   });
 
