@@ -51,7 +51,7 @@
     "assets:character-replacement-stage": "node scripts/stage-character-replacement.mjs",
     "assets:character-replacement-preflight": "node scripts/stage-character-replacement.mjs --dry-run",
     "assets:choice-visual-check": "node scripts/check-choice-visual-coverage.mjs",
-    "test:episode01-visual": "vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts tests/episode01-scene-background-production.test.ts",
+    "test:episode01-visual": "vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts tests/episode01-scene-background-production.test.ts tests/episode01-immersive-scene-ui.test.tsx",
     "assets:node-visual-check": "node scripts/check-node-visual-coverage.mjs",
     "assets:scene-background-status": "node scripts/check-scene-background-production.mjs",
     "assets:scene-background-production-check": "node scripts/check-scene-background-production.mjs --require-final",
@@ -80,4 +80,4 @@
     "vite": "8.2.2",
     "vitest": "5.0.0"
   }
-}
+}\n

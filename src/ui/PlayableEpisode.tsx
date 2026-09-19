@@ -362,6 +362,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         time={cinematicBeat?.time}
         zone={cinematicBeat?.zone}
         resolve={resolveAsset}
+        person={id => session.character(id)}
         t={t}
       />
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>

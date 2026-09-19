@@ -1427,3 +1427,28 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     [data-event="e01_10_next_day_tease"]
   ) .episode-immersive-prop{animation:none!important}
 }
+
+/* EP01 in-scene identity plates: speaker gets name + role; supporting cast stays low-noise. */
+.episode-immersive-nameplate{
+  position:absolute;left:50%;bottom:4%;z-index:9;min-width:74px;max-width:132px;
+  translate:-50% 0;padding:4px 7px 5px;border:1px solid rgba(227,234,231,.14);
+  border-radius:6px;background:linear-gradient(180deg,rgba(10,16,19,.72),rgba(7,11,14,.84));
+  box-shadow:0 5px 14px rgba(0,0,0,.24);text-align:center;white-space:nowrap;
+  opacity:.48;filter:saturate(.75);transition:opacity .18s ease,filter .18s ease,translate .18s ease;
+}
+.episode-immersive-nameplate strong{display:block;overflow:hidden;text-overflow:ellipsis;font-size:9px;line-height:1.15;color:#eef1ee;letter-spacing:-.01em}
+.episode-immersive-nameplate small{display:none;margin-top:2px;overflow:hidden;text-overflow:ellipsis;font-size:7px;line-height:1.15;color:#cbd2cf}
+.episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate{
+  opacity:1;filter:none;translate:-50% -3px;border-color:rgba(238,176,99,.42);
+  background:linear-gradient(180deg,rgba(16,22,24,.88),rgba(8,13,16,.94));
+  box-shadow:0 7px 18px rgba(0,0,0,.34),0 0 0 1px rgba(238,176,99,.08)
+}
+.episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate strong{font-size:10px;color:#fff4df}
+.episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate small{display:block}
+@media(max-width:760px){
+  .episode-immersive-character:not([data-speaker="true"]) .episode-immersive-nameplate{display:none}
+  .episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate{bottom:5%;min-width:70px;max-width:108px;padding:3px 6px 4px}
+  .episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate strong{font-size:9px}
+  .episode-immersive-character[data-speaker="true"] .episode-immersive-nameplate small{font-size:6.5px}
+}
+@media(prefers-reduced-motion:reduce){.episode-immersive-nameplate{transition:none!important}}

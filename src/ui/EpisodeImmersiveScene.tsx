@@ -94,14 +94,22 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {scene.cast.map((characterId, index) => <div
-        key={characterId}
-        className={`episode-immersive-character cast-${index + 1}`}
-        data-speaker={speakerId === characterId || undefined}
-        data-character={characterId}
-      >
-        <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
-      </div>)}
+      {scene.cast.map((characterId, index) => {
+        const identity = person?.(characterId);
+        const isSpeaker = speakerId === characterId;
+        return <div
+          key={characterId}
+          className={`episode-immersive-character cast-${index + 1}`}
+          data-speaker={isSpeaker || undefined}
+          data-character={characterId}
+        >
+          <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
+          {identity ? <span className="episode-immersive-nameplate" data-active={isSpeaker || undefined}>
+            <strong>{identity.name}</strong>
+            <small>{identity.role}</small>
+          </span> : null}
+        </div>;
+      })}
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
     <figcaption>
