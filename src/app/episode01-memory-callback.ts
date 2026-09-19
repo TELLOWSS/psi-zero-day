@@ -1,4 +1,5 @@
 import type { GameState } from '../domain';
+import { episode01CarryoverKey } from './episode01-day-carryover';
 
 export interface EpisodeMemoryCallback {
   readonly eyebrow_text_id: string;
@@ -57,6 +58,18 @@ function outcomeLine(state: GameState): string | undefined {
   return undefined;
 }
 
+
+function nextDayOutcomeLine(state: GameState): string | undefined {
+  const carryover = episode01CarryoverKey(state.flags);
+  if (carryover === 'people') return 'ui.memory.outcome.stopwork.silenced';
+  if (carryover === 'instruction') return 'ui.memory.outcome.instruction.gap';
+  if (carryover === 'record') {
+    if (state.flags.record_result === 'supplement_requested') return 'ui.memory.outcome.report.supplement';
+    if (state.flags.record_result === 'document_sync_required') return 'ui.memory.outcome.report.sync';
+  }
+  return outcomeLine(state);
+}
+
 export function episode01MemoryCallback(state: GameState | null, activeEventId: string | null): EpisodeMemoryCallback | undefined {
   if (!state || (activeEventId !== 'e01_09_evening' && activeEventId !== 'e01_10_next_day_tease')) return undefined;
   const branch = branchChoice(state);
@@ -65,8 +78,8 @@ export function episode01MemoryCallback(state: GameState | null, activeEventId: 
     : branch === 'coordinate_schedule' ? 'ui.memory.branch.coordinate'
     : branch === 'follow_junho' ? 'ui.memory.branch.follow'
     : undefined;
-  const outcomeText = outcomeLine(state);
   const nextDay = activeEventId === 'e01_10_next_day_tease';
+  const outcomeText = nextDay ? nextDayOutcomeLine(state) : outcomeLine(state);
   const line_text_ids = [branchText, outcomeText].filter((id): id is string => Boolean(id));
   if (!line_text_ids.length) return undefined;
   return {
