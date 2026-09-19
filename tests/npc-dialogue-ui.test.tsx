@@ -78,7 +78,8 @@ describe('TASK-006 character interaction UI', () => {
     expect(card.querySelector('.portrait-image')?.getAttribute('src')).toContain('lim-junho-concerned.webp');
     expect(container.querySelectorAll('.choice-panel button')).toHaveLength(3);
     const responses = session.getSnapshot().dialogue!.responses;
-    expect(responses).toHaveLength(3);\n    expect(new Set(responses.map(response => JSON.stringify(response.consequences))).size).toBeGreaterThan(1);
+    expect(responses).toHaveLength(3);
+    expect(new Set(responses.map(response => JSON.stringify(response.consequences))).size).toBeGreaterThan(1);
   });
 
   it('shows an attributed relationship delta before confirmation and clears it on the next action', () => {
