@@ -6,6 +6,7 @@ import {
   episode01UsesCharacterBlocking,
 } from '../src/app/episode01-character-blocking';
 import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
+import scenes from '../content/episode01/immersive-scenes.json';
 
 describe('Episode 01 cinematic character blocking', () => {
   it('uses authored identity-based positions for inspection scenes', () => {
@@ -112,6 +113,24 @@ describe('Episode 01 cinematic character blocking', () => {
       side: 'center',
       depth: 'foreground',
     });
+  });
+
+  it('covers every cast member in the authored inspection-restart-stopwork blocking arc', () => {
+    const blockedEvents = [
+      'e01_08b_inspection_find',
+      'e01_08c_site_pushback',
+      'e01_08d_reinspection',
+      'e01_08i_restart_pressure',
+      'e01_08j_restart_return',
+      'e01_08k_stopwork_aftershock',
+      'e01_08l_stopwork_return',
+    ] as const;
+
+    for (const eventId of blockedEvents) {
+      for (const characterId of scenes.events[eventId].cast) {
+        expect(episode01CharacterBlocking(eventId, characterId), `${eventId}:${characterId}`).toBeDefined();
+      }
+    }
   });
 
 });
