@@ -10,7 +10,9 @@
     "Each environment resolves through a stable production background asset id; final WebP replaces RC without event/content changes.",
     "Priority construction beats use at least two independently positioned foreground/midground field elements so the scene reads as a place, not a flat backdrop.",
     "Inspection conflict beats keep hazard evidence and control measures visible at the same time so field pressure and safety control remain legible together.",
-    "Responsibility/report beats add a neutral evidence-board layer for records and timeline context; the board never marks a side as correct."
+    "Responsibility/report beats add a neutral evidence-board layer for records and timeline context; the board never marks a side as correct.",
+    "TBM, restart, stop-work and instruction beats show both the formal control and the field condition that can undermine or support it.",
+    "Office return beats reuse the neutral record board to visualize instruction/report traces without labeling any route as correct."
   ],
   "events": {
     "e01_01_arrival": {
@@ -212,7 +214,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/access-barrier.webp",
-        "assets/episode01/scene-elements/open-edge.webp"
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/material-stack.webp"
       ],
       "camera": "wide",
       "focus": "right"
@@ -226,7 +229,9 @@
         "player"
       ],
       "props": [
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/material-stack.webp"
       ],
       "camera": "medium",
       "focus": "center"
@@ -241,7 +246,8 @@
       ],
       "props": [
         "assets/episode01/scene-elements/open-edge.webp",
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/exclusion-zone.webp"
       ],
       "camera": "wide",
       "focus": "right"
@@ -255,7 +261,9 @@
         "player"
       ],
       "props": [
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp",
+        "assets/episode01/scene-elements/exclusion-zone.webp"
       ],
       "camera": "medium",
       "focus": "center"
@@ -269,7 +277,8 @@
         "lim_junho"
       ],
       "props": [
-        "assets/episode01/scene-elements/exclusion-zone.webp"
+        "assets/episode01/scene-elements/exclusion-zone.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",
       "focus": "left"
@@ -282,7 +291,8 @@
         "lim_junho"
       ],
       "props": [
-        "assets/episode01/scene-elements/exclusion-zone.webp"
+        "assets/episode01/scene-elements/exclusion-zone.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "tight",
       "focus": "center"
@@ -296,7 +306,9 @@
         "lim_junho"
       ],
       "props": [
-        "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp"
+        "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
+        "assets/episode01/scene-elements/access-barrier.webp",
+        "assets/episode01/scene-elements/open-edge.webp"
       ],
       "camera": "medium",
       "focus": "center"
