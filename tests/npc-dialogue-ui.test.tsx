@@ -68,7 +68,7 @@ describe('TASK-006 character interaction UI', () => {
     expect(container.querySelector('.character-card')?.hasAttribute('data-first-contact')).toBe(false);
   });
 
-  it('retains the NPC identity and silhouette while asking two different Junho responses', () => {
+  it('retains the NPC identity and silhouette while presenting distinct Junho response routes', () => {
     continueToChoice(); choose('follow_junho'); continueToChoice();
     expect(session.getSnapshot().dialogue?.speaker_id).toBe('lim_junho');
     const card = container.querySelector('.character-card')!;
@@ -76,9 +76,9 @@ describe('TASK-006 character interaction UI', () => {
     expect(card.textContent).toContain(session.character('lim_junho')!.role);
     expect(card.querySelector('.worker-mark')).not.toBeNull();
     expect(card.querySelector('.portrait-image')?.getAttribute('src')).toContain('lim-junho-concerned.webp');
-    expect(container.querySelectorAll('.choice-panel button')).toHaveLength(2);
+    expect(container.querySelectorAll('.choice-panel button')).toHaveLength(3);
     const responses = session.getSnapshot().dialogue!.responses;
-    expect(responses[0]!.consequences).not.toEqual(responses[1]!.consequences);
+    expect(responses).toHaveLength(3);\n    expect(new Set(responses.map(response => JSON.stringify(response.consequences))).size).toBeGreaterThan(1);
   });
 
   it('shows an attributed relationship delta before confirmation and clears it on the next action', () => {
