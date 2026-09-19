@@ -103,6 +103,10 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('data-signal="signal.ramp_movement"');
     expect(html).toContain('경사로 이상 신호');
     expect(html).toContain('data-zone="ramp"');
+    expect(html).toContain('data-production-map="v1"');
+    expect(html).toContain('data-production-anchor="ramp"');
+    expect(html).toContain('left:49%');
+    expect(html).toContain('top:34.5%');
     expect(html).toContain('1 대상 선택');
     expect(html).toContain('먼저 대상을 선택하세요.');
     expect(html).not.toContain('data-choice="listen_more"');
