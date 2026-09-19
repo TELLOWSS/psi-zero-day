@@ -170,4 +170,16 @@ describe('Episode 01 cinematic character performance', () => {
       }
     }
   });
+  it('stages the Day 02 gate return as a deliberate re-entry', () => {
+    expect(episode01CharacterPerformance(
+      'e01_10_next_day_tease',
+      'tease',
+      'player',
+    )).toEqual({
+      expression: 'neutral',
+      pose: 'reengage',
+      motion: 'enter',
+    });
+  });
+
 });
