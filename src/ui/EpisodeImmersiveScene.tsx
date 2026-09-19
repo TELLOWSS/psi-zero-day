@@ -34,6 +34,7 @@ export function EpisodeImmersiveScene({
   eventId,
   nodeId,
   speakerId,
+  speakerIdentity,
   presentationType,
   previewChoiceId,
   eventTitle,
@@ -45,6 +46,7 @@ export function EpisodeImmersiveScene({
   readonly eventId: string | null | undefined;
   readonly nodeId: string | null | undefined;
   readonly speakerId?: string | null;
+  readonly speakerIdentity?: { readonly name: string; readonly role: string; readonly trade?: string };
   readonly presentationType?: string | null;
   readonly previewChoiceId?: string | null;
   readonly eventTitle: string;
@@ -104,6 +106,11 @@ export function EpisodeImmersiveScene({
       </div>)}
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
+    {speakerIdentity ? <div className="episode-immersive-speaker-tag" aria-hidden="true">
+      <strong>{speakerIdentity.name}</strong>
+      <span>{speakerIdentity.role}</span>
+      {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}
+    </div> : null}
     <figcaption>
       <div><span>{time ?? 'EP01'}</span>{zone ? <b>{zone}</b> : null}<em>{t(stageTextId(presentationType, nodeId))}</em></div>
       <strong>{eventTitle}</strong>

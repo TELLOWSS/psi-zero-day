@@ -356,6 +356,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         eventId={activeEventId}
         nodeId={activeInstance?.current_node_id}
         speakerId={snapshot.dialogue?.speaker_id}
+        speakerIdentity={person}
         presentationType={presentation?.type}
         previewChoiceId={choicePreviewId}
         eventTitle={snapshot.eventTitle}
