@@ -35,13 +35,12 @@ export function projectEpisode01CharacterPlacements(
   return characterIds.map((characterId, index) => {
     const anchor = EPISODE01_ANCHORS[characterId] ?? FALLBACK_ANCHORS[index % FALLBACK_ANCHORS.length]!;
     const roleId = roleByCharacter.get(characterId);
-    const signalAnchor = characterId === 'seo_jeongmin' ? 'entry' : anchor;
     return {
       character_id: characterId,
       anchor,
       scene_participant: roleId !== undefined,
       ...(roleId === undefined ? {} : { role_id: roleId }),
-      nearby_signal_ids: signals.filter(signal => signal.anchor === signalAnchor).map(signal => signal.signal_id),
+      nearby_signal_ids: signals.filter(signal => signal.anchor === anchor).map(signal => signal.signal_id),
     };
   });
 }
