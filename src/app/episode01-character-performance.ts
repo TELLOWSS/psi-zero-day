@@ -22,379 +22,383 @@ type CharacterPerformancePatch = Partial<Episode01CharacterPerformance>;
 type CharacterPatchMap = Readonly<Record<string, CharacterPerformancePatch>>;
 type NodePatchMap = Readonly<Record<string, CharacterPatchMap>>;
 
-const EVENT_BASE = Object.freeze({
-  e01_08b_inspection_find: Object.freeze({
+function freeze<const T>(value: T): Readonly<T> {
+  return Object.freeze(value);
+}
+
+const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
+  e01_08b_inspection_find: freeze({
     player: { pose: 'observe' },
     seo_jeongmin: { pose: 'inspect', expression: 'neutral' },
     lee_jaehoon: { pose: 'document', expression: 'concern' },
   }),
-  e01_08c_site_pushback: Object.freeze({
+  e01_08c_site_pushback: freeze({
     player: { pose: 'brace', expression: 'concern' },
     lee_jaehoon: { pose: 'press', expression: 'conflict' },
     seo_jeongmin: { pose: 'observe', expression: 'neutral' },
   }),
-  e01_08d_reinspection: Object.freeze({
+  e01_08d_reinspection: freeze({
     player: { pose: 'observe' },
     seo_jeongmin: { pose: 'verify', expression: 'neutral' },
     lee_jaehoon: { pose: 'document', expression: 'concern' },
   }),
-  e01_08i_restart_pressure: Object.freeze({
+  e01_08i_restart_pressure: freeze({
     player: { pose: 'verify', expression: 'concern' },
     lee_jaehoon: { pose: 'press', expression: 'concern' },
     kang_taesik: { pose: 'brace', expression: 'conflict' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-  e01_08j_restart_return: Object.freeze({
+  e01_08j_restart_return: freeze({
     player: { pose: 'observe', expression: 'concern' },
     lee_jaehoon: { pose: 'brace', expression: 'concern' },
     kang_taesik: { pose: 'listen', expression: 'neutral' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-  e01_08k_stopwork_aftershock: Object.freeze({
+  e01_08k_stopwork_aftershock: freeze({
     player: { pose: 'listen', expression: 'concern' },
     kang_taesik: { pose: 'brace', expression: 'conflict' },
     lee_jaehoon: { pose: 'press', expression: 'concern' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-  e01_08l_stopwork_return: Object.freeze({
+  e01_08l_stopwork_return: freeze({
     player: { pose: 'listen', expression: 'neutral' },
     kang_taesik: { pose: 'listen', expression: 'neutral' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-  e01_08e_responsibility_clash: Object.freeze({
+  e01_08e_responsibility_clash: freeze({
     player: { pose: 'document', expression: 'concern' },
     oh_seungjae: { pose: 'press', expression: 'concern' },
     lee_jaehoon: { pose: 'brace', expression: 'concern' },
     kang_taesik: { pose: 'brace', expression: 'conflict' },
   }),
-  e01_08f_report_return: Object.freeze({
+  e01_08f_report_return: freeze({
     oh_seungjae: { pose: 'listen', expression: 'neutral' },
     lee_jaehoon: { pose: 'document', expression: 'concern' },
     kang_taesik: { pose: 'listen', expression: 'concern' },
     player: { pose: 'document', expression: 'neutral' },
   }),
-  e01_08m_instruction_cascade: Object.freeze({
+  e01_08m_instruction_cascade: freeze({
     player: { pose: 'observe', expression: 'concern' },
     lee_jaehoon: { pose: 'press', expression: 'concern' },
     kang_taesik: { pose: 'press', expression: 'conflict' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-  e01_08n_instruction_return: Object.freeze({
+  e01_08n_instruction_return: freeze({
     lee_jaehoon: { pose: 'document', expression: 'concern' },
     kang_taesik: { pose: 'listen', expression: 'concern' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
     player: { pose: 'document', expression: 'neutral' },
   }),
-  e01_08o_record_pressure: Object.freeze({
+  e01_08o_record_pressure: freeze({
     player: { pose: 'document', expression: 'concern' },
     oh_seungjae: { pose: 'press', expression: 'concern' },
     lee_jaehoon: { pose: 'document', expression: 'concern' },
     kang_taesik: { pose: 'brace', expression: 'conflict' },
   }),
-  e01_08p_record_return: Object.freeze({
+  e01_08p_record_return: freeze({
     oh_seungjae: { pose: 'listen', expression: 'neutral' },
     lee_jaehoon: { pose: 'document', expression: 'concern' },
     kang_taesik: { pose: 'listen', expression: 'concern' },
     player: { pose: 'document', expression: 'neutral' },
   }),
-  e01_10_next_day_tease: Object.freeze({
+  e01_10_next_day_tease: freeze({
     player: { pose: 'reengage', expression: 'neutral', motion: 'enter' },
   }),
-} satisfies Record<string, CharacterPatchMap>);
+});
 
-const NODE_PATCHES = Object.freeze({
-  e01_08b_inspection_find: Object.freeze({
-    inspection: Object.freeze({
+const NODE_PATCHES: Readonly<Record<string, NodePatchMap>> = freeze({
+  e01_08b_inspection_find: freeze({
+    inspection: freeze({
       seo_jeongmin: { pose: 'inspect', expression: 'neutral', motion: 'enter' },
     }),
-    lee: Object.freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'document', expression: 'concern', motion: 'reengage' },
     }),
-    full_stop_result: Object.freeze({
+    full_stop_result: freeze({
       player: { pose: 'verify', expression: 'resolve' },
       seo_jeongmin: { pose: 'verify', expression: 'resolve' },
       lee_jaehoon: { pose: 'listen', expression: 'concern', motion: 'withdraw' },
     }),
-    quick_photo_result: Object.freeze({
+    quick_photo_result: freeze({
       player: { pose: 'document', expression: 'neutral' },
       seo_jeongmin: { pose: 'observe', expression: 'concern', motion: 'withdraw' },
       lee_jaehoon: { pose: 'reengage', expression: 'relief' },
     }),
-    sequence_result: Object.freeze({
+    sequence_result: freeze({
       player: { pose: 'verify', expression: 'resolve' },
       seo_jeongmin: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
     }),
   }),
-  e01_08c_site_pushback: Object.freeze({
-    full_stop: Object.freeze({
+  e01_08c_site_pushback: freeze({
+    full_stop: freeze({
       lee_jaehoon: { pose: 'press', expression: 'conflict', motion: 'reengage' },
     }),
-    quick_photo: Object.freeze({
+    quick_photo: freeze({
       lee_jaehoon: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    sequence: Object.freeze({
+    sequence: freeze({
       lee_jaehoon: { pose: 'listen', expression: 'neutral', motion: 'reengage' },
     }),
   }),
-  e01_08d_reinspection: Object.freeze({
-    full: Object.freeze({
+  e01_08d_reinspection: freeze({
+    full: freeze({
       seo_jeongmin: { pose: 'verify', expression: 'resolve' },
     }),
-    reject: Object.freeze({
+    reject: freeze({
       seo_jeongmin: { pose: 'inspect', expression: 'conflict' },
       lee_jaehoon: { pose: 'brace', expression: 'concern' },
     }),
-    lee_rework: Object.freeze({
+    lee_rework: freeze({
       lee_jaehoon: { pose: 'document', expression: 'conflict', motion: 'reengage' },
       seo_jeongmin: { pose: 'observe', expression: 'neutral' },
     }),
-    sequence: Object.freeze({
+    sequence: freeze({
       seo_jeongmin: { pose: 'verify', expression: 'resolve' },
       lee_jaehoon: { pose: 'listen', expression: 'relief' },
     }),
   }),
-  e01_08i_restart_pressure: Object.freeze({
-    kang: Object.freeze({
+  e01_08i_restart_pressure: freeze({
+    kang: freeze({
       kang_taesik: { pose: 'press', expression: 'conflict', motion: 'reengage' },
     }),
-    lee: Object.freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    junho: Object.freeze({
+    junho: freeze({
       lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
     }),
-    follow_verbal_result: Object.freeze({
+    follow_verbal_result: freeze({
       player: { pose: 'brace', expression: 'concern' },
       lee_jaehoon: { pose: 'reengage', expression: 'relief' },
       kang_taesik: { pose: 'reengage', expression: 'neutral' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    trace_instruction_result: Object.freeze({
+    trace_instruction_result: freeze({
       player: { pose: 'document', expression: 'neutral' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'hesitate', expression: 'concern' },
     }),
-    verify_controls_result: Object.freeze({
+    verify_controls_result: freeze({
       player: { pose: 'verify', expression: 'resolve' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08j_restart_return: Object.freeze({
-    premature: Object.freeze({
+  e01_08j_restart_return: freeze({
+    premature: freeze({
       player: { pose: 'brace', expression: 'conflict' },
       lee_jaehoon: { pose: 'press', expression: 'conflict' },
       kang_taesik: { pose: 'brace', expression: 'concern' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    distorted: Object.freeze({
+    distorted: freeze({
       player: { pose: 'document', expression: 'concern' },
       lee_jaehoon: { pose: 'brace', expression: 'concern' },
       kang_taesik: { pose: 'listen', expression: 'conflict' },
       lim_junho: { pose: 'hesitate', expression: 'concern' },
     }),
-    controlled: Object.freeze({
+    controlled: freeze({
       player: { pose: 'verify', expression: 'resolve' },
       lee_jaehoon: { pose: 'listen', expression: 'relief' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08k_stopwork_aftershock: Object.freeze({
-    kang: Object.freeze({
+  e01_08k_stopwork_aftershock: freeze({
+    kang: freeze({
       kang_taesik: { pose: 'brace', expression: 'conflict', motion: 'reengage' },
     }),
-    junho: Object.freeze({
+    junho: freeze({
       lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
     }),
-    lee: Object.freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    ignore_social_result: Object.freeze({
+    ignore_social_result: freeze({
       player: { pose: 'brace', expression: 'concern' },
       kang_taesik: { pose: 'reengage', expression: 'relief' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    public_boundary_result: Object.freeze({
+    public_boundary_result: freeze({
       player: { pose: 'verify', expression: 'resolve' },
       kang_taesik: { pose: 'withdraw', expression: 'conflict', motion: 'withdraw' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'neutral', motion: 'reengage' },
     }),
-    protect_process_result: Object.freeze({
+    protect_process_result: freeze({
       player: { pose: 'listen', expression: 'resolve' },
       kang_taesik: { pose: 'listen', expression: 'concern' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08l_stopwork_return: Object.freeze({
-    silenced: Object.freeze({
+  e01_08l_stopwork_return: freeze({
+    silenced: freeze({
       player: { pose: 'brace', expression: 'concern' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    cold: Object.freeze({
+    cold: freeze({
       player: { pose: 'verify', expression: 'neutral' },
       kang_taesik: { pose: 'withdraw', expression: 'conflict', motion: 'withdraw' },
       lim_junho: { pose: 'listen', expression: 'concern' },
     }),
-    route: Object.freeze({
+    route: freeze({
       player: { pose: 'listen', expression: 'resolve' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08e_responsibility_clash: Object.freeze({
-    gc: Object.freeze({
+  e01_08e_responsibility_clash: freeze({
+    gc: freeze({
       oh_seungjae: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    lee: Object.freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'document', expression: 'concern', motion: 'reengage' },
     }),
-    kang: Object.freeze({
+    kang: freeze({
       kang_taesik: { pose: 'press', expression: 'conflict', motion: 'reengage' },
     }),
-    one_sided_result: Object.freeze({
+    one_sided_result: freeze({
       player: { pose: 'document', expression: 'concern' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
       kang_taesik: { pose: 'brace', expression: 'conflict' },
     }),
-    defensive_result: Object.freeze({
+    defensive_result: freeze({
       player: { pose: 'brace', expression: 'conflict' },
       oh_seungjae: { pose: 'press', expression: 'conflict' },
       lee_jaehoon: { pose: 'brace', expression: 'conflict' },
       kang_taesik: { pose: 'press', expression: 'conflict' },
     }),
-    timeline_result: Object.freeze({
+    timeline_result: freeze({
       player: { pose: 'document', expression: 'resolve' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'neutral' },
       kang_taesik: { pose: 'listen', expression: 'concern' },
     }),
   }),
-  e01_08f_report_return: Object.freeze({
-    correction: Object.freeze({
+  e01_08f_report_return: freeze({
+    correction: freeze({
       player: { pose: 'verify', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'concern' },
     }),
-    evidence: Object.freeze({
+    evidence: freeze({
       player: { pose: 'document', expression: 'resolve' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'relief' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
     }),
-    timeline: Object.freeze({
+    timeline: freeze({
       player: { pose: 'document', expression: 'resolve' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
     }),
   }),
-  e01_08m_instruction_cascade: Object.freeze({
-    lee: Object.freeze({
+  e01_08m_instruction_cascade: freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    kang: Object.freeze({
+    kang: freeze({
       kang_taesik: { pose: 'press', expression: 'conflict', motion: 'reengage' },
     }),
-    junho: Object.freeze({
+    junho: freeze({
       lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
     }),
-    accept_top_result: Object.freeze({
+    accept_top_result: freeze({
       player: { pose: 'brace', expression: 'concern' },
       lee_jaehoon: { pose: 'listen', expression: 'relief' },
       kang_taesik: { pose: 'reengage', expression: 'neutral' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    blame_worker_result: Object.freeze({
+    blame_worker_result: freeze({
       player: { pose: 'brace', expression: 'conflict' },
       lee_jaehoon: { pose: 'press', expression: 'conflict' },
       kang_taesik: { pose: 'press', expression: 'conflict' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    reconstruct_result: Object.freeze({
+    reconstruct_result: freeze({
       player: { pose: 'document', expression: 'resolve' },
       lee_jaehoon: { pose: 'document', expression: 'concern' },
       kang_taesik: { pose: 'listen', expression: 'concern' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08n_instruction_return: Object.freeze({
-    gap: Object.freeze({
+  e01_08n_instruction_return: freeze({
+    gap: freeze({
       player: { pose: 'document', expression: 'concern' },
       lee_jaehoon: { pose: 'brace', expression: 'concern' },
       kang_taesik: { pose: 'listen', expression: 'concern' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    chilled: Object.freeze({
+    chilled: freeze({
       player: { pose: 'brace', expression: 'concern' },
       lee_jaehoon: { pose: 'listen', expression: 'concern' },
       kang_taesik: { pose: 'withdraw', expression: 'conflict', motion: 'withdraw' },
       lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
     }),
-    reconstructed: Object.freeze({
+    reconstructed: freeze({
       player: { pose: 'document', expression: 'resolve' },
       lee_jaehoon: { pose: 'listen', expression: 'relief' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-  e01_08o_record_pressure: Object.freeze({
-    oh: Object.freeze({
+  e01_08o_record_pressure: freeze({
+    oh: freeze({
       oh_seungjae: { pose: 'press', expression: 'concern', motion: 'reengage' },
     }),
-    lee: Object.freeze({
+    lee: freeze({
       lee_jaehoon: { pose: 'document', expression: 'concern', motion: 'reengage' },
     }),
-    kang: Object.freeze({
+    kang: freeze({
       kang_taesik: { pose: 'brace', expression: 'conflict', motion: 'reengage' },
     }),
-    summary_result: Object.freeze({
+    summary_result: freeze({
       player: { pose: 'document', expression: 'neutral' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'concern' },
       kang_taesik: { pose: 'listen', expression: 'concern' },
     }),
-    align_result: Object.freeze({
+    align_result: freeze({
       player: { pose: 'document', expression: 'neutral' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'listen', expression: 'neutral' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
     }),
-    timeline_result: Object.freeze({
+    timeline_result: freeze({
       player: { pose: 'document', expression: 'resolve' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'relief' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
     }),
   }),
-  e01_08p_record_return: Object.freeze({
-    correction: Object.freeze({
+  e01_08p_record_return: freeze({
+    correction: freeze({
       player: { pose: 'document', expression: 'concern' },
       lee_jaehoon: { pose: 'document', expression: 'concern' },
     }),
-    conflict: Object.freeze({
+    conflict: freeze({
       player: { pose: 'brace', expression: 'concern' },
       oh_seungjae: { pose: 'press', expression: 'conflict' },
       lee_jaehoon: { pose: 'brace', expression: 'conflict' },
       kang_taesik: { pose: 'press', expression: 'conflict' },
     }),
-    preserved: Object.freeze({
+    preserved: freeze({
       player: { pose: 'document', expression: 'resolve' },
       oh_seungjae: { pose: 'listen', expression: 'neutral' },
       lee_jaehoon: { pose: 'document', expression: 'relief' },
       kang_taesik: { pose: 'listen', expression: 'neutral' },
     }),
   }),
-} satisfies Record<string, NodePatchMap>);
+});
 
-const DEFAULT_PERFORMANCE: Episode01CharacterPerformance = Object.freeze({
+const DEFAULT_PERFORMANCE: Episode01CharacterPerformance = freeze({
   expression: 'neutral',
   pose: 'observe',
   motion: 'hold',
@@ -423,7 +427,7 @@ export function episode01CharacterPerformance(
     if (pose === 'listen' || pose === 'observe') pose = 'withdraw';
   }
 
-  return Object.freeze({ expression, pose, motion });
+  return freeze({ expression, pose, motion });
 }
 
 export function episode01UsesCharacterPerformance(eventId: string | null | undefined): boolean {
