@@ -26,7 +26,11 @@
     "choice_visual_fallback_remaining": 0,
     "authored_node_direction": true,
     "authored_node_direction_coverage": "146/146",
-    "node_visual_fallback_remaining": 0
+    "node_visual_fallback_remaining": 0,
+    "production_scene_background_slots": 8,
+    "production_scene_background_final": "0/8",
+    "production_scene_background_rc_fallback": "8/8",
+    "production_scene_background_auto_upgrade": true
   },
   "quality_gates": [
     "Every Episode 01 event renders an authored immersive scene.",
@@ -42,13 +46,15 @@
   ],
   "remaining": [
     "Browser-level visual QA against Production after latest Git/Vercel SHA synchronization.",
-    "Replace RC SVG environments with final raster/production art only when each replacement is visually superior.",
-    "Refresh legacy test expectations to the current Episode 01 contract without weakening product behavior."
+    "Refresh legacy test expectations to the current Episode 01 contract without weakening product behavior.",
+    "Replace the eight immersive RC SVG environments with final >=1920x1080 WebP art; runtime will auto-upgrade each stable asset slot as files land.",
+    "Browser-level visual QA remains pending because this session's external Chromium access is administratively blocked."
   ],
   "completed_passes": [
     "episode01-shot-director-v1",
     "episode01-choice-direction-v2-full-coverage",
     "responsive-pc-mobile-portrait-landscape-v1",
-    "episode01-node-direction-v1-full-coverage"
+    "episode01-node-direction-v1-full-coverage",
+    "episode01-scene-background-production-v1"
   ]
 }
