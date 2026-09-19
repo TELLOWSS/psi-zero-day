@@ -121,6 +121,7 @@ export function EpisodeImmersiveScene({
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
     data-authored-node={scene.authored_node_direction || undefined}
+    data-psi-active={cinematicTrace?.active_kind ?? undefined}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -130,6 +131,13 @@ export function EpisodeImmersiveScene({
       <span className="moment-mark moment-b" />
       <span className="moment-mark moment-c" />
       <i className="moment-axis" />
+    </div> : null}
+    {cinematicTrace ? <div className="episode-psi-field-markers" data-trace={cinematicTrace.trace_id} aria-hidden="true">
+      {cinematicTrace.items.map(item => <span
+        key={item.kind}
+        data-kind={item.kind}
+        data-active={item.kind === cinematicTrace.active_kind || undefined}
+      />)}
     </div> : null}
     {showMemoryStrip ? <div className="episode-immersive-memory-strip" data-next-day={scene.event_id === 'e01_10_next_day_tease' || undefined} aria-hidden="true">
       {EPISODE01_MEMORY_FRAMES.map((frame, index) => <span key={frame.assetId} className={`memory-frame memory-${index + 1}`}>
