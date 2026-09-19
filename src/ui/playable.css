@@ -2372,3 +2372,31 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
 }
 
+/* Ground contact for authored blocking: keeps layered character art attached to the photographed/painted floor. */
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side]::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:16%;
+  right:16%;
+  bottom:1.5%;
+  height:7%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(3,7,9,var(--blocking-shadow-opacity,.28)) 0 20%,rgba(3,7,9,.12) 42%,transparent 72%);
+  transform:scaleX(var(--blocking-shadow-scale,1));
+  filter:blur(1px);
+  pointer-events:none;
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side]>img{
+  position:relative;z-index:1
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="foreground"]{
+  --blocking-shadow-opacity:.42;--blocking-shadow-scale:1.18
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="midground"]{
+  --blocking-shadow-opacity:.3;--blocking-shadow-scale:.96
+}
+.episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="background"]{
+  --blocking-shadow-opacity:.18;--blocking-shadow-scale:.78
+}
+
