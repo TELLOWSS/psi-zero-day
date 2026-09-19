@@ -22,6 +22,29 @@ export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
     || eventId === 'e01_08p_record_return';
 }
 
+const EPISODE01_DETAIL_CUTS: Readonly<Record<string, {
+  readonly propIndex: number;
+  readonly nodes: readonly string[];
+  readonly kind: 'hazard' | 'evidence' | 'culture';
+}>> = Object.freeze({
+  e01_04_junho_signal: { propIndex: 0, nodes: ['detail', 'listen', 'dismiss_result'], kind: 'hazard' },
+  e01_06_pump_arrival: { propIndex: 1, nodes: ['resolve', 'relation_conflict', 'near_miss', 'near_miss_react'], kind: 'hazard' },
+  e01_08b_inspection_find: { propIndex: 0, nodes: ['inspection', 'action', 'quick_photo_result'], kind: 'evidence' },
+  e01_08k_stopwork_aftershock: { propIndex: 0, nodes: ['culture_action', 'ignore_social_result', 'protect_process_result'], kind: 'culture' },
+});
+
+export function episode01DetailCut(
+  eventId: string | null | undefined,
+  nodeId: string | null | undefined,
+  propUris: readonly string[],
+) {
+  if (!eventId || !nodeId) return undefined;
+  const plan = EPISODE01_DETAIL_CUTS[eventId];
+  if (!plan || !plan.nodes.includes(nodeId)) return undefined;
+  const uri = propUris[plan.propIndex];
+  return uri ? Object.freeze({ uri, kind: plan.kind }) : undefined;
+}
+
 function stageTextId(presentationType: string | null | undefined, nodeId: string | null | undefined) {
   if (presentationType === 'SHOW_CHOICE') return 'ui.immersive.stage.decision';
   if (nodeId && /(result|high|low|reinforced|suppressed|missed|correction|evidence|timeline|paper|silenced|controlled|premature|distorted|cold|route|gap|chilled|reconstructed|preserved|rest|family|study|field_note)/i.test(nodeId)) {
@@ -58,6 +81,7 @@ export function EpisodeImmersiveScene({
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
+  const detailCut = episode01DetailCut(scene.event_id, scene.node_id, scene.prop_uris);
 
   return <figure
     className="episode-immersive-scene"
@@ -93,6 +117,10 @@ export function EpisodeImmersiveScene({
     <div className="episode-immersive-props" aria-hidden="true">
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
+    {detailCut ? <div className="episode-immersive-detail-cut" data-detail-kind={detailCut.kind} aria-hidden="true">
+      <VisualImage uri={detailCut.uri} alt="" />
+      <span />
+    </div> : null}
     <div className="episode-immersive-cast" aria-hidden="true">
       {scene.cast.map((characterId, index) => {
         const identity = person?.(characterId);
