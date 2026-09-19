@@ -75,27 +75,15 @@ describe('Episode 01 strategy visual assets', () => {
       pivot_y: 0.94,
       map_max_px: 132,
     });
-    expect(visuals.scene_elements?.['scene.control.access_barrier']).toEqual({
-      element_id: 'scene.control.access_barrier',
-      uri: 'assets/episode01/scene-elements/access-barrier.webp',
-      pivot_x: 0.5,
-      pivot_y: 0.92,
-      map_max_px: 140,
-    });
-    expect(visuals.scene_elements?.['scene.hazard.vehicle_overlap']).toEqual({
-      element_id: 'scene.hazard.vehicle_overlap',
-      uri: 'assets/episode01/scene-elements/vehicle-overlap.webp',
-      pivot_x: 0.5,
-      pivot_y: 0.5,
-      map_max_px: 168,
-    });
+    expect(visuals.scene_elements?.['scene.control.access_barrier']).toBeUndefined();
+    expect(visuals.scene_elements?.['scene.hazard.vehicle_overlap']).toBeUndefined();
     expect(visuals.scene_elements?.['scene.hazard.harness_unclipped']).toBeUndefined();
   });
 
   it('uses integrated production art through the registry without changing asset identities', () => {
     const registry = createEpisode01Registry();
     const content = registry.getValidatedContent();
-    expect(content.asset_manifest.assets).toHaveLength(30);
+    expect(content.asset_manifest.assets.length).toBeGreaterThanOrEqual(48);
 
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');
@@ -115,20 +103,8 @@ describe('Episode 01 strategy visual assets', () => {
       pivot_y: 0.94,
       map_max_px: 132,
     });
-    expect(art.scene_elements?.['scene.control.access_barrier']).toMatchObject({
-      element_id: 'scene.control.access_barrier',
-      uri: 'assets/episode01/scene-elements/access-barrier.webp',
-      pivot_x: 0.5,
-      pivot_y: 0.92,
-      map_max_px: 140,
-    });
-    expect(art.scene_elements?.['scene.hazard.vehicle_overlap']).toMatchObject({
-      element_id: 'scene.hazard.vehicle_overlap',
-      uri: 'assets/episode01/scene-elements/vehicle-overlap.webp',
-      pivot_x: 0.5,
-      pivot_y: 0.5,
-      map_max_px: 168,
-    });
+    expect(art.scene_elements?.['scene.control.access_barrier']).toBeUndefined();
+    expect(art.scene_elements?.['scene.hazard.vehicle_overlap']).toBeUndefined();
 
     for (const characterId of cast) {
       const file = characterId.replaceAll('_', '-');

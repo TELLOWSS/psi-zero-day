@@ -33,7 +33,7 @@ describe('TASK-016B Batch A production art brief', () => {
     expect(batchA.assets).toHaveLength(9);
     expect(batchA.assets.map(asset => asset.source)).toEqual(expectedSources);
     expect(batchA.assets.map(asset => asset.path)).toEqual(expectedPaths);
-    expect(new Set(batchA.assets.map(asset => asset.path)).size).toBe(7);
+    expect(new Set(batchA.assets.map(asset => asset.path)).size).toBe(batchA.assets.length);
   });
 
   it('requires commercial-resolution source sizes before Batch A can pass', () => {

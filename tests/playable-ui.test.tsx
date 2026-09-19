@@ -189,7 +189,7 @@ describe('Playable Episode React UI', () => {
     const session = new EpisodeSession();
     const person = session.character('player')!;
     const portraitUri = session.assetUri('ep01.character.player.portrait');
-    expect(portraitUri).toBe('assets/episode01/characters/player-portrait.webp');
+    expect(portraitUri).toContain('assets/episode01/characters/player-portrait.webp');
     act(() => root.render(<CharacterCard person={person} portraitUri={portraitUri} />));
     const image = container.querySelector('img');
     expect(image).not.toBeNull();

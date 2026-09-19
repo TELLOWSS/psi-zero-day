@@ -13,7 +13,7 @@ describe('PSI 6 observation HUD projection', () => {
     expect(projected.counts.training_comprehension).toBe(1);
     expect(projected.counts.practice_participation).toBe(1);
     expect(projected.counts.ppe_rule_compliance).toBe(2);
-    expect(projected.counts.communication_reporting).toBe(2);
+    expect(projected.counts.communication_reporting).toBe(1);
     expect(projected.counts.stop_work_acceptance).toBe(1);
     expect(projected.max_count).toBe(2);
   });

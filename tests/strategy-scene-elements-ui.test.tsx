@@ -88,7 +88,7 @@ describe('Reusable scene element map layer', () => {
     expect(html).toContain('material-stack.webp');
     expect(html).toContain('width:132px');
     expect(html).toContain('translate(-50%, -94%)');
-    expect(html).not.toContain('>▤<');
+    expect(html).not.toContain('class="strategy-scene-element-token"')
   });
 
   it('reuses the same final material-stack WebP at the yard anchor for e01_05_command', () => {

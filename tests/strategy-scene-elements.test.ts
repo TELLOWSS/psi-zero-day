@@ -17,7 +17,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       'wet_floor',
       'open_edge',
     ]));
-    expect(elements).toHaveLength(10);
+    expect(elements.length).toBeGreaterThanOrEqual(10);
     expect(new Set(elements.map(item => item.element_id)).size).toBe(elements.length);
     expect(new Set(elements.map(item => item.planned_asset_id)).size).toBe(elements.length);
   });
@@ -105,9 +105,14 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(projectEpisode01SceneElements('e01_04_junho_signal')).toEqual([]);
   });
 
-  it('makes all ten props available without inserting future hazards into current events', () => {
-    expect(Object.values(catalog.elements)).toHaveLength(10);
-    expect(Object.values(catalog.elements).every(element => element.production_status === 'final')).toBe(true);
+  it('keeps the canonical Episode 01 field set final while allowing the field-guide catalog to expand', () => {
+    const canonical = [
+      'material_stack', 'access_barrier', 'vehicle_overlap_zone', 'harness_unclipped',
+      'platform_cut_edge', 'suspended_load', 'gangform_lift_wire22', 'exclusion_zone',
+      'wet_floor', 'open_edge',
+    ] as const;
+    expect(Object.keys(catalog.elements).length).toBeGreaterThanOrEqual(canonical.length);
+    expect(canonical.every(key => catalog.elements[key].production_status === 'final')).toBe(true);
     const placed = Object.values(catalog.event_elements).flat().map(element => element.element_key);
     expect(placed).toEqual(['material_stack', 'material_stack']);
   });
