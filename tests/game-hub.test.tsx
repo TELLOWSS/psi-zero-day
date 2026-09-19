@@ -32,7 +32,7 @@ describe('game hub navigation', () => {
       await act(async () => { await import('../src/ui/FieldGuide'); });
       expect(host.querySelectorAll('.field-guide-list button').length).toBeGreaterThanOrEqual(10);
       const openEdgeButton = Array.from(host.querySelectorAll<HTMLButtonElement>('.field-guide-list button'))
-        .find(button => button.textContent?.includes(session.t('ui.guide.open_edge.title')));
+        .find(button => button.querySelector('img')?.getAttribute('src')?.includes('open-edge.webp'));
       expect(openEdgeButton).toBeDefined();
       act(() => openEdgeButton!.click());
       expect(host.querySelector('.field-guide-detail h2')?.textContent).toBe(session.t('ui.guide.open_edge.title'));
