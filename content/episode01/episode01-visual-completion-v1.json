@@ -21,7 +21,9 @@
     "speaker_rack_focus": true,
     "result_camera_rhythm": true,
     "authored_choice_direction": true,
-    "full_scene_choice_hover_focus_preview": true
+    "full_scene_choice_hover_focus_preview": true,
+    "authored_choice_direction_coverage": "75/75",
+    "choice_visual_fallback_remaining": 0
   },
   "quality_gates": [
     "Every Episode 01 event renders an authored immersive scene.",
@@ -31,7 +33,8 @@
     "Dialogue, choice and result nodes must not reuse one static camera rhythm.",
     "Production typecheck and Vite build must pass before visual QA is considered deployable.",
     "Episode 02 stays outside the live session until this pass is closed.",
-    "Hovering or keyboard-focusing a major player choice must redirect the full scene without assigning a good/bad visual score."
+    "Every Episode 01 choice must have authored crop/tone/prop direction; generic choice-visual fallback is not allowed.",
+    "Hovering or keyboard-focusing any Episode 01 choice must redirect the full scene without assigning a good/bad visual score."
   ],
   "remaining": [
     "Browser-level visual QA against Production after latest Git/Vercel SHA synchronization.",
@@ -40,6 +43,7 @@
   ],
   "completed_passes": [
     "episode01-shot-director-v1",
-    "episode01-choice-direction-v1"
+    "episode01-choice-direction-v2-full-coverage",
+    "responsive-pc-mobile-portrait-landscape-v1"
   ]
 }
