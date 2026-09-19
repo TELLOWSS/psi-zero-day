@@ -2402,6 +2402,21 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 
 /* EP01 character performance pass: pose/expression state works with today's single map art
    and remains compatible with future expression-specific transparent WebP replacements. */
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-blocking-side="far-left"],
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-blocking-side="left"]{
+  --presence-enter-x:-6%;
+  --presence-exit-x:-8%;
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-blocking-side="center"]{
+  --presence-enter-x:0%;
+  --presence-exit-x:0%;
+}
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-blocking-side="right"],
+.episode-immersive-scene[data-character-performance="true"] .episode-immersive-character[data-blocking-side="far-right"]{
+  --presence-enter-x:6%;
+  --presence-exit-x:8%;
+}
+
 .episode-immersive-scene[data-character-performance="true"] .episode-immersive-character>img{
   --pose-x:0%;
   --pose-y:0%;
@@ -2472,7 +2487,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @keyframes character-performance-enter{
   from{
     opacity:.16;
-    transform:translate(var(--pose-x),var(--pose-y)) translateY(4%) scale(.93) rotate(var(--pose-rotate))
+    transform:translate(var(--pose-x),var(--pose-y)) translateX(var(--presence-enter-x,0%)) translateY(4%) scale(.93) rotate(var(--pose-rotate))
   }
   to{
     opacity:1;
@@ -2482,7 +2497,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @keyframes character-performance-reengage{
   0%{
     opacity:.72;
-    transform:translate(var(--pose-x),var(--pose-y)) translateY(1.8%) scale(.965) rotate(var(--pose-rotate))
+    transform:translate(var(--pose-x),var(--pose-y)) translateX(var(--presence-enter-x,0%)) translateY(1.8%) scale(.965) rotate(var(--pose-rotate))
   }
   100%{
     opacity:1;
@@ -2496,7 +2511,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
   100%{
     opacity:.56;
-    transform:translate(var(--pose-x),var(--pose-y)) translateY(2.3%) scale(.94) rotate(var(--pose-rotate))
+    transform:translate(var(--pose-x),var(--pose-y)) translateX(var(--presence-exit-x,0%)) translateY(2.3%) scale(.94) rotate(var(--pose-rotate))
   }
 }
 @media(max-width:760px){
