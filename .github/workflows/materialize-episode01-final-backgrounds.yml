@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - '.art-ingest/episode01/*.b64.*'
-      - '.github/workflows/materialize-episode01-final-backgrounds.yml'
 
 permissions:
   contents: write
