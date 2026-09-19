@@ -52,3 +52,8 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
 export function episodePresentationAudioCue(eventId: string | null | undefined): EpisodePresentationAudioCue | undefined {
   return eventId ? EVENT_AUDIO_CUES[eventId] : undefined;
 }
+
+/** Ambiguous field decisions expose consequences without success/failure audio scoring. */
+export function episode01StrategyOutcomeAudioCue(): UiAudioCue {
+  return 'result_neutral';
+}
