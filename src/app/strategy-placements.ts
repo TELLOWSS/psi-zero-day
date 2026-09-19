@@ -1,7 +1,8 @@
 import type { Id } from '../domain/common';
+import type { ProductionMapAnchorId } from './production-map';
 import type { StrategySignal } from './strategy-signals';
 
-export type StrategyCharacterAnchor = 'overview' | 'yard' | 'entry' | 'core' | 'ramp' | 'gate' | 'inspection' | 'office';
+export type StrategyCharacterAnchor = ProductionMapAnchorId;
 
 export interface StrategyCharacterPlacement {
   readonly character_id: Id;
