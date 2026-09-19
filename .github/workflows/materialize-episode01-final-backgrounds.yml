@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.art-ingest/episode01/*.b64'
+      - '.art-ingest/episode01/*.b64.*'
       - '.github/workflows/materialize-episode01-final-backgrounds.yml'
 
 permissions:
@@ -37,12 +37,10 @@ jobs:
             inspection-zone site-office break-area home-night
           )
           for name in "${expected[@]}"; do
-            source=".art-ingest/episode01/${name}.webp.b64"
-            test -f "$source" || { echo "Missing $source"; exit 1; }
-            base64 --decode "$source" > "public/assets/episode01/cg/${name}.webp"
+            mapfile -t chunks < <(find .art-ingest/episode01 -maxdepth 1 -type f -name "${name}.webp.b64.*" | sort)
+            test "${#chunks[@]}" -gt 0 || { echo "Missing chunks for $name"; exit 1; }
+            cat "${chunks[@]}" | base64 --decode > "public/assets/episode01/cg/${name}.webp"
           done
-          count=$(find .art-ingest/episode01 -maxdepth 1 -type f -name '*.webp.b64' | wc -l | tr -d ' ')
-          test "$count" = "8" || { echo "Expected exactly 8 ingest files, got $count"; exit 1; }
           rm -rf .art-ingest/episode01
       - run: npm ci
       - name: Verify final production backgrounds
