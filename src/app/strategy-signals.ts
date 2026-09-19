@@ -1,7 +1,7 @@
 import type { Id, TextId } from '../domain/common';
 
 export type StrategySignalKind = 'access' | 'ramp' | 'overlap' | 'vehicle';
-export type StrategySignalAnchor = 'entry' | 'ramp' | 'yard' | 'gate';
+export type StrategySignalAnchor = 'entry' | 'ramp' | 'yard' | 'gate' | 'inspection';
 
 export interface StrategySignal {
   readonly signal_id: Id;
@@ -15,8 +15,8 @@ const SIGNALS_BY_EVENT: Readonly<Record<Id, readonly StrategySignal[]>> = {
   e01_04_junho_signal: [{ signal_id: 'signal.ramp_movement', kind: 'ramp', anchor: 'ramp', label_text_id: 'ui.signal.ramp_movement' }],
   e01_05_command: [{ signal_id: 'signal.work_vehicle_overlap', kind: 'overlap', anchor: 'yard', label_text_id: 'ui.signal.work_vehicle_overlap' }],
   e01_06_pump_arrival: [{ signal_id: 'signal.pump_entry', kind: 'vehicle', anchor: 'gate', label_text_id: 'ui.signal.pump_entry' }],
-  e01_08b_inspection_find: [{ signal_id: 'signal.inspection_access', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.inspection_access' }],
-  e01_08d_reinspection: [{ signal_id: 'signal.reinspection_access', kind: 'access', anchor: 'entry', label_text_id: 'ui.signal.reinspection_access' }],
+  e01_08b_inspection_find: [{ signal_id: 'signal.inspection_access', kind: 'access', anchor: 'inspection', label_text_id: 'ui.signal.inspection_access' }],
+  e01_08d_reinspection: [{ signal_id: 'signal.reinspection_access', kind: 'access', anchor: 'inspection', label_text_id: 'ui.signal.reinspection_access' }],
   e01_08g_tbm_field_gap: [{ signal_id: 'signal.tbm_field_gap', kind: 'access', anchor: 'yard', label_text_id: 'ui.signal.tbm_field_gap' }],
   e01_08i_restart_pressure: [{ signal_id: 'signal.restart_unverified', kind: 'access', anchor: 'yard', label_text_id: 'ui.signal.restart_unverified' }],
 };
