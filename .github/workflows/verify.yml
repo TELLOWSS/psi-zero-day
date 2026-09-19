@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/task-007-casual-strategy-foundation
+      - 'build/**'
   workflow_dispatch:
 
 permissions:
