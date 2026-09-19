@@ -3,6 +3,10 @@ import { characterMapUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { VisualImage } from './VisualSlot';
 
+export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
+  return eventId === 'e01_08e_responsibility_clash' || eventId === 'e01_08f_report_return';
+}
+
 function stageTextId(presentationType: string | null | undefined, nodeId: string | null | undefined) {
   if (presentationType === 'SHOW_CHOICE') return 'ui.immersive.stage.decision';
   if (nodeId && /(result|high|low|reinforced|suppressed|missed|correction|evidence|timeline|paper|silenced|controlled|premature|distorted|cold|route|gap|chilled|reconstructed|preserved|rest|family|study|field_note)/i.test(nodeId)) {
@@ -37,7 +41,7 @@ export function EpisodeImmersiveScene({
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
-  const showEvidenceBoard = scene.event_id === 'e01_08e_responsibility_clash' || scene.event_id === 'e01_08f_report_return';
+  const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
 
   return <figure
     className="episode-immersive-scene"
