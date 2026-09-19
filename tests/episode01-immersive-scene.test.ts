@@ -68,4 +68,17 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.tone).toBe('reflective');
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.background_uri).toContain('home-night');
   });
+  it('keeps key field beats multi-plane instead of falling back to flat background-only scenes', () => {
+    const layeredFieldEvents = [
+      'e01_01_arrival',
+      'e01_02_meet_kang',
+      'e01_08_reactions',
+      'e01_08a_reporting_return',
+      'e01_10_next_day_tease',
+    ] as const;
+    for (const eventId of layeredFieldEvents) {
+      expect(plan.events[eventId].props.length).toBeGreaterThanOrEqual(2);
+    }
+  });
+
 });

@@ -1364,3 +1364,66 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     left:2%;top:9%;width:29%;opacity:.34
   }
 }
+
+/* EP01 field-depth pass v1: previously flat field scenes gain authored foreground/midground continuity. */
+.episode-immersive-scene:is(
+  [data-event="e01_01_arrival"],
+  [data-event="e01_02_meet_kang"],
+  [data-event="e01_08_reactions"],
+  [data-event="e01_08a_reporting_return"],
+  [data-event="e01_10_next_day_tease"]
+) .episode-immersive-prop{
+  animation:ep01-field-depth-in .42s cubic-bezier(.2,.74,.2,1) both;
+}
+@keyframes ep01-field-depth-in{
+  from{opacity:.28;translate:0 8px;scale:.975}
+  to{translate:0 0;scale:1}
+}
+.episode-immersive-scene[data-event="e01_01_arrival"] .episode-immersive-prop.prop-1{
+  left:auto;right:-4%;bottom:-4%;width:39%;height:58%;opacity:.78;z-index:1
+}
+.episode-immersive-scene[data-event="e01_01_arrival"] .episode-immersive-prop.prop-2{
+  left:-5%;right:auto;bottom:-11%;width:34%;height:36%;opacity:.72;z-index:2
+}
+.episode-immersive-scene[data-event="e01_02_meet_kang"] .episode-immersive-prop.prop-1{
+  left:auto;right:-6%;bottom:-3%;width:36%;height:55%;opacity:.67;z-index:1
+}
+.episode-immersive-scene[data-event="e01_02_meet_kang"] .episode-immersive-prop.prop-2{
+  left:-4%;right:auto;bottom:-10%;width:33%;height:34%;opacity:.76;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08_reactions"] .episode-immersive-prop.prop-1{
+  left:29%;right:auto;bottom:-10%;width:42%;height:38%;opacity:.84;z-index:3
+}
+.episode-immersive-scene[data-event="e01_08_reactions"] .episode-immersive-prop.prop-2{
+  left:auto;right:-4%;bottom:2%;width:29%;height:48%;opacity:.68;z-index:1
+}
+.episode-immersive-scene[data-event="e01_08a_reporting_return"] .episode-immersive-prop.prop-1{
+  left:-4%;right:auto;bottom:-10%;width:35%;height:36%;opacity:.8;z-index:2
+}
+.episode-immersive-scene[data-event="e01_08a_reporting_return"] .episode-immersive-prop.prop-2{
+  left:auto;right:-3%;bottom:2%;width:31%;height:49%;opacity:.74;z-index:1
+}
+.episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-prop.prop-1{
+  left:auto;right:-4%;bottom:-4%;width:35%;height:54%;opacity:.6;z-index:1
+}
+.episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-prop.prop-2{
+  left:30%;right:auto;bottom:-12%;width:31%;height:32%;opacity:.48;z-index:2
+}
+@media(max-width:760px){
+  .episode-immersive-scene:is(
+    [data-event="e01_01_arrival"],
+    [data-event="e01_02_meet_kang"],
+    [data-event="e01_08_reactions"],
+    [data-event="e01_08a_reporting_return"],
+    [data-event="e01_10_next_day_tease"]
+  ) .episode-immersive-prop{opacity:.62}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene:is(
+    [data-event="e01_01_arrival"],
+    [data-event="e01_02_meet_kang"],
+    [data-event="e01_08_reactions"],
+    [data-event="e01_08a_reporting_return"],
+    [data-event="e01_10_next_day_tease"]
+  ) .episode-immersive-prop{animation:none!important}
+}

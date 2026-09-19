@@ -20,7 +20,10 @@
       "cast": [
         "player"
       ],
-      "props": [],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp",
+        "assets/episode01/scene-elements/material-stack.webp"
+      ],
       "camera": "wide",
       "focus": "center"
     },
@@ -30,7 +33,10 @@
         "player",
         "kang_taesik"
       ],
-      "props": [],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
       "camera": "medium",
       "focus": "left"
     },
@@ -119,7 +125,10 @@
         "lim_junho",
         "player"
       ],
-      "props": [],
+      "props": [
+        "assets/episode01/scene-elements/exclusion-zone.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
       "camera": "medium",
       "focus": "center"
     },
@@ -130,7 +139,8 @@
         "lim_junho"
       ],
       "props": [
-        "assets/episode01/scene-elements/material-stack.webp"
+        "assets/episode01/scene-elements/material-stack.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",
       "focus": "left"
@@ -361,7 +371,10 @@
       "cast": [
         "player"
       ],
-      "props": [],
+      "props": [
+        "assets/episode01/scene-elements/site-gate.webp",
+        "assets/episode01/scene-elements/material-stack.webp"
+      ],
       "camera": "wide",
       "focus": "center"
     }
