@@ -43,12 +43,7 @@
 .strategy-worker-label strong em { color: #657b89; font-size: .78em; font-style: normal; font-weight: 650; }
 .strategy-worker-alert { position: absolute; top: -9px; left: 27px; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #a94435; color: #fff; border: 2px solid #fff; font-size: 11px; }
 
-.worker-overview { left: 54%; top: 24%; }
-.worker-yard { left: 26%; top: 61%; }
-.worker-entry { left: 54%; top: 57%; }
-.worker-core { left: 34%; top: 40%; }
-.worker-ramp { left: 39%; top: 47%; }
-.worker-gate { left: 72%; top: 64%; }
+/* Map coordinates are supplied inline by the Production Map anchor contract. */
 
 /* PLAYER — compact female safety manager, white/blue helmet, visible hair and tablet. */
 .strategy-map-worker[data-character="player"] .strategy-worker-figure { transform: scale(.94,1.02); }
