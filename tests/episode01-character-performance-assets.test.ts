@@ -41,4 +41,19 @@ describe('Episode 01 character performance asset contract', () => {
     expect(episode01CharacterPerformanceAssetId('unknown', 'neutral')).toBeUndefined();
     expect(episode01CharacterPerformanceAsset('unknown', 'neutral', () => undefined)).toBeUndefined();
   });
+  it('reuses the existing Junho concerned WebP as the concern-state compatibility asset', () => {
+    const asset = episode01CharacterPerformanceAsset(
+      'lim_junho',
+      'concern',
+      assetId => assetId === 'ep01.character.lim_junho.concerned'
+        ? 'assets/episode01/characters/lim-junho-concerned.webp'
+        : undefined,
+    );
+
+    expect(asset?.using_expression_asset).toBe(true);
+    expect(asset?.resolved_asset_id).toBe('ep01.character.lim_junho.concerned');
+    expect(asset?.uri).toBe('assets/episode01/characters/lim-junho-concerned.webp');
+    expect(asset?.asset_id).toBe('ep01.character.lim_junho.performance.concern');
+  });
+
 });
