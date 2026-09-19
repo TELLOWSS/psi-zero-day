@@ -179,7 +179,9 @@ describe('Playable Episode React UI', () => {
     }
     key('4', 'Digit4');
     expect(session.getSnapshot().state!.flags.followed_junho).toBe(true);
-    expect(session.getSnapshot().presentation).toEqual([]);
+    expect(session.getSnapshot().presentation).toEqual([
+      expect.objectContaining({ type: 'SHOW_RESULT', text_id: 'ep01.plan.d.result' }),
+    ]);
     expect(session.getSnapshot().state!.event_runtime.choice_history).toHaveLength(1);
     click(session.t('ui.strategy.return_map'));
     expect(session.getSnapshot().presentation[0]).toMatchObject({ text_id: 'ep01.junho.signal' });
