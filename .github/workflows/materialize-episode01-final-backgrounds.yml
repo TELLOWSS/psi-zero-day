@@ -50,6 +50,16 @@ jobs:
           npm run assets:scene-background-imagegen-check
       - name: Rebuild asset manifest
         run: npm run assets:manifest
+      - name: Mark exact final-art batch as ingested
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path='content/episode01/final-art-ingest-manifest.json';
+          const manifest=JSON.parse(fs.readFileSync(path,'utf8'));
+          manifest.status='exact_archive_verified_github_ingested';
+          manifest.verification={...manifest.verification,ingested_at:new Date().toISOString()};
+          fs.writeFileSync(path,JSON.stringify(manifest,null,2)+'\n');
+          NODE
       - name: Run Episode 01 visual tests
         run: npm run test:episode01-visual
       - name: Commit materialized backgrounds
@@ -57,7 +67,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A public/assets/episode01/cg content/episode01/assets.json .art-ingest
+          git add -A public/assets/episode01/cg content/episode01/assets.json content/episode01/final-art-ingest-manifest.json .art-ingest
           if git diff --cached --quiet; then
             echo "Final backgrounds already current."
           else
