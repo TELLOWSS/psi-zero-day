@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "queue_id": "episode01-visual-production-v2",
+  "rule": "Do not spend repeated generations on near-identical site-overview maps. Keep one master Production Map plate, then move through distinct gameplay surfaces.",
+  "master_map": {
+    "asset_id": "ep01.background.foundation.map",
+    "status": "concept-selected",
+    "final_path": "assets/episode01/backgrounds/foundation-map.webp",
+    "purpose": "single reusable strategic overview plate",
+    "generation_limit_before_selection": 3
+  },
+  "next_assets": [
+    {
+      "order": 1,
+      "asset_id": "ep01.background.ramp.entry",
+      "surface": "ramp_entry",
+      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "camera": "worker-eye-level 32mm wide-to-medium",
+      "visual_goal": "constrained temporary ramp, pedestrian/vehicle desire-line overlap, realistic Korean temporary works",
+      "must_differ_from_master": ["eye-level camera", "tight spatial pressure", "no bird-eye whole-site composition"]
+    },
+    {
+      "order": 2,
+      "asset_id": "ep01.background.work.yard",
+      "surface": "work_yard",
+      "final_path": "assets/episode01/cg/work-yard.webp",
+      "camera": "worker-eye-level 30mm wide",
+      "visual_goal": "material staging under structure with changing work zones and practical access controls",
+      "must_differ_from_master": ["under-structure depth", "foreground materials", "human-scale circulation"]
+    },
+    {
+      "order": 3,
+      "asset_id": "ep01.background.concrete.pour",
+      "surface": "concrete_pour",
+      "final_path": "assets/episode01/cg/concrete-pour.webp",
+      "camera": "dynamic 28mm slab-level wide shot",
+      "visual_goal": "first-pour pressure with pump boom, rebar workface, hose route and limited maneuvering room",
+      "must_differ_from_master": ["active pour operation", "slab-level perspective", "dynamic machinery"]
+    },
+    {
+      "order": 4,
+      "asset_id": "ep01.background.inspection.zone",
+      "surface": "inspection_zone",
+      "final_path": "assets/episode01/cg/inspection-zone.webp",
+      "camera": "35mm medium-wide",
+      "visual_goal": "inspection/reinspection space with opening, edge and access-control references",
+      "must_differ_from_master": ["interior-exterior threshold", "inspection scale", "clear evidence landmarks"]
+    },
+    {
+      "order": 5,
+      "asset_id": "ep01.background.site.office",
+      "surface": "site_office",
+      "final_path": "assets/episode01/cg/site-office.webp",
+      "camera": "38mm medium-wide interior",
+      "visual_goal": "modular field office for reporting, coordination and responsibility dialogue",
+      "must_differ_from_master": ["interior", "paperwork/evidence space", "mixed fluorescent/daylight"]
+    },
+    {
+      "order": 6,
+      "asset_id": "ep01.background.break.area",
+      "surface": "break_area",
+      "final_path": "assets/episode01/cg/break-area.webp",
+      "camera": "35mm medium-wide human-scale",
+      "visual_goal": "late-afternoon worker break area supporting social pressure and informal dialogue",
+      "must_differ_from_master": ["people-scale rest space", "late-afternoon mood", "no heavy equipment focus"]
+    },
+    {
+      "order": 7,
+      "asset_id": "ep01.background.home.night",
+      "surface": "home_night",
+      "final_path": "assets/episode01/cg/home-night.webp",
+      "camera": "38mm seated-eye-level interior",
+      "visual_goal": "quiet post-shift home reflection scene with study/notes space",
+      "must_differ_from_master": ["night interior", "non-site environment", "reflective narrative tone"]
+    }
+  ],
+  "runtime_rule": {
+    "backgrounds": "environment art only",
+    "named_characters": "runtime cutouts",
+    "risk_signals": "runtime overlays",
+    "choices_and_dialogue": "live React UI",
+    "minimap": "derived from Production Map geometry; do not spend image-generation budget on a separate decorative map"
+  }
+}
