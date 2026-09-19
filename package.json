@@ -11,7 +11,7 @@
     "dev": "vite",
     "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run audio:contract-check && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:scene-background-brief-check && npm run audio:contract-check && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -55,7 +55,8 @@
     "assets:node-visual-check": "node scripts/check-node-visual-coverage.mjs",
     "assets:scene-background-status": "node scripts/check-scene-background-production.mjs",
     "assets:scene-background-production-check": "node scripts/check-scene-background-production.mjs --require-final",
-    "test:episode01-audio": "vitest run tests/episode01-audio-production.test.ts"
+    "test:episode01-audio": "vitest run tests/episode01-audio-production.test.ts",
+    "assets:scene-background-brief-check": "node scripts/check-scene-background-briefs.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
