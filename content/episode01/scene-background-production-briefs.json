@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-production-background-brief-v1",
+  "purpose": "Final 1920x1080+ WebP art direction for the eight Episode 01 immersive environments. Characters and gameplay props remain separate runtime layers.",
+  "global_contract": {
+    "style": "commercial adult-friendly 2.5D casual-strategy construction drama; grounded Korean construction-site realism with clean readable silhouettes and restrained cinematic lighting",
+    "continuity": "same fictional NEW PSI universe and fictional contractor identity; no real company logos, real site names, apartment brands, readable license plates or copyrighted signage",
+    "composition": "16:9 landscape; preserve clean lower-center dialogue/readability zone and avoid critical hazards at extreme crop edges; support desktop cover crop and mobile 16:9 crop",
+    "character_rule": "do not bake named cast into background; distant anonymous workers may appear only as scale silhouettes",
+    "prop_rule": "do not make the runtime focal prop the only readable story cue; leave room for overlay props/characters",
+    "detail": "accurate PPE, temporary works, access routes, materials, vehicles and Korean-site spatial logic; avoid generic Western industrial-site visual language",
+    "reject": [
+      "photorealistic disaster spectacle",
+      "heroic safety propaganda pose",
+      "obvious correct-versus-wrong visual color coding",
+      "cyberpunk/neon sci-fi construction site",
+      "clean empty showroom-like site",
+      "real corporate branding or identifiable project signage",
+      "baked dialogue text, UI, captions or watermarks"
+    ]
+  },
+  "backgrounds": {
+    "gate_dawn": {
+      "final_path": "assets/episode01/cg/gate-dawn.webp",
+      "story_function": "Arrival and next-day reset. The site feels active before the player understands its social rules.",
+      "time_light": "06:20–06:55 blue dawn shifting to warm work lights; moist cool air, low sun not yet dominant",
+      "camera": "eye-level wide 28–32mm equivalent from just outside/inside gate, slight diagonal into site",
+      "must_show": [
+        "fictional construction gate/checkpoint",
+        "worker entry path separated imperfectly from vehicle flow",
+        "distant tower crane/building frame",
+        "idling work vehicles or delivery queue",
+        "temporary fencing and safety signage shapes without readable real brands"
+      ],
+      "tension": "busy but not dangerous on its face; subtle competition for space and attention",
+      "ui_safe_zone": "lower center 38% relatively low-detail; main visual anchors upper-left and mid-right"
+    },
+    "ramp_entry": {
+      "final_path": "assets/episode01/cg/ramp-entry.webp",
+      "story_function": "Schedule collision and Junho signal. The player can see why material flow, vehicle access and people interfere with each other.",
+      "time_light": "early morning neutral-cool daylight with warmer reflected construction lighting",
+      "camera": "wide-to-medium 30–35mm equivalent looking along a temporary ramp/entry lane",
+      "must_show": [
+        "temporary ramp or constrained entry lane",
+        "material staging encroaching on movement space",
+        "vehicle turning/overlap possibility",
+        "pedestrian desire line",
+        "barriers/cones that are present but imperfectly resolve flow"
+      ],
+      "tension": "credible congestion, not a crash scene",
+      "ui_safe_zone": "lower center-left reserved; strongest depth line should lead toward right-center"
+    },
+    "work_yard": {
+      "final_path": "assets/episode01/cg/work-yard.webp",
+      "story_function": "Field command, TBM gap, restart pressure and instruction cascade. Formal controls coexist with changing work.",
+      "time_light": "morning daylight, slightly dusty/overcast, realistic temporary illumination under structure",
+      "camera": "wide 28–32mm equivalent at worker eye height across active staging/workface",
+      "must_show": [
+        "temporary access path",
+        "mixed materials and work zones",
+        "visible but incomplete exclusion/control boundaries",
+        "workface depth under structural frame",
+        "space for later overlay of harness/open-edge/access props"
+      ],
+      "tension": "work is moving; control measures can lag behind sequence changes",
+      "ui_safe_zone": "lower 35% center uncluttered enough for dialogue; avoid a giant central machine"
+    },
+    "concrete_pour": {
+      "final_path": "assets/episode01/cg/concrete-pour.webp",
+      "story_function": "Pump arrival and first pour set piece. Production energy is high and spatial control matters.",
+      "time_light": "brighter morning daylight with wet concrete/rebar reflections; no dramatic storm",
+      "camera": "dynamic wide 26–30mm equivalent, pump/truck mass on right side and workface depth left/center",
+      "must_show": [
+        "concrete pump truck/boom context without real brand",
+        "hose/pour work area or slab/rebar context",
+        "temporary access/exclusion boundaries",
+        "workers as small distant scale silhouettes only",
+        "vehicle/workface relationship"
+      ],
+      "tension": "energetic productive scene with limited maneuvering room; no collision frozen in progress",
+      "ui_safe_zone": "lower center kept readable; boom/vehicle silhouette concentrated upper/right"
+    },
+    "inspection_zone": {
+      "final_path": "assets/episode01/cg/inspection-zone.webp",
+      "story_function": "Inspection discovery, pushback and reinspection. The same place must support both hazard evidence and corrective-control reading.",
+      "time_light": "midday neutral daylight; slightly cool concrete interior/exterior transition",
+      "camera": "medium-wide 32–38mm equivalent aimed across edge/access zone with clear depth references",
+      "must_show": [
+        "temporary edge/opening context",
+        "wet or messy floor possibility",
+        "temporary barrier/guarding context",
+        "work continuing beyond inspected area",
+        "clear physical reference points that can look changed on reinspection"
+      ],
+      "tension": "ambiguous enough that sequencing and adequacy of controls must be judged, not visually pre-decided",
+      "ui_safe_zone": "center-lower clean; inspection clues left and right so choice focus can crop either way"
+    },
+    "site_office": {
+      "final_path": "assets/episode01/cg/site-office.webp",
+      "story_function": "Responsibility clash, report return and record pressure. Human accounts meet incomplete records.",
+      "time_light": "daytime site office, cool fluorescent/LED light with warm daylight leak from window",
+      "camera": "medium-wide 35–40mm equivalent from meeting-table corner toward wall/window",
+      "must_show": [
+        "modular site office interior",
+        "table/desk with paperwork space",
+        "monitor/keyboard or radio charger",
+        "window hinting at active site outside",
+        "blank/abstract pinboard or document wall for runtime evidence-board overlay"
+      ],
+      "tension": "administrative pressure and field proximity, not a corporate boardroom",
+      "ui_safe_zone": "right-upper/center room for evidence-board layer; lower center not busy"
+    },
+    "break_area": {
+      "final_path": "assets/episode01/cg/break-area.webp",
+      "story_function": "Stop-work social aftershock. Safety action has interpersonal and cultural consequences after the immediate hazard is gone.",
+      "time_light": "late afternoon soft light, sheltered break/rest area",
+      "camera": "medium-wide 35mm equivalent with benches/table and worksite glimpsed beyond",
+      "must_show": [
+        "temporary worker rest area",
+        "benches/table/water station or lockers",
+        "site visible through opening",
+        "space where small groups could plausibly talk apart from each other",
+        "ordinary worn-in details"
+      ],
+      "tension": "social distance and fatigue, not hostility staged like a confrontation poster",
+      "ui_safe_zone": "center-lower clear; seating and site glimpse toward sides"
+    },
+    "home_night": {
+      "final_path": "assets/episode01/cg/home-night.webp",
+      "story_function": "Evening reflection. Work traces remain mentally present without melodramatic punishment or reward.",
+      "time_light": "quiet Korean apartment-like night, warm practical lamp plus cool window city light",
+      "camera": "medium-wide 35–40mm equivalent from seated eye level toward modest living/dining workspace",
+      "must_show": [
+        "ordinary apartment-like interior",
+        "small table/desk usable for notes or study",
+        "window with distant urban traffic lights",
+        "personal but non-identifying household details",
+        "visual calm distinct from site scenes"
+      ],
+      "tension": "decompression with residual cognitive load; neither bleak nor triumphal",
+      "ui_safe_zone": "lower center and left readable; memory-strip can occupy upper/right"
+    }
+  }
+}
