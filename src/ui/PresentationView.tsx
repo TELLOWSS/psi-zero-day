@@ -16,6 +16,8 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
     return <button key={c.choice_id} type="button" disabled={!c.enabled} data-choice-tone={visual?.tone} data-authored-visual={visual?.authored || undefined}
       onMouseEnter={() => { if (c.enabled) onChoicePreview?.(c.choice_id); }}
       onMouseLeave={() => onChoicePreview?.(null)}
+      onPointerDown={() => { if (c.enabled) onChoicePreview?.(c.choice_id); }}
+      onPointerCancel={() => onChoicePreview?.(null)}
       onFocus={() => { if (c.enabled) onChoicePreview?.(c.choice_id); }}
       onBlur={() => onChoicePreview?.(null)}
       onClick={e => { if (e.detail < 2) { onChoicePreview?.(null); send({ type: 'choose_event', instance_id: p.instance_id, node_id: p.node_id, choice_id: c.choice_id }); } }}>
