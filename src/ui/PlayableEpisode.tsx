@@ -13,6 +13,7 @@ import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
 import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
+import { episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
   consumePaidItem,
@@ -85,6 +86,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeEventId = activeInstance?.event_id ?? null;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
+  const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
   const continuityTrace = episode01ContinuityTrace(snapshot.state, activeEventId);
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
   const fallbackChoiceId = activeInstance
@@ -378,6 +380,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         zone={cinematicBeat?.zone}
         resolve={resolveAsset}
         t={t}
+        memoryVisualPlan={memoryVisualPlan}
       />
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
         {person ? <CharacterCard
