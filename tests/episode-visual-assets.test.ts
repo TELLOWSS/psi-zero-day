@@ -6,7 +6,7 @@ const fake = (id:string) => `/asset/${id}`;
 describe('episode visual assets lightweight boundary',()=>{
   it('resolves title character art without the scene-element catalog',()=>{
     expect(characterPortraitUri('player', fake)).toContain('player');
-    expect(characterMapUri('lim_junho', fake)).toContain('lim-junho');
+    expect(characterMapUri('lim_junho', fake)).toContain('ep01.character.lim_junho.map');
     expect(episode01BackgroundUri(fake)).toContain('background');
   });
 
