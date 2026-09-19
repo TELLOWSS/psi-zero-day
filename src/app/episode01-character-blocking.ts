@@ -91,6 +91,23 @@ const BLOCKING_BY_EVENT_NODE: Readonly<Record<string, Readonly<Record<string, Bl
       lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
     }),
   }),
+  e01_08l_stopwork_return: Object.freeze({
+    silenced: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'center', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+    cold: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'far-left', depth: 'background' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'midground' }),
+    }),
+    route: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+      kang_taesik: Object.freeze({ side: 'center', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+  }),
 });
 
 const SIDE_ORDER: readonly Episode01BlockingSide[] = ['far-left', 'left', 'center', 'right', 'far-right'];
