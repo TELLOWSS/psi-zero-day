@@ -132,7 +132,10 @@ describe('NPC dialogue projection and existing event execution', () => {
     const state = engine.getState();
     expect(getNpcRelationship(state, 'lim_junho').reporting).toBe(choice === 'listen_more' ? 36 : 28);
     expect(state.flags.ramp_signal_known).toBe(choice === 'listen_more');
-    expect(state.event_runtime.completion_history.at(-1)?.event_id).toBe('e01_04_junho_signal');
+    const resultNode = choice === 'listen_more' ? 'listen_more_result' : 'dismiss_result';
+    expect(state.event_runtime.active_instance?.current_node_id).toBe(resultNode);
+    engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: resultNode });
+    expect(engine.getState().event_runtime.completion_history.at(-1)?.event_id).toBe('e01_04_junho_signal');
   });
 
   it('exposes relationship/session requirements and rejects unmet responses without mutations', () => {
