@@ -1,0 +1,68 @@
+name: Materialize Episode 01 final backgrounds
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.art-ingest/episode01/*.b64'
+      - '.github/workflows/materialize-episode01-final-backgrounds.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: episode01-final-backgrounds
+  cancel-in-progress: true
+
+jobs:
+  materialize:
+    if: "!contains(github.event.head_commit.message, 'art: materialize Episode 01 final backgrounds')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - name: Decode final WebP batch
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/assets/episode01/cg
+          expected=(
+            gate-dawn ramp-entry work-yard concrete-pour
+            inspection-zone site-office break-area home-night
+          )
+          for name in "${expected[@]}"; do
+            source=".art-ingest/episode01/${name}.webp.b64"
+            test -f "$source" || { echo "Missing $source"; exit 1; }
+            base64 --decode "$source" > "public/assets/episode01/cg/${name}.webp"
+          done
+          count=$(find .art-ingest/episode01 -maxdepth 1 -type f -name '*.webp.b64' | wc -l | tr -d ' ')
+          test "$count" = "8" || { echo "Expected exactly 8 ingest files, got $count"; exit 1; }
+          rm -rf .art-ingest/episode01
+      - run: npm ci
+      - name: Verify final production backgrounds
+        run: |
+          npm run assets:scene-background-production-check
+          npm run assets:scene-background-brief-check
+          npm run assets:scene-background-imagegen-check
+      - name: Rebuild asset manifest
+        run: npm run assets:manifest
+      - name: Run Episode 01 visual tests
+        run: npm run test:episode01-visual
+      - name: Commit materialized backgrounds
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public/assets/episode01/cg content/episode01/assets.json .art-ingest
+          if git diff --cached --quiet; then
+            echo "Final backgrounds already current."
+          else
+            git commit -m "art: materialize Episode 01 final backgrounds"
+            git push
+          fi
