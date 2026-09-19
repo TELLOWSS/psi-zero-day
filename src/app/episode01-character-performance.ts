@@ -22,7 +22,7 @@ type CharacterPerformancePatch = Partial<Episode01CharacterPerformance>;
 type CharacterPatchMap = Readonly<Record<string, CharacterPerformancePatch>>;
 type NodePatchMap = Readonly<Record<string, CharacterPatchMap>>;
 
-const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = Object.freeze({
+const EVENT_BASE = Object.freeze({
   e01_08b_inspection_find: Object.freeze({
     player: { pose: 'observe' },
     seo_jeongmin: { pose: 'inspect', expression: 'neutral' },
@@ -61,9 +61,9 @@ const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = Object.freeze({
     kang_taesik: { pose: 'listen', expression: 'neutral' },
     lim_junho: { pose: 'hesitate', expression: 'concern' },
   }),
-});
+} satisfies Record<string, CharacterPatchMap>);
 
-const NODE_PATCHES: Readonly<Record<string, NodePatchMap>> = Object.freeze({
+const NODE_PATCHES = Object.freeze({
   e01_08b_inspection_find: Object.freeze({
     inspection: Object.freeze({
       seo_jeongmin: { pose: 'inspect', expression: 'neutral', motion: 'enter' },
@@ -210,7 +210,7 @@ const NODE_PATCHES: Readonly<Record<string, NodePatchMap>> = Object.freeze({
       lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
     }),
   }),
-});
+} satisfies Record<string, NodePatchMap>);
 
 const DEFAULT_PERFORMANCE: Episode01CharacterPerformance = Object.freeze({
   expression: 'neutral',
