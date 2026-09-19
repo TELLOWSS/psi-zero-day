@@ -129,6 +129,7 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
+    data-background-source={resolvedBackground ? 'final' : 'rc-fallback'}
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
