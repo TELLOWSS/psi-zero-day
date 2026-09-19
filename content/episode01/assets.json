@@ -626,6 +626,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.first_aid_aed",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/first-aid-aed.webp",
+          "format": "webp",
+          "bytes": 16919,
+          "hash": "65428065ba7a8507976c9176fca827583029f0bd466474e3b2b9444d2480493d"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.gangform_lift_wire22",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -674,6 +690,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.material_yard",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/material-yard.webp",
+          "format": "webp",
+          "bytes": 15009,
+          "hash": "e4fa31d23f3519ed15c96353770ccbd0a72efc32c0f861c4447ea495ad3169fd"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.open_edge",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -683,6 +715,22 @@
           "format": "webp",
           "bytes": 299746,
           "hash": "f35e2fa801ca203f62db83e74d5953e3561734c4576021e4bf25fe0b89f083cf"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.pedestrian_gate",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/pedestrian-gate.webp",
+          "format": "webp",
+          "bytes": 15009,
+          "hash": "bc6e4fed13a00ad58c7120fad70e32d50f35d76fd1ac3a32ffb515c0dfb541e9"
         }
       ],
       "dependencies": [],
@@ -706,6 +754,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.ppe_issue_station",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/ppe-issue-station.webp",
+          "format": "webp",
+          "bytes": 13837,
+          "hash": "af833bef764c115dd137e006e9c3d338cf2c64653d296837daf092ade17db3f8"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.site_gate",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -715,6 +779,22 @@
           "format": "webp",
           "bytes": 7395,
           "hash": "927af20c9da3e42427d14645d972bcaca5f35cd690b81dd7a596118e8c3a0efd"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.site_weather_station",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/site-weather-station.webp",
+          "format": "webp",
+          "bytes": 10782,
+          "hash": "54600dcd1add9b3c30aacc982a4f74bada473074f443e8926414695879be4ea4"
         }
       ],
       "dependencies": [],
@@ -738,6 +818,38 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.temporary_distribution_board",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/temporary-distribution-board.webp",
+          "format": "webp",
+          "bytes": 15030,
+          "hash": "629522f7bb89b63d5707a87eccb44bc84cef9aa767aa5df5f86389ba05520a72"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.temporary_lighting_pack",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
+          "format": "webp",
+          "bytes": 16919,
+          "hash": "b0de525309e171d85ed249f390d8f2ad018e16e6aec46033e5400238dc2d2782"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.vehicle_overlap",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -747,6 +859,22 @@
           "format": "webp",
           "bytes": 3972,
           "hash": "3de85114ac9eee95034d2c39e9f88d7bb6b6f7e8b9c39bdc9669674709a2287f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+          "format": "webp",
+          "bytes": 15009,
+          "hash": "f7c7b1ed985fbb00107b361e26b5443f44be5b46eb993305e60b67b45f5c7e94"
         }
       ],
       "dependencies": [],

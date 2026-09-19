@@ -474,7 +474,7 @@
       "kind": "control",
       "label": "근로자 전용 출입구",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.pedestrian_gate",
       "art": {
         "path": "assets/episode01/scene-elements/pedestrian-gate.webp",
@@ -509,7 +509,7 @@
       "kind": "control",
       "label": "차량·보행 동선 분리시설",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
       "art": {
         "path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
@@ -546,7 +546,7 @@
       "kind": "prop",
       "label": "자재 야적장",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.material_yard",
       "art": {
         "path": "assets/episode01/scene-elements/material-yard.webp",
@@ -584,7 +584,7 @@
       "kind": "equipment",
       "label": "임시 분전반",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.temporary_distribution_board",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
@@ -622,7 +622,7 @@
       "kind": "control",
       "label": "임시조명",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.temporary_lighting_pack",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
@@ -659,7 +659,7 @@
       "kind": "control",
       "label": "안전용품 지급·교체 지점",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.ppe_issue_station",
       "art": {
         "path": "assets/episode01/scene-elements/ppe-issue-station.webp",
@@ -732,7 +732,7 @@
       "kind": "equipment",
       "label": "응급구호함·AED",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.first_aid_aed",
       "art": {
         "path": "assets/episode01/scene-elements/first-aid-aed.webp",
@@ -768,7 +768,7 @@
       "kind": "equipment",
       "label": "현장 풍속·기상 확인 지점",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.site_weather_station",
       "art": {
         "path": "assets/episode01/scene-elements/site-weather-station.webp",
