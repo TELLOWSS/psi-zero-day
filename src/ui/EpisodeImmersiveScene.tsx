@@ -3,6 +3,13 @@ import { characterMapUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { VisualImage } from './VisualSlot';
 
+const EPISODE01_MEMORY_FRAMES = [
+  { assetId: 'ep01.scene_bg.ramp_entry', fallback: 'assets/episode01/cg/ramp-entry-rc.svg' },
+  { assetId: 'ep01.scene_bg.concrete_pour', fallback: 'assets/episode01/cg/concrete-pour-rc.svg' },
+  { assetId: 'ep01.scene_bg.inspection_zone', fallback: 'assets/episode01/cg/inspection-zone-rc.svg' },
+  { assetId: 'ep01.scene_bg.site_office', fallback: 'assets/episode01/cg/site-office-rc.svg' },
+] as const;
+
 export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
   return eventId === 'e01_08e_responsibility_clash'
     || eventId === 'e01_08f_report_return'
@@ -46,6 +53,7 @@ export function EpisodeImmersiveScene({
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
+  const showMemoryStrip = scene.event_id === 'e01_09_evening' || scene.event_id === 'e01_10_next_day_tease';
 
   return <figure
     className="episode-immersive-scene"
@@ -65,6 +73,11 @@ export function EpisodeImmersiveScene({
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
+    {showMemoryStrip ? <div className="episode-immersive-memory-strip" data-next-day={scene.event_id === 'e01_10_next_day_tease' || undefined} aria-hidden="true">
+      {EPISODE01_MEMORY_FRAMES.map((frame, index) => <span key={frame.assetId} className={`memory-frame memory-${index + 1}`}>
+        <VisualImage uri={resolve(frame.assetId) ?? frame.fallback} fallbackUri={frame.fallback} alt="" />
+      </span>)}
+    </div> : null}
     {showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
       <span className="evidence-sheet sheet-a" />
       <span className="evidence-sheet sheet-b" />
