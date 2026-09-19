@@ -14,6 +14,27 @@ export function episode01UsesMemoryStrip(eventId: string | null | undefined) {
   return eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease';
 }
 
+export type Episode01MomentOverlay =
+  | 'signal-trace'
+  | 'pump-approach'
+  | 'near-miss'
+  | 'inspection-frame'
+  | 'stopwork-gap'
+  | 'record-pressure';
+
+export function episode01MomentOverlay(eventId: string | null | undefined, nodeId: string | null | undefined): Episode01MomentOverlay | undefined {
+  if (eventId === 'e01_04_junho_signal') return 'signal-trace';
+  if (eventId === 'e01_06_pump_arrival') {
+    return nodeId && /near[_-]?miss/i.test(nodeId) ? 'near-miss' : 'pump-approach';
+  }
+  if (eventId === 'e01_08b_inspection_find' || eventId === 'e01_08c_site_pushback' || eventId === 'e01_08d_reinspection') {
+    return 'inspection-frame';
+  }
+  if (eventId === 'e01_08k_stopwork_aftershock' || eventId === 'e01_08l_stopwork_return') return 'stopwork-gap';
+  if (eventId === 'e01_08o_record_pressure' || eventId === 'e01_08p_record_return') return 'record-pressure';
+  return undefined;
+}
+
 export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
   return eventId === 'e01_08e_responsibility_clash'
     || eventId === 'e01_08f_report_return'
@@ -60,6 +81,7 @@ export function EpisodeImmersiveScene({
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
+  const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -79,6 +101,12 @@ export function EpisodeImmersiveScene({
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
+    {momentOverlay ? <div className="episode-immersive-moment-overlay" data-moment={momentOverlay} aria-hidden="true">
+      <span className="moment-mark moment-a" />
+      <span className="moment-mark moment-b" />
+      <span className="moment-mark moment-c" />
+      <i className="moment-axis" />
+    </div> : null}
     {showMemoryStrip ? <div className="episode-immersive-memory-strip" data-next-day={scene.event_id === 'e01_10_next_day_tease' || undefined} aria-hidden="true">
       {EPISODE01_MEMORY_FRAMES.map((frame, index) => <span key={frame.assetId} className={`memory-frame memory-${index + 1}`}>
         <VisualImage uri={resolve(frame.assetId) ?? frame.fallback} fallbackUri={frame.fallback} alt="" />

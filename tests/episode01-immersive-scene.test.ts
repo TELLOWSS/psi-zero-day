@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import manifest from '../content/episode01/manifest.json';
 import plan from '../content/episode01/immersive-scenes.json';
 import { episode01DirectedNodeCount, episode01ImmersiveScene, episode01ImmersiveSceneCount } from '../src/app/episode01-immersive-scene';
+import { episode01MomentOverlay } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 immersive scene coverage', () => {
   it('covers every authored Episode 01 event', () => {
@@ -81,4 +82,15 @@ describe('Episode 01 immersive scene coverage', () => {
     }
   });
 
+
+
+  it('maps signature Episode 01 moments to neutral scene overlays without scoring choices', () => {
+    expect(episode01MomentOverlay('e01_04_junho_signal', 'detail')).toBe('signal-trace');
+    expect(episode01MomentOverlay('e01_06_pump_arrival', 'pump')).toBe('pump-approach');
+    expect(episode01MomentOverlay('e01_06_pump_arrival', 'near_miss')).toBe('near-miss');
+    expect(episode01MomentOverlay('e01_08b_inspection_find', 'inspection')).toBe('inspection-frame');
+    expect(episode01MomentOverlay('e01_08k_stopwork_aftershock', 'aftershock')).toBe('stopwork-gap');
+    expect(episode01MomentOverlay('e01_08o_record_pressure', 'pressure')).toBe('record-pressure');
+    expect(episode01MomentOverlay('e01_09_evening', 'rest')).toBeUndefined();
+  });
 });

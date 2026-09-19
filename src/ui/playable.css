@@ -1507,3 +1507,121 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-speaker-tag em{font-size:8px}
 }
 
+/* EP01 signature-moment overlays: visual attention without correctness scoring. */
+.episode-immersive-moment-overlay{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  overflow:hidden;
+}
+.episode-immersive-moment-overlay .moment-mark,
+.episode-immersive-moment-overlay .moment-axis{
+  position:absolute;
+  display:block;
+  box-sizing:border-box;
+}
+.episode-immersive-moment-overlay[data-moment="signal-trace"] .moment-a{
+  left:53%;top:46%;width:18%;height:11%;
+  border:1px solid rgba(230,205,138,.56);
+  border-radius:50%;
+  transform:rotate(-11deg);
+  box-shadow:0 0 0 6px rgba(230,205,138,.055),0 0 24px rgba(230,205,138,.08);
+}
+.episode-immersive-moment-overlay[data-moment="signal-trace"] .moment-b{
+  left:39%;top:57%;width:29%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(214,225,220,.28),transparent);
+  transform:rotate(13deg);
+}
+.episode-immersive-moment-overlay[data-moment="signal-trace"] .moment-c{
+  left:64%;top:51%;width:5px;height:5px;border-radius:50%;
+  background:rgba(238,213,143,.72);
+  box-shadow:0 0 18px rgba(238,213,143,.36);
+}
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-axis{
+  left:28%;bottom:16%;width:58%;height:2px;
+  background:linear-gradient(90deg,rgba(229,190,105,.1),rgba(229,190,105,.58),rgba(229,190,105,.08));
+  transform:rotate(-8deg);
+  transform-origin:left center;
+}
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-c{
+  bottom:13%;width:7px;height:7px;border-radius:50%;
+  border:1px solid rgba(234,205,139,.62);background:rgba(20,28,31,.5);
+}
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-a{left:38%}
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-b{left:57%;bottom:16%}
+.episode-immersive-moment-overlay[data-moment="pump-approach"] .moment-c{left:75%;bottom:19%}
+.episode-immersive-moment-overlay[data-moment="near-miss"]{
+  background:radial-gradient(circle at 64% 61%,rgba(213,187,125,.12),transparent 19%);
+}
+.episode-immersive-moment-overlay[data-moment="near-miss"] .moment-a{
+  left:58%;top:55%;width:16%;height:2px;
+  background:rgba(231,216,178,.64);
+  transform:rotate(-6deg);
+  box-shadow:0 0 13px rgba(231,216,178,.16);
+}
+.episode-immersive-moment-overlay[data-moment="near-miss"] .moment-b{
+  left:61%;top:60%;width:14%;height:2px;
+  background:rgba(201,211,205,.38);
+  transform:rotate(4deg);
+}
+.episode-immersive-moment-overlay[data-moment="near-miss"] .moment-c{
+  left:64%;top:54%;width:28px;height:28px;border:1px solid rgba(232,211,156,.5);border-radius:50%;
+}
+.episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-a{
+  left:7%;top:18%;width:18%;height:28%;
+  border-left:1px solid rgba(193,217,220,.4);
+  border-top:1px solid rgba(193,217,220,.4);
+}
+.episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-b{
+  right:7%;bottom:20%;width:18%;height:28%;
+  border-right:1px solid rgba(193,217,220,.4);
+  border-bottom:1px solid rgba(193,217,220,.4);
+}
+.episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-axis{
+  left:12%;right:12%;top:50%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(190,214,216,.22),transparent);
+}
+.episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-c{
+  left:48%;top:48%;width:7px;height:7px;border-radius:50%;
+  border:1px solid rgba(202,222,223,.45);
+}
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"]{
+  background:linear-gradient(90deg,transparent 0 44%,rgba(8,13,16,.24) 48% 56%,transparent 60%);
+}
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"] .moment-axis{
+  left:49.5%;top:18%;bottom:18%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(207,215,207,.23),transparent);
+}
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"] .moment-b{
+  top:43%;width:14%;height:1px;background:rgba(201,211,205,.18);
+}
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"] .moment-a{left:19%}
+.episode-immersive-moment-overlay[data-moment="stopwork-gap"] .moment-b{right:19%}
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-c{
+  right:8%;width:26%;height:1px;
+  background:linear-gradient(90deg,rgba(197,214,216,.06),rgba(197,214,216,.36));
+}
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-a{top:31%}
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-b{top:42%;width:22%}
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-c{top:53%;width:18%}
+.episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-axis{
+  right:6%;top:25%;width:1px;height:36%;
+  background:rgba(196,214,216,.2);
+}
+@media(max-width:760px){
+  .episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-a,
+  .episode-immersive-moment-overlay[data-moment="inspection-frame"] .moment-b{width:14%;height:22%}
+  .episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-a,
+  .episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-b,
+  .episode-immersive-moment-overlay[data-moment="record-pressure"] .moment-c{right:3%;width:30%}
+}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-moment-overlay *{animation:none!important;transition:none!important}
+}
+
