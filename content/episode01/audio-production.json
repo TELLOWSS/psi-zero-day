@@ -29,6 +29,7 @@
       ],
       "loop_candidate": true,
       "events": [
+        "e01_01_arrival",
         "e01_03_plan_breaks",
         "e01_10_next_day_tease"
       ],
@@ -53,6 +54,7 @@
       "events": [
         "e01_04_junho_signal",
         "e01_08g_tbm_field_gap",
+        "e01_08l_stopwork_return",
         "e01_08m_instruction_cascade"
       ],
       "direction": "Short construction-radio squelch, clipped push-to-talk texture and faint unintelligible voice tail.",
@@ -73,9 +75,15 @@
       ],
       "loop_candidate": true,
       "events": [
+        "e01_02_meet_kang",
         "e01_05_command",
+        "e01_08a_reporting_return",
         "e01_08b_inspection_find",
-        "e01_08i_restart_pressure"
+        "e01_08c_site_pushback",
+        "e01_08d_reinspection",
+        "e01_08h_tbm_return",
+        "e01_08i_restart_pressure",
+        "e01_08j_restart_return"
       ],
       "direction": "Foundation workface tension: metal contact, footsteps on temporary path, distant machinery and compressed work rhythm.",
       "reject": [
@@ -115,7 +123,8 @@
       ],
       "loop_candidate": true,
       "events": [
-        "e01_07_first_pour"
+        "e01_07_first_pour",
+        "e01_08_reactions"
       ],
       "direction": "Wet concrete through hose with pump pulse, hose movement, rebar/workface texture; energetic but not deafening.",
       "reject": [
@@ -156,7 +165,10 @@
       "loop_candidate": true,
       "events": [
         "e01_08e_responsibility_clash",
-        "e01_08o_record_pressure"
+        "e01_08f_report_return",
+        "e01_08n_instruction_return",
+        "e01_08o_record_pressure",
+        "e01_08p_record_return"
       ],
       "direction": "Site office room tone: HVAC/computer hum, distant site machinery through wall, light paper/keyboard texture.",
       "reject": [
@@ -187,7 +199,7 @@
     }
   ],
   "integration": {
-    "current": "Each event first tries its production asset_id through EpisodeSession.assetUri(). If absent, a lightweight field-oriented WebAudio cue plays instead (clean/radio/pressure/air timbre families).",
+    "current": "Each of the 26 Episode 01 immersive events resolves to one of eight production audio asset slots. If the reviewed binary is absent, a lightweight field-oriented WebAudio cue plays instead (clean/radio/pressure/air timbre families).",
     "finalization": "When a reviewed binary is added under public/assets/episode01/audio and registered in assets.json generation, no story or event rule changes are required.",
     "qa_surfaces": [
       "web production",
