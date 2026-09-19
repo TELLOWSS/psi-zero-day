@@ -59,4 +59,31 @@ describe('Episode 01 immersive cast identity', () => {
     expect(nearMiss).toContain('data-detail-kind="hazard"');
     expect(calm).not.toContain('episode-immersive-detail-cut');
   });
+
+  it('auto-upgrades the evening memory strip through the same stable final background assets', () => {
+    const finals: Record<string, string> = {
+      'ep01.scene_bg.home_night': 'assets/episode01/cg/home-night.webp',
+      'ep01.scene_bg.ramp_entry': 'assets/episode01/cg/ramp-entry.webp',
+      'ep01.scene_bg.concrete_pour': 'assets/episode01/cg/concrete-pour.webp',
+      'ep01.scene_bg.inspection_zone': 'assets/episode01/cg/inspection-zone.webp',
+      'ep01.scene_bg.site_office': 'assets/episode01/cg/site-office.webp',
+    };
+
+    const html = renderToStaticMarkup(<EpisodeImmersiveScene
+      eventId="e01_09_evening"
+      nodeId="rest"
+      presentationType="SHOW_RESULT"
+      eventTitle="저녁"
+      resolve={id => finals[id]}
+      t={id => id}
+    />);
+
+    expect(html).toContain('episode-immersive-memory-strip');
+    expect(html).toContain('assets/episode01/cg/home-night.webp');
+    expect(html).toContain('assets/episode01/cg/ramp-entry.webp');
+    expect(html).toContain('assets/episode01/cg/concrete-pour.webp');
+    expect(html).toContain('assets/episode01/cg/inspection-zone.webp');
+    expect(html).toContain('assets/episode01/cg/site-office.webp');
+    expect((html.match(/data-asset-tier="final"/g) ?? []).length).toBeGreaterThanOrEqual(5);
+  });
 });
