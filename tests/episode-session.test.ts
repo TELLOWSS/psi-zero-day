@@ -73,7 +73,7 @@ describe('Episode application session', () => {
     expect(complete.total).toBeLessThan(26);
   });
 
-  it('holds a terminal field result until the player confirms or reconsiders it', () => {
+  it('shows the authored field result before advancing into the next event', () => {
     const session = new EpisodeSession(episodeOptions(916), episodeBounds);
     session.start(0);
     let choiceSnapshot = session.getSnapshot();
@@ -86,47 +86,27 @@ describe('Episode application session', () => {
       expect(session.dispatch({ type: 'advance_event', instance_id: command.instance_id, node_id: command.node_id }, choiceSnapshot.revision)).toBe(true);
     }
     const planChoice = choiceSnapshot.presentation.find(item => item.type === 'SHOW_CHOICE');
-    if (planChoice?.type !== 'SHOW_CHOICE' || !choiceSnapshot.state) throw new Error('Expected plan choice');
-    const checkpoint = choiceSnapshot.state;
+    if (planChoice?.type !== 'SHOW_CHOICE') throw new Error('Expected plan choice');
+
     expect(session.dispatch({
       type: 'choose_event', instance_id: planChoice.instance_id, node_id: planChoice.node_id, choice_id: 'delegate_kang',
     }, choiceSnapshot.revision)).toBe(true);
-    const held = session.getSnapshot();
-    expect(held.presentation).toEqual([
+
+    const result = session.getSnapshot();
+    expect(result.presentation).toEqual([
       expect.objectContaining({ type: 'SHOW_RESULT', instance_id: planChoice.instance_id, text_id: 'ep01.plan.a.result' }),
     ]);
-    expect(held.state?.event_runtime.active_instance?.current_node_id).toBe('delegate_kang_result');
-    expect(held.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
+    expect(result.state?.event_runtime.active_instance?.current_node_id).toBe('delegate_kang_result');
+    expect(result.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(true);
+
     expect(session.dispatch({
       type: 'advance_event', instance_id: planChoice.instance_id, node_id: 'delegate_kang_result',
-    }, held.revision)).toBe(true);
-    const terminal = session.getSnapshot();
-    expect(terminal.state?.event_runtime.active_instance).toBeNull();
-    expect(terminal.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
+    }, result.revision)).toBe(true);
 
-    expect(session.reconsider(checkpoint, terminal.revision)).toBe(true);
-    const restored = session.getSnapshot();
-    expect(restored.state).toEqual(checkpoint);
-    expect(restored.presentation.some(item => item.type === 'SHOW_CHOICE')).toBe(true);
-    expect(restored.state?.event_runtime.choice_history.some(item => item.choice_id === 'delegate_kang')).toBe(false);
-    expect(session.reconsider(checkpoint, restored.revision)).toBe(false);
-
-    const restoredChoice = restored.presentation.find(item => item.type === 'SHOW_CHOICE');
-    if (restoredChoice?.type !== 'SHOW_CHOICE') throw new Error('Expected restored plan choice');
-    expect(session.dispatch({
-      type: 'choose_event', instance_id: restoredChoice.instance_id, node_id: restoredChoice.node_id, choice_id: 'delegate_kang',
-    }, restored.revision)).toBe(true);
-    const secondResult = session.getSnapshot();
-    expect(secondResult.state?.event_runtime.active_instance?.current_node_id).toBe('delegate_kang_result');
-    expect(session.dispatch({
-      type: 'advance_event', instance_id: restoredChoice.instance_id, node_id: 'delegate_kang_result',
-    }, secondResult.revision)).toBe(true);
-    const secondHeld = session.getSnapshot();
-    expect(secondHeld.state?.event_runtime.active_instance).toBeNull();
-    expect(session.confirmFieldOutcome(restoredChoice.instance_id, secondHeld.revision)).toBe(true);
-    const confirmed = session.getSnapshot();
-    expect(confirmed.state?.event_runtime.active_instance?.event_id).not.toBe('e01_03_plan_breaks');
-    expect(confirmed.presentation.length).toBeGreaterThan(0);
+    const advanced = session.getSnapshot();
+    expect(advanced.state?.event_runtime.finished_instances.some(item => item.instance_id === planChoice.instance_id)).toBe(true);
+    expect(advanced.state?.event_runtime.active_instance?.event_id).toBe('e01_05_command');
+    expect(advanced.presentation.length).toBeGreaterThan(0);
   });
 
   it('rejects stale input, invalid choices, and arbitrary effect commands without state changes', () => {
