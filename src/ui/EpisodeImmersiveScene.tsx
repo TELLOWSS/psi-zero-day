@@ -37,6 +37,7 @@ export function EpisodeImmersiveScene({
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
+  const showEvidenceBoard = scene.event_id === 'e01_08e_responsibility_clash' || scene.event_id === 'e01_08f_report_return';
 
   return <figure
     className="episode-immersive-scene"
@@ -56,6 +57,14 @@ export function EpisodeImmersiveScene({
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
+    {showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
+      <span className="evidence-sheet sheet-a" />
+      <span className="evidence-sheet sheet-b" />
+      <span className="evidence-sheet sheet-c" />
+      <i className="evidence-pin pin-a" />
+      <i className="evidence-pin pin-b" />
+      <b className="evidence-timeline" />
+    </div> : null}
     <div className="episode-immersive-props" aria-hidden="true">
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
