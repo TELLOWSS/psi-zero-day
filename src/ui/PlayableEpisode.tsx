@@ -37,7 +37,7 @@ import { EpisodeStopworkCultureChain } from './EpisodeStopworkCultureChain';
 import { EpisodeInstructionRealityChain } from './EpisodeInstructionRealityChain';
 import { EpisodeRecordRealityChain } from './EpisodeRecordRealityChain';
 import { EpisodeDayCarryover } from './EpisodeDayCarryover';
-import { EpisodeImmersiveScene } from './EpisodeImmersiveScene';
+import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 
@@ -357,6 +357,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         nodeId={activeInstance?.current_node_id}
         speakerId={snapshot.dialogue?.speaker_id}
         speakerIdentity={person}
+        relationshipCues={snapshot.relationshipFeedback.flatMap(({ npc_id, delta }) => {
+          const cue = episode01RelationshipSceneCue(delta.applied_delta);
+          return cue ? [{ character_id: npc_id, cue }] : [];
+        })}
         presentationType={presentation?.type}
         previewChoiceId={choicePreviewId}
         eventTitle={snapshot.eventTitle}

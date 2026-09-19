@@ -14,6 +14,14 @@ export function episode01UsesMemoryStrip(eventId: string | null | undefined) {
   return eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease';
 }
 
+export type Episode01RelationshipSceneCue = 'closer' | 'strained';
+
+export function episode01RelationshipSceneCue(delta: number): Episode01RelationshipSceneCue | undefined {
+  if (delta > 0) return 'closer';
+  if (delta < 0) return 'strained';
+  return undefined;
+}
+
 export type Episode01MomentOverlay =
   | 'signal-trace'
   | 'pump-approach'
@@ -56,6 +64,7 @@ export function EpisodeImmersiveScene({
   nodeId,
   speakerId,
   speakerIdentity,
+  relationshipCues = [],
   presentationType,
   previewChoiceId,
   eventTitle,
@@ -68,6 +77,7 @@ export function EpisodeImmersiveScene({
   readonly nodeId: string | null | undefined;
   readonly speakerId?: string | null;
   readonly speakerIdentity?: { readonly name: string; readonly role: string; readonly trade?: string };
+  readonly relationshipCues?: readonly { readonly character_id: string; readonly cue: Episode01RelationshipSceneCue }[];
   readonly presentationType?: string | null;
   readonly previewChoiceId?: string | null;
   readonly eventTitle: string;
@@ -124,14 +134,18 @@ export function EpisodeImmersiveScene({
       {scene.prop_uris.map((uri, index) => <VisualImage key={uri} uri={uri} alt="" className={`episode-immersive-prop prop-${index + 1}`} />)}
     </div>
     <div className="episode-immersive-cast" aria-hidden="true">
-      {scene.cast.map((characterId, index) => <div
+      {scene.cast.map((characterId, index) => {
+        const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
+        return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
         data-speaker={speakerId === characterId || undefined}
         data-character={characterId}
+        data-relationship-cue={relationshipCue}
       >
         <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
-      </div>)}
+      </div>;
+      })}
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
     {speakerIdentity ? <div className="episode-immersive-speaker-tag" aria-hidden="true">

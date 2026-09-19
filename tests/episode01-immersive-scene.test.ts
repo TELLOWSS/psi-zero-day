@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import manifest from '../content/episode01/manifest.json';
 import plan from '../content/episode01/immersive-scenes.json';
 import { episode01DirectedNodeCount, episode01ImmersiveScene, episode01ImmersiveSceneCount } from '../src/app/episode01-immersive-scene';
-import { episode01MomentOverlay } from '../src/ui/EpisodeImmersiveScene';
+import { episode01MomentOverlay, episode01RelationshipSceneCue } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 immersive scene coverage', () => {
   it('covers every authored Episode 01 event', () => {
@@ -92,5 +92,12 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_08k_stopwork_aftershock', 'aftershock')).toBe('stopwork-gap');
     expect(episode01MomentOverlay('e01_08o_record_pressure', 'pressure')).toBe('record-pressure');
     expect(episode01MomentOverlay('e01_09_evening', 'rest')).toBeUndefined();
+  });
+
+
+  it('turns relationship deltas into neutral spatial aftermath cues instead of score colors', () => {
+    expect(episode01RelationshipSceneCue(3)).toBe('closer');
+    expect(episode01RelationshipSceneCue(-2)).toBe('strained');
+    expect(episode01RelationshipSceneCue(0)).toBeUndefined();
   });
 });

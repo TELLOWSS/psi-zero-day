@@ -1625,3 +1625,32 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-moment-overlay *{animation:none!important;transition:none!important}
 }
 
+/* Relationship aftermath is spatial, not green/red scoring: people lean in or withdraw. */
+.episode-immersive-character[data-relationship-cue="closer"]{
+  scale:1.035;
+  filter:saturate(1.02) contrast(1.02) brightness(1.025);
+  transform-origin:50% 88%;
+}
+.episode-immersive-character[data-relationship-cue="strained"]{
+  scale:.965;
+  opacity:.8;
+  filter:saturate(.72) contrast(.96) brightness(.9);
+  transform-origin:50% 88%;
+}
+.episode-immersive-character[data-relationship-cue]::after{
+  content:"";
+  position:absolute;
+  left:20%;
+  right:20%;
+  bottom:3%;
+  height:7%;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(6,10,12,.28),transparent 68%);
+  pointer-events:none;
+}
+.episode-immersive-character[data-relationship-cue="closer"]::after{opacity:.62}
+.episode-immersive-character[data-relationship-cue="strained"]::after{opacity:.34}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-character[data-relationship-cue]{transition:none!important}
+}
+
