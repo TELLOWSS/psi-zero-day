@@ -22,7 +22,9 @@ describe('Episode 01 immersive production background contract', () => {
       const scene = scenes.events[eventId as keyof typeof scenes.events];
       const expectedAssetId = byRc.get(scene.bg);
       expect(expectedAssetId, eventId).toBeTruthy();
-      expect(episode01ImmersiveScene(eventId, undefined, undefined)?.background_asset_id).toBe(expectedAssetId);
+      const runtimeScene = episode01ImmersiveScene(eventId, undefined, undefined);
+      expect(runtimeScene?.background_asset_id).toBe(expectedAssetId);
+      expect(runtimeScene?.background_environment).toBeTruthy();
     }
   });
 
