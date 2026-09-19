@@ -5,6 +5,7 @@ import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
 import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from '../app/episode01-character-performance';
+import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -199,6 +200,10 @@ export function EpisodeImmersiveScene({
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
         const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
         const performance = episode01CharacterPerformance(scene.event_id, scene.node_id, characterId, speakerId, relationshipCue);
+        const performanceAsset = episode01CharacterPerformanceAsset(characterId, performance?.expression, resolve);
+        const characterUri = performanceAsset?.uri
+          ?? performanceAsset?.fallback_uri
+          ?? characterMapUri(characterId, resolve);
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
@@ -210,8 +215,9 @@ export function EpisodeImmersiveScene({
         data-expression={performance?.expression}
         data-pose={performance?.pose}
         data-presence-motion={performance?.motion}
+        data-performance-asset={performanceAsset?.using_expression_asset ? 'expression' : 'map-fallback'}
       >
-        <VisualImage uri={characterMapUri(characterId, resolve)} alt="" />
+        <VisualImage uri={characterUri} alt="" />
       </div>;
       })}
     </div>
