@@ -19,7 +19,9 @@
     "mobile_responsive": true,
     "node_directed_camera_cuts": true,
     "speaker_rack_focus": true,
-    "result_camera_rhythm": true
+    "result_camera_rhythm": true,
+    "authored_choice_direction": true,
+    "full_scene_choice_hover_focus_preview": true
   },
   "quality_gates": [
     "Every Episode 01 event renders an authored immersive scene.",
@@ -28,7 +30,8 @@
     "Result nodes alter visual tone/focus without labeling choices correct or incorrect.",
     "Dialogue, choice and result nodes must not reuse one static camera rhythm.",
     "Production typecheck and Vite build must pass before visual QA is considered deployable.",
-    "Episode 02 stays outside the live session until this pass is closed."
+    "Episode 02 stays outside the live session until this pass is closed.",
+    "Hovering or keyboard-focusing a major player choice must redirect the full scene without assigning a good/bad visual score."
   ],
   "remaining": [
     "Browser-level visual QA against Production after latest Git/Vercel SHA synchronization.",
@@ -36,6 +39,7 @@
     "Refresh legacy test expectations to the current Episode 01 contract without weakening product behavior."
   ],
   "completed_passes": [
-    "episode01-shot-director-v1"
+    "episode01-shot-director-v1",
+    "episode01-choice-direction-v1"
   ]
 }

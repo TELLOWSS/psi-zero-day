@@ -46,6 +46,17 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(resolved?.camera).toBe('wide');
   });
 
+  it('lets keyboard or pointer choice focus redirect the full scene without scoring it', () => {
+    const people = episode01ImmersiveScene('e01_03_plan_breaks', 'kang.branch', 'SHOW_CHOICE', null, 'delegate_kang');
+    const control = episode01ImmersiveScene('e01_03_plan_breaks', 'kang.branch', 'SHOW_CHOICE', null, 'coordinate_schedule');
+    expect(people?.tone).toBe('decision');
+    expect(control?.tone).toBe('decision');
+    expect(people?.preview_choice_tone).toBe('people');
+    expect(control?.preview_choice_tone).toBe('control');
+    expect(people?.focus).toBe('left');
+    expect(control?.focus).toBe('center');
+  });
+
   it('keeps evening reflection visually distinct from field pressure', () => {
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.tone).toBe('reflective');
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.background_uri).toContain('home-night');

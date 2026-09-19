@@ -1,4 +1,5 @@
 import plan from '../../content/episode01/immersive-scenes.json';
+import { episode01ChoiceVisual, type Episode01ChoiceVisualTone } from './episode01-choice-visual';
 
 export type ImmersiveSceneTone = 'neutral' | 'decision' | 'pressure' | 'resolved' | 'reflective';
 
@@ -15,6 +16,8 @@ export interface ImmersiveScenePlan {
   readonly shot: ImmersiveSceneShot;
   readonly subject_character_id?: string;
   readonly node_id?: string;
+  readonly preview_choice_id?: string;
+  readonly preview_choice_tone?: Episode01ChoiceVisualTone;
 }
 
 type SceneRecord = {
@@ -73,6 +76,7 @@ export function episode01ImmersiveScene(
   nodeId: string | null | undefined,
   presentationType: string | null | undefined,
   speakerId?: string | null,
+  previewChoiceId?: string | null,
 ): ImmersiveScenePlan | undefined {
   if (!eventId) return undefined;
   const scene = scenes[eventId];
@@ -88,21 +92,37 @@ export function episode01ImmersiveScene(
   const cast = [...scene.cast];
   if (speakerId && !cast.includes(speakerId)) cast.push(speakerId);
   const visibleCast = cast.slice(0, 5);
+  const choicePreview = presentationType === 'SHOW_CHOICE' && previewChoiceId
+    ? episode01ChoiceVisual(eventId, previewChoiceId)
+    : undefined;
   const shot = shotFor(presentationType, tone, speakerId);
-  const focus = speakerFocus(visibleCast, speakerId, scene.focus);
-  const camera = cameraFor(shot, scene.camera, visibleCast.length);
+  const baseFocus = speakerFocus(visibleCast, speakerId, scene.focus);
+  const focus = choicePreview?.crop ?? baseFocus;
+  const baseCamera = cameraFor(shot, scene.camera, visibleCast.length);
+  const camera = choicePreview
+    ? choicePreview.tone === 'evidence' ? 'tight'
+      : choicePreview.tone === 'recovery' ? 'wide'
+      : 'medium'
+    : baseCamera;
+  const propUris = choicePreview?.prop_uri
+    ? [choicePreview.prop_uri, ...scene.props.filter(uri => uri !== choicePreview.prop_uri)]
+    : [...scene.props];
 
   return Object.freeze({
     event_id: eventId,
     background_uri: scene.bg,
     cast: Object.freeze(visibleCast),
-    prop_uris: Object.freeze([...scene.props]),
+    prop_uris: Object.freeze(propUris),
     camera,
     focus,
     tone,
     shot,
     ...(speakerId ? { subject_character_id: speakerId } : {}),
     ...(nodeId ? { node_id: nodeId } : {}),
+    ...(choicePreview && previewChoiceId ? {
+      preview_choice_id: previewChoiceId,
+      preview_choice_tone: choicePreview.tone,
+    } : {}),
   });
 }
 

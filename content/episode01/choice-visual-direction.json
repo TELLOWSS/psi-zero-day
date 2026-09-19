@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "pass_id": "episode01-choice-direction-v1",
+  "intent": "Author the visible framing of ambiguous player decisions so hovering or keyboard-focusing a response changes the full scene without implying a correct answer.",
+  "rules": [
+    "Framing communicates what the player is choosing to attend to, not whether the choice is good or bad.",
+    "Control, pressure, people, evidence and recovery are decision domains, never scores.",
+    "Player-facing multi-option decisions use authored crop and prop emphasis; state-gated consequence branches may use the generic fallback."
+  ],
+  "events": {
+    "e01_03_plan_breaks": {
+      "delegate_kang": {
+        "tone": "people",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "negotiate_yoon": {
+        "tone": "people",
+        "crop": "right",
+        "prop_index": 0
+      },
+      "coordinate_schedule": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 0
+      },
+      "follow_junho": {
+        "tone": "people",
+        "crop": "right",
+        "prop_index": 0
+      }
+    },
+    "e01_04_junho_signal": {
+      "listen_more": {
+        "tone": "people",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "crosscheck_minseok": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 0
+      },
+      "dismiss": {
+        "tone": "pressure",
+        "crop": "right",
+        "prop_index": 0
+      }
+    },
+    "e01_05_command": {
+      "check_self": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 1
+      },
+      "ask_minseok": {
+        "tone": "people",
+        "crop": "right",
+        "prop_index": 1
+      },
+      "keep_schedule": {
+        "tone": "pressure",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "assign_crew": {
+        "tone": "people",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "request_delay": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 1
+      },
+      "force_clear": {
+        "tone": "pressure",
+        "crop": "right",
+        "prop_index": 0
+      }
+    },
+    "e01_08b_inspection_find": {
+      "inspection_full_stop": {
+        "tone": "control",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "inspection_quick_photo": {
+        "tone": "evidence",
+        "crop": "right",
+        "prop_index": 1
+      },
+      "inspection_sequence_agreement": {
+        "tone": "people",
+        "crop": "center",
+        "prop_index": 0
+      }
+    },
+    "e01_08e_responsibility_clash": {
+      "report_one_sided": {
+        "tone": "evidence",
+        "crop": "left"
+      },
+      "report_defensive": {
+        "tone": "people",
+        "crop": "right"
+      },
+      "report_verify_timeline": {
+        "tone": "evidence",
+        "crop": "center"
+      }
+    },
+    "e01_08g_tbm_field_gap": {
+      "tbm_form_first": {
+        "tone": "evidence",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "tbm_worker_blame": {
+        "tone": "people",
+        "crop": "right",
+        "prop_index": 1
+      },
+      "tbm_change_control": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 0
+      }
+    },
+    "e01_08i_restart_pressure": {
+      "restart_follow_verbal": {
+        "tone": "people",
+        "crop": "left",
+        "prop_index": 1
+      },
+      "restart_trace_instruction": {
+        "tone": "evidence",
+        "crop": "right",
+        "prop_index": 0
+      },
+      "restart_verify_controls": {
+        "tone": "control",
+        "crop": "center",
+        "prop_index": 1
+      }
+    },
+    "e01_08k_stopwork_aftershock": {
+      "stopwork_ignore_social": {
+        "tone": "people",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "stopwork_public_boundary": {
+        "tone": "people",
+        "crop": "center",
+        "prop_index": 0
+      },
+      "stopwork_protect_process": {
+        "tone": "evidence",
+        "crop": "right",
+        "prop_index": 0
+      }
+    },
+    "e01_08m_instruction_cascade": {
+      "instruction_accept_top": {
+        "tone": "evidence",
+        "crop": "left",
+        "prop_index": 0
+      },
+      "instruction_blame_worker": {
+        "tone": "people",
+        "crop": "right",
+        "prop_index": 0
+      },
+      "instruction_reconstruct_chain": {
+        "tone": "evidence",
+        "crop": "center",
+        "prop_index": 0
+      }
+    },
+    "e01_08o_record_pressure": {
+      "record_minimize_scope": {
+        "tone": "evidence",
+        "crop": "left"
+      },
+      "record_retrofit_paper": {
+        "tone": "evidence",
+        "crop": "center"
+      },
+      "record_preserve_timeline": {
+        "tone": "evidence",
+        "crop": "right"
+      }
+    },
+    "e01_09_evening": {
+      "rest": {
+        "tone": "recovery",
+        "crop": "left"
+      },
+      "family": {
+        "tone": "recovery",
+        "crop": "right"
+      },
+      "study": {
+        "tone": "recovery",
+        "crop": "center"
+      },
+      "field_note": {
+        "tone": "recovery",
+        "crop": "right"
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import plan from '../../content/episode01/immersive-scenes.json';
+import direction from '../../content/episode01/choice-visual-direction.json';
 
 export type Episode01ChoiceVisualTone = 'control' | 'pressure' | 'people' | 'evidence' | 'recovery';
 
@@ -8,6 +9,7 @@ export interface Episode01ChoiceVisual {
   readonly tone: Episode01ChoiceVisualTone;
   readonly crop: 'left' | 'center' | 'right';
   readonly label_text_id: string;
+  readonly authored: boolean;
 }
 
 type SceneRecord = {
@@ -16,6 +18,14 @@ type SceneRecord = {
 };
 
 const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
+
+type DirectionRecord = {
+  readonly tone: Episode01ChoiceVisualTone;
+  readonly crop: 'left' | 'center' | 'right';
+  readonly prop_index?: number;
+};
+
+const authoredDirections = direction.events as Readonly<Record<string, Readonly<Record<string, DirectionRecord>>>>;
 
 function choiceTone(choiceId: string): Episode01ChoiceVisualTone {
   if (/(rest|family|study|field_note)/i.test(choiceId)) return 'recovery';
@@ -43,15 +53,18 @@ export function episode01ChoiceVisual(
   const scene = scenes[eventId];
   if (!scene) return undefined;
 
-  const tone = choiceTone(choiceId);
-  const propIndex = tone === 'pressure' ? 1 : 0;
+  const authored = authoredDirections[eventId]?.[choiceId];
+  const tone = authored?.tone ?? choiceTone(choiceId);
+  const crop = authored?.crop ?? cropFor(choiceId);
+  const propIndex = authored?.prop_index ?? (tone === 'pressure' ? 1 : 0);
   const propUri = scene.props[propIndex] ?? scene.props[0];
 
   return Object.freeze({
     background_uri: scene.bg,
     ...(propUri ? { prop_uri: propUri } : {}),
     tone,
-    crop: cropFor(choiceId),
+    crop,
     label_text_id: labelId(tone),
+    authored: Boolean(authored),
   });
 }
