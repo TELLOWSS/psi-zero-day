@@ -52,3 +52,22 @@ const EVENT_AUDIO_CUES: Readonly<Record<string, EpisodePresentationAudioCue>> = 
 export function episodePresentationAudioCue(eventId: string | null | undefined): EpisodePresentationAudioCue | undefined {
   return eventId ? EVENT_AUDIO_CUES[eventId] : undefined;
 }
+
+
+/**
+ * Short synthetic accents for high-salience nodes. These never replace the event's
+ * production ambience and intentionally avoid playing on the event entry node.
+ */
+export function episodePresentationNodeCue(
+  eventId: string | null | undefined,
+  nodeId: string | null | undefined,
+  presentationType: string | null | undefined,
+): UiAudioCue | undefined {
+  if (!eventId || !nodeId) return undefined;
+  if (eventId === 'e01_04_junho_signal' && nodeId === 'detail') return 'radio_signal';
+  if (eventId === 'e01_06_pump_arrival' && nodeId === 'near_miss' && presentationType === 'SHOW_RESULT') return 'pressure';
+  if (eventId === 'e01_08b_inspection_find' && nodeId === 'action' && presentationType === 'SHOW_CHOICE') return 'scene_shift';
+  if (eventId === 'e01_08k_stopwork_aftershock' && nodeId === 'culture_action' && presentationType === 'SHOW_CHOICE') return 'pressure';
+  if (eventId === 'e01_08o_record_pressure' && nodeId === 'record_action' && presentationType === 'SHOW_CHOICE') return 'pressure';
+  return undefined;
+}

@@ -11,7 +11,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
-import { episodePresentationAudioCue } from '../app/episode-presentation-cues';
+import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
 import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
@@ -254,6 +254,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playedSceneCues.current.add(key);
     playPresentationCue(cue);
   }, [activeEventId, runIdentity, playPresentationCue]);
+  useEffect(() => {
+    if (!activeEventId || !runIdentity || !presentation || !('node_id' in presentation)) return;
+    const cue = episodePresentationNodeCue(activeEventId, presentation.node_id, presentation.type);
+    if (!cue) return;
+    const key = `${runIdentity}:node:${activeEventId}:${presentation.node_id}`;
+    if (playedSceneCues.current.has(key)) return;
+    playedSceneCues.current.add(key);
+    playUiCue(cue);
+  }, [activeEventId, runIdentity, presentation?.type, presentation && 'node_id' in presentation ? presentation.node_id : null, playUiCue]);
   useEffect(() => {
     if (!firstContactTextId || !dialogueNodeIdentity) return;
     playUiCue('character_intro');

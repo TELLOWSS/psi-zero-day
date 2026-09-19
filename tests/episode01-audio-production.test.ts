@@ -3,7 +3,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import contract from '../content/episode01/audio-production.json';
 import immersiveScenes from '../content/episode01/immersive-scenes.json';
-import { episodePresentationAudioCue } from '../src/app/episode-presentation-cues';
+import { episodePresentationAudioCue, episodePresentationNodeCue } from '../src/app/episode-presentation-cues';
 import { uiAudioCueTimbre } from '../src/ui/useEpisodeAudio';
 
 const root = process.cwd();
@@ -60,5 +60,15 @@ describe('Episode 01 audio production contract', () => {
     expect(contract.production_generation.method).toContain('procedural');
     expect(contract.production_generation.generator).toBe('tools/generate_episode01_audio.py');
     expect(contract.production_generation.rights).toContain('no external recordings');
+  });
+
+
+  it('adds node-level accents only at signature decision moments', () => {
+    expect(episodePresentationNodeCue('e01_04_junho_signal', 'detail', 'SHOW_DIALOGUE')).toBe('radio_signal');
+    expect(episodePresentationNodeCue('e01_06_pump_arrival', 'near_miss', 'SHOW_RESULT')).toBe('pressure');
+    expect(episodePresentationNodeCue('e01_08b_inspection_find', 'action', 'SHOW_CHOICE')).toBe('scene_shift');
+    expect(episodePresentationNodeCue('e01_08k_stopwork_aftershock', 'culture_action', 'SHOW_CHOICE')).toBe('pressure');
+    expect(episodePresentationNodeCue('e01_08o_record_pressure', 'record_action', 'SHOW_CHOICE')).toBe('pressure');
+    expect(episodePresentationNodeCue('e01_06_pump_arrival', 'resolve', 'SHOW_CHOICE')).toBeUndefined();
   });
 });
