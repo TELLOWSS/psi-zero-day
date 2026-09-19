@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { episode01StrategyOutcomeAudioCue } from '../src/app/episode-presentation-cues';
 import { uiAudioCueProfile } from '../src/ui/useEpisodeAudio';
 
 describe('Episode 01 presentation audio', () => {
@@ -18,5 +19,11 @@ describe('Episode 01 presentation audio', () => {
     expect(positive[1]).toBeGreaterThan(positive[0]);
     expect(negative[1]).toBeLessThan(negative[0]);
     expect(execute).not.toEqual(continuation);
+  });
+
+  it('keeps ambiguous field outcomes acoustically neutral instead of scoring relationship deltas', () => {
+    expect(episode01StrategyOutcomeAudioCue()).toBe('result_neutral');
+    expect(episode01StrategyOutcomeAudioCue()).not.toBe('result_positive');
+    expect(episode01StrategyOutcomeAudioCue()).not.toBe('result_negative');
   });
 });
