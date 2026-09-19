@@ -9,6 +9,8 @@ const sourceDir = path.join(root, 'content/episode01/embedded-media');
 const foundationTarget = path.join(root, 'public/assets/episode01/backgrounds/foundation-map.webp');
 const materialStackTarget = path.join(root, 'public/assets/episode01/scene-elements/material-stack.webp');
 const accessBarrierTarget = path.join(root, 'public/assets/episode01/scene-elements/access-barrier.webp');
+const foundationBlindingTarget = path.join(root, 'public/assets/episode01/scene-elements/foundation-blinding-edge.webp');
+const foundationRebarTarget = path.join(root, 'public/assets/episode01/scene-elements/foundation-rebar-mat.webp');
 
 const EXPECTED = Object.freeze({
   encodedLength: 150248,
@@ -34,6 +36,24 @@ const ACCESS_BARRIER_EXPECTED = Object.freeze({
   width: 820,
   height: 514,
   sha256: 'acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542',
+});
+
+const FOUNDATION_BLINDING_EXPECTED = Object.freeze({
+  encodedLength: 34064,
+  encodedSha256: 'd0cd924d0feda18d2d807e89c49aae4e7cef16ac358a3c10b48413d07250743a',
+  bytes: 25546,
+  width: 768,
+  height: 576,
+  sha256: 'f9a22a076a81769badd9cc6173c6846b0073e2f1cf1b03f692089b6b06ae4583',
+});
+
+const FOUNDATION_REBAR_EXPECTED = Object.freeze({
+  encodedLength: 47704,
+  encodedSha256: '2d0fe984b3a4c22a6b86fab9666a2fdf5eb71af15aec676ce2dd18fa5b536f3f',
+  bytes: 35778,
+  width: 768,
+  height: 576,
+  sha256: '503efef361fd54592b00b5862ad0e91be13e771267607def92fbebb1190c76fe',
 });
 
 const foundationSources = [
@@ -80,6 +100,23 @@ const accessBarrierSources = [
   ['06', 10000, '1f0d9fa1168349662787ea921dc6239180f74538e312ff31bf04a2efefd50fe7'],
   ['07', 10000, 'ecff91a611fe33b32e667097e81f4f9237d7b93674b66b147b2a6f550d6cc093'],
   ['08', 4404, 'f6e7fba0239cdf5edd3e4f6024ab9e3ec060a78ae238de864088ef7c3a17ba03'],
+];
+
+const foundationBlindingSources = [
+  ['01a', 8000, '63ac8b13ea39a127d01f7e90f0c5716ce223d89389c25dc8a3bfa6dcb5053d49'],
+  ['01b', 8000, '441c36782d530a508ce45953a429d39b04646cd24132ea842d9fedcfb826a6b8'],
+  ['02', 16000, '0c5d20f8e9c50bb336710950a53027f13a8a6a1c98404c7c5755b5fd1f5c7ddf'],
+  ['03', 2064, '47d718efd9f46bd0590ac4949d3fa18034c0c25fa777923bd67081a7171f729f'],
+];
+
+const foundationRebarSources = [
+  ['01', 8000, 'd32988941b2e06431dde514389c6820bc295dc12d5b86cc7d4ffd32339550108'],
+  ['02a', 4000, '17664fb7605d68787e46c1b44a91020e4922ecb88a64f85c154d988631a05d8a'],
+  ['02b', 4000, '32f1e2d915e753aaf29a6e236969bce66aa4a92470c71d4e83d90d1c1e08e0ef'],
+  ['03', 8000, '045c9cc35dbf4dff1ec0a75b5b935cd704c9797408d9b543c42edcdff5c21451'],
+  ['04', 8000, 'd62890c1ff44b80abce786e00de48cc0b0295843191769d5cf29058abf8495ff'],
+  ['05', 8000, 'eadd279423480ffaf5270e664bea76c4c919318ac9839c2a6fba499f6669126e'],
+  ['06', 7704, 'ad0246865ecd82bfc9a1de70b0765c54a877763efc2f6446b13d78fc04321b87'],
 ];
 
 async function readEmbeddedParts(prefix, specs) {
@@ -172,15 +209,67 @@ if (webPHasAlpha(accessBarrierBytes) !== true) throw new Error('Access barrier f
 const accessBarrierHash = createHash('sha256').update(accessBarrierBytes).digest('hex');
 if (accessBarrierHash !== ACCESS_BARRIER_EXPECTED.sha256) throw new Error(`Access barrier SHA-256 mismatch: ${accessBarrierHash}.`);
 
+const foundationBlindingEncoded = await readEmbeddedParts('foundation-blinding-edge.webp', foundationBlindingSources);
+if (foundationBlindingEncoded.length !== FOUNDATION_BLINDING_EXPECTED.encodedLength) {
+  throw new Error(`Foundation blinding base64 length ${foundationBlindingEncoded.length}; expected ${FOUNDATION_BLINDING_EXPECTED.encodedLength}.`);
+}
+const foundationBlindingEncodedHash = createHash('sha256').update(foundationBlindingEncoded).digest('hex');
+if (foundationBlindingEncodedHash !== FOUNDATION_BLINDING_EXPECTED.encodedSha256) {
+  throw new Error(`Foundation blinding base64 SHA-256 mismatch: ${foundationBlindingEncodedHash}.`);
+}
+const foundationBlindingBytes = Buffer.from(foundationBlindingEncoded, 'base64');
+if (foundationBlindingBytes.length !== FOUNDATION_BLINDING_EXPECTED.bytes) {
+  throw new Error(`Foundation blinding WebP size ${foundationBlindingBytes.length}; expected ${FOUNDATION_BLINDING_EXPECTED.bytes}.`);
+}
+if (!isWebP(foundationBlindingBytes)) throw new Error('Materialized foundation blinding asset is not a WebP file.');
+const foundationBlindingDimensions = webPDimensions(foundationBlindingBytes);
+if (!foundationBlindingDimensions
+  || foundationBlindingDimensions.width !== FOUNDATION_BLINDING_EXPECTED.width
+  || foundationBlindingDimensions.height !== FOUNDATION_BLINDING_EXPECTED.height) {
+  throw new Error(`Foundation blinding dimensions ${foundationBlindingDimensions ? `${foundationBlindingDimensions.width}x${foundationBlindingDimensions.height}` : 'unreadable'}; expected ${FOUNDATION_BLINDING_EXPECTED.width}x${FOUNDATION_BLINDING_EXPECTED.height}.`);
+}
+if (webPHasAlpha(foundationBlindingBytes) !== true) throw new Error('Foundation blinding final WebP must include alpha transparency.');
+const foundationBlindingHash = createHash('sha256').update(foundationBlindingBytes).digest('hex');
+if (foundationBlindingHash !== FOUNDATION_BLINDING_EXPECTED.sha256) throw new Error(`Foundation blinding SHA-256 mismatch: ${foundationBlindingHash}.`);
+
+const foundationRebarEncoded = await readEmbeddedParts('foundation-rebar-mat.webp', foundationRebarSources);
+if (foundationRebarEncoded.length !== FOUNDATION_REBAR_EXPECTED.encodedLength) {
+  throw new Error(`Foundation rebar base64 length ${foundationRebarEncoded.length}; expected ${FOUNDATION_REBAR_EXPECTED.encodedLength}.`);
+}
+const foundationRebarEncodedHash = createHash('sha256').update(foundationRebarEncoded).digest('hex');
+if (foundationRebarEncodedHash !== FOUNDATION_REBAR_EXPECTED.encodedSha256) {
+  throw new Error(`Foundation rebar base64 SHA-256 mismatch: ${foundationRebarEncodedHash}.`);
+}
+const foundationRebarBytes = Buffer.from(foundationRebarEncoded, 'base64');
+if (foundationRebarBytes.length !== FOUNDATION_REBAR_EXPECTED.bytes) {
+  throw new Error(`Foundation rebar WebP size ${foundationRebarBytes.length}; expected ${FOUNDATION_REBAR_EXPECTED.bytes}.`);
+}
+if (!isWebP(foundationRebarBytes)) throw new Error('Materialized foundation rebar asset is not a WebP file.');
+const foundationRebarDimensions = webPDimensions(foundationRebarBytes);
+if (!foundationRebarDimensions
+  || foundationRebarDimensions.width !== FOUNDATION_REBAR_EXPECTED.width
+  || foundationRebarDimensions.height !== FOUNDATION_REBAR_EXPECTED.height) {
+  throw new Error(`Foundation rebar dimensions ${foundationRebarDimensions ? `${foundationRebarDimensions.width}x${foundationRebarDimensions.height}` : 'unreadable'}; expected ${FOUNDATION_REBAR_EXPECTED.width}x${FOUNDATION_REBAR_EXPECTED.height}.`);
+}
+if (webPHasAlpha(foundationRebarBytes) !== true) throw new Error('Foundation rebar final WebP must include alpha transparency.');
+const foundationRebarHash = createHash('sha256').update(foundationRebarBytes).digest('hex');
+if (foundationRebarHash !== FOUNDATION_REBAR_EXPECTED.sha256) throw new Error(`Foundation rebar SHA-256 mismatch: ${foundationRebarHash}.`);
+
 if (!checkOnly) {
   const foundationUnchanged = await writeIfChanged(foundationTarget, bytes);
   const materialStackUnchanged = await writeIfChanged(materialStackTarget, materialStackBytes);
   const accessBarrierUnchanged = await writeIfChanged(accessBarrierTarget, accessBarrierBytes);
+  const foundationBlindingUnchanged = await writeIfChanged(foundationBlindingTarget, foundationBlindingBytes);
+  const foundationRebarUnchanged = await writeIfChanged(foundationRebarTarget, foundationRebarBytes);
   console.log(`${foundationUnchanged ? 'Verified' : 'Materialized'} Foundation final WebP (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${materialStackUnchanged ? 'Verified' : 'Materialized'} material stack final WebP (${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}, ${MATERIAL_STACK_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${accessBarrierUnchanged ? 'Verified' : 'Materialized'} access barrier final WebP (${ACCESS_BARRIER_EXPECTED.width}x${ACCESS_BARRIER_EXPECTED.height}, ${ACCESS_BARRIER_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  console.log(`${foundationBlindingUnchanged ? 'Verified' : 'Materialized'} foundation blinding final WebP (${FOUNDATION_BLINDING_EXPECTED.width}x${FOUNDATION_BLINDING_EXPECTED.height}, ${FOUNDATION_BLINDING_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  console.log(`${foundationRebarUnchanged ? 'Verified' : 'Materialized'} foundation rebar final WebP (${FOUNDATION_REBAR_EXPECTED.width}x${FOUNDATION_REBAR_EXPECTED.height}, ${FOUNDATION_REBAR_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
 } else {
   console.log(`Foundation embedded media source verified (sha256 ${hash}).`);
   console.log(`Material stack embedded media source verified (sha256 ${materialStackHash}).`);
   console.log(`Access barrier embedded media source verified (sha256 ${accessBarrierHash}).`);
+  console.log(`Foundation blinding embedded media source verified (sha256 ${foundationBlindingHash}).`);
+  console.log(`Foundation rebar embedded media source verified (sha256 ${foundationRebarHash}).`);
 }
