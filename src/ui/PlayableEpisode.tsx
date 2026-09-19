@@ -12,7 +12,7 @@ import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectS
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episodePresentationAudioCue } from '../app/episode-presentation-cues';
-import { episode01MemoryCallback } from '../app/episode01-memory-callback';
+import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
   consumePaidItem,
@@ -85,6 +85,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeEventId = activeInstance?.event_id ?? null;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
+  const continuityTrace = episode01ContinuityTrace(snapshot.state, activeEventId);
   const activeInstanceHasChoice = activeInstance !== null && (snapshot.state?.event_runtime.choice_history.some(item => item.instance_id === activeInstance.instance_id) ?? false);
   const fallbackChoiceId = activeInstance
     ? (snapshot.state?.event_runtime.choice_history.slice().reverse().find(item => item.instance_id === activeInstance.instance_id)?.choice_id)
@@ -394,6 +395,10 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
           <EpisodeInstructionRealityChain eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeRecordRealityChain eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeDayCarryover eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
+          {continuityTrace ? <aside className="episode-continuity-ribbon" aria-label={t(continuityTrace.eyebrow_text_id)}>
+            <span>{t(continuityTrace.eyebrow_text_id)}</span>
+            <p>{t(continuityTrace.line_text_id)}</p>
+          </aside> : null}
           {memoryCallback ? <aside className="episode-memory-callback" aria-label={t(memoryCallback.title_text_id)}>
             <span>{t(memoryCallback.eyebrow_text_id)}</span>
             <strong>{t(memoryCallback.title_text_id)}</strong>

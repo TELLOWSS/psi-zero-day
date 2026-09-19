@@ -1,5 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {episode01DayCarryover} from '../src/app/episode01-day-carryover';
+import {episode01ContinuityTrace} from '../src/app/episode01-memory-callback';
 import {FIELD_REALITY_DOCTRINE_ID} from '../src/app/gameplay-doctrine';
 import {episodeCinematicBeat} from '../src/app/episode-cinematic-beats';
 import {episodePresentationAudioCue} from '../src/app/episode-presentation-cues';
@@ -54,5 +55,21 @@ describe('Episode 01 day carryover',()=>{
     expect(episodeCinematicBeat('e01_10_next_day_tease')?.detail).toContain('어제');
     expect(episodePresentationAudioCue('e01_09_evening')?.production_key).toBe('home_night');
     expect(episodePresentationAudioCue('e01_10_next_day_tease')?.production_key).toBe('gate_queue');
+  });
+
+
+  it('returns prior choices as factual continuity traces at later field arcs',()=>{
+    expect(episode01ContinuityTrace({ flags:{ reporting_return_state:'reinforced' } } as any,'e01_08b_inspection_find')?.line_text_id)
+      .toBe('ui.memory.outcome.reporting.reinforced');
+    expect(episode01ContinuityTrace({ flags:{ tbm_gap_result:'paper_field_gap_remains' } } as any,'e01_08i_restart_pressure')?.line_text_id)
+      .toBe('ui.memory.outcome.tbm.paper');
+    expect(episode01ContinuityTrace({ flags:{ stopwork_culture_result:'formal_protection_private_friction' } } as any,'e01_08m_instruction_cascade')?.line_text_id)
+      .toBe('ui.memory.outcome.stopwork.silenced');
+    expect(episode01ContinuityTrace({ flags:{ instruction_chain_result:'conditional_phrase_restored' } } as any,'e01_08o_record_pressure')?.line_text_id)
+      .toBe('ui.memory.outcome.instruction.restored');
+  });
+
+  it('does not show continuity residue in unrelated scenes',()=>{
+    expect(episode01ContinuityTrace({ flags:{ reporting_return_state:'reinforced' } } as any,'e01_07_first_pour')).toBeUndefined();
   });
 });

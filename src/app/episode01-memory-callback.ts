@@ -6,6 +6,11 @@ export interface EpisodeMemoryCallback {
   readonly line_text_ids: readonly string[];
 }
 
+export interface EpisodeContinuityTrace {
+  readonly eyebrow_text_id: string;
+  readonly line_text_id: string;
+}
+
 function branchChoice(state: GameState): string | undefined {
   const instance = [...state.event_runtime.finished_instances].reverse().find(item => item.event_id === 'e01_03_plan_breaks');
   if (!instance) return undefined;
@@ -69,4 +74,71 @@ export function episode01MemoryCallback(state: GameState | null, activeEventId: 
     title_text_id: nextDay ? 'ui.memory.title.next_day' : 'ui.memory.title.evening',
     line_text_ids,
   };
+}
+
+
+function reportingTrace(state: GameState): string | undefined {
+  switch (state.flags.reporting_return_state) {
+    case 'reinforced': return 'ui.memory.outcome.reporting.reinforced';
+    case 'suppressed':
+    case 'missed': return 'ui.memory.outcome.reporting.suppressed';
+    default: return undefined;
+  }
+}
+
+function inspectionTrace(state: GameState): string | undefined {
+  switch (state.flags.inspection_result) {
+    case 'rework_after_reinspection': return 'ui.memory.outcome.inspection.rework';
+    case 'accepted':
+    case 'accepted_after_sequence': return 'ui.memory.outcome.inspection.accepted';
+    default: return undefined;
+  }
+}
+
+function tbmTrace(state: GameState): string | undefined {
+  switch (state.flags.tbm_gap_result) {
+    case 'paper_field_gap_remains': return 'ui.memory.outcome.tbm.paper';
+    case 'reporting_chilled': return 'ui.memory.outcome.stopwork.silenced';
+    case 'changed_work_rebriefed': return 'ui.memory.outcome.tbm.controlled';
+    default: return undefined;
+  }
+}
+
+function restartTrace(state: GameState): string | undefined {
+  switch (state.flags.restart_result) {
+    case 'premature_restart_second_stop': return 'ui.memory.outcome.restart.premature';
+    case 'conditional_instruction_distorted': return 'ui.memory.outcome.instruction.gap';
+    case 'controlled_restart': return 'ui.memory.outcome.restart.controlled';
+    default: return undefined;
+  }
+}
+
+function stopworkTrace(state: GameState): string | undefined {
+  switch (state.flags.stopwork_culture_result) {
+    case 'reporting_silenced':
+    case 'formal_protection_private_friction': return 'ui.memory.outcome.stopwork.silenced';
+    case 'reporting_route_preserved': return 'ui.memory.outcome.stopwork.route';
+    default: return undefined;
+  }
+}
+
+function instructionTrace(state: GameState): string | undefined {
+  switch (state.flags.instruction_chain_result) {
+    case 'condition_loss_unresolved':
+    case 'worker_blame_hides_chain': return 'ui.memory.outcome.instruction.gap';
+    case 'conditional_phrase_restored': return 'ui.memory.outcome.instruction.restored';
+    default: return undefined;
+  }
+}
+
+export function episode01ContinuityTrace(state: GameState | null, activeEventId: string | null): EpisodeContinuityTrace | undefined {
+  if (!state || !activeEventId) return undefined;
+  const line_text_id = activeEventId === 'e01_08b_inspection_find' ? reportingTrace(state)
+    : activeEventId === 'e01_08g_tbm_field_gap' ? inspectionTrace(state)
+    : activeEventId === 'e01_08i_restart_pressure' ? tbmTrace(state)
+    : activeEventId === 'e01_08k_stopwork_aftershock' ? restartTrace(state)
+    : activeEventId === 'e01_08m_instruction_cascade' ? stopworkTrace(state)
+    : activeEventId === 'e01_08o_record_pressure' ? instructionTrace(state)
+    : undefined;
+  return line_text_id ? { eyebrow_text_id: 'ui.continuity.eyebrow', line_text_id } : undefined;
 }

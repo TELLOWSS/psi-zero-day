@@ -822,6 +822,7 @@
     "ui.title.settings.audio": "현장 음향",
     "ui.title.settings.audio.hint": "현장음과 효과음을 즉시 켜거나 끕니다. 게임 판단과 저장 데이터에는 영향을 주지 않습니다.",
     "ui.audio.toggle.on": "음향 켜짐",
-    "ui.audio.toggle.off": "음향 꺼짐"
+    "ui.audio.toggle.off": "음향 꺼짐",
+    "ui.continuity.eyebrow": "앞선 판단의 흔적"
   }
 }
