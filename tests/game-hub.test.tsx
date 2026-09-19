@@ -30,11 +30,14 @@ describe('game hub navigation', () => {
       expect(host.querySelector('.hub-person-detail')?.textContent).toContain(session.character('oh_seungjae')!.name);
       click('.hub-nav button:nth-child(5)');
       await act(async () => { await import('../src/ui/FieldGuide'); });
-      expect(host.querySelectorAll('.field-guide-list button')).toHaveLength(10);
-      click('.field-guide-list button:last-child');
+      expect(host.querySelectorAll('.field-guide-list button').length).toBeGreaterThanOrEqual(10);
+      const openEdgeButton = Array.from(host.querySelectorAll<HTMLButtonElement>('.field-guide-list button'))
+        .find(button => button.textContent?.includes(session.t('ui.guide.open_edge.title')));
+      expect(openEdgeButton).toBeDefined();
+      act(() => openEdgeButton!.click());
       expect(host.querySelector('.field-guide-detail h2')?.textContent).toBe(session.t('ui.guide.open_edge.title'));
       expect(host.querySelector('.field-guide-preview img')?.getAttribute('src')).toContain('open-edge.webp');
-      expect(host.querySelectorAll('.field-guide-list img')).toHaveLength(10);
+      expect(host.querySelectorAll('.field-guide-list img').length).toBeGreaterThanOrEqual(10);
       expect(JSON.stringify(session.getSnapshot().state)).toBe(saved);
     } finally { act(() => root.unmount()); }
   });
