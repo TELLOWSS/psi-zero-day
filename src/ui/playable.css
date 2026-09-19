@@ -2801,5 +2801,8 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     right:2.5%;
     left:auto;
   }
+  .episode-immersive-scene[data-has-locator="true"][data-has-trace="true"][data-has-speaker="true"] .episode-scene-minimap{
+    top:98px;
+  }
 }
 
