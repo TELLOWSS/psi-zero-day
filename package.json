@@ -9,9 +9,9 @@
   "scripts": {
     "predev": "npm run assets:scene-runtime && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "dev": "vite",
-    "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
+    "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run test:episode01-visual && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run test:episode01-visual && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -51,7 +51,8 @@
     "assets:character-replacement-stage": "node scripts/stage-character-replacement.mjs",
     "assets:character-replacement-preflight": "node scripts/stage-character-replacement.mjs --dry-run",
     "assets:choice-visual-check": "node scripts/check-choice-visual-coverage.mjs",
-    "test:episode01-visual": "vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts"
+    "test:episode01-visual": "vitest run tests/episode01-choice-visual.test.ts tests/episode01-immersive-scene.test.ts",
+    "assets:node-visual-check": "node scripts/check-node-visual-coverage.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
