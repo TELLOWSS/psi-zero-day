@@ -99,4 +99,19 @@ describe('Episode 01 cinematic character blocking', () => {
     });
   });
 
+  it('stages inspection outcomes as different human compositions', () => {
+    expect(episode01CharacterBlocking('e01_08b_inspection_find', 'lee_jaehoon', null, undefined, 'full_stop_result')).toEqual({
+      side: 'far-right',
+      depth: 'background',
+    });
+    expect(episode01CharacterBlocking('e01_08b_inspection_find', 'lee_jaehoon', null, undefined, 'quick_photo_result')).toEqual({
+      side: 'right',
+      depth: 'foreground',
+    });
+    expect(episode01CharacterBlocking('e01_08d_reinspection', 'lee_jaehoon', null, undefined, 'lee_rework')).toEqual({
+      side: 'center',
+      depth: 'foreground',
+    });
+  });
+
 });
