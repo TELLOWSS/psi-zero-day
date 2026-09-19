@@ -2299,23 +2299,23 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-side="far-right"]{left:89%}
 
 .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="foreground"]{
-  --blocking-scale:1.08;--blocking-opacity:1;--blocking-z:9;
+  --blocking-scale:1.08;--blocking-opacity:1;--blocking-muted-opacity:.72;--blocking-strained-opacity:.58;--blocking-z:9;
   height:96%;
   filter:drop-shadow(0 22px 16px rgba(0,0,0,.42))
 }
 .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="midground"]{
-  --blocking-scale:.96;--blocking-opacity:.86;--blocking-z:6;
+  --blocking-scale:.96;--blocking-opacity:.86;--blocking-muted-opacity:.62;--blocking-strained-opacity:.5;--blocking-z:6;
   height:88%;
   filter:saturate(.9) brightness(.91) drop-shadow(0 17px 13px rgba(0,0,0,.36))
 }
 .episode-immersive-scene[data-character-blocking="true"] .episode-immersive-character[data-blocking-depth="background"]{
-  --blocking-scale:.84;--blocking-opacity:.58;--blocking-z:4;
+  --blocking-scale:.84;--blocking-opacity:.58;--blocking-muted-opacity:.45;--blocking-strained-opacity:.38;--blocking-z:4;
   height:79%;
   filter:saturate(.68) brightness(.78) drop-shadow(0 13px 10px rgba(0,0,0,.32))
 }
 .episode-immersive-scene[data-character-blocking="true"][data-has-speaker="true"]
   .episode-immersive-character[data-blocking-side]:not([data-speaker="true"]){
-  opacity:calc(var(--blocking-opacity,.9) * .78);
+  opacity:var(--blocking-muted-opacity,.62);
 }
 .episode-immersive-scene[data-character-blocking="true"]
   .episode-immersive-character[data-speaker="true"]{
@@ -2332,7 +2332,7 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 }
 .episode-immersive-scene[data-character-blocking="true"]
   .episode-immersive-character[data-relationship-cue="strained"]:not([data-speaker="true"]){
-  opacity:calc(var(--blocking-opacity,.86) * .72);
+  opacity:var(--blocking-strained-opacity,.5);
   filter:saturate(.6) brightness(.78) drop-shadow(0 14px 11px rgba(0,0,0,.33))
 }
 
