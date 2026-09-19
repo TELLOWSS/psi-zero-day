@@ -4,7 +4,11 @@ import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { VisualImage } from './VisualSlot';
 
 export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
-  return eventId === 'e01_08e_responsibility_clash' || eventId === 'e01_08f_report_return';
+  return eventId === 'e01_08e_responsibility_clash'
+    || eventId === 'e01_08f_report_return'
+    || eventId === 'e01_08n_instruction_return'
+    || eventId === 'e01_08o_record_pressure'
+    || eventId === 'e01_08p_record_return';
 }
 
 function stageTextId(presentationType: string | null | undefined, nodeId: string | null | undefined) {
