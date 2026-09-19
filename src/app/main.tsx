@@ -22,6 +22,7 @@ import '../ui/interaction-safety.css';
 import '../ui/production-readability.css';
 import '../ui/game-hub.css';
 import '../ui/cinematic-world.css';
+import '../ui/responsive-layout.css';
 
 const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
