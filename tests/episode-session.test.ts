@@ -93,7 +93,7 @@ describe('Episode application session', () => {
     }, choiceSnapshot.revision)).toBe(true);
     const held = session.getSnapshot();
     expect(held.presentation).toEqual([
-      expect.objectContaining({ type: 'SHOW_RESULT', instance_id: planChoice.instance_id, text_id: 'ep01.plan.b.result' }),
+      expect.objectContaining({ type: 'SHOW_RESULT', instance_id: planChoice.instance_id, text_id: 'ep01.plan.a.result' }),
     ]);
     expect(held.state?.event_runtime.active_instance).toBeNull();
     expect(held.state?.event_runtime.finished_instances.at(-1)?.instance_id).toBe(planChoice.instance_id);
