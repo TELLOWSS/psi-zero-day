@@ -9,6 +9,50 @@ export interface Episode01CharacterBlocking {
 type BlockingMap = Readonly<Record<string, Episode01CharacterBlocking>>;
 
 const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
+  e01_02_meet_kang: Object.freeze({
+    player: Object.freeze({ side: 'left', depth: 'midground' }),
+    kang_taesik: Object.freeze({ side: 'right', depth: 'foreground' }),
+  }),
+  e01_03_plan_breaks: Object.freeze({
+    player: Object.freeze({ side: 'center', depth: 'foreground' }),
+    lee_jaehoon: Object.freeze({ side: 'left', depth: 'foreground' }),
+    kang_taesik: Object.freeze({ side: 'far-left', depth: 'midground' }),
+    yoon_sungho: Object.freeze({ side: 'far-right', depth: 'midground' }),
+  }),
+  e01_04_junho_signal: Object.freeze({
+    player: Object.freeze({ side: 'left', depth: 'midground' }),
+    lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+    choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
+  }),
+  e01_05_command: Object.freeze({
+    player: Object.freeze({ side: 'center', depth: 'foreground' }),
+    lee_jaehoon: Object.freeze({ side: 'left', depth: 'midground' }),
+    kang_taesik: Object.freeze({ side: 'far-left', depth: 'background' }),
+    choi_minseok: Object.freeze({ side: 'right', depth: 'midground' }),
+  }),
+  e01_06_pump_arrival: Object.freeze({
+    player: Object.freeze({ side: 'left', depth: 'foreground' }),
+    lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'midground' }),
+    kang_taesik: Object.freeze({ side: 'right', depth: 'midground' }),
+    choi_minseok: Object.freeze({ side: 'far-right', depth: 'foreground' }),
+    lim_junho: Object.freeze({ side: 'center', depth: 'background' }),
+  }),
+  e01_07_first_pour: Object.freeze({
+    player: Object.freeze({ side: 'left', depth: 'midground' }),
+    kang_taesik: Object.freeze({ side: 'center', depth: 'foreground' }),
+    lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+    lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+  }),
+  e01_08_reactions: Object.freeze({
+    player: Object.freeze({ side: 'far-left', depth: 'midground' }),
+    kang_taesik: Object.freeze({ side: 'left', depth: 'foreground' }),
+    yoon_sungho: Object.freeze({ side: 'right', depth: 'foreground' }),
+    lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+  }),
+  e01_08a_reporting_return: Object.freeze({
+    player: Object.freeze({ side: 'left', depth: 'foreground' }),
+    lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+  }),
   e01_08b_inspection_find: Object.freeze({
     player: Object.freeze({ side: 'left', depth: 'midground' }),
     seo_jeongmin: Object.freeze({ side: 'center', depth: 'foreground' }),
@@ -51,6 +95,115 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
 
 
 const BLOCKING_BY_EVENT_NODE: Readonly<Record<string, Readonly<Record<string, BlockingMap>>>> = Object.freeze({
+  e01_03_plan_breaks: Object.freeze({
+    delegate_kang_result: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'background' }),
+      yoon_sungho: Object.freeze({ side: 'far-right', depth: 'midground' }),
+    }),
+    negotiate_yoon_result: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      yoon_sungho: Object.freeze({ side: 'right', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'left', depth: 'midground' }),
+      kang_taesik: Object.freeze({ side: 'far-left', depth: 'background' }),
+    }),
+    coordinate_schedule_result: Object.freeze({
+      player: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'far-left', depth: 'midground' }),
+      yoon_sungho: Object.freeze({ side: 'far-right', depth: 'midground' }),
+    }),
+    follow_junho_result: Object.freeze({
+      player: Object.freeze({ side: 'right', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'background' }),
+      kang_taesik: Object.freeze({ side: 'left', depth: 'background' }),
+      yoon_sungho: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+  }),
+  e01_04_junho_signal: Object.freeze({
+    listen_more_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+      choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+    crosscheck_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'center', depth: 'midground' }),
+      choi_minseok: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+    dismiss_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+      choi_minseok: Object.freeze({ side: 'right', depth: 'midground' }),
+    }),
+  }),
+  e01_06_pump_arrival: Object.freeze({
+    relation_conflict_react: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+      kang_taesik: Object.freeze({ side: 'right', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'background' }),
+      choi_minseok: Object.freeze({ side: 'far-right', depth: 'midground' }),
+    }),
+    best_control_react: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      choi_minseok: Object.freeze({ side: 'far-right', depth: 'midground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'midground' }),
+    }),
+    near_miss_react: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      choi_minseok: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'background' }),
+      kang_taesik: Object.freeze({ side: 'far-right', depth: 'midground' }),
+    }),
+    controlled_delay_react: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'center', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'right', depth: 'midground' }),
+      choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+  }),
+  e01_08_reactions: Object.freeze({
+    'kang.high': Object.freeze({
+      kang_taesik: Object.freeze({ side: 'center', depth: 'foreground' }),
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+    }),
+    'kang.low': Object.freeze({
+      kang_taesik: Object.freeze({ side: 'center', depth: 'foreground' }),
+      player: Object.freeze({ side: 'far-left', depth: 'background' }),
+    }),
+    'yoon.high': Object.freeze({
+      yoon_sungho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+    }),
+    'yoon.low': Object.freeze({
+      yoon_sungho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      player: Object.freeze({ side: 'far-left', depth: 'background' }),
+    }),
+    'junho.high': Object.freeze({
+      lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+    }),
+    'junho.low': Object.freeze({
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+    }),
+  }),
+  e01_08a_reporting_return: Object.freeze({
+    reinforced: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+    }),
+    suppressed: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+    missed: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+  }),
   e01_08b_inspection_find: Object.freeze({
     full_stop_result: Object.freeze({
       player: Object.freeze({ side: 'left', depth: 'foreground' }),
