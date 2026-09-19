@@ -49,6 +49,50 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
   }),
 });
 
+
+const BLOCKING_BY_EVENT_NODE: Readonly<Record<string, Readonly<Record<string, BlockingMap>>>> = Object.freeze({
+  e01_08j_restart_return: Object.freeze({
+    premature: Object.freeze({
+      lee_jaehoon: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'right', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+      player: Object.freeze({ side: 'far-left', depth: 'midground' }),
+    }),
+    distorted: Object.freeze({
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'midground' }),
+      kang_taesik: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+      player: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+    controlled: Object.freeze({
+      lee_jaehoon: Object.freeze({ side: 'far-left', depth: 'midground' }),
+      kang_taesik: Object.freeze({ side: 'left', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+      player: Object.freeze({ side: 'far-right', depth: 'foreground' }),
+    }),
+  }),
+  e01_08k_stopwork_aftershock: Object.freeze({
+    ignore_social_result: Object.freeze({
+      player: Object.freeze({ side: 'far-left', depth: 'background' }),
+      kang_taesik: Object.freeze({ side: 'left', depth: 'foreground' }),
+      lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'far-right', depth: 'background' }),
+    }),
+    public_boundary_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'far-left', depth: 'background' }),
+      lee_jaehoon: Object.freeze({ side: 'far-right', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+    protect_process_result: Object.freeze({
+      player: Object.freeze({ side: 'left', depth: 'foreground' }),
+      kang_taesik: Object.freeze({ side: 'far-left', depth: 'midground' }),
+      lee_jaehoon: Object.freeze({ side: 'far-right', depth: 'midground' }),
+      lim_junho: Object.freeze({ side: 'right', depth: 'foreground' }),
+    }),
+  }),
+});
+
 const SIDE_ORDER: readonly Episode01BlockingSide[] = ['far-left', 'left', 'center', 'right', 'far-right'];
 
 function moveSide(side: Episode01BlockingSide, direction: 'in' | 'out'): Episode01BlockingSide {
@@ -66,9 +110,11 @@ export function episode01CharacterBlocking(
   characterId: string,
   speakerId?: string | null,
   relationshipCue?: 'closer' | 'strained',
+  nodeId?: string | null,
 ): Episode01CharacterBlocking | undefined {
   if (!eventId) return undefined;
-  const base = BLOCKING_BY_EVENT[eventId]?.[characterId];
+  const base = (nodeId ? BLOCKING_BY_EVENT_NODE[eventId]?.[nodeId]?.[characterId] : undefined)
+    ?? BLOCKING_BY_EVENT[eventId]?.[characterId];
   if (!base) return undefined;
 
   let side = base.side;
