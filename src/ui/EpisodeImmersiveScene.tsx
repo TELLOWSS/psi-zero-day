@@ -195,7 +195,7 @@ export function EpisodeImmersiveScene({
     <div className="episode-immersive-cast" aria-hidden="true">
       {scene.cast.map((characterId, index) => {
         const relationshipCue = relationshipCues.find(item => item.character_id === characterId)?.cue;
-        const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue);
+        const blocking = episode01CharacterBlocking(scene.event_id, characterId, speakerId, relationshipCue, scene.node_id);
         return <div
         key={characterId}
         className={`episode-immersive-character cast-${index + 1}`}
