@@ -331,14 +331,16 @@
 .mini-building-c{left:30%;bottom:12%;width:49%;height:25%}
 .mini-zone{position:absolute;width:8px;height:8px;border-radius:50%;background:#2cb6e3;border:2px solid rgba(222,244,249,.88);box-shadow:0 0 0 3px rgba(44,182,227,.12)}
 .mini-zone[data-alert="true"]{background:#e64f42;box-shadow:0 0 0 4px rgba(230,79,66,.14)}
-.mini-zone-entry{left:54%;top:66%}.mini-zone-ramp{left:39%;top:48%}.mini-zone-yard{left:23%;top:72%}.mini-zone-gate{right:13%;top:69%}
-.mini-player{position:absolute;left:50%;top:56%;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:14px solid #f2c45d;transform:rotate(22deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+/* Minimap pins use the same Production Map coordinates as the full map. */
+.mini-player{position:absolute;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:14px solid #f2c45d;transform:translate(-50%,-50%) rotate(22deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
 .strategy-overview-minimap footer{display:flex;justify-content:space-between;gap:5px;margin-top:5px;color:#879da2;font-size:6px}
 .strategy-overview-minimap footer span:first-child::first-letter{color:#2cb6e3}
 .strategy-overview-minimap footer span:last-child::first-letter{color:#e64f42}
 .strategy-map-stage-card{right:19.5%;width:15%;min-width:125px}
 
+.strategy-zone-layer{position:absolute;inset:0;z-index:9;pointer-events:none}
 .strategy-zone-target{
+  position:absolute;transform:translate(-50%,-50%);pointer-events:auto;
   min-width:104px;min-height:38px;padding:6px 8px;border-radius:6px;
   display:flex;align-items:center;justify-content:space-between;gap:6px;
   background:rgba(6,25,33,.82);border-style:solid;border-color:rgba(84,159,182,.35);
