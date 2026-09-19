@@ -67,6 +67,7 @@ export function episodePresentationNodeCue(
   if (eventId === 'e01_04_junho_signal' && nodeId === 'detail') return 'radio_signal';
   if (eventId === 'e01_06_pump_arrival' && nodeId === 'near_miss' && presentationType === 'SHOW_RESULT') return 'pressure';
   if (eventId === 'e01_08b_inspection_find' && nodeId === 'action' && presentationType === 'SHOW_CHOICE') return 'scene_shift';
+  if (eventId === 'e01_08g_tbm_field_gap' && nodeId === 'tbm_action' && presentationType === 'SHOW_CHOICE') return 'radio_signal';
   if (eventId === 'e01_08i_restart_pressure' && nodeId === 'restart_action' && presentationType === 'SHOW_CHOICE') return 'pressure';
   if (eventId === 'e01_08k_stopwork_aftershock' && nodeId === 'culture_action' && presentationType === 'SHOW_CHOICE') return 'pressure';
   if (eventId === 'e01_08m_instruction_cascade' && nodeId === 'instruction_action' && presentationType === 'SHOW_CHOICE') return 'radio_signal';

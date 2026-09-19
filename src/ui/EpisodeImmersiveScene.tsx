@@ -29,6 +29,7 @@ export type Episode01MomentOverlay =
   | 'inspection-frame'
   | 'stopwork-gap'
   | 'record-pressure'
+  | 'tbm-gap'
   | 'restart-trace'
   | 'instruction-chain';
 
@@ -40,6 +41,7 @@ export function episode01MomentOverlay(eventId: string | null | undefined, nodeI
   if (eventId === 'e01_08b_inspection_find' || eventId === 'e01_08c_site_pushback' || eventId === 'e01_08d_reinspection') {
     return 'inspection-frame';
   }
+  if (eventId === 'e01_08g_tbm_field_gap' || eventId === 'e01_08h_tbm_return') return 'tbm-gap';
   if (eventId === 'e01_08i_restart_pressure' || eventId === 'e01_08j_restart_return') return 'restart-trace';
   if (eventId === 'e01_08k_stopwork_aftershock' || eventId === 'e01_08l_stopwork_return') return 'stopwork-gap';
   if (eventId === 'e01_08m_instruction_cascade' || eventId === 'e01_08n_instruction_return') return 'instruction-chain';

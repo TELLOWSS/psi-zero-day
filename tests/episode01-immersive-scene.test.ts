@@ -89,6 +89,8 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'pump')).toBe('pump-approach');
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'near_miss')).toBe('near-miss');
     expect(episode01MomentOverlay('e01_08b_inspection_find', 'inspection')).toBe('inspection-frame');
+    expect(episode01MomentOverlay('e01_08g_tbm_field_gap', 'tbm_action')).toBe('tbm-gap');
+    expect(episode01MomentOverlay('e01_08h_tbm_return', 'paper')).toBe('tbm-gap');
     expect(episode01MomentOverlay('e01_08i_restart_pressure', 'restart_action')).toBe('restart-trace');
     expect(episode01MomentOverlay('e01_08j_restart_return', 'controlled')).toBe('restart-trace');
     expect(episode01MomentOverlay('e01_08k_stopwork_aftershock', 'aftershock')).toBe('stopwork-gap');
@@ -111,5 +113,13 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_08j_restart_return', 'distorted')).toBe('restart-trace');
     expect(episode01MomentOverlay('e01_08m_instruction_cascade', 'blame_worker_result')).toBe('instruction-chain');
     expect(episode01MomentOverlay('e01_08n_instruction_return', 'gap')).toBe('instruction-chain');
+  });
+
+
+  it('maps TBM paper-field continuity to its own neutral overlay', () => {
+    expect(episode01MomentOverlay('e01_08g_tbm_field_gap', 'form_first_result')).toBe('tbm-gap');
+    expect(episode01MomentOverlay('e01_08g_tbm_field_gap', 'change_control_result')).toBe('tbm-gap');
+    expect(episode01MomentOverlay('e01_08h_tbm_return', 'silenced')).toBe('tbm-gap');
+    expect(episode01MomentOverlay('e01_08h_tbm_return', 'controlled')).toBe('tbm-gap');
   });
 });
