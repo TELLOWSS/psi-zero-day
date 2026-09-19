@@ -63,6 +63,7 @@ export function EpisodeImmersiveScene({
   time,
   zone,
   resolve,
+  person,
   t,
 }: {
   readonly eventId: string | null | undefined;
@@ -74,6 +75,7 @@ export function EpisodeImmersiveScene({
   readonly time?: string;
   readonly zone?: string;
   readonly resolve: AssetResolver;
+  readonly person?: (id: string) => { readonly id: string; readonly name: string; readonly role: string } | undefined;
   readonly t: (id: string) => string;
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
