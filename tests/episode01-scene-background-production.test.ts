@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import catalog from '../content/episode01/scene-background-catalog.json';
 import scenes from '../content/episode01/immersive-scenes.json';
 import { episode01ImmersiveScene } from '../src/app/episode01-immersive-scene';
+import { episode01UsesEvidenceBoard } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 immersive production background contract', () => {
   it('locks eight stable final WebP background slots with RC fallbacks', () => {
@@ -36,6 +37,18 @@ describe('Episode 01 immersive production background contract', () => {
     expect(scenes.events.e01_03_plan_breaks.props).toContain('assets/episode01/scene-elements/vehicle-overlap.webp');
     expect(scenes.events.e01_05_command.props).toContain('assets/episode01/scene-elements/access-barrier.webp');
     expect(scenes.events.e01_06_pump_arrival.props).toContain('assets/episode01/scene-elements/exclusion-zone.webp');
+  });
+
+  it('locks the inspection-to-report arc to visible field evidence and neutral record context', () => {
+    for (const eventId of ['e01_08b_inspection_find', 'e01_08c_site_pushback', 'e01_08d_reinspection'] as const) {
+      expect(scenes.events[eventId].props.length, eventId).toBeGreaterThanOrEqual(3);
+      expect(scenes.events[eventId].props).toContain('assets/episode01/scene-elements/open-edge.webp');
+      expect(scenes.events[eventId].props).toContain('assets/episode01/scene-elements/wet-floor.webp');
+      expect(scenes.events[eventId].props).toContain('assets/episode01/scene-elements/access-barrier.webp');
+    }
+    expect(episode01UsesEvidenceBoard('e01_08e_responsibility_clash')).toBe(true);
+    expect(episode01UsesEvidenceBoard('e01_08f_report_return')).toBe(true);
+    expect(episode01UsesEvidenceBoard('e01_08d_reinspection')).toBe(false);
   });
 
   it('keeps catalog usage synchronized with the actual immersive event map', () => {
