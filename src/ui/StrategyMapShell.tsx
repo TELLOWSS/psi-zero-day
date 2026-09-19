@@ -32,6 +32,7 @@ export interface StrategyMapCopy {
 export interface StrategyPersonLabel {
   readonly name: string;
   readonly role: string;
+  readonly trade?: string;
 }
 
 export interface StrategySupportItem {
@@ -294,7 +295,7 @@ export function StrategyMapShell({
               ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
               : <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>}
             <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}>
-              <strong>{label?.name ?? placement.character_id}{(label?.role ?? placement.role_id) ? <em> · {label?.role ?? placement.role_id}</em> : null}</strong>
+              <strong>{label ? formatCharacterIdentity(label) : placement.character_id}{!label && placement.role_id ? <em> · {placement.role_id}</em> : null}</strong>
             </span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
           </button>;
