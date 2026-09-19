@@ -2636,3 +2636,45 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
 }
 
+/* Episode completion keeps Day 02 continuity visible without turning the ending into a score screen. */
+.complete-screen:has(.episode-completion-carryover){
+  width:min(920px,94%);
+  max-height:calc(100% - 18px);
+  overflow:auto;
+  scrollbar-width:thin;
+}
+.episode-completion-carryover{
+  width:min(780px,88vw);
+  margin:0 auto 18px;
+  text-align:left
+}
+.episode-completion-carryover .episode-day-carryover{
+  margin-bottom:0;
+  padding:10px 11px;
+  background:linear-gradient(130deg,rgba(17,21,27,.86),rgba(22,24,21,.7))
+}
+.episode-completion-carryover .day-carryover-cards{
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr))
+}
+.episode-completion-carryover .day-carryover-cards article{
+  min-height:72px
+}
+.episode-completion-carryover + .episode-review{
+  width:min(780px,88vw);
+  margin:0 auto 18px;
+  text-align:left
+}
+@media(max-width:760px), (max-height:620px){
+  .complete-screen:has(.episode-completion-carryover){
+    align-self:stretch;
+    padding:14px 12px;
+  }
+  .episode-completion-carryover,
+  .episode-completion-carryover + .episode-review{
+    width:100%
+  }
+  .episode-completion-carryover .day-carryover-cards{
+    grid-template-columns:1fr
+  }
+}
+
