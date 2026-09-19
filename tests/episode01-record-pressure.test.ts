@@ -11,9 +11,9 @@ const common = {
 
 describe('Episode 01 post-incident record pressure', () => {
   it.each([
-    ['record_minimize_scope', 'evidence_forces_correction'],
-    ['record_retrofit_paper', 'retroactive_record_conflict'],
-    ['record_preserve_timeline', 'factual_record_preserved'],
+    ['record_minimize_scope', 'supplement_requested'],
+    ['record_retrofit_paper', 'document_sync_required'],
+    ['record_preserve_timeline', 'timeline_preserved'],
   ] as const)('%s resolves as %s', (record, result) => {
     const { state } = playEpisode({ ...common, record });
     expect(state.flags).toMatchObject({
