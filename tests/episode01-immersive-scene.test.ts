@@ -85,9 +85,11 @@ describe('Episode 01 immersive scene coverage', () => {
 
 
   it('maps signature Episode 01 moments to neutral scene overlays without scoring choices', () => {
+    expect(episode01MomentOverlay('e01_03_plan_breaks', 'plan')).toBe('schedule-cross');
     expect(episode01MomentOverlay('e01_04_junho_signal', 'detail')).toBe('signal-trace');
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'pump')).toBe('pump-approach');
     expect(episode01MomentOverlay('e01_06_pump_arrival', 'near_miss')).toBe('near-miss');
+    expect(episode01MomentOverlay('e01_07_first_pour', 'pressure')).toBe('pour-flow');
     expect(episode01MomentOverlay('e01_08b_inspection_find', 'inspection')).toBe('inspection-frame');
     expect(episode01MomentOverlay('e01_08g_tbm_field_gap', 'tbm_action')).toBe('tbm-gap');
     expect(episode01MomentOverlay('e01_08h_tbm_return', 'paper')).toBe('tbm-gap');
@@ -121,5 +123,13 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_08g_tbm_field_gap', 'change_control_result')).toBe('tbm-gap');
     expect(episode01MomentOverlay('e01_08h_tbm_return', 'silenced')).toBe('tbm-gap');
     expect(episode01MomentOverlay('e01_08h_tbm_return', 'controlled')).toBe('tbm-gap');
+  });
+
+
+  it('maps schedule collision and first-pour flow to distinct scene overlays', () => {
+    expect(episode01MomentOverlay('e01_03_plan_breaks', 'coordinate_schedule_result')).toBe('schedule-cross');
+    expect(episode01MomentOverlay('e01_03_plan_breaks', 'follow_junho_result')).toBe('schedule-cross');
+    expect(episode01MomentOverlay('e01_07_first_pour', 'pour')).toBe('pour-flow');
+    expect(episode01MomentOverlay('e01_07_first_pour', 'after')).toBe('pour-flow');
   });
 });

@@ -2032,3 +2032,81 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .episode-immersive-moment-overlay[data-moment="tbm-gap"] .moment-b{left:8%;right:8%}
 }
 
+/* EP01 early flow language: schedule conflict crosses; first-pour flow converges. */
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-c{
+  left:12%;width:76%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(211,219,212,.34) 10% 90%,transparent);
+  transform-origin:50% 50%;
+}
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-a{
+  top:38%;transform:rotate(7deg);
+}
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-b{
+  top:52%;transform:rotate(-5deg);opacity:.8;
+}
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-c{
+  top:64%;transform:rotate(2deg);opacity:.55;
+}
+.episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-axis{
+  left:49%;top:30%;height:43%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(215,222,214,.24),transparent);
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="plan"] .episode-immersive-moment-overlay[data-moment="schedule-cross"]{
+  background:radial-gradient(circle at 50% 51%,rgba(212,191,136,.07),transparent 24%);
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="delegate_kang_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-a{
+  transform:rotate(2deg);opacity:.92;
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="negotiate_yoon_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-b{
+  transform:rotate(-1deg);opacity:.92;
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="coordinate_schedule_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-a,
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="coordinate_schedule_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-b,
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="coordinate_schedule_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-c{
+  transform:rotate(0deg);opacity:.7;
+}
+.episode-immersive-scene[data-event="e01_03_plan_breaks"][data-node="follow_junho_result"] .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-c{
+  transform:rotate(8deg) translateY(-8px);opacity:.88;
+}
+
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-axis{
+  left:18%;right:15%;top:57%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(223,215,190,.18),rgba(223,215,190,.38),transparent);
+  transform:rotate(-4deg);
+}
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-a,
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-b,
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-c{
+  width:17%;height:2px;
+  background:linear-gradient(90deg,rgba(221,211,185,.06),rgba(221,211,185,.42),rgba(221,211,185,.06));
+  transform-origin:left center;
+}
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-a{
+  left:28%;top:48%;transform:rotate(11deg);
+}
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-b{
+  left:43%;top:54%;transform:rotate(5deg);opacity:.8;
+}
+.episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-c{
+  left:58%;top:59%;transform:rotate(-1deg);opacity:.62;
+}
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="pressure"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-a,
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="pressure"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-b,
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="pressure"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-c{
+  opacity:.96;
+}
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="after"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-a,
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="after"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-b,
+.episode-immersive-scene[data-event="e01_07_first_pour"][data-node="after"] .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-c{
+  opacity:.3;transform:rotate(0deg);
+}
+
+@media(max-width:760px){
+  .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-a,
+  .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-b,
+  .episode-immersive-moment-overlay[data-moment="schedule-cross"] .moment-c{left:7%;width:86%}
+  .episode-immersive-moment-overlay[data-moment="pour-flow"] .moment-axis{left:10%;right:8%}
+}
+

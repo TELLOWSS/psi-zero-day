@@ -24,6 +24,8 @@ export function episode01RelationshipSceneCue(delta: number): Episode01Relations
 
 export type Episode01MomentOverlay =
   | 'signal-trace'
+  | 'schedule-cross'
+  | 'pour-flow'
   | 'pump-approach'
   | 'near-miss'
   | 'inspection-frame'
@@ -34,10 +36,12 @@ export type Episode01MomentOverlay =
   | 'instruction-chain';
 
 export function episode01MomentOverlay(eventId: string | null | undefined, nodeId: string | null | undefined): Episode01MomentOverlay | undefined {
+  if (eventId === 'e01_03_plan_breaks') return 'schedule-cross';
   if (eventId === 'e01_04_junho_signal') return 'signal-trace';
   if (eventId === 'e01_06_pump_arrival') {
     return nodeId && /near[_-]?miss/i.test(nodeId) ? 'near-miss' : 'pump-approach';
   }
+  if (eventId === 'e01_07_first_pour') return 'pour-flow';
   if (eventId === 'e01_08b_inspection_find' || eventId === 'e01_08c_site_pushback' || eventId === 'e01_08d_reinspection') {
     return 'inspection-frame';
   }
