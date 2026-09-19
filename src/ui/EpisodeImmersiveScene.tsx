@@ -10,6 +10,10 @@ const EPISODE01_MEMORY_FRAMES = [
   { assetId: 'ep01.scene_bg.site_office', fallback: 'assets/episode01/cg/site-office-rc.svg' },
 ] as const;
 
+export function episode01UsesMemoryStrip(eventId: string | null | undefined) {
+  return eventId === 'e01_09_evening' || eventId === 'e01_10_next_day_tease';
+}
+
 export function episode01UsesEvidenceBoard(eventId: string | null | undefined) {
   return eventId === 'e01_08e_responsibility_clash'
     || eventId === 'e01_08f_report_return'
@@ -53,7 +57,7 @@ export function EpisodeImmersiveScene({
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
-  const showMemoryStrip = scene.event_id === 'e01_09_evening' || scene.event_id === 'e01_10_next_day_tease';
+  const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
 
   return <figure
     className="episode-immersive-scene"
