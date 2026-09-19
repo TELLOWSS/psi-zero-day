@@ -816,3 +816,34 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
 @media(prefers-reduced-motion:reduce){
   .episode-immersive-scene[data-shot] .episode-immersive-background{animation:none!important}
 }
+
+/* EP01 authored full-scene choice preview */
+.episode-immersive-scene[data-preview-choice] .episode-immersive-background{
+  transition:object-position .24s cubic-bezier(.2,.75,.2,1),transform .24s ease,filter .24s ease;
+  transform:scale(1.055);
+}
+.episode-immersive-scene[data-preview-choice] .episode-immersive-prop{
+  transition:transform .24s ease,opacity .24s ease,filter .24s ease;
+  transform:translateY(-1.5%) scale(1.035);
+}
+.episode-immersive-scene[data-preview-choice] .episode-immersive-character:not([data-speaker="true"]){opacity:.84}
+.episode-immersive-scene[data-choice-tone="control"] .episode-immersive-atmosphere{
+  background:radial-gradient(circle at 52% 28%,rgba(108,176,155,.16),transparent 36%),linear-gradient(90deg,rgba(7,16,18,.34),transparent 32%,transparent 70%,rgba(7,16,18,.3));
+}
+.episode-immersive-scene[data-choice-tone="people"] .episode-immersive-atmosphere{
+  background:radial-gradient(circle at 50% 26%,rgba(102,157,186,.17),transparent 38%),linear-gradient(90deg,rgba(8,14,20,.34),transparent 32%,transparent 70%,rgba(8,14,20,.3));
+}
+.episode-immersive-scene[data-choice-tone="evidence"] .episode-immersive-atmosphere{
+  background:radial-gradient(circle at 54% 24%,rgba(195,164,100,.16),transparent 36%),linear-gradient(90deg,rgba(18,15,8,.32),transparent 32%,transparent 70%,rgba(18,15,8,.28));
+}
+.episode-immersive-scene[data-choice-tone="pressure"] .episode-immersive-atmosphere{
+  background:radial-gradient(circle at 52% 25%,rgba(186,112,78,.15),transparent 35%),linear-gradient(90deg,rgba(22,12,9,.33),transparent 30%,transparent 69%,rgba(22,12,9,.29));
+}
+.episode-immersive-scene[data-choice-tone="recovery"] .episode-immersive-atmosphere{
+  background:radial-gradient(circle at 50% 24%,rgba(128,132,181,.16),transparent 38%),linear-gradient(90deg,rgba(10,11,22,.31),transparent 31%,transparent 70%,rgba(10,11,22,.28));
+}
+.choice-panel button[data-authored-visual="true"]:focus-visible{outline:2px solid rgba(234,190,103,.66);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){
+  .episode-immersive-scene[data-preview-choice] .episode-immersive-background,
+  .episode-immersive-scene[data-preview-choice] .episode-immersive-prop{transition:none!important;transform:none!important}
+}

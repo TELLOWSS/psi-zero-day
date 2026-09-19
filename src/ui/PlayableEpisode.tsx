@@ -64,6 +64,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const seenSpeakersByRun = useRef(new Set<string>());
   const playedSceneCues = useRef(new Set<string>());
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
+  const [choicePreviewId, setChoicePreviewId] = useState<string | null>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
@@ -229,6 +230,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
   useEffect(() => { if (!isPlaying) setExecutedFieldAction(null); }, [isPlaying]);
+  useEffect(() => { setChoicePreviewId(null); }, [activeEventId, activeInstance?.current_node_id]);
   useEffect(() => {
     if (!person || !dialogueNodeIdentity || !runIdentity) {
       setFirstContactNode(null);
@@ -355,6 +357,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         nodeId={activeInstance?.current_node_id}
         speakerId={snapshot.dialogue?.speaker_id}
         presentationType={presentation?.type}
+        previewChoiceId={choicePreviewId}
         eventTitle={snapshot.eventTitle}
         time={cinematicBeat?.time}
         zone={cinematicBeat?.zone}
@@ -419,6 +422,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
               assetUri={resolveAsset}
               eventId={activeEventId}
               choiceFallback={strategyActions.length > 0}
+              onChoicePreview={setChoicePreviewId}
             />}
         </div>
       </section>

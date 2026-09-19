@@ -16,6 +16,7 @@ export function EpisodeImmersiveScene({
   nodeId,
   speakerId,
   presentationType,
+  previewChoiceId,
   eventTitle,
   time,
   zone,
@@ -26,13 +27,14 @@ export function EpisodeImmersiveScene({
   readonly nodeId: string | null | undefined;
   readonly speakerId?: string | null;
   readonly presentationType?: string | null;
+  readonly previewChoiceId?: string | null;
   readonly eventTitle: string;
   readonly time?: string;
   readonly zone?: string;
   readonly resolve: AssetResolver;
   readonly t: (id: string) => string;
 }) {
-  const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId);
+  const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   if (!scene) return null;
 
   return <figure
@@ -44,6 +46,8 @@ export function EpisodeImmersiveScene({
     data-has-speaker={Boolean(scene.subject_character_id) || undefined}
     data-subject={scene.subject_character_id ?? undefined}
     data-node={scene.node_id ?? undefined}
+    data-preview-choice={scene.preview_choice_id ?? undefined}
+    data-choice-tone={scene.preview_choice_tone ?? undefined}
     key={`${scene.event_id}:${scene.node_id ?? 'entry'}:${scene.tone}`}
   >
     <VisualImage uri={scene.background_uri} alt="" className="episode-immersive-background" />
@@ -65,7 +69,9 @@ export function EpisodeImmersiveScene({
     <figcaption>
       <div><span>{time ?? 'EP01'}</span>{zone ? <b>{zone}</b> : null}<em>{t(stageTextId(presentationType, nodeId))}</em></div>
       <strong>{eventTitle}</strong>
-      <small>{t(`ui.immersive.tone.${scene.tone}`)}</small>
+      <small>{scene.preview_choice_tone
+        ? `${t('ui.immersive.stage.decision')} · ${t(`ui.choice_visual.${scene.preview_choice_tone}`)}`
+        : t(`ui.immersive.tone.${scene.tone}`)}</small>
     </figcaption>
   </figure>;
 }
