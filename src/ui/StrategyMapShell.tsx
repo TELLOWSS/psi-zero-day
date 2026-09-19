@@ -6,7 +6,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
-import { PRODUCTION_MAP_ANCHOR_IDS, productionMapStyle } from '../app/production-map';
+import { PRODUCTION_MAP_ANCHOR_IDS, STRATEGY_ZONE_ANCHOR_IDS, productionMapStyle } from '../app/production-map';
 import type { StrategySignalKind } from '../app/strategy-signals';
 import { StrategyLoopPanel } from './StrategyLoopPanel';
 import { StrategyPsiSixPanel } from './StrategyPsiSixPanel';
@@ -120,7 +120,7 @@ export function StrategyMapShell({
     onAction(engineAction ?? action);
   };
 
-  const zones = ['entry', 'ramp', 'yard', 'gate', 'inspection'] as const;
+  const zones = STRATEGY_ZONE_ANCHOR_IDS;
   const zoneSummary = Object.fromEntries(zones.map(zone => [
     zone,
     {
