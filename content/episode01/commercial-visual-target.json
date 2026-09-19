@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "target_id": "episode01-commercial-reference-tier-v1",
+  "reference_intent": "Match the perceived production quality of the supplied 1672x941 concept references without baking UI text into artwork.",
+  "architecture": {
+    "principle": "high-resolution art plate plus live React interaction layers",
+    "preserve_engine": true,
+    "background_asset_id": "ep01.background.foundation.map",
+    "current_rc_path": "assets/episode01/backgrounds/foundation-map-rc.svg",
+    "final_path": "assets/episode01/backgrounds/foundation-map.webp",
+    "ui_rule": "All labels, buttons, objectives, PSI values, risk markers and dialogue remain runtime DOM/UI. Final background art contains no readable interface text."
+  },
+  "strategy_map": {
+    "production_status": "final-art-pending",
+    "minimum_resolution": {
+      "width": 2560,
+      "height": 1440
+    },
+    "preferred_resolution": {
+      "width": 3072,
+      "height": 1728
+    },
+    "aspect_ratio": "16:9",
+    "camera": "oblique construction-site overview, approximately 30-40 degree elevation, realistic depth, readable work zones",
+    "style": "commercial 2.5D construction strategy drama; grounded Korean high-rise construction realism; clean cinematic daylight; adult audience; no toy-like diorama look",
+    "must_show": [
+      "multiple high-rise concrete structures at different completion stages",
+      "tower crane with believable mast/jib scale",
+      "temporary access road and vehicle circulation",
+      "material staging and laydown yard",
+      "worker circulation and active workfaces",
+      "temporary fencing, hoist or lift context, scaffolding or safety netting",
+      "enough negative space for PSI panel, objectives, minimap, dialogue and action controls"
+    ],
+    "reject": [
+      "flat CSS illustration as final art",
+      "generic empty construction site",
+      "Western-only site details",
+      "real company or apartment branding",
+      "baked Korean text, buttons, icons or hazard labels",
+      "excessive cyberpunk/neon treatment",
+      "miniature/toy visual scale"
+    ],
+    "runtime_layers": [
+      "zone targets",
+      "named character map cutouts",
+      "anonymous worker clusters",
+      "scene-element WebPs",
+      "risk signals",
+      "field friction markers",
+      "minimap",
+      "PSI 6 HUD",
+      "objectives",
+      "dialogue/action panel"
+    ],
+    "art_safe_zones": {
+      "left_hud": "0-18% width",
+      "right_minimap": "82-100% width, upper 0-24% height",
+      "lower_dialogue": "0-100% width, lower 78-100% height",
+      "central_interaction": "20-82% width, 12-76% height should remain spatially readable"
+    }
+  },
+  "map_anchor_contract": {
+    "note": "Coordinates are normalized interaction targets and may be tuned after final plate review without changing gameplay IDs.",
+    "gate": {
+      "x": 0.17,
+      "y": 0.72,
+      "purpose": "worker/vehicle entry"
+    },
+    "entry": {
+      "x": 0.36,
+      "y": 0.61,
+      "purpose": "main internal access"
+    },
+    "yard": {
+      "x": 0.54,
+      "y": 0.63,
+      "purpose": "material staging and coordination"
+    },
+    "ramp": {
+      "x": 0.49,
+      "y": 0.31,
+      "purpose": "constrained ramp / overlap signal"
+    },
+    "inspection": {
+      "x": 0.79,
+      "y": 0.39,
+      "purpose": "edge/access inspection zone"
+    },
+    "core": {
+      "x": 0.68,
+      "y": 0.25,
+      "purpose": "vertical transport/core reference"
+    },
+    "office": {
+      "x": 0.83,
+      "y": 0.68,
+      "purpose": "site office / reporting context"
+    },
+    "overview": {
+      "x": 0.55,
+      "y": 0.49,
+      "purpose": "whole-site strategic focus"
+    }
+  },
+  "cinematic_surfaces": {
+    "stop_work": {
+      "quality_target": "full-screen character-driven cinematic",
+      "art_separation": "background + character cutouts + props + live decision UI",
+      "requirement": "PPE, temporary edge protection, suspended-load logic and character gesture must read immediately"
+    },
+    "office_dialogue": {
+      "quality_target": "cinematic group dialogue",
+      "art_separation": "site-office background + named character cutouts + live dialogue UI",
+      "requirement": "warm/cool mixed light, believable paperwork and field-office wear, role/trade identity preserved"
+    },
+    "day_result": {
+      "quality_target": "sunset/evening result tableau",
+      "art_separation": "environment plate + player silhouette/cutout + live PSI/result dashboard",
+      "requirement": "reflective closure, not heroic propaganda or grading baked into art"
+    }
+  },
+  "production_order": [
+    "foundation-map.webp master strategy plate",
+    "gate/ramp/work-yard/concrete/inspection/site-office/break/home final environment WebPs",
+    "event-specific high-salience CG overlays",
+    "UI spacing and crop QA at desktop, tablet portrait, phone portrait, phone landscape"
+  ],
+  "acceptance": {
+    "strategy_map": [
+      "final WebP resolves instead of foundation-map-rc.svg",
+      "zone and signal overlays align to physical site features",
+      "named characters remain clickable and visually grounded",
+      "no critical UI overlaps focal construction details",
+      "desktop presentation reads at reference-tier density without looking like a prototype"
+    ],
+    "cinematic": [
+      "background is production raster art, not RC SVG",
+      "character scale/perspective matches background",
+      "dialogue and choice UI remain live text",
+      "scene remains readable without relying on color-coded correct/wrong answers"
+    ]
+  }
+}
