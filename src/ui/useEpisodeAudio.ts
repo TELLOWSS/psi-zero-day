@@ -63,7 +63,7 @@ function syntheticNoise(context: AudioContext, duration: number) {
 /** Presentation-only audio bridge. Authored audio remains in GameState; no game rule depends on playback. */
 export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: AssetResolver) {
   const preferenceMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
-  const effectiveMuted = Boolean(effectiveMuted || preferenceMuted);
+  const effectiveMuted = Boolean(audio?.muted || preferenceMuted);
   const bgmRef = useRef<HTMLAudioElement | null>(null);
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
   const seenCueIds = useRef(new Set<string>());
