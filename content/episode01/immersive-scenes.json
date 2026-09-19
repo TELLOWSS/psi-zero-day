@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
-  "art_direction": "Episode 01 immersive scene compositor: hand-authored RC environment image + production character/prop WebP layers + node-specific mood/focus.",
+  "art_direction": "Episode 01 immersive scene compositor: stable production background asset slot (final WebP when present, hand-authored RC SVG fallback) + production character/prop WebP layers + node-specific mood/focus.",
   "rules": [
     "Every authored Episode 01 event has a visual scene.",
     "Dialogue nodes spotlight the actual speaker.",
     "Choice nodes visually tighten framing before the decision.",
     "Result nodes change grade/focus from the selected result node instead of showing a generic static background.",
-    "Visuals never label a choice correct or incorrect."
+    "Visuals never label a choice correct or incorrect.",
+    "Each environment resolves through a stable production background asset id; final WebP replaces RC without event/content changes."
   ],
   "events": {
     "e01_01_arrival": {
