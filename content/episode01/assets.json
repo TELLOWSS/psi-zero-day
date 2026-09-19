@@ -642,6 +642,38 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.foundation_blinding_edge",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
+          "format": "webp",
+          "bytes": 25546,
+          "hash": "f9a22a076a81769badd9cc6173c6846b0073e2f1cf1b03f692089b6b06ae4583"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.foundation_rebar_mat",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
+          "format": "webp",
+          "bytes": 35778,
+          "hash": "503efef361fd54592b00b5862ad0e91be13e771267607def92fbebb1190c76fe"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.gangform_lift_wire22",
       "type": "image",
       "group_id": "ep01.scene_elements",

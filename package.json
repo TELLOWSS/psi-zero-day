@@ -24,7 +24,7 @@
     "assets:manifest": "node scripts/build-episode01-assets.mjs",
     "assets:check": "npm run assets:embedded && node scripts/materialize-embedded-media.mjs --check && node scripts/materialize-vehicle-overlap.mjs --check && node scripts/materialize-character-media.mjs --check && node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
     "assets:visual-contract": "node scripts/check-visual-contract.mjs",
-    "assets:scene-elements-contract": "node scripts/check-scene-element-art.mjs",
+    "assets:scene-elements-contract": "npm run assets:embedded && node scripts/check-scene-element-art.mjs",
     "assets:character-map-shape-check": "node scripts/check-character-final-art-shape.mjs",
     "assets:active-report": "npm run assets:embedded && npm run assets:manifest && node scripts/report-active-art.mjs",
     "assets:production-status": "npm run assets:embedded && node scripts/report-production-art-full.mjs",

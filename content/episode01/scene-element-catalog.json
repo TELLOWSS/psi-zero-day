@@ -805,7 +805,7 @@
       "kind": "hazard",
       "label": "버림타설 단부·단차",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.foundation_blinding_edge",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
@@ -840,7 +840,7 @@
       "kind": "prop",
       "label": "기초 철근 배근 구간",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.foundation_rebar_mat",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
