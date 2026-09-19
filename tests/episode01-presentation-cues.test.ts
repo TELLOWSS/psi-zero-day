@@ -29,7 +29,11 @@ describe('Episode 01 presentation audio cues',()=>{
     }
   });
 
-  it('does not force a cue onto every event',()=>{
-    expect(episodePresentationAudioCue('e01_08_reactions')).toBeUndefined();
+  it('covers authored Episode 01 beats while leaving unknown events unmapped',()=>{
+    expect(episodePresentationAudioCue('e01_08_reactions')).toMatchObject({
+      production_key:'concrete_pour',
+      asset_id:'ep01.audio.concrete_pour',
+    });
+    expect(episodePresentationAudioCue('e01_unknown')).toBeUndefined();
   });
 });
