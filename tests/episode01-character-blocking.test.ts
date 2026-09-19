@@ -124,6 +124,12 @@ describe('Episode 01 cinematic character blocking', () => {
       'e01_08j_restart_return',
       'e01_08k_stopwork_aftershock',
       'e01_08l_stopwork_return',
+      'e01_08e_responsibility_clash',
+      'e01_08f_report_return',
+      'e01_08m_instruction_cascade',
+      'e01_08n_instruction_return',
+      'e01_08o_record_pressure',
+      'e01_08p_record_return',
     ] as const;
 
     for (const eventId of blockedEvents) {
@@ -133,4 +139,18 @@ describe('Episode 01 cinematic character blocking', () => {
     }
   });
 
+  it('stages responsibility and record outcomes without cast-index dependence', () => {
+    expect(episode01CharacterBlocking('e01_08e_responsibility_clash', 'player', null, undefined, 'timeline_result')).toEqual({
+      side: 'center',
+      depth: 'foreground',
+    });
+    expect(episode01CharacterBlocking('e01_08m_instruction_cascade', 'lim_junho', null, undefined, 'blame_worker_result')).toEqual({
+      side: 'far-right',
+      depth: 'background',
+    });
+    expect(episode01CharacterBlocking('e01_08p_record_return', 'player', null, undefined, 'preserved')).toEqual({
+      side: 'center',
+      depth: 'foreground',
+    });
+  });
 });
