@@ -1746,3 +1746,75 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   }
 }
 
+/* EP01 inspection/stop-work result compositions: outcome changes spatial emphasis, never correctness color. */
+/* Inspection: full stop brings the control line forward while the physical finding remains visible. */
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="full_stop_result"] .episode-immersive-prop.prop-1{
+  right:-3%;width:31%;height:54%;opacity:.74;z-index:2;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="full_stop_result"] .episode-immersive-prop.prop-2{
+  left:-7%;width:34%;height:38%;opacity:.6;z-index:1;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="full_stop_result"] .episode-immersive-prop.prop-3{
+  left:23%;bottom:-8%;width:50%;height:43%;opacity:1;z-index:5;
+}
+
+/* Inspection: photo/evidence route keeps the finding large while the barrier stays peripheral. */
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="quick_photo_result"] .episode-immersive-prop.prop-1{
+  right:4%;bottom:1%;width:42%;height:64%;opacity:1;z-index:5;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="quick_photo_result"] .episode-immersive-prop.prop-2{
+  left:-3%;bottom:-10%;width:44%;height:48%;opacity:.9;z-index:3;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="quick_photo_result"] .episode-immersive-prop.prop-3{
+  left:43%;bottom:-13%;width:27%;height:31%;opacity:.56;z-index:1;
+}
+
+/* Inspection: sequence agreement keeps hazard and control at comparable visual weight. */
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="sequence_result"] .episode-immersive-prop.prop-1{
+  right:-1%;bottom:3%;width:34%;height:57%;opacity:.88;z-index:3;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="sequence_result"] .episode-immersive-prop.prop-2{
+  left:-5%;bottom:-12%;width:36%;height:42%;opacity:.7;z-index:2;
+}
+.episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="sequence_result"] .episode-immersive-prop.prop-3{
+  left:32%;bottom:-8%;width:39%;height:40%;opacity:.94;z-index:4;
+}
+
+/* Stop-work: ignoring the social residue leaves the team visually split around empty space. */
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-character.cast-1{left:2%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-character.cast-2{left:34%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-character.cast-3{right:24%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-character.cast-4{right:1%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-prop{opacity:.54}
+
+/* Stop-work: public boundary leaves a visible formal control between the two sides. */
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-prop.prop-1{
+  left:31%;bottom:-7%;width:42%;height:38%;opacity:1;z-index:5;
+}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-prop.prop-2{
+  left:-2%;bottom:-8%;width:31%;height:35%;opacity:.72;z-index:2;
+}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-character.cast-1{left:5%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-character.cast-2{left:27%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-character.cast-3{right:26%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="public_boundary_result"] .episode-immersive-character.cast-4{right:5%}
+
+/* Stop-work: protected reporting/process route shifts the social focus back toward a workable conversation cluster. */
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-prop.prop-1{
+  left:38%;bottom:-10%;width:32%;height:33%;opacity:.7;z-index:2;
+}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-prop.prop-2{
+  left:-4%;bottom:-8%;width:29%;height:34%;opacity:.66;z-index:1;
+}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-character.cast-1{left:10%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-character.cast-2{left:31%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-character.cast-3{right:24%}
+.episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-character.cast-4{right:9%}
+
+@media(max-width:760px){
+  .episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="full_stop_result"] .episode-immersive-prop.prop-3{left:20%;width:56%}
+  .episode-immersive-scene[data-event="e01_08b_inspection_find"][data-node="quick_photo_result"] .episode-immersive-prop.prop-1{right:1%;width:45%}
+  .episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="ignore_social_result"] .episode-immersive-character.cast-2{left:29%}
+  .episode-immersive-scene[data-event="e01_08k_stopwork_aftershock"][data-node="protect_process_result"] .episode-immersive-character.cast-4{right:4%}
+}
+
