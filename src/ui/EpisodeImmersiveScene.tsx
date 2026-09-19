@@ -49,6 +49,9 @@ export function EpisodeImmersiveScene({
     data-node={scene.node_id ?? undefined}
     data-preview-choice={scene.preview_choice_id ?? undefined}
     data-choice-tone={scene.preview_choice_tone ?? undefined}
+    data-event={scene.event_id}
+    data-environment={scene.background_environment ?? undefined}
+    data-authored-node={scene.authored_node_direction || undefined}
     key={`${scene.event_id}:${scene.node_id ?? 'entry'}:${scene.tone}`}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
