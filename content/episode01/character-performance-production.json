@@ -101,6 +101,11 @@
         "bytes": 150304,
         "sha256": "f6af2ced769422ec7240a5e2c733922b0c2f5274c90879a986a9a4e807544b2d"
       }
-    ]
+    ],
+    "archive": {
+      "filename": "PSI_EP01_PERFORMANCE_WAVE01_GITHUB_READY.zip",
+      "bytes": 728007,
+      "sha256": "83ad86b83522279d45c26d45b4fbe56688c682a4e333beddc911178cde92a464"
+    }
   }
 }
