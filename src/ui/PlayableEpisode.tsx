@@ -11,7 +11,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
-import { episodePresentationAudioCue } from '../app/episode-presentation-cues';
+import { episode01StrategyOutcomeAudioCue, episodePresentationAudioCue } from '../app/episode-presentation-cues';
 import { episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
 import {
@@ -259,8 +259,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
     if (!strategyOutcome) return;
-    const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
-    playUiCue(relationDelta > 0 ? 'result_positive' : relationDelta < 0 ? 'result_negative' : 'result_neutral');
+    playUiCue(episode01StrategyOutcomeAudioCue());
   }, [strategyOutcome?.key, playUiCue]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
