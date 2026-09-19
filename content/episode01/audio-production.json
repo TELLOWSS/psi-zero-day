@@ -199,7 +199,7 @@
     }
   ],
   "integration": {
-    "current": "Each of the 26 Episode 01 immersive events resolves to one of eight production audio asset slots. If the reviewed binary is absent, a lightweight field-oriented WebAudio cue plays instead (clean/radio/pressure/air timbre families).",
+    "current": "Each of the 26 Episode 01 immersive events resolves to one of eight production audio asset slots. If absent, the reviewed production binary is replaced by a lightweight field-oriented WebAudio cue (clean/radio/pressure/air timbre families).",
     "finalization": "When a reviewed binary is added under public/assets/episode01/audio and registered in assets.json generation, no story or event rule changes are required.",
     "qa_surfaces": [
       "web production",
