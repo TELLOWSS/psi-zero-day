@@ -8,8 +8,10 @@ on:
       - 'content/episode01/scene-background-catalog.json'
       - 'content/episode01/scene-background-production-briefs.json'
       - 'content/episode01/scene-background-imagegen-prompts.json'
+      - 'content/episode01/final-art-ingest-manifest.json'
       - 'scripts/check-scene-background-production.mjs'
       - 'scripts/check-scene-background-imagegen-prompts.mjs'
+      - 'scripts/check-final-art-ingest.mjs'
       - 'scripts/build-episode01-assets.mjs'
   workflow_dispatch:
 
@@ -32,6 +34,7 @@ jobs:
           npm run assets:scene-background-brief-check
           npm run assets:scene-background-imagegen-check
           npm run assets:scene-background-status
+          npm run assets:final-art-ingest-status
       - name: Enforce complete final-art batch when WebP delivery starts
         shell: bash
         run: |
@@ -40,6 +43,7 @@ jobs:
             echo "No final Episode 01 background batch has landed yet; RC fallback remains active."
           elif [ "$count" = "8" ]; then
             npm run assets:scene-background-production-check
+            npm run assets:final-art-ingest-check
           else
             echo "Partial final-art batch detected: $count/8 WebP backgrounds. Deliver either 0 or all 8."
             exit 1
