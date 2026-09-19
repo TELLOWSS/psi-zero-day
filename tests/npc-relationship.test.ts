@@ -113,17 +113,21 @@ describe('NPC dialogue projection and existing event execution', () => {
   it('projects speaker, silhouette, response consequences and next transitions from JSON', () => {
     const engine = signal();
     const view = getDialogueView(engine.getState(), episodeContent)!;
-    expect(view).toMatchObject({ speaker_id: 'lim_junho', text_id: 'ep01.junho.signal', visual_reference: { kind: 'character', id: 'lim_junho' }, next_node_id: 'listen' });
+    expect(view).toMatchObject({ speaker_id: 'lim_junho', text_id: 'ep01.junho.signal', visual_reference: { kind: 'character', id: 'lim_junho' }, next_node_id: 'detail' });
     engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'signal' });
+    expect(getDialogueView(engine.getState(), episodeContent)).toMatchObject({ text_id: 'ep01.junho.detail', next_node_id: 'listen' });
+    engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'detail' });
     const before = engine.getState(); const responses = getDialogueView(before, episodeContent)!;
     expect(responses.speaker_id).toBe('lim_junho');
-    expect(responses.responses.map(r => r.choice_id)).toEqual(['listen_more', 'dismiss']);
+    expect(responses.responses.map(r => r.choice_id)).toEqual(['listen_more', 'crosscheck_minseok', 'dismiss']);
     expect(responses.responses[0]!.consequences).not.toEqual(responses.responses[1]!.consequences);
     expect(engine.getState()).toBe(before);
   });
 
   it.each(['listen_more', 'dismiss'] as const)('applies %s response consequences through the same event command', choice => {
-    const engine = signal(); engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'signal' });
+    const engine = signal();
+    engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'signal' });
+    engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'detail' });
     engine.dispatch({ type: 'choose_event', instance_id: 'test.signal', node_id: 'listen', choice_id: choice });
     const state = engine.getState();
     expect(getNpcRelationship(state, 'lim_junho').reporting).toBe(choice === 'listen_more' ? 36 : 28);
@@ -137,9 +141,11 @@ describe('NPC dialogue projection and existing event execution', () => {
       to: { kind: 'player' }, field: 'reporting', operator: 'gte', value: 30 }, { kind: 'flag', flag_id: 'followed_junho', equals: true }];
     const content = new ContentRegistry(input).getValidatedContent(); const engine = signal(content);
     engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'signal' });
+    engine.dispatch({ type: 'advance_event', instance_id: 'test.signal', node_id: 'detail' });
     const state = engine.getState(); const view = getDialogueView(state, content)!;
     expect(view.responses[0]!.enabled).toBe(false);
     expect(view.responses[1]!.enabled).toBe(true);
+    expect(view.responses[2]!.enabled).toBe(true);
     expect(view.responses[0]!.conditions).toHaveLength(2);
     expect(() => engine.dispatch({ type: 'choose_event', instance_id: 'test.signal', node_id: 'listen', choice_id: 'listen_more' })).toThrow();
     expect(engine.getState()).toBe(state);
