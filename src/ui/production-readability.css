@@ -66,20 +66,9 @@
 .strategy-map-worker .strategy-worker-label span { color: #dae6ec; font-size: 10px; }
 .strategy-map-worker.has-actions .strategy-worker-label { border-color: #ffbd69; }
 .strategy-map-worker.is-focused .strategy-worker-label { outline: 2px solid #7bcaf4; }
-/* Normalized walkable ground positions for the locked Foundation background. */
-.strategy-map .worker-overview { left: 52%; top: 77%; }
-.strategy-map .worker-yard { left: 29%; top: 78%; }
-.strategy-map .worker-entry { left: 38%; top: 58%; }
-.strategy-map .worker-core { left: 48%; top: 47%; }
-.strategy-map .worker-ramp { left: 42%; top: 76%; }
-.strategy-map .worker-gate { left: 72%; top: 82%; }
-.strategy-map .worker-inspection { left: 63%; top: 66%; }
-.strategy-map .worker-office { left: 76%; top: 53%; }
+/* Production Map runtime owns normalized worker coordinates. */
 .strategy-zone-target { min-height: 44px; background: #183543dd; color: #fff; font-size: 11px; opacity: .92; }
-.strategy-map .zone-entry { left: 33%; top: 47%; }
-.strategy-map .zone-ramp { left: 38%; top: 84%; }
-.strategy-map .zone-yard { left: 17%; top: 86%; }
-.strategy-map .zone-gate { left: 78%; top: 83%; }
+/* Production Map runtime owns normalized zone coordinates. */
 .strategy-active .strategy-roster { display: none; }
 .strategy-active .play-panel {
   left: 202px; right: 12px; bottom: 14px; min-height: 148px; max-height: 148px;
