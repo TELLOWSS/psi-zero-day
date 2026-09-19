@@ -41,6 +41,10 @@ describe('Episode 01 PSI cinematic trace', () => {
     expect(html).toContain('class="episode-psi-field-markers"');
     expect(html).toContain('data-kind="signal" data-active="true"');
     expect(html).toContain('ui.psi_trace.restart.signal');
+    expect(html).toContain('class="episode-scene-minimap"');
+    expect(html).toContain('data-anchor="yard"');
+    expect(html).toContain('left:54%');
+    expect(html).toContain('top:63%');
   });
 
 });
