@@ -56,9 +56,20 @@ describe('Episode 01 character performance asset contract', () => {
     expect(asset?.asset_id).toBe('ep01.character.lim_junho.performance.concern');
   });
 
-  it('locks generated wave 01 metadata without claiming binary ingest is complete', () => {
-    expect(performanceProduction.production_status).toBe('generated_wave_01_pending_github_binary_ingest');
-    expect(performanceProduction.generated_wave_01.status).toBe('verified_local_files_pending_github_binary_ingest');
+  it('locks generated wave 01 metadata across pending and verified GitHub ingest states', () => {
+    expect([
+      'generated_wave_01_pending_github_binary_ingest',
+      'generated_wave_01_ingested',
+    ]).toContain(performanceProduction.production_status);
+    expect([
+      'verified_local_files_pending_github_binary_ingest',
+      'verified_github_binary_ingest',
+    ]).toContain(performanceProduction.generated_wave_01.status);
+    expect(performanceProduction.generated_wave_01.archive).toEqual({
+      filename: 'PSI_EP01_PERFORMANCE_WAVE01_GITHUB_READY.zip',
+      bytes: 728007,
+      sha256: '83ad86b83522279d45c26d45b4fbe56688c682a4e333beddc911178cde92a464',
+    });
     expect(performanceProduction.generated_wave_01.assets).toHaveLength(5);
     expect(performanceProduction.generated_wave_01.assets.map(asset => asset.asset_id)).toEqual([
       'ep01.character.player.performance.resolve',
