@@ -40,7 +40,7 @@ describe('Episode 01 director pass v2',()=>{
   });
 
   it('bumps content compatibility and records the no-obvious-answer design contract',()=>{
-    expect(manifest.bundle.content_version).toBe('ep01.director.v2');
+    expect(manifest.bundle.content_version).toBe('ep01.director.v4');
     expect(director.design_rules.some(rule=>rule.includes('obviously safe/correct'))).toBe(true);
   });
 });
