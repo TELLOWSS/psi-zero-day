@@ -73,7 +73,7 @@ export class EpisodeSession {
   };
   character(id: string) {
     const c = this.#registry.getCharacter(id);
-    return c ? Object.freeze({ id: c.id, name: this.t(c.name_text_id), role: this.t(c.role_text_id) }) : undefined;
+    return c ? Object.freeze({ id: c.id, name: this.t(c.name_text_id), role: this.t(c.role_text_id), trade: this.t(c.trade_text_id) }) : undefined;
   }
   assetUri(id: string): string | undefined {
     const variant = this.#registry.getAsset(id)?.variants[0];

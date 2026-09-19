@@ -1427,3 +1427,19 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     [data-event="e01_10_next_day_tease"]
   ) .episode-immersive-prop{animation:none!important}
 }
+  
+/* Character identity: role and grounded construction trade stay visibly distinct. */
+.character-identity-line>span[data-kind="trade"]{
+  border-style:dashed;
+  background:rgba(255,255,255,.035);
+  color:#b9c7c8;
+  letter-spacing:.04em;
+}
+.character-identity-line>span[data-kind="trade"]::before{
+  content:"공종";
+  margin-right:5px;
+  opacity:.62;
+  font-size:.82em;
+  font-weight:600;
+}
+

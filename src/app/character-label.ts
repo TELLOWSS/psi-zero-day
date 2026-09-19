@@ -1,13 +1,18 @@
 export interface CharacterIdentityLabel {
   readonly name: string;
   readonly role?: string | null;
+  readonly trade?: string | null;
 }
 
 /** Player-facing identity label: never show a bare name when a job/role is known. */
 export function formatCharacterIdentity(person: CharacterIdentityLabel | undefined | null): string {
   if (!person) return '';
   const role = person.role?.trim();
-  return role ? `${person.name} · ${role}` : person.name;
+  const trade = person.trade?.trim();
+  const parts = [person.name];
+  if (role) parts.push(role);
+  if (trade && trade !== role) parts.push(trade);
+  return parts.join(' · ');
 }
 
 
