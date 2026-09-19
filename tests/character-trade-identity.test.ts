@@ -8,14 +8,19 @@ describe('Episode 01 character role and trade identity', () => {
   it('separates field scope from role only when the content is explicit', () => {
     const all = [...characters, ...inspectionCharacters, ...responsibilityCharacters];
     const byId = Object.fromEntries(all.map(character => [character.id, character]));
+    const character = (id: keyof typeof byId) => {
+      const value = byId[id];
+      expect(value).toBeDefined();
+      return value!;
+    };
 
-    expect(byId.kang_taesik.trade_text_id).toBe('cast.kang_taesik.trade');
-    expect(byId.yoon_sungho.trade_text_id).toBe('cast.yoon_sungho.trade');
-    expect(byId.lee_jaehoon.trade_text_id).toBe('cast.lee_jaehoon.trade');
-    expect(byId.choi_minseok.trade_text_id).toBe('cast.choi_minseok.trade');
-    expect(byId.seo_jeongmin.trade_text_id).toBe('cast.seo_jeongmin.trade');
-    expect(byId.oh_seungjae.trade_text_id).toBe('cast.oh_seungjae.trade');
-    expect(byId.lim_junho.trade_text_id).toBe(byId.lim_junho.role_text_id);
+    expect(character('kang_taesik').trade_text_id).toBe('cast.kang_taesik.trade');
+    expect(character('yoon_sungho').trade_text_id).toBe('cast.yoon_sungho.trade');
+    expect(character('lee_jaehoon').trade_text_id).toBe('cast.lee_jaehoon.trade');
+    expect(character('choi_minseok').trade_text_id).toBe('cast.choi_minseok.trade');
+    expect(character('seo_jeongmin').trade_text_id).toBe('cast.seo_jeongmin.trade');
+    expect(character('oh_seungjae').trade_text_id).toBe('cast.oh_seungjae.trade');
+    expect(character('lim_junho').trade_text_id).toBe(character('lim_junho').role_text_id);
   });
 
   it('projects a distinct trade to the UI without inventing one for an unspecified worker', () => {
