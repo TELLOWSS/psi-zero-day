@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_status": "planned_expression_variants_with_map_fallback",
+  "production_status": "generated_wave_01_pending_github_binary_ingest",
   "purpose": "Stable transparent full-body expression slots for cinematic Episode 01 scenes. Runtime may request these IDs now; unresolved assets fall back to the approved map character art.",
   "expression_set": [
     "neutral",
@@ -50,5 +50,57 @@
       "asset_id_prefix": "ep01.character.oh_seungjae.performance",
       "path_prefix": "assets/episode01/characters/performance/oh-seungjae"
     }
+  },
+  "generated_wave_01": {
+    "source": "chatgpt_image_generation_2026-09-19",
+    "canonical_size": [
+      1024,
+      1536
+    ],
+    "format": "webp",
+    "alpha": true,
+    "status": "verified_local_files_pending_github_binary_ingest",
+    "assets": [
+      {
+        "character_id": "player",
+        "expression": "resolve",
+        "asset_id": "ep01.character.player.performance.resolve",
+        "path": "assets/episode01/characters/performance/player-resolve.webp",
+        "bytes": 135228,
+        "sha256": "7ed2c13978cc75b51cbadd99e48d789f525ae496ec345b61bc8d56b179671f8e"
+      },
+      {
+        "character_id": "lee_jaehoon",
+        "expression": "concern",
+        "asset_id": "ep01.character.lee_jaehoon.performance.concern",
+        "path": "assets/episode01/characters/performance/lee-jaehoon-concern.webp",
+        "bytes": 128518,
+        "sha256": "93a1573121705cdc489c01b64f22c308c41bd5704d5ef9f0b9214b421d19b5e6"
+      },
+      {
+        "character_id": "kang_taesik",
+        "expression": "conflict",
+        "asset_id": "ep01.character.kang_taesik.performance.conflict",
+        "path": "assets/episode01/characters/performance/kang-taesik-conflict.webp",
+        "bytes": 199724,
+        "sha256": "353619aec821ec95abb6a517c3a2c6cf5541780d39833b5c71ee2e13023b2401"
+      },
+      {
+        "character_id": "seo_jeongmin",
+        "expression": "neutral",
+        "asset_id": "ep01.character.seo_jeongmin.performance.neutral",
+        "path": "assets/episode01/characters/performance/seo-jeongmin-neutral.webp",
+        "bytes": 113766,
+        "sha256": "cf1c13696d50b89938ef142b7f19930d6ed77a00d7aa9a203c696ccbc6432b68"
+      },
+      {
+        "character_id": "lim_junho",
+        "expression": "relief",
+        "asset_id": "ep01.character.lim_junho.performance.relief",
+        "path": "assets/episode01/characters/performance/lim-junho-relief.webp",
+        "bytes": 150304,
+        "sha256": "f6af2ced769422ec7240a5e2c733922b0c2f5274c90879a986a9a4e807544b2d"
+      }
+    ]
   }
 }
