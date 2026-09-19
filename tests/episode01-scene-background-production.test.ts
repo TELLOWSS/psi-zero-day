@@ -28,6 +28,16 @@ describe('Episode 01 immersive production background contract', () => {
     }
   });
 
+  it('stages the five priority field beats with multiple independent depth props', () => {
+    const priority = ['e01_03_plan_breaks', 'e01_04_junho_signal', 'e01_05_command', 'e01_06_pump_arrival', 'e01_07_first_pour'] as const;
+    for (const eventId of priority) {
+      expect(scenes.events[eventId].props.length, eventId).toBeGreaterThanOrEqual(2);
+    }
+    expect(scenes.events.e01_03_plan_breaks.props).toContain('assets/episode01/scene-elements/vehicle-overlap.webp');
+    expect(scenes.events.e01_05_command.props).toContain('assets/episode01/scene-elements/access-barrier.webp');
+    expect(scenes.events.e01_06_pump_arrival.props).toContain('assets/episode01/scene-elements/exclusion-zone.webp');
+  });
+
   it('keeps catalog usage synchronized with the actual immersive event map', () => {
     const actualByRc = new Map<string, string[]>();
     for (const [eventId, scene] of Object.entries(scenes.events)) {
