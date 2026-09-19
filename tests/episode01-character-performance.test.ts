@@ -111,4 +111,28 @@ describe('Episode 01 cinematic character performance', () => {
     expect(episode01UsesCharacterPerformance('e01_07_first_pour')).toBe(false);
     expect(episode01CharacterPerformance('e01_07_first_pour', 'pour', 'player')).toBeUndefined();
   });
+  it('uses the existing Junho concerned art in a live concern-state scene when available', () => {
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_08i_restart_pressure',
+      nodeId: 'junho',
+      speakerId: 'lim_junho',
+      eventTitle: '재개 압박',
+      resolve: (assetId: string) => {
+        if (assetId === 'ep01.character.lim_junho.concerned') {
+          return 'assets/episode01/characters/lim-junho-concerned.webp';
+        }
+        if (assetId === 'ep01.character.lim_junho.map') {
+          return 'assets/episode01/characters/lim-junho-map.webp';
+        }
+        return undefined;
+      },
+      t: (id: string) => id,
+    }));
+
+    expect(html).toContain('data-character="lim_junho"');
+    expect(html).toContain('data-expression="concern"');
+    expect(html).toContain('data-performance-asset="expression"');
+    expect(html).toContain('lim-junho-concerned.webp');
+  });
+
 });
