@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import catalog from '../content/episode01/scene-background-catalog.json';
 import scenes from '../content/episode01/immersive-scenes.json';
 import { episode01ImmersiveScene } from '../src/app/episode01-immersive-scene';
-import { episode01UsesEvidenceBoard } from '../src/ui/EpisodeImmersiveScene';
+import { episode01UsesEvidenceBoard, episode01UsesMemoryStrip } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 immersive production background contract', () => {
   it('locks eight stable final WebP background slots with RC fallbacks', () => {
@@ -61,6 +61,12 @@ describe('Episode 01 immersive production background contract', () => {
     expect(episode01UsesEvidenceBoard('e01_08n_instruction_return')).toBe(true);
     expect(episode01UsesEvidenceBoard('e01_08o_record_pressure')).toBe(true);
     expect(episode01UsesEvidenceBoard('e01_08p_record_return')).toBe(true);
+  });
+
+  it("carries yesterday's field memory through evening reflection and next-day tease", () => {
+    expect(episode01UsesMemoryStrip('e01_09_evening')).toBe(true);
+    expect(episode01UsesMemoryStrip('e01_10_next_day_tease')).toBe(true);
+    expect(episode01UsesMemoryStrip('e01_08p_record_return')).toBe(false);
   });
 
   it('keeps catalog usage synchronized with the actual immersive event map', () => {
