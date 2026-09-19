@@ -132,4 +132,34 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01MomentOverlay('e01_07_first_pour', 'pour')).toBe('pour-flow');
     expect(episode01MomentOverlay('e01_07_first_pour', 'after')).toBe('pour-flow');
   });
+  it('aligns dialogue camera focus with authored character blocking in the late field arc', () => {
+    expect(episode01ImmersiveScene(
+      'e01_08b_inspection_find',
+      'inspection',
+      'SHOW_DIALOGUE',
+      'seo_jeongmin',
+    )?.focus).toBe('center');
+
+    expect(episode01ImmersiveScene(
+      'e01_08c_site_pushback',
+      'full_stop',
+      'SHOW_DIALOGUE',
+      'lee_jaehoon',
+    )?.focus).toBe('center');
+
+    expect(episode01ImmersiveScene(
+      'e01_08d_reinspection',
+      'lee_rework',
+      'SHOW_DIALOGUE',
+      'lee_jaehoon',
+    )?.focus).toBe('center');
+
+    expect(episode01ImmersiveScene(
+      'e01_08i_restart_pressure',
+      'junho',
+      'SHOW_DIALOGUE',
+      'lim_junho',
+    )?.focus).toBe('right');
+  });
+
 });
