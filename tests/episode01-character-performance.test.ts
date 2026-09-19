@@ -8,34 +8,6 @@ import {
 import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 cinematic character performance', () => {
-  it('directs the early field drama before the inspection arc begins', () => {
-    expect(episode01CharacterPerformance('e01_04_junho_signal', 'signal', 'lim_junho')).toEqual({
-      expression: 'concern',
-      pose: 'hesitate',
-      motion: 'enter',
-    });
-    expect(episode01CharacterPerformance('e01_06_pump_arrival', 'near_miss', 'choi_minseok')).toMatchObject({
-      expression: 'conflict',
-      pose: 'press',
-    });
-    expect(episode01CharacterPerformance('e01_07_first_pour', 'after', 'lim_junho')).toMatchObject({
-      expression: 'relief',
-      motion: 'reengage',
-    });
-  });
-
-  it('turns post-pour relationship outcomes into visible presence changes', () => {
-    expect(episode01CharacterPerformance('e01_08_reactions', 'junho.low', 'lim_junho')).toEqual({
-      expression: 'concern',
-      pose: 'withdraw',
-      motion: 'withdraw',
-    });
-    expect(episode01CharacterPerformance('e01_08a_reporting_return', 'reinforced', 'lim_junho')).toMatchObject({
-      expression: 'relief',
-      motion: 'reengage',
-    });
-  });
-
   it('keeps the approved five-expression vocabulary', () => {
     const states = [
       episode01CharacterPerformance('e01_08b_inspection_find', 'inspection', 'seo_jeongmin'),
@@ -136,8 +108,8 @@ describe('Episode 01 cinematic character performance', () => {
 
   it('does not apply late-arc performance direction to unrelated scenes', () => {
     expect(episode01UsesCharacterPerformance('e01_08k_stopwork_aftershock')).toBe(true);
-    expect(episode01UsesCharacterPerformance('e01_07_first_pour')).toBe(true);
-    expect(episode01CharacterPerformance('e01_09_evening', 'rest', 'player')).toBeUndefined();
+    expect(episode01UsesCharacterPerformance('e01_07_first_pour')).toBe(false);
+    expect(episode01CharacterPerformance('e01_07_first_pour', 'pour', 'player')).toBeUndefined();
   });
   it('uses the existing Junho concerned art in a live concern-state scene when available', () => {
     const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {

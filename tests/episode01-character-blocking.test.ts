@@ -9,32 +9,6 @@ import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 import scenes from '../content/episode01/immersive-scenes.json';
 
 describe('Episode 01 cinematic character blocking', () => {
-  it('stages the first-shift conflict as a readable four-way composition', () => {
-    expect(episode01CharacterBlocking('e01_03_plan_breaks', 'player')).toEqual({
-      side: 'center',
-      depth: 'foreground',
-    });
-    expect(episode01CharacterBlocking('e01_03_plan_breaks', 'kang_taesik')).toEqual({
-      side: 'far-left',
-      depth: 'midground',
-    });
-    expect(episode01CharacterBlocking('e01_03_plan_breaks', 'yoon_sungho')).toEqual({
-      side: 'far-right',
-      depth: 'midground',
-    });
-  });
-
-  it('spatially separates Junho reporting outcomes after the pour', () => {
-    expect(episode01CharacterBlocking('e01_08a_reporting_return', 'lim_junho', null, undefined, 'reinforced')).toEqual({
-      side: 'center',
-      depth: 'foreground',
-    });
-    expect(episode01CharacterBlocking('e01_08a_reporting_return', 'lim_junho', null, undefined, 'suppressed')).toEqual({
-      side: 'far-right',
-      depth: 'background',
-    });
-  });
-
   it('uses authored identity-based positions for inspection scenes', () => {
     expect(episode01CharacterBlocking('e01_08b_inspection_find', 'seo_jeongmin')).toEqual({
       side: 'center',
@@ -96,8 +70,8 @@ describe('Episode 01 cinematic character blocking', () => {
 
   it('does not override scenes outside the authored blocking arc', () => {
     expect(episode01UsesCharacterBlocking('e01_08i_restart_pressure')).toBe(true);
-    expect(episode01UsesCharacterBlocking('e01_07_first_pour')).toBe(true);
-    expect(episode01CharacterBlocking('e01_09_evening', 'player')).toBeUndefined();
+    expect(episode01UsesCharacterBlocking('e01_07_first_pour')).toBe(false);
+    expect(episode01CharacterBlocking('e01_07_first_pour', 'player')).toBeUndefined();
   });
   it('renders authored blocking metadata into the immersive character layers', () => {
     const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
