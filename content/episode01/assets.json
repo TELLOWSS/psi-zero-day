@@ -2,15 +2,143 @@
   "schema_version": 1,
   "assets": [
     {
+      "asset_id": "ep01.audio.concrete_pour",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/concrete-pour.ogg",
+          "format": "ogg",
+          "bytes": 102372,
+          "hash": "06e50e4ae302878450fabde6bbb68e046ff5e2882cec748af3cdcc502b904bdf"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.gate_queue",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/gate-queue.ogg",
+          "format": "ogg",
+          "bytes": 83098,
+          "hash": "481671098062d9a9b9a456fb9ec2111be3a8accb63672ba4b78899517769eb4c"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.home_night",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/home-night.ogg",
+          "format": "ogg",
+          "bytes": 77585,
+          "hash": "20ad26d83227ac7fa7da194c908dec85630b566e60718314877f08c1bea5f132"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.office_report_roomtone",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/office-report-roomtone.ogg",
+          "format": "ogg",
+          "bytes": 75723,
+          "hash": "ba55649662c76bd524daad99248c90b6dbcce7b317249e528f792cebc2dfc7b9"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.pump_engine_boom",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/pump-engine-boom.ogg",
+          "format": "ogg",
+          "bytes": 86943,
+          "hash": "784f55a2d315d911c9c1038bc4f3bff1ae5aad0d6118aa553fb785f5b49e0726"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.radio_burst",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/radio-burst.ogg",
+          "format": "ogg",
+          "bytes": 16181,
+          "hash": "634f3b9594307746257441b2cefe08f00856ff84cf51acfb2be19c50627f0951"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.stopwork_silence_drop",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/stopwork-silence-drop.ogg",
+          "format": "ogg",
+          "bytes": 31932,
+          "hash": "2cd89b12356b921bcaf76e0bfacdd53e6441aeef6b5bf435ec3b8963f7d46dea"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.workface_pressure",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/workface-pressure.ogg",
+          "format": "ogg",
+          "bytes": 63680,
+          "hash": "b061fa4162bb8687b00516e86a918098f8f5bd23506b1101f21541efa7a9bd56"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.background.foundation.map",
       "type": "image",
       "group_id": "ep01.backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/backgrounds/foundation-map.webp",
-          "format": "webp",
-          "bytes": 112686,
-          "hash": "ee9aefea829ddbdcd5883fab68144ae85759538f83b3ec5bfe4af43c7ad2d74d"
+          "uri": "assets/episode01/backgrounds/foundation-map-rc.svg",
+          "format": "svg",
+          "bytes": 8878,
+          "hash": "6c48cf52b72bd7121d3e7da0473a35563ba883716b45e099bca77616dbc6b164"
         }
       ],
       "dependencies": [],
@@ -322,6 +450,134 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_bg.break_area",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/break-area-rc.svg",
+          "format": "svg",
+          "bytes": 2503,
+          "hash": "f725bd0967ab84e866e45b867e8b493231ea2696e2c509ce512ad7f33f7b9280"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.concrete_pour",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/concrete-pour-rc.svg",
+          "format": "svg",
+          "bytes": 2659,
+          "hash": "e04d1f58ce8ee13b2be02bd0a617271bb037eca60981295b5e83c79b41986fc9"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.gate_dawn",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/gate-dawn-rc.svg",
+          "format": "svg",
+          "bytes": 2876,
+          "hash": "5bbe56e432a97db83e97e4851ed654bb84d0cae42ee60e6d86f2d7d66d3d3d57"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.home_night",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/home-night-rc.svg",
+          "format": "svg",
+          "bytes": 2673,
+          "hash": "4d3c0bf4bbba4f28df9aa89708b0e1c7b86b276f5ad4dec12cc9e0a7f5403ba7"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.inspection_zone",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/inspection-zone-rc.svg",
+          "format": "svg",
+          "bytes": 2471,
+          "hash": "31fe6ba6a1938b7831305ad2a348b298dea2b6fc3a9e0fff4111bccef046b1f6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.ramp_entry",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/ramp-entry-rc.svg",
+          "format": "svg",
+          "bytes": 2588,
+          "hash": "bc568c74990181ec30e81e7fc7e90e0bd49e749597b7ec5d7b660cde08069ca0"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.site_office",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/site-office-rc.svg",
+          "format": "svg",
+          "bytes": 2755,
+          "hash": "bcca8d67e3373dda871ec5d47282acea4b58024e1e3fa9e32aa0c5d1ab962910"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_bg.work_yard",
+      "type": "image",
+      "group_id": "ep01.scene_backgrounds",
+      "variants": [
+        {
+          "uri": "assets/episode01/cg/work-yard-rc.svg",
+          "format": "svg",
+          "bytes": 2549,
+          "hash": "9822fd5faf10bdc771acf9b119ce04cf4ba4bb4cb332603326043eb71f8dfa1e"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.access_barrier",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -347,6 +603,22 @@
           "format": "webp",
           "bytes": 183608,
           "hash": "83381b209496fb77027b4c21458aa25daa36abafa7ebfed2da756c93189fec95"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.fire_extinguisher_station",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
+          "format": "webp",
+          "bytes": 15008,
+          "hash": "d872e2e9415f138c3378b807be5c7f3743e74d5b5bb05271b217aa357eac006e"
         }
       ],
       "dependencies": [],
@@ -427,6 +699,22 @@
           "format": "webp",
           "bytes": 281240,
           "hash": "8de0c514e72cd2a41b0e4993c34cfb2d7b9fedfeaefe27c80be9524508888d07"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.site_gate",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/site-gate.webp",
+          "format": "webp",
+          "bytes": 7395,
+          "hash": "927af20c9da3e42427d14645d972bcaca5f35cd690b81dd7a596118e8c3a0efd"
         }
       ],
       "dependencies": [],

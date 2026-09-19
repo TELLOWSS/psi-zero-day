@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "production_id": "ep01-audio-core-v1",
-  "status": "runtime_slots_wired_binaries_pending",
+  "status": "production_v1_binaries_present",
   "game_title": "PSI : ZERO DAY",
   "company_name": "NEW PSI",
-  "final_asset_count": 0,
+  "final_asset_count": 8,
   "required_core_assets": 8,
   "mix_target": {
     "principle": "Field realism first. Dialogue must remain intelligible; avoid trailer-style over-scoring.",
@@ -199,8 +199,8 @@
     }
   ],
   "integration": {
-    "current": "Each of the 26 Episode 01 immersive events resolves to one of eight production audio asset slots. If absent, the reviewed production binary is replaced by a lightweight field-oriented WebAudio cue (clean/radio/pressure/air timbre families).",
-    "finalization": "The repository generator materializes production-v1 audio at the stable target paths. Field-recorded Foley can later replace those same paths after listening QA without changing story or event rules.",
+    "current": "All eight Episode 01 production-v1 OGG assets are materialized and resolve through the runtime asset manifest; WebAudio fallback remains emergency-only.",
+    "finalization": "Field-recorded Foley may later replace the same stable asset paths after listening QA without changing story or event rules.",
     "qa_surfaces": [
       "web production",
       "Android WebView",
@@ -210,7 +210,7 @@
   },
   "event_cue_coverage": "26/26",
   "synthetic_fallback": {
-    "status": "active_until_reviewed_binaries_exist",
+    "status": "emergency_only_if_binary_missing_or_playback_fails",
     "timbres": [
       "clean",
       "radio",
@@ -223,7 +223,73 @@
     "method": "deterministic procedural synthesis",
     "generator": "tools/generate_episode01_audio.py",
     "rights": "project-owned generated audio; no external recordings, samples, speech, or music",
-    "target": "Ogg/Opus 48 kHz stereo 96 kbps VBR",
-    "state": "workflow_ready_binary_materialization_pending"
+    "codec": "Ogg/Opus 48 kHz stereo 96 kbps VBR",
+    "review_status": "production_v1; listening QA remains required before store release",
+    "assets": [
+      {
+        "file": "gate-queue.ogg",
+        "bytes": 83098,
+        "duration_sec": 6.4,
+        "sha256": "481671098062d9a9b9a456fb9ec2111be3a8accb63672ba4b78899517769eb4c",
+        "peak_dbfs": -9.0,
+        "rms_dbfs": -19.56
+      },
+      {
+        "file": "radio-burst.ogg",
+        "bytes": 16181,
+        "duration_sec": 1.22,
+        "sha256": "634f3b9594307746257441b2cefe08f00856ff84cf51acfb2be19c50627f0951",
+        "peak_dbfs": -7.5,
+        "rms_dbfs": -25.54
+      },
+      {
+        "file": "workface-pressure.ogg",
+        "bytes": 63680,
+        "duration_sec": 4.8,
+        "sha256": "b061fa4162bb8687b00516e86a918098f8f5bd23506b1101f21541efa7a9bd56",
+        "peak_dbfs": -9.0,
+        "rms_dbfs": -22.04
+      },
+      {
+        "file": "pump-engine-boom.ogg",
+        "bytes": 86943,
+        "duration_sec": 7.2,
+        "sha256": "784f55a2d315d911c9c1038bc4f3bff1ae5aad0d6118aa553fb785f5b49e0726",
+        "peak_dbfs": -8.5,
+        "rms_dbfs": -19.73
+      },
+      {
+        "file": "concrete-pour.ogg",
+        "bytes": 102372,
+        "duration_sec": 7.8,
+        "sha256": "06e50e4ae302878450fabde6bbb68e046ff5e2882cec748af3cdcc502b904bdf",
+        "peak_dbfs": -9.0,
+        "rms_dbfs": -20.07
+      },
+      {
+        "file": "stopwork-silence-drop.ogg",
+        "bytes": 31932,
+        "duration_sec": 2.6,
+        "sha256": "2cd89b12356b921bcaf76e0bfacdd53e6441aeef6b5bf435ec3b8963f7d46dea",
+        "peak_dbfs": -10.0,
+        "rms_dbfs": -20.85
+      },
+      {
+        "file": "office-report-roomtone.ogg",
+        "bytes": 75723,
+        "duration_sec": 6.3,
+        "sha256": "ba55649662c76bd524daad99248c90b6dbcce7b317249e528f792cebc2dfc7b9",
+        "peak_dbfs": -13.0,
+        "rms_dbfs": -23.24
+      },
+      {
+        "file": "home-night.ogg",
+        "bytes": 77585,
+        "duration_sec": 6.5,
+        "sha256": "20ad26d83227ac7fa7da194c908dec85630b566e60718314877f08c1bea5f132",
+        "peak_dbfs": -15.0,
+        "rms_dbfs": -21.84
+      }
+    ]
   }
 }
