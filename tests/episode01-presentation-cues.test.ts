@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import audioProduction from '../content/episode01/audio-production.json';
-import { episodePresentationAudioCue } from '../src/app/episode-presentation-cues';
+import { episodeNodeAudioCue, episodePresentationAudioCue } from '../src/app/episode-presentation-cues';
 import { uiAudioCueProfile } from '../src/ui/useEpisodeAudio';
 
 describe('Episode 01 presentation audio cues',()=>{
@@ -35,5 +35,16 @@ describe('Episode 01 presentation audio cues',()=>{
       asset_id:'ep01.audio.concrete_pour',
     });
     expect(episodePresentationAudioCue('e01_unknown')).toBeUndefined();
+  });
+
+  it('cuts the pump soundscape to the authored silence drop on the near miss node', () => {
+    expect(episodeNodeAudioCue('e01_06_pump_arrival', 'near_miss')).toMatchObject({
+      production_key: 'stopwork_silence_drop',
+      asset_id: 'ep01.audio.stopwork_silence_drop',
+      fallback: 'pressure',
+    });
+    expect(episodeNodeAudioCue('e01_06_pump_arrival', 'best_control')).toBeUndefined();
+    const stopwork = audioProduction.assets.find(item => item.key === 'stopwork_silence_drop');
+    expect(stopwork?.events).toContain('e01_06_pump_arrival');
   });
 });
