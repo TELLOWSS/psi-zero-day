@@ -10,7 +10,8 @@ describe('Episode 01 cinematic beat map',()=>{
     expect(beats.map(beat=>beat!.time)).toEqual(['07:18','07:21','07:27','07:36','07:48']);
   });
 
-  it('keeps unrelated later consequence events free of forced transition stamps',()=>{
-    expect(episodeCinematicBeat('e01_08o_record_pressure')).toBeUndefined();
+  it('carries authored time-and-place stamps through the record-pressure closing arc',()=>{
+    expect(episodeCinematicBeat('e01_08o_record_pressure')).toMatchObject({ time:'16:42', zone:'SITE OFFICE', tone:'decision' });
+    expect(episodeCinematicBeat('e01_08p_record_return')).toMatchObject({ time:'17:08', zone:'REPORT', tone:'consequence' });
   });
 });
