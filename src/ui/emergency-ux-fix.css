@@ -1,0 +1,437 @@
+/* Phase A — Emergency UX Fix
+   Goal: guarantee that the world stays readable and every primary interaction remains reachable.
+   Imported last on purpose. Presentation only; no engine/content rules live here. */
+
+:root {
+  --ep-layer-world: 10;
+  --ep-layer-overlay: 30;
+  --ep-layer-hud: 40;
+  --ep-layer-dialogue: 60;
+  --ep-layer-choice: 70;
+  --ep-layer-modal: 90;
+}
+
+/* A decorative cinematic must never steal a tap/click from dialogue or choices. */
+.episode-immersive-scene,
+.episode-immersive-scene *,
+.strategy-world-backdrop,
+.strategy-world-atmosphere,
+.strategy-entry-slate {
+  pointer-events: none;
+}
+
+.game-frame.phase-playing {
+  isolation: isolate;
+}
+
+/* Narrative scenes become full-bleed world + edge HUD + bottom dialogue dock. */
+.game-frame.phase-playing:not(.strategy-active) .episode-immersive-scene {
+  position: absolute;
+  z-index: var(--ep-layer-world);
+  inset: 64px 0 46px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .episode-immersive-background {
+  transform: scale(1.01);
+}
+
+.game-frame.phase-playing:not(.strategy-active) .game-header {
+  position: relative;
+  z-index: var(--ep-layer-hud);
+  background: linear-gradient(180deg, rgba(5,14,20,.94), rgba(5,14,20,.74));
+  backdrop-filter: blur(10px);
+}
+
+.game-frame.phase-playing:not(.strategy-active) .scene-heading {
+  position: absolute;
+  z-index: var(--ep-layer-hud);
+  top: 84px;
+  left: 3%;
+  width: min(420px, 45%);
+  padding: 10px 14px;
+  border-left: 3px solid var(--accent);
+  background: linear-gradient(90deg, rgba(7,18,24,.88), rgba(7,18,24,.28));
+  text-shadow: 0 2px 10px rgba(0,0,0,.75);
+  pointer-events: none;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .scene-heading h1 {
+  margin: 3px 0 0;
+  font-size: clamp(18px, 2vw, 30px);
+}
+
+.game-frame.phase-playing:not(.strategy-active) .play-panel {
+  position: absolute;
+  z-index: var(--ep-layer-dialogue);
+  left: 3%;
+  right: 3%;
+  bottom: 54px;
+  width: auto;
+  margin: 0;
+  min-height: 142px;
+  max-height: 34%;
+  grid-template-columns: minmax(104px, 132px) minmax(0, 1fr);
+  gap: 18px;
+  padding: 14px 16px;
+  overflow: hidden;
+  border: 1px solid rgba(188,211,216,.28);
+  border-top: 1px solid rgba(231,241,239,.46);
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(5,17,23,.94), rgba(6,20,27,.88));
+  box-shadow: 0 -12px 36px rgba(0,0,0,.28);
+  backdrop-filter: blur(14px);
+}
+
+.game-frame.phase-playing:not(.strategy-active) .presentation-area {
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding-right: 2px;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .dialogue-content {
+  min-height: 0;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .dialogue-text {
+  padding: 4px 0 10px;
+  font-size: clamp(15px, 1.35vw, 20px);
+  line-height: 1.58;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .continue-button {
+  position: sticky;
+  z-index: var(--ep-layer-choice);
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+  min-width: 148px;
+  min-height: 48px;
+  padding: 9px 12px;
+  border: 1px solid rgba(216,192,120,.72);
+  border-radius: 8px;
+  background: rgba(12,29,36,.96);
+  box-shadow: 0 8px 18px rgba(0,0,0,.28);
+  pointer-events: auto;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .character-card,
+.game-frame.phase-playing:not(.strategy-active) .narrator-card {
+  min-height: 0;
+  justify-content: center;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .portrait-slot,
+.game-frame.phase-playing:not(.strategy-active) .worker-mark {
+  height: 72px;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .character-identity {
+  margin-top: 8px;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .character-identity strong {
+  font-size: 15px;
+}
+
+.game-frame.phase-playing:not(.strategy-active) .character-first-contact {
+  display: none;
+}
+
+/* A decision is the primary task. Hide auxiliary cards while the choice is active. */
+.presentation-area[data-presentation="SHOW_CHOICE"] > :not(.choice-content) {
+  display: none !important;
+}
+
+.presentation-area[data-presentation="SHOW_CHOICE"] {
+  overflow: visible !important;
+}
+
+.choice-content {
+  position: relative;
+  z-index: var(--ep-layer-choice);
+}
+
+.choice-content h2 {
+  margin: 0 0 10px;
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.4;
+}
+
+.choice-panel {
+  position: relative;
+  z-index: var(--ep-layer-choice);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.choice-panel button {
+  position: relative;
+  z-index: var(--ep-layer-choice);
+  min-height: 62px;
+  grid-template-columns: 28px minmax(0,1fr) 18px;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow: visible;
+  border: 1px solid rgba(160,183,185,.42);
+  border-radius: 9px;
+  background: rgba(13,31,38,.96);
+  box-shadow: 0 8px 18px rgba(0,0,0,.2);
+  pointer-events: auto;
+}
+
+.choice-panel button:hover:not(:disabled),
+.choice-panel button:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: rgba(22,45,51,.98);
+}
+
+.choice-panel .choice-visual {
+  display: none !important;
+}
+
+.choice-panel .choice-copy {
+  grid-template-columns: 24px minmax(0,1fr);
+  align-items: center;
+}
+
+.choice-panel .choice-text {
+  line-height: 1.42;
+}
+
+/* Secondary narrative cards may scroll, but they may not sit above the decision layer. */
+.episode-time-montage,
+.episode-memory-callback,
+.episode-continuity-ribbon,
+.episode-day-carryover,
+.training-reward-panel,
+.relationship-feedback {
+  position: relative;
+  z-index: 1;
+}
+
+/* Strategy scene ordering. Action/decision controls always beat decorative HUD. */
+.strategy-shell { z-index: 1; }
+.strategy-map { z-index: 10; }
+.strategy-rail { z-index: 24; }
+.strategy-hud { z-index: 32; }
+.strategy-action-tray,
+.strategy-outcome-card { z-index: var(--ep-layer-choice); }
+
+.strategy-active .play-panel {
+  z-index: var(--ep-layer-dialogue);
+}
+
+.strategy-action-active .play-panel {
+  max-height: 18%;
+  min-height: 76px;
+}
+
+.strategy-action-active .play-panel .character-card,
+.strategy-action-active .play-panel .narrator-card {
+  display: none;
+}
+
+.strategy-action-active .play-panel {
+  grid-template-columns: 1fr;
+}
+
+/* Footer is informational and must never cover interaction. */
+.game-footer {
+  position: relative;
+  z-index: 20;
+  pointer-events: none;
+}
+.game-footer button {
+  pointer-events: auto;
+}
+
+/* Tablet / portrait phone: world above, interaction dock below. */
+@media (orientation: portrait) and (max-width: 900px) {
+  .game-frame.phase-playing:not(.strategy-active) {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .game-header {
+    height: 52px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .episode-immersive-scene {
+    inset: 52px 0 44%;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading {
+    top: 62px;
+    left: 12px;
+    width: calc(100% - 24px);
+    max-width: 420px;
+    padding: 7px 10px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading .eyebrow {
+    display: none;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading h1 {
+    font-size: 15px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .play-panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 44%;
+    min-height: 34%;
+    grid-template-columns: 72px minmax(0,1fr);
+    gap: 10px;
+    padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+    border-radius: 14px 14px 0 0;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .portrait-slot,
+  .game-frame.phase-playing:not(.strategy-active) .worker-mark {
+    height: 58px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .dialogue-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .game-footer {
+    display: none;
+  }
+
+  .choice-panel {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .choice-panel button {
+    min-height: 52px;
+    padding: 8px 10px;
+  }
+
+  .choice-content h2 {
+    font-size: 14px;
+    margin-bottom: 7px;
+  }
+
+  .strategy-active .game-footer {
+    display: none;
+  }
+
+  .strategy-active .play-panel {
+    z-index: var(--ep-layer-dialogue);
+  }
+
+  .strategy-action-tray {
+    z-index: var(--ep-layer-choice);
+  }
+}
+
+/* Compact landscape phone: preserve the field and use a right-side decision dock. */
+@media (orientation: landscape) and (max-height: 650px) {
+  .game-frame.phase-playing:not(.strategy-active) .game-header {
+    height: 46px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .episode-immersive-scene {
+    inset: 46px 0 0;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading {
+    top: 54px;
+    left: max(10px, env(safe-area-inset-left));
+    width: 48%;
+    padding: 6px 9px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading .eyebrow {
+    display: none;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .scene-heading h1 {
+    font-size: 13px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .play-panel {
+    top: 54px;
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    left: auto;
+    width: min(46%, 430px);
+    max-height: none;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    padding: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .character-card,
+  .game-frame.phase-playing:not(.strategy-active) .narrator-card {
+    display: none;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .presentation-area {
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .dialogue-text {
+    font-size: 12px;
+    line-height: 1.42;
+    padding: 2px 0 7px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .continue-button {
+    min-width: 112px;
+    min-height: 44px;
+  }
+
+  .game-frame.phase-playing:not(.strategy-active) .game-footer {
+    display: none;
+  }
+
+  .choice-panel {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .choice-panel button {
+    min-height: 46px;
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+
+  .choice-content h2 {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .strategy-action-tray {
+    z-index: var(--ep-layer-choice);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choice-panel button {
+    transform: none !important;
+  }
+}
