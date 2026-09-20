@@ -247,11 +247,16 @@ try {
 
       const homeMetrics = await metrics(cdp, 'home', viewport.mobile);
       const homeFailures = validate(homeMetrics, viewport);
-      report.push({ viewport: viewport.name, ...homeMetrics, failures: homeFailures });
+      report.push({ viewportName: viewport.name, ...homeMetrics, failures: homeFailures });
       if (homeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-home.png');
 
       await evaluate(cdp, "document.querySelector('.commercial-title-action.is-primary')?.click(); true");
+      await sleep(120);
+      const confirmNewGame = await evaluate(cdp, "Boolean(document.querySelector('.commercial-title-dialog .is-danger'))");
+      if (confirmNewGame) {
+        await evaluate(cdp, "document.querySelector('.commercial-title-dialog .is-danger')?.click(); true");
+      }
       await waitFor(cdp, "Boolean(document.querySelector('.cinematic-loading, .game-frame'))", 5000);
       await waitFor(cdp, "Boolean(document.querySelector('.game-frame'))", 9000);
       await sleep(500);
@@ -259,12 +264,12 @@ try {
       const episodeMetrics = await metrics(cdp, 'episode01', viewport.mobile);
       const episodeFailures = validate(episodeMetrics, viewport);
       if (!episodeMetrics.activeEvent) episodeFailures.push('Episode 01 immersive scene did not render an active event');
-      report.push({ viewport: viewport.name, ...episodeMetrics, failures: episodeFailures });
+      report.push({ viewportName: viewport.name, ...episodeMetrics, failures: episodeFailures });
       if (episodeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01.png');
     } catch (error) {
       failed = true;
-      report.push({ viewport: viewport.name, stage: 'runner', failures: [error.message] });
+      report.push({ viewportName: viewport.name, viewport: { width: viewport.width, height: viewport.height }, stage: 'runner', failures: [error.message] });
       try { await screenshot(cdp, viewport.name + '-error.png'); } catch {}
     } finally {
       cdp.close();
@@ -295,7 +300,7 @@ fs.writeFileSync(reportPath, JSON.stringify({
 
 for (const row of report) {
   const status = row.failures?.length ? 'FAIL' : 'PASS';
-  console.log(status.padEnd(4) + ' ' + row.viewport.padEnd(28) + ' ' + String(row.stage).padEnd(10)
+  console.log(status.padEnd(4) + ' ' + String(row.viewportName || (row.viewport?.width + 'x' + row.viewport?.height)).padEnd(28) + ' ' + String(row.stage).padEnd(10)
     + ' overflow=' + (row.horizontalOverflow ?? '?')
     + ' bg=' + (row.activeBackground ?? '-')
     + ' event=' + (row.activeEvent ?? '-'));
