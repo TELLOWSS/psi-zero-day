@@ -27,6 +27,30 @@ function freeze<const T>(value: T): Readonly<T> {
 }
 
 const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
+  e01_01_arrival: freeze({
+    player: { pose: 'observe', expression: 'neutral', motion: 'enter' },
+  }),
+  e01_04_junho_signal: freeze({
+    player: { pose: 'listen', expression: 'neutral' },
+    lim_junho: { pose: 'hesitate', expression: 'concern' },
+    choi_minseok: { pose: 'observe', expression: 'neutral' },
+  }),
+  e01_07_first_pour: freeze({
+    player: { pose: 'observe', expression: 'concern' },
+    kang_taesik: { pose: 'press', expression: 'conflict' },
+    lee_jaehoon: { pose: 'document', expression: 'concern' },
+    lim_junho: { pose: 'reengage', expression: 'neutral' },
+  }),
+  e01_08_reactions: freeze({
+    kang_taesik: { pose: 'listen', expression: 'neutral' },
+    yoon_sungho: { pose: 'listen', expression: 'neutral' },
+    lim_junho: { pose: 'hesitate', expression: 'concern' },
+    player: { pose: 'listen', expression: 'neutral' },
+  }),
+  e01_08a_reporting_return: freeze({
+    player: { pose: 'listen', expression: 'neutral' },
+    lim_junho: { pose: 'hesitate', expression: 'concern' },
+  }),
   e01_08b_inspection_find: freeze({
     player: { pose: 'observe' },
     seo_jeongmin: { pose: 'inspect', expression: 'neutral' },
@@ -107,6 +131,34 @@ const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
 });
 
 const NODE_PATCHES: Readonly<Record<string, NodePatchMap>> = freeze({
+  e01_04_junho_signal: freeze({
+    signal: freeze({
+      lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
+      player: { pose: 'listen', expression: 'neutral' },
+    }),
+    detail: freeze({
+      lim_junho: { pose: 'listen', expression: 'concern', motion: 'reengage' },
+      player: { pose: 'listen', expression: 'neutral' },
+    }),
+    listen: freeze({
+      lim_junho: { pose: 'hesitate', expression: 'concern' },
+      player: { pose: 'listen', expression: 'resolve' },
+      choi_minseok: { pose: 'observe', expression: 'neutral' },
+    }),
+    listen_more_result: freeze({
+      lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
+      player: { pose: 'listen', expression: 'neutral' },
+    }),
+    crosscheck_result: freeze({
+      choi_minseok: { pose: 'verify', expression: 'neutral', motion: 'reengage' },
+      lim_junho: { pose: 'listen', expression: 'concern' },
+      player: { pose: 'observe', expression: 'neutral' },
+    }),
+    dismiss_result: freeze({
+      lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
+      player: { pose: 'brace', expression: 'neutral' },
+    }),
+  }),
   e01_08b_inspection_find: freeze({
     inspection: freeze({
       seo_jeongmin: { pose: 'inspect', expression: 'neutral', motion: 'enter' },
