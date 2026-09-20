@@ -242,7 +242,7 @@ try {
       const loaded = cdp.once('Page.loadEventFired', 12000);
       await cdp.send('Page.navigate', { url: baseUrl });
       await loaded;
-      await waitFor(cdp, "document.body.innerText.includes('ZERO DAY') && document.querySelector('.commercial-title-home')", 12000);
+      await waitFor(cdp, "Boolean(document.body.innerText.includes('ZERO DAY') && document.querySelector('.commercial-title-home'))", 12000);
       await sleep(350);
 
       const homeMetrics = await metrics(cdp, 'home', viewport.mobile);
@@ -252,8 +252,8 @@ try {
       await screenshot(cdp, viewport.name + '-home.png');
 
       await evaluate(cdp, "document.querySelector('.commercial-title-action.is-primary')?.click(); true");
-      await waitFor(cdp, "document.querySelector('.cinematic-loading, .game-frame')", 5000);
-      await waitFor(cdp, "document.querySelector('.game-frame')", 9000);
+      await waitFor(cdp, "Boolean(document.querySelector('.cinematic-loading, .game-frame'))", 5000);
+      await waitFor(cdp, "Boolean(document.querySelector('.game-frame'))", 9000);
       await sleep(500);
 
       const episodeMetrics = await metrics(cdp, 'episode01', viewport.mobile);
