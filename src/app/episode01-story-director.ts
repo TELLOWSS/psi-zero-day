@@ -111,3 +111,22 @@ export function episode01AutoAdvanceDelay(
   const perCharacter = pacing === 'fast' ? 58 : pacing === 'slow' ? 78 : 68;
   return Math.max(4200, Math.min(9000, base + Math.max(0, textLength) * perCharacter));
 }
+
+
+const AUTO_RESOLVE_CHOICE_EVENTS = new Set([
+  'e01_08a_reporting_return',
+  'e01_08f_report_return',
+  'e01_08h_tbm_return',
+  'e01_08j_restart_return',
+  'e01_08l_stopwork_return',
+  'e01_08n_instruction_return',
+  'e01_08p_record_return',
+]);
+
+/**
+ * These are consequence-routing nodes, not new player decisions.
+ * In directed campaign mode the runtime may select the sole enabled branch automatically.
+ */
+export function episode01AutoResolveChoice(eventId: string | null | undefined): boolean {
+  return Boolean(eventId && AUTO_RESOLVE_CHOICE_EVENTS.has(eventId));
+}
