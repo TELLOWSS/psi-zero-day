@@ -4,7 +4,7 @@
   "purpose": "Final 1920x1080+ WebP art direction for the eight Episode 01 immersive environments. Characters and gameplay props remain separate runtime layers.",
   "global_contract": {
     "style": "commercial adult-friendly 2.5D casual-strategy construction drama; grounded Korean construction-site realism with clean readable silhouettes and restrained cinematic lighting",
-    "continuity": "same fictional NEW PSI universe and fictional contractor identity; no real company logos, real site names, apartment brands, readable license plates or copyrighted signage",
+    "continuity": "same fictional NEW PSI universe with NEW PSI CONSTRUCTION as contractor and NEW PSI ZERO SITE 01 as site identity; no other real company logos, real site names, apartment brands, readable license plates or copyrighted signage",
     "composition": "16:9 landscape; preserve clean lower-center dialogue/readability zone and avoid critical hazards at extreme crop edges; support desktop cover crop and mobile 16:9 crop",
     "character_rule": "do not bake named cast into background; distant anonymous workers may appear only as scale silhouettes",
     "prop_rule": "do not make the runtime focal prop the only readable story cue; leave room for overlay props/characters",
@@ -15,9 +15,10 @@
       "obvious correct-versus-wrong visual color coding",
       "cyberpunk/neon sci-fi construction site",
       "clean empty showroom-like site",
-      "real corporate branding or identifiable project signage",
+      "real corporate branding or identifiable real-project signage; only fictional NEW PSI identity may be readable",
       "baked dialogue text, UI, captions or watermarks"
-    ]
+    ],
+    "branding": "When a company/site identity must be visible, use NEW PSI / NEW PSI CONSTRUCTION. When text is not needed, leave the surface unbranded rather than using anonymous placeholders."
   },
   "backgrounds": {
     "gate_dawn": {
@@ -30,7 +31,7 @@
         "worker entry path separated imperfectly from vehicle flow",
         "distant tower crane/building frame",
         "idling work vehicles or delivery queue",
-        "temporary fencing and safety signage shapes without readable real brands"
+        "temporary fencing and safety signage; any readable company mark uses NEW PSI only"
       ],
       "tension": "busy but not dangerous on its face; subtle competition for space and attention",
       "ui_safe_zone": "lower center 38% relatively low-detail; main visual anchors upper-left and mid-right"
@@ -71,7 +72,7 @@
       "time_light": "brighter morning daylight with wet concrete/rebar reflections; no dramatic storm",
       "camera": "dynamic wide 26–30mm equivalent, pump/truck mass on right side and workface depth left/center",
       "must_show": [
-        "concrete pump truck/boom context without real brand",
+        "concrete pump truck/boom context without a real manufacturer brand; optional NEW PSI site decal only",
         "hose/pour work area or slab/rebar context",
         "temporary access/exclusion boundaries",
         "workers as small distant scale silhouettes only",
@@ -140,5 +141,6 @@
       "tension": "decompression with residual cognitive load; neither bleak nor triumphal",
       "ui_safe_zone": "lower center and left readable; memory-strip can occupy upper/right"
     }
-  }
+  },
+  "brand_contract": "content/brand/naming-contract.json"
 }
