@@ -69,7 +69,7 @@ export function playEpisode(decisions: EpisodeDecisions, options: {
   );
   const decisionsByNode: Record<string, string | undefined> = {
     'e01_03_plan_breaks/plan': decisions.plan,
-    'e01_04_junho_signal/listen': decisions.signal,
+    'e01_04_junho_signal/listen': decisions.signal ?? 'listen_more',
     'e01_05_command/ramp': decisions.ramp,
     'e01_05_command/entrance': decisions.entrance,
     'e01_08b_inspection_find/action': decisions.inspection ?? 'inspection_sequence_agreement',
