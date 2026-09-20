@@ -4,11 +4,11 @@ import { episodeCinematicBeat } from '../src/app/episode-cinematic-beats';
 import { episodePresentationAudioCue } from '../src/app/episode-presentation-cues';
 
 describe('Episode 01 post-pour montage',()=>{
-  it('compresses the 07:48 to 10:16 gap into readable field beats',()=>{
+  it('compresses the 09:45 to 10:10 gap into readable field beats',()=>{
     const montage=episode01Montage('e01_08_reactions',{pump_result:'BEST_CONTROL'});
-    expect(montage?.beats.map(beat=>beat.time)).toEqual(['08:12','08:56','09:42']);
-    expect(episodeCinematicBeat('e01_08_reactions')?.time).toBe('08:12 → 09:58');
-    expect(episodeCinematicBeat('e01_08a_reporting_return')?.time).toBe('10:07');
+    expect(montage?.beats.map(beat=>beat.time)).toEqual(['09:48','09:54','09:59']);
+    expect(episodeCinematicBeat('e01_08_reactions')?.time).toBe('10:02');
+    expect(episodeCinematicBeat('e01_08a_reporting_return')?.time).toBe('10:10');
   });
 
   it('remembers the pump outcome in the middle montage beat',()=>{
