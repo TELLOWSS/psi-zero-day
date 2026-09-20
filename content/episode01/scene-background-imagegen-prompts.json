@@ -7,14 +7,15 @@
     "minimum_size": "1920x1080",
     "aspect_ratio": "16:9",
     "style": "commercial adult-friendly 2.5D casual-strategy construction drama; grounded Korean construction-site realism; painterly-realistic materials; restrained cinematic lighting; readable silhouettes; premium mobile/PC game background",
-    "continuity": "same fictional NEW PSI universe; no real company/site/apartment branding",
+    "continuity": "same fictional NEW PSI universe; canonical contractor NEW PSI CONSTRUCTION and canonical site NEW PSI ZERO SITE 01; no other real company/site/apartment branding",
     "composition": "reserve lower-center dialogue zone; support desktop and mobile landscape cover crops; avoid critical clues at extreme edges",
-    "negative": "no baked UI, no captions, no watermark, no real logos, no readable license plates, no disaster spectacle, no heroic safety poster pose, no obvious red=wrong green=right coding, no cyberpunk neon, no empty showroom site, no distorted construction equipment, no duplicated workers, no extra fingers or malformed PPE"
+    "negative": "no baked UI, no captions, no watermark, no real logos, no readable license plates, no disaster spectacle, no heroic safety poster pose, no obvious red=wrong green=right coding, no cyberpunk neon, no empty showroom site, no distorted construction equipment, no duplicated workers, no extra fingers or malformed PPE",
+    "branding": "Readable organization marks are optional; when used, only NEW PSI or NEW PSI CONSTRUCTION is allowed. Do not invent placeholder company names or pseudo text."
   },
   "backgrounds": {
     "gate_dawn": {
       "final_path": "assets/episode01/cg/gate-dawn.webp",
-      "prompt": "Korean construction site gate at 06:30 blue dawn, fictional NEW PSI world, humid cool air, warm temporary work lights, temporary fencing, checkpoint booth, imperfectly separated worker entry path and delivery vehicle flow, idling work trucks in a short queue, distant tower crane and concrete frame, a few anonymous workers only as small scale silhouettes, eye-level 30mm wide shot angled into the site, busy but not obviously dangerous, lower-center 38 percent visually quiet for dialogue UI, premium 2.5D casual-strategy game environment, grounded realism, restrained cinematic lighting."
+      "prompt": "Korean construction site gate at 06:30 blue dawn, fictional NEW PSI world with NEW PSI CONSTRUCTION as the site identity, humid cool air, warm temporary work lights, temporary fencing, checkpoint booth, imperfectly separated worker entry path and delivery vehicle flow, idling work trucks in a short queue, distant tower crane and concrete frame, a few anonymous workers only as small scale silhouettes, eye-level 30mm wide shot angled into the site, busy but not obviously dangerous, lower-center 38 percent visually quiet for dialogue UI, premium 2.5D casual-strategy game environment, grounded realism, restrained cinematic lighting."
     },
     "ramp_entry": {
       "final_path": "assets/episode01/cg/ramp-entry.webp",
@@ -26,7 +27,7 @@
     },
     "concrete_pour": {
       "final_path": "assets/episode01/cg/concrete-pour.webp",
-      "prompt": "High-energy first concrete pour on a Korean apartment construction site, fictional unbranded concrete pump truck and boom concentrated upper-right, slab and rebar workface extending left and center, hose/pour context, temporary access and exclusion boundaries, wet concrete reflections, anonymous distant workers as small scale silhouettes only, dynamic 28mm wide shot, productive spatial tension with limited maneuvering room but no accident frozen in progress, lower center clean for dialogue, premium 2.5D casual-strategy construction drama background."
+      "prompt": "High-energy first concrete pour on a Korean apartment construction site, fictional concrete pump truck with no manufacturer mark; if a site decal is visible use NEW PSI only and boom concentrated upper-right, slab and rebar workface extending left and center, hose/pour context, temporary access and exclusion boundaries, wet concrete reflections, anonymous distant workers as small scale silhouettes only, dynamic 28mm wide shot, productive spatial tension with limited maneuvering room but no accident frozen in progress, lower center clean for dialogue, premium 2.5D casual-strategy construction drama background."
     },
     "inspection_zone": {
       "final_path": "assets/episode01/cg/inspection-zone.webp",
@@ -44,5 +45,6 @@
       "final_path": "assets/episode01/cg/home-night.webp",
       "prompt": "Quiet modest Korean apartment-like home at night after a construction shift, warm practical lamp mixed with cool city window light, small table or desk for notes and study, distant traffic lights through window, ordinary non-identifying household details, calm decompression with lingering cognitive load, neither bleak nor triumphant, seated-eye-level 38mm medium-wide shot, lower center and left kept readable with upper-right room for memory-strip UI, premium grounded 2.5D narrative strategy game background."
     }
-  }
+  },
+  "brand_contract": "content/brand/naming-contract.json"
 }
