@@ -146,7 +146,9 @@ function collectMetrics(stage, touchMode) {
     return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0 && rect.width > 0 && rect.height > 0;
   };
   const errorOverlay = document.querySelector('.vite-error-overlay, #webpack-dev-server-client-overlay, [data-nextjs-dialog]');
-  const buttons = [...document.querySelectorAll('button')].filter(visible);
+  const coldOpen = document.querySelector('.episode-cold-open');
+  const activeInteractionRoot = coldOpen && visible(coldOpen) ? coldOpen : document;
+  const buttons = [...activeInteractionRoot.querySelectorAll('button')].filter(visible);
   const smallTargets = touchMode
     ? buttons.map(button => {
         const rect = button.getBoundingClientRect();
@@ -169,7 +171,7 @@ function collectMetrics(stage, touchMode) {
     '.strategy-outcome-card button:not(:disabled)',
     '.primary-button:not(:disabled)',
   ].join(',');
-  const primaryTargets = [...document.querySelectorAll(primarySelector)].filter(visible).map(element => {
+  const primaryTargets = [...activeInteractionRoot.querySelectorAll(primarySelector)].filter(visible).map(element => {
     const rect = element.getBoundingClientRect();
     const centerX = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
     const centerY = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
@@ -187,7 +189,9 @@ function collectMetrics(stage, touchMode) {
       topElement: top instanceof Element ? (top.className || top.tagName) : null,
     };
   });
-  const choiceSurface = document.querySelector('.presentation-area[data-presentation="SHOW_CHOICE"]');
+  const choiceSurface = activeInteractionRoot === document
+    ? document.querySelector('.presentation-area[data-presentation="SHOW_CHOICE"]')
+    : null;
   const visibleEnabledChoices = choiceSurface
     ? [...choiceSurface.querySelectorAll('.choice-panel button:not(:disabled)')].filter(visible).length
     : 0;
@@ -215,6 +219,7 @@ function collectMetrics(stage, touchMode) {
     immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
     activeEvent: immersive?.getAttribute('data-event') || null,
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
+    coldOpen: Boolean(coldOpen && visible(coldOpen)),
   };
 }
 
@@ -233,13 +238,13 @@ function validate(row, viewport) {
     failures.push('primary surface escapes viewport horizontally: ' + JSON.stringify(row.frame));
   }
   if (row.brokenImages.length) failures.push('broken visible images: ' + row.brokenImages.join(', '));
-  if (row.stage === 'episode01') {
+  if (row.stage.startsWith('episode01')) {
     if (!row.primaryTargets?.length) failures.push('no visible primary interaction target in Episode 01');
     const blocked = (row.primaryTargets || []).filter(item => !item.withinViewport || item.occluded);
     if (blocked.length) failures.push('primary interaction target clipped or occluded: ' + JSON.stringify(blocked.slice(0, 4)));
     if (row.choiceSurface && row.visibleEnabledChoices < 1) failures.push('choice surface is active but no enabled choice is visibly reachable');
   }
-  if (row.stage === 'episode01' && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
+  if (row.stage.startsWith('episode01') && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
     failures.push('final immersive background did not finish loading before capture');
   }
   if (viewport.mobile && row.smallTargets.length) {
@@ -307,6 +312,20 @@ try {
         12000,
       );
       await sleep(180);
+
+      const hasColdOpen = await evaluate(cdp, "Boolean(document.querySelector('.episode-cold-open'))");
+      if (hasColdOpen) {
+        const coldOpenMetrics = await metrics(cdp, 'episode01-cold-open', viewport.mobile);
+        const coldOpenFailures = validate(coldOpenMetrics, viewport);
+        if (!coldOpenMetrics.activeEvent) coldOpenFailures.push('Episode 01 immersive scene did not render beneath the cold open');
+        report.push({ viewportName: viewport.name, ...coldOpenMetrics, failures: coldOpenFailures });
+        if (coldOpenFailures.length) failed = true;
+        await screenshot(cdp, viewport.name + '-episode01-cold-open.png');
+
+        await evaluate(cdp, "document.querySelector('.episode-cold-open-cta')?.click(); true");
+        await waitFor(cdp, "Boolean(!document.querySelector('.episode-cold-open'))", 3000);
+        await sleep(180);
+      }
 
       const episodeMetrics = await metrics(cdp, 'episode01', viewport.mobile);
       const episodeFailures = validate(episodeMetrics, viewport);
