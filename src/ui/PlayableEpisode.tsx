@@ -40,8 +40,9 @@ import { EpisodeRecordRealityChain } from './EpisodeRecordRealityChain';
 import { EpisodeDayCarryover } from './EpisodeDayCarryover';
 import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
+import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
-import { episode01StoryDirection } from '../app/episode01-story-director';
+import { episode01AutoAdvanceDelay, episode01StoryDirection } from '../app/episode01-story-director';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -67,6 +68,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const playedSceneCues = useRef(new Set<string>());
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
   const [choicePreviewId, setChoicePreviewId] = useState<string | null>(null);
+  const [coldOpenDismissed, setColdOpenDismissed] = useState(false);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
@@ -272,6 +274,35 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
+    if (!isPlaying || mapOutcomeActive || (activeEventId === 'e01_01_arrival' && !coldOpenDismissed)) return;
+    if (!presentation || !('node_id' in presentation) || presentation.type === 'SHOW_CHOICE') return;
+    if (presentation.type !== 'SHOW_DIALOGUE' && presentation.type !== 'SHOW_RESULT') return;
+    const delay = episode01AutoAdvanceDelay(activeEventId, presentation.node_id, t(presentation.text_id).length);
+    if (!delay) return;
+    const timer = window.setTimeout(() => {
+      playUiCue('continue');
+      session.dispatch({
+        type: 'advance_event',
+        instance_id: presentation.instance_id,
+        node_id: presentation.node_id,
+      }, snapshot.revision);
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, [
+    session,
+    snapshot.revision,
+    isPlaying,
+    mapOutcomeActive,
+    activeEventId,
+    presentation,
+    coldOpenDismissed,
+    t,
+    playUiCue,
+  ]);
+  useEffect(() => {
+    if (snapshot.phase === 'start') setColdOpenDismissed(false);
+  }, [snapshot.phase]);
+  useEffect(() => {
     if (!strategyOutcome) return;
     const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
     playUiCue(relationDelta > 0 ? 'result_positive' : relationDelta < 0 ? 'result_negative' : 'result_neutral');
@@ -322,6 +353,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? [...trainingReward.auto_equipped, ...trainingReward.equip_options.filter(item =>
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
+  const showColdOpen = isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
+  const dismissColdOpen = useCallback(() => {
+    setColdOpenDismissed(true);
+    playUiCue('continue');
+  }, [playUiCue]);
 
   return <main
     className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}
@@ -458,6 +494,14 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
             />}
         </div>
       </section>
+      {showColdOpen ? <EpisodeColdOpen
+        backgroundUri={resolveAsset('ep01.scene_bg.inspection_zone')}
+        playerUri={resolveAsset('ep01.character.player.performance.resolve') ?? characterMapUri('player', resolveAsset)}
+        kangUri={resolveAsset('ep01.character.kang_taesik.performance.conflict') ?? characterMapUri('kang_taesik', resolveAsset)}
+        junhoUri={resolveAsset('ep01.character.lim_junho.performance.relief') ?? characterMapUri('lim_junho', resolveAsset)}
+        t={t}
+        onComplete={dismissColdOpen}
+      /> : null}
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
       <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
       <p className="end-line">{t('ui.end_hint')}</p>
