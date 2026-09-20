@@ -15,9 +15,9 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
     lee_jaehoon: Object.freeze({ side: 'far-right', depth: 'midground' }),
   }),
   e01_08c_site_pushback: Object.freeze({
-    player: Object.freeze({ side: 'far-left', depth: 'background' }),
-    lee_jaehoon: Object.freeze({ side: 'center', depth: 'foreground' }),
-    seo_jeongmin: Object.freeze({ side: 'right', depth: 'midground' }),
+    player: Object.freeze({ side: 'far-left', depth: 'foreground' }),
+    lee_jaehoon: Object.freeze({ side: 'right', depth: 'midground' }),
+    seo_jeongmin: Object.freeze({ side: 'far-right', depth: 'background' }),
   }),
   e01_08d_reinspection: Object.freeze({
     player: Object.freeze({ side: 'left', depth: 'midground' }),
