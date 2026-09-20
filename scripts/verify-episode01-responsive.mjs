@@ -272,6 +272,11 @@ function collectMetrics(stage, touchMode) {
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
     stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
+    stopWorkCamera: immersive?.getAttribute('data-stopwork-camera') || null,
+    stopWorkDepth: immersive?.getAttribute('data-stopwork-depth') || null,
+    stopWorkLighting: immersive?.getAttribute('data-stopwork-lighting') || null,
+    stopWorkUi: immersive?.getAttribute('data-stopwork-ui') || null,
+    stopWorkCast: immersive?.getAttribute('data-stopwork-cast') || null,
     stopWorkLayer: Boolean(document.querySelector('.stop-work-production-layer')),
   };
 }
@@ -303,6 +308,11 @@ function validate(row, viewport) {
   if (row.stage === 'episode01-stop-work') {
     if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');
     if (row.stopWorkPhase !== 'zero-moment') failures.push('STOP WORK zero-moment production phase is missing');
+    if (row.stopWorkCamera !== 'decision-compressed') failures.push('STOP WORK decision camera profile is missing');
+    if (row.stopWorkDepth !== 'compressed-pressure') failures.push('STOP WORK pressure depth profile is missing');
+    if (row.stopWorkLighting !== 'stop-red') failures.push('STOP WORK lighting profile is missing');
+    if (row.stopWorkUi !== 'judgment') failures.push('STOP WORK judgment UI profile is missing');
+    if (row.stopWorkCast !== 'player-hero') failures.push('STOP WORK hero cast profile is missing');
     if (!row.stopWorkLayer) failures.push('STOP WORK production layer did not render');
   }
   if (viewport.mobile && row.smallTargets.length) {
