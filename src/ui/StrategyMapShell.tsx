@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForTarget } from '../app/strategy-actions';
@@ -87,7 +87,15 @@ export function StrategyMapShell({
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
   const effectiveActions = projectSupportAssistedActions(actions, activeSupportItemIds);
+  const actionSetKey = effectiveActions
+    .map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`)
+    .join('|');
   const selectedActions = strategyActionsForTarget(effectiveActions, focusId);
+
+  useEffect(() => {
+    setFocusId(null);
+    setActionFocusId(null);
+  }, [actionSetKey]);
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
@@ -336,21 +344,22 @@ export function StrategyMapShell({
         })}
       </div>
 
-      <StrategyLoopPanel
-        actions={effectiveActions}
-        selectedActions={selectedActions}
-        focusId={focusId}
-        focusTitle={focusTitle}
-        text={text}
-        personName={id => formatCharacterIdentity(person(id)) || id}
-        targetLabel={actionTargetLabel}
-        onAction={executeAction}
-        outcome={outcome}
-        onOutcomeContinue={onOutcomeContinue}
-        onOutcomeReconsider={onOutcomeReconsider}
-        onActionFocus={setActionFocusId}
-      />
     </section>
+
+    <StrategyLoopPanel
+      actions={effectiveActions}
+      selectedActions={selectedActions}
+      focusId={focusId}
+      focusTitle={focusTitle}
+      text={text}
+      personName={id => formatCharacterIdentity(person(id)) || id}
+      targetLabel={actionTargetLabel}
+      onAction={executeAction}
+      outcome={outcome}
+      onOutcomeContinue={onOutcomeContinue}
+      onOutcomeReconsider={onOutcomeReconsider}
+      onActionFocus={setActionFocusId}
+    />
 
     <footer className="strategy-roster" aria-label={copy.roster}>
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
