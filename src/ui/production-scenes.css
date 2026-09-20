@@ -2562,3 +2562,59 @@
     max-height:34%;
   }
 }
+
+
+/* STRATEGY action dock: once tactical actions are available, reserve a real
+   screen region for the controls instead of laying the tray over workers or
+   hazard anchors. The field is reframed, never covered. */
+@media (min-width:901px) and (min-height:461px) {
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-map {
+    right:28%;
+  }
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-action-tray {
+    top:10.5%;
+    right:1.5%;
+    bottom:auto;
+    width:24.5%;
+    max-height:76%;
+  }
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-rail,
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-roster {
+    display:none;
+  }
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-map {
+    top:56px;
+    left:0;
+    right:0;
+    bottom:42%;
+  }
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active[data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    top:auto;
+    left:1.5%;
+    right:1.5%;
+    bottom:1.5%;
+    width:auto;
+    max-height:36%;
+  }
+}
+
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-map {
+    left:16%;
+    right:38%;
+    bottom:1%;
+  }
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active[data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    top:10%;
+    left:auto;
+    right:1%;
+    bottom:auto;
+    width:35%;
+    max-height:82%;
+  }
+}
