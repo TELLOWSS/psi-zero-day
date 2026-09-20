@@ -273,7 +273,15 @@ try {
   }
 } finally {
   browser.kill('SIGTERM');
-  fs.rmSync(profile, { recursive: true, force: true });
+  await Promise.race([
+    new Promise(resolve => browser.once('exit', resolve)),
+    sleep(1200),
+  ]);
+  try {
+    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 4, retryDelay: 100 });
+  } catch (error) {
+    console.warn('Chrome profile cleanup skipped:', error.message);
+  }
 }
 
 const reportPath = path.join(outputDir, 'responsive-report.json');
