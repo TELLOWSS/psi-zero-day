@@ -162,6 +162,35 @@ function collectMetrics(stage, touchMode) {
   const immersive = document.querySelector('.episode-immersive-scene');
   const images = [...document.images].filter(visible);
   const brokenImages = images.filter(image => image.complete && image.naturalWidth === 0).map(image => image.getAttribute('src'));
+  const primarySelector = [
+    '.continue-button',
+    '.choice-panel button:not(:disabled)',
+    '.strategy-action-tray button:not(:disabled)',
+    '.strategy-outcome-card button:not(:disabled)',
+    '.primary-button:not(:disabled)',
+  ].join(',');
+  const primaryTargets = [...document.querySelectorAll(primarySelector)].filter(visible).map(element => {
+    const rect = element.getBoundingClientRect();
+    const centerX = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
+    const centerY = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
+    const top = document.elementFromPoint(centerX, centerY);
+    const withinViewport = rect.left >= -1 && rect.top >= -1 && rect.right <= innerWidth + 1 && rect.bottom <= innerHeight + 1;
+    const occluded = withinViewport && Boolean(top) && !(top === element || element.contains(top));
+    return {
+      text: (element.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 100),
+      left: Math.round(rect.left),
+      top: Math.round(rect.top),
+      right: Math.round(rect.right),
+      bottom: Math.round(rect.bottom),
+      withinViewport,
+      occluded,
+      topElement: top instanceof Element ? (top.className || top.tagName) : null,
+    };
+  });
+  const choiceSurface = document.querySelector('.presentation-area[data-presentation="SHOW_CHOICE"]');
+  const visibleEnabledChoices = choiceSurface
+    ? [...choiceSurface.querySelectorAll('.choice-panel button:not(:disabled)')].filter(visible).length
+    : 0;
   return {
     stage,
     viewport: { width: innerWidth, height: innerHeight },
@@ -179,6 +208,9 @@ function collectMetrics(stage, touchMode) {
     } : null,
     smallTargets,
     brokenImages,
+    primaryTargets,
+    choiceSurface: Boolean(choiceSurface),
+    visibleEnabledChoices,
     activeBackground: immersive?.getAttribute('data-background-source') || null,
     immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
     activeEvent: immersive?.getAttribute('data-event') || null,
@@ -201,6 +233,12 @@ function validate(row, viewport) {
     failures.push('primary surface escapes viewport horizontally: ' + JSON.stringify(row.frame));
   }
   if (row.brokenImages.length) failures.push('broken visible images: ' + row.brokenImages.join(', '));
+  if (row.stage === 'episode01') {
+    if (!row.primaryTargets?.length) failures.push('no visible primary interaction target in Episode 01');
+    const blocked = (row.primaryTargets || []).filter(item => !item.withinViewport || item.occluded);
+    if (blocked.length) failures.push('primary interaction target clipped or occluded: ' + JSON.stringify(blocked.slice(0, 4)));
+    if (row.choiceSurface && row.visibleEnabledChoices < 1) failures.push('choice surface is active but no enabled choice is visibly reachable');
+  }
   if (row.stage === 'episode01' && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
     failures.push('final immersive background did not finish loading before capture');
   }
