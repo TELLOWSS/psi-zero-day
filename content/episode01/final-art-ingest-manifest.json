@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "batch_id": "episode01-final-backgrounds-generated-2026-09-19",
-  "status": "exact_archive_verified_pending_github_binary_ingest",
+  "status": "exact_archive_verified_github_ingested",
   "source": "ChatGPT image generation batch, converted to 1920x1080 WebP for runtime ingestion",
   "assets": [
     {
@@ -87,6 +87,7 @@
     "verified_at": "2026-09-19",
     "archive_sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb",
     "exact_asset_count": 8,
-    "rule": "Do not mark final art ingested until all eight contracted WebPs are committed under public/assets/episode01/cg and the production checks pass."
+    "rule": "Do not mark final art ingested until all eight contracted WebPs are committed under public/assets/episode01/cg and the production checks pass.",
+    "ingested_at": "2026-09-20T06:29:23.426Z"
   }
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "production_status": "generated_wave_01_pending_github_binary_ingest",
+  "production_status": "generated_wave_01_ingested",
   "purpose": "Stable transparent full-body expression slots for cinematic Episode 01 scenes. Runtime may request these IDs now; unresolved assets fall back to the approved map character art.",
   "expression_set": [
     "neutral",
@@ -59,7 +59,7 @@
     ],
     "format": "webp",
     "alpha": true,
-    "status": "verified_local_files_pending_github_binary_ingest",
+    "status": "verified_github_binary_ingest",
     "assets": [
       {
         "character_id": "player",

@@ -194,6 +194,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.kang_taesik.performance.conflict",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/kang-taesik-conflict.webp",
+          "format": "webp",
+          "bytes": 199724,
+          "hash": "353619aec821ec95abb6a517c3a2c6cf5541780d39833b5c71ee2e13023b2401"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.kang_taesik.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -242,6 +258,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.lee_jaehoon.performance.concern",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/lee-jaehoon-concern.webp",
+          "format": "webp",
+          "bytes": 128518,
+          "hash": "93a1573121705cdc489c01b64f22c308c41bd5704d5ef9f0b9214b421d19b5e6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.lee_jaehoon.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -283,6 +315,22 @@
           "format": "webp",
           "bytes": 155694,
           "hash": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.character.lim_junho.performance.relief",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/lim-junho-relief.webp",
+          "format": "webp",
+          "bytes": 150304,
+          "hash": "f6af2ced769422ec7240a5e2c733922b0c2f5274c90879a986a9a4e807544b2d"
         }
       ],
       "dependencies": [],
@@ -354,6 +402,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.player.performance.resolve",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/player-resolve.webp",
+          "format": "webp",
+          "bytes": 135228,
+          "hash": "7ed2c13978cc75b51cbadd99e48d789f525ae496ec345b61bc8d56b179671f8e"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.player.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -379,6 +443,22 @@
           "format": "webp",
           "bytes": 116298,
           "hash": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.character.seo_jeongmin.performance.neutral",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/seo-jeongmin-neutral.webp",
+          "format": "webp",
+          "bytes": 113766,
+          "hash": "cf1c13696d50b89938ef142b7f19930d6ed77a00d7aa9a203c696ccbc6432b68"
         }
       ],
       "dependencies": [],
@@ -455,10 +535,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/break-area-rc.svg",
-          "format": "svg",
-          "bytes": 2503,
-          "hash": "f725bd0967ab84e866e45b867e8b493231ea2696e2c509ce512ad7f33f7b9280"
+          "uri": "assets/episode01/cg/break-area.webp",
+          "format": "webp",
+          "bytes": 186994,
+          "hash": "5aec396106763e0b4a8601bd450004baa8275603351ef7e78fbd816fffcf2118"
         }
       ],
       "dependencies": [],
@@ -471,10 +551,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/concrete-pour-rc.svg",
-          "format": "svg",
-          "bytes": 2659,
-          "hash": "e04d1f58ce8ee13b2be02bd0a617271bb037eca60981295b5e83c79b41986fc9"
+          "uri": "assets/episode01/cg/concrete-pour.webp",
+          "format": "webp",
+          "bytes": 219648,
+          "hash": "f8e3cbc6745c2b369d48b644cd9974901a85fe9ccee5ac54e74d441a59402333"
         }
       ],
       "dependencies": [],
@@ -487,10 +567,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/gate-dawn-rc.svg",
-          "format": "svg",
-          "bytes": 2876,
-          "hash": "5bbe56e432a97db83e97e4851ed654bb84d0cae42ee60e6d86f2d7d66d3d3d57"
+          "uri": "assets/episode01/cg/gate-dawn.webp",
+          "format": "webp",
+          "bytes": 164000,
+          "hash": "bf0d7f51abd1be209ea7d28d548cbf27f57c0cd85476dc36117ff120a8495021"
         }
       ],
       "dependencies": [],
@@ -503,10 +583,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/home-night-rc.svg",
-          "format": "svg",
-          "bytes": 2673,
-          "hash": "4d3c0bf4bbba4f28df9aa89708b0e1c7b86b276f5ad4dec12cc9e0a7f5403ba7"
+          "uri": "assets/episode01/cg/home-night.webp",
+          "format": "webp",
+          "bytes": 76944,
+          "hash": "75c44aa554bfcdacbd10e4ca22bb2a5949cf8b08cedc5b8c07350a39badccf7c"
         }
       ],
       "dependencies": [],
@@ -519,10 +599,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/inspection-zone-rc.svg",
-          "format": "svg",
-          "bytes": 2471,
-          "hash": "31fe6ba6a1938b7831305ad2a348b298dea2b6fc3a9e0fff4111bccef046b1f6"
+          "uri": "assets/episode01/cg/inspection-zone.webp",
+          "format": "webp",
+          "bytes": 216202,
+          "hash": "29327423d047693f4015f0d5341d2ac906055fa29559489d7dc08dd31a120e95"
         }
       ],
       "dependencies": [],
@@ -535,10 +615,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/ramp-entry-rc.svg",
-          "format": "svg",
-          "bytes": 2588,
-          "hash": "bc568c74990181ec30e81e7fc7e90e0bd49e749597b7ec5d7b660cde08069ca0"
+          "uri": "assets/episode01/cg/ramp-entry.webp",
+          "format": "webp",
+          "bytes": 229240,
+          "hash": "382859fff69e1efadf21089031788f4fafc465601c7b9b006d2d333ecfa35906"
         }
       ],
       "dependencies": [],
@@ -551,10 +631,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/site-office-rc.svg",
-          "format": "svg",
-          "bytes": 2755,
-          "hash": "bcca8d67e3373dda871ec5d47282acea4b58024e1e3fa9e32aa0c5d1ab962910"
+          "uri": "assets/episode01/cg/site-office.webp",
+          "format": "webp",
+          "bytes": 89936,
+          "hash": "57fc86a99c4a28deb7d42b330a193ad67acbc7032c4534151dec9c91ae8f9434"
         }
       ],
       "dependencies": [],
@@ -567,10 +647,10 @@
       "group_id": "ep01.scene_backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/cg/work-yard-rc.svg",
-          "format": "svg",
-          "bytes": 2549,
-          "hash": "9822fd5faf10bdc771acf9b119ce04cf4ba4bb4cb332603326043eb71f8dfa1e"
+          "uri": "assets/episode01/cg/work-yard.webp",
+          "format": "webp",
+          "bytes": 216874,
+          "hash": "b994d768a856227aa62924824032951b9ac5cd95714b2ba75b77934c0880d22f"
         }
       ],
       "dependencies": [],
@@ -699,38 +779,6 @@
           "format": "webp",
           "bytes": 68130,
           "hash": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.scene_element.foundation_blinding_edge",
-      "type": "image",
-      "group_id": "ep01.scene_elements",
-      "variants": [
-        {
-          "uri": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
-          "format": "webp",
-          "bytes": 25546,
-          "hash": "f9a22a076a81769badd9cc6173c6846b0073e2f1cf1b03f692089b6b06ae4583"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.scene_element.foundation_rebar_mat",
-      "type": "image",
-      "group_id": "ep01.scene_elements",
-      "variants": [
-        {
-          "uri": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
-          "format": "webp",
-          "bytes": 35778,
-          "hash": "503efef361fd54592b00b5862ad0e91be13e771267607def92fbebb1190c76fe"
         }
       ],
       "dependencies": [],
