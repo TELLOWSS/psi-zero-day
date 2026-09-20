@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import catalog from '../content/episode01/scene-element-catalog.json';
 
 describe('vehicle overlap production contract', () => {
-  it('keeps the reusable traffic-conflict overlay final and text/object free', () => {
+  it('keeps the reusable traffic-conflict overlay contract while its realistic-v2 replacement is tracked', () => {
     const element = catalog.elements.vehicle_overlap_zone;
-    expect(element.production_status).toBe('final');
+    expect(element.production_status).toBe('replacement_required');
+    expect(element.production_note).toContain('realistic-v2 replacement required');
     expect(element.planned_asset_id).toBe('ep01.scene_element.vehicle_overlap');
     expect(element.art).toMatchObject({
       path: 'assets/episode01/scene-elements/vehicle-overlap.webp',
