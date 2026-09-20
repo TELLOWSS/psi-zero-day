@@ -1,0 +1,306 @@
+/* Phase C — Production Scene Layouts
+   Six authored scene families. This layer changes composition only; engine/content rules stay untouched.
+   Imported after Emergency UX so desktop composition can be production-specific while the mobile safety
+   rules below explicitly preserve reachable controls. */
+
+.game-frame[data-production-scene] {
+  --scene-frame: rgba(214,228,226,.24);
+  --scene-glass: rgba(5,17,23,.88);
+  --scene-accent: #d8c078;
+}
+
+/* 1. STRATEGY — tactical world, map first, decisions anchored to spatial context. */
+.game-frame[data-production-scene="STRATEGY"] {
+  --scene-accent: #d8c078;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-map {
+  box-shadow: inset 0 0 0 1px rgba(219,204,145,.12), inset 0 -90px 110px rgba(2,8,12,.24);
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-zone-target.is-focused,
+.game-frame[data-production-scene="STRATEGY"] .strategy-map-worker.is-focused,
+.game-frame[data-production-scene="STRATEGY"] .strategy-risk-signal.is-focused {
+  filter: drop-shadow(0 0 14px rgba(225,196,108,.28));
+}
+
+/* 2. FIELD — character/context scene. World dominates; dialogue occupies one side rather than the whole horizon. */
+.game-frame[data-production-scene="FIELD"] {
+  --scene-accent: #d8c078;
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(2,8,12,.28),transparent 28%,transparent 72%,rgba(2,8,12,.16)),
+    linear-gradient(0deg,rgba(2,8,12,.38),transparent 36%);
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-speaker-tag {
+  border-left-color: var(--scene-accent);
+}
+
+/* 3. TBM — briefing-circle composition. Group remains visible while the communication prompt is centered. */
+.game-frame[data-production-scene="TBM"] {
+  --scene-accent: #68cbb8;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene::before {
+  content:"";
+  position:absolute;
+  z-index:6;
+  left:18%;
+  right:18%;
+  bottom:4%;
+  height:31%;
+  border:1px solid rgba(104,203,184,.36);
+  border-top-color:rgba(104,203,184,.12);
+  border-radius:50%;
+  transform:perspective(460px) rotateX(62deg);
+  box-shadow:0 0 36px rgba(76,177,161,.12),inset 0 0 28px rgba(76,177,161,.07);
+  pointer-events:none;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene::after {
+  content:"TBM";
+  position:absolute;
+  z-index:18;
+  top:18%;
+  left:50%;
+  transform:translateX(-50%);
+  padding:6px 12px;
+  border:1px solid rgba(104,203,184,.34);
+  background:rgba(5,24,27,.68);
+  color:rgba(196,242,232,.82);
+  font:800 9px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.22em;
+  pointer-events:none;
+}
+.game-frame[data-production-scene="TBM"] .play-panel {
+  border-top-color:rgba(104,203,184,.7);
+}
+
+/* 4. STOP WORK — hazard occupies the world; decision dock moves to the side on large screens. */
+.game-frame[data-production-scene="STOP_WORK"] {
+  --scene-accent: #ed6658;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene {
+  box-shadow:inset 0 0 90px rgba(111,12,8,.16);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene::before {
+  content:"";
+  position:absolute;
+  z-index:15;
+  left:46%;
+  top:23%;
+  width:30%;
+  height:39%;
+  border:1px solid rgba(237,102,88,.72);
+  border-left-width:3px;
+  border-right-width:3px;
+  background:
+    linear-gradient(90deg,rgba(237,102,88,.7) 0 14px,transparent 14px calc(100% - 14px),rgba(237,102,88,.7) calc(100% - 14px)),
+    linear-gradient(0deg,rgba(237,102,88,.7) 0 14px,transparent 14px calc(100% - 14px),rgba(237,102,88,.7) calc(100% - 14px));
+  clip-path:polygon(0 0,28% 0,28% 3px,72% 3px,72% 0,100% 0,100% 28%,calc(100% - 3px) 28%,calc(100% - 3px) 72%,100% 72%,100% 100%,72% 100%,72% calc(100% - 3px),28% calc(100% - 3px),28% 100%,0 100%,0 72%,3px 72%,3px 28%,0 28%);
+  filter:drop-shadow(0 0 16px rgba(237,102,88,.22));
+  pointer-events:none;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-moment-overlay {
+  opacity:1;
+}
+.game-frame[data-production-scene="STOP_WORK"] .play-panel {
+  border-color:rgba(237,102,88,.38);
+  border-top-color:rgba(237,102,88,.86);
+  background:linear-gradient(90deg,rgba(24,10,12,.95),rgba(10,18,22,.92));
+}
+.game-frame[data-production-scene="STOP_WORK"] .choice-panel button {
+  border-color:rgba(237,102,88,.36);
+}
+.game-frame[data-production-scene="STOP_WORK"] .choice-panel button:hover:not(:disabled),
+.game-frame[data-production-scene="STOP_WORK"] .choice-panel button:focus-visible {
+  border-color:rgba(255,133,116,.92);
+}
+
+/* 5. OFFICE — evidence/table composition. The board owns the right half; dialogue stays compact. */
+.game-frame[data-production-scene="OFFICE"] {
+  --scene-accent: #d6b36c;
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene::after {
+  content:"";
+  position:absolute;
+  z-index:8;
+  left:0;
+  right:0;
+  bottom:0;
+  height:26%;
+  pointer-events:none;
+  background:
+    linear-gradient(0deg,rgba(14,12,10,.54),rgba(14,12,10,.08)),
+    linear-gradient(90deg,transparent 0 43%,rgba(209,174,101,.06) 43% 100%);
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-evidence-board {
+  transform:scale(1.08);
+  transform-origin:center right;
+}
+.game-frame[data-production-scene="OFFICE"] .play-panel {
+  border-top-color:rgba(214,179,108,.65);
+}
+
+/* 6. DAY RESULT — no scorecard. Sunset, memory and tomorrow's carry-over dominate. */
+.game-frame[data-production-scene="DAY_RESULT"] {
+  --scene-accent: #e7ad55;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .game-header {
+  background:linear-gradient(180deg,rgba(10,13,17,.82),rgba(10,13,17,.34));
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-scene::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:9;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 74% 22%,rgba(242,174,72,.18),transparent 28%),
+    linear-gradient(0deg,rgba(8,11,16,.62),transparent 48%);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip {
+  opacity:1;
+  filter:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .play-panel {
+  border-color:rgba(227,175,83,.3);
+  border-top-color:rgba(227,175,83,.66);
+  background:linear-gradient(90deg,rgba(12,14,18,.9),rgba(25,20,18,.82));
+}
+.game-frame[data-production-scene="DAY_RESULT"] .narrator-card {
+  display:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .play-panel {
+  grid-template-columns:1fr;
+}
+
+/* Desktop choreography — six genuinely different compositions. */
+@media (min-width: 901px) and (min-height: 651px) {
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .play-panel {
+    left:4%;
+    right:auto;
+    width:62%;
+    max-height:35%;
+  }
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .scene-heading {
+    width:min(380px,40%);
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .play-panel {
+    left:11%;
+    right:11%;
+    width:auto;
+    max-height:32%;
+    background:linear-gradient(90deg,rgba(5,25,27,.92),rgba(7,22,25,.84));
+  }
+  .game-frame[data-production-scene="TBM"] .choice-panel {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .scene-heading {
+    left:3%;
+    top:92px;
+    width:41%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .play-panel {
+    left:auto;
+    right:3%;
+    bottom:54px;
+    width:47%;
+    min-height:210px;
+    max-height:58%;
+    grid-template-columns:108px minmax(0,1fr);
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel {
+    grid-template-columns:1fr;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel button {
+    min-height:58px;
+  }
+
+  .game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) .play-panel {
+    left:4%;
+    right:auto;
+    width:58%;
+    max-height:38%;
+  }
+  .game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) .scene-heading {
+    left:4%;
+    width:38%;
+  }
+
+  .game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .play-panel {
+    left:18%;
+    right:18%;
+    width:auto;
+    max-height:33%;
+    text-align:center;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-content h2 {
+    text-align:center;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+/* Portrait: preserve the Phase A bottom-sheet safety contract, but keep scene identity. */
+@media (orientation: portrait) and (max-width: 900px) {
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before {
+    left:6%;
+    right:6%;
+    bottom:2%;
+    height:23%;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::after {
+    top:20%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene::before {
+    left:39%;
+    top:27%;
+    width:48%;
+    height:34%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel,
+  .game-frame[data-production-scene="TBM"] .choice-panel,
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    grid-template-columns:1fr;
+  }
+}
+
+/* Compact landscape: the safe right-side dock wins; only world composition changes. */
+@media (orientation: landscape) and (max-height: 650px) {
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene::before {
+    left:26%;
+    top:18%;
+    width:30%;
+    height:54%;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before {
+    left:4%;
+    right:48%;
+    bottom:5%;
+    height:38%;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .play-panel,
+  .game-frame[data-production-scene="STOP_WORK"] .play-panel,
+  .game-frame[data-production-scene="OFFICE"] .play-panel,
+  .game-frame[data-production-scene="TBM"] .play-panel,
+  .game-frame[data-production-scene="FIELD"] .play-panel {
+    left:auto !important;
+    right:max(8px, env(safe-area-inset-right)) !important;
+    width:min(46%,430px) !important;
+    top:54px !important;
+    bottom:max(8px, env(safe-area-inset-bottom)) !important;
+    max-height:none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-frame[data-production-scene] * {
+    transition:none !important;
+  }
+}
