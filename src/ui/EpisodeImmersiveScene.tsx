@@ -142,6 +142,11 @@ export function EpisodeImmersiveScene({
     data-has-evidence={showEvidenceBoard || undefined}
     data-stopwork-phase={stopWorkProduction?.phase}
     data-stopwork-hero={stopWorkProduction?.hero_character_id}
+    data-stopwork-camera={stopWorkProduction?.camera_profile}
+    data-stopwork-depth={stopWorkProduction?.depth_profile}
+    data-stopwork-lighting={stopWorkProduction?.lighting_profile}
+    data-stopwork-ui={stopWorkProduction?.ui_profile}
+    data-stopwork-cast={stopWorkProduction?.cast_profile}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
