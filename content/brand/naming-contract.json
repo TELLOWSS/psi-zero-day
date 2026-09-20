@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "contract_id": "new-psi-canonical-naming-v1",
+  "status": "locked",
+  "brand_name": "NEW PSI",
+  "game_title": "NEW PSI : ZERO DAY",
+  "tagline": "현장, 오늘도 무사히",
+  "origin_statement": "NEW PSI 안전 프로그램 개발 경험에서 출발해 게임·현장도감·훈련 콘텐츠로 확장된 하나의 브랜드 세계관",
+  "fictional_entities": {
+    "master_brand": {
+      "en": "NEW PSI",
+      "ko": "NEW PSI"
+    },
+    "game": {
+      "en": "NEW PSI : ZERO DAY",
+      "ko": "NEW PSI : ZERO DAY"
+    },
+    "general_contractor": {
+      "en": "NEW PSI CONSTRUCTION",
+      "ko": "NEW PSI 건설"
+    },
+    "project_site": {
+      "en": "NEW PSI ZERO SITE 01",
+      "ko": "NEW PSI 현장 01"
+    },
+    "field_guide": {
+      "en": "NEW PSI FIELD GUIDE",
+      "ko": "NEW PSI 현장도감"
+    },
+    "field_map": {
+      "en": "NEW PSI FIELD",
+      "ko": "NEW PSI 현장 MAP"
+    },
+    "safety_platform": {
+      "en": "NEW PSI SAFETY INTELLIGENCE",
+      "ko": "NEW PSI 안전지능"
+    },
+    "field_team": {
+      "en": "NEW PSI FIELD TEAM",
+      "ko": "NEW PSI 현장팀"
+    }
+  },
+  "replacement_policy": {
+    "real_or_unlicensed_company": "Use NEW PSI CONSTRUCTION / NEW PSI 건설 when an in-world construction-company identity is needed.",
+    "real_or_unlicensed_project": "Use NEW PSI ZERO SITE 01 / NEW PSI 현장 01 when a project or site name is needed.",
+    "manufacturer_or_product_brand": "Use NEW PSI only when a readable mark is narratively useful; otherwise keep the object unbranded.",
+    "anonymous_placeholder": "Do not ship OO건설, ○○건설, A사, B사, 익명회사 or random pseudo-company names. Replace with the appropriate NEW PSI fictional entity or a role-only neutral label.",
+    "real_apartment_or_site_brand": "Do not reproduce it in shipped game art or text unless separately cleared. Use NEW PSI site identity.",
+    "character_names": "Named characters remain fictional human names and are not renamed to NEW PSI."
+  },
+  "visual_marking_policy": {
+    "preferred_mark": "NEW PSI",
+    "secondary_mark": "NEW PSI CONSTRUCTION",
+    "allowed_surfaces": [
+      "hard_hat",
+      "safety_vest",
+      "site_gate",
+      "site_sign",
+      "project_board",
+      "field_office",
+      "document_header",
+      "vehicle_decal_when_needed"
+    ],
+    "isolated_equipment_rule": "Field-guide equipment may remain text-free for thumbnail readability. If a company/manufacturer mark is visible, it must be NEW PSI; universal safety marks such as AED may remain.",
+    "forbidden": [
+      "real company logos",
+      "real apartment brands",
+      "real project names",
+      "manufacturer logos without clearance",
+      "random pseudo text"
+    ]
+  }
+}
