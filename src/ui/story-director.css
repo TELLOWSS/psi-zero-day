@@ -164,6 +164,12 @@
 }
 
 @media (orientation: landscape) and (max-height: 650px) {
+  .episode-cold-open {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+  }
   .episode-cold-open-copy {
     left: max(18px, env(safe-area-inset-left));
     top: 8%;
