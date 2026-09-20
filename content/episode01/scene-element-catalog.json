@@ -1237,7 +1237,7 @@
       "kind": "prop",
       "label": "유로폼 벽체 거푸집",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
       "art": {
         "path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
@@ -1265,6 +1265,14 @@
         "process_order": 1,
         "observe_point_text_id": "ui.guide.euroform_wall_panel.body",
         "unlock_policy": "episode_context"
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 66536,
+        "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a",
+        "source": "imagegen-production-2026-09-20",
+        "brand_contract": "NEW PSI"
       }
     },
     "formwork_tie": {
@@ -1272,7 +1280,7 @@
       "kind": "prop",
       "label": "폼타이·연결철물",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_tie",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-tie.webp",
@@ -1300,6 +1308,14 @@
         "process_order": 2,
         "observe_point_text_id": "ui.guide.formwork_tie.body",
         "unlock_policy": "episode_context"
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 52386,
+        "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea",
+        "source": "imagegen-production-2026-09-20",
+        "brand_contract": "NEW PSI"
       }
     },
     "formwork_brace": {
@@ -1307,7 +1323,7 @@
       "kind": "control",
       "label": "벽체 거푸집 전도방지 지지",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_brace",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-brace.webp",
@@ -1336,6 +1352,14 @@
         "process_order": 3,
         "observe_point_text_id": "ui.guide.formwork_brace.body",
         "unlock_policy": "episode_context"
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 59680,
+        "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6",
+        "source": "imagegen-production-2026-09-20",
+        "brand_contract": "NEW PSI"
       }
     },
     "formwork_work_platform": {
@@ -1343,7 +1367,7 @@
       "kind": "control",
       "label": "거푸집 작업발판",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_work_platform",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-work-platform.webp",
@@ -1371,6 +1395,14 @@
         "process_order": 4,
         "observe_point_text_id": "ui.guide.formwork_work_platform.body",
         "unlock_policy": "episode_context"
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 68130,
+        "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97",
+        "source": "imagegen-production-2026-09-20",
+        "brand_contract": "NEW PSI"
       }
     },
     "system_shoring_jackbase": {

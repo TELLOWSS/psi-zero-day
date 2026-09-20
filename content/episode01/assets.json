@@ -594,6 +594,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.euroform_wall_panel",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+          "format": "webp",
+          "bytes": 66536,
+          "hash": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.exclusion_zone",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -635,6 +651,54 @@
           "format": "webp",
           "bytes": 16919,
           "hash": "65428065ba7a8507976c9176fca827583029f0bd466474e3b2b9444d2480493d"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.formwork_brace",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/formwork-brace.webp",
+          "format": "webp",
+          "bytes": 59680,
+          "hash": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.formwork_tie",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/formwork-tie.webp",
+          "format": "webp",
+          "bytes": 52386,
+          "hash": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.formwork_work_platform",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/formwork-work-platform.webp",
+          "format": "webp",
+          "bytes": 68130,
+          "hash": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97"
         }
       ],
       "dependencies": [],
