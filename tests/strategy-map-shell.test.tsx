@@ -163,4 +163,13 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('lim-junho-map.webp');
     expect(html).toContain('lim-junho-portrait.webp');
   });
+
+  it('renders the Phase C-4 production map layer above the world backdrop and below interactive anchors', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
+    expect(html).toContain('class="strategy-production-layer"');
+    expect(html).toContain('class="strategy-production-grid"');
+    expect(html).toContain('class="strategy-production-route"');
+    expect(html).toContain('class="strategy-production-pulse"');
+  });
+
 });
