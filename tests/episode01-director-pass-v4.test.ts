@@ -16,7 +16,7 @@ describe('Episode 01 director pass v4',()=>{
 
   it('adds closing cinematic beats through evening and next morning',()=>{
     expect(episodeCinematicBeat('e01_08o_record_pressure')?.time).toBe('16:42');
-    expect(episodeCinematicBeat('e01_09_evening')?.time).toBe('20:41');
+    expect(episodeCinematicBeat('e01_09_evening')?.time).toBe('17:18');
     expect(episodeCinematicBeat('e01_10_next_day_tease')?.zone).toContain('DAY 02');
   });
 
