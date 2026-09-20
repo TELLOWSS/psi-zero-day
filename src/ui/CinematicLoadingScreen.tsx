@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { COMPANY_NAME } from '../app/brand';
+import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
 
 export function CinematicLoadingScreen({
   backgroundUri,
@@ -77,7 +77,7 @@ export function CinematicLoadingScreen({
     <div className="cinematic-scanline" aria-hidden="true"><i /></div>
 
     <header className="cinematic-loading-brand">
-      <strong>PSI : ZERO DAY</strong>
+      <strong>{GAME_TITLE}</strong>
       <small>{COMPANY_NAME}</small>
       <span>현장, 오늘도 무사히</span>
     </header>
