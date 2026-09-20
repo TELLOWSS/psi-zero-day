@@ -291,6 +291,14 @@ function collectMetrics(stage, touchMode) {
     tbmUi: immersive?.getAttribute('data-tbm-ui') || null,
     tbmCast: immersive?.getAttribute('data-tbm-cast') || null,
     tbmLayer: Boolean(document.querySelector('.tbm-production-layer')),
+    officePhase: immersive?.getAttribute('data-office-phase') || null,
+    officeCamera: immersive?.getAttribute('data-office-camera') || null,
+    officeDepth: immersive?.getAttribute('data-office-depth') || null,
+    officeLighting: immersive?.getAttribute('data-office-lighting') || null,
+    officeUi: immersive?.getAttribute('data-office-ui') || null,
+    officeCast: immersive?.getAttribute('data-office-cast') || null,
+    officeEvidence: immersive?.getAttribute('data-office-evidence') || null,
+    officeLayer: Boolean(document.querySelector('.office-production-layer')),
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     strategyPhase: gameFrame?.getAttribute('data-strategy-phase') || null,
     strategyCamera: gameFrame?.getAttribute('data-strategy-camera') || null,
@@ -365,6 +373,18 @@ function validate(row, viewport) {
     if (row.tbmUi !== 'judgment') failures.push('TBM judgment UI profile is missing');
     if (row.tbmCast !== 'decision-circle') failures.push('TBM decision-circle cast profile is missing');
     if (!row.tbmLayer) failures.push('TBM production layer did not render');
+  }
+  if (row.stage === 'episode01-office') {
+    if (row.activeEvent !== 'e01_08e_responsibility_clash') failures.push('OFFICE QA did not reach the responsibility clash');
+    if (row.activeNode !== 'report') failures.push('OFFICE QA did not reach the report judgment node');
+    if (row.officePhase !== 'responsibility-judgment') failures.push('OFFICE responsibility-judgment production phase is missing');
+    if (row.officeCamera !== 'judgment-table') failures.push('OFFICE judgment-table camera profile is missing');
+    if (row.officeDepth !== 'evidence-table') failures.push('OFFICE evidence-table depth profile is missing');
+    if (row.officeLighting !== 'decision-amber') failures.push('OFFICE decision lighting profile is missing');
+    if (row.officeUi !== 'judgment') failures.push('OFFICE judgment UI profile is missing');
+    if (row.officeCast !== 'balanced-table') failures.push('OFFICE balanced-table cast profile is missing');
+    if (row.officeEvidence !== 'responsibility') failures.push('OFFICE responsibility evidence focus is missing');
+    if (!row.officeLayer) failures.push('OFFICE production evidence-table layer did not render');
   }
   if (row.stage === 'episode01-stop-work') {
     if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');
@@ -487,7 +507,15 @@ try {
       if (stopWorkFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-stop-work.png');
 
-      await driveEpisodeToEvent(cdp, 'e01_08g_tbm_field_gap', 'tbm_action', 32000);
+      await driveEpisodeToEvent(cdp, 'e01_08e_responsibility_clash', 'report', 36000);
+      await sleep(240);
+      const officeMetrics = await metrics(cdp, 'episode01-office', viewport.mobile);
+      const officeFailures = validate(officeMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...officeMetrics, failures: officeFailures });
+      if (officeFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-office.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_08g_tbm_field_gap', 'tbm_action', 36000);
       await sleep(240);
       const tbmMetrics = await metrics(cdp, 'episode01-tbm', viewport.mobile);
       const tbmFailures = validate(tbmMetrics, viewport);
