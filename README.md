@@ -1,6 +1,10 @@
-# PSI : ZERO DAY — Foundation / Core Rule Engine
+# NEW PSI : ZERO DAY — Foundation / Core Rule Engine
 
 Episode 01을 클릭으로 끝까지 플레이할 수 있는 React Vertical Slice. Headless 검증과 동일한 CoreEngine을 사용하며 Phaser는 의존성만 준비되어 있다.
+
+## 브랜드 네이밍
+
+공식 상위 브랜드는 **NEW PSI**, 게임명은 **NEW PSI : ZERO DAY**다. 게임 내 가상 시공사는 **NEW PSI CONSTRUCTION / NEW PSI 건설**, 기본 현장명은 **NEW PSI ZERO SITE 01 / NEW PSI 현장 01**을 사용한다. 실제 회사·아파트·프로젝트·제조사 표기가 필요한 위치는 별도 권리 확인이 없는 한 NEW PSI 계열 표기 또는 무표기로 처리한다. 캐릭터 개인 이름은 가상의 인물명으로 유지한다. 세부 규칙은 `content/brand/naming-contract.json`을 따른다.
 
 ## 실행
 
