@@ -180,6 +180,7 @@ function collectMetrics(stage, touchMode) {
     smallTargets,
     brokenImages,
     activeBackground: immersive?.getAttribute('data-background-source') || null,
+    immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
     activeEvent: immersive?.getAttribute('data-event') || null,
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
   };
@@ -200,6 +201,9 @@ function validate(row, viewport) {
     failures.push('primary surface escapes viewport horizontally: ' + JSON.stringify(row.frame));
   }
   if (row.brokenImages.length) failures.push('broken visible images: ' + row.brokenImages.join(', '));
+  if (row.stage === 'episode01' && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
+    failures.push('final immersive background did not finish loading before capture');
+  }
   if (viewport.mobile && row.smallTargets.length) {
     const relevant = row.smallTargets.filter(item => !['SOUNDON', 'SOUNDOFF'].includes(item.text.replace(/\s/g, '')));
     if (relevant.length) failures.push('touch targets below 44px: ' + JSON.stringify(relevant.slice(0, 6)));
@@ -259,7 +263,12 @@ try {
       }
       await waitFor(cdp, "Boolean(document.querySelector('.cinematic-loading, .game-frame'))", 5000);
       await waitFor(cdp, "Boolean(document.querySelector('.game-frame'))", 9000);
-      await sleep(500);
+      await waitFor(
+        cdp,
+        "Boolean(document.querySelector('.episode-immersive-scene .episode-immersive-background[data-loaded=\"true\"]'))",
+        12000,
+      );
+      await sleep(180);
 
       const episodeMetrics = await metrics(cdp, 'episode01', viewport.mobile);
       const episodeFailures = validate(episodeMetrics, viewport);
