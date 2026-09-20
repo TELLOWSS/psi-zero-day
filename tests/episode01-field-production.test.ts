@@ -62,7 +62,7 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
 
   it('authors Junho signal blocking and performance instead of falling back to cast order', () => {
     expect(episode01CharacterBlocking('e01_04_junho_signal', 'lim_junho', 'lim_junho', undefined, 'signal')).toEqual({
-      side: 'center',
+      side: 'left',
       depth: 'foreground',
     });
     expect(episode01CharacterBlocking('e01_04_junho_signal', 'player', 'lim_junho', undefined, 'signal')).toEqual({
