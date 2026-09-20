@@ -36,7 +36,7 @@
       "flat CSS illustration as final art",
       "generic empty construction site",
       "Western-only site details",
-      "real company or apartment branding",
+      "real company, apartment, manufacturer or project branding other than the fictional NEW PSI identity",
       "baked Korean text, buttons, icons or hazard labels",
       "excessive cyberpunk/neon treatment",
       "miniature/toy visual scale"
@@ -140,5 +140,12 @@
       "dialogue and choice UI remain live text",
       "scene remains readable without relying on color-coded correct/wrong answers"
     ]
+  },
+  "brand_policy": {
+    "master_brand": "NEW PSI",
+    "game_title": "NEW PSI : ZERO DAY",
+    "in_world_company": "NEW PSI CONSTRUCTION",
+    "in_world_site": "NEW PSI ZERO SITE 01",
+    "art_rule": "If a readable company/site mark is needed, use NEW PSI naming only. Otherwise leave equipment unbranded; never invent pseudo-company text."
   }
 }
