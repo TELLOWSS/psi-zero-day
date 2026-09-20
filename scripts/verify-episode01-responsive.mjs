@@ -211,6 +211,7 @@ function collectMetrics(stage, touchMode) {
       }).filter(item => item.width < 44 || item.height < 44)
     : [];
   const frame = document.querySelector('.commercial-title-home, .game-frame, .game-hub, .cinematic-loading');
+  const gameFrame = document.querySelector('.game-frame');
   const frameRect = frame?.getBoundingClientRect();
   const immersive = document.querySelector('.episode-immersive-scene');
   const images = [...document.images].filter(visible);
@@ -284,6 +285,13 @@ function collectMetrics(stage, touchMode) {
     tbmCast: immersive?.getAttribute('data-tbm-cast') || null,
     tbmLayer: Boolean(document.querySelector('.tbm-production-layer')),
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
+    strategyPhase: gameFrame?.getAttribute('data-strategy-phase') || null,
+    strategyCamera: gameFrame?.getAttribute('data-strategy-camera') || null,
+    strategyDepth: gameFrame?.getAttribute('data-strategy-depth') || null,
+    strategyLighting: gameFrame?.getAttribute('data-strategy-lighting') || null,
+    strategyUi: gameFrame?.getAttribute('data-strategy-ui') || null,
+    strategyFocus: gameFrame?.getAttribute('data-strategy-focus') || null,
+    strategyLayer: Boolean(document.querySelector('.strategy-production-layer')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
     stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
     stopWorkCamera: immersive?.getAttribute('data-stopwork-camera') || null,
@@ -328,6 +336,17 @@ function validate(row, viewport) {
     if (row.fieldLighting !== 'decision-focus') failures.push('FIELD decision lighting profile is missing');
     if (row.fieldUi !== 'judgment') failures.push('FIELD judgment UI profile is missing');
     if (row.fieldCast !== 'junho-player-balance') failures.push('FIELD balanced cast profile is missing');
+  }
+  if (row.stage === 'episode01-strategy') {
+    if (row.activeEvent !== 'e01_05_command') failures.push('STRATEGY QA did not reach coordination pressure');
+    if (row.activeNode !== 'entrance') failures.push('STRATEGY QA did not reach the entrance judgment node');
+    if (row.strategyPhase !== 'tactical-judgment') failures.push('STRATEGY tactical-judgment production phase is missing');
+    if (row.strategyCamera !== 'decision-zone') failures.push('STRATEGY decision-zone camera profile is missing');
+    if (row.strategyDepth !== 'decision-layered') failures.push('STRATEGY decision-layered depth profile is missing');
+    if (row.strategyLighting !== 'decision-contrast') failures.push('STRATEGY decision lighting profile is missing');
+    if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
+    if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
+    if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
   }
   if (row.stage === 'episode01-tbm') {
     if (row.activeEvent !== 'e01_08g_tbm_field_gap') failures.push('TBM QA did not reach the changed-work briefing');
@@ -444,6 +463,14 @@ try {
       report.push({ viewportName: viewport.name, ...fieldMetrics, failures: fieldFailures });
       if (fieldFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-field-signal.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_05_command', 'entrance', 30000);
+      await sleep(240);
+      const strategyMetrics = await metrics(cdp, 'episode01-strategy', viewport.mobile);
+      const strategyFailures = validate(strategyMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...strategyMetrics, failures: strategyFailures });
+      if (strategyFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-strategy.png');
 
       await driveEpisodeToEvent(cdp, 'e01_08c_site_pushback');
       await sleep(240);
