@@ -68,10 +68,15 @@ describe('Episode 01 cinematic character blocking', () => {
     });
   });
 
-  it('does not override scenes outside the authored blocking arc', () => {
+  it('extends authored blocking into FIELD while leaving unrelated scenes untouched', () => {
     expect(episode01UsesCharacterBlocking('e01_08i_restart_pressure')).toBe(true);
-    expect(episode01UsesCharacterBlocking('e01_07_first_pour')).toBe(false);
-    expect(episode01CharacterBlocking('e01_07_first_pour', 'player')).toBeUndefined();
+    expect(episode01UsesCharacterBlocking('e01_07_first_pour')).toBe(true);
+    expect(episode01CharacterBlocking('e01_07_first_pour', 'player')).toEqual({
+      side: 'far-left',
+      depth: 'midground',
+    });
+    expect(episode01UsesCharacterBlocking('e01_06_pump_arrival')).toBe(false);
+    expect(episode01CharacterBlocking('e01_06_pump_arrival', 'player')).toBeUndefined();
   });
   it('renders authored blocking metadata into the immersive character layers', () => {
     const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {

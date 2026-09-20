@@ -138,7 +138,7 @@ async function screenshot(cdp, filename) {
   fs.writeFileSync(path.join(outputDir, filename), Buffer.from(result.data, 'base64'));
 }
 
-async function driveEpisodeToEvent(cdp, targetEventId, timeoutMs = 24000) {
+async function driveEpisodeToEvent(cdp, targetEventId, targetNodeId = null, timeoutMs = 24000) {
   const started = Date.now();
   let lastEvent = null;
   let stagnant = 0;
@@ -160,7 +160,7 @@ async function driveEpisodeToEvent(cdp, targetEventId, timeoutMs = 24000) {
       };
     })()`);
 
-    if (state.event === targetEventId) return state;
+    if (state.event === targetEventId && (!targetNodeId || state.node === targetNodeId)) return state;
 
     stagnant = state.event === lastEvent ? stagnant + 1 : 0;
     lastEvent = state.event;
@@ -186,7 +186,7 @@ async function driveEpisodeToEvent(cdp, targetEventId, timeoutMs = 24000) {
     if (stagnant > 45) throw new Error('Episode 01 QA stalled at ' + JSON.stringify(state));
   }
 
-  throw new Error('Timed out driving Episode 01 to ' + targetEventId + '; last event=' + lastEvent);
+  throw new Error('Timed out driving Episode 01 to ' + targetEventId + (targetNodeId ? '/' + targetNodeId : '') + '; last event=' + lastEvent);
 }
 
 function collectMetrics(stage, touchMode) {
@@ -269,6 +269,13 @@ function collectMetrics(stage, touchMode) {
     activeBackground: immersive?.getAttribute('data-background-source') || null,
     immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
     activeEvent: immersive?.getAttribute('data-event') || null,
+    activeNode: immersive?.getAttribute('data-node') || null,
+    fieldPhase: immersive?.getAttribute('data-field-phase') || null,
+    fieldCamera: immersive?.getAttribute('data-field-camera') || null,
+    fieldDepth: immersive?.getAttribute('data-field-depth') || null,
+    fieldLighting: immersive?.getAttribute('data-field-lighting') || null,
+    fieldUi: immersive?.getAttribute('data-field-ui') || null,
+    fieldCast: immersive?.getAttribute('data-field-cast') || null,
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
     stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
@@ -304,6 +311,16 @@ function validate(row, viewport) {
   }
   if (row.stage.startsWith('episode01') && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
     failures.push('final immersive background did not finish loading before capture');
+  }
+  if (row.stage === 'episode01-field-signal') {
+    if (row.activeEvent !== 'e01_04_junho_signal') failures.push('FIELD QA did not reach the Junho signal event');
+    if (row.activeNode !== 'listen') failures.push('FIELD QA did not reach the judgment node');
+    if (row.fieldPhase !== 'signal-judgment') failures.push('FIELD signal judgment production phase is missing');
+    if (row.fieldCamera !== 'decision-context') failures.push('FIELD decision camera profile is missing');
+    if (row.fieldDepth !== 'decision-layered') failures.push('FIELD decision depth profile is missing');
+    if (row.fieldLighting !== 'decision-focus') failures.push('FIELD decision lighting profile is missing');
+    if (row.fieldUi !== 'judgment') failures.push('FIELD judgment UI profile is missing');
+    if (row.fieldCast !== 'junho-player-balance') failures.push('FIELD balanced cast profile is missing');
   }
   if (row.stage === 'episode01-stop-work') {
     if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');
@@ -401,6 +418,14 @@ try {
       report.push({ viewportName: viewport.name, ...episodeMetrics, failures: episodeFailures });
       if (episodeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_04_junho_signal', 'listen');
+      await sleep(220);
+      const fieldMetrics = await metrics(cdp, 'episode01-field-signal', viewport.mobile);
+      const fieldFailures = validate(fieldMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...fieldMetrics, failures: fieldFailures });
+      if (fieldFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-field-signal.png');
 
       await driveEpisodeToEvent(cdp, 'e01_08c_site_pushback');
       await sleep(240);

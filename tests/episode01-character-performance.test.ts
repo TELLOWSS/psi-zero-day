@@ -107,10 +107,15 @@ describe('Episode 01 cinematic character performance', () => {
     expect(html).toContain('data-presence-motion="reengage"');
   });
 
-  it('does not apply late-arc performance direction to unrelated scenes', () => {
+  it('extends authored performance into FIELD while leaving unrelated scenes untouched', () => {
     expect(episode01UsesCharacterPerformance('e01_08k_stopwork_aftershock')).toBe(true);
-    expect(episode01UsesCharacterPerformance('e01_07_first_pour')).toBe(false);
-    expect(episode01CharacterPerformance('e01_07_first_pour', 'pour', 'player')).toBeUndefined();
+    expect(episode01UsesCharacterPerformance('e01_07_first_pour')).toBe(true);
+    expect(episode01CharacterPerformance('e01_07_first_pour', 'pour', 'player')).toMatchObject({
+      expression: 'concern',
+      pose: 'observe',
+    });
+    expect(episode01UsesCharacterPerformance('e01_06_pump_arrival')).toBe(false);
+    expect(episode01CharacterPerformance('e01_06_pump_arrival', 'resolve', 'player')).toBeUndefined();
   });
   it('uses the existing Junho concerned art in a live concern-state scene when available', () => {
     const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
