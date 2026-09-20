@@ -9,6 +9,7 @@ import { episode01CharacterPerformanceAsset } from '../app/episode01-character-p
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
+import { episode01OfficeProduction } from '../app/episode01-office-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
@@ -121,6 +122,7 @@ export function EpisodeImmersiveScene({
   const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
+  const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -165,6 +167,14 @@ export function EpisodeImmersiveScene({
     data-tbm-lighting={tbmProduction?.lighting_profile}
     data-tbm-ui={tbmProduction?.ui_profile}
     data-tbm-cast={tbmProduction?.cast_profile}
+    data-office-phase={officeProduction?.phase}
+    data-office-hero={officeProduction?.hero_character_id}
+    data-office-camera={officeProduction?.camera_profile}
+    data-office-depth={officeProduction?.depth_profile}
+    data-office-lighting={officeProduction?.lighting_profile}
+    data-office-ui={officeProduction?.ui_profile}
+    data-office-cast={officeProduction?.cast_profile}
+    data-office-evidence={officeProduction?.evidence_focus}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -211,6 +221,16 @@ export function EpisodeImmersiveScene({
       <i className="evidence-pin pin-a" />
       <i className="evidence-pin pin-b" />
       <b className="evidence-timeline" />
+    </div> : null}
+    {officeProduction ? <div className="office-production-layer" data-phase={officeProduction.phase} data-evidence={officeProduction.evidence_focus} aria-hidden="true">
+      <span className="office-table-plane" />
+      <span className="office-record record-a" />
+      <span className="office-record record-b" />
+      <span className="office-record record-c" />
+      <i className="office-evidence-axis" />
+      <i className="office-evidence-link link-a" />
+      <i className="office-evidence-link link-b" />
+      <b className="office-next-field-trace" />
     </div> : null}
     {tbmProduction ? <div className="tbm-production-layer" data-phase={tbmProduction.phase} aria-hidden="true">
       <i className="tbm-briefing-ring" />
