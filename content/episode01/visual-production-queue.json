@@ -10,13 +10,13 @@
     "generation_limit_before_selection": 3
   },
   "final_art_batch": {
-    "status": "exact_archive_verified_pending_github_binary_ingest",
+    "status": "exact_archive_verified_github_ingested",
     "ingest_manifest": "content/episode01/final-art-ingest-manifest.json",
     "archive_filename": "PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip",
     "archive_sha256": "0bdb1f553bdfac3192c1e7c03c25a71c92cea721fe0ce736c272ef1404354fdb",
     "required_surfaces": 8,
-    "repository_binaries_present": 0,
-    "note": "The exact eight-file archive has been checksum-verified against the ingest contract. Runtime stays on RC SVG until all eight WebPs land atomically in GitHub."
+    "repository_binaries_present": 8,
+    "note": "The exact eight-file archive is checksum-verified and all eight contracted WebPs are committed in GitHub. Runtime resolves the final WebP backgrounds, with RC SVG retained only as a fallback path."
   },
   "production_surfaces": [
     {
