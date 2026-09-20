@@ -357,7 +357,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
 
-  const strategyActive = isPlaying && strategy !== null;
+  const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
   const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
     : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
@@ -381,7 +381,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [playUiCue]);
 
   return <main
-    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}
+    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActive && (strategyActions.length || mapOutcomeActive) ? ' strategy-action-active' : ''}`}
     data-story-act={storyDirection?.act_id}
     data-story-beat={storyDirection?.beat}
     data-scene-preset={storyDirection?.preset}
@@ -511,7 +511,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
               }}
               assetUri={resolveAsset}
               eventId={activeEventId}
-              choiceFallback={strategyActions.length > 0}
+              choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
             />}
         </div>
