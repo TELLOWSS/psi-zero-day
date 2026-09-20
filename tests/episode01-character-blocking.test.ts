@@ -165,4 +165,25 @@ describe('Episode 01 cinematic character blocking', () => {
     });
   });
 
+
+  it('stages TBM as a group conversation with a moving foreground speaker', () => {
+    expect(episode01UsesCharacterBlocking('e01_08g_tbm_field_gap')).toBe(true);
+    expect(episode01CharacterBlocking('e01_08g_tbm_field_gap', 'lee_jaehoon', 'lee_jaehoon', undefined, 'lee')).toEqual({
+      side: 'left',
+      depth: 'foreground',
+    });
+    expect(episode01CharacterBlocking('e01_08g_tbm_field_gap', 'lim_junho', 'lim_junho', undefined, 'junho')).toEqual({
+      side: 'far-right',
+      depth: 'foreground',
+    });
+    expect(episode01CharacterBlocking('e01_08g_tbm_field_gap', 'player', null, undefined, 'tbm_action')).toEqual({
+      side: 'center',
+      depth: 'foreground',
+    });
+    expect(episode01CharacterBlocking('e01_08h_tbm_return', 'lim_junho', null, undefined, 'controlled')).toEqual({
+      side: 'right',
+      depth: 'foreground',
+    });
+  });
+
 });

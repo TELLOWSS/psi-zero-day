@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "FIELD_QUALITY_LOCK",
+  "status": "TBM_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -89,7 +89,75 @@
         "TBM"
       ],
       "composition": "briefing circle",
-      "priority": "group context, changed conditions, communication"
+      "priority": "group context, changed conditions, communication",
+      "quality_lock": {
+        "reference_scene": "e01_08g_tbm_field_gap",
+        "reference_node": "tbm_action",
+        "grammar": [
+          "changed conditions stay visible while people speak",
+          "speaker focus moves through the group without hiding listeners",
+          "judgment returns the whole crew to one frame",
+          "rebrief outcome opens the space and connects the decision to field behavior"
+        ],
+        "phases": [
+          "first-briefing",
+          "changed-condition",
+          "role-voice",
+          "group-judgment",
+          "field-rebrief",
+          "consequence-return",
+          "instruction-share"
+        ],
+        "camera": [
+          "briefing-circle",
+          "condition-wide",
+          "speaker-arc",
+          "decision-circle",
+          "rebrief-wide",
+          "consequence-medium",
+          "instruction-arc"
+        ],
+        "depth": [
+          "circle-open",
+          "changed-work-layers",
+          "speaker-ring",
+          "decision-ring",
+          "rebrief-open",
+          "consequence-ring",
+          "instruction-layers"
+        ],
+        "lighting": [
+          "morning-neutral",
+          "changed-condition-neutral",
+          "speaker-focus",
+          "decision-amber",
+          "rebrief-clear",
+          "consequence-soft",
+          "instruction-neutral"
+        ],
+        "ui": [
+          "briefing",
+          "context",
+          "dialogue",
+          "judgment",
+          "result",
+          "verify"
+        ],
+        "cast": [
+          "mentor-pair",
+          "four-person-circle",
+          "active-speaker",
+          "decision-circle",
+          "rebrief-crew",
+          "aftermath-circle",
+          "instruction-crew"
+        ],
+        "expansion_order": [
+          "STRATEGY",
+          "OFFICE",
+          "DAY_RESULT"
+        ]
+      }
     },
     "STOP_WORK": {
       "source_presets": [
