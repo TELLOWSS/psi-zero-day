@@ -84,6 +84,11 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
+  useEffect(() => {
+    setFocusId(null);
+    setActionFocusId(null);
+  }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
   const effectiveActions = projectSupportAssistedActions(actions, activeSupportItemIds);
