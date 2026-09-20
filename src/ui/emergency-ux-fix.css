@@ -737,3 +737,54 @@ body:has(.game-frame.phase-playing) .game-audio-toggle span {
     padding-inline: 4px;
   }
 }
+
+
+/* Compact-landscape final containment: keep Continue physically inside the dock. */
+@media (orientation: landscape) and (max-height: 650px) {
+  .strategy-active .presentation-area {
+    position: relative !important;
+    box-sizing: border-box;
+    padding-right: 114px !important;
+    overflow: hidden !important;
+  }
+
+  .strategy-active .presentation-area > :not(.dialogue-content):not(.choice-content) {
+    display: none !important;
+  }
+
+  .strategy-active .dialogue-content {
+    position: static !important;
+    display: block !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .strategy-active .dialogue-content > .eyebrow {
+    display: block;
+  }
+
+  .strategy-active .dialogue-text {
+    display: block;
+    max-height: 88px;
+    overflow: auto;
+    margin: 0;
+    padding: 2px 0 0 !important;
+  }
+
+  .strategy-active .continue-button {
+    position: absolute !important;
+    z-index: var(--ep-layer-choice);
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    top: auto !important;
+    width: 104px !important;
+    min-width: 104px !important;
+    max-width: 104px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+  }
+}
