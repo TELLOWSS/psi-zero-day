@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "director_id": "episode01-immersive-rewrite-v1",
+  "status": "PHASE_B_FOUNDATION_ACTIVE",
+  "premise": "첫날, 작은 이상 신호를 발견한 신입 안전관리자가 공정 압박과 사람 사이에서 처음으로 현장을 멈춰 세우는 이야기.",
+  "player_experience": {
+    "goal": "교육자료를 넘기는 느낌이 아니라 내가 이 현장의 안전관리자라는 감각을 만든다.",
+    "primary_interaction_limit": 3,
+    "meaningful_decision_target": "9-12",
+    "rules": [
+      "한 장면에는 하나의 핵심 판단만 둔다.",
+      "정답/오답 색상으로 선택을 유도하지 않는다.",
+      "설명보다 현장 변화, 인물 반응, 결과로 PSI를 이해시킨다.",
+      "단순 계속 클릭을 줄이고 대화 묶음 뒤에 의미 있는 탐색·판단·행동을 둔다.",
+      "현장 사람의 사정과 안전 원칙을 동시에 보여주되 어느 한쪽을 caricature로 만들지 않는다."
+    ]
+  },
+  "target_arc": [
+    {
+      "act_id": "PROLOGUE",
+      "title": "ZERO MOMENT",
+      "dramatic_function": "10:24 작업중지 순간을 먼저 보여주고 6시간 전으로 돌아간다.",
+      "target_preset": "STOP_WORK"
+    },
+    {
+      "act_id": "ACT_01",
+      "title": "첫 출근",
+      "dramatic_function": "현장과 사람을 소개하고 책과 현장의 간극을 암시한다.",
+      "target_preset": "FIELD_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_02",
+      "title": "첫 TBM",
+      "dramatic_function": "교육이 아니라 질문과 소통으로 첫 이상 신호를 심는다.",
+      "target_preset": "TBM"
+    },
+    {
+      "act_id": "ACT_03",
+      "title": "현장 배치",
+      "dramatic_function": "Production Map에서 인력·공정·동선을 직접 읽게 한다.",
+      "target_preset": "STRATEGY_MAP"
+    },
+    {
+      "act_id": "ACT_04",
+      "title": "작은 이상 신호",
+      "dramatic_function": "램프, 자재, 차량, 작업순서의 작은 신호를 연결한다.",
+      "target_preset": "FIELD_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_05",
+      "title": "공정 압박",
+      "dramatic_function": "펌프 조기 도착과 일정 압박 속에서 위험이 증폭된다.",
+      "target_preset": "STRATEGY_MAP"
+    },
+    {
+      "act_id": "ACT_06",
+      "title": "ZERO MOMENT",
+      "dramatic_function": "작업중지 또는 통제 판단을 플레이어가 책임지고 내린다.",
+      "target_preset": "STOP_WORK"
+    },
+    {
+      "act_id": "ACT_07",
+      "title": "중지 이후",
+      "dramatic_function": "멈추는 것보다 어려운 재개조건·관계·공정 갈등을 다룬다.",
+      "target_preset": "FIELD_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_08",
+      "title": "재확인",
+      "dramatic_function": "위험 발견에서 재개 기준 설정으로 판단의 깊이를 확장한다.",
+      "target_preset": "FIELD_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_09",
+      "title": "현장 현실",
+      "dramatic_function": "원칙을 지키면서도 사람의 이유를 듣는 게임 철학을 드러낸다.",
+      "target_preset": "FIELD_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_10",
+      "title": "기록과 책임",
+      "dramatic_function": "사실·확인·객관적 기록 사이에서 책임 있는 보고를 만든다.",
+      "target_preset": "OFFICE_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_11",
+      "title": "다시 TBM",
+      "dramatic_function": "아침에 알린 안전이 아니라 현장에서 배운 안전을 팀이 다시 공유한다.",
+      "target_preset": "TBM"
+    },
+    {
+      "act_id": "ACT_12",
+      "title": "PSI TRACE",
+      "dramatic_function": "하루의 작은 신호들이 하나의 위험 구조로 연결되었음을 보여준다.",
+      "target_preset": "OFFICE_DIALOGUE"
+    },
+    {
+      "act_id": "ACT_13",
+      "title": "오늘의 결과",
+      "dramatic_function": "등급 대신 PSI 변화·사람 변화·보고 흔적을 보여준다.",
+      "target_preset": "DAY_RESULT"
+    },
+    {
+      "act_id": "ACT_14",
+      "title": "내일의 변수",
+      "dramatic_function": "비와 달라진 현장을 예고해 다음 날을 궁금하게 만든다.",
+      "target_preset": "NEXT_DAY_TEASER"
+    }
+  ],
+  "presets": {
+    "STRATEGY_MAP": {
+      "hud_density": "operational",
+      "interaction_mode": "explore",
+      "camera_rule": "world-dominant"
+    },
+    "FIELD_DIALOGUE": {
+      "hud_density": "minimal",
+      "interaction_mode": "dialogue",
+      "camera_rule": "character-context"
+    },
+    "TBM": {
+      "hud_density": "guided",
+      "interaction_mode": "communicate",
+      "camera_rule": "briefing-circle"
+    },
+    "STOP_WORK": {
+      "hud_density": "critical",
+      "interaction_mode": "decision",
+      "camera_rule": "hazard-and-gesture"
+    },
+    "OFFICE_DIALOGUE": {
+      "hud_density": "minimal",
+      "interaction_mode": "evidence",
+      "camera_rule": "three-person-table"
+    },
+    "DAY_RESULT": {
+      "hud_density": "summary",
+      "interaction_mode": "reflect",
+      "camera_rule": "sunset-tableau"
+    },
+    "NEXT_DAY_TEASER": {
+      "hud_density": "minimal",
+      "interaction_mode": "continue",
+      "camera_rule": "weather-foreshadow"
+    }
+  },
+  "runtime_event_directions": {
+    "e01_01_arrival": {
+      "act_id": "ACT_01",
+      "beat": "arrival",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "slow",
+      "dramatic_function": "first contact with site reality"
+    },
+    "e01_02_meet_kang": {
+      "act_id": "ACT_01",
+      "beat": "meet_kang",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "slow",
+      "dramatic_function": "introduce field-experience perspective"
+    },
+    "e01_03_plan_breaks": {
+      "act_id": "ACT_03",
+      "beat": "plan_breaks",
+      "preset": "STRATEGY_MAP",
+      "pacing": "medium",
+      "dramatic_function": "show plan and field beginning to diverge"
+    },
+    "e01_04_junho_signal": {
+      "act_id": "ACT_04",
+      "beat": "junho_signal",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "surface the first small signal"
+    },
+    "e01_05_command": {
+      "act_id": "ACT_05",
+      "beat": "coordination_pressure",
+      "preset": "STRATEGY_MAP",
+      "pacing": "medium",
+      "dramatic_function": "turn small signals into coordination pressure"
+    },
+    "e01_06_pump_arrival": {
+      "act_id": "ACT_05",
+      "beat": "pump_arrival",
+      "preset": "STRATEGY_MAP",
+      "pacing": "fast",
+      "dramatic_function": "compress time and access space"
+    },
+    "e01_07_first_pour": {
+      "act_id": "ACT_06",
+      "beat": "zero_moment",
+      "preset": "STOP_WORK",
+      "pacing": "fast",
+      "dramatic_function": "force the first consequential stop/control judgment"
+    },
+    "e01_08_reactions": {
+      "act_id": "ACT_07",
+      "beat": "immediate_aftershock",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "show that stopping work begins a social problem"
+    },
+    "e01_08a_reporting_return": {
+      "act_id": "ACT_07",
+      "beat": "signal_voice",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "protect the reporting voice after pressure"
+    },
+    "e01_08b_inspection_find": {
+      "act_id": "ACT_08",
+      "beat": "inspection_find",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "move from hazard discovery to verifiable evidence"
+    },
+    "e01_08c_site_pushback": {
+      "act_id": "ACT_08",
+      "beat": "site_pushback",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "fast",
+      "dramatic_function": "apply field pressure to the control decision"
+    },
+    "e01_08d_reinspection": {
+      "act_id": "ACT_08",
+      "beat": "reinspection",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "define a restart gate instead of vague reassurance"
+    },
+    "e01_08e_responsibility_clash": {
+      "act_id": "ACT_10",
+      "beat": "responsibility_clash",
+      "preset": "OFFICE_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "separate facts, responsibility and defensiveness"
+    },
+    "e01_08f_report_return": {
+      "act_id": "ACT_10",
+      "beat": "report_return",
+      "preset": "OFFICE_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "make the record useful rather than punitive"
+    },
+    "e01_08g_tbm_field_gap": {
+      "act_id": "ACT_11",
+      "beat": "tbm_gap",
+      "preset": "TBM",
+      "pacing": "medium",
+      "dramatic_function": "show the gap between spoken controls and field reality"
+    },
+    "e01_08h_tbm_return": {
+      "act_id": "ACT_11",
+      "beat": "tbm_return",
+      "preset": "TBM",
+      "pacing": "medium",
+      "dramatic_function": "let workers feed field learning back into TBM"
+    },
+    "e01_08i_restart_pressure": {
+      "act_id": "ACT_07",
+      "beat": "restart_pressure",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "fast",
+      "dramatic_function": "test restart criteria under schedule pressure"
+    },
+    "e01_08j_restart_return": {
+      "act_id": "ACT_08",
+      "beat": "restart_return",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "verify conditions before restart"
+    },
+    "e01_08k_stopwork_aftershock": {
+      "act_id": "ACT_09",
+      "beat": "stopwork_culture",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "slow",
+      "dramatic_function": "show how stop-work culture affects future reporting"
+    },
+    "e01_08l_stopwork_return": {
+      "act_id": "ACT_09",
+      "beat": "human_context",
+      "preset": "FIELD_DIALOGUE",
+      "pacing": "slow",
+      "dramatic_function": "listen to field reasons without surrendering controls"
+    },
+    "e01_08m_instruction_cascade": {
+      "act_id": "ACT_11",
+      "beat": "instruction_cascade",
+      "preset": "TBM",
+      "pacing": "medium",
+      "dramatic_function": "turn a decision into shared field instruction"
+    },
+    "e01_08n_instruction_return": {
+      "act_id": "ACT_12",
+      "beat": "instruction_trace",
+      "preset": "OFFICE_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "trace whether instructions survived handoffs"
+    },
+    "e01_08o_record_pressure": {
+      "act_id": "ACT_10",
+      "beat": "record_pressure",
+      "preset": "OFFICE_DIALOGUE",
+      "pacing": "medium",
+      "dramatic_function": "test record accuracy under relationship pressure"
+    },
+    "e01_08p_record_return": {
+      "act_id": "ACT_12",
+      "beat": "record_trace",
+      "preset": "OFFICE_DIALOGUE",
+      "pacing": "slow",
+      "dramatic_function": "connect records back to future prevention"
+    },
+    "e01_09_evening": {
+      "act_id": "ACT_13",
+      "beat": "sunset_result",
+      "preset": "DAY_RESULT",
+      "pacing": "slow",
+      "dramatic_function": "close the day through changes, not grades"
+    },
+    "e01_10_next_day_tease": {
+      "act_id": "ACT_14",
+      "beat": "rain_tease",
+      "preset": "NEXT_DAY_TEASER",
+      "pacing": "slow",
+      "dramatic_function": "turn tomorrow's weather into a new risk context"
+    }
+  },
+  "migration": {
+    "preserve_engine": true,
+    "preserve_event_ids": true,
+    "preserve_choice_ids_until_rewrite": true,
+    "topology_rewrite_status": "PENDING_AFTER_DIRECTOR_INTEGRATION",
+    "rule": "스토리 재작성은 기존 런타임/저장구조를 깨지 않고 Director metadata와 scene preset을 먼저 붙인 뒤 이벤트 텍스트·노드·선택지를 단계적으로 교체한다."
+  }
+}
