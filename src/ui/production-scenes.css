@@ -2653,3 +2653,18 @@
     max-height:34%;
   }
 }
+
+
+/* Compact-landscape specificity lock: this must outrank the general
+   strategy-action-active judgment dock so the target guidance cannot jump
+   back over characters on 844x390-class screens. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active[data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    top:auto;
+    left:auto;
+    right:1%;
+    bottom:2%;
+    width:27%;
+    max-height:34%;
+  }
+}
