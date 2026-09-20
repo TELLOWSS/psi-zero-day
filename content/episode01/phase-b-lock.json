@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lock_id": "ep01-phase-b-story-director-lock",
+  "status": "LOCKED",
+  "verified_baseline_sha": "021bef504dd40aef57ee97266752b24049fe84ac",
+  "workflow_run_id": 35512232433,
+  "verification": {
+    "test_files": "111/111",
+    "tests": "631/631",
+    "responsive_profiles": "5/5",
+    "production_gate": "BINARY-READY",
+    "final_backgrounds": "8/8",
+    "character_performance_wave": "5/5",
+    "production_audio": "8/8"
+  },
+  "protected_contract": [
+    "Directed player campaign uses the authored 26-event Episode 01 spine.",
+    "Existing engine architecture, Event IDs and Choice IDs remain compatible.",
+    "ZERO MOMENT cold open rewinds into the first-workday chronology.",
+    "Exposition and deterministic consequences may auto-advance; authored player decisions do not.",
+    "Deterministic one-route return nodes do not become artificial player decisions.",
+    "Phase C changes presentation and composition, not the Phase B narrative topology."
+  ]
+}
