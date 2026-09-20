@@ -45,6 +45,7 @@ import { TITLE_CAST_IDS } from '../app/title-cast';
 import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDirection } from '../app/episode01-story-director';
 import { episode01ProductionScene } from '../app/episode01-production-scene';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
+import { episode01FieldProduction } from '../app/episode01-field-production';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -94,6 +95,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const productionScene = episode01ProductionScene(storyDirection?.preset);
   const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
   const stopWorkProduction = productionScene === 'STOP_WORK' ? episode01StopWorkProduction(activeEventId) : undefined;
+  const fieldProduction = productionScene === 'FIELD' ? episode01FieldProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -393,6 +395,12 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-stopwork-depth={stopWorkProduction?.depth_profile}
     data-stopwork-lighting={stopWorkProduction?.lighting_profile}
     data-stopwork-ui={stopWorkProduction?.ui_profile}
+    data-field-phase={fieldProduction?.phase}
+    data-field-camera={fieldProduction?.camera_profile}
+    data-field-depth={fieldProduction?.depth_profile}
+    data-field-lighting={fieldProduction?.lighting_profile}
+    data-field-ui={fieldProduction?.ui_profile}
+    data-field-cast={fieldProduction?.cast_profile}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
