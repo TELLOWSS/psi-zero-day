@@ -3,7 +3,7 @@
   "profile_id": "field-guide-isometric-v1",
   "title_ko": "현장도감 이소메트릭 3D 픽토그램",
   "status": "locked",
-  "purpose": "PSI : ZERO DAY 현장도감 전체 118개 아이템의 시각 일관성 기준",
+  "purpose": "NEW PSI : ZERO DAY 현장도감 전체 118개 아이템의 시각 일관성 기준",
   "visual_language": {
     "camera": "three-quarter isometric, slightly elevated, consistent 35–45 degree presentation",
     "form": "real construction equipment/material proportions simplified into readable game pictograms",
@@ -26,8 +26,8 @@
     },
     "lighting": "soft upper-left key light, subtle cool fill, compact contact shadow",
     "background": "transparent alpha; no baked site photo or UI panel",
-    "text_policy": "no embedded Korean/English text except unavoidable universal equipment marks such as AED or pictograms",
-    "branding_policy": "no company logo, manufacturer logo or site name",
+    "text_policy": "no embedded Korean/English text unless a readable safety/brand mark is necessary; when needed use NEW PSI only, except universal equipment marks such as AED or safety pictograms",
+    "branding_policy": "NEW PSI is the only allowed readable brand; NEW PSI CONSTRUCTION may appear on site/company surfaces. No real company, manufacturer, apartment or project branding.",
     "framing": "single object or one compact work-state diorama; centered with 8–12% transparent breathing room",
     "detail_level": "more detailed than flat icon, less complex than concept-art scene"
   },
