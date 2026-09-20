@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createEpisode01Registry } from '../src/content/episode01';
 import { episode01ExpectedRunTotal } from '../src/app/episode01-run-progress';
-import { episode01AutoAdvanceDelay, episode01StoryPreset } from '../src/app/episode01-story-director';
+import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryPreset } from '../src/app/episode01-story-director';
 import { playEpisode } from './helpers/episode01-playthrough';
 
 const directedContent = createEpisode01Registry('directed').getValidatedContent();
@@ -49,5 +49,14 @@ describe('Episode 01 directed campaign mode', () => {
     expect(episode01AutoAdvanceDelay('e01_08e_responsibility_clash', 'gc', 45)).toBeGreaterThanOrEqual(4200);
     expect(episode01AutoAdvanceDelay('e01_03_plan_breaks', 'plan', 45)).toBeUndefined();
     expect(episode01AutoAdvanceDelay('e01_08b_inspection_find', 'action', 45)).toBeUndefined();
+  });
+
+  it('classifies deterministic return routing separately from the 12 authored player decisions', () => {
+    expect(episode01AutoResolveChoice('e01_08a_reporting_return')).toBe(true);
+    expect(episode01AutoResolveChoice('e01_08f_report_return')).toBe(true);
+    expect(episode01AutoResolveChoice('e01_08p_record_return')).toBe(true);
+    expect(episode01AutoResolveChoice('e01_03_plan_breaks')).toBe(false);
+    expect(episode01AutoResolveChoice('e01_08c_site_pushback')).toBe(false);
+    expect(episode01AutoResolveChoice('e01_09_evening')).toBe(false);
   });
 });
