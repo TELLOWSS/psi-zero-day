@@ -23,6 +23,7 @@ import '../ui/production-readability.css';
 import '../ui/game-hub.css';
 import '../ui/cinematic-world.css';
 import '../ui/responsive-layout.css';
+import '../ui/story-director.css';
 import '../ui/emergency-ux-fix.css';
 
 const root = document.getElementById('root') as HTMLElement | null;
