@@ -323,7 +323,15 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
 
-  return <main\n    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}\n    data-story-act={storyDirection?.act_id}\n    data-story-beat={storyDirection?.beat}\n    data-scene-preset={storyDirection?.preset}\n    data-hud-density={storyDirection?.hud_density}\n    data-interaction-mode={storyDirection?.interaction_mode}\n    data-pacing={storyDirection?.pacing}\n  >
+  return <main
+    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}
+    data-story-act={storyDirection?.act_id}
+    data-story-beat={storyDirection?.beat}
+    data-scene-preset={storyDirection?.preset}
+    data-hud-density={storyDirection?.hud_density}
+    data-interaction-mode={storyDirection?.interaction_mode}
+    data-pacing={storyDirection?.pacing}
+  >
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
