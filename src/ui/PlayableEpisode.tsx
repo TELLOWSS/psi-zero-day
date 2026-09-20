@@ -43,6 +43,7 @@ import { EpisodeRecord } from './EpisodeRecord';
 import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDirection } from '../app/episode01-story-director';
+import { episode01ProductionScene } from '../app/episode01-production-scene';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -89,6 +90,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeEventId = activeInstance?.event_id ?? null;
   const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const storyDirection = episode01StoryDirection(activeEventId);
+  const productionScene = episode01ProductionScene(storyDirection?.preset);
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -383,6 +385,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-story-act={storyDirection?.act_id}
     data-story-beat={storyDirection?.beat}
     data-scene-preset={storyDirection?.preset}
+    data-production-scene={productionScene}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
