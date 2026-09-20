@@ -27,6 +27,22 @@ function freeze<const T>(value: T): Readonly<T> {
 }
 
 const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
+  e01_02_meet_kang: freeze({
+    player: { pose: 'listen', expression: 'neutral' },
+    kang_taesik: { pose: 'listen', expression: 'neutral' },
+  }),
+  e01_08g_tbm_field_gap: freeze({
+    player: { pose: 'observe', expression: 'concern' },
+    lee_jaehoon: { pose: 'document', expression: 'concern' },
+    kang_taesik: { pose: 'listen', expression: 'concern' },
+    lim_junho: { pose: 'hesitate', expression: 'concern' },
+  }),
+  e01_08h_tbm_return: freeze({
+    player: { pose: 'observe', expression: 'concern' },
+    lee_jaehoon: { pose: 'document', expression: 'concern' },
+    kang_taesik: { pose: 'listen', expression: 'concern' },
+    lim_junho: { pose: 'hesitate', expression: 'concern' },
+  }),
   e01_01_arrival: freeze({
     player: { pose: 'observe', expression: 'neutral', motion: 'enter' },
   }),
@@ -131,6 +147,70 @@ const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
 });
 
 const NODE_PATCHES: Readonly<Record<string, NodePatchMap>> = freeze({
+  e01_08g_tbm_field_gap: freeze({
+    situation: freeze({
+      player: { pose: 'observe', expression: 'concern' },
+      lee_jaehoon: { pose: 'document', expression: 'concern' },
+      kang_taesik: { pose: 'listen', expression: 'concern' },
+      lim_junho: { pose: 'hesitate', expression: 'concern' },
+    }),
+    lee: freeze({
+      lee_jaehoon: { pose: 'document', expression: 'concern', motion: 'reengage' },
+    }),
+    kang: freeze({
+      kang_taesik: { pose: 'press', expression: 'concern', motion: 'reengage' },
+    }),
+    junho: freeze({
+      lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
+    }),
+    tbm_action: freeze({
+      player: { pose: 'listen', expression: 'resolve', motion: 'reengage' },
+      lee_jaehoon: { pose: 'listen', expression: 'concern' },
+      kang_taesik: { pose: 'listen', expression: 'concern' },
+      lim_junho: { pose: 'listen', expression: 'concern' },
+    }),
+    form_first_result: freeze({
+      player: { pose: 'document', expression: 'neutral' },
+      lee_jaehoon: { pose: 'reengage', expression: 'relief' },
+      kang_taesik: { pose: 'listen', expression: 'concern' },
+      lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'withdraw' },
+    }),
+    worker_blame_result: freeze({
+      player: { pose: 'brace', expression: 'concern' },
+      lee_jaehoon: { pose: 'listen', expression: 'neutral' },
+      kang_taesik: { pose: 'brace', expression: 'conflict' },
+      lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
+    }),
+    change_control_result: freeze({
+      player: { pose: 'document', expression: 'resolve' },
+      lee_jaehoon: { pose: 'listen', expression: 'neutral' },
+      kang_taesik: { pose: 'listen', expression: 'neutral' },
+      lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
+    }),
+  }),
+  e01_08h_tbm_return: freeze({
+    resolve: freeze({
+      player: { pose: 'verify', expression: 'resolve', motion: 'reengage' },
+    }),
+    paper: freeze({
+      player: { pose: 'document', expression: 'concern' },
+      lee_jaehoon: { pose: 'press', expression: 'concern' },
+      kang_taesik: { pose: 'listen', expression: 'concern' },
+      lim_junho: { pose: 'hesitate', expression: 'concern' },
+    }),
+    silenced: freeze({
+      player: { pose: 'brace', expression: 'concern' },
+      lee_jaehoon: { pose: 'listen', expression: 'neutral' },
+      kang_taesik: { pose: 'brace', expression: 'conflict' },
+      lim_junho: { pose: 'withdraw', expression: 'concern', motion: 'withdraw' },
+    }),
+    controlled: freeze({
+      player: { pose: 'verify', expression: 'resolve' },
+      lee_jaehoon: { pose: 'listen', expression: 'relief' },
+      kang_taesik: { pose: 'listen', expression: 'neutral' },
+      lim_junho: { pose: 'reengage', expression: 'relief', motion: 'reengage' },
+    }),
+  }),
   e01_04_junho_signal: freeze({
     signal: freeze({
       lim_junho: { pose: 'hesitate', expression: 'concern', motion: 'reengage' },
