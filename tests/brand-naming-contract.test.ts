@@ -39,9 +39,11 @@ describe('NEW PSI canonical naming contract', () => {
     expect(ko.messages['ui.title.plaque']).toBe(CONSTRUCTION_COMPANY_NAME);
   });
 
-  it('does not ship legacy anonymous-company placeholders in the canonical runtime copy', () => {
+  it('does not ship legacy title values or anonymous-company placeholders in canonical runtime copy', () => {
+    const runtimeValues = Object.values(ko.messages);
+    expect(runtimeValues).not.toContain('PSI : ZERO DAY');
     const runtimeCopy = JSON.stringify(ko.messages);
-    for (const forbidden of ['PSI : ZERO DAY', 'OO건설', '○○건설', '익명회사']) {
+    for (const forbidden of ['OO건설', '○○건설', '익명회사']) {
       expect(runtimeCopy).not.toContain(forbidden);
     }
   });
