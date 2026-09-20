@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "phase": "C",
+  "status": "LAYOUT_PASS_01",
+  "title": "Episode 01 Production Scene System",
+  "scene_families": {
+    "STRATEGY": {
+      "source_presets": ["STRATEGY_MAP"],
+      "composition": "tactical world first",
+      "runtime_surface": "StrategyMapShell",
+      "priority": "map, people, risks, then action"
+    },
+    "FIELD": {
+      "source_presets": ["FIELD_DIALOGUE", "NEXT_DAY_TEASER"],
+      "composition": "world and character context first",
+      "priority": "field, expression, dialogue"
+    },
+    "TBM": {
+      "source_presets": ["TBM"],
+      "composition": "briefing circle",
+      "priority": "group context, changed conditions, communication"
+    },
+    "STOP_WORK": {
+      "source_presets": ["STOP_WORK"],
+      "composition": "hazard and gesture",
+      "priority": "hazard evidence, stop decision, restart gate"
+    },
+    "OFFICE": {
+      "source_presets": ["OFFICE_DIALOGUE"],
+      "composition": "evidence table",
+      "priority": "people, records, timeline"
+    },
+    "DAY_RESULT": {
+      "source_presets": ["DAY_RESULT"],
+      "composition": "sunset tableau",
+      "priority": "memory, people change, carry-over; no scorecard"
+    }
+  },
+  "rules": [
+    "UI must not cover the field merely to explain it.",
+    "Choices become visually dominant only at authored decision moments.",
+    "Mobile portrait keeps the safe bottom interaction sheet.",
+    "Compact landscape keeps the safe right-side interaction dock.",
+    "Scene family changes presentation only and cannot change Phase B narrative topology.",
+    "Final art replacement uses stable asset slots and does not require event rewrites."
+  ]
+}
