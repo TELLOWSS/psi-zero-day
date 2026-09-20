@@ -1658,65 +1658,65 @@
     {
       "integration_id": "FG-GH-01",
       "generation_batches": [
-        "FG-HS-01",
-        "FG-HS-02"
+        "FG-HS-04",
+        "FG-HS-05"
       ],
-      "max_items": 17,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "지하층 RC·유로폼·시스템동바리",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-02",
       "generation_batches": [
-        "FG-HS-03",
-        "FG-HS-04"
+        "FG-HS-07",
+        "FG-HS-08"
       ],
-      "max_items": 16,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "기준층 AL Form",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-03",
       "generation_batches": [
-        "FG-HS-05",
-        "FG-HS-06"
+        "FG-HS-09",
+        "FG-HS-10"
       ],
-      "max_items": 18,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "갱폼 설치·인상",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-04",
       "generation_batches": [
-        "FG-HS-07",
-        "FG-HS-08"
+        "FG-HS-02",
+        "FG-HS-03"
       ],
-      "max_items": 13,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "기초공사",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-05",
       "generation_batches": [
-        "FG-HS-09",
-        "FG-HS-10"
+        "FG-HS-11",
+        "FG-HS-06"
       ],
-      "max_items": 14,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "층변화·Roof·지상 전환",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-06",
       "generation_batches": [
-        "FG-HS-11",
-        "FG-HS-12"
+        "FG-HS-12",
+        "FG-HS-13"
       ],
-      "max_items": 19,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "견출·할석·미장·해체정리",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     },
     {
       "integration_id": "FG-GH-07",
       "generation_batches": [
-        "FG-HS-13",
+        "FG-HS-01",
         "FG-HS-14"
       ],
-      "max_items": 21,
-      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+      "theme": "현장개설·공통 안전운영",
+      "github_policy": "both generation batches reviewed first, then one atomic integration commit"
     }
   ],
   "quality_rules": [
@@ -1743,5 +1743,28 @@
       "missing horizontal stabilization that exists in the supplied field configuration",
       "generic scaffold substituted for the actual system-shoring configuration"
     ]
-  }
+  },
+  "execution_order": [
+    "FG-HS-04",
+    "FG-HS-05",
+    "FG-HS-07",
+    "FG-HS-08",
+    "FG-HS-09",
+    "FG-HS-10",
+    "FG-HS-02",
+    "FG-HS-03",
+    "FG-HS-11",
+    "FG-HS-06",
+    "FG-HS-12",
+    "FG-HS-13",
+    "FG-HS-01",
+    "FG-HS-14"
+  ],
+  "current_execution_batch": "FG-HS-04",
+  "execution_reasoning": [
+    "SECTION 2 first because live user reference photos are available for system shoring and current visual direction is already being calibrated there.",
+    "Then AL Form and gangform because they are core high-rise structural-cycle gameplay assets.",
+    "Then foundation, roof/transition, finishing, and finally setup/common support assets.",
+    "This order optimizes reference reuse and style consistency rather than construction chronology."
+  ]
 }
