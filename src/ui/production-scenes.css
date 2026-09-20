@@ -1636,3 +1636,414 @@
   min-height:44px;
   margin-top:3px;
 }
+
+
+/* Phase C-3 — TBM production quality lock.
+   TBM rule: changed conditions -> multiple field voices -> group judgment -> rebrief -> field behavior.
+   The crew remains visible as a working group; speaker focus changes without collapsing into talking heads. */
+.game-frame[data-production-scene="TBM"][data-tbm-phase] {
+  --tbm-accent: #d7c487;
+  --tbm-panel: rgba(7,17,20,.91);
+  --tbm-line: rgba(223,207,151,.34);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase].phase-playing:not(.strategy-active) .scene-heading {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase] .episode-immersive-scene::after {
+  background:
+    linear-gradient(90deg,rgba(3,9,12,.34),transparent 22%,transparent 78%,rgba(3,9,12,.24)),
+    linear-gradient(0deg,rgba(2,7,10,.5),transparent 42%);
+}
+
+/* Briefing-circle floor language stays environmental and never becomes a HUD card. */
+.game-frame[data-production-scene="TBM"] .tbm-production-layer {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:4;
+  overflow:hidden;
+}
+.game-frame[data-production-scene="TBM"] .tbm-briefing-ring {
+  position:absolute;
+  left:50%;
+  bottom:7%;
+  width:57%;
+  height:20%;
+  transform:translateX(-50%) perspective(520px) rotateX(62deg);
+  border:1px solid rgba(224,207,148,.18);
+  border-radius:50%;
+  box-shadow:0 0 34px rgba(216,193,119,.055), inset 0 0 30px rgba(216,193,119,.035);
+}
+.game-frame[data-production-scene="TBM"] .tbm-floor-mark {
+  position:absolute;
+  bottom:14%;
+  width:7px;
+  height:7px;
+  border:1px solid rgba(225,210,157,.4);
+  border-radius:50%;
+  opacity:.62;
+}
+.game-frame[data-production-scene="TBM"] .tbm-floor-mark-a { left:31%; }
+.game-frame[data-production-scene="TBM"] .tbm-floor-mark-b { left:49.6%; }
+.game-frame[data-production-scene="TBM"] .tbm-floor-mark-c { right:31%; }
+.game-frame[data-production-scene="TBM"][data-tbm-phase="group-judgment"] .tbm-briefing-ring {
+  border-color:rgba(235,201,112,.42);
+  box-shadow:0 0 42px rgba(224,181,76,.12), inset 0 0 34px rgba(224,181,76,.07);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="field-rebrief"] .tbm-briefing-ring {
+  width:64%;
+  border-color:rgba(183,211,173,.32);
+  box-shadow:0 0 45px rgba(147,194,154,.08);
+}
+
+/* Camera grammar — wide enough to keep the changed work condition in frame. */
+.game-frame[data-production-scene="TBM"][data-tbm-camera="briefing-circle"] .episode-immersive-background {
+  transform:scale(1.025);
+  object-position:52% 48%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="condition-wide"] .episode-immersive-background {
+  transform:scale(1.035);
+  object-position:57% 48%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="speaker-arc"] .episode-immersive-background {
+  transform:scale(1.065);
+  object-position:55% 49%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="decision-circle"] .episode-immersive-background {
+  transform:scale(1.05);
+  object-position:54% 49%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="rebrief-wide"] .episode-immersive-background {
+  transform:scale(1.025);
+  object-position:58% 48%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="consequence-medium"] .episode-immersive-background {
+  transform:scale(1.075);
+  object-position:55% 49%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-camera="instruction-arc"] .episode-immersive-background {
+  transform:scale(1.055);
+  object-position:54% 49%;
+}
+
+/* Depth grammar — active speaker steps forward, but the listening crew never disappears. */
+.game-frame[data-production-scene="TBM"][data-tbm-depth="circle-open"] .episode-immersive-props,
+.game-frame[data-production-scene="TBM"][data-tbm-depth="rebrief-open"] .episode-immersive-props {
+  filter:saturate(.88) brightness(.84);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="changed-work-layers"] .episode-immersive-props {
+  filter:saturate(.92) contrast(1.06) brightness(.86);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="speaker-ring"] .episode-immersive-props,
+.game-frame[data-production-scene="TBM"][data-tbm-depth="decision-ring"] .episode-immersive-props {
+  filter:saturate(.8) brightness(.76) contrast(1.05);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="speaker-ring"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.42;
+  filter:saturate(.58) brightness(.67);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="decision-ring"] .episode-immersive-character[data-blocking-depth="midground"] {
+  opacity:.8;
+  filter:saturate(.78) brightness(.84);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="consequence-ring"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.34;
+  filter:saturate(.48) brightness(.61);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-depth="instruction-layers"] .episode-immersive-props {
+  filter:saturate(.86) brightness(.8) contrast(1.04);
+}
+
+/* Lighting grammar — neutral field light, local speaker emphasis, then a clearer rebrief state. */
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="morning-neutral"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 58% 28%,rgba(240,209,151,.11),transparent 32%),
+    linear-gradient(0deg,rgba(2,7,10,.5),transparent 45%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="changed-condition-neutral"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 69% 38%,rgba(214,195,142,.09),transparent 27%),
+    linear-gradient(90deg,rgba(4,10,13,.46),transparent 48%,rgba(5,12,15,.12)),
+    linear-gradient(0deg,rgba(2,7,10,.54),transparent 45%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="speaker-focus"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 52% 42%,rgba(225,201,139,.13),transparent 30%),
+    linear-gradient(90deg,rgba(3,8,11,.55),transparent 44%,rgba(4,9,12,.28)),
+    linear-gradient(0deg,rgba(2,7,10,.57),transparent 44%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="decision-amber"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 50% 43%,rgba(230,190,95,.15),transparent 30%),
+    linear-gradient(90deg,rgba(3,8,11,.52),transparent 44%,rgba(4,9,12,.27)),
+    linear-gradient(0deg,rgba(2,7,10,.61),transparent 43%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="rebrief-clear"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 57% 35%,rgba(176,207,166,.13),transparent 31%),
+    linear-gradient(0deg,rgba(2,7,10,.48),transparent 48%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="consequence-soft"] .episode-immersive-atmosphere {
+  background:
+    linear-gradient(90deg,rgba(4,10,13,.55),transparent 43%,rgba(5,11,14,.18)),
+    linear-gradient(0deg,rgba(2,7,10,.6),transparent 44%);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-lighting="instruction-neutral"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 55% 39%,rgba(217,197,142,.1),transparent 29%),
+    linear-gradient(0deg,rgba(2,7,10,.54),transparent 46%);
+}
+
+/* Group cast scale. Characters form one briefing space instead of four independent portrait cards. */
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="mentor-pair"]
+  .episode-immersive-character[data-character="kang_taesik"] {
+  width:31%;
+  height:101%;
+  bottom:-7%;
+  --blocking-scale:1.08;
+  z-index:14!important;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="mentor-pair"]
+  .episode-immersive-character[data-character="player"] {
+  width:25%;
+  height:87%;
+  opacity:.82;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="four-person-circle"]
+  .episode-immersive-character,
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="decision-circle"]
+  .episode-immersive-character,
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="rebrief-crew"]
+  .episode-immersive-character,
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="aftermath-circle"]
+  .episode-immersive-character {
+  width:22.5%;
+  height:82%;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="active-speaker"]
+  .episode-immersive-character[data-blocking-depth="foreground"] {
+  width:29%;
+  height:100%;
+  bottom:-7%;
+  --blocking-scale:1.1;
+  opacity:1;
+  z-index:15!important;
+  filter:drop-shadow(0 23px 18px rgba(0,0,0,.46));
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="active-speaker"]
+  .episode-immersive-character[data-blocking-depth="midground"] {
+  width:22%;
+  height:79%;
+  opacity:.72;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="active-speaker"]
+  .episode-immersive-character[data-blocking-depth="background"] {
+  width:18%;
+  height:68%;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="decision-circle"]
+  .episode-immersive-character[data-character="player"],
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="rebrief-crew"]
+  .episode-immersive-character[data-blocking-depth="foreground"] {
+  width:27%;
+  height:96%;
+  bottom:-6%;
+  opacity:1;
+  z-index:14!important;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="instruction-crew"]
+  .episode-immersive-character[data-blocking-depth="foreground"] {
+  height:94%;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="instruction-crew"]
+  .episode-immersive-character[data-blocking-depth="background"] {
+  height:71%;
+  opacity:.46;
+}
+
+/* Acting emphasis. The turn belongs to whoever is speaking; disagreement remains visible in listeners. */
+.game-frame[data-production-scene="TBM"][data-tbm-phase="role-voice"]
+  .episode-immersive-character[data-speaker="true"] > img {
+  filter:saturate(1.01) contrast(1.055) brightness(1.015);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="group-judgment"]
+  .episode-immersive-character[data-character="player"][data-expression="resolve"] > img {
+  filter:saturate(1.03) contrast(1.06) brightness(1.02);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="field-rebrief"]
+  .episode-immersive-character[data-expression="relief"] > img {
+  filter:saturate(1.03) brightness(1.035);
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-character[data-pose="withdraw"] {
+  opacity:.48;
+}
+
+/* Existing TBM gap trace becomes a physical-change cue instead of a dashboard element. */
+.game-frame[data-production-scene="TBM"] .episode-immersive-moment-overlay[data-moment="tbm-gap"] {
+  opacity:.66;
+  filter:saturate(.72);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="group-judgment"]
+  .episode-immersive-moment-overlay[data-moment="tbm-gap"] {
+  opacity:.9;
+}
+
+/* World-first dialogue dock. */
+.game-frame[data-production-scene="TBM"][data-tbm-ui] .play-panel {
+  border-color:rgba(216,197,132,.24);
+  border-top-color:rgba(226,209,153,.54);
+  background:linear-gradient(90deg,rgba(6,16,20,.95),rgba(8,19,23,.88));
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .play-panel,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .play-panel,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .play-panel {
+  grid-template-columns:1fr;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel > .narrator-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .play-panel > .narrator-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .play-panel > .narrator-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .play-panel > .narrator-card {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .presentation-area > .episode-scene-brief,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .presentation-area > .episode-scene-brief {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-content,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-content {
+  min-height:92px;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-text,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-text {
+  padding:5px 0 7px;
+  font-size:clamp(13px,1vw,17px);
+  line-height:1.58;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .continue-button,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .continue-button {
+  min-height:44px;
+}
+
+/* Group judgment: all crew stays on screen while the choice strip remains shallow. */
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .play-panel,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .play-panel {
+  grid-template-columns:1fr;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .play-panel > .narrator-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .play-panel > .character-card,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .play-panel > .narrator-card {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .presentation-area > *,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .presentation-area > * {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .presentation-area > .choice-content,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .presentation-area > .choice-content {
+  display:grid;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+  grid-template-columns:minmax(220px,.72fr) minmax(0,2.28fr);
+  align-items:center;
+  gap:15px;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > .eyebrow,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > h2,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > .eyebrow,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > h2 {
+  grid-column:1;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > h2,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > h2 {
+  margin:3px 0 0;
+  font-size:clamp(14px,1.02vw,18px);
+  line-height:1.45;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+  grid-column:2;
+  grid-row:1 / span 2;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+  min-height:76px;
+  padding:9px 11px;
+  display:grid;
+  align-content:center;
+}
+
+/* Compact layouts preserve the group silhouette and reachable choices. */
+@media (max-width: 700px) {
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-ring {
+    width:78%;
+    height:17%;
+    bottom:12%;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="four-person-circle"] .episode-immersive-character,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="decision-circle"] .episode-immersive-character,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="rebrief-crew"] .episode-immersive-character,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="aftermath-circle"] .episode-immersive-character {
+    width:28%;
+    height:70%;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="active-speaker"]
+    .episode-immersive-character[data-blocking-depth="foreground"] {
+    width:34%;
+    height:89%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+    grid-template-columns:1fr;
+    gap:7px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+    grid-column:1;
+    grid-row:auto;
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:52px;
+  }
+}
+@media (max-height: 460px) and (orientation: landscape) {
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-ring {
+    width:55%;
+    height:18%;
+    bottom:5%;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="active-speaker"]
+    .episode-immersive-character[data-blocking-depth="foreground"] {
+    height:96%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+    grid-template-columns:minmax(170px,.68fr) minmax(0,2.32fr);
+    gap:8px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+    grid-column:2;
+    grid-row:1 / span 2;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:48px;
+    padding:5px 7px;
+    font-size:11px;
+  }
+}
