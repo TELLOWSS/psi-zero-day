@@ -212,6 +212,12 @@ export function EpisodeImmersiveScene({
       <i className="evidence-pin pin-b" />
       <b className="evidence-timeline" />
     </div> : null}
+    {tbmProduction ? <div className="tbm-production-layer" data-phase={tbmProduction.phase} aria-hidden="true">
+      <i className="tbm-briefing-ring" />
+      <span className="tbm-floor-mark tbm-floor-mark-a" />
+      <span className="tbm-floor-mark tbm-floor-mark-b" />
+      <span className="tbm-floor-mark tbm-floor-mark-c" />
+    </div> : null}
     {stopWorkProduction ? <div className="stop-work-production-layer" data-phase={stopWorkProduction.phase} aria-hidden="true">
       <div className="stop-work-production-title">
         <span>{t(stopWorkProduction.kicker_text_id)}</span>
