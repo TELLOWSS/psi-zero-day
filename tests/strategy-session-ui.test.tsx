@@ -16,7 +16,7 @@ function advanceToFirstPlayerChoice(session: EpisodeSession) {
 }
 
 describe('Casual strategy session integration', () => {
-  it('projects the live EpisodeSession into art-mode strategy UI with autosave feedback', () => {
+  it('keeps the live strategy projection while the initial FIELD production scene owns presentation', () => {
     const session = new EpisodeSession();
     session.start(0);
     const snapshot = session.getSnapshot();
@@ -28,15 +28,14 @@ describe('Casual strategy session integration', () => {
     expect(session.assetUri('ep01.background.foundation.map')).toContain('foundation-map.webp');
 
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
-    expect(html).toContain('strategy-shell');
-    expect(html).toContain('data-visual-mode="art"');
+    expect(html).toContain('data-production-scene="FIELD"');
+    expect(html).toContain('episode-immersive-scene');
+    expect(html).toContain('data-event="e01_01_arrival"');
+    expect(html).not.toContain('strategy-shell');
     expect(html).toContain('foundation-map.webp');
     expect(html).toContain('data-character="player"');
     expect(html).toContain('player-map.webp');
-    expect(html).toContain('플레이어');
-    expect(html).toContain('현장 안전관리자');
     expect(html).toContain('PSI : ZERO DAY');
-    expect(html).toContain('현장 목표');
     expect(html).toContain('자동 저장');
     expect(html).toContain('save-hint');
     expect(html).toContain(snapshot.eventTitle);
