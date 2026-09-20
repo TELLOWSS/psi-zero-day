@@ -545,3 +545,195 @@ body:has(.game-frame.phase-playing) .game-audio-toggle span {
     margin-top: 4px;
   }
 }
+
+
+/* Phase A mobile declutter pass.
+   Small screens show the field, the active decision and only essential identity labels. */
+@media (orientation: portrait) and (max-width: 600px) {
+  .strategy-active .strategy-rail,
+  .strategy-active .strategy-map-stage-card,
+  .strategy-active .strategy-overview-minimap,
+  .strategy-active .strategy-roster,
+  .strategy-active .strategy-entry-slate,
+  .strategy-active .episode-scene-stamp {
+    display: none !important;
+  }
+
+  .strategy-active .strategy-map {
+    inset: 54px 0 42dvh 0 !important;
+  }
+
+  .strategy-active .strategy-map-worker .strategy-worker-label {
+    display: none;
+  }
+
+  .strategy-active .strategy-map-worker[data-character="player"] .strategy-worker-label,
+  .strategy-active .strategy-map-worker.has-actions .strategy-worker-label,
+  .strategy-active .strategy-map-worker.is-near-signal .strategy-worker-label {
+    display: block;
+  }
+
+  .strategy-active .strategy-zone-target {
+    min-width: 54px;
+    min-height: 44px;
+    padding: 4px 6px;
+  }
+
+  .strategy-active .strategy-zone-copy small {
+    display: none;
+  }
+
+  .strategy-active .play-panel {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    overflow: hidden !important;
+  }
+
+  .strategy-active .presentation-area {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden !important;
+  }
+
+  .strategy-active .continue-button {
+    position: sticky !important;
+    right: auto !important;
+    bottom: 0 !important;
+    width: 104px;
+    min-width: 104px;
+    max-width: 104px;
+    margin: 6px 8px 0 auto !important;
+    transform: none !important;
+  }
+
+  body:has(.game-frame.phase-playing) .game-audio-toggle {
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    padding: 0;
+    gap: 0;
+  }
+  body:has(.game-frame.phase-playing) .game-audio-toggle span {
+    display: none !important;
+  }
+  body:has(.game-frame.phase-playing) .game-audio-toggle b {
+    min-width: 30px;
+    padding-inline: 4px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .strategy-active .strategy-rail,
+  .strategy-active .strategy-map-stage-card,
+  .strategy-active .strategy-roster,
+  .strategy-active .strategy-entry-slate,
+  .strategy-active .episode-scene-stamp {
+    display: none !important;
+  }
+
+  .strategy-active .strategy-overview-minimap {
+    display: none !important;
+  }
+
+  .strategy-active .strategy-map {
+    inset: 48px 0 0 0 !important;
+  }
+
+  .strategy-active .strategy-map-worker .strategy-worker-label {
+    display: none;
+  }
+
+  .strategy-active .strategy-map-worker[data-character="player"] .strategy-worker-label,
+  .strategy-active .strategy-map-worker.has-actions .strategy-worker-label,
+  .strategy-active .strategy-map-worker.is-near-signal .strategy-worker-label {
+    display: block;
+  }
+
+  .strategy-active .play-panel {
+    top: auto !important;
+    left: 36% !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    height: 132px !important;
+    min-height: 132px !important;
+    max-height: 132px !important;
+    grid-template-columns: 1fr !important;
+    padding: 8px 10px !important;
+    overflow: hidden !important;
+  }
+
+  .strategy-active .presentation-area {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden !important;
+  }
+
+  .strategy-active .dialogue-content {
+    height: 100%;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 104px;
+    grid-template-rows: auto minmax(0,1fr);
+    gap: 2px 10px;
+    align-items: start;
+  }
+
+  .strategy-active .dialogue-content > .eyebrow {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .strategy-active .dialogue-text {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0;
+    max-height: 82px;
+    overflow: auto;
+    margin: 0;
+    padding: 2px 0 0 !important;
+    font-size: 11px !important;
+    line-height: 1.42 !important;
+  }
+
+  .strategy-active .continue-button {
+    position: relative !important;
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: end;
+    justify-self: stretch;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100%;
+    min-width: 0 !important;
+    max-width: 104px !important;
+    min-height: 44px;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  body:has(.game-frame.phase-playing) .game-audio-toggle {
+    top: 6px;
+    right: 6px;
+    width: 44px;
+    min-width: 44px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0;
+  }
+  body:has(.game-frame.phase-playing) .game-audio-toggle span {
+    display: none !important;
+  }
+  body:has(.game-frame.phase-playing) .game-audio-toggle b {
+    min-width: 30px;
+    padding-inline: 4px;
+  }
+}
