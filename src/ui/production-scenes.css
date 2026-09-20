@@ -795,3 +795,245 @@
     display:none;
   }
 }
+
+
+/* Phase C-1 — STOP WORK production quality lock v2.
+   These selectors are driven by presentation-only profiles from episode01-stopwork-production.ts.
+   They lock camera crop, depth, cast scale, lighting and interaction hierarchy without changing outcomes. */
+
+/* Camera grammar: read the world -> compress on the stop decision -> reopen for verification. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-camera="hazard-wide"] .episode-immersive-background {
+  transform:scale(1.035);
+  object-position:59% 47%;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-camera="decision-compressed"] .episode-immersive-background {
+  transform:scale(1.125);
+  object-position:61% 49%;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-camera="verification-medium"] .episode-immersive-background {
+  transform:scale(1.055);
+  object-position:57% 47%;
+}
+
+/* Depth grammar. The zero moment deliberately reduces background separation so schedule pressure feels closer. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-depth="deep-field"] .episode-immersive-props {
+  filter:saturate(.88) contrast(1.02);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-depth="deep-field"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.72;
+  filter:saturate(.74) brightness(.76) blur(.15px);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-depth="compressed-pressure"] .episode-immersive-character[data-character]:not([data-character="player"]) {
+  filter:saturate(.78) brightness(.76) contrast(1.05) drop-shadow(0 18px 15px rgba(0,0,0,.44));
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-depth="compressed-pressure"] .episode-immersive-props {
+  filter:saturate(.86) contrast(1.06) brightness(.86);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-depth="open-verification"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.82;
+  filter:saturate(.86) brightness(.86);
+}
+
+/* Lighting grammar: cool evidence read, red pressure peak, neutral verification. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="hazard-cool"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 63% 39%,rgba(105,174,190,.12),transparent 27%),
+    linear-gradient(90deg,rgba(3,9,13,.67),rgba(6,15,20,.2) 37%,transparent 62%),
+    linear-gradient(0deg,rgba(2,7,10,.6),transparent 41%);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="hazard-cool"] .episode-immersive-grade {
+  box-shadow:inset 0 0 115px rgba(28,76,90,.16);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="stop-red"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 61% 42%,rgba(238,79,64,.2),transparent 25%),
+    linear-gradient(90deg,rgba(3,7,10,.7),rgba(17,7,9,.18) 42%,rgba(35,8,8,.2)),
+    linear-gradient(0deg,rgba(2,7,10,.64),transparent 42%);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="stop-red"] .episode-immersive-grade {
+  box-shadow:inset 0 0 150px rgba(128,18,12,.24);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="restart-neutral"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 59% 40%,rgba(196,206,189,.1),transparent 29%),
+    linear-gradient(90deg,rgba(3,8,11,.57),rgba(5,12,15,.14) 42%,transparent 70%),
+    linear-gradient(0deg,rgba(2,7,10,.54),transparent 42%);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-lighting="restart-neutral"] .episode-immersive-grade {
+  box-shadow:inset 0 0 110px rgba(32,56,51,.14);
+}
+
+/* Cast scale lock: these are the reference ratios for the remaining Phase C scene families. */
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="inspector-lead"]
+  .episode-immersive-character[data-character="seo_jeongmin"] {
+  width:31%;
+  height:99%;
+  bottom:-7%;
+  transform:scale(1.025);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="inspector-lead"]
+  .episode-immersive-character[data-character="player"] {
+  width:26%;
+  height:86%;
+  opacity:.94;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="player-hero"]
+  .episode-immersive-character[data-character="player"] {
+  width:38%;
+  height:108%;
+  bottom:-10%;
+  transform:translateY(-1.5%) scale(1.035);
+  filter:drop-shadow(0 25px 22px rgba(0,0,0,.54)) drop-shadow(0 0 22px rgba(237,102,88,.12));
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="player-hero"]
+  .episode-immersive-character[data-character="lee_jaehoon"] {
+  transform:translateX(2%) scale(.93);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="player-hero"]
+  .episode-immersive-character[data-character="seo_jeongmin"] {
+  transform:translateX(4%) scale(.89);
+  opacity:.76;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="verification-lead"]
+  .episode-immersive-character[data-character="seo_jeongmin"] {
+  width:30%;
+  height:97%;
+  bottom:-7%;
+  transform:scale(1.01);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="verification-lead"]
+  .episode-immersive-character[data-character="player"],
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="verification-lead"]
+  .episode-immersive-character[data-character="lee_jaehoon"] {
+  opacity:.9;
+}
+
+/* Performance emphasis. Expression assets remain authoritative; the grade only reinforces the authored acting state. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"]
+  .episode-immersive-character[data-character="player"][data-expression="resolve"] > img {
+  filter:saturate(1.04) contrast(1.075) brightness(1.035);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"]
+  .episode-immersive-character[data-character="lee_jaehoon"][data-expression="conflict"] > img {
+  filter:saturate(.76) contrast(1.1) brightness(.83);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="restart-gate"]
+  .episode-immersive-character[data-character="seo_jeongmin"][data-expression="resolve"] > img {
+  filter:saturate(.98) contrast(1.045) brightness(1.035);
+}
+
+/* Production title changes weight with the dramatic function instead of staying as a generic overlay. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="observe"] .stop-work-production-title > strong {
+  font-size:clamp(31px,3.6vw,60px);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .stop-work-production-title {
+  top:9.5%;
+  width:min(560px,39%);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .stop-work-production-title > strong {
+  font-size:clamp(40px,4.8vw,76px);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="verify"] .stop-work-production-title > span {
+  color:#d7c98d;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="verify"] .stop-work-production-title > strong {
+  color:#f1f2e9;
+  font-size:clamp(32px,3.7vw,62px);
+}
+
+/* Hazard markers escalate only at the actual zero moment. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-stopline {
+  border-color:rgba(255,118,98,.62);
+  box-shadow:inset 0 0 44px rgba(237,102,88,.07),0 0 34px rgba(237,102,88,.11);
+  animation:stopwork-zero-lock .5s cubic-bezier(.2,.72,.2,1) both;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-markers > span {
+  border-color:rgba(245,119,101,.55);
+  background:rgba(20,10,12,.78);
+}
+
+/* Choice preview changes the world subtly; the player reads consequences in the scene, not in thumbnail cards. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"]
+  .episode-immersive-scene[data-preview-choice] .episode-immersive-background {
+  transform:scale(1.145);
+  transition:transform .28s cubic-bezier(.2,.72,.2,1),filter .28s ease;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"]
+  .episode-immersive-scene[data-choice-tone="pressure"] .episode-immersive-grade {
+  background:
+    radial-gradient(circle at 61% 43%,rgba(224,72,59,.12),transparent 28%),
+    linear-gradient(90deg,rgba(5,8,10,.42),transparent 34%,rgba(23,6,7,.18)),
+    linear-gradient(0deg,rgba(3,7,10,.7),transparent 50%);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"]
+  .episode-immersive-scene[data-choice-tone="recovery"] .episode-immersive-grade {
+  background:
+    radial-gradient(circle at 61% 43%,rgba(126,174,154,.1),transparent 30%),
+    linear-gradient(0deg,rgba(3,7,10,.58),transparent 52%);
+}
+
+/* Dialogue is secondary to the world until a judgment is requested. */
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="observe"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="verify"].phase-playing:not(.strategy-active) .play-panel {
+    left:4%;
+    right:auto;
+    bottom:28px;
+    width:min(720px,54%);
+    min-height:136px;
+    max-height:25%;
+    grid-template-columns:104px minmax(0,1fr);
+    background:linear-gradient(90deg,rgba(7,15,19,.94),rgba(9,17,19,.88));
+    border-color:rgba(188,205,199,.2);
+    border-top-color:rgba(217,208,155,.45);
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="observe"] .presentation-area,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="verify"] .presentation-area {
+    max-height:20vh;
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"].phase-playing:not(.strategy-active) .play-panel:has(.choice-content) {
+    min-height:150px;
+    max-height:29%;
+  }
+}
+
+/* Safe-area variants preserve the same hierarchy without shrinking controls below touch targets. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .stop-work-production-title {
+    width:90%;
+    top:7.5%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="player-hero"]
+    .episode-immersive-character[data-character="player"] {
+    width:60%;
+    height:70%;
+    left:-11%;
+    bottom:17%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-stopwork-cast="player-hero"]
+    .episode-immersive-character[data-character="lee_jaehoon"] {
+    width:37%;
+    height:55%;
+    right:14%;
+    bottom:20%;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-camera="decision-compressed"] .episode-immersive-background {
+    transform:scale(1.1);
+    object-position:52% 48%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .stop-work-production-title {
+    width:36%;
+  }
+}
+
+@keyframes stopwork-zero-lock {
+  from { opacity:.28; transform:scale(.97); }
+  to { opacity:1; transform:scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-stopline {
+    animation:none;
+  }
+}
