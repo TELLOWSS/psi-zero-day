@@ -1037,3 +1037,71 @@
     animation:none;
   }
 }
+
+
+/* Zero-moment information discipline.
+   The field already tells the story; auxiliary timelines/cards must not bury the live judgment control. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .play-panel {
+  grid-template-columns:1fr;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .play-panel > .character-card,
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .play-panel > .narrator-card {
+  display:none;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area {
+  max-height:min(25vh,230px);
+  overflow:auto;
+  padding-right:2px;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area > * {
+  display:none;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area > .dialogue-content {
+  display:flex;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area > .choice-content {
+  display:grid;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area > .cue-placeholder {
+  display:block;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-content {
+  min-height:108px;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-text {
+  padding:4px 0 7px;
+  font-size:clamp(13px,1vw,17px);
+  line-height:1.55;
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .continue-button {
+  min-height:44px;
+  margin-top:4px;
+  margin-left:auto;
+  padding:7px 0 7px 14px;
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area {
+    max-height:24dvh;
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-content {
+    min-height:0;
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-text {
+    font-size:14px;
+    line-height:1.52;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area {
+    max-height:calc(100dvh - 138px);
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-content {
+    min-height:0;
+  }
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-text {
+    font-size:11px;
+    line-height:1.4;
+    padding:3px 0 5px;
+  }
+}
