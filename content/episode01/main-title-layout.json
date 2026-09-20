@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "profile_id": "main-title-cinematic-v8",
+  "profile_id": "main-title-cinematic-v9-new-psi",
   "status": "reference-qa-aligned",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
@@ -69,7 +69,7 @@
     "exit": "620ms fade/zoom handoff"
   },
   "map_entry": {
-    "slate": "PSI FIELD / DAY + construction stage",
+    "slate": "NEW PSI FIELD / DAY + construction stage",
     "duration_ms": 1850,
     "camera": "loading zoom resolves into live strategy map",
     "rule": "entry slate is decorative only; gameplay remains interactive after handoff"
@@ -110,12 +110,13 @@
       ]
     },
     "required_hierarchy": [
-      "white PSI plus warm-yellow ZERO DAY title",
+      "white NEW PSI plus warm-yellow ZERO DAY title",
       "five stacked left-side actions with icon, title and hint",
       "four differentiated character silhouettes with quote plus name/role",
       "four image-backed feature cards",
       "visible quick motion and quote toggles",
       "construction background remains readable but subordinate to foreground UI"
     ]
-  }
+  },
+  "brand_contract": "content/brand/naming-contract.json"
 }
