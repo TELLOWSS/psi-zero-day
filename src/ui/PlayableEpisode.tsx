@@ -11,6 +11,7 @@ import type { StrategyAction } from '../app/strategy-actions';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
+import { episode01AutoAdvanceDelay, episode01StoryDirector } from '../app/episode01-story-director';
 import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
 import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
@@ -40,6 +41,7 @@ import { EpisodeRecordRealityChain } from './EpisodeRecordRealityChain';
 import { EpisodeDayCarryover } from './EpisodeDayCarryover';
 import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
+import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
@@ -66,6 +68,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const playedSceneCues = useRef(new Set<string>());
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
   const [choicePreviewId, setChoicePreviewId] = useState<string | null>(null);
+  const [coldOpenDismissed, setColdOpenDismissed] = useState(false);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
@@ -85,6 +88,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
+  const directorBeat = episode01StoryDirector(activeEventId);
+  const sceneBeat = directorBeat ?? cinematicBeat;
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
   const continuityTrace = episode01ContinuityTrace(snapshot.state, activeEventId);
@@ -270,6 +275,32 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
+    if (!isPlaying || mapOutcomeActive || (activeEventId === 'e01_01_arrival' && !coldOpenDismissed)) return;
+    if (!presentation || !('node_id' in presentation) || presentation.type === 'SHOW_CHOICE') return;
+    if (presentation.type !== 'SHOW_DIALOGUE' && presentation.type !== 'SHOW_RESULT') return;
+    const delay = episode01AutoAdvanceDelay(activeEventId, presentation.node_id, t(presentation.text_id).length);
+    if (!delay) return;
+    const timer = window.setTimeout(() => {
+      playUiCue('continue');
+      session.dispatch({
+        type: 'advance_event',
+        instance_id: presentation.instance_id,
+        node_id: presentation.node_id,
+      }, snapshot.revision);
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, [
+    session,
+    snapshot.revision,
+    isPlaying,
+    mapOutcomeActive,
+    activeEventId,
+    presentation,
+    coldOpenDismissed,
+    t,
+    playUiCue,
+  ]);
+  useEffect(() => {
     if (!strategyOutcome) return;
     const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
     playUiCue(relationDelta > 0 ? 'result_positive' : relationDelta < 0 ? 'result_negative' : 'result_neutral');
@@ -320,11 +351,20 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? [...trainingReward.auto_equipped, ...trainingReward.equip_options.filter(item =>
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
+  const showColdOpen = isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
+  const dismissColdOpen = () => {
+    setColdOpenDismissed(true);
+    playUiCue('continue');
+  };
 
-  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
-    {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
-      <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
-      {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
+  return <main
+    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}
+    data-story-preset={directorBeat?.preset}
+    data-story-act={directorBeat?.act}
+  >
+    {isPlaying && sceneBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={sceneBeat.tone} aria-hidden="true">
+      <span>{sceneBeat.time}</span><b>{sceneBeat.zone}</b><strong>{sceneBeat.label}</strong>
+      {sceneBeat.detail ? <small>{sceneBeat.detail}</small> : null}
     </div> : null}
     {strategyActive ? <StrategyMapShell
       key={`${activeEventId ?? 'strategy'}:${activeInstance?.instance_id ?? 'none'}`}
@@ -376,8 +416,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         presentationType={presentation?.type}
         previewChoiceId={choicePreviewId}
         eventTitle={snapshot.eventTitle}
-        time={cinematicBeat?.time}
-        zone={cinematicBeat?.zone}
+        time={sceneBeat?.time}
+        zone={sceneBeat?.zone}
         resolve={resolveAsset}
         t={t}
         memoryVisualPlan={memoryVisualPlan}
@@ -448,6 +488,14 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
             />}
         </div>
       </section>
+      {showColdOpen ? <EpisodeColdOpen
+        backgroundUri={resolveAsset('ep01.scene_bg.inspection_zone')}
+        playerUri={resolveAsset('ep01.character.player.performance.resolve') ?? characterMapUri('player', resolveAsset)}
+        kangUri={resolveAsset('ep01.character.kang_taesik.performance.conflict') ?? characterMapUri('kang_taesik', resolveAsset)}
+        junhoUri={resolveAsset('ep01.character.lim_junho.performance.relief') ?? characterMapUri('lim_junho', resolveAsset)}
+        t={t}
+        onComplete={dismissColdOpen}
+      /> : null}
     </> : snapshot.phase === 'complete' ? <section className="complete-screen">
       <span className="completion-rule" /><p className="eyebrow">{t('ui.complete')}</p><h1>{t('ep01.title')}</h1>
       <p className="end-line">{t('ui.end_hint')}</p>
