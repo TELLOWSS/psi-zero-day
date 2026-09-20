@@ -6,9 +6,9 @@ import plan from '../content/episode01/character-replacement-plan.json';
 import production from '../content/episode01/character-production-status.json';
 
 describe('NEW PSI brand and three-surface title-cast QA contract',()=>{
-  it('uses NEW PSI as the company identity without renaming the game',()=>{
+  it('uses NEW PSI as the canonical company and game brand prefix',()=>{
     expect(COMPANY_NAME).toBe('NEW PSI');
-    expect(GAME_TITLE).toBe('PSI : ZERO DAY');
+    expect(GAME_TITLE).toBe('NEW PSI : ZERO DAY');
     expect(brandContract.company_name).toBe(COMPANY_NAME);
     expect(brandContract.game_title).toBe(GAME_TITLE);
   });
