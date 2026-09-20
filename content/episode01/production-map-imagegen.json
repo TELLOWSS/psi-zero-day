@@ -14,20 +14,53 @@
   "art_direction": {
     "style": "commercial premium 2.5D construction strategy drama, grounded Korean high-rise apartment construction realism, adult-friendly, painterly-realistic materials, cinematic daylight, readable depth, believable temporary works and logistics",
     "camera": "single oblique site overview at approximately 30-40 degree elevation; wide enough to read the whole site but close enough to identify work zones and temporary logistics",
-    "world": "fictional NEW PSI universe only; no real constructor, apartment, supplier, vehicle plate or site branding",
+    "world": "fictional NEW PSI universe; canonical in-world contractor is NEW PSI CONSTRUCTION and canonical site is NEW PSI ZERO SITE 01; no other real constructor, apartment, supplier, vehicle plate or site branding",
     "density": "busy lived-in construction site with multiple concrete structures at different completion stages, tower crane, temporary roads, laydown areas, worker circulation, hoist/lift context, scaffolding or safety netting, temporary fencing and active workfaces",
     "composition_rule": "physical site features must be composed around the normalized anchor targets below. Anchors are not UI markers and must not be painted as icons; instead each coordinate must land on a visually plausible walkable or inspectable ground/location.",
-    "ui_rule": "no readable interface text, captions, labels, arrows, buttons, minimap, PSI values or hazard icons baked into the background"
+    "ui_rule": "no readable interface text, captions, labels, arrows, buttons, minimap, PSI values or hazard icons baked into the background",
+    "branding": "If a readable company/site mark is needed, use NEW PSI or NEW PSI CONSTRUCTION only. Otherwise leave signage and equipment unbranded rather than inventing pseudo-company text."
   },
   "normalized_anchors": {
-    "gate": { "x": 0.17, "y": 0.72, "physical_target": "worker and vehicle entry gate with believable temporary fencing and turning approach" },
-    "entry": { "x": 0.36, "y": 0.61, "physical_target": "main internal access junction with visible pedestrian and work-route continuity" },
-    "yard": { "x": 0.54, "y": 0.63, "physical_target": "material staging and coordination yard with clear ground footprint" },
-    "ramp": { "x": 0.49, "y": 0.31, "physical_target": "constrained temporary ramp or elevated access transition where movement overlap can later be signaled" },
-    "inspection": { "x": 0.79, "y": 0.39, "physical_target": "edge, opening or access-control inspection area with enough visual detail for later overlays" },
-    "core": { "x": 0.68, "y": 0.25, "physical_target": "vertical transport or concrete core reference zone" },
-    "office": { "x": 0.83, "y": 0.68, "physical_target": "temporary site office or reporting context visible as part of the site" },
-    "overview": { "x": 0.55, "y": 0.49, "physical_target": "central strategic overview ground point kept readable for the player avatar" }
+    "gate": {
+      "x": 0.17,
+      "y": 0.72,
+      "physical_target": "worker and vehicle entry gate with believable temporary fencing and turning approach"
+    },
+    "entry": {
+      "x": 0.36,
+      "y": 0.61,
+      "physical_target": "main internal access junction with visible pedestrian and work-route continuity"
+    },
+    "yard": {
+      "x": 0.54,
+      "y": 0.63,
+      "physical_target": "material staging and coordination yard with clear ground footprint"
+    },
+    "ramp": {
+      "x": 0.49,
+      "y": 0.31,
+      "physical_target": "constrained temporary ramp or elevated access transition where movement overlap can later be signaled"
+    },
+    "inspection": {
+      "x": 0.79,
+      "y": 0.39,
+      "physical_target": "edge, opening or access-control inspection area with enough visual detail for later overlays"
+    },
+    "core": {
+      "x": 0.68,
+      "y": 0.25,
+      "physical_target": "vertical transport or concrete core reference zone"
+    },
+    "office": {
+      "x": 0.83,
+      "y": 0.68,
+      "physical_target": "temporary site office or reporting context visible as part of the site"
+    },
+    "overview": {
+      "x": 0.55,
+      "y": 0.49,
+      "physical_target": "central strategic overview ground point kept readable for the player avatar"
+    }
   },
   "ui_safe_zones": {
     "left_hud": "0-18% width",
@@ -35,7 +68,7 @@
     "lower_dialogue": "0-100% width, lower 78-100% height",
     "central_interaction": "20-82% width, 12-76% height remains spatially readable"
   },
-  "master_prompt": "Create a 3072x1728 production-ready 16:9 master strategy map for a premium construction-management narrative game set on a fictional Korean high-rise apartment construction site. Use a cinematic oblique 30-40 degree site-overview camera, grounded realistic Korean temporary works and logistics, painterly-realistic 2.5D materials, adult-friendly commercial game quality, multiple concrete structures at different completion stages, a believable tower crane, internal temporary road network, material staging yard, worker circulation routes, temporary fencing, hoist or lift context, scaffolding or safety netting, and active but not chaotic workfaces. Compose the physical site so these normalized screen coordinates land on plausible readable locations: gate 17%/72%, main entry 36%/61%, material yard 54%/63%, constrained ramp 49%/31%, inspection zone 79%/39%, core 68%/25%, site office 83%/68%, central overview 55%/49%. Preserve negative space for a left HUD, an upper-right minimap, and a lower dialogue/action panel while keeping the central interaction field visually rich. Do not paint UI markers at the coordinates. No readable UI text, no captions, no arrows, no hazard icons, no minimap, no PSI values, no real company or apartment branding, no watermarks, no cyberpunk neon, no miniature toy-diorama scale, no Western-only site cues, no empty showroom construction site. The finished image must feel like final commercial game art rather than a CSS prototype.",
+  "master_prompt": "Create a 3072x1728 production-ready 16:9 master strategy map for a premium construction-management narrative game set on a fictional Korean high-rise apartment construction site. Use a cinematic oblique 30-40 degree site-overview camera, grounded realistic Korean temporary works and logistics, painterly-realistic 2.5D materials, adult-friendly commercial game quality, multiple concrete structures at different completion stages, a believable tower crane, internal temporary road network, material staging yard, worker circulation routes, temporary fencing, hoist or lift context, scaffolding or safety netting, and active but not chaotic workfaces. Compose the physical site so these normalized screen coordinates land on plausible readable locations: gate 17%/72%, main entry 36%/61%, material yard 54%/63%, constrained ramp 49%/31%, inspection zone 79%/39%, core 68%/25%, site office 83%/68%, central overview 55%/49%. Preserve negative space for a left HUD, an upper-right minimap, and a lower dialogue/action panel while keeping the central interaction field visually rich. Do not paint UI markers at the coordinates. No readable UI text, no captions, no arrows, no hazard icons, no minimap, no PSI values. This is the fictional NEW PSI universe: if a small readable company/site mark is necessary, use NEW PSI or NEW PSI CONSTRUCTION only; otherwise keep signage unbranded. No real company or apartment branding, no watermarks, no cyberpunk neon, no miniature toy-diorama scale, no Western-only site cues, no empty showroom construction site. The finished image must feel like final commercial game art rather than a CSS prototype.",
   "negative_prompt": "baked UI, Korean labels, English labels, buttons, minimap, HUD, hazard icons, arrows, score meters, real logos, real apartment branding, readable license plates, watermark, cyberpunk neon, miniature toy diorama, empty generic construction site, impossible crane geometry, distorted vehicles, malformed workers, duplicated workers, disaster spectacle, heroic safety-poster composition",
   "runtime_contract": {
     "background_is_static_art_plate": true,
@@ -53,5 +86,6 @@
     "upper-right and lower dialogue safe zones remain usable without erasing site depth",
     "no runtime UI or readable labels are baked into the image",
     "background remains useful when characters, signals and minimap are rendered entirely by React"
-  ]
+  ],
+  "brand_contract": "content/brand/naming-contract.json"
 }
