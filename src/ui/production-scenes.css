@@ -3111,3 +3111,61 @@
     line-height:1.3;
   }
 }
+
+
+/* OFFICE decision sizing lock.
+   Older global responsive layers make the presentation column fill its dock;
+   auto grid tracks then stretch every choice row. OFFICE decisions must size
+   from their text content, not from the remaining viewport height. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .presentation-area[data-presentation="SHOW_CHOICE"],
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .presentation-area[data-presentation="SHOW_CHOICE"] {
+  display:block !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content {
+  display:block !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  align-items:start !important;
+  align-content:start !important;
+  grid-auto-rows:max-content !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  height:auto !important;
+  min-height:58px !important;
+  max-height:none !important;
+  align-self:start !important;
+}
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    height:auto !important;
+    min-height:0 !important;
+    max-height:30vh !important;
+    overflow:hidden !important;
+  }
+}
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:52px !important;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:46px !important;
+  }
+}
