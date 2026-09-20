@@ -435,3 +435,113 @@
     transform: none !important;
   }
 }
+
+
+/* Strategy-active interaction dock: keep Continue/choices inside the viewport.
+   This also neutralizes older fixed-height art-slice overrides. */
+.strategy-active .play-panel {
+  bottom: max(10px, env(safe-area-inset-bottom));
+  min-height: 96px;
+  max-height: min(24%, 220px);
+  overflow: hidden;
+}
+
+.strategy-active .presentation-area {
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding-right: 4px;
+}
+
+.strategy-active .dialogue-content {
+  min-height: 0;
+}
+
+.strategy-active .continue-button {
+  position: sticky;
+  z-index: var(--ep-layer-choice);
+  right: 0;
+  bottom: 0;
+  margin: 6px 4px 0 auto;
+  min-width: 124px;
+  max-width: calc(100% - 4px);
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid rgba(216,192,120,.72);
+  border-radius: 8px;
+  background: rgba(12,29,36,.98);
+  box-shadow: 0 8px 18px rgba(0,0,0,.3);
+  pointer-events: auto;
+}
+
+.strategy-active .presentation-area[data-presentation="SHOW_CHOICE"] > :not(.choice-content) {
+  display: none !important;
+}
+
+/* Audio is a utility control, not a gameplay action. Keep it away from the decision dock. */
+body:has(.game-frame.phase-playing) .game-audio-toggle {
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
+  bottom: auto;
+  z-index: var(--ep-layer-modal);
+  min-width: 82px;
+  min-height: 44px;
+  padding-inline: 9px;
+}
+body:has(.game-frame.phase-playing) .game-audio-toggle span {
+  display: none;
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .strategy-active .play-panel {
+    left: 8px;
+    right: 8px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    min-height: 118px;
+    max-height: 30dvh;
+    padding: 9px 10px;
+    grid-template-columns: 72px minmax(0,1fr);
+  }
+
+  .strategy-action-active .play-panel {
+    grid-template-columns: 1fr;
+    min-height: 96px;
+    max-height: 24dvh;
+  }
+
+  .strategy-active .continue-button {
+    min-width: 108px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .strategy-active .play-panel {
+    left: 34%;
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    min-height: 92px;
+    max-height: 34dvh;
+    padding: 7px 9px;
+    grid-template-columns: 1fr;
+  }
+
+  .strategy-active .play-panel .character-card,
+  .strategy-active .play-panel .narrator-card {
+    display: none;
+  }
+
+  .strategy-active .dialogue-text {
+    padding: 2px 0 6px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .strategy-active .continue-button {
+    min-width: 100px;
+    min-height: 44px;
+    margin-top: 4px;
+  }
+}
