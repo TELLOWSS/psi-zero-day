@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "STOP_WORK_QUALITY_LOCK",
+  "status": "FIELD_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -18,7 +18,71 @@
         "NEXT_DAY_TEASER"
       ],
       "composition": "world and character context first",
-      "priority": "field, expression, dialogue"
+      "priority": "field, expression, dialogue",
+      "quality_lock": {
+        "reference_scene": "e01_04_junho_signal",
+        "reference_node": "listen",
+        "phases": [
+          "arrival-observe",
+          "signal-read",
+          "signal-judgment",
+          "signal-consequence",
+          "active-work",
+          "human-aftershock",
+          "next-day-tease"
+        ],
+        "camera": [
+          "site-wide",
+          "worker-intimate",
+          "decision-context",
+          "signal-release",
+          "work-dynamic",
+          "relationship-medium",
+          "weather-wide"
+        ],
+        "depth": [
+          "open-site",
+          "signal-layered",
+          "decision-layered",
+          "release-layered",
+          "work-layers",
+          "human-layered",
+          "weather-open"
+        ],
+        "lighting": [
+          "dawn-neutral",
+          "signal-natural",
+          "decision-focus",
+          "signal-release",
+          "work-contrast",
+          "aftershock-soft",
+          "rain-foreshadow"
+        ],
+        "ui": [
+          "observe",
+          "dialogue",
+          "judgment",
+          "result",
+          "work",
+          "human",
+          "tease"
+        ],
+        "cast": [
+          "solo-observer",
+          "junho-lead",
+          "junho-player-balance",
+          "signal-release",
+          "crew-motion",
+          "human-ensemble",
+          "solo-return"
+        ],
+        "expansion_order": [
+          "TBM",
+          "STRATEGY",
+          "OFFICE",
+          "DAY_RESULT"
+        ]
+      }
     },
     "TBM": {
       "source_presets": [
