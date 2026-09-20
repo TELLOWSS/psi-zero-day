@@ -92,15 +92,7 @@ export function StrategyMapShell({
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
   const effectiveActions = projectSupportAssistedActions(actions, activeSupportItemIds);
-  const actionSetKey = effectiveActions
-    .map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`)
-    .join('|');
   const selectedActions = strategyActionsForTarget(effectiveActions, focusId);
-
-  useEffect(() => {
-    setFocusId(null);
-    setActionFocusId(null);
-  }, [actionSetKey]);
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
