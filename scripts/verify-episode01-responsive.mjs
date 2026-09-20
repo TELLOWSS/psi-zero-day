@@ -192,6 +192,8 @@ async function driveEpisodeToEvent(cdp, targetEventId, targetNodeId = null, time
 function collectMetrics(stage, touchMode) {
   const visible = element => {
     if (!(element instanceof HTMLElement)) return false;
+    const closedDetails = element.closest('details:not([open])');
+    if (closedDetails && element.tagName !== 'SUMMARY') return false;
     const style = getComputedStyle(element);
     const rect = element.getBoundingClientRect();
     return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0 && rect.width > 0 && rect.height > 0;
@@ -221,6 +223,10 @@ function collectMetrics(stage, touchMode) {
     '.choice-panel button:not(:disabled)',
     '.strategy-action-tray button:not(:disabled)',
     '.strategy-outcome-card button:not(:disabled)',
+    '.strategy-map-worker.has-actions',
+    '.strategy-risk-signal.has-actions',
+    '.strategy-zone-target.has-actions',
+    '.strategy-rail button.has-actions',
     '.primary-button:not(:disabled)',
   ].join(',');
   const primaryTargets = [...activeInteractionRoot.querySelectorAll(primarySelector)].filter(visible).map(element => {
