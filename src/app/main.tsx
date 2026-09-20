@@ -54,7 +54,7 @@ async function bootstrap() {
     import('./episode-save'),
   ]);
 
-  const session = new EpisodeSession();
+  const session = EpisodeSession.directed();
   let storage: import('./episode-save').EpisodeSaveStorage | null = null;
   try { storage = window.localStorage; } catch { storage = null; }
 
