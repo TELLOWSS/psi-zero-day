@@ -46,6 +46,7 @@ import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDi
 import { episode01ProductionScene } from '../app/episode01-production-scene';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
+import { episode01TbmProduction } from '../app/episode01-tbm-production';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -96,6 +97,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
   const stopWorkProduction = productionScene === 'STOP_WORK' ? episode01StopWorkProduction(activeEventId) : undefined;
   const fieldProduction = productionScene === 'FIELD' ? episode01FieldProduction(activeEventId, activeInstance?.current_node_id) : undefined;
+  const tbmProduction = productionScene === 'TBM' ? episode01TbmProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -401,6 +403,12 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-field-lighting={fieldProduction?.lighting_profile}
     data-field-ui={fieldProduction?.ui_profile}
     data-field-cast={fieldProduction?.cast_profile}
+    data-tbm-phase={tbmProduction?.phase}
+    data-tbm-camera={tbmProduction?.camera_profile}
+    data-tbm-depth={tbmProduction?.depth_profile}
+    data-tbm-lighting={tbmProduction?.lighting_profile}
+    data-tbm-ui={tbmProduction?.ui_profile}
+    data-tbm-cast={tbmProduction?.cast_profile}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
