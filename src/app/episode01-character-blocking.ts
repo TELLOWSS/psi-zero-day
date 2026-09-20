@@ -14,7 +14,7 @@ const BLOCKING_BY_EVENT: Readonly<Record<string, BlockingMap>> = Object.freeze({
   }),
   e01_04_junho_signal: Object.freeze({
     player: Object.freeze({ side: 'far-left', depth: 'midground' }),
-    lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+    lim_junho: Object.freeze({ side: 'left', depth: 'foreground' }),
     choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
   }),
   e01_07_first_pour: Object.freeze({
@@ -117,12 +117,12 @@ const BLOCKING_BY_EVENT_NODE: Readonly<Record<string, Readonly<Record<string, Bl
   e01_04_junho_signal: Object.freeze({
     signal: Object.freeze({
       player: Object.freeze({ side: 'far-left', depth: 'midground' }),
-      lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'left', depth: 'foreground' }),
       choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
     }),
     detail: Object.freeze({
       player: Object.freeze({ side: 'far-left', depth: 'midground' }),
-      lim_junho: Object.freeze({ side: 'center', depth: 'foreground' }),
+      lim_junho: Object.freeze({ side: 'left', depth: 'foreground' }),
       choi_minseok: Object.freeze({ side: 'far-right', depth: 'background' }),
     }),
     listen: Object.freeze({
