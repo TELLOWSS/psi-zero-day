@@ -8,7 +8,7 @@
   "rule": "generated preview is not complete. Completion requires binary persistence, manifest registration, catalog final status, runtime resolution, and checksum validation.",
   "acceptance_common": [
     "transparent alpha; no baked photo/background",
-    "no company/manufacturer branding or site name",
+    "no real company/manufacturer/project branding; if a readable mark is needed, NEW PSI only",
     "no embedded Korean/English text",
     "object remains identifiable at 60px thumbnail",
     "real Korean high-rise temporary-works proportions; avoid toy-like miniature styling",
@@ -253,5 +253,6 @@
     "register content/episode01/assets.json",
     "set scene-element-catalog production_status=final only after binary validation",
     "run scene-element asset contract"
-  ]
+  ],
+  "brand_contract": "content/brand/naming-contract.json"
 }
