@@ -7,7 +7,7 @@
   "target_minutes": 26,
   "bundle": {
     "schema_version": 1,
-    "content_version": "ep01.director.v5",
+    "content_version": "ep01.director.v4",
     "relationship_policy": {
       "bounds": {
         "min": 0,
