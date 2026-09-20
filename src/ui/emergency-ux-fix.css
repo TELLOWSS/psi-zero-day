@@ -788,3 +788,55 @@ body:has(.game-frame.phase-playing) .game-audio-toggle span {
     box-sizing: border-box;
   }
 }
+
+
+/* Phase A hierarchy pass — keep only information that helps the current decision.
+   Target composition: PSI + objective on the left, world in the center, minimap on the right,
+   dialogue/action dock at the bottom. */
+body:has(.game-frame.phase-playing) .game-audio-toggle {
+  display: none !important;
+}
+
+.strategy-active .strategy-entry-slate,
+.strategy-active .episode-scene-brief,
+.strategy-active .strategy-friction-panel,
+.strategy-active .strategy-focus-panel {
+  display: none !important;
+}
+
+.strategy-active .strategy-rail > button:not(.has-actions) {
+  display: none !important;
+}
+
+.strategy-active .strategy-map-worker .strategy-worker-label {
+  display: none;
+}
+
+.strategy-active .strategy-map-worker[data-character="player"] .strategy-worker-label,
+.strategy-active .strategy-map-worker.has-actions .strategy-worker-label,
+.strategy-active .strategy-map-worker.is-near-signal .strategy-worker-label,
+.strategy-active .strategy-map-worker.is-focused .strategy-worker-label {
+  display: block;
+}
+
+.strategy-active .play-panel {
+  border-top-color: rgba(236,198,111,.52);
+}
+
+@media (min-width: 901px) and (min-height: 651px) {
+  .strategy-active .play-panel {
+    min-height: 128px;
+    max-height: 23%;
+  }
+
+  .strategy-active .strategy-rail {
+    bottom: auto;
+    max-height: 54%;
+    overflow: visible;
+  }
+
+  .strategy-active .strategy-psi-six,
+  .strategy-active .strategy-objectives {
+    background: linear-gradient(180deg,rgba(6,22,29,.9),rgba(6,20,27,.82));
+  }
+}
