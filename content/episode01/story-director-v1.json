@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "director_id": "episode01-immersive-rewrite-v1",
-  "status": "PHASE_B_FOUNDATION_ACTIVE",
+  "status": "PHASE_B_RUNTIME_ACTIVE",
   "premise": "첫날, 작은 이상 신호를 발견한 신입 안전관리자가 공정 압박과 사람 사이에서 처음으로 현장을 멈춰 세우는 이야기.",
   "player_experience": {
     "goal": "교육자료를 넘기는 느낌이 아니라 내가 이 현장의 안전관리자라는 감각을 만든다.",
@@ -153,11 +153,11 @@
       "dramatic_function": "first contact with site reality"
     },
     "e01_02_meet_kang": {
-      "act_id": "ACT_01",
-      "beat": "meet_kang",
-      "preset": "FIELD_DIALOGUE",
+      "act_id": "ACT_02",
+      "beat": "first_tbm",
+      "preset": "TBM",
       "pacing": "slow",
-      "dramatic_function": "introduce field-experience perspective"
+      "dramatic_function": "introduce field-experience perspective through the first briefing"
     },
     "e01_03_plan_breaks": {
       "act_id": "ACT_03",
@@ -188,11 +188,11 @@
       "dramatic_function": "compress time and access space"
     },
     "e01_07_first_pour": {
-      "act_id": "ACT_06",
-      "beat": "zero_moment",
-      "preset": "STOP_WORK",
+      "act_id": "ACT_05",
+      "beat": "first_pour",
+      "preset": "FIELD_DIALOGUE",
       "pacing": "fast",
-      "dramatic_function": "force the first consequential stop/control judgment"
+      "dramatic_function": "release the first schedule-pressure sequence before the later stop-work crisis"
     },
     "e01_08_reactions": {
       "act_id": "ACT_07",
@@ -209,25 +209,25 @@
       "dramatic_function": "protect the reporting voice after pressure"
     },
     "e01_08b_inspection_find": {
-      "act_id": "ACT_08",
-      "beat": "inspection_find",
-      "preset": "FIELD_DIALOGUE",
+      "act_id": "ACT_06",
+      "beat": "zero_moment_hazard",
+      "preset": "STOP_WORK",
       "pacing": "medium",
-      "dramatic_function": "move from hazard discovery to verifiable evidence"
+      "dramatic_function": "make the high-floor hazard physically legible before the stop-work judgment"
     },
     "e01_08c_site_pushback": {
-      "act_id": "ACT_08",
-      "beat": "site_pushback",
-      "preset": "FIELD_DIALOGUE",
+      "act_id": "ACT_06",
+      "beat": "zero_moment_decision",
+      "preset": "STOP_WORK",
       "pacing": "fast",
-      "dramatic_function": "apply field pressure to the control decision"
+      "dramatic_function": "turn stop-work into a concrete restart-condition decision under schedule pressure"
     },
     "e01_08d_reinspection": {
       "act_id": "ACT_08",
-      "beat": "reinspection",
-      "preset": "FIELD_DIALOGUE",
+      "beat": "restart_gate",
+      "preset": "STOP_WORK",
       "pacing": "medium",
-      "dramatic_function": "define a restart gate instead of vague reassurance"
+      "dramatic_function": "verify the restart gate against the actual field, not reassurance or photos alone"
     },
     "e01_08e_responsibility_clash": {
       "act_id": "ACT_10",
@@ -332,7 +332,7 @@
     "preserve_engine": true,
     "preserve_event_ids": true,
     "preserve_choice_ids_until_rewrite": true,
-    "topology_rewrite_status": "PENDING_AFTER_DIRECTOR_INTEGRATION",
+    "topology_rewrite_status": "ACTIVE_DIRECTED_26_EVENT_SPINE",
     "rule": "스토리 재작성은 기존 런타임/저장구조를 깨지 않고 Director metadata와 scene preset을 먼저 붙인 뒤 이벤트 텍스트·노드·선택지를 단계적으로 교체한다."
   }
 }
