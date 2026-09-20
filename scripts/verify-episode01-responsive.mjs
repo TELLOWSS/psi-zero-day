@@ -173,7 +173,10 @@ async function driveEpisodeToEvent(cdp, targetEventId, timeoutMs = 24000) {
         return true;
       };
       if (click('.episode-cold-open-cta')) return 'cold-open';
-      if (click('.strategy-outcome-card button:not(:disabled)')) return 'outcome';
+      if (click('.strategy-outcome-card > .strategy-execute-button:not(:disabled)')) return 'outcome';
+      if (click('.strategy-action-confirm .strategy-execute-button:not(:disabled)')) return 'strategy-execute';
+      if (click('.strategy-action-list button:not(:disabled)')) return 'strategy-action';
+      if (click('.strategy-map-worker.has-actions, .strategy-risk-signal.has-actions, .strategy-zone-target.has-actions, .strategy-rail button.has-actions')) return 'strategy-target';
       if (click('.choice-panel button:not(:disabled)')) return 'choice';
       if (click('.continue-button')) return 'continue';
       return '';
