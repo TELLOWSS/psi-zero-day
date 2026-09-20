@@ -2047,3 +2047,104 @@
     font-size:11px;
   }
 }
+
+
+/* Phase C-3 responsive interaction correction.
+   TBM decisions use text-first cards; thumbnails would steal the width needed for field-language choices. */
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-visual,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-arrow,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-visual,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-arrow {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+  grid-template-columns:1fr;
+  overflow:visible;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-copy,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-copy {
+  width:100%;
+  min-width:0;
+  display:grid;
+  grid-template-columns:2.15em minmax(0,1fr);
+  align-items:start;
+  gap:7px;
+  text-align:left;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-text,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-text {
+  min-width:0;
+  font-size:clamp(11px,.78vw,14px);
+  line-height:1.42;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-number,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-number {
+  color:#d7c487;
+  font:850 11px/1.42 ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+    display:block;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    margin-top:7px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:52px;
+    padding:7px 9px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-text {
+    font-size:10.5px;
+    line-height:1.32;
+  }
+}
+
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+    display:block;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > .eyebrow,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > h2 {
+    margin:0 0 5px;
+    font-size:11px;
+    line-height:1.28;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+    display:grid;
+    grid-template-columns:1fr;
+    gap:4px;
+    margin-top:0;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:46px;
+    padding:5px 7px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-copy,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-copy {
+    grid-template-columns:1.9em minmax(0,1fr);
+    gap:5px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-text {
+    font-size:9px;
+    line-height:1.24;
+  }
+}
