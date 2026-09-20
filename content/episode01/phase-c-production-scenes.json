@@ -1,37 +1,90 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "LAYOUT_PASS_01",
+  "status": "STOP_WORK_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
-      "source_presets": ["STRATEGY_MAP"],
+      "source_presets": [
+        "STRATEGY_MAP"
+      ],
       "composition": "tactical world first",
       "runtime_surface": "StrategyMapShell",
       "priority": "map, people, risks, then action"
     },
     "FIELD": {
-      "source_presets": ["FIELD_DIALOGUE", "NEXT_DAY_TEASER"],
+      "source_presets": [
+        "FIELD_DIALOGUE",
+        "NEXT_DAY_TEASER"
+      ],
       "composition": "world and character context first",
       "priority": "field, expression, dialogue"
     },
     "TBM": {
-      "source_presets": ["TBM"],
+      "source_presets": [
+        "TBM"
+      ],
       "composition": "briefing circle",
       "priority": "group context, changed conditions, communication"
     },
     "STOP_WORK": {
-      "source_presets": ["STOP_WORK"],
+      "source_presets": [
+        "STOP_WORK"
+      ],
       "composition": "hazard and gesture",
-      "priority": "hazard evidence, stop decision, restart gate"
+      "priority": "hazard evidence, stop decision, restart gate",
+      "quality_lock": {
+        "reference_scene": "e01_08c_site_pushback",
+        "phases": [
+          "hazard-read",
+          "zero-moment",
+          "restart-gate"
+        ],
+        "camera": [
+          "hazard-wide",
+          "decision-compressed",
+          "verification-medium"
+        ],
+        "depth": [
+          "deep-field",
+          "compressed-pressure",
+          "open-verification"
+        ],
+        "lighting": [
+          "hazard-cool",
+          "stop-red",
+          "restart-neutral"
+        ],
+        "ui": [
+          "observe",
+          "judgment",
+          "verify"
+        ],
+        "cast": [
+          "inspector-lead",
+          "player-hero",
+          "verification-lead"
+        ],
+        "expansion_order": [
+          "FIELD",
+          "TBM",
+          "STRATEGY",
+          "OFFICE",
+          "DAY_RESULT"
+        ]
+      }
     },
     "OFFICE": {
-      "source_presets": ["OFFICE_DIALOGUE"],
+      "source_presets": [
+        "OFFICE_DIALOGUE"
+      ],
       "composition": "evidence table",
       "priority": "people, records, timeline"
     },
     "DAY_RESULT": {
-      "source_presets": ["DAY_RESULT"],
+      "source_presets": [
+        "DAY_RESULT"
+      ],
       "composition": "sunset tableau",
       "priority": "memory, people change, carry-over; no scorecard"
     }
