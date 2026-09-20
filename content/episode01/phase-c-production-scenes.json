@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "STRATEGY_QUALITY_LOCK",
+  "status": "OFFICE_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -273,7 +273,95 @@
         "OFFICE_DIALOGUE"
       ],
       "composition": "evidence table",
-      "priority": "people, records, timeline"
+      "priority": "people, records, timeline",
+      "quality_lock": {
+        "reference_scene": "e01_08e_responsibility_clash",
+        "reference_node": "report",
+        "grammar": [
+          "confirm the event and verified facts before deciding responsibility",
+          "keep role-specific statements visible without treating any speaker as automatically correct",
+          "compare records, timestamps and evidence in the same room as the people affected by them",
+          "let responsibility pressure change posture and framing without turning disagreement into a score",
+          "commit the chosen reporting basis to a visible record before later evidence returns",
+          "carry instruction and record traces forward into the next field behavior rather than ending at paperwork"
+        ],
+        "phases": [
+          "fact-intake",
+          "position-split",
+          "responsibility-judgment",
+          "report-commit",
+          "evidence-return",
+          "instruction-trace",
+          "record-pressure",
+          "record-judgment",
+          "prevention-return"
+        ],
+        "camera": [
+          "table-wide",
+          "speaker-tight",
+          "judgment-table",
+          "commit-medium",
+          "evidence-wide",
+          "trace-medium",
+          "record-wide",
+          "record-decision",
+          "carryover-wide"
+        ],
+        "depth": [
+          "room-open",
+          "testimony-layered",
+          "evidence-table",
+          "commit-layered",
+          "evidence-return",
+          "trace-board",
+          "record-stack",
+          "decision-layered",
+          "prevention-open"
+        ],
+        "lighting": [
+          "office-neutral",
+          "speaker-focus",
+          "decision-amber",
+          "commit-neutral",
+          "verification-clear",
+          "trace-cool",
+          "record-neutral",
+          "decision-contrast",
+          "prevention-soft"
+        ],
+        "ui": [
+          "context",
+          "dialogue",
+          "judgment",
+          "result",
+          "verify",
+          "trace",
+          "record"
+        ],
+        "cast": [
+          "four-person-table",
+          "speaker-focus",
+          "balanced-table",
+          "report-commit",
+          "evidence-return",
+          "instruction-return",
+          "record-table",
+          "decision-table",
+          "carryover-table"
+        ],
+        "evidence_focus": [
+          "facts",
+          "statements",
+          "responsibility",
+          "timeline",
+          "instruction",
+          "record",
+          "prevention"
+        ],
+        "expansion_order": [
+          "DAY_RESULT"
+        ]
+      }
     },
     "DAY_RESULT": {
       "source_presets": [
