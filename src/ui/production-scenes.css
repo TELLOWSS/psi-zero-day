@@ -304,3 +304,494 @@
     transition:none !important;
   }
 }
+
+
+/* Phase C-1 — STOP WORK quality lock.
+   One cinematic hierarchy: world/hazard -> people -> judgment. The production layer never owns input. */
+.game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .game-header {
+  height:58px;
+  background:linear-gradient(180deg,rgba(4,9,13,.9),rgba(5,11,15,.44) 78%,transparent);
+  border-bottom-color:rgba(237,102,88,.12);
+  backdrop-filter:blur(7px);
+}
+.game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .scene-heading,
+.game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .episode-scene-stamp {
+  display:none;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-background {
+  transform:scale(1.075);
+  object-position:56% 48%;
+  filter:saturate(.9) contrast(1.08) brightness(.79);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-atmosphere {
+  z-index:3;
+  mix-blend-mode:normal;
+  background:
+    linear-gradient(90deg,rgba(3,7,10,.68) 0%,rgba(4,9,12,.22) 32%,transparent 58%,rgba(28,7,7,.18) 100%),
+    radial-gradient(circle at 64% 43%,rgba(230,82,68,.12),transparent 28%),
+    linear-gradient(0deg,rgba(2,7,10,.58),transparent 39%);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-grade {
+  z-index:22;
+  background:
+    linear-gradient(90deg,rgba(3,8,11,.38),transparent 32%,transparent 74%,rgba(9,5,6,.18)),
+    linear-gradient(180deg,rgba(4,7,9,.03) 42%,rgba(3,7,10,.68) 100%);
+  box-shadow:inset 0 0 120px rgba(92,15,10,.18);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-psi-trace,
+.game-frame[data-production-scene="STOP_WORK"] .episode-scene-minimap {
+  display:none;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-speaker-tag {
+  top:18%;
+  left:auto;
+  right:3%;
+  max-width:31%;
+  z-index:26;
+  border-color:rgba(237,102,88,.22);
+  background:linear-gradient(90deg,rgba(20,10,12,.56),rgba(7,12,15,.76));
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-layer {
+  position:absolute;
+  inset:0;
+  z-index:24;
+  pointer-events:none;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title {
+  position:absolute;
+  left:3.5%;
+  top:10.5%;
+  width:min(520px,35%);
+  display:grid;
+  gap:6px;
+  text-shadow:0 3px 18px rgba(0,0,0,.75);
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > span {
+  color:#f18b79;
+  font:850 clamp(10px,.78vw,14px)/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.13em;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > strong {
+  color:#fff5f0;
+  font-size:clamp(34px,4.1vw,68px);
+  line-height:.98;
+  letter-spacing:-.055em;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > small {
+  max-width:470px;
+  color:#dce4e2;
+  font-size:clamp(11px,.9vw,15px);
+  line-height:1.55;
+  font-weight:650;
+  word-break:keep-all;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers > span {
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:5px 8px;
+  border:1px solid rgba(242,119,101,.38);
+  border-radius:4px;
+  background:rgba(12,18,21,.7);
+  box-shadow:0 8px 18px rgba(0,0,0,.24);
+  color:#f1e5e0;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.035em;
+  backdrop-filter:blur(4px);
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers > span i {
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#ed6658;
+  box-shadow:0 0 0 4px rgba(237,102,88,.12),0 0 12px rgba(237,102,88,.35);
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="edge"] {
+  left:57%;
+  top:31%;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="route"] {
+  left:69%;
+  top:49%;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="restart"] {
+  left:63%;
+  top:43%;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline {
+  position:absolute;
+  left:43%;
+  top:23%;
+  width:34%;
+  height:37%;
+  border:1px solid rgba(242,113,96,.38);
+  border-radius:3px;
+  box-shadow:inset 0 0 34px rgba(237,102,88,.045),0 0 24px rgba(237,102,88,.06);
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline::before,
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline::after {
+  content:"";
+  position:absolute;
+  background:#ed6658;
+  opacity:.88;
+  box-shadow:0 0 14px rgba(237,102,88,.3);
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline::before {
+  left:-1px;
+  top:-1px;
+  width:46px;
+  height:3px;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline::after {
+  left:-1px;
+  top:-1px;
+  width:3px;
+  height:46px;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline > i {
+  position:absolute;
+  right:-1px;
+  bottom:-1px;
+  width:46px;
+  height:46px;
+  border-right:3px solid #ed6658;
+  border-bottom:3px solid #ed6658;
+}
+.game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline > b {
+  position:absolute;
+  right:10px;
+  top:8px;
+  color:rgba(255,129,109,.72);
+  font:900 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.18em;
+}
+
+/* STOP WORK cast choreography: at 10:24 the player owns the foreground; pressure remains behind her. */
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-character {
+  transition:transform .36s cubic-bezier(.2,.72,.2,1),filter .3s ease,opacity .3s ease;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character[data-character="player"] {
+  left:3%;
+  right:auto;
+  bottom:-7%;
+  width:27%;
+  height:89%;
+  z-index:13;
+  transform:scale(.95);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character[data-character="seo_jeongmin"] {
+  left:31%;
+  right:auto;
+  bottom:-6%;
+  width:30%;
+  height:96%;
+  z-index:17;
+  transform:scale(1.02);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08b_inspection_find"] .episode-immersive-character[data-character="lee_jaehoon"] {
+  left:auto;
+  right:5%;
+  bottom:-6%;
+  width:25%;
+  height:82%;
+  z-index:12;
+  transform:scale(.94);
+}
+
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="player"] {
+  left:3%;
+  right:auto;
+  bottom:-8%;
+  width:36%;
+  height:104%;
+  z-index:20 !important;
+  transform:translateY(-1%) scale(1.02);
+  filter:drop-shadow(0 24px 20px rgba(0,0,0,.5)) drop-shadow(0 0 18px rgba(237,102,88,.09));
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="lee_jaehoon"] {
+  left:auto;
+  right:23%;
+  bottom:-7%;
+  width:27%;
+  height:84%;
+  z-index:14;
+  transform:scale(.96);
+  filter:drop-shadow(0 18px 15px rgba(0,0,0,.42)) saturate(.92);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="seo_jeongmin"] {
+  left:auto;
+  right:3%;
+  bottom:-5%;
+  width:22%;
+  height:72%;
+  z-index:11;
+  opacity:.9;
+  transform:scale(.92);
+  filter:drop-shadow(0 14px 12px rgba(0,0,0,.38)) saturate(.82);
+}
+
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character[data-character="player"] {
+  left:5%;
+  right:auto;
+  bottom:-7%;
+  width:27%;
+  height:86%;
+  z-index:13;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character[data-character="seo_jeongmin"] {
+  left:33%;
+  right:auto;
+  bottom:-6%;
+  width:29%;
+  height:94%;
+  z-index:17;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08d_reinspection"] .episode-immersive-character[data-character="lee_jaehoon"] {
+  left:auto;
+  right:7%;
+  bottom:-6%;
+  width:25%;
+  height:82%;
+  z-index:12;
+}
+
+/* Hazard objects are grounded into the construction world instead of floating as cards. */
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-prop {
+  filter:drop-shadow(0 16px 14px rgba(0,0,0,.38));
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-prop.prop-1 {
+  left:auto;
+  right:3%;
+  bottom:-4%;
+  width:31%;
+  height:41%;
+  opacity:.86;
+  z-index:8;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-prop.prop-2 {
+  left:48%;
+  right:auto;
+  bottom:-8%;
+  width:37%;
+  height:49%;
+  opacity:.88;
+  z-index:7;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-prop.prop-3 {
+  left:39%;
+  right:auto;
+  bottom:-14%;
+  width:46%;
+  height:34%;
+  object-fit:contain;
+  opacity:.48;
+  z-index:5;
+}
+
+/* Judgment dock: the three meaningful options read together, with no thumbnail clutter. */
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="STOP_WORK"].phase-playing:not(.strategy-active) .play-panel {
+    left:3%;
+    right:3%;
+    bottom:26px;
+    width:auto;
+    min-height:154px;
+    max-height:30%;
+    padding:12px 15px 14px;
+    grid-template-columns:122px minmax(0,1fr);
+    gap:16px;
+    overflow:auto;
+    border-color:rgba(237,102,88,.34);
+    border-top:1px solid rgba(255,135,116,.82);
+    background:linear-gradient(90deg,rgba(20,9,11,.95),rgba(8,16,20,.93) 46%,rgba(8,17,21,.9));
+    box-shadow:0 -12px 42px rgba(0,0,0,.36),0 16px 44px rgba(0,0,0,.32);
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .play-panel:has(.choice-content) {
+    grid-template-columns:1fr;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .play-panel:has(.choice-content) .character-card,
+  .game-frame[data-production-scene="STOP_WORK"] .play-panel:has(.choice-content) .narrator-card {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .presentation-area {
+    max-height:25vh;
+    overflow:auto;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-content {
+    display:grid;
+    grid-template-columns:minmax(220px,.78fr) minmax(0,2.22fr);
+    align-items:center;
+    gap:16px;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-content > .eyebrow,
+  .game-frame[data-production-scene="STOP_WORK"] .choice-content > h2 {
+    grid-column:1;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-content > h2 {
+    margin:3px 0 0;
+    font-size:clamp(14px,1.05vw,18px);
+    line-height:1.45;
+    color:#f5efeb;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel {
+    grid-column:2;
+    grid-row:1 / span 2;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel button {
+    display:grid;
+    grid-template-columns:1fr;
+    align-content:center;
+    min-height:82px;
+    padding:10px 12px;
+    border:1px solid rgba(237,102,88,.28);
+    border-radius:6px;
+    background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel button:hover:not(:disabled),
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel button:focus-visible {
+    transform:translateY(-2px);
+    background:linear-gradient(180deg,rgba(237,102,88,.1),rgba(255,255,255,.025));
+    box-shadow:0 10px 24px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,137,119,.18);
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-visual,
+  .game-frame[data-production-scene="STOP_WORK"] .choice-arrow {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-copy {
+    display:grid;
+    grid-template-columns:2.2em minmax(0,1fr);
+    gap:8px;
+    align-items:start;
+    text-align:left;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-number {
+    color:#ef7867;
+    font:850 11px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-text {
+    color:#edf1ee;
+    font-size:clamp(11px,.78vw,14px);
+    line-height:1.45;
+    word-break:keep-all;
+  }
+}
+
+/* Portrait: retain safe bottom sheet while simplifying the cinematic layer. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title {
+    left:5%;
+    top:8.5%;
+    width:90%;
+    gap:4px;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > strong {
+    font-size:clamp(32px,11vw,54px);
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > small {
+    max-width:82%;
+    font-size:10px;
+    line-height:1.45;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="edge"] {
+    left:56%;
+    top:30%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="route"],
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="restart"] {
+    left:55%;
+    top:39%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline {
+    left:38%;
+    top:25%;
+    width:53%;
+    height:31%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-speaker-tag {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="player"] {
+    left:-10%;
+    width:58%;
+    height:68%;
+    bottom:18%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="lee_jaehoon"] {
+    right:15%;
+    width:39%;
+    height:57%;
+    bottom:20%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="seo_jeongmin"] {
+    right:-8%;
+    width:32%;
+    height:48%;
+    bottom:22%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-visual {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-panel button {
+    grid-template-columns:1fr;
+  }
+}
+
+/* Short landscape: the interaction dock remains reachable; the left half becomes the hero/hazard frame. */
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title {
+    left:max(18px,env(safe-area-inset-left));
+    top:14%;
+    width:38%;
+    gap:3px;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > strong {
+    font-size:clamp(26px,8vh,42px);
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-title > small {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers > span {
+    padding:3px 6px;
+    font-size:7px;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="edge"] {
+    left:31%;
+    top:35%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="route"],
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-markers [data-marker="restart"] {
+    left:35%;
+    top:53%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .stop-work-production-stopline {
+    left:24%;
+    top:23%;
+    width:27%;
+    height:48%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-speaker-tag {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="player"] {
+    left:-3%;
+    width:34%;
+    height:102%;
+    bottom:-10%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="lee_jaehoon"] {
+    right:48%;
+    width:23%;
+    height:80%;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene[data-event="e01_08c_site_pushback"] .episode-immersive-character[data-character="seo_jeongmin"] {
+    display:none;
+  }
+  .game-frame[data-production-scene="STOP_WORK"] .choice-visual {
+    display:none;
+  }
+}
