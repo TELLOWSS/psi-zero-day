@@ -187,4 +187,29 @@ describe('Episode 01 cinematic character performance', () => {
     });
   });
 
+
+  it('gives each TBM voice a distinct field performance and shows the rebrief result', () => {
+    expect(episode01UsesCharacterPerformance('e01_08g_tbm_field_gap')).toBe(true);
+    expect(episode01CharacterPerformance('e01_08g_tbm_field_gap', 'lee', 'lee_jaehoon', 'lee_jaehoon')).toEqual({
+      expression: 'concern',
+      pose: 'document',
+      motion: 'reengage',
+    });
+    expect(episode01CharacterPerformance('e01_08g_tbm_field_gap', 'kang', 'kang_taesik', 'kang_taesik')).toEqual({
+      expression: 'concern',
+      pose: 'press',
+      motion: 'reengage',
+    });
+    expect(episode01CharacterPerformance('e01_08g_tbm_field_gap', 'junho', 'lim_junho', 'lim_junho')).toEqual({
+      expression: 'concern',
+      pose: 'hesitate',
+      motion: 'reengage',
+    });
+    expect(episode01CharacterPerformance('e01_08h_tbm_return', 'controlled', 'lim_junho')).toEqual({
+      expression: 'relief',
+      pose: 'reengage',
+      motion: 'reengage',
+    });
+  });
+
 });
