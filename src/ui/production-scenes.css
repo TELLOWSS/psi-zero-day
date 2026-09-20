@@ -2618,3 +2618,38 @@
     max-height:82%;
   }
 }
+
+
+/* Phase C-4 step-1 placement correction: before a target is selected, keep guidance compact and off the active workface. */
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-1 {
+  width:min(23%,300px);
+  padding:8px;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-1 .strategy-loop-steps {
+  margin-bottom:5px;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-1 .strategy-action-heading {
+  margin-bottom:4px;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-1 .strategy-action-empty {
+  padding:8px;
+}
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    top:auto;
+    left:auto;
+    right:2%;
+    bottom:2%;
+    width:48%;
+    max-height:20%;
+  }
+}
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    top:auto;
+    right:1%;
+    bottom:2%;
+    width:27%;
+    max-height:34%;
+  }
+}
