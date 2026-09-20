@@ -7,7 +7,7 @@
       "kind": "prop",
       "label": "통로 인접 적재 자재",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.material_stack",
       "art": {
         "pivot": {
