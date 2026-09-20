@@ -3013,3 +3013,101 @@
     transition:none!important;
   }
 }
+
+
+/* Phase C-5 interaction correction: evidence is already present in the room.
+   Do not repeat the report/record dashboard inside the judgment dock, and do
+   not let grid stretch turn text choices into viewport-height cards. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain),
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+  display:none;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content {
+  min-height:0;
+  align-self:start;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+  align-items:start;
+  align-content:start;
+  grid-auto-rows:max-content;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  height:auto;
+  min-height:58px;
+  align-self:start;
+  overflow:visible;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-copy,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-copy {
+  width:100%;
+  min-width:0;
+  grid-template-columns:2.1em minmax(0,1fr);
+  align-items:start;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+  font-size:clamp(10px,.76vw,13px);
+  line-height:1.42;
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    min-height:0;
+    max-height:42dvh;
+    overflow:auto;
+    padding:9px 10px max(10px,env(safe-area-inset-bottom));
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > h2 {
+    margin:2px 0 7px;
+    font-size:12px;
+    line-height:1.35;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:52px;
+    padding:7px 9px;
+  }
+}
+
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    left:auto;
+    right:max(8px,env(safe-area-inset-right));
+    bottom:max(8px,env(safe-area-inset-bottom));
+    width:43%;
+    min-height:0;
+    max-height:82%;
+    padding:7px 8px;
+    overflow:auto;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > .eyebrow,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > h2 {
+    margin:0 0 5px;
+    font-size:10px;
+    line-height:1.25;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+    gap:4px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:46px;
+    padding:5px 7px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:9px;
+    line-height:1.3;
+  }
+}
