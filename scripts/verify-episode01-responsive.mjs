@@ -276,6 +276,13 @@ function collectMetrics(stage, touchMode) {
     fieldLighting: immersive?.getAttribute('data-field-lighting') || null,
     fieldUi: immersive?.getAttribute('data-field-ui') || null,
     fieldCast: immersive?.getAttribute('data-field-cast') || null,
+    tbmPhase: immersive?.getAttribute('data-tbm-phase') || null,
+    tbmCamera: immersive?.getAttribute('data-tbm-camera') || null,
+    tbmDepth: immersive?.getAttribute('data-tbm-depth') || null,
+    tbmLighting: immersive?.getAttribute('data-tbm-lighting') || null,
+    tbmUi: immersive?.getAttribute('data-tbm-ui') || null,
+    tbmCast: immersive?.getAttribute('data-tbm-cast') || null,
+    tbmLayer: Boolean(document.querySelector('.tbm-production-layer')),
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
     stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
@@ -321,6 +328,17 @@ function validate(row, viewport) {
     if (row.fieldLighting !== 'decision-focus') failures.push('FIELD decision lighting profile is missing');
     if (row.fieldUi !== 'judgment') failures.push('FIELD judgment UI profile is missing');
     if (row.fieldCast !== 'junho-player-balance') failures.push('FIELD balanced cast profile is missing');
+  }
+  if (row.stage === 'episode01-tbm') {
+    if (row.activeEvent !== 'e01_08g_tbm_field_gap') failures.push('TBM QA did not reach the changed-work briefing');
+    if (row.activeNode !== 'tbm_action') failures.push('TBM QA did not reach the group judgment node');
+    if (row.tbmPhase !== 'group-judgment') failures.push('TBM group-judgment production phase is missing');
+    if (row.tbmCamera !== 'decision-circle') failures.push('TBM decision-circle camera profile is missing');
+    if (row.tbmDepth !== 'decision-ring') failures.push('TBM decision-ring depth profile is missing');
+    if (row.tbmLighting !== 'decision-amber') failures.push('TBM decision lighting profile is missing');
+    if (row.tbmUi !== 'judgment') failures.push('TBM judgment UI profile is missing');
+    if (row.tbmCast !== 'decision-circle') failures.push('TBM decision-circle cast profile is missing');
+    if (!row.tbmLayer) failures.push('TBM production layer did not render');
   }
   if (row.stage === 'episode01-stop-work') {
     if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');
@@ -434,6 +452,14 @@ try {
       report.push({ viewportName: viewport.name, ...stopWorkMetrics, failures: stopWorkFailures });
       if (stopWorkFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-stop-work.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_08g_tbm_field_gap', 'tbm_action', 32000);
+      await sleep(240);
+      const tbmMetrics = await metrics(cdp, 'episode01-tbm', viewport.mobile);
+      const tbmFailures = validate(tbmMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...tbmMetrics, failures: tbmFailures });
+      if (tbmFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-tbm.png');
     } catch (error) {
       failed = true;
       report.push({ viewportName: viewport.name, viewport: { width: viewport.width, height: viewport.height }, stage: 'runner', failures: [error.message] });
