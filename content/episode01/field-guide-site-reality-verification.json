@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "policy_id": "new-psi-field-guide-site-reality-verification-v1",
+  "status": "locked",
+  "purpose": "Prevent visually attractive but field-inaccurate assets. Current Korean construction-site reality is the primary geometry and assembly reference.",
+  "source_priority": [
+    {
+      "priority": 1,
+      "source": "user-provided current-site photos and direct field observations",
+      "rule": "Treat as ground truth for visible geometry, component combinations, spacing relationships, attachment methods, work-platform arrangement and actual site wear."
+    },
+    {
+      "priority": 2,
+      "source": "current Korean safety guidance / manufacturer manuals / certified product documentation",
+      "rule": "Use to verify component names, intended function, load path and required connection/stability logic when the photo alone is ambiguous."
+    },
+    {
+      "priority": 3,
+      "source": "generic reference imagery",
+      "rule": "Use only for texture/lighting/composition. Never override current-site geometry."
+    }
+  ],
+  "pre_generation_gate": [
+    "Identify the exact item currently used on site.",
+    "Confirm visible component names and their roles.",
+    "Confirm how components are physically connected or seated.",
+    "Confirm the load-transfer/stability relationship.",
+    "Record any site-specific geometry that differs from generic textbook illustrations."
+  ],
+  "post_generation_gate": [
+    "Compare generated geometry side-by-side with the current-site reference.",
+    "Reject if a critical member is omitted, added arbitrarily, floating, mis-seated or structurally implausible.",
+    "Reject if it looks like generic scaffolding when the reference shows system shoring.",
+    "Reject if material thickness, connection hardware or support relationship is visibly unrealistic.",
+    "Only approved assets proceed to binary registration and catalog final."
+  ],
+  "system_shoring_reference_set": {
+    "id": "user-current-site-system-shoring-2026-09-20",
+    "observed_configuration": [
+      "galvanized steel standards and ledgers in a dense grid",
+      "adjustable jack bases at slab level with base plates/support pads",
+      "U-head screw jacks at the top of standards",
+      "steel bearer/mong-e members physically seated in the U-heads",
+      "upper horizontal connecting/stabilizing members visible around the U-head/bearer zone",
+      "perforated steel work-platform/deck panels used through the shoring grid",
+      "diagonal bracing present in applicable bays",
+      "real site context includes wall/column formwork and active RC construction"
+    ],
+    "must_preserve": [
+      "jack base -> standard -> U-head -> bearer/mong-e -> slab formwork load path",
+      "ledger grid connected at the standard nodes",
+      "actual upper-level stabilization relationship visible in the supplied photos",
+      "realistic spacing/proportions instead of generic scaffold spacing",
+      "physically seated U-head and bearer with no floating or impossible contact"
+    ],
+    "reject": [
+      "U-head with no bearer/mong-e",
+      "bearer floating above or beside U-head",
+      "generic scaffold substituted for system shoring",
+      "missing ledgers or invented diagonal members inconsistent with reference",
+      "cartoon/pictogram simplification that hides connection logic"
+    ]
+  },
+  "evidence_rule": {
+    "visual_claims": "Use current-site photos first.",
+    "technical_function_claims": "Cross-check with Korean safety guidance or manufacturer documentation when needed.",
+    "uncertainty": "If a component function cannot be confirmed from the reference, mark it unresolved and do not invent it."
+  }
+}

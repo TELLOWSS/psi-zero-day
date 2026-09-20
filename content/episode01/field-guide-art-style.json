@@ -34,7 +34,8 @@
     "realism": "materials, fasteners, joints, wear, edge thickness, deck/bracket/brace geometry and construction logic must read as physically believable",
     "composition": "single object or compact work-state assembly, three-quarter perspective, transparent or neutral studio background; preserve construction context when required for comprehension",
     "material_detail": "visible galvanized steel, plywood grain, painted steel, bolts, pins, clamps, welds, deck texture and realistic wear where applicable",
-    "scale_readability": "must look like real construction equipment at thumbnail and full-screen size, not a toy miniature or vector icon"
+    "scale_readability": "must look like real construction equipment at thumbnail and full-screen size, not a toy miniature or vector icon",
+    "realism_source": "current-site reference first; do not substitute generic scaffold/formwork imagery"
   },
   "output": {
     "preferred_format": "webp",
@@ -113,6 +114,8 @@
     "generic AI construction object that cannot be identified by an experienced worker"
   ],
   "acceptance_gate": [
+    "matches current-site geometry when a user reference exists",
+    "critical components and connection/load-transfer relationships are visible and physically plausible",
     "an experienced construction worker can identify the exact object/work condition without reading the label",
     "critical connection points and support/load path are visible",
     "real materials and thicknesses are believable",
@@ -127,5 +130,6 @@
     "github_integration_cadence": "2 generation batches per 1 integration commit",
     "review_rule": "review contact-sheet/batch first; regenerate failed assets only",
     "legacy_v1_rule": "field-guide-isometric-v1 assets are placeholders, not completion"
-  }
+  },
+  "site_reality_policy": "content/episode01/field-guide-site-reality-verification.json"
 }

@@ -46,7 +46,10 @@
     "no_per_item_commit": true,
     "first_pass_goal": "118개 전 슬롯에 realistic-v2 후보 확보",
     "second_pass_goal": "A급 실패/오류와 대표자산만 정밀 보정",
-    "acceptance_principle": "experienced field worker should recognize the real object/work condition without reading a label"
+    "acceptance_principle": "experienced field worker should recognize the real object/work condition without reading a label",
+    "site_reference_first": true,
+    "pre_generation_verification_required": true,
+    "post_generation_side_by_side_review": true
   },
   "batches": [
     {
@@ -1720,6 +1723,9 @@
     }
   ],
   "quality_rules": [
+    "Current-site reality overrides generic AI aesthetics.",
+    "Do not invent missing structural members merely to make the image look complete.",
+    "Do not omit members clearly visible in the current-site reference.",
     "No pictogram/vector/safety-poster look",
     "No generic toy-like miniature or low-poly prop",
     "Show believable material thickness, joints, fasteners, supports and load paths",
@@ -1742,7 +1748,9 @@
       "bearer unsupported or off-center",
       "missing horizontal stabilization that exists in the supplied field configuration",
       "generic scaffold substituted for the actual system-shoring configuration"
-    ]
+    ],
+    "verification_policy": "content/episode01/field-guide-site-reality-verification.json",
+    "source_priority": "user current-site photos > Korean safety/manufacturer guidance > generic imagery"
   },
   "execution_order": [
     "FG-HS-04",
@@ -1766,5 +1774,6 @@
     "Then AL Form and gangform because they are core high-rise structural-cycle gameplay assets.",
     "Then foundation, roof/transition, finishing, and finally setup/common support assets.",
     "This order optimizes reference reuse and style consistency rather than construction chronology."
-  ]
+  ],
+  "site_reality_verification_policy": "content/episode01/field-guide-site-reality-verification.json"
 }
