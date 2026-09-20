@@ -42,7 +42,7 @@ import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeI
 import { EpisodeRecord } from './EpisodeRecord';
 import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
-import { episode01AutoAdvanceDelay, episode01StoryDirection } from '../app/episode01-story-director';
+import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDirection } from '../app/episode01-story-director';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -304,6 +304,23 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   useEffect(() => {
     if (snapshot.phase === 'start') setColdOpenDismissed(false);
   }, [snapshot.phase]);
+  useEffect(() => {
+    if (!directedCampaign || mapOutcomeActive || !episode01AutoResolveChoice(activeEventId)) return;
+    if (!presentation || presentation.type !== 'SHOW_CHOICE') return;
+    const enabled = presentation.choices.filter(choice => choice.enabled);
+    if (enabled.length !== 1) return;
+    const choice = enabled[0]!;
+    const timer = window.setTimeout(() => {
+      chooseEvent(presentation.instance_id, presentation.node_id, choice.choice_id);
+    }, 650);
+    return () => window.clearTimeout(timer);
+  }, [
+    directedCampaign,
+    mapOutcomeActive,
+    activeEventId,
+    presentation,
+    snapshot.revision,
+  ]);
   useEffect(() => {
     if (!strategyOutcome) return;
     const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
