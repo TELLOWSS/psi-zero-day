@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "company_name": "NEW PSI",
-  "game_title": "PSI : ZERO DAY",
+  "game_title": "NEW PSI : ZERO DAY",
   "tagline": "현장, 오늘도 무사히",
-  "company_role": "fictional/development company identity used where an otherwise anonymous company name is needed",
+  "company_role": "master NEW PSI brand identity and fictional in-world identity used wherever real or anonymous company/project naming would otherwise appear",
   "runtime_surfaces": [
     "main_title",
     "cinematic_loading",
@@ -17,11 +17,25 @@
       "site_sign",
       "project_board"
     ],
-    "rule": "Keep the mark small and secondary to the PSI : ZERO DAY game title.",
+    "rule": "Use NEW PSI as the only readable brand mark. Use NEW PSI CONSTRUCTION where an in-world construction-company name is needed. Isolated field-guide art may stay text-free.",
     "forbidden": [
       "real company logos",
+      "real company names without clearance",
+      "real apartment or project brands",
       "real project names",
+      "manufacturer logos without clearance",
+      "OO건설 / ○○건설 / A사 / B사 placeholders",
       "random pseudo text"
-    ]
+    ],
+    "allowed_secondary_mark": "NEW PSI CONSTRUCTION"
+  },
+  "canonical_naming_contract": "content/brand/naming-contract.json",
+  "in_world": {
+    "general_contractor_en": "NEW PSI CONSTRUCTION",
+    "general_contractor_ko": "NEW PSI 건설",
+    "site_name_en": "NEW PSI ZERO SITE 01",
+    "site_name_ko": "NEW PSI 현장 01",
+    "field_guide": "NEW PSI FIELD GUIDE",
+    "field_map": "NEW PSI FIELD"
   }
 }
