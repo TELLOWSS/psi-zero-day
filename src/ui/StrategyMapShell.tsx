@@ -201,6 +201,11 @@ export function StrategyMapShell({
     </aside>
 
     <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment} data-production-map="v1">
+      <div className="strategy-production-layer" aria-hidden="true">
+        <i className="strategy-production-grid" />
+        <i className="strategy-production-route" />
+        <b className="strategy-production-pulse" />
+      </div>
       {visualAssets?.background_uri ? <img className="strategy-map-background-art" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
       <div className="strategy-map-css-scene" aria-hidden={hasBackgroundArt ? 'true' : undefined}>
         <div className="strategy-map-sky" />
