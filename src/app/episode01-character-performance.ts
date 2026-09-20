@@ -33,9 +33,9 @@ const EVENT_BASE: Readonly<Record<string, CharacterPatchMap>> = freeze({
     lee_jaehoon: { pose: 'document', expression: 'concern' },
   }),
   e01_08c_site_pushback: freeze({
-    player: { pose: 'brace', expression: 'concern' },
+    player: { pose: 'brace', expression: 'resolve' },
     lee_jaehoon: { pose: 'press', expression: 'conflict' },
-    seo_jeongmin: { pose: 'observe', expression: 'neutral' },
+    seo_jeongmin: { pose: 'observe', expression: 'concern' },
   }),
   e01_08d_reinspection: freeze({
     player: { pose: 'observe' },
