@@ -1,9 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "profile_id": "field-guide-isometric-v1",
   "title_ko": "현장도감 이소메트릭 3D 픽토그램",
   "status": "locked",
-  "purpose": "NEW PSI : ZERO DAY 현장도감 전체 118개 아이템의 시각 일관성 기준",
+  "purpose": "NEW PSI : ZERO DAY 현장도감 최종 상업용 비주얼 기준. 기존 픽토그램/아이콘형 이미지는 구조 참고용 placeholder이며 최종본이 아니다.",
   "visual_language": {
     "camera": "three-quarter isometric, slightly elevated, consistent 35–45 degree presentation",
     "form": "real construction equipment/material proportions simplified into readable game pictograms",
@@ -24,12 +24,17 @@
         "#6EA76D"
       ]
     },
-    "lighting": "soft upper-left key light, subtle cool fill, compact contact shadow",
+    "lighting": "soft cinematic key + realistic contact shadow; avoid flat infographic lighting",
     "background": "transparent alpha; no baked site photo or UI panel",
-    "text_policy": "no embedded Korean/English text unless a readable safety/brand mark is necessary; when needed use NEW PSI only, except universal equipment marks such as AED or safety pictograms",
-    "branding_policy": "NEW PSI is the only allowed readable brand; NEW PSI CONSTRUCTION may appear on site/company surfaces. No real company, manufacturer, apartment or project branding.",
+    "text_policy": "no random labels or pseudo text; NEW PSI branding only when a readable company/site mark is naturally required",
+    "branding_policy": "NEW PSI is the only allowed readable brand; no real company, manufacturer, apartment or project branding",
     "framing": "single object or one compact work-state diorama; centered with 8–12% transparent breathing room",
-    "detail_level": "more detailed than flat icon, less complex than concept-art scene"
+    "detail_level": "more detailed than flat icon, less complex than concept-art scene",
+    "primary_style": "high-detail semi-realistic 3D construction asset / compact field diorama",
+    "realism": "materials, fasteners, joints, wear, edge thickness, deck/bracket/brace geometry and construction logic must read as physically believable",
+    "composition": "single object or compact work-state assembly, three-quarter perspective, transparent or neutral studio background; preserve construction context when required for comprehension",
+    "material_detail": "visible galvanized steel, plywood grain, painted steel, bolts, pins, clamps, welds, deck texture and realistic wear where applicable",
+    "scale_readability": "must look like real construction equipment at thumbnail and full-screen size, not a toy miniature or vector icon"
   },
   "output": {
     "preferred_format": "webp",
@@ -94,5 +99,25 @@
       "asset_id": "ep01.scene_element.formwork_work_platform",
       "status": "generation_ready"
     }
+  ],
+  "style_profile": "field-guide-production-realistic-v2",
+  "reject": [
+    "flat pictogram",
+    "vector icon",
+    "generic safety infographic",
+    "toy-like miniature",
+    "oversimplified low-poly prop",
+    "thick cartoon outline",
+    "floating object with no believable joints or load path",
+    "symbolic geometry that omits actual construction details",
+    "generic AI construction object that cannot be identified by an experienced worker"
+  ],
+  "acceptance_gate": [
+    "an experienced construction worker can identify the exact object/work condition without reading the label",
+    "critical connection points and support/load path are visible",
+    "real materials and thicknesses are believable",
+    "image still reads clearly at field-guide thumbnail size",
+    "full-screen view contains enough detail to reward inspection",
+    "not acceptable if it visually reads as a pictogram or safety poster icon"
   ]
 }

@@ -1237,7 +1237,7 @@
       "kind": "prop",
       "label": "유로폼 벽체 거푸집",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
       "art": {
         "path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
@@ -1249,7 +1249,7 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
+        "style_profile": "field-guide-production-realistic-v2",
         "render_intent": "isolated_isometric_3d_pictogram",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
@@ -1273,14 +1273,15 @@
         "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a",
         "source": "imagegen-production-2026-09-20",
         "brand_contract": "NEW PSI"
-      }
+      },
+      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
     },
     "formwork_tie": {
       "element_id": "scene.prop.formwork_tie",
       "kind": "prop",
       "label": "폼타이·연결철물",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.formwork_tie",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-tie.webp",
@@ -1292,7 +1293,7 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
+        "style_profile": "field-guide-production-realistic-v2",
         "render_intent": "isolated_isometric_3d_pictogram",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
@@ -1316,14 +1317,15 @@
         "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea",
         "source": "imagegen-production-2026-09-20",
         "brand_contract": "NEW PSI"
-      }
+      },
+      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
     },
     "formwork_brace": {
       "element_id": "scene.control.formwork_brace",
       "kind": "control",
       "label": "벽체 거푸집 전도방지 지지",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.formwork_brace",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-brace.webp",
@@ -1335,7 +1337,7 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
+        "style_profile": "field-guide-production-realistic-v2",
         "render_intent": "isolated_isometric_3d_pictogram",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
@@ -1360,14 +1362,15 @@
         "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6",
         "source": "imagegen-production-2026-09-20",
         "brand_contract": "NEW PSI"
-      }
+      },
+      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
     },
     "formwork_work_platform": {
       "element_id": "scene.control.formwork_work_platform",
       "kind": "control",
       "label": "거푸집 작업발판",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.formwork_work_platform",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-work-platform.webp",
@@ -1379,7 +1382,7 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
+        "style_profile": "field-guide-production-realistic-v2",
         "render_intent": "isolated_isometric_3d_pictogram",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
@@ -1403,7 +1406,8 @@
         "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97",
         "source": "imagegen-production-2026-09-20",
         "brand_contract": "NEW PSI"
-      }
+      },
+      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
     },
     "system_shoring_jackbase": {
       "element_id": "scene.prop.system_shoring_jackbase",

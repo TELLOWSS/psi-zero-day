@@ -4,22 +4,22 @@
   "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
   "section_order": 2,
   "purpose": "현장도감 SECTION 2 실제 Production WebP 12종을 순차 생성·검증·GitHub 등록하기 위한 고정 생산계약",
-  "style_profile": "field-guide-isometric-v1",
-  "rule": "generated preview is not complete. Completion requires binary persistence, manifest registration, catalog final status, runtime resolution, and checksum validation.",
+  "style_profile": "field-guide-production-realistic-v2",
+  "rule": "Existing pictogram/isometric-icon outputs are placeholders only. Final requires high-detail semi-realistic construction assets with believable joints, materials and work-state context.",
   "acceptance_common": [
-    "transparent alpha; no baked photo/background",
+    "high-detail semi-realistic 3D construction asset, not pictogram/icon",
+    "realistic Korean RC temporary-works proportions and connection details",
+    "critical joints, clamps, ties, braces, guardrails and load paths visible where applicable",
+    "realistic steel/plywood/deck material response, subtle wear and contact shadows",
+    "transparent or neutral studio background; compact work-state context allowed when needed",
+    "no toy-like miniature, low-poly, vector, thick cartoon outline or generic safety infographic look",
     "no real company/manufacturer/project branding; if a readable mark is needed, NEW PSI only",
-    "no embedded Korean/English text",
-    "object remains identifiable at 60px thumbnail",
-    "real Korean high-rise temporary-works proportions; avoid toy-like miniature styling",
-    "three-quarter isometric 35–45 degree presentation",
-    "dark navy edge definition; steel/navy/orange restrained palette",
-    "minimum 768x512; preferred source square 1254x1254 and delivery 768x768 where practical"
+    "minimum 1024px source preferred; delivery optimized separately after visual approval"
   ],
   "batches": [
     {
       "batch_id": "S2-A",
-      "status": "final",
+      "status": "replacement_required",
       "items": [
         {
           "key": "euroform_wall_panel",
@@ -38,13 +38,14 @@
           "style_profile": "field-guide-isometric-v1",
           "render_intent": "isolated_isometric_3d_pictogram",
           "generation_prompt": "Korean apartment basement RC construction euroform wall formwork panel assembly, realistic modular steel-frame plywood panels standing vertically as a compact wall-form section, believable tie-hole spacing and clamps, no workers, no text, clean three-quarter isometric construction pictogram, realistic proportions, commercial 2.5D game asset, dark navy edge definition, steel gray and warm plywood brown with restrained orange safety accents, soft upper-left key light, transparent alpha background, centered with 10% breathing room.",
-          "status": "final",
+          "status": "replacement_required",
           "actual": {
             "width": 768,
             "height": 768,
             "bytes": 66536,
             "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a"
-          }
+          },
+          "visual_acceptance": "not_final_pictogram_placeholder"
         },
         {
           "key": "formwork_tie",
@@ -63,13 +64,14 @@
           "style_profile": "field-guide-isometric-v1",
           "render_intent": "isolated_isometric_3d_pictogram",
           "generation_prompt": "Korean RC wall formwork tie and connection hardware shown as a compact exploded-but-physically-believable assembly: form tie rod passing through opposing euroform panels with cone/spacer, wing nuts and clamps clearly readable, no text, no labels, three-quarter isometric construction pictogram, realistic steel hardware scale, commercial 2.5D game asset, dark navy edge definition, galvanized steel with restrained orange accent, soft upper-left light, transparent alpha background.",
-          "status": "final",
+          "status": "replacement_required",
           "actual": {
             "width": 768,
             "height": 768,
             "bytes": 52386,
             "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea"
-          }
+          },
+          "visual_acceptance": "not_final_pictogram_placeholder"
         },
         {
           "key": "formwork_brace",
@@ -88,13 +90,14 @@
           "style_profile": "field-guide-isometric-v1",
           "render_intent": "isolated_isometric_3d_pictogram",
           "generation_prompt": "Korean basement RC wall euroform stabilized by a proper diagonal push-pull brace / turnbuckle support anchored to slab, clearly showing anti-overturning geometry, one compact work-state diorama, no workers, no text, realistic temporary works proportions, three-quarter isometric commercial 2.5D construction game asset, navy/steel palette with orange safety accent, soft upper-left lighting, transparent alpha background.",
-          "status": "final",
+          "status": "replacement_required",
           "actual": {
             "width": 768,
             "height": 768,
             "bytes": 59680,
             "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6"
-          }
+          },
+          "visual_acceptance": "not_final_pictogram_placeholder"
         },
         {
           "key": "formwork_work_platform",
@@ -113,16 +116,18 @@
           "style_profile": "field-guide-isometric-v1",
           "render_intent": "isolated_isometric_3d_pictogram",
           "generation_prompt": "Korean RC wall formwork work platform attached to euroform, showing metal bracket platform, deck, guardrail top/mid rail and safe access relationship, physically believable compact assembly, no workers, no text, three-quarter isometric commercial 2.5D construction pictogram, realistic steel and timber materials, dark navy edge definition, orange safety details, soft upper-left light, transparent alpha background.",
-          "status": "final",
+          "status": "replacement_required",
           "actual": {
             "width": 768,
             "height": 768,
             "bytes": 68130,
             "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97"
-          }
+          },
+          "visual_acceptance": "not_final_pictogram_placeholder"
         }
       ],
-      "completed_at": "2026-09-20"
+      "completed_at": "2026-09-20",
+      "note": "Current S2-A pictogram/isometric-icon outputs are not approved as final art. Keep only as composition/reference placeholders until realistic-v2 replacements pass visual review."
     },
     {
       "batch_id": "S2-B",
@@ -284,6 +289,6 @@
     "run scene-element asset contract"
   ],
   "brand_contract": "content/brand/naming-contract.json",
-  "current_batch": "S2-B",
-  "next_action": "Generate and integrate system shoring jackbase, standard, ledger, missing brace, and U-head alignment production assets."
+  "current_batch": "S2-A-REALISTIC-REPLACEMENT",
+  "next_action": "Replace euroform wall panel, formwork tie, formwork brace and formwork work platform with realistic-v2 production art before proceeding to S2-B."
 }
