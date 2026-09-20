@@ -3199,3 +3199,42 @@
     max-height:82px !important;
   }
 }
+
+
+/* Mobile OFFICE final containment: keep all three responsibility choices visible
+   at once. Text-first choices do not need image-card height. */
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:50px !important;
+    min-height:50px !important;
+    max-block-size:78px !important;
+    max-height:78px !important;
+    padding:6px 8px !important;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:9.5px;
+    line-height:1.28;
+  }
+}
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:46px !important;
+    min-height:46px !important;
+    max-block-size:64px !important;
+    max-height:64px !important;
+    padding:4px 6px !important;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-copy,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-copy {
+    grid-template-columns:1.8em minmax(0,1fr);
+    gap:4px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:8.5px;
+    line-height:1.22;
+  }
+}
