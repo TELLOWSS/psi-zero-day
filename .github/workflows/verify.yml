@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/task-007-casual-strategy-foundation
+      - phase-c1-stopwork-quality-lock
   workflow_dispatch:
 
 permissions:
