@@ -2201,7 +2201,13 @@
   border-color:rgba(210,229,234,.24);
   color:#edf4f3;
 }
-.game-frame[data-production-scene="STRATEGY"] .strategy-action-heading strong,
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-heading strong {
+  color:#edf4f3;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-action-heading span {
+  color:#bfd2da;
+  opacity:.86;
+}
 .game-frame[data-production-scene="STRATEGY"] .strategy-action-list button,
 .game-frame[data-production-scene="STRATEGY"] .strategy-action-confirm,
 .game-frame[data-production-scene="STRATEGY"] .strategy-outcome-card {
