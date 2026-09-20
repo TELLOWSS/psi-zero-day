@@ -3169,3 +3169,33 @@
     min-height:46px !important;
   }
 }
+
+
+/* OFFICE choice cards are text controls, never visual tiles. Give them a
+   definite content-sized block box so legacy grid stretching cannot expand a
+   single option to hundreds of pixels. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  box-sizing:border-box !important;
+  block-size:fit-content !important;
+  height:fit-content !important;
+  min-block-size:58px !important;
+  max-block-size:96px !important;
+  max-height:96px !important;
+}
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:52px !important;
+    max-block-size:104px !important;
+    max-height:104px !important;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:46px !important;
+    max-block-size:82px !important;
+    max-height:82px !important;
+  }
+}
