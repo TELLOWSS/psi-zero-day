@@ -31,6 +31,18 @@
     "ep01.stopwork.situation": "15:20 쉬는 시간. 오전 작업중지와 재개는 끝났지만 사람들 사이에는 다른 문제가 남아 있다. 임준호가 지나가자 누군가 “저 친구가 말해서 오늘 일이 커졌다”고 낮게 말한다. 위험을 말한 사람이 다음에도 말할 수 있을지는 지금의 분위기에 달려 있다.",
     "ep01.record.situation": "16:42. 하루 동안 쌓인 작업중지, 재확인, 변경작업, TBM 재전파를 한 기록으로 묶는 시간이다. 현장은 정리되고 있지만 기록은 이제 시작이다. 빠르게 쓰는 것과 정확하게 남기는 것은 같은 일이 아니다.",
     "ep01.evening.prompt": "17:18. 해가 내려가고 현장 소음이 줄어든다. 오늘은 사고 없이 끝났지만 ‘아무 일도 없었다’고만 남기기에는 많은 신호와 판단이 있었다. 내일을 위해 무엇을 남길까?",
-    "ep01.tease": "다음 날 06:52. 비 예보가 들어왔다. 어제와 같은 게이트지만 가설통로, 비계, 자재 적치, 물고임은 전부 다시 확인해야 한다. 어제의 선택은 끝난 일이 아니라 오늘의 시작조건이 된다."
+    "ep01.tease": "다음 날 06:52. 비 예보가 들어왔다. 어제와 같은 게이트지만 가설통로, 비계, 자재 적치, 물고임은 전부 다시 확인해야 한다. 어제의 선택은 끝난 일이 아니라 오늘의 시작조건이 된다.",
+    "ui.stopwork.kicker.hazard": "위험 확인 · 10:20",
+    "ui.stopwork.title.hazard": "멈출 이유를 먼저 본다",
+    "ui.stopwork.detail.hazard": "단부·차량·작업자 동선이 한 구간에서 겹친다. 먼저 실제 상태를 확인한다.",
+    "ui.stopwork.kicker.zero": "ZERO MOMENT · 10:24",
+    "ui.stopwork.title.zero": "작업중지",
+    "ui.stopwork.detail.zero": "멈추는 결정과 동시에, 다시 시작할 조건까지 책임져야 한다.",
+    "ui.stopwork.kicker.restart": "재확인 · 11:15",
+    "ui.stopwork.title.restart": "재개 기준 확인",
+    "ui.stopwork.detail.restart": "사진이 아니라 실제 현장에서 조치가 닫혔는지 다시 확인한다.",
+    "ui.stopwork.marker.edge": "단부 위험",
+    "ui.stopwork.marker.route": "차량·작업자 동선",
+    "ui.stopwork.marker.restart": "재개 조건"
   }
 }
