@@ -1,7 +1,7 @@
 {
   "locale": "ko",
   "messages": {
-    "ui.brand": "PSI : ZERO DAY",
+    "ui.brand": "NEW PSI : ZERO DAY",
     "ui.tagline": "현장, 오늘도 무사히",
     "ui.episode": "EPISODE 01",
     "ui.complete": "EPISODE 01 COMPLETE",
@@ -11,7 +11,7 @@
     "ui.continue": "계속",
     "ui.record": "현장 기록",
     "ui.scene": "첫 타설 현장",
-    "ui.site": "FOUNDATION / 현장",
+    "ui.site": "NEW PSI ZERO SITE 01 / FOUNDATION",
     "ui.progress": "에피소드 진행",
     "ui.autosave": "자동 저장",
     "ui.choice": "당신의 판단",
@@ -173,7 +173,7 @@
     "ui.journey.tomorrow.hint": "오늘의 선택을 돌아보고 다음 현장을 준비합니다.",
     "ui.hub.guide": "현장 도감",
     "ui.hub.guide.hint": "위험을 알아보는 눈",
-    "ui.guide.title": "작은 신호를 읽는 연습",
+    "ui.guide.title": "NEW PSI 현장도감 · 작은 신호를 읽는 연습",
     "ui.guide.intro": "현장의 물건을 골라 살펴보세요. 눈에 보이는 것과 더 확인해야 할 것을 구분합니다.",
     "ui.guide.observe": "관찰 포인트",
     "ui.guide.note": "게임용 관찰 자료 · 실제 작업은 해당 현장의 작업계획과 확인 기준을 따릅니다.",
@@ -422,7 +422,7 @@
     "ui.title.brand_copy": "오늘도, 사람이 있는 현장이 대한민국의 내일을 만듭니다.",
     "ui.title.footer": "사람 · 안전 · 현장 · 그리고, 더 나은 내일",
     "ui.title.no_save": "저장 없음",
-    "ui.title.plaque": "함께 짓는 더 나은 내일",
+    "ui.title.plaque": "NEW PSI CONSTRUCTION",
     "ui.title.confirm_new": "새 게임을 시작할까요?",
     "ui.title.confirm_new.hint": "현재 진행 기록이 초기화되고 에피소드 01을 처음부터 시작합니다.",
     "ui.title.cancel": "취소",
@@ -848,6 +848,9 @@
     "ui.psi_trace.record.record": "시점·근거 보존",
     "ui.scene_minimap.title": "현재 위치",
     "ui.strategy.zone.inspection": "검측 구역",
-    "ui.strategy.zone.office": "현장사무실"
+    "ui.strategy.zone.office": "현장사무실",
+    "ui.company.construction": "NEW PSI CONSTRUCTION",
+    "ui.company.construction_ko": "NEW PSI 건설",
+    "ui.site.project": "NEW PSI 현장 01"
   }
 }
