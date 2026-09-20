@@ -1,0 +1,1747 @@
+{
+  "schema_version": 1,
+  "roadmap_id": "new-psi-field-guide-118-high-speed-v2",
+  "status": "locked_for_execution",
+  "title": "NEW PSI FIELD GUIDE — 118개 고속 생산 로드맵",
+  "target_style": "field-guide-production-realistic-v2",
+  "baseline": {
+    "total": 118,
+    "approved_v2": 0,
+    "legacy_v1_placeholders": 20,
+    "needs_new_or_replacement": 118,
+    "note": "Legacy pictogram finals are preserved as placeholders but are not counted as completed under realistic-v2."
+  },
+  "grade_policy": {
+    "A": {
+      "name": "정밀 핵심자산",
+      "generation": "reference-anchored realistic-v2",
+      "review": "strict construction-logic review",
+      "retry": "retry only on failed acceptance",
+      "source_px": "1536+ preferred"
+    },
+    "B": {
+      "name": "표준 현실형",
+      "generation": "realistic-v2 batch",
+      "review": "batch visual review",
+      "retry": "retry failed only",
+      "source_px": "1024+ preferred"
+    },
+    "C": {
+      "name": "경량 현실형",
+      "generation": "clean realistic studio asset",
+      "review": "batch spot-check",
+      "retry": "retry only if unreadable/incorrect",
+      "source_px": "1024 preferred"
+    }
+  },
+  "grade_counts": {
+    "A": 37,
+    "B": 58,
+    "C": 23
+  },
+  "production_strategy": {
+    "sequence": "대량 생성 → 배치 선별 → 실패작만 재생성 → 2개 배치 단위 GitHub 일괄 반영",
+    "generation_batches": 14,
+    "integration_commits_target": 7,
+    "no_per_item_commit": true,
+    "first_pass_goal": "118개 전 슬롯에 realistic-v2 후보 확보",
+    "second_pass_goal": "A급 실패/오류와 대표자산만 정밀 보정",
+    "acceptance_principle": "experienced field worker should recognize the real object/work condition without reading a label"
+  },
+  "batches": [
+    {
+      "batch_id": "FG-HS-01",
+      "section_order": 0,
+      "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+      "count": 10,
+      "grades": {
+        "B": 5,
+        "A": 1,
+        "C": 4
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "site_gate",
+          "label": "현장 출입 게이트",
+          "grade": "B",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.site_gate",
+          "final_path": "assets/episode01/scene-elements/site-gate.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "pedestrian_gate",
+          "label": "근로자 전용 출입구",
+          "grade": "B",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.pedestrian_gate",
+          "final_path": "assets/episode01/scene-elements/pedestrian-gate.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "vehicle_pedestrian_separation",
+          "label": "차량·보행 동선 분리시설",
+          "grade": "A",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
+          "final_path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "material_yard",
+          "label": "자재 야적장",
+          "grade": "B",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.material_yard",
+          "final_path": "assets/episode01/scene-elements/material-yard.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_distribution_board",
+          "label": "임시 분전반",
+          "grade": "B",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.temporary_distribution_board",
+          "final_path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_lighting_pack",
+          "label": "임시조명",
+          "grade": "C",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.temporary_lighting_pack",
+          "final_path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "ppe_issue_station",
+          "label": "안전용품 지급·교체 지점",
+          "grade": "C",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.ppe_issue_station",
+          "final_path": "assets/episode01/scene-elements/ppe-issue-station.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "fire_extinguisher_station",
+          "label": "소화기 배치 지점",
+          "grade": "C",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.fire_extinguisher_station",
+          "final_path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "first_aid_aed",
+          "label": "응급구호함·AED",
+          "grade": "C",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.first_aid_aed",
+          "final_path": "assets/episode01/scene-elements/first-aid-aed.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "site_weather_station",
+          "label": "현장 풍속·기상 확인 지점",
+          "grade": "B",
+          "section": "SECTION 0 — 프로젝트 셋업·현장개설",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.site_weather_station",
+          "final_path": "assets/episode01/scene-elements/site-weather-station.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-02",
+      "section_order": 1,
+      "section": "SECTION 1 — 기초공사",
+      "count": 7,
+      "grades": {
+        "B": 5,
+        "A": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "foundation_blinding_edge",
+          "label": "버림타설 단부·단차",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.foundation_blinding_edge",
+          "final_path": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "foundation_rebar_mat",
+          "label": "기초 철근 배근 구간",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.foundation_rebar_mat",
+          "final_path": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "rebar_chair_support",
+          "label": "철근 받침·스페이서",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.rebar_chair_support",
+          "final_path": "assets/episode01/scene-elements/rebar-chair-support.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "starter_rebar_protrusion",
+          "label": "돌출 철근·스타터바",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.starter_rebar_protrusion",
+          "final_path": "assets/episode01/scene-elements/starter-rebar-protrusion.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "rebar_lifting_bundle",
+          "label": "철근 다발 양중",
+          "grade": "A",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.rebar_lifting_bundle",
+          "final_path": "assets/episode01/scene-elements/rebar-lifting-bundle.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "ev_pit_opening",
+          "label": "EV PIT 개구부",
+          "grade": "A",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.ev_pit_opening",
+          "final_path": "assets/episode01/scene-elements/ev-pit-opening.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "ev_pit_access_route",
+          "label": "EV 구간 작업·이동 동선",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.ev_pit_access_route",
+          "final_path": "assets/episode01/scene-elements/ev-pit-access-route.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-03",
+      "section_order": 1,
+      "section": "SECTION 1 — 기초공사",
+      "count": 6,
+      "grades": {
+        "B": 3,
+        "A": 1,
+        "C": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "foundation_temporary_walkway",
+          "label": "기초 임시통로",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.foundation_temporary_walkway",
+          "final_path": "assets/episode01/scene-elements/foundation-temporary-walkway.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "pump_outrigger",
+          "label": "펌프카 아웃트리거",
+          "grade": "A",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.pump_outrigger",
+          "final_path": "assets/episode01/scene-elements/pump-outrigger.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "pump_hose_route",
+          "label": "자바라 이동 동선",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.pump_hose_route",
+          "final_path": "assets/episode01/scene-elements/pump-hose-route.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "concrete_vibrator_cable",
+          "label": "바이브레이터·전선",
+          "grade": "C",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.concrete_vibrator_cable",
+          "final_path": "assets/episode01/scene-elements/concrete-vibrator-cable.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "foundation_sump_pump",
+          "label": "집수정·양수기",
+          "grade": "B",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.foundation_sump_pump",
+          "final_path": "assets/episode01/scene-elements/foundation-sump-pump.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "wet_floor",
+          "label": "습윤·미끄럼 구간",
+          "grade": "C",
+          "section": "SECTION 1 — 기초공사",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.wet_floor",
+          "final_path": "assets/episode01/scene-elements/wet-floor.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-04",
+      "section_order": 2,
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "count": 10,
+      "grades": {
+        "A": 10
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "euroform_wall_panel",
+          "label": "유로폼 벽체 거푸집",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "replacement_required",
+          "visual_status": "replacement_required",
+          "asset_id": "ep01.scene_element.euroform_wall_panel",
+          "final_path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "formwork_tie",
+          "label": "폼타이·연결철물",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "replacement_required",
+          "visual_status": "replacement_required",
+          "asset_id": "ep01.scene_element.formwork_tie",
+          "final_path": "assets/episode01/scene-elements/formwork-tie.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "formwork_brace",
+          "label": "벽체 거푸집 전도방지 지지",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "replacement_required",
+          "visual_status": "replacement_required",
+          "asset_id": "ep01.scene_element.formwork_brace",
+          "final_path": "assets/episode01/scene-elements/formwork-brace.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "formwork_work_platform",
+          "label": "거푸집 작업발판",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "replacement_required",
+          "visual_status": "replacement_required",
+          "asset_id": "ep01.scene_element.formwork_work_platform",
+          "final_path": "assets/episode01/scene-elements/formwork-work-platform.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "system_shoring_jackbase",
+          "label": "시스템동바리 잭베이스",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.system_shoring_jackbase",
+          "final_path": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "system_shoring_standard",
+          "label": "시스템동바리 수직재",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.system_shoring_standard",
+          "final_path": "assets/episode01/scene-elements/system-shoring-standard.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "system_shoring_ledger",
+          "label": "시스템동바리 수평재",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.system_shoring_ledger",
+          "final_path": "assets/episode01/scene-elements/system-shoring-ledger.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "system_shoring_missing_brace",
+          "label": "누락된 가새·연결재",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.system_shoring_missing_brace",
+          "final_path": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "uhead_beam_alignment",
+          "label": "U-Head와 멍에 중심",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.uhead_beam_alignment",
+          "final_path": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "slab_formwork_edge",
+          "label": "슬래브 판개 단부",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.slab_formwork_edge",
+          "final_path": "assets/episode01/scene-elements/slab-formwork-edge.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-05",
+      "section_order": 2,
+      "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+      "count": 10,
+      "grades": {
+        "A": 2,
+        "B": 8
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "slab_opening_cover",
+          "label": "슬래브 개구부 덮개",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.slab_opening_cover",
+          "final_path": "assets/episode01/scene-elements/slab-opening-cover.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_stair",
+          "label": "임시 계단·승강통로",
+          "grade": "A",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_stair",
+          "final_path": "assets/episode01/scene-elements/temporary-stair.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "shoring_deformation_watch",
+          "label": "타설 중 동바리 감시",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.shoring_deformation_watch",
+          "final_path": "assets/episode01/scene-elements/shoring-deformation-watch.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "concrete_pour_zone",
+          "label": "슬래브 타설 작업구역",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.concrete_pour_zone",
+          "final_path": "assets/episode01/scene-elements/concrete-pour-zone.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "dismantle_drop_zone",
+          "label": "거푸집 해체 하부통제",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.dismantle_drop_zone",
+          "final_path": "assets/episode01/scene-elements/dismantle-drop-zone.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "dismantled_formwork_stack",
+          "label": "해체 거푸집 적치",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.dismantled_formwork_stack",
+          "final_path": "assets/episode01/scene-elements/dismantled-formwork-stack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "confined_space_meter",
+          "label": "밀폐공간 가스농도 측정기",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.confined_space_meter",
+          "final_path": "assets/episode01/scene-elements/confined-space-meter.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "ventilation_fan_duct",
+          "label": "환기팬·덕트",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.ventilation_fan_duct",
+          "final_path": "assets/episode01/scene-elements/ventilation-fan-duct.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "confined_space_attendant",
+          "label": "밀폐공간 감시인 위치",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.confined_space_attendant",
+          "final_path": "assets/episode01/scene-elements/confined-space-attendant.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_electric_wet",
+          "label": "습윤구간 임시전기",
+          "grade": "B",
+          "section": "SECTION 2 — 지하층 RC·유로폼·시스템동바리",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_electric_wet",
+          "final_path": "assets/episode01/scene-elements/temporary-electric-wet.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-06",
+      "section_order": 3,
+      "section": "SECTION 3 — 지상 전환층",
+      "count": 8,
+      "grades": {
+        "B": 5,
+        "A": 3
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "transfer_floor_high_ceiling",
+          "label": "전환층 고층고 구간",
+          "grade": "B",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.transfer_floor_high_ceiling",
+          "final_path": "assets/episode01/scene-elements/transfer-floor-high-ceiling.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "mobile_work_platform",
+          "label": "고소작업대",
+          "grade": "A",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.mobile_work_platform",
+          "final_path": "assets/episode01/scene-elements/mobile-work-platform.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "system_scaffold_transition",
+          "label": "전환층 시스템비계",
+          "grade": "A",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.system_scaffold_transition",
+          "final_path": "assets/episode01/scene-elements/system-scaffold-transition.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "transfer_floor_opening",
+          "label": "전환층 신규 개구부",
+          "grade": "B",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.transfer_floor_opening",
+          "final_path": "assets/episode01/scene-elements/transfer-floor-opening.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "mixed_formwork_interface",
+          "label": "재래식·시스템 거푸집 접점",
+          "grade": "A",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.mixed_formwork_interface",
+          "final_path": "assets/episode01/scene-elements/mixed-formwork-interface.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_support_transfer",
+          "label": "전환층 임시서포트",
+          "grade": "B",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_support_transfer",
+          "final_path": "assets/episode01/scene-elements/temporary-support-transfer.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "material_lift_opening_transfer",
+          "label": "전환층 자재인양구",
+          "grade": "B",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.material_lift_opening_transfer",
+          "final_path": "assets/episode01/scene-elements/material-lift-opening-transfer.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_route_reroute",
+          "label": "전환층 우회통로",
+          "grade": "B",
+          "section": "SECTION 3 — 지상 전환층",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_route_reroute",
+          "final_path": "assets/episode01/scene-elements/temporary-route-reroute.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-07",
+      "section_order": 4,
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "count": 7,
+      "grades": {
+        "A": 4,
+        "B": 3
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "alform_panel",
+          "label": "AL Form 벽체·슬래브 패널",
+          "grade": "A",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_panel",
+          "final_path": "assets/episode01/scene-elements/alform-panel.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "alform_pin_wedge",
+          "label": "알폼 핀·웨지",
+          "grade": "A",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_pin_wedge",
+          "final_path": "assets/episode01/scene-elements/alform-pin-wedge.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "alform_pin_flying",
+          "label": "알폼 핀 타격·비래",
+          "grade": "A",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_pin_flying",
+          "final_path": "assets/episode01/scene-elements/alform-pin-flying.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "alform_support",
+          "label": "AL Form 하부 서포트",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_support",
+          "final_path": "assets/episode01/scene-elements/alform-support.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "alform_deck_support",
+          "label": "슬래브 데크 서포트",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_deck_support",
+          "final_path": "assets/episode01/scene-elements/alform-deck-support.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "lifting_box",
+          "label": "자재 인양 박스",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.lifting_box",
+          "final_path": "assets/episode01/scene-elements/lifting-box.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "material_lift_opening",
+          "label": "자재인양구 개방 상태",
+          "grade": "A",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.material_lift_opening",
+          "final_path": "assets/episode01/scene-elements/material-lift-opening.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-08",
+      "section_order": 4,
+      "section": "SECTION 4 — 기준층 사이클·AL Form",
+      "count": 6,
+      "grades": {
+        "B": 3,
+        "A": 1,
+        "C": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "pump_pipe_opening",
+          "label": "압송관 개구부",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.pump_pipe_opening",
+          "final_path": "assets/episode01/scene-elements/pump-pipe-opening.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "perimeter_open_edge",
+          "label": "기준층 외곽 단부",
+          "grade": "A",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.perimeter_open_edge",
+          "final_path": "assets/episode01/scene-elements/perimeter-open-edge.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "harness_unclipped",
+          "label": "더블 랜야드 안전대 미체결",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.harness_unclipped",
+          "final_path": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "embedded_box_trip",
+          "label": "매립박스·돌출부",
+          "grade": "C",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.embedded_box_trip",
+          "final_path": "assets/episode01/scene-elements/embedded-box-trip.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "alform_panel_stack",
+          "label": "알폼 패널 적치",
+          "grade": "B",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.alform_panel_stack",
+          "final_path": "assets/episode01/scene-elements/alform-panel-stack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "housekeeping_typical_floor",
+          "label": "기준층 정리정돈 상태",
+          "grade": "C",
+          "section": "SECTION 4 — 기준층 사이클·AL Form",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.housekeeping_typical_floor",
+          "final_path": "assets/episode01/scene-elements/housekeeping-typical-floor.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-09",
+      "section_order": 5,
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "count": 7,
+      "grades": {
+        "A": 6,
+        "B": 1
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "gangform_panel",
+          "label": "갱폼 패널 본체",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_panel",
+          "final_path": "assets/episode01/scene-elements/gangform-panel.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_platform",
+          "label": "갱폼 작업발판",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_platform",
+          "final_path": "assets/episode01/scene-elements/gangform-platform.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_anchor_bolt",
+          "label": "갱폼 고정볼트",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_anchor_bolt",
+          "final_path": "assets/episode01/scene-elements/gangform-anchor-bolt.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_shackle",
+          "label": "갱폼 인양 샤클",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_shackle",
+          "final_path": "assets/episode01/scene-elements/gangform-shackle.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_lift_wire22",
+          "label": "갱폼 양중 · Ø22 mm 와이어로프",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.gangform_lift_wire22",
+          "final_path": "assets/episode01/scene-elements/gangform-lift-wire22.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_turnbuckle_wire",
+          "label": "전도방지 턴버클·와이어",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_turnbuckle_wire",
+          "final_path": "assets/episode01/scene-elements/gangform-turnbuckle-wire.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_tagline",
+          "label": "갱폼 유도로프",
+          "grade": "B",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_tagline",
+          "final_path": "assets/episode01/scene-elements/gangform-tagline.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-10",
+      "section_order": 5,
+      "section": "SECTION 5 — 갱폼 설치·인상",
+      "count": 7,
+      "grades": {
+        "B": 3,
+        "C": 3,
+        "A": 1
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "gangform_platform_debris",
+          "label": "갱폼 발판 위 적재물",
+          "grade": "B",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_platform_debris",
+          "final_path": "assets/episode01/scene-elements/gangform-platform-debris.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "exclusion_zone",
+          "label": "출입금지 구역",
+          "grade": "B",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.exclusion_zone",
+          "final_path": "assets/episode01/scene-elements/exclusion-zone.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "wind_meter",
+          "label": "풍속계",
+          "grade": "C",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.wind_meter",
+          "final_path": "assets/episode01/scene-elements/wind-meter.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_lift_interference",
+          "label": "갱폼 인상 구조물 간섭",
+          "grade": "A",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_lift_interference",
+          "final_path": "assets/episode01/scene-elements/gangform-lift-interference.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_landing_fix",
+          "label": "갱폼 인상 후 고정상태",
+          "grade": "B",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_landing_fix",
+          "final_path": "assets/episode01/scene-elements/gangform-landing-fix.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "gangform_signal_radio",
+          "label": "갱폼 인상 무전·신호",
+          "grade": "C",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.gangform_signal_radio",
+          "final_path": "assets/episode01/scene-elements/gangform-signal-radio.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "flying_metal_eye",
+          "label": "금속 파편 비래",
+          "grade": "C",
+          "section": "SECTION 5 — 갱폼 설치·인상",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.flying_metal_eye",
+          "final_path": "assets/episode01/scene-elements/flying-metal-eye.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-11",
+      "section_order": 6,
+      "section": "SECTION 6 — 층변화·Roof·옥탑",
+      "count": 10,
+      "grades": {
+        "A": 2,
+        "B": 6,
+        "C": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "floor_change_edge",
+          "label": "층변화 신규 단부",
+          "grade": "A",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.floor_change_edge",
+          "final_path": "assets/episode01/scene-elements/floor-change-edge.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "partial_gangform_dismantle",
+          "label": "갱폼 부분탈형",
+          "grade": "A",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.partial_gangform_dismantle",
+          "final_path": "assets/episode01/scene-elements/partial-gangform-dismantle.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "changed_lifting_point",
+          "label": "변경된 인양고리 위치",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.changed_lifting_point",
+          "final_path": "assets/episode01/scene-elements/changed-lifting-point.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "irregular_platform_gap",
+          "label": "비정형 작업발판 틈",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.irregular_platform_gap",
+          "final_path": "assets/episode01/scene-elements/irregular-platform-gap.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_lifeline",
+          "label": "임시 생명줄",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_lifeline",
+          "final_path": "assets/episode01/scene-elements/temporary-lifeline.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "roof_open_edge",
+          "label": "Roof 외곽 단부",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.roof_open_edge",
+          "final_path": "assets/episode01/scene-elements/roof-open-edge.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "penthouse_access",
+          "label": "옥탑 승강통로",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.penthouse_access",
+          "final_path": "assets/episode01/scene-elements/penthouse-access.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "roof_wind_exposure",
+          "label": "옥상 강풍 노출구간",
+          "grade": "C",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.roof_wind_exposure",
+          "final_path": "assets/episode01/scene-elements/roof-wind-exposure.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "final_gangform_dismantle",
+          "label": "최종 갱폼 해체구역",
+          "grade": "B",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.final_gangform_dismantle",
+          "final_path": "assets/episode01/scene-elements/final-gangform-dismantle.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "roof_housekeeping",
+          "label": "Roof·옥탑 정리정돈",
+          "grade": "C",
+          "section": "SECTION 6 — 층변화·Roof·옥탑",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.roof_housekeeping",
+          "final_path": "assets/episode01/scene-elements/roof-housekeeping.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-12",
+      "section_order": 7,
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "count": 9,
+      "grades": {
+        "C": 2,
+        "B": 5,
+        "A": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "surface_finishing_tools",
+          "label": "견출 작업 공구",
+          "grade": "C",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.surface_finishing_tools",
+          "final_path": "assets/episode01/scene-elements/surface-finishing-tools.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "chipping_breaker",
+          "label": "할석 브레이커",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.chipping_breaker",
+          "final_path": "assets/episode01/scene-elements/chipping-breaker.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "grinder_guard_switch",
+          "label": "그라인더 덮개·스위치",
+          "grade": "A",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.grinder_guard_switch",
+          "final_path": "assets/episode01/scene-elements/grinder-guard-switch.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "mortar_mixer",
+          "label": "미장용 믹서·교반기",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.mortar_mixer",
+          "final_path": "assets/episode01/scene-elements/mortar-mixer.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "workhorse_platform",
+          "label": "우마·간이 작업발판",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.workhorse_platform",
+          "final_path": "assets/episode01/scene-elements/workhorse-platform.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "mobile_scaffold",
+          "label": "이동식비계",
+          "grade": "A",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.mobile_scaffold",
+          "final_path": "assets/episode01/scene-elements/mobile-scaffold.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "dust_control",
+          "label": "분진 저감장치",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.dust_control",
+          "final_path": "assets/episode01/scene-elements/dust-control.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "eye_face_ppe",
+          "label": "보안경·안면보호구",
+          "grade": "C",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.eye_face_ppe",
+          "final_path": "assets/episode01/scene-elements/eye-face-ppe.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "dismantled_guardrail",
+          "label": "임의 해체된 안전난간",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.dismantled_guardrail",
+          "final_path": "assets/episode01/scene-elements/dismantled-guardrail.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-13",
+      "section_order": 7,
+      "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+      "count": 9,
+      "grades": {
+        "B": 6,
+        "C": 3
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "dismantle_debris_route",
+          "label": "해체자재와 이동통로",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.dismantle_debris_route",
+          "final_path": "assets/episode01/scene-elements/dismantle-debris-route.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "waste_sorting_zone",
+          "label": "폐자재 분리·반출구역",
+          "grade": "C",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.waste_sorting_zone",
+          "final_path": "assets/episode01/scene-elements/waste-sorting-zone.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "forklift_blind_spot",
+          "label": "지게차 사각지대",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.forklift_blind_spot",
+          "final_path": "assets/episode01/scene-elements/forklift-blind-spot.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "traffic_control_pack",
+          "label": "차량통제 장비",
+          "grade": "C",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.traffic_control_pack",
+          "final_path": "assets/episode01/scene-elements/traffic-control-pack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "chemical_msds_station",
+          "label": "화학물질·MSDS 관리지점",
+          "grade": "C",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.chemical_msds_station",
+          "final_path": "assets/episode01/scene-elements/chemical-msds-station.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "extension_ladder",
+          "label": "이동식 사다리",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.extension_ladder",
+          "final_path": "assets/episode01/scene-elements/extension-ladder.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_facility_removal",
+          "label": "가설 안전시설 철거",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_facility_removal",
+          "final_path": "assets/episode01/scene-elements/temporary-facility-removal.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "temporary_power_removal",
+          "label": "임시전기 철거",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.temporary_power_removal",
+          "final_path": "assets/episode01/scene-elements/temporary-power-removal.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "final_route_clearance",
+          "label": "준공 전 최종 이동통로",
+          "grade": "B",
+          "section": "SECTION 7 — 견출·할석·미장·해체정리·직영",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.final_route_clearance",
+          "final_path": "assets/episode01/scene-elements/final-route-clearance.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    },
+    {
+      "batch_id": "FG-HS-14",
+      "section_order": 8,
+      "section": "SECTION 8 — 공통 안전·운영 아이템",
+      "count": 12,
+      "grades": {
+        "B": 5,
+        "C": 5,
+        "A": 2
+      },
+      "workflow_status": "queued",
+      "items": [
+        {
+          "key": "material_stack",
+          "label": "통로 인접 적재 자재",
+          "grade": "B",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.material_stack",
+          "final_path": "assets/episode01/scene-elements/material-stack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "access_barrier",
+          "label": "출입 통제 바리케이드",
+          "grade": "C",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.access_barrier",
+          "final_path": "assets/episode01/scene-elements/access-barrier.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "vehicle_overlap_zone",
+          "label": "차량·보행 동선 중첩",
+          "grade": "B",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.vehicle_overlap",
+          "final_path": "assets/episode01/scene-elements/vehicle-overlap.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "suspended_load",
+          "label": "일반 중량물 양중 · 라운드 슬링 초크걸이",
+          "grade": "A",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.suspended_load",
+          "final_path": "assets/episode01/scene-elements/suspended-load-round-sling-choker.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "radio_pack",
+          "label": "현장 무전기",
+          "grade": "C",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.radio_pack",
+          "final_path": "assets/episode01/scene-elements/radio-pack.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "inspection_kit",
+          "label": "현장 점검 키트",
+          "grade": "C",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.inspection_kit",
+          "final_path": "assets/episode01/scene-elements/inspection-kit.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "stop_work_marker",
+          "label": "작업중지·통제 표시",
+          "grade": "C",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.stop_work_marker",
+          "final_path": "assets/episode01/scene-elements/stop-work-marker.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "tbm_board",
+          "label": "TBM 현황판",
+          "grade": "B",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.tbm_board",
+          "final_path": "assets/episode01/scene-elements/tbm-board.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "permit_board",
+          "label": "작업허가·계획 확인판",
+          "grade": "B",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.permit_board",
+          "final_path": "assets/episode01/scene-elements/permit-board.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "near_miss_marker",
+          "label": "아차사고 흔적",
+          "grade": "C",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "planned",
+          "visual_status": "needs_v2",
+          "asset_id": "ep01.scene_element.near_miss_marker",
+          "final_path": "assets/episode01/scene-elements/near-miss-marker.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "platform_cut_edge",
+          "label": "작업발판 절단부",
+          "grade": "B",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.platform_cut_edge",
+          "final_path": "assets/episode01/scene-elements/platform-cut-edge.webp",
+          "reference_policy": "reference optional",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        },
+        {
+          "key": "open_edge",
+          "label": "개구부·단부",
+          "grade": "A",
+          "section": "SECTION 8 — 공통 안전·운영 아이템",
+          "previous_status": "final",
+          "visual_status": "legacy_pictogram_placeholder",
+          "asset_id": "ep01.scene_element.open_edge",
+          "final_path": "assets/episode01/scene-elements/open-edge.webp",
+          "reference_policy": "use real-site/user reference whenever available",
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+        }
+      ]
+    }
+  ],
+  "integration_groups": [
+    {
+      "integration_id": "FG-GH-01",
+      "generation_batches": [
+        "FG-HS-01",
+        "FG-HS-02"
+      ],
+      "max_items": 17,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-02",
+      "generation_batches": [
+        "FG-HS-03",
+        "FG-HS-04"
+      ],
+      "max_items": 16,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-03",
+      "generation_batches": [
+        "FG-HS-05",
+        "FG-HS-06"
+      ],
+      "max_items": 18,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-04",
+      "generation_batches": [
+        "FG-HS-07",
+        "FG-HS-08"
+      ],
+      "max_items": 13,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-05",
+      "generation_batches": [
+        "FG-HS-09",
+        "FG-HS-10"
+      ],
+      "max_items": 14,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-06",
+      "generation_batches": [
+        "FG-HS-11",
+        "FG-HS-12"
+      ],
+      "max_items": 19,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    },
+    {
+      "integration_id": "FG-GH-07",
+      "generation_batches": [
+        "FG-HS-13",
+        "FG-HS-14"
+      ],
+      "max_items": 21,
+      "github_policy": "one atomic integration commit after both generation batches are reviewed; no per-image commits"
+    }
+  ],
+  "quality_rules": [
+    "No pictogram/vector/safety-poster look",
+    "No generic toy-like miniature or low-poly prop",
+    "Show believable material thickness, joints, fasteners, supports and load paths",
+    "Use user/site reference photos for A-grade structural assets when available",
+    "NEW PSI is the only readable brand identity when branding is naturally required",
+    "Do not mark final until visual approval and repository binary verification are both complete"
+  ],
+  "system_shoring_override": {
+    "mandatory_reference": "Use the user's current system-shoring site photos as the geometry reference.",
+    "must_show": [
+      "jack base and sole/support plate condition",
+      "vertical standard and horizontal ledger grid",
+      "U-head seated under the bearer",
+      "bearer/mong-e receiving slab formwork load",
+      "horizontal stabilizing member maintaining U-head/bearer balance where used in the field reference",
+      "realistic working platform/deck arrangement where applicable"
+    ],
+    "reject": [
+      "U-head floating without bearer",
+      "bearer unsupported or off-center",
+      "missing horizontal stabilization that exists in the supplied field configuration",
+      "generic scaffold substituted for the actual system-shoring configuration"
+    ]
+  }
+}

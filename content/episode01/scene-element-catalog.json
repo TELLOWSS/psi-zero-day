@@ -6,7 +6,7 @@
       "kind": "prop",
       "label": "통로 인접 적재 자재",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.material_stack",
       "storage_profile": {
         "dimension_grouping": "same_spec_only",
@@ -44,14 +44,15 @@
         "process_order": 1,
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "access_barrier": {
       "element_id": "scene.control.access_barrier",
       "kind": "control",
       "label": "출입 통제 바리케이드",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.access_barrier",
       "access_control_profile": {
         "barrier_form": "freestanding_modular",
@@ -94,14 +95,15 @@
         "process_order": 2,
         "observe_point_text_id": "ui.guide.access_barrier.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "vehicle_overlap_zone": {
       "element_id": "scene.hazard.vehicle_overlap",
       "kind": "hazard",
       "label": "차량·보행 동선 중첩",
       "visual_token": "⇄",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.vehicle_overlap",
       "traffic_conflict_profile": {
         "render_mode": "route_overlay",
@@ -144,14 +146,15 @@
         "process_order": 3,
         "observe_point_text_id": "ui.guide.vehicle_overlap_zone.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "harness_unclipped": {
       "element_id": "scene.hazard.harness_unclipped",
       "kind": "hazard",
       "label": "더블 랜야드 안전대 미체결",
       "visual_token": "!",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.harness_unclipped",
       "fall_protection_profile": {
         "harness_type": "full_body",
@@ -192,14 +195,15 @@
         "process_order": 10,
         "observe_point_text_id": "ui.guide.harness_unclipped.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "platform_cut_edge": {
       "element_id": "scene.hazard.platform_cut_edge",
       "kind": "hazard",
       "label": "작업발판 절단부",
       "visual_token": "▰",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.platform_cut_edge",
       "art": {
         "path": "assets/episode01/scene-elements/platform-cut-edge.webp",
@@ -228,14 +232,15 @@
         "process_order": 11,
         "observe_point_text_id": "ui.guide.platform_cut_edge.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "suspended_load": {
       "element_id": "scene.hazard.suspended_load",
       "kind": "hazard",
       "label": "일반 중량물 양중 · 라운드 슬링 초크걸이",
       "visual_token": "◆",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.suspended_load",
       "lifting_profile": {
         "load_family": "general_material",
@@ -274,14 +279,15 @@
         "process_order": 4,
         "observe_point_text_id": "ui.guide.suspended_load.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "gangform_lift_wire22": {
       "element_id": "scene.hazard.gangform_lift_wire22",
       "kind": "hazard",
       "label": "갱폼 양중 · Ø22 mm 와이어로프",
       "visual_token": "◆",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.gangform_lift_wire22",
       "lifting_profile": {
         "load_family": "gangform",
@@ -320,14 +326,15 @@
         "process_order": 5,
         "observe_point_text_id": "ui.guide.gangform_lift_wire22.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "exclusion_zone": {
       "element_id": "scene.control.exclusion_zone",
       "kind": "control",
       "label": "출입금지 구역",
       "visual_token": "⊘",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.exclusion_zone",
       "art": {
         "path": "assets/episode01/scene-elements/exclusion-zone.webp",
@@ -358,14 +365,15 @@
         "process_order": 9,
         "observe_point_text_id": "ui.guide.exclusion_zone.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "wet_floor": {
       "element_id": "scene.hazard.wet_floor",
       "kind": "hazard",
       "label": "습윤·미끄럼 구간",
       "visual_token": "≈",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.wet_floor",
       "art": {
         "path": "assets/episode01/scene-elements/wet-floor.webp",
@@ -395,14 +403,15 @@
         "process_order": 13,
         "observe_point_text_id": "ui.guide.wet_floor.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "open_edge": {
       "element_id": "scene.hazard.open_edge",
       "kind": "hazard",
       "label": "개구부·단부",
       "visual_token": "□",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.open_edge",
       "art": {
         "path": "assets/episode01/scene-elements/open-edge.webp",
@@ -432,7 +441,8 @@
         "process_order": 12,
         "observe_point_text_id": "ui.guide.open_edge.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "site_gate": {
       "element_id": "scene.control.site_gate",
@@ -474,7 +484,7 @@
       "kind": "control",
       "label": "근로자 전용 출입구",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.pedestrian_gate",
       "art": {
         "path": "assets/episode01/scene-elements/pedestrian-gate.webp",
@@ -502,14 +512,15 @@
         "process_order": 2,
         "observe_point_text_id": "ui.guide.pedestrian_gate.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "vehicle_pedestrian_separation": {
       "element_id": "scene.control.vehicle_pedestrian_separation",
       "kind": "control",
       "label": "차량·보행 동선 분리시설",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
       "art": {
         "path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
@@ -539,14 +550,15 @@
         "process_order": 3,
         "observe_point_text_id": "ui.guide.vehicle_pedestrian_separation.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "material_yard": {
       "element_id": "scene.prop.material_yard",
       "kind": "prop",
       "label": "자재 야적장",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.material_yard",
       "art": {
         "path": "assets/episode01/scene-elements/material-yard.webp",
@@ -577,14 +589,15 @@
         "process_order": 4,
         "observe_point_text_id": "ui.guide.material_yard.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "temporary_distribution_board": {
       "element_id": "scene.equipment.temporary_distribution_board",
       "kind": "equipment",
       "label": "임시 분전반",
       "visual_token": "◆",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.temporary_distribution_board",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
@@ -615,14 +628,15 @@
         "process_order": 5,
         "observe_point_text_id": "ui.guide.temporary_distribution_board.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "temporary_lighting_pack": {
       "element_id": "scene.control.temporary_lighting_pack",
       "kind": "control",
       "label": "임시조명",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.temporary_lighting_pack",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
@@ -652,14 +666,15 @@
         "process_order": 6,
         "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "ppe_issue_station": {
       "element_id": "scene.control.ppe_issue_station",
       "kind": "control",
       "label": "안전용품 지급·교체 지점",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.ppe_issue_station",
       "art": {
         "path": "assets/episode01/scene-elements/ppe-issue-station.webp",
@@ -688,7 +703,8 @@
         "process_order": 7,
         "observe_point_text_id": "ui.guide.ppe_issue_station.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "fire_extinguisher_station": {
       "element_id": "scene.control.fire_extinguisher_station",
@@ -732,7 +748,7 @@
       "kind": "equipment",
       "label": "응급구호함·AED",
       "visual_token": "◆",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.first_aid_aed",
       "art": {
         "path": "assets/episode01/scene-elements/first-aid-aed.webp",
@@ -761,14 +777,15 @@
         "process_order": 9,
         "observe_point_text_id": "ui.guide.first_aid_aed.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "site_weather_station": {
       "element_id": "scene.equipment.site_weather_station",
       "kind": "equipment",
       "label": "현장 풍속·기상 확인 지점",
       "visual_token": "◆",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.site_weather_station",
       "art": {
         "path": "assets/episode01/scene-elements/site-weather-station.webp",
@@ -798,14 +815,15 @@
         "process_order": 10,
         "observe_point_text_id": "ui.guide.site_weather_station.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "foundation_blinding_edge": {
       "element_id": "scene.hazard.foundation_blinding_edge",
       "kind": "hazard",
       "label": "버림타설 단부·단차",
       "visual_token": "!",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.foundation_blinding_edge",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
@@ -833,14 +851,15 @@
         "process_order": 1,
         "observe_point_text_id": "ui.guide.foundation_blinding_edge.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "foundation_rebar_mat": {
       "element_id": "scene.prop.foundation_rebar_mat",
       "kind": "prop",
       "label": "기초 철근 배근 구간",
       "visual_token": "▤",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.foundation_rebar_mat",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
@@ -868,7 +887,8 @@
         "process_order": 2,
         "observe_point_text_id": "ui.guide.foundation_rebar_mat.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
     "rebar_chair_support": {
       "element_id": "scene.prop.rebar_chair_support",

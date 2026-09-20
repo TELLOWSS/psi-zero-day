@@ -119,5 +119,13 @@
     "image still reads clearly at field-guide thumbnail size",
     "full-screen view contains enough detail to reward inspection",
     "not acceptable if it visually reads as a pictogram or safety poster icon"
-  ]
+  ],
+  "production_mode": {
+    "mode": "high_speed_batch_v2",
+    "roadmap": "content/episode01/field-guide-high-speed-roadmap.json",
+    "generation_batch_size": "6-10",
+    "github_integration_cadence": "2 generation batches per 1 integration commit",
+    "review_rule": "review contact-sheet/batch first; regenerate failed assets only",
+    "legacy_v1_rule": "field-guide-isometric-v1 assets are placeholders, not completion"
+  }
 }
