@@ -611,6 +611,18 @@ button, input, select, textarea {
   }
 }
 
+/* Compact touch layouts: preserve a reliable 44px minimum target in landscape phones and portrait tablets. */
+@media (max-width: 1100px), (max-height: 650px) {
+  .commercial-title-utility button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .commercial-title-quick-settings button {
+    min-height: 44px;
+    padding-block: 8px;
+  }
+}
+
 /* Very narrow phones: one-column feature cards and simpler chrome. */
 @media (orientation: portrait) and (max-width: 420px) {
   .commercial-title-copy {
