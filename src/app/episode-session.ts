@@ -38,7 +38,7 @@ export interface SessionSnapshot {
 
 /** Application boundary only. All run changes go through CoreEngine commands. */
 export class EpisodeSession {
-  readonly #registry = createEpisode01Registry();
+  readonly #registry = createEpisode01Registry('directed');
   readonly #content = this.#registry.getValidatedContent();
   readonly #options: NewRunOptions;
   readonly #bounds: ProgressBounds;
