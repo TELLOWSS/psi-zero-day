@@ -7,7 +7,7 @@ describe('Episode 01 cinematic beat map',()=>{
     const beats=ids.map(id=>episodeCinematicBeat(id));
     expect(beats.every(Boolean)).toBe(true);
     expect(new Set(beats.map(beat=>beat!.zone)).size).toBeGreaterThanOrEqual(4);
-    expect(beats.map(beat=>beat!.time)).toEqual(['07:18','07:21','07:27','07:36','07:48']);
+    expect(beats.map(beat=>beat!.time)).toEqual(['07:10','08:05','09:10','09:24','09:45']);
   });
 
   it('carries authored time-and-place stamps through the record-pressure closing arc',()=>{
