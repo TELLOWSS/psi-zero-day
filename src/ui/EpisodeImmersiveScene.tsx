@@ -8,6 +8,7 @@ import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from
 import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
+import { episode01TbmProduction } from '../app/episode01-tbm-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
@@ -119,6 +120,7 @@ export function EpisodeImmersiveScene({
   const productionMapUri = locator ? episode01BackgroundUri(resolve) : undefined;
   const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
+  const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -156,6 +158,13 @@ export function EpisodeImmersiveScene({
     data-field-lighting={fieldProduction?.lighting_profile}
     data-field-ui={fieldProduction?.ui_profile}
     data-field-cast={fieldProduction?.cast_profile}
+    data-tbm-phase={tbmProduction?.phase}
+    data-tbm-hero={tbmProduction?.hero_character_id}
+    data-tbm-camera={tbmProduction?.camera_profile}
+    data-tbm-depth={tbmProduction?.depth_profile}
+    data-tbm-lighting={tbmProduction?.lighting_profile}
+    data-tbm-ui={tbmProduction?.ui_profile}
+    data-tbm-cast={tbmProduction?.cast_profile}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
