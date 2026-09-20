@@ -7,6 +7,9 @@ const catalogPath = path.join(root, 'content/episode01/scene-element-catalog.jso
 const productionCheck = process.argv.includes('--production-check');
 const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
 const definitions = Object.entries(catalog.elements ?? {});
+const placedElementKeys = new Set(
+  Object.values(catalog.event_elements ?? {}).flat().map(item => item.element_key),
+);
 const minimumReusableCount = 10;
 const errors = [];
 const assetIds = new Set();
@@ -143,7 +146,9 @@ for (const [key, definition] of definitions) {
   if (!Number.isInteger(art.map_max_px) || art.map_max_px < 72 || art.map_max_px > 220) errors.push(`${key}: map_max_px must be an integer from 72 to 220`);
   if (art.requires_alpha !== true) errors.push(`${key}: requires_alpha must be true for transparent scene cutouts`);
 
-  const requireBinary = productionCheck || ['final', 'replacement_required'].includes(definition.production_status);
+  const requireBinary = productionCheck
+    || definition.production_status === 'final'
+    || (definition.production_status === 'replacement_required' && placedElementKeys.has(key));
   if (!requireBinary || !art.path) continue;
   const bytes = await tryRead(art.path);
   if (!bytes) {
