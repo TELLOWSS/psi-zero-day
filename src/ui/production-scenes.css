@@ -2529,3 +2529,30 @@
     transition:none!important;
   }
 }
+
+
+/* Phase C-4 correction: STRATEGY judgment lives on the map action loop.
+   The legacy text fallback is preserved in the component contract, but the
+   active tactical judgment uses the map target -> action tray interaction. */
+.game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .play-panel {
+  display:none;
+}
+.game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+  max-height:28%;
+}
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    left:auto;
+    top:10%;
+    right:1.5%;
+    bottom:auto;
+    width:min(58%,260px);
+    max-height:24%;
+  }
+}
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .strategy-action-tray.step-1 {
+    width:31%;
+    max-height:34%;
+  }
+}
