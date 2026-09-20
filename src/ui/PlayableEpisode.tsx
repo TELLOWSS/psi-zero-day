@@ -44,6 +44,7 @@ import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDirection } from '../app/episode01-story-director';
 import { episode01ProductionScene } from '../app/episode01-production-scene';
+import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -91,6 +92,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const storyDirection = episode01StoryDirection(activeEventId);
   const productionScene = episode01ProductionScene(storyDirection?.preset);
+  const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
+  const stopWorkProduction = productionScene === 'STOP_WORK' ? episode01StopWorkProduction(activeEventId) : undefined;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -103,7 +106,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const executedOutcomeReady = executedFieldAction !== null && snapshot.revision > executedFieldAction.source_revision;
   const executedEngineResult = executedOutcomeReady && presentation?.type === 'SHOW_RESULT' && presentation.instance_id === executedFieldAction?.action.instance_id;
   const fallbackEngineOutcome = !executedOutcomeReady && isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
-  const mapOutcomeActive = executedOutcomeReady || fallbackEngineOutcome;
+  const mapOutcomeActive = strategyActive && (executedOutcomeReady || fallbackEngineOutcome);
   const outcomePsiCues = psiCuesForChoice(executedFieldAction?.action.choice_id ?? fallbackChoiceId);
   const replanBalance = paidItemQuantity(paidItemWallet, REPLAN_PASS_ITEM_ID);
   const supportItems = snapshot.state
@@ -190,7 +193,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
 
   const chooseEvent = (instanceId: string, nodeId: string, choiceId: string): boolean => {
     const fieldAction = strategyActions.find(action => action.instance_id === instanceId && action.node_id === nodeId && action.choice_id === choiceId);
-    if (fieldAction && snapshot.state) {
+    if (fieldAction && snapshot.state && strategyActive) {
       setExecutedFieldAction({ action: fieldAction, source_revision: snapshot.revision, checkpoint: snapshot.state });
     }
     const accepted = session.dispatch({ type: 'choose_event', instance_id: instanceId, node_id: nodeId, choice_id: choiceId }, snapshot.revision);
@@ -357,7 +360,6 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
 
-  const strategyActive = isPlaying && strategy !== null && productionScene === 'STRATEGY';
   const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
     : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
@@ -386,6 +388,11 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-story-beat={storyDirection?.beat}
     data-scene-preset={storyDirection?.preset}
     data-production-scene={productionScene}
+    data-stopwork-phase={stopWorkProduction?.phase}
+    data-stopwork-camera={stopWorkProduction?.camera_profile}
+    data-stopwork-depth={stopWorkProduction?.depth_profile}
+    data-stopwork-lighting={stopWorkProduction?.lighting_profile}
+    data-stopwork-ui={stopWorkProduction?.ui_profile}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
