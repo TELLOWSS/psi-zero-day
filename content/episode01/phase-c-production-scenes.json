@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "TBM_QUALITY_LOCK",
+  "status": "STRATEGY_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -10,7 +10,69 @@
       ],
       "composition": "tactical world first",
       "runtime_surface": "StrategyMapShell",
-      "priority": "map, people, risks, then action"
+      "priority": "map, people, risks, then action",
+      "quality_lock": {
+        "reference_scene": "e01_05_command",
+        "reference_node": "entrance",
+        "grammar": [
+          "read the whole site before opening a decision surface",
+          "keep people, process and hazard signals spatially related on the same map",
+          "compare field pressure at the actual work anchor instead of in detached cards",
+          "keep the chosen control visible on the field before showing its textual result",
+          "read pump arrival as a consequence of the field state created by earlier choices"
+        ],
+        "phases": [
+          "site-read",
+          "people-network",
+          "risk-compare",
+          "tactical-judgment",
+          "field-shift",
+          "consequence-read"
+        ],
+        "camera": [
+          "operational-overview",
+          "network-pan",
+          "pressure-wide",
+          "decision-zone",
+          "action-route",
+          "consequence-wide"
+        ],
+        "depth": [
+          "site-layers",
+          "relationship-grid",
+          "risk-stack",
+          "decision-layered",
+          "route-open",
+          "changed-field"
+        ],
+        "lighting": [
+          "survey-neutral",
+          "network-cool",
+          "pressure-amber",
+          "decision-contrast",
+          "action-clear",
+          "consequence-reactive"
+        ],
+        "ui": [
+          "scan",
+          "compare",
+          "judgment",
+          "result",
+          "verify"
+        ],
+        "focus": [
+          "overview",
+          "people",
+          "yard",
+          "ramp",
+          "entry",
+          "gate"
+        ],
+        "expansion_order": [
+          "OFFICE",
+          "DAY_RESULT"
+        ]
+      }
     },
     "FIELD": {
       "source_presets": [
