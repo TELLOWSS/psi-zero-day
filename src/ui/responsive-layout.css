@@ -475,7 +475,7 @@ button, input, select, textarea {
   }
   .strategy-zone-target {
     min-width: 70px;
-    min-height: 34px;
+    min-height: 44px;
     padding: 4px 5px;
   }
   .strategy-zone-copy strong {
@@ -620,6 +620,9 @@ button, input, select, textarea {
   .commercial-title-quick-settings button {
     min-height: 44px;
     padding-block: 8px;
+  }
+  .strategy-zone-target {
+    min-height: 44px;
   }
 }
 
