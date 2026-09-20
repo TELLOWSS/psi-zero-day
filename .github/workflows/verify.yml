@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - phase-c3-tbm-quality-lock
       - astra/task-007-casual-strategy-foundation
   workflow_dispatch:
 
