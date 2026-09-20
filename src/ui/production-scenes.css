@@ -1105,3 +1105,15 @@
     padding:3px 0 5px;
   }
 }
+
+
+/* Specificity lock: the generic desktop STOP_WORK two-column dock must not survive after the judgment cast card is removed. */
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"].phase-playing:not(.strategy-active) .play-panel {
+  grid-template-columns:minmax(0,1fr);
+}
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .presentation-area,
+.game-frame[data-production-scene="STOP_WORK"][data-stopwork-ui="judgment"] .dialogue-content {
+  width:100%;
+  min-width:0;
+  max-width:none;
+}
