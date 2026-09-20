@@ -9,14 +9,29 @@ describe('Episode 01 Phase C-1 STOP WORK production scene', () => {
     expect(episode01StopWorkProduction('e01_08b_inspection_find')).toMatchObject({
       phase: 'hazard-read',
       hero_character_id: 'seo_jeongmin',
+      camera_profile: 'hazard-wide',
+      depth_profile: 'deep-field',
+      lighting_profile: 'hazard-cool',
+      ui_profile: 'observe',
+      cast_profile: 'inspector-lead',
     });
     expect(episode01StopWorkProduction('e01_08c_site_pushback')).toMatchObject({
       phase: 'zero-moment',
       hero_character_id: 'player',
+      camera_profile: 'decision-compressed',
+      depth_profile: 'compressed-pressure',
+      lighting_profile: 'stop-red',
+      ui_profile: 'judgment',
+      cast_profile: 'player-hero',
     });
     expect(episode01StopWorkProduction('e01_08d_reinspection')).toMatchObject({
       phase: 'restart-gate',
       hero_character_id: 'seo_jeongmin',
+      camera_profile: 'verification-medium',
+      depth_profile: 'open-verification',
+      lighting_profile: 'restart-neutral',
+      ui_profile: 'verify',
+      cast_profile: 'verification-lead',
     });
     expect(episode01StopWorkProduction('e01_04_junho_signal')).toBeUndefined();
   });
@@ -50,5 +65,10 @@ describe('Episode 01 Phase C-1 STOP WORK production scene', () => {
     expect(css).toContain('.play-panel:has(.choice-content)');
     expect(css).toContain('.choice-visual');
     expect(css).toContain('.stop-work-production-stopline');
+    expect(css).toContain('[data-stopwork-camera="decision-compressed"]');
+    expect(css).toContain('[data-stopwork-depth="compressed-pressure"]');
+    expect(css).toContain('[data-stopwork-lighting="stop-red"]');
+    expect(css).toContain('[data-stopwork-ui="judgment"]');
+    expect(css).toContain('[data-stopwork-cast="player-hero"]');
   });
 });
