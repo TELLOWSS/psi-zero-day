@@ -41,6 +41,7 @@ import { EpisodeDayCarryover } from './EpisodeDayCarryover';
 import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeImmersiveScene';
 import { EpisodeRecord } from './EpisodeRecord';
 import { TITLE_CAST_IDS } from '../app/title-cast';
+import { episode01StoryDirection } from '../app/episode01-story-director';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -84,6 +85,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
+  const storyDirection = episode01StoryDirection(activeEventId);
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -321,7 +323,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
 
-  return <main className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}>
+  return <main\n    className={`game-frame phase-${snapshot.phase}${strategyActive ? ' strategy-active' : ''}${strategyActions.length || mapOutcomeActive ? ' strategy-action-active' : ''}`}\n    data-story-act={storyDirection?.act_id}\n    data-story-beat={storyDirection?.beat}\n    data-scene-preset={storyDirection?.preset}\n    data-hud-density={storyDirection?.hud_density}\n    data-interaction-mode={storyDirection?.interaction_mode}\n    data-pacing={storyDirection?.pacing}\n  >
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
       {cinematicBeat.detail ? <small>{cinematicBeat.detail}</small> : null}
