@@ -138,6 +138,54 @@ async function screenshot(cdp, filename) {
   fs.writeFileSync(path.join(outputDir, filename), Buffer.from(result.data, 'base64'));
 }
 
+async function driveEpisodeToEvent(cdp, targetEventId, timeoutMs = 24000) {
+  const started = Date.now();
+  let lastEvent = null;
+  let stagnant = 0;
+
+  while (Date.now() - started < timeoutMs) {
+    const state = await evaluate(cdp, `(() => {
+      const scene = document.querySelector('.episode-immersive-scene');
+      const coldOpen = document.querySelector('.episode-cold-open-cta');
+      const outcome = document.querySelector('.strategy-outcome-card button:not(:disabled)');
+      const choice = document.querySelector('.choice-panel button:not(:disabled)');
+      const next = document.querySelector('.continue-button');
+      return {
+        event: scene?.getAttribute('data-event') || null,
+        node: scene?.getAttribute('data-node') || null,
+        coldOpen: Boolean(coldOpen),
+        outcome: Boolean(outcome),
+        choice: Boolean(choice),
+        next: Boolean(next),
+      };
+    })()`);
+
+    if (state.event === targetEventId) return state;
+
+    stagnant = state.event === lastEvent ? stagnant + 1 : 0;
+    lastEvent = state.event;
+
+    const advanced = await evaluate(cdp, `(() => {
+      const click = selector => {
+        const element = document.querySelector(selector);
+        if (!(element instanceof HTMLElement)) return false;
+        element.click();
+        return true;
+      };
+      if (click('.episode-cold-open-cta')) return 'cold-open';
+      if (click('.strategy-outcome-card button:not(:disabled)')) return 'outcome';
+      if (click('.choice-panel button:not(:disabled)')) return 'choice';
+      if (click('.continue-button')) return 'continue';
+      return '';
+    })()`);
+
+    await sleep(advanced ? 105 : 180);
+    if (stagnant > 45) throw new Error('Episode 01 QA stalled at ' + JSON.stringify(state));
+  }
+
+  throw new Error('Timed out driving Episode 01 to ' + targetEventId + '; last event=' + lastEvent);
+}
+
 function collectMetrics(stage, touchMode) {
   const visible = element => {
     if (!(element instanceof HTMLElement)) return false;
@@ -220,6 +268,8 @@ function collectMetrics(stage, touchMode) {
     activeEvent: immersive?.getAttribute('data-event') || null,
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
+    stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
+    stopWorkLayer: Boolean(document.querySelector('.stop-work-production-layer')),
   };
 }
 
@@ -246,6 +296,11 @@ function validate(row, viewport) {
   }
   if (row.stage.startsWith('episode01') && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
     failures.push('final immersive background did not finish loading before capture');
+  }
+  if (row.stage === 'episode01-stop-work') {
+    if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');
+    if (row.stopWorkPhase !== 'zero-moment') failures.push('STOP WORK zero-moment production phase is missing');
+    if (!row.stopWorkLayer) failures.push('STOP WORK production layer did not render');
   }
   if (viewport.mobile && row.smallTargets.length) {
     const relevant = row.smallTargets.filter(item => !['SOUNDON', 'SOUNDOFF'].includes(item.text.replace(/\s/g, '')));
@@ -333,6 +388,14 @@ try {
       report.push({ viewportName: viewport.name, ...episodeMetrics, failures: episodeFailures });
       if (episodeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_08c_site_pushback');
+      await sleep(240);
+      const stopWorkMetrics = await metrics(cdp, 'episode01-stop-work', viewport.mobile);
+      const stopWorkFailures = validate(stopWorkMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...stopWorkMetrics, failures: stopWorkFailures });
+      if (stopWorkFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-stop-work.png');
     } catch (error) {
       failed = true;
       report.push({ viewportName: viewport.name, viewport: { width: viewport.width, height: viewport.height }, stage: 'runner', failures: [error.message] });
