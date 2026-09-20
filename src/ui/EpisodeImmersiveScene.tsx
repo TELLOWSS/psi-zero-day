@@ -6,6 +6,7 @@ import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
 import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../app/episode01-character-blocking';
 import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from '../app/episode01-character-performance';
 import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
+import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
@@ -115,6 +116,7 @@ export function EpisodeImmersiveScene({
   const cinematicTrace = episode01CinematicTrace(scene.event_id, scene.node_id);
   const locator = episode01ImmersiveLocator(scene.event_id);
   const productionMapUri = locator ? episode01BackgroundUri(resolve) : undefined;
+  const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -138,6 +140,8 @@ export function EpisodeImmersiveScene({
     data-has-locator={Boolean(locator) || undefined}
     data-has-memory={showMemoryStrip || undefined}
     data-has-evidence={showEvidenceBoard || undefined}
+    data-stopwork-phase={stopWorkProduction?.phase}
+    data-stopwork-hero={stopWorkProduction?.hero_character_id}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -184,6 +188,23 @@ export function EpisodeImmersiveScene({
       <i className="evidence-pin pin-a" />
       <i className="evidence-pin pin-b" />
       <b className="evidence-timeline" />
+    </div> : null}
+    {stopWorkProduction ? <div className="stop-work-production-layer" data-phase={stopWorkProduction.phase} aria-hidden="true">
+      <div className="stop-work-production-title">
+        <span>{t(stopWorkProduction.kicker_text_id)}</span>
+        <strong>{t(stopWorkProduction.title_text_id)}</strong>
+        <small>{t(stopWorkProduction.detail_text_id)}</small>
+      </div>
+      <div className="stop-work-production-markers">
+        {stopWorkProduction.markers.map(marker => <span key={marker.key} data-marker={marker.key}>
+          <i />
+          <b>{t(marker.label_text_id)}</b>
+        </span>)}
+      </div>
+      {stopWorkProduction.phase === 'zero-moment' ? <div className="stop-work-production-stopline">
+        <i />
+        <b>STOP</b>
+      </div> : null}
     </div> : null}
     {cinematicTrace ? <aside
       className="episode-psi-trace"
