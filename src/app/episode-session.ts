@@ -1,5 +1,7 @@
-import type { EffectBundle, GameState, PresentationCommand, GameTime, RelationshipDelta } from '../domain';
+import type { EffectBundle, GameState, PresentationCommand, GameTime, RelationshipDelta, ValidatedContent } from '../domain';
 import { createEpisode01Registry } from '../content/episode01';
+import type { Episode01PlayStructureMode } from '../content/episode01-play-structure';
+import { ContentRegistry } from '../content/registry';
 import { CoreEngine, createRun, eventCandidates, eventPresentation } from '../engine';
 import { getDialogueView } from '../engine/dialogue';
 import type { DialogueView } from '../engine/dialogue';
@@ -38,30 +40,44 @@ export interface SessionSnapshot {
 
 /** Application boundary only. All run changes go through CoreEngine commands. */
 export class EpisodeSession {
-  readonly #registry = createEpisode01Registry('directed');
-  readonly #content = this.#registry.getValidatedContent();
+  readonly #registry: ContentRegistry;
+  readonly #content: ValidatedContent;
   readonly #options: NewRunOptions;
   readonly #bounds: ProgressBounds;
   readonly #listeners = new Set<() => void>();
   #engine: CoreEngine | null = null;
   #busy = false;
   #snapshot: SessionSnapshot;
-  readonly t = createTranslator([{ locale: 'ko', messages: {
-    ...this.#content.localizations[0]!.messages,
-    ...uiKo.messages,
-    ...inspectionUiKo.messages,
-    ...responsibilityUiKo.messages,
-    ...stopworkUiKo.messages,
-    ...recordUiKo.messages,
-    ...psiUiKo.messages,
-    ...productUiKo.messages,
-    ...storyDirectorKo.messages,
-  } }], 'ko');
+  readonly t: ReturnType<typeof createTranslator>;
 
-  constructor(options: NewRunOptions = config.run as NewRunOptions, bounds: ProgressBounds = config.bounds) {
+  constructor(
+    options: NewRunOptions = config.run as NewRunOptions,
+    bounds: ProgressBounds = config.bounds,
+    mode: Episode01PlayStructureMode = 'legacy',
+  ) {
+    this.#registry = createEpisode01Registry(mode);
+    this.#content = this.#registry.getValidatedContent();
+    this.t = createTranslator([{ locale: 'ko', messages: {
+      ...this.#content.localizations[0]!.messages,
+      ...uiKo.messages,
+      ...inspectionUiKo.messages,
+      ...responsibilityUiKo.messages,
+      ...stopworkUiKo.messages,
+      ...recordUiKo.messages,
+      ...psiUiKo.messages,
+      ...productUiKo.messages,
+      ...storyDirectorKo.messages,
+    } }], 'ko');
     this.#options = freezeData(copyData(options));
     this.#bounds = freezeData(copyData(bounds));
     this.#snapshot = this.#view('start', 0);
+  }
+
+  static directed(
+    options: NewRunOptions = config.run as NewRunOptions,
+    bounds: ProgressBounds = config.bounds,
+  ): EpisodeSession {
+    return new EpisodeSession(options, bounds, 'directed');
   }
   getSnapshot = (): SessionSnapshot => this.#snapshot;
   get contentVersion(): string { return this.#content.content_version; }
