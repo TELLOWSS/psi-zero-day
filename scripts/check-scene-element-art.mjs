@@ -143,7 +143,7 @@ for (const [key, definition] of definitions) {
   if (!Number.isInteger(art.map_max_px) || art.map_max_px < 72 || art.map_max_px > 220) errors.push(`${key}: map_max_px must be an integer from 72 to 220`);
   if (art.requires_alpha !== true) errors.push(`${key}: requires_alpha must be true for transparent scene cutouts`);
 
-  const requireBinary = productionCheck || definition.production_status === 'final';
+  const requireBinary = productionCheck || ['final', 'replacement_required'].includes(definition.production_status);
   if (!requireBinary || !art.path) continue;
   const bytes = await tryRead(art.path);
   if (!bytes) {
@@ -166,7 +166,9 @@ for (const [key, definition] of definitions) {
 }
 
 const materialProfile = catalog.elements?.material_stack?.storage_profile;
-if (catalog.elements?.material_stack?.production_status !== 'final') errors.push('material_stack: approved production asset must remain final');
+const materialStatus = catalog.elements?.material_stack?.production_status;
+if (!['final', 'replacement_required'].includes(materialStatus)) errors.push('material_stack: approved runtime asset must remain final or have a tracked replacement');
+if (materialStatus === 'replacement_required' && !catalog.elements?.material_stack?.production_note?.trim()) errors.push('material_stack: replacement_required status must include a production_note');
 if (materialProfile?.dimension_grouping !== 'same_spec_only' || materialProfile?.mixed_dimensions_allowed !== false) errors.push('material_stack: different material dimensions/specifications must be separated');
 if (materialProfile?.binding_method !== 'center_ratchet_or_equivalent' || materialProfile?.binding_position !== 'center') errors.push('material_stack: a central ratchet buckle or equivalent separate binding must be visible');
 
