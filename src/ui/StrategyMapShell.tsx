@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForTarget } from '../app/strategy-actions';
@@ -84,6 +84,11 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
+  useEffect(() => {
+    setFocusId(null);
+    setActionFocusId(null);
+  }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
   const effectiveActions = projectSupportAssistedActions(actions, activeSupportItemIds);
@@ -201,6 +206,11 @@ export function StrategyMapShell({
     </aside>
 
     <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment} data-production-map="v1">
+      <div className="strategy-production-layer" aria-hidden="true">
+        <i className="strategy-production-grid" />
+        <i className="strategy-production-route" />
+        <b className="strategy-production-pulse" />
+      </div>
       {visualAssets?.background_uri ? <img className="strategy-map-background-art" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
       <div className="strategy-map-css-scene" aria-hidden={hasBackgroundArt ? 'true' : undefined}>
         <div className="strategy-map-sky" />
@@ -331,21 +341,22 @@ export function StrategyMapShell({
         })}
       </div>
 
-      <StrategyLoopPanel
-        actions={effectiveActions}
-        selectedActions={selectedActions}
-        focusId={focusId}
-        focusTitle={focusTitle}
-        text={text}
-        personName={id => formatCharacterIdentity(person(id)) || id}
-        targetLabel={actionTargetLabel}
-        onAction={executeAction}
-        outcome={outcome}
-        onOutcomeContinue={onOutcomeContinue}
-        onOutcomeReconsider={onOutcomeReconsider}
-        onActionFocus={setActionFocusId}
-      />
     </section>
+
+    <StrategyLoopPanel
+      actions={effectiveActions}
+      selectedActions={selectedActions}
+      focusId={focusId}
+      focusTitle={focusTitle}
+      text={text}
+      personName={id => formatCharacterIdentity(person(id)) || id}
+      targetLabel={actionTargetLabel}
+      onAction={executeAction}
+      outcome={outcome}
+      onOutcomeContinue={onOutcomeContinue}
+      onOutcomeReconsider={onOutcomeReconsider}
+      onActionFocus={setActionFocusId}
+    />
 
     <footer className="strategy-roster" aria-label={copy.roster}>
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
