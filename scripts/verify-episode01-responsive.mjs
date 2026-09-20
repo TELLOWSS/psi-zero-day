@@ -247,9 +247,10 @@ function collectMetrics(stage, touchMode) {
       topElement: top instanceof Element ? (top.className || top.tagName) : null,
     };
   });
-  const choiceSurface = activeInteractionRoot === document
+  const choiceSurfaceCandidate = activeInteractionRoot === document
     ? document.querySelector('.presentation-area[data-presentation="SHOW_CHOICE"]')
     : null;
+  const choiceSurface = choiceSurfaceCandidate && visible(choiceSurfaceCandidate) ? choiceSurfaceCandidate : null;
   const visibleEnabledChoices = choiceSurface
     ? [...choiceSurface.querySelectorAll('.choice-panel button:not(:disabled)')].filter(visible).length
     : 0;
