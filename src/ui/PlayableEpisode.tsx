@@ -87,6 +87,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
+  const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const storyDirection = episode01StoryDirection(activeEventId);
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
@@ -274,7 +275,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
-    if (!isPlaying || mapOutcomeActive || (activeEventId === 'e01_01_arrival' && !coldOpenDismissed)) return;
+    if (!directedCampaign || !isPlaying || mapOutcomeActive || (activeEventId === 'e01_01_arrival' && !coldOpenDismissed)) return;
     if (!presentation || !('node_id' in presentation) || presentation.type === 'SHOW_CHOICE') return;
     if (presentation.type !== 'SHOW_DIALOGUE' && presentation.type !== 'SHOW_RESULT') return;
     const delay = episode01AutoAdvanceDelay(activeEventId, presentation.node_id, t(presentation.text_id).length);
@@ -291,6 +292,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   }, [
     session,
     snapshot.revision,
+    directedCampaign,
     isPlaying,
     mapOutcomeActive,
     activeEventId,
@@ -353,7 +355,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? [...trainingReward.auto_equipped, ...trainingReward.equip_options.filter(item =>
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
-  const showColdOpen = isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
+  const showColdOpen = directedCampaign && isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
   const dismissColdOpen = useCallback(() => {
     setColdOpenDismissed(true);
     playUiCue('continue');
