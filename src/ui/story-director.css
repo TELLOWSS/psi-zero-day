@@ -1,0 +1,193 @@
+/* Phase B — Story Director cinematic presentation.
+   Imported before emergency-ux-fix.css so interaction safety remains the final authority. */
+
+.game-frame[data-scene-preset="STOP_WORK"] { --story-accent: #e85a4d; }
+.game-frame[data-scene-preset="TBM"] { --story-accent: #59c8b4; }
+.game-frame[data-scene-preset="OFFICE_DIALOGUE"] { --story-accent: #d8b665; }
+.game-frame[data-scene-preset="DAY_RESULT"] { --story-accent: #e9b14e; }
+
+.game-frame[data-scene-preset] .scene-heading {
+  border-left-color: var(--story-accent, var(--accent));
+}
+
+.episode-cold-open {
+  position: absolute;
+  inset: 0;
+  z-index: 85;
+  overflow: hidden;
+  color: #f4f6f2;
+  background: #071015;
+  isolation: isolate;
+}
+
+.episode-cold-open-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 48%;
+  filter: saturate(.84) contrast(1.07) brightness(.72);
+}
+
+.episode-cold-open-grade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 72% 42%, transparent 0 22%, rgba(2,8,12,.27) 56%, rgba(2,7,11,.74) 100%),
+    linear-gradient(90deg, rgba(3,10,15,.84) 0 25%, rgba(3,10,15,.22) 50%, transparent 75%),
+    linear-gradient(0deg, rgba(2,8,12,.7), transparent 38%);
+}
+
+.episode-cold-open-cast {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.episode-cold-open-cast img {
+  position: absolute;
+  bottom: -7%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 22px 24px rgba(0,0,0,.48));
+}
+
+.episode-cold-open-player { left: 16%; height: 91%; z-index: 4; }
+.episode-cold-open-kang { left: 50%; height: 73%; z-index: 2; opacity: .97; }
+.episode-cold-open-junho { left: 66%; height: 67%; z-index: 1; opacity: .92; }
+
+.episode-cold-open-copy {
+  position: absolute;
+  z-index: 5;
+  left: 4%;
+  top: 10%;
+  width: min(470px, 35%);
+  text-shadow: 0 3px 18px rgba(0,0,0,.82);
+}
+
+.episode-cold-open-copy > span {
+  display: block;
+  margin-bottom: 9px;
+  color: #f1b257;
+  font-size: clamp(11px, .85vw, 15px);
+  font-weight: 850;
+  letter-spacing: .14em;
+}
+
+.episode-cold-open-copy strong {
+  display: block;
+  color: #fff2ee;
+  font-size: clamp(44px, 5.4vw, 86px);
+  line-height: .95;
+  letter-spacing: -.05em;
+}
+
+.episode-cold-open-copy p {
+  max-width: 440px;
+  margin: 18px 0 0;
+  color: #e5eae8;
+  font-size: clamp(15px, 1.2vw, 21px);
+  line-height: 1.6;
+  font-weight: 650;
+}
+
+.episode-cold-open-rewind {
+  position: absolute;
+  z-index: 5;
+  left: 4%;
+  bottom: 13%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cdd6d5;
+  font-size: clamp(12px, .9vw, 16px);
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.episode-cold-open-rewind i {
+  width: clamp(60px, 7vw, 124px);
+  height: 1px;
+  background: linear-gradient(90deg, #e4aa4a, transparent);
+}
+
+.episode-cold-open-cta {
+  position: absolute;
+  z-index: 6;
+  right: 4%;
+  bottom: 7%;
+  min-width: 226px;
+  min-height: 54px;
+  border-color: rgba(246,189,83,.72);
+  background: rgba(8,23,30,.96);
+  box-shadow: 0 12px 30px rgba(0,0,0,.34);
+  pointer-events: auto;
+}
+
+.game-frame[data-scene-preset="STOP_WORK"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 58% 35%, rgba(232,77,61,.09), transparent 31%),
+    linear-gradient(0deg, rgba(5,12,16,.24), transparent 45%);
+}
+
+.game-frame[data-scene-preset="OFFICE_DIALOGUE"] .episode-immersive-atmosphere {
+  background: linear-gradient(90deg, rgba(14,20,23,.2), transparent 44%, rgba(226,170,83,.08));
+}
+
+.game-frame[data-scene-preset="DAY_RESULT"] .episode-immersive-atmosphere {
+  background:
+    linear-gradient(0deg, rgba(3,10,15,.52), transparent 55%),
+    radial-gradient(circle at 77% 25%, rgba(232,173,73,.13), transparent 33%);
+}
+
+@media (orientation: portrait) and (max-width: 900px) {
+  .episode-cold-open-copy { left: 6vw; top: 8dvh; width: 88vw; }
+  .episode-cold-open-copy strong { font-size: clamp(46px, 15vw, 72px); }
+  .episode-cold-open-copy p { max-width: 80vw; font-size: 14px; line-height: 1.55; }
+  .episode-cold-open-player { left: -11%; height: 63%; }
+  .episode-cold-open-kang { left: 41%; height: 51%; }
+  .episode-cold-open-junho { left: 66%; height: 46%; }
+  .episode-cold-open-rewind { left: 6vw; bottom: 16dvh; }
+  .episode-cold-open-cta {
+    left: 6vw;
+    right: 6vw;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    width: auto;
+    min-width: 0;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .episode-cold-open-copy {
+    left: max(18px, env(safe-area-inset-left));
+    top: 8%;
+    width: 42%;
+  }
+  .episode-cold-open-copy strong { font-size: clamp(34px, 11vh, 58px); }
+  .episode-cold-open-copy p { margin-top: 8px; font-size: 11px; line-height: 1.44; }
+  .episode-cold-open-player { left: 37%; height: 102%; }
+  .episode-cold-open-kang { left: 62%; height: 77%; }
+  .episode-cold-open-junho { left: 77%; height: 68%; }
+  .episode-cold-open-rewind {
+    left: max(18px, env(safe-area-inset-left));
+    bottom: 12%;
+    font-size: 10px;
+  }
+  .episode-cold-open-cta {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    min-width: 190px;
+    min-height: 44px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .episode-cold-open * { animation: none !important; transition: none !important; }
+}
