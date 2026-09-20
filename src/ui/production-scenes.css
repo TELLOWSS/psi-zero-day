@@ -2358,6 +2358,26 @@
   background:linear-gradient(90deg,transparent,rgba(225,155,67,.9),rgba(203,80,58,.78),transparent);
 }
 
+/* Keep the native <details> text fallback truly collapsed. Author choice-grid rules
+   otherwise override the browser's closed-details hiding and leave off-screen buttons focusable. */
+.game-frame[data-production-scene="STRATEGY"] .map-choice-fallback:not([open]) > :not(summary) {
+  display:none !important;
+}
+.game-frame[data-production-scene="STRATEGY"] .map-choice-fallback:not([open]) {
+  min-height:0;
+}
+.game-frame[data-production-scene="STRATEGY"] .map-choice-fallback[open] .choice-panel {
+  grid-template-columns:1fr;
+}
+.game-frame[data-production-scene="STRATEGY"] .map-choice-fallback[open] .choice-panel button {
+  min-height:44px;
+  height:auto;
+  aspect-ratio:auto;
+}
+.game-frame[data-production-scene="STRATEGY"] .map-choice-fallback[open] .choice-visual {
+  display:none;
+}
+
 /* STRATEGY interaction UI stays compact and field-first. */
 .game-frame[data-production-scene="STRATEGY"] .strategy-action-list {
   max-height:25vh;
