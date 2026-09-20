@@ -7,6 +7,7 @@ import { episode01CharacterBlocking, episode01UsesCharacterBlocking } from '../a
 import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from '../app/episode01-character-performance';
 import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
+import { episode01FieldProduction } from '../app/episode01-field-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
@@ -117,6 +118,7 @@ export function EpisodeImmersiveScene({
   const locator = episode01ImmersiveLocator(scene.event_id);
   const productionMapUri = locator ? episode01BackgroundUri(resolve) : undefined;
   const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
+  const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
 
   return <figure
     className="episode-immersive-scene"
@@ -147,6 +149,13 @@ export function EpisodeImmersiveScene({
     data-stopwork-lighting={stopWorkProduction?.lighting_profile}
     data-stopwork-ui={stopWorkProduction?.ui_profile}
     data-stopwork-cast={stopWorkProduction?.cast_profile}
+    data-field-phase={fieldProduction?.phase}
+    data-field-hero={fieldProduction?.hero_character_id}
+    data-field-camera={fieldProduction?.camera_profile}
+    data-field-depth={fieldProduction?.depth_profile}
+    data-field-lighting={fieldProduction?.lighting_profile}
+    data-field-ui={fieldProduction?.ui_profile}
+    data-field-cast={fieldProduction?.cast_profile}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
