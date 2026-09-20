@@ -1617,3 +1617,22 @@
     height:92%;
   }
 }
+
+
+/* FIELD arrival discipline: the gate itself is the establishing information.
+   Do not stack a scene-brief card above the first playable narration. */
+.game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .presentation-area > .episode-scene-brief {
+  display:none;
+}
+.game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .dialogue-content {
+  min-height:92px;
+}
+.game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .dialogue-text {
+  padding:4px 0 7px;
+  font-size:clamp(13px,.95vw,17px);
+  line-height:1.58;
+}
+.game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .continue-button {
+  min-height:44px;
+  margin-top:3px;
+}
