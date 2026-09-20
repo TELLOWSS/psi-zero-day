@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
-import { COMPANY_NAME } from '../app/brand';
+import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
 import { projectEpisodeJourney } from '../app/episode-journey';
 import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
@@ -20,7 +20,7 @@ const FieldGuide = lazy(() => loadFieldGuide().then(module => ({ default: module
 
 function GameplayChunkFallback() {
   return <main className="gameplay-chunk-fallback" role="status" aria-live="polite">
-    <div><strong>PSI : ZERO DAY</strong><span>{COMPANY_NAME}</span><p>현장을 불러오고 있습니다.</p></div>
+    <div><strong>{GAME_TITLE}</strong><span>{COMPANY_NAME}</span><p>현장을 불러오고 있습니다.</p></div>
   </main>;
 }
 export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
@@ -172,7 +172,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     </header>
 
     <section className="commercial-title-copy">
-      <div className="commercial-title-logo"><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
+      <div className="commercial-title-logo"><span>NEW PSI</span><b>:</b><span>ZERO DAY</span></div>
       <h1>{t('ui.tagline')}</h1>
       <p className="commercial-title-english">Proactive Safety Intelligence</p>
       <p className="commercial-title-subcopy">{t('ui.title.subcopy')}</p>
@@ -270,12 +270,12 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     </div>
 
     <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
-      <span>PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
+      <span>NEW PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
     </button>
 
     {showTitleSettings ? <div className="commercial-title-settings-backdrop" role="presentation" onMouseDown={() => setShowTitleSettings(false)}>
       <section className="commercial-title-settings" role="dialog" aria-modal="true" aria-labelledby="title-settings-heading" onMouseDown={event => event.stopPropagation()}>
-        <span>PSI : ZERO DAY</span>
+        <span>{GAME_TITLE}</span>
         <h2 id="title-settings-heading">{t('ui.title.settings')}</h2>
         <p>{t('ui.title.settings.hint')}</p>
         <label>
@@ -296,7 +296,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
 
     {confirmNewGame ? <div className="commercial-title-dialog-backdrop" role="presentation" onMouseDown={() => setConfirmNewGame(false)}>
       <section className="commercial-title-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-confirm-title" onMouseDown={event => event.stopPropagation()}>
-        <span>PSI : ZERO DAY</span>
+        <span>{GAME_TITLE}</span>
         <h2 id="new-game-confirm-title">{t('ui.title.confirm_new')}</h2>
         <p>{t('ui.title.confirm_new.hint')}</p>
         <div>
@@ -307,7 +307,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     </div> : null}
 
     <footer className="commercial-title-footer">
-      <span>PSI : ZERO DAY · ver 1.0.0</span>
+      <span>{GAME_TITLE} · ver 1.0.0</span>
       <b>{t('ui.title.footer')}</b>
       <span>EPISODE 01 · {t('ep01.title')}</span>
     </footer>
@@ -317,7 +317,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
     <div className="hub-shade" />
     <header className="hub-header">
-      <div className="hub-brand"><span>PSI : ZERO DAY</span><small>{t('ui.hub.brandline')}</small></div>
+      <div className="hub-brand"><span>{GAME_TITLE}</span><small>{t('ui.hub.brandline')}</small></div>
       <div className="hub-signature">{t('ui.hub.signature')}<small>{t('ui.hub.motto')}</small></div>
       <div className="hub-player-status">
         <VisualImage uri={characterPortraitUri('player', resolve)} alt="" />
@@ -354,6 +354,6 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
         <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
       </div>}
     </section>
-    <footer className="hub-footer"><span>PSI · ZERO DAY</span><span>{t('ui.hub.footer')}</span><small>EPISODE 01 · {t('ep01.title')}</small></footer>
+    <footer className="hub-footer"><span>{GAME_TITLE}</span><span>{t('ui.hub.footer')}</span><small>EPISODE 01 · {t('ep01.title')}</small></footer>
   </main>;
 }
