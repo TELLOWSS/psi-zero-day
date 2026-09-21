@@ -4872,3 +4872,75 @@
     backdrop-filter:blur(11px)!important;
   }
 }
+
+
+/* Episode 01 responsive release-gate closure — 2026-09-21 */
+/* Keep the production-scene choreography, but make the final interaction layer physically reachable
+   on phone/tablet viewports. This block intentionally lives at the end of the last-loaded scene sheet. */
+.gameplay-history-button {
+  box-sizing: border-box;
+  min-height: 44px !important;
+  height: 44px !important;
+}
+
+@media (max-width: 1100px), (max-height: 650px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .presentation-area,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-content,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel button,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-copy,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-text {
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel {
+    max-width: calc(100vw - 16px);
+    overflow-x: hidden;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .presentation-area,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-content,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel button,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-copy,
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-text {
+    max-width: 100%;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel button {
+    min-height: 44px;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 1100px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel {
+    left: max(8px, env(safe-area-inset-left)) !important;
+    right: max(8px, env(safe-area-inset-right)) !important;
+    width: auto !important;
+    max-width: none;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-content {
+    display: block;
+    width: 100%;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100%;
+    grid-template-columns: 1fr !important;
+  }
+
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .choice-panel button {
+    width: 100%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel {
+    max-width: calc(100vw - max(16px, env(safe-area-inset-left) + env(safe-area-inset-right)));
+  }
+}
