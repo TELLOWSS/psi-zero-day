@@ -4770,3 +4770,66 @@
     line-height:1.2!important;
   }
 }
+
+
+/* Phase D first-TBM grounding lock — portrait */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-scene {
+    overflow:hidden;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="player"] {
+    left:29%!important;
+    right:auto!important;
+    bottom:-3%!important;
+    width:20%!important;
+    height:58%!important;
+    opacity:.9!important;
+    z-index:12!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:auto!important;
+    right:10%!important;
+    bottom:-5%!important;
+    width:29%!important;
+    height:82%!important;
+    opacity:1!important;
+    z-index:14!important;
+  }
+
+  /* Props sit on the same floor line as the crew. Nothing floats in the sky. */
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-prop.prop-1 {
+    left:-2%!important;
+    right:auto!important;
+    bottom:-4%!important;
+    width:31%!important;
+    height:22%!important;
+    opacity:.78!important;
+    z-index:8!important;
+    object-fit:contain!important;
+    object-position:left bottom!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-prop.prop-2 {
+    left:auto!important;
+    right:1%!important;
+    bottom:-2%!important;
+    width:25%!important;
+    height:21%!important;
+    opacity:.72!important;
+    z-index:7!important;
+    object-fit:contain!important;
+    object-position:right bottom!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-props {
+    filter:saturate(.9) contrast(1.02) brightness(.94)!important;
+  }
+}
