@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "DAY_RESULT_QUALITY_LOCK",
+  "status": "INTEGRATED_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -425,6 +425,66 @@
     "Mobile portrait keeps the safe bottom interaction sheet.",
     "Compact landscape keeps the safe right-side interaction dock.",
     "Scene family changes presentation only and cannot change Phase B narrative topology.",
-    "Final art replacement uses stable asset slots and does not require event rewrites."
-  ]
+    "Final art replacement uses stable asset slots and does not require event rewrites.",
+    "Phase C integration may normalize transitions, camera bands, lighting continuity and interaction rhythm but cannot change Phase B event or choice topology.",
+    "A scene with its own production title must not repeat the same context through a competing scene stamp.",
+    "DAY 02 connection must be verified from the played DAY RESULT state rather than represented as a detached completion screen."
+  ],
+  "integration_lock": {
+    "status": "LOCKED",
+    "scope": "Episode 01 end-to-end production quality",
+    "production_reference_order": [
+      "STOP_WORK",
+      "FIELD",
+      "TBM",
+      "STRATEGY",
+      "OFFICE",
+      "DAY_RESULT"
+    ],
+    "contracts": {
+      "transition": [
+        "scene-family changes use authored cuts or dissolves instead of generic page transitions",
+        "world continuity remains readable before the next interaction surface becomes dominant",
+        "DAY RESULT hands visual emphasis to the DAY 02 threshold instead of a completion score"
+      ],
+      "ui_deduplication": [
+        "one primary context label per scene family",
+        "production overlays replace duplicate scene stamps where the scene already owns a stronger title layer",
+        "support UI stays subordinate to field, people and evidence"
+      ],
+      "camera_character": [
+        "background scale changes stay inside a narrow family-specific band",
+        "character performance keeps a shared bottom-origin and transition behavior",
+        "hero emphasis may change size but cannot break the scene-family framing"
+      ],
+      "lighting": [
+        "FIELD and TBM preserve readable natural light",
+        "STOP WORK compresses contrast around the hazard decision",
+        "OFFICE keeps neutral evidence readability",
+        "DAY RESULT reduces saturation and opens the next-day threshold"
+      ],
+      "choice_rhythm": [
+        "decision choices receive the strongest spacing and hold",
+        "communication and evidence choices remain deliberate but compact",
+        "reflection choices close the day without scorecard styling"
+      ],
+      "mobile": [
+        "portrait keeps a safe bottom interaction sheet",
+        "compact landscape keeps a right-side interaction dock",
+        "touch targets remain at least 44 CSS pixels"
+      ],
+      "day02_bridge": [
+        "e01_09_evening closes Day 01 through residue and memory",
+        "e01_10_next_day_tease remains FIELD-family presentation with a next-day-tease phase",
+        "the bridge shows changed weather and conditions before any new Day 02 judgment"
+      ]
+    },
+    "qa_profiles": [
+      "desktop-1440x900",
+      "desktop-1920x1080",
+      "phone-portrait-390x844",
+      "phone-landscape-844x390",
+      "tablet-portrait-820x1180"
+    ]
+  }
 }
