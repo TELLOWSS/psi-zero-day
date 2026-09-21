@@ -72,7 +72,7 @@ function initialPaidItemWallet() {
   catch { return emptyPaidItemWallet(); }
 }
 
-export function PlayableEpisode({ session }: { session: EpisodeSession }) {
+export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession; onReturn?: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const [debugOpen, setDebugOpen] = useState(false);
   const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
@@ -446,12 +446,16 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
       onOutcomeReconsider={reconsiderMapOutcome}
       supportItems={supportItems}
       onSupportItemUse={useSupportItem}
+      onReturn={onReturn}
       onAction={action => {
         playUiCue('execute');
         chooseEvent(action.instance_id, action.node_id, action.choice_id);
       }}
     /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
+      {onReturn ? <button className="gameplay-home-button" type="button" onClick={onReturn} aria-label={t('ui.hub.return')} title={t('ui.hub.return')}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10" /></svg>
+      </button> : null}
       <div className="hud-brand"><strong>{t('ui.brand')}</strong><small>{t('ui.tagline')}</small></div>
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>

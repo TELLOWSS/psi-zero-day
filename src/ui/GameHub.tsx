@@ -86,8 +86,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   />;
 
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
-    <PlayableEpisode session={session} />
-    <button className="game-hub-return" onClick={() => setInGame(false)} type="button"><HubIcon kind="home" />{session.t('ui.hub.return')}</button>
+    <PlayableEpisode session={session} onReturn={() => setInGame(false)} />
     <button
       className="game-audio-toggle"
       type="button"

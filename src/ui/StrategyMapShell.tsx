@@ -67,7 +67,7 @@ function frictionIcon(kind: FieldFrictionKind): string {
 
 export function StrategyMapShell({
   view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider,
-  supportItems = [], onSupportItemUse,
+  supportItems = [], onSupportItemUse, onReturn,
 }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
@@ -81,6 +81,7 @@ export function StrategyMapShell({
   readonly onOutcomeReconsider?: () => void;
   readonly supportItems?: readonly StrategySupportItem[];
   readonly onSupportItemUse?: (itemId: string) => void;
+  readonly onReturn?: () => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
@@ -149,7 +150,12 @@ export function StrategyMapShell({
       <small>SCAN COMPLETE · OBSERVE · ANALYZE · PLAN</small>
     </div>
     <header className="strategy-hud">
-      <div className="strategy-brand"><span className="strategy-hardhat" aria-hidden="true">⛑</span><div><strong>{copy.brand}</strong><small>{COMPANY_NAME}</small></div></div>
+      <div className="strategy-brand">
+        {onReturn ? <button className="gameplay-home-button" type="button" onClick={onReturn} aria-label={text('ui.hub.return')} title={text('ui.hub.return')}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10" /></svg>
+        </button> : null}
+        <span className="strategy-hardhat" aria-hidden="true">⛑</span><div><strong>{copy.brand}</strong><small>{COMPANY_NAME}</small></div>
+      </div>
       <div className="strategy-resource-bar" aria-label={`${text('ui.resource.money')} ${text('ui.resource.time')} ${text('ui.resource.schedule')} ${text('ui.resource.safety')}`}>
         <article data-resource="money"><span>{text('ui.resource.money')}</span><strong>{moneyValue}</strong></article>
         <article data-resource="time"><span>{text('ui.resource.time')}</span><strong>{timeValue}</strong></article>

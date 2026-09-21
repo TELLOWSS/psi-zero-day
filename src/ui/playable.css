@@ -2858,3 +2858,53 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .presentation-history-list{padding:9px}
   .presentation-history-list article p{font-size:12px;line-height:1.55}
 }
+
+
+/* Phase D header-integrated gameplay home control. */
+.gameplay-home-button{
+  flex:0 0 44px;
+  inline-size:44px;
+  block-size:44px;
+  min-inline-size:44px;
+  min-block-size:44px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin:0;
+  line-height:0;
+  border:1px solid rgba(174,199,220,.36);
+  border-radius:9px;
+  background:rgba(15,37,49,.86);
+  color:#eef4f6;
+  box-shadow:0 7px 18px rgba(0,0,0,.18);
+}
+.gameplay-home-button svg{
+  display:block;
+  inline-size:20px;
+  block-size:20px;
+  margin:0;
+  transform:none;
+}
+.gameplay-home-button:hover,
+.gameplay-home-button:focus-visible{
+  border-color:rgba(232,208,135,.72);
+  color:#f1d486;
+}
+.game-header>.gameplay-home-button{margin-right:2px}
+.strategy-brand{display:flex;align-items:center;min-width:0}
+.strategy-brand>.gameplay-home-button{margin-right:8px}
+@media (orientation:portrait) and (max-width:760px){
+  .phase-playing:not(.strategy-active) .game-header{
+    padding-left:0!important;
+  }
+  .strategy-active .strategy-hud{
+    padding-left:0!important;
+  }
+  .gameplay-home-button{
+    flex-basis:44px;
+    inline-size:44px;
+    block-size:44px;
+    min-inline-size:44px;
+    min-block-size:44px;
+  }
+}
