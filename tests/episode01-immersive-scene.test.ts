@@ -69,6 +69,12 @@ describe('Episode 01 immersive scene coverage', () => {
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.tone).toBe('reflective');
     expect(episode01ImmersiveScene('e01_09_evening', 'family', 'SHOW_RESULT')?.background_uri).toContain('home-night');
   });
+  it('moves the first TBM away from the arrival gate into the active work yard', () => {
+    expect(plan.events.e01_02_meet_kang.bg).toContain('work-yard');
+    expect(plan.events.e01_02_meet_kang.props).toContain('assets/episode01/scene-elements/material-stack.webp');
+    expect(plan.events.e01_02_meet_kang.props).toContain('assets/episode01/scene-elements/access-barrier.webp');
+  });
+
   it('keeps key field beats multi-plane instead of falling back to flat background-only scenes', () => {
     const layeredFieldEvents = [
       'e01_01_arrival',

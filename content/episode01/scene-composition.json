@@ -338,10 +338,10 @@
       ]
     },
     "e01_02_meet_kang": {
-      "scene_id": "foundation.first-contact",
+      "scene_id": "foundation.first-tbm",
       "background_asset_id": "ep01.background.foundation.map",
       "environment": "foundation",
-      "primary_anchor": "entry",
+      "primary_anchor": "yard",
       "active_layers": [
         "background",
         "characters",

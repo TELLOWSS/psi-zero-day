@@ -28,13 +28,13 @@
       "focus": "center"
     },
     "e01_02_meet_kang": {
-      "bg": "assets/episode01/cg/gate-dawn-rc.svg",
+      "bg": "assets/episode01/cg/work-yard-rc.svg",
       "cast": [
         "player",
         "kang_taesik"
       ],
       "props": [
-        "assets/episode01/scene-elements/site-gate.webp",
+        "assets/episode01/scene-elements/material-stack.webp",
         "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",

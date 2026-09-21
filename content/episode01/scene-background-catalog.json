@@ -16,7 +16,6 @@
       "rc_path": "assets/episode01/cg/gate-dawn-rc.svg",
       "used_by": [
         "e01_01_arrival",
-        "e01_02_meet_kang",
         "e01_10_next_day_tease"
       ]
     },
@@ -35,6 +34,7 @@
       "final_path": "assets/episode01/cg/work-yard.webp",
       "rc_path": "assets/episode01/cg/work-yard-rc.svg",
       "used_by": [
+        "e01_02_meet_kang",
         "e01_05_command",
         "e01_08g_tbm_field_gap",
         "e01_08h_tbm_return",
