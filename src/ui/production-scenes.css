@@ -6295,6 +6295,7 @@
     inset:52px 0 0!important;
     width:100%!important;
     height:auto!important;
+    aspect-ratio:auto!important;
     min-height:0!important;
     max-height:none!important;
     margin:0!important;
