@@ -173,8 +173,8 @@ export function EpisodeImmersiveScene({
     data-office-depth={officeProduction?.depth_profile}
     data-office-lighting={officeProduction?.lighting_profile}
     data-office-ui={officeProduction?.ui_profile}
-    data-office-focus={officeProduction?.focus}
     data-office-cast={officeProduction?.cast_profile}
+    data-office-evidence={officeProduction?.evidence_focus}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -214,56 +214,23 @@ export function EpisodeImmersiveScene({
       </span>)}
       {scene.event_id === 'e01_10_next_day_tease' ? <i className="episode-daybreak-threshold" /> : null}
     </div> : null}
-    {officeProduction ? <div
-      className="office-production-layer"
-      data-phase={officeProduction.phase}
-      data-focus={officeProduction.focus}
-      data-cast={officeProduction.cast_profile}
-      aria-hidden="true"
-    >
-      <div className="office-production-caption">
-        <span>{t(officeProduction.kicker_text_id)}</span>
-        <strong>{t(officeProduction.title_text_id)}</strong>
-      </div>
-      <div className="episode-immersive-evidence-board office-production-board">
-        <div className="office-evidence-stack">
-          {officeProduction.evidence_slots.map((slot, index) => <span
-            key={`${slot.time}:${slot.label_text_id}`}
-            className={`office-evidence-sheet office-evidence-${index + 1}`}
-            data-state={slot.state}
-          >
-            <time>{slot.time}</time>
-            <b>{t(slot.label_text_id)}</b>
-            <i />
-          </span>)}
-        </div>
-        <div className="office-evidence-axis">
-          {officeProduction.evidence_slots.map(slot => <span key={slot.time} data-state={slot.state}>
-            <i />
-            <time>{slot.time}</time>
-          </span>)}
-        </div>
-      </div>
-      <div className="office-table-geometry">
-        <i className="office-seat office-seat-a" />
-        <i className="office-seat office-seat-b" />
-        <i className="office-seat office-seat-c" />
-        <b />
-      </div>
-      {officeProduction.phase === 'record-carryover' ? <div className="office-field-carryover">
-        <span className="office-file-stamp" />
-        <i className="office-carry-line" />
-        <span className="office-field-mark mark-a" />
-        <span className="office-field-mark mark-b" />
-        <span className="office-field-mark mark-c" />
-      </div> : null}
-    </div> : showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
+    {showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
       <span className="evidence-sheet sheet-a" />
       <span className="evidence-sheet sheet-b" />
       <span className="evidence-sheet sheet-c" />
       <i className="evidence-pin pin-a" />
       <i className="evidence-pin pin-b" />
       <b className="evidence-timeline" />
+    </div> : null}
+    {officeProduction ? <div className="office-production-layer" data-phase={officeProduction.phase} data-evidence={officeProduction.evidence_focus} aria-hidden="true">
+      <span className="office-table-plane" />
+      <span className="office-record record-a" />
+      <span className="office-record record-b" />
+      <span className="office-record record-c" />
+      <i className="office-evidence-axis" />
+      <i className="office-evidence-link link-a" />
+      <i className="office-evidence-link link-b" />
+      <b className="office-next-field-trace" />
     </div> : null}
     {tbmProduction ? <div className="tbm-production-layer" data-phase={tbmProduction.phase} aria-hidden="true">
       <i className="tbm-briefing-ring" />
