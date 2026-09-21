@@ -61,5 +61,7 @@ describe('Episode 01 Phase C integrated production quality', () => {
     expect(css).toContain('@media (orientation:portrait) and (max-width:900px)');
     expect(css).toContain('@media (orientation:landscape) and (max-height:650px)');
     expect(css.lastIndexOf(marker)).toBeGreaterThan(css.indexOf('Phase C-6'));
+    expect(css).toContain('/* Final playthrough responsive regression lock — 2026-09-21.');
+    expect(css).toContain('.play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"])');
   });
 });
