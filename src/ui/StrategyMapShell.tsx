@@ -85,10 +85,12 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const [observed, setObserved] = useState(false);
   const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
   useEffect(() => {
     setFocusId(null);
     setActionFocusId(null);
+    setObserved(false);
   }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
@@ -140,8 +142,9 @@ export function StrategyMapShell({
   const timeValue = view.resources.display_time ?? text(`ui.slot.${view.resources.time_slot.toLowerCase()}`);
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
   const playerMapAnchor = view.placements.find(placement => placement.character_id === 'player')?.anchor ?? 'overview';
+  const loopPhase = outcome ? 'result' : !observed ? 'observe' : focusId ? 'action' : 'target';
 
-  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={outcome ? 'result' : focusId ? 'action' : 'target'}>
+  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
     <div className="strategy-world-atmosphere" aria-hidden="true" />
     <div className="strategy-entry-slate" aria-hidden="true">
@@ -164,6 +167,23 @@ export function StrategyMapShell({
       </div>
       <div className="strategy-day"><span>{copy.day}</span><strong>{view.clock.day}</strong></div>
     </header>
+
+    <nav className="strategy-loop-stage-strip" aria-label={text('ui.strategy.loop.label')}>
+      {(['observe','target','action','result'] as const).map((stage,index) => {
+        const order = { observe:0, target:1, action:2, result:3 } as const;
+        const current = order[loopPhase];
+        return <span key={stage} className={index === current ? 'is-active' : index < current ? 'is-done' : ''}>
+          {text(`ui.strategy.loop.${stage}`)}
+        </span>;
+      })}
+    </nav>
+
+    {!observed && !outcome ? <section className="strategy-observe-card" aria-live="polite">
+      <span>{text('ui.strategy.observe.kicker')}</span>
+      <strong>{text('ui.strategy.observe.title')}</strong>
+      <p>{text('ui.strategy.observe.hint')}</p>
+      <button type="button" onClick={() => setObserved(true)}>{text('ui.strategy.observe.continue')} <b aria-hidden="true">↗</b></button>
+    </section> : null}
 
     <aside className="strategy-rail" aria-label={copy.objectives}>
       <StrategyPsiSixPanel psi={view.psi} text={text} />
@@ -349,7 +369,7 @@ export function StrategyMapShell({
 
     </section>
 
-    <StrategyLoopPanel
+    {observed || outcome ? <StrategyLoopPanel
       actions={effectiveActions}
       selectedActions={selectedActions}
       focusId={focusId}
@@ -362,7 +382,7 @@ export function StrategyMapShell({
       onOutcomeContinue={onOutcomeContinue}
       onOutcomeReconsider={onOutcomeReconsider}
       onActionFocus={setActionFocusId}
-    />
+    /> : null}
 
     <footer className="strategy-roster" aria-label={copy.roster}>
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
