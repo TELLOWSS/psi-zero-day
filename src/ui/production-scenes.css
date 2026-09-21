@@ -4008,3 +4008,206 @@
     line-height:1.25;
   }
 }
+
+
+/* Final playthrough responsive regression lock — 2026-09-21.
+   Choice states must keep every primary decision inside the active viewport.
+   This is presentation-only: no Phase B event/choice topology changes. */
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+  grid-template-columns:minmax(0,1fr)!important;
+}
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) > .character-card,
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) > .narrator-card {
+  display:none!important;
+}
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .presentation-area[data-presentation="SHOW_CHOICE"] {
+  grid-column:1 / -1;
+  width:100%;
+  min-width:0;
+  min-height:0;
+}
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .presentation-area[data-presentation="SHOW_CHOICE"] > :not(.choice-content) {
+  display:none!important;
+}
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .presentation-area[data-presentation="SHOW_CHOICE"] .choice-content,
+.game-frame[data-production-scene].phase-playing:not(.strategy-active)
+  .presentation-area[data-presentation="SHOW_CHOICE"] .choice-panel {
+  width:100%;
+  min-width:0;
+}
+
+/* 1440-class desktop: DAY RESULT keeps four simultaneous choices, but gives the copy
+   enough horizontal room so none of the cards crosses the 16:9 game-frame bottom. */
+@media (min-width:901px) and (min-height:651px) and (max-width:1600px) {
+  .game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left:5%!important;
+    right:5%!important;
+    bottom:12px!important;
+    width:auto!important;
+    max-height:34%!important;
+    padding:8px 10px 10px!important;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-content h2 {
+    margin-bottom:6px;
+    font-size:11px;
+    line-height:1.25;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    gap:5px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel button {
+    min-height:48px;
+    padding:5px 7px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-copy {
+    grid-template-columns:1.7em minmax(0,1fr);
+    gap:4px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-text {
+    font-size:9.5px;
+    line-height:1.22;
+  }
+}
+
+/* Portrait phones/tablets: when a choice is live, turn the interaction surface into
+   a viewport-anchored sheet instead of allowing the cinematic world to push it below fold. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active):has(
+    .presentation-area[data-presentation="SHOW_CHOICE"]
+  ) {
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    position:absolute!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    top:auto!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    margin:0!important;
+    max-height:min(46dvh,430px)!important;
+    padding:8px 10px max(8px,env(safe-area-inset-bottom))!important;
+    overflow:hidden!important;
+    z-index:34;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .presentation-area[data-presentation="SHOW_CHOICE"] {
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-content h2 {
+    margin:0 0 5px;
+    font-size:11px;
+    line-height:1.24;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-panel {
+    grid-template-columns:1fr!important;
+    gap:4px!important;
+    margin-top:0!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-panel button {
+    min-height:44px!important;
+    padding:4px 7px!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-visual {
+    display:none!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-copy {
+    grid-template-columns:1.8em minmax(0,1fr)!important;
+    gap:5px!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-text {
+    font-size:9.5px!important;
+    line-height:1.22!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-arrow {
+    font-size:10px;
+  }
+}
+
+/* Compact landscape: reclaim the character-card column on decision beats and keep
+   44px touch targets while compressing only typography/padding. */
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left:auto!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    top:52px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:min(48vw,430px)!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:6px 8px!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .presentation-area[data-presentation="SHOW_CHOICE"] {
+    height:100%;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-content h2 {
+    margin:0 0 4px!important;
+    font-size:9.5px!important;
+    line-height:1.16!important;
+  }
+  .game-frame[data-production-scene]:not([data-production-scene="DAY_RESULT"]).phase-playing:not(.strategy-active)
+    .choice-panel {
+    grid-template-columns:1fr!important;
+    gap:3px!important;
+    margin-top:0!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-panel button {
+    min-height:44px!important;
+    padding:3px 6px!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-visual {
+    display:none!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-copy {
+    grid-template-columns:1.7em minmax(0,1fr)!important;
+    gap:4px!important;
+  }
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active)
+    .choice-text {
+    font-size:8.8px!important;
+    line-height:1.16!important;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel button {
+    max-height:64px!important;
+  }
+}
