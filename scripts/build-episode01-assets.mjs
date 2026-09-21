@@ -120,7 +120,7 @@ async function tryRead(uri) {
 function minimumDimensions(item) {
   if (item.source.endsWith(':portrait')) return { width: 1024, height: 1024 };
   if (item.source.endsWith(':map')) return { width: 768, height: 1024 };
-  if (item.source.endsWith(':background')) return { width: 1920, height: 1080 };
+  if (item.source.endsWith(':background')) return { width: 3072, height: 1728 };
   return undefined;
 }
 

@@ -13,11 +13,10 @@ const foundationBlindingTarget = path.join(root, 'public/assets/episode01/scene-
 const foundationRebarTarget = path.join(root, 'public/assets/episode01/scene-elements/foundation-rebar-mat.webp');
 
 const EXPECTED = Object.freeze({
-  encodedLength: 150248,
-  bytes: 112686,
-  width: 1920,
-  height: 1080,
-  sha256: 'ee9aefea829ddbdcd5883fab68144ae85759538f83b3ec5bfe4af43c7ad2d74d',
+  bytes: 1253340,
+  width: 3072,
+  height: 1728,
+  sha256: 'f9273c464f4e194dd50b379be5614c9afed3eb061835ec8be9763eeb6f32a01b',
 });
 
 const MATERIAL_STACK_EXPECTED = Object.freeze({
@@ -149,19 +148,15 @@ async function writeIfChanged(target, bytes) {
   return unchanged;
 }
 
-const encoded = await readEmbeddedParts('foundation-map.webp', foundationSources);
-if (encoded.length !== EXPECTED.encodedLength) {
-  throw new Error(`Foundation base64 length ${encoded.length}; expected ${EXPECTED.encodedLength}.`);
-}
-const bytes = Buffer.from(encoded, 'base64');
+const bytes = await readFile(foundationTarget);
 if (bytes.length !== EXPECTED.bytes) throw new Error(`Foundation WebP size ${bytes.length}; expected ${EXPECTED.bytes}.`);
-if (!isWebP(bytes)) throw new Error('Materialized Foundation asset is not a WebP file.');
+if (!isWebP(bytes)) throw new Error('Checked-in Foundation Production Master is not a WebP file.');
 const dimensions = webPDimensions(bytes);
 if (!dimensions || dimensions.width !== EXPECTED.width || dimensions.height !== EXPECTED.height) {
   throw new Error(`Foundation dimensions ${dimensions ? `${dimensions.width}x${dimensions.height}` : 'unreadable'}; expected ${EXPECTED.width}x${EXPECTED.height}.`);
 }
 const hash = createHash('sha256').update(bytes).digest('hex');
-if (hash !== EXPECTED.sha256) throw new Error(`Foundation SHA-256 mismatch: ${hash}.`);
+if (hash !== EXPECTED.sha256) throw new Error(`Foundation Production Master SHA-256 mismatch: ${hash}.`);
 
 const materialStackEncoded = await readEmbeddedParts('material-stack.webp', materialStackSources);
 if (materialStackEncoded.length !== MATERIAL_STACK_EXPECTED.encodedLength) {
@@ -261,13 +256,13 @@ if (!checkOnly) {
   const accessBarrierUnchanged = await writeIfChanged(accessBarrierTarget, accessBarrierBytes);
   const foundationBlindingUnchanged = await writeIfChanged(foundationBlindingTarget, foundationBlindingBytes);
   const foundationRebarUnchanged = await writeIfChanged(foundationRebarTarget, foundationRebarBytes);
-  console.log(`${foundationUnchanged ? 'Verified' : 'Materialized'} Foundation final WebP (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
+  console.log(`Verified Foundation Production Master (${EXPECTED.width}x${EXPECTED.height}, ${EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${materialStackUnchanged ? 'Verified' : 'Materialized'} material stack final WebP (${MATERIAL_STACK_EXPECTED.width}x${MATERIAL_STACK_EXPECTED.height}, ${MATERIAL_STACK_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${accessBarrierUnchanged ? 'Verified' : 'Materialized'} access barrier final WebP (${ACCESS_BARRIER_EXPECTED.width}x${ACCESS_BARRIER_EXPECTED.height}, ${ACCESS_BARRIER_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${foundationBlindingUnchanged ? 'Verified' : 'Materialized'} foundation blinding final WebP (${FOUNDATION_BLINDING_EXPECTED.width}x${FOUNDATION_BLINDING_EXPECTED.height}, ${FOUNDATION_BLINDING_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
   console.log(`${foundationRebarUnchanged ? 'Verified' : 'Materialized'} foundation rebar final WebP (${FOUNDATION_REBAR_EXPECTED.width}x${FOUNDATION_REBAR_EXPECTED.height}, ${FOUNDATION_REBAR_EXPECTED.bytes.toLocaleString('en-US')} bytes).`);
 } else {
-  console.log(`Foundation embedded media source verified (sha256 ${hash}).`);
+  console.log(`Foundation Production Master verified (sha256 ${hash}).`);
   console.log(`Material stack embedded media source verified (sha256 ${materialStackHash}).`);
   console.log(`Access barrier embedded media source verified (sha256 ${accessBarrierHash}).`);
   console.log(`Foundation blinding embedded media source verified (sha256 ${foundationBlindingHash}).`);
