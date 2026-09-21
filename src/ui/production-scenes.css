@@ -2669,472 +2669,572 @@
   }
 }
 
-/* Phase C-5 — OFFICE quality lock.
-   Evidence and people share one room: fact -> positions -> evidence -> clash -> judgment -> field memory. */
-.game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) .game-header {
-  height:58px;
-  background:linear-gradient(180deg,rgba(12,12,13,.92),rgba(15,15,16,.48) 76%,transparent);
-  border-bottom-color:rgba(214,179,108,.12);
-  backdrop-filter:blur(7px);
-}
-.game-frame[data-production-scene="OFFICE"] .episode-immersive-background {
-  transform:scale(1.045);
-  object-position:51% 48%;
-  filter:saturate(.84) contrast(1.045) brightness(.74) sepia(.035);
-}
-.game-frame[data-production-scene="OFFICE"] .episode-immersive-atmosphere {
-  z-index:3;
-  mix-blend-mode:normal;
-  background:
-    radial-gradient(circle at 73% 32%,rgba(218,183,112,.115),transparent 29%),
-    linear-gradient(90deg,rgba(9,10,12,.46),rgba(9,10,12,.12) 38%,transparent 62%),
-    linear-gradient(0deg,rgba(7,8,10,.62),transparent 42%);
-}
-.game-frame[data-production-scene="OFFICE"] .episode-immersive-grade {
-  z-index:22;
-  background:
-    linear-gradient(90deg,rgba(5,7,9,.34),transparent 38%,rgba(17,14,10,.08)),
-    linear-gradient(180deg,rgba(3,5,7,.02) 43%,rgba(6,7,9,.62) 100%);
-  box-shadow:inset 0 0 130px rgba(49,36,16,.12);
-}
-.game-frame[data-production-scene="OFFICE"] .episode-psi-trace,
-.game-frame[data-production-scene="OFFICE"] .episode-scene-minimap {
-  display:none;
-}
-.game-frame[data-production-scene="OFFICE"] .episode-immersive-speaker-tag {
-  top:17%;
-  left:3.6%;
-  right:auto;
-  z-index:27;
-  max-width:30%;
-  border-color:rgba(214,179,108,.24);
-  border-left-color:rgba(224,193,127,.78);
-  background:linear-gradient(90deg,rgba(22,19,15,.72),rgba(9,13,16,.68));
-}
+
+/* -------------------------------------------------------------------------- */
+/* Phase C-5 OFFICE production quality lock                                    */
+/* Rule: facts -> statements -> evidence -> responsibility -> record -> field. */
+/* People and evidence share one room; the UI never turns this into a dashboard.*/
+/* -------------------------------------------------------------------------- */
+
 .game-frame[data-production-scene="OFFICE"] .office-production-layer {
   position:absolute;
   inset:0;
-  z-index:24;
+  z-index:9;
   pointer-events:none;
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-caption {
-  position:absolute;
-  left:3.8%;
-  top:10.5%;
-  width:min(455px,34%);
-  display:grid;
-  gap:5px;
-  text-shadow:0 3px 18px rgba(0,0,0,.72);
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-caption > span {
-  color:#e1c484;
-  font:850 clamp(9px,.7vw,13px)/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-caption > strong {
-  color:#f4eee2;
-  font-size:clamp(22px,2.25vw,39px);
-  line-height:1.03;
-  letter-spacing:-.04em;
-  word-break:keep-all;
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-board {
-  position:absolute;
-  top:13%;
-  right:3.8%;
-  width:min(530px,40%);
-  height:48%;
-  z-index:25;
-  display:block;
-  padding:0;
-  border:1px solid rgba(226,198,139,.23);
-  border-radius:10px;
   overflow:hidden;
-  transform:none;
+}
+.game-frame[data-production-scene="OFFICE"] .office-table-plane {
+  position:absolute;
+  left:8%;
+  right:7%;
+  bottom:-10%;
+  height:30%;
+  border-top:1px solid rgba(221,193,137,.34);
+  border-radius:50% 50% 0 0 / 28% 28% 0 0;
   background:
-    linear-gradient(145deg,rgba(35,31,25,.94),rgba(16,19,21,.93)),
-    radial-gradient(circle at 64% 26%,rgba(225,192,124,.12),transparent 38%);
-  box-shadow:0 20px 48px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.025);
-  backdrop-filter:blur(6px);
+    linear-gradient(180deg,rgba(96,70,42,.22),rgba(20,17,14,.54)),
+    repeating-linear-gradient(90deg,rgba(238,216,171,.035) 0 1px,transparent 1px 46px);
+  box-shadow:0 -18px 46px rgba(0,0,0,.18);
+  transform:perspective(720px) rotateX(60deg);
+  transform-origin:center bottom;
 }
-.game-frame[data-production-scene="OFFICE"] .office-production-board::before {
-  content:"";
+.game-frame[data-production-scene="OFFICE"] .office-record {
   position:absolute;
-  inset:0;
-  opacity:.28;
+  width:8.2%;
+  height:12%;
+  bottom:14.5%;
+  border:1px solid rgba(241,232,209,.26);
+  border-radius:2px;
   background:
-    repeating-linear-gradient(0deg,transparent 0 27px,rgba(229,210,174,.055) 27px 28px),
-    linear-gradient(90deg,transparent 0 13%,rgba(224,197,145,.055) 13% 13.4%,transparent 13.4%);
+    repeating-linear-gradient(180deg,rgba(235,225,201,.15) 0 1px,transparent 1px 7px),
+    rgba(33,37,36,.78);
+  box-shadow:0 9px 18px rgba(0,0,0,.25);
+  opacity:.72;
 }
-.game-frame[data-production-scene="OFFICE"] .office-evidence-stack {
-  position:absolute;
-  inset:10% 8% 25% 8%;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet {
-  position:absolute;
-  width:64%;
-  min-height:29%;
-  display:grid;
-  grid-template-columns:55px 1fr;
-  align-items:start;
-  gap:8px;
-  padding:10px 12px;
-  border:1px solid rgba(229,213,181,.16);
-  border-radius:5px;
-  background:linear-gradient(145deg,rgba(239,232,217,.93),rgba(207,198,180,.88));
-  color:#202327;
-  box-shadow:0 11px 24px rgba(0,0,0,.24);
-  transform-origin:50% 50%;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet time {
-  font:900 10px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
-  color:#6b5630;
-  letter-spacing:.02em;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet b {
-  font-size:10px;
-  line-height:1.35;
-  word-break:keep-all;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet > i {
-  grid-column:1/-1;
-  height:1px;
-  margin-top:3px;
-  background:linear-gradient(90deg,rgba(62,63,63,.42),transparent);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-1 {
-  left:1%;
-  top:2%;
-  transform:rotate(-2.1deg);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-2 {
-  left:20%;
-  top:31%;
-  transform:rotate(.7deg);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-3 {
-  left:34%;
-  top:60%;
-  transform:rotate(2deg);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet[data-state="past"] {
-  opacity:.58;
-  filter:saturate(.62) brightness(.82);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet[data-state="next"] {
-  opacity:.42;
-  filter:saturate(.44) brightness(.72);
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-sheet[data-state="active"] {
-  z-index:3;
-  opacity:1;
-  transform:translateY(-2px) rotate(0deg) scale(1.035);
-  border-color:rgba(216,181,106,.58);
-  box-shadow:0 15px 28px rgba(0,0,0,.3),0 0 0 2px rgba(216,181,106,.08);
-}
+.game-frame[data-production-scene="OFFICE"] .office-record-a { left:38%; transform:rotate(-4deg); }
+.game-frame[data-production-scene="OFFICE"] .office-record-b { left:47%; bottom:13.3%; transform:rotate(2deg); }
+.game-frame[data-production-scene="OFFICE"] .office-record-c { left:56%; bottom:14.8%; transform:rotate(-1deg); }
 .game-frame[data-production-scene="OFFICE"] .office-evidence-axis {
   position:absolute;
-  left:8%;
-  right:8%;
-  bottom:7%;
-  height:34px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  align-items:start;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-axis::before {
-  content:"";
-  position:absolute;
-  left:8%;
-  right:8%;
-  top:7px;
+  left:38%;
+  right:25%;
+  top:31%;
   height:1px;
-  background:linear-gradient(90deg,rgba(218,194,143,.18),rgba(218,194,143,.62),rgba(218,194,143,.18));
+  background:linear-gradient(90deg,transparent,rgba(218,185,116,.62),rgba(194,207,207,.38),transparent);
+  opacity:.48;
 }
-.game-frame[data-production-scene="OFFICE"] .office-evidence-axis > span {
-  position:relative;
-  display:grid;
-  justify-items:center;
-  gap:4px;
-  color:rgba(231,221,199,.54);
-  font:800 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-axis > span i {
-  z-index:1;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  border:1px solid rgba(218,194,143,.42);
-  background:#17191a;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-axis > span[data-state="active"] {
-  color:#f0d79f;
-}
-.game-frame[data-production-scene="OFFICE"] .office-evidence-axis > span[data-state="active"] i {
-  background:#d6b36c;
-  border-color:#f2d99e;
-  box-shadow:0 0 0 5px rgba(214,179,108,.11),0 0 14px rgba(214,179,108,.3);
-}
-.game-frame[data-production-scene="OFFICE"] .office-table-geometry {
+.game-frame[data-production-scene="OFFICE"] .office-evidence-link {
   position:absolute;
-  left:35%;
-  right:24%;
-  bottom:8.5%;
-  height:24%;
-  opacity:.52;
-  transform:perspective(700px) rotateX(66deg);
+  width:17%;
+  height:1px;
+  top:37%;
+  background:linear-gradient(90deg,transparent,rgba(208,187,138,.52),transparent);
+  opacity:.42;
+  transform-origin:left center;
 }
-.game-frame[data-production-scene="OFFICE"] .office-table-geometry > b {
+.game-frame[data-production-scene="OFFICE"] .office-evidence-link.link-a { left:39%; transform:rotate(18deg); }
+.game-frame[data-production-scene="OFFICE"] .office-evidence-link.link-b { left:52%; transform:rotate(-15deg); }
+.game-frame[data-production-scene="OFFICE"] .office-next-field-trace {
   position:absolute;
-  inset:13% 9%;
-  border:1px solid rgba(220,191,130,.34);
-  border-radius:48%;
-  background:radial-gradient(ellipse,rgba(67,48,26,.28),rgba(10,11,12,.05) 65%,transparent 70%);
-  box-shadow:0 0 36px rgba(80,58,28,.12);
-}
-.game-frame[data-production-scene="OFFICE"] .office-seat {
-  position:absolute;
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  border:1px solid rgba(225,204,160,.34);
-  background:rgba(21,20,18,.72);
-  box-shadow:0 0 0 6px rgba(218,185,115,.04);
-}
-.game-frame[data-production-scene="OFFICE"] .office-seat-a { left:11%; top:49%; }
-.game-frame[data-production-scene="OFFICE"] .office-seat-b { left:49%; top:5%; }
-.game-frame[data-production-scene="OFFICE"] .office-seat-c { right:10%; top:49%; }
-
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="position-read"] .office-production-board {
-  opacity:.62;
-  transform:scale(.96);
-  transform-origin:center right;
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="responsibility-clash"] .office-production-board {
-  filter:saturate(.72) contrast(1.03);
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="responsibility-clash"] .office-table-geometry {
-  opacity:.82;
-  transform:perspective(620px) rotateX(69deg) scale(1.05);
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="judgment"] .office-production-board {
-  border-color:rgba(230,197,126,.5);
-  box-shadow:0 20px 54px rgba(0,0,0,.4),0 0 0 2px rgba(218,179,108,.07);
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="judgment"] .office-table-geometry {
-  opacity:.9;
-}
-.game-frame[data-production-scene="OFFICE"] .office-field-carryover {
-  position:absolute;
-  right:3.5%;
-  top:60.5%;
-  width:min(500px,39%);
-  height:21%;
-  opacity:.9;
-}
-.game-frame[data-production-scene="OFFICE"] .office-file-stamp {
-  position:absolute;
-  left:4%;
-  top:15%;
-  width:42px;
-  height:50px;
-  border:1px solid rgba(223,197,144,.46);
-  border-radius:4px;
-  background:linear-gradient(145deg,rgba(235,227,209,.72),rgba(182,170,147,.6));
-  box-shadow:0 8px 16px rgba(0,0,0,.24);
-  transform:rotate(-5deg);
-}
-.game-frame[data-production-scene="OFFICE"] .office-file-stamp::after {
-  content:"";
-  position:absolute;
-  inset:11px 8px;
-  border-top:2px solid rgba(92,70,37,.36);
-  border-bottom:5px double rgba(92,70,37,.26);
-}
-.game-frame[data-production-scene="OFFICE"] .office-carry-line {
-  position:absolute;
-  left:13%;
-  right:15%;
-  top:48%;
+  right:7%;
+  bottom:13%;
+  width:18%;
   height:2px;
-  background:linear-gradient(90deg,rgba(222,190,124,.64),rgba(107,203,184,.58),rgba(107,203,184,.08));
-  box-shadow:0 0 10px rgba(107,203,184,.12);
+  opacity:.18;
+  background:linear-gradient(90deg,rgba(214,182,112,.8),transparent);
 }
-.game-frame[data-production-scene="OFFICE"] .office-field-mark {
-  position:absolute;
-  top:42%;
-  width:11px;
-  height:11px;
-  border:1px solid rgba(127,214,198,.58);
-  border-radius:50%;
-  background:rgba(8,26,28,.84);
-  box-shadow:0 0 0 5px rgba(107,203,184,.06);
-}
-.game-frame[data-production-scene="OFFICE"] .office-field-mark.mark-a { right:23%; }
-.game-frame[data-production-scene="OFFICE"] .office-field-mark.mark-b { right:12%; top:29%; }
-.game-frame[data-production-scene="OFFICE"] .office-field-mark.mark-c { right:4%; top:55%; }
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="record-carryover"] .office-production-board {
-  transform:translateY(-3%) scale(.95);
-  transform-origin:center right;
-  opacity:.82;
-}
-.game-frame[data-production-scene="OFFICE"] .office-production-layer[data-phase="record-carryover"] .office-field-carryover {
-  animation:office-record-handoff .5s cubic-bezier(.18,.76,.2,1) both;
-}
-@keyframes office-record-handoff {
-  from { opacity:0; transform:translateX(-18px); }
-  to { opacity:.9; transform:translateX(0); }
+.game-frame[data-production-scene="OFFICE"][data-office-phase="prevention-return"] .office-next-field-trace {
+  opacity:.78;
+  width:31%;
+  background:linear-gradient(90deg,rgba(214,182,112,.9),rgba(117,191,167,.76),transparent);
 }
 
-.game-frame[data-production-scene="OFFICE"][data-office-cast="player-centered"] .episode-immersive-character[data-character="player"] {
-  z-index:21;
-  filter:brightness(1.03) contrast(1.04) drop-shadow(0 20px 18px rgba(0,0,0,.42));
+/* Camera grammar: remain in the same office, changing attention rather than teleporting into cards. */
+.game-frame[data-production-scene="OFFICE"][data-office-camera="table-wide"] .episode-immersive-background,
+.game-frame[data-production-scene="OFFICE"][data-office-camera="record-wide"] .episode-immersive-background,
+.game-frame[data-production-scene="OFFICE"][data-office-camera="carryover-wide"] .episode-immersive-background {
+  transform:scale(1.02);
+  object-position:50% 48%;
 }
-.game-frame[data-production-scene="OFFICE"][data-office-cast="pressure-triangle"] .episode-immersive-character[data-character] {
-  filter:saturate(.86) contrast(1.05) brightness(.91) drop-shadow(0 17px 14px rgba(0,0,0,.38));
+.game-frame[data-production-scene="OFFICE"][data-office-camera="speaker-tight"] .episode-immersive-background {
+  transform:scale(1.08);
+  object-position:51% 48%;
 }
-.game-frame[data-production-scene="OFFICE"][data-office-cast="three-way"] .episode-immersive-character[data-speaker="true"],
-.game-frame[data-production-scene="OFFICE"][data-office-cast="pressure-triangle"] .episode-immersive-character[data-speaker="true"] {
-  filter:saturate(.98) contrast(1.06) brightness(1.01) drop-shadow(0 20px 16px rgba(0,0,0,.42));
+.game-frame[data-production-scene="OFFICE"][data-office-camera="judgment-table"] .episode-immersive-background,
+.game-frame[data-production-scene="OFFICE"][data-office-camera="record-decision"] .episode-immersive-background {
+  transform:scale(1.055);
+  object-position:50% 49%;
 }
-.game-frame[data-production-scene="OFFICE"] .play-panel {
-  border-color:rgba(214,179,108,.28);
-  border-top-color:rgba(226,194,126,.72);
-  background:linear-gradient(90deg,rgba(23,19,15,.94),rgba(10,15,18,.92));
-  box-shadow:0 16px 44px rgba(0,0,0,.32);
+.game-frame[data-production-scene="OFFICE"][data-office-camera="evidence-wide"] .episode-immersive-background {
+  transform:scale(1.025);
+  object-position:54% 48%;
 }
-.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button {
-  border-color:rgba(214,179,108,.36);
-  background:linear-gradient(135deg,rgba(43,34,23,.9),rgba(12,18,21,.92));
-}
-.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button:hover:not(:disabled),
-.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button:focus-visible {
-  border-color:rgba(237,205,137,.82);
+.game-frame[data-production-scene="OFFICE"][data-office-camera="trace-medium"] .episode-immersive-background,
+.game-frame[data-production-scene="OFFICE"][data-office-camera="commit-medium"] .episode-immersive-background {
+  transform:scale(1.06);
+  object-position:52% 49%;
 }
 
+/* Depth grammar: testimony steps forward, but other accounts and the record stay visible. */
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-character {
+  transition:transform .28s ease,opacity .24s ease,filter .24s ease;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-depth="testimony-layered"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.38;
+  filter:saturate(.58) brightness(.68);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-depth="testimony-layered"] .episode-immersive-character[data-blocking-depth="midground"] {
+  opacity:.72;
+  filter:saturate(.76) brightness(.82);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-depth="evidence-table"] .episode-immersive-character,
+.game-frame[data-production-scene="OFFICE"][data-office-depth="decision-layered"] .episode-immersive-character {
+  opacity:.86;
+  filter:saturate(.86) brightness(.9);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-depth="evidence-return"] .episode-immersive-evidence-board,
+.game-frame[data-production-scene="OFFICE"][data-office-depth="trace-board"] .episode-immersive-evidence-board,
+.game-frame[data-production-scene="OFFICE"][data-office-depth="record-stack"] .episode-immersive-evidence-board {
+  opacity:.96;
+  filter:drop-shadow(0 12px 20px rgba(0,0,0,.28));
+}
+.game-frame[data-production-scene="OFFICE"][data-office-depth="prevention-open"] .episode-immersive-character[data-blocking-depth="background"] {
+  opacity:.56;
+  filter:saturate(.7) brightness(.8);
+}
+
+/* Speaker emphasis is local. No speaker is visually labelled as truthful or false. */
+.game-frame[data-production-scene="OFFICE"][data-office-hero="oh_seungjae"] .episode-immersive-character[data-character="oh_seungjae"],
+.game-frame[data-production-scene="OFFICE"][data-office-hero="lee_jaehoon"] .episode-immersive-character[data-character="lee_jaehoon"],
+.game-frame[data-production-scene="OFFICE"][data-office-hero="kang_taesik"] .episode-immersive-character[data-character="kang_taesik"] {
+  transform:scale(1.08);
+  filter:drop-shadow(0 20px 18px rgba(0,0,0,.42)) brightness(1.04);
+  z-index:18;
+}
+
+/* Evidence focus changes attention, never correctness. */
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="facts"] .episode-immersive-evidence-board .sheet-a,
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="statements"] .episode-immersive-evidence-board .sheet-b,
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="record"] .episode-immersive-evidence-board .sheet-c {
+  filter:brightness(1.24);
+  opacity:1;
+  transform:translateY(-4px) scale(1.035);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="timeline"] .episode-immersive-evidence-board .evidence-timeline,
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="instruction"] .office-evidence-axis,
+.game-frame[data-production-scene="OFFICE"][data-office-evidence="prevention"] .office-next-field-trace {
+  opacity:.9;
+  box-shadow:0 0 12px rgba(214,184,116,.16);
+}
+
+/* Lighting grammar: warm practical office light, then neutral evidence verification. */
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="office-neutral"] .episode-immersive-atmosphere,
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="record-neutral"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 52% 21%,rgba(230,194,127,.11),transparent 32%),
+    linear-gradient(0deg,rgba(7,8,9,.53),transparent 48%);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="speaker-focus"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 50% 39%,rgba(235,203,139,.12),transparent 28%),
+    linear-gradient(90deg,rgba(6,7,8,.46),transparent 45%,rgba(5,7,8,.26)),
+    linear-gradient(0deg,rgba(7,8,9,.56),transparent 46%);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="decision-amber"] .episode-immersive-atmosphere,
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="decision-contrast"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 51% 44%,rgba(225,181,93,.14),transparent 30%),
+    linear-gradient(90deg,rgba(8,7,6,.52),transparent 46%,rgba(8,7,6,.25)),
+    linear-gradient(0deg,rgba(7,8,9,.62),transparent 44%);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="verification-clear"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 66% 33%,rgba(171,205,205,.1),transparent 28%),
+    linear-gradient(0deg,rgba(7,9,10,.48),transparent 50%);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="trace-cool"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 61% 31%,rgba(151,188,199,.1),transparent 28%),
+    linear-gradient(90deg,rgba(5,9,11,.38),transparent 50%,rgba(6,10,12,.2)),
+    linear-gradient(0deg,rgba(6,8,10,.54),transparent 47%);
+}
+.game-frame[data-production-scene="OFFICE"][data-office-lighting="prevention-soft"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 61% 30%,rgba(174,211,184,.1),transparent 30%),
+    linear-gradient(0deg,rgba(6,8,9,.48),transparent 50%);
+}
+
+/* Reference scene: four people share the same evidence table. */
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character[data-character="player"] {
+  left:2%; right:auto; bottom:-7%; width:24%; height:80%; z-index:12;
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character[data-character="oh_seungjae"] {
+  left:20%; right:auto; bottom:-7%; width:25%; height:86%; z-index:15;
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character[data-character="lee_jaehoon"] {
+  left:auto; right:20%; bottom:-7%; width:25%; height:86%; z-index:15;
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"] .episode-immersive-character[data-character="kang_taesik"] {
+  left:auto; right:2%; bottom:-7%; width:24%; height:80%; z-index:12;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-phase="responsibility-judgment"] .episode-immersive-evidence-board {
+  right:30%;
+  top:13%;
+  width:40%;
+  height:43%;
+  opacity:.98;
+  transform:perspective(760px) rotateX(1deg);
+}
+
+/* UI stays subordinate. Decision moments use one shallow evidence-first dock. */
 @media (min-width:901px) and (min-height:651px) {
   .game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) .play-panel {
-    left:3.8%;
+    left:3%;
     right:auto;
-    width:54%;
-    max-height:35%;
-  }
-  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .play-panel {
-    width:58%;
-    max-height:39%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .scene-heading {
-    top:63px;
-    left:3.8%;
-    width:34%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .choice-panel {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-}
-
-@media (orientation:portrait) and (max-width:900px) {
-  .game-frame[data-production-scene="OFFICE"] .office-production-caption {
-    top:9.5%;
-    left:4%;
-    width:54%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-production-caption > strong {
-    font-size:clamp(17px,4.5vw,28px);
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-production-board {
-    top:16%;
-    left:4%;
-    right:4%;
-    width:auto;
-    height:29%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-stack {
-    inset:10% 6% 26% 6%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet {
+    bottom:26px;
     width:55%;
-    min-height:27%;
-    grid-template-columns:44px 1fr;
-    padding:7px 8px;
+    max-height:34%;
+    background:linear-gradient(90deg,rgba(18,17,15,.94),rgba(18,20,20,.88));
   }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet time,
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet b {
-    font-size:8px;
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="dialogue"].phase-playing:not(.strategy-active) .play-panel {
+    width:52%;
   }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-1 { left:0; top:2%; }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-2 { left:21%; top:31%; }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-3 { left:40%; top:58%; }
-  .game-frame[data-production-scene="OFFICE"] .office-table-geometry {
-    left:8%;
-    right:8%;
-    bottom:40%;
-    height:15%;
-    opacity:.35;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-field-carryover {
-    top:46%;
-    left:8%;
-    right:8%;
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    left:3%;
+    right:3%;
     width:auto;
-    height:10%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .episode-immersive-speaker-tag {
-    top:47%;
-    left:4%;
-    max-width:48%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .choice-panel {
+    max-height:30%;
     grid-template-columns:1fr;
+    padding:12px 15px 14px;
   }
-}
-
-@media (orientation:landscape) and (max-height:650px) {
-  .game-frame[data-production-scene="OFFICE"] .office-production-caption {
-    left:3%;
-    top:13%;
-    width:36%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-production-caption > strong {
-    font-size:clamp(16px,3.2vw,28px);
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-production-board {
-    left:3%;
-    right:auto;
-    top:27%;
-    width:43%;
-    height:57%;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet {
-    width:63%;
-    min-height:27%;
-    padding:7px 8px;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet time,
-  .game-frame[data-production-scene="OFFICE"] .office-evidence-sheet b {
-    font-size:7px;
-  }
-  .game-frame[data-production-scene="OFFICE"] .office-table-geometry {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .character-card,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .narrator-card,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .character-card,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .narrator-card {
     display:none;
   }
-  .game-frame[data-production-scene="OFFICE"] .office-field-carryover {
-    left:5%;
-    right:auto;
-    top:72%;
-    width:39%;
-    height:16%;
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
   }
-  .game-frame[data-production-scene="OFFICE"] .episode-immersive-speaker-tag {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:58px;
+    padding:9px 11px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-visual,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-visual {
+    display:none;
+  }
+}
+
+/* Compact the evidence helpers so they support the scene instead of becoming a dashboard. */
+.game-frame[data-production-scene="OFFICE"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+  margin:0 0 7px;
+  padding:7px 9px;
+  border-radius:8px;
+  max-height:112px;
+  overflow:auto;
+}
+.game-frame[data-production-scene="OFFICE"] :is(.report-chain-timeline,.instruction-reality-timeline,.record-reality-timeline) {
+  margin-block:4px;
+}
+.game-frame[data-production-scene="OFFICE"] :is(.report-chain-cards,.instruction-reality-cards,.record-reality-cards) {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px;
+}
+.game-frame[data-production-scene="OFFICE"] :is(.report-chain-cards,.instruction-reality-cards,.record-reality-cards) article {
+  padding:5px 7px;
+}
+.game-frame[data-production-scene="OFFICE"] :is(.report-chain-cards,.instruction-reality-cards,.record-reality-cards) p {
+  margin:2px 0 0;
+  font-size:10px;
+  line-height:1.35;
+}
+
+/* Portrait: people/evidence remain above the bottom interaction sheet. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-evidence-board {
+    right:4%;
+    top:16%;
+    width:42%;
+    height:36%;
+  }
+  .game-frame[data-production-scene="OFFICE"] .office-table-plane {
+    left:2%;
+    right:2%;
+    bottom:24%;
+    height:20%;
+  }
+  .game-frame[data-production-scene="OFFICE"] .office-record {
+    bottom:32%;
+    width:10%;
+    height:8%;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+    grid-template-columns:1fr;
+  }
+  .game-frame[data-production-scene="OFFICE"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+    max-height:86px;
+  }
+}
+
+/* Compact landscape: keep the evidence board visible and use the safe right-side interaction dock. */
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-evidence-board {
+    right:5%;
     top:13%;
-    left:3%;
-    max-width:38%;
+    width:30%;
+    height:42%;
+  }
+  .game-frame[data-production-scene="OFFICE"] .office-table-plane {
+    left:14%;
+    right:4%;
+    bottom:-15%;
+    height:32%;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+    grid-template-columns:1fr;
+  }
+  .game-frame[data-production-scene="OFFICE"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+    max-height:72px;
+    padding:5px 7px;
   }
 }
 
 @media (prefers-reduced-motion:reduce) {
-  .game-frame[data-production-scene="OFFICE"] .office-field-carryover {
-    animation:none!important;
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-character,
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-evidence-board,
+  .game-frame[data-production-scene="OFFICE"] .office-production-layer * {
+    transition:none!important;
   }
 }
 
+
+/* Phase C-5 interaction correction: evidence is already present in the room.
+   Do not repeat the report/record dashboard inside the judgment dock, and do
+   not let grid stretch turn text choices into viewport-height cards. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain),
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+  display:none;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content {
+  min-height:0;
+  align-self:start;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+  align-items:start;
+  align-content:start;
+  grid-auto-rows:max-content;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  height:auto;
+  min-height:58px;
+  align-self:start;
+  overflow:visible;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-copy,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-copy {
+  width:100%;
+  min-width:0;
+  grid-template-columns:2.1em minmax(0,1fr);
+  align-items:start;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+  font-size:clamp(10px,.76vw,13px);
+  line-height:1.42;
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    min-height:0;
+    max-height:42dvh;
+    overflow:auto;
+    padding:9px 10px max(10px,env(safe-area-inset-bottom));
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > h2 {
+    margin:2px 0 7px;
+    font-size:12px;
+    line-height:1.35;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:52px;
+    padding:7px 9px;
+  }
+}
+
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    left:auto;
+    right:max(8px,env(safe-area-inset-right));
+    bottom:max(8px,env(safe-area-inset-bottom));
+    width:43%;
+    min-height:0;
+    max-height:82%;
+    padding:7px 8px;
+    overflow:auto;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > .eyebrow,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content > h2 {
+    margin:0 0 5px;
+    font-size:10px;
+    line-height:1.25;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+    gap:4px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:46px;
+    padding:5px 7px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:9px;
+    line-height:1.3;
+  }
+}
+
+
+/* OFFICE decision sizing lock.
+   Older global responsive layers make the presentation column fill its dock;
+   auto grid tracks then stretch every choice row. OFFICE decisions must size
+   from their text content, not from the remaining viewport height. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .presentation-area[data-presentation="SHOW_CHOICE"],
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .presentation-area[data-presentation="SHOW_CHOICE"] {
+  display:block !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-content,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-content {
+  display:block !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel {
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  align-items:start !important;
+  align-content:start !important;
+  grid-auto-rows:max-content !important;
+}
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  height:auto !important;
+  min-height:58px !important;
+  max-height:none !important;
+  align-self:start !important;
+}
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    height:auto !important;
+    min-height:0 !important;
+    max-height:30vh !important;
+    overflow:hidden !important;
+  }
+}
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:52px !important;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-height:46px !important;
+  }
+}
+
+
+/* OFFICE choice cards are text controls, never visual tiles. Give them a
+   definite content-sized block box so legacy grid stretching cannot expand a
+   single option to hundreds of pixels. */
+.game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+.game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+  box-sizing:border-box !important;
+  block-size:fit-content !important;
+  height:fit-content !important;
+  min-block-size:58px !important;
+  max-block-size:96px !important;
+  max-height:96px !important;
+}
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:52px !important;
+    max-block-size:104px !important;
+    max-height:104px !important;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:46px !important;
+    max-block-size:82px !important;
+    max-height:82px !important;
+  }
+}
+
+
+/* Mobile OFFICE final containment: keep all three responsibility choices visible
+   at once. Text-first choices do not need image-card height. */
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:50px !important;
+    min-height:50px !important;
+    max-block-size:78px !important;
+    max-height:78px !important;
+    padding:6px 8px !important;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:9.5px;
+    line-height:1.28;
+  }
+}
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-panel button {
+    min-block-size:46px !important;
+    min-height:46px !important;
+    max-block-size:64px !important;
+    max-height:64px !important;
+    padding:4px 6px !important;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-copy,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-copy {
+    grid-template-columns:1.8em minmax(0,1fr);
+    gap:4px;
+  }
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"] .choice-text,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"] .choice-text {
+    font-size:8.5px;
+    line-height:1.22;
+  }
+}

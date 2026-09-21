@@ -274,73 +274,89 @@
       ],
       "composition": "evidence table",
       "priority": "people, records, timeline",
-      "runtime_surface": "EpisodeImmersiveScene",
       "quality_lock": {
         "reference_scene": "e01_08e_responsibility_clash",
         "reference_node": "report",
         "grammar": [
-          "confirm incident facts before framing responsibility",
-          "let different positions occupy the room as people, not detached cards",
-          "compare records and evidence on one shared table before judgment",
-          "compress the room only after the responsibility conflict is legible",
-          "make the player judgment emerge from facts, people and records together",
-          "leave the resulting record visible as field memory that can shape later action"
+          "confirm the event and verified facts before deciding responsibility",
+          "keep role-specific statements visible without treating any speaker as automatically correct",
+          "compare records, timestamps and evidence in the same room as the people affected by them",
+          "let responsibility pressure change posture and framing without turning disagreement into a score",
+          "commit the chosen reporting basis to a visible record before later evidence returns",
+          "carry instruction and record traces forward into the next field behavior rather than ending at paperwork"
         ],
         "phases": [
-          "fact-check",
-          "position-read",
-          "evidence-compare",
-          "responsibility-clash",
-          "judgment",
-          "record-carryover"
+          "fact-intake",
+          "position-split",
+          "responsibility-judgment",
+          "report-commit",
+          "evidence-return",
+          "instruction-trace",
+          "record-pressure",
+          "record-judgment",
+          "prevention-return"
         ],
         "camera": [
-          "incident-table",
-          "three-person-table",
-          "evidence-over-shoulder",
-          "pressure-triangle",
-          "player-over-table",
-          "file-to-field"
+          "table-wide",
+          "speaker-tight",
+          "judgment-table",
+          "commit-medium",
+          "evidence-wide",
+          "trace-medium",
+          "record-wide",
+          "record-decision",
+          "carryover-wide"
         ],
         "depth": [
-          "document-layers",
-          "human-depth",
-          "evidence-stack",
-          "compressed-table",
+          "room-open",
+          "testimony-layered",
+          "evidence-table",
+          "commit-layered",
+          "evidence-return",
+          "trace-board",
+          "record-stack",
           "decision-layered",
-          "open-handoff"
+          "prevention-open"
         ],
         "lighting": [
-          "worklight-neutral",
-          "person-soft",
-          "paper-cool",
-          "conflict-amber",
+          "office-neutral",
+          "speaker-focus",
+          "decision-amber",
+          "commit-neutral",
+          "verification-clear",
+          "trace-cool",
+          "record-neutral",
           "decision-contrast",
-          "carryover-daylight"
+          "prevention-soft"
         ],
         "ui": [
-          "facts",
+          "context",
           "dialogue",
-          "compare",
-          "conflict",
           "judgment",
-          "result"
-        ],
-        "focus": [
-          "facts",
-          "people",
-          "evidence",
-          "responsibility",
-          "decision",
-          "field-memory"
+          "result",
+          "verify",
+          "trace",
+          "record"
         ],
         "cast": [
-          "fact-table",
-          "three-way",
-          "evidence-ring",
-          "pressure-triangle",
-          "player-centered",
-          "record-handoff"
+          "four-person-table",
+          "speaker-focus",
+          "balanced-table",
+          "report-commit",
+          "evidence-return",
+          "instruction-return",
+          "record-table",
+          "decision-table",
+          "carryover-table"
+        ],
+        "evidence_focus": [
+          "facts",
+          "statements",
+          "responsibility",
+          "timeline",
+          "instruction",
+          "record",
+          "prevention"
         ],
         "expansion_order": [
           "DAY_RESULT"
