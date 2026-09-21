@@ -299,6 +299,14 @@ function collectMetrics(stage, touchMode) {
     strategyUi: gameFrame?.getAttribute('data-strategy-ui') || null,
     strategyFocus: gameFrame?.getAttribute('data-strategy-focus') || null,
     strategyLayer: Boolean(document.querySelector('.strategy-production-layer')),
+    officePhase: immersive?.getAttribute('data-office-phase') || gameFrame?.getAttribute('data-office-phase') || null,
+    officeCamera: immersive?.getAttribute('data-office-camera') || gameFrame?.getAttribute('data-office-camera') || null,
+    officeDepth: immersive?.getAttribute('data-office-depth') || gameFrame?.getAttribute('data-office-depth') || null,
+    officeLighting: immersive?.getAttribute('data-office-lighting') || gameFrame?.getAttribute('data-office-lighting') || null,
+    officeUi: immersive?.getAttribute('data-office-ui') || gameFrame?.getAttribute('data-office-ui') || null,
+    officeFocus: immersive?.getAttribute('data-office-focus') || gameFrame?.getAttribute('data-office-focus') || null,
+    officeCast: immersive?.getAttribute('data-office-cast') || gameFrame?.getAttribute('data-office-cast') || null,
+    officeLayer: Boolean(document.querySelector('.office-production-layer')),
     coldOpen: Boolean(coldOpen && visible(coldOpen)),
     stopWorkPhase: immersive?.getAttribute('data-stopwork-phase') || null,
     stopWorkCamera: immersive?.getAttribute('data-stopwork-camera') || null,
@@ -354,6 +362,18 @@ function validate(row, viewport) {
     if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
+  }
+  if (row.stage === 'episode01-office') {
+    if (row.activeEvent !== 'e01_08e_responsibility_clash') failures.push('OFFICE QA did not reach the responsibility clash');
+    if (row.activeNode !== 'report') failures.push('OFFICE QA did not reach the report judgment node');
+    if (row.officePhase !== 'judgment') failures.push('OFFICE judgment production phase is missing');
+    if (row.officeCamera !== 'player-over-table') failures.push('OFFICE player-over-table camera profile is missing');
+    if (row.officeDepth !== 'decision-layered') failures.push('OFFICE decision-layered depth profile is missing');
+    if (row.officeLighting !== 'decision-contrast') failures.push('OFFICE decision lighting profile is missing');
+    if (row.officeUi !== 'judgment') failures.push('OFFICE judgment UI profile is missing');
+    if (row.officeFocus !== 'decision') failures.push('OFFICE decision focus is missing');
+    if (row.officeCast !== 'player-centered') failures.push('OFFICE player-centered cast profile is missing');
+    if (!row.officeLayer) failures.push('OFFICE evidence-and-people production layer did not render');
   }
   if (row.stage === 'episode01-tbm') {
     if (row.activeEvent !== 'e01_08g_tbm_field_gap') failures.push('TBM QA did not reach the changed-work briefing');
@@ -486,6 +506,14 @@ try {
       report.push({ viewportName: viewport.name, ...stopWorkMetrics, failures: stopWorkFailures });
       if (stopWorkFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-stop-work.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_08e_responsibility_clash', 'report', 32000);
+      await sleep(240);
+      const officeMetrics = await metrics(cdp, 'episode01-office', viewport.mobile);
+      const officeFailures = validate(officeMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...officeMetrics, failures: officeFailures });
+      if (officeFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-office.png');
 
       await driveEpisodeToEvent(cdp, 'e01_08g_tbm_field_gap', 'tbm_action', 32000);
       await sleep(240);
