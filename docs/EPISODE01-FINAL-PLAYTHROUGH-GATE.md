@@ -3,6 +3,10 @@
 **Status: ACTIVE REGRESSION GATE**  
 **Effective: 2026-09-21**
 
+**Phase D entry validation: PASSED**  
+Validated commit: `128f77361248fc70b9afe1409bb787af7de2c795`  
+GitHub Actions: `35550376043` — Typecheck / Build / 5 responsive profiles / **121 test files, 687 tests PASS**.
+
 Phase C의 개별 장면 제작은 끝났다. 이 게이트는 새 장면을 추가하는 단계가 아니라, 실제 플레이어가 사용하는 `EpisodeSession.directed()`를 처음부터 끝까지 관통하여 Episode 01의 통합 품질과 회귀를 닫는 단계다.
 
 ## 검수 대상

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "lock_id": "episode01-phase-d-production-lock-v1",
+  "status": "IN_PROGRESS",
+  "entry": {
+    "status": "PASSED",
+    "validated_commit": "128f77361248fc70b9afe1409bb787af7de2c795",
+    "workflow_run_id": 35550376043,
+    "test_files_passed": 121,
+    "tests_passed": 687,
+    "responsive_profiles_passed": 5
+  },
+  "master_principles_id": "master-design-principles-v1",
+  "final_playthrough_gate_id": "episode01-final-playthrough-gate-v1",
+  "tracks": {
+    "immersive_backgrounds": { "required": 8, "ready": 8, "status": "LOCKED" },
+    "character_performance_wave": { "required": 5, "ready": 5, "status": "LOCKED" },
+    "production_audio": { "required": 8, "ready": 8, "status": "LOCKED" },
+    "camera_transition_responsive_direction": { "required": 1, "ready": 1, "status": "LOCKED" },
+    "title_cast_identity_refresh": { "required": 8, "ready": 0, "status": "PENDING" },
+    "episode01_runtime_scene_elements": { "required": 1, "ready": 0, "status": "PENDING" }
+  },
+  "runtime_scene_element_scope": {
+    "policy": "ONLY_ELEMENTS_REFERENCED_BY_EPISODE01_EVENT_ELEMENTS",
+    "current_required_keys": ["material_stack"],
+    "field_guide_only_backlog_is_non_blocking": true,
+    "catalog_definitions": 118,
+    "runtime_placed_definitions": 1,
+    "note": "The remaining reusable catalog is preserved for Field Guide and future episode/process expansion and does not block Episode 01 cinematic lock."
+  },
+  "current_blockers": [
+    "8/8 title-cast replacement portrait/map WebPs are still the legacy baseline (0/8 refreshed).",
+    "material_stack is the only scene element placed by Episode 01 runtime event_elements and is still replacement_required rather than final."
+  ],
+  "locked_now": [
+    "8/8 immersive final backgrounds",
+    "5/5 character performance-wave binaries",
+    "8/8 production-v1 audio binaries",
+    "Phase C camera/transition/responsive direction with five-profile QA"
+  ],
+  "exit_command": "npm run phase-d:check",
+  "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime."
+}

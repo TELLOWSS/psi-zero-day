@@ -64,7 +64,9 @@
     "assets:character-performance-wave-status": "node scripts/stage-character-performance-wave.mjs --check",
     "assets:character-performance-wave-ingest": "node scripts/stage-character-performance-wave.mjs",
     "assets:character-performance-wave-check": "node scripts/stage-character-performance-wave.mjs --require-final",
-    "production:status": "node scripts/report-episode01-production-readiness.mjs"
+    "production:status": "node scripts/report-episode01-production-readiness.mjs",
+    "phase-d:status": "node scripts/report-episode01-production-readiness.mjs",
+    "phase-d:check": "npm run assets:production-check && npm run assets:character-replacement-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && node scripts/report-episode01-production-readiness.mjs --require-phase-d && npm run test:episode01-visual"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
