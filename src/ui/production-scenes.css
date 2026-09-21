@@ -6431,3 +6431,290 @@
     z-index:9!important;
   }
 }
+
+
+/* Phase D — STRATEGY Visual Lock pass 02: portrait information hierarchy.
+   Observe reads as site -> primary signal -> nearby people -> command.
+   Data stays present; non-primary labels recede until the player advances. */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="STRATEGY"] {
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    overflow:hidden!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-hud {
+    top:6px!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:auto!important;
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    grid-template-columns:minmax(132px,.92fr) minmax(0,1.38fr) 46px!important;
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day {
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand {
+    padding:0 5px!important;
+    gap:5px!important;
+    border-radius:9px!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand .gameplay-home-button {
+    flex:0 0 44px!important;
+    width:44px!important;
+    min-width:44px!important;
+    max-width:44px!important;
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    padding:0!important;
+    border-radius:8px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand .gameplay-home-button svg {
+    width:20px!important;
+    height:20px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-hardhat,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand small {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand > div {
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand > div strong {
+    display:block!important;
+    font-size:9.5px!important;
+    line-height:1.12!important;
+    letter-spacing:.015em!important;
+    white-space:normal!important;
+    max-height:2.25em!important;
+    overflow:hidden!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar {
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:2px!important;
+    align-items:center!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article {
+    box-sizing:border-box!important;
+    min-width:0!important;
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+    padding:2px!important;
+    border-radius:8px!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article strong {
+    width:100%!important;
+    font-size:8.5px!important;
+    line-height:1.05!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day {
+    padding:0 2px!important;
+    justify-content:center!important;
+    border-radius:9px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day strong {
+    font-size:18px!important;
+    line-height:1!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip {
+    top:66px!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:auto!important;
+    height:27px!important;
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip span {
+    box-sizing:border-box!important;
+    height:27px!important;
+    min-height:27px!important;
+    padding:5px 3px!important;
+    font-size:7.5px!important;
+    line-height:1!important;
+    border-radius:999px!important;
+  }
+
+  /* Observe owns the full width because the rail is not actionable yet. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map {
+    inset:96px 0 0 0!important;
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    filter:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-rail,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-roster,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-overview-minimap,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map-stage-card {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map-background-art {
+    opacity:1!important;
+    filter:saturate(1.07) contrast(1.07) brightness(1.01)!important;
+    image-rendering:auto!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-production-grid {
+    opacity:.045!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-production-route {
+    opacity:.28!important;
+  }
+
+  /* Zone names are navigation chrome. In Observe they recede behind the actual field signal. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-zone-target {
+    min-width:42px!important;
+    width:42px!important;
+    min-height:30px!important;
+    height:30px!important;
+    padding:0!important;
+    opacity:.12!important;
+    border-color:rgba(151,193,202,.22)!important;
+    background:rgba(5,22,28,.18)!important;
+    backdrop-filter:none!important;
+    box-shadow:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-zone-copy,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-zone-target > b {
+    display:none!important;
+  }
+
+  /* Keep bodies as spatial evidence, but only signal-adjacent people receive a label. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map-worker {
+    opacity:.36!important;
+    filter:saturate(.72) brightness(.88)!important;
+    transition:opacity .18s ease,filter .18s ease!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"]
+    .strategy-map-worker:not(.is-scene-participant):not(.is-near-signal) {
+    opacity:.15!important;
+    filter:saturate(.45) brightness(.76)!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"]
+    .strategy-map-worker.is-scene-participant,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"]
+    .strategy-map-worker.is-near-signal {
+    opacity:.88!important;
+    filter:saturate(.96) brightness(.98) drop-shadow(0 8px 10px rgba(0,0,0,.3))!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-worker-label {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"]
+    .strategy-map-worker.is-near-signal .strategy-worker-label {
+    display:block!important;
+    max-width:92px!important;
+    font-size:7px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-worker-alert {
+    opacity:.45!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"]
+    .strategy-map-worker.is-near-signal .strategy-worker-alert {
+    opacity:1!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-scene-element {
+    opacity:.72!important;
+    filter:saturate(.88) contrast(1.02)!important;
+  }
+
+  /* The risk signal is the primary read in the first 2-3 seconds. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-risk-signal {
+    z-index:31!important;
+    opacity:1!important;
+    filter:drop-shadow(0 0 13px rgba(232,158,74,.34))!important;
+    box-shadow:0 0 0 4px rgba(225,142,66,.11),0 12px 22px rgba(0,0,0,.3)!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-risk-signal strong {
+    font-size:9px!important;
+    line-height:1.16!important;
+  }
+
+  /* Observe instruction becomes a compact command rail, not a second dashboard. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card {
+    box-sizing:border-box!important;
+    left:8px!important;
+    right:8px!important;
+    top:auto!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    transform:none!important;
+    width:auto!important;
+    min-width:0!important;
+    min-height:68px!important;
+    height:auto!important;
+    max-height:86px!important;
+    margin:0!important;
+    padding:7px 8px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 108px!important;
+    grid-template-rows:auto auto!important;
+    column-gap:8px!important;
+    row-gap:1px!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    border-radius:10px!important;
+    backdrop-filter:blur(7px)!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > strong {
+    grid-column:1!important;
+    grid-row:1!important;
+    margin:0!important;
+    font-size:11px!important;
+    line-height:1.15!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > p {
+    grid-column:1!important;
+    grid-row:2!important;
+    margin:1px 0 0!important;
+    font-size:8.5px!important;
+    line-height:1.18!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > button {
+    grid-column:2!important;
+    grid-row:1 / span 2!important;
+    width:108px!important;
+    min-width:108px!important;
+    height:46px!important;
+    min-height:46px!important;
+    max-height:46px!important;
+    margin:0!important;
+    padding:5px 8px!important;
+    font-size:9.5px!important;
+    border-radius:8px!important;
+  }
+}

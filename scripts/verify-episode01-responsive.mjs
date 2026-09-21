@@ -238,6 +238,9 @@ function collectMetrics(stage, touchMode) {
   const strategyLoopRect = metricRect(document.querySelector('.strategy-loop-stage-strip'));
   const strategyMapRect = metricRect(document.querySelector('.strategy-map'));
   const strategyObserveRect = metricRect(document.querySelector('.strategy-observe-card'));
+  const strategyVisibleWorkerLabels = [...document.querySelectorAll('.strategy-worker-label')].filter(visible).length;
+  const strategyVisibleZoneCopies = [...document.querySelectorAll('.strategy-zone-copy')].filter(visible).length;
+  const strategyVisibleRiskSignals = [...document.querySelectorAll('.strategy-risk-signal')].filter(visible).length;
   const immersive = document.querySelector('.episode-immersive-scene');
   const immersiveSceneRect = metricRect(immersive);
   const tbmKangRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="kang_taesik"]'));
@@ -369,6 +372,9 @@ function collectMetrics(stage, touchMode) {
     strategyLoopStrip: strategyLoopRect,
     strategyMapRect,
     strategyObserveCard: strategyObserveRect,
+    strategyVisibleWorkerLabels,
+    strategyVisibleZoneCopies,
+    strategyVisibleRiskSignals,
     strategyPhase: gameFrame?.getAttribute('data-strategy-phase') || null,
     strategyCamera: gameFrame?.getAttribute('data-strategy-camera') || null,
     strategyDepth: gameFrame?.getAttribute('data-strategy-depth') || null,
@@ -494,6 +500,31 @@ function validate(row, viewport) {
       }
       if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.7) {
         failures.push('STRATEGY tactical map is not the dominant landscape surface: ' + JSON.stringify(row.strategyMapRect));
+      }
+    }
+
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (portraitPhone) {
+      if (!row.strategyHud || row.strategyHud.height > 62) {
+        failures.push('STRATEGY portrait HUD is too tall for map-first reading: ' + (row.strategyHud?.height ?? 'missing') + 'px');
+      }
+      if (!row.strategyLoopStrip || row.strategyLoopStrip.height > 32) {
+        failures.push('STRATEGY portrait phase strip is too tall: ' + (row.strategyLoopStrip?.height ?? 'missing') + 'px');
+      }
+      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.82) {
+        failures.push('STRATEGY portrait map is not the dominant surface: ' + JSON.stringify(row.strategyMapRect));
+      }
+      if (!row.strategyObserveCard || row.strategyObserveCard.height > 100) {
+        failures.push('STRATEGY portrait observe command rail is too tall: ' + (row.strategyObserveCard?.height ?? 'missing') + 'px');
+      }
+      if (row.strategyVisibleWorkerLabels > 3) {
+        failures.push('STRATEGY portrait exposes too many worker labels during Observe: ' + row.strategyVisibleWorkerLabels);
+      }
+      if (row.strategyVisibleZoneCopies > 1) {
+        failures.push('STRATEGY portrait exposes too many zone labels during Observe: ' + row.strategyVisibleZoneCopies);
+      }
+      if (row.strategyVisibleRiskSignals < 1) {
+        failures.push('STRATEGY portrait must keep at least one primary risk signal visible');
       }
     }
   }
