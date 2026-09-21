@@ -2839,12 +2839,12 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     top:max(10px,env(safe-area-inset-top))!important;
     bottom:auto!important;
     left:max(8px,env(safe-area-inset-left))!important;
-    width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;
+    width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;
     padding:0!important;border-radius:8px!important
   }
   .game-hub-return svg{width:18px!important;height:18px!important}
   .phase-playing:not(.strategy-active) .game-header{
-    padding-left:max(54px,calc(env(safe-area-inset-left) + 54px))!important
+    padding-left:max(58px,calc(env(safe-area-inset-left) + 58px))!important
   }
   .strategy-active .strategy-hud{
     padding-left:max(54px,calc(env(safe-area-inset-left) + 54px))!important
