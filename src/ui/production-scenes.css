@@ -6264,3 +6264,16 @@
     font-size:10px!important;
   }
 }
+
+
+/* Phase D — FIELD transition flash closure.
+   FIELD signal art is already final and readable; opacity interpolation briefly
+   exposes the dark staging layer on fast scene transitions. Keep camera/filter
+   motion, but make world/grade visibility deterministic from the first frame. */
+.game-frame[data-production-scene="FIELD"][data-field-phase^="signal-"] .episode-immersive-background,
+.game-frame[data-production-scene="FIELD"][data-field-phase^="signal-"] .episode-immersive-atmosphere,
+.game-frame[data-production-scene="FIELD"][data-field-phase^="signal-"] .episode-immersive-grade {
+  transition-property:transform,filter,background,border-color!important;
+  transition-duration:.28s,.28s,.28s,.28s!important;
+  transition-timing-function:cubic-bezier(.2,.72,.2,1),ease,ease,ease!important;
+}
