@@ -496,6 +496,14 @@ try {
         await evaluate(cdp, "document.querySelector('.commercial-title-dialog .is-danger')?.click(); true");
       }
       await waitFor(cdp, "Boolean(document.querySelector('.cinematic-loading, .game-frame'))", 5000);
+      const hasLoadingSurface = await evaluate(cdp, "Boolean(document.querySelector('.cinematic-loading'))");
+      if (hasLoadingSurface) {
+        const loadingMetrics = await metrics(cdp, 'cinematic-loading', viewport.mobile);
+        const loadingFailures = validate(loadingMetrics, viewport);
+        report.push({ viewportName: viewport.name, ...loadingMetrics, failures: loadingFailures });
+        if (loadingFailures.length) failed = true;
+        await screenshot(cdp, viewport.name + '-cinematic-loading.png');
+      }
       await waitFor(cdp, "Boolean(document.querySelector('.game-frame'))", 9000);
       await waitFor(
         cdp,

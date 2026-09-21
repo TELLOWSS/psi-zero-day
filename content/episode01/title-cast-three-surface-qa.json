@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "qa_id": "title-cast-three-surface-qa",
-  "status": "waiting_for_new_webp_binaries",
+  "status": "binary_staged_visual_qa_in_progress",
   "company_name": "NEW PSI",
   "game_title": "PSI : ZERO DAY",
   "canonical_cast": [
@@ -50,5 +50,14 @@
     "npm run assets:production-batch-a-check",
     "npm run release:check"
   ],
-  "completion_rule": "Do not approve the refresh until all 8 hashes differ from legacy baseline and all three surfaces pass visual QA."
+  "completion_rule": "Approve D-1 only after all 8 hashes differ from legacy baseline, strict binary/production gates pass, and Main → Loading → MAP visual QA is captured and approved.",
+  "binary_commit": "8dda5792806e6a7611226055fb90f28da83ca549",
+  "latest_visual_evidence": {
+    "workflow_run_id": 35553503165,
+    "responsive_artifact_id": 10619546506,
+    "automated_responsive_gate": "PASS_5_PROFILES",
+    "main_title": "PASS_REVIEWED",
+    "strategy_map": "PASS_REVIEWED_DESKTOP_AND_PHONE",
+    "cinematic_loading": "PENDING_DEDICATED_CAPTURE"
+  }
 }

@@ -21,9 +21,13 @@ describe('NEW PSI brand and three-surface title-cast QA contract',()=>{
     expect(plan.integration_order).toContain('map QA');
   });
 
-  it('does not claim the new character binaries are integrated early',()=>{
-    expect(surfaceQa.status).toBe('waiting_for_new_webp_binaries');
-    expect(production.replacement_a.integrated_new_assets).toBe(0);
+  it('recognizes the staged 8/8 binaries without claiming D-1 visual lock early',()=>{
+    expect(surfaceQa.status).toBe('binary_staged_visual_qa_in_progress');
+    expect(production.replacement_a.integrated_new_assets).toBe(8);
+    expect(production.replacement_a.status).toBe('visual_qa_pending');
     expect(surfaceQa.required_new_core_assets).toBe(8);
+    expect(surfaceQa.latest_visual_evidence.main_title).toBe('PASS_REVIEWED');
+    expect(surfaceQa.latest_visual_evidence.strategy_map).toContain('PASS_REVIEWED');
+    expect(surfaceQa.latest_visual_evidence.cinematic_loading).toContain('PENDING');
   });
 });
