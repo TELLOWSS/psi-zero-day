@@ -4944,3 +4944,41 @@
     max-width: calc(100vw - max(16px, env(safe-area-inset-left) + env(safe-area-inset-right)));
   }
 }
+
+
+/* Episode 01 release-gate precision closure — 2026-09-21 */
+/* Phone portrait: the history affordance is icon-only, but it still obeys the 44x44 touch contract. */
+.gameplay-history-button {
+  flex-basis: 44px !important;
+  inline-size: 44px !important;
+  min-inline-size: 44px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  block-size: 44px !important;
+  min-block-size: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+/* Compact OFFICE must use the physical viewport as its containing block.
+   This prevents the 560px legacy mobile grid from placing the third judgment below 844x390. */
+@media (orientation: landscape) and (max-height: 650px) {
+  .game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active) .play-panel {
+    top: 50px !important;
+    bottom: 4px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: calc(100dvh - 54px) !important;
+    overflow: hidden !important;
+  }
+}

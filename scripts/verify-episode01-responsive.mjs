@@ -204,7 +204,7 @@ function collectMetrics(stage, touchMode) {
   const errorOverlay = document.querySelector('.vite-error-overlay, #webpack-dev-server-client-overlay, [data-nextjs-dialog]');
   const coldOpen = document.querySelector('.episode-cold-open');
   const activeInteractionRoot = coldOpen && visible(coldOpen) ? coldOpen : document;
-  const buttons = [...activeInteractionRoot.querySelectorAll('button')].filter(visible);
+  const buttons = [...activeInteractionRoot.querySelectorAll('button')].filter(element => visible(element) && getComputedStyle(element).pointerEvents !== 'none');
   const smallTargets = touchMode
     ? buttons.map(button => {
         const rect = button.getBoundingClientRect();
@@ -234,7 +234,7 @@ function collectMetrics(stage, touchMode) {
     '.strategy-rail button.has-actions',
     '.primary-button:not(:disabled)',
   ].join(',');
-  const primaryTargets = [...activeInteractionRoot.querySelectorAll(primarySelector)].filter(visible).map(element => {
+  const primaryTargets = [...activeInteractionRoot.querySelectorAll(primarySelector)].filter(element => visible(element) && getComputedStyle(element).pointerEvents !== 'none').map(element => {
     const rect = element.getBoundingClientRect();
     const centerX = Math.max(0, Math.min(innerWidth - 1, rect.left + rect.width / 2));
     const centerY = Math.max(0, Math.min(innerHeight - 1, rect.top + rect.height / 2));
