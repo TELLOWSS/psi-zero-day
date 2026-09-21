@@ -48,6 +48,7 @@ import { episode01StopWorkProduction } from '../app/episode01-stopwork-productio
 import { episode01FieldProduction } from '../app/episode01-field-production';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
 import { episode01StrategyProduction } from '../app/episode01-strategy-production';
+import { episode01OfficeProduction } from '../app/episode01-office-production';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -100,6 +101,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const fieldProduction = productionScene === 'FIELD' ? episode01FieldProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const tbmProduction = productionScene === 'TBM' ? episode01TbmProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const strategyProduction = productionScene === 'STRATEGY' ? episode01StrategyProduction(activeEventId, activeInstance?.current_node_id) : undefined;
+  const officeProduction = productionScene === 'OFFICE' ? episode01OfficeProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -417,6 +419,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-strategy-lighting={strategyProduction?.lighting_profile}
     data-strategy-ui={strategyProduction?.ui_profile}
     data-strategy-focus={strategyProduction?.focus}
+    data-office-phase={officeProduction?.phase}
+    data-office-camera={officeProduction?.camera_profile}
+    data-office-depth={officeProduction?.depth_profile}
+    data-office-lighting={officeProduction?.lighting_profile}
+    data-office-ui={officeProduction?.ui_profile}
+    data-office-focus={officeProduction?.focus}
+    data-office-cast={officeProduction?.cast_profile}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
