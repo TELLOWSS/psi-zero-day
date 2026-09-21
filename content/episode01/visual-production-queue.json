@@ -28,7 +28,6 @@
       "rc_path": "assets/episode01/cg/gate-dawn-rc.svg",
       "used_by": [
         "e01_01_arrival",
-        "e01_02_meet_kang",
         "e01_10_next_day_tease"
       ],
       "camera": "worker-eye-level 32mm dawn establishing",
@@ -67,6 +66,7 @@
       "final_path": "assets/episode01/cg/work-yard.webp",
       "rc_path": "assets/episode01/cg/work-yard-rc.svg",
       "used_by": [
+        "e01_02_meet_kang",
         "e01_05_command",
         "e01_08g_tbm_field_gap",
         "e01_08h_tbm_return",
@@ -75,7 +75,7 @@
         "e01_08m_instruction_cascade"
       ],
       "camera": "worker-eye-level 30mm wide",
-      "visual_goal": "material staging under structure with changing work zones and practical access controls",
+      "visual_goal": "first TBM and later field-control beats in an active material/work yard with changing work zones and practical access controls",
       "must_differ_from_master": [
         "under-structure depth",
         "foreground materials",
