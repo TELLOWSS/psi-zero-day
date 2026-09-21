@@ -278,6 +278,9 @@ function collectMetrics(stage, touchMode) {
     immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
     activeEvent: immersive?.getAttribute('data-event') || null,
     activeNode: immersive?.getAttribute('data-node') || null,
+    productionScene: gameFrame?.getAttribute('data-production-scene') || null,
+    interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
+    hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
     fieldPhase: immersive?.getAttribute('data-field-phase') || null,
     fieldCamera: immersive?.getAttribute('data-field-camera') || null,
     fieldDepth: immersive?.getAttribute('data-field-depth') || null,
@@ -350,6 +353,19 @@ function validate(row, viewport) {
   if (row.stage.startsWith('episode01') && row.activeBackground === 'final' && !row.immersiveBackgroundLoaded) {
     failures.push('final immersive background did not finish loading before capture');
   }
+  const phaseCSceneByStage = {
+    'episode01-field-signal': 'FIELD',
+    'episode01-strategy': 'STRATEGY',
+    'episode01-stop-work': 'STOP_WORK',
+    'episode01-office': 'OFFICE',
+    'episode01-tbm': 'TBM',
+    'episode01-day-result': 'DAY_RESULT',
+    'episode01-day02-bridge': 'FIELD',
+  };
+  const expectedProductionScene = phaseCSceneByStage[row.stage];
+  if (expectedProductionScene && row.productionScene !== expectedProductionScene) {
+    failures.push('Phase C scene-family continuity mismatch: expected ' + expectedProductionScene + ', got ' + row.productionScene);
+  }
   if (row.stage === 'episode01-field-signal') {
     if (row.activeEvent !== 'e01_04_junho_signal') failures.push('FIELD QA did not reach the Junho signal event');
     if (row.activeNode !== 'listen') failures.push('FIELD QA did not reach the judgment node');
@@ -393,6 +409,12 @@ function validate(row, viewport) {
     if (!['people','instruction','record','stable'].includes(row.dayResultCarryover)) failures.push('DAY RESULT carryover priority is missing');
     if (!row.dayResultLayer) failures.push('DAY RESULT production layer did not render');
     if (!row.memoryStrip) failures.push('DAY RESULT played-memory strip did not render');
+  }
+  if (row.stage === 'episode01-day02-bridge') {
+    if (row.activeEvent !== 'e01_10_next_day_tease') failures.push('DAY 02 bridge did not reach the next-day teaser');
+    if (row.fieldPhase !== 'next-day-tease') failures.push('DAY 02 bridge is missing the FIELD next-day-tease production phase');
+    if (row.interactionMode !== 'continue') failures.push('DAY 02 bridge should return to continue-mode pacing');
+    if (row.hudDensity !== 'minimal') failures.push('DAY 02 bridge should keep minimal HUD density');
   }
   if (row.stage === 'episode01-office') {
     if (row.activeEvent !== 'e01_08e_responsibility_clash') failures.push('OFFICE QA did not reach the responsibility clash');
@@ -550,6 +572,14 @@ try {
       report.push({ viewportName: viewport.name, ...dayResultMetrics, failures: dayResultFailures });
       if (dayResultFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-day-result.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_10_next_day_tease', null, 24000);
+      await sleep(280);
+      const day02BridgeMetrics = await metrics(cdp, 'episode01-day02-bridge', viewport.mobile);
+      const day02BridgeFailures = validate(day02BridgeMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...day02BridgeMetrics, failures: day02BridgeFailures });
+      if (day02BridgeFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-day02-bridge.png');
     } catch (error) {
       failed = true;
       report.push({ viewportName: viewport.name, viewport: { width: viewport.width, height: viewport.height }, stage: 'runner', failures: [error.message] });
