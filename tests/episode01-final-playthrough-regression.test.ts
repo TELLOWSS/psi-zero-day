@@ -5,7 +5,7 @@ import { MASTER_DESIGN_PRINCIPLES } from '../src/app/master-design-principles';
 import { EpisodeSession } from '../src/app/episode-session';
 import { episode01ProductionScene } from '../src/app/episode01-production-scene';
 import { episode01StoryDirection } from '../src/app/episode01-story-director';
-import { episodeBounds, episodeOptions, inputFor, type EpisodeDecisions } from './helpers/episode01-playthrough';
+import { episodeBounds, episodeOptions, type EpisodeDecisions } from './helpers/episode01-playthrough';
 
 const decisions: EpisodeDecisions = {
   plan: 'coordinate_schedule',
@@ -22,6 +22,25 @@ const decisions: EpisodeDecisions = {
   evening: 'field_note',
   nextDay: 'next_day_standard_check',
 };
+
+function decisionFor(nodeId: string): string | undefined {
+  return ({
+    plan: decisions.plan,
+    listen: decisions.signal,
+    ramp: decisions.ramp,
+    entrance: decisions.entrance,
+    action: decisions.inspection,
+    report: decisions.responsibility,
+    tbm_action: decisions.tbm,
+    restart_action: decisions.restart,
+    culture_action: decisions.stopwork,
+    instruction_action: decisions.instruction,
+    record_action: decisions.record,
+    evening: decisions.evening,
+    training_equipment: decisions.equipment ?? 'training_equip_camera',
+    next_day_action: decisions.nextDay,
+  } as Record<string, string | undefined>)[nodeId];
+}
 
 function runDirectedEpisode() {
   const session = EpisodeSession.directed(episodeOptions(815), episodeBounds);
@@ -61,7 +80,7 @@ function runDirectedEpisode() {
     if (command.type === 'SHOW_CHOICE') {
       const enabled = command.choices.filter(choice => choice.enabled);
       if (enabled.length > 1) authoredDecisions.push(`${eventId ?? 'unknown'}/${command.node_id}`);
-      const choiceId = inputFor(command.node_id, decisions);
+      const choiceId = decisionFor(command.node_id);
       if (!choiceId || !enabled.some(choice => choice.choice_id === choiceId)) {
         throw new Error(`Unresolved final-playthrough choice: ${eventId ?? 'unknown'}/${command.node_id}`);
       }
@@ -107,7 +126,6 @@ describe('Episode 01 final player-facing playthrough regression', () => {
       expect(result.seenScenes.has(family), family).toBe(true);
     }
     expect(result.authoredDecisions.length).toBeGreaterThanOrEqual(9);
-    expect(result.seenInteractionModes).toEqual(expect.objectContaining(new Set()));
     for (const mode of ['explore', 'dialogue', 'communicate', 'decision', 'evidence', 'reflect', 'continue']) {
       expect(result.seenInteractionModes.has(mode), mode).toBe(true);
     }
