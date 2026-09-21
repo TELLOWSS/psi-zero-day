@@ -6,9 +6,9 @@ import plan from '../content/episode01/character-replacement-plan.json';
 const canonical=['player','lim_junho','lee_jaehoon','seo_jeongmin'];
 
 describe('character production tracker',()=>{
-  it('reports 8/8 staged binaries without claiming Production Lock before visual QA',()=>{
-    expect(status.integration_status).toBe('replacement_candidate_staged');
-    expect(status.replacement_a.status).toBe('visual_qa_pending');
+  it('reports the 8/8 title-cast replacement as Production LOCKED after cross-surface QA',()=>{
+    expect(status.integration_status).toBe('replacement_locked');
+    expect(status.replacement_a.status).toBe('production_locked');
     expect(status.replacement_a.integrated_new_assets).toBe(8);
     expect(status.rule).toMatch(/Production LOCKED/);
   });
@@ -19,9 +19,9 @@ describe('character production tracker',()=>{
     expect(new Set(plan.batch.map(character=>character.id))).toEqual(new Set(canonical));
   });
 
-  it('moves the whole atomic batch to visual QA instead of generating another placeholder asset',()=>{
-    expect(status.replacement_a.assets.every(asset=>asset.status==='candidate_staged')).toBe(true);
+  it('closes the atomic character batch and moves production focus to TBM then FIELD',()=>{
+    expect(status.replacement_a.assets.every(asset=>asset.status==='locked')).toBe(true);
     expect(status.next_asset).toBeNull();
-    expect(status.next_work).toContain('Main → Loading → MAP');
+    expect(status.next_work).toContain('TBM then FIELD');
   });
 });

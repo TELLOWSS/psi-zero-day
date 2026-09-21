@@ -21,13 +21,13 @@ describe('NEW PSI brand and three-surface title-cast QA contract',()=>{
     expect(plan.integration_order).toContain('map QA');
   });
 
-  it('recognizes the staged 8/8 binaries without claiming D-1 visual lock early',()=>{
-    expect(surfaceQa.status).toBe('binary_staged_visual_qa_in_progress');
+  it('locks D-1 only after all three title-cast surfaces pass',()=>{
+    expect(surfaceQa.status).toBe('PRODUCTION_LOCKED');
     expect(production.replacement_a.integrated_new_assets).toBe(8);
-    expect(production.replacement_a.status).toBe('visual_qa_pending');
+    expect(production.replacement_a.status).toBe('production_locked');
     expect(surfaceQa.required_new_core_assets).toBe(8);
     expect(surfaceQa.latest_visual_evidence.main_title).toBe('PASS_REVIEWED');
     expect(surfaceQa.latest_visual_evidence.strategy_map).toContain('PASS_REVIEWED');
-    expect(surfaceQa.latest_visual_evidence.cinematic_loading).toContain('PENDING');
+    expect(surfaceQa.latest_visual_evidence.cinematic_loading).toContain('PASS_REVIEWED');
   });
 });

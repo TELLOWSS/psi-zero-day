@@ -4353,3 +4353,148 @@
     width:min(32vw,190px);
   }
 }
+
+
+/* Phase D D-2A mobile TBM compression — world first, judgment second */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    transform:scale(1.01)!important;
+    object-position:56% 50%!important;
+    filter:saturate(1.12) contrast(1.025) brightness(1.08)!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-lighting] .episode-immersive-atmosphere {
+    mix-blend-mode:normal!important;
+    background:
+      radial-gradient(circle at 67% 24%,rgba(236,204,142,.08),transparent 25%),
+      linear-gradient(90deg,rgba(3,9,12,.09),transparent 26%,transparent 78%,rgba(3,9,12,.06)),
+      linear-gradient(180deg,rgba(3,9,12,.01) 52%,rgba(3,9,12,.14) 100%)!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    background:
+      linear-gradient(90deg,rgba(3,8,11,.08),transparent 20%,transparent 82%,rgba(3,8,11,.05)),
+      linear-gradient(180deg,rgba(3,8,11,0) 58%,rgba(3,8,11,.18) 100%)!important;
+    box-shadow:none!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-visual-rebaseline="world-first-v1"]::after {
+    top:8.5%!important;
+    padding:5px 11px!important;
+    font-size:9px!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-psi-trace {
+    top:108px!important;
+    left:3%!important;
+    width:47%!important;
+    max-height:90px!important;
+    padding:8px!important;
+    background:rgba(6,18,23,.74)!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    top:108px!important;
+    left:auto!important;
+    right:3%!important;
+    width:auto!important;
+    min-width:92px!important;
+    max-width:38%!important;
+    background:rgba(6,18,23,.72)!important;
+  }
+
+  /* Two primary people + two supporting people, all grounded immediately above the decision dock. */
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character {
+    bottom:31dvh!important;
+    opacity:.92;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="player"] {
+    left:29%!important;
+    right:auto!important;
+    width:27%!important;
+    height:45dvh!important;
+    opacity:1!important;
+    z-index:15!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="kang_taesik"] {
+    left:auto!important;
+    right:5%!important;
+    width:29%!important;
+    height:43dvh!important;
+    opacity:1!important;
+    z-index:14!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="lee_jaehoon"] {
+    left:4%!important;
+    right:auto!important;
+    width:20%!important;
+    height:34dvh!important;
+    opacity:.72!important;
+    z-index:11!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="lim_junho"] {
+    left:auto!important;
+    right:-1%!important;
+    width:18%!important;
+    height:30dvh!important;
+    opacity:.64!important;
+    z-index:10!important;
+  }
+
+  /* Changed-work evidence sits in the same world band as the crew instead of the viewport floor. */
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-1 {
+    left:2%!important;
+    right:auto!important;
+    bottom:31dvh!important;
+    width:31%!important;
+    height:22dvh!important;
+    opacity:.84!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-2 {
+    left:auto!important;
+    right:-1%!important;
+    bottom:31dvh!important;
+    width:33%!important;
+    height:25dvh!important;
+    opacity:.82!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-3 {
+    left:30%!important;
+    right:auto!important;
+    bottom:30dvh!important;
+    width:42%!important;
+    height:19dvh!important;
+    opacity:.9!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-depth] .episode-immersive-props {
+    filter:saturate(.95) contrast(1.03) brightness(.96)!important;
+  }
+
+  /* One compact judgment dock: no reading sheet taller than the scene it explains. */
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left:8px!important;
+    right:8px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    max-height:min(32dvh,280px)!important;
+    padding:7px 9px max(7px,env(safe-area-inset-bottom))!important;
+    border-radius:14px!important;
+    background:linear-gradient(180deg,rgba(5,22,25,.94),rgba(5,17,21,.92))!important;
+  }
+  .game-frame[data-production-scene="TBM"] .choice-content h2 {
+    margin:0 0 4px!important;
+    font-size:10.5px!important;
+    line-height:1.2!important;
+  }
+  .game-frame[data-production-scene="TBM"] .choice-panel {
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="TBM"] .choice-panel button {
+    min-height:44px!important;
+    max-height:56px!important;
+    padding:4px 6px!important;
+  }
+  .game-frame[data-production-scene="TBM"] .choice-copy {
+    grid-template-columns:1.7em minmax(0,1fr)!important;
+    gap:4px!important;
+  }
+  .game-frame[data-production-scene="TBM"] .choice-text {
+    font-size:9.2px!important;
+    line-height:1.2!important;
+  }
+}

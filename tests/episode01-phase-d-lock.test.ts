@@ -16,11 +16,12 @@ describe('Episode 01 Phase D production lock', () => {
     expect(EPISODE01_PHASE_D_LOCK.master_principles_id).toBe(MASTER_DESIGN_PRINCIPLES.id);
   });
 
-  it('keeps locked binary tracks separate from the two remaining Phase D blockers', () => {
+  it('keeps locked binary tracks separate from the active visual and runtime-element blockers', () => {
     expect(phaseD.tracks.immersive_backgrounds).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
     expect(phaseD.tracks.character_performance_wave).toMatchObject({ required: 5, ready: 5, status: 'LOCKED' });
     expect(phaseD.tracks.production_audio).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
-    expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required: 8, ready: 8, status: 'QA_PENDING' });
+    expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
+    expect(phaseD.tracks.visual_quality_rebaseline).toMatchObject({ required: 6, ready: 0, status: 'IN_PROGRESS' });
     expect(phaseD.tracks.episode01_runtime_scene_elements).toMatchObject({ required: 1, ready: 0, status: 'PENDING' });
   });
 
@@ -32,17 +33,18 @@ describe('Episode 01 Phase D production lock', () => {
     expect(phaseD.runtime_scene_element_scope.field_guide_only_backlog_is_non_blocking).toBe(true);
   });
 
-  it('forbids temporary visual expansion and accepts only final-slot candidates during Phase D', () => {
-    expect(phaseD.current_focus).toBe('D-1_TITLE_CAST_IDENTITY_REFRESH');
+  it('forbids temporary visual expansion and keeps the current focus on TBM/FIELD rebaseline', () => {
+    expect(phaseD.current_focus).toBe('D-2_VISUAL_QUALITY_REBASELINE_FIELD_TBM');
     expect(phaseD.asset_policy.mode).toBe('FINAL_CANDIDATES_ONLY');
     expect(phaseD.asset_policy.prohibited).toContain('new temporary visual slots');
     expect(phaseD.asset_policy.prohibited).toContain('renaming legacy binaries as final');
     expect(EPISODE01_PHASE_D_LOCK.asset_policy.mode).toBe('FINAL_CANDIDATES_ONLY');
     expect(EPISODE01_PHASE_D_LOCK.execution_order).toEqual([
-      'D-1_TITLE_CAST_8_FINAL_WEBPS',
-      'D-2_MATERIAL_STACK_REALISTIC_V2',
-      'D-3_STRICT_PHASE_D_CHECK_AND_REGRESSION_ONLY',
-      'D-4_EPISODE01_CINEMATIC_VERTICAL_SLICE_LOCK',
+      'D-1_TITLE_CAST_IDENTITY_LOCKED',
+      'D-2_VISUAL_QUALITY_REBASELINE_TBM_FIELD_THEN_REMAINING_SCENES',
+      'D-3_MATERIAL_STACK_REALISTIC_V2',
+      'D-4_REMAINING_UI_SOUND_DIRECTION_VISUAL_LOCK',
+      'D-5_STRICT_PHASE_D_CHECK_AND_CINEMATIC_VERTICAL_SLICE_LOCK',
     ]);
   });
 
