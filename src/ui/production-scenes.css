@@ -7878,3 +7878,19 @@
     line-height:1.1!important;
   }
 }
+
+
+/* Phase D final regression — DAY 02 short-landscape cast clearance.
+   Keep the returning player physically inside the field viewport: helmet below
+   the scene rail, boots above the decision dock. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="FIELD"][data-field-phase="next-day-tease"]
+    .episode-immersive-character[data-character="player"] {
+    left:auto!important;
+    right:9%!important;
+    bottom:25dvh!important;
+    width:19%!important;
+    height:50dvh!important;
+    z-index:13!important;
+  }
+}

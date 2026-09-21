@@ -695,6 +695,12 @@ function validate(row, viewport) {
       if (row.day02CaptionRect && row.playPanel && row.day02CaptionRect.bottom > row.playPanel.top - 12) {
         failures.push('DAY 02 landscape bridge caption collides with decision dock');
       }
+      if (row.day02PlayerRect && row.immersiveSceneRect && row.day02PlayerRect.top < row.immersiveSceneRect.top + 8) {
+        failures.push('DAY 02 landscape player crosses the scene header rail: playerTop=' + row.day02PlayerRect.top + ' sceneTop=' + row.immersiveSceneRect.top);
+      }
+      if (row.day02PlayerRect && row.playPanel && row.day02PlayerRect.bottom > row.playPanel.top - 18) {
+        failures.push('DAY 02 landscape player is buried by the decision dock: playerBottom=' + row.day02PlayerRect.bottom + ' dockTop=' + row.playPanel.top);
+      }
     }
   }
   if (row.stage === 'episode01-office') {
