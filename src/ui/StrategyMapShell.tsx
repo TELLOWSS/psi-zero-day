@@ -145,6 +145,20 @@ export function StrategyMapShell({
   const loopPhase = outcome ? 'result' : !observed ? 'observe' : focusId ? 'action' : 'target';
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
+    <svg className="strategy-filter-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="strategy-map-sharpen" x="-8%" y="-8%" width="116%" height="116%" colorInterpolationFilters="sRGB">
+          <feConvolveMatrix
+            order="3"
+            kernelMatrix="0 -0.22 0 -0.22 1.88 -0.22 0 -0.22 0"
+            divisor="1"
+            bias="0"
+            edgeMode="duplicate"
+            preserveAlpha="true"
+          />
+        </filter>
+      </defs>
+    </svg>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
     <div className="strategy-world-atmosphere" aria-hidden="true" />
     <div className="strategy-entry-slate" aria-hidden="true">

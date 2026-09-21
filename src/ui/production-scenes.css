@@ -6718,3 +6718,25 @@
     border-radius:8px!important;
   }
 }
+
+
+/* Phase D — STRATEGY source-art recovery.
+   The current production WebP is only 1920x1080; on high-DPI portrait screens it
+   is sampled above native resolution. Use a mild GPU SVG convolution pass to
+   recover local edge definition without inventing new geometry or changing anchors. */
+.strategy-filter-defs {
+  position:absolute!important;
+  width:0!important;
+  height:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="STRATEGY"]
+    .strategy-shell[data-loop-phase="observe"] .strategy-map-background-art {
+    filter:url(#strategy-map-sharpen) saturate(1.035) contrast(1.045) brightness(1.005)!important;
+    transform:translateZ(0)!important;
+    backface-visibility:hidden!important;
+  }
+}
