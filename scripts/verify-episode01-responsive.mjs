@@ -218,6 +218,8 @@ function collectMetrics(stage, touchMode) {
   const frame = document.querySelector('.commercial-title-home, .game-frame, .game-hub, .cinematic-loading');
   const gameFrame = document.querySelector('.game-frame');
   const frameRect = frame?.getBoundingClientRect();
+  const playPanelElement = gameFrame?.querySelector('.play-panel');
+  const playPanelRect = playPanelElement && visible(playPanelElement) ? playPanelElement.getBoundingClientRect() : null;
   const immersive = document.querySelector('.episode-immersive-scene');
   const images = [...document.images].filter(visible);
   const brokenImages = images.filter(image => image.complete && image.naturalWidth === 0).map(image => image.getAttribute('src'));
@@ -274,6 +276,14 @@ function collectMetrics(stage, touchMode) {
       width: Math.round(frameRect.width),
       height: Math.round(frameRect.height),
     } : null,
+    playPanel: playPanelRect ? {
+      left: Math.round(playPanelRect.left),
+      top: Math.round(playPanelRect.top),
+      right: Math.round(playPanelRect.right),
+      bottom: Math.round(playPanelRect.bottom),
+      width: Math.round(playPanelRect.width),
+      height: Math.round(playPanelRect.height),
+    } : null,
     smallTargets,
     brokenImages,
     loadingCrewCount: loadingCrew.length,
@@ -302,6 +312,8 @@ function collectMetrics(stage, touchMode) {
     tbmUi: immersive?.getAttribute('data-tbm-ui') || null,
     tbmCast: immersive?.getAttribute('data-tbm-cast') || null,
     tbmLayer: Boolean(document.querySelector('.tbm-production-layer')),
+    tbmBoard: Boolean(document.querySelector('.tbm-briefing-board[data-board="work-sequence"]')),
+    tbmBackgroundCrew: Boolean(document.querySelector('.tbm-background-crew')),
     officePhase: immersive?.getAttribute('data-office-phase') || null,
     officeCamera: immersive?.getAttribute('data-office-camera') || null,
     officeDepth: immersive?.getAttribute('data-office-depth') || null,
@@ -371,6 +383,7 @@ function validate(row, viewport) {
     'episode01-strategy': 'STRATEGY',
     'episode01-stop-work': 'STOP_WORK',
     'episode01-office': 'OFFICE',
+    'episode01-tbm-first': 'TBM',
     'episode01-tbm': 'TBM',
     'episode01-day-result': 'DAY_RESULT',
     'episode01-day02-bridge': 'FIELD',
@@ -406,6 +419,28 @@ function validate(row, viewport) {
     if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
+  }
+  if (row.stage === 'episode01-tbm-first') {
+    if (row.activeEvent !== 'e01_02_meet_kang') failures.push('First TBM QA did not reach the 06:40 Kang Taesik briefing');
+    if (row.tbmPhase !== 'first-briefing') failures.push('First TBM production phase is missing');
+    if (row.tbmCamera !== 'briefing-circle') failures.push('First TBM briefing-circle camera profile is missing');
+    if (row.tbmDepth !== 'circle-open') failures.push('First TBM circle-open depth profile is missing');
+    if (row.tbmLighting !== 'morning-neutral') failures.push('First TBM morning-neutral lighting profile is missing');
+    if (row.tbmUi !== 'briefing') failures.push('First TBM briefing UI profile is missing');
+    if (row.tbmCast !== 'mentor-pair') failures.push('First TBM mentor-pair cast profile is missing');
+    if (!row.tbmLayer) failures.push('First TBM production layer did not render');
+    if (!row.tbmBoard) failures.push('First TBM work-sequence briefing board did not render');
+    if (!row.tbmBackgroundCrew) failures.push('First TBM background crew did not render');
+  }
+  if ((row.stage === 'episode01-tbm-first' || row.stage === 'episode01-tbm') && viewport.mobile && row.playPanel) {
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (landscapePhone && row.playPanel.height > viewport.height * 0.32) {
+      failures.push('TBM landscape interaction dock is too tall for world-first composition: ' + row.playPanel.height + 'px');
+    }
+    if (portraitPhone && row.stage === 'episode01-tbm' && row.playPanel.height > viewport.height * 0.32) {
+      failures.push('TBM portrait judgment sheet is too tall for world-first composition: ' + row.playPanel.height + 'px');
+    }
   }
   if (row.stage === 'episode01-tbm') {
     if (row.activeEvent !== 'e01_08g_tbm_field_gap') failures.push('TBM QA did not reach the changed-work briefing');
@@ -552,6 +587,14 @@ try {
       report.push({ viewportName: viewport.name, ...episodeMetrics, failures: episodeFailures });
       if (episodeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_02_meet_kang');
+      await sleep(240);
+      const firstTbmMetrics = await metrics(cdp, 'episode01-tbm-first', viewport.mobile);
+      const firstTbmFailures = validate(firstTbmMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...firstTbmMetrics, failures: firstTbmFailures });
+      if (firstTbmFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-tbm-first.png');
 
       await driveEpisodeToEvent(cdp, 'e01_04_junho_signal', 'listen');
       await sleep(220);
