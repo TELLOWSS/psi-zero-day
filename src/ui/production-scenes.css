@@ -5625,3 +5625,88 @@
     margin-top:2px!important;
   }
 }
+
+
+/* Phase D — TBM Visual Lock pass 04: choice-surface specificity closure.
+   A legacy compact SHOW_CHOICE :has() selector is intentionally more specific than
+   ordinary scene rules. TBM judgment must answer it at the same selector level so
+   top/width cannot leak back into the old right-side web panel. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]),
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    position:absolute!important;
+    top:auto!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:max(5px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:30dvh!important;
+    margin:0!important;
+    padding:5px 7px!important;
+    overflow:hidden!important;
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) .presentation-area,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) .presentation-area {
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content {
+    display:grid!important;
+    grid-template-columns:minmax(150px,.5fr) minmax(0,1.5fr)!important;
+    grid-template-rows:auto!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel {
+    grid-column:2!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+    width:100%!important;
+    margin:0!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > h2,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > h2 {
+    grid-column:1!important;
+    grid-row:1!important;
+    margin:0!important;
+    padding:0 4px 0 2px!important;
+    font-size:10px!important;
+    line-height:1.25!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-content > .presentation-toolbar,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-content > .presentation-toolbar {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:46px!important;
+    height:auto!important;
+    max-height:60px!important;
+    padding:4px 6px!important;
+  }
+}
