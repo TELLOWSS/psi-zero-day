@@ -245,6 +245,8 @@ function collectMetrics(stage, touchMode) {
   const immersiveSceneRect = metricRect(immersive);
   const tbmKangRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="kang_taesik"]'));
   const tbmPlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
+  const officeEvidenceBoardRect = metricRect(immersive?.querySelector('.episode-immersive-evidence-board'));
+  const officeVisibleCharacters = [...(immersive?.querySelectorAll('.episode-immersive-character') ?? [])].filter(visible).length;
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
   const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
@@ -329,6 +331,8 @@ function collectMetrics(stage, touchMode) {
     immersiveSceneRect,
     tbmKangRect,
     tbmPlayerRect,
+    officeEvidenceBoardRect,
+    officeVisibleCharacters,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
@@ -618,6 +622,32 @@ function validate(row, viewport) {
     if (row.officeCast !== 'balanced-table') failures.push('OFFICE balanced-table cast profile is missing');
     if (row.officeEvidence !== 'responsibility') failures.push('OFFICE responsibility evidence focus is missing');
     if (!row.officeLayer) failures.push('OFFICE production evidence-table layer did not render');
+    if (!row.officeEvidenceBoardRect) failures.push('OFFICE evidence board did not render');
+    if (row.officeVisibleCharacters < 3) failures.push('OFFICE must keep at least three people visible with the evidence: ' + row.officeVisibleCharacters);
+    if (row.immersiveBackgroundOpacity === null || row.immersiveBackgroundOpacity < 0.9) {
+      failures.push('OFFICE final room background is not visible enough: opacity=' + row.immersiveBackgroundOpacity);
+    }
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (portraitPhone) {
+      if (!row.immersiveSceneRect || row.immersiveSceneRect.bottom < viewport.height - 2) {
+        failures.push('OFFICE portrait room must run full-bleed behind judgment: ' + JSON.stringify(row.immersiveSceneRect));
+      }
+      if (row.playPanel && row.playPanel.height > viewport.height * 0.31) {
+        failures.push('OFFICE portrait judgment dock is too tall: ' + row.playPanel.height + 'px');
+      }
+      if (row.officeEvidenceBoardRect && row.playPanel && row.officeEvidenceBoardRect.bottom > row.playPanel.top + 18) {
+        failures.push('OFFICE portrait evidence board is buried under the judgment dock');
+      }
+    }
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    if (landscapePhone && row.playPanel) {
+      if (row.playPanel.width < viewport.width * 0.9) {
+        failures.push('OFFICE landscape judgment must be a full-width lower dock: width=' + row.playPanel.width + 'px');
+      }
+      if (row.playPanel.height > viewport.height * 0.33) {
+        failures.push('OFFICE landscape judgment dock is too tall: ' + row.playPanel.height + 'px');
+      }
+    }
   }
   if (row.stage === 'episode01-stop-work') {
     if (row.activeEvent !== 'e01_08c_site_pushback') failures.push('STOP WORK QA did not reach the zero-moment event');

@@ -421,6 +421,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     data-office-ui={officeProduction?.ui_profile}
     data-office-cast={officeProduction?.cast_profile}
     data-office-evidence={officeProduction?.evidence_focus}
+    data-office-hero={officeProduction?.hero_character_id}
     data-dayresult-phase={dayResultProduction?.phase}
     data-dayresult-camera={dayResultProduction?.camera_profile}
     data-dayresult-depth={dayResultProduction?.depth_profile}
