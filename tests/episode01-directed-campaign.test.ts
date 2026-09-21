@@ -44,9 +44,9 @@ describe('Episode 01 directed campaign mode', () => {
     expect(episode01StoryPreset('e01_09_evening')).toBe('DAY_RESULT');
   });
 
-  it('auto-advances exposition only, never authored decision nodes', () => {
-    expect(episode01AutoAdvanceDelay('e01_03_plan_breaks', 'situation', 45)).toBeGreaterThanOrEqual(4200);
-    expect(episode01AutoAdvanceDelay('e01_08e_responsibility_clash', 'gc', 45)).toBeGreaterThanOrEqual(4200);
+  it('keeps authored reading surfaces on manual advance, including exposition and decisions', () => {
+    expect(episode01AutoAdvanceDelay('e01_03_plan_breaks', 'situation', 45)).toBeUndefined();
+    expect(episode01AutoAdvanceDelay('e01_08e_responsibility_clash', 'gc', 45)).toBeUndefined();
     expect(episode01AutoAdvanceDelay('e01_03_plan_breaks', 'plan', 45)).toBeUndefined();
     expect(episode01AutoAdvanceDelay('e01_08b_inspection_find', 'action', 45)).toBeUndefined();
   });

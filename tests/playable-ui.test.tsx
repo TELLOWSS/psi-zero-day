@@ -155,7 +155,7 @@ describe('Playable Episode React UI', () => {
   it('offers a previous-view control without mutating the presentation command', () => {
     const session = new EpisodeSession(); const send = vi.fn(); const previous = vi.fn();
     act(() => root.render(<PresentationView t={session.t} send={send} assetUri={() => undefined} previousAvailable onPrevious={previous} commands={[{
-      type: 'SHOW_DIALOGUE', instance_id: 'ui.history', node_id: 'line.2', text_id: 'ep01.arrival.narration',
+      type: 'SHOW_DIALOGUE', instance_id: 'ui.history', node_id: 'line.2', text_id: 'ep01.arrival',
     }]} />));
     const previousButton = buttons().find(button => button.textContent?.includes(session.t('ui.previous_view')));
     expect(previousButton).toBeDefined();
