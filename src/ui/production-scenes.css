@@ -5468,3 +5468,167 @@
 .strategy-shell[data-loop-phase="observe"] .strategy-rail button {
   pointer-events: none !important;
 }
+
+
+/* Phase D — TBM Visual Lock pass 03: speaker continuity + short-landscape gate. */
+/* The first briefing remains one continuous physical scene. The speaker changes,
+   but both people stay present and only the visual lead changes. */
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+  .episode-immersive-character {
+  display:block!important;
+  visibility:visible!important;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"][data-tbm-hero="kang_taesik"]
+  .episode-immersive-character[data-character="kang_taesik"],
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"][data-tbm-hero="player"]
+  .episode-immersive-character[data-character="player"] {
+  opacity:1!important;
+  z-index:16!important;
+  filter:drop-shadow(0 18px 15px rgba(0,0,0,.42)) saturate(1.02) brightness(1.02)!important;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"][data-tbm-hero="kang_taesik"]
+  .episode-immersive-character[data-character="player"],
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"][data-tbm-hero="player"]
+  .episode-immersive-character[data-character="kang_taesik"] {
+  opacity:.72!important;
+  z-index:12!important;
+  filter:saturate(.88) brightness(.9)!important;
+}
+
+/* Changed-work TBM keeps people in the world while PSI TRACE explains the change.
+   Supporting people recede; they never disappear into a dashboard-only state. */
+.game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .episode-immersive-character,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .episode-immersive-character,
+.game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .episode-immersive-character {
+  display:block!important;
+  visibility:visible!important;
+}
+
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="player"] {
+    left:9%!important;
+    right:auto!important;
+    bottom:34dvh!important;
+    width:28%!important;
+    height:41dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:auto!important;
+    right:7%!important;
+    bottom:33dvh!important;
+    width:31%!important;
+    height:45dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .tbm-briefing-board {
+    left:50%!important;
+    bottom:39dvh!important;
+    width:min(27vw,116px)!important;
+    opacity:.82!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"]
+    .episode-immersive-character[data-character="player"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"]
+    .episode-immersive-character[data-character="player"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"]
+    .episode-immersive-character[data-character="player"] {
+    left:30%!important;
+    right:auto!important;
+    bottom:34dvh!important;
+    width:24%!important;
+    height:38dvh!important;
+    opacity:.92!important;
+    z-index:14!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"]
+    .episode-immersive-character[data-character="kang_taesik"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"]
+    .episode-immersive-character[data-character="kang_taesik"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:auto!important;
+    right:5%!important;
+    bottom:34dvh!important;
+    width:27%!important;
+    height:40dvh!important;
+    opacity:.84!important;
+    z-index:13!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"]
+    .episode-immersive-character[data-character="lee_jaehoon"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"]
+    .episode-immersive-character[data-character="lee_jaehoon"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"]
+    .episode-immersive-character[data-character="lee_jaehoon"] {
+    left:5%!important;
+    right:auto!important;
+    bottom:35dvh!important;
+    width:17%!important;
+    height:29dvh!important;
+    opacity:.48!important;
+    z-index:9!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"]
+    .episode-immersive-character[data-character="lim_junho"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"]
+    .episode-immersive-character[data-character="lim_junho"],
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    left:auto!important;
+    right:-1%!important;
+    bottom:35dvh!important;
+    width:15%!important;
+    height:26dvh!important;
+    opacity:.42!important;
+    z-index:8!important;
+  }
+}
+
+/* Release gate: on 844x390-class phones, every TBM interaction is a shallow
+   bottom dock. Explicit top/height reset prevents legacy grid rules from
+   stretching the dock beyond the physical viewport. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .play-panel {
+    position:absolute!important;
+    top:auto!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:max(5px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:30dvh!important;
+    margin:0!important;
+    padding:5px 7px!important;
+    overflow:hidden!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    align-content:end!important;
+  }
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .presentation-area {
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-content {
+    min-height:0!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-text {
+    padding:1px 0 3px!important;
+    font-size:10px!important;
+    line-height:1.25!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .continue-button {
+    min-height:44px!important;
+    height:44px!important;
+    margin-top:2px!important;
+  }
+}

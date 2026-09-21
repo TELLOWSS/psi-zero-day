@@ -101,7 +101,7 @@ export function episode01TbmProduction(
       lighting_profile: 'morning-neutral',
       ui_profile: 'briefing',
       cast_profile: 'mentor-pair',
-      hero_character_id: 'kang_taesik',
+      hero_character_id: nodeId === 'player' ? 'player' : 'kang_taesik',
     });
   }
 

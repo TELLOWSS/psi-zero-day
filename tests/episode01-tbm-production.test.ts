@@ -16,6 +16,11 @@ describe('Episode 01 Phase C-3 TBM production quality', () => {
     });
   });
 
+  it('hands the first TBM visual lead from Kang to the player when the speaker changes', () => {
+    expect(episode01TbmProduction('e01_02_meet_kang', 'kang')?.hero_character_id).toBe('kang_taesik');
+    expect(episode01TbmProduction('e01_02_meet_kang', 'player')?.hero_character_id).toBe('player');
+  });
+
   it('moves the visual lead with each field voice instead of collapsing to talking heads', () => {
     expect(episode01TbmProduction('e01_08g_tbm_field_gap', 'lee')?.hero_character_id).toBe('lee_jaehoon');
     expect(episode01TbmProduction('e01_08g_tbm_field_gap', 'kang')?.hero_character_id).toBe('kang_taesik');
