@@ -4982,3 +4982,15 @@
     overflow: hidden !important;
   }
 }
+
+
+/* STRATEGY observe interaction gate — 2026-09-21 */
+/* The map remains visible for reading, but targets do not become interactive until
+   the player confirms the Observe step. Child buttons explicitly re-enable pointer
+   events in the base map CSS, so the state gate must close them at the leaf level. */
+.strategy-shell[data-loop-phase="observe"] .strategy-map-worker,
+.strategy-shell[data-loop-phase="observe"] .strategy-risk-signal,
+.strategy-shell[data-loop-phase="observe"] .strategy-zone-target,
+.strategy-shell[data-loop-phase="observe"] .strategy-rail button {
+  pointer-events: none !important;
+}
