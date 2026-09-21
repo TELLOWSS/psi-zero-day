@@ -36,12 +36,14 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   })}</div>;
 }
 
-export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview }: {
+export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   eventId?: string | null;
   choiceFallback?: boolean;
   onChoicePreview?: (choiceId: string | null) => void;
+  previousAvailable?: boolean;
+  onPrevious?: () => void;
 }) {
   return <>{commands.map((p, index) => {
     if (p.type === 'SHOW_CHOICE' && choiceFallback) return <details className="choice-content map-choice-fallback" key={`${p.instance_id}/${p.node_id}`}>
@@ -50,12 +52,12 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
       <ChoiceButtons p={p} t={t} send={send} eventId={eventId} onChoicePreview={onChoicePreview} />
     </details>;
     if (p.type === 'SHOW_CHOICE') return <div className="choice-content" key={`${p.instance_id}/${p.node_id}`}>
-      <span className="eyebrow">{t('ui.choice')}</span>
+      <div className="presentation-toolbar"><span className="eyebrow">{t('ui.choice')}</span>{previousAvailable && onPrevious ? <button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button> : null}</div>
       <h2>{t(p.text_id)}</h2>
       <ChoiceButtons p={p} t={t} send={send} eventId={eventId} onChoicePreview={onChoicePreview} />
     </div>;
     if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <div className={`dialogue-content ${textStyle(p.text_id) ?? ''}`} key={`${p.instance_id}/${p.node_id}`}>
-      <span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>
+      <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>{previousAvailable && onPrevious ? <button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button> : null}</div>
       <p className="dialogue-text">{t(p.text_id)}</p>
       <button className="continue-button" type="button" onClick={e => { if (e.detail < 2) send({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }); }}>
         {t('ui.continue')}<span aria-hidden="true">→</span>

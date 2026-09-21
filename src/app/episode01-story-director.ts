@@ -101,16 +101,16 @@ const AUTO_ADVANCE_NODES: Readonly<Record<string, readonly string[]>> = Object.f
 });
 
 export function episode01AutoAdvanceDelay(
-  eventId: string | null | undefined,
-  nodeId: string | null | undefined,
-  textLength: number,
+  _eventId: string | null | undefined,
+  _nodeId: string | null | undefined,
+  _textLength: number,
 ): number | undefined {
-  if (!eventId || !nodeId || !AUTO_ADVANCE_NODES[eventId]?.includes(nodeId)) return undefined;
-  const pacing = episode01StoryDirection(eventId)?.pacing ?? 'medium';
-  const base = pacing === 'fast' ? 1500 : pacing === 'slow' ? 2200 : 1850;
-  const perCharacter = pacing === 'fast' ? 58 : pacing === 'slow' ? 78 : 68;
-  return Math.max(4200, Math.min(9000, base + Math.max(0, textLength) * perCharacter));
+  // Phase D reading-flow lock: dialogue/result text never advances on a timer.
+  // Keep the authored pacing map for documentation, but runtime reading surfaces are manual.
+  void AUTO_ADVANCE_NODES;
+  return undefined;
 }
+
 
 
 const AUTO_RESOLVE_CHOICE_EVENTS = new Set([

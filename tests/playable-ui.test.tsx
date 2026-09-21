@@ -152,6 +152,24 @@ describe('Playable Episode React UI', () => {
     expect(session.getSnapshot()).toBe(before);
   });
 
+  it('offers a previous-view control without mutating the presentation command', () => {
+    const session = new EpisodeSession(); const send = vi.fn(); const previous = vi.fn();
+    act(() => root.render(<PresentationView t={session.t} send={send} assetUri={() => undefined} previousAvailable onPrevious={previous} commands={[{
+      type: 'SHOW_DIALOGUE', instance_id: 'ui.history', node_id: 'line.2', text_id: 'ep01.arrival.narration',
+    }]} />));
+    const previousButton = buttons().find(button => button.textContent?.includes(session.t('ui.previous_view')));
+    expect(previousButton).toBeDefined();
+    act(() => previousButton!.click());
+    expect(previous).toHaveBeenCalledTimes(1);
+    expect(send).not.toHaveBeenCalled();
+  });
+
+  it('keeps Episode 01 dialogue/result presentation on manual advance', async () => {
+    const source = await import('../src/app/episode01-story-director');
+    expect(source.episode01AutoAdvanceDelay('e01_01_arrival', 'arrival', 200)).toBeUndefined();
+    expect(source.episode01AutoAdvanceDelay('e01_08g_tbm_field_gap', 'situation', 200)).toBeUndefined();
+  });
+
   it('renders disabled choices as non-interactive using only PresentationCommand flags', () => {
     const session = new EpisodeSession(); const send = vi.fn();
     act(() => root.render(<PresentationView t={session.t} send={send} assetUri={() => undefined} commands={[{

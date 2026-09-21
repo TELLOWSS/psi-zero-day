@@ -42,7 +42,7 @@ import { EpisodeImmersiveScene, episode01RelationshipSceneCue } from './EpisodeI
 import { EpisodeRecord } from './EpisodeRecord';
 import { EpisodeColdOpen } from './EpisodeColdOpen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
-import { episode01AutoAdvanceDelay, episode01AutoResolveChoice, episode01StoryDirection } from '../app/episode01-story-director';
+import { episode01StoryDirection } from '../app/episode01-story-director';
 import { episode01ProductionScene } from '../app/episode01-production-scene';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
@@ -57,6 +57,13 @@ interface ExecutedFieldAction {
   readonly action: StrategyAction;
   readonly source_revision: number;
   readonly checkpoint: GameState;
+}
+
+interface PresentationHistoryEntry {
+  readonly key: string;
+  readonly eventTitle: string;
+  readonly speaker: string;
+  readonly text: string;
 }
 
 function initialPaidItemWallet() {
@@ -76,6 +83,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const [firstContactNode, setFirstContactNode] = useState<string | null>(null);
   const [choicePreviewId, setChoicePreviewId] = useState<string | null>(null);
   const [coldOpenDismissed, setColdOpenDismissed] = useState(false);
+  const [presentationHistory, setPresentationHistory] = useState<readonly PresentationHistoryEntry[]>([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
@@ -290,52 +299,27 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
-    if (!directedCampaign || !isPlaying || mapOutcomeActive || (activeEventId === 'e01_01_arrival' && !coldOpenDismissed)) return;
-    if (!presentation || !('node_id' in presentation) || presentation.type === 'SHOW_CHOICE') return;
+    if (!presentation || !('node_id' in presentation)) return;
     if (presentation.type !== 'SHOW_DIALOGUE' && presentation.type !== 'SHOW_RESULT') return;
-    const delay = episode01AutoAdvanceDelay(activeEventId, presentation.node_id, t(presentation.text_id).length);
-    if (!delay) return;
-    const timer = window.setTimeout(() => {
-      playUiCue('continue');
-      session.dispatch({
-        type: 'advance_event',
-        instance_id: presentation.instance_id,
-        node_id: presentation.node_id,
-      }, snapshot.revision);
-    }, delay);
-    return () => window.clearTimeout(timer);
-  }, [
-    session,
-    snapshot.revision,
-    directedCampaign,
-    isPlaying,
-    mapOutcomeActive,
-    activeEventId,
-    presentation,
-    coldOpenDismissed,
-    t,
-    playUiCue,
-  ]);
+    const key = `${presentation.instance_id}:${presentation.node_id}`;
+    const entry: PresentationHistoryEntry = {
+      key,
+      eventTitle: snapshot.eventTitle,
+      speaker: person ? formatCharacterIdentity(person) : t(presentation.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration'),
+      text: t(presentation.text_id),
+    };
+    setPresentationHistory(previous => {
+      if (previous.at(-1)?.key === key) return previous;
+      return Object.freeze([...previous, entry].slice(-20));
+    });
+  }, [presentation, snapshot.eventTitle, person?.id, t]);
   useEffect(() => {
-    if (snapshot.phase === 'start') setColdOpenDismissed(false);
+    if (snapshot.phase === 'start') {
+      setColdOpenDismissed(false);
+      setPresentationHistory([]);
+      setHistoryOpen(false);
+    }
   }, [snapshot.phase]);
-  useEffect(() => {
-    if (!directedCampaign || mapOutcomeActive || !episode01AutoResolveChoice(activeEventId)) return;
-    if (!presentation || presentation.type !== 'SHOW_CHOICE') return;
-    const enabled = presentation.choices.filter(choice => choice.enabled);
-    if (enabled.length !== 1) return;
-    const choice = enabled[0]!;
-    const timer = window.setTimeout(() => {
-      chooseEvent(presentation.instance_id, presentation.node_id, choice.choice_id);
-    }, 650);
-    return () => window.clearTimeout(timer);
-  }, [
-    directedCampaign,
-    mapOutcomeActive,
-    activeEventId,
-    presentation,
-    snapshot.revision,
-  ]);
   useEffect(() => {
     if (!strategyOutcome) return;
     const relationDelta = snapshot.relationshipFeedback.reduce((sum, item) => sum + item.delta.applied_delta, 0);
@@ -386,6 +370,13 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     ? [...trainingReward.auto_equipped, ...trainingReward.equip_options.filter(item =>
       snapshot.state?.flags[`equipment.${rewardCharacterId}.${item.slot}`] === item.item_id)]
     : [];
+  const currentHistoryKey = presentation && 'node_id' in presentation && (presentation.type === 'SHOW_DIALOGUE' || presentation.type === 'SHOW_RESULT')
+    ? `${presentation.instance_id}:${presentation.node_id}`
+    : null;
+  const previousHistoryEntries = presentationHistory
+    .filter(entry => entry.key !== currentHistoryKey)
+    .slice(-8)
+    .reverse();
   const showColdOpen = directedCampaign && isPlaying && activeEventId === 'e01_01_arrival' && !coldOpenDismissed;
   const dismissColdOpen = useCallback(() => {
     setColdOpenDismissed(true);
@@ -562,9 +553,20 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
               eventId={activeEventId}
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
+              previousAvailable={previousHistoryEntries.length > 0}
+              onPrevious={() => setHistoryOpen(true)}
             />}
         </div>
       </section>
+      {historyOpen ? <aside className="presentation-history-drawer" role="dialog" aria-modal="true" aria-label={t('ui.previous_view.title')}>
+        <header><div><span>{t('ui.previous_view.eyebrow')}</span><strong>{t('ui.previous_view.title')}</strong></div><button type="button" onClick={() => setHistoryOpen(false)} aria-label={t('ui.previous_view.close')}>×</button></header>
+        <div className="presentation-history-list">
+          {previousHistoryEntries.length ? previousHistoryEntries.map(entry => <article key={entry.key}>
+            <div><strong>{entry.speaker}</strong><span>{entry.eventTitle}</span></div>
+            <p>{entry.text}</p>
+          </article>) : <p className="presentation-history-empty">{t('ui.previous_view.empty')}</p>}
+        </div>
+      </aside> : null}
       {showColdOpen ? <EpisodeColdOpen
         backgroundUri={resolveAsset('ep01.scene_bg.inspection_zone')}
         playerUri={resolveAsset('ep01.character.player.performance.resolve') ?? characterMapUri('player', resolveAsset)}

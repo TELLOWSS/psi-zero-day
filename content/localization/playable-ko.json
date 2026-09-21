@@ -857,6 +857,11 @@
     "ui.strategy.zone.office": "현장사무실",
     "ui.company.construction": "NEW PSI CONSTRUCTION",
     "ui.company.construction_ko": "NEW PSI 건설",
-    "ui.site.project": "NEW PSI 현장 01"
+    "ui.site.project": "NEW PSI 현장 01",
+    "ui.previous_view": "이전 보기",
+    "ui.previous_view.eyebrow": "대화 기록",
+    "ui.previous_view.title": "이전 대화 다시보기",
+    "ui.previous_view.close": "닫기",
+    "ui.previous_view.empty": "이전에 표시된 대화가 없습니다."
   }
 }
