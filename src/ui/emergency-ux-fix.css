@@ -369,7 +369,9 @@
     font-size: 13px;
   }
 
-  .game-frame.phase-playing:not(.strategy-active) .play-panel {
+  /* Generic scenes may use the legacy right-side dock.
+     TBM owns a dedicated Phase D bottom dock and must never inherit this rule. */
+  .game-frame.phase-playing:not(.strategy-active):not([data-production-scene="TBM"]) .play-panel {
     top: 54px;
     right: max(8px, env(safe-area-inset-right));
     bottom: max(8px, env(safe-area-inset-bottom));
@@ -381,6 +383,14 @@
     padding: 10px;
     border-radius: 12px;
     overflow: hidden;
+  }
+
+  /* Compact gameplay must calculate against the physical viewport.
+     This neutralizes playable.css's legacy min-height:560px on 844x390 phones. */
+  .game-frame.phase-playing:not(.strategy-active) {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
   }
 
   .game-frame.phase-playing:not(.strategy-active) .character-card,

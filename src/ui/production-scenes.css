@@ -279,16 +279,9 @@
     width:30%;
     height:54%;
   }
-  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before {
-    left:4%;
-    right:48%;
-    bottom:5%;
-    height:38%;
-  }
   .game-frame[data-production-scene="DAY_RESULT"] .play-panel,
   .game-frame[data-production-scene="STOP_WORK"] .play-panel,
   .game-frame[data-production-scene="OFFICE"] .play-panel,
-  .game-frame[data-production-scene="TBM"] .play-panel,
   .game-frame[data-production-scene="FIELD"] .play-panel {
     left:auto !important;
     right:max(8px, env(safe-area-inset-right)) !important;

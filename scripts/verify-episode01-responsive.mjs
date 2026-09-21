@@ -420,6 +420,9 @@ function validate(row, viewport) {
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
   }
+  if (viewport.mobile && viewport.width > viewport.height && row.frame && row.frame.height > viewport.height + 2) {
+    failures.push('Landscape game frame exceeds physical viewport: ' + row.frame.height + 'px > ' + viewport.height + 'px');
+  }
   if (row.stage === 'episode01-tbm-first') {
     if (row.activeEvent !== 'e01_02_meet_kang') failures.push('First TBM QA did not reach the 06:40 Kang Taesik briefing');
     if (row.tbmPhase !== 'first-briefing') failures.push('First TBM production phase is missing');

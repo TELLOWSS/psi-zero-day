@@ -406,6 +406,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     data-tbm-lighting={tbmProduction?.lighting_profile}
     data-tbm-ui={tbmProduction?.ui_profile}
     data-tbm-cast={tbmProduction?.cast_profile}
+    data-tbm-hero={tbmProduction?.hero_character_id}
     data-strategy-phase={strategyProduction?.phase}
     data-strategy-camera={strategyProduction?.camera_profile}
     data-strategy-depth={strategyProduction?.depth_profile}
