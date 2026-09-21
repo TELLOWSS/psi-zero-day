@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "phase": "C",
-  "status": "OFFICE_QUALITY_LOCK",
+  "status": "DAY_RESULT_QUALITY_LOCK",
   "title": "Episode 01 Production Scene System",
   "scene_families": {
     "STRATEGY": {
@@ -368,7 +368,55 @@
         "DAY_RESULT"
       ],
       "composition": "sunset tableau",
-      "priority": "memory, people change, carry-over; no scorecard"
+      "priority": "memory, people change, carry-over; no scorecard",
+      "runtime_surface": "EpisodeImmersiveScene",
+      "quality_lock": {
+        "reference_scene": "e01_09_evening",
+        "reference_node": "evening",
+        "grammar": [
+          "close the day through visible residues instead of a grade, score or rank",
+          "show what changed in people and reporting culture before summarizing the player's evening choice",
+          "reuse actual played scenes as memory fragments instead of generic result cards",
+          "let the evening choice become a personal afterimage rather than a moralized reward",
+          "keep tomorrow's first verification signal visible before the day fully fades out",
+          "hand the final visual emphasis to DAY 02 conditions rather than a completion scoreboard"
+        ],
+        "phases": [
+          "day-reflection",
+          "choice-afterglow"
+        ],
+        "camera": [
+          "sunset-memory-wide",
+          "personal-settle-wide"
+        ],
+        "depth": [
+          "memory-tableau",
+          "future-threshold"
+        ],
+        "lighting": [
+          "home-night-warm",
+          "night-to-dawn"
+        ],
+        "ui": [
+          "reflect",
+          "afterglow"
+        ],
+        "lanes": [
+          "result",
+          "people",
+          "memory",
+          "tomorrow"
+        ],
+        "carryover": [
+          "people",
+          "instruction",
+          "record",
+          "stable"
+        ],
+        "expansion_order": [
+          "PHASE_C_COMPLETE"
+        ]
+      }
     }
   },
   "rules": [
