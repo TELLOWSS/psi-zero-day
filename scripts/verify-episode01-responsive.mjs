@@ -284,6 +284,7 @@ function collectMetrics(stage, touchMode) {
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
+    visualRebaseline: immersive?.getAttribute('data-visual-rebaseline') || null,
     fieldPhase: immersive?.getAttribute('data-field-phase') || null,
     fieldCamera: immersive?.getAttribute('data-field-camera') || null,
     fieldDepth: immersive?.getAttribute('data-field-depth') || null,
@@ -373,6 +374,9 @@ function validate(row, viewport) {
   const expectedProductionScene = phaseCSceneByStage[row.stage];
   if (expectedProductionScene && row.productionScene !== expectedProductionScene) {
     failures.push('Phase C scene-family continuity mismatch: expected ' + expectedProductionScene + ', got ' + row.productionScene);
+  }
+  if ((expectedProductionScene === 'TBM' || expectedProductionScene === 'FIELD') && row.visualRebaseline !== 'world-first-v1') {
+    failures.push('Phase D world-first visual rebaseline marker is missing for ' + expectedProductionScene);
   }
   if (row.stage === 'episode01-field-signal') {
     if (row.activeEvent !== 'e01_04_junho_signal') failures.push('FIELD QA did not reach the Junho signal event');

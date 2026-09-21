@@ -170,6 +170,7 @@ export function EpisodeImmersiveScene({
     data-tbm-lighting={tbmProduction?.lighting_profile}
     data-tbm-ui={tbmProduction?.ui_profile}
     data-tbm-cast={tbmProduction?.cast_profile}
+    data-visual-rebaseline={fieldProduction || tbmProduction ? 'world-first-v1' : undefined}
     data-office-phase={officeProduction?.phase}
     data-office-hero={officeProduction?.hero_character_id}
     data-office-camera={officeProduction?.camera_profile}
