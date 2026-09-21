@@ -424,8 +424,8 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-office-depth={officeProduction?.depth_profile}
     data-office-lighting={officeProduction?.lighting_profile}
     data-office-ui={officeProduction?.ui_profile}
-    data-office-focus={officeProduction?.focus}
     data-office-cast={officeProduction?.cast_profile}
+    data-office-evidence={officeProduction?.evidence_focus}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
