@@ -7155,3 +7155,35 @@
     line-height:1.12!important;
   }
 }
+
+
+/* Phase D — OFFICE Visual Lock pass 02: compact-landscape cast grounding.
+   Keep heads below the scene-title rail and let the decision dock cover legs,
+   not faces. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"]
+    .episode-immersive-character[data-character="player"] {
+    bottom:23dvh!important;
+    width:12%!important;
+    height:40dvh!important;
+    opacity:.28!important;
+  }
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"]
+    .episode-immersive-character[data-character="oh_seungjae"] {
+    bottom:23dvh!important;
+    width:18%!important;
+    height:50dvh!important;
+  }
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"]
+    .episode-immersive-character[data-character="lee_jaehoon"] {
+    bottom:23dvh!important;
+    width:16%!important;
+    height:48dvh!important;
+  }
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-scene[data-event="e01_08e_responsibility_clash"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    bottom:23dvh!important;
+    width:17%!important;
+    height:49dvh!important;
+  }
+}
