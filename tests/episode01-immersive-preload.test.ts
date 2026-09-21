@@ -5,8 +5,8 @@ describe('Episode 01 immersive background preload plan', () => {
   it('warms the active environment and the next two distinct surfaces', () => {
     expect(episode01ImmersivePreloadAssetIds('e01_01_arrival')).toEqual([
       'ep01.scene_bg.gate_dawn',
-      'ep01.scene_bg.ramp_entry',
       'ep01.scene_bg.work_yard',
+      'ep01.scene_bg.ramp_entry',
     ]);
   });
 
