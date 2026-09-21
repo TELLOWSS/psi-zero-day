@@ -49,6 +49,7 @@ import { episode01FieldProduction } from '../app/episode01-field-production';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
 import { episode01StrategyProduction } from '../app/episode01-strategy-production';
 import { episode01OfficeProduction } from '../app/episode01-office-production';
+import { episode01DayResultProduction } from '../app/episode01-day-result-production';
 
 const DebugPanel = import.meta.env.DEV ? lazy(() => import('./DebugPanel')) : null;
 
@@ -102,6 +103,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
   const tbmProduction = productionScene === 'TBM' ? episode01TbmProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const strategyProduction = productionScene === 'STRATEGY' ? episode01StrategyProduction(activeEventId, activeInstance?.current_node_id) : undefined;
   const officeProduction = productionScene === 'OFFICE' ? episode01OfficeProduction(activeEventId, activeInstance?.current_node_id) : undefined;
+  const dayResultProduction = productionScene === 'DAY_RESULT' ? episode01DayResultProduction(activeEventId, activeInstance?.current_node_id, snapshot.state?.flags) : undefined;
   const cinematicBeat = episodeCinematicBeat(activeEventId);
   const memoryCallback = episode01MemoryCallback(snapshot.state, activeEventId);
   const memoryVisualPlan = episode01MemoryVisualPlan(snapshot.state, activeEventId);
@@ -426,6 +428,12 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
     data-office-ui={officeProduction?.ui_profile}
     data-office-cast={officeProduction?.cast_profile}
     data-office-evidence={officeProduction?.evidence_focus}
+    data-dayresult-phase={dayResultProduction?.phase}
+    data-dayresult-camera={dayResultProduction?.camera_profile}
+    data-dayresult-depth={dayResultProduction?.depth_profile}
+    data-dayresult-lighting={dayResultProduction?.lighting_profile}
+    data-dayresult-ui={dayResultProduction?.ui_profile}
+    data-dayresult-carryover={dayResultProduction?.carryover_key}
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
@@ -489,6 +497,7 @@ export function PlayableEpisode({ session }: { session: EpisodeSession }) {
         resolve={resolveAsset}
         t={t}
         memoryVisualPlan={memoryVisualPlan}
+        dayResultProduction={dayResultProduction}
       />
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
         {person ? <CharacterCard
