@@ -218,6 +218,7 @@ function collectMetrics(stage, touchMode) {
   const immersive = document.querySelector('.episode-immersive-scene');
   const images = [...document.images].filter(visible);
   const brokenImages = images.filter(image => image.complete && image.naturalWidth === 0).map(image => image.getAttribute('src'));
+  const loadingCrew = [...document.querySelectorAll('.cinematic-loading-team [data-art-surface="loading"]')].filter(visible);
   const primarySelector = [
     '.continue-button',
     '.choice-panel button:not(:disabled)',
@@ -271,6 +272,8 @@ function collectMetrics(stage, touchMode) {
     } : null,
     smallTargets,
     brokenImages,
+    loadingCrewCount: loadingCrew.length,
+    loadingCrewIds: loadingCrew.map(element => element.getAttribute('data-character')).filter(Boolean),
     primaryTargets,
     choiceSurface: Boolean(choiceSurface),
     visibleEnabledChoices,
@@ -344,6 +347,11 @@ function validate(row, viewport) {
     failures.push('primary surface escapes viewport horizontally: ' + JSON.stringify(row.frame));
   }
   if (row.brokenImages.length) failures.push('broken visible images: ' + row.brokenImages.join(', '));
+  if (row.stage === 'cinematic-loading') {
+    const expectedCrew = ['lim_junho','player','lee_jaehoon','seo_jeongmin'];
+    if (row.loadingCrewCount !== 4) failures.push('cinematic loading must show all four D-1 title-cast identities; visible=' + row.loadingCrewCount);
+    if (JSON.stringify(row.loadingCrewIds) !== JSON.stringify(expectedCrew)) failures.push('cinematic loading cast order/identity drift: ' + JSON.stringify(row.loadingCrewIds));
+  }
   if (row.stage.startsWith('episode01')) {
     if (!row.primaryTargets?.length) failures.push('no visible primary interaction target in Episode 01');
     const blocked = (row.primaryTargets || []).filter(item => !item.withinViewport || item.occluded);

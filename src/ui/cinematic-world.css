@@ -446,7 +446,15 @@
   .cinematic-loading-team article{height:86px}
 }
 @media(max-width:760px){
-  .cinematic-loading-team{display:none}
+  .cinematic-loading-team{
+    display:block;left:5%;right:5%;bottom:14%;width:auto
+  }
+  .cinematic-loading-team>header{margin-bottom:2px;font-size:6px}
+  .cinematic-loading-team>header strong{font-size:8px}
+  .cinematic-loading-team article{height:72px}
+  .cinematic-loading-team article p{padding:18px 2px 3px}
+  .cinematic-loading-team article strong{font-size:7px}
+  .cinematic-loading-team article small{font-size:6px}
   .strategy-entry-slate{min-width:82vw;padding:14px 18px}
 }
 @media(prefers-reduced-motion:reduce){
