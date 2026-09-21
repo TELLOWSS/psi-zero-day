@@ -247,6 +247,10 @@ function collectMetrics(stage, touchMode) {
   const tbmPlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
   const officeEvidenceBoardRect = metricRect(immersive?.querySelector('.episode-immersive-evidence-board'));
   const officeVisibleCharacters = [...(immersive?.querySelectorAll('.episode-immersive-character') ?? [])].filter(visible).length;
+  const dayResultMemoryRect = metricRect(immersive?.querySelector('.episode-immersive-memory-strip'));
+  const dayResultThreadRect = metricRect(immersive?.querySelector('.day-result-production-thread'));
+  const dayResultTitleRect = metricRect(immersive?.querySelector('.day-result-production-title'));
+  const dayResultTomorrowRect = metricRect(immersive?.querySelector('.day-result-production-thread article[data-lane="tomorrow"]'));
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
   const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
@@ -333,6 +337,10 @@ function collectMetrics(stage, touchMode) {
     tbmPlayerRect,
     officeEvidenceBoardRect,
     officeVisibleCharacters,
+    dayResultMemoryRect,
+    dayResultThreadRect,
+    dayResultTitleRect,
+    dayResultTomorrowRect,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
@@ -604,6 +612,44 @@ function validate(row, viewport) {
     if (!['people','instruction','record','stable'].includes(row.dayResultCarryover)) failures.push('DAY RESULT carryover priority is missing');
     if (!row.dayResultLayer) failures.push('DAY RESULT production layer did not render');
     if (!row.memoryStrip) failures.push('DAY RESULT played-memory strip did not render');
+    if (!row.dayResultMemoryRect) failures.push('DAY RESULT memory tableau did not render');
+    if (!row.dayResultThreadRect) failures.push('DAY RESULT result-to-tomorrow thread did not render');
+    if (!row.dayResultTomorrowRect) failures.push('DAY RESULT tomorrow signal lane did not render');
+
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (portraitPhone) {
+      if (!row.immersiveSceneRect || row.immersiveSceneRect.bottom < viewport.height - 2) {
+        failures.push('DAY RESULT portrait memory world must run full-bleed behind reflection: ' + JSON.stringify(row.immersiveSceneRect));
+      }
+      if (!row.playPanel || row.playPanel.height > viewport.height * 0.33) {
+        failures.push('DAY RESULT portrait reflection dock is too tall or missing: ' + (row.playPanel?.height ?? 'missing') + 'px');
+      }
+      if (row.dayResultTomorrowRect && row.playPanel && row.dayResultTomorrowRect.bottom > row.playPanel.top + 8) {
+        failures.push('DAY RESULT tomorrow signal is buried under the portrait reflection dock');
+      }
+      if (row.dayResultThreadRect && row.playPanel) {
+        const gap = row.playPanel.top - row.dayResultThreadRect.bottom;
+        if (gap > viewport.height * 0.18) {
+          failures.push('DAY RESULT portrait has excessive dead space before reflection: gap=' + gap + 'px');
+        }
+      }
+    }
+
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    if (landscapePhone) {
+      if (!row.playPanel || row.playPanel.width < viewport.width * 0.9) {
+        failures.push('DAY RESULT landscape reflection must be a full-width lower dock: width=' + (row.playPanel?.width ?? 'missing') + 'px');
+      }
+      if (row.playPanel && row.playPanel.height > viewport.height * 0.33) {
+        failures.push('DAY RESULT landscape reflection dock is too tall: ' + row.playPanel.height + 'px');
+      }
+      if (!row.dayResultMemoryRect || row.dayResultMemoryRect.width < viewport.width * 0.55) {
+        failures.push('DAY RESULT landscape memory tableau is not dominant enough: ' + JSON.stringify(row.dayResultMemoryRect));
+      }
+      if (row.dayResultTomorrowRect && row.playPanel && row.dayResultTomorrowRect.bottom > row.playPanel.top + 8) {
+        failures.push('DAY RESULT landscape tomorrow signal is buried under reflection');
+      }
+    }
   }
   if (row.stage === 'episode01-day02-bridge') {
     if (row.activeEvent !== 'e01_10_next_day_tease') failures.push('DAY 02 bridge did not reach the next-day teaser');
