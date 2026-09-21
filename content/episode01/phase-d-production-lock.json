@@ -35,8 +35,8 @@
     },
     "title_cast_identity_refresh": {
       "required": 8,
-      "ready": 0,
-      "status": "PENDING"
+      "ready": 8,
+      "status": "QA_PENDING"
     },
     "episode01_runtime_scene_elements": {
       "required": 1,
@@ -55,14 +55,15 @@
     "note": "The remaining reusable catalog is preserved for Field Guide and future episode/process expansion and does not block Episode 01 cinematic lock."
   },
   "current_blockers": [
-    "8/8 title-cast replacement portrait/map WebPs are still the legacy baseline (0/8 refreshed).",
+    "8/8 title-cast replacement portrait/map WebPs are staged as new verified binary candidates; Main → Loading → MAP identity/crop/scale visual QA is still pending.",
     "material_stack is the only scene element placed by Episode 01 runtime event_elements and is still replacement_required rather than final."
   ],
   "locked_now": [
     "8/8 immersive final backgrounds",
     "5/5 character performance-wave binaries",
     "8/8 production-v1 audio binaries",
-    "Phase C camera/transition/responsive direction with five-profile QA"
+    "Phase C camera/transition/responsive direction with five-profile QA",
+    "8/8 title-cast final-candidate binaries staged; visual continuity approval pending"
   ],
   "exit_command": "npm run phase-d:check",
   "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime.",

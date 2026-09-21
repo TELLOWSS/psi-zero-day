@@ -46,7 +46,7 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
     Object.freeze({ id: 'character_performance_wave', required: 5, ready: 5, status: 'LOCKED' }),
     Object.freeze({ id: 'production_audio', required: 8, ready: 8, status: 'LOCKED' }),
     Object.freeze({ id: 'camera_transition_responsive_direction', required: 1, ready: 1, status: 'LOCKED' }),
-    Object.freeze({ id: 'title_cast_identity_refresh', required: 8, ready: 0, status: 'PENDING' }),
+    Object.freeze({ id: 'title_cast_identity_refresh', required: 8, ready: 8, status: 'QA_PENDING' }),
     Object.freeze({ id: 'episode01_runtime_scene_elements', required: 1, ready: 0, status: 'PENDING' }),
   ] as const),
   runtime_scene_element_scope: Object.freeze({

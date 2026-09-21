@@ -20,7 +20,7 @@ describe('Episode 01 Phase D production lock', () => {
     expect(phaseD.tracks.immersive_backgrounds).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
     expect(phaseD.tracks.character_performance_wave).toMatchObject({ required: 5, ready: 5, status: 'LOCKED' });
     expect(phaseD.tracks.production_audio).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
-    expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required: 8, ready: 0, status: 'PENDING' });
+    expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required: 8, ready: 8, status: 'QA_PENDING' });
     expect(phaseD.tracks.episode01_runtime_scene_elements).toMatchObject({ required: 1, ready: 0, status: 'PENDING' });
   });
 

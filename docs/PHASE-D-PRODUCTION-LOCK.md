@@ -46,6 +46,11 @@ Phase D에서는 **임시 시각물을 더 만들지 않는다**. 새로 만드�
 
 ## D-1 — Title cast identity refresh
 
+**2026-09-21 binary intake status: 8/8 FINAL CANDIDATES STAGED — VISUAL QA PENDING.**
+
+Player / Lim Junho / Lee Jaehoon / Seo Jeongmin의 portrait + map 8개 WebP가 legacy baseline과 다른 신규 binary로 원자적 교체되었다. 이 시점은 D-1 완료가 아니라 **Main → Loading → MAP identity continuity 검수 진입점**이다. 얼굴 동일성, 역할 구분, crop, scale, 작은 MAP 가독성이 승인되기 전에는 Production LOCKED로 표기하지 않는다.
+
+
 현재 runtime에는 Player / Lim Junho / Lee Jaehoon / Seo Jeongmin의 portrait + map WebP가 존재하지만 immutable legacy baseline과 SHA-256을 비교하면 **8개 모두 기존 baseline과 동일**하다.
 
 Phase D에서 필요한 것은 기존 파일을 최종이라고 이름만 바꾸는 것이 아니라, 잠긴 character identity contract에 맞는 실제 신규 8개 WebP다.

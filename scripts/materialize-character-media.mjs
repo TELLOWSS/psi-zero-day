@@ -24,6 +24,26 @@ async function readManifest() {
 }
 
 async function readEmbeddedAsset(asset) {
+  if (asset.storage === 'tracked_binary') {
+    const targetPath = path.join(root, 'public', asset.target);
+    const bytes = await readFile(targetPath);
+    if (!isWebP(bytes)) {
+      throw new Error(`${asset.id}: tracked final character asset is not WebP.`);
+    }
+    const dimensions = webPDimensions(bytes);
+    if (!dimensions || dimensions.width !== asset.width || dimensions.height !== asset.height) {
+      throw new Error(`${asset.id}: tracked dimensions ${dimensions ? `${dimensions.width}x${dimensions.height}` : 'unreadable'}; expected ${asset.width}x${asset.height}.`);
+    }
+    if (asset.alpha === true && webPHasAlpha(bytes) !== true) {
+      throw new Error(`${asset.id}: tracked final character WebP must include alpha transparency.`);
+    }
+    const actualSha = sha256(bytes);
+    if (bytes.length !== asset.bytes || actualSha !== asset.sha256) {
+      throw new Error(`${asset.id}: tracked final character binary does not match the locked size/hash contract.`);
+    }
+    return bytes;
+  }
+
   if (!Array.isArray(asset.parts) || asset.parts.length === 0) {
     throw new Error(`${asset.id}: embedded character asset must declare at least one base64 part.`);
   }

@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-18",
+  "updated": "2026-09-21",
   "active_milestone": "P5_TITLE_CAST_IDENTITY_REFRESH",
   "active_batch": "replacement-a",
-  "integration_status": "replacement_active",
+  "integration_status": "replacement_candidate_staged",
   "legacy_cast": {
     "status": "integrated_as_previous_runtime_baseline",
     "core_assets": 16,
     "note": "The previous 8-character portrait/map set remains technically integrated so the game stays playable. Four title-cast identities are intentionally scheduled for replacement."
   },
   "replacement_a": {
-    "status": "awaiting_new_webp",
+    "status": "visual_qa_pending",
     "characters": [
       "player",
       "lim_junho",
@@ -18,12 +18,12 @@
       "seo_jeongmin"
     ],
     "required_core_assets": 8,
-    "integrated_new_assets": 0,
+    "integrated_new_assets": 8,
     "assets": [
       {
         "id": "player-portrait",
         "file": "player-portrait.webp",
-        "status": "next",
+        "status": "candidate_staged",
         "requirements": [
           "late-20s female safety manager",
           "soft V-shaped face",
@@ -35,7 +35,7 @@
       {
         "id": "player-map",
         "file": "player-map.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "same Player identity as portrait",
           "full-body transparent cutout",
@@ -46,7 +46,7 @@
       {
         "id": "lim-junho-portrait",
         "file": "lim-junho-portrait.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "early-20s male rookie",
           "round youthful face",
@@ -59,7 +59,7 @@
       {
         "id": "lim-junho-map",
         "file": "lim-junho-map.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "same Lim Junho identity as portrait",
           "small narrow youthful frame",
@@ -70,7 +70,7 @@
       {
         "id": "lee-jaehoon-portrait",
         "file": "lee-jaehoon-portrait.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "early-30s male construction assistant manager",
           "long narrow face",
@@ -83,7 +83,7 @@
       {
         "id": "lee-jaehoon-map",
         "file": "lee-jaehoon-map.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "same Lee Jaehoon identity as portrait",
           "tall slim vertical silhouette",
@@ -94,7 +94,7 @@
       {
         "id": "seo-jeongmin-portrait",
         "file": "seo-jeongmin-portrait.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "mid-40s male inspector",
           "thin oblong mature face",
@@ -107,7 +107,7 @@
       {
         "id": "seo-jeongmin-map",
         "file": "seo-jeongmin-map.webp",
-        "status": "queued",
+        "status": "candidate_staged",
         "requirements": [
           "same Seo Jeongmin identity as portrait",
           "lean formal mature silhouette",
@@ -123,7 +123,7 @@
       "content/episode01/main-title-reference-qa.json"
     ]
   },
-  "next_asset": "player-portrait.webp",
-  "rule": "Do not describe the four title-cast characters as newly replaced until all eight core portrait/map WebP hashes differ from the legacy baseline and the strict replacement plus production QA gates pass.",
-  "next_work": "Generate and stage the eight new transparent WebP assets for Player, Lim Junho, Lee Jaehoon and Seo Jeongmin. Keep the current runtime binaries until each replacement passes staging and QA."
+  "next_asset": null,
+  "rule": "Do not describe the four title-cast characters as Production LOCKED until all eight new portrait/map WebPs differ from the legacy baseline, strict binary/production gates pass, and Main → Loading → MAP visual continuity is approved.",
+  "next_work": "Run strict binary gates and inspect Main → Loading → MAP continuity for the staged eight final candidates. Correct only identity/crop/scale regressions before locking D-1."
 }

@@ -371,304 +371,42 @@
     {
       "id": "lee-jaehoon-map",
       "target": "assets/episode01/characters/lee-jaehoon-map.webp",
-      "width": 1024,
-      "height": 1536,
+      "storage": "tracked_binary",
+      "width": 768,
+      "height": 1024,
       "alpha": true,
-      "bytes": 163458,
-      "sha256": "227f7dcb643fe0af3f5fb930a12ec515d8442730b2ca350ad1f4a2841766e5f6",
-      "encoded_length": 217944,
-      "encoded_sha256": "7b23d7ac4f10e541680952592ecaa3adc9d9de3deffb94716b329a2dc081d45d",
-      "parts": [
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.01",
-          "length": 18000,
-          "sha256": "8984651a556b4d28e41409ecdd34a6f10570b1a12e35ad3f9a4ce03086a4f0e0"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.02",
-          "length": 18000,
-          "sha256": "510a47182d8d568ef0977d7fcbe398873b2e3fe5b10c5576744850b649b6f826"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.03",
-          "length": 18000,
-          "sha256": "4324c45fef129d3da8368970cbf0c223aa0b5b30c8f908be3f959f12dfe0685a"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.04",
-          "length": 18000,
-          "sha256": "1bad5eac2b68daf0e0e07e470670d4585bcc8fe9d4abf91ff18b20e53d6c28db"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.05",
-          "length": 18000,
-          "sha256": "b02213b72315866fd0a74f98cc86adf6cb016c659333ebb44217cd2fdea51a41"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.06",
-          "length": 18000,
-          "sha256": "e6bd18d29bc2a22e6e0f32016a08bdc52ff19a2882fe1a4e6c3264d113fbd293"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.07",
-          "length": 18000,
-          "sha256": "c31999bd661b4ca97e221746b70896fb489a68eaf23bdbc5a98367b9396ffed1"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.08",
-          "length": 18000,
-          "sha256": "78dcce981a4a2f04bd42735fbb9b28af239f208c72c9e9070301691fd77ec502"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.09",
-          "length": 18000,
-          "sha256": "2cf266240a79a224ae5c18f581e34458be0ce7ecfdc78e70bc3fab33a4ad219a"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.10",
-          "length": 18000,
-          "sha256": "273f37a56eefa2a5b1891228e07b503bcb9cdefef84a5a7bbe9047c63e023fa8"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.11",
-          "length": 18000,
-          "sha256": "bb9731393fa46686f60f395ac04fdf29b490f372b1b0c6313b4ade0a403b1e7f"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.12",
-          "length": 18000,
-          "sha256": "96a0afb08a07eb5529747897da577506f609f86d7e0892eb117d1f89c0467b3f"
-        },
-        {
-          "file": "lee-jaehoon-map.webp.227f7dcb643f.b64.13",
-          "length": 1944,
-          "sha256": "fa96e42246023dbb79522b8c841fd8cb3bd1c6e48deb66e91d937af9b5463a4a"
-        }
-      ]
+      "bytes": 71042,
+      "sha256": "77c153a59b7e19cee6425294bdaba00257e267cc9d848644cea4bcaaed38d8a3"
     },
     {
       "id": "lee-jaehoon-portrait",
       "target": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "storage": "tracked_binary",
       "width": 1024,
       "height": 1024,
       "alpha": true,
-      "bytes": 155636,
-      "sha256": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d",
-      "encoded_length": 207516,
-      "encoded_sha256": "c60c1e7a56abe56af4dd130d9026998b496a4620f58d57a31a75736782840f34",
-      "parts": [
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.01",
-          "length": 18000,
-          "sha256": "3e08066f5c33c54d97d3b98354d06cc05eb331bb4281ee0ab6f5012519d5ffc7"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.02",
-          "length": 18000,
-          "sha256": "851e9687c4bd40817be2012f4ba303e2135e78d7f572aa4005ca8dc9c4cc66a1"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.03",
-          "length": 18000,
-          "sha256": "4abe14001114107cbd3a19d894f52bc3165e1dba695f97f585f90d80cca37782"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.04",
-          "length": 18000,
-          "sha256": "ff6ff6814d89a8e98ab0b08975fba3af89c775074c9aaeabcc5f8c7649f78843"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.05",
-          "length": 18000,
-          "sha256": "9b91f3fdaa1358a3251dec0d980b6bad43d47547a07a889a4ba753e9410c7f7b"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.06",
-          "length": 18000,
-          "sha256": "71dc605dcf0e980f15c7291e9a3da0cbe8ddb6cdd9471009179df482c27a87fd"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.07",
-          "length": 18000,
-          "sha256": "a783fbb4aa7309463964f469ee803e6acf1d1a54de14b66017a899139c8aa28b"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.08",
-          "length": 18000,
-          "sha256": "67c6edcaa7672edd4bf52dc435c4929fb5423dbaec41caf66aeaedd9c2c4092d"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.09",
-          "length": 18000,
-          "sha256": "76d4b2739431b884e901a6545a5e9e385040e4f61a8bd4e274b060af351ecdc5"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.10",
-          "length": 18000,
-          "sha256": "3e5b1d9698bcc9d0270cb2eaf3a8fcf842b26772fb6601bf14a1352c976e9192"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.11",
-          "length": 18000,
-          "sha256": "ae52e6cae8c0b7fca4c65b4d369b18bcbc06b9534277de3291ffe2b9a41b4b2e"
-        },
-        {
-          "file": "lee-jaehoon-portrait.webp.dd437688e9cc.b64.12",
-          "length": 9516,
-          "sha256": "1e7884b4f595760e97affd1f7987bca358dcf078c8de516d0ad34abeb2696631"
-        }
-      ]
+      "bytes": 145550,
+      "sha256": "88f46e2cbf6e1edd44f8417bba920e5cc0a397928231ee21c05fd14039374657"
     },
     {
       "id": "lim-junho-map",
       "target": "assets/episode01/characters/lim-junho-map.webp",
-      "width": 1024,
-      "height": 1536,
+      "storage": "tracked_binary",
+      "width": 768,
+      "height": 1024,
       "alpha": true,
-      "bytes": 155694,
-      "sha256": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d",
-      "encoded_length": 207592,
-      "encoded_sha256": "a34bc52b17a79c770310541ec1a6b4a3028893269ff785f6f3925e438cc9fdc7",
-      "parts": [
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.01",
-          "length": 18000,
-          "sha256": "5b83a4187e2192b7c5ab767bd52c7cf7c94eb7d04faff57f669255eb066ee303"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.02",
-          "length": 18000,
-          "sha256": "3113a71ef364a36a50ff35f47d6f75096fa3ac024eaffbff4fdd7512db85d19c"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.03",
-          "length": 18000,
-          "sha256": "3c2f1939a2d4abe2d2324df46d6cc8492a0f8060eafefcc435393e311c11addb"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.04",
-          "length": 18000,
-          "sha256": "058505f86b1eab7c161db502c2c6f2af2411786a65a6cb96a8e0d2a57aac604f"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.05",
-          "length": 18000,
-          "sha256": "9b6aa4e4bd47d5dce7ec6bf0357b43aef1fa66a0db431e89b8a135294339132b"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.06",
-          "length": 18000,
-          "sha256": "485e915a51e2aa9722c69355073949508dc28b95a421042ec35c332a8dce5d4b"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.07",
-          "length": 18000,
-          "sha256": "8fc2e7a7033b4cf38dae2a1917661ca1f46a783ea09712e05405cfdb30efa282"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.08",
-          "length": 18000,
-          "sha256": "d8b4ca93f67eebe7f85578fa81d6fc4b348077edb52f3d3ff438db8916bbdffa"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.09",
-          "length": 18000,
-          "sha256": "fdd74cc99028b645f058686dae35bf8a2152600710aabb3fea8b8444568b1fa3"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.10",
-          "length": 18000,
-          "sha256": "bcc2bbc8af683d3d6278d812d4639ee521443c06b9b58aa8e35f7cabd712b7a8"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.11",
-          "length": 18000,
-          "sha256": "94985c57e140651b117b7e3f2d6288758c4ec9daed847ab8c07271f28ff42808"
-        },
-        {
-          "file": "lim-junho-map.webp.12f7806e6a5a.b64.12",
-          "length": 9592,
-          "sha256": "3997e9c46da95ed2560423ee3f19e74b9deaba4f8352160700f7c101d6213cbf"
-        }
-      ]
+      "bytes": 84476,
+      "sha256": "f8e4b106be57942d9408f866ac4fc5a609ab6226a3d37679a457032b106722ae"
     },
     {
       "id": "lim-junho-portrait",
       "target": "assets/episode01/characters/lim-junho-portrait.webp",
+      "storage": "tracked_binary",
       "width": 1024,
       "height": 1024,
       "alpha": true,
-      "bytes": 168184,
-      "sha256": "2a5a4fddd9e5103ec2fb40de97648d154c563045879d44de6cbac923bb2e7d01",
-      "encoded_length": 224248,
-      "encoded_sha256": "9ea9d23ba102f01914053ae1850f9ac310ef358f29a10ceb80a70f74578f62ec",
-      "parts": [
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.01",
-          "length": 18000,
-          "sha256": "4893b8b20a267e09699430f8d1b03bc5bea889b2e9dfc466c02f76a90c70fd20"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.02",
-          "length": 18000,
-          "sha256": "6ef94a853fec201521a3be42036dda736e2cc1e91f4a071910d635a78bece04a"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.03",
-          "length": 18000,
-          "sha256": "dd7cd15f6fe59fe7ca2cf4466b51e5d3f0239943024b8fff219818a6528a7790"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.04",
-          "length": 18000,
-          "sha256": "3857627339a92a68f34e62372cddd66eeb03994e8ba4dcbda12289f76e508ba9"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.05",
-          "length": 18000,
-          "sha256": "2fa416e80f72652e507024da7b1b2b7d875e68ffcbbd9d65091a52a0820449b1"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.06",
-          "length": 18000,
-          "sha256": "fd87637a8427cd02bfc13cb2696e769d0e40888b52588d96f9a6141aaf311fca"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.07",
-          "length": 18000,
-          "sha256": "b2ef40ebeff3f35d79f83ca687fa925b4b86558f044e89fdb98a1020276291e7"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.08",
-          "length": 18000,
-          "sha256": "57ff1b6803ecac4898df745cba2c95f61cdc338d2b495539e389514856f33641"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.09",
-          "length": 18000,
-          "sha256": "1a3bb2692a2834f836f8dce675550a3852879df18281bfcd02d3e9f1583475a8"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.10",
-          "length": 18000,
-          "sha256": "ba903c272efee6d3fb8f50feb96f2ba2606ec3b60f75126dc979a67f3aa5f00e"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.11",
-          "length": 18000,
-          "sha256": "d3f9f1df1c43ea0c629d2807988c2060977be8d9a7e8484692e2e3cdb070a661"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.12",
-          "length": 18000,
-          "sha256": "82b296af04d884bb12300ce57e89724b5a76c56319190a9896a68e2c911c98bd"
-        },
-        {
-          "file": "lim-junho-portrait.webp.2a5a4fddd9e5.b64.13",
-          "length": 8248,
-          "sha256": "8ff8c379ed10006ceebefef658a9234164b4e8a24efe7fb1396a71566d090856"
-        }
-      ]
+      "bytes": 165450,
+      "sha256": "ffdb164ab0301c918dd0fd431c3bbc3148f921fa09886d4bef466f1a2fd25a33"
     },
     {
       "id": "oh-seungjae-map",
@@ -814,269 +552,42 @@
     {
       "id": "player-map",
       "target": "assets/episode01/characters/player-map.webp",
-      "width": 1024,
-      "height": 1536,
+      "storage": "tracked_binary",
+      "width": 768,
+      "height": 1024,
       "alpha": true,
-      "bytes": 140258,
-      "sha256": "75c3a8d7b73978501525aa2304bc4eeca763913260eba433d6861ad5f20f38dc",
-      "encoded_length": 187012,
-      "encoded_sha256": "cc15a4e0b9e787db5762fd730692454bd0ddb6f503c74a2cc9890ca28303cc1c",
-      "parts": [
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.01",
-          "length": 18000,
-          "sha256": "59870631920eac44991322cf74f4127353c053b955098872584ee9c18fb66311"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.02",
-          "length": 18000,
-          "sha256": "54464ed7e8181908847c3893b80a4377c3ef7f051c7511a0d592eac75520151b"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.03",
-          "length": 18000,
-          "sha256": "5e013473a8ec844e8b1fe5b487687cddbbab7c38b51b22dcccae7436111526bc"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.04",
-          "length": 18000,
-          "sha256": "db512244f34b052a6397081aca5369bda8b6a1dc9f88744c19fbefe112ff0693"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.05",
-          "length": 18000,
-          "sha256": "2dff5f9e155b4f0484968f8b5898359363ad3bf1ff0bf934febf86d7fbb71c68"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.06",
-          "length": 18000,
-          "sha256": "169318d3b740fe29c5f9a11f202b0da07a00ceb0d8b66c271c2a7a9d526801f6"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.07",
-          "length": 18000,
-          "sha256": "8d857c37ce9d469ddacc69d7b15bcb3f9dedfd7fef9ca81b2deb096830cd1f5b"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.08",
-          "length": 18000,
-          "sha256": "0c25778876e07af0a1aa8982f72c0d127f7f36c858abea724c8a7299e2aa26c2"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.09",
-          "length": 18000,
-          "sha256": "ddb615706fbc9ce5550db5d726fe97ccc6af4981f090ec9b29580b41664bffc9"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.10",
-          "length": 18000,
-          "sha256": "93ff82b1611d107cf2cf0d268edc440030445ed81dee04618732e40ed36d3f43"
-        },
-        {
-          "file": "player-map.webp.75c3a8d7b739.b64.11",
-          "length": 7012,
-          "sha256": "46f851408cca0deb439fff7a08cd58368b8fb12dffa852f60bb8306644211ca7"
-        }
-      ]
+      "bytes": 77050,
+      "sha256": "830d0a44c71aec94d69dc77023e314bcb8cce67e9bdba5bebc975146127087f8"
     },
     {
       "id": "player-portrait",
       "target": "assets/episode01/characters/player-portrait.webp",
+      "storage": "tracked_binary",
       "width": 1024,
       "height": 1024,
       "alpha": true,
-      "bytes": 54490,
-      "sha256": "6f6f73bf636590ed560e250104b32537a0b28444f3b1c0b8a084ae2b064ab066",
-      "encoded_length": 72656,
-      "encoded_sha256": "c431ad4b8f29e7088714f1d5fd942846e5496a18ad6883ec23c172353fb1253c",
-      "parts": [
-        {
-          "file": "player-portrait.webp.b64.01",
-          "length": 18000,
-          "sha256": "4fb520a966ceb822ce6330f3ca1e83d94d9b939ab3e6eb1e7d885b598ecac00e"
-        },
-        {
-          "file": "player-portrait.webp.b64.02",
-          "length": 18000,
-          "sha256": "8b971ac536c3bac38a1da569dcfff9ceb21fc3c32f757a9fa5e4d3b63be7ecd4"
-        },
-        {
-          "file": "player-portrait.webp.b64.03",
-          "length": 4500,
-          "sha256": "2305f6983a722308fa915d58de23fc5c59b76ccb421405778f5aeceba787e449"
-        },
-        {
-          "file": "player-portrait.webp.b64.03b",
-          "length": 4500,
-          "sha256": "13a8819a5ebb3dfa80a0ae8ebbc5dd01e709e3f3f326b1de156eeeb3ca75274b"
-        },
-        {
-          "file": "player-portrait.webp.b64.03ca",
-          "length": 750,
-          "sha256": "3097396b595f4db49eac197ac560789d1dbf76c07d393fa1f94af304c6a62ac1"
-        },
-        {
-          "file": "player-portrait.webp.b64.03cb",
-          "length": 750,
-          "sha256": "5769502b99914d43af6c7f4fb7d0c701321fb59d972ce79dd740d6372815a471"
-        },
-        {
-          "file": "player-portrait.webp.b64.03cc",
-          "length": 750,
-          "sha256": "63b753631f9574baf26de603e3c579dc9b514ce5e7d35632cf107d4ae83f2fab"
-        },
-        {
-          "file": "player-portrait.webp.b64.03cd",
-          "length": 750,
-          "sha256": "1cb6b4702b815dbb8ce4d1357bd01d42887109ccf36c0a382a12a0421994d09d"
-        },
-        {
-          "file": "player-portrait.webp.b64.03ce",
-          "length": 750,
-          "sha256": "a75fce66c1e8dafc20fec8f63b951fb6d98855124c064490292008d304da66bd"
-        },
-        {
-          "file": "player-portrait.webp.b64.03cf",
-          "length": 750,
-          "sha256": "fe47a0da8d081af4f221ff628443d2a43a8e2208c06717b41d4930ad6761577f"
-        },
-        {
-          "file": "player-portrait.webp.b64.03d",
-          "length": 4500,
-          "sha256": "8fcf620316df039c293d1462366ca7cab6fed1cec7faa117c8792b7d9495c187"
-        },
-        {
-          "file": "player-portrait.webp.b64.04",
-          "length": 18000,
-          "sha256": "5551f75a1951e206dbaeea2227710691e1a0a879b76832aaea356e0c76bc7afd"
-        },
-        {
-          "file": "player-portrait.webp.b64.05",
-          "length": 656,
-          "sha256": "d93f91711bff2459f427634b315fe639dc8e6cd006fc59ca8b25bf3793cff285"
-        }
-      ]
+      "bytes": 162794,
+      "sha256": "afe3c52208021083efe6aba9e0a223ca44263a4b0e182a64a6c8aac86a4729a4"
     },
     {
       "id": "seo-jeongmin-map",
       "target": "assets/episode01/characters/seo-jeongmin-map.webp",
-      "width": 1024,
-      "height": 1536,
+      "storage": "tracked_binary",
+      "width": 768,
+      "height": 1024,
       "alpha": true,
-      "bytes": 116298,
-      "sha256": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3",
-      "encoded_length": 155064,
-      "encoded_sha256": "442961750a7529a319bbecd6403cdc0df3fd949b179553a828ec40d2f4147c09",
-      "parts": [
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.01",
-          "length": 18000,
-          "sha256": "1461146aea056a6a8e749a9ef32bf71e73119745d0d9310f3f76ae3b0aa19276"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.02",
-          "length": 18000,
-          "sha256": "f49e9a7dbcdae31da3a3f53eeb0b416df0dc57b53b81b0abdea413e895ea5bd1"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.03",
-          "length": 18000,
-          "sha256": "6d5c764cfba9f36807dbd99fb31f016a7ee84e8b739adcd0a6ca851a4f342b8f"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.04",
-          "length": 18000,
-          "sha256": "dc528ab88570e2ec1d474e0d9c53b22ea8d0f91d52531c87441a5380cb1c072c"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.05",
-          "length": 18000,
-          "sha256": "946ac842a901714df28a177db481ccb355c1deaa9bcf5fc9c2833c100e36ec8b"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.06",
-          "length": 18000,
-          "sha256": "3f4a5eeb2f084c2fee2f99e3182202c3b33127eaa08e2510bd30a411f0738e36"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.07",
-          "length": 18000,
-          "sha256": "92d7d18d2797a073ddd9bc57e6c6544f00efbd3484dcc977c0c54a22c94d7186"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.08",
-          "length": 18000,
-          "sha256": "2b892a4df0a39471327e2f6c8847e0cdad38357439a8a09fcddc018ad364f20c"
-        },
-        {
-          "file": "seo-jeongmin-map.webp.2ed848be56d2.b64.09",
-          "length": 11064,
-          "sha256": "bb2a739dda6def44c349c7897dced13e3b95788b5f5434e069b9d582944cde09"
-        }
-      ]
+      "bytes": 65344,
+      "sha256": "912bb70a0944c0d325a9c9d3e6c0175fc434bd5539ccc35d8443f517c3ee4485"
     },
     {
       "id": "seo-jeongmin-portrait",
       "target": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "storage": "tracked_binary",
       "width": 1024,
       "height": 1024,
       "alpha": true,
-      "bytes": 122206,
-      "sha256": "cca1f44c70275f285e37cf58dff5dd2f94b262d617d09108bd7ad9021a592634",
-      "encoded_length": 162944,
-      "encoded_sha256": "93161624eb66c6091ce8860b703f1e2b271df0d93d1137679b439bb320e6d1c9",
-      "parts": [
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.01",
-          "length": 18000,
-          "sha256": "1a84781b0d2f659913196d4f2a5bad7cad14084fbf5f348a1bf19d3f119c7b10"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.02",
-          "length": 18000,
-          "sha256": "307bd6ee05bd5f829acf5d373ab8c826f8821c42b57c70df5db3e60be9bc4ff4"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.03",
-          "length": 18000,
-          "sha256": "1dd6a1eb073c9f3cb52f4b822a2baf3af5926a49fc08956442ae9d3e328edfdf"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.04",
-          "length": 18000,
-          "sha256": "93a6e853adf08b2d37cd10a407800f8cf299e255f85b4a3728a4dae9ede50d5e"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.05",
-          "length": 18000,
-          "sha256": "aaf7b9a4226b57e8b5a40092064a2990590697b6213f6802f6a27ea45c70dfa0"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.06",
-          "length": 18000,
-          "sha256": "78a690f229be338b35799ffc467b1f41ccef83926294754843a2066b9c1052c5"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.07",
-          "length": 18000,
-          "sha256": "46955d637e8af0deadb1fc935655a24930538c4bc382e2dc2d0c1d84c38a4970"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.08",
-          "length": 18000,
-          "sha256": "d5796b900f0a2db0947b7f21ba822a27ef3dcd2f1537fa4a6050b992683fe26e"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.09",
-          "length": 18000,
-          "sha256": "59eed918dd2b27be0e2506095922d86f593024ce1ba9326d7bbbfb36340643b7"
-        },
-        {
-          "file": "seo-jeongmin-portrait.webp.cca1f44c7027.b64.10",
-          "length": 944,
-          "sha256": "20198ec97cbee6e6a8c4a726c3b6d131d5b66655f62c2cafda8e5e28fdd6ade4"
-        }
-      ]
+      "bytes": 157994,
+      "sha256": "6a70cdac9751b6ca78770e905c711c19944d03f4132ef3f10e08d89b929eca3e"
     },
     {
       "id": "yoon-sungho-map",

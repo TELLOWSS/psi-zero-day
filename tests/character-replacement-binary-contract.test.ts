@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import baseline from '../content/episode01/character-replacement-baseline.json';
 import plan from '../content/episode01/character-replacement-plan.json';
+import manifest from '../content/episode01/embedded-media/character-media.json';
 import batchA from '../content/episode01/production-art-batch-a.json';
 
 const cast=['player','lim_junho','lee_jaehoon','seo_jeongmin'] as const;
@@ -17,9 +18,13 @@ describe('character replacement binary contract',()=>{
     ]));
   });
 
-  it('keeps replacement plan pending until binary replacement actually occurs',()=>{
-    expect(plan.pipeline_status).toBe('ready_for_new_webp_inputs');
-    expect(plan.batch.every(item=>item.state==='pipeline_ready_asset_pending')).toBe(true);
+  it('tracks all eight new candidate binaries while keeping visual lock pending',()=>{
+    expect(plan.pipeline_status).toBe('final_candidates_staged_pending_visual_qa');
+    expect(plan.batch.every(item=>item.state==='final_candidate_staged_pending_visual_qa')).toBe(true);
+    const legacy=new Map(baseline.assets.map(asset=>[asset.id,asset.sha256]));
+    const staged=manifest.assets.filter(asset=>legacy.has(asset.id));
+    expect(staged).toHaveLength(8);
+    expect(staged.every(asset=>asset.storage==='tracked_binary' && asset.sha256!==legacy.get(asset.id))).toBe(true);
   });
 
   it('keeps Batch A aligned to the same four characters',()=>{
