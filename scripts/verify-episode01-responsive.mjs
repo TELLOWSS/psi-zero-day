@@ -378,6 +378,10 @@ function validate(row, viewport) {
   if ((expectedProductionScene === 'TBM' || expectedProductionScene === 'FIELD') && row.visualRebaseline !== 'world-first-v1') {
     failures.push('Phase D world-first visual rebaseline marker is missing for ' + expectedProductionScene);
   }
+  if (viewport.width <= 620 && viewport.height > viewport.width && expectedProductionScene === 'FIELD' && row.choiceSurface) {
+    const narrow = row.primaryTargets.filter(target => (target.right - target.left) < viewport.width * 0.78);
+    if (narrow.length) failures.push('portrait FIELD choices must use the full-width action dock; narrow choices=' + narrow.length);
+  }
   if (row.stage === 'episode01-field-signal') {
     if (row.activeEvent !== 'e01_04_junho_signal') failures.push('FIELD QA did not reach the Junho signal event');
     if (row.activeNode !== 'listen') failures.push('FIELD QA did not reach the judgment node');

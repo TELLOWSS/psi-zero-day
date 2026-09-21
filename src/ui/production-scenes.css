@@ -4498,3 +4498,238 @@
     line-height:1.2!important;
   }
 }
+
+
+/* Phase D D-2B portrait world reveal — TBM final correction + FIELD depth pass */
+@media (orientation:portrait) and (max-width:620px) {
+  /* Final construction art must be visible. Grading interprets the site; it may not erase it. */
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background,
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-background {
+    z-index:0!important;
+    opacity:1!important;
+    transform:scale(1.015)!important;
+    filter:saturate(1.04) contrast(1.015) brightness(1.02)!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere,
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-atmosphere {
+    z-index:1!important;
+    opacity:.11!important;
+    mix-blend-mode:normal!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade,
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-grade {
+    opacity:.12!important;
+    box-shadow:none!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene::after {
+    background:
+      linear-gradient(90deg,rgba(2,8,12,.08),transparent 20%,transparent 82%,rgba(2,8,12,.05)),
+      linear-gradient(0deg,rgba(2,8,12,.11),transparent 35%)!important;
+  }
+
+  /* TBM — remove decorative dead-space geometry and keep the changed-work evidence in one band. */
+  .game-frame[data-production-scene="TBM"] .tbm-production-layer {
+    opacity:.16!important;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-ring,
+  .game-frame[data-production-scene="TBM"] .tbm-floor-mark {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-visual-rebaseline="world-first-v1"]::after {
+    top:9.5%!important;
+    padding:4px 9px!important;
+    background:rgba(5,24,27,.5)!important;
+    border-color:rgba(104,203,184,.26)!important;
+    font-size:8px!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-psi-trace {
+    top:104px!important;
+    left:10px!important;
+    width:min(46vw,184px)!important;
+    max-height:92px!important;
+    padding:7px!important;
+    background:rgba(5,17,21,.66)!important;
+    backdrop-filter:blur(5px)!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    top:106px!important;
+    right:10px!important;
+    left:auto!important;
+    width:min(34vw,136px)!important;
+    min-width:0!important;
+    background:rgba(5,17,21,.58)!important;
+    backdrop-filter:blur(5px)!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="player"] {
+    left:21%!important;
+    width:25%!important;
+    height:43dvh!important;
+    bottom:30dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="kang_taesik"] {
+    right:5%!important;
+    width:27%!important;
+    height:42dvh!important;
+    bottom:30dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="lee_jaehoon"] {
+    left:3%!important;
+    width:17%!important;
+    height:30dvh!important;
+    bottom:31dvh!important;
+    opacity:.64!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .episode-immersive-character[data-character="lim_junho"] {
+    right:-1%!important;
+    width:16%!important;
+    height:27dvh!important;
+    bottom:31dvh!important;
+    opacity:.56!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-1 {
+    left:1%!important;
+    bottom:30dvh!important;
+    width:27%!important;
+    height:19dvh!important;
+    opacity:.78!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-2 {
+    right:-2%!important;
+    bottom:30dvh!important;
+    width:30%!important;
+    height:22dvh!important;
+    opacity:.72!important;
+  }
+  .game-frame[data-production-scene="TBM"] .episode-immersive-prop.prop-3 {
+    left:30%!important;
+    bottom:29dvh!important;
+    width:40%!important;
+    height:17dvh!important;
+    opacity:.84!important;
+  }
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    max-height:min(30dvh,258px)!important;
+  }
+
+  /* FIELD — foreground player + midground Junho + one quiet background worker. */
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-background {
+    object-position:58% 50%!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-speaker-tag {
+    top:76px!important;
+    left:10px!important;
+    right:auto!important;
+    max-width:44vw!important;
+    padding:6px 8px!important;
+    background:rgba(7,17,21,.7)!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-speaker-tag strong {
+    font-size:10px!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-speaker-tag span,
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-speaker-tag em {
+    font-size:7px!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-scene-minimap {
+    top:82px!important;
+    right:10px!important;
+    left:auto!important;
+    width:min(32vw,126px)!important;
+    background:rgba(5,17,21,.56)!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"]
+    .episode-immersive-character[data-character="player"] {
+    left:6%!important;
+    right:auto!important;
+    width:27%!important;
+    height:46dvh!important;
+    bottom:32dvh!important;
+    opacity:1!important;
+    z-index:14!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    left:auto!important;
+    right:7%!important;
+    width:31%!important;
+    height:49dvh!important;
+    bottom:31dvh!important;
+    opacity:1!important;
+    z-index:15!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"]
+    .episode-immersive-character[data-character="choi_minseok"] {
+    left:auto!important;
+    right:0!important;
+    width:15%!important;
+    height:25dvh!important;
+    bottom:34dvh!important;
+    opacity:.36!important;
+    z-index:8!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .episode-immersive-prop.prop-1 {
+    left:1%!important;
+    right:auto!important;
+    bottom:31dvh!important;
+    width:31%!important;
+    height:18dvh!important;
+    opacity:.72!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .episode-immersive-prop.prop-2 {
+    left:auto!important;
+    right:0!important;
+    bottom:30dvh!important;
+    width:29%!important;
+    height:20dvh!important;
+    opacity:.68!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .episode-immersive-moment-overlay {
+    opacity:.42!important;
+  }
+
+  /* One mobile action surface: short prompt, then three full-width actions. */
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left:8px!important;
+    right:8px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    max-height:min(33dvh,286px)!important;
+    padding:7px 9px max(7px,env(safe-area-inset-bottom))!important;
+    grid-template-columns:1fr!important;
+    border-radius:14px!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-content {
+    display:block!important;
+    width:100%!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-content h2 {
+    margin:0 0 5px!important;
+    font-size:10.5px!important;
+    line-height:1.2!important;
+    max-width:none!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-panel {
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:4px!important;
+    margin-top:0!important;
+    width:100%!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-panel button {
+    width:100%!important;
+    min-height:44px!important;
+    max-height:56px!important;
+    padding:4px 7px!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-copy {
+    grid-template-columns:1.7em minmax(0,1fr)!important;
+    gap:5px!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"] .choice-text {
+    font-size:9.3px!important;
+    line-height:1.2!important;
+  }
+}
