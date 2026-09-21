@@ -10,7 +10,7 @@
           "uri": "assets/episode01/audio/concrete-pour.ogg",
           "format": "ogg",
           "bytes": 102372,
-          "hash": "06e50e4ae302878450fabde6bbb68e046ff5e2882cec748af3cdcc502b904bdf"
+          "hash": "a502cd5e5b6ac2781ee55ed16930b88eb386bfc85e1faa6e508c938116b2fa0c"
         }
       ],
       "dependencies": [],
@@ -26,7 +26,7 @@
           "uri": "assets/episode01/audio/gate-queue.ogg",
           "format": "ogg",
           "bytes": 83098,
-          "hash": "481671098062d9a9b9a456fb9ec2111be3a8accb63672ba4b78899517769eb4c"
+          "hash": "f74e9a2f80bf398e85622b7ff0b197a2e2105bcbd4417d56ef73c75ee30a13ce"
         }
       ],
       "dependencies": [],
@@ -42,7 +42,7 @@
           "uri": "assets/episode01/audio/home-night.ogg",
           "format": "ogg",
           "bytes": 77585,
-          "hash": "20ad26d83227ac7fa7da194c908dec85630b566e60718314877f08c1bea5f132"
+          "hash": "13218c9f31253863c15a158362a2b90510490e46bd444cfaa40d7ebfd6a126fa"
         }
       ],
       "dependencies": [],
@@ -58,7 +58,7 @@
           "uri": "assets/episode01/audio/office-report-roomtone.ogg",
           "format": "ogg",
           "bytes": 75723,
-          "hash": "ba55649662c76bd524daad99248c90b6dbcce7b317249e528f792cebc2dfc7b9"
+          "hash": "741644f6c1b775088760340b22e17d296dda18a5c88e4a3c5497cdaab564a9c1"
         }
       ],
       "dependencies": [],
@@ -74,7 +74,7 @@
           "uri": "assets/episode01/audio/pump-engine-boom.ogg",
           "format": "ogg",
           "bytes": 86943,
-          "hash": "784f55a2d315d911c9c1038bc4f3bff1ae5aad0d6118aa553fb785f5b49e0726"
+          "hash": "d85a5cf01abab596c3c5da05eed732340fcba4e0bee1b8f4466ef224804e0f89"
         }
       ],
       "dependencies": [],
@@ -90,7 +90,7 @@
           "uri": "assets/episode01/audio/radio-burst.ogg",
           "format": "ogg",
           "bytes": 16181,
-          "hash": "634f3b9594307746257441b2cefe08f00856ff84cf51acfb2be19c50627f0951"
+          "hash": "fbbf78ac4d32ca85e305e3c3d1017459d1f4dd19312f4dc4265d4a95aed36fc8"
         }
       ],
       "dependencies": [],
@@ -106,7 +106,7 @@
           "uri": "assets/episode01/audio/stopwork-silence-drop.ogg",
           "format": "ogg",
           "bytes": 31932,
-          "hash": "2cd89b12356b921bcaf76e0bfacdd53e6441aeef6b5bf435ec3b8963f7d46dea"
+          "hash": "90ca33756201e9f69baba5365bf21e71b72fb31ec3c6bd2031eb6b1b1b290a8c"
         }
       ],
       "dependencies": [],
@@ -122,7 +122,7 @@
           "uri": "assets/episode01/audio/workface-pressure.ogg",
           "format": "ogg",
           "bytes": 63680,
-          "hash": "b061fa4162bb8687b00516e86a918098f8f5bd23506b1101f21541efa7a9bd56"
+          "hash": "d509c3855d9ccfc6ade567dee4a2e49b0355ddb82102e86e1ef84be8fcfdd5dc"
         }
       ],
       "dependencies": [],
@@ -135,10 +135,10 @@
       "group_id": "ep01.backgrounds",
       "variants": [
         {
-          "uri": "assets/episode01/backgrounds/foundation-map-rc.svg",
-          "format": "svg",
-          "bytes": 8878,
-          "hash": "6c48cf52b72bd7121d3e7da0473a35563ba883716b45e099bca77616dbc6b164"
+          "uri": "assets/episode01/backgrounds/foundation-map.webp",
+          "format": "webp",
+          "bytes": 1253340,
+          "hash": "f9273c464f4e194dd50b379be5614c9afed3eb061835ec8be9763eeb6f32a01b"
         }
       ],
       "dependencies": [],
@@ -194,22 +194,6 @@
       "version": "1"
     },
     {
-      "asset_id": "ep01.character.kang_taesik.performance.conflict",
-      "type": "image",
-      "group_id": "ep01.character_performance",
-      "variants": [
-        {
-          "uri": "assets/episode01/characters/performance/kang-taesik-conflict.webp",
-          "format": "webp",
-          "bytes": 199724,
-          "hash": "353619aec821ec95abb6a517c3a2c6cf5541780d39833b5c71ee2e13023b2401"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
       "asset_id": "ep01.character.kang_taesik.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -249,24 +233,8 @@
         {
           "uri": "assets/episode01/characters/lee-jaehoon-map.webp",
           "format": "webp",
-          "bytes": 163458,
-          "hash": "227f7dcb643fe0af3f5fb930a12ec515d8442730b2ca350ad1f4a2841766e5f6"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.character.lee_jaehoon.performance.concern",
-      "type": "image",
-      "group_id": "ep01.character_performance",
-      "variants": [
-        {
-          "uri": "assets/episode01/characters/performance/lee-jaehoon-concern.webp",
-          "format": "webp",
-          "bytes": 128518,
-          "hash": "93a1573121705cdc489c01b64f22c308c41bd5704d5ef9f0b9214b421d19b5e6"
+          "bytes": 71042,
+          "hash": "77c153a59b7e19cee6425294bdaba00257e267cc9d848644cea4bcaaed38d8a3"
         }
       ],
       "dependencies": [],
@@ -281,8 +249,8 @@
         {
           "uri": "assets/episode01/characters/lee-jaehoon-portrait.webp",
           "format": "webp",
-          "bytes": 155636,
-          "hash": "dd437688e9ccc9d11082d370e3f15029e33d7d6e3710b455e28027810d7ecf1d"
+          "bytes": 145550,
+          "hash": "88f46e2cbf6e1edd44f8417bba920e5cc0a397928231ee21c05fd14039374657"
         }
       ],
       "dependencies": [],
@@ -313,24 +281,8 @@
         {
           "uri": "assets/episode01/characters/lim-junho-map.webp",
           "format": "webp",
-          "bytes": 155694,
-          "hash": "12f7806e6a5a0ec5f3ab10c98c44ce6a1cd024321414eab8d56cd24296e9f36d"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.character.lim_junho.performance.relief",
-      "type": "image",
-      "group_id": "ep01.character_performance",
-      "variants": [
-        {
-          "uri": "assets/episode01/characters/performance/lim-junho-relief.webp",
-          "format": "webp",
-          "bytes": 150304,
-          "hash": "f6af2ced769422ec7240a5e2c733922b0c2f5274c90879a986a9a4e807544b2d"
+          "bytes": 84476,
+          "hash": "f8e4b106be57942d9408f866ac4fc5a609ab6226a3d37679a457032b106722ae"
         }
       ],
       "dependencies": [],
@@ -345,8 +297,8 @@
         {
           "uri": "assets/episode01/characters/lim-junho-portrait.webp",
           "format": "webp",
-          "bytes": 168184,
-          "hash": "2a5a4fddd9e5103ec2fb40de97648d154c563045879d44de6cbac923bb2e7d01"
+          "bytes": 165450,
+          "hash": "ffdb164ab0301c918dd0fd431c3bbc3148f921fa09886d4bef466f1a2fd25a33"
         }
       ],
       "dependencies": [],
@@ -393,24 +345,8 @@
         {
           "uri": "assets/episode01/characters/player-map.webp",
           "format": "webp",
-          "bytes": 140258,
-          "hash": "75c3a8d7b73978501525aa2304bc4eeca763913260eba433d6861ad5f20f38dc"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.character.player.performance.resolve",
-      "type": "image",
-      "group_id": "ep01.character_performance",
-      "variants": [
-        {
-          "uri": "assets/episode01/characters/performance/player-resolve.webp",
-          "format": "webp",
-          "bytes": 135228,
-          "hash": "7ed2c13978cc75b51cbadd99e48d789f525ae496ec345b61bc8d56b179671f8e"
+          "bytes": 77050,
+          "hash": "830d0a44c71aec94d69dc77023e314bcb8cce67e9bdba5bebc975146127087f8"
         }
       ],
       "dependencies": [],
@@ -425,8 +361,8 @@
         {
           "uri": "assets/episode01/characters/player-portrait.webp",
           "format": "webp",
-          "bytes": 54490,
-          "hash": "6f6f73bf636590ed560e250104b32537a0b28444f3b1c0b8a084ae2b064ab066"
+          "bytes": 162794,
+          "hash": "afe3c52208021083efe6aba9e0a223ca44263a4b0e182a64a6c8aac86a4729a4"
         }
       ],
       "dependencies": [],
@@ -441,24 +377,8 @@
         {
           "uri": "assets/episode01/characters/seo-jeongmin-map.webp",
           "format": "webp",
-          "bytes": 116298,
-          "hash": "2ed848be56d27c5f0618cf8436ee87ceb4f75d278930489cd058868a1f3b3fa3"
-        }
-      ],
-      "dependencies": [],
-      "preload_policy": "next_scene",
-      "version": "1"
-    },
-    {
-      "asset_id": "ep01.character.seo_jeongmin.performance.neutral",
-      "type": "image",
-      "group_id": "ep01.character_performance",
-      "variants": [
-        {
-          "uri": "assets/episode01/characters/performance/seo-jeongmin-neutral.webp",
-          "format": "webp",
-          "bytes": 113766,
-          "hash": "cf1c13696d50b89938ef142b7f19930d6ed77a00d7aa9a203c696ccbc6432b68"
+          "bytes": 65344,
+          "hash": "912bb70a0944c0d325a9c9d3e6c0175fc434bd5539ccc35d8443f517c3ee4485"
         }
       ],
       "dependencies": [],
@@ -473,8 +393,8 @@
         {
           "uri": "assets/episode01/characters/seo-jeongmin-portrait.webp",
           "format": "webp",
-          "bytes": 122206,
-          "hash": "cca1f44c70275f285e37cf58dff5dd2f94b262d617d09108bd7ad9021a592634"
+          "bytes": 157994,
+          "hash": "6a70cdac9751b6ca78770e905c711c19944d03f4132ef3f10e08d89b929eca3e"
         }
       ],
       "dependencies": [],
