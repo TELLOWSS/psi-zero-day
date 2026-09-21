@@ -251,6 +251,8 @@ function collectMetrics(stage, touchMode) {
   const dayResultThreadRect = metricRect(immersive?.querySelector('.day-result-production-thread'));
   const dayResultTitleRect = metricRect(immersive?.querySelector('.day-result-production-title'));
   const dayResultTomorrowRect = metricRect(immersive?.querySelector('.day-result-production-thread article[data-lane="tomorrow"]'));
+  const day02CaptionRect = metricRect(immersive?.querySelector('figcaption'));
+  const day02PlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
   const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
@@ -341,6 +343,8 @@ function collectMetrics(stage, touchMode) {
     dayResultThreadRect,
     dayResultTitleRect,
     dayResultTomorrowRect,
+    day02CaptionRect,
+    day02PlayerRect,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
@@ -654,8 +658,44 @@ function validate(row, viewport) {
   if (row.stage === 'episode01-day02-bridge') {
     if (row.activeEvent !== 'e01_10_next_day_tease') failures.push('DAY 02 bridge did not reach the next-day teaser');
     if (row.fieldPhase !== 'next-day-tease') failures.push('DAY 02 bridge is missing the FIELD next-day-tease production phase');
+    if (row.fieldCamera !== 'weather-wide') failures.push('DAY 02 bridge weather-wide camera profile is missing');
+    if (row.fieldDepth !== 'weather-open') failures.push('DAY 02 bridge weather-open depth profile is missing');
+    if (row.fieldLighting !== 'rain-foreshadow') failures.push('DAY 02 bridge rain-foreshadow lighting profile is missing');
+    if (row.fieldUi !== 'tease') failures.push('DAY 02 bridge tease UI profile is missing');
+    if (row.fieldCast !== 'solo-return') failures.push('DAY 02 bridge solo-return cast profile is missing');
     if (row.interactionMode !== 'continue') failures.push('DAY 02 bridge should return to continue-mode pacing');
     if (row.hudDensity !== 'minimal') failures.push('DAY 02 bridge should keep minimal HUD density');
+    if (!row.dayResultMemoryRect) failures.push('DAY 02 bridge memory carryover did not render');
+    if (!row.day02PlayerRect) failures.push('DAY 02 bridge player did not remain in the world');
+
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (portraitPhone) {
+      if (!row.immersiveSceneRect || row.immersiveSceneRect.bottom < viewport.height - 2) {
+        failures.push('DAY 02 portrait field must stay full-bleed: ' + JSON.stringify(row.immersiveSceneRect));
+      }
+      if (!row.playPanel || row.playPanel.height > viewport.height * 0.33) {
+        failures.push('DAY 02 portrait decision dock is too tall or missing: ' + (row.playPanel?.height ?? 'missing') + 'px');
+      }
+      if (row.playPanel && row.day02PlayerRect && row.day02PlayerRect.top > row.playPanel.top - 60) {
+        failures.push('DAY 02 portrait player is buried by the decision dock');
+      }
+    }
+
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    if (landscapePhone) {
+      if (!row.playPanel || row.playPanel.width < viewport.width * 0.9) {
+        failures.push('DAY 02 landscape decision must be a full-width lower dock: width=' + (row.playPanel?.width ?? 'missing') + 'px');
+      }
+      if (row.playPanel && row.playPanel.height > viewport.height * 0.33) {
+        failures.push('DAY 02 landscape decision dock is too tall: ' + row.playPanel.height + 'px');
+      }
+      if (row.day02CaptionRect && row.day02CaptionRect.width > viewport.width * 0.5) {
+        failures.push('DAY 02 landscape bridge caption is too wide for world-first composition: ' + row.day02CaptionRect.width + 'px');
+      }
+      if (row.day02CaptionRect && row.playPanel && row.day02CaptionRect.bottom > row.playPanel.top - 12) {
+        failures.push('DAY 02 landscape bridge caption collides with decision dock');
+      }
+    }
   }
   if (row.stage === 'episode01-office') {
     if (row.activeEvent !== 'e01_08e_responsibility_clash') failures.push('OFFICE QA did not reach the responsibility clash');
