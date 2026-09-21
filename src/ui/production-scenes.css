@@ -4833,3 +4833,42 @@
     filter:saturate(.9) contrast(1.02) brightness(.94)!important;
   }
 }
+
+
+/* Phase D portrait world-to-dialogue continuity lock */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active),
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) {
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    overflow:hidden!important;
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .episode-immersive-scene,
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .episode-immersive-scene {
+    position:absolute!important;
+    top:48px!important;
+    right:0!important;
+    bottom:0!important;
+    left:0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .play-panel {
+    position:absolute!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    margin:0!important;
+    max-height:min(39dvh,330px)!important;
+    z-index:52!important;
+    background:linear-gradient(180deg,rgba(5,19,24,.92),rgba(4,14,18,.95))!important;
+    backdrop-filter:blur(11px)!important;
+  }
+}
