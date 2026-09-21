@@ -299,6 +299,14 @@ function collectMetrics(stage, touchMode) {
     officeCast: immersive?.getAttribute('data-office-cast') || null,
     officeEvidence: immersive?.getAttribute('data-office-evidence') || null,
     officeLayer: Boolean(document.querySelector('.office-production-layer')),
+    dayResultPhase: immersive?.getAttribute('data-dayresult-phase') || gameFrame?.getAttribute('data-dayresult-phase') || null,
+    dayResultCamera: immersive?.getAttribute('data-dayresult-camera') || gameFrame?.getAttribute('data-dayresult-camera') || null,
+    dayResultDepth: immersive?.getAttribute('data-dayresult-depth') || gameFrame?.getAttribute('data-dayresult-depth') || null,
+    dayResultLighting: immersive?.getAttribute('data-dayresult-lighting') || gameFrame?.getAttribute('data-dayresult-lighting') || null,
+    dayResultUi: immersive?.getAttribute('data-dayresult-ui') || gameFrame?.getAttribute('data-dayresult-ui') || null,
+    dayResultCarryover: immersive?.getAttribute('data-dayresult-carryover') || gameFrame?.getAttribute('data-dayresult-carryover') || null,
+    dayResultLayer: Boolean(document.querySelector('.day-result-production-layer')),
+    memoryStrip: Boolean(document.querySelector('.episode-immersive-memory-strip')),
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
     strategyPhase: gameFrame?.getAttribute('data-strategy-phase') || null,
     strategyCamera: gameFrame?.getAttribute('data-strategy-camera') || null,
@@ -373,6 +381,18 @@ function validate(row, viewport) {
     if (row.tbmUi !== 'judgment') failures.push('TBM judgment UI profile is missing');
     if (row.tbmCast !== 'decision-circle') failures.push('TBM decision-circle cast profile is missing');
     if (!row.tbmLayer) failures.push('TBM production layer did not render');
+  }
+  if (row.stage === 'episode01-day-result') {
+    if (row.activeEvent !== 'e01_09_evening') failures.push('DAY RESULT QA did not reach the evening reflection');
+    if (row.activeNode !== 'evening') failures.push('DAY RESULT QA did not reach the evening choice node');
+    if (row.dayResultPhase !== 'day-reflection') failures.push('DAY RESULT reflection production phase is missing');
+    if (row.dayResultCamera !== 'sunset-memory-wide') failures.push('DAY RESULT sunset-memory camera profile is missing');
+    if (row.dayResultDepth !== 'memory-tableau') failures.push('DAY RESULT memory-tableau depth profile is missing');
+    if (row.dayResultLighting !== 'home-night-warm') failures.push('DAY RESULT home-night lighting profile is missing');
+    if (row.dayResultUi !== 'reflect') failures.push('DAY RESULT reflect UI profile is missing');
+    if (!['people','instruction','record','stable'].includes(row.dayResultCarryover)) failures.push('DAY RESULT carryover priority is missing');
+    if (!row.dayResultLayer) failures.push('DAY RESULT production layer did not render');
+    if (!row.memoryStrip) failures.push('DAY RESULT played-memory strip did not render');
   }
   if (row.stage === 'episode01-office') {
     if (row.activeEvent !== 'e01_08e_responsibility_clash') failures.push('OFFICE QA did not reach the responsibility clash');
@@ -522,6 +542,14 @@ try {
       report.push({ viewportName: viewport.name, ...tbmMetrics, failures: tbmFailures });
       if (tbmFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-tbm.png');
+
+      await driveEpisodeToEvent(cdp, 'e01_09_evening', 'evening', 65000);
+      await sleep(260);
+      const dayResultMetrics = await metrics(cdp, 'episode01-day-result', viewport.mobile);
+      const dayResultFailures = validate(dayResultMetrics, viewport);
+      report.push({ viewportName: viewport.name, ...dayResultMetrics, failures: dayResultFailures });
+      if (dayResultFailures.length) failed = true;
+      await screenshot(cdp, viewport.name + '-episode01-day-result.png');
     } catch (error) {
       failed = true;
       report.push({ viewportName: viewport.name, viewport: { width: viewport.width, height: viewport.height }, stage: 'runner', failures: [error.message] });
