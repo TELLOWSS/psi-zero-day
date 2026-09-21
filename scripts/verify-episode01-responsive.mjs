@@ -147,6 +147,7 @@ async function driveEpisodeToEvent(cdp, targetEventId, targetNodeId = null, time
     const state = await evaluate(cdp, `(() => {
       const scene = document.querySelector('.episode-immersive-scene');
       const coldOpen = document.querySelector('.episode-cold-open-cta');
+      const observe = document.querySelector('.strategy-observe-card button:not(:disabled)');
       const outcome = document.querySelector('.strategy-outcome-card button:not(:disabled)');
       const choice = document.querySelector('.choice-panel button:not(:disabled)');
       const next = document.querySelector('.continue-button');
@@ -154,6 +155,7 @@ async function driveEpisodeToEvent(cdp, targetEventId, targetNodeId = null, time
         event: scene?.getAttribute('data-event') || null,
         node: scene?.getAttribute('data-node') || null,
         coldOpen: Boolean(coldOpen),
+        observe: Boolean(observe),
         outcome: Boolean(outcome),
         choice: Boolean(choice),
         next: Boolean(next),
@@ -173,6 +175,7 @@ async function driveEpisodeToEvent(cdp, targetEventId, targetNodeId = null, time
         return true;
       };
       if (click('.episode-cold-open-cta')) return 'cold-open';
+      if (click('.strategy-observe-card button:not(:disabled)')) return 'strategy-observe';
       if (click('.strategy-outcome-card > .strategy-execute-button:not(:disabled)')) return 'outcome';
       if (click('.strategy-action-confirm .strategy-execute-button:not(:disabled)')) return 'strategy-execute';
       if (click('.strategy-action-list button:not(:disabled)')) return 'strategy-action';
@@ -222,6 +225,7 @@ function collectMetrics(stage, touchMode) {
   const primarySelector = [
     '.continue-button',
     '.choice-panel button:not(:disabled)',
+    '.strategy-observe-card button:not(:disabled)',
     '.strategy-action-tray button:not(:disabled)',
     '.strategy-outcome-card button:not(:disabled)',
     '.strategy-map-worker.has-actions',
