@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "gate_id": "episode01-final-playthrough-gate-v1",
+  "status": "ACTIVE_REGRESSION_GATE",
+  "master_principles_id": "master-design-principles-v1",
+  "runtime_content_version": "ep01.director.v5",
+  "scope": "Player-facing EpisodeSession.directed() from first arrival through DAY 02 signal.",
+  "production_reference_families": ["STOP_WORK", "FIELD", "TBM", "STRATEGY", "OFFICE", "DAY_RESULT"],
+  "blocking_now": [
+    "exact directed 26-event completion",
+    "six production scene families encountered",
+    "meaningful authored decisions remain interactive",
+    "evidence/TBM/record arcs remain playable information rather than lecture slides",
+    "DAY RESULT carries memory and people/record residue",
+    "DAY 02 changed-condition signal follows the result without a detached score screen"
+  ],
+  "principle_coverage": {
+    "play_not_lecture": "PASS_NOW",
+    "cognitive_rhythm": "PASS_NOW",
+    "living_construction_world": "SEED_LOCKED",
+    "season_changes_play": "SEED_LOCKED",
+    "method_changes_rules": "FUTURE_EXPANSION",
+    "project_type_expansion": "FUTURE_EXPANSION",
+    "real_records_become_clues": "PASS_NOW",
+    "cinematic_episode_memory": "PASS_NOW"
+  },
+  "phase_d_entry_rule": "Phase D may begin after this regression gate passes on the current main commit. Deferred expansion principles must not be falsely reported as Episode 01-complete.",
+  "origin": "Director-approved final playthrough/regression step after Phase C integration lock, 2026-09-21"
+}

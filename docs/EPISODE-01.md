@@ -1,26 +1,34 @@
 # EPISODE 01 — 첫 타설
 
-상태: **Vertical Slice + Casual Strategy + Field Realism + Conditional Replay Structure**. 작업 브랜치 `astra/task-007-casual-strategy-foundation`.
+상태: **Phase C Integrated Quality Lock + Directed 26-Event Player-Facing Vertical Slice**.
+
+## 2026-09-21 Runtime Source of Truth
+
+현재 실제 앱은 `EpisodeSession.directed()`를 사용하며 **26개의 authored event 전체를 하나의 영화적 Day 01 → Day 02 spine으로 플레이**한다. `ep01.director.v5`가 player-facing content version이다.
+
+- 실제 앱 플레이: **26-event directed spine**.
+- 목표 러닝타임: manifest 기준 약 **26분**.
+- Phase C Production Scene: STOP_WORK / FIELD / TBM / STRATEGY / OFFICE / DAY_RESULT.
+- DAY RESULT 뒤 `e01_10_next_day_tease`가 DAY 02 changed-condition signal을 연다.
+- 과거 11~16 event conditional route는 삭제하지 않고 **legacy/headless regression harness**로 유지한다. 현재 live app topology로 설명하지 않는다.
+- Master Design Principles 기준 final playthrough gate는 `docs/EPISODE01-FINAL-PLAYTHROUGH-GATE.md`를 따른다.
 
 ## 기본 원칙
 
-Episode 01에는 총 **26개의 authored event**가 존재하지만 한 플레이에서 26개를 모두 강제로 재생하지 않는다.
-현재 목표는 약 15분 플레이 안에서 **핵심 현장 사건 2~3개 + 관계 후폭풍 + 퇴근 선택**이 살아나게 하는 것이다.
+Episode 01은 26개 사건을 단순히 길게 이어붙이는 구조가 아니다. 한 장면에 하나의 핵심 판단을 두고, FIELD/TBM/STRATEGY/STOP_WORK/OFFICE/DAY_RESULT의 서로 다른 플레이 문법과 속도 변화를 통해 하루 전체를 관통한다.
 
-- 콘텐츠 라이브러리: 26개 이벤트.
-- 실제 1회 플레이: 선택에 따라 대체로 **11~16개 이벤트**.
-- 공통 메인라인은 짧게 유지한다.
-- 현실성 사건은 이전 선택이 만든 상황에 따라 한 갈래만 열린다.
-- 나쁜 판단이나 불완전한 대응을 했을 때만 추가 후속사건이 붙는다.
-- 다른 사건은 삭제하지 않고 재플레이에서 볼 수 있도록 남긴다.
+- 설명보다 현장 변화, 사람의 반응, 증거와 결과로 PSI를 이해시킨다.
+- 단순 계속 클릭을 줄이고 관찰·소통·판단·행동을 반복한다.
+- 실제 위험성평가·TBM·증언·기록은 퀴즈 정답지가 아니라 사건의 단서와 후속행동 근거로 사용한다.
+- 결과는 점수보다 사람·기록·보고문화와 다음 날 조건에 남긴다.
 
-## 공통 메인라인
+## Directed 공통 메인라인
 
-ARRIVAL → MEET_KANG → PLAN_BREAKS → JUNHO_SIGNAL(조건부) → COMMAND → PUMP_ARRIVAL → FIRST_POUR → REACTIONS → REPORTING_RETURN → [선택된 현실성 루트] → EVENING → NEXT_DAY_TEASE.
+ARRIVAL → MEET_KANG → PLAN_BREAKS → JUNHO_SIGNAL → COMMAND → PUMP_ARRIVAL → FIRST_POUR → REACTIONS → REPORTING_RETURN → INSPECTION/STOP WORK → RESPONSIBILITY/OFFICE → TBM → RESTART/AFTERSHOCK → INSTRUCTION/RECORD TRACE → EVENING → NEXT_DAY_TEASE.
 
 `REPORTING_RETURN`은 짧은 공통 후속이다. 초반에 임준호의 신호를 들었는지·묵살했는지·놓쳤는지가 나중 보고행동으로 돌아온다.
 
-## TASK-009A — 플레이 구조 압축/재배치
+## TASK-009A — 역사적 Legacy 플레이 구조 압축/재배치
 
 ### 1. `follow_junho` — 보고문화 루트
 

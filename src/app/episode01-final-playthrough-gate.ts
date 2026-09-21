@@ -1,0 +1,76 @@
+import { MASTER_DESIGN_PRINCIPLES_ID } from './master-design-principles';
+
+export const EPISODE01_FINAL_PLAYTHROUGH_GATE_ID = 'episode01-final-playthrough-gate-v1' as const;
+
+export const EPISODE01_FINAL_PLAYTHROUGH_GATE = Object.freeze({
+  id: EPISODE01_FINAL_PLAYTHROUGH_GATE_ID,
+  master_principles_id: MASTER_DESIGN_PRINCIPLES_ID,
+  status: 'ACTIVE_REGRESSION_GATE',
+  runtime_content_version: 'ep01.director.v5',
+  expected_event_order: Object.freeze([
+    'e01_01_arrival',
+    'e01_02_meet_kang',
+    'e01_03_plan_breaks',
+    'e01_04_junho_signal',
+    'e01_05_command',
+    'e01_06_pump_arrival',
+    'e01_07_first_pour',
+    'e01_08_reactions',
+    'e01_08a_reporting_return',
+    'e01_08b_inspection_find',
+    'e01_08c_site_pushback',
+    'e01_08d_reinspection',
+    'e01_08e_responsibility_clash',
+    'e01_08f_report_return',
+    'e01_08g_tbm_field_gap',
+    'e01_08h_tbm_return',
+    'e01_08i_restart_pressure',
+    'e01_08j_restart_return',
+    'e01_08k_stopwork_aftershock',
+    'e01_08l_stopwork_return',
+    'e01_08m_instruction_cascade',
+    'e01_08n_instruction_return',
+    'e01_08o_record_pressure',
+    'e01_08p_record_return',
+    'e01_09_evening',
+    'e01_10_next_day_tease',
+  ] as const),
+  required_scene_families: Object.freeze([
+    'STOP_WORK',
+    'FIELD',
+    'TBM',
+    'STRATEGY',
+    'OFFICE',
+    'DAY_RESULT',
+  ] as const),
+  production_checkpoints: Object.freeze([
+    Object.freeze({ event_id: 'e01_08c_site_pushback', scene: 'STOP_WORK', purpose: 'zero-moment decision' }),
+    Object.freeze({ event_id: 'e01_04_junho_signal', scene: 'FIELD', purpose: 'small-signal reading' }),
+    Object.freeze({ event_id: 'e01_08g_tbm_field_gap', scene: 'TBM', purpose: 'paper-to-field gap' }),
+    Object.freeze({ event_id: 'e01_05_command', scene: 'STRATEGY', purpose: 'site coordination judgment' }),
+    Object.freeze({ event_id: 'e01_08e_responsibility_clash', scene: 'OFFICE', purpose: 'facts/evidence/responsibility' }),
+    Object.freeze({ event_id: 'e01_09_evening', scene: 'DAY_RESULT', purpose: 'memory and carry-over' }),
+    Object.freeze({ event_id: 'e01_10_next_day_tease', scene: 'FIELD', purpose: 'DAY 02 changed-condition signal' }),
+  ] as const),
+  master_principle_coverage: Object.freeze([
+    Object.freeze({ id: 'play_not_lecture', status: 'PASS_NOW', evidence: 'player-facing directed run contains authored observation, communication, evidence and decision interactions' }),
+    Object.freeze({ id: 'cognitive_rhythm', status: 'PASS_NOW', evidence: 'slow/medium/fast pacing and six production scene families alternate across the day' }),
+    Object.freeze({ id: 'living_construction_world', status: 'SEED_LOCKED', evidence: 'Episode 01 is the FOUNDATION vertical slice; multi-stage site growth is reserved for post-Episode-01 expansion' }),
+    Object.freeze({ id: 'season_changes_play', status: 'SEED_LOCKED', evidence: 'DAY 02 rain/changed-condition teaser is present; systemic seasonal simulation remains post-lock expansion' }),
+    Object.freeze({ id: 'method_changes_rules', status: 'FUTURE_EXPANSION', evidence: 'construction-method campaign rules are intentionally outside Episode 01 Production Lock' }),
+    Object.freeze({ id: 'project_type_expansion', status: 'FUTURE_EXPANSION', evidence: 'project-type campaign expansion is intentionally outside Episode 01 Production Lock' }),
+    Object.freeze({ id: 'real_records_become_clues', status: 'PASS_NOW', evidence: 'TBM gap, instruction trace, timeline and record-pressure arcs use evidence as playable information' }),
+    Object.freeze({ id: 'cinematic_episode_memory', status: 'PASS_NOW', evidence: 'DAY RESULT carries people/record/memory residue into the DAY 02 threshold without a scorecard' }),
+  ] as const),
+  exit_criteria: Object.freeze([
+    'The player-facing directed EpisodeSession completes the exact 26-event spine without error.',
+    'All six Production Scene families are encountered in the live run.',
+    'STOP WORK, FIELD, TBM, STRATEGY, OFFICE and DAY RESULT checkpoints resolve to their authored production families.',
+    'The run exposes authored decisions rather than becoming continue-only playback.',
+    'DAY RESULT precedes the DAY 02 changed-condition signal and does not become a detached score screen.',
+    'Only PASS_NOW requirements are release-blocking for Episode 01; SEED_LOCKED and FUTURE_EXPANSION remain explicitly deferred without being misreported as complete.',
+  ] as const),
+});
+
+export type Episode01MasterPrincipleCoverage =
+  (typeof EPISODE01_FINAL_PLAYTHROUGH_GATE.master_principle_coverage)[number];
