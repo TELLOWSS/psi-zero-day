@@ -400,6 +400,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     data-field-lighting={fieldProduction?.lighting_profile}
     data-field-ui={fieldProduction?.ui_profile}
     data-field-cast={fieldProduction?.cast_profile}
+    data-field-hero={fieldProduction?.hero_character_id}
     data-tbm-phase={tbmProduction?.phase}
     data-tbm-camera={tbmProduction?.camera_profile}
     data-tbm-depth={tbmProduction?.depth_profile}

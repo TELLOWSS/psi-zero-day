@@ -221,6 +221,10 @@ function collectMetrics(stage, touchMode) {
   const playPanelElement = gameFrame?.querySelector('.play-panel');
   const playPanelRect = playPanelElement && visible(playPanelElement) ? playPanelElement.getBoundingClientRect() : null;
   const immersive = document.querySelector('.episode-immersive-scene');
+  const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
+  const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
+  const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
+  const computedOpacity = element => element ? Number(getComputedStyle(element).opacity) : null;
   const images = [...document.images].filter(visible);
   const brokenImages = images.filter(image => image.complete && image.naturalWidth === 0).map(image => image.getAttribute('src'));
   const loadingCrew = [...document.querySelectorAll('.cinematic-loading-team [data-art-surface="loading"]')].filter(visible);
@@ -293,6 +297,9 @@ function collectMetrics(stage, touchMode) {
     visibleEnabledChoices,
     activeBackground: immersive?.getAttribute('data-background-source') || null,
     immersiveBackgroundLoaded: Boolean(immersive?.querySelector('.episode-immersive-background[data-loaded="true"]')),
+    immersiveBackgroundOpacity: computedOpacity(immersiveBackground),
+    immersiveAtmosphereOpacity: computedOpacity(immersiveAtmosphere),
+    immersiveGradeOpacity: computedOpacity(immersiveGrade),
     activeEvent: immersive?.getAttribute('data-event') || null,
     activeNode: immersive?.getAttribute('data-node') || null,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
@@ -305,6 +312,7 @@ function collectMetrics(stage, touchMode) {
     fieldLighting: immersive?.getAttribute('data-field-lighting') || null,
     fieldUi: immersive?.getAttribute('data-field-ui') || null,
     fieldCast: immersive?.getAttribute('data-field-cast') || null,
+    fieldHero: immersive?.getAttribute('data-field-hero') || gameFrame?.getAttribute('data-field-hero') || null,
     tbmPhase: immersive?.getAttribute('data-tbm-phase') || null,
     tbmCamera: immersive?.getAttribute('data-tbm-camera') || null,
     tbmDepth: immersive?.getAttribute('data-tbm-depth') || null,
@@ -408,6 +416,25 @@ function validate(row, viewport) {
     if (row.fieldLighting !== 'decision-focus') failures.push('FIELD decision lighting profile is missing');
     if (row.fieldUi !== 'judgment') failures.push('FIELD judgment UI profile is missing');
     if (row.fieldCast !== 'junho-player-balance') failures.push('FIELD balanced cast profile is missing');
+    if (row.fieldHero !== 'lim_junho') failures.push('FIELD Junho visual lead is missing');
+    if (row.immersiveBackgroundOpacity === null || row.immersiveBackgroundOpacity < 0.95) {
+      failures.push('FIELD final world background is not fully visible: opacity=' + row.immersiveBackgroundOpacity);
+    }
+    if (row.immersiveAtmosphereOpacity === null || row.immersiveAtmosphereOpacity > 0.25) {
+      failures.push('FIELD atmosphere is obscuring the world: opacity=' + row.immersiveAtmosphereOpacity);
+    }
+    if (row.immersiveGradeOpacity === null || row.immersiveGradeOpacity > 0.25) {
+      failures.push('FIELD grade is obscuring the world: opacity=' + row.immersiveGradeOpacity);
+    }
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    if (landscapePhone && row.playPanel) {
+      if (row.playPanel.height > viewport.height * 0.32) {
+        failures.push('FIELD landscape judgment dock is too tall for world-first composition: ' + row.playPanel.height + 'px');
+      }
+      if (row.playPanel.width < viewport.width * 0.9) {
+        failures.push('FIELD landscape judgment must be a shallow full-width dock: width=' + row.playPanel.width + 'px');
+      }
+    }
   }
   if (row.stage === 'episode01-strategy') {
     if (row.activeEvent !== 'e01_05_command') failures.push('STRATEGY QA did not reach coordination pressure');
