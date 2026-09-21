@@ -87,6 +87,23 @@ describe('Episode 01 Phase C-3 TBM production quality', () => {
     expect(html).toContain('class="tbm-production-layer"');
   });
 
+  it('renders a physical TBM briefing environment without adding new image assets', () => {
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_02_meet_kang',
+      nodeId: 'intro',
+      eventTitle: '강태식 반장의 TBM',
+      resolve: () => undefined,
+      t: (id: string) => id,
+    }));
+
+    expect(html).toContain('data-tbm-phase="first-briefing"');
+    expect(html).toContain('data-tbm-hero="kang_taesik"');
+    expect(html).toContain('class="tbm-briefing-board"');
+    expect(html).toContain('data-board="work-sequence"');
+    expect(html).toContain('class="tbm-background-crew"');
+    expect(html).toContain('class="tbm-board-step tbm-board-step-a"');
+  });
+
   it('leaves non-TBM scenes outside the TBM production system', () => {
     expect(episode01TbmProduction('e01_04_junho_signal', 'listen')).toBeUndefined();
     expect(episode01TbmProduction(undefined)).toBeUndefined();

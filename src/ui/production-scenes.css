@@ -2150,6 +2150,346 @@
 }
 
 
+
+/* Phase D — TBM Visual Lock pass 01.
+   Reuse the final work-yard and current cast, but make the first briefing read as a
+   real work-face huddle: physical board, task sequence, background crew, grounded
+   props and a shallower mobile dialogue dock. */
+.game-frame[data-production-scene="TBM"] .tbm-briefing-board {
+  position:absolute;
+  z-index:3;
+  left:50%;
+  bottom:20%;
+  width:clamp(118px,18%,210px);
+  aspect-ratio:1.44;
+  transform:translateX(-50%) perspective(720px) rotateX(1.5deg) rotateY(-3deg);
+  transform-origin:50% 100%;
+  padding:7px 8px 8px;
+  display:grid;
+  grid-template-rows:auto repeat(3,1fr);
+  gap:4px;
+  border:1px solid rgba(229,218,181,.32);
+  border-radius:4px;
+  background:
+    linear-gradient(180deg,rgba(42,53,48,.9),rgba(22,32,30,.94)),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px);
+  box-shadow:
+    0 14px 22px rgba(0,0,0,.27),
+    inset 0 0 0 2px rgba(12,18,18,.42);
+  opacity:.78;
+}
+.game-frame[data-production-scene="TBM"] .tbm-briefing-board > b {
+  justify-self:start;
+  padding:2px 5px;
+  border:1px solid rgba(236,218,157,.3);
+  border-radius:3px;
+  color:rgba(243,226,169,.82);
+  font:850 7px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.14em;
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-step {
+  min-width:0;
+  display:grid;
+  grid-template-columns:20px minmax(0,1fr);
+  align-items:center;
+  gap:5px;
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-step > i {
+  display:grid;
+  place-items:center;
+  width:18px;
+  height:15px;
+  border-radius:2px;
+  background:rgba(226,204,132,.12);
+  color:rgba(239,222,165,.68);
+  font:800 6px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-step > em {
+  position:relative;
+  display:block;
+  height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg,rgba(229,221,193,.46) 0 58%,rgba(229,221,193,.14) 58% 100%);
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-step > em::after {
+  content:"";
+  position:absolute;
+  left:0;
+  top:5px;
+  width:72%;
+  height:1px;
+  background:rgba(229,221,193,.18);
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-stand {
+  position:absolute;
+  z-index:-1;
+  left:18%;
+  right:18%;
+  top:100%;
+  height:44%;
+  border-left:2px solid rgba(72,72,65,.68);
+  border-right:2px solid rgba(72,72,65,.68);
+}
+.game-frame[data-production-scene="TBM"] .tbm-board-stand::after {
+  content:"";
+  position:absolute;
+  left:-18%;
+  right:-18%;
+  bottom:-2px;
+  height:7px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,0,0,.3),transparent 68%);
+  filter:blur(1px);
+}
+
+.game-frame[data-production-scene="TBM"] .tbm-background-crew {
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker {
+  position:absolute;
+  bottom:22%;
+  width:22px;
+  height:64px;
+  opacity:.24;
+  filter:saturate(.45) brightness(.64) blur(.15px);
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker::before {
+  content:"";
+  position:absolute;
+  left:6px;
+  top:0;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(15,24,25,.94);
+  box-shadow:0 -2px 0 2px rgba(137,126,83,.38);
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker > i {
+  position:absolute;
+  left:4px;
+  top:11px;
+  width:14px;
+  height:30px;
+  border-radius:5px 5px 3px 3px;
+  background:linear-gradient(90deg,rgba(20,30,30,.95),rgba(42,51,45,.9));
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker > b {
+  position:absolute;
+  left:5px;
+  top:38px;
+  width:12px;
+  height:24px;
+  border-left:4px solid rgba(17,27,28,.92);
+  border-right:4px solid rgba(17,27,28,.92);
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker::after {
+  content:"";
+  position:absolute;
+  left:1px;
+  right:1px;
+  bottom:-3px;
+  height:6px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,0,0,.3),transparent 70%);
+}
+.game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-a { left:8%; transform:scale(.72); }
+.game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-b { right:8%; transform:scale(.78); }
+.game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-c { right:16%; transform:scale(.62); opacity:.18; }
+
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .tbm-briefing-board {
+  left:50%;
+  bottom:22%;
+  width:clamp(126px,19%,220px);
+  opacity:.94;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="role-voice"] .tbm-briefing-board,
+.game-frame[data-production-scene="TBM"][data-tbm-phase="consequence-return"] .tbm-briefing-board {
+  opacity:.48;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="field-rebrief"] .tbm-briefing-board {
+  opacity:.68;
+  filter:saturate(.86) brightness(1.04);
+}
+
+/* Lock the first TBM to one shared floor plane. */
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+  .episode-immersive-character[data-character="player"] {
+  left:24%;
+  bottom:-3%;
+  width:27%;
+  height:88%;
+  --blocking-scale:1;
+  --blocking-opacity:.91;
+  --blocking-shadow-opacity:.4;
+  --blocking-shadow-scale:1.08;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+  .episode-immersive-character[data-character="kang_taesik"] {
+  left:74%;
+  bottom:-4%;
+  width:31%;
+  height:101%;
+  --blocking-scale:1.08;
+  --blocking-shadow-opacity:.5;
+  --blocking-shadow-scale:1.22;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-character[data-blocking-side]::before {
+  bottom:.5%;
+  height:8%;
+  filter:blur(1.5px);
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-1 {
+  right:-1%;
+  bottom:-1%;
+  width:23%;
+  height:38%;
+  opacity:.86;
+  transform:perspective(620px) rotateY(-3deg) scale(.94);
+  transform-origin:50% 100%;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-2 {
+  left:2%;
+  bottom:-1%;
+  width:24%;
+  height:30%;
+  opacity:.72;
+  transform:perspective(620px) rotateY(4deg) scale(.9);
+  transform-origin:50% 100%;
+}
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-prop.prop-1 {
+  bottom:-1%;
+  transform-origin:50% 100%;
+}
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-prop.prop-2 {
+  bottom:-1%;
+  transform-origin:50% 100%;
+}
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-prop.prop-3 {
+  position:absolute;
+  right:2%;
+  bottom:-1%;
+  width:min(23%,250px);
+  height:38%;
+  object-fit:contain;
+  opacity:.82;
+  transform-origin:50% 100%;
+  filter:drop-shadow(0 11px 12px rgba(0,0,0,.34));
+}
+
+/* The first briefing is world-first: one compact line of dialogue below a larger field view. */
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .presentation-area > .episode-scene-brief {
+  display:none;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel {
+  padding-top:9px;
+  padding-bottom:9px;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-content {
+  min-height:0;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text {
+  padding:2px 0 6px;
+  font-size:clamp(12.5px,.9vw,15px);
+  line-height:1.48;
+}
+.game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .continue-button {
+  min-height:44px;
+  margin-top:2px;
+}
+
+@media (orientation:portrait) and (max-width:700px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-scene {
+    width:calc(100% - 16px);
+    aspect-ratio:4/3;
+    margin-bottom:6px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .tbm-briefing-board {
+    left:50%;
+    bottom:20%;
+    width:31%;
+    min-width:104px;
+    max-width:132px;
+    padding:5px 6px 6px;
+    gap:3px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="player"] {
+    left:22%;
+    width:34%;
+    height:79%;
+    bottom:-3%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:79%;
+    width:38%;
+    height:92%;
+    bottom:-4%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-1 {
+    width:28%;
+    height:31%;
+    right:-4%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-2 {
+    width:27%;
+    height:24%;
+    left:-2%;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-a {
+    left:5%;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-b {
+    right:3%;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-background-worker.worker-c {
+    right:13%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel {
+    margin-inline:3vw;
+    padding:8px 10px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text {
+    font-size:12.5px;
+    line-height:1.44;
+    padding-bottom:5px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-scene figcaption small {
+    display:none;
+  }
+}
+
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .tbm-briefing-board {
+    left:50%;
+    bottom:17%;
+    width:15%;
+    min-width:94px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="player"] {
+    left:25%;
+    width:24%;
+    height:88%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:75%;
+    width:29%;
+    height:100%;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .play-panel {
+    padding-block:6px;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text {
+    font-size:10.5px;
+    line-height:1.32;
+  }
+}
+
 /* -------------------------------------------------------------------------- */
 /* Phase C-4 STRATEGY production quality lock                                  */
 /* Rule: site -> people/process -> risk comparison -> judgment -> field change */

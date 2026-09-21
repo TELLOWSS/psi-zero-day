@@ -266,6 +266,18 @@ export function EpisodeImmersiveScene({
       <b className="office-next-field-trace" />
     </div> : null}
     {tbmProduction ? <div className="tbm-production-layer" data-phase={tbmProduction.phase} aria-hidden="true">
+      <div className="tbm-briefing-board" data-board="work-sequence">
+        <b>TBM</b>
+        <span className="tbm-board-step tbm-board-step-a"><i>01</i><em /></span>
+        <span className="tbm-board-step tbm-board-step-b"><i>02</i><em /></span>
+        <span className="tbm-board-step tbm-board-step-c"><i>03</i><em /></span>
+        <span className="tbm-board-stand" />
+      </div>
+      <div className="tbm-background-crew">
+        <span className="tbm-background-worker worker-a"><i /><b /></span>
+        <span className="tbm-background-worker worker-b"><i /><b /></span>
+        <span className="tbm-background-worker worker-c"><i /><b /></span>
+      </div>
       <i className="tbm-briefing-ring" />
       <span className="tbm-floor-mark tbm-floor-mark-a" />
       <span className="tbm-floor-mark tbm-floor-mark-b" />
