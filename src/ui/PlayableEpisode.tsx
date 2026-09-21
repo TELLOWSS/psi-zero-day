@@ -459,6 +459,13 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       <div className="hud-brand"><strong>{t('ui.brand')}</strong><small>{t('ui.tagline')}</small></div>
       <div className="day-marker"><span>{t('ui.day')}</span><strong>{String(clock.day).padStart(2, '0')}</strong></div>
       <div className="time-marker"><span>{t(`ui.slot.${clock.slot.toLowerCase()}`)}</span><i /><span>{snapshot.chapterTitle}</span></div>
+      {previousHistoryEntries.length > 0 ? <button
+        className="gameplay-history-button"
+        type="button"
+        onClick={() => setHistoryOpen(true)}
+        aria-label={t('ui.previous_view')}
+        title={t('ui.previous_view')}
+      ><span aria-hidden="true">↶</span><b>{t('ui.previous_view')}</b></button> : null}
       <span className="header-episode">{t('ui.episode')}</span>
     </header> : null}
     {snapshot.phase === 'start' ? <section className="title-screen title-screen-commercial">
@@ -557,8 +564,6 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
               eventId={activeEventId}
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
-              previousAvailable={previousHistoryEntries.length > 0}
-              onPrevious={() => setHistoryOpen(true)}
             />}
         </div>
       </section>

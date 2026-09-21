@@ -2908,3 +2908,41 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
     min-block-size:44px;
   }
 }
+
+
+/* Phase D header history control */
+.gameplay-history-button{
+  flex:0 0 auto;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:0 10px;
+  border:1px solid rgba(174,199,220,.28);
+  border-radius:999px;
+  background:rgba(12,31,40,.72);
+  color:#dce9eb;
+  font:700 10px/1 inherit;
+  white-space:nowrap;
+}
+.gameplay-history-button>span{font-size:17px;line-height:1}
+.gameplay-history-button>b{font:inherit}
+.gameplay-history-button:hover,
+.gameplay-history-button:focus-visible{
+  border-color:rgba(225,197,119,.72);
+  color:#f0d486;
+}
+@media (orientation:portrait) and (max-width:620px){
+  .gameplay-history-button{
+    flex-basis:40px;
+    inline-size:40px;
+    min-inline-size:40px;
+    block-size:40px;
+    min-block-size:40px;
+    padding:0;
+    border-radius:9px;
+  }
+  .gameplay-history-button>b{display:none}
+  .header-episode{display:none!important}
+}

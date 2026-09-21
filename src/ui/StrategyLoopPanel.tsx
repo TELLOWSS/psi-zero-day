@@ -67,12 +67,6 @@ export function StrategyLoopPanel({
   if (!actions.length && !outcome) return null;
 
   return <aside className={`strategy-action-tray strategy-loop-panel step-${step}`} aria-label={text('ui.strategy.actions')}>
-    <div className="strategy-loop-steps" aria-label="strategy loop">
-      <span className={step === 1 ? 'is-active' : step > 1 ? 'is-done' : ''}>{text('ui.strategy.loop.target')}</span>
-      <span className={step === 2 ? 'is-active' : step > 2 ? 'is-done' : ''}>{text('ui.strategy.loop.action')}</span>
-      <span className={step === 3 ? 'is-active' : ''}>{text('ui.strategy.loop.result')}</span>
-    </div>
-
     {outcome ? <div className="strategy-outcome-card" role="status" data-outcome={outcome.key}>
       <span className="strategy-outcome-kicker">{text('ui.strategy.result')}</span>
       <p>{outcome.text}</p>
