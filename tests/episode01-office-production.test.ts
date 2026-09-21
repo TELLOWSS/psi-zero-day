@@ -2,73 +2,98 @@ import { describe, expect, it } from 'vitest';
 import { episode01OfficeProduction } from '../src/app/episode01-office-production';
 
 describe('Episode 01 Phase C-5 OFFICE production quality', () => {
-  it('starts from facts instead of a strategy-map reuse', () => {
-    expect(episode01OfficeProduction('e01_08o_record_pressure', 'situation')).toMatchObject({
-      phase: 'fact-check',
-      camera_profile: 'incident-table',
-      depth_profile: 'document-layers',
-      lighting_profile: 'worklight-neutral',
-      ui_profile: 'facts',
-      focus: 'facts',
-      cast_profile: 'fact-table',
+  it('reads facts and role-specific statements before responsibility judgment', () => {
+    expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'gc')).toMatchObject({
+      phase: 'fact-intake',
+      camera_profile: 'speaker-tight',
+      depth_profile: 'testimony-layered',
+      lighting_profile: 'speaker-focus',
+      ui_profile: 'dialogue',
+      cast_profile: 'speaker-focus',
+      evidence_focus: 'facts',
+      hero_character_id: 'oh_seungjae',
     });
-  });
-
-  it('lets each person occupy the room before compressing the responsibility clash', () => {
     expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'lee')).toMatchObject({
-      phase: 'position-read',
+      phase: 'position-split',
+      evidence_focus: 'statements',
       hero_character_id: 'lee_jaehoon',
-      focus: 'people',
-    });
-    expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'kang')).toMatchObject({
-      phase: 'responsibility-clash',
-      camera_profile: 'pressure-triangle',
-      hero_character_id: 'kang_taesik',
-      focus: 'responsibility',
     });
   });
 
-  it('uses the responsibility report node as the reference OFFICE judgment', () => {
-    expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'report')).toMatchObject({
-      phase: 'judgment',
-      camera_profile: 'player-over-table',
+  it('uses the responsibility report node as the reference evidence-table judgment', () => {
+    expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'report')).toEqual({
+      phase: 'responsibility-judgment',
+      camera_profile: 'judgment-table',
+      depth_profile: 'evidence-table',
+      lighting_profile: 'decision-amber',
+      ui_profile: 'judgment',
+      cast_profile: 'balanced-table',
+      evidence_focus: 'responsibility',
+    });
+  });
+
+  it('commits the first report basis before returning evidence tests it', () => {
+    expect(episode01OfficeProduction('e01_08e_responsibility_clash', 'timeline_result')).toMatchObject({
+      phase: 'report-commit',
+      ui_profile: 'result',
+      evidence_focus: 'timeline',
+    });
+    expect(episode01OfficeProduction('e01_08f_report_return', 'resolve')).toMatchObject({
+      phase: 'evidence-return',
+      camera_profile: 'evidence-wide',
+      depth_profile: 'evidence-return',
+      lighting_profile: 'verification-clear',
+      ui_profile: 'judgment',
+      evidence_focus: 'timeline',
+    });
+  });
+
+  it('traces instruction loss as evidence instead of turning it into another field scene', () => {
+    expect(episode01OfficeProduction('e01_08n_instruction_return', 'reconstructed')).toMatchObject({
+      phase: 'instruction-trace',
+      camera_profile: 'trace-medium',
+      depth_profile: 'trace-board',
+      lighting_profile: 'trace-cool',
+      ui_profile: 'trace',
+      cast_profile: 'instruction-return',
+      evidence_focus: 'instruction',
+    });
+  });
+
+  it('makes record pressure and record judgment visibly different office beats', () => {
+    expect(episode01OfficeProduction('e01_08o_record_pressure', 'oh')).toMatchObject({
+      phase: 'record-pressure',
+      camera_profile: 'speaker-tight',
+      depth_profile: 'record-stack',
+      ui_profile: 'dialogue',
+      hero_character_id: 'oh_seungjae',
+    });
+    expect(episode01OfficeProduction('e01_08o_record_pressure', 'record_action')).toEqual({
+      phase: 'record-judgment',
+      camera_profile: 'record-decision',
       depth_profile: 'decision-layered',
       lighting_profile: 'decision-contrast',
-      ui_profile: 'judgment',
-      focus: 'decision',
-      cast_profile: 'player-centered',
-      hero_character_id: 'player',
+      ui_profile: 'record',
+      cast_profile: 'decision-table',
+      evidence_focus: 'record',
     });
   });
 
-  it('compares evidence on return events instead of reopening the argument', () => {
-    expect(episode01OfficeProduction('e01_08f_report_return', 'resolve')).toMatchObject({
-      phase: 'evidence-compare',
-      camera_profile: 'evidence-over-shoulder',
-      depth_profile: 'evidence-stack',
-      ui_profile: 'compare',
-      focus: 'evidence',
+  it('carries the record consequence toward prevention instead of ending at paperwork', () => {
+    expect(episode01OfficeProduction('e01_08p_record_return', 'preserved')).toMatchObject({
+      phase: 'prevention-return',
+      camera_profile: 'carryover-wide',
+      depth_profile: 'prevention-open',
+      lighting_profile: 'prevention-soft',
+      ui_profile: 'verify',
+      cast_profile: 'carryover-table',
+      evidence_focus: 'prevention',
     });
-    expect(episode01OfficeProduction('e01_08n_instruction_return', 'resolve')?.evidence_slots.map(item => item.state))
-      .toEqual(['past', 'past', 'active']);
   });
 
-  it('turns a result into a record handoff that survives into later field behavior', () => {
-    expect(episode01OfficeProduction('e01_08o_record_pressure', 'timeline_result')).toMatchObject({
-      phase: 'record-carryover',
-      camera_profile: 'file-to-field',
-      depth_profile: 'open-handoff',
-      lighting_profile: 'carryover-daylight',
-      ui_profile: 'result',
-      focus: 'field-memory',
-      cast_profile: 'record-handoff',
-    });
-    expect(episode01OfficeProduction('e01_08p_record_return', 'preserved')?.focus).toBe('field-memory');
-  });
-
-  it('does not leak OFFICE profiles into FIELD, TBM, STOP WORK or STRATEGY events', () => {
-    expect(episode01OfficeProduction('e01_05_command', 'entrance')).toBeUndefined();
+  it('does not leak OFFICE profiles into other scene families', () => {
     expect(episode01OfficeProduction('e01_08g_tbm_field_gap', 'tbm_action')).toBeUndefined();
+    expect(episode01OfficeProduction('e01_09_evening', 'evening')).toBeUndefined();
     expect(episode01OfficeProduction(undefined)).toBeUndefined();
   });
 });
