@@ -4,6 +4,7 @@
 - 최상위 제품 방향은 `docs/MASTER-DESIGN-PRINCIPLES.md`, `content/design/master-design-principles-v1.json`, `src/app/master-design-principles.ts`의 **Master Design Principles v1.0**을 따른다. 신규 에피소드·시스템·아트·사운드는 이 기준과 `GAMEPLAY_DOCTRINE.md`를 동시에 만족해야 한다.
 - 현재 제작 순서는 **Phase C 통합 기준선 유지 → Episode 01 최종 플레이/회귀 → Phase D Final Art·Sound·연출 Lock → Episode 01 cinematic vertical slice Lock → 공정·계절·공법·현장종류 확장**이다. Episode 01이 닫히기 전에 대규모 신규 캠페인으로 분산하지 않는다.
 - Phase D는 **FINAL_CANDIDATES_ONLY**다. 새 placeholder·mockup·fallback 시각물을 추가하지 않고, 기존 Production slot을 실제 최종 자산으로 교체하는 작업만 허용한다. legacy binary 이름 변경이나 CSS/fallback을 final로 계산하지 않는다.
+- Phase D visual 판정은 `docs/PHASE-D-VISUAL-QUALITY-REBASELINE.md`를 따른다. **BINARY LOCKED ≠ VISUAL PRODUCTION LOCKED**이며, 큰 빈 검정 무대·패널 우선 화면·현장 맥락이 사라진 합성은 최종으로 인정하지 않는다. 현재 first wave는 **TBM → FIELD**다.
 - 모호하거나 충돌하는 기획은 추측하지 말고 TODO/Director 확인사항으로 남긴다. 다음 TASK를 임의로 시작하지 않는다.
 - TypeScript + Vite + React. Phaser는 presentation 전용이다. Game Logic과 GameState 변경은 순수 TypeScript domain/engine만 소유한다.
 - UI/Phaser에 규칙·본편 콘텐츠·GameState 변경을 넣지 않는다. domain/engine은 React, Phaser, Zod, 브라우저, 저장소 API에 의존하지 않는다.

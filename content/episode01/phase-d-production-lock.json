@@ -36,12 +36,17 @@
     "title_cast_identity_refresh": {
       "required": 8,
       "ready": 8,
-      "status": "QA_PENDING"
+      "status": "LOCKED"
     },
     "episode01_runtime_scene_elements": {
       "required": 1,
       "ready": 0,
       "status": "PENDING"
+    },
+    "visual_quality_rebaseline": {
+      "required": 6,
+      "ready": 0,
+      "status": "IN_PROGRESS"
     }
   },
   "runtime_scene_element_scope": {
@@ -55,19 +60,19 @@
     "note": "The remaining reusable catalog is preserved for Field Guide and future episode/process expansion and does not block Episode 01 cinematic lock."
   },
   "current_blockers": [
-    "8/8 title-cast replacement portrait/map WebPs are staged as new verified binary candidates; Main → Loading → MAP identity/crop/scale visual QA is still pending.",
-    "material_stack is the only scene element placed by Episode 01 runtime event_elements and is still replacement_required rather than final."
+    "TBM and FIELD live screens still sit below the Director-approved commercial visual baseline; world-first composition rebaseline is active.",
+    "material_stack remains the only Episode 01 runtime scene-element binary requiring realistic-v2 final replacement."
   ],
   "locked_now": [
-    "8/8 immersive final backgrounds",
+    "8/8 immersive background binaries remain exact",
     "5/5 character performance-wave binaries",
     "8/8 production-v1 audio binaries",
-    "Phase C camera/transition/responsive direction with five-profile QA",
-    "8/8 title-cast final-candidate binaries staged; visual continuity approval pending"
+    "Phase C camera/transition/responsive direction baseline",
+    "D-1 title-cast identity refresh 8/8 Production LOCKED across Main → Loading → MAP"
   ],
   "exit_command": "npm run phase-d:check",
   "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime.",
-  "current_focus": "D-1_TITLE_CAST_IDENTITY_REFRESH",
+  "current_focus": "D-2_VISUAL_QUALITY_REBASELINE_FIELD_TBM",
   "asset_policy": {
     "mode": "FINAL_CANDIDATES_ONLY",
     "rule": "Phase D does not create additional placeholder, mockup, fallback or CSS-only visual substitutes. New visual work must target an existing Phase D production slot and be eligible to become the shipped final asset.",
@@ -87,9 +92,11 @@
     ]
   },
   "execution_order": [
-    "D-1: replace the 8 title-cast portrait/map WebPs as one atomic final-art batch",
-    "D-2: replace material_stack with the realistic-v2 final runtime cutout",
-    "D-3: run npm run phase-d:check and close only regressions caused by final asset intake",
-    "D-4: lock Episode 01 cinematic vertical slice; only then open broader campaign expansion"
-  ]
+    "D-1: title-cast identity refresh — LOCKED",
+    "D-2: visual quality rebaseline — TBM then FIELD, then remaining four production scene families",
+    "D-3: replace runtime material_stack with realistic-v2 final cutout",
+    "D-4: lock remaining scene/UI/sound/direction polish against the visual baseline",
+    "D-5: run strict phase-d:check and lock Episode 01 cinematic vertical slice"
+  ],
+  "visual_quality_rebaseline_id": "episode01-phase-d-visual-quality-rebaseline-v1"
 }

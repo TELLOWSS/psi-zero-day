@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "qa_id": "title-cast-three-surface-qa",
-  "status": "binary_staged_visual_qa_in_progress",
+  "status": "PRODUCTION_LOCKED",
   "company_name": "NEW PSI",
   "game_title": "PSI : ZERO DAY",
   "canonical_cast": [
@@ -50,14 +50,16 @@
     "npm run assets:production-batch-a-check",
     "npm run release:check"
   ],
-  "completion_rule": "Approve D-1 only after all 8 hashes differ from legacy baseline, strict binary/production gates pass, and Main → Loading → MAP visual QA is captured and approved.",
+  "completion_rule": "D-1 is locked only while all 8 hashes differ from legacy baseline and Main → Loading → MAP continuity plus five-profile responsive QA remain green.",
   "binary_commit": "8dda5792806e6a7611226055fb90f28da83ca549",
   "latest_visual_evidence": {
-    "workflow_run_id": 35553503165,
-    "responsive_artifact_id": 10619546506,
+    "workflow_run_id": 35554336085,
+    "responsive_artifact_id": 10619463274,
     "automated_responsive_gate": "PASS_5_PROFILES",
     "main_title": "PASS_REVIEWED",
-    "strategy_map": "PASS_REVIEWED_DESKTOP_AND_PHONE",
-    "cinematic_loading": "PENDING_DEDICATED_CAPTURE"
-  }
+    "cinematic_loading": "PASS_REVIEWED_DESKTOP_PHONE_TABLET",
+    "strategy_map": "PASS_REVIEWED_DESKTOP_AND_PHONE"
+  },
+  "locked_at": "2026-09-21",
+  "lock_commit": "4b24d0616a6b619ae7184a2571d56907781cc945"
 }

@@ -1,5 +1,6 @@
 import { MASTER_DESIGN_PRINCIPLES_ID } from './master-design-principles';
 import { EPISODE01_FINAL_PLAYTHROUGH_GATE_ID } from './episode01-final-playthrough-gate';
+import { EPISODE01_VISUAL_QUALITY_REBASELINE_ID } from './episode01-visual-quality-rebaseline';
 
 export const EPISODE01_PHASE_D_LOCK_ID = 'episode01-phase-d-production-lock-v1' as const;
 
@@ -16,7 +17,8 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
   }),
   master_principles_id: MASTER_DESIGN_PRINCIPLES_ID,
   final_playthrough_gate_id: EPISODE01_FINAL_PLAYTHROUGH_GATE_ID,
-  current_focus: 'D-1_TITLE_CAST_IDENTITY_REFRESH',
+  current_focus: 'D-2_VISUAL_QUALITY_REBASELINE_FIELD_TBM',
+  visual_quality_rebaseline_id: EPISODE01_VISUAL_QUALITY_REBASELINE_ID,
   asset_policy: Object.freeze({
     mode: 'FINAL_CANDIDATES_ONLY',
     rule: 'Phase D does not create additional placeholder, mockup, fallback or CSS-only visual substitutes. New visual work must target an existing Phase D production slot and be eligible to become the shipped final asset.',
@@ -36,17 +38,19 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
     ] as const),
   }),
   execution_order: Object.freeze([
-    'D-1_TITLE_CAST_8_FINAL_WEBPS',
-    'D-2_MATERIAL_STACK_REALISTIC_V2',
-    'D-3_STRICT_PHASE_D_CHECK_AND_REGRESSION_ONLY',
-    'D-4_EPISODE01_CINEMATIC_VERTICAL_SLICE_LOCK',
+    'D-1_TITLE_CAST_IDENTITY_LOCKED',
+    'D-2_VISUAL_QUALITY_REBASELINE_TBM_FIELD_THEN_REMAINING_SCENES',
+    'D-3_MATERIAL_STACK_REALISTIC_V2',
+    'D-4_REMAINING_UI_SOUND_DIRECTION_VISUAL_LOCK',
+    'D-5_STRICT_PHASE_D_CHECK_AND_CINEMATIC_VERTICAL_SLICE_LOCK',
   ] as const),
   tracks: Object.freeze([
     Object.freeze({ id: 'immersive_backgrounds', required: 8, ready: 8, status: 'LOCKED' }),
     Object.freeze({ id: 'character_performance_wave', required: 5, ready: 5, status: 'LOCKED' }),
     Object.freeze({ id: 'production_audio', required: 8, ready: 8, status: 'LOCKED' }),
     Object.freeze({ id: 'camera_transition_responsive_direction', required: 1, ready: 1, status: 'LOCKED' }),
-    Object.freeze({ id: 'title_cast_identity_refresh', required: 8, ready: 8, status: 'QA_PENDING' }),
+    Object.freeze({ id: 'title_cast_identity_refresh', required: 8, ready: 8, status: 'LOCKED' }),
+    Object.freeze({ id: 'visual_quality_rebaseline', required: 6, ready: 0, status: 'IN_PROGRESS' }),
     Object.freeze({ id: 'episode01_runtime_scene_elements', required: 1, ready: 0, status: 'PENDING' }),
   ] as const),
   runtime_scene_element_scope: Object.freeze({

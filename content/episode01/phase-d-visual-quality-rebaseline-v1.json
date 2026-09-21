@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "rebaseline_id": "episode01-phase-d-visual-quality-rebaseline-v1",
+  "status": "ACTIVE_PRODUCTION_BASELINE",
+  "effective": "2026-09-21",
+  "reference": "Director-approved current-vs-target screen comparison, 2026-09-21",
+  "lock_semantics": {
+    "binary_locked": "The contracted file exists and passes exact binary/format validation.",
+    "visual_production_locked": "The live player-facing surface reaches the approved commercial visual bar across required viewports.",
+    "rule": "BINARY_LOCKED does not imply VISUAL_PRODUCTION_LOCKED."
+  },
+  "north_star": "Episode 01 must read as a living construction site first and a UI second: people, work, hazards, materials and spatial change remain visible while PSI interprets the scene.",
+  "first_wave": [
+    "TBM",
+    "FIELD"
+  ],
+  "global_acceptance": [
+    "construction world is the primary visual surface; no large empty black canvas",
+    "characters are grounded with equipment/material/hazard/route context",
+    "HUD interprets the scene instead of replacing it",
+    "decision UI does not cover decisive evidence",
+    "character identity/PPE/props/scale stay continuous",
+    "five-profile responsive hierarchy remains coherent",
+    "art/UI/sound/motion use one NEW PSI commercial visual system"
+  ],
+  "scene_targets": {
+    "TBM": {
+      "benchmark": "e01_08g_tbm_field_gap",
+      "world": "changed work condition + material yard + route/access change + active crew visible",
+      "ui": "PSI TRACE left + location/minimap right + change-control decision dock",
+      "decision": "morning rule vs afternoon changed condition visible before explanatory copy"
+    },
+    "FIELD": {
+      "benchmark": "e01_04_junho_signal",
+      "world": "work area + route + material/equipment context + signal visible",
+      "ui": "small signal/location/judgment controls remain secondary to world",
+      "decision": "what changed or is uncertain is readable in a few seconds"
+    },
+    "STOP_WORK": {
+      "benchmark": "e01_08c_site_pushback",
+      "goal": "physical hazard and human stop action dominate"
+    },
+    "STRATEGY": {
+      "benchmark": "e01_05_command",
+      "goal": "site overview is the playable board"
+    },
+    "OFFICE": {
+      "benchmark": "e01_08e_responsibility_clash",
+      "goal": "people and evidence share one believable room"
+    },
+    "DAY_RESULT": {
+      "benchmark": "e01_09_evening",
+      "goal": "memory/people/record/tomorrow signal rather than detached scorecard"
+    }
+  },
+  "forbidden_drift": [
+    "binary presence is not visual completion",
+    "no new placeholder art to hide layout problems",
+    "no bigger panels as a substitute for world quality",
+    "do not redesign 26-event topology",
+    "do not expand Episode 02/Field Guide backlog before Episode 01 visual lock"
+  ]
+}

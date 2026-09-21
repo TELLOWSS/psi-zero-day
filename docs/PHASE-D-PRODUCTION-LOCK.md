@@ -26,7 +26,8 @@ Phase D 진입 기준은 commit `128f77361248fc70b9afe1409bb787af7de2c795`에서
 | Character performance wave | **LOCKED** | 5 / 5 |
 | Production-v1 audio | **LOCKED** | 8 / 8 |
 | Camera / transition / responsive direction | **LOCKED** | 5-profile regression green |
-| Title-cast identity refresh | **PENDING** | 0 / 8 new core binaries |
+| Title-cast identity refresh | **LOCKED** | 8 / 8 new core binaries + three-surface QA |
+| Visual quality rebaseline | **IN PROGRESS** | TBM → FIELD first |
 | Episode 01 runtime scene elements | **PENDING** | 0 / 1 accepted final |
 
 따라서 Phase D는 시작됐지만 **아직 완료는 아니다**.
@@ -42,22 +43,33 @@ Phase D에서는 **임시 시각물을 더 만들지 않는다**. 새로 만드�
 - Episode 01 runtime scene element는 현재 실제 배치되는 `material_stack`만 realistic-v2 최종본으로 교체한다.
 - 최종 자산 intake로 생긴 회귀만 수정하고, 이 단계에서 새 Episode나 새 비주얼 체계를 열지 않는다.
 
-현재 focus는 **D-1 — Title cast identity refresh**다. D-1 완료 후 D-2 `material_stack` → strict `phase-d:check` → Episode 01 cinematic vertical slice lock 순서로만 진행한다.
+현재 focus는 **D-2 — Visual Quality Rebaseline**이다. D-1 title cast는 8/8과 Main → Loading → MAP, five-profile QA를 통과해 잠겼다. 이제 TBM → FIELD 실화면을 먼저 목표 상용 품질 기준으로 끌어올린다.
 
 ## D-1 — Title cast identity refresh
 
-**2026-09-21 binary intake status: 8/8 FINAL CANDIDATES STAGED — VISUAL QA PENDING.**
+**LOCKED — 2026-09-21**
 
-Player / Lim Junho / Lee Jaehoon / Seo Jeongmin의 portrait + map 8개 WebP가 legacy baseline과 다른 신규 binary로 원자적 교체되었다. 이 시점은 D-1 완료가 아니라 **Main → Loading → MAP identity continuity 검수 진입점**이다. 얼굴 동일성, 역할 구분, crop, scale, 작은 MAP 가독성이 승인되기 전에는 Production LOCKED로 표기하지 않는다.
+- Final portrait/map WebP: **8 / 8**
+- Binary replacement commit: `8dda5792806e6a7611226055fb90f28da83ca549`
+- Final responsive/continuity evidence: workflow `35554336085`, artifact `10619463274`
+- Main Title: PASS
+- Cinematic Loading: PASS on desktop / phone / tablet
+- Strategy MAP: PASS on desktop / phone
+- Five-profile responsive gate: PASS
 
+D-1은 재생산 단계가 아니다. 이후 identity/crop/scale 회귀가 실제 증거로 발견될 때만 다시 연다.
 
-현재 runtime에는 Player / Lim Junho / Lee Jaehoon / Seo Jeongmin의 portrait + map WebP가 존재하지만 immutable legacy baseline과 SHA-256을 비교하면 **8개 모두 기존 baseline과 동일**하다.
+## D-2 — Visual Quality Rebaseline
 
-Phase D에서 필요한 것은 기존 파일을 최종이라고 이름만 바꾸는 것이 아니라, 잠긴 character identity contract에 맞는 실제 신규 8개 WebP다.
+Director의 현재 화면 ↔ 목표 화면 비교를 새 Production 기준선으로 고정했다.
 
-필수: Player / Lim Junho / Lee Jaehoon / Seo Jeongmin 각각 portrait + map.
+**핵심: BINARY LOCKED ≠ VISUAL PRODUCTION LOCKED.**
 
-완료 판정: `npm run assets:character-replacement-check`
+현재 8개 immersive background binary는 exact hash 기준으로 유지하지만, 실제 player-facing composition이 어둡고 비어 보이거나 현장보다 패널이 먼저 보이면 Visual Lock으로 간주하지 않는다.
+
+첫 작업 순서는 **TBM → FIELD**다. 이후 STOP WORK → STRATEGY → OFFICE → DAY RESULT를 같은 기준으로 닫는다.
+
+상세 기준: `docs/PHASE-D-VISUAL-QUALITY-REBASELINE.md`.
 
 ## D-2 — Episode 01 runtime scene element
 

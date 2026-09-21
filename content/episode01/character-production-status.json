@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "updated": "2026-09-21",
-  "active_milestone": "P5_TITLE_CAST_IDENTITY_REFRESH",
+  "active_milestone": "P6_VISUAL_QUALITY_REBASELINE",
   "active_batch": "replacement-a",
-  "integration_status": "replacement_candidate_staged",
+  "integration_status": "replacement_locked",
   "legacy_cast": {
     "status": "integrated_as_previous_runtime_baseline",
     "core_assets": 16,
     "note": "The previous 8-character portrait/map set remains technically integrated so the game stays playable. Four title-cast identities are intentionally scheduled for replacement."
   },
   "replacement_a": {
-    "status": "visual_qa_pending",
+    "status": "production_locked",
     "characters": [
       "player",
       "lim_junho",
@@ -23,7 +23,7 @@
       {
         "id": "player-portrait",
         "file": "player-portrait.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "late-20s female safety manager",
           "soft V-shaped face",
@@ -35,7 +35,7 @@
       {
         "id": "player-map",
         "file": "player-map.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "same Player identity as portrait",
           "full-body transparent cutout",
@@ -46,7 +46,7 @@
       {
         "id": "lim-junho-portrait",
         "file": "lim-junho-portrait.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "early-20s male rookie",
           "round youthful face",
@@ -59,7 +59,7 @@
       {
         "id": "lim-junho-map",
         "file": "lim-junho-map.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "same Lim Junho identity as portrait",
           "small narrow youthful frame",
@@ -70,7 +70,7 @@
       {
         "id": "lee-jaehoon-portrait",
         "file": "lee-jaehoon-portrait.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "early-30s male construction assistant manager",
           "long narrow face",
@@ -83,7 +83,7 @@
       {
         "id": "lee-jaehoon-map",
         "file": "lee-jaehoon-map.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "same Lee Jaehoon identity as portrait",
           "tall slim vertical silhouette",
@@ -94,7 +94,7 @@
       {
         "id": "seo-jeongmin-portrait",
         "file": "seo-jeongmin-portrait.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "mid-40s male inspector",
           "thin oblong mature face",
@@ -107,7 +107,7 @@
       {
         "id": "seo-jeongmin-map",
         "file": "seo-jeongmin-map.webp",
-        "status": "candidate_staged",
+        "status": "locked",
         "requirements": [
           "same Seo Jeongmin identity as portrait",
           "lean formal mature silhouette",
@@ -124,6 +124,6 @@
     ]
   },
   "next_asset": null,
-  "rule": "Do not describe the four title-cast characters as Production LOCKED until all eight new portrait/map WebPs differ from the legacy baseline, strict binary/production gates pass, and Main → Loading → MAP visual continuity is approved.",
-  "next_work": "Run strict binary gates and inspect Main → Loading → MAP continuity for the staged eight final candidates. Correct only identity/crop/scale regressions before locking D-1."
+  "rule": "D-1 title-cast is Production LOCKED. Reopen only for a verified identity/crop/scale regression.",
+  "next_work": "Apply Phase D Visual Quality Rebaseline to TBM then FIELD. Do not generate additional title-cast replacements unless regression evidence requires it."
 }
