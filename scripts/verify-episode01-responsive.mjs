@@ -220,6 +220,24 @@ function collectMetrics(stage, touchMode) {
   const frameRect = frame?.getBoundingClientRect();
   const playPanelElement = gameFrame?.querySelector('.play-panel');
   const playPanelRect = playPanelElement && visible(playPanelElement) ? playPanelElement.getBoundingClientRect() : null;
+  const metricRect = element => {
+    if (!(element instanceof HTMLElement) || !visible(element)) return null;
+    const rect = element.getBoundingClientRect();
+    return {
+      left: Math.round(rect.left),
+      top: Math.round(rect.top),
+      right: Math.round(rect.right),
+      bottom: Math.round(rect.bottom),
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+    };
+  };
+  const strategyShell = document.querySelector('.strategy-shell');
+  const strategyHudRect = metricRect(document.querySelector('.strategy-hud'));
+  const strategyBrandRect = metricRect(document.querySelector('.strategy-brand'));
+  const strategyLoopRect = metricRect(document.querySelector('.strategy-loop-stage-strip'));
+  const strategyMapRect = metricRect(document.querySelector('.strategy-map'));
+  const strategyObserveRect = metricRect(document.querySelector('.strategy-observe-card'));
   const immersive = document.querySelector('.episode-immersive-scene');
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
@@ -339,6 +357,12 @@ function collectMetrics(stage, touchMode) {
     dayResultLayer: Boolean(document.querySelector('.day-result-production-layer')),
     memoryStrip: Boolean(document.querySelector('.episode-immersive-memory-strip')),
     strategy: Boolean(document.querySelector('.game-frame.strategy-active')),
+    strategyLoopPhase: strategyShell?.getAttribute('data-loop-phase') || null,
+    strategyHud: strategyHudRect,
+    strategyBrand: strategyBrandRect,
+    strategyLoopStrip: strategyLoopRect,
+    strategyMapRect,
+    strategyObserveCard: strategyObserveRect,
     strategyPhase: gameFrame?.getAttribute('data-strategy-phase') || null,
     strategyCamera: gameFrame?.getAttribute('data-strategy-camera') || null,
     strategyDepth: gameFrame?.getAttribute('data-strategy-depth') || null,
@@ -446,6 +470,26 @@ function validate(row, viewport) {
     if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
+    if (row.strategyLoopPhase !== 'observe') failures.push('STRATEGY first reading step must begin in observe phase');
+    const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
+    if (landscapePhone) {
+      if (!row.strategyObserveCard) {
+        failures.push('STRATEGY observe command dock is missing');
+      } else {
+        if (row.strategyObserveCard.height > viewport.height * 0.24) {
+          failures.push('STRATEGY observe command dock is too tall for map-first composition: ' + row.strategyObserveCard.height + 'px');
+        }
+        if (row.strategyObserveCard.width < viewport.width * 0.9) {
+          failures.push('STRATEGY observe command dock must span the lower map edge: width=' + row.strategyObserveCard.width + 'px');
+        }
+      }
+      if (!row.strategyBrand || row.strategyBrand.height > 58) {
+        failures.push('STRATEGY landscape brand/HUD is too tall: ' + (row.strategyBrand?.height ?? 'missing') + 'px');
+      }
+      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.7) {
+        failures.push('STRATEGY tactical map is not the dominant landscape surface: ' + JSON.stringify(row.strategyMapRect));
+      }
+    }
   }
   if (viewport.mobile && viewport.width > viewport.height && row.frame && row.frame.height > viewport.height + 2) {
     failures.push('Landscape game frame exceeds physical viewport: ' + row.frame.height + 'px > ' + viewport.height + 'px');

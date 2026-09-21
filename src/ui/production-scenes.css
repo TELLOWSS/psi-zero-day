@@ -6068,3 +6068,199 @@
     line-height:1.16!important;
   }
 }
+
+
+/* Phase D — STRATEGY Visual Lock pass 01.
+   Short-landscape tactical play is map-first: a 48px resource rail, one thin
+   phase strip, then the site. Observe guidance is a lower command bar. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-hud {
+    top:max(6px,env(safe-area-inset-top))!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:auto!important;
+    height:48px!important;
+    grid-template-columns:minmax(170px,.82fr) minmax(0,2.35fr) 56px!important;
+    gap:4px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar {
+    min-width:0!important;
+    height:48px!important;
+    max-height:48px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand {
+    gap:5px!important;
+    padding:0 7px!important;
+    border-radius:8px!important;
+    font-size:10px!important;
+    line-height:1.05!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand .gameplay-home-button {
+    flex:0 0 44px!important;
+    width:44px!important;
+    min-width:44px!important;
+    max-width:44px!important;
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    padding:0!important;
+    border-radius:7px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand .gameplay-home-button svg {
+    width:20px!important;
+    height:20px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-hardhat,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand > div small {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand > div {
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-brand > div strong {
+    display:block!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-size:10.5px!important;
+    letter-spacing:.02em!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar {
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article {
+    box-sizing:border-box!important;
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+    padding:2px 4px!important;
+    border-radius:7px!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-resource-bar article strong {
+    width:100%!important;
+    text-align:center!important;
+    font-size:9px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day {
+    box-sizing:border-box!important;
+    justify-content:center!important;
+    padding:0 4px!important;
+    border-radius:8px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-day strong {
+    font-size:20px!important;
+    line-height:1!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip {
+    top:58px!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:auto!important;
+    height:28px!important;
+    gap:3px!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip span {
+    box-sizing:border-box!important;
+    min-height:28px!important;
+    height:28px!important;
+    padding:5px 4px!important;
+    border-radius:8px!important;
+    font-size:8px!important;
+    line-height:1!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset:90px 0 0 0!important;
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-background-art {
+    filter:saturate(1.02) contrast(1.02) brightness(.98)!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-rail,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-overview-minimap,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map-stage-card {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card {
+    box-sizing:border-box!important;
+    left:max(8px,env(safe-area-inset-left))!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    top:auto!important;
+    bottom:max(6px,env(safe-area-inset-bottom))!important;
+    transform:none!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:58px!important;
+    height:auto!important;
+    max-height:72px!important;
+    margin:0!important;
+    padding:6px 7px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(190px,30%)!important;
+    grid-template-rows:auto auto!important;
+    column-gap:8px!important;
+    row-gap:1px!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    border-radius:9px!important;
+    background:linear-gradient(90deg,rgba(5,20,26,.9),rgba(7,24,30,.86))!important;
+    backdrop-filter:blur(7px)!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > span {
+    display:none!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > strong {
+    grid-column:1!important;
+    grid-row:1!important;
+    margin:0!important;
+    font-size:11px!important;
+    line-height:1.15!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > p {
+    grid-column:1!important;
+    grid-row:2!important;
+    margin:1px 0 0!important;
+    font-size:8.5px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-observe-card > button {
+    grid-column:2!important;
+    grid-row:1 / span 2!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:46px!important;
+    height:46px!important;
+    max-height:46px!important;
+    margin:0!important;
+    padding:5px 9px!important;
+    border-radius:7px!important;
+    font-size:10px!important;
+  }
+}
