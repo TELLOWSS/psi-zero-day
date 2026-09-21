@@ -239,6 +239,9 @@ function collectMetrics(stage, touchMode) {
   const strategyMapRect = metricRect(document.querySelector('.strategy-map'));
   const strategyObserveRect = metricRect(document.querySelector('.strategy-observe-card'));
   const immersive = document.querySelector('.episode-immersive-scene');
+  const immersiveSceneRect = metricRect(immersive);
+  const tbmKangRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="kang_taesik"]'));
+  const tbmPlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
   const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
@@ -320,6 +323,9 @@ function collectMetrics(stage, touchMode) {
     immersiveGradeOpacity: computedOpacity(immersiveGrade),
     activeEvent: immersive?.getAttribute('data-event') || null,
     activeNode: immersive?.getAttribute('data-node') || null,
+    immersiveSceneRect,
+    tbmKangRect,
+    tbmPlayerRect,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
@@ -505,6 +511,31 @@ function validate(row, viewport) {
     if (!row.tbmLayer) failures.push('First TBM production layer did not render');
     if (!row.tbmBoard) failures.push('First TBM work-sequence briefing board did not render');
     if (!row.tbmBackgroundCrew) failures.push('First TBM background crew did not render');
+
+    const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (portraitPhone) {
+      if (!row.immersiveSceneRect || row.immersiveSceneRect.bottom < viewport.height - 2) {
+        failures.push('First TBM portrait world must run full-bleed behind the dialogue dock: ' + JSON.stringify(row.immersiveSceneRect));
+      }
+      if (row.playPanel && row.immersiveSceneRect && row.playPanel.top - row.immersiveSceneRect.bottom > 2) {
+        failures.push('First TBM portrait has a dead band between world and dialogue: gap=' + (row.playPanel.top - row.immersiveSceneRect.bottom) + 'px');
+      }
+      if (row.playPanel && row.playPanel.height > viewport.height * 0.3) {
+        failures.push('First TBM portrait dialogue dock is too tall: ' + row.playPanel.height + 'px');
+      }
+      for (const [name, rect] of [['Kang Taesik', row.tbmKangRect], ['player', row.tbmPlayerRect]]) {
+        if (!rect) {
+          failures.push('First TBM portrait ' + name + ' character is missing');
+          continue;
+        }
+        if (rect.top < 50 || rect.bottom > viewport.height + 2) {
+          failures.push('First TBM portrait ' + name + ' is clipped outside the viewport: ' + JSON.stringify(rect));
+        }
+        if (rect.height < viewport.height * 0.28) {
+          failures.push('First TBM portrait ' + name + ' is too small to read as a grounded full-body character: ' + rect.height + 'px');
+        }
+      }
+    }
   }
   if ((row.stage === 'episode01-tbm-first' || row.stage === 'episode01-tbm') && viewport.mobile && row.playPanel) {
     const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;

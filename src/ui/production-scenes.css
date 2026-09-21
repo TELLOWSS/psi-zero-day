@@ -6277,3 +6277,156 @@
   transition-duration:.28s,.28s,.28s,.28s!important;
   transition-timing-function:cubic-bezier(.2,.72,.2,1),ease,ease,ease!important;
 }
+
+
+/* Phase D — TBM portrait visual recovery.
+   Portrait TBM is one physical scene, not a stacked background / dead-band / card.
+   The world runs full-bleed below the header and the dialogue floats over its floor. */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) {
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    overflow:hidden!important;
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .episode-immersive-scene {
+    position:absolute!important;
+    inset:52px 0 0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    object-position:50% 48%!important;
+    opacity:1!important;
+    transform:scale(1.01)!important;
+    filter:saturate(1.02) contrast(1.015) brightness(1.03)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .play-panel {
+    position:absolute!important;
+    left:8px!important;
+    right:8px!important;
+    top:auto!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:28dvh!important;
+    margin:0!important;
+    padding:10px 11px max(10px,env(safe-area-inset-bottom))!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:0!important;
+    overflow:hidden!important;
+    border-radius:14px!important;
+    background:linear-gradient(180deg,rgba(5,20,24,.88),rgba(4,14,18,.94))!important;
+    backdrop-filter:blur(8px)!important;
+    box-shadow:0 -12px 34px rgba(0,0,0,.26)!important;
+  }
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .presentation-area {
+    height:auto!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    padding:0!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-content {
+    min-height:0!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    column-gap:10px!important;
+    align-items:end!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .presentation-toolbar {
+    grid-column:1 / -1!important;
+    grid-row:1!important;
+    min-height:0!important;
+    margin:0!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text {
+    grid-column:1!important;
+    grid-row:2!important;
+    margin:0!important;
+    padding:4px 0 0!important;
+    font-size:12px!important;
+    line-height:1.38!important;
+    max-height:16.5dvh!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .continue-button {
+    grid-column:2!important;
+    grid-row:2!important;
+    align-self:end!important;
+    min-width:104px!important;
+    width:104px!important;
+    min-height:46px!important;
+    height:46px!important;
+    margin:0!important;
+    padding:7px 10px!important;
+  }
+
+  /* First briefing: two people remain physically grounded in the same yard. */
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="player"] {
+    left:7%!important;
+    right:auto!important;
+    bottom:25.5dvh!important;
+    width:31%!important;
+    height:44dvh!important;
+    transform:none!important;
+    opacity:.78!important;
+    z-index:13!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:auto!important;
+    right:7%!important;
+    bottom:24.5dvh!important;
+    width:35%!important;
+    height:48dvh!important;
+    transform:none!important;
+    opacity:1!important;
+    z-index:16!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"]
+    .tbm-briefing-board {
+    left:49%!important;
+    right:auto!important;
+    bottom:27dvh!important;
+    width:min(29vw,122px)!important;
+    max-height:24dvh!important;
+    transform:translateX(-50%)!important;
+    opacity:.9!important;
+    z-index:12!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .tbm-background-crew {
+    bottom:29dvh!important;
+    opacity:.38!important;
+  }
+
+  /* The floor props sit at the same physical baseline as the cast. */
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-1 {
+    left:-3%!important;
+    right:auto!important;
+    bottom:25dvh!important;
+    width:31%!important;
+    height:18dvh!important;
+    opacity:.72!important;
+    z-index:9!important;
+  }
+  .game-frame[data-production-scene="TBM"][data-tbm-phase="first-briefing"] .episode-immersive-prop.prop-2 {
+    left:auto!important;
+    right:-2%!important;
+    bottom:25dvh!important;
+    width:29%!important;
+    height:19dvh!important;
+    opacity:.68!important;
+    z-index:9!important;
+  }
+}
