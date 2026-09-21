@@ -3238,3 +3238,492 @@
     line-height:1.22;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Phase C-6 DAY RESULT production quality lock                               */
+/* Rule: result -> people -> memory -> tomorrow. Never a grade or scorecard.   */
+/* -------------------------------------------------------------------------- */
+
+.game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .game-header {
+  height:56px;
+  background:linear-gradient(180deg,rgba(7,10,17,.88),rgba(9,12,18,.34) 76%,transparent);
+  border-bottom-color:rgba(231,173,85,.1);
+  backdrop-filter:blur(6px);
+}
+.game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .scene-heading,
+.game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .episode-scene-stamp,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-scene figcaption {
+  display:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-scene {
+  box-shadow:inset 0 0 100px rgba(42,27,13,.08),0 18px 48px rgba(0,0,0,.34);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-background {
+  transform:scale(1.035);
+  object-position:50% 48%;
+  filter:saturate(.82) contrast(1.045) brightness(.68);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-atmosphere {
+  z-index:3;
+  mix-blend-mode:normal;
+  background:
+    radial-gradient(circle at 68% 22%,rgba(237,177,94,.14),transparent 27%),
+    radial-gradient(circle at 22% 30%,rgba(104,122,166,.09),transparent 34%),
+    linear-gradient(180deg,rgba(5,8,15,.05),rgba(5,8,15,.25) 45%,rgba(3,6,12,.7));
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-lighting="night-to-dawn"] .episode-immersive-atmosphere {
+  background:
+    radial-gradient(circle at 78% 18%,rgba(239,186,108,.17),transparent 23%),
+    linear-gradient(90deg,rgba(7,10,17,.48),rgba(12,15,23,.18) 58%,rgba(58,54,45,.08)),
+    linear-gradient(180deg,rgba(5,8,15,.02),rgba(4,7,12,.68));
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-grade {
+  z-index:22;
+  background:
+    linear-gradient(90deg,rgba(5,8,14,.5),transparent 30%,transparent 72%,rgba(10,8,8,.16)),
+    linear-gradient(180deg,rgba(7,10,18,.02) 40%,rgba(4,7,13,.7) 100%);
+  box-shadow:inset 0 0 130px rgba(31,26,43,.14);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-psi-trace,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-scene-minimap,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-day-carryover,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-memory-callback,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-continuity-ribbon,
+.game-frame[data-production-scene="DAY_RESULT"] .training-reward-panel,
+.game-frame[data-production-scene="DAY_RESULT"] .relationship-feedback {
+  display:none;
+}
+
+/* Played scenes become the visual memory itself, not a results dashboard. */
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip {
+  z-index:17;
+  left:26%;
+  right:auto;
+  top:12%;
+  width:69%;
+  padding:8px;
+  gap:7px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  transform:none;
+  opacity:.9;
+  border-color:rgba(229,211,174,.19);
+  background:linear-gradient(180deg,rgba(11,14,21,.46),rgba(9,12,18,.28));
+  box-shadow:0 18px 38px rgba(0,0,0,.25);
+  backdrop-filter:blur(2px);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip .memory-frame {
+  aspect-ratio:16/9.5;
+  border-radius:6px;
+  transition:transform .3s cubic-bezier(.2,.72,.2,1),opacity .26s ease,filter .26s ease,border-color .26s ease;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip .memory-frame img {
+  filter:saturate(.56) contrast(1.055) brightness(.62);
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="record"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="record"],
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="people"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="people"],
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="instruction"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="people"],
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="stable"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="field"] {
+  transform:translateY(-5px) scale(1.035);
+  opacity:1;
+  border-color:rgba(237,205,141,.42);
+  filter:drop-shadow(0 9px 12px rgba(0,0,0,.22));
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="record"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="record"] img,
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="people"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="people"] img,
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="instruction"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="people"] img,
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-carryover="stable"]
+  .episode-immersive-memory-strip .memory-frame[data-memory-key="field"] img {
+  filter:saturate(.82) contrast(1.06) brightness(.78);
+}
+
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-layer {
+  position:absolute;
+  inset:0;
+  z-index:24;
+  pointer-events:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title {
+  position:absolute;
+  left:3.6%;
+  top:12%;
+  width:20%;
+  display:grid;
+  gap:7px;
+  text-shadow:0 4px 18px rgba(0,0,0,.72);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title > span {
+  color:#dfbc78;
+  font:850 clamp(9px,.72vw,13px)/1.1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.14em;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title > strong {
+  color:#f5efe4;
+  font-size:clamp(24px,2.55vw,43px);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  word-break:keep-all;
+}
+
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread {
+  position:absolute;
+  left:4%;
+  right:4%;
+  top:54%;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread::before {
+  content:"";
+  position:absolute;
+  left:4%;
+  right:4%;
+  top:14px;
+  height:1px;
+  background:linear-gradient(90deg,rgba(231,194,122,.18),rgba(231,194,122,.62) 42%,rgba(160,189,180,.48) 74%,rgba(160,189,180,.12));
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article {
+  position:relative;
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  grid-template-areas:
+    "node label"
+    "node title";
+  align-items:start;
+  gap:2px 8px;
+  min-height:88px;
+  padding:0 12px 0 0;
+  opacity:.72;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > i {
+  grid-area:node;
+  position:relative;
+  z-index:1;
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  border:1px solid rgba(225,201,150,.34);
+  border-radius:50%;
+  background:rgba(11,15,21,.8);
+  color:#d8bf8d;
+  font:800 8px/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  box-shadow:0 0 0 5px rgba(222,188,118,.035);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > span {
+  grid-area:label;
+  color:#d7c7a6;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.08em;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > strong {
+  grid-area:title;
+  max-width:94%;
+  color:#eef0eb;
+  font-size:clamp(9px,.74vw,12px);
+  line-height:1.45;
+  font-weight:750;
+  word-break:keep-all;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article[data-lane="result"],
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article[data-lane="tomorrow"] {
+  opacity:1;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article[data-lane="result"] > i {
+  border-color:rgba(231,190,109,.62);
+  box-shadow:0 0 0 6px rgba(231,190,109,.065),0 0 18px rgba(231,190,109,.12);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article[data-lane="tomorrow"] > i {
+  border-color:rgba(135,199,179,.58);
+  color:#b8ddd1;
+  box-shadow:0 0 0 6px rgba(112,183,161,.055),0 0 18px rgba(112,183,161,.11);
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-phase="choice-afterglow"]
+  .day-result-production-thread article[data-lane="memory"] {
+  opacity:1;
+  transform:translateY(-3px);
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-phase="choice-afterglow"]
+  .day-result-production-thread article[data-lane="memory"] > i {
+  border-color:rgba(223,198,141,.58);
+  background:rgba(39,31,21,.78);
+  box-shadow:0 0 0 6px rgba(223,198,141,.055);
+}
+
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold {
+  position:absolute;
+  right:2.5%;
+  top:8%;
+  bottom:19%;
+  width:3%;
+  opacity:.32;
+  transition:opacity .38s ease,transform .42s cubic-bezier(.2,.72,.2,1);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold::before {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:4%;
+  bottom:4%;
+  width:1px;
+  background:linear-gradient(180deg,transparent,rgba(151,203,185,.2) 32%,rgba(151,203,185,.58) 76%,transparent);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > i,
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > span,
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > b {
+  position:absolute;
+  left:50%;
+  width:8px;
+  height:8px;
+  margin-left:-4px;
+  border-radius:50%;
+  border:1px solid rgba(156,208,191,.5);
+  background:rgba(8,20,22,.86);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > i { top:24%; }
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > span { top:52%; }
+.game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold > b { top:78%; }
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-phase="choice-afterglow"] .day-result-tomorrow-threshold {
+  opacity:.88;
+  transform:translateX(-3px);
+}
+.game-frame[data-production-scene="DAY_RESULT"][data-dayresult-phase="choice-afterglow"] .day-result-tomorrow-threshold > b {
+  background:rgba(126,194,173,.82);
+  box-shadow:0 0 0 5px rgba(126,194,173,.08),0 0 18px rgba(126,194,173,.2);
+}
+
+.game-frame[data-production-scene="DAY_RESULT"] .play-panel {
+  border-color:rgba(227,175,83,.22);
+  border-top-color:rgba(227,175,83,.58);
+  background:linear-gradient(90deg,rgba(10,13,19,.94),rgba(23,18,16,.89));
+  box-shadow:0 16px 42px rgba(0,0,0,.3);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .presentation-area[data-presentation="SHOW_CHOICE"] {
+  min-height:0;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-content {
+  min-height:0;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-content > .eyebrow {
+  color:#d9b675;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-content h2 {
+  margin:0 0 9px;
+  font-size:clamp(12px,1vw,16px);
+  line-height:1.35;
+  font-weight:700;
+  text-align:center;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  align-items:start;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-panel button {
+  min-height:54px;
+  height:auto;
+  padding:8px 10px;
+  border-color:rgba(225,189,117,.23);
+  background:linear-gradient(135deg,rgba(36,29,22,.72),rgba(13,17,22,.8));
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-panel button:hover:not(:disabled),
+.game-frame[data-production-scene="DAY_RESULT"] .choice-panel button:focus-visible {
+  border-color:rgba(235,203,139,.7);
+  transform:translateY(-1px);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-visual {
+  display:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-copy {
+  grid-template-columns:2em minmax(0,1fr);
+  gap:6px;
+  align-items:start;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .choice-text {
+  font-size:clamp(9px,.72vw,12px);
+  line-height:1.36;
+}
+
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .play-panel {
+    left:15%;
+    right:15%;
+    bottom:24px;
+    width:auto;
+    max-height:27%;
+    grid-template-columns:1fr;
+    padding:11px 14px 13px;
+  }
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title {
+    left:4%;
+    top:8.5%;
+    width:55%;
+    gap:4px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title > strong {
+    font-size:clamp(19px,5.2vw,31px);
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip {
+    left:4%;
+    right:4%;
+    top:21%;
+    width:auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px;
+    padding:6px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip .memory-frame {
+    aspect-ratio:16/8.7;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread {
+    left:4%;
+    right:4%;
+    top:48%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    row-gap:8px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread::before {
+    display:none;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article {
+    min-height:58px;
+    grid-template-columns:24px minmax(0,1fr);
+    padding-right:6px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > i {
+    width:24px;
+    height:24px;
+    font-size:7px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > span {
+    font-size:7px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > strong {
+    font-size:8.5px;
+    line-height:1.3;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold {
+    right:1%;
+    top:8%;
+    bottom:42%;
+    width:4%;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel button {
+    min-height:50px;
+    padding:6px 8px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .play-panel {
+    max-height:40dvh;
+    overflow:auto;
+  }
+}
+
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title {
+    left:2.5%;
+    top:12%;
+    width:42%;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-title > strong {
+    font-size:clamp(16px,3vw,27px);
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip {
+    left:2.5%;
+    right:auto;
+    top:30%;
+    width:43%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px;
+    padding:5px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread {
+    left:2.5%;
+    right:auto;
+    top:67%;
+    width:44%;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    row-gap:4px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread::before {
+    display:none;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article {
+    min-height:38px;
+    grid-template-columns:19px minmax(0,1fr);
+    gap:1px 4px;
+    padding-right:4px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > i {
+    width:19px;
+    height:19px;
+    font-size:6px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > span {
+    font-size:6px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article > strong {
+    font-size:7px;
+    line-height:1.18;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold {
+    right:50%;
+    top:9%;
+    bottom:8%;
+    width:2%;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"].phase-playing:not(.strategy-active) .play-panel {
+    left:auto!important;
+    right:max(8px,env(safe-area-inset-right))!important;
+    top:54px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:min(48%,430px)!important;
+    max-height:none!important;
+    overflow:auto;
+    padding:8px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-content > .eyebrow {
+    display:none;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-content h2 {
+    margin:0 0 6px;
+    font-size:10px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-panel button {
+    min-height:46px;
+    max-height:72px;
+    padding:5px 6px;
+  }
+  .game-frame[data-production-scene="DAY_RESULT"] .choice-text {
+    font-size:8.5px;
+    line-height:1.22;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-memory-strip .memory-frame,
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-tomorrow-threshold,
+  .game-frame[data-production-scene="DAY_RESULT"] .day-result-production-thread article {
+    transition:none!important;
+    animation:none!important;
+  }
+}
+

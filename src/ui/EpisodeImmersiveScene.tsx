@@ -11,6 +11,7 @@ import { episode01FieldProduction } from '../app/episode01-field-production';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
 import { episode01OfficeProduction } from '../app/episode01-office-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
+import type { Episode01DayResultProduction } from '../app/episode01-day-result-production';
 import { useEpisode01ScenePreload } from './useEpisode01ScenePreload';
 import { VisualImage } from './VisualSlot';
 
@@ -94,6 +95,7 @@ export function EpisodeImmersiveScene({
   resolve,
   t,
   memoryVisualPlan,
+  dayResultProduction,
 }: {
   readonly eventId: string | null | undefined;
   readonly nodeId: string | null | undefined;
@@ -108,6 +110,7 @@ export function EpisodeImmersiveScene({
   readonly resolve: AssetResolver;
   readonly t: (id: string) => string;
   readonly memoryVisualPlan?: Episode01MemoryVisualPlan;
+  readonly dayResultProduction?: Episode01DayResultProduction;
 }) {
   const scene = episode01ImmersiveScene(eventId, nodeId, presentationType, speakerId, previewChoiceId);
   useEpisode01ScenePreload(eventId, resolve);
@@ -175,6 +178,12 @@ export function EpisodeImmersiveScene({
     data-office-ui={officeProduction?.ui_profile}
     data-office-cast={officeProduction?.cast_profile}
     data-office-evidence={officeProduction?.evidence_focus}
+    data-dayresult-phase={dayResultProduction?.phase}
+    data-dayresult-camera={dayResultProduction?.camera_profile}
+    data-dayresult-depth={dayResultProduction?.depth_profile}
+    data-dayresult-lighting={dayResultProduction?.lighting_profile}
+    data-dayresult-ui={dayResultProduction?.ui_profile}
+    data-dayresult-carryover={dayResultProduction?.carryover_key}
     key={scene.background_asset_id ?? scene.background_uri}
   >
     <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
@@ -214,6 +223,29 @@ export function EpisodeImmersiveScene({
       </span>)}
       {scene.event_id === 'e01_10_next_day_tease' ? <i className="episode-daybreak-threshold" /> : null}
     </div> : null}
+    {dayResultProduction ? <section
+      className="day-result-production-layer"
+      data-phase={dayResultProduction.phase}
+      data-carryover={dayResultProduction.carryover_key}
+      aria-label={t(dayResultProduction.title_text_id)}
+    >
+      <header className="day-result-production-title">
+        <span>{t(dayResultProduction.eyebrow_text_id)}</span>
+        <strong>{t(dayResultProduction.title_text_id)}</strong>
+      </header>
+      <div className="day-result-production-thread">
+        {dayResultProduction.lanes.map((lane, index) => <article key={lane.kind} data-lane={lane.kind}>
+          <i aria-hidden="true">{String(index + 1).padStart(2, '0')}</i>
+          <span>{t(lane.label_text_id)}</span>
+          <strong>{t(lane.title_text_id)}</strong>
+        </article>)}
+      </div>
+      <div className="day-result-tomorrow-threshold" aria-hidden="true">
+        <i />
+        <span />
+        <b />
+      </div>
+    </section> : null}
     {showEvidenceBoard ? <div className="episode-immersive-evidence-board" aria-hidden="true">
       <span className="evidence-sheet sheet-a" />
       <span className="evidence-sheet sheet-b" />
