@@ -32,6 +32,20 @@ describe('Episode 01 Phase D production lock', () => {
     expect(phaseD.runtime_scene_element_scope.field_guide_only_backlog_is_non_blocking).toBe(true);
   });
 
+  it('forbids temporary visual expansion and accepts only final-slot candidates during Phase D', () => {
+    expect(phaseD.current_focus).toBe('D-1_TITLE_CAST_IDENTITY_REFRESH');
+    expect(phaseD.asset_policy.mode).toBe('FINAL_CANDIDATES_ONLY');
+    expect(phaseD.asset_policy.prohibited).toContain('new temporary visual slots');
+    expect(phaseD.asset_policy.prohibited).toContain('renaming legacy binaries as final');
+    expect(EPISODE01_PHASE_D_LOCK.asset_policy.mode).toBe('FINAL_CANDIDATES_ONLY');
+    expect(EPISODE01_PHASE_D_LOCK.execution_order).toEqual([
+      'D-1_TITLE_CAST_8_FINAL_WEBPS',
+      'D-2_MATERIAL_STACK_REALISTIC_V2',
+      'D-3_STRICT_PHASE_D_CHECK_AND_REGRESSION_ONLY',
+      'D-4_EPISODE01_CINEMATIC_VERTICAL_SLICE_LOCK',
+    ]);
+  });
+
   it('ships a strict Phase D command without turning all 118 future Field Guide assets into an Episode 01 blocker', () => {
     const pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf8')) as { scripts: Record<string, string> };
     expect(pkg.scripts['phase-d:check']).toContain('assets:character-replacement-check');

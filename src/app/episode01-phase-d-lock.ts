@@ -16,6 +16,31 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
   }),
   master_principles_id: MASTER_DESIGN_PRINCIPLES_ID,
   final_playthrough_gate_id: EPISODE01_FINAL_PLAYTHROUGH_GATE_ID,
+  current_focus: 'D-1_TITLE_CAST_IDENTITY_REFRESH',
+  asset_policy: Object.freeze({
+    mode: 'FINAL_CANDIDATES_ONLY',
+    rule: 'Phase D does not create additional placeholder, mockup, fallback or CSS-only visual substitutes. New visual work must target an existing Phase D production slot and be eligible to become the shipped final asset.',
+    acceptance: Object.freeze([
+      'Asset targets an existing Phase D production slot.',
+      'Binary passes required size, alpha and format checks.',
+      'Character art passes identity and cross-surface continuity QA when applicable.',
+      'Scene-element art passes authored field-reality profile and runtime placement QA when applicable.',
+      'Replacement is verified in the live Episode 01 surface before the slot is marked LOCKED.',
+    ] as const),
+    prohibited: Object.freeze([
+      'New temporary visual slots.',
+      'Concept-only mockups counted as production progress.',
+      'Renaming legacy binaries as final.',
+      'CSS silhouettes or fallback art counted as final media.',
+      'Future Field Guide or Episode 02 art expansion before Episode 01 Phase D closes.',
+    ] as const),
+  }),
+  execution_order: Object.freeze([
+    'D-1_TITLE_CAST_8_FINAL_WEBPS',
+    'D-2_MATERIAL_STACK_REALISTIC_V2',
+    'D-3_STRICT_PHASE_D_CHECK_AND_REGRESSION_ONLY',
+    'D-4_EPISODE01_CINEMATIC_VERTICAL_SLICE_LOCK',
+  ] as const),
   tracks: Object.freeze([
     Object.freeze({ id: 'immersive_backgrounds', required: 8, ready: 8, status: 'LOCKED' }),
     Object.freeze({ id: 'character_performance_wave', required: 5, ready: 5, status: 'LOCKED' }),

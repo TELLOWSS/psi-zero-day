@@ -31,6 +31,19 @@ Phase D 진입 기준은 commit `128f77361248fc70b9afe1409bb787af7de2c795`에서
 
 따라서 Phase D는 시작됐지만 **아직 완료는 아니다**.
 
+## Phase D Final-only asset policy
+
+Phase D에서는 **임시 시각물을 더 만들지 않는다**. 새로 만드는 시각 자산은 반드시 이미 정의된 Production slot을 직접 교체할 수 있는 **최종 후보(final candidate)** 여야 한다.
+
+- 새 placeholder / mockup / fallback slot을 추가하지 않는다.
+- 기존 legacy binary의 이름만 바꿔 final로 처리하지 않는다.
+- CSS 실루엣이나 기능검증용 fallback을 최종 자산 수량에 포함하지 않는다.
+- 캐릭터는 8개 title-cast portrait/map WebP를 **한 배치로** 교체하고 Main → Loading → MAP identity continuity를 통과해야 한다.
+- Episode 01 runtime scene element는 현재 실제 배치되는 `material_stack`만 realistic-v2 최종본으로 교체한다.
+- 최종 자산 intake로 생긴 회귀만 수정하고, 이 단계에서 새 Episode나 새 비주얼 체계를 열지 않는다.
+
+현재 focus는 **D-1 — Title cast identity refresh**다. D-1 완료 후 D-2 `material_stack` → strict `phase-d:check` → Episode 01 cinematic vertical slice lock 순서로만 진행한다.
+
 ## D-1 — Title cast identity refresh
 
 현재 runtime에는 Player / Lim Junho / Lee Jaehoon / Seo Jeongmin의 portrait + map WebP가 존재하지만 immutable legacy baseline과 SHA-256을 비교하면 **8개 모두 기존 baseline과 동일**하다.

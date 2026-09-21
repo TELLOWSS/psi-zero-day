@@ -13,16 +13,42 @@
   "master_principles_id": "master-design-principles-v1",
   "final_playthrough_gate_id": "episode01-final-playthrough-gate-v1",
   "tracks": {
-    "immersive_backgrounds": { "required": 8, "ready": 8, "status": "LOCKED" },
-    "character_performance_wave": { "required": 5, "ready": 5, "status": "LOCKED" },
-    "production_audio": { "required": 8, "ready": 8, "status": "LOCKED" },
-    "camera_transition_responsive_direction": { "required": 1, "ready": 1, "status": "LOCKED" },
-    "title_cast_identity_refresh": { "required": 8, "ready": 0, "status": "PENDING" },
-    "episode01_runtime_scene_elements": { "required": 1, "ready": 0, "status": "PENDING" }
+    "immersive_backgrounds": {
+      "required": 8,
+      "ready": 8,
+      "status": "LOCKED"
+    },
+    "character_performance_wave": {
+      "required": 5,
+      "ready": 5,
+      "status": "LOCKED"
+    },
+    "production_audio": {
+      "required": 8,
+      "ready": 8,
+      "status": "LOCKED"
+    },
+    "camera_transition_responsive_direction": {
+      "required": 1,
+      "ready": 1,
+      "status": "LOCKED"
+    },
+    "title_cast_identity_refresh": {
+      "required": 8,
+      "ready": 0,
+      "status": "PENDING"
+    },
+    "episode01_runtime_scene_elements": {
+      "required": 1,
+      "ready": 0,
+      "status": "PENDING"
+    }
   },
   "runtime_scene_element_scope": {
     "policy": "ONLY_ELEMENTS_REFERENCED_BY_EPISODE01_EVENT_ELEMENTS",
-    "current_required_keys": ["material_stack"],
+    "current_required_keys": [
+      "material_stack"
+    ],
     "field_guide_only_backlog_is_non_blocking": true,
     "catalog_definitions": 118,
     "runtime_placed_definitions": 1,
@@ -39,5 +65,30 @@
     "Phase C camera/transition/responsive direction with five-profile QA"
   ],
   "exit_command": "npm run phase-d:check",
-  "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime."
+  "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime.",
+  "current_focus": "D-1_TITLE_CAST_IDENTITY_REFRESH",
+  "asset_policy": {
+    "mode": "FINAL_CANDIDATES_ONLY",
+    "rule": "Phase D does not create additional placeholder, mockup, fallback or CSS-only visual substitutes. New visual work must target an existing Phase D production slot and be eligible to become the shipped final asset.",
+    "acceptance": [
+      "asset targets an existing Phase D production slot",
+      "binary passes required size, alpha and format checks",
+      "character art passes identity and cross-surface continuity QA when applicable",
+      "scene-element art passes the authored field-reality profile and runtime placement QA when applicable",
+      "replacement is verified in the live Episode 01 surface before the slot is marked LOCKED"
+    ],
+    "prohibited": [
+      "new temporary visual slots",
+      "new concept-only mockups presented as production progress",
+      "renaming legacy binaries as final",
+      "CSS silhouettes or fallback art counted as final media",
+      "expanding future Field Guide or Episode 02 art before Episode 01 Phase D closes"
+    ]
+  },
+  "execution_order": [
+    "D-1: replace the 8 title-cast portrait/map WebPs as one atomic final-art batch",
+    "D-2: replace material_stack with the realistic-v2 final runtime cutout",
+    "D-3: run npm run phase-d:check and close only regressions caused by final asset intake",
+    "D-4: lock Episode 01 cinematic vertical slice; only then open broader campaign expansion"
+  ]
 }
