@@ -3727,3 +3727,175 @@
   }
 }
 
+
+
+/* Phase C integration quality lock — Episode 01 end-to-end. */
+/* This layer intentionally comes last. It aligns the six scene families without flattening their authored identities. */
+.game-frame[data-production-scene] .episode-immersive-background,
+.game-frame[data-production-scene] .episode-immersive-grade,
+.game-frame[data-production-scene] .episode-immersive-atmosphere,
+.game-frame[data-production-scene] .episode-immersive-character,
+.game-frame[data-production-scene] .play-panel {
+  transition:
+    transform .34s cubic-bezier(.2,.72,.2,1),
+    filter .34s ease,
+    opacity .28s ease,
+    background .34s ease,
+    border-color .28s ease;
+}
+.game-frame[data-production-scene] .episode-immersive-background {
+  transform-origin:50% 50%;
+}
+.game-frame[data-production-scene] .episode-immersive-character {
+  transform-origin:50% 100%;
+}
+
+/* Camera/lighting continuity bands. Phase-specific selectors with higher specificity can still author a close-up or pressure beat. */
+.game-frame[data-production-scene="FIELD"] .episode-immersive-background {
+  transform:scale(1.035);
+  filter:saturate(.96) contrast(1.045) brightness(.88);
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-background {
+  transform:scale(1.04);
+  filter:saturate(.94) contrast(1.045) brightness(.9);
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-background {
+  transform:scale(1.075);
+  filter:saturate(.9) contrast(1.08) brightness(.79);
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-background {
+  transform:scale(1.045);
+  filter:saturate(.9) contrast(1.055) brightness(.86);
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-background {
+  transform:scale(1.03);
+  filter:saturate(.78) contrast(1.05) brightness(.78);
+}
+
+/* One context label wins. FIELD keeps its location/time stamp; authored production scenes suppress the redundant stamp. */
+.game-frame[data-production-scene="TBM"] .episode-scene-stamp,
+.game-frame[data-production-scene="STOP_WORK"] .episode-scene-stamp,
+.game-frame[data-production-scene="OFFICE"] .episode-scene-stamp,
+.game-frame[data-production-scene="DAY_RESULT"] .episode-scene-stamp {
+  display:none;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .scene-heading {
+  display:none;
+}
+
+/* Interaction rhythm: pressure gets room, communication/evidence stays deliberate, reflection settles. */
+.game-frame[data-interaction-mode="decision"] .choice-panel {
+  gap:9px;
+}
+.game-frame[data-interaction-mode="decision"] .choice-panel button {
+  min-height:58px;
+}
+.game-frame[data-interaction-mode="communicate"] .choice-panel,
+.game-frame[data-interaction-mode="evidence"] .choice-panel {
+  gap:7px;
+}
+.game-frame[data-interaction-mode="communicate"] .choice-panel button,
+.game-frame[data-interaction-mode="evidence"] .choice-panel button {
+  min-height:54px;
+}
+.game-frame[data-interaction-mode="dialogue"] .choice-panel button {
+  min-height:52px;
+}
+.game-frame[data-interaction-mode="reflect"] .choice-panel button {
+  min-height:50px;
+}
+
+/* Scene-family entry language. These animations restart only when the relevant scene surface remounts. */
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene {
+  animation:phasec-world-dissolve .34s ease-out both;
+}
+.game-frame[data-production-scene="TBM"] .episode-immersive-scene {
+  animation:phasec-group-settle .32s ease-out both;
+}
+.game-frame[data-production-scene="STOP_WORK"] .episode-immersive-scene {
+  animation:phasec-pressure-cut .22s ease-out both;
+}
+.game-frame[data-production-scene="OFFICE"] .episode-immersive-scene {
+  animation:phasec-interior-crossfade .36s ease-out both;
+}
+.game-frame[data-production-scene="DAY_RESULT"] .episode-immersive-scene {
+  animation:phasec-memory-dissolve .5s ease-out both;
+}
+.game-frame[data-production-scene="STRATEGY"] .strategy-map {
+  animation:phasec-map-lock .28s ease-out both;
+}
+
+/* DAY 01 -> DAY 02 is a threshold, not a detached end screen. */
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_10_next_day_tease"] {
+  animation:phasec-day02-threshold .62s cubic-bezier(.2,.72,.2,1) both;
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-background {
+  transform:scale(1.02);
+  filter:saturate(.78) contrast(1.055) brightness(.78);
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-atmosphere {
+  opacity:.9;
+}
+
+/* Mobile contract: safe sheet in portrait, safe dock in compact landscape, with no scene-family exceptions. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel {
+    max-height:min(43dvh,430px);
+    padding-bottom:max(12px,env(safe-area-inset-bottom));
+    overflow:auto;
+    overscroll-behavior:contain;
+  }
+  .game-frame[data-production-scene] .choice-panel button {
+    min-height:44px;
+  }
+}
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene].phase-playing:not(.strategy-active) .play-panel {
+    right:max(8px,env(safe-area-inset-right))!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    max-width:min(430px,48vw);
+    overflow:auto;
+    overscroll-behavior:contain;
+  }
+  .game-frame[data-production-scene] .choice-panel button,
+  .game-frame[data-production-scene] .continue-button {
+    min-height:44px;
+  }
+}
+
+@keyframes phasec-world-dissolve {
+  from { opacity:.82; filter:brightness(.82); }
+  to { opacity:1; filter:brightness(1); }
+}
+@keyframes phasec-group-settle {
+  from { opacity:.86; transform:scale(1.008); }
+  to { opacity:1; transform:scale(1); }
+}
+@keyframes phasec-pressure-cut {
+  from { opacity:.9; filter:contrast(1.14); }
+  to { opacity:1; filter:contrast(1); }
+}
+@keyframes phasec-interior-crossfade {
+  from { opacity:.84; filter:brightness(.88); }
+  to { opacity:1; filter:brightness(1); }
+}
+@keyframes phasec-memory-dissolve {
+  from { opacity:.72; filter:saturate(.7) brightness(.84); }
+  to { opacity:1; filter:saturate(1) brightness(1); }
+}
+@keyframes phasec-map-lock {
+  from { opacity:.86; transform:scale(1.008); }
+  to { opacity:1; transform:scale(1); }
+}
+@keyframes phasec-day02-threshold {
+  0% { opacity:.68; filter:brightness(.76) saturate(.7); }
+  48% { opacity:.9; filter:brightness(.9) saturate(.82); }
+  100% { opacity:1; filter:brightness(1) saturate(1); }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .game-frame[data-production-scene] .episode-immersive-scene,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    animation:none!important;
+  }
+}
