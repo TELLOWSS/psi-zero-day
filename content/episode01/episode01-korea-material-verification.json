@@ -348,14 +348,43 @@
   },
   "field_guide_section0": {
     "vehicle_pedestrian_separation": {
-      "status": "functional_geometry_locked_product_family_pending_site_style",
-      "classification": "separation system / site layout, not one universal product",
-      "verified": "Korean safety rules require safe worker passages, and where the primary entrance is for material-handling equipment an adjacent pedestrian entrance is required. KOSHA guidance calls for worker passage separated from equipment travel routes.",
-      "render_contract": "Use a real Korean site combination such as separated pedestrian lane + PE barrier/fence + lane markings; exact barrier family must be locked from a Korean product/site reference before final art.",
+      "status": "visual_composition_locked_ready_to_render",
+      "classification": "Korean construction-site separated passage assembly",
+      "official_basis": [
+        "KOSHA construction guidance states that a safe passage for workers should be installed separately from material-handling/construction-equipment routes and maintained usable.",
+        "KOSHA guidance identifies collision risk where a pedestrian-only passage is not separated from equipment routes."
+      ],
+      "selected_episode01_visual_family": {
+        "pedestrian_lane": "straight worker passage approximately one-person/two-person lane width, clean walking surface",
+        "vehicle_lane": "adjacent temporary asphalt/concrete construction road",
+        "physical_separator": "verified Korean blue-mesh movable safety-fence panels on black weighted bases",
+        "continuity": "at least two connected fence panels so the separation reads as a route, not an isolated barricade",
+        "entry": "lane opening remains walkable and does not force workers into the vehicle road",
+        "marking": "simple floor/lane edge marking allowed; no text baked into reusable art"
+      },
+      "render_contract": {
+        "asset_type": "transparent scene-fragment module rather than one invented product",
+        "composition": "pedestrian strip on one side, adjacent vehicle strip on the other, separated continuously by 2–3 Korean banding-type blue-mesh fence panels",
+        "fence_geometry": "reuse Episode 01 approved access-barrier family: rounded galvanized tube, blue mesh, black weighted bases",
+        "road_surface": "realistic temporary construction asphalt/concrete strip with mild dirt/tire wear",
+        "pedestrian_surface": "clean non-slip temporary walkway surface; restrained green/gray marking only if needed for readability",
+        "people": "none",
+        "vehicles": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent outside the ground module",
+        "camera": "slight elevated three-quarter view so both routes and the continuous physical separation are immediately legible"
+      },
+      "reject": [
+        "painted line only with no physical separation",
+        "foreign crowd-control fence",
+        "single cone presented as full separation",
+        "magic glowing route overlay as the physical control",
+        "covered public sidewalk tunnel when the authored scene is an internal construction access route"
+      ],
       "sources": [
-        "https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1028543731",
-        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063279",
-        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=118&um=s"
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=118&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=114&um=s"
       ]
     },
     "material_yard": {
@@ -404,7 +433,23 @@
         "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/",
         "https://m.intelrior.com/product/%EC%9E%84%EC%8B%9C-%EA%B0%80%EC%84%A4-%EC%9D%B4%EB%8F%99%EC%8B%9D-%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9E%90%EB%A6%BD%ED%98%95-frp-%EB%8B%A8%EC%83%81-%EC%A1%B0%EB%A6%BD%EC%8B%9D-%EA%B1%B4%EC%84%A4-%EA%B3%B5%EC%82%AC-%EC%82%B0%EC%97%85-%EC%9D%B8%ED%85%8C%EB%A6%AC%EC%96%B4-%ED%98%84%EC%9E%A5-%EC%BA%A0%ED%95%91%EC%9E%A5-%EC%95%BC%EC%99%B8-%EB%AF%B8%EB%9E%98%EC%9D%B4%EC%97%94%EC%97%90%ED%94%84/6416/",
         "https://boxpara.com/category/frp-box/357/"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_binary_and_runtime_review",
+        "generation_id": "ca52c6dc-279d-4a35-97fe-90c4c16e0f4a",
+        "accepted": [
+          "orange/yellow FRP enclosure",
+          "simple black freestanding H-frame",
+          "four blue weather-protected outlets",
+          "small red energized indicator",
+          "closed normal-use door",
+          "no lifting eyes and no dominant red industrial connector"
+        ],
+        "limitations": [
+          "outlet count and exact layout remain product-family specific",
+          "no claim that this is a single universal Korean temporary-board configuration"
+        ]
+      }
     },
     "temporary_lighting_pack": {
       "status": "function_verified_fixture_shape_site_specific"
@@ -423,10 +468,10 @@
     }
   },
   "next_render_order": [
-    "site_gate",
-    "temporary_distribution_board",
-    "material_stack",
-    "vehicle_pedestrian_separation"
+    "vehicle_pedestrian_separation",
+    "site_weather_station",
+    "temporary_lighting_pack",
+    "fire_extinguisher_station"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
