@@ -44,6 +44,8 @@ export function StrategyLoopPanel({
   onActionFocus,
   guidanceText,
   emptyText,
+  transitionPrompt,
+  onTransitionContinue,
 }: {
   readonly actions: readonly StrategyAction[];
   readonly selectedActions: readonly StrategyAction[];
@@ -59,6 +61,8 @@ export function StrategyLoopPanel({
   readonly onActionFocus?: (targetKey: string | null) => void;
   readonly guidanceText?: string;
   readonly emptyText?: string;
+  readonly transitionPrompt?: string;
+  readonly onTransitionContinue?: () => void;
 }) {
   const [pending, setPending] = useState<StrategyAction | null>(null);
   const [reconsiderConfirm, setReconsiderConfirm] = useState(false);
@@ -83,11 +87,11 @@ export function StrategyLoopPanel({
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
   const nextStep = pending
     ? { state: 'execute', title: text('ui.strategy.guide.execute_title'), hint: text('ui.strategy.guide.execute_hint') }
-    : focusId && selectedActions.length
-      ? { state: 'choose', title: text('ui.strategy.guide.choose_title'), hint: text('ui.strategy.guide.choose_hint') }
-      : { state: 'target', title: text('ui.strategy.guide.target_title'), hint: text('ui.strategy.guide.target_hint') };
-
-  if (!actions.length && !outcome) return null;
+    : transitionPrompt
+      ? { state: 'continue', title: text('ui.strategy.guide.continue_title'), hint: text('ui.strategy.guide.continue_hint') }
+      : focusId && selectedActions.length
+        ? { state: 'choose', title: text('ui.strategy.guide.choose_title'), hint: text('ui.strategy.guide.choose_hint') }
+        : { state: 'target', title: text('ui.strategy.guide.target_title'), hint: text('ui.strategy.guide.target_hint') };
 
   return <aside
     className={`strategy-action-tray strategy-loop-panel step-${step}`}
@@ -133,7 +137,13 @@ export function StrategyLoopPanel({
       </div>
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
       {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
-      {!focusId ? <p className="strategy-action-empty">{text('ui.strategy.action_hint')}</p>
+      {transitionPrompt ? <div className="strategy-transition-card" data-strategy-transition="true">
+        <p>{transitionPrompt}</p>
+        <button type="button" className="strategy-transition-button" onClick={onTransitionContinue}>
+          {text('ui.strategy.guide.continue_button')} <b aria-hidden="true">↗</b>
+        </button>
+      </div>
+        : !focusId ? <p className="strategy-action-empty">{text('ui.strategy.action_hint')}</p>
         : !selectedActions.length ? <p className="strategy-action-empty">{emptyText ?? text('ui.strategy.no_actions')}</p>
         : <>
           <p className="strategy-action-count">{text('ui.strategy.guide.available')} <strong>{selectedActions.length}</strong></p>
