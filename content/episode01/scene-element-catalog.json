@@ -158,14 +158,16 @@
       "planned_asset_id": "ep01.scene_element.harness_unclipped",
       "fall_protection_profile": {
         "harness_type": "full_body",
-        "lanyard_configuration": "twin_y",
+        "certification_context": "KCs safety-certified product family",
+        "scenario_configuration": "twin_y_double_lanyard",
+        "scenario_configuration_is_universal_requirement": false,
         "lanyard_count": 2,
         "hook_count": 2,
-        "connection_intent": "continuous_attachment_during_transfer",
-        "design_reference": "SWELOCK double-lanyard ergonomics only; final game art must be brand-neutral.",
+        "connection_intent": "continuous_attachment_during_transfer_when_this_site_method_is_used",
+        "design_reference": "Korean KCs-certified full-body harness product family; no foreign-brand geometry as the source of truth.",
         "branding_policy": "no_logo_no_trademark",
-        "site_practice_note": "고소 이동 작업에서는 두 줄 중 하나의 체결을 유지하면서 다른 한 줄을 다음 부착점으로 옮길 수 있는 더블(Y) 랜야드형 전체식 안전대를 기본 시각 기준으로 표현한다.",
-        "safety_evaluation_note": "두 줄 자체만으로 안전을 판정하지 않고 부착설비 위치와 강도, 훅 체결상태, 추락여유거리, 진자추락 가능성, 충격흡수장치, 랜야드 손상 및 작업조건을 함께 평가한다."
+        "site_practice_note": "Episode 01의 해당 장면은 더블(Y) 랜야드 안전그네식 안전대를 사용하는 현장 설정으로 표현한다. 이 구성 자체를 대한민국 모든 현장의 보편 법정형상으로 설명하지 않는다.",
+        "safety_evaluation_note": "KCs 인증 여부, 작업에 맞는 안전대 종류, 부착설비와의 연결, 훅 체결상태, 죔줄·충격흡수장치 손상 및 제조사 사용설명서를 함께 확인한다."
       },
       "art": {
         "path": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
