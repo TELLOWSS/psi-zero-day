@@ -236,3 +236,86 @@
     max-height: 43vh !important;
   }
 }
+
+
+/* Phase D D-3A — Production Map dominance lock.
+   The current Stage2 contract starts at target selection (no extra Observe click).
+   Keep the map as the primary play surface and let guidance float above it without
+   reserving a large opaque panel. */
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset:16.6% .8% .6% .8%!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"]
+    .strategy-action-tray.step-1 {
+    left:8px!important;
+    right:8px!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    width:auto!important;
+    max-height:13dvh!important;
+    min-height:0!important;
+    padding:8px 10px!important;
+    overflow:auto!important;
+    background:rgba(247,252,255,.96)!important;
+    backdrop-filter:blur(10px)!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+    .strategy-zone-target:not(.is-focused):not(.has-actions) .strategy-zone-copy {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+    .strategy-map-worker:not(.is-focused):not(.has-actions) .strategy-worker-label {
+    display:none!important;
+  }
+}
+
+/* Short landscape phones cannot afford a permanent left rail reservation.
+   The rail overlays at low emphasis while the tactical map uses almost the full
+   physical viewport. The initial command tray is a compact right-side coach. */
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-event-title {
+    left:1.2%!important;
+    right:1.2%!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip {
+    left:1.2%!important;
+    right:1.2%!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset:17.2% .8% 1.2% .8%!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-rail {
+    width:12.5%!important;
+    opacity:.52!important;
+    pointer-events:none!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"]
+    .strategy-action-tray.step-1 {
+    left:auto!important;
+    right:1%!important;
+    bottom:2%!important;
+    width:min(250px,29vw)!important;
+    min-width:0!important;
+    max-width:250px!important;
+    max-height:31vh!important;
+    padding:7px 8px!important;
+    overflow:auto!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+    .strategy-zone-target:not(.is-focused):not(.has-actions) .strategy-zone-copy {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+    .strategy-map-worker:not(.is-focused):not(.has-actions) .strategy-worker-label {
+    display:none!important;
+  }
+}

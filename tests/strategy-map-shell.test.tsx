@@ -95,10 +95,11 @@ const visualAssets: StrategyVisualAssets = {
 };
 
 describe('StrategyMapShell', () => {
-  it('starts at situation observation before target/action/result interaction', () => {
+  it('starts at target selection without restoring the removed observe gate', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
     expect(html).toContain('data-stage="TYPICAL_FLOOR"');
-    expect(html).toContain('data-loop-phase="observe"');
+    expect(html).toContain('data-loop-phase="target"');
+    expect(html).not.toContain('strategy-observe-card');
     expect(html).toContain('data-visual-mode="css"');
     expect(html).toContain('data-character="lim_junho"');
     expect(html).toContain('data-art-surface="map"');
