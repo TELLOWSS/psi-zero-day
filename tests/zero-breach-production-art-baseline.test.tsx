@@ -116,7 +116,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     await click(host.querySelector('[data-support="COORDINATOR"]')!);
 
     const shell = host.querySelector('[data-defense-screen="combat"]');
-    expect(shell?.getAttribute('data-visual-version')).toBe('zero-breach-visual-baseline-0.1.0');
+    expect(shell?.getAttribute('data-visual-version')).toBe(defenseVisualProduction.visualVersion);
 
     const board = host.querySelector('image[data-production-board-art="ramp-01"]');
     expect(board?.getAttribute('href')).toBe('assets/defense/board/ramp-01.svg');
