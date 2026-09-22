@@ -120,11 +120,12 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     const board = host.querySelector('image[data-production-board-art="ramp-01"]');
     expect(board?.getAttribute('href')).toBe('assets/defense/board/ramp-01.svg');
 
+    await click(host.querySelector('button[aria-label^="P1 ·"]')!);
     const shopPulse = host.querySelector('.zb-shop-production-art') as HTMLImageElement | null;
+    expect(shopPulse).not.toBeNull();
     expect(shopPulse?.getAttribute('src')).toContain('assets/defense/towers/pulse-l1.svg');
     expect(host.querySelector('[data-art-state="prototype"]')).not.toBeNull();
 
-    await click(host.querySelector('button[aria-label^="P1 ·"]')!);
     await click(buttonContaining(host, '펄스 대응기'));
     expect(host.querySelector('g[data-production-tower-art="PULSE:L1"] image')?.getAttribute('href'))
       .toBe('assets/defense/towers/pulse-l1.svg');
