@@ -52,7 +52,7 @@ describe('ZERO BREACH Step 6 — E0/E1 event bridge', () => {
     expect(source).toBeDefined();
 
     const knownChoices = source?.choices?.filter(choice => choice.effects?.flags?.ramp_signal_known === true).map(choice => choice.choice_id) ?? [];
-    expect(knownChoices).toEqual(expect.arrayContaining(['direct_follow', 'crosscheck_minseok']));
+    expect(knownChoices).toEqual(expect.arrayContaining(['listen_more', 'crosscheck_minseok']));
     expect(source?.choices?.find(choice => choice.choice_id === 'dismiss')?.effects?.flags?.ramp_signal_known).toBe(false);
 
     const knownState = { flags: { ramp_signal_known: true } } as unknown as GameState;
