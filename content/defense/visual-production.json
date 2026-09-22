@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "visualVersion": "zero-breach-visual-baseline-0.1.0",
-  "status": "BASELINE_LOCK_CANDIDATE",
+  "status": "BASELINE_LOCKED",
   "artDirection": {
     "cameraElevationDeg": 70,
     "projection": "NEAR_ORTHOGRAPHIC",
@@ -26,7 +26,7 @@
       "transparent": false,
       "runtimeWidth": 1000,
       "runtimeHeight": 600,
-      "status": "BASELINE_LOCK_CANDIDATE",
+      "status": "BASELINE_LOCKED",
       "notes": "JSON route and all eight pad centers are authored at exact x2 coordinates; runtime route and pad overlays remain authoritative."
     },
     {
@@ -38,8 +38,11 @@
       "height": 256,
       "transparent": true,
       "safeArea": 192,
-      "anchor": { "x": 0.5, "y": 0.76 },
-      "status": "BASELINE_LOCK_CANDIDATE",
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "BASELINE_LOCKED",
       "notes": "Low square base, cylindrical coil, cyan family cue; no text/logo."
     },
     {
@@ -50,8 +53,11 @@
       "width": 128,
       "height": 128,
       "transparent": true,
-      "anchor": { "x": 0.5, "y": 0.76 },
-      "status": "BASELINE_LOCK_CANDIDATE",
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "BASELINE_LOCKED",
       "notes": "Single cracked spherical risk core with detached chips; non-human silhouette."
     }
   ]
