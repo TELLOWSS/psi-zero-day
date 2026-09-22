@@ -50,12 +50,19 @@ function wavePreview(state: DefenseRunState) {
 function TowerGlyph({ tower }: { tower: DefenseTowerState }) {
   const level = towerLevel(tower);
   const firing = tower.attackCooldown === level.intervalTicks;
+  const revealing = tower.towerId === 'SENSOR'
+    && typeof level.revealIntervalTicks === 'number'
+    && tower.revealCooldown === level.revealIntervalTicks;
   const artUri = defenseTowerArtUri(tower.towerId, tower.levelId);
   if (artUri) {
     return <g
       className={`zb-tower zb-tower-production${firing ? ' is-firing' : ''}`}
       data-production-tower-art={`${tower.towerId}:${tower.levelId}`}
+      data-tower-family={tower.towerId}
     >
+      {firing ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
+      {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
       <image
         href={artUri}
         x="-64"
@@ -99,19 +106,26 @@ function EnemyGlyph({ enemy, state, isHit }: { enemy: DefenseRunState['enemies']
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
   const hidden = definition.hidden && enemy.revealUntilTick <= state.tick && state.revealAllUntilTick <= state.tick;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
+  const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
+  const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
   const artUri = defenseEnemyArtUri(enemy.enemyId);
+  const artSize = definition.boss ? 92 : 60;
+  const artY = definition.boss ? -60 : -39;
   return <g
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
+    {slowed ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
+    {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
+    {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
     {artUri ? <image
       href={artUri}
-      x="-30"
-      y="-39"
-      width="60"
-      height="60"
+      x={-artSize / 2}
+      y={artY}
+      width={artSize}
+      height={artSize}
       preserveAspectRatio="xMidYMid meet"
       className="zb-enemy-production-image"
       data-production-enemy-art={enemy.enemyId}
@@ -235,6 +249,9 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
     if (!state) return;
     try {
+      if (command.type === 'StartWave' || (command.type === 'SetPaused' && command.paused === false && state.status === 'RUNNING')) {
+        audio.armAudio();
+      }
       const next = persistence.dispatch(command);
       if (!next) return;
       setNotice('');
@@ -395,6 +412,13 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
             <circle cx="500" cy="300" r="210" />
             <circle cx="500" cy="300" r="130" />
           </g> : null}
+          {effects.resolvedEnemyEchoes.map(echo => {
+            const pos = defensePositionAtDistance(content.map.path, echo.distance);
+            return <g key={`resolved-${echo.id}`} transform={`translate(${pos.x} ${pos.y})`} className="zb-resolve-burst" data-effect="resolve" aria-hidden="true">
+              <circle r="10" />
+              <path d="M-24 0H24M0-24V24M-17-17L17 17M17-17L-17 17" />
+            </g>;
+          })}
           {state.towers.map(tower => {
             const pad = content.map.pads.find(item => item.id === tower.padId)!;
             return <g key={tower.id} transform={`translate(${pad.x} ${pad.y})`}>

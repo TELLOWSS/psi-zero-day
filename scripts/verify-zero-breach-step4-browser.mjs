@@ -236,6 +236,17 @@ try {
   });
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
     source: `(() => {
+      window.__zbEffectsSeen = [];
+      const rememberEffects = () => {
+        for (const selector of ['.zb-attack-flash','.zb-area-pulse','.zb-detect-pulse','.zb-slow-ring','.zb-boss-armor-effect','.zb-resolve-burst']) {
+          if (document.querySelector(selector) && !window.__zbEffectsSeen.includes(selector)) window.__zbEffectsSeen.push(selector);
+        }
+      };
+      const observer = new MutationObserver(rememberEffects);
+      document.addEventListener('DOMContentLoaded', () => {
+        observer.observe(document.documentElement, { subtree:true, childList:true, attributes:true, attributeFilter:['class'] });
+        rememberEffects();
+      }, { once:true });
       const nativeSetInterval = window.setInterval.bind(window);
       window.setInterval = (handler, timeout, ...args) => {
         if (timeout === 50 && typeof handler === 'function') {
@@ -362,6 +373,12 @@ try {
 
   await waitFor(cdp, "Boolean(document.querySelector('.zb-result'))", 30000);
   const final = await snapshotState(cdp);
+  const effectsSeen = await evaluate(cdp, "window.__zbEffectsSeen || []");
+  const requiredEffects = ['.zb-attack-flash','.zb-area-pulse','.zb-detect-pulse','.zb-slow-ring','.zb-boss-armor-effect','.zb-resolve-burst'];
+  for (const effect of requiredEffects) {
+    if (!effectsSeen.includes(effect)) throw new Error('Missing semantic combat effect in full playthrough: ' + effect + ' / ' + JSON.stringify(effectsSeen));
+  }
+  report.effects_seen = effectsSeen;
   report.result = {
     ...final,
     stars: Number((final.resultText?.match(/별(\d) \/ 3/) || [])[1] || 0),

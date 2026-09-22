@@ -323,3 +323,26 @@
   .zb-support-field.is-coordinator path,.zb-support-field.is-observer circle{animation:none}
   .zb-impact-ring{opacity:.65}
 }
+
+
+/* Step 5 semantic effect set: attack / area / detect / slow / boss armor / resolve */
+.zb-attack-flash{fill:rgba(255,255,255,.18);stroke:#dff7ff;stroke-width:4;pointer-events:none;animation:zb-attack-flash .16s ease-out both}
+.zb-area-pulse{fill:none;stroke:#f5a449;stroke-width:7;pointer-events:none;animation:zb-area-pulse .24s ease-out both}
+.zb-detect-pulse{fill:none;stroke:#b59aff;stroke-width:5;stroke-dasharray:10 7;pointer-events:none;animation:zb-detect-pulse .34s ease-out both}
+.zb-slow-ring{fill:none;stroke:#56d5b0;stroke-width:4;stroke-dasharray:7 5;pointer-events:none;animation:zb-slow-ring .9s linear infinite}
+.zb-reveal-ring{fill:none;stroke:#d7c8ff;stroke-width:3;stroke-dasharray:3 5;pointer-events:none;opacity:.88}
+.zb-boss-armor-effect{fill:none;stroke:#ffad42;stroke-width:7;stroke-dasharray:18 6;pointer-events:none;filter:drop-shadow(0 0 5px rgba(255,173,66,.55));animation:zb-boss-armor 1.2s linear infinite}
+.zb-resolve-burst circle{fill:none;stroke:#eef4f8;stroke-width:5;animation:zb-resolve-burst .22s ease-out both}
+.zb-resolve-burst path{fill:none;stroke:#ffad42;stroke-width:4;stroke-linecap:round;animation:zb-resolve-rays .22s ease-out both}
+@keyframes zb-attack-flash{0%{r:18;opacity:1}100%{r:38;opacity:0}}
+@keyframes zb-area-pulse{0%{r:26;opacity:1;stroke-width:9}100%{r:62;opacity:0;stroke-width:2}}
+@keyframes zb-detect-pulse{0%{r:32;opacity:1}100%{r:70;opacity:0;stroke-dashoffset:-24}}
+@keyframes zb-slow-ring{to{stroke-dashoffset:-48}}
+@keyframes zb-boss-armor{to{stroke-dashoffset:-48}}
+@keyframes zb-resolve-burst{0%{r:7;opacity:1}100%{r:34;opacity:0}}
+@keyframes zb-resolve-rays{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@media (prefers-reduced-motion:reduce){
+  .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-slow-ring,.zb-boss-armor-effect,
+  .zb-resolve-burst circle,.zb-resolve-burst path{animation:none}
+  .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-resolve-burst{opacity:.7}
+}
