@@ -30,7 +30,7 @@ describe('Field guide chunk recovery', () => {
 
     await act(async () => {
       root.render(<RecoverableFieldGuide
-        session={{ t: (id: string) => id } as EpisodeSession}
+        session={{ t: (id: string) => id } as unknown as EpisodeSession}
         onHome={() => undefined}
         loader={loader}
         onReload={() => undefined}
@@ -65,7 +65,7 @@ describe('Field guide chunk recovery', () => {
 
     await act(async () => {
       root.render(<RecoverableFieldGuide
-        session={{ t: (id: string) => id } as EpisodeSession}
+        session={{ t: (id: string) => id } as unknown as EpisodeSession}
         onHome={onHome}
         loader={loader}
         onReload={onReload}
@@ -73,8 +73,10 @@ describe('Field guide chunk recovery', () => {
     });
     await flush();
 
-    buttonByText(host, 'ui.guide.recovery.home').click();
-    buttonByText(host, 'ui.guide.recovery.reload').click();
+    await act(async () => {
+      buttonByText(host, 'ui.guide.recovery.home').click();
+      buttonByText(host, 'ui.guide.recovery.reload').click();
+    });
 
     expect(onHome).toHaveBeenCalledTimes(1);
     expect(onReload).toHaveBeenCalledTimes(1);
