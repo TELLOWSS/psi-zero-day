@@ -377,12 +377,18 @@ export function EpisodeImmersiveScene({
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
     {speakerIdentity ? <div className="episode-immersive-speaker-tag" data-speaker-id={speakerId ?? undefined} aria-hidden="true">
-      {stage3SpeakerPortrait ? <VisualImage uri={stage3SpeakerPortrait} alt="" className="episode-immersive-speaker-portrait" /> : null}
-      <span className="episode-immersive-speaker-copy">
+      {stage3VisualLock ? <>
+        {stage3SpeakerPortrait ? <VisualImage uri={stage3SpeakerPortrait} alt="" className="episode-immersive-speaker-portrait" /> : null}
+        <span className="episode-immersive-speaker-copy">
+          <strong>{speakerIdentity.name}</strong>
+          <span>{speakerIdentity.role}</span>
+          {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}
+        </span>
+      </> : <>
         <strong>{speakerIdentity.name}</strong>
         <span>{speakerIdentity.role}</span>
         {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}
-      </span>
+      </>}
     </div> : null}
     <figcaption>
       <div><span>{time ?? 'EP01'}</span>{zone ? <b>{zone}</b> : null}<em>{t(stageTextId(presentationType, nodeId))}</em></div>
