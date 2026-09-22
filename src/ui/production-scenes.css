@@ -8449,3 +8449,29 @@
     font-size:7px;
   }
 }
+
+
+/* Phase D D-2C — FIELD 390x844 visual-QA correction.
+   Keep the steel-plate signal fully above the portrait judgment dock. */
+@media (orientation:portrait) and (max-width:420px) {
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-ramp-plate {
+    bottom:36dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-ramp-gravel {
+    bottom:37dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-vehicle-trace {
+    bottom:40dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-world-evidence[data-evidence="plate-edge"] {
+    bottom:44dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-world-evidence[data-evidence="small-signal"] {
+    bottom:52dvh!important;
+  }
+}
