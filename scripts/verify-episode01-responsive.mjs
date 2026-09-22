@@ -253,6 +253,18 @@ function collectMetrics(stage, touchMode) {
   const dayResultTomorrowRect = metricRect(immersive?.querySelector('.day-result-production-thread article[data-lane="tomorrow"]'));
   const day02CaptionRect = metricRect(immersive?.querySelector('figcaption'));
   const day02PlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
+  const fieldPlayerRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="player"]'));
+  const fieldJunhoRect = metricRect(immersive?.querySelector('.episode-immersive-character[data-character="lim_junho"]'));
+  const fieldPlateRect = metricRect(immersive?.querySelector('.field-ramp-plate'));
+  const fieldGravelRect = metricRect(immersive?.querySelector('.field-ramp-gravel'));
+  const fieldVehicleTraceRect = metricRect(immersive?.querySelector('.field-vehicle-trace'));
+  const fieldSmallSignalRect = metricRect(immersive?.querySelector('.field-world-evidence[data-evidence="small-signal"]'));
+  const fieldPlateEvidenceRect = metricRect(immersive?.querySelector('.field-world-evidence[data-evidence="plate-edge"]'));
+  const tbmRouteRect = metricRect(immersive?.querySelector('.tbm-change-route-line'));
+  const tbmControlPointRect = metricRect(immersive?.querySelector('.tbm-change-control-point'));
+  const tbmMorningEvidenceRect = metricRect(immersive?.querySelector('.tbm-world-evidence[data-evidence="morning-baseline"]'));
+  const tbmAccessEvidenceRect = metricRect(immersive?.querySelector('.tbm-world-evidence[data-evidence="changed-access"]'));
+  const tbmMaterialEvidenceRect = metricRect(immersive?.querySelector('.tbm-world-evidence[data-evidence="material-exit"]'));
   const immersiveBackground = immersive?.querySelector('.episode-immersive-background');
   const immersiveAtmosphere = immersive?.querySelector('.episode-immersive-atmosphere');
   const immersiveGrade = immersive?.querySelector('.episode-immersive-grade');
@@ -345,6 +357,18 @@ function collectMetrics(stage, touchMode) {
     dayResultTomorrowRect,
     day02CaptionRect,
     day02PlayerRect,
+    fieldPlayerRect,
+    fieldJunhoRect,
+    fieldPlateRect,
+    fieldGravelRect,
+    fieldVehicleTraceRect,
+    fieldSmallSignalRect,
+    fieldPlateEvidenceRect,
+    tbmRouteRect,
+    tbmControlPointRect,
+    tbmMorningEvidenceRect,
+    tbmAccessEvidenceRect,
+    tbmMaterialEvidenceRect,
     productionScene: gameFrame?.getAttribute('data-production-scene') || null,
     interactionMode: gameFrame?.getAttribute('data-interaction-mode') || null,
     hudDensity: gameFrame?.getAttribute('data-hud-density') || null,
@@ -356,12 +380,14 @@ function collectMetrics(stage, touchMode) {
     fieldUi: immersive?.getAttribute('data-field-ui') || null,
     fieldCast: immersive?.getAttribute('data-field-cast') || null,
     fieldHero: immersive?.getAttribute('data-field-hero') || gameFrame?.getAttribute('data-field-hero') || null,
+    fieldVisualLock: immersive?.getAttribute('data-field-visual-lock') || null,
     tbmPhase: immersive?.getAttribute('data-tbm-phase') || null,
     tbmCamera: immersive?.getAttribute('data-tbm-camera') || null,
     tbmDepth: immersive?.getAttribute('data-tbm-depth') || null,
     tbmLighting: immersive?.getAttribute('data-tbm-lighting') || null,
     tbmUi: immersive?.getAttribute('data-tbm-ui') || null,
     tbmCast: immersive?.getAttribute('data-tbm-cast') || null,
+    tbmVisualLock: immersive?.getAttribute('data-tbm-visual-lock') || null,
     tbmLayer: Boolean(document.querySelector('.tbm-production-layer')),
     tbmBoard: Boolean(document.querySelector('.tbm-briefing-board[data-board="work-sequence"]')),
     tbmBackgroundCrew: Boolean(document.querySelector('.tbm-background-crew')),
@@ -469,6 +495,20 @@ function validate(row, viewport) {
     if (row.fieldUi !== 'judgment') failures.push('FIELD judgment UI profile is missing');
     if (row.fieldCast !== 'junho-player-balance') failures.push('FIELD balanced cast profile is missing');
     if (row.fieldHero !== 'lim_junho') failures.push('FIELD Junho visual lead is missing');
+    if (row.fieldVisualLock !== 'field-reference-v1') failures.push('FIELD commercial reference lock marker is missing');
+    if (!row.fieldPlateRect) failures.push('FIELD steel-plate clue did not render');
+    if (!row.fieldGravelRect) failures.push('FIELD gravel displacement clue did not render');
+    if (!row.fieldVehicleTraceRect) failures.push('FIELD vehicle trace did not render');
+    if (!row.fieldSmallSignalRect || !row.fieldPlateEvidenceRect) failures.push('FIELD physical clue labels did not render');
+    if (row.playPanel && row.fieldSmallSignalRect && row.fieldSmallSignalRect.bottom > row.playPanel.top - 4) {
+      failures.push('FIELD small-signal clue is buried under the judgment dock');
+    }
+    if (row.playPanel && row.fieldPlateRect && row.fieldPlateRect.bottom > row.playPanel.top + 10) {
+      failures.push('FIELD steel-plate clue is buried under the judgment dock');
+    }
+    if (row.fieldPlayerRect && row.fieldJunhoRect && Math.abs(row.fieldPlayerRect.bottom - row.fieldJunhoRect.bottom) > Math.max(34, viewport.height * 0.06)) {
+      failures.push('FIELD Player/Junho no longer share a believable floor plane: playerBottom=' + row.fieldPlayerRect.bottom + ' junhoBottom=' + row.fieldJunhoRect.bottom);
+    }
     if (row.immersiveBackgroundOpacity === null || row.immersiveBackgroundOpacity < 0.95) {
       failures.push('FIELD final world background is not fully visible: opacity=' + row.immersiveBackgroundOpacity);
     }
@@ -603,6 +643,21 @@ function validate(row, viewport) {
     if (row.tbmLighting !== 'decision-amber') failures.push('TBM decision lighting profile is missing');
     if (row.tbmUi !== 'judgment') failures.push('TBM judgment UI profile is missing');
     if (row.tbmCast !== 'decision-circle') failures.push('TBM decision-circle cast profile is missing');
+    if (row.tbmVisualLock !== 'tbm-reference-v1') failures.push('TBM commercial reference lock marker is missing');
+    if (!row.tbmRouteRect) failures.push('TBM changed material route did not render');
+    if (!row.tbmControlPointRect) failures.push('TBM changed access control point did not render');
+    if (!row.tbmMorningEvidenceRect || !row.tbmAccessEvidenceRect || !row.tbmMaterialEvidenceRect) {
+      failures.push('TBM changed-work evidence labels did not all render');
+    }
+    if (row.playPanel && row.tbmAccessEvidenceRect && row.tbmAccessEvidenceRect.bottom > row.playPanel.top - 4) {
+      failures.push('TBM changed-access evidence is buried under the judgment dock');
+    }
+    if (row.playPanel && row.tbmMaterialEvidenceRect && row.tbmMaterialEvidenceRect.bottom > row.playPanel.top - 4) {
+      failures.push('TBM material-exit evidence is buried under the judgment dock');
+    }
+    if (row.tbmPlayerRect && row.tbmKangRect && Math.abs(row.tbmPlayerRect.bottom - row.tbmKangRect.bottom) > Math.max(34, viewport.height * 0.06)) {
+      failures.push('TBM Player/Kang no longer share a believable floor plane: playerBottom=' + row.tbmPlayerRect.bottom + ' kangBottom=' + row.tbmKangRect.bottom);
+    }
     if (!row.tbmLayer) failures.push('TBM production layer did not render');
   }
   if (row.stage === 'episode01-day-result') {
