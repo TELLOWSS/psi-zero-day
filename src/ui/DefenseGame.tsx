@@ -127,7 +127,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const tutorial = useDefenseTutorial(state, paused => {
+  const tutorial = useDefenseTutorial(state, content, paused => {
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
