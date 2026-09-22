@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - sol/zero-breach-step1-engine-20260922
+      - sol/zero-breach-step1-verify-20260922
   workflow_dispatch:
 
 permissions:
