@@ -3,14 +3,17 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
+import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
 import type {
   DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
 } from '../domain/defense';
 import {
-  advanceDefense, applyDefenseCommand, createDefenseRun, defensePositionAtDistance, defenseResult,
+  advanceDefense, applyDefenseCommand, defensePositionAtDistance, defenseResult,
 } from '../engine/defense';
+import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
+import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 
 const content = zeroBreachContent;
 const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
@@ -115,8 +118,9 @@ function SupportCard({
   </button>;
 }
 
-export function DefenseGame({ session, onExit }: { readonly session: EpisodeSession; readonly onExit: () => void }) {
-  const [state, setState] = useState<DefenseRunState | null>(null);
+export function DefenseGame({ session, onExit, storage }: { readonly session: EpisodeSession; readonly onExit: () => void; readonly storage?: StoragePort }) {
+  const persistence = useDefensePersistence(content, onExit, storage);
+  const { state, setState } = persistence;
   const [selectedPadId, setSelectedPadId] = useState<string | null>(null);
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -188,8 +192,8 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
     if (!state) return;
     try {
-      const next = applyDefenseCommand(state, content, command);
-      setState(next);
+      const next = persistence.dispatch(command);
+      if (!next) return;
       setNotice('');
       if (command.type === 'Build') {
         const built = next.towers.find(tower => tower.padId === command.padId);
@@ -213,22 +217,24 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
   };
 
   const startWithSupport = (supportId: DefenseSupportId) => {
-    let next = createDefenseRun(content, supportId);
-    if (portrait) next = applyDefenseCommand(next, content, { type: 'SetPaused', paused: true });
-    setState(next);
+    persistence.startWithSupport(supportId, portrait);
   };
 
   const retry = () => {
-    setState(null);
+    persistence.retryAfterResult();
     setSelectedPadId(null);
     setSelectedTowerId(null);
     setNotice('');
   };
 
+  if (!state && persistence.entry.kind !== 'select') {
+    return <DefensePersistenceGate controller={persistence} />;
+  }
+
   if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select">
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.ui.hub.title')}</h1></div>
-      <button type="button" onClick={onExit}>{t('defense.ui.exit')}</button>
+      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
       <span>{t('defense.ui.dev_notice')}</span>
@@ -252,7 +258,7 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed}>
+  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -273,8 +279,9 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
           onClick={() => dispatch({ type: 'SetSpeed', speed: speed as 1 | 2 })}
         >{speed}×</button>)}
       </div>
-      <button type="button" className="zb-exit" onClick={onExit}>{t('defense.ui.exit')}</button>
+      <button type="button" className="zb-exit" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
+    <DefenseSaveStatus controller={persistence} />
 
     <section className="zb-stage">
       <div className="zb-board-wrap">
@@ -443,15 +450,23 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
           <div><dt>{t('defense.ui.completed')}</dt><dd>{result.completedWaves} / 10</dd></div>
           <div><dt>{t('defense.ui.shield')}</dt><dd>{result.shield}</dd></div>
         </dl>
+        {persistence.awardedCosmeticIds.length ? <div className="zb-result-rewards">
+          <strong>{t('defense.save.reward')}</strong>
+          {persistence.awardedCosmeticIds.map(id => <span key={id}>
+            {id === content.scenario.threeStarCosmetic ? t('defense.save.reward.three') : t('defense.save.reward.first')}
+          </span>)}
+        </div> : null}
         <div className="zb-result-actions">
           <button type="button" onClick={retry}>{t('defense.ui.retry')}</button>
-          <button type="button" onClick={onExit}>{t('defense.ui.exit')}</button>
+          <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
         </div>
       </div>
     </section> : null}
 
+    <DefenseConflictOverlay controller={persistence} />
+
     {portrait ? <section className="zb-rotate" role="dialog" aria-modal="true">
-      <div><span aria-hidden="true">↻</span><h2>{t('defense.ui.rotate.title')}</h2><p>{t('defense.ui.rotate.body')}</p><button type="button" onClick={onExit}>{t('defense.ui.exit')}</button></div>
+      <div><span aria-hidden="true">↻</span><h2>{t('defense.ui.rotate.title')}</h2><p>{t('defense.ui.rotate.body')}</p><button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button></div>
     </section> : null}
   </main>;
 }
