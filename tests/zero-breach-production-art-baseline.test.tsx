@@ -74,8 +74,8 @@ afterEach(() => {
 });
 
 describe('ZERO BREACH step 5A production-art baseline', () => {
-  it('locks only the board, PULSE L1 and NORMAL as production candidates', () => {
-    expect(defenseVisualProduction.status).toBe('BASELINE_LOCK_CANDIDATE');
+  it('locks only the board, PULSE L1 and NORMAL as the production baseline', () => {
+    expect(defenseVisualProduction.status).toBe('BASELINE_LOCKED');
     expect(defenseVisualProduction.assets.map(asset => asset.assetId)).toEqual([
       'defense.board.ramp-01',
       'defense.tower.PULSE.L1',
