@@ -684,15 +684,16 @@
         "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Portable handheld work-light candidate rejected. Episode 01 temporary-lighting art must use the current site's LED line-bar system after exact visual verification.",
+      "production_note": "Current-site photos locked. Final art must show multiple white LED line-bar segments installed horizontally through the system-shoring zone; handheld work-light art is rejected.",
       "site_reality_profile": {
-        "subject": "current_site_led_line_bar_temporary_lighting",
-        "geometry_source": "user_current_site_reference_required",
-        "render_mode": "installed_linear_lighting_scene_fragment_or_verified_product_cutout",
+        "subject": "installed_current_site_led_line_bar",
+        "geometry_source": "user_current_site_photos_2026-07-23",
+        "render_mode": "installed_scene_fragment",
         "handheld_worklight_allowed": false,
-        "decorative_linebar_allowed": false,
-        "final_without_site_reference": false,
-        "legal_function": "maintain required passage/work-area illumination without creating new electrical/trip hazards"
+        "continuous_run": true,
+        "segment_based": true,
+        "system_shoring_context": true,
+        "final_without_site_reference": false
       }
     },
     "ppe_issue_station": {
