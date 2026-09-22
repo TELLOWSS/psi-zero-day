@@ -4,3 +4,4 @@ export * from './state';
 export * from './save';
 export * from './events';
 export * from './relationships';
+export * from './defense';
