@@ -153,8 +153,16 @@ export function StrategyMapShell({
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
   const playerMapAnchor = view.placements.find(placement => placement.character_id === 'player')?.anchor ?? 'overview';
   const loopPhase = outcome ? 'result' : focusId ? 'action' : 'target';
+  const stage3VisualLock = view.runtime.active_event_id === 'e01_03_plan_breaks' ? 'stage3-strategy' : undefined;
 
-  return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
+  return <main
+    className="strategy-shell"
+    data-stage={view.construction.stage_id}
+    data-event={view.runtime.active_event_id ?? undefined}
+    data-visual-lock={stage3VisualLock}
+    data-visual-mode={hasBackgroundArt ? 'art' : 'css'}
+    data-loop-phase={loopPhase}
+  >
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
     <div className="strategy-world-atmosphere" aria-hidden="true" />
     <div className="strategy-entry-slate" aria-hidden="true">
@@ -347,7 +355,10 @@ export function StrategyMapShell({
               ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
               : <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>}
             <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}>
-              <strong>{label ? formatCharacterIdentity(label) : placement.character_id}{!label && placement.role_id ? <em> · {placement.role_id}</em> : null}</strong>
+              <strong>
+                <span>{label?.name ?? placement.character_id}</span>
+                {label?.role ? <em>{label.role}</em> : !label && placement.role_id ? <em>{placement.role_id}</em> : null}
+              </strong>
             </span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
           </button>;
