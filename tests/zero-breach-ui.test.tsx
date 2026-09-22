@@ -171,6 +171,31 @@ describe('ZERO BREACH step 2 combat UI', () => {
     await act(async () => root.unmount());
   });
 
+  it('keeps core combat controls keyboard-focusable and supports the Space pause shortcut', async () => {
+    const { host, root } = await mount();
+    await click(host.querySelector('[data-support="COORDINATOR"]')!);
+
+    const controls = [
+      ...host.querySelectorAll('.zb-pad-hit'),
+      ...host.querySelectorAll('.zb-hud button'),
+      ...host.querySelectorAll('.zb-run-controls button'),
+      ...host.querySelectorAll('.zb-defense-settings'),
+    ];
+    expect(controls.length).toBeGreaterThanOrEqual(12);
+    for (const control of controls) {
+      expect(control).toBeInstanceOf(HTMLButtonElement);
+      expect((control as HTMLButtonElement).tabIndex).toBeGreaterThanOrEqual(0);
+    }
+
+    await act(async () => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { code: 'Space', bubbles: true }));
+      await Promise.resolve();
+    });
+    expect(buttonContaining(host, '재개')).toBeInstanceOf(HTMLButtonElement);
+
+    await act(async () => root.unmount());
+  });
+
   it('pauses on portrait orientation and shows an explicit rotate/exit guard', async () => {
     vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
       matches: query.includes('portrait'),
