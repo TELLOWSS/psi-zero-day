@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
@@ -126,7 +125,6 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
   const selectedTower = state?.towers.find(tower => tower.id === selectedTowerId) ?? null;
   const selectedPad = content.map.pads.find(pad => pad.id === selectedPadId) ?? null;
   const selectedPadTower = state?.towers.find(tower => tower.padId === selectedPadId) ?? null;
-  const support = state ? content.supports.find(item => item.id === state.supportId)! : null;
   const supportCharacterId = state ? defenseSupportCharacterId(state.supportId) : null;
   const supportCharacter = supportCharacterId ? session.character(supportCharacterId) : null;
   const supportPortrait = supportCharacterId ? characterPortraitUri(supportCharacterId, id => session.assetUri(id)) : undefined;
@@ -212,13 +210,6 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
     setSelectedPadId(padId);
     setSelectedTowerId(tower?.id ?? null);
     setNotice('');
-  };
-
-  const onPadKey = (event: ReactKeyboardEvent<SVGElement>, padId: string) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      choosePad(padId);
-    }
   };
 
   const retry = () => {
@@ -365,7 +356,7 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
           <div className="zb-tower-shop">
             {TOWER_IDS.map(towerId => {
               const definition = towerDefinition(towerId);
-              const level = definition.levels.find(item => item.levelId === undefined ? false : false) ?? definition.levels.find(item => item.id === 'L1')!;
+              const level = definition.levels.find(item => item.id === 'L1')!;
               const disabled = state.resource < level.cost;
               return <button
                 key={towerId}
