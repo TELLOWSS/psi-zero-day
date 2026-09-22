@@ -264,7 +264,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick}>
+  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
