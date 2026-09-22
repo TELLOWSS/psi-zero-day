@@ -89,11 +89,12 @@ function allSpawned(state: DefenseRunState, content: DefenseContent): boolean {
 }
 function decrementCooldown(value: number): number { return Math.max(0, value - 1); }
 
-export function createDefenseRun(content: DefenseContent, supportId: DefenseRunState['supportId']): DefenseRunState {
+export function createDefenseRun(content: DefenseContent, supportId: DefenseRunState['supportId'], runId = 'run-unassigned'): DefenseRunState {
   if (!content.scenario.availableSupports.includes(supportId)) throw new Error(`Support unavailable: ${supportId}`);
   const support = content.supports.find(item => item.id === supportId);
   if (!support) throw new Error(`Unknown support: ${supportId}`);
   return {
+    runId, mode: 'TRAINING', variant: 'STANDARD',
     status: 'READY', paused: false, speed: 1, tick: 0, waveId: 1, waveTick: 0,
     intermissionRemaining: 0, shield: content.initialShield, resource: content.initialResource,
     towers: [], enemies: [], spawnedByGroup: content.waves[0]!.groups.map(() => 0),
