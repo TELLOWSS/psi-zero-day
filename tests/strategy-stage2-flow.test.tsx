@@ -1,4 +1,5 @@
 /** @vitest-environment jsdom */
+import fs from 'node:fs';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -51,6 +52,10 @@ const labels: Readonly<Record<string, string>> = {
   'ui.strategy.guide.execute_hint': '담당자와 대상을 확인한 뒤 아래 [조치 실행] 버튼을 눌러 현장에 반영하세요.',
   'ui.strategy.guide.available': '선택 가능한 조치',
   'ui.strategy.guide.confirm_title': '이 조치로 진행하시겠습니까?',
+  'ui.strategy.situation': '현재 상황',
+  'ui.strategy.guide.continue_title': '상황을 확인하고 조치 단계로 이어가세요',
+  'ui.strategy.guide.continue_hint': '현재 상황 문장을 확인한 뒤 [조치 보기]를 누르면 같은 대상 선택을 유지한 채 실행 가능한 조치가 열립니다.',
+  'ui.strategy.guide.continue_button': '조치 보기',
   'ui.resource.money': '돈',
   'ui.resource.time': '시간',
   'ui.resource.schedule': '공정',
@@ -141,6 +146,76 @@ async function mount(view: StrategyView, actions: readonly StrategyAction[], onA
 }
 
 describe('Strategy stage 2 interaction flow', () => {
+  it('keeps the command tray visible while the engine is still on a non-choice strategy node', async () => {
+    const onTransitionContinue = vi.fn();
+    const { host, root } = await mount(baseView, []);
+    await act(async () => {
+      root.render(<StrategyMapShell
+        view={baseView}
+        copy={copy}
+        text={text}
+        person={person}
+        actions={[]}
+        eventTitle="계획이 어긋나다"
+        transitionPrompt="펌프카 진입 전 동선을 다시 확인한다."
+        onTransitionContinue={onTransitionContinue}
+      />);
+    });
+    await flush();
+
+    const tray = host.querySelector('.strategy-action-tray');
+    expect(tray).not.toBeNull();
+    expect(tray?.getAttribute('data-guide-state')).toBe('continue');
+    expect(host.textContent).toContain('상황을 확인하고 조치 단계로 이어가세요');
+    expect(host.textContent).toContain('펌프카 진입 전 동선을 다시 확인한다.');
+
+    const signal = host.querySelector('[data-signal="signal.entry_congestion"]') as HTMLButtonElement;
+    await act(async () => { signal.click(); });
+    await flush();
+    expect(host.querySelector('.strategy-action-tray')).not.toBeNull();
+    expect(host.querySelector('[data-loop-phase="action"]')).not.toBeNull();
+
+    const continueButton = host.querySelector('.strategy-transition-button') as HTMLButtonElement;
+    expect(continueButton).toBeInstanceOf(HTMLButtonElement);
+    await act(async () => { continueButton.click(); });
+    expect(onTransitionContinue).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      root.render(<StrategyMapShell
+        view={baseView}
+        copy={copy}
+        text={text}
+        person={person}
+        actions={entryActions}
+        eventTitle="계획이 어긋나다"
+      />);
+    });
+    await flush();
+
+    expect(host.querySelector('[data-choice="negotiate_yoon"]')).not.toBeNull();
+    expect(host.textContent).toContain('아래 조치 중 하나를 선택하세요');
+
+    await act(async () => root.unmount());
+    host.remove();
+  });
+
+  it('loads the final strategy recovery layer after Phase D and separates the top rows', () => {
+    const main = fs.readFileSync('src/app/main.tsx', 'utf8');
+    const css = fs.readFileSync('src/ui/strategy-layout-recovery.css', 'utf8');
+
+    expect(main.indexOf("phase-d-screenshot-polish.css")).toBeGreaterThan(-1);
+    expect(main.indexOf("strategy-layout-recovery.css")).toBeGreaterThan(main.indexOf("phase-d-screenshot-polish.css"));
+    expect(css).toContain('.strategy-event-title');
+    expect(css).toContain('top: 8.2% !important');
+    expect(css).toContain('.strategy-loop-stage-strip');
+    expect(css).toContain('top: 13.1% !important');
+    expect(css).toContain('.strategy-map {');
+    expect(css).toContain('inset: 17.2% 1% 1.4% 14% !important');
+    expect(css).toContain('.strategy-overview-minimap');
+    expect(css).toContain('display: block !important');
+    expect(css).toContain('z-index: 90 !important');
+  });
+
   it('starts directly at target selection without the extra observe gate', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={baseView} copy={copy} text={text} person={person} actions={entryActions} />);
     expect(html).toContain('data-loop-phase="target"');
