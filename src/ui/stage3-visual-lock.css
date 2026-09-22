@@ -87,6 +87,11 @@
 }
 
 .game-frame[data-production-scene="TBM"]
+.episode-immersive-scene[data-visual-lock="stage3-tbm"] .tbm-briefing-board {
+  display: none !important;
+}
+
+.game-frame[data-production-scene="TBM"]
 .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-background {
   opacity: 1 !important;
   object-fit: cover !important;
@@ -308,8 +313,28 @@
 
 .game-frame[data-production-scene="STRATEGY"]
 .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker .strategy-worker-label strong {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  min-width: 0 !important;
   color: #eef5f3 !important;
   font-size: clamp(8px,.64vw,11px) !important;
+  white-space: nowrap !important;
+}
+
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker .strategy-worker-label strong > span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker .strategy-worker-label strong > em {
+  color: #a8c1c7 !important;
+  font-size: .78em !important;
+  font-style: normal !important;
+  font-weight: 650 !important;
 }
 
 .game-frame[data-production-scene="STRATEGY"]
@@ -322,20 +347,57 @@
   z-index: 9 !important;
 }
 
-/* Portrait / compact landscape: keep feet tied to the same authored baseline. */
-@media (max-width:900px), (max-height:650px) {
+/* Portrait: reserve the lower sheet first, then stage people above it. */
+@media (orientation: portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-visual-lock="stage3-entry"] .episode-immersive-cast,
+  .game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-cast {
+    z-index: 16 !important;
+  }
+
   .game-frame[data-production-scene="FIELD"]
   .episode-immersive-scene[data-visual-lock="stage3-entry"] .episode-immersive-character {
-    bottom: 7% !important;
-    width: min(34%, 250px) !important;
-    height: 65% !important;
+    bottom: 35% !important;
+    width: min(42%, 180px) !important;
+    height: 46% !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-visual-lock="stage3-entry"] .episode-immersive-cast::after {
+    bottom: 34.2% !important;
+    left: 31% !important;
+    width: 38% !important;
   }
 
   .game-frame[data-production-scene="TBM"]
   .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-character {
-    bottom: 8% !important;
+    bottom: 23% !important;
     width: 28% !important;
-    height: 54% !important;
+    height: 40% !important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-character[data-blocking-depth="foreground"] {
+    height: 46% !important;
+    --stage3-character-scale: 1;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-character[data-blocking-depth="midground"] {
+    height: 40% !important;
+    --stage3-character-scale: .92;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-character[data-blocking-depth="background"] {
+    height: 35% !important;
+    --stage3-character-scale: .84;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-cast::before {
+    bottom: 22.2% !important;
   }
 
   .game-frame[data-production-scene="TBM"]
@@ -345,12 +407,44 @@
     width: min(260px, 44%) !important;
     grid-template-columns: 40px minmax(0,1fr) !important;
     min-height: 54px !important;
+    z-index: 24 !important;
   }
 
   .game-frame[data-production-scene="TBM"]
   .episode-immersive-scene[data-visual-lock="stage3-tbm"] .episode-immersive-speaker-portrait {
     width: 40px !important;
     height: 40px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-hud {
+    grid-template-columns: minmax(116px,1.2fr) minmax(0,1.65fr) 42px !important;
+    gap: 4px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-resource-bar {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap: 3px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-resource-bar article[data-resource="money"] {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-resource-bar article {
+    min-width: 0 !important;
+    padding-inline: 4px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-resource-bar article strong {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
   }
 
   .game-frame[data-production-scene="STRATEGY"]
@@ -376,5 +470,28 @@
     width: 50px !important;
     height: 64px !important;
     flex-basis: 50px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker .strategy-worker-label {
+    min-width: 58px !important;
+    max-width: 86px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker .strategy-worker-label strong > em {
+    display: none !important;
+  }
+}
+
+/* Compact landscape keeps the same map-token foot pivot without forcing portrait offsets. */
+@media (orientation: landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker,
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker.is-scene-participant {
+    min-width: 52px !important;
+    min-height: 64px !important;
+    transform: translate(-50%, -90%) !important;
   }
 }
