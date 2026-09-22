@@ -454,7 +454,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         playUiCue('execute');
         chooseEvent(action.instance_id, action.node_id, action.choice_id);
       }}
-    /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={titleBackgroundUri} />}
+    /> : <SiteScene chapter={snapshot.state?.event_runtime.chapter_id} backgroundUri={snapshot.phase === 'complete' ? (resolveAsset('ep01.scene_bg.gate_dawn') ?? titleBackgroundUri) : titleBackgroundUri} />}
     {!strategyActive ? <header className="game-header">
       {onReturn ? <button className="gameplay-home-button" type="button" onClick={onReturn} aria-label={t('ui.hub.return')} title={t('ui.hub.return')}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10" /></svg>
@@ -507,7 +507,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       <section className="play-panel" ref={focusRef} tabIndex={-1} aria-label={t('ui.dialogue')}>
         {person ? <CharacterCard
           person={person}
-          portraitUri={dialoguePortraitUri}
+          portraitUri={productionScene === 'OFFICE' ? basePortraitUri : dialoguePortraitUri}
           fallbackPortraitUri={basePortraitUri}
           growth={dialogueGrowth}
           loadout={dialogueLoadout}
