@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "verification_id": "episode01-korea-material-reality-v1",
+  "reviewed_on": "2026-09-23",
+  "status": "research_locked_before_render",
+  "scope": "Episode 01 visible runtime props first, then Section 0 Field Guide items",
+  "governing_rule": "No image generation or final promotion before Korean-site product/assembly verification.",
+  "sources": [
+    {
+      "id": "KOSHA_TEMP_ELECTRIC",
+      "authority": "KOSHA",
+      "title": "가설전기공사 안전보건 실무정보",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&catimage=&eclang=ko&start=10&um=s",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KOSHA_ELECTRIC_MANAGEMENT",
+      "authority": "KOSHA",
+      "title": "분전함 관리 방법",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=451&callmode=normal&catimage=&eclang=ko&start=188&um=s",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KOSHA_TRAFFIC_PLAN",
+      "authority": "KOSHA",
+      "title": "건설현장 중대재해 예방 작업계획 예시",
+      "url": "https://oshri.kosha.or.kr/kosha/report/notice.do?articleNo=455685&attachNo=262320&mode=download",
+      "supports": [
+        "vehicle_pedestrian_separation",
+        "vehicle_overlap_zone",
+        "access_barrier",
+        "site_gate"
+      ]
+    },
+    {
+      "id": "KOSHA_WALKWAY",
+      "authority": "KOSHA",
+      "title": "작업장 통로 안전관리",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=120&um=s",
+      "supports": [
+        "temporary_lighting_pack",
+        "open_edge",
+        "wet_floor"
+      ]
+    },
+    {
+      "id": "LAW_ART11",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제11조 작업장의 출입구",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256121",
+      "supports": [
+        "site_gate",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "LAW_LIGHT",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제21조 통로의 조명",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063297",
+      "supports": [
+        "temporary_lighting_pack"
+      ]
+    },
+    {
+      "id": "LAW_OPEN_EDGE",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제13조·제43조",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029039573",
+      "supports": [
+        "open_edge"
+      ]
+    },
+    {
+      "id": "KOSHA_HARNESS",
+      "authority": "KOSHA",
+      "title": "그네식안전대 안전한 보호구 착용 길잡이",
+      "url": "https://ofsi.jeonnam.go.kr/bbs/ofsi/61/9221/download.do",
+      "supports": [
+        "harness_unclipped"
+      ]
+    },
+    {
+      "id": "KR_FRP_PRODUCT",
+      "authority": "Korean supplier",
+      "title": "FRP 임시분전반 제품군",
+      "url": "https://haesoltech.com/category/frp%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98/1393/",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KR_PE_BARRIER",
+      "authority": "Korean market product reference",
+      "title": "PE 방호벽/가설휀스 제품군",
+      "url": "https://itempage3.auction.co.kr/DetailView.aspx?itemno=E725701519",
+      "supports": [
+        "access_barrier",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "KR_TRAFFIC_CONE",
+      "authority": "Korean market product reference",
+      "title": "PE/고무 라바콘 제품군",
+      "url": "https://kor.winnertech.co.kr/goods_list.php?Index=3073",
+      "supports": [
+        "access_barrier",
+        "exclusion_zone",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "KR_FIRE_EXT",
+      "authority": "Korean market product reference",
+      "title": "국산 ABC 분말소화기 3.3kg 제품군",
+      "url": "https://prod.danawa.com/info/?cate=14255174&pcode=5544692",
+      "supports": [
+        "fire_extinguisher_station"
+      ]
+    }
+  ],
+  "runtime_assets": {
+    "site_gate": {
+      "classification": "site_specific_assembly",
+      "status": "reference_required_before_render",
+      "verified": "Korean rule requires pedestrian entrance separation where a loading/transport entrance is the primary entrance; exact gate geometry is site-specific.",
+      "render_contract": "Do not invent a foreign turnstile/gate. Use a Korean apartment-site reference photo before final rendering."
+    },
+    "material_stack": {
+      "classification": "site_specific_material_stack",
+      "status": "verified_function_reference_needed_for_exact_material",
+      "verified": "Keep same-spec materials separated, stable on dunnage/supports, secured, and out of the travel route. Exact material in Episode 01 must be chosen from the authored scene/site reference.",
+      "render_contract": "No mixed-size decorative stack. Show one identified Korean-site material family only."
+    },
+    "access_barrier": {
+      "classification": "physical_control_family",
+      "status": "verified_family_reference_required_for_final_shape",
+      "verified": "Freestanding high-visibility PE barriers and traffic cones are current Korean market products; law/guidance controls function, not one universal barrier shape.",
+      "render_contract": "Select one Korean product family and preserve its real feet/body/reflective geometry. No generic US/EU crowd-control barrier."
+    },
+    "vehicle_overlap_zone": {
+      "classification": "runtime_route_overlay",
+      "status": "verified_no_physical_prop_render",
+      "verified": "This is a conflict relationship between vehicle and pedestrian routes, not a standalone piece of equipment.",
+      "render_contract": "Render as map/scene overlay geometry only; do not image-generate a fictional physical object."
+    },
+    "exclusion_zone": {
+      "classification": "site_control_composition",
+      "status": "verified_composite_not_single_object",
+      "verified": "Exclusion is created by barriers/cones/tape/signage and work control appropriate to the task.",
+      "render_contract": "Compose from verified Korean barrier/cone assets in the scene; no standalone magical exclusion-zone prop."
+    },
+    "open_edge": {
+      "classification": "hazard_condition",
+      "status": "verified_scene_fragment_required",
+      "verified": "A slab/platform edge or opening requires guardrail/fence/net/cover protection depending on the condition.",
+      "render_contract": "Use a real RC slab-edge scene fragment. Do not render an abstract 'open edge' object."
+    },
+    "wet_floor": {
+      "classification": "surface_condition",
+      "status": "verified_ground_decal_not_object",
+      "verified": "Wet/slippery condition is a ground state and housekeeping hazard.",
+      "render_contract": "Use wet concrete/soil surface decal or scene variation, not an isolated 3D item."
+    },
+    "harness_unclipped": {
+      "classification": "KCs_certified_PPE_scenario",
+      "status": "verified_scenario_specific",
+      "verified": "Use a KCs-certified full-body harness family. Episode 01 may use a twin-Y double-lanyard configuration, but that configuration is not asserted as a universal Korean legal requirement.",
+      "render_contract": "Brand-neutral Korean KCs-style full-body harness; correct D-ring, lanyards/hooks and shock-absorbing component where the selected certified product has them."
+    }
+  },
+  "field_guide_section0": {
+    "vehicle_pedestrian_separation": {
+      "status": "research_verified_function_shape_pending_site_reference"
+    },
+    "material_yard": {
+      "status": "research_verified_function_exact_material_layout_pending"
+    },
+    "temporary_distribution_board": {
+      "status": "approved_visual_family",
+      "approved_visual_family": "FRP temporary distribution board commonly used on Korean construction sites; lockable enclosure, protected live parts, grounding/RCD management.",
+      "reject": [
+        "generic exposed metal breaker panel",
+        "open live busbar hero image",
+        "foreign NEMA-style site box without Korean reference"
+      ]
+    },
+    "temporary_lighting_pack": {
+      "status": "function_verified_fixture_shape_site_specific"
+    },
+    "ppe_issue_station": {
+      "status": "site_specific_no_universal_product_shape"
+    },
+    "fire_extinguisher_station": {
+      "status": "approved_product_family_brand_neutral_ABC_powder_3_3kg_as_common_reference_not_universal_requirement"
+    },
+    "first_aid_aed": {
+      "status": "site_specific_cabinet_device_reference_required"
+    },
+    "site_weather_station": {
+      "status": "site_specific_device_reference_required"
+    }
+  },
+  "next_render_order": [
+    "temporary_distribution_board",
+    "access_barrier",
+    "material_stack",
+    "site_gate"
+  ],
+  "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
+}
