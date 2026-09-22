@@ -36,7 +36,7 @@ jobs:
       - name: Capture representative scenes
         run: |
           mkdir -p stage3-captures
-          cat > /tmp/stage3-capture.mjs <<'EOF'
+          cat > stage3-captures/capture.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
 
@@ -159,7 +159,7 @@ jobs:
 
           fs.writeFileSync('stage3-captures/metrics.json', JSON.stringify(results, null, 2));
           EOF
-          node /tmp/stage3-capture.mjs
+          node stage3-captures/capture.mjs
       - name: Upload captures
         if: always()
         uses: actions/upload-artifact@v4
