@@ -240,9 +240,15 @@ try {
   await clickSelector(cdp, 'button[aria-label^="P2 ·"]');
   await clickText(cdp, '펄스 대응기');
   await waitFor(cdp, "Boolean(document.querySelector('g[data-production-tower-art=\"PULSE:L1\"] image'))");
+  const preStartCues = await evaluate(cdp, "window.__zbAudioCues || []");
+  if (preStartCues.length !== 0) throw new Error('Defense audio activated before StartWave: ' + JSON.stringify(preStartCues));
   await clickText(cdp, '웨이브 시작');
+  await waitFor(cdp, "(window.__zbAudioCues || []).includes('warning')", 5000);
+  await clickSelector(cdp, 'button[aria-label^="P6 ·"]');
+  await clickText(cdp, '펄스 대응기');
+  await waitFor(cdp, "(window.__zbAudioCues || []).includes('place')", 5000);
   await waitFor(cdp, "Boolean(document.querySelector('image[data-production-enemy-art=\"NORMAL\"]'))", 10000);
-  await waitFor(cdp, "(window.__zbAudioCues || []).includes('attack')", 10000);
+  await waitFor(cdp, "(window.__zbAudioCues || []).includes('single_resolve')", 10000);
 
   let snap = await visualSnapshot(cdp);
   report.captures.push({ id: 'desktop-1280x720', ...snap });
@@ -255,7 +261,7 @@ try {
   if (!snap.normalArt.rect || snap.normalArt.rect.width < 28 || snap.normalArt.rect.height < 28) throw new Error('NORMAL runtime footprint is too small');
   if (!snap.padAlignment || snap.padAlignment.dx > 1 || snap.padAlignment.dy > 1) throw new Error('Desktop pad input is not aligned to the SVG coordinate space: ' + JSON.stringify(snap.padAlignment));
   const audioCues = await evaluate(cdp, "window.__zbAudioCues || []");
-  for (const cue of ['place','wave_start','attack']) {
+  for (const cue of ['warning','place','single_resolve']) {
     if (!audioCues.includes(cue)) throw new Error('Missing defense audio cue in real combat: ' + cue + ' / ' + JSON.stringify(audioCues));
   }
   if (await evaluate(cdp, "localStorage.getItem('psi.audio.muted')") !== '0') throw new Error('Defense SOUND toggle did not update shared preference');
