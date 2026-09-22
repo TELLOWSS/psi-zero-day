@@ -199,8 +199,8 @@ export function useDefensePersistence(
       setEntry({
         kind: 'version-mismatch',
         savedAt: inspection.savedAt,
-        savedRulesVersion: inspection.savedRulesVersion ?? content.rulesVersion,
-        savedContentVersion: savedRun.eventContentVersion ?? inspection.savedContentVersion ?? content.contentVersion,
+        savedRulesVersion: content.rulesVersion,
+        savedContentVersion: savedRun.eventContentVersion ?? content.contentVersion,
       });
       return;
     }
