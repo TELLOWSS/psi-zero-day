@@ -45,7 +45,17 @@
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
+      "episode01_visual_profile": {
+        "subject": "used_korean_euroform_panel_bundle",
+        "context": "formwork cleanup near Episode 01 access/yard scene",
+        "same_spec_only": true,
+        "orientation": "horizontal",
+        "dunnage": "two_timber_sleepers",
+        "securing": "two_visible_straps_or_equivalent",
+        "no_mixed_materials": true,
+        "no_text_branding": true
+      }
     },
     "access_barrier": {
       "element_id": "scene.control.access_barrier",
