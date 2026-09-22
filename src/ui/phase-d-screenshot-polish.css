@@ -1,0 +1,348 @@
+/* Phase D screenshot hierarchy pass — 2026-09-22
+   Source: real desktop captures supplied by Director.
+   Contract: composition/readability only. No engine/content/Production Map coordinates change.
+   Goal: world first, character second, decision UI third. */
+
+@media (min-width: 901px) and (min-height: 651px) {
+  /* ---------------------------------------------------------------------- */
+  /* FIELD + TBM: remove the "cut-outs in a black void" read.               */
+  /* ---------------------------------------------------------------------- */
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-background,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    filter: saturate(.96) contrast(1.045) brightness(1.12);
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-atmosphere,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere {
+    opacity: .62;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-grade,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    opacity: .56;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-props,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-props {
+    opacity: .94;
+    filter: brightness(1.16) saturate(.93) contrast(1.03);
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-cast,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-cast {
+    filter: drop-shadow(0 20px 22px rgba(0, 0, 0, .26));
+  }
+
+  /* A locator is useful during tactical play, but redundant during dialogue/TBM.
+     Removing it gives the world and people a cleaner cinematic hierarchy. */
+  .game-frame[data-production-scene="FIELD"] .episode-scene-minimap,
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    display: none;
+  }
+
+  /* FIELD: compact lower-third instead of a large card covering the world. */
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .play-panel {
+    position: absolute;
+    z-index: 38;
+    left: 3.5%;
+    right: auto;
+    bottom: 3.8%;
+    width: min(720px, 47%);
+    min-height: 0;
+    max-height: 26%;
+    margin: 0;
+    padding: 13px 16px 14px;
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: auto;
+    border: 1px solid rgba(205, 192, 132, .31);
+    border-top-color: rgba(224, 206, 142, .68);
+    border-radius: 12px;
+    background: linear-gradient(90deg, rgba(5, 17, 22, .95), rgba(7, 20, 24, .88));
+    box-shadow: 0 16px 42px rgba(0, 0, 0, .34);
+    backdrop-filter: blur(12px);
+  }
+
+  .game-frame[data-production-scene="FIELD"] .play-panel > .character-card,
+  .game-frame[data-production-scene="FIELD"] .play-panel > .narrator-card {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .dialogue-content {
+    min-height: 0;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .dialogue-text {
+    max-width: none;
+    padding: 5px 0 7px;
+    font-size: clamp(13px, .95vw, 17px);
+    line-height: 1.58;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .continue-button {
+    min-height: 40px;
+    min-width: 118px;
+    padding: 7px 0 7px 12px;
+    margin-top: 2px;
+  }
+
+  /* TBM: keep it a group briefing, not a giant portrait plus full-width subtitle. */
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="mentor-pair"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    width: 27.5%;
+    height: 93%;
+    bottom: -4%;
+    --blocking-scale: 1.02;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-tbm-cast="mentor-pair"]
+    .episode-immersive-character[data-character="player"] {
+    width: 24%;
+    height: 84%;
+    opacity: .92;
+  }
+
+  .game-frame[data-production-scene="TBM"] .tbm-production-layer {
+    opacity: .86;
+  }
+
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-board {
+    filter: brightness(1.12) contrast(1.03);
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"].phase-playing:not(.strategy-active) .play-panel {
+    position: absolute;
+    z-index: 38;
+    left: 14%;
+    right: 14%;
+    bottom: 3%;
+    width: auto;
+    min-height: 0;
+    max-height: 21%;
+    margin: 0;
+    padding: 11px 15px 12px;
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: auto;
+    border-radius: 11px;
+    background: linear-gradient(90deg, rgba(5, 21, 24, .95), rgba(7, 22, 25, .88));
+    box-shadow: 0 14px 38px rgba(0, 0, 0, .31);
+    backdrop-filter: blur(12px);
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-content,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .dialogue-content {
+    min-height: 0;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .dialogue-text,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .dialogue-text {
+    max-width: none;
+    padding: 4px 0 6px;
+    font-size: clamp(12px, .9vw, 16px);
+    line-height: 1.5;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"] .continue-button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .continue-button {
+    min-height: 38px;
+    padding: 6px 0 6px 12px;
+  }
+
+  /* Judgment keeps enough vertical room for three safe touch/click targets. */
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"].phase-playing:not(.strategy-active) .play-panel {
+    left: 7%;
+    right: 7%;
+    width: auto;
+    max-height: 31%;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* STRATEGY: map is the game. HUD explains it without covering it.         */
+  /* ---------------------------------------------------------------------- */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset: 8.2% 1% 12.4% 14%;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-rail {
+    width: 14.6%;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-overview-minimap {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-stage-card {
+    top: 2%;
+    right: 1.4%;
+    width: 13.5%;
+    min-width: 118px;
+    padding: 8px 10px;
+    opacity: .84;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map.has-background-art .strategy-map-background-art {
+    filter: saturate(.98) contrast(1.045) brightness(.88);
+    transform: scale(1.008);
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-grid {
+    opacity: .1;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-pulse {
+    opacity: .2;
+  }
+
+  /* Characters read as people first; labels appear only when they matter. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-worker-art {
+    width: 72px;
+    height: 94px;
+    flex-basis: 72px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker.has-art {
+    min-width: 92px;
+    min-height: 90px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker .strategy-worker-label {
+    position: absolute;
+    left: 50%;
+    top: calc(100% - 8px);
+    min-width: 82px;
+    max-width: 132px;
+    transform: translate(-50%, 6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .16s ease, transform .16s ease;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker:hover .strategy-worker-label,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker:focus-visible .strategy-worker-label,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker.is-focused .strategy-worker-label,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker.has-actions .strategy-worker-label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-zone-target:not(.is-focused):not(.has-actions) {
+    opacity: .46;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-zone-target:not(.is-focused):not(.has-actions) .strategy-zone-copy small {
+    display: none;
+  }
+
+  /* The screenshot showed the legacy narrative card occupying the whole lower map.
+     Preserve the story/Continue action, but turn it into a compact field log dock. */
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .strategy-roster {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .play-panel {
+    position: absolute;
+    z-index: 36;
+    left: 15.3%;
+    right: 1.5%;
+    bottom: 1.3%;
+    width: auto;
+    min-height: 0;
+    max-height: 10.6%;
+    margin: 0;
+    padding: 8px 11px 9px;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 11px;
+    overflow: auto;
+    border: 1px solid rgba(171, 205, 214, .24);
+    border-top-color: rgba(214, 196, 129, .56);
+    border-radius: 9px;
+    background: linear-gradient(90deg, rgba(7, 25, 33, .96), rgba(8, 29, 37, .91));
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .3);
+    backdrop-filter: blur(12px);
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .narrator-card {
+    padding-right: 10px;
+    gap: 2px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .narrator-mark {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .narrator-card strong {
+    font-size: 10px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .narrator-card > span:last-child {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .presentation-area {
+    align-self: center;
+    max-height: 8.5vh;
+    overflow: auto;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-content {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 18px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-content .eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-text {
+    max-width: none;
+    padding: 2px 0;
+    font-size: clamp(11px, .84vw, 15px);
+    line-height: 1.45;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .continue-button {
+    min-width: 104px;
+    min-height: 38px;
+    margin: 0;
+    padding: 5px 0 5px 10px;
+    align-self: center;
+  }
+
+  /* When the map action tray becomes active, it owns the decision. */
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-ui="judgment"] .play-panel {
+    display: none;
+  }
+}
+
+/* Keep compact/phone safety contracts untouched. Only remove decorative locator
+   from TBM/FIELD when horizontal space is already scarce. */
+@media (max-width: 900px) {
+  .game-frame[data-production-scene="FIELD"] .episode-scene-minimap,
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-worker .strategy-worker-label {
+    transition: none;
+  }
+}
