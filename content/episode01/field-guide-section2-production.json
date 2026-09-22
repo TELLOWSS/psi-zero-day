@@ -175,7 +175,7 @@
     },
     {
       "batch_id": "S2-B",
-      "status": "queued",
+      "status": "in_progress",
       "items": [
         {
           "key": "system_shoring_jackbase",
@@ -191,8 +191,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "4a020228-7a4c-498b-8f00-3a6b40e11e1c",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 73082,
+            "sha256": "f02b8c1442d85e2afef506d2b2cd7e8b23c584bdac556b077d52c6479988d396",
+            "alpha": true
+          }
         },
         {
           "key": "system_shoring_standard",
@@ -208,8 +228,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "ac85c6cb-a569-4b72-bd4a-eb61d635c7cd",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 44198,
+            "sha256": "70c1987a0406b9ebd31b2a326a08f56051a563aa4c378a3b3503bfc2f6d72744",
+            "alpha": true
+          }
         },
         {
           "key": "system_shoring_ledger",
@@ -225,8 +265,18 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "regeneration_required",
+          "visual_acceptance": "reference_only_frame_contains_extra_members",
+          "source": {
+            "generation_id": "d823abb5-8923-4711-9b0f-c7343a28b147",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": null
+          }
         },
         {
           "key": "system_shoring_missing_brace",
@@ -242,8 +292,10 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_hazard_state_construction_asset",
+          "status": "generation_required",
+          "visual_acceptance": "not_generated"
         },
         {
           "key": "uhead_beam_alignment",
@@ -259,8 +311,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "1ed5436d-fec9-497b-aa56-bb91f4fc541b",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 114806,
+            "sha256": "105b837b3045a735fcd29e0480433006a2c200e2c21fc3c25ba7289ed89197b8",
+            "alpha": true
+          }
         }
       ]
     },
@@ -334,5 +406,6 @@
   ],
   "brand_contract": "content/brand/naming-contract.json",
   "current_batch": "S2-B",
-  "next_action": "Proceed with FG028-FG032 system shoring jack base, standard, ledger, missing brace, and U-Head/beam alignment as realistic-v2 production art after S2-A preview verification."
+  "next_action": "Ingest FG028, FG029 and FG032 candidate WebP binaries, regenerate FG030 as an isolated system-shoring ledger, generate FG031 as an unmistakable missing-brace hazard state, then close S2-B only after manifest/catalog/runtime checks pass.",
+  "s2b_review_note": "The generated full shoring frame is retained only as geometry reference because it combines standards, ledgers and a diagonal brace; it must not be mislabeled as the isolated FG030 ledger or FG031 missing-brace hazard."
 }
