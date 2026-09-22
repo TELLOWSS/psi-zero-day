@@ -26,7 +26,7 @@
 .zb-status b{color:var(--zb-accent);font-size:10px;letter-spacing:.08em}
 .zb-hud-button,.zb-exit{min-height:44px;border-color:rgba(185,200,211,.28);cursor:pointer}
 .zb-speed{display:grid;grid-template-columns:1fr 1fr;padding:3px;gap:3px}
-.zb-speed button{min-height:36px;border:0;border-radius:6px;background:transparent;color:var(--zb-muted);cursor:pointer}
+.zb-speed button{min-height:44px;border:0;border-radius:6px;background:transparent;color:var(--zb-muted);cursor:pointer}
 .zb-speed button.is-active{background:var(--zb-accent);color:#17242c;font-weight:900}
 .zb-exit{color:var(--zb-muted)}
 .zb-stage{min-height:0;padding:10px 12px}
@@ -111,7 +111,7 @@
 .zb-tower-stats{display:grid;grid-template-columns:1fr;gap:3px}.zb-tower-stats span{font-size:9px;color:var(--zb-muted)}.zb-tower-stats b{color:var(--zb-text)}
 .zb-target-mode{display:grid;grid-template-columns:1fr 1fr;gap:4px}.zb-target-mode>span{grid-column:1/-1;font-size:9px;color:var(--zb-muted)}
 .zb-target-mode button,.zb-upgrades button{
-  min-height:34px;border:1px solid rgba(185,200,211,.22);border-radius:6px;background:#1b303d;color:var(--zb-text);font-size:9px;cursor:pointer
+  min-height:44px;border:1px solid rgba(185,200,211,.22);border-radius:6px;background:#1b303d;color:var(--zb-text);font-size:9px;cursor:pointer
 }
 .zb-target-mode button.is-active{border-color:var(--zb-accent);color:var(--zb-accent)}
 .zb-upgrades{display:flex;gap:5px;align-items:center;overflow-x:auto}.zb-upgrades button{min-width:112px;padding:5px 8px;display:flex;justify-content:space-between;gap:8px}
@@ -157,14 +157,14 @@
   .zb-shell:not(.zb-prep){height:100dvh}.zb-rotate{display:grid}
 }
 @media (orientation:landscape) and (max-height:650px){
-  .zb-shell{min-height:100dvh;grid-template-rows:50px minmax(0,1fr) 94px}
+  .zb-shell{min-height:100dvh;grid-template-rows:54px minmax(0,1fr) 94px}
   .zb-hud{padding:4px 6px;grid-template-columns:minmax(150px,1.3fr) repeat(3,minmax(78px,.6fr)) minmax(88px,.65fr) 70px 84px 96px}
   .zb-brand strong{font-size:12px}.zb-meter strong{font-size:12px}.zb-meter span,.zb-status span{font-size:8px}
   .zb-stage{padding:6px}.zb-wave-preview{width:160px;padding:7px}.zb-wave-preview li{font-size:8px}
   .zb-command{padding:5px 6px 6px;grid-template-columns:minmax(0,1fr) minmax(300px,36%)}
   .zb-tower-shop button{min-height:64px}.zb-build-panel{grid-template-columns:120px 1fr}.zb-tower-panel{grid-template-columns:118px 145px 145px 1fr}
   .zb-support-action{grid-template-columns:42px minmax(0,1fr) 64px}.zb-support-mini{width:38px;height:38px}
-  .zb-support-action strong{font-size:9px}.zb-start-wave,.zb-support-action button{min-height:40px;font-size:10px}
+  .zb-support-action strong{font-size:9px}.zb-start-wave,.zb-support-action button{min-height:44px;font-size:10px}
   .zb-pad-hit{width:44px;height:44px}
 }
 @media (max-width:900px) and (orientation:landscape){
