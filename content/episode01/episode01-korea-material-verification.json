@@ -533,7 +533,51 @@
       "status": "site_specific_no_universal_product_shape"
     },
     "fire_extinguisher_station": {
-      "status": "approved_product_family_brand_neutral_ABC_powder_3_3kg_as_common_reference_not_universal_requirement"
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Episode 01 portable fire-extinguisher placement point",
+      "selected_visual_family": {
+        "extinguisher": "red stored-pressure ABC dry-powder extinguisher, 3.3 kg class as the Episode 01 representative visual family",
+        "visible_parts": [
+          "pressure gauge",
+          "black discharge hose",
+          "safety pin",
+          "black lever/handle assembly"
+        ],
+        "stand": "stable floor stand/base suitable for a 3.3 kg class extinguisher",
+        "placement": "upright, immediately accessible, not hidden behind materials"
+      },
+      "evidence": [
+        "Korean retail and fire-safety suppliers repeatedly list KFI-verified 3.3 kg ABC powder extinguishers.",
+        "Current LH temporary-fire-facility estimating guidance identifies a small extinguisher as 3.3 kg for its construction-site installation examples.",
+        "Industrial-safety rules for fire-risk/hot-work contexts require extinguishing means/fire extinguishers in the relevant control scheme; exact count and type depend on applicable fire-safety requirements and site conditions."
+      ],
+      "render_contract": {
+        "composition": "one red 3.3 kg class ABC powder extinguisher seated upright in a simple stable floor stand",
+        "cylinder": "standard Korean portable extinguisher proportion; glossy red but field-used",
+        "gauge": "small round pressure gauge under the valve assembly",
+        "hose": "one black flexible discharge hose clipped neatly to the cylinder side",
+        "handle": "black/metal lever and safety pin visible",
+        "stand": "simple red or dark floor base/stand; no oversized designer cabinet",
+        "label": "generic small safety label texture only; no legible manufacturer or certification text",
+        "signage": "none baked into reusable art",
+        "background": "transparent",
+        "camera": "front three-quarter view",
+        "condition": "clean enough for readiness, minor construction-site dust/scuffing"
+      },
+      "reject": [
+        "CO2 extinguisher horn geometry",
+        "tiny automotive extinguisher",
+        "20 kg wheeled extinguisher as the default FG008 asset",
+        "open fire cabinet",
+        "designer office stand that dominates the extinguisher",
+        "readable fake KFI/brand labels"
+      ],
+      "sources": [
+        "https://www.kif119.co.kr/category/%EC%97%90%ED%94%84%EC%95%84%EC%9D%B4%EC%94%A8fic/154/",
+        "https://prod.danawa.com/vssearch/?productCodes=28377512",
+        "https://architecture-estimate.com/wp-content/uploads/2026/02/LH%EA%B3%B5%EC%82%AC%EC%9B%90%EA%B0%80-%EC%82%B0%EC%A0%95%EC%A7%80%EC%B9%A8%EA%B1%B4%EC%B6%95_%EC%A0%84%EB%AC%B8-%EB%93%B1%EC%9E%AC.pdf"
+      ],
+      "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition."
     },
     "first_aid_aed": {
       "status": "site_specific_cabinet_device_reference_required"
