@@ -138,10 +138,38 @@
       "render_contract": "No mixed-size decorative stack. Show one identified Korean-site material family only."
     },
     "access_barrier": {
-      "classification": "physical_control_family",
-      "status": "verified_family_reference_required_for_final_shape",
-      "verified": "Freestanding high-visibility PE barriers and traffic cones are current Korean market products; law/guidance controls function, not one universal barrier shape.",
-      "render_contract": "Select one Korean product family and preserve its real feet/body/reflective geometry. No generic US/EU crowd-control barrier."
+      "classification": "physical_site_control",
+      "status": "visual_family_locked_ready_to_render",
+      "verified": "For Episode 01 use a Korean construction-site movable safety fence family rather than a generic foreign crowd-control barrier.",
+      "korean_product_family": {
+        "name": "이동식 밴딩형 가림막 안전펜스",
+        "typical_reference": "L2000 × H1200 × Ø31.8 mm class tubular frame, separate lower base",
+        "variants": "25–32 mm tubular-frame / mesh or printed-screen variants also sold domestically",
+        "note": "This is a selected Episode 01 visual family, not a universal legal form."
+      },
+      "render_contract": {
+        "frame": "galvanized or painted round steel tube, approximately 32 mm class",
+        "overall_shape": "one rectangular movable fence panel, about 2 m wide and 1.2 m high proportion",
+        "feet": "two separate stable lower bases/feet; visibly freestanding",
+        "infill": "plain high-visibility yellow/orange sheet or mesh panel; no readable baked text for runtime reuse",
+        "connectors": "simple real-world panel/frame joints only; no invented plastic interlock modules",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter front view",
+        "condition": "used Korean construction-site equipment, mild wear, no severe damage"
+      },
+      "reject": [
+        "US/EU pedestrian crowd-control steel barricade with arched feet",
+        "water-filled road barrier as the default access fence",
+        "short household folding fence",
+        "fictional plastic modular fence geometry",
+        "readable 안전제일 text baked into reusable runtime art"
+      ],
+      "sources": [
+        "https://allcall.co.kr/Shop/k_view?code=2010-0070-001",
+        "https://speed119.kr/product/%EA%B5%AD%EC%82%B0-%EC%9D%B4%EB%8F%99%EC%8B%9D-%EA%B0%80%EB%A6%BC%EB%A7%89-%ED%9C%80%EC%8A%A4-25-32%ED%8C%8C%EC%9D%B4-%EB%A9%94%EC%89%AC%EB%A7%9D-%EA%B3%B5%EC%82%AC%EC%9E%A5-%EC%95%88%EC%A0%84%ED%8E%9C%EC%8A%A4-%EC%95%88%EC%A0%84%EC%A0%9C%EC%9D%BC-%EC%9D%B8%EC%87%84-%ED%8C%AC%EC%8A%A4/686/",
+        "https://kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=452&callmode=normal&catimage=&eclang=ko&start=32&um=s"
+      ]
     },
     "vehicle_overlap_zone": {
       "classification": "runtime_route_overlay",
@@ -233,7 +261,22 @@
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&eclang=ko&start=128&um=s",
         "https://www.haesoltech.com/category/FRP%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98/1393/",
         "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_pending_detail_verification",
+        "generation_id": "a9fdd478-5a55-48e8-b736-be45da55846e",
+        "accepted": [
+          "orange FRP enclosure",
+          "closed lockable door",
+          "freestanding steel support",
+          "external power indicator"
+        ],
+        "rejected_or_unresolved": [
+          "blue/red industrial connector geometry not yet matched to locked Korean reference",
+          "top lifting-eye geometry not yet matched to locked Korean reference"
+        ],
+        "action": "retain as composition reference only; do not register as final binary"
+      }
     },
     "temporary_lighting_pack": {
       "status": "function_verified_fixture_shape_site_specific"
