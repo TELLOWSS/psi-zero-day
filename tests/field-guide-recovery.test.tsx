@@ -3,7 +3,7 @@ import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, it, vi } from 'vitest';
 import type { EpisodeSession } from '../src/app/episode-session';
-import { RecoverableFieldGuide } from '../src/ui/GameHub';
+import { preloadFieldGuide, RecoverableFieldGuide } from '../src/ui/GameHub';
 
 function buttonByText(host: HTMLElement, label: string): HTMLButtonElement {
   const button = [...host.querySelectorAll('button')].find(candidate => candidate.textContent === label);
@@ -19,6 +19,40 @@ async function flush() {
 }
 
 describe('Field guide chunk recovery', () => {
+  it('renders the guide normally when the chunk is available', async () => {
+    const loader = vi.fn().mockResolvedValue({ FieldGuide: () => <div data-testid="guide-ready">도감 정상</div> });
+    const host = document.createElement('div');
+    document.body.append(host);
+    const root = createRoot(host);
+
+    await act(async () => {
+      root.render(<RecoverableFieldGuide
+        session={{ t: (id: string) => id } as unknown as EpisodeSession}
+        onHome={() => undefined}
+        loader={loader}
+        onReload={() => undefined}
+      />);
+    });
+    await flush();
+
+    expect(loader).toHaveBeenCalledTimes(1);
+    expect(host.querySelector('[data-testid="guide-ready"]')?.textContent).toBe('도감 정상');
+
+    await act(async () => root.unmount());
+    host.remove();
+  });
+
+  it('reports preload failure without leaving an unhandled rejection', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const loader = vi.fn().mockRejectedValue(new Error('preload failed'));
+
+    await expect(preloadFieldGuide(loader)).resolves.toBe(false);
+    expect(loader).toHaveBeenCalledTimes(1);
+    expect(consoleError).toHaveBeenCalled();
+
+    consoleError.mockRestore();
+  });
+
   it('creates a fresh lazy load attempt after the first chunk request fails', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     const loader = vi.fn()
