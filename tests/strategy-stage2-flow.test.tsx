@@ -152,6 +152,9 @@ describe('Strategy stage 2 interaction flow', () => {
     expect(host.querySelector('[data-choice="negotiate_yoon"]')).not.toBeNull();
     expect(host.querySelector('[data-choice="coordinate_schedule"]')).toBeNull();
     expect(host.textContent).toContain('같은 위치의 실행 가능한 대응');
+    expect(host.querySelector('[data-guide-state="choose"]')).not.toBeNull();
+    expect(host.textContent).toContain('아래 조치 중 하나를 선택하세요');
+    expect(host.textContent).toContain('조치 실행');
 
     await act(async () => root.unmount());
     host.remove();
@@ -202,6 +205,9 @@ describe('Strategy stage 2 interaction flow', () => {
     await flush();
 
     expect(host.querySelector('[data-pending-choice="negotiate_yoon"]')).not.toBeNull();
+    expect(host.querySelector('[data-guide-state="execute"]')).not.toBeNull();
+    expect(host.textContent).toContain('선택한 조치를 확인하세요');
+    expect(host.textContent).toContain('이 조치로 진행하시겠습니까?');
     await act(async () => { (host.querySelector('.strategy-cancel-button') as HTMLButtonElement).click(); });
     await flush();
     expect(host.querySelector('[data-pending-choice="negotiate_yoon"]')).toBeNull();
