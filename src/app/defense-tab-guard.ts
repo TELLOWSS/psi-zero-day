@@ -25,7 +25,7 @@ function ownerId(): string {
   return random ?? `tab-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-function storageLease(storage: Storage, id: string, now = Date.now()): { readonly ownerId: string; readonly expiresAt: number } | null {
+function storageLease(storage: Storage, now = Date.now()): { readonly ownerId: string; readonly expiresAt: number } | null {
   try {
     const raw = storage.getItem(DEFENSE_TAB_LEASE_KEY);
     if (!raw) return null;
@@ -43,7 +43,7 @@ function storageLease(storage: Storage, id: string, now = Date.now()): { readonl
 function writeLease(storage: Storage, id: string, now = Date.now()): boolean {
   try {
     storage.setItem(DEFENSE_TAB_LEASE_KEY, JSON.stringify({ ownerId: id, expiresAt: now + LEASE_TTL_MS }));
-    return storageLease(storage, id, now)?.ownerId === id;
+    return storageLease(storage, now)?.ownerId === id;
   } catch {
     return false;
   }
@@ -97,7 +97,7 @@ export async function acquireDefenseTabGuard(
     return { status: 'blocked', source: 'storage-lease', release() {} };
   }
 
-  const existing = storageLease(storage, id);
+  const existing = storageLease(storage);
   if (existing && existing.ownerId !== id) {
     return { status: 'blocked', source: 'storage-lease', release() {} };
   }
@@ -106,7 +106,7 @@ export async function acquireDefenseTabGuard(
   }
 
   const heartbeat = window.setInterval(() => {
-    const current = storageLease(storage, id);
+    const current = storageLease(storage);
     if (current && current.ownerId !== id) {
       onLockLost();
       return;
@@ -117,7 +117,7 @@ export async function acquireDefenseTabGuard(
   const onStorage = (event: StorageEvent) => {
     if (event.key === DEFENSE_SAVE_KEY) onExternalSave();
     if (event.key === DEFENSE_TAB_LEASE_KEY) {
-      const current = storageLease(storage, id);
+      const current = storageLease(storage);
       if (current && current.ownerId !== id) onLockLost();
     }
   };
@@ -130,7 +130,7 @@ export async function acquireDefenseTabGuard(
       window.clearInterval(heartbeat);
       window.removeEventListener('storage', onStorage);
       try {
-        if (storageLease(storage, id)?.ownerId === id) storage.removeItem(DEFENSE_TAB_LEASE_KEY);
+        if (storageLease(storage)?.ownerId === id) storage.removeItem(DEFENSE_TAB_LEASE_KEY);
       } catch { /* storage unavailable during teardown */ }
     },
   };
