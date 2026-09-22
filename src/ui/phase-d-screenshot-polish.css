@@ -346,3 +346,244 @@
     transition: none;
   }
 }
+
+
+/* Phase D Director review pass v2 — 2026-09-22
+   Applies the approved screenshot direction to the actual runtime.
+   No new art, no new coordinates, no engine/content changes. */
+
+/* Desktop production target: the physical site must remain visible behind every
+   FIELD/TBM beat. The scene grade may shape the image, never erase it. */
+@media (min-width: 901px) and (min-height: 651px) {
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-background,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    z-index: 0 !important;
+    opacity: 1 !important;
+    transform: scale(1.015);
+    filter: saturate(1.04) contrast(1.02) brightness(1.04) !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-atmosphere,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere {
+    z-index: 1 !important;
+    opacity: .15 !important;
+    mix-blend-mode: normal !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-grade,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    opacity: .14 !important;
+    box-shadow: none !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene::after {
+    background:
+      linear-gradient(90deg,rgba(2,8,12,.08),transparent 20%,transparent 82%,rgba(2,8,12,.05)),
+      linear-gradient(0deg,rgba(2,8,12,.12),transparent 35%) !important;
+  }
+
+  /* TBM is a briefing happening inside the site, not on a dark presentation stage. */
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before {
+    opacity: .18;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::after {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="TBM"] .tbm-production-layer {
+    opacity: .58;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-character[data-character="kang_taesik"] {
+    max-width: 29%;
+    max-height: 96%;
+  }
+
+  /* FIELD lower-third: retain who/what is speaking while giving most of the frame
+     back to the construction world. */
+  .game-frame[data-production-scene="FIELD"].phase-playing:not(.strategy-active) .play-panel {
+    left: 5.5%;
+    right: auto;
+    bottom: 3%;
+    width: min(1040px, 68%);
+    max-height: 27%;
+    grid-template-columns: 112px minmax(0,1fr);
+    gap: 14px;
+    padding: 11px 14px 12px;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .play-panel > .character-card,
+  .game-frame[data-production-scene="FIELD"] .play-panel > .narrator-card {
+    display: flex;
+    padding-right: 12px;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .portrait-slot,
+  .game-frame[data-production-scene="FIELD"] .worker-mark {
+    height: 68px;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .character-identity {
+    margin-top: 6px;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .character-identity strong {
+    font-size: 14px;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .narrator-mark {
+    font-size: 40px;
+  }
+
+  /* TBM dialogue becomes a restrained briefing lower-third. */
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="briefing"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="context"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="dialogue"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="result"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"].phase-playing:not(.strategy-active) .play-panel {
+    left: 12%;
+    right: 12%;
+    bottom: 2.6%;
+    max-height: 19%;
+    padding: 9px 13px 10px;
+  }
+
+  /* STRATEGY — the map is the play surface. Keep one compact overview and remove
+     the duplicate construction-stage card already represented in the top HUD. */
+  .game-frame[data-production-scene="STRATEGY"] .strategy-overview-minimap {
+    display: block;
+    top: 2%;
+    right: 1.4%;
+    width: 12.5%;
+    min-width: 136px;
+    padding: 6px 7px;
+    opacity: .88;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-minimap-plan {
+    height: 62px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map-stage-card {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map.has-background-art .strategy-map-background-art {
+    filter: saturate(1.01) contrast(1.04) brightness(.92);
+  }
+
+  /* Normal map dialogue: compact identity + line, no oversized lower card. */
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"])
+    .play-panel:has(> .character-card) {
+    grid-template-columns: 104px minmax(0,1fr);
+    max-height: 13.5%;
+    padding: 8px 11px 9px;
+    gap: 10px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"])
+    .play-panel > .character-card {
+    padding-right: 9px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"])
+    .play-panel .portrait-slot {
+    height: 58px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"])
+    .play-panel .character-identity {
+    margin-top: 4px;
+    gap: 2px;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"])
+    .play-panel .character-identity strong {
+    font-size: 12px;
+  }
+
+  /* Result mode: the right-side result card is authoritative. The duplicate
+     bottom "check result on map" panel disappears and the field reclaims it. */
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active:not([data-strategy-ui="judgment"]) .play-panel {
+    display: none;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].strategy-action-active:not([data-strategy-ui="judgment"]) .strategy-map {
+    bottom: 1.5%;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 {
+    top: 10.2%;
+    right: 1.4%;
+    width: min(24%, 390px);
+    max-height: 62%;
+    padding: 8px;
+    border-color: rgba(173,211,216,.28);
+    border-radius: 11px;
+    background: linear-gradient(180deg,rgba(5,22,29,.96),rgba(7,27,34,.93));
+    box-shadow: 0 16px 38px rgba(0,0,0,.34);
+    color: #edf5f2;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-outcome-card {
+    max-height: 57vh;
+    overflow: auto;
+    padding: 11px;
+    border-color: rgba(105,190,155,.32);
+    border-radius: 9px;
+    background: linear-gradient(180deg,rgba(17,49,45,.92),rgba(9,31,35,.94));
+    color: #edf5f2;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-outcome-kicker {
+    color: #8fd5b7;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-outcome-card p {
+    margin: 6px 0 8px;
+    color: #edf5f2;
+    font-size: clamp(11px,.78vw,14px);
+    font-weight: 650;
+    line-height: 1.5;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-outcome-relations span {
+    background: rgba(225,245,238,.09);
+    color: #c9e5db;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-outcome-psi,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-replan-card {
+    border-color: rgba(180,211,213,.18);
+    background: rgba(4,20,26,.56);
+    color: #d9e9e6;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray.step-3 .strategy-execute-button {
+    min-height: 42px;
+    border: 1px solid rgba(224,193,104,.56);
+    background: rgba(8,31,39,.96);
+    color: #f0f4ee;
+  }
+}
+
+/* The same world-visibility contract applies to tablets/landscape phones.
+   Existing safe-area and touch-target sizing remains authoritative. */
+@media (max-width: 900px) {
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-background,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    opacity: 1 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-atmosphere,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere {
+    opacity: .15 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-grade,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    opacity: .14 !important;
+    box-shadow: none !important;
+  }
+}
