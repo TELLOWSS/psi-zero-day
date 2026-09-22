@@ -220,6 +220,16 @@ try {
       await loaded;
       await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
       await waitFor(cdp, "[...document.querySelectorAll('button')].some(b => (b.textContent || '').includes('현장 디펜스'))");
+      const entryRect = await evaluate(cdp, `(() => {
+        const button = [...document.querySelectorAll('button')].find(b => (b.textContent || '').includes('현장 디펜스'));
+        if (!(button instanceof HTMLElement)) return null;
+        const rect = button.getBoundingClientRect();
+        return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+      })()`);
+      if (!entryRect) throw new Error('Hub defense entry button was not rendered');
+      if (!viewport.portrait && (entryRect.left < 0 || entryRect.top < 0 || entryRect.right > viewport.width || entryRect.bottom > viewport.height)) {
+        throw new Error('Hub defense entry button is outside fixed landscape viewport: ' + JSON.stringify(entryRect));
+      }
       if (!(await clickText(cdp, '현장 디펜스'))) throw new Error('Hub defense entry button was not clickable');
       await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="support-select"]'))`);
       await screenshot(cdp, viewport.name + '-support-select.png');
