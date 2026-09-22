@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/task-007-casual-strategy-foundation
+      - sol/ep01-production-map-lock-20260923
   workflow_dispatch:
 
 permissions:
@@ -85,6 +86,22 @@ jobs:
           fi
 
           node scripts/verify-episode01-responsive.mjs
+
+      - name: Emit Production Map screenshot evidence
+        if: always()
+        shell: bash
+        run: |
+          for file in \
+            artifacts/responsive/desktop-1920x1080-episode01-strategy.png \
+            artifacts/responsive/phone-portrait-390x844-episode01-strategy.png
+          do
+            if [ -f "$file" ]; then
+              echo "BEGIN_PRODUCTION_MAP_SCREENSHOT:$file"
+              base64 -w0 "$file"
+              echo
+              echo "END_PRODUCTION_MAP_SCREENSHOT:$file"
+            fi
+          done
 
       - name: Upload responsive QA evidence
         if: always()
