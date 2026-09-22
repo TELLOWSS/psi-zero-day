@@ -55,8 +55,8 @@
       "phase":{"triggerHpRatio":0.6,"armor":0.5,"durationTicks":120,"maxTriggers":1}}
   ],
   "supports": [
-    {"id":"COORDINATOR","characterBinding":"kang_taesik","skillTextId":"defense.support.COORDINATOR.skill","cooldownTicks":900,"initialCooldownTicks":0,"freezeMovementTicks":60,"revealAllTicks":0,"rangeBonus":0,"rangeBonusTicks":0},
-    {"id":"OBSERVER","characterBinding":"lim_junho","skillTextId":"defense.support.OBSERVER.skill","cooldownTicks":800,"initialCooldownTicks":0,"freezeMovementTicks":0,"revealAllTicks":160,"rangeBonus":30,"rangeBonusTicks":160}
+    {"id":"COORDINATOR","characterBinding":null,"skillTextId":"defense.support.COORDINATOR.skill","cooldownTicks":900,"initialCooldownTicks":0,"freezeMovementTicks":60,"revealAllTicks":0,"rangeBonus":0,"rangeBonusTicks":0},
+    {"id":"OBSERVER","characterBinding":null,"skillTextId":"defense.support.OBSERVER.skill","cooldownTicks":800,"initialCooldownTicks":0,"freezeMovementTicks":0,"revealAllTicks":160,"rangeBonus":30,"rangeBonusTicks":160}
   ],
   "waves": [
     {"id":1,"groups":[{"enemy":"NORMAL","count":8,"startTick":0,"intervalTicks":40}]},
