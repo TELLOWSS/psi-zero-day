@@ -296,3 +296,30 @@
 @media (prefers-reduced-motion:reduce){
   .zb-tower-production.is-firing .zb-tower-production-image{animation:none}
 }
+
+
+/* Step 5 production effects + shared audio presentation */
+.zb-impact-ring{fill:none;stroke:#fff2b6;stroke-width:5;opacity:.9;pointer-events:none;animation:zb-impact .14s ease-out both}
+.zb-enemy.is-hit .zb-enemy-production-image{animation:zb-enemy-hit .14s ease-out}
+@keyframes zb-impact{0%{r:16;opacity:1;stroke-width:8}100%{r:34;opacity:0;stroke-width:2}}
+@keyframes zb-enemy-hit{0%{filter:drop-shadow(0 0 12px #fff2b6) brightness(1.5)}100%{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38)) brightness(1)}}
+.zb-shell.is-shield-hit .zb-board-wrap::after{
+  content:"";position:absolute;inset:0;z-index:14;pointer-events:none;border:3px solid rgba(226,107,97,.75);
+  box-shadow:inset 0 0 36px rgba(226,107,97,.35);animation:zb-shield-hit .18s ease-out both
+}
+@keyframes zb-shield-hit{0%{opacity:1}100%{opacity:0}}
+.zb-support-field{pointer-events:none}
+.zb-support-field.is-coordinator rect{fill:rgba(86,213,176,.05);stroke:rgba(86,213,176,.68);stroke-width:4;stroke-dasharray:18 10}
+.zb-support-field.is-coordinator path{fill:none;stroke:rgba(86,213,176,.72);stroke-width:8;stroke-linecap:round;stroke-dasharray:16 20;animation:zb-support-sweep .8s linear infinite}
+.zb-support-field.is-observer circle{fill:none;stroke:rgba(181,154,255,.58);stroke-width:4;stroke-dasharray:12 10;transform-origin:500px 300px;animation:zb-observer-scan 1s linear infinite}
+.zb-support-field.is-observer circle+circle{animation-direction:reverse;opacity:.62}
+@keyframes zb-support-sweep{to{stroke-dashoffset:-72}}
+@keyframes zb-observer-scan{to{transform:rotate(360deg)}}
+.zb-defense-settings-panel button[data-audio-muted="false"] b{color:var(--zb-good)}
+.zb-defense-settings-panel button[data-audio-muted="true"] b{color:#ffaaa4}
+.zb-defense-settings-panel button span{margin-right:8px;color:var(--zb-muted)}
+@media (prefers-reduced-motion:reduce){
+  .zb-impact-ring,.zb-enemy.is-hit .zb-enemy-production-image,.zb-shell.is-shield-hit .zb-board-wrap::after,
+  .zb-support-field.is-coordinator path,.zb-support-field.is-observer circle{animation:none}
+  .zb-impact-ring{opacity:.65}
+}

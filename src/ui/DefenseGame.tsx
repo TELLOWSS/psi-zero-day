@@ -16,6 +16,8 @@ import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
+import { useDefenseAudio } from './useDefenseAudio';
+import { useDefenseEffects } from './useDefenseEffects';
 
 const content = zeroBreachContent;
 const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
@@ -91,7 +93,7 @@ function TowerGlyph({ tower }: { tower: DefenseTowerState }) {
   </g>;
 }
 
-function EnemyGlyph({ enemy, state }: { enemy: DefenseRunState['enemies'][number]; state: DefenseRunState }) {
+function EnemyGlyph({ enemy, state, isHit }: { enemy: DefenseRunState['enemies'][number]; state: DefenseRunState; isHit: boolean }) {
   const definition = content.enemies.find(item => item.id === enemy.enemyId)!;
   const pos = defensePositionAtDistance(content.map.path, enemy.distance);
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
@@ -100,9 +102,10 @@ function EnemyGlyph({ enemy, state }: { enemy: DefenseRunState['enemies'][number
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   return <g
     transform={`translate(${pos.x} ${pos.y})`}
-    className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}`}
+    className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
   >
+    {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {artUri ? <image
       href={artUri}
       x="-30"
@@ -163,6 +166,8 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
+  const audio = useDefenseAudio(state);
+  const effects = useDefenseEffects(state);
 
   const selectedTower = state?.towers.find(tower => tower.id === selectedTowerId) ?? null;
   const selectedPad = content.map.pads.find(pad => pad.id === selectedPadId) ?? null;
@@ -236,9 +241,12 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
       if (command.type === 'Build') {
         const built = next.towers.find(tower => tower.padId === command.padId);
         setSelectedTowerId(built?.id ?? null);
+        audio.playCue('place');
       }
+      if (command.type === 'Upgrade') audio.playCue('upgrade');
       if (command.type === 'Sell') {
         setSelectedTowerId(null);
+        audio.playCue('sell');
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : t('defense.ui.command_error');
@@ -255,6 +263,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   };
 
   const startWithSupport = (supportId: DefenseSupportId) => {
+    audio.playCue('select');
     persistence.startWithSupport(supportId, portrait);
   };
 
@@ -296,7 +305,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}`} data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -322,6 +331,12 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
     <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => setSettingsOpen(open => !open)}>설정</button>
     {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
       <button type="button" onClick={() => { tutorial.replay(); setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
+      <button
+        type="button"
+        data-audio-muted={audio.muted ? 'true' : 'false'}
+        aria-pressed={audio.muted}
+        onClick={() => audio.setMuted(!audio.muted)}
+      ><span>SOUND</span><b>{audio.muted ? 'OFF' : 'ON'}</b></button>
     </section> : null}
     <DefenseSaveStatus controller={persistence} />
     <DefenseTutorial controller={tutorial} />
@@ -372,13 +387,21 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
             r="30"
             className={`zb-pad-mark${selectedPadId === pad.id ? ' is-selected' : ''}${state.towers.some(tower => tower.padId === pad.id) ? ' is-occupied' : ''}`}
           />)}
+          {state.freezeMovementUntilTick > state.tick ? <g className="zb-support-field is-coordinator" aria-hidden="true">
+            <rect x="8" y="8" width="984" height="584" rx="20" />
+            <path d="M120 300H880" />
+          </g> : null}
+          {state.rangeBonusUntilTick > state.tick ? <g className="zb-support-field is-observer" aria-hidden="true">
+            <circle cx="500" cy="300" r="210" />
+            <circle cx="500" cy="300" r="130" />
+          </g> : null}
           {state.towers.map(tower => {
             const pad = content.map.pads.find(item => item.id === tower.padId)!;
             return <g key={tower.id} transform={`translate(${pad.x} ${pad.y})`}>
               <TowerGlyph tower={tower} />
             </g>;
           })}
-          {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} enemy={enemy} state={state} />)}
+          {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
         </svg>
 
         <div className="zb-pad-layer" aria-label="설치 패드">
