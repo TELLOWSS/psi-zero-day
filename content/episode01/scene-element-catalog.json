@@ -805,7 +805,15 @@
         "observe_point_text_id": "ui.guide.first_aid_aed.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "FG009 must visually separate the legally required first-aid kit from the AED module. Do not imply universal AED obligation for all Korean construction sites.",
+      "site_reality_profile": {
+        "subject": "korean_first_aid_point_plus_optional_aed",
+        "first_aid_required_by_rule82": true,
+        "aed_universal_construction_site_requirement": false,
+        "aed_rendering": "separate_adjacent_module",
+        "geometry_source": "Korean industrial first-aid box and AED cabinet product families",
+        "final_without_product_family_verification": false
+      }
     },
     "site_weather_station": {
       "element_id": "scene.equipment.site_weather_station",
