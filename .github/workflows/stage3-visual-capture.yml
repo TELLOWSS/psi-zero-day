@@ -149,11 +149,26 @@ jobs:
 
             const tbm = '.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-event="e01_02_meet_kang"][data-visual-lock="stage3-tbm"]';
             await progress(page, tbm, 18);
-            await snapshot(page, '02-tbm', name);
+            await snapshot(page, '02a-tbm-kang', name);
+
+            const tbmPlayer = `${tbm} .episode-immersive-speaker-tag[data-speaker-id="player"]`;
+            await progress(page, tbmPlayer, 8);
+            await snapshot(page, '02b-tbm-player', name);
 
             const strategy = '.game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-event="e01_03_plan_breaks"][data-visual-lock="stage3-strategy"]';
             await progress(page, strategy, 18);
             await snapshot(page, '03-strategy', name);
+
+            const congestion = page.locator('[data-signal="signal.entry_congestion"]').first();
+            await congestion.click();
+            const action = page.locator('.strategy-action-list button:not(:disabled)').first();
+            await action.waitFor({ state: 'visible', timeout: 10000 });
+            await action.click();
+            const execute = page.locator('.strategy-action-confirm .strategy-execute-button').first();
+            await execute.waitFor({ state: 'visible', timeout: 10000 });
+            await execute.click();
+            await page.locator('.strategy-outcome-card').waitFor({ state: 'visible', timeout: 10000 });
+            await snapshot(page, '04-strategy-result', name);
 
             results.push({ viewport:name, consoleErrors });
             await context.close();
