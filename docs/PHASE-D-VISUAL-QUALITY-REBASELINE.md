@@ -43,3 +43,36 @@ Source of truth:
 - `content/episode01/phase-d-visual-quality-rebaseline-v1.json`
 - `src/app/episode01-visual-quality-rebaseline.ts`
 - `tests/episode01-visual-quality-rebaseline.test.ts`
+
+
+## TBM Reference Implementation — 2026-09-23
+
+Reference event/node: `e01_08g_tbm_field_gap / tbm_action`.
+
+Status: **VISUAL PRODUCTION LOCKED**.
+
+The reference frame now composes the existing final work-yard surface with the existing
+`access-barrier`, `open-edge`, and `material-stack` scene-element assets. The four locked
+characters remain on one floor plane while a restrained field-route cue identifies the afternoon
+changed condition. No new placeholder image or event/choice branch was added.
+
+Chrome regression QA passed the five required viewport profiles on GitHub Actions run `35772838827` attempt 2. The representative 390×844 render was also inspected from the emitted screenshot evidence. TBM is now `VISUAL_PRODUCTION_LOCKED`; later work may not redesign this composition without a verified regression.
+
+
+## FIELD Reference Implementation — 2026-09-23
+
+Reference event/node: `e01_04_junho_signal / listen`.
+
+Status: **VISUAL PRODUCTION LOCKED**.
+
+The FIELD reference now keeps the ramp-entry world visible and gives the small signal a physical
+read: vehicle passage trace, displaced gravel, and a slightly raised steel-plate edge sit inside the
+same scene as Player and Lim Junho. Choi Minseok remains visible as an operational background
+presence, while the judgment dock is constrained so it does not cover the clue.
+
+No new placeholder image, event, choice, effect, or Episode topology was added. Chrome regression QA passed the same five viewport profiles on GitHub Actions run `35772838827` attempt 2, including the corrected 390×844 portrait composition. The representative portrait render was inspected from emitted screenshot evidence. FIELD is now `VISUAL_PRODUCTION_LOCKED`.
+
+
+## First-Wave Lock Handoff — 2026-09-23
+
+TBM and FIELD reference scenes are both **VISUAL PRODUCTION LOCKED**. The overall responsive workflow still reports unrelated pre-existing STRATEGY regressions; those are not reclassified as TBM/FIELD failures and are not being repaired in this step. The next directed visual task is **Production Map**. Character Master Lock and these two scene locks remain immutable inputs unless a verified regression requires reopening them.

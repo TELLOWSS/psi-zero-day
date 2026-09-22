@@ -7875,3 +7875,603 @@
     z-index:13!important;
   }
 }
+
+
+/* Phase D D-2 — TBM commercial reference lock v1.
+   Reference: e01_08g_tbm_field_gap / tbm_action.
+   This pass does not add a new image. It composes the existing work-yard,
+   access-barrier, open-edge, material-stack and locked cast into one readable
+   changed-work briefing frame. */
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] {
+  --tbm-lock-floor: 29%;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .tbm-production-layer {
+  opacity:.52;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .tbm-briefing-ring,
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .tbm-floor-mark {
+  opacity:.34;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .tbm-briefing-board {
+  left:50%;
+  bottom:32%;
+  width:clamp(104px,12.5%,156px);
+  opacity:.76;
+  transform:translateX(-50%) perspective(720px) rotateX(1deg);
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-background {
+  object-position:56% 50%;
+  transform:scale(1.02);
+  filter:saturate(1.06) contrast(1.025) brightness(1.045)!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-atmosphere {
+  opacity:.12!important;
+  mix-blend-mode:normal!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-grade {
+  opacity:.1!important;
+  box-shadow:none!important;
+}
+
+/* Existing scene-element WebPs become the physical evidence band. */
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-1 {
+  left:-1%!important;
+  right:auto!important;
+  bottom:27%!important;
+  width:25%!important;
+  height:27%!important;
+  opacity:.88!important;
+  z-index:8!important;
+  transform-origin:50% 100%!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-2 {
+  left:auto!important;
+  right:-3%!important;
+  bottom:27%!important;
+  width:31%!important;
+  height:32%!important;
+  opacity:.94!important;
+  z-index:8!important;
+  transform-origin:50% 100%!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-3 {
+  left:35%!important;
+  right:auto!important;
+  bottom:27%!important;
+  width:29%!important;
+  height:25%!important;
+  opacity:.94!important;
+  z-index:9!important;
+  transform-origin:50% 100%!important;
+}
+
+/* One crew, one floor plane. The player leads the judgment without erasing listeners. */
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-character {
+  bottom:25%!important;
+  transform-origin:50% 100%!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+  .episode-immersive-character[data-character="lee_jaehoon"] {
+  left:10%!important;
+  width:18%!important;
+  height:62%!important;
+  opacity:.72!important;
+  z-index:11!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+  .episode-immersive-character[data-character="player"] {
+  left:31%!important;
+  width:24%!important;
+  height:79%!important;
+  opacity:1!important;
+  z-index:15!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+  .episode-immersive-character[data-character="kang_taesik"] {
+  left:66%!important;
+  width:25%!important;
+  height:77%!important;
+  opacity:.96!important;
+  z-index:14!important;
+}
+.game-frame[data-production-scene="TBM"]
+  .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+  .episode-immersive-character[data-character="lim_junho"] {
+  left:85%!important;
+  width:17%!important;
+  height:58%!important;
+  opacity:.68!important;
+  z-index:11!important;
+}
+
+/* These marks behave like temporary field tape/chalk, not a dashboard. */
+.game-frame[data-production-scene="TBM"] .tbm-visual-lock-layer {
+  position:absolute;
+  inset:0;
+  z-index:16;
+  pointer-events:none;
+  overflow:hidden;
+}
+.game-frame[data-production-scene="TBM"] .tbm-change-route-line {
+  position:absolute;
+  left:43%;
+  bottom:31%;
+  width:30%;
+  height:7%;
+  border-bottom:2px dashed rgba(233,190,82,.62);
+  border-radius:50%;
+  transform:rotate(-4deg) skewX(-18deg);
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45));
+}
+.game-frame[data-production-scene="TBM"] .tbm-change-route-line::after {
+  content:"";
+  position:absolute;
+  right:-1%;
+  bottom:-5px;
+  width:0;
+  height:0;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  border-left:8px solid rgba(233,190,82,.7);
+  transform:rotate(9deg);
+}
+.game-frame[data-production-scene="TBM"] .tbm-change-control-point {
+  position:absolute;
+  right:20%;
+  bottom:31%;
+  width:20px;
+  height:20px;
+  border:2px solid rgba(238,114,83,.82);
+  border-radius:50%;
+  box-shadow:0 0 0 5px rgba(238,114,83,.09),0 2px 8px rgba(0,0,0,.34);
+}
+.game-frame[data-production-scene="TBM"] .tbm-change-control-point::before,
+.game-frame[data-production-scene="TBM"] .tbm-change-control-point::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:26px;
+  height:2px;
+  background:rgba(238,114,83,.68);
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+.game-frame[data-production-scene="TBM"] .tbm-change-control-point::after {
+  transform:translate(-50%,-50%) rotate(-45deg);
+}
+.game-frame[data-production-scene="TBM"] .tbm-world-evidence {
+  position:absolute;
+  padding:4px 7px;
+  border:1px solid rgba(218,208,170,.24);
+  border-radius:999px;
+  color:rgba(246,240,218,.88);
+  background:rgba(7,21,22,.7);
+  box-shadow:0 6px 14px rgba(0,0,0,.2);
+  backdrop-filter:blur(5px);
+  font:750 9px/1.15 ui-sans-serif,system-ui,sans-serif;
+  letter-spacing:.015em;
+  white-space:nowrap;
+}
+.game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="morning-baseline"] {
+  left:45%;
+  bottom:48%;
+}
+.game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="changed-access"] {
+  right:7%;
+  bottom:48%;
+  border-color:rgba(238,114,83,.38);
+}
+.game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="material-exit"] {
+  left:42%;
+  bottom:37%;
+  border-color:rgba(233,190,82,.38);
+}
+
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"].phase-playing:not(.strategy-active) .play-panel {
+    left:9%!important;
+    right:9%!important;
+    bottom:2.5%!important;
+    max-height:25%!important;
+    padding:10px 13px 11px!important;
+  }
+}
+
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .tbm-briefing-board {
+    bottom:31dvh!important;
+    width:min(25vw,108px)!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-character {
+    bottom:30dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+    .episode-immersive-character[data-character="lee_jaehoon"] {
+    left:2%!important;
+    width:17%!important;
+    height:29dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+    .episode-immersive-character[data-character="player"] {
+    left:23%!important;
+    width:24%!important;
+    height:42dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+    .episode-immersive-character[data-character="kang_taesik"] {
+    left:67%!important;
+    width:27%!important;
+    height:41dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    left:86%!important;
+    width:15%!important;
+    height:26dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-1 {
+    left:-3%!important;
+    bottom:30dvh!important;
+    width:25%!important;
+    height:17dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-2 {
+    right:-5%!important;
+    bottom:30dvh!important;
+    width:31%!important;
+    height:20dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-prop.prop-3 {
+    left:35%!important;
+    bottom:30dvh!important;
+    width:30%!important;
+    height:15dvh!important;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-change-route-line {
+    left:42%;
+    bottom:31dvh;
+    width:31%;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-change-control-point {
+    right:18%;
+    bottom:31dvh;
+    width:16px;
+    height:16px;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-world-evidence {
+    padding:3px 5px;
+    font-size:7.5px;
+    backdrop-filter:blur(3px);
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="morning-baseline"] {
+    left:41%;
+    bottom:53dvh;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="changed-access"] {
+    right:3%;
+    bottom:50dvh;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-world-evidence[data-evidence="material-exit"] {
+    left:38%;
+    bottom:38dvh;
+  }
+}
+
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-visual-lock="tbm-reference-v1"] .episode-immersive-character {
+    bottom:27%!important;
+  }
+  .game-frame[data-production-scene="TBM"] .tbm-world-evidence {
+    font-size:7px;
+    padding:2px 4px;
+  }
+}
+
+
+/* Phase D D-2 — FIELD commercial reference lock v1.
+   Reference: e01_04_junho_signal / listen.
+   The small signal is rendered as a physical ramp clue inside the existing
+   ramp-entry scene. No placeholder image, new event or new hazard outcome. */
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-background {
+  object-position:59% 50%;
+  transform:scale(1.018);
+  filter:saturate(1.055) contrast(1.025) brightness(1.04)!important;
+}
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-atmosphere {
+  opacity:.11!important;
+  mix-blend-mode:normal!important;
+}
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-grade {
+  opacity:.09!important;
+  box-shadow:none!important;
+}
+
+/* Preserve operational context at the edges of the decision frame. */
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-prop.prop-1 {
+  left:auto!important;
+  right:-3%!important;
+  bottom:25%!important;
+  width:30%!important;
+  height:35%!important;
+  opacity:.74!important;
+  z-index:8!important;
+}
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-prop.prop-2 {
+  left:-2%!important;
+  right:auto!important;
+  bottom:25%!important;
+  width:27%!important;
+  height:29%!important;
+  opacity:.72!important;
+  z-index:8!important;
+}
+
+/* Player listens; Junho owns the signal; signalman remains present but not dominant. */
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+  .episode-immersive-character[data-character="player"] {
+  left:17%!important;
+  bottom:24%!important;
+  width:25%!important;
+  height:78%!important;
+  opacity:.96!important;
+  z-index:14!important;
+}
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+  .episode-immersive-character[data-character="lim_junho"] {
+  left:45%!important;
+  bottom:24%!important;
+  width:25%!important;
+  height:82%!important;
+  opacity:1!important;
+  z-index:15!important;
+}
+.game-frame[data-production-scene="FIELD"]
+  .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+  .episode-immersive-character[data-character="choi_minseok"] {
+  left:82%!important;
+  bottom:26%!important;
+  width:16%!important;
+  height:55%!important;
+  opacity:.46!important;
+  z-index:10!important;
+}
+
+/* Small physical signal: vehicle trace + moved gravel + lifted plate edge. */
+.game-frame[data-production-scene="FIELD"] .field-visual-lock-layer {
+  position:absolute;
+  inset:0;
+  z-index:16;
+  pointer-events:none;
+  overflow:hidden;
+}
+.game-frame[data-production-scene="FIELD"] .field-ramp-plate {
+  position:absolute;
+  right:17%;
+  bottom:29%;
+  width:23%;
+  height:8%;
+  border:1px solid rgba(132,143,146,.72);
+  border-bottom:3px solid rgba(66,78,82,.86);
+  border-radius:4px 4px 2px 2px;
+  background:
+    linear-gradient(175deg,rgba(132,145,148,.28),rgba(72,83,86,.5)),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 8px);
+  box-shadow:0 7px 9px rgba(0,0,0,.25);
+  transform:perspective(500px) rotateX(65deg) rotateZ(-5deg);
+  transform-origin:50% 100%;
+}
+.game-frame[data-production-scene="FIELD"] .field-ramp-plate::after {
+  content:"";
+  position:absolute;
+  right:7%;
+  top:-3px;
+  width:38%;
+  height:4px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(239,185,92,.78));
+  box-shadow:0 -2px 5px rgba(239,185,92,.16);
+}
+.game-frame[data-production-scene="FIELD"] .field-ramp-gravel {
+  position:absolute;
+  right:14%;
+  bottom:30%;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:rgba(135,118,88,.72);
+  box-shadow:
+    -11px 4px 0 rgba(122,105,78,.62),
+    -20px -2px 0 rgba(147,128,94,.58),
+    8px 7px 0 rgba(109,96,73,.64),
+    17px 2px 0 rgba(153,132,97,.52),
+    25px 9px 0 rgba(117,103,78,.55),
+    -29px 10px 0 rgba(139,120,88,.48);
+  transform:rotate(-7deg);
+}
+.game-frame[data-production-scene="FIELD"] .field-vehicle-trace {
+  position:absolute;
+  right:8%;
+  bottom:34%;
+  width:35%;
+  height:9%;
+  border-bottom:2px dashed rgba(97,112,115,.42);
+  border-radius:50%;
+  transform:rotate(-6deg) skewX(-15deg);
+}
+.game-frame[data-production-scene="FIELD"] .field-world-evidence {
+  position:absolute;
+  padding:4px 7px;
+  border:1px solid rgba(221,204,150,.25);
+  border-radius:999px;
+  color:rgba(246,239,215,.88);
+  background:rgba(7,19,22,.7);
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+  backdrop-filter:blur(5px);
+  font:750 9px/1.15 ui-sans-serif,system-ui,sans-serif;
+  white-space:nowrap;
+}
+.game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="vehicle-trace"] {
+  right:28%;
+  bottom:42%;
+  opacity:.68;
+}
+.game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="plate-edge"] {
+  right:10%;
+  bottom:39%;
+  border-color:rgba(239,185,92,.42);
+}
+.game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="small-signal"] {
+  right:15%;
+  bottom:48%;
+  color:rgba(252,225,159,.96);
+  border-color:rgba(239,185,92,.46);
+}
+
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"].phase-playing:not(.strategy-active) .play-panel {
+    left:4.5%!important;
+    right:auto!important;
+    width:min(860px,58%)!important;
+    bottom:2.5%!important;
+    max-height:25%!important;
+    padding:10px 14px 11px!important;
+  }
+}
+
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+    .episode-immersive-character[data-character="player"] {
+    left:12%!important;
+    bottom:30dvh!important;
+    width:29%!important;
+    height:41dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    left:47%!important;
+    bottom:30dvh!important;
+    width:29%!important;
+    height:43dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"]
+    .episode-immersive-character[data-character="choi_minseok"] {
+    left:85%!important;
+    bottom:32dvh!important;
+    width:14%!important;
+    height:24dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-prop.prop-1 {
+    right:-6%!important;
+    bottom:30dvh!important;
+    width:31%!important;
+    height:18dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .episode-immersive-prop.prop-2 {
+    left:-4%!important;
+    bottom:30dvh!important;
+    width:27%!important;
+    height:16dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-ramp-plate {
+    right:8%;
+    bottom:35dvh;
+    width:34%;
+    height:6dvh;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-ramp-gravel {
+    right:7%;
+    bottom:35.5dvh;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-vehicle-trace {
+    right:2%;
+    bottom:38dvh;
+    width:46%;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-world-evidence {
+    padding:3px 5px;
+    font-size:7.5px;
+    backdrop-filter:blur(3px);
+  }
+  .game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="vehicle-trace"] {
+    right:25%;
+    bottom:46dvh;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="plate-edge"] {
+    right:3%;
+    bottom:43dvh;
+  }
+  .game-frame[data-production-scene="FIELD"] .field-world-evidence[data-evidence="small-signal"] {
+    right:8%;
+    bottom:53dvh;
+  }
+}
+
+@media (orientation:landscape) and (max-height:460px) {
+  .game-frame[data-production-scene="FIELD"] .field-world-evidence {
+    padding:2px 4px;
+    font-size:7px;
+  }
+}
+
+
+/* Phase D D-2C — FIELD 390x844 visual-QA correction.
+   Keep the steel-plate signal fully above the portrait judgment dock. */
+@media (orientation:portrait) and (max-width:420px) {
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-ramp-plate {
+    bottom:36dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-ramp-gravel {
+    bottom:37dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-vehicle-trace {
+    bottom:40dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-world-evidence[data-evidence="plate-edge"] {
+    bottom:44dvh!important;
+  }
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-field-visual-lock="field-reference-v1"] .field-world-evidence[data-evidence="small-signal"] {
+    bottom:52dvh!important;
+  }
+}

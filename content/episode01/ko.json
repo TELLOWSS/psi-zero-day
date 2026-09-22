@@ -120,6 +120,9 @@
     "ep01.pour.after": "콘크리트가 퍼지고 표면이 채워진다. 큰 사고는 없었다. 하지만 오늘의 차이는 '아무 일도 없었다'가 아니라, 어떤 신호를 듣고 무엇을 놓쳤는지가 남았다는 데 있다.",
     "cast.player.trade": "안전관리",
     "cast.kang_taesik.trade": "형틀",
-    "cast.yoon_sungho.trade": "철근"
+    "cast.yoon_sungho.trade": "철근",
+    "ui.field_visual.vehicle_trace": "차량 통과 흔적",
+    "ui.field_visual.plate_edge": "철판 끝 단차",
+    "ui.field_visual.small_signal": "작은 이상 신호"
   }
 }
