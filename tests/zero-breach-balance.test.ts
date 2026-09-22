@@ -314,11 +314,23 @@ describe('ZERO BREACH step 4 baseline balance', () => {
     expect(content.balanceStatus).toBe('UNTESTED_STARTING_POINT');
 
     const reports = STRATEGIES.map(runStrategy);
+    const staticOpening = runStrategy({
+      id: 'STATIC_OPENING',
+      support: 'COORDINATOR',
+      supportWaves: [],
+      prepByWave: {
+        1: [
+          { type: 'build', padId: 'P1', towerId: 'PULSE' },
+          { type: 'build', padId: 'P6', towerId: 'PULSE' },
+        ],
+      },
+    });
     const noResponse = runNoResponse();
-    console.log('ZERO_BREACH_BALANCE_BASELINE=' + JSON.stringify({ reports, noResponse }));
+    console.log('ZERO_BREACH_BALANCE_BASELINE=' + JSON.stringify({ reports, staticOpening, noResponse }));
 
     const winners = reports.filter(report => report.won);
     expect(winners.length, JSON.stringify(reports, null, 2)).toBeGreaterThanOrEqual(2);
+    expect(staticOpening.won, JSON.stringify(staticOpening, null, 2)).toBe(false);
     expect(noResponse.won).toBe(false);
     expect(noResponse.failureWave).not.toBeNull();
 
