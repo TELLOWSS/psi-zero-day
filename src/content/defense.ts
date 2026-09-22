@@ -224,8 +224,17 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   if (speeds.length !== 2 || !speeds.includes(1) || !speeds.includes(2)) issues.push('speeds: must contain 1 and 2');
   if (targetModes.length !== 2 || !targetModes.includes('FIRST') || !targetModes.includes('STRONG')) issues.push('targetModes: must contain FIRST and STRONG');
 
-  if (!stringValue(scenario.id) || !stringValue(scenario.firstClearCosmetic) || !stringValue(scenario.threeStarCosmetic)
-    || !integer(scenario.rewardVersion) || !Array.isArray(scenario.mainStoryStatRewards)) issues.push('scenario: invalid');
+  const supportResetWaveIds = Array.isArray(scenario.supportResetWaveIds) ? scenario.supportResetWaveIds : [];
+  if (supportResetWaveIds.some(id => !integer(id) || id < 1 || id > waves.length)
+    || new Set(supportResetWaveIds).size !== supportResetWaveIds.length) {
+    issues.push('scenario.supportResetWaveIds: invalid wave ids');
+  }
+  const nullableString = (value: unknown): boolean => value === null || stringValue(value);
+  if (!stringValue(scenario.id) || !stringValue(scenario.firstClearCosmetic) || !nullableString(scenario.threeStarCosmetic)
+    || !integer(scenario.rewardVersion) || !Array.isArray(scenario.mainStoryStatRewards)
+    || !Array.isArray(scenario.supportResetWaveIds)
+    || !nullableString(scenario.eventId) || !nullableString(scenario.eventContentVersion)
+    || ((scenario.eventId === null) !== (scenario.eventContentVersion === null))) issues.push('scenario: invalid');
 
   if (issues.length) throw new DefenseContentError(issues);
   return input as unknown as DefenseContent;
