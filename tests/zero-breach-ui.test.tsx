@@ -29,6 +29,7 @@ async function mount() {
   const onExit = vi.fn();
   await act(async () => {
     root.render(<DefenseGame session={sessionStub()} onExit={onExit} />);
+    for (let index = 0; index < 6; index += 1) await Promise.resolve();
   });
   return { host, root, onExit };
 }
@@ -41,6 +42,7 @@ async function click(element: Element) {
 }
 
 beforeEach(() => {
+  window.localStorage.clear();
   vi.useFakeTimers();
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({

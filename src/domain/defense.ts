@@ -129,7 +129,13 @@ export interface DefenseTowerState {
   readonly attackCooldown: number;
   readonly revealCooldown: number;
 }
+export type DefenseRunMode = 'TRAINING';
+export type DefenseRunVariant = 'STANDARD';
+
 export interface DefenseRunState {
+  readonly runId: string;
+  readonly mode: DefenseRunMode;
+  readonly variant: DefenseRunVariant;
   readonly status: DefenseStatus;
   readonly paused: boolean;
   readonly speed: 1 | 2;
