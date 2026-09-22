@@ -285,10 +285,7 @@ export function StrategyMapShell({
             className={`strategy-zone-target zone-${zone}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-production-anchor={zone}
             style={productionMapStyle(zone, 'zone')}
-            onClick={() => {
-              const anchorKey = `anchor:${placement.anchor}`;
-              setFocusId(hasActionsFor(key) ? key : hasActionsFor(anchorKey) ? anchorKey : key);
-            }}
+            onClick={() => setFocusId(key)}
           ><span className="strategy-zone-copy">
             <strong>{text(`ui.strategy.zone.${zone}`)}</strong>
             <small>배치 {zoneSummary[zone].workers} · 위험 {zoneSummary[zone].signals}</small>
@@ -341,7 +338,10 @@ export function StrategyMapShell({
             key={placement.character_id}
             type="button"
             style={productionMapStyle(placement.anchor, 'character')}
-            onClick={() => setFocusId(key)}
+            onClick={() => {
+              const anchorKey = `anchor:${placement.anchor}`;
+              setFocusId(hasActionsFor(key) ? key : hasActionsFor(anchorKey) ? anchorKey : key);
+            }}
           >
             {visual?.map_uri
               ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
