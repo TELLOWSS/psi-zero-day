@@ -42,6 +42,7 @@ async function click(element: Element) {
 
 beforeEach(() => {
   vi.useFakeTimers();
+  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
@@ -55,6 +56,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  delete (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT;
   vi.useRealTimers();
   vi.unstubAllGlobals();
   document.body.replaceChildren();
