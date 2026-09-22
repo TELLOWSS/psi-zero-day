@@ -363,17 +363,20 @@
         "marking": "simple floor/lane edge marking allowed; no text baked into reusable art"
       },
       "render_contract": {
-        "asset_type": "transparent scene-fragment module rather than one invented product",
-        "composition": "pedestrian strip on one side, adjacent vehicle strip on the other, separated continuously by 2–3 Korean banding-type blue-mesh fence panels",
-        "fence_geometry": "reuse Episode 01 approved access-barrier family: rounded galvanized tube, blue mesh, black weighted bases",
-        "road_surface": "realistic temporary construction asphalt/concrete strip with mild dirt/tire wear",
-        "pedestrian_surface": "clean non-slip temporary walkway surface; restrained green/gray marking only if needed for readability",
-        "people": "none",
-        "vehicles": "none",
-        "text": "none",
-        "branding": "none",
-        "background": "transparent outside the ground module",
-        "camera": "slight elevated three-quarter view so both routes and the continuous physical separation are immediately legible"
+        "asset_type": "transparent scene-fragment module",
+        "composition": "one ground-level worker passage beside one ground-level construction vehicle lane, physically separated by 2–3 approved Korean blue-mesh movable fence panels",
+        "pedestrian_surface": "same-level concrete/asphalt or compacted temporary surface with restrained lane-edge marking",
+        "vehicle_surface": "adjacent temporary construction road with tire wear",
+        "fence_geometry": "approved Korean blue-mesh banding fence on black weighted bases",
+        "optional_elements": "small cone at entry only if needed for continuity",
+        "prohibited_elements": [
+          "raised steel deck unless an authored scene specifically needs a bridge/walkway",
+          "extra outer guardrails",
+          "water-filled road barriers unless specifically authored",
+          "people or vehicles baked into the reusable module",
+          "text or branding"
+        ],
+        "camera": "slightly elevated three-quarter view"
       },
       "reject": [
         "painted line only with no physical separation",
@@ -385,7 +388,22 @@
       "sources": [
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=118&um=s",
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=114&um=s"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_overbuilt_scene_fragment",
+        "generation_id": "e2cdd61c-a2d3-42f1-8cc8-67f4628aa0da",
+        "accepted": [
+          "continuous blue-mesh Korean fence family",
+          "clear visual distinction between pedestrian and vehicle routes",
+          "realistic construction-road wear"
+        ],
+        "rejected_or_unresolved": [
+          "raised perforated-deck walkway was invented and is not required by the verified Episode 01 route condition",
+          "extra outer guardrail and orange water barriers add unverified control systems and obscure the core separation logic",
+          "asset should show one ground-level pedestrian route and one vehicle route separated by the verified fence family, not a compound temporary bridge system"
+        ],
+        "action": "Regenerate only after a simpler Korean internal-site route composition is locked."
+      }
     },
     "material_yard": {
       "status": "research_verified_function_exact_material_layout_pending"
