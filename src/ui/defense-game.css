@@ -242,3 +242,36 @@
 @media (prefers-reduced-motion:reduce){
   .zb-save-spinner{animation:none}
 }
+
+
+/* Step 4 first-run guidance */
+.zb-tutorial{
+  position:fixed;z-index:44;left:18px;top:76px;width:min(360px,calc(100vw - 36px));padding:14px 15px;
+  border:1px solid rgba(255,173,66,.58);border-radius:10px;background:rgba(14,27,37,.96);box-shadow:0 16px 42px rgba(0,0,0,.34);
+  pointer-events:auto
+}
+.zb-tutorial[data-target="preview"]{left:auto;right:226px}
+.zb-tutorial small{display:block;color:var(--zb-accent);font-size:9px;letter-spacing:.13em}
+.zb-tutorial strong{display:block;margin-top:4px;font-size:14px}
+.zb-tutorial p{margin:6px 0 10px;color:var(--zb-muted);font-size:11px;line-height:1.5}
+.zb-tutorial>div{display:flex;gap:6px;justify-content:flex-end}
+.zb-tutorial button,.zb-defense-settings,.zb-defense-settings-panel button{
+  min-height:44px;border:1px solid rgba(185,200,211,.26);border-radius:7px;background:#1b303d;color:var(--zb-text);padding:0 11px;cursor:pointer
+}
+.zb-tutorial button.is-primary{border-color:var(--zb-accent);background:#eaa63c;color:#17242c;font-weight:900}
+.zb-defense-settings{
+  position:fixed;z-index:43;right:138px;top:62px;min-width:64px;background:rgba(14,27,37,.95);font-size:10px
+}
+.zb-defense-settings-panel{
+  position:fixed;z-index:46;right:138px;top:112px;width:220px;padding:8px;border:1px solid rgba(185,200,211,.24);
+  border-radius:9px;background:rgba(14,27,37,.98);box-shadow:0 14px 36px rgba(0,0,0,.35)
+}
+.zb-defense-settings-panel button{width:100%;text-align:left}
+@media (orientation:landscape) and (max-height:650px){
+  .zb-tutorial{left:8px;top:60px;width:min(310px,calc(100vw - 16px));padding:9px 10px}
+  .zb-tutorial[data-target="preview"]{right:174px;left:auto}
+  .zb-tutorial p{font-size:9px;margin:4px 0 6px}
+  .zb-tutorial button{min-height:44px;font-size:9px}
+  .zb-defense-settings{right:104px;top:55px}
+  .zb-defense-settings-panel{right:104px;top:104px}
+}

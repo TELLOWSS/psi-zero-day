@@ -1,0 +1,91 @@
+name: Verify ZERO BREACH Step 4
+
+on:
+  push:
+    branches:
+      - sol/zero-breach-step4-balance-20260922
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  balance-and-tutorial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Measure validated ZERO BREACH numeric baseline
+        run: npx vitest run tests/zero-breach-balance.test.ts
+
+      - name: Step 1-4 focused regression
+        run: npx vitest run tests/zero-breach-engine.test.ts tests/zero-breach-ui.test.tsx tests/zero-breach-save.test.ts tests/zero-breach-persistence-ui.test.tsx tests/zero-breach-tutorial.test.tsx
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate browser
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Play one full strategy through the real UI
+        run: |
+          mkdir -p artifacts/zero-breach-step4-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/zero-breach-step4-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() {
+            kill "$PREVIEW_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/zero-breach-step4-preview.log
+            exit 1
+          fi
+          node scripts/verify-zero-breach-step4-browser.mjs
+
+      - name: Upload Step 4 playthrough evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero-breach-step4-browser-qa
+          path: artifacts/zero-breach-step4-browser
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Full repository regression diagnostics
+        continue-on-error: true
+        run: npm test
