@@ -5,6 +5,8 @@ import path from 'node:path';
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_DEFENSE_STEP5_ARTIFACT_DIR || 'artifacts/zero-breach-step5a-visual');
 fs.mkdirSync(outputDir, { recursive: true });
+const visualManifest = JSON.parse(fs.readFileSync('content/defense/visual-production.json', 'utf8'));
+const expectedVisualVersion = visualManifest.visualVersion;
 
 const chrome = [
   process.env.CHROME_BIN,
@@ -252,7 +254,9 @@ try {
 
   let snap = await visualSnapshot(cdp);
   report.captures.push({ id: 'desktop-1280x720', ...snap });
-  if (!snap.visualVersion?.startsWith('zero-breach-visual-')) throw new Error('Unexpected visual version');
+  if (snap.visualVersion !== expectedVisualVersion) {
+    throw new Error('Unexpected visual version: ' + snap.visualVersion + ' !== ' + expectedVisualVersion);
+  }
   if (!snap.boardArt.href?.endsWith('assets/defense/board/ramp-01.svg')) throw new Error('Production board not active');
   if (!snap.towerArt.href?.endsWith('assets/defense/towers/pulse-l1.svg')) throw new Error('PULSE L1 production art not active');
   if (!snap.normalArt.href?.endsWith('assets/defense/enemies/normal.svg')) throw new Error('NORMAL production art not active');
