@@ -113,7 +113,7 @@ describe('Episode 01 Phase C-3 TBM production quality', () => {
   it('locks the changed-work judgment as the TBM commercial reference frame', () => {
     expect(episode01TbmVisualLock('e01_08g_tbm_field_gap', 'tbm_action')).toMatchObject({
       lock_id: 'tbm-reference-v1',
-      status: 'RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA',
+      status: 'VISUAL_PRODUCTION_LOCKED',
       evidence: [
         { key: 'morning-baseline', label_text_id: 'ui.tbm_visual.morning' },
         { key: 'changed-access', label_text_id: 'ui.tbm_visual.changed_access' },

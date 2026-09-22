@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "lock_id": "tbm-reference-v1",
-  "status": "RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA",
+  "status": "VISUAL_PRODUCTION_LOCKED",
   "reference_event_id": "e01_08g_tbm_field_gap",
   "reference_node_id": "tbm_action",
   "intent": "Lock one commercial TBM reference frame where the afternoon changed work condition remains visible before the player reads the change-control choice.",
@@ -43,5 +43,34 @@
     "choice dock does not cover opened access condition or material route",
     "no new placeholder image is introduced",
     "five-profile screenshot QA is required before status may change to VISUAL_PRODUCTION_LOCKED"
-  ]
+  ],
+  "qa": {
+    "locked_date": "2026-09-23",
+    "chrome_qa": {
+      "workflow_run_id": 35772838827,
+      "workflow_attempt": 2,
+      "verified_sha": "03bc401ac0bee238ab9f080e78ba3e4103514f30",
+      "profiles": [
+        "desktop-1440x900",
+        "desktop-1920x1080",
+        "phone-portrait-390x844",
+        "phone-landscape-844x390",
+        "tablet-portrait-820x1180"
+      ],
+      "result": "PASS_FIRST_WAVE_5_OF_5",
+      "note": "FIELD and TBM reference stages passed all five Chrome viewport profiles. Overall workflow remained red only because pre-existing STRATEGY responsive assertions failed outside this first-wave scope."
+    },
+    "representative_pixel_review": {
+      "profile": "phone-portrait-390x844",
+      "result": "PASS",
+      "reviewed_surfaces": [
+        "FIELD e01_04_junho_signal/listen",
+        "TBM e01_08g_tbm_field_gap/tbm_action"
+      ],
+      "evidence_source": "GitHub Actions screenshot output from workflow attempt 2",
+      "note": "Representative rendered screenshots were inspected after the geometry gate; world evidence remains visible above the judgment dock and characters remain grounded in the construction scene."
+    },
+    "artifact_note": "The normal screenshot artifact upload hit the repository Actions storage quota; representative screenshots were emitted in the job log for review instead."
+  },
+  "next_step": "Production Map. Preserve this TBM composition and character identity contract while the map background system is locked."
 }

@@ -91,7 +91,7 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
   it('locks the Junho judgment as the FIELD commercial reference frame', () => {
     expect(episode01FieldVisualLock('e01_04_junho_signal', 'listen')).toMatchObject({
       lock_id: 'field-reference-v1',
-      status: 'RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA',
+      status: 'VISUAL_PRODUCTION_LOCKED',
       evidence: [
         { key: 'vehicle-trace', label_text_id: 'ui.field_visual.vehicle_trace' },
         { key: 'plate-edge', label_text_id: 'ui.field_visual.plate_edge' },
