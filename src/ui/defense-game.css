@@ -177,3 +177,68 @@
   .zb-tower.is-firing .zb-tower-base{animation:none}
   .zb-support-card{transition:none}
 }
+
+
+/* Step 3 persistence / recovery surfaces */
+.zb-save-gate{
+  grid-template-rows:1fr;place-items:center;padding:clamp(18px,4vw,48px);overflow:auto;
+}
+.zb-save-gate>section{
+  width:min(680px,94vw);padding:clamp(24px,4vw,42px);border:1px solid rgba(185,200,211,.24);
+  border-radius:14px;background:linear-gradient(145deg,#182b37,#10202a);box-shadow:0 26px 70px rgba(0,0,0,.38)
+}
+.zb-save-gate>section>small{color:var(--zb-accent);font-size:10px;letter-spacing:.16em}
+.zb-save-gate h1{margin:8px 0 10px;font-size:clamp(24px,4vw,42px)}
+.zb-save-gate p{color:var(--zb-muted);line-height:1.65}
+.zb-save-spinner{display:block;width:34px;height:34px;border:3px solid rgba(185,200,211,.24);border-top-color:var(--zb-accent);border-radius:50%;animation:zb-spin .8s linear infinite}
+@keyframes zb-spin{to{transform:rotate(360deg)}}
+.zb-save-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.zb-save-actions button,.zb-save-confirm button{
+  min-height:44px;padding:0 16px;border:1px solid rgba(185,200,211,.28);border-radius:8px;background:#1b303d;color:var(--zb-text);cursor:pointer
+}
+.zb-save-actions button.is-primary{border-color:var(--zb-accent);background:#eaa63c;color:#17242c;font-weight:900}
+.zb-save-record{margin-top:18px;padding:14px;border:1px solid rgba(185,200,211,.15);border-radius:9px;background:rgba(8,18,26,.34)}
+.zb-save-record>strong{font-size:11px;color:var(--zb-muted)}
+.zb-save-record dl,.zb-save-version{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0 0}
+.zb-save-version{grid-template-columns:repeat(2,minmax(0,1fr));margin:18px 0}
+.zb-save-record dl div,.zb-save-version div{padding:10px;border-radius:7px;background:#1b303d}
+.zb-save-record dt,.zb-save-version dt{font-size:9px;color:var(--zb-muted)}
+.zb-save-record dd,.zb-save-version dd{margin:4px 0 0;font-size:14px;font-weight:800;overflow-wrap:anywhere}
+.zb-save-time{display:block;margin-top:14px;color:var(--zb-muted)}
+.zb-save-error{margin-top:12px;padding:10px;border-radius:7px;background:#54292b;color:#ffd8d5}
+.zb-save-confirm-backdrop{
+  position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:18px;background:rgba(3,9,14,.76);backdrop-filter:blur(8px)
+}
+.zb-save-confirm{
+  width:min(520px,92vw);padding:26px;border:1px solid rgba(185,200,211,.28);border-radius:12px;background:#13232e;box-shadow:0 24px 70px #0008
+}
+.zb-save-confirm>small{color:var(--zb-accent);letter-spacing:.14em}.zb-save-confirm h2{margin:7px 0 8px}.zb-save-confirm p{color:var(--zb-muted);line-height:1.6}
+.zb-save-confirm>div{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+.zb-save-confirm button.is-danger{border-color:rgba(226,107,97,.8);background:#6b3331;color:#ffe5e2}
+.zb-save-status{
+  position:fixed;z-index:35;top:62px;right:14px;display:flex;align-items:center;gap:7px;padding:5px 8px;border:1px solid rgba(185,200,211,.22);
+  border-radius:7px;background:rgba(9,21,29,.92);font-size:9px;color:var(--zb-muted);box-shadow:0 8px 22px rgba(0,0,0,.24)
+}
+.zb-save-status[data-save-status="saved"] span{color:var(--zb-good)}
+.zb-save-status[data-save-status="error"] span{color:#ffaaa4}
+.zb-save-status button{min-height:30px;border:1px solid rgba(255,170,164,.4);border-radius:5px;background:#4d292a;color:#ffd9d6;font-size:9px;cursor:pointer}
+.zb-result-rewards{margin-top:12px;padding:11px;border:1px solid rgba(120,216,172,.3);border-radius:8px;background:rgba(36,88,68,.24)}
+.zb-result-rewards strong{display:block;font-size:9px;color:var(--zb-good);letter-spacing:.1em}
+.zb-result-rewards span{display:block;margin-top:4px;font-size:12px}
+.zb-conflict{z-index:75}
+.game-defense-toggle{
+  position:fixed;right:18px;bottom:76px;z-index:72;min-width:96px;min-height:44px;padding:0 12px;border:1px solid rgba(255,173,66,.65);
+  border-radius:8px;background:rgba(14,27,37,.94);color:#f8dfb8;font:inherit;font-size:10px;font-weight:800;letter-spacing:.04em;cursor:pointer
+}
+@media (orientation:landscape) and (max-height:650px){
+  .zb-save-status{top:56px;right:8px}
+  .game-defense-toggle{right:10px;bottom:62px}
+}
+@media (max-width:560px){
+  .zb-save-record dl{grid-template-columns:1fr}
+  .zb-save-version{grid-template-columns:1fr}
+  .zb-save-actions{display:grid;grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .zb-save-spinner{animation:none}
+}
