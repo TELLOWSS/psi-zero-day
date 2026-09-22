@@ -33,8 +33,8 @@ jobs:
       - name: ZERO BREACH engine tests
         run: npx vitest run tests/zero-breach-engine.test.ts
 
-      - name: Full regression tests
-        run: npm test
-
       - name: Build
         run: npm run build
+
+      - name: Full regression tests
+        run: npm test
