@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { zeroBreachContent as content } from '../src/content/defense';
 import type {
-  DefenseCommand, DefenseEnemyId, DefenseLevelId, DefenseRunState, DefenseSupportId, DefenseTowerId,
+  DefenseLevelId, DefenseRunState, DefenseSupportId, DefenseTowerId,
 } from '../src/domain/defense';
 import {
   applyDefenseCommand, createDefenseRun, defensePathLength, defenseResult, tickDefense,
