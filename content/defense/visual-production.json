@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "visualVersion": "zero-breach-visual-baseline-0.1.0",
+  "status": "BASELINE_LOCK_CANDIDATE",
+  "artDirection": {
+    "cameraElevationDeg": 70,
+    "projection": "NEAR_ORTHOGRAPHIC",
+    "lightDirection": "TOP_LEFT",
+    "shadowDirection": "BOTTOM_RIGHT",
+    "palette": {
+      "uiBackground": "#101A24",
+      "surface": "#1C2A36",
+      "body": "#EEF4F8",
+      "muted": "#B9C8D3",
+      "accent": "#FFAD42"
+    }
+  },
+  "assets": [
+    {
+      "assetId": "defense.board.ramp-01",
+      "kind": "BOARD",
+      "uri": "assets/defense/board/ramp-01.svg",
+      "format": "svg",
+      "width": 2000,
+      "height": 1200,
+      "transparent": false,
+      "runtimeWidth": 1000,
+      "runtimeHeight": 600,
+      "status": "BASELINE_LOCK_CANDIDATE",
+      "notes": "JSON route and all eight pad centers are authored at exact x2 coordinates; runtime route and pad overlays remain authoritative."
+    },
+    {
+      "assetId": "defense.tower.PULSE.L1",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/pulse-l1.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": { "x": 0.5, "y": 0.76 },
+      "status": "BASELINE_LOCK_CANDIDATE",
+      "notes": "Low square base, cylindrical coil, cyan family cue; no text/logo."
+    },
+    {
+      "assetId": "defense.enemy.NORMAL",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/normal.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": { "x": 0.5, "y": 0.76 },
+      "status": "BASELINE_LOCK_CANDIDATE",
+      "notes": "Single cracked spherical risk core with detached chips; non-human silhouette."
+    }
+  ]
+}
