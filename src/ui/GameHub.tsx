@@ -151,6 +151,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   });
 
   const openDefense = (scenarioId: string | null = null) => {
+    if (e1UnlockNotice) {
+      writeE1UnlockNoticeSeen();
+      setE1UnlockNotice(false);
+    }
     void loadDefenseGame();
     setDefenseScenarioId(scenarioId);
     setInDefense(true);
