@@ -112,7 +112,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
   }
   if (command.type === 'StartWave') {
     if (state.paused) throw new Error('Cannot start while paused');
-    if (state.status !== 'READY' && state.status !== 'INTERMION') throw new Error('Wave is already running');
+    if (state.status !== 'READY' && state.status !== 'INTERMISSION') throw new Error('Wave is already running');
     const wave = content.waves.find(item => item.id === state.waveId);
     if (!wave) throw new Error('Missing wave');
     return { ...state, status: 'RUNNING', waveTick: 0, intermissionRemaining: 0, spawnedByGroup: wave.groups.map(() => 0) };
