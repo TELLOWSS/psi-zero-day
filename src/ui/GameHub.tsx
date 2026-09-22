@@ -10,12 +10,15 @@ import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
+import { defenseText } from '../app/defense-text';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
+const loadDefenseGame = () => import('./DefenseGame');
+const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
 const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
@@ -117,6 +120,7 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' })
 /** Navigation is presentation state; all run mutations remain in EpisodeSession/CoreEngine. */
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
+  const [inDefense, setInDefense] = useState(false);
   const [loading, setLoading] = useState(false);
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
@@ -157,6 +161,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setInGame(true);
   };
 
+  if (inDefense) return <Suspense fallback={<GameplayChunkFallback />}>
+    <DefenseGame session={session} onExit={() => setInDefense(false)} />
+  </Suspense>;
+
   if (loading) return <CinematicLoadingScreen
     backgroundUri={cinematicBackground}
     preloadUris={preloadUris}
@@ -174,10 +182,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       onClick={() => setAudioMuted(!audioMuted)}
     ><span aria-hidden="true">SOUND</span><b>{audioMuted ? 'OFF' : 'ON'}</b></button>
   </Suspense>;
-  return <GameHub session={session} onPlay={play} onNewGame={newGame} />;
+  return <GameHub session={session} onPlay={play} onNewGame={newGame} onDefense={() => { void loadDefenseGame(); setInDefense(true); }} />;
 }
 
-export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void }) {
+export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void; onDefense?: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const [page, setPage] = useState<HubPage>('home');
@@ -267,6 +275,11 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
           {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
+        {onDefense ? <button className="commercial-title-action" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><strong>{defenseText('defense.ui.hub.title')}</strong><small>{defenseText('defense.ui.hub.hint')}</small></span>
+          <b>›</b>
+        </button> : null}
         <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
           <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>
