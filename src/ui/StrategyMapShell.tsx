@@ -355,7 +355,10 @@ export function StrategyMapShell({
               ? <img className="strategy-worker-art" src={visual.map_uri} alt="" aria-hidden="true" />
               : <span className="strategy-worker-figure" aria-hidden="true"><i className="worker-helmet" /><i className="worker-head" /><i className="worker-body" /></span>}
             <span className="strategy-worker-label" style={visual ? { borderColor: visual.accent } : undefined}>
-              <strong>{label ? formatCharacterIdentity(label) : placement.character_id}{!label && placement.role_id ? <em> · {placement.role_id}</em> : null}</strong>
+              <strong>
+                <span>{label?.name ?? placement.character_id}</span>
+                {label?.role ? <em>{label.role}</em> : !label && placement.role_id ? <em>{placement.role_id}</em> : null}
+              </strong>
             </span>
             {nearSignal ? <b className="strategy-worker-alert" aria-label={copy.events}>!</b> : null}
           </button>;
