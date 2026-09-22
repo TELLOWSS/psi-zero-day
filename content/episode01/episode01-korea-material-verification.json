@@ -470,47 +470,41 @@
       }
     },
     "temporary_lighting_pack": {
-      "status": "visual_family_locked_ready_to_render",
-      "classification": "portable corded LED work-light family used as temporary supplemental lighting",
+      "status": "site_reference_required_before_render",
+      "classification": "current-site LED line-bar temporary lighting system",
+      "source_of_truth": "user current-site observation: LED 라인바 is the temporary lighting actually used on site",
+      "supersedes": "portable corded handheld LED work-light family",
       "legal_function": [
-        "산업안전보건기준에 관한 규칙 제21조 requires at least 75 lux on worker passages unless the stated exception applies.",
-        "KOSHA guidance repeats the need for 75 lux or more on dark/night work passages."
+        "산업안전보건기준에 관한 규칙 제21조의 통로 조도 기준을 충족하도록 설치·유지하는 기능이 핵심이다.",
+        "제품 형상 자체보다 실제 설치 위치, 연속성, 배선·접속부 보호, 통행 방해 여부와 조도 확보를 함께 본다."
       ],
-      "korean_product_crosscheck": [
-        {
-          "family": "쏠라젠 SWL-250 Cable",
-          "evidence": "AC 220V direct-wired/corded LED work light sold domestically; black body, clear rectangular LED lens, metal hanging hook, red handle switch, corded plug."
-        },
-        {
-          "family": "코리아전기조명 KE-16",
-          "evidence": "220V 50–60Hz corded LED work light sold domestically; black handle/body, clear rectangular LED lens, hanging hook, long cord."
-        }
-      ],
-      "render_contract": {
-        "subject": "one brand-neutral Korean-market corded LED work light",
-        "body": "compact black rectangular LED lamp body with clear multi-LED front lens",
-        "handle": "black ribbed handle with small red on/off switch",
-        "hook": "single metal hanging hook at lamp end",
-        "cable": "long black 220V power cable coiled loosely beside the unit; standard Korean-style two-pin plug",
-        "branding": "none",
-        "text": "none",
-        "background": "transparent",
-        "camera": "three-quarter product view from slightly above",
-        "condition": "working site tool with light scratches; no severe damage",
-        "compliance_note": "The visual represents a product family only; actual lighting design must still achieve required illuminance and safe cable routing."
+      "generated_candidate": {
+        "status": "rejected_for_final_wrong_site_family",
+        "generation_id": "ad045af5-080f-44de-b983-358a372036fb",
+        "reason": "Portable handheld corded work-light geometry does not match the user's current construction site, which uses LED line-bar temporary lighting."
       },
-      "reject": [
-        "decorative household bulb string",
-        "tripod floodlight presented as the only Korean temporary-lighting form",
-        "battery camping lantern as the default",
-        "foreign plug geometry",
-        "loose cable crossing a walkway in the normal reference image"
-      ],
+      "current_site_contract": {
+        "product_family": "LED line-bar / continuous linear temporary work lighting",
+        "geometry_status": "unresolved_until_current_site_photo_or_exact_product_reference",
+        "installation_context": [
+          "corridor/passage, slab soffit, wall, scaffold/shoring line or similar continuous route",
+          "multiple linear light units or continuous luminous line arranged to remove dark zones"
+        ],
+        "must_verify_before_render": [
+          "rigid bar vs flexible strip/rope form",
+          "individual bar length",
+          "housing/cover cross-section and color",
+          "AC direct vs low-voltage/SMPS power method",
+          "connector and cable geometry",
+          "mounting method: tie, clip, hook, bracket, cable support, or other",
+          "spacing/continuity used on this site",
+          "water/dust protection where relevant"
+        ],
+        "visual_rule": "Do not invent a generic decorative LED bar. Final art must reproduce the user's current-site hardware and installation method."
+      },
+      "research_note": "Web references confirm continuous LED lighting is used in unfinished construction corridors and scaffold/work routes, but they do not establish the user's exact Korean site product geometry.",
       "sources": [
-        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=633&callmode=normal&catimage=&eclang=ko&start=16&um=s",
-        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=120&um=s",
-        "https://sunledkorea.co.kr/category/led%EC%9E%91%EC%97%85%EB%93%B1/54/",
-        "https://www.toolnshop.kr/view/?goods=16585"
+        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063297"
       ]
     },
     "ppe_issue_station": {
