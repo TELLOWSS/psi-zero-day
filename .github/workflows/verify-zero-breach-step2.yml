@@ -51,6 +51,54 @@ jobs:
           done
           grep -q '<div id="root"' /tmp/zero-breach-index.html
 
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate browser for ZERO BREACH QA
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Verify ZERO BREACH desktop and mobile browser flow
+        run: |
+          mkdir -p artifacts/zero-breach-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/zero-breach-browser-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() {
+            kill "$PREVIEW_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/zero-breach-browser-preview.log
+            exit 1
+          fi
+          node scripts/verify-zero-breach-browser.mjs
+
+      - name: Upload ZERO BREACH browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero-breach-step2-browser-qa
+          path: artifacts/zero-breach-browser
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Full repository regression diagnostics
         continue-on-error: true
         run: npm test
