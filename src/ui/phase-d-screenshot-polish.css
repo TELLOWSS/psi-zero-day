@@ -1033,3 +1033,337 @@
     padding: 8px 14px !important;
   }
 }
+
+
+/* Phase D Director review pass v4 — 2026-09-22
+   Source: latest live STRATEGY capture + approved STOP WORK cinematic mockup.
+   This pass removes duplicate legacy interaction surfaces and turns STOP WORK
+   into a deliberate cinematic interruption without changing any game outcome. */
+@media (min-width: 901px) and (min-height: 651px) {
+  /* -------------------------------------------------------------------- */
+  /* STRATEGY: the shell owns the interaction. The legacy Episode panel   */
+  /* underneath it is a duplicate and caused the 1800x395 empty slab.     */
+  /* -------------------------------------------------------------------- */
+  .game-frame[data-production-scene="STRATEGY"]:has(.strategy-shell) > .play-panel {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]:has(.strategy-shell) .strategy-map {
+    inset: 8.2% 1% 1.4% 14% !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"]:has(.strategy-shell) .strategy-roster {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="observe"] .strategy-map,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"] .strategy-map {
+    filter: none !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card {
+    left: 50% !important;
+    right: auto !important;
+    bottom: 3.2% !important;
+    width: min(430px, 31%) !important;
+    min-width: 340px !important;
+    transform: translateX(-50%) !important;
+    padding: 10px 13px 11px !important;
+    gap: 3px !important;
+    border: 1px solid rgba(215,190,112,.44) !important;
+    border-radius: 10px !important;
+    background:
+      linear-gradient(180deg,rgba(5,23,30,.965),rgba(5,18,24,.94)) !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.36) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card > span {
+    font-size: 8px !important;
+    letter-spacing: .12em !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card > strong {
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card > p {
+    margin: 2px 0 6px !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card > button {
+    min-height: 42px !important;
+    height: 42px !important;
+    margin-top: 0 !important;
+    border-radius: 8px !important;
+    background: linear-gradient(90deg,rgba(95,60,14,.74),rgba(118,77,18,.68)) !important;
+    border-color: rgba(233,190,76,.62) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"] .strategy-action-tray.step-1 {
+    left: 50% !important;
+    right: auto !important;
+    bottom: 3.2% !important;
+    top: auto !important;
+    width: min(440px, 32%) !important;
+    min-width: 350px !important;
+    max-height: 20% !important;
+    transform: translateX(-50%) !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+    background: linear-gradient(180deg,rgba(5,24,31,.96),rgba(5,18,24,.94)) !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.34) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"] .strategy-action-heading {
+    margin-bottom: 4px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"] .strategy-action-empty {
+    margin: 0 !important;
+    padding: 6px 0 2px !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* STOP WORK: use the approved poster-like interruption.                */
+  /* World + people remain the content; danger chrome is deliberately     */
+  /* reduced during the actual zero moment.                               */
+  /* -------------------------------------------------------------------- */
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] {
+    background: #070d10 !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .game-header {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .game-header
+    > :not(.gameplay-home-button) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .gameplay-home-button {
+    opacity: .72 !important;
+    background: rgba(4,14,18,.48) !important;
+    border-color: rgba(226,196,120,.22) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .scene-heading,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-scene-stamp,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-speaker-tag,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-scene-minimap,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-psi-trace,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-scene figcaption {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-scene {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-background {
+    transform: scale(1.035) !important;
+    object-position: 63% 47% !important;
+    filter: saturate(.88) contrast(1.045) brightness(.88) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-atmosphere {
+    opacity: 1 !important;
+    background:
+      linear-gradient(90deg,rgba(2,8,12,.95) 0%,rgba(3,10,14,.72) 21%,rgba(3,10,14,.22) 44%,transparent 70%),
+      linear-gradient(0deg,rgba(3,8,11,.46),transparent 48%) !important;
+    mix-blend-mode: normal !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-grade {
+    opacity: .28 !important;
+    background:
+      radial-gradient(circle at 64% 40%,rgba(221,111,74,.08),transparent 31%),
+      linear-gradient(0deg,rgba(2,6,9,.42),transparent 47%) !important;
+    box-shadow: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-scene::before {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-stopline,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-markers,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-immersive-moment-overlay,
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .episode-psi-field-markers {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-title {
+    left: 4.2% !important;
+    top: 10% !important;
+    width: min(520px, 30%) !important;
+    gap: 8px !important;
+    z-index: 30 !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-title > span {
+    color: #f2b43a !important;
+    font-size: clamp(10px,.78vw,13px) !important;
+    letter-spacing: .16em !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-title > strong {
+    color: #fff7f0 !important;
+    font-size: clamp(52px,5.2vw,82px) !important;
+    line-height: .95 !important;
+    letter-spacing: -.055em !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .stop-work-production-title > small {
+    max-width: 430px !important;
+    color: #f1eee8 !important;
+    font-size: clamp(13px,1.03vw,17px) !important;
+    line-height: 1.62 !important;
+    font-weight: 720 !important;
+  }
+
+  /* Poster composition based on the approved reference: player leads the visual,
+     two field voices sit behind/right at distinct scales. */
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"]
+    .episode-immersive-character[data-character="player"] {
+    left: 27% !important;
+    right: auto !important;
+    bottom: -8% !important;
+    width: 31% !important;
+    height: 94% !important;
+    opacity: 1 !important;
+    z-index: 18 !important;
+    transform: none !important;
+    filter: drop-shadow(0 28px 24px rgba(0,0,0,.48)) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"]
+    .episode-immersive-character[data-character="lee_jaehoon"] {
+    left: auto !important;
+    right: 20% !important;
+    bottom: -7% !important;
+    width: 30% !important;
+    height: 84% !important;
+    opacity: 1 !important;
+    z-index: 16 !important;
+    transform: none !important;
+    filter: drop-shadow(0 22px 18px rgba(0,0,0,.44)) saturate(.96) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"]
+    .episode-immersive-character[data-character="seo_jeongmin"] {
+    left: auto !important;
+    right: 3.5% !important;
+    bottom: -6% !important;
+    width: 22% !important;
+    height: 69% !important;
+    opacity: .96 !important;
+    z-index: 14 !important;
+    transform: none !important;
+    filter: drop-shadow(0 18px 16px rgba(0,0,0,.4)) saturate(.92) !important;
+  }
+
+  /* The zero-moment decision stays compact and functional. */
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    position: absolute !important;
+    z-index: 42 !important;
+    left: auto !important;
+    right: 3.8% !important;
+    top: auto !important;
+    bottom: 4.2% !important;
+    width: min(520px, 32%) !important;
+    min-height: 0 !important;
+    max-height: 29% !important;
+    margin: 0 !important;
+    padding: 9px 10px 10px !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(230,184,66,.46) !important;
+    border-radius: 8px !important;
+    background: linear-gradient(180deg,rgba(4,16,21,.92),rgba(4,13,18,.965)) !important;
+    box-shadow: 0 18px 44px rgba(0,0,0,.42) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .play-panel > :is(.character-card,.narrator-card) {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-content {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    gap: 5px !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-content > .eyebrow {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-content > h2 {
+    margin: 0 0 5px !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    color: #f3efe6 !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-panel {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-panel button {
+    min-height: 46px !important;
+    max-height: 54px !important;
+    padding: 6px 8px !important;
+    border-color: rgba(230,184,66,.26) !important;
+    background: rgba(9,25,30,.80) !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"][data-stopwork-ui="judgment"]
+    .choice-text {
+    font-size: 10px !important;
+    line-height: 1.28 !important;
+  }
+
+  .game-frame[data-production-scene="STOP_WORK"][data-stopwork-phase="zero-moment"] .game-footer {
+    opacity: .55 !important;
+    background: transparent !important;
+  }
+}
+
+/* Compact screens keep existing safe-area interaction contracts; only suppress
+   the duplicate STRATEGY episode panel because the map shell already owns it. */
+@media (max-width: 900px), (max-height: 650px) {
+  .game-frame[data-production-scene="STRATEGY"]:has(.strategy-shell) > .play-panel {
+    display: none !important;
+  }
+}
