@@ -126,3 +126,130 @@
   .strategy-action-guidance{font-size:.62rem;padding:6px 7px}
   .strategy-outcome-card .strategy-outcome-next{min-height:44px}
 }
+
+
+/* Strategy action guidance hotfix */
+.strategy-next-step{
+  display:grid;
+  gap:3px;
+  margin:0 0 10px;
+  padding:10px 12px;
+  border:1px solid rgba(226,155,67,.48);
+  border-left:4px solid #e29b43;
+  border-radius:10px;
+  background:linear-gradient(100deg,rgba(84,52,14,.18),rgba(226,155,67,.08));
+}
+.strategy-next-step>span{
+  color:#a86721;
+  font-size:.58rem;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.strategy-next-step>strong{
+  color:#17334a;
+  font-size:clamp(13px,1vw,16px);
+  line-height:1.35;
+}
+.strategy-next-step>small{
+  color:#456779;
+  font-size:.68rem;
+  font-weight:700;
+  line-height:1.45;
+}
+.strategy-next-step[data-next-step="execute"]{
+  border-color:rgba(58,143,101,.44);
+  border-left-color:#3a8f65;
+  background:linear-gradient(100deg,rgba(58,143,101,.13),rgba(227,246,235,.65));
+}
+.strategy-next-step[data-next-step="execute"]>span{color:#2f7355}
+.strategy-action-count{
+  margin:0 0 6px;
+  color:#4b6878;
+  font-size:.64rem;
+  font-weight:750;
+}
+.strategy-action-count strong{
+  display:inline-grid;
+  place-items:center;
+  min-width:20px;
+  height:20px;
+  margin-left:4px;
+  border-radius:999px;
+  background:#e29b43;
+  color:#fff;
+  font-size:.65rem;
+}
+.strategy-action-confirm-title{
+  display:block;
+  margin:0 0 8px;
+  color:#19304a;
+  font-size:.78rem;
+  line-height:1.35;
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-action-tray{
+  z-index:42;
+  top:auto;
+  right:2.2%;
+  bottom:3.2%;
+  width:min(520px,36%);
+  max-height:46%;
+  overflow:auto;
+  padding:12px;
+  border:1px solid rgba(229,176,79,.62);
+  border-radius:12px;
+  background:rgba(247,252,255,.98);
+  box-shadow:0 22px 54px rgba(0,0,0,.38),0 0 0 2px rgba(229,176,79,.08);
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-action-list button{
+  border-color:rgba(226,155,67,.48);
+  box-shadow:0 6px 14px rgba(26,63,82,.12);
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-action-list button:not(:disabled)::after{
+  content:"선택";
+  padding:2px 5px;
+  border-radius:999px;
+  background:#e29b43;
+  color:#fff;
+  font-size:.52rem;
+  font-weight:900;
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-action-list button.is-pending::after{
+  content:"선택됨";
+  background:#3a8f65;
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-execute-button{
+  min-height:44px;
+  background:#173b55;
+  font-size:.74rem;
+}
+.game-frame[data-production-scene="STRATEGY"]
+.strategy-shell[data-loop-phase="action"] .strategy-execute-button:not(:disabled){
+  box-shadow:0 8px 18px rgba(23,59,85,.24);
+}
+@media(max-width:900px){
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="action"] .strategy-action-tray{
+    right:1.5%;
+    bottom:2%;
+    width:min(58%,470px);
+    max-height:54%;
+    padding:9px;
+  }
+  .strategy-next-step{padding:8px 9px;margin-bottom:7px}
+  .strategy-next-step>small{font-size:.62rem}
+}
+@media(orientation:portrait) and (max-width:760px){
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="action"] .strategy-action-tray{
+    left:8px;
+    right:8px;
+    bottom:max(8px,env(safe-area-inset-bottom));
+    width:auto;
+    max-height:44%;
+  }
+}
