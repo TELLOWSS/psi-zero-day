@@ -751,3 +751,24 @@
   .field-guide-recovery-actions{flex-direction:column}
   .field-guide-recovery-actions button{width:100%}
 }
+
+
+/* Step 6 — quiet one-time ZERO BREACH event unlock */
+.game-defense-unlock{
+  position:fixed;z-index:120;right:clamp(12px,2.2vw,32px);bottom:clamp(72px,9vh,108px);
+  width:min(360px,calc(100vw - 24px));padding:14px 15px;border:1px solid rgba(240,177,38,.58);
+  border-radius:10px;background:rgba(8,24,34,.96);color:#eef5f7;box-shadow:0 18px 48px rgba(0,0,0,.38);
+  backdrop-filter:blur(10px)
+}
+.game-defense-unlock small{display:block;color:#f0b126;font-size:9px;letter-spacing:.12em}
+.game-defense-unlock strong{display:block;margin-top:4px;font-size:16px}
+.game-defense-unlock p{margin:5px 0 10px;color:#c3d0d7;font-size:11px;line-height:1.5}
+.game-defense-unlock>div{display:flex;gap:7px}
+.game-defense-unlock button{
+  min-height:44px;padding:0 12px;border:1px solid rgba(185,205,215,.3);border-radius:7px;
+  background:#1b303d;color:#eef5f7;font:inherit;font-size:10px;font-weight:750;cursor:pointer
+}
+.game-defense-unlock button:first-child{border-color:#f0b126;background:#e4a92f;color:#10212a}
+@media(max-width:720px){
+  .game-defense-unlock{right:10px;bottom:64px;width:calc(100vw - 20px)}
+}
