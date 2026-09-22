@@ -163,13 +163,65 @@
       "sources": [
         "https://www.law.go.kr/LSW/lsLinkCommonInfo.do?lsJoLnkSeq=1016700405",
         "https://www.law.go.kr/LSW/cgmExpcInfoP.do?cgmExpcDatSeq=30952&mode=2&ofiClsCd=350101"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_runtime_scale_review",
+        "generation_id": "a2cdd759-939f-4f37-a4aa-03db16c05082",
+        "accepted": [
+          "wide vehicle portal integrated with temporary hoarding",
+          "separate adjacent worker entrance",
+          "access-control booth",
+          "physical separation between worker and vehicle entries",
+          "no real contractor branding"
+        ],
+        "limitations": [
+          "finish is cleaner and more architectural than many active apartment sites; runtime grade should reduce showroom-like neatness",
+          "turnstile/access hardware remains site-specific and must not be treated as a universal Korean requirement"
+        ]
+      }
     },
     "material_stack": {
-      "classification": "site_specific_material_stack",
-      "status": "verified_function_reference_needed_for_exact_material",
-      "verified": "Keep same-spec materials separated, stable on dunnage/supports, secured, and out of the travel route. Exact material in Episode 01 must be chosen from the authored scene/site reference.",
-      "render_contract": "No mixed-size decorative stack. Show one identified Korean-site material family only."
+      "classification": "episode01_formwork_material_stack",
+      "status": "visual_family_locked_ready_to_render",
+      "story_basis": [
+        "Episode 01 identifies Kang Taesik as the formwork foreman.",
+        "When workers are diverted to clear the passage, the authored result explicitly says formwork cleanup slows.",
+        "Therefore the reusable Episode 01 material stack should visually read as formwork material cleanup, not as an arbitrary rebar pile."
+      ],
+      "selected_visual_family": {
+        "primary_material": "used Euroform wall/formwork panels",
+        "panel_family": "Korean Euroform steel-frame plywood panels, same size within one bundle",
+        "typical_reference_size": "600×1200 mm class used as the visual family reference; do not bake dimensions into the image",
+        "stack_method": "horizontal same-spec stack on timber dunnage/sleepers",
+        "securing": "two band/ratchet straps or equivalent visible securing consistent with a tidy site bundle",
+        "condition": "used panels with realistic concrete residue and worn orange/brown/yellow steel frames; not factory-new"
+      },
+      "official_basis": "KOSHA reinforced-concrete/formwork guidance lists plywood, timber, Euroform and shoring materials as incoming formwork materials and requires stable storage so materials do not collapse; dismantled formwork materials should be orderly and balanced.",
+      "render_contract": {
+        "object": "one compact bundle of same-size used Euroform panels",
+        "orientation": "horizontal stack",
+        "support": "two timber sleepers/dunnage under the stack",
+        "securing": "two visible straps around the bundle",
+        "edges": "steel frame edges and panel faces clearly identifiable as Euroform",
+        "loose_items": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter front, slightly above so stacked panel edges and top face are readable",
+        "condition": "field-used, mildly dirty/concrete-stained, structurally intact"
+      },
+      "reject": [
+        "mixed rebar, pipe, lumber and formwork in one decorative pile",
+        "different panel sizes mixed in a single bundle",
+        "unrestrained leaning panels presented as the normal reference",
+        "factory pallet with export labels",
+        "generic lumber stack that does not read as Korean Euroform"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=24&um=s",
+        "https://sgsystem.tistory.com/395",
+        "https://www.shinan1.com/"
+      ]
     },
     "access_barrier": {
       "classification": "physical_site_control",
