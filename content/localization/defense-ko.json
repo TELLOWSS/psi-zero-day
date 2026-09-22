@@ -31,7 +31,7 @@
     "defense.ui.hub.title": "현장 디펜스",
     "defense.ui.hub.hint": "10웨이브 전술 시뮬레이션",
     "defense.ui.kicker": "ZERO BREACH · 현장 방어 시뮬레이션",
-    "defense.ui.dev_notice": "개발용 전술 화면 · 최종 아트는 단계 5에서 교체",
+    "defense.ui.dev_notice": "Production Lock · 실제 전투 자산",
     "defense.ui.support.title": "지원 동료 선택",
     "defense.ui.support.body": "출전 전 한 명을 선택합니다. 전투 중에는 교체할 수 없습니다.",
     "defense.ui.support.choose": "이 동료와 출전",
