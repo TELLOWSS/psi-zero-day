@@ -155,6 +155,31 @@ describe('ZERO BREACH step 3 persistence UI', () => {
     await act(async () => root.unmount());
   });
 
+  it('autosaves active combat progress on the two-second cadence', async () => {
+    const storage = new MemoryStorage();
+    const { host, root } = await mount(storage);
+
+    await click(host.querySelector('[data-support="COORDINATOR"]')!);
+    await click(buttonContaining(host, '웨이브 시작'));
+    await settleEffects();
+
+    const before = await inspectDefenseSave(storage, zeroBreachContent);
+    if (before.kind !== 'ready' || !before.document.activeRun) throw new Error('initial run save missing');
+    const beforeTick = before.document.activeRun.tick;
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2_100);
+      for (let index = 0; index < 8; index += 1) await Promise.resolve();
+    });
+
+    const after = await inspectDefenseSave(storage, zeroBreachContent);
+    if (after.kind !== 'ready' || !after.document.activeRun) throw new Error('autosave missing');
+    expect(after.document.activeRun.tick).toBeGreaterThan(beforeTick);
+    expect(after.document.activeRun.status).toBe('RUNNING');
+
+    await act(async () => root.unmount());
+  });
+
   it('saves a paused activeRun before returning to the main game', async () => {
     const storage = new MemoryStorage();
     const { host, root, onExit } = await mount(storage);
