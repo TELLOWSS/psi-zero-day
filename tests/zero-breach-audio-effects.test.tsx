@@ -1,4 +1,5 @@
 /** @vitest-environment jsdom */
+import fs from 'node:fs';
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -81,6 +82,17 @@ describe('ZERO BREACH step 5 audio and impact presentation', () => {
       damagedEnemyIds: ['enemy-fx'],
       shieldHit: true,
     });
+  });
+
+  it('disables combat effect animation when reduced motion is requested', () => {
+    const css = fs.readFileSync('src/ui/defense-game.css', 'utf8');
+    const reduced = css.match(/@media \(prefers-reduced-motion:reduce\)\{([\s\S]*?)\}/g)?.join('\n') ?? '';
+    expect(reduced).toContain('.zb-impact-ring');
+    expect(reduced).toContain('.zb-enemy.is-hit .zb-enemy-production-image');
+    expect(reduced).toContain('.zb-shell.is-shield-hit .zb-board-wrap::after');
+    expect(reduced).toContain('.zb-support-field.is-coordinator path');
+    expect(reduced).toContain('.zb-support-field.is-observer circle');
+    expect(reduced).toContain('animation:none');
   });
 
   it('shares the same global SOUND preference with the main game', async () => {
