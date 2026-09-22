@@ -587,3 +587,449 @@
     box-shadow: none !important;
   }
 }
+
+
+/* Phase D Director review pass v3 — 2026-09-22
+   Reference: approved high-fidelity mockups generated from the latest live captures.
+   Scope: desktop composition/legibility only. Existing game rules and map anchors stay locked. */
+@media (min-width: 901px) and (min-height: 651px) {
+  /* -------------------------------------------------------------------- */
+  /* FIELD — wide cinematic lower-third, no collapsed text column.        */
+  /* -------------------------------------------------------------------- */
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="dialogue"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="result"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="tease"].phase-playing:not(.strategy-active) .play-panel {
+    left: 3.8% !important;
+    right: auto !important;
+    bottom: 2.8% !important;
+    width: min(860px, 53%) !important;
+    min-height: 0 !important;
+    max-height: 25% !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding: 12px 15px 13px !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background:
+      linear-gradient(90deg, rgba(4,18,24,.965), rgba(7,25,31,.91)) !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.34) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .play-panel > :is(.character-card,.narrator-card),
+  .game-frame[data-production-scene="FIELD"][data-field-ui="dialogue"] .play-panel > :is(.character-card,.narrator-card),
+  .game-frame[data-production-scene="FIELD"][data-field-ui="result"] .play-panel > :is(.character-card,.narrator-card),
+  .game-frame[data-production-scene="FIELD"][data-field-ui="tease"] .play-panel > :is(.character-card,.narrator-card) {
+    display: none !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .presentation-area,
+  .game-frame[data-production-scene="FIELD"] .dialogue-content,
+  .game-frame[data-production-scene="FIELD"] .dialogue-text {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .presentation-area {
+    max-height: none !important;
+    overflow: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .dialogue-content,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="dialogue"] .dialogue-content,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="result"] .dialogue-content,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="tease"] .dialogue-content {
+    min-height: 0 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .dialogue-text,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="dialogue"] .dialogue-text,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="result"] .dialogue-text,
+  .game-frame[data-production-scene="FIELD"][data-field-ui="tease"] .dialogue-text {
+    margin: 0 !important;
+    padding: 4px 0 6px !important;
+    font-size: clamp(14px, 1vw, 17px) !important;
+    line-height: 1.56 !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .continue-button {
+    min-width: 112px !important;
+    min-height: 40px !important;
+    margin-left: auto !important;
+    padding: 6px 0 6px 12px !important;
+  }
+
+  /* The background already contains the gate hardware. Hide the old foreground
+     gate cutout that currently reads as a corrupted machine on the lower-right. */
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-event="e01_01_arrival"] .episode-immersive-prop.prop-1,
+  .game-frame[data-production-scene="FIELD"]
+    .episode-immersive-scene[data-event="e01_10_next_day_tease"] .episode-immersive-prop.prop-1 {
+    display: none !important;
+  }
+
+  /* Junio signal: let the character performance and real barrier own the foreground. */
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-read"]
+    .episode-immersive-prop.prop-1 {
+    opacity: .68 !important;
+    filter: brightness(.96) saturate(.94) !important;
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* STRATEGY — map remains dominant; lower record becomes one clean dock. */
+  /* -------------------------------------------------------------------- */
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .play-panel {
+    left: 14.8% !important;
+    right: 1.2% !important;
+    bottom: 1.1% !important;
+    width: auto !important;
+    min-height: 72px !important;
+    max-height: 11.8% !important;
+    padding: 7px 10px 8px !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .presentation-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-content {
+    width: 100% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 112px !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    gap: 2px 16px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-content .eyebrow {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    margin: 0 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .dialogue-text {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 1px 0 !important;
+    font-size: clamp(11.5px,.82vw,14px) !important;
+    line-height: 1.38 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"].phase-playing:not([data-strategy-ui="judgment"]) .continue-button {
+    grid-column: 2 !important;
+    grid-row: 1 / span 2 !important;
+    align-self: center !important;
+    min-width: 104px !important;
+    width: 104px !important;
+    min-height: 42px !important;
+    margin: 0 !important;
+    padding: 6px 9px !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-observe-card {
+    left: 50% !important;
+    right: auto !important;
+    bottom: 13.8% !important;
+    width: min(430px, 34%) !important;
+    transform: translateX(-50%) !important;
+    padding: 10px 13px !important;
+    border-radius: 10px !important;
+    background: linear-gradient(180deg,rgba(5,24,31,.94),rgba(7,29,36,.90)) !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.28) !important;
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* OFFICE — physical room first; evidence lives in the lower evidence   */
+  /* strip instead of a translucent duplicate whiteboard floating over it. */
+  /* -------------------------------------------------------------------- */
+  .game-frame[data-production-scene="OFFICE"] .episode-immersive-evidence-board {
+    opacity: .08 !important;
+    filter: none !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .office-production-layer {
+    opacity: .38 !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"].phase-playing:not(.strategy-active) .scene-heading {
+    top: 8.5% !important;
+    left: 3.8% !important;
+    width: min(560px, 39%) !important;
+    padding: 9px 13px 10px !important;
+    border-radius: 8px !important;
+    background: linear-gradient(90deg,rgba(5,16,21,.88),rgba(6,18,23,.45)) !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .scene-heading h1 {
+    margin-top: 2px !important;
+    font-size: clamp(24px,2.15vw,34px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="context"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="dialogue"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="result"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="verify"].phase-playing:not(.strategy-active) .play-panel,
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="trace"].phase-playing:not(.strategy-active) .play-panel {
+    left: 3.8% !important;
+    right: auto !important;
+    bottom: 2.8% !important;
+    width: min(930px, 58%) !important;
+    min-height: 0 !important;
+    max-height: 31% !important;
+    grid-template-columns: 108px minmax(0,1fr) !important;
+    gap: 13px !important;
+    padding: 10px 13px 11px !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background: linear-gradient(90deg,rgba(5,16,21,.96),rgba(8,24,29,.90)) !important;
+    box-shadow: 0 18px 44px rgba(0,0,0,.35) !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .presentation-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-height: 27vh !important;
+    overflow: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] :is(.episode-report-chain,.episode-instruction-reality-chain,.episode-record-reality-chain) {
+    max-height: 94px !important;
+    overflow: hidden !important;
+    padding: 6px 8px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .dialogue-content {
+    min-height: 0 !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .dialogue-text {
+    max-width: none !important;
+    padding: 4px 0 6px !important;
+    font-size: clamp(13px,.92vw,16px) !important;
+    line-height: 1.5 !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .portrait-slot {
+    height: 72px !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .character-identity {
+    margin-top: 5px !important;
+    gap: 2px !important;
+  }
+
+  .game-frame[data-production-scene="OFFICE"] .character-identity strong {
+    font-size: 13px !important;
+  }
+
+  /* Choices stay a deliberate evidence decision, not a viewport-height form. */
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="judgment"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]),
+  .game-frame[data-production-scene="OFFICE"][data-office-ui="record"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left: 5% !important;
+    right: 5% !important;
+    top: auto !important;
+    bottom: 2.5% !important;
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    max-height: 27% !important;
+    padding: 9px 11px 10px !important;
+    overflow: hidden !important;
+  }
+
+  /* -------------------------------------------------------------------- */
+  /* EPISODE COMPLETE — one intentional editorial panel, inner record      */
+  /* scroll only. The construction dawn remains visible around the panel.  */
+  /* -------------------------------------------------------------------- */
+  .game-frame .complete-screen:has(.episode-completion-carryover) {
+    align-self: center !important;
+    justify-self: center !important;
+    width: min(780px, 48vw) !important;
+    max-width: 48vw !important;
+    height: calc(100% - 88px) !important;
+    max-height: calc(100% - 88px) !important;
+    margin: 0 !important;
+    padding: 15px 18px 16px !important;
+    overflow: hidden !important;
+    text-align: left !important;
+    border: 1px solid rgba(181,207,216,.30) !important;
+    border-top-color: rgba(224,195,112,.66) !important;
+    border-radius: 14px !important;
+    background:
+      linear-gradient(180deg,rgba(7,30,41,.965),rgba(7,25,34,.95)) !important;
+    box-shadow: 0 26px 68px rgba(0,0,0,.44) !important;
+    backdrop-filter: blur(14px) !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .completion-rule {
+    width: 40px !important;
+    height: 2px !important;
+    margin: 0 auto 8px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) > .eyebrow {
+    margin: 0 !important;
+    text-align: center !important;
+    font-size: 9px !important;
+    letter-spacing: .16em !important;
+    color: #e8bc57 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) > h1 {
+    margin: 7px 0 3px !important;
+    text-align: center !important;
+    font-size: clamp(25px,2.25vw,36px) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) > .end-line {
+    margin: 0 0 10px !important;
+    text-align: center !important;
+    font-size: 11px !important;
+    letter-spacing: .03em !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-completion-carryover,
+  .complete-screen:has(.episode-completion-carryover) .episode-review {
+    width: 100% !important;
+    margin: 0 0 10px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-day-carryover {
+    padding: 8px 9px !important;
+    border-radius: 9px !important;
+    background: rgba(5,19,25,.56) !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-day-carryover > header {
+    margin-bottom: 6px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .day-carryover-timeline {
+    margin-bottom: 6px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .day-carryover-cards {
+    grid-template-columns: repeat(5, minmax(0,1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .day-carryover-cards article {
+    min-height: 64px !important;
+    padding: 7px 7px 7px 9px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .day-carryover-cards article strong {
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .day-carryover-cards article p {
+    margin-top: 3px !important;
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+    overflow: hidden !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-review {
+    min-height: 0 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-review > h2 {
+    margin: 0 !important;
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-review > p {
+    margin: 2px 0 6px !important;
+    font-size: 9px !important;
+    color: #afc0c5 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record-filters {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 5px !important;
+    overflow-x: auto !important;
+    padding-bottom: 3px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record-filters button {
+    min-height: 30px !important;
+    padding: 5px 8px !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record-count {
+    margin: 4px 0 5px !important;
+    font-size: 9px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record > ol {
+    max-height: 242px !important;
+    overflow: auto !important;
+    overscroll-behavior: contain !important;
+    padding-right: 4px !important;
+    scrollbar-width: thin !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record > ol > li {
+    padding: 8px 9px !important;
+    margin-bottom: 5px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record > ol > li strong {
+    font-size: 10px !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .episode-record > ol > li span,
+  .complete-screen:has(.episode-completion-carryover) .episode-record > ol > li p {
+    font-size: 9px !important;
+    line-height: 1.4 !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) .replay-hint {
+    margin: 5px 0 7px !important;
+    font-size: 9px !important;
+    color: #aab9bd !important;
+  }
+
+  .complete-screen:has(.episode-completion-carryover) > .primary-button {
+    display: flex !important;
+    margin: 0 0 0 auto !important;
+    min-width: 142px !important;
+    min-height: 42px !important;
+    padding: 8px 14px !important;
+  }
+}
