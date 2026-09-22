@@ -1,5 +1,7 @@
 import type { Id, PresentationCommand, TextId } from '../domain';
 import type { FieldResourceAxisId } from './product-contract';
+import type { StrategyCharacterPlacement } from './strategy-placements';
+import type { StrategySignal } from './strategy-signals';
 
 export type StrategyActionIntent = 'inspect' | 'coordinate' | 'control' | 'report' | 'protect' | 'record';
 export type StrategyActionTarget =
@@ -164,6 +166,29 @@ export function strategyActionExecutionChoiceId(action: StrategyAction): Id {
 export function strategyActionsForTarget(actions: readonly StrategyAction[], targetKey: string | null): readonly StrategyAction[] {
   if (!targetKey) return [];
   return Object.freeze(actions.filter(action => strategyActionTargetKey(action.target) === targetKey));
+}
+
+/**
+ * Risk markers may be informational even when the current choice is attached to a person or work zone.
+ * In that case, connect the marker only to actions located at the same authored map anchor.
+ */
+export function strategyActionsForMapTarget(
+  actions: readonly StrategyAction[],
+  targetKey: string | null,
+  signals: readonly StrategySignal[],
+  placements: readonly StrategyCharacterPlacement[],
+): readonly StrategyAction[] {
+  const direct = strategyActionsForTarget(actions, targetKey);
+  if (!targetKey || direct.length) return direct;
+
+  const signal = signals.find(candidate => candidate.signal_id === targetKey);
+  if (!signal) return direct;
+
+  const contextualTargets = new Set<string>([
+    `anchor:${signal.anchor}`,
+    ...placements.filter(placement => placement.anchor === signal.anchor).map(placement => placement.character_id),
+  ]);
+  return Object.freeze(actions.filter(action => contextualTargets.has(strategyActionTargetKey(action.target))));
 }
 
 /** Read-only UI projection. Executing an action still uses the original choose_event command. */

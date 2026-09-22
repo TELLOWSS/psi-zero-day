@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actions';
 import { strategyActionTargetKey } from '../app/strategy-actions';
 import type { PsiIndicatorId } from '../app/product-contract';
@@ -42,6 +42,8 @@ export function StrategyLoopPanel({
   onOutcomeContinue,
   onOutcomeReconsider,
   onActionFocus,
+  guidanceText,
+  emptyText,
 }: {
   readonly actions: readonly StrategyAction[];
   readonly selectedActions: readonly StrategyAction[];
@@ -55,12 +57,28 @@ export function StrategyLoopPanel({
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
   readonly onActionFocus?: (targetKey: string | null) => void;
+  readonly guidanceText?: string;
+  readonly emptyText?: string;
 }) {
   const [pending, setPending] = useState<StrategyAction | null>(null);
   const [reconsiderConfirm, setReconsiderConfirm] = useState(false);
+  const [executing, setExecuting] = useState(false);
+  const executingRef = useRef(false);
   const actionSetKey = useMemo(() => actions.map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`).join('|'), [actions]);
 
-  useEffect(() => { setPending(null); setReconsiderConfirm(false); }, [actionSetKey, focusId, outcome?.key]);
+  useEffect(() => {
+    setPending(null);
+    setReconsiderConfirm(false);
+    setExecuting(false);
+    executingRef.current = false;
+  }, [actionSetKey, focusId, outcome?.key]);
+
+  const executePending = () => {
+    if (!pending?.enabled || !onAction || executingRef.current) return;
+    executingRef.current = true;
+    setExecuting(true);
+    onAction(pending);
+  };
 
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
 
@@ -77,11 +95,11 @@ export function StrategyLoopPanel({
         <strong>{text('ui.psi.related')}</strong>
         <div>{outcome.psi_cues.map(indicator => <span key={indicator}>{text(psiIndicatorTextId(indicator))}</span>)}</div>
       </div> : null}
-      {outcome.reconsideration ? <div className="strategy-replan-card" data-paid-item={outcome.reconsideration.item_id}>
-        <div className="strategy-replan-heading">
+      {outcome.reconsideration ? <details className="strategy-replan-card" data-paid-item={outcome.reconsideration.item_id}>
+        <summary>
           <strong>{text('ui.paid_item.replan')}</strong>
           <span>{text('ui.paid_item.owned')} {outcome.reconsideration.remaining}</span>
-        </div>
+        </summary>
         <small>{text('ui.paid_item.replan_guard')}</small>
         {!reconsiderConfirm ? <button
           type="button"
@@ -96,12 +114,13 @@ export function StrategyLoopPanel({
               <button type="button" className="strategy-replan-button" onClick={onOutcomeReconsider}>{text('ui.paid_item.confirm')}</button>
             </div>
           </div>}
-      </div> : null}
-      <button type="button" className="strategy-execute-button" onClick={onOutcomeContinue}>{text('ui.strategy.return_map')} <b aria-hidden="true">↗</b></button>
+      </details> : null}
+      <button type="button" className="strategy-execute-button strategy-outcome-next" onClick={onOutcomeContinue}>{text('ui.strategy.next_situation')} <b aria-hidden="true">↗</b></button>
     </div> : <>
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
+      {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
       {!focusId ? <p className="strategy-action-empty">{text('ui.strategy.action_hint')}</p>
-        : !selectedActions.length ? <p className="strategy-action-empty">{text('ui.strategy.no_actions')}</p>
+        : !selectedActions.length ? <p className="strategy-action-empty">{emptyText ?? text('ui.strategy.no_actions')}</p>
         : <div className="strategy-action-list">
           {selectedActions.map((action, index) => <button
             key={action.choice_id}
@@ -142,7 +161,7 @@ export function StrategyLoopPanel({
         </div>
         <div className="strategy-action-confirm-buttons">
           <button type="button" className="strategy-cancel-button" onClick={() => setPending(null)}>{text('ui.strategy.cancel')}</button>
-          <button type="button" className="strategy-execute-button" onClick={() => pending.enabled && onAction?.(pending)}>{text('ui.strategy.execute')} <b aria-hidden="true">↗</b></button>
+          <button type="button" className="strategy-execute-button" disabled={!pending.enabled || executing} onClick={executePending}>{text(executing ? 'ui.strategy.executing' : 'ui.strategy.execute')} <b aria-hidden="true">↗</b></button>
         </div>
       </div> : null}
     </>}
