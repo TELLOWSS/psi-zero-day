@@ -64,11 +64,12 @@ const labels: Readonly<Record<string, string>> = {
 };
 
 const text = (id: string) => labels[id] ?? id;
-const person = (id: string) => ({
+const people: Readonly<Record<string, { readonly name: string; readonly role: string }>> = {
   player: { name: '현장 안전관리자', role: '안전관리' },
   yoon_sungho: { name: '윤성호', role: '철근반장' },
   lim_junho: { name: '임준호', role: '신입근로자' },
-}[id]);
+};
+const person = (id: string) => people[id];
 
 const baseView: StrategyView = {
   clock: { day: 1, slot: 'MORNING' },
