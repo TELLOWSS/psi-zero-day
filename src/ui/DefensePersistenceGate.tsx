@@ -43,7 +43,6 @@ export function DefensePersistenceGate({ controller }: { readonly controller: De
       <small>ZERO BREACH</small>
       <h1>{t('defense.save.storage.title')}</h1>
       <p>{t('defense.save.storage.body')}</p>
-      <code>{entry.issue}</code>
       <div className="zb-save-actions"><button type="button" onClick={exit}>{t('defense.ui.exit')}</button></div>
     </section>
   </main>;
@@ -53,7 +52,6 @@ export function DefensePersistenceGate({ controller }: { readonly controller: De
       <small>ZERO BREACH</small>
       <h1>{t('defense.save.corrupt.title')}</h1>
       <p>{t('defense.save.corrupt.body')}</p>
-      <code>{entry.issue}</code>
       <div className="zb-save-actions">
         <button type="button" className="is-primary" onClick={() => setConfirming(true)}>{t('defense.save.new.action')}</button>
         <button type="button" onClick={exit}>{t('defense.ui.exit')}</button>
