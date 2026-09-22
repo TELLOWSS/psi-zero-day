@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "lock_id": "field-reference-v1",
+  "status": "RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA",
+  "reference_event_id": "e01_04_junho_signal",
+  "reference_node_id": "listen",
+  "intent": "Lock one commercial FIELD reference frame where the small ramp anomaly is readable inside the working construction space before the judgment copy is read.",
+  "world_contract": {
+    "background": "ramp-entry construction world remains fully visible",
+    "crew": "player and Lim Junho share the foreground while Choi Minseok remains a quiet operational background presence",
+    "signal": [
+      "vehicle passage trace remains visible",
+      "slight gravel displacement remains visible",
+      "raised steel-plate edge/level difference remains visible as the uncertain signal"
+    ],
+    "hud": "speaker/location/signal controls remain secondary to the field clue",
+    "decision": "judgment dock leaves the right-side physical clue uncovered"
+  },
+  "evidence": [
+    {
+      "key": "vehicle-trace",
+      "label_text_id": "ui.field_visual.vehicle_trace"
+    },
+    {
+      "key": "plate-edge",
+      "label_text_id": "ui.field_visual.plate_edge"
+    },
+    {
+      "key": "small-signal",
+      "label_text_id": "ui.field_visual.small_signal"
+    }
+  ],
+  "responsive_profiles": [
+    "desktop-1440x900",
+    "desktop-1920x1080",
+    "phone-portrait-390x844",
+    "phone-landscape-844x390",
+    "tablet-portrait-820x1180"
+  ],
+  "completion_gate": [
+    "player can locate the uncertain ramp change within a few seconds before reading the choice text",
+    "Player and Lim Junho remain the dominant human read without floating on a dark stage",
+    "vehicle/access context remains visible so the signal has an operational cause",
+    "decision dock does not cover the steel-plate/gravel clue",
+    "no new placeholder image is introduced",
+    "five-profile screenshot QA is required before status may change to VISUAL_PRODUCTION_LOCKED"
+  ]
+}

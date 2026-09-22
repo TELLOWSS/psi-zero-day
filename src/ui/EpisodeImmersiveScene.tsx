@@ -8,6 +8,7 @@ import { episode01CharacterPerformance, episode01UsesCharacterPerformance } from
 import { episode01CharacterPerformanceAsset } from '../app/episode01-character-performance-assets';
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
+import { episode01FieldVisualLock } from '../app/episode01-field-visual-lock';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
 import { episode01TbmVisualLock } from '../app/episode01-tbm-visual-lock';
 import { episode01OfficeProduction } from '../app/episode01-office-production';
@@ -125,6 +126,7 @@ export function EpisodeImmersiveScene({
   const productionMapUri = locator ? episode01BackgroundUri(resolve) : undefined;
   const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
+  const fieldVisualLock = episode01FieldVisualLock(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
   const tbmVisualLock = episode01TbmVisualLock(scene.event_id, scene.node_id);
   const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
@@ -165,6 +167,7 @@ export function EpisodeImmersiveScene({
     data-field-lighting={fieldProduction?.lighting_profile}
     data-field-ui={fieldProduction?.ui_profile}
     data-field-cast={fieldProduction?.cast_profile}
+    data-field-visual-lock={fieldVisualLock?.lock_id}
     data-tbm-phase={tbmProduction?.phase}
     data-tbm-hero={tbmProduction?.hero_character_id}
     data-tbm-camera={tbmProduction?.camera_profile}
@@ -267,6 +270,14 @@ export function EpisodeImmersiveScene({
       <i className="office-evidence-link link-a" />
       <i className="office-evidence-link link-b" />
       <b className="office-next-field-trace" />
+    </div> : null}
+    {fieldVisualLock ? <div className="field-visual-lock-layer" data-lock={fieldVisualLock.lock_id} aria-hidden="true">
+      <i className="field-ramp-plate" />
+      <i className="field-ramp-gravel" />
+      <i className="field-vehicle-trace" />
+      {fieldVisualLock.evidence.map(item => <span key={item.key} className="field-world-evidence" data-evidence={item.key}>
+        {t(item.label_text_id)}
+      </span>)}
     </div> : null}
     {tbmProduction ? <div className="tbm-production-layer" data-phase={tbmProduction.phase} aria-hidden="true">
       <div className="tbm-briefing-board" data-board="work-sequence">

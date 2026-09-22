@@ -1,6 +1,10 @@
 import fs from 'node:fs';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { episode01FieldProduction } from '../src/app/episode01-field-production';
+import { episode01FieldVisualLock } from '../src/app/episode01-field-visual-lock';
+import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 import { episode01CharacterBlocking } from '../src/app/episode01-character-blocking';
 import { episode01CharacterPerformance } from '../src/app/episode01-character-performance';
 
@@ -84,6 +88,36 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
     });
   });
 
+  it('locks the Junho judgment as the FIELD commercial reference frame', () => {
+    expect(episode01FieldVisualLock('e01_04_junho_signal', 'listen')).toMatchObject({
+      lock_id: 'field-reference-v1',
+      status: 'RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA',
+      evidence: [
+        { key: 'vehicle-trace', label_text_id: 'ui.field_visual.vehicle_trace' },
+        { key: 'plate-edge', label_text_id: 'ui.field_visual.plate_edge' },
+        { key: 'small-signal', label_text_id: 'ui.field_visual.small_signal' },
+      ],
+    });
+    expect(episode01FieldVisualLock('e01_04_junho_signal', 'signal')).toBeUndefined();
+  });
+
+  it('renders the physical ramp clue inside the FIELD judgment scene', () => {
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_04_junho_signal',
+      nodeId: 'listen',
+      eventTitle: '임준호의 말',
+      resolve: () => undefined,
+      t: (id: string) => id,
+    }));
+
+    expect(html).toContain('data-field-visual-lock="field-reference-v1"');
+    expect(html).toContain('class="field-visual-lock-layer"');
+    expect(html).toContain('class="field-ramp-plate"');
+    expect(html).toContain('class="field-ramp-gravel"');
+    expect(html).toContain('data-evidence="small-signal"');
+    expect(html).toContain('ui.field_visual.plate_edge');
+  });
+
   it('locks FIELD production profiles and world-first judgment UI in CSS', () => {
     const css = fs.readFileSync('src/ui/production-scenes.css', 'utf8');
     expect(css).toContain('Phase C-2 — FIELD production quality lock');
@@ -93,5 +127,7 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
     expect(css).toContain('[data-field-cast="junho-player-balance"]');
     expect(css).toContain('[data-field-ui="judgment"]');
     expect(css).toContain('.choice-visual');
+    expect(css).toContain('FIELD commercial reference lock v1');
+    expect(css).toContain('[data-field-visual-lock="field-reference-v1"]');
   });
 });

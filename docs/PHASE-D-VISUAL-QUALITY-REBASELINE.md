@@ -59,3 +59,19 @@ changed condition. No new placeholder image or event/choice branch was added.
 The implementation is intentionally not marked `VISUAL_PRODUCTION_LOCKED` until the five
 required viewport screenshots are inspected. The next runtime expansion remains FIELD after this
 TBM reference frame passes screen QA.
+
+
+## FIELD Reference Implementation — 2026-09-23
+
+Reference event/node: `e01_04_junho_signal / listen`.
+
+Status: **RUNTIME IMPLEMENTED / SCREEN QA REQUIRED**.
+
+The FIELD reference now keeps the ramp-entry world visible and gives the small signal a physical
+read: vehicle passage trace, displaced gravel, and a slightly raised steel-plate edge sit inside the
+same scene as Player and Lim Junho. Choi Minseok remains visible as an operational background
+presence, while the judgment dock is constrained so it does not cover the clue.
+
+No new placeholder image, event, choice, effect, or Episode topology was added. The implementation
+must still pass the same five-profile screenshot review before it can be marked
+`VISUAL_PRODUCTION_LOCKED`.
