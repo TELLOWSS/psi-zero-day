@@ -37,8 +37,9 @@ describe('ZERO BREACH content contract', () => {
     expect(content.towers.map(tower => tower.id)).toEqual(['PULSE', 'BURST', 'CONTROL', 'SENSOR']);
     expect(content.enemies.map(item => item.id)).toEqual(['NORMAL', 'SWIFT', 'ARMORED', 'SWARM', 'VEILED', 'BOSS']);
     expect(content.waves.map(wave => wave.id)).toEqual([1,2,3,4,5,6,7,8,9,10]);
-    expect(content.supports.find(item => item.id === 'COORDINATOR')?.characterBinding).toBe('kang_taesik');
-    expect(content.supports.find(item => item.id === 'OBSERVER')?.characterBinding).toBe('lim_junho');
+    // Character IDs are intentionally resolved by the integration adapter, not embedded in rule data.
+    expect(content.supports.find(item => item.id === 'COORDINATOR')?.characterBinding).toBeNull();
+    expect(content.supports.find(item => item.id === 'OBSERVER')?.characterBinding).toBeNull();
   });
 
   it('rejects broken stable references instead of partially accepting content', () => {
