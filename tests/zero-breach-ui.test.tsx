@@ -72,6 +72,9 @@ describe('ZERO BREACH step 2 combat UI', () => {
     expect(host.querySelectorAll('.zb-support-card')).toHaveLength(2);
     expect(host.textContent).toContain('강태식');
     expect(host.textContent).toContain('임준호');
+    const portraits = [...host.querySelectorAll('.zb-support-card img')].map(image => image.getAttribute('src') ?? '');
+    expect(portraits.some(uri => uri.includes('kang-taesik-portrait.webp'))).toBe(true);
+    expect(portraits.some(uri => uri.includes('lim-junho-portrait.webp'))).toBe(true);
 
     await click(buttonContaining(host, '본편 허브로'));
     expect(onExit).toHaveBeenCalledTimes(1);
