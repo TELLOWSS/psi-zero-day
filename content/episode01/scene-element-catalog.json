@@ -684,7 +684,16 @@
         "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Portable handheld work-light candidate rejected. Episode 01 temporary-lighting art must use the current site's LED line-bar system after exact visual verification.",
+      "site_reality_profile": {
+        "subject": "current_site_led_line_bar_temporary_lighting",
+        "geometry_source": "user_current_site_reference_required",
+        "render_mode": "installed_linear_lighting_scene_fragment_or_verified_product_cutout",
+        "handheld_worklight_allowed": false,
+        "decorative_linebar_allowed": false,
+        "final_without_site_reference": false,
+        "legal_function": "maintain required passage/work-area illumination without creating new electrical/trip hazards"
+      }
     },
     "ppe_issue_station": {
       "element_id": "scene.control.ppe_issue_station",
