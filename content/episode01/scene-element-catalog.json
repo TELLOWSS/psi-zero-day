@@ -55,17 +55,20 @@
       "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.access_barrier",
       "access_control_profile": {
-        "barrier_form": "korean_movable_screen_fence",
-        "body_material": "tubular_steel_frame_with_high_visibility_infill",
+        "barrier_form": "korean_banding_movable_screen_fence",
+        "body_material": "galvanized_round_tube_with_blue_mesh",
         "typical_panel_proportion": "L2000_H1200",
-        "typical_frame_diameter_mm_class": 32,
-        "stabilization": "two_separate_lower_bases",
-        "reflective_marking": "site_optional",
+        "tube_diameter_mm_options": [
+          25.4,
+          31.8
+        ],
+        "stabilization": "two_black_weighted_bases",
+        "rounded_top_corners": true,
         "integrated_text_allowed": false,
         "integrated_sign_allowed": false,
         "warning_lamps_allowed": false,
-        "site_practice_note": "Episode 01 기본 시각형상은 국내 건설현장에서 판매·사용되는 이동식 밴딩형 가림막 안전펜스 계열로 한다. 약 2,000×1,200 mm 비례와 32 mm급 원형 프레임, 별도 하부 베이스를 기준으로 하되 제조사별 세부 규격은 다를 수 있다.",
-        "control_evaluation_note": "펜스 자체만으로 통제가 완료되는 것은 아니며 설치 연속성, 전도·이동 방지, 우회동선, 차량동선 및 신호수·유도자 운영을 함께 평가한다."
+        "site_practice_note": "Episode 01 기준 자산은 국내 판매 중인 밴딩형 이동식 가림막 휀스 형상으로 고정한다. 약 L2000×H1200, Ø25.4/31.8급 원형 프레임, 청색 메쉬, 검정 중량 베이스를 기준으로 한다.",
+        "control_evaluation_note": "제품 형상은 실제 국내 제품군을 따르되, 설치 연속성·전도방지·우회동선·차량동선·유도자 운영은 별도로 평가한다."
       },
       "art": {
         "path": "assets/episode01/scene-elements/access-barrier.webp",
