@@ -111,7 +111,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     expect(normal).not.toMatch(/<text\b/i);
   });
 
-  it('uses the production board and PULSE art in the real combat UI while unapproved assets remain prototype', async () => {
+  it('uses the production board and PULSE art in the real combat UI with no prototype fallback left', async () => {
     const { host, root } = await mount();
     await click(host.querySelector('[data-support="COORDINATOR"]')!);
 
@@ -125,7 +125,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     const shopPulse = host.querySelector('.zb-shop-production-art') as HTMLImageElement | null;
     expect(shopPulse).not.toBeNull();
     expect(shopPulse?.getAttribute('src')).toContain('assets/defense/towers/pulse-l1.svg');
-    expect(host.querySelector('[data-art-state="prototype"]')).not.toBeNull();
+    expect(host.querySelector('[data-art-state="prototype"]')).toBeNull();
 
     await click(buttonContaining(host, '펄스 대응기'));
     expect(host.querySelector('g[data-production-tower-art="PULSE:L1"] image')?.getAttribute('href'))
