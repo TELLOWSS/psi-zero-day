@@ -179,7 +179,7 @@ function SupportCard({
 }
 
 export function DefenseGame({
-  session, onExit, storage, requestedScenarioId = null,
+  session, onExit, storage, requestedScenarioId = zeroBreachContent.scenario.id,
 }: {
   readonly session: EpisodeSession;
   readonly onExit: () => void;
@@ -189,7 +189,8 @@ export function DefenseGame({
   const persistence = useDefensePersistence(zeroBreachContent, onExit, storage, resolveDefenseContentForRun);
   const { state, setState } = persistence;
   const e1 = defenseEvents[0]!;
-  const e1Availability = defenseEventAvailabilityFromState(e1, session.getSnapshot().state, persistence.document);
+  const episodeState = session.getSnapshot?.().state ?? null;
+  const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
     || (selectedScenarioId === e1.id && e1Availability.unlocked);
