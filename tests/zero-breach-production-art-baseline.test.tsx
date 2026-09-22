@@ -75,8 +75,9 @@ afterEach(() => {
 
 describe('ZERO BREACH step 5A production-art baseline', () => {
   it('locks only the board, PULSE L1 and NORMAL as the production baseline', () => {
-    expect(defenseVisualProduction.status).toBe('BASELINE_LOCKED');
-    expect(defenseVisualProduction.assets.map(asset => asset.assetId)).toEqual([
+    expect(['BASELINE_LOCKED', 'EXPANSION_CANDIDATE']).toContain(defenseVisualProduction.status);
+    const locked = defenseVisualProduction.assets.filter(asset => asset.status === 'BASELINE_LOCKED').map(asset => asset.assetId);
+    expect(locked).toEqual([
       'defense.board.ramp-01',
       'defense.tower.PULSE.L1',
       'defense.enemy.NORMAL',
@@ -84,10 +85,10 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
 
     expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01.svg');
     expect(defenseTowerArtUri('PULSE', 'L1')).toBe('assets/defense/towers/pulse-l1.svg');
-    expect(defenseTowerArtUri('PULSE', 'L2')).toBeNull();
-    expect(defenseTowerArtUri('BURST', 'L1')).toBeNull();
+    expect(defenseTowerArtUri('PULSE', 'L2')).toMatch(/pulse-l2\.svg$/);
+    expect(defenseTowerArtUri('BURST', 'L1')).toMatch(/burst-l1\.svg$/);
     expect(defenseEnemyArtUri('NORMAL')).toBe('assets/defense/enemies/normal.svg');
-    expect(defenseEnemyArtUri('SWIFT')).toBeNull();
+    expect(defenseEnemyArtUri('SWIFT')).toMatch(/swift\.svg$/);
   });
 
   it('keeps the authored dimensions, transparent unit assets and JSON-aligned route/pad coordinates', () => {

@@ -11,13 +11,13 @@ interface DefenseVisualAsset {
   readonly transparent: boolean;
   readonly safeArea?: number;
   readonly anchor?: { readonly x: number; readonly y: number };
-  readonly status: 'BASELINE_LOCKED';
+  readonly status: 'BASELINE_LOCKED' | 'EXPANSION_CANDIDATE';
 }
 
 interface DefenseVisualProduction {
   readonly schemaVersion: 1;
   readonly visualVersion: string;
-  readonly status: 'BASELINE_LOCKED';
+  readonly status: 'BASELINE_LOCKED' | 'EXPANSION_CANDIDATE';
   readonly assets: readonly DefenseVisualAsset[];
 }
 

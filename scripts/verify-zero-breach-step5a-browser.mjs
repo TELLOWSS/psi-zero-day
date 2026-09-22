@@ -235,7 +235,7 @@ try {
 
   let snap = await visualSnapshot(cdp);
   report.captures.push({ id: 'desktop-1280x720', ...snap });
-  if (snap.visualVersion !== 'zero-breach-visual-baseline-0.1.0') throw new Error('Unexpected visual version');
+  if (!snap.visualVersion?.startsWith('zero-breach-visual-')) throw new Error('Unexpected visual version');
   if (!snap.boardArt.href?.endsWith('assets/defense/board/ramp-01.svg')) throw new Error('Production board not active');
   if (!snap.towerArt.href?.endsWith('assets/defense/towers/pulse-l1.svg')) throw new Error('PULSE L1 production art not active');
   if (!snap.normalArt.href?.endsWith('assets/defense/enemies/normal.svg')) throw new Error('NORMAL production art not active');
