@@ -81,10 +81,19 @@ export function StrategyLoopPanel({
   };
 
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
+  const nextStep = pending
+    ? { state: 'execute', title: text('ui.strategy.guide.execute_title'), hint: text('ui.strategy.guide.execute_hint') }
+    : focusId && selectedActions.length
+      ? { state: 'choose', title: text('ui.strategy.guide.choose_title'), hint: text('ui.strategy.guide.choose_hint') }
+      : { state: 'target', title: text('ui.strategy.guide.target_title'), hint: text('ui.strategy.guide.target_hint') };
 
   if (!actions.length && !outcome) return null;
 
-  return <aside className={`strategy-action-tray strategy-loop-panel step-${step}`} aria-label={text('ui.strategy.actions')}>
+  return <aside
+    className={`strategy-action-tray strategy-loop-panel step-${step}`}
+    aria-label={text('ui.strategy.actions')}
+    data-guide-state={outcome ? 'result' : nextStep.state}
+  >
     {outcome ? <div className="strategy-outcome-card" role="status" data-outcome={outcome.key}>
       <span className="strategy-outcome-kicker">{text('ui.strategy.result')}</span>
       <p>{outcome.text}</p>
@@ -117,11 +126,18 @@ export function StrategyLoopPanel({
       </details> : null}
       <button type="button" className="strategy-execute-button strategy-outcome-next" onClick={onOutcomeContinue}>{text('ui.strategy.next_situation')} <b aria-hidden="true">↗</b></button>
     </div> : <>
+      <div className="strategy-next-step" role="status" aria-live="polite" data-next-step={nextStep.state}>
+        <span>{text('ui.strategy.guide.kicker')}</span>
+        <strong>{nextStep.title}</strong>
+        <small>{nextStep.hint}</small>
+      </div>
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
       {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
       {!focusId ? <p className="strategy-action-empty">{text('ui.strategy.action_hint')}</p>
         : !selectedActions.length ? <p className="strategy-action-empty">{emptyText ?? text('ui.strategy.no_actions')}</p>
-        : <div className="strategy-action-list">
+        : <>
+          <p className="strategy-action-count">{text('ui.strategy.guide.available')} <strong>{selectedActions.length}</strong></p>
+          <div className="strategy-action-list">
           {selectedActions.map((action, index) => <button
             key={action.choice_id}
             type="button"
@@ -149,9 +165,11 @@ export function StrategyLoopPanel({
             </span>
             <span aria-hidden="true">›</span>
           </button>)}
-        </div>}
+          </div>
+        </>}
 
       {pending ? <div className="strategy-action-confirm" data-pending-choice={pending.choice_id}>
+        <strong className="strategy-action-confirm-title">{text('ui.strategy.guide.confirm_title')}</strong>
         <div><span>{text('ui.strategy.actor')}</span><strong>{personName(pending.actor_character_id)}</strong></div>
         <div><span>{text('ui.strategy.target')}</span><strong>{targetLabel(pending)}</strong></div>
         <p>{text(pending.label_text_id)}</p>
