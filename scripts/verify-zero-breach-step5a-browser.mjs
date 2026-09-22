@@ -161,6 +161,14 @@ async function visualSnapshot(cdp) {
     const boardArt = document.querySelector('image[data-production-board-art="ramp-01"]');
     const towerArt = document.querySelector('g[data-production-tower-art="PULSE:L1"] image');
     const normalArt = document.querySelector('image[data-production-enemy-art="NORMAL"]');
+    const selectedPad = document.querySelector('.zb-pad-hit.is-selected');
+    const range = document.querySelector('.zb-range-preview');
+    const center = el => {
+      const r = el?.getBoundingClientRect();
+      return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null;
+    };
+    const padCenter = center(selectedPad);
+    const rangeCenter = center(range);
     return {
       viewport: { width: innerWidth, height: innerHeight },
       visualVersion: shell?.getAttribute('data-visual-version') || null,
@@ -178,6 +186,10 @@ async function visualSnapshot(cdp) {
         rect: rect(normalArt),
       },
       prototypeCount: document.querySelectorAll('[data-art-state="prototype"]').length,
+      padAlignment: padCenter && rangeCenter ? {
+        dx: Number(Math.abs(padCenter.x - rangeCenter.x).toFixed(3)),
+        dy: Number(Math.abs(padCenter.y - rangeCenter.y).toFixed(3)),
+      } : null,
       overflow: {
         x: document.documentElement.scrollWidth - innerWidth,
         y: document.documentElement.scrollHeight - innerHeight,
@@ -230,6 +242,7 @@ try {
   if (!snap.board || snap.board.width < 760 || snap.board.height < 320) throw new Error('Desktop board is too small');
   if (!snap.towerArt.rect || snap.towerArt.rect.width < 60 || snap.towerArt.rect.height < 60) throw new Error('PULSE L1 runtime footprint is too small');
   if (!snap.normalArt.rect || snap.normalArt.rect.width < 28 || snap.normalArt.rect.height < 28) throw new Error('NORMAL runtime footprint is too small');
+  if (!snap.padAlignment || snap.padAlignment.dx > 1 || snap.padAlignment.dy > 1) throw new Error('Desktop pad input is not aligned to the SVG coordinate space: ' + JSON.stringify(snap.padAlignment));
   await screenshot(cdp, '01-desktop-1280x720.png');
 
   await setViewport(cdp, 844, 390);
@@ -238,6 +251,7 @@ try {
   if (!snap.board || snap.board.height < 180) throw new Error('Small-landscape board collapsed');
   if (!snap.towerArt.rect || snap.towerArt.rect.width < 36) throw new Error('PULSE L1 unreadable on small landscape');
   if (!snap.normalArt.rect || snap.normalArt.rect.width < 17) throw new Error('NORMAL unreadable on small landscape');
+  if (!snap.padAlignment || snap.padAlignment.dx > 1 || snap.padAlignment.dy > 1) throw new Error('Small-landscape pad input is not aligned to the SVG coordinate space: ' + JSON.stringify(snap.padAlignment));
   if (snap.overflow.x > 2) throw new Error('Small-landscape horizontal overflow: ' + snap.overflow.x);
   await screenshot(cdp, '02-small-landscape-844x390.png');
 } catch (error) {
