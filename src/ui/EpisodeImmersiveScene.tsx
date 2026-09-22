@@ -1,5 +1,5 @@
 import type { AssetResolver } from '../app/episode-visual-assets';
-import { characterMapUri, episode01BackgroundUri } from '../app/episode-visual-assets';
+import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/episode-visual-assets';
 import { episode01ImmersiveScene } from '../app/episode01-immersive-scene';
 import { episode01CinematicTrace } from '../app/episode01-cinematic-trace';
 import { episode01ImmersiveLocator } from '../app/episode01-immersive-locator';
@@ -81,6 +81,14 @@ function stageTextId(presentationType: string | null | undefined, nodeId: string
   return 'ui.immersive.stage.dialogue';
 }
 
+export type Episode01Stage3VisualLock = 'stage3-entry' | 'stage3-tbm';
+
+export function episode01Stage3VisualLock(eventId: string | null | undefined): Episode01Stage3VisualLock | undefined {
+  if (eventId === 'e01_01_arrival') return 'stage3-entry';
+  if (eventId === 'e01_02_meet_kang') return 'stage3-tbm';
+  return undefined;
+}
+
 export function EpisodeImmersiveScene({
   eventId,
   nodeId,
@@ -126,6 +134,8 @@ export function EpisodeImmersiveScene({
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
   const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
+  const stage3VisualLock = episode01Stage3VisualLock(scene.event_id);
+  const stage3SpeakerPortrait = stage3VisualLock && speakerId ? characterPortraitUri(speakerId, resolve) : undefined;
 
   return <figure
     className="episode-immersive-scene"
@@ -139,6 +149,7 @@ export function EpisodeImmersiveScene({
     data-preview-choice={scene.preview_choice_id ?? undefined}
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
+    data-visual-lock={stage3VisualLock}
     data-environment={scene.background_environment ?? undefined}
     data-background-source={resolvedBackground ? 'final' : 'rc-fallback'}
     data-authored-node={scene.authored_node_direction || undefined}
@@ -365,10 +376,13 @@ export function EpisodeImmersiveScene({
       })}
     </div>
     <div className="episode-immersive-grade" aria-hidden="true" />
-    {speakerIdentity ? <div className="episode-immersive-speaker-tag" aria-hidden="true">
-      <strong>{speakerIdentity.name}</strong>
-      <span>{speakerIdentity.role}</span>
-      {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}
+    {speakerIdentity ? <div className="episode-immersive-speaker-tag" data-speaker-id={speakerId ?? undefined} aria-hidden="true">
+      {stage3SpeakerPortrait ? <VisualImage uri={stage3SpeakerPortrait} alt="" className="episode-immersive-speaker-portrait" /> : null}
+      <span className="episode-immersive-speaker-copy">
+        <strong>{speakerIdentity.name}</strong>
+        <span>{speakerIdentity.role}</span>
+        {speakerIdentity.trade && speakerIdentity.trade !== speakerIdentity.role ? <em>{speakerIdentity.trade}</em> : null}
+      </span>
     </div> : null}
     <figcaption>
       <div><span>{time ?? 'EP01'}</span>{zone ? <b>{zone}</b> : null}<em>{t(stageTextId(presentationType, nodeId))}</em></div>
