@@ -1257,7 +1257,7 @@
       "kind": "prop",
       "label": "유로폼 벽체 거푸집",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
       "art": {
         "path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
@@ -1270,7 +1270,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1289,19 +1289,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 66536,
-        "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 184348,
+        "sha256": "c9f082661d04dd721e7e159df9b3548595a51dd5b291d8d4f2b091289b259ece",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "bf29bd5b-f8af-4d4c-940f-417286d17752",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_tie": {
       "element_id": "scene.prop.formwork_tie",
       "kind": "prop",
       "label": "폼타이·연결철물",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_tie",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-tie.webp",
@@ -1314,7 +1320,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1333,19 +1339,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 52386,
-        "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 187422,
+        "sha256": "c3163eefe18069e2ec4b28a49a196de08515e731376c738dbd05d9bba8f0ac8a",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "9320d91b-f5e4-4b74-b437-0d8d1ce2d42b",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_brace": {
       "element_id": "scene.control.formwork_brace",
       "kind": "control",
       "label": "벽체 거푸집 전도방지 지지",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_brace",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-brace.webp",
@@ -1358,7 +1370,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1378,19 +1390,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 59680,
-        "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 172766,
+        "sha256": "5351208782aa81147a12bdb63ff6c705a6598ee9bf0c30f3222d84a8da3e2fa7",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "82e1f3ca-1154-4677-9a17-dc6f4a65a583",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_work_platform": {
       "element_id": "scene.control.formwork_work_platform",
       "kind": "control",
       "label": "거푸집 작업발판",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_work_platform",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-work-platform.webp",
@@ -1403,7 +1421,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1422,12 +1440,18 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 68130,
-        "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 172792,
+        "sha256": "b4a574c6b6b9d947173b9acb5a27d427a5fc3ba6643a2a84f20b8cb8621620d2",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "77fa5206-e757-4a1e-bf9b-ef10fe132c15",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "system_shoring_jackbase": {
       "element_id": "scene.prop.system_shoring_jackbase",
