@@ -249,6 +249,26 @@
       ],
       "effective_date": "2026-03-02",
       "summary_text_id": "ui.guide.legal.profile.fire"
+    },
+    "ladder_passage": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제24조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.ladder_passage"
+    },
+    "stairs": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제26조",
+        "제27조",
+        "제28조",
+        "제29조",
+        "제30조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.stairs"
     }
   },
   "items": {
@@ -553,7 +573,11 @@
           "profile": "risk_assessment",
           "applicability": "general"
         }
-      ]
+      ],
+      "site_specific": {
+        "text_id": "ui.guide.legal.site.first_aid_aed",
+        "rule": "Do not present AED placement as a universal construction-site statutory requirement without checking the facility category and other applicable Korean laws."
+      }
     },
     "site_weather_station": {
       "field_guide_id": "FG010",
@@ -928,6 +952,10 @@
         },
         {
           "profile": "passage_lighting",
+          "applicability": "direct"
+        },
+        {
+          "profile": "stairs",
           "applicability": "direct"
         }
       ]
@@ -1668,6 +1696,10 @@
         {
           "profile": "passage_lighting",
           "applicability": "related"
+        },
+        {
+          "profile": "stairs",
+          "applicability": "related"
         }
       ]
     },
@@ -1926,6 +1958,10 @@
         {
           "profile": "fall_opening",
           "applicability": "related"
+        },
+        {
+          "profile": "ladder_passage",
+          "applicability": "direct"
         }
       ]
     },
