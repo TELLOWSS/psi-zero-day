@@ -126,6 +126,14 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const executedEngineResult = executedOutcomeReady && presentation?.type === 'SHOW_RESULT' && presentation.instance_id === executedFieldAction?.action.instance_id;
   const fallbackEngineOutcome = !executedOutcomeReady && isPlaying && activeInstanceHasChoice && isStrategyFieldActionEvent(activeEventId) && presentation?.type === 'SHOW_RESULT';
   const mapOutcomeActive = strategyActive && (executedOutcomeReady || fallbackEngineOutcome);
+  const strategyTransitionPrompt = strategyActive
+    && !mapOutcomeActive
+    && strategyActions.length === 0
+    && presentation
+    && 'text_id' in presentation
+    && presentation.type !== 'SHOW_RESULT'
+      ? t(presentation.text_id)
+      : undefined;
   const outcomePsiCues = psiCuesForChoice(executedFieldAction?.action.choice_id ?? fallbackChoiceId);
   const replanBalance = paidItemQuantity(paidItemWallet, REPLAN_PASS_ITEM_ID);
   const supportItems = snapshot.state
@@ -218,6 +226,12 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     const accepted = session.dispatch({ type: 'choose_event', instance_id: instanceId, node_id: nodeId, choice_id: choiceId }, snapshot.revision);
     if (!accepted && fieldAction) setExecutedFieldAction(null);
     return accepted;
+  };
+
+  const continueStrategyTransition = () => {
+    if (!strategyTransitionPrompt || !presentation || !('node_id' in presentation) || presentation.type === 'SHOW_CHOICE') return;
+    playUiCue('continue');
+    session.dispatch({ type: 'advance_event', instance_id: presentation.instance_id, node_id: presentation.node_id }, snapshot.revision);
   };
 
   const continueMapOutcome = () => {
@@ -450,6 +464,9 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       supportItems={supportItems}
       onSupportItemUse={useSupportItem}
       onReturn={onReturn}
+      eventTitle={snapshot.eventTitle}
+      transitionPrompt={strategyTransitionPrompt}
+      onTransitionContinue={continueStrategyTransition}
       onAction={action => {
         playUiCue('execute');
         chooseEvent(action.instance_id, action.node_id, action.choice_id);
@@ -484,7 +501,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.start(snapshot.revision); } }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
       </div>
     </section> : isPlaying ? <>
-      <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section>
+      {!strategyActive ? <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section> : null}
       <EpisodeImmersiveScene
         eventId={activeEventId}
         nodeId={activeInstance?.current_node_id}

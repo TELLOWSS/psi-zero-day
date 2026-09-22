@@ -887,6 +887,10 @@
     "ui.strategy.guide.execute_title": "선택한 조치를 확인하세요",
     "ui.strategy.guide.execute_hint": "담당자와 대상을 확인한 뒤 아래 [조치 실행] 버튼을 눌러 현장에 반영하세요.",
     "ui.strategy.guide.available": "선택 가능한 조치",
-    "ui.strategy.guide.confirm_title": "이 조치로 진행하시겠습니까?"
+    "ui.strategy.guide.confirm_title": "이 조치로 진행하시겠습니까?",
+    "ui.strategy.situation": "현재 상황",
+    "ui.strategy.guide.continue_title": "상황을 확인하고 조치 단계로 이어가세요",
+    "ui.strategy.guide.continue_hint": "현재 상황 문장을 확인한 뒤 [조치 보기]를 누르면 같은 대상 선택을 유지한 채 실행 가능한 조치가 열립니다.",
+    "ui.strategy.guide.continue_button": "조치 보기"
   }
 }

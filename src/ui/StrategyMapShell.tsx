@@ -67,7 +67,7 @@ function frictionIcon(kind: FieldFrictionKind): string {
 
 export function StrategyMapShell({
   view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider,
-  supportItems = [], onSupportItemUse, onReturn,
+  supportItems = [], onSupportItemUse, onReturn, eventTitle, transitionPrompt, onTransitionContinue,
 }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
@@ -82,12 +82,17 @@ export function StrategyMapShell({
   readonly supportItems?: readonly StrategySupportItem[];
   readonly onSupportItemUse?: (itemId: string) => void;
   readonly onReturn?: () => void;
+  readonly eventTitle?: string;
+  readonly transitionPrompt?: string;
+  readonly onTransitionContinue?: () => void;
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
   const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
   useEffect(() => {
-    setFocusId(null);
+    // Preserve the player's selected map target while the same event advances
+    // from context/dialogue into its choice node. The component itself remounts
+    // when the event instance changes, so stale focus does not leak to new events.
     setActionFocusId(null);
   }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
@@ -177,6 +182,11 @@ export function StrategyMapShell({
       </div>
       <div className="strategy-day"><span>{copy.day}</span><strong>{view.clock.day}</strong></div>
     </header>
+
+    <section className="strategy-event-title" aria-label={text('ui.strategy.situation')}>
+      <span>{text('ui.strategy.situation')}</span>
+      <strong>{eventTitle ?? copy.events}</strong>
+    </section>
 
     <nav className="strategy-loop-stage-strip" aria-label={text('ui.strategy.loop.label')}>
       {(['target','action','result'] as const).map((stage,index) => {
@@ -375,7 +385,7 @@ export function StrategyMapShell({
 
     </section>
 
-    {effectiveActions.length || outcome ? <StrategyLoopPanel
+    <StrategyLoopPanel
       actions={effectiveActions}
       selectedActions={selectedActions}
       focusId={focusId}
@@ -390,7 +400,9 @@ export function StrategyMapShell({
       onActionFocus={setActionFocusId}
       guidanceText={guidedSignal ? text('ui.strategy.signal_guided') : undefined}
       emptyText={informationOnlySignal ? text('ui.strategy.signal_info_only') : undefined}
-    /> : null}
+      transitionPrompt={transitionPrompt}
+      onTransitionContinue={onTransitionContinue}
+    />
 
     <footer className="strategy-roster" aria-label={copy.roster}>
       <div className="roster-title"><span>{copy.roster}</span><strong>{view.roster.length}</strong></div>
