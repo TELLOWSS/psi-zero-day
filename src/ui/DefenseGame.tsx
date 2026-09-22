@@ -14,6 +14,7 @@ import {
 import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
+import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 
 const content = zeroBreachContent;
 const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
@@ -125,6 +126,11 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const tutorial = useDefenseTutorial(state, paused => {
+    if (!state) return;
+    persistence.dispatch({ type: 'SetPaused', paused });
+  });
 
   const selectedTower = state?.towers.find(tower => tower.id === selectedTowerId) ?? null;
   const selectedPad = content.map.pads.find(pad => pad.id === selectedPadId) ?? null;
@@ -281,7 +287,12 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
       </div>
       <button type="button" className="zb-exit" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
+    <button className="zb-defense-settings" type="button" aria-expanded={settingsOpen} onClick={() => setSettingsOpen(open => !open)}>설정</button>
+    {settingsOpen ? <section className="zb-defense-settings-panel" aria-label="현장 디펜스 설정">
+      <button type="button" onClick={() => { tutorial.replay(); setSettingsOpen(false); }}>{t('defense.tutorial.replay')}</button>
+    </section> : null}
     <DefenseSaveStatus controller={persistence} />
+    <DefenseTutorial controller={tutorial} />
 
     <section className="zb-stage">
       <div className="zb-board-wrap">
