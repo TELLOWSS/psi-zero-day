@@ -339,7 +339,7 @@ export function DefenseGame({
   if (!state && !selectedScenarioAllowed) return <main className="zb-shell zb-prep zb-scenario-select" data-defense-screen="scenario-select">
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.scenario.title')}</h1></div>
-      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t(activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
+      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
       <h2>{t('defense.scenario.title')}</h2>
@@ -647,7 +647,7 @@ export function DefenseGame({
         </div> : null}
         <div className="zb-result-actions">
           <button type="button" onClick={retry}>{t('defense.ui.retry')}</button>
-          <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
+          <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t(activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
         </div>
       </div>
     </section> : null}
