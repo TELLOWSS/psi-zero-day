@@ -75,7 +75,7 @@
   "reference_qa": {
     "source": "user-provided main-title concept screenshot 1672x941",
     "status": "layout_and_identity_targets_locked",
-    "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries remain pending replacement."
+    "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries are integrated and the title-cast identity is Production Locked; reopen only for verified regression."
   },
   "pipeline_status": "production_locked",
   "binary_replacement": {
