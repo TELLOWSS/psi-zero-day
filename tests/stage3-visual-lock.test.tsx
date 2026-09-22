@@ -95,7 +95,7 @@ describe('Stage 3 representative visual lock', () => {
     expect(html).toContain('data-tbm-camera="briefing-circle"');
     expect(html).toContain('data-speaker-id="kang_taesik"');
     expect(html).toContain('class="episode-immersive-speaker-portrait"');
-    expect(html).toMatch(/data-character="kang_taesik"[^>]*data-speaker="true"/);
+    expect(html).toMatch(/data-speaker="true"[^>]*data-character="kang_taesik"/);
     expect(html).toMatch(/data-character="kang_taesik"[^>]*data-blocking-depth="foreground"/);
   });
 
