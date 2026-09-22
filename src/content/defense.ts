@@ -88,7 +88,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
         cursor = byId.get(cursor.from);
       }
     }
-    towers.push({ id: value.id, nameTextId: value.nameTextId, roleTextId: value.roleTextId, levels });
+    towers.push({ id: value.id, levels });
   }
 
   const enemies: DefenseEnemyDefinition[] = [];
@@ -117,7 +117,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
       }
     }
     enemies.push({
-      id: value.id, nameTextId: value.nameTextId, hp: value.hp, speed: value.speed, armor: value.armor,
+      id: value.id, hp: value.hp, speed: value.speed, armor: value.armor,
       reward: value.reward, leak: value.leak, hidden: value.hidden, boss: value.boss, ...(phase ? { phase } : {}),
     });
   }
@@ -132,7 +132,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
     const keys = ['cooldownTicks','initialCooldownTicks','freezeMovementTicks','revealAllTicks','rangeBonus','rangeBonusTicks'] as const;
     if (keys.some(key => !nonNegative(value[key]))) { issues.push(`${path}: invalid support numeric value`); continue; }
     supports.push({
-      id: value.id, characterBinding: value.characterBinding as string | null, skillTextId: value.skillTextId,
+      id: value.id, characterBinding: value.characterBinding as string | null,
       cooldownTicks: value.cooldownTicks as number, initialCooldownTicks: value.initialCooldownTicks as number,
       freezeMovementTicks: value.freezeMovementTicks as number, revealAllTicks: value.revealAllTicks as number,
       rangeBonus: value.rangeBonus as number, rangeBonusTicks: value.rangeBonusTicks as number,
