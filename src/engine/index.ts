@@ -13,3 +13,4 @@ export * from './character-reference';
 export * from './npc-relationships';
 export * from './dialogue';
 export * from './defense';
+export * from './defense-event';
