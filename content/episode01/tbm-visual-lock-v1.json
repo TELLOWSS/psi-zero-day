@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "lock_id": "tbm-reference-v1",
+  "status": "RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA",
+  "reference_event_id": "e01_08g_tbm_field_gap",
+  "reference_node_id": "tbm_action",
+  "intent": "Lock one commercial TBM reference frame where the afternoon changed work condition remains visible before the player reads the change-control choice.",
+  "world_contract": {
+    "background": "foundation work yard remains fully visible",
+    "crew": "player + Lee Jaehoon + Kang Taesik + Lim Junho remain grounded on one floor plane",
+    "evidence": [
+      "morning TBM baseline remains visible as context",
+      "opened access/guard condition remains visible in the work zone",
+      "material exit route remains visible as the reason the condition changed"
+    ],
+    "hud": "PSI TRACE and location/minimap remain subordinate to the world",
+    "decision": "change-control choice dock stays below the decisive field evidence"
+  },
+  "evidence": [
+    {
+      "key": "morning-baseline",
+      "label_text_id": "ui.tbm_visual.morning"
+    },
+    {
+      "key": "changed-access",
+      "label_text_id": "ui.tbm_visual.changed_access"
+    },
+    {
+      "key": "material-exit",
+      "label_text_id": "ui.tbm_visual.material_exit"
+    }
+  ],
+  "responsive_profiles": [
+    "desktop-1440x900",
+    "desktop-1920x1080",
+    "phone-portrait-390x844",
+    "phone-landscape-844x390",
+    "tablet-portrait-820x1180"
+  ],
+  "completion_gate": [
+    "reference scene renders the three world evidence cues without a large empty dark stage",
+    "four locked character identities remain readable and grounded on the same floor plane",
+    "choice dock does not cover opened access condition or material route",
+    "no new placeholder image is introduced",
+    "five-profile screenshot QA is required before status may change to VISUAL_PRODUCTION_LOCKED"
+  ]
+}

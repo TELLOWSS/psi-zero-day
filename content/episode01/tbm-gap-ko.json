@@ -27,6 +27,9 @@
     "ui.friction.tbm_return.detail": "앞선 대응 방식이 다음 작업변경 때 보고·복구·재확인 행동으로 되돌아온다.",
     "ep01.tbm_gap.form_first.result": "서명자료와 원래 기준은 빠르게 다시 확인된다. 난간도 복구된다. 하지만 오후 작업이 왜 달라졌는지는 아직 누구의 언어로도 정리되지 않았다.",
     "ep01.tbm_gap.worker_blame.result": "한 작업자가 즉시 복구하고 재교육을 받는다. 현장은 빨리 움직이지만 주변 작업자들은 ‘다음엔 누가 열라고 해도 손대지 말자’는 쪽으로 반응한다.",
-    "ep01.tbm_gap.change_control.result": "작업은 몇 분 멈춘다. 대신 ‘반출 때만 개방→감시자 배치→차량 이탈 즉시 복구’라는 오후 기준이 새로 생긴다. 아침 서류와 다른 실제 작업기준이 처음으로 말로 맞춰진다."
+    "ep01.tbm_gap.change_control.result": "작업은 몇 분 멈춘다. 대신 ‘반출 때만 개방→감시자 배치→차량 이탈 즉시 복구’라는 오후 기준이 새로 생긴다. 아침 서류와 다른 실제 작업기준이 처음으로 말로 맞춰진다.",
+    "ui.tbm_visual.morning": "아침 TBM 기준",
+    "ui.tbm_visual.changed_access": "오후 개방 구간",
+    "ui.tbm_visual.material_exit": "자재 반출 동선"
   }
 }

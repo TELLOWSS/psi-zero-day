@@ -43,3 +43,19 @@ Source of truth:
 - `content/episode01/phase-d-visual-quality-rebaseline-v1.json`
 - `src/app/episode01-visual-quality-rebaseline.ts`
 - `tests/episode01-visual-quality-rebaseline.test.ts`
+
+
+## TBM Reference Implementation — 2026-09-23
+
+Reference event/node: `e01_08g_tbm_field_gap / tbm_action`.
+
+Status: **RUNTIME IMPLEMENTED / SCREEN QA REQUIRED**.
+
+The reference frame now composes the existing final work-yard surface with the existing
+`access-barrier`, `open-edge`, and `material-stack` scene-element assets. The four locked
+characters remain on one floor plane while a restrained field-route cue identifies the afternoon
+changed condition. No new placeholder image or event/choice branch was added.
+
+The implementation is intentionally not marked `VISUAL_PRODUCTION_LOCKED` until the five
+required viewport screenshots are inspected. The next runtime expansion remains FIELD after this
+TBM reference frame passes screen QA.

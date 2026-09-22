@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { episode01TbmProduction } from '../src/app/episode01-tbm-production';
+import { episode01TbmVisualLock } from '../src/app/episode01-tbm-visual-lock';
 import { EpisodeImmersiveScene } from '../src/ui/EpisodeImmersiveScene';
 
 describe('Episode 01 Phase C-3 TBM production quality', () => {
@@ -107,6 +108,36 @@ describe('Episode 01 Phase C-3 TBM production quality', () => {
     expect(html).toContain('data-board="work-sequence"');
     expect(html).toContain('class="tbm-background-crew"');
     expect(html).toContain('class="tbm-board-step tbm-board-step-a"');
+  });
+
+  it('locks the changed-work judgment as the TBM commercial reference frame', () => {
+    expect(episode01TbmVisualLock('e01_08g_tbm_field_gap', 'tbm_action')).toMatchObject({
+      lock_id: 'tbm-reference-v1',
+      status: 'RUNTIME_IMPLEMENTED_PENDING_SCREEN_QA',
+      evidence: [
+        { key: 'morning-baseline', label_text_id: 'ui.tbm_visual.morning' },
+        { key: 'changed-access', label_text_id: 'ui.tbm_visual.changed_access' },
+        { key: 'material-exit', label_text_id: 'ui.tbm_visual.material_exit' },
+      ],
+    });
+    expect(episode01TbmVisualLock('e01_08g_tbm_field_gap', 'lee')).toBeUndefined();
+  });
+
+  it('renders physical changed-work evidence before the TBM choice dock', () => {
+    const html = renderToStaticMarkup(createElement(EpisodeImmersiveScene, {
+      eventId: 'e01_08g_tbm_field_gap',
+      nodeId: 'tbm_action',
+      eventTitle: 'TBM과 실제 작업',
+      resolve: () => undefined,
+      t: (id: string) => id,
+    }));
+
+    expect(html).toContain('data-tbm-visual-lock="tbm-reference-v1"');
+    expect(html).toContain('class="tbm-visual-lock-layer"');
+    expect(html).toContain('data-evidence="morning-baseline"');
+    expect(html).toContain('data-evidence="changed-access"');
+    expect(html).toContain('data-evidence="material-exit"');
+    expect(html).toContain('ui.tbm_visual.changed_access');
   });
 
   it('leaves non-TBM scenes outside the TBM production system', () => {

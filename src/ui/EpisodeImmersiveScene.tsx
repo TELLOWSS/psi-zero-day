@@ -9,6 +9,7 @@ import { episode01CharacterPerformanceAsset } from '../app/episode01-character-p
 import { episode01StopWorkProduction } from '../app/episode01-stopwork-production';
 import { episode01FieldProduction } from '../app/episode01-field-production';
 import { episode01TbmProduction } from '../app/episode01-tbm-production';
+import { episode01TbmVisualLock } from '../app/episode01-tbm-visual-lock';
 import { episode01OfficeProduction } from '../app/episode01-office-production';
 import type { Episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import type { Episode01DayResultProduction } from '../app/episode01-day-result-production';
@@ -125,6 +126,7 @@ export function EpisodeImmersiveScene({
   const stopWorkProduction = episode01StopWorkProduction(scene.event_id);
   const fieldProduction = episode01FieldProduction(scene.event_id, scene.node_id);
   const tbmProduction = episode01TbmProduction(scene.event_id, scene.node_id);
+  const tbmVisualLock = episode01TbmVisualLock(scene.event_id, scene.node_id);
   const officeProduction = episode01OfficeProduction(scene.event_id, scene.node_id);
 
   return <figure
@@ -170,6 +172,7 @@ export function EpisodeImmersiveScene({
     data-tbm-lighting={tbmProduction?.lighting_profile}
     data-tbm-ui={tbmProduction?.ui_profile}
     data-tbm-cast={tbmProduction?.cast_profile}
+    data-tbm-visual-lock={tbmVisualLock?.lock_id}
     data-visual-rebaseline={fieldProduction || tbmProduction ? 'world-first-v1' : undefined}
     data-office-phase={officeProduction?.phase}
     data-office-hero={officeProduction?.hero_character_id}
@@ -282,6 +285,13 @@ export function EpisodeImmersiveScene({
       <span className="tbm-floor-mark tbm-floor-mark-a" />
       <span className="tbm-floor-mark tbm-floor-mark-b" />
       <span className="tbm-floor-mark tbm-floor-mark-c" />
+    </div> : null}
+    {tbmVisualLock ? <div className="tbm-visual-lock-layer" data-lock={tbmVisualLock.lock_id} aria-hidden="true">
+      <i className="tbm-change-route-line" />
+      <i className="tbm-change-control-point" />
+      {tbmVisualLock.evidence.map(item => <span key={item.key} className="tbm-world-evidence" data-evidence={item.key}>
+        {t(item.label_text_id)}
+      </span>)}
     </div> : null}
     {stopWorkProduction ? <div className="stop-work-production-layer" data-phase={stopWorkProduction.phase} aria-hidden="true">
       <div className="stop-work-production-title">
