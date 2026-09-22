@@ -126,10 +126,44 @@
   ],
   "runtime_assets": {
     "site_gate": {
-      "classification": "site_specific_assembly",
-      "status": "reference_required_before_render",
-      "verified": "Korean rule requires pedestrian entrance separation where a loading/transport entrance is the primary entrance; exact gate geometry is site-specific.",
-      "render_contract": "Do not invent a foreign turnstile/gate. Use a Korean apartment-site reference photo before final rendering."
+      "classification": "selected_Korean_apartment_site_gate_assembly",
+      "status": "visual_family_locked_ready_to_render",
+      "verified": "Current Korean apartment construction examples repeatedly show a full-height temporary hoarding wall with a wide vehicle gate and a separate adjacent worker/pedestrian entrance or safety passage. The exact portal, booth and access-control hardware are site-specific.",
+      "legal_basis": "산업안전보건기준에 관한 규칙 제11조: when the primary entrance is for loading/transport machinery, a separate adjacent pedestrian entrance is required.",
+      "selected_episode01_visual_family": {
+        "vehicle_gate": "wide rectangular opening in temporary steel-panel hoarding, sized for dump/pump/truck entry",
+        "pedestrian_gate": "separate narrow worker entrance immediately beside the vehicle gate",
+        "control": "small guard/access-control booth or access-control post beside pedestrian entrance",
+        "separation": "physical fence/rail or curb/line treatment keeps worker entry distinct from vehicle throat",
+        "signage": "NEW PSI / fictional site only; no real constructor logos",
+        "road_context": "construction access road with cones/bollards only where useful; no decorative clutter"
+      },
+      "render_contract": {
+        "composition": "one transparent cutout assembly showing vehicle portal + adjacent worker gate + small access-control booth",
+        "materials": "gray/white temporary steel hoarding panels and dark steel portal frame",
+        "pedestrian_entry": "clearly narrower and physically separate from vehicle opening",
+        "worker_access": "walkable threshold, no turnstile unless specifically authored later",
+        "branding": "NEW PSI or NEW PSI CONSTRUCTION only, otherwise blank",
+        "text": "no dense baked instructional text; a small GATE 1 / NEW PSI mark is optional",
+        "background": "transparent",
+        "camera": "slight three-quarter front, readable vehicle and pedestrian openings simultaneously",
+        "condition": "active Korean apartment construction site, mildly weathered, not showroom-clean"
+      },
+      "reject": [
+        "single vehicle opening with workers forced through the same throat",
+        "foreign stadium turnstile as the main visual",
+        "decorative security gate unrelated to construction hoarding",
+        "real company/apartment branding",
+        "pseudo-Korean gibberish signage"
+      ],
+      "evidence": [
+        "Korean current-site photos show large vehicle portals integrated into temporary hoarding and adjacent worker safety entrances/access-control rooms.",
+        "Ministry legal interpretation confirms the pedestrian entrance requirement is based on the primary use of the loading/transport entrance, not merely its size."
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsLinkCommonInfo.do?lsJoLnkSeq=1016700405",
+        "https://www.law.go.kr/LSW/cgmExpcInfoP.do?cgmExpcDatSeq=30952&mode=2&ofiClsCd=350101"
+      ]
     },
     "material_stack": {
       "classification": "site_specific_material_stack",
@@ -186,12 +220,18 @@
         "https://kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=452&callmode=normal&catimage=&eclang=ko&start=32&um=s"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final",
-        "generation_id": "dbf8250e-8ceb-456d-a16e-6b279cf772f5",
-        "reason": [
-          "orange mesh does not match the selected Korean blue-mesh banding-fence family",
-          "rectangular steel feet differ from the common black weighted-base product geometry",
-          "extra braces/clamps/grommet tie arrangement were not confirmed in the selected Korean references"
+        "status": "approved_candidate_pending_binary_and_runtime_review",
+        "generation_id": "3c619806-ebb8-426f-913f-9a13d4fe8a6d",
+        "accepted": [
+          "blue mesh/screen",
+          "silver rounded tubular frame",
+          "approximately 2.0:1.2 panel proportion",
+          "two black weighted bases",
+          "no baked text or branding"
+        ],
+        "limitations": [
+          "grommet/tie details treated as product-family approximation rather than an exact manufacturer copy",
+          "final approval still requires transparent WebP, checksum registration and in-game scale review"
         ]
       }
     },
@@ -319,10 +359,10 @@
     }
   },
   "next_render_order": [
-    "temporary_distribution_board",
-    "access_barrier",
     "site_gate",
-    "material_stack"
+    "temporary_distribution_board",
+    "material_stack",
+    "vehicle_pedestrian_separation"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
