@@ -220,12 +220,22 @@ try {
   await evaluate(cdp, `(() => {
     localStorage.removeItem('psi-zero-day.defense.save.v1');
     localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
+    localStorage.setItem('psi.audio.muted', '1');
+    window.__zbAudioCues = [];
+    window.addEventListener('psi:defense-audio-cue', event => {
+      window.__zbAudioCues.push(event?.detail?.cue || 'unknown');
+    });
   })()`);
 
   await clickText(cdp, '현장 디펜스');
   await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"support-select\"]'))");
   await clickSelector(cdp, '[data-support="COORDINATOR"]');
   await waitFor(cdp, "Boolean(document.querySelector('image[data-production-board-art=\"ramp-01\"]'))");
+  await clickText(cdp, '설정');
+  await waitFor(cdp, "Boolean(document.querySelector('.zb-defense-settings-panel button[data-audio-muted=\"true\"]'))");
+  await clickSelector(cdp, '.zb-defense-settings-panel button[data-audio-muted="true"]');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-audio-muted') === 'false'");
+  await clickText(cdp, '설정');
 
   await clickSelector(cdp, 'button[aria-label^="P2 ·"]');
   await clickText(cdp, '펄스 대응기');
@@ -243,6 +253,12 @@ try {
   if (!snap.towerArt.rect || snap.towerArt.rect.width < 60 || snap.towerArt.rect.height < 60) throw new Error('PULSE L1 runtime footprint is too small');
   if (!snap.normalArt.rect || snap.normalArt.rect.width < 28 || snap.normalArt.rect.height < 28) throw new Error('NORMAL runtime footprint is too small');
   if (!snap.padAlignment || snap.padAlignment.dx > 1 || snap.padAlignment.dy > 1) throw new Error('Desktop pad input is not aligned to the SVG coordinate space: ' + JSON.stringify(snap.padAlignment));
+  const audioCues = await evaluate(cdp, "window.__zbAudioCues || []");
+  for (const cue of ['place','wave_start','attack']) {
+    if (!audioCues.includes(cue)) throw new Error('Missing defense audio cue in real combat: ' + cue + ' / ' + JSON.stringify(audioCues));
+  }
+  if (await evaluate(cdp, "localStorage.getItem('psi.audio.muted')") !== '0') throw new Error('Defense SOUND toggle did not update shared preference');
+  report.audio = { cues: audioCues, sharedPreferenceAfterToggle: '0' };
   await screenshot(cdp, '01-desktop-1280x720.png');
 
   await setViewport(cdp, 844, 390);
@@ -254,6 +270,14 @@ try {
   if (!snap.padAlignment || snap.padAlignment.dx > 1 || snap.padAlignment.dy > 1) throw new Error('Small-landscape pad input is not aligned to the SVG coordinate space: ' + JSON.stringify(snap.padAlignment));
   if (snap.overflow.x > 2) throw new Error('Small-landscape horizontal overflow: ' + snap.overflow.x);
   await screenshot(cdp, '02-small-landscape-844x390.png');
+  await clickText(cdp, '본편 허브로');
+  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-quick-settings'))", 15000);
+  const mainAudio = await evaluate(cdp, `(() => {
+    const button = document.querySelector('.commercial-title-quick-settings button:last-child');
+    return { value: button?.querySelector('b')?.textContent || null, muted: localStorage.getItem('psi.audio.muted') };
+  })()`);
+  if (mainAudio.value !== 'ON' || mainAudio.muted !== '0') throw new Error('Main audio preference did not survive defense return: ' + JSON.stringify(mainAudio));
+  report.audio.mainAfterReturn = mainAudio;
 } catch (error) {
   report.failures.push(error instanceof Error ? error.message : String(error));
   if (cdp) {
