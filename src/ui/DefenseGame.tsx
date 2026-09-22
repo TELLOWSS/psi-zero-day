@@ -212,6 +212,12 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
     setNotice('');
   };
 
+  const startWithSupport = (supportId: DefenseSupportId) => {
+    let next = createDefenseRun(content, supportId);
+    if (portrait) next = applyDefenseCommand(next, content, { type: 'SetPaused', paused: true });
+    setState(next);
+  };
+
   const retry = () => {
     setState(null);
     setSelectedPadId(null);
@@ -234,7 +240,7 @@ export function DefenseGame({ session, onExit }: { readonly session: EpisodeSess
         key={id}
         session={session}
         supportId={id}
-        onChoose={() => setState(createDefenseRun(content, id))}
+        onChoose={() => startWithSupport(id)}
       />)}
     </section>
   </main>;
