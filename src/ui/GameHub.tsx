@@ -19,6 +19,17 @@ const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ defau
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
 const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
+
+export async function preloadFieldGuide(loader: FieldGuideModuleLoader = loadFieldGuide): Promise<boolean> {
+  try {
+    await loader();
+    return true;
+  } catch (error) {
+    console.error('Field guide preload failed', error);
+    return false;
+  }
+}
+
 const createFieldGuideScreen = (loader: FieldGuideModuleLoader) =>
   lazy(() => loader().then(module => ({ default: module.FieldGuide })));
 
@@ -188,11 +199,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const canContinue = snapshot.phase !== 'start';
   const openGuide = () => setPage('guide');
-  const preloadGuide = () => {
-    void loadFieldGuide().catch(error => {
-      console.error('Field guide preload failed', error);
-    });
-  };
+  const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
     story: episode01BackgroundUri(resolve),
     missions: resolve('ep01.scene_element.suspended_load'),
