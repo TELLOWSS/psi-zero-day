@@ -91,7 +91,8 @@ describe('ZERO BREACH step 5 production lock', () => {
     ]);
     const productionLocked = defenseVisualProduction.assets.filter(asset => asset.status === 'PRODUCTION_LOCKED');
     expect(productionLocked).toHaveLength(20);
-    expect(defenseVisualProduction.assets.some(asset => asset.status === 'EXPANSION_CANDIDATE')).toBe(false);
+    const manifestSource = fs.readFileSync('content/defense/visual-production.json', 'utf8');
+    expect(manifestSource).not.toContain('"EXPANSION_CANDIDATE"');
     expect(defenseVisualProduction.assets).toHaveLength(23);
     expect(defenseVisualProduction.status).toBe('PRODUCTION_LOCKED');
     expect(defenseVisualProduction.visualVersion).toBe('zero-breach-production-lock-1.0.0');
