@@ -580,7 +580,70 @@
       "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition."
     },
     "first_aid_aed": {
-      "status": "site_specific_cabinet_device_reference_required"
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Korean construction-site first-aid point with optional AED module",
+      "legal_split": {
+        "first_aid": {
+          "basis": "산업안전보건기준에 관한 규칙 제82조",
+          "requirement": "사업주는 부상자의 응급처치에 필요한 구급용구를 갖추고, 그 장소와 사용방법을 근로자에게 알려야 한다.",
+          "required_items": [
+            "붕대재료",
+            "탈지면",
+            "핀셋",
+            "반창고",
+            "외상용 소독약",
+            "지혈대",
+            "부목",
+            "들것",
+            "화상 우려 작업장의 화상약"
+          ]
+        },
+        "aed": {
+          "basis": "응급의료에 관한 법률 제47조의2",
+          "requirement_scope": "AED 의무는 법에서 정한 시설·사업장에 적용되며, 모든 건설현장에 일률적으로 적용되는 형식으로 표현하지 않는다.",
+          "workplace_example": "보건관리자를 두어야 하는 사업장 중 상시근로자 300명 이상인 사업장"
+        }
+      },
+      "korean_product_crosscheck": [
+        {
+          "family": "산업용 ABS 구급함",
+          "evidence": "국내 산업용/건설현장용 응급처치 구급함이 견고한 ABS/PE 케이스 형태로 판매됨"
+        },
+        {
+          "family": "AED 벽걸이형 또는 스탠드형 보관함",
+          "evidence": "국내 AED 전문 판매처에서 벽걸이형 NT-W1, 스탠드형 NT-S1 및 일반 AED 보관함을 판매"
+        }
+      ],
+      "selected_episode01_visual_family": {
+        "first_aid_box": "white or light-gray rugged ABS first-aid box/cabinet with red cross marker, portable or wall-capable",
+        "aed_module": "separate white/red AED wall cabinet or slim floor stand placed adjacent to first-aid box",
+        "relationship": "two adjacent emergency-response assets; visually distinct so AED is not mistaken for the first-aid kit itself",
+        "legal_message": "asset presence does not imply universal AED legal obligation"
+      },
+      "render_contract": {
+        "composition": "one compact emergency-response station containing a first-aid box and a separate AED cabinet/stand",
+        "first_aid_box": "rugged rectangular ABS/PE case, white/light gray, red cross symbol only, simple handle/latches",
+        "aed_cabinet": "clean white/red vertical cabinet or slim stand with small heart/lightning pictogram; no real manufacturer logo",
+        "contents": "do not display drugs or detailed medical contents outside the box",
+        "text": "minimal; no dense Korean labels or fake certification marks",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "front three-quarter view",
+        "condition": "clean, readily accessible, light construction-site dust only"
+      },
+      "reject": [
+        "hospital crash cart",
+        "large pharmacy cabinet",
+        "AED merged into the same first-aid box",
+        "claim that AED is universally mandatory at every construction site",
+        "readable fake KCs/KFDA/brand labels"
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsPdfPrint.do?ancYnChk=0&bylChaChk=N&efGubun=Y&efYd=20221018&joAllCheck=Y&joEfOutPutYn=on&lsiSeq=245059&mokChaChk=N",
+        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1031856731",
+        "https://www.navimro.com/p/K08964818/",
+        "https://kdsia.org/shop/list.php?ca_id=3080"
+      ]
     },
     "site_weather_station": {
       "status": "korean_product_families_verified_exact_site_device_unresolved",
@@ -613,7 +676,6 @@
     }
   },
   "next_render_order": [
-    "fire_extinguisher_station",
     "first_aid_aed",
     "ppe_issue_station",
     "site_weather_station"
