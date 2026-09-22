@@ -1,0 +1,32 @@
+{
+  "locale": "ko",
+  "messages": {
+    "defense.map.ramp-01.name": "첫 번째 방어선",
+    "defense.tower.PULSE.name": "펄스 대응기",
+    "defense.tower.PULSE.role": "단일 대상 기본 화력",
+    "defense.tower.PULSE.L3A.name": "고속 펄스",
+    "defense.tower.PULSE.L3B.name": "관통 펄스",
+    "defense.tower.BURST.name": "분산 해소기",
+    "defense.tower.BURST.role": "밀집 위험 범위 해소",
+    "defense.tower.BURST.L3A.name": "광역 분산",
+    "defense.tower.BURST.L3B.name": "고밀도 해소",
+    "defense.tower.CONTROL.name": "흐름 제어기",
+    "defense.tower.CONTROL.role": "감속과 대응 시간 확보",
+    "defense.tower.CONTROL.L3A.name": "집중 제어",
+    "defense.tower.CONTROL.L3B.name": "확장 제어",
+    "defense.tower.SENSOR.name": "정밀 관측기",
+    "defense.tower.SENSOR.role": "은폐 탐지와 보조 공격",
+    "defense.tower.SENSOR.L3A.name": "광역 관측",
+    "defense.tower.SENSOR.L3B.name": "정밀 분석",
+    "defense.enemy.NORMAL.name": "불안정 파형",
+    "defense.enemy.SWIFT.name": "급변 파형",
+    "defense.enemy.ARMORED.name": "중첩 파형",
+    "defense.enemy.SWARM.name": "연속 파형",
+    "defense.enemy.VEILED.name": "잠복 파형",
+    "defense.enemy.BOSS.name": "연쇄 위험 코어",
+    "defense.support.COORDINATOR.suggestedName": "강태식",
+    "defense.support.COORDINATOR.skill": "작업 흐름 정리",
+    "defense.support.OBSERVER.suggestedName": "임준호",
+    "defense.support.OBSERVER.skill": "전 구역 확인"
+  }
+}
