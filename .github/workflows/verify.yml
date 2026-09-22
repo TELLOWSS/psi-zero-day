@@ -87,6 +87,22 @@ jobs:
 
           node scripts/verify-episode01-responsive.mjs
 
+      - name: Emit first-wave screenshot evidence
+        if: always()
+        shell: bash
+        run: |
+          for file in \
+            artifacts/responsive/phone-portrait-390x844-episode01-field-signal.png \
+            artifacts/responsive/phone-portrait-390x844-episode01-tbm.png
+          do
+            if [ -f "$file" ]; then
+              echo "BEGIN_SCREENSHOT:$file"
+              base64 -w0 "$file"
+              echo
+              echo "END_SCREENSHOT:$file"
+            fi
+          done
+
       - name: Upload responsive QA evidence
         if: always()
         uses: actions/upload-artifact@v4
