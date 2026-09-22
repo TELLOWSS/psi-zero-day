@@ -231,20 +231,20 @@
         "https://www.shinan1.com/"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_regeneration_required",
-        "generation_id": "4f8dcedc-9897-4262-b9cf-a9555563cb4f",
+        "status": "approved_candidate_pending_detail_and_runtime_review",
+        "generation_id": "b7eaacfc-91cc-450d-af93-f0b1b997244e",
         "accepted": [
-          "used yellow/orange steel Euroform family",
-          "horizontal same-spec stack",
+          "same-size horizontal Euroform bundle",
+          "used yellow/orange steel frames",
+          "dark coated plywood faces",
+          "four-bay cross-bar rhythm consistent with 1200 mm-class panel geometry",
           "two timber sleepers",
-          "no mixed materials"
+          "simple two-band securing with no oversized ratchet hardware"
         ],
-        "rejected_or_unresolved": [
-          "top/back reinforcement geometry is too generic and does not sufficiently lock to Korean 6012 Euroform F-frame/cross-bar structure",
-          "large ratchet mechanisms are visually over-specified versus common bundled Euroform storage/shipping references",
-          "pin/tie-hole geometry is exaggerated and not clearly consistent with the 150 mm standardized spacing reference"
-        ],
-        "action": "Regenerate from Korean 6012 geometry: 600x1200 class, F-type frame, four 300 mm bays/cross bars, 150 mm wedge-pin/tie-hole spacing, simple two-band securing, no oversized ratchet hardware."
+        "limitations": [
+          "side wedge-pin/tie-hole geometry still requires close comparison before final binary registration",
+          "candidate is product-family accurate, not an exact manufacturer clone"
+        ]
       }
     },
     "access_barrier": {
@@ -362,61 +362,49 @@
       "status": "research_verified_function_exact_material_layout_pending"
     },
     "temporary_distribution_board": {
-      "status": "visual_family_locked_ready_to_render",
-      "classification": "Korean construction temporary electrical distribution board",
-      "approved_visual_family": "orange FRP temporary distribution board on a black steel stand, lockable closed front door, external weather-protected outlet connectors, external energized indicator; brand-neutral",
-      "official_evidence": [
-        "KOSHA temporary electrical work guide identifies steel, FRP and plastic temporary distribution boards and states FRP boards are mainly used for temporary electrical work at most construction sites because of workability and durability.",
-        "KOSHA distribution-board management guidance requires a robust structure, locking device, externally visible energized indicator, external outlet/connection arrangement so the door need not be opened for normal power takeoff, and RCD protection for 220/380V outlets."
-      ],
-      "korean_product_crosscheck": [
-        {
-          "source": "해솔테크",
-          "evidence": "FRP temporary distribution boxes currently listed in multiple sizes from 300x300x95 through 1150x1400x300 and made-to-order FRP temporary boards."
-        },
-        {
-          "source": "국내 가설분전반 판매제품 시각자료",
-          "evidence": "Orange FRP enclosure on black freestanding steel support with side-mounted protected outlets is a currently sold Korean product configuration."
-        }
+      "status": "visual_family_relocked_ready_to_regenerate",
+      "classification": "Korean FRP temporary construction distribution board",
+      "selected_product_family": {
+        "enclosure": "orange/yellow rectangular FRP cabinet with shallow rain lip/roof",
+        "stand": "simple black steel two-leg H-frame stand with flat feet",
+        "indicator": "single small red energized indicator on front",
+        "outlets": "blue weather-protected industrial outlets mounted on enclosure side; count kept modest",
+        "door": "plain closed front door with simple latch/lock provision",
+        "handle": "small side handle may be present",
+        "grounding": "grounding conductor/terminal may be represented if visually grounded in the selected product family"
+      },
+      "visual_evidence": [
+        "Current Korean product listings show orange/yellow FRP temporary boards on simple black steel stands.",
+        "Multiple products show blue protected outlets on the sides and a small red energized indicator on the front.",
+        "An open-door reference confirms the same enclosure family contains breaker/RCD assemblies internally, but the normal reusable game asset remains closed."
       ],
       "render_contract": {
-        "door_state": "closed and visibly lockable for normal/safe reference",
-        "enclosure": "orange FRP, rounded molded edges, weather-resistant appearance",
-        "support": "black steel freestanding frame/base",
-        "outlets": "weather-protected external connectors on enclosure sides; no loose exposed live conductors",
-        "indicator": "small exterior energized/power indicator allowed",
-        "branding": "no manufacturer logo, no invented certification label, no unreadable pseudo-Korean text",
+        "enclosure": "simple orange/yellow FRP box; no lifting eyes; no heavy molded industrial roof",
+        "stand": "black square-tube two-leg H-stand, no A-frame bracing",
+        "outlets": "2–4 blue weatherproof side outlets, Korean-market visual family",
+        "indicator": "one small red front indicator",
+        "door_state": "closed",
+        "lock": "simple latch/lock provision, not an oversized padlock hero detail",
+        "text": "none; no fake warning labels or pseudo-Korean",
+        "branding": "none",
         "background": "transparent",
-        "camera": "three-quarter front view; enough side visibility to read external outlet arrangement"
+        "camera": "slight front-left or front-right three-quarter view so one outlet side is visible",
+        "wear": "used site condition with light dust/scuffs, not rust-heavy"
       },
       "reject": [
-        "generic gray steel NEMA cabinet as the default Korean site reference",
-        "open front door or exposed breakers/busbars presented as normal operating state",
-        "wall-mounted household consumer unit",
-        "foreign plug/receptacle geometry without Korean product evidence",
-        "decorative labels or fake KCs marks"
+        "top lifting eyes",
+        "red large IEC outlet as dominant feature",
+        "A-frame stand",
+        "foreign NEMA-style box",
+        "open breakers/live parts in the normal reference asset",
+        "fake KCs or warning labels"
       ],
       "sources": [
-        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&catimage=&eclang=ko&start=10&um=s",
-        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&eclang=ko&start=128&um=s",
-        "https://www.haesoltech.com/category/FRP%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98/1393/",
-        "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/"
-      ],
-      "generated_candidate": {
-        "status": "rejected_for_final_pending_detail_verification",
-        "generation_id": "a9fdd478-5a55-48e8-b736-be45da55846e",
-        "accepted": [
-          "orange FRP enclosure",
-          "closed lockable door",
-          "freestanding steel support",
-          "external power indicator"
-        ],
-        "rejected_or_unresolved": [
-          "blue/red industrial connector geometry not yet matched to locked Korean reference",
-          "top lifting-eye geometry not yet matched to locked Korean reference"
-        ],
-        "action": "retain as composition reference only; do not register as final binary"
-      }
+        "https://www.coupang.com/vp/products/6658623991",
+        "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/",
+        "https://m.intelrior.com/product/%EC%9E%84%EC%8B%9C-%EA%B0%80%EC%84%A4-%EC%9D%B4%EB%8F%99%EC%8B%9D-%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9E%90%EB%A6%BD%ED%98%95-frp-%EB%8B%A8%EC%83%81-%EC%A1%B0%EB%A6%BD%EC%8B%9D-%EA%B1%B4%EC%84%A4-%EA%B3%B5%EC%82%AC-%EC%82%B0%EC%97%85-%EC%9D%B8%ED%85%8C%EB%A6%AC%EC%96%B4-%ED%98%84%EC%9E%A5-%EC%BA%A0%ED%95%91%EC%9E%A5-%EC%95%BC%EC%99%B8-%EB%AF%B8%EB%9E%98%EC%9D%B4%EC%97%94%EC%97%90%ED%94%84/6416/",
+        "https://boxpara.com/category/frp-box/357/"
+      ]
     },
     "temporary_lighting_pack": {
       "status": "function_verified_fixture_shape_site_specific"
