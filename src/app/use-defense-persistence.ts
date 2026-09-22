@@ -41,7 +41,7 @@ export interface DefensePersistenceController {
   startWithSupport(supportId: DefenseSupportId, portrait: boolean): void;
   resumeSavedRun(): void;
   discardSavedRun(): Promise<boolean>;
-  dispatch(command: DefenseCommand): void;
+  dispatch(command: DefenseCommand): DefenseRunState | null;
   retryAfterResult(): void;
   retrySave(): Promise<boolean>;
   reloadAfterConflict(): Promise<void>;
@@ -307,20 +307,17 @@ export function useDefensePersistence(
     return ok;
   }, [entry.kind, saveDocument]);
 
-  const dispatch = useCallback((command: DefenseCommand) => {
+  const dispatch = useCallback((command: DefenseCommand): DefenseRunState | null => {
     const current = stateRef.current;
-    if (!current || conflict) return;
-    try {
-      const next = applyDefenseCommand(current, content, command);
-      stateRef.current = next;
-      setStateInternal(next);
-      if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
-        || command.type === 'SetPaused' || command.type === 'StartWave') {
-        void persistRun(next);
-      }
-    } catch (error) {
-      throw error;
+    if (!current || conflict) return null;
+    const next = applyDefenseCommand(current, content, command);
+    stateRef.current = next;
+    setStateInternal(next);
+    if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
+      || command.type === 'SetPaused' || command.type === 'StartWave') {
+      void persistRun(next);
     }
+    return next;
   }, [conflict, content, persistRun]);
 
   const retryAfterResult = useCallback(() => {
