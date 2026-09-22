@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      PREVIEW_URL: https://psi-zero-day-git-sol-step3-visual-rule-f03d89-tellowss-projects.vercel.app/
+      PREVIEW_URL: https://psi-zero-day-git-sol-step3-visual-rule-f03d89-tellowss-projects.vercel.app/?_vercel_share=dDSwlIJRfev1SMl5RRfTTbXJqllAeklJ
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
