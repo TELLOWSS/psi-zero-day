@@ -114,6 +114,19 @@
     "defense.save.wave": "저장된 웨이브",
     "defense.save.shield": "저장된 보호막",
     "defense.save.rules": "저장 규칙",
-    "defense.save.content": "저장 콘텐츠"
+    "defense.save.content": "저장 콘텐츠",
+    "defense.tutorial.label": "첫 게임 안내",
+    "defense.tutorial.place.title": "1 · 방어 지점을 정하세요",
+    "defense.tutorial.place.body": "빈 패드를 선택하고 역할이 다른 기본 타워 중 하나를 설치하세요. 굽은 길을 오래 볼 수 있는 위치가 유리합니다.",
+    "defense.tutorial.start.title": "2 · 준비되면 시작하세요",
+    "defense.tutorial.start.body": "배치는 전투 중에도 바꿀 수 있지만, 먼저 현재 방어선이 어떻게 작동하는지 확인해 보세요.",
+    "defense.tutorial.upgrade.title": "3 · 한 역할을 강화하세요",
+    "defense.tutorial.upgrade.body": "첫 웨이브를 넘겼습니다. 설치한 타워를 선택해 L2로 강화해 보세요. 이후 L3A와 L3B는 서로 다른 역할을 가집니다.",
+    "defense.tutorial.preview.title": "4 · 다음 위험을 먼저 읽으세요",
+    "defense.tutorial.preview.body": "오른쪽 위 예고에서 다음 위험 종류와 수량을 확인하고, 다음 배치·강화·지원 사용을 결정하세요.",
+    "defense.tutorial.skip": "안내 건너뛰기",
+    "defense.tutorial.finish": "안내 완료",
+    "defense.tutorial.replay": "첫 게임 안내 다시 보기",
+    "defense.tutorial.wait_upgrade": "첫 웨이브 이후 강화 안내가 이어집니다."
   }
 }
