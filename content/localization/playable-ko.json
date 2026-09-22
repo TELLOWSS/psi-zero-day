@@ -91,9 +91,9 @@
     "ui.strategy.zone.overview": "현장 전체",
     "ui.strategy.zone.core": "코어",
     "ui.strategy.text_fallback": "텍스트 선택지 열기",
-    "ui.strategy.loop.target": "2 대상 선택",
-    "ui.strategy.loop.action": "3 조치 선택",
-    "ui.strategy.loop.result": "4 결과 확인",
+    "ui.strategy.loop.target": "1 대상 선택",
+    "ui.strategy.loop.action": "2 조치 선택",
+    "ui.strategy.loop.result": "3 결과 확인",
     "ui.strategy.actor": "담당",
     "ui.strategy.target": "대상",
     "ui.strategy.execute": "조치 실행",
@@ -874,6 +874,10 @@
     "ui.strategy.observe.kicker": "현장 전체",
     "ui.strategy.observe.title": "먼저 현장을 읽습니다",
     "ui.strategy.observe.hint": "사람·차량·자재·동선·위험 신호가 어디에 겹치는지 확인한 뒤 대상을 선택하세요.",
-    "ui.strategy.observe.continue": "대상 선택 시작"
+    "ui.strategy.observe.continue": "대상 선택 시작",
+    "ui.strategy.signal_guided": "이 위험 신호와 같은 위치의 실행 가능한 대응을 연결했습니다.",
+    "ui.strategy.signal_info_only": "이 표시는 정보 신호입니다. 주변 인물이나 작업 구역에서 실행 가능한 대응을 확인하세요.",
+    "ui.strategy.next_situation": "다음 상황 확인",
+    "ui.strategy.executing": "조치 반영 중"
   }
 }
