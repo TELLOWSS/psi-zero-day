@@ -106,8 +106,8 @@ describe('ZERO BREACH deterministic engine', () => {
     const p1 = state.enemies[0]!.progress;
     state = tickDefense(content, state);
     const weakMove = state.enemies[0]!.progress - p1;
-    expect(strongMove).toBeCloseTo(40 * 0.05 * 0.5, 6);
-    expect(weakMove).toBeCloseTo(40 * 0.05 * 0.8, 6);
+    expect(strongMove).toBeCloseTo(65 * 0.05 * 0.5, 6);
+    expect(weakMove).toBeCloseTo(65 * 0.05 * 0.8, 6);
 
     const bossState = running(createDefenseRun(content), {
       globalTick: 1,
