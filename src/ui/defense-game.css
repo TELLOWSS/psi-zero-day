@@ -346,3 +346,43 @@
   .zb-resolve-burst circle,.zb-resolve-burst path{animation:none}
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-resolve-burst{opacity:.7}
 }
+
+
+/* Step 6 — scenario selection and event debrief */
+.zb-scenario-select{grid-template-rows:auto minmax(0,.52fr) minmax(0,1.48fr)}
+.zb-scenario-grid{
+  min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0 18px 18px
+}
+.zb-scenario-card{
+  min-width:0;text-align:left;border:1px solid rgba(185,200,211,.22);border-radius:14px;padding:18px;
+  background:linear-gradient(145deg,rgba(28,42,54,.98),rgba(12,25,34,.98));color:var(--zb-text);
+  display:flex;flex-direction:column;align-items:flex-start;gap:9px;box-shadow:0 14px 34px rgba(0,0,0,.24)
+}
+.zb-scenario-card small{color:var(--zb-muted);font-size:10px;letter-spacing:.09em}
+.zb-scenario-card strong{font-size:20px}
+.zb-scenario-card p{margin:0;color:var(--zb-muted);font-size:12px;line-height:1.55}
+.zb-scenario-card b{margin-top:auto;color:var(--zb-accent);font-size:11px}
+.zb-scenario-card.is-unlocked{cursor:pointer}
+.zb-scenario-card.is-unlocked:hover,.zb-scenario-card.is-unlocked:focus-visible{border-color:rgba(255,173,66,.75);outline:none}
+.zb-scenario-card.is-locked{opacity:.72;cursor:not-allowed}
+.zb-scenario-card.is-locked ul{margin:2px 0 0;padding-left:18px;color:#d9b7b3;font-size:10px;line-height:1.5}
+.zb-event-debrief{
+  margin-top:12px;padding:12px;border:1px solid rgba(255,173,66,.32);border-radius:10px;background:rgba(13,29,39,.72)
+}
+.zb-event-debrief>strong{display:block;color:var(--zb-accent);font-size:13px}
+.zb-event-debrief>p{margin:5px 0 10px;color:var(--zb-text);font-size:11px;line-height:1.5}
+.zb-event-leaks,.zb-event-recommend{padding-top:8px;border-top:1px solid rgba(185,200,211,.16)}
+.zb-event-leaks small,.zb-event-recommend small{display:block;color:var(--zb-muted);font-size:9px;letter-spacing:.06em}
+.zb-event-leaks ul{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:5px}
+.zb-event-leaks li{display:flex;gap:6px;padding:4px 7px;border-radius:6px;background:rgba(185,200,211,.08);font-size:10px}
+.zb-event-leaks p{margin:5px 0 0;color:var(--zb-good);font-size:10px}
+.zb-event-recommend{margin-top:8px}
+.zb-event-recommend strong{display:inline-block;margin-top:5px;margin-right:7px;font-size:11px}
+.zb-event-recommend span{font-size:10px;color:var(--zb-muted)}
+@media (orientation:landscape) and (max-height:650px){
+  .zb-scenario-grid{gap:8px;padding:0 8px 8px}
+  .zb-scenario-card{padding:10px;gap:5px}
+  .zb-scenario-card strong{font-size:14px}
+  .zb-scenario-card p{font-size:9px}
+  .zb-event-debrief{margin-top:6px;padding:7px}
+}

@@ -89,18 +89,39 @@ function allSpawned(state: DefenseRunState, content: DefenseContent): boolean {
 }
 function decrementCooldown(value: number): number { return Math.max(0, value - 1); }
 
+function startWaveState(state: DefenseRunState, content: DefenseContent): DefenseRunState {
+  const wave = content.waves.find(item => item.id === state.waveId);
+  if (!wave) throw new Error('Missing wave');
+  const resetSupport = content.scenario.supportResetWaveIds.includes(state.waveId);
+  return {
+    ...state,
+    status: 'RUNNING',
+    waveTick: 0,
+    intermissionRemaining: 0,
+    spawnedByGroup: wave.groups.map(() => 0),
+    supportCooldownRemaining: resetSupport ? 0 : state.supportCooldownRemaining,
+  };
+}
+
 export function createDefenseRun(content: DefenseContent, supportId: DefenseRunState['supportId'], runId = 'run-unassigned'): DefenseRunState {
   if (!content.scenario.availableSupports.includes(supportId)) throw new Error(`Support unavailable: ${supportId}`);
   const support = content.supports.find(item => item.id === supportId);
   if (!support) throw new Error(`Unknown support: ${supportId}`);
+  const eventMode = content.scenario.eventId !== null;
   return {
-    runId, mode: 'TRAINING', variant: 'STANDARD',
+    runId,
+    mode: eventMode ? 'EVENT' : 'TRAINING',
+    variant: eventMode ? 'EVENT_MODIFIED' : 'STANDARD',
+    scenarioId: content.scenario.id,
+    eventId: content.scenario.eventId,
+    eventContentVersion: content.scenario.eventContentVersion,
     status: 'READY', paused: false, speed: 1, tick: 0, waveId: 1, waveTick: 0,
     intermissionRemaining: 0, shield: content.initialShield, resource: content.initialResource,
     towers: [], enemies: [], spawnedByGroup: content.waves[0]!.groups.map(() => 0),
     nextTowerSequence: 1, nextEnemySequence: 1, supportId,
     supportCooldownRemaining: support.initialCooldownTicks,
     freezeMovementUntilTick: 0, revealAllUntilTick: 0, rangeBonusUntilTick: 0, completedWaves: 0,
+    leakedByEnemy: {},
   };
 }
 
@@ -114,9 +135,7 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
   if (command.type === 'StartWave') {
     if (state.paused) throw new Error('Cannot start while paused');
     if (state.status !== 'READY' && state.status !== 'INTERMISSION') throw new Error('Wave is already running');
-    const wave = content.waves.find(item => item.id === state.waveId);
-    if (!wave) throw new Error('Missing wave');
-    return { ...state, status: 'RUNNING', waveTick: 0, intermissionRemaining: 0, spawnedByGroup: wave.groups.map(() => 0) };
+    return startWaveState(state, content);
   }
   if (command.type === 'UseSupport') {
     if (state.status !== 'RUNNING' || state.paused) throw new Error('Support requires active combat');
@@ -195,16 +214,21 @@ function spawnDue(state: DefenseRunState, content: DefenseContent): DefenseRunSt
 function moveAndLeak(state: DefenseRunState, content: DefenseContent): DefenseRunState {
   const pathLength = defensePathLength(content.map.path);
   let shield = state.shield;
+  const leakedByEnemy: Partial<Record<DefenseEnemyState['enemyId'], number>> = { ...(state.leakedByEnemy ?? {}) };
   const moved: DefenseEnemyState[] = [];
   for (const enemy of state.enemies) {
     const definition = enemyDefinition(content, enemy.enemyId);
     const frozen = state.tick < state.freezeMovementUntilTick;
     const slow = effectiveSlow(enemy, definition, state.tick);
     const distance = frozen ? enemy.distance : enemy.distance + definition.speed * (content.tickMs / 1000) * (1 - slow);
-    if (distance + EPSILON >= pathLength) { shield = Math.max(0, shield - definition.leak); continue; }
+    if (distance + EPSILON >= pathLength) {
+      shield = Math.max(0, shield - definition.leak);
+      leakedByEnemy[enemy.enemyId] = (leakedByEnemy[enemy.enemyId] ?? 0) + 1;
+      continue;
+    }
     moved.push({ ...enemy, distance });
   }
-  return { ...state, shield, enemies: moved };
+  return { ...state, shield, enemies: moved, leakedByEnemy };
 }
 
 function revealEnemies(state: DefenseRunState, content: DefenseContent): DefenseRunState {
@@ -330,7 +354,7 @@ export function tickDefense(state: DefenseRunState, content: DefenseContent): De
   if (state.status === 'INTERMISSION') {
     let next = tickCooldownsOnly(state);
     next = { ...next, tick: next.tick + 1, intermissionRemaining: Math.max(0, next.intermissionRemaining - 1) };
-    if (next.intermissionRemaining === 0) return { ...next, status: 'RUNNING', waveTick: 0 };
+    if (next.intermissionRemaining === 0) return startWaveState(next, content);
     return next;
   }
   let next: DefenseRunState = { ...state, supportCooldownRemaining: decrementCooldown(state.supportCooldownRemaining) };

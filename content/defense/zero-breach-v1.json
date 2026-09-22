@@ -666,6 +666,9 @@
     ],
     "firstClearCosmetic": "profile-frame-first-line",
     "threeStarCosmetic": "badge-no-breach",
-    "mainStoryStatRewards": []
+    "mainStoryStatRewards": [],
+    "supportResetWaveIds": [],
+    "eventId": null,
+    "eventContentVersion": null
   }
 }

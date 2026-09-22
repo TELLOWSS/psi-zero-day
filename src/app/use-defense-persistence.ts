@@ -38,7 +38,7 @@ export interface DefensePersistenceController {
   readonly lastSavedAt: string | null;
   readonly conflict: boolean;
   readonly awardedCosmeticIds: readonly string[];
-  startWithSupport(supportId: DefenseSupportId, portrait: boolean): void;
+  startWithSupport(supportId: DefenseSupportId, portrait: boolean, launchContent?: DefenseContent): void;
   resumeSavedRun(): void;
   discardSavedRun(): Promise<boolean>;
   dispatch(command: DefenseCommand): DefenseRunState | null;
@@ -61,6 +61,7 @@ export function useDefensePersistence(
   content: DefenseContent,
   onExit: () => void,
   providedStorage?: StoragePort,
+  resolveContent: (run: DefenseRunState) => DefenseContent = () => content,
 ): DefensePersistenceController {
   const [entry, setEntry] = useState<DefenseEntryState>({ kind: 'loading' });
   const [state, setStateInternal] = useState<DefenseRunState | null>(null);
@@ -138,11 +139,12 @@ export function useDefensePersistence(
   const settleFinishedRun = useCallback(async (run: DefenseRunState) => {
     if (settledUiRef.current.has(run.runId)) return;
     settledUiRef.current.add(run.runId);
-    const outcome = applyDefenseOutcome(documentRef.current, content, run, defenseResult(run));
+    const runContent = resolveContent(run);
+    const outcome = applyDefenseOutcome(documentRef.current, runContent, run, defenseResult(run));
     replaceDocument(outcome.document);
     setAwardedCosmeticIds(outcome.awardedCosmeticIds);
     await saveDocument(outcome.document);
-  }, [content, replaceDocument, saveDocument]);
+  }, [replaceDocument, resolveContent, saveDocument]);
 
   const hydrate = useCallback(async () => {
     if (!storageRef.current) {
@@ -191,13 +193,24 @@ export function useDefensePersistence(
       setEntry({ kind: 'select' });
       return;
     }
+    try {
+      resolveContent(savedRun);
+    } catch {
+      setEntry({
+        kind: 'version-mismatch',
+        savedAt: inspection.savedAt,
+        savedRulesVersion: content.rulesVersion,
+        savedContentVersion: savedRun.eventContentVersion ?? content.contentVersion,
+      });
+      return;
+    }
     if (finished(savedRun)) {
       await settleFinishedRun(savedRun);
       if (mountedRef.current) setEntry({ kind: 'select' });
       return;
     }
     setEntry({ kind: 'resume', savedAt: inspection.savedAt, run: savedRun });
-  }, [content, replaceDocument, settleFinishedRun]);
+  }, [content, replaceDocument, resolveContent, settleFinishedRun]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -272,9 +285,9 @@ export function useDefensePersistence(
     }
   }, [persistRun, settleFinishedRun, state]);
 
-  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean) => {
-    let run = createDefenseRun(content, supportId, newRunId());
-    if (portrait) run = applyDefenseCommand(run, content, { type: 'SetPaused', paused: true });
+  const startWithSupport = useCallback((supportId: DefenseSupportId, portrait: boolean, launchContent: DefenseContent = content) => {
+    let run = createDefenseRun(launchContent, supportId, newRunId());
+    if (portrait) run = applyDefenseCommand(run, launchContent, { type: 'SetPaused', paused: true });
     stateRef.current = run;
     previousRunRef.current = run;
     setStateInternal(run);
@@ -310,7 +323,8 @@ export function useDefensePersistence(
   const dispatch = useCallback((command: DefenseCommand): DefenseRunState | null => {
     const current = stateRef.current;
     if (!current || conflict) return null;
-    const next = applyDefenseCommand(current, content, command);
+    const runContent = resolveContent(current);
+    const next = applyDefenseCommand(current, runContent, command);
     stateRef.current = next;
     setStateInternal(next);
     if (command.type === 'Build' || command.type === 'Upgrade' || command.type === 'Sell'
@@ -318,7 +332,7 @@ export function useDefensePersistence(
       void persistRun(next);
     }
     return next;
-  }, [conflict, content, persistRun]);
+  }, [conflict, persistRun, resolveContent]);
 
   const retryAfterResult = useCallback(() => {
     stateRef.current = null;
@@ -350,7 +364,8 @@ export function useDefensePersistence(
     try {
       const run = stateRef.current;
       if (run && !finished(run)) {
-        const paused = run.paused ? run : applyDefenseCommand(run, content, { type: 'SetPaused', paused: true });
+        const runContent = resolveContent(run);
+        const paused = run.paused ? run : applyDefenseCommand(run, runContent, { type: 'SetPaused', paused: true });
         stateRef.current = paused;
         setStateInternal(paused);
         if (!await persistRun(paused)) return false;
@@ -365,7 +380,7 @@ export function useDefensePersistence(
     } finally {
       exitingRef.current = false;
     }
-  }, [content, onExit, persistRun, saveDocument, settleFinishedRun]);
+  }, [onExit, persistRun, resolveContent, saveDocument, settleFinishedRun]);
 
   return {
     entry, state, setState, document, saveStatus, saveError, lastSavedAt, conflict, awardedCosmeticIds,

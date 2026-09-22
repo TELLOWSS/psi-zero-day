@@ -76,8 +76,11 @@ export interface DefenseScenarioDefinition {
   readonly availableTowers: readonly DefenseTowerId[];
   readonly availableSupports: readonly DefenseSupportId[];
   readonly firstClearCosmetic: string;
-  readonly threeStarCosmetic: string;
+  readonly threeStarCosmetic: string | null;
   readonly mainStoryStatRewards: readonly string[];
+  readonly supportResetWaveIds: readonly number[];
+  readonly eventId: string | null;
+  readonly eventContentVersion: string | null;
 }
 export interface DefenseContent {
   readonly schemaVersion: 1;
@@ -129,13 +132,16 @@ export interface DefenseTowerState {
   readonly attackCooldown: number;
   readonly revealCooldown: number;
 }
-export type DefenseRunMode = 'TRAINING';
-export type DefenseRunVariant = 'STANDARD';
+export type DefenseRunMode = 'TRAINING' | 'EVENT';
+export type DefenseRunVariant = 'STANDARD' | 'EVENT_MODIFIED';
 
 export interface DefenseRunState {
   readonly runId: string;
   readonly mode: DefenseRunMode;
   readonly variant: DefenseRunVariant;
+  readonly scenarioId: string;
+  readonly eventId: string | null;
+  readonly eventContentVersion: string | null;
   readonly status: DefenseStatus;
   readonly paused: boolean;
   readonly speed: 1 | 2;
@@ -156,6 +162,7 @@ export interface DefenseRunState {
   readonly revealAllUntilTick: number;
   readonly rangeBonusUntilTick: number;
   readonly completedWaves: number;
+  readonly leakedByEnemy: Readonly<Partial<Record<DefenseEnemyId, number>>>;
 }
 
 export type DefenseCommand =

@@ -17,6 +17,12 @@ const nonNegative = (value: unknown): value is number => finite(value) && value 
 const nonEmptyString = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
 const uniqueStrings = (value: unknown): value is readonly string[] =>
   Array.isArray(value) && value.every(nonEmptyString) && new Set(value).size === value.length;
+const validLeakMap = (value: unknown): boolean => {
+  if (value === undefined) return true;
+  if (!record(value)) return false;
+  return Object.entries(value).every(([key, count]) =>
+    ['NORMAL','SWIFT','ARMORED','SWARM','VEILED','BOSS'].includes(key) && nonNegativeInteger(count));
+};
 
 function validSlowEffect(value: unknown): boolean {
   return record(value)
@@ -55,8 +61,11 @@ function validTower(value: unknown): value is DefenseTowerState {
 export function isDefenseRunState(value: unknown): value is DefenseRunState {
   if (!record(value)) return false;
   return nonEmptyString(value.runId)
-    && value.mode === 'TRAINING'
-    && value.variant === 'STANDARD'
+    && (value.mode === 'TRAINING' || value.mode === 'EVENT')
+    && (value.variant === 'STANDARD' || value.variant === 'EVENT_MODIFIED')
+    && (value.scenarioId === undefined || nonEmptyString(value.scenarioId))
+    && (value.eventId === undefined || value.eventId === null || nonEmptyString(value.eventId))
+    && (value.eventContentVersion === undefined || value.eventContentVersion === null || nonEmptyString(value.eventContentVersion))
     && ['READY','RUNNING','INTERMISSION','WON','LOST'].includes(String(value.status))
     && typeof value.paused === 'boolean'
     && (value.speed === 1 || value.speed === 2)
@@ -76,7 +85,8 @@ export function isDefenseRunState(value: unknown): value is DefenseRunState {
     && nonNegativeInteger(value.freezeMovementUntilTick)
     && nonNegativeInteger(value.revealAllUntilTick)
     && nonNegativeInteger(value.rangeBonusUntilTick)
-    && nonNegativeInteger(value.completedWaves);
+    && nonNegativeInteger(value.completedWaves)
+    && validLeakMap(value.leakedByEnemy);
 }
 
 function validRecord(value: unknown): value is DefenseScenarioRecord {
@@ -110,6 +120,29 @@ export function emptyDefenseSaveDocument(): DefenseSaveDocument {
     claimIds: Object.freeze([]),
     settledRunIds: Object.freeze([]),
   });
+}
+
+function normalizeDefenseRunState(run: DefenseRunState): DefenseRunState {
+  const raw = run as DefenseRunState & {
+    readonly scenarioId?: string;
+    readonly eventId?: string | null;
+    readonly eventContentVersion?: string | null;
+    readonly leakedByEnemy?: DefenseRunState['leakedByEnemy'];
+  };
+  return {
+    ...run,
+    scenarioId: raw.scenarioId ?? 'training-ramp-v1',
+    eventId: raw.eventId ?? null,
+    eventContentVersion: raw.eventContentVersion ?? null,
+    leakedByEnemy: raw.leakedByEnemy ?? {},
+  };
+}
+
+function normalizeDefenseSaveDocument(document: DefenseSaveDocument): DefenseSaveDocument {
+  return {
+    ...document,
+    activeRun: document.activeRun ? normalizeDefenseRunState(document.activeRun) : null,
+  };
 }
 
 /** Fast local corruption check only. */
@@ -157,7 +190,8 @@ export function decodeDefenseSave(raw: string): DefenseSaveEnvelope | null {
       || !nonEmptyString(parsed.checksum)
       || !isDefenseSaveDocument(parsed.payload)) return null;
     if (defensePayloadChecksum(parsed.payload) !== parsed.checksum) return null;
-    return parsed as unknown as DefenseSaveEnvelope;
+    const envelope = parsed as unknown as DefenseSaveEnvelope;
+    return { ...envelope, payload: normalizeDefenseSaveDocument(envelope.payload) };
   } catch {
     return null;
   }
@@ -251,7 +285,7 @@ export function applyDefenseOutcome(
       awarded.push(content.scenario.firstClearCosmetic);
     }
   }
-  if (result.won && result.stars === 3) {
+  if (result.won && result.stars === 3 && content.scenario.threeStarCosmetic) {
     const claim = threeStarClaimId(content);
     if (!claimIds.has(claim)) {
       claimIds.add(claim);
