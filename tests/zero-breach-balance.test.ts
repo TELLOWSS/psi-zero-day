@@ -310,8 +310,8 @@ const STRATEGIES: readonly StrategyPlan[] = [
 ];
 
 describe('ZERO BREACH step 4 baseline balance', () => {
-  it('measures three explicit strategies without modifying the starting JSON', () => {
-    expect(content.balanceStatus).toBe('UNTESTED_STARTING_POINT');
+  it('measures three explicit strategies with the unchanged numeric baseline', () => {
+    expect(content.balanceStatus).toBe('STEP4_AUTOMATION_VALIDATED_NO_NUMERIC_TUNING');
 
     const reports = STRATEGIES.map(runStrategy);
     const staticOpening = runStrategy({
