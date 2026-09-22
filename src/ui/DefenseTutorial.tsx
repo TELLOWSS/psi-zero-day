@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { DefenseRunState } from '../domain/defense';
 import { defenseText as t } from '../app/defense-text';
 import { readDefenseTutorialSeen, writeDefenseTutorialSeen } from '../app/defense-tutorial';
@@ -88,28 +88,13 @@ export function DefenseTutorial({
 }) {
   if (!controller.visible) return null;
 
-  const copy = useMemo(() => {
-    if (controller.step === 'PLACE') return {
-      title: t('defense.tutorial.place.title'),
-      body: t('defense.tutorial.place.body'),
-      target: 'placement',
-    };
-    if (controller.step === 'START') return {
-      title: t('defense.tutorial.start.title'),
-      body: t('defense.tutorial.start.body'),
-      target: 'start',
-    };
-    if (controller.step === 'UPGRADE') return {
-      title: t('defense.tutorial.upgrade.title'),
-      body: t('defense.tutorial.upgrade.body'),
-      target: 'upgrade',
-    };
-    return {
-      title: t('defense.tutorial.preview.title'),
-      body: t('defense.tutorial.preview.body'),
-      target: 'preview',
-    };
-  }, [controller.step]);
+  const copy = controller.step === 'PLACE'
+    ? { title: t('defense.tutorial.place.title'), body: t('defense.tutorial.place.body'), target: 'placement' }
+    : controller.step === 'START'
+      ? { title: t('defense.tutorial.start.title'), body: t('defense.tutorial.start.body'), target: 'start' }
+      : controller.step === 'UPGRADE'
+        ? { title: t('defense.tutorial.upgrade.title'), body: t('defense.tutorial.upgrade.body'), target: 'upgrade' }
+        : { title: t('defense.tutorial.preview.title'), body: t('defense.tutorial.preview.body'), target: 'preview' };
 
   return <aside className="zb-tutorial" data-tutorial-step={controller.step} data-target={copy.target} aria-live="polite">
     <small>{t('defense.tutorial.label')}</small>
