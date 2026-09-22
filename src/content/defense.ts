@@ -1,7 +1,8 @@
 import rawContent from '../../content/defense/zero-breach-v1.json';
 import type {
-  DefenseContent, DefenseDamageType, DefenseEnemyDefinition, DefensePad, DefenseSpawnGroup,
-  DefenseSupportDefinition, DefenseTargetMode, DefenseTowerDefinition, DefenseTowerLevel, DefenseWaveDefinition,
+  DefenseContent, DefenseDamageType, DefenseEnemyDefinition, DefenseEnemyId, DefenseLevelId, DefensePad,
+  DefenseSpawnGroup, DefenseSupportDefinition, DefenseSupportId, DefenseTargetMode, DefenseTowerDefinition,
+  DefenseTowerId, DefenseTowerLevelDefinition, DefenseWaveDefinition,
 } from '../domain/defense';
 
 export class DefenseContentError extends Error {
@@ -18,6 +19,14 @@ const integer = (value: unknown): value is number => finite(value) && Number.isI
 const stringValue = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
 const nonNegative = (value: unknown): value is number => finite(value) && value >= 0;
 const positive = (value: unknown): value is number => finite(value) && value > 0;
+const towerIdValue = (value: unknown): value is DefenseTowerId =>
+  value === 'PULSE' || value === 'BURST' || value === 'CONTROL' || value === 'SENSOR';
+const enemyIdValue = (value: unknown): value is DefenseEnemyId =>
+  value === 'NORMAL' || value === 'SWIFT' || value === 'ARMORED' || value === 'SWARM' || value === 'VEILED' || value === 'BOSS';
+const supportIdValue = (value: unknown): value is DefenseSupportId =>
+  value === 'COORDINATOR' || value === 'OBSERVER';
+const levelIdValue = (value: unknown): value is DefenseLevelId =>
+  value === 'L1' || value === 'L2' || value === 'L3A' || value === 'L3B';
 
 function uniqueIds(items: readonly { readonly id: string }[], label: string, issues: string[]) {
   const seen = new Set<string>();
@@ -35,24 +44,24 @@ function distanceToSegment(px: number, py: number, ax: number, ay: number, bx: n
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 }
 
-function parseLevel(value: unknown, path: string, issues: string[]): DefenseTowerLevel | null {
+function parseLevel(value: unknown, path: string, issues: string[]): DefenseTowerLevelDefinition | null {
   if (!record(value)) { issues.push(`${path}: object required`); return null; }
   const damageType = value.damageType;
   const typeOk = damageType === 'PHYSICAL' || damageType === 'PURE';
   const id = value.id;
   const from = value.from;
   const numericKeys = ['cost','damage','intervalTicks','range','splashRadius','maxTargets','slowFraction','slowTicks','revealRadius','revealIntervalTicks','revealTicks'] as const;
-  if (!stringValue(id)) issues.push(`${path}.id: string required`);
-  if (!(from === null || stringValue(from))) issues.push(`${path}.from: string|null required`);
+  if (!levelIdValue(id)) issues.push(`${path}.id: invalid level id`);
+  if (!(from === null || levelIdValue(from))) issues.push(`${path}.from: invalid parent level id`);
   if (!typeOk) issues.push(`${path}.damageType: invalid`);
   for (const key of numericKeys) if (!nonNegative(value[key])) issues.push(`${path}.${key}: finite non-negative number required`);
   if (!positive(value.cost)) issues.push(`${path}.cost: must be > 0`);
   if (!positive(value.intervalTicks) || !integer(value.intervalTicks)) issues.push(`${path}.intervalTicks: positive integer required`);
   if (!positive(value.maxTargets) || !integer(value.maxTargets)) issues.push(`${path}.maxTargets: positive integer required`);
   if (!finite(value.slowFraction) || value.slowFraction < 0 || value.slowFraction >= 1) issues.push(`${path}.slowFraction: must be in [0,1)`);
-  if (!stringValue(id) || !(from === null || stringValue(from)) || !typeOk || numericKeys.some(key => !nonNegative(value[key]))) return null;
+  if (!levelIdValue(id) || !(from === null || levelIdValue(from)) || !typeOk || numericKeys.some(key => !nonNegative(value[key]))) return null;
   return {
-    id, from: from as string | null, cost: value.cost as number, damage: value.damage as number,
+    id, from, cost: value.cost as number, damage: value.damage as number,
     damageType: damageType as DefenseDamageType, intervalTicks: value.intervalTicks as number, range: value.range as number,
     splashRadius: value.splashRadius as number, maxTargets: value.maxTargets as number,
     slowFraction: value.slowFraction as number, slowTicks: value.slowTicks as number,
@@ -70,10 +79,10 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   if (!Array.isArray(input.towers)) issues.push('towers: array required');
   for (const [index, value] of towerInput.entries()) {
     const path = `towers[${index}]`;
-    if (!record(value) || !stringValue(value.id) || !stringValue(value.nameTextId) || !stringValue(value.roleTextId) || !Array.isArray(value.levels)) {
+    if (!record(value) || !towerIdValue(value.id) || !stringValue(value.nameTextId) || !stringValue(value.roleTextId) || !Array.isArray(value.levels)) {
       issues.push(`${path}: invalid tower`); continue;
     }
-    const levels = value.levels.map((level, i) => parseLevel(level, `${path}.levels[${i}]`, issues)).filter((v): v is DefenseTowerLevel => v !== null);
+    const levels = value.levels.map((level, i) => parseLevel(level, `${path}.levels[${i}]`, issues)).filter((v): v is DefenseTowerLevelDefinition => v !== null);
     uniqueIds(levels, `${path}.levels`, issues);
     const byId = new Map(levels.map(level => [level.id, level]));
     const roots = levels.filter(level => level.from === null);
@@ -81,7 +90,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
     for (const level of levels) {
       if (level.from !== null && !byId.has(level.from)) issues.push(`${path}: level ${level.id} references missing parent ${level.from}`);
       const seen = new Set<string>();
-      let cursor: DefenseTowerLevel | undefined = level;
+      let cursor: DefenseTowerLevelDefinition | undefined = level;
       while (cursor?.from) {
         if (seen.has(cursor.id)) { issues.push(`${path}: upgrade cycle at ${cursor.id}`); break; }
         seen.add(cursor.id);
@@ -96,7 +105,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   if (!Array.isArray(input.enemies)) issues.push('enemies: array required');
   for (const [index, value] of enemyInput.entries()) {
     const path = `enemies[${index}]`;
-    if (!record(value) || !stringValue(value.id) || !stringValue(value.nameTextId)
+    if (!record(value) || !enemyIdValue(value.id) || !stringValue(value.nameTextId)
       || !positive(value.hp) || !positive(value.speed) || !nonNegative(value.armor) || value.armor >= 1
       || !nonNegative(value.reward) || !positive(value.leak) || typeof value.hidden !== 'boolean' || typeof value.boss !== 'boolean') {
       issues.push(`${path}: invalid enemy`); continue;
@@ -127,7 +136,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   if (!Array.isArray(input.supports)) issues.push('supports: array required');
   for (const [index, value] of supportInput.entries()) {
     const path = `supports[${index}]`;
-    if (!record(value) || !stringValue(value.id) || !(value.characterBinding === null || stringValue(value.characterBinding))
+    if (!record(value) || !supportIdValue(value.id) || !(value.characterBinding === null || stringValue(value.characterBinding))
       || !stringValue(value.skillTextId)) { issues.push(`${path}: invalid support`); continue; }
     const keys = ['cooldownTicks','initialCooldownTicks','freezeMovementTicks','revealAllTicks','rangeBonus','rangeBonusTicks'] as const;
     if (keys.some(key => !nonNegative(value[key]))) { issues.push(`${path}: invalid support numeric value`); continue; }
@@ -147,7 +156,7 @@ export function validateDefenseContent(input: unknown): DefenseContent {
     if (!record(value) || !integer(value.id) || !Array.isArray(value.groups)) { issues.push(`${path}: invalid wave`); continue; }
     const groups: DefenseSpawnGroup[] = [];
     for (const [groupIndex, group] of value.groups.entries()) {
-      if (!record(group) || !stringValue(group.enemy) || !positive(group.count) || !integer(group.count)
+      if (!record(group) || !enemyIdValue(group.enemy) || !positive(group.count) || !integer(group.count)
         || !nonNegative(group.startTick) || !integer(group.startTick) || !positive(group.intervalTicks) || !integer(group.intervalTicks)) {
         issues.push(`${path}.groups[${groupIndex}]: invalid spawn group`); continue;
       }
@@ -193,8 +202,8 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   const targetModes = Array.isArray(input.targetModes) ? input.targetModes.filter((v): v is DefenseTargetMode => v === 'FIRST' || v === 'STRONG') : [];
   const speeds = Array.isArray(input.speeds) ? input.speeds.filter((v): v is number => v === 1 || v === 2) : [];
   const scenario = record(input.scenario) ? input.scenario : {};
-  const availableTowers = Array.isArray(scenario.availableTowers) ? scenario.availableTowers.filter(stringValue) : [];
-  const availableSupports = Array.isArray(scenario.availableSupports) ? scenario.availableSupports.filter(stringValue) : [];
+  const availableTowers = Array.isArray(scenario.availableTowers) ? scenario.availableTowers.filter(towerIdValue) : [];
+  const availableSupports = Array.isArray(scenario.availableSupports) ? scenario.availableSupports.filter(supportIdValue) : [];
   if (availableTowers.some(id => !towerIds.has(id))) issues.push('scenario: missing tower reference');
   if (availableSupports.some(id => !supportIds.has(id))) issues.push('scenario: missing support reference');
   if (scenario.mapId !== map.id) issues.push('scenario.mapId: missing map reference');
