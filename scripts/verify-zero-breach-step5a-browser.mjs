@@ -242,6 +242,7 @@ try {
   await waitFor(cdp, "Boolean(document.querySelector('g[data-production-tower-art=\"PULSE:L1\"] image'))");
   await clickText(cdp, '웨이브 시작');
   await waitFor(cdp, "Boolean(document.querySelector('image[data-production-enemy-art=\"NORMAL\"]'))", 10000);
+  await waitFor(cdp, "(window.__zbAudioCues || []).includes('attack')", 10000);
 
   let snap = await visualSnapshot(cdp);
   report.captures.push({ id: 'desktop-1280x720', ...snap });
