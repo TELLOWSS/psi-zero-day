@@ -1,0 +1,2046 @@
+{
+  "schema_version": 1,
+  "legal_basis_id": "field-guide-kr-legal-basis-v1",
+  "jurisdiction": "KR",
+  "reviewed_on": "2026-09-23",
+  "source_authority": "국가법령정보센터",
+  "status": "production_baseline",
+  "policy": {
+    "direct": "해당 도감 항목의 형상·방호·작업상태에 직접 적용되는 조문",
+    "related": "작업 조건에 따라 함께 확인해야 하는 관련 조문",
+    "general": "모든 항목에 공통되는 위험성평가 의무",
+    "site_specific": "현장 작업계획·구조검토·제조사 기준 등으로 확인할 값이며 법정 일률값으로 표현하지 않음"
+  },
+  "law_versions": [
+    {
+      "law": "산업안전보건법",
+      "effective_date": "2026-08-01",
+      "promulgation": "법률 제21374호, 2026-02-19 일부개정"
+    },
+    {
+      "law": "산업안전보건기준에 관한 규칙",
+      "effective_date": "2026-03-02",
+      "promulgation": "고용노동부령 제450호, 2025-09-01 일부개정"
+    }
+  ],
+  "profiles": {
+    "risk_assessment": {
+      "law": "산업안전보건법",
+      "articles": [
+        "제36조"
+      ],
+      "effective_date": "2026-08-01",
+      "summary_text_id": "ui.guide.legal.profile.risk_assessment"
+    },
+    "safety_signs": {
+      "law": "산업안전보건법",
+      "articles": [
+        "제37조"
+      ],
+      "effective_date": "2026-08-01",
+      "summary_text_id": "ui.guide.legal.profile.safety_signs"
+    },
+    "work_stop": {
+      "law": "산업안전보건법",
+      "articles": [
+        "제51조",
+        "제52조"
+      ],
+      "effective_date": "2026-08-01",
+      "summary_text_id": "ui.guide.legal.profile.work_stop"
+    },
+    "msds": {
+      "law": "산업안전보건법",
+      "articles": [
+        "제114조"
+      ],
+      "effective_date": "2026-08-01",
+      "summary_text_id": "ui.guide.legal.profile.msds"
+    },
+    "guardrail": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제13조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.guardrail"
+    },
+    "passage_lighting": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제21조",
+        "제22조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.passage_lighting"
+    },
+    "ppe": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제31조",
+        "제32조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.ppe"
+    },
+    "housekeeping": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제3조",
+        "제4조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.housekeeping"
+    },
+    "weather": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제37조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.weather"
+    },
+    "work_plan": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제38조",
+        "제39조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.work_plan"
+    },
+    "fall_opening": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제42조",
+        "제43조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.fall_opening"
+    },
+    "scaffold": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제55조",
+        "제56조",
+        "제58조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.scaffold"
+    },
+    "workhorse": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제67조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.workhorse"
+    },
+    "mobile_scaffold": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제68조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.mobile_scaffold"
+    },
+    "grinder": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제122조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.grinder"
+    },
+    "lifting_gear": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제163조",
+        "제166조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.lifting_gear"
+    },
+    "vehicle": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제171조",
+        "제172조",
+        "제173조",
+        "제179조",
+        "제180조",
+        "제183조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.vehicle"
+    },
+    "aerial_platform": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제186조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.aerial_platform"
+    },
+    "temporary_electric": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제303조",
+        "제304조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.temporary_electric"
+    },
+    "formwork_shoring": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제328조",
+        "제329조",
+        "제330조",
+        "제331조",
+        "제331조의2",
+        "제332조",
+        "제336조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.formwork_shoring"
+    },
+    "gangform": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제331조의3"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.gangform"
+    },
+    "concrete_placing": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제335조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.concrete_placing"
+    },
+    "dust": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제4조의2",
+        "제617조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.dust"
+    },
+    "confined_space": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제619조",
+        "제619조의2",
+        "제620조",
+        "제621조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.confined_space"
+    },
+    "fire": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제244조",
+        "제245조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.fire"
+    }
+  },
+  "items": {
+    "material_stack": {
+      "field_guide_id": "FG107",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "access_barrier": {
+      "field_guide_id": "FG108",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "vehicle_overlap_zone": {
+      "field_guide_id": "FG109",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "vehicle",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "harness_unclipped": {
+      "field_guide_id": "FG061",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "ppe",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "platform_cut_edge": {
+      "field_guide_id": "FG117",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "suspended_load": {
+      "field_guide_id": "FG110",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ],
+      "site_specific": {
+        "text_id": "ui.guide.legal.site.suspended_load",
+        "rule": "Sling hitch method and WLL depend on manufacturer markings, load geometry and the work plan."
+      }
+    },
+    "gangform_lift_wire22": {
+      "field_guide_id": "FG069",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ],
+      "site_specific": {
+        "text_id": "ui.guide.legal.site.gangform_wire",
+        "rule": "Ø22 mm is a project/site operating detail, not represented as a universal statutory diameter."
+      }
+    },
+    "exclusion_zone": {
+      "field_guide_id": "FG073",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "wet_floor": {
+      "field_guide_id": "FG023",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "related"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "related"
+        }
+      ]
+    },
+    "open_edge": {
+      "field_guide_id": "FG118",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "site_gate": {
+      "field_guide_id": "FG001",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "pedestrian_gate": {
+      "field_guide_id": "FG002",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "vehicle_pedestrian_separation": {
+      "field_guide_id": "FG003",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        },
+        {
+          "profile": "vehicle",
+          "applicability": "direct"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "material_yard": {
+      "field_guide_id": "FG004",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "temporary_distribution_board": {
+      "field_guide_id": "FG005",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "temporary_electric",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "temporary_lighting_pack": {
+      "field_guide_id": "FG006",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "ppe_issue_station": {
+      "field_guide_id": "FG007",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "ppe",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "fire_extinguisher_station": {
+      "field_guide_id": "FG008",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fire",
+          "applicability": "related"
+        }
+      ]
+    },
+    "first_aid_aed": {
+      "field_guide_id": "FG009",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "site_weather_station": {
+      "field_guide_id": "FG010",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "weather",
+          "applicability": "direct"
+        }
+      ],
+      "site_specific": {
+        "text_id": "ui.guide.legal.site.wind",
+        "rule": "Do not reuse tower-crane wind-speed thresholds as a universal gangform/lifting limit."
+      }
+    },
+    "foundation_blinding_edge": {
+      "field_guide_id": "FG011",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "foundation_rebar_mat": {
+      "field_guide_id": "FG012",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "rebar_chair_support": {
+      "field_guide_id": "FG013",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "starter_rebar_protrusion": {
+      "field_guide_id": "FG014",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "rebar_lifting_bundle": {
+      "field_guide_id": "FG015",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "ev_pit_opening": {
+      "field_guide_id": "FG016",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "ev_pit_access_route": {
+      "field_guide_id": "FG017",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "foundation_temporary_walkway": {
+      "field_guide_id": "FG018",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "pump_outrigger": {
+      "field_guide_id": "FG019",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "concrete_placing",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        },
+        {
+          "profile": "vehicle",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "pump_hose_route": {
+      "field_guide_id": "FG020",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "concrete_placing",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "concrete_vibrator_cable": {
+      "field_guide_id": "FG021",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "temporary_electric",
+          "applicability": "direct"
+        },
+        {
+          "profile": "concrete_placing",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "foundation_sump_pump": {
+      "field_guide_id": "FG022",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "related"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "related"
+        }
+      ]
+    },
+    "euroform_wall_panel": {
+      "field_guide_id": "FG024",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "formwork_tie": {
+      "field_guide_id": "FG025",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "formwork_brace": {
+      "field_guide_id": "FG026",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "formwork_work_platform": {
+      "field_guide_id": "FG027",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "system_shoring_jackbase": {
+      "field_guide_id": "FG028",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "system_shoring_standard": {
+      "field_guide_id": "FG029",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "system_shoring_ledger": {
+      "field_guide_id": "FG030",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "system_shoring_missing_brace": {
+      "field_guide_id": "FG031",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "uhead_beam_alignment": {
+      "field_guide_id": "FG032",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "slab_formwork_edge": {
+      "field_guide_id": "FG033",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "slab_opening_cover": {
+      "field_guide_id": "FG034",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "temporary_stair": {
+      "field_guide_id": "FG035",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "shoring_deformation_watch": {
+      "field_guide_id": "FG036",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "concrete_pour_zone": {
+      "field_guide_id": "FG037",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "concrete_placing",
+          "applicability": "direct"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "dismantle_drop_zone": {
+      "field_guide_id": "FG038",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "dismantled_formwork_stack": {
+      "field_guide_id": "FG039",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "confined_space_meter": {
+      "field_guide_id": "FG040",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "confined_space",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "ventilation_fan_duct": {
+      "field_guide_id": "FG041",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "confined_space",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "confined_space_attendant": {
+      "field_guide_id": "FG042",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "confined_space",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "temporary_electric_wet": {
+      "field_guide_id": "FG043",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "temporary_electric",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "transfer_floor_high_ceiling": {
+      "field_guide_id": "FG044",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "mobile_work_platform": {
+      "field_guide_id": "FG045",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "aerial_platform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "system_scaffold_transition": {
+      "field_guide_id": "FG046",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "scaffold",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "transfer_floor_opening": {
+      "field_guide_id": "FG047",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "mixed_formwork_interface": {
+      "field_guide_id": "FG048",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "temporary_support_transfer": {
+      "field_guide_id": "FG049",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "material_lift_opening_transfer": {
+      "field_guide_id": "FG050",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "temporary_route_reroute": {
+      "field_guide_id": "FG051",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_panel": {
+      "field_guide_id": "FG052",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_pin_wedge": {
+      "field_guide_id": "FG053",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_pin_flying": {
+      "field_guide_id": "FG054",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        },
+        {
+          "profile": "ppe",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_support": {
+      "field_guide_id": "FG055",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_deck_support": {
+      "field_guide_id": "FG056",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "formwork_shoring",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "lifting_box": {
+      "field_guide_id": "FG057",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "material_lift_opening": {
+      "field_guide_id": "FG058",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "pump_pipe_opening": {
+      "field_guide_id": "FG059",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "perimeter_open_edge": {
+      "field_guide_id": "FG060",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "embedded_box_trip": {
+      "field_guide_id": "FG062",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "alform_panel_stack": {
+      "field_guide_id": "FG063",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "housekeeping_typical_floor": {
+      "field_guide_id": "FG064",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_panel": {
+      "field_guide_id": "FG065",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_platform": {
+      "field_guide_id": "FG066",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_anchor_bolt": {
+      "field_guide_id": "FG067",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_shackle": {
+      "field_guide_id": "FG068",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "gangform_turnbuckle_wire": {
+      "field_guide_id": "FG070",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_tagline": {
+      "field_guide_id": "FG071",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "gangform_platform_debris": {
+      "field_guide_id": "FG072",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "wind_meter": {
+      "field_guide_id": "FG074",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "weather",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ],
+      "site_specific": {
+        "text_id": "ui.guide.legal.site.wind",
+        "rule": "Do not reuse tower-crane wind-speed thresholds as a universal gangform/lifting limit."
+      }
+    },
+    "gangform_lift_interference": {
+      "field_guide_id": "FG075",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "gangform_landing_fix": {
+      "field_guide_id": "FG076",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "gangform_signal_radio": {
+      "field_guide_id": "FG077",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "flying_metal_eye": {
+      "field_guide_id": "FG078",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "ppe",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "floor_change_edge": {
+      "field_guide_id": "FG079",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "partial_gangform_dismantle": {
+      "field_guide_id": "FG080",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "changed_lifting_point": {
+      "field_guide_id": "FG081",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "lifting_gear",
+          "applicability": "direct"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "irregular_platform_gap": {
+      "field_guide_id": "FG082",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "temporary_lifeline": {
+      "field_guide_id": "FG083",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "roof_open_edge": {
+      "field_guide_id": "FG084",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "penthouse_access": {
+      "field_guide_id": "FG085",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "related"
+        }
+      ]
+    },
+    "roof_wind_exposure": {
+      "field_guide_id": "FG086",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "weather",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "final_gangform_dismantle": {
+      "field_guide_id": "FG087",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "gangform",
+          "applicability": "direct"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        }
+      ]
+    },
+    "roof_housekeeping": {
+      "field_guide_id": "FG088",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "surface_finishing_tools": {
+      "field_guide_id": "FG089",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "dust",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "chipping_breaker": {
+      "field_guide_id": "FG090",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "dust",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "grinder_guard_switch": {
+      "field_guide_id": "FG091",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "dust",
+          "applicability": "direct"
+        },
+        {
+          "profile": "grinder",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "mortar_mixer": {
+      "field_guide_id": "FG092",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "workhorse_platform": {
+      "field_guide_id": "FG093",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "workhorse",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "mobile_scaffold": {
+      "field_guide_id": "FG094",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "mobile_scaffold",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "dust_control": {
+      "field_guide_id": "FG095",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "dust",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "eye_face_ppe": {
+      "field_guide_id": "FG096",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "ppe",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "dismantled_guardrail": {
+      "field_guide_id": "FG097",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "direct"
+        },
+        {
+          "profile": "guardrail",
+          "applicability": "related"
+        }
+      ]
+    },
+    "dismantle_debris_route": {
+      "field_guide_id": "FG098",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "waste_sorting_zone": {
+      "field_guide_id": "FG099",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "forklift_blind_spot": {
+      "field_guide_id": "FG100",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        },
+        {
+          "profile": "vehicle",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "traffic_control_pack": {
+      "field_guide_id": "FG101",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "vehicle",
+          "applicability": "direct"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "chemical_msds_station": {
+      "field_guide_id": "FG102",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "msds",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "extension_ladder": {
+      "field_guide_id": "FG103",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "related"
+        },
+        {
+          "profile": "fall_opening",
+          "applicability": "related"
+        }
+      ]
+    },
+    "temporary_facility_removal": {
+      "field_guide_id": "FG104",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "temporary_power_removal": {
+      "field_guide_id": "FG105",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "temporary_electric",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "final_route_clearance": {
+      "field_guide_id": "FG106",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "passage_lighting",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "radio_pack": {
+      "field_guide_id": "FG111",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "inspection_kit": {
+      "field_guide_id": "FG112",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        }
+      ]
+    },
+    "stop_work_marker": {
+      "field_guide_id": "FG113",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        },
+        {
+          "profile": "work_stop",
+          "applicability": "direct"
+        }
+      ]
+    },
+    "tbm_board": {
+      "field_guide_id": "FG114",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "permit_board": {
+      "field_guide_id": "FG115",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "work_plan",
+          "applicability": "related"
+        },
+        {
+          "profile": "safety_signs",
+          "applicability": "related"
+        }
+      ]
+    },
+    "near_miss_marker": {
+      "field_guide_id": "FG116",
+      "bases": [
+        {
+          "profile": "risk_assessment",
+          "applicability": "general"
+        },
+        {
+          "profile": "housekeeping",
+          "applicability": "direct"
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import catalog from '../../content/episode01/scene-element-catalog.json';
+import legalBasis from '../../content/episode01/field-guide-legal-basis.json';
 import { VisualImage } from './VisualSlot';
 import { FieldGuideArt } from './FieldGuideArt';
 import './field-guide.css';
@@ -20,6 +21,24 @@ type CatalogEntry = {
   visual_token?: string;
   field_guide?: GuideMeta;
 };
+
+type LegalApplicability = 'direct' | 'related' | 'general';
+
+type LegalProfile = {
+  law: string;
+  articles: string[];
+  effective_date: string;
+  summary_text_id: string;
+};
+
+type LegalItem = {
+  field_guide_id: string;
+  bases: Array<{ profile: string; applicability: LegalApplicability }>;
+  site_specific?: { text_id: string; rule: string };
+};
+
+const legalProfiles = legalBasis.profiles as Record<string, LegalProfile>;
+const legalItems = legalBasis.items as Record<string, LegalItem>;
 
 const rawEntries = Object.entries(catalog.elements) as [string, CatalogEntry][];
 
@@ -68,6 +87,7 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
   const [key, entry] = entries.find(([id]) => id === activeVisible) ?? entries[0]!;
   const title = session.t(`ui.guide.${key}.title`);
   const meta = entry.field_guide;
+  const legal = legalItems[key];
 
   return <div className="field-guide">
     <header>
@@ -117,6 +137,28 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
         <h2>{title}</h2>
         <h3>{session.t('ui.guide.observe')}</h3>
         <p>{session.t(`ui.guide.${key}.body`)}</p>
+        {legal ? <section className="field-guide-legal" aria-label={session.t('ui.guide.legal.title')}>
+          <div className="field-guide-legal-heading">
+            <h3>{session.t('ui.guide.legal.title')}</h3>
+            <small>{session.t('ui.guide.legal.reviewed')} {legalBasis.reviewed_on}</small>
+          </div>
+          <div className="field-guide-legal-list">
+            {legal.bases.filter(({ applicability }) => applicability !== 'general').slice(0, 4).map(({ profile, applicability }) => {
+              const basis = legalProfiles[profile];
+              if (!basis) return null;
+              return <div className="field-guide-legal-item" key={profile}>
+                <span className={`field-guide-legal-level ${applicability}`}>{session.t(`ui.guide.legal.level.${applicability}`)}</span>
+                <strong>{basis.law} {basis.articles.join(' · ')}</strong>
+                <p>{session.t(basis.summary_text_id)}</p>
+              </div>;
+            })}
+          </div>
+          {legal.site_specific ? <div className="field-guide-site-check">
+            <strong>{session.t('ui.guide.legal.level.site_specific')}</strong>
+            <p>{session.t(legal.site_specific.text_id)}</p>
+          </div> : null}
+          <small className="field-guide-legal-note">{session.t('ui.guide.legal.notice')}</small>
+        </section> : null}
         <small>{session.t('ui.guide.note')}</small>
       </div>
     </article>
