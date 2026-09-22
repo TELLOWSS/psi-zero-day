@@ -365,10 +365,10 @@
 @media(max-width:680px){.strategy-overview-minimap{display:none}.strategy-map-stage-card{right:2%;width:18%}}
 
 
-/* Phase D Strategy 4-step interaction lock */
+/* Stage 2 Strategy 3-step interaction lock */
 .strategy-loop-stage-strip{
   position:absolute;z-index:34;top:10.2%;left:22%;right:2%;
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;pointer-events:none
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;pointer-events:none
 }
 .strategy-loop-stage-strip span{
   min-width:0;padding:7px 8px;border:1px solid rgba(174,205,214,.18);border-radius:999px;
