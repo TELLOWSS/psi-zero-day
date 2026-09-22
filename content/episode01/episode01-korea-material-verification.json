@@ -147,7 +147,11 @@
       "classification": "runtime_route_overlay",
       "status": "verified_no_physical_prop_render",
       "verified": "This is a conflict relationship between vehicle and pedestrian routes, not a standalone piece of equipment.",
-      "render_contract": "Render as map/scene overlay geometry only; do not image-generate a fictional physical object."
+      "render_contract": "Render as map/scene overlay geometry only; do not image-generate a fictional physical object.",
+      "official_basis": "KOSHA guidance requires separating construction-equipment routes from worker passages or controlling access/using a signal person where collision risk exists.",
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132"
+      ]
     },
     "exclusion_zone": {
       "classification": "site_control_composition",
@@ -176,18 +180,59 @@
   },
   "field_guide_section0": {
     "vehicle_pedestrian_separation": {
-      "status": "research_verified_function_shape_pending_site_reference"
+      "status": "functional_geometry_locked_product_family_pending_site_style",
+      "classification": "separation system / site layout, not one universal product",
+      "verified": "Korean safety rules require safe worker passages, and where the primary entrance is for material-handling equipment an adjacent pedestrian entrance is required. KOSHA guidance calls for worker passage separated from equipment travel routes.",
+      "render_contract": "Use a real Korean site combination such as separated pedestrian lane + PE barrier/fence + lane markings; exact barrier family must be locked from a Korean product/site reference before final art.",
+      "sources": [
+        "https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1028543731",
+        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063279",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=118&um=s"
+      ]
     },
     "material_yard": {
       "status": "research_verified_function_exact_material_layout_pending"
     },
     "temporary_distribution_board": {
-      "status": "approved_visual_family",
-      "approved_visual_family": "FRP temporary distribution board commonly used on Korean construction sites; lockable enclosure, protected live parts, grounding/RCD management.",
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Korean construction temporary electrical distribution board",
+      "approved_visual_family": "orange FRP temporary distribution board on a black steel stand, lockable closed front door, external weather-protected outlet connectors, external energized indicator; brand-neutral",
+      "official_evidence": [
+        "KOSHA temporary electrical work guide identifies steel, FRP and plastic temporary distribution boards and states FRP boards are mainly used for temporary electrical work at most construction sites because of workability and durability.",
+        "KOSHA distribution-board management guidance requires a robust structure, locking device, externally visible energized indicator, external outlet/connection arrangement so the door need not be opened for normal power takeoff, and RCD protection for 220/380V outlets."
+      ],
+      "korean_product_crosscheck": [
+        {
+          "source": "해솔테크",
+          "evidence": "FRP temporary distribution boxes currently listed in multiple sizes from 300x300x95 through 1150x1400x300 and made-to-order FRP temporary boards."
+        },
+        {
+          "source": "국내 가설분전반 판매제품 시각자료",
+          "evidence": "Orange FRP enclosure on black freestanding steel support with side-mounted protected outlets is a currently sold Korean product configuration."
+        }
+      ],
+      "render_contract": {
+        "door_state": "closed and visibly lockable for normal/safe reference",
+        "enclosure": "orange FRP, rounded molded edges, weather-resistant appearance",
+        "support": "black steel freestanding frame/base",
+        "outlets": "weather-protected external connectors on enclosure sides; no loose exposed live conductors",
+        "indicator": "small exterior energized/power indicator allowed",
+        "branding": "no manufacturer logo, no invented certification label, no unreadable pseudo-Korean text",
+        "background": "transparent",
+        "camera": "three-quarter front view; enough side visibility to read external outlet arrangement"
+      },
       "reject": [
-        "generic exposed metal breaker panel",
-        "open live busbar hero image",
-        "foreign NEMA-style site box without Korean reference"
+        "generic gray steel NEMA cabinet as the default Korean site reference",
+        "open front door or exposed breakers/busbars presented as normal operating state",
+        "wall-mounted household consumer unit",
+        "foreign plug/receptacle geometry without Korean product evidence",
+        "decorative labels or fake KCs marks"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&catimage=&eclang=ko&start=10&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&eclang=ko&start=128&um=s",
+        "https://www.haesoltech.com/category/FRP%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98/1393/",
+        "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/"
       ]
     },
     "temporary_lighting_pack": {
@@ -209,8 +254,8 @@
   "next_render_order": [
     "temporary_distribution_board",
     "access_barrier",
-    "material_stack",
-    "site_gate"
+    "site_gate",
+    "material_stack"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
