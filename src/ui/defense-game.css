@@ -10,7 +10,7 @@
 }
 .zb-shell button{font:inherit}
 .zb-hud{
-  display:grid;grid-template-columns:minmax(180px,1.5fr) repeat(3,minmax(100px,.7fr)) minmax(110px,.7fr) 82px 96px 120px;
+  display:grid;grid-template-columns:minmax(180px,1.5fr) repeat(3,minmax(100px,.7fr)) minmax(110px,.7fr) 82px 100px 120px;
   gap:6px;align-items:stretch;padding:6px 10px;border-bottom:1px solid rgba(185,200,211,.2);
   background:rgba(12,24,33,.96);z-index:20
 }
@@ -158,7 +158,7 @@
 }
 @media (orientation:landscape) and (max-height:650px){
   .zb-shell{min-height:100dvh;grid-template-rows:54px minmax(0,1fr) 94px}
-  .zb-hud{padding:4px 6px;grid-template-columns:minmax(150px,1.3fr) repeat(3,minmax(78px,.6fr)) minmax(88px,.65fr) 70px 84px 96px}
+  .zb-hud{padding:4px 6px;grid-template-columns:minmax(150px,1.3fr) repeat(3,minmax(78px,.6fr)) minmax(88px,.65fr) 70px 98px 96px}
   .zb-brand strong{font-size:12px}.zb-meter strong{font-size:12px}.zb-meter span,.zb-status span{font-size:8px}
   .zb-stage{padding:6px}.zb-wave-preview{width:160px;padding:7px}.zb-wave-preview li{font-size:8px}
   .zb-command{padding:5px 6px 6px;grid-template-columns:minmax(0,1fr) minmax(300px,36%)}
@@ -168,7 +168,7 @@
   .zb-pad-hit{width:44px;height:44px}
 }
 @media (max-width:900px) and (orientation:landscape){
-  .zb-hud{grid-template-columns:150px repeat(3,78px) 90px 64px 76px 84px}
+  .zb-hud{grid-template-columns:150px repeat(3,78px) 90px 64px 98px 84px}
   .zb-brand small{display:none}.zb-exit{font-size:9px}
   .zb-command{grid-template-columns:minmax(0,1fr) 280px}.zb-tower-shop{grid-template-columns:repeat(2,minmax(0,1fr))}
   .zb-tower-shop button:nth-child(n+3){display:none}
