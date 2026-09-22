@@ -124,5 +124,10 @@ describe('Stage 3 representative visual lock', () => {
     expect(css).toContain('.strategy-shell[data-visual-lock="stage3-strategy"] .strategy-map-worker');
     expect(css).toContain('transform: translate(-50%, -92%) !important');
     expect(css).toContain('.strategy-shell[data-visual-lock="stage3-strategy"] .strategy-worker-art');
+    expect(css).toContain('bottom: 35% !important');
+    expect(css).toContain('bottom: 23% !important');
+    expect(css).toContain('.tbm-briefing-board');
+    expect(css).toContain('article[data-resource="money"]');
+    expect(css).toContain('.strategy-worker-label strong > em');
   });
 });
