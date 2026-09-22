@@ -5,7 +5,7 @@ import {
   defenseContentForScenario, defenseEvents, resolveDefenseContentForRun, validateDefenseEvents,
 } from '../src/content/defense-events';
 import { zeroBreachContent } from '../src/content/defense';
-import type { DefenseContent, DefenseRunState } from '../src/domain/defense';
+import type { DefenseRunState } from '../src/domain/defense';
 import type { DefenseEventDefinition } from '../src/domain/defense-event';
 import type { DefenseSaveDocument } from '../src/domain/defense-save';
 import type { GameState } from '../src/domain/state';
