@@ -318,7 +318,7 @@ function attackWithTowers(content: DefenseContent, state: DefenseRunState): Defe
           if (!hitIds.has(enemy.instanceId) || enemy.hp <= 0) return enemy;
           const enemyDef = enemyDefinition(content, enemy.definitionId);
           const nextHp = Math.max(0, enemy.hp - damageAmount(level.damage, level.damageType, currentArmor(state, enemy, enemyDef)));
-          const slowFraction = enemyDef.boss ? level.slowFraction * 0.5 : level.slowFraction;
+          const slowFraction = level.slowFraction;
           const effects = slowFraction > 0 && nextHp > 0
             ? [...enemy.slowEffects.filter(effect => effect.sourceId !== tower.instanceId),
               { sourceId: tower.instanceId, fraction: slowFraction, endTick: state.globalTick + level.slowTicks }]
