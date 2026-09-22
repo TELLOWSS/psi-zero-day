@@ -26,6 +26,7 @@ import '../ui/responsive-layout.css';
 import '../ui/story-director.css';
 import '../ui/emergency-ux-fix.css';
 import '../ui/production-scenes.css';
+import '../ui/phase-d-screenshot-polish.css';
 
 const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
