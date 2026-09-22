@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "visualVersion": "zero-breach-visual-expansion-0.2.0",
-  "status": "EXPANSION_CANDIDATE",
+  "visualVersion": "zero-breach-production-lock-1.0.0",
+  "status": "PRODUCTION_LOCKED",
   "artDirection": {
     "cameraElevationDeg": 70,
     "projection": "NEAR_ORTHOGRAPHIC",
@@ -73,7 +73,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Base coil plus side capacitor."
     },
     {
@@ -89,7 +89,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Three short coils for the fast branch."
     },
     {
@@ -105,7 +105,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Long single prism for the pure-damage branch."
     },
     {
@@ -121,7 +121,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Wide dish emitter."
     },
     {
@@ -137,7 +137,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Dish plus reinforced outriggers."
     },
     {
@@ -153,7 +153,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Three large emission rings."
     },
     {
@@ -169,7 +169,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Small core inside a thick containment wall."
     },
     {
@@ -185,7 +185,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Open arch field generator."
     },
     {
@@ -201,7 +201,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Arch plus stabilizer feet."
     },
     {
@@ -217,7 +217,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Tall narrow arch."
     },
     {
@@ -233,7 +233,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Low wide triangular supports."
     },
     {
@@ -249,7 +249,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Observation mast with scan ring."
     },
     {
@@ -265,7 +265,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Mast plus auxiliary lens."
     },
     {
@@ -281,7 +281,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Wide double scan rings."
     },
     {
@@ -297,7 +297,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Long narrow observation lens."
     },
     {
@@ -312,7 +312,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Forward twin-wedge silhouette with tail fragments."
     },
     {
@@ -327,7 +327,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Layered hex plates communicate physical resistance."
     },
     {
@@ -342,7 +342,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Cluster of irregular crystal shards."
     },
     {
@@ -357,7 +357,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Broken ring and hollow core remain visible before reveal."
     },
     {
@@ -372,7 +372,7 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "EXPANSION_CANDIDATE",
+      "status": "PRODUCTION_LOCKED",
       "notes": "Large triple-ring chain-risk core with central fracture."
     }
   ]

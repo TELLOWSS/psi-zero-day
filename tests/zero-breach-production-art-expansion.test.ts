@@ -11,7 +11,7 @@ function readAsset(uri: string): string {
   return fs.readFileSync(path.resolve('public', uri), 'utf8');
 }
 
-describe('ZERO BREACH step 5B visual expansion', () => {
+describe('ZERO BREACH step 5 production lock', () => {
   it('covers all 16 tower states and all 6 risk silhouettes without fallback gaps', () => {
     const towerUris = TOWERS.flatMap(tower => LEVELS.map(level => defenseTowerArtUri(tower, level)));
     const enemyUris = ENEMIES.map(enemy => defenseEnemyArtUri(enemy));
@@ -79,7 +79,7 @@ describe('ZERO BREACH step 5B visual expansion', () => {
     expect(new Set(enemySource).size).toBe(6);
   });
 
-  it('preserves the locked board/PULSE L1/NORMAL baseline inside the expansion candidate', () => {
+  it('preserves the original three baseline anchors and locks every expansion asset', () => {
     const locked = defenseVisualProduction.assets
       .filter(asset => asset.status === 'BASELINE_LOCKED')
       .map(asset => asset.assetId);
@@ -89,6 +89,11 @@ describe('ZERO BREACH step 5B visual expansion', () => {
       'defense.tower.PULSE.L1',
       'defense.enemy.NORMAL',
     ]);
-    expect(defenseVisualProduction.status).toBe('EXPANSION_CANDIDATE');
+    const productionLocked = defenseVisualProduction.assets.filter(asset => asset.status === 'PRODUCTION_LOCKED');
+    expect(productionLocked).toHaveLength(20);
+    expect(defenseVisualProduction.assets.some(asset => asset.status === 'EXPANSION_CANDIDATE')).toBe(false);
+    expect(defenseVisualProduction.assets).toHaveLength(23);
+    expect(defenseVisualProduction.status).toBe('PRODUCTION_LOCKED');
+    expect(defenseVisualProduction.visualVersion).toBe('zero-breach-production-lock-1.0.0');
   });
 });
