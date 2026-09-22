@@ -470,7 +470,48 @@
       }
     },
     "temporary_lighting_pack": {
-      "status": "function_verified_fixture_shape_site_specific"
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "portable corded LED work-light family used as temporary supplemental lighting",
+      "legal_function": [
+        "산업안전보건기준에 관한 규칙 제21조 requires at least 75 lux on worker passages unless the stated exception applies.",
+        "KOSHA guidance repeats the need for 75 lux or more on dark/night work passages."
+      ],
+      "korean_product_crosscheck": [
+        {
+          "family": "쏠라젠 SWL-250 Cable",
+          "evidence": "AC 220V direct-wired/corded LED work light sold domestically; black body, clear rectangular LED lens, metal hanging hook, red handle switch, corded plug."
+        },
+        {
+          "family": "코리아전기조명 KE-16",
+          "evidence": "220V 50–60Hz corded LED work light sold domestically; black handle/body, clear rectangular LED lens, hanging hook, long cord."
+        }
+      ],
+      "render_contract": {
+        "subject": "one brand-neutral Korean-market corded LED work light",
+        "body": "compact black rectangular LED lamp body with clear multi-LED front lens",
+        "handle": "black ribbed handle with small red on/off switch",
+        "hook": "single metal hanging hook at lamp end",
+        "cable": "long black 220V power cable coiled loosely beside the unit; standard Korean-style two-pin plug",
+        "branding": "none",
+        "text": "none",
+        "background": "transparent",
+        "camera": "three-quarter product view from slightly above",
+        "condition": "working site tool with light scratches; no severe damage",
+        "compliance_note": "The visual represents a product family only; actual lighting design must still achieve required illuminance and safe cable routing."
+      },
+      "reject": [
+        "decorative household bulb string",
+        "tripod floodlight presented as the only Korean temporary-lighting form",
+        "battery camping lantern as the default",
+        "foreign plug geometry",
+        "loose cable crossing a walkway in the normal reference image"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=633&callmode=normal&catimage=&eclang=ko&start=16&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=120&um=s",
+        "https://sunledkorea.co.kr/category/led%EC%9E%91%EC%97%85%EB%93%B1/54/",
+        "https://www.toolnshop.kr/view/?goods=16585"
+      ]
     },
     "ppe_issue_station": {
       "status": "site_specific_no_universal_product_shape"
@@ -486,10 +527,10 @@
     }
   },
   "next_render_order": [
-    "vehicle_pedestrian_separation",
-    "site_weather_station",
     "temporary_lighting_pack",
-    "fire_extinguisher_station"
+    "site_weather_station",
+    "fire_extinguisher_station",
+    "first_aid_aed"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
