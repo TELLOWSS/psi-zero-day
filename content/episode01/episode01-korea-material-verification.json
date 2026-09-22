@@ -470,42 +470,64 @@
       }
     },
     "temporary_lighting_pack": {
-      "status": "site_reference_required_before_render",
-      "classification": "current-site LED line-bar temporary lighting system",
-      "source_of_truth": "user current-site observation: LED 라인바 is the temporary lighting actually used on site",
-      "supersedes": "portable corded handheld LED work-light family",
+      "status": "site_photo_locked_candidate_review",
+      "classification": "installed LED line-bar temporary-lighting scene fragment",
+      "source_of_truth": {
+        "priority": 1,
+        "type": "user_current_site_photos",
+        "references": [
+          "KakaoTalk_20260723_142037826_03.jpg",
+          "KakaoTalk_20260723_142037826_04.jpg"
+        ],
+        "observed": [
+          "underground/basement RC construction environment",
+          "dense system-shoring/scaffold grid",
+          "bright white linear LED lighting running horizontally through the shoring zone",
+          "multiple light segments visually forming a continuous illuminated line",
+          "lighting positioned along temporary-work members rather than as a handheld lamp",
+          "black power lead/cable visible at some transitions",
+          "wet concrete floor and low-light work environment"
+        ]
+      },
       "legal_function": [
-        "산업안전보건기준에 관한 규칙 제21조의 통로 조도 기준을 충족하도록 설치·유지하는 기능이 핵심이다.",
-        "제품 형상 자체보다 실제 설치 위치, 연속성, 배선·접속부 보호, 통행 방해 여부와 조도 확보를 함께 본다."
+        "산업안전보건기준에 관한 규칙 제21조의 통로 조도 기준 충족 여부는 별도 조도계획/측정으로 판단한다.",
+        "도감 자산은 현재 현장의 실제 설치형상과 전선·고정 상태를 보여주되, 이미지 자체가 법적 조도충족을 의미하지 않는다."
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_wrong_site_family",
-        "generation_id": "ad045af5-080f-44de-b983-358a372036fb",
-        "reason": "Portable handheld corded work-light geometry does not match the user's current construction site, which uses LED line-bar temporary lighting."
-      },
-      "current_site_contract": {
-        "product_family": "LED line-bar / continuous linear temporary work lighting",
-        "geometry_status": "unresolved_until_current_site_photo_or_exact_product_reference",
-        "installation_context": [
-          "corridor/passage, slab soffit, wall, scaffold/shoring line or similar continuous route",
-          "multiple linear light units or continuous luminous line arranged to remove dark zones"
+        "status": "approved_candidate_pending_detail_refinement",
+        "generation_id": "bd5c0faf-048f-444c-bfb9-9e683acc9463",
+        "accepted": [
+          "system-shoring context matches user photos",
+          "white horizontal linear lighting matches the installed-light concept",
+          "wet basement RC context is consistent",
+          "lighting is attached to temporary-work members rather than shown as a handheld tool"
         ],
-        "must_verify_before_render": [
-          "rigid bar vs flexible strip/rope form",
-          "individual bar length",
-          "housing/cover cross-section and color",
-          "AC direct vs low-voltage/SMPS power method",
-          "connector and cable geometry",
-          "mounting method: tie, clip, hook, bracket, cable support, or other",
-          "spacing/continuity used on this site",
-          "water/dust protection where relevant"
-        ],
-        "visual_rule": "Do not invent a generic decorative LED bar. Final art must reproduce the user's current-site hardware and installation method."
+        "limitations": [
+          "generated asset reads as one long rigid luminous tube; user photos suggest repeated/connected line-bar segments forming a continuous run",
+          "tie/clip and power-cable transitions are simplified and not yet copied from the actual site",
+          "final crop should emphasize the LED line-bar and its mounting relationship more than the full shoring assembly"
+        ]
       },
-      "research_note": "Web references confirm continuous LED lighting is used in unfinished construction corridors and scaffold/work routes, but they do not establish the user's exact Korean site product geometry.",
-      "sources": [
-        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063297"
-      ]
+      "final_render_contract": {
+        "asset_type": "installed scene fragment, not isolated product",
+        "lighting": "multiple slim white LED line-bar segments aligned into a continuous horizontal run",
+        "mounting": "mounted/tied along the horizontal member line in the system-shoring zone; exact tie/clip geometry follows site photo",
+        "cable": "black power cable and joint transitions visible only where supported by the photos",
+        "structure": "actual system-shoring density and galvanized members preserved",
+        "environment": "unfinished basement RC, concrete column/slab, subdued ambient light, locally wet floor allowed",
+        "people": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent outside the scene fragment",
+        "reject": [
+          "handheld work light",
+          "tripod floodlight",
+          "decorative LED strip floating in space",
+          "one impossible infinitely long rigid lamp",
+          "lighting attached to invented members not visible in the site reference"
+        ]
+      },
+      "web_crosscheck_note": "Domestic market searches show several products called LED line/bar, but naming is inconsistent and product geometry varies; therefore user site photos override generic product search for the Episode 01 final."
     },
     "ppe_issue_station": {
       "status": "site_specific_no_universal_product_shape"
