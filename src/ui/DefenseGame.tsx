@@ -3,6 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
+import { defenseBoardArtUri, defenseEnemyArtUri, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
 import type {
@@ -19,6 +20,7 @@ import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 const content = zeroBreachContent;
 const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
 const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
+const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -46,7 +48,27 @@ function wavePreview(state: DefenseRunState) {
 function TowerGlyph({ tower }: { tower: DefenseTowerState }) {
   const level = towerLevel(tower);
   const firing = tower.attackCooldown === level.intervalTicks;
-  return <g className={`zb-tower zb-tower-${tower.towerId.toLowerCase()}${firing ? ' is-firing' : ''}`}>
+  const artUri = defenseTowerArtUri(tower.towerId, tower.levelId);
+  if (artUri) {
+    return <g
+      className={`zb-tower zb-tower-production${firing ? ' is-firing' : ''}`}
+      data-production-tower-art={`${tower.towerId}:${tower.levelId}`}
+    >
+      <image
+        href={artUri}
+        x="-64"
+        y="-98"
+        width="128"
+        height="128"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-tower-production-image"
+      />
+    </g>;
+  }
+  return <g
+    className={`zb-tower zb-tower-${tower.towerId.toLowerCase()}${firing ? ' is-firing' : ''}`}
+    data-art-state="prototype"
+  >
     <circle r="25" className="zb-tower-base" />
     {tower.towerId === 'PULSE' ? <>
       <circle r="14" className="zb-tower-core" />
@@ -75,23 +97,33 @@ function EnemyGlyph({ enemy, state }: { enemy: DefenseRunState['enemies'][number
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
   const hidden = definition.hidden && enemy.revealUntilTick <= state.tick && state.revealAllUntilTick <= state.tick;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
+  const artUri = defenseEnemyArtUri(enemy.enemyId);
   return <g
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}`}
     data-enemy={enemy.enemyId}
   >
-    {enemy.enemyId === 'SWIFT' ? <polygon points="-16,-9 18,0 -16,9 -7,0" /> :
-      enemy.enemyId === 'ARMORED' ? <polygon points="-16,-14 8,-18 20,0 8,18 -16,14 -22,0" /> :
-      enemy.enemyId === 'SWARM' ? <polygon points="-13,-4 -5,-14 4,-8 13,-13 16,-2 8,7 12,16 0,12 -9,18 -11,7 -20,3" /> :
+    {artUri ? <image
+      href={artUri}
+      x="-30"
+      y="-39"
+      width="60"
+      height="60"
+      preserveAspectRatio="xMidYMid meet"
+      className="zb-enemy-production-image"
+      data-production-enemy-art={enemy.enemyId}
+    /> : enemy.enemyId === 'SWIFT' ? <polygon points="-16,-9 18,0 -16,9 -7,0" data-art-state="prototype" /> :
+      enemy.enemyId === 'ARMORED' ? <polygon points="-16,-14 8,-18 20,0 8,18 -16,14 -22,0" data-art-state="prototype" /> :
+      enemy.enemyId === 'SWARM' ? <polygon points="-13,-4 -5,-14 4,-8 13,-13 16,-2 8,7 12,16 0,12 -9,18 -11,7 -20,3" data-art-state="prototype" /> :
       enemy.enemyId === 'VEILED' ? <>
-        <circle r="17" className="zb-enemy-hollow" />
+        <circle r="17" className="zb-enemy-hollow" data-art-state="prototype" />
         <path d="M-13 0h7M6 0h7" className="zb-enemy-cut" />
       </> :
       enemy.enemyId === 'BOSS' ? <>
-        <circle r="28" />
+        <circle r="28" data-art-state="prototype" />
         <circle r="20" className="zb-boss-ring" />
         <circle r="10" className="zb-boss-core" />
-      </> : <circle r="16" />}
+      </> : <circle r="16" data-art-state="prototype" />}
     <rect x="-22" y="-31" width="44" height="5" rx="2.5" className="zb-hp-track" />
     <rect x="-22" y="-31" width={44 * hpRatio} height="5" rx="2.5" className="zb-hp-fill" />
   </g>;
@@ -264,7 +296,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource}>
+  return <main className="zb-shell" data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -309,7 +341,16 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
             </pattern>
           </defs>
           <rect width="1000" height="600" rx="22" className="zb-board-bg" />
-          <rect width="1000" height="600" rx="22" fill="url(#zb-grid)" />
+          {BOARD_ART_URI ? <image
+            href={BOARD_ART_URI}
+            x="0"
+            y="0"
+            width="1000"
+            height="600"
+            preserveAspectRatio="none"
+            className="zb-board-production-art"
+            data-production-board-art={content.map.id}
+          /> : <rect width="1000" height="600" rx="22" fill="url(#zb-grid)" />}
           <polyline
             points={content.map.path.map(point => point.join(',')).join(' ')}
             className="zb-path-shadow"
@@ -388,7 +429,9 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
                 disabled={disabled}
                 onClick={() => dispatch({ type: 'Build', padId: selectedPad.id, towerId })}
               >
-                <span className={`zb-shop-glyph zb-shop-${towerId.toLowerCase()}`} aria-hidden="true" />
+                {defenseTowerArtUri(towerId, 'L1')
+                  ? <img src={defenseTowerArtUri(towerId, 'L1') ?? undefined} className="zb-shop-production-art" alt="" aria-hidden="true" />
+                  : <span className={`zb-shop-glyph zb-shop-${towerId.toLowerCase()}`} aria-hidden="true" data-art-state="prototype" />}
                 <span><strong>{t(`defense.tower.${towerId}.name`)}</strong><small>{t(`defense.tower.${towerId}.role`)}</small></span>
                 <b>R {level.cost}</b>
               </button>;
