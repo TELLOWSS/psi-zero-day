@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
-import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForTarget } from '../app/strategy-actions';
+import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForMapTarget, strategyActionsForTarget } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
@@ -85,17 +85,21 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
-  const [observed, setObserved] = useState(false);
   const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
   useEffect(() => {
     setFocusId(null);
     setActionFocusId(null);
-    setObserved(false);
   }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);
   const effectiveActions = projectSupportAssistedActions(actions, activeSupportItemIds);
-  const selectedActions = strategyActionsForTarget(effectiveActions, focusId);
+  const actionsForMapTarget = (targetKey: string | null) =>
+    strategyActionsForMapTarget(effectiveActions, targetKey, view.signals, view.placements);
+  const directSelectedActions = strategyActionsForTarget(effectiveActions, focusId);
+  const selectedActions = actionsForMapTarget(focusId);
+  const selectedSignal = view.signals.find(signal => signal.signal_id === focusId);
+  const guidedSignal = selectedSignal !== undefined && directSelectedActions.length === 0 && selectedActions.length > 0;
+  const informationOnlySignal = selectedSignal !== undefined && directSelectedActions.length === 0 && selectedActions.length === 0;
   const roster = view.roster.slice(0, 5);
   const progress = Math.max(0, Math.min(100, view.construction.current_stage_progress));
   const focusedSignal = view.signals.find(signal => signal.signal_id === effectiveFocusId);
@@ -108,8 +112,14 @@ export function StrategyMapShell({
     : focusedPerson ? formatCharacterIdentity(focusedPerson) : focusedPlacement?.character_id ?? anchorTitle ?? (effectiveFocusId === 'site' ? copy.site : null);
   const focusDetail = focusedPlacement
     ? ''
-    : focusedSignal ? copy.events : focusedAnchor ? text('ui.strategy.zone_hint') : effectiveFocusId === 'site' ? copy.actionHint : '';
-  const hasActionsFor = (targetKey: string): boolean => strategyActionsForTarget(effectiveActions, targetKey).length > 0;
+    : focusedSignal
+      ? focusedSignal.signal_id === focusId && guidedSignal
+        ? text('ui.strategy.signal_guided')
+        : focusedSignal.signal_id === focusId && informationOnlySignal
+          ? text('ui.strategy.signal_info_only')
+          : copy.events
+      : focusedAnchor ? text('ui.strategy.zone_hint') : effectiveFocusId === 'site' ? copy.actionHint : '';
+  const hasActionsFor = (targetKey: string): boolean => actionsForMapTarget(targetKey).length > 0;
   const actionTargetLabel = (action: StrategyAction): string => {
     if (action.target.kind === 'character') return formatCharacterIdentity(person(action.target.character_id)) || action.target.character_id;
     if (action.target.kind === 'signal') {
@@ -142,7 +152,7 @@ export function StrategyMapShell({
   const timeValue = view.resources.display_time ?? text(`ui.slot.${view.resources.time_slot.toLowerCase()}`);
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
   const playerMapAnchor = view.placements.find(placement => placement.character_id === 'player')?.anchor ?? 'overview';
-  const loopPhase = outcome ? 'result' : !observed ? 'observe' : focusId ? 'action' : 'target';
+  const loopPhase = outcome ? 'result' : focusId ? 'action' : 'target';
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
@@ -169,21 +179,14 @@ export function StrategyMapShell({
     </header>
 
     <nav className="strategy-loop-stage-strip" aria-label={text('ui.strategy.loop.label')}>
-      {(['observe','target','action','result'] as const).map((stage,index) => {
-        const order = { observe:0, target:1, action:2, result:3 } as const;
+      {(['target','action','result'] as const).map((stage,index) => {
+        const order = { target:0, action:1, result:2 } as const;
         const current = order[loopPhase];
         return <span key={stage} className={index === current ? 'is-active' : index < current ? 'is-done' : ''}>
           {text(`ui.strategy.loop.${stage}`)}
         </span>;
       })}
     </nav>
-
-    {!observed && !outcome ? <section className="strategy-observe-card" aria-live="polite">
-      <span>{text('ui.strategy.observe.kicker')}</span>
-      <strong>{text('ui.strategy.observe.title')}</strong>
-      <p>{text('ui.strategy.observe.hint')}</p>
-      <button type="button" onClick={() => setObserved(true)}>{text('ui.strategy.observe.continue')} <b aria-hidden="true">↗</b></button>
-    </section> : null}
 
     <aside className="strategy-rail" aria-label={copy.objectives}>
       <StrategyPsiSixPanel psi={view.psi} text={text} />
@@ -210,7 +213,7 @@ export function StrategyMapShell({
       </section>
 
       <button type="button" className={hasActionsFor('site') ? 'has-actions' : ''} onClick={() => setFocusId('site')}>
-        <span aria-hidden="true">⌖</span>{copy.site}{hasActionsFor('site') ? <b>{strategyActionsForTarget(effectiveActions, 'site').length}</b> : null}
+        <span aria-hidden="true">⌖</span>{copy.site}{hasActionsFor('site') ? <b>{actionsForMapTarget('site').length}</b> : null}
       </button>
       <button type="button"><span aria-hidden="true">⚠</span>{copy.events}<b>{view.signals.length}</b></button>
       <button type="button"><span aria-hidden="true">▦</span>{copy.assignments}<b>{view.assignments.length}</b></button>
@@ -282,11 +285,14 @@ export function StrategyMapShell({
             className={`strategy-zone-target zone-${zone}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-production-anchor={zone}
             style={productionMapStyle(zone, 'zone')}
-            onClick={() => setFocusId(key)}
+            onClick={() => {
+              const anchorKey = `anchor:${placement.anchor}`;
+              setFocusId(hasActionsFor(key) ? key : hasActionsFor(anchorKey) ? anchorKey : key);
+            }}
           ><span className="strategy-zone-copy">
             <strong>{text(`ui.strategy.zone.${zone}`)}</strong>
             <small>배치 {zoneSummary[zone].workers} · 위험 {zoneSummary[zone].signals}</small>
-          </span>{hasActionsFor(key) ? <b>{strategyActionsForTarget(effectiveActions, key).length}</b> : null}</button>;
+          </span>{hasActionsFor(key) ? <b>{actionsForMapTarget(key).length}</b> : null}</button>;
         })}
       </div>
 
@@ -329,7 +335,7 @@ export function StrategyMapShell({
             data-character={placement.character_id}
             data-art-surface="map"
             data-scene-participant={placement.scene_participant ? 'true' : 'false'}
-            data-action-count={strategyActionsForTarget(effectiveActions, key).length}
+            data-action-count={actionsForMapTarget(key).length}
             data-production-anchor={placement.anchor}
             data-visual={visual?.map_uri ? 'asset' : 'css'}
             key={placement.character_id}
@@ -354,7 +360,7 @@ export function StrategyMapShell({
           return <button
             className={`strategy-risk-signal signal-${signal.anchor} signal-${signal.kind}${effectiveFocusId === key ? ' is-focused' : ''}${hasActionsFor(key) ? ' has-actions' : ''}`}
             data-signal={signal.signal_id}
-            data-action-count={strategyActionsForTarget(effectiveActions, key).length}
+            data-action-count={actionsForMapTarget(key).length}
             data-production-anchor={signal.anchor}
             key={signal.signal_id}
             type="button"
@@ -369,7 +375,7 @@ export function StrategyMapShell({
 
     </section>
 
-    {observed || outcome ? <StrategyLoopPanel
+    {effectiveActions.length || outcome ? <StrategyLoopPanel
       actions={effectiveActions}
       selectedActions={selectedActions}
       focusId={focusId}
@@ -382,6 +388,8 @@ export function StrategyMapShell({
       onOutcomeContinue={onOutcomeContinue}
       onOutcomeReconsider={onOutcomeReconsider}
       onActionFocus={setActionFocusId}
+      guidanceText={guidedSignal ? text('ui.strategy.signal_guided') : undefined}
+      emptyText={informationOnlySignal ? text('ui.strategy.signal_info_only') : undefined}
     /> : null}
 
     <footer className="strategy-roster" aria-label={copy.roster}>
