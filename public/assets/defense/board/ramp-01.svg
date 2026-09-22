@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1200" viewBox="0 0 2000 1200" role="img" aria-label="ZERO BREACH ramp tactical board production candidate">
+  <defs>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#344650"/><stop offset=".58" stop-color="#2d3c45"/><stop offset="1" stop-color="#18232c"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#77858d"/><stop offset=".48" stop-color="#626f77"/><stop offset="1" stop-color="#4f5d66"/>
+    </linearGradient>
+    <radialGradient id="light" cx=".12" cy=".08" r=".9">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".18"/><stop offset=".58" stop-color="#d9edf6" stop-opacity=".04"/><stop offset="1" stop-color="#000000" stop-opacity=".2"/>
+    </radialGradient>
+    <pattern id="slab" width="160" height="120" patternUnits="userSpaceOnUse">
+      <rect x="2" y="2" width="156" height="116" rx="12" fill="#354750" stroke="#8ca0aa" stroke-opacity=".13" stroke-width="2"/>
+      <circle cx="28" cy="25" r="2" fill="#d8e5ea" opacity=".13"/><circle cx="112" cy="82" r="2" fill="#0a1116" opacity=".16"/>
+      <circle cx="72" cy="54" r="1.6" fill="#e6eef1" opacity=".1"/><circle cx="145" cy="34" r="1.4" fill="#101820" opacity=".15"/>
+    </pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="softShadow" x="-40%" y="-40%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="2000" height="1200" fill="url(#floor)"/>
+  <rect width="2000" height="1200" fill="url(#slab)" opacity=".92"/>
+  <path d="M0 0H520L450 180L0 260Z" fill="#75634f" opacity=".68"/>
+  <path d="M0 960L460 870L700 1200H0Z" fill="#655746" opacity=".66"/>
+  <path d="M1580 0H2000V340L1760 300Z" fill="#615b50" opacity=".52"/>
+
+  <!-- Low contrast construction props, all outside the tactical route -->
+  <g opacity=".68">
+    <path d="M108 98h250v96H108z" fill="#596c76"/><path d="M358 98l24 24v96l-24-24z" fill="#31434d"/><path d="M108 194h250l24 24H132z" fill="#3b4c56"/>
+    <g stroke="#dbe6ea" stroke-opacity=".12" stroke-width="3">
+      <path d="M136 106v78M170 106v78M204 106v78M238 106v78M272 106v78M306 106v78"/>
+    </g>
+    <g fill="none" stroke="#758790" stroke-width="7" stroke-linecap="round">
+      <path d="M1180 88l220 40M1198 96l220 40M1216 88l220 40M1234 96l220 40M1252 88l220 40M1270 96l220 40"/>
+    </g>
+    <g>
+      <path d="M1478 878h95v54h-95z" fill="#756a57"/><path d="M1573 878l15 15v54l-15-15z" fill="#4e463b"/><path d="M1478 932h95l15 15h-95z" fill="#5f5547"/>
+      <path d="M1608 948h95v54h-95z" fill="#756a57"/><path d="M1703 948l15 15v54l-15-15z" fill="#4e463b"/><path d="M1608 1002h95l15 15h-95z" fill="#5f5547"/>
+      <path d="M1738 878h95v54h-95z" fill="#756a57"/><path d="M1833 878l15 15v54l-15-15z" fill="#4e463b"/><path d="M1738 932h95l15 15h-95z" fill="#5f5547"/>
+    </g>
+  </g>
+
+  <!-- JSON route x2. Shadow is intentionally down-right. -->
+  <polyline points="20,624 380,624 380,324 920,324 920,924 1460,924 1460,504 2020,504"
+    fill="none" stroke="#050a0e" stroke-opacity=".65" stroke-width="108" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)"/>
+  <polyline points="0,600 360,600 360,300 900,300 900,900 1440,900 1440,480 2000,480"
+    fill="none" stroke="#43515a" stroke-width="104" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="0,600 360,600 360,300 900,300 900,900 1440,900 1440,480 2000,480"
+    fill="none" stroke="url(#road)" stroke-width="82" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="0,600 360,600 360,300 900,300 900,900 1440,900 1440,480 2000,480"
+    fill="none" stroke="#d9e4e8" stroke-opacity=".32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Mounting plinths at exact JSON pad coordinates x2; no labels baked into art. -->
+  <g fill="#364b57" stroke="#c7d5db" stroke-opacity=".42" stroke-width="3">
+    <g transform="translate(240 440)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(520 440)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(720 140)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(740 680)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(1060 480)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(1200 740)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(1280 1060)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+    <g transform="translate(1600 640)"><ellipse cx="16" cy="18" rx="56" ry="54" fill="#071018" opacity=".45" stroke="none"/><circle r="58"/><circle r="43" fill="#425b68" stroke-opacity=".25"/></g>
+  </g>
+
+  <g fill="#ffad42" opacity=".55">
+    <path d="M25 588l22 12-22 12 8-12z"/><path d="M55 588l22 12-22 12 8-12z"/><path d="M85 588l22 12-22 12 8-12z"/>
+    <path d="M1875 468l22 12-22 12 8-12z"/><path d="M1905 468l22 12-22 12 8-12z"/><path d="M1935 468l22 12-22 12 8-12z"/>
+  </g>
+
+  <rect width="2000" height="1200" fill="url(#light)"/>
+</svg>
