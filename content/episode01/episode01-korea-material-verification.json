@@ -198,17 +198,25 @@
       },
       "official_basis": "KOSHA reinforced-concrete/formwork guidance lists plywood, timber, Euroform and shoring materials as incoming formwork materials and requires stable storage so materials do not collapse; dismantled formwork materials should be orderly and balanced.",
       "render_contract": {
-        "object": "one compact bundle of same-size used Euroform panels",
-        "orientation": "horizontal stack",
-        "support": "two timber sleepers/dunnage under the stack",
-        "securing": "two visible straps around the bundle",
-        "edges": "steel frame edges and panel faces clearly identifiable as Euroform",
+        "object": "one compact bundle of same-size used Korean Euroform 6012 panels",
+        "panel_geometry": "600×1200 class, F-type perimeter/profile, cross-bars dividing the 1200 mm length into four approximately 300 mm bays, standardized side wedge-pin/tie holes",
+        "orientation": "horizontal stack with panel backs/edges readable",
+        "support": "two timber sleepers/dunnage under the bundle",
+        "securing": "two plain steel/PP bands; no large ratchet buckles",
+        "face": "dark coated plywood with realistic wear and light concrete residue",
+        "frame": "yellow/orange steel frame, used but structurally intact",
         "loose_items": "none",
         "text": "none",
         "branding": "none",
         "background": "transparent",
-        "camera": "three-quarter front, slightly above so stacked panel edges and top face are readable",
-        "condition": "field-used, mildly dirty/concrete-stained, structurally intact"
+        "camera": "three-quarter front, slightly above",
+        "reject": [
+          "custom oversized panel proportions",
+          "generic container-like steel panel",
+          "large ratchet hardware",
+          "mixed panel sizes",
+          "invented giant round holes"
+        ]
       },
       "reject": [
         "mixed rebar, pipe, lumber and formwork in one decorative pile",
@@ -221,7 +229,23 @@
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=24&um=s",
         "https://sgsystem.tistory.com/395",
         "https://www.shinan1.com/"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_regeneration_required",
+        "generation_id": "4f8dcedc-9897-4262-b9cf-a9555563cb4f",
+        "accepted": [
+          "used yellow/orange steel Euroform family",
+          "horizontal same-spec stack",
+          "two timber sleepers",
+          "no mixed materials"
+        ],
+        "rejected_or_unresolved": [
+          "top/back reinforcement geometry is too generic and does not sufficiently lock to Korean 6012 Euroform F-frame/cross-bar structure",
+          "large ratchet mechanisms are visually over-specified versus common bundled Euroform storage/shipping references",
+          "pin/tie-hole geometry is exaggerated and not clearly consistent with the 150 mm standardized spacing reference"
+        ],
+        "action": "Regenerate from Korean 6012 geometry: 600x1200 class, F-type frame, four 300 mm bays/cross bars, 150 mm wedge-pin/tie-hole spacing, simple two-band securing, no oversized ratchet hardware."
+      }
     },
     "access_barrier": {
       "classification": "physical_site_control",
