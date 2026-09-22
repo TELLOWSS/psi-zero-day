@@ -39,6 +39,17 @@ function enemyName(id: DefenseEnemyId) {
   return t(`defense.enemy.${id}.name`);
 }
 
+function recommendedTowerForLeaks(leaks: DefenseRunState['leakedByEnemy']): DefenseTowerId {
+  const entries = (Object.entries(leaks) as [DefenseEnemyId, number][])
+    .filter(([, count]) => count > 0)
+    .sort((a, b) => b[1] - a[1]);
+  const enemy = entries[0]?.[0] ?? 'VEILED';
+  if (enemy === 'VEILED') return 'SENSOR';
+  if (enemy === 'SWARM') return 'BURST';
+  if (enemy === 'SWIFT') return 'CONTROL';
+  return 'PULSE';
+}
+
 function wavePreview(content: DefenseContent, state: DefenseRunState) {
   const waveId = state.status === 'RUNNING'
     ? Math.min(content.waves.length, state.waveId + 1)
@@ -210,6 +221,16 @@ export function DefenseGame({
   const supportPortrait = supportCharacterId ? characterPortraitUri(supportCharacterId, id => session.assetUri(id)) : undefined;
   const preview = state ? wavePreview(content, state) : null;
   const result = state && (state.status === 'WON' || state.status === 'LOST') ? defenseResult(state) : null;
+  const activeEvent = state?.eventId ? defenseEventById(state.eventId) : undefined;
+  const leakedEntries = state
+    ? (Object.entries(state.leakedByEnemy) as [DefenseEnemyId, number][]).filter(([, count]) => count > 0)
+    : [];
+  const recommendedTowerId = state ? recommendedTowerForLeaks(state.leakedByEnemy) : 'SENSOR';
+  const eventDebriefTextId = activeEvent && result
+    ? result.won
+      ? result.stars === 3 ? activeEvent.debriefTextIds.perfect : activeEvent.debriefTextIds.win
+      : activeEvent.debriefTextIds.lose
+    : null;
 
   useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
@@ -318,7 +339,7 @@ export function DefenseGame({
   if (!state && !selectedScenarioAllowed) return <main className="zb-shell zb-prep zb-scenario-select" data-defense-screen="scenario-select">
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.scenario.title')}</h1></div>
-      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
+      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t(activeEvent ? 'defense.event.return' : 'defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
       <h2>{t('defense.scenario.title')}</h2>
@@ -365,7 +386,7 @@ export function DefenseGame({
     </section>
   </main>;
 
-  const selectedLevel = selectedTower ? towerLevel(selectedTower) : null;
+  const selectedLevel = selectedTower ? towerLevel(content, selectedTower) : null;
   const upgrades = selectedTower
     ? towerDefinition(content, selectedTower.towerId).levels.filter(level => level.from === selectedTower.levelId)
     : [];
@@ -601,10 +622,27 @@ export function DefenseGame({
           <div><dt>{t('defense.ui.completed')}</dt><dd>{result.completedWaves} / 10</dd></div>
           <div><dt>{t('defense.ui.shield')}</dt><dd>{result.shield}</dd></div>
         </dl>
+        {activeEvent && eventDebriefTextId ? <section className="zb-event-debrief" data-event-debrief={activeEvent.id}>
+          <strong>{t(activeEvent.titleTextId)}</strong>
+          <p>{t(eventDebriefTextId)}</p>
+          <div className="zb-event-leaks">
+            <small>{t('defense.event.result.leaks')}</small>
+            {leakedEntries.length ? <ul>{leakedEntries.map(([enemyId, count]) => <li key={enemyId}>
+              <span>{enemyName(enemyId)}</span><b>×{count}</b>
+            </li>)}</ul> : <p>{t('defense.event.result.no_leaks')}</p>}
+          </div>
+          <div className="zb-event-recommend">
+            <small>{t('defense.event.result.recommend')}</small>
+            <strong>{t(`defense.tower.${recommendedTowerId}.name`)}</strong>
+            <span>{t(`defense.tower.${recommendedTowerId}.role`)}</span>
+          </div>
+        </section> : null}
         {persistence.awardedCosmeticIds.length ? <div className="zb-result-rewards">
           <strong>{t('defense.save.reward')}</strong>
           {persistence.awardedCosmeticIds.map(id => <span key={id}>
-            {id === content.scenario.threeStarCosmetic ? t('defense.save.reward.three') : t('defense.save.reward.first')}
+            {id === 'tablet-skin-signal-blue'
+              ? t('defense.event.reward.signal_blue')
+              : id === content.scenario.threeStarCosmetic ? t('defense.save.reward.three') : t('defense.save.reward.first')}
           </span>)}
         </div> : null}
         <div className="zb-result-actions">
