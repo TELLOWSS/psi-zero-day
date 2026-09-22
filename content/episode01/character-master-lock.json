@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "lock_id": "ep01-character-master-lock-v1",
+  "status": "production_locked",
+  "locked_date": "2026-09-23",
+  "scope": "Episode 01 primary cast identity and cross-surface asset routing",
+  "commercial_target": "One coherent commercial 2.5D construction-game cast; the same person must read consistently in title, loading, dialogue, TBM, FIELD, STRATEGY, OFFICE and DAY RESULT.",
+  "rule": "Do not redesign or regenerate core portrait/map identity unless a verified identity, crop, scale or scene-integration regression is documented. Missing performance expressions may be produced from this identity only.",
+  "source_files": {
+    "runtime": [
+      "content/episode01/characters.json",
+      "content/episode01/inspection-characters.json",
+      "content/episode01/responsibility-characters.json"
+    ],
+    "localization": [
+      "content/episode01/ko.json",
+      "content/episode01/inspection-ko.json",
+      "content/episode01/responsibility-ko.json"
+    ],
+    "visual": "content/episode01/visuals.json",
+    "art_production": "content/episode01/character-art-production.json",
+    "art_spec": "content/episode01/character-art-spec.json",
+    "performance": "content/episode01/character-performance-production.json"
+  },
+  "expression_contract": [
+    "neutral",
+    "concern",
+    "resolve",
+    "relief",
+    "conflict"
+  ],
+  "performance_policy": {
+    "identity_status": "locked",
+    "final_expression_coverage": "partial",
+    "current_final_wave": {
+      "player": [
+        "resolve"
+      ],
+      "kang_taesik": [
+        "conflict"
+      ],
+      "yoon_sungho": [],
+      "lee_jaehoon": [
+        "concern"
+      ],
+      "lim_junho": [
+        "relief"
+      ],
+      "choi_minseok": [],
+      "seo_jeongmin": [
+        "neutral"
+      ],
+      "oh_seungjae": []
+    },
+    "fallback": "Until a required final expression exists, runtime may use the approved map art. Fallback is compatibility behavior, not proof of Visual Production Lock for that expression."
+  },
+  "characters": [
+    {
+      "id": "player",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.player.name",
+      "name_ko": "플레이어",
+      "role_text_id": "cast.player.role",
+      "role_ko": "현장 안전관리자",
+      "age_text_id": "cast.unspecified",
+      "age_ko": "미정",
+      "age_band": "late_20s",
+      "portrait_asset_id": "ep01.character.player.portrait",
+      "map_asset_id": "ep01.character.player.map",
+      "portrait_path": "assets/episode01/characters/player-portrait.webp",
+      "map_path": "assets/episode01/characters/player-map.webp",
+      "performance_asset_id_prefix": "ep01.character.player.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/player",
+      "identity_anchor": "late-20s female safety manager / soft V face / white-blue NEW PSI helmet / blue safety vest / inspection tablet"
+    },
+    {
+      "id": "kang_taesik",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.kang_taesik.name",
+      "name_ko": "강태식",
+      "role_text_id": "cast.kang_taesik.role",
+      "role_ko": "형틀반장",
+      "age_text_id": "cast.kang_taesik.age",
+      "age_ko": "52세",
+      "age_band": "early_50s",
+      "portrait_asset_id": "ep01.character.kang_taesik.portrait",
+      "map_asset_id": "ep01.character.kang_taesik.map",
+      "portrait_path": "assets/episode01/characters/kang-taesik-portrait.webp",
+      "map_path": "assets/episode01/characters/kang-taesik-map.webp",
+      "performance_asset_id_prefix": "ep01.character.kang_taesik.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/kang-taesik",
+      "identity_anchor": "52-year-old veteran formwork foreman / broad heavy build / weathered moustached face / orange helmet / work gloves"
+    },
+    {
+      "id": "yoon_sungho",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.yoon_sungho.name",
+      "name_ko": "윤성호",
+      "role_text_id": "cast.yoon_sungho.role",
+      "role_ko": "철근반장",
+      "age_text_id": "cast.yoon_sungho.age",
+      "age_ko": "48세",
+      "age_band": "late_40s",
+      "portrait_asset_id": "ep01.character.yoon_sungho.portrait",
+      "map_asset_id": "ep01.character.yoon_sungho.map",
+      "portrait_path": "assets/episode01/characters/yoon-sungho-portrait.webp",
+      "map_path": "assets/episode01/characters/yoon-sungho-map.webp",
+      "performance_asset_id_prefix": "ep01.character.yoon_sungho.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/yoon-sungho",
+      "identity_anchor": "48-year-old rebar foreman / muscular V build / angular tanned face / short beard / yellow helmet / rebar"
+    },
+    {
+      "id": "lee_jaehoon",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.lee_jaehoon.name",
+      "name_ko": "이재훈",
+      "role_text_id": "cast.lee_jaehoon.role",
+      "role_ko": "공사대리",
+      "age_text_id": "cast.lee_jaehoon.age",
+      "age_ko": "33세",
+      "age_band": "early_30s",
+      "portrait_asset_id": "ep01.character.lee_jaehoon.portrait",
+      "map_asset_id": "ep01.character.lee_jaehoon.map",
+      "portrait_path": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+      "map_path": "assets/episode01/characters/lee-jaehoon-map.webp",
+      "performance_asset_id_prefix": "ep01.character.lee_jaehoon.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/lee-jaehoon",
+      "identity_anchor": "33-year-old construction assistant manager / tall slim / long narrow clean face / white helmet / blue jacket / rolled drawing"
+    },
+    {
+      "id": "lim_junho",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.lim_junho.name",
+      "name_ko": "임준호",
+      "role_text_id": "cast.lim_junho.role",
+      "role_ko": "신입근로자",
+      "age_text_id": "cast.lim_junho.age",
+      "age_ko": "23세",
+      "age_band": "early_20s",
+      "portrait_asset_id": "ep01.character.lim_junho.portrait",
+      "map_asset_id": "ep01.character.lim_junho.map",
+      "portrait_path": "assets/episode01/characters/lim-junho-portrait.webp",
+      "map_path": "assets/episode01/characters/lim-junho-map.webp",
+      "performance_asset_id_prefix": "ep01.character.lim_junho.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/lim-junho",
+      "identity_anchor": "23-year-old rookie worker / small narrow youthful frame / round face / large bright eyes / yellow helmet / green vest / radio"
+    },
+    {
+      "id": "choi_minseok",
+      "runtime_source": "content/episode01/characters.json",
+      "name_text_id": "cast.choi_minseok.name",
+      "name_ko": "최민석",
+      "role_text_id": "cast.choi_minseok.role",
+      "role_ko": "크레인 신호수",
+      "age_text_id": "cast.choi_minseok.age",
+      "age_ko": "39세",
+      "age_band": "late_30s",
+      "portrait_asset_id": "ep01.character.choi_minseok.portrait",
+      "map_asset_id": "ep01.character.choi_minseok.map",
+      "portrait_path": "assets/episode01/characters/choi-minseok-portrait.webp",
+      "map_path": "assets/episode01/characters/choi-minseok-map.webp",
+      "performance_asset_id_prefix": "ep01.character.choi_minseok.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/choi-minseok",
+      "identity_anchor": "39-year-old crane signalman / dynamic raised-arm silhouette / orange PPE / dual red signal batons"
+    },
+    {
+      "id": "seo_jeongmin",
+      "runtime_source": "content/episode01/inspection-characters.json",
+      "name_text_id": "cast.seo_jeongmin.name",
+      "name_ko": "서정민",
+      "role_text_id": "cast.seo_jeongmin.role",
+      "role_ko": "건축감리",
+      "age_text_id": "cast.seo_jeongmin.age",
+      "age_ko": "46세",
+      "age_band": "mid_40s",
+      "portrait_asset_id": "ep01.character.seo_jeongmin.portrait",
+      "map_asset_id": "ep01.character.seo_jeongmin.map",
+      "portrait_path": "assets/episode01/characters/seo-jeongmin-portrait.webp",
+      "map_path": "assets/episode01/characters/seo-jeongmin-map.webp",
+      "performance_asset_id_prefix": "ep01.character.seo_jeongmin.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/seo-jeongmin",
+      "identity_anchor": "46-year-old architectural inspector / lean formal / thin oblong face / rectangular glasses / white helmet / clipboard"
+    },
+    {
+      "id": "oh_seungjae",
+      "runtime_source": "content/episode01/responsibility-characters.json",
+      "name_text_id": "cast.oh_seungjae.name",
+      "name_ko": "오승재",
+      "role_text_id": "cast.oh_seungjae.role",
+      "role_ko": "현장 공사팀장",
+      "age_text_id": "cast.oh_seungjae.age",
+      "age_ko": "41세",
+      "age_band": "early_40s",
+      "portrait_asset_id": "ep01.character.oh_seungjae.portrait",
+      "map_asset_id": "ep01.character.oh_seungjae.map",
+      "portrait_path": "assets/episode01/characters/oh-seungjae-portrait.webp",
+      "map_path": "assets/episode01/characters/oh-seungjae-map.webp",
+      "performance_asset_id_prefix": "ep01.character.oh_seungjae.performance",
+      "performance_path_prefix": "assets/episode01/characters/performance/oh-seungjae",
+      "identity_anchor": "41-year-old site construction manager / broad managerial frame / tired hooded eyes / white helmet / navy jacket / phone-radio"
+    }
+  ]
+}

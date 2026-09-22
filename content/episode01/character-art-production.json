@@ -66,7 +66,7 @@
         "yoon_sungho",
         "oh_seungjae"
       ],
-      "age_band": "late_50s",
+      "age_band": "early_50s",
       "presentation": "male",
       "face_geometry": {
         "shape": "round_broad",
@@ -91,7 +91,7 @@
         "broad_square_body",
         "moustache"
       ],
-      "regeneration_prompt": "Veteran Korean male construction foreman, late 50s, broad heavy square build, round weathered face, heavy jaw, small deep-set eyes, thick downward brows, broad nose, visible moustache and grey sideburns. Orange hard hat, dark field jacket, orange safety vest, work gloves. Wide stance giving instruction. Commercial casual 2.5D strategy game character, rugged semi-realistic anime styling, full-body transparent-background map art.",
+      "regeneration_prompt": "Veteran Korean male construction foreman, early 50s, broad heavy square build, round weathered face, heavy jaw, small deep-set eyes, thick downward brows, broad nose, visible moustache and grey sideburns. Orange hard hat, dark field jacket, orange safety vest, work gloves. Wide stance giving instruction. Commercial casual 2.5D strategy game character, rugged semi-realistic anime styling, full-body transparent-background map art.",
       "negative_prompt": "young idol face, slim V jaw, clean-shaven youthful look, white helmet, glasses, tablet"
     },
     {
@@ -107,7 +107,7 @@
       "must_not_resemble": [
         "kang_taesik"
       ],
-      "age_band": "mid_40s",
+      "age_band": "late_40s",
       "presentation": "male",
       "face_geometry": {
         "shape": "angular_long",
@@ -132,7 +132,7 @@
         "muscular_shoulders",
         "short_beard"
       ],
-      "regeneration_prompt": "Korean male rebar worker, mid 40s, muscular V-shaped build, deeply tanned angular long face, strong angled jaw, high cheekbones, narrow squinting eyes, thick arched brows, long broad-bridge nose, short beard. Yellow hard hat, brown rebar workwear, heavy gloves, rebar bundle or crossed arms. Commercial casual 2.5D construction strategy character, full-body transparent-background map art.",
+      "regeneration_prompt": "Korean male rebar worker, late 40s, muscular V-shaped build, deeply tanned angular long face, strong angled jaw, high cheekbones, narrow squinting eyes, thick arched brows, long broad-bridge nose, short beard. Yellow hard hat, brown rebar workwear, heavy gloves, rebar bundle or crossed arms. Commercial casual 2.5D construction strategy character, full-body transparent-background map art.",
       "negative_prompt": "round face, pale clean manager, orange signalman outfit, glasses, slim inspector"
     },
     {

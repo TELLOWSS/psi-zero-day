@@ -12,18 +12,27 @@
   },
   "characters": {
     "player": {
-      "role": "현장 안전관리자 / PLAYER",
+      "role": "현장 안전관리자",
       "gender_presentation": "female",
       "age_impression": "late 20s to early 30s",
       "silhouette": "medium height, compact athletic build, centered confident stance",
-      "face": "soft oval face, large focused eyes, short dark bob tucked behind ears; clearly different from every male NPC",
-      "helmet": "clean white safety helmet with one simple blue abstract safety emblem",
+      "face": "soft V-shaped face, focused almond eyes, dark low ponytail with side fringe visible beneath the helmet; clearly different from every male NPC",
+      "helmet": "clean white safety helmet with a thin blue stripe and one small NEW PSI mark",
       "clothing": "blue safety jacket or vest over dark workwear, neat practical styling",
       "signature_prop": "black safety tablet/inspection pad",
       "default_pose": "tablet in one hand, other hand ready to point or signal stop",
       "expression": "alert, empathetic, decisive",
-      "palette": ["white", "safety blue", "navy", "small lime reflective accents"],
-      "do_not": ["male-coded clone of Lee Jaehoon", "long hair flowing outside PPE", "medical cross logo"]
+      "palette": [
+        "white",
+        "safety blue",
+        "navy",
+        "small lime reflective accents"
+      ],
+      "do_not": [
+        "male-coded clone of Lee Jaehoon",
+        "long hair flowing outside PPE",
+        "medical cross logo"
+      ]
     },
     "kang_taesik": {
       "role": "형틀반장",
@@ -35,8 +44,16 @@
       "signature_prop": "tape measure clipped to belt and rolled work glove/tool pouch",
       "default_pose": "one arm pointing toward the workface, feet planted wide",
       "expression": "experienced, stubborn but responsible",
-      "palette": ["burnt orange", "charcoal", "dark navy", "tan leather"],
-      "do_not": ["slim young face", "clean-shaven office-worker look"]
+      "palette": [
+        "burnt orange",
+        "charcoal",
+        "dark navy",
+        "tan leather"
+      ],
+      "do_not": [
+        "slim young face",
+        "clean-shaven office-worker look"
+      ]
     },
     "yoon_sungho": {
       "role": "철근반장",
@@ -48,8 +65,16 @@
       "signature_prop": "short bundled rebar sample / rebar hook",
       "default_pose": "one forearm resting against rebar, other hand checking alignment",
       "expression": "quiet, confident, technically proud",
-      "palette": ["mustard yellow", "brown", "black", "steel gray"],
-      "do_not": ["orange Kang palette", "boyish round face"]
+      "palette": [
+        "mustard yellow",
+        "brown",
+        "black",
+        "steel gray"
+      ],
+      "do_not": [
+        "orange Kang palette",
+        "boyish round face"
+      ]
     },
     "lee_jaehoon": {
       "role": "공사대리",
@@ -61,8 +86,17 @@
       "signature_prop": "rolled drawings plus schedule clipboard",
       "default_pose": "drawings under one arm while checking schedule with the other hand",
       "expression": "quick-thinking, schedule-conscious, occasionally pressured",
-      "palette": ["white", "royal blue", "navy", "paper gray"],
-      "do_not": ["older than mid-30s", "beard", "same female-player facial structure"]
+      "palette": [
+        "white",
+        "royal blue",
+        "navy",
+        "paper gray"
+      ],
+      "do_not": [
+        "older than mid-30s",
+        "beard",
+        "same female-player facial structure"
+      ]
     },
     "lim_junho": {
       "role": "신입근로자",
@@ -74,8 +108,17 @@
       "signature_prop": "compact radio and small tool bag",
       "default_pose": "radio held close while glancing toward a supervisor or hazard",
       "expression": "earnest, observant, slightly hesitant but capable of courage",
-      "palette": ["bright yellow", "green", "dark gray", "orange tool accents"],
-      "do_not": ["mature moustache", "broad foreman body", "aggressive hero pose"]
+      "palette": [
+        "bright yellow",
+        "green",
+        "dark gray",
+        "orange tool accents"
+      ],
+      "do_not": [
+        "mature moustache",
+        "broad foreman body",
+        "aggressive hero pose"
+      ]
     },
     "choi_minseok": {
       "role": "크레인 신호수",
@@ -87,8 +130,16 @@
       "signature_prop": "pair of red illuminated signal wands",
       "default_pose": "both signal wands clearly raised in a crane-hand-signal posture",
       "expression": "energetic, vigilant, communicative",
-      "palette": ["high-vis orange", "black", "red signal light", "silver reflective stripe"],
-      "do_not": ["static clipboard pose", "same stocky silhouette as Kang"]
+      "palette": [
+        "high-vis orange",
+        "black",
+        "red signal light",
+        "silver reflective stripe"
+      ],
+      "do_not": [
+        "static clipboard pose",
+        "same stocky silhouette as Kang"
+      ]
     },
     "seo_jeongmin": {
       "role": "건축감리",
@@ -100,11 +151,19 @@
       "signature_prop": "inspection clipboard with pen",
       "default_pose": "clipboard against chest, pen raised while checking a detail",
       "expression": "precise, skeptical, calm rather than hostile",
-      "palette": ["white", "navy", "slate gray", "muted blue"],
-      "do_not": ["round youthful Lee face", "comedic angry inspector caricature"]
+      "palette": [
+        "white",
+        "navy",
+        "slate gray",
+        "muted blue"
+      ],
+      "do_not": [
+        "round youthful Lee face",
+        "comedic angry inspector caricature"
+      ]
     },
     "oh_seungjae": {
-      "role": "원도급 현장 공사팀장",
+      "role": "현장 공사팀장",
       "age_impression": "early 40s",
       "silhouette": "medium-tall, slightly broad management build, one shoulder often angled as if taking a call",
       "face": "broad cheekbones, slightly tired eyes, defined jaw, clean-shaven",
@@ -113,9 +172,16 @@
       "signature_prop": "smartphone / radio headset plus folded coordination note",
       "default_pose": "phone or radio at one ear while gesturing toward the site",
       "expression": "authoritative, busy, relationship-conscious",
-      "palette": ["white", "deep navy", "steel blue", "small orange coordination accent"],
-      "do_not": ["glasses-and-clipboard Seo clone", "young Lee silhouette"]
+      "palette": [
+        "white",
+        "deep navy",
+        "steel blue",
+        "small orange coordination accent"
+      ],
+      "do_not": [
+        "glasses-and-clipboard Seo clone",
+        "young Lee silhouette"
+      ]
     }
   }
 }
-
