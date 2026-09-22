@@ -1,0 +1,170 @@
+name: Stage 3 Visual Capture
+
+on:
+  pull_request:
+    branches:
+      - sol/step2-strategy-flow-20260922
+    paths:
+      - '.github/workflows/stage3-visual-capture.yml'
+      - 'src/ui/**'
+      - 'src/app/**'
+      - 'content/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    if: github.head_ref == 'sol/step3-visual-rules-20260922'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PREVIEW_URL: https://psi-zero-day-git-sol-step3-visual-rule-f03d89-tellowss-projects.vercel.app/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: npm
+      - run: npm ci
+      - name: Install capture browser
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Capture representative scenes
+        run: |
+          mkdir -p stage3-captures
+          cat > /tmp/stage3-capture.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const url = process.env.PREVIEW_URL;
+          if (!url) throw new Error('PREVIEW_URL missing');
+
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+
+          async function snapshot(page, label, viewport) {
+            const file = `stage3-captures/${viewport}-${label}.png`;
+            await page.screenshot({ path: file, fullPage: false });
+            const metrics = await page.evaluate(() => {
+              const rect = el => {
+                if (!(el instanceof HTMLElement)) return null;
+                const r = el.getBoundingClientRect();
+                return { x:r.x, y:r.y, width:r.width, height:r.height, bottom:r.bottom, right:r.right };
+              };
+              const frame = document.querySelector('.game-frame');
+              const scene = document.querySelector('.episode-immersive-scene');
+              const speaker = document.querySelector('.episode-immersive-speaker-tag');
+              const characters = [...document.querySelectorAll('.episode-immersive-character')].map(el => ({
+                id: el.getAttribute('data-character'),
+                speaker: el.getAttribute('data-speaker'),
+                depth: el.getAttribute('data-blocking-depth'),
+                box: rect(el),
+              }));
+              const workers = [...document.querySelectorAll('.strategy-map-worker')].map(el => ({
+                id: el.getAttribute('data-character'),
+                anchor: el.getAttribute('data-production-anchor'),
+                box: rect(el),
+              }));
+              return {
+                productionScene: frame?.getAttribute('data-production-scene') ?? null,
+                event: scene?.getAttribute('data-event') ?? document.querySelector('.strategy-shell')?.getAttribute('data-event') ?? null,
+                visualLock: scene?.getAttribute('data-visual-lock') ?? document.querySelector('.strategy-shell')?.getAttribute('data-visual-lock') ?? null,
+                frame: rect(frame),
+                scene: rect(scene),
+                speaker: rect(speaker),
+                characters,
+                workers,
+              };
+            });
+            results.push({ viewport, label, file, metrics });
+          }
+
+          async function visible(page, selector) {
+            const loc = page.locator(selector).first();
+            return await loc.count() > 0 && await loc.isVisible().catch(() => false);
+          }
+
+          async function progress(page, targetSelector, maxSteps = 30) {
+            for (let i = 0; i < maxSteps; i++) {
+              if (await visible(page, targetSelector)) return;
+              if (await visible(page, '.episode-cold-open-cta')) {
+                await page.locator('.episode-cold-open-cta').click();
+                await page.waitForTimeout(250);
+                continue;
+              }
+              const choices = page.locator('.choice-panel button:not(:disabled):visible');
+              if (await choices.count()) {
+                await choices.first().click();
+                await page.waitForTimeout(300);
+                continue;
+              }
+              if (await visible(page, '.continue-button')) {
+                await page.locator('.continue-button:visible').first().click();
+                await page.waitForTimeout(300);
+                continue;
+              }
+              await page.keyboard.press('Enter');
+              await page.waitForTimeout(300);
+            }
+            throw new Error(`Target not reached: ${targetSelector}`);
+          }
+
+          async function runViewport(name, width, height) {
+            const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
+            const page = await context.newPage();
+            const consoleErrors = [];
+            page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
+            page.on('pageerror', err => consoleErrors.push(String(err)));
+
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+            await page.evaluate(() => {
+              localStorage.clear();
+              sessionStorage.clear();
+            });
+            await page.reload({ waitUntil: 'networkidle' });
+
+            await page.locator('.commercial-title-action.is-primary').click();
+            await page.waitForSelector('.game-frame', { timeout: 60000 });
+            if (await visible(page, '.episode-cold-open-cta')) {
+              await page.locator('.episode-cold-open-cta').click();
+              await page.waitForTimeout(300);
+            }
+
+            const entry = '.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_01_arrival"][data-visual-lock="stage3-entry"]';
+            await progress(page, entry, 8);
+            await snapshot(page, '01-entry', name);
+
+            const tbm = '.game-frame[data-production-scene="TBM"] .episode-immersive-scene[data-event="e01_02_meet_kang"][data-visual-lock="stage3-tbm"]';
+            await progress(page, tbm, 18);
+            await snapshot(page, '02-tbm', name);
+
+            const strategy = '.game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-event="e01_03_plan_breaks"][data-visual-lock="stage3-strategy"]';
+            await progress(page, strategy, 18);
+            await snapshot(page, '03-strategy', name);
+
+            results.push({ viewport:name, consoleErrors });
+            await context.close();
+          }
+
+          try {
+            await runViewport('desktop-1280x720', 1280, 720);
+            await runViewport('mobile-390x844', 390, 844);
+          } finally {
+            await browser.close();
+          }
+
+          fs.writeFileSync('stage3-captures/metrics.json', JSON.stringify(results, null, 2));
+          EOF
+          node /tmp/stage3-capture.mjs
+      - name: Upload captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage3-visual-captures
+          path: stage3-captures/
+          if-no-files-found: error
+          retention-days: 7
