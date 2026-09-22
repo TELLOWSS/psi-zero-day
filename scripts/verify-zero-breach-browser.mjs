@@ -221,7 +221,7 @@ try {
       await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
       await waitFor(cdp, "[...document.querySelectorAll('button')].some(b => (b.textContent || '').includes('현장 디펜스'))");
       if (!(await clickText(cdp, '현장 디펜스'))) throw new Error('Hub defense entry button was not clickable');
-      await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen="support-select"]'))");
+      await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="support-select"]'))`);
       await screenshot(cdp, viewport.name + '-support-select.png');
 
       const supportClicked = await evaluate(cdp, `(() => {
@@ -231,7 +231,7 @@ try {
         return true;
       })()`);
       if (!supportClicked) throw new Error('COORDINATOR support card was not clickable');
-      await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen="combat"]'))");
+      await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="combat"]'))`);
 
       if (viewport.portrait) {
         await waitFor(cdp, "Boolean(document.querySelector('.zb-rotate'))");
@@ -264,9 +264,9 @@ try {
       await screenshot(cdp, viewport.name + '-tower-built.png');
 
       if (!(await clickText(cdp, '웨이브 시작'))) throw new Error('Wave start button was not clickable');
-      await waitFor(cdp, "document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status') === 'RUNNING'");
+      await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status') === 'RUNNING'`);
       if (!(await clickText(cdp, '2×'))) throw new Error('2x speed button was not clickable');
-      await waitFor(cdp, "document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-speed') === '2'");
+      await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-speed') === '2'`);
       await clickText(cdp, '동료 지원');
       await screenshot(cdp, viewport.name + '-running.png');
 
