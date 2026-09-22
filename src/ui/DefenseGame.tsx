@@ -6,8 +6,12 @@ import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseEnemyArtUri, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
+import {
+  defenseContentForScenario, defenseEventById, defenseEvents, resolveDefenseContentForRun,
+} from '../content/defense-events';
+import { defenseEventAvailabilityFromState } from '../app/defense-story-bridge';
 import type {
-  DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
+  DefenseContent, DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
 } from '../domain/defense';
 import {
   advanceDefense, applyDefenseCommand, defensePositionAtDistance, defenseResult,
@@ -19,36 +23,31 @@ import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
 
-const content = zeroBreachContent;
-const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
-const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
-const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
-
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
 }
 
-function towerDefinition(id: DefenseTowerId) {
+function towerDefinition(content: DefenseContent, id: DefenseTowerId) {
   return content.towers.find(item => item.id === id)!;
 }
 
-function towerLevel(tower: DefenseTowerState) {
-  return towerDefinition(tower.towerId).levels.find(level => level.id === tower.levelId)!;
+function towerLevel(content: DefenseContent, tower: DefenseTowerState) {
+  return towerDefinition(content, tower.towerId).levels.find(level => level.id === tower.levelId)!;
 }
 
 function enemyName(id: DefenseEnemyId) {
   return t(`defense.enemy.${id}.name`);
 }
 
-function wavePreview(state: DefenseRunState) {
+function wavePreview(content: DefenseContent, state: DefenseRunState) {
   const waveId = state.status === 'RUNNING'
     ? Math.min(content.waves.length, state.waveId + 1)
     : state.waveId;
   return content.waves.find(wave => wave.id === waveId) ?? content.waves.at(-1)!;
 }
 
-function TowerGlyph({ tower }: { tower: DefenseTowerState }) {
-  const level = towerLevel(tower);
+function TowerGlyph({ content, tower }: { content: DefenseContent; tower: DefenseTowerState }) {
+  const level = towerLevel(content, tower);
   const firing = tower.attackCooldown === level.intervalTicks;
   const revealing = tower.towerId === 'SENSOR'
     && typeof level.revealIntervalTicks === 'number'
@@ -100,7 +99,7 @@ function TowerGlyph({ tower }: { tower: DefenseTowerState }) {
   </g>;
 }
 
-function EnemyGlyph({ enemy, state, isHit }: { enemy: DefenseRunState['enemies'][number]; state: DefenseRunState; isHit: boolean }) {
+function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent; enemy: DefenseRunState['enemies'][number]; state: DefenseRunState; isHit: boolean }) {
   const definition = content.enemies.find(item => item.id === enemy.enemyId)!;
   const pos = defensePositionAtDistance(content.map.path, enemy.distance);
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
@@ -168,9 +167,29 @@ function SupportCard({
   </button>;
 }
 
-export function DefenseGame({ session, onExit, storage }: { readonly session: EpisodeSession; readonly onExit: () => void; readonly storage?: StoragePort }) {
-  const persistence = useDefensePersistence(content, onExit, storage);
+export function DefenseGame({
+  session, onExit, storage, requestedScenarioId = null,
+}: {
+  readonly session: EpisodeSession;
+  readonly onExit: () => void;
+  readonly storage?: StoragePort;
+  readonly requestedScenarioId?: string | null;
+}) {
+  const persistence = useDefensePersistence(zeroBreachContent, onExit, storage, resolveDefenseContentForRun);
   const { state, setState } = persistence;
+  const e1 = defenseEvents[0]!;
+  const e1Availability = defenseEventAvailabilityFromState(e1, session.getSnapshot().state, persistence.document);
+  const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
+  const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
+    || (selectedScenarioId === e1.id && e1Availability.unlocked);
+  const content = state
+    ? resolveDefenseContentForRun(state)
+    : selectedScenarioAllowed && selectedScenarioId
+      ? defenseContentForScenario(selectedScenarioId)
+      : zeroBreachContent;
+  const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
+  const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
+  const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
   const [selectedPadId, setSelectedPadId] = useState<string | null>(null);
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -189,13 +208,13 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
   const supportCharacterId = state ? defenseSupportCharacterId(state.supportId) : null;
   const supportCharacter = supportCharacterId ? session.character(supportCharacterId) : null;
   const supportPortrait = supportCharacterId ? characterPortraitUri(supportCharacterId, id => session.assetUri(id)) : undefined;
-  const preview = state ? wavePreview(state) : null;
+  const preview = state ? wavePreview(content, state) : null;
   const result = state && (state.status === 'WON' || state.status === 'LOST') ? defenseResult(state) : null;
 
   useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
     const timer = window.setInterval(() => {
-      setState(current => current ? advanceDefense(current, content, 1) : current);
+      setState(current => current ? advanceDefense(current, resolveDefenseContentForRun(current), 1) : current);
     }, content.tickMs);
     return () => window.clearInterval(timer);
   }, [state?.status, state?.paused, state?.speed]);
@@ -204,7 +223,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
     const onVisibility = () => {
       if (!document.hidden) return;
       setState(current => current && !current.paused
-        ? applyDefenseCommand(current, content, { type: 'SetPaused', paused: true })
+        ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: true })
         : current);
     };
     document.addEventListener('visibilitychange', onVisibility);
@@ -219,7 +238,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
       setPortrait(next);
       if (next) {
         setState(current => current && !current.paused
-          ? applyDefenseCommand(current, content, { type: 'SetPaused', paused: true })
+          ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: true })
           : current);
       }
     };
@@ -234,7 +253,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
       if (event.code === 'Space') {
         event.preventDefault();
         setState(current => current
-          ? applyDefenseCommand(current, content, { type: 'SetPaused', paused: !current.paused })
+          ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: !current.paused })
           : current);
       }
       if (event.key === 'Escape') {
@@ -281,10 +300,11 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
 
   const startWithSupport = (supportId: DefenseSupportId) => {
     audio.playCue('select');
-    persistence.startWithSupport(supportId, portrait);
+    persistence.startWithSupport(supportId, portrait, content);
   };
 
   const retry = () => {
+    if (state) setSelectedScenarioId(state.scenarioId);
     persistence.retryAfterResult();
     setSelectedPadId(null);
     setSelectedTowerId(null);
@@ -295,15 +315,45 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
     return <DefensePersistenceGate controller={persistence} />;
   }
 
-  if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select">
+  if (!state && !selectedScenarioAllowed) return <main className="zb-shell zb-prep zb-scenario-select" data-defense-screen="scenario-select">
     <header className="zb-prep-header">
-      <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.ui.hub.title')}</h1></div>
+      <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.scenario.title')}</h1></div>
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
-      <span>{t('defense.ui.dev_notice')}</span>
-      <h2>{t('defense.ui.support.title')}</h2>
-      <p>{t('defense.ui.support.body')}</p>
+      <h2>{t('defense.scenario.title')}</h2>
+      <p>{t('defense.scenario.body')}</p>
+    </section>
+    <section className="zb-scenario-grid">
+      <button type="button" className="zb-scenario-card is-unlocked" data-scenario="training-ramp-v1" onClick={() => setSelectedScenarioId(zeroBreachContent.scenario.id)}>
+        <small>{t('defense.scenario.training.status')}</small>
+        <strong>{t('defense.scenario.training.title')}</strong>
+        <p>{t('defense.scenario.training.body')}</p>
+        <b>{t('defense.scenario.choose')}</b>
+      </button>
+      <button type="button" className={`zb-scenario-card${e1Availability.unlocked ? ' is-unlocked' : ' is-locked'}`} data-scenario={e1.id}
+        disabled={!e1Availability.unlocked} onClick={() => setSelectedScenarioId(e1.id)}>
+        <small>{t(e1Availability.unlocked ? 'defense.scenario.event.status.unlocked' : 'defense.scenario.event.status.locked')}</small>
+        <strong>{t(e1.titleTextId)}</strong>
+        <p>{t(e1.briefingTextId)}</p>
+        {!e1Availability.unlocked ? <ul>
+          {e1Availability.missing.map((missing, index) => <li key={index}>{t(missing.kind === 'scenario-cleared'
+            ? 'defense.scenario.event.lock.training' : 'defense.scenario.event.lock.story')}</li>)}
+        </ul> : <b>{t('defense.scenario.choose')}</b>}
+      </button>
+    </section>
+  </main>;
+
+  if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select" data-scenario={content.scenario.id}>
+    <header className="zb-prep-header">
+      <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.ui.hub.title')}</h1></div>
+      <button type="button" onClick={() => setSelectedScenarioId(null)}>{t('defense.scenario.back')}</button>
+      <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
+    </header>
+    <section className="zb-prep-copy">
+      <span>{content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
+      <h2>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
+      <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
     <section className="zb-support-grid">
       {SUPPORT_IDS.map(id => <SupportCard
@@ -317,12 +367,12 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
 
   const selectedLevel = selectedTower ? towerLevel(selectedTower) : null;
   const upgrades = selectedTower
-    ? towerDefinition(selectedTower.towerId).levels.filter(level => level.from === selectedTower.levelId)
+    ? towerDefinition(content, selectedTower.towerId).levels.filter(level => level.from === selectedTower.levelId)
     : [];
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}`} data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}`} data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -422,10 +472,10 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
           {state.towers.map(tower => {
             const pad = content.map.pads.find(item => item.id === tower.padId)!;
             return <g key={tower.id} transform={`translate(${pad.x} ${pad.y})`}>
-              <TowerGlyph tower={tower} />
+              <TowerGlyph content={content} tower={tower} />
             </g>;
           })}
-          {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
+          {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} content={content} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
         </svg>
 
         <div className="zb-pad-layer" aria-label="설치 패드">
@@ -467,7 +517,7 @@ export function DefenseGame({ session, onExit, storage }: { readonly session: Ep
           <div className="zb-panel-heading"><span>{selectedPad.id}</span><strong>{t('defense.ui.select_tower')}</strong></div>
           <div className="zb-tower-shop">
             {TOWER_IDS.map(towerId => {
-              const definition = towerDefinition(towerId);
+              const definition = towerDefinition(content, towerId);
               const level = definition.levels.find(item => item.id === 'L1')!;
               const disabled = state.resource < level.cost;
               return <button
