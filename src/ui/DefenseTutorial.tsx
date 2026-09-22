@@ -1,12 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import type { DefenseRunState } from '../domain/defense';
+import type { DefenseContent, DefenseRunState } from '../domain/defense';
 import { defenseText as t } from '../app/defense-text';
 import { readDefenseTutorialSeen, writeDefenseTutorialSeen } from '../app/defense-tutorial';
 
 type TutorialStep = 'PLACE' | 'START' | 'WAIT_UPGRADE' | 'UPGRADE' | 'PREVIEW' | 'DONE';
 
-function canAffordUpgrade(state: DefenseRunState): boolean {
-  return state.towers.some(tower => tower.levelId === 'L1');
+function canAffordUpgrade(state: DefenseRunState, content: DefenseContent): boolean {
+  return state.towers.some(tower => {
+    if (tower.levelId !== 'L1') return false;
+    const definition = content.towers.find(item => item.id === tower.towerId);
+    const next = definition?.levels.find(level => level.from === 'L1');
+    return Boolean(next && state.resource >= next.cost);
+  });
 }
 
 export interface DefenseTutorialController {
@@ -20,6 +25,7 @@ export interface DefenseTutorialController {
 
 export function useDefenseTutorial(
   state: DefenseRunState | null,
+  content: DefenseContent,
   setPaused: (paused: boolean) => void,
 ): DefenseTutorialController {
   const [step, setStep] = useState<TutorialStep>(() => readDefenseTutorialSeen() ? 'DONE' : 'PLACE');
@@ -48,7 +54,7 @@ export function useDefenseTutorial(
       setStep('WAIT_UPGRADE');
       return;
     }
-    if (step === 'WAIT_UPGRADE' && state.completedWaves >= 1 && state.status === 'INTERMISSION' && canAffordUpgrade(state)) {
+    if (step === 'WAIT_UPGRADE' && state.completedWaves >= 1 && state.status === 'INTERMISSION' && canAffordUpgrade(state, content)) {
       pauseForGuide();
       setStep('UPGRADE');
       return;
@@ -56,7 +62,7 @@ export function useDefenseTutorial(
     if (step === 'UPGRADE' && state.towers.some(tower => tower.levelId !== 'L1')) {
       setStep('PREVIEW');
     }
-  }, [state, step]);
+  }, [content, state, step]);
 
   const complete = () => {
     writeDefenseTutorialSeen(true);
