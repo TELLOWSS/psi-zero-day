@@ -127,6 +127,26 @@ describe('ZERO BREACH step 2 combat UI', () => {
     await act(async () => root.unmount());
   });
 
+  it('keeps resource and occupancy stable under rapid repeated build clicks', async () => {
+    const { host, root } = await mount();
+    await click(host.querySelector('[data-support="COORDINATOR"]')!);
+    await click(host.querySelector('button[aria-label^="P1 ·"]')!);
+
+    const pulse = buttonContaining(host, '펄스 대응기');
+    await act(async () => {
+      pulse.click();
+      pulse.click();
+      pulse.click();
+      await Promise.resolve();
+    });
+
+    expect(host.querySelectorAll('.zb-tower')).toHaveLength(1);
+    expect(host.textContent).toContain('R 120');
+    expect(host.querySelector('button[aria-label^="P1 ·"]')?.getAttribute('aria-label')).toContain('타워 설치됨');
+
+    await act(async () => root.unmount());
+  });
+
   it('keeps support use locked outside active unpaused combat and exposes wave preview/status in combat', async () => {
     const { host, root } = await mount();
     await click(host.querySelector('[data-support="OBSERVER"]')!);
