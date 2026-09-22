@@ -202,8 +202,12 @@ export function validateDefenseContent(input: unknown): DefenseContent {
   const targetModes = Array.isArray(input.targetModes) ? input.targetModes.filter((v): v is DefenseTargetMode => v === 'FIRST' || v === 'STRONG') : [];
   const speeds = Array.isArray(input.speeds) ? input.speeds.filter((v): v is number => v === 1 || v === 2) : [];
   const scenario = record(input.scenario) ? input.scenario : {};
-  const availableTowers = Array.isArray(scenario.availableTowers) ? scenario.availableTowers.filter(towerIdValue) : [];
-  const availableSupports = Array.isArray(scenario.availableSupports) ? scenario.availableSupports.filter(supportIdValue) : [];
+  const rawAvailableTowers = Array.isArray(scenario.availableTowers) ? scenario.availableTowers : [];
+  const rawAvailableSupports = Array.isArray(scenario.availableSupports) ? scenario.availableSupports : [];
+  if (rawAvailableTowers.some(id => !towerIdValue(id))) issues.push('scenario.availableTowers: invalid tower id');
+  if (rawAvailableSupports.some(id => !supportIdValue(id))) issues.push('scenario.availableSupports: invalid support id');
+  const availableTowers = rawAvailableTowers.filter(towerIdValue);
+  const availableSupports = rawAvailableSupports.filter(supportIdValue);
   if (availableTowers.some(id => !towerIds.has(id))) issues.push('scenario: missing tower reference');
   if (availableSupports.some(id => !supportIds.has(id))) issues.push('scenario: missing support reference');
   if (scenario.mapId !== map.id) issues.push('scenario.mapId: missing map reference');
