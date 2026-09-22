@@ -175,6 +175,13 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
     <PlayableEpisode session={session} onReturn={() => setInGame(false)} />
     <button
+      className="game-defense-toggle"
+      type="button"
+      onMouseEnter={() => { void loadDefenseGame(); }}
+      onFocus={() => { void loadDefenseGame(); }}
+      onClick={() => { void loadDefenseGame(); setInDefense(true); }}
+    >{defenseText('defense.ui.hub.title')}</button>
+    <button
       className="game-audio-toggle"
       type="button"
       aria-pressed={audioMuted}
