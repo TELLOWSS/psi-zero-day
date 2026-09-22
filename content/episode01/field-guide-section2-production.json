@@ -175,7 +175,7 @@
     },
     {
       "batch_id": "S2-B",
-      "status": "in_progress",
+      "status": "paused_for_episode01_reality_first",
       "items": [
         {
           "key": "system_shoring_jackbase",
@@ -405,7 +405,7 @@
     "run scene-element asset contract"
   ],
   "brand_contract": "content/brand/naming-contract.json",
-  "current_batch": "S2-B",
-  "next_action": "Ingest FG028, FG029 and FG032 candidate WebP binaries, regenerate FG030 as an isolated system-shoring ledger, generate FG031 as an unmistakable missing-brace hazard state, then close S2-B only after manifest/catalog/runtime checks pass.",
-  "s2b_review_note": "The generated full shoring frame is retained only as geometry reference because it combines standards, ledgers and a diagonal brace; it must not be mislabeled as the isolated FG030 ledger or FG031 missing-brace hazard."
+  "current_batch": "PAUSED",
+  "next_action": "Do not generate or promote S2-B. Complete Episode 01 Korean-material verification and visible runtime assets first, then resume only after user review.",
+  "s2b_review_note": "The generated full shoring frame is retained only as geometry reference because it combines standards, ledgers and a diagonal brace; it must not be mislabeled as the isolated FG030 ledger or FG031 missing-brace hazard. Production paused by Episode 01 reality-first priority on 2026-09-23."
 }
