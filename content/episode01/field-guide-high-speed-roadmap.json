@@ -40,7 +40,7 @@
     "C": 23
   },
   "production_strategy": {
-    "sequence": "대량 생성 → 배치 선별 → 실패작만 재생성 → 2개 배치 단위 GitHub 일괄 반영",
+    "sequence": "EP01 국내현장 실물검증 → EP01 visible runtime/Section0 자산 제작·검수 → 실패작 재생성 → 이후 공정별 배치 생산",
     "generation_batches": 14,
     "integration_commits_target": 7,
     "no_per_item_commit": true,
@@ -1753,27 +1753,36 @@
     "source_priority": "user current-site photos > Korean safety/manufacturer guidance > generic imagery"
   },
   "execution_order": [
+    "FG-HS-01",
+    "FG-HS-02",
+    "FG-HS-03",
     "FG-HS-04",
     "FG-HS-05",
     "FG-HS-07",
     "FG-HS-08",
     "FG-HS-09",
     "FG-HS-10",
-    "FG-HS-02",
-    "FG-HS-03",
     "FG-HS-11",
     "FG-HS-06",
     "FG-HS-12",
     "FG-HS-13",
-    "FG-HS-01",
     "FG-HS-14"
   ],
-  "current_execution_batch": "FG-HS-04",
-  "execution_reasoning": [
-    "SECTION 2 first because live user reference photos are available for system shoring and current visual direction is already being calibrated there.",
-    "Then AL Form and gangform because they are core high-rise structural-cycle gameplay assets.",
-    "Then foundation, roof/transition, finishing, and finally setup/common support assets.",
-    "This order optimizes reference reuse and style consistency rather than construction chronology."
-  ],
-  "site_reality_verification_policy": "content/episode01/field-guide-site-reality-verification.json"
+  "current_execution_batch": "FG-HS-01",
+  "execution_reasoning": "User-directed reality-first reset on 2026-09-23: complete Episode 01 Korean-site material verification and visible runtime assets before resuming Section 2 or later batches.",
+  "site_reality_verification_policy": "content/episode01/field-guide-site-reality-verification.json",
+  "episode01_runtime_priority": {
+    "gate": "content/episode01/episode01-korea-material-verification.json",
+    "must_finish_before_later_batches": true,
+    "visible_runtime_assets": [
+      "site_gate",
+      "material_stack",
+      "access_barrier",
+      "vehicle_overlap_zone",
+      "exclusion_zone",
+      "open_edge",
+      "wet_floor",
+      "harness_unclipped"
+    ]
+  }
 }
