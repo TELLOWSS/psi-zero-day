@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, useState, useSyncExternalStore } from 'react';
+import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
 import { projectEpisodeJourney } from '../app/episode-journey';
@@ -15,8 +16,86 @@ const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
-const loadFieldGuide = () => import('./FieldGuide');
-const FieldGuide = lazy(() => loadFieldGuide().then(module => ({ default: module.FieldGuide })));
+type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
+
+const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
+
+export async function preloadFieldGuide(loader: FieldGuideModuleLoader = loadFieldGuide): Promise<boolean> {
+  try {
+    await loader();
+    return true;
+  } catch (error) {
+    console.error('Field guide preload failed', error);
+    return false;
+  }
+}
+
+const createFieldGuideScreen = (loader: FieldGuideModuleLoader) =>
+  lazy(() => loader().then(module => ({ default: module.FieldGuide })));
+
+class FieldGuideErrorBoundary extends Component<{
+  readonly children: ReactNode;
+  readonly text: (id: string) => string;
+  readonly onRetry: () => void;
+  readonly onHome: () => void;
+  readonly onReload: () => void;
+}, { readonly error: Error | null }> {
+  state = { error: null as Error | null };
+
+  static getDerivedStateFromError(error: unknown) {
+    return { error: error instanceof Error ? error : new Error(String(error)) };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Field guide chunk failed to load', error, info);
+  }
+
+  render() {
+    if (!this.state.error) return this.props.children;
+    const { text, onRetry, onHome, onReload } = this.props;
+    return <div className="hub-empty field-guide-recovery" role="alert">
+      <HubIcon kind="guide" />
+      <h2>{text('ui.guide.recovery.title')}</h2>
+      <p>{text('ui.guide.recovery.body')}</p>
+      <div className="field-guide-recovery-actions">
+        <button className="hub-primary" type="button" onClick={onRetry}>{text('ui.guide.recovery.retry')}</button>
+        <button className="field-guide-recovery-secondary" type="button" onClick={onReload}>{text('ui.guide.recovery.reload')}</button>
+        <button className="field-guide-recovery-secondary" type="button" onClick={onHome}>{text('ui.guide.recovery.home')}</button>
+      </div>
+    </div>;
+  }
+}
+
+export function RecoverableFieldGuide({
+  session,
+  onHome,
+  loader = loadFieldGuide,
+  onReload = () => window.location.reload(),
+}: {
+  readonly session: EpisodeSession;
+  readonly onHome: () => void;
+  readonly loader?: FieldGuideModuleLoader;
+  readonly onReload?: () => void;
+}) {
+  const [attempt, setAttempt] = useState(0);
+  const FieldGuideScreen = useMemo(() => createFieldGuideScreen(loader), [attempt, loader]);
+
+  return <FieldGuideErrorBoundary
+    key={attempt}
+    text={session.t}
+    onRetry={() => setAttempt(value => value + 1)}
+    onHome={onHome}
+    onReload={onReload}
+  >
+    <Suspense fallback={<div className="hub-empty" role="status">
+      <HubIcon kind="guide" />
+      <h2>{session.t('ui.hub.guide')}</h2>
+      <p>{session.t('ui.guide.recovery.loading')}</p>
+    </div>}>
+      <FieldGuideScreen session={session} />
+    </Suspense>
+  </FieldGuideErrorBoundary>;
+}
 
 function GameplayChunkFallback() {
   return <main className="gameplay-chunk-fallback" role="status" aria-live="polite">
@@ -119,11 +198,8 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const canContinue = snapshot.phase !== 'start';
-  const openGuide = () => {
-    void loadFieldGuide();
-    setPage('guide');
-  };
-  const preloadGuide = () => { void loadFieldGuide(); };
+  const openGuide = () => setPage('guide');
+  const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
     story: episode01BackgroundUri(resolve),
     missions: resolve('ep01.scene_element.suspended_load'),
@@ -347,7 +423,7 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
           <VisualImage uri={characterPortraitUri(character.id, resolve)} alt="" /><strong>{session.character(character.id)?.name}</strong><small>{session.character(character.id)?.role}</small>
         </button>)}</div>
         <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
-      </div> : page === 'guide' ? <Suspense fallback={<div className="hub-empty" role="status"><HubIcon kind="guide" /><h2>{t('ui.hub.guide')}</h2><p>현장 도감을 불러오고 있습니다.</p></div>}><FieldGuide session={session} /></Suspense> : <div className="hub-journal">
+      </div> : page === 'guide' ? <RecoverableFieldGuide session={session} onHome={() => setPage('home')} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
         <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
