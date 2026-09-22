@@ -11,7 +11,7 @@
     "dev": "vite",
     "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:stage3-visual-lock && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -68,7 +68,8 @@
     "production:status": "node scripts/report-episode01-production-readiness.mjs",
     "phase-d:status": "node scripts/report-episode01-production-readiness.mjs",
     "phase-d:check": "npm run assets:production-check && npm run assets:character-replacement-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && node scripts/report-episode01-production-readiness.mjs --require-phase-d && npm run test:episode01-visual",
-    "test:strategy-stage2": "vitest run tests/strategy-stage2-flow.test.tsx"
+    "test:strategy-stage2": "vitest run tests/strategy-stage2-flow.test.tsx",
+    "test:stage3-visual-lock": "vitest run tests/stage3-visual-lock.test.tsx"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
