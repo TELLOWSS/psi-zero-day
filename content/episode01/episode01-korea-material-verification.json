@@ -494,18 +494,18 @@
         "도감 자산은 현재 현장의 실제 설치형상과 전선·고정 상태를 보여주되, 이미지 자체가 법적 조도충족을 의미하지 않는다."
       ],
       "generated_candidate": {
-        "status": "approved_candidate_pending_detail_refinement",
-        "generation_id": "bd5c0faf-048f-444c-bfb9-9e683acc9463",
+        "status": "approved_final_candidate_pending_binary_and_runtime_crop",
+        "generation_id": "462331cc-d8af-4714-941f-c14e82169f2c",
         "accepted": [
-          "system-shoring context matches user photos",
-          "white horizontal linear lighting matches the installed-light concept",
-          "wet basement RC context is consistent",
-          "lighting is attached to temporary-work members rather than shown as a handheld tool"
+          "multiple white LED line-bar segments read as a continuous installed run",
+          "line-bar is physically attached along system-shoring horizontal members",
+          "black cable/joint transitions are visible",
+          "unfinished basement RC and wet-floor context match the user photos",
+          "no handheld or tripod lighting is substituted"
         ],
-        "limitations": [
-          "generated asset reads as one long rigid luminous tube; user photos suggest repeated/connected line-bar segments forming a continuous run",
-          "tie/clip and power-cable transitions are simplified and not yet copied from the actual site",
-          "final crop should emphasize the LED line-bar and its mounting relationship more than the full shoring assembly"
+        "remaining_gate": [
+          "final crop must keep LED line-bar mounting relationship readable at game scale",
+          "binary registration and in-game scale QA still required"
         ]
       },
       "final_render_contract": {
@@ -539,14 +539,40 @@
       "status": "site_specific_cabinet_device_reference_required"
     },
     "site_weather_station": {
-      "status": "site_specific_device_reference_required"
+      "status": "korean_product_families_verified_exact_site_device_unresolved",
+      "classification": "construction-site wind/weather monitoring point",
+      "verified_product_families": [
+        {
+          "family": "installation anemometer + monitor/display",
+          "examples": [
+            "WTF-B500/WTF-B500D",
+            "K-200AW/K-200AWN"
+          ],
+          "evidence": "Currently sold in Korea specifically for tower-crane/construction-site wind monitoring. K-200AW is listed as domestic-made; WTF-B500D is sold as an outdoor construction-site display anemometer."
+        },
+        {
+          "family": "integrated construction weather/heat-index IoT station",
+          "examples": [
+            "Senso T3/T5 class",
+            "Korean outdoor air/weather monitoring systems"
+          ],
+          "evidence": "Current Korean construction-safety suppliers offer wind-linked heat-index/weather monitoring and display systems."
+        }
+      ],
+      "render_hold_reason": "The exact Episode 01/site device family has not been established by a user site photo or authored scene requirement. Do not blend multiple product families into a fictional weather station.",
+      "sources": [
+        "https://www.cjtech21.com/goods/goods_view.php?goodsNo=1000001045",
+        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001919",
+        "https://www.aceiot.co.kr/",
+        "https://aceiot.co.kr/products/thermal.php"
+      ]
     }
   },
   "next_render_order": [
-    "temporary_lighting_pack",
-    "site_weather_station",
     "fire_extinguisher_station",
-    "first_aid_aed"
+    "first_aid_aed",
+    "ppe_issue_station",
+    "site_weather_station"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
