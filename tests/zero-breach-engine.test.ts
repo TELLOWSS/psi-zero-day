@@ -31,7 +31,7 @@ const enemy = (patch: Partial<DefenseEnemyState> = {}): DefenseEnemyState => ({
 describe('ZERO BREACH content contract', () => {
   it('validates the supplied v1 IDs, references, pads and ten waves', () => {
     expect(validateDefenseContent(content)).toBe(content);
-    expect(content.balanceStatus).toBe('UNTESTED_STARTING_POINT');
+    expect(content.balanceStatus).toBe('STEP4_AUTOMATION_VALIDATED_NO_NUMERIC_TUNING');
     expect(content.tickMs).toBe(50);
     expect(content.map.pads).toHaveLength(8);
     expect(content.towers.map(tower => tower.id)).toEqual(['PULSE', 'BURST', 'CONTROL', 'SENSOR']);
