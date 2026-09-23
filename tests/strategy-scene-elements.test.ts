@@ -58,7 +58,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       requires_alpha: true,
     });
     expect(catalog.elements.access_barrier.access_control_profile.control_evaluation_note)
-      .toContain('형상만으로 통제가 완료된 것으로 판정하지 않고');
+      .toContain('설치 연속성·전도방지·우회동선·차량동선·유도자 운영은 별도로 평가한다');
   });
 
   it('keeps vehicle-pedestrian overlap reusable while tracking its realistic-v2 replacement', () => {
