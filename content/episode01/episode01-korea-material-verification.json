@@ -422,18 +422,31 @@
       },
       "render_contract": {
         "asset_type": "transparent scene-fragment module",
-        "composition": "compact rectangular yard fragment with two visibly separated material zones and one clear aisle",
-        "euroform": "reuse verified used Korean 6012-style Euroform bundle geometry; 1–2 bundles only",
-        "steel_members": "same-length galvanized shoring/pipe members, horizontally stacked in a simple low cradle or on sleepers; no mixed random scrap",
-        "dunnage": "timber sleepers visibly keep stacked material off the ground where appropriate",
-        "aisle": "clean, continuous and unobstructed",
-        "markings": "simple yellow/white boundary lines only; no text signs baked into reusable art",
+        "composition": "compact rectangular Korean-site storage yard with Euroform zone on left, system-shoring members on right, and a clear central aisle",
+        "euroform": "1–2 bundles of same-size used Korean 6012-style Euroform panels on timber sleepers, strapped",
+        "shoring_standards": "galvanized vertical system-shoring standards matching the user's current-site installed members; straight cylindrical standards with the real intermediate connection/ring details visible, horizontally bundled on sleepers",
+        "shoring_ledgers": "separate smaller bundle of horizontal ledgers matching the user's current-site system-shoring; real end connector geometry, no invented circular flange plates",
+        "separation": "standards and ledgers remain in separate neat bundles",
+        "dunnage": "timber sleepers or simple low steel cradle under the bundles",
+        "aisle": "clean, continuous, unobstructed",
+        "markings": "simple yellow/white boundary lines only",
         "people": "none",
         "vehicles": "none",
+        "text": "none",
         "branding": "none",
-        "background": "transparent outside the yard slab",
-        "camera": "slightly elevated three-quarter view so storage segregation and aisle are immediately legible",
-        "condition": "active Korean construction site, used materials with realistic dust/concrete residue but orderly"
+        "background": "transparent outside yard slab",
+        "camera": "slightly elevated three-quarter view",
+        "primary_geometry_reference": [
+          "user photo KakaoTalk_20260723_142037826_03.jpg",
+          "user photo KakaoTalk_20260723_142037826_04.jpg"
+        ],
+        "reject": [
+          "round end flanges with bolt holes not present in the site reference",
+          "generic scaffold tubes",
+          "mixed random scrap pile",
+          "unstable leaning material",
+          "materials intruding into the aisle"
+        ]
       },
       "reject": [
         "decorative mixed scrap pile",
@@ -446,7 +459,22 @@
       "sources": [
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=26&um=s",
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132&um=s"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_wrong_shoring_member_geometry",
+        "generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
+        "accepted": [
+          "two separated material zones",
+          "clear central aisle",
+          "Euroform bundles on timber dunnage",
+          "materials kept within marked storage footprints"
+        ],
+        "rejected_or_unresolved": [
+          "right-side members read as generic tubes with repeated round flange end plates rather than verified Korean system-shoring components",
+          "system-shoring standard/ledger connection geometry is not faithful enough for field-sensitive use"
+        ],
+        "action": "Regenerate using current-site system-shoring photos as the primary geometry reference. Separate vertical standards and ledgers into clearly different bundles."
+      }
     },
     "temporary_distribution_board": {
       "status": "visual_family_relocked_ready_to_regenerate",
@@ -855,7 +883,6 @@
   },
   "next_render_order": [
     "material_yard",
-    "pedestrian_gate",
     "site_weather_station"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
