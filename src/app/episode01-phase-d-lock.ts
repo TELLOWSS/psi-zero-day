@@ -40,7 +40,7 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
   execution_order: Object.freeze([
     'D-1_TITLE_CAST_IDENTITY_LOCKED',
     'D-2_VISUAL_QUALITY_REBASELINE_TBM_FIELD_THEN_REMAINING_SCENES',
-    'D-3_MATERIAL_STACK_REALISTIC_V2',
+    'D-3_MATERIAL_STACK_REALISTIC_V2_LOCKED',
     'D-4_REMAINING_UI_SOUND_DIRECTION_VISUAL_LOCK',
     'D-5_STRICT_PHASE_D_CHECK_AND_CINEMATIC_VERTICAL_SLICE_LOCK',
   ] as const),
@@ -51,7 +51,7 @@ export const EPISODE01_PHASE_D_LOCK = Object.freeze({
     Object.freeze({ id: 'camera_transition_responsive_direction', required: 1, ready: 1, status: 'LOCKED' }),
     Object.freeze({ id: 'title_cast_identity_refresh', required: 8, ready: 8, status: 'LOCKED' }),
     Object.freeze({ id: 'visual_quality_rebaseline', required: 6, ready: 0, status: 'IN_PROGRESS' }),
-    Object.freeze({ id: 'episode01_runtime_scene_elements', required: 1, ready: 0, status: 'PENDING' }),
+    Object.freeze({ id: 'episode01_runtime_scene_elements', required: 1, ready: 1, status: 'LOCKED' }),
   ] as const),
   runtime_scene_element_scope: Object.freeze({
     policy: 'ONLY_ELEMENTS_REFERENCED_BY_EPISODE01_EVENT_ELEMENTS',
