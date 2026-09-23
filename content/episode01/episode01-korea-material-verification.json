@@ -530,7 +530,58 @@
       "web_crosscheck_note": "Domestic market searches show several products called LED line/bar, but naming is inconsistent and product geometry varies; therefore user site photos override generic product search for the Episode 01 final."
     },
     "ppe_issue_station": {
-      "status": "site_specific_no_universal_product_shape"
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Korean construction-site PPE issue/storage point",
+      "legal_basis": {
+        "rules": [
+          "산업안전보건기준에 관한 규칙 제32조",
+          "산업안전보건기준에 관한 규칙 제33조"
+        ],
+        "meaning": [
+          "작업조건에 맞는 보호구를 필요한 근로자 수 이상으로 지급하고 착용하도록 해야 한다.",
+          "지급한 보호구는 상시 점검하고 이상품은 수리·교환하며 청결을 유지해야 한다.",
+          "법은 특정 보호구함 외형 하나를 의무형상으로 정하지 않는다."
+        ]
+      },
+      "korean_product_family": {
+        "selected_reference": "freestanding steel PPE cabinet with acrylic front panels",
+        "common_reference_dimensions": "approximately W600 × H1200 × D400 class",
+        "internal_layout": "3 shelves / 4 visible compartments class",
+        "body": "powder-coated steel, yellow or ivory safety-equipment cabinet family",
+        "doors": "clear acrylic-front doors or acrylic viewing panels",
+        "legs": "short freestanding legs/base",
+        "note": "Selected as Episode 01 representative field equipment, not a universal statutory cabinet shape."
+      },
+      "render_contract": {
+        "composition": "one freestanding Korean-style PPE cabinet",
+        "body": "yellow powder-coated steel cabinet, mildly worn",
+        "door": "clear acrylic-front twin doors with simple hinges/latch",
+        "interior": "four tidy compartments/shelf zones",
+        "visible_ppe": [
+          "brand-neutral safety helmets",
+          "clear safety goggles",
+          "work gloves",
+          "dust masks/respiratory PPE packages"
+        ],
+        "quantities": "small representative stock only; do not make it look like a retail store",
+        "condition": "clean and serviceable with light site dust/scuffs",
+        "text": "no readable Korean text, no fake inspection labels",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "front three-quarter view, doors closed so contents remain visible through acrylic"
+      },
+      "reject": [
+        "open retail shelving",
+        "personal locker bank as the main asset",
+        "hospital supply cabinet",
+        "foreign OSHA-branded PPE station",
+        "damaged or dirty PPE presented as ready-for-issue stock",
+        "fake KCs marks or brand logos"
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&chrClsCd=010202&efYd=20260302&lsiSeq=273603&urlMode=lsInfoP",
+        "https://www.safetyzone.co.kr/shop/shopbrand.html?mcode=003&xcode=011"
+      ]
     },
     "fire_extinguisher_station": {
       "status": "visual_family_locked_ready_to_render",
@@ -676,7 +727,6 @@
     }
   },
   "next_render_order": [
-    "first_aid_aed",
     "ppe_issue_station",
     "site_weather_station"
   ],
