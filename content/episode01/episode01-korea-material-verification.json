@@ -589,18 +589,18 @@
         "https://www.safetyzone.co.kr/shop/shopbrand.html?mcode=003&xcode=011"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_regeneration_required",
-        "generation_id": "bfa21923-958d-43c4-9898-402560524455",
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "9a68c94c-f7a7-40d7-a66a-eda0bb3f90b7",
         "accepted": [
-          "yellow powder-coated steel body",
-          "clear viewing area",
-          "organized helmets, goggles, gloves and masks",
-          "short freestanding legs"
+          "flat-top yellow powder-coated steel cabinet",
+          "modest acrylic viewing windows rather than full glass display doors",
+          "simple handles/hinges and short legs",
+          "light representative PPE inventory",
+          "no roof lifting lugs or fake labels"
         ],
-        "rejected_or_unresolved": [
-          "three lifting lugs on the cabinet roof are not part of the selected Korean representative product family",
-          "full-height twin acrylic doors and heavy hinge pattern are overbuilt compared with the verified Korean cabinet references",
-          "inventory density is too high for a simple reusable PPE issue-point asset"
+        "remaining_gate": [
+          "binary registration",
+          "runtime scale/readability review"
         ]
       }
     },
@@ -718,37 +718,58 @@
       ]
     },
     "site_weather_station": {
-      "status": "korean_product_families_verified_exact_site_device_unresolved",
-      "classification": "construction-site wind/weather monitoring point",
-      "verified_product_families": [
-        {
-          "family": "installation anemometer + monitor/display",
-          "examples": [
-            "WTF-B500/WTF-B500D",
-            "K-200AW/K-200AWN"
-          ],
-          "evidence": "Currently sold in Korea specifically for tower-crane/construction-site wind monitoring. K-200AW is listed as domestic-made; WTF-B500D is sold as an outdoor construction-site display anemometer."
-        },
-        {
-          "family": "integrated construction weather/heat-index IoT station",
-          "examples": [
-            "Senso T3/T5 class",
-            "Korean outdoor air/weather monitoring systems"
-          ],
-          "evidence": "Current Korean construction-safety suppliers offer wind-linked heat-index/weather monitoring and display systems."
-        }
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Episode 01 construction-site wind monitoring point",
+      "selected_visual_family": {
+        "sensor": "Korean-market K-200AW/K-200AWN class wireless installation anemometer family",
+        "sensor_geometry": "three-cup rotor on compact black cylindrical sensor body with rigid mounting bracket",
+        "display": "separate weather-resistant digital monitor/display module showing wind-speed numerals",
+        "mounting": "sensor fixed high on a mast/crane/structure; display located at a readable control point",
+        "network_option": "smartphone/network monitoring may exist in product family but is not baked into the reusable art"
+      },
+      "product_evidence": [
+        "K-200AW is currently sold in Korea as a domestically made wireless tower-crane/site anemometer with two monitors.",
+        "K-200AWN is currently sold as a domestically made network version with smartphone monitoring.",
+        "WTF-B500D is sold domestically as a construction-site/tower-crane wind-speed display system, confirming the sensor+display operational pattern."
       ],
-      "render_hold_reason": "The exact Episode 01/site device family has not been established by a user site photo or authored scene requirement. Do not blend multiple product families into a fictional weather station.",
+      "legal_basis": {
+        "rule": "산업안전보건기준에 관한 규칙 제37조",
+        "general": "작업자가 기상 불안정으로 위험해질 우려가 있는 경우 작업중지",
+        "tower_crane_only": {
+          "install_repair_inspect_dismantle_stop_over_ms": 10,
+          "operation_stop_over_ms": 15
+        },
+        "caution": "These numeric thresholds apply to tower-crane operations in the cited rule and must not be copied as universal gangform/general-lifting limits."
+      },
+      "render_contract": {
+        "composition": "one compact wind-monitoring set: three-cup sensor on a short galvanized mounting mast/bracket plus separate rugged digital display box",
+        "sensor_body": "matte black cylindrical body, three black cups, simple cap, metal bracket",
+        "display": "dark gray/black weather-resistant rectangular enclosure with bright red wind-speed numerals; no fake brand/model text",
+        "cable": "minimal cable only if visually needed; wireless family may omit a long signal cable",
+        "structure": "small mast/base fragment only, not a full tower crane",
+        "text": "numerals only; no Korean labels or brand names",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter product/scene-fragment view showing both sensor and monitor",
+        "condition": "outdoor construction equipment, light weathering"
+      },
+      "reject": [
+        "airport weather station with wind vane tower",
+        "handheld vane anemometer",
+        "generic home weather sensor",
+        "invented multi-sensor meteorological mast",
+        "displaying tower-crane 10/15 m/s values as if they were universal site limits",
+        "real manufacturer logo/model text"
+      ],
       "sources": [
-        "https://www.cjtech21.com/goods/goods_view.php?goodsNo=1000001045",
-        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001919",
-        "https://www.aceiot.co.kr/",
-        "https://aceiot.co.kr/products/thermal.php"
+        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001045",
+        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001782",
+        "https://m.finetest.co.kr/",
+        "https://law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1011851029"
       ]
     }
   },
   "next_render_order": [
-    "ppe_issue_station",
     "site_weather_station"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
