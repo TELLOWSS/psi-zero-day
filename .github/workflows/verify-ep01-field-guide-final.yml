@@ -27,8 +27,8 @@ jobs:
         run: npm run typecheck
       - name: Episode 01 Field Guide focused regression
         run: npx vitest run tests/field-guide-episode01-final.test.ts tests/field-guide-legal-basis.test.ts tests/field-guide-s2a-production.test.ts tests/strategy-scene-elements.test.ts
-      - name: Verify production scene-element binaries
-        run: npm run assets:production-scene-elements-check
+      - name: Verify Episode 01 final WebP binaries
+        run: node scripts/check-ep01-field-guide-final.mjs
       - name: Production build
         run: npm run build
       - name: Full repository regression diagnostics
