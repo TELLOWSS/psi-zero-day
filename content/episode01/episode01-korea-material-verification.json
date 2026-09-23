@@ -406,7 +406,47 @@
       }
     },
     "material_yard": {
-      "status": "research_verified_function_exact_material_layout_pending"
+      "status": "visual_composition_locked_ready_to_render",
+      "classification": "Korean construction-site organized material storage yard",
+      "legal_safety_function": [
+        "Materials must be stored so they do not collapse or overturn.",
+        "Stored and dismantled materials must not obstruct worker passage or create trip hazards.",
+        "Loading/unloading and equipment travel need their own controlled space and clear approach."
+      ],
+      "selected_episode01_visual_family": {
+        "zone_a": "two same-size Korean Euroform bundles on timber sleepers, horizontally stacked and strapped",
+        "zone_b": "galvanized shoring/pipe members grouped by length on a simple low steel cradle/rack",
+        "aisle": "clear central worker/service aisle between storage zones",
+        "ground": "flat temporary concrete/asphalt yard surface with mild dirt and restrained painted boundary lines",
+        "separation": "storage zones stay inside their marked footprint and do not spill into the aisle"
+      },
+      "render_contract": {
+        "asset_type": "transparent scene-fragment module",
+        "composition": "compact rectangular yard fragment with two visibly separated material zones and one clear aisle",
+        "euroform": "reuse verified used Korean 6012-style Euroform bundle geometry; 1–2 bundles only",
+        "steel_members": "same-length galvanized shoring/pipe members, horizontally stacked in a simple low cradle or on sleepers; no mixed random scrap",
+        "dunnage": "timber sleepers visibly keep stacked material off the ground where appropriate",
+        "aisle": "clean, continuous and unobstructed",
+        "markings": "simple yellow/white boundary lines only; no text signs baked into reusable art",
+        "people": "none",
+        "vehicles": "none",
+        "branding": "none",
+        "background": "transparent outside the yard slab",
+        "camera": "slightly elevated three-quarter view so storage segregation and aisle are immediately legible",
+        "condition": "active Korean construction site, used materials with realistic dust/concrete residue but orderly"
+      },
+      "reject": [
+        "decorative mixed scrap pile",
+        "Euroform, rebar, timber and pipes tangled together",
+        "unstable leaning panels",
+        "material extending into the worker aisle",
+        "warehouse pallet-rack system unrelated to an outdoor/temporary construction yard",
+        "forklift or crane baked permanently into the reusable yard module"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=26&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132&um=s"
+      ]
     },
     "temporary_distribution_board": {
       "status": "visual_family_relocked_ready_to_regenerate",
@@ -732,16 +772,17 @@
         "https://kdsia.org/shop/list.php?ca_id=3080"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_exact_aed_family_refinement_required",
-        "generation_id": "2e669626-a737-4d0c-90a6-27037460c770",
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "e92b6174-4109-4c7b-88f0-0883dac4ff01",
         "accepted": [
-          "first-aid box and AED remain visibly separate",
-          "rugged first-aid case reads clearly",
-          "AED module is a dedicated cabinet/stand rather than merged into the kit"
+          "first-aid case and AED remain separate",
+          "AED reads as a tall Korean stand-type cabinet with upper device compartment and lower pedestal body",
+          "proportion is consistent with the verified NT-S1 class (about 375×140×1200 mm)",
+          "no real brand/model text is baked into the asset"
         ],
-        "rejected_or_unresolved": [
-          "AED cabinet is a generic white/red hybrid and not sufficiently locked to the verified Korean NT-S1/NT-W1 product family",
-          "for Episode 01 use the verified Korean stand-family geometry rather than a synthesized cabinet shape"
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
         ]
       }
     },
@@ -813,9 +854,9 @@
     }
   },
   "next_render_order": [
-    "first_aid_aed",
     "material_yard",
-    "pedestrian_gate"
+    "pedestrian_gate",
+    "site_weather_station"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
