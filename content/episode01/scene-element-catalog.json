@@ -1,5 +1,5 @@
 {
-  "schema_version": 9,
+  "schema_version": 10,
   "elements": {
     "material_stack": {
       "element_id": "scene.prop.material_stack",
@@ -490,10 +490,19 @@
         "id": "FG001",
         "section": "SECTION 0 — 프로젝트 셋업·현장개설",
         "section_order": 0,
-        "episode": "EP00",
+        "episode": "EP01",
         "process_order": 1,
         "observe_point_text_id": "ui.guide.site_gate.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_id": "ep01.scene_bg.gate_dawn",
+        "asset_path": "assets/episode01/cg/gate-dawn.webp",
+        "presentation": "production_scene_reference_crop",
+        "focus": "vehicle_gate_and_adjacent_worker_entry",
+        "source_scene": "Episode 01 gate-dawn production scene",
+        "rationale": "Field Guide uses the verified Episode 01 production gate scene instead of the legacy scene-element placeholder. Map/strategy asset promotion remains independent."
       }
     },
     "pedestrian_gate": {
@@ -525,12 +534,21 @@
         "id": "FG002",
         "section": "SECTION 0 — 프로젝트 셋업·현장개설",
         "section_order": 0,
-        "episode": "EP00",
+        "episode": "EP01",
         "process_order": 2,
         "observe_point_text_id": "ui.guide.pedestrian_gate.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
+      "field_guide_visual": {
+        "status": "final",
+        "asset_id": "ep01.scene_bg.gate_dawn",
+        "asset_path": "assets/episode01/cg/gate-dawn.webp",
+        "presentation": "production_scene_reference_crop",
+        "focus": "worker_entry_and_access_control",
+        "source_scene": "Episode 01 gate-dawn production scene",
+        "rationale": "Field Guide uses the verified Episode 01 production gate scene instead of the legacy scene-element placeholder. Map/strategy asset promotion remains independent."
+      }
     },
     "vehicle_pedestrian_separation": {
       "element_id": "scene.control.vehicle_pedestrian_separation",
