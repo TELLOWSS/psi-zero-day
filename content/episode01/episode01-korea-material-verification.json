@@ -553,22 +553,28 @@
         "note": "Selected as Episode 01 representative field equipment, not a universal statutory cabinet shape."
       },
       "render_contract": {
-        "composition": "one freestanding Korean-style PPE cabinet",
-        "body": "yellow powder-coated steel cabinet, mildly worn",
-        "door": "clear acrylic-front twin doors with simple hinges/latch",
-        "interior": "four tidy compartments/shelf zones",
+        "composition": "one freestanding Korean-style PPE safety cabinet",
+        "body": "plain yellow powder-coated steel rectangular cabinet, flat roof, no lifting lugs",
+        "door": "yellow steel front door or twin doors with modest clear acrylic viewing window(s), simple silver recessed handle/latch",
+        "interior": "three shelf levels, lightly stocked",
         "visible_ppe": [
-          "brand-neutral safety helmets",
-          "clear safety goggles",
-          "work gloves",
-          "dust masks/respiratory PPE packages"
+          "3–4 brand-neutral safety helmets",
+          "2–3 clear safety goggles",
+          "small stacks of work gloves",
+          "small pack/bin of dust masks"
         ],
-        "quantities": "small representative stock only; do not make it look like a retail store",
-        "condition": "clean and serviceable with light site dust/scuffs",
-        "text": "no readable Korean text, no fake inspection labels",
+        "legs": "four short yellow steel legs",
+        "condition": "serviceable, light construction-site dust and scuffs",
+        "text": "omit readable 안전보호구함 wording from reusable game art",
         "branding": "none",
         "background": "transparent",
-        "camera": "front three-quarter view, doors closed so contents remain visible through acrylic"
+        "camera": "front three-quarter view",
+        "reject": [
+          "roof lifting eyes",
+          "glass display-cabinet proportions",
+          "retail-store stock density",
+          "fake labels or KCs marks"
+        ]
       },
       "reject": [
         "open retail shelving",
@@ -581,7 +587,22 @@
       "sources": [
         "https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&chrClsCd=010202&efYd=20260302&lsiSeq=273603&urlMode=lsInfoP",
         "https://www.safetyzone.co.kr/shop/shopbrand.html?mcode=003&xcode=011"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_regeneration_required",
+        "generation_id": "bfa21923-958d-43c4-9898-402560524455",
+        "accepted": [
+          "yellow powder-coated steel body",
+          "clear viewing area",
+          "organized helmets, goggles, gloves and masks",
+          "short freestanding legs"
+        ],
+        "rejected_or_unresolved": [
+          "three lifting lugs on the cabinet roof are not part of the selected Korean representative product family",
+          "full-height twin acrylic doors and heavy hinge pattern are overbuilt compared with the verified Korean cabinet references",
+          "inventory density is too high for a simple reusable PPE issue-point asset"
+        ]
+      }
     },
     "fire_extinguisher_station": {
       "status": "visual_family_locked_ready_to_render",
