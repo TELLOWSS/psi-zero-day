@@ -239,7 +239,11 @@ if (productionCheck) {
       }],
       dependencies: [],
       preload_policy: item.preload_policy,
-      version: '1',
+      version: item.source.startsWith('scene_element:')
+        && elementCatalog.elements?.[item.source.slice('scene_element:'.length)]?.production_status === 'final'
+        && elementCatalog.elements?.[item.source.slice('scene_element:'.length)]?.art?.style_profile === 'field-guide-production-realistic-v2'
+        ? '2'
+        : '1',
     });
   }
   assets.sort((a, b) => a.asset_id.localeCompare(b.asset_id));
