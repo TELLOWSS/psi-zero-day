@@ -731,7 +731,16 @@
         "observe_point_text_id": "ui.guide.ppe_issue_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 PPE station uses a Korean freestanding steel/acrylic safety-equipment cabinet as the representative visual family. The cabinet itself is not a universal statutory form; the legal requirement is PPE issue, use and maintenance.",
+      "site_reality_profile": {
+        "subject": "korean_freestanding_ppe_issue_cabinet",
+        "geometry_source": "current Korean safety-cabinet product family",
+        "legal_meaning": "distribution_and_maintenance_point_not_universal_cabinet_requirement",
+        "cabinet_body": "powder_coated_steel",
+        "door": "clear_acrylic_viewing_panel",
+        "shelf_layout": "3_shelf_4_compartment_class",
+        "final_without_korean_product_family_verification": false
+      }
     },
     "fire_extinguisher_station": {
       "element_id": "scene.control.fire_extinguisher_station",
