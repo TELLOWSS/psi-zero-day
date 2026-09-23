@@ -28,9 +28,17 @@ function clickPresentationChoice(text: string) {
   act(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
 }
 function continueCurrent(session: EpisodeSession) {
-  const mapReturn = session.t('ui.strategy.return_map');
-  if (buttons().some(button => button.textContent?.includes(mapReturn))) click(mapReturn);
-  else click(session.t('ui.continue'));
+  const coldOpen = container.querySelector('.episode-cold-open-cta') as HTMLButtonElement | null;
+  if (coldOpen) {
+    act(() => coldOpen.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
+    return;
+  }
+  const outcomeNext = container.querySelector('.strategy-outcome-next') as HTMLButtonElement | null;
+  if (outcomeNext) {
+    act(() => outcomeNext.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
+    return;
+  }
+  click(session.t('ui.continue'));
 }
 function mount() {
   const session = new EpisodeSession(episodeOptions(42), episodeBounds);
@@ -201,7 +209,7 @@ describe('Playable Episode React UI', () => {
       expect.objectContaining({ type: 'SHOW_RESULT', text_id: 'ep01.plan.d.result' }),
     ]);
     expect(session.getSnapshot().state!.event_runtime.choice_history).toHaveLength(1);
-    click(session.t('ui.strategy.return_map'));
+    click(session.t('ui.strategy.next_situation'));
     expect(session.getSnapshot().presentation[0]).toMatchObject({ text_id: 'ep01.junho.signal' });
   });
 
