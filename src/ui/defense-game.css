@@ -386,3 +386,12 @@
   .zb-scenario-card p{font-size:9px}
   .zb-event-debrief{margin-top:6px;padding:7px}
 }
+
+
+/* Episode 01 regression lock: ZERO BREACH remains available from the Hub.
+   On compact play surfaces the floating shortcut must never cover story/strategy controls. */
+@media (max-width: 900px), (max-height: 650px) {
+  body:has(.game-frame.phase-playing) .game-defense-toggle {
+    display: none !important;
+  }
+}
