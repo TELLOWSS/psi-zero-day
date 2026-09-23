@@ -743,15 +743,15 @@
       "group_id": "ep01.scene_elements",
       "variants": [
         {
-          "uri": "assets/episode01/scene-elements/material-stack.webp",
+          "uri": "assets/episode01/scene-elements/material-yard.webp",
           "format": "webp",
-          "bytes": 51984,
-          "hash": "88692a78c8958c697acda30f76379c577b61667422a2d2a43e6105b2016394f0"
+          "bytes": 169282,
+          "hash": "eb6350820151a983b0d5960218d8a9ac590fab8cad3fede2e514cce00229d142"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.material_yard",

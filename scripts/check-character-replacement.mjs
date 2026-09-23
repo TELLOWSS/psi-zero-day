@@ -6,8 +6,12 @@ const strict=process.argv.includes('--require-new');
 const baseline=JSON.parse(fs.readFileSync(path.join(root,'content/episode01/character-replacement-baseline.json'),'utf8'));
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'content/episode01/embedded-media/character-media.json'),'utf8'));
 const plan=JSON.parse(fs.readFileSync(path.join(root,'content/episode01/character-replacement-plan.json'),'utf8'));
+const batchA=JSON.parse(fs.readFileSync(path.join(root,'content/episode01/production-art-batch-a.json'),'utf8'));
 
 const byId=new Map((manifest.assets??[]).map(asset=>[asset.id,asset]));
+const minimumByTarget=new Map((batchA.assets??[])
+  .filter(asset=>asset?.path && asset?.minimum_size)
+  .map(asset=>[asset.path,asset.minimum_size]));
 const rows=[];
 const errors=[];
 
@@ -19,7 +23,8 @@ for(const base of baseline.assets??[]){
     continue;
   }
   const changed=current.sha256!==base.sha256;
-  const shapeOk=current.width>=base.width && current.height>=base.height && current.alpha===true;
+  const minimum=minimumByTarget.get(current.target) ?? { width: base.width, height: base.height };
+  const shapeOk=current.width>=minimum.width && current.height>=minimum.height && current.alpha===true;
   rows.push({
     id:base.id,
     status:changed && shapeOk ? 'new-candidate' : changed ? 'new-invalid-shape' : 'legacy',
@@ -28,7 +33,7 @@ for(const base of baseline.assets??[]){
     bytes:current.bytes,
     sha256:current.sha256,
   });
-  if(changed && !shapeOk) errors.push(`${base.id}: replacement changed but minimum dimensions/alpha contract failed`);
+  if(changed && !shapeOk) errors.push(`${base.id}: replacement changed but approved Batch A minimum dimensions/alpha contract failed`);
 }
 
 const replaced=rows.filter(row=>row.status==='new-candidate').length;

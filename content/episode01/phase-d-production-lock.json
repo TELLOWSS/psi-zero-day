@@ -40,8 +40,8 @@
     },
     "episode01_runtime_scene_elements": {
       "required": 1,
-      "ready": 0,
-      "status": "PENDING"
+      "ready": 1,
+      "status": "LOCKED"
     },
     "visual_quality_rebaseline": {
       "required": 6,
@@ -60,15 +60,15 @@
     "note": "The remaining reusable catalog is preserved for Field Guide and future episode/process expansion and does not block Episode 01 cinematic lock."
   },
   "current_blockers": [
-    "TBM and FIELD live screens still sit below the Director-approved commercial visual baseline; world-first composition rebaseline is active.",
-    "material_stack remains the only Episode 01 runtime scene-element binary requiring realistic-v2 final replacement."
+    "TBM and FIELD live screens still sit below the Director-approved commercial visual baseline; world-first composition rebaseline is active."
   ],
   "locked_now": [
     "8/8 immersive background binaries remain exact",
     "5/5 character performance-wave binaries",
     "8/8 production-v1 audio binaries",
     "Phase C camera/transition/responsive direction baseline",
-    "D-1 title-cast identity refresh 8/8 Production LOCKED across Main → Loading → MAP"
+    "D-1 title-cast identity refresh 8/8 Production LOCKED across Main → Loading → MAP",
+    "D-3 Episode 01 runtime material_stack locked to verified realistic-v2 Euroform storage art"
   ],
   "exit_command": "npm run phase-d:check",
   "scope_rule": "Phase D closes the Episode 01 cinematic vertical slice. It does not require future Field Guide/campaign art that is not placed in Episode 01 runtime.",
@@ -94,7 +94,7 @@
   "execution_order": [
     "D-1: title-cast identity refresh — LOCKED",
     "D-2: visual quality rebaseline — TBM then FIELD, then remaining four production scene families",
-    "D-3: replace runtime material_stack with realistic-v2 final cutout",
+    "D-3: runtime material_stack — LOCKED with verified realistic-v2 Euroform storage art",
     "D-4: lock remaining scene/UI/sound/direction polish against the visual baseline",
     "D-5: run strict phase-d:check and lock Episode 01 cinematic vertical slice"
   ],

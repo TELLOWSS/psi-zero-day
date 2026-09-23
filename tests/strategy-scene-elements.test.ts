@@ -22,16 +22,17 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(new Set(elements.map(item => item.planned_asset_id)).size).toBe(elements.length);
   });
 
-  it('keeps the approved material stack playable while tracking its realistic-v2 replacement', () => {
-    expect(catalog.elements.material_stack.production_status).toBe('replacement_required');
-    expect(catalog.elements.material_stack.production_note).toContain('realistic-v2 replacement required');
+  it('locks the Episode 01 material stack to the verified realistic-v2 Euroform final', () => {
+    expect(catalog.elements.material_stack.production_status).toBe('final');
+    expect(catalog.elements.material_stack.production_note).toContain('verified realistic-v2 Euroform storage cutout');
     expect(catalog.elements.material_stack.storage_profile).toMatchObject({
       dimension_grouping: 'same_spec_only',
       mixed_dimensions_allowed: false,
       binding_method: 'center_ratchet_or_equivalent',
       binding_position: 'center',
     });
-    expect(catalog.elements.material_stack.art.path).toBe('assets/episode01/scene-elements/material-stack.webp');
+    expect(catalog.elements.material_stack.art.path).toBe('assets/episode01/scene-elements/material-yard.webp');
+    expect(catalog.elements.material_stack.production.reused_from_asset_id).toBe('ep01.scene_element.material_yard');
     expect(catalog.elements.material_stack.storage_profile.safety_evaluation_note)
       .toContain('결속 형상만으로 안전을 판정하지 않고');
   });
@@ -95,7 +96,7 @@ describe('Episode 01 reusable scene element catalog', () => {
         catalog_key: 'material_stack',
         anchor: 'entry',
         label: '통로 인접 적재 자재',
-        production_status: 'replacement_required',
+        production_status: 'final',
         storage_profile: expect.objectContaining({
           dimension_grouping: 'same_spec_only',
           mixed_dimensions_allowed: false,
@@ -109,15 +110,18 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(projectEpisode01SceneElements('e01_04_junho_signal')).toEqual([]);
   });
 
-  it('keeps the canonical Episode 01 field set playable while all legacy visuals remain tracked for realistic-v2 replacement', () => {
+  it('keeps material_stack final while the remaining legacy reusable visuals stay tracked for replacement', () => {
     const canonical = [
       'material_stack', 'access_barrier', 'vehicle_overlap_zone', 'harness_unclipped',
       'platform_cut_edge', 'suspended_load', 'gangform_lift_wire22', 'exclusion_zone',
       'wet_floor', 'open_edge',
     ] as const;
     expect(Object.keys(catalog.elements).length).toBeGreaterThanOrEqual(canonical.length);
-    expect(canonical.every(key => catalog.elements[key].production_status === 'replacement_required')).toBe(true);
-    expect(canonical.every(key => catalog.elements[key].production_note?.includes('replacement required'))).toBe(true);
+    expect(catalog.elements.material_stack.production_status).toBe('final');
+    expect(canonical.filter(key => key !== 'material_stack')
+      .every(key => catalog.elements[key].production_status === 'replacement_required')).toBe(true);
+    expect(canonical.filter(key => key !== 'material_stack')
+      .every(key => catalog.elements[key].production_note?.includes('replacement required'))).toBe(true);
     const placed = Object.values(catalog.event_elements).flat().map(element => element.element_key);
     expect(placed).toEqual(['material_stack', 'material_stack']);
   });
