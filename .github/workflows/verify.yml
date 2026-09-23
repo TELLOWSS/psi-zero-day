@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - astra/task-007-casual-strategy-foundation
+      - sol/ep01-regression-ui-fix-20260923
   workflow_dispatch:
 
 permissions:
@@ -88,6 +89,7 @@ jobs:
 
       - name: Upload responsive QA evidence
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: episode01-responsive-qa
@@ -102,6 +104,7 @@ jobs:
         run: npm run production:status
 
       - name: Upload verified web bundle
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: psi-zero-day-web-dist
