@@ -40,10 +40,11 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(catalog.elements.access_barrier.production_status).toBe('replacement_required');
     expect(catalog.elements.access_barrier.production_note).toContain('realistic-v2 replacement required');
     expect(catalog.elements.access_barrier.access_control_profile).toMatchObject({
-      barrier_form: 'freestanding_modular',
-      body_material: 'high_visibility_polymer',
-      stabilization: 'weighted_feet',
-      reflective_marking: true,
+      barrier_form: 'korean_banding_movable_screen_fence',
+      body_material: 'galvanized_round_tube_with_blue_mesh',
+      stabilization: 'two_black_weighted_bases',
+      rounded_top_corners: true,
+      tube_diameter_mm_options: [25.4, 31.8],
       integrated_text_allowed: false,
       integrated_sign_allowed: false,
       warning_lamps_allowed: false,
@@ -121,19 +122,21 @@ describe('Episode 01 reusable scene element catalog', () => {
     expect(placed).toEqual(['material_stack', 'material_stack']);
   });
 
-  it('locks the fall-protection visual to a brand-neutral twin-Y full-body harness', () => {
+  it('locks the authored Episode 01 fall-protection scenario to a Korean KCs product family without making twin-Y universal', () => {
     expect(catalog.elements.harness_unclipped.fall_protection_profile).toMatchObject({
       harness_type: 'full_body',
-      lanyard_configuration: 'twin_y',
+      certification_context: 'KCs safety-certified product family',
+      scenario_configuration: 'twin_y_double_lanyard',
+      scenario_configuration_is_universal_requirement: false,
       lanyard_count: 2,
       hook_count: 2,
-      connection_intent: 'continuous_attachment_during_transfer',
+      connection_intent: 'continuous_attachment_during_transfer_when_this_site_method_is_used',
       branding_policy: 'no_logo_no_trademark',
     });
-    expect(catalog.elements.harness_unclipped.fall_protection_profile.design_reference).toContain('SWELOCK');
+    expect(catalog.elements.harness_unclipped.fall_protection_profile.design_reference).toContain('Korean KCs-certified');
     expect(catalog.elements.harness_unclipped.art.path).toBe('assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp');
     expect(catalog.elements.harness_unclipped.fall_protection_profile.safety_evaluation_note)
-      .toContain('두 줄 자체만으로 안전을 판정하지 않고');
+      .toContain('KCs 인증 여부');
   });
 
   it('locks general lifting to round-sling choker hitch while keeping gangform hitch site-defined', () => {
