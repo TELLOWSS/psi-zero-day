@@ -26,7 +26,7 @@ describe('Episode 01 Phase D production lock', () => {
     expect(catalog.elements.material_stack).toMatchObject({
       production_status: 'final',
       planned_asset_id: 'ep01.scene_element.material_stack',
-      art: { path: 'assets/episode01/scene-elements/material-yard.webp' },
+      art: { path: 'assets/episode01/scene-elements/material-stack-realistic-v2.webp' },
     });
   });
 

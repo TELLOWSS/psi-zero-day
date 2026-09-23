@@ -17,7 +17,7 @@
         "safety_evaluation_note": "결속 형상만으로 안전을 판정하지 않고 적재 안정성, 받침목, 결속 상태, 통로 침범 여부 및 작업계획을 함께 평가한다."
       },
       "art": {
-        "path": "assets/episode01/scene-elements/material-yard.webp",
+        "path": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
         "minimum_width": 768,
         "minimum_height": 512,
         "pivot": {
@@ -45,7 +45,7 @@
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Episode 01 runtime final reuses the verified realistic-v2 Euroform storage cutout from FG004: same-size used Euroform bundles on sleepers with visible securing and clear aisle context. The legacy generic shoring-member binary is retained only as an unbound historical asset and is not used by Episode 01 runtime.",
+      "production_note": "Episode 01 runtime final uses a dedicated repository copy of the verified realistic-v2 Euroform storage cutout from FG004: same-size used Euroform bundles on sleepers with visible securing and clear aisle context. The legacy generic shoring-member binary is retained only as an unbound historical asset and is not used by Episode 01 runtime.",
       "episode01_visual_profile": {
         "subject": "used_korean_euroform_panel_bundle",
         "context": "formwork cleanup near Episode 01 access/yard scene",
@@ -69,7 +69,8 @@
         "source_generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
         "visual_review": "approved_realistic_v2_runtime_reuse",
         "legal_visual_gate": "field-guide-kr-legal-basis-v1",
-        "reused_from_asset_id": "ep01.scene_element.material_yard"
+        "reused_from_asset_id": "ep01.scene_element.material_yard",
+        "repository_path": "assets/episode01/scene-elements/material-stack-realistic-v2.webp"
       },
       "site_reality_profile": {
         "subject": "episode01_verified_euroform_material_stack",
