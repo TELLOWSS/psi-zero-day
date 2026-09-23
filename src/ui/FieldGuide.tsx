@@ -20,6 +20,13 @@ type CatalogEntry = {
   planned_asset_id: string;
   visual_token?: string;
   field_guide?: GuideMeta;
+  field_guide_visual?: {
+    status?: string;
+    asset_id: string;
+    asset_path?: string;
+    presentation?: string;
+    focus?: string;
+  };
 };
 
 type LegalApplicability = 'direct' | 'related' | 'general';
@@ -63,9 +70,17 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
   alt: string;
   className?: string;
 }) {
-  const uri = session.assetUri(entry.planned_asset_id);
-  return <div className={`field-guide-visual ${className ?? ''}`.trim()}>
-    {uri ? <VisualImage uri={uri} alt={alt} /> : <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />}
+  const guideVisual = entry.field_guide_visual;
+  const uri = session.assetUri(guideVisual?.asset_id ?? entry.planned_asset_id);
+  return <div
+    className={`field-guide-visual ${className ?? ''}`.trim()}
+    data-item-key={itemKey}
+    data-guide-visual-status={guideVisual?.status}
+    data-guide-presentation={guideVisual?.presentation}
+    data-guide-focus={guideVisual?.focus}
+  >
+    {uri ? <VisualImage uri={uri} alt={alt} className="field-guide-image" /> : null}
+    <FieldGuideArt itemKey={itemKey} kind={(entry as any).kind} title={alt} />
   </div>;
 }
 
