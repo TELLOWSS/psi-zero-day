@@ -280,6 +280,15 @@
   .strategy-shell[data-loop-phase="target"] .strategy-action-empty {
     display: none !important;
   }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-next-step {
+    margin: 0 !important;
+    padding: 7px 9px !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-next-step > small {
+    display: none !important;
+  }
 }
 
 @media (orientation:portrait) and (max-width:420px) {
