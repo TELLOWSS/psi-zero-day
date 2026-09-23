@@ -8,6 +8,8 @@ import catalog from '../content/episode01/scene-element-catalog.json';
 import { FieldGuide } from '../src/ui/FieldGuide';
 
 const keys = [
+  'site_gate',
+  'pedestrian_gate',
   'vehicle_pedestrian_separation',
   'material_yard',
   'temporary_distribution_board',
@@ -19,7 +21,7 @@ const keys = [
 ] as const;
 
 describe('Episode 01 Field Guide runtime asset routing', () => {
-  it('renders FG003-FG010 through the manifest-backed final WebP paths', async () => {
+  it('renders FG001-FG010 through manifest-backed production WebP routes', async () => {
     const manifest = assets as any;
     const guide = catalog as any;
     const session = {
@@ -44,12 +46,18 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
     for (const key of keys) {
       const entry = guide.elements[key];
       expect(entry.field_guide.episode).toBe('EP01');
-      expect(srcs.some(src => src.endsWith(entry.art.path))).toBe(true);
-      const matching = images.find(image => (image.getAttribute('src') ?? '').endsWith(entry.art.path));
+      const assetId = entry.field_guide_visual?.asset_id ?? entry.planned_asset_id;
+      const asset = manifest.assets.find((candidate: any) => candidate.asset_id === assetId);
+      expect(asset).toBeDefined();
+      const uri = asset.variants[0].uri;
+      expect(srcs.some(src => src.endsWith(uri))).toBe(true);
+      const matching = images.find(image => (image.getAttribute('src') ?? '').endsWith(uri));
       expect(matching?.getAttribute('data-asset-tier')).toBe('final');
     }
 
-    expect(host.textContent).toContain('FG003');
+    expect(guide.elements.site_gate.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
+    expect(guide.elements.pedestrian_gate.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
+    expect(host.textContent).toContain('FG001');
     expect(host.textContent).toContain('FG010');
 
     await act(async () => root.unmount());
