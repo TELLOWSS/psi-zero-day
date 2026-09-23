@@ -348,7 +348,7 @@
   },
   "field_guide_section0": {
     "vehicle_pedestrian_separation": {
-      "status": "regeneration_in_progress",
+      "status": "approved_final_candidate_pending_binary_and_runtime_review",
       "classification": "Korean construction-site separated passage assembly",
       "official_basis": [
         "KOSHA construction guidance states that a safe passage for workers should be installed separately from material-handling/construction-equipment routes and maintained usable.",
@@ -390,19 +390,19 @@
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=114&um=s"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_overbuilt_scene_fragment",
-        "generation_id": "e2cdd61c-a2d3-42f1-8cc8-67f4628aa0da",
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "e53218fb-e09c-486d-b780-cd3cbe3d0fea",
         "accepted": [
-          "continuous blue-mesh Korean fence family",
-          "clear visual distinction between pedestrian and vehicle routes",
-          "realistic construction-road wear"
+          "ground-level pedestrian and vehicle routes",
+          "continuous physical separation with three Korean blue-mesh movable fence panels",
+          "black weighted bases",
+          "restrained lane-edge markings",
+          "no raised deck, outer guardrail, water barrier, people or vehicles baked into the reusable module"
         ],
-        "rejected_or_unresolved": [
-          "raised perforated-deck walkway was invented and is not required by the verified Episode 01 route condition",
-          "extra outer guardrail and orange water barriers add unverified control systems and obscure the core separation logic",
-          "asset should show one ground-level pedestrian route and one vehicle route separated by the verified fence family, not a compound temporary bridge system"
-        ],
-        "action": "Regenerate only after a simpler Korean internal-site route composition is locked."
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
+        ]
       }
     },
     "material_yard": {
@@ -629,7 +629,7 @@
         "gauge": "small round pressure gauge under the valve assembly",
         "hose": "one black flexible discharge hose clipped neatly to the cylinder side",
         "handle": "black/metal lever and safety pin visible",
-        "stand": "simple red or dark floor base/stand; no oversized designer cabinet",
+        "stand": "low Korean 3.3kg extinguisher floor stand: red square/trapezoidal plastic base with a circular recessed opening; omit readable 소화기/FIRE EXTINGUISHER lettering from reusable art",
         "label": "generic small safety label texture only; no legible manufacturer or certification text",
         "signage": "none baked into reusable art",
         "background": "transparent",
@@ -649,7 +649,21 @@
         "https://prod.danawa.com/vssearch/?productCodes=28377512",
         "https://architecture-estimate.com/wp-content/uploads/2026/02/LH%EA%B3%B5%EC%82%AC%EC%9B%90%EA%B0%80-%EC%82%B0%EC%A0%95%EC%A7%80%EC%B9%A8%EA%B1%B4%EC%B6%95_%EC%A0%84%EB%AC%B8-%EB%93%B1%EC%9E%AC.pdf"
       ],
-      "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition."
+      "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition.",
+      "generated_candidate": {
+        "status": "rejected_for_final_base_geometry_wrong",
+        "generation_id": "b1f22434-0f5a-4713-9132-dfed93ac08fd",
+        "accepted": [
+          "3.3kg-class red stored-pressure extinguisher proportion",
+          "pressure gauge",
+          "black hose",
+          "safety pin"
+        ],
+        "rejected_or_unresolved": [
+          "round cradle-style base does not match the selected common Korean 3.3kg floor-stand family",
+          "replace with low red square/trapezoidal stand with circular extinguisher recess"
+        ]
+      }
     },
     "first_aid_aed": {
       "status": "visual_family_locked_ready_to_render",
@@ -688,14 +702,14 @@
       ],
       "selected_episode01_visual_family": {
         "first_aid_box": "white or light-gray rugged ABS first-aid box/cabinet with red cross marker, portable or wall-capable",
-        "aed_module": "separate white/red AED wall cabinet or slim floor stand placed adjacent to first-aid box",
+        "aed_module": "Korean NT-S1 class stand-type AED cabinet: red slim pedestal, square upper AED cabinet, lower instruction-panel body; brand/model text removed.",
         "relationship": "two adjacent emergency-response assets; visually distinct so AED is not mistaken for the first-aid kit itself",
         "legal_message": "asset presence does not imply universal AED legal obligation"
       },
       "render_contract": {
         "composition": "one compact emergency-response station containing a first-aid box and a separate AED cabinet/stand",
         "first_aid_box": "rugged rectangular ABS/PE case, white/light gray, red cross symbol only, simple handle/latches",
-        "aed_cabinet": "clean white/red vertical cabinet or slim stand with small heart/lightning pictogram; no real manufacturer logo",
+        "aed_cabinet": "red slim NT-S1-class stand: square upper AED cabinet with viewing area/alarm module and tall lower instruction-panel pedestal; use blank/simple universal pictograms instead of readable Korean product instructions",
         "contents": "do not display drugs or detailed medical contents outside the box",
         "text": "minimal; no dense Korean labels or fake certification marks",
         "branding": "none",
@@ -715,7 +729,20 @@
         "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1031856731",
         "https://www.navimro.com/p/K08964818/",
         "https://kdsia.org/shop/list.php?ca_id=3080"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_exact_aed_family_refinement_required",
+        "generation_id": "2e669626-a737-4d0c-90a6-27037460c770",
+        "accepted": [
+          "first-aid box and AED remain visibly separate",
+          "rugged first-aid case reads clearly",
+          "AED module is a dedicated cabinet/stand rather than merged into the kit"
+        ],
+        "rejected_or_unresolved": [
+          "AED cabinet is a generic white/red hybrid and not sufficiently locked to the verified Korean NT-S1/NT-W1 product family",
+          "for Episode 01 use the verified Korean stand-family geometry rather than a synthesized cabinet shape"
+        ]
+      }
     },
     "site_weather_station": {
       "status": "visual_family_locked_ready_to_render",
@@ -785,10 +812,10 @@
     }
   },
   "next_render_order": [
-    "vehicle_pedestrian_separation",
-    "first_aid_aed",
     "fire_extinguisher_station",
-    "material_yard"
+    "first_aid_aed",
+    "material_yard",
+    "pedestrian_gate"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
