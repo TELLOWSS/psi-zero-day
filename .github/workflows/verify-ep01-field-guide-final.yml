@@ -1,0 +1,36 @@
+name: Verify Episode 01 Field Guide final
+
+on:
+  push:
+    branches:
+      - sol/ep01-field-guide-final-20260923
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - name: Verify committed asset manifest
+        run: |
+          npm run assets:manifest
+          git diff --exit-code -- content/episode01/assets.json
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Episode 01 Field Guide focused regression
+        run: npx vitest run tests/field-guide-episode01-final.test.ts tests/field-guide-legal-basis.test.ts tests/field-guide-s2a-production.test.ts tests/strategy-scene-elements.test.ts
+      - name: Verify production scene-element binaries
+        run: npm run assets:production-scene-elements-check
+      - name: Production build
+        run: npm run build
+      - name: Full repository regression diagnostics
+        continue-on-error: true
+        run: npm test

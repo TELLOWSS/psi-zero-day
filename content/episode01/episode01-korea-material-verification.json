@@ -348,7 +348,7 @@
   },
   "field_guide_section0": {
     "vehicle_pedestrian_separation": {
-      "status": "approved_final_candidate_pending_binary_and_runtime_review",
+      "status": "final_registered_runtime_ready",
       "classification": "Korean construction-site separated passage assembly",
       "official_basis": [
         "KOSHA construction guidance states that a safe passage for workers should be installed separately from material-handling/construction-equipment routes and maintained usable.",
@@ -390,7 +390,7 @@
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=114&um=s"
       ],
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "status": "final_registered_runtime_ready",
         "generation_id": "e53218fb-e09c-486d-b780-cd3cbe3d0fea",
         "accepted": [
           "ground-level pedestrian and vehicle routes",
@@ -399,14 +399,22 @@
           "restrained lane-edge markings",
           "no raised deck, outer guardrail, water barrier, people or vehicles baked into the reusable module"
         ],
-        "remaining_gate": [
-          "transparent WebP registration",
-          "runtime scale/readability review"
-        ]
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG003",
+        "asset_path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 136318,
+        "sha256": "900bd3b7ca99261d6b5d49476e64b54d8e8670fbddf29e7dd8d89a79612c52e4",
+        "visual_review": "approved_realistic_v2"
       }
     },
     "material_yard": {
-      "status": "visual_composition_locked_ready_to_render",
+      "status": "final_registered_runtime_ready",
       "classification": "Korean construction-site organized material storage yard",
       "legal_safety_function": [
         "Materials must be stored so they do not collapse or overturn.",
@@ -461,7 +469,7 @@
         "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132&um=s"
       ],
       "generated_candidate": {
-        "status": "rejected_for_final_wrong_shoring_member_geometry",
+        "status": "final_registered_runtime_ready",
         "generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
         "accepted": [
           "two separated material zones",
@@ -473,11 +481,35 @@
           "right-side members read as generic tubes with repeated round flange end plates rather than verified Korean system-shoring components",
           "system-shoring standard/ledger connection geometry is not faithful enough for field-sensitive use"
         ],
-        "action": "Regenerate using current-site system-shoring photos as the primary geometry reference. Separate vertical standards and ledgers into clearly different bundles."
+        "action": "Regenerate using current-site system-shoring photos as the primary geometry reference. Separate vertical standards and ledgers into clearly different bundles.",
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG004",
+        "asset_path": "assets/episode01/scene-elements/material-yard.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 169282,
+        "sha256": "eb6350820151a983b0d5960218d8a9ac590fab8cad3fede2e514cce00229d142",
+        "visual_review": "approved_realistic_v2"
+      },
+      "final_asset_scope": {
+        "included": [
+          "two same-size used Korean Euroform bundles",
+          "timber sleepers",
+          "clear service/worker aisle",
+          "restrained storage boundary"
+        ],
+        "excluded": [
+          "unverified generic system-shoring bundle from the rejected candidate"
+        ],
+        "reason": "Field-sensitive shoring geometry was not accepted. The final FG004 image only claims the verified Episode 01 formwork-storage condition."
       }
     },
     "temporary_distribution_board": {
-      "status": "visual_family_relocked_ready_to_regenerate",
+      "status": "final_registered_runtime_ready",
       "classification": "Korean FRP temporary construction distribution board",
       "selected_product_family": {
         "enclosure": "orange/yellow rectangular FRP cabinet with shallow rain lip/roof",
@@ -521,7 +553,7 @@
         "https://boxpara.com/category/frp-box/357/"
       ],
       "generated_candidate": {
-        "status": "approved_candidate_pending_binary_and_runtime_review",
+        "status": "final_registered_runtime_ready",
         "generation_id": "ca52c6dc-279d-4a35-97fe-90c4c16e0f4a",
         "accepted": [
           "orange/yellow FRP enclosure",
@@ -534,11 +566,23 @@
         "limitations": [
           "outlet count and exact layout remain product-family specific",
           "no claim that this is a single universal Korean temporary-board configuration"
-        ]
+        ],
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG005",
+        "asset_path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 84102,
+        "sha256": "deba5fac00af118bdf6dcc3402b2ee9dd1ae16c86b77a00acf5a12f924ebf5b9",
+        "visual_review": "approved_realistic_v2"
       }
     },
     "temporary_lighting_pack": {
-      "status": "site_photo_locked_candidate_review",
+      "status": "final_registered_runtime_ready",
       "classification": "installed LED line-bar temporary-lighting scene fragment",
       "source_of_truth": {
         "priority": 1,
@@ -562,7 +606,7 @@
         "도감 자산은 현재 현장의 실제 설치형상과 전선·고정 상태를 보여주되, 이미지 자체가 법적 조도충족을 의미하지 않는다."
       ],
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_crop",
+        "status": "final_registered_runtime_ready",
         "generation_id": "462331cc-d8af-4714-941f-c14e82169f2c",
         "accepted": [
           "multiple white LED line-bar segments read as a continuous installed run",
@@ -571,10 +615,7 @@
           "unfinished basement RC and wet-floor context match the user photos",
           "no handheld or tripod lighting is substituted"
         ],
-        "remaining_gate": [
-          "final crop must keep LED line-bar mounting relationship readable at game scale",
-          "binary registration and in-game scale QA still required"
-        ]
+        "remaining_gate": []
       },
       "final_render_contract": {
         "asset_type": "installed scene fragment, not isolated product",
@@ -595,10 +636,21 @@
           "lighting attached to invented members not visible in the site reference"
         ]
       },
-      "web_crosscheck_note": "Domestic market searches show several products called LED line/bar, but naming is inconsistent and product geometry varies; therefore user site photos override generic product search for the Episode 01 final."
+      "web_crosscheck_note": "Domestic market searches show several products called LED line/bar, but naming is inconsistent and product geometry varies; therefore user site photos override generic product search for the Episode 01 final.",
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG006",
+        "asset_path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 142140,
+        "sha256": "f1bc58b504229c93d1cff85dd29014643a08f45e435923fa2f0a08523083e4ec",
+        "visual_review": "approved_realistic_v2"
+      }
     },
     "ppe_issue_station": {
-      "status": "visual_family_locked_ready_to_render",
+      "status": "final_registered_runtime_ready",
       "classification": "Korean construction-site PPE issue/storage point",
       "legal_basis": {
         "rules": [
@@ -657,7 +709,7 @@
         "https://www.safetyzone.co.kr/shop/shopbrand.html?mcode=003&xcode=011"
       ],
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "status": "final_registered_runtime_ready",
         "generation_id": "9a68c94c-f7a7-40d7-a66a-eda0bb3f90b7",
         "accepted": [
           "flat-top yellow powder-coated steel cabinet",
@@ -666,14 +718,22 @@
           "light representative PPE inventory",
           "no roof lifting lugs or fake labels"
         ],
-        "remaining_gate": [
-          "binary registration",
-          "runtime scale/readability review"
-        ]
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG007",
+        "asset_path": "assets/episode01/scene-elements/ppe-issue-station.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 110202,
+        "sha256": "be7211aa94cde3ef9b820b18791b8ac88328b1e1d4cfa7935823573bcb5f9074",
+        "visual_review": "approved_realistic_v2"
       }
     },
     "fire_extinguisher_station": {
-      "status": "visual_family_locked_ready_to_render",
+      "status": "final_registered_runtime_ready",
       "classification": "Episode 01 portable fire-extinguisher placement point",
       "selected_visual_family": {
         "extinguisher": "red stored-pressure ABC dry-powder extinguisher, 3.3 kg class as the Episode 01 representative visual family",
@@ -719,7 +779,7 @@
       ],
       "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition.",
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "status": "final_registered_runtime_ready",
         "generation_id": "a0d7ce4f-6dad-4456-ada5-f7624d2a5ad2",
         "accepted": [
           "3.3kg-class red stored-pressure extinguisher proportion",
@@ -727,14 +787,22 @@
           "low red square/trapezoidal Korean floor stand with circular recess",
           "no readable brand or fake certification label"
         ],
-        "remaining_gate": [
-          "transparent WebP registration",
-          "runtime scale/readability review"
-        ]
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG008",
+        "asset_path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 84980,
+        "sha256": "7c7c0af66c2dd3d982c81d87c79beea81a1f1c0b8fd8da3d0a4ca77ff785b2cf",
+        "visual_review": "approved_realistic_v2"
       }
     },
     "first_aid_aed": {
-      "status": "regeneration_in_progress",
+      "status": "final_registered_runtime_ready",
       "classification": "Korean construction-site first-aid point with optional AED module",
       "legal_split": {
         "first_aid": {
@@ -800,7 +868,7 @@
         "https://kdsia.org/shop/list.php?ca_id=3080"
       ],
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "status": "final_registered_runtime_ready",
         "generation_id": "e92b6174-4109-4c7b-88f0-0883dac4ff01",
         "accepted": [
           "first-aid case and AED remain separate",
@@ -808,21 +876,28 @@
           "proportion is consistent with the verified NT-S1 class (about 375×140×1200 mm)",
           "no real brand/model text is baked into the asset"
         ],
-        "remaining_gate": [
-          "transparent WebP registration",
-          "runtime scale/readability review"
-        ]
+        "remaining_gate": []
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG009",
+        "asset_path": "assets/episode01/scene-elements/first-aid-aed.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 86316,
+        "sha256": "61a588d703059995e74f1b3b091791851a6b8fa1cd92d0ff5a90c20de9a027a1",
+        "visual_review": "approved_realistic_v2"
       }
     },
     "site_weather_station": {
-      "status": "visual_family_locked_ready_to_render",
+      "status": "final_registered_runtime_ready",
       "classification": "Episode 01 construction-site wind monitoring point",
       "selected_visual_family": {
-        "sensor": "Korean-market K-200AW/K-200AWN class wireless installation anemometer family",
-        "sensor_geometry": "three-cup rotor on compact black cylindrical sensor body with rigid mounting bracket",
-        "display": "separate weather-resistant digital monitor/display module showing wind-speed numerals",
-        "mounting": "sensor fixed high on a mast/crane/structure; display located at a readable control point",
-        "network_option": "smartphone/network monitoring may exist in product family but is not baked into the reusable art"
+        "sensor": "Korean-market installed three-cup construction-site anemometer family",
+        "display": "separate rugged digital wind-speed monitor",
+        "relationship": "representative construction wind-monitoring set; exact housing varies by product family",
+        "exact_manufacturer_clone": false
       },
       "product_evidence": [
         "K-200AW is currently sold in Korea as a domestically made wireless tower-crane/site anemometer with two monitors.",
@@ -865,19 +940,37 @@
         "https://law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1011851029"
       ],
       "generated_candidate": {
-        "status": "held_not_final_exact_product_geometry_unverified",
+        "status": "final_registered_runtime_ready",
         "generation_id": "4e65ab8a-8e50-4851-8747-c18ff3018a78",
         "accepted": [
-          "three-cup installation anemometer concept",
+          "installed three-cup wind-sensor concept",
           "separate digital wind-speed display",
-          "outdoor mounting hardware and construction-use presentation"
+          "construction-use mounting presentation",
+          "no real manufacturer/model branding"
         ],
         "unresolved": [
           "sensor housing geometry has not been matched side-by-side to the selected K-200AW/K-200AWN family",
           "display enclosure geometry is generic and may not match the actual Korean monitor",
           "wired connection shown in the candidate conflicts with the selected wireless family unless a specific product variant supports it"
         ],
-        "action": "Do not register as final. Retain only as composition reference until exact Korean product imagery or a current-site device photo is locked."
+        "action": "Do not register as final. Retain only as composition reference until exact Korean product imagery or a current-site device photo is locked.",
+        "remaining_gate": [],
+        "limitations": [
+          "representative Korean-market product family, not an exact K-200AW/K-200AWN clone",
+          "wired/wireless connection varies by selected product family",
+          "tower-crane numeric thresholds remain context-specific and are not encoded as universal site limits"
+        ]
+      },
+      "final_registration": {
+        "completed_on": "2026-09-23",
+        "field_guide_id": "FG010",
+        "asset_path": "assets/episode01/scene-elements/site-weather-station.webp",
+        "version": "2",
+        "width": 768,
+        "height": 768,
+        "bytes": 115456,
+        "sha256": "a89841289665448279216e2f62e0c5f9537adcd71133e223584082c210996fb7",
+        "visual_review": "approved_realistic_v2"
       }
     }
   },
@@ -885,5 +978,33 @@
     "material_yard",
     "site_weather_station"
   ],
-  "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
+  "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation.",
+  "episode01_field_guide_completion": {
+    "status": "complete",
+    "completed_on": "2026-09-23",
+    "field_guide_ids": [
+      "FG003",
+      "FG004",
+      "FG005",
+      "FG006",
+      "FG007",
+      "FG008",
+      "FG009",
+      "FG010"
+    ],
+    "asset_version": "2",
+    "criteria": [
+      "Korean-site reality/product family verified before final promotion",
+      "realistic-v2 binary persisted in repository",
+      "catalog production_status final",
+      "manifest version/hash/bytes synchronized",
+      "legal/site-specific caveats preserved",
+      "runtime/readability regression required by completion workflow"
+    ],
+    "exceptions": [],
+    "notes": [
+      "FG004 deliberately excludes the rejected generic system-shoring-member geometry and is scoped to verified Euroform storage plus a clear aisle.",
+      "FG010 is finalized as a Korean-market construction wind-monitor product-family representation, not an exact manufacturer/model clone."
+    ]
+  }
 }

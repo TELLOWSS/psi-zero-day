@@ -633,13 +633,13 @@
         {
           "uri": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
           "format": "webp",
-          "bytes": 15008,
-          "hash": "d872e2e9415f138c3378b807be5c7f3743e74d5b5bb05271b217aa357eac006e"
+          "bytes": 84980,
+          "hash": "7c7c0af66c2dd3d982c81d87c79beea81a1f1c0b8fd8da3d0a4ca77ff785b2cf"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.first_aid_aed",
@@ -649,13 +649,13 @@
         {
           "uri": "assets/episode01/scene-elements/first-aid-aed.webp",
           "format": "webp",
-          "bytes": 16919,
-          "hash": "65428065ba7a8507976c9176fca827583029f0bd466474e3b2b9444d2480493d"
+          "bytes": 86316,
+          "hash": "61a588d703059995e74f1b3b091791851a6b8fa1cd92d0ff5a90c20de9a027a1"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.formwork_brace",
@@ -761,13 +761,13 @@
         {
           "uri": "assets/episode01/scene-elements/material-yard.webp",
           "format": "webp",
-          "bytes": 15009,
-          "hash": "e4fa31d23f3519ed15c96353770ccbd0a72efc32c0f861c4447ea495ad3169fd"
+          "bytes": 169282,
+          "hash": "eb6350820151a983b0d5960218d8a9ac590fab8cad3fede2e514cce00229d142"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.open_edge",
@@ -825,13 +825,13 @@
         {
           "uri": "assets/episode01/scene-elements/ppe-issue-station.webp",
           "format": "webp",
-          "bytes": 13837,
-          "hash": "af833bef764c115dd137e006e9c3d338cf2c64653d296837daf092ade17db3f8"
+          "bytes": 110202,
+          "hash": "be7211aa94cde3ef9b820b18791b8ac88328b1e1d4cfa7935823573bcb5f9074"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.site_gate",
@@ -857,13 +857,13 @@
         {
           "uri": "assets/episode01/scene-elements/site-weather-station.webp",
           "format": "webp",
-          "bytes": 10782,
-          "hash": "54600dcd1add9b3c30aacc982a4f74bada473074f443e8926414695879be4ea4"
+          "bytes": 115456,
+          "hash": "a89841289665448279216e2f62e0c5f9537adcd71133e223584082c210996fb7"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.suspended_load",
@@ -889,13 +889,13 @@
         {
           "uri": "assets/episode01/scene-elements/temporary-distribution-board.webp",
           "format": "webp",
-          "bytes": 15030,
-          "hash": "629522f7bb89b63d5707a87eccb44bc84cef9aa767aa5df5f86389ba05520a72"
+          "bytes": 84102,
+          "hash": "deba5fac00af118bdf6dcc3402b2ee9dd1ae16c86b77a00acf5a12f924ebf5b9"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.temporary_lighting_pack",
@@ -905,13 +905,13 @@
         {
           "uri": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
           "format": "webp",
-          "bytes": 16919,
-          "hash": "b0de525309e171d85ed249f390d8f2ad018e16e6aec46033e5400238dc2d2782"
+          "bytes": 142140,
+          "hash": "f1bc58b504229c93d1cff85dd29014643a08f45e435923fa2f0a08523083e4ec"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.vehicle_overlap",
@@ -937,13 +937,13 @@
         {
           "uri": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
           "format": "webp",
-          "bytes": 15009,
-          "hash": "f7c7b1ed985fbb00107b361e26b5443f44be5b46eb993305e60b67b45f5c7e94"
+          "bytes": 136318,
+          "hash": "900bd3b7ca99261d6b5d49476e64b54d8e8670fbddf29e7dd8d89a79612c52e4"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.wet_floor",

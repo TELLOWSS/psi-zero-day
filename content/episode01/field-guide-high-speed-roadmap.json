@@ -6,10 +6,10 @@
   "target_style": "field-guide-production-realistic-v2",
   "baseline": {
     "total": 118,
-    "approved_v2": 0,
-    "legacy_v1_placeholders": 20,
-    "needs_new_or_replacement": 118,
-    "note": "Legacy pictogram finals are preserved as placeholders but are not counted as completed under realistic-v2."
+    "approved_v2": 12,
+    "legacy_v1_placeholders": 12,
+    "needs_new_or_replacement": 106,
+    "note": "12 realistic-v2 finals are registered: Episode 01 FG003-FG010 plus S2-A FG024-FG027. EP00 and later sections remain separate."
   },
   "grade_policy": {
     "A": {
@@ -62,7 +62,7 @@
         "A": 1,
         "C": 4
       },
-      "workflow_status": "queued",
+      "workflow_status": "episode01_items_complete_ep00_items_remaining",
       "items": [
         {
           "key": "site_gate",
@@ -94,11 +94,13 @@
           "grade": "A",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
           "final_path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
           "reference_policy": "use real-site/user reference whenever available",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "material_yard",
@@ -106,11 +108,13 @@
           "grade": "B",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.material_yard",
           "final_path": "assets/episode01/scene-elements/material-yard.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "temporary_distribution_board",
@@ -118,11 +122,13 @@
           "grade": "B",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.temporary_distribution_board",
           "final_path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "temporary_lighting_pack",
@@ -130,11 +136,13 @@
           "grade": "C",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.temporary_lighting_pack",
           "final_path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "ppe_issue_station",
@@ -142,11 +150,13 @@
           "grade": "C",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.ppe_issue_station",
           "final_path": "assets/episode01/scene-elements/ppe-issue-station.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "fire_extinguisher_station",
@@ -154,11 +164,13 @@
           "grade": "C",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "planned",
-          "visual_status": "needs_v2",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.fire_extinguisher_station",
           "final_path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "first_aid_aed",
@@ -166,11 +178,13 @@
           "grade": "C",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.first_aid_aed",
           "final_path": "assets/episode01/scene-elements/first-aid-aed.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         },
         {
           "key": "site_weather_station",
@@ -178,11 +192,13 @@
           "grade": "B",
           "section": "SECTION 0 — 프로젝트 셋업·현장개설",
           "previous_status": "final",
-          "visual_status": "legacy_pictogram_placeholder",
+          "visual_status": "approved_v2_final",
           "asset_id": "ep01.scene_element.site_weather_station",
           "final_path": "assets/episode01/scene-elements/site-weather-station.webp",
           "reference_policy": "reference optional",
-          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified"
+          "completion_gate": "approved_v2 + binary persisted + manifest registered + catalog final + checksum verified",
+          "completion_status": "complete",
+          "completed_on": "2026-09-23"
         }
       ]
     },
@@ -1784,5 +1800,20 @@
       "wet_floor",
       "harness_unclipped"
     ]
+  },
+  "episode01_field_guide_status": {
+    "status": "complete",
+    "completed_on": "2026-09-23",
+    "field_guide_ids": [
+      "FG003",
+      "FG004",
+      "FG005",
+      "FG006",
+      "FG007",
+      "FG008",
+      "FG009",
+      "FG010"
+    ],
+    "note": "Only Episode 01 Section 0 FG003-FG010 is closed here. EP00 FG001-FG002 and later-section mass production remain separate work."
   }
 }
