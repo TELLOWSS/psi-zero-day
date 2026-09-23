@@ -24,11 +24,20 @@ function click(text: string) {
   act(() => button.click());
 }
 function hasVisibleFieldOutcome() {
-  const returnMap = session.t('ui.strategy.return_map');
-  return Array.from(container.querySelectorAll('button')).some(button => button.textContent?.includes(returnMap));
+  return container.querySelector('.strategy-outcome-next') instanceof HTMLButtonElement;
 }
 function continueCurrent() {
-  click(hasVisibleFieldOutcome() ? session.t('ui.strategy.return_map') : session.t('ui.continue'));
+  const coldOpen = container.querySelector('.episode-cold-open-cta') as HTMLButtonElement | null;
+  if (coldOpen) {
+    act(() => coldOpen.click());
+    return;
+  }
+  const outcomeNext = container.querySelector('.strategy-outcome-next') as HTMLButtonElement | null;
+  if (outcomeNext) {
+    act(() => outcomeNext.click());
+    return;
+  }
+  click(session.t('ui.continue'));
 }
 function continueToChoice() {
   for (let i = 0; i < 30; i++) {
