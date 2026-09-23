@@ -393,11 +393,10 @@
         "status": "approved_final_candidate_pending_binary_and_runtime_review",
         "generation_id": "e53218fb-e09c-486d-b780-cd3cbe3d0fea",
         "accepted": [
-          "ground-level pedestrian and vehicle routes",
-          "continuous physical separation with three Korean blue-mesh movable fence panels",
-          "black weighted bases",
-          "restrained lane-edge markings",
-          "no raised deck, outer guardrail, water barrier, people or vehicles baked into the reusable module"
+          "ground-level pedestrian and vehicle lanes are immediately distinguishable",
+          "2–3 verified Korean blue-mesh movable fence panels provide continuous physical separation",
+          "no invented raised deck, outer guardrail or water barriers",
+          "no people, vehicles, text or branding baked into the reusable module"
         ],
         "remaining_gate": [
           "transparent WebP registration",
@@ -692,17 +691,24 @@
         "Industrial-safety rules for fire-risk/hot-work contexts require extinguishing means/fire extinguishers in the relevant control scheme; exact count and type depend on applicable fire-safety requirements and site conditions."
       ],
       "render_contract": {
-        "composition": "one red 3.3 kg class ABC powder extinguisher seated upright in a simple stable floor stand",
-        "cylinder": "standard Korean portable extinguisher proportion; glossy red but field-used",
-        "gauge": "small round pressure gauge under the valve assembly",
-        "hose": "one black flexible discharge hose clipped neatly to the cylinder side",
-        "handle": "black/metal lever and safety pin visible",
-        "stand": "low Korean 3.3kg extinguisher floor stand: red square/trapezoidal plastic base with a circular recessed opening; omit readable 소화기/FIRE EXTINGUISHER lettering from reusable art",
-        "label": "generic small safety label texture only; no legible manufacturer or certification text",
-        "signage": "none baked into reusable art",
+        "composition": "one Korean 3.3 kg class stored-pressure ABC dry-powder extinguisher with a small optional floor ring/base only",
+        "dimensions_reference": "approximately Ø145 × H383 mm class for the selected Korean reference family; do not print dimensions",
+        "cylinder": "shorter compact red cylinder, standard 3.3 kg domestic proportion",
+        "valve": "compact metal valve with black squeeze lever and visible safety pin",
+        "gauge": "small round pressure gauge near valve neck, needle in normal green zone",
+        "hose": "one black flexible discharge hose clipped neatly down the cylinder side",
+        "base": "none or a low unobtrusive floor ring; no large decorative pedestal",
+        "label": "small generic white label area without readable brand/KFI text",
         "background": "transparent",
-        "camera": "front three-quarter view",
-        "condition": "clean enough for readiness, minor construction-site dust/scuffing"
+        "camera": "front three-quarter product view",
+        "wear": "serviceable, light site dust/scuffs",
+        "reject": [
+          "tall narrow foreign-looking cylinder",
+          "oversized pedestal",
+          "CO2 horn",
+          "wheeled 20 kg geometry",
+          "fake KFI/brand marks"
+        ]
       },
       "reject": [
         "CO2 extinguisher horn geometry",
@@ -719,17 +725,18 @@
       ],
       "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition.",
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
-        "generation_id": "a0d7ce4f-6dad-4456-ada5-f7624d2a5ad2",
+        "status": "rejected_for_final_regeneration_required",
+        "generation_id": "b1f22434-0f5a-4713-9132-dfed93ac08fd",
         "accepted": [
-          "3.3kg-class red stored-pressure extinguisher proportion",
-          "pressure gauge, black hose and safety pin are readable",
-          "low red square/trapezoidal Korean floor stand with circular recess",
-          "no readable brand or fake certification label"
+          "stored-pressure red extinguisher concept",
+          "pressure gauge",
+          "black discharge hose",
+          "safety pin"
         ],
-        "remaining_gate": [
-          "transparent WebP registration",
-          "runtime scale/readability review"
+        "rejected_or_unresolved": [
+          "cylinder proportion reads taller than the verified Korean 3.3 kg class reference",
+          "oversized cradle/base dominates the asset and is not part of the locked representative product geometry",
+          "handle/valve proportions need to be tightened to a common Korean 3.3 kg ABC extinguisher family"
         ]
       }
     },
@@ -775,16 +782,22 @@
         "legal_message": "asset presence does not imply universal AED legal obligation"
       },
       "render_contract": {
-        "composition": "two adjacent but clearly separate emergency assets: one rugged white/light-gray ABS first-aid case plus one Korean NT-S1-class red stand-type AED cabinet",
-        "first_aid_box": "low rectangular ABS/PE case with top carry handle, two black latches, red cross symbol only",
-        "aed_stand": "slim red floor-standing pedestal; square upper AED compartment with clear viewing window and simple heart/lightning pictogram; tall lower body/panel below",
-        "alarm": "small top alarm/beacon may be present if consistent with the stand family",
-        "relationship": "first-aid kit sits beside the AED stand; never merge them into one device",
-        "text": "no readable Korean instructions, model numbers, brand names or fake certification labels",
+        "composition": "two separate adjacent assets: Korean industrial first-aid box + Korean NT-S1-class slim AED stand",
+        "first_aid_box": "portable ABS industrial case, about 490×235×230 mm class, white lid with light-blue lower body, molded top handle and front locking clips; red-cross marking only, no brand",
+        "aed_stand": "slim freestanding red rectangular stand, about 375×140×1200 mm class, upper AED storage compartment/window and lower white instruction-panel zone simplified without readable text",
+        "relationship": "place side-by-side but visibly independent",
+        "medical_contents": "keep both closed; no loose medicines or instruments outside",
         "branding": "none",
+        "text": "no readable Korean instructions in reusable art",
         "background": "transparent",
-        "camera": "front three-quarter view, both assets fully visible",
-        "condition": "clean, accessible, only light construction-site dust/scuffs"
+        "camera": "front three-quarter view",
+        "reject": [
+          "large white toolbox first-aid case",
+          "wide cabinet-like AED kiosk",
+          "hospital crash cart",
+          "merged first-aid/AED unit",
+          "fake certification marks"
+        ]
       },
       "reject": [
         "hospital crash cart",
@@ -800,17 +813,16 @@
         "https://kdsia.org/shop/list.php?ca_id=3080"
       ],
       "generated_candidate": {
-        "status": "approved_final_candidate_pending_binary_and_runtime_review",
-        "generation_id": "e92b6174-4109-4c7b-88f0-0883dac4ff01",
+        "status": "rejected_for_final_regeneration_required",
+        "generation_id": "2e669626-a737-4d0c-90a6-27037460c770",
         "accepted": [
-          "first-aid case and AED remain separate",
-          "AED reads as a tall Korean stand-type cabinet with upper device compartment and lower pedestal body",
-          "proportion is consistent with the verified NT-S1 class (about 375×140×1200 mm)",
-          "no real brand/model text is baked into the asset"
+          "first-aid and AED are shown as separate assets",
+          "red cross and heart/lightning pictograms are readable"
         ],
-        "remaining_gate": [
-          "transparent WebP registration",
-          "runtime scale/readability review"
+        "rejected_or_unresolved": [
+          "first-aid case shape does not match the verified Korean industrial first-aid box family",
+          "AED stand/cabinet geometry differs from the Korean NT-S1 class slim red stand reference",
+          "candidate appears like a generic Western emergency cabinet set"
         ]
       }
     },
@@ -882,6 +894,8 @@
     }
   },
   "next_render_order": [
+    "fire_extinguisher_station",
+    "first_aid_aed",
     "material_yard",
     "site_weather_station"
   ],
