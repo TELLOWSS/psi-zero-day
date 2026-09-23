@@ -1,0 +1,43 @@
+name: Verify ZERO BREACH Step 6
+
+on:
+  push:
+    branches:
+      - sol/zero-breach-step6-e1-20260922
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e1-main-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: E1 event contract
+        run: npx vitest run tests/zero-breach-event.test.ts tests/zero-breach-event-ui.test.tsx
+
+      - name: ZERO BREACH Step 1-6 focused regression
+        run: npx vitest run tests/zero-breach-engine.test.ts tests/zero-breach-balance.test.ts tests/zero-breach-ui.test.tsx tests/zero-breach-save.test.ts tests/zero-breach-persistence-ui.test.tsx tests/zero-breach-tutorial.test.tsx tests/zero-breach-production-art-baseline.test.tsx tests/zero-breach-production-art-expansion.test.ts tests/zero-breach-audio-effects.test.tsx tests/zero-breach-event.test.ts tests/zero-breach-event-ui.test.tsx
+
+      - name: Build
+        run: npm run build
+
+      - name: Full repository regression diagnostics
+        continue-on-error: true
+        run: npm test

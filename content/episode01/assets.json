@@ -601,13 +601,13 @@
         {
           "uri": "assets/episode01/scene-elements/euroform-wall-panel.webp",
           "format": "webp",
-          "bytes": 66536,
-          "hash": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a"
+          "bytes": 184348,
+          "hash": "c9f082661d04dd721e7e159df9b3548595a51dd5b291d8d4f2b091289b259ece"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.exclusion_zone",
@@ -665,13 +665,13 @@
         {
           "uri": "assets/episode01/scene-elements/formwork-brace.webp",
           "format": "webp",
-          "bytes": 59680,
-          "hash": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6"
+          "bytes": 172766,
+          "hash": "5351208782aa81147a12bdb63ff6c705a6598ee9bf0c30f3222d84a8da3e2fa7"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.formwork_tie",
@@ -681,13 +681,13 @@
         {
           "uri": "assets/episode01/scene-elements/formwork-tie.webp",
           "format": "webp",
-          "bytes": 52386,
-          "hash": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea"
+          "bytes": 187422,
+          "hash": "c3163eefe18069e2ec4b28a49a196de08515e731376c738dbd05d9bba8f0ac8a"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.formwork_work_platform",
@@ -697,13 +697,13 @@
         {
           "uri": "assets/episode01/scene-elements/formwork-work-platform.webp",
           "format": "webp",
-          "bytes": 68130,
-          "hash": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97"
+          "bytes": 172792,
+          "hash": "b4a574c6b6b9d947173b9acb5a27d427a5fc3ba6643a2a84f20b8cb8621620d2"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "1"
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.gangform_lift_wire22",

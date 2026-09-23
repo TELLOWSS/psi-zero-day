@@ -19,7 +19,7 @@
   "batches": [
     {
       "batch_id": "S2-A",
-      "status": "replacement_required",
+      "status": "final",
       "items": [
         {
           "key": "euroform_wall_panel",
@@ -35,17 +35,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram",
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
           "generation_prompt": "Korean apartment basement RC construction euroform wall formwork panel assembly, realistic modular steel-frame plywood panels standing vertically as a compact wall-form section, believable tie-hole spacing and clamps, no workers, no text, clean three-quarter isometric construction pictogram, realistic proportions, commercial 2.5D game asset, dark navy edge definition, steel gray and warm plywood brown with restrained orange safety accents, soft upper-left key light, transparent alpha background, centered with 10% breathing room.",
-          "status": "replacement_required",
+          "status": "final",
           "actual": {
             "width": 768,
             "height": 768,
-            "bytes": 66536,
-            "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a"
+            "bytes": 184348,
+            "sha256": "c9f082661d04dd721e7e159df9b3548595a51dd5b291d8d4f2b091289b259ece"
           },
-          "visual_acceptance": "not_final_pictogram_placeholder"
+          "visual_acceptance": "approved_realistic_v2",
+          "source": {
+            "generation_id": "bf29bd5b-f8af-4d4c-940f-417286d17752",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          }
         },
         {
           "key": "formwork_tie",
@@ -61,17 +72,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram",
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
           "generation_prompt": "Korean RC wall formwork tie and connection hardware shown as a compact exploded-but-physically-believable assembly: form tie rod passing through opposing euroform panels with cone/spacer, wing nuts and clamps clearly readable, no text, no labels, three-quarter isometric construction pictogram, realistic steel hardware scale, commercial 2.5D game asset, dark navy edge definition, galvanized steel with restrained orange accent, soft upper-left light, transparent alpha background.",
-          "status": "replacement_required",
+          "status": "final",
           "actual": {
             "width": 768,
             "height": 768,
-            "bytes": 52386,
-            "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea"
+            "bytes": 187422,
+            "sha256": "c3163eefe18069e2ec4b28a49a196de08515e731376c738dbd05d9bba8f0ac8a"
           },
-          "visual_acceptance": "not_final_pictogram_placeholder"
+          "visual_acceptance": "approved_realistic_v2",
+          "source": {
+            "generation_id": "9320d91b-f5e4-4b74-b437-0d8d1ce2d42b",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          }
         },
         {
           "key": "formwork_brace",
@@ -87,17 +109,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram",
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
           "generation_prompt": "Korean basement RC wall euroform stabilized by a proper diagonal push-pull brace / turnbuckle support anchored to slab, clearly showing anti-overturning geometry, one compact work-state diorama, no workers, no text, realistic temporary works proportions, three-quarter isometric commercial 2.5D construction game asset, navy/steel palette with orange safety accent, soft upper-left lighting, transparent alpha background.",
-          "status": "replacement_required",
+          "status": "final",
           "actual": {
             "width": 768,
             "height": 768,
-            "bytes": 59680,
-            "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6"
+            "bytes": 172766,
+            "sha256": "5351208782aa81147a12bdb63ff6c705a6598ee9bf0c30f3222d84a8da3e2fa7"
           },
-          "visual_acceptance": "not_final_pictogram_placeholder"
+          "visual_acceptance": "approved_realistic_v2",
+          "source": {
+            "generation_id": "82e1f3ca-1154-4677-9a17-dc6f4a65a583",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          }
         },
         {
           "key": "formwork_work_platform",
@@ -113,25 +146,36 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram",
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
           "generation_prompt": "Korean RC wall formwork work platform attached to euroform, showing metal bracket platform, deck, guardrail top/mid rail and safe access relationship, physically believable compact assembly, no workers, no text, three-quarter isometric commercial 2.5D construction pictogram, realistic steel and timber materials, dark navy edge definition, orange safety details, soft upper-left light, transparent alpha background.",
-          "status": "replacement_required",
+          "status": "final",
           "actual": {
             "width": 768,
             "height": 768,
-            "bytes": 68130,
-            "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97"
+            "bytes": 172792,
+            "sha256": "b4a574c6b6b9d947173b9acb5a27d427a5fc3ba6643a2a84f20b8cb8621620d2"
           },
-          "visual_acceptance": "not_final_pictogram_placeholder"
+          "visual_acceptance": "approved_realistic_v2",
+          "source": {
+            "generation_id": "77fa5206-e757-4a1e-bf9b-ef10fe132c15",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          }
         }
       ],
-      "completed_at": "2026-09-20",
-      "note": "Current S2-A pictogram/isometric-icon outputs are not approved as final art. Keep only as composition/reference placeholders until realistic-v2 replacements pass visual review."
+      "completed_at": "2026-09-23",
+      "note": "FG024-FG027 realistic-v2 final art approved. 1254x1254 RGBA sources were normalized to 768x768 transparent WebP, registered in the asset manifest and catalog, and gated by the KR legal visual baseline."
     },
     {
       "batch_id": "S2-B",
-      "status": "queued",
+      "status": "paused_for_episode01_reality_first",
       "items": [
         {
           "key": "system_shoring_jackbase",
@@ -147,8 +191,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "4a020228-7a4c-498b-8f00-3a6b40e11e1c",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 73082,
+            "sha256": "f02b8c1442d85e2afef506d2b2cd7e8b23c584bdac556b077d52c6479988d396",
+            "alpha": true
+          }
         },
         {
           "key": "system_shoring_standard",
@@ -164,8 +228,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "ac85c6cb-a569-4b72-bd4a-eb61d635c7cd",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 44198,
+            "sha256": "70c1987a0406b9ebd31b2a326a08f56051a563aa4c378a3b3503bfc2f6d72744",
+            "alpha": true
+          }
         },
         {
           "key": "system_shoring_ledger",
@@ -181,8 +265,18 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "regeneration_required",
+          "visual_acceptance": "reference_only_frame_contains_extra_members",
+          "source": {
+            "generation_id": "d823abb5-8923-4711-9b0f-c7343a28b147",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": null
+          }
         },
         {
           "key": "system_shoring_missing_brace",
@@ -198,8 +292,10 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_hazard_state_construction_asset",
+          "status": "generation_required",
+          "visual_acceptance": "not_generated"
         },
         {
           "key": "uhead_beam_alignment",
@@ -215,8 +311,28 @@
           },
           "map_max_px": 148,
           "requires_alpha": true,
-          "style_profile": "field-guide-isometric-v1",
-          "render_intent": "isolated_isometric_3d_pictogram"
+          "style_profile": "field-guide-production-realistic-v2",
+          "render_intent": "realistic_isometric_construction_asset",
+          "status": "candidate_generated",
+          "visual_acceptance": "approved_candidate_pending_binary_ingest",
+          "source": {
+            "generation_id": "1ed5436d-fec9-497b-aa56-bb91f4fc541b",
+            "source_canvas": [
+              1254,
+              1254
+            ],
+            "normalized_delivery": [
+              768,
+              768
+            ]
+          },
+          "candidate_delivery": {
+            "width": 768,
+            "height": 768,
+            "bytes": 114806,
+            "sha256": "105b837b3045a735fcd29e0480433006a2c200e2c21fc3c25ba7289ed89197b8",
+            "alpha": true
+          }
         }
       ]
     },
@@ -289,6 +405,7 @@
     "run scene-element asset contract"
   ],
   "brand_contract": "content/brand/naming-contract.json",
-  "current_batch": "S2-A-REALISTIC-REPLACEMENT",
-  "next_action": "Replace euroform wall panel, formwork tie, formwork brace and formwork work platform with realistic-v2 production art before proceeding to S2-B."
+  "current_batch": "PAUSED",
+  "next_action": "Do not generate or promote S2-B. Complete Episode 01 Korean-material verification and visible runtime assets first, then resume only after user review.",
+  "s2b_review_note": "The generated full shoring frame is retained only as geometry reference because it combines standards, ledgers and a diagonal brace; it must not be mislabeled as the isolated FG030 ledger or FG031 missing-brace hazard. Production paused by Episode 01 reality-first priority on 2026-09-23."
 }

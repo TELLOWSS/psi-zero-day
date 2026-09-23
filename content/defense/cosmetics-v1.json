@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "cosmetics": [
+    { "id": "profile-frame-first-line", "kind": "profile-frame" },
+    { "id": "badge-no-breach", "kind": "badge" },
+    { "id": "tablet-skin-signal-blue", "kind": "tablet-skin" }
+  ]
+}

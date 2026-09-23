@@ -1,0 +1,379 @@
+{
+  "schemaVersion": 1,
+  "visualVersion": "zero-breach-production-lock-1.0.0",
+  "status": "PRODUCTION_LOCKED",
+  "artDirection": {
+    "cameraElevationDeg": 70,
+    "projection": "NEAR_ORTHOGRAPHIC",
+    "lightDirection": "TOP_LEFT",
+    "shadowDirection": "BOTTOM_RIGHT",
+    "palette": {
+      "uiBackground": "#101A24",
+      "surface": "#1C2A36",
+      "body": "#EEF4F8",
+      "muted": "#B9C8D3",
+      "accent": "#FFAD42"
+    }
+  },
+  "assets": [
+    {
+      "assetId": "defense.board.ramp-01",
+      "kind": "BOARD",
+      "uri": "assets/defense/board/ramp-01.svg",
+      "format": "svg",
+      "width": 2000,
+      "height": 1200,
+      "transparent": false,
+      "runtimeWidth": 1000,
+      "runtimeHeight": 600,
+      "status": "BASELINE_LOCKED",
+      "notes": "JSON route and all eight pad centers are authored at exact x2 coordinates; runtime route and pad overlays remain authoritative."
+    },
+    {
+      "assetId": "defense.tower.PULSE.L1",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/pulse-l1.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "BASELINE_LOCKED",
+      "notes": "Low square base, cylindrical coil, cyan family cue; no text/logo."
+    },
+    {
+      "assetId": "defense.enemy.NORMAL",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/normal.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "BASELINE_LOCKED",
+      "notes": "Single cracked spherical risk core with detached chips; non-human silhouette."
+    },
+    {
+      "assetId": "defense.tower.PULSE.L2",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/pulse-l2.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Base coil plus side capacitor."
+    },
+    {
+      "assetId": "defense.tower.PULSE.L3A",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/pulse-l3a.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Three short coils for the fast branch."
+    },
+    {
+      "assetId": "defense.tower.PULSE.L3B",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/pulse-l3b.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Long single prism for the pure-damage branch."
+    },
+    {
+      "assetId": "defense.tower.BURST.L1",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/burst-l1.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Wide dish emitter."
+    },
+    {
+      "assetId": "defense.tower.BURST.L2",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/burst-l2.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Dish plus reinforced outriggers."
+    },
+    {
+      "assetId": "defense.tower.BURST.L3A",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/burst-l3a.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Three large emission rings."
+    },
+    {
+      "assetId": "defense.tower.BURST.L3B",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/burst-l3b.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Small core inside a thick containment wall."
+    },
+    {
+      "assetId": "defense.tower.CONTROL.L1",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/control-l1.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Open arch field generator."
+    },
+    {
+      "assetId": "defense.tower.CONTROL.L2",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/control-l2.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Arch plus stabilizer feet."
+    },
+    {
+      "assetId": "defense.tower.CONTROL.L3A",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/control-l3a.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Tall narrow arch."
+    },
+    {
+      "assetId": "defense.tower.CONTROL.L3B",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/control-l3b.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Low wide triangular supports."
+    },
+    {
+      "assetId": "defense.tower.SENSOR.L1",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/sensor-l1.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Observation mast with scan ring."
+    },
+    {
+      "assetId": "defense.tower.SENSOR.L2",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/sensor-l2.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Mast plus auxiliary lens."
+    },
+    {
+      "assetId": "defense.tower.SENSOR.L3A",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/sensor-l3a.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Wide double scan rings."
+    },
+    {
+      "assetId": "defense.tower.SENSOR.L3B",
+      "kind": "TOWER",
+      "uri": "assets/defense/towers/sensor-l3b.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "safeArea": 192,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Long narrow observation lens."
+    },
+    {
+      "assetId": "defense.enemy.SWIFT",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/swift.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Forward twin-wedge silhouette with tail fragments."
+    },
+    {
+      "assetId": "defense.enemy.ARMORED",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/armored.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Layered hex plates communicate physical resistance."
+    },
+    {
+      "assetId": "defense.enemy.SWARM",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/swarm.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Cluster of irregular crystal shards."
+    },
+    {
+      "assetId": "defense.enemy.VEILED",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/veiled.svg",
+      "format": "svg",
+      "width": 128,
+      "height": 128,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Broken ring and hollow core remain visible before reveal."
+    },
+    {
+      "assetId": "defense.enemy.BOSS",
+      "kind": "ENEMY",
+      "uri": "assets/defense/enemies/boss.svg",
+      "format": "svg",
+      "width": 256,
+      "height": 256,
+      "transparent": true,
+      "anchor": {
+        "x": 0.5,
+        "y": 0.76
+      },
+      "status": "PRODUCTION_LOCKED",
+      "notes": "Large triple-ring chain-risk core with central fracture."
+    }
+  ]
+}

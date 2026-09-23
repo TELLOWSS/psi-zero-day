@@ -1,0 +1,674 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "zero-breach-1.0.0",
+  "contentVersion": "prototype-1.0.0",
+  "balanceStatus": "STEP4_AUTOMATION_VALIDATED_NO_NUMERIC_TUNING",
+  "tickMs": 50,
+  "speeds": [
+    1,
+    2
+  ],
+  "initialShield": 20,
+  "initialResource": 200,
+  "intermissionTicks": 160,
+  "waveClearReward": 45,
+  "sellRate": 0.7,
+  "defaultTargetMode": "FIRST",
+  "targetModes": [
+    "FIRST",
+    "STRONG"
+  ],
+  "map": {
+    "id": "ramp-01",
+    "nameTextId": "defense.map.ramp-01.name",
+    "width": 1000,
+    "height": 600,
+    "path": [
+      [
+        0,
+        300
+      ],
+      [
+        180,
+        300
+      ],
+      [
+        180,
+        150
+      ],
+      [
+        450,
+        150
+      ],
+      [
+        450,
+        450
+      ],
+      [
+        720,
+        450
+      ],
+      [
+        720,
+        240
+      ],
+      [
+        1000,
+        240
+      ]
+    ],
+    "pads": [
+      {
+        "id": "P1",
+        "x": 120,
+        "y": 220
+      },
+      {
+        "id": "P2",
+        "x": 260,
+        "y": 220
+      },
+      {
+        "id": "P3",
+        "x": 360,
+        "y": 70
+      },
+      {
+        "id": "P4",
+        "x": 370,
+        "y": 340
+      },
+      {
+        "id": "P5",
+        "x": 530,
+        "y": 240
+      },
+      {
+        "id": "P6",
+        "x": 600,
+        "y": 370
+      },
+      {
+        "id": "P7",
+        "x": 640,
+        "y": 530
+      },
+      {
+        "id": "P8",
+        "x": 800,
+        "y": 320
+      }
+    ]
+  },
+  "towers": [
+    {
+      "id": "PULSE",
+      "nameTextId": "defense.tower.PULSE.name",
+      "roleTextId": "defense.tower.PULSE.role",
+      "levels": [
+        {
+          "id": "L1",
+          "from": null,
+          "cost": 80,
+          "damage": 12,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 16,
+          "range": 155,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L2",
+          "from": "L1",
+          "cost": 60,
+          "damage": 20,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 16,
+          "range": 165,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3A",
+          "from": "L2",
+          "cost": 110,
+          "damage": 20,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 9,
+          "range": 170,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3B",
+          "from": "L2",
+          "cost": 110,
+          "damage": 26,
+          "damageType": "PURE",
+          "intervalTicks": 18,
+          "range": 195,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        }
+      ]
+    },
+    {
+      "id": "BURST",
+      "nameTextId": "defense.tower.BURST.name",
+      "roleTextId": "defense.tower.BURST.role",
+      "levels": [
+        {
+          "id": "L1",
+          "from": null,
+          "cost": 110,
+          "damage": 16,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 40,
+          "range": 165,
+          "splashRadius": 65,
+          "maxTargets": 5,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L2",
+          "from": "L1",
+          "cost": 80,
+          "damage": 26,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 36,
+          "range": 175,
+          "splashRadius": 75,
+          "maxTargets": 6,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3A",
+          "from": "L2",
+          "cost": 130,
+          "damage": 34,
+          "damageType": "PHYSICAL",
+          "intervalTicks": 36,
+          "range": 180,
+          "splashRadius": 100,
+          "maxTargets": 8,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3B",
+          "from": "L2",
+          "cost": 130,
+          "damage": 36,
+          "damageType": "PURE",
+          "intervalTicks": 40,
+          "range": 180,
+          "splashRadius": 50,
+          "maxTargets": 3,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        }
+      ]
+    },
+    {
+      "id": "CONTROL",
+      "nameTextId": "defense.tower.CONTROL.name",
+      "roleTextId": "defense.tower.CONTROL.role",
+      "levels": [
+        {
+          "id": "L1",
+          "from": null,
+          "cost": 90,
+          "damage": 3,
+          "damageType": "PURE",
+          "intervalTicks": 20,
+          "range": 135,
+          "splashRadius": 60,
+          "maxTargets": 3,
+          "slowFraction": 0.3,
+          "slowTicks": 30,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L2",
+          "from": "L1",
+          "cost": 65,
+          "damage": 5,
+          "damageType": "PURE",
+          "intervalTicks": 20,
+          "range": 145,
+          "splashRadius": 65,
+          "maxTargets": 4,
+          "slowFraction": 0.4,
+          "slowTicks": 32,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3A",
+          "from": "L2",
+          "cost": 110,
+          "damage": 8,
+          "damageType": "PURE",
+          "intervalTicks": 20,
+          "range": 155,
+          "splashRadius": 55,
+          "maxTargets": 3,
+          "slowFraction": 0.55,
+          "slowTicks": 36,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        },
+        {
+          "id": "L3B",
+          "from": "L2",
+          "cost": 110,
+          "damage": 6,
+          "damageType": "PURE",
+          "intervalTicks": 20,
+          "range": 175,
+          "splashRadius": 105,
+          "maxTargets": 7,
+          "slowFraction": 0.35,
+          "slowTicks": 40,
+          "revealRadius": 0,
+          "revealIntervalTicks": 0,
+          "revealTicks": 0
+        }
+      ]
+    },
+    {
+      "id": "SENSOR",
+      "nameTextId": "defense.tower.SENSOR.name",
+      "roleTextId": "defense.tower.SENSOR.role",
+      "levels": [
+        {
+          "id": "L1",
+          "from": null,
+          "cost": 75,
+          "damage": 8,
+          "damageType": "PURE",
+          "intervalTicks": 20,
+          "range": 130,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 130,
+          "revealIntervalTicks": 20,
+          "revealTicks": 50
+        },
+        {
+          "id": "L2",
+          "from": "L1",
+          "cost": 55,
+          "damage": 12,
+          "damageType": "PURE",
+          "intervalTicks": 18,
+          "range": 145,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 145,
+          "revealIntervalTicks": 20,
+          "revealTicks": 60
+        },
+        {
+          "id": "L3A",
+          "from": "L2",
+          "cost": 95,
+          "damage": 14,
+          "damageType": "PURE",
+          "intervalTicks": 18,
+          "range": 185,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 220,
+          "revealIntervalTicks": 20,
+          "revealTicks": 80
+        },
+        {
+          "id": "L3B",
+          "from": "L2",
+          "cost": 95,
+          "damage": 25,
+          "damageType": "PURE",
+          "intervalTicks": 15,
+          "range": 145,
+          "splashRadius": 0,
+          "maxTargets": 1,
+          "slowFraction": 0,
+          "slowTicks": 0,
+          "revealRadius": 145,
+          "revealIntervalTicks": 20,
+          "revealTicks": 60
+        }
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "NORMAL",
+      "nameTextId": "defense.enemy.NORMAL.name",
+      "hp": 40,
+      "speed": 65,
+      "armor": 0,
+      "reward": 5,
+      "leak": 1,
+      "hidden": false,
+      "boss": false
+    },
+    {
+      "id": "SWIFT",
+      "nameTextId": "defense.enemy.SWIFT.name",
+      "hp": 28,
+      "speed": 100,
+      "armor": 0,
+      "reward": 5,
+      "leak": 1,
+      "hidden": false,
+      "boss": false
+    },
+    {
+      "id": "ARMORED",
+      "nameTextId": "defense.enemy.ARMORED.name",
+      "hp": 140,
+      "speed": 45,
+      "armor": 0.55,
+      "reward": 12,
+      "leak": 2,
+      "hidden": false,
+      "boss": false
+    },
+    {
+      "id": "SWARM",
+      "nameTextId": "defense.enemy.SWARM.name",
+      "hp": 18,
+      "speed": 70,
+      "armor": 0,
+      "reward": 3,
+      "leak": 1,
+      "hidden": false,
+      "boss": false
+    },
+    {
+      "id": "VEILED",
+      "nameTextId": "defense.enemy.VEILED.name",
+      "hp": 48,
+      "speed": 65,
+      "armor": 0.1,
+      "reward": 8,
+      "leak": 1,
+      "hidden": true,
+      "boss": false
+    },
+    {
+      "id": "BOSS",
+      "nameTextId": "defense.enemy.BOSS.name",
+      "hp": 950,
+      "speed": 32,
+      "armor": 0.2,
+      "reward": 80,
+      "leak": 20,
+      "hidden": false,
+      "boss": true,
+      "phase": {
+        "triggerHpRatio": 0.6,
+        "armor": 0.5,
+        "durationTicks": 120,
+        "maxTriggers": 1
+      }
+    }
+  ],
+  "supports": [
+    {
+      "id": "COORDINATOR",
+      "characterBinding": null,
+      "skillTextId": "defense.support.COORDINATOR.skill",
+      "cooldownTicks": 900,
+      "initialCooldownTicks": 0,
+      "freezeMovementTicks": 60,
+      "revealAllTicks": 0,
+      "rangeBonus": 0,
+      "rangeBonusTicks": 0
+    },
+    {
+      "id": "OBSERVER",
+      "characterBinding": null,
+      "skillTextId": "defense.support.OBSERVER.skill",
+      "cooldownTicks": 800,
+      "initialCooldownTicks": 0,
+      "freezeMovementTicks": 0,
+      "revealAllTicks": 160,
+      "rangeBonus": 30,
+      "rangeBonusTicks": 160
+    }
+  ],
+  "waves": [
+    {
+      "id": 1,
+      "groups": [
+        {
+          "enemy": "NORMAL",
+          "count": 8,
+          "startTick": 0,
+          "intervalTicks": 40
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "groups": [
+        {
+          "enemy": "SWIFT",
+          "count": 10,
+          "startTick": 0,
+          "intervalTicks": 30
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "groups": [
+        {
+          "enemy": "SWARM",
+          "count": 12,
+          "startTick": 0,
+          "intervalTicks": 15
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "groups": [
+        {
+          "enemy": "NORMAL",
+          "count": 8,
+          "startTick": 0,
+          "intervalTicks": 30
+        },
+        {
+          "enemy": "ARMORED",
+          "count": 3,
+          "startTick": 90,
+          "intervalTicks": 60
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "groups": [
+        {
+          "enemy": "SWIFT",
+          "count": 12,
+          "startTick": 0,
+          "intervalTicks": 20
+        },
+        {
+          "enemy": "SWARM",
+          "count": 12,
+          "startTick": 100,
+          "intervalTicks": 10
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "groups": [
+        {
+          "enemy": "VEILED",
+          "count": 6,
+          "startTick": 0,
+          "intervalTicks": 40
+        },
+        {
+          "enemy": "NORMAL",
+          "count": 6,
+          "startTick": 60,
+          "intervalTicks": 35
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "groups": [
+        {
+          "enemy": "ARMORED",
+          "count": 5,
+          "startTick": 0,
+          "intervalTicks": 60
+        },
+        {
+          "enemy": "SWARM",
+          "count": 12,
+          "startTick": 80,
+          "intervalTicks": 14
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "groups": [
+        {
+          "enemy": "VEILED",
+          "count": 8,
+          "startTick": 0,
+          "intervalTicks": 25
+        },
+        {
+          "enemy": "SWIFT",
+          "count": 10,
+          "startTick": 60,
+          "intervalTicks": 20
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "groups": [
+        {
+          "enemy": "ARMORED",
+          "count": 6,
+          "startTick": 0,
+          "intervalTicks": 40
+        },
+        {
+          "enemy": "SWARM",
+          "count": 10,
+          "startTick": 60,
+          "intervalTicks": 12
+        },
+        {
+          "enemy": "VEILED",
+          "count": 4,
+          "startTick": 200,
+          "intervalTicks": 30
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "groups": [
+        {
+          "enemy": "BOSS",
+          "count": 1,
+          "startTick": 0,
+          "intervalTicks": 1
+        },
+        {
+          "enemy": "NORMAL",
+          "count": 10,
+          "startTick": 20,
+          "intervalTicks": 24
+        },
+        {
+          "enemy": "VEILED",
+          "count": 8,
+          "startTick": 120,
+          "intervalTicks": 28
+        }
+      ]
+    }
+  ],
+  "scenario": {
+    "id": "training-ramp-v1",
+    "mapId": "ramp-01",
+    "rewardVersion": 1,
+    "availableTowers": [
+      "PULSE",
+      "BURST",
+      "CONTROL",
+      "SENSOR"
+    ],
+    "availableSupports": [
+      "COORDINATOR",
+      "OBSERVER"
+    ],
+    "firstClearCosmetic": "profile-frame-first-line",
+    "threeStarCosmetic": "badge-no-breach",
+    "mainStoryStatRewards": [],
+    "supportResetWaveIds": [],
+    "eventId": null,
+    "eventContentVersion": null
+  }
+}

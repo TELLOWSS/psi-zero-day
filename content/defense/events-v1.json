@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "events": [
+    {
+      "id": "event-ramp-reconstruction-v1",
+      "contentVersion": "event-ramp-reconstruction-1.0.0",
+      "titleTextId": "defense.event.e1.title",
+      "briefingTextId": "defense.event.e1.briefing",
+      "mapId": "ramp-01",
+      "baseScenarioId": "training-ramp-v1",
+      "unlock": {
+        "all": [
+          { "kind": "scenario-cleared", "scenarioId": "training-ramp-v1" },
+          { "kind": "story-fact", "factId": "ep01.ramp-signal-known" }
+        ]
+      },
+      "modifiers": [
+        {
+          "kind": "replace-wave",
+          "waveId": 6,
+          "groups": [
+            { "enemy": "VEILED", "count": 8, "startTick": 0, "intervalTicks": 30 },
+            { "enemy": "NORMAL", "count": 6, "startTick": 60, "intervalTicks": 35 }
+          ]
+        },
+        {
+          "kind": "replace-wave",
+          "waveId": 8,
+          "groups": [
+            { "enemy": "VEILED", "count": 10, "startTick": 0, "intervalTicks": 25 },
+            { "enemy": "SWIFT", "count": 8, "startTick": 70, "intervalTicks": 20 }
+          ]
+        },
+        { "kind": "wave-support-reset", "waveIds": [6, 8] }
+      ],
+      "rewardVersion": 1,
+      "firstClearCosmeticId": "tablet-skin-signal-blue",
+      "debriefTextIds": {
+        "win": "defense.event.e1.debrief.win",
+        "lose": "defense.event.e1.debrief.lose",
+        "perfect": "defense.event.e1.debrief.perfect"
+      }
+    }
+  ]
+}

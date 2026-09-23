@@ -1,0 +1,889 @@
+{
+  "schema_version": 1,
+  "verification_id": "episode01-korea-material-reality-v1",
+  "reviewed_on": "2026-09-23",
+  "status": "research_locked_before_render",
+  "scope": "Episode 01 visible runtime props first, then Section 0 Field Guide items",
+  "governing_rule": "No image generation or final promotion before Korean-site product/assembly verification.",
+  "sources": [
+    {
+      "id": "KOSHA_TEMP_ELECTRIC",
+      "authority": "KOSHA",
+      "title": "가설전기공사 안전보건 실무정보",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=446&callmode=normal&catimage=&eclang=ko&start=10&um=s",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KOSHA_ELECTRIC_MANAGEMENT",
+      "authority": "KOSHA",
+      "title": "분전함 관리 방법",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=451&callmode=normal&catimage=&eclang=ko&start=188&um=s",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KOSHA_TRAFFIC_PLAN",
+      "authority": "KOSHA",
+      "title": "건설현장 중대재해 예방 작업계획 예시",
+      "url": "https://oshri.kosha.or.kr/kosha/report/notice.do?articleNo=455685&attachNo=262320&mode=download",
+      "supports": [
+        "vehicle_pedestrian_separation",
+        "vehicle_overlap_zone",
+        "access_barrier",
+        "site_gate"
+      ]
+    },
+    {
+      "id": "KOSHA_WALKWAY",
+      "authority": "KOSHA",
+      "title": "작업장 통로 안전관리",
+      "url": "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=120&um=s",
+      "supports": [
+        "temporary_lighting_pack",
+        "open_edge",
+        "wet_floor"
+      ]
+    },
+    {
+      "id": "LAW_ART11",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제11조 작업장의 출입구",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=256121",
+      "supports": [
+        "site_gate",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "LAW_LIGHT",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제21조 통로의 조명",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1028063297",
+      "supports": [
+        "temporary_lighting_pack"
+      ]
+    },
+    {
+      "id": "LAW_OPEN_EDGE",
+      "authority": "국가법령정보센터",
+      "title": "산업안전보건기준에 관한 규칙 제13조·제43조",
+      "url": "https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1029039573",
+      "supports": [
+        "open_edge"
+      ]
+    },
+    {
+      "id": "KOSHA_HARNESS",
+      "authority": "KOSHA",
+      "title": "그네식안전대 안전한 보호구 착용 길잡이",
+      "url": "https://ofsi.jeonnam.go.kr/bbs/ofsi/61/9221/download.do",
+      "supports": [
+        "harness_unclipped"
+      ]
+    },
+    {
+      "id": "KR_FRP_PRODUCT",
+      "authority": "Korean supplier",
+      "title": "FRP 임시분전반 제품군",
+      "url": "https://haesoltech.com/category/frp%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98/1393/",
+      "supports": [
+        "temporary_distribution_board"
+      ]
+    },
+    {
+      "id": "KR_PE_BARRIER",
+      "authority": "Korean market product reference",
+      "title": "PE 방호벽/가설휀스 제품군",
+      "url": "https://itempage3.auction.co.kr/DetailView.aspx?itemno=E725701519",
+      "supports": [
+        "access_barrier",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "KR_TRAFFIC_CONE",
+      "authority": "Korean market product reference",
+      "title": "PE/고무 라바콘 제품군",
+      "url": "https://kor.winnertech.co.kr/goods_list.php?Index=3073",
+      "supports": [
+        "access_barrier",
+        "exclusion_zone",
+        "vehicle_pedestrian_separation"
+      ]
+    },
+    {
+      "id": "KR_FIRE_EXT",
+      "authority": "Korean market product reference",
+      "title": "국산 ABC 분말소화기 3.3kg 제품군",
+      "url": "https://prod.danawa.com/info/?cate=14255174&pcode=5544692",
+      "supports": [
+        "fire_extinguisher_station"
+      ]
+    }
+  ],
+  "runtime_assets": {
+    "site_gate": {
+      "classification": "selected_Korean_apartment_site_gate_assembly",
+      "status": "visual_family_locked_ready_to_render",
+      "verified": "Current Korean apartment construction examples repeatedly show a full-height temporary hoarding wall with a wide vehicle gate and a separate adjacent worker/pedestrian entrance or safety passage. The exact portal, booth and access-control hardware are site-specific.",
+      "legal_basis": "산업안전보건기준에 관한 규칙 제11조: when the primary entrance is for loading/transport machinery, a separate adjacent pedestrian entrance is required.",
+      "selected_episode01_visual_family": {
+        "vehicle_gate": "wide rectangular opening in temporary steel-panel hoarding, sized for dump/pump/truck entry",
+        "pedestrian_gate": "separate narrow worker entrance immediately beside the vehicle gate",
+        "control": "small guard/access-control booth or access-control post beside pedestrian entrance",
+        "separation": "physical fence/rail or curb/line treatment keeps worker entry distinct from vehicle throat",
+        "signage": "NEW PSI / fictional site only; no real constructor logos",
+        "road_context": "construction access road with cones/bollards only where useful; no decorative clutter"
+      },
+      "render_contract": {
+        "composition": "one transparent cutout assembly showing vehicle portal + adjacent worker gate + small access-control booth",
+        "materials": "gray/white temporary steel hoarding panels and dark steel portal frame",
+        "pedestrian_entry": "clearly narrower and physically separate from vehicle opening",
+        "worker_access": "walkable threshold, no turnstile unless specifically authored later",
+        "branding": "NEW PSI or NEW PSI CONSTRUCTION only, otherwise blank",
+        "text": "no dense baked instructional text; a small GATE 1 / NEW PSI mark is optional",
+        "background": "transparent",
+        "camera": "slight three-quarter front, readable vehicle and pedestrian openings simultaneously",
+        "condition": "active Korean apartment construction site, mildly weathered, not showroom-clean"
+      },
+      "reject": [
+        "single vehicle opening with workers forced through the same throat",
+        "foreign stadium turnstile as the main visual",
+        "decorative security gate unrelated to construction hoarding",
+        "real company/apartment branding",
+        "pseudo-Korean gibberish signage"
+      ],
+      "evidence": [
+        "Korean current-site photos show large vehicle portals integrated into temporary hoarding and adjacent worker safety entrances/access-control rooms.",
+        "Ministry legal interpretation confirms the pedestrian entrance requirement is based on the primary use of the loading/transport entrance, not merely its size."
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsLinkCommonInfo.do?lsJoLnkSeq=1016700405",
+        "https://www.law.go.kr/LSW/cgmExpcInfoP.do?cgmExpcDatSeq=30952&mode=2&ofiClsCd=350101"
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_runtime_scale_review",
+        "generation_id": "a2cdd759-939f-4f37-a4aa-03db16c05082",
+        "accepted": [
+          "wide vehicle portal integrated with temporary hoarding",
+          "separate adjacent worker entrance",
+          "access-control booth",
+          "physical separation between worker and vehicle entries",
+          "no real contractor branding"
+        ],
+        "limitations": [
+          "finish is cleaner and more architectural than many active apartment sites; runtime grade should reduce showroom-like neatness",
+          "turnstile/access hardware remains site-specific and must not be treated as a universal Korean requirement"
+        ]
+      }
+    },
+    "material_stack": {
+      "classification": "episode01_formwork_material_stack",
+      "status": "visual_family_locked_ready_to_render",
+      "story_basis": [
+        "Episode 01 identifies Kang Taesik as the formwork foreman.",
+        "When workers are diverted to clear the passage, the authored result explicitly says formwork cleanup slows.",
+        "Therefore the reusable Episode 01 material stack should visually read as formwork material cleanup, not as an arbitrary rebar pile."
+      ],
+      "selected_visual_family": {
+        "primary_material": "used Euroform wall/formwork panels",
+        "panel_family": "Korean Euroform steel-frame plywood panels, same size within one bundle",
+        "typical_reference_size": "600×1200 mm class used as the visual family reference; do not bake dimensions into the image",
+        "stack_method": "horizontal same-spec stack on timber dunnage/sleepers",
+        "securing": "two band/ratchet straps or equivalent visible securing consistent with a tidy site bundle",
+        "condition": "used panels with realistic concrete residue and worn orange/brown/yellow steel frames; not factory-new"
+      },
+      "official_basis": "KOSHA reinforced-concrete/formwork guidance lists plywood, timber, Euroform and shoring materials as incoming formwork materials and requires stable storage so materials do not collapse; dismantled formwork materials should be orderly and balanced.",
+      "render_contract": {
+        "object": "one compact bundle of same-size used Korean Euroform 6012 panels",
+        "panel_geometry": "600×1200 class, F-type perimeter/profile, cross-bars dividing the 1200 mm length into four approximately 300 mm bays, standardized side wedge-pin/tie holes",
+        "orientation": "horizontal stack with panel backs/edges readable",
+        "support": "two timber sleepers/dunnage under the bundle",
+        "securing": "two plain steel/PP bands; no large ratchet buckles",
+        "face": "dark coated plywood with realistic wear and light concrete residue",
+        "frame": "yellow/orange steel frame, used but structurally intact",
+        "loose_items": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter front, slightly above",
+        "reject": [
+          "custom oversized panel proportions",
+          "generic container-like steel panel",
+          "large ratchet hardware",
+          "mixed panel sizes",
+          "invented giant round holes"
+        ]
+      },
+      "reject": [
+        "mixed rebar, pipe, lumber and formwork in one decorative pile",
+        "different panel sizes mixed in a single bundle",
+        "unrestrained leaning panels presented as the normal reference",
+        "factory pallet with export labels",
+        "generic lumber stack that does not read as Korean Euroform"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=24&um=s",
+        "https://sgsystem.tistory.com/395",
+        "https://www.shinan1.com/"
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_detail_and_runtime_review",
+        "generation_id": "b7eaacfc-91cc-450d-af93-f0b1b997244e",
+        "accepted": [
+          "same-size horizontal Euroform bundle",
+          "used yellow/orange steel frames",
+          "dark coated plywood faces",
+          "four-bay cross-bar rhythm consistent with 1200 mm-class panel geometry",
+          "two timber sleepers",
+          "simple two-band securing with no oversized ratchet hardware"
+        ],
+        "limitations": [
+          "side wedge-pin/tie-hole geometry still requires close comparison before final binary registration",
+          "candidate is product-family accurate, not an exact manufacturer clone"
+        ]
+      }
+    },
+    "access_barrier": {
+      "classification": "physical_site_control",
+      "status": "visual_family_locked_ready_to_render",
+      "verified": "For Episode 01 use a Korean construction-site movable safety fence family rather than a generic foreign crowd-control barrier.",
+      "korean_product_family": {
+        "name": "국산 밴딩형 이동식 가림막 휀스",
+        "geometry_lock": {
+          "width_mm_class": 2000,
+          "height_mm_class": 1200,
+          "tube_diameter_mm_options": [
+            25.4,
+            31.8
+          ],
+          "frame": "continuous rounded-corner silver tubular frame",
+          "infill": "blue mesh/screen panel",
+          "base": "two black weighted rubber/polymer bases, one near each vertical leg",
+          "visibility_marking": "short black-yellow hazard bands on top/bottom rail may be present by product variant",
+          "center_print": "omit from reusable game asset even when commercial products print 안전제일"
+        },
+        "sources": [
+          "https://m.speed119.kr/product/%EC%8B%A0%ED%98%95-%EB%B0%B4%EB%94%A9%ED%98%95-%EC%95%88%EC%A0%84%EC%A0%9C%EC%9D%BC-%EA%B0%80%EB%A6%BC%EB%A7%89-%ED%9C%80%EC%8A%A4-254-318%ED%8C%8C%EC%9D%B4-l2000-x-h1200mm-%EB%A9%94%EC%89%AC%EB%A7%9D-%ED%8E%9C%EC%8A%A4/1352/",
+          "https://m.kmmall.co.kr/product/%EA%B0%80%EB%A6%BC%EB%A7%89%ED%9C%80%EC%8A%A4-25%ED%8C%8C%EC%9D%B4-%EB%B0%B4%EB%94%A9%ED%98%95-l2000%C3%97h1200-%EA%B8%B0%EC%84%B1-%EC%95%88%EC%A0%84%EC%A0%9C%EC%9D%BC-%EC%A3%BC%EB%AC%B8%EC%9D%B8%EC%87%84-%ED%98%84%EC%9E%A5-%EC%B0%A8%EB%8B%A8%EB%A7%89-%EC%9D%B4%EB%8F%99%EC%8B%9D-%ED%8E%9C%EC%8A%A4/4415/",
+          "https://m.kgmall.co.kr/product/%EC%8B%A0%EB%8F%84%EC%82%B0%EC%97%85-%EB%B0%B4%EB%94%A9%ED%98%95-%EA%B0%80%EB%A6%BC%EB%A7%89%ED%9C%80%EC%8A%A4-%EC%95%88%EC%A0%84%EC%A0%9C%EC%9D%BC-2000x1200-%EB%B3%B4%ED%96%89%EC%9E%90-%EC%A0%91%EA%B7%BC%EB%B0%A9%EC%A7%80-%EC%95%88%EC%A0%84%EC%8B%9C%EC%84%A4%EB%AC%BC/5144"
+        ]
+      },
+      "render_contract": {
+        "frame": "silver galvanized round tube, continuous rounded top corners, approximately 25.4–31.8 mm product family",
+        "overall_shape": "single panel approximately 2:1.2 width-to-height proportion",
+        "feet": "two black weighted bases; no fabricated steel A-frame feet",
+        "infill": "plain blue mesh/screen, taut but slightly field-worn",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter front product view",
+        "condition": "real Korean construction-site wear, no severe damage"
+      },
+      "reject": [
+        "US/EU pedestrian crowd-control steel barricade with arched feet",
+        "water-filled road barrier as the default access fence",
+        "short household folding fence",
+        "fictional plastic modular fence geometry",
+        "readable 안전제일 text baked into reusable runtime art"
+      ],
+      "sources": [
+        "https://allcall.co.kr/Shop/k_view?code=2010-0070-001",
+        "https://speed119.kr/product/%EA%B5%AD%EC%82%B0-%EC%9D%B4%EB%8F%99%EC%8B%9D-%EA%B0%80%EB%A6%BC%EB%A7%89-%ED%9C%80%EC%8A%A4-25-32%ED%8C%8C%EC%9D%B4-%EB%A9%94%EC%89%AC%EB%A7%9D-%EA%B3%B5%EC%82%AC%EC%9E%A5-%EC%95%88%EC%A0%84%ED%8E%9C%EC%8A%A4-%EC%95%88%EC%A0%84%EC%A0%9C%EC%9D%BC-%EC%9D%B8%EC%87%84-%ED%8C%AC%EC%8A%A4/686/",
+        "https://kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=452&callmode=normal&catimage=&eclang=ko&start=32&um=s"
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_binary_and_runtime_review",
+        "generation_id": "3c619806-ebb8-426f-913f-9a13d4fe8a6d",
+        "accepted": [
+          "blue mesh/screen",
+          "silver rounded tubular frame",
+          "approximately 2.0:1.2 panel proportion",
+          "two black weighted bases",
+          "no baked text or branding"
+        ],
+        "limitations": [
+          "grommet/tie details treated as product-family approximation rather than an exact manufacturer copy",
+          "final approval still requires transparent WebP, checksum registration and in-game scale review"
+        ]
+      }
+    },
+    "vehicle_overlap_zone": {
+      "classification": "runtime_route_overlay",
+      "status": "verified_no_physical_prop_render",
+      "verified": "This is a conflict relationship between vehicle and pedestrian routes, not a standalone piece of equipment.",
+      "render_contract": "Render as map/scene overlay geometry only; do not image-generate a fictional physical object.",
+      "official_basis": "KOSHA guidance requires separating construction-equipment routes from worker passages or controlling access/using a signal person where collision risk exists.",
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132"
+      ]
+    },
+    "exclusion_zone": {
+      "classification": "site_control_composition",
+      "status": "verified_composite_not_single_object",
+      "verified": "Exclusion is created by barriers/cones/tape/signage and work control appropriate to the task.",
+      "render_contract": "Compose from verified Korean barrier/cone assets in the scene; no standalone magical exclusion-zone prop."
+    },
+    "open_edge": {
+      "classification": "hazard_condition",
+      "status": "verified_scene_fragment_required",
+      "verified": "A slab/platform edge or opening requires guardrail/fence/net/cover protection depending on the condition.",
+      "render_contract": "Use a real RC slab-edge scene fragment. Do not render an abstract 'open edge' object."
+    },
+    "wet_floor": {
+      "classification": "surface_condition",
+      "status": "verified_ground_decal_not_object",
+      "verified": "Wet/slippery condition is a ground state and housekeeping hazard.",
+      "render_contract": "Use wet concrete/soil surface decal or scene variation, not an isolated 3D item."
+    },
+    "harness_unclipped": {
+      "classification": "KCs_certified_PPE_scenario",
+      "status": "verified_scenario_specific",
+      "verified": "Use a KCs-certified full-body harness family. Episode 01 may use a twin-Y double-lanyard configuration, but that configuration is not asserted as a universal Korean legal requirement.",
+      "render_contract": "Brand-neutral Korean KCs-style full-body harness; correct D-ring, lanyards/hooks and shock-absorbing component where the selected certified product has them."
+    }
+  },
+  "field_guide_section0": {
+    "vehicle_pedestrian_separation": {
+      "status": "approved_final_candidate_pending_binary_and_runtime_review",
+      "classification": "Korean construction-site separated passage assembly",
+      "official_basis": [
+        "KOSHA construction guidance states that a safe passage for workers should be installed separately from material-handling/construction-equipment routes and maintained usable.",
+        "KOSHA guidance identifies collision risk where a pedestrian-only passage is not separated from equipment routes."
+      ],
+      "selected_episode01_visual_family": {
+        "pedestrian_lane": "straight worker passage approximately one-person/two-person lane width, clean walking surface",
+        "vehicle_lane": "adjacent temporary asphalt/concrete construction road",
+        "physical_separator": "verified Korean blue-mesh movable safety-fence panels on black weighted bases",
+        "continuity": "at least two connected fence panels so the separation reads as a route, not an isolated barricade",
+        "entry": "lane opening remains walkable and does not force workers into the vehicle road",
+        "marking": "simple floor/lane edge marking allowed; no text baked into reusable art"
+      },
+      "render_contract": {
+        "asset_type": "transparent scene-fragment module",
+        "composition": "one ground-level worker passage beside one ground-level construction vehicle lane, physically separated by 2–3 approved Korean blue-mesh movable fence panels",
+        "pedestrian_surface": "same-level concrete/asphalt or compacted temporary surface with restrained lane-edge marking",
+        "vehicle_surface": "adjacent temporary construction road with tire wear",
+        "fence_geometry": "approved Korean blue-mesh banding fence on black weighted bases",
+        "optional_elements": "small cone at entry only if needed for continuity",
+        "prohibited_elements": [
+          "raised steel deck unless an authored scene specifically needs a bridge/walkway",
+          "extra outer guardrails",
+          "water-filled road barriers unless specifically authored",
+          "people or vehicles baked into the reusable module",
+          "text or branding"
+        ],
+        "camera": "slightly elevated three-quarter view"
+      },
+      "reject": [
+        "painted line only with no physical separation",
+        "foreign crowd-control fence",
+        "single cone presented as full separation",
+        "magic glowing route overlay as the physical control",
+        "covered public sidewalk tunnel when the authored scene is an internal construction access route"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=516&callmode=normal&catimage=&eclang=ko&start=118&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=114&um=s"
+      ],
+      "generated_candidate": {
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "e53218fb-e09c-486d-b780-cd3cbe3d0fea",
+        "accepted": [
+          "ground-level pedestrian and vehicle routes",
+          "continuous physical separation with three Korean blue-mesh movable fence panels",
+          "black weighted bases",
+          "restrained lane-edge markings",
+          "no raised deck, outer guardrail, water barrier, people or vehicles baked into the reusable module"
+        ],
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
+        ]
+      }
+    },
+    "material_yard": {
+      "status": "visual_composition_locked_ready_to_render",
+      "classification": "Korean construction-site organized material storage yard",
+      "legal_safety_function": [
+        "Materials must be stored so they do not collapse or overturn.",
+        "Stored and dismantled materials must not obstruct worker passage or create trip hazards.",
+        "Loading/unloading and equipment travel need their own controlled space and clear approach."
+      ],
+      "selected_episode01_visual_family": {
+        "zone_a": "two same-size Korean Euroform bundles on timber sleepers, horizontally stacked and strapped",
+        "zone_b": "galvanized shoring/pipe members grouped by length on a simple low steel cradle/rack",
+        "aisle": "clear central worker/service aisle between storage zones",
+        "ground": "flat temporary concrete/asphalt yard surface with mild dirt and restrained painted boundary lines",
+        "separation": "storage zones stay inside their marked footprint and do not spill into the aisle"
+      },
+      "render_contract": {
+        "asset_type": "transparent scene-fragment module",
+        "composition": "compact rectangular Korean-site storage yard with Euroform zone on left, system-shoring members on right, and a clear central aisle",
+        "euroform": "1–2 bundles of same-size used Korean 6012-style Euroform panels on timber sleepers, strapped",
+        "shoring_standards": "galvanized vertical system-shoring standards matching the user's current-site installed members; straight cylindrical standards with the real intermediate connection/ring details visible, horizontally bundled on sleepers",
+        "shoring_ledgers": "separate smaller bundle of horizontal ledgers matching the user's current-site system-shoring; real end connector geometry, no invented circular flange plates",
+        "separation": "standards and ledgers remain in separate neat bundles",
+        "dunnage": "timber sleepers or simple low steel cradle under the bundles",
+        "aisle": "clean, continuous, unobstructed",
+        "markings": "simple yellow/white boundary lines only",
+        "people": "none",
+        "vehicles": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent outside yard slab",
+        "camera": "slightly elevated three-quarter view",
+        "primary_geometry_reference": [
+          "user photo KakaoTalk_20260723_142037826_03.jpg",
+          "user photo KakaoTalk_20260723_142037826_04.jpg"
+        ],
+        "reject": [
+          "round end flanges with bolt holes not present in the site reference",
+          "generic scaffold tubes",
+          "mixed random scrap pile",
+          "unstable leaning material",
+          "materials intruding into the aisle"
+        ]
+      },
+      "reject": [
+        "decorative mixed scrap pile",
+        "Euroform, rebar, timber and pipes tangled together",
+        "unstable leaning panels",
+        "material extending into the worker aisle",
+        "warehouse pallet-rack system unrelated to an outdoor/temporary construction yard",
+        "forklift or crane baked permanently into the reusable yard module"
+      ],
+      "sources": [
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=474&callmode=normal&catimage=&eclang=ko&start=26&um=s",
+        "https://www.kosha.or.kr/ebook/fcatalog/access/ecatalogt.jsp?Dir=473&callmode=normal&catimage=&eclang=ko&start=132&um=s"
+      ],
+      "generated_candidate": {
+        "status": "rejected_for_final_wrong_shoring_member_geometry",
+        "generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
+        "accepted": [
+          "two separated material zones",
+          "clear central aisle",
+          "Euroform bundles on timber dunnage",
+          "materials kept within marked storage footprints"
+        ],
+        "rejected_or_unresolved": [
+          "right-side members read as generic tubes with repeated round flange end plates rather than verified Korean system-shoring components",
+          "system-shoring standard/ledger connection geometry is not faithful enough for field-sensitive use"
+        ],
+        "action": "Regenerate using current-site system-shoring photos as the primary geometry reference. Separate vertical standards and ledgers into clearly different bundles."
+      }
+    },
+    "temporary_distribution_board": {
+      "status": "visual_family_relocked_ready_to_regenerate",
+      "classification": "Korean FRP temporary construction distribution board",
+      "selected_product_family": {
+        "enclosure": "orange/yellow rectangular FRP cabinet with shallow rain lip/roof",
+        "stand": "simple black steel two-leg H-frame stand with flat feet",
+        "indicator": "single small red energized indicator on front",
+        "outlets": "blue weather-protected industrial outlets mounted on enclosure side; count kept modest",
+        "door": "plain closed front door with simple latch/lock provision",
+        "handle": "small side handle may be present",
+        "grounding": "grounding conductor/terminal may be represented if visually grounded in the selected product family"
+      },
+      "visual_evidence": [
+        "Current Korean product listings show orange/yellow FRP temporary boards on simple black steel stands.",
+        "Multiple products show blue protected outlets on the sides and a small red energized indicator on the front.",
+        "An open-door reference confirms the same enclosure family contains breaker/RCD assemblies internally, but the normal reusable game asset remains closed."
+      ],
+      "render_contract": {
+        "enclosure": "simple orange/yellow FRP box; no lifting eyes; no heavy molded industrial roof",
+        "stand": "black square-tube two-leg H-stand, no A-frame bracing",
+        "outlets": "2–4 blue weatherproof side outlets, Korean-market visual family",
+        "indicator": "one small red front indicator",
+        "door_state": "closed",
+        "lock": "simple latch/lock provision, not an oversized padlock hero detail",
+        "text": "none; no fake warning labels or pseudo-Korean",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "slight front-left or front-right three-quarter view so one outlet side is visible",
+        "wear": "used site condition with light dust/scuffs, not rust-heavy"
+      },
+      "reject": [
+        "top lifting eyes",
+        "red large IEC outlet as dominant feature",
+        "A-frame stand",
+        "foreign NEMA-style box",
+        "open breakers/live parts in the normal reference asset",
+        "fake KCs or warning labels"
+      ],
+      "sources": [
+        "https://www.coupang.com/vp/products/6658623991",
+        "https://m.boxpara.com/product/%EA%B0%80%EC%84%A4%EB%B6%84%EC%A0%84%EB%B0%98-frp-%EC%9E%84%EC%8B%9C%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9D%B4%EB%8F%99%EC%8B%9D%EB%B6%84%EC%A0%84%ED%95%A8-%EC%9D%B4%EB%8F%99%ED%98%95-%EC%BD%98%EC%84%BC%ED%8A%B8%ED%95%A8-%EB%B6%84%EC%A0%84%EB%B0%98%EC%A0%9C%EC%9E%91/1653/",
+        "https://m.intelrior.com/product/%EC%9E%84%EC%8B%9C-%EA%B0%80%EC%84%A4-%EC%9D%B4%EB%8F%99%EC%8B%9D-%EB%B6%84%EC%A0%84%EB%B0%98-%EC%9E%90%EB%A6%BD%ED%98%95-frp-%EB%8B%A8%EC%83%81-%EC%A1%B0%EB%A6%BD%EC%8B%9D-%EA%B1%B4%EC%84%A4-%EA%B3%B5%EC%82%AC-%EC%82%B0%EC%97%85-%EC%9D%B8%ED%85%8C%EB%A6%AC%EC%96%B4-%ED%98%84%EC%9E%A5-%EC%BA%A0%ED%95%91%EC%9E%A5-%EC%95%BC%EC%99%B8-%EB%AF%B8%EB%9E%98%EC%9D%B4%EC%97%94%EC%97%90%ED%94%84/6416/",
+        "https://boxpara.com/category/frp-box/357/"
+      ],
+      "generated_candidate": {
+        "status": "approved_candidate_pending_binary_and_runtime_review",
+        "generation_id": "ca52c6dc-279d-4a35-97fe-90c4c16e0f4a",
+        "accepted": [
+          "orange/yellow FRP enclosure",
+          "simple black freestanding H-frame",
+          "four blue weather-protected outlets",
+          "small red energized indicator",
+          "closed normal-use door",
+          "no lifting eyes and no dominant red industrial connector"
+        ],
+        "limitations": [
+          "outlet count and exact layout remain product-family specific",
+          "no claim that this is a single universal Korean temporary-board configuration"
+        ]
+      }
+    },
+    "temporary_lighting_pack": {
+      "status": "site_photo_locked_candidate_review",
+      "classification": "installed LED line-bar temporary-lighting scene fragment",
+      "source_of_truth": {
+        "priority": 1,
+        "type": "user_current_site_photos",
+        "references": [
+          "KakaoTalk_20260723_142037826_03.jpg",
+          "KakaoTalk_20260723_142037826_04.jpg"
+        ],
+        "observed": [
+          "underground/basement RC construction environment",
+          "dense system-shoring/scaffold grid",
+          "bright white linear LED lighting running horizontally through the shoring zone",
+          "multiple light segments visually forming a continuous illuminated line",
+          "lighting positioned along temporary-work members rather than as a handheld lamp",
+          "black power lead/cable visible at some transitions",
+          "wet concrete floor and low-light work environment"
+        ]
+      },
+      "legal_function": [
+        "산업안전보건기준에 관한 규칙 제21조의 통로 조도 기준 충족 여부는 별도 조도계획/측정으로 판단한다.",
+        "도감 자산은 현재 현장의 실제 설치형상과 전선·고정 상태를 보여주되, 이미지 자체가 법적 조도충족을 의미하지 않는다."
+      ],
+      "generated_candidate": {
+        "status": "approved_final_candidate_pending_binary_and_runtime_crop",
+        "generation_id": "462331cc-d8af-4714-941f-c14e82169f2c",
+        "accepted": [
+          "multiple white LED line-bar segments read as a continuous installed run",
+          "line-bar is physically attached along system-shoring horizontal members",
+          "black cable/joint transitions are visible",
+          "unfinished basement RC and wet-floor context match the user photos",
+          "no handheld or tripod lighting is substituted"
+        ],
+        "remaining_gate": [
+          "final crop must keep LED line-bar mounting relationship readable at game scale",
+          "binary registration and in-game scale QA still required"
+        ]
+      },
+      "final_render_contract": {
+        "asset_type": "installed scene fragment, not isolated product",
+        "lighting": "multiple slim white LED line-bar segments aligned into a continuous horizontal run",
+        "mounting": "mounted/tied along the horizontal member line in the system-shoring zone; exact tie/clip geometry follows site photo",
+        "cable": "black power cable and joint transitions visible only where supported by the photos",
+        "structure": "actual system-shoring density and galvanized members preserved",
+        "environment": "unfinished basement RC, concrete column/slab, subdued ambient light, locally wet floor allowed",
+        "people": "none",
+        "text": "none",
+        "branding": "none",
+        "background": "transparent outside the scene fragment",
+        "reject": [
+          "handheld work light",
+          "tripod floodlight",
+          "decorative LED strip floating in space",
+          "one impossible infinitely long rigid lamp",
+          "lighting attached to invented members not visible in the site reference"
+        ]
+      },
+      "web_crosscheck_note": "Domestic market searches show several products called LED line/bar, but naming is inconsistent and product geometry varies; therefore user site photos override generic product search for the Episode 01 final."
+    },
+    "ppe_issue_station": {
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Korean construction-site PPE issue/storage point",
+      "legal_basis": {
+        "rules": [
+          "산업안전보건기준에 관한 규칙 제32조",
+          "산업안전보건기준에 관한 규칙 제33조"
+        ],
+        "meaning": [
+          "작업조건에 맞는 보호구를 필요한 근로자 수 이상으로 지급하고 착용하도록 해야 한다.",
+          "지급한 보호구는 상시 점검하고 이상품은 수리·교환하며 청결을 유지해야 한다.",
+          "법은 특정 보호구함 외형 하나를 의무형상으로 정하지 않는다."
+        ]
+      },
+      "korean_product_family": {
+        "selected_reference": "freestanding steel PPE cabinet with acrylic front panels",
+        "common_reference_dimensions": "approximately W600 × H1200 × D400 class",
+        "internal_layout": "3 shelves / 4 visible compartments class",
+        "body": "powder-coated steel, yellow or ivory safety-equipment cabinet family",
+        "doors": "clear acrylic-front doors or acrylic viewing panels",
+        "legs": "short freestanding legs/base",
+        "note": "Selected as Episode 01 representative field equipment, not a universal statutory cabinet shape."
+      },
+      "render_contract": {
+        "composition": "one freestanding Korean-style PPE safety cabinet",
+        "body": "plain yellow powder-coated steel rectangular cabinet, flat roof, no lifting lugs",
+        "door": "yellow steel front door or twin doors with modest clear acrylic viewing window(s), simple silver recessed handle/latch",
+        "interior": "three shelf levels, lightly stocked",
+        "visible_ppe": [
+          "3–4 brand-neutral safety helmets",
+          "2–3 clear safety goggles",
+          "small stacks of work gloves",
+          "small pack/bin of dust masks"
+        ],
+        "legs": "four short yellow steel legs",
+        "condition": "serviceable, light construction-site dust and scuffs",
+        "text": "omit readable 안전보호구함 wording from reusable game art",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "front three-quarter view",
+        "reject": [
+          "roof lifting eyes",
+          "glass display-cabinet proportions",
+          "retail-store stock density",
+          "fake labels or KCs marks"
+        ]
+      },
+      "reject": [
+        "open retail shelving",
+        "personal locker bank as the main asset",
+        "hospital supply cabinet",
+        "foreign OSHA-branded PPE station",
+        "damaged or dirty PPE presented as ready-for-issue stock",
+        "fake KCs marks or brand logos"
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsInfoP.do?ancYnChk=0&chrClsCd=010202&efYd=20260302&lsiSeq=273603&urlMode=lsInfoP",
+        "https://www.safetyzone.co.kr/shop/shopbrand.html?mcode=003&xcode=011"
+      ],
+      "generated_candidate": {
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "9a68c94c-f7a7-40d7-a66a-eda0bb3f90b7",
+        "accepted": [
+          "flat-top yellow powder-coated steel cabinet",
+          "modest acrylic viewing windows rather than full glass display doors",
+          "simple handles/hinges and short legs",
+          "light representative PPE inventory",
+          "no roof lifting lugs or fake labels"
+        ],
+        "remaining_gate": [
+          "binary registration",
+          "runtime scale/readability review"
+        ]
+      }
+    },
+    "fire_extinguisher_station": {
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Episode 01 portable fire-extinguisher placement point",
+      "selected_visual_family": {
+        "extinguisher": "red stored-pressure ABC dry-powder extinguisher, 3.3 kg class as the Episode 01 representative visual family",
+        "visible_parts": [
+          "pressure gauge",
+          "black discharge hose",
+          "safety pin",
+          "black lever/handle assembly"
+        ],
+        "stand": "stable floor stand/base suitable for a 3.3 kg class extinguisher",
+        "placement": "upright, immediately accessible, not hidden behind materials"
+      },
+      "evidence": [
+        "Korean retail and fire-safety suppliers repeatedly list KFI-verified 3.3 kg ABC powder extinguishers.",
+        "Current LH temporary-fire-facility estimating guidance identifies a small extinguisher as 3.3 kg for its construction-site installation examples.",
+        "Industrial-safety rules for fire-risk/hot-work contexts require extinguishing means/fire extinguishers in the relevant control scheme; exact count and type depend on applicable fire-safety requirements and site conditions."
+      ],
+      "render_contract": {
+        "composition": "one red 3.3 kg class ABC powder extinguisher seated upright in a simple stable floor stand",
+        "cylinder": "standard Korean portable extinguisher proportion; glossy red but field-used",
+        "gauge": "small round pressure gauge under the valve assembly",
+        "hose": "one black flexible discharge hose clipped neatly to the cylinder side",
+        "handle": "black/metal lever and safety pin visible",
+        "stand": "low Korean 3.3kg extinguisher floor stand: red square/trapezoidal plastic base with a circular recessed opening; omit readable 소화기/FIRE EXTINGUISHER lettering from reusable art",
+        "label": "generic small safety label texture only; no legible manufacturer or certification text",
+        "signage": "none baked into reusable art",
+        "background": "transparent",
+        "camera": "front three-quarter view",
+        "condition": "clean enough for readiness, minor construction-site dust/scuffing"
+      },
+      "reject": [
+        "CO2 extinguisher horn geometry",
+        "tiny automotive extinguisher",
+        "20 kg wheeled extinguisher as the default FG008 asset",
+        "open fire cabinet",
+        "designer office stand that dominates the extinguisher",
+        "readable fake KFI/brand labels"
+      ],
+      "sources": [
+        "https://www.kif119.co.kr/category/%EC%97%90%ED%94%84%EC%95%84%EC%9D%B4%EC%94%A8fic/154/",
+        "https://prod.danawa.com/vssearch/?productCodes=28377512",
+        "https://architecture-estimate.com/wp-content/uploads/2026/02/LH%EA%B3%B5%EC%82%AC%EC%9B%90%EA%B0%80-%EC%82%B0%EC%A0%95%EC%A7%80%EC%B9%A8%EA%B1%B4%EC%B6%95_%EC%A0%84%EB%AC%B8-%EB%93%B1%EC%9E%AC.pdf"
+      ],
+      "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition.",
+      "generated_candidate": {
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "a0d7ce4f-6dad-4456-ada5-f7624d2a5ad2",
+        "accepted": [
+          "3.3kg-class red stored-pressure extinguisher proportion",
+          "pressure gauge, black hose and safety pin are readable",
+          "low red square/trapezoidal Korean floor stand with circular recess",
+          "no readable brand or fake certification label"
+        ],
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
+        ]
+      }
+    },
+    "first_aid_aed": {
+      "status": "regeneration_in_progress",
+      "classification": "Korean construction-site first-aid point with optional AED module",
+      "legal_split": {
+        "first_aid": {
+          "basis": "산업안전보건기준에 관한 규칙 제82조",
+          "requirement": "사업주는 부상자의 응급처치에 필요한 구급용구를 갖추고, 그 장소와 사용방법을 근로자에게 알려야 한다.",
+          "required_items": [
+            "붕대재료",
+            "탈지면",
+            "핀셋",
+            "반창고",
+            "외상용 소독약",
+            "지혈대",
+            "부목",
+            "들것",
+            "화상 우려 작업장의 화상약"
+          ]
+        },
+        "aed": {
+          "basis": "응급의료에 관한 법률 제47조의2",
+          "requirement_scope": "AED 의무는 법에서 정한 시설·사업장에 적용되며, 모든 건설현장에 일률적으로 적용되는 형식으로 표현하지 않는다.",
+          "workplace_example": "보건관리자를 두어야 하는 사업장 중 상시근로자 300명 이상인 사업장"
+        }
+      },
+      "korean_product_crosscheck": [
+        {
+          "family": "산업용 ABS 구급함",
+          "evidence": "국내 산업용/건설현장용 응급처치 구급함이 견고한 ABS/PE 케이스 형태로 판매됨"
+        },
+        {
+          "family": "AED 벽걸이형 또는 스탠드형 보관함",
+          "evidence": "국내 AED 전문 판매처에서 벽걸이형 NT-W1, 스탠드형 NT-S1 및 일반 AED 보관함을 판매"
+        }
+      ],
+      "selected_episode01_visual_family": {
+        "first_aid_box": "white or light-gray rugged ABS first-aid box/cabinet with red cross marker, portable or wall-capable",
+        "aed_module": "Korean NT-S1-class stand-type AED cabinet: square red upper storage box on a tall slim red pedestal/lower instruction-panel body. Product-family geometry only; no model/brand text.",
+        "relationship": "two adjacent emergency-response assets; visually distinct so AED is not mistaken for the first-aid kit itself",
+        "legal_message": "asset presence does not imply universal AED legal obligation"
+      },
+      "render_contract": {
+        "composition": "two adjacent but clearly separate emergency assets: one rugged white/light-gray ABS first-aid case plus one Korean NT-S1-class red stand-type AED cabinet",
+        "first_aid_box": "low rectangular ABS/PE case with top carry handle, two black latches, red cross symbol only",
+        "aed_stand": "slim red floor-standing pedestal; square upper AED compartment with clear viewing window and simple heart/lightning pictogram; tall lower body/panel below",
+        "alarm": "small top alarm/beacon may be present if consistent with the stand family",
+        "relationship": "first-aid kit sits beside the AED stand; never merge them into one device",
+        "text": "no readable Korean instructions, model numbers, brand names or fake certification labels",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "front three-quarter view, both assets fully visible",
+        "condition": "clean, accessible, only light construction-site dust/scuffs"
+      },
+      "reject": [
+        "hospital crash cart",
+        "large pharmacy cabinet",
+        "AED merged into the same first-aid box",
+        "claim that AED is universally mandatory at every construction site",
+        "readable fake KCs/KFDA/brand labels"
+      ],
+      "sources": [
+        "https://www.law.go.kr/LSW/lsPdfPrint.do?ancYnChk=0&bylChaChk=N&efGubun=Y&efYd=20221018&joAllCheck=Y&joEfOutPutYn=on&lsiSeq=245059&mokChaChk=N",
+        "https://www.law.go.kr/lsLinkCommonInfo.do?lsJoLnkSeq=1031856731",
+        "https://www.navimro.com/p/K08964818/",
+        "https://kdsia.org/shop/list.php?ca_id=3080"
+      ],
+      "generated_candidate": {
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "e92b6174-4109-4c7b-88f0-0883dac4ff01",
+        "accepted": [
+          "first-aid case and AED remain separate",
+          "AED reads as a tall Korean stand-type cabinet with upper device compartment and lower pedestal body",
+          "proportion is consistent with the verified NT-S1 class (about 375×140×1200 mm)",
+          "no real brand/model text is baked into the asset"
+        ],
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
+        ]
+      }
+    },
+    "site_weather_station": {
+      "status": "visual_family_locked_ready_to_render",
+      "classification": "Episode 01 construction-site wind monitoring point",
+      "selected_visual_family": {
+        "sensor": "Korean-market K-200AW/K-200AWN class wireless installation anemometer family",
+        "sensor_geometry": "three-cup rotor on compact black cylindrical sensor body with rigid mounting bracket",
+        "display": "separate weather-resistant digital monitor/display module showing wind-speed numerals",
+        "mounting": "sensor fixed high on a mast/crane/structure; display located at a readable control point",
+        "network_option": "smartphone/network monitoring may exist in product family but is not baked into the reusable art"
+      },
+      "product_evidence": [
+        "K-200AW is currently sold in Korea as a domestically made wireless tower-crane/site anemometer with two monitors.",
+        "K-200AWN is currently sold as a domestically made network version with smartphone monitoring.",
+        "WTF-B500D is sold domestically as a construction-site/tower-crane wind-speed display system, confirming the sensor+display operational pattern."
+      ],
+      "legal_basis": {
+        "rule": "산업안전보건기준에 관한 규칙 제37조",
+        "general": "작업자가 기상 불안정으로 위험해질 우려가 있는 경우 작업중지",
+        "tower_crane_only": {
+          "install_repair_inspect_dismantle_stop_over_ms": 10,
+          "operation_stop_over_ms": 15
+        },
+        "caution": "These numeric thresholds apply to tower-crane operations in the cited rule and must not be copied as universal gangform/general-lifting limits."
+      },
+      "render_contract": {
+        "composition": "one compact wind-monitoring set: three-cup sensor on a short galvanized mounting mast/bracket plus separate rugged digital display box",
+        "sensor_body": "matte black cylindrical body, three black cups, simple cap, metal bracket",
+        "display": "dark gray/black weather-resistant rectangular enclosure with bright red wind-speed numerals; no fake brand/model text",
+        "cable": "minimal cable only if visually needed; wireless family may omit a long signal cable",
+        "structure": "small mast/base fragment only, not a full tower crane",
+        "text": "numerals only; no Korean labels or brand names",
+        "branding": "none",
+        "background": "transparent",
+        "camera": "three-quarter product/scene-fragment view showing both sensor and monitor",
+        "condition": "outdoor construction equipment, light weathering"
+      },
+      "reject": [
+        "airport weather station with wind vane tower",
+        "handheld vane anemometer",
+        "generic home weather sensor",
+        "invented multi-sensor meteorological mast",
+        "displaying tower-crane 10/15 m/s values as if they were universal site limits",
+        "real manufacturer logo/model text"
+      ],
+      "sources": [
+        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001045",
+        "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001782",
+        "https://m.finetest.co.kr/",
+        "https://law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1011851029"
+      ],
+      "generated_candidate": {
+        "status": "held_not_final_exact_product_geometry_unverified",
+        "generation_id": "4e65ab8a-8e50-4851-8747-c18ff3018a78",
+        "accepted": [
+          "three-cup installation anemometer concept",
+          "separate digital wind-speed display",
+          "outdoor mounting hardware and construction-use presentation"
+        ],
+        "unresolved": [
+          "sensor housing geometry has not been matched side-by-side to the selected K-200AW/K-200AWN family",
+          "display enclosure geometry is generic and may not match the actual Korean monitor",
+          "wired connection shown in the candidate conflicts with the selected wireless family unless a specific product variant supports it"
+        ],
+        "action": "Do not register as final. Retain only as composition reference until exact Korean product imagery or a current-site device photo is locked."
+      }
+    }
+  },
+  "next_render_order": [
+    "material_yard",
+    "site_weather_station"
+  ],
+  "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
+}

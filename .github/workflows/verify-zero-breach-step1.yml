@@ -1,0 +1,40 @@
+name: Verify ZERO BREACH Step 1
+
+on:
+  push:
+    branches:
+      - sol/zero-breach-step1-engine-20260922
+      - sol/zero-breach-step1-verify-20260922
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-zero-breach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: ZERO BREACH engine tests
+        run: npx vitest run tests/zero-breach-engine.test.ts
+
+      - name: Build
+        run: npm run build
+
+      - name: Full regression tests
+        run: npm test

@@ -131,5 +131,17 @@
     "review_rule": "review contact-sheet/batch first; regenerate failed assets only",
     "legacy_v1_rule": "field-guide-isometric-v1 assets are placeholders, not completion"
   },
-  "site_reality_policy": "content/episode01/field-guide-site-reality-verification.json"
+  "site_reality_policy": "content/episode01/field-guide-site-reality-verification.json",
+  "legal_visual_gate": {
+    "jurisdiction": "KR",
+    "legal_basis": "content/episode01/field-guide-legal-basis.json",
+    "reviewed_on": "2026-09-23",
+    "rules": [
+      "A production image must not present a statutory non-compliant condition as the normal/safe reference state.",
+      "Statutory numeric requirements and project/manufacturer/structural-review values must be visually and semantically separated.",
+      "Hazard entries may intentionally depict an unsafe state, but the hazard must be unmistakable and never reused as a safe reference asset.",
+      "Where the statute requires strength, rated capacity, structural review or a work plan, do not invent a visually precise numeric value that is not present in the approved source.",
+      "Gangform wire diameter, sling arrangement and wind limits are site/equipment-specific unless the cited law directly fixes the value."
+    ]
+  }
 }

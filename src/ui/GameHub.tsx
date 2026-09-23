@@ -10,12 +10,22 @@ import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
+import { defenseText } from '../app/defense-text';
+import { inspectDefenseSave } from '../app/defense-save';
+import {
+  defenseEventAvailabilityFromState, readE1UnlockNoticeSeen, writeE1UnlockNoticeSeen,
+} from '../app/defense-story-bridge';
+import { zeroBreachContent } from '../content/defense';
+import { defenseEvents } from '../content/defense-events';
+import { browserLocalStoragePort } from '../platform/browser-storage';
 
 type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
+const loadDefenseGame = () => import('./DefenseGame');
+const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
 const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
@@ -117,6 +127,9 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' })
 /** Navigation is presentation state; all run mutations remain in EpisodeSession/CoreEngine. */
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
+  const [inDefense, setInDefense] = useState(false);
+  const [defenseScenarioId, setDefenseScenarioId] = useState<string | null>(null);
+  const [e1UnlockNotice, setE1UnlockNotice] = useState(false);
   const [loading, setLoading] = useState(false);
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
@@ -136,6 +149,42 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       role: member?.role ?? '',
     };
   });
+
+  const openDefense = (scenarioId: string | null = null) => {
+    if (e1UnlockNotice) {
+      writeE1UnlockNoticeSeen();
+      setE1UnlockNotice(false);
+    }
+    void loadDefenseGame();
+    setDefenseScenarioId(scenarioId);
+    setInDefense(true);
+  };
+  const closeDefense = () => {
+    setInDefense(false);
+    setDefenseScenarioId(null);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    if (inDefense || !snapshot.state || readE1UnlockNoticeSeen()) {
+      setE1UnlockNotice(false);
+      return () => { cancelled = true; };
+    }
+    void (async () => {
+      try {
+        const inspection = await inspectDefenseSave(browserLocalStoragePort(), zeroBreachContent);
+        if (cancelled) return;
+        if (inspection.kind !== 'ready' && inspection.kind !== 'empty' && inspection.kind !== 'version-mismatch') return;
+        const event = defenseEvents[0];
+        if (!event) return;
+        const availability = defenseEventAvailabilityFromState(event, snapshot.state, inspection.document);
+        setE1UnlockNotice(availability.unlocked);
+      } catch {
+        if (!cancelled) setE1UnlockNotice(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [inDefense, snapshot.revision, snapshot.state]);
 
   const play = () => {
     void loadPlayableEpisode();
@@ -157,6 +206,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setInGame(true);
   };
 
+  if (inDefense) return <Suspense fallback={<GameplayChunkFallback />}>
+    <DefenseGame session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} />
+  </Suspense>;
+
   if (loading) return <CinematicLoadingScreen
     backgroundUri={cinematicBackground}
     preloadUris={preloadUris}
@@ -167,6 +220,29 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   if (inGame && snapshot.phase !== 'start') return <Suspense fallback={<GameplayChunkFallback />}>
     <PlayableEpisode session={session} onReturn={() => setInGame(false)} />
     <button
+      className="game-defense-toggle"
+      type="button"
+      onMouseEnter={() => { void loadDefenseGame(); }}
+      onFocus={() => { void loadDefenseGame(); }}
+      onClick={() => openDefense()}
+    >{defenseText('defense.ui.hub.title')}</button>
+    {e1UnlockNotice ? <aside className="game-defense-unlock" role="status" aria-live="polite">
+      <small>{defenseText('defense.event.new')}</small>
+      <strong>{defenseText('defense.event.e1.title')}</strong>
+      <p>{defenseText('defense.event.unlock.body')}</p>
+      <div>
+        <button type="button" onClick={() => {
+          writeE1UnlockNoticeSeen();
+          setE1UnlockNotice(false);
+          openDefense(defenseEvents[0]?.id ?? null);
+        }}>{defenseText('defense.event.unlock.play')}</button>
+        <button type="button" onClick={() => {
+          writeE1UnlockNoticeSeen();
+          setE1UnlockNotice(false);
+        }}>{defenseText('defense.event.unlock.later')}</button>
+      </div>
+    </aside> : null}
+    <button
       className="game-audio-toggle"
       type="button"
       aria-pressed={audioMuted}
@@ -174,10 +250,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       onClick={() => setAudioMuted(!audioMuted)}
     ><span aria-hidden="true">SOUND</span><b>{audioMuted ? 'OFF' : 'ON'}</b></button>
   </Suspense>;
-  return <GameHub session={session} onPlay={play} onNewGame={newGame} />;
+  return <GameHub session={session} onPlay={play} onNewGame={newGame} onDefense={() => openDefense()} />;
 }
 
-export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void }) {
+export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void; onDefense?: () => void }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const [page, setPage] = useState<HubPage>('home');
@@ -267,6 +343,11 @@ export function GameHub({ session, onPlay, onNewGame }: { session: EpisodeSessio
           {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
+        {onDefense ? <button className="commercial-title-action" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><strong>{defenseText('defense.ui.hub.title')}</strong><small>{defenseText('defense.ui.hub.hint')}</small></span>
+          <b>›</b>
+        </button> : null}
         <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
           <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>

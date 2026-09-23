@@ -62,9 +62,9 @@ function validateFallProtectionProfile(key, definition) {
   const profile = definition.fall_protection_profile;
   if (!profile) return;
   if (profile.harness_type !== 'full_body') errors.push(`${key}: fall_protection_profile.harness_type must be full_body`);
-  if (profile.lanyard_configuration !== 'twin_y') errors.push(`${key}: fall_protection_profile.lanyard_configuration must be twin_y`);
-  if (profile.lanyard_count !== 2 || profile.hook_count !== 2) errors.push(`${key}: twin_y fall protection profile requires two lanyards and two hooks`);
-  if (profile.connection_intent !== 'continuous_attachment_during_transfer') errors.push(`${key}: fall_protection_profile.connection_intent is invalid`);
+  if (profile.certification_context !== 'KCs safety-certified product family') errors.push(`${key}: fall protection must use a Korean KCs-certified product family as the reference context`);
+  if (profile.scenario_configuration === 'twin_y_double_lanyard' && (profile.lanyard_count !== 2 || profile.hook_count !== 2)) errors.push(`${key}: the authored twin-Y scenario requires two lanyards and two hooks`);
+  if (profile.scenario_configuration_is_universal_requirement !== false) errors.push(`${key}: site/scenario harness configuration must not be asserted as a universal Korean legal requirement`);
   if (profile.branding_policy !== 'no_logo_no_trademark') errors.push(`${key}: final harness art must remain brand-neutral`);
   if (typeof profile.design_reference !== 'string' || !profile.design_reference.trim()) errors.push(`${key}: fall_protection_profile.design_reference is required`);
   if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) errors.push(`${key}: fall_protection_profile.site_practice_note is required`);
@@ -85,10 +85,11 @@ function validateStorageProfile(key, definition) {
 function validateAccessControlProfile(key, definition) {
   const profile = definition.access_control_profile;
   if (!profile) return;
-  if (profile.barrier_form !== 'freestanding_modular') errors.push(`${key}: access_control_profile.barrier_form must be freestanding_modular`);
-  if (profile.body_material !== 'high_visibility_polymer') errors.push(`${key}: access_control_profile.body_material must be high_visibility_polymer`);
-  if (profile.stabilization !== 'weighted_feet') errors.push(`${key}: access_control_profile.stabilization must be weighted_feet`);
-  if (profile.reflective_marking !== true) errors.push(`${key}: access barrier must keep visible reflective marking`);
+  if (profile.barrier_form !== 'korean_banding_movable_screen_fence') errors.push(`${key}: access_control_profile.barrier_form must use the locked Korean banding movable screen fence family`);
+  if (profile.body_material !== 'galvanized_round_tube_with_blue_mesh') errors.push(`${key}: access_control_profile.body_material must be galvanized round tube with blue mesh`);
+  if (profile.stabilization !== 'two_black_weighted_bases') errors.push(`${key}: access_control_profile.stabilization must use two black weighted bases`);
+  if (profile.rounded_top_corners !== true) errors.push(`${key}: Korean banding fence must keep rounded top corners`);
+  if (!Array.isArray(profile.tube_diameter_mm_options) || !profile.tube_diameter_mm_options.includes(25.4) || !profile.tube_diameter_mm_options.includes(31.8)) errors.push(`${key}: Korean banding fence must preserve the verified 25.4/31.8 mm product-family tube options`);
   if (profile.integrated_text_allowed !== false || profile.integrated_sign_allowed !== false) errors.push(`${key}: reusable access barrier art must not bake text or a situation-specific sign into the cutout`);
   if (profile.warning_lamps_allowed !== false) errors.push(`${key}: reusable access barrier art must not bake warning lamps into the generic cutout`);
   if (typeof profile.site_practice_note !== 'string' || !profile.site_practice_note.trim()) errors.push(`${key}: access_control_profile.site_practice_note is required`);
@@ -180,7 +181,12 @@ if (materialProfile?.binding_method !== 'center_ratchet_or_equivalent' || materi
 const accessProfile = catalog.elements?.access_barrier?.access_control_profile;
 if (!accessProfile) errors.push('access_barrier: reusable access-control profile is required before final art production');
 else {
-  if (accessProfile.barrier_form !== 'freestanding_modular' || accessProfile.stabilization !== 'weighted_feet' || accessProfile.reflective_marking !== true) errors.push('access_barrier: final visual must be a stable freestanding modular barrier with weighted feet and reflective marking');
+  if (accessProfile.barrier_form !== 'korean_banding_movable_screen_fence'
+    || accessProfile.body_material !== 'galvanized_round_tube_with_blue_mesh'
+    || accessProfile.stabilization !== 'two_black_weighted_bases'
+    || accessProfile.rounded_top_corners !== true) {
+    errors.push('access_barrier: final visual must use the locked Korean blue-mesh banding fence family with rounded galvanized frame and two black weighted bases');
+  }
   if (accessProfile.integrated_text_allowed !== false || accessProfile.integrated_sign_allowed !== false || accessProfile.warning_lamps_allowed !== false) errors.push('access_barrier: generic production cutout must exclude baked text, signs, and warning lamps');
 }
 
@@ -202,8 +208,9 @@ else {
 }
 
 const harnessProfile = catalog.elements?.harness_unclipped?.fall_protection_profile;
-if (harnessProfile?.lanyard_configuration !== 'twin_y' || harnessProfile?.lanyard_count !== 2 || harnessProfile?.hook_count !== 2) errors.push('harness_unclipped: site-default harness visual must use a twin-Y two-lanyard/two-hook profile');
-if (catalog.elements?.harness_unclipped?.art?.path !== 'assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp') errors.push('harness_unclipped: production art path must identify the twin-lanyard profile');
+if (harnessProfile?.scenario_configuration !== 'twin_y_double_lanyard' || harnessProfile?.lanyard_count !== 2 || harnessProfile?.hook_count !== 2) errors.push('harness_unclipped: this authored Episode 01 scenario uses a twin-Y two-lanyard/two-hook configuration');
+if (harnessProfile?.scenario_configuration_is_universal_requirement !== false) errors.push('harness_unclipped: the twin-Y configuration must remain scenario-specific, not a universal Korean legal claim');
+if (catalog.elements?.harness_unclipped?.art?.path !== 'assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp') errors.push('harness_unclipped: production art path must identify the authored twin-lanyard profile');
 if (harnessProfile?.branding_policy !== 'no_logo_no_trademark') errors.push('harness_unclipped: final game art must not embed SWELOCK or other manufacturer branding');
 
 const generalLift = catalog.elements?.suspended_load?.lifting_profile;

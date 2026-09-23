@@ -1,0 +1,104 @@
+name: Verify ZERO BREACH Step 3
+
+on:
+  push:
+    branches:
+      - sol/zero-breach-step3-save-20260922
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-zero-breach-save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: ZERO BREACH step 1-3 focused tests
+        run: npx vitest run tests/zero-breach-engine.test.ts tests/zero-breach-ui.test.tsx tests/zero-breach-save.test.ts tests/zero-breach-persistence-ui.test.tsx
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify lazy combat chunk
+        run: ls dist/assets | grep -E 'DefenseGame-.*\.js$'
+
+      - name: Smoke-load built app
+        run: |
+          npx vite preview --host 127.0.0.1 --port 4173 > /tmp/zero-breach-step3-vite.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill $PREVIEW_PID || true' EXIT
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent http://127.0.0.1:4173/ > /tmp/zero-breach-step3-index.html; then
+              break
+            fi
+            sleep 1
+          done
+          grep -q '<div id="root"' /tmp/zero-breach-step3-index.html
+
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate browser for ZERO BREACH Step 3 QA
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Verify save resume two-tab and episode return in Chromium
+        run: |
+          mkdir -p artifacts/zero-breach-step3-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/zero-breach-step3-browser-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() {
+            kill "$PREVIEW_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/zero-breach-step3-browser-preview.log
+            exit 1
+          fi
+          node scripts/verify-zero-breach-step3-browser.mjs
+
+      - name: Upload ZERO BREACH Step 3 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero-breach-step3-browser-qa
+          path: artifacts/zero-breach-step3-browser
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Full repository regression diagnostics
+        continue-on-error: true
+        run: npm test
