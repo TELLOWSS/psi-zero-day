@@ -49,7 +49,7 @@ const manifest = assets as any;
 const guide = catalog as any;
 const reality = verification as any;
 
-describe('Episode 01 Field Guide FG003-FG010 final lock', () => {
+describe('Episode 01 Field Guide FG001-FG010 completion lock', () => {
   it('locks every Episode 01 Section 0 guide asset to realistic-v2 final', () => {
     for (const [key, item] of Object.entries(expected)) {
       const entry = guide.elements[key];
@@ -94,10 +94,25 @@ describe('Episode 01 Field Guide FG003-FG010 final lock', () => {
       .toBe(false);
   });
 
-  it('declares only FG003-FG010 complete for the Episode 01 field-guide gate', () => {
+  it('completes FG001-FG002 through the verified production gate scene without promoting map placeholders', () => {
+    for (const [key, id] of [['site_gate', 'FG001'], ['pedestrian_gate', 'FG002']] as const) {
+      const entry = guide.elements[key];
+      expect(entry.field_guide.id).toBe(id);
+      expect(entry.field_guide.episode).toBe('EP01');
+      expect(entry.field_guide_visual.status).toBe('final');
+      expect(entry.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
+      expect(entry.field_guide_visual.presentation).toBe('production_scene_reference_crop');
+      const asset = manifest.assets.find((candidate: any) => candidate.asset_id === entry.field_guide_visual.asset_id);
+      expect(asset?.variants?.[0]?.uri).toBe('assets/episode01/cg/gate-dawn.webp');
+    }
+    expect(guide.elements.site_gate.production_status).toBe('planned');
+    expect(guide.elements.pedestrian_gate.production_status).toBe('replacement_required');
+  });
+
+  it('declares FG001-FG010 complete for the Episode 01 field-guide gate', () => {
     expect(reality.episode01_field_guide_completion.status).toBe('complete');
     expect(reality.episode01_field_guide_completion.field_guide_ids)
-      .toEqual(['FG003','FG004','FG005','FG006','FG007','FG008','FG009','FG010']);
+      .toEqual(['FG001','FG002','FG003','FG004','FG005','FG006','FG007','FG008','FG009','FG010']);
     expect(reality.episode01_field_guide_completion.exceptions).toEqual([]);
   });
 });

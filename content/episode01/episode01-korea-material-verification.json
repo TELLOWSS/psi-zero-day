@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "verification_id": "episode01-korea-material-reality-v1",
-  "reviewed_on": "2026-09-23",
+  "reviewed_on": "2026-09-24",
   "status": "research_locked_before_render",
   "scope": "Episode 01 visible runtime props first, then Section 0 Field Guide items",
   "governing_rule": "No image generation or final promotion before Korean-site product/assembly verification.",
@@ -347,6 +347,36 @@
     }
   },
   "field_guide_section0": {
+    "site_gate": {
+      "status": "final_runtime_scene_reference",
+      "field_guide_id": "FG001",
+      "classification": "Episode 01 vehicle gate + separate worker entrance production-scene reference",
+      "final_registration": {
+        "completed_on": "2026-09-24",
+        "asset_id": "ep01.scene_bg.gate_dawn",
+        "asset_path": "assets/episode01/cg/gate-dawn.webp",
+        "presentation": "production_scene_reference_crop",
+        "focus": "vehicle_gate_and_adjacent_worker_entry",
+        "visual_review": "approved_production_scene_reference",
+        "dedicated_map_asset_promoted": false
+      },
+      "integrity_note": "Field Guide completion does not promote the legacy scene-element placeholder used by map/strategy content."
+    },
+    "pedestrian_gate": {
+      "status": "final_runtime_scene_reference",
+      "field_guide_id": "FG002",
+      "classification": "Episode 01 pedestrian entrance + access-control production-scene reference",
+      "final_registration": {
+        "completed_on": "2026-09-24",
+        "asset_id": "ep01.scene_bg.gate_dawn",
+        "asset_path": "assets/episode01/cg/gate-dawn.webp",
+        "presentation": "production_scene_reference_crop",
+        "focus": "worker_entry_and_access_control",
+        "visual_review": "approved_production_scene_reference",
+        "dedicated_map_asset_promoted": false
+      },
+      "integrity_note": "Field Guide completion does not promote the legacy scene-element placeholder used by map/strategy content."
+    },
     "vehicle_pedestrian_separation": {
       "status": "final_registered_runtime_ready",
       "classification": "Korean construction-site separated passage assembly",
@@ -981,8 +1011,10 @@
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation.",
   "episode01_field_guide_completion": {
     "status": "complete",
-    "completed_on": "2026-09-23",
+    "completed_on": "2026-09-24",
     "field_guide_ids": [
+      "FG001",
+      "FG002",
       "FG003",
       "FG004",
       "FG005",
@@ -995,14 +1027,15 @@
     "asset_version": "2",
     "criteria": [
       "Korean-site reality/product family verified before final promotion",
-      "realistic-v2 binary persisted in repository",
-      "catalog production_status final",
-      "manifest version/hash/bytes synchronized",
-      "legal/site-specific caveats preserved",
-      "runtime/readability regression required by completion workflow"
+      "FG001-FG002 route to the verified Episode 01 production gate scene with item-specific crops",
+      "FG003-FG010 use dedicated realistic-v2 binaries persisted in the repository",
+      "catalog/manifest runtime routing is synchronized",
+      "legal/site-specific caveats are preserved",
+      "runtime/readability regression is required by completion verification"
     ],
     "exceptions": [],
     "notes": [
+      "FG001 and FG002 no longer depend on their legacy scene-element placeholders inside Field Guide; the dedicated map/strategy asset status remains unchanged.",
       "FG004 deliberately excludes the rejected generic system-shoring-member geometry and is scoped to verified Euroform storage plus a clear aisle.",
       "FG010 is finalized as a Korean-market construction wind-monitor product-family representation, not an exact manufacturer/model clone."
     ]
