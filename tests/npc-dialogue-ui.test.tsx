@@ -23,30 +23,38 @@ function click(text: string) {
   if (!button) throw new Error(`Missing button: ${text}`);
   act(() => button.click());
 }
-function hasVisibleFieldOutcome() {
-  const returnMap = session.t('ui.strategy.return_map');
-  return Array.from(container.querySelectorAll('button')).some(button => button.textContent?.includes(returnMap));
-}
 function continueCurrent() {
-  click(hasVisibleFieldOutcome() ? session.t('ui.strategy.return_map') : session.t('ui.continue'));
+  const coldOpen = container.querySelector<HTMLButtonElement>('.episode-cold-open-cta');
+  if (coldOpen) { act(() => coldOpen.click()); return; }
+
+  const outcome = container.querySelector<HTMLButtonElement>('.strategy-outcome-next');
+  if (outcome) { act(() => outcome.click()); return; }
+
+  const transition = container.querySelector<HTMLButtonElement>('.strategy-transition-button');
+  if (transition) { act(() => transition.click()); return; }
+
+  const next = container.querySelector<HTMLButtonElement>('.continue-button');
+  if (next) { act(() => next.click()); return; }
+
+  throw new Error(`No visible continue control for ${session.getSnapshot().presentation.map(item => item.type).join(',')}`);
 }
 function continueToChoice() {
-  for (let i = 0; i < 30; i++) {
-    // A held field outcome intentionally covers the next engine presentation.
-    // Dismiss what the player can actually see before reading the next dialogue choice.
-    if (hasVisibleFieldOutcome()) {
-      continueCurrent();
-      continue;
-    }
-    if (session.getSnapshot().dialogue?.responses.length) return;
+  for (let i = 0; i < 40; i++) {
+    const choice = session.getSnapshot().presentation.find(item => item.type === 'SHOW_CHOICE');
+    if (choice?.type === 'SHOW_CHOICE' && container.querySelector('.choice-panel button')) return;
     continueCurrent();
   }
   throw new Error('No response node reached');
 }
 function choose(id: string) {
-  const response = session.getSnapshot().dialogue?.responses.find(r => r.choice_id === id);
-  if (!response) throw new Error('Unknown response');
-  click(session.t(response.text_id));
+  const presentation = session.getSnapshot().presentation.find(item => item.type === 'SHOW_CHOICE');
+  if (presentation?.type !== 'SHOW_CHOICE') throw new Error('No visible choice presentation');
+  const response = presentation.choices.find(item => item.choice_id === id);
+  if (!response) throw new Error(`Unknown response: ${id}`);
+  const button = Array.from(container.querySelectorAll<HTMLButtonElement>('.choice-panel button'))
+    .find(item => !item.disabled && item.textContent?.includes(session.t(response.text_id)));
+  if (!button) throw new Error(`Missing choice button: ${id}`);
+  act(() => button.click());
 }
 
 describe('TASK-006 character interaction UI', () => {
