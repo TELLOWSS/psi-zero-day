@@ -6,7 +6,7 @@
       "kind": "prop",
       "label": "통로 인접 적재 자재",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.material_stack",
       "storage_profile": {
         "dimension_grouping": "same_spec_only",
@@ -17,7 +17,7 @@
         "safety_evaluation_note": "결속 형상만으로 안전을 판정하지 않고 적재 안정성, 받침목, 결속 상태, 통로 침범 여부 및 작업계획을 함께 평가한다."
       },
       "art": {
-        "path": "assets/episode01/scene-elements/material-stack.webp",
+        "path": "assets/episode01/scene-elements/material-yard.webp",
         "minimum_width": 768,
         "minimum_height": 512,
         "pivot": {
@@ -26,8 +26,8 @@
         },
         "map_max_px": 132,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -45,7 +45,7 @@
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
+      "production_note": "Episode 01 runtime final reuses the verified realistic-v2 Euroform storage cutout from FG004: same-size used Euroform bundles on sleepers with visible securing and clear aisle context. The legacy generic shoring-member binary is retained only as an unbound historical asset and is not used by Episode 01 runtime.",
       "episode01_visual_profile": {
         "subject": "used_korean_euroform_panel_bundle",
         "context": "formwork cleanup near Episode 01 access/yard scene",
@@ -55,6 +55,31 @@
         "securing": "two_visible_straps_or_equivalent",
         "no_mixed_materials": true,
         "no_text_branding": true
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 169282,
+        "sha256": "eb6350820151a983b0d5960218d8a9ac590fab8cad3fede2e514cce00229d142",
+        "source": "verified_fg004_runtime_reuse_2026-09-24",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
+        "visual_review": "approved_realistic_v2_runtime_reuse",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1",
+        "reused_from_asset_id": "ep01.scene_element.material_yard"
+      },
+      "site_reality_profile": {
+        "subject": "episode01_verified_euroform_material_stack",
+        "source_asset": "material_yard",
+        "same_size_used_euroform_bundles": true,
+        "sleepers": true,
+        "visible_securing": true,
+        "mixed_materials": false,
+        "generic_system_shoring_geometry_excluded": true,
+        "rationale": "Episode 01 placement only needs a readable formwork material stack at entry/yard anchors; the verified FG004 Euroform storage final matches that authored condition without inventing shoring connector geometry."
       }
     },
     "access_barrier": {
