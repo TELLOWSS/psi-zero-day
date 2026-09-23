@@ -537,7 +537,7 @@
       "kind": "control",
       "label": "차량·보행 동선 분리시설",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.vehicle_pedestrian_separation",
       "art": {
         "path": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
@@ -549,8 +549,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -568,14 +568,28 @@
         "observe_point_text_id": "ui.guide.vehicle_pedestrian_separation.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 final uses a ground-level Korean construction-site pedestrian/vehicle separation scene with connected blue-mesh movable fences on weighted bases.",
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 136318,
+        "sha256": "900bd3b7ca99261d6b5d49476e64b54d8e8670fbddf29e7dd8d89a79612c52e4",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "e53218fb-e09c-486d-b780-cd3cbe3d0fea",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
+      }
     },
     "material_yard": {
       "element_id": "scene.prop.material_yard",
       "kind": "prop",
       "label": "자재 야적장",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.material_yard",
       "art": {
         "path": "assets/episode01/scene-elements/material-yard.webp",
@@ -587,8 +601,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -607,14 +621,35 @@
         "observe_point_text_id": "ui.guide.material_yard.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 final is intentionally scoped to the verified formwork-storage portion: same-size used Euroform bundles on sleepers with a clear aisle. The rejected generic shoring-member portion was removed rather than invented.",
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 169282,
+        "sha256": "eb6350820151a983b0d5960218d8a9ac590fab8cad3fede2e514cce00229d142",
+        "source": "approved-library-candidate-crop-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "db9c57fc-6866-46b3-b8f4-4af3eba88620",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
+      },
+      "site_reality_profile": {
+        "subject": "episode01_verified_euroform_storage_yard",
+        "final_scope": "same_size_used_euroform_bundles_on_sleepers_plus_clear_aisle",
+        "excluded_from_final": "unverified_generic_system_shoring_member_bundle",
+        "rationale": "Do not invent field-sensitive shoring connector geometry. FG004 Episode 01 story context is formwork material storage/housekeeping.",
+        "final_without_verified_shoring_geometry": true
+      }
     },
     "temporary_distribution_board": {
       "element_id": "scene.equipment.temporary_distribution_board",
       "kind": "equipment",
       "label": "임시 분전반",
       "visual_token": "◆",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.temporary_distribution_board",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-distribution-board.webp",
@@ -626,8 +661,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -646,14 +681,28 @@
         "observe_point_text_id": "ui.guide.temporary_distribution_board.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 final uses a Korean-market orange/yellow FRP temporary distribution-board family on a simple black H-frame with protected blue side outlets.",
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 84102,
+        "sha256": "deba5fac00af118bdf6dcc3402b2ee9dd1ae16c86b77a00acf5a12f924ebf5b9",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "ca52c6dc-279d-4a35-97fe-90c4c16e0f4a",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
+      }
     },
     "temporary_lighting_pack": {
       "element_id": "scene.control.temporary_lighting_pack",
       "kind": "control",
       "label": "임시조명",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.temporary_lighting_pack",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
@@ -665,8 +714,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -684,7 +733,7 @@
         "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Current-site photos locked. Final art must show multiple white LED line-bar segments installed horizontally through the system-shoring zone; handheld work-light art is rejected.",
+      "production_note": "Episode 01 final follows the user's current-site basement photos: multiple white LED line-bar segments installed through the system-shoring zone, not a handheld lamp.",
       "site_reality_profile": {
         "subject": "installed_current_site_led_line_bar",
         "geometry_source": "user_current_site_photos_2026-07-23",
@@ -694,6 +743,20 @@
         "segment_based": true,
         "system_shoring_context": true,
         "final_without_site_reference": false
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 142140,
+        "sha256": "f1bc58b504229c93d1cff85dd29014643a08f45e435923fa2f0a08523083e4ec",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "462331cc-d8af-4714-941f-c14e82169f2c",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       }
     },
     "ppe_issue_station": {
@@ -701,7 +764,7 @@
       "kind": "control",
       "label": "안전용품 지급·교체 지점",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.ppe_issue_station",
       "art": {
         "path": "assets/episode01/scene-elements/ppe-issue-station.webp",
@@ -713,8 +776,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -731,7 +794,7 @@
         "observe_point_text_id": "ui.guide.ppe_issue_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Episode 01 PPE station uses a Korean freestanding steel/acrylic safety-equipment cabinet as the representative visual family. The cabinet itself is not a universal statutory form; the legal requirement is PPE issue, use and maintenance.",
+      "production_note": "Episode 01 final uses a Korean freestanding steel/acrylic PPE cabinet as a representative issue-and-maintenance point, not as a universal statutory cabinet form.",
       "site_reality_profile": {
         "subject": "korean_freestanding_ppe_issue_cabinet",
         "geometry_source": "current Korean safety-cabinet product family",
@@ -740,6 +803,20 @@
         "door": "clear_acrylic_viewing_panel",
         "shelf_layout": "3_shelf_4_compartment_class",
         "final_without_korean_product_family_verification": false
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 110202,
+        "sha256": "be7211aa94cde3ef9b820b18791b8ac88328b1e1d4cfa7935823573bcb5f9074",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "9a68c94c-f7a7-40d7-a66a-eda0bb3f90b7",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       }
     },
     "fire_extinguisher_station": {
@@ -747,7 +824,7 @@
       "kind": "control",
       "label": "소화기 배치 지점",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.fire_extinguisher_station",
       "art": {
         "path": "assets/episode01/scene-elements/fire-extinguisher-station.webp",
@@ -759,8 +836,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -777,14 +854,29 @@
         "process_order": 8,
         "observe_point_text_id": "ui.guide.fire_extinguisher_station.body",
         "unlock_policy": "episode_context"
-      }
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 84980,
+        "sha256": "7c7c0af66c2dd3d982c81d87c79beea81a1f1c0b8fd8da3d0a4ca77ff785b2cf",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "a0d7ce4f-6dad-4456-ada5-f7624d2a5ad2",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
+      },
+      "production_note": "Episode 01 final uses a Korean 3.3 kg-class stored-pressure ABC powder-extinguisher family with gauge, hose and a low stable floor stand; this is a representative visual family."
     },
     "first_aid_aed": {
       "element_id": "scene.equipment.first_aid_aed",
       "kind": "equipment",
       "label": "응급구호함·AED",
       "visual_token": "◆",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.first_aid_aed",
       "art": {
         "path": "assets/episode01/scene-elements/first-aid-aed.webp",
@@ -796,8 +888,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -814,7 +906,7 @@
         "observe_point_text_id": "ui.guide.first_aid_aed.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "FG009 must visually separate the legally required first-aid kit from the AED module. Do not imply universal AED obligation for all Korean construction sites.",
+      "production_note": "Episode 01 final keeps the legally required first-aid kit visually separate from the adjacent AED module; the art does not imply universal AED obligation at every construction site.",
       "site_reality_profile": {
         "subject": "korean_first_aid_point_plus_optional_aed",
         "first_aid_required_by_rule82": true,
@@ -822,6 +914,20 @@
         "aed_rendering": "separate_adjacent_module",
         "geometry_source": "Korean industrial first-aid box and AED cabinet product families",
         "final_without_product_family_verification": false
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 86316,
+        "sha256": "61a588d703059995e74f1b3b091791851a6b8fa1cd92d0ff5a90c20de9a027a1",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "e92b6174-4109-4c7b-88f0-0883dac4ff01",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       }
     },
     "site_weather_station": {
@@ -829,7 +935,7 @@
       "kind": "equipment",
       "label": "현장 풍속·기상 확인 지점",
       "visual_token": "◆",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.site_weather_station",
       "art": {
         "path": "assets/episode01/scene-elements/site-weather-station.webp",
@@ -841,8 +947,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -860,14 +966,30 @@
         "observe_point_text_id": "ui.guide.site_weather_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Episode 01 FG010 uses a Korean-market installation anemometer + separate digital monitor family. Tower-crane 10/15 m/s stop thresholds remain tower-crane-specific and are not baked into generic art.",
+      "production_note": "Episode 01 final is a Korean-market construction-site cup-anemometer plus separate digital-monitor product-family representation, not an exact manufacturer/model clone. Tower-crane wind thresholds are not baked into generic art.",
       "site_reality_profile": {
-        "subject": "korean_construction_site_wireless_anemometer_and_display",
-        "product_family": "K-200AW/K-200AWN class",
-        "sensor": "three_cup_black_cylindrical_wireless_sensor",
+        "subject": "korean_market_construction_site_cup_anemometer_and_digital_monitor",
+        "product_family_scope": "representative_installed_wind_monitor_family",
+        "exact_manufacturer_clone": false,
+        "sensor": "three_cup_installed_sensor",
         "display": "separate_digital_wind_speed_monitor",
+        "connection_variant": "wired_or_wireless_by_product_family",
         "tower_crane_thresholds_not_universal": true,
         "final_without_korean_product_family_verification": false
+      },
+      "production": {
+        "width": 768,
+        "height": 768,
+        "bytes": 115456,
+        "sha256": "a89841289665448279216e2f62e0c5f9537adcd71133e223584082c210996fb7",
+        "source": "approved-library-candidate-2026-09-23",
+        "source_canvas": {
+          "width": 768,
+          "height": 768
+        },
+        "source_generation_id": "4e65ab8a-8e50-4851-8747-c18ff3018a78",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       }
     },
     "foundation_blinding_edge": {

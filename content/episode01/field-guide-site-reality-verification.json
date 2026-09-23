@@ -94,6 +94,18 @@
       "fire_extinguisher_station",
       "first_aid_aed",
       "site_weather_station"
-    ]
+    ],
+    "field_guide_status": "complete",
+    "completed_field_guide_ids": [
+      "FG003",
+      "FG004",
+      "FG005",
+      "FG006",
+      "FG007",
+      "FG008",
+      "FG009",
+      "FG010"
+    ],
+    "field_guide_completed_on": "2026-09-23"
   }
 }
