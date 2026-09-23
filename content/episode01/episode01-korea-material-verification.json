@@ -348,7 +348,7 @@
   },
   "field_guide_section0": {
     "vehicle_pedestrian_separation": {
-      "status": "visual_composition_locked_ready_to_render",
+      "status": "regeneration_in_progress",
       "classification": "Korean construction-site separated passage assembly",
       "official_basis": [
         "KOSHA construction guidance states that a safe passage for workers should be installed separately from material-handling/construction-equipment routes and maintained usable.",
@@ -766,11 +766,29 @@
         "https://cjtech21.com/goods/goods_view.php?goodsNo=1000001782",
         "https://m.finetest.co.kr/",
         "https://law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&lsJoLnkSeq=1011851029"
-      ]
+      ],
+      "generated_candidate": {
+        "status": "held_not_final_exact_product_geometry_unverified",
+        "generation_id": "4e65ab8a-8e50-4851-8747-c18ff3018a78",
+        "accepted": [
+          "three-cup installation anemometer concept",
+          "separate digital wind-speed display",
+          "outdoor mounting hardware and construction-use presentation"
+        ],
+        "unresolved": [
+          "sensor housing geometry has not been matched side-by-side to the selected K-200AW/K-200AWN family",
+          "display enclosure geometry is generic and may not match the actual Korean monitor",
+          "wired connection shown in the candidate conflicts with the selected wireless family unless a specific product variant supports it"
+        ],
+        "action": "Do not register as final. Retain only as composition reference until exact Korean product imagery or a current-site device photo is locked."
+      }
     }
   },
   "next_render_order": [
-    "site_weather_station"
+    "vehicle_pedestrian_separation",
+    "first_aid_aed",
+    "fire_extinguisher_station",
+    "material_yard"
   ],
   "hard_stop": "If a visual family is still site-specific/unresolved, request or search a Korean reference before calling image generation."
 }
