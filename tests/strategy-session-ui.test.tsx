@@ -41,7 +41,7 @@ describe('Casual strategy session integration', () => {
     expect(html).toContain(snapshot.eventTitle);
   });
 
-  it('starts actionable scenes at situation observation before target selection', () => {
+  it('starts actionable scenes at explicit target selection', () => {
     const session = new EpisodeSession();
     session.start(0);
     advanceToFirstPlayerChoice(session);
@@ -49,11 +49,11 @@ describe('Casual strategy session integration', () => {
     const snapshot = session.getSnapshot();
     expect(snapshot.state?.event_runtime.active_instance?.event_id).toBe('e01_03_plan_breaks');
     const html = renderToStaticMarkup(<PlayableEpisode session={session} />);
-    expect(html).toContain('strategy-observe-card');
-    expect(html).toContain('data-loop-phase="observe"');
-    expect(html).toContain('1 상황 보기');
-    expect(html).toContain('먼저 현장을 읽습니다');
-    expect(html).toContain('대상 선택 시작');
+    expect(html).not.toContain('strategy-observe-card');
+    expect(html).toContain('data-loop-phase="target"');
+    expect(html).toContain('1 대상 선택');
+    expect(html).toContain('지도에서 대상을 선택하세요');
+    expect(html).not.toContain('대상 선택 시작');
     expect(html).toContain('data-character="player"');
     expect(html).toContain('data-character="kang_taesik"');
     expect(html).toContain('data-character="yoon_sungho"');

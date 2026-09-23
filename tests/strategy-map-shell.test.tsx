@@ -42,15 +42,18 @@ const labels: Readonly<Record<string, string>> = {
   'ui.strategy.zone.gate': '현장 게이트',
   'ui.strategy.no_actions': '현재 선택한 대상에는 실행할 행동이 없습니다.',
   'ui.strategy.loop.label': '현장 판단 단계',
-  'ui.strategy.loop.observe': '1 상황 보기',
-  'ui.strategy.loop.target': '2 대상 선택',
-  'ui.strategy.loop.action': '3 조치 선택',
-  'ui.strategy.loop.result': '4 결과 확인',
+  'ui.strategy.loop.target': '1 대상 선택',
+  'ui.strategy.loop.action': '2 조치 선택',
+  'ui.strategy.loop.result': '3 결과 확인',
   'ui.strategy.observe.kicker': '현장 전체',
   'ui.strategy.observe.title': '먼저 현장을 읽습니다',
   'ui.strategy.observe.hint': '사람·차량·자재·동선·위험 신호를 먼저 확인합니다.',
   'ui.strategy.observe.continue': '대상 선택 시작',
   'ui.strategy.result': '현장 결과',
+  'ui.strategy.next_situation': '다음 상황 확인',
+  'ui.strategy.guide.kicker': '다음 행동',
+  'ui.strategy.guide.target_title': '지도에서 대상을 선택하세요',
+  'ui.strategy.guide.target_hint': '강조된 위험 신호·사람·작업 구역을 누르면 실행 가능한 조치가 열립니다.',
   'ui.strategy.return_map': '맵으로 복귀',
   'ui.strategy.actions': '현장 행동',
   'ui.strategy.action_hint': '먼저 대상을 선택하세요.',
@@ -95,10 +98,10 @@ const visualAssets: StrategyVisualAssets = {
 };
 
 describe('StrategyMapShell', () => {
-  it('starts at situation observation before target/action/result interaction', () => {
+  it('starts at explicit target selection before action/result interaction', () => {
     const html = renderToStaticMarkup(<StrategyMapShell view={view} copy={copy} text={text} person={person} actions={actions} />);
     expect(html).toContain('data-stage="TYPICAL_FLOOR"');
-    expect(html).toContain('data-loop-phase="observe"');
+    expect(html).toContain('data-loop-phase="target"');
     expect(html).toContain('data-visual-mode="css"');
     expect(html).toContain('data-character="lim_junho"');
     expect(html).toContain('data-art-surface="map"');
@@ -113,8 +116,8 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('data-production-anchor="ramp"');
     expect(html).toContain('left:49%');
     expect(html).toContain('top:34.5%');
-    expect(html).toContain('1 상황 보기');
-    expect(html).toContain('먼저 현장을 읽습니다');
+    expect(html).toContain('1 대상 선택');
+    expect(html).toContain('지도에서 대상을 선택하세요');
     expect(html).not.toContain('data-choice="listen_more"');
   });
 
@@ -136,10 +139,10 @@ describe('StrategyMapShell', () => {
     />);
     expect(html).toContain('data-loop-phase="result"');
     expect(html).toContain('data-outcome="result.1"');
-    expect(html).toContain('4 결과 확인');
+    expect(html).toContain('3 결과 확인');
     expect(html).toContain('임준호의 위험신호를 확인했다.');
     expect(html).toContain('임준호 · 보고 +4');
-    expect(html).toContain('맵으로 복귀');
+    expect(html).toContain('다음 상황 확인');
   });
 
   it('shows the replan pass lifecycle on an unresolved field result without erasing incident language', () => {

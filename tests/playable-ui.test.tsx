@@ -28,9 +28,19 @@ function clickPresentationChoice(text: string) {
   act(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 })));
 }
 function continueCurrent(session: EpisodeSession) {
-  const mapReturn = session.t('ui.strategy.return_map');
-  if (buttons().some(button => button.textContent?.includes(mapReturn))) click(mapReturn);
-  else click(session.t('ui.continue'));
+  const coldOpen = container.querySelector<HTMLButtonElement>('.episode-cold-open-cta');
+  if (coldOpen) { act(() => coldOpen.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))); return; }
+
+  const outcome = container.querySelector<HTMLButtonElement>('.strategy-outcome-next');
+  if (outcome) { act(() => outcome.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))); return; }
+
+  const transition = container.querySelector<HTMLButtonElement>('.strategy-transition-button');
+  if (transition) { act(() => transition.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))); return; }
+
+  const next = container.querySelector<HTMLButtonElement>('.continue-button');
+  if (next) { act(() => next.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }))); return; }
+
+  throw new Error(`No visible continue control for revision ${session.getSnapshot().revision}`);
 }
 function mount() {
   const session = new EpisodeSession(episodeOptions(42), episodeBounds);
@@ -85,7 +95,7 @@ describe('Playable Episode React UI', () => {
 
       // Field outcomes intentionally cover the next engine presentation until the player confirms the result.
       // Follow what is actually visible before inspecting the underlying presentation snapshot.
-      if (buttons().some(button => button.textContent?.includes(session.t('ui.strategy.return_map')))) {
+      if (container.querySelector('.strategy-outcome-next')) {
         const visibleResult = s.presentation.find(command => command.type === 'SHOW_RESULT');
         if (visibleResult?.type === 'SHOW_RESULT') {
           seen.push(visibleResult.text_id);
@@ -186,6 +196,8 @@ describe('Playable Episode React UI', () => {
 
   it('handles Enter/Space once, ignores repeats/double clicks, and uses 1–4 for current choices', () => {
     const session = mount(); click(session.t('ui.start'));
+    const coldOpen = container.querySelector<HTMLButtonElement>('.episode-cold-open-cta');
+    if (coldOpen) act(() => coldOpen.click());
     const key = (value: string, code = value, repeat = false) => act(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: value, code, repeat, bubbles: true, cancelable: true })));
     key('Enter'); const beforeRepeat = session.getSnapshot();
     key('Enter', 'Enter', true); expect(session.getSnapshot()).toBe(beforeRepeat);
@@ -201,7 +213,7 @@ describe('Playable Episode React UI', () => {
       expect.objectContaining({ type: 'SHOW_RESULT', text_id: 'ep01.plan.d.result' }),
     ]);
     expect(session.getSnapshot().state!.event_runtime.choice_history).toHaveLength(1);
-    click(session.t('ui.strategy.return_map'));
+    continueCurrent(session);
     expect(session.getSnapshot().presentation[0]).toMatchObject({ text_id: 'ep01.junho.signal' });
   });
 
