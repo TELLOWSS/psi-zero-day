@@ -45,7 +45,17 @@
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
+      "episode01_visual_profile": {
+        "subject": "used_korean_euroform_panel_bundle",
+        "context": "formwork cleanup near Episode 01 access/yard scene",
+        "same_spec_only": true,
+        "orientation": "horizontal",
+        "dunnage": "two_timber_sleepers",
+        "securing": "two_visible_straps_or_equivalent",
+        "no_mixed_materials": true,
+        "no_text_branding": true
+      }
     },
     "access_barrier": {
       "element_id": "scene.control.access_barrier",
@@ -55,15 +65,20 @@
       "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.access_barrier",
       "access_control_profile": {
-        "barrier_form": "freestanding_modular",
-        "body_material": "high_visibility_polymer",
-        "stabilization": "weighted_feet",
-        "reflective_marking": true,
+        "barrier_form": "korean_banding_movable_screen_fence",
+        "body_material": "galvanized_round_tube_with_blue_mesh",
+        "typical_panel_proportion": "L2000_H1200",
+        "tube_diameter_mm_options": [
+          25.4,
+          31.8
+        ],
+        "stabilization": "two_black_weighted_bases",
+        "rounded_top_corners": true,
         "integrated_text_allowed": false,
         "integrated_sign_allowed": false,
         "warning_lamps_allowed": false,
-        "site_practice_note": "여러 공종에서 재사용할 수 있도록 고휘도 독립형 모듈 바리케이드와 안정형 중량 발판, 반사 표시를 기본 형상으로 표현한다.",
-        "control_evaluation_note": "바리케이드 형상만으로 통제가 완료된 것으로 판정하지 않고 설치 연속성, 전도·이동 방지, 실제 출입통제 범위, 우회동선 및 작업계획을 함께 평가한다."
+        "site_practice_note": "Episode 01 기준 자산은 국내 판매 중인 밴딩형 이동식 가림막 휀스 형상으로 고정한다. 약 L2000×H1200, Ø25.4/31.8급 원형 프레임, 청색 메쉬, 검정 중량 베이스를 기준으로 한다.",
+        "control_evaluation_note": "제품 형상은 실제 국내 제품군을 따르되, 설치 연속성·전도방지·우회동선·차량동선·유도자 운영은 별도로 평가한다."
       },
       "art": {
         "path": "assets/episode01/scene-elements/access-barrier.webp",
@@ -158,14 +173,16 @@
       "planned_asset_id": "ep01.scene_element.harness_unclipped",
       "fall_protection_profile": {
         "harness_type": "full_body",
-        "lanyard_configuration": "twin_y",
+        "certification_context": "KCs safety-certified product family",
+        "scenario_configuration": "twin_y_double_lanyard",
+        "scenario_configuration_is_universal_requirement": false,
         "lanyard_count": 2,
         "hook_count": 2,
-        "connection_intent": "continuous_attachment_during_transfer",
-        "design_reference": "SWELOCK double-lanyard ergonomics only; final game art must be brand-neutral.",
+        "connection_intent": "continuous_attachment_during_transfer_when_this_site_method_is_used",
+        "design_reference": "Korean KCs-certified full-body harness product family; no foreign-brand geometry as the source of truth.",
         "branding_policy": "no_logo_no_trademark",
-        "site_practice_note": "고소 이동 작업에서는 두 줄 중 하나의 체결을 유지하면서 다른 한 줄을 다음 부착점으로 옮길 수 있는 더블(Y) 랜야드형 전체식 안전대를 기본 시각 기준으로 표현한다.",
-        "safety_evaluation_note": "두 줄 자체만으로 안전을 판정하지 않고 부착설비 위치와 강도, 훅 체결상태, 추락여유거리, 진자추락 가능성, 충격흡수장치, 랜야드 손상 및 작업조건을 함께 평가한다."
+        "site_practice_note": "Episode 01의 해당 장면은 더블(Y) 랜야드 안전그네식 안전대를 사용하는 현장 설정으로 표현한다. 이 구성 자체를 대한민국 모든 현장의 보편 법정형상으로 설명하지 않는다.",
+        "safety_evaluation_note": "KCs 인증 여부, 작업에 맞는 안전대 종류, 부착설비와의 연결, 훅 체결상태, 죔줄·충격흡수장치 손상 및 제조사 사용설명서를 함께 확인한다."
       },
       "art": {
         "path": "assets/episode01/scene-elements/harness-twin-lanyard-unclipped.webp",
@@ -667,7 +684,17 @@
         "observe_point_text_id": "ui.guide.temporary_lighting_pack.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Current-site photos locked. Final art must show multiple white LED line-bar segments installed horizontally through the system-shoring zone; handheld work-light art is rejected.",
+      "site_reality_profile": {
+        "subject": "installed_current_site_led_line_bar",
+        "geometry_source": "user_current_site_photos_2026-07-23",
+        "render_mode": "installed_scene_fragment",
+        "handheld_worklight_allowed": false,
+        "continuous_run": true,
+        "segment_based": true,
+        "system_shoring_context": true,
+        "final_without_site_reference": false
+      }
     },
     "ppe_issue_station": {
       "element_id": "scene.control.ppe_issue_station",
@@ -704,7 +731,16 @@
         "observe_point_text_id": "ui.guide.ppe_issue_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 PPE station uses a Korean freestanding steel/acrylic safety-equipment cabinet as the representative visual family. The cabinet itself is not a universal statutory form; the legal requirement is PPE issue, use and maintenance.",
+      "site_reality_profile": {
+        "subject": "korean_freestanding_ppe_issue_cabinet",
+        "geometry_source": "current Korean safety-cabinet product family",
+        "legal_meaning": "distribution_and_maintenance_point_not_universal_cabinet_requirement",
+        "cabinet_body": "powder_coated_steel",
+        "door": "clear_acrylic_viewing_panel",
+        "shelf_layout": "3_shelf_4_compartment_class",
+        "final_without_korean_product_family_verification": false
+      }
     },
     "fire_extinguisher_station": {
       "element_id": "scene.control.fire_extinguisher_station",
@@ -778,7 +814,15 @@
         "observe_point_text_id": "ui.guide.first_aid_aed.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "FG009 must visually separate the legally required first-aid kit from the AED module. Do not imply universal AED obligation for all Korean construction sites.",
+      "site_reality_profile": {
+        "subject": "korean_first_aid_point_plus_optional_aed",
+        "first_aid_required_by_rule82": true,
+        "aed_universal_construction_site_requirement": false,
+        "aed_rendering": "separate_adjacent_module",
+        "geometry_source": "Korean industrial first-aid box and AED cabinet product families",
+        "final_without_product_family_verification": false
+      }
     },
     "site_weather_station": {
       "element_id": "scene.equipment.site_weather_station",
@@ -816,7 +860,15 @@
         "observe_point_text_id": "ui.guide.site_weather_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 FG010 uses a Korean-market installation anemometer + separate digital monitor family. Tower-crane 10/15 m/s stop thresholds remain tower-crane-specific and are not baked into generic art.",
+      "site_reality_profile": {
+        "subject": "korean_construction_site_wireless_anemometer_and_display",
+        "product_family": "K-200AW/K-200AWN class",
+        "sensor": "three_cup_black_cylindrical_wireless_sensor",
+        "display": "separate_digital_wind_speed_monitor",
+        "tower_crane_thresholds_not_universal": true,
+        "final_without_korean_product_family_verification": false
+      }
     },
     "foundation_blinding_edge": {
       "element_id": "scene.hazard.foundation_blinding_edge",
@@ -1257,7 +1309,7 @@
       "kind": "prop",
       "label": "유로폼 벽체 거푸집",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.euroform_wall_panel",
       "art": {
         "path": "assets/episode01/scene-elements/euroform-wall-panel.webp",
@@ -1270,7 +1322,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1289,19 +1341,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 66536,
-        "sha256": "87bd77d86418ffe670ddf850ab125c936869ec2f223163234b24362f9f551c6a",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 184348,
+        "sha256": "c9f082661d04dd721e7e159df9b3548595a51dd5b291d8d4f2b091289b259ece",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "bf29bd5b-f8af-4d4c-940f-417286d17752",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_tie": {
       "element_id": "scene.prop.formwork_tie",
       "kind": "prop",
       "label": "폼타이·연결철물",
       "visual_token": "▤",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_tie",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-tie.webp",
@@ -1314,7 +1372,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1333,19 +1391,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 52386,
-        "sha256": "9579ee9645b09dd3bdf3638cb004a17ad5dff35bd2d50c962a4bb542c94d75ea",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 187422,
+        "sha256": "c3163eefe18069e2ec4b28a49a196de08515e731376c738dbd05d9bba8f0ac8a",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "9320d91b-f5e4-4b74-b437-0d8d1ce2d42b",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_brace": {
       "element_id": "scene.control.formwork_brace",
       "kind": "control",
       "label": "벽체 거푸집 전도방지 지지",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_brace",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-brace.webp",
@@ -1358,7 +1422,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1378,19 +1442,25 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 59680,
-        "sha256": "cbeaf971563dc2f899cca40fa4e094407c0e4fdec5169fe0a4ba831b14ffc7e6",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 172766,
+        "sha256": "5351208782aa81147a12bdb63ff6c705a6598ee9bf0c30f3222d84a8da3e2fa7",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "82e1f3ca-1154-4677-9a17-dc6f4a65a583",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "formwork_work_platform": {
       "element_id": "scene.control.formwork_work_platform",
       "kind": "control",
       "label": "거푸집 작업발판",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.formwork_work_platform",
       "art": {
         "path": "assets/episode01/scene-elements/formwork-work-platform.webp",
@@ -1403,7 +1473,7 @@
         "map_max_px": 148,
         "requires_alpha": true,
         "style_profile": "field-guide-production-realistic-v2",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1422,12 +1492,18 @@
       "production": {
         "width": 768,
         "height": 768,
-        "bytes": 68130,
-        "sha256": "9b0453cc89cf06c559f052a871165d092a4002e6a5acfd1d7597ebae61802c97",
-        "source": "imagegen-production-2026-09-20",
-        "brand_contract": "NEW PSI"
+        "bytes": 172792,
+        "sha256": "b4a574c6b6b9d947173b9acb5a27d427a5fc3ba6643a2a84f20b8cb8621620d2",
+        "source": "imagegen-realistic-v2-2026-09-23",
+        "source_canvas": {
+          "width": 1254,
+          "height": 1254
+        },
+        "source_generation_id": "77fa5206-e757-4a1e-bf9b-ef10fe132c15",
+        "visual_review": "approved_realistic_v2",
+        "legal_visual_gate": "field-guide-kr-legal-basis-v1"
       },
-      "production_note": "Existing pictogram/isometric asset retained only as placeholder/reference; realistic-v2 replacement required."
+      "production_note": "Realistic-v2 production asset approved for Field Guide and runtime reuse; statutory and site-specific criteria remain governed by field-guide-legal-basis.json."
     },
     "system_shoring_jackbase": {
       "element_id": "scene.prop.system_shoring_jackbase",

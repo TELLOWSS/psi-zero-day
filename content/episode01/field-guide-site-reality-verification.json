@@ -1,37 +1,43 @@
 {
   "schema_version": 1,
   "policy_id": "new-psi-field-guide-site-reality-verification-v1",
-  "status": "locked",
-  "purpose": "Prevent visually attractive but field-inaccurate assets. Current Korean construction-site reality is the primary geometry and assembly reference.",
+  "status": "locked_reality_first",
+  "purpose": "Prevent visually attractive but field-inaccurate assets. Before any rendering, confirm the object/control as actually used in Korean construction sites, then confirm safety/legal function, then render.",
   "source_priority": [
     {
       "priority": 1,
       "source": "user-provided current-site photos and direct field observations",
-      "rule": "Treat as ground truth for visible geometry, component combinations, spacing relationships, attachment methods, work-platform arrangement and actual site wear."
+      "rule": "When available, treat as ground truth for the exact site configuration and visible geometry."
     },
     {
       "priority": 2,
-      "source": "current Korean safety guidance / manufacturer manuals / certified product documentation",
-      "rule": "Use to verify component names, intended function, load path and required connection/stability logic when the photo alone is ambiguous."
+      "source": "current Korean official guidance and law (KOSHA / 국가법령정보센터 / KCs certification)",
+      "rule": "Confirm terminology, required safety function, certification category and any statutory geometry before drawing."
     },
     {
       "priority": 3,
+      "source": "current Korean manufacturer or supplier product documentation",
+      "rule": "Confirm that the proposed product family and visible hardware are actually sold/used in Korea. Use at least one Korean product source when the item is a purchasable material/equipment."
+    },
+    {
+      "priority": 4,
       "source": "generic reference imagery",
-      "rule": "Use only for texture/lighting/composition. Never override current-site geometry."
+      "rule": "Texture and lighting only. Never establish geometry or naming from generic global imagery."
     }
   ],
   "pre_generation_gate": [
-    "Identify the exact item currently used on site.",
-    "Confirm visible component names and their roles.",
-    "Confirm how components are physically connected or seated.",
-    "Confirm the load-transfer/stability relationship.",
-    "Record any site-specific geometry that differs from generic textbook illustrations."
+    "Identify whether the target is a physical product, a site-specific assembly, a hazard condition, or a runtime overlay.",
+    "Search Korean official guidance/law for the function and terminology.",
+    "For purchasable items, confirm at least one current Korean manufacturer/supplier product family before rendering.",
+    "If a user/current-site photo exists, compare it with the Korean reference and record any site-specific difference.",
+    "Record exact visible geometry, connections, material, stabilization and load-transfer relationship.",
+    "Do not render while the exact product family or scene type is unresolved."
   ],
   "post_generation_gate": [
-    "Compare generated geometry side-by-side with the current-site reference.",
-    "Reject if a critical member is omitted, added arbitrarily, floating, mis-seated or structurally implausible.",
-    "Reject if it looks like generic scaffolding when the reference shows system shoring.",
-    "Reject if material thickness, connection hardware or support relationship is visibly unrealistic.",
+    "Compare generated geometry side-by-side with the Korean reference and any current-site photo.",
+    "Reject foreign/generic hardware not evidenced by the reference.",
+    "Reject invented fasteners, connectors, dimensions, markings or structural members.",
+    "Reject a physical 3D prop when the item is actually a route overlay, ground condition or exclusion-zone composition.",
     "Only approved assets proceed to binary registration and catalog final."
   ],
   "system_shoring_reference_set": {
@@ -65,5 +71,29 @@
     "visual_claims": "Use current-site photos first.",
     "technical_function_claims": "Cross-check with Korean safety guidance or manufacturer documentation when needed.",
     "uncertainty": "If a component function cannot be confirmed from the reference, mark it unresolved and do not invent it."
+  },
+  "episode01_priority": {
+    "status": "active",
+    "rule": "Episode 01 visible runtime props and Section 0 Field Guide assets are verified and completed before resuming later-section mass production.",
+    "runtime_visible_first": [
+      "site_gate",
+      "material_stack",
+      "access_barrier",
+      "vehicle_overlap_zone",
+      "exclusion_zone",
+      "open_edge",
+      "wet_floor",
+      "harness_unclipped"
+    ],
+    "field_guide_section0": [
+      "vehicle_pedestrian_separation",
+      "material_yard",
+      "temporary_distribution_board",
+      "temporary_lighting_pack",
+      "ppe_issue_station",
+      "fire_extinguisher_station",
+      "first_aid_aed",
+      "site_weather_station"
+    ]
   }
 }
