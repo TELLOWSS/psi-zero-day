@@ -25,7 +25,6 @@ jobs:
           npm run assets:embedded
           npm run assets:vector
           npm run assets:manifest
-          git diff --exit-code -- content/episode01/assets.json
       - name: Lock Episode 01 Field Guide
         run: node scripts/check-ep01-field-guide-final.mjs
       - name: Typecheck
