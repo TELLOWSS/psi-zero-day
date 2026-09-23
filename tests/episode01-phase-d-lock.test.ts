@@ -22,7 +22,12 @@ describe('Episode 01 Phase D production lock', () => {
     expect(phaseD.tracks.production_audio).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
     expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required: 8, ready: 8, status: 'LOCKED' });
     expect(phaseD.tracks.visual_quality_rebaseline).toMatchObject({ required: 6, ready: 0, status: 'IN_PROGRESS' });
-    expect(phaseD.tracks.episode01_runtime_scene_elements).toMatchObject({ required: 1, ready: 0, status: 'PENDING' });
+    expect(phaseD.tracks.episode01_runtime_scene_elements).toMatchObject({ required: 1, ready: 1, status: 'LOCKED' });
+    expect(catalog.elements.material_stack).toMatchObject({
+      production_status: 'final',
+      planned_asset_id: 'ep01.scene_element.material_stack',
+      art: { path: 'assets/episode01/scene-elements/material-yard.webp' },
+    });
   });
 
   it('derives Episode 01 scene-element scope from actual event placement instead of all future catalog art', () => {
@@ -42,7 +47,7 @@ describe('Episode 01 Phase D production lock', () => {
     expect(EPISODE01_PHASE_D_LOCK.execution_order).toEqual([
       'D-1_TITLE_CAST_IDENTITY_LOCKED',
       'D-2_VISUAL_QUALITY_REBASELINE_TBM_FIELD_THEN_REMAINING_SCENES',
-      'D-3_MATERIAL_STACK_REALISTIC_V2',
+      'D-3_MATERIAL_STACK_REALISTIC_V2_LOCKED',
       'D-4_REMAINING_UI_SOUND_DIRECTION_VISUAL_LOCK',
       'D-5_STRICT_PHASE_D_CHECK_AND_CINEMATIC_VERTICAL_SLICE_LOCK',
     ]);
