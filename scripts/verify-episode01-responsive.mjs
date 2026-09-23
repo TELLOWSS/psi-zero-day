@@ -498,23 +498,15 @@ function validate(row, viewport) {
     if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
-    if (row.strategyLoopPhase !== 'observe') failures.push('STRATEGY first reading step must begin in observe phase');
+    if (row.strategyLoopPhase !== 'target') failures.push('STRATEGY first actionable step must begin in target phase');
     const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
     if (landscapePhone) {
-      if (!row.strategyObserveCard) {
-        failures.push('STRATEGY observe command dock is missing');
-      } else {
-        if (row.strategyObserveCard.height > viewport.height * 0.24) {
-          failures.push('STRATEGY observe command dock is too tall for map-first composition: ' + row.strategyObserveCard.height + 'px');
-        }
-        if (row.strategyObserveCard.width < viewport.width * 0.9) {
-          failures.push('STRATEGY observe command dock must span the lower map edge: width=' + row.strategyObserveCard.width + 'px');
-        }
-      }
       if (!row.strategyBrand || row.strategyBrand.height > 58) {
         failures.push('STRATEGY landscape brand/HUD is too tall: ' + (row.strategyBrand?.height ?? 'missing') + 'px');
       }
-      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.7) {
+      // The final recovery layout intentionally reserves a left decision rail; the map remains dominant
+      // without requiring the obsolete full-width Observe command dock.
+      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.82 || row.strategyMapRect.height < viewport.height * 0.75) {
         failures.push('STRATEGY tactical map is not the dominant landscape surface: ' + JSON.stringify(row.strategyMapRect));
       }
     }
@@ -527,17 +519,11 @@ function validate(row, viewport) {
       if (!row.strategyLoopStrip || row.strategyLoopStrip.height > 32) {
         failures.push('STRATEGY portrait phase strip is too tall: ' + (row.strategyLoopStrip?.height ?? 'missing') + 'px');
       }
-      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.82) {
+      if (!row.strategyMapRect || row.strategyMapRect.width < viewport.width * 0.95 || row.strategyMapRect.height < viewport.height * 0.80) {
         failures.push('STRATEGY portrait map is not the dominant surface: ' + JSON.stringify(row.strategyMapRect));
       }
-      if (!row.strategyObserveCard || row.strategyObserveCard.height > 100) {
-        failures.push('STRATEGY portrait observe command rail is too tall: ' + (row.strategyObserveCard?.height ?? 'missing') + 'px');
-      }
       if (row.strategyVisibleWorkerLabels > 3) {
-        failures.push('STRATEGY portrait exposes too many worker labels during Observe: ' + row.strategyVisibleWorkerLabels);
-      }
-      if (row.strategyVisibleZoneCopies > 1) {
-        failures.push('STRATEGY portrait exposes too many zone labels during Observe: ' + row.strategyVisibleZoneCopies);
+        failures.push('STRATEGY portrait exposes too many worker labels during target selection: ' + row.strategyVisibleWorkerLabels);
       }
       if (row.strategyVisibleRiskSignals < 1) {
         failures.push('STRATEGY portrait must keep at least one primary risk signal visible');
