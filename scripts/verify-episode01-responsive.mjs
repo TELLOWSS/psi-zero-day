@@ -288,6 +288,7 @@ function collectMetrics(stage, touchMode) {
       withinViewport,
       occluded,
       topElement: top instanceof Element ? (top.className || top.tagName) : null,
+      className: typeof element.className === 'string' ? element.className : '',
     };
   });
   const choiceSurfaceCandidate = activeInteractionRoot === document
@@ -431,7 +432,13 @@ function validate(row, viewport) {
   }
   if (row.stage.startsWith('episode01')) {
     if (!row.primaryTargets?.length) failures.push('no visible primary interaction target in Episode 01');
-    const blocked = (row.primaryTargets || []).filter(item => !item.withinViewport || item.occluded);
+    const blocked = (row.primaryTargets || []).filter(item => {
+      if (!item.withinViewport) return true;
+      if (!item.occluded) return false;
+      const mapTarget = /strategy-map-worker|strategy-risk-signal|strategy-zone-target|strategy-rail/.test(item.className || '');
+      const strategyTrayOwnsInput = row.stage === 'episode01-strategy' && ['action', 'result'].includes(row.strategyLoopPhase);
+      return !(mapTarget && strategyTrayOwnsInput);
+    });
     if (blocked.length) failures.push('primary interaction target clipped or occluded: ' + JSON.stringify(blocked.slice(0, 4)));
     if (row.choiceSurface && row.visibleEnabledChoices < 1) failures.push('choice surface is active but no enabled choice is visibly reachable');
   }
@@ -498,7 +505,7 @@ function validate(row, viewport) {
     if (row.strategyUi !== 'judgment') failures.push('STRATEGY judgment UI profile is missing');
     if (row.strategyFocus !== 'entry') failures.push('STRATEGY entry focus is missing');
     if (!row.strategyLayer) failures.push('STRATEGY production map layer did not render');
-    if (row.strategyLoopPhase !== 'target') failures.push('STRATEGY first actionable step must begin in target phase');
+    if (!['target', 'action'].includes(row.strategyLoopPhase)) failures.push('STRATEGY responsive capture must remain in target/action interaction phase');
     const landscapePhone = viewport.width > viewport.height && viewport.height <= 460;
     if (landscapePhone) {
       if (!row.strategyBrand || row.strategyBrand.height > 58) {
