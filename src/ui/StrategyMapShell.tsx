@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForMapTarget, strategyActionsForTarget } from '../app/strategy-actions';
@@ -88,12 +88,17 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const previousActionNodeKey = useRef('');
   const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
   useEffect(() => {
-    // Preserve the player's selected map target while the same event advances
-    // from context/dialogue into its choice node. The component itself remounts
-    // when the event instance changes, so stale focus does not leak to new events.
+    // Keep a selection while context/dialogue opens choices for the same node,
+    // but never carry one judgment node's target into the next actionable node.
     setActionFocusId(null);
+    if (!actionNodeKey) return;
+    if (previousActionNodeKey.current && previousActionNodeKey.current !== actionNodeKey) {
+      setFocusId(null);
+    }
+    previousActionNodeKey.current = actionNodeKey;
   }, [actionNodeKey]);
   const effectiveFocusId = actionFocusId ?? focusId;
   const activeSupportItemIds = supportItems.filter(item => item.active).map(item => item.item_id);

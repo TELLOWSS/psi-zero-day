@@ -239,6 +239,9 @@
   .zb-save-version{grid-template-columns:1fr}
   .zb-save-actions{display:grid;grid-template-columns:1fr}
 }
+@media (orientation:portrait) and (max-width:560px){
+  .game-defense-toggle{left:12px;right:auto;bottom:76px}
+}
 @media (prefers-reduced-motion:reduce){
   .zb-save-spinner{animation:none}
 }

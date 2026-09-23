@@ -236,3 +236,56 @@
     max-height: 43vh !important;
   }
 }
+
+/* Episode 01 regression lock — direct target-first STRATEGY flow.
+ * Keep compact command guidance clear of actionable map anchors.
+ */
+@media (orientation:landscape) and (max-height:700px) {
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-action-tray {
+    left: 15% !important;
+    right: 1.5% !important;
+    bottom: 1.5% !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    max-height: 22% !important;
+    padding: 7px 9px !important;
+    overflow: hidden !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-next-step {
+    margin: 0 !important;
+    padding: 6px 8px !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-next-step > small {
+    display: none !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-action-heading,
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-action-empty {
+    display: none !important;
+  }
+}
+
+@media (orientation:portrait) and (max-width:900px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset: 16.8% 1.2% .5% 1.2% !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-action-heading,
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-action-empty {
+    display: none !important;
+  }
+}
+
+@media (orientation:portrait) and (max-width:420px) {
+  .game-frame[data-production-scene="STRATEGY"]
+  .strategy-shell[data-loop-phase="target"] .strategy-zone-target:not(.has-actions) .strategy-zone-copy {
+    display: none !important;
+  }
+}
+
