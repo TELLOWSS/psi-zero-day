@@ -860,7 +860,15 @@
         "observe_point_text_id": "ui.guide.site_weather_station.body",
         "unlock_policy": "episode_context"
       },
-      "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
+      "production_note": "Episode 01 FG010 uses a Korean-market installation anemometer + separate digital monitor family. Tower-crane 10/15 m/s stop thresholds remain tower-crane-specific and are not baked into generic art.",
+      "site_reality_profile": {
+        "subject": "korean_construction_site_wireless_anemometer_and_display",
+        "product_family": "K-200AW/K-200AWN class",
+        "sensor": "three_cup_black_cylindrical_wireless_sensor",
+        "display": "separate_digital_wind_speed_monitor",
+        "tower_crane_thresholds_not_universal": true,
+        "final_without_korean_product_family_verification": false
+      }
     },
     "foundation_blinding_edge": {
       "element_id": "scene.hazard.foundation_blinding_edge",
