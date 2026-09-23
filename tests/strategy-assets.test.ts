@@ -8,7 +8,7 @@ const available: Readonly<Record<string, string>> = {
   'ep01.background.scaffold.map': 'assets/episode01/backgrounds/scaffold-map.webp',
   'ep01.character.lim_junho.map': 'assets/episode01/characters/lim-junho-map.webp',
   'ep01.character.lim_junho.portrait': 'assets/episode01/characters/lim-junho-portrait.webp',
-  'ep01.scene_element.material_stack': 'assets/episode01/scene-elements/material-yard.webp',
+  'ep01.scene_element.material_stack': 'assets/episode01/scene-elements/material-stack-realistic-v2.webp',
   'ep01.scene_element.access_barrier': 'assets/episode01/scene-elements/access-barrier.webp',
   'ep01.scene_element.vehicle_overlap': 'assets/episode01/scene-elements/vehicle-overlap.webp',
 };
@@ -70,7 +70,7 @@ describe('Episode 01 strategy visual assets', () => {
     const visuals = projectStrategyVisualAssets([], resolve);
     expect(visuals.scene_elements?.['scene.prop.material_stack']).toEqual({
       element_id: 'scene.prop.material_stack',
-      uri: 'assets/episode01/scene-elements/material-yard.webp',
+      uri: 'assets/episode01/scene-elements/material-stack-realistic-v2.webp',
       pivot_x: 0.5,
       pivot_y: 0.94,
       map_max_px: 132,
@@ -88,7 +88,7 @@ describe('Episode 01 strategy visual assets', () => {
     expect(registry.getAsset('ep01.background.foundation.map')?.variants[0]?.uri)
       .toBe('assets/episode01/backgrounds/foundation-map.webp');
     expect(registry.getAsset('ep01.scene_element.material_stack')?.variants[0]?.uri)
-      .toBe('assets/episode01/scene-elements/material-yard.webp');
+      .toBe('assets/episode01/scene-elements/material-stack-realistic-v2.webp');
     expect(registry.getAsset('ep01.scene_element.access_barrier')?.variants[0]?.uri)
       .toBe('assets/episode01/scene-elements/access-barrier.webp');
     expect(registry.getAsset('ep01.scene_element.vehicle_overlap')?.variants[0]?.uri)
@@ -98,7 +98,7 @@ describe('Episode 01 strategy visual assets', () => {
     expect(art.background_uri).toBe('assets/episode01/backgrounds/foundation-map.webp');
     expect(art.scene_elements?.['scene.prop.material_stack']).toMatchObject({
       element_id: 'scene.prop.material_stack',
-      uri: 'assets/episode01/scene-elements/material-yard.webp',
+      uri: 'assets/episode01/scene-elements/material-stack-realistic-v2.webp',
       pivot_x: 0.5,
       pivot_y: 0.94,
       map_max_px: 132,
