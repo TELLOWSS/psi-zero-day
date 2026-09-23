@@ -31,7 +31,7 @@ describe('Episode 01 reusable scene element catalog', () => {
       binding_method: 'center_ratchet_or_equivalent',
       binding_position: 'center',
     });
-    expect(catalog.elements.material_stack.art.path).toBe('assets/episode01/scene-elements/material-yard.webp');
+    expect(catalog.elements.material_stack.art.path).toBe('assets/episode01/scene-elements/material-stack-realistic-v2.webp');
     expect(catalog.elements.material_stack.production.reused_from_asset_id).toBe('ep01.scene_element.material_yard');
     expect(catalog.elements.material_stack.storage_profile.safety_evaluation_note)
       .toContain('결속 형상만으로 안전을 판정하지 않고');
