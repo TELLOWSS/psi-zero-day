@@ -651,22 +651,22 @@
       ],
       "caution": "3.3 kg is the selected Episode 01 visual family, not a universal legal minimum for every construction fire-risk condition.",
       "generated_candidate": {
-        "status": "rejected_for_final_base_geometry_wrong",
-        "generation_id": "b1f22434-0f5a-4713-9132-dfed93ac08fd",
+        "status": "approved_final_candidate_pending_binary_and_runtime_review",
+        "generation_id": "a0d7ce4f-6dad-4456-ada5-f7624d2a5ad2",
         "accepted": [
           "3.3kg-class red stored-pressure extinguisher proportion",
-          "pressure gauge",
-          "black hose",
-          "safety pin"
+          "pressure gauge, black hose and safety pin are readable",
+          "low red square/trapezoidal Korean floor stand with circular recess",
+          "no readable brand or fake certification label"
         ],
-        "rejected_or_unresolved": [
-          "round cradle-style base does not match the selected common Korean 3.3kg floor-stand family",
-          "replace with low red square/trapezoidal stand with circular extinguisher recess"
+        "remaining_gate": [
+          "transparent WebP registration",
+          "runtime scale/readability review"
         ]
       }
     },
     "first_aid_aed": {
-      "status": "visual_family_locked_ready_to_render",
+      "status": "regeneration_in_progress",
       "classification": "Korean construction-site first-aid point with optional AED module",
       "legal_split": {
         "first_aid": {
@@ -702,20 +702,21 @@
       ],
       "selected_episode01_visual_family": {
         "first_aid_box": "white or light-gray rugged ABS first-aid box/cabinet with red cross marker, portable or wall-capable",
-        "aed_module": "Korean NT-S1 class stand-type AED cabinet: red slim pedestal, square upper AED cabinet, lower instruction-panel body; brand/model text removed.",
+        "aed_module": "Korean NT-S1-class stand-type AED cabinet: square red upper storage box on a tall slim red pedestal/lower instruction-panel body. Product-family geometry only; no model/brand text.",
         "relationship": "two adjacent emergency-response assets; visually distinct so AED is not mistaken for the first-aid kit itself",
         "legal_message": "asset presence does not imply universal AED legal obligation"
       },
       "render_contract": {
-        "composition": "one compact emergency-response station containing a first-aid box and a separate AED cabinet/stand",
-        "first_aid_box": "rugged rectangular ABS/PE case, white/light gray, red cross symbol only, simple handle/latches",
-        "aed_cabinet": "red slim NT-S1-class stand: square upper AED cabinet with viewing area/alarm module and tall lower instruction-panel pedestal; use blank/simple universal pictograms instead of readable Korean product instructions",
-        "contents": "do not display drugs or detailed medical contents outside the box",
-        "text": "minimal; no dense Korean labels or fake certification marks",
+        "composition": "two adjacent but clearly separate emergency assets: one rugged white/light-gray ABS first-aid case plus one Korean NT-S1-class red stand-type AED cabinet",
+        "first_aid_box": "low rectangular ABS/PE case with top carry handle, two black latches, red cross symbol only",
+        "aed_stand": "slim red floor-standing pedestal; square upper AED compartment with clear viewing window and simple heart/lightning pictogram; tall lower body/panel below",
+        "alarm": "small top alarm/beacon may be present if consistent with the stand family",
+        "relationship": "first-aid kit sits beside the AED stand; never merge them into one device",
+        "text": "no readable Korean instructions, model numbers, brand names or fake certification labels",
         "branding": "none",
         "background": "transparent",
-        "camera": "front three-quarter view",
-        "condition": "clean, readily accessible, light construction-site dust only"
+        "camera": "front three-quarter view, both assets fully visible",
+        "condition": "clean, accessible, only light construction-site dust/scuffs"
       },
       "reject": [
         "hospital crash cart",
@@ -812,7 +813,6 @@
     }
   },
   "next_render_order": [
-    "fire_extinguisher_station",
     "first_aid_aed",
     "material_yard",
     "pedestrian_gate"
