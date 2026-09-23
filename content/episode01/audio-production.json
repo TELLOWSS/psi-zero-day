@@ -230,7 +230,7 @@
         "file": "gate-queue.ogg",
         "bytes": 83098,
         "duration_sec": 6.4,
-        "sha256": "f74e9a2f80bf398e85622b7ff0b197a2e2105bcbd4417d56ef73c75ee30a13ce",
+        "sha256": "e83d5b6ece30e0316515658967d0a3dba6524b8862502c30e1e18457d097009e",
         "peak_dbfs": -9.0,
         "rms_dbfs": -19.56
       },
@@ -238,7 +238,7 @@
         "file": "radio-burst.ogg",
         "bytes": 16181,
         "duration_sec": 1.22,
-        "sha256": "fbbf78ac4d32ca85e305e3c3d1017459d1f4dd19312f4dc4265d4a95aed36fc8",
+        "sha256": "a8d7470bb2362d155b3c8d4e6992e7c89a6262fea083d96547c9410fa17a1bf8",
         "peak_dbfs": -7.5,
         "rms_dbfs": -25.54
       },
@@ -246,7 +246,7 @@
         "file": "workface-pressure.ogg",
         "bytes": 63680,
         "duration_sec": 4.8,
-        "sha256": "d509c3855d9ccfc6ade567dee4a2e49b0355ddb82102e86e1ef84be8fcfdd5dc",
+        "sha256": "962807d102518811190c6d8e390b80effe63e869b45a9a75f7ca9c9abc3af0af",
         "peak_dbfs": -9.0,
         "rms_dbfs": -22.04
       },
@@ -254,7 +254,7 @@
         "file": "pump-engine-boom.ogg",
         "bytes": 86943,
         "duration_sec": 7.2,
-        "sha256": "d85a5cf01abab596c3c5da05eed732340fcba4e0bee1b8f4466ef224804e0f89",
+        "sha256": "2efb28c93893b6cda98bcdcec78b36da00bfa7545c86c4402942cffc7868e80d",
         "peak_dbfs": -8.5,
         "rms_dbfs": -19.73
       },
@@ -262,7 +262,7 @@
         "file": "concrete-pour.ogg",
         "bytes": 102372,
         "duration_sec": 7.8,
-        "sha256": "a502cd5e5b6ac2781ee55ed16930b88eb386bfc85e1faa6e508c938116b2fa0c",
+        "sha256": "a3cbe9fe145ca1dfd1e9eae09a0050dd3df0e93ef4e92b117d9e894061fd98fc",
         "peak_dbfs": -9.0,
         "rms_dbfs": -20.07
       },
@@ -270,7 +270,7 @@
         "file": "stopwork-silence-drop.ogg",
         "bytes": 31932,
         "duration_sec": 2.6,
-        "sha256": "90ca33756201e9f69baba5365bf21e71b72fb31ec3c6bd2031eb6b1b1b290a8c",
+        "sha256": "99bfe62543e05d8785f3978759c32d226f23bb6f4fd62201dad3c587fa504db9",
         "peak_dbfs": -10.0,
         "rms_dbfs": -20.85
       },
@@ -278,7 +278,7 @@
         "file": "office-report-roomtone.ogg",
         "bytes": 75723,
         "duration_sec": 6.3,
-        "sha256": "741644f6c1b775088760340b22e17d296dda18a5c88e4a3c5497cdaab564a9c1",
+        "sha256": "f29f04e55bf07ad32ddcad40bd7eb3c80c75c8cd7bb88567543c68b04ef4ba19",
         "peak_dbfs": -13.0,
         "rms_dbfs": -23.24
       },
@@ -286,7 +286,7 @@
         "file": "home-night.ogg",
         "bytes": 77585,
         "duration_sec": 6.5,
-        "sha256": "13218c9f31253863c15a158362a2b90510490e46bd444cfaa40d7ebfd6a126fa",
+        "sha256": "7da4b0e8c7c49a69312336d5a8fe092ca769bef6313e1de49ce7547e059c2e1c",
         "peak_dbfs": -15.0,
         "rms_dbfs": -21.84
       }
