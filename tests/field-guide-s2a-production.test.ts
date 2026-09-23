@@ -40,10 +40,17 @@ describe('Field Guide S2-A realistic-v2 production lock', () => {
     }
   });
 
-  it('advances Section 2 production to S2-B only after S2-A is final', () => {
+  it('keeps S2-A final while allowing the Episode 01 reality-first production pause', () => {
     const batch = productionPlan.batches.find((candidate: any) => candidate.batch_id === 'S2-A');
+    const nextBatch = productionPlan.batches.find((candidate: any) => candidate.batch_id === 'S2-B');
     expect(batch?.status).toBe('final');
     expect(batch?.items.every((item: any) => item.status === 'final' && item.visual_acceptance === 'approved_realistic_v2')).toBe(true);
-    expect(productionPlan.current_batch).toBe('S2-B');
+
+    if (productionPlan.current_batch === 'PAUSED') {
+      expect(nextBatch?.status).toBe('paused_for_episode01_reality_first');
+      expect(productionPlan.next_action).toContain('Episode 01');
+    } else {
+      expect(productionPlan.current_batch).toBe('S2-B');
+    }
   });
 });
