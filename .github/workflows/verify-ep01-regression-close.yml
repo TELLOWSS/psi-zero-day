@@ -1,0 +1,61 @@
+name: Verify Episode 01 regression close
+
+on:
+  push:
+    branches:
+      - sol/ep01-regression-close-20260923
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - name: Rebuild deterministic Episode 01 asset metadata
+        run: |
+          npm run assets:embedded
+          npm run assets:vector
+          npm run assets:manifest
+          git diff --exit-code -- content/episode01/assets.json
+      - name: Lock Episode 01 Field Guide
+        run: node scripts/check-ep01-field-guide-final.mjs
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Former 17-failure UI regression set
+        run: npx vitest run tests/npc-dialogue-ui.test.tsx tests/playable-ui.test.tsx tests/strategy-map-shell.test.tsx tests/strategy-session-ui.test.tsx
+      - name: Full repository tests
+        run: npm test
+      - name: Production build
+        run: npm run build
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+      - name: Responsive Episode 01 QA
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_BIN"
+          export CHROME_BIN
+          mkdir -p artifacts/responsive
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/psi-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup(){ kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then READY=1; break; fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then cat /tmp/psi-preview.log; exit 1; fi
+          node scripts/verify-episode01-responsive.mjs
