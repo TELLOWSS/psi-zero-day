@@ -7,13 +7,14 @@ const root = process.cwd();
 const requirePhaseD = process.argv.includes('--require-phase-d');
 const readJson = async file => JSON.parse(await readFile(path.join(root, file), 'utf8'));
 
-const [backgrounds, performance, audio, replacementBaseline, characterManifest, sceneElementCatalog] = await Promise.all([
+const [backgrounds, performance, audio, replacementBaseline, characterManifest, sceneElementCatalog, batchA] = await Promise.all([
   readJson('content/episode01/final-art-ingest-manifest.json'),
   readJson('content/episode01/character-performance-production.json'),
   readJson('content/episode01/audio-production.json'),
   readJson('content/episode01/character-replacement-baseline.json'),
   readJson('content/episode01/embedded-media/character-media.json'),
   readJson('content/episode01/scene-element-catalog.json'),
+  readJson('content/episode01/production-art-batch-a.json'),
 ]);
 
 async function inspect(relativePath, expectedBytes, expectedSha256) {
@@ -70,12 +71,16 @@ const audioRows = await Promise.all((audio.assets ?? []).map(async asset => {
 }));
 
 const characterById = new Map((characterManifest.assets ?? []).map(asset => [asset.id, asset]));
+const minimumByTarget = new Map((batchA.assets ?? [])
+  .filter(asset => asset?.path && asset?.minimum_size)
+  .map(asset => [asset.path, asset.minimum_size]));
 const replacementRows = await Promise.all((replacementBaseline.assets ?? []).map(async legacy => {
   const current = characterById.get(legacy.id);
   if (!current) return { id: legacy.id, present: false, valid: false, changed: false };
   const file = await inspect(path.join('public', current.target), current.bytes, current.sha256);
   const changed = current.sha256 !== legacy.sha256;
-  const shapeOk = current.width >= legacy.width && current.height >= legacy.height && current.alpha === true;
+  const minimum = minimumByTarget.get(current.target) ?? { width: legacy.width, height: legacy.height };
+  const shapeOk = current.width >= minimum.width && current.height >= minimum.height && current.alpha === true;
   return { id: legacy.id, present: file.present, valid: file.valid && changed && shapeOk, changed, shape_ok: shapeOk };
 }));
 
