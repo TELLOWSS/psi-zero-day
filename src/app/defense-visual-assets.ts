@@ -1,4 +1,5 @@
 import visualProductionRaw from '../../content/defense/visual-production.json';
+import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -23,11 +24,30 @@ interface DefenseVisualProduction {
 
 export const defenseVisualProduction = visualProductionRaw as DefenseVisualProduction;
 
+interface DefHd01ArtIngest {
+  readonly status: string;
+  readonly backgroundCandidate?: {
+    readonly runtimeUri?: string;
+  };
+  readonly acceptanceState?: {
+    readonly assetBytesInRepository?: string;
+  };
+}
+
+const defHd01ArtIngest = defHd01ArtIngestRaw as DefHd01ArtIngest;
+
 function asset(id: string): DefenseVisualAsset | null {
   return defenseVisualProduction.assets.find(item => item.assetId === id) ?? null;
 }
 
 export function defenseBoardArtUri(mapId: string): string | null {
+  if (
+    mapId === 'ramp-01'
+    && defHd01ArtIngest.acceptanceState?.assetBytesInRepository === 'PASS'
+    && defHd01ArtIngest.backgroundCandidate?.runtimeUri
+  ) {
+    return defHd01ArtIngest.backgroundCandidate.runtimeUri;
+  }
   return asset(`defense.board.${mapId}`)?.uri ?? null;
 }
 

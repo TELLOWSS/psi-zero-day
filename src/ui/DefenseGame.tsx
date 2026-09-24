@@ -457,6 +457,12 @@ export function DefenseGame({
           /> : <rect width="1000" height="600" rx="22" fill="url(#zb-grid)" />}
           <polyline
             points={content.map.path.map(point => point.join(',')).join(' ')}
+            className="zb-path-shoulder"
+            fill="none"
+            aria-hidden="true"
+          />
+          <polyline
+            points={content.map.path.map(point => point.join(',')).join(' ')}
             className="zb-path-shadow"
             fill="none"
           />
@@ -465,17 +471,25 @@ export function DefenseGame({
             className="zb-path"
             fill="none"
           />
+          <polyline
+            points={content.map.path.map(point => point.join(',')).join(' ')}
+            className="zb-path-centerline"
+            fill="none"
+            aria-hidden="true"
+          />
           {selectedTower && selectedLevel ? (() => {
             const pad = content.map.pads.find(item => item.id === selectedTower.padId)!;
             return <circle cx={pad.x} cy={pad.y} r={selectedLevel.range} className="zb-range-preview" />;
           })() : null}
-          {content.map.pads.map(pad => <circle
-            key={`pad-${pad.id}`}
-            cx={pad.x}
-            cy={pad.y}
-            r="30"
-            className={`zb-pad-mark${selectedPadId === pad.id ? ' is-selected' : ''}${state.towers.some(tower => tower.padId === pad.id) ? ' is-occupied' : ''}`}
-          />)}
+          {content.map.pads.map(pad => <g key={`pad-${pad.id}`} className="zb-pad-runtime">
+            <circle cx={pad.x} cy={pad.y} r="42" className="zb-pad-hardstand" aria-hidden="true" />
+            <circle
+              cx={pad.x}
+              cy={pad.y}
+              r="22"
+              className={`zb-pad-mark${selectedPadId === pad.id ? ' is-selected' : ''}${state.towers.some(tower => tower.padId === pad.id) ? ' is-occupied' : ''}`}
+            />
+          </g>)}
           {state.freezeMovementUntilTick > state.tick ? <g className="zb-support-field is-coordinator" aria-hidden="true">
             <rect x="8" y="8" width="984" height="584" rx="20" />
             <path d="M120 300H880" />

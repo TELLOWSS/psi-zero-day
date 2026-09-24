@@ -83,7 +83,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
       'defense.enemy.NORMAL',
     ]);
 
-    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01.svg');
+    expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01-hd01.webp');
     expect(defenseTowerArtUri('PULSE', 'L1')).toBe('assets/defense/towers/pulse-l1.svg');
     expect(defenseTowerArtUri('PULSE', 'L2')).toMatch(/pulse-l2\.svg$/);
     expect(defenseTowerArtUri('BURST', 'L1')).toMatch(/burst-l1\.svg$/);
@@ -91,7 +91,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     expect(defenseEnemyArtUri('SWIFT')).toMatch(/swift\.svg$/);
   });
 
-  it('keeps the authored dimensions, transparent unit assets and JSON-aligned route/pad coordinates', () => {
+  it('keeps the legacy authored geometry as the rollback/alignment reference', () => {
     const read = (relative: string) => fs.readFileSync(path.resolve(relative), 'utf8');
     const board = read('public/assets/defense/board/ramp-01.svg');
     const pulse = read('public/assets/defense/towers/pulse-l1.svg');
@@ -119,7 +119,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     expect(shell?.getAttribute('data-visual-version')).toBe(defenseVisualProduction.visualVersion);
 
     const board = host.querySelector('image[data-production-board-art="ramp-01"]');
-    expect(board?.getAttribute('href')).toBe('assets/defense/board/ramp-01.svg');
+    expect(board?.getAttribute('href')).toBe('assets/defense/board/ramp-01-hd01.webp');
 
     await click(host.querySelector('button[aria-label^="P1 ·"]')!);
     const shopPulse = host.querySelector('.zb-shop-production-art') as HTMLImageElement | null;

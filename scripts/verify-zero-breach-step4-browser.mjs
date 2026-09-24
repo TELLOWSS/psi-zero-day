@@ -216,6 +216,7 @@ const report = {
   support_waves: [],
   result: null,
   failures: [],
+  visual: null,
 };
 
 let target;
@@ -289,6 +290,33 @@ try {
   })()`);
   if (!support) throw new Error('COORDINATOR support selection failed');
   await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"combat\"]'))");
+  if (process.env.PSI_DEF_HD01_EXPECT_HD_BOARD === '1') {
+    await waitFor(cdp, "document.querySelector('image[data-production-board-art=\"ramp-01\"]')?.getAttribute('href') === 'assets/defense/board/ramp-01-hd01.webp'");
+    const visual = await evaluate(cdp, `(async () => {
+      const board = document.querySelector('image[data-production-board-art="ramp-01"]');
+      const href = board?.getAttribute('href') || null;
+      const response = href ? await fetch(href) : null;
+      return {
+        boardHref: href,
+        boardFetchOk: Boolean(response?.ok),
+        boardContentType: response?.headers.get('content-type') || null,
+        pathShoulder: document.querySelectorAll('.zb-path-shoulder').length,
+        pathSurface: document.querySelectorAll('.zb-path').length,
+        pathCenterline: document.querySelectorAll('.zb-path-centerline').length,
+        padHardstands: document.querySelectorAll('.zb-pad-hardstand').length,
+        padMarks: document.querySelectorAll('.zb-pad-mark').length,
+        padHitTargets: document.querySelectorAll('.zb-pad-hit').length,
+      };
+    })()`);
+    report.visual = visual;
+    if (!visual.boardFetchOk) throw new Error('DEF-HD01 HD board asset did not load in Chromium: ' + JSON.stringify(visual));
+    if (visual.pathShoulder !== 1 || visual.pathSurface !== 1 || visual.pathCenterline !== 1) {
+      throw new Error('DEF-HD01 runtime route layers are incomplete: ' + JSON.stringify(visual));
+    }
+    if (visual.padHardstands !== 8 || visual.padMarks !== 8 || visual.padHitTargets !== 8) {
+      throw new Error('DEF-HD01 runtime pad layers drifted: ' + JSON.stringify(visual));
+    }
+  }
   await waitFor(cdp, "document.querySelector('.zb-tutorial')?.getAttribute('data-tutorial-step') === 'PLACE'");
   report.tutorial.place = true;
   await screenshot(cdp, '01-tutorial-place.png');

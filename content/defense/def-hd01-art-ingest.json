@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "gate": "DEF-HD01-2",
+  "status": "MASTER_WORLD_VISUAL_QA_PASS",
+  "runtimeTarget": "src/ui/DefenseGame.tsx",
+  "branch": "sol/def-hd01-master-world-20260924",
+  "backgroundCandidate": {
+    "sourceName": "a_highly_detailed_aerial_top_down_cinematic_view_o.png",
+    "sourceSize": {
+      "width": 1619,
+      "height": 972
+    },
+    "sourceSha256": "5c7f45d8f73261bc5e8e4759079e1da1e7d8ce07800f20b92c3d4fc410598088",
+    "productionFilename": "ramp-01-hd01.webp",
+    "productionTargetSize": {
+      "width": 1000,
+      "height": 600
+    },
+    "productionFormat": "webp",
+    "productionQuality": 42,
+    "productionSizeBytes": 138860,
+    "productionSha256": "01a677c52551136099ecd3283bfaa14785ec6e1a4a8f6691e24815428651ee5c",
+    "runtimeUri": "assets/defense/board/ramp-01-hd01.webp"
+  },
+  "qaPreview": {
+    "filename": "DEF_HD01_2_HYBRID_RUNTIME_PREVIEW.png",
+    "size": {
+      "width": 2000,
+      "height": 1200
+    },
+    "sha256": "3c2a2c375d6c82ed85521a48dea7b33d7a4c1aabfbcba0fce45b7b3793af14af"
+  },
+  "renderingContract": {
+    "backgroundRole": "cinematic construction-site context plate only",
+    "routeAuthority": "content/defense/zero-breach-v1.json map.path",
+    "padAuthority": "content/defense/zero-breach-v1.json map.pads",
+    "layerOrder": [
+      "background art",
+      "runtime construction-road shoulder",
+      "runtime road surface",
+      "runtime center guide",
+      "runtime pad hardstands",
+      "runtime tower/enemy/effect overlays"
+    ],
+    "noAiAuthoredGameplayCoordinates": true
+  },
+  "completedCodeChanges": [
+    "runtime route shoulder layer",
+    "runtime centerline layer",
+    "runtime 58px pad hardstands",
+    "construction-road visual styling",
+    "hybrid overlay contract test"
+  ],
+  "acceptanceState": {
+    "typecheck": "PASS",
+    "layoutContracts": "PASS",
+    "build": "PASS",
+    "assetBytesInRepository": "PASS",
+    "actualDefenseGameVisualQaWithHdBackground": "PASS",
+    "realChromiumTenWavePlaythrough": "PASS",
+    "worldVisualQa": "PASS"
+  },
+  "next": "DEF-HD01-PQ_REPRESENTATIVE_BENCHMARK",
+  "visualQa": {
+    "evidenceCommit": "a57426880641a3ffd6d875d222c42a863b218d44",
+    "result": "WORLD_PASS",
+    "gameplayResult": {
+      "status": "WON",
+      "completedWave": 10,
+      "stars": 2,
+      "shield": 18
+    },
+    "verified": [
+      "HD WebP loaded in actual DefenseGame runtime",
+      "1000x600 route authority preserved",
+      "eight runtime pad centers preserved",
+      "construction circulation overlay reduced so world art remains primary",
+      "tutorial, combat, wave 10 and result screenshots visually inspected"
+    ],
+    "scopeNote": "This closes G1 WORLD only. Legacy tower/risk/FX art is intentionally not declared Production Locked; G2 PQ benchmark must bring representative CONTROL, SWIFT and FX into the same production generation."
+  }
+}

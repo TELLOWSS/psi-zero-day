@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "gate": "DEF-HD01-1",
+  "status": "LAYOUT_CONTRACT_CANDIDATE",
+  "sourceBaseline": {
+    "branch": "sol/def-hd00-defense-baseline-20260924",
+    "sha": "3da0ac0456914b3322ec7a8b6c2294e36d66aa67",
+    "mapId": "ramp-01",
+    "logicalSize": {
+      "width": 1000,
+      "height": 600
+    },
+    "productionAssetSize": {
+      "width": 2000,
+      "height": 1200
+    }
+  },
+  "artDirection": {
+    "camera": "high oblique near-orthographic construction-site world",
+    "cameraElevationDeg": 70,
+    "projection": "NEAR_ORTHOGRAPHIC",
+    "aspectRatio": "5:3",
+    "lightDirection": "TOP_LEFT",
+    "shadowDirection": "BOTTOM_RIGHT",
+    "tone": "cinematic realistic Korean high-rise construction site",
+    "worldPriority": "site-first, HUD-free, readable at phone scale",
+    "noBakedText": true,
+    "noBakedPadLabels": true,
+    "noBakedHazardIcons": true
+  },
+  "routeContract": {
+    "semantic": "temporary logistics and risk-propagation circulation spine",
+    "points": [
+      [
+        0,
+        300
+      ],
+      [
+        180,
+        300
+      ],
+      [
+        180,
+        150
+      ],
+      [
+        450,
+        150
+      ],
+      [
+        450,
+        450
+      ],
+      [
+        720,
+        450
+      ],
+      [
+        720,
+        240
+      ],
+      [
+        1000,
+        240
+      ]
+    ],
+    "runtimeStrokeReference": 48,
+    "artClearCorridorHalfWidth": 42,
+    "notes": [
+      "The route must read as believable temporary site circulation, not a game track painted on the ground.",
+      "Curbs, cones, barriers, fencing and surface changes may suggest flow, but no baked arrows or UI symbols.",
+      "Large props must not occlude the route centerline."
+    ]
+  },
+  "pads": [
+    {
+      "id": "P1",
+      "x": 120,
+      "y": 220,
+      "nearestRouteDistance": 60,
+      "worldContext": "west gate marshal hardstand",
+      "zone": "Z1_GATE",
+      "visualCue": "small clear hardstand beside inbound lane; gatehouse/fence context nearby"
+    },
+    {
+      "id": "P2",
+      "x": 260,
+      "y": 220,
+      "nearestRouteDistance": 70,
+      "worldContext": "pedestrian/logistics separation point",
+      "zone": "Z2_LOGISTICS",
+      "visualCue": "clear verge between circulation lane and material handling edge"
+    },
+    {
+      "id": "P3",
+      "x": 360,
+      "y": 70,
+      "nearestRouteDistance": 80,
+      "worldContext": "elevated observation / crane signal position",
+      "zone": "Z3_NORTH_WORKFACE",
+      "visualCue": "open slab or temporary deck edge with long sightline"
+    },
+    {
+      "id": "P4",
+      "x": 370,
+      "y": 340,
+      "nearestRouteDistance": 80,
+      "worldContext": "central crossing intervention point",
+      "zone": "Z4_CORE",
+      "visualCue": "clear refuge hardstand near a high-conflict route bend"
+    },
+    {
+      "id": "P5",
+      "x": 530,
+      "y": 240,
+      "nearestRouteDistance": 80,
+      "worldContext": "lifting exclusion / central workface control point",
+      "zone": "Z4_CORE",
+      "visualCue": "clear control apron beside structure/tower-crane work zone"
+    },
+    {
+      "id": "P6",
+      "x": 600,
+      "y": 370,
+      "nearestRouteDistance": 80,
+      "worldContext": "south logistics control point",
+      "zone": "Z5_SOUTH_SERVICE",
+      "visualCue": "open shoulder beside truck/pump/service circulation"
+    },
+    {
+      "id": "P7",
+      "x": 640,
+      "y": 530,
+      "nearestRouteDistance": 80,
+      "worldContext": "plant/material staging intervention point",
+      "zone": "Z5_SOUTH_SERVICE",
+      "visualCue": "clear pad near pump/material staging but outside vehicle swept path"
+    },
+    {
+      "id": "P8",
+      "x": 800,
+      "y": 320,
+      "nearestRouteDistance": 80,
+      "worldContext": "east workface access control point",
+      "zone": "Z6_EAST_WORKFACE",
+      "visualCue": "clear access apron near final workface and vertical access"
+    }
+  ],
+  "padArtRules": {
+    "keepoutRadius": 44,
+    "preferredClearRadius": 58,
+    "allowAnyTowerFamily": true,
+    "notes": [
+      "Pads must look like plausible construction control/staging hardstands, not circular sci-fi sockets.",
+      "No permanent prop may occupy the central 44 logical-pixel radius around a pad.",
+      "The art must support any PULSE/BURST/CONTROL/SENSOR runtime overlay at every pad."
+    ]
+  },
+  "zones": [
+    {
+      "id": "Z0_SITE_OFFICE",
+      "bounds": {
+        "x0": 0,
+        "y0": 0,
+        "x1": 240,
+        "y1": 180
+      },
+      "purpose": "temporary office/welfare and site administration edge",
+      "props": [
+        "temporary office cabins",
+        "parking edge",
+        "fence",
+        "lighting mast"
+      ],
+      "density": "medium"
+    },
+    {
+      "id": "Z1_GATE",
+      "bounds": {
+        "x0": 0,
+        "y0": 180,
+        "x1": 210,
+        "y1": 390
+      },
+      "purpose": "main vehicle/pedestrian entry and security gate",
+      "props": [
+        "gatehouse",
+        "fence",
+        "wheel-wash hint",
+        "pedestrian gate",
+        "traffic barrier"
+      ],
+      "density": "medium"
+    },
+    {
+      "id": "Z2_LOGISTICS",
+      "bounds": {
+        "x0": 180,
+        "y0": 120,
+        "x1": 360,
+        "y1": 310
+      },
+      "purpose": "material logistics transition and segregated circulation",
+      "props": [
+        "stacked materials",
+        "forklift staging",
+        "pedestrian barrier",
+        "sign frames without text"
+      ],
+      "density": "medium"
+    },
+    {
+      "id": "Z3_NORTH_WORKFACE",
+      "bounds": {
+        "x0": 300,
+        "y0": 0,
+        "x1": 560,
+        "y1": 220
+      },
+      "purpose": "upper slab/material handling and crane observation workface",
+      "props": [
+        "formwork stacks",
+        "rebar bundles",
+        "temporary edge protection",
+        "tower crane structure"
+      ],
+      "density": "high"
+    },
+    {
+      "id": "Z4_CORE",
+      "bounds": {
+        "x0": 390,
+        "y0": 140,
+        "x1": 620,
+        "y1": 470
+      },
+      "purpose": "central structure/core and major conflict zone",
+      "props": [
+        "reinforced-concrete core",
+        "scaffold",
+        "tower-crane influence",
+        "temporary stairs",
+        "workers"
+      ],
+      "density": "high"
+    },
+    {
+      "id": "Z5_SOUTH_SERVICE",
+      "bounds": {
+        "x0": 430,
+        "y0": 390,
+        "x1": 760,
+        "y1": 600
+      },
+      "purpose": "pump truck, plant and service staging zone",
+      "props": [
+        "pump truck",
+        "ready-mix truck",
+        "material pallets",
+        "temporary power",
+        "washout containment"
+      ],
+      "density": "high"
+    },
+    {
+      "id": "Z6_EAST_WORKFACE",
+      "bounds": {
+        "x0": 690,
+        "y0": 120,
+        "x1": 1000,
+        "y1": 430
+      },
+      "purpose": "active high-rise workface and final controlled access",
+      "props": [
+        "high-rise structure",
+        "temporary hoist",
+        "edge protection",
+        "access stair",
+        "mobile equipment"
+      ],
+      "density": "high"
+    },
+    {
+      "id": "Z7_EAST_BUFFER",
+      "bounds": {
+        "x0": 760,
+        "y0": 420,
+        "x1": 1000,
+        "y1": 600
+      },
+      "purpose": "visual depth and secondary storage buffer",
+      "props": [
+        "site fencing",
+        "containers",
+        "secondary material storage",
+        "lighting"
+      ],
+      "density": "low"
+    }
+  ],
+  "compositionRules": [
+    "Keep the central serpentine circulation spine visually legible within two seconds.",
+    "Use realistic Korean high-rise construction-site materials and temporary works.",
+    "Foreground/midground/background depth must be readable despite near-orthographic projection.",
+    "Major vertical masses must stay outside pad keepout circles and must not visually erase route bends.",
+    "The board should feel like one continuous worksite, not six disconnected diorama tiles.",
+    "Route bends at x=180, x=450 and x=720 are deliberate visual landmarks and must remain easy to track.",
+    "The west entry and east final workface must read as different operational contexts.",
+    "No logos, company names, HUD, score text, hazard icons or game labels in world art."
+  ],
+  "mobileReadabilityRules": [
+    "At 390px portrait camera scale, each local sector must still show at least one route segment plus nearby pad context.",
+    "Avoid micro-detail that disappears below 2-3 device pixels.",
+    "Use large material/light/value blocks to separate road, slab, structure and staging areas.",
+    "Critical interactable clearings must have strong ground contrast without glowing game rings."
+  ],
+  "nextGate": "DEF-HD01-2_MASTER_WORLD_ART_BRIEF_AND_FIRST_RENDER"
+}
