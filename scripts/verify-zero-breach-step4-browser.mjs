@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_DEFENSE_STEP4_ARTIFACT_DIR || 'artifacts/zero-breach-step4-browser');
+const pqVisualQa = process.env.PSI_DEF_HD01_PQ_QA === '1';
 fs.mkdirSync(outputDir, { recursive: true });
 
 const chrome = [
@@ -217,6 +218,7 @@ const report = {
   result: null,
   failures: [],
   visual: null,
+  pq: { enabled: pqVisualQa, swift: false, control: false },
 };
 
 let target;
@@ -389,6 +391,13 @@ try {
   await upgrade(cdp, 'P6', '관통 펄스');
   report.purchases.push({ wave: 8, action: 'PULSE@P6 L3B' });
   await resumeIntermission(cdp);
+  if (pqVisualQa) {
+    await waitFor(cdp, "Boolean(document.querySelector('[data-pq-swift=\"SWIFT\"]'))", 30000);
+    const swiftCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-swift=\"SWIFT\"]').length");
+    if (swiftCount < 1) throw new Error('G2 PQ SWIFT candidate did not render in Wave 8');
+    report.pq.swift = true;
+    await screenshot(cdp, '05a-pq-swift-wave8.png');
+  }
   await screenshot(cdp, '05-wave8-branches.png');
 
   // Wave 9 prep
@@ -403,6 +412,13 @@ try {
   await pauseIntermission(cdp, 10);
   await build(cdp, 'P5', '흐름 제어기');
   report.purchases.push({ wave: 10, action: 'CONTROL@P5 L1' });
+  if (pqVisualQa) {
+    await waitFor(cdp, "Boolean(document.querySelector('[data-pq-control=\"CONTROL:L1\"]'))");
+    const controlCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-control=\"CONTROL:L1\"]').length");
+    if (controlCount !== 1) throw new Error('G2 PQ CONTROL L1 candidate did not render exactly once');
+    report.pq.control = true;
+    await screenshot(cdp, '06a-pq-control-l1.png');
+  }
   await upgrade(cdp, 'P5', '강화 L2');
   report.purchases.push({ wave: 10, action: 'CONTROL@P5 L2' });
   await resumeIntermission(cdp);
@@ -433,6 +449,9 @@ try {
   }
   if (report.purchases.filter(item => item.action.includes('L3A')).length < 1) throw new Error('UI run did not use an L3A branch');
   if (report.purchases.filter(item => item.action.includes('L3B')).length < 1) throw new Error('UI run did not use an L3B branch');
+  if (pqVisualQa && (!report.pq.swift || !report.pq.control)) {
+    throw new Error('G2 PQ visual evidence did not capture both SWIFT and CONTROL candidates');
+  }
 } catch (error) {
   report.failures.push(error instanceof Error ? error.message : String(error));
   if (cdp) {
