@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
-import { defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqCrop, defenseTowerArtUri } from '../src/app/defense-visual-assets';
+import { defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri } from '../src/app/defense-visual-assets';
 import { zeroBreachContent } from '../src/content/defense';
 
 describe('DEF-HD01-PQ representative benchmark contract', () => {
@@ -31,7 +31,7 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
       marshalUri: 'assets/episode01/characters/choi-minseok-map.webp',
       barrierUri: 'assets/episode01/scene-elements/access-barrier.webp',
     });
-    expect(defenseSwiftPqCrop()?.source).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(defenseSwiftPqAsset()).toEqual({ uri: 'assets/defense/enemies/swift-pq01.svg', width: 384, height: 268 });
 
     // Legacy assets remain available as rollback even while the G2 branch previews composites.
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
@@ -47,12 +47,11 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(ui).toContain("enemy.enemyId === 'SWIFT'");
     expect(ui).toContain('zb-swift-brake-cue');
     expect(ui).toContain('data-pq-swift="SWIFT"');
-    expect(ui).toContain('<g clipPath={`url(#zb-swift-pq-${enemy.id})`}>');
     expect(css).toContain('.zb-control-intervention');
     expect(css).toContain('.zb-control-pq-marshal');
     expect(benchmark.benchmark.response.target.sources[0]).toBe('assets/episode01/characters/choi-minseok-map.webp');
     expect(css).toContain('.zb-swift-brake-cue');
-    expect(css).toContain('.zb-swift-pq-crop');
+    expect(css).toContain('.zb-swift-pq-asset');
   });
 
   it('requires grounded construction-safety semantics instead of sci-fi combat language', () => {
