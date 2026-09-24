@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "strategy": "PRECISION_PURE_UI",
+  "acceleration": "wall scheduling only; fixed 50ms logical ticks and production content unchanged",
+  "tutorial": {
+    "place": true,
+    "start": true,
+    "upgrade": true,
+    "preview": true,
+    "completed": true
+  },
+  "purchases": [
+    {
+      "wave": 1,
+      "action": "PULSE@P1 L1"
+    },
+    {
+      "wave": 1,
+      "action": "PULSE@P6 L1"
+    },
+    {
+      "wave": 2,
+      "action": "PULSE@P1 L2"
+    },
+    {
+      "wave": 3,
+      "action": "PULSE@P6 L2"
+    },
+    {
+      "wave": 4,
+      "action": "BURST@P4 L1"
+    },
+    {
+      "wave": 5,
+      "action": "SENSOR@P8 L1"
+    },
+    {
+      "wave": 6,
+      "action": "SENSOR@P8 L2"
+    },
+    {
+      "wave": 6,
+      "action": "PULSE@P1 L3B"
+    },
+    {
+      "wave": 7,
+      "action": "BURST@P4 L2"
+    },
+    {
+      "wave": 8,
+      "action": "SENSOR@P8 L3A"
+    },
+    {
+      "wave": 8,
+      "action": "PULSE@P6 L3B"
+    },
+    {
+      "wave": 9,
+      "action": "BURST@P4 L3B"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L1"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L2"
+    }
+  ],
+  "support_waves": [
+    4,
+    7,
+    10
+  ],
+  "result": {
+    "status": "WON",
+    "wave": 10,
+    "tick": 7196,
+    "shield": 18,
+    "resource": 352,
+    "tutorial": null,
+    "result": "방어 성공",
+    "resultText": "결과방어 성공별2 / 3점수11,800완료 웨이브10 / 10보호막18획득 보상첫 클리어 꾸미기 획득다시 도전본편 허브로",
+    "stars": 2,
+    "logical_1x_seconds": 359.8,
+    "accelerated_wall_seconds": 27.6
+  },
+  "failures": [],
+  "visual": {
+    "boardHref": "assets/defense/board/ramp-01-hd01.webp",
+    "boardFetchOk": true,
+    "boardContentType": "image/webp",
+    "pathShoulder": 1,
+    "pathSurface": 1,
+    "pathCenterline": 1,
+    "padHardstands": 8,
+    "padMarks": 8,
+    "padHitTargets": 8
+  },
+  "effects_seen": [
+    ".zb-resolve-burst",
+    ".zb-attack-flash",
+    ".zb-area-pulse",
+    ".zb-detect-pulse",
+    ".zb-slow-ring",
+    ".zb-boss-armor-effect"
+  ]
+}
