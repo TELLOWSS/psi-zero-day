@@ -326,6 +326,13 @@
 .zb-tower-production-image,.zb-enemy-production-image{pointer-events:none;overflow:visible}
 .zb-tower-production-image{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34))}
 .zb-enemy-production-image{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38))}
+.zb-control-pq-barrier{pointer-events:none;filter:drop-shadow(3px 5px 4px rgba(0,0,0,.28));opacity:.96}
+.zb-control-pq-marshal{pointer-events:none;filter:drop-shadow(5px 7px 5px rgba(0,0,0,.34))}
+.zb-control-pq.is-firing .zb-control-pq-marshal{animation:zb-control-marshal-cue .22s ease-out}
+.zb-swift-pq-crop{pointer-events:none;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34));overflow:visible}
+.zb-enemy-swift.is-hit .zb-swift-pq-crop{animation:zb-swift-hit .14s ease-out}
+@keyframes zb-control-marshal-cue{0%{transform:translateY(0)}45%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+@keyframes zb-swift-hit{0%{filter:drop-shadow(0 0 9px rgba(255,210,154,.85)) brightness(1.28)}100%{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34)) brightness(1)}}
 .zb-tower-production.is-firing .zb-tower-production-image{animation:zb-production-fire .18s ease-out}
 @keyframes zb-production-fire{
   0%{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34)) drop-shadow(0 0 9px rgba(69,184,255,.9));transform:scale(1.06)}
@@ -333,7 +340,8 @@
 }
 .zb-shop-production-art{width:34px;height:34px;object-fit:contain;filter:drop-shadow(2px 3px 2px rgba(0,0,0,.3))}
 @media (prefers-reduced-motion:reduce){
-  .zb-tower-production.is-firing .zb-tower-production-image{animation:none}
+  .zb-tower-production.is-firing .zb-tower-production-image,.zb-control-pq.is-firing .zb-control-pq-marshal,
+  .zb-enemy-swift.is-hit .zb-swift-pq-crop{animation:none}
 }
 
 
