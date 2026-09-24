@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "gate": "DEF-HD01-PQ",
+  "status": "SOURCE_AUDIT_COMPLETE_ASSET_PRODUCTION_PENDING",
+  "branch": "sol/def-hd01-pq-benchmark-20260924",
+  "inherits": {
+    "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
+    "worldAsset": "assets/defense/board/ramp-01-hd01.webp",
+    "boardLogicalSize": {
+      "width": 1000,
+      "height": 600
+    }
+  },
+  "benchmark": {
+    "response": {
+      "id": "CONTROL",
+      "level": "L1",
+      "legacyAsset": "assets/defense/towers/control-l1.svg",
+      "legacyAssessment": "REJECT_AS_NEW_FINAL",
+      "semantic": "traffic marshal + temporary pedestrian/vehicle segregation intervention",
+      "productionAsset": "assets/defense/towers/control-l1-pq01.webp",
+      "target": {
+        "width": 512,
+        "height": 512,
+        "format": "webp",
+        "transparent": true,
+        "anchor": {
+          "x": 0.5,
+          "y": 0.82
+        }
+      },
+      "mustReadAtPhoneScale": [
+        "human marshal silhouette",
+        "high-visibility PPE",
+        "cones/barrier segregation",
+        "clear action direction"
+      ],
+      "forbidden": [
+        "sci-fi arch",
+        "glowing portal",
+        "baked text",
+        "logo",
+        "HUD",
+        "fantasy weapon"
+      ]
+    },
+    "risk": {
+      "id": "SWIFT",
+      "legacyAsset": "assets/defense/enemies/swift.svg",
+      "legacyAssessment": "REJECT_AS_NEW_FINAL",
+      "semantic": "reversing construction vehicle converging with pedestrian path",
+      "productionAsset": "assets/defense/enemies/swift-pq01.webp",
+      "target": {
+        "width": 384,
+        "height": 384,
+        "format": "webp",
+        "transparent": true,
+        "anchor": {
+          "x": 0.5,
+          "y": 0.78
+        }
+      },
+      "mustReadAtPhoneScale": [
+        "construction vehicle mass",
+        "reverse direction",
+        "pedestrian conflict cue",
+        "urgent but non-monster silhouette"
+      ],
+      "forbidden": [
+        "monster",
+        "projectile",
+        "abstract wedge",
+        "baked warning text",
+        "logo",
+        "HUD"
+      ]
+    },
+    "fx": {
+      "id": "CONTROL_SWIFT_INTERVENTION",
+      "semantic": "brake + marshal intervention + temporary separation",
+      "runtimeOnly": true,
+      "mustUse": [
+        "brake response",
+        "brief risk contraction",
+        "pedestrian route deflection",
+        "barrier/cone appearance"
+      ],
+      "forbidden": [
+        "explosion",
+        "enemy death",
+        "combat blood",
+        "superhero energy blast"
+      ]
+    }
+  },
+  "productionGeneration": {
+    "camera": "high-oblique near-orthographic compatible with MASTER WORLD",
+    "lighting": "top-left natural daylight compatible with ramp-01-hd01",
+    "materialLanguage": "real Korean high-rise construction site",
+    "colorRule": "PPE and construction-control colors grounded in real site materials; no neon game-object body",
+    "worldFirst": true
+  },
+  "runtimeGate": {
+    "currentLegacyAssetsRemainActive": true,
+    "switchCondition": "CONTROL + SWIFT binaries exist, dimensions/alpha/anchors pass, actual DefenseGame visual QA passes",
+    "noPlaceholderPromotion": true,
+    "noGameplayCoordinateChange": true,
+    "noBalanceChange": true
+  },
+  "acceptance": [
+    "CONTROL and SWIFT are immediately readable without explanatory copy",
+    "both belong to the same visual generation as the HD master world",
+    "assets remain legible in actual DefenseGame at phone-scale board size",
+    "intervention reads as a site-safety action, not an attack",
+    "no route/pad/wave/id/balance changes",
+    "actual browser screenshots pass before runtime promotion"
+  ],
+  "next": "PRODUCE_CONTROL_AND_SWIFT_PQ01_BINARIES"
+}
