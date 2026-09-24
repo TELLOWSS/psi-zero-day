@@ -44,5 +44,8 @@ jobs:
           tests/zero-breach-save.test.ts
           tests/zero-breach-event.test.ts
 
+      - name: Verify PQ01 candidate WebP binaries when present
+        run: node scripts/verify-def-hd01-pq-assets.mjs
+
       - name: Build
         run: npm run build
