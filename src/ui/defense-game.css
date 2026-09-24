@@ -304,14 +304,25 @@
 
 /* Step 5A production-art baseline: board + PULSE L1 + NORMAL only. */
 .zb-board-production-art{pointer-events:none}
-.zb-board-production-art~.zb-path-shoulder{stroke:#30322e;stroke-width:86;opacity:.9}
-.zb-board-production-art~.zb-path-shadow{stroke:#151b1a;stroke-width:68;opacity:.92}
-.zb-board-production-art~.zb-path{stroke:#747975;stroke-width:52;opacity:.94}
-.zb-board-production-art~.zb-path-centerline{stroke:rgba(230,193,80,.58);stroke-width:3.5}
-.zb-board-production-art~.zb-pad-runtime .zb-pad-hardstand{fill:rgba(38,42,39,.62);stroke:rgba(213,224,218,.22)}
-.zb-board-production-art~.zb-pad-runtime .zb-pad-mark{fill:rgba(31,51,62,.52);stroke:rgba(211,226,232,.64);stroke-width:2}
-.zb-board-production-art~.zb-pad-runtime .zb-pad-mark.is-selected{fill:rgba(255,173,66,.12);stroke:var(--zb-accent);stroke-width:6}
-.zb-board-production-art~.zb-pad-runtime .zb-pad-mark.is-occupied{fill:rgba(24,48,58,.28);stroke:rgba(131,166,183,.76)}
+.zb-board-production-art~.zb-path-shoulder{
+  stroke:rgba(49,48,42,.66);stroke-width:62;opacity:.52;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.12))
+}
+.zb-board-production-art~.zb-path-shadow{stroke:rgba(19,24,22,.72);stroke-width:50;opacity:.46}
+.zb-board-production-art~.zb-path{stroke:rgba(105,103,94,.82);stroke-width:38;opacity:.56}
+.zb-board-production-art~.zb-path-centerline{stroke:rgba(232,199,97,.48);stroke-width:2.2;opacity:.68}
+.zb-board-production-art~.zb-pad-runtime .zb-pad-hardstand{
+  fill:rgba(42,44,40,.18);stroke:rgba(220,224,204,.14);stroke-width:1
+}
+.zb-board-production-art~.zb-pad-runtime .zb-pad-mark{
+  fill:rgba(20,38,42,.12);stroke:rgba(211,226,232,.28);stroke-width:1.5
+}
+.zb-board-production-art~.zb-pad-runtime .zb-pad-mark.is-selected{
+  fill:rgba(255,173,66,.11);stroke:var(--zb-accent);stroke-width:4
+}
+.zb-board-production-art~.zb-pad-runtime .zb-pad-mark.is-occupied{
+  fill:rgba(24,48,58,.18);stroke:rgba(131,166,183,.38)
+}
 .zb-tower-production-image,.zb-enemy-production-image{pointer-events:none;overflow:visible}
 .zb-tower-production-image{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34))}
 .zb-enemy-production-image{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38))}
