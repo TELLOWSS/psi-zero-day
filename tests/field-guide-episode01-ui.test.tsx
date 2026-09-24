@@ -21,7 +21,7 @@ const keys = [
 ] as const;
 
 describe('Episode 01 Field Guide runtime asset routing', () => {
-  it('renders FG001-FG010 through manifest-backed production WebP routes', async () => {
+  it('renders FG001-FG010 through final Field Guide visual routes', async () => {
     const manifest = assets as any;
     const guide = catalog as any;
     const session = {
@@ -47,6 +47,13 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
       const entry = guide.elements[key];
       expect(entry.field_guide.episode).toBe('EP01');
 
+      const directPath = entry.field_guide_visual?.asset_path;
+      if (directPath) {
+        const matching = images.find(image => (image.getAttribute('src') ?? '').endsWith(directPath));
+        expect(matching).toBeDefined();
+        continue;
+      }
+
       if (entry.field_guide_visual?.presentation === 'generated_item_art') {
         const visual = host.querySelector(`.field-guide-visual[data-item-key="${key}"]`);
         expect(visual?.querySelector('.field-guide-generated-art')).not.toBeNull();
@@ -63,8 +70,10 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
       expect(matching?.getAttribute('data-asset-tier')).toBe('final');
     }
 
-    expect(guide.elements.site_gate.field_guide_visual.presentation).toBe('generated_item_art');
-    expect(guide.elements.pedestrian_gate.field_guide_visual.presentation).toBe('generated_item_art');
+    expect(guide.elements.site_gate.field_guide_visual.presentation).toBe('production_realistic_v2');
+    expect(guide.elements.pedestrian_gate.field_guide_visual.presentation).toBe('production_realistic_v2');
+    expect(srcs.some(src => src.endsWith('assets/episode01/field-guide/site-gate-final.webp'))).toBe(true);
+    expect(srcs.some(src => src.endsWith('assets/episode01/field-guide/pedestrian-gate-final.webp'))).toBe(true);
     expect(srcs.some(src => src.endsWith('assets/episode01/cg/gate-dawn.webp'))).toBe(false);
     expect(host.textContent).toContain('FG001');
     expect(host.textContent).toContain('FG010');

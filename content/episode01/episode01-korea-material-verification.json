@@ -181,19 +181,33 @@
       },
       "reverified_on": "2026-09-24",
       "field_guide_runtime_render": {
-        "version": "production-webp-v3",
-        "status": "production_locked",
-        "source_master": "user-approved 1536x1536 gate renders, 2026-09-24",
-        "runtime_optimization": "384x384 WebP for current Field Guide display; source master preserved outside runtime commit",
+        "version": "korean-site-gate-v3-photoreal",
+        "status": "final_field_guide_art",
+        "source": "user_approved_2026-09-24",
+        "assets": {
+          "site_gate": {
+            "path": "assets/episode01/field-guide/site-gate-final.webp",
+            "width": 384,
+            "height": 384,
+            "bytes": 17498,
+            "sha256": "d7f4a52b8e2732ebdb68da6310308b5a8c2723c17c12a5dc11707333293a94e5"
+          },
+          "pedestrian_gate": {
+            "path": "assets/episode01/field-guide/pedestrian-gate-final.webp",
+            "width": 384,
+            "height": 384,
+            "bytes": 17442,
+            "sha256": "e39b5f791cf4a2bf09c620ecde3a9a80de298db2b259f03492c8b063d0149d01"
+          }
+        },
         "decisions": [
-          "FG001 uses the approved high-detail Korean construction vehicle-gate render.",
-          "FG002 uses the approved high-detail worker-only entrance render.",
-          "Manifest WebP is primary; generated SVG remains fallback only.",
-          "Vehicle and worker entrances are compositionally distinct at thumbnail size."
+          "FG001 emphasizes a wide vehicle/equipment portal, boom barrier, temporary hoarding, guard booth and readable vehicle approach.",
+          "FG002 emphasizes a separate narrow worker entrance, protected footpath, blue mesh separation, access-control reader and guard booth.",
+          "A generic turnstile is intentionally omitted because turnstile/access hardware is site-specific rather than a universal Korean construction-site requirement.",
+          "No real contractor or apartment branding is baked into the reusable Field Guide art."
         ],
         "legal_anchor": "산업안전보건기준에 관한 규칙 제11조",
-        "runtime_component": "FieldGuide/GuideVisual + manifest asset",
-        "visual_review": "user_approved_graphic_level_2026-09-24"
+        "visual_review": "approved_photorealistic_v3"
       }
     },
     "material_stack": {
@@ -369,13 +383,18 @@
       "classification": "Episode 01 vehicle gate dedicated Field Guide illustration",
       "final_registration": {
         "completed_on": "2026-09-24",
-        "presentation": "generated_item_art",
-        "runtime_component": "FieldGuide/GuideVisual[manifest-asset-v3]",
+        "presentation": "production_realistic_v2",
+        "asset_path": "assets/episode01/field-guide/site-gate-final.webp",
         "focus": "vehicle_access_gate",
-        "visual_review": "user_approved_graphic_level_2026-09-24",
+        "visual_review": "approved_photorealistic_v3",
+        "source": "user_approved_2026-09-24",
+        "width": 384,
+        "height": 384,
+        "bytes": 17498,
+        "sha256": "d7f4a52b8e2732ebdb68da6310308b5a8c2723c17c12a5dc11707333293a94e5",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "FG001 uses a dedicated Korean-site vehicle-gate illustration: wide equipment portal, temporary hoarding and controlled vehicle throat. Episode scene backgrounds remain excluded."
+      "integrity_note": "FG001 Field Guide now uses approved photorealistic vehicle-gate art. The map/strategy scene-element asset remains an independent production track and is not promoted by this change."
     },
     "pedestrian_gate": {
       "status": "final_runtime_item_art",
@@ -383,13 +402,18 @@
       "classification": "Episode 01 worker-only pedestrian entrance dedicated Field Guide illustration",
       "final_registration": {
         "completed_on": "2026-09-24",
-        "presentation": "generated_item_art",
-        "runtime_component": "FieldGuide/GuideVisual[manifest-asset-v3]",
+        "presentation": "production_realistic_v2",
+        "asset_path": "assets/episode01/field-guide/pedestrian-gate-final.webp",
         "focus": "worker_only_access_gate",
-        "visual_review": "user_approved_graphic_level_2026-09-24",
+        "visual_review": "approved_photorealistic_v3",
+        "source": "user_approved_2026-09-24",
+        "width": 384,
+        "height": 384,
+        "bytes": 17442,
+        "sha256": "e39b5f791cf4a2bf09c620ecde3a9a80de298db2b259f03492c8b063d0149d01",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "FG002 uses a separate Korean-site worker entrance illustration. Generic turnstile geometry is excluded; access-control hardware remains site-specific."
+      "integrity_note": "FG002 Field Guide now uses approved photorealistic worker-entrance art. The map/strategy scene-element asset remains an independent production track and is not promoted by this change."
     },
     "vehicle_pedestrian_separation": {
       "status": "final_registered_runtime_ready",

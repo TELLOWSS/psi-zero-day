@@ -793,13 +793,13 @@
         {
           "uri": "assets/episode01/scene-elements/pedestrian-gate.webp",
           "format": "webp",
-          "bytes": 9922,
-          "hash": "901700706566e84e359e22721f4bf8f42f503d0a6ca7864ad221211f307bde9e"
+          "bytes": 15009,
+          "hash": "bc6e4fed13a00ad58c7120fad70e32d50f35d76fd1ac3a32ffb515c0dfb541e9"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "3"
+      "version": "1"
     },
     {
       "asset_id": "ep01.scene_element.platform_cut_edge",
@@ -841,13 +841,13 @@
         {
           "uri": "assets/episode01/scene-elements/site-gate.webp",
           "format": "webp",
-          "bytes": 10010,
-          "hash": "948ef2f3b3d89a3e806ac05cf738f7b79ac54d307b968e13beec95c4be99a1ca"
+          "bytes": 7395,
+          "hash": "927af20c9da3e42427d14645d972bcaca5f35cd690b81dd7a596118e8c3a0efd"
         }
       ],
       "dependencies": [],
       "preload_policy": "next_scene",
-      "version": "3"
+      "version": "1"
     },
     {
       "asset_id": "ep01.scene_element.site_weather_station",

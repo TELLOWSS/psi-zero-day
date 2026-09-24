@@ -492,7 +492,7 @@
       "kind": "control",
       "label": "현장 출입 게이트",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "planned",
       "planned_asset_id": "ep01.scene_element.site_gate",
       "art": {
         "path": "assets/episode01/scene-elements/site-gate.webp",
@@ -503,10 +503,10 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": false,
-        "style_profile": "field-guide-production-realistic-v3",
-        "render_intent": "isolated_isometric_3d_asset",
-        "background_policy": "navy_gradient_baked",
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
@@ -523,19 +523,11 @@
       },
       "field_guide_visual": {
         "status": "final",
-        "presentation": "manifest_asset",
-        "asset_id": "ep01.scene_element.site_gate",
-        "asset_path": "assets/episode01/scene-elements/site-gate.webp",
+        "asset_path": "assets/episode01/field-guide/site-gate-final.webp",
+        "presentation": "production_realistic_v2",
         "focus": "vehicle_access_gate",
-        "source_scene": "production WebP asset",
-        "rationale": "Dedicated high-detail production art derived from the user-approved 1536px master; SVG is fallback only."
-      },
-      "production": {
-        "width": 384,
-        "height": 384,
-        "bytes": 10010,
-        "sha256": "948ef2f3b3d89a3e806ac05cf738f7b79ac54d307b968e13beec95c4be99a1ca",
-        "visual_review": "user_approved_graphic_level_2026-09-24"
+        "source_scene": "approved_field_guide_final_art_2026-09-24",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site vehicle-gate art. Map/strategy scene-element promotion remains a separate asset track."
       }
     },
     "pedestrian_gate": {
@@ -543,21 +535,21 @@
       "kind": "control",
       "label": "근로자 전용 출입구",
       "visual_token": "▥",
-      "production_status": "final",
+      "production_status": "replacement_required",
       "planned_asset_id": "ep01.scene_element.pedestrian_gate",
       "art": {
         "path": "assets/episode01/scene-elements/pedestrian-gate.webp",
-        "minimum_width": 384,
-        "minimum_height": 384,
+        "minimum_width": 768,
+        "minimum_height": 512,
         "pivot": {
           "x": 0.5,
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": false,
-        "style_profile": "field-guide-production-realistic-v3",
-        "render_intent": "isolated_isometric_3d_asset",
-        "background_policy": "navy_gradient_baked",
+        "requires_alpha": true,
+        "style_profile": "field-guide-isometric-v1",
+        "render_intent": "isolated_isometric_3d_pictogram",
+        "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
@@ -575,19 +567,11 @@
       "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
       "field_guide_visual": {
         "status": "final",
-        "presentation": "manifest_asset",
-        "asset_id": "ep01.scene_element.pedestrian_gate",
-        "asset_path": "assets/episode01/scene-elements/pedestrian-gate.webp",
+        "asset_path": "assets/episode01/field-guide/pedestrian-gate-final.webp",
+        "presentation": "production_realistic_v2",
         "focus": "worker_only_access_gate",
-        "source_scene": "production WebP asset",
-        "rationale": "Dedicated high-detail production art derived from the user-approved 1536px master; SVG is fallback only."
-      },
-      "production": {
-        "width": 384,
-        "height": 384,
-        "bytes": 9922,
-        "sha256": "901700706566e84e359e22721f4bf8f42f503d0a6ca7864ad221211f307bde9e",
-        "visual_review": "user_approved_graphic_level_2026-09-24"
+        "source_scene": "approved_field_guide_final_art_2026-09-24",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site worker-only entrance art. Map/strategy scene-element promotion remains a separate asset track."
       }
     },
     "vehicle_pedestrian_separation": {

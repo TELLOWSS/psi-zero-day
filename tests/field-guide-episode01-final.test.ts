@@ -96,22 +96,43 @@ describe('Episode 01 Field Guide FG001-FG010 completion lock', () => {
       .toBe(false);
   });
 
-  it('renders FG001-FG002 from dedicated Field Guide gate art rather than an Episode background', () => {
-    for (const [key, id] of [['site_gate', 'FG001'], ['pedestrian_gate', 'FG002']] as const) {
+  it('locks FG001-FG002 to dedicated photorealistic Field Guide assets without promoting map cutouts', () => {
+    const finals = {
+      site_gate: {
+        id: 'FG001',
+        path: 'assets/episode01/field-guide/site-gate-final.webp',
+        bytes: 17498,
+        sha256: 'd7f4a52b8e2732ebdb68da6310308b5a8c2723c17c12a5dc11707333293a94e5',
+      },
+      pedestrian_gate: {
+        id: 'FG002',
+        path: 'assets/episode01/field-guide/pedestrian-gate-final.webp',
+        bytes: 17442,
+        sha256: 'e39b5f791cf4a2bf09c620ecde3a9a80de298db2b259f03492c8b063d0149d01',
+      },
+    } as const;
+
+    for (const [key, final] of Object.entries(finals) as [keyof typeof finals, (typeof finals)[keyof typeof finals]][]) {
       const entry = guide.elements[key];
-      expect(entry.field_guide.id).toBe(id);
+      expect(entry.field_guide.id).toBe(final.id);
       expect(entry.field_guide.episode).toBe('EP01');
       expect(entry.field_guide_visual.status).toBe('final');
-      expect(entry.field_guide_visual.presentation).toBe('generated_item_art');
+      expect(entry.field_guide_visual.presentation).toBe('production_realistic_v2');
+      expect(entry.field_guide_visual.asset_path).toBe(final.path);
       expect(entry.field_guide_visual.asset_id).toBeUndefined();
-      expect(entry.field_guide_visual.source_scene).toContain('FieldGuideArt/GateScene');
+      expect(entry.field_guide_visual.source_scene).toContain('approved_field_guide_final_art');
+      expect(reality.runtime_assets.site_gate.field_guide_runtime_render.assets[key].bytes).toBe(final.bytes);
+      expect(reality.runtime_assets.site_gate.field_guide_runtime_render.assets[key].sha256).toBe(final.sha256);
     }
+
     expect(guide.elements.site_gate.production_status).toBe('planned');
     expect(guide.elements.pedestrian_gate.production_status).toBe('replacement_required');
-    expect(reality.runtime_assets.site_gate.field_guide_runtime_render.version).toBe('korean-site-gate-v2');
+    expect(reality.runtime_assets.site_gate.field_guide_runtime_render.version).toBe('korean-site-gate-v3-photoreal');
     expect(reality.runtime_assets.site_gate.field_guide_runtime_render.decisions.join(' ')).toContain('turnstile');
-    expect(reality.field_guide_section0.site_gate.final_registration.visual_review).toBe('korean_site_reality_reverified_vector_v2');
-    expect(reality.field_guide_section0.pedestrian_gate.final_registration.visual_review).toBe('korean_site_reality_reverified_vector_v2');
+    expect(reality.field_guide_section0.site_gate.final_registration.visual_review).toBe('approved_photorealistic_v3');
+    expect(reality.field_guide_section0.pedestrian_gate.final_registration.visual_review).toBe('approved_photorealistic_v3');
+    expect(reality.field_guide_section0.site_gate.final_registration.dedicated_map_asset_promoted).toBe(false);
+    expect(reality.field_guide_section0.pedestrian_gate.final_registration.dedicated_map_asset_promoted).toBe(false);
   });
 
   it('surfaces the Korean workplace-entrance rule directly for FG001-FG002', () => {
