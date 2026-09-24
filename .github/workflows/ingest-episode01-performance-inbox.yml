@@ -1,10 +1,8 @@
 name: Ingest Episode 01 performance inbox
 
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.art-inbox/PSI_EP01_PERFORMANCE_WAVE01_GITHUB_READY.zip'
+  workflow_dispatch:
 
 permissions:
   contents: write
