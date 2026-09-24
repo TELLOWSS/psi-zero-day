@@ -12,12 +12,12 @@
   },
   "characters": {
     "player": {
-      "role": "현장 안전관리자 / PLAYER",
+      "role": "현장 안전관리자",
       "gender_presentation": "female",
       "age_impression": "late 20s to early 30s",
       "silhouette": "medium height, compact athletic build, centered confident stance",
-      "face": "soft oval face, large focused eyes, short dark bob tucked behind ears; clearly different from every male NPC",
-      "helmet": "clean white safety helmet with one simple blue abstract safety emblem",
+      "face": "soft V-shaped face, focused almond eyes, dark low ponytail with side fringe visible beneath the helmet; clearly different from every male NPC",
+      "helmet": "clean white safety helmet with a thin blue stripe and one small NEW PSI mark",
       "clothing": "blue safety jacket or vest over dark workwear, neat practical styling",
       "signature_prop": "black safety tablet/inspection pad",
       "default_pose": "tablet in one hand, other hand ready to point or signal stop",
@@ -104,7 +104,7 @@
       "do_not": ["round youthful Lee face", "comedic angry inspector caricature"]
     },
     "oh_seungjae": {
-      "role": "원도급 현장 공사팀장",
+      "role": "현장 공사팀장",
       "age_impression": "early 40s",
       "silhouette": "medium-tall, slightly broad management build, one shoulder often angled as if taking a call",
       "face": "broad cheekbones, slightly tired eyes, defined jaw, clean-shaven",

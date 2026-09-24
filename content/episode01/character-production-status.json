@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-09-21",
+  "updated": "2026-09-23",
   "active_milestone": "P6_VISUAL_QUALITY_REBASELINE",
   "active_batch": "replacement-a",
   "integration_status": "replacement_locked",
@@ -125,5 +125,13 @@
   },
   "next_asset": null,
   "rule": "D-1 title-cast is Production LOCKED. Reopen only for a verified identity/crop/scale regression.",
-  "next_work": "Apply Phase D Visual Quality Rebaseline to TBM then FIELD. Do not generate additional title-cast replacements unless regression evidence requires it."
+  "next_work": "Apply Phase D Visual Quality Rebaseline to TBM then FIELD using the locked eight-character identity contract. Generate only scene-required missing performance variants; do not redesign core portrait/map identities.",
+  "master_lock": {
+    "status": "production_locked",
+    "lock_id": "ep01-character-master-lock-v1",
+    "characters": 8,
+    "identity_scope": "name / role / age / face / silhouette / PPE / wardrobe / prop / portrait / map / performance routing",
+    "performance_asset_status": "partial_final_assets_with_explicit_map_fallback",
+    "rule": "Identity is locked for all eight Episode 01 characters. Do not redesign or regenerate core portrait/map art without a verified identity, crop, scale, or scene-integration regression."
+  }
 }

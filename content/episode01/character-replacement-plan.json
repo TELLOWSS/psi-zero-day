@@ -3,12 +3,12 @@
   "batch_id": "character-identity-replacement-a",
   "priority": "high",
   "purpose": "Replace visually similar legacy faces without blocking current playable build.",
-  "current_runtime_policy": "use the eight staged final-candidate portrait/map WebPs while keeping D-1 open until Main → Loading → MAP identity continuity QA is approved",
+  "current_runtime_policy": "use the eight integrated Production-Locked title-cast portrait/map WebPs; reopen only for verified Main → Loading → MAP identity/crop/scale regression",
   "batch": [
     {
       "id": "player",
       "priority": 1,
-      "state": "final_candidate_staged_pending_visual_qa",
+      "state": "production_locked",
       "required": [
         "portrait",
         "map_full_body",
@@ -19,7 +19,7 @@
     {
       "id": "lim_junho",
       "priority": 2,
-      "state": "final_candidate_staged_pending_visual_qa",
+      "state": "production_locked",
       "required": [
         "portrait",
         "map_full_body",
@@ -30,7 +30,7 @@
     {
       "id": "lee_jaehoon",
       "priority": 3,
-      "state": "final_candidate_staged_pending_visual_qa",
+      "state": "production_locked",
       "required": [
         "portrait",
         "map_full_body",
@@ -41,7 +41,7 @@
     {
       "id": "seo_jeongmin",
       "priority": 4,
-      "state": "final_candidate_staged_pending_visual_qa",
+      "state": "production_locked",
       "required": [
         "portrait",
         "map_full_body",
@@ -75,9 +75,9 @@
   "reference_qa": {
     "source": "user-provided main-title concept screenshot 1672x941",
     "status": "layout_and_identity_targets_locked",
-    "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries remain pending replacement."
+    "note": "Reference confirms desired four-person hierarchy and stronger age/face/prop separation. Runtime binaries are integrated and the title-cast identity is Production Locked; reopen only for verified regression."
   },
-  "pipeline_status": "final_candidates_staged_pending_visual_qa",
+  "pipeline_status": "production_locked",
   "binary_replacement": {
     "baseline_file": "content/episode01/character-replacement-baseline.json",
     "status_command": "npm run assets:character-replacement-status",
@@ -92,7 +92,7 @@
       "npm run assets:character-stage -- --id seo-jeongmin-portrait --file <new-seo-jeongmin-portrait.webp>",
       "npm run assets:character-stage -- --id seo-jeongmin-map --file <new-seo-jeongmin-map.webp>"
     ],
-    "completion_rule": "Do not mark integrated until strict_command passes and main/loading/map visual QA is approved.",
+    "completion_rule": "Integrated and Production Locked. Reopen only if strict identity checks or cross-surface visual QA reveal a verified regression.",
     "batch_stage_command": "npm run assets:character-replacement-stage -- --dir <directory-containing-all-8-webps>",
     "batch_preflight_command": "npm run assets:character-replacement-stage -- --dir <directory-containing-all-8-webps> --dry-run",
     "required_filenames": [
@@ -115,7 +115,7 @@
     "url": "https://github.com/TELLOWSS/psi-zero-day/issues/4",
     "title": "ART: Replace title cast with four distinct production characters"
   },
-  "next_required_input": "Main → Loading → MAP visual QA approval for the staged 8/8 title-cast final candidates",
+  "next_required_input": "none for title-cast identity replacement; next work is TBM then FIELD visual quality rebaseline using the locked character identities",
   "branding": {
     "company_name": "NEW PSI",
     "game_title": "PSI : ZERO DAY",

@@ -33,7 +33,7 @@
     "assets:production-batch-a-check": "npm run assets:visual-contract && npm run assets:embedded && node scripts/check-character-final-art-shape.mjs --batch-a && node scripts/build-episode01-assets.mjs --production-batch-a-check",
     "assets:production-check": "npm run assets:visual-contract && npm run assets:embedded && npm run assets:character-map-shape-check && node scripts/build-episode01-assets.mjs --production-check",
     "assets:production-scene-elements-check": "npm run assets:embedded && npm run assets:scene-elements-contract && node scripts/check-scene-element-art.mjs --production-check",
-    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:visual-production-queue-check && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:scene-runtime-check && npm run audio:contract-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
+    "release:check": "npm run copy:ko-check && npm run assets:visual-contract && npm run assets:visual-production-queue-check && npm run assets:character-master-lock-check && npm run assets:character-identity-check && npm run assets:scene-elements-contract && npm run assets:scene-runtime-check && npm run audio:contract-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:check && npm test && npm run typecheck && npm run build",
     "release:production-check": "npm run assets:production-check && npm run assets:production-scene-elements-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && npm run release:check",
     "android:add": "npm run build && npx cap add android && npm run android:configure",
     "android:sync": "npm run build && npx cap sync android && npm run android:configure",
@@ -68,7 +68,8 @@
     "production:status": "node scripts/report-episode01-production-readiness.mjs",
     "phase-d:status": "node scripts/report-episode01-production-readiness.mjs",
     "phase-d:check": "npm run assets:production-check && npm run assets:character-replacement-check && npm run assets:scene-background-production-check && npm run assets:final-art-ingest-check && npm run assets:character-performance-wave-check && npm run audio:production-check && node scripts/report-episode01-production-readiness.mjs --require-phase-d && npm run test:episode01-visual",
-    "test:strategy-stage2": "vitest run tests/strategy-stage2-flow.test.tsx"
+    "test:strategy-stage2": "vitest run tests/strategy-stage2-flow.test.tsx",
+    "assets:character-master-lock-check": "node scripts/check-character-master-lock.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
