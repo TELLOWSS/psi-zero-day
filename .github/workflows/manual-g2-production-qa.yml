@@ -1,0 +1,155 @@
+name: Manual G2 Production QA
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_ref:
+        description: G2 branch to verify
+        required: true
+        default: sol/def-hd01-pq-benchmark-20260924
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: manual-g2-production-qa
+  cancel-in-progress: false
+
+jobs:
+  g2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Validate target ref
+        shell: bash
+        env:
+          TARGET_REF: ${{ inputs.target_ref }}
+        run: |
+          if [ "$TARGET_REF" != "sol/def-hd01-pq-benchmark-20260924" ]; then
+            echo "Unexpected target_ref: $TARGET_REF"
+            exit 1
+          fi
+
+      - name: Checkout G2 branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: G2 benchmark and protected DefenseGame contracts
+        run: >
+          npx vitest run
+          tests/def-hd01-pq-benchmark-contract.test.ts
+          tests/def-hd00-defense-baseline-contract.test.ts
+          tests/def-hd01-world-layout-contract.test.ts
+          tests/def-hd01-hd-board-runtime.test.ts
+          tests/zero-breach-engine.test.ts
+          tests/zero-breach-save.test.ts
+          tests/zero-breach-event.test.ts
+
+      - name: Verify G2 production asset integrity
+        run: node scripts/verify-def-hd01-pq-assets.mjs
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run actual DefenseGame G2 browser QA
+        shell: bash
+        env:
+          PSI_DEF_HD01_PQ_QA: '1'
+          PSI_DEF_HD01_EXPECT_HD_BOARD: '1'
+          PSI_DEFENSE_STEP4_ARTIFACT_DIR: artifacts/def-hd01-pq-browser
+        run: |
+          mkdir -p artifacts/def-hd01-pq-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/def-hd01-pq-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/def-hd01-pq-preview.log
+            exit 1
+          fi
+
+          node scripts/verify-zero-breach-step4-browser.mjs
+
+      - name: Persist compact G2 evidence to target branch
+        if: always()
+        shell: bash
+        env:
+          TARGET_REF: ${{ inputs.target_ref }}
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/def-hd01-pq
+          mkdir -p qa/def-hd01-pq
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Path('artifacts/def-hd01-pq-browser')
+          out = Path('qa/def-hd01-pq')
+          wanted = ['05a-pq-swift-wave8.png','06a-pq-control-l1.png','error.png']
+
+          for name in wanted:
+              p = src / name
+              if not p.exists():
+                  continue
+              im = Image.open(p).convert('RGB')
+              if im.width > 1100:
+                  h = round(im.height * 1100 / im.width)
+                  im = im.resize((1100,h), Image.Resampling.LANCZOS)
+              im.save(out / (p.stem + '.jpg'),'JPEG',quality=82,optimize=True)
+
+          report = src / 'step4-browser-report.json'
+          if report.exists():
+              (out / report.name).write_bytes(report.read_bytes())
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/def-hd01-pq
+          if git diff --cached --quiet; then
+            echo "No G2 evidence changes to commit."
+            exit 0
+          fi
+          git commit -m "qa: store manual G2 production evidence [skip ci]"
+          git push origin HEAD:"$TARGET_REF"
