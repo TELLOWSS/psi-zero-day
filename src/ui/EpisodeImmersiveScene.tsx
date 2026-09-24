@@ -116,6 +116,7 @@ export function EpisodeImmersiveScene({
   useEpisode01ScenePreload(eventId, resolve);
   if (!scene) return null;
   const resolvedBackground = scene.background_asset_id ? resolve(scene.background_asset_id) : undefined;
+  const finalBackground = resolvedBackground ?? scene.background_final_uri;
   const showEvidenceBoard = episode01UsesEvidenceBoard(scene.event_id);
   const showMemoryStrip = episode01UsesMemoryStrip(scene.event_id);
   const momentOverlay = episode01MomentOverlay(scene.event_id, scene.node_id);
@@ -140,7 +141,7 @@ export function EpisodeImmersiveScene({
     data-choice-tone={scene.preview_choice_tone ?? undefined}
     data-event={scene.event_id}
     data-environment={scene.background_environment ?? undefined}
-    data-background-source={resolvedBackground ? 'final' : 'rc-fallback'}
+    data-background-source={finalBackground ? 'final' : 'rc-fallback'}
     data-authored-node={scene.authored_node_direction || undefined}
     data-psi-active={cinematicTrace?.active_kind ?? undefined}
     data-character-blocking={episode01UsesCharacterBlocking(scene.event_id) || undefined}
@@ -170,7 +171,7 @@ export function EpisodeImmersiveScene({
     data-tbm-lighting={tbmProduction?.lighting_profile}
     data-tbm-ui={tbmProduction?.ui_profile}
     data-tbm-cast={tbmProduction?.cast_profile}
-    data-visual-rebaseline={fieldProduction || tbmProduction ? 'world-first-v1' : undefined}
+    data-visual-rebaseline={fieldProduction || tbmProduction || officeProduction ? 'world-first-v1' : undefined}
     data-office-phase={officeProduction?.phase}
     data-office-hero={officeProduction?.hero_character_id}
     data-office-camera={officeProduction?.camera_profile}
@@ -187,7 +188,7 @@ export function EpisodeImmersiveScene({
     data-dayresult-carryover={dayResultProduction?.carryover_key}
     key={scene.background_asset_id ?? scene.background_uri}
   >
-    <VisualImage uri={resolvedBackground ?? scene.background_uri} fallbackUri={resolvedBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
+    <VisualImage uri={finalBackground ?? scene.background_uri} fallbackUri={finalBackground ? scene.background_uri : undefined} alt="" className="episode-immersive-background" />
     <div className="episode-immersive-atmosphere" aria-hidden="true" />
     {momentOverlay ? <div className="episode-immersive-moment-overlay" data-moment={momentOverlay} aria-hidden="true">
       <span className="moment-mark moment-a" />
