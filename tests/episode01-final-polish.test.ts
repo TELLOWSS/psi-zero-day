@@ -70,7 +70,8 @@ describe('Episode 01 final polish contract', () => {
     expect(html).toContain('data-has-locator="true"');
     expect(html).toContain('data-character-blocking="true"');
     expect(html).toContain('data-character-performance="true"');
-    expect(html).toContain('data-background-source="rc-fallback"');
+    expect(html).toContain('data-background-source="final"');
+    expect(html).toContain('work-yard.webp');
   });
 
   it('reports final background source when the production slot resolves', () => {
