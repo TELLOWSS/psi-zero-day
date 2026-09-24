@@ -269,6 +269,17 @@ try {
   })()`);
 
   await clickText(cdp, '현장 디펜스');
+  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"scenario-select\"]')) || Boolean(document.querySelector('[data-defense-screen=\"support-select\"]'))");
+  const defenseEntryScreen = await evaluate(cdp, `document.querySelector('[data-defense-screen]')?.getAttribute('data-defense-screen') || null`);
+  if (defenseEntryScreen === 'scenario-select') {
+    const trainingSelected = await evaluate(cdp, `(() => {
+      const button = document.querySelector('button[data-scenario="training-ramp-v1"]');
+      if (!(button instanceof HTMLButtonElement) || button.disabled) return false;
+      button.click();
+      return true;
+    })()`);
+    if (!trainingSelected) throw new Error('Training scenario selection failed');
+  }
   await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"support-select\"]'))");
   const support = await evaluate(cdp, `(() => {
     const button = document.querySelector('[data-support="COORDINATOR"]');
