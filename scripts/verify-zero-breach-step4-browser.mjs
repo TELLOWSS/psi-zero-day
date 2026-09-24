@@ -418,8 +418,10 @@ try {
     await waitFor(cdp, "Boolean(document.querySelector('[data-pq-swift=\"SWIFT\"]'))", 30000);
     const swiftCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-swift=\"SWIFT\"]').length");
     if (swiftCount < 1) throw new Error('G2 PQ SWIFT candidate did not render in Wave 8');
-    const swiftClipCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-swift=\"SWIFT\"] g[clip-path]').length");
-    if (swiftClipCount < 1) throw new Error('G2 PQ SWIFT world crop rendered without an active clip group');
+    const swiftHref = await evaluate(cdp, "document.querySelector('[data-pq-swift=\"SWIFT\"]')?.getAttribute('href') || null");
+    if (swiftHref !== 'assets/defense/enemies/swift-pq01.svg') {
+      throw new Error('G2 PQ SWIFT did not render from dedicated transparent asset: ' + swiftHref);
+    }
     report.pq.swift = true;
     await screenshot(cdp, '05a-pq-swift-wave8.png');
   }
