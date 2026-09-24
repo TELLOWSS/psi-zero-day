@@ -40,18 +40,69 @@ const defHd01ArtIngest = defHd01ArtIngestRaw as DefHd01ArtIngest;
 interface DefHd01PqBenchmark {
   readonly runtimePromotion?: {
     readonly approved?: boolean;
-    readonly approvedAssets?: {
-      readonly control?: string | null;
-      readonly swift?: string | null;
+    readonly previewCandidateOnGateBranch?: boolean;
+  };
+  readonly benchmark?: {
+    readonly response?: {
+      readonly target?: {
+        readonly kind?: string;
+        readonly sources?: readonly string[];
+      };
+    };
+    readonly risk?: {
+      readonly target?: {
+        readonly kind?: string;
+        readonly source?: string;
+        readonly sourceLogicalSize?: { readonly width: number; readonly height: number };
+        readonly cropViewBox?: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
+        readonly clipPolygon?: readonly (readonly [number, number])[];
+      };
     };
   };
 }
 
 const defHd01PqBenchmark = defHd01PqBenchmarkRaw as DefHd01PqBenchmark;
 
-function approvedPqAsset(kind: 'control' | 'swift'): string | null {
-  if (defHd01PqBenchmark.runtimePromotion?.approved !== true) return null;
-  return defHd01PqBenchmark.runtimePromotion.approvedAssets?.[kind] ?? null;
+function pqPreviewEnabled(): boolean {
+  return defHd01PqBenchmark.runtimePromotion?.approved === true
+    || defHd01PqBenchmark.runtimePromotion?.previewCandidateOnGateBranch === true;
+}
+
+export function defenseControlPqComposite(): {
+  readonly marshalUri: string;
+  readonly barrierUri: string;
+} | null {
+  if (!pqPreviewEnabled()) return null;
+  const sources = defHd01PqBenchmark.benchmark?.response?.target?.sources;
+  if (defHd01PqBenchmark.benchmark?.response?.target?.kind !== 'RUNTIME_COMPOSITE' || !sources || sources.length < 2) {
+    return null;
+  }
+  return { marshalUri: sources[0]!, barrierUri: sources[1]! };
+}
+
+export function defenseSwiftPqCrop(): {
+  readonly source: string;
+  readonly sourceLogicalSize: { readonly width: number; readonly height: number };
+  readonly cropViewBox: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
+  readonly clipPolygon: readonly (readonly [number, number])[];
+} | null {
+  if (!pqPreviewEnabled()) return null;
+  const target = defHd01PqBenchmark.benchmark?.risk?.target;
+  if (
+    target?.kind !== 'RUNTIME_WORLD_CROP'
+    || !target.source
+    || !target.sourceLogicalSize
+    || !target.cropViewBox
+    || !target.clipPolygon
+  ) {
+    return null;
+  }
+  return {
+    source: target.source,
+    sourceLogicalSize: target.sourceLogicalSize,
+    cropViewBox: target.cropViewBox,
+    clipPolygon: target.clipPolygon,
+  };
 }
 
 function asset(id: string): DefenseVisualAsset | null {
@@ -70,17 +121,9 @@ export function defenseBoardArtUri(mapId: string): string | null {
 }
 
 export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLevelId): string | null {
-  if (towerId === 'CONTROL' && levelId === 'L1') {
-    const approved = approvedPqAsset('control');
-    if (approved) return approved;
-  }
   return asset(`defense.tower.${towerId}.${levelId}`)?.uri ?? null;
 }
 
 export function defenseEnemyArtUri(enemyId: DefenseEnemyId): string | null {
-  if (enemyId === 'SWIFT') {
-    const approved = approvedPqAsset('swift');
-    if (approved) return approved;
-  }
   return asset(`defense.enemy.${enemyId}`)?.uri ?? null;
 }
