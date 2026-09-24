@@ -71,8 +71,15 @@ describe('Episode 01 immersive scene coverage', () => {
   });
   it('moves the first TBM away from the arrival gate into the active work yard', () => {
     expect(plan.events.e01_02_meet_kang.bg).toContain('work-yard');
-    expect(plan.events.e01_02_meet_kang.props).toContain('assets/episode01/scene-elements/material-stack.webp');
+    expect(plan.events.e01_02_meet_kang.props).toContain('assets/episode01/scene-elements/material-stack-realistic-v2.webp');
     expect(plan.events.e01_02_meet_kang.props).toContain('assets/episode01/scene-elements/access-barrier.webp');
+  });
+
+  it('keeps every live TBM scene off the legacy material-stack placeholder', () => {
+    for (const eventId of ['e01_02_meet_kang', 'e01_08g_tbm_field_gap', 'e01_08h_tbm_return'] as const) {
+      expect(plan.events[eventId].props).toContain('assets/episode01/scene-elements/material-stack-realistic-v2.webp');
+      expect(plan.events[eventId].props).not.toContain('assets/episode01/scene-elements/material-stack.webp');
+    }
   });
 
   it('keeps key field beats multi-plane instead of falling back to flat background-only scenes', () => {
