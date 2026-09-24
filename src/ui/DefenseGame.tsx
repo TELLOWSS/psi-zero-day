@@ -188,15 +188,16 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
           <polygon points={swiftPq.clipPolygon.map(([x, y]) => `${x},${y}`).join(' ')} />
         </clipPath>
       </defs>
-      <image
-        href={swiftPq.source}
-        x="0"
-        y="0"
-        width={swiftPq.sourceLogicalSize.width}
-        height={swiftPq.sourceLogicalSize.height}
-        preserveAspectRatio="none"
-        clipPath={`url(#zb-swift-pq-${enemy.id})`}
-      />
+      <g clipPath={`url(#zb-swift-pq-${enemy.id})`}>
+        <image
+          href={swiftPq.source}
+          x="0"
+          y="0"
+          width={swiftPq.sourceLogicalSize.width}
+          height={swiftPq.sourceLogicalSize.height}
+          preserveAspectRatio="none"
+        />
+      </g>
     </svg> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
