@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
 import { defenseEnemyArtUri, defenseTowerArtUri } from '../src/app/defense-visual-assets';
@@ -27,6 +28,17 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(benchmark.runtimeGate.noPlaceholderPromotion).toBe(true);
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
     expect(defenseEnemyArtUri('SWIFT')).toBe(benchmark.benchmark.risk.legacyAsset);
+  });
+
+  it('renders CONTROL and SWIFT with safety-intervention semantics instead of generic attack-only FX', () => {
+    const ui = fs.readFileSync('src/ui/DefenseGame.tsx', 'utf8');
+    const css = fs.readFileSync('src/ui/defense-game.css', 'utf8');
+    expect(ui).toContain("tower.towerId !== 'CONTROL'");
+    expect(ui).toContain('zb-control-intervention');
+    expect(ui).toContain("enemy.enemyId === 'SWIFT'");
+    expect(ui).toContain('zb-swift-brake-cue');
+    expect(css).toContain('.zb-control-intervention');
+    expect(css).toContain('.zb-swift-brake-cue');
   });
 
   it('requires grounded construction-safety semantics instead of sci-fi combat language', () => {
