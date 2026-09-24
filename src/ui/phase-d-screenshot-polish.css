@@ -1406,3 +1406,165 @@
   }
 }
 
+/* Phase D-2 — FIELD world lock pass 03.
+   Reference: e01_04_junho_signal.
+   The ramp and active site are the scene. Junho is the human signal, the player
+   is the listener, and the choice dock arrives last. Low-fidelity diagram props
+   are not allowed back into this benchmark. */
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background {
+  opacity: 1 !important;
+  filter: saturate(1.01) contrast(1.02) brightness(1.055) !important;
+}
+.game-frame[data-production-scene="FIELD"][data-field-phase="signal-read"]
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background {
+  transform: scale(1.035) !important;
+  object-position: 60% 50% !important;
+}
+.game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background {
+  transform: scale(1.025) !important;
+  object-position: 60% 50% !important;
+}
+.game-frame[data-production-scene="FIELD"][data-field-phase="signal-consequence"]
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background {
+  transform: scale(1.02) !important;
+  object-position: 59% 50% !important;
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-atmosphere {
+  opacity: .14 !important;
+  mix-blend-mode: normal !important;
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-grade {
+  opacity: .1 !important;
+  box-shadow: none !important;
+}
+
+/* One grounded physical route-separation asset is enough. The final ramp art
+   already carries vehicles, material, wet ground and access geometry. */
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-props {
+  opacity: 1 !important;
+  filter: none !important;
+}
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1 {
+  left: 1.5% !important;
+  right: auto !important;
+  bottom: -1.5% !important;
+  width: min(25%, 340px) !important;
+  height: 27% !important;
+  opacity: .62 !important;
+  object-fit: contain !important;
+  object-position: left bottom !important;
+  filter: drop-shadow(0 12px 15px rgba(0,0,0,.28)) saturate(.93) brightness(.95) !important;
+  z-index: 7 !important;
+}
+.game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1 {
+  opacity: .42 !important;
+}
+
+/* Read state: stop presenting Junho as a full-height cut-out. Keep enough site
+   around him that the player can read where the concern comes from. */
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-read"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    width: 22% !important;
+    height: 79% !important;
+    bottom: 4% !important;
+    --blocking-scale: 1 !important;
+    z-index: 15 !important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-read"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="player"] {
+    width: 17% !important;
+    height: 62% !important;
+    bottom: 7% !important;
+    opacity: .72 !important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-read"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="choi_minseok"] {
+    width: 12% !important;
+    height: 43% !important;
+    bottom: 9% !important;
+    opacity: .28 !important;
+  }
+
+  /* Judgment: both primary people remain grounded in the same ramp plane and
+     the route behind them stays readable before the choices are read. */
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="player"] {
+    left: 16% !important;
+    right: auto !important;
+    bottom: 7% !important;
+    width: 18% !important;
+    height: 62% !important;
+    opacity: .88 !important;
+    z-index: 13 !important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="lim_junho"] {
+    left: auto !important;
+    right: 21% !important;
+    bottom: 6% !important;
+    width: 21% !important;
+    height: 66% !important;
+    opacity: 1 !important;
+    z-index: 15 !important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+    .episode-immersive-scene[data-event="e01_04_junho_signal"]
+    .episode-immersive-character[data-character="choi_minseok"] {
+    left: auto !important;
+    right: 6% !important;
+    bottom: 8% !important;
+    width: 11% !important;
+    height: 38% !important;
+    opacity: .24 !important;
+    z-index: 8 !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"][data-field-ui="judgment"].phase-playing:not(.strategy-active)
+    .play-panel:has(.presentation-area[data-presentation="SHOW_CHOICE"]) {
+    left: 5% !important;
+    right: 5% !important;
+    bottom: 16px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 21% !important;
+    padding: 8px 11px !important;
+    background: linear-gradient(90deg,rgba(5,17,21,.88),rgba(7,20,24,.8)) !important;
+    backdrop-filter: blur(7px) !important;
+  }
+
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-psi-trace {
+    top: 12% !important;
+    left: 2.5% !important;
+    right: auto !important;
+    width: min(236px, 18vw) !important;
+    padding: 8px 9px !important;
+    opacity: .82 !important;
+    background: rgba(5,18,22,.72) !important;
+    backdrop-filter: blur(7px) !important;
+  }
+}
+
+/* Phone: the production background already carries enough evidence. Do not stack
+   another isometric floor cut-out into the limited vertical world band. */
+@media (max-width:620px) {
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-background {
+    transform: scale(1.01) !important;
+    object-position: 61% 50% !important;
+    filter: saturate(1.02) contrast(1.015) brightness(1.06) !important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1 {
+    display: none !important;
+  }
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-psi-trace {
+    opacity: .72 !important;
+  }
+}
+
