@@ -523,12 +523,10 @@
       },
       "field_guide_visual": {
         "status": "final",
-        "asset_id": "ep01.scene_bg.gate_dawn",
-        "asset_path": "assets/episode01/cg/gate-dawn.webp",
-        "presentation": "production_scene_reference_crop",
-        "focus": "vehicle_gate_and_adjacent_worker_entry",
-        "source_scene": "Episode 01 gate-dawn production scene",
-        "rationale": "Field Guide uses the verified Episode 01 production gate scene instead of the legacy scene-element placeholder. Map/strategy asset promotion remains independent."
+        "presentation": "generated_item_art",
+        "focus": "vehicle_access_gate",
+        "source_scene": "FieldGuideArt/GateScene",
+        "rationale": "Field Guide must show the dedicated gate item art for FG001. Episode background art is not used as a substitute for the guide image."
       }
     },
     "pedestrian_gate": {
@@ -568,12 +566,10 @@
       "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
       "field_guide_visual": {
         "status": "final",
-        "asset_id": "ep01.scene_bg.gate_dawn",
-        "asset_path": "assets/episode01/cg/gate-dawn.webp",
-        "presentation": "production_scene_reference_crop",
-        "focus": "worker_entry_and_access_control",
-        "source_scene": "Episode 01 gate-dawn production scene",
-        "rationale": "Field Guide uses the verified Episode 01 production gate scene instead of the legacy scene-element placeholder. Map/strategy asset promotion remains independent."
+        "presentation": "generated_item_art",
+        "focus": "worker_only_access_gate",
+        "source_scene": "FieldGuideArt/GateScene(pedestrian)",
+        "rationale": "Field Guide must show the dedicated pedestrian-gate item art for FG002. Episode background art is not used as a substitute for the guide image."
       }
     },
     "vehicle_pedestrian_separation": {

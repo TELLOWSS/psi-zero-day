@@ -94,16 +94,15 @@ describe('Episode 01 Field Guide FG001-FG010 completion lock', () => {
       .toBe(false);
   });
 
-  it('completes FG001-FG002 through the verified production gate scene without promoting map placeholders', () => {
+  it('renders FG001-FG002 from dedicated Field Guide gate art rather than an Episode background', () => {
     for (const [key, id] of [['site_gate', 'FG001'], ['pedestrian_gate', 'FG002']] as const) {
       const entry = guide.elements[key];
       expect(entry.field_guide.id).toBe(id);
       expect(entry.field_guide.episode).toBe('EP01');
       expect(entry.field_guide_visual.status).toBe('final');
-      expect(entry.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
-      expect(entry.field_guide_visual.presentation).toBe('production_scene_reference_crop');
-      const asset = manifest.assets.find((candidate: any) => candidate.asset_id === entry.field_guide_visual.asset_id);
-      expect(asset?.variants?.[0]?.uri).toBe('assets/episode01/cg/gate-dawn.webp');
+      expect(entry.field_guide_visual.presentation).toBe('generated_item_art');
+      expect(entry.field_guide_visual.asset_id).toBeUndefined();
+      expect(entry.field_guide_visual.source_scene).toContain('FieldGuideArt/GateScene');
     }
     expect(guide.elements.site_gate.production_status).toBe('planned');
     expect(guide.elements.pedestrian_gate.production_status).toBe('replacement_required');

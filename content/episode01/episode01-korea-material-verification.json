@@ -348,34 +348,32 @@
   },
   "field_guide_section0": {
     "site_gate": {
-      "status": "final_runtime_scene_reference",
+      "status": "final_runtime_item_art",
       "field_guide_id": "FG001",
-      "classification": "Episode 01 vehicle gate + separate worker entrance production-scene reference",
+      "classification": "Episode 01 vehicle gate dedicated Field Guide illustration",
       "final_registration": {
         "completed_on": "2026-09-24",
-        "asset_id": "ep01.scene_bg.gate_dawn",
-        "asset_path": "assets/episode01/cg/gate-dawn.webp",
-        "presentation": "production_scene_reference_crop",
-        "focus": "vehicle_gate_and_adjacent_worker_entry",
-        "visual_review": "approved_production_scene_reference",
+        "presentation": "generated_item_art",
+        "runtime_component": "FieldGuideArt/GateScene",
+        "focus": "vehicle_access_gate",
+        "visual_review": "subject_specific_field_guide_art",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "Field Guide completion does not promote the legacy scene-element placeholder used by map/strategy content."
+      "integrity_note": "FG001 is rendered from dedicated Field Guide gate art. Episode scene backgrounds are explicitly excluded from the guide card."
     },
     "pedestrian_gate": {
-      "status": "final_runtime_scene_reference",
+      "status": "final_runtime_item_art",
       "field_guide_id": "FG002",
-      "classification": "Episode 01 pedestrian entrance + access-control production-scene reference",
+      "classification": "Episode 01 worker-only pedestrian entrance dedicated Field Guide illustration",
       "final_registration": {
         "completed_on": "2026-09-24",
-        "asset_id": "ep01.scene_bg.gate_dawn",
-        "asset_path": "assets/episode01/cg/gate-dawn.webp",
-        "presentation": "production_scene_reference_crop",
-        "focus": "worker_entry_and_access_control",
-        "visual_review": "approved_production_scene_reference",
+        "presentation": "generated_item_art",
+        "runtime_component": "FieldGuideArt/GateScene(pedestrian)",
+        "focus": "worker_only_access_gate",
+        "visual_review": "subject_specific_field_guide_art",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "Field Guide completion does not promote the legacy scene-element placeholder used by map/strategy content."
+      "integrity_note": "FG002 is rendered from dedicated Field Guide pedestrian-gate art. Episode scene backgrounds are explicitly excluded from the guide card."
     },
     "vehicle_pedestrian_separation": {
       "status": "final_registered_runtime_ready",
@@ -1027,7 +1025,7 @@
     "asset_version": "2",
     "criteria": [
       "Korean-site reality/product family verified before final promotion",
-      "FG001-FG002 route to the verified Episode 01 production gate scene with item-specific crops",
+      "FG001-FG002 render dedicated item-specific gate art in Field Guide; Episode scene backgrounds are not substitutes",
       "FG003-FG010 use dedicated realistic-v2 binaries persisted in the repository",
       "catalog/manifest runtime routing is synchronized",
       "legal/site-specific caveats are preserved",
@@ -1035,7 +1033,7 @@
     ],
     "exceptions": [],
     "notes": [
-      "FG001 and FG002 no longer depend on their legacy scene-element placeholders inside Field Guide; the dedicated map/strategy asset status remains unchanged.",
+      "FG001 and FG002 render dedicated item-specific gate illustrations in Field Guide; map/strategy scene-element binaries remain an independent asset track.",
       "FG004 deliberately excludes the rejected generic system-shoring-member geometry and is scoped to verified Euroform storage plus a clear aisle.",
       "FG010 is finalized as a Korean-market construction wind-monitor product-family representation, not an exact manufacturer/model clone."
     ]

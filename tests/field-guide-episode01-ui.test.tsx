@@ -46,6 +46,14 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
     for (const key of keys) {
       const entry = guide.elements[key];
       expect(entry.field_guide.episode).toBe('EP01');
+
+      if (entry.field_guide_visual?.presentation === 'generated_item_art') {
+        const visual = host.querySelector(`.field-guide-visual[data-item-key="${key}"]`);
+        expect(visual?.querySelector('.field-guide-generated-art')).not.toBeNull();
+        expect(visual?.querySelector('img')).toBeNull();
+        continue;
+      }
+
       const assetId = entry.field_guide_visual?.asset_id ?? entry.planned_asset_id;
       const asset = manifest.assets.find((candidate: any) => candidate.asset_id === assetId);
       expect(asset).toBeDefined();
@@ -55,8 +63,9 @@ describe('Episode 01 Field Guide runtime asset routing', () => {
       expect(matching?.getAttribute('data-asset-tier')).toBe('final');
     }
 
-    expect(guide.elements.site_gate.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
-    expect(guide.elements.pedestrian_gate.field_guide_visual.asset_id).toBe('ep01.scene_bg.gate_dawn');
+    expect(guide.elements.site_gate.field_guide_visual.presentation).toBe('generated_item_art');
+    expect(guide.elements.pedestrian_gate.field_guide_visual.presentation).toBe('generated_item_art');
+    expect(srcs.some(src => src.endsWith('assets/episode01/cg/gate-dawn.webp'))).toBe(false);
     expect(host.textContent).toContain('FG001');
     expect(host.textContent).toContain('FG010');
 

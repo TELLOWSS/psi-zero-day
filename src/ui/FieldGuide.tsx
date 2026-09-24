@@ -22,7 +22,7 @@ type CatalogEntry = {
   field_guide?: GuideMeta;
   field_guide_visual?: {
     status?: string;
-    asset_id: string;
+    asset_id?: string;
     asset_path?: string;
     presentation?: string;
     focus?: string;
@@ -71,7 +71,8 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
   className?: string;
 }) {
   const guideVisual = entry.field_guide_visual;
-  const uri = session.assetUri(guideVisual?.asset_id ?? entry.planned_asset_id);
+  const itemArtOnly = guideVisual?.presentation === 'generated_item_art';
+  const uri = itemArtOnly ? undefined : session.assetUri(guideVisual?.asset_id ?? entry.planned_asset_id);
   return <div
     className={`field-guide-visual ${className ?? ''}`.trim()}
     data-item-key={itemKey}
