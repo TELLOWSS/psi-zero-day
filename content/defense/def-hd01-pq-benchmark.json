@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "PQ_VISUAL_IMPLEMENTED_QA_INFRA_BLOCKED",
+  "status": "SWIFT_DEDICATED_TRANSPARENT_ASSET_IMPLEMENTED_BROWSER_QA_PENDING",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -56,75 +56,80 @@
       "legacyAsset": "assets/defense/enemies/swift.svg",
       "legacyAssessment": "REJECT_AS_NEW_FINAL",
       "semantic": "reversing construction vehicle converging with pedestrian path",
-      "productionAsset": "RUNTIME_WORLD_CROP",
+      "productionAsset": "assets/defense/enemies/swift-pq01.svg",
       "target": {
-        "kind": "RUNTIME_WORLD_CROP",
-        "source": "assets/defense/board/ramp-01-hd01.webp",
-        "sourceLogicalSize": {
-          "width": 1000,
-          "height": 600
-        },
-        "cropViewBox": {
-          "x": 748,
-          "y": 404,
-          "width": 112,
-          "height": 78
-        },
-        "clipPolygon": [
-          [
-            754,
-            424
-          ],
-          [
-            769,
-            414
-          ],
-          [
-            790,
-            415
-          ],
-          [
-            812,
-            427
-          ],
-          [
-            838,
-            439
-          ],
-          [
-            850,
-            455
-          ],
-          [
-            842,
-            470
-          ],
-          [
-            824,
-            477
-          ],
-          [
-            802,
-            466
-          ],
-          [
-            781,
-            457
-          ],
-          [
-            761,
-            450
-          ],
-          [
-            751,
-            438
-          ]
-        ],
+        "kind": "STATIC_TRANSPARENT_SVG",
+        "asset": "assets/defense/enemies/swift-pq01.svg",
+        "width": 384,
+        "height": 268,
+        "transparent": true,
         "anchor": {
           "x": 0.5,
           "y": 0.78
         },
-        "transparentOutsideClip": true
+        "sourceLineage": {
+          "masterWorld": "assets/defense/board/ramp-01-hd01.webp",
+          "sourceLogicalSize": {
+            "width": 1000,
+            "height": 600
+          },
+          "cropViewBox": {
+            "x": 748,
+            "y": 404,
+            "width": 112,
+            "height": 78
+          },
+          "clipPolygon": [
+            [
+              754,
+              424
+            ],
+            [
+              769,
+              414
+            ],
+            [
+              790,
+              415
+            ],
+            [
+              812,
+              427
+            ],
+            [
+              838,
+              439
+            ],
+            [
+              850,
+              455
+            ],
+            [
+              842,
+              470
+            ],
+            [
+              824,
+              477
+            ],
+            [
+              802,
+              466
+            ],
+            [
+              781,
+              457
+            ],
+            [
+              761,
+              450
+            ],
+            [
+              751,
+              438
+            ]
+          ]
+        }
       },
       "mustReadAtPhoneScale": [
         "construction vehicle mass",
@@ -181,10 +186,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "RERUN_G2_ACTUAL_BROWSER_QA_WHEN_RUNNER_OR_PREVIEW_CAPACITY_IS_AVAILABLE_THEN_PROMOTE_ONLY_IF_VISUAL_PASS",
+  "next": "RUN_FRESH_G2_BROWSER_QA_WITH_DEDICATED_SWIFT_ASSET_THEN_FINAL_G2_PROMOTION",
   "runtimePromotion": {
     "approved": false,
-    "status": "BLOCKED_PENDING_FRESH_ACTUAL_BROWSER_VISUAL_QA",
+    "status": "DEDICATED_SWIFT_ASSET_PRESENT_FRESH_BROWSER_QA_PENDING",
     "requiredChecks": [
       "CONTROL production source exists at declared source path",
       "SWIFT dedicated PQ01 binary exists at declared production asset path",
@@ -223,15 +228,9 @@
       "note": "Transparent full-body fictional signalman WebP replaces the RC vector placeholder; scale and saturation were reduced to fit the HD construction world."
     },
     "swift": {
-      "source": "assets/defense/board/ramp-01-hd01.webp",
-      "cropViewBox": {
-        "x": 748,
-        "y": 404,
-        "width": 112,
-        "height": 78
-      },
-      "assessment": "IMPLEMENTED_PENDING_FINAL_RUNTIME_SCREENSHOT",
-      "note": "Crop targets the real concrete-mixer vehicle in the lower-right MASTER WORLD and is now clipped on the rendered SVG group."
+      "source": "assets/defense/enemies/swift-pq01.svg",
+      "assessment": "DEDICATED_TRANSPARENT_ASSET_IMPLEMENTED_PENDING_FINAL_RUNTIME_SCREENSHOT",
+      "note": "Standalone transparent SWIFT sprite now owns the clipped vehicle rendering; it references the locked MASTER WORLD for visual-generation consistency and removes live board-crop rendering from moving enemies."
     }
   },
   "externalQaBlockers": [
