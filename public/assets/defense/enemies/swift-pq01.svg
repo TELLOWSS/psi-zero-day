@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="268" viewBox="748 404 112 78" role="img" aria-label="SWIFT construction vehicle production candidate">
+  <defs>
+    <clipPath id="swiftVehicleClip" clipPathUnits="userSpaceOnUse">
+      <polygon points="754,424 769,414 790,415 812,427 838,439 850,455 842,470 824,477 802,466 781,457 761,450 751,438"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#swiftVehicleClip)">
+    <image href="../board/ramp-01-hd01.webp" x="0" y="0" width="1000" height="600" preserveAspectRatio="none"/>
+  </g>
+</svg>
