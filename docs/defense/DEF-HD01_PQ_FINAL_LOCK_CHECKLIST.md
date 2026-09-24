@@ -112,3 +112,41 @@ After all ten conditions pass:
 **DEF-CORE-01 — vehicle/pedestrian “한 걸음” Vertical Slice**
 
 Do not begin DEF-CORE-01 before G2 Production Lock.
+
+
+## Promotion transaction
+
+After the fresh manual G2 browser QA has written schema-v2 evidence into `qa/def-hd01-pq`:
+
+1. Run the guarded dry check:
+   `npm run defense:g2-promote`
+
+2. The dry check must report `[DEF-HD01-PQ PROMOTION] READY`.
+   It rejects:
+   - old schema-v1 evidence
+   - missing/invalid QA source SHA
+   - QA older than 72 hours
+   - any browser failure
+   - anything other than a WON 10/10 run
+   - wrong MASTER WORLD
+   - wrong SWIFT asset URI
+   - CONTROL count other than exactly one
+   - asset SHA256 drift
+   - source/code changes after the browser QA
+
+3. Only after the dry check is READY, apply the Production Lock:
+   `npm run defense:g2-promote -- --apply`
+
+4. The apply transaction must set:
+   - `runtimePromotion.approved=true`
+   - `runtimePromotion.previewCandidateOnGateBranch=false`
+   - `runtimePromotion.status=PRODUCTION_LOCKED`
+   - approved CONTROL/SWIFT asset records
+   - fresh QA source SHA and generated time
+   - `staticQa.productionApproval=true`
+
+5. Re-run the focused G2 contract/verifier before marking PR #48 Ready.
+
+6. Only then merge PR #48 and begin DEF-CORE-01.
+
+Do not hand-edit the Production Lock flags individually.
