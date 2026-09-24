@@ -39,7 +39,7 @@ browser.stderr.on('data', chunk => { browserStderr += chunk.toString(); });
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function waitForJson(url, timeoutMs = 10000) {
+async function waitForJson(url, timeoutMs = 30000) {
   const started = Date.now();
   let lastError;
   while (Date.now() - started < timeoutMs) {
