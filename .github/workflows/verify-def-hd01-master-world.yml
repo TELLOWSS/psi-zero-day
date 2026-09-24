@@ -1,0 +1,46 @@
+name: Verify DEF-HD01 Master World Layout
+
+on:
+  push:
+    branches:
+      - sol/def-hd01-master-world-20260924
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: def-hd01-master-world-layout
+  cancel-in-progress: true
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: DEF-HD00 + DEF-HD01 contracts
+        run: >
+          npx vitest run
+          tests/def-hd00-defense-baseline-contract.test.ts
+          tests/def-hd01-world-layout-contract.test.ts
+          tests/zero-breach-engine.test.ts
+          tests/zero-breach-save.test.ts
+          tests/zero-breach-event.test.ts
+
+      - name: Build
+        run: npm run build
