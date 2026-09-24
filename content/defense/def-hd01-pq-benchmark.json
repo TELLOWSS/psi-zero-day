@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "SWIFT_DEDICATED_TRANSPARENT_ASSET_IMPLEMENTED_BROWSER_QA_PENDING",
+  "status": "DEDICATED_SWIFT_LOCK_IMPLEMENTED_EXTERNAL_QA_BLOCKED",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -186,10 +186,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "RUN_FRESH_G2_BROWSER_QA_WITH_DEDICATED_SWIFT_ASSET_THEN_FINAL_G2_PROMOTION",
+  "next": "RERUN_FRESH_G2_BROWSER_QA_WHEN_GITHUB_ACTIONS_OR_PREVIEW_CAPACITY_RECOVERS_THEN_PROMOTE_ONLY_IF_VISUAL_PASS",
   "runtimePromotion": {
     "approved": false,
-    "status": "DEDICATED_SWIFT_ASSET_PRESENT_FRESH_BROWSER_QA_PENDING",
+    "status": "BLOCKED_PENDING_FRESH_BROWSER_QA_ONLY",
     "requiredChecks": [
       "CONTROL production source exists at declared source path",
       "SWIFT dedicated PQ01 binary exists at declared production asset path",
@@ -237,13 +237,24 @@
     {
       "system": "Vercel",
       "state": "BUILD_RATE_LIMIT",
-      "effect": "Latest G2 branch Preview cannot be used as the final browser evidence."
+      "effect": "Latest G2 branch Preview cannot be used for the final browser evidence."
     },
     {
       "system": "GitHub Actions",
-      "state": "RUNNER_JOB_FAILED_BEFORE_STEP_LOGS",
-      "run": "#34 / 35997194048",
-      "effect": "Latest PR QA could not produce a trustworthy post-WebP CONTROL/SWIFT screenshot."
+      "state": "JOB_FAILED_BEFORE_STEPS",
+      "run": "35998033547",
+      "runner": "ubuntu-22.04",
+      "effect": "Job object was created but contained no steps/logs, so this cannot be treated as a code/test failure."
     }
-  ]
+  ],
+  "staticQa": {
+    "dedicatedSwiftAsset": "assets/defense/enemies/swift-pq01.svg",
+    "dedicatedSwiftAssetExists": true,
+    "runtimeUsesDedicatedSwiftAsset": true,
+    "liveWorldCropRemoved": true,
+    "controlRuntimeComposite": true,
+    "gameplayCoordinatesChanged": false,
+    "balanceChanged": false,
+    "productionApproval": false
+  }
 }
