@@ -492,7 +492,7 @@
       "kind": "control",
       "label": "현장 출입 게이트",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.site_gate",
       "art": {
         "path": "assets/episode01/scene-elements/site-gate.webp",
@@ -503,10 +503,10 @@
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
-        "background_policy": "transparent",
+        "requires_alpha": false,
+        "style_profile": "field-guide-production-realistic-v3",
+        "render_intent": "isolated_isometric_3d_asset",
+        "background_policy": "navy_gradient_baked",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
@@ -523,10 +523,19 @@
       },
       "field_guide_visual": {
         "status": "final",
-        "presentation": "generated_item_art",
+        "presentation": "manifest_asset",
+        "asset_id": "ep01.scene_element.site_gate",
+        "asset_path": "assets/episode01/scene-elements/site-gate.webp",
         "focus": "vehicle_access_gate",
-        "source_scene": "FieldGuideArt/GateScene",
-        "rationale": "Field Guide must show the dedicated gate item art for FG001. Episode background art is not used as a substitute for the guide image."
+        "source_scene": "production WebP asset",
+        "rationale": "Dedicated high-detail production art derived from the user-approved 1536px master; SVG is fallback only."
+      },
+      "production": {
+        "width": 384,
+        "height": 384,
+        "bytes": 10010,
+        "sha256": "948ef2f3b3d89a3e806ac05cf738f7b79ac54d307b968e13beec95c4be99a1ca",
+        "visual_review": "user_approved_graphic_level_2026-09-24"
       }
     },
     "pedestrian_gate": {
@@ -534,21 +543,21 @@
       "kind": "control",
       "label": "근로자 전용 출입구",
       "visual_token": "▥",
-      "production_status": "replacement_required",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.pedestrian_gate",
       "art": {
         "path": "assets/episode01/scene-elements/pedestrian-gate.webp",
-        "minimum_width": 768,
-        "minimum_height": 512,
+        "minimum_width": 384,
+        "minimum_height": 384,
         "pivot": {
           "x": 0.5,
           "y": 0.88
         },
         "map_max_px": 148,
-        "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
-        "background_policy": "transparent",
+        "requires_alpha": false,
+        "style_profile": "field-guide-production-realistic-v3",
+        "render_intent": "isolated_isometric_3d_asset",
+        "background_policy": "navy_gradient_baked",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
       "reuse_for": [
@@ -566,10 +575,19 @@
       "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required.",
       "field_guide_visual": {
         "status": "final",
-        "presentation": "generated_item_art",
+        "presentation": "manifest_asset",
+        "asset_id": "ep01.scene_element.pedestrian_gate",
+        "asset_path": "assets/episode01/scene-elements/pedestrian-gate.webp",
         "focus": "worker_only_access_gate",
-        "source_scene": "FieldGuideArt/GateScene(pedestrian)",
-        "rationale": "Field Guide must show the dedicated pedestrian-gate item art for FG002. Episode background art is not used as a substitute for the guide image."
+        "source_scene": "production WebP asset",
+        "rationale": "Dedicated high-detail production art derived from the user-approved 1536px master; SVG is fallback only."
+      },
+      "production": {
+        "width": 384,
+        "height": 384,
+        "bytes": 9922,
+        "sha256": "901700706566e84e359e22721f4bf8f42f503d0a6ca7864ad221211f307bde9e",
+        "visual_review": "user_approved_graphic_level_2026-09-24"
       }
     },
     "vehicle_pedestrian_separation": {
