@@ -907,6 +907,41 @@ try {
       if (strategyFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-strategy.png');
 
+      if (process.env.PSI_RESPONSIVE_PROFILE === 'hd02') {
+        const focusClicked = await evaluate(cdp, `(() => {
+          const target = document.querySelector('.strategy-risk-signal.has-actions, .strategy-zone-target.has-actions, .strategy-map-worker.has-actions');
+          if (!(target instanceof HTMLElement)) return false;
+          target.click();
+          return true;
+        })()`);
+        await sleep(480);
+        const focusedZoom = Number(await evaluate(cdp, `document.querySelector('.strategy-map')?.getAttribute('data-camera-zoom') || '0'`));
+        const focusFailures = [];
+        if (!focusClicked) focusFailures.push('HD-02 could not find an actionable map target for focus probe');
+        if (focusedZoom < 1.2) focusFailures.push('HD-02 target focus did not zoom the camera: zoom=' + focusedZoom);
+        await screenshot(cdp, viewport.name + '-episode01-strategy-focus.png');
+
+        const recentered = await evaluate(cdp, `(() => {
+          const button = document.querySelector('.strategy-camera-recenter');
+          if (!(button instanceof HTMLElement)) return false;
+          button.click();
+          return true;
+        })()`);
+        await sleep(480);
+        const recenteredZoom = Number(await evaluate(cdp, `document.querySelector('.strategy-map')?.getAttribute('data-camera-zoom') || '0'`));
+        if (!recentered) focusFailures.push('HD-02 recenter control could not be activated');
+        if (Math.abs(recenteredZoom - 1) > .02) focusFailures.push('HD-02 recenter did not restore overview zoom: zoom=' + recenteredZoom);
+        report.push({
+          viewportName: viewport.name,
+          viewport: { width: viewport.width, height: viewport.height },
+          stage: 'hd02-camera-focus-recenter',
+          focusedZoom,
+          recenteredZoom,
+          failures: focusFailures,
+        });
+        if (focusFailures.length) failed = true;
+      }
+
       await driveEpisodeToEvent(cdp, 'e01_08c_site_pushback');
       await sleep(240);
       const stopWorkMetrics = await metrics(cdp, 'episode01-stop-work', viewport.mobile);
