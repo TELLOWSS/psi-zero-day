@@ -107,16 +107,27 @@ if (!integrity) {
   }
 }
 
-if (benchmark.runtimePromotion.previewCandidateOnGateBranch !== true) {
-  fail('G2 branch must explicitly enable candidate preview for browser QA');
+const promotion = benchmark.runtimePromotion;
+const previewState = promotion?.approved === false && promotion?.previewCandidateOnGateBranch === true;
+const lockedState = promotion?.approved === true && promotion?.previewCandidateOnGateBranch === false;
+
+if (!previewState && !lockedState) {
+  fail('G2 promotion state must be exactly PREVIEW or PRODUCTION_LOCKED');
 }
-if (benchmark.runtimePromotion.approved !== false) {
-  fail('Production approval must remain false until browser visual QA passes');
+
+if (lockedState) {
+  if (!promotion.approvedAssets?.control || !promotion.approvedAssets?.swift) {
+    fail('Production-locked G2 must record approved CONTROL and SWIFT assets');
+  }
+  if (promotion.status !== 'PRODUCTION_LOCKED') {
+    fail('Production-locked G2 must set runtimePromotion.status=PRODUCTION_LOCKED');
+  }
 }
+
 if (benchmark.runtimeGate.noGameplayCoordinateChange !== true || benchmark.runtimeGate.noBalanceChange !== true) {
   fail('G2 may not change gameplay coordinates or balance');
 }
 
 if (!process.exitCode) {
-  console.log('[DEF-HD01-PQ] CONTROL composite + dedicated SWIFT asset QA PASS');
+  console.log(`[DEF-HD01-PQ] CONTROL composite + dedicated SWIFT asset QA PASS (${lockedState ? 'PRODUCTION_LOCKED' : 'PREVIEW'})`);
 }
