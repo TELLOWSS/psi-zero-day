@@ -188,7 +188,7 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "WAIT_FOR_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERY_THEN_MANUALLY_RUN_SINGLE_G2_QA_GATE",
+  "next": "WAIT_FOR_GITHUB_RUNNER_PROBE_PASS_THEN_RUN_MANUAL_G2_PRODUCTION_QA_ONCE",
   "runtimePromotion": {
     "approved": false,
     "status": "BLOCKED_ONLY_BY_FRESH_ACTUAL_BROWSER_QA",
@@ -247,9 +247,9 @@
   "externalQaBlockers": [
     {
       "system": "GitHub Actions",
-      "state": "GITHUB_HOSTED_RUNNER_NOT_ALLOCATED",
-      "evidence": "Minimal one-step sentinel also ended with runner_id=0 and steps=[].",
-      "effect": "Fresh actual-browser G2 evidence cannot be produced until GitHub-hosted runner allocation recovers."
+      "state": "GITHUB_HOSTED_RUNNER_STILL_NOT_ALLOCATED_AFTER_ARTIFACT_CLEANUP",
+      "evidence": "GitHub Runner Probe run 36067770735 / job 107861428140 ended with runner_id=0, runner_name empty, steps=[] and no build/test/artifact/Vercel work.",
+      "effect": "Fresh G2 browser QA remains blocked. Use only the ultra-light Runner Probe until allocation recovers."
     },
     {
       "system": "Vercel",
@@ -344,6 +344,22 @@
       "chrome153Hardening": true,
       "dynamicDebugPort": true,
       "uploadArtifactStep": false
+    },
+    "latestRunnerProbe": {
+      "workflow": "GitHub Runner Probe",
+      "mainCommit": "4c2ae09bce351faac109b17de940f5c3dde9f860",
+      "runId": 36067770735,
+      "jobId": 107861428140,
+      "checkedAt": "2026-09-24T22:30:05Z",
+      "result": "FAILURE_BEFORE_ANY_STEP",
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": 0,
+      "artifactUpload": false,
+      "build": false,
+      "tests": false,
+      "vercel": false,
+      "conclusion": "Artifact cleanup was already verified on representative runs, but a one-step probe still cannot obtain a GitHub-hosted runner. The remaining blocker is outside the G2 code path."
     }
   },
   "repositorySync": {
