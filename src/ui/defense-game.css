@@ -326,8 +326,8 @@
 .zb-tower-production-image,.zb-enemy-production-image{pointer-events:none;overflow:visible}
 .zb-tower-production-image{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34))}
 .zb-enemy-production-image{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38))}
-.zb-control-pq-barrier{pointer-events:none;filter:drop-shadow(3px 5px 4px rgba(0,0,0,.28));opacity:.96}
-.zb-control-pq-marshal{pointer-events:none;filter:drop-shadow(5px 7px 5px rgba(0,0,0,.34))}
+.zb-control-pq-barrier{pointer-events:none;filter:saturate(.82) brightness(.92) drop-shadow(2px 3px 3px rgba(0,0,0,.26));opacity:.9}
+.zb-control-pq-marshal{pointer-events:none;filter:saturate(.74) contrast(.94) brightness(.91) drop-shadow(3px 4px 4px rgba(0,0,0,.3));opacity:.94}
 .zb-control-pq.is-firing .zb-control-pq-marshal{animation:zb-control-marshal-cue .22s ease-out}
 .zb-swift-pq-crop{pointer-events:none;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34));overflow:visible}
 .zb-enemy-swift.is-hit .zb-swift-pq-crop{animation:zb-swift-hit .14s ease-out}
