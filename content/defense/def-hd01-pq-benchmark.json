@@ -186,10 +186,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "RERUN_FRESH_G2_BROWSER_QA_WHEN_GITHUB_ACTIONS_OR_PREVIEW_CAPACITY_RECOVERS_THEN_PROMOTE_ONLY_IF_VISUAL_PASS",
+  "next": "FRESH_ACTUAL_BROWSER_QA_THEN_FINAL_G2_PRODUCTION_LOCK",
   "runtimePromotion": {
     "approved": false,
-    "status": "BLOCKED_PENDING_FRESH_BROWSER_QA_ONLY",
+    "status": "ASSET_INTEGRITY_LOCKED_ONLY_FRESH_BROWSER_QA_PENDING",
     "requiredChecks": [
       "CONTROL production source exists at declared source path",
       "SWIFT dedicated PQ01 binary exists at declared production asset path",
@@ -256,5 +256,35 @@
     "gameplayCoordinatesChanged": false,
     "balanceChanged": false,
     "productionApproval": false
+  },
+  "assetIntegrity": {
+    "masterWorld": {
+      "uri": "assets/defense/board/ramp-01-hd01.webp",
+      "sha256": "01a677c52551136099ecd3283bfaa14785ec6e1a4a8f6691e24815428651ee5c",
+      "bytes": 138860,
+      "gitBlobSha": "9c9001d896a14ea97dfd3952f43184aba7db63f1"
+    },
+    "controlMarshal": {
+      "uri": "assets/episode01/characters/choi-minseok-map.webp",
+      "sha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+      "bytes": 202410,
+      "gitBlobSha": "32816af21921c5fee0c195caae37187fe39f545d"
+    },
+    "controlBarrier": {
+      "uri": "assets/episode01/scene-elements/access-barrier.webp",
+      "sha256": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542",
+      "bytes": 55802,
+      "gitBlobSha": "46637af1893c95461adab3984431e0ddd4612353"
+    },
+    "swift": {
+      "uri": "assets/defense/enemies/swift-pq01.svg",
+      "sha256": "8f291e1f51f1e94d19a40fbcba3bdfa7465a1bd6366db928979649ca73226ced",
+      "dimensions": {
+        "width": 384,
+        "height": 268
+      },
+      "transparent": true,
+      "gitBlobSha": "c403c82db3710e903bf2b3adbce8f5fbe5988b7b"
+    }
   }
 }
