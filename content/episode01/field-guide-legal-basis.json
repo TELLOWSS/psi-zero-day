@@ -269,6 +269,14 @@
       ],
       "effective_date": "2026-03-02",
       "summary_text_id": "ui.guide.legal.profile.stairs"
+    },
+    "workplace_entrance": {
+      "law": "산업안전보건기준에 관한 규칙",
+      "articles": [
+        "제11조"
+      ],
+      "effective_date": "2026-03-02",
+      "summary_text_id": "ui.guide.legal.profile.workplace_entrance"
     }
   },
   "items": {
@@ -454,6 +462,10 @@
           "applicability": "general"
         },
         {
+          "profile": "workplace_entrance",
+          "applicability": "direct"
+        },
+        {
           "profile": "passage_lighting",
           "applicability": "direct"
         },
@@ -469,6 +481,10 @@
         {
           "profile": "risk_assessment",
           "applicability": "general"
+        },
+        {
+          "profile": "workplace_entrance",
+          "applicability": "direct"
         },
         {
           "profile": "passage_lighting",
