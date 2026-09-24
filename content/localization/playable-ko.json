@@ -204,9 +204,9 @@
     "ui.guide.open_edge.title": "열린 콘크리트 단부",
     "ui.guide.open_edge.body": "콘크리트 바닥 끝과 방호가 이어지지 않는 지점을 확인하세요. 작업·자재 이동 때문에 생긴 임시 개방부가 없는지 살펴봅니다.",
     "ui.guide.site_gate.title": "현장 출입 게이트",
-    "ui.guide.site_gate.body": "차량과 근로자 출입이 같은 지점에서 뒤엉키지 않는지, 출입통제와 안내가 실제 동선에 맞는지 확인합니다.",
+    "ui.guide.site_gate.body": "차량·하역운반기계가 주로 사용하는 출입구라면 인접한 보행자용 출입구가 따로 있는지, 차량 통로와 맞닿아 접촉 위험이 있으면 경보장치 등 필요한 조치가 있는지 확인합니다.",
     "ui.guide.pedestrian_gate.title": "근로자 전용 출입구",
-    "ui.guide.pedestrian_gate.body": "보행자 전용 출입구가 차량 진입부와 충분히 분리되어 있는지 확인합니다.",
+    "ui.guide.pedestrian_gate.body": "차량용 출입구와 구분된 보행자용 출입구가 실제로 따로 확보되어 있는지, 근로자가 차량 진입부를 통과하지 않고 안전하게 접근할 수 있는지 확인합니다.",
     "ui.guide.vehicle_pedestrian_separation.title": "차량·보행 동선 분리시설",
     "ui.guide.vehicle_pedestrian_separation.body": "통로가 선으로만 구분된 것인지, 물리적 분리와 우회동선이 실제로 확보되는지 확인합니다.",
     "ui.guide.material_yard.title": "자재 야적장",
@@ -929,6 +929,7 @@
     "ui.guide.legal.site.wind": "타워크레인에 정해진 풍속 수치를 갱폼·일반 양중의 일률 기준으로 복사하지 않습니다. 해당 장비·공법의 작업계획과 위험성평가 기준을 확인합니다.",
     "ui.guide.legal.profile.ladder_passage": "사다리식 통로는 견고한 구조, 손상 없는 재료, 일정한 발판 간격, 미끄럼·전도 방지와 상단 돌출 등 법정 구조요건을 확인합니다.",
     "ui.guide.legal.profile.stairs": "계단·계단참은 법정 강도·폭·계단참·상부 공간과 개방측 안전난간 기준을 실제 구조와 함께 확인합니다.",
-    "ui.guide.legal.site.first_aid_aed": "응급구호 체계는 현장에 반드시 갖추되, AED 설치 의무 자체는 시설 종류·규모와 다른 관계 법령까지 확인해 판단합니다."
+    "ui.guide.legal.site.first_aid_aed": "응급구호 체계는 현장에 반드시 갖추되, AED 설치 의무 자체는 시설 종류·규모와 다른 관계 법령까지 확인해 판단합니다.",
+    "ui.guide.legal.profile.workplace_entrance": "하역운반기계가 주로 사용하는 출입구에는 인접한 보행자용 출입구를 따로 설치하고, 운반기계 통로와 인접해 접촉 위험이 있으면 경보장치 등 필요한 조치를 확인합니다."
   }
 }
