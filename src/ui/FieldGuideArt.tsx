@@ -726,8 +726,16 @@ function resolveScene(key:string) {
 }
 
 export function FieldGuideArt({ itemKey, kind, title }: Props) {
+  const productionImage = itemKey === 'site_gate'
+    ? './assets/episode01/field-guide/fg001-site-gate.webp'
+    : itemKey === 'pedestrian_gate'
+      ? './assets/episode01/field-guide/fg002-pedestrian-gate.webp'
+      : null;
+
   return <div className={`field-guide-generated-art kind-${kind ?? 'unknown'}`} title={title}>
-    {resolveScene(itemKey)}
+    {productionImage
+      ? <img className="field-guide-production-image" src={productionImage} alt="" aria-hidden="true"/>
+      : resolveScene(itemKey)}
     {kind === 'hazard' ? <div className="field-guide-art-corner hazard-corner">!</div> : null}
     {kind === 'control' ? <div className="field-guide-art-corner control-corner">✓</div> : null}
   </div>;
