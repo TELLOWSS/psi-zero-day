@@ -34,7 +34,7 @@
         "kang_taesik"
       ],
       "props": [
-        "assets/episode01/scene-elements/material-stack.webp",
+        "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
         "assets/episode01/scene-elements/access-barrier.webp"
       ],
       "camera": "medium",
@@ -225,7 +225,7 @@
       "props": [
         "assets/episode01/scene-elements/access-barrier.webp",
         "assets/episode01/scene-elements/open-edge.webp",
-        "assets/episode01/scene-elements/material-stack.webp"
+        "assets/episode01/scene-elements/material-stack-realistic-v2.webp"
       ],
       "camera": "wide",
       "focus": "right"
@@ -241,7 +241,7 @@
       "props": [
         "assets/episode01/scene-elements/access-barrier.webp",
         "assets/episode01/scene-elements/open-edge.webp",
-        "assets/episode01/scene-elements/material-stack.webp"
+        "assets/episode01/scene-elements/material-stack-realistic-v2.webp"
       ],
       "camera": "medium",
       "focus": "center"
