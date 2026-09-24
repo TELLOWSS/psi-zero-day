@@ -188,7 +188,7 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "WAIT_FOR_GITHUB_RUNNER_PROBE_PASS_THEN_RUN_MANUAL_G2_PRODUCTION_QA_ONCE",
+  "next": "WAIT_FOR_RUNNER_PROBE_PASS_THEN_RUN_MANUAL_G2_PRODUCTION_QA_ONCE",
   "runtimePromotion": {
     "approved": false,
     "status": "BLOCKED_ONLY_BY_FRESH_ACTUAL_BROWSER_QA",
@@ -364,8 +364,8 @@
   },
   "repositorySync": {
     "mode": "GITHUB_FIRST",
-    "mainBaselineSha": "4582160679154c87345b9091af5b4935a641f178",
-    "g2SyncMergeSha": "2dcbdd8f6871db1fb43e9bacf378b77fba438509",
+    "mainBaselineSha": "4c2ae09bce351faac109b17de940f5c3dde9f860",
+    "g2SyncMergeSha": "f845185e35583faf04582a7b1844bafddda43f08",
     "behindMain": 0,
     "prNumber": 48,
     "prMergeable": true,
@@ -383,6 +383,18 @@
       "runnerRecheckAttempt": 2,
       "runnerAllocated": false,
       "note": "Artifact cleanup is reflected for representative runs, but GitHub-hosted runner allocation has not recovered yet."
+    },
+    "runnerProbe": {
+      "workflow": "GitHub Runner Probe",
+      "latestRunId": 36067770735,
+      "latestAttempt": 2,
+      "latestJobId": 107861814377,
+      "runnerAllocated": false,
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": 0,
+      "conclusion": "failure",
+      "note": "Ultra-light probe still fails before any step. Heavy G2 QA must not be retried until probe obtains a real GitHub-hosted runner."
     }
   }
 }
