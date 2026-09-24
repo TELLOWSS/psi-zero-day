@@ -1,0 +1,96 @@
+name: Verify DEF-HD00 Defense Baseline
+
+on:
+  push:
+    branches:
+      - sol/def-hd00-defense-baseline-20260924
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: def-hd00-defense-baseline
+  cancel-in-progress: true
+
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: DEF-HD00 immutable contract
+        run: npx vitest run tests/def-hd00-defense-baseline-contract.test.ts
+
+      - name: Existing DefenseGame focused regression
+        run: >
+          npx vitest run
+          tests/zero-breach-engine.test.ts
+          tests/zero-breach-balance.test.ts
+          tests/zero-breach-ui.test.tsx
+          tests/zero-breach-save.test.ts
+          tests/zero-breach-persistence-ui.test.tsx
+          tests/zero-breach-tutorial.test.tsx
+          tests/zero-breach-production-art-baseline.test.tsx
+          tests/zero-breach-production-art-expansion.test.ts
+          tests/zero-breach-audio-effects.test.tsx
+          tests/zero-breach-event.test.ts
+          tests/zero-breach-event-ui.test.tsx
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Real DefenseGame playthrough smoke
+        shell: bash
+        run: |
+          mkdir -p artifacts/def-hd00-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/def-hd00-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+
+          READY=0
+          for attempt in $(seq 1 80); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/def-hd00-preview.log
+            exit 1
+          fi
+
+          PSI_DEFENSE_STEP4_ARTIFACT_DIR=artifacts/def-hd00-browser node scripts/verify-zero-breach-step4-browser.mjs
