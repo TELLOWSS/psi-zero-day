@@ -28,7 +28,7 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(benchmark.runtimeGate.noPlaceholderPromotion).toBe(true);
 
     expect(defenseControlPqComposite()).toEqual({
-      marshalUri: 'assets/episode01/characters/choi-minseok-map-rc.svg',
+      marshalUri: 'assets/episode01/characters/choi-minseok-map.webp',
       barrierUri: 'assets/episode01/scene-elements/access-barrier.webp',
     });
     expect(defenseSwiftPqCrop()?.source).toBe('assets/defense/board/ramp-01-hd01.webp');
@@ -50,6 +50,7 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(ui).toContain('<g clipPath={`url(#zb-swift-pq-${enemy.id})`}>');
     expect(css).toContain('.zb-control-intervention');
     expect(css).toContain('.zb-control-pq-marshal');
+    expect(benchmark.benchmark.response.target.sources[0]).toBe('assets/episode01/characters/choi-minseok-map.webp');
     expect(css).toContain('.zb-swift-brake-cue');
     expect(css).toContain('.zb-swift-pq-crop');
   });
