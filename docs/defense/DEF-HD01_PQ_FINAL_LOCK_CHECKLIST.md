@@ -31,6 +31,8 @@ Dedicated movable asset:
 - `assets/defense/enemies/swift-pq01.svg`
 - transparent outside the vehicle clip
 - visual lineage: `assets/defense/board/ramp-01-hd01.webp`
+- MASTER WORLD bytes are embedded inside the SVG (`data-self-contained="true"`)
+- no runtime-relative board image dependency remains
 - runtime helper: `defenseSwiftPqAsset()`
 - runtime renderer consumes the dedicated asset directly
 - the previous live MASTER WORLD crop renderer is no longer the active SWIFT PQ path
@@ -79,9 +81,13 @@ Latest Vercel deployment for the final dedicated-SWIFT branch state:
 
 ## External QA blocker
 
-GitHub Actions is currently creating the G2 job but terminating it before any workflow step or log is created. The same behavior reproduced after pinning the runner to `ubuntu-22.04`.
+GitHub Actions is currently creating the G2 job but terminating it before any workflow step or log is created. API inspection shows `runner_id=0`, an empty runner name, and `steps=[]`.
 
-This is not accepted as a code/test failure, but it also does not satisfy the browser QA requirement.
+A temporary one-step `G2 Runner Sentinel` reproduced the same failure on `ubuntu-latest`, proving this is not caused by the G2 workflow body. The sentinel was removed after diagnosis.
+
+The last runner-assigned failure had already passed Typecheck/tests/Build; its browser step failed on Chrome 153 CDP startup and its artifact upload hit storage quota. The current workflow has since hardened Chrome startup, added dynamic CDP port allocation, and removed the blocking artifact-upload path.
+
+This infrastructure failure is not accepted as a code/test failure, but it also does not satisfy the fresh browser QA requirement.
 
 ## Final G2 PASS conditions
 
@@ -96,7 +102,8 @@ All of the following are required before Production Lock:
 7. 10/10 waves complete successfully.
 8. Protected topology, IDs, save/story and balance contracts remain unchanged.
 9. Final runtime screenshots pass visual inspection at representative desktop/mobile board scale.
-10. `runtimePromotion.approved` is changed to `true` only in the final G2 approval commit.
+10. The standalone SWIFT SVG is self-contained and contains no external relative board reference.
+11. `runtimePromotion.approved` is changed to `true` only in the final G2 approval commit.
 
 ## Next Gate
 
