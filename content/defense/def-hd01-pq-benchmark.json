@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "RUNTIME_COMPOSITE_CANDIDATE_IMPLEMENTATION",
+  "status": "PQ_CONTROL_WEBP_UPGRADED_BROWSER_QA_PENDING",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -22,7 +22,7 @@
       "target": {
         "kind": "RUNTIME_COMPOSITE",
         "sources": [
-          "assets/episode01/characters/choi-minseok-map-rc.svg",
+          "assets/episode01/characters/choi-minseok-map.webp",
           "assets/episode01/scene-elements/access-barrier.webp"
         ],
         "anchor": {
@@ -44,7 +44,12 @@
         "logo",
         "HUD",
         "fantasy weapon"
-      ]
+      ],
+      "sourceUpgrade": {
+        "from": "assets/episode01/characters/choi-minseok-map-rc.svg",
+        "to": "assets/episode01/characters/choi-minseok-map.webp",
+        "reason": "Use existing transparent full-body signalman WebP with realistic PPE/lighting instead of RC vector placeholder."
+      }
     },
     "risk": {
       "id": "SWIFT",
@@ -176,7 +181,7 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "IMPLEMENT_RUNTIME_COMPOSITE_PREVIEW_AND_CAPTURE_G2_BROWSER_QA",
+  "next": "CAPTURE_G2_BROWSER_QA_WITH_REALISTIC_CONTROL_WEBP_AND_FIXED_SWIFT_CROP",
   "runtimePromotion": {
     "approved": false,
     "status": "G2_BRANCH_PREVIEW_ONLY_NOT_PRODUCTION_APPROVED",
