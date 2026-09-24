@@ -232,7 +232,8 @@ async function snapshotState(cdp) {
 }
 
 const report = {
-  schema_version: 1,
+  schema_version: 2,
+  generated_at: new Date().toISOString(),
   strategy: 'PRECISION_PURE_UI',
   acceleration: 'wall scheduling only; fixed 50ms logical ticks and production content unchanged',
   tutorial: {},
@@ -241,7 +242,13 @@ const report = {
   result: null,
   failures: [],
   visual: null,
-  pq: { enabled: pqVisualQa, swift: false, control: false },
+  pq: {
+    enabled: pqVisualQa,
+    swift: false,
+    swiftAsset: null,
+    control: false,
+    controlCount: 0,
+  },
 };
 
 let target;
@@ -423,6 +430,7 @@ try {
       throw new Error('G2 PQ SWIFT did not render from dedicated transparent asset: ' + swiftHref);
     }
     report.pq.swift = true;
+    report.pq.swiftAsset = swiftHref;
     await screenshot(cdp, '05a-pq-swift-wave8.png');
   }
   await screenshot(cdp, '05-wave8-branches.png');
@@ -444,6 +452,7 @@ try {
     const controlCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-control=\"CONTROL:L1\"]').length");
     if (controlCount !== 1) throw new Error('G2 PQ CONTROL L1 candidate did not render exactly once');
     report.pq.control = true;
+    report.pq.controlCount = controlCount;
     await screenshot(cdp, '06a-pq-control-l1.png');
   }
   await upgrade(cdp, 'P5', '강화 L2');
