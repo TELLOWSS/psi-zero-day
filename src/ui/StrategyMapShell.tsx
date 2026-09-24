@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
 import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForMapTarget, strategyActionsForTarget } from '../app/strategy-actions';
@@ -6,7 +6,8 @@ import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
 import type { FieldFrictionKind } from '../app/strategy-frictions';
-import { PRODUCTION_MAP_ANCHOR_IDS, STRATEGY_ZONE_ANCHOR_IDS, productionMapStyle } from '../app/production-map';
+import { PRODUCTION_MAP_ANCHOR_IDS, STRATEGY_ZONE_ANCHOR_IDS, productionMapPoint, productionMapStyle } from '../app/production-map';
+import { STRATEGY_CAMERA_FOCUS_ZOOM, strategyCameraAfterPan, strategyCameraAfterPinch, strategyCameraForPoint, strategyCameraOverview, type StrategyCameraBounds, type StrategyCameraState } from '../app/strategy-camera';
 import type { StrategySignalKind } from '../app/strategy-signals';
 import { StrategyLoopPanel } from './StrategyLoopPanel';
 import { StrategyPsiSixPanel } from './StrategyPsiSixPanel';
@@ -88,6 +89,14 @@ export function StrategyMapShell({
 }) {
   const [focusId, setFocusId] = useState<string | null>(null);
   const [actionFocusId, setActionFocusId] = useState<string | null>(null);
+  const [camera, setCamera] = useState<StrategyCameraState>({ x: 0, y: 0, zoom: 1 });
+  const cameraStateRef = useRef<StrategyCameraState>(camera);
+  const cameraViewportRef = useRef<HTMLElement | null>(null);
+  const cameraWorldRef = useRef<HTMLDivElement | null>(null);
+  const pointerPositions = useRef(new Map<number, { x: number; y: number }>());
+  const panGesture = useRef<{ x: number; y: number; camera: StrategyCameraState } | null>(null);
+  const pinchGesture = useRef<{ distance: number; camera: StrategyCameraState } | null>(null);
+  const [cameraDragging, setCameraDragging] = useState(false);
   const previousActionNodeKey = useRef('');
   const actionNodeKey = [...new Set(actions.map(action => `${action.instance_id}:${action.node_id}`))].join('|');
   useEffect(() => {
@@ -163,6 +172,153 @@ export function StrategyMapShell({
   const safetyValue = `${text('ui.resource.safety_signals')} ${view.resources.safety_signal_count}`;
   const playerMapAnchor = view.placements.find(placement => placement.character_id === 'player')?.anchor ?? 'overview';
   const loopPhase = outcome ? 'result' : focusId ? 'action' : 'target';
+
+  const cameraFocusAnchor = focusedSignal?.anchor
+    ?? focusedPlacement?.anchor
+    ?? (focusedAnchor && PRODUCTION_MAP_ANCHOR_IDS.includes(focusedAnchor as (typeof PRODUCTION_MAP_ANCHOR_IDS)[number])
+      ? focusedAnchor as (typeof PRODUCTION_MAP_ANCHOR_IDS)[number]
+      : null);
+
+  const cameraBounds = (): StrategyCameraBounds | null => {
+    const viewport = cameraViewportRef.current;
+    const world = cameraWorldRef.current;
+    if (!viewport || !world || viewport.clientWidth <= 0 || viewport.clientHeight <= 0 || world.offsetWidth <= 0 || world.offsetHeight <= 0) {
+      return null;
+    }
+    return {
+      viewportWidth: viewport.clientWidth,
+      viewportHeight: viewport.clientHeight,
+      worldWidth: world.offsetWidth,
+      worldHeight: world.offsetHeight,
+    };
+  };
+
+  const applyCamera = (next: StrategyCameraState) => {
+    cameraStateRef.current = next;
+    setCamera(next);
+  };
+
+  const resetCamera = () => {
+    const bounds = cameraBounds();
+    if (!bounds) return;
+    applyCamera(strategyCameraOverview(bounds, productionMapPoint('overview')));
+  };
+
+  const focusCameraOnAnchor = (anchor: (typeof PRODUCTION_MAP_ANCHOR_IDS)[number]) => {
+    const bounds = cameraBounds();
+    if (!bounds) return;
+    applyCamera(strategyCameraForPoint(productionMapPoint(anchor), bounds, STRATEGY_CAMERA_FOCUS_ZOOM));
+  };
+
+  useEffect(() => {
+    const viewport = cameraViewportRef.current;
+    const world = cameraWorldRef.current;
+    if (!viewport || !world) return;
+
+    const syncCamera = () => {
+      if (loopPhase === 'result' || !cameraFocusAnchor) {
+        resetCamera();
+      } else {
+        focusCameraOnAnchor(cameraFocusAnchor);
+      }
+    };
+
+    syncCamera();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(syncCamera);
+    observer.observe(viewport);
+    observer.observe(world);
+    return () => observer.disconnect();
+  }, [cameraFocusAnchor, loopPhase]);
+
+  const pointerDistance = () => {
+    const points = [...pointerPositions.current.values()];
+    if (points.length < 2) return 0;
+    return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+  };
+
+  const pointerFocalPoint = () => {
+    const viewport = cameraViewportRef.current;
+    const points = [...pointerPositions.current.values()];
+    if (!viewport || points.length < 2) return { x: 0, y: 0 };
+    const rect = viewport.getBoundingClientRect();
+    return {
+      x: ((points[0].x + points[1].x) / 2) - rect.left,
+      y: ((points[0].y + points[1].y) / 2) - rect.top,
+    };
+  };
+
+  const handleCameraPointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.closest('button, a, input, select, textarea')) return;
+
+    pointerPositions.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    setCameraDragging(true);
+
+    if (pointerPositions.current.size === 1) {
+      panGesture.current = { x: event.clientX, y: event.clientY, camera: cameraStateRef.current };
+      pinchGesture.current = null;
+    } else if (pointerPositions.current.size === 2) {
+      panGesture.current = null;
+      pinchGesture.current = {
+        distance: Math.max(1, pointerDistance()),
+        camera: cameraStateRef.current,
+      };
+    }
+  };
+
+  const handleCameraPointerMove = (event: ReactPointerEvent<HTMLElement>) => {
+    if (!pointerPositions.current.has(event.pointerId)) return;
+    pointerPositions.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    const bounds = cameraBounds();
+    if (!bounds) return;
+
+    if (pointerPositions.current.size === 1 && panGesture.current) {
+      const only = [...pointerPositions.current.values()][0];
+      applyCamera(strategyCameraAfterPan(
+        panGesture.current.camera,
+        only.x - panGesture.current.x,
+        only.y - panGesture.current.y,
+        bounds,
+      ));
+      return;
+    }
+
+    if (pointerPositions.current.size >= 2 && pinchGesture.current) {
+      const distance = Math.max(1, pointerDistance());
+      applyCamera(strategyCameraAfterPinch(
+        pinchGesture.current.camera,
+        distance / pinchGesture.current.distance,
+        pointerFocalPoint(),
+        bounds,
+      ));
+    }
+  };
+
+  const releaseCameraPointer = (event: ReactPointerEvent<HTMLElement>) => {
+    pointerPositions.current.delete(event.pointerId);
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    if (pointerPositions.current.size === 1) {
+      const remaining = [...pointerPositions.current.values()][0];
+      panGesture.current = { x: remaining.x, y: remaining.y, camera: cameraStateRef.current };
+      pinchGesture.current = null;
+    } else if (pointerPositions.current.size === 0) {
+      panGesture.current = null;
+      pinchGesture.current = null;
+      setCameraDragging(false);
+    }
+  };
+
+  const cameraStyle = {
+    '--strategy-camera-x': `${camera.x}px`,
+    '--strategy-camera-y': `${camera.y}px`,
+    '--strategy-camera-zoom': camera.zoom,
+  } as CSSProperties;
+
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
@@ -249,7 +405,22 @@ export function StrategyMapShell({
       </section> : null}
     </aside>
 
-    <section className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`} aria-label={copy.site} data-scene={view.scene.scene_id} data-environment={view.scene.environment} data-production-map="v1">
+    <section
+      ref={cameraViewportRef}
+      className={`strategy-map${effectiveFocusId === 'site' ? ' is-site-focused' : ''}${hasBackgroundArt ? ' has-background-art' : ''}`}
+      aria-label={copy.site}
+      data-scene={view.scene.scene_id}
+      data-environment={view.scene.environment}
+      data-production-map="v1"
+      data-camera="hd02"
+      data-camera-dragging={cameraDragging ? 'true' : 'false'}
+      data-camera-zoom={camera.zoom.toFixed(2)}
+      onPointerDown={handleCameraPointerDown}
+      onPointerMove={handleCameraPointerMove}
+      onPointerUp={releaseCameraPointer}
+      onPointerCancel={releaseCameraPointer}
+    >
+      <div ref={cameraWorldRef} className="strategy-map-camera strategy-map-camera-world" style={cameraStyle} aria-hidden="true">
       <div className="strategy-production-layer" aria-hidden="true">
         <i className="strategy-production-grid" />
         <i className="strategy-production-route" />
@@ -265,6 +436,7 @@ export function StrategyMapShell({
         <div className="strategy-site-core"><span>CORE</span></div>
         <div className="strategy-tower-crane"><i /><b /><em /></div>
         <div className="strategy-site-yard"><span>{view.assignments.length}</span><small>{copy.assignments}</small></div>
+      </div>
       </div>
       <div className="strategy-map-stage-card">
         <span>{copy.stage}</span>
@@ -290,6 +462,15 @@ export function StrategyMapShell({
         <footer><span>● 작업구역</span><span>● 위험신호</span></footer>
       </aside>
 
+      <button
+        type="button"
+        className="strategy-camera-recenter"
+        aria-label={text('ui.strategy.return_map')}
+        title={text('ui.strategy.return_map')}
+        onClick={resetCamera}
+      ><span aria-hidden="true">⌖</span></button>
+
+      <div className="strategy-map-camera strategy-map-camera-interaction" style={cameraStyle}>
       <div className="strategy-zone-layer" aria-label={text('ui.strategy.zones')}>
         {zones.map(zone => {
           const key = `anchor:${zone}`;
@@ -386,6 +567,7 @@ export function StrategyMapShell({
             <strong>{text(signal.label_text_id)}</strong>
           </button>;
         })}
+      </div>
       </div>
 
     </section>
