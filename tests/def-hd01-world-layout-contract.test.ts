@@ -35,4 +35,12 @@ describe('DEF-HD01 master-world layout contract', () => {
     expect(layout.zones.some(zone => zone.id === 'Z5_SOUTH_SERVICE')).toBe(true);
     expect(layout.zones.some(zone => zone.id === 'Z6_EAST_WORKFACE')).toBe(true);
   });
+
+  it('keeps the road and pad visuals as runtime-authoritative overlays', async () => {
+    const source = await import('node:fs/promises').then(fs => fs.readFile('src/ui/DefenseGame.tsx', 'utf8'));
+    expect(source).toContain('className="zb-path-shoulder"');
+    expect(source).toContain('className="zb-path-centerline"');
+    expect(source).toContain('className="zb-pad-hardstand"');
+    expect(source).toContain('r="58"');
+  });
 });
