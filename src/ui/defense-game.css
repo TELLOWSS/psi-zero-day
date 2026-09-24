@@ -38,25 +38,28 @@
 .zb-board-bg{fill:#152631}
 .zb-grid-line{fill:none;stroke:rgba(185,200,211,.06);stroke-width:1}
 .zb-path-shoulder{
-  stroke:rgba(44,46,42,.82);stroke-width:84;stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))
+  stroke:rgba(72,67,56,.40);stroke-width:66;stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.12))
 }
-.zb-path-shadow{stroke:rgba(22,28,27,.72);stroke-width:64;stroke-linecap:round;stroke-linejoin:round}
-.zb-path{stroke:rgba(101,102,96,.88);stroke-width:50;stroke-linecap:round;stroke-linejoin:round}
+.zb-path-shadow{stroke:rgba(27,31,29,.42);stroke-width:54;stroke-linecap:round;stroke-linejoin:round}
+.zb-path{stroke:rgba(94,94,87,.68);stroke-width:44;stroke-linecap:round;stroke-linejoin:round}
 .zb-path-centerline{
-  stroke:rgba(222,191,92,.46);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;
-  stroke-dasharray:12 18;pointer-events:none
+  stroke:rgba(228,194,86,.26);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:10 20;pointer-events:none
 }
 .zb-pad-hardstand{
-  fill:rgba(52,58,54,.26);stroke:rgba(205,213,201,.16);stroke-width:1.5;pointer-events:none
+  fill:rgba(50,56,52,.05);stroke:rgba(225,214,176,.10);stroke-width:1.25;
+  stroke-dasharray:5 11;pointer-events:none
 }
 .zb-pad-mark{
-  fill:rgba(31,48,51,.18);stroke:rgba(171,198,199,.34);stroke-width:2.5;stroke-dasharray:7 6
+  fill:rgba(21,39,42,.04);stroke:rgba(188,207,205,.17);stroke-width:2;stroke-dasharray:6 8
 }
 .zb-pad-mark.is-selected{
-  fill:rgba(255,173,66,.10);stroke:var(--zb-accent);stroke-width:6;stroke-dasharray:none
+  fill:rgba(255,173,66,.12);stroke:var(--zb-accent);stroke-width:5;stroke-dasharray:none
 }
-.zb-pad-mark.is-occupied{fill:rgba(24,48,58,.22);stroke:rgba(143,190,194,.32)}
+.zb-pad-mark.is-occupied{
+  fill:rgba(24,48,58,.10);stroke:rgba(143,190,194,.20)
+}
 .zb-range-preview{fill:rgba(255,173,66,.08);stroke:rgba(255,173,66,.65);stroke-width:3;stroke-dasharray:8 7;pointer-events:none}
 .zb-tower text{fill:#f4f7f8;font-size:16px;font-weight:900;paint-order:stroke;stroke:#091017;stroke-width:4}
 .zb-tower-base{fill:#213846;stroke:#8ba3b3;stroke-width:4}
@@ -87,9 +90,9 @@
   background:transparent;color:transparent;pointer-events:auto;cursor:pointer
 }
 .zb-pad-hit:focus-visible,.zb-pad-hit.is-selected{outline:3px solid var(--zb-accent);outline-offset:3px}
-.zb-pad-hit span{position:absolute;left:50%;top:calc(100% + 3px);transform:translateX(-50%);color:rgba(226,235,236,.72);
-  background:rgba(8,18,26,.50);border:1px solid rgba(185,200,211,.10);border-radius:5px;padding:2px 5px;font-size:9px;
-  opacity:.38;transition:opacity .16s ease,border-color .16s ease,color .16s ease}
+.zb-pad-hit span{position:absolute;left:50%;top:calc(100% + 3px);transform:translateX(-50%);color:rgba(226,235,236,.66);
+  background:rgba(8,18,26,.28);border:1px solid rgba(185,200,211,.06);border-radius:5px;padding:2px 5px;font-size:9px;
+  opacity:.20;transition:opacity .16s ease,border-color .16s ease,color .16s ease}
 .zb-pad-hit:hover span,.zb-pad-hit:focus-visible span,.zb-pad-hit.is-selected span{
   opacity:1;color:#fff4d8;border-color:rgba(255,173,66,.48)
 }
