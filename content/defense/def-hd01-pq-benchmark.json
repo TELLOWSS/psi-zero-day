@@ -102,7 +102,7 @@
   },
   "runtimeGate": {
     "currentLegacyAssetsRemainActive": true,
-    "switchCondition": "CONTROL + SWIFT binaries exist, dimensions/alpha/anchors pass, actual DefenseGame visual QA passes",
+    "switchCondition": "runtimePromotion.approved === true AND approved CONTROL/SWIFT asset records are present after binary/hash/dimension/alpha/browser QA",
     "noPlaceholderPromotion": true,
     "noGameplayCoordinateChange": true,
     "noBalanceChange": true
@@ -115,5 +115,22 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "PRODUCE_CONTROL_AND_SWIFT_PQ01_BINARIES"
+  "next": "IMPLEMENT_SAFE_RUNTIME_PROMOTION_GATE_THEN_PRODUCE_CONTROL_AND_SWIFT_PQ01_BINARIES",
+  "runtimePromotion": {
+    "approved": false,
+    "status": "BLOCKED_UNTIL_FINAL_BINARIES_AND_VISUAL_QA_PASS",
+    "requiredChecks": [
+      "CONTROL PQ01 binary exists at declared productionAsset",
+      "SWIFT PQ01 binary exists at declared productionAsset",
+      "transparent background verified",
+      "declared dimensions verified",
+      "SHA256 recorded and locked",
+      "actual DefenseGame browser visual QA passes",
+      "MASTER WORLD generation match passes"
+    ],
+    "approvedAssets": {
+      "control": null,
+      "swift": null
+    }
+  }
 }
