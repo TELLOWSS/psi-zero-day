@@ -34,24 +34,25 @@ if (control.kind !== 'RUNTIME_COMPOSITE') {
 }
 
 const swift = benchmark.benchmark.risk.target;
-if (swift.kind !== 'RUNTIME_WORLD_CROP') {
-  fail('SWIFT benchmark must use RUNTIME_WORLD_CROP');
+if (swift.kind !== 'STATIC_TRANSPARENT_SVG') {
+  fail('SWIFT benchmark must use STATIC_TRANSPARENT_SVG');
 } else {
-  requireFile(swift.source, 'SWIFT master-world source');
-  if (swift.sourceLogicalSize?.width !== 1000 || swift.sourceLogicalSize?.height !== 600) {
-    fail('SWIFT crop source must stay aligned to the locked 1000x600 DefenseGame world');
+  requireFile(swift.asset, 'SWIFT dedicated transparent asset');
+  if (swift.transparent !== true) fail('SWIFT dedicated asset must be declared transparent');
+  if (swift.width !== 384 || swift.height !== 268) {
+    fail('SWIFT dedicated asset dimensions must stay locked at 384x268');
   }
-  const box = swift.cropViewBox;
-  if (!box || box.width <= 0 || box.height <= 0) fail('SWIFT cropViewBox must be positive');
-  if (!Array.isArray(swift.clipPolygon) || swift.clipPolygon.length < 6) {
-    fail('SWIFT clip polygon is too coarse for a production candidate');
-  } else if (box) {
-    for (const point of swift.clipPolygon) {
-      const [x, y] = point;
-      if (x < box.x || x > box.x + box.width || y < box.y || y > box.y + box.height) {
-        fail(`SWIFT clip point ${x},${y} falls outside cropViewBox`);
-      }
-    }
+  const source = swift.sourceLineage;
+  if (source?.masterWorld !== 'assets/defense/board/ramp-01-hd01.webp') {
+    fail('SWIFT asset must retain MASTER WORLD lineage');
+  } else {
+    requireFile(source.masterWorld, 'SWIFT master-world lineage');
+  }
+  if (source?.sourceLogicalSize?.width !== 1000 || source?.sourceLogicalSize?.height !== 600) {
+    fail('SWIFT source lineage must stay aligned to the locked 1000x600 DefenseGame world');
+  }
+  if (!Array.isArray(source?.clipPolygon) || source.clipPolygon.length < 6) {
+    fail('SWIFT source-lineage clip polygon is missing or too coarse');
   }
 }
 
@@ -66,5 +67,5 @@ if (benchmark.runtimeGate.noGameplayCoordinateChange !== true || benchmark.runti
 }
 
 if (!process.exitCode) {
-  console.log('[DEF-HD01-PQ] runtime composite source QA PASS');
+  console.log('[DEF-HD01-PQ] CONTROL composite + dedicated SWIFT asset QA PASS');
 }
