@@ -76,20 +76,20 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       </g> : null}
       <image
         href={controlPq.barrierUri}
-        x="-72"
-        y="-33"
-        width="144"
-        height="92"
+        x="-55"
+        y="-22"
+        width="110"
+        height="70"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-barrier"
         aria-hidden="true"
       />
       <image
         href={controlPq.marshalUri}
-        x="-45"
-        y="-106"
-        width="90"
-        height="135"
+        x="-31"
+        y="-77"
+        width="62"
+        height="93"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-marshal"
         aria-hidden="true"
