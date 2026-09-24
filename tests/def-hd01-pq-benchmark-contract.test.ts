@@ -47,6 +47,7 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(ui).toContain("enemy.enemyId === 'SWIFT'");
     expect(ui).toContain('zb-swift-brake-cue');
     expect(ui).toContain('data-pq-swift="SWIFT"');
+    expect(ui).toContain('<g clipPath={`url(#zb-swift-pq-${enemy.id})`}>');
     expect(css).toContain('.zb-control-intervention');
     expect(css).toContain('.zb-control-pq-marshal');
     expect(css).toContain('.zb-swift-brake-cue');
