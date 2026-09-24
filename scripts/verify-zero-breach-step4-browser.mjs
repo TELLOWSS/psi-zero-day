@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import net from 'node:net';
@@ -6,6 +6,13 @@ import net from 'node:net';
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_DEFENSE_STEP4_ARTIFACT_DIR || 'artifacts/zero-breach-step4-browser');
 const pqVisualQa = process.env.PSI_DEF_HD01_PQ_QA === '1';
+const qaSourceSha = (() => {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  } catch {
+    return null;
+  }
+})();
 fs.mkdirSync(outputDir, { recursive: true });
 
 const chrome = [
@@ -234,6 +241,7 @@ async function snapshotState(cdp) {
 const report = {
   schema_version: 2,
   generated_at: new Date().toISOString(),
+  source_sha: qaSourceSha,
   strategy: 'PRECISION_PURE_UI',
   acceleration: 'wall scheduling only; fixed 50ms logical ticks and production content unchanged',
   tutorial: {},
