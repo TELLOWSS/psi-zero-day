@@ -373,6 +373,12 @@
 .zb-boss-armor-effect{fill:none;stroke:#ffad42;stroke-width:7;stroke-dasharray:18 6;pointer-events:none;filter:drop-shadow(0 0 5px rgba(255,173,66,.55));animation:zb-boss-armor 1.2s linear infinite}
 .zb-resolve-burst circle{fill:none;stroke:#eef4f8;stroke-width:5;animation:zb-resolve-burst .22s ease-out both}
 .zb-resolve-burst path{fill:none;stroke:#ffad42;stroke-width:4;stroke-linecap:round;animation:zb-resolve-rays .22s ease-out both}
+.zb-control-intervention{pointer-events:none;transform-origin:center;animation:zb-control-intervention .22s ease-out both}
+.zb-control-intervention circle{fill:rgba(255,173,66,.06);stroke:rgba(255,196,98,.82);stroke-width:3;stroke-dasharray:8 7}
+.zb-control-intervention path{fill:none;stroke:#ffd28a;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.zb-swift-brake-cue{pointer-events:none;animation:zb-swift-brake .24s ease-out both}
+.zb-swift-brake-cue circle{fill:rgba(226,107,97,.05);stroke:rgba(255,188,135,.78);stroke-width:3;stroke-dasharray:7 6}
+.zb-swift-brake-cue path{fill:none;stroke:#ffd29a;stroke-width:4;stroke-linecap:round}
 @keyframes zb-attack-flash{0%{r:18;opacity:1}100%{r:38;opacity:0}}
 @keyframes zb-area-pulse{0%{r:26;opacity:1;stroke-width:9}100%{r:62;opacity:0;stroke-width:2}}
 @keyframes zb-detect-pulse{0%{r:32;opacity:1}100%{r:70;opacity:0;stroke-dashoffset:-24}}
@@ -380,9 +386,11 @@
 @keyframes zb-boss-armor{to{stroke-dashoffset:-48}}
 @keyframes zb-resolve-burst{0%{r:7;opacity:1}100%{r:34;opacity:0}}
 @keyframes zb-resolve-rays{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@keyframes zb-control-intervention{0%{opacity:0;transform:scale(.72)}55%{opacity:1}100%{opacity:.18;transform:scale(1.08)}}
+@keyframes zb-swift-brake{0%{opacity:0;transform:translateX(6px) scale(.82)}45%{opacity:1}100%{opacity:.24;transform:translateX(0) scale(1.08)}}
 @media (prefers-reduced-motion:reduce){
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-slow-ring,.zb-boss-armor-effect,
-  .zb-resolve-burst circle,.zb-resolve-burst path{animation:none}
+  .zb-resolve-burst circle,.zb-resolve-burst path,.zb-control-intervention,.zb-swift-brake-cue{animation:none}
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-resolve-burst{opacity:.7}
 }
 
