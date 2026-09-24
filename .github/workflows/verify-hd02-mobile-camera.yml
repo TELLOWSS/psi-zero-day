@@ -81,7 +81,7 @@ jobs:
           node scripts/verify-episode01-responsive.mjs
 
       - name: Persist compact HD-02 visual evidence
-        if: success()
+        if: always()
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
