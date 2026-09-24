@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episode01OfficeProduction } from '../src/app/episode01-office-production';
 
@@ -89,6 +91,16 @@ describe('Episode 01 Phase C-5 OFFICE production quality', () => {
       cast_profile: 'carryover-table',
       evidence_focus: 'prevention',
     });
+  });
+
+  it('locks the Phase D-2 office to the final shared-room composition', () => {
+    const css = fs.readFileSync(path.resolve('src/ui/phase-d-screenshot-polish.css'), 'utf8');
+    expect(css).toContain('Phase D-2 — OFFICE shared-room lock pass 05.');
+    expect(css).toContain('brightness(1.075)');
+    expect(css).toContain('.office-table-plane');
+    expect(css).toContain('display: none !important');
+    expect(css).toContain('width: min(760px,49%)');
+    expect(css).toContain('e01_08e_responsibility_clash');
   });
 
   it('does not leak OFFICE profiles into other scene families', () => {
