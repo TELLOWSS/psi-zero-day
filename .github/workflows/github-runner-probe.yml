@@ -1,0 +1,23 @@
+name: GitHub Runner Probe
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/github-runner-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Runner allocated
+        run: |
+          echo "GITHUB_RUNNER_PROBE=PASS"
+          echo "runner_name=$RUNNER_NAME"
+          uname -a
