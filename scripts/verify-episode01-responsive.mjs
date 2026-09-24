@@ -236,7 +236,11 @@ function collectMetrics(stage, touchMode) {
   const strategyHudRect = metricRect(document.querySelector('.strategy-hud'));
   const strategyBrandRect = metricRect(document.querySelector('.strategy-brand'));
   const strategyLoopRect = metricRect(document.querySelector('.strategy-loop-stage-strip'));
-  const strategyMapRect = metricRect(document.querySelector('.strategy-map'));
+  const strategyMapElement = document.querySelector('.strategy-map');
+  const strategyMapRect = metricRect(strategyMapElement);
+  const strategyCameraWorldRect = metricRect(document.querySelector('.strategy-map-camera-world'));
+  const strategyCameraInteractionRect = metricRect(document.querySelector('.strategy-map-camera-interaction'));
+  const strategyRecenterRect = metricRect(document.querySelector('.strategy-camera-recenter'));
   const strategyObserveRect = metricRect(document.querySelector('.strategy-observe-card'));
   const strategyActionTrayRect = metricRect(document.querySelector('.strategy-action-tray'));
   const strategyGuideState = document.querySelector('.strategy-action-tray')?.getAttribute('data-guide-state') || null;
@@ -389,6 +393,11 @@ function collectMetrics(stage, touchMode) {
     strategyBrand: strategyBrandRect,
     strategyLoopStrip: strategyLoopRect,
     strategyMapRect,
+    strategyHd02Camera: strategyMapElement?.getAttribute('data-camera') || null,
+    strategyHd02Zoom: strategyMapElement?.getAttribute('data-camera-zoom') || null,
+    strategyCameraWorldRect,
+    strategyCameraInteractionRect,
+    strategyRecenterRect,
     strategyObserveCard: strategyObserveRect,
     strategyActionTray: strategyActionTrayRect,
     strategyGuideState,
@@ -522,6 +531,20 @@ function validate(row, viewport) {
     }
 
     const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (process.env.PSI_RESPONSIVE_PROFILE === 'hd02') {
+      if (row.strategyHd02Camera !== 'hd02') failures.push('HD-02 camera marker is missing');
+      if (!row.strategyCameraWorldRect || !row.strategyCameraInteractionRect) failures.push('HD-02 synchronized camera layers are missing');
+      if (!row.strategyRecenterRect || row.strategyRecenterRect.width < 44 || row.strategyRecenterRect.height < 44) {
+        failures.push('HD-02 recenter control is missing or below 44px: ' + JSON.stringify(row.strategyRecenterRect));
+      }
+      if (row.strategyCameraWorldRect && row.strategyCameraInteractionRect
+        && (Math.abs(row.strategyCameraWorldRect.left - row.strategyCameraInteractionRect.left) > 1
+          || Math.abs(row.strategyCameraWorldRect.top - row.strategyCameraInteractionRect.top) > 1
+          || Math.abs(row.strategyCameraWorldRect.width - row.strategyCameraInteractionRect.width) > 2
+          || Math.abs(row.strategyCameraWorldRect.height - row.strategyCameraInteractionRect.height) > 2)) {
+        failures.push('HD-02 world/interaction camera layers drifted apart');
+      }
+    }
     if (portraitPhone) {
       if (!row.strategyHud || row.strategyHud.height > 62) {
         failures.push('STRATEGY portrait HUD is too tall for map-first reading: ' + (row.strategyHud?.height ?? 'missing') + 'px');
@@ -760,13 +783,25 @@ function validate(row, viewport) {
   return failures;
 }
 
-const viewports = [
+const defaultViewports = [
   { name: 'desktop-1440x900', width: 1440, height: 900, mobile: false },
   { name: 'desktop-1920x1080', width: 1920, height: 1080, mobile: false },
   { name: 'phone-portrait-390x844', width: 390, height: 844, mobile: true },
   { name: 'phone-landscape-844x390', width: 844, height: 390, mobile: true },
   { name: 'tablet-portrait-820x1180', width: 820, height: 1180, mobile: true },
 ];
+
+const hd02Viewports = [
+  { name: 'hd02-phone-portrait-390x844', width: 390, height: 844, mobile: true },
+  { name: 'hd02-phone-portrait-412x915', width: 412, height: 915, mobile: true },
+  { name: 'hd02-phone-landscape-844x390', width: 844, height: 390, mobile: true },
+  { name: 'hd02-browser-1280x720', width: 1280, height: 720, mobile: false },
+  { name: 'hd02-browser-1366x768', width: 1366, height: 768, mobile: false },
+];
+
+const viewports = process.env.PSI_RESPONSIVE_PROFILE === 'hd02'
+  ? hd02Viewports
+  : defaultViewports;
 
 const report = [];
 let failed = false;
