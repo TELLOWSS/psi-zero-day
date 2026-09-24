@@ -64,7 +64,8 @@
         "choi_minseok"
       ],
       "props": [
-        "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
+        "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+        "assets/episode01/scene-elements/material-yard.webp"
       ],
       "camera": "medium",
       "focus": "right"
