@@ -84,27 +84,77 @@ function Person({ x=330, y=150, vest=yellow }: {x?:number;y?:number;vest?:string
 }
 
 function GateScene({ pedestrian=false }: {pedestrian?:boolean}) {
-  return <SceneBase accent={blue}>
-    <g>
-      <rect x="165" y="95" width="28" height="225" fill="url(#fg-steel)"/>
-      <rect x="445" y="95" width="28" height="225" fill="url(#fg-steel)"/>
-      <rect x="165" y="92" width="308" height="38" rx="6" fill={blue}/>
-      <rect x="187" y="105" width="265" height="12" fill="#2b6084"/>
+  return <SceneBase accent={pedestrian ? green : blue}>
+    <g data-gate-variant={pedestrian ? 'pedestrian' : 'vehicle'}>
       {pedestrian ? <>
-        <rect x="255" y="180" width="130" height="130" rx="10" fill="#738793" opacity=".45" stroke={steel} strokeWidth="5"/>
-        <circle cx="290" cy="247" r="9" fill={steel}/>
-        <circle cx="350" cy="247" r="9" fill={steel}/>
-        <path d="M290 247h60m-30 0 30-27m-30 27 28 30m-28-30-30 27" stroke={steel} strokeWidth="7" strokeLinecap="round"/>
+        {/* Korean-site worker entrance: separate narrow portal, hoarding, access-control post and protected footpath.
+            Do not draw a turnstile as a universal construction-site requirement. */}
+        <path d="M98 132h160v173H98Z" fill="#778791" stroke="#4d606d" strokeWidth="4"/>
+        <path d="M388 132h154v173H388Z" fill="#778791" stroke="#4d606d" strokeWidth="4"/>
+        {[122,154,186,218].map(x => <path key={x} d={`M${x} 138v160`} stroke="#95a3aa" strokeWidth="3" opacity=".7"/>)}
+        {[414,446,478,510].map(x => <path key={x} d={`M${x} 138v160`} stroke="#95a3aa" strokeWidth="3" opacity=".7"/>)}
+        <rect x="252" y="105" width="24" height="205" fill="url(#fg-steel)"/>
+        <rect x="370" y="105" width="24" height="205" fill="url(#fg-steel)"/>
+        <rect x="252" y="102" width="142" height="30" rx="4" fill="#314d61"/>
+        <rect x="270" y="112" width="106" height="7" rx="3" fill="#8da4b3" opacity=".8"/>
+        <path d="M274 304 326 279 392 298 337 326Z" fill="#3e8a72" opacity=".88"/>
+        <path d="M222 326 277 304M392 298 451 321" stroke="#d8e4e8" strokeWidth="7" strokeLinecap="round"/>
+        <path d="M222 326 277 304M392 298 451 321" stroke={yellow} strokeWidth="3" strokeDasharray="12 10" strokeLinecap="round"/>
+        <g>
+          <rect x="407" y="178" width="91" height="111" rx="5" fill="#d3d8d8" stroke="#6c7e88" strokeWidth="4"/>
+          <rect x="419" y="190" width="67" height="40" rx="3" fill="#36596d"/>
+          <rect x="421" y="239" width="63" height="38" rx="3" fill="#b6bec1"/>
+          <path d="M452 178v111" stroke="#8f9da3" strokeWidth="3"/>
+        </g>
+        <g>
+          <rect x="352" y="211" width="16" height="84" rx="4" fill="#344a58"/>
+          <rect x="345" y="205" width="30" height="35" rx="5" fill="#263c49" stroke="#8ea2ad" strokeWidth="3"/>
+          <circle cx="360" cy="221" r="5" fill={green}/>
+        </g>
+        <g opacity=".92">
+          <rect x="181" y="225" width="10" height="79" rx="3" fill="url(#fg-steel)"/>
+          <rect x="232" y="208" width="10" height="89" rx="3" fill="url(#fg-steel)"/>
+          <path d="M188 234 235 218v52l-47 17Z" fill="#3a82ac" opacity=".65" stroke="#78a8c5" strokeWidth="2"/>
+          <rect x="454" y="236" width="10" height="69" rx="3" fill="url(#fg-steel)"/>
+          <rect x="513" y="219" width="10" height="84" rx="3" fill="url(#fg-steel)"/>
+          <path d="M461 245 516 228v50l-55 17Z" fill="#3a82ac" opacity=".65" stroke="#78a8c5" strokeWidth="2"/>
+        </g>
+        <g transform="translate(20 49) scale(.72)">
+          <Person x={420} y={205} vest={yellow}/>
+        </g>
       </> : <>
-        <rect x="196" y="260" width="145" height="18" rx="7" fill="#f5f6f5"/>
-        <rect x="196" y="260" width="20" height="18" fill={red}/>
-        <rect x="236" y="260" width="20" height="18" fill={red}/>
-        <rect x="276" y="260" width="20" height="18" fill={red}/>
-        <rect x="316" y="260" width="20" height="18" fill={red}/>
-        <rect x="183" y="242" width="28" height="66" rx="6" fill={orange}/>
+        {/* Korean apartment-site vehicle entrance: wide equipment portal integrated with temporary hoarding.
+            A separate adjacent worker opening is visible but remains secondary to the vehicle throat. */}
+        <path d="M82 135h88v170H82Z" fill="#778791" stroke="#4d606d" strokeWidth="4"/>
+        <path d="M434 135h125v170H434Z" fill="#778791" stroke="#4d606d" strokeWidth="4"/>
+        {[104,128,152].map(x => <path key={x} d={`M${x} 141v157`} stroke="#97a5ac" strokeWidth="3" opacity=".7"/>)}
+        {[455,480,505,530].map(x => <path key={x} d={`M${x} 141v157`} stroke="#97a5ac" strokeWidth="3" opacity=".7"/>)}
+        <rect x="164" y="91" width="30" height="220" fill="url(#fg-steel)"/>
+        <rect x="420" y="91" width="30" height="220" fill="url(#fg-steel)"/>
+        <rect x="164" y="88" width="286" height="37" rx="5" fill="#314d61"/>
+        <rect x="185" y="101" width="244" height="9" rx="4" fill="#91a4af" opacity=".8"/>
+        <path d="M200 315 285 278 409 304 321 344Z" fill="#465967"/>
+        <path d="M232 309 293 284M318 329 381 302" stroke="#dce4e7" strokeWidth="6" strokeDasharray="18 13" opacity=".95"/>
+        <g>
+          <rect x="197" y="254" width="26" height="58" rx="5" fill="#d89a32" stroke="#825719" strokeWidth="3"/>
+          <circle cx="210" cy="249" r="7" fill="#efa33b"/>
+          <rect x="216" y="261" width="176" height="17" rx="7" fill="#f0f2ef" stroke="#b2b9b8" strokeWidth="2"/>
+          <rect x="225" y="261" width="24" height="17" fill={red}/>
+          <rect x="273" y="261" width="24" height="17" fill={red}/>
+          <rect x="321" y="261" width="24" height="17" fill={red}/>
+          <rect x="369" y="261" width="18" height="17" fill={red}/>
+        </g>
+        <g>
+          <rect x="471" y="170" width="65" height="120" rx="4" fill="#d1d7d7" stroke="#6d808a" strokeWidth="4"/>
+          <rect x="481" y="183" width="45" height="37" rx="3" fill="#365a70"/>
+          <rect x="482" y="230" width="43" height="49" rx="3" fill="#b7bec1"/>
+        </g>
+        <g>
+          <rect x="448" y="204" width="11" height="93" rx="3" fill="url(#fg-steel)"/>
+          <rect x="465" y="198" width="11" height="98" rx="3" fill="url(#fg-steel)"/>
+          <path d="M452 214h20v52h-20Z" fill="#3a82ac" opacity=".7" stroke="#79a9c5" strokeWidth="2"/>
+        </g>
       </>}
-      <Rail x={120} y={190} w={78} h={115}/>
-      <Rail x={448} y={190} w={72} h={115}/>
     </g>
   </SceneBase>;
 }
