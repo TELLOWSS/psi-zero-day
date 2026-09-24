@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "gate": "DEF-HD01-2",
+  "status": "HYBRID_RENDER_METHOD_LOCKED_ASSET_INGEST_PENDING",
+  "runtimeTarget": "src/ui/DefenseGame.tsx",
+  "branch": "sol/def-hd01-master-world-20260924",
+  "backgroundCandidate": {
+    "sourceName": "a_highly_detailed_aerial_top_down_cinematic_view_o.png",
+    "sourceSize": {
+      "width": 1619,
+      "height": 972
+    },
+    "sourceSha256": "5c7f45d8f73261bc5e8e4759079e1da1e7d8ce07800f20b92c3d4fc410598088",
+    "productionFilename": "ramp-01-hd01.webp",
+    "productionTargetSize": {
+      "width": 1600,
+      "height": 960
+    },
+    "productionFormat": "webp",
+    "productionQuality": 60,
+    "productionSizeBytes": 354810,
+    "productionSha256": "f42957150d36e5d8be26e327ad8c9cb6f8933032953b2eb8f37bf23fef385295"
+  },
+  "qaPreview": {
+    "filename": "DEF_HD01_2_HYBRID_RUNTIME_PREVIEW.png",
+    "size": {
+      "width": 2000,
+      "height": 1200
+    },
+    "sha256": "3c2a2c375d6c82ed85521a48dea7b33d7a4c1aabfbcba0fce45b7b3793af14af"
+  },
+  "renderingContract": {
+    "backgroundRole": "cinematic construction-site context plate only",
+    "routeAuthority": "content/defense/zero-breach-v1.json map.path",
+    "padAuthority": "content/defense/zero-breach-v1.json map.pads",
+    "layerOrder": [
+      "background art",
+      "runtime construction-road shoulder",
+      "runtime road surface",
+      "runtime center guide",
+      "runtime pad hardstands",
+      "runtime tower/enemy/effect overlays"
+    ],
+    "noAiAuthoredGameplayCoordinates": true
+  },
+  "completedCodeChanges": [
+    "runtime route shoulder layer",
+    "runtime centerline layer",
+    "runtime 58px pad hardstands",
+    "construction-road visual styling",
+    "hybrid overlay contract test"
+  ],
+  "acceptanceState": {
+    "typecheck": "PASS",
+    "layoutContracts": "PASS",
+    "build": "PASS",
+    "assetBytesInRepository": "PENDING",
+    "actualDefenseGameVisualQaWithHdBackground": "PENDING"
+  },
+  "next": "DEF-HD01-2B_ASSET_INGEST_AND_RUNTIME_VISUAL_QA"
+}
