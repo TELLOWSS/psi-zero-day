@@ -29,6 +29,13 @@ jobs:
       - name: Build current HD-02 commit
         run: npm run build
 
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
       - name: Locate Chromium
         shell: bash
         run: |
