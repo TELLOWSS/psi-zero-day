@@ -42,7 +42,11 @@
     },
     "STRATEGY": {
       "benchmark": "e01_05_command",
-      "goal": "site overview is the playable board"
+      "goal": "site overview is the playable board",
+      "world": "production site overview + workers + route/risk anchors stay visible through the decision",
+      "ui": "compact top interpretation rows + dark glass command dock; no white modal slab over the map",
+      "decision": "read site -> compare people/process pressure -> act on a spatial anchor -> verify the changed field",
+      "code_rebaseline": "applied_2026-09-24"
     },
     "OFFICE": {
       "benchmark": "e01_08e_responsibility_clash",
