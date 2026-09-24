@@ -23,12 +23,15 @@ if (!chrome) {
 const port = Number(process.env.PSI_CHROME_DEBUG_PORT || 9555);
 const profile = fs.mkdtempSync('/tmp/psi-zero-breach-step4-');
 const browser = spawn(chrome, [
-  '--headless=new',
+  '--headless',
   '--no-sandbox',
   '--disable-gpu',
   '--disable-dev-shm-usage',
   '--hide-scrollbars',
   '--mute-audio',
+  '--no-first-run',
+  '--no-default-browser-check',
+  '--disable-background-networking',
   '--remote-debugging-address=127.0.0.1',
   '--remote-debugging-port=' + port,
   '--user-data-dir=' + profile,
@@ -39,7 +42,7 @@ let browserStderr = '';
 browser.stderr.on('data', chunk => { browserStderr += chunk.toString(); });
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function waitForJson(url, timeoutMs = 10000) {
+async function waitForJson(url, timeoutMs = 30000) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     try {
