@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: hd02-mobile-camera-visual-qa
+  cancel-in-progress: true
+
 jobs:
   hd02-visual-qa:
     runs-on: ubuntu-latest
