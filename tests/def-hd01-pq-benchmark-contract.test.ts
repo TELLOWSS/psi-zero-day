@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
 import { defenseEnemyArtUri, defenseTowerArtUri } from '../src/app/defense-visual-assets';
@@ -21,11 +19,10 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(benchmark.runtimeGate.noBalanceChange).toBe(true);
   });
 
-  it('does not promote missing PQ binaries or placeholders into runtime', () => {
-    const controlCandidate = path.resolve('public', benchmark.benchmark.response.productionAsset);
-    const swiftCandidate = path.resolve('public', benchmark.benchmark.risk.productionAsset);
-    expect(fs.existsSync(controlCandidate)).toBe(false);
-    expect(fs.existsSync(swiftCandidate)).toBe(false);
+  it('does not promote candidate PQ art until the explicit runtime approval gate passes', () => {
+    expect(benchmark.runtimePromotion.approved).toBe(false);
+    expect(benchmark.runtimePromotion.approvedAssets.control).toBeNull();
+    expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
     expect(benchmark.runtimeGate.currentLegacyAssetsRemainActive).toBe(true);
     expect(benchmark.runtimeGate.noPlaceholderPromotion).toBe(true);
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
