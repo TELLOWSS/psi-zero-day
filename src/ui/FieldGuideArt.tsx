@@ -6,7 +6,6 @@ type Props = {
   title?: string;
 };
 
-const steel = '#9fb0bc';
 const orange = '#f2a33a';
 const yellow = '#f1c84d';
 const red = '#d85148';
