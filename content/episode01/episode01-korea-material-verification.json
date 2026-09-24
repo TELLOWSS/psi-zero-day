@@ -127,7 +127,7 @@
   "runtime_assets": {
     "site_gate": {
       "classification": "selected_Korean_apartment_site_gate_assembly",
-      "status": "visual_family_locked_ready_to_render",
+      "status": "field_guide_runtime_reverified",
       "verified": "Current Korean apartment construction examples repeatedly show a full-height temporary hoarding wall with a wide vehicle gate and a separate adjacent worker/pedestrian entrance or safety passage. The exact portal, booth and access-control hardware are site-specific.",
       "legal_basis": "산업안전보건기준에 관한 규칙 제11조: when the primary entrance is for loading/transport machinery, a separate adjacent pedestrian entrance is required.",
       "selected_episode01_visual_family": {
@@ -178,6 +178,20 @@
           "finish is cleaner and more architectural than many active apartment sites; runtime grade should reduce showroom-like neatness",
           "turnstile/access hardware remains site-specific and must not be treated as a universal Korean requirement"
         ]
+      },
+      "reverified_on": "2026-09-24",
+      "field_guide_runtime_render": {
+        "version": "korean-site-gate-v2",
+        "status": "implemented",
+        "decisions": [
+          "FG001 emphasizes a wide vehicle/equipment portal integrated with temporary steel hoarding and a controllable boom barrier.",
+          "FG002 emphasizes a separate narrow worker entrance with a protected footpath, small guard/access-control booth and neutral access-control post.",
+          "A generic turnstile is intentionally omitted because turnstile/access hardware is site-specific rather than a universal Korean construction-site requirement.",
+          "No real contractor or apartment branding is baked into the reusable Field Guide art."
+        ],
+        "legal_anchor": "산업안전보건기준에 관한 규칙 제11조",
+        "runtime_component": "FieldGuideArt/GateScene",
+        "visual_review": "korean_site_reality_reverified_vector_v2"
       }
     },
     "material_stack": {
@@ -354,12 +368,12 @@
       "final_registration": {
         "completed_on": "2026-09-24",
         "presentation": "generated_item_art",
-        "runtime_component": "FieldGuideArt/GateScene",
+        "runtime_component": "FieldGuideArt/GateScene[korean-site-v2]",
         "focus": "vehicle_access_gate",
-        "visual_review": "subject_specific_field_guide_art",
+        "visual_review": "korean_site_reality_reverified_vector_v2",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "FG001 is rendered from dedicated Field Guide gate art. Episode scene backgrounds are explicitly excluded from the guide card."
+      "integrity_note": "FG001 uses a dedicated Korean-site vehicle-gate illustration: wide equipment portal, temporary hoarding and controlled vehicle throat. Episode scene backgrounds remain excluded."
     },
     "pedestrian_gate": {
       "status": "final_runtime_item_art",
@@ -368,12 +382,12 @@
       "final_registration": {
         "completed_on": "2026-09-24",
         "presentation": "generated_item_art",
-        "runtime_component": "FieldGuideArt/GateScene(pedestrian)",
+        "runtime_component": "FieldGuideArt/GateScene[korean-site-v2]",
         "focus": "worker_only_access_gate",
-        "visual_review": "subject_specific_field_guide_art",
+        "visual_review": "korean_site_reality_reverified_vector_v2",
         "dedicated_map_asset_promoted": false
       },
-      "integrity_note": "FG002 is rendered from dedicated Field Guide pedestrian-gate art. Episode scene backgrounds are explicitly excluded from the guide card."
+      "integrity_note": "FG002 uses a separate Korean-site worker entrance illustration. Generic turnstile geometry is excluded; access-control hardware remains site-specific."
     },
     "vehicle_pedestrian_separation": {
       "status": "final_registered_runtime_ready",
