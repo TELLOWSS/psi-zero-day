@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "PQ_CONTROL_WEBP_UPGRADED_BROWSER_QA_PENDING",
+  "status": "G2_BROWSER_QA_PASSED_AWAITING_PRODUCTION_ASSET_LOCK",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -181,14 +181,14 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "CAPTURE_G2_BROWSER_QA_WITH_REALISTIC_CONTROL_WEBP_AND_FIXED_SWIFT_CROP",
+  "next": "PRODUCE_AND_LOCK_DEDICATED_SWIFT_PQ01_TRANSPARENT_ASSET_THEN_FINAL_G2_PROMOTION",
   "runtimePromotion": {
     "approved": false,
-    "status": "G2_BRANCH_PREVIEW_ONLY_NOT_PRODUCTION_APPROVED",
+    "status": "G2_BROWSER_QA_PASSED_DEDICATED_ASSET_LOCK_PENDING",
     "requiredChecks": [
-      "CONTROL PQ01 binary exists at declared productionAsset",
-      "SWIFT PQ01 binary exists at declared productionAsset",
-      "transparent background verified",
+      "CONTROL production source exists at declared source path",
+      "SWIFT dedicated PQ01 binary exists at declared production asset path",
+      "transparent background verified for dedicated movable assets",
       "declared dimensions verified",
       "SHA256 recorded and locked",
       "actual DefenseGame browser visual QA passes",
@@ -198,6 +198,21 @@
       "control": null,
       "swift": null
     },
-    "previewCandidateOnGateBranch": true
+    "previewCandidateOnGateBranch": true,
+    "g2BrowserQa": {
+      "passed": true,
+      "evidence": {
+        "report": "qa/def-hd01-pq/step4-browser-report.json",
+        "swift": "qa/def-hd01-pq/05a-pq-swift-wave8.jpg",
+        "control": "qa/def-hd01-pq/06a-pq-control-l1.jpg"
+      },
+      "result": {
+        "status": "WON",
+        "waves": "10/10",
+        "stars": 2,
+        "shield": 18
+      },
+      "note": "Browser gate confirms both PQ candidates render after active SWIFT clip-group fix. Production approval remains false until a dedicated transparent SWIFT movable asset is locked."
+    }
   }
 }
