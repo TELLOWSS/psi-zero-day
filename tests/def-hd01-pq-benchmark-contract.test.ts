@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
-import { defenseEnemyArtUri, defenseTowerArtUri } from '../src/app/defense-visual-assets';
+import { defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqCrop, defenseTowerArtUri } from '../src/app/defense-visual-assets';
 import { zeroBreachContent } from '../src/content/defense';
 
 describe('DEF-HD01-PQ representative benchmark contract', () => {
@@ -20,12 +20,20 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(benchmark.runtimeGate.noBalanceChange).toBe(true);
   });
 
-  it('does not promote candidate PQ art until the explicit runtime approval gate passes', () => {
+  it('enables G2 branch preview without declaring production approval', () => {
+    expect(benchmark.runtimePromotion.previewCandidateOnGateBranch).toBe(true);
     expect(benchmark.runtimePromotion.approved).toBe(false);
     expect(benchmark.runtimePromotion.approvedAssets.control).toBeNull();
     expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
-    expect(benchmark.runtimeGate.currentLegacyAssetsRemainActive).toBe(true);
     expect(benchmark.runtimeGate.noPlaceholderPromotion).toBe(true);
+
+    expect(defenseControlPqComposite()).toEqual({
+      marshalUri: 'assets/episode01/characters/choi-minseok-map-rc.svg',
+      barrierUri: 'assets/episode01/scene-elements/access-barrier.webp',
+    });
+    expect(defenseSwiftPqCrop()?.source).toBe('assets/defense/board/ramp-01-hd01.webp');
+
+    // Legacy assets remain available as rollback even while the G2 branch previews composites.
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
     expect(defenseEnemyArtUri('SWIFT')).toBe(benchmark.benchmark.risk.legacyAsset);
   });
@@ -35,10 +43,14 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     const css = fs.readFileSync('src/ui/defense-game.css', 'utf8');
     expect(ui).toContain("tower.towerId !== 'CONTROL'");
     expect(ui).toContain('zb-control-intervention');
+    expect(ui).toContain('data-pq-control="CONTROL:L1"');
     expect(ui).toContain("enemy.enemyId === 'SWIFT'");
     expect(ui).toContain('zb-swift-brake-cue');
+    expect(ui).toContain('data-pq-swift="SWIFT"');
     expect(css).toContain('.zb-control-intervention');
+    expect(css).toContain('.zb-control-pq-marshal');
     expect(css).toContain('.zb-swift-brake-cue');
+    expect(css).toContain('.zb-swift-pq-crop');
   });
 
   it('requires grounded construction-safety semantics instead of sci-fi combat language', () => {
