@@ -20,12 +20,26 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     expect(benchmark.runtimeGate.noBalanceChange).toBe(true);
   });
 
-  it('enables G2 branch preview without declaring production approval', () => {
-    expect(benchmark.runtimePromotion.previewCandidateOnGateBranch).toBe(true);
-    expect(benchmark.runtimePromotion.approved).toBe(false);
-    expect(benchmark.runtimePromotion.approvedAssets.control).toBeNull();
-    expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
+  it('allows exactly one valid G2 runtime state: preview or production lock', () => {
+    const previewState =
+      benchmark.runtimePromotion.previewCandidateOnGateBranch === true
+      && benchmark.runtimePromotion.approved === false;
+    const lockedState =
+      benchmark.runtimePromotion.previewCandidateOnGateBranch === false
+      && benchmark.runtimePromotion.approved === true;
+
+    expect(previewState || lockedState).toBe(true);
+    expect(previewState && lockedState).toBe(false);
     expect(benchmark.runtimeGate.noPlaceholderPromotion).toBe(true);
+
+    if (previewState) {
+      expect(benchmark.runtimePromotion.approvedAssets.control).toBeNull();
+      expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
+    } else {
+      expect(benchmark.runtimePromotion.status).toBe('PRODUCTION_LOCKED');
+      expect(benchmark.runtimePromotion.approvedAssets.control).toBeTruthy();
+      expect(benchmark.runtimePromotion.approvedAssets.swift).toBeTruthy();
+    }
 
     expect(defenseControlPqComposite()).toEqual({
       marshalUri: 'assets/episode01/characters/choi-minseok-map.webp',
@@ -33,9 +47,19 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
     });
     expect(defenseSwiftPqAsset()).toEqual({ uri: 'assets/defense/enemies/swift-pq01.svg', width: 384, height: 268 });
 
-    // Legacy assets remain available as rollback even while the G2 branch previews composites.
+    // Legacy assets remain available as rollback in either valid runtime state.
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
     expect(defenseEnemyArtUri('SWIFT')).toBe(benchmark.benchmark.risk.legacyAsset);
+  });
+
+  it('guards final G2 promotion behind fresh schema-v2 browser evidence', () => {
+    const promotionScript = fs.readFileSync('scripts/promote-def-hd01-pq.mjs', 'utf8');
+    expect(promotionScript).toContain("report.schema_version !== 2");
+    expect(promotionScript).toContain("report.pq?.swiftAsset !== 'assets/defense/enemies/swift-pq01.svg'");
+    expect(promotionScript).toContain('report.pq?.controlCount !== 1');
+    expect(promotionScript).toContain("git', ['merge-base', '--is-ancestor'");
+    expect(promotionScript).toContain("benchmark.runtimePromotion.previewCandidateOnGateBranch = false");
+    expect(promotionScript).toContain("benchmark.runtimePromotion.approved = true");
   });
 
   it('renders CONTROL and SWIFT with safety-intervention semantics instead of generic attack-only FX', () => {
