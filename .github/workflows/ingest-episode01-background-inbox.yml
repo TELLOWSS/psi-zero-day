@@ -1,10 +1,8 @@
 name: Ingest Episode 01 background inbox
 
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.art-inbox/PSI_ZERO_DAY_EP01_FINAL_BACKGROUNDS_WEBP.zip'
+  workflow_dispatch:
 
 permissions:
   contents: write
