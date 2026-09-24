@@ -1,11 +1,7 @@
 name: Verify vertical slice
 
+
 on:
-  push:
-    branches:
-      - main
-      - astra/task-007-casual-strategy-foundation
-      - sol/ep01-regression-ui-fix-20260923
   workflow_dispatch:
 
 permissions:
