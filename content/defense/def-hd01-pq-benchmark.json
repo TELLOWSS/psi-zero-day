@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "SOURCE_AUDIT_COMPLETE_ASSET_PRODUCTION_PENDING",
+  "status": "RUNTIME_COMPOSITE_CANDIDATE_IMPLEMENTATION",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -18,16 +18,18 @@
       "legacyAsset": "assets/defense/towers/control-l1.svg",
       "legacyAssessment": "REJECT_AS_NEW_FINAL",
       "semantic": "traffic marshal + temporary pedestrian/vehicle segregation intervention",
-      "productionAsset": "assets/defense/towers/control-l1-pq01.webp",
+      "productionAsset": "RUNTIME_COMPOSITE",
       "target": {
-        "width": 512,
-        "height": 512,
-        "format": "webp",
-        "transparent": true,
+        "kind": "RUNTIME_COMPOSITE",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map-rc.svg",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
         "anchor": {
           "x": 0.5,
           "y": 0.82
-        }
+        },
+        "transparent": true
       },
       "mustReadAtPhoneScale": [
         "human marshal silhouette",
@@ -49,16 +51,75 @@
       "legacyAsset": "assets/defense/enemies/swift.svg",
       "legacyAssessment": "REJECT_AS_NEW_FINAL",
       "semantic": "reversing construction vehicle converging with pedestrian path",
-      "productionAsset": "assets/defense/enemies/swift-pq01.webp",
+      "productionAsset": "RUNTIME_WORLD_CROP",
       "target": {
-        "width": 384,
-        "height": 384,
-        "format": "webp",
-        "transparent": true,
+        "kind": "RUNTIME_WORLD_CROP",
+        "source": "assets/defense/board/ramp-01-hd01.webp",
+        "sourceLogicalSize": {
+          "width": 1000,
+          "height": 600
+        },
+        "cropViewBox": {
+          "x": 748,
+          "y": 404,
+          "width": 112,
+          "height": 78
+        },
+        "clipPolygon": [
+          [
+            754,
+            424
+          ],
+          [
+            769,
+            414
+          ],
+          [
+            790,
+            415
+          ],
+          [
+            812,
+            427
+          ],
+          [
+            838,
+            439
+          ],
+          [
+            850,
+            455
+          ],
+          [
+            842,
+            470
+          ],
+          [
+            824,
+            477
+          ],
+          [
+            802,
+            466
+          ],
+          [
+            781,
+            457
+          ],
+          [
+            761,
+            450
+          ],
+          [
+            751,
+            438
+          ]
+        ],
         "anchor": {
           "x": 0.5,
           "y": 0.78
-        }
+        },
+        "transparentOutsideClip": true
       },
       "mustReadAtPhoneScale": [
         "construction vehicle mass",
@@ -101,8 +162,8 @@
     "worldFirst": true
   },
   "runtimeGate": {
-    "currentLegacyAssetsRemainActive": true,
-    "switchCondition": "runtimePromotion.approved === true AND approved CONTROL/SWIFT asset records are present after binary/hash/dimension/alpha/browser QA",
+    "currentLegacyAssetsRemainActive": false,
+    "switchCondition": "G2 branch may preview runtime composites; main promotion requires runtimePromotion.approved === true after actual browser visual QA",
     "noPlaceholderPromotion": true,
     "noGameplayCoordinateChange": true,
     "noBalanceChange": true
@@ -115,10 +176,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "IMPLEMENT_SAFE_RUNTIME_PROMOTION_GATE_THEN_PRODUCE_CONTROL_AND_SWIFT_PQ01_BINARIES",
+  "next": "IMPLEMENT_RUNTIME_COMPOSITE_PREVIEW_AND_CAPTURE_G2_BROWSER_QA",
   "runtimePromotion": {
     "approved": false,
-    "status": "BLOCKED_UNTIL_FINAL_BINARIES_AND_VISUAL_QA_PASS",
+    "status": "G2_BRANCH_PREVIEW_ONLY_NOT_PRODUCTION_APPROVED",
     "requiredChecks": [
       "CONTROL PQ01 binary exists at declared productionAsset",
       "SWIFT PQ01 binary exists at declared productionAsset",
@@ -131,6 +192,7 @@
     "approvedAssets": {
       "control": null,
       "swift": null
-    }
+    },
+    "previewCandidateOnGateBranch": true
   }
 }
