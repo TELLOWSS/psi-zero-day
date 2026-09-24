@@ -75,15 +75,15 @@
   "result": {
     "status": "WON",
     "wave": 10,
-    "tick": 7165,
+    "tick": 7196,
     "shield": 18,
     "resource": 352,
     "tutorial": null,
     "result": "방어 성공",
     "resultText": "결과방어 성공별2 / 3점수11,800완료 웨이브10 / 10보호막18획득 보상첫 클리어 꾸미기 획득다시 도전본편 허브로",
     "stars": 2,
-    "logical_1x_seconds": 358.3,
-    "accelerated_wall_seconds": 27.9
+    "logical_1x_seconds": 359.8,
+    "accelerated_wall_seconds": 28
   },
   "failures": [],
   "visual": {
