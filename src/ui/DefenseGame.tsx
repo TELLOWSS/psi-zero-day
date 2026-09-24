@@ -70,7 +70,11 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-production-tower-art={`${tower.towerId}:${tower.levelId}`}
       data-tower-family={tower.towerId}
     >
-      {firing ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
+        <circle r="35" />
+        <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
+      </g> : null}
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
       {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
       <image
@@ -127,7 +131,11 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     data-enemy={enemy.enemyId}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
-    {slowed ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
+    {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
+    {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
+      <circle r="25" />
+      <path d="M-26 13H-10M-30 19H-14" />
+    </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
     {artUri ? <image
