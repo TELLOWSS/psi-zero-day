@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   hd02-visual-qa:
@@ -69,11 +69,19 @@ jobs:
 
           node scripts/verify-episode01-responsive.mjs
 
-      - name: Upload HD-02 visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hd02-mobile-camera-visual-qa
-          path: artifacts/hd02-responsive
-          if-no-files-found: error
-          retention-days: 14
+      - name: Persist compact HD-02 visual evidence
+        if: success()
+        shell: bash
+        run: |
+          mkdir -p qa/hd02
+          cp artifacts/hd02-responsive/*-episode01-strategy.png qa/hd02/
+          cp artifacts/hd02-responsive/responsive-report.json qa/hd02/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add qa/hd02
+          if git diff --cached --quiet; then
+            echo "No HD-02 QA evidence changes."
+            exit 0
+          fi
+          git commit -m "qa: store HD-02 visual evidence [skip ci]"
+          git push origin HEAD:"$GITHUB_REF_NAME"
