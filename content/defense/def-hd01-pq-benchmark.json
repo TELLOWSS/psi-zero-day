@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "G2_BROWSER_QA_PASSED_AWAITING_PRODUCTION_ASSET_LOCK",
+  "status": "PQ_VISUAL_IMPLEMENTED_QA_INFRA_BLOCKED",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -181,10 +181,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "PRODUCE_AND_LOCK_DEDICATED_SWIFT_PQ01_TRANSPARENT_ASSET_THEN_FINAL_G2_PROMOTION",
+  "next": "RERUN_G2_ACTUAL_BROWSER_QA_WHEN_RUNNER_OR_PREVIEW_CAPACITY_IS_AVAILABLE_THEN_PROMOTE_ONLY_IF_VISUAL_PASS",
   "runtimePromotion": {
     "approved": false,
-    "status": "G2_BROWSER_QA_PASSED_DEDICATED_ASSET_LOCK_PENDING",
+    "status": "BLOCKED_PENDING_FRESH_ACTUAL_BROWSER_VISUAL_QA",
     "requiredChecks": [
       "CONTROL production source exists at declared source path",
       "SWIFT dedicated PQ01 binary exists at declared production asset path",
@@ -214,5 +214,37 @@
       },
       "note": "Browser gate confirms both PQ candidates render after active SWIFT clip-group fix. Production approval remains false until a dedicated transparent SWIFT movable asset is locked."
     }
-  }
+  },
+  "manualReview": {
+    "control": {
+      "source": "assets/episode01/characters/choi-minseok-map.webp",
+      "barrier": "assets/episode01/scene-elements/access-barrier.webp",
+      "assessment": "IMPLEMENTED_PENDING_FINAL_RUNTIME_SCREENSHOT",
+      "note": "Transparent full-body fictional signalman WebP replaces the RC vector placeholder; scale and saturation were reduced to fit the HD construction world."
+    },
+    "swift": {
+      "source": "assets/defense/board/ramp-01-hd01.webp",
+      "cropViewBox": {
+        "x": 748,
+        "y": 404,
+        "width": 112,
+        "height": 78
+      },
+      "assessment": "IMPLEMENTED_PENDING_FINAL_RUNTIME_SCREENSHOT",
+      "note": "Crop targets the real concrete-mixer vehicle in the lower-right MASTER WORLD and is now clipped on the rendered SVG group."
+    }
+  },
+  "externalQaBlockers": [
+    {
+      "system": "Vercel",
+      "state": "BUILD_RATE_LIMIT",
+      "effect": "Latest G2 branch Preview cannot be used as the final browser evidence."
+    },
+    {
+      "system": "GitHub Actions",
+      "state": "RUNNER_JOB_FAILED_BEFORE_STEP_LOGS",
+      "run": "#34 / 35997194048",
+      "effect": "Latest PR QA could not produce a trustworthy post-WebP CONTROL/SWIFT screenshot."
+    }
+  ]
 }
