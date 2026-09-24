@@ -1,0 +1,48 @@
+name: Verify DEF-HD01 PQ Benchmark
+
+on:
+  push:
+    branches:
+      - sol/def-hd01-pq-benchmark-20260924
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: def-hd01-pq-benchmark
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: PQ benchmark and protected DefenseGame contracts
+        run: >
+          npx vitest run
+          tests/def-hd01-pq-benchmark-contract.test.ts
+          tests/def-hd00-defense-baseline-contract.test.ts
+          tests/def-hd01-world-layout-contract.test.ts
+          tests/def-hd01-hd-board-runtime.test.ts
+          tests/zero-breach-engine.test.ts
+          tests/zero-breach-save.test.ts
+          tests/zero-breach-event.test.ts
+
+      - name: Build
+        run: npm run build
