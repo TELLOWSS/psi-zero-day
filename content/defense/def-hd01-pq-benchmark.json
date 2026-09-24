@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "G2_IMPLEMENTATION_LOCKED_GITHUB_HOSTED_RUNNER_UNAVAILABLE",
+  "status": "G2_SELF_CONTAINED_SWIFT_LOCKED_FRESH_BROWSER_QA_PENDING",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -128,8 +128,10 @@
               751,
               438
             ]
-          ]
-        }
+          ],
+          "embeddedInAsset": true
+        },
+        "selfContained": true
       },
       "mustReadAtPhoneScale": [
         "construction vehicle mass",
@@ -186,7 +188,7 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "WHEN_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERS_RUN_FRESH_G2_BROWSER_QA_THEN_FINAL_PRODUCTION_LOCK",
+  "next": "FRESH_ACTUAL_BROWSER_QA_WHEN_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERS_THEN_FINAL_G2_PRODUCTION_LOCK",
   "runtimePromotion": {
     "approved": false,
     "status": "BLOCKED_ONLY_BY_FRESH_ACTUAL_BROWSER_QA",
@@ -230,7 +232,7 @@
     "swift": {
       "source": "assets/defense/enemies/swift-pq01.svg",
       "assessment": "DEDICATED_TRANSPARENT_ASSET_IMPLEMENTED_PENDING_FINAL_RUNTIME_SCREENSHOT",
-      "note": "Standalone transparent SWIFT sprite now owns the clipped vehicle rendering; it references the locked MASTER WORLD for visual-generation consistency and removes live board-crop rendering from moving enemies."
+      "note": "Standalone transparent SWIFT sprite now embeds the locked MASTER WORLD bytes inside the SVG, so it cannot fail because an SVG-as-image blocks external relative resources. Moving runtime enemies no longer depend on a live board crop."
     }
   },
   "externalQaBlockers": [
@@ -278,13 +280,14 @@
     },
     "swift": {
       "uri": "assets/defense/enemies/swift-pq01.svg",
-      "sha256": "8f291e1f51f1e94d19a40fbcba3bdfa7465a1bd6366db928979649ca73226ced",
+      "sha256": "1600bc6290672a3a8711677a7a2e8a405fddbd73ff159f3e8230b8851849a8a0",
       "dimensions": {
         "width": 384,
         "height": 268
       },
       "transparent": true,
-      "gitBlobSha": "c403c82db3710e903bf2b3adbce8f5fbe5988b7b"
+      "gitBlobSha": "54548dc7dda42ced8c29b0df1b66505c1cd15892",
+      "selfContained": true
     }
   },
   "qaInfrastructureDiagnosis": {
