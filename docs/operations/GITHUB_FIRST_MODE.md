@@ -81,3 +81,13 @@ Gate candidate -> manual Actions if runner capacity is available
 Visual QA required -> manual Vercel deployment  
 PASS -> Production Lock / merge  
 Next development cycle -> GitHub only
+
+## Manual G2 QA launcher
+
+The default branch contains `.github/workflows/manual-g2-production-qa.yml`.
+
+It is `workflow_dispatch` only and never runs automatically. When GitHub-hosted runner allocation has recovered, use this launcher once with:
+
+- target ref: `sol/def-hd01-pq-benchmark-20260924`
+
+The launcher checks out the G2 branch, runs Typecheck/contracts/build/Chromium actual-browser QA, and writes only compact QA evidence back to the G2 branch. It does not trigger Vercel.
