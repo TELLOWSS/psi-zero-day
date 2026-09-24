@@ -26,6 +26,8 @@ describe('Episode 01 immersive production background contract', () => {
       const runtimeScene = episode01ImmersiveScene(eventId, undefined, undefined);
       expect(runtimeScene?.background_asset_id).toBe(expectedAssetId);
       expect(runtimeScene?.background_environment).toBeTruthy();
+      const background = Object.values(catalog.backgrounds).find(item => item.asset_id === expectedAssetId);
+      expect(runtimeScene?.background_final_uri).toBe(background?.final_path);
     }
   });
 
