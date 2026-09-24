@@ -105,7 +105,9 @@ jobs:
               import base64
               b64.write_text(base64.b64encode(jpg.read_bytes()).decode('ascii'), encoding='ascii')
 
-          (out / 'responsive-report.json').write_bytes((src / 'responsive-report.json').read_bytes())
+          report = src / 'responsive-report.json'
+          if report.exists():
+              (out / 'responsive-report.json').write_bytes(report.read_bytes())
           PY
 
           rm -rf qa/hd02
