@@ -103,17 +103,8 @@ jobs:
 
           node scripts/verify-zero-breach-step4-browser.mjs
 
-      - name: Upload G2 browser QA artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: def-hd01-pq-browser
-          path: artifacts/def-hd01-pq-browser
-          if-no-files-found: error
-          retention-days: 3
-
       - name: Persist compact G2 visual evidence
-        if: github.event_name == 'push' && always()
+        if: always()
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
@@ -152,4 +143,5 @@ jobs:
             exit 0
           fi
           git commit -m "qa: store G2 CONTROL and SWIFT visual evidence [skip ci]"
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          TARGET_BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          git push origin HEAD:"$TARGET_BRANCH"
