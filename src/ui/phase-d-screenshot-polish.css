@@ -1367,3 +1367,42 @@
     display: none !important;
   }
 }
+
+/* Phase D-2 — TBM world lock pass 02.
+   The changed-work TBM scenes use the authored construction world, real cast and
+   physical props as the composition. Synthetic briefing geometry is reserved
+   for the first briefing only and must not float over the afternoon change-control scene. */
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-production-layer {
+  opacity: 0 !important;
+}
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-briefing-board,
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-background-crew,
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-briefing-ring,
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-floor-mark {
+  display: none !important;
+}
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-scene::before,
+.game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-scene::after {
+  display: none !important;
+}
+
+/* The final Euroform stack carries more real photographic mass than the old
+   placeholder bundle. Keep it as contextual evidence, not a foreground card. */
+@media (min-width: 901px) and (min-height: 651px) {
+  .game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .episode-immersive-prop.prop-3 {
+    right: 1.5% !important;
+    bottom: -1.5% !important;
+    width: min(24%, 300px) !important;
+    height: 34% !important;
+    opacity: .78 !important;
+    object-fit: contain !important;
+    filter: drop-shadow(0 13px 16px rgba(0,0,0,.3)) saturate(.96) brightness(.98) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-frame[data-production-scene="TBM"]:not([data-tbm-phase="first-briefing"]) .tbm-production-layer {
+    display: none !important;
+  }
+}
+
