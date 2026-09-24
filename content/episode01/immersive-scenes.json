@@ -64,8 +64,7 @@
         "choi_minseok"
       ],
       "props": [
-        "assets/episode01/scene-elements/vehicle-overlap.webp",
-        "assets/episode01/scene-elements/access-barrier.webp"
+        "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
       ],
       "camera": "medium",
       "focus": "right"
