@@ -482,11 +482,11 @@ export function DefenseGame({
             return <circle cx={pad.x} cy={pad.y} r={selectedLevel.range} className="zb-range-preview" />;
           })() : null}
           {content.map.pads.map(pad => <g key={`pad-${pad.id}`} className="zb-pad-runtime">
-            <circle cx={pad.x} cy={pad.y} r="58" className="zb-pad-hardstand" aria-hidden="true" />
+            <circle cx={pad.x} cy={pad.y} r="42" className="zb-pad-hardstand" aria-hidden="true" />
             <circle
               cx={pad.x}
               cy={pad.y}
-              r="30"
+              r="22"
               className={`zb-pad-mark${selectedPadId === pad.id ? ' is-selected' : ''}${state.towers.some(tower => tower.padId === pad.id) ? ' is-occupied' : ''}`}
             />
           </g>)}
