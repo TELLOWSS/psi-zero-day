@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqCrop, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
 import {
@@ -155,7 +155,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
   const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
-  const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqCrop() : null;
+  const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqAsset() : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
@@ -172,33 +172,17 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {swiftPq ? <svg
+    {swiftPq ? <image
+      href={swiftPq.uri}
       x="-39"
       y="-34"
       width="78"
       height="58"
-      viewBox={`${swiftPq.cropViewBox.x} ${swiftPq.cropViewBox.y} ${swiftPq.cropViewBox.width} ${swiftPq.cropViewBox.height}`}
-      className="zb-swift-pq-crop"
+      preserveAspectRatio="xMidYMid meet"
+      className="zb-swift-pq-asset"
       data-pq-swift="SWIFT"
-      overflow="visible"
       aria-hidden="true"
-    >
-      <defs>
-        <clipPath id={`zb-swift-pq-${enemy.id}`} clipPathUnits="userSpaceOnUse">
-          <polygon points={swiftPq.clipPolygon.map(([x, y]) => `${x},${y}`).join(' ')} />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#zb-swift-pq-${enemy.id})`}>
-        <image
-          href={swiftPq.source}
-          x="0"
-          y="0"
-          width={swiftPq.sourceLogicalSize.width}
-          height={swiftPq.sourceLogicalSize.height}
-          preserveAspectRatio="none"
-        />
-      </g>
-    </svg> : artUri ? <image
+    /> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
       y={artY}
