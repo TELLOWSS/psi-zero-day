@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episode01StrategyProduction } from '../src/app/episode01-strategy-production';
 
@@ -57,6 +59,16 @@ describe('Episode 01 Phase C-4 STRATEGY production quality', () => {
       focus: 'gate',
     });
     expect(episode01StrategyProduction('e01_06_pump_arrival', 'best_control')?.ui_profile).toBe('result');
+  });
+
+  it('locks the Phase D-2 strategy surface to a map-first commercial composition', () => {
+    const css = fs.readFileSync(path.resolve('src/ui/strategy-layout-recovery.css'), 'utf8');
+    expect(css).toContain('Phase D-2 — STRATEGY world lock pass 04.');
+    expect(css).toContain('[data-strategy-phase="site-read"]');
+    expect(css).toContain('[data-strategy-phase="tactical-judgment"]');
+    expect(css).toContain('[data-strategy-phase="field-shift"]');
+    expect(css).toContain('background: linear-gradient(180deg,rgba(6,24,31,.955),rgba(5,18,24,.94))');
+    expect(css).toContain('filter: saturate(1.01) contrast(1.035) brightness(.98)');
   });
 
   it('does not leak STRATEGY production profiles into other scene families', () => {
