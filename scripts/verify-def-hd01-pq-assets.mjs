@@ -1,9 +1,29 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json' with { type: 'json' };
 
 const root = process.cwd();
 const publicPath = relative => path.resolve(root, 'public', relative);
+
+function sha256File(relative) {
+  const bytes = fs.readFileSync(publicPath(relative));
+  return crypto.createHash('sha256').update(bytes).digest('hex');
+}
+
+function requireIntegrity(relative, expected, label) {
+  requireFile(relative, label);
+  if (!expected) {
+    fail(`${label} integrity metadata missing`);
+    return;
+  }
+  const actual = sha256File(relative);
+  if (actual !== expected.sha256) {
+    fail(`${label} SHA256 drifted: expected ${expected.sha256}, got ${actual}`);
+  } else {
+    console.log(`[DEF-HD01-PQ] ${label} SHA256 locked: ${actual}`);
+  }
+}
 
 function fail(message) {
   console.error(`[DEF-HD01-PQ] FAIL: ${message}`);
@@ -53,6 +73,24 @@ if (swift.kind !== 'STATIC_TRANSPARENT_SVG') {
   }
   if (!Array.isArray(source?.clipPolygon) || source.clipPolygon.length < 6) {
     fail('SWIFT source-lineage clip polygon is missing or too coarse');
+  }
+}
+
+
+const integrity = benchmark.assetIntegrity;
+if (!integrity) {
+  fail('assetIntegrity block is missing');
+} else {
+  requireIntegrity(integrity.masterWorld.uri, integrity.masterWorld, 'MASTER WORLD');
+  requireIntegrity(integrity.controlMarshal.uri, integrity.controlMarshal, 'CONTROL marshal');
+  requireIntegrity(integrity.controlBarrier.uri, integrity.controlBarrier, 'CONTROL barrier');
+  requireIntegrity(integrity.swift.uri, integrity.swift, 'SWIFT dedicated asset');
+
+  if (integrity.swift.dimensions?.width !== 384 || integrity.swift.dimensions?.height !== 268) {
+    fail('SWIFT integrity dimensions must remain 384x268');
+  }
+  if (integrity.swift.transparent !== true) {
+    fail('SWIFT integrity metadata must keep transparency locked');
   }
 }
 
