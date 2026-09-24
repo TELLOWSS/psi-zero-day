@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-2",
-  "status": "ASSET_INGESTED_RUNTIME_VISUAL_QA_PENDING",
+  "status": "MASTER_WORLD_VISUAL_QA_PASS",
   "runtimeTarget": "src/ui/DefenseGame.tsx",
   "branch": "sol/def-hd01-master-world-20260924",
   "backgroundCandidate": {
@@ -56,7 +56,27 @@
     "layoutContracts": "PASS",
     "build": "PASS",
     "assetBytesInRepository": "PASS",
-    "actualDefenseGameVisualQaWithHdBackground": "PENDING"
+    "actualDefenseGameVisualQaWithHdBackground": "PASS",
+    "realChromiumTenWavePlaythrough": "PASS",
+    "worldVisualQa": "PASS"
   },
-  "next": "DEF-HD01-2B_RUNTIME_VISUAL_QA"
+  "next": "DEF-HD01-PQ_REPRESENTATIVE_BENCHMARK",
+  "visualQa": {
+    "evidenceCommit": "a57426880641a3ffd6d875d222c42a863b218d44",
+    "result": "WORLD_PASS",
+    "gameplayResult": {
+      "status": "WON",
+      "completedWave": 10,
+      "stars": 2,
+      "shield": 18
+    },
+    "verified": [
+      "HD WebP loaded in actual DefenseGame runtime",
+      "1000x600 route authority preserved",
+      "eight runtime pad centers preserved",
+      "construction circulation overlay reduced so world art remains primary",
+      "tutorial, combat, wave 10 and result screenshots visually inspected"
+    ],
+    "scopeNote": "This closes G1 WORLD only. Legacy tower/risk/FX art is intentionally not declared Production Locked; G2 PQ benchmark must bring representative CONTROL, SWIFT and FX into the same production generation."
+  }
 }
