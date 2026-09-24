@@ -92,6 +92,19 @@ if (!integrity) {
   if (integrity.swift.transparent !== true) {
     fail('SWIFT integrity metadata must keep transparency locked');
   }
+  if (integrity.swift.selfContained !== true) {
+    fail('SWIFT integrity metadata must keep the sprite self-contained');
+  }
+  const swiftSvg = fs.readFileSync(publicPath(integrity.swift.uri), 'utf8');
+  if (!swiftSvg.includes('data-self-contained="true"')) {
+    fail('SWIFT sprite must declare data-self-contained="true"');
+  }
+  if (!swiftSvg.includes('data:image/webp;base64,')) {
+    fail('SWIFT sprite must embed its MASTER WORLD source bytes');
+  }
+  if (swiftSvg.includes('../board/') || swiftSvg.includes('href="/assets/')) {
+    fail('SWIFT sprite must not depend on an external board image reference');
+  }
 }
 
 if (benchmark.runtimePromotion.previewCandidateOnGateBranch !== true) {
