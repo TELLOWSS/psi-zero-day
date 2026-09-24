@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import scenes from '../content/episode01/immersive-scenes.json';
 import { episode01FieldProduction } from '../src/app/episode01-field-production';
 import { episode01CharacterBlocking } from '../src/app/episode01-character-blocking';
 import { episode01CharacterPerformance } from '../src/app/episode01-character-performance';
@@ -82,6 +83,18 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
       expression: 'resolve',
       pose: 'listen',
     });
+  });
+
+  it('keeps the Junho signal benchmark on final realistic route context only', () => {
+    expect(scenes.events.e01_04_junho_signal.props).toEqual([
+      'assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
+    ]);
+    expect(scenes.events.e01_04_junho_signal.props).not.toContain(
+      'assets/episode01/scene-elements/vehicle-overlap.webp',
+    );
+    expect(scenes.events.e01_04_junho_signal.props).not.toContain(
+      'assets/episode01/scene-elements/access-barrier.webp',
+    );
   });
 
   it('locks FIELD production profiles and world-first judgment UI in CSS', () => {
