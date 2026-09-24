@@ -1,6 +1,12 @@
 name: G2 Runner Sentinel
 
 on:
+  push:
+    branches:
+      - sol/def-hd01-pq-benchmark-20260924
+    paths:
+      - '.github/workflows/g2-runner-sentinel.yml'
+      - 'docs/defense/G2_RUNNER_SENTINEL.md'
   pull_request:
     branches:
       - main
