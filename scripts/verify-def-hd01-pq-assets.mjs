@@ -1,99 +1,70 @@
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json' with { type: 'json' };
 
 const root = process.cwd();
+const publicPath = relative => path.resolve(root, 'public', relative);
 
 function fail(message) {
   console.error(`[DEF-HD01-PQ] FAIL: ${message}`);
   process.exitCode = 1;
 }
 
-function sha256(bytes) {
-  return crypto.createHash('sha256').update(bytes).digest('hex');
+function requireFile(relative, label) {
+  const absolute = publicPath(relative);
+  if (!fs.existsSync(absolute)) {
+    fail(`${label} missing: ${relative}`);
+    return;
+  }
+  const bytes = fs.statSync(absolute).size;
+  if (bytes <= 0) fail(`${label} is empty: ${relative}`);
+  else console.log(`[DEF-HD01-PQ] ${label}: ${relative} (${bytes} bytes)`);
 }
 
-function readWebpMeta(relativePath) {
-  const absolute = path.resolve(root, 'public', relativePath);
-  const bytes = fs.readFileSync(absolute);
-  if (bytes.length < 30 || bytes.toString('ascii', 0, 4) !== 'RIFF' || bytes.toString('ascii', 8, 12) !== 'WEBP') {
-    throw new Error(`${relativePath} is not a valid RIFF WEBP`);
+const control = benchmark.benchmark.response.target;
+if (control.kind !== 'RUNTIME_COMPOSITE') {
+  fail('CONTROL benchmark must use RUNTIME_COMPOSITE');
+} else {
+  if (!Array.isArray(control.sources) || control.sources.length !== 2) {
+    fail('CONTROL runtime composite must declare exactly two source assets');
+  } else {
+    requireFile(control.sources[0], 'CONTROL marshal');
+    requireFile(control.sources[1], 'CONTROL barrier');
   }
+}
 
-  let offset = 12;
-  let width = null;
-  let height = null;
-  let hasAlpha = false;
-
-  while (offset + 8 <= bytes.length) {
-    const type = bytes.toString('ascii', offset, offset + 4);
-    const size = bytes.readUInt32LE(offset + 4);
-    const data = offset + 8;
-
-    if (type === 'VP8X' && size >= 10 && data + 10 <= bytes.length) {
-      const flags = bytes[data];
-      hasAlpha ||= Boolean(flags & 0x10);
-      width = 1 + bytes[data + 4] + (bytes[data + 5] << 8) + (bytes[data + 6] << 16);
-      height = 1 + bytes[data + 7] + (bytes[data + 8] << 8) + (bytes[data + 9] << 16);
-    } else if (type === 'ALPH') {
-      hasAlpha = true;
+const swift = benchmark.benchmark.risk.target;
+if (swift.kind !== 'RUNTIME_WORLD_CROP') {
+  fail('SWIFT benchmark must use RUNTIME_WORLD_CROP');
+} else {
+  requireFile(swift.source, 'SWIFT master-world source');
+  if (swift.sourceLogicalSize?.width !== 1000 || swift.sourceLogicalSize?.height !== 600) {
+    fail('SWIFT crop source must stay aligned to the locked 1000x600 DefenseGame world');
+  }
+  const box = swift.cropViewBox;
+  if (!box || box.width <= 0 || box.height <= 0) fail('SWIFT cropViewBox must be positive');
+  if (!Array.isArray(swift.clipPolygon) || swift.clipPolygon.length < 6) {
+    fail('SWIFT clip polygon is too coarse for a production candidate');
+  } else if (box) {
+    for (const point of swift.clipPolygon) {
+      const [x, y] = point;
+      if (x < box.x || x > box.x + box.width || y < box.y || y > box.y + box.height) {
+        fail(`SWIFT clip point ${x},${y} falls outside cropViewBox`);
+      }
     }
-
-    offset = data + size + (size % 2);
   }
-
-  if (width == null || height == null) {
-    throw new Error(`${relativePath} must use VP8X extended WEBP so dimensions/alpha can be locked deterministically`);
-  }
-
-  return {
-    relativePath,
-    bytes: bytes.length,
-    width,
-    height,
-    hasAlpha,
-    sha256: sha256(bytes),
-  };
 }
 
-const entries = [
-  ['CONTROL', benchmark.benchmark.response],
-  ['SWIFT', benchmark.benchmark.risk],
-];
-
-const present = entries.map(([name, entry]) => {
-  const absolute = path.resolve(root, 'public', entry.productionAsset);
-  return [name, entry, fs.existsSync(absolute)];
-});
-
-const presentCount = present.filter(([, , exists]) => exists).length;
-if (presentCount === 0) {
-  console.log('[DEF-HD01-PQ] PQ01 binaries are not committed yet; candidate production remains pending.');
-  process.exit(0);
+if (benchmark.runtimePromotion.previewCandidateOnGateBranch !== true) {
+  fail('G2 branch must explicitly enable candidate preview for browser QA');
 }
-if (presentCount !== present.length) {
-  fail('PQ01 candidate set is incomplete: CONTROL and SWIFT must be committed together for benchmark QA.');
-  process.exit(1);
+if (benchmark.runtimePromotion.approved !== false) {
+  fail('Production approval must remain false until browser visual QA passes');
 }
-
-const report = {};
-for (const [name, entry] of entries) {
-  try {
-    const meta = readWebpMeta(entry.productionAsset);
-    report[name] = meta;
-    if (meta.width !== entry.target.width || meta.height !== entry.target.height) {
-      fail(`${name} dimensions drifted: expected ${entry.target.width}x${entry.target.height}, got ${meta.width}x${meta.height}`);
-    }
-    if (entry.target.transparent && !meta.hasAlpha) {
-      fail(`${name} must contain transparency/alpha`);
-    }
-  } catch (error) {
-    fail(error instanceof Error ? error.message : String(error));
-  }
+if (benchmark.runtimeGate.noGameplayCoordinateChange !== true || benchmark.runtimeGate.noBalanceChange !== true) {
+  fail('G2 may not change gameplay coordinates or balance');
 }
 
 if (!process.exitCode) {
-  console.log('[DEF-HD01-PQ] candidate binary QA PASS');
-  console.log(JSON.stringify(report, null, 2));
+  console.log('[DEF-HD01-PQ] runtime composite source QA PASS');
 }
