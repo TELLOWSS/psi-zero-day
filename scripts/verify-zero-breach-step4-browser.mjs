@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import net from 'node:net';
 
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_DEFENSE_STEP4_ARTIFACT_DIR || 'artifacts/zero-breach-step4-browser');
@@ -20,7 +21,26 @@ if (!chrome) {
   process.exit(1);
 }
 
-const port = Number(process.env.PSI_CHROME_DEBUG_PORT || 9555);
+async function allocateDebugPort() {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.unref();
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', () => {
+      const address = server.address();
+      const port = typeof address === 'object' && address ? address.port : null;
+      server.close(error => {
+        if (error) reject(error);
+        else if (typeof port === 'number') resolve(port);
+        else reject(new Error('Unable to allocate Chrome debug port'));
+      });
+    });
+  });
+}
+
+const port = process.env.PSI_CHROME_DEBUG_PORT
+  ? Number(process.env.PSI_CHROME_DEBUG_PORT)
+  : await allocateDebugPort();
 const profile = fs.mkdtempSync('/tmp/psi-zero-breach-step4-');
 const browser = spawn(chrome, [
   '--headless',
