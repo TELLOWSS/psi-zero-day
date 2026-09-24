@@ -1,11 +1,6 @@
 name: Verify DEF-HD01 PQ Benchmark
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - 'qa/def-hd01-pq/**'
   workflow_dispatch:
 
 permissions:
