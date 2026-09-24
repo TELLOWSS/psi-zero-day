@@ -188,7 +188,7 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "FRESH_ACTUAL_BROWSER_QA_WHEN_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERS_THEN_FINAL_G2_PRODUCTION_LOCK",
+  "next": "WAIT_FOR_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERY_THEN_MANUALLY_RUN_SINGLE_G2_QA_GATE",
   "runtimePromotion": {
     "approved": false,
     "status": "BLOCKED_ONLY_BY_FRESH_ACTUAL_BROWSER_QA",
@@ -335,6 +335,29 @@
       "chrome153Hardening": true,
       "dynamicDebugPort": true,
       "uploadArtifactStep": false
+    }
+  },
+  "repositorySync": {
+    "mode": "GITHUB_FIRST",
+    "mainBaselineSha": "95a3b438ee79f4796e15dfadc7a6b447f6e92da7",
+    "g2SyncMergeSha": "538df2076bf5a136d8c725cdb7bfcda5a34284c9",
+    "behindMain": 0,
+    "prNumber": 48,
+    "prMergeable": true,
+    "vercelAutomaticGitDeployments": false,
+    "heavyActionsAutomaticExecution": false,
+    "artifactCleanupVerification": {
+      "representativeRunsChecked": [
+        35995588079,
+        35996203431,
+        35997230578,
+        35998920057
+      ],
+      "artifactsRemainingInCheckedRuns": 0,
+      "runnerRecheckRunId": 35999767376,
+      "runnerRecheckAttempt": 2,
+      "runnerAllocated": false,
+      "note": "Artifact cleanup is reflected for representative runs, but GitHub-hosted runner allocation has not recovered yet."
     }
   }
 }
