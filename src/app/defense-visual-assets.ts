@@ -61,7 +61,7 @@ interface DefHd01PqBenchmark {
   };
 }
 
-const defHd01PqBenchmark = defHd01PqBenchmarkRaw as DefHd01PqBenchmark;
+const defHd01PqBenchmark = defHd01PqBenchmarkRaw as unknown as DefHd01PqBenchmark;
 
 function pqPreviewEnabled(): boolean {
   return defHd01PqBenchmark.runtimePromotion?.approved === true
