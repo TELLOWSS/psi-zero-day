@@ -52,10 +52,10 @@ interface DefHd01PqBenchmark {
     readonly risk?: {
       readonly target?: {
         readonly kind?: string;
-        readonly source?: string;
-        readonly sourceLogicalSize?: { readonly width: number; readonly height: number };
-        readonly cropViewBox?: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
-        readonly clipPolygon?: readonly (readonly [number, number])[];
+        readonly asset?: string;
+        readonly width?: number;
+        readonly height?: number;
+        readonly transparent?: boolean;
       };
     };
   };
@@ -80,29 +80,23 @@ export function defenseControlPqComposite(): {
   return { marshalUri: sources[0]!, barrierUri: sources[1]! };
 }
 
-export function defenseSwiftPqCrop(): {
-  readonly source: string;
-  readonly sourceLogicalSize: { readonly width: number; readonly height: number };
-  readonly cropViewBox: { readonly x: number; readonly y: number; readonly width: number; readonly height: number };
-  readonly clipPolygon: readonly (readonly [number, number])[];
+export function defenseSwiftPqAsset(): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
 } | null {
   if (!pqPreviewEnabled()) return null;
   const target = defHd01PqBenchmark.benchmark?.risk?.target;
   if (
-    target?.kind !== 'RUNTIME_WORLD_CROP'
-    || !target.source
-    || !target.sourceLogicalSize
-    || !target.cropViewBox
-    || !target.clipPolygon
+    target?.kind !== 'STATIC_TRANSPARENT_SVG'
+    || !target.asset
+    || !target.width
+    || !target.height
+    || target.transparent !== true
   ) {
     return null;
   }
-  return {
-    source: target.source,
-    sourceLogicalSize: target.sourceLogicalSize,
-    cropViewBox: target.cropViewBox,
-    clipPolygon: target.clipPolygon,
-  };
+  return { uri: target.asset, width: target.width, height: target.height };
 }
 
 function asset(id: string): DefenseVisualAsset | null {
