@@ -85,9 +85,10 @@ describe('Episode 01 Phase C-2 FIELD production scene', () => {
     });
   });
 
-  it('keeps the Junho signal benchmark on final realistic route context only', () => {
+  it('keeps the Junho signal benchmark on final realistic route and material context', () => {
     expect(scenes.events.e01_04_junho_signal.props).toEqual([
       'assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
+      'assets/episode01/scene-elements/material-yard.webp',
     ]);
     expect(scenes.events.e01_04_junho_signal.props).not.toContain(
       'assets/episode01/scene-elements/vehicle-overlap.webp',
