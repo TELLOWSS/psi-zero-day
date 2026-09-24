@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-24T07:38:41.085Z",
+  "generated_at": "2026-09-24T07:45:04.056Z",
   "base_url": "http://127.0.0.1:4173",
   "browser": "/usr/bin/google-chrome",
   "results": [
@@ -126,7 +126,7 @@
         "width": 390,
         "height": 844
       },
-      "bodyTextLength": 211,
+      "bodyTextLength": 212,
       "scrollWidth": 390,
       "horizontalOverflow": false,
       "errorOverlay": false,
@@ -582,9 +582,9 @@
         {
           "text": "계속→",
           "left": 266,
-          "top": 780,
+          "top": 779,
           "right": 370,
-          "bottom": 826,
+          "bottom": 825,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -605,7 +605,7 @@
         "right": 390,
         "bottom": 844,
         "width": 390,
-        "height": 793
+        "height": 792
       },
       "tbmKangRect": {
         "left": 226,
@@ -613,7 +613,7 @@
         "right": 363,
         "bottom": 637,
         "width": 137,
-        "height": 406
+        "height": 405
       },
       "tbmPlayerRect": {
         "left": 27,
@@ -621,7 +621,7 @@
         "right": 148,
         "bottom": 629,
         "width": 121,
-        "height": 372
+        "height": 371
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 2,
@@ -636,7 +636,7 @@
         "right": 148,
         "bottom": 629,
         "width": 121,
-        "height": 372
+        "height": 371
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -791,11 +791,11 @@
       "tbmKangRect": null,
       "tbmPlayerRect": {
         "left": -33,
-        "top": 153,
+        "top": 155,
         "right": 80,
         "bottom": 574,
         "width": 114,
-        "height": 421
+        "height": 419
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -806,11 +806,11 @@
       "day02CaptionRect": null,
       "day02PlayerRect": {
         "left": -33,
-        "top": 153,
+        "top": 155,
         "right": 80,
         "bottom": 574,
         "width": 114,
-        "height": 421
+        "height": 419
       },
       "productionScene": "FIELD",
       "interactionMode": "dialogue",
@@ -919,9 +919,9 @@
         },
         {
           "text": "이재훈 · 공사대리",
-          "left": 335,
+          "left": 334,
           "top": 283,
-          "right": 379,
+          "right": 378,
           "bottom": 341,
           "withinViewport": true,
           "occluded": false,
@@ -929,10 +929,10 @@
         },
         {
           "text": "⇄차량·작업 동선 겹침",
-          "left": 226,
+          "left": 225,
           "top": 557,
           "right": 336,
-          "bottom": 602,
+          "bottom": 601,
           "withinViewport": true,
           "occluded": false,
           "topElement": "STRONG"
@@ -1066,19 +1066,19 @@
       "strategyHd02Camera": "hd02",
       "strategyHd02Zoom": "1.00",
       "strategyCameraWorldRect": {
-        "left": -488,
+        "left": -487,
         "top": 142,
-        "right": 754,
+        "right": 753,
         "bottom": 840,
-        "width": 1242,
+        "width": 1241,
         "height": 698
       },
       "strategyCameraInteractionRect": {
-        "left": -488,
+        "left": -487,
         "top": 142,
-        "right": 754,
+        "right": 753,
         "bottom": 840,
-        "width": 1242,
+        "width": 1241,
         "height": 698
       },
       "strategyRecenterRect": {
@@ -2612,7 +2612,7 @@
         "right": 412,
         "bottom": 915,
         "width": 412,
-        "height": 864
+        "height": 863
       },
       "tbmKangRect": {
         "left": 239,
@@ -2750,9 +2750,9 @@
         {
           "text": "현장·관계01임준호와 90초만 현장으로 간다. 위치·변화·차량 통과순서를 직접 듣는다.↗",
           "left": 18,
-          "top": 700,
+          "top": 699,
           "right": 392,
-          "bottom": 744,
+          "bottom": 743,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -2760,9 +2760,9 @@
         {
           "text": "통제·검증02임준호에게 지점을 표시하게 하고 최민석에게 반대쪽에서 상태를 교차확인해 달라고 무전한다.↗",
           "left": 18,
-          "top": 748,
+          "top": 747,
           "right": 392,
-          "bottom": 792,
+          "bottom": 791,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -2770,9 +2770,9 @@
         {
           "text": "공정·압박03지금은 진입부를 놓치지 않는다. '같은 움직임이 한 번 더 보이면 즉시 무전'하도록 기준을 정한다.↗",
           "left": 18,
-          "top": 796,
+          "top": 795,
           "right": 392,
-          "bottom": 840,
+          "bottom": 839,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -2797,12 +2797,12 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": -34,
-        "top": 91,
-        "right": 87,
+        "left": -35,
+        "top": 167,
+        "right": 85,
         "bottom": 622,
         "width": 120,
-        "height": 531
+        "height": 455
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -2812,12 +2812,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": -34,
-        "top": 91,
-        "right": 87,
+        "left": -35,
+        "top": 167,
+        "right": 85,
         "bottom": 622,
         "width": 120,
-        "height": 531
+        "height": 455
       },
       "productionScene": "FIELD",
       "interactionMode": "dialogue",
@@ -3188,9 +3188,9 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": -49,
-        "top": 95,
-        "right": 207,
+        "left": -50,
+        "top": 96,
+        "right": 206,
         "bottom": 429,
         "width": 256,
         "height": 334
@@ -3203,9 +3203,9 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": -49,
-        "top": 95,
-        "right": 207,
+        "left": -50,
+        "top": 96,
+        "right": 206,
         "bottom": 429,
         "width": 256,
         "height": 334
@@ -4596,9 +4596,9 @@
         {
           "text": "계속→",
           "left": 714,
-          "top": 336,
+          "top": 335,
           "right": 826,
-          "bottom": 380,
+          "bottom": 379,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -4618,7 +4618,7 @@
         "top": 46,
         "right": 844,
         "bottom": 390,
-        "width": 845,
+        "width": 844,
         "height": 344
       },
       "tbmKangRect": {
@@ -4627,15 +4627,15 @@
         "right": 732,
         "bottom": 407,
         "width": 283,
-        "height": 376
+        "height": 375
       },
       "tbmPlayerRect": {
-        "left": 147,
+        "left": 148,
         "top": 101,
         "right": 359,
-        "bottom": 401,
+        "bottom": 400,
         "width": 211,
-        "height": 300
+        "height": 299
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 2,
@@ -4645,12 +4645,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 147,
+        "left": 148,
         "top": 101,
         "right": 359,
-        "bottom": 401,
+        "bottom": 400,
         "width": 211,
-        "height": 300
+        "height": 299
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -4805,7 +4805,7 @@
       "tbmKangRect": null,
       "tbmPlayerRect": {
         "left": -3,
-        "top": 47,
+        "top": 48,
         "right": 189,
         "bottom": 281,
         "width": 191,
@@ -4820,7 +4820,7 @@
       "day02CaptionRect": null,
       "day02PlayerRect": {
         "left": -3,
-        "top": 47,
+        "top": 48,
         "right": 189,
         "bottom": 281,
         "width": 191,
@@ -4946,7 +4946,7 @@
           "left": 532,
           "top": 256,
           "right": 648,
-          "bottom": 300,
+          "bottom": 301,
           "withinViewport": true,
           "occluded": false,
           "topElement": "STRONG"
@@ -5196,11 +5196,11 @@
       "tbmKangRect": null,
       "tbmPlayerRect": {
         "left": -30,
-        "top": 37,
+        "top": 36,
         "right": 302,
         "bottom": 419,
-        "width": 331,
-        "height": 381
+        "width": 332,
+        "height": 383
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 2,
@@ -5211,11 +5211,11 @@
       "day02CaptionRect": null,
       "day02PlayerRect": {
         "left": -30,
-        "top": 37,
+        "top": 36,
         "right": 302,
         "bottom": 419,
-        "width": 331,
-        "height": 381
+        "width": 332,
+        "height": 383
       },
       "productionScene": "STOP_WORK",
       "interactionMode": "decision",
@@ -5691,9 +5691,9 @@
         {
           "text": "회복·정리01오늘은 더 판단하지 않는다. 휴대폰을 뒤집고 수면을 우선한다.↗",
           "left": 191,
-          "top": 334,
+          "top": 333,
           "right": 347,
-          "bottom": 380,
+          "bottom": 379,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -5701,9 +5701,9 @@
         {
           "text": "회복·정리02현장 이야기를 잠시 내려놓고 가족과 저녁을 먹는다. 사람을 상대할 여유를 회복한다.↗",
           "left": 351,
-          "top": 334,
+          "top": 333,
           "right": 508,
-          "bottom": 380,
+          "bottom": 379,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -5711,9 +5711,9 @@
         {
           "text": "회복·정리03오늘 실제로 막혔던 한 장면만 골라 기준·도면·절차와 비교한다.↗",
           "left": 512,
-          "top": 334,
+          "top": 333,
           "right": 668,
-          "bottom": 380,
+          "bottom": 379,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -5721,9 +5721,9 @@
         {
           "text": "회복·정리04오늘의 선택을 시간순으로 5줄만 적는다. 정답이 아니라 ‘봤던 것·놓친 것·다음 확인’을 남긴다.↗",
           "left": 672,
-          "top": 334,
+          "top": 333,
           "right": 828,
-          "bottom": 380,
+          "bottom": 379,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -6610,9 +6610,9 @@
         {
           "text": "계속→",
           "left": 937,
-          "top": 655,
+          "top": 653,
           "right": 1085,
-          "bottom": 693,
+          "bottom": 691,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -6628,28 +6628,28 @@
       "activeEvent": "e01_02_meet_kang",
       "activeNode": "kang",
       "immersiveSceneRect": {
-        "left": -2,
-        "top": 63,
-        "right": 1282,
-        "bottom": 675,
-        "width": 1284,
-        "height": 612
+        "left": -1,
+        "top": 64,
+        "right": 1281,
+        "bottom": 674,
+        "width": 1282,
+        "height": 611
       },
       "tbmKangRect": {
         "left": 717,
-        "top": 106,
-        "right": 1077,
-        "bottom": 687,
-        "width": 360,
-        "height": 581
+        "top": 107,
+        "right": 1076,
+        "bottom": 686,
+        "width": 359,
+        "height": 579
       },
       "tbmPlayerRect": {
-        "left": 229,
-        "top": 179,
+        "left": 230,
+        "top": 180,
         "right": 537,
         "bottom": 693,
         "width": 308,
-        "height": 514
+        "height": 513
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 2,
@@ -6659,12 +6659,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 229,
-        "top": 179,
+        "left": 230,
+        "top": 180,
         "right": 537,
         "bottom": 693,
         "width": 308,
-        "height": 514
+        "height": 513
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -6771,9 +6771,9 @@
         {
           "text": "현장·관계01임준호와 90초만 현장으로 간다. 위치·변화·차량 통과순서를 직접 듣는다.↗",
           "left": 352,
-          "top": 621,
+          "top": 619,
           "right": 622,
-          "bottom": 697,
+          "bottom": 695,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -6781,9 +6781,9 @@
         {
           "text": "통제·검증02임준호에게 지점을 표시하게 하고 최민석에게 반대쪽에서 상태를 교차확인해 달라고 무전한다.↗",
           "left": 630,
-          "top": 621,
+          "top": 619,
           "right": 901,
-          "bottom": 697,
+          "bottom": 695,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -6791,9 +6791,9 @@
         {
           "text": "공정·압박03지금은 진입부를 놓치지 않는다. '같은 움직임이 한 번 더 보이면 즉시 무전'하도록 기준을 정한다.↗",
           "left": 909,
-          "top": 621,
+          "top": 619,
           "right": 1179,
-          "bottom": 697,
+          "bottom": 695,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -6818,12 +6818,12 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": 75,
-        "top": 206,
-        "right": 322,
+        "left": 80,
+        "top": 223,
+        "right": 329,
         "bottom": 631,
-        "width": 247,
-        "height": 425
+        "width": 249,
+        "height": 408
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -6833,12 +6833,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 75,
-        "top": 206,
-        "right": 322,
+        "left": 80,
+        "top": 223,
+        "right": 329,
         "bottom": 631,
-        "width": 247,
-        "height": 425
+        "width": 249,
+        "height": 408
       },
       "productionScene": "FIELD",
       "interactionMode": "dialogue",
@@ -6957,10 +6957,10 @@
         },
         {
           "text": "⇄차량·작업 동선 겹침",
-          "left": 805,
+          "left": 804,
           "top": 446,
-          "right": 921,
-          "bottom": 488,
+          "right": 922,
+          "bottom": 489,
           "withinViewport": true,
           "occluded": false,
           "topElement": "STRONG"
@@ -7127,7 +7127,7 @@
         "height": 144
       },
       "strategyGuideState": "target",
-      "strategyVisibleWorkerLabels": 1,
+      "strategyVisibleWorkerLabels": 2,
       "strategyVisibleZoneCopies": 5,
       "strategyVisibleRiskSignals": 1,
       "strategyPhase": "tactical-judgment",
@@ -7182,9 +7182,9 @@
         {
           "text": "계속→",
           "left": 1051,
-          "top": 616,
+          "top": 615,
           "right": 1199,
-          "bottom": 660,
+          "bottom": 659,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -7196,7 +7196,7 @@
       "immersiveBackgroundLoaded": true,
       "immersiveBackgroundOpacity": 0,
       "immersiveAtmosphereOpacity": 1,
-      "immersiveGradeOpacity": 0.338591,
+      "immersiveGradeOpacity": 0.28,
       "activeEvent": "e01_08c_site_pushback",
       "activeNode": "full_stop",
       "immersiveSceneRect": {
@@ -7209,12 +7209,12 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": 330,
-        "top": 109,
-        "right": 725,
+        "left": 344,
+        "top": 101,
+        "right": 741,
         "bottom": 778,
-        "width": 396,
-        "height": 669
+        "width": 397,
+        "height": 677
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -7224,12 +7224,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 330,
-        "top": 109,
-        "right": 725,
+        "left": 344,
+        "top": 101,
+        "right": 741,
         "bottom": 778,
-        "width": 396,
-        "height": 669
+        "width": 397,
+        "height": 677
       },
       "productionScene": "STOP_WORK",
       "interactionMode": "decision",
@@ -7524,9 +7524,9 @@
         {
           "text": "기록·증거01아침 TBM 기준을 다시 확인시키고 난간을 복구한다. 작업변경 내용은 작업 종료 후 별도 보완한다.↗",
           "left": 370,
-          "top": 582,
+          "top": 581,
           "right": 627,
-          "bottom": 658,
+          "bottom": 657,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7534,9 +7534,9 @@
         {
           "text": "현장·관계02난간을 연 작업자를 특정해 즉시 복구·재교육한다. 전체 작업 흐름은 유지한다.↗",
           "left": 635,
-          "top": 582,
+          "top": 581,
           "right": 892,
-          "bottom": 658,
+          "bottom": 657,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7544,9 +7544,9 @@
         {
           "text": "통제·검증03반출을 잠시 멈추고 ‘왜 열어야 했는지’부터 다시 정리해, 변경된 순서와 통제방법을 현장에서 재브리핑한다.↗",
           "left": 900,
-          "top": 582,
+          "top": 581,
           "right": 1156,
-          "bottom": 658,
+          "bottom": 657,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7570,20 +7570,20 @@
         "height": 610
       },
       "tbmKangRect": {
-        "left": 270,
+        "left": 247,
         "top": 218,
-        "right": 553,
+        "right": 530,
         "bottom": 698,
         "width": 283,
         "height": 480
       },
       "tbmPlayerRect": {
-        "left": 427,
-        "top": 96,
-        "right": 800,
+        "left": 449,
+        "top": 79,
+        "right": 822,
         "bottom": 711,
         "width": 373,
-        "height": 615
+        "height": 631
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 4,
@@ -7593,12 +7593,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 427,
-        "top": 96,
-        "right": 800,
+        "left": 449,
+        "top": 79,
+        "right": 822,
         "bottom": 711,
         "width": 373,
-        "height": 615
+        "height": 631
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -7705,9 +7705,9 @@
         {
           "text": "회복·정리01오늘은 더 판단하지 않는다. 휴대폰을 뒤집고 수면을 우선한다.↗",
           "left": 115,
-          "top": 627,
+          "top": 625,
           "right": 370,
-          "bottom": 675,
+          "bottom": 673,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7715,9 +7715,9 @@
         {
           "text": "회복·정리02현장 이야기를 잠시 내려놓고 가족과 저녁을 먹는다. 사람을 상대할 여유를 회복한다.↗",
           "left": 375,
-          "top": 627,
+          "top": 625,
           "right": 629,
-          "bottom": 675,
+          "bottom": 673,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7725,9 +7725,9 @@
         {
           "text": "회복·정리03오늘 실제로 막혔던 한 장면만 골라 기준·도면·절차와 비교한다.↗",
           "left": 634,
-          "top": 627,
+          "top": 625,
           "right": 888,
-          "bottom": 675,
+          "bottom": 673,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -7735,9 +7735,9 @@
         {
           "text": "회복·정리04오늘의 선택을 시간순으로 5줄만 적는다. 정답이 아니라 ‘봤던 것·놓친 것·다음 확인’을 남긴다.↗",
           "left": 893,
-          "top": 627,
+          "top": 625,
           "right": 1148,
-          "bottom": 675,
+          "bottom": 673,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -8617,9 +8617,9 @@
         {
           "text": "계속→",
           "left": 1013,
-          "top": 706,
+          "top": 701,
           "right": 1161,
-          "bottom": 744,
+          "bottom": 739,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -8635,28 +8635,28 @@
       "activeEvent": "e01_02_meet_kang",
       "activeNode": "kang",
       "immersiveSceneRect": {
-        "left": -5,
-        "top": 61,
-        "right": 1371,
-        "bottom": 725,
-        "width": 1376,
-        "height": 663
+        "left": -1,
+        "top": 63,
+        "right": 1367,
+        "bottom": 723,
+        "width": 1369,
+        "height": 660
       },
       "tbmKangRect": {
         "left": 765,
-        "top": 108,
-        "right": 1151,
-        "bottom": 738,
-        "width": 386,
-        "height": 629
+        "top": 110,
+        "right": 1149,
+        "bottom": 736,
+        "width": 384,
+        "height": 626
       },
       "tbmPlayerRect": {
-        "left": 243,
-        "top": 187,
-        "right": 573,
-        "bottom": 745,
-        "width": 330,
-        "height": 557
+        "left": 245,
+        "top": 189,
+        "right": 574,
+        "bottom": 743,
+        "width": 328,
+        "height": 554
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 2,
@@ -8666,12 +8666,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 243,
-        "top": 187,
-        "right": 573,
-        "bottom": 745,
-        "width": 330,
-        "height": 557
+        "left": 245,
+        "top": 189,
+        "right": 574,
+        "bottom": 743,
+        "width": 328,
+        "height": 554
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -8778,9 +8778,9 @@
         {
           "text": "현장·관계01임준호와 90초만 현장으로 간다. 위치·변화·차량 통과순서를 직접 듣는다.↗",
           "left": 375,
-          "top": 668,
+          "top": 667,
           "right": 665,
-          "bottom": 744,
+          "bottom": 743,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -8788,9 +8788,9 @@
         {
           "text": "통제·검증02임준호에게 지점을 표시하게 하고 최민석에게 반대쪽에서 상태를 교차확인해 달라고 무전한다.↗",
           "left": 673,
-          "top": 668,
+          "top": 667,
           "right": 963,
-          "bottom": 744,
+          "bottom": 743,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -8798,9 +8798,9 @@
         {
           "text": "공정·압박03지금은 진입부를 놓치지 않는다. '같은 움직임이 한 번 더 보이면 즉시 무전'하도록 기준을 정한다.↗",
           "left": 971,
-          "top": 668,
+          "top": 667,
           "right": 1260,
-          "bottom": 744,
+          "bottom": 743,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -8825,12 +8825,12 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": 82,
-        "top": 233,
-        "right": 347,
+        "left": 85,
+        "top": 235,
+        "right": 351,
         "bottom": 676,
         "width": 265,
-        "height": 443
+        "height": 441
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -8840,12 +8840,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 82,
-        "top": 233,
-        "right": 347,
+        "left": 85,
+        "top": 235,
+        "right": 351,
         "bottom": 676,
         "width": 265,
-        "height": 443
+        "height": 441
       },
       "productionScene": "FIELD",
       "interactionMode": "dialogue",
@@ -8964,9 +8964,9 @@
         },
         {
           "text": "⇄차량·작업 동선 겹침",
-          "left": 859,
+          "left": 858,
           "top": 476,
-          "right": 979,
+          "right": 980,
           "bottom": 518,
           "withinViewport": true,
           "occluded": false,
@@ -9134,7 +9134,7 @@
         "height": 152
       },
       "strategyGuideState": "target",
-      "strategyVisibleWorkerLabels": 1,
+      "strategyVisibleWorkerLabels": 2,
       "strategyVisibleZoneCopies": 5,
       "strategyVisibleRiskSignals": 1,
       "strategyPhase": "tactical-judgment",
@@ -9189,9 +9189,9 @@
         {
           "text": "계속→",
           "left": 1134,
-          "top": 666,
+          "top": 665,
           "right": 1282,
-          "bottom": 710,
+          "bottom": 709,
           "withinViewport": true,
           "occluded": false,
           "topElement": "continue-button"
@@ -9203,7 +9203,7 @@
       "immersiveBackgroundLoaded": true,
       "immersiveBackgroundOpacity": 0,
       "immersiveAtmosphereOpacity": 1,
-      "immersiveGradeOpacity": 0.36499,
+      "immersiveGradeOpacity": 0.302829,
       "activeEvent": "e01_08c_site_pushback",
       "activeNode": "full_stop",
       "immersiveSceneRect": {
@@ -9216,12 +9216,12 @@
       },
       "tbmKangRect": null,
       "tbmPlayerRect": {
-        "left": 346,
-        "top": 119,
-        "right": 768,
+        "left": 360,
+        "top": 112,
+        "right": 783,
         "bottom": 829,
-        "width": 422,
-        "height": 710
+        "width": 423,
+        "height": 718
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 3,
@@ -9231,12 +9231,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": 346,
-        "top": 119,
-        "right": 768,
+        "left": 360,
+        "top": 112,
+        "right": 783,
         "bottom": 829,
-        "width": 422,
-        "height": 710
+        "width": 423,
+        "height": 718
       },
       "productionScene": "STOP_WORK",
       "interactionMode": "decision",
@@ -9531,9 +9531,9 @@
         {
           "text": "기록·증거01아침 TBM 기준을 다시 확인시키고 난간을 복구한다. 작업변경 내용은 작업 종료 후 별도 보완한다.↗",
           "left": 394,
-          "top": 641,
+          "top": 629,
           "right": 669,
-          "bottom": 717,
+          "bottom": 705,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9541,9 +9541,9 @@
         {
           "text": "현장·관계02난간을 연 작업자를 특정해 즉시 복구·재교육한다. 전체 작업 흐름은 유지한다.↗",
           "left": 677,
-          "top": 641,
+          "top": 629,
           "right": 953,
-          "bottom": 717,
+          "bottom": 705,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9551,9 +9551,9 @@
         {
           "text": "통제·검증03반출을 잠시 멈추고 ‘왜 열어야 했는지’부터 다시 정리해, 변경된 순서와 통제방법을 현장에서 재브리핑한다.↗",
           "left": 961,
-          "top": 641,
+          "top": 629,
           "right": 1236,
-          "bottom": 717,
+          "bottom": 705,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9577,20 +9577,20 @@
         "height": 658
       },
       "tbmKangRect": {
-        "left": 805,
-        "top": 249,
-        "right": 1107,
+        "left": 270,
+        "top": 230,
+        "right": 572,
         "bottom": 748,
         "width": 301,
-        "height": 499
+        "height": 518
       },
       "tbmPlayerRect": {
-        "left": -4,
-        "top": 386,
-        "right": 305,
+        "left": 473,
+        "top": 85,
+        "right": 871,
         "bottom": 761,
-        "width": 310,
-        "height": 376
+        "width": 398,
+        "height": 676
       },
       "officeEvidenceBoardRect": null,
       "officeVisibleCharacters": 4,
@@ -9600,12 +9600,12 @@
       "dayResultTomorrowRect": null,
       "day02CaptionRect": null,
       "day02PlayerRect": {
-        "left": -4,
-        "top": 386,
-        "right": 305,
+        "left": 473,
+        "top": 85,
+        "right": 871,
         "bottom": 761,
-        "width": 310,
-        "height": 376
+        "width": 398,
+        "height": 676
       },
       "productionScene": "TBM",
       "interactionMode": "communicate",
@@ -9712,9 +9712,9 @@
         {
           "text": "회복·정리01오늘은 더 판단하지 않는다. 휴대폰을 뒤집고 수면을 우선한다.↗",
           "left": 123,
-          "top": 685,
+          "top": 674,
           "right": 395,
-          "bottom": 733,
+          "bottom": 722,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9722,9 +9722,9 @@
         {
           "text": "회복·정리02현장 이야기를 잠시 내려놓고 가족과 저녁을 먹는다. 사람을 상대할 여유를 회복한다.↗",
           "left": 400,
-          "top": 685,
+          "top": 674,
           "right": 672,
-          "bottom": 733,
+          "bottom": 722,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9732,9 +9732,9 @@
         {
           "text": "회복·정리03오늘 실제로 막혔던 한 장면만 골라 기준·도면·절차와 비교한다.↗",
           "left": 677,
-          "top": 685,
+          "top": 674,
           "right": 949,
-          "bottom": 733,
+          "bottom": 722,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
@@ -9742,9 +9742,9 @@
         {
           "text": "회복·정리04오늘의 선택을 시간순으로 5줄만 적는다. 정답이 아니라 ‘봤던 것·놓친 것·다음 확인’을 남긴다.↗",
           "left": 954,
-          "top": 685,
+          "top": 674,
           "right": 1226,
-          "bottom": 733,
+          "bottom": 722,
           "withinViewport": true,
           "occluded": false,
           "topElement": "choice-text"
