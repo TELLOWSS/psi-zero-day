@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "DEDICATED_SWIFT_LOCK_IMPLEMENTED_EXTERNAL_QA_BLOCKED",
+  "status": "G2_IMPLEMENTATION_LOCKED_GITHUB_HOSTED_RUNNER_UNAVAILABLE",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -186,10 +186,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "FRESH_ACTUAL_BROWSER_QA_THEN_FINAL_G2_PRODUCTION_LOCK",
+  "next": "WHEN_GITHUB_HOSTED_RUNNER_ALLOCATION_RECOVERS_RUN_FRESH_G2_BROWSER_QA_THEN_FINAL_PRODUCTION_LOCK",
   "runtimePromotion": {
     "approved": false,
-    "status": "ASSET_INTEGRITY_LOCKED_ONLY_FRESH_BROWSER_QA_PENDING",
+    "status": "BLOCKED_ONLY_BY_FRESH_ACTUAL_BROWSER_QA",
     "requiredChecks": [
       "CONTROL production source exists at declared source path",
       "SWIFT dedicated PQ01 binary exists at declared production asset path",
@@ -235,16 +235,16 @@
   },
   "externalQaBlockers": [
     {
-      "system": "Vercel",
-      "state": "BUILD_RATE_LIMIT",
-      "effect": "Latest G2 branch Preview cannot be used for the final browser evidence."
+      "system": "GitHub Actions",
+      "state": "GITHUB_HOSTED_RUNNER_NOT_ALLOCATED",
+      "evidence": "Minimal one-step sentinel also ended with runner_id=0 and steps=[].",
+      "effect": "Fresh actual-browser G2 evidence cannot be produced until GitHub-hosted runner allocation recovers."
     },
     {
-      "system": "GitHub Actions",
-      "state": "JOB_FAILED_BEFORE_STEPS",
-      "run": "35998033547",
-      "runner": "ubuntu-22.04",
-      "effect": "Job object was created but contained no steps/logs, so this cannot be treated as a code/test failure."
+      "system": "Vercel",
+      "state": "INTERMITTENT_BUILD_RATE_LIMIT",
+      "evidence": "A READY preview exists for runtime commit b7dd4c6a44060b8bc69d49e9c0ba464e9ccb8f0d; later non-runtime lock/checklist commits may be rate-limited.",
+      "effect": "Does not invalidate the READY runtime preview but prevents treating later preview status as the final browser gate."
     }
   ],
   "staticQa": {
@@ -285,6 +285,53 @@
       },
       "transparent": true,
       "gitBlobSha": "c403c82db3710e903bf2b3adbce8f5fbe5988b7b"
+    }
+  },
+  "qaInfrastructureDiagnosis": {
+    "lastKnownBrowserQaSuccess": {
+      "runId": 35995588079,
+      "headSha": "5937bb7803d062e753f201861df6b54328561016",
+      "runnerId": 1000001358,
+      "runnerName": "GitHub Actions 1000001358",
+      "runnerLabel": "ubuntu-latest",
+      "result": "SUCCESS",
+      "note": "Full Typecheck/tests/build/Chromium 10-wave browser QA completed successfully on the earlier G2 candidate."
+    },
+    "lastRunnerAssignedFailure": {
+      "runId": 35996203431,
+      "headSha": "f8a2f513678da606a6b9293ad74af532afd53a42",
+      "runnerId": 1000001361,
+      "runnerName": "GitHub Actions 1000001361",
+      "runnerLabel": "ubuntu-latest",
+      "codeChecks": "PASS",
+      "browserFailure": "Chrome 153 CDP endpoint did not become reachable before timeout.",
+      "artifactStorageFailure": "GitHub Artifact storage quota was hit.",
+      "remediation": [
+        "Chrome startup hardened with headless/profile/network flags and longer CDP wait.",
+        "Dynamic localhost CDP port allocation added.",
+        "Blocking upload-artifact step is not present in the current G2 workflow."
+      ]
+    },
+    "runnerAllocationCutover": {
+      "firstObservedNoRunnerRunId": 35996639899,
+      "state": "runner_id=0, runner_name empty, steps empty"
+    },
+    "minimalSentinel": {
+      "pushRunId": 35999767376,
+      "jobId": 107633272833,
+      "workflow": "G2 Runner Sentinel",
+      "runnerLabel": "ubuntu-latest",
+      "result": "FAILURE_BEFORE_ANY_STEP",
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": 0,
+      "conclusion": "Confirms current failure is outside the G2 workflow/code path; even a one-step echo job cannot obtain a GitHub-hosted runner."
+    },
+    "currentWorkflow": {
+      "runner": "ubuntu-latest",
+      "chrome153Hardening": true,
+      "dynamicDebugPort": true,
+      "uploadArtifactStep": false
     }
   }
 }
