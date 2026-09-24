@@ -6,6 +6,11 @@ on:
       - sol/def-hd01-pq-benchmark-20260924
     paths-ignore:
       - 'qa/def-hd01-pq/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'qa/def-hd01-pq/**'
   workflow_dispatch:
 
 permissions:
@@ -98,8 +103,17 @@ jobs:
 
           node scripts/verify-zero-breach-step4-browser.mjs
 
-      - name: Persist compact G2 visual evidence
+      - name: Upload G2 browser QA artifact
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: def-hd01-pq-browser
+          path: artifacts/def-hd01-pq-browser
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Persist compact G2 visual evidence
+        if: github.event_name == 'push' && always()
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
