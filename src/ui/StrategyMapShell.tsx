@@ -232,19 +232,19 @@ export function StrategyMapShell({
   }, [cameraFocusAnchor, loopPhase]);
 
   const pointerDistance = () => {
-    const points = [...pointerPositions.current.values()];
-    if (points.length < 2) return 0;
-    return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+    const [first, second] = [...pointerPositions.current.values()];
+    if (!first || !second) return 0;
+    return Math.hypot(first.x - second.x, first.y - second.y);
   };
 
   const pointerFocalPoint = () => {
     const viewport = cameraViewportRef.current;
-    const points = [...pointerPositions.current.values()];
-    if (!viewport || points.length < 2) return { x: 0, y: 0 };
+    const [first, second] = [...pointerPositions.current.values()];
+    if (!viewport || !first || !second) return { x: 0, y: 0 };
     const rect = viewport.getBoundingClientRect();
     return {
-      x: ((points[0].x + points[1].x) / 2) - rect.left,
-      y: ((points[0].y + points[1].y) / 2) - rect.top,
+      x: ((first.x + second.x) / 2) - rect.left,
+      y: ((first.y + second.y) / 2) - rect.top,
     };
   };
 
@@ -275,7 +275,8 @@ export function StrategyMapShell({
     if (!bounds) return;
 
     if (pointerPositions.current.size === 1 && panGesture.current) {
-      const only = [...pointerPositions.current.values()][0];
+      const [only] = [...pointerPositions.current.values()];
+      if (!only) return;
       applyCamera(strategyCameraAfterPan(
         panGesture.current.camera,
         only.x - panGesture.current.x,
@@ -303,8 +304,10 @@ export function StrategyMapShell({
     }
 
     if (pointerPositions.current.size === 1) {
-      const remaining = [...pointerPositions.current.values()][0];
-      panGesture.current = { x: remaining.x, y: remaining.y, camera: cameraStateRef.current };
+      const [remaining] = [...pointerPositions.current.values()];
+      if (remaining) {
+        panGesture.current = { x: remaining.x, y: remaining.y, camera: cameraStateRef.current };
+      }
       pinchGesture.current = null;
     } else if (pointerPositions.current.size === 0) {
       panGesture.current = null;
