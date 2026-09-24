@@ -298,3 +298,169 @@
   }
 }
 
+/* Phase D-2 — STRATEGY world lock pass 04.
+ * Benchmark: e01_05_command.
+ * Keep the production site map as the playable board. The top HUD explains the
+ * world; it must not consume a separate screen. Command surfaces use the same
+ * dark-field material system as the map instead of reading like a white modal.
+ * Production Map anchors, actions and outcomes remain untouched.
+ */
+@media (min-width: 901px) and (min-height: 651px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-event-title {
+    top: 7.65% !important;
+    left: 13.2% !important;
+    right: 13.6% !important;
+    min-height: 30px !important;
+    padding: 5px 10px !important;
+    background: linear-gradient(90deg,rgba(5,23,30,.9),rgba(7,28,35,.62)) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,.18) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip {
+    top: 11.25% !important;
+    left: 13.2% !important;
+    right: 13.6% !important;
+    gap: 5px !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip span {
+    padding: 4px 7px !important;
+    min-height: 22px !important;
+    border-color: rgba(174,205,214,.13) !important;
+    background: rgba(6,22,29,.5) !important;
+    font-size: 8px !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-loop-stage-strip span.is-active {
+    border-color: rgba(229,176,79,.62) !important;
+    background: rgba(103,69,21,.58) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map {
+    inset: 14.25% .8% .9% 12.4% !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-rail {
+    left: .9% !important;
+    top: 8.3% !important;
+    bottom: 1.2% !important;
+    width: 11.1% !important;
+    opacity: .92 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map.has-background-art .strategy-map-background-art {
+    filter: saturate(1.01) contrast(1.035) brightness(.98) !important;
+    transform: scale(1.002) !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-grid {
+    opacity: .055 !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-pulse {
+    opacity: .12 !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-overview-minimap {
+    top: 1% !important;
+    right: .9% !important;
+    width: min(150px,10.2%) !important;
+    min-width: 124px !important;
+    max-width: 150px !important;
+    opacity: .78 !important;
+    background: rgba(5,20,27,.74) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,.2) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-zone-target:not(.is-focused):not(.has-actions) {
+    opacity: .34 !important;
+    background: rgba(6,25,33,.52) !important;
+    border-color: rgba(84,159,182,.2) !important;
+    box-shadow: none !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-zone-target.is-focused,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-zone-target.has-actions {
+    opacity: 1 !important;
+    background: rgba(7,31,40,.89) !important;
+  }
+
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="target"] .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="action"] .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-shell[data-loop-phase="result"] .strategy-action-tray {
+    right: 1.25% !important;
+    bottom: 1.5% !important;
+    width: min(420px,28vw) !important;
+    min-width: 330px !important;
+    max-width: 420px !important;
+    max-height: 42vh !important;
+    padding: 10px 11px !important;
+    border: 1px solid rgba(218,187,99,.45) !important;
+    background: linear-gradient(180deg,rgba(6,24,31,.955),rgba(5,18,24,.94)) !important;
+    color: #edf4f1 !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.34) !important;
+    backdrop-filter: blur(11px) !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray * {
+    --strategy-command-text: #edf4f1;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-heading,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray h2,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray h3,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray strong {
+    color: #edf4f1 !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray p,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-action-tray small {
+    color: #b9c9ca !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-transition-card,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-next-step {
+    border-color: rgba(148,188,196,.22) !important;
+    background: rgba(9,34,42,.7) !important;
+    color: #e8f1ef !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-transition-card > p {
+    color: #c6d7d8 !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-transition-button,
+  .game-frame[data-production-scene="STRATEGY"] .strategy-execute-button {
+    border: 1px solid rgba(229,187,83,.5) !important;
+    background: linear-gradient(90deg,rgba(86,57,16,.92),rgba(113,75,19,.88)) !important;
+    color: #fff1c7 !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.24) !important;
+  }
+
+  /* Read / relationship states: information recedes until a map target matters. */
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="site-read"] .strategy-rail,
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="people-network"] .strategy-rail {
+    opacity: .62 !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="site-read"] .strategy-overview-minimap {
+    opacity: .58 !important;
+  }
+
+  /* Judgment keeps one focused decision surface; field-shift/result gives the
+     map back immediately so spatial consequences can be read. */
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="tactical-judgment"] .strategy-action-tray {
+    width: min(440px,30vw) !important;
+    max-width: 440px !important;
+    max-height: 44vh !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="field-shift"] .strategy-action-tray,
+  .game-frame[data-production-scene="STRATEGY"][data-strategy-phase="consequence-read"] .strategy-action-tray {
+    width: min(370px,25vw) !important;
+    max-width: 370px !important;
+    max-height: 34vh !important;
+    opacity: .93 !important;
+  }
+}
+
+/* Preserve touch reachability; only reduce decorative intensity on smaller screens. */
+@media (max-width: 900px) {
+  .game-frame[data-production-scene="STRATEGY"] .strategy-map.has-background-art .strategy-map-background-art {
+    filter: saturate(1.01) contrast(1.02) brightness(.98) !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-grid {
+    opacity: .04 !important;
+  }
+  .game-frame[data-production-scene="STRATEGY"] .strategy-production-pulse {
+    opacity: .1 !important;
+  }
+}
+
