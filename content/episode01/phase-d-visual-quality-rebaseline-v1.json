@@ -50,7 +50,11 @@
     },
     "OFFICE": {
       "benchmark": "e01_08e_responsibility_clash",
-      "goal": "people and evidence share one believable room"
+      "goal": "people and evidence share one believable room",
+      "world": "final site office WebP remains visible: meeting table, records, whiteboard, monitor and live site outside the window",
+      "ui": "compact transcript/evidence dock; no duplicate synthetic room or full-screen form",
+      "decision": "hear each role -> compare statements against shared physical records -> commit responsibility basis",
+      "code_rebaseline": "applied_2026-09-24"
     },
     "DAY_RESULT": {
       "benchmark": "e01_09_evening",

@@ -12,6 +12,7 @@ export type ImmersiveSceneShot = 'establishing' | 'dialogue' | 'decision' | 'res
 export interface ImmersiveScenePlan {
   readonly event_id: string;
   readonly background_uri: string;
+  readonly background_final_uri?: string;
   readonly background_asset_id?: string;
   readonly background_environment?: string;
   readonly cast: readonly string[];
@@ -47,9 +48,9 @@ const scenes = plan.events as Readonly<Record<string, SceneRecord>>;
 const sceneBackgroundByRc = Object.freeze(Object.fromEntries(
   Object.entries(sceneBackgroundCatalog.backgrounds).map(([key, background]) => [
     background.rc_path,
-    { key, asset_id: background.asset_id },
+    { key, asset_id: background.asset_id, final_uri: background.final_path },
   ]),
-) as Readonly<Record<string, { readonly key: string; readonly asset_id: string }>>);
+) as Readonly<Record<string, { readonly key: string; readonly asset_id: string; readonly final_uri: string }>>);
 
 const nodeDirections = Object.freeze({
   ...(nodeDirectionA.events as Readonly<Record<string, Readonly<Record<string, NodeDirectionRecord>>>>),
@@ -159,7 +160,11 @@ export function episode01ImmersiveScene(
   return Object.freeze({
     event_id: eventId,
     background_uri: scene.bg,
-    ...(backgroundPlan ? { background_asset_id: backgroundPlan.asset_id, background_environment: backgroundPlan.key } : {}),
+    ...(backgroundPlan ? {
+      background_final_uri: backgroundPlan.final_uri,
+      background_asset_id: backgroundPlan.asset_id,
+      background_environment: backgroundPlan.key,
+    } : {}),
     cast: Object.freeze(visibleCast),
     prop_uris: Object.freeze(propUris),
     camera,
