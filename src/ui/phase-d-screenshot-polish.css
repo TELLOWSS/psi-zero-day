@@ -1457,9 +1457,23 @@
   filter: drop-shadow(0 12px 15px rgba(0,0,0,.28)) saturate(.93) brightness(.95) !important;
   z-index: 7 !important;
 }
+.game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-2 {
+  left: auto !important;
+  right: -1.5% !important;
+  bottom: -2% !important;
+  width: min(23%, 320px) !important;
+  height: 25% !important;
+  opacity: .5 !important;
+  object-fit: contain !important;
+  object-position: right bottom !important;
+  filter: drop-shadow(0 11px 14px rgba(0,0,0,.25)) saturate(.9) brightness(.92) !important;
+  z-index: 6 !important;
+}
 .game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
-  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1 {
-  opacity: .42 !important;
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1,
+.game-frame[data-production-scene="FIELD"][data-field-phase="signal-judgment"]
+  .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-2 {
+  opacity: .4 !important;
 }
 
 /* Read state: stop presenting Junho as a full-height cut-out. Keep enough site
@@ -1560,7 +1574,8 @@
     object-position: 61% 50% !important;
     filter: saturate(1.02) contrast(1.015) brightness(1.06) !important;
   }
-  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1 {
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-1,
+  .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-immersive-prop.prop-2 {
     display: none !important;
   }
   .game-frame[data-production-scene="FIELD"] .episode-immersive-scene[data-event="e01_04_junho_signal"] .episode-psi-trace {
