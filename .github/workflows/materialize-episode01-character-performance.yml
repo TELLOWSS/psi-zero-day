@@ -1,10 +1,8 @@
 name: Materialize Episode 01 character performance
 
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.art-ingest/episode01-performance/*.b64.*'
+  workflow_dispatch:
 
 permissions:
   contents: write

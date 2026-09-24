@@ -1,12 +1,8 @@
 name: Materialize Episode 01 production audio
 
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'tools/generate_episode01_audio.py'
-      - 'scripts/build-episode01-assets.mjs'
-      - '.github/workflows/materialize-episode01-audio.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write

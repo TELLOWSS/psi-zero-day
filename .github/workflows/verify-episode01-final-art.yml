@@ -1,18 +1,7 @@
 name: Verify Episode 01 final art
 
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'public/assets/episode01/cg/*.webp'
-      - 'content/episode01/scene-background-catalog.json'
-      - 'content/episode01/scene-background-production-briefs.json'
-      - 'content/episode01/scene-background-imagegen-prompts.json'
-      - 'content/episode01/final-art-ingest-manifest.json'
-      - 'scripts/check-scene-background-production.mjs'
-      - 'scripts/check-scene-background-imagegen-prompts.mjs'
-      - 'scripts/check-final-art-ingest.mjs'
-      - 'scripts/build-episode01-assets.mjs'
   workflow_dispatch:
 
 permissions:
