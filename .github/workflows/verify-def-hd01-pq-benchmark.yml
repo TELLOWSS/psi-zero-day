@@ -1,11 +1,6 @@
 name: Verify DEF-HD01 PQ Benchmark
 
 on:
-  push:
-    branches:
-      - sol/def-hd01-pq-benchmark-20260924
-    paths-ignore:
-      - 'qa/def-hd01-pq/**'
   pull_request:
     branches:
       - main
