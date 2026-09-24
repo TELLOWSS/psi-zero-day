@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import assets from '../content/episode01/assets.json';
 import catalog from '../content/episode01/scene-element-catalog.json';
 import verification from '../content/episode01/episode01-korea-material-verification.json';
+import legalBasis from '../content/episode01/field-guide-legal-basis.json';
 
 const expected = {
   "vehicle_pedestrian_separation": {
@@ -48,6 +49,7 @@ const expected = {
 const manifest = assets as any;
 const guide = catalog as any;
 const reality = verification as any;
+const legal = legalBasis as any;
 
 describe('Episode 01 Field Guide FG001-FG010 completion lock', () => {
   it('locks every Episode 01 Section 0 guide asset to realistic-v2 final', () => {
@@ -106,6 +108,21 @@ describe('Episode 01 Field Guide FG001-FG010 completion lock', () => {
     }
     expect(guide.elements.site_gate.production_status).toBe('planned');
     expect(guide.elements.pedestrian_gate.production_status).toBe('replacement_required');
+    expect(reality.runtime_assets.site_gate.field_guide_runtime_render.version).toBe('korean-site-gate-v2');
+    expect(reality.runtime_assets.site_gate.field_guide_runtime_render.decisions.join(' ')).toContain('turnstile');
+    expect(reality.field_guide_section0.site_gate.final_registration.visual_review).toBe('korean_site_reality_reverified_vector_v2');
+    expect(reality.field_guide_section0.pedestrian_gate.final_registration.visual_review).toBe('korean_site_reality_reverified_vector_v2');
+  });
+
+  it('surfaces the Korean workplace-entrance rule directly for FG001-FG002', () => {
+    expect(legal.profiles.workplace_entrance.law).toBe('산업안전보건기준에 관한 규칙');
+    expect(legal.profiles.workplace_entrance.articles).toEqual(['제11조']);
+    for (const key of ['site_gate', 'pedestrian_gate'] as const) {
+      expect(legal.items[key].bases).toContainEqual({
+        profile: 'workplace_entrance',
+        applicability: 'direct',
+      });
+    }
   });
 
   it('declares FG001-FG010 complete for the Episode 01 field-guide gate', () => {
