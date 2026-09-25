@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "source_sha": "2937a78cd034eb0b371fd022dc3882d31142c7b4",
+  "source_sha": "7dbd28a81174ff7a5095996ef6c1daf2fecd3d4a",
   "desktop_initial": {
     "profile": "apt-remodel-selective-demolition",
     "phase": "SURVEY_ISOLATION",
     "top": [
       {
-        "risk": "ARMORED",
+        "risk": "VEILED",
         "score": 100
       },
       {
-        "risk": "VEILED",
-        "score": 100
+        "risk": "ARMORED",
+        "score": 99
       },
       {
         "risk": "SWARM",
@@ -23,9 +23,9 @@
     "practiceDisabled": true,
     "panel": {
       "left": 941,
-      "top": 939,
+      "top": 984,
       "right": 1366,
-      "bottom": 1370,
+      "bottom": 1415,
       "width": 425,
       "height": 431
     },
@@ -33,9 +33,9 @@
       "left": 941,
       "top": 601,
       "right": 1366,
-      "bottom": 925,
+      "bottom": 970,
       "width": 425,
-      "height": 324
+      "height": 369
     },
     "overflow": false,
     "persisted": null,
@@ -46,12 +46,12 @@
     "phase": "SURVEY_ISOLATION",
     "top": [
       {
-        "risk": "ARMORED",
+        "risk": "VEILED",
         "score": 100
       },
       {
-        "risk": "VEILED",
-        "score": 100
+        "risk": "ARMORED",
+        "score": 99
       },
       {
         "risk": "SWARM",
@@ -63,9 +63,9 @@
     "practiceDisabled": true,
     "panel": {
       "left": 941,
-      "top": 939,
+      "top": 984,
       "right": 1366,
-      "bottom": 1404,
+      "bottom": 1449,
       "width": 425,
       "height": 465
     },
@@ -73,9 +73,9 @@
       "left": 941,
       "top": 601,
       "right": 1366,
-      "bottom": 925,
+      "bottom": 970,
       "width": 425,
-      "height": 324
+      "height": 369
     },
     "overflow": false,
     "persisted": null,
@@ -103,9 +103,9 @@
     "practiceDisabled": false,
     "panel": {
       "left": 941,
-      "top": 939,
+      "top": 984,
       "right": 1366,
-      "bottom": 1404,
+      "bottom": 1449,
       "width": 425,
       "height": 465
     },
@@ -113,9 +113,9 @@
       "left": 941,
       "top": 601,
       "right": 1366,
-      "bottom": 925,
+      "bottom": 970,
       "width": 425,
-      "height": 324
+      "height": 369
     },
     "overflow": false,
     "persisted": {
@@ -161,12 +161,12 @@
     "phase": "SURVEY_ISOLATION",
     "top": [
       {
-        "risk": "ARMORED",
+        "risk": "VEILED",
         "score": 100
       },
       {
-        "risk": "VEILED",
-        "score": 100
+        "risk": "ARMORED",
+        "score": 99
       },
       {
         "risk": "SWARM",
@@ -186,11 +186,11 @@
     },
     "preview": {
       "left": 38,
-      "top": -336,
+      "top": -424,
       "right": 352,
       "bottom": -7,
       "width": 314,
-      "height": 329
+      "height": 417
     },
     "overflow": false,
     "persisted": null,
