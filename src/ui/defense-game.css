@@ -714,3 +714,44 @@
 @media(prefers-reduced-motion:reduce){
   .zb-data-center-energy.is-energized g circle+circle{animation:none}
 }
+
+
+/* G8-A PRODUCTION MAP — bottom-up open excavation.
+   The HD world plate is primary; topology remains authoritative but visually restrained. */
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-board-production-art{
+  filter:saturate(.9) contrast(.96) brightness(.9);
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-zone{
+  fill-opacity:.05;
+  stroke-opacity:.42;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-visibility{
+  opacity:.36;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-secondary-routes{
+  opacity:.72;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-shoulder{
+  stroke-width:54;
+  opacity:.34;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-shadow{
+  stroke-width:44;
+  opacity:.3;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path{
+  stroke-width:34;
+  opacity:.36;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-centerline{
+  opacity:.78;
+  stroke-width:2.4;
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-pad-hardstand{
+  fill:rgba(18,27,26,.16);
+  stroke:rgba(239,228,194,.22);
+}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-pad-mark{
+  fill:rgba(15,31,34,.18);
+  stroke:rgba(244,226,174,.42);
+}
