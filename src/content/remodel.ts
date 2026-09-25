@@ -24,18 +24,20 @@ if (!stringValue(scenarioRaw.id) || !stringValue(scenarioRaw.profileId) || !stri
   throw new Error('remodel-v1.json: invalid scenario');
 }
 
+const riskHintsRaw = scenarioRaw.riskHints as Record<string, unknown>;
+
 export const remodelScenario: RemodelScenarioDefinition = Object.freeze({
   id: scenarioRaw.id,
   profileId: scenarioRaw.profileId,
   label: scenarioRaw.label,
   legalScaleNote: scenarioRaw.legalScaleNote,
   riskHints: Object.freeze({
-    ...(typeof scenarioRaw.riskHints.NORMAL === 'number' ? { NORMAL: scenarioRaw.riskHints.NORMAL } : {}),
-    ...(typeof scenarioRaw.riskHints.SWIFT === 'number' ? { SWIFT: scenarioRaw.riskHints.SWIFT } : {}),
-    ...(typeof scenarioRaw.riskHints.ARMORED === 'number' ? { ARMORED: scenarioRaw.riskHints.ARMORED } : {}),
-    ...(typeof scenarioRaw.riskHints.SWARM === 'number' ? { SWARM: scenarioRaw.riskHints.SWARM } : {}),
-    ...(typeof scenarioRaw.riskHints.VEILED === 'number' ? { VEILED: scenarioRaw.riskHints.VEILED } : {}),
-    ...(typeof scenarioRaw.riskHints.BOSS === 'number' ? { BOSS: scenarioRaw.riskHints.BOSS } : {}),
+    ...(typeof riskHintsRaw.NORMAL === 'number' ? { NORMAL: riskHintsRaw.NORMAL } : {}),
+    ...(typeof riskHintsRaw.SWIFT === 'number' ? { SWIFT: riskHintsRaw.SWIFT } : {}),
+    ...(typeof riskHintsRaw.ARMORED === 'number' ? { ARMORED: riskHintsRaw.ARMORED } : {}),
+    ...(typeof riskHintsRaw.SWARM === 'number' ? { SWARM: riskHintsRaw.SWARM } : {}),
+    ...(typeof riskHintsRaw.VEILED === 'number' ? { VEILED: riskHintsRaw.VEILED } : {}),
+    ...(typeof riskHintsRaw.BOSS === 'number' ? { BOSS: riskHintsRaw.BOSS } : {}),
   }),
   map: validateSiteProcessMap(scenarioRaw.map, 0),
 });
