@@ -84,7 +84,12 @@ class Cdp {
 
 async function evaluate(cdp, expression) {
   const result = await cdp.send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
-  if (result.exceptionDetails) throw new Error(result.exceptionDetails.text || 'Runtime evaluation failed');
+  if (result.exceptionDetails) {
+    const detail = result.exceptionDetails.exception?.description
+      || result.exceptionDetails.text
+      || JSON.stringify(result.exceptionDetails);
+    throw new Error(detail);
+  }
   return result.result?.value;
 }
 async function waitFor(cdp, expression, timeoutMs = 12000) {
