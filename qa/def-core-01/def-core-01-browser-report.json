@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-25T06:44:18.688Z",
+  "source_sha": "cf24eab152a711355570b5f3f1debe0850756154",
+  "gate": "DEF-CORE-01",
+  "scenario": "event-ramp-reconstruction-v1",
+  "wave": 8,
+  "phases": [
+    "SIGNAL",
+    "READ",
+    "IMPACT",
+    "CINEMATIC"
+  ],
+  "shots": [],
+  "decision_count": 0,
+  "chosen": null,
+  "followup": null,
+  "cinematic_wall_ms": null,
+  "audio_cues": [],
+  "assets": {},
+  "final": null,
+  "failures": [
+    "Timed out waiting for: document.querySelector('[data-def-core-phase=\"CINEMATIC\"]')?.getAttribute('data-def-core-shot') === \"WIDE\""
+  ]
+}
