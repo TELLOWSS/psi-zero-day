@@ -282,10 +282,36 @@ try {
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
     source: `(() => {
       window.__defCoreAudioCues = [];
+      window.__defCoreShotsSeen = [];
+      window.__defCoreTimeline = [];
       window.addEventListener('psi:defense-audio-cue', event => {
         const cue = event?.detail?.cue;
         if (cue) window.__defCoreAudioCues.push(cue);
       });
+
+      const remember = () => {
+        const cinematic = document.querySelector('.def-core-cinematic');
+        const shot = cinematic?.getAttribute('data-def-core-shot');
+        if (shot && !window.__defCoreShotsSeen.includes(shot)) {
+          window.__defCoreShotsSeen.push(shot);
+          window.__defCoreTimeline.push({ kind: 'shot', value: shot, at: performance.now() });
+        }
+        if (document.querySelector('[data-def-core-phase="DECISION"]')
+          && !window.__defCoreTimeline.some(item => item.kind === 'phase' && item.value === 'DECISION')) {
+          window.__defCoreTimeline.push({ kind: 'phase', value: 'DECISION', at: performance.now() });
+        }
+      };
+
+      const observer = new MutationObserver(remember);
+      document.addEventListener('DOMContentLoaded', () => {
+        observer.observe(document.documentElement, {
+          subtree: true,
+          childList: true,
+          attributes: true,
+          attributeFilter: ['data-def-core-shot','data-def-core-phase'],
+        });
+        remember();
+      }, { once: true });
     })();`,
   });
 
@@ -331,19 +357,30 @@ try {
 
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'CINEMATIC'");
   report.phases.push('CINEMATIC');
-  const cinematicStarted = Date.now();
-  for (const shot of ['WIDE','FOCUS','REAR','SIGNAL','RADIO','BRAKE']) {
-    await waitFor(cdp, `document.querySelector('[data-def-core-phase="CINEMATIC"]')?.getAttribute('data-def-core-shot') === ${JSON.stringify(shot)}`, 10000);
-    report.shots.push(shot);
-    if (shot === 'WIDE' || shot === 'SIGNAL' || shot === 'BRAKE') {
-      await screenshot(cdp, `04-cinematic-${shot.toLowerCase()}.png`);
-    }
-  }
+  await screenshot(cdp, '04-cinematic-wide.png');
 
-  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 10000);
-  report.cinematic_wall_ms = Date.now() - cinematicStarted;
+  await waitFor(cdp, "(window.__defCoreShotsSeen || []).includes('SIGNAL')", 12000);
+  await screenshot(cdp, '04-cinematic-signal.png');
+  await waitFor(cdp, "(window.__defCoreShotsSeen || []).includes('BRAKE')", 12000);
+  await screenshot(cdp, '04-cinematic-brake.png');
+
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 12000);
   report.phases.push('DECISION');
-  if (report.cinematic_wall_ms < 12000 || report.cinematic_wall_ms > 20000) {
+
+  const cinematicTrace = await evaluate(cdp, `(() => ({
+    shots: window.__defCoreShotsSeen || [],
+    timeline: window.__defCoreTimeline || [],
+  }))()`);
+  report.shots = cinematicTrace.shots;
+  const wide = cinematicTrace.timeline.find(item => item.kind === 'shot' && item.value === 'WIDE');
+  const decision = cinematicTrace.timeline.find(item => item.kind === 'phase' && item.value === 'DECISION');
+  report.cinematic_wall_ms = wide && decision ? Math.round(decision.at - wide.at) : null;
+
+  const requiredShots = ['WIDE','FOCUS','REAR','SIGNAL','RADIO','BRAKE'];
+  if (JSON.stringify(report.shots) !== JSON.stringify(requiredShots)) {
+    throw new Error('Cinematic shot sequence drifted: ' + JSON.stringify(report.shots));
+  }
+  if (report.cinematic_wall_ms === null || report.cinematic_wall_ms < 12000 || report.cinematic_wall_ms > 20000) {
     throw new Error('Cinematic duration outside 12-20s contract: ' + report.cinematic_wall_ms);
   }
 
