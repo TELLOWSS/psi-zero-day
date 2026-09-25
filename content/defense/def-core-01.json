@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "gate": "DEF-CORE-01",
   "title": "한 걸음",
-  "status": "RUNTIME_INTEGRATION",
+  "status": "G3_PRODUCTION_LOCKED",
   "inherits": {
     "g2ProductionLock": true,
     "masterWorld": "assets/defense/board/ramp-01-hd01.webp",
@@ -190,12 +190,12 @@
     "noRealCompanySiteVictimNames": true
   },
   "qa": {
-    "contract": false,
-    "browser": false,
-    "visual": false,
-    "audio": false,
-    "mobile": false,
-    "productionLock": false
+    "contract": true,
+    "browser": true,
+    "visual": true,
+    "audio": true,
+    "mobile": true,
+    "productionLock": true
   },
   "sliceAssets": {
     "wideGate": "assets/episode01/cg/gate-dawn.webp",
@@ -205,5 +205,18 @@
     "leeJaehoon": "assets/episode01/characters/lee-jaehoon-portrait.webp",
     "worldBarrier": "assets/episode01/scene-elements/access-barrier.webp",
     "separation": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
+  },
+  "productionLock": {
+    "approved": true,
+    "gate": "G3",
+    "workflowRunId": 36109408663,
+    "verifiedSourceSha": "243b93e60bfb8861bbb02c902bb76a36836fbc42",
+    "desktopCycle": "PASS",
+    "mobileViewport": "390x844",
+    "mobileCycle": "PASS",
+    "liveRuntimeMotion": "C: 42 -> 0 -> 21",
+    "cinematicSeconds": 12.61,
+    "visualReview": "PASS — grounded CONTROL, no tower silhouette, portrait world remains visible",
+    "rule": "Do not expand new site/runtime systems until this lock is merged to main."
   }
 }
