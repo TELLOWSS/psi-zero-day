@@ -122,6 +122,14 @@ function asset(id: string): DefenseVisualAsset | null {
   return defenseVisualProduction.assets.find(item => item.assetId === id) ?? null;
 }
 
+function runtimeFinalAsset(id: string): DefenseVisualAsset | null {
+  const candidate = asset(id);
+  if (!candidate) return null;
+  if (candidate.status === 'LEGACY_GEOMETRY_ONLY') return null;
+  if (candidate.uri.toLowerCase().includes('.svg')) return null;
+  return candidate;
+}
+
 export function defenseBoardArtUri(mapId: string): string | null {
   const productionMap = defenseProductionMapEntry(mapId);
   if (productionMap) return productionMap.runtimeUri;
@@ -136,9 +144,9 @@ export function defenseBoardArtUri(mapId: string): string | null {
 }
 
 export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLevelId): string | null {
-  return asset(`defense.tower.${towerId}.${levelId}`)?.uri ?? null;
+  return runtimeFinalAsset(`defense.tower.${towerId}.${levelId}`)?.uri ?? null;
 }
 
 export function defenseEnemyArtUri(enemyId: DefenseEnemyId): string | null {
-  return asset(`defense.enemy.${enemyId}`)?.uri ?? null;
+  return runtimeFinalAsset(`defense.enemy.${enemyId}`)?.uri ?? null;
 }
