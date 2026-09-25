@@ -6,7 +6,8 @@ import { siteProcessMapByProfile } from '../src/content/site-process-maps';
 
 const BOTTOM_ID = 'map-apt-bottom-up-excavation-01';
 const TOP_ID = 'map-apt-top-down-under-slab-01';
-const ART = 'public/assets/defense/board/ramp-01-hd01.webp';
+const ART = 'public/assets/defense/board/bottom-up-excavation-01.svg';
+const SOURCE = 'public/assets/defense/board/ramp-01-hd01.webp';
 
 describe('G8-A bottom-up production map', () => {
   it('keeps ONE GATE AT A TIME: only bottom-up excavation is a production-map candidate', () => {
@@ -18,10 +19,13 @@ describe('G8-A bottom-up production map', () => {
 
   it('reuses the already approved HD world plate only for G8-A', () => {
     const entry = defenseProductionMapEntry(BOTTOM_ID);
-    expect(entry?.runtimeUri).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(entry?.runtimeUri).toBe('assets/defense/board/bottom-up-excavation-01.svg');
     expect(defenseBoardArtUri(BOTTOM_ID)).toBe(entry?.runtimeUri);
     expect(existsSync(ART)).toBe(true);
-    expect(statSync(ART).size).toBeGreaterThan(100_000);
+    expect(statSync(ART).size).toBeGreaterThan(5_000);
+    expect(existsSync(SOURCE)).toBe(true);
+    expect(statSync(SOURCE).size).toBeGreaterThan(100_000);
+    expect(productionRaw.maps[0]?.sourceUri).toBe('assets/defense/board/ramp-01-hd01.webp');
 
     expect(defenseProductionMapEntry(TOP_ID)).toBeNull();
     expect(productionRaw.maps[0]?.reusePolicy.allowedForOtherG8Maps).toBe(false);
@@ -55,8 +59,8 @@ describe('G8-A bottom-up production map', () => {
   });
 
   it('does not bake HUD or text into the registered world plate contract', () => {
-    expect(productionRaw.maps[0]?.visualFit).toContain('no baked HUD, text or logo');
-    expect(productionRaw.maps[0]?.format).toBe('webp');
+    expect(productionRaw.maps[0]?.visualFit).toContain('no baked HUD, text, logo or pad markers');
+    expect(productionRaw.maps[0]?.format).toBe('svg');
     expect(productionRaw.maps[0]?.width).toBe(1000);
     expect(productionRaw.maps[0]?.height).toBe(600);
   });
