@@ -1,0 +1,119 @@
+name: Verify G5 MAP-FAMILY-01
+
+on:
+  push:
+    branches:
+      - sol/g5-map-family-01-20260925
+
+permissions:
+  contents: write
+
+concurrency:
+  group: g5-map-family-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-g5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout G5 branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: G5 map-family contracts
+        run: npx vitest run tests/site-process-map-family.test.ts tests/site-profile-risk-priority.test.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run G5 live map-family browser QA
+        shell: bash
+        env:
+          PSI_G5_ARTIFACT_DIR: artifacts/g5-map-family
+        run: |
+          mkdir -p artifacts/g5-map-family
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g5-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g5-preview.log
+            exit 1
+          fi
+          node scripts/verify-g5-map-family-browser.mjs
+
+      - name: Persist G5 QA evidence
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/g5-map-family
+          mkdir -p qa/g5-map-family
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          src=Path('artifacts/g5-map-family')
+          out=Path('qa/g5-map-family')
+          for name in [
+              '01-bottom-up-profile.png','02-bottom-up-combat.png',
+              '03-top-down-profile.png','04-top-down-combat.png',
+              '05-mobile-top-down-profile.png','error.png'
+          ]:
+              p=src/name
+              if not p.exists():
+                  continue
+              im=Image.open(p).convert('RGB')
+              if im.width>1100:
+                  h=round(im.height*1100/im.width)
+                  im=im.resize((1100,h),Image.Resampling.LANCZOS)
+              im.save(out/(p.stem+'.jpg'),'JPEG',quality=84,optimize=True)
+          report=src/'g5-map-family-report.json'
+          if report.exists():
+              (out/report.name).write_bytes(report.read_bytes())
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/g5-map-family
+          if git diff --cached --quiet; then
+            echo "No G5 evidence changes."
+            exit 0
+          fi
+          git commit -m "qa: store G5 map-family evidence [skip ci]"
+          git push origin HEAD:sol/g5-map-family-01-20260925

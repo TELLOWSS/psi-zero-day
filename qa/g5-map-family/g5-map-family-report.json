@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "source_sha": "c8f40bf07377aec58e973f010bacdaf207e9bb42",
+  "bottom_up": {
+    "scenario": "training-site:apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "overlay": "map-apt-bottom-up-excavation-01",
+    "zones": 3,
+    "visibility": 1,
+    "transfers": 1,
+    "workerRoutes": 1,
+    "materialRoutes": 1,
+    "pads": 8,
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    },
+    "overflow": false
+  },
+  "top_down": {
+    "scenario": "training-site:apt-new-top-down-under-slab",
+    "map": "map-apt-top-down-under-slab-01",
+    "overlay": "map-apt-top-down-under-slab-01",
+    "zones": 4,
+    "visibility": 2,
+    "transfers": 2,
+    "workerRoutes": 1,
+    "materialRoutes": 1,
+    "pads": 8,
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    },
+    "overflow": false
+  },
+  "mobile": {
+    "profile": "apt-new-top-down-under-slab",
+    "top": [
+      "VEILED",
+      "SWARM",
+      "ARMORED"
+    ],
+    "priorityTop": 420,
+    "pickerTop": 1308,
+    "preview": {
+      "top": 712,
+      "bottom": 1041,
+      "width": 314
+    },
+    "overflow": false
+  },
+  "failures": []
+}

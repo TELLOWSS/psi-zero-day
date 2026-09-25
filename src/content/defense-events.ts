@@ -9,6 +9,7 @@ import type {
 } from '../domain/defense-event';
 import { applyDefenseEvent, defenseScenarioIdForRun } from '../engine/defense-event';
 import { validateDefenseContent, zeroBreachContent } from './defense';
+import { siteDefenseContents } from './site-process-maps';
 
 const record = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -206,6 +207,7 @@ export const defenseEvents = validateDefenseEvents(rawEvents);
 const contentByScenario = new Map<string, DefenseContent>([
   [zeroBreachContent.scenario.id, zeroBreachContent],
   ...defenseEvents.map(event => [event.id, applyDefenseEvent(zeroBreachContent, event)] as const),
+  ...siteDefenseContents.map(content => [content.scenario.id, content] as const),
 ]);
 
 export function defenseEventById(id: string): DefenseEventDefinition | undefined {

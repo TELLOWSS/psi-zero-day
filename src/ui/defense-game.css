@@ -630,3 +630,24 @@
     border-radius:0;
   }
 }
+
+
+/* G5 MAP-FAMILY-01 — live process topology */
+.zb-site-zone{stroke-width:2;vector-effect:non-scaling-stroke}
+.zb-site-zone-excavation{fill:rgba(173,119,48,.13);stroke:rgba(230,166,79,.34)}
+.zb-site-zone-under_slab{fill:rgba(61,89,105,.18);stroke:rgba(115,166,188,.32)}
+.zb-site-zone-logistics_conflict{fill:rgba(199,80,61,.12);stroke:rgba(222,105,87,.32)}
+.zb-site-zone-low_visibility{fill:rgba(27,36,47,.3);stroke:rgba(119,139,153,.24)}
+.zb-site-zone-opening{fill:rgba(225,168,61,.16);stroke:rgba(240,192,87,.38)}
+.zb-site-zone-material_staging{fill:rgba(94,129,76,.12);stroke:rgba(133,173,105,.28)}
+.zb-site-zone-restricted{fill:rgba(177,62,73,.13);stroke:rgba(214,88,100,.3)}
+.zb-site-visibility circle{fill:#243541;stroke:#7894a4;stroke-width:2;stroke-dasharray:10 8}
+.zb-site-route{stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.zb-site-route-worker{stroke:#6fcaa8;stroke-width:5;stroke-dasharray:15 11;opacity:.72}
+.zb-site-route-material{stroke:#6faec7;stroke-width:5;stroke-dasharray:6 9;opacity:.7}
+.zb-site-transfers circle{fill:rgba(9,29,39,.9);stroke:#e4ae45;stroke-width:4}
+.zb-site-transfers path{fill:none;stroke:#e4ae45;stroke-width:4;stroke-linecap:round}
+.zb-site-anchor-hints{opacity:.52}
+.zb-site-anchor-hints circle{fill:rgba(8,30,40,.88);stroke:#edc05d;stroke-width:3;stroke-dasharray:5 4}
+.zb-site-anchor-hints text{fill:#f3d582;font-size:13px;font-weight:900;pointer-events:none}
+.zb-site-process-map + .zb-path-shoulder{opacity:.8}

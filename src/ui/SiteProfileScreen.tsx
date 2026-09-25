@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { defaultSiteProfile, siteProfileById, siteProfiles } from '../content/site-profiles';
+import { siteProcessMapByProfile } from '../content/site-process-maps';
 import type { ProjectArchetype } from '../domain/site-profile';
 import { baselineRiskContext, topRiskPriorities } from '../engine/risk-priority';
 import { readSiteProfilePreference, writeSiteProfilePreference } from '../app/site-profile-preference';
@@ -53,7 +54,7 @@ function levelLabel(value: number) {
   return '높음';
 }
 
-export function SiteProfileScreen({ onBack }: { readonly onBack: () => void }) {
+export function SiteProfileScreen({ onBack, onPractice }: { readonly onBack: () => void; readonly onPractice: (profileId: string) => void }) {
   const [profileId, setProfileId] = useState(() => readSiteProfilePreference());
   const [context, setContext] = useState(() => ({
     concurrency: 0,
@@ -74,6 +75,7 @@ export function SiteProfileScreen({ onBack }: { readonly onBack: () => void }) {
   }), [context, selected]);
 
   const top = useMemo(() => topRiskPriorities(selected, riskContext, 3), [riskContext, selected]);
+  const processMap = useMemo(() => siteProcessMapByProfile(selected.id), [selected.id]);
 
   const choose = (id: string) => {
     setProfileId(id);
@@ -129,6 +131,49 @@ export function SiteProfileScreen({ onBack }: { readonly onBack: () => void }) {
             <b>{row.score}</b>
           </article>)}
         </div>
+
+        {processMap ? <section className="site-process-preview" aria-label="대표 공정 맵 미리보기">
+          <div className="site-process-preview-head">
+            <div><small>G5 · TOPOLOGY PROOF</small><strong>{processMap.label}</strong></div>
+            <button type="button" onClick={() => onPractice(selected.id)}>이 공정으로 디펜스 체험</button>
+          </div>
+          <svg viewBox="0 0 1000 600" role="img" aria-label={processMap.label}>
+            {processMap.zones.map(zone => <polygon
+              key={zone.id}
+              className={`site-map-zone zone-${zone.kind.toLowerCase()}`}
+              points={zone.points.map(point => `${point.x},${point.y}`).join(' ')}
+            />)}
+            {processMap.visibilityZones.map(zone => <circle
+              key={zone.id}
+              className="site-map-visibility"
+              cx={zone.center.x}
+              cy={zone.center.y}
+              r={zone.radius}
+              opacity={0.18 + zone.severity * 0.28}
+            />)}
+            {processMap.routes.map(route => <polyline
+              key={route.id}
+              className={`site-map-route route-${route.kind}`}
+              points={route.points.map(point => `${point.x},${point.y}`).join(' ')}
+            />)}
+            {processMap.verticalTransfers.map(item => <g key={item.id} className="site-map-transfer">
+              <circle cx={item.point.x} cy={item.point.y} r="20" />
+              <path d={`M${item.point.x - 10} ${item.point.y}h20M${item.point.x} ${item.point.y - 10}v20`} />
+            </g>)}
+            {processMap.interventionAnchors.map(item => <g key={item.id} className="site-map-anchor" data-tower={item.recommendedTower}>
+              <circle cx={item.x} cy={item.y} r="16" />
+              <text x={item.x} y={item.y + 5} textAnchor="middle">{item.recommendedTower.slice(0, 1)}</text>
+            </g>)}
+          </svg>
+          <div className="site-process-preview-legend">
+            <span data-kind="vehicle">차량/장비</span><span data-kind="worker">보행</span><span data-kind="material">자재/토사</span>
+            <span data-kind="visibility">시야제한</span>
+          </div>
+        </section> : <section className="site-process-preview is-pending">
+          <small>NEXT MAP GATE</small>
+          <strong>대표 맵 제작 대기</strong>
+          <p>G5는 순타 굴착과 역타 슬래브 하부굴착 두 맵만 먼저 검증합니다. 리모델링과 데이터센터 전용 맵은 G6/G7에서 순차 제작합니다.</p>
+        </section>}
 
         <div className="site-profile-context">
           <strong>현장 조건을 바꿔보세요</strong>

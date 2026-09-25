@@ -9,6 +9,7 @@ import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { SiteProfileScreen } from './SiteProfileScreen';
+import { siteScenarioId } from '../content/site-process-maps';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import { defenseText } from '../app/defense-text';
@@ -252,10 +253,15 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       onClick={() => setAudioMuted(!audioMuted)}
     ><span aria-hidden="true">SOUND</span><b>{audioMuted ? 'OFF' : 'ON'}</b></button>
   </Suspense>;
-  return <GameHub session={session} onPlay={play} onNewGame={newGame} onDefense={() => openDefense()} />;
+  return <GameHub session={session} onPlay={play} onNewGame={newGame} onDefense={scenarioId => openDefense(scenarioId ?? null)} />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: EpisodeSession; onPlay: () => void; onNewGame: () => void; onDefense?: () => void }) {
+export function GameHub({ session, onPlay, onNewGame, onDefense }: {
+  session: EpisodeSession;
+  onPlay: () => void;
+  onNewGame: () => void;
+  onDefense?: (scenarioId?: string | null) => void;
+}) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const [page, setPage] = useState<HubPage>('home');
@@ -331,7 +337,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 먼저 봐야 할 위험은 달라집니다.</p>
 
       <div className="commercial-title-actions is-defense-first">
-        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>
           <b>›</b>
@@ -493,7 +499,10 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
       <p className="hub-nav-note">{t('ui.hub.note')}</p>
     </nav>
     <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
-      {page === 'site' ? <SiteProfileScreen onBack={() => setPage('home')} /> : page === 'map' ? <>
+      {page === 'site' ? <SiteProfileScreen
+        onBack={() => setPage('home')}
+        onPractice={profileId => onDefense?.(siteScenarioId(profileId))}
+      /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
           <svg className="hub-route-line" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M150 100 L470 120 L810 155 L660 335 L300 340" /></svg>

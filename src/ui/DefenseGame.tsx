@@ -6,6 +6,7 @@ import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
+import { siteDefenseContentForScenario, siteProcessMapByMapId } from '../content/site-process-maps';
 import {
   defenseContentForScenario, defenseEventById, defenseEvents, resolveDefenseContentForRun,
 } from '../content/defense-events';
@@ -23,6 +24,7 @@ import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
+import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -247,6 +249,7 @@ export function DefenseGame({
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
+    || Boolean(selectedScenarioId && siteDefenseContentForScenario(selectedScenarioId))
     || (selectedScenarioId === e1.id && e1Availability.unlocked);
   const content = state
     ? resolveDefenseContentForRun(state)
@@ -256,6 +259,7 @@ export function DefenseGame({
   const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
   const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
+  const activeSiteMap = siteProcessMapByMapId(content.map.id);
   const [selectedPadId, setSelectedPadId] = useState<string | null>(null);
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -434,16 +438,16 @@ export function DefenseGame({
     </section>
   </main>;
 
-  if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select" data-scenario={content.scenario.id}>
+  if (!state) return <main className="zb-shell zb-prep" data-defense-screen="support-select" data-scenario={content.scenario.id} data-map={content.map.id}>
     <header className="zb-prep-header">
       <div><small>{t('defense.ui.kicker')}</small><h1>{t('defense.ui.hub.title')}</h1></div>
       <button type="button" onClick={() => setSelectedScenarioId(null)}>{t('defense.scenario.back')}</button>
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
-      <span>{content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
-      <h2>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
-      <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
+      <span>{activeSiteMap ? 'G5 · 공정별 맵 체험' : content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
+      <h2>{activeSiteMap ? activeSiteMap.label : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
+      <p>{activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
     <section className="zb-support-grid">
       {SUPPORT_IDS.map(id => <SupportCard
@@ -462,7 +466,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -523,6 +527,7 @@ export function DefenseGame({
             className="zb-board-production-art"
             data-production-board-art={content.map.id}
           /> : <rect width="1000" height="600" rx="22" fill="url(#zb-grid)" />}
+          <SiteProcessMapBoardOverlay mapId={content.map.id} />
           <polyline
             points={content.map.path.map(point => point.join(',')).join(' ')}
             className="zb-path-shoulder"
@@ -608,8 +613,8 @@ export function DefenseGame({
         </aside>
 
         <div className="zb-board-caption">
-          <span>{t('defense.ui.dev_notice')}</span>
-          <b>{t('defense.map.ramp-01.name')}</b>
+          <span>{activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
+          <b>{activeSiteMap?.label ?? t('defense.map.ramp-01.name')}</b>
         </div>
       </div>
     </section>

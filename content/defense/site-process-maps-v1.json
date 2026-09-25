@@ -1,0 +1,640 @@
+{
+  "schemaVersion": 1,
+  "status": "G5_MAP_FAMILY_01_LOCKED",
+  "maps": [
+    {
+      "id": "map-apt-bottom-up-excavation-01",
+      "siteProfileId": "apt-new-bottom-up-excavation",
+      "label": "공동주택 신축 · 순타 · 개방 굴착",
+      "width": 1000,
+      "height": 600,
+      "primaryDefenseRouteId": "vehicle-ramp",
+      "routes": [
+        {
+          "id": "vehicle-ramp",
+          "kind": "vehicle",
+          "points": [
+            {
+              "x": 0,
+              "y": 500
+            },
+            {
+              "x": 180,
+              "y": 500
+            },
+            {
+              "x": 180,
+              "y": 390
+            },
+            {
+              "x": 370,
+              "y": 390
+            },
+            {
+              "x": 370,
+              "y": 240
+            },
+            {
+              "x": 620,
+              "y": 240
+            },
+            {
+              "x": 620,
+              "y": 120
+            },
+            {
+              "x": 1000,
+              "y": 120
+            }
+          ]
+        },
+        {
+          "id": "worker-perimeter",
+          "kind": "worker",
+          "points": [
+            {
+              "x": 40,
+              "y": 555
+            },
+            {
+              "x": 300,
+              "y": 555
+            },
+            {
+              "x": 300,
+              "y": 465
+            },
+            {
+              "x": 540,
+              "y": 465
+            },
+            {
+              "x": 540,
+              "y": 330
+            },
+            {
+              "x": 900,
+              "y": 330
+            }
+          ]
+        },
+        {
+          "id": "material-staging",
+          "kind": "material",
+          "points": [
+            {
+              "x": 40,
+              "y": 80
+            },
+            {
+              "x": 300,
+              "y": 80
+            },
+            {
+              "x": 300,
+              "y": 180
+            },
+            {
+              "x": 540,
+              "y": 180
+            },
+            {
+              "x": 540,
+              "y": 280
+            },
+            {
+              "x": 880,
+              "y": 280
+            }
+          ]
+        }
+      ],
+      "pads": [
+        {
+          "id": "BU-P1",
+          "x": 115,
+          "y": 430
+        },
+        {
+          "id": "BU-P2",
+          "x": 245,
+          "y": 445
+        },
+        {
+          "id": "BU-P3",
+          "x": 300,
+          "y": 315
+        },
+        {
+          "id": "BU-P4",
+          "x": 455,
+          "y": 330
+        },
+        {
+          "id": "BU-P5",
+          "x": 520,
+          "y": 130
+        },
+        {
+          "id": "BU-P6",
+          "x": 690,
+          "y": 190
+        },
+        {
+          "id": "BU-P7",
+          "x": 760,
+          "y": 340
+        },
+        {
+          "id": "BU-P8",
+          "x": 875,
+          "y": 180
+        }
+      ],
+      "zones": [
+        {
+          "id": "open-excavation",
+          "kind": "EXCAVATION",
+          "label": "개방 굴착부",
+          "points": [
+            {
+              "x": 205,
+              "y": 195
+            },
+            {
+              "x": 690,
+              "y": 195
+            },
+            {
+              "x": 690,
+              "y": 535
+            },
+            {
+              "x": 205,
+              "y": 535
+            }
+          ]
+        },
+        {
+          "id": "ramp-conflict",
+          "kind": "LOGISTICS_CONFLICT",
+          "label": "램프 차량-보행 간섭",
+          "points": [
+            {
+              "x": 115,
+              "y": 355
+            },
+            {
+              "x": 265,
+              "y": 355
+            },
+            {
+              "x": 265,
+              "y": 555
+            },
+            {
+              "x": 115,
+              "y": 555
+            }
+          ]
+        },
+        {
+          "id": "soil-staging",
+          "kind": "MATERIAL_STAGING",
+          "label": "토사 적재·반출 대기",
+          "points": [
+            {
+              "x": 720,
+              "y": 65
+            },
+            {
+              "x": 960,
+              "y": 65
+            },
+            {
+              "x": 960,
+              "y": 205
+            },
+            {
+              "x": 720,
+              "y": 205
+            }
+          ]
+        }
+      ],
+      "visibilityZones": [
+        {
+          "id": "ramp-blind-turn",
+          "label": "램프 굴곡부 시야제한",
+          "center": {
+            "x": 185,
+            "y": 405
+          },
+          "radius": 85,
+          "severity": 0.35
+        }
+      ],
+      "verticalTransfers": [
+        {
+          "id": "open-ramp",
+          "kind": "RAMP",
+          "label": "지하 굴착 램프",
+          "point": {
+            "x": 180,
+            "y": 445
+          }
+        }
+      ],
+      "interventionAnchors": [
+        {
+          "id": "BU-A1",
+          "x": 150,
+          "y": 430,
+          "recommendedTower": "CONTROL",
+          "label": "램프 유도·통로분리",
+          "reason": "덤프·굴착장비 진출입과 보행동선이 가장 먼저 충돌하는 지점"
+        },
+        {
+          "id": "BU-A2",
+          "x": 420,
+          "y": 285,
+          "recommendedTower": "PULSE",
+          "label": "굴착면 즉시조치",
+          "reason": "개방 굴착부 작업면의 즉시 정지·시정 개입"
+        },
+        {
+          "id": "BU-A3",
+          "x": 710,
+          "y": 150,
+          "recommendedTower": "SENSOR",
+          "label": "흙막이·지반 신호확인",
+          "reason": "변위·지하수 등 눈에 바로 보이지 않는 신호 확인"
+        }
+      ],
+      "baseRiskModifiers": {
+        "ARMORED": 8,
+        "SWIFT": 6,
+        "VEILED": 3
+      }
+    },
+    {
+      "id": "map-apt-top-down-under-slab-01",
+      "siteProfileId": "apt-new-top-down-under-slab",
+      "label": "공동주택 신축 · 역타 · 슬래브 하부굴착",
+      "width": 1000,
+      "height": 600,
+      "primaryDefenseRouteId": "vehicle-under-slab",
+      "routes": [
+        {
+          "id": "vehicle-under-slab",
+          "kind": "vehicle",
+          "points": [
+            {
+              "x": 0,
+              "y": 500
+            },
+            {
+              "x": 150,
+              "y": 500
+            },
+            {
+              "x": 150,
+              "y": 420
+            },
+            {
+              "x": 350,
+              "y": 420
+            },
+            {
+              "x": 350,
+              "y": 300
+            },
+            {
+              "x": 570,
+              "y": 300
+            },
+            {
+              "x": 570,
+              "y": 420
+            },
+            {
+              "x": 780,
+              "y": 420
+            },
+            {
+              "x": 780,
+              "y": 250
+            },
+            {
+              "x": 1000,
+              "y": 250
+            }
+          ]
+        },
+        {
+          "id": "worker-under-slab",
+          "kind": "worker",
+          "points": [
+            {
+              "x": 0,
+              "y": 125
+            },
+            {
+              "x": 240,
+              "y": 125
+            },
+            {
+              "x": 240,
+              "y": 260
+            },
+            {
+              "x": 470,
+              "y": 260
+            },
+            {
+              "x": 470,
+              "y": 505
+            },
+            {
+              "x": 700,
+              "y": 505
+            },
+            {
+              "x": 700,
+              "y": 360
+            },
+            {
+              "x": 950,
+              "y": 360
+            }
+          ]
+        },
+        {
+          "id": "material-muck-out",
+          "kind": "material",
+          "points": [
+            {
+              "x": 500,
+              "y": 0
+            },
+            {
+              "x": 500,
+              "y": 120
+            },
+            {
+              "x": 650,
+              "y": 120
+            },
+            {
+              "x": 650,
+              "y": 250
+            },
+            {
+              "x": 820,
+              "y": 250
+            },
+            {
+              "x": 820,
+              "y": 520
+            }
+          ]
+        }
+      ],
+      "pads": [
+        {
+          "id": "TD-P1",
+          "x": 95,
+          "y": 430
+        },
+        {
+          "id": "TD-P2",
+          "x": 245,
+          "y": 350
+        },
+        {
+          "id": "TD-P3",
+          "x": 390,
+          "y": 220
+        },
+        {
+          "id": "TD-P4",
+          "x": 455,
+          "y": 365
+        },
+        {
+          "id": "TD-P5",
+          "x": 610,
+          "y": 215
+        },
+        {
+          "id": "TD-P6",
+          "x": 655,
+          "y": 455
+        },
+        {
+          "id": "TD-P7",
+          "x": 820,
+          "y": 335
+        },
+        {
+          "id": "TD-P8",
+          "x": 900,
+          "y": 195
+        }
+      ],
+      "zones": [
+        {
+          "id": "under-slab-workzone",
+          "kind": "UNDER_SLAB",
+          "label": "슬래브 하부 굴착·작업구역",
+          "points": [
+            {
+              "x": 110,
+              "y": 85
+            },
+            {
+              "x": 930,
+              "y": 85
+            },
+            {
+              "x": 930,
+              "y": 555
+            },
+            {
+              "x": 110,
+              "y": 555
+            }
+          ]
+        },
+        {
+          "id": "muck-opening",
+          "kind": "OPENING",
+          "label": "토사 반출 개구부",
+          "points": [
+            {
+              "x": 455,
+              "y": 35
+            },
+            {
+              "x": 555,
+              "y": 35
+            },
+            {
+              "x": 555,
+              "y": 145
+            },
+            {
+              "x": 455,
+              "y": 145
+            }
+          ]
+        },
+        {
+          "id": "concurrent-interface",
+          "kind": "LOGISTICS_CONFLICT",
+          "label": "보행·장비·수직물류 교차",
+          "points": [
+            {
+              "x": 430,
+              "y": 215
+            },
+            {
+              "x": 705,
+              "y": 215
+            },
+            {
+              "x": 705,
+              "y": 455
+            },
+            {
+              "x": 430,
+              "y": 455
+            }
+          ]
+        },
+        {
+          "id": "blind-under-slab",
+          "kind": "LOW_VISIBILITY",
+          "label": "저조도·저시야 작업구역",
+          "points": [
+            {
+              "x": 140,
+              "y": 315
+            },
+            {
+              "x": 380,
+              "y": 315
+            },
+            {
+              "x": 380,
+              "y": 555
+            },
+            {
+              "x": 140,
+              "y": 555
+            }
+          ]
+        }
+      ],
+      "visibilityZones": [
+        {
+          "id": "under-slab-west-blind",
+          "label": "서측 슬래브 하부 시야제한",
+          "center": {
+            "x": 275,
+            "y": 430
+          },
+          "radius": 145,
+          "severity": 0.82
+        },
+        {
+          "id": "muck-out-blind",
+          "label": "토사반출 개구부 하부 시야제한",
+          "center": {
+            "x": 575,
+            "y": 300
+          },
+          "radius": 125,
+          "severity": 0.7
+        }
+      ],
+      "verticalTransfers": [
+        {
+          "id": "muck-transfer",
+          "kind": "MUCK_OPENING",
+          "label": "토사 수직 반출구",
+          "point": {
+            "x": 505,
+            "y": 105
+          }
+        },
+        {
+          "id": "lift-opening",
+          "kind": "LIFT_OPENING",
+          "label": "장비·자재 수직 반입구",
+          "point": {
+            "x": 820,
+            "y": 235
+          }
+        }
+      ],
+      "interventionAnchors": [
+        {
+          "id": "TD-A1",
+          "x": 280,
+          "y": 390,
+          "recommendedTower": "SENSOR",
+          "label": "저시야 작업면 확인",
+          "reason": "슬래브 하부에서는 위험 상태가 보이기 전에 정보 부족이 먼저 커질 수 있음"
+        },
+        {
+          "id": "TD-A2",
+          "x": 540,
+          "y": 335,
+          "recommendedTower": "CONTROL",
+          "label": "수직물류 교차 통제",
+          "reason": "토사반출·장비·보행 동선이 같은 인터페이스에 모이는 지점"
+        },
+        {
+          "id": "TD-A3",
+          "x": 700,
+          "y": 300,
+          "recommendedTower": "BURST",
+          "label": "동시작업 간섭 정리",
+          "reason": "상하부 및 다공종 간섭이 몰릴 때 여러 작은 위험을 동시에 정리"
+        },
+        {
+          "id": "TD-A4",
+          "x": 835,
+          "y": 270,
+          "recommendedTower": "PULSE",
+          "label": "개구부 즉시 시정",
+          "reason": "수직 개구부 주변의 즉시 위험을 빠르게 정지·시정"
+        }
+      ],
+      "baseRiskModifiers": {
+        "VEILED": 10,
+        "SWARM": 8,
+        "ARMORED": 5,
+        "SWIFT": 3
+      }
+    }
+  ],
+  "gate": {
+    "id": "G5_MAP_FAMILY_01",
+    "scope": "TOPOLOGY_RUNTIME_PROOF",
+    "contract": true,
+    "typecheck": true,
+    "build": true,
+    "browser": true,
+    "desktopVisual": true,
+    "mobile390x844": true,
+    "representativeMaps": [
+      "apt-new-bottom-up-excavation",
+      "apt-new-top-down-under-slab"
+    ],
+    "balanceMutation": false,
+    "productionArtLocked": false,
+    "next": "G6_REMODEL_01"
+  }
+}
