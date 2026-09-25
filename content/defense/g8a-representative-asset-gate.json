@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED_SWIFT_FINAL_RASTER_REQUIRED",
+  "status": "BLOCKED_WORLD_AND_SWIFT_FINAL_RASTER_REQUIRED",
   "gate": "G8A_REPRESENTATIVE_SLICE",
   "map": "map-apt-bottom-up-excavation-01",
   "wave": 8,
@@ -25,8 +25,8 @@
         "png"
       ],
       "minimumSourceSize": {
-        "width": 1024,
-        "height": 768
+        "width": 2048,
+        "height": 1536
       },
       "runtimeTarget": {
         "width": 78,
@@ -60,7 +60,45 @@
     "swift": 1,
     "activeSvgVisuals": [],
     "prototypeBoardItems": 1,
-    "result": "BLOCKED_AS_DESIGNED"
+    "result": "BLOCKED_AS_DESIGNED",
+    "worldFinal": false,
+    "swiftFinal": false
   },
-  "promotionRule": "Do not promote G8-A until prototypeBoardItems=0 and activeSvgVisuals=0 on desktop and 390x844 mobile actual-play screenshots."
+  "promotionRule": "Do not promote G8-A until the process-specific final world plate and SWIFT final raster are both approved, then actual-play QA proves prototypeBoardItems=0 and activeSvgVisuals=0 on desktop and 390x844 mobile.",
+  "world": {
+    "id": "map-apt-bottom-up-excavation-01",
+    "state": "BLOCKED",
+    "currentKind": "HD_REFERENCE_ONLY",
+    "requiredKind": "PROCESS_SPECIFIC_RASTER_FINAL",
+    "allowedFormats": [
+      "webp",
+      "png"
+    ],
+    "minimumSourceSize": {
+      "width": 4000,
+      "height": 2400
+    },
+    "runtimeTarget": {
+      "width": 1000,
+      "height": 600
+    },
+    "legalProfile": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+    "requiredVisuals": [
+      "bottom-up open excavation identifiable without captions",
+      "retaining/shoring condition visually defensible",
+      "haul ramp and heavy-equipment circulation readable",
+      "worker access and vehicle circulation visually separable",
+      "no HUD, route, pad, warning icon, text or logo baked into art"
+    ],
+    "forbidden": [
+      "svg",
+      "rasterized legacy svg",
+      "upscaled low-resolution crop",
+      "generic aerial construction photo reused as final art",
+      "baked gameplay route",
+      "baked tower pad",
+      "fake Korean text",
+      "real company logo"
+    ]
+  }
 }
