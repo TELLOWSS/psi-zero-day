@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "source_sha": "5994242d4dab0c2ef0ac01a92118949cf2a94afd",
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false,
+    "profile": "apt-new-bottom-up-rc-frame",
+    "top": [
+      {
+        "risk": "ARMORED",
+        "score": 84
+      },
+      {
+        "risk": "SWIFT",
+        "score": 72
+      },
+      {
+        "risk": "SWARM",
+        "score": 68
+      }
+    ],
+    "screenRect": {
+      "left": 250,
+      "top": 116,
+      "right": 1416,
+      "bottom": 842,
+      "width": 1166,
+      "height": 726
+    },
+    "priorityRect": {
+      "left": 923,
+      "top": 292,
+      "right": 1384,
+      "bottom": 840,
+      "width": 461,
+      "height": 549
+    },
+    "pickerRect": {
+      "left": 282,
+      "top": 292,
+      "right": 905,
+      "bottom": 840,
+      "width": 624,
+      "height": 548
+    },
+    "selected": [
+      "순타 · 골조"
+    ]
+  },
+  "mobile": {
+    "viewport": {
+      "width": 393,
+      "height": 851
+    },
+    "overflow": false,
+    "profile": "apt-new-top-down-under-slab",
+    "top": [
+      {
+        "risk": "VEILED",
+        "score": 86
+      },
+      {
+        "risk": "SWARM",
+        "score": 78
+      },
+      {
+        "risk": "ARMORED",
+        "score": 74
+      }
+    ],
+    "screenRect": {
+      "left": 12,
+      "top": 269,
+      "right": 378,
+      "bottom": 1743,
+      "width": 366,
+      "height": 1474
+    },
+    "priorityRect": {
+      "left": 24,
+      "top": 1190,
+      "right": 366,
+      "bottom": 1719,
+      "width": 342,
+      "height": 529
+    },
+    "pickerRect": {
+      "left": 24,
+      "top": 420,
+      "right": 366,
+      "bottom": 1172,
+      "width": 342,
+      "height": 752
+    },
+    "selected": [
+      "역타 · 슬래브 하부굴착"
+    ]
+  },
+  "dynamic": {
+    "profile": "apt-new-top-down-under-slab",
+    "before": [
+      86,
+      78,
+      74
+    ],
+    "after": [
+      99,
+      88,
+      77
+    ],
+    "top": [
+      {
+        "risk": "VEILED",
+        "score": 99
+      },
+      {
+        "risk": "SWARM",
+        "score": 88
+      },
+      {
+        "risk": "ARMORED",
+        "score": 77
+      }
+    ]
+  },
+  "failures": []
+}
