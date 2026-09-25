@@ -123,6 +123,11 @@ jobs:
               '06-return-c.png',
               '07-hook.png',
               '08-done.png',
+              'mobile-01-signal.png',
+              'mobile-02-read.png',
+              'mobile-03-impact.png',
+              'mobile-05-decision.png',
+              'mobile-07-hook.png',
               'error.png',
           ]
           for name in wanted:
