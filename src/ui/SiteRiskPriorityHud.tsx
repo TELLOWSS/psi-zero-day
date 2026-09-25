@@ -4,12 +4,14 @@ import type { RiskPriorityResult, SiteProfileDefinition } from '../domain/defens
 export function SiteRiskPriorityHud({
   profile,
   result,
+  variant = 'board',
 }: {
   readonly profile: SiteProfileDefinition;
   readonly result: RiskPriorityResult;
+  readonly variant?: 'board' | 'prep';
 }) {
   return <aside
-    className="zb-risk-priority"
+    className={`zb-risk-priority${variant === 'prep' ? ' is-prep' : ''}`}
     data-site-profile={profile.id}
     data-project-archetype={profile.projectArchetype}
     data-construction-method={profile.constructionMethod}
