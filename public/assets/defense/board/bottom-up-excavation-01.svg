@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <defs>
+    <linearGradient id="earth" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8a7256"/>
+      <stop offset=".48" stop-color="#9b805e"/>
+      <stop offset="1" stop-color="#6f604d"/>
+    </linearGradient>
+    <linearGradient id="ramp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#baa27d"/>
+      <stop offset=".55" stop-color="#9f8766"/>
+      <stop offset="1" stop-color="#7f6c53"/>
+    </linearGradient>
+    <linearGradient id="slope" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#463d32"/>
+      <stop offset=".5" stop-color="#6a5943"/>
+      <stop offset="1" stop-color="#372f28"/>
+    </linearGradient>
+    <filter id="soil" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency=".018 .065" numOctaves="3" seed="17" result="n"/>
+      <feColorMatrix in="n" type="matrix" values=".32 0 0 0 .16  0 .25 0 0 .12  0 0 .18 0 .08  0 0 0 .34 0" result="grain"/>
+      <feBlend in="SourceGraphic" in2="grain" mode="multiply"/>
+    </filter>
+    <filter id="roadSoil" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="11" result="n"/>
+      <feColorMatrix in="n" type="saturate" values=".15" result="desat"/>
+      <feBlend in="SourceGraphic" in2="desat" mode="soft-light"/>
+    </filter>
+    <filter id="edgeShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <clipPath id="excavation">
+      <path d="M177 174 L706 163 L731 205 L722 516 L684 542 L197 548 L167 511 L170 217 Z"/>
+    </clipPath>
+  </defs>
+
+  <image href="ramp-01-hd01.webp" x="0" y="0" width="1000" height="600" preserveAspectRatio="none"/>
+  <rect width="1000" height="600" fill="#0e1b20" opacity=".09"/>
+
+  <!-- production excavation cut: no HUD/text/gameplay markers baked in -->
+  <path d="M170 173 L708 159 L742 210 L730 522 L688 553 L190 557 L158 516 L159 216 Z"
+        fill="#1d1a16" opacity=".48" filter="url(#edgeShadow)"/>
+  <g clip-path="url(#excavation)">
+    <rect x="150" y="150" width="610" height="410" fill="url(#earth)" filter="url(#soil)"/>
+    <path d="M165 195 L713 178 L713 221 L183 238 Z" fill="url(#slope)" opacity=".85"/>
+    <path d="M184 530 L714 500 L721 540 L194 556 Z" fill="url(#slope)" opacity=".82"/>
+    <path d="M172 205 L220 220 L218 525 L180 542 Z" fill="#43392d" opacity=".72"/>
+    <path d="M690 183 L727 210 L722 515 L683 500 Z" fill="#514434" opacity=".72"/>
+
+    <!-- excavation floor variation -->
+    <path d="M245 270 C330 235 430 258 510 232 C586 208 642 233 686 276
+             L685 462 C590 432 505 462 416 441 C334 422 275 454 215 424 Z"
+          fill="#a18966" opacity=".38" filter="url(#soil)"/>
+    <path d="M233 489 C350 461 468 488 585 455 C630 443 667 449 703 466"
+          fill="none" stroke="#5c4c3a" stroke-width="7" opacity=".28"/>
+    <path d="M238 302 C350 281 475 310 595 278 C632 268 662 271 693 281"
+          fill="none" stroke="#d0b287" stroke-width="4" opacity=".22"/>
+  </g>
+
+  <!-- temporary haul/ramp circulation aligned to locked G5 topology -->
+  <path d="M0 500 H180 V390 H370 V240 H620 V120 H1000"
+        fill="none" stroke="#463b2e" stroke-width="92" stroke-linecap="round" stroke-linejoin="round" opacity=".72"/>
+  <path d="M0 500 H180 V390 H370 V240 H620 V120 H1000"
+        fill="none" stroke="url(#ramp)" stroke-width="72" stroke-linecap="round" stroke-linejoin="round" filter="url(#roadSoil)" opacity=".97"/>
+  <path d="M0 492 H180 V382 H370 V232 H620 V112 H1000"
+        fill="none" stroke="#574b3a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="18 13" opacity=".48"/>
+  <path d="M0 508 H180 V398 H370 V248 H620 V128 H1000"
+        fill="none" stroke="#d0b98f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="20 16" opacity=".38"/>
+
+  <!-- retaining / shoring rhythm -->
+  <g fill="none" stroke="#c1ad83" stroke-width="3" opacity=".58">
+    <path d="M182 186 L696 176"/>
+    <path d="M183 539 L686 530"/>
+    <path d="M178 210 L176 505"/>
+    <path d="M710 205 L708 500"/>
+  </g>
+  <g stroke="#3c342c" stroke-width="3" opacity=".55">
+    <path d="M212 184v24 M252 183v24 M292 182v24 M332 181v24 M372 180v24 M412 179v24 M452 178v24 M492 177v24 M532 176v24 M572 175v24 M612 174v24 M652 173v24"/>
+    <path d="M207 520v24 M247 519v24 M287 518v24 M327 517v24 M367 516v24 M407 515v24 M447 514v24 M487 513v24 M527 512v24 M567 511v24 M607 510v24 M647 509v24"/>
+  </g>
+
+  <!-- spoil / material staging at upper-right -->
+  <g opacity=".9" filter="url(#soil)">
+    <path d="M752 70 C782 48 824 52 845 82 C830 108 780 112 750 95 Z" fill="#876e50"/>
+    <path d="M830 83 C866 55 910 66 928 99 C910 124 861 125 828 108 Z" fill="#967758"/>
+    <path d="M785 121 C821 95 867 102 886 135 C866 160 817 163 783 146 Z" fill="#735f48"/>
+  </g>
+
+  <!-- subtle safety separation / worker perimeter, world marking only -->
+  <path d="M40 555 H300 V465 H540 V330 H900"
+        fill="none" stroke="#d8d2a5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="13 11" opacity=".55"/>
+
+  <!-- light cinematic grade -->
+  <rect width="1000" height="600" fill="url(#earth)" opacity=".035"/>
+  <rect x="1.5" y="1.5" width="997" height="597" rx="14" fill="none" stroke="#1a2222" stroke-width="3" opacity=".45"/>
+</svg>
