@@ -278,7 +278,7 @@ const report = {
   generated_at: new Date().toISOString(),
   source_sha: qaSourceSha,
   strategy: 'PRECISION_PURE_UI',
-  acceleration: 'wall scheduling only; fixed 50ms logical ticks and production content unchanged',
+  acceleration: 'wall scheduling only; one logical tick per 25ms wall interval, no synchronous batching; production 50ms logical tick and content unchanged',
   tutorial: {},
   purchases: [],
   support_waves: [],
@@ -326,9 +326,9 @@ try {
       const nativeSetInterval = window.setInterval.bind(window);
       window.setInterval = (handler, timeout, ...args) => {
         if (timeout === 50 && typeof handler === 'function') {
-          return nativeSetInterval(() => {
-            for (let i = 0; i < 4; i += 1) handler(...args);
-          }, 10);
+          // Keep every logical tick in its own macrotask so React can render
+          // transient one-tick semantic FX (notably SENSOR detect pulse).
+          return nativeSetInterval(handler, 25, ...args);
         }
         return nativeSetInterval(handler, timeout, ...args);
       };
