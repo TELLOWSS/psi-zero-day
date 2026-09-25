@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react';
 import { defaultSiteProfile, siteProfileById, siteProfiles } from '../content/site-profiles';
+import { dataCenterProfileIdForPhase, dataCenterScenario } from '../content/data-center';
 import { remodelScenario } from '../content/remodel';
 import { siteProcessMapByProfile, siteScenarioId } from '../content/site-process-maps';
+import type { DataCenterAction } from '../domain/data-center';
 import type { RemodelAction } from '../domain/remodel';
 import type { ProjectArchetype } from '../domain/site-profile';
 import { baselineRiskContext, topRiskPriorities } from '../engine/risk-priority';
+import { applyDataCenterAction, dataCenterCanLaunchDefense, dataCenterRiskContext } from '../engine/data-center';
 import { applyRemodelAction, remodelCanLaunchDefense, remodelRiskContext } from '../engine/remodel';
+import { readDataCenterState, resetDataCenterState, writeDataCenterState } from '../app/data-center-state';
 import { readRemodelState, resetRemodelState, writeRemodelState } from '../app/remodel-state';
 import { readSiteProfilePreference, writeSiteProfilePreference } from '../app/site-profile-preference';
 
@@ -78,6 +82,39 @@ const REMODEL_STATE_LABELS = {
   OPENED: '개방', REINFORCED: '보강', NOT_STARTED: '미시작', PREPARED: '준비',
 } as const;
 
+const DATA_CENTER_ACTIONS: readonly { readonly action: DataCenterAction; readonly label: string; readonly hint: string }[] = [
+  { action: 'CLOSE_MEP_PUNCHLIST', label: 'MEP 간섭·미완료 정리', hint: '다공종 인터페이스와 미완료 항목을 정리합니다.' },
+  { action: 'VERIFY_ELECTRICAL_BOUNDARY', label: '전기 작업경계 확인', hint: '전기실·UPS·계통별 작업경계를 확인합니다.' },
+  { action: 'PLAN_SYSTEM_ISOLATION', label: '계통 격리계획 확정', hint: '통전 전 격리·접근 경계를 계획 상태로 고정합니다.' },
+  { action: 'VERIFY_SYSTEM_ISOLATION', label: '계통 격리 검증', hint: '격리 상태가 실제 현장과 일치하는지 확인합니다.' },
+  { action: 'PRE_ENERGIZATION_CHECK', label: '통전 전 점검', hint: '제한된 통전 전 선행조건을 다시 확인합니다.' },
+  { action: 'ENTER_ENERGIZED_STATE', label: '제한 통전 상태 전환', hint: '검증된 경계 아래에서 활성계통 상태로 전환합니다.' },
+  { action: 'VERIFY_INTERLOCKS', label: '인터록 검증', hint: '활성계통 간 보호·연동 상태를 확인합니다.' },
+  { action: 'RUN_SINGLE_SYSTEM_TEST', label: '단일계통 시험', hint: '한 계통씩 기능을 확인하고 통합시험 조건을 엽니다.' },
+  { action: 'RUN_INTEGRATED_TEST', label: '통합시운전', hint: '여러 활성계통의 상호작용을 동시에 확인합니다.' },
+  { action: 'VERIFY_COMMISSIONING', label: '시운전 결과 검증', hint: '통합시험 결과를 확인하고 대표 공정을 완료합니다.' },
+];
+
+const DATA_CENTER_STATE_LABELS = {
+  NOT_INSTALLED: '미설치',
+  INSTALLED: '설치',
+  TESTING: '시험',
+  ENERGIZED: '통전',
+  LOCKED_OUT: '격리',
+  LIVE_CRITICAL: '활성·중요',
+  UNDEFINED: '미정',
+  PLANNED: '계획',
+  VERIFIED: '검증',
+  UNVERIFIED: '미검증',
+  NOT_STARTED: '미시작',
+  PRECHECK: '통전전점검',
+  SINGLE_SYSTEM_TEST: '단일시험',
+  INTEGRATED_TEST: '통합시험',
+  LOW: '낮음',
+  MEDIUM: '중간',
+  HIGH: '높음',
+} as const;
+
 export function SiteProfileScreen({ onBack, onPracticeScenario }: {
   readonly onBack: () => void;
   readonly onPracticeScenario: (scenarioId: string) => void;
@@ -91,34 +128,50 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
   }));
   const [remodelState, setRemodelState] = useState(() => readRemodelState());
   const [remodelNotice, setRemodelNotice] = useState('');
+  const [dataCenterState, setDataCenterState] = useState(() => readDataCenterState());
+  const [dataCenterNotice, setDataCenterNotice] = useState('');
   const selected = siteProfileById(profileId) ?? defaultSiteProfile;
   const isRemodelRepresentative = selected.id === remodelScenario.profileId;
-  const riskContext = useMemo(() => isRemodelRepresentative
-    ? remodelRiskContext(remodelState, selected.id)
-    : ({
-      ...baselineRiskContext(selected.id),
-      ...context,
-      asBuiltConfidence: selected.projectArchetype === 'APT_REMODEL' ? 'MEDIUM' as const : 'HIGH' as const,
-      energyState: selected.processPhase === 'COMMISSIONING'
-        ? 'TESTING' as const
-        : selected.processPhase === 'ELECTRICAL_UPS'
-          ? 'INSTALLED' as const
-          : 'NOT_INSTALLED' as const,
-    }), [context, isRemodelRepresentative, remodelState, selected]);
+  const isDataCenterRepresentative = selected.id === dataCenterScenario.profileIds.MEP_ROUGH_IN;
+  const runtimeProfile = isDataCenterRepresentative
+    ? (siteProfileById(dataCenterProfileIdForPhase(dataCenterState.phase)) ?? selected)
+    : selected;
+  const riskContext = useMemo(() => isDataCenterRepresentative
+    ? dataCenterRiskContext(dataCenterState, runtimeProfile.id)
+    : isRemodelRepresentative
+      ? remodelRiskContext(remodelState, selected.id)
+      : ({
+        ...baselineRiskContext(selected.id),
+        ...context,
+        asBuiltConfidence: selected.projectArchetype === 'APT_REMODEL' ? 'MEDIUM' as const : 'HIGH' as const,
+        energyState: selected.processPhase === 'COMMISSIONING'
+          ? 'TESTING' as const
+          : selected.processPhase === 'ELECTRICAL_UPS'
+            ? 'INSTALLED' as const
+            : 'NOT_INSTALLED' as const,
+      }), [context, dataCenterState, isDataCenterRepresentative, isRemodelRepresentative, remodelState, runtimeProfile.id, selected]);
 
-  const top = useMemo(() => topRiskPriorities(selected, riskContext, 3), [riskContext, selected]);
+  const top = useMemo(() => topRiskPriorities(runtimeProfile, riskContext, 3), [riskContext, runtimeProfile]);
   const processMap = useMemo(
-    () => siteProcessMapByProfile(selected.id) ?? (isRemodelRepresentative ? remodelScenario.map : undefined),
-    [isRemodelRepresentative, selected.id],
+    () => siteProcessMapByProfile(selected.id)
+      ?? (isRemodelRepresentative ? remodelScenario.map : undefined)
+      ?? (isDataCenterRepresentative ? dataCenterScenario.map : undefined),
+    [isDataCenterRepresentative, isRemodelRepresentative, selected.id],
   );
-  const practiceScenarioId = isRemodelRepresentative ? remodelScenario.id : siteProcessMapByProfile(selected.id) ? siteScenarioId(selected.id) : null;
+  const practiceScenarioId = isRemodelRepresentative
+    ? remodelScenario.id
+    : isDataCenterRepresentative
+      ? dataCenterScenario.id
+      : siteProcessMapByProfile(selected.id) ? siteScenarioId(selected.id) : null;
   const remodelReady = isRemodelRepresentative && remodelCanLaunchDefense(remodelState);
+  const dataCenterReady = isDataCenterRepresentative && dataCenterCanLaunchDefense(dataCenterState);
 
   const choose = (id: string) => {
     setProfileId(id);
     writeSiteProfilePreference(id);
     setContext({ concurrency: 0, uncertainty: 0, logisticsCongestion: 0, timePressure: 0 });
     setRemodelNotice('');
+    setDataCenterNotice('');
   };
 
   const runRemodelAction = (action: RemodelAction) => {
@@ -136,6 +189,23 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
     const state = resetRemodelState();
     setRemodelState(state);
     setRemodelNotice('리모델링 대표 공정을 처음 상태로 되돌렸습니다.');
+  };
+
+  const runDataCenterAction = (action: DataCenterAction) => {
+    const result = applyDataCenterAction(dataCenterState, action);
+    setDataCenterState(result.state);
+    if (result.applied) {
+      writeDataCenterState(result.state);
+      setDataCenterNotice('데이터센터 계통 상태가 반영되었습니다.');
+    } else {
+      setDataCenterNotice(result.blockedReason ?? '이미 반영된 조치입니다.');
+    }
+  };
+
+  const restartDataCenter = () => {
+    const state = resetDataCenterState();
+    setDataCenterState(state);
+    setDataCenterNotice('데이터센터 대표 공정을 처음 상태로 되돌렸습니다.');
   };
 
   const grouped = (['APT_NEW_BUILD','APT_REMODEL','DATA_CENTER'] as const).map(project => ({
@@ -176,7 +246,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
           <span>PSI RISK PRIORITY</span>
           <b>GAME PRIORITY · NOT LEGAL RA</b>
         </div>
-        <h2>{selected.label}</h2>
+        <h2>{isDataCenterRepresentative ? runtimeProfile.label : selected.label}</h2>
         <p>아래 값은 법정 위험성평가 점수가 아니라 게임 내 우선순위입니다.</p>
 
         <div className="site-profile-top3">
@@ -189,18 +259,24 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
 
         {processMap ? <section className="site-process-preview" aria-label="대표 공정 맵 미리보기">
           <div className="site-process-preview-head">
-            <div><small>{isRemodelRepresentative ? 'G6 · REMODEL RUNTIME PROOF' : 'G5 · TOPOLOGY PROOF'}</small><strong>{processMap.label}</strong></div>
+            <div><small>{isDataCenterRepresentative ? 'G7 · ENERGY / COMMISSIONING PROOF' : isRemodelRepresentative ? 'G6 · REMODEL RUNTIME PROOF' : 'G5 · TOPOLOGY PROOF'}</small><strong>{processMap.label}</strong></div>
             <button
               type="button"
-              disabled={!practiceScenarioId || (isRemodelRepresentative && !remodelReady)}
+              disabled={!practiceScenarioId || (isRemodelRepresentative && !remodelReady) || (isDataCenterRepresentative && !dataCenterReady)}
               onClick={() => practiceScenarioId && onPracticeScenario(practiceScenarioId)}
-            >{isRemodelRepresentative && !remodelReady ? '선행조건 확인 필요' : '이 공정으로 디펜스 체험'}</button>
+            >{(isRemodelRepresentative && !remodelReady) || (isDataCenterRepresentative && !dataCenterReady) ? '선행조건 확인 필요' : '이 공정으로 디펜스 체험'}</button>
           </div>
           {isRemodelRepresentative ? <div className="remodel-preview-state" aria-label="리모델링 현재 상태">
             <span><small>AS-BUILT</small><b>{REMODEL_STATE_LABELS[remodelState.asBuiltConfidence]}</b></span>
             <span><small>차단</small><b>{REMODEL_STATE_LABELS[remodelState.isolationState]}</b></span>
             <span><small>임시지지</small><b>{REMODEL_STATE_LABELS[remodelState.tempSupportState]}</b></span>
             <span><small>선택철거</small><b>{REMODEL_STATE_LABELS[remodelState.structuralOpeningState]}</b></span>
+          </div> : null}
+          {isDataCenterRepresentative ? <div className="data-center-preview-state" aria-label="데이터센터 현재 상태">
+            <span><small>PHASE</small><b>{dataCenterState.phase}</b></span>
+            <span><small>ENERGY</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.energyState]}</b></span>
+            <span><small>격리</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.isolationState]}</b></span>
+            <span><small>시운전</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.commissioningState]}</b></span>
           </div> : null}
           <svg viewBox="0 0 1000 600" role="img" aria-label={processMap.label}>
             {processMap.zones.map(zone => <polygon
@@ -240,7 +316,34 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
           <p>G5는 순타 굴착과 역타 슬래브 하부굴착 두 맵만 먼저 검증합니다. 리모델링과 데이터센터 전용 맵은 G6/G7에서 순차 제작합니다.</p>
         </section>}
 
-        {isRemodelRepresentative ? <section className="remodel-runtime-panel" data-remodel-phase={remodelState.phase}>
+        {isDataCenterRepresentative ? <section className="data-center-runtime-panel" data-data-center-phase={dataCenterState.phase}>
+          <div className="data-center-runtime-head">
+            <div><small>G7 · ENERGY / COMMISSIONING STATE</small><strong>설치된 설비가 언제부터 ‘활성계통’이 되는지를 읽습니다.</strong></div>
+            <button type="button" onClick={restartDataCenter}>처음부터</button>
+          </div>
+          <p>실제 전기 조작 절차를 재현하지 않고, 상태 확인·격리·권한·검증이 선행되어야 다음 단계가 열리는 판단 구조를 다룹니다.</p>
+          <div className="data-center-runtime-state">
+            <span><small>PHASE</small><b>{dataCenterState.phase}</b></span>
+            <span><small>ENERGY</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.energyState]}</b></span>
+            <span><small>격리</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.isolationState]}</b></span>
+            <span><small>INTERLOCK</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.interlockState]}</b></span>
+            <span><small>시운전</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.commissioningState]}</b></span>
+            <span><small>동시작업</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.crossTradeConcurrency]}</b></span>
+          </div>
+          <div className="data-center-runtime-actions">
+            {DATA_CENTER_ACTIONS.map((item, index) => <button
+              key={item.action}
+              type="button"
+              data-done={dataCenterState.completedActions.includes(item.action) ? 'true' : 'false'}
+              onClick={() => runDataCenterAction(item.action)}
+            >
+              <i>{String(index + 1).padStart(2, '0')}</i>
+              <span><strong>{item.label}</strong><small>{item.hint}</small></span>
+              <b>{dataCenterState.completedActions.includes(item.action) ? '완료' : '진행'}</b>
+            </button>)}
+          </div>
+          {dataCenterNotice ? <div className="data-center-runtime-notice" role="status">{dataCenterNotice}</div> : null}
+        </section> : isRemodelRepresentative ? <section className="remodel-runtime-panel" data-remodel-phase={remodelState.phase}>
           <div className="remodel-runtime-head">
             <div><small>G6 · EXISTING BUILDING STATE</small><strong>기존 구조를 먼저 읽고, 검증된 순서로 바꿉니다.</strong></div>
             <button type="button" onClick={restartRemodel}>처음부터</button>
@@ -283,9 +386,11 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
 
         <div className="site-profile-gate-note">
           <b>현재 Gate</b>
-          <p>{isRemodelRepresentative
-            ? 'G6는 기존 구조 조사·차단·임시지지·선택철거·접합 상태가 위험우선순위와 디펜스 진입 조건을 바꾸는지 검증합니다.'
-            : 'G5 대표 순타/역타 맵은 topology/runtime proof까지 잠겼습니다. 데이터센터는 G7에서 대표 공정부터 이어집니다.'}</p>
+          <p>{isDataCenterRepresentative
+            ? 'G7은 MEP → 전기/UPS → 통전 → 통합시운전으로 에너지 상태가 바뀔 때 위험 우선순위와 디펜스 진입 조건이 어떻게 재정렬되는지 검증합니다.'
+            : isRemodelRepresentative
+              ? 'G6는 기존 구조 조사·차단·임시지지·선택철거·접합 상태가 위험우선순위와 디펜스 진입 조건을 바꾸는지 검증합니다.'
+              : 'G5 대표 순타/역타 맵은 topology/runtime proof까지 잠겼습니다. 대표 리모델링과 데이터센터 공정은 G6/G7에서 이어집니다.'}</p>
         </div>
       </aside>
     </div>
