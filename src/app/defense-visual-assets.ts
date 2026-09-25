@@ -1,6 +1,7 @@
 import visualProductionRaw from '../../content/defense/visual-production.json';
 import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json';
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
+import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -63,6 +64,24 @@ interface DefHd01PqBenchmark {
 
 const defHd01PqBenchmark = defHd01PqBenchmarkRaw as unknown as DefHd01PqBenchmark;
 
+interface ProductionMapFamilyEntry {
+  readonly mapId: string;
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'svg';
+  readonly width: number;
+  readonly height: number;
+  readonly status: 'PRODUCTION_CANDIDATE' | 'PRODUCTION_LOCKED';
+}
+interface ProductionMapFamily {
+  readonly schemaVersion: 1;
+  readonly maps: readonly ProductionMapFamilyEntry[];
+}
+const productionMapFamily = productionMapFamilyRaw as ProductionMapFamily;
+
+export function defenseProductionMapEntry(mapId: string): ProductionMapFamilyEntry | null {
+  return productionMapFamily.maps.find(item => item.mapId === mapId) ?? null;
+}
+
 function pqPreviewEnabled(): boolean {
   return defHd01PqBenchmark.runtimePromotion?.approved === true
     || defHd01PqBenchmark.runtimePromotion?.previewCandidateOnGateBranch === true;
@@ -104,6 +123,8 @@ function asset(id: string): DefenseVisualAsset | null {
 }
 
 export function defenseBoardArtUri(mapId: string): string | null {
+  const productionMap = defenseProductionMapEntry(mapId);
+  if (productionMap) return productionMap.runtimeUri;
   if (
     mapId === 'ramp-01'
     && defHd01ArtIngest.acceptanceState?.assetBytesInRepository === 'PASS'
