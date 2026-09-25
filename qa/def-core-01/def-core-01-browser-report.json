@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T07:34:40.714Z",
-  "source_sha": "1bafad79e415be3053a36557af5a1e5a2e2e878e",
+  "generated_at": "2026-09-25T07:42:34.238Z",
+  "source_sha": "2e8335033b305eb6bb9a6ff489b810f184abb881",
   "gate": "DEF-CORE-01",
   "scenario": "event-ramp-reconstruction-v1",
   "wave": 8,
@@ -26,7 +26,7 @@
   "decision_count": 3,
   "chosen": "C",
   "followup": "RECORD",
-  "cinematic_wall_ms": 12611,
+  "cinematic_wall_ms": 12608,
   "audio_cues": [
     "warning",
     "warning",
@@ -97,6 +97,57 @@
     "world": "REROUTED_STAGING",
     "barrier": 1,
     "marshal": 1
+  },
+  "mobile": {
+    "viewport": "390x844",
+    "phases": [
+      "SIGNAL",
+      "READ",
+      "IMPACT",
+      "DECISION",
+      "HOOK"
+    ],
+    "no_horizontal_overflow": true,
+    "signal_rect": {
+      "left": 12,
+      "top": 536,
+      "right": 354,
+      "bottom": 732,
+      "width": 342,
+      "height": 196,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "read_rect": {
+      "left": 12,
+      "top": 246,
+      "right": 378,
+      "bottom": 598,
+      "width": 366,
+      "height": 353,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "decision_rect": {
+      "left": 12,
+      "top": 189,
+      "right": 378,
+      "bottom": 655,
+      "width": 366,
+      "height": 465,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "hook_rect": {
+      "left": 12,
+      "top": 243,
+      "right": 378,
+      "bottom": 601,
+      "width": 366,
+      "height": 358,
+      "innerWidth": 390,
+      "innerHeight": 844
+    }
   },
   "failures": []
 }
