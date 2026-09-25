@@ -206,14 +206,49 @@ async function waitCombat(cdp, status, wave, timeoutMs = 30000) {
   );
 }
 
+async function setPaused(cdp, paused) {
+  const ok = await evaluate(cdp, `(() => {
+    const button = document.querySelector('.zb-hud-button');
+    if (!(button instanceof HTMLButtonElement) || button.disabled) return false;
+    const current = button.getAttribute('aria-pressed') === 'true';
+    if (current !== ${JSON.stringify(paused)}) button.click();
+    return true;
+  })()`);
+  if (!ok) throw new Error('Missing pause control');
+  await waitFor(
+    cdp,
+    `document.querySelector('.zb-hud-button')?.getAttribute('aria-pressed') === ${JSON.stringify(String(paused))}`,
+  );
+}
+
 async function pauseIntermission(cdp, wave) {
   await waitCombat(cdp, 'INTERMISSION', wave);
-  await clickText(cdp, '정지');
-  await waitFor(cdp, "[...document.querySelectorAll('button')].some(b => (b.textContent || '').includes('재개'))");
+  await setPaused(cdp, true);
 }
 
 async function resumeIntermission(cdp) {
-  await clickText(cdp, '재개');
+  await setPaused(cdp, false);
+  const state = await evaluate(cdp, `(() => {
+    const shell = document.querySelector('[data-defense-screen="combat"]');
+    return {
+      status: shell?.getAttribute('data-status') || null,
+      wave: Number(shell?.getAttribute('data-wave') || 0),
+    };
+  })()`);
+
+  if (state.status === 'RUNNING') return;
+  if (state.status !== 'INTERMISSION') {
+    throw new Error('Cannot resume from status: ' + state.status);
+  }
+
+  const started = await evaluate(cdp, `(() => {
+    const button = document.querySelector('button.zb-start-wave');
+    if (!(button instanceof HTMLButtonElement) || button.disabled) return false;
+    button.click();
+    return true;
+  })()`);
+  if (!started) throw new Error('Missing next-wave control');
+  await waitCombat(cdp, 'RUNNING', state.wave);
 }
 
 async function useSupportAtWave(cdp, wave) {
