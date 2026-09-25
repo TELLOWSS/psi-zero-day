@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "gate": "DEF-CORE-01",
   "title": "한 걸음",
-  "status": "IMPLEMENTATION",
+  "status": "RUNTIME_INTEGRATION",
   "inherits": {
     "g2ProductionLock": true,
     "masterWorld": "assets/defense/board/ramp-01-hd01.webp",
@@ -99,26 +99,48 @@
       "id": "A",
       "label": "3분만 통로를 완전히 비우고 다시 받죠.",
       "worldResult": "HOLD_LINE",
-      "tradeoff": "fast safety / small schedule delay"
+      "tradeoff": "fast safety / small schedule delay",
+      "runtime": {
+        "activeTicks": 60,
+        "swiftSlowFraction": 1,
+        "setbackDistance": 0
+      }
     },
     {
       "id": "B",
       "label": "유도원 한 명 더 붙이고 한 대씩 통과시킵니다.",
       "worldResult": "REINFORCED_CONTROL",
-      "tradeoff": "operational / manpower cost"
+      "tradeoff": "operational / manpower cost",
+      "runtime": {
+        "activeTicks": 160,
+        "swiftSlowFraction": 0.55,
+        "setbackDistance": 0
+      }
     },
     {
       "id": "C",
       "label": "대기 위치를 바꾸죠. 여기서 계속 받으면 반복됩니다.",
       "worldResult": "REROUTED_STAGING",
-      "tradeoff": "structural / more setup time"
+      "tradeoff": "structural / more setup time",
+      "runtime": {
+        "activeTicks": 240,
+        "swiftSlowFraction": 0.3,
+        "setbackDistance": 95
+      }
     }
   ],
   "returnToDefense": {
     "sameCameraAnchor": true,
     "worldChangeMustRemainVisible": true,
     "allChoicesSafe": true,
-    "noBaseBalanceMutation": true
+    "noBaseBalanceMutation": true,
+    "runtimeConsequence": {
+      "scope": "DEF-CORE-01 Wave 8 SWIFT only",
+      "baseWaveContentUnchanged": true,
+      "A": "active SWIFT vehicles hold at the control line before release",
+      "B": "active and newly arriving SWIFT vehicles remain under reinforced marshal slowdown",
+      "C": "active SWIFT returns toward staging once; following SWIFT vehicles use a reduced-speed safer approach"
+    }
   },
   "hook": {
     "speaker": "임준호",
@@ -181,6 +203,7 @@
     "limJunho": "assets/episode01/characters/lim-junho-concerned.webp",
     "choiMinseok": "assets/episode01/characters/choi-minseok-map.webp",
     "leeJaehoon": "assets/episode01/characters/lee-jaehoon-portrait.webp",
-    "worldBarrier": "assets/episode01/scene-elements/access-barrier.webp"
+    "worldBarrier": "assets/episode01/scene-elements/access-barrier.webp",
+    "separation": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
   }
 }
