@@ -180,16 +180,20 @@ async function metrics(cdp) {
     const art=document.querySelector('.zb-board-production-art');
     const href=art?.getAttribute('href') || null;
     let artBytes=0;
+    let sourceBytes=0;
     if(href){
       const response=await fetch(href);
       if(response.ok) artBytes=(await response.arrayBuffer()).byteLength;
     }
+    const sourceResponse=await fetch('assets/defense/board/ramp-01-hd01.webp');
+    if(sourceResponse.ok) sourceBytes=(await sourceResponse.arrayBuffer()).byteLength;
     return {
       scenario:shell?.getAttribute('data-scenario')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
       artHref:href,
       artBytes,
+      sourceBytes,
       productionArtCount:document.querySelectorAll('.zb-board-production-art').length,
       processOverlay:Boolean(document.querySelector('[data-site-process-map="map-apt-bottom-up-excavation-01"]')),
       pads:document.querySelectorAll('.zb-pad-runtime').length,
@@ -227,7 +231,7 @@ try {
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
   if(report.desktop.productionMap!=='PRODUCTION_CANDIDATE') throw new Error('G8-A production-map state missing');
-  if(!report.desktop.artHref?.includes('ramp-01-hd01.webp') || report.desktop.artBytes<100000) throw new Error('HD production world plate did not load');
+  if(!report.desktop.artHref?.includes('bottom-up-excavation-01.svg') || report.desktop.artBytes<5000 || report.desktop.sourceBytes<100000) throw new Error('G8-A composite or HD source did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers<1 || report.desktop.enemies<1 || report.desktop.status!=='RUNNING') throw new Error('Actual-play actors missing from G8-A evidence');
