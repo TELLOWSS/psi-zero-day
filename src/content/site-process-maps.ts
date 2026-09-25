@@ -12,6 +12,7 @@ const ROUTE_KINDS = new Set<SiteRouteKind>(['vehicle','worker','material']);
 const ZONE_KINDS = new Set<SiteZoneKind>([
   'EXCAVATION','UNDER_SLAB','LOGISTICS_CONFLICT','LOW_VISIBILITY','OPENING','MATERIAL_STAGING','RESTRICTED',
   'EXISTING_STRUCTURE','TEMP_SUPPORT','EXTENSION_CONNECTION',
+  'MEP_SERVICE','ELECTRICAL_ROOM','STORED_ENERGY','LIVE_SYSTEM','COMMISSIONING_INTERFACE',
 ]);
 const TRANSFER_KINDS = new Set<VerticalTransferKind>(['RAMP','MUCK_OPENING','STAIR','LIFT_OPENING']);
 const TOWER_IDS = new Set<DefenseTowerId>(['PULSE','BURST','CONTROL','SENSOR']);
@@ -124,7 +125,7 @@ export function validateSiteProcessMap(value: unknown, index = 0): SiteProcessMa
   unique(visibilityZones, `${path}.visibilityZones`); unique(verticalTransfers, `${path}.verticalTransfers`);
   unique(interventionAnchors, `${path}.interventionAnchors`);
   const primary = routes.find(item => item.id === value.primaryDefenseRouteId);
-  if (!primary || primary.kind !== 'vehicle') throw new Error(`${path}: primary defense route must reference vehicle route`);
+  if (!primary) throw new Error(`${path}: primary defense route must reference a declared route`);
   for (const p of [...routes.flatMap(item => item.points), ...pads, ...zones.flatMap(item => item.points),
     ...visibilityZones.map(item => item.center), ...verticalTransfers.map(item => item.point), ...interventionAnchors]) {
     if (!inside(p, 1000, 600)) throw new Error(`${path}: point outside 1000x600 board`);

@@ -675,3 +675,42 @@
 .zb-remodel-connection.is-verified path{stroke:#79d5b1}
 .zb-shell[data-remodel-phase="SELECTIVE_DEMOLITION"] .zb-board-wrap{box-shadow:inset 0 0 0 1px rgba(221,155,69,.28),0 18px 55px rgba(0,0,0,.25)}
 .zb-shell[data-remodel-phase="OLD_NEW_CONNECTION"] .zb-board-wrap{box-shadow:inset 0 0 0 1px rgba(123,186,164,.25),0 18px 55px rgba(0,0,0,.25)}
+
+
+/* G7 DATA-CENTER-01 — live energy / commissioning world state */
+.zb-site-zone-mep_service{fill:rgba(63,119,142,.11);stroke:rgba(103,165,190,.3)}
+.zb-site-zone-electrical_room{fill:rgba(190,151,61,.1);stroke:rgba(225,186,87,.32)}
+.zb-site-zone-stored_energy{fill:rgba(170,103,65,.11);stroke:rgba(213,137,89,.32)}
+.zb-site-zone-live_system{fill:rgba(169,58,68,.11);stroke:rgba(219,84,94,.34)}
+.zb-site-zone-commissioning_interface{fill:rgba(90,96,164,.11);stroke:rgba(143,148,214,.31)}
+
+.zb-data-center-world{pointer-events:none}
+.zb-data-center-isolation rect{fill:rgba(10,31,41,.12);stroke:#78c8e4;stroke-width:4;stroke-dasharray:12 8}
+.zb-data-center-isolation path{fill:none;stroke:#78c8e4;stroke-width:3;opacity:.42}
+.zb-data-center-lockout rect{fill:rgba(8,37,48,.95);stroke:#7cd0ea;stroke-width:3}
+.zb-data-center-lockout path{fill:none;stroke:#7cd0ea;stroke-width:4;stroke-linecap:round}
+.zb-data-center-lockout circle{fill:#7cd0ea}
+.zb-data-center-energy path{fill:none;stroke:#e3b95d;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.68}
+.zb-data-center-energy g circle:first-child{fill:#efc461;opacity:.85}
+.zb-data-center-energy g circle+circle{fill:none;stroke:#efc461;stroke-width:3;opacity:.35}
+.zb-data-center-energy.is-testing{opacity:.68}
+.zb-data-center-energy.is-energized path{stroke:#ef9a55;filter:drop-shadow(0 0 5px rgba(239,154,85,.42))}
+.zb-data-center-energy.is-energized g circle:first-child{fill:#ef9a55}
+.zb-data-center-energy.is-energized g circle+circle{stroke:#ef9a55;animation:zb-data-center-energy-pulse 1.2s ease-out infinite}
+.zb-data-center-interlock path{fill:none;stroke:#84d1b6;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.zb-data-center-commissioning circle{fill:none;stroke:#b28ce0;stroke-width:4;stroke-dasharray:12 9;opacity:.66}
+.zb-data-center-commissioning path{fill:none;stroke:#b28ce0;stroke-width:4;opacity:.62}
+.zb-shell[data-energy-state="ENERGIZED"] .zb-board-wrap,
+.zb-shell[data-energy-state="LIVE_CRITICAL"] .zb-board-wrap{
+  box-shadow:inset 0 0 0 1px rgba(226,132,77,.3),0 18px 55px rgba(0,0,0,.25)
+}
+.zb-shell[data-data-center-phase="INTEGRATED_COMMISSIONING"] .zb-board-wrap{
+  box-shadow:inset 0 0 0 1px rgba(164,130,207,.31),0 18px 55px rgba(0,0,0,.25)
+}
+@keyframes zb-data-center-energy-pulse{
+  0%{opacity:.65;transform:scale(.82)}
+  70%,100%{opacity:0;transform:scale(1.35)}
+}
+@media(prefers-reduced-motion:reduce){
+  .zb-data-center-energy.is-energized g circle+circle{animation:none}
+}

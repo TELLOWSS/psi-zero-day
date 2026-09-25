@@ -1,8 +1,11 @@
 import { siteProcessMapByMapId } from '../content/site-process-maps';
 import { remodelScenario } from '../content/remodel';
+import { dataCenterScenario } from '../content/data-center';
 
 export function SiteProcessMapBoardOverlay({ mapId }: { readonly mapId: string }) {
-  const processMap = siteProcessMapByMapId(mapId) ?? (remodelScenario.map.id === mapId ? remodelScenario.map : undefined);
+  const processMap = siteProcessMapByMapId(mapId)
+    ?? (remodelScenario.map.id === mapId ? remodelScenario.map : undefined)
+    ?? (dataCenterScenario.map.id === mapId ? dataCenterScenario.map : undefined);
   if (!processMap) return null;
 
   return <g className="zb-site-process-map" data-site-process-map={processMap.id}>

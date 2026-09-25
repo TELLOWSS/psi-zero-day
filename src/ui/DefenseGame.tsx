@@ -5,7 +5,9 @@ import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
+import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
+import { dataCenterDefense, dataCenterScenario } from '../content/data-center';
 import { zeroBreachContent } from '../content/defense';
 import { remodelDefense, remodelScenario } from '../content/remodel';
 import { siteDefenseContentForScenario, siteProcessMapByMapId } from '../content/site-process-maps';
@@ -28,6 +30,7 @@ import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
 import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
 import { RemodelBoardOverlay } from './RemodelBoardOverlay';
+import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -253,6 +256,7 @@ export function DefenseGame({
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
     || selectedScenarioId === remodelDefense.scenario.id
+    || selectedScenarioId === dataCenterDefense.scenario.id
     || Boolean(selectedScenarioId && siteDefenseContentForScenario(selectedScenarioId))
     || (selectedScenarioId === e1.id && e1Availability.unlocked);
   const content = state
@@ -264,8 +268,10 @@ export function DefenseGame({
   const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
   const activeSiteMap = siteProcessMapByMapId(content.map.id)
-    ?? (content.map.id === remodelScenario.map.id ? remodelScenario.map : undefined);
+    ?? (content.map.id === remodelScenario.map.id ? remodelScenario.map : undefined)
+    ?? (content.map.id === dataCenterScenario.map.id ? dataCenterScenario.map : undefined);
   const remodelWorldState = content.scenario.id === remodelScenario.id ? readRemodelState() : null;
+  const dataCenterWorldState = content.scenario.id === dataCenterScenario.id ? readDataCenterState() : null;
   const [selectedPadId, setSelectedPadId] = useState<string | null>(null);
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -472,7 +478,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-remodel-phase={remodelWorldState?.phase ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -535,6 +541,7 @@ export function DefenseGame({
           /> : <rect width="1000" height="600" rx="22" fill="url(#zb-grid)" />}
           <SiteProcessMapBoardOverlay mapId={content.map.id} />
           <RemodelBoardOverlay state={remodelWorldState} />
+          <DataCenterBoardOverlay state={dataCenterWorldState} />
           <polyline
             points={content.map.path.map(point => point.join(',')).join(' ')}
             className="zb-path-shoulder"

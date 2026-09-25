@@ -11,6 +11,7 @@ import { applyDefenseEvent, defenseScenarioIdForRun } from '../engine/defense-ev
 import { validateDefenseContent, zeroBreachContent } from './defense';
 import { siteDefenseContents } from './site-process-maps';
 import { remodelDefense } from './remodel';
+import { dataCenterDefense } from './data-center';
 
 const record = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -210,6 +211,7 @@ const contentByScenario = new Map<string, DefenseContent>([
   ...defenseEvents.map(event => [event.id, applyDefenseEvent(zeroBreachContent, event)] as const),
   ...siteDefenseContents.map(content => [content.scenario.id, content] as const),
   [remodelDefense.scenario.id, remodelDefense],
+  [dataCenterDefense.scenario.id, dataCenterDefense],
 ]);
 
 export function defenseEventById(id: string): DefenseEventDefinition | undefined {
