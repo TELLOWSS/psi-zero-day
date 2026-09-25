@@ -9,7 +9,7 @@ on:
       - sol/def-core-01-one-step-20260925
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: title-defense-first-${{ github.ref }}
@@ -93,6 +93,7 @@ jobs:
           node scripts/verify-title-defense-first.mjs
 
       - name: Persist title QA evidence
+        if: github.event_name == 'push'
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
