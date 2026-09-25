@@ -586,3 +586,16 @@
 @media (prefers-reduced-motion:reduce){
   .def-core-ped-route,.def-core-barrier,.def-core-marshal,.def-core-brake-fx{animation:none}
 }
+
+/* DEF-CORE-01 impact camera — short physical response, not a permanent zoom */
+.zb-shell[data-def-core-phase="IMPACT"] .zb-board-wrap{
+  animation:def-core-camera-punch .46s cubic-bezier(.18,.72,.25,1) both;
+}
+@keyframes def-core-camera-punch{
+  0%{transform:scale(1)}
+  42%{transform:scale(1.018)}
+  100%{transform:scale(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .zb-shell[data-def-core-phase="IMPACT"] .zb-board-wrap{animation:none}
+}
