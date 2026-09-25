@@ -830,7 +830,11 @@
   .commercial-title-subcopy{max-width:88vw;font-size:10px!important}
   .commercial-title-actions.is-defense-first{margin-top:16px}
   .commercial-title-field-status{
-    left:6%;right:6%;top:auto;bottom:29.5%;width:auto;padding:10px 12px;
+    position:relative;
+    left:auto;right:auto;top:auto;bottom:auto;
+    width:auto;
+    margin:12px 5vw 0;
+    padding:10px 12px;
   }
   .commercial-title-field-status>strong{font-size:12px}
   .commercial-title-field-status>small,.commercial-title-field-status>p{display:none}
