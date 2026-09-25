@@ -994,3 +994,56 @@
   .site-process-preview svg{aspect-ratio:1.45/1}
   .site-process-preview-legend{font-size:8px}
 }
+
+
+/* G6 REMODEL-01 — existing-building state before selective demolition */
+.site-map-zone.zone-existing_structure{fill:rgba(110,124,132,.13);stroke:rgba(165,185,194,.48)}
+.site-map-zone.zone-temp_support{fill:rgba(71,155,132,.12);stroke:rgba(99,204,171,.5);stroke-dasharray:7 5}
+.site-map-zone.zone-extension_connection{fill:rgba(108,103,176,.13);stroke:rgba(156,149,224,.52)}
+
+.remodel-runtime-panel{
+  margin-top:14px;padding:12px;border:1px solid rgba(113,181,157,.28);border-radius:9px;
+  background:linear-gradient(145deg,rgba(8,31,35,.95),rgba(7,23,30,.96))
+}
+.remodel-runtime-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.remodel-runtime-head small{display:block;color:#79d5b1;font-size:7px;letter-spacing:.14em;font-weight:850}
+.remodel-runtime-head strong{display:block;margin-top:3px;color:#eef5f3;font-size:11px;line-height:1.4;word-break:keep-all}
+.remodel-runtime-head>button{
+  flex:0 0 auto;min-height:30px;padding:0 9px;border:1px solid rgba(141,178,190,.32);border-radius:6px;
+  background:#102a35;color:#d8e5e9;font:inherit;font-size:8px;font-weight:800;cursor:pointer
+}
+.remodel-runtime-panel>p{
+  margin:9px 0 0;padding:8px 9px;border-left:3px solid #e3ae45;background:rgba(227,174,69,.07);
+  color:#aebfc5;font-size:8px;line-height:1.55;word-break:keep-all
+}
+.remodel-runtime-state{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:10px
+}
+.remodel-runtime-state span{
+  min-height:48px;padding:7px;border:1px solid rgba(163,193,202,.16);border-radius:6px;background:rgba(255,255,255,.025)
+}
+.remodel-runtime-state small{display:block;color:#8198a2;font-size:7px}
+.remodel-runtime-state b{display:block;margin-top:5px;color:#8fe0c1;font-size:9px}
+.remodel-runtime-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px}
+.remodel-runtime-actions button{
+  display:grid;grid-template-columns:25px minmax(0,1fr) 35px;align-items:center;gap:7px;min-height:50px;padding:6px 8px;
+  border:1px solid rgba(153,185,197,.17);border-radius:7px;background:#112a35;color:#dce8eb;text-align:left;font:inherit;cursor:pointer
+}
+.remodel-runtime-actions button>i{font-style:normal;color:#6e8791;font-size:8px}
+.remodel-runtime-actions button strong{display:block;font-size:9px}
+.remodel-runtime-actions button small{display:block;margin-top:2px;color:#8198a2;font-size:7px;line-height:1.35;word-break:keep-all}
+.remodel-runtime-actions button>b{text-align:right;color:#7eb9cf;font-size:7px}
+.remodel-runtime-actions button[data-done="true"]{border-color:rgba(91,201,162,.4);background:rgba(43,101,82,.18)}
+.remodel-runtime-actions button[data-done="true"]>b{color:#79d5b1}
+.remodel-runtime-notice{
+  margin-top:8px;padding:7px 9px;border-radius:6px;background:rgba(89,159,134,.12);color:#9be2c7;font-size:8px;line-height:1.45
+}
+.site-process-preview-head>button:disabled{
+  cursor:not-allowed;filter:saturate(.35);opacity:.62;background:#56646a;color:#d4dcdf;border-color:#6b7b82
+}
+
+@media(max-width:600px){
+  .remodel-runtime-state{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .remodel-runtime-actions{grid-template-columns:1fr}
+  .remodel-runtime-actions button{min-height:58px}
+}
