@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "status": "ASSET_PENDING",
+  "assetId": "defense.board.map-apt-bottom-up-excavation-01.final.g8a",
+  "runtimeUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+  "format": "webp",
+  "sourceMaster": {
+    "required": true,
+    "minimumWidth": 4000,
+    "minimumHeight": 2400,
+    "aspectRatio": "5:3",
+    "transparentBackground": false
+  },
+  "runtime": {
+    "width": 1000,
+    "height": 600,
+    "preserveAspectRatio": "xMidYMid slice"
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+  "role": "process-specific bottom-up open-excavation world plate",
+  "required": [
+    "deep open excavation visibly reads as bottom-up construction",
+    "retaining/shoring condition is visually defensible",
+    "temporary haul ramp and heavy-equipment circulation are readable",
+    "worker access and vehicle circulation are visually separable",
+    "spotter/control intervention area remains readable at phone scale",
+    "edge/opening protection and drainage clues match the represented site state",
+    "natural Korean daylight with coherent contact and cast shadows",
+    "no UI, HUD, risk icon, route, pad, text or logo baked into the image",
+    "commercial-game environment art, not a generic aerial construction photo"
+  ],
+  "forbidden": [
+    "svg",
+    "rasterized legacy svg",
+    "upscaled low-resolution crop",
+    "generic construction-site photo reused as final art",
+    "baked gameplay route",
+    "baked tower pad",
+    "baked warning icon",
+    "baked UI or HUD",
+    "readable fake Korean text",
+    "real company logo",
+    "real construction-site name",
+    "fantasy or sci-fi construction language"
+  ],
+  "promotion": {
+    "productionApproved": false,
+    "requires": [
+      "NON_SVG_MASTER_REVIEW",
+      "SOURCE_MASTER_4000x2400_MIN",
+      "PROCESS_SPECIFIC_BOTTOM_UP_EXCAVATION_REVIEW",
+      "KOREA_LAW_PROFILE_BOUND",
+      "LEGAL_VISUAL_QA_PASS",
+      "DESKTOP_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_QA_PASS",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ONE_PRODUCTION_GENERATION_PASS"
+    ]
+  }
+}
