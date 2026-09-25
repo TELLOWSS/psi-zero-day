@@ -132,9 +132,9 @@ async function enterProfile(cdp, label) {
 }
 async function launchPractice(cdp) {
   await clickButtonContaining(cdp, '이 공정으로 디펜스 체험');
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen="support-select"]'))", 15000);
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="support-select"]'))`, 15000);
   await evaluate(cdp, "document.querySelector('.zb-support-card')?.click(); true");
-  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen="combat"]'))", 12000);
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="combat"]'))`, 12000);
   await sleep(220);
 }
 async function combatMetrics(cdp) {
