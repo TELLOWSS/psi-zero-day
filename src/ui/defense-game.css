@@ -755,3 +755,172 @@
   fill:rgba(15,31,34,.18);
   stroke:rgba(244,226,174,.42);
 }
+
+
+/* G8-A mobile production-map play — portrait is a real gameplay viewport. */
+@media (orientation:portrait) and (max-width:560px){
+  .zb-shell:not(.zb-prep):not(.is-def-core-active){
+    height:100dvh;
+    min-height:100dvh;
+    grid-template-rows:92px 240px minmax(0,1fr);
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-hud{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-rows:42px 42px;
+    gap:4px;
+    padding:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-brand,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-meter,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-status{
+    padding:0 5px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-brand small{display:none}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-brand strong{font-size:9px;line-height:1.1}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-meter span,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-status span{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-meter strong,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-status b{font-size:10px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-hud-button,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-exit{
+    min-height:0;
+    font-size:8px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-speed{padding:2px;gap:2px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-speed button{
+    min-height:0;
+    font-size:9px;
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-stage{
+    min-height:0;
+    padding:6px;
+    align-items:center;
+    overflow:hidden;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-board-wrap{
+    width:100%;
+    height:auto;
+    max-width:100%;
+    max-height:100%;
+    aspect-ratio:5/3;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview{
+    right:6px;
+    top:6px;
+    width:124px;
+    padding:5px 6px;
+    border-radius:6px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview small{font-size:6px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview strong{margin:1px 0 0;font-size:10px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview ul{display:none}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-board-caption{left:6px;top:6px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-board-caption span{font-size:6px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-board-caption b{font-size:8px;max-width:180px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-pad-hit{width:44px;height:44px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-pad-hit span{display:none}
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-command{
+    min-height:0;
+    grid-template-columns:1fr;
+    grid-template-rows:minmax(0,1fr) 72px;
+    gap:5px;
+    padding:5px 6px 6px;
+    overflow:hidden;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-selection{
+    min-height:0;
+    overflow:auto;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection{
+    min-height:72px;
+    padding:8px 10px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection strong{font-size:12px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection span{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-build-panel{
+    height:auto;
+    grid-template-columns:1fr;
+    grid-template-rows:36px minmax(0,1fr);
+    gap:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-panel-heading{
+    padding:4px 7px;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-panel-heading span{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-panel-heading strong{font-size:10px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-shop{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-shop button{
+    min-height:54px;
+    grid-template-columns:28px minmax(0,1fr) auto;
+    gap:5px;
+    padding:5px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-shop-production-art{width:28px;height:28px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-shop strong{font-size:9px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-shop small{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-shop b{font-size:8px}
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-panel{
+    height:auto;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+    gap:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-panel>.zb-panel-heading,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-upgrades{grid-column:1/-1}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-stats,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-target-mode,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-upgrades{padding:5px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-stats span,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-target-mode>span{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-target-mode button,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-upgrades button{
+    min-height:38px;
+    font-size:8px;
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-run-controls{
+    min-height:0;
+    grid-template-columns:minmax(0,1fr) 96px;
+    gap:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-action{
+    grid-template-columns:34px minmax(0,1fr) 54px;
+    gap:4px;
+    padding:4px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-mini{width:32px;height:32px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-action small{font-size:7px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-action strong{font-size:8px}
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-action button,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-start-wave{
+    min-height:58px;
+    font-size:9px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-defense-settings{
+    top:98px;
+    right:8px;
+    min-width:52px;
+    min-height:34px;
+    font-size:8px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-defense-settings-panel{
+    top:138px;
+    right:8px;
+    width:190px;
+  }
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-save-status{
+    top:98px;
+    left:8px;
+    right:auto;
+    font-size:7px;
+  }
+}
