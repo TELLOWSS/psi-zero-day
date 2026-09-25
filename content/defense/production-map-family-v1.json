@@ -7,19 +7,19 @@
       "mapId": "map-apt-bottom-up-excavation-01",
       "profileId": "apt-new-bottom-up-excavation",
       "label": "공동주택 신축 · 순타 · 개방 굴착",
-      "runtimeUri": "assets/defense/board/ramp-01-hd01.webp",
-      "format": "webp",
+      "runtimeUri": "assets/defense/board/bottom-up-excavation-01.svg",
+      "format": "svg",
       "width": 1000,
       "height": 600,
       "status": "PRODUCTION_CANDIDATE",
-      "source": "DEF-HD01 approved aerial construction-site world plate",
-      "sourceRole": "UNIQUE_G8A_WORLD_PLATE",
+      "source": "G8-A authored bottom-up excavation composite over approved DEF-HD01 aerial world plate",
+      "sourceRole": "PROCESS_SPECIFIC_G8A_WORLD_COMPOSITE",
       "visualFit": [
-        "open excavation visible",
-        "temporary earth roads visible",
-        "heavy equipment and spoil handling visible",
-        "RC frame and tower crane context visible",
-        "no baked HUD, text or logo"
+        "open excavation cut visually replaces conflicting central frame area",
+        "temporary haul ramp follows the locked G5 route",
+        "retaining/shoring rhythm and spoil staging are visible",
+        "existing construction-site aerial context remains visible around the excavation",
+        "no baked HUD, text, logo or pad markers"
       ],
       "runtimeContract": {
         "topologyAuthority": "content/defense/site-process-maps-v1.json",
@@ -32,7 +32,8 @@
         "allowedForThisMap": true,
         "allowedForOtherG8Maps": false,
         "reason": "G8-A reuses one already-approved HD world plate only because it visually matches open-excavation bottom-up work. G8-B/C/D require their own world plates."
-      }
+      },
+      "sourceUri": "assets/defense/board/ramp-01-hd01.webp"
     }
   ]
 }
