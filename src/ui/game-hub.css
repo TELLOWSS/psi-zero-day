@@ -918,7 +918,8 @@
 
 @media(max-width:900px){
   .site-profile-layout{grid-template-columns:1fr}
-  .site-profile-priority{position:relative}
+  .site-profile-priority{position:relative;order:1}
+  .site-profile-picker{order:2}
 }
 @media(max-width:600px){
   .site-profile-screen{padding:14px 12px 24px}
@@ -927,7 +928,8 @@
   .site-profile-head p{font-size:10px}
   .site-profile-head>button{min-width:76px;padding:0 8px;font-size:10px}
   .site-profile-group>div{grid-template-columns:1fr}
-  .site-profile-group button{min-height:56px}
+  .site-profile-group button{min-height:62px}
+  .site-profile-group button small{font-size:9px;line-height:1.45;letter-spacing:0;word-break:keep-all}
   .site-profile-priority{padding:13px}
   .site-profile-priority-head{align-items:flex-start;flex-direction:column;gap:3px}
   .site-profile-priority>h2{font-size:16px}
