@@ -7,7 +7,17 @@ import { zeroBreachContent } from '../content/defense';
 import type { DefenseRunState } from '../domain/defense';
 import { browserLocalStoragePort } from '../platform/browser-storage';
 import { VisualImage } from './VisualSlot';
-import { HubIcon } from './GameHub';
+
+
+function CommandIcon({ kind }: { kind: 'play' | 'journal' | 'people' | 'guide' }) {
+  const paths = {
+    play: 'm8 4 12 8-12 8Z',
+    journal: 'M6 3h14v18H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm0 0v18m4-13h6m-6 4h6m-6 4h4',
+    people: 'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 10v-3a6 6 0 0 1 12 0v3m3-17a4 4 0 0 1 0 8m1 3a5 5 0 0 1 4 5v1',
+    guide: 'M12 5C8 2 4 3 2 4v16c3-2 6-2 10 0 4-2 7-2 10 0V4c-3-1-6-2-10 1Zm0 0v15',
+  } as const;
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[kind]} /></svg>;
+}
 
 interface DefenseHomeSnapshot {
   readonly activeRun: DefenseRunState | null;
@@ -109,9 +119,9 @@ export function DefenseCommandHome({
         <span>{COMPANY_NAME}</span>
       </div>
       <nav className="defense-command-utility" aria-label="보조 메뉴">
-        <button type="button" onClick={onJournal}><HubIcon kind="journal" /><span>기록</span></button>
-        <button type="button" onClick={onPeople}><HubIcon kind="people" /><span>인물</span></button>
-        <button type="button" onClick={onGuide}><HubIcon kind="guide" /><span>현장도감</span></button>
+        <button type="button" onClick={onJournal}><CommandIcon kind="journal" /><span>기록</span></button>
+        <button type="button" onClick={onPeople}><CommandIcon kind="people" /><span>인물</span></button>
+        <button type="button" onClick={onGuide}><CommandIcon kind="guide" /><span>현장도감</span></button>
         <button type="button" onClick={onSettings}><span aria-hidden="true">⚙</span><span>설정</span></button>
       </nav>
     </header>
@@ -124,7 +134,7 @@ export function DefenseCommandHome({
 
       <div className="defense-command-actions">
         <button className="defense-command-primary" type="button" onClick={onDefense}>
-          <span className="defense-command-action-icon"><HubIcon kind="play" /></span>
+          <span className="defense-command-action-icon"><CommandIcon kind="play" /></span>
           <span><strong>{defenseCta}</strong><small>{defenseHint}</small></span>
           <b aria-hidden="true">›</b>
         </button>
