@@ -16,13 +16,14 @@ type OneStepPhase =
   | 'HOOK'
   | 'DONE';
 
-type OneStepChoice = 'A' | 'B' | 'C';
+export type OneStepChoice = 'A' | 'B' | 'C';
 type OneStepFollowup = 'ASK' | 'RECORD' | 'TOMORROW';
 
 interface OneStepPersisted {
   readonly phase: OneStepPhase;
   readonly shotIndex: number;
   readonly choice: OneStepChoice | null;
+  readonly choiceTick: number | null;
   readonly followup: OneStepFollowup | null;
 }
 
@@ -46,6 +47,11 @@ interface OneStepContract {
     readonly label: string;
     readonly worldResult: 'HOLD_LINE' | 'REINFORCED_CONTROL' | 'REROUTED_STAGING';
     readonly tradeoff: string;
+    readonly runtime: {
+      readonly activeTicks: number;
+      readonly swiftSlowFraction: number;
+      readonly setbackDistance: number;
+    };
   }[];
   readonly hook: {
     readonly speaker: string;
@@ -73,6 +79,7 @@ function readPersisted(runId: string): OneStepPersisted | null {
       phase: parsed.phase,
       shotIndex: Number.isInteger(parsed.shotIndex) ? Number(parsed.shotIndex) : 0,
       choice: parsed.choice ?? null,
+      choiceTick: Number.isInteger(parsed.choiceTick) ? Number(parsed.choiceTick) : null,
       followup: parsed.followup ?? null,
     };
   } catch {
@@ -104,12 +111,75 @@ function playOneShotAsset(uri: string, muted: boolean) {
   }
 }
 
+/**
+ * Event-local runtime consequence layer.
+ * It deliberately reuses the existing enemy distance/slow-effect model instead of changing
+ * base tower stats, wave definitions, IDs, save schema, or the Defense engine contract.
+ */
+export function applyDefCoreOneStepRuntime(
+  previous: DefenseRunState,
+  advanced: DefenseRunState,
+  choice: OneStepChoice | null,
+  choiceTick: number | null,
+): DefenseRunState {
+  if (
+    !choice
+    || choiceTick === null
+    || previous.scenarioId !== contract.scope.scenarioId
+    || previous.waveId !== contract.scope.representativeWave
+    || advanced.waveId !== contract.scope.representativeWave
+    || advanced.status !== 'RUNNING'
+  ) return advanced;
+
+  const selected = contract.choices.find(item => item.id === choice);
+  if (!selected) return advanced;
+
+  const runtime = selected.runtime;
+  const endTick = choiceTick + runtime.activeTicks;
+  if (advanced.tick > endTick) return advanced;
+
+  const previousById = new Map(previous.enemies.map(enemy => [enemy.id, enemy]));
+  const sourceId = `def-core-01:${choice}`;
+  let touched = false;
+
+  const enemies = advanced.enemies.map(enemy => {
+    if (enemy.enemyId !== contract.scope.riskId) return enemy;
+
+    const prior = previousById.get(enemy.id);
+    const origin = prior?.distance ?? 0;
+    const travelled = Math.max(0, enemy.distance - origin);
+    let distance = origin + travelled * (1 - runtime.swiftSlowFraction);
+
+    // C means the waiting point itself changes. On the first live tick, the active vehicle
+    // visibly returns toward staging before proceeding on the safer approach.
+    if (choice === 'C' && previous.tick === choiceTick) {
+      distance = Math.max(0, distance - runtime.setbackDistance);
+    }
+
+    const slowEffects = [
+      ...enemy.slowEffects.filter(effect => effect.sourceId !== sourceId && effect.endTick > advanced.tick),
+      {
+        sourceId,
+        fraction: runtime.swiftSlowFraction,
+        startTick: advanced.tick,
+        endTick,
+      },
+    ];
+
+    touched = true;
+    return { ...enemy, distance, slowEffects };
+  });
+
+  return touched ? { ...advanced, enemies } : advanced;
+}
+
 export interface DefCoreOneStepController {
   readonly eligible: boolean;
   readonly active: boolean;
   readonly phase: OneStepPhase;
   readonly shotIndex: number;
   readonly choice: OneStepChoice | null;
+  readonly choiceTick: number | null;
   readonly followup: OneStepFollowup | null;
   readonly choiceResult: OneStepContract['choices'][number] | null;
   readonly focusSignal: () => void;
@@ -133,6 +203,7 @@ export function useDefCoreOneStep({
   const [phase, setPhase] = useState<OneStepPhase>('IDLE');
   const [shotIndex, setShotIndex] = useState(0);
   const [choice, setChoice] = useState<OneStepChoice | null>(null);
+  const [choiceTick, setChoiceTick] = useState<number | null>(null);
   const [followup, setFollowup] = useState<OneStepFollowup | null>(null);
 
   useEffect(() => {
@@ -142,13 +213,14 @@ export function useDefCoreOneStep({
     setPhase(saved?.phase ?? 'IDLE');
     setShotIndex(saved?.shotIndex ?? 0);
     setChoice(saved?.choice ?? null);
+    setChoiceTick(saved?.choiceTick ?? null);
     setFollowup(saved?.followup ?? null);
   }, [state]);
 
   useEffect(() => {
     if (!state || hydratedRunRef.current !== state.runId) return;
-    writePersisted(state.runId, { phase, shotIndex, choice, followup });
-  }, [choice, followup, phase, shotIndex, state]);
+    writePersisted(state.runId, { phase, shotIndex, choice, choiceTick, followup });
+  }, [choice, choiceTick, followup, phase, shotIndex, state]);
 
   const eligible = Boolean(
     state
@@ -215,6 +287,7 @@ export function useDefCoreOneStep({
     phase,
     shotIndex,
     choice,
+    choiceTick,
     followup,
     choiceResult,
     focusSignal: () => {
@@ -229,6 +302,7 @@ export function useDefCoreOneStep({
     choose: selected => {
       if (phase !== 'DECISION') return;
       setChoice(selected);
+      setChoiceTick(state?.tick ?? null);
       playCue('select');
       setPhase('RETURN');
     },
@@ -256,8 +330,17 @@ export function DefCoreOneStepBoardOverlay({
   const swiftPos = swift ? defensePositionAtDistance(CORE_PATH, swift.distance) : { x: 92, y: 300 };
   const worldResult = controller.choiceResult?.worldResult ?? null;
 
-  return <g className="def-core-world" data-def-core-world={worldResult ?? 'CONTROL_ACTIVE'} aria-hidden="true">
+  return <g
+    className="def-core-world"
+    data-def-core-world={worldResult ?? 'CONTROL_ACTIVE'}
+    data-def-core-runtime={controller.choice ?? 'PENDING'}
+    aria-hidden="true"
+  >
     <circle cx={swiftPos.x} cy={swiftPos.y} r={worldResult ? 38 : 58} className="def-core-risk-zone" />
+    <g transform={`translate(${swiftPos.x} ${swiftPos.y})`} className="def-core-brake-fx">
+      <path d="M-64 24H-30M-72 34H-36" />
+      <circle cx="-15" cy="19" r="4" />
+    </g>
     <polyline
       points={worldResult === 'REROUTED_STAGING' ? '18,356 80,356 80,215 188,215' : '18,356 92,356 92,242 180,242'}
       className="def-core-ped-route"
