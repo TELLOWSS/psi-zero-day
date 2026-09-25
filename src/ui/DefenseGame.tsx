@@ -6,6 +6,7 @@ import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
+import { siteProfileForScenario } from '../content/defense-site-profiles';
 import {
   defenseContentForScenario, defenseEventById, defenseEvents, resolveDefenseContentForRun,
 } from '../content/defense-events';
@@ -16,11 +17,15 @@ import type {
 import {
   advanceDefense, applyDefenseCommand, defensePositionAtDistance, defenseResult,
 } from '../engine/defense';
+import {
+  calculateRiskPriority, defaultRiskPriorityContext, riskPriorityContextFromRun,
+} from '../engine/defense-risk-priority';
 import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
+import { SiteRiskPriorityHud } from './SiteRiskPriorityHud';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
 
@@ -287,6 +292,13 @@ export function DefenseGame({
   const preview = state ? wavePreview(content, state) : null;
   const result = state && (state.status === 'WON' || state.status === 'LOST') ? defenseResult(state) : null;
   const activeEvent = state?.eventId ? defenseEventById(state.eventId) : undefined;
+  const siteProfile = siteProfileForScenario(state?.scenarioId ?? content.scenario.id);
+  const riskPriority = calculateRiskPriority(
+    siteProfile,
+    state
+      ? riskPriorityContextFromRun(siteProfile, state, content)
+      : defaultRiskPriorityContext(siteProfile),
+  );
   const leakedEntries = state
     ? (Object.entries(state.leakedByEnemy) as [DefenseEnemyId, number][]).filter(([, count]) => count > 0)
     : [];
@@ -596,6 +608,8 @@ export function DefenseGame({
             ><span>{pad.id}</span></button>;
           })}
         </div>
+
+        <SiteRiskPriorityHud profile={siteProfile} result={riskPriority} />
 
         <aside className="zb-wave-preview">
           <small>{state.status === 'RUNNING' ? t('defense.ui.next_wave') : t('defense.ui.current_wave')}</small>
