@@ -20,6 +20,7 @@ async function shot(cdp,name){const r=await cdp.send('Page.captureScreenshot',{f
 async function vp(cdp,width,height,mobile){await cdp.send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:mobile?2.75:1,mobile,screenOrientation:width>height?{type:'landscapePrimary',angle:90}:{type:'portraitPrimary',angle:0}})}
 async function nav(cdp){const p=cdp.once('Page.loadEventFired');await cdp.send('Page.navigate',{url:baseUrl});await p;await wait(cdp,"Boolean(document.querySelector('.commercial-title-home'))");await sleep(300)}
 async function clickText(cdp,text){const ok=await ev(cdp,`(() => {const el=[...document.querySelectorAll('button')].find(b=>(b.textContent||'').includes(${JSON.stringify(text)}));if(!el)return false;el.click();return true})()`);if(!ok)throw new Error('button missing '+text)}
+async function clickContext(cdp,text){const ok=await ev(cdp,`(() => {const el=[...document.querySelectorAll('.site-profile-context button')].find(b=>(b.textContent||'').includes(${JSON.stringify(text)}));if(!el)return false;el.click();return true})()`);if(!ok)throw new Error('context button missing '+text)}
 async function metrics(cdp){return ev(cdp,`(() => {
  const rect=sel=>{const el=document.querySelector(sel);if(!el)return null;const r=el.getBoundingClientRect();return {left:Math.round(r.left),top:Math.round(r.top),right:Math.round(r.right),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)}};
  return {
@@ -48,7 +49,7 @@ try{
  const topDown=await metrics(cdp);
  if(JSON.stringify(topDown.top.map(x=>x.risk))!==JSON.stringify(['VEILED','SWARM','ARMORED'])) throw new Error('top-down priority drift '+JSON.stringify(topDown.top));
  const before=topDown.top.map(x=>x.score);
- await clickText(cdp,'정보 불확실');await clickText(cdp,'동시작업');await sleep(100);
+ await clickContext(cdp,'정보 불확실');await clickContext(cdp,'동시작업');await sleep(100);
  const after=await metrics(cdp);
  report.dynamic={profile:after.profile,before,after:after.top.map(x=>x.score),top:after.top};
  if(after.top[0]?.risk!=='VEILED') throw new Error('dynamic VEILED priority lost');
