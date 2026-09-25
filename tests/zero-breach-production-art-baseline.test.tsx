@@ -73,15 +73,10 @@ afterEach(() => {
   window.localStorage.clear();
 });
 
-describe('ZERO BREACH step 5A production-art baseline', () => {
-  it('preserves the original board, PULSE L1 and NORMAL baseline inside the final production lock', () => {
-    expect(defenseVisualProduction.status).toBe('PRODUCTION_LOCKED');
-    const locked = defenseVisualProduction.assets.filter(asset => asset.status === 'BASELINE_LOCKED').map(asset => asset.assetId);
-    expect(locked).toEqual([
-      'defense.board.ramp-01',
-      'defense.tower.PULSE.L1',
-      'defense.enemy.NORMAL',
-    ]);
+describe('ZERO BREACH legacy SVG geometry baseline', () => {
+  it('keeps the HD board final while legacy SVG tower/enemy assets remain geometry-only', () => {
+    expect(defenseVisualProduction.status).toBe('LEGACY_GEOMETRY_ONLY');
+    expect(defenseVisualProduction.assets.every(asset => asset.status === 'LEGACY_GEOMETRY_ONLY')).toBe(true);
 
     expect(defenseBoardArtUri('ramp-01')).toBe('assets/defense/board/ramp-01-hd01.webp');
     expect(defenseTowerArtUri('PULSE', 'L1')).toBe('assets/defense/towers/pulse-l1.svg');
@@ -111,7 +106,7 @@ describe('ZERO BREACH step 5A production-art baseline', () => {
     expect(normal).not.toMatch(/<text\b/i);
   });
 
-  it('uses the production board and PULSE art in the real combat UI with no prototype fallback left', async () => {
+  it('uses the HD WebP board while legacy SVG actor art remains runtime-only until replacement', async () => {
     const { host, root } = await mount();
     await click(host.querySelector('[data-support="COORDINATOR"]')!);
 
