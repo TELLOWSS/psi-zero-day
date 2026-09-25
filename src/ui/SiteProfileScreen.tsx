@@ -196,6 +196,12 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
               onClick={() => practiceScenarioId && onPracticeScenario(practiceScenarioId)}
             >{isRemodelRepresentative && !remodelReady ? '선행조건 확인 필요' : '이 공정으로 디펜스 체험'}</button>
           </div>
+          {isRemodelRepresentative ? <div className="remodel-preview-state" aria-label="리모델링 현재 상태">
+            <span><small>AS-BUILT</small><b>{REMODEL_STATE_LABELS[remodelState.asBuiltConfidence]}</b></span>
+            <span><small>차단</small><b>{REMODEL_STATE_LABELS[remodelState.isolationState]}</b></span>
+            <span><small>임시지지</small><b>{REMODEL_STATE_LABELS[remodelState.tempSupportState]}</b></span>
+            <span><small>선택철거</small><b>{REMODEL_STATE_LABELS[remodelState.structuralOpeningState]}</b></span>
+          </div> : null}
           <svg viewBox="0 0 1000 600" role="img" aria-label={processMap.label}>
             {processMap.zones.map(zone => <polygon
               key={zone.id}
