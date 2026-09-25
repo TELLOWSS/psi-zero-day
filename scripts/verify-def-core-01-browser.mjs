@@ -437,7 +437,6 @@ try {
       'assets/defense/enemies/swift-pq01.svg',
       'assets/episode01/characters/choi-minseok-map.webp',
       'assets/episode01/scene-elements/access-barrier.webp',
-      'assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
       'assets/episode01/cg/gate-dawn.webp',
       'assets/episode01/cg/ramp-entry.webp',
       'assets/episode01/characters/lim-junho-concerned.webp',
