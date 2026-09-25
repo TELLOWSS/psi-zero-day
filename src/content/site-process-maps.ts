@@ -163,6 +163,10 @@ export function siteProcessMapByProfile(profileId: string): SiteProcessMapDefini
   return siteProcessMaps.find(map => map.siteProfileId === profileId);
 }
 
+export function siteProcessMapByMapId(mapId: string): SiteProcessMapDefinition | undefined {
+  return siteProcessMaps.find(map => map.id === mapId);
+}
+
 export function siteScenarioId(profileId: string): string {
   return `training-site:${profileId}`;
 }
