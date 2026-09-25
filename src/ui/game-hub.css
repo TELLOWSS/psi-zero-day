@@ -585,6 +585,7 @@
 .commercial-title-logo>span:last-child{color:#f0b126}
 .commercial-title-logo b{color:#eef3f4}
 .commercial-title-copy h1{margin:7px 0 0;font-size:clamp(28px,3.1vw,48px);line-height:1.02}
+.commercial-title-copy h1{word-break:keep-all}
 .commercial-title-english{margin:4px 0 0!important;font-size:clamp(11px,1.15vw,18px)!important;letter-spacing:.035em!important;color:#f3f4f0!important}
 .commercial-title-english::before{display:none!important}
 .commercial-title-subcopy{display:none}
@@ -842,6 +843,7 @@
   .commercial-title-risk-strip>span{padding:5px 6px}
   .commercial-title-risk-strip small{display:none}
   .commercial-title-features{display:none}
+  .commercial-title-quick-settings{display:none!important}
   .commercial-title-actions{width:min(88vw,370px)}
   .commercial-title-action{min-height:52px}
   .commercial-title-action.is-defense-entry{min-height:64px}
