@@ -115,6 +115,14 @@ const DATA_CENTER_STATE_LABELS = {
   HIGH: '높음',
 } as const;
 
+const DATA_CENTER_PHASE_LABELS = {
+  MEP_ROUGH_IN: 'MEP 시공',
+  ELECTRICAL_UPS: '전기·UPS',
+  ENERGIZATION: '통전 준비',
+  INTEGRATED_COMMISSIONING: '통합시운전',
+  COMPLETE: '검증 완료',
+} as const;
+
 export function SiteProfileScreen({ onBack, onPracticeScenario }: {
   readonly onBack: () => void;
   readonly onPracticeScenario: (scenarioId: string) => void;
@@ -273,7 +281,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
             <span><small>선택철거</small><b>{REMODEL_STATE_LABELS[remodelState.structuralOpeningState]}</b></span>
           </div> : null}
           {isDataCenterRepresentative ? <div className="data-center-preview-state" aria-label="데이터센터 현재 상태">
-            <span><small>PHASE</small><b>{dataCenterState.phase}</b></span>
+            <span><small>PHASE</small><b>{DATA_CENTER_PHASE_LABELS[dataCenterState.phase]}</b></span>
             <span><small>ENERGY</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.energyState]}</b></span>
             <span><small>격리</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.isolationState]}</b></span>
             <span><small>시운전</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.commissioningState]}</b></span>
@@ -323,7 +331,7 @@ export function SiteProfileScreen({ onBack, onPracticeScenario }: {
           </div>
           <p>실제 전기 조작 절차를 재현하지 않고, 상태 확인·격리·권한·검증이 선행되어야 다음 단계가 열리는 판단 구조를 다룹니다.</p>
           <div className="data-center-runtime-state">
-            <span><small>PHASE</small><b>{dataCenterState.phase}</b></span>
+            <span><small>PHASE</small><b>{DATA_CENTER_PHASE_LABELS[dataCenterState.phase]}</b></span>
             <span><small>ENERGY</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.energyState]}</b></span>
             <span><small>격리</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.isolationState]}</b></span>
             <span><small>INTERLOCK</small><b>{DATA_CENTER_STATE_LABELS[dataCenterState.interlockState]}</b></span>
