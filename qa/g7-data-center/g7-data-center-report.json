@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "source_sha": "716a7df5359a647dca9ab42696035874bee77dd3",
+  "desktop_initial": {
+    "profile": "data-center-mep",
+    "phase": "MEP_ROUGH_IN",
+    "top": [
+      {
+        "risk": "SWARM",
+        "score": 100
+      },
+      {
+        "risk": "VEILED",
+        "score": 87
+      },
+      {
+        "risk": "SWIFT",
+        "score": 73
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 941,
+      "top": 982,
+      "right": 1366,
+      "bottom": 1479,
+      "width": 425,
+      "height": 497
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 968,
+      "width": 425,
+      "height": 367
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": ""
+  },
+  "blocked_guard": {
+    "profile": "data-center-mep",
+    "phase": "MEP_ROUGH_IN",
+    "top": [
+      {
+        "risk": "SWARM",
+        "score": 100
+      },
+      {
+        "risk": "VEILED",
+        "score": 87
+      },
+      {
+        "risk": "SWIFT",
+        "score": 73
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 941,
+      "top": 982,
+      "right": 1366,
+      "bottom": 1513,
+      "width": 425,
+      "height": 530
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 968,
+      "width": 425,
+      "height": 367
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": "통전 전 확인과 격리 검증을 완료한 뒤 제한된 통전 상태로 전환합니다."
+  },
+  "energized_ready": {
+    "profile": "data-center-mep",
+    "phase": "ENERGIZATION",
+    "top": [
+      {
+        "risk": "ARMORED",
+        "score": 100
+      },
+      {
+        "risk": "VEILED",
+        "score": 100
+      },
+      {
+        "risk": "SWARM",
+        "score": 80
+      }
+    ],
+    "actions": 10,
+    "done": 6,
+    "practiceDisabled": false,
+    "panel": {
+      "left": 941,
+      "top": 982,
+      "right": 1366,
+      "bottom": 1513,
+      "width": 425,
+      "height": 530
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 968,
+      "width": 425,
+      "height": 367
+    },
+    "overflow": false,
+    "persisted": {
+      "scenarioId": "training-data-center:energization-commissioning",
+      "phase": "ENERGIZATION",
+      "energyState": "ENERGIZED",
+      "isolationState": "VERIFIED",
+      "interlockState": "UNVERIFIED",
+      "commissioningState": "PRECHECK",
+      "crossTradeConcurrency": "LOW",
+      "completedActions": [
+        "CLOSE_MEP_PUNCHLIST",
+        "VERIFY_ELECTRICAL_BOUNDARY",
+        "PLAN_SYSTEM_ISOLATION",
+        "VERIFY_SYSTEM_ISOLATION",
+        "PRE_ENERGIZATION_CHECK",
+        "ENTER_ENERGIZED_STATE"
+      ],
+      "revision": 6
+    },
+    "notice": "데이터센터 계통 상태가 반영되었습니다."
+  },
+  "combat": {
+    "scenario": "training-data-center:energization-commissioning",
+    "map": "map-data-center-energization-commissioning-01",
+    "phase": "ENERGIZATION",
+    "energy": "ENERGIZED",
+    "overlay": true,
+    "world": {
+      "phase": "ENERGIZATION",
+      "energy": "ENERGIZED",
+      "isolation": "VERIFIED",
+      "interlock": "UNVERIFIED",
+      "commissioning": "PRECHECK"
+    },
+    "energyNodes": 5,
+    "zones": 6,
+    "pads": 8,
+    "overflow": false
+  },
+  "integrated": {
+    "profile": "data-center-mep",
+    "phase": "INTEGRATED_COMMISSIONING",
+    "top": [
+      {
+        "risk": "SWARM",
+        "score": 100
+      },
+      {
+        "risk": "VEILED",
+        "score": 100
+      },
+      {
+        "risk": "BOSS",
+        "score": 100
+      }
+    ],
+    "actions": 10,
+    "done": 9,
+    "practiceDisabled": false,
+    "panel": {
+      "left": 941,
+      "top": 982,
+      "right": 1366,
+      "bottom": 1513,
+      "width": 425,
+      "height": 530
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 968,
+      "width": 425,
+      "height": 367
+    },
+    "overflow": false,
+    "persisted": {
+      "scenarioId": "training-data-center:energization-commissioning",
+      "phase": "INTEGRATED_COMMISSIONING",
+      "energyState": "LIVE_CRITICAL",
+      "isolationState": "VERIFIED",
+      "interlockState": "VERIFIED",
+      "commissioningState": "INTEGRATED_TEST",
+      "crossTradeConcurrency": "HIGH",
+      "completedActions": [
+        "CLOSE_MEP_PUNCHLIST",
+        "VERIFY_ELECTRICAL_BOUNDARY",
+        "PLAN_SYSTEM_ISOLATION",
+        "VERIFY_SYSTEM_ISOLATION",
+        "PRE_ENERGIZATION_CHECK",
+        "ENTER_ENERGIZED_STATE",
+        "VERIFY_INTERLOCKS",
+        "RUN_SINGLE_SYSTEM_TEST",
+        "RUN_INTEGRATED_TEST"
+      ],
+      "revision": 9
+    },
+    "notice": "데이터센터 계통 상태가 반영되었습니다."
+  },
+  "mobile": {
+    "profile": "data-center-mep",
+    "phase": "MEP_ROUGH_IN",
+    "top": [
+      {
+        "risk": "SWARM",
+        "score": 100
+      },
+      {
+        "risk": "VEILED",
+        "score": 87
+      },
+      {
+        "risk": "SWIFT",
+        "score": 73
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 38,
+      "top": 7,
+      "right": 352,
+      "bottom": 923,
+      "width": 314,
+      "height": 917
+    },
+    "preview": {
+      "left": 38,
+      "top": -424,
+      "right": 352,
+      "bottom": -7,
+      "width": 314,
+      "height": 417
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": ""
+  },
+  "failures": []
+}
