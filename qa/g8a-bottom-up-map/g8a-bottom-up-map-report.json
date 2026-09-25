@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "9796b9b16d7f71af3e6863fd31e8bfba6c910da5",
+  "source_sha": "6a8186ffe44c1994e731defed70651912ab0e6ec",
   "desktop": {
     "scenario": "training-site:apt-new-bottom-up-excavation",
     "map": "map-apt-bottom-up-excavation-01",
@@ -13,8 +13,10 @@
     "pads": 8,
     "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
     "towers": 1,
+    "controlPq": 1,
     "enemies": 1,
-    "prototypeBoardItems": 2,
+    "swift": 1,
+    "prototypeBoardItems": 1,
     "activeSvgVisuals": [],
     "status": "RUNNING",
     "board": {
