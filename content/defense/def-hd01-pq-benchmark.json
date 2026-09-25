@@ -385,20 +385,30 @@
     },
     "runnerProbe": {
       "workflow": "GitHub Runner Probe",
-      "latestRunId": 36067770735,
-      "latestAttempt": 2,
-      "latestJobId": 107861814377,
-      "runnerAllocated": false,
-      "runnerId": 0,
-      "runnerName": "",
-      "steps": 0,
-      "conclusion": "failure",
-      "note": "Ultra-light probe still fails before any step. Heavy G2 QA must not be retried until probe obtains a real GitHub-hosted runner."
+      "runId": 36067770735,
+      "attempt": 9,
+      "jobId": 107951664411,
+      "runnerAllocated": true,
+      "runnerId": 1000001408,
+      "runnerName": "GitHub Actions 1000001408",
+      "steps": 3,
+      "conclusion": "success",
+      "note": "GitHub-hosted runner allocation recovered after the repository was changed from private to public."
     },
     "finalG2Qa": {
+      "runId": 36066893099,
+      "attempt": 5,
+      "jobId": 107953427106,
+      "runnerId": 1000001411,
+      "runnerName": "GitHub Actions 1000001411",
       "sourceSha": "04f2d90eb18ea7a20461ff418fd9efcf08597d6a",
       "generatedAt": "2026-09-25T05:15:12.134Z",
-      "promotionAppliedAt": "2026-09-25T05:15:12.134Z"
-    }
+      "result": "PASS",
+      "waves": "10/10",
+      "stars": 2,
+      "shield": 18,
+      "productionLockCommit": "ae547a3ca7c34c392407d5f8a33f5606b8742cb4"
+    },
+    "repositoryVisibility": "public"
   }
 }
