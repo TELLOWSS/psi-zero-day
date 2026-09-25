@@ -67,10 +67,10 @@ const defHd01PqBenchmark = defHd01PqBenchmarkRaw as unknown as DefHd01PqBenchmar
 interface ProductionMapFamilyEntry {
   readonly mapId: string;
   readonly runtimeUri: string;
-  readonly format: 'webp' | 'svg';
+  readonly format: 'webp' | 'png' | 'jpg' | 'jpeg' | 'avif';
   readonly width: number;
   readonly height: number;
-  readonly status: 'PRODUCTION_CANDIDATE' | 'PRODUCTION_LOCKED';
+  readonly status: 'HD_REFERENCE_ONLY' | 'PRODUCTION_CANDIDATE' | 'PRODUCTION_LOCKED';
 }
 interface ProductionMapFamily {
   readonly schemaVersion: 1;
