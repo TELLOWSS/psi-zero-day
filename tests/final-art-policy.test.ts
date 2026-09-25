@@ -4,6 +4,8 @@ import productionMaps from '../content/defense/production-map-family-v1.json';
 import visuals from '../content/defense/visual-production.json';
 import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
 import episodeVisuals from '../content/episode01/visuals.json';
+import worldFinal from '../content/defense/g8a-world-final-art.json';
+import swiftFinal from '../content/defense/g8a-swift-final-art.json';
 
 const FINAL_STATUSES = new Set(['BASELINE_LOCKED','PRODUCTION_CANDIDATE','PRODUCTION_LOCKED']);
 
@@ -48,11 +50,18 @@ describe('absolute final-art policy', () => {
     expect(paths.some(path => /\.svg$/i.test(path))).toBe(false);
   });
 
-  it('keeps G8-A explicitly blocked from Production Lock until a process-specific non-SVG final plate exists', () => {
-    expect(productionMaps.status).toBe('G8A_CONTROL_PASS_SWIFT_FINAL_REQUIRED');
+  it('keeps G8-A explicitly blocked until both the process-specific world plate and SWIFT final raster are approved', () => {
+    expect(productionMaps.status).toBe('G8A_WORLD_AND_SWIFT_FINAL_REQUIRED');
     expect(productionMaps.maps[0]?.status).toBe('HD_REFERENCE_ONLY');
     expect(productionMaps.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
+    expect(productionMaps.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_MISSING');
     expect(productionMaps.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_MISSING');
+    expect(worldFinal.status).toBe('ASSET_PENDING');
+    expect(worldFinal.promotion.productionApproved).toBe(false);
+    expect(swiftFinal.status).toBe('ASSET_PENDING');
+    expect(swiftFinal.promotion.productionApproved).toBe(false);
+    expect(policy.enforcement.productionLockRequires).toContain('WORLD_FINAL_RASTER_APPROVED');
+    expect(policy.enforcement.productionLockRequires).toContain('SWIFT_FINAL_RASTER_APPROVED');
     expect(productionMaps.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
   });
 });
