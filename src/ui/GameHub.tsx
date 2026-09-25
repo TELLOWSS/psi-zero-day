@@ -277,12 +277,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
   const canContinue = snapshot.phase !== 'start';
   const openGuide = () => setPage('guide');
   const preloadGuide = () => { void preloadFieldGuide(); };
-  const titleFeatureVisuals = {
-    story: episode01BackgroundUri(resolve),
-    missions: resolve('ep01.scene_element.suspended_load'),
-    people: characterPortraitUri('player', resolve),
-    tomorrow: resolve('ep01.scene_element.access_barrier'),
-  };
   useEffect(() => {
     const storedMotion = window.localStorage.getItem('psi.title.motion');
     const storedQuotes = window.localStorage.getItem('psi.title.castQuotes');
