@@ -399,10 +399,43 @@ try {
   if (hookActions !== 3) throw new Error('Story hook must expose three follow-up choices');
   await screenshot(cdp, '07-hook.png');
 
+  // While HOOK is paused, capture the vehicle's pre-release location.
+  // Choice C must create a real setback once the player resumes the world.
+  const preReleaseDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  if (!Number.isFinite(preReleaseDistance)) {
+    throw new Error('DEF-CORE pre-release SWIFT distance telemetry missing');
+  }
+
   await clickText(cdp, '기록하기');
   report.followup = 'RECORD';
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DONE'");
   report.phases.push('DONE');
+
+  await waitFor(
+    cdp,
+    `Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) < ${Math.max(0, preReleaseDistance - 20)}`,
+    1800,
+  );
+  const runtimeStart = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  await sleep(300);
+  const runtimeEnd = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  report.runtime_motion = {
+    choice: 'C',
+    pre_release_distance: preReleaseDistance,
+    start_distance: runtimeStart,
+    end_distance: runtimeEnd,
+    delta: Number((runtimeEnd - runtimeStart).toFixed(3)),
+  };
+  if (!Number.isFinite(runtimeStart) || !Number.isFinite(runtimeEnd)) {
+    throw new Error('DEF-CORE runtime SWIFT distance telemetry missing');
+  }
+  if (runtimeStart >= preReleaseDistance - 20) {
+    throw new Error('Choice C did not create a meaningful live setback: ' + JSON.stringify(report.runtime_motion));
+  }
+  if (runtimeEnd <= runtimeStart || runtimeEnd - runtimeStart > 28) {
+    throw new Error('Choice C safer-approach movement did not remain live and reduced-speed: ' + JSON.stringify(report.runtime_motion));
+  }
+
   const final = await evaluate(cdp, `(() => {
     const shell = document.querySelector('[data-defense-screen="combat"]');
     return {
@@ -419,26 +452,6 @@ try {
     throw new Error('RETURN state did not persist the chosen world result: ' + JSON.stringify(final));
   }
   await screenshot(cdp, '08-done.png');
-
-  await waitFor(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) <= 5", 3000);
-  const runtimeStart = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
-  await sleep(450);
-  const runtimeEnd = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
-  report.runtime_motion = {
-    choice: 'C',
-    start_distance: runtimeStart,
-    end_distance: runtimeEnd,
-    delta: Number((runtimeEnd - runtimeStart).toFixed(3)),
-  };
-  if (!Number.isFinite(runtimeStart) || !Number.isFinite(runtimeEnd)) {
-    throw new Error('DEF-CORE runtime SWIFT distance telemetry missing');
-  }
-  if (runtimeStart > 5) {
-    throw new Error('Choice C did not return the active SWIFT toward staging: ' + runtimeStart);
-  }
-  if (runtimeEnd <= runtimeStart || runtimeEnd - runtimeStart > 38) {
-    throw new Error('Choice C safer-approach movement did not remain live and reduced-speed: ' + JSON.stringify(report.runtime_motion));
-  }
 
   report.audio_cues = await evaluate(cdp, "window.__defCoreAudioCues || []");
   for (const cue of ['warning','support','select','area_resolve']) {
