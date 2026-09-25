@@ -124,6 +124,110 @@ async function clearState(cdp) {
     return true;
   })()`);
 }
+
+function fnv1a32(value) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index++) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return 'fnv1a32:' + (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+function representativeDefenseSave() {
+  const run = {
+    runId: 'g8a-bottom-up-representative',
+    mode: 'TRAINING',
+    variant: 'STANDARD',
+    scenarioId: 'training-site:apt-new-bottom-up-excavation',
+    eventId: null,
+    eventContentVersion: null,
+    status: 'RUNNING',
+    paused: false,
+    speed: 1,
+    tick: 4120,
+    waveId: 8,
+    waveTick: 84,
+    intermissionRemaining: 0,
+    shield: 18,
+    resource: 210,
+    towers: [{
+      id: 'tower-1',
+      padId: 'BU-P3',
+      towerId: 'CONTROL',
+      levelId: 'L1',
+      targetMode: 'FIRST',
+      invested: 90,
+      attackCooldown: 0,
+      revealCooldown: 0,
+    }],
+    enemies: [{
+      id: 'enemy-11',
+      enemyId: 'SWIFT',
+      hp: 28,
+      distance: 42,
+      spawnSequence: 11,
+      revealUntilTick: 0,
+      slowEffects: [],
+      bossPhaseTriggered: false,
+      bossArmorFromTick: 0,
+      bossArmorUntilTick: 0,
+    }],
+    spawnedByGroup: [10, 1],
+    nextTowerSequence: 2,
+    nextEnemySequence: 12,
+    supportId: 'COORDINATOR',
+    supportCooldownRemaining: 0,
+    freezeMovementUntilTick: 0,
+    revealAllUntilTick: 0,
+    rangeBonusUntilTick: 0,
+    completedWaves: 7,
+    leakedByEnemy: {},
+  };
+  const payload = {
+    activeRun: run,
+    records: [{
+      scenarioId: 'training-site:apt-new-bottom-up-excavation',
+      finishedRuns: 0,
+      clears: 0,
+      bestStars: 0,
+      bestScore: 0,
+      bestShield: 0,
+      bestCompletedWaves: 7,
+      lastResultRunId: null,
+      updatedAt: '2026-09-25T00:00:00.000Z',
+    }],
+    cosmeticIds: [],
+    claimIds: [],
+    settledRunIds: [],
+  };
+  return {
+    namespace: 'defense',
+    schemaVersion: 1,
+    rulesVersion: 'zero-breach-1.0.0',
+    contentVersion: 'prototype-1.0.0',
+    buildVersion: 'g8a-representative-qa',
+    revision: 1,
+    savedAt: '2026-09-25T00:00:00.000Z',
+    checksum: fnv1a32(JSON.stringify(payload)),
+    payload,
+  };
+}
+
+async function enterRepresentativeBottomUp(cdp) {
+  const save = representativeDefenseSave();
+  await evaluate(cdp, `(() => {
+    localStorage.setItem('psi-zero-day.defense.save.v1', ${JSON.stringify(JSON.stringify(save))});
+    localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
+    return true;
+  })()`);
+  await clickButton(cdp, '현장 디펜스');
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`, 12000);
+  await clickButton(cdp, '이어서 훈련');
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'`, 12000);
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-wave') === '8'`, 12000);
+  await sleep(220);
+}
 async function clickButton(cdp, text, scope = 'button') {
   const clicked = await evaluate(cdp, `(() => {
     const el=[...document.querySelectorAll(${JSON.stringify(scope)})].find(b=>(b.textContent||'').includes(${JSON.stringify(text)}));
@@ -204,7 +308,9 @@ async function metrics(cdp) {
       pads:document.querySelectorAll('.zb-pad-runtime').length,
       routePoints:document.querySelector('.zb-path')?.getAttribute('points')||null,
       towers:document.querySelectorAll('.zb-tower').length,
+      controlPq:document.querySelectorAll('[data-pq-control="CONTROL:L1"]').length,
       enemies:document.querySelectorAll('.zb-enemy').length,
+      swift:document.querySelectorAll('.zb-enemy-swift').length,
       prototypeBoardItems:document.querySelectorAll('.zb-board [data-art-state="prototype"]').length,
       activeSvgVisuals:[...document.querySelectorAll('image[href],img[src]')].filter(el => {
         const uri=el.getAttribute('href') || el.getAttribute('src') || '';
@@ -235,16 +341,14 @@ try {
   await navigate(cdp);
   await clearState(cdp);
   await navigate(cdp);
-  await enterBottomUp(cdp);
-  await dismissTutorial(cdp);
-  await placeAndStart(cdp);
+  await enterRepresentativeBottomUp(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
   if(report.desktop.productionMap!=='HD_REFERENCE_ONLY') throw new Error('G8-A must remain HD_REFERENCE_ONLY until non-SVG final art exists');
   if(!report.desktop.artHref?.includes('ramp-01-hd01.webp') || report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
-  if(report.desktop.towers<1 || report.desktop.enemies<1 || report.desktop.status!=='RUNNING') throw new Error('Actual-play actors missing from G8-A evidence');
+  if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<1 || report.desktop.swift<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT actors missing from G8-A evidence');
   if(report.desktop.prototypeBoardItems!==0) throw new Error('Prototype art leaked into representative G8-A board');
   if(report.desktop.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active; G8-A Production Lock forbidden: '+JSON.stringify(report.desktop.activeSvgVisuals));
   if(report.desktop.overflow) throw new Error('Desktop G8-A horizontal overflow');
@@ -253,13 +357,11 @@ try {
   await viewport(cdp,390,844,true);
   await clearState(cdp);
   await navigate(cdp);
-  await enterBottomUp(cdp);
-  await dismissTutorial(cdp);
-  await placeAndStart(cdp);
+  await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
   if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='HD_REFERENCE_ONLY') throw new Error('Mobile G8-A must remain HD_REFERENCE_ONLY');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
-  if(report.mobile.towers<1 || report.mobile.enemies<1) throw new Error('Mobile G8-A actual-play actors missing');
+  if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<1 || report.mobile.swift<1) throw new Error('Mobile representative CONTROL/SWIFT actors missing');
   if(report.mobile.prototypeBoardItems!==0) throw new Error('Prototype art leaked into mobile G8-A board');
   if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
   if(report.mobile.overflow) throw new Error('390x844 G8-A horizontal overflow');
