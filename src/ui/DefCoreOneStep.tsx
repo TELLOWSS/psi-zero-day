@@ -265,17 +265,17 @@ export function DefCoreOneStepBoardOverlay({
     />
     <line x1={worldResult === 'HOLD_LINE' ? 58 : 86} y1="276" x2={worldResult === 'HOLD_LINE' ? 58 : 86} y2="326" className="def-core-hold-line" />
     <image
-      href="assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
-      x="26"
-      y="190"
-      width="286"
-      height="205"
+      href="assets/episode01/scene-elements/access-barrier.webp"
+      x="92"
+      y="247"
+      width="138"
+      height="88"
       preserveAspectRatio="xMidYMid meet"
-      className="def-core-barrier def-core-separation"
+      className="def-core-barrier"
     />
     <image
       href="assets/episode01/characters/choi-minseok-map.webp"
-      x="126"
+      x="128"
       y="205"
       width="58"
       height="88"
