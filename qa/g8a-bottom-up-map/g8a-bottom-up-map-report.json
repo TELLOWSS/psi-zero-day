@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "fb2f7b50e2dba1d5c9ba3f25ebf2f100ffeb6794",
+  "source_sha": "9796b9b16d7f71af3e6863fd31e8bfba6c910da5",
   "desktop": {
     "scenario": "training-site:apt-new-bottom-up-excavation",
     "map": "map-apt-bottom-up-excavation-01",
@@ -14,11 +14,8 @@
     "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
     "towers": 1,
     "enemies": 1,
-    "prototypeBoardItems": 0,
-    "activeSvgVisuals": [
-      "assets/defense/towers/pulse-l1.svg",
-      "assets/defense/enemies/normal.svg"
-    ],
+    "prototypeBoardItems": 2,
+    "activeSvgVisuals": [],
     "status": "RUNNING",
     "board": {
       "left": 120,
@@ -36,6 +33,6 @@
   },
   "mobile": null,
   "failures": [
-    "SVG visual asset still active; G8-A Production Lock forbidden: [\"assets/defense/towers/pulse-l1.svg\",\"assets/defense/enemies/normal.svg\"]"
+    "Prototype art leaked into representative G8-A board"
   ]
 }
