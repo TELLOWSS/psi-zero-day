@@ -79,19 +79,23 @@ describe('DEF-CORE-01 one-step vertical slice contract', () => {
     const reinforced = applyDefCoreOneStepRuntime(previous, advanced, 'B', 100);
     const rerouted = applyDefCoreOneStepRuntime(previous, advanced, 'C', 100);
 
-    expect(hold.enemies[0].distance).toBe(80);
-    expect(hold.enemies[0].slowEffects.at(-1)?.fraction).toBe(1);
-    expect(reinforced.enemies[0].distance).toBeCloseTo(82.7, 4);
-    expect(reinforced.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.55);
+    const holdSwift = hold.enemies[0]!;
+    const reinforcedSwift = reinforced.enemies[0]!;
+    const reroutedSwift = rerouted.enemies[0]!;
+    expect(holdSwift.distance).toBe(80);
+    expect(holdSwift.slowEffects.at(-1)?.fraction).toBe(1);
+    expect(reinforcedSwift.distance).toBeCloseTo(82.7, 4);
+    expect(reinforcedSwift.slowEffects.at(-1)?.fraction).toBe(0.55);
     const reinforcedNextEngineTick = {
       ...reinforced,
       tick: 102,
-      enemies: [{ ...reinforced.enemies[0], distance: reinforced.enemies[0].distance + 2.25 }],
+      enemies: [{ ...reinforcedSwift, distance: reinforcedSwift.distance + 2.25 }],
     } as any;
     const reinforcedNext = applyDefCoreOneStepRuntime(reinforced, reinforcedNextEngineTick, 'B', 100);
-    expect(reinforcedNext.enemies[0].distance).toBeCloseTo(84.95, 4);
-    expect(rerouted.enemies[0].distance).toBe(0);
-    expect(rerouted.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.3);
+    const reinforcedNextSwift = reinforcedNext.enemies[0]!;
+    expect(reinforcedNextSwift.distance).toBeCloseTo(84.95, 4);
+    expect(reroutedSwift.distance).toBe(0);
+    expect(reroutedSwift.slowEffects.at(-1)?.fraction).toBe(0.3);
     expect(zeroBreachContent.waves[7]?.groups).toEqual([
       { enemy: 'VEILED', count: 8, startTick: 0, intervalTicks: 25 },
       { enemy: 'SWIFT', count: 10, startTick: 60, intervalTicks: 20 },
