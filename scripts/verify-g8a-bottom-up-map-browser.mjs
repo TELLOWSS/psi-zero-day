@@ -201,6 +201,11 @@ async function metrics(cdp) {
       towers:document.querySelectorAll('.zb-tower').length,
       enemies:document.querySelectorAll('.zb-enemy').length,
       prototypeBoardItems:document.querySelectorAll('.zb-board [data-art-state="prototype"]').length,
+      activeSvgVisuals:[...document.querySelectorAll('image[href],img[src]')].filter(el => {
+        const uri=el.getAttribute('href') || el.getAttribute('src') || '';
+        const r=el.getBoundingClientRect();
+        return /\.svg(?:$|\?)/i.test(uri) && r.width>0 && r.height>0;
+      }).map(el => el.getAttribute('href') || el.getAttribute('src')),
       status:shell?.getAttribute('data-status')||null,
       board:board?{left:Math.round(board.left),top:Math.round(board.top),right:Math.round(board.right),bottom:Math.round(board.bottom),width:Math.round(board.width),height:Math.round(board.height)}:null,
       overflow:document.documentElement.scrollWidth>innerWidth+2,
@@ -230,12 +235,13 @@ try {
   await placeAndStart(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
-  if(report.desktop.productionMap!=='PRODUCTION_CANDIDATE') throw new Error('G8-A production-map state missing');
-  if(!report.desktop.artHref?.includes('bottom-up-excavation-01.svg') || report.desktop.artBytes<5000 || report.desktop.sourceBytes<100000) throw new Error('G8-A composite or HD source did not load');
+  if(report.desktop.productionMap!=='HD_REFERENCE_ONLY') throw new Error('G8-A must remain HD_REFERENCE_ONLY until non-SVG final art exists');
+  if(!report.desktop.artHref?.includes('ramp-01-hd01.webp') || report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers<1 || report.desktop.enemies<1 || report.desktop.status!=='RUNNING') throw new Error('Actual-play actors missing from G8-A evidence');
   if(report.desktop.prototypeBoardItems!==0) throw new Error('Prototype art leaked into representative G8-A board');
+  if(report.desktop.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active; G8-A Production Lock forbidden: '+JSON.stringify(report.desktop.activeSvgVisuals));
   if(report.desktop.overflow) throw new Error('Desktop G8-A horizontal overflow');
   await screenshot(cdp,'01-g8a-bottom-up-live.png');
 
@@ -246,10 +252,11 @@ try {
   await dismissTutorial(cdp);
   await placeAndStart(cdp);
   report.mobile=await metrics(cdp);
-  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='PRODUCTION_CANDIDATE') throw new Error('Mobile G8-A production map missing');
+  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='HD_REFERENCE_ONLY') throw new Error('Mobile G8-A must remain HD_REFERENCE_ONLY');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
   if(report.mobile.towers<1 || report.mobile.enemies<1) throw new Error('Mobile G8-A actual-play actors missing');
   if(report.mobile.prototypeBoardItems!==0) throw new Error('Prototype art leaked into mobile G8-A board');
+  if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
   if(report.mobile.overflow) throw new Error('390x844 G8-A horizontal overflow');
   if(!report.mobile.board || report.mobile.board.left < -2 || report.mobile.board.right > 392 || report.mobile.board.width < 300) {
     throw new Error('390x844 G8-A board escaped viewport: '+JSON.stringify(report.mobile.board));
@@ -272,4 +279,4 @@ if(report.failures.length){
   if(stderr.trim()) console.error(stderr.slice(-3000));
   process.exit(1);
 }
-console.log('G8-A bottom-up production map browser QA passed.');
+console.log('G8-A raster-only production-map browser QA passed.');
