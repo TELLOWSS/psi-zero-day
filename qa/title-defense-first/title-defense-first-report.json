@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "0aca1f62af8d99ce010b67fb813cfe62c79b7306",
+  "source_sha": "6dd3aa8f896d6e63be476c5b5e09c233f7306afd",
   "desktop": {
     "viewport": {
       "width": 1440,
@@ -17,10 +17,18 @@
     "primaryRect": {
       "left": 35,
       "top": 312,
-      "right": 338,
+      "right": 337,
       "bottom": 394,
       "width": 302,
       "height": 82
+    },
+    "lastActionRect": {
+      "left": 35,
+      "top": 547,
+      "right": 337,
+      "bottom": 613,
+      "width": 302,
+      "height": 66
     },
     "liveRect": {
       "left": 1097,
@@ -55,12 +63,20 @@
       "width": 351,
       "height": 60
     },
+    "lastActionRect": {
+      "left": 15,
+      "top": 584,
+      "right": 366,
+      "bottom": 644,
+      "width": 351,
+      "height": 60
+    },
     "liveRect": {
-      "left": 23,
-      "top": 490,
-      "right": 367,
-      "bottom": 595,
-      "width": 343,
+      "left": 20,
+      "top": 654,
+      "right": 371,
+      "bottom": 758,
+      "width": 351,
       "height": 105
     },
     "liveText": "LIVE SITEDEF-CORE-01서측 Gate · 차량–보행 간섭대표 시나리오 · WAVE 8 / 1001SWIFT차량 · 동선 급변02CONTROL유도 · 통로 분리03PSI약한 신호 읽기현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.",
