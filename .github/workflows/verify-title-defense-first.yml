@@ -1,0 +1,130 @@
+name: Verify TITLE-DEFENSE-FIRST-01
+
+on:
+  push:
+    branches:
+      - sol/title-defense-first-v2-20260925
+  pull_request:
+    branches:
+      - sol/def-core-01-one-step-20260925
+
+permissions:
+  contents: write
+
+concurrency:
+  group: title-defense-first-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-title:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout title branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify defense-first title contract
+        shell: bash
+        run: |
+          grep -q "현장 디펜스 시작" src/ui/GameHub.tsx
+          grep -q "사고 전 신호를 읽고, 현장을 바꿔라." src/ui/GameHub.tsx
+          grep -q "LIVE SITE" src/ui/GameHub.tsx
+          grep -q "현장 · 공정" src/ui/GameHub.tsx
+          grep -q "is-defense-entry" src/ui/game-hub.css
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run defense-first title browser QA
+        shell: bash
+        env:
+          PSI_TITLE_ARTIFACT_DIR: artifacts/title-defense-first
+        run: |
+          mkdir -p artifacts/title-defense-first
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/title-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/title-preview.log
+            exit 1
+          fi
+          node scripts/verify-title-defense-first.mjs
+
+      - name: Persist title QA evidence
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/title-defense-first
+          mkdir -p qa/title-defense-first
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Path('artifacts/title-defense-first')
+          out = Path('qa/title-defense-first')
+          for name in ['desktop-1440x900-home.png','desktop-defense-entry.png','mobile-390x844-home.png','error.png']:
+              p = src / name
+              if not p.exists():
+                  continue
+              im = Image.open(p).convert('RGB')
+              if im.width > 1100:
+                  h = round(im.height * 1100 / im.width)
+                  im = im.resize((1100, h), Image.Resampling.LANCZOS)
+              im.save(out / (p.stem + '.jpg'), 'JPEG', quality=84, optimize=True)
+          report = src / 'title-defense-first-report.json'
+          if report.exists():
+              (out / report.name).write_bytes(report.read_bytes())
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/title-defense-first
+          if git diff --cached --quiet; then
+            echo "No title QA evidence changes."
+            exit 0
+          fi
+          git commit -m "qa: store defense-first title evidence [skip ci]"
+          git push origin HEAD:sol/title-defense-first-v2-20260925

@@ -804,7 +804,9 @@ try {
       if (homeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-home.png');
 
-      await evaluate(cdp, "document.querySelector('.commercial-title-action.is-primary')?.click(); true");
+      // The product home is now Defense-first. Episode regression must explicitly
+      // use the secondary "new story" entry instead of assuming the primary CTA is story.
+      await evaluate(cdp, "document.querySelector('.commercial-title-action.is-quiet')?.click(); true");
       await sleep(120);
       const confirmNewGame = await evaluate(cdp, "Boolean(document.querySelector('.commercial-title-dialog .is-danger'))");
       if (confirmNewGame) {
