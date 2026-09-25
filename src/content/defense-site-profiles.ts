@@ -96,6 +96,8 @@ export function validateSiteProfiles(input: unknown): SiteProfileRegistry {
       || !isRecord(value.baseRiskModifiers) || !isRecord(value.defaults)) continue;
     if (ids.has(value.id)) issues.push(`${path}.id: duplicate ${value.id}`);
     ids.add(value.id);
+    const riskRecord = value.baseRiskModifiers as Record<string, unknown>;
+    const defaults = value.defaults as Record<string, unknown>;
 
     profiles.push({
       id:value.id,
@@ -105,15 +107,15 @@ export function validateSiteProfiles(input: unknown): SiteProfileRegistry {
       labelTextId:String(value.labelTextId),
       methodTextId:String(value.methodTextId),
       phaseTextId:String(value.phaseTextId),
-      baseRiskModifiers:Object.fromEntries(RISK_IDS.map(id => [id, Number(value.baseRiskModifiers?.[id] ?? 0)])) as Record<DefenseEnemyId,number>,
+      baseRiskModifiers:Object.fromEntries(RISK_IDS.map(id => [id, Number(riskRecord[id] ?? 0)])) as Record<DefenseEnemyId,number>,
       defaults:{
-        verticalLayer:value.defaults.verticalLayer as VerticalLayer,
-        uncertainty:Number(value.defaults.uncertainty),
-        concurrency:Number(value.defaults.concurrency),
-        logisticsCongestion:Number(value.defaults.logisticsCongestion),
-        timePressure:Number(value.defaults.timePressure),
-        asBuiltConfidence:Number(value.defaults.asBuiltConfidence),
-        energyState:value.defaults.energyState as EnergyState,
+        verticalLayer:defaults.verticalLayer as VerticalLayer,
+        uncertainty:Number(defaults.uncertainty),
+        concurrency:Number(defaults.concurrency),
+        logisticsCongestion:Number(defaults.logisticsCongestion),
+        timePressure:Number(defaults.timePressure),
+        asBuiltConfidence:Number(defaults.asBuiltConfidence),
+        energyState:defaults.energyState as EnergyState,
       },
     });
   }
