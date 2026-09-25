@@ -56,6 +56,7 @@ interface OneStepContract {
 
 const contract = contractRaw as OneStepContract;
 const SHOT_MS = 2100;
+const CORE_PATH = [[0,300],[180,300],[180,150],[450,150],[450,450],[720,450],[720,240],[1000,240]] as const;
 
 function storageKey(runId: string) {
   return `psi-zero-day.def-core-01.${runId}`;
@@ -252,9 +253,7 @@ export function DefCoreOneStepBoardOverlay({
   if (!showIntervention && !controller.choice) return null;
 
   const swift = state.enemies.find(enemy => enemy.enemyId === 'SWIFT');
-  const swiftPos = swift ? defensePositionAtDistance([
-    [0,300],[180,300],[180,150],[450,150],[450,450],[720,450],[720,240],[1000,240],
-  ], swift.distance) : { x: 92, y: 300 };
+  const swiftPos = swift ? defensePositionAtDistance(CORE_PATH, swift.distance) : { x: 92, y: 300 };
   const worldResult = controller.choiceResult?.worldResult ?? null;
 
   return <g className="def-core-world" data-def-core-world={worldResult ?? 'CONTROL_ACTIVE'} aria-hidden="true">
