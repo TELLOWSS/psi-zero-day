@@ -151,7 +151,7 @@ async function combatMetrics(cdp) {
       transfers: document.querySelectorAll('.zb-site-transfers > g').length,
       workerRoutes: document.querySelectorAll('.zb-site-route-worker').length,
       materialRoutes: document.querySelectorAll('.zb-site-route-material').length,
-      pads: document.querySelectorAll('.zb-pad').length,
+      pads: document.querySelectorAll('.zb-pad-runtime').length,
       board: rect ? { left: Math.round(rect.left), top: Math.round(rect.top), right: Math.round(rect.right), bottom: Math.round(rect.bottom), width: Math.round(rect.width), height: Math.round(rect.height) } : null,
       overflow: document.documentElement.scrollWidth > innerWidth + 2,
     };
