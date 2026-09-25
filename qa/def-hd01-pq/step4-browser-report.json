@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-25T05:07:32.065Z",
-  "source_sha": "e4ddf21d86a017aaaf3a209b133d917c0ce2f6af",
+  "generated_at": "2026-09-25T05:12:13.730Z",
+  "source_sha": "e0be1a1121e966fc9a5391b7f781343635468d84",
   "strategy": "PRECISION_PURE_UI",
   "acceleration": "wall scheduling only; fixed 50ms logical ticks and production content unchanged",
   "tutorial": {
@@ -31,12 +31,52 @@
     {
       "wave": 4,
       "action": "BURST@P4 L1"
+    },
+    {
+      "wave": 5,
+      "action": "SENSOR@P8 L1"
+    },
+    {
+      "wave": 6,
+      "action": "SENSOR@P8 L2"
+    },
+    {
+      "wave": 6,
+      "action": "PULSE@P1 L3B"
+    },
+    {
+      "wave": 7,
+      "action": "BURST@P4 L2"
+    },
+    {
+      "wave": 8,
+      "action": "SENSOR@P8 L3A"
+    },
+    {
+      "wave": 8,
+      "action": "PULSE@P6 L3B"
+    },
+    {
+      "wave": 9,
+      "action": "BURST@P4 L3B"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L1"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L2"
     }
   ],
-  "support_waves": [],
+  "support_waves": [
+    4,
+    7,
+    10
+  ],
   "result": null,
   "failures": [
-    "Missing clickable button: 재개"
+    "Missing semantic combat effect in full playthrough: .zb-detect-pulse / [\".zb-resolve-burst\",\".zb-attack-flash\",\".zb-area-pulse\",\".zb-slow-ring\",\".zb-boss-armor-effect\"]"
   ],
   "visual": {
     "boardHref": "assets/defense/board/ramp-01-hd01.webp",
@@ -51,9 +91,9 @@
   },
   "pq": {
     "enabled": true,
-    "swift": false,
-    "swiftAsset": null,
-    "control": false,
-    "controlCount": 0
+    "swift": true,
+    "swiftAsset": "assets/defense/enemies/swift-pq01.svg",
+    "control": true,
+    "controlCount": 1
   }
 }
