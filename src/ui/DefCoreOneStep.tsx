@@ -363,28 +363,32 @@ export function DefCoreOneStepBoardOverlay({
     <line x1={worldResult === 'HOLD_LINE' ? 58 : 86} y1="276" x2={worldResult === 'HOLD_LINE' ? 58 : 86} y2="326" className="def-core-hold-line" />
     <image
       href="assets/episode01/scene-elements/access-barrier.webp"
-      x="92"
-      y="247"
-      width="138"
-      height="88"
+      x="76"
+      y="278"
+      width="78"
+      height="50"
       preserveAspectRatio="xMidYMid meet"
       className="def-core-barrier"
     />
+    <g className="def-core-cones" aria-hidden="true">
+      <path d="M62 320l7-18 7 18zM157 320l7-18 7 18z" />
+      <path d="M59 321h20M154 321h20" />
+    </g>
     <image
       href="assets/episode01/characters/choi-minseok-map.webp"
-      x="128"
-      y="205"
-      width="58"
-      height="88"
+      x="146"
+      y="252"
+      width="38"
+      height="58"
       preserveAspectRatio="xMidYMid meet"
       className="def-core-marshal"
     />
     {worldResult === 'REINFORCED_CONTROL' ? <image
       href="assets/episode01/characters/choi-minseok-map.webp"
-      x="205"
-      y="224"
-      width="54"
-      height="82"
+      x="196"
+      y="258"
+      width="34"
+      height="52"
       preserveAspectRatio="xMidYMid meet"
       className="def-core-marshal is-secondary"
     /> : null}
