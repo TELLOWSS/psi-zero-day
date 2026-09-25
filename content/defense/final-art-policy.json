@@ -42,16 +42,20 @@
   },
   "enforcement": {
     "currentGate": "G8-A",
-    "g8aState": "VISUAL_REWORK_REQUIRED_LEGAL_BRIEF_READY",
-    "reason": "An SVG world composite was incorrectly promoted as a Production Candidate. That promotion is revoked.",
+    "g8aState": "WORLD_AND_SWIFT_FINAL_ASSETS_PENDING",
+    "reason": "The current world plate is HD reference only and the SWIFT risk actor has no approved final raster. Previous SVG/low-resolution promotion attempts remain revoked.",
     "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
-    "next": "Generate process-specific 4000x2400+ non-SVG G8-A world plate and matching representative CONTROL/SWIFT final assets, then run legal/visual/browser QA.",
+    "next": "Approve one process-specific 4000x2400+ non-SVG G8-A world plate and one 2048x1536+ transparent SWIFT final master, then run legal/visual/browser QA.",
     "productionLockRequires": [
+      "WORLD_FINAL_RASTER_APPROVED",
+      "SWIFT_FINAL_RASTER_APPROVED",
       "NON_SVG_FINAL_ASSETS",
       "KOREA_LAW_PROFILE_BOUND",
       "LEGAL_VISUAL_QA_PASS",
       "DESKTOP_ACTUAL_PLAY_QA_PASS",
       "MOBILE_390x844_QA_PASS",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0",
       "ONE_PRODUCTION_GENERATION_PASS"
     ]
   }
