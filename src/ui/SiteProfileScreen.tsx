@@ -28,6 +28,19 @@ const CONTEXT_LABEL: Record<ContextKey, string> = {
   timePressure: '공정 압박',
 };
 
+const MAP_HINT: Record<string, string> = {
+  A1_SITE_EXCAVATION: '개방 굴착 · 흙막이 · 굴착기/덤프 동선',
+  A3_RC_FRAME: '형틀 · 철근 · 슬래브단부 · 갱폼/동바리',
+  T2_UNDER_SLAB_EXCAVATION: '슬래브 하부 · 토사반출구 · 저시야/수직물류',
+  T3_CONCURRENT_ABOVE_BELOW: '상부 골조 + 하부 굴착 · 공정 간섭',
+  R1_SURVEY_ISOLATION: '기존 구조 조사 · 설비 차단 · 도면/실물 검증',
+  R2_SELECTIVE_DEMOLITION: '선택철거 · 잭서포트 · 폐기물 반출',
+  R4_EXTENSION_CONNECTION: '기존/신설 구조 접합 · 보강 · 양중',
+  D2_MEP_ROUGH_IN: '케이블트레이 · 덕트 · 배관 · 다공종 동시작업',
+  D3_ELECTRICAL_UPS: '수배전 · UPS · 배터리 · 에너지 상태',
+  D6_COMMISSIONING: '통전 · 기능시험 · 통합시운전 · 활성계통',
+};
+
 function nextLevel(value: number) {
   if (value < 0.25) return 0.5;
   if (value < 0.75) return 1;
@@ -95,7 +108,7 @@ export function SiteProfileScreen({ onBack }: { readonly onBack: () => void }) {
               onClick={() => choose(profile.id)}
             >
               <strong>{profile.label.replace(PROJECT_LABEL[group.project] + ' · ', '')}</strong>
-              <small>{profile.mapFamily}</small>
+              <small>{MAP_HINT[profile.mapFamily] ?? profile.mapFamily}</small>
             </button>)}
           </div>
         </div>)}
