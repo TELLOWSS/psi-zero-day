@@ -8,7 +8,10 @@ export type SiteZoneKind =
   | 'LOW_VISIBILITY'
   | 'OPENING'
   | 'MATERIAL_STAGING'
-  | 'RESTRICTED';
+  | 'RESTRICTED'
+  | 'EXISTING_STRUCTURE'
+  | 'TEMP_SUPPORT'
+  | 'EXTENSION_CONNECTION';
 
 export type VerticalTransferKind = 'RAMP' | 'MUCK_OPENING' | 'STAIR' | 'LIFT_OPENING';
 

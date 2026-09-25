@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "source_sha": "b189ffe3b6d32462d5367d2f02fb89d1465090ea",
+  "desktop_initial": {
+    "profile": "apt-remodel-selective-demolition",
+    "phase": "SURVEY_ISOLATION",
+    "top": [
+      {
+        "risk": "VEILED",
+        "score": 100
+      },
+      {
+        "risk": "ARMORED",
+        "score": 99
+      },
+      {
+        "risk": "SWARM",
+        "score": 80
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 941,
+      "top": 984,
+      "right": 1366,
+      "bottom": 1415,
+      "width": 425,
+      "height": 431
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 970,
+      "width": 425,
+      "height": 369
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": ""
+  },
+  "blocked_guard": {
+    "profile": "apt-remodel-selective-demolition",
+    "phase": "SURVEY_ISOLATION",
+    "top": [
+      {
+        "risk": "VEILED",
+        "score": 100
+      },
+      {
+        "risk": "ARMORED",
+        "score": 99
+      },
+      {
+        "risk": "SWARM",
+        "score": 80
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 941,
+      "top": 984,
+      "right": 1366,
+      "bottom": 1449,
+      "width": 425,
+      "height": 465
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 970,
+      "width": 425,
+      "height": 369
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": "기존 구조 상태를 현장에서 확인한 뒤 임시지지 계획을 적용합니다."
+  },
+  "desktop_ready": {
+    "profile": "apt-remodel-selective-demolition",
+    "phase": "SELECTIVE_DEMOLITION",
+    "top": [
+      {
+        "risk": "SWARM",
+        "score": 100
+      },
+      {
+        "risk": "SWIFT",
+        "score": 82
+      },
+      {
+        "risk": "ARMORED",
+        "score": 79
+      }
+    ],
+    "actions": 10,
+    "done": 6,
+    "practiceDisabled": false,
+    "panel": {
+      "left": 941,
+      "top": 984,
+      "right": 1366,
+      "bottom": 1449,
+      "width": 425,
+      "height": 465
+    },
+    "preview": {
+      "left": 941,
+      "top": 601,
+      "right": 1366,
+      "bottom": 970,
+      "width": 425,
+      "height": 369
+    },
+    "overflow": false,
+    "persisted": {
+      "scenarioId": "training-remodel:selective-demolition-connection",
+      "phase": "SELECTIVE_DEMOLITION",
+      "asBuiltConfidence": "HIGH",
+      "isolationState": "VERIFIED",
+      "tempSupportState": "VERIFIED",
+      "structuralOpeningState": "PLANNED",
+      "connectionState": "NOT_STARTED",
+      "completedActions": [
+        "REVIEW_EXISTING_RECORDS",
+        "FIELD_VERIFY_EXISTING",
+        "VERIFY_ISOLATION",
+        "INSTALL_TEMP_SUPPORT",
+        "VERIFY_TEMP_SUPPORT",
+        "PLAN_SELECTIVE_OPENING"
+      ],
+      "revision": 6
+    },
+    "notice": "현장 상태가 반영되었습니다."
+  },
+  "combat": {
+    "scenario": "training-remodel:selective-demolition-connection",
+    "map": "map-apt-remodel-selective-connection-01",
+    "phase": "SELECTIVE_DEMOLITION",
+    "overlay": true,
+    "world": {
+      "phase": "SELECTIVE_DEMOLITION",
+      "asBuilt": "HIGH",
+      "isolation": "VERIFIED",
+      "tempSupport": "VERIFIED",
+      "opening": "PLANNED"
+    },
+    "supports": 9,
+    "opening": true,
+    "zones": 5,
+    "pads": 8,
+    "overflow": false
+  },
+  "mobile": {
+    "profile": "apt-remodel-selective-demolition",
+    "phase": "SURVEY_ISOLATION",
+    "top": [
+      {
+        "risk": "VEILED",
+        "score": 100
+      },
+      {
+        "risk": "ARMORED",
+        "score": 99
+      },
+      {
+        "risk": "SWARM",
+        "score": 80
+      }
+    ],
+    "actions": 10,
+    "done": 0,
+    "practiceDisabled": true,
+    "panel": {
+      "left": 38,
+      "top": 7,
+      "right": 352,
+      "bottom": 911,
+      "width": 314,
+      "height": 905
+    },
+    "preview": {
+      "left": 38,
+      "top": -424,
+      "right": 352,
+      "bottom": -7,
+      "width": 314,
+      "height": 417
+    },
+    "overflow": false,
+    "persisted": null,
+    "notice": ""
+  },
+  "failures": []
+}

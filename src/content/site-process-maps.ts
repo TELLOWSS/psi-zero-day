@@ -11,6 +11,7 @@ import { validateDefenseContent, zeroBreachContent } from './defense';
 const ROUTE_KINDS = new Set<SiteRouteKind>(['vehicle','worker','material']);
 const ZONE_KINDS = new Set<SiteZoneKind>([
   'EXCAVATION','UNDER_SLAB','LOGISTICS_CONFLICT','LOW_VISIBILITY','OPENING','MATERIAL_STAGING','RESTRICTED',
+  'EXISTING_STRUCTURE','TEMP_SUPPORT','EXTENSION_CONNECTION',
 ]);
 const TRANSFER_KINDS = new Set<VerticalTransferKind>(['RAMP','MUCK_OPENING','STAIR','LIFT_OPENING']);
 const TOWER_IDS = new Set<DefenseTowerId>(['PULSE','BURST','CONTROL','SENSOR']);
@@ -103,7 +104,7 @@ function unique(items: readonly { readonly id: string }[], path: string) {
 function inside(p: DefensePoint, width: number, height: number): boolean {
   return p.x >= 0 && p.x <= width && p.y >= 0 && p.y <= height;
 }
-function parseMap(value: unknown, index: number): SiteProcessMapDefinition {
+export function validateSiteProcessMap(value: unknown, index = 0): SiteProcessMapDefinition {
   const path = `site process maps[${index}]`;
   if (!object(value) || typeof value.id !== 'string' || !value.id || typeof value.siteProfileId !== 'string'
     || !siteProfileById(value.siteProfileId) || typeof value.label !== 'string' || !value.label
@@ -157,7 +158,7 @@ if (!object(raw) || raw.schemaVersion !== 1 || !Array.isArray(raw.maps)) {
   throw new Error('site-process-maps-v1.json: schemaVersion 1 and maps[] required');
 }
 
-export const siteProcessMaps: readonly SiteProcessMapDefinition[] = Object.freeze(raw.maps.map(parseMap));
+export const siteProcessMaps: readonly SiteProcessMapDefinition[] = Object.freeze(raw.maps.map((value, index) => validateSiteProcessMap(value, index)));
 
 export function siteProcessMapByProfile(profileId: string): SiteProcessMapDefinition | undefined {
   return siteProcessMaps.find(map => map.siteProfileId === profileId);

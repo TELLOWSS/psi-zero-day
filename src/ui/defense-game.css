@@ -651,3 +651,27 @@
 .zb-site-anchor-hints circle{fill:rgba(8,30,40,.88);stroke:#edc05d;stroke-width:3;stroke-dasharray:5 4}
 .zb-site-anchor-hints text{fill:#f3d582;font-size:13px;font-weight:900;pointer-events:none}
 .zb-site-process-map + .zb-path-shoulder{opacity:.8}
+
+
+/* G6 REMODEL-01 — existing structure / temporary support / connection state */
+.zb-site-zone-existing_structure{fill:rgba(101,119,128,.12);stroke:rgba(161,183,192,.28)}
+.zb-site-zone-temp_support{fill:rgba(69,148,126,.09);stroke:rgba(102,198,169,.3);stroke-dasharray:8 6}
+.zb-site-zone-extension_connection{fill:rgba(103,98,167,.1);stroke:rgba(153,147,218,.31)}
+
+.zb-remodel-world{pointer-events:none}
+.zb-remodel-isolation rect{fill:rgba(10,43,48,.94);stroke:#76d8b4;stroke-width:3}
+.zb-remodel-isolation path{fill:none;stroke:#8be6c4;stroke-width:4;stroke-linecap:round}
+.zb-remodel-supports path{fill:none;stroke:#e2b95b;stroke-width:4;stroke-linecap:round}
+.zb-remodel-supports circle{fill:#e2b95b}
+.zb-remodel-supports.is-verified path{stroke:#79d5b1}
+.zb-remodel-supports.is-verified circle{fill:#79d5b1}
+.zb-remodel-opening rect{fill:rgba(197,79,67,.14);stroke:#d77b6e;stroke-width:4;stroke-dasharray:9 7}
+.zb-remodel-opening path{fill:none;stroke:#d77b6e;stroke-width:3;opacity:.72}
+.zb-remodel-opening.is-planned rect{fill:rgba(226,174,69,.08);stroke:#dfb154}
+.zb-remodel-opening.is-planned path{stroke:#dfb154}
+.zb-remodel-opening.is-reinforced rect{fill:rgba(91,169,143,.08);stroke:#79d5b1;stroke-dasharray:none}
+.zb-remodel-opening.is-reinforced path{stroke:#79d5b1}
+.zb-remodel-connection path{fill:none;stroke:#bda96c;stroke-width:5;stroke-linecap:round}
+.zb-remodel-connection.is-verified path{stroke:#79d5b1}
+.zb-shell[data-remodel-phase="SELECTIVE_DEMOLITION"] .zb-board-wrap{box-shadow:inset 0 0 0 1px rgba(221,155,69,.28),0 18px 55px rgba(0,0,0,.25)}
+.zb-shell[data-remodel-phase="OLD_NEW_CONNECTION"] .zb-board-wrap{box-shadow:inset 0 0 0 1px rgba(123,186,164,.25),0 18px 55px rgba(0,0,0,.25)}

@@ -1,7 +1,8 @@
 import { siteProcessMapByMapId } from '../content/site-process-maps';
+import { remodelScenario } from '../content/remodel';
 
 export function SiteProcessMapBoardOverlay({ mapId }: { readonly mapId: string }) {
-  const processMap = siteProcessMapByMapId(mapId);
+  const processMap = siteProcessMapByMapId(mapId) ?? (remodelScenario.map.id === mapId ? remodelScenario.map : undefined);
   if (!processMap) return null;
 
   return <g className="zb-site-process-map" data-site-process-map={processMap.id}>

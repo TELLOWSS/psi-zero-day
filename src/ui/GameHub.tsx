@@ -9,7 +9,6 @@ import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { SiteProfileScreen } from './SiteProfileScreen';
-import { siteScenarioId } from '../content/site-process-maps';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import { defenseText } from '../app/defense-text';
@@ -501,7 +500,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
     <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
       {page === 'site' ? <SiteProfileScreen
         onBack={() => setPage('home')}
-        onPractice={profileId => onDefense?.(siteScenarioId(profileId))}
+        onPracticeScenario={scenarioId => onDefense?.(scenarioId)}
       /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
