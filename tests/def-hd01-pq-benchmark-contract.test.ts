@@ -36,16 +36,20 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
       expect(benchmark.runtimePromotion.approvedAssets.control).toBeNull();
       expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
     } else {
-      expect(benchmark.runtimePromotion.status).toBe('PRODUCTION_LOCKED');
+      expect(benchmark.runtimePromotion.status).toBe('CONTROL_PRODUCTION_LOCKED_SWIFT_REWORK_REQUIRED');
       expect(benchmark.runtimePromotion.approvedAssets.control).toBeTruthy();
-      expect(benchmark.runtimePromotion.approvedAssets.swift).toBeTruthy();
+      expect(benchmark.runtimePromotion.approvedAssets.swift).toBeNull();
+      expect(benchmark.runtimePromotion.controlApproved).toBe(true);
+      expect(benchmark.runtimePromotion.swiftApproved).toBe(false);
     }
 
     expect(defenseControlPqComposite()).toEqual({
       marshalUri: 'assets/episode01/characters/choi-minseok-map.webp',
       barrierUri: 'assets/episode01/scene-elements/access-barrier.webp',
     });
-    expect(defenseSwiftPqAsset()).toEqual({ uri: 'assets/defense/enemies/swift-pq01.svg', width: 384, height: 268 });
+    expect(defenseSwiftPqAsset()).toBeNull();
+    expect(benchmark.benchmark.risk.target.kind).toBe('LEGACY_SVG_REFERENCE');
+    expect(benchmark.manualReview.swift.assessment).toBe('REJECT_AS_FINAL');
 
     // Legacy assets remain available as rollback in either valid runtime state.
     expect(defenseTowerArtUri('CONTROL', 'L1')).toBe(benchmark.benchmark.response.legacyAsset);
