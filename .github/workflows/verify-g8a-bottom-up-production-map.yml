@@ -1,4 +1,4 @@
-name: Verify G8-A BOTTOM-UP PRODUCTION MAP
+name: Verify G8-A PRE-ART GATE
 
 on:
   push:
@@ -56,7 +56,7 @@ jobs:
           echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
           "$CHROME_BIN" --version
 
-      - name: Run G8-A live production-map browser QA
+      - name: Run G8-A representative-slice browser QA
         shell: bash
         env:
           PSI_G8A_ARTIFACT_DIR: artifacts/g8a-bottom-up-map
@@ -80,18 +80,18 @@ jobs:
           fi
           node scripts/verify-g8a-bottom-up-map-browser.mjs
 
-      - name: Persist G8-A QA evidence
+      - name: Prepare G8-A QA evidence
         if: always()
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
-          rm -rf qa/g8a-bottom-up-map
-          mkdir -p qa/g8a-bottom-up-map
+          mkdir -p artifacts/g8a-bottom-up-map/evidence
           python3 - <<'PY'
           from pathlib import Path
           from PIL import Image
           src=Path('artifacts/g8a-bottom-up-map')
-          out=Path('qa/g8a-bottom-up-map')
+          out=src/'evidence'
+          out.mkdir(parents=True,exist_ok=True)
           for name in ['01-g8a-bottom-up-live.png','02-g8a-bottom-up-mobile.png','error.png']:
               p=src/name
               if not p.exists():
@@ -105,12 +105,11 @@ jobs:
           if report.exists():
               (out/report.name).write_bytes(report.read_bytes())
           PY
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A qa/g8a-bottom-up-map
-          if git diff --cached --quiet; then
-            echo "No G8-A evidence changes."
-            exit 0
-          fi
-          git commit -m "qa: store G8-A production-map evidence [skip ci]"
-          git push origin HEAD:sol/g8a-bottom-up-production-map-20260925
+
+      - name: Upload G8-A QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8a-pre-art-evidence
+          path: artifacts/g8a-bottom-up-map/evidence
+          if-no-files-found: error
