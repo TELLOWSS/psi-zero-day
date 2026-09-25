@@ -387,9 +387,11 @@ try {
   if (desktopPrototype === 0 && mobilePrototype === 0) {
     report.gate_state = 'READY_FOR_PRODUCTION_REVIEW';
   } else if (desktopPrototype === 1 && mobilePrototype === 1) {
-    report.gate_state = 'BLOCKED_SWIFT_FINAL_RASTER_REQUIRED';
+    report.gate_state = 'BLOCKED_WORLD_AND_SWIFT_FINAL_RASTER_REQUIRED';
     report.expected_blocker = {
-      id: 'SWIFT_FINAL_RASTER_MISSING',
+      id: 'WORLD_AND_SWIFT_FINAL_RASTER_MISSING',
+      worldFinalApproved: false,
+      currentWorldRole: report.desktop?.productionMap ?? null,
       desktopPrototypeItems: desktopPrototype,
       mobilePrototypeItems: mobilePrototype,
       controlRasterPass: report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
