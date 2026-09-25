@@ -164,6 +164,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
+    data-distance={enemy.distance.toFixed(3)}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
