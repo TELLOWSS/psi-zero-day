@@ -20,6 +20,9 @@ describe('DEF-CORE-01 one-step vertical slice contract', () => {
     expect(core.scope.riskId).toBe('SWIFT');
     expect(core.scope.responseId).toBe('CONTROL');
     expect(core.action.noAdditionalResponseFamilies).toBe(true);
+    expect(core.sliceAssets.wideGate).toBe('assets/episode01/cg/gate-dawn.webp');
+    expect(core.sliceAssets.vehicleRear).toBe('assets/episode01/cg/ramp-entry.webp');
+    expect(core.sliceAssets.separation).toBe('assets/episode01/scene-elements/vehicle-pedestrian-separation.webp');
     expect(core.protected.noNewTowerFamily).toBe(true);
     expect(core.protected.noNewRiskFamily).toBe(true);
   });
