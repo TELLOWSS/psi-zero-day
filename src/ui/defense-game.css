@@ -176,7 +176,10 @@
 .zb-result-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}.zb-result-actions button,.zb-rotate button{min-height:48px;border:1px solid var(--zb-accent);border-radius:8px;background:#eaa63c;color:#17242c;font-weight:900}
 .zb-rotate{display:none}.zb-rotate span{font-size:42px;color:var(--zb-accent)}.zb-rotate p{color:var(--zb-muted);line-height:1.6}
 @media (orientation:portrait){
-  .zb-shell:not(.zb-prep){height:100dvh}.zb-rotate{display:grid}
+  .zb-shell:not(.zb-prep){height:100dvh}
+  /* Portrait is a supported gameplay viewport. Rotation guidance must never cover
+     the live construction world; the DEF-CORE mobile gate validates 390x844 directly. */
+  .zb-rotate{display:none}
 }
 @media (orientation:landscape) and (max-height:650px){
   .zb-shell{min-height:100dvh;grid-template-rows:54px minmax(0,1fr) 94px}
