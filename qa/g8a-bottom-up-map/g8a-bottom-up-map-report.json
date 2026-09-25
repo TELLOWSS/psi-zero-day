@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "1b13895f02cdeb2a746166fedc7a5d60b01e7e1f",
+  "source_sha": "8f1f061c45f9c2167b5620029a64761fa76692aa",
   "desktop": {
     "scenario": "training-site:apt-new-bottom-up-excavation",
     "map": "map-apt-bottom-up-excavation-01",
