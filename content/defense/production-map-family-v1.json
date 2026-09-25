@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "G8A_VISUAL_REWORK_REQUIRED",
+  "status": "G8A_CONTROL_PASS_SWIFT_FINAL_REQUIRED",
   "generationRule": "ONE_MAP_AT_A_TIME",
   "maps": [
     {
@@ -35,7 +35,7 @@
       "finalArtPolicy": {
         "svgFinalArtForbidden": true,
         "productionLockAllowed": false,
-        "blockingReason": "Process-specific G8-A final art must be a non-SVG commercial raster asset."
+        "blockingReason": "CONTROL raster composite passes representative runtime. SWIFT still needs a dedicated high-end transparent WebP/PNG final asset; prototype fallback is intentionally blocked."
       },
       "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
       "legalCompliance": {
@@ -50,6 +50,23 @@
           "MOBILE_390x844_QA",
           "ONE_PRODUCTION_GENERATION_QA"
         ]
+      },
+      "representativeSlice": {
+        "response": "CONTROL:L1",
+        "responseState": "RASTER_RUNTIME_COMPOSITE_PASS",
+        "risk": "SWIFT",
+        "riskState": "FINAL_RASTER_MISSING",
+        "browserQa": {
+          "sourceSha": "6a8186ffe44c1994e731defed70651912ab0e6ec",
+          "map": "map-apt-bottom-up-excavation-01",
+          "wave": 8,
+          "controlPqCount": 1,
+          "swiftCount": 1,
+          "activeSvgVisuals": 0,
+          "prototypeBoardItems": 1,
+          "result": "BLOCKED_AS_DESIGNED",
+          "blocker": "SWIFT has no approved non-SVG final raster, so runtime correctly falls back to prototype and Production Lock is denied."
+        }
       }
     }
   ]
