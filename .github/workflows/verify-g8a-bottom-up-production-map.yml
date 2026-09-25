@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: G8-A production-map contracts
-        run: npx vitest run tests/final-art-policy.test.ts tests/korea-legal-visual-standard.test.ts tests/g8a-swift-final-art.test.ts tests/production-map-family.test.ts tests/data-center-runtime.test.ts tests/remodel-runtime.test.ts tests/site-process-map-family.test.ts tests/site-profile-risk-priority.test.ts
+        run: npx vitest run tests/final-art-policy.test.ts tests/korea-legal-visual-standard.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/production-map-family.test.ts tests/data-center-runtime.test.ts tests/remodel-runtime.test.ts tests/site-process-map-family.test.ts tests/site-profile-risk-priority.test.ts
 
       - name: Typecheck
         run: npm run typecheck
