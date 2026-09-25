@@ -121,7 +121,7 @@ describe('G4 SITE-PROFILE-01 contract', () => {
     expect(ui).toContain('riskPriorityContextFromRun');
     expect(ui).toContain('<SiteRiskPriorityHud');
     expect(hud).toContain('data-risk-top3');
-    expect(hud).toContain('GAME_PRIORITY').not;
+    expect(hud).not.toContain('statutory');
     expect(ui).not.toContain('SiteProfileDefenseGame');
   });
 });
