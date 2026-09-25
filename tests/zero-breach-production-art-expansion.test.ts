@@ -11,7 +11,7 @@ function readAsset(uri: string): string {
   return fs.readFileSync(path.resolve('public', uri), 'utf8');
 }
 
-describe('ZERO BREACH step 5 production lock', () => {
+describe('ZERO BREACH legacy geometry coverage', () => {
   it('covers all 16 tower states and all 6 risk silhouettes without fallback gaps', () => {
     const towerUris = TOWERS.flatMap(tower => LEVELS.map(level => defenseTowerArtUri(tower, level)));
     const enemyUris = ENEMIES.map(enemy => defenseEnemyArtUri(enemy));
@@ -79,22 +79,11 @@ describe('ZERO BREACH step 5 production lock', () => {
     expect(new Set(enemySource).size).toBe(6);
   });
 
-  it('preserves the original three baseline anchors and locks every expansion asset', () => {
-    const locked = defenseVisualProduction.assets
-      .filter(asset => asset.status === 'BASELINE_LOCKED')
-      .map(asset => asset.assetId);
-
-    expect(locked).toEqual([
-      'defense.board.ramp-01',
-      'defense.tower.PULSE.L1',
-      'defense.enemy.NORMAL',
-    ]);
-    const productionLocked = defenseVisualProduction.assets.filter(asset => asset.status === 'PRODUCTION_LOCKED');
-    expect(productionLocked).toHaveLength(20);
-    const manifestSource = fs.readFileSync('content/defense/visual-production.json', 'utf8');
-    expect(manifestSource).not.toContain('"EXPANSION_CANDIDATE"');
+  it('keeps all legacy SVG assets explicitly geometry-only until non-SVG replacements exist', () => {
     expect(defenseVisualProduction.assets).toHaveLength(23);
-    expect(defenseVisualProduction.status).toBe('PRODUCTION_LOCKED');
-    expect(defenseVisualProduction.visualVersion).toBe('zero-breach-production-lock-1.0.0');
+    expect(defenseVisualProduction.assets.every(asset => asset.status === 'LEGACY_GEOMETRY_ONLY')).toBe(true);
+    expect(defenseVisualProduction.assets.every(asset => asset.uri.endsWith('.svg'))).toBe(true);
+    expect(defenseVisualProduction.status).toBe('LEGACY_GEOMETRY_ONLY');
+    expect(defenseVisualProduction.visualVersion).toBe('zero-breach-legacy-svg-geometry-1.0.0');
   });
 });
