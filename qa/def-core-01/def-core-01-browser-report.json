@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T07:26:32.264Z",
-  "source_sha": "06de1b74ba1b9e0fffa6e077d050f34ff6d10a75",
+  "generated_at": "2026-09-25T07:34:40.714Z",
+  "source_sha": "1bafad79e415be3053a36557af5a1e5a2e2e878e",
   "gate": "DEF-CORE-01",
   "scenario": "event-ramp-reconstruction-v1",
   "wave": 8,
@@ -26,7 +26,7 @@
   "decision_count": 3,
   "chosen": "C",
   "followup": "RECORD",
-  "cinematic_wall_ms": 12609,
+  "cinematic_wall_ms": 12611,
   "audio_cues": [
     "warning",
     "warning",
