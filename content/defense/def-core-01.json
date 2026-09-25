@@ -174,5 +174,13 @@
     "audio": false,
     "mobile": false,
     "productionLock": false
+  },
+  "sliceAssets": {
+    "wideGate": "assets/episode01/cg/gate-dawn.webp",
+    "vehicleRear": "assets/episode01/cg/ramp-entry.webp",
+    "separation": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+    "limJunho": "assets/episode01/characters/lim-junho-concerned.webp",
+    "choiMinseok": "assets/episode01/characters/choi-minseok-map.webp",
+    "leeJaehoon": "assets/episode01/characters/lee-jaehoon-portrait.webp"
   }
 }
