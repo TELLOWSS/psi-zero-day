@@ -1,9 +1,18 @@
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import net from 'node:net';
 
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_DEFENSE_STEP4_ARTIFACT_DIR || 'artifacts/zero-breach-step4-browser');
+const pqVisualQa = process.env.PSI_DEF_HD01_PQ_QA === '1';
+const qaSourceSha = (() => {
+  try {
+    return execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  } catch {
+    return null;
+  }
+})();
 fs.mkdirSync(outputDir, { recursive: true });
 
 const chrome = [
@@ -19,15 +28,37 @@ if (!chrome) {
   process.exit(1);
 }
 
-const port = Number(process.env.PSI_CHROME_DEBUG_PORT || 9555);
+async function allocateDebugPort() {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.unref();
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', () => {
+      const address = server.address();
+      const port = typeof address === 'object' && address ? address.port : null;
+      server.close(error => {
+        if (error) reject(error);
+        else if (typeof port === 'number') resolve(port);
+        else reject(new Error('Unable to allocate Chrome debug port'));
+      });
+    });
+  });
+}
+
+const port = process.env.PSI_CHROME_DEBUG_PORT
+  ? Number(process.env.PSI_CHROME_DEBUG_PORT)
+  : await allocateDebugPort();
 const profile = fs.mkdtempSync('/tmp/psi-zero-breach-step4-');
 const browser = spawn(chrome, [
-  '--headless=new',
+  '--headless',
   '--no-sandbox',
   '--disable-gpu',
   '--disable-dev-shm-usage',
   '--hide-scrollbars',
   '--mute-audio',
+  '--no-first-run',
+  '--no-default-browser-check',
+  '--disable-background-networking',
   '--remote-debugging-address=127.0.0.1',
   '--remote-debugging-port=' + port,
   '--user-data-dir=' + profile,
@@ -38,7 +69,7 @@ let browserStderr = '';
 browser.stderr.on('data', chunk => { browserStderr += chunk.toString(); });
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function waitForJson(url, timeoutMs = 10000) {
+async function waitForJson(url, timeoutMs = 30000) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     try {
@@ -175,14 +206,49 @@ async function waitCombat(cdp, status, wave, timeoutMs = 30000) {
   );
 }
 
+async function setPaused(cdp, paused) {
+  const ok = await evaluate(cdp, `(() => {
+    const button = document.querySelector('.zb-hud-button');
+    if (!(button instanceof HTMLButtonElement) || button.disabled) return false;
+    const current = button.getAttribute('aria-pressed') === 'true';
+    if (current !== ${JSON.stringify(paused)}) button.click();
+    return true;
+  })()`);
+  if (!ok) throw new Error('Missing pause control');
+  await waitFor(
+    cdp,
+    `document.querySelector('.zb-hud-button')?.getAttribute('aria-pressed') === ${JSON.stringify(String(paused))}`,
+  );
+}
+
 async function pauseIntermission(cdp, wave) {
   await waitCombat(cdp, 'INTERMISSION', wave);
-  await clickText(cdp, '정지');
-  await waitFor(cdp, "[...document.querySelectorAll('button')].some(b => (b.textContent || '').includes('재개'))");
+  await setPaused(cdp, true);
 }
 
 async function resumeIntermission(cdp) {
-  await clickText(cdp, '재개');
+  await setPaused(cdp, false);
+  const state = await evaluate(cdp, `(() => {
+    const shell = document.querySelector('[data-defense-screen="combat"]');
+    return {
+      status: shell?.getAttribute('data-status') || null,
+      wave: Number(shell?.getAttribute('data-wave') || 0),
+    };
+  })()`);
+
+  if (state.status === 'RUNNING') return;
+  if (state.status !== 'INTERMISSION') {
+    throw new Error('Cannot resume from status: ' + state.status);
+  }
+
+  const started = await evaluate(cdp, `(() => {
+    const button = document.querySelector('button.zb-start-wave');
+    if (!(button instanceof HTMLButtonElement) || button.disabled) return false;
+    button.click();
+    return true;
+  })()`);
+  if (!started) throw new Error('Missing next-wave control');
+  await waitCombat(cdp, 'RUNNING', state.wave);
 }
 
 async function useSupportAtWave(cdp, wave) {
@@ -208,15 +274,24 @@ async function snapshotState(cdp) {
 }
 
 const report = {
-  schema_version: 1,
+  schema_version: 2,
+  generated_at: new Date().toISOString(),
+  source_sha: qaSourceSha,
   strategy: 'PRECISION_PURE_UI',
-  acceleration: 'wall scheduling only; fixed 50ms logical ticks and production content unchanged',
+  acceleration: 'wall scheduling only; one logical tick per 25ms wall interval, no synchronous batching; production 50ms logical tick and content unchanged',
   tutorial: {},
   purchases: [],
   support_waves: [],
   result: null,
   failures: [],
   visual: null,
+  pq: {
+    enabled: pqVisualQa,
+    swift: false,
+    swiftAsset: null,
+    control: false,
+    controlCount: 0,
+  },
 };
 
 let target;
@@ -251,9 +326,9 @@ try {
       const nativeSetInterval = window.setInterval.bind(window);
       window.setInterval = (handler, timeout, ...args) => {
         if (timeout === 50 && typeof handler === 'function') {
-          return nativeSetInterval(() => {
-            for (let i = 0; i < 4; i += 1) handler(...args);
-          }, 10);
+          // Keep every logical tick in its own macrotask so React can render
+          // transient one-tick semantic FX (notably SENSOR detect pulse).
+          return nativeSetInterval(handler, 25, ...args);
         }
         return nativeSetInterval(handler, timeout, ...args);
       };
@@ -389,6 +464,18 @@ try {
   await upgrade(cdp, 'P6', '관통 펄스');
   report.purchases.push({ wave: 8, action: 'PULSE@P6 L3B' });
   await resumeIntermission(cdp);
+  if (pqVisualQa) {
+    await waitFor(cdp, "Boolean(document.querySelector('[data-pq-swift=\"SWIFT\"]'))", 30000);
+    const swiftCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-swift=\"SWIFT\"]').length");
+    if (swiftCount < 1) throw new Error('G2 PQ SWIFT candidate did not render in Wave 8');
+    const swiftHref = await evaluate(cdp, "document.querySelector('[data-pq-swift=\"SWIFT\"]')?.getAttribute('href') || null");
+    if (swiftHref !== 'assets/defense/enemies/swift-pq01.svg') {
+      throw new Error('G2 PQ SWIFT did not render from dedicated transparent asset: ' + swiftHref);
+    }
+    report.pq.swift = true;
+    report.pq.swiftAsset = swiftHref;
+    await screenshot(cdp, '05a-pq-swift-wave8.png');
+  }
   await screenshot(cdp, '05-wave8-branches.png');
 
   // Wave 9 prep
@@ -403,6 +490,14 @@ try {
   await pauseIntermission(cdp, 10);
   await build(cdp, 'P5', '흐름 제어기');
   report.purchases.push({ wave: 10, action: 'CONTROL@P5 L1' });
+  if (pqVisualQa) {
+    await waitFor(cdp, "Boolean(document.querySelector('[data-pq-control=\"CONTROL:L1\"]'))");
+    const controlCount = await evaluate(cdp, "document.querySelectorAll('[data-pq-control=\"CONTROL:L1\"]').length");
+    if (controlCount !== 1) throw new Error('G2 PQ CONTROL L1 candidate did not render exactly once');
+    report.pq.control = true;
+    report.pq.controlCount = controlCount;
+    await screenshot(cdp, '06a-pq-control-l1.png');
+  }
   await upgrade(cdp, 'P5', '강화 L2');
   report.purchases.push({ wave: 10, action: 'CONTROL@P5 L2' });
   await resumeIntermission(cdp);
@@ -433,6 +528,9 @@ try {
   }
   if (report.purchases.filter(item => item.action.includes('L3A')).length < 1) throw new Error('UI run did not use an L3A branch');
   if (report.purchases.filter(item => item.action.includes('L3B')).length < 1) throw new Error('UI run did not use an L3B branch');
+  if (pqVisualQa && (!report.pq.swift || !report.pq.control)) {
+    throw new Error('G2 PQ visual evidence did not capture both SWIFT and CONTROL candidates');
+  }
 } catch (error) {
   report.failures.push(error instanceof Error ? error.message : String(error));
   if (cdp) {

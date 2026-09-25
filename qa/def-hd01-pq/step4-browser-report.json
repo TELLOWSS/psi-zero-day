@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-09-25T05:15:12.134Z",
+  "source_sha": "04f2d90eb18ea7a20461ff418fd9efcf08597d6a",
+  "strategy": "PRECISION_PURE_UI",
+  "acceleration": "wall scheduling only; one logical tick per 25ms wall interval, no synchronous batching; production 50ms logical tick and content unchanged",
+  "tutorial": {
+    "place": true,
+    "start": true,
+    "upgrade": true,
+    "preview": true,
+    "completed": true
+  },
+  "purchases": [
+    {
+      "wave": 1,
+      "action": "PULSE@P1 L1"
+    },
+    {
+      "wave": 1,
+      "action": "PULSE@P6 L1"
+    },
+    {
+      "wave": 2,
+      "action": "PULSE@P1 L2"
+    },
+    {
+      "wave": 3,
+      "action": "PULSE@P6 L2"
+    },
+    {
+      "wave": 4,
+      "action": "BURST@P4 L1"
+    },
+    {
+      "wave": 5,
+      "action": "SENSOR@P8 L1"
+    },
+    {
+      "wave": 6,
+      "action": "SENSOR@P8 L2"
+    },
+    {
+      "wave": 6,
+      "action": "PULSE@P1 L3B"
+    },
+    {
+      "wave": 7,
+      "action": "BURST@P4 L2"
+    },
+    {
+      "wave": 8,
+      "action": "SENSOR@P8 L3A"
+    },
+    {
+      "wave": 8,
+      "action": "PULSE@P6 L3B"
+    },
+    {
+      "wave": 9,
+      "action": "BURST@P4 L3B"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L1"
+    },
+    {
+      "wave": 10,
+      "action": "CONTROL@P5 L2"
+    }
+  ],
+  "support_waves": [
+    4,
+    7,
+    10
+  ],
+  "result": {
+    "status": "WON",
+    "wave": 10,
+    "tick": 5928,
+    "shield": 18,
+    "resource": 352,
+    "tutorial": null,
+    "result": "방어 성공",
+    "resultText": "결과방어 성공별2 / 3점수11,800완료 웨이브10 / 10보호막18획득 보상첫 클리어 꾸미기 획득다시 도전본편 허브로",
+    "stars": 2,
+    "logical_1x_seconds": 296.4,
+    "accelerated_wall_seconds": 158.7
+  },
+  "failures": [],
+  "visual": {
+    "boardHref": "assets/defense/board/ramp-01-hd01.webp",
+    "boardFetchOk": true,
+    "boardContentType": "image/webp",
+    "pathShoulder": 1,
+    "pathSurface": 1,
+    "pathCenterline": 1,
+    "padHardstands": 8,
+    "padMarks": 8,
+    "padHitTargets": 8
+  },
+  "pq": {
+    "enabled": true,
+    "swift": true,
+    "swiftAsset": "assets/defense/enemies/swift-pq01.svg",
+    "control": true,
+    "controlCount": 1
+  },
+  "effects_seen": [
+    ".zb-attack-flash",
+    ".zb-resolve-burst",
+    ".zb-area-pulse",
+    ".zb-detect-pulse",
+    ".zb-slow-ring",
+    ".zb-boss-armor-effect"
+  ]
+}

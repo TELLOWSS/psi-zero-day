@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseEnemyArtUri, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
 import {
@@ -63,6 +63,39 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
   const revealing = tower.towerId === 'SENSOR'
     && typeof level.revealIntervalTicks === 'number'
     && tower.revealCooldown === level.revealIntervalTicks;
+  const controlPq = tower.towerId === 'CONTROL' && tower.levelId === 'L1' ? defenseControlPqComposite() : null;
+  if (controlPq) {
+    return <g
+      className={`zb-tower zb-tower-production zb-control-pq${firing ? ' is-firing' : ''}`}
+      data-pq-control="CONTROL:L1"
+      data-tower-family={tower.towerId}
+    >
+      {firing ? <g className="zb-control-intervention" aria-hidden="true">
+        <circle r="35" />
+        <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
+      </g> : null}
+      <image
+        href={controlPq.barrierUri}
+        x="-55"
+        y="-22"
+        width="110"
+        height="70"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-control-pq-barrier"
+        aria-hidden="true"
+      />
+      <image
+        href={controlPq.marshalUri}
+        x="-31"
+        y="-77"
+        width="62"
+        height="93"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-control-pq-marshal"
+        aria-hidden="true"
+      />
+    </g>;
+  }
   const artUri = defenseTowerArtUri(tower.towerId, tower.levelId);
   if (artUri) {
     return <g
@@ -70,7 +103,11 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-production-tower-art={`${tower.towerId}:${tower.levelId}`}
       data-tower-family={tower.towerId}
     >
-      {firing ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
+      {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
+        <circle r="35" />
+        <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
+      </g> : null}
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
       {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
       <image
@@ -118,6 +155,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
   const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
+  const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqAsset() : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
@@ -127,10 +165,24 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     data-enemy={enemy.enemyId}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
-    {slowed ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
+    {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
+    {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
+      <circle r="25" />
+      <path d="M-26 13H-10M-30 19H-14" />
+    </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {artUri ? <image
+    {swiftPq ? <image
+      href={swiftPq.uri}
+      x="-39"
+      y="-34"
+      width="78"
+      height="58"
+      preserveAspectRatio="xMidYMid meet"
+      className="zb-swift-pq-asset"
+      data-pq-swift="SWIFT"
+      aria-hidden="true"
+    /> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
       y={artY}

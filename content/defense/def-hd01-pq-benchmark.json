@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "gate": "DEF-HD01-PQ",
+  "status": "G2_PRODUCTION_LOCKED",
+  "branch": "sol/def-hd01-pq-benchmark-20260924",
+  "inherits": {
+    "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
+    "worldAsset": "assets/defense/board/ramp-01-hd01.webp",
+    "boardLogicalSize": {
+      "width": 1000,
+      "height": 600
+    }
+  },
+  "benchmark": {
+    "response": {
+      "id": "CONTROL",
+      "level": "L1",
+      "legacyAsset": "assets/defense/towers/control-l1.svg",
+      "legacyAssessment": "REJECT_AS_NEW_FINAL",
+      "semantic": "traffic marshal + temporary pedestrian/vehicle segregation intervention",
+      "productionAsset": "RUNTIME_COMPOSITE",
+      "target": {
+        "kind": "RUNTIME_COMPOSITE",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
+        "anchor": {
+          "x": 0.5,
+          "y": 0.82
+        },
+        "transparent": true
+      },
+      "mustReadAtPhoneScale": [
+        "human marshal silhouette",
+        "high-visibility PPE",
+        "cones/barrier segregation",
+        "clear action direction"
+      ],
+      "forbidden": [
+        "sci-fi arch",
+        "glowing portal",
+        "baked text",
+        "logo",
+        "HUD",
+        "fantasy weapon"
+      ],
+      "sourceUpgrade": {
+        "from": "assets/episode01/characters/choi-minseok-map-rc.svg",
+        "to": "assets/episode01/characters/choi-minseok-map.webp",
+        "reason": "Use existing transparent full-body signalman WebP with realistic PPE/lighting instead of RC vector placeholder."
+      }
+    },
+    "risk": {
+      "id": "SWIFT",
+      "legacyAsset": "assets/defense/enemies/swift.svg",
+      "legacyAssessment": "REJECT_AS_NEW_FINAL",
+      "semantic": "reversing construction vehicle converging with pedestrian path",
+      "productionAsset": "assets/defense/enemies/swift-pq01.svg",
+      "target": {
+        "kind": "STATIC_TRANSPARENT_SVG",
+        "asset": "assets/defense/enemies/swift-pq01.svg",
+        "width": 384,
+        "height": 268,
+        "transparent": true,
+        "anchor": {
+          "x": 0.5,
+          "y": 0.78
+        },
+        "sourceLineage": {
+          "masterWorld": "assets/defense/board/ramp-01-hd01.webp",
+          "sourceLogicalSize": {
+            "width": 1000,
+            "height": 600
+          },
+          "cropViewBox": {
+            "x": 748,
+            "y": 404,
+            "width": 112,
+            "height": 78
+          },
+          "clipPolygon": [
+            [
+              754,
+              424
+            ],
+            [
+              769,
+              414
+            ],
+            [
+              790,
+              415
+            ],
+            [
+              812,
+              427
+            ],
+            [
+              838,
+              439
+            ],
+            [
+              850,
+              455
+            ],
+            [
+              842,
+              470
+            ],
+            [
+              824,
+              477
+            ],
+            [
+              802,
+              466
+            ],
+            [
+              781,
+              457
+            ],
+            [
+              761,
+              450
+            ],
+            [
+              751,
+              438
+            ]
+          ],
+          "embeddedInAsset": true
+        },
+        "selfContained": true
+      },
+      "mustReadAtPhoneScale": [
+        "construction vehicle mass",
+        "reverse direction",
+        "pedestrian conflict cue",
+        "urgent but non-monster silhouette"
+      ],
+      "forbidden": [
+        "monster",
+        "projectile",
+        "abstract wedge",
+        "baked warning text",
+        "logo",
+        "HUD"
+      ]
+    },
+    "fx": {
+      "id": "CONTROL_SWIFT_INTERVENTION",
+      "semantic": "brake + marshal intervention + temporary separation",
+      "runtimeOnly": true,
+      "mustUse": [
+        "brake response",
+        "brief risk contraction",
+        "pedestrian route deflection",
+        "barrier/cone appearance"
+      ],
+      "forbidden": [
+        "explosion",
+        "enemy death",
+        "combat blood",
+        "superhero energy blast"
+      ]
+    }
+  },
+  "productionGeneration": {
+    "camera": "high-oblique near-orthographic compatible with MASTER WORLD",
+    "lighting": "top-left natural daylight compatible with ramp-01-hd01",
+    "materialLanguage": "real Korean high-rise construction site",
+    "colorRule": "PPE and construction-control colors grounded in real site materials; no neon game-object body",
+    "worldFirst": true
+  },
+  "runtimeGate": {
+    "currentLegacyAssetsRemainActive": false,
+    "switchCondition": "G2 Production Lock approved; main may render the locked CONTROL/SWIFT production benchmark.",
+    "noPlaceholderPromotion": true,
+    "noGameplayCoordinateChange": true,
+    "noBalanceChange": true
+  },
+  "acceptance": [
+    "CONTROL and SWIFT are immediately readable without explanatory copy",
+    "both belong to the same visual generation as the HD master world",
+    "assets remain legible in actual DefenseGame at phone-scale board size",
+    "intervention reads as a site-safety action, not an attack",
+    "no route/pad/wave/id/balance changes",
+    "actual browser screenshots pass before runtime promotion"
+  ],
+  "next": "MERGE_PR_48_THEN_BEGIN_DEF_CORE_01",
+  "runtimePromotion": {
+    "approved": true,
+    "status": "PRODUCTION_LOCKED",
+    "requiredChecks": [
+      "CONTROL production sources exist at declared source paths",
+      "SWIFT dedicated PQ01 asset exists at declared production asset path",
+      "transparent/self-contained SWIFT contract verified",
+      "declared dimensions verified",
+      "SHA256 recorded and locked",
+      "fresh schema-v2 actual DefenseGame browser QA passes",
+      "fresh QA source SHA is bound to the tested G2 commit",
+      "MASTER WORLD generation match passes",
+      "no source/code drift occurs after fresh browser QA"
+    ],
+    "approvedAssets": {
+      "control": {
+        "kind": "RUNTIME_COMPOSITE",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
+        "marshalSha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+        "barrierSha256": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542"
+      },
+      "swift": {
+        "kind": "STATIC_TRANSPARENT_SVG",
+        "asset": "assets/defense/enemies/swift-pq01.svg",
+        "sha256": "1600bc6290672a3a8711677a7a2e8a405fddbd73ff159f3e8230b8851849a8a0",
+        "dimensions": {
+          "width": 384,
+          "height": 268
+        },
+        "selfContained": true
+      }
+    },
+    "previewCandidateOnGateBranch": false,
+    "g2BrowserQa": {
+      "passed": true,
+      "evidence": {
+        "report": "qa/def-hd01-pq/step4-browser-report.json",
+        "swift": "qa/def-hd01-pq/05a-pq-swift-wave8.jpg",
+        "control": "qa/def-hd01-pq/06a-pq-control-l1.jpg"
+      },
+      "sourceSha": "04f2d90eb18ea7a20461ff418fd9efcf08597d6a",
+      "generatedAt": "2026-09-25T05:15:12.134Z",
+      "result": {
+        "status": "WON",
+        "waves": "10/10",
+        "stars": 2,
+        "shield": 18
+      },
+      "note": "Fresh schema-v2 browser evidence verified the self-contained dedicated SWIFT asset and exactly one CONTROL L1 candidate on the locked MASTER WORLD."
+    }
+  },
+  "manualReview": {
+    "control": {
+      "source": "assets/episode01/characters/choi-minseok-map.webp",
+      "barrier": "assets/episode01/scene-elements/access-barrier.webp",
+      "assessment": "PRODUCTION_LOCKED",
+      "note": "Transparent full-body fictional signalman WebP replaces the RC vector placeholder; scale and saturation were reduced to fit the HD construction world."
+    },
+    "swift": {
+      "source": "assets/defense/enemies/swift-pq01.svg",
+      "assessment": "PRODUCTION_LOCKED",
+      "note": "Standalone transparent SWIFT sprite now embeds the locked MASTER WORLD bytes inside the SVG, so it cannot fail because an SVG-as-image blocks external relative resources. Moving runtime enemies no longer depend on a live board crop."
+    }
+  },
+  "externalQaBlockers": [],
+  "staticQa": {
+    "dedicatedSwiftAsset": "assets/defense/enemies/swift-pq01.svg",
+    "dedicatedSwiftAssetExists": true,
+    "runtimeUsesDedicatedSwiftAsset": true,
+    "liveWorldCropRemoved": true,
+    "controlRuntimeComposite": true,
+    "gameplayCoordinatesChanged": false,
+    "balanceChanged": false,
+    "productionApproval": true
+  },
+  "assetIntegrity": {
+    "masterWorld": {
+      "uri": "assets/defense/board/ramp-01-hd01.webp",
+      "sha256": "01a677c52551136099ecd3283bfaa14785ec6e1a4a8f6691e24815428651ee5c",
+      "bytes": 138860,
+      "gitBlobSha": "9c9001d896a14ea97dfd3952f43184aba7db63f1"
+    },
+    "controlMarshal": {
+      "uri": "assets/episode01/characters/choi-minseok-map.webp",
+      "sha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+      "bytes": 202410,
+      "gitBlobSha": "32816af21921c5fee0c195caae37187fe39f545d"
+    },
+    "controlBarrier": {
+      "uri": "assets/episode01/scene-elements/access-barrier.webp",
+      "sha256": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542",
+      "bytes": 55802,
+      "gitBlobSha": "46637af1893c95461adab3984431e0ddd4612353"
+    },
+    "swift": {
+      "uri": "assets/defense/enemies/swift-pq01.svg",
+      "sha256": "1600bc6290672a3a8711677a7a2e8a405fddbd73ff159f3e8230b8851849a8a0",
+      "dimensions": {
+        "width": 384,
+        "height": 268
+      },
+      "transparent": true,
+      "gitBlobSha": "54548dc7dda42ced8c29b0df1b66505c1cd15892",
+      "selfContained": true
+    }
+  },
+  "qaInfrastructureDiagnosis": {
+    "lastKnownBrowserQaSuccess": {
+      "runId": 35995588079,
+      "headSha": "5937bb7803d062e753f201861df6b54328561016",
+      "runnerId": 1000001358,
+      "runnerName": "GitHub Actions 1000001358",
+      "runnerLabel": "ubuntu-latest",
+      "result": "SUCCESS",
+      "note": "Full Typecheck/tests/build/Chromium 10-wave browser QA completed successfully on the earlier G2 candidate."
+    },
+    "lastRunnerAssignedFailure": {
+      "runId": 35996203431,
+      "headSha": "f8a2f513678da606a6b9293ad74af532afd53a42",
+      "runnerId": 1000001361,
+      "runnerName": "GitHub Actions 1000001361",
+      "runnerLabel": "ubuntu-latest",
+      "codeChecks": "PASS",
+      "browserFailure": "Chrome 153 CDP endpoint did not become reachable before timeout.",
+      "artifactStorageFailure": "GitHub Artifact storage quota was hit.",
+      "remediation": [
+        "Chrome startup hardened with headless/profile/network flags and longer CDP wait.",
+        "Dynamic localhost CDP port allocation added.",
+        "Blocking upload-artifact step is not present in the current G2 workflow."
+      ]
+    },
+    "runnerAllocationCutover": {
+      "firstObservedNoRunnerRunId": 35996639899,
+      "state": "runner_id=0, runner_name empty, steps empty"
+    },
+    "minimalSentinel": {
+      "pushRunId": 35999767376,
+      "jobId": 107633272833,
+      "workflow": "G2 Runner Sentinel",
+      "runnerLabel": "ubuntu-latest",
+      "result": "FAILURE_BEFORE_ANY_STEP",
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": 0,
+      "conclusion": "Confirms current failure is outside the G2 workflow/code path; even a one-step echo job cannot obtain a GitHub-hosted runner."
+    },
+    "currentWorkflow": {
+      "runner": "ubuntu-latest",
+      "chrome153Hardening": true,
+      "dynamicDebugPort": true,
+      "uploadArtifactStep": false
+    },
+    "latestRunnerProbe": {
+      "workflow": "GitHub Runner Probe",
+      "mainCommit": "4c2ae09bce351faac109b17de940f5c3dde9f860",
+      "runId": 36067770735,
+      "jobId": 107861428140,
+      "checkedAt": "2026-09-24T22:30:05Z",
+      "result": "FAILURE_BEFORE_ANY_STEP",
+      "runnerId": 0,
+      "runnerName": "",
+      "steps": 0,
+      "artifactUpload": false,
+      "build": false,
+      "tests": false,
+      "vercel": false,
+      "conclusion": "Artifact cleanup was already verified on representative runs, but a one-step probe still cannot obtain a GitHub-hosted runner. The remaining blocker is outside the G2 code path."
+    }
+  },
+  "repositorySync": {
+    "mode": "GITHUB_FIRST",
+    "mainBaselineSha": "4c2ae09bce351faac109b17de940f5c3dde9f860",
+    "g2SyncMergeSha": "f845185e35583faf04582a7b1844bafddda43f08",
+    "behindMain": 0,
+    "prNumber": 48,
+    "prMergeable": true,
+    "vercelAutomaticGitDeployments": false,
+    "heavyActionsAutomaticExecution": false,
+    "artifactCleanupVerification": {
+      "representativeRunsChecked": [
+        35995588079,
+        35996203431,
+        35997230578,
+        35998920057
+      ],
+      "artifactsRemainingInCheckedRuns": 0,
+      "runnerRecheckRunId": 35999767376,
+      "runnerRecheckAttempt": 2,
+      "runnerAllocated": false,
+      "note": "Artifact cleanup is reflected for representative runs, but GitHub-hosted runner allocation has not recovered yet."
+    },
+    "runnerProbe": {
+      "workflow": "GitHub Runner Probe",
+      "runId": 36067770735,
+      "attempt": 9,
+      "jobId": 107951664411,
+      "runnerAllocated": true,
+      "runnerId": 1000001408,
+      "runnerName": "GitHub Actions 1000001408",
+      "steps": 3,
+      "conclusion": "success",
+      "note": "GitHub-hosted runner allocation recovered after the repository was changed from private to public."
+    },
+    "finalG2Qa": {
+      "runId": 36066893099,
+      "attempt": 5,
+      "jobId": 107953427106,
+      "runnerId": 1000001411,
+      "runnerName": "GitHub Actions 1000001411",
+      "sourceSha": "04f2d90eb18ea7a20461ff418fd9efcf08597d6a",
+      "generatedAt": "2026-09-25T05:15:12.134Z",
+      "result": "PASS",
+      "waves": "10/10",
+      "stars": 2,
+      "shield": 18,
+      "productionLockCommit": "ae547a3ca7c34c392407d5f8a33f5606b8742cb4"
+    },
+    "repositoryVisibility": "public"
+  }
+}
