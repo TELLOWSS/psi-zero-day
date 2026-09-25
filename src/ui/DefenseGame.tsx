@@ -457,6 +457,7 @@ export function DefenseGame({
       <h2>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
       <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
+    <SiteRiskPriorityHud profile={siteProfile} result={riskPriority} variant="prep" />
     <section className="zb-support-grid">
       {SUPPORT_IDS.map(id => <SupportCard
         key={id}
