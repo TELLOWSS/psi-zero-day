@@ -1,9 +1,41 @@
 {
   "schema_version": 1,
-  "source_sha": "432fc8c689d8f1f31ab436bdf1f77c069cf11842",
-  "desktop": null,
+  "source_sha": "fb2f7b50e2dba1d5c9ba3f25ebf2f100ffeb6794",
+  "desktop": {
+    "scenario": "training-site:apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "productionMap": "HD_REFERENCE_ONLY",
+    "artHref": "assets/defense/board/ramp-01-hd01.webp",
+    "artBytes": 138860,
+    "sourceBytes": 138860,
+    "productionArtCount": 1,
+    "processOverlay": true,
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "towers": 1,
+    "enemies": 1,
+    "prototypeBoardItems": 0,
+    "activeSvgVisuals": [
+      "assets/defense/towers/pulse-l1.svg",
+      "assets/defense/enemies/normal.svg"
+    ],
+    "status": "RUNNING",
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    },
+    "overflow": false,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
   "mobile": null,
   "failures": [
-    "SyntaxError: Invalid regular expression: /.svg(?:$|?)/i: Nothing to repeat"
+    "SVG visual asset still active; G8-A Production Lock forbidden: [\"assets/defense/towers/pulse-l1.svg\",\"assets/defense/enemies/normal.svg\"]"
   ]
 }
