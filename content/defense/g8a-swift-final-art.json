@@ -8,12 +8,14 @@
     "required": true,
     "minimumWidth": 2048,
     "minimumHeight": 1536,
-    "transparentBackground": true
+    "transparentBackground": true,
+    "repositoryUri": "production-assets/defense/g8a/swift-dump-truck-master.png"
   },
   "runtime": {
     "width": 78,
     "height": 58,
-    "preserveAspectRatio": "xMidYMid meet"
+    "preserveAspectRatio": "xMidYMid meet",
+    "transparentBackground": true
   },
   "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
   "role": "reversing construction dump truck converging with a pedestrian route",
