@@ -2,6 +2,7 @@ import visualProductionRaw from '../../content/defense/visual-production.json';
 import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json';
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
+import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -82,6 +83,21 @@ export function defenseProductionMapEntry(mapId: string): ProductionMapFamilyEnt
   return productionMapFamily.maps.find(item => item.mapId === mapId) ?? null;
 }
 
+interface SwiftFinalManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly promotion: {
+    readonly productionApproved: boolean;
+  };
+}
+const swiftFinalManifest = swiftFinalRaw as SwiftFinalManifest;
+
 function pqPreviewEnabled(): boolean {
   return defHd01PqBenchmark.runtimePromotion?.approved === true
     || defHd01PqBenchmark.runtimePromotion?.previewCandidateOnGateBranch === true;
@@ -104,18 +120,19 @@ export function defenseSwiftPqAsset(): {
   readonly width: number;
   readonly height: number;
 } | null {
-  if (!pqPreviewEnabled()) return null;
-  const target = defHd01PqBenchmark.benchmark?.risk?.target;
   if (
-    target?.kind !== 'STATIC_TRANSPARENT_SVG'
-    || !target.asset
-    || !target.width
-    || !target.height
-    || target.transparent !== true
+    swiftFinalManifest.status !== 'PRODUCTION_APPROVED'
+    || swiftFinalManifest.promotion.productionApproved !== true
+    || !['webp','png'].includes(swiftFinalManifest.format)
+    || swiftFinalManifest.runtimeUri.toLowerCase().includes('.svg')
   ) {
     return null;
   }
-  return { uri: target.asset, width: target.width, height: target.height };
+  return {
+    uri: swiftFinalManifest.runtimeUri,
+    width: swiftFinalManifest.runtime.width,
+    height: swiftFinalManifest.runtime.height,
+  };
 }
 
 function asset(id: string): DefenseVisualAsset | null {
