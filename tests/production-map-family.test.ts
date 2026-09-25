@@ -14,12 +14,13 @@ describe('G8-A bottom-up production map', () => {
     expect(productionRaw.generationRule).toBe('ONE_MAP_AT_A_TIME');
     expect(productionRaw.maps).toHaveLength(1);
     expect(productionRaw.maps[0]?.mapId).toBe(BOTTOM_ID);
-    expect(productionRaw.status).toBe('G8A_CONTROL_PASS_SWIFT_FINAL_REQUIRED');
+    expect(productionRaw.status).toBe('G8A_WORLD_AND_SWIFT_FINAL_REQUIRED');
     expect(productionRaw.maps[0]?.status).toBe('HD_REFERENCE_ONLY');
     expect(productionRaw.maps[0]?.representativeSlice.response).toBe('CONTROL:L1');
     expect(productionRaw.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
     expect(productionRaw.maps[0]?.representativeSlice.risk).toBe('SWIFT');
     expect(productionRaw.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_MISSING');
+    expect(productionRaw.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_MISSING');
     expect(productionRaw.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
   });
 
