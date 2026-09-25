@@ -153,7 +153,7 @@ export function DefenseCommandHome({
         <small>{active ? `${active.status} · 완료 Wave ${active.completedWaves}` : `최고 진행 ${home.bestCompletedWaves} Wave · 완료 Run ${home.finishedRuns}`}</small>
       </div>
       <div className="defense-command-signals">
-        <span>PSI · CURRENT SIGNALS</span>
+        <span>{active ? 'PSI · CURRENT SIGNALS' : 'PSI · DEF-CORE-01 대표 신호'}</span>
         {signals.map((id, index) => <article key={id}>
           <b>{String(index + 1).padStart(2, '0')}</b>
           <div><strong>{id}</strong><small>{riskLabel(id)}</small></div>
