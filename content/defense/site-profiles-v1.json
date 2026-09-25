@@ -14,7 +14,7 @@
       "baseRiskModifiers": {
         "NORMAL": 8,
         "SWIFT": 26,
-        "ARMORED": 34,
+        "ARMORED": 43,
         "SWARM": 10,
         "VEILED": 18,
         "BOSS": 0
@@ -39,7 +39,7 @@
       "phaseTextId": "defense.phase.under_slab_excavation",
       "baseRiskModifiers": {
         "NORMAL": 6,
-        "SWIFT": 14,
+        "SWIFT": 8,
         "ARMORED": 24,
         "SWARM": 28,
         "VEILED": 36,
@@ -116,11 +116,11 @@
       "methodTextId": "defense.method.phased",
       "phaseTextId": "defense.phase.mep_rough_in",
       "baseRiskModifiers": {
-        "NORMAL": 18,
+        "NORMAL": 26,
         "SWIFT": 8,
         "ARMORED": 10,
         "SWARM": 34,
-        "VEILED": 16,
+        "VEILED": 14,
         "BOSS": 4
       },
       "defaults": {
