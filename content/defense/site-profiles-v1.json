@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "status": "G4_SITE_PROFILE_BASELINE",
+  "scoreNotice": "GAME_PRIORITY_ONLY_NOT_STATUTORY_RISK_ASSESSMENT",
+  "profiles": [
+    {
+      "id": "apt-new-bottom-up-excavation",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "BOTTOM_UP",
+      "processPhase": "EXCAVATION",
+      "labelTextId": "defense.site.apt_new_build",
+      "methodTextId": "defense.method.bottom_up",
+      "phaseTextId": "defense.phase.excavation",
+      "baseRiskModifiers": {
+        "NORMAL": 8,
+        "SWIFT": 26,
+        "ARMORED": 34,
+        "SWARM": 10,
+        "VEILED": 18,
+        "BOSS": 0
+      },
+      "defaults": {
+        "verticalLayer": "SURFACE",
+        "uncertainty": 0.38,
+        "concurrency": 0.35,
+        "logisticsCongestion": 0.62,
+        "timePressure": 0.3,
+        "asBuiltConfidence": 1,
+        "energyState": "NOT_INSTALLED"
+      }
+    },
+    {
+      "id": "apt-new-top-down-under-slab",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "TOP_DOWN",
+      "processPhase": "UNDER_SLAB_EXCAVATION",
+      "labelTextId": "defense.site.apt_new_build",
+      "methodTextId": "defense.method.top_down",
+      "phaseTextId": "defense.phase.under_slab_excavation",
+      "baseRiskModifiers": {
+        "NORMAL": 6,
+        "SWIFT": 14,
+        "ARMORED": 24,
+        "SWARM": 28,
+        "VEILED": 36,
+        "BOSS": 4
+      },
+      "defaults": {
+        "verticalLayer": "B2",
+        "uncertainty": 0.72,
+        "concurrency": 0.7,
+        "logisticsCongestion": 0.55,
+        "timePressure": 0.38,
+        "asBuiltConfidence": 1,
+        "energyState": "NOT_INSTALLED"
+      }
+    },
+    {
+      "id": "apt-remodel-survey-isolation",
+      "projectArchetype": "APT_REMODEL",
+      "constructionMethod": "STRUCTURAL_RECONFIGURATION",
+      "processPhase": "SURVEY_ISOLATION",
+      "labelTextId": "defense.site.apt_remodel",
+      "methodTextId": "defense.method.structural_reconfiguration",
+      "phaseTextId": "defense.phase.survey_isolation",
+      "baseRiskModifiers": {
+        "NORMAL": 10,
+        "SWIFT": 4,
+        "ARMORED": 22,
+        "SWARM": 8,
+        "VEILED": 40,
+        "BOSS": 2
+      },
+      "defaults": {
+        "verticalLayer": "TYPICAL_FLOOR",
+        "uncertainty": 0.8,
+        "concurrency": 0.25,
+        "logisticsCongestion": 0.2,
+        "timePressure": 0.2,
+        "asBuiltConfidence": 0.45,
+        "energyState": "INSTALLED"
+      }
+    },
+    {
+      "id": "apt-remodel-selective-demolition",
+      "projectArchetype": "APT_REMODEL",
+      "constructionMethod": "STRUCTURAL_RECONFIGURATION",
+      "processPhase": "SELECTIVE_DEMOLITION",
+      "labelTextId": "defense.site.apt_remodel",
+      "methodTextId": "defense.method.structural_reconfiguration",
+      "phaseTextId": "defense.phase.selective_demolition",
+      "baseRiskModifiers": {
+        "NORMAL": 8,
+        "SWIFT": 12,
+        "ARMORED": 36,
+        "SWARM": 20,
+        "VEILED": 28,
+        "BOSS": 6
+      },
+      "defaults": {
+        "verticalLayer": "TYPICAL_FLOOR",
+        "uncertainty": 0.68,
+        "concurrency": 0.55,
+        "logisticsCongestion": 0.45,
+        "timePressure": 0.38,
+        "asBuiltConfidence": 0.55,
+        "energyState": "LOCKED_OUT"
+      }
+    },
+    {
+      "id": "data-center-mep-rough-in",
+      "projectArchetype": "DATA_CENTER",
+      "constructionMethod": "PHASED",
+      "processPhase": "MEP_ROUGH_IN",
+      "labelTextId": "defense.site.data_center",
+      "methodTextId": "defense.method.phased",
+      "phaseTextId": "defense.phase.mep_rough_in",
+      "baseRiskModifiers": {
+        "NORMAL": 18,
+        "SWIFT": 8,
+        "ARMORED": 10,
+        "SWARM": 34,
+        "VEILED": 16,
+        "BOSS": 4
+      },
+      "defaults": {
+        "verticalLayer": "TYPICAL_FLOOR",
+        "uncertainty": 0.42,
+        "concurrency": 0.82,
+        "logisticsCongestion": 0.5,
+        "timePressure": 0.48,
+        "asBuiltConfidence": 0.95,
+        "energyState": "INSTALLED"
+      }
+    },
+    {
+      "id": "data-center-commissioning",
+      "projectArchetype": "DATA_CENTER",
+      "constructionMethod": "PHASED",
+      "processPhase": "COMMISSIONING_ENERGIZATION",
+      "labelTextId": "defense.site.data_center",
+      "methodTextId": "defense.method.phased",
+      "phaseTextId": "defense.phase.commissioning_energization",
+      "baseRiskModifiers": {
+        "NORMAL": 4,
+        "SWIFT": 4,
+        "ARMORED": 24,
+        "SWARM": 20,
+        "VEILED": 38,
+        "BOSS": 30
+      },
+      "defaults": {
+        "verticalLayer": "SYSTEM_VIEW",
+        "uncertainty": 0.62,
+        "concurrency": 0.65,
+        "logisticsCongestion": 0.18,
+        "timePressure": 0.58,
+        "asBuiltConfidence": 0.98,
+        "energyState": "TESTING"
+      }
+    }
+  ],
+  "scenarioDefaults": {
+    "training-ramp-v1": "apt-new-bottom-up-excavation",
+    "event-ramp-reconstruction-v1": "apt-new-bottom-up-excavation"
+  }
+}
