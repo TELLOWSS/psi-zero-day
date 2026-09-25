@@ -184,7 +184,12 @@ export function defenseContentForSiteProfile(
 ): DefenseContent {
   const siteMap = siteProcessMapByProfile(profileId);
   if (!siteMap) throw new Error(`No G5 site map for profile: ${profileId}`);
-  const map = defenseMapFromSiteProcessMap(siteMap);
+  const projectedMap = defenseMapFromSiteProcessMap(siteMap);
+  const baseMap = base.map as DefenseMapDefinition & { readonly nameTextId?: string };
+  const map = {
+    ...projectedMap,
+    nameTextId: baseMap.nameTextId ?? 'defense.map.ramp-01.name',
+  };
   return validateDefenseContent({
     ...base,
     contentVersion: `${base.contentVersion}+g5-map-family-01`,
