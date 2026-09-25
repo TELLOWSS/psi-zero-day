@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "status": "G7_DATA_CENTER_RUNTIME_PROOF",
+  "scenario": {
+    "id": "training-data-center:energization-commissioning",
+    "label": "데이터센터 · MEP → 전기/UPS → 통전 → 통합시운전",
+    "profileIds": {
+      "MEP_ROUGH_IN": "data-center-mep",
+      "ELECTRICAL_UPS": "data-center-electrical-ups",
+      "ENERGIZATION": "data-center-electrical-ups",
+      "INTEGRATED_COMMISSIONING": "data-center-commissioning"
+    },
+    "map": {
+      "id": "map-data-center-energization-commissioning-01",
+      "siteProfileId": "data-center-commissioning",
+      "label": "데이터센터 · 전기/UPS·통전·통합시운전",
+      "width": 1000,
+      "height": 600,
+      "primaryDefenseRouteId": "dc-worker-risk-route",
+      "routes": [
+        {
+          "id": "dc-worker-risk-route",
+          "kind": "worker",
+          "points": [
+            {"x":0,"y":500},
+            {"x":130,"y":500},
+            {"x":130,"y":390},
+            {"x":300,"y":390},
+            {"x":300,"y":270},
+            {"x":500,"y":270},
+            {"x":500,"y":390},
+            {"x":680,"y":390},
+            {"x":680,"y":250},
+            {"x":830,"y":250},
+            {"x":830,"y":140},
+            {"x":1000,"y":140}
+          ]
+        },
+        {
+          "id": "dc-equipment-route",
+          "kind": "vehicle",
+          "points": [
+            {"x":0,"y":545},
+            {"x":220,"y":545},
+            {"x":220,"y":455},
+            {"x":445,"y":455},
+            {"x":445,"y":520},
+            {"x":760,"y":520},
+            {"x":760,"y":430},
+            {"x":1000,"y":430}
+          ]
+        },
+        {
+          "id": "dc-cable-material-route",
+          "kind": "material",
+          "points": [
+            {"x":40,"y":95},
+            {"x":250,"y":95},
+            {"x":250,"y":185},
+            {"x":475,"y":185},
+            {"x":475,"y":95},
+            {"x":720,"y":95},
+            {"x":720,"y":185},
+            {"x":960,"y":185}
+          ]
+        }
+      ],
+      "pads": [
+        {"id":"DC-P1","x":90,"y":420},
+        {"id":"DC-P2","x":215,"y":460},
+        {"id":"DC-P3","x":245,"y":220},
+        {"id":"DC-P4","x":410,"y":340},
+        {"id":"DC-P5","x":560,"y":190},
+        {"id":"DC-P6","x":610,"y":470},
+        {"id":"DC-P7","x":760,"y":330},
+        {"id":"DC-P8","x":900,"y":220}
+      ],
+      "zones": [
+        {
+          "id":"mep-service-zone",
+          "kind":"MEP_SERVICE",
+          "label":"MEP 서비스 복도",
+          "points":[{"x":55,"y":180},{"x":325,"y":180},{"x":325,"y":470},{"x":55,"y":470}]
+        },
+        {
+          "id":"electrical-room-zone",
+          "kind":"ELECTRICAL_ROOM",
+          "label":"전기실/수배전 계통",
+          "points":[{"x":335,"y":155},{"x":575,"y":155},{"x":575,"y":430},{"x":335,"y":430}]
+        },
+        {
+          "id":"ups-stored-energy-zone",
+          "kind":"STORED_ENERGY",
+          "label":"UPS·저장에너지 구역",
+          "points":[{"x":585,"y":145},{"x":760,"y":145},{"x":760,"y":430},{"x":585,"y":430}]
+        },
+        {
+          "id":"live-system-zone",
+          "kind":"LIVE_SYSTEM",
+          "label":"활성계통 제한구역",
+          "points":[{"x":775,"y":85},{"x":965,"y":85},{"x":965,"y":310},{"x":775,"y":310}]
+        },
+        {
+          "id":"commissioning-interface-zone",
+          "kind":"COMMISSIONING_INTERFACE",
+          "label":"통합시운전 인터페이스",
+          "points":[{"x":555,"y":325},{"x":955,"y":325},{"x":955,"y":555},{"x":555,"y":555}]
+        },
+        {
+          "id":"equipment-worker-conflict",
+          "kind":"LOGISTICS_CONFLICT",
+          "label":"장비반입·작업자 동선 교차",
+          "points":[{"x":80,"y":360},{"x":275,"y":360},{"x":275,"y":570},{"x":80,"y":570}]
+        }
+      ],
+      "visibilityZones": [
+        {
+          "id":"mep-overhead-interface",
+          "label":"천장 MEP 인터페이스 상태 확인",
+          "center":{"x":255,"y":300},
+          "radius":145,
+          "severity":0.58
+        },
+        {
+          "id":"energized-state-ambiguity",
+          "label":"활성계통 상태 식별 구역",
+          "center":{"x":705,"y":285},
+          "radius":165,
+          "severity":0.82
+        }
+      ],
+      "verticalTransfers": [
+        {
+          "id":"service-lift",
+          "kind":"LIFT_OPENING",
+          "label":"대형 장비·자재 반입",
+          "point":{"x":220,"y":520}
+        },
+        {
+          "id":"cable-riser",
+          "kind":"STAIR",
+          "label":"수직 케이블/서비스 샤프트",
+          "point":{"x":720,"y":180}
+        }
+      ],
+      "interventionAnchors": [
+        {
+          "id":"DC-BURST-01",
+          "x":245,
+          "y":220,
+          "recommendedTower":"BURST",
+          "label":"MEP 다공종 간섭 정리",
+          "reason":"배관·덕트·케이블·장비 작업이 겹치는 인터페이스를 정리"
+        },
+        {
+          "id":"DC-SENSOR-01",
+          "x":410,
+          "y":340,
+          "recommendedTower":"SENSOR",
+          "label":"전기계통 상태 확인",
+          "reason":"설치된 계통의 실제 상태와 작업경계를 먼저 확인"
+        },
+        {
+          "id":"DC-CONTROL-01",
+          "x":760,
+          "y":330,
+          "recommendedTower":"CONTROL",
+          "label":"활성계통 접근 통제",
+          "reason":"통전 이후 제한구역과 작업자 접근을 분리"
+        },
+        {
+          "id":"DC-SENSOR-02",
+          "x":900,
+          "y":220,
+          "recommendedTower":"SENSOR",
+          "label":"통합시운전 인터페이스 확인",
+          "reason":"여러 활성계통과 시험상태가 만나는 지점의 약한 신호를 확인"
+        }
+      ],
+      "baseRiskModifiers": {
+        "SWARM": 10,
+        "VEILED": 10,
+        "ARMORED": 8,
+        "BOSS": 4
+      }
+    }
+  }
+}
