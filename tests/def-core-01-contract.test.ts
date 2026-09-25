@@ -83,6 +83,13 @@ describe('DEF-CORE-01 one-step vertical slice contract', () => {
     expect(hold.enemies[0].slowEffects.at(-1)?.fraction).toBe(1);
     expect(reinforced.enemies[0].distance).toBeCloseTo(82.7, 4);
     expect(reinforced.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.55);
+    const reinforcedNextEngineTick = {
+      ...reinforced,
+      tick: 102,
+      enemies: [{ ...reinforced.enemies[0], distance: reinforced.enemies[0].distance + 2.25 }],
+    } as any;
+    const reinforcedNext = applyDefCoreOneStepRuntime(reinforced, reinforcedNextEngineTick, 'B', 100);
+    expect(reinforcedNext.enemies[0].distance).toBeCloseTo(84.95, 4);
     expect(rerouted.enemies[0].distance).toBe(0);
     expect(rerouted.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.3);
     expect(zeroBreachContent.waves[7]?.groups).toEqual([
