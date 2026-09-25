@@ -255,6 +255,15 @@ const report = {
   assets: {},
   runtime_motion: null,
   final: null,
+  mobile: {
+    viewport: '390x844',
+    phases: [],
+    no_horizontal_overflow: false,
+    signal_rect: null,
+    read_rect: null,
+    decision_rect: null,
+    hook_rect: null,
+  },
   failures: [],
 };
 
@@ -481,6 +490,93 @@ try {
   for (const [asset, status] of Object.entries(report.assets)) {
     if (!status.ok) throw new Error('DEF-CORE asset failed to load: ' + asset);
   }
+
+  // Required mobile-first gate: rerun the representative slice at 390x844.
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width: 390, height: 844, deviceScaleFactor: 2.75, mobile: true,
+    screenOrientation: { type: 'portraitPrimary', angle: 0 },
+  });
+
+  const mobileLoaded = cdp.once('Page.loadEventFired');
+  await cdp.send('Page.navigate', { url: baseUrl });
+  await mobileLoaded;
+  await waitFor(cdp, "Boolean(document.querySelector('.commercial-title-home'))");
+
+  const mobileSave = qaDefenseSave();
+  await evaluate(cdp, `(() => {
+    localStorage.setItem('psi-zero-day.defense.save.v1', ${JSON.stringify(JSON.stringify(mobileSave))});
+    localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
+    sessionStorage.removeItem('psi-zero-day.def-core-01.def-core-01-browser-qa');
+    return true;
+  })()`);
+
+  const rectOf = async selector => evaluate(cdp, `(() => {
+    const el = document.querySelector(${JSON.stringify(selector)});
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return {
+      left: Math.round(r.left), top: Math.round(r.top),
+      right: Math.round(r.right), bottom: Math.round(r.bottom),
+      width: Math.round(r.width), height: Math.round(r.height),
+      innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+    };
+  })()`);
+
+  const assertMobileRect = (rect, label) => {
+    if (!rect) throw new Error('Mobile missing ' + label);
+    if (rect.left < -1 || rect.right > 391 || rect.top < -1 || rect.bottom > 845) {
+      throw new Error('Mobile ' + label + ' escaped 390x844 viewport: ' + JSON.stringify(rect));
+    }
+  };
+
+  await clickText(cdp, '현장 디펜스');
+  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\\\"persistence-gate\\\"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
+  await clickText(cdp, '이어서 훈련');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-wave') === '8'");
+  await clickText(cdp, '재개');
+
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'SIGNAL'");
+  report.mobile.phases.push('SIGNAL');
+  report.mobile.no_horizontal_overflow = await evaluate(cdp, "document.documentElement.scrollWidth <= window.innerWidth + 1");
+  if (!report.mobile.no_horizontal_overflow) {
+    throw new Error('Mobile horizontal overflow at SIGNAL: ' + await evaluate(cdp, "document.documentElement.scrollWidth + '>' + window.innerWidth"));
+  }
+  report.mobile.signal_rect = await rectOf('.def-core-signal-card');
+  assertMobileRect(report.mobile.signal_rect, 'SIGNAL card');
+  await screenshot(cdp, 'mobile-01-signal.png');
+
+  await clickText(cdp, '서측 Gate 집중해서 보기');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'READ'");
+  report.mobile.phases.push('READ');
+  report.mobile.read_rect = await rectOf('.def-core-read-panel');
+  assertMobileRect(report.mobile.read_rect, 'READ panel');
+  const mobileRead = await evaluate(cdp, "document.querySelector('.def-core-read-panel')?.textContent || ''");
+  for (const required of ['후진 차량','자재','시야 제한','CONTROL']) {
+    if (!mobileRead.includes(required)) throw new Error('Mobile READ missing: ' + required);
+  }
+  await screenshot(cdp, 'mobile-02-read.png');
+
+  await clickText(cdp, 'CONTROL · 유도원 + 보행동선 분리');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'IMPACT'");
+  report.mobile.phases.push('IMPACT');
+  await screenshot(cdp, 'mobile-03-impact.png');
+
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 20000);
+  report.mobile.phases.push('DECISION');
+  report.mobile.decision_rect = await rectOf('.def-core-decision-card');
+  assertMobileRect(report.mobile.decision_rect, 'DECISION card');
+  const mobileChoices = await evaluate(cdp, "document.querySelectorAll('.def-core-choice-grid button').length");
+  if (mobileChoices !== 3) throw new Error('Mobile DECISION lost A/B/C choices');
+  await screenshot(cdp, 'mobile-05-decision.png');
+
+  await clickText(cdp, '대기 위치를 바꾸죠');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'HOOK'", 5000);
+  report.mobile.phases.push('HOOK');
+  report.mobile.hook_rect = await rectOf('.def-core-hook-card');
+  assertMobileRect(report.mobile.hook_rect, 'HOOK card');
+  const mobileHookActions = await evaluate(cdp, "document.querySelectorAll('.def-core-hook-actions button').length");
+  if (mobileHookActions !== 3) throw new Error('Mobile HOOK lost three follow-up actions');
+  await screenshot(cdp, 'mobile-07-hook.png');
 } catch (error) {
   report.failures.push(error instanceof Error ? error.message : String(error));
   if (cdp) {
