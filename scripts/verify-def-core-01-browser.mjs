@@ -559,6 +559,31 @@ try {
   await clickText(cdp, 'CONTROL · 유도원 + 보행동선 분리');
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'IMPACT'");
   report.mobile.phases.push('IMPACT');
+  const mobileWorldRead = await evaluate(cdp, `(() => {
+    const board = document.querySelector('.zb-board-wrap')?.getBoundingClientRect();
+    const world = document.querySelector('.def-core-world');
+    const marshal = document.querySelector('.def-core-marshal')?.getBoundingClientRect();
+    const barrier = document.querySelector('.def-core-barrier')?.getBoundingClientRect();
+    const rotate = document.querySelector('.zb-rotate');
+    const rotateStyle = rotate ? getComputedStyle(rotate) : null;
+    return {
+      board: board ? { left: Math.round(board.left), top: Math.round(board.top), right: Math.round(board.right), bottom: Math.round(board.bottom), width: Math.round(board.width), height: Math.round(board.height) } : null,
+      world: Boolean(world),
+      marshal: marshal ? { left: Math.round(marshal.left), top: Math.round(marshal.top), right: Math.round(marshal.right), bottom: Math.round(marshal.bottom) } : null,
+      barrier: barrier ? { left: Math.round(barrier.left), top: Math.round(barrier.top), right: Math.round(barrier.right), bottom: Math.round(barrier.bottom) } : null,
+      rotation_blocking: Boolean(rotate && rotateStyle && rotateStyle.display !== 'none' && rotateStyle.visibility !== 'hidden'),
+    };
+  })()`);
+  report.mobile.world_read = mobileWorldRead;
+  if (!mobileWorldRead.board || mobileWorldRead.board.width < 260 || mobileWorldRead.board.height < 150) {
+    throw new Error('Mobile IMPACT board is not visibly readable: ' + JSON.stringify(mobileWorldRead));
+  }
+  if (!mobileWorldRead.world || !mobileWorldRead.marshal || !mobileWorldRead.barrier) {
+    throw new Error('Mobile IMPACT lost CONTROL world actors: ' + JSON.stringify(mobileWorldRead));
+  }
+  if (mobileWorldRead.rotation_blocking) {
+    throw new Error('Mobile IMPACT is blocked by portrait rotation UI');
+  }
   await screenshot(cdp, 'mobile-03-impact.png');
 
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 20000);
