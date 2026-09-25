@@ -159,7 +159,7 @@ async function placeAndStart(cdp) {
     return true;
   })()`);
   if (!start) throw new Error('Wave start button missing');
-  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\"]')?.getAttribute('data-status') === 'RUNNING'", 4000);
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status') === 'RUNNING'`, 4000);
   const paused = await evaluate(cdp, "Boolean(document.querySelector('.zb-status b'))");
   if (paused) {
     await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
