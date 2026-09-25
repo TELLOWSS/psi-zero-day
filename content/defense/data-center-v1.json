@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "G7_DATA_CENTER_RUNTIME_PROOF",
+  "status": "G7_DATA_CENTER_01_LOCKED",
+  "gate": {"id":"G7_DATA_CENTER_01","contract":true,"typecheck":true,"build":true,"browser":true,"mobile390x844":true,"productionArtLocked":false,"next":"G8_PRODUCTION_MAP_FAMILY"},
   "scenario": {
     "id": "training-data-center:energization-commissioning",
     "label": "데이터센터 · MEP → 전기/UPS → 통전 → 통합시운전",
