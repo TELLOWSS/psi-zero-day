@@ -17,11 +17,16 @@ describe('game hub navigation', () => {
     try {
       expect(session.start(session.getSnapshot().revision)).toBe(true);
       act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} />));
-      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(5);
-      expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
+      expect(host.querySelector('[data-home-mode="DEFENSE_FIRST"]')).not.toBeNull();
+      expect(host.querySelectorAll('.defense-command-primary')).toHaveLength(1);
+      expect(host.querySelector('.defense-command-primary')?.textContent).toContain('현장 디펜스');
+      expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(0);
+      expect(host.querySelector('.defense-command-backdrop')?.getAttribute('src')).toContain('ramp-01-hd01.webp');
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
-      click('.commercial-title-action:nth-child(3)');
+      click('.defense-command-utility button:nth-child(2)');
+      expect(host.querySelectorAll('.hub-person-grid button')).toHaveLength(8);
+      click('.hub-nav button:nth-child(2)');
       expect(host.querySelector('.hub-page-map')).not.toBeNull();
       expect(host.querySelectorAll('.hub-route-node')).toHaveLength(5);
       click('.hub-nav button:nth-child(3)');
