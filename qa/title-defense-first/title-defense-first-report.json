@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "6dd3aa8f896d6e63be476c5b5e09c233f7306afd",
+  "source_sha": "45ef0922cf9a9d2e4e3286e2d04395bd4e902a4d",
   "desktop": {
     "viewport": {
       "width": 1440,
@@ -15,18 +15,18 @@
       "새 스토리 시작"
     ],
     "primaryRect": {
-      "left": 35,
-      "top": 312,
+      "left": 34,
+      "top": 313,
       "right": 337,
-      "bottom": 394,
+      "bottom": 395,
       "width": 302,
       "height": 82
     },
     "lastActionRect": {
-      "left": 35,
-      "top": 547,
+      "left": 34,
+      "top": 548,
       "right": 337,
-      "bottom": 613,
+      "bottom": 614,
       "width": 302,
       "height": 66
     },
