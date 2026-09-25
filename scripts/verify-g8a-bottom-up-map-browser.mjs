@@ -152,6 +152,11 @@ async function placeAndStart(cdp) {
   await waitFor(cdp, "Boolean(document.querySelector('.zb-tower-shop button'))");
   await evaluate(cdp, "document.querySelector('.zb-tower-shop button')?.click(); true");
   await sleep(80);
+  const pausedBeforeStart = await evaluate(cdp, "Boolean(document.querySelector('.zb-status b'))");
+  if (pausedBeforeStart) {
+    await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
+    await waitFor(cdp, "!document.querySelector('.zb-status b')", 3000);
+  }
   const start = await evaluate(cdp, `(() => {
     const b=document.querySelector('.zb-start-wave');
     if(!b)return false;
@@ -160,8 +165,8 @@ async function placeAndStart(cdp) {
   })()`);
   if (!start) throw new Error('Wave start button missing');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status') === 'RUNNING'`, 4000);
-  const paused = await evaluate(cdp, "Boolean(document.querySelector('.zb-status b'))");
-  if (paused) {
+  const pausedAfterStart = await evaluate(cdp, "Boolean(document.querySelector('.zb-status b'))");
+  if (pausedAfterStart) {
     await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
     await sleep(120);
   }
