@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 1,
+  "status": "KOREA_LEGAL_VISUAL_STANDARD_LOCKED",
+  "verifiedAsOf": "2026-09-25",
+  "jurisdiction": "대한민국",
+  "purpose": "PSI : ZERO DAY의 맵·캐릭터·위험·장비·가설시설·안전시설을 대한민국 건설현장 법규와 공식 안전자료에 맞게 시각화하기 위한 단일 기준",
+  "authorityOrder": [
+    "국가법령정보센터 현행 법령",
+    "고용노동부·국토교통부 고시/지침",
+    "한국산업안전보건공단(KOSHA) 공식 실무자료·기술지침",
+    "국토안전관리원 공식 매뉴얼",
+    "게임 내부 창작 규칙"
+  ],
+  "globalRules": {
+    "legalNumbers": "법적 수치·높이·거리·각도·허용범위는 최종 렌더 전 해당 조문/별표를 재검증하며 임의 생성 금지",
+    "unsafeSceneRule": "위험상황을 표현할 수 있으나 HAZARD_SIGNAL 또는 TRANSITION으로 명시하고, 준수상태처럼 보이게 연출하지 않는다",
+    "fictionalization": "실제 회사명·현장명·피해자·실제 사건 식별정보는 사용하지 않고 가상화한다",
+    "ppe": "작업조건에 맞는 안전모·안전화·안전대 등 보호구를 실제 현장 수준의 형태와 착용방식으로 표현한다",
+    "access": "근로자 통로·차량계 건설기계 동선·출입금지/유도 상태를 장면의 위험상태와 일치시킨다",
+    "falls": "단부·개구부·작업발판·안전난간·안전대 부착설비는 장면 상태에 맞게 사실적으로 표현한다",
+    "excavation": "굴착면·흙막이/지보공·배수·출입제한·매설물 보호는 공법과 상태에 맞게 표현한다",
+    "electrical": "충전부·작업경계·격리·유자격자 작업이라는 상태 차이를 시각적으로 구분하되 실제 전기조작 절차를 튜토리얼처럼 재현하지 않는다",
+    "demolition": "사전조사·작업순서·구조안전·안전통로·낙하방지·해체물 처리 상태가 장면에 반영되어야 한다",
+    "remodeling": "공동주택 리모델링은 법적 증축 범위를 임의로 2배 확대하지 않으며 기존구조 조사·임시지지·선택철거·기존/신설 접합의 상태를 분리한다"
+  },
+  "renderIntent": [
+    {
+      "id": "COMPLIANT",
+      "rule": "필요한 방호·통제·보호구가 적정하게 확보된 정상 상태"
+    },
+    {
+      "id": "HAZARD_SIGNAL",
+      "rule": "법규/안전기준상 위험요인이 아직 해소되지 않은 사고 전 신호 상태"
+    },
+    {
+      "id": "TRANSITION",
+      "rule": "조치가 진행 중이며 일부 위험요인이 남아 있는 상태"
+    },
+    {
+      "id": "AFTERMATH",
+      "rule": "조치 결과와 현장 변화가 남은 상태"
+    }
+  ],
+  "sourceRegistry": [
+    {
+      "id": "KR-OSH-22",
+      "title": "산업안전보건기준에 관한 규칙 제22조 통로의 설치",
+      "use": [
+        "worker_route",
+        "safe_access"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-32",
+      "title": "산업안전보건기준에 관한 규칙 제32조 보호구의 지급 등",
+      "use": [
+        "ppe",
+        "helmet",
+        "safety_shoes",
+        "safety_harness"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-38",
+      "title": "산업안전보건기준에 관한 규칙 제38조 사전조사 및 작업계획서의 작성 등",
+      "use": [
+        "excavation",
+        "vehicle",
+        "electrical",
+        "demolition",
+        "lifting"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-42-44",
+      "title": "산업안전보건기준에 관한 규칙 제42조~제44조 추락·개구부·안전대 부착설비",
+      "use": [
+        "edge",
+        "opening",
+        "platform",
+        "guardrail",
+        "harness_anchor"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-171-172",
+      "title": "산업안전보건기준에 관한 규칙 제171조~제172조 차량계 하역운반기계 전도·접촉 방지",
+      "use": [
+        "logistics",
+        "spotter",
+        "pedestrian_separation"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-199-200",
+      "title": "산업안전보건기준에 관한 규칙 제199조~제200조 차량계 건설기계 전도·접촉 방지",
+      "use": [
+        "excavator",
+        "dump_truck",
+        "spotter",
+        "exclusion_zone"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-301-318",
+      "title": "산업안전보건기준에 관한 규칙 제301조·제318조 전기 충전부 방호·전기작업자 제한",
+      "use": [
+        "electrical_room",
+        "ups",
+        "energization",
+        "qualified_worker"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-OSH-338-341",
+      "title": "산업안전보건기준에 관한 규칙 제338조~제341조 굴착작업 위험방지",
+      "use": [
+        "excavation",
+        "slope",
+        "shoring",
+        "drainage",
+        "buried_utilities"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-BMA-30",
+      "title": "건축물관리법 제30조 건축물 해체의 허가",
+      "use": [
+        "demolition_permit",
+        "demolition_plan"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-BMA-R12",
+      "title": "건축물관리법 시행규칙 제12조 해체계획서의 작성",
+      "use": [
+        "demolition_sequence",
+        "structural_safety",
+        "safe_passage",
+        "falling_object",
+        "waste"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-HOUSING-2-25",
+      "title": "주택법 제2조제25호 리모델링",
+      "use": [
+        "apartment_remodeling",
+        "extension_scope",
+        "vertical_extension"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-KALIS-REMODEL",
+      "title": "국토안전관리원 수직증축형 리모델링 안전성 검토 매뉴얼 관련 자료",
+      "use": [
+        "remodel_structural_safety",
+        "as_built",
+        "vertical_extension"
+      ],
+      "checked": "2026-09-25"
+    },
+    {
+      "id": "KR-KOSHA-CONSTRUCTION",
+      "title": "한국산업안전보건공단 건설업 안전보건 실무정보",
+      "use": [
+        "field_visual_crosscheck",
+        "equipment",
+        "demolition",
+        "excavation"
+      ],
+      "checked": "2026-09-25"
+    }
+  ],
+  "visualProfiles": [
+    {
+      "id": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+      "scope": "APT_NEW_BUILD / BOTTOM_UP / EXCAVATION",
+      "legalSources": [
+        "KR-OSH-22",
+        "KR-OSH-32",
+        "KR-OSH-38",
+        "KR-OSH-42-44",
+        "KR-OSH-199-200",
+        "KR-OSH-338-341",
+        "KR-KOSHA-CONSTRUCTION"
+      ],
+      "mustRead": [
+        "굴착면과 흙막이/지보공 또는 설계상 안전한 굴착형태",
+        "차량계 건설기계와 근로자 동선 분리",
+        "유도자/통제 위치",
+        "안전한 근로자 통로",
+        "굴착부 단부·개구부 추락방지",
+        "배수/용수 관리 흔적",
+        "토사 적치·반출 흐름"
+      ],
+      "mustNotRead": [
+        "무근거 수직 절벽",
+        "작업자와 덤프트럭이 같은 동선에 무통제 혼재",
+        "개구부·단부가 정상상태인데 무방호",
+        "건설기계가 붕괴우려 가장자리에 비현실적으로 밀착",
+        "가상 회사 실명 또는 실제 현장명"
+      ]
+    },
+    {
+      "id": "KR-CONSTRUCTION-TOP-DOWN-01",
+      "scope": "APT_NEW_BUILD / TOP_DOWN / UNDER_SLAB_EXCAVATION",
+      "legalSources": [
+        "KR-OSH-22",
+        "KR-OSH-32",
+        "KR-OSH-38",
+        "KR-OSH-42-44",
+        "KR-OSH-199-200",
+        "KR-OSH-338-341"
+      ],
+      "mustRead": [
+        "슬래브 하부 굴착의 제한된 시야",
+        "수직 개구부와 자재반출구 방호",
+        "임시통로",
+        "장비-보행 간섭 통제",
+        "흙막이/지보 상태"
+      ],
+      "mustNotRead": [
+        "개구부 무방호를 정상상태로 묘사",
+        "통로 없이 작업자가 장비 사이를 임의 통과"
+      ]
+    },
+    {
+      "id": "KR-CONSTRUCTION-REMODEL-01",
+      "scope": "APT_REMODEL / SELECTIVE_DEMOLITION / CONNECTION",
+      "legalSources": [
+        "KR-OSH-32",
+        "KR-OSH-38",
+        "KR-OSH-42-44",
+        "KR-BMA-30",
+        "KR-BMA-R12",
+        "KR-HOUSING-2-25",
+        "KR-KALIS-REMODEL"
+      ],
+      "mustRead": [
+        "기존구조와 신설구조 구분",
+        "선택철거 구역",
+        "임시지지",
+        "설비 이동/차단 상태",
+        "안전통로·낙하방지",
+        "철거잔재 반출",
+        "기존-신설 접합부"
+      ],
+      "mustNotRead": [
+        "기존 구조를 전면 철거한 신축처럼 묘사",
+        "법적 근거 없이 20평을 40평으로 단정",
+        "임시지지 없이 구조부 철거가 진행되는 정상상태"
+      ]
+    },
+    {
+      "id": "KR-CONSTRUCTION-DATACENTER-01",
+      "scope": "DATA_CENTER / ELECTRICAL_UPS / COMMISSIONING",
+      "legalSources": [
+        "KR-OSH-22",
+        "KR-OSH-32",
+        "KR-OSH-38",
+        "KR-OSH-301-318"
+      ],
+      "mustRead": [
+        "MEP 다공종 인터페이스",
+        "전기실/UPS 구역의 접근경계",
+        "통전 전/후 상태 차이",
+        "격리/검증된 구역",
+        "시운전 시 다팀 인터페이스"
+      ],
+      "mustNotRead": [
+        "활성계통과 일반통로의 무통제 혼재",
+        "전기조작 절차를 상세 매뉴얼처럼 노출",
+        "판타지 전기효과가 실제 안전상태를 대체"
+      ]
+    }
+  ]
+}
