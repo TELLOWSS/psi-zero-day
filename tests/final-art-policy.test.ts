@@ -49,8 +49,10 @@ describe('absolute final-art policy', () => {
   });
 
   it('keeps G8-A explicitly blocked from Production Lock until a process-specific non-SVG final plate exists', () => {
-    expect(productionMaps.status).toBe('G8A_VISUAL_REWORK_REQUIRED');
+    expect(productionMaps.status).toBe('G8A_CONTROL_PASS_SWIFT_FINAL_REQUIRED');
     expect(productionMaps.maps[0]?.status).toBe('HD_REFERENCE_ONLY');
+    expect(productionMaps.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
+    expect(productionMaps.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_MISSING');
     expect(productionMaps.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
   });
 });
