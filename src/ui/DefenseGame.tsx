@@ -740,7 +740,7 @@ export function DefenseGame({
 
     <DefenseConflictOverlay controller={persistence} />
 
-    {portrait ? <section className="zb-rotate" role="dialog" aria-modal="true">
+    {portrait && !oneStep.active ? <section className="zb-rotate" role="dialog" aria-modal="true">
       <div><span aria-hidden="true">↻</span><h2>{t('defense.ui.rotate.title')}</h2><p>{t('defense.ui.rotate.body')}</p><button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button></div>
     </section> : null}
   </main>;
