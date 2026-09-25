@@ -340,15 +340,7 @@ export function DefenseGame({
   useEffect(() => {
     const media = window.matchMedia?.('(orientation: portrait)');
     if (!media) return;
-    const sync = () => {
-      const next = media.matches;
-      setPortrait(next);
-      if (next) {
-        setState(current => current && !current.paused
-          ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: true })
-          : current);
-      }
-    };
+    const sync = () => setPortrait(media.matches);
     sync();
     media.addEventListener?.('change', sync);
     return () => media.removeEventListener?.('change', sync);
