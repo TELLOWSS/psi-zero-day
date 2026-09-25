@@ -20,7 +20,7 @@ import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
-import { DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
+import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
 
@@ -298,10 +298,14 @@ export function DefenseGame({
   useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
     const timer = window.setInterval(() => {
-      setState(current => current ? advanceDefense(current, resolveDefenseContentForRun(current), 1) : current);
+      setState(current => {
+        if (!current) return current;
+        const advanced = advanceDefense(current, resolveDefenseContentForRun(current), 1);
+        return applyDefCoreOneStepRuntime(current, advanced, oneStep.choice, oneStep.choiceTick);
+      });
     }, content.tickMs);
     return () => window.clearInterval(timer);
-  }, [state?.status, state?.paused, state?.speed]);
+  }, [state?.status, state?.paused, state?.speed, oneStep.choice, oneStep.choiceTick]);
 
   useEffect(() => {
     const onVisibility = () => {
