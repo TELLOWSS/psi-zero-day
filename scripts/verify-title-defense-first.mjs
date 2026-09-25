@@ -16,7 +16,7 @@ const browser = spawn(chrome, [
 ], { stdio:['ignore','pipe','pipe'] });
 let stderr=''; browser.stderr.on('data', c => { stderr += c.toString(); });
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
-async function waitJson(url, timeout=10000){const start=Date.now(); while(Date.now()-start<timeout){try{const r=await fetch(url);if(r.ok)return r.json();}catch{} await sleep(100);} throw new Error('timeout '+url);}
+async function waitJson(url, timeout=30000){const start=Date.now(); while(Date.now()-start<timeout){try{const r=await fetch(url);if(r.ok)return r.json();}catch{} await sleep(100);} throw new Error('timeout '+url);}
 class Cdp{
   constructor(url){this.ws=new WebSocket(url);this.i=1;this.pending=new Map();this.events=new Map();this.opened=new Promise((res,rej)=>{this.ws.addEventListener('open',res,{once:true});this.ws.addEventListener('error',rej,{once:true});});this.ws.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.id){const p=this.pending.get(m.id);if(!p)return;this.pending.delete(m.id);m.error?p.reject(new Error(m.error.message)):p.resolve(m.result);return;}for(const fn of this.events.get(m.method)||[])fn(m.params);});}
   async send(method,params={}){await this.opened;const id=this.i++;const p=new Promise((res,rej)=>this.pending.set(id,{resolve:res,reject:rej}));this.ws.send(JSON.stringify({id,method,params}));return p;}
