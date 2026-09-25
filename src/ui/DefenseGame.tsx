@@ -6,6 +6,7 @@ import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
+import { siteDefenseContentForScenario } from '../content/site-process-maps';
 import {
   defenseContentForScenario, defenseEventById, defenseEvents, resolveDefenseContentForRun,
 } from '../content/defense-events';
@@ -247,6 +248,7 @@ export function DefenseGame({
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
+    || Boolean(selectedScenarioId && siteDefenseContentForScenario(selectedScenarioId))
     || (selectedScenarioId === e1.id && e1Availability.unlocked);
   const content = state
     ? resolveDefenseContentForRun(state)
