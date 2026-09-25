@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "visualVersion": "zero-breach-production-lock-1.0.0",
-  "status": "PRODUCTION_LOCKED",
+  "visualVersion": "zero-breach-legacy-svg-geometry-1.0.0",
+  "status": "LEGACY_GEOMETRY_ONLY",
   "artDirection": {
     "cameraElevationDeg": 70,
     "projection": "NEAR_ORTHOGRAPHIC",
@@ -26,8 +26,8 @@
       "transparent": false,
       "runtimeWidth": 1000,
       "runtimeHeight": 600,
-      "status": "BASELINE_LOCKED",
-      "notes": "JSON route and all eight pad centers are authored at exact x2 coordinates; runtime route and pad overlays remain authoritative."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. JSON route and all eight pad centers are authored at exact x2 coordinates; runtime route and pad overlays remain authoritative."
     },
     {
       "assetId": "defense.tower.PULSE.L1",
@@ -42,8 +42,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "BASELINE_LOCKED",
-      "notes": "Low square base, cylindrical coil, cyan family cue; no text/logo."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Low square base, cylindrical coil, cyan family cue; no text/logo."
     },
     {
       "assetId": "defense.enemy.NORMAL",
@@ -57,8 +57,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "BASELINE_LOCKED",
-      "notes": "Single cracked spherical risk core with detached chips; non-human silhouette."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Single cracked spherical risk core with detached chips; non-human silhouette."
     },
     {
       "assetId": "defense.tower.PULSE.L2",
@@ -73,8 +73,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Base coil plus side capacitor."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Base coil plus side capacitor."
     },
     {
       "assetId": "defense.tower.PULSE.L3A",
@@ -89,8 +89,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Three short coils for the fast branch."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Three short coils for the fast branch."
     },
     {
       "assetId": "defense.tower.PULSE.L3B",
@@ -105,8 +105,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Long single prism for the pure-damage branch."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Long single prism for the pure-damage branch."
     },
     {
       "assetId": "defense.tower.BURST.L1",
@@ -121,8 +121,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Wide dish emitter."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Wide dish emitter."
     },
     {
       "assetId": "defense.tower.BURST.L2",
@@ -137,8 +137,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Dish plus reinforced outriggers."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Dish plus reinforced outriggers."
     },
     {
       "assetId": "defense.tower.BURST.L3A",
@@ -153,8 +153,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Three large emission rings."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Three large emission rings."
     },
     {
       "assetId": "defense.tower.BURST.L3B",
@@ -169,8 +169,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Small core inside a thick containment wall."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Small core inside a thick containment wall."
     },
     {
       "assetId": "defense.tower.CONTROL.L1",
@@ -185,8 +185,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Open arch field generator."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Open arch field generator."
     },
     {
       "assetId": "defense.tower.CONTROL.L2",
@@ -201,8 +201,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Arch plus stabilizer feet."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Arch plus stabilizer feet."
     },
     {
       "assetId": "defense.tower.CONTROL.L3A",
@@ -217,8 +217,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Tall narrow arch."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Tall narrow arch."
     },
     {
       "assetId": "defense.tower.CONTROL.L3B",
@@ -233,8 +233,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Low wide triangular supports."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Low wide triangular supports."
     },
     {
       "assetId": "defense.tower.SENSOR.L1",
@@ -249,8 +249,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Observation mast with scan ring."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Observation mast with scan ring."
     },
     {
       "assetId": "defense.tower.SENSOR.L2",
@@ -265,8 +265,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Mast plus auxiliary lens."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Mast plus auxiliary lens."
     },
     {
       "assetId": "defense.tower.SENSOR.L3A",
@@ -281,8 +281,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Wide double scan rings."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Wide double scan rings."
     },
     {
       "assetId": "defense.tower.SENSOR.L3B",
@@ -297,8 +297,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Long narrow observation lens."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Long narrow observation lens."
     },
     {
       "assetId": "defense.enemy.SWIFT",
@@ -312,8 +312,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Forward twin-wedge silhouette with tail fragments."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Forward twin-wedge silhouette with tail fragments."
     },
     {
       "assetId": "defense.enemy.ARMORED",
@@ -327,8 +327,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Layered hex plates communicate physical resistance."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Layered hex plates communicate physical resistance."
     },
     {
       "assetId": "defense.enemy.SWARM",
@@ -342,8 +342,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Cluster of irregular crystal shards."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Cluster of irregular crystal shards."
     },
     {
       "assetId": "defense.enemy.VEILED",
@@ -357,8 +357,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Broken ring and hollow core remain visible before reveal."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Broken ring and hollow core remain visible before reveal."
     },
     {
       "assetId": "defense.enemy.BOSS",
@@ -372,8 +372,8 @@
         "x": 0.5,
         "y": 0.76
       },
-      "status": "PRODUCTION_LOCKED",
-      "notes": "Large triple-ring chain-risk core with central fracture."
+      "status": "LEGACY_GEOMETRY_ONLY",
+      "notes": "Legacy SVG retained only for geometry/rollback/runtime development reference. Not final production art. Large triple-ring chain-risk core with central fracture."
     }
   ]
 }
