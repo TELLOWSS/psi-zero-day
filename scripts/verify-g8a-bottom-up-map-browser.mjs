@@ -209,7 +209,7 @@ async function metrics(cdp) {
       activeSvgVisuals:[...document.querySelectorAll('image[href],img[src]')].filter(el => {
         const uri=el.getAttribute('href') || el.getAttribute('src') || '';
         const r=el.getBoundingClientRect();
-        return /\.svg(?:$|\?)/i.test(uri) && r.width>0 && r.height>0;
+        return uri.toLowerCase().includes('.svg') && r.width>0 && r.height>0;
       }).map(el => el.getAttribute('href') || el.getAttribute('src')),
       status:shell?.getAttribute('data-status')||null,
       board:board?{left:Math.round(board.left),top:Math.round(board.top),right:Math.round(board.right),bottom:Math.round(board.bottom),width:Math.round(board.width),height:Math.round(board.height)}:null,
