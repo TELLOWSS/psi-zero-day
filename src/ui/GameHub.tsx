@@ -8,6 +8,7 @@ import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
+import { DefenseCommandHome } from './DefenseCommandHome';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import { defenseText } from '../app/defense-text';
@@ -276,12 +277,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
   const canContinue = snapshot.phase !== 'start';
   const openGuide = () => setPage('guide');
   const preloadGuide = () => { void preloadFieldGuide(); };
-  const titleFeatureVisuals = {
-    story: episode01BackgroundUri(resolve),
-    missions: resolve('ep01.scene_element.suspended_load'),
-    people: characterPortraitUri('player', resolve),
-    tomorrow: resolve('ep01.scene_element.access_barrier'),
-  };
   useEffect(() => {
     const storedMotion = window.localStorage.getItem('psi.title.motion');
     const storedQuotes = window.localStorage.getItem('psi.title.castQuotes');
@@ -300,134 +295,22 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
   }, [castQuotesEnabled]);
 
 
-  if (page === 'home') return <main className="commercial-title-home">
-    <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
-    <div className="commercial-title-grade" aria-hidden="true" />
-    <div className="commercial-title-grain" aria-hidden="true" />
-    <div className="commercial-title-sun-glow" aria-hidden="true" />
-    <div className="commercial-title-depth" aria-hidden="true" />
-    <div className="commercial-title-scan" aria-hidden="true" />
-
-    <header className="commercial-title-topline">
-      <div className="commercial-title-meta">
-        <small>Ver. 0.1.0</small>
-        <b>{COMPANY_NAME}</b>
-        <span>{t('ui.title.topline')}</span>
-      </div>
-      <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
-        <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
-        <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
-        <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
-        <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
-      </nav>
-    </header>
-
-    <section className="commercial-title-copy">
-      <div className="commercial-title-logo"><span>NEW PSI</span><b>:</b><span>ZERO DAY</span></div>
-      <h1>{t('ui.tagline')}</h1>
-      <p className="commercial-title-english">Proactive Safety Intelligence</p>
-      <p className="commercial-title-subcopy">{t('ui.title.subcopy')}</p>
-
-      <div className="commercial-title-actions">
-        <button className="commercial-title-action is-primary" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
-          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.new_game')}</strong><small>{t('ui.title.new_game.hint')}</small></span>
-          <b>›</b>
-        </button>
-        <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
-          <span className="commercial-title-action-icon"><HubIcon kind="journal" /></span>
-          <span className="commercial-title-action-copy">
-            <strong>{t('ui.title.continue')}</strong>
-            <small>{canContinue ? t('ui.title.continue.hint') : t('ui.title.no_save')}</small>
-          </span>
-          {canContinue ? <em>EP.01 · {progress}%</em> : null}
-          <b>›</b>
-        </button>
-        {onDefense ? <button className="commercial-title-action" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
-          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{defenseText('defense.ui.hub.title')}</strong><small>{defenseText('defense.ui.hub.hint')}</small></span>
-          <b>›</b>
-        </button> : null}
-        <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
-          <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>
-          <b>›</b>
-        </button>
-        <button className="commercial-title-action" type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}>
-          <span className="commercial-title-action-icon"><HubIcon kind="guide" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.guide')}</strong><small>{t('ui.title.guide.hint')}</small></span>
-          <b>›</b>
-        </button>
-        <button className="commercial-title-action" type="button" onClick={() => setShowTitleSettings(true)}>
-          <span className="commercial-title-action-icon commercial-title-settings-glyph" aria-hidden="true">⚙</span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.settings')}</strong><small>{t('ui.title.settings.menu_hint')}</small></span>
-          <b>›</b>
-        </button>
-      </div>
-    </section>
-
-    <aside className="commercial-title-message">
-      <p>{t('ui.title.brand_copy')}</p>
-      <i aria-hidden="true" />
-      <small>BUILD<br/>PEOPLE<br/>A SAFER<br/>TOMORROW</small>
-    </aside>
-
-    <div className="commercial-title-cast">
-      {featured.map((id, index) => {
-        const member = session.character(id);
-        return <figure className={`commercial-title-worker worker-${index}`} key={id} data-art-surface="main" data-character={id}>
-          <VisualImage uri={characterMapUri(id, resolve)} alt="" />
-          <blockquote>{t(`ui.title.cast.${id}.quote`)}</blockquote>
-          <figcaption>
-            <strong>{member?.name}</strong>
-            <span>{member?.role}</span>
-          </figcaption>
-        </figure>;
-      })}
-    </div>
-
-    <section className="commercial-title-features" aria-label={t('ui.title.features')}>
-      <button type="button" onClick={() => setPage('map')}>
-        <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
-        <span className="commercial-title-feature-shade" aria-hidden="true" />
-        <div><strong>{t('ui.title.feature.story')}</strong><small>{t('ui.title.feature.story.hint')}</small></div><b>›</b>
-      </button>
-      <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}>
-        <VisualImage uri={titleFeatureVisuals.missions} alt="" className="commercial-title-feature-art" />
-        <span className="commercial-title-feature-shade" aria-hidden="true" />
-        <div><strong>{t('ui.title.feature.missions')}</strong><small>{t('ui.title.feature.missions.hint')}</small></div><b>›</b>
-      </button>
-      <button type="button" onClick={() => setPage('people')}>
-        <VisualImage uri={titleFeatureVisuals.people} alt="" className="commercial-title-feature-art" />
-        <span className="commercial-title-feature-shade" aria-hidden="true" />
-        <div><strong>{t('ui.title.feature.people')}</strong><small>{t('ui.title.feature.people.hint')}</small></div><b>›</b>
-      </button>
-      <button type="button" onClick={() => setPage('journal')}>
-        <VisualImage uri={titleFeatureVisuals.tomorrow} alt="" className="commercial-title-feature-art" />
-        <span className="commercial-title-feature-shade" aria-hidden="true" />
-        <div><strong>{t('ui.title.feature.tomorrow')}</strong><small>{t('ui.title.feature.tomorrow.hint')}</small></div><b>›</b>
-      </button>
-    </section>
-
-    <div className="commercial-title-site-plaque" aria-hidden="true">
-      <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
-    </div>
-
-    <div className="commercial-title-quick-settings" aria-label={t('ui.title.quick_settings')}>
-      <button type="button" aria-pressed={motionEnabled} onClick={() => setMotionEnabled(value => !value)}>
-        <span>{t('ui.title.settings.motion')}</span><b>{motionEnabled ? 'ON' : 'OFF'}</b>
-      </button>
-      <button type="button" aria-pressed={castQuotesEnabled} onClick={() => setCastQuotesEnabled(value => !value)}>
-        <span>{t('ui.title.settings.quotes')}</span><b>{castQuotesEnabled ? 'ON' : 'OFF'}</b>
-      </button>
-      <button type="button" aria-pressed={!audioMuted} onClick={() => setAudioMuted(!audioMuted)}>
-        <span>{t('ui.title.settings.audio')}</span><b>{audioMuted ? 'OFF' : 'ON'}</b>
-      </button>
-    </div>
-
-    <button className="commercial-title-open-menu" type="button" onClick={() => setPage('map')}>
-      <span>NEW PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
-    </button>
+  if (page === 'home') return <>
+    <DefenseCommandHome
+      session={session}
+      canContinueStory={canContinue}
+      storyProgress={progress}
+      onDefense={() => {
+        void loadDefenseGame();
+        onDefense?.();
+      }}
+      onStory={onPlay}
+      onNewStory={() => canContinue ? setConfirmNewGame(true) : onNewGame()}
+      onJournal={() => setPage('journal')}
+      onPeople={() => setPage('people')}
+      onGuide={() => { preloadGuide(); openGuide(); }}
+      onSettings={() => setShowTitleSettings(true)}
+    />
 
     {showTitleSettings ? <div className="commercial-title-settings-backdrop" role="presentation" onMouseDown={() => setShowTitleSettings(false)}>
       <section className="commercial-title-settings" role="dialog" aria-modal="true" aria-labelledby="title-settings-heading" onMouseDown={event => event.stopPropagation()}>
@@ -461,13 +344,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
         </div>
       </section>
     </div> : null}
-
-    <footer className="commercial-title-footer">
-      <span>{GAME_TITLE} · ver 1.0.0</span>
-      <b>{t('ui.title.footer')}</b>
-      <span>EPISODE 01 · {t('ep01.title')}</span>
-    </footer>
-  </main>;
+  </>;
 
   return <main className={`game-hub hub-page-${page}`}>
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />

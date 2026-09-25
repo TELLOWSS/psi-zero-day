@@ -1,0 +1,94 @@
+name: Verify HOME-DEFENSE-01
+
+on:
+  push:
+    branches:
+      - sol/home-defense-command-20260925
+  workflow_dispatch:
+
+concurrency:
+  group: home-defense-01-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  home-defense:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout home branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Home and hub contracts
+        run: npx vitest run tests/defense-command-home.test.tsx tests/game-hub.test.tsx
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME_BIN"
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Browser QA — desktop and mobile home
+        env:
+          PSI_HOME_ARTIFACT_DIR: artifacts/home-defense-01
+        run: |
+          mkdir -p artifacts/home-defense-01
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/home-defense-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          node scripts/verify-home-defense-command.mjs
+
+      - name: Persist compact home QA evidence
+        if: always()
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/home-defense-01
+          mkdir -p qa/home-defense-01
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          src=Path('artifacts/home-defense-01'); out=Path('qa/home-defense-01')
+          for p in src.glob('*-home.png'):
+              im=Image.open(p).convert('RGB')
+              if im.width > 1440:
+                  h=round(im.height*1440/im.width)
+                  im=im.resize((1440,h),Image.Resampling.LANCZOS)
+              im.save(out/(p.stem+'.jpg'),'JPEG',quality=84,optimize=True)
+          report=src/'home-defense-01-report.json'
+          if report.exists(): (out/report.name).write_bytes(report.read_bytes())
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/home-defense-01
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "qa: store HOME-DEFENSE-01 browser evidence [skip ci]"
+          git push origin HEAD:sol/home-defense-command-20260925

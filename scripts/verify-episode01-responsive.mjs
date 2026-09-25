@@ -215,7 +215,7 @@ function collectMetrics(stage, touchMode) {
         };
       }).filter(item => item.width < 44 || item.height < 44)
     : [];
-  const frame = document.querySelector('.commercial-title-home, .game-frame, .game-hub, .cinematic-loading');
+  const frame = document.querySelector('.defense-command-home, .commercial-title-home, .game-frame, .game-hub, .cinematic-loading');
   const gameFrame = document.querySelector('.game-frame');
   const frameRect = frame?.getBoundingClientRect();
   const playPanelElement = gameFrame?.querySelector('.play-panel');
@@ -795,7 +795,7 @@ try {
       const loaded = cdp.once('Page.loadEventFired', 12000);
       await cdp.send('Page.navigate', { url: baseUrl });
       await loaded;
-      await waitFor(cdp, "Boolean(document.body.innerText.includes('ZERO DAY') && document.querySelector('.commercial-title-home'))", 12000);
+      await waitFor(cdp, "Boolean(document.body.innerText.includes('ZERO DAY') && document.querySelector('.defense-command-home, .commercial-title-home'))", 12000);
       await sleep(350);
 
       const homeMetrics = await metrics(cdp, 'home', viewport.mobile);
@@ -804,7 +804,7 @@ try {
       if (homeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-home.png');
 
-      await evaluate(cdp, "document.querySelector('.commercial-title-action.is-primary')?.click(); true");
+      await evaluate(cdp, "document.querySelector('.defense-command-secondary, .commercial-title-action.is-primary')?.click(); true");
       await sleep(120);
       const confirmNewGame = await evaluate(cdp, "Boolean(document.querySelector('.commercial-title-dialog .is-danger'))");
       if (confirmNewGame) {

@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "source_sha": "9046581c8bc70110f69936b71a8a8df6aeebba31",
+  "gate": "HOME-DEFENSE-01",
+  "viewports": [
+    {
+      "name": "desktop-1440x900",
+      "innerWidth": 1440,
+      "innerHeight": 900,
+      "scrollWidth": 1440,
+      "scrollHeight": 900,
+      "primaryText": "현장 디펜스 시작약한 신호를 읽고 개입해 현장 자체를 바꾸는 본편 플레이›",
+      "secondaryText": "스토리 시작사람관계 · 사건 · 판단의 맥락을 이어갑니다.",
+      "primary": {
+        "left": 86,
+        "top": 419,
+        "right": 696,
+        "bottom": 501,
+        "width": 610,
+        "height": 82
+      },
+      "secondary": {
+        "left": 86,
+        "top": 509,
+        "right": 696,
+        "bottom": 567,
+        "width": 610,
+        "height": 58
+      },
+      "hero": {
+        "left": 86,
+        "top": 146,
+        "right": 746,
+        "bottom": 567,
+        "width": 660,
+        "height": 421
+      },
+      "ops": {
+        "left": 1022,
+        "top": 112,
+        "right": 1382,
+        "bottom": 409,
+        "width": 360,
+        "height": 297
+      },
+      "dock": {
+        "left": 58,
+        "top": 796,
+        "right": 1382,
+        "bottom": 882,
+        "width": 1325,
+        "height": 86
+      },
+      "backdropLoaded": true,
+      "smallButtons": [],
+      "failures": []
+    },
+    {
+      "name": "phone-portrait-390x844",
+      "innerWidth": 390,
+      "innerHeight": 844,
+      "scrollWidth": 390,
+      "scrollHeight": 1227,
+      "primaryText": "현장 디펜스 시작약한 신호를 읽고 개입해 현장 자체를 바꾸는 본편 플레이›",
+      "secondaryText": "스토리 시작사람관계 · 사건 · 판단의 맥락을 이어갑니다.",
+      "primary": {
+        "left": 18,
+        "top": 311,
+        "right": 372,
+        "bottom": 397,
+        "width": 354,
+        "height": 86
+      },
+      "secondary": {
+        "left": 18,
+        "top": 405,
+        "right": 372,
+        "bottom": 467,
+        "width": 354,
+        "height": 62
+      },
+      "hero": {
+        "left": 18,
+        "top": 91,
+        "right": 372,
+        "bottom": 467,
+        "width": 354,
+        "height": 376
+      },
+      "ops": {
+        "left": 18,
+        "top": 485,
+        "right": 372,
+        "bottom": 821,
+        "width": 354,
+        "height": 336
+      },
+      "dock": {
+        "left": 18,
+        "top": 831,
+        "right": 372,
+        "bottom": 1209,
+        "width": 354,
+        "height": 378
+      },
+      "backdropLoaded": true,
+      "smallButtons": [],
+      "failures": []
+    },
+    {
+      "name": "phone-landscape-844x390",
+      "innerWidth": 844,
+      "innerHeight": 390,
+      "scrollWidth": 844,
+      "scrollHeight": 390,
+      "primaryText": "현장 디펜스 시작약한 신호를 읽고 개입해 현장 자체를 바꾸는 본편 플레이›",
+      "secondaryText": "스토리 시작사람관계 · 사건 · 판단의 맥락을 이어갑니다.",
+      "primary": {
+        "left": 34,
+        "top": 197,
+        "right": 506,
+        "bottom": 257,
+        "width": 473,
+        "height": 60
+      },
+      "secondary": {
+        "left": 34,
+        "top": 262,
+        "right": 506,
+        "bottom": 306,
+        "width": 473,
+        "height": 44
+      },
+      "hero": {
+        "left": 34,
+        "top": 76,
+        "right": 506,
+        "bottom": 306,
+        "width": 473,
+        "height": 230
+      },
+      "ops": {
+        "left": 557,
+        "top": 70,
+        "right": 819,
+        "bottom": 293,
+        "width": 262,
+        "height": 223
+      },
+      "dock": null,
+      "backdropLoaded": true,
+      "smallButtons": [],
+      "failures": []
+    }
+  ],
+  "failures": []
+}
