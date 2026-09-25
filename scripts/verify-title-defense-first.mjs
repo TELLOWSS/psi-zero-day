@@ -38,6 +38,7 @@ async function titleMetrics(cdp){return evalJs(cdp,`(() => {
     primary:(primary?.textContent||'').replace(/\\s+/g,' ').trim(),
     labels,
     primaryRect:rect('.commercial-title-action.is-primary'),
+    lastActionRect:rect('.commercial-title-actions .commercial-title-action:last-child'),
     liveRect:rect('.commercial-title-field-status'),
     liveText:(document.querySelector('.commercial-title-field-status')?.textContent||'').replace(/\\s+/g,' ').trim(),
     subcopy:(document.querySelector('.commercial-title-subcopy')?.textContent||'').trim(),
@@ -73,9 +74,10 @@ try{
   if(!report.mobile.primary.includes('현장 디펜스 시작')) throw new Error('mobile primary CTA is not Field Defense');
   if(!report.mobile.liveText.includes('LIVE SITE')) throw new Error('mobile LIVE SITE panel missing');
   if(report.mobile.overflow) throw new Error('mobile title horizontal overflow');
-  const pr=report.mobile.primaryRect, lr=report.mobile.liveRect;
+  const pr=report.mobile.primaryRect, lr=report.mobile.liveRect, ar=report.mobile.lastActionRect;
   if(!pr || pr.left < -1 || pr.right > 391 || pr.top < -1 || pr.bottom > 845) throw new Error('mobile primary CTA outside viewport '+JSON.stringify(pr));
   if(!lr || lr.left < -1 || lr.right > 391 || lr.top < -1 || lr.bottom > 845) throw new Error('mobile LIVE SITE outside viewport '+JSON.stringify(lr));
+  if(!ar || lr.top < ar.bottom + 8) throw new Error('mobile LIVE SITE overlaps action stack '+JSON.stringify({lastAction:ar,live:lr}));
   await shot(cdp,'mobile-390x844-home.png');
 }catch(e){report.failures.push(e instanceof Error?e.message:String(e)); if(cdp){try{await shot(cdp,'error.png')}catch{}}}
 finally{if(cdp)cdp.close();if(target){try{await fetch('http://127.0.0.1:'+port+'/json/close/'+target.id)}catch{}}browser.kill('SIGTERM');await Promise.race([new Promise(r=>browser.once('exit',r)),sleep(1000)]);try{fs.rmSync(profile,{recursive:true,force:true})}catch{}}
