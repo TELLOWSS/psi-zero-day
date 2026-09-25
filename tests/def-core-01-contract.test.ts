@@ -6,6 +6,21 @@ import { zeroBreachContent } from '../src/content/defense';
 import { applyDefCoreOneStepRuntime } from '../src/ui/DefCoreOneStep';
 
 describe('DEF-CORE-01 one-step vertical slice contract', () => {
+  it('is G3 production locked only with desktop, mobile, visual, audio, and live-runtime evidence', () => {
+    expect(core.status).toBe('G3_PRODUCTION_LOCKED');
+    expect(core.qa).toEqual({
+      contract: true,
+      browser: true,
+      visual: true,
+      audio: true,
+      mobile: true,
+      productionLock: true,
+    });
+    expect(core.productionLock.approved).toBe(true);
+    expect(core.productionLock.mobileViewport).toBe('390x844');
+    expect(core.productionLock.liveRuntimeMotion).toBe('C: 42 -> 0 -> 21');
+  });
+
   it('starts only after the G2 production benchmark is locked', () => {
     expect(g2.status).toBe('G2_PRODUCTION_LOCKED');
     expect(g2.runtimePromotion.approved).toBe(true);
