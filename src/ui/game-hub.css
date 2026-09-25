@@ -1047,3 +1047,16 @@
   .remodel-runtime-actions{grid-template-columns:1fr}
   .remodel-runtime-actions button{min-height:58px}
 }
+
+.remodel-preview-state{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0 0 8px
+}
+.remodel-preview-state span{
+  min-height:34px;padding:6px 7px;border:1px solid rgba(136,187,170,.18);border-radius:5px;background:rgba(65,125,106,.07)
+}
+.remodel-preview-state small{display:block;color:#78959e;font-size:6px}
+.remodel-preview-state b{display:block;margin-top:3px;color:#91dfc3;font-size:8px}
+@media(max-width:600px){
+  .remodel-preview-state{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .remodel-preview-state span{min-height:38px}
+}
