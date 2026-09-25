@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import core from '../content/defense/def-core-01.json';
 import g2 from '../content/defense/def-hd01-pq-benchmark.json';
 import { zeroBreachContent } from '../src/content/defense';
+import { applyDefCoreOneStepRuntime } from '../src/ui/DefCoreOneStep';
 
 describe('DEF-CORE-01 one-step vertical slice contract', () => {
   it('starts only after the G2 production benchmark is locked', () => {
@@ -53,9 +54,41 @@ describe('DEF-CORE-01 one-step vertical slice contract', () => {
       'HOLD_LINE','REINFORCED_CONTROL','REROUTED_STAGING',
     ]);
     expect(core.returnToDefense.allChoicesSafe).toBe(true);
+    expect(core.returnToDefense.noBaseBalanceMutation).toBe(true);
+    expect(core.choices.map(choice => choice.runtime.swiftSlowFraction)).toEqual([1, 0.55, 0.3]);
+    expect(core.choices.find(choice => choice.id === 'C')?.runtime.setbackDistance).toBe(95);
     expect(core.cinematic.shots).toHaveLength(6);
     expect(core.cinematic.targetSeconds[0]).toBeGreaterThanOrEqual(12);
     expect(core.cinematic.targetSeconds[1]).toBeLessThanOrEqual(20);
+  });
+
+  it('applies choice-specific live SWIFT movement without mutating the base wave content', () => {
+    const swift = {
+      id: 'enemy-swift', enemyId: 'SWIFT', hp: 30, distance: 80, spawnSequence: 1,
+      revealUntilTick: 0, slowEffects: [], bossPhaseTriggered: false, bossArmorFromTick: 0, bossArmorUntilTick: 0,
+    };
+    const previous = {
+      scenarioId: 'event-ramp-reconstruction-v1', waveId: 8, tick: 100, status: 'RUNNING',
+      enemies: [swift],
+    } as any;
+    const advanced = {
+      ...previous, tick: 101, enemies: [{ ...swift, distance: 86 }],
+    } as any;
+
+    const hold = applyDefCoreOneStepRuntime(previous, advanced, 'A', 100);
+    const reinforced = applyDefCoreOneStepRuntime(previous, advanced, 'B', 100);
+    const rerouted = applyDefCoreOneStepRuntime(previous, advanced, 'C', 100);
+
+    expect(hold.enemies[0].distance).toBe(80);
+    expect(hold.enemies[0].slowEffects.at(-1)?.fraction).toBe(1);
+    expect(reinforced.enemies[0].distance).toBeCloseTo(82.7, 4);
+    expect(reinforced.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.55);
+    expect(rerouted.enemies[0].distance).toBe(0);
+    expect(rerouted.enemies[0].slowEffects.at(-1)?.fraction).toBe(0.3);
+    expect(zeroBreachContent.waves[7]?.groups).toEqual([
+      { enemy: 'VEILED', count: 8, startTick: 0, intervalTicks: 25 },
+      { enemy: 'SWIFT', count: 10, startTick: 60, intervalTicks: 20 },
+    ]);
   });
 
   it('integrates the slice into DefenseGame without StrategyMapShell or new engine IDs', () => {
@@ -64,6 +97,7 @@ describe('DEF-CORE-01 one-step vertical slice contract', () => {
     const css = fs.readFileSync('src/ui/defense-game.css', 'utf8');
 
     expect(ui).toContain('useDefCoreOneStep');
+    expect(ui).toContain('applyDefCoreOneStepRuntime');
     expect(ui).toContain('DefCoreOneStepBoardOverlay');
     expect(ui).toContain('DefCoreOneStepOverlay');
     expect(ui).toContain('data-def-core-phase');
