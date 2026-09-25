@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T06:47:26.810Z",
-  "source_sha": "0bb83f68bb730d310fd948ee9c4b7ff78008156c",
+  "generated_at": "2026-09-25T06:51:56.637Z",
+  "source_sha": "f74b4a9e2bf0f478ace98342a61ba5f3f31b4474",
   "gate": "DEF-CORE-01",
   "scenario": "event-ramp-reconstruction-v1",
   "wave": 8,
@@ -26,7 +26,7 @@
   "decision_count": 3,
   "chosen": "C",
   "followup": "RECORD",
-  "cinematic_wall_ms": 12609,
+  "cinematic_wall_ms": 12611,
   "audio_cues": [
     "warning",
     "select",
@@ -51,6 +51,18 @@
       "contentType": "image/webp"
     },
     "assets/episode01/scene-elements/access-barrier.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/cg/gate-dawn.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/cg/ramp-entry.webp": {
       "ok": true,
       "contentType": "image/webp"
     },
