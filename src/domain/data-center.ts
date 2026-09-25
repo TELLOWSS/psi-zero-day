@@ -45,7 +45,7 @@ export interface DataCenterActionResult {
 
 export interface DataCenterScenarioDefinition {
   readonly id: string;
-  readonly profileId: string;
   readonly label: string;
+  readonly profileIds: Readonly<Record<Exclude<DataCenterPhase, 'COMPLETE'>, string>>;
   readonly map: SiteProcessMapDefinition;
 }
