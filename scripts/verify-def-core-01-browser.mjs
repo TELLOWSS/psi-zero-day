@@ -187,16 +187,9 @@ function qaDefenseSave() {
     intermissionRemaining: 0,
     shield: 18,
     resource: 210,
-    towers: [
-      {
-        id: 'tower-1', padId: 'P1', towerId: 'PULSE', levelId: 'L2',
-        targetMode: 'FIRST', invested: 140, attackCooldown: 4, revealCooldown: 0,
-      },
-      {
-        id: 'tower-2', padId: 'P6', towerId: 'PULSE', levelId: 'L2',
-        targetMode: 'FIRST', invested: 140, attackCooldown: 7, revealCooldown: 0,
-      },
-    ],
+    // Keep the representative SWIFT alive long enough to measure the choice-specific
+    // movement consequence. Combat balance is covered by the protected engine suite.
+    towers: [],
     enemies: [
       {
         id: 'enemy-11', enemyId: 'SWIFT', hp: 28, distance: 42,
@@ -205,7 +198,7 @@ function qaDefenseSave() {
       },
     ],
     spawnedByGroup: [10, 1],
-    nextTowerSequence: 3,
+    nextTowerSequence: 1,
     nextEnemySequence: 12,
     supportId: 'COORDINATOR',
     supportCooldownRemaining: 0,
@@ -260,6 +253,7 @@ const report = {
   cinematic_wall_ms: null,
   audio_cues: [],
   assets: {},
+  runtime_motion: null,
   final: null,
   failures: [],
 };
@@ -425,6 +419,26 @@ try {
     throw new Error('RETURN state did not persist the chosen world result: ' + JSON.stringify(final));
   }
   await screenshot(cdp, '08-done.png');
+
+  await waitFor(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) <= 5", 3000);
+  const runtimeStart = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  await sleep(450);
+  const runtimeEnd = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  report.runtime_motion = {
+    choice: 'C',
+    start_distance: runtimeStart,
+    end_distance: runtimeEnd,
+    delta: Number((runtimeEnd - runtimeStart).toFixed(3)),
+  };
+  if (!Number.isFinite(runtimeStart) || !Number.isFinite(runtimeEnd)) {
+    throw new Error('DEF-CORE runtime SWIFT distance telemetry missing');
+  }
+  if (runtimeStart > 5) {
+    throw new Error('Choice C did not return the active SWIFT toward staging: ' + runtimeStart);
+  }
+  if (runtimeEnd <= runtimeStart || runtimeEnd - runtimeStart > 38) {
+    throw new Error('Choice C safer-approach movement did not remain live and reduced-speed: ' + JSON.stringify(report.runtime_motion));
+  }
 
   report.audio_cues = await evaluate(cdp, "window.__defCoreAudioCues || []");
   for (const cue of ['warning','support','select','area_resolve']) {
