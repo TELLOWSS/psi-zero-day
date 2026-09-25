@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "status": "ABSOLUTE_VISUAL_POLICY",
+  "source": "PSI_ZERO_DAY_COMPLETE_MASTER_BIBLE_20260924-1.md",
+  "rules": {
+    "productionImageFormats": ["webp", "png", "jpg", "jpeg", "avif"],
+    "svgFinalArtForbidden": true,
+    "svgAllowedOnlyFor": [
+      "geometry_reference",
+      "rollback_reference",
+      "technical_runtime_overlay",
+      "non_art_path_or_hit_area"
+    ],
+    "svgForbiddenFor": [
+      "production_map_art",
+      "tower_final_art",
+      "enemy_or_risk_final_art",
+      "character_final_art",
+      "scene_element_final_art",
+      "final_pictogram_or_placeholder_visual"
+    ],
+    "finalStatusForbiddenWhenSvg": [
+      "BASELINE_LOCKED",
+      "PRODUCTION_CANDIDATE",
+      "PRODUCTION_LOCKED"
+    ],
+    "qualityRule": "Visible final imagery must read as authored commercial game art at phone scale; low-grade pictogram/vector placeholder styling is not acceptable."
+  },
+  "enforcement": {
+    "currentGate": "G8-A",
+    "g8aState": "VISUAL_REWORK_REQUIRED",
+    "reason": "An SVG world composite was incorrectly promoted as a Production Candidate. That promotion is revoked.",
+    "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
+    "next": "Replace representative map/risk/response visuals with non-SVG final assets before any Production Lock."
+  }
+}
