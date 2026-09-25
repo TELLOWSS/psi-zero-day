@@ -274,6 +274,7 @@ export function DefenseGame({
       persistence.dispatch({ type: 'SetPaused', paused });
     },
     playCue: audio.playCue,
+    armAudio: audio.armAudio,
     muted: audio.muted,
   });
 
