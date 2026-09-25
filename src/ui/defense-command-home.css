@@ -1,0 +1,243 @@
+/* HOME-DEFENSE-01 — defense is the product entry, story is supporting context. */
+.defense-command-home{
+  --home-accent:#e3a13e;
+  --home-line:rgba(190,207,216,.18);
+  position:relative;
+  width:100%;
+  min-height:100dvh;
+  overflow:hidden;
+  background:#071018;
+  color:#eef4f5;
+  isolation:isolate;
+}
+.defense-command-backdrop{
+  position:absolute;
+  inset:0;
+  z-index:-4;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 50%;
+  filter:saturate(.9) brightness(.82) contrast(1.04);
+}
+.defense-command-grade{
+  position:absolute;
+  inset:0;
+  z-index:-3;
+  background:
+    linear-gradient(90deg,rgba(4,10,15,.94) 0%,rgba(4,10,15,.82) 33%,rgba(4,10,15,.26) 64%,rgba(4,10,15,.68) 100%),
+    linear-gradient(0deg,rgba(4,10,15,.92) 0%,transparent 48%,rgba(4,10,15,.38) 100%);
+}
+.defense-command-grid{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  opacity:.15;
+  background-image:
+    linear-gradient(rgba(209,224,230,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(209,224,230,.08) 1px,transparent 1px);
+  background-size:54px 54px;
+  mask-image:linear-gradient(90deg,#000 0%,transparent 62%);
+}
+.defense-command-top{
+  position:relative;
+  z-index:4;
+  min-height:74px;
+  padding:14px clamp(18px,4vw,64px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  border-bottom:1px solid var(--home-line);
+  background:linear-gradient(180deg,rgba(4,11,16,.8),rgba(4,11,16,.24));
+}
+.defense-command-brand{display:grid;grid-template-columns:auto auto;column-gap:12px;align-items:end}
+.defense-command-brand small{grid-column:1/3;color:var(--home-accent);font-size:9px;font-weight:900;letter-spacing:.18em}
+.defense-command-brand strong{font-size:20px;letter-spacing:.02em}
+.defense-command-brand span{padding-bottom:2px;color:#91a3ab;font-size:9px;letter-spacing:.08em}
+.defense-command-utility{display:flex;gap:6px}
+.defense-command-utility button{
+  min-height:44px;
+  min-width:70px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 12px;
+  border:1px solid var(--home-line);
+  border-radius:8px;
+  background:rgba(12,27,36,.68);
+  color:#d7e1e5;
+  font-size:10px;
+  cursor:pointer;
+  backdrop-filter:blur(9px);
+}
+.defense-command-utility button:hover,.defense-command-utility button:focus-visible{border-color:rgba(227,161,62,.62);color:#fff}
+.defense-command-utility svg{width:17px;height:17px}
+
+.defense-command-hero{
+  position:relative;
+  z-index:3;
+  width:min(660px,48vw);
+  margin:clamp(48px,8dvh,96px) 0 0 clamp(24px,6vw,92px);
+}
+.defense-command-kicker{color:var(--home-accent);font-size:10px;font-weight:900;letter-spacing:.2em}
+.defense-command-hero h1{margin:10px 0 12px;font-size:clamp(40px,5.2vw,74px);line-height:.98;letter-spacing:-.045em;text-shadow:0 12px 40px rgba(0,0,0,.44)}
+.defense-command-hero h1 em{color:#f0b254;font-style:normal}
+.defense-command-definition{max-width:620px;margin:0;color:#f4f7f7;font-size:clamp(15px,1.45vw,20px);font-weight:800;line-height:1.55}
+.defense-command-body{max-width:590px;margin:11px 0 0;color:#aebdc4;font-size:12px;line-height:1.7}
+
+.defense-command-actions{display:grid;gap:8px;width:min(610px,100%);margin-top:25px}
+.defense-command-primary,.defense-command-secondary{
+  border:1px solid rgba(208,222,228,.2);
+  border-radius:12px;
+  color:#f6f8f9;
+  cursor:pointer;
+}
+.defense-command-primary{
+  min-height:82px;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) 26px;
+  gap:12px;
+  align-items:center;
+  padding:10px 15px;
+  background:linear-gradient(110deg,#d98d2d,#edae49);
+  color:#111920;
+  border-color:#f0b45d;
+  box-shadow:0 18px 46px rgba(0,0,0,.3),0 0 0 1px rgba(255,207,127,.14) inset;
+}
+.defense-command-primary:hover,.defense-command-primary:focus-visible{transform:translateY(-1px);filter:brightness(1.05)}
+.defense-command-action-icon{
+  width:44px;height:44px;display:grid;place-items:center;border-radius:10px;background:rgba(14,25,30,.14)
+}
+.defense-command-action-icon svg{width:23px;height:23px}
+.defense-command-primary span:nth-child(2){display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.defense-command-primary strong{font-size:19px}
+.defense-command-primary small{margin-top:4px;font-size:10px;line-height:1.35;color:#3d3529}
+.defense-command-primary>b{font-size:26px}
+.defense-command-secondary{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 16px;
+  background:rgba(12,27,36,.82);
+  backdrop-filter:blur(10px);
+}
+.defense-command-secondary>span{display:flex;flex-direction:column;text-align:left}
+.defense-command-secondary strong{font-size:13px}
+.defense-command-secondary small{margin-top:3px;color:#98a9b1;font-size:9px}
+.defense-command-secondary em{font-style:normal;color:#e7b15d;font-size:9px;letter-spacing:.08em}
+
+.defense-command-ops{
+  position:absolute;
+  z-index:3;
+  top:112px;
+  right:clamp(18px,4vw,62px);
+  width:min(360px,29vw);
+  padding:16px;
+  border:1px solid rgba(194,210,219,.2);
+  border-radius:14px;
+  background:linear-gradient(145deg,rgba(10,23,31,.91),rgba(7,16,22,.82));
+  box-shadow:0 20px 54px rgba(0,0,0,.35);
+  backdrop-filter:blur(12px);
+}
+.defense-command-ops>header{display:flex;flex-direction:column;padding-bottom:12px;border-bottom:1px solid var(--home-line)}
+.defense-command-ops>header small,.defense-command-signals>span{color:var(--home-accent);font-size:8px;font-weight:900;letter-spacing:.17em}
+.defense-command-ops>header strong{margin-top:4px;font-size:16px}
+.defense-command-ops>header span{margin-top:2px;color:#82959e;font-size:8px;letter-spacing:.1em}
+.defense-command-run{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;padding:13px 0;border-bottom:1px solid var(--home-line)}
+.defense-command-run>span{grid-row:1/3;color:#90a1a9;font-size:9px;align-self:center}
+.defense-command-run>strong{font-size:16px;text-align:right}
+.defense-command-run>small{color:#9fb0b7;font-size:8px;text-align:right}
+.defense-command-signals{padding-top:13px}
+.defense-command-signals article{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(188,204,212,.1)}
+.defense-command-signals article>b{color:#e9ad52;font-size:10px}
+.defense-command-signals article div{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.defense-command-signals article strong{font-size:11px;letter-spacing:.08em}
+.defense-command-signals article small{color:#8fa1a9;font-size:8px;text-align:right}
+.defense-command-ops>footer{display:flex;justify-content:space-between;gap:6px;padding-top:12px;color:#70858f;font-size:7px;letter-spacing:.09em}
+
+.defense-command-dock{
+  position:absolute;
+  z-index:4;
+  left:clamp(18px,4vw,62px);
+  right:clamp(18px,4vw,62px);
+  bottom:18px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr)) minmax(260px,1.3fr);
+  gap:8px;
+}
+.defense-command-dock>button,.defense-command-next{
+  min-height:86px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:flex-start;
+  padding:12px 14px;
+  border:1px solid rgba(188,204,212,.18);
+  border-radius:10px;
+  background:rgba(9,21,29,.78);
+  color:#eef4f5;
+  text-align:left;
+  backdrop-filter:blur(12px);
+}
+.defense-command-dock>button{cursor:pointer}
+.defense-command-dock>button:hover,.defense-command-dock>button:focus-visible{border-color:rgba(227,161,62,.55);background:rgba(15,31,40,.9)}
+.defense-command-dock small,.defense-command-next small{color:var(--home-accent);font-size:7px;font-weight:900;letter-spacing:.14em}
+.defense-command-dock strong,.defense-command-next strong{margin-top:4px;font-size:12px}
+.defense-command-dock span,.defense-command-next span{margin-top:3px;color:#8fa2aa;font-size:8px;line-height:1.35}
+.defense-command-next{border-color:rgba(227,161,62,.25);background:linear-gradient(115deg,rgba(93,64,28,.34),rgba(9,21,29,.82))}
+
+@media (max-width:1000px){
+  .defense-command-hero{width:min(620px,58vw);margin-left:4vw}
+  .defense-command-ops{width:31vw;right:3vw}
+  .defense-command-dock{left:3vw;right:3vw;grid-template-columns:repeat(3,1fr)}
+  .defense-command-next{grid-column:1/4;min-height:62px}
+}
+
+@media (orientation:portrait) and (max-width:760px){
+  .defense-command-home{min-height:100dvh;overflow-y:auto;padding-bottom:max(18px,env(safe-area-inset-bottom))}
+  .defense-command-backdrop{position:fixed;height:100dvh;object-position:34% 50%;filter:brightness(.58) saturate(.86)}
+  .defense-command-grade{position:fixed;background:linear-gradient(180deg,rgba(4,10,15,.76),rgba(4,10,15,.88) 55%,#071018 100%)}
+  .defense-command-grid{position:fixed;opacity:.08}
+  .defense-command-top{min-height:64px;padding:10px 12px}
+  .defense-command-brand small{font-size:7px}.defense-command-brand strong{font-size:15px}.defense-command-brand span{display:none}
+  .defense-command-utility{gap:3px}
+  .defense-command-utility button{min-width:44px;width:44px;padding:0}
+  .defense-command-utility button span:last-child{display:none}
+  .defense-command-utility svg{width:16px;height:16px}
+
+  .defense-command-hero{width:auto;margin:34px 18px 0}
+  .defense-command-kicker{font-size:8px}
+  .defense-command-hero h1{font-size:clamp(40px,12vw,58px);line-height:1.02}
+  .defense-command-definition{font-size:15px}
+  .defense-command-body{font-size:11px}
+  .defense-command-actions{width:100%;margin-top:20px}
+  .defense-command-primary{min-height:86px}
+  .defense-command-primary strong{font-size:17px}
+  .defense-command-secondary{min-height:62px}
+
+  .defense-command-ops{position:relative;top:auto;right:auto;width:auto;margin:18px 18px 0}
+  .defense-command-signals article div{align-items:flex-start;flex-direction:column;gap:2px}
+  .defense-command-signals article small{text-align:left}
+  .defense-command-dock{position:relative;left:auto;right:auto;bottom:auto;margin:10px 18px 0;grid-template-columns:1fr 1fr}
+  .defense-command-dock>button,.defense-command-next{min-height:92px}
+  .defense-command-next{grid-column:1/3;min-height:78px}
+}
+
+@media (max-width:390px){
+  .defense-command-top{align-items:flex-start}
+  .defense-command-utility button:nth-child(2){display:none}
+  .defense-command-hero{margin-top:26px}
+  .defense-command-hero h1{font-size:43px}
+  .defense-command-primary{grid-template-columns:42px minmax(0,1fr) 18px;padding-inline:11px}
+  .defense-command-primary small{font-size:9px}
+  .defense-command-dock{grid-template-columns:1fr}
+  .defense-command-next{grid-column:1}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .defense-command-primary{transition:none}
+}
