@@ -1,34 +1,33 @@
 import { existsSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import policy from '../content/defense/final-art-policy.json';
 import productionRaw from '../content/defense/production-map-family-v1.json';
 import { defenseBoardArtUri, defenseProductionMapEntry } from '../src/app/defense-visual-assets';
 import { siteProcessMapByProfile } from '../src/content/site-process-maps';
 
 const BOTTOM_ID = 'map-apt-bottom-up-excavation-01';
 const TOP_ID = 'map-apt-top-down-under-slab-01';
-const ART = 'public/assets/defense/board/bottom-up-excavation-01.svg';
-const SOURCE = 'public/assets/defense/board/ramp-01-hd01.webp';
+const ART = 'public/assets/defense/board/ramp-01-hd01.webp';
 
 describe('G8-A bottom-up production map', () => {
-  it('keeps ONE GATE AT A TIME: only bottom-up excavation is a production-map candidate', () => {
+  it('keeps ONE GATE AT A TIME and refuses to call the temporary HD plate a Production Lock', () => {
     expect(productionRaw.generationRule).toBe('ONE_MAP_AT_A_TIME');
     expect(productionRaw.maps).toHaveLength(1);
     expect(productionRaw.maps[0]?.mapId).toBe(BOTTOM_ID);
-    expect(productionRaw.maps[0]?.status).toBe('PRODUCTION_CANDIDATE');
+    expect(productionRaw.status).toBe('G8A_VISUAL_REWORK_REQUIRED');
+    expect(productionRaw.maps[0]?.status).toBe('HD_REFERENCE_ONLY');
+    expect(productionRaw.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
   });
 
-  it('reuses the already approved HD world plate only for G8-A', () => {
+  it('uses only the approved raster HD reference while the process-specific final plate is reworked', () => {
     const entry = defenseProductionMapEntry(BOTTOM_ID);
-    expect(entry?.runtimeUri).toBe('assets/defense/board/bottom-up-excavation-01.svg');
+    expect(entry?.runtimeUri).toBe('assets/defense/board/ramp-01-hd01.webp');
     expect(defenseBoardArtUri(BOTTOM_ID)).toBe(entry?.runtimeUri);
     expect(existsSync(ART)).toBe(true);
-    expect(statSync(ART).size).toBeGreaterThan(5_000);
-    expect(existsSync(SOURCE)).toBe(true);
-    expect(statSync(SOURCE).size).toBeGreaterThan(100_000);
-    expect(productionRaw.maps[0]?.sourceUri).toBe('assets/defense/board/ramp-01-hd01.webp');
-
+    expect(statSync(ART).size).toBeGreaterThan(100_000);
+    expect(entry?.format).toBe('webp');
+    expect(entry?.runtimeUri).not.toMatch(/\.svg(?:$|\?)/i);
     expect(defenseProductionMapEntry(TOP_ID)).toBeNull();
-    expect(productionRaw.maps[0]?.reusePolicy.allowedForOtherG8Maps).toBe(false);
   });
 
   it('preserves the locked G5 bottom-up topology and all eight pad coordinates', () => {
@@ -58,10 +57,10 @@ describe('G8-A bottom-up production map', () => {
     expect(contract?.noGameplayCoordinatesFromImage).toBe(true);
   });
 
-  it('does not bake HUD or text into the registered world plate contract', () => {
-    expect(productionRaw.maps[0]?.visualFit).toContain('no baked HUD, text, logo or pad markers');
-    expect(productionRaw.maps[0]?.format).toBe('svg');
-    expect(productionRaw.maps[0]?.width).toBe(1000);
-    expect(productionRaw.maps[0]?.height).toBe(600);
+  it('enforces the Master Bible no-SVG-final rule for production map imagery', () => {
+    expect(policy.rules.svgFinalArtForbidden).toBe(true);
+    expect(policy.rules.productionImageFormats).not.toContain('svg');
+    expect(productionRaw.maps.every(map => !map.runtimeUri.toLowerCase().endsWith('.svg'))).toBe(true);
+    expect(productionRaw.maps.every(map => map.format !== 'svg')).toBe(true);
   });
 });
