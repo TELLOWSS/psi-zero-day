@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 2,
+  "gate": "DEF-CORE-01",
+  "title": "한 걸음",
+  "status": "G3_PRODUCTION_LOCKED",
+  "inherits": {
+    "g2ProductionLock": true,
+    "masterWorld": "assets/defense/board/ramp-01-hd01.webp",
+    "swift": "assets/defense/enemies/swift-pq01.svg",
+    "controlSources": [
+      "assets/episode01/characters/choi-minseok-map.webp",
+      "assets/episode01/scene-elements/access-barrier.webp"
+    ]
+  },
+  "scope": {
+    "scenarioId": "event-ramp-reconstruction-v1",
+    "representativeWave": 8,
+    "riskId": "SWIFT",
+    "responseId": "CONTROL",
+    "location": "P1/P2 WEST GATE / LOGISTICS",
+    "characters": [
+      "PLAYER",
+      "lim-junho",
+      "choi-minseok",
+      "lee-jaehoon"
+    ],
+    "cycle": [
+      "NORMAL_WORK",
+      "SIGNAL",
+      "READ",
+      "CONTROL",
+      "IMPACT",
+      "CINEMATIC",
+      "DECISION",
+      "RETURN",
+      "HOOK",
+      "DONE"
+    ]
+  },
+  "trigger": {
+    "status": "RUNNING",
+    "waveId": 8,
+    "enemyId": "SWIFT",
+    "minDistance": 20,
+    "maxDistance": 190,
+    "oncePerRun": true,
+    "autoPause": true
+  },
+  "action": {
+    "onlyProductionResponse": "marshal + temporary pedestrian route segregation",
+    "noAdditionalResponseFamilies": true
+  },
+  "impact": [
+    "vehicle slowdown cue",
+    "brake cue",
+    "marshal moves into the conflict zone",
+    "barrier appears",
+    "pedestrian route visibly deflects",
+    "risk zone contracts"
+  ],
+  "cinematic": {
+    "targetSeconds": [
+      12,
+      20
+    ],
+    "shots": [
+      {
+        "id": "WIDE",
+        "focus": "west gate / truck / pedestrian conflict"
+      },
+      {
+        "id": "STEP",
+        "focus": "Lim Junho stops before mud/material intrusion"
+      },
+      {
+        "id": "REAR",
+        "focus": "reversing vehicle rear and blind zone"
+      },
+      {
+        "id": "SIGNAL",
+        "focus": "Choi Minseok raises stop signal"
+      },
+      {
+        "id": "RADIO",
+        "focus": "Player radio intervention and 0.2s silence"
+      },
+      {
+        "id": "BRAKE",
+        "focus": "brake + Lee Jaehoon arrives"
+      }
+    ],
+    "dialogue": {
+      "speaker": "이재훈",
+      "line": "차를 세우면 뒤에 두 대가 밀립니다."
+    }
+  },
+  "choices": [
+    {
+      "id": "A",
+      "label": "3분만 통로를 완전히 비우고 다시 받죠.",
+      "worldResult": "HOLD_LINE",
+      "tradeoff": "fast safety / small schedule delay",
+      "runtime": {
+        "activeTicks": 60,
+        "swiftSlowFraction": 1,
+        "setbackDistance": 0
+      }
+    },
+    {
+      "id": "B",
+      "label": "유도원 한 명 더 붙이고 한 대씩 통과시킵니다.",
+      "worldResult": "REINFORCED_CONTROL",
+      "tradeoff": "operational / manpower cost",
+      "runtime": {
+        "activeTicks": 160,
+        "swiftSlowFraction": 0.55,
+        "setbackDistance": 0
+      }
+    },
+    {
+      "id": "C",
+      "label": "대기 위치를 바꾸죠. 여기서 계속 받으면 반복됩니다.",
+      "worldResult": "REROUTED_STAGING",
+      "tradeoff": "structural / more setup time",
+      "runtime": {
+        "activeTicks": 240,
+        "swiftSlowFraction": 0.3,
+        "setbackDistance": 95
+      }
+    }
+  ],
+  "returnToDefense": {
+    "sameCameraAnchor": true,
+    "worldChangeMustRemainVisible": true,
+    "allChoicesSafe": true,
+    "noBaseBalanceMutation": true,
+    "runtimeConsequence": {
+      "scope": "DEF-CORE-01 Wave 8 SWIFT only",
+      "baseWaveContentUnchanged": true,
+      "A": "active SWIFT vehicles hold at the control line before release",
+      "B": "active and newly arriving SWIFT vehicles remain under reinforced marshal slowdown",
+      "C": "active SWIFT returns toward staging once; following SWIFT vehicles use a reduced-speed safer approach"
+    }
+  },
+  "hook": {
+    "speaker": "임준호",
+    "line": "부장님… 아까 저쪽, 어제도 한번 비슷했습니다.",
+    "followups": [
+      "더 묻기",
+      "기록하기",
+      "내일 확인"
+    ]
+  },
+  "audio": {
+    "states": [
+      "NORMAL_WORK",
+      "SIGNAL",
+      "RISK",
+      "STOP",
+      "RESTORED"
+    ],
+    "required": [
+      "site ambience",
+      "reverse cue",
+      "brake cue",
+      "radio open",
+      "stop stinger",
+      "control restored",
+      "short aftermath"
+    ]
+  },
+  "mobile": {
+    "requiredViewport": "390x844",
+    "mustReadTogether": [
+      "risk location",
+      "vehicle",
+      "pedestrian",
+      "CONTROL"
+    ],
+    "subtitleClearOfBottomUi": true
+  },
+  "protected": {
+    "keepDefenseGame": true,
+    "noStrategyMapShell": true,
+    "noNewTowerFamily": true,
+    "noNewRiskFamily": true,
+    "noBaseCoordinateChange": true,
+    "noBaseWaveBalanceChange": true,
+    "noMassAssetProduction": true,
+    "noRealCompanySiteVictimNames": true
+  },
+  "qa": {
+    "contract": true,
+    "browser": true,
+    "visual": true,
+    "audio": true,
+    "mobile": true,
+    "productionLock": true
+  },
+  "sliceAssets": {
+    "wideGate": "assets/episode01/cg/gate-dawn.webp",
+    "vehicleRear": "assets/episode01/cg/ramp-entry.webp",
+    "limJunho": "assets/episode01/characters/lim-junho-concerned.webp",
+    "choiMinseok": "assets/episode01/characters/choi-minseok-map.webp",
+    "leeJaehoon": "assets/episode01/characters/lee-jaehoon-portrait.webp",
+    "worldBarrier": "assets/episode01/scene-elements/access-barrier.webp",
+    "separation": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
+  },
+  "productionLock": {
+    "approved": true,
+    "gate": "G3",
+    "workflowRunId": 36109619260,
+    "verifiedSourceSha": "569dbe4ea72715feefdcc1b50f78c4e418ee2a89",
+    "desktopCycle": "PASS",
+    "mobileViewport": "390x844",
+    "mobileCycle": "PASS",
+    "liveRuntimeMotion": "C: 42 -> 0 -> 21",
+    "cinematicSeconds": 12.61,
+    "visualReview": "PASS — grounded CONTROL, no tower silhouette, portrait world remains visible",
+    "rule": "Do not expand new site/runtime systems until this lock is merged to main.",
+    "revalidatedAfterLock": true,
+    "finalWorkflowConclusion": "PASS"
+  }
+}

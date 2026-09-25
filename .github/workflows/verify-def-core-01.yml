@@ -1,0 +1,156 @@
+name: Verify DEF-CORE-01 One Step
+
+on:
+  push:
+    branches:
+      - sol/def-core-01-one-step-20260925
+    paths-ignore:
+      - 'qa/def-core-01/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: def-core-01-one-step
+  cancel-in-progress: true
+
+jobs:
+  def-core-01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout DEF-CORE-01 branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: DEF-CORE-01 and protected DefenseGame contracts
+        run: >
+          npx vitest run
+          tests/def-core-01-contract.test.ts
+          tests/def-hd01-pq-benchmark-contract.test.ts
+          tests/def-hd00-defense-baseline-contract.test.ts
+          tests/def-hd01-world-layout-contract.test.ts
+          tests/def-hd01-hd-board-runtime.test.ts
+          tests/zero-breach-engine.test.ts
+          tests/zero-breach-save.test.ts
+          tests/zero-breach-event.test.ts
+
+      - name: Verify G2 locked production assets
+        run: node scripts/verify-def-hd01-pq-assets.mjs
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run focused DEF-CORE-01 browser QA
+        shell: bash
+        env:
+          PSI_DEF_CORE_01_ARTIFACT_DIR: artifacts/def-core-01-browser
+        run: |
+          mkdir -p artifacts/def-core-01-browser
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/def-core-01-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/def-core-01-preview.log
+            exit 1
+          fi
+
+          node scripts/verify-def-core-01-browser.mjs
+
+      - name: Persist compact DEF-CORE-01 evidence
+        if: always()
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/def-core-01
+          mkdir -p qa/def-core-01
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Path('artifacts/def-core-01-browser')
+          out = Path('qa/def-core-01')
+          wanted = [
+              '01-signal.png',
+              '02-read.png',
+              '03-impact.png',
+              '04-cinematic-wide.png',
+              '04-cinematic-signal.png',
+              '04-cinematic-brake.png',
+              '05-decision.png',
+              '06-return-c.png',
+              '07-hook.png',
+              '08-done.png',
+              'mobile-01-signal.png',
+              'mobile-02-read.png',
+              'mobile-03-impact.png',
+              'mobile-05-decision.png',
+              'mobile-07-hook.png',
+              'error.png',
+          ]
+          for name in wanted:
+              p = src / name
+              if not p.exists():
+                  continue
+              im = Image.open(p).convert('RGB')
+              if im.width > 1100:
+                  h = round(im.height * 1100 / im.width)
+                  im = im.resize((1100, h), Image.Resampling.LANCZOS)
+              im.save(out / (p.stem + '.jpg'), 'JPEG', quality=82, optimize=True)
+
+          report = src / 'def-core-01-browser-report.json'
+          if report.exists():
+              (out / report.name).write_bytes(report.read_bytes())
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/def-core-01
+          if git diff --cached --quiet; then
+            echo "No DEF-CORE-01 evidence changes to commit."
+            exit 0
+          fi
+          git commit -m "qa: store DEF-CORE-01 browser evidence [skip ci]"
+          git push origin HEAD:sol/def-core-01-one-step-20260925

@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-25T07:50:20.402Z",
+  "source_sha": "569dbe4ea72715feefdcc1b50f78c4e418ee2a89",
+  "gate": "DEF-CORE-01",
+  "scenario": "event-ramp-reconstruction-v1",
+  "wave": 8,
+  "phases": [
+    "SIGNAL",
+    "READ",
+    "IMPACT",
+    "CINEMATIC",
+    "DECISION",
+    "RETURN",
+    "HOOK",
+    "DONE"
+  ],
+  "shots": [
+    "WIDE",
+    "FOCUS",
+    "REAR",
+    "SIGNAL",
+    "RADIO",
+    "BRAKE"
+  ],
+  "decision_count": 3,
+  "chosen": "C",
+  "followup": "RECORD",
+  "cinematic_wall_ms": 12613,
+  "audio_cues": [
+    "warning",
+    "warning",
+    "select",
+    "support",
+    "select",
+    "area_resolve",
+    "select",
+    "support"
+  ],
+  "assets": {
+    "assets/defense/board/ramp-01-hd01.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/defense/enemies/swift-pq01.svg": {
+      "ok": true,
+      "contentType": "image/svg+xml"
+    },
+    "assets/episode01/characters/choi-minseok-map.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/scene-elements/access-barrier.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/cg/gate-dawn.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/cg/ramp-entry.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/characters/lim-junho-concerned.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/characters/lee-jaehoon-portrait.webp": {
+      "ok": true,
+      "contentType": "image/webp"
+    },
+    "assets/episode01/audio/gate-queue.ogg": {
+      "ok": true,
+      "contentType": "audio/ogg"
+    },
+    "assets/episode01/audio/radio-burst.ogg": {
+      "ok": true,
+      "contentType": "audio/ogg"
+    },
+    "assets/episode01/audio/stopwork-silence-drop.ogg": {
+      "ok": true,
+      "contentType": "audio/ogg"
+    }
+  },
+  "runtime_motion": {
+    "choice": "C",
+    "pre_release_distance": 42,
+    "start_distance": 0,
+    "end_distance": 21,
+    "delta": 21
+  },
+  "final": {
+    "phase": "DONE",
+    "choice": "C",
+    "paused": false,
+    "world": "REROUTED_STAGING",
+    "barrier": 1,
+    "marshal": 1
+  },
+  "mobile": {
+    "viewport": "390x844",
+    "phases": [
+      "SIGNAL",
+      "READ",
+      "IMPACT",
+      "DECISION",
+      "HOOK"
+    ],
+    "no_horizontal_overflow": true,
+    "signal_rect": {
+      "left": 12,
+      "top": 536,
+      "right": 354,
+      "bottom": 732,
+      "width": 342,
+      "height": 196,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "read_rect": {
+      "left": 12,
+      "top": 246,
+      "right": 378,
+      "bottom": 598,
+      "width": 366,
+      "height": 353,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "decision_rect": {
+      "left": 12,
+      "top": 189,
+      "right": 378,
+      "bottom": 655,
+      "width": 366,
+      "height": 465,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "hook_rect": {
+      "left": 12,
+      "top": 243,
+      "right": 378,
+      "bottom": 601,
+      "width": 366,
+      "height": 358,
+      "innerWidth": 390,
+      "innerHeight": 844
+    },
+    "world_read": {
+      "board": {
+        "left": 0,
+        "top": 0,
+        "right": 1407,
+        "bottom": 844,
+        "width": 1407,
+        "height": 844
+      },
+      "world": true,
+      "marshal": {
+        "left": 160,
+        "top": 378,
+        "right": 209,
+        "bottom": 453
+      },
+      "barrier": {
+        "left": 120,
+        "top": 430,
+        "right": 203,
+        "bottom": 484
+      },
+      "rotation_blocking": false
+    }
+  },
+  "failures": []
+}

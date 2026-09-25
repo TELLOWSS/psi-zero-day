@@ -20,6 +20,7 @@ import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
 import { DefenseConflictOverlay, DefensePersistenceGate, DefenseSaveStatus } from './DefensePersistenceGate';
 import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
+import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
 
@@ -163,6 +164,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
+    data-distance={enemy.distance.toFixed(3)}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
@@ -265,6 +267,16 @@ export function DefenseGame({
   });
   const audio = useDefenseAudio(state);
   const effects = useDefenseEffects(state);
+  const oneStep = useDefCoreOneStep({
+    state,
+    onPause: paused => {
+      if (!state) return;
+      persistence.dispatch({ type: 'SetPaused', paused });
+    },
+    playCue: audio.playCue,
+    armAudio: audio.armAudio,
+    muted: audio.muted,
+  });
 
   const selectedTower = state?.towers.find(tower => tower.id === selectedTowerId) ?? null;
   const selectedPad = content.map.pads.find(pad => pad.id === selectedPadId) ?? null;
@@ -288,10 +300,14 @@ export function DefenseGame({
   useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
     const timer = window.setInterval(() => {
-      setState(current => current ? advanceDefense(current, resolveDefenseContentForRun(current), 1) : current);
+      setState(current => {
+        if (!current) return current;
+        const advanced = advanceDefense(current, resolveDefenseContentForRun(current), 1);
+        return applyDefCoreOneStepRuntime(current, advanced, oneStep.choice, oneStep.choiceTick);
+      });
     }, content.tickMs);
     return () => window.clearInterval(timer);
-  }, [state?.status, state?.paused, state?.speed]);
+  }, [state?.status, state?.paused, state?.speed, oneStep.choice, oneStep.choiceTick]);
 
   useEffect(() => {
     const onVisibility = () => {
@@ -446,7 +462,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}`} data-defense-screen="combat" data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -557,6 +573,7 @@ export function DefenseGame({
               <path d="M-24 0H24M0-24V24M-17-17L17 17M17-17L-17 17" />
             </g>;
           })}
+          <DefCoreOneStepBoardOverlay state={state} controller={oneStep} />
           {state.towers.map(tower => {
             const pad = content.map.pads.find(item => item.id === tower.padId)!;
             return <g key={tower.id} transform={`translate(${pad.x} ${pad.y})`}>
@@ -596,6 +613,8 @@ export function DefenseGame({
         </div>
       </div>
     </section>
+
+    <DefCoreOneStepOverlay controller={oneStep} />
 
     <footer className="zb-command">
       <section className="zb-selection">
@@ -721,7 +740,7 @@ export function DefenseGame({
 
     <DefenseConflictOverlay controller={persistence} />
 
-    {portrait ? <section className="zb-rotate" role="dialog" aria-modal="true">
+    {portrait && !oneStep.active ? <section className="zb-rotate" role="dialog" aria-modal="true">
       <div><span aria-hidden="true">↻</span><h2>{t('defense.ui.rotate.title')}</h2><p>{t('defense.ui.rotate.body')}</p><button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button></div>
     </section> : null}
   </main>;
