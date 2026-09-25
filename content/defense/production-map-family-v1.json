@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "G8A_BOTTOM_UP_PRODUCTION_MAP_CANDIDATE",
+  "generationRule": "ONE_MAP_AT_A_TIME",
+  "maps": [
+    {
+      "mapId": "map-apt-bottom-up-excavation-01",
+      "profileId": "apt-new-bottom-up-excavation",
+      "label": "공동주택 신축 · 순타 · 개방 굴착",
+      "runtimeUri": "assets/defense/board/ramp-01-hd01.webp",
+      "format": "webp",
+      "width": 1000,
+      "height": 600,
+      "status": "PRODUCTION_CANDIDATE",
+      "source": "DEF-HD01 approved aerial construction-site world plate",
+      "sourceRole": "UNIQUE_G8A_WORLD_PLATE",
+      "visualFit": [
+        "open excavation visible",
+        "temporary earth roads visible",
+        "heavy equipment and spoil handling visible",
+        "RC frame and tower crane context visible",
+        "no baked HUD, text or logo"
+      ],
+      "runtimeContract": {
+        "topologyAuthority": "content/defense/site-process-maps-v1.json",
+        "routeCoordinatesPreserved": true,
+        "padCoordinatesPreserved": true,
+        "runtimeOverlaysAuthoritative": true,
+        "noGameplayCoordinatesFromImage": true
+      },
+      "reusePolicy": {
+        "allowedForThisMap": true,
+        "allowedForOtherG8Maps": false,
+        "reason": "G8-A reuses one already-approved HD world plate only because it visually matches open-excavation bottom-up work. G8-B/C/D require their own world plates."
+      }
+    }
+  ]
+}
