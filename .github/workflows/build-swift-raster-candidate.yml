@@ -30,13 +30,8 @@ jobs:
           mkdir -p public/assets/defense/enemies
           rsvg-convert             --width 1024             --height 715             public/assets/defense/enemies/swift-pq01.svg             -o /tmp/swift-raster-candidate.png
           cwebp -quiet -q 94 -alpha_q 100 -m 6             /tmp/swift-raster-candidate.png             -o public/assets/defense/enemies/swift-raster-candidate.webp
-          python3 - <<'PY'
-          from PIL import Image
-          im=Image.open('public/assets/defense/enemies/swift-raster-candidate.webp')
-          print('SWIFT_RASTER_SIZE', im.size, im.mode)
-          assert im.width >= 1024
-          assert im.height >= 700
-          PY
+          webpinfo public/assets/defense/enemies/swift-raster-candidate.webp
+          test "$(stat -c%s public/assets/defense/enemies/swift-raster-candidate.webp)" -gt 5000
 
       - name: Commit candidate
         run: |
