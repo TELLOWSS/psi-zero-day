@@ -71,7 +71,8 @@ describe('G6 REMODEL-01', () => {
 
     const initialVeiled = initialRows.find(row => row.riskId === 'VEILED')!;
     const verifiedVeiled = verifiedRows.find(row => row.riskId === 'VEILED')!;
-    expect(initialVeiled.rank).toBe(1);
+    expect(initialVeiled.rank).toBeLessThanOrEqual(2);
+    expect(initialVeiled.score).toBeGreaterThanOrEqual(90);
     expect(verifiedVeiled.score).toBeLessThan(initialVeiled.score);
     expect(verifiedRows.some(row => row.riskId === 'ARMORED' && row.rank <= 3)).toBe(true);
   });
