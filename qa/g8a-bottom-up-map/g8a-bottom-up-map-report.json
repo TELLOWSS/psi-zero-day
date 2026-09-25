@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "source_sha": "85abccf3f98ff01840026e247d49fbe04018d8ae",
+  "desktop": {
+    "scenario": "training-site:apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "productionMap": "PRODUCTION_CANDIDATE",
+    "artHref": "assets/defense/board/ramp-01-hd01.webp",
+    "artBytes": 138860,
+    "productionArtCount": 1,
+    "processOverlay": true,
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "towers": 1,
+    "enemies": 1,
+    "prototypeBoardItems": 0,
+    "status": "RUNNING",
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    },
+    "overflow": false,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "mobile": {
+    "scenario": "training-site:apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "productionMap": "PRODUCTION_CANDIDATE",
+    "artHref": "assets/defense/board/ramp-01-hd01.webp",
+    "artBytes": 138860,
+    "productionArtCount": 1,
+    "processOverlay": true,
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "towers": 1,
+    "enemies": 1,
+    "prototypeBoardItems": 0,
+    "status": "RUNNING",
+    "board": {
+      "left": 6,
+      "top": 99,
+      "right": 384,
+      "bottom": 325,
+      "width": 378,
+      "height": 227
+    },
+    "overflow": false,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "failures": []
+}
