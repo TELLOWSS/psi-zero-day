@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "status": "G4_SITE_PROFILE_STARTING_PRIORS",
+  "note": "These are game-priority design priors, not statutory risk-assessment scores or accident-frequency statistics.",
+  "profiles": [
+    {
+      "id": "apt-new-bottom-up-excavation",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "BOTTOM_UP",
+      "processPhase": "EXCAVATION",
+      "label": "공동주택 신축 · 순타 · 굴착",
+      "mapFamily": "A1_SITE_EXCAVATION",
+      "baseRiskScores": {"NORMAL": 42, "SWIFT": 72, "ARMORED": 82, "SWARM": 58, "VEILED": 66, "BOSS": 18}
+    },
+    {
+      "id": "apt-new-bottom-up-rc-frame",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "BOTTOM_UP",
+      "processPhase": "RC_FRAME",
+      "label": "공동주택 신축 · 순타 · 골조",
+      "mapFamily": "A3_RC_FRAME",
+      "baseRiskScores": {"NORMAL": 48, "SWIFT": 72, "ARMORED": 84, "SWARM": 68, "VEILED": 46, "BOSS": 20}
+    },
+    {
+      "id": "apt-new-top-down-under-slab",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "TOP_DOWN",
+      "processPhase": "UNDER_SLAB_EXCAVATION",
+      "label": "공동주택 신축 · 역타 · 슬래브 하부굴착",
+      "mapFamily": "T2_UNDER_SLAB_EXCAVATION",
+      "baseRiskScores": {"NORMAL": 40, "SWIFT": 61, "ARMORED": 74, "SWARM": 78, "VEILED": 86, "BOSS": 18}
+    },
+    {
+      "id": "apt-new-top-down-concurrent",
+      "projectArchetype": "APT_NEW_BUILD",
+      "constructionMethod": "TOP_DOWN",
+      "processPhase": "CONCURRENT_ABOVE_BELOW",
+      "label": "공동주택 신축 · 역타 · 상하부 동시시공",
+      "mapFamily": "T3_CONCURRENT_ABOVE_BELOW",
+      "baseRiskScores": {"NORMAL": 44, "SWIFT": 67, "ARMORED": 76, "SWARM": 88, "VEILED": 82, "BOSS": 26}
+    },
+    {
+      "id": "apt-remodel-survey",
+      "projectArchetype": "APT_REMODEL",
+      "constructionMethod": "STRUCTURAL_RECONFIGURATION",
+      "processPhase": "SURVEY_ISOLATION",
+      "label": "공동주택 리모델링 · 조사/차단",
+      "mapFamily": "R1_SURVEY_ISOLATION",
+      "baseRiskScores": {"NORMAL": 50, "SWIFT": 35, "ARMORED": 68, "SWARM": 42, "VEILED": 88, "BOSS": 12}
+    },
+    {
+      "id": "apt-remodel-selective-demolition",
+      "projectArchetype": "APT_REMODEL",
+      "constructionMethod": "HORIZONTAL_EXTENSION",
+      "processPhase": "SELECTIVE_DEMOLITION",
+      "label": "공동주택 리모델링 · 선택철거",
+      "mapFamily": "R2_SELECTIVE_DEMOLITION",
+      "baseRiskScores": {"NORMAL": 52, "SWIFT": 58, "ARMORED": 88, "SWARM": 72, "VEILED": 82, "BOSS": 22}
+    },
+    {
+      "id": "apt-remodel-old-new-connection",
+      "projectArchetype": "APT_REMODEL",
+      "constructionMethod": "VERTICAL_EXTENSION",
+      "processPhase": "OLD_NEW_CONNECTION",
+      "label": "공동주택 리모델링 · 기존/신설 구조 접합",
+      "mapFamily": "R4_EXTENSION_CONNECTION",
+      "baseRiskScores": {"NORMAL": 48, "SWIFT": 74, "ARMORED": 90, "SWARM": 70, "VEILED": 66, "BOSS": 28}
+    },
+    {
+      "id": "data-center-mep",
+      "projectArchetype": "DATA_CENTER",
+      "constructionMethod": "CONVENTIONAL",
+      "processPhase": "MEP_ROUGH_IN",
+      "label": "데이터센터 · MEP Rough-in",
+      "mapFamily": "D2_MEP_ROUGH_IN",
+      "baseRiskScores": {"NORMAL": 62, "SWIFT": 54, "ARMORED": 58, "SWARM": 86, "VEILED": 72, "BOSS": 18}
+    },
+    {
+      "id": "data-center-electrical-ups",
+      "projectArchetype": "DATA_CENTER",
+      "constructionMethod": "PHASED",
+      "processPhase": "ELECTRICAL_UPS",
+      "label": "데이터센터 · 전기/UPS",
+      "mapFamily": "D3_ELECTRICAL_UPS",
+      "baseRiskScores": {"NORMAL": 42, "SWIFT": 38, "ARMORED": 82, "SWARM": 70, "VEILED": 90, "BOSS": 28}
+    },
+    {
+      "id": "data-center-commissioning",
+      "projectArchetype": "DATA_CENTER",
+      "constructionMethod": "PHASED",
+      "processPhase": "COMMISSIONING",
+      "label": "데이터센터 · 통전/통합시운전",
+      "mapFamily": "D6_COMMISSIONING",
+      "baseRiskScores": {"NORMAL": 34, "SWIFT": 38, "ARMORED": 78, "SWARM": 72, "VEILED": 94, "BOSS": 84}
+    }
+  ]
+}
