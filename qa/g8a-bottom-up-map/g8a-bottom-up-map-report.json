@@ -1,63 +1,9 @@
 {
   "schema_version": 1,
-  "source_sha": "612fa5d651095a0cdba19a7ee04121dbd2183f83",
-  "desktop": {
-    "scenario": "training-site:apt-new-bottom-up-excavation",
-    "map": "map-apt-bottom-up-excavation-01",
-    "productionMap": "PRODUCTION_CANDIDATE",
-    "artHref": "assets/defense/board/bottom-up-excavation-01.svg",
-    "artBytes": 5504,
-    "sourceBytes": 138860,
-    "productionArtCount": 1,
-    "processOverlay": true,
-    "pads": 8,
-    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
-    "towers": 1,
-    "enemies": 1,
-    "prototypeBoardItems": 0,
-    "status": "RUNNING",
-    "board": {
-      "left": 120,
-      "top": 66,
-      "right": 1320,
-      "bottom": 786,
-      "width": 1200,
-      "height": 720
-    },
-    "overflow": false,
-    "viewport": {
-      "width": 1440,
-      "height": 900
-    }
-  },
-  "mobile": {
-    "scenario": "training-site:apt-new-bottom-up-excavation",
-    "map": "map-apt-bottom-up-excavation-01",
-    "productionMap": "PRODUCTION_CANDIDATE",
-    "artHref": "assets/defense/board/bottom-up-excavation-01.svg",
-    "artBytes": 5504,
-    "sourceBytes": 138860,
-    "productionArtCount": 1,
-    "processOverlay": true,
-    "pads": 8,
-    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
-    "towers": 1,
-    "enemies": 1,
-    "prototypeBoardItems": 0,
-    "status": "RUNNING",
-    "board": {
-      "left": 6,
-      "top": 99,
-      "right": 384,
-      "bottom": 325,
-      "width": 378,
-      "height": 227
-    },
-    "overflow": false,
-    "viewport": {
-      "width": 390,
-      "height": 844
-    }
-  },
-  "failures": []
+  "source_sha": "432fc8c689d8f1f31ab436bdf1f77c069cf11842",
+  "desktop": null,
+  "mobile": null,
+  "failures": [
+    "SyntaxError: Invalid regular expression: /.svg(?:$|?)/i: Nothing to repeat"
+  ]
 }
