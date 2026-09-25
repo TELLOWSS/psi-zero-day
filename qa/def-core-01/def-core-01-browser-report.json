@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-25T07:21:00.156Z",
+  "source_sha": "996fb584e5708d6e1b11104a6972c81028c2d81d",
+  "gate": "DEF-CORE-01",
+  "scenario": "event-ramp-reconstruction-v1",
+  "wave": 8,
+  "phases": [
+    "SIGNAL",
+    "READ",
+    "IMPACT",
+    "CINEMATIC",
+    "DECISION",
+    "RETURN",
+    "HOOK",
+    "DONE"
+  ],
+  "shots": [
+    "WIDE",
+    "FOCUS",
+    "REAR",
+    "SIGNAL",
+    "RADIO",
+    "BRAKE"
+  ],
+  "decision_count": 3,
+  "chosen": "C",
+  "followup": "RECORD",
+  "cinematic_wall_ms": 12608,
+  "audio_cues": [],
+  "assets": {},
+  "runtime_motion": null,
+  "final": {
+    "phase": "DONE",
+    "choice": "C",
+    "paused": false,
+    "world": "REROUTED_STAGING",
+    "barrier": 1,
+    "marshal": 1
+  },
+  "failures": [
+    "Timed out waiting for: Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) <= 5"
+  ]
+}
