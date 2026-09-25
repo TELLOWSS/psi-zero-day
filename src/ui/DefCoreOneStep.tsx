@@ -200,11 +200,13 @@ export function useDefCoreOneStep({
   state,
   onPause,
   playCue,
+  armAudio,
   muted,
 }: {
   readonly state: DefenseRunState | null;
   readonly onPause: (paused: boolean) => void;
   readonly playCue: (cue: DefenseAudioCue) => void;
+  readonly armAudio: () => void;
   readonly muted: boolean;
 }): DefCoreOneStepController {
   const hydratedRunRef = useRef<string | null>(null);
@@ -300,6 +302,10 @@ export function useDefCoreOneStep({
     choiceResult,
     focusSignal: () => {
       if (phase !== 'SIGNAL') return;
+      // First explicit DEF-CORE user gesture unlocks browser audio.
+      // Re-emit the risk cue after arming so SIGNAL remains audible in real browsers.
+      armAudio();
+      playCue('warning');
       playCue('select');
       setPhase('READ');
     },
