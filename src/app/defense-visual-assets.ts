@@ -3,6 +3,7 @@ import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json'
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
+import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -98,6 +99,41 @@ interface SwiftFinalManifest {
 }
 const swiftFinalManifest = swiftFinalRaw as SwiftFinalManifest;
 
+interface WorldFinalManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly promotion: {
+    readonly productionApproved: boolean;
+  };
+}
+const worldFinalManifest = worldFinalRaw as WorldFinalManifest;
+
+export function defenseG8aWorldFinalAsset(): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+} | null {
+  if (
+    worldFinalManifest.status !== 'PRODUCTION_APPROVED'
+    || worldFinalManifest.promotion.productionApproved !== true
+    || !['webp','png'].includes(worldFinalManifest.format)
+    || worldFinalManifest.runtimeUri.toLowerCase().includes('.svg')
+  ) {
+    return null;
+  }
+  return {
+    uri: worldFinalManifest.runtimeUri,
+    width: worldFinalManifest.runtime.width,
+    height: worldFinalManifest.runtime.height,
+  };
+}
+
 function pqPreviewEnabled(): boolean {
   return defHd01PqBenchmark.runtimePromotion?.approved === true
     || defHd01PqBenchmark.runtimePromotion?.previewCandidateOnGateBranch === true;
@@ -148,6 +184,10 @@ function runtimeFinalAsset(id: string): DefenseVisualAsset | null {
 }
 
 export function defenseBoardArtUri(mapId: string): string | null {
+  if (mapId === 'map-apt-bottom-up-excavation-01') {
+    const finalWorld = defenseG8aWorldFinalAsset();
+    if (finalWorld) return finalWorld.uri;
+  }
   const productionMap = defenseProductionMapEntry(mapId);
   if (productionMap) return productionMap.runtimeUri;
   if (
