@@ -116,7 +116,7 @@ export function remodelRiskContext(state: RemodelRuntimeState, profileId: string
   return Object.freeze({
     profileId,
     concurrency: phaseLoad.concurrency,
-    uncertainty: state.asBuiltConfidence === 'LOW' ? 1 : state.asBuiltConfidence === 'MEDIUM' ? 0.55 : 0.18,
+    uncertainty: state.asBuiltConfidence === 'LOW' ? 0.5 : state.asBuiltConfidence === 'MEDIUM' ? 0.3 : 0.12,
     logisticsCongestion: phaseLoad.logistics,
     timePressure: state.phase === 'SELECTIVE_DEMOLITION' ? 0.55 : 0.25,
     asBuiltConfidence: state.asBuiltConfidence,
