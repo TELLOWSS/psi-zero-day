@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "source_sha": "0aca1f62af8d99ce010b67fb813cfe62c79b7306",
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "overflow": false,
+    "primary": "현장 디펜스 시작신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다›",
+    "labels": [
+      "현장 디펜스 시작",
+      "스토리 이어하기",
+      "현장 · 공정",
+      "새 스토리 시작"
+    ],
+    "primaryRect": {
+      "left": 35,
+      "top": 312,
+      "right": 338,
+      "bottom": 394,
+      "width": 302,
+      "height": 82
+    },
+    "liveRect": {
+      "left": 1097,
+      "top": 198,
+      "right": 1400,
+      "bottom": 409,
+      "width": 302,
+      "height": 211
+    },
+    "liveText": "LIVE SITEDEF-CORE-01서측 Gate · 차량–보행 간섭대표 시나리오 · WAVE 8 / 1001SWIFT차량 · 동선 급변02CONTROL유도 · 통로 분리03PSI약한 신호 읽기현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.",
+    "subcopy": "같은 안전관리자라도 현장·공법·공정이 달라지면 먼저 봐야 할 위험은 달라집니다.",
+    "featuresVisible": true
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "overflow": false,
+    "primary": "현장 디펜스 시작신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다›",
+    "labels": [
+      "현장 디펜스 시작",
+      "스토리 이어하기",
+      "현장 · 공정",
+      "새 스토리 시작"
+    ],
+    "primaryRect": {
+      "left": 15,
+      "top": 380,
+      "right": 366,
+      "bottom": 440,
+      "width": 351,
+      "height": 60
+    },
+    "liveRect": {
+      "left": 23,
+      "top": 490,
+      "right": 367,
+      "bottom": 595,
+      "width": 343,
+      "height": 105
+    },
+    "liveText": "LIVE SITEDEF-CORE-01서측 Gate · 차량–보행 간섭대표 시나리오 · WAVE 8 / 1001SWIFT차량 · 동선 급변02CONTROL유도 · 통로 분리03PSI약한 신호 읽기현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.",
+    "subcopy": "같은 안전관리자라도 현장·공법·공정이 달라지면 먼저 봐야 할 위험은 달라집니다.",
+    "featuresVisible": false
+  },
+  "defense_entry": {
+    "titleVisible": false,
+    "defenseVisible": true,
+    "screen": "save-loading"
+  },
+  "failures": []
+}
