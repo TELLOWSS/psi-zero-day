@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T07:45:36.164Z",
-  "source_sha": "85d918fd565dda19ceda60224cd8689df6bf9907",
+  "generated_at": "2026-09-25T07:47:43.081Z",
+  "source_sha": "243b93e60bfb8861bbb02c902bb76a36836fbc42",
   "gate": "DEF-CORE-01",
   "scenario": "event-ramp-reconstruction-v1",
   "wave": 8,
@@ -147,6 +147,30 @@
       "height": 358,
       "innerWidth": 390,
       "innerHeight": 844
+    },
+    "world_read": {
+      "board": {
+        "left": 0,
+        "top": 0,
+        "right": 1407,
+        "bottom": 844,
+        "width": 1407,
+        "height": 844
+      },
+      "world": true,
+      "marshal": {
+        "left": 160,
+        "top": 378,
+        "right": 209,
+        "bottom": 453
+      },
+      "barrier": {
+        "left": 120,
+        "top": 430,
+        "right": 203,
+        "bottom": 484
+      },
+      "rotation_blocking": false
     }
   },
   "failures": []
