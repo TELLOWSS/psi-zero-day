@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "0fafe4dc2e7ed0eb1bc33fb08595567a5fc87de0",
+  "source_sha": "88d3ace43e98039d04d3e75101372520392aad97",
   "gate": "HOME-DEFENSE-01",
   "viewports": [
     {
@@ -112,57 +112,46 @@
       "innerWidth": 844,
       "innerHeight": 390,
       "scrollWidth": 844,
-      "scrollHeight": 497,
+      "scrollHeight": 390,
       "primaryText": "현장 디펜스 시작약한 신호를 읽고 개입해 현장 자체를 바꾸는 본편 플레이›",
       "secondaryText": "스토리 시작사람관계 · 사건 · 판단의 맥락을 이어갑니다.",
       "primary": {
         "left": 34,
-        "top": 349,
-        "right": 523,
-        "bottom": 431,
-        "width": 490,
-        "height": 82
+        "top": 197,
+        "right": 506,
+        "bottom": 257,
+        "width": 473,
+        "height": 60
       },
       "secondary": {
         "left": 34,
-        "top": 439,
-        "right": 523,
-        "bottom": 497,
-        "width": 490,
-        "height": 58
+        "top": 262,
+        "right": 506,
+        "bottom": 306,
+        "width": 473,
+        "height": 44
       },
       "hero": {
         "left": 34,
-        "top": 122,
-        "right": 523,
-        "bottom": 497,
-        "width": 490,
-        "height": 375
+        "top": 76,
+        "right": 506,
+        "bottom": 306,
+        "width": 473,
+        "height": 230
       },
       "ops": {
         "left": 557,
-        "top": 112,
+        "top": 70,
         "right": 819,
-        "bottom": 409,
+        "bottom": 293,
         "width": 262,
-        "height": 297
+        "height": 223
       },
-      "dock": {
-        "left": 25,
-        "top": 316,
-        "right": 819,
-        "bottom": 479,
-        "width": 793,
-        "height": 163
-      },
+      "dock": null,
       "backdropLoaded": true,
       "smallButtons": [],
-      "failures": [
-        "primary CTA not fully visible in first viewport"
-      ]
+      "failures": []
     }
   ],
-  "failures": [
-    "phone-landscape-844x390: primary CTA not fully visible in first viewport"
-  ]
+  "failures": []
 }
