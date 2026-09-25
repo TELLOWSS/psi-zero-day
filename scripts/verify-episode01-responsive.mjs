@@ -39,7 +39,7 @@ browser.stderr.on('data', chunk => { browserStderr += chunk.toString(); });
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function waitForJson(url, timeoutMs = 10000) {
+async function waitForJson(url, timeoutMs = 30000) {
   const started = Date.now();
   let lastError;
   while (Date.now() - started < timeoutMs) {
@@ -236,7 +236,11 @@ function collectMetrics(stage, touchMode) {
   const strategyHudRect = metricRect(document.querySelector('.strategy-hud'));
   const strategyBrandRect = metricRect(document.querySelector('.strategy-brand'));
   const strategyLoopRect = metricRect(document.querySelector('.strategy-loop-stage-strip'));
-  const strategyMapRect = metricRect(document.querySelector('.strategy-map'));
+  const strategyMapElement = document.querySelector('.strategy-map');
+  const strategyMapRect = metricRect(strategyMapElement);
+  const strategyCameraWorldRect = metricRect(document.querySelector('.strategy-map-camera-world'));
+  const strategyCameraInteractionRect = metricRect(document.querySelector('.strategy-map-camera-interaction'));
+  const strategyRecenterRect = metricRect(document.querySelector('.strategy-camera-recenter'));
   const strategyObserveRect = metricRect(document.querySelector('.strategy-observe-card'));
   const strategyActionTrayRect = metricRect(document.querySelector('.strategy-action-tray'));
   const strategyGuideState = document.querySelector('.strategy-action-tray')?.getAttribute('data-guide-state') || null;
@@ -389,6 +393,11 @@ function collectMetrics(stage, touchMode) {
     strategyBrand: strategyBrandRect,
     strategyLoopStrip: strategyLoopRect,
     strategyMapRect,
+    strategyHd02Camera: strategyMapElement?.getAttribute('data-camera') || null,
+    strategyHd02Zoom: strategyMapElement?.getAttribute('data-camera-zoom') || null,
+    strategyCameraWorldRect,
+    strategyCameraInteractionRect,
+    strategyRecenterRect,
     strategyObserveCard: strategyObserveRect,
     strategyActionTray: strategyActionTrayRect,
     strategyGuideState,
@@ -522,6 +531,20 @@ function validate(row, viewport) {
     }
 
     const portraitPhone = viewport.height > viewport.width && viewport.width <= 420;
+    if (process.env.PSI_RESPONSIVE_PROFILE === 'hd02') {
+      if (row.strategyHd02Camera !== 'hd02') failures.push('HD-02 camera marker is missing');
+      if (!row.strategyCameraWorldRect || !row.strategyCameraInteractionRect) failures.push('HD-02 synchronized camera layers are missing');
+      if (!row.strategyRecenterRect || row.strategyRecenterRect.width < 44 || row.strategyRecenterRect.height < 44) {
+        failures.push('HD-02 recenter control is missing or below 44px: ' + JSON.stringify(row.strategyRecenterRect));
+      }
+      if (row.strategyCameraWorldRect && row.strategyCameraInteractionRect
+        && (Math.abs(row.strategyCameraWorldRect.left - row.strategyCameraInteractionRect.left) > 1
+          || Math.abs(row.strategyCameraWorldRect.top - row.strategyCameraInteractionRect.top) > 1
+          || Math.abs(row.strategyCameraWorldRect.width - row.strategyCameraInteractionRect.width) > 2
+          || Math.abs(row.strategyCameraWorldRect.height - row.strategyCameraInteractionRect.height) > 2)) {
+        failures.push('HD-02 world/interaction camera layers drifted apart');
+      }
+    }
     if (portraitPhone) {
       if (!row.strategyHud || row.strategyHud.height > 62) {
         failures.push('STRATEGY portrait HUD is too tall for map-first reading: ' + (row.strategyHud?.height ?? 'missing') + 'px');
@@ -760,13 +783,25 @@ function validate(row, viewport) {
   return failures;
 }
 
-const viewports = [
+const defaultViewports = [
   { name: 'desktop-1440x900', width: 1440, height: 900, mobile: false },
   { name: 'desktop-1920x1080', width: 1920, height: 1080, mobile: false },
   { name: 'phone-portrait-390x844', width: 390, height: 844, mobile: true },
   { name: 'phone-landscape-844x390', width: 844, height: 390, mobile: true },
   { name: 'tablet-portrait-820x1180', width: 820, height: 1180, mobile: true },
 ];
+
+const hd02Viewports = [
+  { name: 'hd02-phone-portrait-390x844', width: 390, height: 844, mobile: true },
+  { name: 'hd02-phone-portrait-412x915', width: 412, height: 915, mobile: true },
+  { name: 'hd02-phone-landscape-844x390', width: 844, height: 390, mobile: true },
+  { name: 'hd02-browser-1280x720', width: 1280, height: 720, mobile: false },
+  { name: 'hd02-browser-1366x768', width: 1366, height: 768, mobile: false },
+];
+
+const viewports = process.env.PSI_RESPONSIVE_PROFILE === 'hd02'
+  ? hd02Viewports
+  : defaultViewports;
 
 const report = [];
 let failed = false;
@@ -871,6 +906,41 @@ try {
       report.push({ viewportName: viewport.name, ...strategyMetrics, failures: strategyFailures });
       if (strategyFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-episode01-strategy.png');
+
+      if (process.env.PSI_RESPONSIVE_PROFILE === 'hd02') {
+        const focusClicked = await evaluate(cdp, `(() => {
+          const target = document.querySelector('.strategy-risk-signal.has-actions, .strategy-zone-target.has-actions, .strategy-map-worker.has-actions');
+          if (!(target instanceof HTMLElement)) return false;
+          target.click();
+          return true;
+        })()`);
+        await sleep(480);
+        const focusedZoom = Number(await evaluate(cdp, `document.querySelector('.strategy-map')?.getAttribute('data-camera-zoom') || '0'`));
+        const focusFailures = [];
+        if (!focusClicked) focusFailures.push('HD-02 could not find an actionable map target for focus probe');
+        if (focusedZoom < 1.2) focusFailures.push('HD-02 target focus did not zoom the camera: zoom=' + focusedZoom);
+        await screenshot(cdp, viewport.name + '-episode01-strategy-focus.png');
+
+        const recentered = await evaluate(cdp, `(() => {
+          const button = document.querySelector('.strategy-camera-recenter');
+          if (!(button instanceof HTMLElement)) return false;
+          button.click();
+          return true;
+        })()`);
+        await sleep(480);
+        const recenteredZoom = Number(await evaluate(cdp, `document.querySelector('.strategy-map')?.getAttribute('data-camera-zoom') || '0'`));
+        if (!recentered) focusFailures.push('HD-02 recenter control could not be activated');
+        if (Math.abs(recenteredZoom - 1) > .02) focusFailures.push('HD-02 recenter did not restore overview zoom: zoom=' + recenteredZoom);
+        report.push({
+          viewportName: viewport.name,
+          viewport: { width: viewport.width, height: viewport.height },
+          stage: 'hd02-camera-focus-recenter',
+          focusedZoom,
+          recenteredZoom,
+          failures: focusFailures,
+        });
+        if (focusFailures.length) failed = true;
+      }
 
       await driveEpisodeToEvent(cdp, 'e01_08c_site_pushback');
       await sleep(240);

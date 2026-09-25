@@ -181,4 +181,17 @@ describe('StrategyMapShell', () => {
     expect(html).toContain('class="strategy-production-pulse"');
   });
 
+
+  it('renders the HD-02 synchronized world/interaction camera and overview control', () => {
+    const html = renderToStaticMarkup(<StrategyMapShell
+      view={view} copy={copy} text={text} person={person} actions={actions} visualAssets={visualAssets}
+    />);
+    expect(html).toContain('data-camera="hd02"');
+    expect(html).toContain('data-camera-zoom="1.00"');
+    expect(html).toContain('strategy-map-camera strategy-map-camera-world');
+    expect(html).toContain('strategy-map-camera strategy-map-camera-interaction');
+    expect(html).toContain('strategy-camera-recenter');
+    expect(html).toContain('--strategy-camera-zoom:1');
+  });
+
 });
