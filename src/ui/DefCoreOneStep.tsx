@@ -147,8 +147,16 @@ export function applyDefCoreOneStepRuntime(
 
     const prior = previousById.get(enemy.id);
     const origin = prior?.distance ?? 0;
+    const hadRuntimeSlow = Boolean(prior?.slowEffects.some(
+      effect => effect.sourceId === sourceId && effect.endTick > previous.tick,
+    ));
     const travelled = Math.max(0, enemy.distance - origin);
-    let distance = origin + travelled * (1 - runtime.swiftSlowFraction);
+    // The engine already applies an existing slow effect. Retro-scale only the first
+    // post-decision movement (or the first tick of a newly spawned SWIFT) so the
+    // event layer never compounds its own slowdown on later ticks.
+    let distance = hadRuntimeSlow
+      ? enemy.distance
+      : origin + travelled * (1 - runtime.swiftSlowFraction);
 
     // C means the waiting point itself changes. On the first live tick, the active vehicle
     // visibly returns toward staging before proceeding on the safer approach.
@@ -324,7 +332,7 @@ export function DefCoreOneStepBoardOverlay({
   readonly controller: DefCoreOneStepController;
 }) {
   const showIntervention = ['IMPACT','CINEMATIC','DECISION','RETURN','HOOK','DONE'].includes(controller.phase);
-  if (!showIntervention && !controller.choice) return null;
+  if (!controller.eligible || (!showIntervention && !controller.choice)) return null;
 
   const swift = state.enemies.find(enemy => enemy.enemyId === 'SWIFT');
   const swiftPos = swift ? defensePositionAtDistance(CORE_PATH, swift.distance) : { x: 92, y: 300 };
