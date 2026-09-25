@@ -8,6 +8,7 @@ import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
+import { SiteProfileScreen } from './SiteProfileScreen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import { defenseText } from '../app/defense-text';
@@ -19,7 +20,7 @@ import { zeroBreachContent } from '../content/defense';
 import { defenseEvents } from '../content/defense-events';
 import { browserLocalStoragePort } from '../platform/browser-storage';
 
-type HubPage = 'home' | 'map' | 'people' | 'journal' | 'guide';
+type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
 const featured = TITLE_CAST_IDS;
 const loadPlayableEpisode = () => import('./PlayableEpisode');
@@ -343,7 +344,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
           {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
-        <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
+        <button className="commercial-title-action" type="button" onClick={() => setPage('site')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
           <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
           <b>›</b>
@@ -490,8 +491,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
       </button>)}
       <p className="hub-nav-note">{t('ui.hub.note')}</p>
     </nav>
-    <section className="hub-main" aria-label={t(`ui.hub.${page}`)}>
-      {page === 'map' ? <>
+    <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
+      {page === 'site' ? <SiteProfileScreen onBack={() => setPage('home')} /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
           <svg className="hub-route-line" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"><path d="M150 100 L470 120 L810 155 L660 335 L300 340" /></svg>
