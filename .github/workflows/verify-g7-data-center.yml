@@ -6,7 +6,7 @@ on:
       - sol/g7-data-center-01-20260925
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: g7-data-center-${{ github.ref }}
@@ -37,3 +37,86 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run G7 data-center browser QA
+        shell: bash
+        env:
+          PSI_G7_ARTIFACT_DIR: artifacts/g7-data-center
+        run: |
+          mkdir -p artifacts/g7-data-center
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g7-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g7-preview.log
+            exit 1
+          fi
+          node scripts/verify-g7-data-center-browser.mjs
+
+      - name: Persist G7 QA evidence
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          rm -rf qa/g7-data-center
+          mkdir -p qa/g7-data-center
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          src=Path('artifacts/g7-data-center')
+          out=Path('qa/g7-data-center')
+          for name in [
+              '01-data-center-initial.png',
+              '02-data-center-energized.png',
+              '03-data-center-combat.png',
+              '04-data-center-integrated.png',
+              '05-mobile-data-center-panel.png',
+              'error.png'
+          ]:
+              p=src/name
+              if not p.exists():
+                  continue
+              im=Image.open(p).convert('RGB')
+              if im.width>1100:
+                  h=round(im.height*1100/im.width)
+                  im=im.resize((1100,h),Image.Resampling.LANCZOS)
+              im.save(out/(p.stem+'.jpg'),'JPEG',quality=84,optimize=True)
+          report=src/'g7-data-center-report.json'
+          if report.exists():
+              (out/report.name).write_bytes(report.read_bytes())
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa/g7-data-center
+          if git diff --cached --quiet; then
+            echo "No G7 evidence changes."
+            exit 0
+          fi
+          git commit -m "qa: store G7 data-center evidence [skip ci]"
+          git push origin HEAD:sol/g7-data-center-01-20260925
