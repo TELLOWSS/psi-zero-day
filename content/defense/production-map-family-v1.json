@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "G8A_CONTROL_PASS_SWIFT_FINAL_REQUIRED",
+  "status": "G8A_WORLD_AND_SWIFT_FINAL_REQUIRED",
   "generationRule": "ONE_MAP_AT_A_TIME",
   "maps": [
     {
@@ -35,7 +35,7 @@
       "finalArtPolicy": {
         "svgFinalArtForbidden": true,
         "productionLockAllowed": false,
-        "blockingReason": "CONTROL raster composite passes representative runtime. SWIFT still needs a dedicated high-end transparent WebP/PNG final asset; prototype fallback is intentionally blocked."
+        "blockingReason": "CONTROL raster composite passes representative runtime. The world plate remains HD_REFERENCE_ONLY and SWIFT remains a prototype fallback; both require dedicated approved non-SVG final raster assets before Production Lock."
       },
       "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
       "legalCompliance": {
@@ -65,7 +65,13 @@
           "activeSvgVisuals": 0,
           "prototypeBoardItems": 1,
           "result": "BLOCKED_AS_DESIGNED",
-          "blocker": "SWIFT has no approved non-SVG final raster, so runtime correctly falls back to prototype and Production Lock is denied."
+          "blocker": "The world plate is still HD_REFERENCE_ONLY and SWIFT has no approved non-SVG final raster. Production Lock is denied until both final assets are approved and actual-play QA reaches zero prototype/SVG leakage."
+        },
+        "worldPlate": {
+          "state": "FINAL_RASTER_MISSING",
+          "manifest": "content/defense/g8a-world-final-art.json",
+          "currentRuntime": "assets/defense/board/ramp-01-hd01.webp",
+          "currentRole": "HD_REFERENCE_ONLY"
         }
       }
     }
