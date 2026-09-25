@@ -81,6 +81,7 @@ jobs:
           node scripts/verify-g8a-bottom-up-map-browser.mjs
 
       - name: Persist G8-A QA evidence
+        if: always()
         shell: bash
         run: |
           python3 -m pip install --quiet pillow
