@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "5994242d4dab0c2ef0ac01a92118949cf2a94afd",
+  "source_sha": "44d8f1d328b8c11c8c7b4f3240c4b368322acba5",
   "desktop": {
     "viewport": {
       "width": 1440,
@@ -75,25 +75,25 @@
       "left": 12,
       "top": 269,
       "right": 378,
-      "bottom": 1743,
+      "bottom": 1803,
       "width": 366,
-      "height": 1474
+      "height": 1534
     },
     "priorityRect": {
       "left": 24,
-      "top": 1190,
+      "top": 420,
       "right": 366,
-      "bottom": 1719,
+      "bottom": 949,
       "width": 342,
       "height": 529
     },
     "pickerRect": {
       "left": 24,
-      "top": 420,
+      "top": 967,
       "right": 366,
-      "bottom": 1172,
+      "bottom": 1779,
       "width": 342,
-      "height": 752
+      "height": 812
     },
     "selected": [
       "역타 · 슬래브 하부굴착"
