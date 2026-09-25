@@ -61,6 +61,12 @@ try{
  if(report.mobile.overflow) throw new Error('mobile horizontal overflow');
  const rr=report.mobile.screenRect;
  if(!rr||rr.left<-1||rr.right>391) throw new Error('mobile site screen width escaped '+JSON.stringify(rr));
+ if(!report.mobile.priorityRect || !report.mobile.pickerRect || report.mobile.priorityRect.top >= report.mobile.pickerRect.top) {
+   throw new Error('mobile PSI priority must appear before the long profile picker '+JSON.stringify({priority:report.mobile.priorityRect,picker:report.mobile.pickerRect}));
+ }
+ if(report.mobile.priorityRect.top > 520) {
+   throw new Error('mobile PSI priority starts too far below the first viewport '+JSON.stringify(report.mobile.priorityRect));
+ }
  await shot(cdp,'mobile-site-profile.png');
 }catch(e){report.failures.push(e instanceof Error?e.message:String(e));if(cdp){try{await shot(cdp,'error.png')}catch{}}}
 finally{if(cdp)cdp.close();if(target){try{await fetch('http://127.0.0.1:'+port+'/json/close/'+target.id)}catch{}}browser.kill('SIGTERM');await Promise.race([new Promise(r=>browser.once('exit',r)),sleep(1000)]);try{fs.rmSync(profile,{recursive:true,force:true})}catch{}}
