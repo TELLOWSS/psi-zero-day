@@ -324,47 +324,51 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: { session: Ep
 
     <section className="commercial-title-copy">
       <div className="commercial-title-logo"><span>NEW PSI</span><b>:</b><span>ZERO DAY</span></div>
-      <h1>{t('ui.tagline')}</h1>
-      <p className="commercial-title-english">Proactive Safety Intelligence</p>
-      <p className="commercial-title-subcopy">{t('ui.title.subcopy')}</p>
+      <h1>사고 전 신호를 읽고, 현장을 바꿔라.</h1>
+      <p className="commercial-title-english">Proactive Safety Intelligence · FIELD DEFENSE</p>
+      <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 먼저 봐야 할 위험은 달라집니다.</p>
 
-      <div className="commercial-title-actions">
-        <button className="commercial-title-action is-primary" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
+      <div className="commercial-title-actions is-defense-first">
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.new_game')}</strong><small>{t('ui.title.new_game.hint')}</small></span>
+          <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>
           <b>›</b>
-        </button>
+        </button> : null}
         <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
           <span className="commercial-title-action-icon"><HubIcon kind="journal" /></span>
           <span className="commercial-title-action-copy">
-            <strong>{t('ui.title.continue')}</strong>
-            <small>{canContinue ? t('ui.title.continue.hint') : t('ui.title.no_save')}</small>
+            <strong>스토리 이어하기</strong>
+            <small>{canContinue ? '현장 사람들과 이전 판단의 결과를 이어갑니다' : t('ui.title.no_save')}</small>
           </span>
           {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
-        {onDefense ? <button className="commercial-title-action" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={onDefense}>
-          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>{defenseText('defense.ui.hub.title')}</strong><small>{defenseText('defense.ui.hub.hint')}</small></span>
-          <b>›</b>
-        </button> : null}
         <button className="commercial-title-action" type="button" onClick={() => setPage('map')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.map')}</strong><small>{t('ui.title.map.hint')}</small></span>
+          <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
           <b>›</b>
         </button>
-        <button className="commercial-title-action" type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}>
-          <span className="commercial-title-action-icon"><HubIcon kind="guide" /></span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.guide')}</strong><small>{t('ui.title.guide.hint')}</small></span>
-          <b>›</b>
-        </button>
-        <button className="commercial-title-action" type="button" onClick={() => setShowTitleSettings(true)}>
-          <span className="commercial-title-action-icon commercial-title-settings-glyph" aria-hidden="true">⚙</span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.title.settings')}</strong><small>{t('ui.title.settings.menu_hint')}</small></span>
+        <button className="commercial-title-action is-quiet" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
+          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
+          <span className="commercial-title-action-copy"><strong>새 스토리 시작</strong><small>{t('ui.title.new_game.hint')}</small></span>
           <b>›</b>
         </button>
       </div>
     </section>
+
+    <aside className="commercial-title-field-status" aria-label="현재 현장 디펜스">
+      <div className="commercial-title-field-status-head">
+        <span>LIVE SITE</span><b>DEF-CORE-01</b>
+      </div>
+      <strong>서측 Gate · 차량–보행 간섭</strong>
+      <small>대표 시나리오 · WAVE 8 / 10</small>
+      <div className="commercial-title-risk-strip">
+        <span><i>01</i><b>SWIFT</b><small>차량 · 동선 급변</small></span>
+        <span><i>02</i><b>CONTROL</b><small>유도 · 통로 분리</small></span>
+        <span><i>03</i><b>PSI</b><small>약한 신호 읽기</small></span>
+      </div>
+      <p>현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.</p>
+    </aside>
 
     <aside className="commercial-title-message">
       <p>{t('ui.title.brand_copy')}</p>
