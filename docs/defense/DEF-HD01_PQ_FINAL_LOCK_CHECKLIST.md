@@ -1,9 +1,9 @@
 # DEF-HD01-PQ — FINAL G2 LOCK CHECKLIST
 
-Date: 2026-09-24  
+Date: 2026-09-25  
 Branch: `sol/def-hd01-pq-benchmark-20260924`  
 PR: #48  
-Latest verified branch head before this checklist: `b7dd4c6a44060b8bc69d49e9c0ba464e9ccb8f0d`
+Final fresh-QA source SHA: `04f2d90eb18ea7a20461ff418fd9efcf08597d6a`
 
 ## Scope
 
@@ -75,19 +75,30 @@ Latest Vercel deployment for the final dedicated-SWIFT branch state:
 
 ## Production approval state
 
-**NOT APPROVED YET.**
+**APPROVED — G2 PRODUCTION LOCKED.**
 
-`runtimePromotion.approved` must remain `false` until fresh actual-browser evidence is captured after the dedicated SWIFT switch.
+Fresh schema-v2 actual-browser evidence passed on GitHub-hosted runner `1000001411`.
+
+- workflow run: `36066893099`
+- attempt: `5`
+- result: WON
+- waves: 10/10
+- stars: 2/3
+- shield: 18
+- failures: none
+- SWIFT: `assets/defense/enemies/swift-pq01.svg`
+- CONTROL L1 count: exactly 1
+- `runtimePromotion.approved=true`
+- `runtimePromotion.previewCandidateOnGateBranch=false`
+- `runtimePromotion.status=PRODUCTION_LOCKED`
 
 ## External QA blocker
 
-GitHub Actions is currently creating the G2 job but terminating it before any workflow step or log is created. API inspection shows `runner_id=0`, an empty runner name, and `steps=[]`.
+**RESOLVED.**
 
-A temporary one-step `G2 Runner Sentinel` reproduced the same failure on `ubuntu-latest`, proving this is not caused by the G2 workflow body. The sentinel was removed after diagnosis.
+The repository was changed from private to public. The ultra-light `GitHub Runner Probe` then received runner `1000001408` and completed successfully. Final G2 QA subsequently ran on runner `1000001411` and passed.
 
-The last runner-assigned failure had already passed Typecheck/tests/Build; its browser step failed on Chrome 153 CDP startup and its artifact upload hit storage quota. The current workflow has since hardened Chrome startup, added dynamic CDP port allocation, and removed the blocking artifact-upload path.
-
-This infrastructure failure is not accepted as a code/test failure, but it also does not satisfy the fresh browser QA requirement.
+The earlier `runner_id=0 / steps=[]` condition is retained only as historical diagnosis and is no longer an active blocker.
 
 ## Final G2 PASS conditions
 
@@ -107,11 +118,11 @@ All of the following are required before Production Lock:
 
 ## Next Gate
 
-After all ten conditions pass:
+All G2 PASS conditions are satisfied.
 
-**DEF-CORE-01 — vehicle/pedestrian “한 걸음” Vertical Slice**
+**NEXT: DEF-CORE-01 — vehicle/pedestrian “한 걸음” Vertical Slice**
 
-Do not begin DEF-CORE-01 before G2 Production Lock.
+G2 Production Lock is complete; DEF-CORE-01 may begin after PR #48 is merged to `main`.
 
 
 ## Promotion transaction
@@ -150,3 +161,16 @@ After the fresh manual G2 browser QA has written schema-v2 evidence into `qa/def
 6. Only then merge PR #48 and begin DEF-CORE-01.
 
 Do not hand-edit the Production Lock flags individually.
+
+
+## Final closure record
+
+- Runner Probe PASS: run `36067770735`, attempt 9, runner `1000001408`
+- Final browser QA PASS: run `36066893099`, attempt 5, runner `1000001411`
+- Fresh evidence generated: `2026-09-25T05:15:12.134Z`
+- QA source SHA: `04f2d90eb18ea7a20461ff418fd9efcf08597d6a`
+- Production Lock commit: `ae547a3ca7c34c392407d5f8a33f5606b8742cb4`
+- Final report: `qa/def-hd01-pq/step4-browser-report.json`
+- Visual evidence: `qa/def-hd01-pq/05a-pq-swift-wave8.jpg`, `qa/def-hd01-pq/06a-pq-control-l1.jpg`
+- Protected gameplay coordinates/balance: unchanged
+- Vercel automatic deployment: remains disabled
