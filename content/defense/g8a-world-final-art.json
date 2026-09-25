@@ -9,12 +9,14 @@
     "minimumWidth": 4000,
     "minimumHeight": 2400,
     "aspectRatio": "5:3",
-    "transparentBackground": false
+    "transparentBackground": false,
+    "repositoryUri": "production-assets/defense/g8a/bottom-up-excavation-master.webp"
   },
   "runtime": {
     "width": 1000,
     "height": 600,
-    "preserveAspectRatio": "xMidYMid slice"
+    "preserveAspectRatio": "xMidYMid slice",
+    "transparentBackground": false
   },
   "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
   "role": "process-specific bottom-up open-excavation world plate",
