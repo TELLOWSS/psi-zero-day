@@ -6,7 +6,7 @@ import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { zeroBreachContent } from '../content/defense';
-import { siteDefenseContentForScenario } from '../content/site-process-maps';
+import { siteDefenseContentForScenario, siteProcessMapByMapId } from '../content/site-process-maps';
 import {
   defenseContentForScenario, defenseEventById, defenseEvents, resolveDefenseContentForRun,
 } from '../content/defense-events';
@@ -259,6 +259,7 @@ export function DefenseGame({
   const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
   const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
+  const activeSiteMap = siteProcessMapByMapId(content.map.id);
   const [selectedPadId, setSelectedPadId] = useState<string | null>(null);
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -444,9 +445,9 @@ export function DefenseGame({
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
-      <span>{content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
-      <h2>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
-      <p>{content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
+      <span>{activeSiteMap ? 'G5 · 공정별 맵 체험' : content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
+      <h2>{activeSiteMap ? activeSiteMap.label : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
+      <p>{activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
     <section className="zb-support-grid">
       {SUPPORT_IDS.map(id => <SupportCard
@@ -612,8 +613,8 @@ export function DefenseGame({
         </aside>
 
         <div className="zb-board-caption">
-          <span>{t('defense.ui.dev_notice')}</span>
-          <b>{t('defense.map.ramp-01.name')}</b>
+          <span>{activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
+          <b>{activeSiteMap?.label ?? t('defense.map.ramp-01.name')}</b>
         </div>
       </div>
     </section>
