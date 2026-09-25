@@ -209,14 +209,16 @@
   "productionLock": {
     "approved": true,
     "gate": "G3",
-    "workflowRunId": 36109408663,
-    "verifiedSourceSha": "243b93e60bfb8861bbb02c902bb76a36836fbc42",
+    "workflowRunId": 36109619260,
+    "verifiedSourceSha": "569dbe4ea72715feefdcc1b50f78c4e418ee2a89",
     "desktopCycle": "PASS",
     "mobileViewport": "390x844",
     "mobileCycle": "PASS",
     "liveRuntimeMotion": "C: 42 -> 0 -> 21",
     "cinematicSeconds": 12.61,
     "visualReview": "PASS — grounded CONTROL, no tower silhouette, portrait world remains visible",
-    "rule": "Do not expand new site/runtime systems until this lock is merged to main."
+    "rule": "Do not expand new site/runtime systems until this lock is merged to main.",
+    "revalidatedAfterLock": true,
+    "finalWorkflowConclusion": "PASS"
   }
 }
