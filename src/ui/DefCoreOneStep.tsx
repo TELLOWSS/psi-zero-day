@@ -265,20 +265,20 @@ export function DefCoreOneStepBoardOverlay({
     />
     <line x1={worldResult === 'HOLD_LINE' ? 58 : 86} y1="276" x2={worldResult === 'HOLD_LINE' ? 58 : 86} y2="326" className="def-core-hold-line" />
     <image
-      href="assets/episode01/scene-elements/access-barrier.webp"
-      x="105"
-      y="248"
-      width="112"
-      height="72"
+      href="assets/episode01/scene-elements/vehicle-pedestrian-separation.webp"
+      x="26"
+      y="190"
+      width="286"
+      height="205"
       preserveAspectRatio="xMidYMid meet"
-      className="def-core-barrier"
+      className="def-core-barrier def-core-separation"
     />
     <image
       href="assets/episode01/characters/choi-minseok-map.webp"
-      x="128"
+      x="126"
       y="205"
-      width="66"
-      height="100"
+      width="58"
+      height="88"
       preserveAspectRatio="xMidYMid meet"
       className="def-core-marshal"
     />
@@ -295,9 +295,9 @@ export function DefCoreOneStepBoardOverlay({
 }
 
 const SHOT_VISUALS = [
-  { uri: 'assets/defense/board/ramp-01-hd01.webp', alt: '서측 게이트 전경' },
+  { uri: 'assets/episode01/cg/gate-dawn.webp', alt: '차량과 보행자가 교차하는 서측 게이트 전경' },
   { uri: 'assets/episode01/characters/lim-junho-concerned.webp', alt: '멈춰 선 임준호' },
-  { uri: 'assets/defense/enemies/swift-pq01.svg', alt: '후진 차량' },
+  { uri: 'assets/episode01/cg/ramp-entry.webp', alt: '후진 차량 후미와 제한된 진입 동선' },
   { uri: 'assets/episode01/characters/choi-minseok-map.webp', alt: '정지 신호를 보내는 최민석' },
   { uri: 'assets/episode01/characters/player-portrait.webp', alt: '무전으로 개입하는 플레이어' },
   { uri: 'assets/episode01/characters/lee-jaehoon-portrait.webp', alt: '현장에 도착한 이재훈' },
