@@ -11,6 +11,7 @@ import { validateDefenseContent, zeroBreachContent } from './defense';
 const ROUTE_KINDS = new Set<SiteRouteKind>(['vehicle','worker','material']);
 const ZONE_KINDS = new Set<SiteZoneKind>([
   'EXCAVATION','UNDER_SLAB','LOGISTICS_CONFLICT','LOW_VISIBILITY','OPENING','MATERIAL_STAGING','RESTRICTED',
+  'EXISTING_STRUCTURE','TEMP_SUPPORT','EXTENSION_CONNECTION',
 ]);
 const TRANSFER_KINDS = new Set<VerticalTransferKind>(['RAMP','MUCK_OPENING','STAIR','LIFT_OPENING']);
 const TOWER_IDS = new Set<DefenseTowerId>(['PULSE','BURST','CONTROL','SENSOR']);
