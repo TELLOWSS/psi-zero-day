@@ -1,0 +1,40 @@
+name: Verify HOME-DEFENSE-01
+
+on:
+  push:
+    branches:
+      - sol/home-defense-command-20260925
+  workflow_dispatch:
+
+concurrency:
+  group: home-defense-01-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  home-defense:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout home branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Home and hub contracts
+        run: npx vitest run tests/defense-command-home.test.tsx tests/game-hub.test.tsx
+
+      - name: Build
+        run: npm run build
