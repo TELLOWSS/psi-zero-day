@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "G6_REMODEL_RUNTIME_PROOF",
+  "status": "G6_REMODEL_01_LOCKED",
   "scenario": {
     "id": "training-remodel:selective-demolition-connection",
     "profileId": "apt-remodel-selective-demolition",
@@ -23,63 +23,176 @@
           "id": "remodel-worker-route",
           "kind": "vehicle",
           "points": [
-            {"x":0,"y":470},
-            {"x":170,"y":470},
-            {"x":170,"y":360},
-            {"x":360,"y":360},
-            {"x":360,"y":250},
-            {"x":590,"y":250},
-            {"x":590,"y":390},
-            {"x":790,"y":390},
-            {"x":790,"y":260},
-            {"x":1000,"y":260}
+            {
+              "x": 0,
+              "y": 470
+            },
+            {
+              "x": 170,
+              "y": 470
+            },
+            {
+              "x": 170,
+              "y": 360
+            },
+            {
+              "x": 360,
+              "y": 360
+            },
+            {
+              "x": 360,
+              "y": 250
+            },
+            {
+              "x": 590,
+              "y": 250
+            },
+            {
+              "x": 590,
+              "y": 390
+            },
+            {
+              "x": 790,
+              "y": 390
+            },
+            {
+              "x": 790,
+              "y": 260
+            },
+            {
+              "x": 1000,
+              "y": 260
+            }
           ]
         },
         {
           "id": "remodel-worker-access",
           "kind": "worker",
           "points": [
-            {"x":40,"y":140},
-            {"x":250,"y":140},
-            {"x":250,"y":220},
-            {"x":480,"y":220},
-            {"x":480,"y":490},
-            {"x":710,"y":490},
-            {"x":710,"y":330},
-            {"x":930,"y":330}
+            {
+              "x": 40,
+              "y": 140
+            },
+            {
+              "x": 250,
+              "y": 140
+            },
+            {
+              "x": 250,
+              "y": 220
+            },
+            {
+              "x": 480,
+              "y": 220
+            },
+            {
+              "x": 480,
+              "y": 490
+            },
+            {
+              "x": 710,
+              "y": 490
+            },
+            {
+              "x": 710,
+              "y": 330
+            },
+            {
+              "x": 930,
+              "y": 330
+            }
           ]
         },
         {
           "id": "remodel-debris-out",
           "kind": "material",
           "points": [
-            {"x":295,"y":305},
-            {"x":180,"y":305},
-            {"x":180,"y":520},
-            {"x":0,"y":520}
+            {
+              "x": 295,
+              "y": 305
+            },
+            {
+              "x": 180,
+              "y": 305
+            },
+            {
+              "x": 180,
+              "y": 520
+            },
+            {
+              "x": 0,
+              "y": 520
+            }
           ]
         },
         {
           "id": "remodel-reinforcement-in",
           "kind": "material",
           "points": [
-            {"x":1000,"y":120},
-            {"x":830,"y":120},
-            {"x":830,"y":205},
-            {"x":650,"y":205},
-            {"x":650,"y":305}
+            {
+              "x": 1000,
+              "y": 120
+            },
+            {
+              "x": 830,
+              "y": 120
+            },
+            {
+              "x": 830,
+              "y": 205
+            },
+            {
+              "x": 650,
+              "y": 205
+            },
+            {
+              "x": 650,
+              "y": 305
+            }
           ]
         }
       ],
       "pads": [
-        {"id":"RM-P1","x":105,"y":390},
-        {"id":"RM-P2","x":275,"y":430},
-        {"id":"RM-P3","x":300,"y":275},
-        {"id":"RM-P4","x":455,"y":330},
-        {"id":"RM-P5","x":530,"y":160},
-        {"id":"RM-P6","x":665,"y":450},
-        {"id":"RM-P7","x":740,"y":220},
-        {"id":"RM-P8","x":895,"y":360}
+        {
+          "id": "RM-P1",
+          "x": 105,
+          "y": 390
+        },
+        {
+          "id": "RM-P2",
+          "x": 275,
+          "y": 430
+        },
+        {
+          "id": "RM-P3",
+          "x": 300,
+          "y": 275
+        },
+        {
+          "id": "RM-P4",
+          "x": 455,
+          "y": 330
+        },
+        {
+          "id": "RM-P5",
+          "x": 530,
+          "y": 160
+        },
+        {
+          "id": "RM-P6",
+          "x": 665,
+          "y": 450
+        },
+        {
+          "id": "RM-P7",
+          "x": 740,
+          "y": 220
+        },
+        {
+          "id": "RM-P8",
+          "x": 895,
+          "y": 360
+        }
       ],
       "zones": [
         {
@@ -87,10 +200,22 @@
           "kind": "EXISTING_STRUCTURE",
           "label": "기존 구조체",
           "points": [
-            {"x":150,"y":105},
-            {"x":645,"y":105},
-            {"x":645,"y":505},
-            {"x":150,"y":505}
+            {
+              "x": 150,
+              "y": 105
+            },
+            {
+              "x": 645,
+              "y": 105
+            },
+            {
+              "x": 645,
+              "y": 505
+            },
+            {
+              "x": 150,
+              "y": 505
+            }
           ]
         },
         {
@@ -98,10 +223,22 @@
           "kind": "RESTRICTED",
           "label": "선택철거 구역",
           "points": [
-            {"x":285,"y":235},
-            {"x":485,"y":235},
-            {"x":485,"y":410},
-            {"x":285,"y":410}
+            {
+              "x": 285,
+              "y": 235
+            },
+            {
+              "x": 485,
+              "y": 235
+            },
+            {
+              "x": 485,
+              "y": 410
+            },
+            {
+              "x": 285,
+              "y": 410
+            }
           ]
         },
         {
@@ -109,10 +246,22 @@
           "kind": "TEMP_SUPPORT",
           "label": "임시지지/잭서포트 구역",
           "points": [
-            {"x":235,"y":190},
-            {"x":535,"y":190},
-            {"x":535,"y":455},
-            {"x":235,"y":455}
+            {
+              "x": 235,
+              "y": 190
+            },
+            {
+              "x": 535,
+              "y": 190
+            },
+            {
+              "x": 535,
+              "y": 455
+            },
+            {
+              "x": 235,
+              "y": 455
+            }
           ]
         },
         {
@@ -120,10 +269,22 @@
           "kind": "EXTENSION_CONNECTION",
           "label": "기존-신설 구조 접합부",
           "points": [
-            {"x":620,"y":130},
-            {"x":920,"y":130},
-            {"x":920,"y":470},
-            {"x":620,"y":470}
+            {
+              "x": 620,
+              "y": 130
+            },
+            {
+              "x": 920,
+              "y": 130
+            },
+            {
+              "x": 920,
+              "y": 470
+            },
+            {
+              "x": 620,
+              "y": 470
+            }
           ]
         },
         {
@@ -131,10 +292,22 @@
           "kind": "LOGISTICS_CONFLICT",
           "label": "철거잔재 반출-보행 동선 교차",
           "points": [
-            {"x":80,"y":330},
-            {"x":300,"y":330},
-            {"x":300,"y":560},
-            {"x":80,"y":560}
+            {
+              "x": 80,
+              "y": 330
+            },
+            {
+              "x": 300,
+              "y": 330
+            },
+            {
+              "x": 300,
+              "y": 560
+            },
+            {
+              "x": 80,
+              "y": 560
+            }
           ]
         }
       ],
@@ -142,14 +315,20 @@
         {
           "id": "existing-structure-uncertainty",
           "label": "기존 구조/매립설비 불확실 구역",
-          "center": {"x":400,"y":315},
+          "center": {
+            "x": 400,
+            "y": 315
+          },
           "radius": 175,
           "severity": 0.82
         },
         {
           "id": "connection-interface-uncertainty",
           "label": "기존-신설 접합 인터페이스",
-          "center": {"x":710,"y":300},
+          "center": {
+            "x": 710,
+            "y": 300
+          },
           "radius": 135,
           "severity": 0.68
         }
@@ -159,38 +338,41 @@
           "id": "debris-lift-opening",
           "kind": "LIFT_OPENING",
           "label": "철거잔재 수직반출",
-          "point": {"x":180,"y":520}
+          "point": {
+            "x": 180,
+            "y": 520
+          }
         }
       ],
       "interventionAnchors": [
         {
           "id": "RM-SENSOR-01",
-          "x":335,
-          "y":190,
+          "x": 335,
+          "y": 190,
           "recommendedTower": "SENSOR",
           "label": "기존 구조 상태 확인",
           "reason": "도면과 실제 구조·매립설비 차이를 먼저 확인"
         },
         {
           "id": "RM-CONTROL-01",
-          "x":205,
-          "y":390,
+          "x": 205,
+          "y": 390,
           "recommendedTower": "CONTROL",
           "label": "선택철거 반출동선 통제",
           "reason": "철거잔재 반출과 보행동선의 교차를 관리"
         },
         {
           "id": "RM-PULSE-01",
-          "x":500,
-          "y":330,
+          "x": 500,
+          "y": 330,
           "recommendedTower": "PULSE",
           "label": "철거구역 즉시조치",
           "reason": "선택철거 구역의 명확한 단일 위험을 빠르게 제어"
         },
         {
           "id": "RM-SENSOR-02",
-          "x":745,
-          "y":220,
+          "x": 745,
+          "y": 220,
           "recommendedTower": "SENSOR",
           "label": "기존-신설 접합부 확인",
           "reason": "접합부 상태와 보강조건의 불확실성을 먼저 확인"
@@ -202,5 +384,26 @@
         "SWARM": 8
       }
     }
+  },
+  "gate": {
+    "id": "G6_REMODEL_01",
+    "scope": "STATE_TOPOLOGY_RUNTIME_PROOF",
+    "researchGrounded": true,
+    "contract": true,
+    "typecheck": true,
+    "build": true,
+    "browser": true,
+    "desktopVisual": true,
+    "mobile390x844": true,
+    "protectedDefenseBalance": true,
+    "defenseSaveSchemaMutation": false,
+    "productionArtLocked": false,
+    "representativeFlow": [
+      "SURVEY_ISOLATION",
+      "TEMP_SUPPORT",
+      "SELECTIVE_DEMOLITION",
+      "OLD_NEW_CONNECTION"
+    ],
+    "next": "G7_DATA_CENTER_01"
   }
 }
