@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "status": "ASSET_PENDING",
+  "assetId": "defense.board.map-apt-top-down-under-slab-01.final.g8b",
+  "runtimeUri": "assets/defense/board/g8b-top-down-under-slab-final.webp",
+  "format": "webp",
+  "sourceMaster": {
+    "required": true,
+    "minimumWidth": 1600,
+    "minimumHeight": 960,
+    "aspectRatio": "5:3",
+    "aspectTolerance": 0.01,
+    "transparentBackground": false,
+    "nativeUpscaleForbidden": true
+  },
+  "runtime": {
+    "width": 1000,
+    "height": 600,
+    "preserveAspectRatio": "xMidYMid slice",
+    "transparentBackground": false
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-TOP-DOWN-01",
+  "role": "process-specific top-down under-slab excavation world plate",
+  "required": [
+    "concrete slab and column structure must clearly read as top-down under-slab excavation",
+    "limited headroom and constrained sightlines must be visually obvious",
+    "protected muck-out opening and lift/material opening must be readable",
+    "temporary worker access route must be distinguishable from plant circulation",
+    "equipment-pedestrian interface control must read at phone scale",
+    "retaining/shoring condition must remain visually defensible",
+    "temporary work lighting must explain the low-visibility environment",
+    "no UI, HUD, risk icon, route, pad, text or logo baked into the image",
+    "commercial-game environment art, not a generic basement photo"
+  ],
+  "forbidden": [
+    "svg",
+    "rasterized legacy svg",
+    "upscaled low-resolution crop",
+    "reuse of the G8-A bottom-up world plate",
+    "generic basement or parking-garage photo reused as final art",
+    "baked gameplay route",
+    "baked tower pad",
+    "baked warning icon",
+    "baked UI or HUD",
+    "readable fake Korean text",
+    "real company logo",
+    "real construction-site name",
+    "fantasy or sci-fi construction language"
+  ],
+  "promotion": {
+    "productionApproved": false,
+    "requires": [
+      "NATIVE_SOURCE_REVIEW_PASS",
+      "RUNTIME_DERIVATIVE_SHA256_LOCKED",
+      "PROCESS_SPECIFIC_TOP_DOWN_UNDER_SLAB_REVIEW",
+      "KOREA_LAW_PROFILE_BOUND",
+      "LEGAL_VISUAL_QA_PASS",
+      "DESKTOP_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_QA_PASS",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ONE_PRODUCTION_GENERATION_PASS"
+    ]
+  }
+}
