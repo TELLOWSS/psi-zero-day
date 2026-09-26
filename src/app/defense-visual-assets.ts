@@ -4,6 +4,7 @@ import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.j
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
+import g8bResponseTowerFinalRaw from '../../content/defense/g8b-response-tower-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -114,6 +115,48 @@ interface WorldFinalManifest {
 }
 const worldFinalManifest = worldFinalRaw as WorldFinalManifest;
 
+interface G8bResponseTowerFinalAsset {
+  readonly towerId: Exclude<DefenseTowerId, 'CONTROL'>;
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly levels: readonly DefenseLevelId[];
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+    readonly preserveAspectRatio: string;
+  };
+}
+interface G8bResponseTowerFinalManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_CANDIDATE' | 'PRODUCTION_APPROVED';
+  readonly assets: readonly G8bResponseTowerFinalAsset[];
+  readonly promotion: {
+    readonly runtimeCandidate: boolean;
+    readonly productionApproved: boolean;
+  };
+}
+const g8bResponseTowerFinal = g8bResponseTowerFinalRaw as G8bResponseTowerFinalManifest;
+
+export function defenseG8bTowerFinalAsset(
+  towerId: DefenseTowerId,
+  levelId: DefenseLevelId,
+): { readonly uri: string; readonly width: number; readonly height: number } | null {
+  if (
+    towerId === 'CONTROL'
+    || g8bResponseTowerFinal.promotion.runtimeCandidate !== true
+    || !['PRODUCTION_CANDIDATE', 'PRODUCTION_APPROVED'].includes(g8bResponseTowerFinal.status)
+  ) {
+    return null;
+  }
+  const candidate = g8bResponseTowerFinal.assets.find(item => item.towerId === towerId && item.levels.includes(levelId));
+  if (!candidate || !['webp', 'png'].includes(candidate.format) || candidate.runtimeUri.toLowerCase().includes('.svg')) return null;
+  return {
+    uri: candidate.runtimeUri,
+    width: candidate.runtime.width,
+    height: candidate.runtime.height,
+  };
+}
+
 export function defenseG8aWorldFinalAsset(): {
   readonly uri: string;
   readonly width: number;
@@ -201,7 +244,9 @@ export function defenseBoardArtUri(mapId: string): string | null {
 }
 
 export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLevelId): string | null {
-  return runtimeFinalAsset(`defense.tower.${towerId}.${levelId}`)?.uri ?? null;
+  return defenseG8bTowerFinalAsset(towerId, levelId)?.uri
+    ?? runtimeFinalAsset(`defense.tower.${towerId}.${levelId}`)?.uri
+    ?? null;
 }
 
 export function defenseEnemyArtUri(enemyId: DefenseEnemyId): string | null {
