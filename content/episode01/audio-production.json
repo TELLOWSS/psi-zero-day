@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "production_id": "ep01-audio-core-v1",
-  "status": "runtime_slots_wired_binaries_pending",
+  "status": "production_v1_voice_lock",
   "game_title": "PSI : ZERO DAY",
   "company_name": "NEW PSI",
-  "final_asset_count": 8,
+  "final_asset_count": 12,
   "required_core_assets": 12,
   "mix_target": {
     "principle": "Field realism first. Dialogue must remain intelligible; avoid trailer-style over-scoring.",
@@ -280,7 +280,7 @@
     }
   ],
   "integration": {
-    "current": "Eight Episode 01 ambience/SFX binaries are materialized. Four Director-approved voice slots are fully wired to stable runtime asset ids; their mastered OGG binaries remain pending repository ingestion.",
+    "current": "Eight Episode 01 ambience/SFX binaries plus four Director-approved voice masters are materialized through stable runtime asset ids; WebAudio fallback remains emergency-only for non-voice cues.",
     "finalization": "Field Foley and any voice line that fails final listening QA may later replace the same stable asset paths without changing story, event rules, or choice outcomes.",
     "qa_surfaces": [
       "web production",
