@@ -10,6 +10,13 @@ export interface PresentationAudioCue {
   readonly gain?: number;
 }
 
+export interface CharacterVoiceCue {
+  readonly asset_id: string;
+  readonly gain?: number;
+  readonly duck_bgm?: number;
+  readonly duck_ambience?: number;
+}
+
 export type UiAudioTimbre = 'clean' | 'radio' | 'pressure' | 'air';
 
 type AssetResolver = (assetId: string) => string | undefined;
@@ -68,6 +75,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
   const seenCueIds = useRef(new Set<string>());
   const contextRef = useRef<AudioContext | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
@@ -130,6 +138,7 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
 
   useEffect(() => () => {
     bgmRef.current?.pause();
+    voiceRef.current?.pause();
     for (const element of ambienceRef.current.values()) element.pause();
     void contextRef.current?.close();
   }, []);
@@ -183,6 +192,43 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.sfx]);
 
+
+  const playCharacterVoice = useCallback((cue: CharacterVoiceCue): boolean => {
+    if (effectiveMuted || typeof Audio === 'undefined') return false;
+    const uri = resolve(cue.asset_id);
+    if (!uri) return false;
+
+    voiceRef.current?.pause();
+    const element = new Audio(uri);
+    voiceRef.current = element;
+    element.dataset.assetId = cue.asset_id;
+    element.volume = Math.max(0, Math.min(1,
+      (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * (cue.gain ?? 1)));
+
+    const bgm = bgmRef.current;
+    const bgmVolume = bgm?.volume;
+    const ambienceVolumes = new Map<HTMLAudioElement, number>();
+    for (const ambience of ambienceRef.current.values()) {
+      ambienceVolumes.set(ambience, ambience.volume);
+      ambience.volume = Math.max(0, Math.min(1, ambience.volume * (cue.duck_ambience ?? 0.38)));
+    }
+    if (bgm) bgm.volume = Math.max(0, Math.min(1, bgm.volume * (cue.duck_bgm ?? 0.42)));
+
+    const restore = () => {
+      if (bgm && bgmVolume !== undefined) bgm.volume = bgmVolume;
+      for (const [ambience, volume] of ambienceVolumes) ambience.volume = volume;
+      if (voiceRef.current === element) voiceRef.current = null;
+    };
+    element.addEventListener('ended', restore, { once: true });
+    element.addEventListener('error', restore, { once: true });
+
+    const playback = element.play();
+    if (playback && typeof playback.catch === 'function') {
+      void playback.catch(() => restore());
+    }
+    return true;
+  }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve]);
+
   const playPresentationCue = useCallback((cue: PresentationAudioCue) => {
     if (effectiveMuted) return;
     const uri = cue.asset_id ? resolve(cue.asset_id) : undefined;
@@ -200,5 +246,5 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
-  return { playUiCue, playPresentationCue } as const;
+  return { playUiCue, playPresentationCue, playCharacterVoice } as const;
 }
