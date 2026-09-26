@@ -1,23 +1,24 @@
 {
   "schemaVersion": 1,
-  "status": "G8A_SWIFT_FINAL_PASS_WORLD_FINAL_REQUIRED",
+  "status": "G8A_FINAL_ASSETS_APPROVED_QA_REQUIRED",
   "generationRule": "ONE_MAP_AT_A_TIME",
   "maps": [
     {
       "mapId": "map-apt-bottom-up-excavation-01",
       "profileId": "apt-new-bottom-up-excavation",
       "label": "공동주택 신축 · 순타 · 개방 굴착",
-      "runtimeUri": "assets/defense/board/ramp-01-hd01.webp",
+      "runtimeUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
       "format": "webp",
       "width": 1000,
       "height": 600,
-      "status": "HD_REFERENCE_ONLY",
-      "source": "DEF-HD01 approved aerial world plate retained only as non-final HD reference for G8-A.",
-      "sourceRole": "HD_REFERENCE_ONLY",
+      "status": "PRODUCTION_CANDIDATE",
+      "source": "content/defense/g8a-world-source-review.json",
+      "sourceRole": "PROCESS_SPECIFIC_FINAL_RASTER_CANDIDATE",
       "visualFit": [
-        "commercial-quality raster construction-site context",
-        "no baked HUD, text or logo",
-        "NOT process-specific enough for G8-A Production Lock"
+        "process-specific bottom-up open-excavation final raster candidate",
+        "commercial-quality full-bleed world art with coherent night-work lighting",
+        "no baked HUD, text, logo, route, pad or risk marker",
+        "awaiting desktop/mobile actual-play Production Review"
       ],
       "runtimeContract": {
         "topologyAuthority": "content/defense/site-process-maps-v1.json",
@@ -35,11 +36,11 @@
       "finalArtPolicy": {
         "svgFinalArtForbidden": true,
         "productionLockAllowed": false,
-        "blockingReason": "SWIFT final raster is approved and active. The process-specific WORLD plate remains HD_REFERENCE_ONLY and is the only G8-A Final Art blocker."
+        "blockingReason": "WORLD and SWIFT final rasters are approved. Desktop/mobile actual-play QA and legal/visual review remain required before Production Lock."
       },
       "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
       "legalCompliance": {
-        "status": "BRIEF_READY_ASSET_PENDING",
+        "status": "FINAL_ASSETS_APPROVED_QA_PENDING",
         "registry": "content/defense/korea-legal-visual-standard-v1.json",
         "brief": "content/defense/g8a-bottom-up-high-end-raster-brief.json",
         "verifiedAsOf": "2026-09-25",
@@ -65,13 +66,13 @@
           "activeSvgVisuals": 0,
           "prototypeBoardItems": 1,
           "result": "BLOCKED_AS_DESIGNED",
-          "blocker": "SWIFT final raster approved; world plate remains HD_REFERENCE_ONLY. Production Lock remains denied until WORLD final art passes actual-play QA."
+          "blocker": "WORLD and SWIFT final rasters are approved. Production Lock awaits desktop/mobile actual-play QA with zero prototype/SVG leakage."
         },
         "worldPlate": {
-          "state": "FINAL_RASTER_MISSING",
+          "state": "FINAL_RASTER_APPROVED_QA_PENDING",
           "manifest": "content/defense/g8a-world-final-art.json",
-          "currentRuntime": "assets/defense/board/ramp-01-hd01.webp",
-          "currentRole": "HD_REFERENCE_ONLY"
+          "currentRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+          "currentRole": "PROCESS_SPECIFIC_FINAL_RASTER_CANDIDATE"
         },
         "riskRuntime": "assets/defense/enemies/swift-final-g8a.webp"
       }
