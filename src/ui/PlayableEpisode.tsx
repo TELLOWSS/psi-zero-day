@@ -77,6 +77,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const [debugOpen, setDebugOpen] = useState(false);
   const [executedFieldAction, setExecutedFieldAction] = useState<ExecutedFieldAction | null>(null);
   const [paidItemWallet, setPaidItemWallet] = useState(initialPaidItemWallet);
+  const [recentSupportItemId, setRecentSupportItemId] = useState<string | null>(null);
   const focusRef = useRef<HTMLElement>(null);
   const seenSpeakersByRun = useRef(new Set<string>());
   const playedSceneCues = useRef(new Set<string>());
@@ -268,11 +269,27 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
 
   const useSupportItem = (itemId: string) => {
     if (paidItemQuantity(paidItemWallet, itemId) <= 0) return;
+    const definition = FIELD_SUPPORT_ITEMS.find(item => item.item_id === itemId);
     const accepted = session.activateSupportItem(itemId, snapshot.revision);
     if (!accepted) return;
     saveWallet(consumePaidItem(paidItemWallet, itemId));
-    playUiCue('execute');
+    setRecentSupportItemId(itemId);
+    if (definition?.activation_audio_asset_id) {
+      playPresentationCue({
+        fallback: 'radio_signal',
+        asset_id: definition.activation_audio_asset_id,
+        gain: 0.72,
+      });
+    } else {
+      playUiCue('execute');
+    }
   };
+
+  useEffect(() => {
+    if (!recentSupportItemId) return;
+    const timer = window.setTimeout(() => setRecentSupportItemId(null), 1900);
+    return () => window.clearTimeout(timer);
+  }, [recentSupportItemId]);
 
   useEffect(() => { if (snapshot.phase === 'playing') focusRef.current?.focus({ preventScroll: true }); }, [snapshot.revision, snapshot.phase]);
   useEffect(() => { if (!isPlaying) setExecutedFieldAction(null); }, [isPlaying]);
@@ -462,6 +479,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       onOutcomeContinue={continueMapOutcome}
       onOutcomeReconsider={reconsiderMapOutcome}
       supportItems={supportItems}
+      recentSupportItemId={recentSupportItemId}
       onSupportItemUse={useSupportItem}
       onReturn={onReturn}
       eventTitle={snapshot.eventTitle}
