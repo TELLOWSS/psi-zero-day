@@ -14,22 +14,23 @@ describe('G8-A bottom-up production map', () => {
     expect(productionRaw.generationRule).toBe('ONE_MAP_AT_A_TIME');
     expect(productionRaw.maps).toHaveLength(1);
     expect(productionRaw.maps[0]?.mapId).toBe(BOTTOM_ID);
-    expect(productionRaw.status).toBe('G8A_SWIFT_FINAL_PASS_WORLD_FINAL_REQUIRED');
-    expect(productionRaw.maps[0]?.status).toBe('HD_REFERENCE_ONLY');
+    expect(productionRaw.status).toBe('G8A_FINAL_ASSETS_APPROVED_QA_REQUIRED');
+    expect(productionRaw.maps[0]?.status).toBe('PRODUCTION_CANDIDATE');
     expect(productionRaw.maps[0]?.representativeSlice.response).toBe('CONTROL:L1');
     expect(productionRaw.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
     expect(productionRaw.maps[0]?.representativeSlice.risk).toBe('SWIFT');
     expect(productionRaw.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_APPROVED');
-    expect(productionRaw.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_MISSING');
+    expect(productionRaw.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_APPROVED_QA_PENDING');
     expect(productionRaw.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
   });
 
-  it('uses only the approved raster HD reference while the process-specific final plate is reworked', () => {
+  it('uses the approved process-specific final raster candidate while retaining the old HD plate only as reference', () => {
     const entry = defenseProductionMapEntry(BOTTOM_ID);
-    expect(entry?.runtimeUri).toBe('assets/defense/board/ramp-01-hd01.webp');
+    expect(entry?.runtimeUri).toBe('assets/defense/board/g8a-bottom-up-excavation-final.webp');
     expect(defenseBoardArtUri(BOTTOM_ID)).toBe(entry?.runtimeUri);
+    expect(existsSync('public/assets/defense/board/g8a-bottom-up-excavation-final.webp')).toBe(true);
+    expect(statSync('public/assets/defense/board/g8a-bottom-up-excavation-final.webp').size).toBeGreaterThan(80_000);
     expect(existsSync(ART)).toBe(true);
-    expect(statSync(ART).size).toBeGreaterThan(100_000);
     expect(entry?.format).toBe('webp');
     expect(entry?.runtimeUri).not.toMatch(/\.svg(?:$|\?)/i);
     expect(defenseProductionMapEntry(TOP_ID)).toBeNull();
