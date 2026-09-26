@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const requireFinal = process.argv.includes('--require-final');
+const candidateCheck = process.argv.includes('--candidate');
 
 function readJson(rel) {
   return JSON.parse(fs.readFileSync(path.join(root, rel), 'utf8'));
@@ -86,16 +87,16 @@ function checkManifest(name, manifest) {
   try { master = imageInfo(masterRel); } catch (error) { failures.push(error.message); }
   try { runtime = imageInfo(runtimeRel); } catch (error) { failures.push(error.message); }
 
-  if (approved || master) {
-    if (!master) failures.push(`${name}: approved asset is missing source master ${masterRel}`);
+  if (approved || candidateCheck || master) {
+    if (!master) failures.push(`${name}: source master is missing ${masterRel}`);
     else {
       if (master.width < manifest.sourceMaster.minimumWidth) failures.push(`${name}: source width ${master.width} < ${manifest.sourceMaster.minimumWidth}`);
       if (master.height < manifest.sourceMaster.minimumHeight) failures.push(`${name}: source height ${master.height} < ${manifest.sourceMaster.minimumHeight}`);
       if (manifest.sourceMaster.transparentBackground === true && !master.alpha) failures.push(`${name}: source master must preserve alpha transparency`);
     }
   }
-  if (approved || runtime) {
-    if (!runtime) failures.push(`${name}: approved asset is missing runtime file ${runtimeRel}`);
+  if (approved || candidateCheck || runtime) {
+    if (!runtime) failures.push(`${name}: runtime file is missing ${runtimeRel}`);
     else {
       if (runtime.width !== manifest.runtime.width) failures.push(`${name}: runtime width ${runtime.width} != ${manifest.runtime.width}`);
       if (runtime.height !== manifest.runtime.height) failures.push(`${name}: runtime height ${runtime.height} != ${manifest.runtime.height}`);
@@ -121,8 +122,15 @@ checkManifest('SWIFT', swift);
 const report = {
   gate: 'G8-A',
   requireFinal,
+  candidateCheck,
   rows,
-  result: failures.length ? 'FAIL' : (rows.every(row => row.approved) ? 'FINAL_ASSETS_VALID' : 'PRE_ART_BLOCKED_AS_DESIGNED'),
+  result: failures.length
+    ? 'FAIL'
+    : rows.every(row => row.approved)
+      ? 'FINAL_ASSETS_VALID'
+      : candidateCheck && rows.every(row => !row.master.missing && !row.runtime.missing)
+        ? 'CANDIDATE_ASSETS_VALID'
+        : 'PRE_ART_BLOCKED_AS_DESIGNED',
   failures,
 };
 console.log('G8A_FINAL_ASSET_INTAKE=' + JSON.stringify(report));
