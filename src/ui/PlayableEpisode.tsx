@@ -12,6 +12,7 @@ import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectS
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
+import { episodeCharacterVoicePlan, episodeCharacterVoicePolicy, episodeCharacterVoiceRuntimeCue } from '../app/episode-character-voice';
 import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
@@ -88,7 +89,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const [historyOpen, setHistoryOpen] = useState(false);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
+  const { playUiCue, playPresentationCue, playCharacterVoice } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -99,6 +100,13 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const firstContactTextId = person && dialogueNodeIdentity === firstContactNode
     ? characterIntroductionTextId(person.id)
     : undefined;
+  const voicePlan = presentation && 'node_id' in presentation && presentation.type === 'SHOW_DIALOGUE'
+    ? episodeCharacterVoicePlan(activeEventId, presentation.node_id, person?.id, 'text_id' in presentation ? presentation.text_id : undefined)
+    : undefined;
+  const voiceRuntimeCue = presentation && 'node_id' in presentation && presentation.type === 'SHOW_DIALOGUE'
+    ? episodeCharacterVoiceRuntimeCue(activeEventId, presentation.node_id, person?.id, 'text_id' in presentation ? presentation.text_id : undefined)
+    : undefined;
+  const voicePolicy = episodeCharacterVoicePolicy();
   const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
   const isPlaying = snapshot.phase === 'playing';
   const strategy = snapshot.strategy;
@@ -330,6 +338,18 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
   useEffect(() => {
+    if (!voiceRuntimeCue || !dialogueNodeIdentity) return;
+    const key = `${dialogueNodeIdentity}:voice:${voiceRuntimeCue.cueId}`;
+    if (playedSceneCues.current.has(key)) return;
+    playedSceneCues.current.add(key);
+    playCharacterVoice({
+      asset_id: voiceRuntimeCue.assetId,
+      gain: voiceRuntimeCue.gain,
+      duck_bgm: voicePolicy.ducking.bgm,
+      duck_ambience: voicePolicy.ducking.ambience,
+    });
+  }, [voiceRuntimeCue?.cueId, dialogueNodeIdentity, playCharacterVoice, voicePolicy.ducking.bgm, voicePolicy.ducking.ambience]);
+  useEffect(() => {
     if (!presentation || !('node_id' in presentation)) return;
     if (presentation.type !== 'SHOW_DIALOGUE' && presentation.type !== 'SHOW_RESULT') return;
     const key = `${presentation.instance_id}:${presentation.node_id}`;
@@ -462,6 +482,8 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     data-hud-density={storyDirection?.hud_density}
     data-interaction-mode={storyDirection?.interaction_mode}
     data-pacing={storyDirection?.pacing}
+    data-voice-plan={voicePlan?.cueId}
+    data-voice-runtime={voiceRuntimeCue ? 'materialized' : voicePlan ? 'asset-pending' : undefined}
   >
     {isPlaying && cinematicBeat ? <div className="episode-scene-stamp" key={activeEventId ?? 'beat'} data-tone={cinematicBeat.tone} aria-hidden="true">
       <span>{cinematicBeat.time}</span><b>{cinematicBeat.zone}</b><strong>{cinematicBeat.label}</strong>
