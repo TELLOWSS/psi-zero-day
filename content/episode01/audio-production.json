@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "production_id": "ep01-audio-core-v1",
-  "status": "production_v1_voice_lock",
+  "status": "runtime_slots_wired_binaries_pending",
   "game_title": "PSI : ZERO DAY",
   "company_name": "NEW PSI",
-  "final_asset_count": 12,
+  "final_asset_count": 8,
   "required_core_assets": 12,
   "mix_target": {
     "principle": "Field realism first. Dialogue must remain intelligible; avoid trailer-style over-scoring.",
