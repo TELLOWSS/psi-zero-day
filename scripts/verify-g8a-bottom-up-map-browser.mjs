@@ -11,9 +11,10 @@ const swiftManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g
 const worldApproved = worldManifest.status === 'PRODUCTION_APPROVED' && worldManifest.promotion?.productionApproved === true;
 const swiftApproved = swiftManifest.status === 'PRODUCTION_APPROVED' && swiftManifest.promotion?.productionApproved === true;
 const finalAssetsApproved = worldApproved && swiftApproved;
-const expectedWorldHref = finalAssetsApproved
+const expectedWorldHref = worldApproved
   ? worldManifest.runtimeUri
   : 'assets/defense/board/ramp-01-hd01.webp';
+const expectedRegistryStatus = worldApproved ? 'PRODUCTION_CANDIDATE' : 'HD_REFERENCE_ONLY';
 
 const chrome = [
   process.env.CHROME_BIN,
@@ -363,9 +364,9 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
-  if(report.desktop.productionMap!=='HD_REFERENCE_ONLY') throw new Error('G8-A production-map registry must remain HD_REFERENCE_ONLY until final review promotion');
+  if(report.desktop.productionMap!==expectedRegistryStatus) throw new Error('Unexpected G8-A production-map registry state: '+report.desktop.productionMap+' expected '+expectedRegistryStatus);
   if(report.desktop.artHref!==expectedWorldHref) throw new Error('Unexpected G8-A world art: '+report.desktop.artHref+' expected '+expectedWorldHref);
-  if(report.desktop.worldFinal!==finalAssetsApproved) throw new Error('Desktop world-final runtime state mismatch');
+  if(report.desktop.worldFinal!==worldApproved) throw new Error('Desktop world-final runtime state mismatch');
   if(!finalAssetsApproved && (report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000)) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
@@ -382,9 +383,9 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
-  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='HD_REFERENCE_ONLY') throw new Error('Mobile G8-A registry must remain HD_REFERENCE_ONLY until final review promotion');
+  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!==expectedRegistryStatus) throw new Error('Unexpected mobile G8-A registry state: '+report.mobile.productionMap+' expected '+expectedRegistryStatus);
   if(report.mobile.artHref!==expectedWorldHref) throw new Error('Unexpected mobile G8-A world art: '+report.mobile.artHref+' expected '+expectedWorldHref);
-  if(report.mobile.worldFinal!==finalAssetsApproved) throw new Error('Mobile world-final runtime state mismatch');
+  if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
   if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<1 || report.mobile.swift<1) throw new Error('Mobile representative CONTROL/SWIFT actors missing');
   if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
