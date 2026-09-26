@@ -122,8 +122,9 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
       const playback = element.play();
       window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'premium-binary', uri: premiumUri } }));
       if (playback && typeof playback.catch === 'function') {
-        void playback.catch(() => {
-          window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: 'binary-playback-failed' } }));
+        void playback.catch((error: unknown) => {
+          const failure = error instanceof Error ? { errorName: error.name, errorMessage: error.message } : { errorMessage: String(error) };
+          window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: 'binary-playback-failed', ...failure } }));
           playOscillatorCue(cue);
         });
       }
