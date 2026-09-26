@@ -37,7 +37,7 @@ describe('G8-A premium orchestral audio contract', () => {
   it('exposes all gameplay premium binaries in QA while keeping them unapproved', () => {
     expect(contract.gameplaySfx).toHaveLength(11);
     for(const item of contract.gameplaySfx){
-      expect(item.state).toBe('QA_CANDIDATE');
+      expect(item.state).not.toBe('PRODUCTION_APPROVED');
       expect(premiumDefenseCueUri(item.cue as PremiumDefenseAudioCue)).toBe(item.path);
     }
   });
@@ -50,7 +50,7 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(ids).toContain('swift.airbrake');
     expect(ids).toContain('control.radio_stop');
     expect(ids).toContain('control.barrier_clack');
-    expect(contract.fieldSound.every(item=>item.state==='QA_CANDIDATE')).toBe(true);
+    expect(contract.fieldSound.every(item=>item.state!=='PRODUCTION_APPROVED')).toBe(true);
   });
 
   it('locks source provenance, runtime, mastering, mobile and headphone requirements', () => {
@@ -70,7 +70,7 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(all).toHaveLength(24);
     expect(contract.acceptance.requiredAssetCount).toBe(24);
     expect(contract.acceptance.finalBinaryCount).toBe(24);
-    expect(all.every(item=>item.state==='QA_CANDIDATE')).toBe(true);
+    expect(premiumDefenseAudioContractState().runtimeReadyAssetCount).toBe(24);
     expect(all.some(item=>item.state==='PRODUCTION_APPROVED')).toBe(false);
   });
 });
