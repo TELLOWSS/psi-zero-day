@@ -8,6 +8,7 @@ fs.mkdirSync(outDir,{recursive:true});
 
 const contract=JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-premium-audio-production.json'),'utf8'));
 const finalMode=contract.status==='AUDIO_PRODUCTION_LOCKED' && contract.acceptance?.productionLockAllowed===true;
+const qaMode=contract.status==='PREMIUM_AUDIO_QA_READY' || finalMode;
 
 const chrome=[
   process.env.CHROME_BIN,
@@ -115,7 +116,25 @@ async function enter(cdp){
   await installTelemetry(cdp);
   const resume=await evaluate(cdp,`(()=>{const buttons=[...document.querySelectorAll('button')];const b=buttons.find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'));if(b){b.click();return true}const h=document.querySelector('.zb-hud-button');if(h){h.click();return true}return false})()`);
   if(!resume) throw new Error('Could not resume representative run to arm audio');
-  await sleep(2200);
+  await sleep(900);
+  if(qaMode){
+    const selected=await evaluate(cdp,`(()=>{
+      const b=[...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'));
+      if(!b)return false;
+      b.click();
+      return true;
+    })()`);
+    if(!selected) throw new Error('No empty pad available for premium actual-play cue');
+    await waitFor(cdp,"Boolean(document.querySelector('.zb-tower-shop button:not([disabled])'))",3000);
+    const built=await evaluate(cdp,`(()=>{
+      const b=document.querySelector('.zb-tower-shop button:not([disabled])');
+      if(!b)return false;
+      b.click();
+      return true;
+    })()`);
+    if(!built) throw new Error('Could not perform actual tower placement for premium cue');
+  }
+  await sleep(1400);
 }
 async function metrics(cdp){
   return evaluate(cdp,`(()=>{
@@ -130,7 +149,7 @@ async function metrics(cdp){
   })()`);
 }
 
-const report={schemaVersion:1,finalMode,desktop:null,mobile:null,failures:[]};
+const report={schemaVersion:2,qaMode,finalMode,desktop:null,mobile:null,failures:[]};
 let cdp,target;
 try{
   await waitJson('http://127.0.0.1:'+port+'/json/version');
@@ -146,8 +165,8 @@ try{
     const m=await metrics(cdp);
     report[cfg.name]=m;
     if(m.map!=='map-apt-bottom-up-excavation-01') throw new Error(cfg.name+': map mismatch');
-    if(finalMode){
-      if(m.premiumAudio!=='true') throw new Error(cfg.name+': premium audio not enabled');
+    if(qaMode){
+      if(m.premiumAudio!=='true') throw new Error(cfg.name+': premium QA runtime not enabled');
       if((m.telemetry?.oscillatorFallback??-1)!==0) throw new Error(cfg.name+': oscillator fallback detected '+JSON.stringify(m.telemetry));
       if((m.telemetry?.premiumBinary??0)<1) throw new Error(cfg.name+': no premium binary cue observed');
       if((m.telemetry?.mixTransitions?.length??0)<1) throw new Error(cfg.name+': no premium mix transition observed');
