@@ -317,28 +317,28 @@
       "id": "win",
       "path": "assets/defense/audio/g8a/result-win.ogg",
       "category": "RESULT",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Result reel event 1. Restrained WIN candidate; 0.947 s, 48 kHz Opus, -16.7 LUFS, -5.3 dBFS peak. Full-mix/headphone/Android discrimination QA pending.",
       "productionApproved": false
     },
     {
       "id": "loss",
       "path": "assets/defense/audio/g8a/result-loss.ogg",
       "category": "RESULT",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Result reel event 2. Sober LOSS candidate; 2.020 s, 48 kHz Opus, -12.2 LUFS, -4.5 dBFS peak. Must remain distinguishable from WIN on phone speakers.",
       "productionApproved": false
     }
   ],
@@ -375,11 +375,8 @@
     "qa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
     "nextAsset": "score.pressure_ostinato"
   },
-  "candidateAssetCount": 22,
-  "currentProductionFocus": "10 UI / GAMEPLAY SFX REEL B",
-  "productionStateNote": "18/24 candidate assets prepared; final runtime promotion and all listening QA remain pending.",
-  "remainingCandidateIds": [
-    "win",
-    "loss"
-  ]
+  "candidateAssetCount": 24,
+  "currentProductionFocus": "REPOSITORY_RUNTIME_PROMOTION_AND_FULL_MIX_QA",
+  "productionStateNote": "24/24 candidate assets prepared locally; final repository runtime promotion and all listening QA remain pending.",
+  "remainingCandidateIds": []
 }
