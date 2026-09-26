@@ -42,10 +42,10 @@
   },
   "enforcement": {
     "currentGate": "G8-A",
-    "g8aState": "FINAL_ASSETS_APPROVED_QA_REQUIRED",
-    "reason": "WORLD and SWIFT final rasters are approved from reviewed native sources without upscaling. Production Lock still requires legal/visual and desktop/mobile actual-play QA.",
+    "g8aState": "PRODUCTION_LOCKED",
+    "reason": "WORLD and SWIFT final rasters passed reviewed native-source intake, contract tests, Typecheck, Build, desktop actual-play QA and 390x844 mobile QA with zero prototype/SVG leakage and no horizontal overflow.",
     "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
-    "next": "Run G8-A desktop and 390x844 actual-play QA. If worldFinal=true, swiftFinal=1, prototypeBoardItems=0, activeSvgVisuals=0 and overflow=false, apply Production Lock.",
+    "next": "Proceed to the next representative production slice without reopening G8-A topology, WORLD, SWIFT or CONTROL contracts unless a regression is proven.",
     "productionLockRequires": [
       "WORLD_FINAL_RASTER_APPROVED",
       "SWIFT_FINAL_RASTER_APPROVED",
@@ -57,6 +57,7 @@
       "ACTIVE_SVG_VISUALS_0",
       "PROTOTYPE_BOARD_ITEMS_0",
       "ONE_PRODUCTION_GENERATION_PASS"
-    ]
+    ],
+    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json"
   }
 }
