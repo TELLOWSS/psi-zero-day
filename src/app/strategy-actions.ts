@@ -131,6 +131,20 @@ const SUPPORT_SHORTCUTS: readonly SupportShortcut[] = [
       skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' } },
   },
   {
+    action_id: 'support.lighting.inspect_access', required_item_id: 'facility.lighting_pack',
+    event_id: 'e01_08b_inspection_find', node_id: 'action', execution_choice_id: 'inspection_full_stop',
+    label_text_id: 'ui.paid_item.action.lighting_inspection',
+    metadata: { intent: 'inspect', target: { kind: 'signal', signal_id: 'signal.inspection_access' }, resource_axes: ['time', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' } },
+  },
+  {
+    action_id: 'support.logistics.resequence_yard', required_item_id: 'facility.logistics_zone',
+    event_id: 'e01_03_plan_breaks', node_id: 'plan', execution_choice_id: 'coordinate_schedule',
+    label_text_id: 'ui.paid_item.action.logistics_resequence',
+    metadata: { intent: 'coordinate', target: { kind: 'anchor', anchor: 'yard' }, resource_axes: ['time', 'schedule', 'safety'],
+      skill: { source: 'equipment', label_text_id: 'ui.skill.equipment' } },
+  },
+  {
     action_id: 'support.radio.verify_instruction_chain', required_item_id: 'equipment.radio_pack',
     event_id: 'e01_08m_instruction_cascade', node_id: 'instruction_action', execution_choice_id: 'instruction_reconstruct_chain',
     label_text_id: 'ui.paid_item.action.radio_chain_check',
