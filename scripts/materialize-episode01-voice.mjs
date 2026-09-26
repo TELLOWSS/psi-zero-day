@@ -1,11 +1,23 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
 const manifest = JSON.parse(await readFile(path.join(root, 'content/episode01/voice-media.json'), 'utf8'));
 
+let materialized = 0;
+let pending = 0;
+
 for (const asset of manifest.assets) {
+  const existingChunks = asset.chunks.filter(chunkPath => existsSync(path.join(root, chunkPath)));
+  if (existingChunks.length === 0) {
+    pending += 1;
+    continue;
+  }
+  if (existingChunks.length !== asset.chunks.length) {
+    throw new Error(`voice materialization has partial chunk set: ${asset.source}: ${existingChunks.length}/${asset.chunks.length}`);
+  }
   const encoded = (await Promise.all(asset.chunks.map(async chunkPath =>
     (await readFile(path.join(root, chunkPath), 'utf8')).trim(),
   ))).join('');
@@ -23,6 +35,7 @@ for (const asset of manifest.assets) {
   const target = path.join(root, asset.target);
   await mkdir(path.dirname(target), { recursive: true });
   await writeFile(target, bytes);
+  materialized += 1;
 }
 
-console.log(`Episode 01 voice materialized: ${manifest.assets.length} reviewed masters.`);
+console.log(`Episode 01 voice materialized: ${materialized}; pending embedded sources: ${pending}.`);
