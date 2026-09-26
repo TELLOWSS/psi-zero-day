@@ -1,4 +1,5 @@
 import type { FlagMap } from '../domain';
+import type { ProductionMapAnchorId } from './production-map';
 
 export type FieldSupportCategory = 'facility' | 'equipment';
 
@@ -9,6 +10,9 @@ export interface FieldSupportItemDefinition {
   readonly active_flag_id: string;
   readonly effect_text_id: string;
   readonly effect_visual_uri?: string;
+  readonly map_anchor: ProductionMapAnchorId;
+  readonly visual_kind: 'asset' | 'radio';
+  readonly activation_audio_asset_id?: string;
 }
 
 /**
@@ -23,6 +27,8 @@ export const FIELD_SUPPORT_ITEMS = [
     active_flag_id: 'support.facility.access_lane.active',
     effect_text_id: 'ui.paid_item.effect.access_lane',
     effect_visual_uri: '/assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
+    map_anchor: 'entry',
+    visual_kind: 'asset',
   },
   {
     item_id: 'facility.lighting_pack',
@@ -31,6 +37,8 @@ export const FIELD_SUPPORT_ITEMS = [
     active_flag_id: 'support.facility.lighting_pack.active',
     effect_text_id: 'ui.paid_item.effect.lighting_pack',
     effect_visual_uri: '/assets/episode01/scene-elements/temporary-lighting-pack.webp',
+    map_anchor: 'inspection',
+    visual_kind: 'asset',
   },
   {
     item_id: 'facility.logistics_zone',
@@ -39,6 +47,8 @@ export const FIELD_SUPPORT_ITEMS = [
     active_flag_id: 'support.facility.logistics_zone.active',
     effect_text_id: 'ui.paid_item.effect.logistics_zone',
     effect_visual_uri: '/assets/episode01/scene-elements/material-yard.webp',
+    map_anchor: 'yard',
+    visual_kind: 'asset',
   },
   {
     item_id: 'equipment.radio_pack',
@@ -46,6 +56,9 @@ export const FIELD_SUPPORT_ITEMS = [
     name_text_id: 'ui.paid_item.equipment.radio_pack',
     active_flag_id: 'support.equipment.radio_pack.active',
     effect_text_id: 'ui.paid_item.effect.radio_pack',
+    map_anchor: 'overview',
+    visual_kind: 'radio',
+    activation_audio_asset_id: 'ep01.audio.radio_burst',
   },
   {
     item_id: 'equipment.inspection_kit',
@@ -54,6 +67,8 @@ export const FIELD_SUPPORT_ITEMS = [
     active_flag_id: 'support.equipment.inspection_kit.active',
     effect_text_id: 'ui.paid_item.effect.inspection_kit',
     effect_visual_uri: '/assets/episode01/cg/inspection-zone.webp',
+    map_anchor: 'inspection',
+    visual_kind: 'asset',
   },
   {
     item_id: 'equipment.traffic_control_pack',
@@ -62,6 +77,8 @@ export const FIELD_SUPPORT_ITEMS = [
     active_flag_id: 'support.equipment.traffic_control_pack.active',
     effect_text_id: 'ui.paid_item.effect.traffic_control_pack',
     effect_visual_uri: '/assets/episode01/scene-elements/access-barrier.webp',
+    map_anchor: 'gate',
+    visual_kind: 'asset',
   },
 ] as const satisfies readonly FieldSupportItemDefinition[];
 
