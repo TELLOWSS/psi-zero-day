@@ -21,7 +21,7 @@ export type PremiumFieldSoundId =
   | 'control.radio_stop'
   | 'control.barrier_clack';
 
-type PremiumAssetState = 'ASSET_PENDING' | 'QA_READY' | 'PRODUCTION_APPROVED';
+type PremiumAssetState = 'ASSET_PENDING' | 'QA_CANDIDATE' | 'QA_READY' | 'PRODUCTION_APPROVED';
 type PremiumPlaybackRole = 'SYNCHRONIZED_LOOP' | 'STATE_ENTRY_ONE_SHOT' | 'STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION';
 
 interface PremiumAudioContract {
@@ -53,7 +53,7 @@ interface PremiumAudioContract {
 }
 
 const contract = premiumRaw as PremiumAudioContract;
-const runtimeReady = (state: PremiumAssetState) => state === 'QA_READY' || state === 'PRODUCTION_APPROVED';
+const runtimeReady = (state: PremiumAssetState) => state === 'QA_CANDIDATE' || state === 'QA_READY' || state === 'PRODUCTION_APPROVED';
 
 function allRuntimeAssetsReady(): boolean {
   return contract.dynamicScore.stems.every(item => runtimeReady(item.state))
