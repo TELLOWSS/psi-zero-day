@@ -6,6 +6,8 @@ import benchmark from '../content/defense/def-hd01-pq-benchmark.json';
 import episodeVisuals from '../content/episode01/visuals.json';
 import worldFinal from '../content/defense/g8a-world-final-art.json';
 import swiftFinal from '../content/defense/g8a-swift-final-art.json';
+import g8bWorld from '../content/defense/g8b-world-final-art.json';
+import g8bVeiled from '../content/defense/g8b-veiled-final-art.json';
 
 const FINAL_STATUSES = new Set(['BASELINE_LOCKED','PRODUCTION_CANDIDATE','PRODUCTION_LOCKED']);
 
@@ -62,5 +64,14 @@ describe('absolute final-art policy', () => {
     expect(swiftFinal.promotion.productionApproved).toBe(true);
     expect(policy.enforcement.g8aState).toBe('PRODUCTION_LOCKED');
     expect(productionMaps.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(true);
+  });
+  it('opens G8-B without reopening G8-A or allowing pending art into production', () => {
+    expect(policy.enforcement.currentGate).toBe('G8-B');
+    expect(policy.enforcement.g8aState).toBe('PRODUCTION_LOCKED');
+    expect(policy.enforcement.g8bState).toBe('SENSOR_PASS_WORLD_AND_VEILED_FINAL_REQUIRED');
+    expect(g8bWorld.status).toBe('ASSET_PENDING');
+    expect(g8bWorld.promotion.productionApproved).toBe(false);
+    expect(g8bVeiled.status).toBe('ASSET_PENDING');
+    expect(g8bVeiled.promotion.productionApproved).toBe(false);
   });
 });
