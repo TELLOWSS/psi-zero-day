@@ -78,7 +78,11 @@
         "role": "low strings + restrained piano + air",
         "state": "ASSET_PENDING",
         "loop": true,
-        "playbackRole": "SYNCHRONIZED_LOOP"
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "TONAL_REFERENCE_LOCKED",
+        "referenceSource": "floor_twelve_ledger.mp4",
+        "referenceQa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
+        "nextAction": "AUTHOR_SCORE_PRESSURE_OSTINATO"
       },
       {
         "id": "score.pressure_ostinato",
@@ -325,5 +329,6 @@
       "ANDROID_MOBILE_LISTENING_QA_PASS",
       "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
     ]
-  }
+  },
+  "currentProductionFocus": "score.pressure_ostinato"
 }
