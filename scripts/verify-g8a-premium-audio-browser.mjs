@@ -109,9 +109,9 @@ async function enter(cdp){
   const s=save();
   await evaluate(cdp,`(()=>{localStorage.setItem('psi-zero-day.defense.save.v1',${JSON.stringify(JSON.stringify(s))});localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');return true})()`);
   await clickText(cdp,'현장 디펜스');
-  await waitFor(cdp,"Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')");
+  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`);
   await clickText(cdp,'이어서 훈련');
-  await waitFor(cdp,"document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'");
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
   await installTelemetry(cdp);
   const resume=await evaluate(cdp,`(()=>{const buttons=[...document.querySelectorAll('button')];const b=buttons.find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'));if(b){b.click();return true}const h=document.querySelector('.zb-hud-button');if(h){h.click();return true}return false})()`);
   if(!resume) throw new Error('Could not resume representative run to arm audio');
