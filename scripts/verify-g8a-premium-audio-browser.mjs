@@ -139,9 +139,21 @@ async function clickText(cdp,text,scope='button'){
   const ok=await evaluate(cdp,`(()=>{const el=[...document.querySelectorAll(${JSON.stringify(scope)})].find(x=>(x.textContent||'').includes(${JSON.stringify(text)}));if(!el)return false;el.click();return true})()`);
   if(!ok) throw new Error('Button not found '+text);
 }
+async function trustedClick(cdp, elementExpression, label){
+  const point=await evaluate(cdp,`(()=>{
+    const el=${elementExpression};
+    if(!el)return null;
+    const r=el.getBoundingClientRect();
+    return {x:r.left+r.width/2,y:r.top+r.height/2};
+  })()`);
+  if(!point) throw new Error('Trusted click target missing: '+label);
+  await cdp.send('Input.dispatchMouseEvent',{type:'mouseMoved',x:point.x,y:point.y});
+  await cdp.send('Input.dispatchMouseEvent',{type:'mousePressed',x:point.x,y:point.y,button:'left',buttons:1,clickCount:1});
+  await cdp.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:point.x,y:point.y,button:'left',buttons:0,clickCount:1});
+}
 async function installTelemetry(cdp){
   await evaluate(cdp,`(()=>{
-    window.__psiAudioTelemetry={premiumBinary:0,oscillatorFallback:0,mixTransitions:[],cueEvents:0,sources:[]};
+    window.__psiAudioTelemetry={premiumBinary:0,oscillatorFallback:0,mixTransitions:[],cueEvents:0,sources:[],mixPlaybackSuccess:0,mixPlaybackFailures:0,mixPlaybackEvents:[]};
     window.addEventListener('psi:defense-audio-cue',()=>window.__psiAudioTelemetry.cueEvents++);
     window.addEventListener('psi:defense-audio-source',event=>{
       const d=event.detail||{};
@@ -150,6 +162,12 @@ async function installTelemetry(cdp){
       if(d.source==='oscillator-fallback')window.__psiAudioTelemetry.oscillatorFallback++;
     });
     window.addEventListener('psi:g8a-premium-mix',event=>window.__psiAudioTelemetry.mixTransitions.push(event.detail||{}));
+    window.addEventListener('psi:g8a-premium-playback',event=>{
+      const d=event.detail||{};
+      window.__psiAudioTelemetry.mixPlaybackEvents.push(d);
+      if(d.status==='playing')window.__psiAudioTelemetry.mixPlaybackSuccess++;
+      if(d.status==='failed')window.__psiAudioTelemetry.mixPlaybackFailures++;
+    });
     return true;
   })()`);
 }
