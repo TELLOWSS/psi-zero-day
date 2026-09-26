@@ -22,7 +22,7 @@
     "defense.enemy.SWIFT.name": "급변 이동위험",
     "defense.enemy.ARMORED.name": "구조적 조건 위험",
     "defense.enemy.SWARM.name": "다중 작은 위험",
-    "defense.enemy.VEILED.name": "숨은 신호",
+    "defense.enemy.VEILED.name": "숨은 설비 신호",
     "defense.enemy.BOSS.name": "복합 작업 위험",
     "defense.support.COORDINATOR.suggestedName": "강태식",
     "defense.support.COORDINATOR.skill": "작업 흐름 정리",
@@ -157,7 +157,7 @@
     "defense.enemy.SWIFT.role": "차량·움직이는 자재·갑작스러운 동선처럼 빠르게 변하는 위험",
     "defense.enemy.ARMORED.role": "가시설·장비상태·작업조건처럼 한 번의 조치로 끝나지 않는 위험",
     "defense.enemy.SWARM.role": "정리정돈·동선·다수 인원 등 작은 위험이 동시에 겹친 상태",
-    "defense.enemy.VEILED.role": "사각지대·오해·보고 누락 때문에 표면에서 잘 보이지 않는 위험",
+    "defense.enemy.VEILED.role": "분전·설비처럼 외관만으로 상태를 판단하기 어려워 확인·보고가 누락되기 쉬운 위험",
     "defense.enemy.BOSS.role": "여러 위험이 한 작업상황에서 동시에 결합된 상태"
   }
 }
