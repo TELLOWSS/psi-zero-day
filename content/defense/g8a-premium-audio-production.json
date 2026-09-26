@@ -13,11 +13,12 @@
     "fieldSfxMustRemainGameplayReadable": true,
     "dialoguePriority": "future dialogue/voice must always remain intelligible above score and ambience",
     "sourceMaster": {
-      "sampleRateHz": 48000,
-      "bitDepth": 24,
+      "policy": "PRESERVE_NATIVE_GENERATOR_OUTPUT",
       "preferredFormat": "wav",
-      "stereoMusic": true,
-      "monoAllowedForPointSourceFoley": true
+      "musicNativeSampleRateHz": 44100,
+      "fieldSfxPreferredSampleRateHz": 48000,
+      "bitDepthPolicy": "record actual native bit depth; never claim artificial bit-depth/sample-rate conversion as native quality",
+      "nativeUpsampleForbidden": true
     },
     "runtime": {
       "format": "ogg/opus",
@@ -75,31 +76,41 @@
         "id": "score.foundation_bed",
         "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
         "role": "low strings + restrained piano + air",
-        "state": "ASSET_PENDING"
+        "state": "ASSET_PENDING",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP"
       },
       {
         "id": "score.pressure_ostinato",
         "path": "assets/defense/audio/g8a/score-pressure-ostinato.ogg",
         "role": "spiccato/low-string pulse + restrained percussion",
-        "state": "ASSET_PENDING"
+        "state": "ASSET_PENDING",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP"
       },
       {
         "id": "score.swift_threat",
         "path": "assets/defense/audio/g8a/score-swift-threat.ogg",
         "role": "low brass/horn tension + rhythmic acceleration",
-        "state": "ASSET_PENDING"
+        "state": "ASSET_PENDING",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP"
       },
       {
         "id": "score.control_intervention",
         "path": "assets/defense/audio/g8a/score-control-intervention.ogg",
         "role": "short decisive orchestral intervention accent",
-        "state": "ASSET_PENDING"
+        "state": "ASSET_PENDING",
+        "loop": false,
+        "playbackRole": "STATE_ENTRY_ONE_SHOT"
       },
       {
         "id": "score.resolution_coda",
         "path": "assets/defense/audio/g8a/score-resolution-coda.ogg",
         "role": "warm strings/horn release preserving seriousness",
-        "state": "ASSET_PENDING"
+        "state": "ASSET_PENDING",
+        "loop": false,
+        "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION"
       }
     ],
     "runtimeStates": [
@@ -295,12 +306,13 @@
     ],
     "technicalQa": [
       "all final binaries present",
-      "48 kHz source provenance recorded",
+      "native source provenance/sample rate/bit depth recorded without artificial upsample claims",
       "no clipped samples",
       "true peak <= -1 dBTP on mastered score deliverables",
       "runtime OGG decodes in Chrome and Android WebView",
       "loop seams inaudible",
-      "no oscillator fallback during approved G8-A actual play"
+      "no oscillator fallback during approved G8-A actual play",
+      "runtime OGG normalized to 48 kHz without changing the archived native-source provenance"
     ],
     "productionLockRequires": [
       "ORCHESTRAL_SCORE_STEMS_APPROVED",
