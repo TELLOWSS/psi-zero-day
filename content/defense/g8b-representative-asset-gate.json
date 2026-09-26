@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "status": "BLOCKED_WORLD_AND_VEILED_FINAL_RASTER_REQUIRED",
+  "gate": "G8B_REPRESENTATIVE_SLICE",
+  "map": "map-apt-top-down-under-slab-01",
+  "profile": "apt-new-top-down-under-slab",
+  "representative": {
+    "response": "SENSOR:L1",
+    "risk": "VEILED",
+    "reason": "Top-down under-slab excavation is differentiated by low visibility and information deficit before direct exposure."
+  },
+  "topologyContract": {
+    "authority": "content/defense/site-process-maps-v1.json",
+    "board": {
+      "width": 1000,
+      "height": 600
+    },
+    "padCount": 8,
+    "primaryRoute": "vehicle-under-slab",
+    "routePoints": "0,500 150,500 150,420 350,420 350,300 570,300 570,420 780,420 780,250 1000,250",
+    "mutationAllowed": false
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-TOP-DOWN-01",
+  "response": {
+    "id": "SENSOR:L1",
+    "state": "PASS",
+    "kind": "RASTER_RUNTIME_COMPOSITE",
+    "manifest": "content/defense/g8b-sensor-runtime-composite.json"
+  },
+  "world": {
+    "state": "BLOCKED",
+    "manifest": "content/defense/g8b-world-final-art.json",
+    "requiredKind": "PROCESS_SPECIFIC_RASTER_FINAL"
+  },
+  "risk": {
+    "id": "VEILED",
+    "state": "BLOCKED",
+    "manifest": "content/defense/g8b-veiled-final-art.json",
+    "requiredKind": "TRANSPARENT_RASTER_FINAL"
+  },
+  "promotionRule": "Do not promote G8-B until WORLD and VEILED final rasters are approved and desktop/390x844 actual-play QA proves SENSOR=1, VEILED final=1, prototypeBoardItems=0, activeSvgVisuals=0 and no horizontal overflow."
+}
