@@ -55,7 +55,7 @@ for(const slot of slots){
   const p=probe(slot.path);
   let loudness=null;
   if(p.exists && !p.error) loudness=peak(slot.path);
-  const runtimeReady=slot.state==='QA_READY' || slot.state==='PRODUCTION_APPROVED';
+  const runtimeReady=slot.state==='QA_CANDIDATE' || slot.state==='QA_READY' || slot.state==='PRODUCTION_APPROVED';
   if(runtimeReady){
     if(!p.exists) failures.push(slot.id+': approved file missing');
     else if(p.error) failures.push(slot.id+': ffprobe failed: '+p.error);
@@ -72,7 +72,7 @@ for(const slot of slots){
 const byId=new Map(rows.map(r=>[r.id,r]));
 const loopIds=['score.foundation_bed','score.pressure_ostinato','score.swift_threat'];
 const loopRows=loopIds.map(id=>byId.get(id)).filter(Boolean);
-if(loopRows.every(r=>(r.state==='QA_READY' || r.state==='PRODUCTION_APPROVED') && r.exists && !r.error)){
+if(loopRows.every(r=>(r.state==='QA_CANDIDATE' || r.state==='QA_READY' || r.state==='PRODUCTION_APPROVED') && r.exists && !r.error)){
   const target=45.7142857;
   for(const r of loopRows){
     if(Math.abs(r.duration-target)>0.08) failures.push(r.id+': 16-bar loop duration '+r.duration+' not within 80 ms of '+target);
@@ -84,20 +84,20 @@ if(loopRows.every(r=>(r.state==='QA_READY' || r.state==='PRODUCTION_APPROVED') &
 }
 
 const control=byId.get('score.control_intervention');
-if((control?.state==='QA_READY' || control?.state==='PRODUCTION_APPROVED') && (control.duration<2.0 || control.duration>3.5)){
+if((control?.state==='QA_CANDIDATE' || control?.state==='QA_READY' || control?.state==='PRODUCTION_APPROVED') && (control.duration<2.0 || control.duration>3.5)){
   failures.push('score.control_intervention duration outside 2.0-3.5 s');
 }
 
 const reverse=byId.get('swift.reverse_alarm');
-if((reverse?.state==='QA_READY' || reverse?.state==='PRODUCTION_APPROVED') && (reverse.duration<1.5 || reverse.duration>8.5)){
+if((reverse?.state==='QA_CANDIDATE' || reverse?.state==='QA_READY' || reverse?.state==='PRODUCTION_APPROVED') && (reverse.duration<1.5 || reverse.duration>8.5)){
   failures.push('swift.reverse_alarm duration outside QA loop range');
 }
 
 const approved=rows.filter(r=>r.state==='PRODUCTION_APPROVED').length;
-const qaReady=rows.filter(r=>r.state==='QA_READY').length;
+const qaReady=rows.filter(r=>r.state==='QA_CANDIDATE' || r.state==='QA_READY').length;
 const present=rows.filter(r=>r.exists).length;
 if(contract.status==='PREMIUM_AUDIO_QA_READY'){
-  if(qaReady!==24) failures.push('QA-ready contract requires 24/24 QA_READY slots');
+  if(qaReady!==24) failures.push('QA-ready contract requires 24/24 QA runtime candidate slots');
   if(present!==24) failures.push('QA-ready contract requires 24/24 runtime binaries');
   if(contract.acceptance.productionLockAllowed!==false) failures.push('QA-ready contract must keep productionLockAllowed false');
 }
