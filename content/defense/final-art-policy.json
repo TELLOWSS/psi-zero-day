@@ -37,8 +37,17 @@
     "legalNumbersMayNotBeInvented": true,
     "unsafeSceneRequiresRenderIntent": true,
     "realCompanySiteVictimIdentifiersForbidden": true,
-    "masterMapMinimum": "4000x2400",
-    "mobileLegibilityRequired": "390x844"
+    "masterMapMinimum": "gate-specific reviewed native-source minimum",
+    "mobileLegibilityRequired": "390x844",
+    "defaultProductionMapNativeMinimum": "1600x960",
+    "nativeUpscaleForbidden": true,
+    "finalAcceptanceRequires": [
+      "reviewed native source",
+      "no artificial upscale to satisfy nominal dimensions",
+      "runtime derivative hash lock",
+      "desktop actual-play QA",
+      "390x844 mobile actual-play QA"
+    ]
   },
   "enforcement": {
     "currentGate": "G8-A",
@@ -58,6 +67,7 @@
       "PROTOTYPE_BOARD_ITEMS_0",
       "ONE_PRODUCTION_GENERATION_PASS"
     ],
-    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json"
+    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json",
+    "normalization": "G8-A nominal PRE-ART master-size placeholders are retired; locked acceptance is native-source review + no-upscale + runtime actual-play QA."
   }
 }
