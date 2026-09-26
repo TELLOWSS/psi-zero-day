@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-B",
+  "target": "map-apt-top-down-under-slab-01",
+  "title": "공동주택 신축 · 역타 · 슬래브 하부굴착 — Final World Art Brief",
+  "visualGoal": "A commercial-game high-oblique under-slab excavation world where limited visibility, vertical muck-out logistics and equipment-worker interfaces are understandable before any HUD overlay.",
+  "camera": {
+    "projection": "high-oblique near-orthographic",
+    "aspect": "5:3",
+    "runtime": "1000x600",
+    "sourceNativeMinimum": "1600x960",
+    "cropRule": "preserve the locked G5 topology; image generation never authors gameplay coordinates"
+  },
+  "mustRead": [
+    "existing/top-down concrete slab overhead and columns",
+    "low headroom and shadowed blind zones",
+    "excavation/muck handling below the slab",
+    "protected muck-out vertical opening",
+    "protected lift/material opening",
+    "temporary worker access",
+    "separated or actively controlled plant/worker routes",
+    "retaining/shoring condition",
+    "temporary lighting that explains visibility state"
+  ],
+  "mustNotRead": [
+    "open-sky bottom-up excavation",
+    "generic finished basement/parking garage",
+    "unprotected opening shown as normal",
+    "workers wandering between machines without access control",
+    "G8-A world reuse",
+    "HUD, text, labels, route lines, pad markers, warning icons or logos"
+  ],
+  "lighting": "realistic construction work lighting with shadowed under-slab depth; no fantasy glow",
+  "legalProfile": "KR-CONSTRUCTION-TOP-DOWN-01",
+  "oneGenerationRule": "Generate or edit one full-bleed WORLD plate only. Do not create a project board, infographic, asset sheet or alternate views."
+}
