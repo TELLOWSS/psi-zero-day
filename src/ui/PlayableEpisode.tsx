@@ -87,6 +87,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const [presentationHistory, setPresentationHistory] = useState<readonly PresentationHistoryEntry[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [voiceLocked, setVoiceLocked] = useState(false);
+  const [voiceSubtitle, setVoiceSubtitle] = useState<string | null>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
   const { playUiCue, playPresentationCue, playVoiceCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
@@ -316,10 +317,24 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   useEffect(() => {
     if (!activeVoiceCue || !runIdentity) {
       setVoiceLocked(false);
+      setVoiceSubtitle(null);
       return;
     }
     setVoiceLocked(true);
-    return playVoiceCue(activeVoiceCue, () => setVoiceLocked(false));
+    setVoiceSubtitle('');
+    return playVoiceCue(
+      activeVoiceCue,
+      () => {
+        setVoiceLocked(false);
+        setVoiceSubtitle(null);
+      },
+      elapsedMs => {
+        const segment = [...activeVoiceCue.subtitles]
+          .reverse()
+          .find(item => elapsedMs >= item.start_ms);
+        setVoiceSubtitle(segment?.text ?? '');
+      },
+    );
   }, [
     runIdentity,
     activeVoiceCue?.event_id,
@@ -611,6 +626,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
               interactionLocked={voiceLocked}
+              dialogueOverrideText={voiceLocked ? voiceSubtitle : null}
             />}
         </div>
       </section>
