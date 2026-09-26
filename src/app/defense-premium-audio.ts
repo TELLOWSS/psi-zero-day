@@ -1,3 +1,4 @@
+// G8-A audio preview deployment sync marker: 2026-09-26
 import premiumRaw from '../../content/defense/g8a-premium-audio-production.json';
 
 export type PremiumDefenseAudioCue =
