@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-D SUPPORT ITEM RUNTIME VISUALS",
+  "status": "PRODUCTION_CANDIDATE",
+  "principle": "Support items must be visible as field interventions on the production map; they may accelerate an authored safe action but never purchase a better safety outcome.",
+  "items": [
+    {
+      "itemId": "facility.access_lane",
+      "mapAnchor": "entry",
+      "visual": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+      "visualState": "FINAL_REUSE",
+      "audio": null
+    },
+    {
+      "itemId": "facility.lighting_pack",
+      "mapAnchor": "inspection",
+      "visual": "assets/episode01/scene-elements/temporary-lighting-pack.webp",
+      "visualState": "FINAL_REUSE",
+      "audio": null
+    },
+    {
+      "itemId": "facility.logistics_zone",
+      "mapAnchor": "yard",
+      "visual": "assets/episode01/scene-elements/material-yard.webp",
+      "visualState": "FINAL_REUSE",
+      "audio": null
+    },
+    {
+      "itemId": "equipment.radio_pack",
+      "mapAnchor": "overview",
+      "visual": "DEDICATED_UI_RADIO_RENDER",
+      "visualState": "PRODUCTION_CANDIDATE_UI_RENDER",
+      "audio": "ep01.audio.radio_burst"
+    },
+    {
+      "itemId": "equipment.inspection_kit",
+      "mapAnchor": "inspection",
+      "visual": "assets/episode01/cg/inspection-zone.webp",
+      "visualState": "FINAL_REUSE",
+      "audio": null
+    },
+    {
+      "itemId": "equipment.traffic_control_pack",
+      "mapAnchor": "gate",
+      "visual": "assets/episode01/scene-elements/access-barrier.webp",
+      "visualState": "FINAL_REUSE",
+      "audio": null
+    }
+  ],
+  "runtime": {
+    "activationPulseMs": 1900,
+    "activeItemsPersistOnMap": true,
+    "radioUsesAuthoredBinary": true,
+    "genericSupportUsesExistingUiExecuteCue": true
+  },
+  "promotion": {
+    "runtimeCandidate": true,
+    "productionApproved": false,
+    "requires": [
+      "ALL_SIX_SUPPORT_ITEMS_MAP_VISIBLE",
+      "SUPPORT_ITEM_STORY_CONNECTION_LOCK_PASS",
+      "NO_DIRECT_PSI_PURCHASE",
+      "NO_DIRECT_ACCIDENT_DELETE",
+      "NO_BALANCE_MUTATION",
+      "MOBILE_RESPONSIVE_REGRESSION_PASS",
+      "RADIO_DEDICATED_RASTER_OR_REAL_DEVICE_UI_ACCEPTANCE"
+    ]
+  }
+}
