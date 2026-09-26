@@ -1,4 +1,4 @@
-name: Verify G8-A PRE-ART GATE
+name: Verify G8-A PRODUCTION LOCK
 
 on:
   push:
@@ -29,10 +29,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: G8-A final asset intake status
+      - name: G8-A locked final asset intake
         run: npm run defense:g8a-art-status
 
-      - name: G8-A production-map contracts
+      - name: G8-A Production Lock contracts
         run: npx vitest run tests/final-art-policy.test.ts tests/korea-legal-visual-standard.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/g8a-generation-review.test.ts tests/production-map-family.test.ts tests/data-center-runtime.test.ts tests/remodel-runtime.test.ts tests/site-process-map-family.test.ts tests/site-profile-risk-priority.test.ts
 
       - name: Typecheck
@@ -59,7 +59,7 @@ jobs:
           echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
           "$CHROME_BIN" --version
 
-      - name: Run G8-A representative-slice browser QA
+      - name: Run G8-A locked representative-slice browser QA
         shell: bash
         env:
           PSI_G8A_ARTIFACT_DIR: artifacts/g8a-bottom-up-map
@@ -83,7 +83,7 @@ jobs:
           fi
           node scripts/verify-g8a-bottom-up-map-browser.mjs
 
-      - name: Prepare G8-A QA evidence
+      - name: Prepare G8-A Production Lock evidence
         if: always()
         shell: bash
         run: |
@@ -109,10 +109,10 @@ jobs:
               (out/report.name).write_bytes(report.read_bytes())
           PY
 
-      - name: Upload G8-A QA evidence
+      - name: Upload G8-A Production Lock evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: g8a-pre-art-evidence
+          name: g8a-production-lock-evidence
           path: artifacts/g8a-bottom-up-map/evidence
           if-no-files-found: error
