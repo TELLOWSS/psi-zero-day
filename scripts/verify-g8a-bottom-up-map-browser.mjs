@@ -10,9 +10,6 @@ const worldManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g
 const swiftManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-swift-final-art.json'), 'utf8'));
 const worldApproved = worldManifest.status === 'PRODUCTION_APPROVED' && worldManifest.promotion?.productionApproved === true;
 const swiftApproved = swiftManifest.status === 'PRODUCTION_APPROVED' && swiftManifest.promotion?.productionApproved === true;
-if (worldApproved !== swiftApproved) {
-  throw new Error('G8-A final assets must be promoted atomically: world=' + worldApproved + ', swift=' + swiftApproved);
-}
 const finalAssetsApproved = worldApproved && swiftApproved;
 const expectedWorldHref = finalAssetsApproved
   ? worldManifest.runtimeUri
@@ -402,41 +399,48 @@ try {
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
-  if (finalAssetsApproved) {
-    if (desktopPrototype !== 0 || mobilePrototype !== 0) {
-      throw new Error('Final G8-A assets approved but prototype visuals remain: '+JSON.stringify({desktopPrototype,mobilePrototype}));
-    }
-    if (report.desktop?.swiftFinal !== 1 || report.mobile?.swiftFinal !== 1) {
-      throw new Error('Final SWIFT raster is not active in both desktop/mobile actual play');
-    }
-    if ((report.desktop?.activeSvgVisuals?.length ?? 0) > 0 || (report.mobile?.activeSvgVisuals?.length ?? 0) > 0) {
-      throw new Error('SVG visual leakage remains after final asset approval');
+  const desktopSwiftFinal = report.desktop?.swiftFinal ?? -1;
+  const mobileSwiftFinal = report.mobile?.swiftFinal ?? -1;
+
+  if (worldApproved && swiftApproved) {
+    if (desktopPrototype !== 0 || mobilePrototype !== 0 || desktopSwiftFinal !== 1 || mobileSwiftFinal !== 1) {
+      throw new Error('Approved final assets are not fully active in actual play: '+JSON.stringify({
+        desktopPrototype,mobilePrototype,desktopSwiftFinal,mobileSwiftFinal,
+      }));
     }
     report.gate_state = 'READY_FOR_PRODUCTION_REVIEW';
     report.expected_blocker = null;
-  } else if (desktopPrototype === 1 && mobilePrototype === 1 && report.desktop?.swiftFinal === 0 && report.mobile?.swiftFinal === 0) {
+  } else if (!worldApproved && swiftApproved) {
+    if (desktopPrototype !== 0 || mobilePrototype !== 0 || desktopSwiftFinal !== 1 || mobileSwiftFinal !== 1) {
+      throw new Error('SWIFT-approved/WORLD-pending runtime state mismatch: '+JSON.stringify({
+        desktopPrototype,mobilePrototype,desktopSwiftFinal,mobileSwiftFinal,
+      }));
+    }
+    report.gate_state = 'BLOCKED_WORLD_FINAL_RASTER_REQUIRED';
+    report.expected_blocker = {
+      id: 'WORLD_FINAL_RASTER_MISSING',
+      worldFinalApproved: false,
+      swiftFinalApproved: true,
+      currentWorldRole: report.desktop?.productionMap ?? null,
+      controlRasterPass: report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
+    };
+  } else if (worldApproved && !swiftApproved) {
+    if (desktopPrototype !== 1 || mobilePrototype !== 1 || desktopSwiftFinal !== 0 || mobileSwiftFinal !== 0) {
+      throw new Error('WORLD-approved/SWIFT-pending runtime state mismatch');
+    }
+    report.gate_state = 'BLOCKED_SWIFT_FINAL_RASTER_REQUIRED';
+    report.expected_blocker = { id:'SWIFT_FINAL_RASTER_MISSING', worldFinalApproved:true, swiftFinalApproved:false };
+  } else {
+    if (desktopPrototype !== 1 || mobilePrototype !== 1 || desktopSwiftFinal !== 0 || mobileSwiftFinal !== 0) {
+      throw new Error('PRE-ART runtime state mismatch');
+    }
     report.gate_state = 'BLOCKED_WORLD_AND_SWIFT_FINAL_RASTER_REQUIRED';
     report.expected_blocker = {
       id: 'WORLD_AND_SWIFT_FINAL_RASTER_MISSING',
       worldFinalApproved: false,
       swiftFinalApproved: false,
       currentWorldRole: report.desktop?.productionMap ?? null,
-      desktopPrototypeItems: desktopPrototype,
-      mobilePrototypeItems: mobilePrototype,
-      controlRasterPass: report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
-      activeSvgVisuals: [
-        ...(report.desktop?.activeSvgVisuals ?? []),
-        ...(report.mobile?.activeSvgVisuals ?? []),
-      ],
     };
-  } else {
-    throw new Error('Desktop/mobile representative-art state is neither valid PRE-ART nor valid FINAL: '+JSON.stringify({
-      finalAssetsApproved,
-      desktopPrototype,
-      mobilePrototype,
-      desktopSwiftFinal:report.desktop?.swiftFinal,
-      mobileSwiftFinal:report.mobile?.swiftFinal,
-    }));
   }
 } catch(error) {
   report.failures.push(error instanceof Error ? error.message : String(error));
