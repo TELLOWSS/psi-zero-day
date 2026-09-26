@@ -5,6 +5,7 @@ import { FIELD_SUPPORT_ITEMS, fieldSupportItem } from '../src/app/field-support-
 import { PRODUCTION_MAP_ANCHOR_IDS } from '../src/app/production-map';
 import type { StrategyView } from '../src/app/strategy-view';
 import { StrategyMapShell } from '../src/ui/StrategyMapShell';
+import contract from '../content/episode01/g8d-support-runtime-visuals.json';
 
 const view: StrategyView = {
   clock: { day: 1, slot: 'MORNING' },
@@ -63,6 +64,16 @@ describe('G8-D support item runtime visual lock',()=>{
     expect(html).toContain('data-production-anchor="inspection"');
     expect(html).toContain('is-recent');
     expect(html).toContain(item.effect_visual_uri!);
+  });
+
+
+  it('keeps the G8-D promotion gate honest until radio art or real-device UI acceptance closes it',()=>{
+    expect(contract.status).toBe('PRODUCTION_CANDIDATE');
+    expect(contract.promotion.productionApproved).toBe(false);
+    expect(contract.items).toHaveLength(6);
+    expect(contract.promotion.requires).toContain('NO_DIRECT_PSI_PURCHASE');
+    expect(contract.promotion.requires).toContain('NO_DIRECT_ACCIDENT_DELETE');
+    expect(contract.promotion.requires).toContain('RADIO_DEDICATED_RASTER_OR_REAL_DEVICE_UI_ACCEPTANCE');
   });
 
   it('renders the radio as a dedicated rugged-radio field object rather than inventing an unrelated photo',()=>{
