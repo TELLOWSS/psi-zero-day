@@ -420,3 +420,89 @@
   }
   .zb-command{grid-template-columns:minmax(0,1fr) minmax(300px,34%);padding:5px 7px 6px}
 }
+
+
+/* Follow-up from actual 390x844 QA evidence:
+   remove vertical dead-space panels and bring the primary loop higher in the first viewport. */
+@media (orientation:portrait) and (max-width:430px){
+  .commercial-title-copy{padding-top:76px}
+  .commercial-title-logo{
+    font-size:clamp(42px,12.8vw,52px);
+    line-height:.88;
+  }
+  .commercial-title-copy h1{
+    margin-top:12px;
+    font-size:clamp(25px,7.25vw,31px);
+    line-height:1.05;
+  }
+  .commercial-title-english{
+    margin-top:7px!important;
+    font-size:9.5px!important;
+  }
+  .commercial-title-subcopy{display:none!important}
+  .commercial-title-actions{margin-top:14px;gap:7px}
+  .commercial-title-action,
+  .commercial-title-action.is-primary{
+    min-height:58px;
+    padding-block:6px;
+  }
+  .commercial-title-action.is-primary{min-height:68px}
+  .commercial-title-action-copy strong{font-size:15px}
+  .commercial-title-action-copy small{font-size:8px}
+  .commercial-title-features{margin-top:14px}
+}
+
+/* Portrait DefenseGame is supported, but its command row must size to content rather
+   than stretching an empty selection card over the remaining viewport. */
+@media (orientation:portrait) and (max-width:560px){
+  .zb-shell:not(.zb-prep):not(.is-def-core-active){
+    height:auto;
+    min-height:100dvh;
+    grid-template-rows:92px 240px auto;
+    align-content:start;
+    overflow-y:auto;
+    background:
+      linear-gradient(180deg,#08141d 0%,#0a1923 55%,#08131c 100%);
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-command{
+    min-height:0;
+    height:auto;
+    grid-template-rows:auto 68px;
+    align-content:start;
+    overflow:visible;
+    border-top-color:rgba(109,177,208,.32);
+    background:linear-gradient(180deg,#0d1f2b,#091823);
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-selection{
+    min-height:0;
+    height:auto;
+    overflow:visible;
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection{
+    height:auto;
+    min-height:76px;
+    max-height:92px;
+    justify-content:center;
+    border-color:rgba(111,181,212,.28);
+    background:linear-gradient(180deg,rgba(18,43,58,.96),rgba(13,33,45,.96));
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-build-panel,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-tower-panel{
+    height:auto;
+    max-height:none;
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-run-controls{
+    min-height:68px;
+    align-self:start;
+  }
+
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-support-action,
+  .zb-shell:not(.zb-prep):not(.is-def-core-active) .zb-start-wave{
+    min-height:64px;
+  }
+}
