@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-A",
+  "state": "PRODUCTION_LOCK_PASS",
+  "verifiedAt": "2026-09-26",
+  "workflowRunId": 36206566063,
+  "workflowJobId": 108304253536,
+  "sourceSha": "6e1c99efcaeccf815f668772a9b9130f35c08e2d",
+  "gateState": "READY_FOR_PRODUCTION_REVIEW",
+  "map": "map-apt-bottom-up-excavation-01",
+  "representativeSlice": {
+    "wave": 8,
+    "response": "CONTROL:L1",
+    "risk": "SWIFT"
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "productionMap": "PRODUCTION_CANDIDATE",
+    "worldFinal": true,
+    "worldRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+    "worldBytes": 90098,
+    "controlPq": 1,
+    "swift": 1,
+    "swiftFinal": 1,
+    "prototypeBoardItems": 0,
+    "activeSvgVisuals": [],
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "overflow": false,
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    }
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "productionMap": "PRODUCTION_CANDIDATE",
+    "worldFinal": true,
+    "worldRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+    "worldBytes": 90098,
+    "controlPq": 1,
+    "swift": 1,
+    "swiftFinal": 1,
+    "prototypeBoardItems": 0,
+    "activeSvgVisuals": [],
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "overflow": false,
+    "board": {
+      "left": 6,
+      "top": 99,
+      "right": 384,
+      "bottom": 325,
+      "width": 378,
+      "height": 227
+    }
+  },
+  "failures": [],
+  "lockConditions": {
+    "finalAssetIntake": true,
+    "contracts": true,
+    "typecheck": true,
+    "build": true,
+    "desktopActualPlay": true,
+    "mobile390x844": true,
+    "worldFinal": true,
+    "swiftFinal": true,
+    "prototypeBoardItems0": true,
+    "activeSvgVisuals0": true,
+    "noHorizontalOverflow": true
+  }
+}
