@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: g8a-premium-audio-${{ github.ref }}
+  group: g8a-premium-audio-lock-v2-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
