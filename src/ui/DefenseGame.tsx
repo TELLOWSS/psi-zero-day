@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseG8bVeiledFinalAsset, defenseG8bWorldFinalAsset, defenseProductionMapEntry, defenseSensorG8bComposite, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
@@ -72,6 +72,39 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
   const revealing = tower.towerId === 'SENSOR'
     && typeof level.revealIntervalTicks === 'number'
     && tower.revealCooldown === level.revealIntervalTicks;
+  const sensorG8b = content.map.id === 'map-apt-top-down-under-slab-01'
+    && tower.towerId === 'SENSOR' && tower.levelId === 'L1'
+    ? defenseSensorG8bComposite()
+    : null;
+  if (sensorG8b) {
+    return <g
+      className={`zb-tower zb-tower-production zb-sensor-g8b${revealing ? ' is-revealing' : ''}`}
+      data-pq-sensor="SENSOR:L1"
+      data-tower-family={tower.towerId}
+    >
+      {revealing ? <circle r="58" className="zb-detect-pulse" aria-hidden="true" /> : null}
+      <image
+        href={sensorG8b.lightingUri}
+        x="-74"
+        y="-48"
+        width="148"
+        height="86"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-sensor-g8b-lighting"
+        aria-hidden="true"
+      />
+      <image
+        href={sensorG8b.observerUri}
+        x="-27"
+        y="-83"
+        width="54"
+        height="98"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-sensor-g8b-observer"
+        aria-hidden="true"
+      />
+    </g>;
+  }
   const controlPq = tower.towerId === 'CONTROL' && tower.levelId === 'L1' ? defenseControlPqComposite() : null;
   if (controlPq) {
     return <g
@@ -164,6 +197,9 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
   const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
+  const veiledG8b = content.map.id === 'map-apt-top-down-under-slab-01' && enemy.enemyId === 'VEILED'
+    ? defenseG8bVeiledFinalAsset()
+    : null;
   const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqAsset() : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
@@ -182,7 +218,17 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {swiftPq ? <image
+    {veiledG8b ? <image
+      href={veiledG8b.uri}
+      x="-39"
+      y="-34"
+      width="78"
+      height="58"
+      preserveAspectRatio="xMidYMid meet"
+      className="zb-veiled-g8b-asset"
+      data-pq-veiled="VEILED"
+      aria-hidden="true"
+    /> : swiftPq ? <image
       href={swiftPq.uri}
       x="-39"
       y="-34"
@@ -269,6 +315,7 @@ export function DefenseGame({
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
   const PRODUCTION_MAP = defenseProductionMapEntry(content.map.id);
   const G8A_WORLD_FINAL = content.map.id === 'map-apt-bottom-up-excavation-01' ? defenseG8aWorldFinalAsset() : null;
+  const G8B_WORLD_FINAL = content.map.id === 'map-apt-top-down-under-slab-01' ? defenseG8bWorldFinalAsset() : null;
   const activeSiteMap = siteProcessMapByMapId(content.map.id)
     ?? (content.map.id === remodelScenario.map.id ? remodelScenario.map : undefined)
     ?? (content.map.id === dataCenterScenario.map.id ? dataCenterScenario.map : undefined);
@@ -472,7 +519,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-g8b-world-final={G8B_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
