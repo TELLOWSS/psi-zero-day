@@ -4,10 +4,11 @@ import world from '../content/defense/g8a-world-final-art.json';
 import swift from '../content/defense/g8a-swift-final-art.json';
 
 describe('G8-A generation review lock', () => {
-  it('closes generation after approved WORLD and SWIFT assets without granting Production Lock early', () => {
+  it('closes generation and records Production Lock after actual-play review', () => {
     expect(review.currentState.worldFinalApproved).toBe(true);
     expect(review.currentState.swiftFinalApproved).toBe(true);
-    expect(review.currentState.productionLockAllowed).toBe(false);
+    expect(review.currentState.productionLockAllowed).toBe(true);
+    expect(review.currentState.productionLocked).toBe(true);
     expect(world.status).toBe('PRODUCTION_APPROVED');
     expect(swift.status).toBe('PRODUCTION_APPROVED');
   });
