@@ -129,7 +129,7 @@ export function useDefenseAudio(state: DefenseRunState | null) {
 
     window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: premiumUri ? 'audio-api-unavailable' : 'premium-binary-not-approved' } }));
     playOscillatorCue(cue);
-  }, [muted]);
+  }, [muted, playOscillatorCue]);
 
 
 
