@@ -1,0 +1,99 @@
+name: Verify G8-B RESPONSE TOWER FINAL ART
+
+on:
+  push:
+    branches:
+      - sol/g8b-response-tower-final-art-20260926
+  pull_request:
+    branches:
+      - sol/g8a-audio-production-lock-20260926
+
+permissions:
+  contents: read
+
+concurrency:
+  group: g8b-response-tower-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-g8b-response-towers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout G8-B branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: G8-B response tower contracts
+        run: >
+          npx vitest run
+          tests/g8b-response-tower-final-art.test.ts
+          tests/g8a-world-final-art.test.ts
+          tests/g8a-swift-final-art.test.ts
+          tests/korea-legal-visual-standard.test.ts
+          tests/final-art-policy.test.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run G8-B response tower actual-play QA
+        shell: bash
+        env:
+          PSI_G8B_ARTIFACT_DIR: artifacts/g8b-response-towers
+        run: |
+          mkdir -p artifacts/g8b-response-towers
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8b-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g8b-preview.log
+            exit 1
+          fi
+          node scripts/verify-g8b-response-towers-browser.mjs
+
+      - name: Upload G8-B response tower evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8b-response-tower-evidence
+          path: artifacts/g8b-response-towers
+          if-no-files-found: error
+          retention-days: 14
