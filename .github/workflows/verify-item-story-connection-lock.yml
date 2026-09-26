@@ -1,0 +1,51 @@
+name: Verify ITEM STORY CONNECTION LOCK
+
+on:
+  push:
+    branches:
+      - sol/item-story-connection-lock-20260926
+  pull_request:
+    branches:
+      - sol/g8a-audio-production-lock-20260926
+
+permissions:
+  contents: read
+
+concurrency:
+  group: item-story-connection-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+
+      - name: Item / story relationship tests
+        run: >
+          npx vitest run
+          tests/item-story-connection-lock.test.ts
+          tests/field-support-items.test.ts
+          tests/field-support-ui.test.tsx
+          tests/paid-item-catalog.test.ts
+          tests/strategy-stage2-flow.test.tsx
+          tests/localization.test.ts
+
+      - name: Preserve episode equipment progression
+        run: >
+          npx vitest run
+          tests/training-loadout.test.ts
+          tests/equipment-skill-unlock.test.ts
+          tests/episode01-final-playthrough-regression.test.ts
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
