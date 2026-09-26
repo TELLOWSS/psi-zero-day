@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assetId": "defense.enemy.SWIFT.final.g8a",
+  "reviewState": "SOURCE_REVIEW_PASS",
+  "sourceKind": "NATIVE_IMAGE_GENERATION",
+  "observed": {
+    "width": 1536,
+    "height": 1024,
+    "format": "png",
+    "rgba": true,
+    "transparentBackground": true,
+    "alphaMin": 0,
+    "alphaMax": 254,
+    "transparentPixelRatio": 0.28969891866048175,
+    "sha256": "95717ed79a3b78a296126ac9b054835a3221afaa8ffe8e1aee5bef1a26477e26"
+  },
+  "generation": {
+    "genId": "20785513-e490-4948-8ed9-f3419fa1aeb0",
+    "sourceFileName": "a_high_resolution_isolated_vehicle_cutout_on_a_tr.png",
+    "nativeUpscaleUsed": false
+  },
+  "visualReview": {
+    "singleTruckOnly": true,
+    "rearThreeQuarterReadable": true,
+    "noPeople": true,
+    "noSceneBackground": true,
+    "noReadableText": true,
+    "noBranding": true,
+    "phoneScaleIntent": "SWIFT reversing dump truck"
+  },
+  "acceptance": {
+    "minimumNativeWidth": 1440,
+    "minimumNativeHeight": 1024,
+    "noUpscale": true,
+    "result": "PASS"
+  }
+}
