@@ -48,6 +48,7 @@ interface PremiumAudioContract {
   }[];
   readonly acceptance: {
     readonly productionLockAllowed: boolean;
+    readonly runtimeQaAllowed?: boolean;
   };
 }
 
