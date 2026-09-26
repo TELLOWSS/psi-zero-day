@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "production_id": "ep01-audio-core-v1",
-  "status": "production_v1_binaries_present",
+  "status": "production_v1_voice_lock",
   "game_title": "PSI : ZERO DAY",
   "company_name": "NEW PSI",
-  "final_asset_count": 8,
-  "required_core_assets": 8,
+  "final_asset_count": 12,
+  "required_core_assets": 12,
   "mix_target": {
     "principle": "Field realism first. Dialogue must remain intelligible; avoid trailer-style over-scoring.",
-    "loudness_note": "Keep one-shot field SFX below dialogue and UI confirmation cues. Final mastering is deferred until real recordings exist.",
+    "loudness_note": "Production voices target about -18 LUFS with true-peak headroom; ambience and presentation beds duck only while a reviewed voice line is actively playing.",
     "mobile_note": "Prefer compact mono for radio/office detail and stereo only where space materially improves immersion."
   },
   "format_target": {
@@ -196,11 +196,92 @@
         "melodramatic music",
         "prominent neighbor speech"
       ]
+    },
+    {
+      "key": "voice_kang_first_contact",
+      "asset_id": "ep01.audio.voice_kang_first_contact",
+      "target_uri": "assets/episode01/audio/voice-kang-first-contact.ogg",
+      "kind": "voice",
+      "target_duration_sec": [
+        16,
+        18
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_02_meet_kang"
+      ],
+      "direction": "강태식 첫 대면. 현장 논리와 사람을 읽는 기준을 담담하고 단단하게 전달한다.",
+      "reject": [
+        "악역 톤",
+        "훈계조",
+        "트레일러식 과장",
+        "배경음보다 작은 대사"
+      ]
+    },
+    {
+      "key": "voice_junho_signal",
+      "asset_id": "ep01.audio.voice_junho_signal",
+      "target_uri": "assets/episode01/audio/voice-junho-signal.ogg",
+      "kind": "voice",
+      "target_duration_sec": [
+        10,
+        12
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_04_junho_signal"
+      ],
+      "direction": "임준호의 확신 없는 이상징후 제보. 망설임과 관찰 사실을 살리고 결론을 대신 내리지 않는다.",
+      "reject": [
+        "공포 연기",
+        "확정적 사고 예고",
+        "속삭여 알아듣기 어려움"
+      ]
+    },
+    {
+      "key": "voice_lee_delay",
+      "asset_id": "ep01.audio.voice_lee_delay",
+      "target_uri": "assets/episode01/audio/voice-lee-delay.ogg",
+      "kind": "voice",
+      "target_duration_sec": [
+        10,
+        12
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_05_command"
+      ],
+      "direction": "이재훈의 7분 진입 지연 답변. 공정 압박은 분명하지만 안전을 조롱하거나 적대하지 않는다.",
+      "reject": [
+        "분노 폭발",
+        "악역 톤",
+        "카운트다운 경보음"
+      ]
+    },
+    {
+      "key": "voice_oh_record_judgment",
+      "asset_id": "ep01.audio.voice_oh_record_judgment",
+      "target_uri": "assets/episode01/audio/voice-oh-record-judgment.ogg",
+      "kind": "voice",
+      "target_duration_sec": [
+        13,
+        15
+      ],
+      "loop_candidate": false,
+      "events": [
+        "e01_08o_record_pressure"
+      ],
+      "direction": "오승재의 1차보고 기준. 책임 단정보다 다시 설명 가능한 사실 기록을 요구하는 실무 톤.",
+      "reject": [
+        "정답 해설 톤",
+        "법정 판결 톤",
+        "과도한 권위 연기"
+      ]
     }
   ],
   "integration": {
-    "current": "All eight Episode 01 production-v1 OGG assets are materialized and resolve through the runtime asset manifest; WebAudio fallback remains emergency-only.",
-    "finalization": "Field-recorded Foley may later replace the same stable asset paths after listening QA without changing story or event rules.",
+    "current": "Eight Episode 01 ambience/SFX binaries plus four Director-approved voice masters resolve through stable runtime asset ids. WebAudio synthetic fallback remains emergency-only for non-voice cues.",
+    "finalization": "Field Foley and any voice line that fails final listening QA may later replace the same stable asset paths without changing story, event rules, or choice outcomes.",
     "qa_surfaces": [
       "web production",
       "Android WebView",
@@ -231,7 +312,7 @@
         "bytes": 83098,
         "duration_sec": 6.4,
         "sha256": "e83d5b6ece30e0316515658967d0a3dba6524b8862502c30e1e18457d097009e",
-        "peak_dbfs": -9.0,
+        "peak_dbfs": -9,
         "rms_dbfs": -19.56
       },
       {
@@ -247,7 +328,7 @@
         "bytes": 63680,
         "duration_sec": 4.8,
         "sha256": "962807d102518811190c6d8e390b80effe63e869b45a9a75f7ca9c9abc3af0af",
-        "peak_dbfs": -9.0,
+        "peak_dbfs": -9,
         "rms_dbfs": -22.04
       },
       {
@@ -263,7 +344,7 @@
         "bytes": 102372,
         "duration_sec": 7.8,
         "sha256": "a3cbe9fe145ca1dfd1e9eae09a0050dd3df0e93ef4e92b117d9e894061fd98fc",
-        "peak_dbfs": -9.0,
+        "peak_dbfs": -9,
         "rms_dbfs": -20.07
       },
       {
@@ -271,7 +352,7 @@
         "bytes": 31932,
         "duration_sec": 2.6,
         "sha256": "99bfe62543e05d8785f3978759c32d226f23bb6f4fd62201dad3c587fa504db9",
-        "peak_dbfs": -10.0,
+        "peak_dbfs": -10,
         "rms_dbfs": -20.85
       },
       {
@@ -279,7 +360,7 @@
         "bytes": 75723,
         "duration_sec": 6.3,
         "sha256": "f29f04e55bf07ad32ddcad40bd7eb3c80c75c8cd7bb88567543c68b04ef4ba19",
-        "peak_dbfs": -13.0,
+        "peak_dbfs": -13,
         "rms_dbfs": -23.24
       },
       {
@@ -287,8 +368,41 @@
         "bytes": 77585,
         "duration_sec": 6.5,
         "sha256": "7da4b0e8c7c49a69312336d5a8fe092ca769bef6313e1de49ce7547e059c2e1c",
-        "peak_dbfs": -15.0,
+        "peak_dbfs": -15,
         "rms_dbfs": -21.84
+      }
+    ]
+  },
+  "voice_mastering": {
+    "source": "Director-supplied Episode 01 Final Voice candidate recordings",
+    "runtime_codec": "Ogg/Opus 48 kHz mono 32 kbps VBR",
+    "loudness_target_lufs": -18,
+    "true_peak_target_dbfs": -1.5,
+    "release_note": "Voice candidates remain subject to Director listening and release-clearance review.",
+    "assets": [
+      {
+        "file": "voice-kang-first-contact.ogg",
+        "bytes": 68167,
+        "duration_sec": 16.8065,
+        "sha256": "2c7d6b06f4911a07d6162f864848567fd0c06120c2dfc951f0b5041de624d648"
+      },
+      {
+        "file": "voice-junho-signal.ogg",
+        "bytes": 42337,
+        "duration_sec": 10.6065,
+        "sha256": "1bbe652e14aab6cb4abec30f7072701c6d11b8133b055f3709993a08df0bd950"
+      },
+      {
+        "file": "voice-lee-delay.ogg",
+        "bytes": 45677,
+        "duration_sec": 11.2065,
+        "sha256": "20a180a6937d95f68f21bf09548366c9cb95a9a80b8699d16ce24f3d0b45aa67"
+      },
+      {
+        "file": "voice-oh-record-judgment.ogg",
+        "bytes": 56027,
+        "duration_sec": 14.2065,
+        "sha256": "eb41f06924085cb384966013911f9169c0e8ce8c751c8f9cb42f1d6dabadebdd"
       }
     ]
   }
