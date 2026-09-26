@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import manifest from '../content/defense/g8b-response-tower-final-art.json';
 import sceneCatalog from '../content/episode01/scene-element-catalog.json';
 import { defenseG8bTowerFinalAsset, defenseTowerArtUri } from '../src/app/defense-visual-assets';
+import type { DefenseLevelId, DefenseTowerId } from '../src/domain/defense';
 
 describe('G8-B response tower final-art candidate', () => {
   it('replaces PULSE/BURST/SENSOR prototype glyphs with non-SVG raster candidates', () => {
@@ -17,15 +18,22 @@ describe('G8-B response tower final-art candidate', () => {
       expect(existsSync('public/' + asset.runtimeUri)).toBe(true);
       expect(statSync('public/' + asset.runtimeUri).size).toBeGreaterThan(50_000);
       for (const levelId of asset.levels) {
-        expect(defenseTowerArtUri(asset.towerId, levelId)).toBe(asset.runtimeUri);
-        expect(defenseG8bTowerFinalAsset(asset.towerId, levelId)?.uri).toBe(asset.runtimeUri);
+        const towerId = asset.towerId as DefenseTowerId;
+        const typedLevelId = levelId as DefenseLevelId;
+        expect(defenseTowerArtUri(towerId, typedLevelId)).toBe(asset.runtimeUri);
+        expect(defenseG8bTowerFinalAsset(towerId, typedLevelId)?.uri).toBe(asset.runtimeUri);
       }
     }
   });
 
   it('reuses only scene-element sources already reviewed as final realistic production art', () => {
+    const sources = sceneCatalog.elements as Record<string, {
+      production_status: string;
+      art: { style_profile?: string; requires_alpha?: boolean; path: string };
+      production?: { legal_visual_gate?: string };
+    }>;
     for (const asset of manifest.assets) {
-      const source = sceneCatalog.elements[asset.sourceCatalogKey as keyof typeof sceneCatalog.elements];
+      const source = sources[asset.sourceCatalogKey];
       expect(source).toBeDefined();
       expect(source?.production_status).toBe('final');
       expect(source?.art.style_profile).toBe('field-guide-production-realistic-v2');
