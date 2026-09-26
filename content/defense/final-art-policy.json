@@ -42,10 +42,10 @@
   },
   "enforcement": {
     "currentGate": "G8-A",
-    "g8aState": "SWIFT_FINAL_APPROVED_WORLD_FINAL_PENDING",
-    "reason": "SWIFT final raster is approved and active from a reviewed native transparent source. The process-specific WORLD plate remains the only G8-A Final Art blocker.",
+    "g8aState": "FINAL_ASSETS_APPROVED_QA_REQUIRED",
+    "reason": "WORLD and SWIFT final rasters are approved from reviewed native sources without upscaling. Production Lock still requires legal/visual and desktop/mobile actual-play QA.",
     "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
-    "next": "Create and approve one process-specific non-SVG G8-A WORLD plate, then run desktop/mobile actual-play QA and Production Lock.",
+    "next": "Run G8-A desktop and 390x844 actual-play QA. If worldFinal=true, swiftFinal=1, prototypeBoardItems=0, activeSvgVisuals=0 and overflow=false, apply Production Lock.",
     "productionLockRequires": [
       "WORLD_FINAL_RASTER_APPROVED",
       "SWIFT_FINAL_RASTER_APPROVED",
