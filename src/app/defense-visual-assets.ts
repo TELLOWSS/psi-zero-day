@@ -5,6 +5,7 @@ import productionMapFamilyRaw from '../../content/defense/production-map-family-
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
 import g8bResponseTowerFinalRaw from '../../content/defense/g8b-response-tower-final-art.json';
+import g8cRiskFinalRaw from '../../content/defense/g8c-risk-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -136,6 +137,46 @@ interface G8bResponseTowerFinalManifest {
   };
 }
 const g8bResponseTowerFinal = g8bResponseTowerFinalRaw as G8bResponseTowerFinalManifest;
+
+interface G8cRiskPart {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+  readonly x: number;
+  readonly y: number;
+  readonly opacity: number;
+}
+interface G8cRiskAsset {
+  readonly enemyId: Exclude<DefenseEnemyId, 'SWIFT'>;
+  readonly displayName: string;
+  readonly role: string;
+  readonly render: 'SINGLE' | 'COMPOSITE' | 'VEILED_SINGLE';
+  readonly parts: readonly G8cRiskPart[];
+}
+interface G8cRiskFinalManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_CANDIDATE' | 'PRODUCTION_APPROVED';
+  readonly assets: readonly G8cRiskAsset[];
+  readonly promotion: {
+    readonly runtimeCandidate: boolean;
+    readonly productionApproved: boolean;
+  };
+}
+const g8cRiskFinal = g8cRiskFinalRaw as G8cRiskFinalManifest;
+
+export function defenseG8cRiskFinalAsset(enemyId: DefenseEnemyId): G8cRiskAsset | null {
+  if (
+    enemyId === 'SWIFT'
+    || g8cRiskFinal.promotion.runtimeCandidate !== true
+    || !['PRODUCTION_CANDIDATE', 'PRODUCTION_APPROVED'].includes(g8cRiskFinal.status)
+  ) {
+    return null;
+  }
+  const candidate = g8cRiskFinal.assets.find(item => item.enemyId === enemyId);
+  if (!candidate || candidate.parts.length === 0) return null;
+  if (candidate.parts.some(part => part.uri.toLowerCase().includes('.svg'))) return null;
+  return candidate;
+}
 
 export function defenseG8bTowerFinalAsset(
   towerId: DefenseTowerId,
