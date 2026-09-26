@@ -4,6 +4,9 @@ import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.j
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
+import g8bWorldFinalRaw from '../../content/defense/g8b-world-final-art.json';
+import g8bVeiledFinalRaw from '../../content/defense/g8b-veiled-final-art.json';
+import g8bSensorCompositeRaw from '../../content/defense/g8b-sensor-runtime-composite.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
 interface DefenseVisualAsset {
@@ -113,24 +116,80 @@ interface WorldFinalManifest {
   };
 }
 const worldFinalManifest = worldFinalRaw as WorldFinalManifest;
+const g8bWorldFinalManifest = g8bWorldFinalRaw as WorldFinalManifest;
+const g8bVeiledFinalManifest = g8bVeiledFinalRaw as SwiftFinalManifest;
+
+interface G8bSensorCompositeManifest {
+  readonly status: 'PRODUCTION_APPROVED';
+  readonly mapId: string;
+  readonly towerId: 'SENSOR';
+  readonly levelId: 'L1';
+  readonly sources: {
+    readonly observer: string;
+    readonly lighting: string;
+  };
+  readonly promotion: {
+    readonly productionApproved: boolean;
+  };
+}
+const g8bSensorCompositeManifest = g8bSensorCompositeRaw as G8bSensorCompositeManifest;
+
+function approvedRaster(manifest: WorldFinalManifest | SwiftFinalManifest): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+} | null {
+  if (
+    manifest.status !== 'PRODUCTION_APPROVED'
+    || manifest.promotion.productionApproved !== true
+    || !['webp','png'].includes(manifest.format)
+    || manifest.runtimeUri.toLowerCase().includes('.svg')
+  ) return null;
+  return { uri: manifest.runtimeUri, width: manifest.runtime.width, height: manifest.runtime.height };
+}
 
 export function defenseG8aWorldFinalAsset(): {
   readonly uri: string;
   readonly width: number;
   readonly height: number;
 } | null {
+  return approvedRaster(worldFinalManifest);
+}
+
+export function defenseG8bWorldFinalAsset(): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+} | null {
+  return approvedRaster(g8bWorldFinalManifest);
+}
+
+export function defenseG8bVeiledFinalAsset(): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+} | null {
+  return approvedRaster(g8bVeiledFinalManifest);
+}
+
+export function defenseSensorG8bComposite(): {
+  readonly mapId: string;
+  readonly observerUri: string;
+  readonly lightingUri: string;
+} | null {
   if (
-    worldFinalManifest.status !== 'PRODUCTION_APPROVED'
-    || worldFinalManifest.promotion.productionApproved !== true
-    || !['webp','png'].includes(worldFinalManifest.format)
-    || worldFinalManifest.runtimeUri.toLowerCase().includes('.svg')
-  ) {
-    return null;
-  }
+    g8bSensorCompositeManifest.status !== 'PRODUCTION_APPROVED'
+    || g8bSensorCompositeManifest.promotion.productionApproved !== true
+    || g8bSensorCompositeManifest.mapId !== 'map-apt-top-down-under-slab-01'
+    || g8bSensorCompositeManifest.towerId !== 'SENSOR'
+    || g8bSensorCompositeManifest.levelId !== 'L1'
+    || g8bSensorCompositeManifest.sources.observer.toLowerCase().includes('.svg')
+    || g8bSensorCompositeManifest.sources.lighting.toLowerCase().includes('.svg')
+  ) return null;
   return {
-    uri: worldFinalManifest.runtimeUri,
-    width: worldFinalManifest.runtime.width,
-    height: worldFinalManifest.runtime.height,
+    mapId: g8bSensorCompositeManifest.mapId,
+    observerUri: g8bSensorCompositeManifest.sources.observer,
+    lightingUri: g8bSensorCompositeManifest.sources.lighting,
   };
 }
 
@@ -184,6 +243,10 @@ function runtimeFinalAsset(id: string): DefenseVisualAsset | null {
 }
 
 export function defenseBoardArtUri(mapId: string): string | null {
+  if (mapId === 'map-apt-top-down-under-slab-01') {
+    const finalWorld = defenseG8bWorldFinalAsset();
+    if (finalWorld) return finalWorld.uri;
+  }
   if (mapId === 'map-apt-bottom-up-excavation-01') {
     const finalWorld = defenseG8aWorldFinalAsset();
     if (finalWorld) return finalWorld.uri;
