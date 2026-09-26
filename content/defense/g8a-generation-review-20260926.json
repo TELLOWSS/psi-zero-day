@@ -32,15 +32,13 @@
     }
   ],
   "currentState": {
-    "worldFinalApproved": false,
+    "worldFinalApproved": true,
     "swiftFinalApproved": true,
     "productionLockAllowed": false,
-    "note": "SWIFT native transparent source and 78x58 runtime WebP approved; WORLD remains the sole G8-A final-art blocker."
+    "note": "WORLD and SWIFT native final assets are approved; generation is closed and actual-play Production Review is the only remaining gate."
   },
   "nextGeneration": {
-    "order": [
-      "WORLD"
-    ],
+    "order": [],
     "swift": {
       "mode": "LOCKED_APPROVED_ASSET",
       "required": [
@@ -49,12 +47,10 @@
       ]
     },
     "world": {
-      "mode": "FULL_BLEED_WORLD_PLATE_ONLY",
+      "mode": "LOCKED_APPROVED_ASSET",
       "required": [
-        "single 5:3 world plate",
-        "no text, logo, UI, HUD, asset sheet, mini-map or lower panel",
-        "no baked gameplay route, tower pad or warning icon",
-        "process-specific bottom-up open excavation"
+        "do not regenerate unless a regression is found",
+        "preserve approved runtime path assets/defense/board/g8a-bottom-up-excavation-final.webp"
       ]
     }
   }
