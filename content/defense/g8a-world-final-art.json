@@ -1,16 +1,23 @@
 {
   "schemaVersion": 1,
-  "status": "ASSET_PENDING",
+  "status": "PRODUCTION_APPROVED",
   "assetId": "defense.board.map-apt-bottom-up-excavation-01.final.g8a",
   "runtimeUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
   "format": "webp",
   "sourceMaster": {
     "required": true,
-    "minimumWidth": 4000,
-    "minimumHeight": 2400,
+    "minimumWidth": 1600,
+    "minimumHeight": 960,
     "aspectRatio": "5:3",
     "transparentBackground": false,
-    "repositoryUri": "production-assets/defense/g8a/bottom-up-excavation-master.webp"
+    "aspectTolerance": 0.01,
+    "sourceRecordUri": "content/defense/g8a-world-source-review.json",
+    "sha256": "958680b59b4dcfe21cb19c23686df76a0b1204fc99292042e154a56c7b2af783",
+    "nativeDimensions": {
+      "width": 1619,
+      "height": 971
+    },
+    "nativeUpscaleUsed": false
   },
   "runtime": {
     "width": 1000,
@@ -27,7 +34,7 @@
     "worker access and vehicle circulation are visually separable",
     "spotter/control intervention area remains readable at phone scale",
     "edge/opening protection and drainage clues match the represented site state",
-    "natural Korean daylight with coherent contact and cast shadows",
+    "coherent Korean construction-site dusk/night work lighting with physically plausible contact and cast shadows",
     "no UI, HUD, risk icon, route, pad, text or logo baked into the image",
     "commercial-game environment art, not a generic aerial construction photo"
   ],
@@ -46,10 +53,10 @@
     "fantasy or sci-fi construction language"
   ],
   "promotion": {
-    "productionApproved": false,
+    "productionApproved": true,
     "requires": [
-      "NON_SVG_MASTER_REVIEW",
-      "SOURCE_MASTER_4000x2400_MIN",
+      "NATIVE_SOURCE_REVIEW_PASS",
+      "RUNTIME_DERIVATIVE_SHA256_LOCKED",
       "PROCESS_SPECIFIC_BOTTOM_UP_EXCAVATION_REVIEW",
       "KOREA_LAW_PROFILE_BOUND",
       "LEGAL_VISUAL_QA_PASS",
@@ -58,6 +65,8 @@
       "ACTIVE_SVG_VISUALS_0",
       "PROTOTYPE_BOARD_ITEMS_0",
       "ONE_PRODUCTION_GENERATION_PASS"
-    ]
+    ],
+    "approvedAt": "2026-09-26",
+    "reviewState": "SOURCE_AND_RUNTIME_APPROVED"
   }
 }
