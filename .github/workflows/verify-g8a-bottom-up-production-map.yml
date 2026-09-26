@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: g8a-bottom-up-production-map-${{ github.ref }}
+  group: g8a-production-lock-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
