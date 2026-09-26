@@ -60,7 +60,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
     </div>;
     if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <div className={`dialogue-content ${textStyle(p.text_id) ?? ''}`} key={`${p.instance_id}/${p.node_id}`}>
       <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>{previousAvailable && onPrevious ? <button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button> : null}</div>
-      <p className="dialogue-text" data-voice-caption={dialogueOverrideText !== null || undefined}>
+      <p className="dialogue-text" data-voice-caption={dialogueOverrideText !== null ? 'active' : undefined}>
         {dialogueOverrideText ?? t(p.text_id)}
       </p>
       <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked || undefined}
