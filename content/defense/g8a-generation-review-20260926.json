@@ -33,22 +33,19 @@
   ],
   "currentState": {
     "worldFinalApproved": false,
-    "swiftFinalApproved": false,
-    "productionLockAllowed": false
+    "swiftFinalApproved": true,
+    "productionLockAllowed": false,
+    "note": "SWIFT native transparent source and 78x58 runtime WebP approved; WORLD remains the sole G8-A final-art blocker."
   },
   "nextGeneration": {
     "order": [
-      "SWIFT",
       "WORLD"
     ],
     "swift": {
-      "mode": "SINGLE_OBJECT_ONLY",
+      "mode": "LOCKED_APPROVED_ASSET",
       "required": [
-        "one unbranded construction dump truck only",
-        "transparent background",
-        "3/4 rear or side-rear high-oblique view",
-        "no text, no labels, no UI, no asset sheet, no alternate views",
-        "no people, cones, excavators, buildings or scene background"
+        "do not regenerate unless a regression is found",
+        "preserve approved runtime path assets/defense/enemies/swift-final-g8a.webp"
       ]
     },
     "world": {
