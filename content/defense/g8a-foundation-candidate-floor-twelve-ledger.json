@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "candidateId": "G8A-FOUNDATION-CANDIDATE-02",
+  "sourceFile": "floor_twelve_ledger.mp4",
+  "sourceSha256": "8a8f13b92eaa44156e0d5efef015f6e3090e543fbfd1ea9182ba6782604ba4d4",
+  "interpretedSlot": "score.foundation_bed",
+  "observedSource": {
+    "durationSeconds": 136.400333,
+    "codec": "aac",
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "bitrateKbps": 192,
+    "integratedLufs": -12.4,
+    "loudnessRangeLu": 9.9,
+    "truePeakDbfs": -0.2,
+    "endingSilenceSeconds": 2.305,
+    "metadata": {
+      "title": "Floor Twelve Ledger",
+      "album": "Object of Purpose",
+      "genre": "Modern Orchestral Minimalism"
+    },
+    "beatAnalysis": {
+      "dominantCandidateBpm": 86.1328125,
+      "note": "Generator again produced a full-length composition instead of the requested 16-bar deliverable."
+    }
+  },
+  "derivedCandidate": {
+    "sourceRegionSeconds": {
+      "start": 66.45551020408163,
+      "end": 111.10748299319728,
+      "duration": 44.651972789115646
+    },
+    "detectedBeatCount": 64,
+    "assumedBarsAtFourFour": 16,
+    "targetTempoBpm": 84,
+    "targetDurationSeconds": 45.7142857,
+    "timeStretchFactor": 0.9767619050671429,
+    "pitchShiftUsed": false,
+    "runtimeSampleRateHz": 48000,
+    "gainTrimDb": -2,
+    "wavSha256": "e0bc36f6299af6d9b660ad89b0419622e492fd232264a43f420ca2a4c42843d4",
+    "runtimeOggSha256": "6c492eb961207f9d8bb3013a5bcf3cac8a707f7b7e7515929fd58cd76c1d5bf1",
+    "runtimeOggBytes": 933718,
+    "observedRuntimeDurationSeconds": 45.712854,
+    "observedRuntimeTruePeakDbfs": -2,
+    "observedRuntimeIntegratedLufs": -12.4,
+    "observedRuntimeLoudnessRangeLu": 1.2
+  },
+  "verdict": "TECHNICAL_16_BAR_CANDIDATE_LISTENING_QA_REQUIRED",
+  "productionApproved": false,
+  "nextDecision": [
+    "listen for musical continuity at the loop boundary",
+    "confirm the selected middle section preserves the desired premium orchestral character",
+    "confirm the foundation remains subordinate to SWIFT reverse alarm and CONTROL Foley",
+    "if only the seam is audible, repair in post instead of spending another generation"
+  ],
+  "generationPolicy": {
+    "immediateRegenerationRequired": false,
+    "reason": "Two consecutive Gemini/Lyria results expanded to roughly 136 seconds despite the 16-bar duration instruction; post-derived loop candidate is more token/quota efficient than blind regeneration."
+  }
+}
