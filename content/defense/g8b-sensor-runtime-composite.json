@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "status": "PRODUCTION_APPROVED",
+  "assetId": "defense.tower.SENSOR.L1.g8b.runtime-composite",
+  "mapId": "map-apt-top-down-under-slab-01",
+  "towerId": "SENSOR",
+  "levelId": "L1",
+  "kind": "RASTER_RUNTIME_COMPOSITE",
+  "role": "low-visibility inspection and reveal intervention",
+  "sources": {
+    "observer": "assets/episode01/characters/player-map.webp",
+    "lighting": "assets/episode01/scene-elements/temporary-lighting-pack.webp"
+  },
+  "sourcePolicy": {
+    "existingApprovedRasterReuse": true,
+    "newGenerationRequired": false,
+    "svgUsed": false
+  },
+  "runtimeIntent": [
+    "tablet observer reads the work face before exposure",
+    "temporary lighting makes the under-slab visibility intervention legible",
+    "runtime SENSOR reveal pulse remains the gameplay authority"
+  ],
+  "promotion": {
+    "productionApproved": true,
+    "approvedAt": "2026-09-26"
+  }
+}
