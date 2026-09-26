@@ -9,14 +9,14 @@
       "id": "score.foundation_bed",
       "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
       "category": "SCORE",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "LOCK_CANDIDATE_LOCAL",
+      "technicalQa": "PASS_CANDIDATE",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Floor Twelve Ledger selected as tonal reference. 84 BPM / 16-bar runtime derivative prepared at 48 kHz Opus, -14.0 LUFS, -3.6 dBFS peak. Do not spend another Gemini generation unless later full-mix regression is proven.",
       "productionApproved": false
     },
     {
@@ -349,5 +349,30 @@
     "premiumBinaryCueCount": null,
     "premiumMixStateTransitions": [],
     "productionLockAllowed": false
+  },
+  "musicReference": {
+    "state": "TONAL_REFERENCE_LOCKED",
+    "assetId": "score.foundation_bed",
+    "sourceTitle": "Floor Twelve Ledger",
+    "sourceFile": "floor_twelve_ledger.mp4",
+    "sourceNative": {
+      "sampleRateHz": 44100,
+      "channels": 2,
+      "container": "mp4",
+      "codec": "aac"
+    },
+    "runtimeCandidate": {
+      "durationSeconds": 45.720792,
+      "targetTempoBpm": 84,
+      "bars": 16,
+      "meter": "4/4",
+      "sampleRateHz": 48000,
+      "codec": "opus",
+      "bitrateKbps": 160,
+      "integratedLufs": -14,
+      "truePeakDbfs": -3.6
+    },
+    "qa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
+    "nextAsset": "score.pressure_ostinato"
   }
 }
