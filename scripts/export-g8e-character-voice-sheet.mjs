@@ -84,5 +84,5 @@ console.log(JSON.stringify({
   status:manifest.status,
   plannedCues:rows.length,
   distinctCharacters:new Set(rows.map(row=>row.character_id)).size,
-  outputDir,
+  outputDir:outDir,
 },null,2));
