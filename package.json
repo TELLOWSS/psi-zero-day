@@ -71,7 +71,10 @@
     "test:strategy-stage2": "vitest run tests/strategy-stage2-flow.test.tsx",
     "defense:g2-promote": "node scripts/promote-def-hd01-pq.mjs",
     "defense:g8a-art-status": "node scripts/check-g8a-final-assets.mjs",
-    "defense:g8a-art-check": "node scripts/check-g8a-final-assets.mjs --require-final"
+    "defense:g8a-art-check": "node scripts/check-g8a-final-assets.mjs --require-final",
+    "defense:g8a-art-candidate-check": "node scripts/check-g8a-final-assets.mjs --candidate",
+    "defense:g8a-art-promote": "node scripts/promote-g8a-final-assets.mjs",
+    "defense:g8a-production-lock": "node scripts/lock-g8a-production.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
