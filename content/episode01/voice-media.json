@@ -10,7 +10,8 @@
       "chunks": [
         "content/episode01/embedded-audio/kang-first-contact.ogg.b64.01.txt",
         "content/episode01/embedded-audio/kang-first-contact.ogg.b64.02.txt",
-        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.03.txt"
+        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.03.txt",
+        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.04.txt"
       ]
     },
     {
@@ -20,7 +21,8 @@
       "sha256": "1bbe652e14aab6cb4abec30f7072701c6d11b8133b055f3709993a08df0bd950",
       "chunks": [
         "content/episode01/embedded-audio/junho-signal.ogg.b64.01.txt",
-        "content/episode01/embedded-audio/junho-signal.ogg.b64.02.txt"
+        "content/episode01/embedded-audio/junho-signal.ogg.b64.02.txt",
+        "content/episode01/embedded-audio/junho-signal.ogg.b64.03.txt"
       ]
     },
     {
@@ -30,7 +32,8 @@
       "sha256": "20a180a6937d95f68f21bf09548366c9cb95a9a80b8699d16ce24f3d0b45aa67",
       "chunks": [
         "content/episode01/embedded-audio/lee-delay.ogg.b64.01.txt",
-        "content/episode01/embedded-audio/lee-delay.ogg.b64.02.txt"
+        "content/episode01/embedded-audio/lee-delay.ogg.b64.02.txt",
+        "content/episode01/embedded-audio/lee-delay.ogg.b64.03.txt"
       ]
     },
     {
@@ -41,7 +44,8 @@
       "chunks": [
         "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.01.txt",
         "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.02.txt",
-        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.03.txt"
+        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.03.txt",
+        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.04.txt"
       ]
     }
   ]
