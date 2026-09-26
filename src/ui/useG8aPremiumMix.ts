@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import type { DefenseRunState } from '../domain/defense';
 import {
-  premiumDefenseAudioEnabled,
+  premiumDefenseAudioRuntimeEnabled,
   premiumDefenseFieldAssets,
   premiumDefenseFieldUri,
   premiumDefenseScoreStemAssets,
@@ -39,7 +39,7 @@ export function useG8aPremiumMix(
   const fadeTimersRef = useRef(new Map<string, number>());
   const previousMixStateRef = useRef<G8aPremiumMusicState | null>(null);
 
-  const enabled = premiumDefenseAudioEnabled() && g8aIsPremiumAudioScope(mapId);
+  const enabled = premiumDefenseAudioRuntimeEnabled() && g8aIsPremiumAudioScope(mapId);
 
   const stopFade = useCallback((id: string) => {
     const timer = fadeTimersRef.current.get(id);
