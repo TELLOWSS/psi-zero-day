@@ -28,6 +28,8 @@ interface PremiumAudioContract {
       readonly id: PremiumScoreStemId;
       readonly path: string;
       readonly state: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+      readonly loop: boolean;
+      readonly playbackRole: 'SYNCHRONIZED_LOOP' | 'STATE_ENTRY_ONE_SHOT' | 'STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION';
     }[];
   };
   readonly fieldSound: readonly {
@@ -72,10 +74,18 @@ export function premiumDefenseAudioContractState() {
 export function premiumDefenseScoreStemAssets(): readonly {
   readonly id: PremiumScoreStemId;
   readonly uri: string;
+  readonly loop: boolean;
+  readonly playbackRole: 'SYNCHRONIZED_LOOP' | 'STATE_ENTRY_ONE_SHOT' | 'STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION';
 }[] {
   return contract.dynamicScore.stems
     .filter(item => item.state === 'PRODUCTION_APPROVED')
-    .map(item => ({ id: item.id, uri: item.path }));
+    .map(item => ({ id: item.id, uri: item.path, loop: item.loop, playbackRole: item.playbackRole }));
+}
+
+export function premiumDefenseScoreStemUri(id: PremiumScoreStemId): string | null {
+  const item = contract.dynamicScore.stems.find(asset => asset.id === id);
+  if (!item || item.state !== 'PRODUCTION_APPROVED') return null;
+  return item.path;
 }
 
 export function premiumDefenseFieldAssets(): readonly {
