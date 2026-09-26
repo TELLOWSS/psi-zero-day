@@ -25,8 +25,9 @@ for(const item of slots){
     if(bytes<2048) failures.push(item.id+': audio binary too small');
     if(!ogg) failures.push(item.id+': runtime binary is not an Ogg container');
   }
-  if(item.state==='PRODUCTION_APPROVED' && !exists) failures.push(item.id+': approved slot has no runtime binary');
-  if(item.state!=='PRODUCTION_APPROVED' && exists) failures.push(item.id+': binary exists but manifest is not approved');
+  const runtimeReady=item.state==='QA_READY' || item.state==='PRODUCTION_APPROVED';
+  if(runtimeReady && !exists) failures.push(item.id+': runtime-ready slot has no runtime binary');
+  if(item.state==='ASSET_PENDING' && exists) failures.push(item.id+': binary exists while slot is still ASSET_PENDING');
   rows.push({...item,exists,bytes,ogg});
 }
 
@@ -75,7 +76,7 @@ const report={
   productionLockAllowed:contract.acceptance.productionLockAllowed,
   rows,
   failures,
-  result:failures.length?'FAIL':(requireFinal?'FINAL_AUDIO_VALID':'AUDIO_PREPRODUCTION_VALID'),
+  result:failures.length?'FAIL':(requireFinal?'FINAL_AUDIO_VALID':(contract.status==='PREMIUM_AUDIO_QA_READY'?'AUDIO_QA_RUNTIME_VALID':'AUDIO_PREPRODUCTION_VALID')),
 };
 console.log('G8A_PREMIUM_AUDIO='+JSON.stringify(report));
 if(failures.length) process.exit(1);
