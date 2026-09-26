@@ -10,18 +10,18 @@ const TOP_ID = 'map-apt-top-down-under-slab-01';
 const ART = 'public/assets/defense/board/ramp-01-hd01.webp';
 
 describe('G8-A bottom-up production map', () => {
-  it('keeps ONE GATE AT A TIME and refuses to call the temporary HD plate a Production Lock', () => {
+  it('keeps ONE GATE AT A TIME and locks only the verified representative production map', () => {
     expect(productionRaw.generationRule).toBe('ONE_MAP_AT_A_TIME');
     expect(productionRaw.maps).toHaveLength(1);
     expect(productionRaw.maps[0]?.mapId).toBe(BOTTOM_ID);
-    expect(productionRaw.status).toBe('G8A_FINAL_ASSETS_APPROVED_QA_REQUIRED');
-    expect(productionRaw.maps[0]?.status).toBe('PRODUCTION_CANDIDATE');
+    expect(productionRaw.status).toBe('G8A_PRODUCTION_LOCKED');
+    expect(productionRaw.maps[0]?.status).toBe('PRODUCTION_LOCKED');
     expect(productionRaw.maps[0]?.representativeSlice.response).toBe('CONTROL:L1');
     expect(productionRaw.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
     expect(productionRaw.maps[0]?.representativeSlice.risk).toBe('SWIFT');
-    expect(productionRaw.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_APPROVED');
-    expect(productionRaw.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_APPROVED_QA_PENDING');
-    expect(productionRaw.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
+    expect(productionRaw.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_LOCKED');
+    expect(productionRaw.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_LOCKED');
+    expect(productionRaw.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(true);
   });
 
   it('uses the approved process-specific final raster candidate while retaining the old HD plate only as reference', () => {
