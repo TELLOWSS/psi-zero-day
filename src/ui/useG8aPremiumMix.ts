@@ -5,7 +5,9 @@ import {
   premiumDefenseFieldAssets,
   premiumDefenseFieldUri,
   premiumDefenseScoreStemAssets,
+  premiumDefenseScoreStemUri,
   type PremiumFieldSoundId,
+  type PremiumScoreStemId,
 } from '../app/defense-premium-audio';
 import {
   g8aIsPremiumAudioScope,
@@ -68,7 +70,7 @@ export function useG8aPremiumMix(
     if (!enabled || typeof Audio === 'undefined') return;
 
     for (const asset of premiumDefenseScoreStemAssets()) {
-      if (elementsRef.current.has(asset.id)) continue;
+      if (!asset.loop || elementsRef.current.has(asset.id)) continue;
       const audio = new Audio(asset.uri);
       audio.preload = 'auto';
       audio.loop = true;
@@ -86,9 +88,20 @@ export function useG8aPremiumMix(
     }
   }, [enabled]);
 
-  const playOneShot = useCallback((id: PremiumFieldSoundId, volume = 0.7) => {
+  const playFieldOneShot = useCallback((id: PremiumFieldSoundId, volume = 0.7) => {
     if (!enabled || muted || !armedRef.current || typeof Audio === 'undefined') return;
     const uri = premiumDefenseFieldUri(id);
+    if (!uri) return;
+    const audio = new Audio(uri);
+    audio.preload = 'auto';
+    audio.loop = false;
+    audio.volume = Math.max(0, Math.min(1, volume));
+    safePlay(audio);
+  }, [enabled, muted]);
+
+  const playScoreOneShot = useCallback((id: PremiumScoreStemId, volume = 0.7) => {
+    if (!enabled || muted || !armedRef.current || typeof Audio === 'undefined') return;
+    const uri = premiumDefenseScoreStemUri(id);
     if (!uri) return;
     const audio = new Audio(uri);
     audio.preload = 'auto';
@@ -115,7 +128,7 @@ export function useG8aPremiumMix(
     armedRef.current = true;
     if (!enabled || muted) return;
     ensureElements();
-    for (const asset of premiumDefenseScoreStemAssets()) startLoop(asset.id);
+    for (const asset of premiumDefenseScoreStemAssets()) if (asset.loop) startLoop(asset.id);
     for (const id of ['field.excavation_world', 'field.excavator_hydraulic'] as const) startLoop(id);
   }, [enabled, ensureElements, muted, startLoop]);
 
@@ -128,16 +141,19 @@ export function useG8aPremiumMix(
 
     ensureElements();
     const mix = g8aPremiumMixSnapshot(state);
-    const activeCount = Math.max(1, mix.activeScoreIds.length);
+    const scoreAssets = premiumDefenseScoreStemAssets();
+    const activeLoopIds = mix.activeScoreIds.filter(id => scoreAssets.find(asset => asset.id === id)?.loop);
+    const activeCount = Math.max(1, activeLoopIds.length);
     const musicBusGain = dbToGain(mix.musicGainDb + mix.duckMusicDb);
     const perStemGain = musicBusGain / Math.sqrt(activeCount);
     const crossfadeMs = mix.state === 'CONTROL_INTERVENTION'
       ? Math.max(40, mix.duckAttackMs)
       : SCORE_CROSSFADE_MS;
 
-    for (const asset of premiumDefenseScoreStemAssets()) {
+    for (const asset of scoreAssets) {
+      if (!asset.loop) continue;
       startLoop(asset.id);
-      fadeTo(asset.id, mix.activeScoreIds.includes(asset.id) ? perStemGain : 0, crossfadeMs);
+      fadeTo(asset.id, activeLoopIds.includes(asset.id) ? perStemGain : 0, crossfadeMs);
     }
 
     startLoop('field.excavation_world');
@@ -151,11 +167,15 @@ export function useG8aPremiumMix(
 
     const previous = previousMixStateRef.current;
     if (mix.state !== previous) {
-      if (mix.state === 'SWIFT_THREAT') playOneShot('swift.gravel_tire', 0.58);
+      if (mix.state === 'SWIFT_THREAT') playFieldOneShot('swift.gravel_tire', 0.58);
       if (mix.state === 'CONTROL_INTERVENTION') {
-        playOneShot('swift.airbrake', 0.82);
-        playOneShot('control.radio_stop', 0.68);
-        playOneShot('control.barrier_clack', 0.64);
+        playScoreOneShot('score.control_intervention', 0.76);
+        playFieldOneShot('swift.airbrake', 0.82);
+        playFieldOneShot('control.radio_stop', 0.68);
+        playFieldOneShot('control.barrier_clack', 0.64);
+      }
+      if (mix.state === 'RESOLUTION') {
+        playScoreOneShot('score.resolution_coda', 0.68);
       }
       window.dispatchEvent(new CustomEvent(G8A_PREMIUM_MIX_EVENT, {
         detail: {
@@ -171,7 +191,7 @@ export function useG8aPremiumMix(
       }));
       previousMixStateRef.current = mix.state;
     }
-  }, [enabled, ensureElements, fadeTo, muted, pauseAll, playOneShot, startLoop, state]);
+  }, [enabled, ensureElements, fadeTo, muted, pauseAll, playFieldOneShot, playScoreOneShot, startLoop, state]);
 
   useEffect(() => () => {
     pauseAll();
