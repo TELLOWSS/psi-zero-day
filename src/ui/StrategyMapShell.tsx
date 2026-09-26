@@ -40,6 +40,8 @@ export interface StrategySupportItem {
   readonly item_id: string;
   readonly category: 'facility' | 'equipment';
   readonly name_text_id: string;
+  readonly effect_text_id?: string;
+  readonly effect_visual_uri?: string;
   readonly remaining: number;
   readonly active: boolean;
   readonly enabled: boolean;
@@ -237,8 +239,12 @@ export function StrategyMapShell({
         <h2>{text('ui.paid_item.support_title')}</h2>
         <div className="strategy-support-list">
           {supportItems.map(item => <article key={item.item_id} data-support-item={item.item_id} data-support-active={item.active ? 'true' : 'false'}>
+            {item.effect_visual_uri ? <img className="strategy-support-visual" src={item.effect_visual_uri} alt="" aria-hidden="true" /> : null}
             <span>{text(`ui.paid_item.${item.category}`)}</span>
-            <strong>{text(item.name_text_id)}</strong>
+            <div className="strategy-support-copy">
+              <strong>{text(item.name_text_id)}</strong>
+              {item.effect_text_id ? <small>{text(item.effect_text_id)}</small> : null}
+            </div>
             {item.active ? <em>{text('ui.paid_item.active')}</em> : <button
               type="button"
               disabled={!item.enabled}
