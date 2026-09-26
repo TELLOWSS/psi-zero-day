@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - feature/ep01-voice-integration-lock
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
