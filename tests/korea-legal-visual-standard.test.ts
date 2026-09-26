@@ -31,12 +31,12 @@ describe('Korea-law high-end visual production standard', () => {
     expect(ids).toContain('KR-CONSTRUCTION-DATACENTER-01');
   });
 
-  it('binds G8-A to the bottom-up legal profile and blocks lock until final-asset actual-play QA passes', () => {
+  it('binds G8-A to the bottom-up legal profile through Production Lock', () => {
     const map = maps.maps[0]!;
     expect(map.legalVisualProfileId).toBe('KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01');
-    expect(map.legalCompliance.status).toBe('FINAL_ASSETS_APPROVED_QA_PENDING');
-    expect(map.legalCompliance.productionLockAllowed).toBe(false);
-    expect(map.finalArtPolicy.productionLockAllowed).toBe(false);
+    expect(map.legalCompliance.status).toBe('PRODUCTION_LOCKED');
+    expect(map.legalCompliance.productionLockAllowed).toBe(true);
+    expect(map.finalArtPolicy.productionLockAllowed).toBe(true);
   });
 
   it('sets a 4K-class 5:3 raster brief with no SVG, baked UI, real company branding or fake Korean text', () => {
