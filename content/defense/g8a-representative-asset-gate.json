@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "BLOCKED_WORLD_AND_SWIFT_FINAL_RASTER_REQUIRED",
+  "status": "PRODUCTION_LOCKED",
   "gate": "G8A_REPRESENTATIVE_SLICE",
   "map": "map-apt-bottom-up-excavation-01",
   "wave": 8,
@@ -18,7 +18,7 @@
     },
     "swift": {
       "id": "SWIFT",
-      "state": "BLOCKED",
+      "state": "PASS",
       "requiredKind": "TRANSPARENT_RASTER_FINAL",
       "allowedFormats": [
         "webp",
@@ -51,23 +51,29 @@
         "fake Korean text",
         "glowing fantasy enemy",
         "projectile/combat weapon language"
-      ]
+      ],
+      "approvedRuntime": "assets/defense/enemies/swift-final-g8a.webp"
     }
   },
   "latestRuntimeProof": {
-    "sourceSha": "6a8186ffe44c1994e731defed70651912ab0e6ec",
+    "sourceSha": "6e1c99efcaeccf815f668772a9b9130f35c08e2d",
+    "workflowRunId": 36206566063,
+    "worldFinal": true,
     "controlPq": 1,
     "swift": 1,
+    "swiftFinal": 1,
+    "desktopPrototypeBoardItems": 0,
+    "mobilePrototypeBoardItems": 0,
     "activeSvgVisuals": [],
-    "prototypeBoardItems": 1,
-    "result": "BLOCKED_AS_DESIGNED",
-    "worldFinal": false,
-    "swiftFinal": false
+    "desktopOverflow": false,
+    "mobileOverflow": false,
+    "result": "PRODUCTION_LOCK_PASS",
+    "evidence": "content/defense/g8a-production-lock-evidence.json"
   },
-  "promotionRule": "Do not promote G8-A until the process-specific final world plate and SWIFT final raster are both approved, then actual-play QA proves prototypeBoardItems=0 and activeSvgVisuals=0 on desktop and 390x844 mobile.",
+  "promotionRule": "SATISFIED — G8-A is Production Locked. Reopen only on a proven regression or an explicit Master Bible contract change.",
   "world": {
     "id": "map-apt-bottom-up-excavation-01",
-    "state": "BLOCKED",
+    "state": "PASS",
     "currentKind": "HD_REFERENCE_ONLY",
     "requiredKind": "PROCESS_SPECIFIC_RASTER_FINAL",
     "allowedFormats": [
@@ -99,6 +105,7 @@
       "baked tower pad",
       "fake Korean text",
       "real company logo"
-    ]
+    ],
+    "approvedRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp"
   }
 }
