@@ -34,8 +34,10 @@
   "currentState": {
     "worldFinalApproved": true,
     "swiftFinalApproved": true,
-    "productionLockAllowed": false,
-    "note": "WORLD and SWIFT native final assets are approved; generation is closed and actual-play Production Review is the only remaining gate."
+    "productionLockAllowed": true,
+    "note": "WORLD and SWIFT are locked. Generation is closed; G8-A passed desktop and 390x844 actual-play Production Review.",
+    "productionLocked": true,
+    "evidence": "content/defense/g8a-production-lock-evidence.json"
   },
   "nextGeneration": {
     "order": [],
