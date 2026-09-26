@@ -490,10 +490,10 @@
     ],
     "runtimeQaAllowed": true
   },
-  "currentProductionFocus": "human_device_listening_qa",
+  "currentProductionFocus": "physical_android_actual_play_qa",
   "nextProductionAsset": null,
   "candidateAssetCount": 24,
-  "productionStateNote": "24/24 QA_READY runtime assets passed automated technical QA and desktop/mobile-viewport actual-play with zero oscillator fallback. Human acoustic/device QA remains required before any PRODUCTION_APPROVED or AUDIO_PRODUCTION_LOCKED transition.",
+  "productionStateNote": "24/24 QA_READY assets passed automated technical/runtime QA and project-owner human/device listening QA. Final physical Android in-game actual-play verification remains required; no asset is PRODUCTION_APPROVED and productionLockAllowed remains false.",
   "candidateProgress": {
     "status": "24_OF_24_RUNTIME_QA_READY",
     "candidateAssetCount": 24,
@@ -514,13 +514,7 @@
       "premium adaptive mix event observed in browser",
       "oscillator fallback count = 0 in QA actual play"
     ],
-    "humanEvidenceStillRequired": [
-      "headphone stereo listening",
-      "physical Android phone speaker listening at normal listening volume",
-      "small Bluetooth speaker or laptop speaker listening",
-      "10-minute fatigue/repetition check",
-      "CONTROL vs SWIFT discrimination without looking at screen"
-    ],
+    "humanEvidenceStillRequired": [],
     "automatedStatus": "PASS",
     "automatedEvidence": {
       "workflowRunId": 36221130191,
@@ -542,6 +536,15 @@
       "premiumMixPlaybackFailureCount": 0,
       "oscillatorFallbackCount": 0
     },
-    "note": "390x844 browser emulation is automated UI/runtime evidence, not physical Android acoustic listening."
+    "note": "Automated 390x844 browser QA and human acoustic listening are complete. Physical Android in-game runtime remains the last gate.",
+    "humanListeningStatus": "PASS",
+    "humanListeningAttestedAt": "2026-09-26",
+    "finalEvidenceStillRequired": [
+      "physical Android in-game actual play on the G8-A QA runtime",
+      "premium binary playback confirmed during real touch interaction",
+      "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION behavior audibly coherent in game",
+      "no oscillator fallback or failed premium playback observed",
+      "mute/unmute and resume behavior acceptable on device"
+    ]
   }
 }
