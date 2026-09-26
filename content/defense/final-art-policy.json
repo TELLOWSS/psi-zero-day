@@ -37,18 +37,21 @@
     "legalNumbersMayNotBeInvented": true,
     "unsafeSceneRequiresRenderIntent": true,
     "realCompanySiteVictimIdentifiersForbidden": true,
-    "masterMapMinimum": "4000x2400",
-    "mobileLegibilityRequired": "390x844"
+    "masterMapMinimum": "gate-specific native-source floor; never upscale merely to satisfy a nominal master size",
+    "mobileLegibilityRequired": "390x844",
+    "defaultProductionMapNativeMinimum": "1600x960",
+    "nativeUpscaleForbidden": true
   },
   "enforcement": {
-    "currentGate": "G8-A",
+    "currentGate": "G8-B",
     "g8aState": "PRODUCTION_LOCKED",
-    "reason": "WORLD and SWIFT final rasters passed reviewed native-source intake, contract tests, Typecheck, Build, desktop actual-play QA and 390x844 mobile QA with zero prototype/SVG leakage and no horizontal overflow.",
+    "reason": "G8-A remains Production Locked. G8-B preserves the locked top-down topology and has an approved raster SENSOR:L1 composite, while its process-specific WORLD and VEILED final rasters are still pending.",
     "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
-    "next": "Proceed to the next representative production slice without reopening G8-A topology, WORLD, SWIFT or CONTROL contracts unless a regression is proven.",
+    "next": "Verify G8-B PRE-ART on desktop and 390x844 with SENSOR:L1 active, VEILED prototype fallback exactly once, no active SVG final visuals, and no WORLD reuse; then generate one G8-B WORLD plate.",
     "productionLockRequires": [
+      "SENSOR_RUNTIME_COMPOSITE_PASS",
       "WORLD_FINAL_RASTER_APPROVED",
-      "SWIFT_FINAL_RASTER_APPROVED",
+      "VEILED_FINAL_RASTER_APPROVED",
       "NON_SVG_FINAL_ASSETS",
       "KOREA_LAW_PROFILE_BOUND",
       "LEGAL_VISUAL_QA_PASS",
@@ -58,6 +61,8 @@
       "PROTOTYPE_BOARD_ITEMS_0",
       "ONE_PRODUCTION_GENERATION_PASS"
     ],
-    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json"
+    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json",
+    "g8aProductionLockEvidence": "content/defense/g8a-production-lock-evidence.json",
+    "g8bState": "SENSOR_PASS_WORLD_AND_VEILED_FINAL_REQUIRED"
   }
 }
