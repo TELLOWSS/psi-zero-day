@@ -25,8 +25,8 @@
         "png"
       ],
       "minimumSourceSize": {
-        "width": 2048,
-        "height": 1536
+        "width": 1440,
+        "height": 1024
       },
       "runtimeTarget": {
         "width": 78,
@@ -40,7 +40,7 @@
         "no company logo or readable fake text",
         "no HUD/warning copy baked into asset",
         "transparent or cleanly isolated object edge",
-        "lighting compatible with high-oblique natural daylight world"
+        "lighting compatible with the locked high-oblique dusk/night construction world"
       ],
       "forbidden": [
         "svg",
@@ -52,7 +52,13 @@
         "glowing fantasy enemy",
         "projectile/combat weapon language"
       ],
-      "approvedRuntime": "assets/defense/enemies/swift-final-g8a.webp"
+      "approvedRuntime": "assets/defense/enemies/swift-final-g8a.webp",
+      "approvedNativeSource": {
+        "width": 1536,
+        "height": 1024,
+        "transparent": true,
+        "nativeUpscaleUsed": false
+      }
     }
   },
   "latestRuntimeProof": {
@@ -74,15 +80,15 @@
   "world": {
     "id": "map-apt-bottom-up-excavation-01",
     "state": "PASS",
-    "currentKind": "HD_REFERENCE_ONLY",
+    "currentKind": "PROCESS_SPECIFIC_RASTER_FINAL",
     "requiredKind": "PROCESS_SPECIFIC_RASTER_FINAL",
     "allowedFormats": [
       "webp",
       "png"
     ],
     "minimumSourceSize": {
-      "width": 4000,
-      "height": 2400
+      "width": 1600,
+      "height": 960
     },
     "runtimeTarget": {
       "width": 1000,
@@ -90,7 +96,7 @@
     },
     "legalProfile": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
     "requiredVisuals": [
-      "bottom-up open excavation identifiable without captions",
+      "bottom-up open excavation identifiable without captions at desktop and 390x844 mobile scale",
       "retaining/shoring condition visually defensible",
       "haul ramp and heavy-equipment circulation readable",
       "worker access and vehicle circulation visually separable",
@@ -106,6 +112,17 @@
       "fake Korean text",
       "real company logo"
     ],
-    "approvedRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp"
+    "approvedRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+    "approvedNativeSource": {
+      "width": 1619,
+      "height": 971,
+      "nativeUpscaleUsed": false
+    }
+  },
+  "normalization": {
+    "state": "FINAL_METADATA_NORMALIZED",
+    "reason": "Production Lock uses reviewed native-source floors plus no-upscale and actual-play QA; obsolete PRE-ART nominal master-size placeholders were removed.",
+    "worldSourceReview": "content/defense/g8a-world-source-review.json",
+    "swiftSourceReview": "content/defense/g8a-swift-source-review.json"
   }
 }
