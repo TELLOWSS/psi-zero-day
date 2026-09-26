@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-B RESPONSE TOWER FINAL ART",
+  "status": "PRODUCTION_CANDIDATE",
+  "artDirection": {
+    "principle": "Construction-safety interventions must read as real Korean site controls at phone scale; tower IDs remain engine-only.",
+    "camera": "high-oblique isometric-compatible cutout",
+    "background": "transparent",
+    "forbidden": [
+      "fantasy turret",
+      "energy cannon",
+      "sci-fi emitter",
+      "flat pictogram",
+      "legacy SVG final art",
+      "real company logo",
+      "readable fake Korean text"
+    ]
+  },
+  "assets": [
+    {
+      "towerId": "PULSE",
+      "displayName": "개별 대응 스테이션",
+      "role": "개별 작업자의 보호구·현장 상태를 빠르게 보완하는 단일 위험 즉응 수단",
+      "sourceCatalogKey": "ppe_issue_station",
+      "sourceAssetId": "ep01.scene_element.ppe_issue_station",
+      "runtimeUri": "assets/episode01/scene-elements/ppe-issue-station.webp",
+      "format": "webp",
+      "levels": [
+        "L1",
+        "L2",
+        "L3A",
+        "L3B"
+      ],
+      "runtime": {
+        "width": 112,
+        "height": 112,
+        "preserveAspectRatio": "xMidYMid meet"
+      },
+      "sourceAcceptance": {
+        "requiredProductionStatus": "final",
+        "requiredStyleProfile": "field-guide-production-realistic-v2",
+        "requiresAlpha": true,
+        "legalVisualGate": "field-guide-kr-legal-basis-v1"
+      }
+    },
+    {
+      "towerId": "BURST",
+      "displayName": "구역 분리 스테이션",
+      "role": "차량·보행·밀집 위험 구간을 넓게 분리해 여러 위험을 동시에 완화하는 구역 대응 수단",
+      "sourceCatalogKey": "vehicle_pedestrian_separation",
+      "sourceAssetId": "ep01.scene_element.vehicle_pedestrian_separation",
+      "runtimeUri": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+      "format": "webp",
+      "levels": [
+        "L1",
+        "L2",
+        "L3A",
+        "L3B"
+      ],
+      "runtime": {
+        "width": 126,
+        "height": 112,
+        "preserveAspectRatio": "xMidYMid meet"
+      },
+      "sourceAcceptance": {
+        "requiredProductionStatus": "final",
+        "requiredStyleProfile": "field-guide-production-realistic-v2",
+        "requiresAlpha": true,
+        "legalVisualGate": "field-guide-kr-legal-basis-v1"
+      }
+    },
+    {
+      "towerId": "SENSOR",
+      "displayName": "현장 관측 스테이션",
+      "role": "기상·현장 변화를 관측해 잠복 위험을 드러내고 대응 범위를 확보하는 관측 수단",
+      "sourceCatalogKey": "site_weather_station",
+      "sourceAssetId": "ep01.scene_element.site_weather_station",
+      "runtimeUri": "assets/episode01/scene-elements/site-weather-station.webp",
+      "format": "webp",
+      "levels": [
+        "L1",
+        "L2",
+        "L3A",
+        "L3B"
+      ],
+      "runtime": {
+        "width": 106,
+        "height": 118,
+        "preserveAspectRatio": "xMidYMid meet"
+      },
+      "sourceAcceptance": {
+        "requiredProductionStatus": "final",
+        "requiredStyleProfile": "field-guide-production-realistic-v2",
+        "requiresAlpha": true,
+        "legalVisualGate": "field-guide-kr-legal-basis-v1"
+      }
+    }
+  ],
+  "promotion": {
+    "runtimeCandidate": true,
+    "productionApproved": false,
+    "requires": [
+      "SOURCE_CATALOG_FINAL_STATUS_PASS",
+      "NON_SVG_RASTER_PASS",
+      "KOREA_LEGAL_VISUAL_GATE_BOUND",
+      "DESKTOP_THREE_TOWER_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_THREE_TOWER_ACTUAL_PLAY_QA_PASS",
+      "ACTIVE_SVG_TOWER_VISUALS_0",
+      "PULSE_BURST_SENSOR_PROTOTYPE_GLYPHS_0",
+      "NO_HORIZONTAL_OVERFLOW"
+    ]
+  },
+  "scope": {
+    "includes": [
+      "PULSE",
+      "BURST",
+      "SENSOR"
+    ],
+    "excludes": [
+      "CONTROL",
+      "enemy/risk final art",
+      "balance values",
+      "tower topology",
+      "map coordinates"
+    ],
+    "note": "CONTROL remains governed by the locked G8-A marshal + barrier composite. This gate only replaces abstract PULSE/BURST/SENSOR tower visuals."
+  }
+}
