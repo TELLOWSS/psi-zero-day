@@ -1,0 +1,114 @@
+name: Verify MOBILE VISUAL POLISH
+
+on:
+  push:
+    branches:
+      - sol/mobile-visual-polish-20260926
+  pull_request:
+    branches:
+      - sol/g8a-audio-production-lock-20260926
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-visual-polish-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-visual-polish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout visual polish branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify visual polish contract
+        shell: bash
+        run: |
+          grep -q "visual-polish-20260926.css" src/app/main.tsx
+          grep -q "TITLE / HOME — MOBILE PORTRAIT" src/ui/visual-polish-20260926.css
+          grep -q "DEFENSE — LANDSCAPE PRODUCTION HUD" src/ui/visual-polish-20260926.css
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Start preview
+        shell: bash
+        run: |
+          mkdir -p artifacts/title-defense-first artifacts/g8a-bottom-up-map
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/psi-polish-preview.log 2>&1 &
+          echo $! > /tmp/psi-polish-preview.pid
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/psi-polish-preview.log
+            exit 1
+          fi
+
+      - name: Verify title mobile / desktop
+        env:
+          PSI_TITLE_ARTIFACT_DIR: artifacts/title-defense-first
+        run: node scripts/verify-title-defense-first.mjs
+
+      - name: Verify G8-A desktop / mobile defense
+        env:
+          PSI_G8A_ARTIFACT_DIR: artifacts/g8a-bottom-up-map
+        run: node scripts/verify-g8a-bottom-up-map-browser.mjs
+
+      - name: Stop preview
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/psi-polish-preview.pid ]; then
+            kill "$(cat /tmp/psi-polish-preview.pid)" 2>/dev/null || true
+          fi
+
+      - name: Upload visual QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-visual-polish-evidence
+          path: |
+            artifacts/title-defense-first
+            artifacts/g8a-bottom-up-map
+          if-no-files-found: warn
+          retention-days: 14
