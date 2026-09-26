@@ -114,3 +114,139 @@
   .strategy-support-visual { width: 34px; height: 30px; }
   .strategy-support-copy > small { display: none; }
 }
+
+
+/* G8-D — support items must become visible field interventions, not inventory-only cards. */
+.strategy-support-runtime-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.strategy-support-runtime-object {
+  position: absolute;
+  width: clamp(58px, 7.2vw, 92px);
+  transform: translate(-50%, -78%);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  filter: drop-shadow(0 7px 12px rgba(0, 0, 0, .35));
+}
+
+.strategy-support-runtime-object > img {
+  display: block;
+  width: 100%;
+  max-height: 78px;
+  object-fit: contain;
+}
+
+.strategy-support-runtime-object > small {
+  max-width: 108px;
+  padding: 2px 5px;
+  border: 1px solid rgba(116, 188, 217, .45);
+  border-radius: 999px;
+  background: rgba(5, 22, 31, .88);
+  color: #eef7fa;
+  font-size: 7px;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.strategy-support-runtime-object.is-recent::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 43%;
+  width: 84px;
+  height: 84px;
+  border: 2px solid rgba(244, 179, 60, .88);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: support-deploy-pulse 1.7s ease-out both;
+}
+
+.strategy-support-radio-art {
+  position: relative;
+  display: block;
+  width: 34px;
+  height: 56px;
+  border: 2px solid #7f98a4;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #263f4c, #0d212c);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.strategy-support-radio-art::before {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 22px;
+  left: 22px;
+  top: -20px;
+  border-radius: 3px;
+  background: #9cb0b8;
+  transform: rotate(8deg);
+  transform-origin: bottom;
+}
+
+.strategy-support-radio-art > i {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 8px;
+  height: 10px;
+  border-radius: 3px;
+  background: #6bc9b5;
+  box-shadow: 0 0 9px rgba(107,201,181,.32);
+}
+
+.strategy-support-radio-art > b,
+.strategy-support-radio-art > em {
+  position: absolute;
+  left: 8px;
+  width: 17px;
+  height: 2px;
+  background: #8fa5ae;
+  content: '';
+}
+
+.strategy-support-radio-art > b { top: 28px; }
+.strategy-support-radio-art > em { top: 35px; }
+
+.strategy-support-runtime-object[data-runtime-support-kind="radio"]::after {
+  content: '';
+  position: absolute;
+  left: calc(50% + 17px);
+  top: 2px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(95, 215, 184, .58);
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+@keyframes support-deploy-pulse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.55); }
+  16% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.45); }
+}
+
+@media (max-width: 560px) {
+  .strategy-support-runtime-object {
+    width: 58px;
+    transform: translate(-50%, -72%);
+  }
+  .strategy-support-runtime-object > img { max-height: 52px; }
+  .strategy-support-runtime-object > small {
+    max-width: 76px;
+    font-size: 6px;
+  }
+  .strategy-support-runtime-object.is-recent::before {
+    width: 62px;
+    height: 62px;
+  }
+}
