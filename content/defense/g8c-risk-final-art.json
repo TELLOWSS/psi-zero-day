@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-C RISK FINAL ART",
+  "status": "PRODUCTION_CANDIDATE",
+  "sourceRule": {
+    "reinterpretation": {
+      "NORMAL": "평범한 작은 위험. 방치되면 현장의 익숙한 관행으로 굳어진다.",
+      "SWIFT": "빠르게 변하는 이동위험. 차량·움직이는 자재·갑작스러운 동선.",
+      "ARMORED": "한 번의 조치로 끝나지 않는 구조적 위험. 가시설·장비상태·작업조건.",
+      "SWARM": "작은 위험 여러 개가 동시에 겹치는 상태. 정리정돈·동선·다수 인원.",
+      "VEILED": "표면에서 잘 보이지 않는 위험. 사각지대·오해·보고 누락·잘못된 이해.",
+      "BOSS": "몬스터가 아니라 여러 위험이 결합된 복합 작업상황."
+    },
+    "rule": "Enemy IDs remain engine IDs only. Runtime art must read as construction hazards or combined work conditions, never monsters."
+  },
+  "assets": [
+    {
+      "enemyId": "NORMAL",
+      "displayName": "익숙한 작은 위험",
+      "role": "통로 인접 자재와 같은 작은 이상이 반복되어 정상처럼 받아들여지는 상태",
+      "render": "SINGLE",
+      "parts": [
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 64,
+          "height": 64,
+          "x": -32,
+          "y": -45,
+          "opacity": 1
+        }
+      ],
+      "sourceCatalogKeys": [
+        "material_stack"
+      ]
+    },
+    {
+      "enemyId": "ARMORED",
+      "displayName": "구조적 조건 위험",
+      "role": "가시설·거푸집·지지상태처럼 한 번의 즉시조치로 끝나지 않는 구조적 위험",
+      "render": "COMPOSITE",
+      "parts": [
+        {
+          "uri": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+          "width": 72,
+          "height": 72,
+          "x": -40,
+          "y": -50,
+          "opacity": 1
+        },
+        {
+          "uri": "assets/episode01/scene-elements/formwork-brace.webp",
+          "width": 54,
+          "height": 54,
+          "x": -10,
+          "y": -32,
+          "opacity": 0.95
+        }
+      ],
+      "sourceCatalogKeys": [
+        "euroform_wall_panel",
+        "formwork_brace"
+      ]
+    },
+    {
+      "enemyId": "SWARM",
+      "displayName": "다중 작은 위험",
+      "role": "정리정돈·동선·작은 적치가 동시에 겹쳐 현장 흐름 전체를 압박하는 상태",
+      "render": "COMPOSITE",
+      "parts": [
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 46,
+          "height": 46,
+          "x": -42,
+          "y": -44,
+          "opacity": 1
+        },
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 42,
+          "height": 42,
+          "x": -10,
+          "y": -52,
+          "opacity": 0.96
+        },
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 40,
+          "height": 40,
+          "x": 10,
+          "y": -34,
+          "opacity": 0.92
+        }
+      ],
+      "sourceCatalogKeys": [
+        "material_stack"
+      ]
+    },
+    {
+      "enemyId": "VEILED",
+      "displayName": "숨은 신호",
+      "role": "사각지대·보고 누락·잘못된 이해 때문에 실체는 있으나 쉽게 보이지 않는 위험",
+      "render": "VEILED_SINGLE",
+      "parts": [
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 62,
+          "height": 62,
+          "x": -31,
+          "y": -45,
+          "opacity": 0.38
+        }
+      ],
+      "sourceCatalogKeys": [
+        "material_stack"
+      ]
+    },
+    {
+      "enemyId": "BOSS",
+      "displayName": "복합 작업 위험",
+      "role": "차량·가시설·적치·작업동선이 한 작업상황에서 동시에 얽힌 복합 위험",
+      "render": "COMPOSITE",
+      "parts": [
+        {
+          "uri": "assets/defense/enemies/swift-final-g8a.webp",
+          "width": 76,
+          "height": 56,
+          "x": -58,
+          "y": -48,
+          "opacity": 1
+        },
+        {
+          "uri": "assets/episode01/scene-elements/euroform-wall-panel.webp",
+          "width": 78,
+          "height": 78,
+          "x": -8,
+          "y": -62,
+          "opacity": 0.96
+        },
+        {
+          "uri": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+          "width": 58,
+          "height": 58,
+          "x": 18,
+          "y": -36,
+          "opacity": 0.94
+        }
+      ],
+      "sourceCatalogKeys": [
+        "material_stack",
+        "euroform_wall_panel"
+      ]
+    }
+  ],
+  "untouched": {
+    "SWIFT": "G8-A final asset remains authoritative and is not reopened."
+  },
+  "promotion": {
+    "runtimeCandidate": true,
+    "productionApproved": false,
+    "requires": [
+      "NON_MONSTER_RUNTIME_ART_PASS",
+      "ALL_G8C_PARTS_RASTER_PASS",
+      "SOURCE_FINAL_STATUS_PASS",
+      "DESKTOP_ALL_RISK_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_ALL_RISK_ACTUAL_PLAY_QA_PASS",
+      "NORMAL_ARMORED_SWARM_VEILED_BOSS_PROTOTYPE_GLYPHS_0",
+      "ACTIVE_SVG_G8C_RISK_VISUALS_0",
+      "NO_HORIZONTAL_OVERFLOW"
+    ]
+  }
+}
