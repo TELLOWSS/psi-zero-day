@@ -96,3 +96,46 @@ jobs:
 
       - name: Report Episode 01 production readiness
         run: npm run production:status
+
+  verify-main-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Confirm unrelated baseline failures
+        shell: bash
+        run: |
+          set +e
+          NO_COLOR=1 npm test -- \
+            tests/def-core-01-contract.test.ts \
+            tests/def-hd00-defense-baseline-contract.test.ts \
+            tests/def-hd01-pq-benchmark-contract.test.ts \
+            tests/game-hub.test.tsx \
+            tests/zero-breach-production-art-baseline.test.tsx \
+            tests/zero-breach-production-art-expansion.test.ts \
+            > /tmp/main-baseline.log 2>&1
+          STATUS=$?
+          set -e
+          cat /tmp/main-baseline.log
+          if [ "$STATUS" -eq 0 ]; then
+            echo "Expected known main-baseline failures, but targeted suite passed."
+            exit 1
+          fi
+          grep -Eq "6 failed.*150 passed|6 failed" /tmp/main-baseline.log
+          grep -Eq "8 failed.*864 passed|8 failed" /tmp/main-baseline.log
+          grep -q "G2_CONTROL_LOCK_SWIFT_REWORK_REQUIRED" /tmp/main-baseline.log
+          grep -q "zero-breach-legacy-svg-geometry-1.0.0" /tmp/main-baseline.log
+          echo "Confirmed: the remaining Voice-PR failures reproduce on main."
