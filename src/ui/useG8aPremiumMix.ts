@@ -16,6 +16,7 @@ import {
 } from '../app/g8a-premium-audio-state';
 
 export const G8A_PREMIUM_MIX_EVENT = 'psi:g8a-premium-mix';
+export const G8A_PREMIUM_PLAYBACK_EVENT = 'psi:g8a-premium-playback';
 
 const SCORE_CROSSFADE_MS = 420;
 const FIELD_CROSSFADE_MS = 260;
@@ -24,9 +25,19 @@ function dbToGain(db: number): number {
   return Math.max(0, Math.min(1, Math.pow(10, db / 20)));
 }
 
-function safePlay(element: HTMLAudioElement): void {
+function safePlay(element: HTMLAudioElement, id: string): void {
   const playback = element.play();
-  if (playback && typeof playback.catch === 'function') void playback.catch(() => {});
+  if (!playback || typeof playback.then !== 'function') return;
+  void playback.then(() => {
+    window.dispatchEvent(new CustomEvent(G8A_PREMIUM_PLAYBACK_EVENT, {
+      detail: { id, status: 'playing' },
+    }));
+  }).catch((error: unknown) => {
+    const reason = error instanceof Error ? { name: error.name, message: error.message } : { message: String(error) };
+    window.dispatchEvent(new CustomEvent(G8A_PREMIUM_PLAYBACK_EVENT, {
+      detail: { id, status: 'failed', ...reason },
+    }));
+  });
 }
 
 export function useG8aPremiumMix(
@@ -96,7 +107,7 @@ export function useG8aPremiumMix(
     audio.preload = 'auto';
     audio.loop = false;
     audio.volume = Math.max(0, Math.min(1, volume));
-    safePlay(audio);
+    safePlay(audio, id);
   }, [enabled, muted]);
 
   const playScoreOneShot = useCallback((id: PremiumScoreStemId, volume = 0.7) => {
@@ -107,13 +118,13 @@ export function useG8aPremiumMix(
     audio.preload = 'auto';
     audio.loop = false;
     audio.volume = Math.max(0, Math.min(1, volume));
-    safePlay(audio);
+    safePlay(audio, id);
   }, [enabled, muted]);
 
   const startLoop = useCallback((id: string) => {
     const element = elementsRef.current.get(id);
     if (!element) return;
-    if (element.paused) safePlay(element);
+    if (element.paused) safePlay(element, id);
   }, []);
 
   const pauseAll = useCallback(() => {
