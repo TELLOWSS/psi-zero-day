@@ -10,6 +10,12 @@ export interface PresentationAudioCue {
   readonly gain?: number;
 }
 
+export interface PresentationVoiceCue {
+  readonly asset_id: string;
+  readonly gain?: number;
+  readonly duck_gain?: number;
+}
+
 export type UiAudioTimbre = 'clean' | 'radio' | 'pressure' | 'air';
 
 type AssetResolver = (assetId: string) => string | undefined;
@@ -66,8 +72,25 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   const effectiveMuted = Boolean(audio?.muted || preferenceMuted);
   const bgmRef = useRef<HTMLAudioElement | null>(null);
   const ambienceRef = useRef(new Map<string, HTMLAudioElement>());
+  const presentationRef = useRef(new Set<HTMLAudioElement>());
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
+  const voiceDuckRef = useRef(1);
+  const voiceCleanupRef = useRef<(() => void) | null>(null);
   const seenCueIds = useRef(new Set<string>());
   const contextRef = useRef<AudioContext | null>(null);
+
+  const applyVoiceDucking = useCallback((gain: number) => {
+    const duck = Math.max(0, Math.min(1, gain));
+    voiceDuckRef.current = duck;
+    const update = (element: HTMLAudioElement | null | undefined) => {
+      if (!element) return;
+      const base = Number(element.dataset.baseVolume ?? element.volume);
+      if (Number.isFinite(base)) element.volume = Math.max(0, Math.min(1, base * duck));
+    };
+    update(bgmRef.current);
+    for (const element of ambienceRef.current.values()) update(element);
+    for (const element of presentationRef.current.values()) update(element);
+  }, []);
 
   useEffect(() => {
     if (typeof Audio === 'undefined') return;
@@ -86,7 +109,9 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     const element = bgmRef.current;
     if (!element) return;
     element.loop = track.loop;
-    element.volume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
+    const baseVolume = Math.max(0, Math.min(1, audio.volumes.master * audio.volumes.bgm * track.gain));
+    element.dataset.baseVolume = String(baseVolume);
+    element.volume = baseVolume * voiceDuckRef.current;
     void element.play().catch(() => { /* browser gesture policy; retry occurs on the next state change */ });
   }, [audio?.bgm?.asset_id, audio?.bgm?.gain, audio?.bgm?.loop, effectiveMuted, audio?.volumes.master, audio?.volumes.bgm, resolve]);
 
@@ -103,7 +128,9 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
         element.loop = track.loop;
         ambienceRef.current.set(track.asset_id, element);
       }
-      element.volume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
+      const baseVolume = Math.max(0, Math.min(1, (audio?.volumes.master ?? 1) * (audio?.volumes.ambience ?? 1) * track.gain));
+      element.dataset.baseVolume = String(baseVolume);
+      element.volume = baseVolume * voiceDuckRef.current;
       void element.play().catch(() => {});
     }
     for (const [assetId, element] of ambienceRef.current) {
@@ -129,8 +156,10 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
   }, [audio?.sfx_bus, audio?.event_bus, effectiveMuted, audio?.volumes.master, audio?.volumes.sfx, resolve]);
 
   useEffect(() => () => {
+    voiceCleanupRef.current?.();
     bgmRef.current?.pause();
     for (const element of ambienceRef.current.values()) element.pause();
+    for (const element of presentationRef.current.values()) element.pause();
     void contextRef.current?.close();
   }, []);
 
@@ -192,13 +221,70 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     }
     const element = new Audio(uri);
     const gain = cue.gain ?? 1;
-    element.volume = Math.max(0, Math.min(1,
+    const baseVolume = Math.max(0, Math.min(1,
       (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * gain));
+    element.dataset.baseVolume = String(baseVolume);
+    element.volume = baseVolume * voiceDuckRef.current;
+    presentationRef.current.add(element);
+    const release = () => presentationRef.current.delete(element);
+    element.addEventListener('ended', release, { once: true });
+    element.addEventListener('error', release, { once: true });
     const playback = element.play();
     if (playback && typeof playback.catch === 'function') {
-      void playback.catch(() => playUiCue(cue.fallback));
+      void playback.catch(() => {
+        release();
+        playUiCue(cue.fallback);
+      });
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
-  return { playUiCue, playPresentationCue } as const;
+  const playVoiceCue = useCallback((cue: PresentationVoiceCue, onEnded?: () => void) => {
+    voiceCleanupRef.current?.();
+
+    const uri = resolve(cue.asset_id);
+    if (effectiveMuted || !uri || typeof Audio === 'undefined') {
+      onEnded?.();
+      return () => {};
+    }
+
+    const element = new Audio(uri);
+    voiceRef.current = element;
+    const baseVolume = Math.max(0, Math.min(1,
+      (audio?.volumes.master ?? 1) * (audio?.volumes.event ?? 1) * (cue.gain ?? 1)));
+    element.dataset.baseVolume = String(baseVolume);
+    element.volume = baseVolume;
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      element.removeEventListener('ended', finish);
+      element.removeEventListener('error', finish);
+      if (voiceRef.current === element) voiceRef.current = null;
+      if (voiceCleanupRef.current === cleanup) voiceCleanupRef.current = null;
+      applyVoiceDucking(1);
+      onEnded?.();
+    };
+    const cleanup = () => {
+      element.pause();
+      finish();
+    };
+
+    voiceCleanupRef.current = cleanup;
+    element.addEventListener('ended', finish, { once: true });
+    element.addEventListener('error', finish, { once: true });
+    applyVoiceDucking(cue.duck_gain ?? 0.28);
+
+    const playback = element.play();
+    if (playback && typeof playback.catch === 'function') void playback.catch(finish);
+    return cleanup;
+  }, [
+    effectiveMuted,
+    audio?.volumes.master,
+    audio?.volumes.event,
+    resolve,
+    applyVoiceDucking,
+  ]);
+
+  return { playUiCue, playPresentationCue, playVoiceCue } as const;
 }
