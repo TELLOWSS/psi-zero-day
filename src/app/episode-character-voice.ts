@@ -31,7 +31,7 @@ interface CharacterVoiceManifest {
   };
 }
 
-const manifest = raw as CharacterVoiceManifest;
+const manifest = raw as unknown as CharacterVoiceManifest;
 
 export function episodeCharacterVoicePlan(
   eventId: string | null | undefined,
