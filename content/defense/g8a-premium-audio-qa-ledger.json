@@ -261,56 +261,56 @@
       "id": "single_resolve",
       "path": "assets/defense/audio/g8a/control-resolve.ogg",
       "category": "GAMEPLAY",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Reel B event 1. Clean isolated SINGLE RESOLVE candidate. Must remain precise and distinguishable from AREA RESOLVE in Android actual-play QA.",
       "productionApproved": false
     },
     {
       "id": "area_resolve",
       "path": "assets/defense/audio/g8a/area-resolve.ogg",
       "category": "GAMEPLAY",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Reel B event 2. Clean isolated AREA RESOLVE candidate. Broader than SINGLE but must not read as explosion/heroic combo.",
       "productionApproved": false
     },
     {
       "id": "leak",
       "path": "assets/defense/audio/g8a/shield-leak.ogg",
       "category": "GAMEPLAY",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Reel B event 3. Clean isolated LEAK candidate. Kept salient; must read as loss-of-margin rather than horror/game-over.",
       "productionApproved": false
     },
     {
       "id": "support",
       "path": "assets/defense/audio/g8a/support-call.ogg",
       "category": "GAMEPLAY",
-      "binary": "MISSING",
-      "technicalQa": "PENDING",
+      "binary": "CANDIDATE_LOCAL_QA",
+      "technicalQa": "CANDIDATE_PASS",
       "headphoneQa": "PENDING",
       "androidPhoneQa": "PENDING",
       "smallSpeakerQa": "PENDING",
       "maskingQa": "PENDING",
       "fatigueQa": "PENDING",
-      "reviewerNote": "",
+      "reviewerNote": "Reel B event 4. Clean isolated SUPPORT candidate. Must read as coordination/readiness rather than sci-fi/military.",
       "productionApproved": false
     },
     {
@@ -375,7 +375,11 @@
     "qa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
     "nextAsset": "score.pressure_ostinato"
   },
-  "candidateAssetCount": 18,
+  "candidateAssetCount": 22,
   "currentProductionFocus": "10 UI / GAMEPLAY SFX REEL B",
-  "productionStateNote": "18/24 candidate assets prepared; final runtime promotion and all listening QA remain pending."
+  "productionStateNote": "18/24 candidate assets prepared; final runtime promotion and all listening QA remain pending.",
+  "remainingCandidateIds": [
+    "win",
+    "loss"
+  ]
 }
