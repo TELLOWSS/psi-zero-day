@@ -25,7 +25,7 @@ for(const item of slots){
     if(bytes<2048) failures.push(item.id+': audio binary too small');
     if(!ogg) failures.push(item.id+': runtime binary is not an Ogg container');
   }
-  const runtimeReady=item.state==='QA_READY' || item.state==='PRODUCTION_APPROVED';
+  const runtimeReady=item.state==='QA_CANDIDATE' || item.state==='QA_READY' || item.state==='PRODUCTION_APPROVED';
   if(runtimeReady && !exists) failures.push(item.id+': runtime-ready slot has no runtime binary');
   if(item.state==='ASSET_PENDING' && exists) failures.push(item.id+': binary exists while slot is still ASSET_PENDING');
   rows.push({...item,exists,bytes,ogg});
