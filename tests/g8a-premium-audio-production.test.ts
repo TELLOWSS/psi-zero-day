@@ -43,9 +43,12 @@ describe('G8-A premium orchestral audio contract', () => {
     }
   });
 
-  it('locks professional source, mastering, mobile and headphone quality requirements', () => {
-    expect(contract.absoluteRules.sourceMaster.sampleRateHz).toBe(48000);
-    expect(contract.absoluteRules.sourceMaster.bitDepth).toBe(24);
+  it('locks professional source provenance, runtime, mastering, mobile and headphone quality requirements', () => {
+    expect(contract.absoluteRules.sourceMaster.policy).toBe('PRESERVE_NATIVE_GENERATOR_OUTPUT');
+    expect(contract.absoluteRules.sourceMaster.nativeUpsampleForbidden).toBe(true);
+    expect(contract.absoluteRules.sourceMaster.musicNativeSampleRateHz).toBeGreaterThan(0);
+    expect(contract.absoluteRules.runtime.format).toBe('ogg/opus');
+    expect(contract.absoluteRules.runtime.sampleRateHz).toBe(48000);
     expect(contract.absoluteRules.mastering.truePeakDbtpMax).toBe(-1);
     expect(contract.absoluteRules.mastering.minimumProgramLraLu).toBeGreaterThanOrEqual(5);
     expect(contract.acceptance.listeningQa).toContain('Android phone speaker at normal listening volume');
