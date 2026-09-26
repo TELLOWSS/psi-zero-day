@@ -100,6 +100,11 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const firstContactTextId = person && dialogueNodeIdentity === firstContactNode
     ? characterIntroductionTextId(person.id)
     : undefined;
+  const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
+  const isPlaying = snapshot.phase === 'playing';
+  const strategy = snapshot.strategy;
+  const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
+  const activeEventId = activeInstance?.event_id ?? null;
   const voicePlan = presentation && 'node_id' in presentation && presentation.type === 'SHOW_DIALOGUE'
     ? episodeCharacterVoicePlan(activeEventId, presentation.node_id, person?.id, 'text_id' in presentation ? presentation.text_id : undefined)
     : undefined;
@@ -107,11 +112,6 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     ? episodeCharacterVoiceRuntimeCue(activeEventId, presentation.node_id, person?.id, 'text_id' in presentation ? presentation.text_id : undefined)
     : undefined;
   const voicePolicy = episodeCharacterVoicePolicy();
-  const clock = snapshot.state?.clock ?? { day: 1, slot: 'PRE_WORK' };
-  const isPlaying = snapshot.phase === 'playing';
-  const strategy = snapshot.strategy;
-  const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
-  const activeEventId = activeInstance?.event_id ?? null;
   const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const storyDirection = episode01StoryDirection(activeEventId);
   const productionScene = episode01ProductionScene(storyDirection?.preset);
