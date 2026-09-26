@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseG8cRiskFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
@@ -165,6 +165,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
   const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqAsset() : null;
+  const g8cRisk = defenseG8cRiskFinalAsset(enemy.enemyId);
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
@@ -192,7 +193,24 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
       className="zb-swift-pq-asset"
       data-pq-swift="SWIFT"
       aria-hidden="true"
-    /> : artUri ? <image
+    /> : g8cRisk ? <g
+      className={`zb-risk-production zb-risk-production-${enemy.enemyId.toLowerCase()}`}
+      data-production-risk-art={enemy.enemyId}
+      data-risk-render={g8cRisk.render}
+      aria-hidden="true"
+    >
+      {g8cRisk.parts.map((part, index) => <image
+        key={`${enemy.id}-risk-part-${index}`}
+        href={part.uri}
+        x={part.x}
+        y={part.y}
+        width={part.width}
+        height={part.height}
+        opacity={g8cRisk.render === 'VEILED_SINGLE' && revealed ? 1 : part.opacity}
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-risk-production-part"
+      />)}
+    </g> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
       y={artY}
