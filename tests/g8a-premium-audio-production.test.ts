@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import contract from '../content/defense/g8a-premium-audio-production.json';
 import { premiumDefenseAudioContractState, premiumDefenseCueUri } from '../src/app/defense-premium-audio';
+import type { PremiumDefenseAudioCue } from '../src/app/defense-premium-audio';
 
 describe('G8-A premium orchestral audio contract', () => {
   it('does not call current synthetic/oscillator audio final-quality', () => {
@@ -38,7 +39,7 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(contract.gameplaySfx).toHaveLength(11);
     for(const item of contract.gameplaySfx){
       expect(item.state).toBe('ASSET_PENDING');
-      expect(premiumDefenseCueUri(item.cue)).toBeNull();
+      expect(premiumDefenseCueUri(item.cue as PremiumDefenseAudioCue)).toBeNull();
     }
   });
 
