@@ -21,7 +21,7 @@
     "assets:character-batch-stage": "node scripts/stage-character-batch.mjs",
     "assets:embedded": "node scripts/materialize-embedded-media.mjs && node scripts/materialize-vehicle-overlap.mjs && node scripts/materialize-character-media.mjs",
     "assets:vector": "node scripts/generate-episode01-vector-art.mjs",
-    "assets:manifest": "node scripts/build-episode01-assets.mjs",
+    "assets:manifest": "npm run audio:voice-materialize && node scripts/build-episode01-assets.mjs",
     "assets:check": "npm run assets:embedded && node scripts/materialize-embedded-media.mjs --check && node scripts/materialize-vehicle-overlap.mjs --check && node scripts/materialize-character-media.mjs --check && node scripts/generate-episode01-vector-art.mjs --check && node scripts/build-episode01-assets.mjs --check",
     "assets:visual-contract": "node scripts/check-visual-contract.mjs",
     "assets:scene-elements-contract": "npm run assets:embedded && node scripts/check-scene-element-art.mjs",
@@ -43,9 +43,9 @@
     "assets:character-identity-check": "node scripts/check-character-identity.mjs",
     "assets:character-replacement-status": "node scripts/check-character-replacement.mjs",
     "assets:character-replacement-check": "node scripts/check-character-replacement.mjs --require-new",
-    "audio:contract-check": "node scripts/check-audio-production.mjs",
-    "audio:production-status": "node scripts/check-audio-production.mjs",
-    "audio:production-check": "node scripts/check-audio-production.mjs --require-final",
+    "audio:contract-check": "npm run audio:voice-materialize && node scripts/check-audio-production.mjs",
+    "audio:production-status": "npm run audio:voice-materialize && node scripts/check-audio-production.mjs",
+    "audio:production-check": "npm run audio:voice-materialize && node scripts/check-audio-production.mjs --require-final",
     "assets:scene-runtime": "node scripts/build-scene-element-runtime.mjs",
     "assets:scene-runtime-check": "node scripts/build-scene-element-runtime.mjs --check",
     "assets:character-replacement-stage": "node scripts/stage-character-replacement.mjs",
@@ -74,7 +74,8 @@
     "defense:g8a-art-check": "node scripts/check-g8a-final-assets.mjs --require-final",
     "defense:g8a-art-candidate-check": "node scripts/check-g8a-final-assets.mjs --candidate",
     "defense:g8a-art-promote": "node scripts/promote-g8a-final-assets.mjs",
-    "defense:g8a-production-lock": "node scripts/lock-g8a-production.mjs"
+    "defense:g8a-production-lock": "node scripts/lock-g8a-production.mjs",
+    "audio:voice-materialize": "node scripts/materialize-episode01-voice.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

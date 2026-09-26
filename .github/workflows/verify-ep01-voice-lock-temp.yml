@@ -1,0 +1,141 @@
+name: Verify EP01 Voice Lock
+
+on:
+  push:
+    branches:
+      - feature/ep01-voice-integration-lock
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify-voice-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Materialize and verify voice masters
+        run: |
+          npm run audio:voice-materialize
+          npm run audio:production-check
+
+      - name: Voice integration contract
+        run: npx vitest run tests/episode01-voice-integration.test.ts tests/episode01-audio-production.test.ts
+
+      - name: Generate deterministic Episode 01 assets
+        run: |
+          npm run assets:embedded
+          npm run assets:vector
+          npm run assets:manifest
+
+      - name: Verify generated assets
+        run: npm run assets:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate browser for responsive QA
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Verify Episode 01 PC and mobile viewports
+        shell: bash
+        run: |
+          mkdir -p artifacts/responsive
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/psi-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/psi-preview.log
+            exit 1
+          fi
+          node scripts/verify-episode01-responsive.mjs
+
+      - name: Run full tests
+        run: npm test
+
+      - name: Report Episode 01 production readiness
+        run: npm run production:status
+
+  verify-main-baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Confirm unrelated baseline failures
+        shell: bash
+        run: |
+          set +e
+          NO_COLOR=1 npm test -- \
+            tests/def-core-01-contract.test.ts \
+            tests/def-hd00-defense-baseline-contract.test.ts \
+            tests/def-hd01-pq-benchmark-contract.test.ts \
+            tests/game-hub.test.tsx \
+            tests/zero-breach-production-art-baseline.test.tsx \
+            tests/zero-breach-production-art-expansion.test.ts \
+            > /tmp/main-baseline.log 2>&1
+          STATUS=$?
+          set -e
+          cat /tmp/main-baseline.log
+          if [ "$STATUS" -eq 0 ]; then
+            echo "Expected known main-baseline failures, but targeted suite passed."
+            exit 1
+          fi
+          grep -Eq "6 failed.*150 passed|6 failed" /tmp/main-baseline.log
+          grep -Eq "8 failed.*864 passed|8 failed" /tmp/main-baseline.log
+          grep -q "G2_CONTROL_LOCK_SWIFT_REWORK_REQUIRED" /tmp/main-baseline.log
+          grep -q "zero-breach-legacy-svg-geometry-1.0.0" /tmp/main-baseline.log
+          echo "Confirmed: the remaining Voice-PR failures reproduce on main."
