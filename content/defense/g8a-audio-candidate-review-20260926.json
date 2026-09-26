@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "gate": "G8-A AUDIO PRODUCTION LOCK",
   "updatedAt": "2026-09-26",
-  "currentFocus": "score.swift_threat",
+  "currentFocus": "score.control_intervention",
   "candidates": [
     {
       "assetId": "score.foundation_bed",
@@ -72,12 +72,56 @@
         "audible loop seam in actual play",
         "style mismatch with SWIFT layer"
       ]
+    },
+    {
+      "assetId": "score.swift_threat",
+      "sourceTitle": "Clear The Trench",
+      "sourceFile": "clear_the_trench.mp4",
+      "native": {
+        "durationSec": 68.967333,
+        "codec": "aac",
+        "sampleRateHz": 44100,
+        "channels": 2,
+        "bitrateKbps": 194,
+        "integratedLufs": -12.9,
+        "lraLu": 11.1,
+        "truePeakDbfs": -0.2,
+        "tempoEvidenceBpmFamily": [
+          104,
+          110
+        ]
+      },
+      "derivative": {
+        "sourceRegionSec": {
+          "start": 8.858412698412698,
+          "end": 46.18448979591837
+        },
+        "targetGrid": "84 BPM / 4/4 / 16 bars",
+        "durationSec": 45.7142857,
+        "timeStretchFactor": 0.8165079367630952,
+        "pitchShiftUsed": false,
+        "wrapCrossfadeMs": 650,
+        "sampleRateHz": 48000,
+        "format": "ogg/opus",
+        "bitrateKbps": 160,
+        "integratedLufs": -19.7,
+        "lraLu": 9.4,
+        "truePeakDbfs": -5.9
+      },
+      "state": "TONAL_MASS_REFERENCE_LOCKED",
+      "productionApproved": false,
+      "reopenOnlyIf": [
+        "audible time-stretch artifacts in three-layer mix",
+        "vehicle-warning masking in actual play",
+        "audible loop seam",
+        "harmonic mismatch with Foundation and Pressure"
+      ]
     }
   ],
   "next": {
-    "assetId": "score.swift_threat",
-    "action": "Generate one independent 84 BPM / 16-bar SWIFT Threat stem using locked Foundation and Pressure references.",
-    "promptArtifact": "03_LYRIA_SCORE_SWIFT_THREAT_FOUNDATION_PRESSURE_LOCK.md"
+    "assetId": "score.control_intervention",
+    "action": "Generate one short state-entry orchestral CONTROL intervention one-shot using locked Foundation, Pressure and SWIFT references.",
+    "promptArtifact": "04_LYRIA_SCORE_CONTROL_INTERVENTION_3_LAYER_REFERENCE.md"
   },
   "productionLockAllowed": false
 }
