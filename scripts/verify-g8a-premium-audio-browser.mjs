@@ -102,8 +102,11 @@ function controlTower(){
   };
 }
 function runForCase(name){
-  if(name==='READY_TO_WAVE_BUILD'){
+  if(name==='READY'){
     return {...baseRun('g8a-audio-ready'),status:'READY',paused:false,waveId:8,waveTick:0,spawnedByGroup:[0,0],enemies:[]};
+  }
+  if(name==='WAVE_BUILD'){
+    return {...baseRun('g8a-audio-wave-build'),status:'RUNNING',paused:true,waveId:8,waveTick:1,spawnedByGroup:[8,0],enemies:[]};
   }
   if(name==='SWIFT_THREAT'){
     return {...baseRun('g8a-audio-swift'),enemies:[swiftEnemy(false)],towers:[]};
@@ -188,23 +191,20 @@ async function enterPersistedRun(cdp,name){
   await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
 }
 async function armByResume(cdp){
-  const ok=await evaluate(cdp,`(()=>{
-    const b=[...document.querySelectorAll('button')].find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'));
-    if(b){b.click();return true}
-    const h=document.querySelector('.zb-hud-button');
-    if(h){h.click();return true}
-    return false;
-  })()`);
-  if(!ok) throw new Error('Could not resume representative run to arm audio');
+  const hasResume=await evaluate(cdp,`(()=>Boolean([...document.querySelectorAll('button')].find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'))))()`);
+  if(hasResume){
+    await trustedClick(cdp,`[...document.querySelectorAll('button')].find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'))`,'resume');
+    return;
+  }
+  await trustedClick(cdp,`document.querySelector('.zb-hud-button')`,'HUD resume');
 }
 async function triggerPremiumPlacementCue(cdp){
-  const selected=await evaluate(cdp,`(()=>{
-    const b=[...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'));
-    if(!b)return false;b.click();return true;
-  })()`);
-  if(!selected) return false;
+  const hasPad=await evaluate(cdp,`(()=>Boolean([...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'))))()`);
+  if(!hasPad) return false;
+  await trustedClick(cdp,`[...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'))`,'empty tower pad');
   await waitFor(cdp,"Boolean(document.querySelector('.zb-tower-shop button:not([disabled])'))",3000);
-  return evaluate(cdp,`(()=>{const b=document.querySelector('.zb-tower-shop button:not([disabled])');if(!b)return false;b.click();return true})()`);
+  await trustedClick(cdp,`document.querySelector('.zb-tower-shop button:not([disabled])')`,'tower shop build');
+  return true;
 }
 async function snapshot(cdp){
   return evaluate(cdp,`(()=>{
@@ -229,35 +229,37 @@ async function runAudioCase(cdp,name){
   if(before.map!=='map-apt-bottom-up-excavation-01') throw new Error(name+': G8-A map mismatch');
   if(runtimeMode && before.premiumAudio!=='true') throw new Error(name+': premium QA runtime not enabled');
 
-  if(name==='READY_TO_WAVE_BUILD'){
-    if(before.premiumMixState!=='READY') throw new Error('READY state not exposed before wave start: '+JSON.stringify(before));
-    const started=await evaluate(cdp,`(()=>{const b=document.querySelector('.zb-start-wave');if(!b)return false;b.click();return true})()`);
-    if(!started) throw new Error('READY_TO_WAVE_BUILD: start-wave button missing');
+  if(name==='READY'){
+    if(before.premiumMixState!=='READY') throw new Error('READY state not exposed: '+JSON.stringify(before));
+    return {before,after:before};
+  }
+
+  await armByResume(cdp);
+
+  if(name==='WAVE_BUILD'){
     await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='WAVE_BUILD'`,5000);
-    await triggerPremiumPlacementCue(cdp);
+    if(!(await triggerPremiumPlacementCue(cdp))) throw new Error('WAVE_BUILD: premium placement cue could not be triggered');
     await sleep(900);
   }else if(name==='SWIFT_THREAT'){
-    await armByResume(cdp);
     await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='SWIFT_THREAT'`,5000);
-    await triggerPremiumPlacementCue(cdp);
+    if(!(await triggerPremiumPlacementCue(cdp))) throw new Error('SWIFT_THREAT: premium placement cue could not be triggered');
     await sleep(900);
   }else if(name==='CONTROL_INTERVENTION'){
-    await armByResume(cdp);
     await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='CONTROL_INTERVENTION'`,5000);
     await sleep(1000);
   }else if(name==='RESOLUTION'){
-    await armByResume(cdp);
     await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status')==='WON'`,5000);
     await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='RESOLUTION'`,5000);
     await sleep(1000);
   }
 
   const after=await snapshot(cdp);
-  const expected=name==='READY_TO_WAVE_BUILD'?'WAVE_BUILD':name;
-  if(after.premiumMixState!==expected) throw new Error(name+': expected '+expected+' got '+after.premiumMixState);
+  if(after.premiumMixState!==name) throw new Error(name+': expected '+name+' got '+after.premiumMixState);
   if(runtimeMode){
     if((after.telemetry?.oscillatorFallback??-1)!==0) throw new Error(name+': oscillator fallback detected '+JSON.stringify(after.telemetry));
     if((after.telemetry?.mixTransitions?.length??0)<1) throw new Error(name+': no premium mix transition observed');
+    if((after.telemetry?.mixPlaybackFailures??0)!==0) throw new Error(name+': premium mix playback failure '+JSON.stringify(after.telemetry?.mixPlaybackEvents||[]));
+    if((after.telemetry?.mixPlaybackSuccess??0)<1) throw new Error(name+': no successful premium mix playback observed');
   }
   return {before,after};
 }
@@ -267,6 +269,7 @@ const report={
   sourceSha:process.env.GITHUB_SHA||null,
   desktop:{cases:{}},mobile:{cases:{}},
   stateCoverage:[],premiumBinaryCueCount:0,oscillatorFallbackCount:0,
+  premiumMixPlaybackSuccessCount:0,premiumMixPlaybackFailureCount:0,
   failures:[],
 };
 let cdp,target;
@@ -275,7 +278,7 @@ try{
   const r=await fetch('http://127.0.0.1:'+port+'/json/new?about:blank',{method:'PUT'});target=await r.json();
   cdp=new Cdp(target.webSocketDebuggerUrl);await cdp.send('Page.enable');await cdp.send('Runtime.enable');
 
-  const cases=['READY_TO_WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
+  const cases=['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
   for(const cfg of [{name:'desktop',w:1440,h:900,m:false},{name:'mobile',w:390,h:844,m:true}]){
     await viewport(cdp,cfg.w,cfg.h,cfg.m);
     await navigate(cdp);
@@ -290,12 +293,16 @@ try{
       for(const state of states) if(!report.stateCoverage.includes(state)) report.stateCoverage.push(state);
       report.premiumBinaryCueCount+=result.after?.telemetry?.premiumBinary||0;
       report.oscillatorFallbackCount+=result.after?.telemetry?.oscillatorFallback||0;
+      report.premiumMixPlaybackSuccessCount+=result.after?.telemetry?.mixPlaybackSuccess||0;
+      report.premiumMixPlaybackFailureCount+=result.after?.telemetry?.mixPlaybackFailures||0;
     }
   }
 
   const required=['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
   for(const state of required) if(!report.stateCoverage.includes(state)) throw new Error('Missing G8-A premium state coverage: '+state);
   if(runtimeMode && report.premiumBinaryCueCount<2) throw new Error('Insufficient premium binary cue evidence: '+report.premiumBinaryCueCount);
+  if(runtimeMode && report.premiumMixPlaybackSuccessCount<8) throw new Error('Insufficient premium mix playback evidence: '+report.premiumMixPlaybackSuccessCount);
+  if(runtimeMode && report.premiumMixPlaybackFailureCount!==0) throw new Error('Premium mix playback failures detected: '+report.premiumMixPlaybackFailureCount);
   if(runtimeMode && report.oscillatorFallbackCount!==0) throw new Error('Oscillator fallback count is not zero: '+report.oscillatorFallbackCount);
 }catch(error){
   report.failures.push(error instanceof Error?error.message:String(error));
