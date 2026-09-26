@@ -76,7 +76,7 @@
         "id": "score.foundation_bed",
         "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
         "role": "low strings + restrained piano + air",
-        "state": "QA_READY",
+        "state": "QA_CANDIDATE",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -93,7 +93,7 @@
         "id": "score.pressure_ostinato",
         "path": "assets/defense/audio/g8a/score-pressure-ostinato.ogg",
         "role": "spiccato/low-string pulse + restrained percussion",
-        "state": "QA_READY",
+        "state": "QA_CANDIDATE",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -108,7 +108,7 @@
         "id": "score.swift_threat",
         "path": "assets/defense/audio/g8a/score-swift-threat.ogg",
         "role": "low brass/horn tension + rhythmic acceleration",
-        "state": "QA_READY",
+        "state": "QA_CANDIDATE",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -123,7 +123,7 @@
         "id": "score.control_intervention",
         "path": "assets/defense/audio/g8a/score-control-intervention.ogg",
         "role": "short decisive orchestral intervention accent",
-        "state": "QA_READY",
+        "state": "QA_CANDIDATE",
         "loop": false,
         "playbackRole": "STATE_ENTRY_ONE_SHOT",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -139,7 +139,7 @@
         "id": "score.resolution_coda",
         "path": "assets/defense/audio/g8a/score-resolution-coda.ogg",
         "role": "warm strings/horn release preserving seriousness",
-        "state": "QA_READY",
+        "state": "QA_CANDIDATE",
         "loop": false,
         "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -214,63 +214,63 @@
       "path": "assets/defense/audio/g8a/field-excavation-world.ogg",
       "role": "deep excavation ambience, distant machinery, air, gravel",
       "loop": true,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "field.excavator_hydraulic",
       "path": "assets/defense/audio/g8a/field-excavator-hydraulic.ogg",
       "role": "distant hydraulic and track texture",
       "loop": true,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "swift.engine_loop",
       "path": "assets/defense/audio/g8a/swift-engine-loop.ogg",
       "role": "diesel dump-truck approach/reverse loop",
       "loop": true,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "swift.reverse_alarm",
       "path": "assets/defense/audio/g8a/swift-reverse-alarm.ogg",
       "role": "direction-readable reversing warning",
       "loop": true,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "swift.gravel_tire",
       "path": "assets/defense/audio/g8a/swift-gravel-tire.ogg",
       "role": "slow heavy tire/gravel movement",
       "loop": false,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "swift.airbrake",
       "path": "assets/defense/audio/g8a/swift-airbrake.ogg",
       "role": "intervention stop punctuation",
       "loop": false,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "control.radio_stop",
       "path": "assets/defense/audio/g8a/control-radio-stop.ogg",
       "role": "short non-verbal radio squelch/stop cue",
       "loop": false,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     },
     {
       "id": "control.barrier_clack",
       "path": "assets/defense/audio/g8a/control-barrier-clack.ogg",
       "role": "physical access-control confirmation",
       "loop": false,
-      "state": "QA_READY"
+      "state": "QA_CANDIDATE"
     }
   ],
   "gameplaySfx": [
     {
       "cue": "select",
       "path": "assets/defense/audio/g8a/ui-select.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-select_48k_opus128.ogg",
@@ -285,7 +285,7 @@
     {
       "cue": "place",
       "path": "assets/defense/audio/g8a/ui-place.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-place_48k_opus128.ogg",
@@ -300,7 +300,7 @@
     {
       "cue": "upgrade",
       "path": "assets/defense/audio/g8a/ui-upgrade.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-upgrade_48k_opus128.ogg",
@@ -315,7 +315,7 @@
     {
       "cue": "sell",
       "path": "assets/defense/audio/g8a/ui-sell.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-sell_48k_opus128.ogg",
@@ -330,7 +330,7 @@
     {
       "cue": "warning",
       "path": "assets/defense/audio/g8a/wave-warning.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "wave-warning_48k_opus128.ogg",
@@ -345,7 +345,7 @@
     {
       "cue": "single_resolve",
       "path": "assets/defense/audio/g8a/control-resolve.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "control-resolve_48k_opus128.ogg",
@@ -360,7 +360,7 @@
     {
       "cue": "area_resolve",
       "path": "assets/defense/audio/g8a/area-resolve.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "area-resolve_48k_opus128.ogg",
@@ -375,7 +375,7 @@
     {
       "cue": "leak",
       "path": "assets/defense/audio/g8a/shield-leak.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "shield-leak_48k_opus128.ogg",
@@ -390,7 +390,7 @@
     {
       "cue": "support",
       "path": "assets/defense/audio/g8a/support-call.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "support-call_48k_opus128.ogg",
@@ -405,7 +405,7 @@
     {
       "cue": "win",
       "path": "assets/defense/audio/g8a/result-win.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
       "candidateRuntime": "result-win_48k_opus128.ogg",
@@ -421,7 +421,7 @@
     {
       "cue": "loss",
       "path": "assets/defense/audio/g8a/result-loss.ogg",
-      "state": "QA_READY",
+      "state": "QA_CANDIDATE",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
       "candidateRuntime": "result-loss_48k_opus128.ogg",
@@ -487,19 +487,39 @@
       "DESKTOP_LISTENING_QA_PASS",
       "ANDROID_MOBILE_LISTENING_QA_PASS",
       "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
-    ]
+    ],
+    "runtimeQaAllowed": true
   },
-  "currentProductionFocus": "runtime_actual_play_and_device_listening_qa",
+  "currentProductionFocus": "actual_play_full_mix_and_device_listening_qa",
   "nextProductionAsset": null,
   "candidateAssetCount": 24,
-  "productionStateNote": "24/24 runtime OGG binaries are present in repository final paths and enabled only for QA. No asset is PRODUCTION_APPROVED; AUDIO_PRODUCTION_LOCKED remains forbidden until technical CI, actual-play zero-fallback evidence, headphone/Android/small-speaker/fatigue listening QA are complete.",
+  "productionStateNote": "24/24 runtime candidates are promoted to the repository and may play only for G8-A QA. productionLockAllowed remains false until human/device listening QA and zero-fallback actual-play evidence are complete.",
   "candidateProgress": {
-    "status": "RUNTIME_QA_READY",
+    "status": "24_OF_24_RUNTIME_QA_READY",
     "candidateAssetCount": 24,
     "requiredAssetCount": 24,
     "remaining": [],
-    "currentFocus": "ACTUAL_PLAY_AND_DEVICE_LISTENING_QA",
+    "currentFocus": "ACTUAL_PLAY_FULL_MIX_AND_DEVICE_LISTENING_QA",
     "runtimeCandidatePack": "G8A_PREMIUM_AUDIO_24_OF_24_RUNTIME_CANDIDATE_PACK.zip",
-    "note": "24/24 runtime binaries promoted to repository paths. QA runtime may play them; production approval remains false."
+    "note": "Repository promotion complete. QA_CANDIDATE assets are allowed in G8-A runtime QA but are not PRODUCTION_APPROVED and do not permit Production Lock."
+  },
+  "runtimeQa": {
+    "enabled": true,
+    "scope": "map-apt-bottom-up-excavation-01",
+    "assetState": "QA_CANDIDATE",
+    "requiredAutomatedEvidence": [
+      "24 runtime OGG binaries decode at 48 kHz",
+      "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION state resolver coverage",
+      "premium binary cue playback observed in browser",
+      "premium adaptive mix event observed in browser",
+      "oscillator fallback count = 0 in QA actual play"
+    ],
+    "humanEvidenceStillRequired": [
+      "headphone stereo listening",
+      "Android phone speaker listening",
+      "small speaker/laptop listening",
+      "10-minute fatigue/repetition check",
+      "CONTROL vs SWIFT discrimination without looking at screen"
+    ]
   }
 }
