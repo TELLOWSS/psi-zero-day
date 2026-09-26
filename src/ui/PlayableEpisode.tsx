@@ -4,7 +4,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { projectCharacterGrowth } from '../app/character-growth';
 import { dialogueExpressionUri } from '../app/dialogue-art';
 import { projectCharacterLoadout } from '../app/character-loadout';
-import { FIELD_SUPPORT_ITEMS, isFieldSupportItemActive } from '../app/field-support-items';
+import { FIELD_SUPPORT_ITEMS, fieldSupportItem, isFieldSupportItemActive } from '../app/field-support-items';
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
@@ -269,7 +269,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
 
   const useSupportItem = (itemId: string) => {
     if (paidItemQuantity(paidItemWallet, itemId) <= 0) return;
-    const definition = FIELD_SUPPORT_ITEMS.find(item => item.item_id === itemId);
+    const definition = fieldSupportItem(itemId);
     const accepted = session.activateSupportItem(itemId, snapshot.revision);
     if (!accepted) return;
     saveWallet(consumePaidItem(paidItemWallet, itemId));
