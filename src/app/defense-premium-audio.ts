@@ -69,6 +69,7 @@ export function premiumDefenseAudioEnabled(): boolean {
 
 export function premiumDefenseAudioRuntimeEnabled(): boolean {
   const qaReady = contract.status === 'PREMIUM_AUDIO_QA_READY'
+    && contract.acceptance.runtimeQaAllowed === true
     && contract.acceptance.productionLockAllowed === false;
   return (qaReady || premiumDefenseAudioEnabled()) && allRuntimeAssetsReady();
 }
