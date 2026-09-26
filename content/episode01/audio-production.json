@@ -280,7 +280,7 @@
     }
   ],
   "integration": {
-    "current": "Eight Episode 01 ambience/SFX binaries plus four Director-approved voice masters resolve through stable runtime asset ids. WebAudio synthetic fallback remains emergency-only for non-voice cues.",
+    "current": "Eight Episode 01 ambience/SFX binaries are materialized. Four Director-approved voice slots are fully wired to stable runtime asset ids; their mastered OGG binaries remain pending repository ingestion.",
     "finalization": "Field Foley and any voice line that fails final listening QA may later replace the same stable asset paths without changing story, event rules, or choice outcomes.",
     "qa_surfaces": [
       "web production",
