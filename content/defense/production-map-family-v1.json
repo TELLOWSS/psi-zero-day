@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "status": "G8A_PRODUCTION_LOCKED",
+  "generationRule": "ONE_MAP_AT_A_TIME",
+  "maps": [
+    {
+      "mapId": "map-apt-bottom-up-excavation-01",
+      "profileId": "apt-new-bottom-up-excavation",
+      "label": "공동주택 신축 · 순타 · 개방 굴착",
+      "runtimeUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+      "format": "webp",
+      "width": 1000,
+      "height": 600,
+      "status": "PRODUCTION_LOCKED",
+      "source": "content/defense/g8a-world-source-review.json",
+      "sourceRole": "PROCESS_SPECIFIC_FINAL_RASTER_CANDIDATE",
+      "visualFit": [
+        "process-specific bottom-up open-excavation final raster candidate",
+        "commercial-quality full-bleed world art with coherent night-work lighting",
+        "no baked HUD, text, logo, route, pad or risk marker",
+        "awaiting desktop/mobile actual-play Production Review"
+      ],
+      "runtimeContract": {
+        "topologyAuthority": "content/defense/site-process-maps-v1.json",
+        "routeCoordinatesPreserved": true,
+        "padCoordinatesPreserved": true,
+        "runtimeOverlaysAuthoritative": true,
+        "noGameplayCoordinatesFromImage": true
+      },
+      "reusePolicy": {
+        "allowedForThisMap": true,
+        "allowedForOtherG8Maps": false,
+        "reason": "Temporary HD raster reference only; G8-A still requires its own non-SVG process-specific final world plate."
+      },
+      "sourceUri": "assets/defense/board/ramp-01-hd01.webp",
+      "finalArtPolicy": {
+        "svgFinalArtForbidden": true,
+        "productionLockAllowed": true,
+        "blockingReason": ""
+      },
+      "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+      "legalCompliance": {
+        "status": "PRODUCTION_LOCKED",
+        "registry": "content/defense/korea-legal-visual-standard-v1.json",
+        "brief": "content/defense/g8a-bottom-up-high-end-raster-brief.json",
+        "verifiedAsOf": "2026-09-25",
+        "productionLockAllowed": true,
+        "requiredQa": [
+          "LEGAL_VISUAL_QA",
+          "DESKTOP_ACTUAL_PLAY_QA",
+          "MOBILE_390x844_QA",
+          "ONE_PRODUCTION_GENERATION_QA"
+        ]
+      },
+      "representativeSlice": {
+        "response": "CONTROL:L1",
+        "responseState": "RASTER_RUNTIME_COMPOSITE_PASS",
+        "risk": "SWIFT",
+        "riskState": "FINAL_RASTER_LOCKED",
+        "browserQa": {
+          "sourceSha": "6e1c99efcaeccf815f668772a9b9130f35c08e2d",
+          "workflowRunId": 36206566063,
+          "map": "map-apt-bottom-up-excavation-01",
+          "wave": 8,
+          "controlPqCount": 1,
+          "swiftCount": 1,
+          "swiftFinalCount": 1,
+          "worldFinal": true,
+          "activeSvgVisuals": 0,
+          "prototypeBoardItems": 0,
+          "desktopOverflow": false,
+          "mobileOverflow": false,
+          "mobileBoard": {
+            "left": 6,
+            "top": 99,
+            "right": 384,
+            "bottom": 325,
+            "width": 378,
+            "height": 227
+          },
+          "result": "PRODUCTION_LOCK_PASS",
+          "evidence": "content/defense/g8a-production-lock-evidence.json"
+        },
+        "worldPlate": {
+          "state": "FINAL_RASTER_LOCKED",
+          "manifest": "content/defense/g8a-world-final-art.json",
+          "currentRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+          "currentRole": "PROCESS_SPECIFIC_FINAL_RASTER_LOCKED"
+        },
+        "riskRuntime": "assets/defense/enemies/swift-final-g8a.webp"
+      }
+    }
+  ]
+}

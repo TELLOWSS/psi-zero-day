@@ -3,7 +3,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
@@ -267,6 +267,8 @@ export function DefenseGame({
   const TOWER_IDS = content.scenario.availableTowers as readonly DefenseTowerId[];
   const SUPPORT_IDS = content.scenario.availableSupports as readonly DefenseSupportId[];
   const BOARD_ART_URI = defenseBoardArtUri(content.map.id);
+  const PRODUCTION_MAP = defenseProductionMapEntry(content.map.id);
+  const G8A_WORLD_FINAL = content.map.id === 'map-apt-bottom-up-excavation-01' ? defenseG8aWorldFinalAsset() : null;
   const activeSiteMap = siteProcessMapByMapId(content.map.id)
     ?? (content.map.id === remodelScenario.map.id ? remodelScenario.map : undefined)
     ?? (content.map.id === dataCenterScenario.map.id ? dataCenterScenario.map : undefined);
@@ -339,15 +341,7 @@ export function DefenseGame({
   useEffect(() => {
     const media = window.matchMedia?.('(orientation: portrait)');
     if (!media) return;
-    const sync = () => {
-      const next = media.matches;
-      setPortrait(next);
-      if (next) {
-        setState(current => current && !current.paused
-          ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: true })
-          : current);
-      }
-    };
+    const sync = () => setPortrait(media.matches);
     sync();
     media.addEventListener?.('change', sync);
     return () => media.removeEventListener?.('change', sync);
@@ -457,9 +451,9 @@ export function DefenseGame({
       <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
     <section className="zb-prep-copy">
-      <span>{activeSiteMap ? 'G5 · 공정별 맵 체험' : content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
+      <span>{PRODUCTION_MAP ? 'G8-A · PRODUCTION MAP' : activeSiteMap ? 'G5 · 공정별 맵 체험' : content.scenario.eventId ? t('defense.scenario.event.status.unlocked') : t('defense.scenario.training.status')}</span>
       <h2>{activeSiteMap ? activeSiteMap.label : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.titleTextId ?? 'defense.event.e1.title') : t('defense.ui.support.title')}</h2>
-      <p>{activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
+      <p>{PRODUCTION_MAP ? '순타 굴착 대표 맵을 실제 현장 월드 플레이트 위에서 검증합니다. 게임 좌표는 런타임 topology가 계속 권위값입니다.' : activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
     <section className="zb-support-grid">
       {SUPPORT_IDS.map(id => <SupportCard
@@ -478,7 +472,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -627,7 +621,7 @@ export function DefenseGame({
         </aside>
 
         <div className="zb-board-caption">
-          <span>{activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
+          <span>{PRODUCTION_MAP ? 'G8-A · PRODUCTION MAP' : activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
           <b>{activeSiteMap?.label ?? t('defense.map.ramp-01.name')}</b>
         </div>
       </div>

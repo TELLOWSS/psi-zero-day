@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "status": "PRODUCTION_APPROVED",
+  "assetId": "defense.board.map-apt-bottom-up-excavation-01.final.g8a",
+  "runtimeUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+  "format": "webp",
+  "sourceMaster": {
+    "required": true,
+    "minimumWidth": 1600,
+    "minimumHeight": 960,
+    "aspectRatio": "5:3",
+    "transparentBackground": false,
+    "aspectTolerance": 0.01,
+    "sourceRecordUri": "content/defense/g8a-world-source-review.json",
+    "sha256": "958680b59b4dcfe21cb19c23686df76a0b1204fc99292042e154a56c7b2af783",
+    "nativeDimensions": {
+      "width": 1619,
+      "height": 971
+    },
+    "nativeUpscaleUsed": false
+  },
+  "runtime": {
+    "width": 1000,
+    "height": 600,
+    "preserveAspectRatio": "xMidYMid slice",
+    "transparentBackground": false
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+  "role": "process-specific bottom-up open-excavation world plate",
+  "required": [
+    "deep open excavation visibly reads as bottom-up construction",
+    "retaining/shoring condition is visually defensible",
+    "temporary haul ramp and heavy-equipment circulation are readable",
+    "worker access and vehicle circulation are visually separable",
+    "spotter/control intervention area remains readable at phone scale",
+    "edge/opening protection and drainage clues match the represented site state",
+    "coherent Korean construction-site dusk/night work lighting with physically plausible contact and cast shadows",
+    "no UI, HUD, risk icon, route, pad, text or logo baked into the image",
+    "commercial-game environment art, not a generic aerial construction photo"
+  ],
+  "forbidden": [
+    "svg",
+    "rasterized legacy svg",
+    "upscaled low-resolution crop",
+    "generic construction-site photo reused as final art",
+    "baked gameplay route",
+    "baked tower pad",
+    "baked warning icon",
+    "baked UI or HUD",
+    "readable fake Korean text",
+    "real company logo",
+    "real construction-site name",
+    "fantasy or sci-fi construction language"
+  ],
+  "promotion": {
+    "productionApproved": true,
+    "requires": [
+      "NATIVE_SOURCE_REVIEW_PASS",
+      "RUNTIME_DERIVATIVE_SHA256_LOCKED",
+      "PROCESS_SPECIFIC_BOTTOM_UP_EXCAVATION_REVIEW",
+      "KOREA_LAW_PROFILE_BOUND",
+      "LEGAL_VISUAL_QA_PASS",
+      "DESKTOP_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_QA_PASS",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ONE_PRODUCTION_GENERATION_PASS"
+    ],
+    "approvedAt": "2026-09-26",
+    "reviewState": "SOURCE_AND_RUNTIME_APPROVED"
+  }
+}

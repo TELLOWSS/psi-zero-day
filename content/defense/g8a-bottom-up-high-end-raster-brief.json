@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "status": "G8A_READY_FOR_HIGH_END_RASTER_GENERATION",
+  "profileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+  "output": {
+    "masterWidth": 4000,
+    "masterHeight": 2400,
+    "runtimeWidth": 1000,
+    "runtimeHeight": 600,
+    "finalFormats": [
+      "webp",
+      "png"
+    ],
+    "transparent": false
+  },
+  "composition": {
+    "camera": "high-oblique near-orthographic aerial construction-site view",
+    "aspect": "5:3",
+    "preserveRuntimeTopology": true,
+    "gameplayCoordinates": "NEVER_AUTHORED_BY_IMAGE_MODEL",
+    "lighting": "natural Korean daylight, top-left key light, physically coherent shadows",
+    "style": "premium commercial strategy game environment art; realistic Korean high-rise construction site; cinematic but operationally readable"
+  },
+  "legalIntent": {
+    "renderIntent": "COMPLIANT_WITH_VISIBLE_RISK_SIGNALS",
+    "sources": [
+      "KR-OSH-22",
+      "KR-OSH-32",
+      "KR-OSH-38",
+      "KR-OSH-42-44",
+      "KR-OSH-199-200",
+      "KR-OSH-338-341",
+      "KR-KOSHA-CONSTRUCTION"
+    ],
+    "requiredVisuals": [
+      "deep open excavation with believable shoring/retaining condition or safe designed slope treatment",
+      "temporary haul ramp and dump-truck/excavator circulation separated from worker access",
+      "clearly readable spotter/control location where vehicle-pedestrian conflict can occur",
+      "safe worker access route",
+      "edge/opening fall-protection elements appropriate to the scene state",
+      "surface-water/drainage management clues",
+      "spoil staging and removal flow",
+      "Korean construction PPE with realistic hard hats, safety footwear, high-visibility workwear as appropriate"
+    ]
+  },
+  "negativePrompt": [
+    "SVG",
+    "flat vector art",
+    "low-grade pictogram",
+    "cartoon safety icon",
+    "generic sci-fi tower",
+    "monster enemy",
+    "fantasy neon portal",
+    "baked UI",
+    "readable fake Korean text",
+    "real company logo",
+    "real construction-site name",
+    "unsafe unguarded opening presented as normal",
+    "workers mixed with moving dump trucks without control",
+    "impossible excavation wall",
+    "deformed excavator",
+    "duplicate workers",
+    "AI gibberish signage",
+    "plastic toy materials"
+  ],
+  "acceptance": [
+    "looks like one coherent premium game world at first glance",
+    "construction method is identifiable without captions",
+    "legal safety state is visually defensible",
+    "hazard signal remains readable without making the whole site look noncompliant",
+    "route and intervention areas remain legible at 390x844",
+    "no text/logo/HUD baked into art",
+    "no SVG final asset in the representative slice"
+  ]
+}

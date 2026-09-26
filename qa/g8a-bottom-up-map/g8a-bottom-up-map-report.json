@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "source_sha": "8f1f061c45f9c2167b5620029a64761fa76692aa",
+  "desktop": {
+    "scenario": "training-site:apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "productionMap": "HD_REFERENCE_ONLY",
+    "artHref": "assets/defense/board/ramp-01-hd01.webp",
+    "artBytes": 138860,
+    "sourceBytes": 138860,
+    "productionArtCount": 1,
+    "processOverlay": true,
+    "pads": 8,
+    "routePoints": "0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120",
+    "towers": 1,
+    "controlPq": 1,
+    "enemies": 1,
+    "swift": 1,
+    "prototypeBoardItems": 1,
+    "activeSvgVisuals": [],
+    "status": "RUNNING",
+    "board": {
+      "left": 120,
+      "top": 66,
+      "right": 1320,
+      "bottom": 786,
+      "width": 1200,
+      "height": 720
+    },
+    "overflow": false,
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "mobile": null,
+  "failures": [
+    "Prototype art leaked into representative G8-A board"
+  ]
+}

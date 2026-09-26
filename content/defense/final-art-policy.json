@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 2,
+  "status": "ABSOLUTE_VISUAL_POLICY",
+  "source": "PSI_ZERO_DAY_COMPLETE_MASTER_BIBLE_20260924-1.md",
+  "rules": {
+    "productionImageFormats": [
+      "webp",
+      "png",
+      "jpg",
+      "jpeg",
+      "avif"
+    ],
+    "svgFinalArtForbidden": true,
+    "svgAllowedOnlyFor": [
+      "geometry_reference",
+      "rollback_reference",
+      "technical_runtime_overlay",
+      "non_art_path_or_hit_area"
+    ],
+    "svgForbiddenFor": [
+      "production_map_art",
+      "tower_final_art",
+      "enemy_or_risk_final_art",
+      "character_final_art",
+      "scene_element_final_art",
+      "final_pictogram_or_placeholder_visual"
+    ],
+    "finalStatusForbiddenWhenSvg": [
+      "BASELINE_LOCKED",
+      "PRODUCTION_CANDIDATE",
+      "PRODUCTION_LOCKED"
+    ],
+    "qualityRule": "Visible final imagery must read as authored commercial game art at phone scale; low-grade pictogram/vector placeholder styling is not acceptable.",
+    "koreaLawGroundingRequired": true,
+    "legalSourceRegistry": "content/defense/korea-legal-visual-standard-v1.json",
+    "legalFactsMustBeVerifiedBeforeRender": true,
+    "legalNumbersMayNotBeInvented": true,
+    "unsafeSceneRequiresRenderIntent": true,
+    "realCompanySiteVictimIdentifiersForbidden": true,
+    "masterMapMinimum": "4000x2400",
+    "mobileLegibilityRequired": "390x844"
+  },
+  "enforcement": {
+    "currentGate": "G8-A",
+    "g8aState": "PRODUCTION_LOCKED",
+    "reason": "WORLD and SWIFT final rasters passed reviewed native-source intake, contract tests, Typecheck, Build, desktop actual-play QA and 390x844 mobile QA with zero prototype/SVG leakage and no horizontal overflow.",
+    "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
+    "next": "Proceed to the next representative production slice without reopening G8-A topology, WORLD, SWIFT or CONTROL contracts unless a regression is proven.",
+    "productionLockRequires": [
+      "WORLD_FINAL_RASTER_APPROVED",
+      "SWIFT_FINAL_RASTER_APPROVED",
+      "NON_SVG_FINAL_ASSETS",
+      "KOREA_LAW_PROFILE_BOUND",
+      "LEGAL_VISUAL_QA_PASS",
+      "DESKTOP_ACTUAL_PLAY_QA_PASS",
+      "MOBILE_390x844_QA_PASS",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ONE_PRODUCTION_GENERATION_PASS"
+    ],
+    "productionLockEvidence": "content/defense/g8a-production-lock-evidence.json"
+  }
+}

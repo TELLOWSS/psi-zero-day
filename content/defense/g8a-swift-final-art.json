@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "status": "PRODUCTION_APPROVED",
+  "assetId": "defense.enemy.SWIFT.final.g8a",
+  "runtimeUri": "assets/defense/enemies/swift-final-g8a.webp",
+  "format": "webp",
+  "sourceMaster": {
+    "required": true,
+    "minimumWidth": 1440,
+    "minimumHeight": 1024,
+    "transparentBackground": true,
+    "sourceRecordUri": "content/defense/g8a-swift-source-review.json",
+    "sha256": "95717ed79a3b78a296126ac9b054835a3221afaa8ffe8e1aee5bef1a26477e26",
+    "nativeDimensions": {
+      "width": 1536,
+      "height": 1024
+    },
+    "nativeUpscaleUsed": false
+  },
+  "runtime": {
+    "width": 78,
+    "height": 58,
+    "preserveAspectRatio": "xMidYMid meet",
+    "transparentBackground": true
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+  "role": "reversing construction dump truck converging with a pedestrian route",
+  "required": [
+    "single unbranded construction dump truck only",
+    "high-oblique 3/4 rear or side-rear view readable at phone scale",
+    "believable truck mass, tires, dump body, chassis and worksite dust",
+    "transparent clean silhouette with physically plausible contact shadow",
+    "no people, cones, excavators, background or signage baked into the asset",
+    "no manufacturer logo, PSI logo, plate text, Korean text, HUD or iconography",
+    "commercial-game final art, not pictogram/vector/flat illustration"
+  ],
+  "forbidden": [
+    "svg",
+    "legacy swift-pq01.svg rasterization",
+    "upscaled low-resolution crop",
+    "rectangular photo tile",
+    "fake Korean text",
+    "real manufacturer branding",
+    "fantasy glow or monster language"
+  ],
+  "promotion": {
+    "productionApproved": true,
+    "requires": [
+      "NATIVE_SOURCE_REVIEW_PASS",
+      "TRANSPARENCY_EDGE_REVIEW",
+      "DESKTOP_WAVE8_CONTROL_SWIFT_QA",
+      "MOBILE_390x844_CONTROL_SWIFT_QA",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0"
+    ],
+    "approvedAt": "2026-09-26",
+    "reviewState": "SOURCE_AND_RUNTIME_APPROVED"
+  }
+}

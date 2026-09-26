@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "assetId": "defense.board.map-apt-bottom-up-excavation-01.final.g8a",
+  "reviewState": "SOURCE_REVIEW_PASS",
+  "sourceKind": "NATIVE_IMAGE_GENERATION",
+  "observed": {
+    "width": 1619,
+    "height": 971,
+    "format": "png",
+    "alpha": false,
+    "transparentBackground": false,
+    "aspectRatio": 1.66735324407827,
+    "sha256": "958680b59b4dcfe21cb19c23686df76a0b1204fc99292042e154a56c7b2af783"
+  },
+  "generation": {
+    "genId": "5738f882-8ba5-4569-888c-e05552f5c521",
+    "sourceFileName": "a_detailed_wide_cinematic_construction_site_infogr.png",
+    "nativeUpscaleUsed": false
+  },
+  "runtimeDerivative": {
+    "path": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+    "width": 1000,
+    "height": 600,
+    "format": "webp",
+    "qualityProfile": "Q20",
+    "bytes": 90098,
+    "sha256": "06df6e0fd114b98baa72a612b17b598f6a3ad11feee9953ccf5066d655783e49",
+    "upscaleUsed": false
+  },
+  "visualReview": {
+    "fullBleedWorldOnly": true,
+    "noUiTextHud": true,
+    "noLogo": true,
+    "noBakedGameplayRoute": true,
+    "noBakedTowerPads": true,
+    "bottomUpOpenExcavationReadable": true,
+    "retainingAndShoringReadable": true,
+    "haulAndHeavyEquipmentCirculationReadable": true,
+    "workerVehicleSeparationReadable": true,
+    "coherentNightWorkLighting": true,
+    "commercialGameEnvironmentRead": true
+  },
+  "acceptance": {
+    "minimumNativeWidth": 1600,
+    "minimumNativeHeight": 960,
+    "targetAspectRatio": "5:3",
+    "maximumAspectDeviation": 0.01,
+    "noUpscale": true,
+    "result": "PASS"
+  }
+}

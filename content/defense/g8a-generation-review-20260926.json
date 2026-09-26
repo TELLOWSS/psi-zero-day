@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-A",
+  "reviewedAt": "2026-09-26",
+  "policy": "NO_CANDIDATE_PROMOTION_WITHOUT_MANIFEST_AND_BINARY_VALIDATION",
+  "attempts": [
+    {
+      "id": "WORLD-CANDIDATE-01",
+      "target": "WORLD",
+      "observed": {
+        "composition": "FULL_BLEED_WORLD_ONLY",
+        "uiTextHudBakedIn": false,
+        "width": 1619,
+        "height": 971,
+        "aspectApprox": "5:3"
+      },
+      "verdict": "REJECT_AS_FINAL_SOURCE_RESOLUTION",
+      "allowedUse": "VISUAL_DIRECTION_REFERENCE_ONLY",
+      "reason": "Source master is below the locked 4000x2400 minimum. Upscaling is forbidden as a final-source workaround."
+    },
+    {
+      "id": "SWIFT-CANDIDATE-01",
+      "target": "SWIFT",
+      "observed": {
+        "composition": "COMPOSITE_PRODUCTION_BOARD",
+        "isolatedSingleTruck": false,
+        "transparentBackground": false
+      },
+      "verdict": "REJECT_ISOLATION_CONTRACT",
+      "allowedUse": "NONE",
+      "reason": "The asset must be one isolated unbranded dump truck with alpha transparency; boards, captions, alternate-view sheets, UI and scene context are forbidden."
+    }
+  ],
+  "currentState": {
+    "worldFinalApproved": true,
+    "swiftFinalApproved": true,
+    "productionLockAllowed": true,
+    "note": "WORLD and SWIFT are locked. Generation is closed; G8-A passed desktop and 390x844 actual-play Production Review.",
+    "productionLocked": true,
+    "evidence": "content/defense/g8a-production-lock-evidence.json"
+  },
+  "nextGeneration": {
+    "order": [],
+    "swift": {
+      "mode": "LOCKED_APPROVED_ASSET",
+      "required": [
+        "do not regenerate unless a regression is found",
+        "preserve approved runtime path assets/defense/enemies/swift-final-g8a.webp"
+      ]
+    },
+    "world": {
+      "mode": "LOCKED_APPROVED_ASSET",
+      "required": [
+        "do not regenerate unless a regression is found",
+        "preserve approved runtime path assets/defense/board/g8a-bottom-up-excavation-final.webp"
+      ]
+    }
+  }
+}

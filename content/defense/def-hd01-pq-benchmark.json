@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "DEF-HD01-PQ",
-  "status": "G2_PRODUCTION_LOCKED",
+  "status": "G2_CONTROL_LOCK_SWIFT_REWORK_REQUIRED",
   "branch": "sol/def-hd01-pq-benchmark-20260924",
   "inherits": {
     "mainSha": "e382a8495ea4d47339ec05214854aa1438a88b77",
@@ -54,11 +54,11 @@
     "risk": {
       "id": "SWIFT",
       "legacyAsset": "assets/defense/enemies/swift.svg",
-      "legacyAssessment": "REJECT_AS_NEW_FINAL",
+      "legacyAssessment": "REJECT_AS_FINAL",
       "semantic": "reversing construction vehicle converging with pedestrian path",
-      "productionAsset": "assets/defense/enemies/swift-pq01.svg",
+      "productionAsset": "LEGACY_SVG_REFERENCE",
       "target": {
-        "kind": "STATIC_TRANSPARENT_SVG",
+        "kind": "LEGACY_SVG_REFERENCE",
         "asset": "assets/defense/enemies/swift-pq01.svg",
         "width": 384,
         "height": 268,
@@ -188,10 +188,10 @@
     "no route/pad/wave/id/balance changes",
     "actual browser screenshots pass before runtime promotion"
   ],
-  "next": "MERGE_PR_48_THEN_BEGIN_DEF_CORE_01",
+  "next": "REPLACE_SWIFT_WITH_NON_SVG_FINAL_ASSET_BEFORE_NEXT_PRODUCTION_LOCK",
   "runtimePromotion": {
     "approved": true,
-    "status": "PRODUCTION_LOCKED",
+    "status": "CONTROL_PRODUCTION_LOCKED_SWIFT_REWORK_REQUIRED",
     "requiredChecks": [
       "CONTROL production sources exist at declared source paths",
       "SWIFT dedicated PQ01 asset exists at declared production asset path",
@@ -213,16 +213,7 @@
         "marshalSha256": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
         "barrierSha256": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542"
       },
-      "swift": {
-        "kind": "STATIC_TRANSPARENT_SVG",
-        "asset": "assets/defense/enemies/swift-pq01.svg",
-        "sha256": "1600bc6290672a3a8711677a7a2e8a405fddbd73ff159f3e8230b8851849a8a0",
-        "dimensions": {
-          "width": 384,
-          "height": 268
-        },
-        "selfContained": true
-      }
+      "swift": null
     },
     "previewCandidateOnGateBranch": false,
     "g2BrowserQa": {
@@ -241,7 +232,9 @@
         "shield": 18
       },
       "note": "Fresh schema-v2 browser evidence verified the self-contained dedicated SWIFT asset and exactly one CONTROL L1 candidate on the locked MASTER WORLD."
-    }
+    },
+    "controlApproved": true,
+    "swiftApproved": false
   },
   "manualReview": {
     "control": {
@@ -252,8 +245,8 @@
     },
     "swift": {
       "source": "assets/defense/enemies/swift-pq01.svg",
-      "assessment": "PRODUCTION_LOCKED",
-      "note": "Standalone transparent SWIFT sprite now embeds the locked MASTER WORLD bytes inside the SVG, so it cannot fail because an SVG-as-image blocks external relative resources. Moving runtime enemies no longer depend on a live board crop."
+      "assessment": "REJECT_AS_FINAL",
+      "note": "SVG is retained only as a development/geometry reference. It is not accepted as final production art under the Master Bible final-art policy."
     }
   },
   "externalQaBlockers": [],
@@ -265,7 +258,9 @@
     "controlRuntimeComposite": true,
     "gameplayCoordinatesChanged": false,
     "balanceChanged": false,
-    "productionApproval": true
+    "productionApproval": false,
+    "controlProductionApproval": true,
+    "swiftProductionApproval": false
   },
   "assetIntegrity": {
     "masterWorld": {

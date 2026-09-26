@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "status": "PRODUCTION_LOCKED",
+  "gate": "G8A_REPRESENTATIVE_SLICE",
+  "map": "map-apt-bottom-up-excavation-01",
+  "wave": 8,
+  "requiredGeneration": "ONE_PRODUCTION_GENERATION",
+  "actors": {
+    "control": {
+      "id": "CONTROL:L1",
+      "state": "PASS",
+      "kind": "RASTER_RUNTIME_COMPOSITE",
+      "sources": [
+        "assets/episode01/characters/choi-minseok-map.webp",
+        "assets/episode01/scene-elements/access-barrier.webp"
+      ],
+      "legalProfile": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01"
+    },
+    "swift": {
+      "id": "SWIFT",
+      "state": "PASS",
+      "requiredKind": "TRANSPARENT_RASTER_FINAL",
+      "allowedFormats": [
+        "webp",
+        "png"
+      ],
+      "minimumSourceSize": {
+        "width": 2048,
+        "height": 1536
+      },
+      "runtimeTarget": {
+        "width": 78,
+        "height": 58
+      },
+      "semantic": "reversing construction dump truck converging with a pedestrian route",
+      "requiredVisuals": [
+        "realistic construction dump-truck mass",
+        "rear/reversing direction readable at phone scale",
+        "no monster/combat silhouette",
+        "no company logo or readable fake text",
+        "no HUD/warning copy baked into asset",
+        "transparent or cleanly isolated object edge",
+        "lighting compatible with high-oblique natural daylight world"
+      ],
+      "forbidden": [
+        "svg",
+        "flat pictogram",
+        "vector placeholder",
+        "cropped rectangular photo tile",
+        "real manufacturer logo",
+        "fake Korean text",
+        "glowing fantasy enemy",
+        "projectile/combat weapon language"
+      ],
+      "approvedRuntime": "assets/defense/enemies/swift-final-g8a.webp"
+    }
+  },
+  "latestRuntimeProof": {
+    "sourceSha": "6e1c99efcaeccf815f668772a9b9130f35c08e2d",
+    "workflowRunId": 36206566063,
+    "worldFinal": true,
+    "controlPq": 1,
+    "swift": 1,
+    "swiftFinal": 1,
+    "desktopPrototypeBoardItems": 0,
+    "mobilePrototypeBoardItems": 0,
+    "activeSvgVisuals": [],
+    "desktopOverflow": false,
+    "mobileOverflow": false,
+    "result": "PRODUCTION_LOCK_PASS",
+    "evidence": "content/defense/g8a-production-lock-evidence.json"
+  },
+  "promotionRule": "SATISFIED — G8-A is Production Locked. Reopen only on a proven regression or an explicit Master Bible contract change.",
+  "world": {
+    "id": "map-apt-bottom-up-excavation-01",
+    "state": "PASS",
+    "currentKind": "HD_REFERENCE_ONLY",
+    "requiredKind": "PROCESS_SPECIFIC_RASTER_FINAL",
+    "allowedFormats": [
+      "webp",
+      "png"
+    ],
+    "minimumSourceSize": {
+      "width": 4000,
+      "height": 2400
+    },
+    "runtimeTarget": {
+      "width": 1000,
+      "height": 600
+    },
+    "legalProfile": "KR-CONSTRUCTION-BOTTOM-UP-EXCAVATION-01",
+    "requiredVisuals": [
+      "bottom-up open excavation identifiable without captions",
+      "retaining/shoring condition visually defensible",
+      "haul ramp and heavy-equipment circulation readable",
+      "worker access and vehicle circulation visually separable",
+      "no HUD, route, pad, warning icon, text or logo baked into art"
+    ],
+    "forbidden": [
+      "svg",
+      "rasterized legacy svg",
+      "upscaled low-resolution crop",
+      "generic aerial construction photo reused as final art",
+      "baked gameplay route",
+      "baked tower pad",
+      "fake Korean text",
+      "real company logo"
+    ],
+    "approvedRuntime": "assets/defense/board/g8a-bottom-up-excavation-final.webp"
+  }
+}
