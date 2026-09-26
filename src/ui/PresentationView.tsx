@@ -36,7 +36,7 @@ function ChoiceButtons({ p, t, send, eventId, onChoicePreview }: {
   })}</div>;
 }
 
-export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false }: {
+export function PresentationView({ commands, t, send, assetUri, eventId, choiceFallback = false, onChoicePreview, previousAvailable = false, onPrevious, interactionLocked = false, dialogueOverrideText = null }: {
   commands: readonly PresentationCommand[]; t: Translate; send: (command: EngineCommand) => void;
   assetUri: (id: string) => string | undefined;
   eventId?: string | null;
@@ -45,6 +45,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
   previousAvailable?: boolean;
   onPrevious?: () => void;
   interactionLocked?: boolean;
+  dialogueOverrideText?: string | null;
 }) {
   return <>{commands.map((p, index) => {
     if (p.type === 'SHOW_CHOICE' && choiceFallback) return <details className="choice-content map-choice-fallback" key={`${p.instance_id}/${p.node_id}`}>
@@ -59,7 +60,9 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
     </div>;
     if (p.type === 'SHOW_DIALOGUE' || p.type === 'SHOW_RESULT') return <div className={`dialogue-content ${textStyle(p.text_id) ?? ''}`} key={`${p.instance_id}/${p.node_id}`}>
       <div className="presentation-toolbar"><span className="eyebrow">{t(textStyle(p.text_id) === 'note' ? 'ui.record' : p.type === 'SHOW_DIALOGUE' ? 'ui.dialogue' : 'ui.narration')}</span>{previousAvailable && onPrevious ? <button className="previous-view-button" type="button" onClick={onPrevious}>{t('ui.previous_view')}</button> : null}</div>
-      <p className="dialogue-text">{t(p.text_id)}</p>
+      <p className="dialogue-text" data-voice-caption={dialogueOverrideText !== null || undefined}>
+        {dialogueOverrideText ?? t(p.text_id)}
+      </p>
       <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked || undefined}
         onClick={e => { if (!interactionLocked && e.detail < 2) send({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }); }}>
         {t('ui.continue')}<span aria-hidden="true">→</span>
