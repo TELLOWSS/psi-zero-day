@@ -41,8 +41,22 @@ if(contract.acceptance.finalBinaryCount!==present){
 if(contract.absoluteRules.oscillatorFinalAudioForbidden!==true){
   failures.push('oscillatorFinalAudioForbidden must remain true');
 }
-if(contract.absoluteRules.sourceMaster.sampleRateHz!==48000 || contract.absoluteRules.sourceMaster.bitDepth!==24){
-  failures.push('source master must remain 48kHz / 24-bit');
+const sourceMaster=contract.absoluteRules.sourceMaster;
+const runtime=contract.absoluteRules.runtime;
+if(sourceMaster.policy!=='PRESERVE_NATIVE_GENERATOR_OUTPUT'){
+  failures.push('source master policy must preserve native generator output');
+}
+if(sourceMaster.nativeUpsampleForbidden!==true){
+  failures.push('nativeUpsampleForbidden must remain true');
+}
+if(!Number.isFinite(sourceMaster.musicNativeSampleRateHz) || sourceMaster.musicNativeSampleRateHz<=0){
+  failures.push('music native sample-rate provenance must be recorded');
+}
+if(!Number.isFinite(sourceMaster.fieldSfxPreferredSampleRateHz) || sourceMaster.fieldSfxPreferredSampleRateHz<=0){
+  failures.push('field/SFX preferred sample-rate policy must be recorded');
+}
+if(runtime.format!=='ogg/opus' || runtime.sampleRateHz!==48000){
+  failures.push('runtime audio must remain 48kHz Ogg/Opus');
 }
 if(requireFinal){
   if(contract.status!=='AUDIO_PRODUCTION_LOCKED') failures.push('contract is not AUDIO_PRODUCTION_LOCKED');
