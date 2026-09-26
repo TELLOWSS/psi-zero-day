@@ -8,13 +8,16 @@ fs.mkdirSync(outputDir, { recursive: true });
 
 const worldManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-world-final-art.json'), 'utf8'));
 const swiftManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-swift-final-art.json'), 'utf8'));
+const productionMapFamily = JSON.parse(fs.readFileSync(path.resolve('content/defense/production-map-family-v1.json'), 'utf8'));
+const representativeMapContract = productionMapFamily.maps?.find(item => item.mapId === 'map-apt-bottom-up-excavation-01');
+if (!representativeMapContract) throw new Error('G8-A representative production-map contract is missing');
 const worldApproved = worldManifest.status === 'PRODUCTION_APPROVED' && worldManifest.promotion?.productionApproved === true;
 const swiftApproved = swiftManifest.status === 'PRODUCTION_APPROVED' && swiftManifest.promotion?.productionApproved === true;
 const finalAssetsApproved = worldApproved && swiftApproved;
 const expectedWorldHref = worldApproved
   ? worldManifest.runtimeUri
   : 'assets/defense/board/ramp-01-hd01.webp';
-const expectedRegistryStatus = worldApproved ? 'PRODUCTION_CANDIDATE' : 'HD_REFERENCE_ONLY';
+const expectedRegistryStatus = representativeMapContract.status;
 
 const chrome = [
   process.env.CHROME_BIN,
