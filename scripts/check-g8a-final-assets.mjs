@@ -70,21 +70,42 @@ function checkManifest(name, manifest) {
   const consistentPending = manifest.status === 'ASSET_PENDING' && manifest.promotion?.productionApproved === false;
   if (!approved && !consistentPending) failures.push(`${name}: status and productionApproved disagree`);
 
-  const masterRel = manifest.sourceMaster?.repositoryUri;
+  const masterRel = manifest.sourceMaster?.repositoryUri ?? null;
+  const sourceRecordRel = manifest.sourceMaster?.sourceRecordUri ?? null;
   const runtimeRel = manifest.runtimeUri?.startsWith('assets/')
     ? path.posix.join('public', manifest.runtimeUri)
     : manifest.runtimeUri;
-  if (!masterRel || !runtimeRel) {
-    failures.push(`${name}: source master/runtime repository paths are required`);
+  if ((!masterRel && !sourceRecordRel) || !runtimeRel) {
+    failures.push(`${name}: source master/review record and runtime repository path are required`);
     return;
   }
-  if (/\.svg(?:$|\?)/i.test(masterRel) || /\.svg(?:$|\?)/i.test(runtimeRel)) {
+  if ((masterRel && /\.svg(?:$|\?)/i.test(masterRel)) || /\.svg(?:$|\?)/i.test(runtimeRel)) {
     failures.push(`${name}: SVG cannot enter final asset intake`);
   }
 
   let master = null;
   let runtime = null;
-  try { master = imageInfo(masterRel); } catch (error) { failures.push(error.message); }
+  if (masterRel) {
+    try { master = imageInfo(masterRel); } catch (error) { failures.push(error.message); }
+  } else if (sourceRecordRel) {
+    try {
+      const record = readJson(sourceRecordRel);
+      const observed = record.observed ?? {};
+      if (record.reviewState !== 'SOURCE_REVIEW_PASS' || record.acceptance?.result !== 'PASS') {
+        failures.push(`${name}: source review record is not PASS`);
+      }
+      master = {
+        format: observed.format,
+        width: observed.width,
+        height: observed.height,
+        alpha: observed.transparentBackground === true,
+        bytes: observed.bytes ?? null,
+        externalReviewed: true,
+        sha256: observed.sha256 ?? null,
+        path: sourceRecordRel,
+      };
+    } catch (error) { failures.push(`${name}: source review record could not be read: ${error.message}`); }
+  }
   try { runtime = imageInfo(runtimeRel); } catch (error) { failures.push(error.message); }
 
   if (approved || candidateCheck || master) {
@@ -111,7 +132,7 @@ function checkManifest(name, manifest) {
     name,
     status: manifest.status,
     approved,
-    master: master ? { path:masterRel, ...master } : { path:masterRel, missing:true },
+    master: master ? { path:masterRel ?? sourceRecordRel, ...master } : { path:masterRel ?? sourceRecordRel, missing:true },
     runtime: runtime ? { path:runtimeRel, ...runtime } : { path:runtimeRel, missing:true },
   });
 }
