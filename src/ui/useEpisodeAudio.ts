@@ -238,7 +238,11 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     }
   }, [effectiveMuted, audio?.volumes.master, audio?.volumes.event, resolve, playUiCue]);
 
-  const playVoiceCue = useCallback((cue: PresentationVoiceCue, onEnded?: () => void) => {
+  const playVoiceCue = useCallback((
+    cue: PresentationVoiceCue,
+    onEnded?: () => void,
+    onProgress?: (elapsedMs: number) => void,
+  ) => {
     voiceCleanupRef.current?.();
 
     const uri = resolve(cue.asset_id);
@@ -255,11 +259,13 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     element.volume = baseVolume;
 
     let finished = false;
+    const reportProgress = () => onProgress?.(element.currentTime * 1000);
     const finish = () => {
       if (finished) return;
       finished = true;
       element.removeEventListener('ended', finish);
       element.removeEventListener('error', finish);
+      element.removeEventListener('timeupdate', reportProgress);
       if (voiceRef.current === element) voiceRef.current = null;
       if (voiceCleanupRef.current === cleanup) voiceCleanupRef.current = null;
       applyVoiceDucking(1);
@@ -273,7 +279,9 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     voiceCleanupRef.current = cleanup;
     element.addEventListener('ended', finish, { once: true });
     element.addEventListener('error', finish, { once: true });
+    element.addEventListener('timeupdate', reportProgress);
     applyVoiceDucking(cue.duck_gain ?? 0.28);
+    onProgress?.(0);
 
     const playback = element.play();
     if (playback && typeof playback.catch === 'function') void playback.catch(finish);
