@@ -88,4 +88,4 @@ jobs:
         with:
           name: g8a-premium-audio-telemetry
           path: artifacts/g8a-premium-audio
-          if-no-files-found: error
+          if-no-files-found: warn
