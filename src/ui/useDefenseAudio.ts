@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import type { DefenseRunState } from '../domain/defense';
+import { premiumDefenseCueUri } from '../app/defense-premium-audio';
+import { useG8aPremiumMix } from './useG8aPremiumMix';
 
 export type DefenseAudioCue =
   | 'select'
@@ -41,6 +43,7 @@ const PROFILES: Readonly<Record<DefenseAudioCue, DefenseAudioProfile>> = {
 };
 
 export const DEFENSE_AUDIO_CUE_EVENT = 'psi:defense-audio-cue';
+export const DEFENSE_AUDIO_SOURCE_EVENT = 'psi:defense-audio-source';
 
 export function defenseAudioCueProfile(cue: DefenseAudioCue): DefenseAudioProfile {
   return PROFILES[cue];
@@ -58,12 +61,13 @@ export function defenseResolveCues(previous: DefenseRunState, current: DefenseRu
   return [...(single ? ['single_resolve' as const] : []), ...(area ? ['area_resolve' as const] : [])];
 }
 
-export function useDefenseAudio(state: DefenseRunState | null) {
+export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null) {
   const muted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const contextRef = useRef<AudioContext | null>(null);
   const previousRef = useRef<DefenseRunState | null>(null);
   const armedRef = useRef(false);
   const activeVoicesRef = useRef(0);
+  const premiumMix = useG8aPremiumMix(state, mapId, muted);
   const lastResolveTickRef = useRef<Record<'single_resolve' | 'area_resolve', number>>({
     single_resolve: -9999,
     area_resolve: -9999,
@@ -79,12 +83,11 @@ export function useDefenseAudio(state: DefenseRunState | null) {
 
   const armAudio = useCallback(() => {
     armedRef.current = true;
+    premiumMix.arm();
     if (!muted) ensureContext();
-  }, [ensureContext, muted]);
+  }, [ensureContext, muted, premiumMix.arm]);
 
-  const playCue = useCallback((cue: DefenseAudioCue) => {
-    if (!armedRef.current || muted || typeof window === 'undefined') return;
-    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
+  const playOscillatorCue = useCallback((cue: DefenseAudioCue) => {
     const context = ensureContext();
     if (!context || activeVoicesRef.current >= DEFENSE_AUDIO_MAX_VOICES) return;
 
@@ -105,7 +108,34 @@ export function useDefenseAudio(state: DefenseRunState | null) {
     }, { once: true });
     oscillator.start(now);
     oscillator.stop(now + duration);
-  }, [ensureContext, muted]);
+  }, [ensureContext]);
+
+  const playCue = useCallback((cue: DefenseAudioCue) => {
+    if (!armedRef.current || muted || typeof window === 'undefined') return;
+    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
+
+    const premiumUri = premiumDefenseCueUri(cue);
+    if (premiumUri && typeof Audio !== 'undefined') {
+      const element = new Audio(premiumUri);
+      element.preload = 'auto';
+      element.volume = 1;
+      const playback = element.play();
+      window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'premium-binary', uri: premiumUri } }));
+      if (playback && typeof playback.catch === 'function') {
+        void playback.catch((error: unknown) => {
+          const failure = error instanceof Error ? { errorName: error.name, errorMessage: error.message } : { errorMessage: String(error) };
+          window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: 'binary-playback-failed', ...failure } }));
+          playOscillatorCue(cue);
+        });
+      }
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: premiumUri ? 'audio-api-unavailable' : 'premium-binary-not-approved' } }));
+    playOscillatorCue(cue);
+  }, [muted, playOscillatorCue]);
+
+
 
   useEffect(() => {
     const previous = previousRef.current;
@@ -150,5 +180,12 @@ export function useDefenseAudio(state: DefenseRunState | null) {
     if (context) void context.close();
   }, []);
 
-  return { muted, setMuted: setAudioMuted, armAudio, playCue } as const;
+  return {
+    muted,
+    setMuted: setAudioMuted,
+    armAudio,
+    playCue,
+    premiumMixEnabled: premiumMix.enabled,
+    premiumMixState: premiumMix.currentState,
+  } as const;
 }

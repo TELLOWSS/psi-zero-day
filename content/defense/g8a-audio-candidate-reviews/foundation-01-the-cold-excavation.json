@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "candidateId": "G8A-AUDIO-CANDIDATE-FOUNDATION-01",
+  "submittedFile": "the_cold_excavation.mp4",
+  "interpretedSlot": "score.foundation_bed",
+  "observed": {
+    "durationSeconds": 136.367333,
+    "container": "mp4",
+    "audioCodec": "aac-lc",
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "approximateAudioBitrateKbps": 192,
+    "integratedLufs": -13.3,
+    "loudnessRangeLu": 8.5,
+    "truePeakDbfs": -0.2,
+    "endingSilenceSeconds": 1.819,
+    "metadata": {
+      "title": "The Cold Excavation",
+      "album": "Structural Integrity",
+      "genre": "Minimalist Orchestral Ambient"
+    },
+    "approximateBeatAnalysisBpm": 86.1
+  },
+  "target": {
+    "tempoBpm": 84,
+    "meter": "4/4",
+    "bars": 16,
+    "targetDurationSeconds": 45.7142857,
+    "seamlessLoop": true,
+    "truePeakDbtpMax": -1
+  },
+  "verdict": "PASS_DIRECTION_REFERENCE_REGENERATE_FINAL_STEM",
+  "reasons": [
+    "candidate is a full-length 136.367s track rather than the locked 16-bar synchronized stem",
+    "arbitrary cutting cannot establish a seamless loop boundary",
+    "true peak is hotter than the locked master target",
+    "rough beat analysis does not confirm the locked 84 BPM grid"
+  ],
+  "allowedUse": [
+    "tonal reference",
+    "orchestral palette reference",
+    "atmosphere reference"
+  ],
+  "forbiddenUse": [
+    "final runtime stem",
+    "arbitrary 45.714s crop promoted as final",
+    "artificial upsample claimed as native master"
+  ],
+  "next": "Regenerate Foundation with REV-B: exact 84 BPM, 4/4, 16 bars, 45.7142857s synchronized seamless-loop contract."
+}

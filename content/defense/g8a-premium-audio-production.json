@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-A AUDIO PRODUCTION LOCK",
+  "status": "PREMIUM_AUDIO_QA_READY",
+  "scope": "map-apt-bottom-up-excavation-01 / CONTROL:L1 vs SWIFT",
+  "principle": "Orchestral-grade cinematic scoring plus construction-field realism. Premium means emotionally authored, dynamically mixed, spatially believable, and readable on phone speakers without masking gameplay.",
+  "absoluteRules": {
+    "oscillatorFinalAudioForbidden": true,
+    "genericTrailerMusicForbidden": true,
+    "constantEpicWallForbidden": true,
+    "copyrightedReferenceMimicryForbidden": true,
+    "stockLoopAsFinalScoreForbidden": true,
+    "fieldSfxMustRemainGameplayReadable": true,
+    "dialoguePriority": "future dialogue/voice must always remain intelligible above score and ambience",
+    "sourceMaster": {
+      "policy": "PRESERVE_NATIVE_GENERATOR_OUTPUT",
+      "preferredFormat": "wav",
+      "musicNativeSampleRateHz": 44100,
+      "fieldSfxPreferredSampleRateHz": 48000,
+      "bitDepthPolicy": "record actual native bit depth; never claim artificial bit-depth/sample-rate conversion as native quality",
+      "nativeUpsampleForbidden": true
+    },
+    "runtime": {
+      "format": "ogg/opus",
+      "musicBitrateKbps": 160,
+      "sfxBitrateKbps": 128,
+      "sampleRateHz": 48000
+    },
+    "mastering": {
+      "truePeakDbtpMax": -1,
+      "integratedLufsTargetRange": [
+        -18,
+        -14
+      ],
+      "minimumProgramLraLu": 5,
+      "noHardBrickwallLimiting": true,
+      "mobileSpeakerReadabilityRequired": true,
+      "headphoneDepthRequired": true
+    }
+  },
+  "musicalIdentity": {
+    "style": "premium hybrid orchestra grounded in human tension rather than heroic spectacle",
+    "ensemble": [
+      "full strings with legato, tremolo, spiccato and low-string pulse",
+      "French horns and restrained low brass",
+      "woodwind breath/color for human vulnerability",
+      "concert bass drum, low toms, timpani and metallic construction-derived percussion",
+      "felt piano or restrained piano harmonic anchor",
+      "subtle synth/sub layer only as support, never as the identity"
+    ],
+    "emotionalArc": [
+      "site realism and restraint",
+      "growing operational pressure",
+      "risk recognition before impact",
+      "decisive CONTROL intervention",
+      "release without victory-fanfare excess",
+      "human consequence and tomorrow-facing resolve"
+    ],
+    "motifRule": "Create one original PSI motif that can survive as 2-5 second fragments, a low-string ostinato, and a full orchestral statement without copying any existing score.",
+    "reject": [
+      "generic AI trailer braam",
+      "constant four-on-the-floor pulse",
+      "superhero victory fanfare",
+      "horror sting language",
+      "overly sentimental piano-only scoring",
+      "music that masks reverse alarm, radio, brake, barrier or impact information"
+    ]
+  },
+  "dynamicScore": {
+    "tempoBpm": 84,
+    "meter": "4/4",
+    "harmonicBehavior": "modal/minor tension with restrained resolution; avoid simplistic major-key triumph",
+    "synchronizedStemLoopBars": 16,
+    "stems": [
+      {
+        "id": "score.foundation_bed",
+        "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
+        "role": "low strings + restrained piano + air",
+        "state": "QA_READY",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "floor_twelve_ledger.mp4",
+        "referenceQa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
+        "nextAction": "AUTHOR_SCORE_PRESSURE_OSTINATO",
+        "candidateRuntime": "01_score_foundation_bed_LOCK_CANDIDATE_V2_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -14,
+          "truePeakDbfs": -3.6
+        }
+      },
+      {
+        "id": "score.pressure_ostinato",
+        "path": "assets/defense/audio/g8a/score-pressure-ostinato.ogg",
+        "role": "spiccato/low-string pulse + restrained percussion",
+        "state": "QA_READY",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "before_the_pour.mp4",
+        "candidateRuntime": "02_score_pressure_ostinato_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -18.1,
+          "truePeakDbfs": -5.3
+        }
+      },
+      {
+        "id": "score.swift_threat",
+        "path": "assets/defense/audio/g8a/score-swift-threat.ogg",
+        "role": "low brass/horn tension + rhythmic acceleration",
+        "state": "QA_READY",
+        "loop": true,
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "clear_the_trench.mp4",
+        "candidateRuntime": "03_score_swift_threat_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -19.7,
+          "truePeakDbfs": -5.9
+        }
+      },
+      {
+        "id": "score.control_intervention",
+        "path": "assets/defense/audio/g8a/score-control-intervention.ogg",
+        "role": "short decisive orchestral intervention accent",
+        "state": "QA_READY",
+        "loop": false,
+        "playbackRole": "STATE_ENTRY_ONE_SHOT",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "constant_oversight.mp4",
+        "candidateRuntime": "04_score_control_intervention_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -18.6,
+          "truePeakDbfs": -4.6,
+          "durationSec": 2.52
+        }
+      },
+      {
+        "id": "score.resolution_coda",
+        "path": "assets/defense/audio/g8a/score-resolution-coda.ogg",
+        "role": "warm strings/horn release preserving seriousness",
+        "state": "QA_READY",
+        "loop": false,
+        "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "the_quiet_perimeter.mp4",
+        "candidateRuntime": "05_score_resolution_coda_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -15.8,
+          "lraLu": 9.6,
+          "truePeakDbfs": -5.8,
+          "durationSec": 22.857
+        }
+      }
+    ],
+    "runtimeStates": [
+      {
+        "state": "READY",
+        "active": [
+          "score.foundation_bed"
+        ],
+        "musicGainDb": -8
+      },
+      {
+        "state": "WAVE_BUILD",
+        "active": [
+          "score.foundation_bed",
+          "score.pressure_ostinato"
+        ],
+        "musicGainDb": -6
+      },
+      {
+        "state": "SWIFT_THREAT",
+        "active": [
+          "score.foundation_bed",
+          "score.pressure_ostinato",
+          "score.swift_threat"
+        ],
+        "musicGainDb": -5
+      },
+      {
+        "state": "CONTROL_INTERVENTION",
+        "active": [
+          "score.control_intervention"
+        ],
+        "duckMusicDb": -5,
+        "duckAttackMs": 40,
+        "duckReleaseMs": 900
+      },
+      {
+        "state": "RESOLUTION",
+        "active": [
+          "score.foundation_bed",
+          "score.resolution_coda"
+        ],
+        "musicGainDb": -7
+      }
+    ],
+    "candidateSet": {
+      "status": "MUSIC_CANDIDATE_SET_COMPLETE",
+      "count": 5,
+      "adaptiveArcPreview": "G8A_ADAPTIVE_MUSIC_ARC_PREVIEW_V1_48k_opus192.ogg",
+      "previewMetrics": {
+        "integratedLufs": -16.1,
+        "lraLu": 3.8,
+        "truePeakDbfs": -2.2
+      },
+      "note": "Candidate set only. Do not mark PRODUCTION_APPROVED until Foley/full-mix/headphone/Android QA."
+    }
+  },
+  "fieldSound": [
+    {
+      "id": "field.excavation_world",
+      "path": "assets/defense/audio/g8a/field-excavation-world.ogg",
+      "role": "deep excavation ambience, distant machinery, air, gravel",
+      "loop": true,
+      "state": "QA_READY"
+    },
+    {
+      "id": "field.excavator_hydraulic",
+      "path": "assets/defense/audio/g8a/field-excavator-hydraulic.ogg",
+      "role": "distant hydraulic and track texture",
+      "loop": true,
+      "state": "QA_READY"
+    },
+    {
+      "id": "swift.engine_loop",
+      "path": "assets/defense/audio/g8a/swift-engine-loop.ogg",
+      "role": "diesel dump-truck approach/reverse loop",
+      "loop": true,
+      "state": "QA_READY"
+    },
+    {
+      "id": "swift.reverse_alarm",
+      "path": "assets/defense/audio/g8a/swift-reverse-alarm.ogg",
+      "role": "direction-readable reversing warning",
+      "loop": true,
+      "state": "QA_READY"
+    },
+    {
+      "id": "swift.gravel_tire",
+      "path": "assets/defense/audio/g8a/swift-gravel-tire.ogg",
+      "role": "slow heavy tire/gravel movement",
+      "loop": false,
+      "state": "QA_READY"
+    },
+    {
+      "id": "swift.airbrake",
+      "path": "assets/defense/audio/g8a/swift-airbrake.ogg",
+      "role": "intervention stop punctuation",
+      "loop": false,
+      "state": "QA_READY"
+    },
+    {
+      "id": "control.radio_stop",
+      "path": "assets/defense/audio/g8a/control-radio-stop.ogg",
+      "role": "short non-verbal radio squelch/stop cue",
+      "loop": false,
+      "state": "QA_READY"
+    },
+    {
+      "id": "control.barrier_clack",
+      "path": "assets/defense/audio/g8a/control-barrier-clack.ogg",
+      "role": "physical access-control confirmation",
+      "loop": false,
+      "state": "QA_READY"
+    }
+  ],
+  "gameplaySfx": [
+    {
+      "cue": "select",
+      "path": "assets/defense/audio/g8a/ui-select.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-select_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.501,
+        "integratedLufs": -10.3,
+        "truePeakDbfs": -6.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "place",
+      "path": "assets/defense/audio/g8a/ui-place.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-place_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.459,
+        "integratedLufs": -21.6,
+        "truePeakDbfs": -5.8,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "upgrade",
+      "path": "assets/defense/audio/g8a/ui-upgrade.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-upgrade_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.624,
+        "integratedLufs": -13.6,
+        "truePeakDbfs": -5.5,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "sell",
+      "path": "assets/defense/audio/g8a/ui-sell.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-sell_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.419,
+        "integratedLufs": -17,
+        "truePeakDbfs": -5.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "warning",
+      "path": "assets/defense/audio/g8a/wave-warning.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "wave-warning_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.813,
+        "integratedLufs": -5.8,
+        "truePeakDbfs": -3.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "single_resolve",
+      "path": "assets/defense/audio/g8a/control-resolve.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
+      "candidateRuntime": "control-resolve_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.417,
+        "integratedLufs": -15,
+        "truePeakDbfs": -6.3,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "area_resolve",
+      "path": "assets/defense/audio/g8a/area-resolve.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
+      "candidateRuntime": "area-resolve_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.476,
+        "integratedLufs": -23.3,
+        "truePeakDbfs": -5.5,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "leak",
+      "path": "assets/defense/audio/g8a/shield-leak.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
+      "candidateRuntime": "shield-leak_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.63,
+        "integratedLufs": -12.5,
+        "truePeakDbfs": -4.6,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "support",
+      "path": "assets/defense/audio/g8a/support-call.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
+      "candidateRuntime": "support-call_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.633,
+        "integratedLufs": -14.3,
+        "truePeakDbfs": -5.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
+    },
+    {
+      "cue": "win",
+      "path": "assets/defense/audio/g8a/result-win.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
+      "candidateRuntime": "result-win_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.947,
+        "integratedLufs": -16.7,
+        "truePeakDbfs": -5.3,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      },
+      "candidateNote": "Restrained short orchestral positive confirmation; no victory-fanfare language."
+    },
+    {
+      "cue": "loss",
+      "path": "assets/defense/audio/g8a/result-loss.ogg",
+      "state": "QA_READY",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
+      "candidateRuntime": "result-loss_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 2.02,
+        "integratedLufs": -12.2,
+        "truePeakDbfs": -4.5,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      },
+      "candidateNote": "Low-register sober consequence cue; clearly distinguishable from WIN without retro game-over language."
+    }
+  ],
+  "mixBehavior": {
+    "buses": [
+      "MUSIC",
+      "FIELD_AMBIENCE",
+      "VEHICLE",
+      "GAMEPLAY_SFX",
+      "UI",
+      "VOICE_RESERVED"
+    ],
+    "ducking": [
+      "SWIFT reverse alarm ducks MUSIC by 2-3 dB but not FIELD_AMBIENCE completely",
+      "CONTROL intervention ducks MUSIC by 5 dB briefly so brake/radio/barrier cues read instantly",
+      "future VOICE_RESERVED ducks MUSIC 6-8 dB and ambience 3-5 dB"
+    ],
+    "spatial": [
+      "vehicle and point-source SFX pan/attenuate from logical board position where platform permits",
+      "ambience stays wide but center-clean",
+      "critical warnings retain a stable center component for phone speakers"
+    ]
+  },
+  "acceptance": {
+    "requiredAssetCount": 24,
+    "finalBinaryCount": 24,
+    "productionLockAllowed": false,
+    "listeningQa": [
+      "studio/headphone stereo",
+      "Android phone speaker at normal listening volume",
+      "small Bluetooth speaker or laptop speaker",
+      "muted/unmuted transition",
+      "extended 10-minute fatigue check",
+      "CONTROL vs SWIFT cue discrimination without looking at the screen"
+    ],
+    "technicalQa": [
+      "all final binaries present",
+      "native source provenance/sample rate/bit depth recorded without artificial upsample claims",
+      "no clipped samples",
+      "true peak <= -1 dBTP on mastered score deliverables",
+      "runtime OGG decodes in Chrome and Android WebView",
+      "loop seams inaudible",
+      "no oscillator fallback during approved G8-A actual play",
+      "runtime OGG normalized to 48 kHz without changing the archived native-source provenance"
+    ],
+    "productionLockRequires": [
+      "ORCHESTRAL_SCORE_STEMS_APPROVED",
+      "FIELD_FOLEY_APPROVED",
+      "SWIFT_AUDIO_APPROVED",
+      "CONTROL_AUDIO_APPROVED",
+      "GAMEPLAY_SFX_PACK_APPROVED",
+      "MIX_MASTER_APPROVED",
+      "DESKTOP_LISTENING_QA_PASS",
+      "ANDROID_MOBILE_LISTENING_QA_PASS",
+      "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
+    ],
+    "runtimeQaAllowed": true
+  },
+  "currentProductionFocus": "physical_android_actual_play_qa",
+  "nextProductionAsset": null,
+  "candidateAssetCount": 24,
+  "productionStateNote": "24/24 QA_READY assets passed automated technical/runtime QA and project-owner human/device listening QA. Final physical Android in-game actual-play verification remains required; no asset is PRODUCTION_APPROVED and productionLockAllowed remains false.",
+  "candidateProgress": {
+    "status": "24_OF_24_RUNTIME_QA_READY",
+    "candidateAssetCount": 24,
+    "requiredAssetCount": 24,
+    "remaining": [],
+    "currentFocus": "ACTUAL_PLAY_FULL_MIX_AND_DEVICE_LISTENING_QA",
+    "runtimeCandidatePack": "G8A_PREMIUM_AUDIO_24_OF_24_RUNTIME_CANDIDATE_PACK.zip",
+    "note": "Repository promotion complete. QA_CANDIDATE assets are allowed in G8-A runtime QA but are not PRODUCTION_APPROVED and do not permit Production Lock."
+  },
+  "runtimeQa": {
+    "enabled": true,
+    "scope": "map-apt-bottom-up-excavation-01",
+    "assetState": "QA_READY",
+    "requiredAutomatedEvidence": [
+      "24 runtime OGG binaries decode at 48 kHz",
+      "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION state resolver coverage",
+      "premium binary cue playback observed in browser",
+      "premium adaptive mix event observed in browser",
+      "oscillator fallback count = 0 in QA actual play"
+    ],
+    "humanEvidenceStillRequired": [],
+    "automatedStatus": "PASS",
+    "automatedEvidence": {
+      "workflowRunId": 36221130191,
+      "sourceSha": "2d6ff82227817518dda4e035323d7b6ca53fb796",
+      "artifactId": 10899193585,
+      "viewports": [
+        "1440x900",
+        "390x844"
+      ],
+      "stateCoverage": [
+        "READY",
+        "WAVE_BUILD",
+        "SWIFT_THREAT",
+        "CONTROL_INTERVENTION",
+        "RESOLUTION"
+      ],
+      "premiumBinaryCueCount": 10,
+      "premiumMixPlaybackSuccessCount": 68,
+      "premiumMixPlaybackFailureCount": 0,
+      "oscillatorFallbackCount": 0
+    },
+    "note": "Automated 390x844 browser QA and human acoustic listening are complete. Physical Android in-game runtime remains the last gate.",
+    "humanListeningStatus": "PASS",
+    "humanListeningAttestedAt": "2026-09-26",
+    "finalEvidenceStillRequired": [
+      "physical Android in-game actual play on the G8-A QA runtime",
+      "premium binary playback confirmed during real touch interaction",
+      "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION behavior audibly coherent in game",
+      "no oscillator fallback or failed premium playback observed",
+      "mute/unmute and resume behavior acceptable on device"
+    ]
+  }
+}
