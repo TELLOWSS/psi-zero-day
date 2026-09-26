@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "note": "Base64 is split only to keep repository text writes reviewable. Materialization verifies bytes and SHA-256 before runtime use.",
+  "assets": [
+    {
+      "source": "kang-first-contact",
+      "target": "public/assets/episode01/audio/voice-kang-first-contact.ogg",
+      "bytes": 68167,
+      "sha256": "2c7d6b06f4911a07d6162f864848567fd0c06120c2dfc951f0b5041de624d648",
+      "chunks": [
+        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.01.txt",
+        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.02.txt",
+        "content/episode01/embedded-audio/kang-first-contact.ogg.b64.03.txt"
+      ]
+    },
+    {
+      "source": "junho-signal",
+      "target": "public/assets/episode01/audio/voice-junho-signal.ogg",
+      "bytes": 42337,
+      "sha256": "1bbe652e14aab6cb4abec30f7072701c6d11b8133b055f3709993a08df0bd950",
+      "chunks": [
+        "content/episode01/embedded-audio/junho-signal.ogg.b64.01.txt",
+        "content/episode01/embedded-audio/junho-signal.ogg.b64.02.txt"
+      ]
+    },
+    {
+      "source": "lee-delay",
+      "target": "public/assets/episode01/audio/voice-lee-delay.ogg",
+      "bytes": 45677,
+      "sha256": "20a180a6937d95f68f21bf09548366c9cb95a9a80b8699d16ce24f3d0b45aa67",
+      "chunks": [
+        "content/episode01/embedded-audio/lee-delay.ogg.b64.01.txt",
+        "content/episode01/embedded-audio/lee-delay.ogg.b64.02.txt"
+      ]
+    },
+    {
+      "source": "oh-record-judgment",
+      "target": "public/assets/episode01/audio/voice-oh-record-judgment.ogg",
+      "bytes": 56027,
+      "sha256": "eb41f06924085cb384966013911f9169c0e8ce8c751c8f9cb42f1d6dabadebdd",
+      "chunks": [
+        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.01.txt",
+        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.02.txt",
+        "content/episode01/embedded-audio/oh-record-judgment.ogg.b64.03.txt"
+      ]
+    }
+  ]
+}
