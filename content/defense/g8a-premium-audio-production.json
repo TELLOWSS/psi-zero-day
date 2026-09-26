@@ -405,12 +405,34 @@
     {
       "cue": "win",
       "path": "assets/defense/audio/g8a/result-win.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
+      "candidateRuntime": "result-win_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.947,
+        "integratedLufs": -16.7,
+        "truePeakDbfs": -5.3,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      },
+      "candidateNote": "Restrained short orchestral positive confirmation; no victory-fanfare language."
     },
     {
       "cue": "loss",
       "path": "assets/defense/audio/g8a/result-loss.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
+      "candidateRuntime": "result-loss_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 2.02,
+        "integratedLufs": -12.2,
+        "truePeakDbfs": -4.5,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      },
+      "candidateNote": "Low-register sober consequence cue; clearly distinguishable from WIN without retro game-over language."
     }
   ],
   "mixBehavior": {
@@ -467,19 +489,17 @@
       "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
     ]
   },
-  "currentProductionFocus": "ui.gameplay_sfx_reel_b",
-  "nextProductionAsset": "10_GEMINI_UI_GAMEPLAY_SFX_REEL_B",
-  "candidateAssetCount": 18,
-  "productionStateNote": "18/24 candidate assets exist outside final runtime paths. UI/Game SFX A added as 5 clean separated candidates. No candidate is PRODUCTION_APPROVED solely from presence; full-mix/headphone/Android/actual-play QA remains mandatory.",
+  "currentProductionFocus": "repository_runtime_promotion_and_full_mix_qa",
+  "nextProductionAsset": null,
+  "candidateAssetCount": 24,
+  "productionStateNote": "24/24 production candidates acquired and technically prepared outside final repository runtime paths. Generation is closed. No candidate is PRODUCTION_APPROVED until repository promotion, full-mix/headphone/Android listening QA, and zero oscillator fallback actual-play evidence.",
   "candidateProgress": {
-    "status": "22_OF_24_LOCK_CANDIDATES_READY",
-    "candidateAssetCount": 22,
+    "status": "24_OF_24_LOCK_CANDIDATES_READY",
+    "candidateAssetCount": 24,
     "requiredAssetCount": 24,
-    "remaining": [
-      "result-win",
-      "result-loss"
-    ],
-    "currentFocus": "11 RESULT SFX REEL",
-    "note": "Candidate assets remain ASSET_PENDING until full-mix listening, Android/headphone QA, repository runtime promotion, and zero oscillator fallback actual-play evidence."
+    "remaining": [],
+    "currentFocus": "REPOSITORY_RUNTIME_PROMOTION_AND_FULL_MIX_QA",
+    "runtimeCandidatePack": "G8A_PREMIUM_AUDIO_24_OF_24_RUNTIME_CANDIDATE_PACK.zip",
+    "note": "Generation/acquisition complete. Runtime binaries are still outside repository final paths; keep manifest state ASSET_PENDING and productionLockAllowed=false until promotion + listening QA."
   }
 }
