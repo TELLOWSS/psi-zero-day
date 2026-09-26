@@ -1,15 +1,21 @@
 {
   "schemaVersion": 1,
-  "status": "ASSET_PENDING",
+  "status": "PRODUCTION_APPROVED",
   "assetId": "defense.enemy.SWIFT.final.g8a",
   "runtimeUri": "assets/defense/enemies/swift-final-g8a.webp",
   "format": "webp",
   "sourceMaster": {
     "required": true,
-    "minimumWidth": 2048,
-    "minimumHeight": 1536,
+    "minimumWidth": 1440,
+    "minimumHeight": 1024,
     "transparentBackground": true,
-    "repositoryUri": "production-assets/defense/g8a/swift-dump-truck-master.png"
+    "sourceRecordUri": "content/defense/g8a-swift-source-review.json",
+    "sha256": "95717ed79a3b78a296126ac9b054835a3221afaa8ffe8e1aee5bef1a26477e26",
+    "nativeDimensions": {
+      "width": 1536,
+      "height": 1024
+    },
+    "nativeUpscaleUsed": false
   },
   "runtime": {
     "width": 78,
@@ -38,14 +44,16 @@
     "fantasy glow or monster language"
   ],
   "promotion": {
-    "productionApproved": false,
+    "productionApproved": true,
     "requires": [
-      "NON_SVG_MASTER_REVIEW",
+      "NATIVE_SOURCE_REVIEW_PASS",
       "TRANSPARENCY_EDGE_REVIEW",
       "DESKTOP_WAVE8_CONTROL_SWIFT_QA",
       "MOBILE_390x844_CONTROL_SWIFT_QA",
       "ACTIVE_SVG_VISUALS_0",
       "PROTOTYPE_BOARD_ITEMS_0"
-    ]
+    ],
+    "approvedAt": "2026-09-26",
+    "reviewState": "SOURCE_AND_RUNTIME_APPROVED"
   }
 }
