@@ -1,0 +1,70 @@
+name: Promote G8-A PREMIUM AUDIO Candidates
+
+on:
+  push:
+    branches:
+      - sol/g8a-audio-production-lock-20260926
+    paths:
+      - 'artifacts/g8a-premium-audio-transfer/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: g8a-premium-audio-promotion-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout audio branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reassemble and verify exact candidate package
+        shell: bash
+        run: |
+          set -euo pipefail
+          DIR="artifacts/g8a-premium-audio-transfer"
+          test "$(find "$DIR" -maxdepth 1 -type f -name 'g8a_audio_candidates.zip.part*' | wc -l | tr -d ' ')" = "10"
+          cat "$DIR"/g8a_audio_candidates.zip.part* > /tmp/g8a-premium-audio-candidates.zip
+          echo "e66e862b096ef195c832208b9a8fe52d98e6a29f27a3c53c1e53b21a1c8cb11f  /tmp/g8a-premium-audio-candidates.zip" | sha256sum --check -
+          rm -rf /tmp/g8a-premium-promote
+          mkdir -p /tmp/g8a-premium-promote
+          unzip -q /tmp/g8a-premium-audio-candidates.zip -d /tmp/g8a-premium-promote
+          SRC="/tmp/g8a-premium-promote/public/assets/defense/audio/g8a"
+          test -d "$SRC"
+          test "$(find "$SRC" -maxdepth 1 -type f -name '*.ogg' | wc -l | tr -d ' ')" = "24"
+          while IFS= read -r f; do
+            test "$(head -c 4 "$f")" = "OggS"
+          done < <(find "$SRC" -maxdepth 1 -type f -name '*.ogg' | sort)
+
+      - name: Promote exact runtime binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="/tmp/g8a-premium-promote/public/assets/defense/audio/g8a"
+          DST="public/assets/defense/audio/g8a"
+          rm -rf "$DST"
+          mkdir -p "$DST"
+          cp -p "$SRC"/*.ogg "$DST"/
+          test "$(find "$DST" -maxdepth 1 -type f -name '*.ogg' | wc -l | tr -d ' ')" = "24"
+          rm -rf artifacts/g8a-premium-audio-transfer
+
+      - name: Commit promoted runtime candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A public/assets/defense/audio/g8a artifacts/g8a-premium-audio-transfer
+          if git diff --cached --quiet; then
+            echo "No promotion changes to commit."
+            exit 0
+          fi
+          git commit -m "audio: promote 24 G8-A runtime candidates"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
