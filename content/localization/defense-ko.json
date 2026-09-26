@@ -18,12 +18,12 @@
     "defense.tower.SENSOR.role": "기상·현장 변화를 관측해 잠복 위험을 탐지",
     "defense.tower.SENSOR.L3A.name": "광역 관측",
     "defense.tower.SENSOR.L3B.name": "정밀 관측",
-    "defense.enemy.NORMAL.name": "불안정 파형",
-    "defense.enemy.SWIFT.name": "급변 파형",
-    "defense.enemy.ARMORED.name": "중첩 파형",
-    "defense.enemy.SWARM.name": "연속 파형",
-    "defense.enemy.VEILED.name": "잠복 파형",
-    "defense.enemy.BOSS.name": "연쇄 위험 코어",
+    "defense.enemy.NORMAL.name": "익숙한 작은 위험",
+    "defense.enemy.SWIFT.name": "급변 이동위험",
+    "defense.enemy.ARMORED.name": "구조적 조건 위험",
+    "defense.enemy.SWARM.name": "다중 작은 위험",
+    "defense.enemy.VEILED.name": "숨은 신호",
+    "defense.enemy.BOSS.name": "복합 작업 위험",
     "defense.support.COORDINATOR.suggestedName": "강태식",
     "defense.support.COORDINATOR.skill": "작업 흐름 정리",
     "defense.support.OBSERVER.suggestedName": "임준호",
@@ -152,6 +152,12 @@
     "defense.event.result.no_leaks": "통과한 위험 없음",
     "defense.event.result.recommend": "다음 도전 추천 역할",
     "defense.event.reward.signal_blue": "신호 블루 태블릿 스킨",
-    "defense.event.return": "원래 현장으로 복귀"
+    "defense.event.return": "원래 현장으로 복귀",
+    "defense.enemy.NORMAL.role": "작은 이상이 반복되어 정상처럼 받아들여지는 상태",
+    "defense.enemy.SWIFT.role": "차량·움직이는 자재·갑작스러운 동선처럼 빠르게 변하는 위험",
+    "defense.enemy.ARMORED.role": "가시설·장비상태·작업조건처럼 한 번의 조치로 끝나지 않는 위험",
+    "defense.enemy.SWARM.role": "정리정돈·동선·다수 인원 등 작은 위험이 동시에 겹친 상태",
+    "defense.enemy.VEILED.role": "사각지대·오해·보고 누락 때문에 표면에서 잘 보이지 않는 위험",
+    "defense.enemy.BOSS.role": "여러 위험이 한 작업상황에서 동시에 결합된 상태"
   }
 }
