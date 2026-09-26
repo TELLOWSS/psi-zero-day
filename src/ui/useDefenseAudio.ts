@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import type { DefenseRunState } from '../domain/defense';
+import { premiumDefenseCueUri } from '../app/defense-premium-audio';
 
 export type DefenseAudioCue =
   | 'select'
@@ -41,6 +42,7 @@ const PROFILES: Readonly<Record<DefenseAudioCue, DefenseAudioProfile>> = {
 };
 
 export const DEFENSE_AUDIO_CUE_EVENT = 'psi:defense-audio-cue';
+export const DEFENSE_AUDIO_SOURCE_EVENT = 'psi:defense-audio-source';
 
 export function defenseAudioCueProfile(cue: DefenseAudioCue): DefenseAudioProfile {
   return PROFILES[cue];
@@ -82,9 +84,7 @@ export function useDefenseAudio(state: DefenseRunState | null) {
     if (!muted) ensureContext();
   }, [ensureContext, muted]);
 
-  const playCue = useCallback((cue: DefenseAudioCue) => {
-    if (!armedRef.current || muted || typeof window === 'undefined') return;
-    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
+  const playOscillatorCue = useCallback((cue: DefenseAudioCue) => {
     const context = ensureContext();
     if (!context || activeVoicesRef.current >= DEFENSE_AUDIO_MAX_VOICES) return;
 
@@ -105,7 +105,33 @@ export function useDefenseAudio(state: DefenseRunState | null) {
     }, { once: true });
     oscillator.start(now);
     oscillator.stop(now + duration);
-  }, [ensureContext, muted]);
+  }, [ensureContext]);
+
+  const playCue = useCallback((cue: DefenseAudioCue) => {
+    if (!armedRef.current || muted || typeof window === 'undefined') return;
+    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
+
+    const premiumUri = premiumDefenseCueUri(cue);
+    if (premiumUri && typeof Audio !== 'undefined') {
+      const element = new Audio(premiumUri);
+      element.preload = 'auto';
+      element.volume = 1;
+      const playback = element.play();
+      window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'premium-binary', uri: premiumUri } }));
+      if (playback && typeof playback.catch === 'function') {
+        void playback.catch(() => {
+          window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: 'binary-playback-failed' } }));
+          playOscillatorCue(cue);
+        });
+      }
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_SOURCE_EVENT, { detail: { cue, source: 'oscillator-fallback', reason: premiumUri ? 'audio-api-unavailable' : 'premium-binary-not-approved' } }));
+    playOscillatorCue(cue);
+  }, [muted]);
+
+
 
   useEffect(() => {
     const previous = previousRef.current;
