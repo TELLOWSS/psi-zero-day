@@ -270,27 +270,77 @@
     {
       "cue": "select",
       "path": "assets/defense/audio/g8a/ui-select.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-select_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.501,
+        "integratedLufs": -10.3,
+        "truePeakDbfs": -6.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
     },
     {
       "cue": "place",
       "path": "assets/defense/audio/g8a/ui-place.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-place_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.459,
+        "integratedLufs": -21.6,
+        "truePeakDbfs": -5.8,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
     },
     {
       "cue": "upgrade",
       "path": "assets/defense/audio/g8a/ui-upgrade.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-upgrade_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.624,
+        "integratedLufs": -13.6,
+        "truePeakDbfs": -5.5,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
     },
     {
       "cue": "sell",
       "path": "assets/defense/audio/g8a/ui-sell.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "ui-sell_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.419,
+        "integratedLufs": -17,
+        "truePeakDbfs": -5.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
     },
     {
       "cue": "warning",
       "path": "assets/defense/audio/g8a/wave-warning.ogg",
-      "state": "ASSET_PENDING"
+      "state": "ASSET_PENDING",
+      "referenceStatus": "LOCK_CANDIDATE_READY",
+      "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
+      "candidateRuntime": "wave-warning_48k_opus128.ogg",
+      "candidateMetrics": {
+        "durationSec": 0.813,
+        "integratedLufs": -5.8,
+        "truePeakDbfs": -3.9,
+        "sampleRateHz": 48000,
+        "codec": "opus"
+      }
     },
     {
       "cue": "single_resolve",
@@ -377,6 +427,8 @@
       "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
     ]
   },
-  "currentProductionFocus": "swift.vehicle_reel",
-  "nextProductionAsset": "06_VEO_SWIFT_VEHICLE_REEL"
+  "currentProductionFocus": "ui.gameplay_sfx_reel_b",
+  "nextProductionAsset": "10_GEMINI_UI_GAMEPLAY_SFX_REEL_B",
+  "candidateAssetCount": 18,
+  "productionStateNote": "18/24 candidate assets exist outside final runtime paths. UI/Game SFX A added as 5 clean separated candidates. No candidate is PRODUCTION_APPROVED solely from presence; full-mix/headphone/Android/actual-play QA remains mandatory."
 }
