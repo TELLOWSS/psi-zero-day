@@ -79,7 +79,8 @@
     "defense:g8a-premium-audio-check": "node scripts/check-g8a-premium-audio.mjs --require-final",
     "test:g8a-premium-audio": "vitest run tests/g8a-premium-audio-production.test.ts tests/g8a-premium-audio-state.test.ts tests/zero-breach-audio-effects.test.tsx",
     "defense:g8a-premium-audio-technical-status": "node scripts/check-g8a-premium-audio-technical.mjs",
-    "defense:g8a-premium-audio-technical-check": "node scripts/check-g8a-premium-audio-technical.mjs --require-final"
+    "defense:g8a-premium-audio-technical-check": "node scripts/check-g8a-premium-audio-technical.mjs --require-final",
+    "defense:g8a-premium-audio-browser-check": "node scripts/verify-g8a-premium-audio-browser.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
