@@ -35,8 +35,57 @@ jobs:
       - name: Premium audio contracts and defense audio regression
         run: npm run test:g8a-premium-audio
 
+      - name: Install audio and browser QA tools
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          ffprobe -version | head -n 1
+          "$CHROME_BIN" --version
+
+      - name: Premium audio technical status
+        run: npm run defense:g8a-premium-audio-technical-status
+
       - name: Typecheck
         run: npm run typecheck
 
       - name: Build
         run: npm run build
+
+      - name: G8-A premium audio actual-play telemetry
+        shell: bash
+        env:
+          PSI_G8A_AUDIO_ARTIFACT_DIR: artifacts/g8a-premium-audio
+        run: |
+          mkdir -p artifacts/g8a-premium-audio
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-audio-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g8a-audio-preview.log
+            exit 1
+          fi
+          npm run defense:g8a-premium-audio-browser-check
+
+      - name: Upload G8-A premium audio telemetry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8a-premium-audio-telemetry
+          path: artifacts/g8a-premium-audio
+          if-no-files-found: error
