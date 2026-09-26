@@ -6,6 +6,18 @@ const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_G8A_ARTIFACT_DIR || 'artifacts/g8a-bottom-up-map');
 fs.mkdirSync(outputDir, { recursive: true });
 
+const worldManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-world-final-art.json'), 'utf8'));
+const swiftManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-swift-final-art.json'), 'utf8'));
+const worldApproved = worldManifest.status === 'PRODUCTION_APPROVED' && worldManifest.promotion?.productionApproved === true;
+const swiftApproved = swiftManifest.status === 'PRODUCTION_APPROVED' && swiftManifest.promotion?.productionApproved === true;
+if (worldApproved !== swiftApproved) {
+  throw new Error('G8-A final assets must be promoted atomically: world=' + worldApproved + ', swift=' + swiftApproved);
+}
+const finalAssetsApproved = worldApproved && swiftApproved;
+const expectedWorldHref = finalAssetsApproved
+  ? worldManifest.runtimeUri
+  : 'assets/defense/board/ramp-01-hd01.webp';
+
 const chrome = [
   process.env.CHROME_BIN,
   '/usr/bin/google-chrome',
@@ -300,6 +312,7 @@ async function metrics(cdp) {
       scenario:shell?.getAttribute('data-scenario')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
+      worldFinal:shell?.getAttribute('data-g8a-world-final')==='true',
       artHref:href,
       artBytes,
       sourceBytes,
@@ -311,6 +324,7 @@ async function metrics(cdp) {
       controlPq:document.querySelectorAll('[data-pq-control="CONTROL:L1"]').length,
       enemies:document.querySelectorAll('.zb-enemy').length,
       swift:document.querySelectorAll('.zb-enemy-swift').length,
+      swiftFinal:document.querySelectorAll('[data-pq-swift="SWIFT"]').length,
       prototypeBoardItems:document.querySelectorAll('.zb-board [data-art-state="prototype"]').length,
       activeSvgVisuals:[...document.querySelectorAll('image[href],img[src]')].filter(el => {
         const uri=el.getAttribute('href') || el.getAttribute('src') || '';
@@ -352,8 +366,10 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
-  if(report.desktop.productionMap!=='HD_REFERENCE_ONLY') throw new Error('G8-A must remain HD_REFERENCE_ONLY until non-SVG final art exists');
-  if(!report.desktop.artHref?.includes('ramp-01-hd01.webp') || report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000) throw new Error('HD raster reference did not load');
+  if(report.desktop.productionMap!=='HD_REFERENCE_ONLY') throw new Error('G8-A production-map registry must remain HD_REFERENCE_ONLY until final review promotion');
+  if(report.desktop.artHref!==expectedWorldHref) throw new Error('Unexpected G8-A world art: '+report.desktop.artHref+' expected '+expectedWorldHref);
+  if(report.desktop.worldFinal!==finalAssetsApproved) throw new Error('Desktop world-final runtime state mismatch');
+  if(!finalAssetsApproved && (report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000)) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<1 || report.desktop.swift<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT actors missing from G8-A evidence');
@@ -369,7 +385,9 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
-  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='HD_REFERENCE_ONLY') throw new Error('Mobile G8-A must remain HD_REFERENCE_ONLY');
+  if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!=='HD_REFERENCE_ONLY') throw new Error('Mobile G8-A registry must remain HD_REFERENCE_ONLY until final review promotion');
+  if(report.mobile.artHref!==expectedWorldHref) throw new Error('Unexpected mobile G8-A world art: '+report.mobile.artHref+' expected '+expectedWorldHref);
+  if(report.mobile.worldFinal!==finalAssetsApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
   if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<1 || report.mobile.swift<1) throw new Error('Mobile representative CONTROL/SWIFT actors missing');
   if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
@@ -384,13 +402,24 @@ try {
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
-  if (desktopPrototype === 0 && mobilePrototype === 0) {
+  if (finalAssetsApproved) {
+    if (desktopPrototype !== 0 || mobilePrototype !== 0) {
+      throw new Error('Final G8-A assets approved but prototype visuals remain: '+JSON.stringify({desktopPrototype,mobilePrototype}));
+    }
+    if (report.desktop?.swiftFinal !== 1 || report.mobile?.swiftFinal !== 1) {
+      throw new Error('Final SWIFT raster is not active in both desktop/mobile actual play');
+    }
+    if ((report.desktop?.activeSvgVisuals?.length ?? 0) > 0 || (report.mobile?.activeSvgVisuals?.length ?? 0) > 0) {
+      throw new Error('SVG visual leakage remains after final asset approval');
+    }
     report.gate_state = 'READY_FOR_PRODUCTION_REVIEW';
-  } else if (desktopPrototype === 1 && mobilePrototype === 1) {
+    report.expected_blocker = null;
+  } else if (desktopPrototype === 1 && mobilePrototype === 1 && report.desktop?.swiftFinal === 0 && report.mobile?.swiftFinal === 0) {
     report.gate_state = 'BLOCKED_WORLD_AND_SWIFT_FINAL_RASTER_REQUIRED';
     report.expected_blocker = {
       id: 'WORLD_AND_SWIFT_FINAL_RASTER_MISSING',
       worldFinalApproved: false,
+      swiftFinalApproved: false,
       currentWorldRole: report.desktop?.productionMap ?? null,
       desktopPrototypeItems: desktopPrototype,
       mobilePrototypeItems: mobilePrototype,
@@ -401,9 +430,12 @@ try {
       ],
     };
   } else {
-    throw new Error('Desktop/mobile representative-art state diverged: '+JSON.stringify({
+    throw new Error('Desktop/mobile representative-art state is neither valid PRE-ART nor valid FINAL: '+JSON.stringify({
+      finalAssetsApproved,
       desktopPrototype,
       mobilePrototype,
+      desktopSwiftFinal:report.desktop?.swiftFinal,
+      mobileSwiftFinal:report.mobile?.swiftFinal,
     }));
   }
 } catch(error) {
@@ -423,4 +455,4 @@ if(report.failures.length){
   if(stderr.trim()) console.error(stderr.slice(-3000));
   process.exit(1);
 }
-console.log('G8-A pre-art gate verified: '+report.gate_state);
+console.log('G8-A runtime art gate verified: '+report.gate_state);
