@@ -29,6 +29,7 @@ import '../ui/production-scenes.css';
 import '../ui/phase-d-screenshot-polish.css';
 import '../ui/strategy-layout-recovery.css';
 import '../ui/defense-game.css';
+import '../ui/visual-polish-20260926.css';
 
 const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
