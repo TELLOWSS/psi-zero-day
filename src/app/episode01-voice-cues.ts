@@ -12,7 +12,7 @@ const VOICE_CUES: Readonly<Record<string, Episode01VoiceCue>> = Object.freeze({
   'e01_02_meet_kang/kang': Object.freeze({
     event_id: 'e01_02_meet_kang',
     node_id: 'kang',
-    asset_id: 'ep01.voice.kang_first_contact',
+    asset_id: 'ep01.audio.voice_kang_first_contact',
     duration_ms: 16807,
     gain: 1,
     duck_gain: 0.28,
@@ -20,7 +20,7 @@ const VOICE_CUES: Readonly<Record<string, Episode01VoiceCue>> = Object.freeze({
   'e01_04_junho_signal/signal': Object.freeze({
     event_id: 'e01_04_junho_signal',
     node_id: 'signal',
-    asset_id: 'ep01.voice.junho_signal',
+    asset_id: 'ep01.audio.voice_junho_signal',
     duration_ms: 10607,
     gain: 1,
     duck_gain: 0.24,
@@ -28,7 +28,7 @@ const VOICE_CUES: Readonly<Record<string, Episode01VoiceCue>> = Object.freeze({
   'e01_05_command/request_delay_result': Object.freeze({
     event_id: 'e01_05_command',
     node_id: 'request_delay_result',
-    asset_id: 'ep01.voice.lee_delay',
+    asset_id: 'ep01.audio.voice_lee_delay',
     duration_ms: 11207,
     gain: 1,
     duck_gain: 0.26,
@@ -37,7 +37,7 @@ const VOICE_CUES: Readonly<Record<string, Episode01VoiceCue>> = Object.freeze({
   'e01_08o_record_pressure/oh': Object.freeze({
     event_id: 'e01_08o_record_pressure',
     node_id: 'oh',
-    asset_id: 'ep01.voice.oh_record_judgment',
+    asset_id: 'ep01.audio.voice_oh_record_judgment',
     duration_ms: 14207,
     gain: 1,
     duck_gain: 0.22,
