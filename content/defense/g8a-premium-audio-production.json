@@ -79,10 +79,15 @@
         "state": "ASSET_PENDING",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
-        "referenceStatus": "TONAL_REFERENCE_LOCKED",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
         "referenceSource": "floor_twelve_ledger.mp4",
         "referenceQa": "docs/audio/G8A_01_FOUNDATION_LOCK_CANDIDATE_V2_QA.md",
-        "nextAction": "AUTHOR_SCORE_PRESSURE_OSTINATO"
+        "nextAction": "AUTHOR_SCORE_PRESSURE_OSTINATO",
+        "candidateRuntime": "01_score_foundation_bed_LOCK_CANDIDATE_V2_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -14,
+          "truePeakDbfs": -3.6
+        }
       },
       {
         "id": "score.pressure_ostinato",
@@ -90,7 +95,14 @@
         "role": "spiccato/low-string pulse + restrained percussion",
         "state": "ASSET_PENDING",
         "loop": true,
-        "playbackRole": "SYNCHRONIZED_LOOP"
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "before_the_pour.mp4",
+        "candidateRuntime": "02_score_pressure_ostinato_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -18.1,
+          "truePeakDbfs": -5.3
+        }
       },
       {
         "id": "score.swift_threat",
@@ -98,7 +110,14 @@
         "role": "low brass/horn tension + rhythmic acceleration",
         "state": "ASSET_PENDING",
         "loop": true,
-        "playbackRole": "SYNCHRONIZED_LOOP"
+        "playbackRole": "SYNCHRONIZED_LOOP",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "clear_the_trench.mp4",
+        "candidateRuntime": "03_score_swift_threat_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -19.7,
+          "truePeakDbfs": -5.9
+        }
       },
       {
         "id": "score.control_intervention",
@@ -106,7 +125,15 @@
         "role": "short decisive orchestral intervention accent",
         "state": "ASSET_PENDING",
         "loop": false,
-        "playbackRole": "STATE_ENTRY_ONE_SHOT"
+        "playbackRole": "STATE_ENTRY_ONE_SHOT",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "constant_oversight.mp4",
+        "candidateRuntime": "04_score_control_intervention_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -18.6,
+          "truePeakDbfs": -4.6,
+          "durationSec": 2.52
+        }
       },
       {
         "id": "score.resolution_coda",
@@ -114,7 +141,16 @@
         "role": "warm strings/horn release preserving seriousness",
         "state": "ASSET_PENDING",
         "loop": false,
-        "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION"
+        "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION",
+        "referenceStatus": "LOCK_CANDIDATE_READY",
+        "referenceSource": "the_quiet_perimeter.mp4",
+        "candidateRuntime": "05_score_resolution_coda_LOCK_CANDIDATE_V1_48k_opus160.ogg",
+        "candidateMetrics": {
+          "integratedLufs": -15.8,
+          "lraLu": 9.6,
+          "truePeakDbfs": -5.8,
+          "durationSec": 22.857
+        }
       }
     ],
     "runtimeStates": [
@@ -159,7 +195,18 @@
         ],
         "musicGainDb": -7
       }
-    ]
+    ],
+    "candidateSet": {
+      "status": "MUSIC_CANDIDATE_SET_COMPLETE",
+      "count": 5,
+      "adaptiveArcPreview": "G8A_ADAPTIVE_MUSIC_ARC_PREVIEW_V1_48k_opus192.ogg",
+      "previewMetrics": {
+        "integratedLufs": -16.1,
+        "lraLu": 3.8,
+        "truePeakDbfs": -2.2
+      },
+      "note": "Candidate set only. Do not mark PRODUCTION_APPROVED until Foley/full-mix/headphone/Android QA."
+    }
   },
   "fieldSound": [
     {
@@ -330,5 +377,6 @@
       "NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY"
     ]
   },
-  "currentProductionFocus": "score.pressure_ostinato"
+  "currentProductionFocus": "swift.vehicle_reel",
+  "nextProductionAsset": "06_VEO_SWIFT_VEHICLE_REEL"
 }
