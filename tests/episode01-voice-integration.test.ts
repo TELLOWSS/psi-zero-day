@@ -12,7 +12,7 @@ describe('Episode 01 voice integration lock', () => {
       .toBe('ep01.audio.voice_oh_record_judgment');
     expect(EPISODE01_VOICE_CUES.every(cue => cue.subtitles.length >= 4)).toBe(true);
     expect(EPISODE01_VOICE_CUES.every(cue =>
-      cue.subtitles.every((segment, index, all) => index === 0 || segment.start_ms > all[index - 1].start_ms)
+      cue.subtitles.every((segment, index, all) => index === 0 || segment.start_ms > all[index - 1]!.start_ms)
     )).toBe(true);
   });
 
