@@ -283,8 +283,18 @@ export function useEpisodeAudio(audio: AudioState | null | undefined, resolve: A
     applyVoiceDucking(cue.duck_gain ?? 0.28);
     onProgress?.(0);
 
-    const playback = element.play();
-    if (playback && typeof playback.catch === 'function') void playback.catch(finish);
+    try {
+      const playback = element.play();
+      // Real browsers return a Promise. Test/hardened media environments may not
+      // implement playback; never leave gameplay locked when audio cannot start.
+      if (!playback || typeof playback.catch !== 'function') {
+        finish();
+        return cleanup;
+      }
+      void playback.catch(finish);
+    } catch {
+      finish();
+    }
     return cleanup;
   }, [
     effectiveMuted,
