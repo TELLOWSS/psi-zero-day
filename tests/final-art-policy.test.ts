@@ -50,17 +50,17 @@ describe('absolute final-art policy', () => {
     expect(paths.some(path => /\.svg$/i.test(path))).toBe(false);
   });
 
-  it('keeps G8-A in actual-play QA after both final rasters are approved', () => {
-    expect(productionMaps.status).toBe('G8A_FINAL_ASSETS_APPROVED_QA_REQUIRED');
-    expect(productionMaps.maps[0]?.status).toBe('PRODUCTION_CANDIDATE');
+  it('locks G8-A only after both final rasters and actual-play QA pass', () => {
+    expect(productionMaps.status).toBe('G8A_PRODUCTION_LOCKED');
+    expect(productionMaps.maps[0]?.status).toBe('PRODUCTION_LOCKED');
     expect(productionMaps.maps[0]?.representativeSlice.responseState).toBe('RASTER_RUNTIME_COMPOSITE_PASS');
-    expect(productionMaps.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_APPROVED_QA_PENDING');
-    expect(productionMaps.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_APPROVED');
+    expect(productionMaps.maps[0]?.representativeSlice.worldPlate.state).toBe('FINAL_RASTER_LOCKED');
+    expect(productionMaps.maps[0]?.representativeSlice.riskState).toBe('FINAL_RASTER_LOCKED');
     expect(worldFinal.status).toBe('PRODUCTION_APPROVED');
     expect(worldFinal.promotion.productionApproved).toBe(true);
     expect(swiftFinal.status).toBe('PRODUCTION_APPROVED');
     expect(swiftFinal.promotion.productionApproved).toBe(true);
-    expect(policy.enforcement.g8aState).toBe('FINAL_ASSETS_APPROVED_QA_REQUIRED');
-    expect(productionMaps.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(false);
+    expect(policy.enforcement.g8aState).toBe('PRODUCTION_LOCKED');
+    expect(productionMaps.maps[0]?.finalArtPolicy.productionLockAllowed).toBe(true);
   });
 });
