@@ -42,10 +42,10 @@
   },
   "enforcement": {
     "currentGate": "G8-A",
-    "g8aState": "WORLD_AND_SWIFT_FINAL_ASSETS_PENDING",
-    "reason": "The current world plate is HD reference only and the SWIFT risk actor has no approved final raster. Previous SVG/low-resolution promotion attempts remain revoked.",
+    "g8aState": "SWIFT_FINAL_APPROVED_WORLD_FINAL_PENDING",
+    "reason": "SWIFT final raster is approved and active from a reviewed native transparent source. The process-specific WORLD plate remains the only G8-A Final Art blocker.",
     "legacyDefenseSvgState": "GEOMETRY_ROLLBACK_ONLY",
-    "next": "Approve one process-specific 4000x2400+ non-SVG G8-A world plate and one 2048x1536+ transparent SWIFT final master, then run legal/visual/browser QA.",
+    "next": "Create and approve one process-specific non-SVG G8-A WORLD plate, then run desktop/mobile actual-play QA and Production Lock.",
     "productionLockRequires": [
       "WORLD_FINAL_RASTER_APPROVED",
       "SWIFT_FINAL_RASTER_APPROVED",
