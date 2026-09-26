@@ -1,0 +1,422 @@
+/* 2026-09-26 visual polish pass
+   Scope: title/home mobile portrait + DefenseGame landscape.
+   Additive override only: gameplay logic, coordinates and production assets remain unchanged. */
+
+:root{
+  --psi-polish-panel:rgba(7,22,32,.86);
+  --psi-polish-panel-strong:rgba(8,25,36,.94);
+  --psi-polish-line:rgba(91,184,226,.58);
+  --psi-polish-accent:#f4b33c;
+  --psi-polish-text:#f4f7f8;
+}
+
+/* ------------------------------
+   TITLE / HOME — MOBILE PORTRAIT
+   ------------------------------ */
+@media (orientation:portrait) and (max-width:760px){
+  .commercial-title-home{
+    background:#08131d;
+    padding-bottom:max(24px,env(safe-area-inset-bottom));
+  }
+
+  .commercial-title-backdrop{
+    filter:saturate(1.06) contrast(1.04) brightness(.83);
+    object-position:58% 42%;
+  }
+
+  .commercial-title-grade{
+    background:
+      linear-gradient(180deg,rgba(4,11,17,.18) 0%,rgba(4,11,17,.08) 25%,rgba(4,11,17,.48) 57%,rgba(4,11,17,.9) 100%),
+      linear-gradient(90deg,rgba(4,12,18,.68) 0%,rgba(4,12,18,.18) 70%,rgba(4,12,18,.34) 100%);
+  }
+
+  .commercial-title-topline{
+    top:10px;
+    left:5.2vw;
+    right:5.2vw;
+    min-height:42px;
+    align-items:center;
+  }
+
+  .commercial-title-meta{
+    max-width:48%;
+  }
+
+  .commercial-title-meta small,
+  .commercial-title-meta b{
+    display:none;
+  }
+
+  .commercial-title-meta span{
+    display:block;
+    color:#f7f8f8;
+    font-size:10px;
+    line-height:1.25;
+    font-weight:760;
+    letter-spacing:-.01em;
+    text-shadow:0 2px 7px rgba(0,0,0,.72);
+  }
+
+  .commercial-title-utility{
+    gap:4px;
+  }
+
+  .commercial-title-utility button{
+    width:42px;
+    min-width:42px;
+    min-height:42px;
+    border:1px solid rgba(218,235,243,.17);
+    border-radius:11px;
+    background:rgba(5,17,25,.38);
+    backdrop-filter:blur(7px);
+  }
+
+  .commercial-title-copy{
+    padding:clamp(88px,12dvh,112px) 5.2vw 0;
+  }
+
+  .commercial-title-logo{
+    max-width:94vw;
+    font-size:clamp(46px,14.2vw,66px);
+    line-height:.86;
+    letter-spacing:-.055em;
+    text-shadow:0 8px 24px rgba(0,0,0,.48);
+  }
+
+  .commercial-title-logo span:last-child{
+    color:#f5b52e;
+  }
+
+  .commercial-title-copy h1{
+    max-width:94%;
+    margin:16px 0 0;
+    font-size:clamp(28px,8.15vw,39px);
+    line-height:1.04;
+    letter-spacing:-.045em;
+    word-break:keep-all;
+    text-shadow:0 4px 14px rgba(0,0,0,.6);
+  }
+
+  .commercial-title-english{
+    margin-top:9px!important;
+    color:#f2f6f7!important;
+    font-size:10.5px!important;
+    letter-spacing:.025em;
+  }
+
+  .commercial-title-subcopy{
+    max-width:92%;
+    margin-top:8px!important;
+    color:#cad5da!important;
+    font-size:10px!important;
+    line-height:1.45!important;
+    word-break:keep-all;
+  }
+
+  .commercial-title-actions{
+    max-width:none;
+    margin-top:20px;
+    gap:9px;
+  }
+
+  .commercial-title-action,
+  .commercial-title-action.is-primary{
+    position:relative;
+    min-height:70px;
+    padding:8px 12px;
+    grid-template-columns:40px minmax(0,1fr) 22px;
+    overflow:hidden;
+    border:1px solid var(--psi-polish-line);
+    border-radius:11px;
+    background:
+      linear-gradient(90deg,rgba(6,27,39,.94),rgba(9,32,45,.82)),
+      rgba(7,22,32,.88);
+    box-shadow:0 11px 26px rgba(0,0,0,.26);
+    backdrop-filter:blur(9px);
+  }
+
+  .commercial-title-action.is-primary{
+    min-height:82px;
+    border-color:#ffd878;
+    background:
+      linear-gradient(115deg,#eeaa28 0%,#ffc748 55%,#f5b22f 100%);
+    color:#15232b;
+    box-shadow:0 12px 28px rgba(229,155,32,.25), inset 0 1px rgba(255,255,255,.42);
+  }
+
+  .commercial-title-action-icon{
+    width:36px;
+    height:36px;
+    display:grid;
+    place-items:center;
+    border-radius:9px;
+    background:rgba(255,255,255,.045);
+  }
+
+  .commercial-title-action.is-primary .commercial-title-action-icon{
+    background:rgba(255,255,255,.16);
+  }
+
+  .commercial-title-action-copy strong{
+    font-size:16px;
+    line-height:1.08;
+    letter-spacing:-.025em;
+  }
+
+  .commercial-title-action-copy small{
+    margin-top:4px;
+    color:#bfcdd3;
+    font-size:9px;
+    line-height:1.35;
+    word-break:keep-all;
+  }
+
+  .commercial-title-action.is-primary .commercial-title-action-copy small{
+    color:#3a4345;
+  }
+
+  .commercial-title-features{
+    margin:18px 5.2vw 0;
+    gap:8px;
+  }
+
+  .commercial-title-features button{
+    min-height:104px;
+    border:1px solid rgba(114,190,223,.62);
+    border-radius:10px;
+    overflow:hidden;
+    background:rgba(7,22,32,.86);
+    box-shadow:0 9px 22px rgba(0,0,0,.24);
+  }
+
+  .commercial-title-feature-art{
+    filter:saturate(1.05) contrast(1.05) brightness(.82);
+  }
+
+  .commercial-title-feature-shade{
+    background:linear-gradient(180deg,rgba(3,11,17,.04),rgba(3,11,17,.86));
+  }
+
+  .commercial-title-features button>div{
+    left:10px;
+    right:30px;
+    bottom:9px;
+  }
+
+  .commercial-title-features strong{
+    font-size:12px;
+    letter-spacing:-.015em;
+  }
+
+  .commercial-title-features small{
+    margin-top:3px;
+    color:#d0d9dd;
+    font-size:8px;
+    line-height:1.25;
+  }
+
+  .commercial-title-quick-settings{
+    width:calc(100% - 10.4vw);
+    margin:13px 5.2vw 0;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+
+  .commercial-title-quick-settings button{
+    min-width:0;
+    min-height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:6px;
+    padding:7px 8px;
+    border:1px solid rgba(109,177,208,.45);
+    border-radius:9px;
+    background:rgba(6,22,32,.9);
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+  }
+
+  .commercial-title-quick-settings button span{
+    display:block!important;
+    min-width:0;
+    color:#d7e0e4;
+    font-size:8px;
+    line-height:1.15;
+    white-space:normal;
+  }
+
+  .commercial-title-quick-settings button b{
+    flex:0 0 auto;
+    min-width:36px;
+    padding:4px 6px;
+    border-radius:999px;
+    background:#62d9b3;
+    color:#09291f;
+    font-size:8px;
+    text-align:center;
+  }
+
+  .commercial-title-quick-settings button[aria-pressed="false"] b{
+    background:#65747c;
+    color:#edf2f4;
+  }
+}
+
+@media (orientation:portrait) and (max-width:430px){
+  .commercial-title-copy{padding-top:84px}
+  .commercial-title-subcopy{display:none}
+  .commercial-title-actions{margin-top:16px}
+  .commercial-title-action,
+  .commercial-title-action.is-primary{min-height:66px}
+  .commercial-title-action.is-primary{min-height:76px}
+  .commercial-title-features{margin-top:16px}
+  .commercial-title-features button{min-height:96px}
+}
+
+/* ---------------------------------
+   DEFENSE — LANDSCAPE PRODUCTION HUD
+   --------------------------------- */
+@media (orientation:landscape) and (min-width:901px){
+  .zb-shell:not(.zb-prep){
+    grid-template-rows:68px minmax(0,1fr) 132px;
+    background:
+      radial-gradient(circle at 50% 26%,rgba(26,69,88,.18),transparent 42%),
+      #08141d;
+  }
+
+  .zb-hud{
+    padding:6px 12px;
+    gap:7px;
+    grid-template-columns:minmax(190px,1.28fr) repeat(3,minmax(104px,.68fr)) minmax(116px,.72fr) 92px 104px 116px;
+    border-bottom:1px solid rgba(109,177,208,.34);
+    box-shadow:0 8px 22px rgba(0,0,0,.18);
+  }
+
+  .zb-brand,
+  .zb-meter,
+  .zb-status,
+  .zb-hud-button,
+  .zb-speed,
+  .zb-exit{
+    border-color:rgba(126,185,211,.28);
+    background:linear-gradient(180deg,rgba(18,43,58,.96),rgba(12,31,43,.96));
+  }
+
+  .zb-brand strong{font-size:16px}
+  .zb-meter strong{font-size:16px}
+  .zb-status b{font-size:11px}
+
+  .zb-stage{
+    min-width:0;
+    padding:10px 14px 8px;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .zb-board-wrap{
+    width:min(100%,1360px);
+    height:auto;
+    max-height:100%;
+    aspect-ratio:5/3;
+    border:1px solid rgba(99,188,229,.48);
+    border-radius:15px;
+    box-shadow:0 18px 52px rgba(0,0,0,.38), inset 0 0 0 1px rgba(255,255,255,.035);
+  }
+
+  .zb-wave-preview{
+    top:16px;
+    right:16px;
+    width:214px;
+    padding:11px 13px;
+    border-color:rgba(111,189,224,.42);
+    background:rgba(5,21,31,.9);
+    box-shadow:0 12px 28px rgba(0,0,0,.28);
+  }
+
+  .zb-board-caption{
+    left:16px;
+    top:16px;
+    padding:8px 10px;
+    border-left:3px solid var(--zb-accent);
+    border-radius:0 8px 8px 0;
+    background:linear-gradient(90deg,rgba(5,19,28,.82),rgba(5,19,28,.18));
+  }
+
+  .zb-board-caption span{font-size:8px}
+  .zb-board-caption b{font-size:15px}
+
+  .zb-command{
+    padding:8px 12px 10px;
+    gap:9px;
+    grid-template-columns:minmax(0,1fr) minmax(400px,31%);
+    border-top:1px solid rgba(109,177,208,.34);
+    background:linear-gradient(180deg,#0d1f2b,#091823);
+  }
+
+  .zb-empty-selection,
+  .zb-panel-heading,
+  .zb-tower-stats,
+  .zb-target-mode,
+  .zb-upgrades,
+  .zb-support-action{
+    border-color:rgba(111,181,212,.25);
+    background:linear-gradient(180deg,rgba(18,43,58,.96),rgba(13,33,45,.96));
+  }
+
+  .zb-build-panel{grid-template-columns:180px minmax(0,1fr)}
+  .zb-panel-heading strong{font-size:15px}
+  .zb-tower-shop{gap:7px}
+  .zb-tower-shop button{
+    min-height:78px;
+    border-color:rgba(106,180,214,.26);
+    background:linear-gradient(180deg,#183547,#112936);
+  }
+
+  .zb-run-controls{
+    grid-template-columns:minmax(0,1fr) minmax(160px,.46fr);
+    gap:8px;
+  }
+
+  .zb-support-action{
+    grid-template-columns:54px minmax(0,1fr) 92px;
+    padding:7px 8px;
+  }
+
+  .zb-start-wave{
+    min-height:100%;
+    border-radius:9px;
+    border-color:#ffd36b;
+    background:linear-gradient(120deg,#efa62f,#f9bb3d);
+    box-shadow:0 9px 24px rgba(239,166,47,.2);
+    font-size:15px;
+  }
+
+  .zb-defense-settings{
+    top:78px;
+    right:18px;
+    min-width:72px;
+    min-height:38px;
+    border-color:rgba(111,189,224,.36);
+    background:rgba(7,24,35,.88);
+    backdrop-filter:blur(8px);
+  }
+}
+
+@media (orientation:landscape) and (min-width:1200px) and (min-height:700px){
+  .zb-shell:not(.zb-prep){grid-template-rows:74px minmax(0,1fr) 148px}
+  .zb-board-wrap{width:min(100%,1480px)}
+  .zb-command{grid-template-columns:minmax(0,1fr) minmax(430px,30%)}
+}
+
+@media (orientation:landscape) and (max-height:650px){
+  .zb-shell:not(.zb-prep){grid-template-rows:54px minmax(0,1fr) 96px}
+  .zb-stage{padding:5px 8px}
+  .zb-board-wrap{
+    width:min(100%,calc((100dvh - 160px) * 5 / 3));
+    max-width:1180px;
+    height:auto;
+    aspect-ratio:5/3;
+  }
+  .zb-command{grid-template-columns:minmax(0,1fr) minmax(300px,34%);padding:5px 7px 6px}
+}
