@@ -1,0 +1,98 @@
+name: Verify ITEM STORY AV INTEGRATION
+
+on:
+  push:
+    branches:
+      - sol/integration-audit-items-story-av-20260926
+
+permissions:
+  contents: read
+
+concurrency:
+  group: item-story-av-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout audit branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Item / training / story integration tests
+        run: >
+          npx vitest run
+          tests/training-loadout.test.ts
+          tests/equipment-skill-unlock.test.ts
+          tests/field-support-items.test.ts
+          tests/field-support-ui.test.tsx
+          tests/paid-item-catalog.test.ts
+          tests/paid-item-wallet.test.ts
+
+      - name: Visual integration tests
+        run: >
+          npx vitest run
+          tests/episode-visual-assets.test.ts
+          tests/dialogue-art.test.ts
+          tests/character-art-production.test.ts
+          tests/character-three-surface-qa.test.tsx
+          tests/g8a-world-final-art.test.ts
+          tests/g8a-swift-final-art.test.ts
+          tests/production-map-family.test.ts
+
+      - name: Audio integration tests
+        run: >
+          npx vitest run
+          tests/episode-audio.test.ts
+          tests/episode01-audio-production.test.ts
+          tests/zero-breach-audio-effects.test.tsx
+          tests/g8a-premium-audio-production.test.ts
+          tests/g8a-premium-audio-state.test.ts
+
+      - name: Static voice and item-art inventory
+        shell: bash
+        run: |
+          mkdir -p artifacts/item-story-av-audit
+          {
+            echo "# ITEM / STORY / AV STATIC AUDIT"
+            echo
+            echo "## Episode inventory item IDs"
+            node -e "const j=require('./content/episode01/items.json'); for(const x of j.items) console.log('- '+x.item_id+' | '+x.name+' | '+x.equip_slot)"
+            echo
+            echo "## Field support items"
+            grep -oE "(facility|equipment)\.[a-z_]+" src/app/field-support-items.ts | sort -u | sed 's/^/- /'
+            echo
+            echo "## Runtime voice-like audio files"
+            find public/assets -type f \( -iname '*voice*' -o -iname '*dialogue*' -o -iname '*narrat*' -o -iname '*speech*' \) -print | sort || true
+            echo
+            echo "## G8-A audio state"
+            node -e "const j=require('./content/defense/g8a-premium-audio-production.json'); console.log('status='+j.status); console.log('candidateAssetCount='+j.candidateAssetCount); console.log('productionLockAllowed='+j.acceptance.productionLockAllowed);"
+            echo
+            echo "## Defense visual baseline"
+            node -e "const j=require('./content/defense/visual-production.json'); console.log('status='+j.status); for(const a of j.assets) console.log(a.assetId+' | '+a.status+' | '+a.uri)"
+          } > artifacts/item-story-av-audit/report.txt
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: item-story-av-integration-audit
+          path: artifacts/item-story-av-audit
+          if-no-files-found: warn
+          retention-days: 14
