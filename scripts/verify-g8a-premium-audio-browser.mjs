@@ -8,7 +8,10 @@ fs.mkdirSync(outDir,{recursive:true});
 
 const contract=JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-premium-audio-production.json'),'utf8'));
 const finalMode=contract.status==='AUDIO_PRODUCTION_LOCKED' && contract.acceptance?.productionLockAllowed===true;
-const qaMode=contract.status==='PREMIUM_AUDIO_QA_READY' || finalMode;
+const qaMode=contract.status==='PREMIUM_AUDIO_QA_READY'
+  && contract.acceptance?.runtimeQaAllowed===true
+  && contract.acceptance?.productionLockAllowed===false;
+const runtimeMode=qaMode||finalMode;
 
 const chrome=[
   process.env.CHROME_BIN,
@@ -62,7 +65,7 @@ async function evaluate(cdp,expression){
 }
 async function waitFor(cdp,expr,timeout=12000){
   const start=Date.now();
-  while(Date.now()-start<timeout){if(await evaluate(cdp,expr))return;await sleep(100);}
+  while(Date.now()-start<timeout){if(await evaluate(cdp,expr))return;await sleep(80);}
   throw new Error('Timeout '+expr);
 }
 async function viewport(cdp,width,height,mobile){
@@ -74,19 +77,63 @@ async function navigate(cdp){
   await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");
 }
 function fnv1a32(value){let hash=0x811c9dc5;for(let i=0;i<value.length;i++){hash^=value.charCodeAt(i);hash=Math.imul(hash,0x01000193);}return 'fnv1a32:'+(hash>>>0).toString(16).padStart(8,'0');}
-function save(){
-  const run={
-    runId:'g8a-audio-representative',mode:'TRAINING',variant:'STANDARD',
+
+function baseRun(runId){
+  return {
+    runId,mode:'TRAINING',variant:'STANDARD',
     scenarioId:'training-site:apt-new-bottom-up-excavation',eventId:null,eventContentVersion:null,
     status:'RUNNING',paused:true,speed:1,tick:4120,waveId:8,waveTick:84,intermissionRemaining:0,
-    shield:18,resource:210,
-    towers:[{id:'tower-1',padId:'BU-P3',towerId:'CONTROL',levelId:'L1',targetMode:'FIRST',invested:90,attackCooldown:0,revealCooldown:0}],
-    enemies:[{id:'enemy-11',enemyId:'SWIFT',hp:28,distance:42,spawnSequence:11,revealUntilTick:0,slowEffects:[],bossPhaseTriggered:false,bossArmorFromTick:0,bossArmorUntilTick:0}],
-    spawnedByGroup:[10,1],nextTowerSequence:2,nextEnemySequence:12,supportId:'COORDINATOR',supportCooldownRemaining:0,
+    shield:18,resource:500,towers:[],enemies:[],spawnedByGroup:[8,1],
+    nextTowerSequence:1,nextEnemySequence:12,supportId:'COORDINATOR',supportCooldownRemaining:0,
     freezeMovementUntilTick:0,revealAllUntilTick:0,rangeBonusUntilTick:0,completedWaves:7,leakedByEnemy:{},
   };
-  const payload={activeRun:run,records:[{scenarioId:run.scenarioId,finishedRuns:0,clears:0,bestStars:0,bestScore:0,bestShield:0,bestCompletedWaves:7,lastResultRunId:null,updatedAt:'2026-09-26T00:00:00.000Z'}],cosmeticIds:[],claimIds:[],settledRunIds:[]};
-  return {namespace:'defense',schemaVersion:1,rulesVersion:'zero-breach-1.0.0',contentVersion:'prototype-1.0.0',buildVersion:'g8a-audio-qa',revision:1,savedAt:'2026-09-26T00:00:00.000Z',checksum:fnv1a32(JSON.stringify(payload)),payload};
+}
+function swiftEnemy(slow=false){
+  return {
+    id:'enemy-11',enemyId:'SWIFT',hp:28,distance:42,spawnSequence:11,revealUntilTick:0,
+    slowEffects:slow?[{sourceId:'control-1',fraction:0.3,startTick:4100,endTick:4300}]:[],
+    bossPhaseTriggered:false,bossArmorFromTick:0,bossArmorUntilTick:0,
+  };
+}
+function controlTower(){
+  return {
+    id:'control-1',padId:'BU-P3',towerId:'CONTROL',levelId:'L1',targetMode:'FIRST',
+    invested:90,attackCooldown:0,revealCooldown:0,
+  };
+}
+function runForCase(name){
+  if(name==='READY_TO_WAVE_BUILD'){
+    return {...baseRun('g8a-audio-ready'),status:'READY',paused:false,waveId:8,waveTick:0,spawnedByGroup:[0,0],enemies:[]};
+  }
+  if(name==='SWIFT_THREAT'){
+    return {...baseRun('g8a-audio-swift'),enemies:[swiftEnemy(false)],towers:[]};
+  }
+  if(name==='CONTROL_INTERVENTION'){
+    return {...baseRun('g8a-audio-control'),enemies:[swiftEnemy(true)],towers:[controlTower()],nextTowerSequence:2};
+  }
+  if(name==='RESOLUTION'){
+    return {
+      ...baseRun('g8a-audio-resolution'),
+      waveId:10,waveTick:999,completedWaves:9,spawnedByGroup:[1,10,8],enemies:[],towers:[],
+    };
+  }
+  throw new Error('Unknown audio QA case '+name);
+}
+function saveForCase(name){
+  const run=runForCase(name);
+  const payload={
+    activeRun:run,
+    records:[{
+      scenarioId:run.scenarioId,finishedRuns:0,clears:0,bestStars:0,bestScore:0,bestShield:0,
+      bestCompletedWaves:Math.max(0,run.completedWaves),lastResultRunId:null,updatedAt:'2026-09-26T00:00:00.000Z',
+    }],
+    cosmeticIds:[],claimIds:[],settledRunIds:[],
+  };
+  return {
+    namespace:'defense',schemaVersion:1,rulesVersion:'zero-breach-1.0.0',contentVersion:'prototype-1.0.0',
+    buildVersion:'g8a-audio-final-integration-qa',revision:1,savedAt:'2026-09-26T00:00:00.000Z',
+    checksum:fnv1a32(JSON.stringify(payload)),payload,
+  };
 }
 async function clickText(cdp,text,scope='button'){
   const ok=await evaluate(cdp,`(()=>{const el=[...document.querySelectorAll(${JSON.stringify(scope)})].find(x=>(x.textContent||'').includes(${JSON.stringify(text)}));if(!el)return false;el.click();return true})()`);
@@ -106,37 +153,42 @@ async function installTelemetry(cdp){
     return true;
   })()`);
 }
-async function enter(cdp){
-  const s=save();
-  await evaluate(cdp,`(()=>{localStorage.setItem('psi-zero-day.defense.save.v1',${JSON.stringify(JSON.stringify(s))});localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');return true})()`);
-  await clickText(cdp,'현장 디펜스');
-  await waitFor(cdp, `Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`);
-  await clickText(cdp,'이어서 훈련');
-  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
-  await installTelemetry(cdp);
-  const resume=await evaluate(cdp,`(()=>{const buttons=[...document.querySelectorAll('button')];const b=buttons.find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'));if(b){b.click();return true}const h=document.querySelector('.zb-hud-button');if(h){h.click();return true}return false})()`);
-  if(!resume) throw new Error('Could not resume representative run to arm audio');
-  await sleep(900);
-  if(qaMode){
-    const selected=await evaluate(cdp,`(()=>{
-      const b=[...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'));
-      if(!b)return false;
-      b.click();
-      return true;
-    })()`);
-    if(!selected) throw new Error('No empty pad available for premium actual-play cue');
-    await waitFor(cdp,"Boolean(document.querySelector('.zb-tower-shop button:not([disabled])'))",3000);
-    const built=await evaluate(cdp,`(()=>{
-      const b=document.querySelector('.zb-tower-shop button:not([disabled])');
-      if(!b)return false;
-      b.click();
-      return true;
-    })()`);
-    if(!built) throw new Error('Could not perform actual tower placement for premium cue');
-  }
-  await sleep(1400);
+async function seedCase(cdp,name){
+  const save=saveForCase(name);
+  await evaluate(cdp,`(()=>{
+    localStorage.setItem('psi-zero-day.defense.save.v1',${JSON.stringify(JSON.stringify(save))});
+    localStorage.setItem('psi-zero-day.defense.tutorial.v1','seen');
+    return true;
+  })()`);
 }
-async function metrics(cdp){
+async function enterPersistedRun(cdp,name){
+  await seedCase(cdp,name);
+  await installTelemetry(cdp);
+  await clickText(cdp,'현장 디펜스');
+  await waitFor(cdp,`Boolean(document.querySelector('[data-defense-screen="persistence-gate"]')) || document.body.textContent.includes('중단한 훈련이 있습니다')`);
+  await clickText(cdp,'이어서 훈련');
+  await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map')==='map-apt-bottom-up-excavation-01'`);
+}
+async function armByResume(cdp){
+  const ok=await evaluate(cdp,`(()=>{
+    const b=[...document.querySelectorAll('button')].find(x=>(x.textContent||'').includes('계속')||(x.textContent||'').includes('재개'));
+    if(b){b.click();return true}
+    const h=document.querySelector('.zb-hud-button');
+    if(h){h.click();return true}
+    return false;
+  })()`);
+  if(!ok) throw new Error('Could not resume representative run to arm audio');
+}
+async function triggerPremiumPlacementCue(cdp){
+  const selected=await evaluate(cdp,`(()=>{
+    const b=[...document.querySelectorAll('.zb-pad-hit')].find(x=>!(x.getAttribute('aria-label')||'').includes('타워 설치됨'));
+    if(!b)return false;b.click();return true;
+  })()`);
+  if(!selected) return false;
+  await waitFor(cdp,"Boolean(document.querySelector('.zb-tower-shop button:not([disabled])'))",3000);
+  return evaluate(cdp,`(()=>{const b=document.querySelector('.zb-tower-shop button:not([disabled])');if(!b)return false;b.click();return true})()`);
+}
+async function snapshot(cdp){
   return evaluate(cdp,`(()=>{
     const shell=document.querySelector('[data-defense-screen="combat"]');
     return {
@@ -148,32 +200,85 @@ async function metrics(cdp){
     };
   })()`);
 }
+async function resetToHome(cdp){
+  await evaluate(cdp,"localStorage.removeItem('psi-zero-day.defense.save.v1'); true");
+  await navigate(cdp);
+}
+async function runAudioCase(cdp,name){
+  await resetToHome(cdp);
+  await enterPersistedRun(cdp,name);
+  const before=await snapshot(cdp);
+  if(before.map!=='map-apt-bottom-up-excavation-01') throw new Error(name+': G8-A map mismatch');
+  if(runtimeMode && before.premiumAudio!=='true') throw new Error(name+': premium QA runtime not enabled');
 
-const report={schemaVersion:2,qaMode,finalMode,desktop:null,mobile:null,failures:[]};
+  if(name==='READY_TO_WAVE_BUILD'){
+    if(before.premiumMixState!=='READY') throw new Error('READY state not exposed before wave start: '+JSON.stringify(before));
+    const started=await evaluate(cdp,`(()=>{const b=document.querySelector('.zb-start-wave');if(!b)return false;b.click();return true})()`);
+    if(!started) throw new Error('READY_TO_WAVE_BUILD: start-wave button missing');
+    await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='WAVE_BUILD'`,5000);
+    await triggerPremiumPlacementCue(cdp);
+    await sleep(900);
+  }else if(name==='SWIFT_THREAT'){
+    await armByResume(cdp);
+    await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='SWIFT_THREAT'`,5000);
+    await triggerPremiumPlacementCue(cdp);
+    await sleep(900);
+  }else if(name==='CONTROL_INTERVENTION'){
+    await armByResume(cdp);
+    await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='CONTROL_INTERVENTION'`,5000);
+    await sleep(1000);
+  }else if(name==='RESOLUTION'){
+    await armByResume(cdp);
+    await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-status')==='WON'`,5000);
+    await waitFor(cdp,`document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-premium-mix-state')==='RESOLUTION'`,5000);
+    await sleep(1000);
+  }
+
+  const after=await snapshot(cdp);
+  const expected=name==='READY_TO_WAVE_BUILD'?'WAVE_BUILD':name;
+  if(after.premiumMixState!==expected) throw new Error(name+': expected '+expected+' got '+after.premiumMixState);
+  if(runtimeMode){
+    if((after.telemetry?.oscillatorFallback??-1)!==0) throw new Error(name+': oscillator fallback detected '+JSON.stringify(after.telemetry));
+    if((after.telemetry?.mixTransitions?.length??0)<1) throw new Error(name+': no premium mix transition observed');
+  }
+  return {before,after};
+}
+
+const report={
+  schemaVersion:3,qaMode,finalMode,runtimeMode,
+  sourceSha:process.env.GITHUB_SHA||null,
+  desktop:{cases:{}},mobile:{cases:{}},
+  stateCoverage:[],premiumBinaryCueCount:0,oscillatorFallbackCount:0,
+  failures:[],
+};
 let cdp,target;
 try{
   await waitJson('http://127.0.0.1:'+port+'/json/version');
   const r=await fetch('http://127.0.0.1:'+port+'/json/new?about:blank',{method:'PUT'});target=await r.json();
   cdp=new Cdp(target.webSocketDebuggerUrl);await cdp.send('Page.enable');await cdp.send('Runtime.enable');
 
+  const cases=['READY_TO_WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
   for(const cfg of [{name:'desktop',w:1440,h:900,m:false},{name:'mobile',w:390,h:844,m:true}]){
     await viewport(cdp,cfg.w,cfg.h,cfg.m);
     await navigate(cdp);
-    await evaluate(cdp,"localStorage.removeItem('psi-zero-day.defense.save.v1'); true");
-    await navigate(cdp);
-    await enter(cdp);
-    const m=await metrics(cdp);
-    report[cfg.name]=m;
-    if(m.map!=='map-apt-bottom-up-excavation-01') throw new Error(cfg.name+': map mismatch');
-    if(qaMode){
-      if(m.premiumAudio!=='true') throw new Error(cfg.name+': premium QA runtime not enabled');
-      if((m.telemetry?.oscillatorFallback??-1)!==0) throw new Error(cfg.name+': oscillator fallback detected '+JSON.stringify(m.telemetry));
-      if((m.telemetry?.premiumBinary??0)<1) throw new Error(cfg.name+': no premium binary cue observed');
-      if((m.telemetry?.mixTransitions?.length??0)<1) throw new Error(cfg.name+': no premium mix transition observed');
-    }else{
-      if(m.premiumAudio!=='false') throw new Error(cfg.name+': premium audio must remain disabled before lock');
+    for(const name of cases){
+      const result=await runAudioCase(cdp,name);
+      report[cfg.name].cases[name]=result;
+      const states=[
+        result.before?.premiumMixState,
+        ...(result.after?.telemetry?.mixTransitions||[]).map(x=>x.state),
+        result.after?.premiumMixState,
+      ].filter(Boolean);
+      for(const state of states) if(!report.stateCoverage.includes(state)) report.stateCoverage.push(state);
+      report.premiumBinaryCueCount+=result.after?.telemetry?.premiumBinary||0;
+      report.oscillatorFallbackCount+=result.after?.telemetry?.oscillatorFallback||0;
     }
   }
+
+  const required=['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
+  for(const state of required) if(!report.stateCoverage.includes(state)) throw new Error('Missing G8-A premium state coverage: '+state);
+  if(runtimeMode && report.premiumBinaryCueCount<2) throw new Error('Insufficient premium binary cue evidence: '+report.premiumBinaryCueCount);
+  if(runtimeMode && report.oscillatorFallbackCount!==0) throw new Error('Oscillator fallback count is not zero: '+report.oscillatorFallbackCount);
 }catch(error){
   report.failures.push(error instanceof Error?error.message:String(error));
 }finally{
@@ -181,6 +286,8 @@ try{
   if(target){try{await fetch('http://127.0.0.1:'+port+'/json/close/'+target.id)}catch{}}
   browser.kill('SIGTERM');await sleep(500);try{fs.rmSync(profileDir,{recursive:true,force:true})}catch{}
 }
+
+report.stateCoverage.sort((a,b)=>['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'].indexOf(a)-['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'].indexOf(b));
 fs.writeFileSync(path.join(outDir,'g8a-premium-audio-browser-report.json'),JSON.stringify(report,null,2)+'\n');
 console.log('G8A_PREMIUM_AUDIO_BROWSER='+JSON.stringify(report));
 if(report.failures.length)process.exit(1);
