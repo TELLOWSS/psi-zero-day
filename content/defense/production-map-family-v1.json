@@ -13,12 +13,12 @@
       "height": 600,
       "status": "PRODUCTION_LOCKED",
       "source": "content/defense/g8a-world-source-review.json",
-      "sourceRole": "PROCESS_SPECIFIC_FINAL_RASTER_CANDIDATE",
+      "sourceRole": "PROCESS_SPECIFIC_FINAL_RASTER_LOCKED",
       "visualFit": [
-        "process-specific bottom-up open-excavation final raster candidate",
+        "process-specific bottom-up open-excavation final raster",
         "commercial-quality full-bleed world art with coherent night-work lighting",
         "no baked HUD, text, logo, route, pad or risk marker",
-        "awaiting desktop/mobile actual-play Production Review"
+        "desktop and 390x844 actual-play Production Lock passed"
       ],
       "runtimeContract": {
         "topologyAuthority": "content/defense/site-process-maps-v1.json",
@@ -30,9 +30,9 @@
       "reusePolicy": {
         "allowedForThisMap": true,
         "allowedForOtherG8Maps": false,
-        "reason": "Temporary HD raster reference only; G8-A still requires its own non-SVG process-specific final world plate."
+        "reason": "G8-A final WORLD is locked to the bottom-up excavation topology and may not be reused as another process map."
       },
-      "sourceUri": "assets/defense/board/ramp-01-hd01.webp",
+      "sourceUri": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
       "finalArtPolicy": {
         "svgFinalArtForbidden": true,
         "productionLockAllowed": true,
