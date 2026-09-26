@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "ASSET_PENDING",
+  "assetId": "defense.enemy.VEILED.final.g8b",
+  "runtimeUri": "assets/defense/enemies/veiled-final-g8b.webp",
+  "format": "webp",
+  "sourceMaster": {
+    "required": true,
+    "minimumWidth": 1440,
+    "minimumHeight": 1024,
+    "transparentBackground": true,
+    "nativeUpscaleForbidden": true
+  },
+  "runtime": {
+    "width": 78,
+    "height": 58,
+    "preserveAspectRatio": "xMidYMid meet",
+    "transparentBackground": true
+  },
+  "legalVisualProfileId": "KR-CONSTRUCTION-TOP-DOWN-01",
+  "role": "compact tracked under-slab muck-handling excavator entering a blind working lane",
+  "required": [
+    "single unbranded compact tracked excavator or equivalent under-slab muck-handling machine only",
+    "high-oblique 3/4 view readable at phone scale",
+    "low-profile machine mass suitable for constrained under-slab work",
+    "transparent clean silhouette with believable tracks, boom, bucket and chassis",
+    "hidden/reveal behavior must come from runtime visibility logic, not fantasy art",
+    "no people, barriers, lights, background or signage baked into the asset",
+    "no manufacturer logo, PSI logo, plate text, Korean text, HUD or iconography",
+    "commercial-game final art, not pictogram/vector/flat illustration"
+  ],
+  "forbidden": [
+    "svg",
+    "legacy VEILED svg rasterization",
+    "upscaled low-resolution crop",
+    "rectangular photo tile",
+    "fake Korean text",
+    "real manufacturer branding",
+    "fantasy glow",
+    "monster or stealth-character language"
+  ],
+  "promotion": {
+    "productionApproved": false,
+    "requires": [
+      "NATIVE_SOURCE_REVIEW_PASS",
+      "TRANSPARENCY_EDGE_REVIEW",
+      "DESKTOP_SENSOR_VEILED_QA",
+      "MOBILE_390x844_SENSOR_VEILED_QA",
+      "ACTIVE_SVG_VISUALS_0",
+      "PROTOTYPE_BOARD_ITEMS_0"
+    ]
+  }
+}
