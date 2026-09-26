@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { readAudioMuted, setAudioMuted, subscribeAudioMuted } from '../app/audio-preference';
 import type { DefenseRunState } from '../domain/defense';
 import { premiumDefenseCueUri } from '../app/defense-premium-audio';
+import { useG8aPremiumMix } from './useG8aPremiumMix';
 
 export type DefenseAudioCue =
   | 'select'
@@ -60,12 +61,13 @@ export function defenseResolveCues(previous: DefenseRunState, current: DefenseRu
   return [...(single ? ['single_resolve' as const] : []), ...(area ? ['area_resolve' as const] : [])];
 }
 
-export function useDefenseAudio(state: DefenseRunState | null) {
+export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | null) {
   const muted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
   const contextRef = useRef<AudioContext | null>(null);
   const previousRef = useRef<DefenseRunState | null>(null);
   const armedRef = useRef(false);
   const activeVoicesRef = useRef(0);
+  const premiumMix = useG8aPremiumMix(state, mapId, muted);
   const lastResolveTickRef = useRef<Record<'single_resolve' | 'area_resolve', number>>({
     single_resolve: -9999,
     area_resolve: -9999,
@@ -81,8 +83,9 @@ export function useDefenseAudio(state: DefenseRunState | null) {
 
   const armAudio = useCallback(() => {
     armedRef.current = true;
+    premiumMix.arm();
     if (!muted) ensureContext();
-  }, [ensureContext, muted]);
+  }, [ensureContext, muted, premiumMix.arm]);
 
   const playOscillatorCue = useCallback((cue: DefenseAudioCue) => {
     const context = ensureContext();
@@ -176,5 +179,12 @@ export function useDefenseAudio(state: DefenseRunState | null) {
     if (context) void context.close();
   }, []);
 
-  return { muted, setMuted: setAudioMuted, armAudio, playCue } as const;
+  return {
+    muted,
+    setMuted: setAudioMuted,
+    armAudio,
+    playCue,
+    premiumMixEnabled: premiumMix.enabled,
+    premiumMixState: premiumMix.currentState,
+  } as const;
 }
