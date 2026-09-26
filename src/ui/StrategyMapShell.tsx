@@ -42,6 +42,9 @@ export interface StrategySupportItem {
   readonly name_text_id: string;
   readonly effect_text_id?: string;
   readonly effect_visual_uri?: string;
+  readonly map_anchor: import('../app/production-map').ProductionMapAnchorId;
+  readonly visual_kind: 'asset' | 'radio';
+  readonly activation_audio_asset_id?: string;
   readonly remaining: number;
   readonly active: boolean;
   readonly enabled: boolean;
@@ -69,7 +72,7 @@ function frictionIcon(kind: FieldFrictionKind): string {
 
 export function StrategyMapShell({
   view, copy, text, person, actions = [], onAction, visualAssets, outcome, onOutcomeContinue, onOutcomeReconsider,
-  supportItems = [], onSupportItemUse, onReturn, eventTitle, transitionPrompt, onTransitionContinue,
+  supportItems = [], recentSupportItemId, onSupportItemUse, onReturn, eventTitle, transitionPrompt, onTransitionContinue,
 }: {
   readonly view: StrategyView;
   readonly copy: StrategyMapCopy;
@@ -82,6 +85,7 @@ export function StrategyMapShell({
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
   readonly supportItems?: readonly StrategySupportItem[];
+  readonly recentSupportItemId?: string | null;
   readonly onSupportItemUse?: (itemId: string) => void;
   readonly onReturn?: () => void;
   readonly eventTitle?: string;
@@ -340,6 +344,23 @@ export function StrategyMapShell({
               : <><span aria-hidden="true">{element.visual_token}</span><small>{element.label}</small></>}
           </div>;
         })}
+      </div> : null}
+
+      {supportItems.some(item => item.active) ? <div className="strategy-support-runtime-layer" aria-label={text('ui.paid_item.support_title')}>
+        {supportItems.filter(item => item.active).map(item => <div
+          key={item.item_id}
+          className={`strategy-support-runtime-object${recentSupportItemId === item.item_id ? ' is-recent' : ''}`}
+          data-runtime-support={item.item_id}
+          data-runtime-support-kind={item.visual_kind}
+          data-production-anchor={item.map_anchor}
+          style={productionMapStyle(item.map_anchor, 'scene-element')}
+          title={text(item.name_text_id)}
+        >
+          {item.effect_visual_uri
+            ? <img src={item.effect_visual_uri} alt="" aria-hidden="true" />
+            : <span className="strategy-support-radio-art" aria-hidden="true"><i /><b /><em /></span>}
+          <small>{text(item.name_text_id)}</small>
+        </div>)}
       </div> : null}
 
       <div className="strategy-worker-layer">

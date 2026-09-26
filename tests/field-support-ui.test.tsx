@@ -42,8 +42,8 @@ describe('TASK-015B3 field support UI', () => {
       text={text}
       person={() => undefined}
       supportItems={[
-        { item_id: 'facility.access_lane', category: 'facility', name_text_id: 'ui.paid_item.facility.access_lane', remaining: 0, active: true, enabled: false },
-        { item_id: 'equipment.inspection_kit', category: 'equipment', name_text_id: 'ui.paid_item.equipment.inspection_kit', remaining: 2, active: false, enabled: true },
+        { item_id: 'facility.access_lane', category: 'facility', name_text_id: 'ui.paid_item.facility.access_lane', effect_text_id: 'ui.paid_item.effect.access_lane', effect_visual_uri: '/assets/episode01/scene-elements/vehicle-pedestrian-separation.webp', map_anchor: 'entry', visual_kind: 'asset', remaining: 0, active: true, enabled: false },
+        { item_id: 'equipment.inspection_kit', category: 'equipment', name_text_id: 'ui.paid_item.equipment.inspection_kit', effect_text_id: 'ui.paid_item.effect.inspection_kit', effect_visual_uri: '/assets/episode01/cg/inspection-zone.webp', map_anchor: 'inspection', visual_kind: 'asset', remaining: 2, active: false, enabled: true },
       ]}
     />);
     expect(html).toContain('현장 지원');
@@ -51,6 +51,9 @@ describe('TASK-015B3 field support UI', () => {
     expect(html).toContain('data-support-active="true"');
     expect(html).toContain('임시 안전통로');
     expect(html).toContain('적용 중');
+    expect(html).toContain('data-runtime-support="facility.access_lane"');
+    expect(html).toContain('data-production-anchor="entry"');
+    expect(html).toContain('/assets/episode01/scene-elements/vehicle-pedestrian-separation.webp');
     expect(html).toContain('data-support-item="equipment.inspection_kit"');
     expect(html).toContain('현장 검측 키트');
     expect(html).toContain('투입 · 보유 2');
