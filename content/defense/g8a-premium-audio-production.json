@@ -490,10 +490,10 @@
     ],
     "runtimeQaAllowed": true
   },
-  "currentProductionFocus": "actual_play_full_mix_and_device_listening_qa",
+  "currentProductionFocus": "human_device_listening_qa",
   "nextProductionAsset": null,
   "candidateAssetCount": 24,
-  "productionStateNote": "24/24 runtime binaries are promoted and explicitly QA_READY. They may play in G8-A runtime QA while productionLockAllowed remains false until human/device listening and zero-fallback evidence are complete.",
+  "productionStateNote": "24/24 QA_READY runtime assets passed automated technical QA and desktop/mobile-viewport actual-play with zero oscillator fallback. Human acoustic/device QA remains required before any PRODUCTION_APPROVED or AUDIO_PRODUCTION_LOCKED transition.",
   "candidateProgress": {
     "status": "24_OF_24_RUNTIME_QA_READY",
     "candidateAssetCount": 24,
@@ -516,10 +516,32 @@
     ],
     "humanEvidenceStillRequired": [
       "headphone stereo listening",
-      "Android phone speaker listening",
-      "small speaker/laptop listening",
+      "physical Android phone speaker listening at normal listening volume",
+      "small Bluetooth speaker or laptop speaker listening",
       "10-minute fatigue/repetition check",
       "CONTROL vs SWIFT discrimination without looking at screen"
-    ]
+    ],
+    "automatedStatus": "PASS",
+    "automatedEvidence": {
+      "workflowRunId": 36221130191,
+      "sourceSha": "2d6ff82227817518dda4e035323d7b6ca53fb796",
+      "artifactId": 10899193585,
+      "viewports": [
+        "1440x900",
+        "390x844"
+      ],
+      "stateCoverage": [
+        "READY",
+        "WAVE_BUILD",
+        "SWIFT_THREAT",
+        "CONTROL_INTERVENTION",
+        "RESOLUTION"
+      ],
+      "premiumBinaryCueCount": 10,
+      "premiumMixPlaybackSuccessCount": 68,
+      "premiumMixPlaybackFailureCount": 0,
+      "oscillatorFallbackCount": 0
+    },
+    "note": "390x844 browser emulation is automated UI/runtime evidence, not physical Android acoustic listening."
   }
 }
