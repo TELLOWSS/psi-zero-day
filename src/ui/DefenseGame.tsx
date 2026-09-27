@@ -207,6 +207,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const swiftPq = enemy.enemyId === 'SWIFT' ? g8aDump : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const g8aRiskActor = content.map.id === G8A_MAP_ID;
+  const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.999;
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
   const vehicleState = enemy.enemyId === 'SWIFT'
@@ -231,17 +232,19 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {g8aRiskActor && enemy.enemyId === 'NORMAL' ? <image
-      href="assets/episode01/characters/player-map.webp"
-      x="-15"
-      y="-44"
-      width="30"
-      height="46"
-      preserveAspectRatio="xMidYMax meet"
-      className="zb-g8a-risk-worker"
-      data-g8a-risk-actor="WORKER_APPROACH"
-      aria-hidden="true"
-    /> : g8aRiskActor && enemy.enemyId === 'SWARM' ? <g className="zb-g8a-risk-worker-group" data-g8a-risk-actor="WORKER_GROUP" aria-hidden="true">
+    {g8aRiskActor && enemy.enemyId === 'NORMAL' ? <g className="zb-g8a-risk-worker-wrap" data-g8a-risk-actor="WORKER_APPROACH" aria-hidden="true">
+      <ellipse cx="0" cy="2" rx="11" ry="3.6" className="zb-g8a-risk-contact-shadow" />
+      <image
+        href="assets/episode01/characters/player-map.webp"
+        x="-15"
+        y="-44"
+        width="30"
+        height="46"
+        preserveAspectRatio="xMidYMax meet"
+        className="zb-g8a-risk-worker"
+      />
+    </g> : g8aRiskActor && enemy.enemyId === 'SWARM' ? <g className="zb-g8a-risk-worker-group" data-g8a-risk-actor="WORKER_GROUP" aria-hidden="true">
+      <ellipse cx="0" cy="3" rx="26" ry="5" className="zb-g8a-risk-contact-shadow" />
       <image href="assets/episode01/characters/lee-jaehoon-map.webp" x="-25" y="-43" width="27" height="43" preserveAspectRatio="xMidYMax meet" />
       <image href="assets/episode01/characters/seo-jeongmin-map.webp" x="-4" y="-49" width="29" height="45" preserveAspectRatio="xMidYMax meet" />
       <image href="assets/episode01/characters/player-map.webp" x="-1" y="-37" width="25" height="39" preserveAspectRatio="xMidYMax meet" />
@@ -292,8 +295,10 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
         <circle r="20" className="zb-boss-ring" />
         <circle r="10" className="zb-boss-core" />
       </> : <circle r="16" data-art-state="prototype" />}
-    <rect x="-22" y="-31" width="44" height="5" rx="2.5" className="zb-hp-track" />
-    <rect x="-22" y="-31" width={44 * hpRatio} height="5" rx="2.5" className="zb-hp-fill" />
+    {showHp ? <g className="zb-health-readout" aria-hidden="true">
+      <rect x="-22" y="-31" width="44" height="4" rx="2" className="zb-hp-track" />
+      <rect x="-22" y="-31" width={44 * hpRatio} height="4" rx="2" className="zb-hp-fill" />
+    </g> : null}
   </g>;
 }
 
@@ -827,9 +832,12 @@ export function DefenseGame({
       </section>
     </footer>
 
-    {result ? <section className="zb-result" role="dialog" aria-modal="true" aria-labelledby="zb-result-title">
+    {result ? <section className={`zb-result ${result.won ? 'is-win' : 'is-loss'}`} role="dialog" aria-modal="true" aria-labelledby="zb-result-title" data-result-grade="COMMERCIAL_GFX_V1">
       <div>
-        <small>{t('defense.ui.result')}</small>
+        <div className="zb-result-head">
+          <span className="zb-result-kicker">{t('defense.ui.result')}</span>
+          <div className="zb-result-stars" aria-hidden="true">{[1,2,3].map(star => <span key={star} className={star <= result.stars ? 'is-earned' : ''}>★</span>)}</div>
+        </div>
         <h2 id="zb-result-title">{t(result.won ? 'defense.ui.won' : 'defense.ui.lost')}</h2>
         <dl>
           <div><dt>{t('defense.ui.stars')}</dt><dd>{result.stars} / 3</dd></div>
