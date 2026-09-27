@@ -1,0 +1,99 @@
+name: Verify G8-A Full Visual V-01
+
+on:
+  push:
+    branches:
+      - sol/g8a-full-visual-v01-20260927
+  pull_request:
+    paths:
+      - 'content/defense/g8a-veiled-final-art.json'
+      - 'content/defense/g8a-full-visual-lock.json'
+      - 'src/app/defense-visual-assets.ts'
+      - 'tests/g8a-veiled-final-art.test.ts'
+      - 'public/assets/defense/enemies/veiled-final-g8a.webp'
+      - 'src/ui/DefenseGame.tsx'
+      - 'src/ui/G8AActivityOverlay.tsx'
+      - 'src/ui/defense-game.css'
+      - 'src/app/defense-map-framing.ts'
+      - 'src/app/defense-visual-projection.ts'
+      - 'scripts/verify-g8a-full-visual-v01-browser.mjs'
+      - 'scripts/verify-def-core-01-browser.mjs'
+      - 'tests/g8a-full-screen-polish.test.ts'
+      - 'tests/g8a-v05-cinematic.test.ts'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: g8a-full-visual-v01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-v01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - name: V-01 visual contracts
+        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/final-art-policy.test.ts tests/dual-orientation-map-doctrine.test.ts tests/g8a-full-visual-lock.test.ts tests/defense-camera.test.ts tests/impact-presentation-policy.test.ts tests/g8a-worker-motion.test.ts tests/g8a-v02-visual-coherence.test.ts tests/g8a-v05-cinematic.test.ts tests/g8a-full-screen-polish.test.ts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+
+      - name: Run Wave 8 Full Visual V-01 browser gate
+        shell: bash
+        env:
+          PSI_G8A_ARTIFACT_DIR: artifacts/g8a-full-visual-v01
+        run: |
+          mkdir -p artifacts/g8a-full-visual-v01 artifacts/g8a-v05-cinematic
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-v01-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g8a-v01-preview.log
+            exit 1
+          fi
+          node scripts/verify-g8a-full-visual-v01-browser.mjs
+          PSI_DEF_CORE_01_ARTIFACT_DIR=artifacts/g8a-v05-cinematic node scripts/verify-def-core-01-browser.mjs
+
+      - name: Upload V-01 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8a-full-visual-v01-evidence
+          path: |
+            artifacts/g8a-full-visual-v01
+            artifacts/g8a-v05-cinematic
+          if-no-files-found: error

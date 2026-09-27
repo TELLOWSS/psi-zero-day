@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseMapFrame, defenseMapPointPercent, defenseMapViewBox } from '../app/defense-map-framing';
+import { defenseVisualPadPoint, defenseVisualPath, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
@@ -19,7 +22,7 @@ import type {
   DefenseContent, DefenseEnemyId, DefenseRunState, DefenseSupportId, DefenseTowerId, DefenseTowerState,
 } from '../domain/defense';
 import {
-  advanceDefense, applyDefenseCommand, defensePositionAtDistance, defenseResult,
+  advanceDefense, applyDefenseCommand, defenseResult,
 } from '../engine/defense';
 import type { StoragePort } from '../platform/storage';
 import { VisualImage } from './VisualSlot';
@@ -28,9 +31,11 @@ import { DefenseTutorial, useDefenseTutorial } from './DefenseTutorial';
 import { applyDefCoreOneStepRuntime, DefCoreOneStepBoardOverlay, DefCoreOneStepOverlay, useDefCoreOneStep } from './DefCoreOneStep';
 import { useDefenseAudio } from './useDefenseAudio';
 import { useDefenseEffects } from './useDefenseEffects';
+import { useDefenseCamera } from './useDefenseCamera';
 import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
 import { RemodelBoardOverlay } from './RemodelBoardOverlay';
 import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
+import { G8AActivityOverlay } from './G8AActivityOverlay';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -79,26 +84,27 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-pq-control="CONTROL:L1"
       data-tower-family={tower.towerId}
     >
+      <ellipse cx="0" cy="25" rx="28" ry="6" className="zb-control-ground-shadow" aria-hidden="true" />
       {firing ? <g className="zb-control-intervention" aria-hidden="true">
-        <circle r="35" />
-        <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
+        <ellipse cx="0" cy="20" rx="30" ry="8" />
+        <path d="M-34 18H34M-24 14L-14 6M14 6L24 14M-14 6H14" />
       </g> : null}
       <image
         href={controlPq.barrierUri}
-        x="-55"
-        y="-22"
-        width="110"
-        height="70"
+        x="-28"
+        y="-7"
+        width="56"
+        height="35"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-barrier"
         aria-hidden="true"
       />
       <image
         href={controlPq.marshalUri}
-        x="-31"
-        y="-77"
-        width="62"
-        height="93"
+        x="5"
+        y="-37"
+        width="27"
+        height="41"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-marshal"
         aria-hidden="true"
@@ -114,7 +120,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     >
       {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
       {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
-        <circle r="35" />
+        <ellipse cx="0" cy="20" rx="32" ry="9" />
         <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
       </g> : null}
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
@@ -158,7 +164,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
 
 function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent; enemy: DefenseRunState['enemies'][number]; state: DefenseRunState; isHit: boolean }) {
   const definition = content.enemies.find(item => item.id === enemy.enemyId)!;
-  const pos = defensePositionAtDistance(content.map.path, enemy.distance);
+  const pos = defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance);
   const hpRatio = Math.max(0, Math.min(1, enemy.hp / definition.hp));
   const hidden = definition.hidden && enemy.revealUntilTick <= state.tick && state.revealAllUntilTick <= state.tick;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
@@ -168,31 +174,42 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
+  const vehicleState = enemy.enemyId === 'SWIFT'
+    ? slowed ? 'BRAKE' : isHit ? 'THREAT' : 'CRUISE'
+    : undefined;
   return <g
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
     data-distance={enemy.distance.toFixed(3)}
+    data-motion-vehicle={enemy.enemyId === 'SWIFT' ? 'SWIFT' : undefined}
+    data-vehicle-state={vehicleState}
+    data-veiled-state={enemy.enemyId === 'VEILED' ? (hidden ? 'CONCEALED' : revealed ? 'REVEALED' : 'TRACKED') : undefined}
   >
-    {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
+    {enemy.enemyId === 'VEILED' ? <ellipse cx="0" cy="8" rx="30" ry="16" className="zb-veiled-site-occlusion" aria-hidden="true" /> : null}
+    {isHit && enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED' ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
-      <circle r="25" />
-      <path d="M-26 13H-10M-30 19H-14" />
+      <ellipse cx="-25" cy="19" rx="18" ry="5" />
+      <ellipse cx="-38" cy="21" rx="11" ry="4" />
+      <path d="M-31 14H-15M-37 19H-20M-42 23H-27" />
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {swiftPq ? <image
-      href={swiftPq.uri}
-      x="-39"
-      y="-34"
-      width="78"
-      height="58"
-      preserveAspectRatio="xMidYMid meet"
-      className="zb-swift-pq-asset"
-      data-pq-swift="SWIFT"
-      aria-hidden="true"
-    /> : artUri ? <image
+    {swiftPq ? <>
+      <ellipse cx="0" cy="20" rx="31" ry="8" className="zb-swift-road-contact" aria-hidden="true" />
+      <image
+        href={swiftPq.uri}
+        x="-39"
+        y="-34"
+        width="78"
+        height="58"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-swift-pq-asset"
+        data-pq-swift="SWIFT"
+        aria-hidden="true"
+      />
+    </> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
       y={artY}
@@ -279,12 +296,15 @@ export function DefenseGame({
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
+  const visualPath = defenseVisualPath(content.map.id, content.map.path);
   const tutorial = useDefenseTutorial(state, content, paused => {
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
   const audio = useDefenseAudio(state);
   const effects = useDefenseEffects(state);
+  const camera = useDefenseCamera(state, content, portrait);
   const oneStep = useDefCoreOneStep({
     state,
     onPause: paused => {
@@ -472,7 +492,10 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+      data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
+      data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
+      data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -509,10 +532,17 @@ export function DefenseGame({
     <DefenseTutorial controller={tutorial} />
 
     <section className="zb-stage">
-      <div className="zb-board-wrap">
+      <div
+        className="zb-board-wrap"
+        style={{
+          '--zb-camera-scale': String(camera.scale),
+          '--zb-camera-x': `${camera.focus.left}%`,
+          '--zb-camera-y': `${camera.focus.top}%`,
+        } as CSSProperties}
+      >
         <svg
           className="zb-board"
-          viewBox={`0 0 ${content.map.width} ${content.map.height}`}
+          viewBox={defenseMapViewBox(mapFrame)}
           role="img"
           aria-label={t('defense.map.ramp-01.name')}
           preserveAspectRatio="xMidYMid meet"
@@ -537,40 +567,47 @@ export function DefenseGame({
           <RemodelBoardOverlay state={remodelWorldState} />
           <DataCenterBoardOverlay state={dataCenterWorldState} />
           <polyline
-            points={content.map.path.map(point => point.join(',')).join(' ')}
+            points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path-shoulder"
             fill="none"
             aria-hidden="true"
           />
           <polyline
-            points={content.map.path.map(point => point.join(',')).join(' ')}
+            points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path-shadow"
             fill="none"
           />
           <polyline
-            points={content.map.path.map(point => point.join(',')).join(' ')}
+            points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path"
             fill="none"
           />
           <polyline
-            points={content.map.path.map(point => point.join(',')).join(' ')}
+            points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path-centerline"
             fill="none"
             aria-hidden="true"
           />
+          {content.map.id === 'map-apt-bottom-up-excavation-01'
+            ? <G8AActivityOverlay cameraMode={camera.mode} />
+            : null}
           {selectedTower && selectedLevel ? (() => {
             const pad = content.map.pads.find(item => item.id === selectedTower.padId)!;
-            return <circle cx={pad.x} cy={pad.y} r={selectedLevel.range} className="zb-range-preview" />;
+            const visualPad = defenseVisualPadPoint(content.map.id, pad);
+            return <circle cx={visualPad.x} cy={visualPad.y} r={selectedLevel.range} className="zb-range-preview" />;
           })() : null}
-          {content.map.pads.map(pad => <g key={`pad-${pad.id}`} className="zb-pad-runtime">
-            <circle cx={pad.x} cy={pad.y} r="42" className="zb-pad-hardstand" aria-hidden="true" />
+          {content.map.pads.map(pad => {
+            const visualPad = defenseVisualPadPoint(content.map.id, pad);
+            return <g key={`pad-${pad.id}`} className="zb-pad-runtime">
+            <circle cx={visualPad.x} cy={visualPad.y} r="42" className="zb-pad-hardstand" aria-hidden="true" />
             <circle
-              cx={pad.x}
-              cy={pad.y}
+              cx={visualPad.x}
+              cy={visualPad.y}
               r="22"
               className={`zb-pad-mark${selectedPadId === pad.id ? ' is-selected' : ''}${state.towers.some(tower => tower.padId === pad.id) ? ' is-occupied' : ''}`}
             />
-          </g>)}
+          </g>;
+          })}
           {state.freezeMovementUntilTick > state.tick ? <g className="zb-support-field is-coordinator" aria-hidden="true">
             <rect x="8" y="8" width="984" height="584" rx="20" />
             <path d="M120 300H880" />
@@ -580,7 +617,7 @@ export function DefenseGame({
             <circle cx="500" cy="300" r="130" />
           </g> : null}
           {effects.resolvedEnemyEchoes.map(echo => {
-            const pos = defensePositionAtDistance(content.map.path, echo.distance);
+            const pos = defenseVisualPositionAtDistance(content.map.id, content.map.path, echo.distance);
             return <g key={`resolved-${echo.id}`} transform={`translate(${pos.x} ${pos.y})`} className="zb-resolve-burst" data-effect="resolve" aria-hidden="true">
               <circle r="10" />
               <path d="M-24 0H24M0-24V24M-17-17L17 17M17-17L-17 17" />
@@ -589,7 +626,8 @@ export function DefenseGame({
           <DefCoreOneStepBoardOverlay state={state} controller={oneStep} />
           {state.towers.map(tower => {
             const pad = content.map.pads.find(item => item.id === tower.padId)!;
-            return <g key={tower.id} transform={`translate(${pad.x} ${pad.y})`}>
+            const visualPad = defenseVisualPadPoint(content.map.id, pad);
+            return <g key={tower.id} transform={`translate(${visualPad.x} ${visualPad.y})`}>
               <TowerGlyph content={content} tower={tower} />
             </g>;
           })}
@@ -599,11 +637,14 @@ export function DefenseGame({
         <div className="zb-pad-layer" aria-label="설치 패드">
           {content.map.pads.map(pad => {
             const occupied = state.towers.some(tower => tower.padId === pad.id);
+            const visualPad = defenseVisualPadPoint(content.map.id, pad);
+            const point = defenseMapPointPercent(mapFrame, visualPad.x, visualPad.y);
+            if (!point.visible) return null;
             return <button
               key={pad.id}
               type="button"
               className={`zb-pad-hit${selectedPadId === pad.id ? ' is-selected' : ''}`}
-              style={{ left: `${pad.x / content.map.width * 100}%`, top: `${pad.y / content.map.height * 100}%` }}
+              style={{ left: `${point.left}%`, top: `${point.top}%` }}
               aria-label={`${pad.id} · ${occupied ? '타워 설치됨' : t('defense.ui.empty_pad')}`}
               onClick={() => choosePad(pad.id)}
             ><span>{pad.id}</span></button>;

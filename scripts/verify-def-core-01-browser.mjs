@@ -251,6 +251,7 @@ const report = {
   chosen: null,
   followup: null,
   cinematic_wall_ms: null,
+  cinematic_v05: null,
   audio_cues: [],
   assets: {},
   runtime_motion: null,
@@ -263,6 +264,9 @@ const report = {
     read_rect: null,
     decision_rect: null,
     hook_rect: null,
+    cinematic_rect: null,
+    cinematic_copy_rect: null,
+    cinematic_presentations: [],
   },
   failures: [],
 };
@@ -286,6 +290,7 @@ try {
     source: `(() => {
       window.__defCoreAudioCues = [];
       window.__defCoreShotsSeen = [];
+      window.__defCoreShotPresentation = [];
       window.__defCoreTimeline = [];
       window.addEventListener('psi:defense-audio-cue', event => {
         const cue = event?.detail?.cue;
@@ -297,6 +302,12 @@ try {
         const shot = cinematic?.getAttribute('data-def-core-shot');
         if (shot && !window.__defCoreShotsSeen.includes(shot)) {
           window.__defCoreShotsSeen.push(shot);
+          window.__defCoreShotPresentation.push({
+            shot,
+            grade: cinematic?.getAttribute('data-cinematic-grade') || null,
+            motion: cinematic?.getAttribute('data-cinematic-motion') || null,
+            framing: cinematic?.getAttribute('data-cinematic-framing') || null,
+          });
           window.__defCoreTimeline.push({ kind: 'shot', value: shot, at: performance.now() });
         }
         if (document.querySelector('[data-def-core-phase="DECISION"]')
@@ -360,6 +371,19 @@ try {
 
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'CINEMATIC'");
   report.phases.push('CINEMATIC');
+  report.cinematic_v05 = await evaluate(cdp, `(() => {
+    const el=document.querySelector('.def-core-cinematic');
+    return el ? {
+      grade:el.getAttribute('data-cinematic-grade'),
+      shot:el.getAttribute('data-def-core-shot'),
+      motion:el.getAttribute('data-cinematic-motion'),
+      framing:el.getAttribute('data-cinematic-framing'),
+      overflow:document.documentElement.scrollWidth>window.innerWidth+1,
+    } : null;
+  })()`);
+  if (!report.cinematic_v05 || report.cinematic_v05.grade !== 'V05' || report.cinematic_v05.shot !== 'WIDE' || report.cinematic_v05.motion !== 'WIDE' || report.cinematic_v05.overflow) {
+    throw new Error('V-05 desktop cinematic did not enter production WIDE state: '+JSON.stringify(report.cinematic_v05));
+  }
   await screenshot(cdp, '04-cinematic-wide.png');
 
   await waitFor(cdp, "(window.__defCoreShotsSeen || []).includes('SIGNAL')", 12000);
@@ -372,9 +396,11 @@ try {
 
   const cinematicTrace = await evaluate(cdp, `(() => ({
     shots: window.__defCoreShotsSeen || [],
+    presentations: window.__defCoreShotPresentation || [],
     timeline: window.__defCoreTimeline || [],
   }))()`);
   report.shots = cinematicTrace.shots;
+  report.cinematic_v05.presentations = cinematicTrace.presentations;
   const wide = cinematicTrace.timeline.find(item => item.kind === 'shot' && item.value === 'WIDE');
   const decision = cinematicTrace.timeline.find(item => item.kind === 'phase' && item.value === 'DECISION');
   report.cinematic_wall_ms = wide && decision ? Math.round(decision.at - wide.at) : null;
@@ -382,6 +408,18 @@ try {
   const requiredShots = ['WIDE','FOCUS','REAR','SIGNAL','RADIO','BRAKE'];
   if (JSON.stringify(report.shots) !== JSON.stringify(requiredShots)) {
     throw new Error('Cinematic shot sequence drifted: ' + JSON.stringify(report.shots));
+  }
+  const requiredPresentation = [
+    ['WIDE','V05','WIDE','wide'],
+    ['FOCUS','V05','FOCUS','junho'],
+    ['REAR','V05','REAR','rear'],
+    ['SIGNAL','V05','HUMAN_CLOSE','signal'],
+    ['RADIO','V05','DECISION','radio'],
+    ['BRAKE','V05','IMPACT','brake'],
+  ];
+  const actualPresentation = cinematicTrace.presentations.map(item => [item.shot,item.grade,item.motion,item.framing]);
+  if (JSON.stringify(actualPresentation) !== JSON.stringify(requiredPresentation)) {
+    throw new Error('V-05 cinematic camera grammar drifted: '+JSON.stringify(actualPresentation));
   }
   if (report.cinematic_wall_ms === null || report.cinematic_wall_ms < 12000 || report.cinematic_wall_ms > 20000) {
     throw new Error('Cinematic duration outside 12-20s contract: ' + report.cinematic_wall_ms);
@@ -586,8 +624,62 @@ try {
   }
   await screenshot(cdp, 'mobile-03-impact.png');
 
-  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 20000);
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'CINEMATIC'", 5000);
+  report.mobile.phases.push('CINEMATIC');
+  report.mobile.cinematic_rect = await rectOf('.def-core-letterbox');
+  report.mobile.cinematic_copy_rect = await rectOf('.def-core-shot-copy');
+  assertMobileRect(report.mobile.cinematic_rect, 'CINEMATIC frame');
+  assertMobileRect(report.mobile.cinematic_copy_rect, 'CINEMATIC copy');
+  const mobileWidePresentation = await evaluate(cdp, `(() => {
+    const el=document.querySelector('.def-core-cinematic');
+    return el ? {
+      grade:el.getAttribute('data-cinematic-grade'),
+      shot:el.getAttribute('data-def-core-shot'),
+      motion:el.getAttribute('data-cinematic-motion'),
+      framing:el.getAttribute('data-cinematic-framing'),
+      overflow:document.documentElement.scrollWidth>window.innerWidth+1,
+    } : null;
+  })()`);
+  if (!mobileWidePresentation || mobileWidePresentation.grade!=='V05' || mobileWidePresentation.shot!=='WIDE' || mobileWidePresentation.motion!=='WIDE' || mobileWidePresentation.overflow) {
+    throw new Error('Mobile V-05 WIDE presentation mismatch: '+JSON.stringify(mobileWidePresentation));
+  }
+  await screenshot(cdp, 'mobile-04-cinematic-wide.png');
+
+  await waitFor(cdp, "document.querySelector('.def-core-cinematic')?.getAttribute('data-def-core-shot') === 'SIGNAL'", 12000);
+  const mobileSignalPresentation = await evaluate(cdp, `(() => {
+    const el=document.querySelector('.def-core-cinematic');
+    return el ? [el.getAttribute('data-cinematic-grade'),el.getAttribute('data-cinematic-motion'),el.getAttribute('data-cinematic-framing')] : null;
+  })()`);
+  if (JSON.stringify(mobileSignalPresentation)!==JSON.stringify(['V05','HUMAN_CLOSE','signal'])) {
+    throw new Error('Mobile V-05 SIGNAL presentation mismatch: '+JSON.stringify(mobileSignalPresentation));
+  }
+  await screenshot(cdp, 'mobile-04-cinematic-signal.png');
+
+  await waitFor(cdp, "document.querySelector('.def-core-cinematic')?.getAttribute('data-def-core-shot') === 'BRAKE'", 12000);
+  const mobileBrakePresentation = await evaluate(cdp, `(() => {
+    const el=document.querySelector('.def-core-cinematic');
+    return el ? [el.getAttribute('data-cinematic-grade'),el.getAttribute('data-cinematic-motion'),el.getAttribute('data-cinematic-framing')] : null;
+  })()`);
+  if (JSON.stringify(mobileBrakePresentation)!==JSON.stringify(['V05','IMPACT','brake'])) {
+    throw new Error('Mobile V-05 BRAKE presentation mismatch: '+JSON.stringify(mobileBrakePresentation));
+  }
+  await screenshot(cdp, 'mobile-04-cinematic-brake.png');
+
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'DECISION'", 5000);
   report.mobile.phases.push('DECISION');
+  report.mobile.cinematic_presentations = await evaluate(cdp, "window.__defCoreShotPresentation || []");
+  const mobileExpectedPresentation = [
+    ['WIDE','V05','WIDE','wide'],
+    ['FOCUS','V05','FOCUS','junho'],
+    ['REAR','V05','REAR','rear'],
+    ['SIGNAL','V05','HUMAN_CLOSE','signal'],
+    ['RADIO','V05','DECISION','radio'],
+    ['BRAKE','V05','IMPACT','brake'],
+  ];
+  const mobileActualPresentation = report.mobile.cinematic_presentations.map(item => [item.shot,item.grade,item.motion,item.framing]);
+  if (JSON.stringify(mobileActualPresentation)!==JSON.stringify(mobileExpectedPresentation)) {
+    throw new Error('Mobile V-05 cinematic camera grammar drifted: '+JSON.stringify(mobileActualPresentation));
+  }
   report.mobile.decision_rect = await rectOf('.def-core-decision-card');
   assertMobileRect(report.mobile.decision_rect, 'DECISION card');
   const mobileChoices = await evaluate(cdp, "document.querySelectorAll('.def-core-choice-grid button').length");

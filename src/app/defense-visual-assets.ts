@@ -3,6 +3,7 @@ import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json'
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
+import veiledFinalRaw from '../../content/defense/g8a-veiled-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
 import type { DefenseEnemyId, DefenseLevelId, DefenseTowerId } from '../domain/defense';
 
@@ -99,6 +100,21 @@ interface SwiftFinalManifest {
 }
 const swiftFinalManifest = swiftFinalRaw as SwiftFinalManifest;
 
+interface VeiledFinalManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly promotion: {
+    readonly productionApproved: boolean;
+  };
+}
+const veiledFinalManifest = veiledFinalRaw as VeiledFinalManifest;
+
 interface WorldFinalManifest {
   readonly schemaVersion: 1;
   readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
@@ -171,6 +187,26 @@ export function defenseSwiftPqAsset(): {
   };
 }
 
+export function defenseG8aVeiledFinalAsset(): {
+  readonly uri: string;
+  readonly width: number;
+  readonly height: number;
+} | null {
+  if (
+    veiledFinalManifest.status !== 'PRODUCTION_APPROVED'
+    || veiledFinalManifest.promotion.productionApproved !== true
+    || !['webp','png'].includes(veiledFinalManifest.format)
+    || veiledFinalManifest.runtimeUri.toLowerCase().includes('.svg')
+  ) {
+    return null;
+  }
+  return {
+    uri: veiledFinalManifest.runtimeUri,
+    width: veiledFinalManifest.runtime.width,
+    height: veiledFinalManifest.runtime.height,
+  };
+}
+
 function asset(id: string): DefenseVisualAsset | null {
   return defenseVisualProduction.assets.find(item => item.assetId === id) ?? null;
 }
@@ -205,5 +241,9 @@ export function defenseTowerArtUri(towerId: DefenseTowerId, levelId: DefenseLeve
 }
 
 export function defenseEnemyArtUri(enemyId: DefenseEnemyId): string | null {
+  if (enemyId === 'VEILED') {
+    const finalVeiled = defenseG8aVeiledFinalAsset();
+    if (finalVeiled) return finalVeiled.uri;
+  }
   return runtimeFinalAsset(`defense.enemy.${enemyId}`)?.uri ?? null;
 }

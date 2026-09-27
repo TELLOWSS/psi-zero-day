@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8A_FULL_VISUAL_V01",
+  "assetId": "VEILED",
+  "status": "PRODUCTION_APPROVED",
+  "semantic": "site-specific partially confirmed construction risk emerging from real bottom-up excavation conditions: blind vehicle approach, retaining/shoring occlusion, uneven lighting, dust/mud, stacked materials and worker-route obstruction; never a fantasy enemy",
+  "runtimeUri": "assets/defense/enemies/veiled-final-g8a.webp",
+  "format": "webp",
+  "runtime": {
+    "width": 72,
+    "height": 72
+  },
+  "sourceMaster": {
+    "minimumWidth": 1440,
+    "minimumHeight": 1024,
+    "transparentBackground": true,
+    "nativeUpscaleUsed": false
+  },
+  "required": [
+    "construction-site grounded silhouette readable at phone scale",
+    "the risk must appear to originate from actual site geometry, equipment, temporary works or visibility loss",
+    "partial occlusion/blind-zone character without monster language",
+    "retain recognizable fragments of real construction context in silhouette or edge treatment",
+    "transparent isolated runtime object edge",
+    "lighting compatible with the locked G8-A high-oblique night construction world",
+    "no text, logo, HUD, warning copy or gameplay geometry baked into the asset"
+  ],
+  "forbidden": [
+    "svg",
+    "legacy veiled.svg rasterization",
+    "flat pictogram",
+    "vector placeholder",
+    "fantasy ghost or monster silhouette",
+    "humanoid demon or creature anatomy",
+    "floating magical crystal",
+    "neon sci-fi orb",
+    "generic RPG enemy unrelated to construction",
+    "fake Korean text",
+    "real company logo",
+    "upscaled low-resolution crop"
+  ],
+  "promotion": {
+    "productionApproved": true,
+    "requires": [
+      "SOURCE_REVIEW_PASS",
+      "NON_SVG_FINAL_RASTER",
+      "NATIVE_UPSCALE_FALSE",
+      "DESKTOP_WAVE8_VEILED_SWIFT_QA",
+      "MOBILE_390x844_VEILED_SWIFT_QA",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ACTIVE_SVG_VISUALS_0"
+    ],
+    "approvedAt": "2026-09-27",
+    "pendingActualPlayQa": true
+  },
+  "siteIdentity": {
+    "profile": "apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "mustReadAs": [
+      "Korean apartment construction bottom-up open excavation workface",
+      "haul-ramp and worker-route visibility conflict",
+      "risk created by actual site geometry and temporary works rather than a supernatural creature"
+    ],
+    "visualSources": [
+      "dump-truck blind zone and reversing path",
+      "retaining/shoring and excavation-edge occlusion",
+      "temporary barrier/cone/material-stack interference",
+      "night-work lighting contrast and partial shadow",
+      "dust, mud and suspended particles used subtly as visibility cues"
+    ]
+  },
+  "sourceReview": {
+    "status": "PASS",
+    "reviewedAt": "2026-09-27",
+    "candidateBlobSha": "3d6a985b057fa1dc417f8458354ce584ff65afbb",
+    "finalBlobSha": "3d6a985b057fa1dc417f8458354ce584ff65afbb",
+    "sourceCanvas": {
+      "width": 1536,
+      "height": 1024
+    },
+    "sourceAssets": [
+      "public/assets/episode01/characters/kang-taesik-map.webp",
+      "public/assets/episode01/scene-elements/material-stack-realistic-v2.webp"
+    ],
+    "reviewNotes": [
+      "grounded construction-site occlusion reads as stacked formwork hiding a worker",
+      "transparent background",
+      "no text, logo, HUD or fantasy enemy language",
+      "all source elements rendered at native scale or downscaled; no source upscale"
+    ]
+  }
+}
