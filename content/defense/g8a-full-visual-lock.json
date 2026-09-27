@@ -113,5 +113,36 @@
       "worldMinimumScreenShare": 0.55
     },
     "next": "Refine final HUD art language during V-04 without reopening the portrait camera/topology contract."
+  },
+  "motionPresentation": {
+    "architecture": "2.5D_CINEMATIC_TACTICAL",
+    "m01Camera": {
+      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "modes": [
+        "STRATEGIC_BASE",
+        "THREAT_APPROACH",
+        "IMPACT_CLOSE_UP",
+        "RETURN_RECOVER"
+      ],
+      "triggers": [
+        "CONTROL_APPROACH",
+        "VEILED_REVEAL",
+        "CONTROL_INTERVENTION"
+      ],
+      "engineRewrite": false
+    },
+    "m02Impact": {
+      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "visualHitStopMs": 150,
+      "landscapeImpactScale": 1.28,
+      "portraitImpactScale": 1.18,
+      "groundedConstructionSemantics": true
+    },
+    "next": [
+      "M03_WORKER_MOTION",
+      "M04_VEHICLE_MOTION",
+      "M05_VEILED_REVEAL",
+      "M06_DUAL_ORIENTATION_IMPACT_QA"
+    ]
   }
 }
