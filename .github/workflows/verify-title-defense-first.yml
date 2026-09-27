@@ -7,6 +7,7 @@ on:
     paths:
       - 'src/ui/GameHub.tsx'
       - 'src/ui/game-hub.css'
+      - 'content/episode01/main-title-layout.json'
       - 'scripts/verify-title-defense-first.mjs'
       - '.github/workflows/verify-title-defense-first.yml'
   pull_request:
