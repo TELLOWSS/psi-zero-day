@@ -16,8 +16,10 @@ describe('G8-A V-02 visual coherence', () => {
     const game = readFileSync('src/ui/DefenseGame.tsx', 'utf8');
     expect(overlay).not.toContain('recommendedTower.slice(0, 1)');
     expect(overlay).toContain('zb-site-anchor-core');
-    expect(game).toContain('width="82"');
-    expect(game).toContain('width="44"');
+    expect(game).toContain('width="62"');
+    expect(game).toContain('width="30"');
+    expect(game).toContain('height="39"');
+    expect(game).toContain('height="45"');
     const cueStart = game.indexOf('zb-swift-brake-cue');
     const cueEnd = game.indexOf('</g> : null}', cueStart);
     const brakeCue = game.slice(cueStart, cueEnd);
