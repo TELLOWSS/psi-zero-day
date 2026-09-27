@@ -31,28 +31,16 @@ html,body{margin:0;width:1536px;height:1024px;overflow:hidden;background:transpa
   position:absolute;left:355px;top:555px;width:735px;height:auto;z-index:5;
   filter:brightness(.68) saturate(.72) contrast(1.10) drop-shadow(0 16px 22px rgba(0,0,0,.44))
 }
-.haze{
-  position:absolute;left:640px;top:255px;width:560px;height:500px;z-index:4;
-  background:rgba(133,124,108,.16);border-radius:48%;
-  filter:blur(72px);opacity:.72
-}
 .dust{position:absolute;z-index:6;border-radius:50%;background:rgba(175,158,130,.20);filter:blur(10px);opacity:.55}
 .d1{left:650px;top:420px;width:82px;height:54px}
 .d2{left:760px;top:355px;width:58px;height:43px;opacity:.38}
 .d3{left:905px;top:500px;width:74px;height:50px;opacity:.42}
 .d4{left:1040px;top:390px;width:48px;height:34px;opacity:.30}
 .d5{left:565px;top:610px;width:64px;height:42px;opacity:.34}
-.edge{
-  position:absolute;left:770px;top:105px;width:515px;height:730px;z-index:2;
-  border-radius:46%;box-shadow:inset 85px 0 95px rgba(8,12,13,.24);
-  opacity:.82
-}
 </style>
 <div class="scene">
   <img class="worker" src="${worker}">
-  <div class="edge"></div>
   <img class="stack-back" src="${stack}">
-  <div class="haze"></div>
   <img class="stack-front" src="${stack}">
   <div class="dust d1"></div><div class="dust d2"></div><div class="dust d3"></div>
   <div class="dust d4"></div><div class="dust d5"></div>
