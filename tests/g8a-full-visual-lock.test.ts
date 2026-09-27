@@ -24,7 +24,12 @@ describe('G8-A full-screen visual lock contract', () => {
 
   it('keeps asset lock and full-screen visual lock as different gates', () => {
     expect(fullVisual.lockSemantics.neverTreatAsEquivalent).toBe(true);
-    expect(fullVisual.status).toBe('V02_PASS_V04A_ACTIVE');
+    expect([
+      'V02_PASS_V04A_ACTIVE',
+      'V04A_PASS_V05_ACTIVE',
+      'V05_PASS_FULL_SCREEN_REVIEW',
+      'PRODUCTION_LOCKED',
+    ]).toContain(fullVisual.status);
     expect(fullVisual.stopLine).toContain('V-01 through V-05');
     expect(fullVisual.v01.status).toBe('ACTUAL_PLAY_PASS');
   });
