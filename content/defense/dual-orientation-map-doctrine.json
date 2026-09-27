@@ -9,7 +9,10 @@
     "padCoordinatesImmutableAcrossOrientation": true,
     "worldAssetMayBeSharedWhenCropSafe": true,
     "orientationMayChangeCameraOnly": true,
-    "orientationMayNotChangeBalance": true
+    "orientationMayNotChangeBalance": true,
+    "simulationTopologyRemainsAuthoritative": true,
+    "visualProjectionMayAlignToReviewedWorldArt": true,
+    "visualProjectionMustBeSharedAcrossOrientations": true
   },
   "portraitDoctrine": {
     "goal": "closer, fuller, event-centered play",
@@ -57,7 +60,7 @@
       "height": 600
     },
     "portraitFrame": {
-      "x": 0,
+      "x": 430,
       "y": 80,
       "width": 330,
       "height": 520
@@ -69,7 +72,12 @@
       "worker/vehicle separation",
       "idle command tray collapsed so the world remains dominant"
     ],
-    "lockedWorldReopen": false
+    "lockedWorldReopen": false,
+    "visualProjection": {
+      "purpose": "align visible route, pads, enemies and responses with the reviewed construction-world haul road without changing simulation distances, balance or logical topology",
+      "route": "G8A visual projection shared by landscape and portrait",
+      "simulationTopologyReopen": false
+    }
   },
   "futureMapRule": {
     "id": "MAP-NEXT-01",
