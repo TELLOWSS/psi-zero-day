@@ -4,6 +4,11 @@ import layout from '../content/episode01/main-title-layout.json';
 
 const hub = readFileSync('src/ui/GameHub.tsx', 'utf8');
 const css = readFileSync('src/ui/game-hub.css', 'utf8');
+const defenseGame = readFileSync('src/ui/DefenseGame.tsx', 'utf8');
+const defenseCss = readFileSync('src/ui/defense-game.css', 'utf8');
+const activity = readFileSync('src/ui/G8AActivityOverlay.tsx', 'utf8');
+const camera = readFileSync('src/ui/useDefenseCamera.ts', 'utf8');
+const visualAssets = readFileSync('src/app/defense-visual-assets.ts', 'utf8');
 
 describe('H-01 through H-04 commercial presentation upgrade', () => {
   it('locks the title hierarchy in live DOM', () => {
@@ -40,5 +45,34 @@ describe('H-01 through H-04 commercial presentation upgrade', () => {
     expect(css).toContain('@media (orientation:landscape) and (max-height:560px)');
     expect(layout.commercialPresentation.h04.shortLandscape).toContain('feature strip hidden');
     expect(layout.commercialPresentation.h04.shortLandscape).toContain('quick settings hidden');
+  });
+
+  it('keeps the construction world alive from the first waves instead of waiting for the Wave 8 slice', () => {
+    expect(activity).toContain('lee-jaehoon-map.webp');
+    expect(activity).toContain('seo-jeongmin-map.webp');
+    expect(activity).toContain('data-motion-vehicle="AMBIENT_DUMP"');
+    expect(defenseGame).toContain('state.waveId <= 5');
+    expect(defenseGame).toContain("enemy.enemyId === 'NORMAL'");
+    expect(defenseGame).toContain("enemy.enemyId === 'SWARM'");
+    expect(defenseGame).toContain("enemy.enemyId === 'ARMORED'");
+  });
+
+  it('uses construction-semantic raster equipment for all G8-A tower families', () => {
+    for (const asset of ['temporary-lighting-pack.webp','exclusion-zone.webp','access-barrier.webp','site-weather-station.webp']) {
+      expect(visualAssets).toContain(asset);
+    }
+    expect(defenseGame).toContain('defenseG8aTowerVisual');
+    expect(defenseGame).toContain('data-g8a-semantic');
+    expect(defenseCss).toContain('.zb-g8a-semantic-tower-image');
+  });
+
+  it('exposes player zoom and early automatic camera focus on the physical phone board', () => {
+    expect(defenseGame).toContain('camera.zoomIn');
+    expect(defenseGame).toContain('camera.zoomOut');
+    expect(defenseGame).toContain('camera.resetZoom');
+    expect(camera).toContain("'TOWER_PLACEMENT'");
+    expect(camera).toContain("'RISK_ENTRY'");
+    expect(camera).toContain('manualScale');
+    expect(defenseCss).toContain('.zb-camera-controls');
   });
 });
