@@ -327,6 +327,7 @@ async function metrics(cdp) {
       frameMode:shell?.getAttribute('data-frame-mode')||null,
       cameraMode:shell?.getAttribute('data-camera-mode')||null,
       cameraReason:shell?.getAttribute('data-camera-reason')||null,
+      selectionMode:shell?.getAttribute('data-selection-mode')||null,
       boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
@@ -374,6 +375,12 @@ async function metrics(cdp) {
       }).map(el => el.getAttribute('href') || el.getAttribute('src')),
       status:shell?.getAttribute('data-status')||null,
       board:board?{left:Math.round(board.left),top:Math.round(board.top),right:Math.round(board.right),bottom:Math.round(board.bottom),width:Math.round(board.width),height:Math.round(board.height)}:null,
+      command:(() => {
+        const el=document.querySelector('.zb-command');
+        if(!el)return null;
+        const r=el.getBoundingClientRect();
+        return {height:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+      })(),
       overflow:document.documentElement.scrollWidth>innerWidth+2,
       viewport:{width:innerWidth,height:innerHeight},
     };
@@ -388,6 +395,7 @@ const report={
   expected_blocker:null,
   desktop:null,
   mobile:null,
+  mobileSelectedPad:null,
   desktopImpact:null,
   mobileImpact:null,
   failures:[],
@@ -452,7 +460,7 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
   if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!==expectedRegistryStatus) throw new Error('Unexpected mobile G8-A registry state: '+report.mobile.productionMap+' expected '+expectedRegistryStatus);
-  if(report.mobile.frameMode!=='PORTRAIT_IMMERSION' || report.mobile.boardViewBox!=='0 80 430 520') throw new Error('390x844 portrait frame contract mismatch: '+JSON.stringify({frameMode:report.mobile.frameMode,viewBox:report.mobile.boardViewBox}));
+  if(report.mobile.frameMode!=='PORTRAIT_IMMERSION' || report.mobile.boardViewBox!=='0 80 330 520') throw new Error('390x844 portrait frame contract mismatch: '+JSON.stringify({frameMode:report.mobile.frameMode,viewBox:report.mobile.boardViewBox}));
   if(report.mobile.artHref!==expectedWorldHref) throw new Error('Unexpected mobile G8-A world art: '+report.mobile.artHref+' expected '+expectedWorldHref);
   if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
@@ -474,13 +482,27 @@ try {
   if(!report.mobile.board || report.mobile.board.left < -2 || report.mobile.board.right > 392 || report.mobile.board.width < 300) {
     throw new Error('390x844 G8-A board escaped viewport: '+JSON.stringify(report.mobile.board));
   }
-  if(report.mobile.board.height / report.mobile.viewport.height < 0.55) {
-    throw new Error('390x844 portrait world is not immersive enough: '+JSON.stringify({board:report.mobile.board,viewport:report.mobile.viewport}));
+  if(report.mobile.selectionMode!=='NONE') throw new Error('390x844 idle portrait selection mode mismatch: '+report.mobile.selectionMode);
+  if(report.mobile.board.height / report.mobile.viewport.height < 0.72) {
+    throw new Error('390x844 portrait idle world fill is below V-04A target: '+JSON.stringify({board:report.mobile.board,viewport:report.mobile.viewport}));
+  }
+  if(!report.mobile.command || report.mobile.command.height / report.mobile.viewport.height > 0.15) {
+    throw new Error('390x844 idle command tray is too tall: '+JSON.stringify({command:report.mobile.command,viewport:report.mobile.viewport}));
   }
   if(report.mobile.touchPads < 3 || report.mobile.touchPads > 4) {
     throw new Error('Portrait touch pads are not remapped to the authored camera frame: '+report.mobile.touchPads);
   }
   await screenshot(cdp,'02-g8a-bottom-up-mobile.png');
+
+  await evaluate(cdp, "document.querySelector('.zb-pad-hit')?.click(); true");
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-selection-mode') === 'PAD'`, 1500);
+  report.mobileSelectedPad=await metrics(cdp);
+  if(report.mobileSelectedPad.selectionMode!=='PAD') throw new Error('390x844 selected-pad mode did not expand');
+  if(!report.mobileSelectedPad.command || report.mobileSelectedPad.command.height < 180) {
+    throw new Error('390x844 selected-pad command panel did not expand: '+JSON.stringify(report.mobileSelectedPad.command));
+  }
+  if(report.mobileSelectedPad.overflow) throw new Error('390x844 selected-pad expansion caused horizontal overflow');
+  await screenshot(cdp,'03-g8a-pad-selected-mobile.png');
 
   await clearState(cdp);
   await navigate(cdp);
@@ -494,7 +516,7 @@ try {
   }
   if(!report.mobileImpact.vehicleStates.includes('BRAKE')) throw new Error('390x844 SWIFT BRAKE state did not trigger: '+JSON.stringify(report.mobileImpact.vehicleStates));
   if(report.mobileImpact.overflow) throw new Error('390x844 impact camera caused horizontal overflow');
-  await screenshot(cdp,'03-g8a-control-impact-mobile.png');
+  await screenshot(cdp,'04-g8a-control-impact-mobile.png');
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
