@@ -1031,3 +1031,46 @@
   .zb-worker-motion.is-directing,
   .zb-g8a-activity.is-impact .zb-worker-motion{animation:none}
 }
+
+/* M-04 — SWIFT vehicle presentation. Engine path movement stays authoritative. */
+.zb-swift-road-contact{
+  fill:rgba(8,17,21,.30);
+  stroke:rgba(193,219,228,.12);
+  stroke-width:1.5;
+  pointer-events:none;
+}
+.zb-enemy-swift[data-vehicle-state="CRUISE"] .zb-swift-pq-asset{
+  animation:zb-swift-road-vibration .52s ease-in-out infinite;
+}
+.zb-enemy-swift[data-vehicle-state="THREAT"] .zb-swift-pq-asset{
+  animation:zb-swift-threat-body .18s ease-out both;
+}
+.zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-pq-asset{
+  animation:zb-swift-brake-body .24s cubic-bezier(.2,.8,.2,1) both;
+}
+.zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-road-contact{
+  animation:zb-swift-road-brake .28s ease-out both;
+}
+@keyframes zb-swift-road-vibration{
+  0%,100%{transform:translate3d(0,0,0)}
+  50%{transform:translate3d(.8px,-.7px,0)}
+}
+@keyframes zb-swift-threat-body{
+  0%{transform:translate3d(2px,0,0) scale(1.02);filter:brightness(1.14) drop-shadow(0 0 8px rgba(255,183,117,.36))}
+  100%{transform:translate3d(0,0,0) scale(1);filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34))}
+}
+@keyframes zb-swift-brake-body{
+  0%{transform:translate3d(5px,0,0) scaleX(1.035);filter:brightness(1.16) drop-shadow(0 0 8px rgba(255,190,128,.42))}
+  45%{transform:translate3d(-2px,1px,0) scaleX(.99)}
+  100%{transform:translate3d(0,0,0) scaleX(1);filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34))}
+}
+@keyframes zb-swift-road-brake{
+  0%{rx:31;ry:8;opacity:.35}
+  100%{rx:43;ry:12;opacity:.08}
+}
+@media (prefers-reduced-motion:reduce){
+  .zb-enemy-swift[data-vehicle-state="CRUISE"] .zb-swift-pq-asset,
+  .zb-enemy-swift[data-vehicle-state="THREAT"] .zb-swift-pq-asset,
+  .zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-pq-asset,
+  .zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-road-contact{animation:none}
+}
