@@ -158,7 +158,7 @@ function representativeDefenseSave(impact = false) {
     eventId: null,
     eventContentVersion: null,
     status: 'RUNNING',
-    paused: false,
+    paused: impact,
     speed: 1,
     tick: 4120,
     waveId: 8,
@@ -419,6 +419,8 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
+  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
   report.desktopImpact=await metrics(cdp);
   if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
@@ -459,6 +461,8 @@ try {
   await clearState(cdp);
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
+  await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
+  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
   report.mobileImpact=await metrics(cdp);
   if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
