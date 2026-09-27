@@ -49,6 +49,48 @@
 .zb-shell[data-camera-mode="RETURN_RECOVER"] .zb-pad-layer{
   transition-duration:380ms;
 }
+
+.zb-shell[data-camera-mode="IMPACT_CLOSE_UP"] .zb-board-wrap{
+  animation:zb-camera-impact-shake 140ms ease-out both;
+}
+.zb-shell[data-camera-mode="IMPACT_CLOSE_UP"][data-camera-reason="CONTROL_INTERVENTION"] .zb-board-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:13;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at var(--zb-camera-x,50%) var(--zb-camera-y,50%),
+      rgba(133,226,255,.42) 0%,
+      rgba(72,187,225,.22) 10%,
+      rgba(39,118,152,.08) 22%,
+      transparent 42%);
+  animation:zb-control-light-peak 150ms ease-out both;
+  mix-blend-mode:screen;
+}
+@keyframes zb-camera-impact-shake{
+  0%{transform:translate3d(0,0,0)}
+  22%{transform:translate3d(5px,-2px,0)}
+  45%{transform:translate3d(-4px,2px,0)}
+  68%{transform:translate3d(2px,-1px,0)}
+  100%{transform:translate3d(0,0,0)}
+}
+@keyframes zb-control-light-peak{
+  0%{opacity:0}
+  24%{opacity:1}
+  100%{opacity:0}
+}
+@media (orientation:portrait){
+  .zb-shell[data-camera-mode="IMPACT_CLOSE_UP"] .zb-board-wrap{
+    animation-name:zb-camera-impact-shake-portrait;
+  }
+  @keyframes zb-camera-impact-shake-portrait{
+    0%{transform:translate3d(0,0,0)}
+    25%{transform:translate3d(3px,-1px,0)}
+    50%{transform:translate3d(-2px,1px,0)}
+    100%{transform:translate3d(0,0,0)}
+  }
+}
 .zb-board-bg{fill:#152631}
 .zb-grid-line{fill:none;stroke:rgba(185,200,211,.06);stroke-width:1}
 .zb-path-shoulder{
@@ -399,11 +441,12 @@
 .zb-resolve-burst circle{fill:none;stroke:#eef4f8;stroke-width:5;animation:zb-resolve-burst .22s ease-out both}
 .zb-resolve-burst path{fill:none;stroke:#ffad42;stroke-width:4;stroke-linecap:round;animation:zb-resolve-rays .22s ease-out both}
 .zb-control-intervention{pointer-events:none;transform-origin:center;animation:zb-control-intervention .22s ease-out both}
-.zb-control-intervention circle{fill:rgba(255,173,66,.06);stroke:rgba(255,196,98,.82);stroke-width:3;stroke-dasharray:8 7}
-.zb-control-intervention path{fill:none;stroke:#ffd28a;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.zb-control-intervention circle{fill:rgba(72,194,225,.08);stroke:rgba(120,225,255,.9);stroke-width:3;stroke-dasharray:8 7;filter:drop-shadow(0 0 5px rgba(88,211,244,.42))}
+.zb-control-intervention path{fill:none;stroke:#9fe9ff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(83,199,233,.45))}
 .zb-swift-brake-cue{pointer-events:none;animation:zb-swift-brake .24s ease-out both}
-.zb-swift-brake-cue circle{fill:rgba(226,107,97,.05);stroke:rgba(255,188,135,.78);stroke-width:3;stroke-dasharray:7 6}
+.zb-swift-brake-cue circle{fill:rgba(226,107,97,.04);stroke:rgba(255,188,135,.82);stroke-width:3;stroke-dasharray:7 6}
 .zb-swift-brake-cue path{fill:none;stroke:#ffd29a;stroke-width:4;stroke-linecap:round}
+.zb-swift-brake-cue ellipse{fill:rgba(171,137,101,.18);stroke:rgba(221,189,150,.28);stroke-width:2;animation:zb-brake-dust .24s ease-out both}
 @keyframes zb-attack-flash{0%{r:18;opacity:1}100%{r:38;opacity:0}}
 @keyframes zb-area-pulse{0%{r:26;opacity:1;stroke-width:9}100%{r:62;opacity:0;stroke-width:2}}
 @keyframes zb-detect-pulse{0%{r:32;opacity:1}100%{r:70;opacity:0;stroke-dashoffset:-24}}
@@ -413,9 +456,10 @@
 @keyframes zb-resolve-rays{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.35);opacity:0}}
 @keyframes zb-control-intervention{0%{opacity:0;transform:scale(.72)}55%{opacity:1}100%{opacity:.18;transform:scale(1.08)}}
 @keyframes zb-swift-brake{0%{opacity:0;transform:translateX(6px) scale(.82)}45%{opacity:1}100%{opacity:.24;transform:translateX(0) scale(1.08)}}
+@keyframes zb-brake-dust{0%{rx:8;ry:3;opacity:.55}100%{rx:34;ry:11;opacity:0}}
 @media (prefers-reduced-motion:reduce){
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-slow-ring,.zb-boss-armor-effect,
-  .zb-resolve-burst circle,.zb-resolve-burst path,.zb-control-intervention,.zb-swift-brake-cue{animation:none}
+  .zb-resolve-burst circle,.zb-resolve-burst path,.zb-control-intervention,.zb-swift-brake-cue,.zb-swift-brake-cue ellipse{animation:none}
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-resolve-burst{opacity:.7}
 }
 
