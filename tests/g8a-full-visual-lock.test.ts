@@ -30,6 +30,7 @@ describe('G8-A full-screen visual lock contract', () => {
       'V05_PASS_FULL_SCREEN_REVIEW',
       'V05_PASS_FULL_SCREEN_REVIEW_REVALIDATION',
       'V05_PASS_FULL_SCREEN_VISUAL_POLISH_ACTIVE',
+      'PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE',
       'PRODUCTION_LOCKED',
     ]).toContain(fullVisual.status);
     if (fullVisual.status === 'PRODUCTION_LOCKED') {
@@ -37,6 +38,13 @@ describe('G8-A full-screen visual lock contract', () => {
       expect(fullVisual.stopLine).toContain('Voice Integration');
     } else {
       expect(fullVisual.stopLine).toContain('V-01 through V-05');
+    }
+    if (fullVisual.status === 'PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE') {
+      expect(fullVisual.fullScreenReview.productionLocked).toBe(false);
+      expect(fullVisual.fullScreenReview.physicalAndroidLandscape.correction.landscapeFrame)
+        .toEqual({ x: 0, y: 60, width: 1000, height: 480 });
+      expect(fullVisual.fullScreenReview.physicalAndroidLandscape.correction.worldTarget.minimumWidthShare).toBeGreaterThanOrEqual(0.94);
+      expect(fullVisual.fullScreenReview.physicalAndroidLandscape.correction.worldTarget.minimumHeightShare).toBeGreaterThanOrEqual(0.94);
     }
     expect(fullVisual.v01.status).toBe('ACTUAL_PLAY_PASS');
   });
