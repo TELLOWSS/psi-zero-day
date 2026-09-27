@@ -660,8 +660,8 @@
       "next": "Install rebuilt Commercial Presentation QA APK and submit a second physical-device landscape recording. Physical replay remains required before restoring Production Lock.",
       "automatedRevalidation": {
         "status": "PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
-        "githubActionsRun": 36316684226,
-        "sourceSha": "2ebe3760ee12fba25106b3c2d5eb3a2052676aa6",
+        "githubActionsRun": 36317181019,
+        "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
         "viewport": "780x360",
         "board": {
           "width": 780,
@@ -702,7 +702,9 @@
         "EVADE",
         "SAFE_RETURN"
       ],
-      "githubActionsRun": 36316684226
+      "githubActionsRun": 36317181019,
+      "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
+      "transientCapture": "ATOMIC_DOM_SNAPSHOT"
     }
   }
 }
