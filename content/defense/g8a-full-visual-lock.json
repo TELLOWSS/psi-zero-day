@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V01_PASS_V02_ACTIVE",
+  "status": "V02_PASS_V04A_ACTIVE",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -131,13 +131,20 @@
   },
   "v04a": {
     "title": "Portrait HUD/UI Layout Pass",
-    "status": "BASELINE_IMPLEMENTED",
+    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
     "targets": {
       "topHudMaximumScreenShare": 0.09,
-      "bottomActionMaximumScreenShare": 0.3,
-      "worldMinimumScreenShare": 0.55
+      "idleBottomActionMaximumScreenShare": 0.15,
+      "idleWorldMinimumScreenShare": 0.72,
+      "expandedCommandPanelAllowedAfterSelection": true
     },
-    "next": "Refine final HUD art language during V-04 without reopening the portrait camera/topology contract."
+    "next": "Verify 390x844 idle world fill, touch-pad mapping, impact zoom and expanded selected-pad/tower command states.",
+    "portraitFrame": {
+      "x": 0,
+      "y": 80,
+      "width": 330,
+      "height": 520
+    }
   },
   "motionPresentation": {
     "architecture": "2.5D_CINEMATIC_TACTICAL",
@@ -265,7 +272,7 @@
   },
   "v02": {
     "title": "CONTROL + Process Overlay Visual Coherence",
-    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "status": "ACTUAL_PLAY_VISUAL_QA_PASS",
     "changes": [
       "reduce CONTROL:L1 marshal/barrier footprint to world-consistent scale",
       "remove P/C/S letter labels from intervention anchors",
@@ -281,6 +288,28 @@
       "locked WORLD",
       "locked SWIFT",
       "VEILED Final"
-    ]
+    ],
+    "evidence": {
+      "githubActionsRun": 36300634261,
+      "desktop": {
+        "controlBounds": {
+          "width": 98,
+          "height": 112
+        },
+        "anchorTextCount": 0,
+        "anchorOpacity": 0.07,
+        "secondaryRouteOpacity": 0.12
+      },
+      "portrait": {
+        "controlBounds": {
+          "width": 72,
+          "height": 83
+        },
+        "anchorTextCount": 0,
+        "anchorOpacity": 0.07,
+        "secondaryRouteOpacity": 0.12
+      },
+      "impactFx": "SWIFT circular brake warning ring removed; grounded skid/dust cue retained"
+    }
   }
 }
