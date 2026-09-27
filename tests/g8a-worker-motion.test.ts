@@ -15,6 +15,10 @@ describe('M-03 G8-A worker motion overlay', () => {
   it('supports an impact reaction state without changing defense simulation state', () => {
     const source = readFileSync('src/ui/G8AActivityOverlay.tsx', 'utf8');
     expect(source).toContain("cameraMode === 'IMPACT_CLOSE_UP'");
+    expect(source).toContain("cameraMode === 'RETURN_RECOVER'");
+    expect(source).toContain("data-worker-group-state");
+    expect(source).toContain("'EVADE'");
+    expect(source).toContain("'SAFE_RETURN'");
     expect(source).not.toContain('dispatch(');
     expect(source).not.toContain('advanceDefense(');
   });
