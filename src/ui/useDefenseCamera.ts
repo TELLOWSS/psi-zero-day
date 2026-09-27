@@ -172,7 +172,7 @@ export function useDefenseCamera(
       setFocusEnemyId(signal.enemyId);
       setReason(signal.reason);
       setMode('IMPACT_CLOSE_UP');
-      timersRef.current.push(window.setTimeout(() => setMode('RETURN_RECOVER'), 150));
+      timersRef.current.push(window.setTimeout(() => setMode('RETURN_RECOVER'), 130));
       timersRef.current.push(window.setTimeout(() => {
         setMode('STRATEGIC_BASE');
         setFocus(null);
