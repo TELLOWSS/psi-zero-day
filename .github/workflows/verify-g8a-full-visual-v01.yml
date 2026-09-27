@@ -1,0 +1,38 @@
+name: Verify G8-A Full Visual V-01
+
+on:
+  push:
+    branches:
+      - sol/g8a-full-visual-v01-20260927
+  pull_request:
+    paths:
+      - 'content/defense/g8a-veiled-final-art.json'
+      - 'content/defense/g8a-full-visual-lock.json'
+      - 'src/app/defense-visual-assets.ts'
+      - 'tests/g8a-veiled-final-art.test.ts'
+      - 'public/assets/defense/enemies/veiled-final-g8a.webp'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: g8a-full-visual-v01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-v01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - name: V-01 visual contracts
+        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/final-art-policy.test.ts
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
