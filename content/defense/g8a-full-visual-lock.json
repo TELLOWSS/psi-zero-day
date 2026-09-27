@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
+  "status": "V01_ASSET_PENDING",
+  "baseline": {
+    "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
+    "world": {
+      "state": "PRODUCTION_LOCKED",
+      "runtime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+      "reopen": false
+    },
+    "swift": {
+      "state": "PRODUCTION_LOCKED",
+      "runtime": "assets/defense/enemies/swift-final-g8a.webp",
+      "reopen": false
+    },
+    "controlL1": {
+      "state": "REPRESENTATIVE_RASTER_COMPOSITE_PASS",
+      "reopenTopology": false
+    }
+  },
+  "representativePlay": {
+    "map": "map-apt-bottom-up-excavation-01",
+    "wave": 8,
+    "waveEnemies": {
+      "VEILED": 8,
+      "SWIFT": 10
+    },
+    "priority": [
+      "VEILED_FINAL",
+      "CONTROL_VISUAL_COHERENCE",
+      "RISK_AND_CONTROL_FX",
+      "PROCESS_OVERLAY_VISUAL_LANGUAGE",
+      "HUD_UI",
+      "CINEMATIC"
+    ]
+  },
+  "v01": {
+    "title": "Wave 8 VEILED + CONTROL + FX Production Pass",
+    "status": "ASSET_PENDING",
+    "mustKeep": [
+      "locked G8-A WORLD raster",
+      "locked G8-A SWIFT raster",
+      "locked map route coordinates",
+      "locked pad coordinates",
+      "base wave balance",
+      "base defense engine"
+    ],
+    "mustRemoveFromVisibleRepresentativePlay": [
+      "VEILED prototype glyph",
+      "development-looking risk/control geometry",
+      "prototype-style process anchor presentation"
+    ],
+    "acceptance": [
+      "VEILED final raster approved and active",
+      "Wave 8 visible enemy prototype glyph count is zero",
+      "WORLD, SWIFT and CONTROL remain regression-free",
+      "desktop actual-play visual QA passes",
+      "390x844 actual-play visual QA passes",
+      "no horizontal overflow",
+      "no final-art SVG leakage"
+    ]
+  },
+  "lockSemantics": {
+    "assetLock": "G8-A WORLD + SWIFT + CONTROL representative asset proof; already passed",
+    "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
+    "neverTreatAsEquivalent": true
+  },
+  "stopLine": "Do not promote G8A_FULL_SCREEN_VISUAL_LOCK until V-01 through V-05 actual-play visual QA all pass."
+}
