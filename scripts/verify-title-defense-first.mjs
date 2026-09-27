@@ -27,7 +27,7 @@ async function evalJs(cdp, expression){const r=await cdp.send('Runtime.evaluate'
 async function waitFor(cdp, expression, timeout=10000){const start=Date.now();while(Date.now()-start<timeout){if(await evalJs(cdp,expression))return;await sleep(100);}throw new Error('condition timeout: '+expression);}
 async function shot(cdp,name){const r=await cdp.send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});fs.writeFileSync(path.join(outputDir,name),Buffer.from(r.data,'base64'));}
 async function viewport(cdp,w,h,mobile){await cdp.send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:mobile?2.75:1,mobile,screenOrientation:w>h?{type:'landscapePrimary',angle:90}:{type:'portraitPrimary',angle:0}});}
-async function navigate(cdp){const p=cdp.once('Page.loadEventFired');await cdp.send('Page.navigate',{url:baseUrl});await p;await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");await sleep(350);}
+async function navigate(cdp){const p=cdp.once('Page.loadEventFired');await cdp.send('Page.navigate',{url:baseUrl});await p;await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");await sleep(950);}
 async function titleMetrics(cdp){return evalJs(cdp,`(() => {
   const rect = sel => { const el=document.querySelector(sel); if(!el)return null; const r=el.getBoundingClientRect(); return {left:Math.round(r.left),top:Math.round(r.top),right:Math.round(r.right),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)}; };
   const primary=document.querySelector('.commercial-title-action.is-primary');
