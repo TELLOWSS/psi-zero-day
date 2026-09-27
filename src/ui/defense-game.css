@@ -872,6 +872,10 @@
 }
 
 
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"]:not(.zb-prep):not(.is-def-core-active) .zb-board-wrap{
+  aspect-ratio:25/12;
+}
+
 /* G8-A physical-phone landscape — world-first immersive gameplay. */
 @media (orientation:landscape) and (max-height:560px){
   .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active){
