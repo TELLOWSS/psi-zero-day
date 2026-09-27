@@ -27,4 +27,13 @@ describe('G8-A full-screen visual lock contract', () => {
     expect(fullVisual.status).toBe('V01_ASSET_PENDING');
     expect(fullVisual.stopLine).toContain('V-01 through V-05');
   });
+
+  it('locks portrait immersion as an authored camera mode, not a scaled landscape board', () => {
+    expect(fullVisual.v01a.status).toBe('IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA');
+    expect(fullVisual.v01a.portraitFrame).toEqual({ x: 0, y: 80, width: 430, height: 520 });
+    expect(fullVisual.v01a.requirements).toContain('390x844 world viewport occupies at least 55% of screen height');
+    expect(fullVisual.v04a.targets.topHudMaximumScreenShare).toBeLessThanOrEqual(0.09);
+    expect(fullVisual.v04a.targets.bottomActionMaximumScreenShare).toBeLessThanOrEqual(0.30);
+    expect(fullVisual.v04a.targets.worldMinimumScreenShare).toBeGreaterThanOrEqual(0.55);
+  });
 });
