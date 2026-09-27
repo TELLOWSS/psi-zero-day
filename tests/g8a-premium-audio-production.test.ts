@@ -9,16 +9,16 @@ import {
 import type { PremiumDefenseAudioCue } from '../src/app/defense-premium-audio';
 
 describe('G8-A premium orchestral audio contract', () => {
-  it('enables promoted premium binaries for QA without claiming Production Lock', () => {
-    expect(contract.status).toBe('PREMIUM_AUDIO_QA_READY');
+  it('enables 24/24 production-approved premium binaries after Production Lock', () => {
+    expect(contract.status).toBe('AUDIO_PRODUCTION_LOCKED');
     expect(contract.absoluteRules.oscillatorFinalAudioForbidden).toBe(true);
     expect(contract.absoluteRules.genericTrailerMusicForbidden).toBe(true);
-    expect(contract.acceptance.productionLockAllowed).toBe(false);
+    expect(contract.acceptance.productionLockAllowed).toBe(true);
     expect(contract.acceptance.finalBinaryCount).toBe(24);
-    expect(premiumDefenseAudioEnabled()).toBe(false);
+    expect(premiumDefenseAudioEnabled()).toBe(true);
     expect(premiumDefenseAudioRuntimeEnabled()).toBe(true);
     expect(premiumDefenseAudioContractState().runtimeReadyAssetCount).toBe(24);
-    expect(premiumDefenseAudioContractState().productionApprovedAssetCount).toBe(0);
+    expect(premiumDefenseAudioContractState().productionApprovedAssetCount).toBe(24);
   });
 
   it('keeps a full adaptive orchestral score rather than one baked BGM loop', () => {
@@ -34,10 +34,10 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(contract.dynamicScore.runtimeStates.map(item=>item.state)).toContain('CONTROL_INTERVENTION');
   });
 
-  it('exposes all gameplay premium binaries in QA while keeping them unapproved', () => {
+  it('exposes all gameplay premium binaries as production approved', () => {
     expect(contract.gameplaySfx).toHaveLength(11);
     for(const item of contract.gameplaySfx){
-      expect(item.state).not.toBe('PRODUCTION_APPROVED');
+      expect(item.state).toBe('PRODUCTION_APPROVED');
       expect(premiumDefenseCueUri(item.cue as PremiumDefenseAudioCue)).toBe(item.path);
     }
   });
@@ -50,7 +50,7 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(ids).toContain('swift.airbrake');
     expect(ids).toContain('control.radio_stop');
     expect(ids).toContain('control.barrier_clack');
-    expect(contract.fieldSound.every(item=>item.state!=='PRODUCTION_APPROVED')).toBe(true);
+    expect(contract.fieldSound.every(item=>item.state==='PRODUCTION_APPROVED')).toBe(true);
   });
 
   it('locks source provenance, runtime, mastering, mobile and headphone requirements', () => {
@@ -65,12 +65,12 @@ describe('G8-A premium orchestral audio contract', () => {
     expect(contract.acceptance.productionLockRequires).toContain('NO_OSCILLATOR_FALLBACK_IN_ACTUAL_PLAY');
   });
 
-  it('tracks exactly 24 QA-ready runtime deliverables and no Production Approved assets', () => {
+  it('tracks exactly 24 production-approved runtime deliverables', () => {
     const all=[...contract.dynamicScore.stems,...contract.fieldSound,...contract.gameplaySfx];
     expect(all).toHaveLength(24);
     expect(contract.acceptance.requiredAssetCount).toBe(24);
     expect(contract.acceptance.finalBinaryCount).toBe(24);
     expect(premiumDefenseAudioContractState().runtimeReadyAssetCount).toBe(24);
-    expect(all.some(item=>item.state==='PRODUCTION_APPROVED')).toBe(false);
+    expect(all.every(item=>item.state==='PRODUCTION_APPROVED')).toBe(true);
   });
 });
