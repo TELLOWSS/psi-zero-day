@@ -66,5 +66,23 @@
     "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "Do not promote G8A_FULL_SCREEN_VISUAL_LOCK until V-01 through V-05 actual-play visual QA all pass."
+  "stopLine": "Do not promote G8A_FULL_SCREEN_VISUAL_LOCK until V-01 through V-05 actual-play visual QA all pass.",
+  "visualDoctrine": {
+    "siteUniquenessFirst": true,
+    "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
+    "g8aIdentity": [
+      "bottom-up open excavation",
+      "haul-ramp circulation",
+      "worker/vehicle route conflict",
+      "retaining/shoring edges",
+      "temporary access control",
+      "night-work visibility"
+    ],
+    "application": {
+      "VEILED": "concealed/ambiguous risk caused by real sightline loss, temporary works and site clutter",
+      "SWIFT": "fast-changing vehicle movement risk",
+      "CONTROL": "marshal, barrier and route-separation intervention",
+      "FX": "risk interpretation and intervention cues that reveal real site relationships rather than magical attacks"
+    }
+  }
 }
