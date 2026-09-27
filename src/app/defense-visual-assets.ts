@@ -209,35 +209,35 @@ export function defenseG8aVeiledFinalAsset(): {
 
 export interface DefenseG8aTowerVisual {
   readonly uri: string;
-  readonly semantic: 'WARNING_LIGHTING' | 'EXCLUSION_CONTROL' | 'TRAFFIC_CONTROL' | 'SITE_SENSOR';
+  readonly semantic: 'ALERT_CONTROL' | 'EXCLUSION_CONTROL' | 'TRAFFIC_CONTROL' | 'SITE_SENSOR';
   readonly width: number;
   readonly height: number;
 }
 
 const G8A_TOWER_VISUALS: Readonly<Record<DefenseTowerId, DefenseG8aTowerVisual>> = {
   PULSE: {
-    uri: 'assets/episode01/scene-elements/temporary-lighting-pack.webp',
-    semantic: 'WARNING_LIGHTING',
-    width: 84,
-    height: 84,
+    uri: 'assets/episode01/scene-elements/temporary-distribution-board.webp',
+    semantic: 'ALERT_CONTROL',
+    width: 66,
+    height: 74,
   },
   BURST: {
     uri: 'assets/episode01/scene-elements/exclusion-zone.webp',
     semantic: 'EXCLUSION_CONTROL',
-    width: 88,
-    height: 88,
+    width: 82,
+    height: 78,
   },
   CONTROL: {
-    uri: 'assets/episode01/scene-elements/access-barrier.webp',
+    uri: 'assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
     semantic: 'TRAFFIC_CONTROL',
-    width: 88,
-    height: 78,
+    width: 104,
+    height: 72,
   },
   SENSOR: {
     uri: 'assets/episode01/scene-elements/site-weather-station.webp',
     semantic: 'SITE_SENSOR',
-    width: 82,
-    height: 92,
+    width: 66,
+    height: 76,
   },
 };
 
