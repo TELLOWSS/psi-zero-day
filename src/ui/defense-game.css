@@ -444,9 +444,8 @@
 .zb-control-intervention circle{fill:rgba(72,194,225,.08);stroke:rgba(120,225,255,.9);stroke-width:3;stroke-dasharray:8 7;filter:drop-shadow(0 0 5px rgba(88,211,244,.42))}
 .zb-control-intervention path{fill:none;stroke:#9fe9ff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(83,199,233,.45))}
 .zb-swift-brake-cue{pointer-events:none;animation:zb-swift-brake .24s ease-out both}
-.zb-swift-brake-cue circle{fill:rgba(226,107,97,.04);stroke:rgba(255,188,135,.82);stroke-width:3;stroke-dasharray:7 6}
-.zb-swift-brake-cue path{fill:none;stroke:#ffd29a;stroke-width:4;stroke-linecap:round}
-.zb-swift-brake-cue ellipse{fill:rgba(171,137,101,.18);stroke:rgba(221,189,150,.28);stroke-width:2;animation:zb-brake-dust .24s ease-out both}
+.zb-swift-brake-cue path{fill:none;stroke:rgba(228,207,173,.72);stroke-width:2.4;stroke-linecap:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.32))}
+.zb-swift-brake-cue ellipse{fill:rgba(151,126,96,.16);stroke:none;animation:zb-brake-dust .24s ease-out both}
 @keyframes zb-attack-flash{0%{r:18;opacity:1}100%{r:38;opacity:0}}
 @keyframes zb-area-pulse{0%{r:26;opacity:1;stroke-width:9}100%{r:62;opacity:0;stroke-width:2}}
 @keyframes zb-detect-pulse{0%{r:32;opacity:1}100%{r:70;opacity:0;stroke-dashoffset:-24}}
