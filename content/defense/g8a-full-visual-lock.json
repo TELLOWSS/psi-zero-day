@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V05_PASS_FULL_SCREEN_REVIEW_REVALIDATION",
+  "status": "V05_PASS_FULL_SCREEN_VISUAL_POLISH_ACTIVE",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "ACTUAL_PLAY_REVALIDATION_PENDING",
+    "status": "TECHNICAL_REVALIDATION_PASS_VISUAL_POLISH_ACTIVE",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -496,6 +496,50 @@
       "prototypeBoardItems = 0",
       "activeSvgVisuals = 0",
       "horizontal overflow = 0"
-    ]
+    ],
+    "technicalEvidence": {
+      "githubActionsRun": 36302647219,
+      "artifactId": 10925454614,
+      "sourceSha": "66b5c8d12111dbbee9432c4a58d75bf95ac088fb",
+      "desktop": {
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false,
+        "controlBounds": {
+          "width": 79,
+          "height": 86
+        }
+      },
+      "portrait": {
+        "viewBox": "430 80 330 520",
+        "worldShare": 0.777,
+        "touchPads": 3,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false,
+        "controlBounds": {
+          "width": 76,
+          "height": 83
+        }
+      },
+      "impact": {
+        "desktop": "IMPACT_CLOSE_UP / CONTROL_INTERVENTION / BRAKE",
+        "portrait": "IMPACT_CLOSE_UP / CONTROL_INTERVENTION / BRAKE"
+      },
+      "cinematic": "V05 desktop + 390x844 PASS"
+    },
+    "visualReview": {
+      "decision": "POLISH_REQUIRED_BEFORE_PRODUCTION_LOCK",
+      "findings": [
+        "live worker/CONTROL rasters still read slightly cut-out against the photoreal construction world",
+        "generic circular impact feedback competes with the grounded braking/control language"
+      ],
+      "activeFixes": [
+        "reduce worker and CONTROL world footprint and match dusk lighting/contact shadows",
+        "remove generic impact ring from SWIFT and VEILED",
+        "use road-contact, skid/dust, CONTROL ground cue and camera punch as representative impact feedback"
+      ],
+      "next": "Rerun desktop/390x844/impact/V05 evidence and visually inspect screenshots before Production Lock."
+    }
   }
 }
