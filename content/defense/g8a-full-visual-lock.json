@@ -27,6 +27,7 @@
       "SWIFT": 10
     },
     "priority": [
+      "PORTRAIT_FRAMING_QA",
       "VEILED_FINAL",
       "CONTROL_VISUAL_COHERENCE",
       "RISK_AND_CONTROL_FX",
@@ -84,5 +85,33 @@
       "CONTROL": "marshal, barrier and route-separation intervention",
       "FX": "risk interpretation and intervention cues that reveal real site relationships rather than magical attacks"
     }
+  },
+  "v01a": {
+    "title": "Portrait Framing Doctrine",
+    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "map": "map-apt-bottom-up-excavation-01",
+    "portraitFrame": {
+      "x": 0,
+      "y": 80,
+      "width": 430,
+      "height": 520
+    },
+    "requirements": [
+      "portrait is a dedicated camera composition, not a shrunken landscape frame",
+      "390x844 world viewport occupies at least 55% of screen height",
+      "SWIFT, VEILED representative approach and CONTROL intervention remain readable in one frame",
+      "touch pad coordinates are remapped to the active camera frame",
+      "locked WORLD raster and gameplay topology remain unchanged"
+    ]
+  },
+  "v04a": {
+    "title": "Portrait HUD/UI Layout Pass",
+    "status": "BASELINE_IMPLEMENTED",
+    "targets": {
+      "topHudMaximumScreenShare": 0.09,
+      "bottomActionMaximumScreenShare": 0.3,
+      "worldMinimumScreenShare": 0.55
+    },
+    "next": "Refine final HUD art language during V-04 without reopening the portrait camera/topology contract."
   }
 }
