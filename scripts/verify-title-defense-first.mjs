@@ -61,7 +61,12 @@ try{
 
   await viewport(cdp,1440,900,false);await navigate(cdp);
   report.desktop=await titleMetrics(cdp);
-  if(!report.desktop.primary.includes('현장 디펜스 시작')) throw new Error('desktop primary CTA is not Field Defense');
+  if(report.desktop.hierarchy!=='H01_LOCKED') throw new Error('desktop H-01 hierarchy marker missing');
+  if(report.desktop.eyebrow!=='NEW PSI') throw new Error('desktop brand eyebrow drifted: '+report.desktop.eyebrow);
+  if(report.desktop.primaryTitle!=='PSI : ZERO DAY') throw new Error('desktop primary title drifted: '+report.desktop.primaryTitle);
+  if(report.desktop.slogan!=='사고 전 신호를 읽고, 현장을 바꿔라.') throw new Error('desktop slogan drifted: '+report.desktop.slogan);
+  if(report.desktop.primaryCtaKind!=='defense' || !report.desktop.primary.includes('현장 디펜스 시작')) throw new Error('desktop primary CTA is not Field Defense');
+  if(!report.desktop.copyRect || report.desktop.copyRect.width / report.desktop.viewport.width > .52) throw new Error('desktop hero copy exceeds 52vw: '+JSON.stringify(report.desktop.copyRect));
   if(!report.desktop.liveText.includes('LIVE SITE') || !report.desktop.liveText.includes('SWIFT')) throw new Error('desktop LIVE SITE panel missing');
   if(report.desktop.overflow) throw new Error('desktop title horizontal overflow');
   await shot(cdp,'desktop-1440x900-home.png');
@@ -79,6 +84,7 @@ try{
   await viewport(cdp,780,360,true);await navigate(cdp);
   report.physicalLandscape=await titleMetrics(cdp);
   if(report.physicalLandscape.titleLayout!=='PHYSICAL_PHONE_V10') throw new Error('physical landscape title layout marker missing');
+  if(report.physicalLandscape.hierarchy!=='H01_LOCKED' || report.physicalLandscape.primaryTitle!=='PSI : ZERO DAY') throw new Error('780x360 H-01 title hierarchy drifted: '+JSON.stringify({hierarchy:report.physicalLandscape.hierarchy,title:report.physicalLandscape.primaryTitle}));
   if(!report.physicalLandscape.primary.includes('현장 디펜스 시작')) throw new Error('780x360 primary CTA is not Field Defense');
   if(report.physicalLandscape.featuresVisible) throw new Error('780x360 feature-card strip should be hidden');
   if(!report.physicalLandscape.castVisible || report.physicalLandscape.visibleCastCount!==1) throw new Error('780x360 should use one protagonist instead of a four-face lineup: '+report.physicalLandscape.visibleCastCount);
@@ -93,6 +99,7 @@ try{
 
   await viewport(cdp,390,844,true);await navigate(cdp);
   report.mobile=await titleMetrics(cdp);
+  if(report.mobile.hierarchy!=='H01_LOCKED' || report.mobile.primaryTitle!=='PSI : ZERO DAY') throw new Error('mobile H-01 title hierarchy drifted: '+JSON.stringify({hierarchy:report.mobile.hierarchy,title:report.mobile.primaryTitle}));
   if(!report.mobile.primary.includes('현장 디펜스 시작')) throw new Error('mobile primary CTA is not Field Defense');
   if(!report.mobile.liveText.includes('LIVE SITE')) throw new Error('mobile LIVE SITE panel missing');
   if(report.mobile.overflow) throw new Error('mobile title horizontal overflow');
