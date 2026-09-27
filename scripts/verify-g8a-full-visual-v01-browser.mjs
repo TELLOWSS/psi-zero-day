@@ -388,7 +388,26 @@ async function metrics(cdp) {
         const el=document.querySelector('.zb-hud');
         if(!el)return null;
         const r=el.getBoundingClientRect();
-        return {height:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+        return {left:Math.round(r.left),right:Math.round(r.right),height:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+      })(),
+      wavePreview:(() => {
+        const el=document.querySelector('.zb-wave-preview');
+        if(!el)return null;
+        const r=el.getBoundingClientRect();
+        return {left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)};
+      })(),
+      settingsButton:(() => {
+        const el=document.querySelector('.zb-defense-settings');
+        if(!el)return null;
+        const r=el.getBoundingClientRect();
+        return {left:Math.round(r.left),right:Math.round(r.right),top:Math.round(r.top),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)};
+      })(),
+      idleInstruction:(document.querySelector('.zb-empty-selection')?.textContent||'').trim(),
+      wavePreviewGroupRows:document.querySelectorAll('.zb-wave-preview li').length,
+      visibleWavePreviewGroupRows:[...document.querySelectorAll('.zb-wave-preview li')].filter(el=>getComputedStyle(el).display!=='none' && el.getBoundingClientRect().height>0).length,
+      supportCopyVisible:(() => {
+        const el=document.querySelector('.zb-support-action>span');
+        return Boolean(el && getComputedStyle(el).display!=='none' && el.getBoundingClientRect().width>0);
       })(),
       command:(() => {
         const el=document.querySelector('.zb-command');
@@ -494,7 +513,20 @@ try {
   if(!report.physicalLandscape.hud || report.physicalLandscape.hud.height > 44) {
     throw new Error('780x360 landscape HUD is too tall: '+JSON.stringify(report.physicalLandscape.hud));
   }
-  if(!report.physicalLandscape.command || report.physicalLandscape.command.height > 80) {
+  if(!report.physicalLandscape.wavePreview || !report.physicalLandscape.settingsButton) {
+    throw new Error('780x360 compact wave/settings controls are missing');
+  }
+  const wave=report.physicalLandscape.wavePreview;
+  const settings=report.physicalLandscape.settingsButton;
+  const overlaps=!(settings.right <= wave.left || settings.left >= wave.right || settings.bottom <= wave.top || settings.top >= wave.bottom);
+  if(overlaps) throw new Error('780x360 settings button overlaps the compact WAVE card: '+JSON.stringify({settings,wave}));
+  if(report.physicalLandscape.visibleWavePreviewGroupRows!==0) throw new Error('780x360 WAVE detail rows should be collapsed: '+report.physicalLandscape.visibleWavePreviewGroupRows);
+  if(report.physicalLandscape.supportCopyVisible) throw new Error('780x360 support copy should collapse to portrait + action');
+  if(report.physicalLandscape.idleInstruction.includes('LOGICAL BOARD') || report.physicalLandscape.idleInstruction.includes('1000×600')) {
+    throw new Error('Developer board jargon leaked into physical gameplay: '+report.physicalLandscape.idleInstruction);
+  }
+  if(!report.physicalLandscape.idleInstruction.includes('개입 지점')) throw new Error('Production-facing idle guidance missing: '+report.physicalLandscape.idleInstruction);
+  if(!report.physicalLandscape.command || report.physicalLandscape.command.height > 68) {
     throw new Error('780x360 idle command overlay is too tall: '+JSON.stringify(report.physicalLandscape.command));
   }
   if(report.physicalLandscape.touchPads < 6) {
