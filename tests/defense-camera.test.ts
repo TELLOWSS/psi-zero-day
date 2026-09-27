@@ -70,7 +70,7 @@ describe('cinematic defense camera', () => {
   });
 
   it('focuses CONTROL approach on the visual vehicle-intervention relationship, not the raw simulation point', () => {
-    const before = state({ enemies: [{ ...state().enemies[0]!, distance: 230 }] });
+    const before = state({ enemies: [{ ...state().enemies[0]!, distance: 0 }] });
     const after = state({ tick: 101, enemies: [{ ...state().enemies[0]!, distance: 280 }] });
     const signal = defenseCameraSignal(before, after, content);
     expect(signal.kind).toBe('APPROACH');
