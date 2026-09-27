@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "main-title-cinematic-v10-physical-phone",
-  "status": "commercial-presentation-h01-active",
+  "status": "commercial-presentation-h04-implemented",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -174,6 +174,61 @@
         "primary title, slogan and defense CTA must remain visible without scroll",
         "left hero uses a readability gradient without blurring construction-world detail",
         "no new tutorial or long lore copy is introduced"
+      ]
+    },
+    "h02": {
+      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "goal": "characters remain emotional anchors while title CTA and LIVE SITE own interaction hierarchy",
+      "desktop": {
+        "castRole": "human-anchor",
+        "layerOrder": [
+          "construction background",
+          "lighting/atmosphere",
+          "character silhouettes",
+          "hero readability gradient",
+          "title/slogan/CTA",
+          "LIVE SITE briefing",
+          "secondary cards"
+        ],
+        "collisionRules": [
+          "hero CTA must not be obscured",
+          "LIVE SITE must not overlap title copy",
+          "character captions must stay clear of feature cards"
+        ]
+      },
+      "shortLandscape": "one protagonist remains visible; quotes/captions suppressed"
+    },
+    "h03": {
+      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "role": "tactical pre-entry briefing",
+      "requiredText": [
+        "LIVE SITE",
+        "DEF-CORE-01",
+        "서측 Gate · 차량–보행 간섭",
+        "대표 시나리오 · WAVE 8 / 10",
+        "SWIFT",
+        "CONTROL",
+        "PSI"
+      ],
+      "interactionRule": "presentation upgrade only; no new click behavior"
+    },
+    "h04": {
+      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "featurePriority": "secondary",
+      "quickSettingsPriority": "tertiary",
+      "desktop": [
+        "four feature cards remain",
+        "descriptions visually clamp to one line",
+        "quick settings remain compact"
+      ],
+      "shortLandscape": [
+        "feature strip hidden",
+        "quick settings hidden",
+        "settings remain accessible from top utility"
+      ],
+      "mobile": [
+        "feature strip hidden",
+        "quick settings hidden"
       ]
     }
   }
