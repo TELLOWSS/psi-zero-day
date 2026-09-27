@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V05_PASS_FULL_SCREEN_REVIEW",
+  "status": "V05_PASS_FULL_SCREEN_REVIEW_REVALIDATION",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -140,7 +140,7 @@
     },
     "next": "PASS locked. Continue to V-05 Cinematic Event visual production and actual-play QA.",
     "portraitFrame": {
-      "x": 0,
+      "x": 430,
       "y": 80,
       "width": 330,
       "height": 520
@@ -170,7 +170,9 @@
         "vehicleState": "BRAKE",
         "viewBox": "0 80 330 520",
         "overflow": false
-      }
+      },
+      "supersededByVisualProjectionRevision": true,
+      "previousViewBox": "0 80 330 520"
     }
   },
   "motionPresentation": {
@@ -469,5 +471,31 @@
       }
     },
     "next": "Run full-screen visual gate reconciliation/review before promotion. Do not merge or declare Production Lock from cinematic pass alone."
+  },
+  "fullScreenReview": {
+    "title": "G8-A Full-Screen Visual Revalidation",
+    "status": "ACTUAL_PLAY_REVALIDATION_PENDING",
+    "reasons": [
+      "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
+      "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
+    ],
+    "invariants": [
+      "logical simulation route remains unchanged",
+      "logical pad ids and balance remain unchanged",
+      "WORLD/SWIFT/VEILED Final assets remain locked",
+      "visual projection is presentation-only and shared across landscape/portrait"
+    ],
+    "acceptance": [
+      "desktop logical route matches locked simulation topology",
+      "desktop visual route matches reviewed haul-road projection",
+      "390x844 viewBox is 430 80 330 520",
+      "390x844 idle world share remains >= 72%",
+      "three portrait touch pads remain reachable",
+      "CONTROL/SWIFT/VEILED remain visible and coherent",
+      "IMPACT_CLOSE_UP + SWIFT BRAKE still trigger",
+      "prototypeBoardItems = 0",
+      "activeSvgVisuals = 0",
+      "horizontal overflow = 0"
+    ]
   }
 }
