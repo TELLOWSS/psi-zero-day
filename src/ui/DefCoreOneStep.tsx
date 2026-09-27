@@ -396,12 +396,12 @@ export function DefCoreOneStepBoardOverlay({
 }
 
 const SHOT_VISUALS = [
-  { uri: 'assets/episode01/cg/gate-dawn.webp', alt: '차량과 보행자가 교차하는 서측 게이트 전경' },
-  { uri: 'assets/episode01/characters/lim-junho-concerned.webp', alt: '멈춰 선 임준호' },
-  { uri: 'assets/episode01/cg/ramp-entry.webp', alt: '후진 차량 후미와 제한된 진입 동선' },
-  { uri: 'assets/episode01/characters/choi-minseok-map.webp', alt: '정지 신호를 보내는 최민석' },
-  { uri: 'assets/episode01/characters/player-portrait.webp', alt: '무전으로 개입하는 플레이어' },
-  { uri: 'assets/episode01/characters/lee-jaehoon-portrait.webp', alt: '현장에 도착한 이재훈' },
+  { uri: 'assets/episode01/cg/gate-dawn.webp', alt: '차량과 보행자가 교차하는 서측 게이트 전경', motion: 'WIDE', framing: 'wide' },
+  { uri: 'assets/episode01/characters/lim-junho-concerned.webp', alt: '멈춰 선 임준호', motion: 'FOCUS', framing: 'junho' },
+  { uri: 'assets/episode01/cg/ramp-entry.webp', alt: '후진 차량 후미와 제한된 진입 동선', motion: 'REAR', framing: 'rear' },
+  { uri: 'assets/episode01/characters/choi-minseok-map.webp', alt: '정지 신호를 보내는 최민석', motion: 'HUMAN_CLOSE', framing: 'signal' },
+  { uri: 'assets/episode01/characters/player-portrait.webp', alt: '무전으로 개입하는 플레이어', motion: 'DECISION', framing: 'radio' },
+  { uri: 'assets/episode01/characters/lee-jaehoon-portrait.webp', alt: '현장에 도착한 이재훈', motion: 'IMPACT', framing: 'brake' },
 ] as const;
 
 const SHOT_COPY = [
@@ -459,10 +459,22 @@ export function DefCoreOneStepOverlay({
   if (controller.phase === 'CINEMATIC') {
     const visual = SHOT_VISUALS[controller.shotIndex] ?? SHOT_VISUALS[0];
     const copy = SHOT_COPY[controller.shotIndex] ?? SHOT_COPY[0];
-    return <section className="def-core-overlay def-core-cinematic" role="dialog" aria-modal="true" data-def-core-phase="CINEMATIC" data-def-core-shot={copy[0]}>
+    return <section
+      className="def-core-overlay def-core-cinematic"
+      role="dialog"
+      aria-modal="true"
+      data-def-core-phase="CINEMATIC"
+      data-def-core-shot={copy[0]}
+      data-cinematic-grade="V05"
+      data-cinematic-motion={visual.motion}
+      data-cinematic-framing={visual.framing}
+    >
       <div className="def-core-letterbox">
-        <VisualImage uri={visual.uri} alt={visual.alt} className="def-core-shot-image" />
+        <div className="def-core-shot-visual">
+          <VisualImage uri={visual.uri} alt={visual.alt} className="def-core-shot-image" />
+        </div>
         <div className="def-core-shot-shade" />
+        <div className="def-core-shot-focus" aria-hidden="true" />
         <div className="def-core-shot-copy">
           <small>{copy[0]} · 한 걸음</small>
           <p>{copy[1]}</p>
