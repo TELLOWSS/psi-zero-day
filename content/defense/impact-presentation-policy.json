@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "M02_IMPACT_PRESENTATION",
-  "status": "P02_PRODUCTION_PASS_ACTIVE",
+  "status": "ACTUAL_PLAY_QA_PASS",
   "principle": "Impact must communicate real construction-site intervention: braking, separation, route control and human reaction. Never present CONTROL as a magical attack.",
   "camera": {
     "impactHoldMs": 130,
@@ -66,5 +66,47 @@
     "generic fantasy impact rings remain absent from SWIFT and VEILED",
     "audio uses existing Premium Audio routing; no new sound system",
     "prefers-reduced-motion removes nonessential camera/worker shake"
-  ]
+  ],
+  "evidence": {
+    "githubActionsRun": 36316684226,
+    "sourceSha": "2ebe3760ee12fba25106b3c2d5eb3a2052676aa6",
+    "desktop": {
+      "impact": {
+        "cameraMode": "IMPACT_CLOSE_UP",
+        "reason": "CONTROL_INTERVENTION",
+        "workerState": "EVADE",
+        "vehicleState": "BRAKE",
+        "overflow": false
+      },
+      "recover": {
+        "cameraMode": "RETURN_RECOVER",
+        "workerState": "SAFE_RETURN",
+        "vehicleState": "BRAKE",
+        "overflow": false
+      }
+    },
+    "portrait": {
+      "viewport": "390x844",
+      "impact": {
+        "cameraMode": "IMPACT_CLOSE_UP",
+        "reason": "CONTROL_INTERVENTION",
+        "workerState": "EVADE",
+        "vehicleState": "BRAKE",
+        "overflow": false
+      },
+      "recover": {
+        "cameraMode": "RETURN_RECOVER",
+        "workerState": "SAFE_RETURN",
+        "vehicleState": "BRAKE",
+        "overflow": false
+      }
+    },
+    "physicalLandscape": {
+      "viewport": "780x360",
+      "board": "780x360",
+      "hudPx": 40,
+      "commandPx": 60,
+      "overflow": false
+    }
+  }
 }
