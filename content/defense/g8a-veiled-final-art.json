@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8A_FULL_VISUAL_V01",
+  "assetId": "VEILED",
+  "status": "ASSET_PENDING",
+  "semantic": "occluded or partially confirmed construction-site risk signal; a grounded blind-zone/visibility hazard, never a fantasy enemy",
+  "runtimeUri": "assets/defense/enemies/veiled-final-g8a.webp",
+  "format": "webp",
+  "runtime": {
+    "width": 72,
+    "height": 72
+  },
+  "sourceMaster": {
+    "minimumWidth": 1440,
+    "minimumHeight": 1024,
+    "transparentBackground": true,
+    "nativeUpscaleUsed": false
+  },
+  "required": [
+    "construction-site grounded silhouette readable at phone scale",
+    "partial occlusion or blind-zone character without monster language",
+    "transparent isolated object edge",
+    "lighting compatible with the locked G8-A high-oblique night construction world",
+    "no text, logo, HUD, warning copy or gameplay geometry baked into the asset"
+  ],
+  "forbidden": [
+    "svg",
+    "legacy veiled.svg rasterization",
+    "flat pictogram",
+    "vector placeholder",
+    "fantasy ghost or monster silhouette",
+    "neon sci-fi orb",
+    "fake Korean text",
+    "real company logo",
+    "upscaled low-resolution crop"
+  ],
+  "promotion": {
+    "productionApproved": false,
+    "requires": [
+      "SOURCE_REVIEW_PASS",
+      "NON_SVG_FINAL_RASTER",
+      "NATIVE_UPSCALE_FALSE",
+      "DESKTOP_WAVE8_VEILED_SWIFT_QA",
+      "MOBILE_390x844_VEILED_SWIFT_QA",
+      "PROTOTYPE_BOARD_ITEMS_0",
+      "ACTIVE_SVG_VISUALS_0"
+    ]
+  }
+}
