@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V04A_PASS_V05_ACTIVE",
+  "status": "V05_PASS_FULL_SCREEN_REVIEW",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -341,7 +341,7 @@
   },
   "v05": {
     "title": "Cinematic Event Production Camera Lock",
-    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "status": "ACTUAL_PLAY_CINEMATIC_QA_PASS",
     "sourceRule": "WIDE → FOCUS → HUMAN CLOSE → DECISION → IMPACT → WIDE",
     "representativeEvent": "한 걸음",
     "shots": [
@@ -400,6 +400,74 @@
       "no horizontal overflow",
       "decision A/B/C remains reachable after cinematic",
       "reduced-motion fallback does not hide shot content"
-    ]
+    ],
+    "evidence": {
+      "githubActionsRun": 36301490649,
+      "artifactId": 10926021638,
+      "desktop": {
+        "viewport": "1280x720",
+        "shotOrder": [
+          "WIDE",
+          "FOCUS",
+          "REAR",
+          "SIGNAL",
+          "RADIO",
+          "BRAKE"
+        ],
+        "motionOrder": [
+          "WIDE",
+          "FOCUS",
+          "REAR",
+          "HUMAN_CLOSE",
+          "DECISION",
+          "IMPACT"
+        ],
+        "grade": "V05",
+        "cinematicWallMs": 12610,
+        "overflow": false,
+        "decisionCount": 3
+      },
+      "portrait": {
+        "viewport": "390x844",
+        "cinematicRect": {
+          "width": 390,
+          "height": 844
+        },
+        "copyRect": {
+          "left": 20,
+          "top": 669,
+          "right": 371,
+          "bottom": 717,
+          "width": 351,
+          "height": 48
+        },
+        "shotOrder": [
+          "WIDE",
+          "FOCUS",
+          "REAR",
+          "SIGNAL",
+          "RADIO",
+          "BRAKE"
+        ],
+        "motionOrder": [
+          "WIDE",
+          "FOCUS",
+          "REAR",
+          "HUMAN_CLOSE",
+          "DECISION",
+          "IMPACT"
+        ],
+        "grade": "V05",
+        "noHorizontalOverflow": true,
+        "decisionCount": 3
+      },
+      "continuity": {
+        "chosen": "C",
+        "followup": "RECORD",
+        "finalPhase": "DONE",
+        "worldResult": "REROUTED_STAGING"
+      }
+    },
+    "next": "Run full-screen visual gate reconciliation/review before promotion. Do not merge or declare Production Lock from cinematic pass alone."
   }
 }
