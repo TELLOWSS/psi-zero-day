@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "gate": "DUAL_ORIENTATION_MAP_DOCTRINE",
+  "status": "ACTIVE",
+  "principle": "Portrait is not a shrunken landscape view. Each map must have an authored landscape strategy frame and an authored portrait immersion frame while preserving one authoritative gameplay topology.",
+  "sharedRules": {
+    "singleTopology": true,
+    "routeCoordinatesImmutableAcrossOrientation": true,
+    "padCoordinatesImmutableAcrossOrientation": true,
+    "worldAssetMayBeSharedWhenCropSafe": true,
+    "orientationMayChangeCameraOnly": true,
+    "orientationMayNotChangeBalance": true
+  },
+  "portraitDoctrine": {
+    "goal": "closer, fuller, event-centered play",
+    "verticalLayers": [
+      "top: minimal status",
+      "center: world/risk/response conflict",
+      "bottom: current player action"
+    ],
+    "worldViewportTarget": {
+      "minimumScreenShare": 0.55,
+      "preferredScreenShare": 0.62
+    },
+    "hudTarget": {
+      "maximumTopShare": 0.09,
+      "maximumBottomShare": 0.30
+    },
+    "mustReadTogether": [
+      "primary risk",
+      "current response",
+      "local movement path",
+      "immediate consequence"
+    ],
+    "failureConditions": [
+      "entire landscape map is merely scaled down",
+      "large empty bands above or below the world",
+      "risk and response cannot be read in the same portrait frame",
+      "HUD visually dominates the construction world"
+    ]
+  },
+  "landscapeDoctrine": {
+    "goal": "broader strategic reading",
+    "mustReadTogether": [
+      "multiple placement opportunities",
+      "route progression",
+      "risk distribution",
+      "response coverage"
+    ]
+  },
+  "g8a": {
+    "mapId": "map-apt-bottom-up-excavation-01",
+    "landscapeFrame": { "x": 0, "y": 0, "width": 1000, "height": 600 },
+    "portraitFrame": { "x": 0, "y": 80, "width": 430, "height": 520 },
+    "portraitFocus": [
+      "west haul-ramp conflict",
+      "SWIFT/VEILED approach",
+      "CONTROL intervention zone",
+      "worker/vehicle separation"
+    ],
+    "lockedWorldReopen": false
+  },
+  "futureMapRule": {
+    "id": "MAP-NEXT-01",
+    "requiredAtConceptStage": [
+      "landscape play frame",
+      "portrait play frame",
+      "shared critical zone",
+      "portrait immersion zone",
+      "landscape strategy zone",
+      "HUD exclusion zones",
+      "cinematic focus zones"
+    ]
+  }
+}
