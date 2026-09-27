@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "gate": "G8-A AUDIO PRODUCTION LOCK",
-  "status": "PHYSICAL_ANDROID_PARTIAL_PASS",
+  "status": "AUDIO_PRODUCTION_LOCKED",
   "requiredAssetCount": 24,
-  "approvedAssetCount": 0,
+  "approvedAssetCount": 24,
   "items": [
     {
       "id": "score.foundation_bed",
       "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
       "category": "SCORE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -17,13 +17,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Floor Twelve Ledger selected as tonal reference. 84 BPM / 16-bar runtime derivative prepared at 48 kHz Opus, -14.0 LUFS, -3.6 dBFS peak. Do not spend another Gemini generation unless later full-mix regression is proven. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "score.pressure_ostinato",
       "path": "assets/defense/audio/g8a/score-pressure-ostinato.ogg",
       "category": "SCORE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -31,13 +31,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "score.swift_threat",
       "path": "assets/defense/audio/g8a/score-swift-threat.ogg",
       "category": "SCORE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -45,13 +45,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "score.control_intervention",
       "path": "assets/defense/audio/g8a/score-control-intervention.ogg",
       "category": "SCORE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -59,13 +59,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "score.resolution_coda",
       "path": "assets/defense/audio/g8a/score-resolution-coda.ogg",
       "category": "SCORE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -73,13 +73,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "field.excavation_world",
       "path": "assets/defense/audio/g8a/field-excavation-world.ogg",
       "category": "FIELD",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -87,13 +87,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "field.excavator_hydraulic",
       "path": "assets/defense/audio/g8a/field-excavator-hydraulic.ogg",
       "category": "FIELD",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -101,13 +101,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "swift.engine_loop",
       "path": "assets/defense/audio/g8a/swift-engine-loop.ogg",
       "category": "VEHICLE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -115,13 +115,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "swift.reverse_alarm",
       "path": "assets/defense/audio/g8a/swift-reverse-alarm.ogg",
       "category": "VEHICLE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -129,13 +129,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "swift.gravel_tire",
       "path": "assets/defense/audio/g8a/swift-gravel-tire.ogg",
       "category": "VEHICLE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -143,13 +143,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "swift.airbrake",
       "path": "assets/defense/audio/g8a/swift-airbrake.ogg",
       "category": "VEHICLE",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -157,13 +157,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "control.radio_stop",
       "path": "assets/defense/audio/g8a/control-radio-stop.ogg",
       "category": "CONTROL",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -171,13 +171,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "control.barrier_clack",
       "path": "assets/defense/audio/g8a/control-barrier-clack.ogg",
       "category": "CONTROL",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -185,13 +185,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Candidate extracted/generated; final listening QA and repository binary promotion pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "select",
       "path": "assets/defense/audio/g8a/ui-select.ogg",
       "category": "UI",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -199,13 +199,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel A event 1. Clean isolated SELECT candidate. 48 kHz Opus derivative prepared; repeated-click fatigue QA pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "place",
       "path": "assets/defense/audio/g8a/ui-place.ogg",
       "category": "UI",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -213,13 +213,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel A event 2. Clean isolated PLACE candidate. Must remain distinct from SELECT in Android actual-play QA. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "upgrade",
       "path": "assets/defense/audio/g8a/ui-upgrade.ogg",
       "category": "UI",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -227,13 +227,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel A event 3. Clean isolated UPGRADE candidate. Must not read as magical/gacha in listening QA. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "sell",
       "path": "assets/defense/audio/g8a/ui-sell.ogg",
       "category": "UI",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -241,13 +241,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel A event 4. Clean isolated SELL candidate. Must not read as error/failure. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "warning",
       "path": "assets/defense/audio/g8a/wave-warning.ogg",
       "category": "GAMEPLAY",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -255,13 +255,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel A event 5. Clean isolated WARNING candidate. Must remain distinct from SWIFT reverse alarm on phone speakers. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "single_resolve",
       "path": "assets/defense/audio/g8a/control-resolve.ogg",
       "category": "GAMEPLAY",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -269,13 +269,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel B event 1. Clean isolated SINGLE RESOLVE candidate. Must remain precise and distinguishable from AREA RESOLVE in Android actual-play QA. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "area_resolve",
       "path": "assets/defense/audio/g8a/area-resolve.ogg",
       "category": "GAMEPLAY",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -283,13 +283,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel B event 2. Clean isolated AREA RESOLVE candidate. Broader than SINGLE but must not read as explosion/heroic combo. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "leak",
       "path": "assets/defense/audio/g8a/shield-leak.ogg",
       "category": "GAMEPLAY",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -297,13 +297,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel B event 3. Clean isolated LEAK candidate. Kept salient; must read as loss-of-margin rather than horror/game-over. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "support",
       "path": "assets/defense/audio/g8a/support-call.ogg",
       "category": "GAMEPLAY",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -311,13 +311,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Reel B event 4. Clean isolated SUPPORT candidate. Must read as coordination/readiness rather than sci-fi/military. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "win",
       "path": "assets/defense/audio/g8a/result-win.ogg",
       "category": "RESULT",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -325,13 +325,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Result reel event 1. Restrained WIN candidate; 0.947 s, 48 kHz Opus, -16.7 LUFS, -5.3 dBFS peak. Full-mix/headphone/Android discrimination QA pending. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     },
     {
       "id": "loss",
       "path": "assets/defense/audio/g8a/result-loss.ogg",
       "category": "RESULT",
-      "binary": "RUNTIME_PRESENT_QA_READY",
+      "binary": "RUNTIME_PRESENT_PRODUCTION_APPROVED",
       "technicalQa": "PASS",
       "headphoneQa": "PASS",
       "androidPhoneQa": "PASS",
@@ -339,13 +339,13 @@
       "maskingQa": "PASS",
       "fatigueQa": "PASS",
       "reviewerNote": "Result reel event 2. Sober LOSS candidate; 2.020 s, 48 kHz Opus, -12.2 LUFS, -4.5 dBFS peak. Must remain distinguishable from WIN on phone speakers. Human/device listening accepted by project owner on 2026-09-26; final physical Android in-game actual-play gate remains separate.",
-      "productionApproved": false
+      "productionApproved": true
     }
   ],
   "actualPlay": {
-    "desktop": "AUTOMATED_BROWSER_PASS",
-    "mobileViewport": "AUTOMATED_390X844_BROWSER_PASS",
-    "androidMobile": "PENDING_PHYSICAL_ANDROID_GAMEPLAY",
+    "desktop": "PASS",
+    "mobileViewport": "PASS",
+    "androidMobile": "PASS",
     "oscillatorFallbackCount": 0,
     "premiumBinaryCueCount": 10,
     "premiumMixPlaybackSuccessCount": 68,
@@ -365,7 +365,7 @@
       "mobileViewport": "390x844",
       "result": "PASS"
     },
-    "productionLockAllowed": false,
+    "productionLockAllowed": true,
     "androidSpeakerListening": "PASS"
   },
   "musicReference": {
@@ -394,11 +394,11 @@
     "nextAsset": "score.pressure_ostinato"
   },
   "candidateAssetCount": 24,
-  "currentProductionFocus": "PHYSICAL_ANDROID_IN_GAME_RUNTIME_QA",
-  "productionStateNote": "24/24 runtime assets passed technical QA, automated desktop/mobile-viewport actual-play QA, and project-owner human/device listening QA. Final physical Android in-game runtime verification remains required before PRODUCTION_APPROVED or Production Lock.",
+  "currentProductionFocus": "AUDIO_PRODUCTION_LOCKED",
+  "productionStateNote": "24/24 assets are PRODUCTION_APPROVED. The remaining physical Android in-game gate was closed by project-owner directive on 2026-09-27; no new recording artifact was supplied in that chat turn.",
   "remainingCandidateIds": [],
-  "currentGate": "PHYSICAL_ANDROID_ACTUAL_PLAY_QA",
-  "note": "Human/device listening PASS recorded from project-owner attestation. PR #63 remains Draft; G8-B remains paused.",
+  "currentGate": "CLOSED_AUDIO_PRODUCTION_LOCK",
+  "note": "G8-A Premium Audio Production Lock closed on 2026-09-27 by project-owner acceptance after automated and prior device/listening QA.",
   "automatedMixPreflight": {
     "result": "PASS",
     "integratedLufs": -17.9,
@@ -453,7 +453,14 @@
     "decision": "PARTIAL_PASS_KEEP_STOP_LINE"
   },
   "summary": {
-    "physicalAndroid": "PARTIAL_PASS_WAVE1_TO_5",
-    "productionLockAllowed": false
+    "physicalAndroid": "PASS_OWNER_DIRECTIVE_2026-09-27",
+    "productionLockAllowed": true
+  },
+  "finalAcceptance": {
+    "acceptedAt": "2026-09-27",
+    "source": "PROJECT_OWNER_DIRECTIVE",
+    "directive": "Treat final physical Android replay as PASS and proceed to the next production step.",
+    "newRecordingArtifactSupplied": false,
+    "decision": "PASS_CLOSE_AUDIO_PRODUCTION_LOCK"
   }
 }
