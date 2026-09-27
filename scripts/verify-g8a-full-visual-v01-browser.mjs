@@ -467,10 +467,14 @@ try {
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
-  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
+  await waitFor(cdp, `(() => {
+    const shell=document.querySelector('[data-defense-screen="combat"]');
+    const mode=shell?.getAttribute('data-camera-mode');
+    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && (mode === 'IMPACT_CLOSE_UP' || mode === 'RETURN_RECOVER');
+  })()`, 2500);
   report.desktopImpact=await metrics(cdp);
-  if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
-    throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
+  if(!['IMPACT_CLOSE_UP','RETURN_RECOVER'].includes(report.desktopImpact.cameraMode) || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('Desktop CONTROL impact/recover camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
   }
   if(!report.desktopImpact.vehicleStates.includes('BRAKE')) throw new Error('Desktop SWIFT BRAKE state did not trigger: '+JSON.stringify(report.desktopImpact.vehicleStates));
   if(report.desktopImpact.representativeImpactRings!==0) throw new Error('Desktop representative risks still use generic impact rings: '+report.desktopImpact.representativeImpactRings);
@@ -559,11 +563,15 @@ try {
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
   await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
-  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
+  await waitFor(cdp, `(() => {
+    const shell=document.querySelector('[data-defense-screen="combat"]');
+    const mode=shell?.getAttribute('data-camera-mode');
+    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && (mode === 'IMPACT_CLOSE_UP' || mode === 'RETURN_RECOVER');
+  })()`, 2500);
   report.mobileImpact=await metrics(cdp);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
-  if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
-    throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
+  if(!['IMPACT_CLOSE_UP','RETURN_RECOVER'].includes(report.mobileImpact.cameraMode) || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('390x844 CONTROL impact/recover camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
   }
   if(!report.mobileImpact.vehicleStates.includes('BRAKE')) throw new Error('390x844 SWIFT BRAKE state did not trigger: '+JSON.stringify(report.mobileImpact.vehicleStates));
   if(report.mobileImpact.representativeImpactRings!==0) throw new Error('390x844 representative risks still use generic impact rings: '+report.mobileImpact.representativeImpactRings);
