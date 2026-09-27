@@ -34,6 +34,7 @@ import { useDefenseCamera } from './useDefenseCamera';
 import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
 import { RemodelBoardOverlay } from './RemodelBoardOverlay';
 import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
+import { G8AActivityOverlay } from './G8AActivityOverlay';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -571,6 +572,9 @@ export function DefenseGame({
             fill="none"
             aria-hidden="true"
           />
+          {content.map.id === 'map-apt-bottom-up-excavation-01'
+            ? <G8AActivityOverlay cameraMode={camera.mode} />
+            : null}
           {selectedTower && selectedLevel ? (() => {
             const pad = content.map.pads.find(item => item.id === selectedTower.padId)!;
             return <circle cx={pad.x} cy={pad.y} r={selectedLevel.range} className="zb-range-preview" />;
