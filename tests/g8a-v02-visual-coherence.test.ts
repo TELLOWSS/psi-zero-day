@@ -4,7 +4,7 @@ import lock from '../content/defense/g8a-full-visual-lock.json';
 
 describe('G8-A V-02 visual coherence', () => {
   it('closes V-01 with actual-play final raster evidence', () => {
-    expect(lock.status).toBe('V01_PASS_V02_ACTIVE');
+    expect(lock.v02.status).toBe('ACTUAL_PLAY_VISUAL_QA_PASS');
     expect(lock.v01.status).toBe('ACTUAL_PLAY_PASS');
     expect(lock.v01.evidence.desktop.prototypeBoardItems).toBe(0);
     expect(lock.v01.evidence.portrait.prototypeBoardItems).toBe(0);
