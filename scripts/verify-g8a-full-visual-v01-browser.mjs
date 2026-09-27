@@ -149,7 +149,7 @@ function fnv1a32(value) {
   return 'fnv1a32:' + (hash >>> 0).toString(16).padStart(8, '0');
 }
 
-function representativeDefenseSave() {
+function representativeDefenseSave(impact = false) {
   const run = {
     runId: 'g8a-full-visual-v01-representative',
     mode: 'TRAINING',
@@ -191,7 +191,7 @@ function representativeDefenseSave() {
       id: 'enemy-11',
       enemyId: 'SWIFT',
       hp: 28,
-      distance: 42,
+      distance: impact ? 410 : 42,
       spawnSequence: 11,
       revealUntilTick: 0,
       slowEffects: [],
@@ -240,8 +240,8 @@ function representativeDefenseSave() {
   };
 }
 
-async function enterRepresentativeBottomUp(cdp) {
-  const save = representativeDefenseSave();
+async function enterRepresentativeBottomUp(cdp, impact = false) {
+  const save = representativeDefenseSave(impact);
   await evaluate(cdp, `(() => {
     localStorage.setItem('psi-zero-day.defense.save.v1', ${JSON.stringify(JSON.stringify(save))});
     localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
@@ -378,6 +378,8 @@ const report={
   expected_blocker:null,
   desktop:null,
   mobile:null,
+  desktopImpact:null,
+  mobileImpact:null,
   failures:[],
 };
 let cdp;
@@ -414,6 +416,17 @@ try {
   if(report.desktop.overflow) throw new Error('Desktop G8-A horizontal overflow');
   await screenshot(cdp,'01-g8a-bottom-up-live.png');
 
+  await clearState(cdp);
+  await navigate(cdp);
+  await enterRepresentativeBottomUp(cdp, true);
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
+  report.desktopImpact=await metrics(cdp);
+  if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
+  }
+  if(!report.desktopImpact.vehicleStates.includes('BRAKE')) throw new Error('Desktop SWIFT BRAKE state did not trigger: '+JSON.stringify(report.desktopImpact.vehicleStates));
+  await screenshot(cdp,'02-g8a-control-impact.png');
+
   await viewport(cdp,390,844,true);
   await clearState(cdp);
   await navigate(cdp);
@@ -442,6 +455,18 @@ try {
     throw new Error('Portrait touch pads are not remapped to the authored camera frame: '+report.mobile.touchPads);
   }
   await screenshot(cdp,'02-g8a-bottom-up-mobile.png');
+
+  await clearState(cdp);
+  await navigate(cdp);
+  await enterRepresentativeBottomUp(cdp, true);
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
+  report.mobileImpact=await metrics(cdp);
+  if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
+  }
+  if(!report.mobileImpact.vehicleStates.includes('BRAKE')) throw new Error('390x844 SWIFT BRAKE state did not trigger: '+JSON.stringify(report.mobileImpact.vehicleStates));
+  if(report.mobileImpact.overflow) throw new Error('390x844 impact camera caused horizontal overflow');
+  await screenshot(cdp,'03-g8a-control-impact-mobile.png');
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
