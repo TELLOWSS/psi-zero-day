@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "gate": "G8-A AUDIO PRODUCTION LOCK",
+  "updatedAt": "2026-09-26",
+  "currentFocus": "score.control_intervention",
+  "candidates": [
+    {
+      "assetId": "score.foundation_bed",
+      "sourceTitle": "Floor Twelve Ledger",
+      "sourceFile": "floor_twelve_ledger.mp4",
+      "sourceSha256": "8a8f13b92eaa44156e0d5efef015f6e3090e543fbfd1ea9182ba6782604ba4d4",
+      "native": {
+        "durationSec": 136.4,
+        "codec": "aac",
+        "sampleRateHz": 44100,
+        "channels": 2,
+        "integratedLufs": -12.4,
+        "lraLu": 9.9,
+        "truePeakDbfs": -0.2
+      },
+      "derivative": {
+        "durationSec": 45.7142857,
+        "sampleRateHz": 48000,
+        "format": "ogg/opus",
+        "bitrateKbps": 160,
+        "integratedLufs": -14,
+        "truePeakDbfs": -3.6
+      },
+      "state": "TONAL_REFERENCE_LOCKED",
+      "productionApproved": false,
+      "reopenOnlyIf": [
+        "full-mix regression",
+        "audible loop seam in actual play",
+        "Android listening QA failure"
+      ]
+    },
+    {
+      "assetId": "score.pressure_ostinato",
+      "sourceTitle": "Before the Pour",
+      "sourceFile": "before_the_pour.mp4",
+      "sourceSha256": "a508d30a6343a78e26d33999a5d512d0ec4b480b1531ee3d2b7c99f88719ea63",
+      "native": {
+        "durationSec": 48.900333,
+        "codec": "aac",
+        "sampleRateHz": 44100,
+        "channels": 2,
+        "bitrateKbps": 186,
+        "integratedLufs": -12.6,
+        "lraLu": 3.7,
+        "truePeakDbfs": -0.1,
+        "tempoEvidenceBpm": [
+          83.35,
+          80.75,
+          86.13
+        ]
+      },
+      "derivative": {
+        "durationSec": 45.7142857,
+        "grid": "84 BPM / 4/4 / 16 bars",
+        "sampleRateHz": 48000,
+        "format": "ogg/opus",
+        "bitrateKbps": 160,
+        "integratedLufs": -18.1,
+        "lraLu": 3.6,
+        "truePeakDbfs": -5.3,
+        "sha256": "7076b0d1a8be63c8f96821a85f0a2e72f3c7caf4963a98051d127c5913b18ce6"
+      },
+      "state": "TONAL_RHYTHMIC_REFERENCE_LOCKED",
+      "productionApproved": false,
+      "reopenOnlyIf": [
+        "vehicle-warning masking in full mix",
+        "audible loop seam in actual play",
+        "style mismatch with SWIFT layer"
+      ]
+    },
+    {
+      "assetId": "score.swift_threat",
+      "sourceTitle": "Clear The Trench",
+      "sourceFile": "clear_the_trench.mp4",
+      "native": {
+        "durationSec": 68.967333,
+        "codec": "aac",
+        "sampleRateHz": 44100,
+        "channels": 2,
+        "bitrateKbps": 194,
+        "integratedLufs": -12.9,
+        "lraLu": 11.1,
+        "truePeakDbfs": -0.2,
+        "tempoEvidenceBpmFamily": [
+          104,
+          110
+        ]
+      },
+      "derivative": {
+        "sourceRegionSec": {
+          "start": 8.858412698412698,
+          "end": 46.18448979591837
+        },
+        "targetGrid": "84 BPM / 4/4 / 16 bars",
+        "durationSec": 45.7142857,
+        "timeStretchFactor": 0.8165079367630952,
+        "pitchShiftUsed": false,
+        "wrapCrossfadeMs": 650,
+        "sampleRateHz": 48000,
+        "format": "ogg/opus",
+        "bitrateKbps": 160,
+        "integratedLufs": -19.7,
+        "lraLu": 9.4,
+        "truePeakDbfs": -5.9
+      },
+      "state": "TONAL_MASS_REFERENCE_LOCKED",
+      "productionApproved": false,
+      "reopenOnlyIf": [
+        "audible time-stretch artifacts in three-layer mix",
+        "vehicle-warning masking in actual play",
+        "audible loop seam",
+        "harmonic mismatch with Foundation and Pressure"
+      ]
+    }
+  ],
+  "next": {
+    "assetId": "score.control_intervention",
+    "action": "Generate one short state-entry orchestral CONTROL intervention one-shot using locked Foundation, Pressure and SWIFT references.",
+    "promptArtifact": "04_LYRIA_SCORE_CONTROL_INTERVENTION_3_LAYER_REFERENCE.md"
+  },
+  "productionLockAllowed": false
+}
