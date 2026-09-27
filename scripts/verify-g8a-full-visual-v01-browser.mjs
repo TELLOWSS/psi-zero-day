@@ -252,7 +252,7 @@ async function enterRepresentativeBottomUp(cdp, impact = false) {
   await clickButton(cdp, '이어서 훈련');
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-map') === 'map-apt-bottom-up-excavation-01'`, 12000);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-wave') === '8'`, 12000);
-  await sleep(220);
+  await sleep(impact ? 10 : 220);
 }
 async function clickButton(cdp, text, scope = 'button') {
   const clicked = await evaluate(cdp, `(() => {
