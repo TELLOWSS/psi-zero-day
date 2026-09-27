@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V02_PASS_V04A_ACTIVE",
+  "status": "V04A_PASS_V05_ACTIVE",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -131,19 +131,46 @@
   },
   "v04a": {
     "title": "Portrait HUD/UI Layout Pass",
-    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "status": "ACTUAL_PLAY_QA_PASS",
     "targets": {
       "topHudMaximumScreenShare": 0.09,
       "idleBottomActionMaximumScreenShare": 0.15,
       "idleWorldMinimumScreenShare": 0.72,
       "expandedCommandPanelAllowedAfterSelection": true
     },
-    "next": "Verify 390x844 idle world fill, touch-pad mapping, impact zoom and expanded selected-pad/tower command states.",
+    "next": "PASS locked. Continue to V-05 Cinematic Event visual production and actual-play QA.",
     "portraitFrame": {
       "x": 0,
       "y": 80,
       "width": 330,
       "height": 520
+    },
+    "evidence": {
+      "githubActionsRun": 36300963333,
+      "portrait": {
+        "viewport": "390x844",
+        "viewBox": "0 80 330 520",
+        "idleWorldPx": 656,
+        "idleWorldShare": 0.777,
+        "idleCommandPx": 118,
+        "idleCommandShare": 0.14,
+        "touchPads": 3,
+        "prototypeBoardItems": 0,
+        "overflow": false
+      },
+      "selectedPad": {
+        "commandPx": 238,
+        "commandShare": 0.282,
+        "worldPx": 536,
+        "worldShare": 0.635,
+        "overflow": false
+      },
+      "impact": {
+        "cameraMode": "IMPACT_CLOSE_UP",
+        "vehicleState": "BRAKE",
+        "viewBox": "0 80 330 520",
+        "overflow": false
+      }
     }
   },
   "motionPresentation": {
@@ -311,5 +338,68 @@
       },
       "impactFx": "SWIFT circular brake warning ring removed; grounded skid/dust cue retained"
     }
+  },
+  "v05": {
+    "title": "Cinematic Event Production Camera Lock",
+    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "sourceRule": "WIDE → FOCUS → HUMAN CLOSE → DECISION → IMPACT → WIDE",
+    "representativeEvent": "한 걸음",
+    "shots": [
+      {
+        "id": "WIDE",
+        "motion": "WIDE",
+        "purpose": "read vehicle-worker conflict in context"
+      },
+      {
+        "id": "FOCUS",
+        "motion": "FOCUS",
+        "purpose": "move attention to Lim Junho hesitation"
+      },
+      {
+        "id": "REAR",
+        "motion": "REAR",
+        "purpose": "show driver blind-zone meaning"
+      },
+      {
+        "id": "SIGNAL",
+        "motion": "HUMAN_CLOSE",
+        "purpose": "read Choi Minseok stop signal as human action"
+      },
+      {
+        "id": "RADIO",
+        "motion": "DECISION",
+        "purpose": "bring player intervention close"
+      },
+      {
+        "id": "BRAKE",
+        "motion": "IMPACT",
+        "purpose": "show braking outcome and transition back to world"
+      }
+    ],
+    "changes": [
+      "shot-specific pan/zoom motion instead of one generic still-image animation",
+      "shot-specific object-position framing",
+      "localized focus/vignette treatment",
+      "restrained impact light peak on BRAKE",
+      "portrait-specific framing so faces, vehicle and hand signals remain readable",
+      "prefers-reduced-motion fallback preserves static readability"
+    ],
+    "mustNotChange": [
+      "DEF-CORE-01 story sequence",
+      "dialogue text",
+      "choice A/B/C semantics",
+      "Defense engine",
+      "locked G8-A WORLD/SWIFT/VEILED assets"
+    ],
+    "acceptance": [
+      "all six cinematic shots appear in locked order",
+      "data-cinematic-grade V05 active on every shot",
+      "each shot exposes its intended motion grammar",
+      "desktop cinematic remains within viewport",
+      "390x844 cinematic remains within viewport",
+      "no horizontal overflow",
+      "decision A/B/C remains reachable after cinematic",
+      "reduced-motion fallback does not hide shot content"
+    ]
   }
 }
