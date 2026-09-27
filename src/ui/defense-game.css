@@ -389,9 +389,9 @@
 .zb-tower-production-image,.zb-enemy-production-image{pointer-events:none;overflow:visible}
 .zb-tower-production-image{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34))}
 .zb-enemy-production-image{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38))}
-.zb-control-ground-shadow{fill:rgba(3,8,10,.34);filter:blur(2px);pointer-events:none}
-.zb-control-pq-barrier{pointer-events:none;filter:saturate(.72) brightness(.86) contrast(.96) drop-shadow(1px 2px 2px rgba(0,0,0,.34));opacity:.88}
-.zb-control-pq-marshal{pointer-events:none;filter:saturate(.68) contrast(.92) brightness(.86) drop-shadow(2px 3px 3px rgba(0,0,0,.34));opacity:.9}
+.zb-control-ground-shadow{fill:rgba(3,8,10,.27);filter:blur(2.4px);pointer-events:none}
+.zb-control-pq-barrier{pointer-events:none;filter:saturate(.64) brightness(.82) contrast(.92) sepia(.05) drop-shadow(0 1px 1px rgba(0,0,0,.3));opacity:.9}
+.zb-control-pq-marshal{pointer-events:none;filter:saturate(.62) contrast(.9) brightness(.82) sepia(.04) drop-shadow(0 1px 1px rgba(0,0,0,.3));opacity:.9}
 .zb-control-pq.is-firing .zb-control-pq-marshal{animation:zb-control-marshal-cue .22s ease-out}
 .zb-swift-pq-asset{pointer-events:none;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34));overflow:visible}
 .zb-enemy-swift.is-hit .zb-swift-pq-asset{animation:zb-swift-hit .14s ease-out}
@@ -446,8 +446,8 @@
 .zb-resolve-burst circle{fill:none;stroke:#eef4f8;stroke-width:5;animation:zb-resolve-burst .22s ease-out both}
 .zb-resolve-burst path{fill:none;stroke:#ffad42;stroke-width:4;stroke-linecap:round;animation:zb-resolve-rays .22s ease-out both}
 .zb-control-intervention{pointer-events:none;transform-origin:center;animation:zb-control-intervention .22s ease-out both}
-.zb-control-intervention circle{fill:rgba(72,194,225,.08);stroke:rgba(120,225,255,.9);stroke-width:3;stroke-dasharray:8 7;filter:drop-shadow(0 0 5px rgba(88,211,244,.42))}
-.zb-control-intervention path{fill:none;stroke:#9fe9ff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px rgba(83,199,233,.45))}
+.zb-control-intervention ellipse{fill:rgba(104,132,139,.12);stroke:rgba(186,210,214,.34);stroke-width:1.6;stroke-dasharray:10 9;filter:blur(.15px)}
+.zb-control-intervention path{fill:none;stroke:rgba(202,224,226,.72);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.28))}
 .zb-swift-brake-cue{pointer-events:none;animation:zb-swift-brake .24s ease-out both}
 .zb-swift-brake-cue path{fill:none;stroke:rgba(228,207,173,.72);stroke-width:2.4;stroke-linecap:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.32))}
 .zb-swift-brake-cue ellipse{fill:rgba(151,126,96,.16);stroke:none;animation:zb-brake-dust .24s ease-out both}
@@ -1050,10 +1050,11 @@
 
 /* M-03 — G8-A living-site worker presentation. Raster characters only; no prototype worker glyphs. */
 .zb-g8a-activity{pointer-events:none}
-.zb-worker-shadow{fill:rgba(0,0,0,.34);filter:blur(1.2px)}
+.zb-worker-shadow{fill:rgba(0,0,0,.27);filter:blur(1.7px)}
 .zb-worker-raster{
   pointer-events:none;
-  filter:saturate(.72) contrast(.94) brightness(.88) drop-shadow(1px 2px 2px rgba(0,0,0,.38));
+  opacity:.91;
+  filter:saturate(.64) contrast(.9) brightness(.82) sepia(.05) drop-shadow(0 1px 1px rgba(0,0,0,.3));
 }
 .zb-worker-motion{transform-box:fill-box;transform-origin:center bottom;will-change:transform}
 .zb-worker-motion.is-walking{animation:zb-worker-route-a 6.4s ease-in-out infinite alternate}
