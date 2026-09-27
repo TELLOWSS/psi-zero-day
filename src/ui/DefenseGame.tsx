@@ -84,7 +84,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     >
       {firing ? <g className="zb-control-intervention" aria-hidden="true">
         <circle r="35" />
-        <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
+        <path d="M-42 24H42M-30 18L-18 8M18 8L30 18M-18 8H18" />
       </g> : null}
       <image
         href={controlPq.barrierUri}
@@ -180,8 +180,9 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
+      <ellipse cx="-24" cy="18" rx="22" ry="7" />
       <circle r="25" />
-      <path d="M-26 13H-10M-30 19H-14" />
+      <path d="M-26 13H-10M-30 19H-14M-34 23H-18" />
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
