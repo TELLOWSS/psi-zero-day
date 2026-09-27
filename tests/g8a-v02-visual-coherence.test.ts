@@ -18,6 +18,9 @@ describe('G8-A V-02 visual coherence', () => {
     expect(overlay).toContain('zb-site-anchor-core');
     expect(game).toContain('width="82"');
     expect(game).toContain('width="44"');
+    const brakeCue = game.slice(game.indexOf('zb-swift-brake-cue'), game.indexOf('zb-swift-brake-cue') + 420);
+    expect(brakeCue).not.toContain('<circle');
+    expect(brakeCue).toContain('<ellipse');
   });
 
   it('recedes technical overlays during running play', () => {
