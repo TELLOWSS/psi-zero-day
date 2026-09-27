@@ -40,8 +40,8 @@ export function SiteProcessMapBoardOverlay({ mapId }: { readonly mapId: string }
 
     <g className="zb-site-transfers" aria-hidden="true">
       {processMap.verticalTransfers.map(transfer => <g key={transfer.id} transform={`translate(${transfer.point.x} ${transfer.point.y})`}>
-        <circle r="24" />
-        <path d="M-11 0H11M0-11V11" />
+        <circle r="14" />
+        <path d="M-6 0H6M0-6V6" />
       </g>)}
     </g>
 
@@ -51,8 +51,8 @@ export function SiteProcessMapBoardOverlay({ mapId }: { readonly mapId: string }
         transform={`translate(${anchor.x} ${anchor.y})`}
         data-recommended-tower={anchor.recommendedTower}
       >
-        <circle r="18" />
-        <text y="5" textAnchor="middle">{anchor.recommendedTower.slice(0, 1)}</text>
+        <circle r="9" />
+        <circle r="2.5" className="zb-site-anchor-core" />
       </g>)}
     </g>
   </g>;
