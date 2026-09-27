@@ -324,6 +324,8 @@ async function metrics(cdp) {
     if(sourceResponse.ok) sourceBytes=(await sourceResponse.arrayBuffer()).byteLength;
     return {
       scenario:shell?.getAttribute('data-scenario')||null,
+      frameMode:shell?.getAttribute('data-frame-mode')||null,
+      boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
       worldFinal:shell?.getAttribute('data-g8a-world-final')==='true',
@@ -333,6 +335,7 @@ async function metrics(cdp) {
       productionArtCount:document.querySelectorAll('.zb-board-production-art').length,
       processOverlay:Boolean(document.querySelector('[data-site-process-map="map-apt-bottom-up-excavation-01"]')),
       pads:document.querySelectorAll('.zb-pad-runtime').length,
+      touchPads:document.querySelectorAll('.zb-pad-hit').length,
       routePoints:document.querySelector('.zb-path')?.getAttribute('points')||null,
       towers:document.querySelectorAll('.zb-tower').length,
       controlPq:document.querySelectorAll('[data-pq-control="CONTROL:L1"]').length,
@@ -382,6 +385,7 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
+  if(report.desktop.frameMode!=='LANDSCAPE_STRATEGY' || report.desktop.boardViewBox!=='0 0 1000 600') throw new Error('Desktop frame contract mismatch: '+JSON.stringify({frameMode:report.desktop.frameMode,viewBox:report.desktop.boardViewBox}));
   if(report.desktop.productionMap!==expectedRegistryStatus) throw new Error('Unexpected G8-A production-map registry state: '+report.desktop.productionMap+' expected '+expectedRegistryStatus);
   if(report.desktop.artHref!==expectedWorldHref) throw new Error('Unexpected G8-A world art: '+report.desktop.artHref+' expected '+expectedWorldHref);
   if(report.desktop.worldFinal!==worldApproved) throw new Error('Desktop world-final runtime state mismatch');
@@ -402,6 +406,7 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
   if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!==expectedRegistryStatus) throw new Error('Unexpected mobile G8-A registry state: '+report.mobile.productionMap+' expected '+expectedRegistryStatus);
+  if(report.mobile.frameMode!=='PORTRAIT_IMMERSION' || report.mobile.boardViewBox!=='0 80 430 520') throw new Error('390x844 portrait frame contract mismatch: '+JSON.stringify({frameMode:report.mobile.frameMode,viewBox:report.mobile.boardViewBox}));
   if(report.mobile.artHref!==expectedWorldHref) throw new Error('Unexpected mobile G8-A world art: '+report.mobile.artHref+' expected '+expectedWorldHref);
   if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
@@ -413,6 +418,12 @@ try {
   if(report.mobile.overflow) throw new Error('390x844 G8-A horizontal overflow');
   if(!report.mobile.board || report.mobile.board.left < -2 || report.mobile.board.right > 392 || report.mobile.board.width < 300) {
     throw new Error('390x844 G8-A board escaped viewport: '+JSON.stringify(report.mobile.board));
+  }
+  if(report.mobile.board.height / report.mobile.viewport.height < 0.55) {
+    throw new Error('390x844 portrait world is not immersive enough: '+JSON.stringify({board:report.mobile.board,viewport:report.mobile.viewport}));
+  }
+  if(report.mobile.touchPads < 3 || report.mobile.touchPads > 4) {
+    throw new Error('Portrait touch pads are not remapped to the authored camera frame: '+report.mobile.touchPads);
   }
   await screenshot(cdp,'02-g8a-bottom-up-mobile.png');
 
