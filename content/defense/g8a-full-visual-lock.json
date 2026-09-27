@@ -780,7 +780,7 @@
     "requestedAt": "2026-09-27"
   },
   "graphicsPolishV1": {
-    "status": "IMPLEMENTED_AWAITING_QA",
+    "status": "QA_PASS",
     "requestedAt": "2026-09-27",
     "scope": [
       "main hero depth integration",
@@ -805,6 +805,29 @@
       "cutout characters and equipment needed common lighting/contact treatment to sit inside the same world",
       "Defense result presentation still read as a generic web modal"
     ],
-    "expectedOutcome": "Preserve the realistic construction world while making actors, safety equipment, HUD and result flow read as one commercial game presentation."
+    "expectedOutcome": "Preserve the realistic construction world while making actors, safety equipment, HUD and result flow read as one commercial game presentation.",
+    "qaPassedAt": "2026-09-27",
+    "headSha": "492095a8286f3639d04a71c874e74d2e55496964",
+    "evidence": {
+      "titleRun": 36325993083,
+      "titleResult": "SUCCESS",
+      "titleArtifactId": 10934450182,
+      "titleArtifactDigest": "sha256:7f1774fd16b1f534d0e981b5c8685de633339c95429fbacd3758034bc3b7edf3",
+      "fullVisualRun": 36325993092,
+      "fullVisualResult": "SUCCESS",
+      "fullVisualArtifactId": 10934216065,
+      "fullVisualArtifactDigest": "sha256:a7bc2e9e9fc470c80ecc6688992763173a44176b92e3f80fad2516adf6c44f90",
+      "voiceRun": 36325993067,
+      "voiceResult": "SUCCESS",
+      "premiumAudioRun": 36325993117,
+      "premiumAudioResult": "SUCCESS"
+    },
+    "screenshotReview": [
+      "desktop title reads cleaner after removing floating cast quotes while retaining character identity and role plates",
+      "780x360 physical-landscape title hierarchy remains intact",
+      "G8-A mobile impact capture no longer shows a detached floating full-health HUD bar over site actors",
+      "approved construction world remains dominant; presentation overlays no longer compete with the world plate"
+    ],
+    "next": "Commercial Graphics Integration V1 is locked. Reopen only for a demonstrated regression or a deliberate art-direction change."
   }
 }
