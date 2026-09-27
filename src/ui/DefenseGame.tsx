@@ -672,7 +672,7 @@ export function DefenseGame({
 
     <footer className="zb-command">
       <section className="zb-selection">
-        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>8 PAD · 1000×600 LOGICAL BOARD</span></div> : null}
+        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>동선을 확인하고 개입 지점을 선택하세요.</span></div> : null}
 
         {selectedPad && !selectedPadTower ? <div className="zb-build-panel">
           <div className="zb-panel-heading"><span>{selectedPad.id}</span><strong>{t('defense.ui.select_tower')}</strong></div>
