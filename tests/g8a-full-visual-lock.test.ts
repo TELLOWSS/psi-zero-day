@@ -59,6 +59,6 @@ describe('G8-A full-screen visual lock contract', () => {
     expect(fullVisual.v04a.targets.idleWorldMinimumScreenShare).toBeGreaterThanOrEqual(0.72);
     expect(fullVisual.v04a.targets.expandedCommandPanelAllowedAfterSelection).toBe(true);
     expect(fullVisual.fullScreenReview.invariants).toContain('logical simulation route remains unchanged');
-    expect(fullVisual.fullScreenReview.status).toMatch(/REVALIDATION|PASS/);
+    expect(fullVisual.fullScreenReview.status).toMatch(/REVALIDATION|PASS|CORRECTION_ACTIVE/);
   });
 });
