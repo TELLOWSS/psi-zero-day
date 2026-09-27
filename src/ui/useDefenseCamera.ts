@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DefenseContent, DefensePoint, DefenseRunState } from '../domain/defense';
 import { defensePositionAtDistance } from '../engine/defense';
 import { defenseMapFrame, defenseMapPointPercent } from '../app/defense-map-framing';
+import { defenseVisualPadPoint, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 
 export type DefenseCameraMode =
   | 'STRATEGIC_BASE'
@@ -50,7 +51,7 @@ function controlThreat(
       const level = content.towers
         .find(item => item.id === 'CONTROL')
         ?.levels.find(item => item.id === tower.levelId);
-      return pad && level ? { pad, range: level.range } : null;
+      return pad && level ? { pad, visualPad: defenseVisualPadPoint(content.map.id, pad), range: level.range } : null;
     })
     .filter((item): item is NonNullable<typeof item> => item !== null);
 
@@ -60,6 +61,7 @@ function controlThreat(
   for (const enemy of state.enemies) {
     if (enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED') continue;
     const pos = defensePositionAtDistance(content.map.path, enemy.distance);
+    const visualPos = defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance);
     for (const control of controls) {
       const dx = pos.x - control.pad.x;
       const dy = pos.y - control.pad.y;
@@ -67,7 +69,11 @@ function controlThreat(
       const triggerRange = control.range + 70;
       if (distance > triggerRange) continue;
       const score = distance / Math.max(1, triggerRange);
-      if (!best || score < best.score) best = { enemyId: enemy.id, focus: pos, score };
+      const focus = {
+        x: visualPos.x * 0.62 + control.visualPad.x * 0.38,
+        y: visualPos.y * 0.62 + control.visualPad.y * 0.38,
+      };
+      if (!best || score < best.score) best = { enemyId: enemy.id, focus, score };
     }
   }
   return best;
@@ -91,10 +97,13 @@ export function defenseCameraSignal(
     const nowSlow = activeSlowSources(enemy, current.tick);
     const newlySlowed = [...nowSlow].some(source => !beforeSlow.has(source));
     if (newlySlowed) {
+      const relationship = controlThreat(current, content);
       return {
         kind: 'IMPACT',
         enemyId: enemy.id,
-        focus: defensePositionAtDistance(content.map.path, enemy.distance),
+        focus: relationship?.enemyId === enemy.id
+          ? relationship.focus
+          : defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance),
         reason: 'CONTROL_INTERVENTION',
       };
     }
@@ -107,7 +116,7 @@ export function defenseCameraSignal(
       return {
         kind: 'APPROACH',
         enemyId: currentVeiled.id,
-        focus: defensePositionAtDistance(content.map.path, currentVeiled.distance),
+        focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, currentVeiled.distance),
         reason: 'VEILED_REVEAL',
       };
     }
