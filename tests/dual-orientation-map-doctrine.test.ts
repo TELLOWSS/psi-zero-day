@@ -6,8 +6,20 @@ import { g8aVisualProjection } from '../src/app/defense-visual-projection';
 describe('Dual-orientation map doctrine', () => {
   it('keeps G8-A landscape topology unchanged', () => {
     const frame = defenseMapFrame('map-apt-bottom-up-excavation-01', false, 1000, 600);
-    expect(frame).toEqual({ x: 0, y: 0, width: 1000, height: 600, mode: 'LANDSCAPE_STRATEGY' });
-    expect(defenseMapViewBox(frame)).toBe('0 0 1000 600');
+    expect(frame).toEqual({ x: 0, y: 60, width: 1000, height: 480, mode: 'LANDSCAPE_STRATEGY' });
+    expect(defenseMapViewBox(frame)).toBe('0 60 1000 480');
+  });
+
+  it('keeps all reviewed G8-A route and pad projection inside the physical-phone landscape frame', () => {
+    const frame = defenseMapFrame('map-apt-bottom-up-excavation-01', false, 1000, 600);
+    for (const point of [
+      ...g8aVisualProjection.route.map(([x, y], index) => ({ x, y, id: `route-${index}` })),
+      ...Object.entries(g8aVisualProjection.pads).map(([id, point]) => ({ ...point, id })),
+    ]) {
+      expect(defenseMapPointPercent(frame, point.x, point.y).visible, point.id).toBe(true);
+    }
+    expect(doctrine.landscapeDoctrine.physicalPhoneWorldViewportTarget.minimumWidthShare).toBeGreaterThanOrEqual(0.94);
+    expect(doctrine.landscapeDoctrine.physicalPhoneWorldViewportTarget.minimumHeightShare).toBeGreaterThanOrEqual(0.94);
   });
 
   it('uses a dedicated close portrait frame instead of shrinking the entire map', () => {
