@@ -86,15 +86,15 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     >
       <ellipse cx="0" cy="25" rx="28" ry="6" className="zb-control-ground-shadow" aria-hidden="true" />
       {firing ? <g className="zb-control-intervention" aria-hidden="true">
-        <circle r="26" />
+        <ellipse cx="0" cy="20" rx="30" ry="8" />
         <path d="M-34 18H34M-24 14L-14 6M14 6L24 14M-14 6H14" />
       </g> : null}
       <image
         href={controlPq.barrierUri}
-        x="-31"
-        y="-9"
-        width="62"
-        height="39"
+        x="-28"
+        y="-7"
+        width="56"
+        height="35"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-barrier"
         aria-hidden="true"
@@ -102,9 +102,9 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       <image
         href={controlPq.marshalUri}
         x="5"
-        y="-41"
-        width="30"
-        height="45"
+        y="-37"
+        width="27"
+        height="41"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-marshal"
         aria-hidden="true"
@@ -120,7 +120,7 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     >
       {firing && tower.towerId !== 'CONTROL' ? <circle r="31" className="zb-attack-flash" aria-hidden="true" /> : null}
       {firing && tower.towerId === 'CONTROL' ? <g className="zb-control-intervention" aria-hidden="true">
-        <circle r="35" />
+        <ellipse cx="0" cy="20" rx="32" ry="9" />
         <path d="M-30 18L-18 8M18 8L30 18M-18 8H18" />
       </g> : null}
       {firing && tower.towerId === 'BURST' ? <circle r="48" className="zb-area-pulse" aria-hidden="true" /> : null}
@@ -187,7 +187,7 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     data-veiled-state={enemy.enemyId === 'VEILED' ? (hidden ? 'CONCEALED' : revealed ? 'REVEALED' : 'TRACKED') : undefined}
   >
     {enemy.enemyId === 'VEILED' ? <ellipse cx="0" cy="8" rx="30" ry="16" className="zb-veiled-site-occlusion" aria-hidden="true" /> : null}
-    {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
+    {isHit && enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED' ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
       <ellipse cx="-25" cy="19" rx="18" ry="5" />
