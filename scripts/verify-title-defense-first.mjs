@@ -42,10 +42,15 @@ async function titleMetrics(cdp){return evalJs(cdp,`(() => {
     liveRect:rect('.commercial-title-field-status'),
     liveText:(document.querySelector('.commercial-title-field-status')?.textContent||'').replace(/\\s+/g,' ').trim(),
     subcopy:(document.querySelector('.commercial-title-subcopy')?.textContent||'').trim(),
+    titleLayout:document.querySelector('.commercial-title-home')?.getAttribute('data-title-layout')||null,
+    homeRect:rect('.commercial-title-home'),
+    copyRect:rect('.commercial-title-copy'),
+    castRect:rect('.commercial-title-cast'),
+    castVisible:getComputedStyle(document.querySelector('.commercial-title-cast')).display!=='none',
     featuresVisible:getComputedStyle(document.querySelector('.commercial-title-features')).display!=='none'
   };
 })()`);}
-const report={schema_version:1,source_sha:process.env.GITHUB_SHA||null,desktop:null,mobile:null,defense_entry:null,failures:[]};
+const report={schema_version:2,source_sha:process.env.GITHUB_SHA||null,desktop:null,physicalLandscape:null,mobile:null,defense_entry:null,failures:[]};
 let cdp,target;
 try{
   await waitJson('http://127.0.0.1:'+port+'/json/version');
@@ -68,6 +73,20 @@ try{
   }))()`);
   if(!report.defense_entry.defenseVisible || report.defense_entry.titleVisible) throw new Error('primary CTA did not enter DefenseGame');
   await shot(cdp,'desktop-defense-entry.png');
+
+  await viewport(cdp,780,360,true);await navigate(cdp);
+  report.physicalLandscape=await titleMetrics(cdp);
+  if(report.physicalLandscape.titleLayout!=='PHYSICAL_PHONE_V10') throw new Error('physical landscape title layout marker missing');
+  if(!report.physicalLandscape.primary.includes('현장 디펜스 시작')) throw new Error('780x360 primary CTA is not Field Defense');
+  if(report.physicalLandscape.featuresVisible) throw new Error('780x360 feature-card strip should be hidden');
+  if(!report.physicalLandscape.castVisible) throw new Error('780x360 title cast should remain visible');
+  if(report.physicalLandscape.overflow) throw new Error('780x360 title horizontal overflow');
+  const ph=report.physicalLandscape.homeRect, pp=report.physicalLandscape.primaryRect, pl=report.physicalLandscape.liveRect, pc=report.physicalLandscape.copyRect;
+  if(!ph || ph.width<770 || ph.height<350) throw new Error('780x360 title does not fill viewport '+JSON.stringify(ph));
+  if(!pp || pp.left<0 || pp.right>780 || pp.top<0 || pp.bottom>360) throw new Error('780x360 primary CTA escaped viewport '+JSON.stringify(pp));
+  if(!pl || pl.left<0 || pl.right>780 || pl.top<0 || pl.bottom>360) throw new Error('780x360 LIVE SITE escaped viewport '+JSON.stringify(pl));
+  if(!pc || pc.left<0 || pc.right>450 || pc.top<0 || pc.bottom>360) throw new Error('780x360 hero copy no longer owns the left third '+JSON.stringify(pc));
+  await shot(cdp,'physical-780x360-home.png');
 
   await viewport(cdp,390,844,true);await navigate(cdp);
   report.mobile=await titleMetrics(cdp);
