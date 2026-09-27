@@ -188,9 +188,9 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
-      <ellipse cx="-24" cy="18" rx="22" ry="7" />
-      <circle r="25" />
-      <path d="M-26 13H-10M-30 19H-14M-34 23H-18" />
+      <ellipse cx="-25" cy="19" rx="18" ry="5" />
+      <ellipse cx="-38" cy="21" rx="11" ry="4" />
+      <path d="M-31 14H-15M-37 19H-20M-42 23H-27" />
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
