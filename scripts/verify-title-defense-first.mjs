@@ -47,6 +47,8 @@ async function titleMetrics(cdp){return evalJs(cdp,`(() => {
     copyRect:rect('.commercial-title-copy'),
     castRect:rect('.commercial-title-cast'),
     castVisible:getComputedStyle(document.querySelector('.commercial-title-cast')).display!=='none',
+    visibleCastCount:[...document.querySelectorAll('.commercial-title-worker')].filter(el=>getComputedStyle(el).display!=='none').length,
+    quickSettingsVisible:getComputedStyle(document.querySelector('.commercial-title-quick-settings')).display!=='none',
     featuresVisible:getComputedStyle(document.querySelector('.commercial-title-features')).display!=='none'
   };
 })()`);}
@@ -79,7 +81,8 @@ try{
   if(report.physicalLandscape.titleLayout!=='PHYSICAL_PHONE_V10') throw new Error('physical landscape title layout marker missing');
   if(!report.physicalLandscape.primary.includes('현장 디펜스 시작')) throw new Error('780x360 primary CTA is not Field Defense');
   if(report.physicalLandscape.featuresVisible) throw new Error('780x360 feature-card strip should be hidden');
-  if(!report.physicalLandscape.castVisible) throw new Error('780x360 title cast should remain visible');
+  if(!report.physicalLandscape.castVisible || report.physicalLandscape.visibleCastCount!==1) throw new Error('780x360 should use one protagonist instead of a four-face lineup: '+report.physicalLandscape.visibleCastCount);
+  if(report.physicalLandscape.quickSettingsVisible) throw new Error('780x360 unlabeled quick-settings strip should be hidden');
   if(report.physicalLandscape.overflow) throw new Error('780x360 title horizontal overflow');
   const ph=report.physicalLandscape.homeRect, pp=report.physicalLandscape.primaryRect, pl=report.physicalLandscape.liveRect, pc=report.physicalLandscape.copyRect;
   if(!ph || ph.width<770 || ph.height<350) throw new Error('780x360 title does not fill viewport '+JSON.stringify(ph));
