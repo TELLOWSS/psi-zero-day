@@ -778,5 +778,33 @@
     "premiumAudioState": "AUDIO_PRODUCTION_LOCKED",
     "purpose": "Force Commercial Presentation regression against main after PR #73 merge before PR #74 merge.",
     "requestedAt": "2026-09-27"
+  },
+  "graphicsPolishV1": {
+    "status": "IMPLEMENTED_AWAITING_QA",
+    "requestedAt": "2026-09-27",
+    "scope": [
+      "main hero depth integration",
+      "G8-A world color-grade integration",
+      "semantic equipment silhouette upgrade",
+      "risk actor contact shadows and reduced game HUD clutter",
+      "premium command/wave panel treatment",
+      "commercial result-screen treatment"
+    ],
+    "protectedContracts": [
+      "Defense engine state and balance",
+      "logical route topology and pad coordinates",
+      "Wave composition and timing",
+      "WORLD/SWIFT/VEILED locked final rasters",
+      "Episode 01 story/voice contracts",
+      "G8-A Premium Audio Production Lock"
+    ],
+    "visualFindings": [
+      "locked world plate quality is sufficient; the remaining quality gap is compositing and UI integration rather than map replacement",
+      "full-health bars on G8-A site actors made the live world read as a generic tower-defense board",
+      "reused tower scene elements needed cleaner physical silhouettes and scale discipline",
+      "cutout characters and equipment needed common lighting/contact treatment to sit inside the same world",
+      "Defense result presentation still read as a generic web modal"
+    ],
+    "expectedOutcome": "Preserve the realistic construction world while making actors, safety equipment, HUD and result flow read as one commercial game presentation."
   }
 }
