@@ -1,0 +1,63 @@
+name: Generate G8-A VEILED candidate
+
+on:
+  push:
+    branches:
+      - sol/g8a-full-visual-v01-20260927
+    paths:
+      - scripts/render-g8a-veiled-candidate.mjs
+      - .github/workflows/generate-g8a-veiled-candidate.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: g8a-veiled-candidate
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: sol/g8a-full-visual-v01-20260927
+          fetch-depth: 0
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found"
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+
+      - name: Install WebP encoder
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends webp
+
+      - name: Render VEILED candidate
+        run: node scripts/render-g8a-veiled-candidate.mjs
+
+      - name: Inspect candidate
+        shell: bash
+        run: |
+          file public/assets/defense/enemies/veiled-final-g8a-candidate.webp
+          test -s public/assets/defense/enemies/veiled-final-g8a-candidate.webp
+
+      - name: Commit candidate
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/defense/enemies/veiled-final-g8a-candidate.webp
+          if git diff --cached --quiet; then
+            echo "Candidate unchanged"
+            exit 0
+          fi
+          git commit -m "art: render grounded VEILED candidate"
+          git push origin HEAD:sol/g8a-full-visual-v01-20260927
