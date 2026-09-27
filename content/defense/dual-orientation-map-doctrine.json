@@ -49,15 +49,20 @@
       "route progression",
       "risk distribution",
       "response coverage"
-    ]
+    ],
+    "physicalPhoneGoal": "world-first immersive landscape; HUD and command chrome float over the construction world instead of shrinking it",
+    "physicalPhoneWorldViewportTarget": {
+      "minimumWidthShare": 0.94,
+      "minimumHeightShare": 0.94
+    }
   },
   "g8a": {
     "mapId": "map-apt-bottom-up-excavation-01",
     "landscapeFrame": {
       "x": 0,
-      "y": 0,
+      "y": 60,
       "width": 1000,
-      "height": 600
+      "height": 480
     },
     "portraitFrame": {
       "x": 430,
@@ -77,7 +82,12 @@
       "purpose": "align visible route, pads, enemies and responses with the reviewed construction-world haul road without changing simulation distances, balance or logical topology",
       "route": "G8A visual projection shared by landscape and portrait",
       "simulationTopologyReopen": false
-    }
+    },
+    "landscapeFocus": [
+      "full haul-road route from approach to intervention",
+      "worker/vehicle conflict and CONTROL response visible without a small centered board",
+      "top HUD and bottom command chrome overlay the world on short landscape devices"
+    ]
   },
   "futureMapRule": {
     "id": "MAP-NEXT-01",
