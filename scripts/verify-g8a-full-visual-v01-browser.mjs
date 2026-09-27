@@ -312,6 +312,8 @@ async function metrics(cdp) {
   return evaluate(cdp, `(async () => {
     const shell=document.querySelector('[data-defense-screen="combat"]');
     const board=document.querySelector('.zb-board-wrap')?.getBoundingClientRect();
+    const hud=document.querySelector('.zb-hud')?.getBoundingClientRect();
+    const command=document.querySelector('.zb-command')?.getBoundingClientRect();
     const art=document.querySelector('.zb-board-production-art');
     const href=art?.getAttribute('href') || null;
     let artBytes=0;
@@ -324,6 +326,7 @@ async function metrics(cdp) {
     if(sourceResponse.ok) sourceBytes=(await sourceResponse.arrayBuffer()).byteLength;
     return {
       scenario:shell?.getAttribute('data-scenario')||null,
+      selectionMode:shell?.getAttribute('data-selection-mode')||null,
       frameMode:shell?.getAttribute('data-frame-mode')||null,
       cameraMode:shell?.getAttribute('data-camera-mode')||null,
       cameraReason:shell?.getAttribute('data-camera-reason')||null,
@@ -511,6 +514,7 @@ try {
   await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
   report.mobileImpact=await metrics(cdp);
+  if(report.mobileImpact.boardViewBox!=='0 80 330 520') throw new Error('V-04A impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
   if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
     throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
   }
