@@ -32,7 +32,12 @@ describe('G8-A full-screen visual lock contract', () => {
       'V05_PASS_FULL_SCREEN_VISUAL_POLISH_ACTIVE',
       'PRODUCTION_LOCKED',
     ]).toContain(fullVisual.status);
-    expect(fullVisual.stopLine).toContain('V-01 through V-05');
+    if (fullVisual.status === 'PRODUCTION_LOCKED') {
+      expect(fullVisual.stopLine).toContain('Full-Screen Visual Lock is closed');
+      expect(fullVisual.stopLine).toContain('Voice Integration');
+    } else {
+      expect(fullVisual.stopLine).toContain('V-01 through V-05');
+    }
     expect(fullVisual.v01.status).toBe('ACTUAL_PLAY_PASS');
   });
 
