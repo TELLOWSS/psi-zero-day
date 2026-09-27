@@ -31,7 +31,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: V-01 visual contracts
-        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/final-art-policy.test.ts tests/dual-orientation-map-doctrine.test.ts tests/g8a-full-visual-lock.test.ts tests/defense-camera.test.ts tests/impact-presentation-policy.test.ts
+        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/final-art-policy.test.ts tests/dual-orientation-map-doctrine.test.ts tests/g8a-full-visual-lock.test.ts tests/defense-camera.test.ts tests/impact-presentation-policy.test.ts tests/g8a-worker-motion.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Build
