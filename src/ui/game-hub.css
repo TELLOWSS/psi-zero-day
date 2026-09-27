@@ -1760,3 +1760,6 @@
     display:none!important;
   }
 }
+
+/* H-01 final hierarchy polish — avoid duplicate NEW PSI branding in the same first frame. */
+.commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta b{display:none}
