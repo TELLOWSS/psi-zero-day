@@ -11,10 +11,10 @@ describe('Dual-orientation map doctrine', () => {
 
   it('uses a dedicated close portrait frame instead of shrinking the entire map', () => {
     const frame = defenseMapFrame('map-apt-bottom-up-excavation-01', true, 1000, 600);
-    expect(frame).toEqual({ x: 0, y: 80, width: 430, height: 520, mode: 'PORTRAIT_IMMERSION' });
+    expect(frame).toEqual({ x: 0, y: 80, width: 330, height: 520, mode: 'PORTRAIT_IMMERSION' });
     expect(frame.width).toBeLessThan(1000);
     expect(frame.height).toBeLessThanOrEqual(600);
-    expect(doctrine.portraitDoctrine.worldViewportTarget.minimumScreenShare).toBeGreaterThanOrEqual(0.55);
+    expect(doctrine.portraitDoctrine.worldViewportTarget.minimumScreenShare).toBeGreaterThanOrEqual(0.72);
   });
 
   it('keeps the representative conflict actors inside the portrait frame', () => {
