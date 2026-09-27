@@ -65,7 +65,7 @@
       rgba(72,187,225,.22) 10%,
       rgba(39,118,152,.08) 22%,
       transparent 42%);
-  animation:zb-control-light-peak 150ms ease-out both;
+  animation:zb-control-light-peak 130ms ease-out both;
   mix-blend-mode:screen;
 }
 @keyframes zb-camera-impact-shake{
@@ -1267,6 +1267,9 @@
 .zb-g8a-activity.is-impact .zb-worker-motion{
   animation:zb-worker-evade .34s cubic-bezier(.2,.8,.2,1) 1 both;
 }
+.zb-g8a-activity.is-recovering .zb-worker-motion{
+  animation:zb-worker-safe-return .42s cubic-bezier(.18,.76,.22,1) 1 both;
+}
 @keyframes zb-worker-route-a{
   0%{transform:translate3d(0,0,0)}
   48%{transform:translate3d(24px,-7px,0)}
@@ -1287,11 +1290,17 @@
   35%{transform:translate3d(-6px,-3px,0) scale(1.025)}
   100%{transform:translate3d(-14px,-6px,0) scale(.99)}
 }
+@keyframes zb-worker-safe-return{
+  0%{transform:translate3d(-8px,-4px,0) scale(.995)}
+  55%{transform:translate3d(-3px,-1px,0) scale(1)}
+  100%{transform:translate3d(0,0,0) scale(1)}
+}
 @media (prefers-reduced-motion:reduce){
   .zb-worker-motion.is-walking,
   .zb-worker-motion.is-walking-alt,
   .zb-worker-motion.is-directing,
-  .zb-g8a-activity.is-impact .zb-worker-motion{animation:none}
+  .zb-g8a-activity.is-impact .zb-worker-motion,
+  .zb-g8a-activity.is-recovering .zb-worker-motion{animation:none}
 }
 
 /* M-04 — SWIFT vehicle presentation. Engine path movement stays authoritative. */
