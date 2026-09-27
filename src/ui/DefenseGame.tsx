@@ -84,25 +84,25 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-tower-family={tower.towerId}
     >
       {firing ? <g className="zb-control-intervention" aria-hidden="true">
-        <circle r="35" />
-        <path d="M-42 24H42M-30 18L-18 8M18 8L30 18M-18 8H18" />
+        <circle r="26" />
+        <path d="M-34 18H34M-24 14L-14 6M14 6L24 14M-14 6H14" />
       </g> : null}
       <image
         href={controlPq.barrierUri}
-        x="-55"
-        y="-22"
-        width="110"
-        height="70"
+        x="-41"
+        y="-16"
+        width="82"
+        height="52"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-barrier"
         aria-hidden="true"
       />
       <image
         href={controlPq.marshalUri}
-        x="-31"
-        y="-77"
-        width="62"
-        height="93"
+        x="-22"
+        y="-58"
+        width="44"
+        height="66"
         preserveAspectRatio="xMidYMid meet"
         className="zb-control-pq-marshal"
         aria-hidden="true"
