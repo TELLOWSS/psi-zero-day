@@ -1,4 +1,4 @@
-name: Verify G8-A PREMIUM AUDIO QA
+name: Verify G8-A PREMIUM AUDIO PRODUCTION LOCK
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
             tests/episode01-voice-runtime-lock.test.ts
 
       - name: Premium audio manifest status
-        run: npm run defense:g8a-premium-audio-status
+        run: npm run defense:g8a-premium-audio-check
 
       - name: Premium audio contracts and defense audio regression
         run: npm run test:g8a-premium-audio
@@ -73,7 +73,7 @@ jobs:
           "$CHROME_BIN" --version
 
       - name: Premium audio technical status
-        run: npm run defense:g8a-premium-audio-technical-status
+        run: npm run defense:g8a-premium-audio-technical-check
 
       - name: Typecheck
         run: npm run typecheck
