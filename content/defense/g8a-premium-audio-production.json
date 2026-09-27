@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8-A AUDIO PRODUCTION LOCK",
-  "status": "PREMIUM_AUDIO_QA_READY",
+  "status": "AUDIO_PRODUCTION_LOCKED",
   "scope": "map-apt-bottom-up-excavation-01 / CONTROL:L1 vs SWIFT",
   "principle": "Orchestral-grade cinematic scoring plus construction-field realism. Premium means emotionally authored, dynamically mixed, spatially believable, and readable on phone speakers without masking gameplay.",
   "absoluteRules": {
@@ -76,7 +76,7 @@
         "id": "score.foundation_bed",
         "path": "assets/defense/audio/g8a/score-foundation-bed.ogg",
         "role": "low strings + restrained piano + air",
-        "state": "QA_READY",
+        "state": "PRODUCTION_APPROVED",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -93,7 +93,7 @@
         "id": "score.pressure_ostinato",
         "path": "assets/defense/audio/g8a/score-pressure-ostinato.ogg",
         "role": "spiccato/low-string pulse + restrained percussion",
-        "state": "QA_READY",
+        "state": "PRODUCTION_APPROVED",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -108,7 +108,7 @@
         "id": "score.swift_threat",
         "path": "assets/defense/audio/g8a/score-swift-threat.ogg",
         "role": "low brass/horn tension + rhythmic acceleration",
-        "state": "QA_READY",
+        "state": "PRODUCTION_APPROVED",
         "loop": true,
         "playbackRole": "SYNCHRONIZED_LOOP",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -123,7 +123,7 @@
         "id": "score.control_intervention",
         "path": "assets/defense/audio/g8a/score-control-intervention.ogg",
         "role": "short decisive orchestral intervention accent",
-        "state": "QA_READY",
+        "state": "PRODUCTION_APPROVED",
         "loop": false,
         "playbackRole": "STATE_ENTRY_ONE_SHOT",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -139,7 +139,7 @@
         "id": "score.resolution_coda",
         "path": "assets/defense/audio/g8a/score-resolution-coda.ogg",
         "role": "warm strings/horn release preserving seriousness",
-        "state": "QA_READY",
+        "state": "PRODUCTION_APPROVED",
         "loop": false,
         "playbackRole": "STATE_ENTRY_ONE_SHOT_OVER_FOUNDATION",
         "referenceStatus": "LOCK_CANDIDATE_READY",
@@ -197,7 +197,7 @@
       }
     ],
     "candidateSet": {
-      "status": "MUSIC_CANDIDATE_SET_COMPLETE",
+      "status": "PRODUCTION_APPROVED",
       "count": 5,
       "adaptiveArcPreview": "G8A_ADAPTIVE_MUSIC_ARC_PREVIEW_V1_48k_opus192.ogg",
       "previewMetrics": {
@@ -205,7 +205,7 @@
         "lraLu": 3.8,
         "truePeakDbfs": -2.2
       },
-      "note": "Candidate set only. Do not mark PRODUCTION_APPROVED until Foley/full-mix/headphone/Android QA."
+      "note": "Five score states are production approved under the closed G8-A Audio Production Lock."
     }
   },
   "fieldSound": [
@@ -214,63 +214,63 @@
       "path": "assets/defense/audio/g8a/field-excavation-world.ogg",
       "role": "deep excavation ambience, distant machinery, air, gravel",
       "loop": true,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "field.excavator_hydraulic",
       "path": "assets/defense/audio/g8a/field-excavator-hydraulic.ogg",
       "role": "distant hydraulic and track texture",
       "loop": true,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "swift.engine_loop",
       "path": "assets/defense/audio/g8a/swift-engine-loop.ogg",
       "role": "diesel dump-truck approach/reverse loop",
       "loop": true,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "swift.reverse_alarm",
       "path": "assets/defense/audio/g8a/swift-reverse-alarm.ogg",
       "role": "direction-readable reversing warning",
       "loop": true,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "swift.gravel_tire",
       "path": "assets/defense/audio/g8a/swift-gravel-tire.ogg",
       "role": "slow heavy tire/gravel movement",
       "loop": false,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "swift.airbrake",
       "path": "assets/defense/audio/g8a/swift-airbrake.ogg",
       "role": "intervention stop punctuation",
       "loop": false,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "control.radio_stop",
       "path": "assets/defense/audio/g8a/control-radio-stop.ogg",
       "role": "short non-verbal radio squelch/stop cue",
       "loop": false,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     },
     {
       "id": "control.barrier_clack",
       "path": "assets/defense/audio/g8a/control-barrier-clack.ogg",
       "role": "physical access-control confirmation",
       "loop": false,
-      "state": "QA_READY"
+      "state": "PRODUCTION_APPROVED"
     }
   ],
   "gameplaySfx": [
     {
       "cue": "select",
       "path": "assets/defense/audio/g8a/ui-select.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-select_48k_opus128.ogg",
@@ -285,7 +285,7 @@
     {
       "cue": "place",
       "path": "assets/defense/audio/g8a/ui-place.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-place_48k_opus128.ogg",
@@ -300,7 +300,7 @@
     {
       "cue": "upgrade",
       "path": "assets/defense/audio/g8a/ui-upgrade.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-upgrade_48k_opus128.ogg",
@@ -315,7 +315,7 @@
     {
       "cue": "sell",
       "path": "assets/defense/audio/g8a/ui-sell.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "ui-sell_48k_opus128.ogg",
@@ -330,7 +330,7 @@
     {
       "cue": "warning",
       "path": "assets/defense/audio/g8a/wave-warning.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_A.mp3",
       "candidateRuntime": "wave-warning_48k_opus128.ogg",
@@ -345,7 +345,7 @@
     {
       "cue": "single_resolve",
       "path": "assets/defense/audio/g8a/control-resolve.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "control-resolve_48k_opus128.ogg",
@@ -360,7 +360,7 @@
     {
       "cue": "area_resolve",
       "path": "assets/defense/audio/g8a/area-resolve.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "area-resolve_48k_opus128.ogg",
@@ -375,7 +375,7 @@
     {
       "cue": "leak",
       "path": "assets/defense/audio/g8a/shield-leak.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "shield-leak_48k_opus128.ogg",
@@ -390,7 +390,7 @@
     {
       "cue": "support",
       "path": "assets/defense/audio/g8a/support-call.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_UI_GAMEPLAY_SFX_REEL_B.mp3",
       "candidateRuntime": "support-call_48k_opus128.ogg",
@@ -405,7 +405,7 @@
     {
       "cue": "win",
       "path": "assets/defense/audio/g8a/result-win.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
       "candidateRuntime": "result-win_48k_opus128.ogg",
@@ -421,7 +421,7 @@
     {
       "cue": "loss",
       "path": "assets/defense/audio/g8a/result-loss.ogg",
-      "state": "QA_READY",
+      "state": "PRODUCTION_APPROVED",
       "referenceStatus": "LOCK_CANDIDATE_READY",
       "referenceSource": "PSI_ZERO_DAY_RESULT_SFX_REEL.mp3",
       "candidateRuntime": "result-loss_48k_opus128.ogg",
@@ -458,7 +458,7 @@
   "acceptance": {
     "requiredAssetCount": 24,
     "finalBinaryCount": 24,
-    "productionLockAllowed": false,
+    "productionLockAllowed": true,
     "listeningQa": [
       "studio/headphone stereo",
       "Android phone speaker at normal listening volume",
@@ -490,23 +490,23 @@
     ],
     "runtimeQaAllowed": true
   },
-  "currentProductionFocus": "physical_android_actual_play_qa",
+  "currentProductionFocus": "AUDIO_PRODUCTION_LOCKED",
   "nextProductionAsset": null,
   "candidateAssetCount": 24,
-  "productionStateNote": "24/24 QA_READY assets passed automated technical/runtime QA and project-owner human/device listening QA. Final physical Android in-game actual-play verification remains required; no asset is PRODUCTION_APPROVED and productionLockAllowed remains false.",
+  "productionStateNote": "24/24 premium runtime assets are PRODUCTION_APPROVED. Automated technical/runtime QA and prior human/device listening passed; the project owner directed the remaining physical Android in-game gate to be treated as PASS on 2026-09-27. No new recording artifact was supplied in that chat turn.",
   "candidateProgress": {
-    "status": "24_OF_24_RUNTIME_QA_READY",
+    "status": "24_OF_24_PRODUCTION_APPROVED",
     "candidateAssetCount": 24,
     "requiredAssetCount": 24,
     "remaining": [],
-    "currentFocus": "ACTUAL_PLAY_FULL_MIX_AND_DEVICE_LISTENING_QA",
+    "currentFocus": "AUDIO_PRODUCTION_LOCKED",
     "runtimeCandidatePack": "G8A_PREMIUM_AUDIO_24_OF_24_RUNTIME_CANDIDATE_PACK.zip",
-    "note": "Repository promotion complete. QA_CANDIDATE assets are allowed in G8-A runtime QA but are not PRODUCTION_APPROVED and do not permit Production Lock."
+    "note": "24/24 runtime assets promoted to PRODUCTION_APPROVED; Production Lock closed."
   },
   "runtimeQa": {
     "enabled": true,
     "scope": "map-apt-bottom-up-excavation-01",
-    "assetState": "QA_READY",
+    "assetState": "PRODUCTION_APPROVED",
     "requiredAutomatedEvidence": [
       "24 runtime OGG binaries decode at 48 kHz",
       "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION state resolver coverage",
@@ -536,27 +536,24 @@
       "premiumMixPlaybackFailureCount": 0,
       "oscillatorFallbackCount": 0
     },
-    "note": "Automated 390x844 browser QA and human acoustic listening are complete. Physical Android in-game runtime remains the last gate.",
+    "note": "Automated browser/runtime QA, human acoustic listening, and the owner-directed final physical Android gate are closed.",
     "humanListeningStatus": "PASS",
     "humanListeningAttestedAt": "2026-09-26",
-    "finalEvidenceStillRequired": [
-      "physical Android in-game actual play on the G8-A QA runtime",
-      "premium binary playback confirmed during real touch interaction",
-      "READY/WAVE_BUILD/SWIFT_THREAT/CONTROL_INTERVENTION/RESOLUTION behavior audibly coherent in game",
-      "no oscillator fallback or failed premium playback observed",
-      "mute/unmute and resume behavior acceptable on device"
-    ]
+    "finalEvidenceStillRequired": []
   },
-  "productionLockAllowed": false,
+  "productionLockAllowed": true,
   "physicalAndroidGate": {
-    "status": "PARTIAL_PASS",
-    "evidence": "2026-09-27 physical-device recording, WAVE 1-5",
-    "remaining": [
-      "reach representative Wave 8",
-      "capture SWIFT_THREAT",
-      "capture CONTROL_INTERVENTION",
-      "capture RESOLUTION",
-      "confirm subjective balance/no clipping/no abrupt transition on device"
-    ]
+    "status": "PASS_OWNER_DIRECTIVE",
+    "acceptedAt": "2026-09-27",
+    "evidence": "Project-owner instruction to treat the final physical Android replay as PASS and proceed. No new recording artifact was supplied in this chat turn.",
+    "acceptedScope": [
+      "representative Wave 8",
+      "SWIFT_THREAT",
+      "CONTROL_INTERVENTION",
+      "RESOLUTION",
+      "subjective device-level balance"
+    ],
+    "remaining": [],
+    "productionLockAllowed": true
   }
 }
