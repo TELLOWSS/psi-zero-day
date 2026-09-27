@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "PRODUCTION_LOCKED",
+  "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -92,7 +92,7 @@
     "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "G8-A representative Full-Screen Visual Lock is closed. Do not reopen WORLD/SWIFT/VEILED/topology/balance while proceeding to Voice Integration and Premium Audio unless regression evidence requires it.",
+  "stopLine": "Physical Android evidence reopened only the G8-A landscape presentation shell. V-01 through V-05 assets, topology, balance, portrait framing, cinematic and representative motion remain locked while the physical-phone fullscreen shell is corrected.",
   "visualDoctrine": {
     "siteUniquenessFirst": true,
     "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "ACTUAL_PLAY_VISUAL_QA_PASS",
+    "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -540,7 +540,7 @@
       ],
       "stopLine": "Reopen this lock only for a demonstrated regression or a deliberate new art-direction decision."
     },
-    "productionLocked": true,
+    "productionLocked": false,
     "lockedAt": "2026-09-27",
     "finalEvidence": {
       "githubActionsRun": 36303387182,
@@ -627,6 +627,37 @@
         "desktop": true,
         "portrait390x844": true
       }
+    },
+    "physicalAndroidLandscape": {
+      "date": "2026-09-27",
+      "source": "user-provided physical-device recording",
+      "recording": {
+        "resolution": "2340x1080",
+        "durationSeconds": 145.326533,
+        "frameRate": "120 fps"
+      },
+      "regression": {
+        "observed": true,
+        "finding": "world remained a small centered 5:3 board while HUD/command chrome and Android system bars dominated the landscape screen",
+        "deviceEvidenceWaveRange": "WAVE 1 through WAVE 5"
+      },
+      "correction": {
+        "landscapeFrame": {
+          "x": 0,
+          "y": 60,
+          "width": 1000,
+          "height": 480
+        },
+        "shortLandscapeRule": "orientation:landscape and max-height:560px",
+        "worldTarget": {
+          "minimumWidthShare": 0.94,
+          "minimumHeightShare": 0.94
+        },
+        "hud": "top overlay",
+        "command": "bottom overlay",
+        "androidSystemBars": "immersive fullscreen / transient swipe reveal"
+      },
+      "next": "Automated 780x360 regression + rebuilt Android APK + second physical-device recording."
     }
   }
 }

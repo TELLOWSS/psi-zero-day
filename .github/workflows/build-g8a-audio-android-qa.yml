@@ -1,0 +1,102 @@
+name: Build G8-A Audio Android QA APK
+
+on:
+  push:
+    branches:
+      - sol/g8a-premium-audio-clean-20260927
+    paths:
+      - 'public/assets/defense/audio/g8a/**'
+      - 'content/defense/g8a-premium-audio-*.json'
+      - 'src/app/defense-premium-audio.ts'
+      - 'src/app/g8a-premium-audio-state.ts'
+      - 'src/ui/useDefenseAudio.ts'
+      - 'src/ui/useG8aPremiumMix.ts'
+      - 'src/ui/DefenseGame.tsx'
+      - 'scripts/verify-title-defense-first.mjs'
+      - 'src/ui/game-hub.css'
+      - 'src/ui/GameHub.tsx'
+      - 'content/defense/g8a-full-visual-lock.json'
+      - 'content/defense/dual-orientation-map-doctrine.json'
+      - 'src/app/defense-map-framing.ts'
+      - 'src/ui/defense-game.css'
+      - 'android/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - '.github/workflows/build-g8a-audio-android-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: g8a-audio-android-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Install Android 36 SDK
+        shell: bash
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+        run: |
+          SDKMANAGER="$(command -v sdkmanager || true)"
+          if [ -z "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          fi
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-36" "platform-tools"
+          "$SDKMANAGER" --list_installed | grep -E "platforms;android-36|platform-tools"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify premium audio gate before packaging
+        run: |
+          npm run defense:g8a-premium-audio-status
+          npm run test:g8a-premium-audio
+          npx vitest run tests/g8a-full-visual-lock.test.ts tests/episode01-voice-runtime-lock.test.ts
+
+      - name: Build web and sync Capacitor Android
+        run: npm run android:sync
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon assembleDebug
+
+      - name: Verify APK exists
+        shell: bash
+        run: |
+          APK="android/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          ls -lh "$APK"
+
+      - name: Upload physical-device QA APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: psi-zero-day-g8a-audio-qa-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7

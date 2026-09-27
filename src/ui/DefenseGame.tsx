@@ -302,7 +302,7 @@ export function DefenseGame({
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
   });
-  const audio = useDefenseAudio(state);
+  const audio = useDefenseAudio(state, content.map.id);
   const effects = useDefenseEffects(state);
   const camera = useDefenseCamera(state, content, portrait);
   const oneStep = useDefCoreOneStep({
@@ -492,7 +492,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
@@ -672,7 +672,7 @@ export function DefenseGame({
 
     <footer className="zb-command">
       <section className="zb-selection">
-        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>8 PAD · 1000×600 LOGICAL BOARD</span></div> : null}
+        {!selectedPad ? <div className="zb-empty-selection"><strong>{t('defense.ui.select_pad')}</strong><span>동선을 확인하고 개입 지점을 선택하세요.</span></div> : null}
 
         {selectedPad && !selectedPadTower ? <div className="zb-build-panel">
           <div className="zb-panel-heading"><span>{selectedPad.id}</span><strong>{t('defense.ui.select_tower')}</strong></div>

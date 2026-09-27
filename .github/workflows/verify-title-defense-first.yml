@@ -3,13 +3,24 @@ name: Verify TITLE-DEFENSE-FIRST-01
 on:
   push:
     branches:
-      - sol/title-defense-first-v2-20260925
+      - sol/g8a-premium-audio-clean-20260927
+    paths:
+      - 'src/ui/GameHub.tsx'
+      - 'src/ui/game-hub.css'
+      - 'content/episode01/main-title-layout.json'
+      - 'scripts/verify-title-defense-first.mjs'
+      - '.github/workflows/verify-title-defense-first.yml'
   pull_request:
     branches:
-      - sol/def-core-01-one-step-20260925
+      - main
+    paths:
+      - 'src/ui/GameHub.tsx'
+      - 'src/ui/game-hub.css'
+      - 'scripts/verify-title-defense-first.mjs'
+      - '.github/workflows/verify-title-defense-first.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: title-defense-first-${{ github.ref }}
@@ -20,10 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout title branch
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -43,11 +52,11 @@ jobs:
       - name: Verify defense-first title contract
         shell: bash
         run: |
+          grep -q "PHYSICAL_PHONE_V10" src/ui/GameHub.tsx
           grep -q "현장 디펜스 시작" src/ui/GameHub.tsx
           grep -q "사고 전 신호를 읽고, 현장을 바꿔라." src/ui/GameHub.tsx
           grep -q "LIVE SITE" src/ui/GameHub.tsx
-          grep -q "현장 · 공정" src/ui/GameHub.tsx
-          grep -q "is-defense-entry" src/ui/game-hub.css
+          grep -q "TITLE PHYSICAL PHONE V10" src/ui/game-hub.css
 
       - name: Install Korean QA font
         shell: bash
@@ -67,7 +76,7 @@ jobs:
           echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
           "$CHROME_BIN" --version
 
-      - name: Run defense-first title browser QA
+      - name: Run title browser QA
         shell: bash
         env:
           PSI_TITLE_ARTIFACT_DIR: artifacts/title-defense-first
@@ -77,7 +86,6 @@ jobs:
           PREVIEW_PID=$!
           cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
           trap cleanup EXIT
-
           READY=0
           for attempt in $(seq 1 120); do
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
@@ -92,39 +100,10 @@ jobs:
           fi
           node scripts/verify-title-defense-first.mjs
 
-      - name: Persist title QA evidence
-        if: github.event_name == 'push'
-        shell: bash
-        run: |
-          python3 -m pip install --quiet pillow
-          rm -rf qa/title-defense-first
-          mkdir -p qa/title-defense-first
-          python3 - <<'PY'
-          from pathlib import Path
-          from PIL import Image
-
-          src = Path('artifacts/title-defense-first')
-          out = Path('qa/title-defense-first')
-          for name in ['desktop-1440x900-home.png','desktop-defense-entry.png','mobile-390x844-home.png','error.png']:
-              p = src / name
-              if not p.exists():
-                  continue
-              im = Image.open(p).convert('RGB')
-              if im.width > 1100:
-                  h = round(im.height * 1100 / im.width)
-                  im = im.resize((1100, h), Image.Resampling.LANCZOS)
-              im.save(out / (p.stem + '.jpg'), 'JPEG', quality=84, optimize=True)
-          report = src / 'title-defense-first-report.json'
-          if report.exists():
-              (out / report.name).write_bytes(report.read_bytes())
-          PY
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A qa/title-defense-first
-          if git diff --cached --quiet; then
-            echo "No title QA evidence changes."
-            exit 0
-          fi
-          git commit -m "qa: store defense-first title evidence [skip ci]"
-          git push origin HEAD:sol/title-defense-first-v2-20260925
+      - name: Upload title QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: title-defense-first-physical-phone-v10
+          path: artifacts/title-defense-first
+          if-no-files-found: error

@@ -1,0 +1,114 @@
+name: Verify G8-A PREMIUM AUDIO PRODUCTION LOCK
+
+on:
+  push:
+    branches:
+      - sol/g8a-premium-audio-clean-20260927
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'content/defense/g8a-premium-audio-*.json'
+      - 'content/defense/g8a-audio-*.json'
+      - 'public/assets/defense/audio/g8a/**'
+      - 'src/app/defense-premium-audio.ts'
+      - 'src/app/g8a-premium-audio-state.ts'
+      - 'src/ui/useDefenseAudio.ts'
+      - 'src/ui/useG8aPremiumMix.ts'
+      - 'src/ui/DefenseGame.tsx'
+      - 'scripts/*g8a-premium-audio*'
+      - 'tests/g8a-premium-audio-*.test.ts'
+      - '.github/workflows/verify-g8a-premium-audio.yml'
+      - 'package.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: g8a-premium-audio-clean-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-g8a-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify prerequisite visual and voice locks
+        run: |
+          npx vitest run \
+            tests/g8a-full-visual-lock.test.ts \
+            tests/episode01-voice-integration.test.ts \
+            tests/episode01-voice-runtime-lock.test.ts
+
+      - name: Premium audio manifest status
+        run: npm run defense:g8a-premium-audio-check
+
+      - name: Premium audio contracts and defense audio regression
+        run: npm run test:g8a-premium-audio
+
+      - name: Install audio and browser QA tools
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          ffprobe -version | head -n 1
+          "$CHROME_BIN" --version
+
+      - name: Premium audio technical status
+        run: npm run defense:g8a-premium-audio-technical-check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: G8-A premium audio actual-play telemetry
+        shell: bash
+        env:
+          PSI_G8A_AUDIO_ARTIFACT_DIR: artifacts/g8a-premium-audio
+        run: |
+          mkdir -p artifacts/g8a-premium-audio
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-audio-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g8a-audio-preview.log
+            exit 1
+          fi
+          npm run defense:g8a-premium-audio-browser-check
+
+      - name: Upload G8-A premium audio telemetry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8a-premium-audio-telemetry
+          path: artifacts/g8a-premium-audio
+          if-no-files-found: warn
