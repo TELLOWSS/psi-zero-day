@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - sol/g8a-premium-audio-clean-20260927
+      - sol/commercial-presentation-upgrade-20260927
     paths:
       - 'public/assets/defense/audio/g8a/**'
       - 'content/defense/g8a-premium-audio-*.json'
@@ -12,6 +13,10 @@ on:
       - 'src/ui/useDefenseAudio.ts'
       - 'src/ui/useG8aPremiumMix.ts'
       - 'src/ui/DefenseGame.tsx'
+      - 'content/defense/impact-presentation-policy.json'
+      - 'src/ui/G8AActivityOverlay.tsx'
+      - 'src/ui/useDefenseCamera.ts'
+      - 'content/episode01/main-title-layout.json'
       - 'scripts/verify-title-defense-first.mjs'
       - 'src/ui/game-hub.css'
       - 'src/ui/GameHub.tsx'
