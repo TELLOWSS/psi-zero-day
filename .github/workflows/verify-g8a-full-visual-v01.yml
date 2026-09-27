@@ -36,3 +36,52 @@ jobs:
         run: npm run typecheck
       - name: Build
         run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+
+      - name: Run Wave 8 Full Visual V-01 browser gate
+        shell: bash
+        env:
+          PSI_G8A_ARTIFACT_DIR: artifacts/g8a-full-visual-v01
+        run: |
+          mkdir -p artifacts/g8a-full-visual-v01
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-v01-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 120); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/g8a-v01-preview.log
+            exit 1
+          fi
+          node scripts/verify-g8a-full-visual-v01-browser.mjs
+
+      - name: Upload V-01 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g8a-full-visual-v01-evidence
+          path: artifacts/g8a-full-visual-v01
+          if-no-files-found: error
