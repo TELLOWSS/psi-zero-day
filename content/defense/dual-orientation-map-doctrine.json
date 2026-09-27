@@ -19,12 +19,12 @@
       "bottom: current player action"
     ],
     "worldViewportTarget": {
-      "minimumScreenShare": 0.55,
-      "preferredScreenShare": 0.62
+      "minimumScreenShare": 0.72,
+      "preferredScreenShare": 0.76
     },
     "hudTarget": {
       "maximumTopShare": 0.09,
-      "maximumBottomShare": 0.30
+      "maximumBottomShare": 0.15
     },
     "mustReadTogether": [
       "primary risk",
@@ -50,13 +50,24 @@
   },
   "g8a": {
     "mapId": "map-apt-bottom-up-excavation-01",
-    "landscapeFrame": { "x": 0, "y": 0, "width": 1000, "height": 600 },
-    "portraitFrame": { "x": 0, "y": 80, "width": 430, "height": 520 },
+    "landscapeFrame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 600
+    },
+    "portraitFrame": {
+      "x": 0,
+      "y": 80,
+      "width": 330,
+      "height": 520
+    },
     "portraitFocus": [
       "west haul-ramp conflict",
       "SWIFT/VEILED approach",
       "CONTROL intervention zone",
-      "worker/vehicle separation"
+      "worker/vehicle separation",
+      "idle command tray collapsed so the world remains dominant"
     ],
     "lockedWorldReopen": false
   },
