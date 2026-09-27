@@ -1115,3 +1115,37 @@
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-path-centerline{opacity:.20}
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="THREAT_APPROACH"] .zb-path-centerline,
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="IMPACT_CLOSE_UP"] .zb-path-centerline{opacity:.32}
+
+/* V-04A — portrait idle HUD density. Full command UI expands only after a pad/tower selection. */
+@media (orientation:portrait) and (max-width:560px){
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active){
+    grid-template-rows:64px minmax(0,1fr) 118px;
+  }
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-command{
+    grid-template-rows:32px 72px;
+    gap:4px;
+    padding:4px 6px 6px;
+  }
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-selection{
+    overflow:hidden;
+  }
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection{
+    height:32px;
+    min-height:32px;
+    padding:0 9px;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    border-radius:7px;
+    background:rgba(21,37,48,.88);
+  }
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection strong{
+    font-size:10px;
+    line-height:1;
+  }
+  .zb-shell[data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection span{
+    font-size:6px;
+    letter-spacing:.07em;
+    opacity:.62;
+  }
+}
