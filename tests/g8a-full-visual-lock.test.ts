@@ -29,6 +29,7 @@ describe('G8-A full-screen visual lock contract', () => {
       'V04A_PASS_V05_ACTIVE',
       'V05_PASS_FULL_SCREEN_REVIEW',
       'V05_PASS_FULL_SCREEN_REVIEW_REVALIDATION',
+      'V05_PASS_FULL_SCREEN_VISUAL_POLISH_ACTIVE',
       'PRODUCTION_LOCKED',
     ]).toContain(fullVisual.status);
     expect(fullVisual.stopLine).toContain('V-01 through V-05');
