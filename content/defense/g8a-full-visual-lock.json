@@ -139,10 +139,63 @@
       "groundedConstructionSemantics": true
     },
     "next": [
-      "M03_WORKER_MOTION",
-      "M04_VEHICLE_MOTION",
-      "M05_VEILED_REVEAL",
-      "M06_DUAL_ORIENTATION_IMPACT_QA"
-    ]
+      "VEILED_FINAL_RASTER",
+      "CONTROL_FX_VISUAL_QA",
+      "FULL_SCREEN_VISUAL_LOCK"
+    ],
+    "m03Workers": {
+      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "representativeWorkers": [
+        "lim_junho",
+        "choi_minseok",
+        "kang_taesik"
+      ],
+      "art": "existing high-quality episode01 map rasters",
+      "states": [
+        "WALK",
+        "DIRECT",
+        "EVADE"
+      ],
+      "simulationMutation": false
+    },
+    "m04Vehicle": {
+      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "vehicle": "SWIFT",
+      "enginePathMovement": "PRESERVED",
+      "presentationStates": [
+        "CRUISE",
+        "THREAT",
+        "BRAKE"
+      ],
+      "effects": [
+        "road vibration",
+        "brake body settle",
+        "road-contact response"
+      ],
+      "finalRasterReopen": false
+    },
+    "m05Veiled": {
+      "status": "IMPLEMENTED_AWAITING_FINAL_RASTER",
+      "states": [
+        "CONCEALED",
+        "REVEALED",
+        "TRACKED"
+      ],
+      "semantics": "site visibility / occlusion hazard",
+      "fantasyLanguageForbidden": true
+    },
+    "m06Qa": {
+      "status": "RUNNING",
+      "desktop": "1440x900",
+      "portrait": "390x844",
+      "assertions": [
+        "living workers visible",
+        "SWIFT motion vehicle visible",
+        "VEILED presentation state active",
+        "portrait world share >= 55%",
+        "no horizontal overflow",
+        "locked topology unchanged"
+      ]
+    }
   }
 }
