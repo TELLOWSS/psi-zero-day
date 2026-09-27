@@ -1767,6 +1767,15 @@
 
 /* COMMERCIAL-HERO-GFX-V1 — integrate character cutouts with the construction world. */
 @media (min-width:1001px) and (min-height:651px){
+  .commercial-title-worker blockquote{display:none}
+  .commercial-title-worker figcaption{
+    width:80%;
+    padding:7px 6px 6px;
+    opacity:.82;
+    background:linear-gradient(90deg,rgba(4,12,18,.58),rgba(7,19,28,.42));
+    border-color:rgba(185,205,215,.12);
+  }
+
   .commercial-title-cast::before{
     content:"";
     position:absolute;
