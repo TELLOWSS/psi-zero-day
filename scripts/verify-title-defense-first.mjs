@@ -67,7 +67,15 @@ try{
   if(report.desktop.slogan!=='사고 전 신호를 읽고, 현장을 바꿔라.') throw new Error('desktop slogan drifted: '+report.desktop.slogan);
   if(report.desktop.primaryCtaKind!=='defense' || !report.desktop.primary.includes('현장 디펜스 시작')) throw new Error('desktop primary CTA is not Field Defense');
   if(!report.desktop.copyRect || report.desktop.copyRect.width / report.desktop.viewport.width > .52) throw new Error('desktop hero copy exceeds 52vw: '+JSON.stringify(report.desktop.copyRect));
-  if(!report.desktop.liveText.includes('LIVE SITE') || !report.desktop.liveText.includes('SWIFT')) throw new Error('desktop LIVE SITE panel missing');
+  for (const token of ['LIVE SITE','DEF-CORE-01','서측 Gate · 차량–보행 간섭','WAVE 8 / 10','SWIFT','CONTROL','PSI']) {
+    if(!report.desktop.liveText.includes(token)) throw new Error('desktop LIVE SITE briefing missing: '+token);
+  }
+  if(!report.desktop.featuresVisible || !report.desktop.quickSettingsVisible) throw new Error('desktop secondary title layers unexpectedly hidden');
+  if(!report.desktop.castVisible || report.desktop.visibleCastCount!==4) throw new Error('desktop title must retain four differentiated cast members: '+report.desktop.visibleCastCount);
+  const dc=report.desktop.copyRect, dl=report.desktop.liveRect;
+  if(dc && dl && dc.left < dl.right && dc.right > dl.left && dc.top < dl.bottom && dc.bottom > dl.top) {
+    throw new Error('desktop hero copy overlaps LIVE SITE briefing: '+JSON.stringify({copy:dc,live:dl}));
+  }
   if(report.desktop.overflow) throw new Error('desktop title horizontal overflow');
   await shot(cdp,'desktop-1440x900-home.png');
 
@@ -89,6 +97,7 @@ try{
   if(report.physicalLandscape.featuresVisible) throw new Error('780x360 feature-card strip should be hidden');
   if(!report.physicalLandscape.castVisible || report.physicalLandscape.visibleCastCount!==1) throw new Error('780x360 should use one protagonist instead of a four-face lineup: '+report.physicalLandscape.visibleCastCount);
   if(report.physicalLandscape.quickSettingsVisible) throw new Error('780x360 unlabeled quick-settings strip should be hidden');
+  if(report.physicalLandscape.featuresVisible) throw new Error('780x360 secondary feature cards should be hidden');
   if(report.physicalLandscape.overflow) throw new Error('780x360 title horizontal overflow');
   const ph=report.physicalLandscape.homeRect, pp=report.physicalLandscape.primaryRect, pl=report.physicalLandscape.liveRect, pc=report.physicalLandscape.copyRect;
   if(!ph || ph.width<770 || ph.height<350) throw new Error('780x360 title does not fill viewport '+JSON.stringify(ph));
@@ -102,6 +111,8 @@ try{
   if(report.mobile.hierarchy!=='H01_LOCKED' || report.mobile.primaryTitle!=='PSI : ZERO DAY') throw new Error('mobile H-01 title hierarchy drifted: '+JSON.stringify({hierarchy:report.mobile.hierarchy,title:report.mobile.primaryTitle}));
   if(!report.mobile.primary.includes('현장 디펜스 시작')) throw new Error('mobile primary CTA is not Field Defense');
   if(!report.mobile.liveText.includes('LIVE SITE')) throw new Error('mobile LIVE SITE panel missing');
+  if(report.mobile.featuresVisible || report.mobile.quickSettingsVisible) throw new Error('mobile secondary title chrome should be hidden');
+  if(report.mobile.castVisible) throw new Error('mobile title cast should be hidden for readability');
   if(report.mobile.overflow) throw new Error('mobile title horizontal overflow');
   const pr=report.mobile.primaryRect, lr=report.mobile.liveRect, ar=report.mobile.lastActionRect;
   if(!pr || pr.left < -1 || pr.right > 391 || pr.top < -1 || pr.bottom > 845) throw new Error('mobile primary CTA outside viewport '+JSON.stringify(pr));
