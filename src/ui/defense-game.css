@@ -1425,3 +1425,114 @@
     opacity:.62;
   }
 }
+
+
+/* DYNAMIC-SITE-01 — physical-phone reality pass.
+   Presentation only: engine IDs, route topology and balance remain authoritative. */
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-g8a-activity .zb-worker-raster{
+  opacity:1;
+  filter:saturate(.82) contrast(.96) brightness(.96) drop-shadow(0 2px 2px rgba(0,0,0,.42));
+}
+.zb-g8a-semantic-tower{pointer-events:none}
+.zb-g8a-tower-ground-shadow{
+  fill:rgba(0,0,0,.32);
+  filter:blur(1.8px);
+}
+.zb-g8a-semantic-tower-image{
+  pointer-events:none;
+  filter:saturate(.86) contrast(.96) brightness(.94) drop-shadow(0 3px 3px rgba(0,0,0,.42));
+}
+.zb-g8a-intervention-cue{
+  fill:rgba(255,180,74,.12);
+  stroke:rgba(255,201,116,.62);
+  stroke-width:2;
+  animation:zb-g8a-intervention-pulse .42s ease-out both;
+}
+@keyframes zb-g8a-intervention-pulse{
+  0%{opacity:.95;transform:scale(.82)}
+  100%{opacity:0;transform:scale(1.22)}
+}
+.zb-g8a-risk-worker,
+.zb-g8a-risk-worker-group image{
+  filter:saturate(.82) contrast(.95) brightness(.95) drop-shadow(0 2px 2px rgba(0,0,0,.38));
+}
+.zb-g8a-heavy-vehicle{
+  filter:saturate(.78) contrast(.98) brightness(.9) drop-shadow(3px 4px 3px rgba(0,0,0,.38));
+}
+.zb-ambient-dump{pointer-events:none}
+.zb-ambient-dump-shadow{
+  fill:rgba(0,0,0,.3);
+  filter:blur(1.6px);
+}
+.zb-ambient-dump-raster{
+  opacity:.96;
+  filter:saturate(.78) contrast(.98) brightness(.92) drop-shadow(3px 4px 3px rgba(0,0,0,.38));
+}
+.zb-ambient-dump-motion{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:zb-ambient-dump-route 9.5s cubic-bezier(.35,.08,.65,.92) infinite alternate;
+}
+@keyframes zb-ambient-dump-route{
+  0%,12%{transform:translate3d(0,0,0)}
+  44%{transform:translate3d(95px,-2px,0)}
+  72%{transform:translate3d(150px,-36px,0)}
+  100%{transform:translate3d(204px,-71px,0)}
+}
+
+.zb-camera-controls{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  z-index:18;
+  display:grid;
+  grid-template-columns:34px 54px 34px;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(211,225,233,.24);
+  border-radius:9px;
+  background:rgba(8,18,26,.78);
+  backdrop-filter:blur(7px);
+  box-shadow:0 5px 18px rgba(0,0,0,.22);
+}
+.zb-camera-controls button{
+  min-width:0;
+  height:32px;
+  border:1px solid rgba(211,225,233,.18);
+  border-radius:6px;
+  background:rgba(26,45,57,.9);
+  color:var(--zb-text);
+  cursor:pointer;
+  font-weight:800;
+}
+.zb-camera-controls button:disabled{opacity:.34;cursor:default}
+.zb-camera-controls .zb-camera-reset{
+  font-size:9px;
+  color:var(--zb-accent);
+}
+
+@media (orientation:landscape) and (max-height:560px){
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-camera-controls{
+    left:8px;
+    bottom:86px;
+    grid-template-columns:30px 48px 30px;
+    padding:2px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-camera-controls button{height:28px;font-size:10px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-wave-preview{
+    max-width:132px;
+  }
+}
+@media (orientation:portrait) and (max-width:560px){
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-camera-controls{
+    left:7px;
+    bottom:7px;
+    grid-template-columns:30px 46px 30px;
+    padding:2px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"] .zb-camera-controls button{height:29px;font-size:9px}
+}
+@media (prefers-reduced-motion:reduce){
+  .zb-ambient-dump-motion,
+  .zb-g8a-intervention-cue{animation:none}
+}
