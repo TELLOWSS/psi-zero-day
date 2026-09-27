@@ -330,8 +330,9 @@ async function metrics(cdp) {
       frameMode:shell?.getAttribute('data-frame-mode')||null,
       cameraMode:shell?.getAttribute('data-camera-mode')||null,
       cameraReason:shell?.getAttribute('data-camera-reason')||null,
-      selectionMode:shell?.getAttribute('data-selection-mode')||null,
       boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
+      logicalRoute:shell?.getAttribute('data-logical-route')||null,
+      visualRoute:shell?.getAttribute('data-visual-route')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
       worldFinal:shell?.getAttribute('data-g8a-world-final')==='true',
@@ -390,7 +391,9 @@ async function metrics(cdp) {
   })()`);
 }
 
-const EXPECTED_ROUTE='0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120';
+const EXPECTED_LOGICAL_ROUTE='0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120';
+const EXPECTED_VISUAL_ROUTE='470,495 585,480 660,445 735,420 805,355 870,300 930,245 1000,205';
+const EXPECTED_PORTRAIT_VIEWBOX='430 80 330 520';
 const report={
   schema_version:2,
   source_sha:process.env.GITHUB_SHA||null,
@@ -426,7 +429,9 @@ try {
   if(report.desktop.worldFinal!==worldApproved) throw new Error('Desktop world-final runtime state mismatch');
   if(!worldApproved && (report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000)) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
-  if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
+  if(report.desktop.pads!==8) throw new Error('Locked pad count changed');
+  if(report.desktop.logicalRoute!==EXPECTED_LOGICAL_ROUTE) throw new Error('Logical simulation topology changed: '+report.desktop.logicalRoute);
+  if(report.desktop.visualRoute!==EXPECTED_VISUAL_ROUTE || report.desktop.routePoints!==EXPECTED_VISUAL_ROUTE) throw new Error('Reviewed G8-A visual route projection drifted: '+JSON.stringify({visualRoute:report.desktop.visualRoute,routePoints:report.desktop.routePoints}));
   if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
   if(report.desktop.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on desktop: '+report.desktop.anchorTextCount);
   if(Number(report.desktop.anchorHintOpacity)>0.08 || Number(report.desktop.secondaryRoutesOpacity)>0.13 || Number(report.desktop.centerlineOpacity)>0.21) {
@@ -463,10 +468,12 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.mobile=await metrics(cdp);
   if(report.mobile.map!=='map-apt-bottom-up-excavation-01' || report.mobile.productionMap!==expectedRegistryStatus) throw new Error('Unexpected mobile G8-A registry state: '+report.mobile.productionMap+' expected '+expectedRegistryStatus);
-  if(report.mobile.frameMode!=='PORTRAIT_IMMERSION' || report.mobile.boardViewBox!=='0 80 330 520') throw new Error('390x844 portrait frame contract mismatch: '+JSON.stringify({frameMode:report.mobile.frameMode,viewBox:report.mobile.boardViewBox}));
+  if(report.mobile.frameMode!=='PORTRAIT_IMMERSION' || report.mobile.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('390x844 portrait frame contract mismatch: '+JSON.stringify({frameMode:report.mobile.frameMode,viewBox:report.mobile.boardViewBox}));
   if(report.mobile.artHref!==expectedWorldHref) throw new Error('Unexpected mobile G8-A world art: '+report.mobile.artHref+' expected '+expectedWorldHref);
   if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
-  if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
+  if(report.mobile.pads!==8) throw new Error('Mobile locked pad count changed');
+  if(report.mobile.logicalRoute!==EXPECTED_LOGICAL_ROUTE) throw new Error('Mobile logical simulation topology changed: '+report.mobile.logicalRoute);
+  if(report.mobile.visualRoute!==EXPECTED_VISUAL_ROUTE || report.mobile.routePoints!==EXPECTED_VISUAL_ROUTE) throw new Error('Mobile reviewed G8-A visual route projection drifted: '+JSON.stringify({visualRoute:report.mobile.visualRoute,routePoints:report.mobile.routePoints}));
   if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<2 || report.mobile.swift<1 || report.mobile.veiled<1) throw new Error('Mobile representative CONTROL/SWIFT/VEILED actors missing');
   if(report.mobile.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on mobile: '+report.mobile.anchorTextCount);
   if(Number(report.mobile.anchorHintOpacity)>0.08 || Number(report.mobile.secondaryRoutesOpacity)>0.13 || Number(report.mobile.centerlineOpacity)>0.21) {
@@ -514,7 +521,7 @@ try {
   await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP'`, 2500);
   report.mobileImpact=await metrics(cdp);
-  if(report.mobileImpact.boardViewBox!=='0 80 330 520') throw new Error('V-04A impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
+  if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
   if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
     throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
   }
