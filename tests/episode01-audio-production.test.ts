@@ -11,11 +11,11 @@ const present = contract.assets.filter(item =>
   fs.existsSync(path.join(root, 'public', item.target_uri)));
 
 describe('Episode 01 audio production contract', () => {
-  it('keeps exactly eight production slots and reports binary state truthfully', () => {
-    expect(contract.required_core_assets).toBe(8);
-    expect(contract.assets).toHaveLength(8);
+  it('keeps twelve production slots and reports binary state truthfully', () => {
+    expect(contract.required_core_assets).toBe(12);
+    expect(contract.assets).toHaveLength(12);
     expect(contract.final_asset_count).toBe(present.length);
-    if (present.length === 8) expect(contract.status).toBe('production_v1_binaries_present');
+    if (present.length === 12) expect(contract.status).toBe('production_v1_voice_lock');
     else expect(contract.status).toBe('runtime_slots_wired_binaries_pending');
   });
 
@@ -56,10 +56,13 @@ describe('Episode 01 audio production contract', () => {
     expect(uiAudioCueTimbre('continue')).toBe('clean');
   });
 
-  it('declares the reproducible, project-owned production source', () => {
+  it('separates generated field audio from Director-supplied voice mastering', () => {
     expect(contract.production_generation.method).toContain('procedural');
     expect(contract.production_generation.generator).toBe('tools/generate_episode01_audio.py');
     expect(contract.production_generation.rights).toContain('no external recordings');
+    expect(contract.production_generation.assets).toHaveLength(8);
+    expect(contract.voice_mastering.source).toContain('Director-supplied');
+    expect(contract.voice_mastering.assets).toHaveLength(4);
   });
 
 

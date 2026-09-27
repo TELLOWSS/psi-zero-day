@@ -12,6 +12,7 @@ import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectS
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
+import { episode01VoiceCue } from '../app/episode01-voice-cues';
 import { episode01ContinuityTrace, episode01MemoryCallback } from '../app/episode01-memory-callback';
 import { episode01MemoryVisualPlan } from '../app/episode01-memory-visuals';
 import { characterIntroductionTextId, formatCharacterIdentity } from '../app/character-label';
@@ -85,9 +86,11 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const [coldOpenDismissed, setColdOpenDismissed] = useState(false);
   const [presentationHistory, setPresentationHistory] = useState<readonly PresentationHistoryEntry[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [voiceLocked, setVoiceLocked] = useState(false);
+  const [voiceSubtitle, setVoiceSubtitle] = useState<string | null>(null);
   const t = session.t;
   const resolveAsset = useCallback((id: string) => session.assetUri(id), [session]);
-  const { playUiCue, playPresentationCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
+  const { playUiCue, playPresentationCue, playVoiceCue } = useEpisodeAudio(snapshot.state?.audio, resolveAsset);
   const presentation = snapshot.presentation.find(p => 'node_id' in p);
   const person = snapshot.dialogue?.speaker_id ? session.character(snapshot.dialogue.speaker_id) : undefined;
   const portrait = snapshot.dialogue?.visual_reference;
@@ -103,6 +106,9 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
   const strategy = snapshot.strategy;
   const activeInstance = snapshot.state?.event_runtime.active_instance ?? null;
   const activeEventId = activeInstance?.event_id ?? null;
+  const activeVoiceCue = presentation && 'node_id' in presentation
+    ? episode01VoiceCue(activeEventId, presentation.node_id, presentation.type)
+    : undefined;
   const directedCampaign = snapshot.state?.run.content_version === 'ep01.director.v5';
   const storyDirection = episode01StoryDirection(activeEventId);
   const productionScene = episode01ProductionScene(storyDirection?.preset);
@@ -309,6 +315,34 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     playUiCue(cue);
   }, [activeEventId, runIdentity, presentation?.type, presentation && 'node_id' in presentation ? presentation.node_id : null, playUiCue]);
   useEffect(() => {
+    if (!activeVoiceCue || !runIdentity) {
+      setVoiceLocked(false);
+      setVoiceSubtitle(null);
+      return;
+    }
+    setVoiceLocked(true);
+    setVoiceSubtitle('');
+    return playVoiceCue(
+      activeVoiceCue,
+      () => {
+        setVoiceLocked(false);
+        setVoiceSubtitle(null);
+      },
+      elapsedMs => {
+        const segment = [...activeVoiceCue.subtitles]
+          .reverse()
+          .find(item => elapsedMs >= item.start_ms);
+        setVoiceSubtitle(segment?.text ?? '');
+      },
+    );
+  }, [
+    runIdentity,
+    activeVoiceCue?.event_id,
+    activeVoiceCue?.node_id,
+    activeVoiceCue?.asset_id,
+    playVoiceCue,
+  ]);
+  useEffect(() => {
     if (!firstContactTextId || !dialogueNodeIdentity) return;
     playUiCue('character_intro');
   }, [firstContactTextId, dialogueNodeIdentity, playUiCue]);
@@ -345,6 +379,10 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       if (target?.closest('input, textarea, select, summary, [contenteditable="true"], .debug-panel')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.repeat) { if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); return; }
+      if (voiceLocked && (e.key === 'Enter' || e.code === 'Space' || /^[1-4]$/.test(e.key))) {
+        e.preventDefault();
+        return;
+      }
       if (mapOutcomeActive) {
         if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); continueMapOutcome(); }
         return;
@@ -366,7 +404,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, playUiCue]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue]);
 
   const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
@@ -535,6 +573,9 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
           firstContact={Boolean(firstContactTextId)}
         /> : <aside className="narrator-card"><span className="narrator-mark" aria-hidden="true">01</span><strong>{t('ui.record')}</strong><span>{t('ep01.title')}</span></aside>}
         <div className="presentation-area" data-presentation={presentation?.type ?? 'NONE'} aria-live="polite" key={snapshot.revision}>
+          {activeVoiceCue?.countdown_label ? <div className="episode-voice-countdown" aria-label={activeVoiceCue.countdown_label}>
+            <span aria-hidden="true">T−</span><strong>{activeVoiceCue.countdown_label}</strong>
+          </div> : null}
           <EpisodeTimeMontage eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
           <EpisodeSceneBrief eventId={activeEventId ?? undefined} t={t} />
           <EpisodeInspectionContext eventId={activeEventId} flags={snapshot.state?.flags} t={t} />
@@ -584,6 +625,8 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
               eventId={activeEventId}
               choiceFallback={strategyActive && strategyActions.length > 0}
               onChoicePreview={setChoicePreviewId}
+              interactionLocked={voiceLocked}
+              dialogueOverrideText={voiceLocked ? voiceSubtitle : null}
             />}
         </div>
       </section>

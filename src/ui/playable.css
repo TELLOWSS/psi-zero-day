@@ -2946,3 +2946,30 @@ progress::-webkit-progress-bar { background: #626d55; } progress::-webkit-progre
   .gameplay-history-button>b{display:none}
   .header-episode{display:none!important}
 }
+
+
+/* EP01 Voice Integration Lock — quiet operational timing, never an alarm surface. */
+.episode-voice-countdown{
+  display:inline-flex;
+  align-items:baseline;
+  gap:7px;
+  margin:0 0 8px;
+  padding:4px 8px;
+  border:1px solid color-mix(in srgb,var(--ink) 22%,transparent);
+  border-radius:6px;
+  background:color-mix(in srgb,var(--paper) 86%,transparent);
+  font-variant-numeric:tabular-nums;
+  letter-spacing:.04em;
+}
+.episode-voice-countdown span{font-size:10px;opacity:.55}
+.episode-voice-countdown strong{font-size:14px;font-weight:650}
+.continue-button:disabled{
+  cursor:default;
+  opacity:.42;
+  color:var(--ink);
+  border-color:color-mix(in srgb,var(--ink) 22%,transparent);
+}
+.continue-button:disabled:hover{
+  color:var(--ink);
+  border-color:color-mix(in srgb,var(--ink) 22%,transparent);
+}

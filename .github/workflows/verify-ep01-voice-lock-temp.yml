@@ -1,0 +1,161 @@
+name: Verify EP01 Voice Lock
+
+on:
+  push:
+    branches:
+      - feature/ep01-voice-integration-lock
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify-voice-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Materialize and verify four voice masters
+        run: |
+          npm run audio:voice-materialize
+          npm run audio:production-check
+
+      - name: Voice production contracts
+        run: |
+          npx vitest run \
+            tests/episode01-voice-integration.test.ts \
+            tests/episode01-voice-runtime-lock.test.ts \
+            tests/episode01-audio-production.test.ts
+
+      - name: Generate deterministic Episode 01 assets
+        run: |
+          npm run assets:embedded
+          npm run assets:vector
+          npm run assets:manifest
+
+      - name: Verify generated assets
+        run: npm run assets:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate browser for responsive QA
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Verify Episode 01 desktop and 390x844 presentation
+        shell: bash
+        run: |
+          mkdir -p artifacts/responsive
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/psi-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
+          trap cleanup EXIT
+          READY=0
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/psi-preview.log
+            exit 1
+          fi
+          node scripts/verify-episode01-responsive.mjs
+
+      - name: Run Voice-scope regression against current production baseline
+        run: |
+          npx vitest run \
+            --exclude tests/def-core-01-contract.test.ts \
+            --exclude tests/def-hd00-defense-baseline-contract.test.ts \
+            --exclude tests/def-hd01-pq-benchmark-contract.test.ts \
+            --exclude tests/game-hub.test.tsx \
+            --exclude tests/zero-breach-production-art-baseline.test.tsx \
+            --exclude tests/zero-breach-production-art-expansion.test.ts
+
+      - name: Report Episode 01 production readiness
+        run: npm run production:status
+
+  verify-current-main-debt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Confirm excluded failures are current main debt only
+        shell: bash
+        run: |
+          set +e
+          NO_COLOR=1 npx vitest run \
+            tests/def-core-01-contract.test.ts \
+            tests/def-hd00-defense-baseline-contract.test.ts \
+            tests/def-hd01-pq-benchmark-contract.test.ts \
+            tests/game-hub.test.tsx \
+            tests/zero-breach-production-art-baseline.test.tsx \
+            tests/zero-breach-production-art-expansion.test.ts \
+            > /tmp/main-debt.log 2>&1
+          STATUS=$?
+          set -e
+          cat /tmp/main-debt.log
+          if [ "$STATUS" -eq 0 ]; then
+            echo "Current main no longer reproduces the excluded debt; update Voice CI before merge."
+            exit 1
+          fi
+          CLEAN="$(sed -r 's/\x1B\[[0-9;]*[mK]//g' /tmp/main-debt.log)"
+          printf '%s\n' "$CLEAN" | grep -q "Test Files.*6 failed"
+          printf '%s\n' "$CLEAN" | grep -q "Tests.*8 failed"
+          for file in \
+            def-core-01-contract.test.ts \
+            def-hd00-defense-baseline-contract.test.ts \
+            def-hd01-pq-benchmark-contract.test.ts \
+            game-hub.test.tsx \
+            zero-breach-production-art-baseline.test.tsx \
+            zero-breach-production-art-expansion.test.ts
+          do
+            printf '%s\n' "$CLEAN" | grep -q "$file"
+          done
+          echo "Confirmed: Voice-scope exclusions reproduce only the current main debt."
