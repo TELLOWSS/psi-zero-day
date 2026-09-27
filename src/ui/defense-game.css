@@ -1074,3 +1074,35 @@
   .zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-pq-asset,
   .zb-enemy-swift[data-vehicle-state="BRAKE"] .zb-swift-road-contact{animation:none}
 }
+
+/* M-05 — VEILED is a site-visibility hazard, not a fantasy creature. */
+.zb-veiled-site-occlusion{
+  fill:rgba(105,92,75,.16);
+  stroke:rgba(189,172,145,.16);
+  stroke-width:2;
+  pointer-events:none;
+  filter:blur(1.2px);
+}
+.zb-enemy-veiled[data-veiled-state="CONCEALED"]{
+  opacity:.46;
+  filter:saturate(.68) brightness(.78);
+}
+.zb-enemy-veiled[data-veiled-state="REVEALED"]{
+  animation:zb-veiled-site-reveal .34s cubic-bezier(.2,.8,.2,1) both;
+}
+.zb-enemy-veiled[data-veiled-state="REVEALED"] .zb-veiled-site-occlusion{
+  animation:zb-veiled-dust-clear .42s ease-out both;
+}
+@keyframes zb-veiled-site-reveal{
+  0%{opacity:.45;filter:blur(2px) saturate(.65) brightness(.78);transform:scale(.97)}
+  58%{opacity:1;filter:blur(0) saturate(.95) brightness(1.08);transform:scale(1.035)}
+  100%{opacity:1;filter:none;transform:scale(1)}
+}
+@keyframes zb-veiled-dust-clear{
+  0%{opacity:.58;rx:34;ry:18}
+  100%{opacity:.12;rx:43;ry:22}
+}
+@media (prefers-reduced-motion:reduce){
+  .zb-enemy-veiled[data-veiled-state="REVEALED"],
+  .zb-enemy-veiled[data-veiled-state="REVEALED"] .zb-veiled-site-occlusion{animation:none}
+}
