@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "gate": "G8A_FULL_VISUAL_V01",
   "assetId": "VEILED",
-  "status": "ASSET_PENDING",
+  "status": "PRODUCTION_APPROVED",
   "semantic": "site-specific partially confirmed construction risk emerging from real bottom-up excavation conditions: blind vehicle approach, retaining/shoring occlusion, uneven lighting, dust/mud, stacked materials and worker-route obstruction; never a fantasy enemy",
   "runtimeUri": "assets/defense/enemies/veiled-final-g8a.webp",
   "format": "webp",
@@ -40,7 +40,7 @@
     "upscaled low-resolution crop"
   ],
   "promotion": {
-    "productionApproved": false,
+    "productionApproved": true,
     "requires": [
       "SOURCE_REVIEW_PASS",
       "NON_SVG_FINAL_RASTER",
@@ -49,7 +49,9 @@
       "MOBILE_390x844_VEILED_SWIFT_QA",
       "PROTOTYPE_BOARD_ITEMS_0",
       "ACTIVE_SVG_VISUALS_0"
-    ]
+    ],
+    "approvedAt": "2026-09-27",
+    "pendingActualPlayQa": true
   },
   "siteIdentity": {
     "profile": "apt-new-bottom-up-excavation",
@@ -65,6 +67,26 @@
       "temporary barrier/cone/material-stack interference",
       "night-work lighting contrast and partial shadow",
       "dust, mud and suspended particles used subtly as visibility cues"
+    ]
+  },
+  "sourceReview": {
+    "status": "PASS",
+    "reviewedAt": "2026-09-27",
+    "candidateBlobSha": "3d6a985b057fa1dc417f8458354ce584ff65afbb",
+    "finalBlobSha": "3d6a985b057fa1dc417f8458354ce584ff65afbb",
+    "sourceCanvas": {
+      "width": 1536,
+      "height": 1024
+    },
+    "sourceAssets": [
+      "public/assets/episode01/characters/kang-taesik-map.webp",
+      "public/assets/episode01/scene-elements/material-stack-realistic-v2.webp"
+    ],
+    "reviewNotes": [
+      "grounded construction-site occlusion reads as stacked formwork hiding a worker",
+      "transparent background",
+      "no text, logo, HUD or fantasy enemy language",
+      "all source elements rendered at native scale or downscaled; no source upscale"
     ]
   }
 }
