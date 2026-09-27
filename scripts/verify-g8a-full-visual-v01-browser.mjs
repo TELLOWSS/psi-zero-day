@@ -490,11 +490,10 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `(() => {
     const shell=document.querySelector('[data-defense-screen="combat"]');
     return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && shell?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP';
-  })()`, 2500, 20);
+  })()`, 2500, 10);
   report.desktopImpact=await metrics(cdp);
   if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
     throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
@@ -606,11 +605,10 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
   await waitFor(cdp, `(() => {
     const shell=document.querySelector('[data-defense-screen="combat"]');
     return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && shell?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP';
-  })()`, 2500, 20);
+  })()`, 2500, 10);
   report.mobileImpact=await metrics(cdp);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
   if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
