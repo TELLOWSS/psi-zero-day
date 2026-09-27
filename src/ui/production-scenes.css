@@ -7875,3 +7875,147 @@
     z-index:13!important;
   }
 }
+
+/* Phase D D-2C — TBM desktop + compact-landscape world-first closure.
+   Remove residual HUD-like staging from the Phase C briefing language.
+   The construction world, changed-work evidence and crew remain primary; PSI only interprets them. */
+@media (min-width:901px) and (min-height:651px) {
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before,
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-ring,
+  .game-frame[data-production-scene="TBM"] .tbm-floor-mark {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-visual-rebaseline="world-first-v1"]::after {
+    content:none!important;
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    transform:scale(1.012)!important;
+    filter:saturate(1.05) contrast(1.02) brightness(1.01)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere {
+    opacity:.2!important;
+    mix-blend-mode:normal!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    opacity:.18!important;
+    box-shadow:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .tbm-production-layer {
+    opacity:.46!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-psi-trace {
+    top:76px!important;
+    left:2.5%!important;
+    right:auto!important;
+    width:min(270px,19vw)!important;
+    max-height:132px!important;
+    background:rgba(6,18,23,.7)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    top:76px!important;
+    left:auto!important;
+    right:2.5%!important;
+    width:min(190px,15vw)!important;
+    background:rgba(6,18,23,.66)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-depth="changed-work-layers"] .episode-immersive-props,
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-depth="decision-ring"] .episode-immersive-props {
+    filter:saturate(.98) contrast(1.025) brightness(.98)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-cast="four-person-circle"] .episode-immersive-character,
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-cast="decision-circle"] .episode-immersive-character {
+    bottom:-2%!important;
+    opacity:.94!important;
+  }
+
+  .game-frame[data-production-scene="TBM"].phase-playing:not(.strategy-active) .play-panel {
+    left:4%!important;
+    right:4%!important;
+    bottom:24px!important;
+    width:auto!important;
+    max-height:27%!important;
+    padding:10px 13px 12px!important;
+    border-radius:14px!important;
+    background:linear-gradient(90deg,rgba(5,22,25,.9),rgba(6,18,22,.84))!important;
+    backdrop-filter:blur(8px)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="judgment"] .choice-panel button,
+  .game-frame[data-production-scene="TBM"][data-tbm-ui="verify"] .choice-panel button {
+    min-height:64px!important;
+  }
+}
+
+@media (orientation:landscape) and (max-height:650px) {
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::before,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-scene::after,
+  .game-frame[data-production-scene="TBM"] .tbm-briefing-ring,
+  .game-frame[data-production-scene="TBM"] .tbm-floor-mark {
+    display:none!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-background {
+    transform:scale(1.012)!important;
+    object-position:52% 48%!important;
+    filter:saturate(1.04) contrast(1.02) brightness(1.02)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-immersive-atmosphere,
+  .game-frame[data-production-scene="TBM"] .episode-immersive-grade {
+    opacity:.14!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .tbm-production-layer {
+    opacity:.34!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-psi-trace {
+    top:58px!important;
+    left:10px!important;
+    right:auto!important;
+    width:min(220px,25vw)!important;
+    max-height:96px!important;
+    padding:7px!important;
+    background:rgba(5,17,21,.66)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"] .episode-scene-minimap {
+    top:58px!important;
+    left:auto!important;
+    right:calc(min(46%,430px) + 18px)!important;
+    width:min(142px,17vw)!important;
+    background:rgba(5,17,21,.58)!important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-cast="four-person-circle"] .episode-immersive-character,
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-cast="decision-circle"] .episode-immersive-character {
+    bottom:-5%!important;
+    max-width:21vw!important;
+    opacity:.92!important;
+  }
+
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-depth="changed-work-layers"] .episode-immersive-props,
+  .game-frame[data-production-scene="TBM"]
+    .episode-immersive-scene[data-tbm-depth="decision-ring"] .episode-immersive-props {
+    filter:saturate(.97) contrast(1.02) brightness(.98)!important;
+  }
+}
+

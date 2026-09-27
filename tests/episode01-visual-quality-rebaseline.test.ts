@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import baseline from '../content/episode01/phase-d-visual-quality-rebaseline-v1.json';
 import { EPISODE01_VISUAL_QUALITY_REBASELINE } from '../src/app/episode01-visual-quality-rebaseline';
@@ -25,4 +26,13 @@ describe('Episode 01 Phase D visual quality rebaseline', () => {
     expect(phaseD.tracks.title_cast_identity_refresh).toMatchObject({ required:8, ready:8, status:'LOCKED' });
     expect(phaseD.current_focus).toBe('D-2_VISUAL_QUALITY_REBASELINE_FIELD_TBM');
   });
+
+  it('locks the D-2C TBM desktop and compact-landscape world-first composition', () => {
+    const css = fs.readFileSync('src/ui/production-scenes.css', 'utf8');
+    expect(css).toContain('Phase D D-2C — TBM desktop + compact-landscape world-first closure');
+    expect(css).toContain('.episode-immersive-scene[data-visual-rebaseline="world-first-v1"]::after');
+    expect(css).toContain('.episode-immersive-scene[data-tbm-depth="changed-work-layers"] .episode-immersive-props');
+    expect(css).toContain('@media (orientation:landscape) and (max-height:650px)');
+  });
+
 });
