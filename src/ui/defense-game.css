@@ -872,6 +872,141 @@
 }
 
 
+/* G8-A physical-phone landscape — world-first immersive gameplay. */
+@media (orientation:landscape) and (max-height:560px){
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active){
+    position:relative;
+    height:100dvh;
+    min-height:100dvh;
+    grid-template-rows:minmax(0,1fr);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-stage{
+    grid-row:1;
+    min-height:100dvh;
+    padding:0;
+    align-items:stretch;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-frame-mode="LANDSCAPE_STRATEGY"]:not(.zb-prep):not(.is-def-core-active) .zb-board-wrap{
+    width:100%;
+    height:100%;
+    max-width:100%;
+    max-height:100%;
+    aspect-ratio:auto;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-hud{
+    position:absolute;
+    z-index:30;
+    top:4px;left:4px;right:4px;
+    height:40px;
+    grid-template-columns:minmax(108px,1.4fr) repeat(3,minmax(70px,.72fr)) minmax(76px,.8fr) 72px 92px 96px;
+    gap:3px;
+    padding:3px 4px;
+    border:1px solid rgba(185,200,211,.16);
+    border-radius:9px;
+    background:rgba(8,18,26,.82);
+    backdrop-filter:blur(8px);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-brand,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-meter,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-status{
+    padding:0 6px;
+    border-radius:6px;
+    background:rgba(20,35,47,.74);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-brand small{display:none}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-brand strong{font-size:10px;line-height:1.05}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-meter span,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-status span{font-size:7px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-meter strong,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-status b{font-size:10px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-hud-button,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-exit{
+    min-height:0;
+    height:32px;
+    font-size:9px;
+    border-radius:6px;
+    background:rgba(20,35,47,.78);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-speed{
+    padding:2px;
+    gap:2px;
+    background:rgba(20,35,47,.78);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-speed button{
+    min-height:0;
+    height:30px;
+    font-size:9px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-command{
+    position:absolute;
+    z-index:29;
+    left:6px;right:6px;bottom:6px;
+    height:74px;
+    grid-template-columns:minmax(0,1fr) minmax(245px,32%);
+    gap:5px;
+    padding:5px;
+    border:1px solid rgba(185,200,211,.16);
+    border-radius:9px;
+    background:rgba(8,18,26,.82);
+    backdrop-filter:blur(8px);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-selection-mode="PAD"]:not(.zb-prep):not(.is-def-core-active) .zb-command,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-selection-mode="TOWER"]:not(.zb-prep):not(.is-def-core-active) .zb-command{
+    height:112px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection{
+    height:100%;
+    min-height:0;
+    padding:0 10px;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    background:rgba(21,37,48,.56);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection strong{font-size:10px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-selection-mode="NONE"]:not(.zb-prep):not(.is-def-core-active) .zb-empty-selection span{font-size:7px;opacity:.7}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-run-controls{
+    min-height:0;
+    grid-template-columns:minmax(0,1fr) 112px;
+    gap:4px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-support-action{
+    min-height:0;
+    grid-template-columns:32px minmax(0,1fr) 62px;
+    padding:4px;
+    gap:4px;
+    background:rgba(21,37,48,.58);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-support-mini{width:30px;height:30px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-support-action small{font-size:7px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-support-action strong{font-size:8px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-support-action button,
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-start-wave{
+    min-height:0;
+    height:58px;
+    font-size:9px;
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview{
+    top:50px;
+    right:8px;
+    width:150px;
+    padding:7px 8px;
+    background:rgba(8,18,26,.78);
+    backdrop-filter:blur(6px);
+  }
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview small{font-size:7px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview strong{font-size:13px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-wave-preview li{font-size:8px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-board-caption{left:10px;top:50px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-defense-settings{top:50px;right:8px}
+  .zb-shell[data-map="map-apt-bottom-up-excavation-01"]:not(.zb-prep):not(.is-def-core-active) .zb-save-status{top:50px}
+}
+
 /* G8-A mobile production-map play — portrait is a real gameplay viewport. */
 @media (orientation:portrait) and (max-width:560px){
   .zb-shell:not(.zb-prep):not(.is-def-core-active){
