@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "M02_IMPACT_PRESENTATION",
-  "status": "ACTUAL_PLAY_QA_PASS",
+  "status": "PRODUCTION_LOCKED",
   "principle": "Impact must communicate real construction-site intervention: braking, separation, route control and human reaction. Never present CONTROL as a magical attack.",
   "camera": {
     "impactHoldMs": 130,
@@ -108,5 +108,20 @@
       "commandPx": 60,
       "overflow": false
     }
+  },
+  "physicalAcceptance": {
+    "acceptedAt": "2026-09-27",
+    "source": "PROJECT_OWNER_DIRECTIVE",
+    "newRecordingArtifactSupplied": false,
+    "sequence": [
+      "THREAT_APPROACH",
+      "IMPACT_CLOSE_UP",
+      "RETURN_RECOVER"
+    ],
+    "workerSequence": [
+      "EVADE",
+      "SAFE_RETURN"
+    ],
+    "decision": "PASS_CLOSE_P02_IMPACT_FEEL_LOCK"
   }
 }
