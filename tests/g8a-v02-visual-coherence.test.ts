@@ -18,7 +18,9 @@ describe('G8-A V-02 visual coherence', () => {
     expect(overlay).toContain('zb-site-anchor-core');
     expect(game).toContain('width="82"');
     expect(game).toContain('width="44"');
-    const brakeCue = game.slice(game.indexOf('zb-swift-brake-cue'), game.indexOf('zb-swift-brake-cue') + 420);
+    const cueStart = game.indexOf('zb-swift-brake-cue');
+    const cueEnd = game.indexOf('</g> : null}', cueStart);
+    const brakeCue = game.slice(cueStart, cueEnd);
     expect(brakeCue).not.toContain('<circle');
     expect(brakeCue).toContain('<ellipse');
   });
