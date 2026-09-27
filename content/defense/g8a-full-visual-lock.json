@@ -769,5 +769,14 @@
       "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
       "transientCapture": "ATOMIC_DOM_SNAPSHOT"
     }
+  },
+  "postAudioMergeRevalidation": {
+    "status": "PENDING_CI",
+    "base": "main",
+    "baseSha": "5c7e232929fd5a3f3a8b2ced5a4408daf793cc65",
+    "premiumAudioPr": 73,
+    "premiumAudioState": "AUDIO_PRODUCTION_LOCKED",
+    "purpose": "Force Commercial Presentation regression against main after PR #73 merge before PR #74 merge.",
+    "requestedAt": "2026-09-27"
   }
 }
