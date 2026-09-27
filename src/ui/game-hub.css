@@ -1589,3 +1589,174 @@
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-features[data-title-role="secondary-features"],
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-quick-settings[data-title-role="quick-settings"]{display:none!important}
 }
+
+
+/* H-01~H-04 portrait title composition — first-screen entry, no vertical spill. */
+@media (orientation:portrait) and (max-width:560px){
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"]{
+    height:100dvh;
+    min-height:100dvh;
+    overflow:hidden;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-backdrop{
+    inset:-2%;
+    width:104%;
+    height:104%;
+    object-position:58% 48%;
+    filter:saturate(.92) contrast(1.06) brightness(.76);
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-grade{
+    background:
+      linear-gradient(180deg,rgba(2,8,13,.78) 0%,rgba(3,10,16,.60) 34%,rgba(4,12,19,.28) 58%,rgba(3,9,15,.80) 100%),
+      linear-gradient(90deg,rgba(2,8,14,.88),rgba(5,15,24,.24));
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-topline{
+    left:16px;
+    right:16px;
+    top:10px;
+    min-height:34px;
+    align-items:center;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta small,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta b{
+    display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta span{
+    font-size:9px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility{
+    gap:3px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility button{
+    width:32px;
+    height:32px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    border-radius:7px;
+    background:rgba(6,20,29,.42);
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility button span:last-child{
+    display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"]{
+    position:absolute;
+    left:16px;
+    right:16px;
+    top:58px;
+    width:auto;
+    z-index:12;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] .commercial-title-kicker{
+    margin-bottom:5px;
+    font-size:8px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] .commercial-title-logo{
+    font-size:clamp(45px,13.5vw,56px);
+    line-height:.92;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] h1{
+    max-width:340px;
+    margin:10px 0 5px;
+    font-size:clamp(25px,7.3vw,31px);
+    line-height:1.08;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-english{
+    font-size:9px!important;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-subcopy{
+    display:block!important;
+    max-width:340px;
+    margin-top:7px!important;
+    font-size:9px!important;
+    line-height:1.45!important;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-actions.is-defense-first{
+    width:100%;
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action{
+    min-height:48px;
+    padding:5px 8px;
+    grid-template-columns:30px minmax(0,1fr) auto;
+    gap:5px;
+    border-radius:7px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry{
+    grid-column:1/-1;
+    min-height:66px;
+    padding:6px 10px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
+    grid-column:1/-1;
+    min-height:44px;
+    opacity:.68;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-icon{
+    width:28px;
+    height:28px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-icon svg{
+    width:21px;
+    height:21px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-copy strong{
+    font-size:11px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy strong{
+    font-size:15px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action:not(.is-defense-entry) .commercial-title-action-copy small,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action em{
+    display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy small{
+    display:block;
+    margin-top:2px!important;
+    font-size:7px;
+    line-height:1.25;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status[data-title-role="live-briefing"]{
+    position:absolute;
+    left:16px;
+    right:16px;
+    top:auto;
+    bottom:16px;
+    width:auto;
+    margin:0;
+    padding:11px 12px;
+    border-radius:10px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status>strong{
+    font-size:13px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status>small{
+    display:block;
+    margin-top:2px;
+    font-size:8px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status>p{
+    display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-risk-strip{
+    margin-top:8px;
+    gap:5px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-risk-strip>span{
+    padding:6px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-risk-strip small{
+    display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-cast,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-message,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-features,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-quick-settings,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-site-plaque,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-footer{
+    display:none!important;
+  }
+}
