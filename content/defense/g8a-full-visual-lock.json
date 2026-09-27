@@ -676,7 +676,7 @@
           "Episode 01 story/voice/audio contracts"
         ]
       },
-      "next": "Run automated regression on the Dynamic Site pass, rebuild the Android QA APK, then replay WAVE 1–5 and representative WAVE 8 on the physical phone. Keep PR #74 unmerged until actors, semantic equipment/risks, zoom/focus and impact recovery are all visibly confirmed.",
+      "next": "Install Android QA artifact 10932221045 and replay WAVE 1–5 plus representative WAVE 8 on the physical phone. Confirm readable workers/site traffic, semantic tower/risk visuals, automatic focus, 100–180% manual zoom, CONTROL impact and recovery. Keep PR #74 Draft until that replay passes.",
       "automatedRevalidation": {
         "status": "PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
         "githubActionsRun": 36317181019,
@@ -698,7 +698,7 @@
         "overflow": false
       },
       "dynamicSiteImplementation": {
-        "status": "IMPLEMENTED_AWAITING_AUTOMATED_AND_PHYSICAL_QA",
+        "status": "AUTOMATED_QA_PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
         "branch": "sol/commercial-presentation-upgrade-20260927",
         "workers": 5,
         "earlyAmbientVehicle": "APPROVED_SWIFT_DUMP_RASTER_AS_SITE_CIRCULATION",
@@ -711,7 +711,15 @@
           1,
           1.8
         ],
-        "dedicatedTowerMasterArt": "TODO_AFTER_PRESENTATION_BEHAVIOR_LOCK"
+        "dedicatedTowerMasterArt": "TODO_AFTER_PRESENTATION_BEHAVIOR_LOCK",
+        "automatedEvidence": {
+          "sourceSha": "a88b5f42abe9f47df0b106afb0ced4edf209cee5",
+          "visualPushRun": 36319405642,
+          "visualPullRequestRun": 36319408012,
+          "androidQaRun": 36319405640,
+          "androidArtifactId": 10932221045,
+          "result": "TYPECHECK_BUILD_BROWSER_GATE_AND_ANDROID_APK_PASS"
+        }
       }
     },
     "commercialPresentationP02": {
