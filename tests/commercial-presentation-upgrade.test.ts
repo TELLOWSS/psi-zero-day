@@ -58,12 +58,24 @@ describe('H-01 through H-04 commercial presentation upgrade', () => {
   });
 
   it('uses construction-semantic raster equipment for all G8-A tower families', () => {
-    for (const asset of ['temporary-lighting-pack.webp','exclusion-zone.webp','access-barrier.webp','site-weather-station.webp']) {
+    for (const asset of ['temporary-distribution-board.webp','exclusion-zone.webp','vehicle-pedestrian-separation.webp','site-weather-station.webp']) {
       expect(visualAssets).toContain(asset);
     }
+    expect(visualAssets).toContain("semantic: 'ALERT_CONTROL'");
     expect(defenseGame).toContain('defenseG8aTowerVisual');
     expect(defenseGame).toContain('data-g8a-semantic');
     expect(defenseCss).toContain('.zb-g8a-semantic-tower-image');
+  });
+
+  it('applies the post-lock commercial graphics integration pass without changing simulation contracts', () => {
+    expect(defenseGame).toContain('data-world-grade="COMMERCIAL_GFX_V1"');
+    expect(defenseGame).toContain('zb-g8a-risk-contact-shadow');
+    expect(defenseGame).toContain('zb-health-readout');
+    expect(defenseGame).toContain('data-result-grade="COMMERCIAL_GFX_V1"');
+    expect(defenseCss).toContain('COMMERCIAL-GFX-V1');
+    expect(defenseCss).toContain('.zb-board-grade');
+    expect(defenseCss).toContain('.zb-result-stars');
+    expect(css).toContain('COMMERCIAL-HERO-GFX-V1');
   });
 
   it('exposes player zoom and early automatic camera focus on the physical phone board', () => {
