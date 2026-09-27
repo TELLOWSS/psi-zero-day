@@ -1172,6 +1172,10 @@
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-transfers{opacity:.10}
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-anchor-hints{opacity:.07}
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-path-centerline{opacity:.20}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-pad-runtime .zb-pad-hardstand{opacity:.025}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-pad-runtime .zb-pad-mark:not(.is-selected){opacity:.035}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-pad-runtime .zb-pad-mark.is-occupied:not(.is-selected){opacity:.025}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-pad-runtime .zb-pad-mark.is-selected{opacity:1}
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="THREAT_APPROACH"] .zb-path-centerline,
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="IMPACT_CLOSE_UP"] .zb-path-centerline{opacity:.32}
 
