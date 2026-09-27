@@ -389,8 +389,9 @@
 .zb-tower-production-image,.zb-enemy-production-image{pointer-events:none;overflow:visible}
 .zb-tower-production-image{filter:drop-shadow(6px 8px 5px rgba(0,0,0,.34))}
 .zb-enemy-production-image{filter:drop-shadow(4px 5px 3px rgba(0,0,0,.38))}
-.zb-control-pq-barrier{pointer-events:none;filter:saturate(.82) brightness(.92) drop-shadow(2px 3px 3px rgba(0,0,0,.26));opacity:.9}
-.zb-control-pq-marshal{pointer-events:none;filter:saturate(.74) contrast(.94) brightness(.91) drop-shadow(3px 4px 4px rgba(0,0,0,.3));opacity:.94}
+.zb-control-ground-shadow{fill:rgba(3,8,10,.34);filter:blur(2px);pointer-events:none}
+.zb-control-pq-barrier{pointer-events:none;filter:saturate(.72) brightness(.86) contrast(.96) drop-shadow(1px 2px 2px rgba(0,0,0,.34));opacity:.88}
+.zb-control-pq-marshal{pointer-events:none;filter:saturate(.68) contrast(.92) brightness(.86) drop-shadow(2px 3px 3px rgba(0,0,0,.34));opacity:.9}
 .zb-control-pq.is-firing .zb-control-pq-marshal{animation:zb-control-marshal-cue .22s ease-out}
 .zb-swift-pq-asset{pointer-events:none;filter:drop-shadow(4px 5px 3px rgba(0,0,0,.34));overflow:visible}
 .zb-enemy-swift.is-hit .zb-swift-pq-asset{animation:zb-swift-hit .14s ease-out}
@@ -1049,10 +1050,10 @@
 
 /* M-03 — G8-A living-site worker presentation. Raster characters only; no prototype worker glyphs. */
 .zb-g8a-activity{pointer-events:none}
-.zb-worker-shadow{fill:rgba(0,0,0,.28);filter:blur(1.5px)}
+.zb-worker-shadow{fill:rgba(0,0,0,.34);filter:blur(1.2px)}
 .zb-worker-raster{
   pointer-events:none;
-  filter:saturate(.9) brightness(.94) drop-shadow(2px 4px 3px rgba(0,0,0,.42));
+  filter:saturate(.72) contrast(.94) brightness(.88) drop-shadow(1px 2px 2px rgba(0,0,0,.38));
 }
 .zb-worker-motion{transform-box:fill-box;transform-origin:center bottom;will-change:transform}
 .zb-worker-motion.is-walking{animation:zb-worker-route-a 6.4s ease-in-out infinite alternate}
@@ -1063,13 +1064,13 @@
 }
 @keyframes zb-worker-route-a{
   0%{transform:translate3d(0,0,0)}
-  48%{transform:translate3d(46px,-22px,0)}
-  100%{transform:translate3d(92px,-8px,0)}
+  48%{transform:translate3d(24px,-7px,0)}
+  100%{transform:translate3d(48px,-13px,0)}
 }
 @keyframes zb-worker-route-b{
   0%{transform:translate3d(0,0,0)}
-  52%{transform:translate3d(34px,-32px,0)}
-  100%{transform:translate3d(70px,-12px,0)}
+  52%{transform:translate3d(18px,-8px,0)}
+  100%{transform:translate3d(38px,-12px,0)}
 }
 @keyframes zb-worker-direct{
   0%,100%{transform:translate3d(0,0,0) rotate(0deg)}
@@ -1078,8 +1079,8 @@
 }
 @keyframes zb-worker-evade{
   0%{transform:translate3d(0,0,0) scale(1)}
-  35%{transform:translate3d(-10px,-5px,0) scale(1.04)}
-  100%{transform:translate3d(-24px,-8px,0) scale(.98)}
+  35%{transform:translate3d(-6px,-3px,0) scale(1.025)}
+  100%{transform:translate3d(-14px,-6px,0) scale(.99)}
 }
 @media (prefers-reduced-motion:reduce){
   .zb-worker-motion.is-walking,
