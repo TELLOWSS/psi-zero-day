@@ -1266,7 +1266,7 @@
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
     grid-column:1/-1;
-    min-height:42px;
+    min-height:44px;
     opacity:.68;
     border-color:rgba(168,197,210,.24);
     background:rgba(5,18,27,.54);
