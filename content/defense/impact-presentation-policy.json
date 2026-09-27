@@ -1,14 +1,19 @@
 {
   "schemaVersion": 1,
   "gate": "M02_IMPACT_PRESENTATION",
-  "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+  "status": "P02_PRODUCTION_PASS_ACTIVE",
   "principle": "Impact must communicate real construction-site intervention: braking, separation, route control and human reaction. Never present CONTROL as a magical attack.",
   "camera": {
-    "impactHoldMs": 150,
+    "impactHoldMs": 130,
     "recoverEndMs": 560,
     "landscapeImpactScale": 1.28,
     "portraitImpactScale": 1.18,
-    "portraitShakeMultiplier": 0.65
+    "portraitShakeMultiplier": 0.65,
+    "approachLandscapeScale": 1.16,
+    "approachPortraitScale": 1.1,
+    "approachRecoverStartMs": 520,
+    "approachRecoverEndMs": 900,
+    "impactShakeMs": 140
   },
   "fx": {
     "CONTROL_INTERVENTION": [
@@ -33,5 +38,33 @@
     "impact flash must remain localized around the intervention point",
     "portrait shake must be weaker than landscape shake",
     "prefers-reduced-motion must disable shake and nonessential camera animation"
+  ],
+  "workerResponse": {
+    "sequence": [
+      "WALK_OR_DIRECT",
+      "ALERT_CONTEXT",
+      "EVADE",
+      "SAFE_RETURN"
+    ],
+    "impact": "EVADE",
+    "recover": "SAFE_RETURN",
+    "simulationMutation": false
+  },
+  "audioPriority": [
+    "SWIFT brake transient",
+    "CONTROL intervention",
+    "worker reaction",
+    "ambience duck",
+    "recovery ambience"
+  ],
+  "voicePriorityRule": "Episode voice remains dominant when active; Premium Audio must duck beneath voice.",
+  "acceptance": [
+    "THREAT_APPROACH scale stays within approved landscape/portrait range",
+    "CONTROL_INTERVENTION produces IMPACT_CLOSE_UP and SWIFT BRAKE",
+    "impact hold is 130ms and screen shake remains 140ms",
+    "worker response transitions EVADE to SAFE_RETURN during camera recovery",
+    "generic fantasy impact rings remain absent from SWIFT and VEILED",
+    "audio uses existing Premium Audio routing; no new sound system",
+    "prefers-reduced-motion removes nonessential camera/worker shake"
   ]
 }
