@@ -385,7 +385,7 @@ try {
   if(report.desktop.productionMap!==expectedRegistryStatus) throw new Error('Unexpected G8-A production-map registry state: '+report.desktop.productionMap+' expected '+expectedRegistryStatus);
   if(report.desktop.artHref!==expectedWorldHref) throw new Error('Unexpected G8-A world art: '+report.desktop.artHref+' expected '+expectedWorldHref);
   if(report.desktop.worldFinal!==worldApproved) throw new Error('Desktop world-final runtime state mismatch');
-  if(!finalAssetsApproved && (report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000)) throw new Error('HD raster reference did not load');
+  if(!worldApproved && (report.desktop.artBytes<100000 || report.desktop.sourceBytes<100000)) throw new Error('HD raster reference did not load');
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
