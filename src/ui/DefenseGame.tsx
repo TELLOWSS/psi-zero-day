@@ -4,6 +4,7 @@ import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
 import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseMapFrame, defenseMapPointPercent, defenseMapViewBox } from '../app/defense-map-framing';
 import { useDefensePersistence } from '../app/use-defense-persistence';
 import { readDataCenterState } from '../app/data-center-state';
 import { readRemodelState } from '../app/remodel-state';
@@ -279,6 +280,7 @@ export function DefenseGame({
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
   const tutorial = useDefenseTutorial(state, content, paused => {
     if (!state) return;
     persistence.dispatch({ type: 'SetPaused', paused });
@@ -472,7 +474,7 @@ export function DefenseGame({
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id} data-frame-mode={mapFrame.mode} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
@@ -512,7 +514,7 @@ export function DefenseGame({
       <div className="zb-board-wrap">
         <svg
           className="zb-board"
-          viewBox={`0 0 ${content.map.width} ${content.map.height}`}
+          viewBox={defenseMapViewBox(mapFrame)}
           role="img"
           aria-label={t('defense.map.ramp-01.name')}
           preserveAspectRatio="xMidYMid meet"
@@ -599,11 +601,13 @@ export function DefenseGame({
         <div className="zb-pad-layer" aria-label="설치 패드">
           {content.map.pads.map(pad => {
             const occupied = state.towers.some(tower => tower.padId === pad.id);
+            const point = defenseMapPointPercent(mapFrame, pad.x, pad.y);
+            if (!point.visible) return null;
             return <button
               key={pad.id}
               type="button"
               className={`zb-pad-hit${selectedPadId === pad.id ? ' is-selected' : ''}`}
-              style={{ left: `${pad.x / content.map.width * 100}%`, top: `${pad.y / content.map.height * 100}%` }}
+              style={{ left: `${point.left}%`, top: `${point.top}%` }}
               aria-label={`${pad.id} · ${occupied ? '타워 설치됨' : t('defense.ui.empty_pad')}`}
               onClick={() => choosePad(pad.id)}
             ><span>{pad.id}</span></button>;
