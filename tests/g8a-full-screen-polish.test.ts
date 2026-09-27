@@ -7,15 +7,23 @@ const css = readFileSync('src/ui/defense-game.css', 'utf8');
 
 describe('G8-A full-screen actor/world integration polish', () => {
   it('keeps representative workers small enough to belong to the world plate', () => {
-    expect(activity).toContain('width: 24');
-    expect(activity).toContain('height: 36');
-    expect(activity).toContain('width: 26');
-    expect(activity).toContain('height: 39');
-    expect(activity).toContain('width: 23');
-    expect(activity).toContain('height: 35');
+    expect(activity).toContain('width: 19');
+    expect(activity).toContain('height: 29');
+    expect(activity).toContain('width: 20');
+    expect(activity).toContain('height: 30');
+    expect(activity).toContain('width: 18');
+    expect(activity).toContain('height: 27');
     expect(activity).toContain('rx={worker.width * 0.38}');
+    expect(activity).toContain('yoon-sungho-map.webp');
+    expect(activity).not.toContain("id: 'choi_minseok'");
     expect(css).toContain('opacity:.91');
     expect(css).toContain('saturate(.64)');
+  });
+
+  it('recedes unselected pad paint during running play without removing hit targets', () => {
+    expect(css).toContain('.zb-pad-runtime .zb-pad-hardstand{opacity:.025}');
+    expect(css).toContain('.zb-pad-runtime .zb-pad-mark:not(.is-selected){opacity:.035}');
+    expect(game).toContain('className={`zb-pad-hit');
   });
 
   it('does not use the generic impact ring for SWIFT or VEILED', () => {
