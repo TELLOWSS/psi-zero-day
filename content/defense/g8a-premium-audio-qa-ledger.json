@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8-A AUDIO PRODUCTION LOCK",
-  "status": "HUMAN_LISTENING_QA_PASS_ANDROID_GAMEPLAY_PENDING",
+  "status": "PHYSICAL_ANDROID_PARTIAL_PASS",
   "requiredAssetCount": 24,
   "approvedAssetCount": 0,
   "items": [
@@ -421,5 +421,39 @@
       "blind SWIFT vs CONTROL discrimination"
     ],
     "note": "This attestation closes human/device acoustic listening only. It does not by itself close physical Android in-game actual play."
+  },
+  "physicalAndroidEvidence": {
+    "date": "2026-09-27",
+    "source": "user-provided physical-device screen recording",
+    "recording": {
+      "durationSeconds": 145.326533,
+      "resolution": "2340x1080",
+      "frameRate": "120 fps",
+      "audio": "AAC stereo 48 kHz",
+      "integratedLufs": -14.4,
+      "truePeakDbfs": -0.2,
+      "loudnessRangeLu": 7.5
+    },
+    "observed": [
+      "APK launches on physical Android device",
+      "landscape gameplay renders correctly",
+      "support selection screen renders",
+      "WAVE 1 through WAVE 5 gameplay observed",
+      "touch interaction and tower/pad selection observed",
+      "audio stream is present in the device recording",
+      "no application crash observed during recorded session"
+    ],
+    "notYetObserved": [
+      "representative Wave 8",
+      "SWIFT_THREAT premium mix transition",
+      "CONTROL_INTERVENTION premium mix transition",
+      "RESOLUTION transition after representative intervention",
+      "subjective balance confirmation across those representative states"
+    ],
+    "decision": "PARTIAL_PASS_KEEP_STOP_LINE"
+  },
+  "summary": {
+    "physicalAndroid": "PARTIAL_PASS_WAVE1_TO_5",
+    "productionLockAllowed": false
   }
 }
