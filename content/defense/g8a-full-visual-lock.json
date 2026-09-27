@@ -657,7 +657,52 @@
         "command": "bottom overlay",
         "androidSystemBars": "immersive fullscreen / transient swipe reveal"
       },
-      "next": "Automated 780x360 regression + rebuilt Android APK + second physical-device recording."
+      "next": "Install rebuilt Commercial Presentation QA APK and submit a second physical-device landscape recording. Physical replay remains required before restoring Production Lock.",
+      "automatedRevalidation": {
+        "status": "PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
+        "githubActionsRun": 36316684226,
+        "sourceSha": "2ebe3760ee12fba25106b3c2d5eb3a2052676aa6",
+        "viewport": "780x360",
+        "board": {
+          "width": 780,
+          "height": 360,
+          "widthShare": 1,
+          "heightShare": 1
+        },
+        "hudPx": 40,
+        "idleCommandPx": 60,
+        "motionWorkers": 3,
+        "motionVehicles": 1,
+        "controlFinalVisible": true,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      }
+    },
+    "commercialPresentationP02": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "impactHoldMs": 130,
+      "shakeMs": 140,
+      "approachScale": {
+        "landscape": 1.16,
+        "portrait": 1.1
+      },
+      "impactScale": {
+        "landscape": 1.28,
+        "portrait": 1.18
+      },
+      "sequence": [
+        "STRATEGIC_BASE",
+        "THREAT_APPROACH",
+        "IMPACT_CLOSE_UP",
+        "RETURN_RECOVER"
+      ],
+      "workerSequence": [
+        "WALK/DIRECT",
+        "EVADE",
+        "SAFE_RETURN"
+      ],
+      "githubActionsRun": 36316684226
     }
   }
 }
