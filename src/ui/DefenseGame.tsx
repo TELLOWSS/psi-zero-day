@@ -172,11 +172,16 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
+  const vehicleState = enemy.enemyId === 'SWIFT'
+    ? slowed ? 'BRAKE' : isHit ? 'THREAT' : 'CRUISE'
+    : undefined;
   return <g
     transform={`translate(${pos.x} ${pos.y})`}
     className={`zb-enemy zb-enemy-${enemy.enemyId.toLowerCase()}${hidden ? ' is-hidden' : ''}${bossArmor ? ' has-boss-armor' : ''}${isHit ? ' is-hit' : ''}`}
     data-enemy={enemy.enemyId}
     data-distance={enemy.distance.toFixed(3)}
+    data-motion-vehicle={enemy.enemyId === 'SWIFT' ? 'SWIFT' : undefined}
+    data-vehicle-state={vehicleState}
   >
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
@@ -187,17 +192,20 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {swiftPq ? <image
-      href={swiftPq.uri}
-      x="-39"
-      y="-34"
-      width="78"
-      height="58"
-      preserveAspectRatio="xMidYMid meet"
-      className="zb-swift-pq-asset"
-      data-pq-swift="SWIFT"
-      aria-hidden="true"
-    /> : artUri ? <image
+    {swiftPq ? <>
+      <ellipse cx="0" cy="20" rx="31" ry="8" className="zb-swift-road-contact" aria-hidden="true" />
+      <image
+        href={swiftPq.uri}
+        x="-39"
+        y="-34"
+        width="78"
+        height="58"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-swift-pq-asset"
+        data-pq-swift="SWIFT"
+        aria-hidden="true"
+      />
+    </> : artUri ? <image
       href={artUri}
       x={-artSize / 2}
       y={artY}
