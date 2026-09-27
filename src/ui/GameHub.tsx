@@ -307,7 +307,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
   }, [castQuotesEnabled]);
 
 
-  if (page === 'home') return <main className="commercial-title-home">
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
     <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
@@ -330,6 +330,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
     </header>
 
     <section className="commercial-title-copy">
+      <span className="commercial-title-kicker">FIELD DEFENSE · PROACTIVE SAFETY INTELLIGENCE</span>
       <div className="commercial-title-logo"><span>NEW PSI</span><b>:</b><span>ZERO DAY</span></div>
       <h1>사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">Proactive Safety Intelligence · FIELD DEFENSE</p>
