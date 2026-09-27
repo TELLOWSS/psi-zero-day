@@ -13,47 +13,50 @@ function dataUrl(file, mime='image/webp') {
 
 const worker = dataUrl('public/assets/episode01/characters/kang-taesik-map.webp');
 const stack = dataUrl('public/assets/episode01/scene-elements/material-stack-realistic-v2.webp');
-const barrier = dataUrl('public/assets/episode01/scene-elements/access-barrier.webp');
 
 const html = `<!doctype html>
 <meta charset="utf-8">
 <style>
 html,body{margin:0;width:1536px;height:1024px;overflow:hidden;background:transparent}
-body{font-family:sans-serif}
 .scene{position:relative;width:1536px;height:1024px;background:transparent;isolation:isolate}
-.worker{position:absolute;left:760px;top:115px;width:525px;height:auto;z-index:2;
-  filter:brightness(.68) saturate(.72) contrast(1.04) drop-shadow(0 16px 20px rgba(0,0,0,.34))}
-.stack{position:absolute;left:170px;top:285px;width:1100px;height:auto;z-index:4;
-  filter:brightness(.76) saturate(.78) contrast(1.08) drop-shadow(0 18px 26px rgba(0,0,0,.42))}
-.barrier{position:absolute;left:735px;top:760px;width:650px;height:auto;z-index:6;
-  filter:brightness(.72) saturate(.68) contrast(1.08) drop-shadow(0 13px 16px rgba(0,0,0,.34))}
-.occlusion{position:absolute;left:635px;top:190px;width:510px;height:520px;z-index:5;border-radius:48% 52% 44% 56%;
-  background:
-    radial-gradient(ellipse at 34% 56%,rgba(55,58,58,.48),rgba(74,74,70,.26) 44%,rgba(96,91,81,.09) 68%,transparent 80%);
-  filter:blur(22px);opacity:.88}
-.dust-a,.dust-b,.dust-c{position:absolute;border-radius:50%;z-index:7;pointer-events:none}
-.dust-a{left:485px;top:250px;width:760px;height:500px;
-  background:radial-gradient(ellipse at 48% 56%,rgba(171,159,137,.34),rgba(132,122,105,.16) 44%,transparent 74%);filter:blur(28px)}
-.dust-b{left:760px;top:160px;width:480px;height:360px;
-  background:radial-gradient(ellipse at 48% 58%,rgba(109,118,118,.18),rgba(76,82,82,.07) 50%,transparent 78%);filter:blur(30px)}
-.dust-c{left:260px;top:600px;width:780px;height:300px;
-  background:radial-gradient(ellipse at 56% 42%,rgba(156,134,105,.20),rgba(116,96,72,.08) 50%,transparent 80%);filter:blur(24px)}
-.light{position:absolute;left:1040px;top:160px;width:360px;height:360px;z-index:3;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,188,102,.14),rgba(255,188,102,.04) 42%,transparent 72%);filter:blur(28px)}
-.cut{position:absolute;inset:0;z-index:8;background:
-  linear-gradient(180deg,transparent 0 84%,rgba(11,14,15,.08) 100%),
-  radial-gradient(ellipse at 52% 57%,transparent 0 58%,rgba(0,0,0,.08) 84%,rgba(0,0,0,.16) 100%);
-  pointer-events:none}
+.worker{
+  position:absolute;left:820px;top:115px;width:500px;height:auto;z-index:1;
+  filter:brightness(.72) saturate(.76) contrast(1.04) drop-shadow(0 15px 18px rgba(0,0,0,.38))
+}
+.stack-back{
+  position:absolute;left:200px;top:350px;width:990px;height:auto;z-index:3;
+  filter:brightness(.74) saturate(.76) contrast(1.08) drop-shadow(0 18px 26px rgba(0,0,0,.46))
+}
+.stack-front{
+  position:absolute;left:355px;top:555px;width:735px;height:auto;z-index:5;
+  filter:brightness(.68) saturate(.72) contrast(1.10) drop-shadow(0 16px 22px rgba(0,0,0,.44))
+}
+.haze{
+  position:absolute;left:640px;top:255px;width:560px;height:500px;z-index:4;
+  background:rgba(133,124,108,.16);border-radius:48%;
+  filter:blur(72px);opacity:.72
+}
+.dust{position:absolute;z-index:6;border-radius:50%;background:rgba(175,158,130,.20);filter:blur(10px);opacity:.55}
+.d1{left:650px;top:420px;width:82px;height:54px}
+.d2{left:760px;top:355px;width:58px;height:43px;opacity:.38}
+.d3{left:905px;top:500px;width:74px;height:50px;opacity:.42}
+.d4{left:1040px;top:390px;width:48px;height:34px;opacity:.30}
+.d5{left:565px;top:610px;width:64px;height:42px;opacity:.34}
+.edge{
+  position:absolute;left:770px;top:105px;width:515px;height:730px;z-index:2;
+  border-radius:46%;box-shadow:inset 85px 0 95px rgba(8,12,13,.24);
+  opacity:.82
+}
 </style>
 <div class="scene">
-  <div class="light"></div>
   <img class="worker" src="${worker}">
-  <img class="stack" src="${stack}">
-  <img class="barrier" src="${barrier}">
-  <div class="occlusion"></div>
-  <div class="dust-a"></div><div class="dust-b"></div><div class="dust-c"></div>
-  <div class="cut"></div>
-</div>`;
+  <div class="edge"></div>
+  <img class="stack-back" src="${stack}">
+  <div class="haze"></div>
+  <img class="stack-front" src="${stack}">
+  <div class="dust d1"></div><div class="dust d2"></div><div class="dust d3"></div>
+  <div class="dust d4"></div><div class="dust d5"></div>
+</div>`
 
 const tempHtml = resolve('/tmp/psi-veiled-g8a.html');
 const tempPng = resolve('/tmp/psi-veiled-g8a.png');
