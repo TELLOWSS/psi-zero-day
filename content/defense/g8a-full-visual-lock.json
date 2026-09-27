@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
+  "status": "PRODUCTION_LOCKED",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -89,10 +89,10 @@
   },
   "lockSemantics": {
     "assetLock": "G8-A WORLD + SWIFT + CONTROL representative asset proof; already passed",
-    "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
+    "fullScreenVisualLock": "closed: physical fullscreen, dynamic site presentation, camera/zoom and representative Wave 8 impact are accepted for Production Lock",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "V-01 through V-05 assets, topology, balance, portrait framing, cinematic and representative motion remain locked. The 2026-09-27 physical Android replay keeps only the G8-A presentation shell/dynamic-site lock open: fullscreen world, readable live actors, semantic tower/risk visuals and observable camera behavior must pass on-device before merge.",
+  "stopLine": "Full-Screen Visual Lock is closed. V-01 through V-05, Physical Fullscreen, Dynamic Site, P-02 Impact Feel and Voice Integration remain locked; reopen only for a demonstrated regression or deliberate art-direction change.",
   "visualDoctrine": {
     "siteUniquenessFirst": true,
     "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "PHYSICAL_DEVICE_DYNAMIC_SITE_CORRECTION_ACTIVE",
+    "status": "PHYSICAL_DEVICE_DYNAMIC_SITE_PASS",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -540,7 +540,7 @@
       ],
       "stopLine": "Reopen this lock only for a demonstrated regression or a deliberate new art-direction decision."
     },
-    "productionLocked": false,
+    "productionLocked": true,
     "lockedAt": "2026-09-27",
     "finalEvidence": {
       "githubActionsRun": 36303387182,
@@ -676,9 +676,9 @@
           "Episode 01 story/voice/audio contracts"
         ]
       },
-      "next": "Install Android QA artifact 10932221045 and replay WAVE 1–5 plus representative WAVE 8 on the physical phone. Confirm readable workers/site traffic, semantic tower/risk visuals, automatic focus, 100–180% manual zoom, CONTROL impact and recovery. Keep PR #74 Draft until that replay passes.",
+      "next": "Production Lock closed. Reopen only for a demonstrated physical-device regression.",
       "automatedRevalidation": {
-        "status": "PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
+        "status": "PASS",
         "githubActionsRun": 36317181019,
         "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
         "viewport": "780x360",
@@ -698,7 +698,7 @@
         "overflow": false
       },
       "dynamicSiteImplementation": {
-        "status": "AUTOMATED_QA_PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
+        "status": "PHYSICAL_DEVICE_PASS",
         "branch": "sol/commercial-presentation-upgrade-20260927",
         "workers": 5,
         "earlyAmbientVehicle": "APPROVED_SWIFT_DUMP_RASTER_AS_SITE_CIRCULATION",
@@ -720,6 +720,26 @@
           "androidArtifactId": 10932221045,
           "result": "TYPECHECK_BUILD_BROWSER_GATE_AND_ANDROID_APK_PASS"
         }
+      },
+      "finalAcceptance": {
+        "acceptedAt": "2026-09-27",
+        "source": "PROJECT_OWNER_DIRECTIVE",
+        "directive": "Treat the rebuilt physical-device replay as PASS and proceed.",
+        "newRecordingArtifactSupplied": false,
+        "accepted": [
+          "landscape world fullscreen",
+          "immersive Android system bars",
+          "HUD/command hierarchy",
+          "readable workers and site traffic",
+          "semantic tower/risk presentation",
+          "automatic camera focus",
+          "100-180% manual zoom",
+          "representative Wave 8 SWIFT_THREAT",
+          "CONTROL_INTERVENTION / brake",
+          "worker EVADE to SAFE_RETURN",
+          "RESOLUTION / recovery"
+        ],
+        "decision": "PASS_CLOSE_COMMERCIAL_PRODUCTION_LOCK"
       }
     },
     "commercialPresentationP02": {
