@@ -1763,3 +1763,81 @@
 
 /* H-01 final hierarchy polish — avoid duplicate NEW PSI branding in the same first frame. */
 .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta b{display:none}
+
+
+/* COMMERCIAL-HERO-GFX-V1 — integrate character cutouts with the construction world. */
+@media (min-width:1001px) and (min-height:651px){
+  .commercial-title-cast::before{
+    content:"";
+    position:absolute;
+    left:8%;right:2%;bottom:-1.5%;
+    height:18%;
+    border-radius:50%;
+    background:
+      radial-gradient(ellipse at center,rgba(0,0,0,.52) 0%,rgba(0,0,0,.26) 43%,transparent 74%);
+    filter:blur(10px);
+    opacity:.78;
+    pointer-events:none;
+  }
+  .commercial-title-worker>img{
+    filter:
+      drop-shadow(0 22px 28px rgba(0,0,0,.62))
+      drop-shadow(-2px 0 1px rgba(255,188,79,.12))
+      drop-shadow(2px -1px 1px rgba(109,181,216,.08))
+      saturate(.94)
+      contrast(1.02);
+  }
+  .commercial-title-worker.worker-1>img{
+    filter:
+      drop-shadow(0 24px 30px rgba(0,0,0,.66))
+      drop-shadow(-2px 0 1px rgba(255,194,84,.16))
+      drop-shadow(2px -1px 1px rgba(110,184,220,.1))
+      saturate(.98)
+      contrast(1.03);
+  }
+  .commercial-title-worker figcaption{
+    box-shadow:0 8px 22px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.035);
+    backdrop-filter:blur(4px);
+  }
+  .commercial-title-features button{
+    box-shadow:
+      0 13px 30px rgba(0,0,0,.28),
+      inset 0 1px rgba(255,255,255,.045);
+  }
+  .commercial-title-features button::after{
+    content:"";
+    position:absolute;
+    z-index:2;
+    left:0;right:0;top:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(239,187,76,.72),transparent);
+    opacity:.52;
+  }
+  .commercial-title-feature-art{
+    filter:saturate(.82) contrast(1.09) brightness(.74);
+  }
+  .commercial-title-features button:hover .commercial-title-feature-art,
+  .commercial-title-features button:focus-visible .commercial-title-feature-art{
+    transform:scale(1.045);
+    filter:saturate(.94) contrast(1.08) brightness(.84);
+  }
+  .commercial-title-field-status{
+    border-color:rgba(159,198,216,.36);
+    box-shadow:
+      0 22px 52px rgba(0,0,0,.31),
+      inset 0 1px rgba(255,255,255,.035);
+  }
+  .commercial-title-field-status::before{
+    content:"";
+    position:absolute;
+    left:14px;right:14px;top:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(241,185,67,.78),transparent);
+  }
+  .commercial-title-action.is-defense-entry{
+    box-shadow:
+      0 0 0 1px rgba(255,210,96,.15),
+      0 16px 38px rgba(0,0,0,.31),
+      inset 0 1px rgba(255,255,255,.48);
+  }
+}
