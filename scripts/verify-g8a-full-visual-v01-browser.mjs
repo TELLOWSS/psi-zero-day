@@ -308,6 +308,31 @@ async function placeAndStart(cdp) {
   await waitFor(cdp, "document.querySelectorAll('.zb-enemy').length > 0", 8000);
   await sleep(500);
 }
+async function waitForImpactSnapshot(cdp, timeoutMs = 2500, intervalMs = 10) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const snapshot = await evaluate(cdp, `(() => {
+      const shell=document.querySelector('[data-defense-screen="combat"]');
+      if(shell?.getAttribute('data-camera-reason') !== 'CONTROL_INTERVENTION' || shell?.getAttribute('data-camera-mode') !== 'IMPACT_CLOSE_UP') return null;
+      return {
+        cameraMode:shell.getAttribute('data-camera-mode'),
+        cameraReason:shell.getAttribute('data-camera-reason'),
+        cameraScale:getComputedStyle(shell).getPropertyValue('--zb-camera-scale').trim(),
+        workerGroupState:document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state')||null,
+        workerResponses:[...document.querySelectorAll('[data-motion-worker]')].map(el=>el.getAttribute('data-worker-response')),
+        boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
+        vehicleStates:[...document.querySelectorAll('[data-motion-vehicle]')].map(el=>el.getAttribute('data-vehicle-state')),
+        representativeImpactRings:document.querySelectorAll('.zb-enemy-swift .zb-impact-ring,.zb-enemy-veiled .zb-impact-ring').length,
+        overflow:document.documentElement.scrollWidth>innerWidth+2,
+        viewport:{width:innerWidth,height:innerHeight},
+      };
+    })()`);
+    if (snapshot) return snapshot;
+    await sleep(intervalMs);
+  }
+  throw new Error('Timed out waiting for atomic CONTROL impact snapshot');
+}
+
 async function metrics(cdp) {
   return evaluate(cdp, `(async () => {
     const shell=document.querySelector('[data-defense-screen="combat"]');
@@ -490,11 +515,7 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, `(() => {
-    const shell=document.querySelector('[data-defense-screen="combat"]');
-    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && shell?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP';
-  })()`, 2500, 10);
-  report.desktopImpact=await metrics(cdp);
+  report.desktopImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
     throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
   }
@@ -605,11 +626,7 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, `(() => {
-    const shell=document.querySelector('[data-defense-screen="combat"]');
-    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && shell?.getAttribute('data-camera-mode') === 'IMPACT_CLOSE_UP';
-  })()`, 2500, 10);
-  report.mobileImpact=await metrics(cdp);
+  report.mobileImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
   if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
     throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
