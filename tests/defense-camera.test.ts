@@ -80,6 +80,35 @@ describe('cinematic defense camera', () => {
     expect(signal.focus!.x).toBeLessThan(660);
   });
 
+  it('focuses a newly placed tower before the first wave so placement is visually readable', () => {
+    const before = state({ status: 'INTERMISSION', towers: [] });
+    const after = state({ status: 'INTERMISSION', tick: 101 });
+    const signal = defenseCameraSignal(before, after, content);
+    expect(signal.kind).toBe('APPROACH');
+    expect(signal.reason).toBe('TOWER_PLACEMENT');
+    expect(signal.enemyId).toBeNull();
+    expect(signal.focus).not.toBeNull();
+  });
+
+  it('focuses newly spawned early-wave risk actors instead of waiting for Wave 8', () => {
+    const before = state({ waveId: 2, completedWaves: 1, enemies: [] });
+    const after = state({
+      waveId: 2,
+      completedWaves: 1,
+      tick: 101,
+      enemies: [{
+        ...state().enemies[0]!,
+        id: 'early-risk-1',
+        enemyId: 'NORMAL',
+        distance: 45,
+      }],
+    });
+    const signal = defenseCameraSignal(before, after, content);
+    expect(signal.kind).toBe('APPROACH');
+    expect(signal.reason).toBe('RISK_ENTRY');
+    expect(signal.enemyId).toBe('early-risk-1');
+  });
+
   it('fires APPROACH when VEILED becomes newly revealed', () => {
     const veiled = {
       id: 'veiled-1', enemyId: 'VEILED' as const, hp: 10, distance: 90, spawnSequence: 1,
