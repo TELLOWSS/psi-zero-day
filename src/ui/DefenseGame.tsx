@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
@@ -519,7 +520,7 @@ export function DefenseGame({
           '--zb-camera-scale': String(camera.scale),
           '--zb-camera-x': `${camera.focus.left}%`,
           '--zb-camera-y': `${camera.focus.top}%`,
-        } as React.CSSProperties}
+        } as CSSProperties}
       >
         <svg
           className="zb-board"
