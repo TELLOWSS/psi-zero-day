@@ -17,8 +17,8 @@ describe('H-01 through H-04 commercial presentation upgrade', () => {
 
   it('keeps characters as a secondary human anchor rather than the primary UI layer', () => {
     expect(hub).toContain('data-title-role="human-anchor"');
-    expect(layout.commercialPresentation.h02.layerOrder.indexOf('character silhouettes'))
-      .toBeLessThan(layout.commercialPresentation.h02.layerOrder.indexOf('title/slogan/CTA'));
+    expect(layout.commercialPresentation.h02.desktop.layerOrder.indexOf('character silhouettes'))
+      .toBeLessThan(layout.commercialPresentation.h02.desktop.layerOrder.indexOf('title/slogan/CTA'));
     expect(css).toContain('.commercial-title-cast[data-title-role="human-anchor"]');
   });
 
