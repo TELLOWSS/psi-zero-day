@@ -207,7 +207,10 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const swiftPq = enemy.enemyId === 'SWIFT' ? g8aDump : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
   const g8aRiskActor = content.map.id === G8A_MAP_ID;
-  const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.999;
+  const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.75;
+  const g8aVehicleRisk = enemy.enemyId === 'SWIFT' || enemy.enemyId === 'ARMORED';
+  const hpWidth = g8aRiskActor ? 28 : 44;
+  const hpY = g8aRiskActor ? (g8aVehicleRisk ? 31 : 8) : -31;
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
   const vehicleState = enemy.enemyId === 'SWIFT'
@@ -295,9 +298,9 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
         <circle r="20" className="zb-boss-ring" />
         <circle r="10" className="zb-boss-core" />
       </> : <circle r="16" data-art-state="prototype" />}
-    {showHp ? <g className="zb-health-readout" aria-hidden="true">
-      <rect x="-22" y="-31" width="44" height="4" rx="2" className="zb-hp-track" />
-      <rect x="-22" y="-31" width={44 * hpRatio} height="4" rx="2" className="zb-hp-fill" />
+    {showHp ? <g className={`zb-health-readout${g8aRiskActor ? ' is-grounded' : ''}`} aria-hidden="true">
+      <rect x={-hpWidth / 2} y={hpY} width={hpWidth} height={g8aRiskActor ? 3 : 4} rx="2" className="zb-hp-track" />
+      <rect x={-hpWidth / 2} y={hpY} width={hpWidth * hpRatio} height={g8aRiskActor ? 3 : 4} rx="2" className="zb-hp-fill" />
     </g> : null}
   </g>;
 }
