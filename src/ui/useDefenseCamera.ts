@@ -20,12 +20,16 @@ export interface DefenseCameraSignal {
 export interface DefenseCameraPresentation {
   readonly mode: DefenseCameraMode;
   readonly scale: number;
+  readonly manualScale: number;
   readonly focus: {
     readonly left: number;
     readonly top: number;
   };
   readonly focusEnemyId: string | null;
   readonly reason: string | null;
+  readonly zoomIn: () => void;
+  readonly zoomOut: () => void;
+  readonly resetZoom: () => void;
 }
 
 function activeSlowSources(enemy: DefenseRunState['enemies'][number], tick: number): ReadonlySet<string> {
@@ -84,11 +88,50 @@ export function defenseCameraSignal(
   current: DefenseRunState | null,
   content: DefenseContent,
 ): DefenseCameraSignal {
-  if (!previous || !current || previous.runId !== current.runId || current.status !== 'RUNNING') {
+  if (!previous || !current || previous.runId !== current.runId) {
+    return { kind: 'NONE', enemyId: null, focus: null, reason: null };
+  }
+
+  const addedTower = current.towers.find(tower => !previous.towers.some(before => before.id === tower.id));
+  if (addedTower) {
+    const pad = content.map.pads.find(item => item.id === addedTower.padId);
+    if (pad) {
+      return {
+        kind: 'APPROACH',
+        enemyId: null,
+        focus: defenseVisualPadPoint(content.map.id, pad),
+        reason: 'TOWER_PLACEMENT',
+      };
+    }
+  }
+
+  if (current.status !== 'RUNNING') {
     return { kind: 'NONE', enemyId: null, focus: null, reason: null };
   }
 
   const previousById = new Map(previous.enemies.map(enemy => [enemy.id, enemy]));
+
+  if (current.waveId !== previous.waveId) {
+    const first = current.enemies[0];
+    return {
+      kind: 'APPROACH',
+      enemyId: first?.id ?? null,
+      focus: first
+        ? defenseVisualPositionAtDistance(content.map.id, content.map.path, first.distance)
+        : defenseVisualPositionAtDistance(content.map.id, content.map.path, 0),
+      reason: 'WAVE_ENTRY',
+    };
+  }
+
+  const newlySpawned = current.enemies.find(enemy => !previousById.has(enemy.id));
+  if (newlySpawned) {
+    return {
+      kind: 'APPROACH',
+      enemyId: newlySpawned.id,
+      focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, newlySpawned.distance),
+      reason: 'RISK_ENTRY',
+    };
+  }
 
   for (const enemy of current.enemies) {
     const before = previousById.get(enemy.id);
@@ -155,6 +198,7 @@ export function useDefenseCamera(
   const [focus, setFocus] = useState<DefensePoint | null>(null);
   const [focusEnemyId, setFocusEnemyId] = useState<string | null>(null);
   const [reason, setReason] = useState<string | null>(null);
+  const [manualScale, setManualScale] = useState(1);
 
   const clearTimers = () => {
     for (const timer of timersRef.current) window.clearTimeout(timer);
@@ -166,7 +210,7 @@ export function useDefenseCamera(
     const signal = defenseCameraSignal(previous, state, content);
     previousRef.current = state;
 
-    if (!state || state.status !== 'RUNNING') {
+    if (!state || state.status === 'WON' || state.status === 'LOST') {
       clearTimers();
       setMode('STRATEGIC_BASE');
       setFocus(null);
@@ -210,6 +254,14 @@ export function useDefenseCamera(
 
   useEffect(() => () => clearTimers(), []);
 
+  useEffect(() => {
+    setManualScale(1);
+  }, [state?.runId, content.map.id]);
+
+  const zoomIn = () => setManualScale(current => Math.min(1.8, Math.round((current + 0.2) * 10) / 10));
+  const zoomOut = () => setManualScale(current => Math.max(1, Math.round((current - 0.2) * 10) / 10));
+  const resetZoom = () => setManualScale(1);
+
   const baseFrame = useMemo(
     () => defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height),
     [content.map.id, content.map.width, content.map.height, portrait],
@@ -221,12 +273,16 @@ export function useDefenseCamera(
 
   return {
     mode,
-    scale: defenseCameraScale(mode, portrait),
+    scale: Math.min(1.8, defenseCameraScale(mode, portrait) * manualScale),
+    manualScale,
     focus: {
       left: Math.max(8, Math.min(92, focusPercent.left)),
       top: Math.max(8, Math.min(92, focusPercent.top)),
     },
     focusEnemyId,
     reason,
+    zoomIn,
+    zoomOut,
+    resetZoom,
   };
 }
