@@ -182,7 +182,9 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     data-distance={enemy.distance.toFixed(3)}
     data-motion-vehicle={enemy.enemyId === 'SWIFT' ? 'SWIFT' : undefined}
     data-vehicle-state={vehicleState}
+    data-veiled-state={enemy.enemyId === 'VEILED' ? (hidden ? 'CONCEALED' : revealed ? 'REVEALED' : 'TRACKED') : undefined}
   >
+    {enemy.enemyId === 'VEILED' ? <ellipse cx="0" cy="8" rx="30" ry="16" className="zb-veiled-site-occlusion" aria-hidden="true" /> : null}
     {isHit ? <circle r="28" className="zb-impact-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId !== 'SWIFT' ? <circle r={definition.boss ? 42 : 24} className="zb-slow-ring" aria-hidden="true" /> : null}
     {slowed && enemy.enemyId === 'SWIFT' ? <g className="zb-swift-brake-cue" aria-hidden="true">
