@@ -364,7 +364,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       </div>
     </section>
 
-    <aside className="commercial-title-field-status" aria-label="현재 현장 디펜스">
+    <aside className="commercial-title-field-status" data-title-role="live-briefing" aria-label="현재 현장 디펜스">
       <div className="commercial-title-field-status-head">
         <span>LIVE SITE</span><b>DEF-CORE-01</b>
       </div>
@@ -384,7 +384,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       <small>BUILD<br/>PEOPLE<br/>A SAFER<br/>TOMORROW</small>
     </aside>
 
-    <div className="commercial-title-cast">
+    <div className="commercial-title-cast" data-title-role="human-anchor">
       {featured.map((id, index) => {
         const member = session.character(id);
         return <figure className={`commercial-title-worker worker-${index}`} key={id} data-art-surface="main" data-character={id}>
@@ -398,7 +398,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       })}
     </div>
 
-    <section className="commercial-title-features" aria-label={t('ui.title.features')}>
+    <section className="commercial-title-features" data-title-role="secondary-features" aria-label={t('ui.title.features')}>
       <button type="button" onClick={() => setPage('map')}>
         <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
         <span className="commercial-title-feature-shade" aria-hidden="true" />
@@ -425,7 +425,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
     </div>
 
-    <div className="commercial-title-quick-settings" aria-label={t('ui.title.quick_settings')}>
+    <div className="commercial-title-quick-settings" data-title-role="quick-settings" aria-label={t('ui.title.quick_settings')}>
       <button type="button" aria-pressed={motionEnabled} onClick={() => setMotionEnabled(value => !value)}>
         <span>{t('ui.title.settings.motion')}</span><b>{motionEnabled ? 'ON' : 'OFF'}</b>
       </button>
