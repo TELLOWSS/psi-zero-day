@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V01_ASSET_PENDING",
+  "status": "V01_PASS_V02_ACTIVE",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -38,7 +38,7 @@
   },
   "v01": {
     "title": "Wave 8 VEILED + CONTROL + FX Production Pass",
-    "status": "ASSET_PENDING",
+    "status": "ACTUAL_PLAY_PASS",
     "mustKeep": [
       "locked G8-A WORLD raster",
       "locked G8-A SWIFT raster",
@@ -60,7 +60,32 @@
       "390x844 actual-play visual QA passes",
       "no horizontal overflow",
       "no final-art SVG leakage"
-    ]
+    ],
+    "evidence": {
+      "githubActionsRun": 36300051425,
+      "desktop": {
+        "veiledFinal": 1,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      },
+      "portrait": {
+        "veiledFinal": 1,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      },
+      "desktopImpact": {
+        "cameraMode": "IMPACT_CLOSE_UP",
+        "vehicleState": "BRAKE",
+        "prototypeBoardItems": 0
+      },
+      "portraitImpact": {
+        "cameraMode": "IMPACT_CLOSE_UP",
+        "vehicleState": "BRAKE",
+        "prototypeBoardItems": 0
+      }
+    }
   },
   "lockSemantics": {
     "assetLock": "G8-A WORLD + SWIFT + CONTROL representative asset proof; already passed",
@@ -88,7 +113,7 @@
   },
   "v01a": {
     "title": "Portrait Framing Doctrine",
-    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "status": "ACTUAL_PLAY_QA_PASS",
     "map": "map-apt-bottom-up-excavation-01",
     "portraitFrame": {
       "x": 0,
@@ -185,7 +210,7 @@
       "finalRasterReopen": false
     },
     "m05Veiled": {
-      "status": "REVEALED_STATE_PASS_AWAITING_FINAL_RASTER",
+      "status": "FINAL_RASTER_ACTUAL_PLAY_PASS",
       "states": [
         "CONCEALED",
         "REVEALED",
@@ -207,7 +232,7 @@
         "locked topology unchanged"
       ],
       "evidence": {
-        "githubActionsRun": 36296944262,
+        "githubActionsRun": 36300051425,
         "desktopImpact": {
           "viewport": "1440x900",
           "cameraMode": "IMPACT_CLOSE_UP",
@@ -227,5 +252,35 @@
         }
       }
     }
+  },
+  "visualReview": {
+    "evidenceRun": 36300051425,
+    "decision": "V01_PASS_FULL_SCREEN_LOCK_NOT_YET",
+    "findings": [
+      "CONTROL representative composite reads oversized against world actors, especially in portrait",
+      "process anchor letters and thick secondary routes read as development overlays",
+      "technical topology competes with the production world during RUNNING",
+      "portrait command panel remains a later V-04 density target"
+    ]
+  },
+  "v02": {
+    "title": "CONTROL + Process Overlay Visual Coherence",
+    "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+    "changes": [
+      "reduce CONTROL:L1 marshal/barrier footprint to world-consistent scale",
+      "remove P/C/S letter labels from intervention anchors",
+      "replace anchor letters with restrained dot markers",
+      "reduce route/zone/visibility/transfer opacity during live play",
+      "reduce primary route paint so the real construction world remains dominant"
+    ],
+    "mustNotChange": [
+      "map topology",
+      "pad coordinates",
+      "wave balance",
+      "Defense engine",
+      "locked WORLD",
+      "locked SWIFT",
+      "VEILED Final"
+    ]
   }
 }
