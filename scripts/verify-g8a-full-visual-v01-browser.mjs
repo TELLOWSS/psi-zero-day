@@ -366,6 +366,11 @@ async function metrics(cdp) {
         const r=el.getBoundingClientRect();
         return r.width>0 && r.height>0 && r.right>0 && r.left<innerWidth && r.bottom>0 && r.top<innerHeight;
       }).length,
+      workerBounds:[...document.querySelectorAll('[data-motion-worker] .zb-worker-raster')].map(el => {
+        const r=el.getBoundingClientRect();
+        return {width:Math.round(r.width),height:Math.round(r.height)};
+      }),
+      representativeImpactRings:document.querySelectorAll('.zb-enemy-swift .zb-impact-ring,.zb-enemy-veiled .zb-impact-ring').length,
       motionVehicles:[...document.querySelectorAll('[data-motion-vehicle]')].filter(el => {
         const r=el.getBoundingClientRect();
         return r.width>0 && r.height>0 && r.right>0 && r.left<innerWidth && r.bottom>0 && r.top<innerHeight;
@@ -460,6 +465,7 @@ try {
     throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
   }
   if(!report.desktopImpact.vehicleStates.includes('BRAKE')) throw new Error('Desktop SWIFT BRAKE state did not trigger: '+JSON.stringify(report.desktopImpact.vehicleStates));
+  if(report.desktopImpact.representativeImpactRings!==0) throw new Error('Desktop representative risks still use generic impact rings: '+report.desktopImpact.representativeImpactRings);
   await screenshot(cdp,'02-g8a-control-impact.png');
 
   await viewport(cdp,390,844,true);
@@ -526,6 +532,7 @@ try {
     throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
   }
   if(!report.mobileImpact.vehicleStates.includes('BRAKE')) throw new Error('390x844 SWIFT BRAKE state did not trigger: '+JSON.stringify(report.mobileImpact.vehicleStates));
+  if(report.mobileImpact.representativeImpactRings!==0) throw new Error('390x844 representative risks still use generic impact rings: '+report.mobileImpact.representativeImpactRings);
   if(report.mobileImpact.overflow) throw new Error('390x844 impact camera caused horizontal overflow');
   await screenshot(cdp,'04-g8a-control-impact-mobile.png');
 
