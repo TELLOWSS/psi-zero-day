@@ -325,6 +325,8 @@ async function metrics(cdp) {
     return {
       scenario:shell?.getAttribute('data-scenario')||null,
       frameMode:shell?.getAttribute('data-frame-mode')||null,
+      cameraMode:shell?.getAttribute('data-camera-mode')||null,
+      cameraReason:shell?.getAttribute('data-camera-reason')||null,
       boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
       map:shell?.getAttribute('data-map')||null,
       productionMap:shell?.getAttribute('data-production-map')||null,
@@ -344,6 +346,16 @@ async function metrics(cdp) {
       swiftFinal:document.querySelectorAll('[data-pq-swift="SWIFT"]').length,
       veiled:document.querySelectorAll('.zb-enemy-veiled').length,
       veiledFinal:document.querySelectorAll('[data-production-enemy-art="VEILED"]').length,
+      veiledState:document.querySelector('.zb-enemy-veiled')?.getAttribute('data-veiled-state')||null,
+      motionWorkers:[...document.querySelectorAll('[data-motion-worker]')].filter(el => {
+        const r=el.getBoundingClientRect();
+        return r.width>0 && r.height>0 && r.right>0 && r.left<innerWidth && r.bottom>0 && r.top<innerHeight;
+      }).length,
+      motionVehicles:[...document.querySelectorAll('[data-motion-vehicle]')].filter(el => {
+        const r=el.getBoundingClientRect();
+        return r.width>0 && r.height>0 && r.right>0 && r.left<innerWidth && r.bottom>0 && r.top<innerHeight;
+      }).length,
+      vehicleStates:[...document.querySelectorAll('[data-motion-vehicle]')].map(el => el.getAttribute('data-vehicle-state')),
       prototypeBoardItems:document.querySelectorAll('.zb-board [data-art-state="prototype"]').length,
       activeSvgVisuals:[...document.querySelectorAll('image[href],img[src]')].filter(el => {
         const uri=el.getAttribute('href') || el.getAttribute('src') || '';
@@ -393,6 +405,8 @@ try {
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
+  if(report.desktop.motionWorkers<3 || report.desktop.motionVehicles<1) throw new Error('Desktop living-site motion layer missing: '+JSON.stringify({workers:report.desktop.motionWorkers,vehicles:report.desktop.motionVehicles}));
+  if(!['CONCEALED','REVEALED','TRACKED'].includes(report.desktop.veiledState)) throw new Error('Desktop VEILED presentation state missing: '+report.desktop.veiledState);
   if(report.desktop.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active; G8-A Production Lock forbidden: '+JSON.stringify(report.desktop.activeSvgVisuals));
   if(report.desktop.prototypeBoardItems!==0 && report.desktop.prototypeBoardItems!==1) {
     throw new Error('Unexpected prototype count in representative G8-A board: '+report.desktop.prototypeBoardItems);
@@ -411,6 +425,8 @@ try {
   if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
   if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<2 || report.mobile.swift<1 || report.mobile.veiled<1) throw new Error('Mobile representative CONTROL/SWIFT/VEILED actors missing');
+  if(report.mobile.motionWorkers<3 || report.mobile.motionVehicles<1) throw new Error('390x844 living-site motion layer missing: '+JSON.stringify({workers:report.mobile.motionWorkers,vehicles:report.mobile.motionVehicles}));
+  if(!['CONCEALED','REVEALED','TRACKED'].includes(report.mobile.veiledState)) throw new Error('390x844 VEILED presentation state missing: '+report.mobile.veiledState);
   if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
   if(report.mobile.prototypeBoardItems!==0 && report.mobile.prototypeBoardItems!==1) {
     throw new Error('Unexpected mobile prototype count in representative G8-A board: '+report.mobile.prototypeBoardItems);
