@@ -28,6 +28,7 @@ describe('G8-A full-screen visual lock contract', () => {
       'V02_PASS_V04A_ACTIVE',
       'V04A_PASS_V05_ACTIVE',
       'V05_PASS_FULL_SCREEN_REVIEW',
+      'V05_PASS_FULL_SCREEN_REVIEW_REVALIDATION',
       'PRODUCTION_LOCKED',
     ]).toContain(fullVisual.status);
     expect(fullVisual.stopLine).toContain('V-01 through V-05');
@@ -37,11 +38,13 @@ describe('G8-A full-screen visual lock contract', () => {
   it('locks portrait immersion as an authored camera mode, not a scaled landscape board', () => {
     expect(fullVisual.v01a.status).toBe('ACTUAL_PLAY_QA_PASS');
     expect(fullVisual.v01a.portraitFrame).toEqual({ x: 0, y: 80, width: 430, height: 520 });
-    expect(fullVisual.v04a.portraitFrame).toEqual({ x: 0, y: 80, width: 330, height: 520 });
+    expect(fullVisual.v04a.portraitFrame).toEqual({ x: 430, y: 80, width: 330, height: 520 });
     expect(fullVisual.v01a.requirements).toContain('390x844 world viewport occupies at least 55% of screen height');
     expect(fullVisual.v04a.targets.topHudMaximumScreenShare).toBeLessThanOrEqual(0.09);
     expect(fullVisual.v04a.targets.idleBottomActionMaximumScreenShare).toBeLessThanOrEqual(0.15);
     expect(fullVisual.v04a.targets.idleWorldMinimumScreenShare).toBeGreaterThanOrEqual(0.72);
     expect(fullVisual.v04a.targets.expandedCommandPanelAllowedAfterSelection).toBe(true);
+    expect(fullVisual.fullScreenReview.invariants).toContain('logical simulation route remains unchanged');
+    expect(fullVisual.fullScreenReview.status).toMatch(/REVALIDATION|PASS/);
   });
 });
