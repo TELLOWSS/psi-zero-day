@@ -36,15 +36,21 @@ export function G8AActivityOverlay({
   readonly cameraMode: DefenseCameraMode;
 }) {
   const impact = cameraMode === 'IMPACT_CLOSE_UP';
+  const recovering = cameraMode === 'RETURN_RECOVER';
   return <g
-    className={`zb-g8a-activity${impact ? ' is-impact' : ''}`}
+    className={`zb-g8a-activity${impact ? ' is-impact' : ''}${recovering ? ' is-recovering' : ''}`}
     data-site-activity="G8A"
+    data-worker-group-state={impact ? 'EVADE' : recovering ? 'SAFE_RETURN' : 'NORMAL'}
     aria-hidden="true"
   >
-    {WORKERS.map(worker => <g
+    {WORKERS.map(worker => {
+      const baseState = worker.className === 'is-directing' ? 'DIRECT' : 'WALK';
+      const responseState = impact ? 'EVADE' : recovering ? 'SAFE_RETURN' : baseState;
+      return <g
       key={worker.id}
       transform={`translate(${worker.x} ${worker.y})`}
       data-motion-worker={worker.id}
+      data-worker-response={responseState}
     >
       <g className={`zb-worker-motion ${worker.className}`}>
         <ellipse cx="0" cy="2.5" rx={worker.width * 0.38} ry="2.4" className="zb-worker-shadow" />
@@ -58,6 +64,7 @@ export function G8AActivityOverlay({
           className="zb-worker-raster"
         />
       </g>
-    </g>)}
+    </g>;
+    })}
   </g>;
 }
