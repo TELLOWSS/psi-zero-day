@@ -6,8 +6,8 @@ const WORKERS = [
     href: 'assets/episode01/characters/lim-junho-map.webp',
     x: 535,
     y: 520,
-    width: 28,
-    height: 42,
+    width: 24,
+    height: 36,
     className: 'is-walking',
   },
   {
@@ -15,8 +15,8 @@ const WORKERS = [
     href: 'assets/episode01/characters/choi-minseok-map.webp',
     x: 675,
     y: 470,
-    width: 30,
-    height: 45,
+    width: 26,
+    height: 39,
     className: 'is-directing',
   },
   {
@@ -24,8 +24,8 @@ const WORKERS = [
     href: 'assets/episode01/characters/kang-taesik-map.webp',
     x: 610,
     y: 505,
-    width: 27,
-    height: 41,
+    width: 23,
+    height: 35,
     className: 'is-walking-alt',
   },
 ] as const;
@@ -47,7 +47,7 @@ export function G8AActivityOverlay({
       data-motion-worker={worker.id}
     >
       <g className={`zb-worker-motion ${worker.className}`}>
-        <ellipse cx="0" cy="3" rx="10" ry="3.5" className="zb-worker-shadow" />
+        <ellipse cx="0" cy="2.5" rx={worker.width * 0.38} ry="2.4" className="zb-worker-shadow" />
         <image
           href={worker.href}
           x={-worker.width / 2}
