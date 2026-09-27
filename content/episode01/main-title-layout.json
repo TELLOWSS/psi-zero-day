@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "main-title-cinematic-v10-physical-phone",
-  "status": "commercial-presentation-h04-implemented",
+  "status": "commercial-presentation-h04-actual-play-pass",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -142,7 +142,7 @@
   },
   "commercialPresentation": {
     "h01": {
-      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "status": "ACTUAL_PLAY_QA_PASS",
       "hierarchy": [
         {
           "rank": 1,
@@ -177,7 +177,7 @@
       ]
     },
     "h02": {
-      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "status": "ACTUAL_PLAY_QA_PASS",
       "goal": "characters remain emotional anchors while title CTA and LIVE SITE own interaction hierarchy",
       "desktop": {
         "castRole": "human-anchor",
@@ -199,7 +199,7 @@
       "shortLandscape": "one protagonist remains visible; quotes/captions suppressed"
     },
     "h03": {
-      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "status": "ACTUAL_PLAY_QA_PASS",
       "role": "tactical pre-entry briefing",
       "requiredText": [
         "LIVE SITE",
@@ -213,7 +213,7 @@
       "interactionRule": "presentation upgrade only; no new click behavior"
     },
     "h04": {
-      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "status": "ACTUAL_PLAY_QA_PASS",
       "featurePriority": "secondary",
       "quickSettingsPriority": "tertiary",
       "desktop": [
@@ -230,6 +230,70 @@
         "feature strip hidden",
         "quick settings hidden"
       ]
+    },
+    "evidence": {
+      "githubActionsRun": 36315615282,
+      "sourceSha": "4de6e868374dc8ac59ab0e9e49326ac9cad9e3de",
+      "desktop": {
+        "viewport": "1440x900",
+        "primaryTitle": "PSI : ZERO DAY",
+        "primaryCta": "현장 디펜스 시작",
+        "heroWidthPx": 706,
+        "liveSiteRect": {
+          "left": 1066,
+          "top": 135,
+          "width": 331,
+          "height": 211
+        },
+        "castCount": 4,
+        "featureCardsVisible": true,
+        "quickSettingsVisible": true,
+        "overflow": false
+      },
+      "physicalLandscape": {
+        "viewport": "780x360",
+        "heroRect": {
+          "left": 18,
+          "top": 46,
+          "width": 330,
+          "height": 253
+        },
+        "primaryCtaRect": {
+          "left": 14,
+          "top": 147,
+          "width": 320,
+          "height": 56
+        },
+        "liveSiteRect": {
+          "left": 563,
+          "top": 48,
+          "width": 205,
+          "height": 74
+        },
+        "castCount": 1,
+        "featureCardsVisible": false,
+        "quickSettingsVisible": false,
+        "overflow": false
+      },
+      "portrait": {
+        "viewport": "390x844",
+        "primaryCtaRect": {
+          "left": 31,
+          "top": 417,
+          "width": 319,
+          "height": 66
+        },
+        "liveSiteRect": {
+          "left": 16,
+          "top": 701,
+          "width": 358,
+          "height": 127
+        },
+        "castVisible": false,
+        "featureCardsVisible": false,
+        "quickSettingsVisible": false,
+        "overflow": false
+      }
     }
   }
 }
