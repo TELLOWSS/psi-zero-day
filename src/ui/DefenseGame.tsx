@@ -705,6 +705,7 @@ export function DefenseGame({
           })}
           {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} content={content} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
         </svg>
+        {content.map.id === G8A_MAP_ID ? <div className="zb-board-grade" aria-hidden="true" data-world-grade="COMMERCIAL_GFX_V1" /> : null}
 
         <div className="zb-pad-layer" aria-label="설치 패드">
           {content.map.pads.map(pad => {
