@@ -7,7 +7,7 @@ export interface DefenseMapFrame {
 }
 
 const G8A_LANDSCAPE: DefenseMapFrame = {
-  x: 0, y: 0, width: 1000, height: 600, mode: 'LANDSCAPE_STRATEGY',
+  x: 0, y: 60, width: 1000, height: 480, mode: 'LANDSCAPE_STRATEGY',
 };
 
 const G8A_PORTRAIT: DefenseMapFrame = {
