@@ -384,6 +384,12 @@ async function metrics(cdp) {
       }).map(el => el.getAttribute('href') || el.getAttribute('src')),
       status:shell?.getAttribute('data-status')||null,
       board:board?{left:Math.round(board.left),top:Math.round(board.top),right:Math.round(board.right),bottom:Math.round(board.bottom),width:Math.round(board.width),height:Math.round(board.height)}:null,
+      hud:(() => {
+        const el=document.querySelector('.zb-hud');
+        if(!el)return null;
+        const r=el.getBoundingClientRect();
+        return {height:Math.round(r.height),top:Math.round(r.top),bottom:Math.round(r.bottom)};
+      })(),
       command:(() => {
         const el=document.querySelector('.zb-command');
         if(!el)return null;
@@ -398,6 +404,7 @@ async function metrics(cdp) {
 
 const EXPECTED_LOGICAL_ROUTE='0,500 180,500 180,390 370,390 370,240 620,240 620,120 1000,120';
 const EXPECTED_VISUAL_ROUTE='470,495 585,480 660,445 735,420 805,355 870,300 930,245 1000,205';
+const EXPECTED_LANDSCAPE_VIEWBOX='0 60 1000 480';
 const EXPECTED_PORTRAIT_VIEWBOX='430 80 330 520';
 const report={
   schema_version:2,
@@ -405,6 +412,7 @@ const report={
   gate_state:null,
   expected_blocker:null,
   desktop:null,
+  physicalLandscape:null,
   mobile:null,
   mobileSelectedPad:null,
   desktopImpact:null,
@@ -428,7 +436,7 @@ try {
   await enterRepresentativeBottomUp(cdp);
   report.desktop=await metrics(cdp);
   if(report.desktop.map!=='map-apt-bottom-up-excavation-01') throw new Error('G8-A map mismatch');
-  if(report.desktop.frameMode!=='LANDSCAPE_STRATEGY' || report.desktop.boardViewBox!=='0 0 1000 600') throw new Error('Desktop frame contract mismatch: '+JSON.stringify({frameMode:report.desktop.frameMode,viewBox:report.desktop.boardViewBox}));
+  if(report.desktop.frameMode!=='LANDSCAPE_STRATEGY' || report.desktop.boardViewBox!==EXPECTED_LANDSCAPE_VIEWBOX) throw new Error('Desktop frame contract mismatch: '+JSON.stringify({frameMode:report.desktop.frameMode,viewBox:report.desktop.boardViewBox}));
   if(report.desktop.productionMap!==expectedRegistryStatus) throw new Error('Unexpected G8-A production-map registry state: '+report.desktop.productionMap+' expected '+expectedRegistryStatus);
   if(report.desktop.artHref!==expectedWorldHref) throw new Error('Unexpected G8-A world art: '+report.desktop.artHref+' expected '+expectedWorldHref);
   if(report.desktop.worldFinal!==worldApproved) throw new Error('Desktop world-final runtime state mismatch');
@@ -467,6 +475,32 @@ try {
   if(!report.desktopImpact.vehicleStates.includes('BRAKE')) throw new Error('Desktop SWIFT BRAKE state did not trigger: '+JSON.stringify(report.desktopImpact.vehicleStates));
   if(report.desktopImpact.representativeImpactRings!==0) throw new Error('Desktop representative risks still use generic impact rings: '+report.desktopImpact.representativeImpactRings);
   await screenshot(cdp,'02-g8a-control-impact.png');
+
+  await viewport(cdp,780,360,true);
+  await clearState(cdp);
+  await navigate(cdp);
+  await enterRepresentativeBottomUp(cdp);
+  report.physicalLandscape=await metrics(cdp);
+  if(report.physicalLandscape.frameMode!=='LANDSCAPE_STRATEGY' || report.physicalLandscape.boardViewBox!==EXPECTED_LANDSCAPE_VIEWBOX) {
+    throw new Error('780x360 physical-landscape frame mismatch: '+JSON.stringify({mode:report.physicalLandscape.frameMode,viewBox:report.physicalLandscape.boardViewBox}));
+  }
+  if(!report.physicalLandscape.board || report.physicalLandscape.board.width / report.physicalLandscape.viewport.width < 0.94 || report.physicalLandscape.board.height / report.physicalLandscape.viewport.height < 0.94) {
+    throw new Error('780x360 G8-A world does not fill the physical landscape viewport: '+JSON.stringify({board:report.physicalLandscape.board,viewport:report.physicalLandscape.viewport}));
+  }
+  if(!report.physicalLandscape.hud || report.physicalLandscape.hud.height > 44) {
+    throw new Error('780x360 landscape HUD is too tall: '+JSON.stringify(report.physicalLandscape.hud));
+  }
+  if(!report.physicalLandscape.command || report.physicalLandscape.command.height > 80) {
+    throw new Error('780x360 idle command overlay is too tall: '+JSON.stringify(report.physicalLandscape.command));
+  }
+  if(report.physicalLandscape.touchPads < 6) {
+    throw new Error('780x360 landscape lost too many authored touch pads: '+report.physicalLandscape.touchPads);
+  }
+  if(report.physicalLandscape.motionWorkers<3 || report.physicalLandscape.motionVehicles<1 || report.physicalLandscape.controlPq!==1) {
+    throw new Error('780x360 landscape lost representative living-site actors: '+JSON.stringify({workers:report.physicalLandscape.motionWorkers,vehicles:report.physicalLandscape.motionVehicles,control:report.physicalLandscape.controlPq}));
+  }
+  if(report.physicalLandscape.overflow) throw new Error('780x360 physical landscape caused horizontal overflow');
+  await screenshot(cdp,'03-g8a-physical-landscape.png');
 
   await viewport(cdp,390,844,true);
   await clearState(cdp);
