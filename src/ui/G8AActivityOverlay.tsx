@@ -4,22 +4,28 @@ const WORKERS = [
   {
     id: 'lim_junho',
     href: 'assets/episode01/characters/lim-junho-map.webp',
-    x: 92,
-    y: 482,
+    x: 535,
+    y: 520,
+    width: 28,
+    height: 42,
     className: 'is-walking',
   },
   {
     id: 'choi_minseok',
     href: 'assets/episode01/characters/choi-minseok-map.webp',
-    x: 286,
-    y: 404,
+    x: 675,
+    y: 470,
+    width: 30,
+    height: 45,
     className: 'is-directing',
   },
   {
     id: 'kang_taesik',
     href: 'assets/episode01/characters/kang-taesik-map.webp',
-    x: 182,
-    y: 454,
+    x: 610,
+    y: 505,
+    width: 27,
+    height: 41,
     className: 'is-walking-alt',
   },
 ] as const;
@@ -41,13 +47,13 @@ export function G8AActivityOverlay({
       data-motion-worker={worker.id}
     >
       <g className={`zb-worker-motion ${worker.className}`}>
-        <ellipse cx="0" cy="5" rx="15" ry="5" className="zb-worker-shadow" />
+        <ellipse cx="0" cy="3" rx="10" ry="3.5" className="zb-worker-shadow" />
         <image
           href={worker.href}
-          x="-20"
-          y="-54"
-          width="40"
-          height="58"
+          x={-worker.width / 2}
+          y={-worker.height + 3}
+          width={worker.width}
+          height={worker.height}
           preserveAspectRatio="xMidYMax meet"
           className="zb-worker-raster"
         />
