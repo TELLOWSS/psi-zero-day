@@ -92,7 +92,7 @@
     "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "Physical Android evidence reopened only the G8-A landscape presentation shell. V-01 through V-05 assets, topology, balance, portrait framing, cinematic and representative motion remain locked while the physical-phone fullscreen shell is corrected.",
+  "stopLine": "The 2026-09-27 physical Android replay keeps the G8-A presentation lock open: fullscreen shell, dynamic site actors, semantic tower/risk visuals and observable camera behavior must all pass on-device before merge.",
   "visualDoctrine": {
     "siteUniquenessFirst": true,
     "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
+    "status": "PHYSICAL_DEVICE_DYNAMIC_SITE_CORRECTION_ACTIVE",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -638,8 +638,16 @@
       },
       "regression": {
         "observed": true,
-        "finding": "world remained a small centered 5:3 board while HUD/command chrome and Android system bars dominated the landscape screen",
-        "deviceEvidenceWaveRange": "WAVE 1 through WAVE 5"
+        "decision": "FAIL_DYNAMIC_SITE_PRESENTATION",
+        "finding": "WAVE 1–5 read as a small/static tower-defense board: workers and site traffic were not legible, most tower/risk presentation remained abstract, and no meaningful zoom/focus beat was visible in the recorded play.",
+        "deviceEvidenceWaveRange": "WAVE 1 through WAVE 5",
+        "userVisibleFailures": [
+          "workers did not read as active site actors at phone scale",
+          "dump/site traffic did not visibly circulate during early waves",
+          "non-CONTROL tower families still read as abstract game markers",
+          "early-wave risk actors still read as abstract wave symbols",
+          "camera behavior was not observable before the later representative Wave 8 conditions"
+        ]
       },
       "correction": {
         "landscapeFrame": {
@@ -655,9 +663,20 @@
         },
         "hud": "top overlay",
         "command": "bottom overlay",
-        "androidSystemBars": "immersive fullscreen / transient swipe reveal"
+        "androidSystemBars": "immersive fullscreen / transient swipe reveal",
+        "dynamicSiteLayer": "five enlarged raster workers remain visible from early waves; ambient approved dump raster circulates through WAVE 1–5 unless a real SWIFT risk is active",
+        "towerVisualSystem": "G8-A tower families render construction-semantic Episode 01 raster elements instead of prototype SVG glyphs while dedicated tower masters remain a later final-art task",
+        "riskActorSystem": "NORMAL/SWARM/ARMORED receive site-actor presentation on G8-A while internal enemy IDs and balance remain unchanged",
+        "cameraSystem": "tower placement and newly spawned risks can trigger THREAT_APPROACH before Wave 8; player receives 100–180% manual zoom controls",
+        "protectedContracts": [
+          "Defense engine state and balance",
+          "logical route topology and pad coordinates",
+          "WORLD/SWIFT/VEILED locked raster assets",
+          "CONTROL L1 representative semantic",
+          "Episode 01 story/voice/audio contracts"
+        ]
       },
-      "next": "Install rebuilt Commercial Presentation QA APK and submit a second physical-device landscape recording. Physical replay remains required before restoring Production Lock.",
+      "next": "Run automated regression on the Dynamic Site pass, rebuild the Android QA APK, then replay WAVE 1–5 and representative WAVE 8 on the physical phone. Keep PR #74 unmerged until actors, semantic equipment/risks, zoom/focus and impact recovery are all visibly confirmed.",
       "automatedRevalidation": {
         "status": "PASS_AWAITING_PHYSICAL_DEVICE_REPLAY",
         "githubActionsRun": 36317181019,
@@ -677,6 +696,22 @@
         "prototypeBoardItems": 0,
         "activeSvgVisuals": 0,
         "overflow": false
+      },
+      "dynamicSiteImplementation": {
+        "status": "IMPLEMENTED_AWAITING_AUTOMATED_AND_PHYSICAL_QA",
+        "branch": "sol/commercial-presentation-upgrade-20260927",
+        "workers": 5,
+        "earlyAmbientVehicle": "APPROVED_SWIFT_DUMP_RASTER_AS_SITE_CIRCULATION",
+        "earlyCameraReasons": [
+          "TOWER_PLACEMENT",
+          "RISK_ENTRY",
+          "WAVE_ENTRY"
+        ],
+        "manualZoomRange": [
+          1,
+          1.8
+        ],
+        "dedicatedTowerMasterArt": "TODO_AFTER_PRESENTATION_BEHAVIOR_LOCK"
       }
     },
     "commercialPresentationP02": {
