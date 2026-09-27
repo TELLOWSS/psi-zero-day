@@ -341,6 +341,16 @@ async function metrics(cdp) {
       routePoints:document.querySelector('.zb-path')?.getAttribute('points')||null,
       towers:document.querySelectorAll('.zb-tower').length,
       controlPq:document.querySelectorAll('[data-pq-control="CONTROL:L1"]').length,
+      controlBounds:(() => {
+        const el=document.querySelector('[data-pq-control="CONTROL:L1"]');
+        if(!el)return null;
+        const r=el.getBoundingClientRect();
+        return {width:Math.round(r.width),height:Math.round(r.height)};
+      })(),
+      anchorTextCount:document.querySelectorAll('.zb-site-anchor-hints text').length,
+      anchorHintOpacity:document.querySelector('.zb-site-anchor-hints') ? getComputedStyle(document.querySelector('.zb-site-anchor-hints')).opacity : null,
+      secondaryRoutesOpacity:document.querySelector('.zb-site-secondary-routes') ? getComputedStyle(document.querySelector('.zb-site-secondary-routes')).opacity : null,
+      centerlineOpacity:document.querySelector('.zb-path-centerline') ? getComputedStyle(document.querySelector('.zb-path-centerline')).opacity : null,
       enemies:document.querySelectorAll('.zb-enemy').length,
       swift:document.querySelectorAll('.zb-enemy-swift').length,
       swiftFinal:document.querySelectorAll('[data-pq-swift="SWIFT"]').length,
@@ -407,6 +417,13 @@ try {
   if(report.desktop.productionArtCount!==1 || !report.desktop.processOverlay) throw new Error('Production map or topology overlay missing');
   if(report.desktop.pads!==8 || report.desktop.routePoints!==EXPECTED_ROUTE) throw new Error('Locked topology coordinates changed');
   if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
+  if(report.desktop.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on desktop: '+report.desktop.anchorTextCount);
+  if(Number(report.desktop.anchorHintOpacity)>0.08 || Number(report.desktop.secondaryRoutesOpacity)>0.13 || Number(report.desktop.centerlineOpacity)>0.21) {
+    throw new Error('V-02 technical overlays are too prominent on desktop: '+JSON.stringify({anchor:report.desktop.anchorHintOpacity,routes:report.desktop.secondaryRoutesOpacity,centerline:report.desktop.centerlineOpacity}));
+  }
+  if(!report.desktop.controlBounds || report.desktop.controlBounds.width>130 || report.desktop.controlBounds.height>120) {
+    throw new Error('V-02 CONTROL footprint is too large on desktop: '+JSON.stringify(report.desktop.controlBounds));
+  }
   if(report.desktop.motionWorkers<3 || report.desktop.motionVehicles<1) throw new Error('Desktop living-site motion layer missing: '+JSON.stringify({workers:report.desktop.motionWorkers,vehicles:report.desktop.motionVehicles}));
   if(!['CONCEALED','REVEALED','TRACKED'].includes(report.desktop.veiledState)) throw new Error('Desktop VEILED presentation state missing: '+report.desktop.veiledState);
   if(report.desktop.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active; G8-A Production Lock forbidden: '+JSON.stringify(report.desktop.activeSvgVisuals));
@@ -440,6 +457,13 @@ try {
   if(report.mobile.worldFinal!==worldApproved) throw new Error('Mobile world-final runtime state mismatch');
   if(report.mobile.pads!==8 || report.mobile.routePoints!==EXPECTED_ROUTE) throw new Error('Mobile G8-A topology changed');
   if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<2 || report.mobile.swift<1 || report.mobile.veiled<1) throw new Error('Mobile representative CONTROL/SWIFT/VEILED actors missing');
+  if(report.mobile.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on mobile: '+report.mobile.anchorTextCount);
+  if(Number(report.mobile.anchorHintOpacity)>0.08 || Number(report.mobile.secondaryRoutesOpacity)>0.13 || Number(report.mobile.centerlineOpacity)>0.21) {
+    throw new Error('V-02 technical overlays are too prominent on mobile: '+JSON.stringify({anchor:report.mobile.anchorHintOpacity,routes:report.mobile.secondaryRoutesOpacity,centerline:report.mobile.centerlineOpacity}));
+  }
+  if(!report.mobile.controlBounds || report.mobile.controlBounds.width>105 || report.mobile.controlBounds.height>110) {
+    throw new Error('V-02 CONTROL footprint is too large on mobile: '+JSON.stringify(report.mobile.controlBounds));
+  }
   if(report.mobile.motionWorkers<3 || report.mobile.motionVehicles<1) throw new Error('390x844 living-site motion layer missing: '+JSON.stringify({workers:report.mobile.motionWorkers,vehicles:report.mobile.motionVehicles}));
   if(!['CONCEALED','REVEALED','TRACKED'].includes(report.mobile.veiledState)) throw new Error('390x844 VEILED presentation state missing: '+report.mobile.veiledState);
   if(report.mobile.activeSvgVisuals.length>0) throw new Error('SVG visual asset still active on mobile; G8-A Production Lock forbidden: '+JSON.stringify(report.mobile.activeSvgVisuals));
