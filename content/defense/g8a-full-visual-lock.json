@@ -117,7 +117,7 @@
   "motionPresentation": {
     "architecture": "2.5D_CINEMATIC_TACTICAL",
     "m01Camera": {
-      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "status": "ACTUAL_PLAY_TRIGGER_PASS",
       "modes": [
         "STRATEGIC_BASE",
         "THREAT_APPROACH",
@@ -129,10 +129,20 @@
         "VEILED_REVEAL",
         "CONTROL_INTERVENTION"
       ],
-      "engineRewrite": false
+      "engineRewrite": false,
+      "actualPlay": {
+        "desktop": {
+          "mode": "IMPACT_CLOSE_UP",
+          "reason": "CONTROL_INTERVENTION"
+        },
+        "portrait": {
+          "mode": "IMPACT_CLOSE_UP",
+          "reason": "CONTROL_INTERVENTION"
+        }
+      }
     },
     "m02Impact": {
-      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "status": "ACTUAL_PLAY_IMPACT_PASS",
       "visualHitStopMs": 150,
       "landscapeImpactScale": 1.28,
       "portraitImpactScale": 1.18,
@@ -140,11 +150,11 @@
     },
     "next": [
       "VEILED_FINAL_RASTER",
-      "CONTROL_FX_VISUAL_QA",
+      "CONTROL_FX_VISUAL_POLISH",
       "FULL_SCREEN_VISUAL_LOCK"
     ],
     "m03Workers": {
-      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "status": "ACTUAL_PLAY_VISIBLE_PASS",
       "representativeWorkers": [
         "lim_junho",
         "choi_minseok",
@@ -159,7 +169,7 @@
       "simulationMutation": false
     },
     "m04Vehicle": {
-      "status": "IMPLEMENTED_AWAITING_ACTUAL_PLAY_QA",
+      "status": "CRUISE_AND_BRAKE_ACTUAL_PLAY_PASS",
       "vehicle": "SWIFT",
       "enginePathMovement": "PRESERVED",
       "presentationStates": [
@@ -175,7 +185,7 @@
       "finalRasterReopen": false
     },
     "m05Veiled": {
-      "status": "IMPLEMENTED_AWAITING_FINAL_RASTER",
+      "status": "REVEALED_STATE_PASS_AWAITING_FINAL_RASTER",
       "states": [
         "CONCEALED",
         "REVEALED",
@@ -185,7 +195,7 @@
       "fantasyLanguageForbidden": true
     },
     "m06Qa": {
-      "status": "RUNNING",
+      "status": "DUAL_ORIENTATION_DYNAMIC_IMPACT_QA_PASS",
       "desktop": "1440x900",
       "portrait": "390x844",
       "assertions": [
@@ -195,7 +205,27 @@
         "portrait world share >= 55%",
         "no horizontal overflow",
         "locked topology unchanged"
-      ]
+      ],
+      "evidence": {
+        "githubActionsRun": 36296944262,
+        "desktopImpact": {
+          "viewport": "1440x900",
+          "cameraMode": "IMPACT_CLOSE_UP",
+          "vehicleState": "BRAKE",
+          "overflow": false
+        },
+        "portraitImpact": {
+          "viewport": "390x844",
+          "cameraMode": "IMPACT_CLOSE_UP",
+          "vehicleState": "BRAKE",
+          "overflow": false
+        },
+        "baseline": {
+          "motionWorkers": 3,
+          "motionVehicles": 1,
+          "veiledState": "REVEALED"
+        }
+      }
     }
   }
 }
