@@ -701,13 +701,13 @@
 .zb-site-zone-restricted{fill:rgba(177,62,73,.13);stroke:rgba(214,88,100,.3)}
 .zb-site-visibility circle{fill:#243541;stroke:#7894a4;stroke-width:2;stroke-dasharray:10 8}
 .zb-site-route{stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.zb-site-route-worker{stroke:#6fcaa8;stroke-width:5;stroke-dasharray:15 11;opacity:.72}
-.zb-site-route-material{stroke:#6faec7;stroke-width:5;stroke-dasharray:6 9;opacity:.7}
-.zb-site-transfers circle{fill:rgba(9,29,39,.9);stroke:#e4ae45;stroke-width:4}
-.zb-site-transfers path{fill:none;stroke:#e4ae45;stroke-width:4;stroke-linecap:round}
-.zb-site-anchor-hints{opacity:.52}
-.zb-site-anchor-hints circle{fill:rgba(8,30,40,.88);stroke:#edc05d;stroke-width:3;stroke-dasharray:5 4}
-.zb-site-anchor-hints text{fill:#f3d582;font-size:13px;font-weight:900;pointer-events:none}
+.zb-site-route-worker{stroke:#6fcaa8;stroke-width:3;stroke-dasharray:10 14;opacity:.42}
+.zb-site-route-material{stroke:#6faec7;stroke-width:3;stroke-dasharray:5 13;opacity:.38}
+.zb-site-transfers circle{fill:rgba(9,29,39,.36);stroke:rgba(228,174,69,.58);stroke-width:2}
+.zb-site-transfers path{fill:none;stroke:rgba(228,174,69,.62);stroke-width:2;stroke-linecap:round}
+.zb-site-anchor-hints{opacity:.28}
+.zb-site-anchor-hints circle{fill:rgba(8,30,40,.22);stroke:rgba(237,192,93,.58);stroke-width:1.8}
+.zb-site-anchor-hints .zb-site-anchor-core{fill:rgba(237,192,93,.82);stroke:none}
 .zb-site-process-map + .zb-path-shoulder{opacity:.8}
 
 
@@ -780,30 +780,30 @@
   filter:saturate(.9) contrast(.96) brightness(.9);
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-zone{
-  fill-opacity:.05;
-  stroke-opacity:.42;
+  fill-opacity:.018;
+  stroke-opacity:.18;
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-visibility{
-  opacity:.36;
+  opacity:.16;
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-site-process-map .zb-site-secondary-routes{
-  opacity:.72;
-}
-.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-shoulder{
-  stroke-width:54;
   opacity:.34;
 }
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-shoulder{
+  stroke-width:48;
+  opacity:.18;
+}
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-shadow{
-  stroke-width:44;
-  opacity:.3;
+  stroke-width:40;
+  opacity:.14;
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path{
-  stroke-width:34;
-  opacity:.36;
+  stroke-width:30;
+  opacity:.13;
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-path-centerline{
-  opacity:.78;
-  stroke-width:2.4;
+  opacity:.28;
+  stroke-width:1.8;
 }
 .zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-production-map] .zb-pad-hardstand{
   fill:rgba(18,27,26,.16);
@@ -1106,3 +1106,13 @@
   .zb-enemy-veiled[data-veiled-state="REVEALED"],
   .zb-enemy-veiled[data-veiled-state="REVEALED"] .zb-veiled-site-occlusion{animation:none}
 }
+
+/* G8-A V-02 — technical topology recedes during live play; the construction world remains primary. */
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-zones{opacity:.34}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-visibility{opacity:.08}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-secondary-routes{opacity:.12}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-transfers{opacity:.10}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-site-process-map .zb-site-anchor-hints{opacity:.07}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-status="RUNNING"] .zb-path-centerline{opacity:.20}
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="THREAT_APPROACH"] .zb-path-centerline,
+.zb-shell[data-map="map-apt-bottom-up-excavation-01"][data-camera-mode="IMPACT_CLOSE_UP"] .zb-path-centerline{opacity:.32}
