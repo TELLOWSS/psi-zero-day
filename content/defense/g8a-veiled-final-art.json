@@ -3,7 +3,7 @@
   "gate": "G8A_FULL_VISUAL_V01",
   "assetId": "VEILED",
   "status": "ASSET_PENDING",
-  "semantic": "occluded or partially confirmed construction-site risk signal; a grounded blind-zone/visibility hazard, never a fantasy enemy",
+  "semantic": "site-specific partially confirmed construction risk emerging from real bottom-up excavation conditions: blind vehicle approach, retaining/shoring occlusion, uneven lighting, dust/mud, stacked materials and worker-route obstruction; never a fantasy enemy",
   "runtimeUri": "assets/defense/enemies/veiled-final-g8a.webp",
   "format": "webp",
   "runtime": {
@@ -18,8 +18,10 @@
   },
   "required": [
     "construction-site grounded silhouette readable at phone scale",
-    "partial occlusion or blind-zone character without monster language",
-    "transparent isolated object edge",
+    "the risk must appear to originate from actual site geometry, equipment, temporary works or visibility loss",
+    "partial occlusion/blind-zone character without monster language",
+    "retain recognizable fragments of real construction context in silhouette or edge treatment",
+    "transparent isolated runtime object edge",
     "lighting compatible with the locked G8-A high-oblique night construction world",
     "no text, logo, HUD, warning copy or gameplay geometry baked into the asset"
   ],
@@ -29,7 +31,10 @@
     "flat pictogram",
     "vector placeholder",
     "fantasy ghost or monster silhouette",
+    "humanoid demon or creature anatomy",
+    "floating magical crystal",
     "neon sci-fi orb",
+    "generic RPG enemy unrelated to construction",
     "fake Korean text",
     "real company logo",
     "upscaled low-resolution crop"
@@ -44,6 +49,22 @@
       "MOBILE_390x844_VEILED_SWIFT_QA",
       "PROTOTYPE_BOARD_ITEMS_0",
       "ACTIVE_SVG_VISUALS_0"
+    ]
+  },
+  "siteIdentity": {
+    "profile": "apt-new-bottom-up-excavation",
+    "map": "map-apt-bottom-up-excavation-01",
+    "mustReadAs": [
+      "Korean apartment construction bottom-up open excavation workface",
+      "haul-ramp and worker-route visibility conflict",
+      "risk created by actual site geometry and temporary works rather than a supernatural creature"
+    ],
+    "visualSources": [
+      "dump-truck blind zone and reversing path",
+      "retaining/shoring and excavation-edge occlusion",
+      "temporary barrier/cone/material-stack interference",
+      "night-work lighting contrast and partial shadow",
+      "dust, mud and suspended particles used subtly as visibility cues"
     ]
   }
 }
