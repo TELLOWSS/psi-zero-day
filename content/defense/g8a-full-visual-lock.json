@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "V05_PASS_FULL_SCREEN_VISUAL_POLISH_ACTIVE",
+  "status": "PRODUCTION_LOCKED",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -92,7 +92,7 @@
     "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "Do not promote G8A_FULL_SCREEN_VISUAL_LOCK until V-01 through V-05 actual-play visual QA all pass.",
+  "stopLine": "G8-A representative Full-Screen Visual Lock is closed. Do not reopen WORLD/SWIFT/VEILED/topology/balance while proceeding to Voice Integration and Premium Audio unless regression evidence requires it.",
   "visualDoctrine": {
     "siteUniquenessFirst": true,
     "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "TECHNICAL_REVALIDATION_PASS_VISUAL_POLISH_ACTIVE",
+    "status": "ACTUAL_PLAY_VISUAL_QA_PASS",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -529,17 +529,104 @@
       "cinematic": "V05 desktop + 390x844 PASS"
     },
     "visualReview": {
-      "decision": "POLISH_REQUIRED_BEFORE_PRODUCTION_LOCK",
+      "decision": "PASS",
+      "reviewedFromActualScreenshots": true,
       "findings": [
-        "live worker/CONTROL rasters still read slightly cut-out against the photoreal construction world",
-        "generic circular impact feedback competes with the grounded braking/control language"
+        "photoreal construction world remains dominant in landscape and portrait",
+        "ambient workers are reduced to world scale and duplicate CONTROL marshal identity is removed",
+        "unselected live-play pad paint recedes while touch targets remain interactive",
+        "representative impact reads through braking, road contact, dust, CONTROL ground cue and camera punch instead of a generic attack ring",
+        "portrait cinematic framing remains production-readable"
       ],
-      "activeFixes": [
-        "reduce worker and CONTROL world footprint and match dusk lighting/contact shadows",
-        "remove generic impact ring from SWIFT and VEILED",
-        "use road-contact, skid/dust, CONTROL ground cue and camera punch as representative impact feedback"
-      ],
-      "next": "Rerun desktop/390x844/impact/V05 evidence and visually inspect screenshots before Production Lock."
+      "stopLine": "Reopen this lock only for a demonstrated regression or a deliberate new art-direction decision."
+    },
+    "productionLocked": true,
+    "lockedAt": "2026-09-27",
+    "finalEvidence": {
+      "githubActionsRun": 36303387182,
+      "artifactId": 10925834872,
+      "branchHead": "ce93e3d9ae4192f5a74b4a1dd6dc358f44487c37",
+      "desktop": {
+        "viewport": "1440x900",
+        "controlBounds": {
+          "width": 72,
+          "height": 81
+        },
+        "workerBounds": [
+          {
+            "width": 23,
+            "height": 35
+          },
+          {
+            "width": 25,
+            "height": 36
+          },
+          {
+            "width": 22,
+            "height": 32
+          }
+        ],
+        "representativeImpactRings": 0,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      },
+      "portrait": {
+        "viewport": "390x844",
+        "viewBox": "430 80 330 520",
+        "worldPx": 656,
+        "worldShare": 0.777,
+        "idleCommandPx": 118,
+        "idleCommandShare": 0.14,
+        "touchPads": 3,
+        "controlBounds": {
+          "width": 69,
+          "height": 78
+        },
+        "workerBounds": [
+          {
+            "width": 22,
+            "height": 33
+          },
+          {
+            "width": 23,
+            "height": 35
+          },
+          {
+            "width": 21,
+            "height": 31
+          }
+        ],
+        "representativeImpactRings": 0,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      },
+      "selectedPad": {
+        "commandPx": 238,
+        "worldPx": 536,
+        "touchPads": 3,
+        "overflow": false,
+        "selectedPadVisible": true
+      },
+      "impact": {
+        "desktop": "IMPACT_CLOSE_UP / CONTROL_INTERVENTION / BRAKE",
+        "portrait": "IMPACT_CLOSE_UP / CONTROL_INTERVENTION / BRAKE",
+        "representativeImpactRings": 0
+      },
+      "cinematic": {
+        "grade": "V05",
+        "shots": [
+          "WIDE",
+          "FOCUS",
+          "REAR",
+          "SIGNAL",
+          "RADIO",
+          "BRAKE"
+        ],
+        "desktop": true,
+        "portrait390x844": true
+      }
     }
   }
 }
