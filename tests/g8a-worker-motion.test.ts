@@ -5,7 +5,8 @@ describe('M-03 G8-A worker motion overlay', () => {
   it('uses existing raster character art instead of prototype worker glyphs', () => {
     const source = readFileSync('src/ui/G8AActivityOverlay.tsx', 'utf8');
     expect(source).toContain('lim-junho-map.webp');
-    expect(source).toContain('choi-minseok-map.webp');
+    expect(source).toContain('yoon-sungho-map.webp');
+    expect(source).not.toContain("id: 'choi_minseok'");
     expect(source).toContain('kang-taesik-map.webp');
     expect(source).not.toContain('<circle r="');
     expect(source).toContain('data-motion-worker');
