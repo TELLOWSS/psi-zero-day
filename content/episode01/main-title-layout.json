@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "main-title-cinematic-v10-physical-phone",
-  "status": "physical-phone-v10-qa-active",
+  "status": "commercial-presentation-h01-active",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -139,5 +139,42 @@
     ],
     "settingsAccess": "top-right settings button",
     "productionRule": "desktop can retain four-person ensemble; short landscape phone uses one protagonist until four title binaries are visually differentiated enough for side-by-side display"
+  },
+  "commercialPresentation": {
+    "h01": {
+      "status": "IMPLEMENTED_AWAITING_BROWSER_QA",
+      "hierarchy": [
+        {
+          "rank": 1,
+          "id": "primaryTitle",
+          "text": "PSI : ZERO DAY"
+        },
+        {
+          "rank": 2,
+          "id": "slogan",
+          "text": "사고 전 신호를 읽고, 현장을 바꿔라."
+        },
+        {
+          "rank": 3,
+          "id": "primaryCTA",
+          "text": "현장 디펜스 시작"
+        },
+        {
+          "rank": 4,
+          "id": "liveSite",
+          "text": "LIVE SITE"
+        }
+      ],
+      "eyebrow": "NEW PSI",
+      "englishLine": "Proactive Safety Intelligence · FIELD DEFENSE",
+      "briefCopy": "같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.",
+      "desktopHeroWidthMaxVw": 52,
+      "rules": [
+        "NEW PSI is a low-emphasis brand eyebrow and must not compete with PSI : ZERO DAY",
+        "primary title, slogan and defense CTA must remain visible without scroll",
+        "left hero uses a readability gradient without blurring construction-world detail",
+        "no new tutorial or long lore copy is introduced"
+      ]
+    }
   }
 }
