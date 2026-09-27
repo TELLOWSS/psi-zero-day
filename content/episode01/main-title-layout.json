@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "profile_id": "main-title-cinematic-v9-new-psi",
-  "status": "reference-qa-aligned",
+  "profile_id": "main-title-cinematic-v10-physical-phone",
+  "status": "physical-phone-v10-qa-active",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -38,7 +38,8 @@
     "continue reflects save-state progress",
     "new game requires confirmation when progress exists",
     "motion setting must respect user choice and reduced-motion preference",
-    "character quotes can be hidden without changing gameplay"
+    "character quotes can be hidden without changing gameplay",
+    "short landscape phone keeps only one protagonist visible to avoid duplicate-face lineup until final differentiated title-cast binaries are promoted"
   ],
   "character_separation": {
     "primary_axes": [
@@ -55,7 +56,8 @@
   "breakpoint_notes": {
     "desktop": "four character foreground plus four feature cards",
     "compact": "reduce captions and character scale",
-    "mobile": "hide character foreground and use two-column feature cards"
+    "mobile": "hide character foreground and use two-column feature cards",
+    "physical_landscape_phone": "world-first hero composition: one protagonist only, primary Field Defense CTA dominates, LIVE SITE is compact, feature-card strip and unlabeled quick toggles are hidden, utility remains icon-only"
   },
   "loading": {
     "background": "same episode background focus as title",
@@ -118,5 +120,24 @@
       "construction background remains readable but subordinate to foreground UI"
     ]
   },
-  "brand_contract": "content/brand/naming-contract.json"
+  "brand_contract": "content/brand/naming-contract.json",
+  "physical_phone_v10": {
+    "target": "2340x1080-class Android landscape",
+    "cssQaViewport": "780x360",
+    "primaryHierarchy": [
+      "construction world",
+      "NEW PSI : ZERO DAY",
+      "현장 디펜스 시작",
+      "one protagonist",
+      "compact LIVE SITE status"
+    ],
+    "suppressedOnShortLandscape": [
+      "four-card feature strip",
+      "cast quotes and captions",
+      "three unlabeled quick-setting pills",
+      "long explanatory copy"
+    ],
+    "settingsAccess": "top-right settings button",
+    "productionRule": "desktop can retain four-person ensemble; short landscape phone uses one protagonist until four title binaries are visually differentiated enough for side-by-side display"
+  }
 }
