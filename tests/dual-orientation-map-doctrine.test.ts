@@ -24,7 +24,7 @@ describe('Dual-orientation map doctrine', () => {
       { x: g8aVisualProjection.route[0][0], y: g8aVisualProjection.route[0][1], id: 'SWIFT/VEILED approach' },
       { x: g8aVisualProjection.route[1][0], y: g8aVisualProjection.route[1][1], id: 'approach continuation' },
       { x: g8aVisualProjection.route[2][0], y: g8aVisualProjection.route[2][1], id: 'conflict approach' },
-      { x: g8aVisualProjection.pads['BU-P3'].x, y: g8aVisualProjection.pads['BU-P3'].y, id: 'CONTROL representative pad' },
+      { x: g8aVisualProjection.pads['BU-P3']!.x, y: g8aVisualProjection.pads['BU-P3']!.y, id: 'CONTROL representative pad' },
     ];
     for (const point of points) {
       expect(defenseMapPointPercent(frame, point.x, point.y).visible, point.id).toBe(true);
