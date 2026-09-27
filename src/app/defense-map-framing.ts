@@ -11,7 +11,7 @@ const G8A_LANDSCAPE: DefenseMapFrame = {
 };
 
 const G8A_PORTRAIT: DefenseMapFrame = {
-  x: 0, y: 80, width: 430, height: 520, mode: 'PORTRAIT_IMMERSION',
+  x: 0, y: 80, width: 330, height: 520, mode: 'PORTRAIT_IMMERSION',
 };
 
 export function defenseMapFrame(
