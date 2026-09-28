@@ -9,9 +9,12 @@ on:
     paths:
       - 'content/defense/g8a-veiled-final-art.json'
       - 'content/defense/g8a-full-visual-lock.json'
+      - 'content/defense/control-tower-production-v1.json'
       - 'src/app/defense-visual-assets.ts'
       - 'tests/g8a-veiled-final-art.test.ts'
+      - 'tests/control-tower-production-pipeline.test.ts'
       - 'public/assets/defense/enemies/veiled-final-g8a.webp'
+      - 'public/assets/defense/towers/control/**'
       - 'src/ui/DefenseGame.tsx'
       - 'src/ui/G8AActivityOverlay.tsx'
       - 'src/ui/defense-game.css'
@@ -41,7 +44,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: V-01 visual contracts
-        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/final-art-policy.test.ts tests/dual-orientation-map-doctrine.test.ts tests/g8a-full-visual-lock.test.ts tests/defense-camera.test.ts tests/impact-presentation-policy.test.ts tests/g8a-worker-motion.test.ts tests/g8a-v02-visual-coherence.test.ts tests/g8a-v05-cinematic.test.ts tests/g8a-full-screen-polish.test.ts
+        run: npx vitest run tests/g8a-veiled-final-art.test.ts tests/g8a-world-final-art.test.ts tests/g8a-swift-final-art.test.ts tests/control-tower-production-pipeline.test.ts tests/final-art-policy.test.ts tests/dual-orientation-map-doctrine.test.ts tests/g8a-full-visual-lock.test.ts tests/defense-camera.test.ts tests/impact-presentation-policy.test.ts tests/g8a-worker-motion.test.ts tests/g8a-v02-visual-coherence.test.ts tests/g8a-v05-cinematic.test.ts tests/g8a-full-screen-polish.test.ts
       - name: Typecheck
         run: npm run typecheck
       - name: Build
