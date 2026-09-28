@@ -397,12 +397,14 @@ async function runLiveSiteEntryPath() {
   const preserved = await evaluate(cdp, `(() => {
     const raw = localStorage.getItem('psi-zero-day.defense.save.v1');
     const parsed = raw ? JSON.parse(raw) : null;
+    const payload = parsed?.payload ?? null;
     return {
-      activeRun: parsed?.payload?.activeRun ?? 'missing',
-      trainingClears: parsed?.payload?.records?.find(item => item.scenarioId === 'training-ramp-v1')?.clears ?? -1,
+      hasActiveRun: Boolean(payload && Object.prototype.hasOwnProperty.call(payload, 'activeRun')),
+      activeRun: payload?.activeRun,
+      trainingClears: payload?.records?.find(item => item.scenarioId === 'training-ramp-v1')?.clears ?? -1,
     };
   })()`);
-  if (preserved.activeRun !== null || preserved.trainingClears !== 1) {
+  if (!preserved.hasActiveRun || preserved.activeRun !== null || preserved.trainingClears !== 1) {
     throw new Error('LIVE SITE switch did not preserve records while clearing only activeRun: ' + JSON.stringify(preserved));
   }
   await screenshot(cdp, 'entry-02-event-support-select.png');
