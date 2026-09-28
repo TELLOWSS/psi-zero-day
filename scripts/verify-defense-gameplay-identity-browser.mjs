@@ -348,7 +348,7 @@ async function runChoice(choice, viewport) {
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\"combat\"]')?.getAttribute('data-def-core-phase') === 'VERIFY'", 8000);
 
   const verified = await evaluate(cdp, `(() => {
-    const overlay = document.querySelector('[data-def-core-phase="VERIFY"]');
+    const overlay = document.querySelector('.def-core-impact[data-def-core-phase="VERIFY"]');
     const world = document.querySelector('.def-core-world');
     return {
       tick: Number(document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-tick')),
@@ -360,6 +360,8 @@ async function runChoice(choice, viewport) {
       verification: world?.getAttribute('data-def-core-verification') || null,
       distances: [...document.querySelectorAll('.zb-enemy-swift')].map(el => Number(el.getAttribute('data-distance'))),
       marshals: document.querySelectorAll('.def-core-marshal').length,
+      barriers: document.querySelectorAll('.def-core-barrier').length,
+      pedestrianRoutes: document.querySelectorAll('.def-core-ped-route').length,
       paused: document.querySelector('.zb-hud-button')?.getAttribute('aria-pressed') === 'true',
     };
   })()`);
@@ -368,7 +370,9 @@ async function runChoice(choice, viewport) {
     || verified.vehicleControlled !== 'true'
     || verified.pedestrianSeparated !== 'true'
     || verified.choiceCondition !== 'true'
-    || verified.verification !== 'SAFE') {
+    || verified.verification !== 'SAFE'
+    || verified.barriers < 1
+    || verified.pedestrianRoutes < 1) {
     throw new Error(choice + ' VERIFY did not close from field conditions: ' + JSON.stringify(verified));
   }
   if (verified.world !== expectedWorld[choice]) {
