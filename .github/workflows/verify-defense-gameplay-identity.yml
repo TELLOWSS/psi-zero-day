@@ -9,6 +9,7 @@ on:
       - 'src/ui/DefenseGame.tsx'
       - 'content/defense/def-core-01.json'
       - 'tests/def-core-gameplay-identity.test.ts'
+      - 'tests/zero-breach-event-ui.test.tsx'
       - 'tests/g8a-v05-cinematic.test.ts'
       - 'scripts/verify-defense-gameplay-identity-browser.mjs'
       - '.github/workflows/verify-defense-gameplay-identity.yml'
@@ -20,6 +21,7 @@ on:
       - 'src/ui/DefenseGame.tsx'
       - 'content/defense/def-core-01.json'
       - 'tests/def-core-gameplay-identity.test.ts'
+      - 'tests/zero-breach-event-ui.test.tsx'
       - 'tests/g8a-v05-cinematic.test.ts'
       - 'scripts/verify-defense-gameplay-identity-browser.mjs'
       - '.github/workflows/verify-defense-gameplay-identity.yml'
@@ -49,7 +51,7 @@ jobs:
         run: npm ci
 
       - name: CONTROL gameplay identity contracts
-        run: npx vitest run tests/def-core-gameplay-identity.test.ts tests/g8a-v05-cinematic.test.ts
+        run: npx vitest run tests/def-core-gameplay-identity.test.ts tests/zero-breach-event-ui.test.tsx tests/g8a-v05-cinematic.test.ts
 
       - name: Typecheck
         run: npm run typecheck
