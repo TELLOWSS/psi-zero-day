@@ -341,11 +341,12 @@ export function DefenseGame({
   const episodeState = session.getSnapshot?.().state ?? null;
   const e1Availability = defenseEventAvailabilityFromState(e1, episodeState, persistence.document);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(() => requestedScenarioId);
+  const explicitLiveSiteRequest = requestedScenarioId === e1.id;
   const selectedScenarioAllowed = selectedScenarioId === zeroBreachContent.scenario.id
     || selectedScenarioId === remodelDefense.scenario.id
     || selectedScenarioId === dataCenterDefense.scenario.id
     || Boolean(selectedScenarioId && siteDefenseContentForScenario(selectedScenarioId))
-    || (selectedScenarioId === e1.id && e1Availability.unlocked);
+    || (selectedScenarioId === e1.id && (e1Availability.unlocked || explicitLiveSiteRequest));
   const content = state
     ? resolveDefenseContentForRun(state)
     : selectedScenarioAllowed && selectedScenarioId

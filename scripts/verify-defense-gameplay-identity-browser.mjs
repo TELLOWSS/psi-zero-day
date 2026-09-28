@@ -149,6 +149,66 @@ function fnv1a32(value) {
   return 'fnv1a32:' + (hash >>> 0).toString(16).padStart(8, '0');
 }
 
+function qaStaleTrainingSave() {
+  const run = {
+    runId: 'self-qa-stale-training',
+    mode: 'TRAINING',
+    variant: 'STANDARD',
+    scenarioId: 'training-ramp-v1',
+    eventId: null,
+    eventContentVersion: null,
+    status: 'RUNNING',
+    paused: true,
+    speed: 1,
+    tick: 1280,
+    waveId: 3,
+    waveTick: 40,
+    intermissionRemaining: 0,
+    shield: 20,
+    resource: 160,
+    towers: [],
+    enemies: [],
+    spawnedByGroup: [0, 0],
+    nextTowerSequence: 1,
+    nextEnemySequence: 1,
+    supportId: 'COORDINATOR',
+    supportCooldownRemaining: 0,
+    freezeMovementUntilTick: 0,
+    revealAllUntilTick: 0,
+    rangeBonusUntilTick: 0,
+    completedWaves: 2,
+    leakedByEnemy: {},
+  };
+  const payload = {
+    activeRun: run,
+    records: [{
+      scenarioId: 'training-ramp-v1',
+      finishedRuns: 1,
+      clears: 1,
+      bestStars: 2,
+      bestScore: 11800,
+      bestShield: 18,
+      bestCompletedWaves: 10,
+      lastResultRunId: 'qa-training-clear',
+      updatedAt: '2026-09-25T00:00:00.000Z',
+    }],
+    cosmeticIds: [],
+    claimIds: [],
+    settledRunIds: [],
+  };
+  return {
+    namespace: 'defense',
+    schemaVersion: 1,
+    rulesVersion: 'zero-breach-1.0.0',
+    contentVersion: 'prototype-1.0.0',
+    buildVersion: 'self-qa-live-site-entry',
+    revision: 2,
+    savedAt: '2026-09-28T00:00:00.000Z',
+    checksum: fnv1a32(JSON.stringify(payload)),
+    payload,
+  };
+}
+
 function qaDefenseSave(choice) {
   const runId = 'def-gameplay-identity-' + choice.toLowerCase();
   const run = {
@@ -241,6 +301,7 @@ const report = {
   gate: 'DEF-GAMEPLAY-IDENTITY-01',
   source_sha: sourceSha,
   generated_at: new Date().toISOString(),
+  entry_path: null,
   runs: [],
   failures: [],
   final: null,
@@ -308,6 +369,80 @@ function assertInsideViewport(rect, label) {
   if (rect.left < -1 || rect.top < -1 || rect.right > rect.innerWidth + 1 || rect.bottom > rect.innerHeight + 1) {
     throw new Error(label + ' escaped viewport: ' + JSON.stringify(rect));
   }
+}
+
+async function runLiveSiteEntryPath() {
+  await setViewport({ width: 390, height: 844, mobile: true });
+  await navigateHome();
+
+  const stale = qaStaleTrainingSave();
+  await evaluate(cdp, `(() => {
+    localStorage.setItem('psi-zero-day.defense.save.v1', ${JSON.stringify(JSON.stringify(stale))});
+    localStorage.setItem('psi-zero-day.defense.tutorial.v1', 'seen');
+    return true;
+  })()`);
+
+  await clickText(cdp, '대표 시나리오 바로 시작');
+  await waitFor(cdp, "Boolean(document.querySelector('[data-defense-screen=\"requested-scenario-conflict\"]'))");
+
+  const conflictCopy = await evaluate(cdp, "document.querySelector('[data-defense-screen=\"requested-scenario-conflict\"]')?.textContent || ''");
+  if (!conflictCopy.includes('대표 시나리오로 전환할까요?') || !conflictCopy.includes('기존 훈련 이어하기')) {
+    throw new Error('LIVE SITE stale-run conflict gate copy missing');
+  }
+  await screenshot(cdp, 'entry-01-stale-run-conflict.png');
+
+  await clickText(cdp, '대표 시나리오 시작');
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\"support-select\"]')?.getAttribute('data-scenario') === 'event-ramp-reconstruction-v1'");
+
+  const preserved = await evaluate(cdp, `(() => {
+    const raw = localStorage.getItem('psi-zero-day.defense.save.v1');
+    const parsed = raw ? JSON.parse(raw) : null;
+    const payload = parsed?.payload ?? null;
+    return {
+      hasActiveRun: Boolean(payload && Object.prototype.hasOwnProperty.call(payload, 'activeRun')),
+      activeRun: payload?.activeRun,
+      trainingClears: payload?.records?.find(item => item.scenarioId === 'training-ramp-v1')?.clears ?? -1,
+    };
+  })()`);
+  if (!preserved.hasActiveRun || preserved.activeRun !== null || preserved.trainingClears !== 1) {
+    throw new Error('LIVE SITE switch did not preserve records while clearing only activeRun: ' + JSON.stringify(preserved));
+  }
+  await screenshot(cdp, 'entry-02-event-support-select.png');
+
+  const supportClicked = await evaluate(cdp, `(() => {
+    const button = document.querySelector('[data-support="COORDINATOR"]');
+    if (!(button instanceof HTMLButtonElement)) return false;
+    button.click();
+    return true;
+  })()`);
+  if (!supportClicked) throw new Error('LIVE SITE event support button missing');
+
+  await waitFor(cdp, `(() => {
+    const combat = document.querySelector('[data-defense-screen="combat"]');
+    return combat?.getAttribute('data-scenario') === 'event-ramp-reconstruction-v1'
+      && combat?.getAttribute('data-event') === 'event-ramp-reconstruction-v1';
+  })()`);
+
+  const eventLaunch = await evaluate(cdp, `(() => {
+    const combat = document.querySelector('[data-defense-screen="combat"]');
+    return {
+      scenario: combat?.getAttribute('data-scenario') || null,
+      event: combat?.getAttribute('data-event') || null,
+      wave: combat?.getAttribute('data-wave') || null,
+      portrait: window.innerWidth === 390 && window.innerHeight === 844,
+    };
+  })()`);
+  await screenshot(cdp, 'entry-03-event-combat.png');
+
+  return {
+    stale_run_conflict_seen: true,
+    records_preserved: preserved.trainingClears === 1,
+    stale_active_run_cleared: preserved.activeRun === null,
+    support_select_scenario: 'event-ramp-reconstruction-v1',
+    event_launch: eventLaunch,
+    passed: eventLaunch.scenario === 'event-ramp-reconstruction-v1'
+      && eventLaunch.event === 'event-ramp-reconstruction-v1',
+  };
 }
 
 async function runChoice(choice, viewport) {
@@ -439,11 +574,13 @@ try {
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
 
+  report.entry_path = await runLiveSiteEntryPath();
   report.runs.push(await runChoice('A', { width: 1280, height: 720, mobile: false }));
   report.runs.push(await runChoice('B', { width: 1280, height: 720, mobile: false }));
   report.runs.push(await runChoice('C', { width: 390, height: 844, mobile: true }));
 
   report.final = {
+    live_site_entry_verified: report.entry_path?.passed === true,
     abc_replayed: report.runs.map(run => run.choice).join('') === 'ABC',
     all_verified: report.runs.every(run => run.verified.verified === 'true'),
     mobile_c_verified: report.runs.some(run => run.choice === 'C' && run.viewport === '390x844'),
