@@ -149,6 +149,25 @@ describe('ZERO BREACH Step 6 event entry UI', () => {
     await act(async () => root.unmount());
   });
 
+  it('allows the explicit LIVE SITE representative request without bypassing the normal selector lock', async () => {
+    const storage = new MemoryStorage();
+    const state = episodeState(false);
+    const { host, root } = await mount(state, storage, 'event-ramp-reconstruction-v1');
+
+    const prep = host.querySelector('[data-defense-screen="support-select"]');
+    expect(prep?.getAttribute('data-scenario')).toBe('event-ramp-reconstruction-v1');
+    expect(host.querySelector('[data-defense-screen="scenario-select"]')).toBeNull();
+
+    await act(async () => root.unmount());
+
+    const selectorStorage = new MemoryStorage();
+    const mounted = await mount(state, selectorStorage, null);
+    const event = mounted.host.querySelector('[data-scenario="event-ramp-reconstruction-v1"]') as HTMLButtonElement | null;
+    expect(event).toBeInstanceOf(HTMLButtonElement);
+    expect(event?.disabled).toBe(true);
+    await act(async () => mounted.root.unmount());
+  });
+
   it('unlocks E1 from an existing training-clear record plus the real episode fact', async () => {
     const storage = new MemoryStorage();
     seed(storage, clearedTrainingDocument());
