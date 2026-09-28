@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "gate": "DEF-CORE-01",
   "title": "한 걸음",
   "status": "G3_PRODUCTION_LOCKED",
@@ -103,7 +103,9 @@
       "runtime": {
         "activeTicks": 60,
         "swiftSlowFraction": 1,
-        "setbackDistance": 0
+        "setbackDistance": 0,
+        "minHeadwayDistance": 0,
+        "verifyAfterTicks": 8
       }
     },
     {
@@ -114,7 +116,9 @@
       "runtime": {
         "activeTicks": 160,
         "swiftSlowFraction": 0.55,
-        "setbackDistance": 0
+        "setbackDistance": 0,
+        "minHeadwayDistance": 120,
+        "verifyAfterTicks": 10
       }
     },
     {
@@ -125,7 +129,9 @@
       "runtime": {
         "activeTicks": 240,
         "swiftSlowFraction": 0.3,
-        "setbackDistance": 95
+        "setbackDistance": 95,
+        "minHeadwayDistance": 0,
+        "verifyAfterTicks": 10
       }
     }
   ],
@@ -220,5 +226,30 @@
     "rule": "Do not expand new site/runtime systems until this lock is merged to main.",
     "revalidatedAfterLock": true,
     "finalWorkflowConclusion": "PASS"
+  },
+  "verification": {
+    "principle": "risk resolution is confirmed by field conditions, not by HP depletion",
+    "required": [
+      "CONTROL remains deployed as marshal + pedestrian route segregation",
+      "SWIFT vehicle flow is under active operational control",
+      "the selected A/B/C operating condition is observable before the story hook resumes"
+    ],
+    "A": "vehicle holds at the control line before release",
+    "B": "additional marshal operation enforces minimum vehicle headway and sequential passage",
+    "C": "staging position changes and following SWIFT vehicles remain on a reduced-speed safer approach",
+    "hpOrDamageCanCloseGate": false
+  },
+  "relationshipRule": {
+    "emergencyStopAutomaticTrustPenalty": false,
+    "principle": "relationship effects come from explanation, coordination, and follow-up rather than from necessary stop-work itself",
+    "implementationScope": "contract locked here; relationship-state propagation remains a later dedicated gate"
+  },
+  "gameplayIdentityLock": {
+    "gate": "DEF-GAMEPLAY-IDENTITY-01",
+    "scope": "representative vehicle-pedestrian CONTROL cycle only",
+    "status": "IMPLEMENTED_PENDING_AUTOMATED_AND_BROWSER_QA",
+    "preservesBaseDefenseEngine": true,
+    "preservesWaveBalance": true,
+    "expandsOtherTowerFamilies": false
   }
 }
