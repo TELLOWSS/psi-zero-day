@@ -136,12 +136,14 @@ def build() -> dict:
         "transparent": True,
         "alphaExtrema": list(alpha_extrema),
     }
-    level["promotionEvidence"] = {
+    existing_evidence = dict(level.get("promotionEvidence", {}))
+    existing_evidence.update({
         "staticRasterBuild": "PASS",
-        "browserActualPlay": "PENDING_BRANCH_QA",
-        "mobile390x844": "PENDING_BRANCH_QA",
-        "commercialVisualReview": "PENDING_BRANCH_QA",
-    }
+        "browserActualPlay": existing_evidence.get("browserActualPlay", "PENDING_BRANCH_QA"),
+        "mobile390x844": existing_evidence.get("mobile390x844", "PENDING_BRANCH_QA"),
+        "commercialVisualReview": existing_evidence.get("commercialVisualReview", "PENDING_BRANCH_QA"),
+    })
+    level["promotionEvidence"] = existing_evidence
 
     MANIFEST_PATH.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
