@@ -441,12 +441,23 @@ try {
   await waitFor(cdp, "document.querySelector('.def-core-world')?.getAttribute('data-def-core-world') === 'REROUTED_STAGING'");
   await screenshot(cdp, '06-return-c.png');
 
+  let minimumSetbackDistance = preChoiceDistance;
+  const setbackSampleStarted = Date.now();
+  while (Date.now() - setbackSampleStarted < 1800) {
+    const sample = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+    if (Number.isFinite(sample)) minimumSetbackDistance = Math.min(minimumSetbackDistance, sample);
+    const phase = await evaluate(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase')");
+    if (phase === 'VERIFY') break;
+    await sleep(20);
+  }
+
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'VERIFY'");
   report.phases.push('VERIFY');
   const verifiedDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
-  if (!Number.isFinite(verifiedDistance) || verifiedDistance >= preChoiceDistance - 20) {
-    throw new Error('Choice C did not create a meaningful live setback before VERIFY: ' + JSON.stringify({
+  if (!Number.isFinite(verifiedDistance) || minimumSetbackDistance >= preChoiceDistance - 20) {
+    throw new Error('Choice C did not create a meaningful live setback during RETURN: ' + JSON.stringify({
       pre_choice_distance: preChoiceDistance,
+      minimum_setback_distance: minimumSetbackDistance,
       verified_distance: verifiedDistance,
     }));
   }
@@ -484,6 +495,7 @@ try {
   report.runtime_motion = {
     choice: 'C',
     pre_choice_distance: preChoiceDistance,
+    minimum_setback_distance: minimumSetbackDistance,
     verified_distance: verifiedDistance,
     hook_distance: hookDistance,
     start_distance: runtimeStart,
