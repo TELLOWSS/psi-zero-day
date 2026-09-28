@@ -25,8 +25,8 @@
       "runtimeUri": "assets/defense/towers/control/control-l1-final.webp",
       "format": "webp",
       "runtime": {
-        "width": 104,
-        "height": 82
+        "width": 84,
+        "height": 66
       },
       "visualRole": "BASE_TRAFFIC_CONTROL",
       "gameplayRead": {
@@ -66,7 +66,7 @@
         },
         "sourceScale": {
           "marshal": 0.453947,
-          "barrier": 1.0
+          "barrier": 1
         },
         "nativeUpscaleUsed": false
       },
@@ -85,7 +85,18 @@
         "staticRasterBuild": "PASS",
         "browserActualPlay": "PENDING_BRANCH_QA",
         "mobile390x844": "PENDING_BRANCH_QA",
-        "commercialVisualReview": "PENDING_BRANCH_QA"
+        "commercialVisualReview": "PENDING_BRANCH_QA",
+        "desktopFootprintQa": {
+          "previous": {
+            "width": 156,
+            "height": 132
+          },
+          "requiredMax": {
+            "width": 130,
+            "height": 120
+          },
+          "adjustment": "runtime logical display size reduced from 104x82 to 84x66; source raster remains 583x512"
+        }
       }
     },
     {
