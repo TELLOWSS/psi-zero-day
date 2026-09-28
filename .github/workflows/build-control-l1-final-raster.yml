@@ -1,0 +1,54 @@
+name: Build CONTROL L1 Final Raster
+
+on:
+  push:
+    branches:
+      - sol/phase-d-control-l1-final-raster-20260928
+    paths:
+      - 'scripts/build-control-l1-raster.py'
+      - 'content/defense/control-tower-production-v1.json'
+      - 'public/assets/episode01/characters/choi-minseok-map.webp'
+      - 'public/assets/episode01/scene-elements/access-barrier.webp'
+      - '.github/workflows/build-control-l1-final-raster.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: control-l1-final-raster-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-control-l1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
+      - name: Build dedicated CONTROL L1 WebP
+        run: python scripts/build-control-l1-raster.py
+
+      - name: Verify raster integrity
+        run: python scripts/build-control-l1-raster.py --check
+
+      - name: Commit generated raster and manifest evidence
+        shell: bash
+        run: |
+          if git diff --quiet -- public/assets/defense/towers/control/control-l1-final.webp content/defense/control-tower-production-v1.json; then
+            echo "CONTROL:L1 raster already deterministic and current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/defense/towers/control/control-l1-final.webp content/defense/control-tower-production-v1.json
+          git commit -m "art(control): materialize CONTROL L1 final raster"
+          git push
