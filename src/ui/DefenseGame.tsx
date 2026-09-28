@@ -501,6 +501,35 @@ export function DefenseGame({
     setNotice('');
   };
 
+  const requestedResumeConflict = !state
+    && Boolean(requestedScenarioId)
+    && persistence.entry.kind === 'resume'
+    && persistence.entry.run.scenarioId !== requestedScenarioId
+    && persistence.entry.run.eventId !== requestedScenarioId;
+
+  if (requestedResumeConflict && persistence.entry.kind === 'resume') {
+    return <main className="zb-shell zb-save-gate" data-defense-screen="requested-scenario-conflict">
+      <section>
+        <small>ZERO BREACH · LIVE SITE</small>
+        <h1>대표 시나리오로 전환할까요?</h1>
+        <p>중단한 일반 훈련이 남아 있습니다. 대표 시나리오를 시작하면 현재 중단 지점만 정리되고, 기존 클리어 기록과 보상 기록은 유지됩니다.</p>
+        <dl className="zb-save-version">
+          <div><dt>현재 저장</dt><dd>WAVE {persistence.entry.run.waveId} / 10</dd></div>
+          <div><dt>진입 대상</dt><dd>DEF-CORE-01</dd></div>
+        </dl>
+        <div className="zb-save-actions">
+          <button
+            type="button"
+            className="is-primary"
+            onClick={() => { void persistence.discardSavedRun(); }}
+          >대표 시나리오 시작</button>
+          <button type="button" onClick={persistence.resumeSavedRun}>기존 훈련 이어하기</button>
+          <button type="button" onClick={() => { void persistence.exitToMain(); }}>본편 허브로</button>
+        </div>
+      </section>
+    </main>;
+  }
+
   if (!state && persistence.entry.kind !== 'select') {
     return <DefensePersistenceGate controller={persistence} />;
   }

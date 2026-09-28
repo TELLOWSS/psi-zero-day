@@ -4,12 +4,13 @@ import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { EpisodeSession } from '../src/app/episode-session';
 import {
-  encodeDefenseSave, emptyDefenseSaveDocument, inspectDefenseSave,
+  encodeDefenseSave, emptyDefenseSaveDocument, inspectDefenseSave, withDefenseActiveRun,
 } from '../src/app/defense-save';
 import { zeroBreachContent } from '../src/content/defense';
 import type { DefenseSaveDocument } from '../src/domain/defense-save';
 import type { GameState } from '../src/domain/state';
 import type { StoragePort } from '../src/platform/storage';
+import { createDefenseRun } from '../src/engine/defense';
 import { DefenseGame } from '../src/ui/DefenseGame';
 
 class MemoryStorage implements StoragePort {
@@ -68,7 +69,7 @@ async function settle(rounds = 8) {
   });
 }
 
-async function mount(state: GameState, storage: MemoryStorage) {
+async function mount(state: GameState, storage: MemoryStorage, requestedScenarioId: string | null = null) {
   const host = document.createElement('div');
   document.body.append(host);
   const root = createRoot(host);
@@ -80,7 +81,7 @@ async function mount(state: GameState, storage: MemoryStorage) {
         session={session}
         onExit={onExit}
         storage={storage}
-        requestedScenarioId={null}
+        requestedScenarioId={requestedScenarioId}
       />,
     );
     for (let index = 0; index < 10; index += 1) await Promise.resolve();
@@ -179,6 +180,39 @@ describe('ZERO BREACH Step 6 event entry UI', () => {
     expect(inspected.document.activeRun.variant).toBe('EVENT_MODIFIED');
     expect(inspected.document.activeRun.scenarioId).toBe('event-ramp-reconstruction-v1');
     expect(inspected.document.activeRun.eventContentVersion).toBe('event-ramp-reconstruction-1.0.0');
+
+    await act(async () => root.unmount());
+  });
+
+  it('routes an explicit LIVE SITE E1 request around a mismatched saved training run', async () => {
+    const storage = new MemoryStorage();
+    const staleTrainingRun = createDefenseRun(zeroBreachContent, 'COORDINATOR', 'stale-training-run');
+    seed(storage, withDefenseActiveRun(clearedTrainingDocument(), staleTrainingRun));
+    const state = episodeState(true);
+    const { host, root } = await mount(state, storage, 'event-ramp-reconstruction-v1');
+
+    const conflict = host.querySelector('[data-defense-screen="requested-scenario-conflict"]');
+    expect(conflict).not.toBeNull();
+    expect(conflict?.textContent).toContain('대표 시나리오로 전환할까요?');
+    expect(conflict?.textContent).toContain('기존 훈련 이어하기');
+
+    await click(buttonContaining(host, '대표 시나리오 시작'));
+    await settle(12);
+
+    const prep = host.querySelector('[data-defense-screen="support-select"]');
+    expect(prep?.getAttribute('data-scenario')).toBe('event-ramp-reconstruction-v1');
+    expect(host.querySelector('[data-defense-screen="save-resume"]')).toBeNull();
+
+    const afterDiscard = await inspectDefenseSave(storage, zeroBreachContent);
+    expect(afterDiscard.kind).toBe('ready');
+    if (afterDiscard.kind !== 'ready') throw new Error('save missing after requested-scenario switch');
+    expect(afterDiscard.document.activeRun).toBeNull();
+    expect(afterDiscard.document.records[0]?.clears).toBe(1);
+
+    await click(host.querySelector('[data-support="COORDINATOR"]')!);
+    const combat = host.querySelector('[data-defense-screen="combat"]');
+    expect(combat?.getAttribute('data-scenario')).toBe('event-ramp-reconstruction-v1');
+    expect(combat?.getAttribute('data-event')).toBe('event-ramp-reconstruction-v1');
 
     await act(async () => root.unmount());
   });

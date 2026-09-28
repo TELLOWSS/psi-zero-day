@@ -247,7 +247,7 @@
   "gameplayIdentityLock": {
     "gate": "DEF-GAMEPLAY-IDENTITY-01",
     "scope": "representative vehicle-pedestrian CONTROL cycle only",
-    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_TARGET_NOT_EXERCISED",
+    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_REPLAY_2_ENTRY_BLOCKED_FIXED",
     "preservesBaseDefenseEngine": true,
     "preservesWaveBalance": true,
     "expandsOtherTowerFamilies": false,
@@ -305,7 +305,7 @@
         }
       }
     },
-    "physicalDeviceGate": "REPLAY_REVIEWED_TARGET_NOT_EXERCISED",
+    "physicalDeviceGate": "REPLAY_2_REVIEWED_ENTRY_BLOCKED_FIXED_PENDING_NEW_REPLAY",
     "physicalDeviceEvidence": {
       "reviewedAt": "2026-09-28",
       "environment": "Samsung Browser · portrait",
@@ -324,7 +324,19 @@
         "HOOK"
       ],
       "conclusion": "This replay verifies mobile runtime continuity, not DEF-GAMEPLAY-IDENTITY-01 A/B/C physical acceptance.",
-      "followup": "Use the actionable LIVE SITE · DEF-CORE-01 card to launch event-ramp-reconstruction-v1 for the next replay."
+      "followup": "Use the actionable LIVE SITE · DEF-CORE-01 card to launch event-ramp-reconstruction-v1 for the next replay.",
+      "replay2": {
+        "reviewedAt": "2026-09-28",
+        "file": "Screen_Recording_20260928_180707_Chrome.mp4",
+        "environment": "Chrome · Android portrait",
+        "recordingPixels": "1080x2340",
+        "durationSeconds": 199.5,
+        "observed": "LIVE SITE CTA visible; stale training save resume gate appeared; standard Field Defense Wave 1→10 completed",
+        "targetScenarioShown": false,
+        "rootCause": "explicit requestedScenarioId was masked by an existing mismatched activeRun persistence gate",
+        "fix": "explicit LIVE SITE requests now get a requested-scenario conflict gate; choosing the representative scenario discards only the stale activeRun while preserving records",
+        "physicalAcceptance": "PENDING_NEW_REPLAY"
+      }
     }
   }
 }

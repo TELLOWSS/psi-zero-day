@@ -431,12 +431,37 @@ try {
   if (!decisionCopy.includes('차를 세우면 뒤에 두 대가 밀립니다.')) throw new Error('Lee Jaehoon schedule-pressure line missing');
   await screenshot(cdp, '05-decision.png');
 
+  const preChoiceDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  if (!Number.isFinite(preChoiceDistance)) throw new Error('DEF-CORE pre-choice SWIFT distance telemetry missing');
+
   await clickText(cdp, '대기 위치를 바꾸죠');
   report.chosen = 'C';
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'RETURN'");
   report.phases.push('RETURN');
   await waitFor(cdp, "document.querySelector('.def-core-world')?.getAttribute('data-def-core-world') === 'REROUTED_STAGING'");
   await screenshot(cdp, '06-return-c.png');
+
+  let minimumSetbackDistance = preChoiceDistance;
+  const setbackSampleStarted = Date.now();
+  while (Date.now() - setbackSampleStarted < 1800) {
+    const sample = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+    if (Number.isFinite(sample)) minimumSetbackDistance = Math.min(minimumSetbackDistance, sample);
+    const phase = await evaluate(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase')");
+    if (phase === 'VERIFY') break;
+    await sleep(20);
+  }
+
+  await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'VERIFY'");
+  report.phases.push('VERIFY');
+  const verifiedDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  if (!Number.isFinite(verifiedDistance) || minimumSetbackDistance >= preChoiceDistance - 20) {
+    throw new Error('Choice C did not create a meaningful live setback during RETURN: ' + JSON.stringify({
+      pre_choice_distance: preChoiceDistance,
+      minimum_setback_distance: minimumSetbackDistance,
+      verified_distance: verifiedDistance,
+    }));
+  }
+  await screenshot(cdp, '06b-verify-c.png');
 
   await waitFor(cdp, "document.querySelector('[data-defense-screen=\\\"combat\\\"]')?.getAttribute('data-def-core-phase') === 'HOOK'");
   report.phases.push('HOOK');
@@ -446,11 +471,12 @@ try {
   if (hookActions !== 3) throw new Error('Story hook must expose three follow-up choices');
   await screenshot(cdp, '07-hook.png');
 
-  // While HOOK is paused, capture the vehicle's pre-release location.
-  // Choice C must create a real setback once the player resumes the world.
-  const preReleaseDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
-  if (!Number.isFinite(preReleaseDistance)) {
-    throw new Error('DEF-CORE pre-release SWIFT distance telemetry missing');
+  // HOOK is paused after the RETURN/VERIFY setback has already been established.
+  // DONE resumes the same rerouted vehicle on the reduced-speed safer approach; it must
+  // move forward from the verified staging position, not receive a second setback.
+  const hookDistance = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
+  if (!Number.isFinite(hookDistance)) {
+    throw new Error('DEF-CORE HOOK SWIFT distance telemetry missing');
   }
 
   await clickText(cdp, '기록하기');
@@ -460,7 +486,7 @@ try {
 
   await waitFor(
     cdp,
-    `Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) < ${Math.max(0, preReleaseDistance - 20)}`,
+    `Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance')) > ${hookDistance + 0.5}`,
     1800,
   );
   const runtimeStart = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
@@ -468,7 +494,10 @@ try {
   const runtimeEnd = await evaluate(cdp, "Number(document.querySelector('.zb-enemy-swift')?.getAttribute('data-distance'))");
   report.runtime_motion = {
     choice: 'C',
-    pre_release_distance: preReleaseDistance,
+    pre_choice_distance: preChoiceDistance,
+    minimum_setback_distance: minimumSetbackDistance,
+    verified_distance: verifiedDistance,
+    hook_distance: hookDistance,
     start_distance: runtimeStart,
     end_distance: runtimeEnd,
     delta: Number((runtimeEnd - runtimeStart).toFixed(3)),
@@ -476,8 +505,8 @@ try {
   if (!Number.isFinite(runtimeStart) || !Number.isFinite(runtimeEnd)) {
     throw new Error('DEF-CORE runtime SWIFT distance telemetry missing');
   }
-  if (runtimeStart >= preReleaseDistance - 20) {
-    throw new Error('Choice C did not create a meaningful live setback: ' + JSON.stringify(report.runtime_motion));
+  if (runtimeStart <= hookDistance) {
+    throw new Error('Choice C did not resume from the verified staging position: ' + JSON.stringify(report.runtime_motion));
   }
   if (runtimeEnd <= runtimeStart || runtimeEnd - runtimeStart > 28) {
     throw new Error('Choice C safer-approach movement did not remain live and reduced-speed: ' + JSON.stringify(report.runtime_motion));
