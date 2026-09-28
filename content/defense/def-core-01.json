@@ -250,6 +250,10 @@
     "status": "IMPLEMENTED_PENDING_AUTOMATED_AND_BROWSER_QA",
     "preservesBaseDefenseEngine": true,
     "preservesWaveBalance": true,
-    "expandsOtherTowerFamilies": false
+    "expandsOtherTowerFamilies": false,
+    "baseBranch": "main",
+    "requiredWorkflow": ".github/workflows/verify-defense-gameplay-identity.yml",
+    "automatedGate": "PENDING_PR_SYNCHRONIZE_RUN",
+    "browserReplay": "A_DESKTOP + B_DESKTOP + C_MOBILE"
   }
 }
