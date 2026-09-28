@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import layout from '../content/episode01/main-title-layout.json';
 import production from '../content/episode01/character-art-production.json';
 import replacement from '../content/episode01/character-replacement-plan.json';
 import batchA from '../content/episode01/production-art-batch-a.json';
 
 const titleCast = ['lim_junho', 'player', 'lee_jaehoon', 'seo_jeongmin'] as const;
+const gameHubSource = readFileSync('src/ui/GameHub.tsx', 'utf8');
+const gameHubCss = readFileSync('src/ui/game-hub.css', 'utf8');
 
 describe('main title / loading / character production alignment', () => {
   it('uses one canonical four-character cast across title, loading and replacement plan', () => {
@@ -70,5 +73,13 @@ describe('main title / loading / character production alignment', () => {
     expect(layout.runtime_rules).toContain('all menu controls must remain clickable DOM elements');
     expect(layout.runtime_rules).toContain('generated concept images are art direction only and must not bake functional buttons into runtime');
     expect(layout.composition.cast_mode).toBe('full_body_live_assets');
+  });
+
+  it('makes the LIVE SITE DEF-CORE card a real representative-scenario entry on phone', () => {
+    expect(gameHubSource).toContain('data-title-live-entry="DEF-CORE-01"');
+    expect(gameHubSource).toContain('onClick={() => onDefense(defenseEvents[0]?.id ?? null)}');
+    expect(gameHubSource).toContain('대표 시나리오 바로 시작');
+    expect(gameHubCss).toContain('.commercial-title-field-status.is-live-entry');
+    expect(gameHubCss).toContain('.commercial-title-field-status-cta');
   });
 });

@@ -364,7 +364,16 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       </div>
     </section>
 
-    <aside className="commercial-title-field-status" data-title-role="live-briefing" aria-label="현재 현장 디펜스">
+    {onDefense ? <button
+      className="commercial-title-field-status is-live-entry"
+      data-title-role="live-briefing"
+      data-title-live-entry="DEF-CORE-01"
+      type="button"
+      aria-label="대표 시나리오 서측 Gate 차량-보행 간섭 시작"
+      onMouseEnter={() => { void loadDefenseGame(); }}
+      onFocus={() => { void loadDefenseGame(); }}
+      onClick={() => onDefense(defenseEvents[0]?.id ?? null)}
+    >
       <div className="commercial-title-field-status-head">
         <span>LIVE SITE</span><b>DEF-CORE-01</b>
       </div>
@@ -375,8 +384,9 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
         <span><i>02</i><b>CONTROL</b><small>유도 · 통로 분리</small></span>
         <span><i>03</i><b>PSI</b><small>약한 신호 읽기</small></span>
       </div>
+      <span className="commercial-title-field-status-cta">대표 시나리오 바로 시작 <b aria-hidden="true">›</b></span>
       <p>현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.</p>
-    </aside>
+    </button> : null}
 
     <aside className="commercial-title-message">
       <p>{t('ui.title.brand_copy')}</p>
