@@ -13,6 +13,7 @@ type OneStepPhase =
   | 'CINEMATIC'
   | 'DECISION'
   | 'RETURN'
+  | 'VERIFY'
   | 'HOOK'
   | 'DONE';
 
@@ -51,6 +52,8 @@ interface OneStepContract {
       readonly activeTicks: number;
       readonly swiftSlowFraction: number;
       readonly setbackDistance: number;
+      readonly minHeadwayDistance: number;
+      readonly verifyAfterTicks: number;
     };
   }[];
   readonly hook: {
@@ -140,6 +143,14 @@ export function applyDefCoreOneStepRuntime(
 
   const previousById = new Map(previous.enemies.map(enemy => [enemy.id, enemy]));
   const sourceId = `def-core-01:${choice}`;
+  const swiftByDistance = advanced.enemies
+    .filter(enemy => enemy.enemyId === contract.scope.riskId)
+    .slice()
+    .sort((a, b) => b.distance - a.distance);
+  const swiftAheadById = new Map<string, (typeof swiftByDistance)[number]>();
+  for (let index = 1; index < swiftByDistance.length; index += 1) {
+    swiftAheadById.set(swiftByDistance[index]!.id, swiftByDistance[index - 1]!);
+  }
   let touched = false;
 
   const enemies = advanced.enemies.map(enemy => {
@@ -164,11 +175,22 @@ export function applyDefCoreOneStepRuntime(
       distance = Math.max(0, distance - runtime.setbackDistance);
     }
 
+    // B is not just a generic slow debuff. A trailing vehicle is held when it would
+    // violate the minimum operating headway, so vehicles are released sequentially.
+    let appliedSlowFraction = runtime.swiftSlowFraction;
+    if (choice === 'B') {
+      const ahead = swiftAheadById.get(enemy.id);
+      if (ahead && ahead.distance - distance < runtime.minHeadwayDistance) {
+        distance = origin;
+        appliedSlowFraction = 1;
+      }
+    }
+
     const slowEffects = [
       ...enemy.slowEffects.filter(effect => effect.sourceId !== sourceId && effect.endTick > advanced.tick),
       {
         sourceId,
-        fraction: runtime.swiftSlowFraction,
+        fraction: appliedSlowFraction,
         startTick: advanced.tick,
         endTick,
       },
@@ -181,6 +203,103 @@ export function applyDefCoreOneStepRuntime(
   return touched ? { ...advanced, enemies } : advanced;
 }
 
+export interface DefCoreOneStepVerification {
+  readonly safe: boolean;
+  readonly elapsedTicks: number;
+  readonly vehicleControlled: boolean;
+  readonly pedestrianSeparated: boolean;
+  readonly choiceConditionMet: boolean;
+  readonly summary: string;
+}
+
+/**
+ * DEF-CORE-01 is resolved by observable operating conditions, never by enemy HP.
+ * The base engine can still use HP/damage for its generic defense math, but this
+ * event gate only closes when CONTROL is active and the choice-specific field
+ * condition has actually been established.
+ */
+export function evaluateDefCoreOneStepVerification(
+  state: DefenseRunState,
+  choice: OneStepChoice | null,
+  choiceTick: number | null,
+): DefCoreOneStepVerification {
+  if (
+    !choice
+    || choiceTick === null
+    || state.scenarioId !== contract.scope.scenarioId
+    || state.waveId !== contract.scope.representativeWave
+  ) {
+    return {
+      safe: false,
+      elapsedTicks: 0,
+      vehicleControlled: false,
+      pedestrianSeparated: false,
+      choiceConditionMet: false,
+      summary: 'CONTROL 조건 확인 전',
+    };
+  }
+
+  const selected = contract.choices.find(item => item.id === choice);
+  if (!selected) {
+    return {
+      safe: false,
+      elapsedTicks: 0,
+      vehicleControlled: false,
+      pedestrianSeparated: false,
+      choiceConditionMet: false,
+      summary: '선택 조건을 찾을 수 없음',
+    };
+  }
+
+  const sourceId = `def-core-01:${choice}`;
+  const elapsedTicks = Math.max(0, state.tick - choiceTick);
+  const swift = state.enemies
+    .filter(enemy => enemy.enemyId === contract.scope.riskId)
+    .slice()
+    .sort((a, b) => b.distance - a.distance);
+  const effectFor = (enemy: (typeof swift)[number]) => enemy.slowEffects.find(
+    effect => effect.sourceId === sourceId && effect.startTick <= state.tick && state.tick < effect.endTick,
+  );
+
+  const vehicleControlled = swift.length > 0 && swift.every(enemy => Boolean(effectFor(enemy)));
+  // All three choices retain the already-deployed marshal + pedestrian segregation.
+  // The difference is how vehicle flow is operated after that common safe baseline.
+  const pedestrianSeparated = true;
+
+  let choiceConditionMet = false;
+  if (choice === 'A') {
+    choiceConditionMet = swift.length > 0 && swift.every(enemy => (effectFor(enemy)?.fraction ?? 0) >= 0.999);
+  } else if (choice === 'B') {
+    choiceConditionMet = swift.every((enemy, index) => {
+      if (index === 0) return Boolean(effectFor(enemy));
+      const ahead = swift[index - 1]!;
+      const gapSafe = ahead.distance - enemy.distance >= selected.runtime.minHeadwayDistance;
+      const heldForHeadway = (effectFor(enemy)?.fraction ?? 0) >= 0.999;
+      return gapSafe || heldForHeadway;
+    });
+  } else if (choice === 'C') {
+    choiceConditionMet = swift.length > 0 && swift.every(
+      enemy => (effectFor(enemy)?.fraction ?? 0) >= selected.runtime.swiftSlowFraction,
+    );
+  }
+
+  const safe = elapsedTicks >= selected.runtime.verifyAfterTicks
+    && vehicleControlled
+    && pedestrianSeparated
+    && choiceConditionMet;
+
+  return {
+    safe,
+    elapsedTicks,
+    vehicleControlled,
+    pedestrianSeparated,
+    choiceConditionMet,
+    summary: safe
+      ? '차량 통제 · 보행동선 분리 · 선택별 운영조건 확인'
+      : '현장 조건 확인 중',
+  };
+}
+
 export interface DefCoreOneStepController {
   readonly eligible: boolean;
   readonly active: boolean;
@@ -190,6 +309,7 @@ export interface DefCoreOneStepController {
   readonly choiceTick: number | null;
   readonly followup: OneStepFollowup | null;
   readonly choiceResult: OneStepContract['choices'][number] | null;
+  readonly verification: DefCoreOneStepVerification;
   readonly focusSignal: () => void;
   readonly applyControl: () => void;
   readonly choose: (choice: OneStepChoice) => void;
@@ -280,16 +400,36 @@ export function useDefCoreOneStep({
     return () => window.clearTimeout(timer);
   }, [muted, phase, playCue, shotIndex]);
 
-  useEffect(() => {
-    if (phase !== 'RETURN') return;
-    const timer = window.setTimeout(() => setPhase('HOOK'), 1300);
-    return () => window.clearTimeout(timer);
-  }, [phase]);
-
   const choiceResult = useMemo(
     () => contract.choices.find(item => item.id === choice) ?? null,
     [choice],
   );
+  const verification = useMemo(
+    () => state
+      ? evaluateDefCoreOneStepVerification(state, choice, choiceTick)
+      : {
+        safe: false,
+        elapsedTicks: 0,
+        vehicleControlled: false,
+        pedestrianSeparated: false,
+        choiceConditionMet: false,
+        summary: 'CONTROL 조건 확인 전',
+      },
+    [choice, choiceTick, state],
+  );
+
+  useEffect(() => {
+    if (phase !== 'RETURN' || !verification.safe) return;
+    playCue('area_resolve');
+    setPhase('VERIFY');
+  }, [phase, playCue, verification.safe]);
+
+  useEffect(() => {
+    if (phase !== 'VERIFY') return;
+    onPause(true);
+    const timer = window.setTimeout(() => setPhase('HOOK'), 1100);
+    return () => window.clearTimeout(timer);
+  }, [onPause, phase]);
 
   return {
     eligible,
@@ -300,6 +440,7 @@ export function useDefCoreOneStep({
     choiceTick,
     followup,
     choiceResult,
+    verification,
     focusSignal: () => {
       if (phase !== 'SIGNAL') return;
       // First explicit DEF-CORE user gesture unlocks browser audio.
@@ -319,6 +460,7 @@ export function useDefCoreOneStep({
       setChoiceTick(state?.tick ?? null);
       playCue('select');
       setPhase('RETURN');
+      onPause(false);
     },
     finishHook: selected => {
       if (phase !== 'HOOK') return;
@@ -337,7 +479,7 @@ export function DefCoreOneStepBoardOverlay({
   readonly state: DefenseRunState;
   readonly controller: DefCoreOneStepController;
 }) {
-  const showIntervention = ['IMPACT','CINEMATIC','DECISION','RETURN','HOOK','DONE'].includes(controller.phase);
+  const showIntervention = ['IMPACT','CINEMATIC','DECISION','RETURN','VERIFY','HOOK','DONE'].includes(controller.phase);
   if (!controller.eligible || (!showIntervention && !controller.choice)) return null;
 
   const swift = state.enemies.find(enemy => enemy.enemyId === 'SWIFT');
@@ -348,6 +490,7 @@ export function DefCoreOneStepBoardOverlay({
     className="def-core-world"
     data-def-core-world={worldResult ?? 'CONTROL_ACTIVE'}
     data-def-core-runtime={controller.choice ?? 'PENDING'}
+    data-def-core-verification={controller.verification.safe ? 'SAFE' : 'PENDING'}
     aria-hidden="true"
   >
     <circle cx={swiftPos.x} cy={swiftPos.y} r={worldResult ? 38 : 58} className="def-core-risk-zone" />
@@ -444,14 +587,22 @@ export function DefCoreOneStepOverlay({
     </div>
   </section>;
 
-  if (controller.phase === 'IMPACT' || controller.phase === 'RETURN') return <section
+  if (controller.phase === 'IMPACT' || controller.phase === 'RETURN' || controller.phase === 'VERIFY') return <section
     className={`def-core-overlay def-core-impact is-${controller.phase.toLowerCase()}`}
     role="status"
     data-def-core-phase={controller.phase}
+    data-def-core-verified={controller.verification.safe ? 'true' : 'false'}
+    data-def-core-vehicle-controlled={controller.verification.vehicleControlled ? 'true' : 'false'}
+    data-def-core-pedestrian-separated={controller.verification.pedestrianSeparated ? 'true' : 'false'}
+    data-def-core-choice-condition={controller.verification.choiceConditionMet ? 'true' : 'false'}
   >
     <div>
-      <small>{controller.phase === 'IMPACT' ? 'CONTROL INTERVENTION' : 'RETURN TO DEFENSE'}</small>
-      <strong>{controller.phase === 'IMPACT' ? '차량 감속 · 유도원 이동 · 통로 분리' : '선택한 조치가 현장에 남았습니다.'}</strong>
+      <small>{controller.phase === 'IMPACT' ? 'CONTROL INTERVENTION' : controller.phase === 'VERIFY' ? 'VERIFY · FIELD SAFE' : 'RETURN TO DEFENSE · VERIFYING'}</small>
+      <strong>{controller.phase === 'IMPACT'
+        ? '차량 감속 · 유도원 이동 · 통로 분리'
+        : controller.phase === 'VERIFY'
+          ? controller.verification.summary
+          : '선택한 조치를 실행하고 실제 현장 조건을 확인합니다.'}</strong>
       {controller.choiceResult ? <span>{controller.choiceResult.label}</span> : null}
     </div>
   </section>;
