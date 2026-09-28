@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "gate": "DEF-CORE-01",
   "title": "한 걸음",
   "status": "G3_PRODUCTION_LOCKED",
@@ -103,7 +103,9 @@
       "runtime": {
         "activeTicks": 60,
         "swiftSlowFraction": 1,
-        "setbackDistance": 0
+        "setbackDistance": 0,
+        "minHeadwayDistance": 0,
+        "verifyAfterTicks": 8
       }
     },
     {
@@ -114,7 +116,9 @@
       "runtime": {
         "activeTicks": 160,
         "swiftSlowFraction": 0.55,
-        "setbackDistance": 0
+        "setbackDistance": 0,
+        "minHeadwayDistance": 120,
+        "verifyAfterTicks": 10
       }
     },
     {
@@ -125,7 +129,9 @@
       "runtime": {
         "activeTicks": 240,
         "swiftSlowFraction": 0.3,
-        "setbackDistance": 95
+        "setbackDistance": 95,
+        "minHeadwayDistance": 0,
+        "verifyAfterTicks": 10
       }
     }
   ],
@@ -220,5 +226,85 @@
     "rule": "Do not expand new site/runtime systems until this lock is merged to main.",
     "revalidatedAfterLock": true,
     "finalWorkflowConclusion": "PASS"
+  },
+  "verification": {
+    "principle": "risk resolution is confirmed by field conditions, not by HP depletion",
+    "required": [
+      "CONTROL remains deployed as marshal + pedestrian route segregation",
+      "SWIFT vehicle flow is under active operational control",
+      "the selected A/B/C operating condition is observable before the story hook resumes"
+    ],
+    "A": "vehicle holds at the control line before release",
+    "B": "additional marshal operation enforces minimum vehicle headway and sequential passage",
+    "C": "staging position changes and following SWIFT vehicles remain on a reduced-speed safer approach",
+    "hpOrDamageCanCloseGate": false
+  },
+  "relationshipRule": {
+    "emergencyStopAutomaticTrustPenalty": false,
+    "principle": "relationship effects come from explanation, coordination, and follow-up rather than from necessary stop-work itself",
+    "implementationScope": "contract locked here; relationship-state propagation remains a later dedicated gate"
+  },
+  "gameplayIdentityLock": {
+    "gate": "DEF-GAMEPLAY-IDENTITY-01",
+    "scope": "representative vehicle-pedestrian CONTROL cycle only",
+    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_DEVICE_PENDING",
+    "preservesBaseDefenseEngine": true,
+    "preservesWaveBalance": true,
+    "expandsOtherTowerFamilies": false,
+    "baseBranch": "main",
+    "requiredWorkflow": ".github/workflows/verify-defense-gameplay-identity.yml",
+    "automatedGate": "PASS",
+    "browserReplay": "A_DESKTOP + B_DESKTOP + C_MOBILE",
+    "implementationEvidence": {
+      "workflowRunId": 36395290278,
+      "verifiedHeadSha": "dbba46753f112c814ece580b6f295d6a56381bbe",
+      "artifactId": 10957103998,
+      "artifactDigest": "sha256:c3636873a84b918444d88aed39f536b1ff07d6f700c1c15ffda9d50d12d4b3c9",
+      "vitest": "9/9 PASS",
+      "typecheck": "PASS",
+      "build": "PASS",
+      "browserReplay": {
+        "A": {
+          "viewport": "1280x720",
+          "before": [
+            100,
+            20
+          ],
+          "verified": [
+            100,
+            20
+          ],
+          "world": "HOLD_LINE",
+          "fieldSafe": true
+        },
+        "B": {
+          "viewport": "1280x720",
+          "before": [
+            100,
+            20
+          ],
+          "verified": [
+            122.5,
+            20
+          ],
+          "world": "REINFORCED_CONTROL",
+          "fieldSafe": true
+        },
+        "C": {
+          "viewport": "390x844",
+          "before": [
+            100,
+            20
+          ],
+          "verified": [
+            40,
+            55
+          ],
+          "world": "REROUTED_STAGING",
+          "fieldSafe": true
+        }
+      }
+    },
+    "physicalDeviceGate": "PENDING_NEW_DEVICE_REPLAY"
   }
 }
