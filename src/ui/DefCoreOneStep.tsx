@@ -430,10 +430,13 @@ export function useDefCoreOneStep({
 
   useEffect(() => {
     if (phase !== 'VERIFY') return;
+    // VERIFY is a phase transition gate. Do not depend on the inline onPause callback:
+    // its identity changes with DefenseGame renders and would continuously reset this timer.
     onPause(true);
     const timer = window.setTimeout(() => setPhase('HOOK'), 1100);
     return () => window.clearTimeout(timer);
-  }, [onPause, phase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   return {
     eligible,
