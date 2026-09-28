@@ -105,6 +105,7 @@ describe('DEF-GAMEPLAY-IDENTITY-01 CONTROL cycle', () => {
     const following = next.enemies.find(enemy => enemy.id === 'enemy-2')!;
 
     expect(active.distance).toBeLessThan(10);
+    expect(following.distance).toBeGreaterThan(1);
     expect(following.distance).toBeLessThan(2);
     expect(following.slowEffects.some(effect =>
       effect.sourceId === 'def-core-01:C' && effect.fraction === 0.3,
