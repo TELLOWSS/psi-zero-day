@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "briefId": "phase-d-control-l1-final-art-v1",
+  "assetId": "defense.tower.CONTROL.L1.final",
+  "output": {
+    "sourceWidth": 1536,
+    "sourceHeight": 1024,
+    "transparentBackground": true,
+    "runtimePath": "assets/defense/towers/control/control-l1-final.webp",
+    "runtimeWidth": 104,
+    "runtimeHeight": 82
+  },
+  "scene": {
+    "role": "entry-level temporary vehicle-pedestrian traffic control intervention",
+    "camera": "high-oblique three-quarter view matching the locked G8-A construction map",
+    "composition": "one Korean construction-site traffic marshal standing beside a portable traffic barrier and a short pedestrian separation line; compact triangular footprint; equipment grounded on muddy/compacted temporary-road surface only through contact shadow, with no background plate",
+    "marshal": "adult construction worker in ordinary high-visibility vest, safety helmet and workwear, holding a traffic baton or giving a clear stop/slow hand signal; realistic proportions, not heroic poster pose",
+    "barrier": "portable construction traffic barrier with stable feet, believable site wear, no readable text",
+    "separation": "short modular pedestrian rail/delineator segment that clearly distinguishes the walking line from the vehicle lane",
+    "lighting": "dusk/night work lighting compatible with G8-A world, neutral warm work-light key with restrained cool ambient fill",
+    "material": "painted steel/plastic temporary works with realistic dirt, abrasion and contact shadow",
+    "readability": "marshal + barrier + separated pedestrian edge must remain recognizable when reduced to approximately 104x82 CSS pixels"
+  },
+  "mustRead": [
+    "CONTROL means human traffic control, not an energy turret",
+    "one marshal is the primary identity",
+    "vehicle stop/slow intervention",
+    "pedestrian-vehicle separation",
+    "temporary construction-site equipment"
+  ],
+  "forbidden": [
+    "text or logo",
+    "real company branding",
+    "HUD or icon",
+    "sci-fi device",
+    "energy beam",
+    "fantasy glow",
+    "flat vector pictogram",
+    "Western police traffic-control styling",
+    "clean showroom equipment",
+    "multiple duplicated workers",
+    "background rectangle or baked map"
+  ],
+  "promotion": {
+    "status": "ASSET_PENDING",
+    "requires": [
+      "source image visual review",
+      "transparent edge review",
+      "G8-A perspective and lighting match",
+      "desktop actual-play QA",
+      "390x844 mobile actual-play QA",
+      "contact-shadow grounding QA"
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "gate": "PHASE_D_VISUAL_02_CONTROL",
+  "status": "ART_PIPELINE_READY",
+  "family": "CONTROL",
+  "mapId": "map-apt-bottom-up-excavation-01",
+  "artDirection": {
+    "style": "premium commercial construction-strategy game art, grounded Korean site realism, painterly-realistic materials, no fantasy technology",
+    "camera": "high-oblique 3/4 view compatible with the locked G8-A world plate",
+    "lighting": "coherent dusk/night work lighting matching the locked G8-A map, physically plausible contact shadow",
+    "background": "transparent",
+    "branding": "unbranded temporary safety equipment; no real contractor, manufacturer, apartment or license-plate text",
+    "runtimeRule": "level silhouette must change materially; size-only upgrades are forbidden"
+  },
+  "sourceMaster": {
+    "minimumWidth": 1536,
+    "minimumHeight": 1024,
+    "transparentBackground": true,
+    "nativeUpscaleForbidden": true
+  },
+  "levels": [
+    {
+      "levelId": "L1",
+      "status": "ASSET_PENDING",
+      "runtimeUri": "assets/defense/towers/control/control-l1-final.webp",
+      "format": "webp",
+      "runtime": { "width": 104, "height": 82 },
+      "visualRole": "BASE_TRAFFIC_CONTROL",
+      "gameplayRead": {
+        "range": 135,
+        "splashRadius": 60,
+        "maxTargets": 3,
+        "slowFraction": 0.3,
+        "slowTicks": 30
+      },
+      "requiredRead": [
+        "one clearly readable trained traffic marshal",
+        "portable red-white or yellow-black traffic barrier with stable feet",
+        "short pedestrian separation segment or delineators",
+        "single-lane stop/slow intervention readable at phone scale",
+        "compact footprint that reads as an entry-level temporary control station"
+      ]
+    },
+    {
+      "levelId": "L2",
+      "status": "ASSET_PENDING",
+      "runtimeUri": "assets/defense/towers/control/control-l2-final.webp",
+      "format": "webp",
+      "runtime": { "width": 116, "height": 86 },
+      "visualRole": "REINFORCED_TRAFFIC_CONTROL",
+      "gameplayRead": {
+        "range": 145,
+        "splashRadius": 65,
+        "maxTargets": 4,
+        "slowFraction": 0.4,
+        "slowTicks": 32
+      },
+      "requiredRead": [
+        "same CONTROL family identity as L1",
+        "longer linked barrier line and additional delineators",
+        "clearer pedestrian channel separation than L1",
+        "marshal with radio/hand-signal equipment",
+        "visibly reinforced but not yet branch-specialized"
+      ]
+    },
+    {
+      "levelId": "L3A",
+      "status": "ASSET_PENDING",
+      "runtimeUri": "assets/defense/towers/control/control-l3a-final.webp",
+      "format": "webp",
+      "runtime": { "width": 122, "height": 92 },
+      "visualRole": "INTENSIVE_POINT_CONTROL",
+      "gameplayRead": {
+        "range": 155,
+        "splashRadius": 55,
+        "maxTargets": 3,
+        "slowFraction": 0.55,
+        "slowTicks": 36
+      },
+      "requiredRead": [
+        "stronger point-control silhouette than L2",
+        "two coordinated marshal positions or one marshal plus dedicated stop gate",
+        "dense active-control equipment focused on a narrower intervention point",
+        "radio/hand-signal coordination readable without text",
+        "must visually communicate stronger slowing rather than broader coverage"
+      ]
+    },
+    {
+      "levelId": "L3B",
+      "status": "ASSET_PENDING",
+      "runtimeUri": "assets/defense/towers/control/control-l3b-final.webp",
+      "format": "webp",
+      "runtime": { "width": 138, "height": 88 },
+      "visualRole": "WIDE_FLOW_SEPARATION",
+      "gameplayRead": {
+        "range": 175,
+        "splashRadius": 105,
+        "maxTargets": 7,
+        "slowFraction": 0.35,
+        "slowTicks": 40
+      },
+      "requiredRead": [
+        "wider footprint than L3A",
+        "extended interlocked barrier and pedestrian-channel system",
+        "multiple delineators or modular rails showing larger controlled area",
+        "one marshal remains visible to keep the human-control identity",
+        "must visually communicate coverage and sustained separation rather than maximum stop strength"
+      ]
+    }
+  ],
+  "forbidden": [
+    "svg final art",
+    "flat pictogram",
+    "sci-fi turret",
+    "energy emitter",
+    "fantasy glow",
+    "floating hologram",
+    "baked HUD or text",
+    "real company logo",
+    "only scaling the L1 image for higher levels"
+  ],
+  "promotionRule": {
+    "oneLevelAtATime": true,
+    "firstLevel": "L1",
+    "requiresBeforeProductionApproved": [
+      "TRANSPARENT_RASTER_SOURCE_REVIEW",
+      "G8A_LIGHTING_AND_PERSPECTIVE_MATCH",
+      "DESKTOP_ACTUAL_PLAY_QA",
+      "MOBILE_390x844_QA",
+      "CONTACT_SHADOW_AND_GROUNDING_QA",
+      "LEVEL_SILHOUETTE_DIFFERENCE_QA"
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "gate": "PHASE_D_VISUAL_01_AUDIT",
+  "status": "IMPLEMENTED_PENDING_ASSET_GENERATION",
+  "auditedAt": "2026-09-28",
+  "baselineMainSha": "d856de0261eafdb87c528b64e4b7a3defa094611",
+  "findings": {
+    "defenseWorld": {
+      "runtime": "assets/defense/board/g8a-bottom-up-excavation-final.webp",
+      "state": "PRODUCTION_LOCKED",
+      "action": "preserve camera, route, pad and topology; do not redraw unless visual review finds a concrete defect"
+    },
+    "episodeStrategyMap": {
+      "runtime": "assets/episode01/backgrounds/foundation-map.webp",
+      "sourceMaster": "3072x1728 WebP",
+      "state": "PRODUCTION_ASSET_PRESENT_REQUIRES_COMMERCIAL_QUALITY_REVIEW",
+      "action": "retain all eight normalized anchors and improve only art/material/depth if review fails"
+    },
+    "swift": {
+      "runtime": "assets/defense/enemies/swift-final-g8a.webp",
+      "state": "PRODUCTION_APPROVED"
+    },
+    "veiled": {
+      "runtime": "assets/defense/enemies/veiled-final-g8a.webp",
+      "state": "PRODUCTION_APPROVED"
+    },
+    "control": {
+      "state": "DEDICATED_LEVEL_ART_MISSING",
+      "currentFallback": "assets/episode01/scene-elements/vehicle-pedestrian-separation.webp",
+      "problem": "the previous G8-A semantic resolver reused one scene element for L1/L2/L3A/L3B, so upgrades had no dedicated silhouette change",
+      "next": "author and promote CONTROL:L1 first"
+    },
+    "pulse": {
+      "state": "SEMANTIC_FALLBACK_ONLY",
+      "currentFallback": "assets/episode01/scene-elements/temporary-distribution-board.webp"
+    },
+    "burst": {
+      "state": "SEMANTIC_FALLBACK_ONLY",
+      "currentFallback": "assets/episode01/scene-elements/exclusion-zone.webp"
+    },
+    "sensor": {
+      "state": "SEMANTIC_FALLBACK_ONLY",
+      "currentFallback": "assets/episode01/scene-elements/site-weather-station.webp"
+    },
+    "remainingRiskActors": {
+      "final": ["SWIFT", "VEILED"],
+      "legacyGeometryOnly": ["NORMAL", "ARMORED", "SWARM", "BOSS"]
+    }
+  },
+  "lockedSequence": [
+    "VISUAL-01 map quality audit",
+    "VISUAL-02 CONTROL:L1 final raster",
+    "VISUAL-02 CONTROL:L2 final raster",
+    "VISUAL-02 CONTROL:L3A final raster",
+    "VISUAL-02 CONTROL:L3B final raster",
+    "VISUAL-03 PULSE",
+    "VISUAL-03 BURST",
+    "VISUAL-03 SENSOR",
+    "VISUAL-04 remaining risk actors",
+    "VISUAL-05 map-item integration lock"
+  ],
+  "nonRegressionRules": [
+    "do not change gameplay route coordinates",
+    "do not change tower pad coordinates",
+    "do not change Wave 8 topology or balance",
+    "do not change DEF-CORE A/B/C semantics",
+    "do not use SVG as final production art",
+    "do not mark an asset Production Approved before browser and mobile QA"
+  ]
+}
