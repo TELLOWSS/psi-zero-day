@@ -207,6 +207,56 @@ export function defenseG8aVeiledFinalAsset(): {
   };
 }
 
+export interface DefenseG8aTowerVisual {
+  readonly uri: string;
+  readonly semantic: 'ALERT_CONTROL' | 'EXCLUSION_CONTROL' | 'TRAFFIC_CONTROL' | 'SITE_SENSOR';
+  readonly width: number;
+  readonly height: number;
+}
+
+const G8A_TOWER_VISUALS: Readonly<Record<DefenseTowerId, DefenseG8aTowerVisual>> = {
+  PULSE: {
+    uri: 'assets/episode01/scene-elements/temporary-distribution-board.webp',
+    semantic: 'ALERT_CONTROL',
+    width: 66,
+    height: 74,
+  },
+  BURST: {
+    uri: 'assets/episode01/scene-elements/exclusion-zone.webp',
+    semantic: 'EXCLUSION_CONTROL',
+    width: 82,
+    height: 78,
+  },
+  CONTROL: {
+    uri: 'assets/episode01/scene-elements/vehicle-pedestrian-separation.webp',
+    semantic: 'TRAFFIC_CONTROL',
+    width: 104,
+    height: 72,
+  },
+  SENSOR: {
+    uri: 'assets/episode01/scene-elements/site-weather-station.webp',
+    semantic: 'SITE_SENSOR',
+    width: 66,
+    height: 76,
+  },
+};
+
+/**
+ * G8-A presentation-only construction semantics for the four defense families.
+ * Internal tower IDs, balance and engine behavior remain unchanged. These reuse
+ * reviewed Episode 01 raster scene elements so the physical-phone board never
+ * falls back to abstract SVG/prototype tower glyphs while dedicated tower
+ * masters are being authored.
+ */
+export function defenseG8aTowerVisual(
+  mapId: string,
+  towerId: DefenseTowerId,
+  _levelId: DefenseLevelId,
+): DefenseG8aTowerVisual | null {
+  if (mapId !== 'map-apt-bottom-up-excavation-01') return null;
+  return G8A_TOWER_VISUALS[towerId] ?? null;
+}
+
 function asset(id: string): DefenseVisualAsset | null {
   return defenseVisualProduction.assets.find(item => item.assetId === id) ?? null;
 }

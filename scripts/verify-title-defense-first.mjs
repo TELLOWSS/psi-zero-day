@@ -27,7 +27,7 @@ async function evalJs(cdp, expression){const r=await cdp.send('Runtime.evaluate'
 async function waitFor(cdp, expression, timeout=10000){const start=Date.now();while(Date.now()-start<timeout){if(await evalJs(cdp,expression))return;await sleep(100);}throw new Error('condition timeout: '+expression);}
 async function shot(cdp,name){const r=await cdp.send('Page.captureScreenshot',{format:'png',fromSurface:true,captureBeyondViewport:false});fs.writeFileSync(path.join(outputDir,name),Buffer.from(r.data,'base64'));}
 async function viewport(cdp,w,h,mobile){await cdp.send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:mobile?2.75:1,mobile,screenOrientation:w>h?{type:'landscapePrimary',angle:90}:{type:'portraitPrimary',angle:0}});}
-async function navigate(cdp){const p=cdp.once('Page.loadEventFired');await cdp.send('Page.navigate',{url:baseUrl});await p;await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");await sleep(350);}
+async function navigate(cdp){const p=cdp.once('Page.loadEventFired');await cdp.send('Page.navigate',{url:baseUrl});await p;await waitFor(cdp,"Boolean(document.querySelector('.commercial-title-home'))");await sleep(950);}
 async function titleMetrics(cdp){return evalJs(cdp,`(() => {
   const rect = sel => { const el=document.querySelector(sel); if(!el)return null; const r=el.getBoundingClientRect(); return {left:Math.round(r.left),top:Math.round(r.top),right:Math.round(r.right),bottom:Math.round(r.bottom),width:Math.round(r.width),height:Math.round(r.height)}; };
   const primary=document.querySelector('.commercial-title-action.is-primary');
@@ -37,10 +37,17 @@ async function titleMetrics(cdp){return evalJs(cdp,`(() => {
     overflow:document.documentElement.scrollWidth>innerWidth+1,
     primary:(primary?.textContent||'').replace(/\\s+/g,' ').trim(),
     labels,
+    hierarchy:document.querySelector('.commercial-title-copy')?.getAttribute('data-title-hierarchy')||null,
+    eyebrow:(document.querySelector('[data-title-rank="brand"]')?.textContent||'').trim(),
+    primaryTitle:(document.querySelector('[data-title-rank="primary"]')?.getAttribute('aria-label')||document.querySelector('[data-title-rank="primary"]')?.textContent||'').replace(/\\s+/g,' ').trim(),
+    slogan:(document.querySelector('[data-title-rank="slogan"]')?.textContent||'').replace(/\\s+/g,' ').trim(),
+    primaryCtaKind:document.querySelector('[data-title-primary-cta]')?.getAttribute('data-title-primary-cta')||null,
     primaryRect:rect('.commercial-title-action.is-primary'),
     lastActionRect:rect('.commercial-title-actions .commercial-title-action:last-child'),
     liveRect:rect('.commercial-title-field-status'),
     liveText:(document.querySelector('.commercial-title-field-status')?.textContent||'').replace(/\\s+/g,' ').trim(),
+    featureRect:rect('.commercial-title-features'),
+    quickSettingsRect:rect('.commercial-title-quick-settings'),
     subcopy:(document.querySelector('.commercial-title-subcopy')?.textContent||'').trim(),
     titleLayout:document.querySelector('.commercial-title-home')?.getAttribute('data-title-layout')||null,
     homeRect:rect('.commercial-title-home'),
@@ -61,8 +68,21 @@ try{
 
   await viewport(cdp,1440,900,false);await navigate(cdp);
   report.desktop=await titleMetrics(cdp);
-  if(!report.desktop.primary.includes('현장 디펜스 시작')) throw new Error('desktop primary CTA is not Field Defense');
-  if(!report.desktop.liveText.includes('LIVE SITE') || !report.desktop.liveText.includes('SWIFT')) throw new Error('desktop LIVE SITE panel missing');
+  if(report.desktop.hierarchy!=='H01_LOCKED') throw new Error('desktop H-01 hierarchy marker missing');
+  if(report.desktop.eyebrow!=='NEW PSI') throw new Error('desktop brand eyebrow drifted: '+report.desktop.eyebrow);
+  if(report.desktop.primaryTitle!=='PSI : ZERO DAY') throw new Error('desktop primary title drifted: '+report.desktop.primaryTitle);
+  if(report.desktop.slogan!=='사고 전 신호를 읽고, 현장을 바꿔라.') throw new Error('desktop slogan drifted: '+report.desktop.slogan);
+  if(report.desktop.primaryCtaKind!=='defense' || !report.desktop.primary.includes('현장 디펜스 시작')) throw new Error('desktop primary CTA is not Field Defense');
+  if(!report.desktop.copyRect || report.desktop.copyRect.width / report.desktop.viewport.width > .52) throw new Error('desktop hero copy exceeds 52vw: '+JSON.stringify(report.desktop.copyRect));
+  for (const token of ['LIVE SITE','DEF-CORE-01','서측 Gate · 차량–보행 간섭','WAVE 8 / 10','SWIFT','CONTROL','PSI']) {
+    if(!report.desktop.liveText.includes(token)) throw new Error('desktop LIVE SITE briefing missing: '+token);
+  }
+  if(!report.desktop.featuresVisible || !report.desktop.quickSettingsVisible) throw new Error('desktop secondary title layers unexpectedly hidden');
+  if(!report.desktop.castVisible || report.desktop.visibleCastCount!==4) throw new Error('desktop title must retain four differentiated cast members: '+report.desktop.visibleCastCount);
+  const dc=report.desktop.copyRect, dl=report.desktop.liveRect;
+  if(dc && dl && dc.left < dl.right && dc.right > dl.left && dc.top < dl.bottom && dc.bottom > dl.top) {
+    throw new Error('desktop hero copy overlaps LIVE SITE briefing: '+JSON.stringify({copy:dc,live:dl}));
+  }
   if(report.desktop.overflow) throw new Error('desktop title horizontal overflow');
   await shot(cdp,'desktop-1440x900-home.png');
 
@@ -79,10 +99,12 @@ try{
   await viewport(cdp,780,360,true);await navigate(cdp);
   report.physicalLandscape=await titleMetrics(cdp);
   if(report.physicalLandscape.titleLayout!=='PHYSICAL_PHONE_V10') throw new Error('physical landscape title layout marker missing');
+  if(report.physicalLandscape.hierarchy!=='H01_LOCKED' || report.physicalLandscape.primaryTitle!=='PSI : ZERO DAY') throw new Error('780x360 H-01 title hierarchy drifted: '+JSON.stringify({hierarchy:report.physicalLandscape.hierarchy,title:report.physicalLandscape.primaryTitle}));
   if(!report.physicalLandscape.primary.includes('현장 디펜스 시작')) throw new Error('780x360 primary CTA is not Field Defense');
   if(report.physicalLandscape.featuresVisible) throw new Error('780x360 feature-card strip should be hidden');
   if(!report.physicalLandscape.castVisible || report.physicalLandscape.visibleCastCount!==1) throw new Error('780x360 should use one protagonist instead of a four-face lineup: '+report.physicalLandscape.visibleCastCount);
   if(report.physicalLandscape.quickSettingsVisible) throw new Error('780x360 unlabeled quick-settings strip should be hidden');
+  if(report.physicalLandscape.featuresVisible) throw new Error('780x360 secondary feature cards should be hidden');
   if(report.physicalLandscape.overflow) throw new Error('780x360 title horizontal overflow');
   const ph=report.physicalLandscape.homeRect, pp=report.physicalLandscape.primaryRect, pl=report.physicalLandscape.liveRect, pc=report.physicalLandscape.copyRect;
   if(!ph || ph.width<770 || ph.height<350) throw new Error('780x360 title does not fill viewport '+JSON.stringify(ph));
@@ -93,8 +115,11 @@ try{
 
   await viewport(cdp,390,844,true);await navigate(cdp);
   report.mobile=await titleMetrics(cdp);
+  if(report.mobile.hierarchy!=='H01_LOCKED' || report.mobile.primaryTitle!=='PSI : ZERO DAY') throw new Error('mobile H-01 title hierarchy drifted: '+JSON.stringify({hierarchy:report.mobile.hierarchy,title:report.mobile.primaryTitle}));
   if(!report.mobile.primary.includes('현장 디펜스 시작')) throw new Error('mobile primary CTA is not Field Defense');
   if(!report.mobile.liveText.includes('LIVE SITE')) throw new Error('mobile LIVE SITE panel missing');
+  if(report.mobile.featuresVisible || report.mobile.quickSettingsVisible) throw new Error('mobile secondary title chrome should be hidden');
+  if(report.mobile.castVisible) throw new Error('mobile title cast should be hidden for readability');
   if(report.mobile.overflow) throw new Error('mobile title horizontal overflow');
   const pr=report.mobile.primaryRect, lr=report.mobile.liveRect, ar=report.mobile.lastActionRect;
   if(!pr || pr.left < -1 || pr.right > 391 || pr.top < -1 || pr.bottom > 845) throw new Error('mobile primary CTA outside viewport '+JSON.stringify(pr));

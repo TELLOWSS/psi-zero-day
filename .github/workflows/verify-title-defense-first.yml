@@ -3,12 +3,14 @@ name: Verify TITLE-DEFENSE-FIRST-01
 on:
   push:
     branches:
-      - sol/g8a-premium-audio-clean-20260927
+      - sol/commercial-presentation-upgrade-20260927
     paths:
       - 'src/ui/GameHub.tsx'
       - 'src/ui/game-hub.css'
       - 'content/episode01/main-title-layout.json'
       - 'scripts/verify-title-defense-first.mjs'
+      - 'tests/main-title-layout.test.ts'
+      - 'tests/commercial-presentation-upgrade.test.ts'
       - '.github/workflows/verify-title-defense-first.yml'
   pull_request:
     branches:
@@ -16,6 +18,9 @@ on:
     paths:
       - 'src/ui/GameHub.tsx'
       - 'src/ui/game-hub.css'
+      - 'content/episode01/main-title-layout.json'
+      - 'tests/main-title-layout.test.ts'
+      - 'tests/commercial-presentation-upgrade.test.ts'
       - 'scripts/verify-title-defense-first.mjs'
       - '.github/workflows/verify-title-defense-first.yml'
 
@@ -42,6 +47,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Commercial presentation contracts
+        run: npx vitest run tests/main-title-layout.test.ts tests/commercial-presentation-upgrade.test.ts
 
       - name: Typecheck
         run: npm run typecheck

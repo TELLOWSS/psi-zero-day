@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - sol/g8a-full-visual-v01-20260927
+      - sol/commercial-presentation-upgrade-20260927
   pull_request:
     paths:
       - 'content/defense/g8a-veiled-final-art.json'
@@ -31,7 +32,7 @@ concurrency:
 jobs:
   verify-v01:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

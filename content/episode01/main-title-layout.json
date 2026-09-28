@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "main-title-cinematic-v10-physical-phone",
-  "status": "physical-phone-v10-qa-active",
+  "status": "commercial-presentation-h04-actual-play-pass",
   "intent": "Approved cinematic construction title screen expressed as live DOM UI, not baked controls.",
   "composition": {
     "backdrop": {
@@ -139,5 +139,161 @@
     ],
     "settingsAccess": "top-right settings button",
     "productionRule": "desktop can retain four-person ensemble; short landscape phone uses one protagonist until four title binaries are visually differentiated enough for side-by-side display"
+  },
+  "commercialPresentation": {
+    "h01": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "hierarchy": [
+        {
+          "rank": 1,
+          "id": "primaryTitle",
+          "text": "PSI : ZERO DAY"
+        },
+        {
+          "rank": 2,
+          "id": "slogan",
+          "text": "사고 전 신호를 읽고, 현장을 바꿔라."
+        },
+        {
+          "rank": 3,
+          "id": "primaryCTA",
+          "text": "현장 디펜스 시작"
+        },
+        {
+          "rank": 4,
+          "id": "liveSite",
+          "text": "LIVE SITE"
+        }
+      ],
+      "eyebrow": "NEW PSI",
+      "englishLine": "Proactive Safety Intelligence · FIELD DEFENSE",
+      "briefCopy": "같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.",
+      "desktopHeroWidthMaxVw": 52,
+      "rules": [
+        "NEW PSI is a low-emphasis brand eyebrow and must not compete with PSI : ZERO DAY",
+        "primary title, slogan and defense CTA must remain visible without scroll",
+        "left hero uses a readability gradient without blurring construction-world detail",
+        "no new tutorial or long lore copy is introduced"
+      ]
+    },
+    "h02": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "goal": "characters remain emotional anchors while title CTA and LIVE SITE own interaction hierarchy",
+      "desktop": {
+        "castRole": "human-anchor",
+        "layerOrder": [
+          "construction background",
+          "lighting/atmosphere",
+          "character silhouettes",
+          "hero readability gradient",
+          "title/slogan/CTA",
+          "LIVE SITE briefing",
+          "secondary cards"
+        ],
+        "collisionRules": [
+          "hero CTA must not be obscured",
+          "LIVE SITE must not overlap title copy",
+          "character captions must stay clear of feature cards"
+        ]
+      },
+      "shortLandscape": "one protagonist remains visible; quotes/captions suppressed"
+    },
+    "h03": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "role": "tactical pre-entry briefing",
+      "requiredText": [
+        "LIVE SITE",
+        "DEF-CORE-01",
+        "서측 Gate · 차량–보행 간섭",
+        "대표 시나리오 · WAVE 8 / 10",
+        "SWIFT",
+        "CONTROL",
+        "PSI"
+      ],
+      "interactionRule": "presentation upgrade only; no new click behavior"
+    },
+    "h04": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "featurePriority": "secondary",
+      "quickSettingsPriority": "tertiary",
+      "desktop": [
+        "four feature cards remain",
+        "descriptions visually clamp to one line",
+        "quick settings remain compact"
+      ],
+      "shortLandscape": [
+        "feature strip hidden",
+        "quick settings hidden",
+        "settings remain accessible from top utility"
+      ],
+      "mobile": [
+        "feature strip hidden",
+        "quick settings hidden"
+      ]
+    },
+    "evidence": {
+      "githubActionsRun": 36315615282,
+      "sourceSha": "4de6e868374dc8ac59ab0e9e49326ac9cad9e3de",
+      "desktop": {
+        "viewport": "1440x900",
+        "primaryTitle": "PSI : ZERO DAY",
+        "primaryCta": "현장 디펜스 시작",
+        "heroWidthPx": 706,
+        "liveSiteRect": {
+          "left": 1066,
+          "top": 135,
+          "width": 331,
+          "height": 211
+        },
+        "castCount": 4,
+        "featureCardsVisible": true,
+        "quickSettingsVisible": true,
+        "overflow": false
+      },
+      "physicalLandscape": {
+        "viewport": "780x360",
+        "heroRect": {
+          "left": 18,
+          "top": 46,
+          "width": 330,
+          "height": 253
+        },
+        "primaryCtaRect": {
+          "left": 14,
+          "top": 147,
+          "width": 320,
+          "height": 56
+        },
+        "liveSiteRect": {
+          "left": 563,
+          "top": 48,
+          "width": 205,
+          "height": 74
+        },
+        "castCount": 1,
+        "featureCardsVisible": false,
+        "quickSettingsVisible": false,
+        "overflow": false
+      },
+      "portrait": {
+        "viewport": "390x844",
+        "primaryCtaRect": {
+          "left": 31,
+          "top": 417,
+          "width": 319,
+          "height": 66
+        },
+        "liveSiteRect": {
+          "left": 16,
+          "top": 701,
+          "width": 358,
+          "height": 127
+        },
+        "castVisible": false,
+        "featureCardsVisible": false,
+        "quickSettingsVisible": false,
+        "overflow": false
+      }
+    }
   }
 }

@@ -329,15 +329,15 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       </nav>
     </header>
 
-    <section className="commercial-title-copy">
-      <span className="commercial-title-kicker">FIELD DEFENSE · PROACTIVE SAFETY INTELLIGENCE</span>
-      <div className="commercial-title-logo"><span>NEW PSI</span><b>:</b><span>ZERO DAY</span></div>
-      <h1>사고 전 신호를 읽고, 현장을 바꿔라.</h1>
+    <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
+      <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
+      <div className="commercial-title-logo" data-title-rank="primary" aria-label="PSI : ZERO DAY"><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
+      <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">Proactive Safety Intelligence · FIELD DEFENSE</p>
-      <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 먼저 봐야 할 위험은 달라집니다.</p>
+      <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
 
       <div className="commercial-title-actions is-defense-first">
-        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" data-title-primary-cta="defense" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>
           <b>›</b>
@@ -364,7 +364,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       </div>
     </section>
 
-    <aside className="commercial-title-field-status" aria-label="현재 현장 디펜스">
+    <aside className="commercial-title-field-status" data-title-role="live-briefing" aria-label="현재 현장 디펜스">
       <div className="commercial-title-field-status-head">
         <span>LIVE SITE</span><b>DEF-CORE-01</b>
       </div>
@@ -384,7 +384,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       <small>BUILD<br/>PEOPLE<br/>A SAFER<br/>TOMORROW</small>
     </aside>
 
-    <div className="commercial-title-cast">
+    <div className="commercial-title-cast" data-title-role="human-anchor">
       {featured.map((id, index) => {
         const member = session.character(id);
         return <figure className={`commercial-title-worker worker-${index}`} key={id} data-art-surface="main" data-character={id}>
@@ -398,7 +398,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       })}
     </div>
 
-    <section className="commercial-title-features" aria-label={t('ui.title.features')}>
+    <section className="commercial-title-features" data-title-role="secondary-features" aria-label={t('ui.title.features')}>
       <button type="button" onClick={() => setPage('map')}>
         <VisualImage uri={titleFeatureVisuals.story} alt="" className="commercial-title-feature-art" />
         <span className="commercial-title-feature-shade" aria-hidden="true" />
@@ -425,7 +425,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       <strong>{t('ui.title.plaque')}</strong><span>SAFER SITE · BETTER TOMORROW</span>
     </div>
 
-    <div className="commercial-title-quick-settings" aria-label={t('ui.title.quick_settings')}>
+    <div className="commercial-title-quick-settings" data-title-role="quick-settings" aria-label={t('ui.title.quick_settings')}>
       <button type="button" aria-pressed={motionEnabled} onClick={() => setMotionEnabled(value => !value)}>
         <span>{t('ui.title.settings.motion')}</span><b>{motionEnabled ? 'ON' : 'OFF'}</b>
       </button>

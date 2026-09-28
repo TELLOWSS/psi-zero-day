@@ -8,7 +8,7 @@ const content = {
     width: 1000,
     height: 600,
     path: [[0, 500], [180, 500], [180, 390], [370, 390], [370, 240], [620, 240], [620, 120], [1000, 120]],
-    pads: [{ id: 'P1', x: 300, y: 315 }],
+    pads: [{ id: 'BU-P3', x: 300, y: 315 }],
   },
   towers: [{
     id: 'CONTROL',
@@ -27,7 +27,7 @@ function state(overrides: Partial<DefenseRunState> = {}): DefenseRunState {
     scenarioId: 'training-site:apt-new-bottom-up-excavation', eventId: null, eventContentVersion: null,
     status: 'RUNNING', paused: false, speed: 1, tick: 100, waveId: 8, waveTick: 100,
     intermissionRemaining: 0, shield: 100, resource: 100,
-    towers: [{ id: 'tower-1', padId: 'P1', towerId: 'CONTROL', levelId: 'L1', targetMode: 'FIRST', invested: 0, attackCooldown: 0, revealCooldown: 0 }],
+    towers: [{ id: 'tower-1', padId: 'BU-P3', towerId: 'CONTROL', levelId: 'L1', targetMode: 'FIRST', invested: 0, attackCooldown: 0, revealCooldown: 0 }],
     enemies: [{
       id: 'swift-1', enemyId: 'SWIFT', hp: 10, distance: 280, spawnSequence: 1,
       revealUntilTick: 0, slowEffects: [], bossPhaseTriggered: false,
@@ -62,6 +62,51 @@ describe('cinematic defense camera', () => {
     expect(signal.kind).toBe('IMPACT');
     expect(signal.reason).toBe('CONTROL_INTERVENTION');
     expect(signal.enemyId).toBe('swift-1');
+    expect(signal.focus).not.toBeNull();
+    expect(signal.focus!.x).toBeGreaterThan(610);
+    expect(signal.focus!.x).toBeLessThan(660);
+    expect(signal.focus!.y).toBeGreaterThan(460);
+    expect(signal.focus!.y).toBeLessThan(490);
+  });
+
+  it('focuses CONTROL approach on the visual vehicle-intervention relationship, not the raw simulation point', () => {
+    const before = state({ enemies: [{ ...state().enemies[0]!, distance: 0 }] });
+    const after = state({ tick: 101, enemies: [{ ...state().enemies[0]!, distance: 280 }] });
+    const signal = defenseCameraSignal(before, after, content);
+    expect(signal.kind).toBe('APPROACH');
+    expect(signal.reason).toBe('CONTROL_APPROACH');
+    expect(signal.focus).not.toBeNull();
+    expect(signal.focus!.x).toBeGreaterThan(610);
+    expect(signal.focus!.x).toBeLessThan(660);
+  });
+
+  it('focuses a newly placed tower before the first wave so placement is visually readable', () => {
+    const before = state({ status: 'INTERMISSION', towers: [] });
+    const after = state({ status: 'INTERMISSION', tick: 101 });
+    const signal = defenseCameraSignal(before, after, content);
+    expect(signal.kind).toBe('APPROACH');
+    expect(signal.reason).toBe('TOWER_PLACEMENT');
+    expect(signal.enemyId).toBeNull();
+    expect(signal.focus).not.toBeNull();
+  });
+
+  it('focuses newly spawned early-wave risk actors instead of waiting for Wave 8', () => {
+    const before = state({ waveId: 2, completedWaves: 1, enemies: [] });
+    const after = state({
+      waveId: 2,
+      completedWaves: 1,
+      tick: 101,
+      enemies: [{
+        ...state().enemies[0]!,
+        id: 'early-risk-1',
+        enemyId: 'NORMAL',
+        distance: 45,
+      }],
+    });
+    const signal = defenseCameraSignal(before, after, content);
+    expect(signal.kind).toBe('APPROACH');
+    expect(signal.reason).toBe('RISK_ENTRY');
+    expect(signal.enemyId).toBe('early-risk-1');
   });
 
   it('fires APPROACH when VEILED becomes newly revealed', () => {

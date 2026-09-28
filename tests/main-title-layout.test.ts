@@ -53,6 +53,19 @@ describe('main title / loading / character production alignment', () => {
     }
   });
 
+  it('locks H-01 commercial title hierarchy around title, slogan and Field Defense CTA', () => {
+    expect(layout.commercialPresentation.h01.status).toMatch(/IMPLEMENTED|PASS/);
+    expect(layout.commercialPresentation.h01.hierarchy.slice(0, 3).map(item => item.text)).toEqual([
+      'PSI : ZERO DAY',
+      '사고 전 신호를 읽고, 현장을 바꿔라.',
+      '현장 디펜스 시작',
+    ]);
+    expect(layout.commercialPresentation.h01.eyebrow).toBe('NEW PSI');
+    expect(layout.commercialPresentation.h01.desktopHeroWidthMaxVw).toBeLessThanOrEqual(52);
+    expect(layout.commercialPresentation.h01.briefCopy)
+      .toBe('같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.');
+  });
+
   it('keeps the generated concept as art direction while runtime controls stay live DOM', () => {
     expect(layout.runtime_rules).toContain('all menu controls must remain clickable DOM elements');
     expect(layout.runtime_rules).toContain('generated concept images are art direction only and must not bake functional buttons into runtime');

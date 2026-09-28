@@ -6,18 +6,21 @@ const activity = readFileSync('src/ui/G8AActivityOverlay.tsx', 'utf8');
 const css = readFileSync('src/ui/defense-game.css', 'utf8');
 
 describe('G8-A full-screen actor/world integration polish', () => {
-  it('keeps representative workers small enough to belong to the world plate', () => {
-    expect(activity).toContain('width: 19');
-    expect(activity).toContain('height: 29');
-    expect(activity).toContain('width: 20');
-    expect(activity).toContain('height: 30');
-    expect(activity).toContain('width: 18');
-    expect(activity).toContain('height: 27');
-    expect(activity).toContain('rx={worker.width * 0.38}');
+  it('keeps representative workers world-scaled but readable on the physical phone', () => {
+    expect(activity).toContain('width: 31');
+    expect(activity).toContain('height: 47');
+    expect(activity).toContain('width: 33');
+    expect(activity).toContain('height: 50');
+    expect(activity).toContain('width: 30');
+    expect(activity).toContain('height: 45');
+    expect(activity).toContain('rx={worker.width * 0.39}');
     expect(activity).toContain('yoon-sungho-map.webp');
+    expect(activity).toContain('lee-jaehoon-map.webp');
+    expect(activity).toContain('seo-jeongmin-map.webp');
     expect(activity).not.toContain("id: 'choi_minseok'");
-    expect(css).toContain('opacity:.91');
-    expect(css).toContain('saturate(.64)');
+    expect(css).toContain('opacity:1');
+    expect(css).toContain('saturate(.82)');
+    expect(css).toContain('.zb-ambient-dump-motion');
   });
 
   it('recedes unselected pad paint during running play without removing hit targets', () => {

@@ -4,7 +4,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseEnemyArtUri, defenseG8aTowerVisual, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { defenseMapFrame, defenseMapPointPercent, defenseMapViewBox } from '../app/defense-map-framing';
 import { defenseVisualPadPoint, defenseVisualPath, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 import { useDefensePersistence } from '../app/use-defense-persistence';
@@ -49,8 +49,18 @@ function towerLevel(content: DefenseContent, tower: DefenseTowerState) {
   return towerDefinition(content, tower.towerId).levels.find(level => level.id === tower.levelId)!;
 }
 
-function enemyName(id: DefenseEnemyId) {
-  return t(`defense.enemy.${id}.name`);
+const G8A_MAP_ID = 'map-apt-bottom-up-excavation-01';
+
+function enemyName(mapId: string, id: DefenseEnemyId) {
+  return t(mapId === G8A_MAP_ID ? `defense.g8a.enemy.${id}.name` : `defense.enemy.${id}.name`);
+}
+
+function towerName(mapId: string, id: DefenseTowerId) {
+  return t(mapId === G8A_MAP_ID ? `defense.g8a.tower.${id}.name` : `defense.tower.${id}.name`);
+}
+
+function towerRole(mapId: string, id: DefenseTowerId) {
+  return t(mapId === G8A_MAP_ID ? `defense.g8a.tower.${id}.role` : `defense.tower.${id}.role`);
 }
 
 function recommendedTowerForLeaks(leaks: DefenseRunState['leakedByEnemy']): DefenseTowerId {
@@ -111,6 +121,29 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       />
     </g>;
   }
+  const g8aVisual = defenseG8aTowerVisual(content.map.id, tower.towerId, tower.levelId);
+  if (g8aVisual) {
+    return <g
+      className={`zb-tower zb-tower-production zb-g8a-semantic-tower${firing ? ' is-firing' : ''}`}
+      data-g8a-tower={tower.towerId}
+      data-g8a-tower-level={tower.levelId}
+      data-g8a-semantic={g8aVisual.semantic}
+    >
+      <ellipse cx="0" cy="20" rx="31" ry="8" className="zb-g8a-tower-ground-shadow" aria-hidden="true" />
+      {firing ? <ellipse cx="0" cy="18" rx="38" ry="12" className="zb-g8a-intervention-cue" aria-hidden="true" /> : null}
+      <image
+        href={g8aVisual.uri}
+        x={-g8aVisual.width / 2}
+        y={-g8aVisual.height + 22}
+        width={g8aVisual.width}
+        height={g8aVisual.height}
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-g8a-semantic-tower-image"
+        aria-hidden="true"
+      />
+    </g>;
+  }
+
   const artUri = defenseTowerArtUri(tower.towerId, tower.levelId);
   if (artUri) {
     return <g
@@ -170,8 +203,14 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
   const bossArmor = definition.boss && enemy.bossArmorFromTick <= state.tick && state.tick < enemy.bossArmorUntilTick;
   const slowed = enemy.slowEffects.some(effect => effect.startTick <= state.tick && state.tick < effect.endTick);
   const revealed = definition.hidden && (enemy.revealUntilTick > state.tick || state.revealAllUntilTick > state.tick);
-  const swiftPq = enemy.enemyId === 'SWIFT' ? defenseSwiftPqAsset() : null;
+  const g8aDump = content.map.id === G8A_MAP_ID ? defenseSwiftPqAsset() : null;
+  const swiftPq = enemy.enemyId === 'SWIFT' ? g8aDump : null;
   const artUri = defenseEnemyArtUri(enemy.enemyId);
+  const g8aRiskActor = content.map.id === G8A_MAP_ID;
+  const showHp = !g8aRiskActor || definition.boss || hpRatio < 0.75;
+  const g8aVehicleRisk = enemy.enemyId === 'SWIFT' || enemy.enemyId === 'ARMORED';
+  const hpWidth = g8aRiskActor ? 28 : 44;
+  const hpY = g8aRiskActor ? (g8aVehicleRisk ? 31 : 8) : -31;
   const artSize = definition.boss ? 92 : 60;
   const artY = definition.boss ? -60 : -39;
   const vehicleState = enemy.enemyId === 'SWIFT'
@@ -196,7 +235,36 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
     </g> : null}
     {revealed ? <circle r={definition.boss ? 48 : 29} className="zb-reveal-ring" aria-hidden="true" /> : null}
     {bossArmor ? <circle r="50" className="zb-boss-armor-effect" aria-hidden="true" /> : null}
-    {swiftPq ? <>
+    {g8aRiskActor && enemy.enemyId === 'NORMAL' ? <g className="zb-g8a-risk-worker-wrap" data-g8a-risk-actor="WORKER_APPROACH" aria-hidden="true">
+      <ellipse cx="0" cy="2" rx="11" ry="3.6" className="zb-g8a-risk-contact-shadow" />
+      <image
+        href="assets/episode01/characters/player-map.webp"
+        x="-15"
+        y="-44"
+        width="30"
+        height="46"
+        preserveAspectRatio="xMidYMax meet"
+        className="zb-g8a-risk-worker"
+      />
+    </g> : g8aRiskActor && enemy.enemyId === 'SWARM' ? <g className="zb-g8a-risk-worker-group" data-g8a-risk-actor="WORKER_GROUP" aria-hidden="true">
+      <ellipse cx="0" cy="3" rx="26" ry="5" className="zb-g8a-risk-contact-shadow" />
+      <image href="assets/episode01/characters/lee-jaehoon-map.webp" x="-25" y="-43" width="27" height="43" preserveAspectRatio="xMidYMax meet" />
+      <image href="assets/episode01/characters/seo-jeongmin-map.webp" x="-4" y="-49" width="29" height="45" preserveAspectRatio="xMidYMax meet" />
+      <image href="assets/episode01/characters/player-map.webp" x="-1" y="-37" width="25" height="39" preserveAspectRatio="xMidYMax meet" />
+    </g> : g8aRiskActor && enemy.enemyId === 'ARMORED' && g8aDump ? <>
+      <ellipse cx="0" cy="22" rx="37" ry="9" className="zb-swift-road-contact" aria-hidden="true" />
+      <image
+        href={g8aDump.uri}
+        x="-46"
+        y="-39"
+        width="92"
+        height="68"
+        preserveAspectRatio="xMidYMid meet"
+        className="zb-g8a-heavy-vehicle"
+        data-g8a-risk-actor="HEAVY_VEHICLE"
+        aria-hidden="true"
+      />
+    </> : swiftPq ? <>
       <ellipse cx="0" cy="20" rx="31" ry="8" className="zb-swift-road-contact" aria-hidden="true" />
       <image
         href={swiftPq.uri}
@@ -230,8 +298,10 @@ function EnemyGlyph({ content, enemy, state, isHit }: { content: DefenseContent;
         <circle r="20" className="zb-boss-ring" />
         <circle r="10" className="zb-boss-core" />
       </> : <circle r="16" data-art-state="prototype" />}
-    <rect x="-22" y="-31" width="44" height="5" rx="2.5" className="zb-hp-track" />
-    <rect x="-22" y="-31" width={44 * hpRatio} height="5" rx="2.5" className="zb-hp-fill" />
+    {showHp ? <g className={`zb-health-readout${g8aRiskActor ? ' is-grounded' : ''}`} aria-hidden="true">
+      <rect x={-hpWidth / 2} y={hpY} width={hpWidth} height={g8aRiskActor ? 3 : 4} rx="2" className="zb-hp-track" />
+      <rect x={-hpWidth / 2} y={hpY} width={hpWidth * hpRatio} height={g8aRiskActor ? 3 : 4} rx="2" className="zb-hp-fill" />
+    </g> : null}
   </g>;
 }
 
@@ -588,8 +658,13 @@ export function DefenseGame({
             fill="none"
             aria-hidden="true"
           />
-          {content.map.id === 'map-apt-bottom-up-excavation-01'
-            ? <G8AActivityOverlay cameraMode={camera.mode} />
+          {content.map.id === G8A_MAP_ID
+            ? <G8AActivityOverlay
+              cameraMode={camera.mode}
+              waveId={state.waveId}
+              ambientDumpUri={defenseSwiftPqAsset()?.uri ?? null}
+              showAmbientDump={state.waveId <= 5 && !state.enemies.some(enemy => enemy.enemyId === 'SWIFT')}
+            />
             : null}
           {selectedTower && selectedLevel ? (() => {
             const pad = content.map.pads.find(item => item.id === selectedTower.padId)!;
@@ -633,6 +708,7 @@ export function DefenseGame({
           })}
           {state.enemies.map(enemy => <EnemyGlyph key={enemy.id} content={content} enemy={enemy} state={state} isHit={effects.impactedEnemyIds.has(enemy.id)} />)}
         </svg>
+        {content.map.id === G8A_MAP_ID ? <div className="zb-board-grade" aria-hidden="true" data-world-grade="COMMERCIAL_GFX_V1" /> : null}
 
         <div className="zb-pad-layer" aria-label="설치 패드">
           {content.map.pads.map(pad => {
@@ -656,15 +732,21 @@ export function DefenseGame({
           <strong>WAVE {preview?.id}</strong>
           <ul>
             {preview?.groups.map((group, index) => <li key={`${group.enemy}-${index}`}>
-              <span>{enemyName(group.enemy)}</span><b>×{group.count}</b>
+              <span>{enemyName(content.map.id, group.enemy)}</span><b>×{group.count}</b>
             </li>)}
           </ul>
         </aside>
 
         <div className="zb-board-caption">
-          <span>{PRODUCTION_MAP ? 'G8-A · PRODUCTION MAP' : activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
+          <span>{PRODUCTION_MAP ? 'G8-A · LIVE CONSTRUCTION SITE' : activeSiteMap ? 'G5 · PROCESS MAP' : t('defense.ui.dev_notice')}</span>
           <b>{activeSiteMap?.label ?? t('defense.map.ramp-01.name')}</b>
         </div>
+
+        {content.map.id === G8A_MAP_ID ? <div className="zb-camera-controls" aria-label="현장 카메라 확대 축소">
+          <button type="button" onClick={camera.zoomOut} disabled={camera.manualScale <= 1} aria-label="축소">−</button>
+          <button type="button" className="zb-camera-reset" onClick={camera.resetZoom} aria-label="배율 초기화">{Math.round(camera.manualScale * 100)}%</button>
+          <button type="button" onClick={camera.zoomIn} disabled={camera.manualScale >= 1.8} aria-label="확대">＋</button>
+        </div> : null}
       </div>
     </section>
 
@@ -681,16 +763,18 @@ export function DefenseGame({
               const definition = towerDefinition(content, towerId);
               const level = definition.levels.find(item => item.id === 'L1')!;
               const disabled = state.resource < level.cost;
+              const shopArtUri = defenseG8aTowerVisual(content.map.id, towerId, 'L1')?.uri
+                ?? defenseTowerArtUri(towerId, 'L1');
               return <button
                 key={towerId}
                 type="button"
                 disabled={disabled}
                 onClick={() => dispatch({ type: 'Build', padId: selectedPad.id, towerId })}
               >
-                {defenseTowerArtUri(towerId, 'L1')
-                  ? <img src={defenseTowerArtUri(towerId, 'L1') ?? undefined} className="zb-shop-production-art" alt="" aria-hidden="true" />
+                {shopArtUri
+                  ? <img src={shopArtUri} className="zb-shop-production-art" alt="" aria-hidden="true" data-g8a-shop-art={content.map.id === G8A_MAP_ID ? towerId : undefined} />
                   : <span className={`zb-shop-glyph zb-shop-${towerId.toLowerCase()}`} aria-hidden="true" data-art-state="prototype" />}
-                <span><strong>{t(`defense.tower.${towerId}.name`)}</strong><small>{t(`defense.tower.${towerId}.role`)}</small></span>
+                <span><strong>{towerName(content.map.id, towerId)}</strong><small>{towerRole(content.map.id, towerId)}</small></span>
                 <b>R {level.cost}</b>
               </button>;
             })}
@@ -700,7 +784,7 @@ export function DefenseGame({
         {selectedTower && selectedLevel ? <div className="zb-tower-panel">
           <div className="zb-panel-heading">
             <span>{selectedTower.padId} · {selectedTower.levelId}</span>
-            <strong>{t(`defense.tower.${selectedTower.towerId}.name`)}</strong>
+            <strong>{towerName(content.map.id, selectedTower.towerId)}</strong>
           </div>
           <div className="zb-tower-stats">
             <span>{t('defense.ui.damage')} <b>{selectedLevel.damage}</b></span>
@@ -752,9 +836,12 @@ export function DefenseGame({
       </section>
     </footer>
 
-    {result ? <section className="zb-result" role="dialog" aria-modal="true" aria-labelledby="zb-result-title">
+    {result ? <section className={`zb-result ${result.won ? 'is-win' : 'is-loss'}`} role="dialog" aria-modal="true" aria-labelledby="zb-result-title" data-result-grade="COMMERCIAL_GFX_V1">
       <div>
-        <small>{t('defense.ui.result')}</small>
+        <div className="zb-result-head">
+          <span className="zb-result-kicker">{t('defense.ui.result')}</span>
+          <div className="zb-result-stars" aria-hidden="true">{[1,2,3].map(star => <span key={star} className={star <= result.stars ? 'is-earned' : ''}>★</span>)}</div>
+        </div>
         <h2 id="zb-result-title">{t(result.won ? 'defense.ui.won' : 'defense.ui.lost')}</h2>
         <dl>
           <div><dt>{t('defense.ui.stars')}</dt><dd>{result.stars} / 3</dd></div>
@@ -768,13 +855,13 @@ export function DefenseGame({
           <div className="zb-event-leaks">
             <small>{t('defense.event.result.leaks')}</small>
             {leakedEntries.length ? <ul>{leakedEntries.map(([enemyId, count]) => <li key={enemyId}>
-              <span>{enemyName(enemyId)}</span><b>×{count}</b>
+              <span>{enemyName(content.map.id, enemyId)}</span><b>×{count}</b>
             </li>)}</ul> : <p>{t('defense.event.result.no_leaks')}</p>}
           </div>
           <div className="zb-event-recommend">
             <small>{t('defense.event.result.recommend')}</small>
-            <strong>{t(`defense.tower.${recommendedTowerId}.name`)}</strong>
-            <span>{t(`defense.tower.${recommendedTowerId}.role`)}</span>
+            <strong>{towerName(content.map.id, recommendedTowerId)}</strong>
+            <span>{towerRole(content.map.id, recommendedTowerId)}</span>
           </div>
         </section> : null}
         {persistence.awardedCosmeticIds.length ? <div className="zb-result-rewards">

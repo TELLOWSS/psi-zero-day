@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "gate": "G8A_FULL_SCREEN_VISUAL_LOCK",
-  "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
+  "status": "PRODUCTION_LOCKED",
   "baseline": {
     "mainSha": "0e277958a3e3edf74ad24b242c83277f704416cd",
     "world": {
@@ -89,10 +89,10 @@
   },
   "lockSemantics": {
     "assetLock": "G8-A WORLD + SWIFT + CONTROL representative asset proof; already passed",
-    "fullScreenVisualLock": "whole visible representative Wave 8 screen reaches coherent commercial-game presentation; not yet passed",
+    "fullScreenVisualLock": "closed: physical fullscreen, dynamic site presentation, camera/zoom and representative Wave 8 impact are accepted for Production Lock",
     "neverTreatAsEquivalent": true
   },
-  "stopLine": "Physical Android evidence reopened only the G8-A landscape presentation shell. V-01 through V-05 assets, topology, balance, portrait framing, cinematic and representative motion remain locked while the physical-phone fullscreen shell is corrected.",
+  "stopLine": "Full-Screen Visual Lock is closed. V-01 through V-05, Physical Fullscreen, Dynamic Site, P-02 Impact Feel and Voice Integration remain locked; reopen only for a demonstrated regression or deliberate art-direction change.",
   "visualDoctrine": {
     "siteUniquenessFirst": true,
     "rule": "Every final gameplay visual must inherit meaning from the construction site's actual process, temporary works, logistics, visibility and worker-equipment interfaces. Do not overlay a generic fantasy tower-defense art language on top of a realistic construction map.",
@@ -474,7 +474,7 @@
   },
   "fullScreenReview": {
     "title": "G8-A Full-Screen Visual Revalidation",
-    "status": "PHYSICAL_DEVICE_LANDSCAPE_CORRECTION_ACTIVE",
+    "status": "PHYSICAL_DEVICE_DYNAMIC_SITE_PASS",
     "reasons": [
       "portrait camera moved from x=0 to x=430 to frame the reviewed haul-road conflict area",
       "visible route/pads/enemy-response positions now use a shared visual projection aligned to the locked world art"
@@ -540,7 +540,7 @@
       ],
       "stopLine": "Reopen this lock only for a demonstrated regression or a deliberate new art-direction decision."
     },
-    "productionLocked": false,
+    "productionLocked": true,
     "lockedAt": "2026-09-27",
     "finalEvidence": {
       "githubActionsRun": 36303387182,
@@ -638,8 +638,16 @@
       },
       "regression": {
         "observed": true,
-        "finding": "world remained a small centered 5:3 board while HUD/command chrome and Android system bars dominated the landscape screen",
-        "deviceEvidenceWaveRange": "WAVE 1 through WAVE 5"
+        "decision": "FAIL_DYNAMIC_SITE_PRESENTATION",
+        "finding": "WAVE 1–5 read as a small/static tower-defense board: workers and site traffic were not legible, most tower/risk presentation remained abstract, and no meaningful zoom/focus beat was visible in the recorded play.",
+        "deviceEvidenceWaveRange": "WAVE 1 through WAVE 5",
+        "userVisibleFailures": [
+          "workers did not read as active site actors at phone scale",
+          "dump/site traffic did not visibly circulate during early waves",
+          "non-CONTROL tower families still read as abstract game markers",
+          "early-wave risk actors still read as abstract wave symbols",
+          "camera behavior was not observable before the later representative Wave 8 conditions"
+        ]
       },
       "correction": {
         "landscapeFrame": {
@@ -655,9 +663,171 @@
         },
         "hud": "top overlay",
         "command": "bottom overlay",
-        "androidSystemBars": "immersive fullscreen / transient swipe reveal"
+        "androidSystemBars": "immersive fullscreen / transient swipe reveal",
+        "dynamicSiteLayer": "five enlarged raster workers remain visible from early waves; ambient approved dump raster circulates through WAVE 1–5 unless a real SWIFT risk is active",
+        "towerVisualSystem": "G8-A tower families render construction-semantic Episode 01 raster elements instead of prototype SVG glyphs while dedicated tower masters remain a later final-art task",
+        "riskActorSystem": "NORMAL/SWARM/ARMORED receive site-actor presentation on G8-A while internal enemy IDs and balance remain unchanged",
+        "cameraSystem": "tower placement and newly spawned risks can trigger THREAT_APPROACH before Wave 8; player receives 100–180% manual zoom controls",
+        "protectedContracts": [
+          "Defense engine state and balance",
+          "logical route topology and pad coordinates",
+          "WORLD/SWIFT/VEILED locked raster assets",
+          "CONTROL L1 representative semantic",
+          "Episode 01 story/voice/audio contracts"
+        ]
       },
-      "next": "Automated 780x360 regression + rebuilt Android APK + second physical-device recording."
+      "next": "Production Lock closed. Reopen only for a demonstrated physical-device regression.",
+      "automatedRevalidation": {
+        "status": "PASS",
+        "githubActionsRun": 36317181019,
+        "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
+        "viewport": "780x360",
+        "board": {
+          "width": 780,
+          "height": 360,
+          "widthShare": 1,
+          "heightShare": 1
+        },
+        "hudPx": 40,
+        "idleCommandPx": 60,
+        "motionWorkers": 3,
+        "motionVehicles": 1,
+        "controlFinalVisible": true,
+        "prototypeBoardItems": 0,
+        "activeSvgVisuals": 0,
+        "overflow": false
+      },
+      "dynamicSiteImplementation": {
+        "status": "PHYSICAL_DEVICE_PASS",
+        "branch": "sol/commercial-presentation-upgrade-20260927",
+        "workers": 5,
+        "earlyAmbientVehicle": "APPROVED_SWIFT_DUMP_RASTER_AS_SITE_CIRCULATION",
+        "earlyCameraReasons": [
+          "TOWER_PLACEMENT",
+          "RISK_ENTRY",
+          "WAVE_ENTRY"
+        ],
+        "manualZoomRange": [
+          1,
+          1.8
+        ],
+        "dedicatedTowerMasterArt": "TODO_AFTER_PRESENTATION_BEHAVIOR_LOCK",
+        "automatedEvidence": {
+          "sourceSha": "a88b5f42abe9f47df0b106afb0ced4edf209cee5",
+          "visualPushRun": 36319405642,
+          "visualPullRequestRun": 36319408012,
+          "androidQaRun": 36319405640,
+          "androidArtifactId": 10932221045,
+          "result": "TYPECHECK_BUILD_BROWSER_GATE_AND_ANDROID_APK_PASS"
+        }
+      },
+      "finalAcceptance": {
+        "acceptedAt": "2026-09-27",
+        "source": "PROJECT_OWNER_DIRECTIVE",
+        "directive": "Treat the rebuilt physical-device replay as PASS and proceed.",
+        "newRecordingArtifactSupplied": false,
+        "accepted": [
+          "landscape world fullscreen",
+          "immersive Android system bars",
+          "HUD/command hierarchy",
+          "readable workers and site traffic",
+          "semantic tower/risk presentation",
+          "automatic camera focus",
+          "100-180% manual zoom",
+          "representative Wave 8 SWIFT_THREAT",
+          "CONTROL_INTERVENTION / brake",
+          "worker EVADE to SAFE_RETURN",
+          "RESOLUTION / recovery"
+        ],
+        "decision": "PASS_CLOSE_COMMERCIAL_PRODUCTION_LOCK"
+      }
+    },
+    "commercialPresentationP02": {
+      "status": "ACTUAL_PLAY_QA_PASS",
+      "impactHoldMs": 130,
+      "shakeMs": 140,
+      "approachScale": {
+        "landscape": 1.16,
+        "portrait": 1.1
+      },
+      "impactScale": {
+        "landscape": 1.28,
+        "portrait": 1.18
+      },
+      "sequence": [
+        "STRATEGIC_BASE",
+        "THREAT_APPROACH",
+        "IMPACT_CLOSE_UP",
+        "RETURN_RECOVER"
+      ],
+      "workerSequence": [
+        "WALK/DIRECT",
+        "EVADE",
+        "SAFE_RETURN"
+      ],
+      "githubActionsRun": 36317181019,
+      "sourceSha": "a18a7e6e501b9b32283f5ad6262ff6d421f8aa51",
+      "transientCapture": "ATOMIC_DOM_SNAPSHOT"
     }
+  },
+  "postAudioMergeRevalidation": {
+    "status": "PENDING_CI",
+    "base": "main",
+    "baseSha": "5c7e232929fd5a3f3a8b2ced5a4408daf793cc65",
+    "premiumAudioPr": 73,
+    "premiumAudioState": "AUDIO_PRODUCTION_LOCKED",
+    "purpose": "Force Commercial Presentation regression against main after PR #73 merge before PR #74 merge.",
+    "requestedAt": "2026-09-27"
+  },
+  "graphicsPolishV1": {
+    "status": "QA_PASS",
+    "requestedAt": "2026-09-27",
+    "scope": [
+      "main hero depth integration",
+      "G8-A world color-grade integration",
+      "semantic equipment silhouette upgrade",
+      "risk actor contact shadows and reduced game HUD clutter",
+      "premium command/wave panel treatment",
+      "commercial result-screen treatment"
+    ],
+    "protectedContracts": [
+      "Defense engine state and balance",
+      "logical route topology and pad coordinates",
+      "Wave composition and timing",
+      "WORLD/SWIFT/VEILED locked final rasters",
+      "Episode 01 story/voice contracts",
+      "G8-A Premium Audio Production Lock"
+    ],
+    "visualFindings": [
+      "locked world plate quality is sufficient; the remaining quality gap is compositing and UI integration rather than map replacement",
+      "full-health bars on G8-A site actors made the live world read as a generic tower-defense board",
+      "reused tower scene elements needed cleaner physical silhouettes and scale discipline",
+      "cutout characters and equipment needed common lighting/contact treatment to sit inside the same world",
+      "Defense result presentation still read as a generic web modal"
+    ],
+    "expectedOutcome": "Preserve the realistic construction world while making actors, safety equipment, HUD and result flow read as one commercial game presentation.",
+    "qaPassedAt": "2026-09-27",
+    "headSha": "492095a8286f3639d04a71c874e74d2e55496964",
+    "evidence": {
+      "titleRun": 36325993083,
+      "titleResult": "SUCCESS",
+      "titleArtifactId": 10934450182,
+      "titleArtifactDigest": "sha256:7f1774fd16b1f534d0e981b5c8685de633339c95429fbacd3758034bc3b7edf3",
+      "fullVisualRun": 36325993092,
+      "fullVisualResult": "SUCCESS",
+      "fullVisualArtifactId": 10934216065,
+      "fullVisualArtifactDigest": "sha256:a7bc2e9e9fc470c80ecc6688992763173a44176b92e3f80fad2516adf6c44f90",
+      "voiceRun": 36325993067,
+      "voiceResult": "SUCCESS",
+      "premiumAudioRun": 36325993117,
+      "premiumAudioResult": "SUCCESS"
+    },
+    "screenshotReview": [
+      "desktop title reads cleaner after removing floating cast quotes while retaining character identity and role plates",
+      "780x360 physical-landscape title hierarchy remains intact",
+      "G8-A mobile impact capture no longer shows a detached floating full-health HUD bar over site actors",
+      "approved construction world remains dominant; presentation overlays no longer compete with the world plate"
+    ],
+    "next": "Commercial Graphics Integration V1 is locked. Reopen only for a demonstrated regression or a deliberate art-direction change."
   }
 }

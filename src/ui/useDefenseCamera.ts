@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { DefenseContent, DefensePoint, DefenseRunState } from '../domain/defense';
 import { defensePositionAtDistance } from '../engine/defense';
 import { defenseMapFrame, defenseMapPointPercent } from '../app/defense-map-framing';
+import { defenseVisualPadPoint, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 
 export type DefenseCameraMode =
   | 'STRATEGIC_BASE'
@@ -19,12 +20,16 @@ export interface DefenseCameraSignal {
 export interface DefenseCameraPresentation {
   readonly mode: DefenseCameraMode;
   readonly scale: number;
+  readonly manualScale: number;
   readonly focus: {
     readonly left: number;
     readonly top: number;
   };
   readonly focusEnemyId: string | null;
   readonly reason: string | null;
+  readonly zoomIn: () => void;
+  readonly zoomOut: () => void;
+  readonly resetZoom: () => void;
 }
 
 function activeSlowSources(enemy: DefenseRunState['enemies'][number], tick: number): ReadonlySet<string> {
@@ -50,7 +55,7 @@ function controlThreat(
       const level = content.towers
         .find(item => item.id === 'CONTROL')
         ?.levels.find(item => item.id === tower.levelId);
-      return pad && level ? { pad, range: level.range } : null;
+      return pad && level ? { pad, visualPad: defenseVisualPadPoint(content.map.id, pad), range: level.range } : null;
     })
     .filter((item): item is NonNullable<typeof item> => item !== null);
 
@@ -60,6 +65,7 @@ function controlThreat(
   for (const enemy of state.enemies) {
     if (enemy.enemyId !== 'SWIFT' && enemy.enemyId !== 'VEILED') continue;
     const pos = defensePositionAtDistance(content.map.path, enemy.distance);
+    const visualPos = defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance);
     for (const control of controls) {
       const dx = pos.x - control.pad.x;
       const dy = pos.y - control.pad.y;
@@ -67,7 +73,11 @@ function controlThreat(
       const triggerRange = control.range + 70;
       if (distance > triggerRange) continue;
       const score = distance / Math.max(1, triggerRange);
-      if (!best || score < best.score) best = { enemyId: enemy.id, focus: pos, score };
+      const focus = {
+        x: visualPos.x * 0.62 + control.visualPad.x * 0.38,
+        y: visualPos.y * 0.62 + control.visualPad.y * 0.38,
+      };
+      if (!best || score < best.score) best = { enemyId: enemy.id, focus, score };
     }
   }
   return best;
@@ -78,11 +88,50 @@ export function defenseCameraSignal(
   current: DefenseRunState | null,
   content: DefenseContent,
 ): DefenseCameraSignal {
-  if (!previous || !current || previous.runId !== current.runId || current.status !== 'RUNNING') {
+  if (!previous || !current || previous.runId !== current.runId) {
+    return { kind: 'NONE', enemyId: null, focus: null, reason: null };
+  }
+
+  const addedTower = current.towers.find(tower => !previous.towers.some(before => before.id === tower.id));
+  if (addedTower) {
+    const pad = content.map.pads.find(item => item.id === addedTower.padId);
+    if (pad) {
+      return {
+        kind: 'APPROACH',
+        enemyId: null,
+        focus: defenseVisualPadPoint(content.map.id, pad),
+        reason: 'TOWER_PLACEMENT',
+      };
+    }
+  }
+
+  if (current.status !== 'RUNNING') {
     return { kind: 'NONE', enemyId: null, focus: null, reason: null };
   }
 
   const previousById = new Map(previous.enemies.map(enemy => [enemy.id, enemy]));
+
+  if (current.waveId !== previous.waveId) {
+    const first = current.enemies[0];
+    return {
+      kind: 'APPROACH',
+      enemyId: first?.id ?? null,
+      focus: first
+        ? defenseVisualPositionAtDistance(content.map.id, content.map.path, first.distance)
+        : defenseVisualPositionAtDistance(content.map.id, content.map.path, 0),
+      reason: 'WAVE_ENTRY',
+    };
+  }
+
+  const newlySpawned = current.enemies.find(enemy => !previousById.has(enemy.id));
+  if (newlySpawned) {
+    return {
+      kind: 'APPROACH',
+      enemyId: newlySpawned.id,
+      focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, newlySpawned.distance),
+      reason: 'RISK_ENTRY',
+    };
+  }
 
   for (const enemy of current.enemies) {
     const before = previousById.get(enemy.id);
@@ -91,10 +140,13 @@ export function defenseCameraSignal(
     const nowSlow = activeSlowSources(enemy, current.tick);
     const newlySlowed = [...nowSlow].some(source => !beforeSlow.has(source));
     if (newlySlowed) {
+      const relationship = controlThreat(current, content);
       return {
         kind: 'IMPACT',
         enemyId: enemy.id,
-        focus: defensePositionAtDistance(content.map.path, enemy.distance),
+        focus: relationship?.enemyId === enemy.id
+          ? relationship.focus
+          : defenseVisualPositionAtDistance(content.map.id, content.map.path, enemy.distance),
         reason: 'CONTROL_INTERVENTION',
       };
     }
@@ -107,7 +159,7 @@ export function defenseCameraSignal(
       return {
         kind: 'APPROACH',
         enemyId: currentVeiled.id,
-        focus: defensePositionAtDistance(content.map.path, currentVeiled.distance),
+        focus: defenseVisualPositionAtDistance(content.map.id, content.map.path, currentVeiled.distance),
         reason: 'VEILED_REVEAL',
       };
     }
@@ -146,6 +198,7 @@ export function useDefenseCamera(
   const [focus, setFocus] = useState<DefensePoint | null>(null);
   const [focusEnemyId, setFocusEnemyId] = useState<string | null>(null);
   const [reason, setReason] = useState<string | null>(null);
+  const [manualScale, setManualScale] = useState(1);
 
   const clearTimers = () => {
     for (const timer of timersRef.current) window.clearTimeout(timer);
@@ -157,7 +210,7 @@ export function useDefenseCamera(
     const signal = defenseCameraSignal(previous, state, content);
     previousRef.current = state;
 
-    if (!state || state.status !== 'RUNNING') {
+    if (!state || state.status === 'WON' || state.status === 'LOST') {
       clearTimers();
       setMode('STRATEGIC_BASE');
       setFocus(null);
@@ -172,7 +225,7 @@ export function useDefenseCamera(
       setFocusEnemyId(signal.enemyId);
       setReason(signal.reason);
       setMode('IMPACT_CLOSE_UP');
-      timersRef.current.push(window.setTimeout(() => setMode('RETURN_RECOVER'), 150));
+      timersRef.current.push(window.setTimeout(() => setMode('RETURN_RECOVER'), 130));
       timersRef.current.push(window.setTimeout(() => {
         setMode('STRATEGIC_BASE');
         setFocus(null);
@@ -201,6 +254,14 @@ export function useDefenseCamera(
 
   useEffect(() => () => clearTimers(), []);
 
+  useEffect(() => {
+    setManualScale(1);
+  }, [state?.runId, content.map.id]);
+
+  const zoomIn = () => setManualScale(current => Math.min(1.8, Math.round((current + 0.2) * 10) / 10));
+  const zoomOut = () => setManualScale(current => Math.max(1, Math.round((current - 0.2) * 10) / 10));
+  const resetZoom = () => setManualScale(1);
+
   const baseFrame = useMemo(
     () => defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height),
     [content.map.id, content.map.width, content.map.height, portrait],
@@ -212,12 +273,16 @@ export function useDefenseCamera(
 
   return {
     mode,
-    scale: defenseCameraScale(mode, portrait),
+    scale: Math.min(1.8, defenseCameraScale(mode, portrait) * manualScale),
+    manualScale,
     focus: {
       left: Math.max(8, Math.min(92, focusPercent.left)),
       top: Math.max(8, Math.min(92, focusPercent.top)),
     },
     focusEnemyId,
     reason,
+    zoomIn,
+    zoomOut,
+    resetZoom,
   };
 }

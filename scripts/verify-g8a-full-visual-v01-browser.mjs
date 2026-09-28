@@ -107,11 +107,11 @@ async function evaluate(cdp, expression) {
   }
   return result.result?.value;
 }
-async function waitFor(cdp, expression, timeoutMs = 12000) {
+async function waitFor(cdp, expression, timeoutMs = 12000, intervalMs = 100) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
     if (await evaluate(cdp, expression)) return;
-    await sleep(100);
+    await sleep(intervalMs);
   }
   throw new Error('Timed out waiting for: ' + expression);
 }
@@ -308,6 +308,31 @@ async function placeAndStart(cdp) {
   await waitFor(cdp, "document.querySelectorAll('.zb-enemy').length > 0", 8000);
   await sleep(500);
 }
+async function waitForImpactSnapshot(cdp, timeoutMs = 2500, intervalMs = 10) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const snapshot = await evaluate(cdp, `(() => {
+      const shell=document.querySelector('[data-defense-screen="combat"]');
+      if(shell?.getAttribute('data-camera-reason') !== 'CONTROL_INTERVENTION' || shell?.getAttribute('data-camera-mode') !== 'IMPACT_CLOSE_UP') return null;
+      return {
+        cameraMode:shell.getAttribute('data-camera-mode'),
+        cameraReason:shell.getAttribute('data-camera-reason'),
+        cameraScale:getComputedStyle(shell).getPropertyValue('--zb-camera-scale').trim(),
+        workerGroupState:document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state')||null,
+        workerResponses:[...document.querySelectorAll('[data-motion-worker]')].map(el=>el.getAttribute('data-worker-response')),
+        boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
+        vehicleStates:[...document.querySelectorAll('[data-motion-vehicle]')].map(el=>el.getAttribute('data-vehicle-state')),
+        representativeImpactRings:document.querySelectorAll('.zb-enemy-swift .zb-impact-ring,.zb-enemy-veiled .zb-impact-ring').length,
+        overflow:document.documentElement.scrollWidth>innerWidth+2,
+        viewport:{width:innerWidth,height:innerHeight},
+      };
+    })()`);
+    if (snapshot) return snapshot;
+    await sleep(intervalMs);
+  }
+  throw new Error('Timed out waiting for atomic CONTROL impact snapshot');
+}
+
 async function metrics(cdp) {
   return evaluate(cdp, `(async () => {
     const shell=document.querySelector('[data-defense-screen="combat"]');
@@ -330,6 +355,9 @@ async function metrics(cdp) {
       frameMode:shell?.getAttribute('data-frame-mode')||null,
       cameraMode:shell?.getAttribute('data-camera-mode')||null,
       cameraReason:shell?.getAttribute('data-camera-reason')||null,
+      cameraScale:shell ? getComputedStyle(shell).getPropertyValue('--zb-camera-scale').trim() : null,
+      workerGroupState:document.querySelector('[data-site-activity="G8A"]')?.getAttribute('data-worker-group-state')||null,
+      workerResponses:[...document.querySelectorAll('[data-motion-worker]')].map(el=>el.getAttribute('data-worker-response')),
       boardViewBox:document.querySelector('.zb-board')?.getAttribute('viewBox')||null,
       logicalRoute:shell?.getAttribute('data-logical-route')||null,
       visualRoute:shell?.getAttribute('data-visual-route')||null,
@@ -435,7 +463,9 @@ const report={
   mobile:null,
   mobileSelectedPad:null,
   desktopImpact:null,
+  desktopRecover:null,
   mobileImpact:null,
+  mobileRecover:null,
   failures:[],
 };
 let cdp;
@@ -485,19 +515,21 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
-  await waitFor(cdp, `(() => {
-    const shell=document.querySelector('[data-defense-screen="combat"]');
-    const mode=shell?.getAttribute('data-camera-mode');
-    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && (mode === 'IMPACT_CLOSE_UP' || mode === 'RETURN_RECOVER');
-  })()`, 2500);
-  report.desktopImpact=await metrics(cdp);
-  if(!['IMPACT_CLOSE_UP','RETURN_RECOVER'].includes(report.desktopImpact.cameraMode) || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
-    throw new Error('Desktop CONTROL impact/recover camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
+  report.desktopImpact=await waitForImpactSnapshot(cdp, 2500, 10);
+  if(report.desktopImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.desktopImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('Desktop CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.desktopImpact.cameraMode,reason:report.desktopImpact.cameraReason}));
+  }
+  if(report.desktopImpact.workerGroupState!=='EVADE' || !report.desktopImpact.workerResponses.every(state => state==='EVADE')) {
+    throw new Error('Desktop workers did not enter EVADE with impact: '+JSON.stringify({group:report.desktopImpact.workerGroupState,responses:report.desktopImpact.workerResponses}));
   }
   if(!report.desktopImpact.vehicleStates.includes('BRAKE')) throw new Error('Desktop SWIFT BRAKE state did not trigger: '+JSON.stringify(report.desktopImpact.vehicleStates));
   if(report.desktopImpact.representativeImpactRings!==0) throw new Error('Desktop representative risks still use generic impact rings: '+report.desktopImpact.representativeImpactRings);
   await screenshot(cdp,'02-g8a-control-impact.png');
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
+  report.desktopRecover=await metrics(cdp);
+  if(report.desktopRecover.workerGroupState!=='SAFE_RETURN' || !report.desktopRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
+    throw new Error('Desktop workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.desktopRecover.workerGroupState,responses:report.desktopRecover.workerResponses}));
+  }
 
   await viewport(cdp,780,360,true);
   await clearState(cdp);
@@ -594,21 +626,23 @@ try {
   await navigate(cdp);
   await enterRepresentativeBottomUp(cdp, true);
   await evaluate(cdp, "document.querySelector('.zb-hud-button')?.click(); true");
-  await waitFor(cdp, "!document.querySelector('.zb-status b')", 1200);
-  await waitFor(cdp, `(() => {
-    const shell=document.querySelector('[data-defense-screen="combat"]');
-    const mode=shell?.getAttribute('data-camera-mode');
-    return shell?.getAttribute('data-camera-reason') === 'CONTROL_INTERVENTION' && (mode === 'IMPACT_CLOSE_UP' || mode === 'RETURN_RECOVER');
-  })()`, 2500);
-  report.mobileImpact=await metrics(cdp);
+  report.mobileImpact=await waitForImpactSnapshot(cdp, 2500, 10);
   if(report.mobileImpact.boardViewBox!==EXPECTED_PORTRAIT_VIEWBOX) throw new Error('Full-screen review impact camera lost portrait crop: '+report.mobileImpact.boardViewBox);
-  if(!['IMPACT_CLOSE_UP','RETURN_RECOVER'].includes(report.mobileImpact.cameraMode) || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
-    throw new Error('390x844 CONTROL impact/recover camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
+  if(report.mobileImpact.cameraMode!=='IMPACT_CLOSE_UP' || report.mobileImpact.cameraReason!=='CONTROL_INTERVENTION') {
+    throw new Error('390x844 CONTROL impact camera did not trigger: '+JSON.stringify({mode:report.mobileImpact.cameraMode,reason:report.mobileImpact.cameraReason}));
+  }
+  if(report.mobileImpact.workerGroupState!=='EVADE' || !report.mobileImpact.workerResponses.every(state => state==='EVADE')) {
+    throw new Error('390x844 workers did not enter EVADE with impact: '+JSON.stringify({group:report.mobileImpact.workerGroupState,responses:report.mobileImpact.workerResponses}));
   }
   if(!report.mobileImpact.vehicleStates.includes('BRAKE')) throw new Error('390x844 SWIFT BRAKE state did not trigger: '+JSON.stringify(report.mobileImpact.vehicleStates));
   if(report.mobileImpact.representativeImpactRings!==0) throw new Error('390x844 representative risks still use generic impact rings: '+report.mobileImpact.representativeImpactRings);
   if(report.mobileImpact.overflow) throw new Error('390x844 impact camera caused horizontal overflow');
   await screenshot(cdp,'04-g8a-control-impact-mobile.png');
+  await waitFor(cdp, `document.querySelector('[data-defense-screen="combat"]')?.getAttribute('data-camera-mode') === 'RETURN_RECOVER'`, 1200, 20);
+  report.mobileRecover=await metrics(cdp);
+  if(report.mobileRecover.workerGroupState!=='SAFE_RETURN' || !report.mobileRecover.workerResponses.every(state => state==='SAFE_RETURN')) {
+    throw new Error('390x844 workers did not enter SAFE_RETURN during recovery: '+JSON.stringify({group:report.mobileRecover.workerGroupState,responses:report.mobileRecover.workerResponses}));
+  }
 
   const desktopPrototype = report.desktop?.prototypeBoardItems ?? -1;
   const mobilePrototype = report.mobile?.prototypeBoardItems ?? -1;
