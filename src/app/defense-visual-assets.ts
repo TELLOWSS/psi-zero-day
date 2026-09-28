@@ -2,6 +2,7 @@ import visualProductionRaw from '../../content/defense/visual-production.json';
 import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json';
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
+import controlTowerProductionRaw from '../../content/defense/control-tower-production-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import veiledFinalRaw from '../../content/defense/g8a-veiled-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
@@ -83,6 +84,43 @@ const productionMapFamily = productionMapFamilyRaw as ProductionMapFamily;
 
 export function defenseProductionMapEntry(mapId: string): ProductionMapFamilyEntry | null {
   return productionMapFamily.maps.find(item => item.mapId === mapId) ?? null;
+}
+
+
+interface ControlTowerProductionEntry {
+  readonly levelId: DefenseLevelId;
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly visualRole: string;
+}
+interface ControlTowerProductionManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ART_PIPELINE_READY' | 'PRODUCTION_LOCKED';
+  readonly family: 'CONTROL';
+  readonly mapId: string;
+  readonly levels: readonly ControlTowerProductionEntry[];
+}
+const controlTowerProduction = controlTowerProductionRaw as ControlTowerProductionManifest;
+
+export function defenseControlTowerProductionEntry(levelId: DefenseLevelId): ControlTowerProductionEntry | null {
+  return controlTowerProduction.levels.find(item => item.levelId === levelId) ?? null;
+}
+
+function approvedControlTowerVisual(levelId: DefenseLevelId): DefenseG8aTowerVisual | null {
+  const entry = defenseControlTowerProductionEntry(levelId);
+  if (!entry || entry.status !== 'PRODUCTION_APPROVED') return null;
+  if (!['webp','png'].includes(entry.format) || entry.runtimeUri.toLowerCase().includes('.svg')) return null;
+  return {
+    uri: entry.runtimeUri,
+    semantic: 'TRAFFIC_CONTROL',
+    width: entry.runtime.width,
+    height: entry.runtime.height,
+  };
 }
 
 interface SwiftFinalManifest {
@@ -251,9 +289,13 @@ const G8A_TOWER_VISUALS: Readonly<Record<DefenseTowerId, DefenseG8aTowerVisual>>
 export function defenseG8aTowerVisual(
   mapId: string,
   towerId: DefenseTowerId,
-  _levelId: DefenseLevelId,
+  levelId: DefenseLevelId,
 ): DefenseG8aTowerVisual | null {
   if (mapId !== 'map-apt-bottom-up-excavation-01') return null;
+  if (towerId === 'CONTROL') {
+    const dedicated = approvedControlTowerVisual(levelId);
+    if (dedicated) return dedicated;
+  }
   return G8A_TOWER_VISUALS[towerId] ?? null;
 }
 
