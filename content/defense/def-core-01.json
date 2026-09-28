@@ -247,7 +247,7 @@
   "gameplayIdentityLock": {
     "gate": "DEF-GAMEPLAY-IDENTITY-01",
     "scope": "representative vehicle-pedestrian CONTROL cycle only",
-    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_DEVICE_PENDING",
+    "status": "AUTOMATED_BROWSER_PASS_PHYSICAL_TARGET_NOT_EXERCISED",
     "preservesBaseDefenseEngine": true,
     "preservesWaveBalance": true,
     "expandsOtherTowerFamilies": false,
@@ -305,6 +305,26 @@
         }
       }
     },
-    "physicalDeviceGate": "PENDING_NEW_DEVICE_REPLAY"
+    "physicalDeviceGate": "REPLAY_REVIEWED_TARGET_NOT_EXERCISED",
+    "physicalDeviceEvidence": {
+      "reviewedAt": "2026-09-28",
+      "environment": "Samsung Browser · portrait",
+      "recordingPixels": "1080x2340",
+      "durationSeconds": 214.76,
+      "observed": "standard Field Defense Wave 1→10 completion and return to title",
+      "targetScenarioShown": false,
+      "missingRequiredPhases": [
+        "SIGNAL",
+        "READ",
+        "IMPACT",
+        "CINEMATIC",
+        "DECISION",
+        "RETURN",
+        "VERIFY",
+        "HOOK"
+      ],
+      "conclusion": "This replay verifies mobile runtime continuity, not DEF-GAMEPLAY-IDENTITY-01 A/B/C physical acceptance.",
+      "followup": "Use the actionable LIVE SITE · DEF-CORE-01 card to launch event-ramp-reconstruction-v1 for the next replay."
+    }
   }
 }
