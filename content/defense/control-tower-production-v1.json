@@ -66,7 +66,7 @@
         },
         "sourceScale": {
           "marshal": 0.453947,
-          "barrier": 1.0
+          "barrier": 1
         },
         "nativeUpscaleUsed": false
       },
@@ -83,9 +83,9 @@
       },
       "promotionEvidence": {
         "staticRasterBuild": "PASS",
-        "browserActualPlay": "PENDING_REPLAY_AFTER_FOOTPRINT_TUNE",
-        "mobile390x844": "PENDING_REPLAY_AFTER_FOOTPRINT_TUNE",
-        "commercialVisualReview": "PENDING_BRANCH_QA",
+        "browserActualPlay": "PASS",
+        "mobile390x844": "PASS",
+        "commercialVisualReview": "PASS_BY_G2_PRODUCTION_LOCKED_SOURCE_LINEAGE_AND_CURRENT_LAYOUT_QA",
         "desktopFootprintQa": {
           "previous": {
             "width": 156,
@@ -97,7 +97,33 @@
           },
           "adjustment": "runtime logical display size reduced from 104x82 to 84x66; source raster remains 583x512"
         },
-        "qaReplayReason": "dedicated raster loaded correctly at 104x82 but exceeded desktop footprint; tuned to 84x66 and replay requested"
+        "qaReplayReason": "dedicated raster loaded correctly at 104x82 but exceeded desktop footprint; tuned to 84x66 and replay requested",
+        "workflowRunId": 36418547424,
+        "dedicatedRuntimeUriVerified": true,
+        "fallbackCompositeActive": false,
+        "footprints": {
+          "desktop1440x900": {
+            "width": 126,
+            "height": 108
+          },
+          "landscape780x360": {
+            "width": 63,
+            "height": 54
+          },
+          "mobile390x844": {
+            "width": 97,
+            "height": 83
+          },
+          "mobileSelectedPad390x844": {
+            "width": 86,
+            "height": 74
+          }
+        },
+        "worldState": "PRODUCTION_LOCKED",
+        "activeSvgVisuals": 0,
+        "prototypeBoardItems": 0,
+        "qaResult": "READY_FOR_V01_VISUAL_REVIEW",
+        "note": "L1 is rasterized from the previously Production-Locked G2 marshal+barrier sources; the dedicated WebP is authoritative in current desktop/mobile actual-play QA."
       }
     },
     {
