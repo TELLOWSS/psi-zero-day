@@ -66,7 +66,7 @@
         },
         "sourceScale": {
           "marshal": 0.453947,
-          "barrier": 1.0
+          "barrier": 1
         },
         "nativeUpscaleUsed": false
       },
@@ -83,8 +83,8 @@
       },
       "promotionEvidence": {
         "staticRasterBuild": "PASS",
-        "browserActualPlay": "PENDING_BRANCH_QA",
-        "mobile390x844": "PENDING_BRANCH_QA",
+        "browserActualPlay": "PENDING_REPLAY_AFTER_FOOTPRINT_TUNE",
+        "mobile390x844": "PENDING_REPLAY_AFTER_FOOTPRINT_TUNE",
         "commercialVisualReview": "PENDING_BRANCH_QA",
         "desktopFootprintQa": {
           "previous": {
@@ -96,7 +96,8 @@
             "height": 120
           },
           "adjustment": "runtime logical display size reduced from 104x82 to 84x66; source raster remains 583x512"
-        }
+        },
+        "qaReplayReason": "dedicated raster loaded correctly at 104x82 but exceeded desktop footprint; tuned to 84x66 and replay requested"
       }
     },
     {
