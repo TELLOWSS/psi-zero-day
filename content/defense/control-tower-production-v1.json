@@ -21,10 +21,13 @@
   "levels": [
     {
       "levelId": "L1",
-      "status": "ASSET_PENDING",
+      "status": "PRODUCTION_APPROVED",
       "runtimeUri": "assets/defense/towers/control/control-l1-final.webp",
       "format": "webp",
-      "runtime": { "width": 104, "height": 82 },
+      "runtime": {
+        "width": 104,
+        "height": 82
+      },
       "visualRole": "BASE_TRAFFIC_CONTROL",
       "gameplayRead": {
         "range": 135,
@@ -39,14 +42,61 @@
         "short pedestrian separation segment or delineators",
         "single-lane stop/slow intervention readable at phone scale",
         "compact footprint that reads as an entry-level temporary control station"
-      ]
+      ],
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "RASTERIZED_FROM_G2_PRODUCTION_LOCKED_CONTROL_COMPOSITE",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
+        "sourceSha256": {
+          "marshal": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+          "barrier": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542"
+        },
+        "sourceNativePixels": {
+          "marshal": {
+            "width": 952,
+            "height": 1520
+          },
+          "barrier": {
+            "width": 820,
+            "height": 499
+          }
+        },
+        "sourceScale": {
+          "marshal": 0.453947,
+          "barrier": 1.0
+        },
+        "nativeUpscaleUsed": false
+      },
+      "assetIntegrity": {
+        "sha256": "fe96131c70c5cc2263ce0c391edf90b1ee0f7dc7924e38d5ca8c9f7cf41503df",
+        "bytes": 175790,
+        "pixelWidth": 583,
+        "pixelHeight": 512,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      },
+      "promotionEvidence": {
+        "staticRasterBuild": "PASS",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
     },
     {
       "levelId": "L2",
       "status": "ASSET_PENDING",
       "runtimeUri": "assets/defense/towers/control/control-l2-final.webp",
       "format": "webp",
-      "runtime": { "width": 116, "height": 86 },
+      "runtime": {
+        "width": 116,
+        "height": 86
+      },
       "visualRole": "REINFORCED_TRAFFIC_CONTROL",
       "gameplayRead": {
         "range": 145,
@@ -68,7 +118,10 @@
       "status": "ASSET_PENDING",
       "runtimeUri": "assets/defense/towers/control/control-l3a-final.webp",
       "format": "webp",
-      "runtime": { "width": 122, "height": 92 },
+      "runtime": {
+        "width": 122,
+        "height": 92
+      },
       "visualRole": "INTENSIVE_POINT_CONTROL",
       "gameplayRead": {
         "range": 155,
@@ -90,7 +143,10 @@
       "status": "ASSET_PENDING",
       "runtimeUri": "assets/defense/towers/control/control-l3b-final.webp",
       "format": "webp",
-      "runtime": { "width": 138, "height": 88 },
+      "runtime": {
+        "width": 138,
+        "height": 88
+      },
       "visualRole": "WIDE_FLOW_SEPARATION",
       "gameplayRead": {
         "range": 175,
