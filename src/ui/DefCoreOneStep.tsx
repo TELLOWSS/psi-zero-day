@@ -143,6 +143,10 @@ export function applyDefCoreOneStepRuntime(
 
   const previousById = new Map(previous.enemies.map(enemy => [enemy.id, enemy]));
   const sourceId = `def-core-01:${choice}`;
+  const activeSwiftId = previous.enemies
+    .filter(enemy => enemy.enemyId === contract.scope.riskId)
+    .slice()
+    .sort((a, b) => b.distance - a.distance)[0]?.id ?? null;
   const swiftByDistance = advanced.enemies
     .filter(enemy => enemy.enemyId === contract.scope.riskId)
     .slice()
@@ -171,7 +175,7 @@ export function applyDefCoreOneStepRuntime(
 
     // C means the waiting point itself changes. On the first live tick, the active vehicle
     // visibly returns toward staging before proceeding on the safer approach.
-    if (choice === 'C' && previous.tick === choiceTick) {
+    if (choice === 'C' && previous.tick === choiceTick && enemy.id === activeSwiftId) {
       distance = Math.max(0, distance - runtime.setbackDistance);
     }
 
