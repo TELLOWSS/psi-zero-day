@@ -22,7 +22,7 @@ describe('Phase D PULSE representative production art', () => {
   it('binds L1 visual meaning to the locked PULSE gameplay values', () => {
     const pulse = zeroBreach.towers.find(tower => tower.id === 'PULSE');
     const gameplay = pulse?.levels.find(level => level.id === 'L1');
-    const visual = manifest.levels[0];
+    const visual = manifest.levels[0]!;
 
     expect(gameplay).toBeTruthy();
     expect(visual.gameplayRead).toMatchObject({
