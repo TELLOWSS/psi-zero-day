@@ -3,6 +3,7 @@ import defHd01ArtIngestRaw from '../../content/defense/def-hd01-art-ingest.json'
 import defHd01PqBenchmarkRaw from '../../content/defense/def-hd01-pq-benchmark.json';
 import productionMapFamilyRaw from '../../content/defense/production-map-family-v1.json';
 import controlTowerProductionRaw from '../../content/defense/control-tower-production-v1.json';
+import pulseTowerProductionRaw from '../../content/defense/pulse-tower-production-v1.json';
 import swiftFinalRaw from '../../content/defense/g8a-swift-final-art.json';
 import veiledFinalRaw from '../../content/defense/g8a-veiled-final-art.json';
 import worldFinalRaw from '../../content/defense/g8a-world-final-art.json';
@@ -109,6 +110,43 @@ const controlTowerProduction = controlTowerProductionRaw as ControlTowerProducti
 
 export function defenseControlTowerProductionEntry(levelId: DefenseLevelId): ControlTowerProductionEntry | null {
   return controlTowerProduction.levels.find(item => item.levelId === levelId) ?? null;
+}
+
+interface PulseTowerProductionEntry {
+  readonly levelId: 'L1';
+  readonly status: 'ASSET_PENDING' | 'PRODUCTION_APPROVED';
+  readonly runtimeUri: string;
+  readonly format: 'webp' | 'png';
+  readonly runtime: {
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly visualRole: 'DIRECT_SAFETY_INTERVENTION';
+}
+interface PulseTowerProductionManifest {
+  readonly schemaVersion: 1;
+  readonly status: 'ART_PIPELINE_READY' | 'PRODUCTION_LOCKED';
+  readonly family: 'PULSE';
+  readonly mapId: string;
+  readonly levels: readonly PulseTowerProductionEntry[];
+}
+const pulseTowerProduction = pulseTowerProductionRaw as PulseTowerProductionManifest;
+
+export function defensePulseTowerProductionEntry(levelId: DefenseLevelId): PulseTowerProductionEntry | null {
+  if (levelId !== 'L1') return null;
+  return pulseTowerProduction.levels.find(item => item.levelId === 'L1') ?? null;
+}
+
+function approvedPulseTowerVisual(levelId: DefenseLevelId): DefenseG8aTowerVisual | null {
+  const entry = defensePulseTowerProductionEntry(levelId);
+  if (!entry || entry.status !== 'PRODUCTION_APPROVED') return null;
+  if (!['webp','png'].includes(entry.format) || entry.runtimeUri.toLowerCase().includes('.svg')) return null;
+  return {
+    uri: entry.runtimeUri,
+    semantic: 'ALERT_CONTROL',
+    width: entry.runtime.width,
+    height: entry.runtime.height,
+  };
 }
 
 function approvedControlTowerVisual(levelId: DefenseLevelId): DefenseG8aTowerVisual | null {
@@ -294,6 +332,10 @@ export function defenseG8aTowerVisual(
   if (mapId !== 'map-apt-bottom-up-excavation-01') return null;
   if (towerId === 'CONTROL') {
     const dedicated = approvedControlTowerVisual(levelId);
+    if (dedicated) return dedicated;
+  }
+  if (towerId === 'PULSE') {
+    const dedicated = approvedPulseTowerVisual(levelId);
     if (dedicated) return dedicated;
   }
   return G8A_TOWER_VISUALS[towerId] ?? null;
