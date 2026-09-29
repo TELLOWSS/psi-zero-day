@@ -37,7 +37,7 @@
   "levels": [
     {
       "levelId": "L1",
-      "status": "ASSET_PENDING",
+      "status": "PRODUCTION_APPROVED",
       "runtimeUri": "assets/defense/towers/pulse/pulse-l1-final.webp",
       "format": "webp",
       "runtime": {
@@ -59,7 +59,40 @@
         "no traffic-control barrier or signal-baton identity",
         "no electrical-panel identity",
         "no sci-fi turret or weapon"
-      ]
+      ],
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "NORMALIZED_FROM_PRODUCTION_LOCKED_PLAYER_MAP",
+        "sources": [
+          "assets/episode01/characters/player-map.webp"
+        ],
+        "sourceSha256": "830d0a44c71aec94d69dc77023e314bcb8cce67e9bdba5bebc975146127087f8",
+        "sourceNativePixels": {
+          "width": 696,
+          "height": 1024
+        },
+        "sourceScale": 0.689655,
+        "nativeUpscaleUsed": false,
+        "identityRead": "female safety manager + inspection tablet + direct pointing/intervention pose",
+        "controlSeparation": "no marshal baton, vehicle-flow barrier, or traffic-control corridor baked into PULSE"
+      },
+      "assetIntegrity": {
+        "sha256": "f8ebc113c6efef321d7c1c0454c4114fb2c7889175a0eb8668d54a648951cfc4",
+        "bytes": 134838,
+        "pixelWidth": 512,
+        "pixelHeight": 731,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      },
+      "promotionEvidence": {
+        "staticRasterBuild": "PASS",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
     }
   ],
   "forbidden": [
