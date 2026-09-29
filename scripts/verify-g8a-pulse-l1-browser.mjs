@@ -80,7 +80,7 @@ class Cdp {
         this.events.set(method, (this.events.get(method) || []).filter(item => item !== listener));
         resolve(params);
       };
-      const timer = setTimeout(() => reject(new Error('Timed out waiting for ' + method), timeoutMs));
+      const timer = setTimeout(() => reject(new Error('Timed out waiting for ' + method)), timeoutMs);
       this.events.set(method, [...(this.events.get(method) || []), listener]);
     });
   }
