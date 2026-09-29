@@ -152,12 +152,30 @@
       ],
       "promotionEvidence": {
         "materialization": "TRIGGERED",
-        "browserActualPlay": "PENDING_BRANCH_QA",
-        "mobile390x844": "PENDING_BRANCH_QA",
-        "commercialVisualReview": "PENDING_BRANCH_QA",
+        "browserActualPlay": "PASS",
+        "mobile390x844": "PASS",
+        "commercialVisualReview": "PASS_BY_PRODUCTION_LOCKED_SOURCE_LINEAGE_AND_CURRENT_LAYOUT_QA",
         "materializerRequestedAt": "2026-09-29",
-        "status": "PENDING_GITHUB_RASTER_BUILD",
-        "staticRasterBuild": "PASS"
+        "status": "PRODUCTION_QA_PASS",
+        "staticRasterBuild": "PASS",
+        "workflowRunId": 36529553548,
+        "dedicatedRuntimeUriVerified": true,
+        "l1RuntimeUriExcluded": true,
+        "fallbackCompositeActive": false,
+        "footprints": {
+          "desktop1440x900": {
+            "width": 129,
+            "height": 111
+          },
+          "mobile390x844": {
+            "width": 99,
+            "height": 85
+          }
+        },
+        "activeSvgVisuals": 0,
+        "overflow": false,
+        "qaResult": "PASS",
+        "note": "L2 is materially wider/denser than L1 via three linked barrier modules and a marshal; it is not a scaled L1 image."
       },
       "sourceReview": {
         "status": "PASS",
