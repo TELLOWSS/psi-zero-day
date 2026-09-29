@@ -279,12 +279,12 @@
     },
     {
       "levelId": "L3B",
-      "status": "ASSET_PENDING",
+      "status": "PRODUCTION_APPROVED",
       "runtimeUri": "assets/defense/towers/control/control-l3b-final.webp",
       "format": "webp",
       "runtime": {
-        "width": 138,
-        "height": 88
+        "width": 86,
+        "height": 66
       },
       "visualRole": "WIDE_FLOW_SEPARATION",
       "gameplayRead": {
@@ -300,7 +300,53 @@
         "multiple delineators or modular rails showing larger controlled area",
         "one marshal remains visible to keep the human-control identity",
         "must visually communicate coverage and sustained separation rather than maximum stop strength"
-      ]
+      ],
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "RASTERIZED_FROM_PRODUCTION_LOCKED_CONTROL_COMPONENTS",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
+        "sourceSha256": {
+          "marshal": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+          "barrier": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542"
+        },
+        "sourceNativePixels": {
+          "marshal": {
+            "width": 952,
+            "height": 1520
+          },
+          "barrier": {
+            "width": 820,
+            "height": 499
+          }
+        },
+        "sourceScale": {
+          "marshal": 0.407895,
+          "barrierMain": 0.731463,
+          "barrierSmall": 0.609756
+        },
+        "nativeUpscaleUsed": false,
+        "silhouetteDeltaFromL3A": "five linked barrier modules form a wide, low separation corridor around one marshal; broader and less vertical than L3A hard-stop gate"
+      },
+      "assetIntegrity": {
+        "sha256": "11781ff4ceee9beeff3112218a1a16d8e98b78628e33d6df0191c448f2e8d8fe",
+        "bytes": 214714,
+        "pixelWidth": 960,
+        "pixelHeight": 433,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      },
+      "promotionEvidence": {
+        "staticRasterBuild": "PASS",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
     }
   ],
   "forbidden": [
