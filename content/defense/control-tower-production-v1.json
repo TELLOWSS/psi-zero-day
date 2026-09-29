@@ -149,7 +149,13 @@
         "clearer pedestrian channel separation than L1",
         "marshal with radio/hand-signal equipment",
         "visibly reinforced but not yet branch-specialized"
-      ]
+      ],
+      "promotionEvidence": {
+        "materialization": "TRIGGERED",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
     },
     {
       "levelId": "L3A",
