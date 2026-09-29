@@ -72,7 +72,7 @@ jobs:
         env:
           PSI_G8A_ARTIFACT_DIR: artifacts/g8a-full-visual-v01
         run: |
-          mkdir -p artifacts/g8a-full-visual-v01 artifacts/g8a-v05-cinematic
+          mkdir -p artifacts/g8a-full-visual-v01 artifacts/g8a-control-l2 artifacts/g8a-v05-cinematic
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-v01-preview.log 2>&1 &
           PREVIEW_PID=$!
           cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
@@ -90,6 +90,12 @@ jobs:
             exit 1
           fi
           node scripts/verify-g8a-full-visual-v01-browser.mjs
+          if node -e "const m=require('./content/defense/control-tower-production-v1.json'); const l=m.levels.find(x=>x.levelId==='L2'); process.exit(l?.status==='PRODUCTION_APPROVED'?0:1)"; then
+            echo "CONTROL:L2 approved — running dedicated desktop/mobile actual-play gate."
+            PSI_G8A_CONTROL_LEVEL=L2 PSI_G8A_ARTIFACT_DIR=artifacts/g8a-control-l2 PSI_CHROME_DEBUG_PORT=9889 node scripts/verify-g8a-full-visual-v01-browser.mjs
+          else
+            echo "CONTROL:L2 not yet approved — dedicated L2 replay skipped."
+          fi
           PSI_DEF_CORE_01_ARTIFACT_DIR=artifacts/g8a-v05-cinematic node scripts/verify-def-core-01-browser.mjs
 
       - name: Upload V-01 browser evidence
@@ -99,5 +105,6 @@ jobs:
           name: g8a-full-visual-v01-evidence
           path: |
             artifacts/g8a-full-visual-v01
+            artifacts/g8a-control-l2
             artifacts/g8a-v05-cinematic
           if-no-files-found: error
