@@ -9,12 +9,16 @@ fs.mkdirSync(outputDir, { recursive: true });
 const worldManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-world-final-art.json'), 'utf8'));
 const swiftManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-swift-final-art.json'), 'utf8'));
 const veiledManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/g8a-veiled-final-art.json'), 'utf8'));
+const controlManifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/control-tower-production-v1.json'), 'utf8'));
 const productionMapFamily = JSON.parse(fs.readFileSync(path.resolve('content/defense/production-map-family-v1.json'), 'utf8'));
 const representativeMapContract = productionMapFamily.maps?.find(item => item.mapId === 'map-apt-bottom-up-excavation-01');
 if (!representativeMapContract) throw new Error('G8-A representative production-map contract is missing');
 const worldApproved = worldManifest.status === 'PRODUCTION_APPROVED' && worldManifest.promotion?.productionApproved === true;
 const swiftApproved = swiftManifest.status === 'PRODUCTION_APPROVED' && swiftManifest.promotion?.productionApproved === true;
 const veiledApproved = veiledManifest.status === 'PRODUCTION_APPROVED' && veiledManifest.promotion?.productionApproved === true;
+const controlL1 = controlManifest.levels?.find(item => item.levelId === 'L1');
+const controlL1Approved = controlL1?.status === 'PRODUCTION_APPROVED';
+const expectedControlUri = controlL1Approved ? controlL1.runtimeUri : null;
 const finalAssetsApproved = worldApproved && swiftApproved && veiledApproved;
 const expectedWorldHref = worldApproved
   ? worldManifest.runtimeUri
@@ -374,8 +378,12 @@ async function metrics(cdp) {
       routePoints:document.querySelector('.zb-path')?.getAttribute('points')||null,
       towers:document.querySelectorAll('.zb-tower').length,
       controlPq:document.querySelectorAll('[data-pq-control="CONTROL:L1"]').length,
+      controlDedicated:document.querySelectorAll('[data-g8a-control-dedicated="true"][data-g8a-tower-level="L1"]').length,
+      controlUri:document.querySelector('[data-g8a-control-dedicated="true"][data-g8a-tower-level="L1"]')?.getAttribute('data-g8a-tower-uri')||null,
+      controlImageHref:document.querySelector('[data-g8a-control-dedicated="true"][data-g8a-tower-level="L1"] image')?.getAttribute('href')||null,
       controlBounds:(() => {
-        const el=document.querySelector('[data-pq-control="CONTROL:L1"]');
+        const el=document.querySelector('[data-g8a-control-dedicated="true"][data-g8a-tower-level="L1"]')
+          || document.querySelector('[data-pq-control="CONTROL:L1"]');
         if(!el)return null;
         const r=el.getBoundingClientRect();
         return {width:Math.round(r.width),height:Math.round(r.height)};
@@ -494,7 +502,14 @@ try {
   if(report.desktop.pads!==8) throw new Error('Locked pad count changed');
   if(report.desktop.logicalRoute!==EXPECTED_LOGICAL_ROUTE) throw new Error('Logical simulation topology changed: '+report.desktop.logicalRoute);
   if(report.desktop.visualRoute!==EXPECTED_VISUAL_ROUTE || report.desktop.routePoints!==EXPECTED_VISUAL_ROUTE) throw new Error('Reviewed G8-A visual route projection drifted: '+JSON.stringify({visualRoute:report.desktop.visualRoute,routePoints:report.desktop.routePoints}));
-  if(report.desktop.towers!==1 || report.desktop.controlPq!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
+  if(report.desktop.towers!==1 || report.desktop.enemies<2 || report.desktop.swift<1 || report.desktop.veiled<1 || report.desktop.status!=='RUNNING') throw new Error('Representative CONTROL/SWIFT/VEILED actors missing from V-01 evidence');
+  if(controlL1Approved) {
+    if(report.desktop.controlDedicated!==1 || report.desktop.controlPq!==0 || report.desktop.controlUri!==expectedControlUri || report.desktop.controlImageHref!==expectedControlUri) {
+      throw new Error('Dedicated CONTROL:L1 raster is not authoritative on desktop: '+JSON.stringify({dedicated:report.desktop.controlDedicated,pq:report.desktop.controlPq,uri:report.desktop.controlUri,image:report.desktop.controlImageHref,expected:expectedControlUri}));
+    }
+  } else if(report.desktop.controlPq!==1 || report.desktop.controlDedicated!==0) {
+    throw new Error('CONTROL:L1 fallback state mismatch on desktop');
+  }
   if(report.desktop.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on desktop: '+report.desktop.anchorTextCount);
   if(Number(report.desktop.anchorHintOpacity)>0.08 || Number(report.desktop.secondaryRoutesOpacity)>0.13 || Number(report.desktop.centerlineOpacity)>0.21) {
     throw new Error('V-02 technical overlays are too prominent on desktop: '+JSON.stringify({anchor:report.desktop.anchorHintOpacity,routes:report.desktop.secondaryRoutesOpacity,centerline:report.desktop.centerlineOpacity}));
@@ -564,8 +579,11 @@ try {
   if(report.physicalLandscape.touchPads < 6) {
     throw new Error('780x360 landscape lost too many authored touch pads: '+report.physicalLandscape.touchPads);
   }
-  if(report.physicalLandscape.motionWorkers<3 || report.physicalLandscape.motionVehicles<1 || report.physicalLandscape.controlPq!==1) {
-    throw new Error('780x360 landscape lost representative living-site actors: '+JSON.stringify({workers:report.physicalLandscape.motionWorkers,vehicles:report.physicalLandscape.motionVehicles,control:report.physicalLandscape.controlPq}));
+  if(report.physicalLandscape.motionWorkers<3 || report.physicalLandscape.motionVehicles<1) {
+    throw new Error('780x360 landscape lost representative living-site actors: '+JSON.stringify({workers:report.physicalLandscape.motionWorkers,vehicles:report.physicalLandscape.motionVehicles}));
+  }
+  if(controlL1Approved ? report.physicalLandscape.controlDedicated!==1 : report.physicalLandscape.controlPq!==1) {
+    throw new Error('780x360 landscape lost the authoritative CONTROL:L1 actor: '+JSON.stringify({dedicated:report.physicalLandscape.controlDedicated,pq:report.physicalLandscape.controlPq}));
   }
   if(report.physicalLandscape.overflow) throw new Error('780x360 physical landscape caused horizontal overflow');
   await screenshot(cdp,'03-g8a-physical-landscape.png');
@@ -582,7 +600,14 @@ try {
   if(report.mobile.pads!==8) throw new Error('Mobile locked pad count changed');
   if(report.mobile.logicalRoute!==EXPECTED_LOGICAL_ROUTE) throw new Error('Mobile logical simulation topology changed: '+report.mobile.logicalRoute);
   if(report.mobile.visualRoute!==EXPECTED_VISUAL_ROUTE || report.mobile.routePoints!==EXPECTED_VISUAL_ROUTE) throw new Error('Mobile reviewed G8-A visual route projection drifted: '+JSON.stringify({visualRoute:report.mobile.visualRoute,routePoints:report.mobile.routePoints}));
-  if(report.mobile.towers!==1 || report.mobile.controlPq!==1 || report.mobile.enemies<2 || report.mobile.swift<1 || report.mobile.veiled<1) throw new Error('Mobile representative CONTROL/SWIFT/VEILED actors missing');
+  if(report.mobile.towers!==1 || report.mobile.enemies<2 || report.mobile.swift<1 || report.mobile.veiled<1) throw new Error('Mobile representative CONTROL/SWIFT/VEILED actors missing');
+  if(controlL1Approved) {
+    if(report.mobile.controlDedicated!==1 || report.mobile.controlPq!==0 || report.mobile.controlUri!==expectedControlUri || report.mobile.controlImageHref!==expectedControlUri) {
+      throw new Error('Dedicated CONTROL:L1 raster is not authoritative on 390x844: '+JSON.stringify({dedicated:report.mobile.controlDedicated,pq:report.mobile.controlPq,uri:report.mobile.controlUri,image:report.mobile.controlImageHref,expected:expectedControlUri}));
+    }
+  } else if(report.mobile.controlPq!==1 || report.mobile.controlDedicated!==0) {
+    throw new Error('CONTROL:L1 fallback state mismatch on 390x844');
+  }
   if(report.mobile.anchorTextCount!==0) throw new Error('V-02 anchor letters remain visible on mobile: '+report.mobile.anchorTextCount);
   if(Number(report.mobile.anchorHintOpacity)>0.08 || Number(report.mobile.secondaryRoutesOpacity)>0.13 || Number(report.mobile.centerlineOpacity)>0.21) {
     throw new Error('V-02 technical overlays are too prominent on mobile: '+JSON.stringify({anchor:report.mobile.anchorHintOpacity,routes:report.mobile.secondaryRoutesOpacity,centerline:report.mobile.centerlineOpacity}));
@@ -671,7 +696,9 @@ try {
       worldFinalApproved: true,
       swiftFinalApproved: true,
       veiledFinalApproved: false,
-      controlRasterPass: report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
+      controlRasterPass: controlL1Approved
+        ? report.desktop?.controlDedicated === 1 && report.mobile?.controlDedicated === 1
+        : report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
     };
   } else if (!worldApproved && swiftApproved) {
     if (desktopPrototype !== 0 || mobilePrototype !== 0 || desktopSwiftFinal !== 1 || mobileSwiftFinal !== 1) {
@@ -685,7 +712,9 @@ try {
       worldFinalApproved: false,
       swiftFinalApproved: true,
       currentWorldRole: report.desktop?.productionMap ?? null,
-      controlRasterPass: report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
+      controlRasterPass: controlL1Approved
+        ? report.desktop?.controlDedicated === 1 && report.mobile?.controlDedicated === 1
+        : report.desktop?.controlPq === 1 && report.mobile?.controlPq === 1,
     };
   } else if (worldApproved && !swiftApproved) {
     if (desktopPrototype !== 1 || mobilePrototype !== 1 || desktopSwiftFinal !== 0 || mobileSwiftFinal !== 0) {

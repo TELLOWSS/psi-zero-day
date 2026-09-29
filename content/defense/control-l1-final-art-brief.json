@@ -7,8 +7,8 @@
     "sourceHeight": 1024,
     "transparentBackground": true,
     "runtimePath": "assets/defense/towers/control/control-l1-final.webp",
-    "runtimeWidth": 104,
-    "runtimeHeight": 82
+    "runtimeWidth": 84,
+    "runtimeHeight": 66
   },
   "scene": {
     "role": "entry-level temporary vehicle-pedestrian traffic control intervention",
@@ -19,7 +19,7 @@
     "separation": "short modular pedestrian rail/delineator segment that clearly distinguishes the walking line from the vehicle lane",
     "lighting": "dusk/night work lighting compatible with G8-A world, neutral warm work-light key with restrained cool ambient fill",
     "material": "painted steel/plastic temporary works with realistic dirt, abrasion and contact shadow",
-    "readability": "marshal + barrier + separated pedestrian edge must remain recognizable when reduced to approximately 104x82 CSS pixels"
+    "readability": "marshal + barrier + separated pedestrian edge must remain recognizable at the locked G8-A board scale; dedicated source raster remains high-DPI while runtime logical size is 84x66 to fit desktop and 390x844 footprint limits"
   },
   "mustRead": [
     "CONTROL means human traffic control, not an energy turret",
