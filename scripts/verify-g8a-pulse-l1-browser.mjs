@@ -265,10 +265,13 @@ function assertBase(label, m, maxW, maxH) {
 
 const report = { schemaVersion: 1, sourceSha: process.env.GITHUB_SHA || null, expectedUri, desktop: null, landscape: null, mobile: null, firing: null, failures: [] };
 let cdp;
+let target;
 
 try {
-  const version = await waitJson('http://127.0.0.1:' + port + '/json/version');
-  cdp = new Cdp(version.webSocketDebuggerUrl);
+  await waitJson('http://127.0.0.1:' + port + '/json/version');
+  const response = await fetch('http://127.0.0.1:' + port + '/json/new?about:blank', { method: 'PUT' });
+  target = await response.json();
+  cdp = new Cdp(target.webSocketDebuggerUrl);
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
 
