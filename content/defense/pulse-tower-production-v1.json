@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "status": "ART_PIPELINE_READY",
+  "family": "PULSE",
+  "mapId": "map-apt-bottom-up-excavation-01",
+  "masterBibleRole": "DIRECT_INTERVENTION",
+  "masterBibleRead": [
+    "안전관리자/반장 직접개입",
+    "작업 잠깐 정지",
+    "즉시 위험원 제거",
+    "단기 통제"
+  ],
+  "scope": {
+    "representativeOnly": true,
+    "productionLevel": "L1",
+    "deferredLevels": [
+      "L2",
+      "L3A",
+      "L3B"
+    ],
+    "rule": "PULSE representative L1 only. Do not mass-author the upgrade family before L1 actual-play review."
+  },
+  "promotionRule": {
+    "firstLevel": "L1",
+    "actualPlayRequired": true,
+    "mobile390x844Required": true,
+    "noSvgRuntime": true,
+    "noSourceUpscale": true
+  },
+  "artDirection": {
+    "identity": "young female NEW PSI safety manager with inspection tablet",
+    "source": "assets/episode01/characters/player-map.webp",
+    "runtimeRule": "The human direct-intervention silhouette is the tower. Do not reuse electrical panels, traffic-marshalling barriers, or fantasy turret language.",
+    "firingRead": "short immediate intervention cue around the safety manager; the world response carries the impact",
+    "distinctionFromControl": "PULSE is a person stepping in directly. CONTROL remains signalman + flow-control infrastructure."
+  },
+  "levels": [
+    {
+      "levelId": "L1",
+      "status": "PRODUCTION_APPROVED",
+      "runtimeUri": "assets/defense/towers/pulse/pulse-l1-final.webp",
+      "format": "webp",
+      "runtime": {
+        "width": 62,
+        "height": 82
+      },
+      "visualRole": "DIRECT_SAFETY_INTERVENTION",
+      "gameplayRead": {
+        "damage": 12,
+        "damageType": "PHYSICAL",
+        "intervalTicks": 16,
+        "range": 155,
+        "maxTargets": 1
+      },
+      "requiredRead": [
+        "one safety manager is the dominant silhouette",
+        "inspection tablet remains readable",
+        "pose reads as immediate instruction/intervention",
+        "no traffic-control barrier or signal-baton identity",
+        "no electrical-panel identity",
+        "no sci-fi turret or weapon"
+      ],
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "NORMALIZED_FROM_PRODUCTION_LOCKED_PLAYER_MAP",
+        "sources": [
+          "assets/episode01/characters/player-map.webp"
+        ],
+        "sourceSha256": "830d0a44c71aec94d69dc77023e314bcb8cce67e9bdba5bebc975146127087f8",
+        "sourceNativePixels": {
+          "width": 696,
+          "height": 1024
+        },
+        "sourceScale": 0.689655,
+        "nativeUpscaleUsed": false,
+        "identityRead": "female safety manager + inspection tablet + direct pointing/intervention pose",
+        "controlSeparation": "no marshal baton, vehicle-flow barrier, or traffic-control corridor baked into PULSE"
+      },
+      "assetIntegrity": {
+        "sha256": "f8ebc113c6efef321d7c1c0454c4114fb2c7889175a0eb8668d54a648951cfc4",
+        "bytes": 134838,
+        "pixelWidth": 512,
+        "pixelHeight": 731,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      },
+      "promotionEvidence": {
+        "staticRasterBuild": "PASS",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
+    }
+  ],
+  "forbidden": [
+    "temporary distribution board as the PULSE identity",
+    "traffic marshal or signal baton silhouette",
+    "vehicle-flow barrier composition",
+    "sci-fi turret",
+    "weaponized character",
+    "size-only placeholder SVG"
+  ]
+}

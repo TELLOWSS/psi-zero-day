@@ -4,7 +4,7 @@ import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
 import { defenseSupportCharacterId } from '../app/defense-support';
 import { defenseText as t } from '../app/defense-text';
-import { defenseBoardArtUri, defenseControlPqComposite, defenseControlTowerProductionEntry, defenseEnemyArtUri, defenseG8aTowerVisual, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
+import { defenseBoardArtUri, defenseControlPqComposite, defenseControlTowerProductionEntry, defenseEnemyArtUri, defenseG8aTowerVisual, defenseG8aWorldFinalAsset, defenseProductionMapEntry, defensePulseTowerProductionEntry, defenseSwiftPqAsset, defenseTowerArtUri, defenseVisualProduction } from '../app/defense-visual-assets';
 import { defenseMapFrame, defenseMapPointPercent, defenseMapViewBox } from '../app/defense-map-framing';
 import { defenseVisualPadPoint, defenseVisualPath, defenseVisualPositionAtDistance } from '../app/defense-visual-projection';
 import { useDefensePersistence } from '../app/use-defense-persistence';
@@ -89,6 +89,9 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
     && tower.revealCooldown === level.revealIntervalTicks;
   const dedicatedControl = tower.towerId === 'CONTROL'
     && defenseControlTowerProductionEntry(tower.levelId)?.status === 'PRODUCTION_APPROVED';
+  const dedicatedPulse = tower.towerId === 'PULSE'
+    && defensePulseTowerProductionEntry(tower.levelId)?.status === 'PRODUCTION_APPROVED';
+  const dedicatedTower = dedicatedControl || dedicatedPulse;
   const controlPq = tower.towerId === 'CONTROL' && tower.levelId === 'L1' && !dedicatedControl
     ? defenseControlPqComposite()
     : null;
@@ -133,7 +136,9 @@ function TowerGlyph({ content, tower }: { content: DefenseContent; tower: Defens
       data-g8a-tower-level={tower.levelId}
       data-g8a-semantic={g8aVisual.semantic}
       data-g8a-tower-uri={g8aVisual.uri}
+      data-g8a-tower-dedicated={dedicatedTower ? 'true' : undefined}
       data-g8a-control-dedicated={tower.towerId === 'CONTROL' && dedicatedControl ? 'true' : undefined}
+      data-g8a-pulse-dedicated={tower.towerId === 'PULSE' && dedicatedPulse ? 'true' : undefined}
     >
       <ellipse cx="0" cy="20" rx="31" ry="8" className="zb-g8a-tower-ground-shadow" aria-hidden="true" />
       {firing ? <ellipse cx="0" cy="18" rx="38" ry="12" className="zb-g8a-intervention-cue" aria-hidden="true" /> : null}
