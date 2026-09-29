@@ -7,9 +7,9 @@ const outputDir = path.resolve(process.env.PSI_PULSE_ARTIFACT_DIR || 'artifacts/
 fs.mkdirSync(outputDir, { recursive: true });
 
 const manifest = JSON.parse(fs.readFileSync(path.resolve('content/defense/pulse-tower-production-v1.json'), 'utf8'));
-const target = manifest.levels?.find(item => item.levelId === 'L1');
-if (!target || target.status !== 'PRODUCTION_APPROVED') throw new Error('PULSE:L1 production raster must be approved before browser QA');
-const expectedUri = target.runtimeUri;
+const pulseTarget = manifest.levels?.find(item => item.levelId === 'L1');
+if (!pulseTarget || pulseTarget.status !== 'PRODUCTION_APPROVED') throw new Error('PULSE:L1 production raster must be approved before browser QA');
+const expectedUri = pulseTarget.runtimeUri;
 
 const chrome = [
   process.env.CHROME_BIN,
@@ -265,13 +265,13 @@ function assertBase(label, m, maxW, maxH) {
 
 const report = { schemaVersion: 1, sourceSha: process.env.GITHUB_SHA || null, expectedUri, desktop: null, landscape: null, mobile: null, firing: null, failures: [] };
 let cdp;
-let target;
+let pageTarget;
 
 try {
   await waitJson('http://127.0.0.1:' + port + '/json/version');
   const response = await fetch('http://127.0.0.1:' + port + '/json/new?about:blank', { method: 'PUT' });
-  target = await response.json();
-  cdp = new Cdp(target.webSocketDebuggerUrl);
+  pageTarget = await response.json();
+  cdp = new Cdp(pageTarget.webSocketDebuggerUrl);
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
 
