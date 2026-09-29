@@ -154,7 +154,9 @@
         "materialization": "TRIGGERED",
         "browserActualPlay": "PENDING_BRANCH_QA",
         "mobile390x844": "PENDING_BRANCH_QA",
-        "commercialVisualReview": "PENDING_BRANCH_QA"
+        "commercialVisualReview": "PENDING_BRANCH_QA",
+        "materializerRequestedAt": "2026-09-29",
+        "status": "PENDING_GITHUB_RASTER_BUILD"
       }
     },
     {
