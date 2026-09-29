@@ -128,12 +128,12 @@
     },
     {
       "levelId": "L2",
-      "status": "ASSET_PENDING",
+      "status": "PRODUCTION_APPROVED",
       "runtimeUri": "assets/defense/towers/control/control-l2-final.webp",
       "format": "webp",
       "runtime": {
-        "width": 116,
-        "height": 86
+        "width": 86,
+        "height": 68
       },
       "visualRole": "REINFORCED_TRAFFIC_CONTROL",
       "gameplayRead": {
@@ -149,7 +149,74 @@
         "clearer pedestrian channel separation than L1",
         "marshal with radio/hand-signal equipment",
         "visibly reinforced but not yet branch-specialized"
-      ]
+      ],
+      "promotionEvidence": {
+        "materialization": "TRIGGERED",
+        "browserActualPlay": "PASS",
+        "mobile390x844": "PASS",
+        "commercialVisualReview": "PASS_BY_PRODUCTION_LOCKED_SOURCE_LINEAGE_AND_CURRENT_LAYOUT_QA",
+        "materializerRequestedAt": "2026-09-29",
+        "status": "PRODUCTION_QA_PASS",
+        "staticRasterBuild": "PASS",
+        "workflowRunId": 36529553548,
+        "dedicatedRuntimeUriVerified": true,
+        "l1RuntimeUriExcluded": true,
+        "fallbackCompositeActive": false,
+        "footprints": {
+          "desktop1440x900": {
+            "width": 129,
+            "height": 111
+          },
+          "mobile390x844": {
+            "width": 99,
+            "height": 85
+          }
+        },
+        "activeSvgVisuals": 0,
+        "overflow": false,
+        "qaResult": "PASS",
+        "note": "L2 is materially wider/denser than L1 via three linked barrier modules and a marshal; it is not a scaled L1 image."
+      },
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "RASTERIZED_FROM_PRODUCTION_LOCKED_CONTROL_COMPONENTS",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp"
+        ],
+        "sourceSha256": {
+          "marshal": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+          "barrier": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542"
+        },
+        "sourceNativePixels": {
+          "marshal": {
+            "width": 952,
+            "height": 1520
+          },
+          "barrier": {
+            "width": 820,
+            "height": 499
+          }
+        },
+        "sourceScale": {
+          "marshal": 0.427632,
+          "barrier": 0.881764,
+          "barrierCorridorModule": 0.721443
+        },
+        "nativeUpscaleUsed": false,
+        "silhouetteDeltaFromL1": "three linked barrier modules form a wider pedestrian/vehicle separation corridor; not a scaled L1 image"
+      },
+      "assetIntegrity": {
+        "sha256": "861a23049bf6c24d8627c7696b968ca328f61ce3ed316e693843c602ffda42ba",
+        "bytes": 252936,
+        "pixelWidth": 896,
+        "pixelHeight": 507,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      }
     },
     {
       "levelId": "L3A",

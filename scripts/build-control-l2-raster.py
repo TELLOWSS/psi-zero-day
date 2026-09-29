@@ -11,7 +11,6 @@ from PIL import Image, ImageFilter
 ROOT = Path(__file__).resolve().parents[1]
 MARSHAL_PATH = ROOT / "public/assets/episode01/characters/choi-minseok-map.webp"
 BARRIER_PATH = ROOT / "public/assets/episode01/scene-elements/access-barrier.webp"
-PEDESTRIAN_GATE_PATH = ROOT / "public/assets/episode01/scene-elements/pedestrian-gate.webp"
 OUT_PATH = ROOT / "public/assets/defense/towers/control/control-l2-final.webp"
 MANIFEST_PATH = ROOT / "content/defense/control-tower-production-v1.json"
 
@@ -53,32 +52,32 @@ def paste_with_shadow(canvas: Image.Image, item: Image.Image, xy: tuple[int, int
 
 
 def build() -> dict:
-    for path in (MARSHAL_PATH, BARRIER_PATH, PEDESTRIAN_GATE_PATH):
+    for path in (MARSHAL_PATH, BARRIER_PATH):
         if not path.exists():
             raise SystemExit(f"CONTROL:L2 source asset missing: {path}")
 
     marshal_native = trim(Image.open(MARSHAL_PATH))
     barrier_native = trim(Image.open(BARRIER_PATH))
-    gate_native = trim(Image.open(PEDESTRIAN_GATE_PATH))
 
     marshal, marshal_scale = fit_no_upscale(marshal_native, 430, 650)
     barrier, barrier_scale = fit_no_upscale(barrier_native, 760, 440)
-    gate, gate_scale = fit_no_upscale(gate_native, 540, 520)
     barrier2 = barrier.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    barrier3, barrier3_scale = fit_no_upscale(barrier_native, 620, 360)
 
     canvas = Image.new("RGBA", MASTER_SIZE, (0, 0, 0, 0))
 
-    # L2 is materially wider than L1: two linked temporary traffic barriers create
-    # a reinforced lane boundary, while a pedestrian gate defines a dedicated
-    # walking channel. The marshal remains the human-control anchor.
-    barrier1_xy = (350, 760 - barrier.height)
-    barrier2_xy = (890, 730 - barrier2.height)
-    gate_xy = (1080, 900 - gate.height)
-    marshal_xy = (670, 875 - marshal.height)
+    # L2 is materially wider than L1: three linked temporary barrier modules form
+    # a reinforced, readable pedestrian/vehicle separation corridor. The marshal
+    # remains the human-control anchor. This changes composition, density and width;
+    # it is not an enlarged L1.
+    barrier1_xy = (260, 735 - barrier.height)
+    barrier2_xy = (870, 710 - barrier2.height)
+    barrier3_xy = (1030, 920 - barrier3.height)
+    marshal_xy = (665, 885 - marshal.height)
 
     paste_with_shadow(canvas, barrier, barrier1_xy, blur=18, offset=(10, 24), opacity=100)
     paste_with_shadow(canvas, barrier2, barrier2_xy, blur=18, offset=(10, 24), opacity=100)
-    paste_with_shadow(canvas, gate, gate_xy, blur=18, offset=(12, 24), opacity=110)
+    paste_with_shadow(canvas, barrier3, barrier3_xy, blur=16, offset=(10, 22), opacity=95)
     paste_with_shadow(canvas, marshal, marshal_xy, blur=16, offset=(12, 24), opacity=120)
 
     bbox = canvas.getchannel("A").getbbox()
@@ -117,25 +116,22 @@ def build() -> dict:
         "sources": [
             "assets/episode01/characters/choi-minseok-map.webp",
             "assets/episode01/scene-elements/access-barrier.webp",
-            "assets/episode01/scene-elements/pedestrian-gate.webp",
         ],
         "sourceSha256": {
             "marshal": sha256(MARSHAL_PATH),
             "barrier": sha256(BARRIER_PATH),
-            "pedestrianGate": sha256(PEDESTRIAN_GATE_PATH),
         },
         "sourceNativePixels": {
             "marshal": {"width": marshal_native.width, "height": marshal_native.height},
             "barrier": {"width": barrier_native.width, "height": barrier_native.height},
-            "pedestrianGate": {"width": gate_native.width, "height": gate_native.height},
         },
         "sourceScale": {
             "marshal": round(marshal_scale, 6),
             "barrier": round(barrier_scale, 6),
-            "pedestrianGate": round(gate_scale, 6),
+            "barrierCorridorModule": round(barrier3_scale, 6),
         },
         "nativeUpscaleUsed": False,
-        "silhouetteDeltaFromL1": "two linked barriers plus dedicated pedestrian gate; not a scaled L1 image",
+        "silhouetteDeltaFromL1": "three linked barrier modules form a wider pedestrian/vehicle separation corridor; not a scaled L1 image",
     }
     level["assetIntegrity"] = {
         "sha256": sha256(OUT_PATH),
@@ -164,7 +160,7 @@ def build() -> dict:
         "alphaExtrema": list(alpha_extrema),
         "marshalScale": marshal_scale,
         "barrierScale": barrier_scale,
-        "pedestrianGateScale": gate_scale,
+        "barrierCorridorModuleScale": barrier3_scale,
     }
 
 

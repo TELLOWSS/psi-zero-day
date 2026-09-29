@@ -5,6 +5,7 @@ on:
     branches:
       - sol/g8a-full-visual-v01-20260927
       - sol/commercial-presentation-upgrade-20260927
+      - sol/phase-d-control-l2-final-raster-20260929
   pull_request:
     paths:
       - 'content/defense/g8a-veiled-final-art.json'
@@ -21,6 +22,7 @@ on:
       - 'src/app/defense-map-framing.ts'
       - 'src/app/defense-visual-projection.ts'
       - 'scripts/verify-g8a-full-visual-v01-browser.mjs'
+      - 'scripts/verify-control-l2-browser.mjs'
       - 'scripts/verify-def-core-01-browser.mjs'
       - 'tests/g8a-full-screen-polish.test.ts'
       - 'tests/g8a-v05-cinematic.test.ts'
@@ -72,7 +74,7 @@ jobs:
         env:
           PSI_G8A_ARTIFACT_DIR: artifacts/g8a-full-visual-v01
         run: |
-          mkdir -p artifacts/g8a-full-visual-v01 artifacts/g8a-v05-cinematic
+          mkdir -p artifacts/g8a-full-visual-v01 artifacts/g8a-v05-cinematic artifacts/control-l2
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/g8a-v01-preview.log 2>&1 &
           PREVIEW_PID=$!
           cleanup() { kill "$PREVIEW_PID" 2>/dev/null || true; }
@@ -90,6 +92,7 @@ jobs:
             exit 1
           fi
           node scripts/verify-g8a-full-visual-v01-browser.mjs
+          PSI_CONTROL_L2_ARTIFACT_DIR=artifacts/control-l2 node scripts/verify-control-l2-browser.mjs
           PSI_DEF_CORE_01_ARTIFACT_DIR=artifacts/g8a-v05-cinematic node scripts/verify-def-core-01-browser.mjs
 
       - name: Upload V-01 browser evidence
@@ -100,4 +103,5 @@ jobs:
           path: |
             artifacts/g8a-full-visual-v01
             artifacts/g8a-v05-cinematic
+            artifacts/control-l2
           if-no-files-found: error
