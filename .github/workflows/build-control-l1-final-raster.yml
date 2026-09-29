@@ -3,11 +3,12 @@ name: Build CONTROL Final Rasters
 on:
   push:
     branches:
-      - sol/phase-d-control-l1-final-raster-20260928
-      - sol/phase-d-control-l2-final-raster-20260929
+      - 'sol/phase-d-control-l1-final-raster-*'
+      - 'sol/phase-d-control-l2-final-raster-*'
+      - 'sol/phase-d-control-l3a-final-raster-*'
+      - 'sol/phase-d-control-l3b-final-raster-*'
     paths:
-      - 'scripts/build-control-l1-raster.py'
-      - 'scripts/build-control-l2-raster.py'
+      - 'scripts/build-control-*-raster.py'
       - 'content/defense/control-tower-production-v1.json'
       - 'public/assets/episode01/characters/choi-minseok-map.webp'
       - 'public/assets/episode01/scene-elements/access-barrier.webp'
@@ -17,11 +18,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: control-l1-final-raster-${{ github.ref }}
+  group: control-final-raster-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-control-l1:
+  build-control:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -72,3 +73,22 @@ jobs:
           git add public/assets/defense/towers/control/control-l2-final.webp content/defense/control-tower-production-v1.json
           git commit -m "art(control): materialize CONTROL L2 final raster"
           git push
+
+      - name: Materialize once or verify existing CONTROL L3A WebP
+        shell: bash
+        run: |
+          if [ -f public/assets/defense/towers/control/control-l3a-final.webp ]; then
+            echo "CONTROL:L3A raster already exists; verification-only mode."
+            python scripts/build-control-l3a-raster.py --check
+            exit 0
+          fi
+
+          python scripts/build-control-l3a-raster.py
+          python scripts/build-control-l3a-raster.py --check
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/defense/towers/control/control-l3a-final.webp content/defense/control-tower-production-v1.json
+          git commit -m "art(control): materialize CONTROL L3A final raster"
+          git push
+

@@ -202,12 +202,12 @@
     },
     {
       "levelId": "L3A",
-      "status": "ASSET_PENDING",
+      "status": "PRODUCTION_APPROVED",
       "runtimeUri": "assets/defense/towers/control/control-l3a-final.webp",
       "format": "webp",
       "runtime": {
-        "width": 122,
-        "height": 92
+        "width": 82,
+        "height": 72
       },
       "visualRole": "INTENSIVE_POINT_CONTROL",
       "gameplayRead": {
@@ -223,7 +223,59 @@
         "dense active-control equipment focused on a narrower intervention point",
         "radio/hand-signal coordination readable without text",
         "must visually communicate stronger slowing rather than broader coverage"
-      ]
+      ],
+      "sourceReview": {
+        "status": "PASS",
+        "lineage": "RASTERIZED_FROM_APPROVED_CONTROL_AND_FIELD_GUIDE_COMPONENTS",
+        "sources": [
+          "assets/episode01/characters/choi-minseok-map.webp",
+          "assets/episode01/scene-elements/access-barrier.webp",
+          "assets/episode01/field-guide/site-gate-final.webp"
+        ],
+        "sourceSha256": {
+          "marshal": "2461c6490491d63b206e6409044989ba632538d04d3fd186e7a68c8e03774b80",
+          "barrier": "acb24f74cb7976fb2a6afa4efa0534991537e192670c11f639be25875f1fa542",
+          "siteGate": "d7f4a52b8e2732ebdb68da6310308b5a8c2723c17c12a5dc11707333293a94e5"
+        },
+        "sourceNativePixels": {
+          "marshal": {
+            "width": 952,
+            "height": 1520
+          },
+          "barrier": {
+            "width": 820,
+            "height": 499
+          },
+          "siteGate": {
+            "width": 384,
+            "height": 384
+          }
+        },
+        "sourceScale": {
+          "marshal": 0.451681,
+          "barrier": 0.780488,
+          "siteGate": 1.0
+        },
+        "nativeUpscaleUsed": false,
+        "silhouetteDeltaFromL2": "compact hard-stop gate plus one short barrier and marshal; intentionally narrower than the L2 barrier corridor"
+      },
+      "assetIntegrity": {
+        "sha256": "100a488b21e33369efc725cf3a16ff76269c5f999bd6e108deb7cca93310ede0",
+        "bytes": 199330,
+        "pixelWidth": 611,
+        "pixelHeight": 576,
+        "transparent": true,
+        "alphaExtrema": [
+          0,
+          255
+        ]
+      },
+      "promotionEvidence": {
+        "staticRasterBuild": "PASS",
+        "browserActualPlay": "PENDING_BRANCH_QA",
+        "mobile390x844": "PENDING_BRANCH_QA",
+        "commercialVisualReview": "PENDING_BRANCH_QA"
+      }
     },
     {
       "levelId": "L3B",
