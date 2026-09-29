@@ -7,10 +7,14 @@ on:
       - 'sol/phase-d-control-l2-final-raster-*'
       - 'sol/phase-d-control-l3a-final-raster-*'
       - 'sol/phase-d-control-l3b-final-raster-*'
+      - 'sol/phase-d-pulse-l1-final-raster-*'
     paths:
       - 'scripts/build-control-*-raster.py'
+      - 'scripts/build-pulse-l1-raster.py'
       - 'content/defense/control-tower-production-v1.json'
+      - 'content/defense/pulse-tower-production-v1.json'
       - 'public/assets/episode01/characters/choi-minseok-map.webp'
+      - 'public/assets/episode01/characters/player-map.webp'
       - 'public/assets/episode01/scene-elements/access-barrier.webp'
       - '.github/workflows/build-control-l1-final-raster.yml'
 
@@ -108,5 +112,23 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/assets/defense/towers/control/control-l3b-final.webp content/defense/control-tower-production-v1.json
           git commit -m "art(control): materialize CONTROL L3B final raster"
+          git push
+
+      - name: Materialize once or verify existing PULSE L1 WebP
+        shell: bash
+        run: |
+          if [ -f public/assets/defense/towers/pulse/pulse-l1-final.webp ]; then
+            echo "PULSE:L1 raster already exists; verification-only mode."
+            python scripts/build-pulse-l1-raster.py --check
+            exit 0
+          fi
+
+          python scripts/build-pulse-l1-raster.py
+          python scripts/build-pulse-l1-raster.py --check
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/assets/defense/towers/pulse/pulse-l1-final.webp content/defense/pulse-tower-production-v1.json
+          git commit -m "art(pulse): materialize PULSE L1 final raster"
           git push
 
