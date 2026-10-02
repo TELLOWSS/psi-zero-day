@@ -2189,3 +2189,52 @@
   .zb-enemy-swarm .zb-g8a-risk-worker-group,
   .zb-g8a-semantic-tower.is-firing .zb-g8a-semantic-tower-image{animation:none!important}
 }
+
+/* ==========================================================================
+   Realistic Construction Field Hazards Overlay (Realism & Immersion)
+   ========================================================================== */
+.zb-field-hazards-layer {
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+.zb-field-hazard {
+  transform-origin: center bottom;
+  transition: opacity 0.3s ease;
+}
+.zb-field-hazard .zb-hazard-shadow {
+  fill: rgba(8, 14, 18, 0.42);
+  filter: blur(1.5px);
+}
+.zb-field-hazard .zb-hazard-raster {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+.zb-field-hazard.zb-hazard-slip .zb-hazard-raster {
+  opacity: 0.92;
+}
+.zb-field-hazard.zb-hazard-drop .zb-hazard-raster {
+  filter: drop-shadow(0 3px 6px rgba(180, 40, 20, 0.32));
+}
+.zb-field-hazard.zb-hazard-electric .zb-hazard-raster {
+  animation: zb-electric-hum 4s ease-in-out infinite;
+}
+.zb-field-hazard.zb-hazard-confined .zb-hazard-raster {
+  animation: zb-vent-vibration 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes zb-electric-hum {
+  0%, 100% { opacity: 0.95; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35)); }
+  50% { opacity: 1; filter: drop-shadow(0 2px 8px rgba(255, 170, 0, 0.45)); }
+}
+
+@keyframes zb-vent-vibration {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-0.8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zb-field-hazard.zb-hazard-electric .zb-hazard-raster,
+  .zb-field-hazard.zb-hazard-confined .zb-hazard-raster {
+    animation: none;
+  }
+}
+

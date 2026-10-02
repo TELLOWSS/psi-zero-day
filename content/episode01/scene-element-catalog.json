@@ -45,6 +45,14 @@
         "observe_point_text_id": "ui.guide.material_stack.body",
         "unlock_policy": "episode_context"
       },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/material-stack-realistic-v2.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "euroform_panel_bundle_stack",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site material stack."
+      },
       "production_note": "Episode 01 runtime final uses a dedicated repository copy of the verified realistic-v2 Euroform storage cutout from FG004: same-size used Euroform bundles on sleepers with visible securing and clear aisle context. The legacy generic shoring-member binary is retained only as an unbound historical asset and is not used by Episode 01 runtime.",
       "episode01_visual_profile": {
         "subject": "used_korean_euroform_panel_bundle",
@@ -136,6 +144,14 @@
         "process_order": 2,
         "observe_point_text_id": "ui.guide.access_barrier.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/access-barrier.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "movable_access_barrier_fence",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site access barrier."
       },
       "production_note": "Legacy field-guide-isometric-v1 pictogram retained only as placeholder; realistic-v2 replacement required."
     },
@@ -1111,7 +1127,7 @@
       "kind": "prop",
       "label": "철근 받침·스페이서",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.rebar_chair_support",
       "art": {
         "path": "assets/episode01/scene-elements/rebar-chair-support.webp",
@@ -1123,8 +1139,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1139,6 +1155,14 @@
         "process_order": 3,
         "observe_point_text_id": "ui.guide.rebar_chair_support.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/rebar-chair-support.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "steel_rebar_chairs_and_spacers",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic rebar chairs and spacers."
       }
     },
     "starter_rebar_protrusion": {
@@ -1146,7 +1170,7 @@
       "kind": "hazard",
       "label": "돌출 철근·스타터바",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.starter_rebar_protrusion",
       "art": {
         "path": "assets/episode01/scene-elements/starter-rebar-protrusion.webp",
@@ -1158,8 +1182,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1176,6 +1200,14 @@
         "process_order": 4,
         "observe_point_text_id": "ui.guide.starter_rebar_protrusion.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/starter-rebar-protrusion.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "protruding_starter_rebars_with_caps",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic starter rebars with safety caps."
       }
     },
     "rebar_lifting_bundle": {
@@ -1183,7 +1215,7 @@
       "kind": "hazard",
       "label": "철근 다발 양중",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.rebar_lifting_bundle",
       "art": {
         "path": "assets/episode01/scene-elements/rebar-lifting-bundle.webp",
@@ -1195,8 +1227,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1212,6 +1244,14 @@
         "process_order": 5,
         "observe_point_text_id": "ui.guide.rebar_lifting_bundle.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/rebar-lifting-bundle.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "rebar_bundle_crane_lift",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic rebar bundle lift."
       }
     },
     "ev_pit_opening": {
@@ -1219,7 +1259,7 @@
       "kind": "hazard",
       "label": "EV PIT 개구부",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.ev_pit_opening",
       "art": {
         "path": "assets/episode01/scene-elements/ev-pit-opening.webp",
@@ -1231,8 +1271,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1248,6 +1288,14 @@
         "process_order": 6,
         "observe_point_text_id": "ui.guide.ev_pit_opening.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/ev-pit-opening.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "elevator_pit_opening_with_guardrail",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic elevator pit opening with safety rails."
       }
     },
     "ev_pit_access_route": {
@@ -1255,7 +1303,7 @@
       "kind": "control",
       "label": "EV 구간 작업·이동 동선",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.ev_pit_access_route",
       "art": {
         "path": "assets/episode01/scene-elements/ev-pit-access-route.webp",
@@ -1267,8 +1315,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1284,6 +1332,14 @@
         "process_order": 7,
         "observe_point_text_id": "ui.guide.ev_pit_access_route.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/ev-pit-access-route.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "ev_access_route_and_gangway",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic temporary pit access route."
       }
     },
     "foundation_temporary_walkway": {
@@ -1291,7 +1347,7 @@
       "kind": "control",
       "label": "기초 임시통로",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.foundation_temporary_walkway",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-temporary-walkway.webp",
@@ -1303,8 +1359,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1319,6 +1375,14 @@
         "process_order": 8,
         "observe_point_text_id": "ui.guide.foundation_temporary_walkway.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/foundation-temporary-walkway.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "foundation_rebar_walkway_planks",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic foundation temporary walkway."
       }
     },
     "pump_outrigger": {
@@ -1326,7 +1390,7 @@
       "kind": "hazard",
       "label": "펌프카 아웃트리거",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.pump_outrigger",
       "art": {
         "path": "assets/episode01/scene-elements/pump-outrigger.webp",
@@ -1338,8 +1402,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1356,6 +1420,14 @@
         "process_order": 9,
         "observe_point_text_id": "ui.guide.pump_outrigger.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/pump-outrigger.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "pump_truck_outrigger_support_cribbing",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic concrete pump truck outrigger with dunnage cribbing and steel plate."
       }
     },
     "pump_hose_route": {
@@ -1363,7 +1435,7 @@
       "kind": "hazard",
       "label": "자바라 이동 동선",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.pump_hose_route",
       "art": {
         "path": "assets/episode01/scene-elements/pump-hose-route.webp",
@@ -1375,8 +1447,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1393,6 +1465,14 @@
         "process_order": 10,
         "observe_point_text_id": "ui.guide.pump_hose_route.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/pump-hose-route.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "concrete_pump_discharge_hose_and_route",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic pump discharge hose line with safety clamps and designated route."
       }
     },
     "concrete_vibrator_cable": {
@@ -1400,7 +1480,7 @@
       "kind": "equipment",
       "label": "바이브레이터·전선",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.concrete_vibrator_cable",
       "art": {
         "path": "assets/episode01/scene-elements/concrete-vibrator-cable.webp",
@@ -1412,8 +1492,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1430,6 +1510,14 @@
         "process_order": 11,
         "observe_point_text_id": "ui.guide.concrete_vibrator_cable.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/concrete-vibrator-cable.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "concrete_vibrator_and_gfci_cable_reel",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic concrete vibrator unit with flexible shaft and waterproof GFCI cable reel."
       }
     },
     "foundation_sump_pump": {
@@ -1437,7 +1525,7 @@
       "kind": "equipment",
       "label": "집수정·양수기",
       "visual_token": "◆",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.foundation_sump_pump",
       "art": {
         "path": "assets/episode01/scene-elements/foundation-sump-pump.webp",
@@ -1449,8 +1537,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1466,6 +1554,14 @@
         "process_order": 12,
         "observe_point_text_id": "ui.guide.foundation_sump_pump.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/foundation-sump-pump.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "foundation_sump_pit_submersible_pump",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic foundation sump pit with submersible dewatering pump and discharge line."
       }
     },
     "euroform_wall_panel": {
@@ -1674,7 +1770,7 @@
       "kind": "prop",
       "label": "시스템동바리 잭베이스",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.system_shoring_jackbase",
       "art": {
         "path": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
@@ -1686,8 +1782,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1702,6 +1798,14 @@
         "process_order": 5,
         "observe_point_text_id": "ui.guide.system_shoring_jackbase.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "system_shoring_screw_jackbase",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic system shoring adjustable screw jackbase and plate."
       }
     },
     "system_shoring_standard": {
@@ -1709,7 +1813,7 @@
       "kind": "prop",
       "label": "시스템동바리 수직재",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.system_shoring_standard",
       "art": {
         "path": "assets/episode01/scene-elements/system-shoring-standard.webp",
@@ -1721,8 +1825,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1737,6 +1841,14 @@
         "process_order": 6,
         "observe_point_text_id": "ui.guide.system_shoring_standard.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/system-shoring-standard.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "system_shoring_vertical_standard_pipe",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic system shoring vertical standard post with ringlock rosettes."
       }
     },
     "system_shoring_ledger": {
@@ -1744,7 +1856,7 @@
       "kind": "prop",
       "label": "시스템동바리 수평재",
       "visual_token": "▤",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.system_shoring_ledger",
       "art": {
         "path": "assets/episode01/scene-elements/system-shoring-ledger.webp",
@@ -1756,8 +1868,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1772,6 +1884,14 @@
         "process_order": 7,
         "observe_point_text_id": "ui.guide.system_shoring_ledger.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/system-shoring-ledger.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "system_shoring_horizontal_ledger",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic system shoring horizontal ledger tube with wedge clamps."
       }
     },
     "system_shoring_missing_brace": {
@@ -1779,7 +1899,7 @@
       "kind": "hazard",
       "label": "누락된 가새·연결재",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.system_shoring_missing_brace",
       "art": {
         "path": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
@@ -1791,8 +1911,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1807,6 +1927,14 @@
         "process_order": 8,
         "observe_point_text_id": "ui.guide.system_shoring_missing_brace.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "system_shoring_diagonal_brace",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic system shoring diagonal brace pipe with safety inspection tag."
       }
     },
     "uhead_beam_alignment": {
@@ -1814,7 +1942,7 @@
       "kind": "hazard",
       "label": "U-Head와 멍에 중심",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.uhead_beam_alignment",
       "art": {
         "path": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
@@ -1826,8 +1954,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1842,6 +1970,14 @@
         "process_order": 9,
         "observe_point_text_id": "ui.guide.uhead_beam_alignment.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "system_shoring_uhead_and_joist_centering",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic system shoring U-head jack with aligned joist beams and wedges."
       }
     },
     "slab_formwork_edge": {
@@ -1849,7 +1985,7 @@
       "kind": "hazard",
       "label": "슬래브 판개 단부",
       "visual_token": "!",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.slab_formwork_edge",
       "art": {
         "path": "assets/episode01/scene-elements/slab-formwork-edge.webp",
@@ -1861,8 +1997,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1877,6 +2013,14 @@
         "process_order": 10,
         "observe_point_text_id": "ui.guide.slab_formwork_edge.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/slab-formwork-edge.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "slab_formwork_edge_guardrails_and_toeboard",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic slab formwork edge with safety railings and kickplate."
       }
     },
     "slab_opening_cover": {
@@ -1884,7 +2028,7 @@
       "kind": "control",
       "label": "슬래브 개구부 덮개",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.slab_opening_cover",
       "art": {
         "path": "assets/episode01/scene-elements/slab-opening-cover.webp",
@@ -1896,8 +2040,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1913,6 +2057,14 @@
         "process_order": 11,
         "observe_point_text_id": "ui.guide.slab_opening_cover.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/slab-opening-cover.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "slab_opening_safety_cover",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic floor opening hatch cover with hazard markings and warning text."
       }
     },
     "temporary_stair": {
@@ -1920,7 +2072,7 @@
       "kind": "control",
       "label": "임시 계단·승강통로",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.temporary_stair",
       "art": {
         "path": "assets/episode01/scene-elements/temporary-stair.webp",
@@ -1932,8 +2084,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1949,6 +2101,14 @@
         "process_order": 12,
         "observe_point_text_id": "ui.guide.temporary_stair.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/temporary-stair.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "temporary_access_staircase_tower",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic modular steel temporary construction access stairs."
       }
     },
     "shoring_deformation_watch": {
@@ -1956,7 +2116,7 @@
       "kind": "control",
       "label": "타설 중 동바리 감시",
       "visual_token": "▥",
-      "production_status": "planned",
+      "production_status": "final",
       "planned_asset_id": "ep01.scene_element.shoring_deformation_watch",
       "art": {
         "path": "assets/episode01/scene-elements/shoring-deformation-watch.webp",
@@ -1968,8 +2128,8 @@
         },
         "map_max_px": 148,
         "requires_alpha": true,
-        "style_profile": "field-guide-isometric-v1",
-        "render_intent": "isolated_isometric_3d_pictogram",
+        "style_profile": "field-guide-production-realistic-v2",
+        "render_intent": "realistic_isometric_construction_asset",
         "background_policy": "transparent",
         "palette_policy": "navy_steel_orange_safety_accents"
       },
@@ -1984,6 +2144,14 @@
         "process_order": 13,
         "observe_point_text_id": "ui.guide.shoring_deformation_watch.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/shoring-deformation-watch.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "shoring_deformation_monitoring_station",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic shoring deformation monitoring post with dial gauge, plumb bob, and signboard."
       }
     },
     "concrete_pour_zone": {
@@ -2019,6 +2187,11 @@
         "process_order": 14,
         "observe_point_text_id": "ui.guide.concrete_pour_zone.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/concrete-pour-zone.webp"
       }
     },
     "dismantle_drop_zone": {
@@ -2055,6 +2228,11 @@
         "process_order": 15,
         "observe_point_text_id": "ui.guide.dismantle_drop_zone.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/dismantle-drop-zone.webp"
       }
     },
     "dismantled_formwork_stack": {
@@ -2091,6 +2269,11 @@
         "process_order": 16,
         "observe_point_text_id": "ui.guide.dismantled_formwork_stack.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/dismantled-formwork-stack.webp"
       }
     },
     "confined_space_meter": {
@@ -2126,6 +2309,11 @@
         "process_order": 17,
         "observe_point_text_id": "ui.guide.confined_space_meter.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/confined-space-meter.webp"
       }
     },
     "ventilation_fan_duct": {
@@ -2161,6 +2349,11 @@
         "process_order": 18,
         "observe_point_text_id": "ui.guide.ventilation_fan_duct.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/ventilation-fan-duct.webp"
       }
     },
     "confined_space_attendant": {
@@ -2196,6 +2389,11 @@
         "process_order": 19,
         "observe_point_text_id": "ui.guide.confined_space_attendant.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/confined-space-attendant.webp"
       }
     },
     "temporary_electric_wet": {
@@ -2232,6 +2430,11 @@
         "process_order": 20,
         "observe_point_text_id": "ui.guide.temporary_electric_wet.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "ready",
+        "presentation": "generated_item_art",
+        "asset_path": "assets/episode01/scene-elements/temporary-electric-wet.webp"
       }
     },
     "transfer_floor_high_ceiling": {
@@ -3928,6 +4131,14 @@
         "process_order": 6,
         "observe_point_text_id": "ui.guide.mobile_scaffold.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/mobile-scaffold.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "mobile_pipe_scaffolding_platform",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site mobile pipe scaffolding."
       }
     },
     "dust_control": {
@@ -4035,6 +4246,14 @@
         "process_order": 9,
         "observe_point_text_id": "ui.guide.dismantled_guardrail.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/dismantled-guardrail.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "dismantled_safety_guardrail",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site dismantled safety guardrail."
       }
     },
     "dismantle_debris_route": {
@@ -4178,6 +4397,14 @@
         "process_order": 13,
         "observe_point_text_id": "ui.guide.traffic_control_pack.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/traffic-control-pack.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "traffic_control_safety_equipment",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site traffic control pack."
       }
     },
     "chemical_msds_station": {
@@ -4390,6 +4617,14 @@
         "process_order": 5,
         "observe_point_text_id": "ui.guide.radio_pack.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/radio-pack.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "site_two_way_radios_and_dock",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site field radios."
       }
     },
     "inspection_kit": {
@@ -4425,6 +4660,14 @@
         "process_order": 6,
         "observe_point_text_id": "ui.guide.inspection_kit.body",
         "unlock_policy": "episode_context"
+      },
+      "field_guide_visual": {
+        "status": "final",
+        "asset_path": "assets/episode01/scene-elements/inspection-kit.webp",
+        "presentation": "production_realistic_v2",
+        "focus": "field_inspection_tools_and_slump_cone",
+        "source_scene": "approved_field_guide_final_art_2026-10-02",
+        "rationale": "Field Guide uses approved photorealistic Korean construction-site inspection kit."
       }
     },
     "stop_work_marker": {

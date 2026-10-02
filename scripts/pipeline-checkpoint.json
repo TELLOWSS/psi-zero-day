@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "project": "psi-zero-day-realism-immersion",
+  "lastUpdated": "2026-10-02T16:38:00.000Z",
+  "currentStep": "completed",
+  "steps": {
+    "step1_scene_elements_batch3": {
+      "status": "completed",
+      "description": "실제 건설현장 10종 고화질 씬 엘리먼트 실사 에셋 생성 및 투명 WebP 파이프라인 반영",
+      "items": {
+        "wet_floor": { "name": "물웅덩이 및 미끄럼 구역", "status": "ready", "file": "wet_floor.png" },
+        "foundation_blinding_edge": { "name": "버림콘크리트 단부 경계", "status": "ready", "file": "foundation_blinding_edge.png" },
+        "foundation_rebar_mat": { "name": "기초 바닥 철근 배근 매트", "status": "ready", "file": "foundation_rebar_mat.png" },
+        "concrete_pour_zone": { "name": "콘크리트 타설 및 바이브레이터 구역", "status": "ready", "file": "concrete_pour_zone.png" },
+        "dismantle_drop_zone": { "name": "거푸집 해체 자재 낙하 위험구역", "status": "ready", "file": "dismantle_drop_zone.png" },
+        "dismantled_formwork_stack": { "name": "해체 적재된 유로폼 거푸집 더미", "status": "ready", "file": "dismantled_formwork_stack.png" },
+        "confined_space_meter": { "name": "밀폐공간 4대가스 복합가스 측정기", "status": "ready", "file": "confined_space_meter.png" },
+        "ventilation_fan_duct": { "name": "이동식 급배기 환기팬 및 송풍 덕트", "status": "ready", "file": "ventilation_fan_duct.png" },
+        "confined_space_attendant": { "name": "밀폐공간 출입 감시인 및 안전장구", "status": "ready", "file": "confined_space_attendant.png" },
+        "temporary_electric_wet": { "name": "물기 취약 가설분전함 및 케이블", "status": "ready", "file": "temporary_electric_wet.png" }
+      }
+    },
+    "step2_board_environmental_interaction": {
+      "status": "completed",
+      "description": "건설현장 지형지물 상호작용 (FieldHazardsOverlay, 물웅덩이/해체구역/가설분전함/유로폼적재/환기팬 현장 오버레이)",
+      "targetFiles": [
+        "src/ui/FieldHazardsOverlay.tsx",
+        "src/ui/DefenseGame.tsx",
+        "src/ui/defense-game.css"
+      ]
+    },
+    "step3_near_miss_feedback_and_audio": {
+      "status": "completed",
+      "description": "아차사고(Near-miss) 시뮬레이션 연출 (기지 피격 화면 흔들림/적색 비네팅, +R 자원 플로팅, 가설전기 펄스 및 환기팬 진동 반응)",
+      "targetFiles": [
+        "src/ui/DefenseGame.tsx",
+        "src/ui/defense-game.css"
+      ]
+    }
+  }
+}

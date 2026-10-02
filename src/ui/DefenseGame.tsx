@@ -36,6 +36,7 @@ import { SiteProcessMapBoardOverlay } from './SiteProcessMapBoardOverlay';
 import { RemodelBoardOverlay } from './RemodelBoardOverlay';
 import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
 import { G8AActivityOverlay } from './G8AActivityOverlay';
+import { FieldHazardsOverlay } from './FieldHazardsOverlay';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -759,6 +760,7 @@ export function DefenseGame({
           <SiteProcessMapBoardOverlay mapId={content.map.id} />
           <RemodelBoardOverlay state={remodelWorldState} />
           <DataCenterBoardOverlay state={dataCenterWorldState} />
+          <FieldHazardsOverlay mapId={content.map.id} isRunning={state.status === 'RUNNING'} />
           <polyline
             points={visualPath.map(point => point.join(',')).join(' ')}
             className="zb-path-shoulder"
