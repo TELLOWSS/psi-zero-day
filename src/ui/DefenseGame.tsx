@@ -449,24 +449,6 @@ export function DefenseGame({
     return () => media.removeEventListener?.('change', sync);
   }, []);
 
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (!state || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
-      if (event.code === 'Space') {
-        event.preventDefault();
-        setState(current => current
-          ? applyDefenseCommand(current, resolveDefenseContentForRun(current), { type: 'SetPaused', paused: !current.paused })
-          : current);
-      }
-      if (event.key === 'Escape') {
-        setSelectedPadId(null);
-        setSelectedTowerId(null);
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [state]);
-
   const dispatch = (command: Parameters<typeof applyDefenseCommand>[2]) => {
     if (!state) return;
     try {
@@ -491,6 +473,110 @@ export function DefenseGame({
       setNotice(message === 'Insufficient resource' ? t('defense.ui.no_resource') : message);
     }
   };
+
+  const selectedLevel = selectedTower ? towerLevel(content, selectedTower) : null;
+  const upgrades = selectedTower
+    ? towerDefinition(content, selectedTower.towerId).levels.filter(level => level.from === selectedTower.levelId)
+    : [];
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!state || event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+
+      // Space: Toggle pause
+      if (event.code === 'Space') {
+        event.preventDefault();
+        dispatch({ type: 'SetPaused', paused: !state.paused });
+        return;
+      }
+
+      // Enter: Start wave when ready or in intermission
+      if (event.code === 'Enter') {
+        if (state.status === 'READY' || state.status === 'INTERMISSION') {
+          event.preventDefault();
+          dispatch({ type: 'StartWave' });
+          return;
+        }
+      }
+
+      // Escape: Deselect pad or tower / close settings
+      if (event.key === 'Escape') {
+        if (settingsOpen) {
+          setSettingsOpen(false);
+          return;
+        }
+        if (selectedPadId || selectedTowerId) {
+          setSelectedPadId(null);
+          setSelectedTowerId(null);
+          return;
+        }
+      }
+
+      // Support Skill (Q or F)
+      if (event.key === 'q' || event.key === 'Q' || event.key === 'f' || event.key === 'F') {
+        if (state.status === 'RUNNING' && !state.paused && state.supportCooldownRemaining <= 0) {
+          event.preventDefault();
+          dispatch({ type: 'UseSupport' });
+        }
+        return;
+      }
+
+      // Tower building hotkeys 1, 2, 3, 4 when empty pad is selected
+      if (selectedPad && !selectedPadTower) {
+        const keyMap: Record<string, DefenseTowerId> = {
+          '1': 'PULSE',
+          '2': 'CONTROL',
+          '3': 'BURST',
+          '4': 'SENSOR',
+        };
+        const towerId = keyMap[event.key];
+        if (towerId && TOWER_IDS.includes(towerId)) {
+          const definition = towerDefinition(content, towerId);
+          const level = definition.levels.find(item => item.id === 'L1')!;
+          if (state.resource >= level.cost) {
+            event.preventDefault();
+            dispatch({ type: 'Build', padId: selectedPad.id, towerId });
+          }
+          return;
+        }
+      }
+
+      // Tower management hotkeys when a tower is selected: U (upgrade), S (sell), T (target mode)
+      if (selectedTower && selectedLevel) {
+        if (event.key === 'u' || event.key === 'U') {
+          const availableUpgrade = upgrades.find(lvl => state.resource >= lvl.cost);
+          if (availableUpgrade) {
+            event.preventDefault();
+            dispatch({ type: 'Upgrade', towerInstanceId: selectedTower.id, levelId: availableUpgrade.id });
+          }
+          return;
+        }
+        if (event.key === 's' || event.key === 'S') {
+          event.preventDefault();
+          dispatch({ type: 'Sell', towerInstanceId: selectedTower.id });
+          return;
+        }
+        if (event.key === 't' || event.key === 'T') {
+          event.preventDefault();
+          const curIdx = content.targetModes.indexOf(selectedTower.targetMode);
+          const nextMode = content.targetModes[(curIdx + 1) % content.targetModes.length] ?? content.targetModes[0];
+          if (nextMode) {
+            dispatch({ type: 'SetTargetMode', towerInstanceId: selectedTower.id, targetMode: nextMode });
+          }
+          return;
+        }
+      }
+
+      // Speed hotkeys 1, 2 when no pad is selected
+      if (!selectedPad && (event.key === '1' || event.key === '2')) {
+        event.preventDefault();
+        dispatch({ type: 'SetSpeed', speed: Number(event.key) as 1 | 2 });
+        return;
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [state, selectedPad, selectedPadTower, selectedTower, selectedLevel, upgrades, settingsOpen, content, TOWER_IDS, dispatch]);
 
   const choosePad = (padId: string) => {
     if (!state) return;
@@ -596,20 +682,16 @@ export function DefenseGame({
     </section>
   </main>;
 
-  const selectedLevel = selectedTower ? towerLevel(content, selectedTower) : null;
-  const upgrades = selectedTower
-    ? towerDefinition(content, selectedTower.towerId).levels.filter(level => level.from === selectedTower.levelId)
-    : [];
   const refund = selectedTower ? Math.floor(selectedTower.invested * content.sellRate) : 0;
   const supportCooldownSeconds = Math.ceil(state.supportCooldownRemaining * content.tickMs / 1000);
 
-  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${oneStep.active ? ' is-def-core-active' : ''}`} data-defense-screen="combat" data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
+  return <main className={`zb-shell${effects.shieldHit ? ' is-shield-hit' : ''}${state.shield <= 3 ? ' is-critical-shield' : ''}${oneStep.active ? ' is-def-core-active' : ''}${portrait ? ' is-portrait-immersion' : ''}`} data-defense-screen="combat" data-orientation={portrait ? 'portrait' : 'landscape'} data-def-core-phase={oneStep.phase} data-def-core-choice={oneStep.choice ?? ''} data-status={state.status} data-speed={state.speed} data-run-id={state.runId} data-tick={state.tick} data-wave={state.waveId} data-shield={state.shield} data-resource={state.resource} data-visual-version={defenseVisualProduction.visualVersion} data-audio-muted={audio.muted ? 'true' : 'false'} data-premium-audio={audio.premiumMixEnabled ? 'true' : 'false'} data-premium-mix-state={audio.premiumMixState} data-scenario={state.scenarioId} data-event={state.eventId ?? ''} data-map={content.map.id}
       data-logical-route={content.map.path.map(point => point.join(',')).join(' ')}
       data-visual-route={visualPath.map(point => point.join(',')).join(' ')}
       data-frame-mode={mapFrame.mode} data-camera-mode={camera.mode} data-camera-reason={camera.reason ?? ''} data-production-map={PRODUCTION_MAP?.status ?? ''} data-g8a-world-final={G8A_WORLD_FINAL ? 'true' : 'false'} data-remodel-phase={remodelWorldState?.phase ?? ''} data-data-center-phase={dataCenterWorldState?.phase ?? ''} data-energy-state={dataCenterWorldState?.energyState ?? ''} data-selection-mode={!selectedPad ? 'NONE' : selectedTower ? 'TOWER' : 'PAD'}>
     <header className="zb-hud">
       <div className="zb-brand"><small>ZERO BREACH</small><strong>{t('defense.ui.hub.title')}</strong></div>
-      <div className="zb-meter"><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
+      <div className={`zb-meter${state.shield <= 3 ? ' is-critical' : ''}`}><span>{t('defense.ui.shield')}</span><strong>{state.shield}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.resource')}</span><strong>R {state.resource}</strong></div>
       <div className="zb-meter"><span>{t('defense.ui.wave')}</span><strong>{state.waveId} / {content.waves.length}</strong></div>
       <div className="zb-status"><span>{statusLabel(state)}</span>{state.paused ? <b>PAUSED</b> : null}</div>
@@ -618,14 +700,14 @@ export function DefenseGame({
         className="zb-hud-button"
         aria-pressed={state.paused}
         onClick={() => dispatch({ type: 'SetPaused', paused: !state.paused })}
-      >{t(state.paused ? 'defense.ui.resume' : 'defense.ui.pause')}</button>
+      >{t(state.paused ? 'defense.ui.resume' : 'defense.ui.pause')}<kbd className="zb-hotkey">Space</kbd></button>
       <div className="zb-speed" aria-label={t('defense.ui.speed')}>
         {[1, 2].map(speed => <button
           key={speed}
           type="button"
           className={state.speed === speed ? 'is-active' : ''}
           onClick={() => dispatch({ type: 'SetSpeed', speed: speed as 1 | 2 })}
-        >{speed}×</button>)}
+        >{speed}×<kbd className="zb-hotkey">{speed}</kbd></button>)}
       </div>
       <button type="button" className="zb-exit" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
     </header>
@@ -737,6 +819,7 @@ export function DefenseGame({
             return <g key={`resolved-${echo.id}`} transform={`translate(${pos.x} ${pos.y})`} className="zb-resolve-burst" data-effect="resolve" aria-hidden="true">
               <circle r="10" />
               <path d="M-24 0H24M0-24V24M-17-17L17 17M17-17L-17 17" />
+              <text y="-14" textAnchor="middle" className="zb-reward-float">+R</text>
             </g>;
           })}
           <DefCoreOneStepBoardOverlay state={state} controller={oneStep} />
@@ -800,7 +883,7 @@ export function DefenseGame({
         {selectedPad && !selectedPadTower ? <div className="zb-build-panel">
           <div className="zb-panel-heading"><span>{selectedPad.id}</span><strong>{t('defense.ui.select_tower')}</strong></div>
           <div className="zb-tower-shop">
-            {TOWER_IDS.map(towerId => {
+            {TOWER_IDS.map((towerId, index) => {
               const definition = towerDefinition(content, towerId);
               const level = definition.levels.find(item => item.id === 'L1')!;
               const disabled = state.resource < level.cost;
@@ -816,7 +899,7 @@ export function DefenseGame({
                   ? <img src={shopArtUri} className="zb-shop-production-art" alt="" aria-hidden="true" data-g8a-shop-art={content.map.id === G8A_MAP_ID ? towerId : undefined} />
                   : <span className={`zb-shop-glyph zb-shop-${towerId.toLowerCase()}`} aria-hidden="true" data-art-state="prototype" />}
                 <span><strong>{towerName(content.map.id, towerId)}</strong><small>{towerRole(content.map.id, towerId)}</small></span>
-                <b>R {level.cost}</b>
+                <b>R {level.cost}<kbd className="zb-hotkey">{index + 1}</kbd></b>
               </button>;
             })}
           </div>
@@ -833,7 +916,7 @@ export function DefenseGame({
             <span>{t('defense.ui.interval')} <b>{(selectedLevel.intervalTicks * content.tickMs / 1000).toFixed(2)}s</b></span>
           </div>
           <div className="zb-target-mode">
-            <span>{t('defense.ui.target')}</span>
+            <span>{t('defense.ui.target')} <kbd className="zb-hotkey" style={{ fontSize: '8px' }}>T</kbd></span>
             {content.targetModes.map(mode => <button
               key={mode}
               type="button"
@@ -848,11 +931,11 @@ export function DefenseGame({
               disabled={state.resource < level.cost}
               onClick={() => dispatch({ type: 'Upgrade', towerInstanceId: selectedTower.id, levelId: level.id })}
             >
-              <span>{level.id === 'L3A' || level.id === 'L3B' ? t(`defense.tower.${selectedTower.towerId}.${level.id}.name`) : `${t('defense.ui.upgrade')} ${level.id}`}</span>
+              <span>{level.id === 'L3A' || level.id === 'L3B' ? t(`defense.tower.${selectedTower.towerId}.${level.id}.name`) : `${t('defense.ui.upgrade')} ${level.id}`}<kbd className="zb-hotkey">U</kbd></span>
               <b>R {level.cost}</b>
             </button>)}
             <button className="zb-sell" type="button" onClick={() => dispatch({ type: 'Sell', towerInstanceId: selectedTower.id })}>
-              <span>{t('defense.ui.sell')}</span><b>R {refund}</b>
+              <span>{t('defense.ui.sell')}<kbd className="zb-hotkey">S</kbd></span><b>R {refund}</b>
             </button>
           </div>
         </div> : null}
@@ -866,13 +949,16 @@ export function DefenseGame({
             type="button"
             disabled={state.status !== 'RUNNING' || state.paused || state.supportCooldownRemaining > 0}
             onClick={() => dispatch({ type: 'UseSupport' })}
-          >{state.supportCooldownRemaining > 0 ? `${supportCooldownSeconds}s` : t('defense.ui.support')}</button>
+          >
+            {state.supportCooldownRemaining > 0 ? `${supportCooldownSeconds}s` : t('defense.ui.support')}
+            {state.supportCooldownRemaining <= 0 ? <kbd className="zb-hotkey">Q</kbd> : null}
+          </button>
         </div>
         {(state.status === 'READY' || state.status === 'INTERMISSION') ? <button
           className="zb-start-wave"
           type="button"
           onClick={() => dispatch({ type: 'StartWave' })}
-        >{t(state.status === 'READY' ? 'defense.ui.start_wave' : 'defense.ui.start_next')}</button> : null}
+        >{t(state.status === 'READY' ? 'defense.ui.start_wave' : 'defense.ui.start_next')}<kbd className="zb-hotkey">Enter</kbd></button> : null}
         {notice ? <p className="zb-notice" role="status">{notice}</p> : null}
       </section>
     </footer>

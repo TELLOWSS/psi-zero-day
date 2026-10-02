@@ -231,11 +231,351 @@
 .zb-result dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}.zb-result dl div{padding:12px;border-radius:8px;background:#1b303d}.zb-result dt{font-size:9px;color:var(--zb-muted)}.zb-result dd{margin:4px 0 0;font-size:18px;font-weight:900}
 .zb-result-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}.zb-result-actions button,.zb-rotate button{min-height:48px;border:1px solid var(--zb-accent);border-radius:8px;background:#eaa63c;color:#17242c;font-weight:900}
 .zb-rotate{display:none}.zb-rotate span{font-size:42px;color:var(--zb-accent)}.zb-rotate p{color:var(--zb-muted);line-height:1.6}
-@media (orientation:portrait){
-  .zb-shell:not(.zb-prep){height:100dvh}
-  /* Portrait is a supported gameplay viewport. Rotation guidance must never cover
-     the live construction world; the DEF-CORE mobile gate validates 390x844 directly. */
-  .zb-rotate{display:none}
+@media (orientation: portrait), (max-width: 600px) {
+  .zb-shell:not(.zb-prep) {
+    height: 100dvh;
+    min-height: 0;
+    max-height: 100dvh;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+  }
+
+  /* Rotation guidance hidden to prioritize live immersive construction world */
+  .zb-rotate {
+    display: none;
+  }
+
+  /* Compact top status bar */
+  .zb-hud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 6px;
+    padding: 6px 10px;
+    min-height: 44px;
+    background: rgba(10, 20, 28, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(185, 200, 211, 0.16);
+    z-index: 25;
+  }
+
+  .zb-brand {
+    display: none;
+  }
+
+  .zb-meter, .zb-status {
+    flex: 1 1 auto;
+    min-width: 58px;
+    height: 32px;
+    padding: 0 6px;
+    gap: 4px;
+  }
+  .zb-meter span, .zb-status span {
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
+  .zb-meter strong, .zb-status b {
+    font-size: 13px;
+  }
+
+  .zb-hud-button {
+    min-height: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .zb-hud-button .zb-hotkey {
+    display: none;
+  }
+
+  .zb-speed {
+    height: 32px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .zb-speed button {
+    min-height: 28px;
+    height: 28px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  .zb-speed button .zb-hotkey {
+    display: none;
+  }
+
+  .zb-exit {
+    min-height: 32px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  /* Immersive 3D Construction Stage - Fills mobile screen */
+  .zb-stage {
+    padding: 4px 6px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .zb-board-wrap {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 330 / 520; /* Matches G8A_PORTRAIT 9:14.2 immersion ratio */
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.55), inset 0 0 1px rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(185, 200, 211, 0.28);
+  }
+
+  .zb-wave-preview {
+    right: 8px;
+    top: 8px;
+    width: auto;
+    max-width: 140px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(10, 23, 32, 0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+  .zb-wave-preview small {
+    font-size: 8px;
+  }
+  .zb-wave-preview strong {
+    font-size: 12px;
+    margin: 2px 0 4px;
+  }
+  .zb-wave-preview li {
+    font-size: 8px;
+    gap: 4px;
+  }
+
+  .zb-board-caption {
+    left: 8px;
+    top: 8px;
+  }
+  .zb-board-caption span {
+    font-size: 7px;
+  }
+  .zb-board-caption b {
+    font-size: 11px;
+  }
+
+  .zb-pad-hit {
+    width: 44px;
+    height: 44px;
+    touch-action: manipulation;
+  }
+  .zb-pad-hit span {
+    font-size: 10px;
+    opacity: 0.65;
+  }
+
+  /* Thumb-friendly bottom dock */
+  .zb-command {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, #101c26, #091219);
+    border-top: 1px solid rgba(185, 200, 211, 0.18);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+    max-height: 42dvh;
+    overflow-y: auto;
+    z-index: 30;
+  }
+
+  .zb-empty-selection {
+    display: none;
+  }
+
+  .zb-build-panel, .zb-tower-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: auto;
+  }
+
+  .zb-panel-heading {
+    padding: 4px 8px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+  }
+  .zb-panel-heading span {
+    font-size: 8px;
+  }
+  .zb-panel-heading strong {
+    font-size: 12px;
+  }
+
+  .zb-tower-shop {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+  .zb-tower-shop button {
+    min-height: 52px;
+    padding: 4px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-align: center;
+    border-radius: 8px;
+  }
+  .zb-shop-production-art {
+    width: 26px;
+    height: 26px;
+  }
+  .zb-shop-glyph {
+    width: 22px;
+    height: 22px;
+  }
+  .zb-tower-shop strong {
+    font-size: 10px;
+    margin: 0;
+  }
+  .zb-tower-shop small {
+    display: none;
+  }
+  .zb-tower-shop b {
+    font-size: 9px;
+  }
+  .zb-tower-shop .zb-hotkey {
+    display: none;
+  }
+
+  .zb-tower-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .zb-tower-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .zb-tower-stats span {
+    font-size: 9px;
+  }
+  .zb-tower-stats b {
+    font-size: 10px;
+  }
+
+  .zb-target-mode {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 4px 6px;
+    border-radius: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zb-target-mode > span {
+    font-size: 9px;
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+  .zb-target-mode button {
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 10px;
+    white-space: nowrap;
+    border-radius: 5px;
+  }
+
+  .zb-upgrades {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .zb-upgrades button {
+    min-height: 36px;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .zb-upgrades .zb-hotkey {
+    display: none;
+  }
+
+  .zb-run-controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .zb-support-action {
+    display: grid;
+    grid-template-columns: 36px 1fr 68px;
+    padding: 4px 6px;
+    gap: 6px;
+    border-radius: 8px;
+  }
+  .zb-support-mini {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+  }
+  .zb-support-action small {
+    font-size: 8px;
+  }
+  .zb-support-action strong {
+    font-size: 10px;
+  }
+  .zb-support-action button {
+    min-height: 36px;
+    font-size: 10px;
+    padding: 0 6px;
+  }
+  .zb-support-action .zb-hotkey {
+    display: none;
+  }
+
+  .zb-start-wave {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 900;
+    border-radius: 8px;
+  }
+  .zb-start-wave .zb-hotkey {
+    display: none;
+  }
+
+  .zb-camera-controls {
+    bottom: 8px;
+    left: 8px;
+    gap: 4px;
+  }
+  .zb-camera-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  .zb-camera-reset {
+    font-size: 10px !important;
+  }
 }
 @media (orientation:landscape) and (max-height:650px){
   .zb-shell{min-height:100dvh;grid-template-rows:54px minmax(0,1fr) 94px}
@@ -461,6 +801,122 @@
 @keyframes zb-control-intervention{0%{opacity:0;transform:scale(.72)}55%{opacity:1}100%{opacity:.18;transform:scale(1.08)}}
 @keyframes zb-swift-brake{0%{opacity:0;transform:translateX(6px) scale(.82)}45%{opacity:1}100%{opacity:.24;transform:translateX(0) scale(1.08)}}
 @keyframes zb-brake-dust{0%{rx:8;ry:3;opacity:.55}100%{rx:34;ry:11;opacity:0}}
+
+/* Enhanced visual juice & polish: range preview, hit response, critical shield, hotkeys */
+.zb-range-preview{
+  fill:rgba(69,184,255,.09);
+  stroke:rgba(69,184,255,.72);
+  stroke-width:2.2;
+  stroke-dasharray:9 6;
+  pointer-events:none;
+  filter:drop-shadow(0 0 8px rgba(69,184,255,.5));
+  animation:zb-range-rotate 20s linear infinite;
+}
+@keyframes zb-range-rotate{
+  from{stroke-dashoffset:0}
+  to{stroke-dashoffset:300}
+}
+
+.zb-enemy.is-hit{
+  filter:brightness(1.75) drop-shadow(0 0 10px #ffe285);
+  transition:filter 60ms ease-out;
+}
+.zb-enemy.is-hit circle,.zb-enemy.is-hit polygon{
+  fill:#fff9d6 !important;
+  stroke:#ffad42 !important;
+}
+
+.zb-meter.is-critical strong{
+  color:#ff5555;
+  animation:zb-critical-pulse .8s ease-in-out infinite alternate;
+}
+@keyframes zb-critical-pulse{
+  from{text-shadow:0 0 2px rgba(255,85,85,.4);transform:scale(1)}
+  to{text-shadow:0 0 12px rgba(255,85,85,.95);transform:scale(1.12)}
+}
+.zb-shell.is-critical-shield .zb-board-wrap{
+  border-color:rgba(226,107,97,.65);
+  box-shadow:0 0 28px rgba(226,107,97,.3),inset 0 0 24px rgba(226,107,97,.18);
+}
+.zb-shell.is-shield-hit .zb-board-wrap{
+  animation:zb-shield-impact-shake .18s cubic-bezier(.36,.07,.19,.97) both;
+  box-shadow:0 0 32px rgba(255,65,65,.7),inset 0 0 36px rgba(255,65,65,.35);
+  border-color:rgba(255,80,80,.85);
+}
+@keyframes zb-shield-impact-shake{
+  0%,100%{transform:translate(0,0)}
+  20%{transform:translate(-4px,2px)}
+  40%{transform:translate(4px,-3px)}
+  60%{transform:translate(-3px,-1px)}
+  80%{transform:translate(2px,2px)}
+}
+.zb-reward-float{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;
+  font-weight:900;
+  fill:#ffe066;
+  stroke:#161a22;
+  stroke-width:2.5px;
+  paint-order:stroke fill;
+  animation:zb-reward-float-anim .38s ease-out both;
+  pointer-events:none;
+}
+@keyframes zb-reward-float-anim{
+  0%{opacity:0;transform:translateY(4px) scale(.6)}
+  40%{opacity:1;transform:translateY(-10px) scale(1.15)}
+  100%{opacity:0;transform:translateY(-26px) scale(.95)}
+}
+
+.zb-start-wave{
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 0 14px rgba(255,173,66,.35);
+  animation:zb-start-wave-pulse 2s ease-in-out infinite;
+}
+@keyframes zb-start-wave-pulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(255,173,66,.3)}
+  50%{transform:scale(1.02);box-shadow:0 0 22px rgba(255,173,66,.65)}
+}
+
+.zb-hotkey{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  padding:0 4px;
+  font-size:10px;
+  font-weight:800;
+  font-family:inherit;
+  color:#ffad42;
+  background:rgba(255,173,66,.14);
+  border:1px solid rgba(255,173,66,.45);
+  border-radius:4px;
+  box-shadow:0 2px 0 rgba(0,0,0,.4);
+  margin-left:5px;
+  pointer-events:none;
+  letter-spacing:0;
+  vertical-align:middle;
+  line-height:1;
+}
+.zb-hud-button .zb-hotkey,.zb-start-wave .zb-hotkey,.zb-support-action button .zb-hotkey{
+  color:#17242c;
+  background:rgba(23,36,44,.18);
+  border-color:rgba(23,36,44,.35);
+  box-shadow:0 1px 0 rgba(255,255,255,.3);
+}
+.zb-speed button .zb-hotkey{
+  font-size:8px;
+  height:14px;
+  min-width:14px;
+  padding:0 2px;
+  margin-left:2px;
+}
+.zb-tower-shop button .zb-hotkey{
+  float:right;
+  margin-top:2px;
+}
+
 @media (prefers-reduced-motion:reduce){
   .zb-attack-flash,.zb-area-pulse,.zb-detect-pulse,.zb-slow-ring,.zb-boss-armor-effect,
   .zb-resolve-burst circle,.zb-resolve-burst path,.zb-control-intervention,.zb-swift-brake-cue,.zb-swift-brake-cue ellipse{animation:none}
