@@ -65,7 +65,7 @@ export function PresentationView({ commands, t, send, assetUri, eventId, choiceF
       </p>
       <button className="continue-button" type="button" disabled={interactionLocked} aria-busy={interactionLocked || undefined}
         onClick={e => { if (!interactionLocked && e.detail < 2) send({ type: 'advance_event', instance_id: p.instance_id, node_id: p.node_id }); }}>
-        {t('ui.continue')}<span aria-hidden="true">→</span>
+        {t('ui.continue')}<kbd className="play-hotkey" aria-hidden="true">Space</kbd><span aria-hidden="true">→</span>
       </button>
     </div>;
     return <div className="cue-placeholder" key={`cue.${index}`} role="status">

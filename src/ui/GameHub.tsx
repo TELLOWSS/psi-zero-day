@@ -27,6 +27,8 @@ const loadPlayableEpisode = () => import('./PlayableEpisode');
 const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ default: module.PlayableEpisode })));
 const loadDefenseGame = () => import('./DefenseGame');
 const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
+const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
+const PatrolSurvivorsGame = lazy(() => loadSurvivorsGame().then(module => ({ default: module.PatrolSurvivorsGame })));
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
 const loadFieldGuide: FieldGuideModuleLoader = () => import('./FieldGuide');
@@ -130,6 +132,7 @@ export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' })
 export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
   const [inDefense, setInDefense] = useState(false);
+  const [inSurvivors, setInSurvivors] = useState(false);
   const [defenseScenarioId, setDefenseScenarioId] = useState<string | null>(null);
   const [e1UnlockNotice, setE1UnlockNotice] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -168,7 +171,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
 
   useEffect(() => {
     let cancelled = false;
-    if (inDefense || !snapshot.state || readE1UnlockNoticeSeen()) {
+    if (inDefense || inSurvivors || !snapshot.state || readE1UnlockNoticeSeen()) {
       setE1UnlockNotice(false);
       return () => { cancelled = true; };
     }
@@ -186,7 +189,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       }
     })();
     return () => { cancelled = true; };
-  }, [inDefense, snapshot.revision, snapshot.state]);
+  }, [inDefense, inSurvivors, snapshot.revision, snapshot.state]);
 
   const play = () => {
     void loadPlayableEpisode();
@@ -207,6 +210,10 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setLoading(false);
     setInGame(true);
   };
+
+  if (inSurvivors) return <Suspense fallback={<GameplayChunkFallback />}>
+    <PatrolSurvivorsGame onExit={() => setInSurvivors(false)} audioMuted={audioMuted} />
+  </Suspense>;
 
   if (inDefense) return <Suspense fallback={<GameplayChunkFallback />}>
     <DefenseGame session={session} requestedScenarioId={defenseScenarioId} onExit={closeDefense} />
@@ -252,14 +259,21 @@ export function GameShell({ session }: { session: EpisodeSession }) {
       onClick={() => setAudioMuted(!audioMuted)}
     ><span aria-hidden="true">SOUND</span><b>{audioMuted ? 'OFF' : 'ON'}</b></button>
   </Suspense>;
-  return <GameHub session={session} onPlay={play} onNewGame={newGame} onDefense={scenarioId => openDefense(scenarioId ?? null)} />;
+  return <GameHub
+    session={session}
+    onPlay={play}
+    onNewGame={newGame}
+    onDefense={scenarioId => openDefense(scenarioId ?? null)}
+    onSurvivors={() => setInSurvivors(true)}
+  />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense }: {
+export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
   onDefense?: (scenarioId?: string | null) => void;
+  onSurvivors?: () => void;
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
@@ -337,6 +351,28 @@ export function GameHub({ session, onPlay, onNewGame, onDefense }: {
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
 
       <div className="commercial-title-actions is-defense-first">
+        {onSurvivors ? <button
+          className="commercial-title-action is-survivors-entry"
+          type="button"
+          onMouseEnter={() => { void loadSurvivorsGame(); }}
+          onFocus={() => { void loadSurvivorsGame(); }}
+          onClick={() => onSurvivors?.()}
+          style={{
+            borderColor: 'rgba(245, 158, 11, 0.7)',
+            background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(22, 28, 36, 0.85))',
+            boxShadow: '0 0 20px rgba(245, 158, 11, 0.25)',
+          }}
+        >
+          <span className="commercial-title-action-icon" style={{ color: '#fbbf24', fontSize: '20px' }}>⚡</span>
+          <span className="commercial-title-action-copy">
+            <strong style={{ color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              야간 긴급 순찰 (SURVIVORS)
+              <span style={{ fontSize: '10px', background: '#f59e0b', color: '#111827', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>NEW MODE</span>
+            </strong>
+            <small>주인공 직접 조작 · 현장 위험 실시간 요격 & 퍽 강화 서바이벌</small>
+          </span>
+          <b style={{ color: '#fbbf24' }}>›</b>
+        </button> : null}
         {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" data-title-primary-cta="defense" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>

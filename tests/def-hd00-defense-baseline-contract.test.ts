@@ -54,7 +54,7 @@ describe('DEF-HD00 existing DefenseGame baseline contract', () => {
   });
 
   it('records the legacy visual asset inventory without treating it as the new final art target', () => {
-    expect(visualProduction.visualVersion).toBe('zero-breach-production-lock-1.0.0');
+    expect(visualProduction.visualVersion).toBe('zero-breach-legacy-svg-geometry-1.0.0');
     expect(visualProduction.assets.filter(asset => asset.kind === 'BOARD')).toHaveLength(1);
     expect(visualProduction.assets.filter(asset => asset.kind === 'TOWER')).toHaveLength(16);
     expect(visualProduction.assets.filter(asset => asset.kind === 'ENEMY')).toHaveLength(6);

@@ -80,7 +80,7 @@ export const FieldHazardsOverlay: FC<{
 }> = ({ mapId, isRunning }) => {
   // G8A 및 일반 건설 맵에 사실적 환경 장애물/위험요소 오버레이 렌더링
   return (
-    <g className={`zb-field-hazards-layer${isRunning ? ' is-active' : ''}`} aria-hidden="true">
+    <g className={`zb-field-hazards-layer${isRunning ? ' is-active' : ''}`} data-map-id={mapId} aria-hidden="true">
       {G8A_HAZARDS.map(item => (
         <g
           key={item.id}

@@ -9,6 +9,53 @@
   color: #284653;
 }
 
+.strategy-replan-card summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.strategy-replan-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.strategy-replan-thumb {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .8);
+  padding: 2px;
+  box-shadow: 0 2px 6px rgba(40, 70, 83, .12);
+}
+
+.strategy-replan-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  gap: 8px;
+}
+
+.strategy-replan-info strong {
+  font-size: 12px;
+  font-weight: 900;
+  color: #24404e;
+}
+
+.strategy-replan-info span {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(48, 91, 108, .1);
+  font-size: 9px;
+  font-weight: 800;
+  color: #315f71;
+}
+
 .strategy-replan-heading {
   display: flex;
   align-items: center;

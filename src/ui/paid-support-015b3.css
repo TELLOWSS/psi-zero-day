@@ -23,13 +23,23 @@
 
 .strategy-support-list article {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 28px auto 1fr auto;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   min-width: 0;
-  padding: 5px 6px;
+  padding: 4px 6px;
   border-radius: 9px;
   background: rgba(225, 238, 243, .62);
+}
+
+.strategy-support-item-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .75);
+  box-shadow: 0 1px 4px rgba(28, 58, 72, .12);
+  flex-shrink: 0;
 }
 
 .strategy-support-list article > span {
@@ -89,5 +99,6 @@
   .strategy-support-list { gap: 3px; }
   .strategy-support-list article { padding: 3px 4px; }
   .strategy-support-list article > span { display: none; }
-  .strategy-support-list article { grid-template-columns: 1fr auto; }
+  .strategy-support-list article { grid-template-columns: 22px 1fr auto; }
+  .strategy-support-item-thumb { width: 22px; height: 22px; }
 }

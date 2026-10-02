@@ -1,0 +1,480 @@
+/* PSI : ZERO DAY — Patrol Survivors (Night Patrol) Stylesheet */
+
+.survivors-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
+  background-color: #0c0f12;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+}
+
+.survivors-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #12161b;
+  cursor: crosshair;
+}
+
+/* TOP HUD */
+.survivors-hud-top {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(18, 24, 32, 0.88);
+  backdrop-filter: blur(12px);
+  padding: 8px 24px;
+  border-radius: 40px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 15px rgba(245, 158, 11, 0.15);
+  z-index: 20;
+}
+
+.survivors-timer {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.survivors-timer strong {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fbbf24;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+}
+
+.survivors-timer small {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.survivors-score-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 16px;
+}
+
+.survivors-score-badge span {
+  font-size: 10px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.survivors-score-badge strong {
+  font-size: 18px;
+  color: #10b981;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.survivors-kills-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.survivors-kills-badge span {
+  color: #f87171;
+}
+
+/* EXP BAR */
+.survivors-exp-bar-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 25;
+}
+
+.survivors-exp-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd);
+  box-shadow: 0 0 10px rgba(96, 165, 250, 0.6);
+  transition: width 0.15s ease-out;
+}
+
+/* PLAYER STATUS (TOP LEFT) */
+.survivors-player-hud {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+
+.survivors-hp-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(18, 24, 32, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.survivors-level-tag {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827;
+  font-weight: 900;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+.survivors-hp-bar-bg {
+  width: 160px;
+  height: 12px;
+  background: #374151;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.survivors-hp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #10b981);
+  transition: width 0.2s ease-out;
+}
+
+.survivors-hp-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #d1d5db;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ACTIVE PERKS BAR */
+.survivors-perks-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: 280px;
+}
+
+.survivors-perk-badge {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  background: rgba(31, 41, 55, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.survivors-perk-badge small {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  background: #f59e0b;
+  color: #111827;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* TOP RIGHT ACTIONS */
+.survivors-top-actions {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.survivors-btn-icon {
+  background: rgba(18, 24, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e5e7eb;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+
+.survivors-btn-icon:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #fbbf24;
+}
+
+/* OVERLAYS & MODALS */
+.survivors-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 14, 20, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.survivors-modal-content {
+  background: #161c24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.2);
+  padding: 32px;
+  width: 90%;
+  max-width: 680px;
+  text-align: center;
+}
+
+.survivors-modal-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.survivors-modal-title.is-gold {
+  color: #fbbf24;
+  text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+.survivors-modal-title.is-green {
+  color: #10b981;
+  text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.survivors-modal-title.is-red {
+  color: #ef4444;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+.survivors-modal-sub {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 24px;
+}
+
+/* PERK SELECTION CARDS */
+.survivors-perk-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.survivors-perk-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(30, 39, 51, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.survivors-perk-card:hover {
+  background: rgba(45, 58, 77, 0.9);
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.survivors-perk-card-icon {
+  font-size: 32px;
+  width: 54px;
+  height: 54px;
+  background: #111827;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  flex-shrink: 0;
+}
+
+.survivors-perk-card-info {
+  flex: 1;
+}
+
+.survivors-perk-card-info h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f3f4f6;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.survivors-perk-card-info h4 span {
+  font-size: 11px;
+  background: #374151;
+  color: #fbbf24;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+}
+
+.survivors-perk-card-info p {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* RESULTS SCREEN STATS */
+.survivors-results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  background: rgba(18, 24, 32, 0.7);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.survivors-stat-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.survivors-stat-box span {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.survivors-stat-box strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f3f4f6;
+}
+
+.survivors-actions-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.survivors-btn-primary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 12px 32px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.survivors-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+}
+
+.survivors-btn-secondary {
+  background: #374151;
+  color: #e5e7eb;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.survivors-btn-secondary:hover {
+  background: #4b5563;
+}
+
+/* READY / CONTROLS OVERLAY */
+.survivors-controls-guide {
+  background: rgba(18, 24, 32, 0.6);
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.survivors-controls-guide kbd {
+  background: #374151;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  border: 1px solid #4b5563;
+  color: #fbbf24;
+}
+
+/* MOBILE VIRTUAL JOYSTICK */
+.survivors-touch-joystick {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(245, 158, 11, 0.4);
+  touch-action: none;
+  z-index: 30;
+}
+
+.survivors-touch-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  pointer-events: none;
+}

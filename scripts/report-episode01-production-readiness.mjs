@@ -62,7 +62,10 @@ const performanceRows = await Promise.all(performance.generated_wave_01.assets.m
   id: asset.asset_id,
   ...(await inspect(path.join('public', asset.path), asset.bytes, asset.sha256)),
 })));
-const audioByFile = new Map((audio.production_generation?.assets ?? []).map(asset => [asset.file, asset]));
+const audioByFile = new Map([
+  ...(audio.production_generation?.assets ?? []),
+  ...(audio.voice_mastering?.assets ?? []),
+].map(asset => [asset.file, asset]));
 const audioRows = await Promise.all((audio.assets ?? []).map(async asset => {
   const file = asset.target_uri.split('/').at(-1);
   const contract = audioByFile.get(file);

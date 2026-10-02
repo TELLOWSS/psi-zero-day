@@ -7,6 +7,7 @@ export interface FieldSupportItemDefinition {
   readonly category: FieldSupportCategory;
   readonly name_text_id: string;
   readonly active_flag_id: string;
+  readonly visual_asset_path?: string;
 }
 
 /**
@@ -19,36 +20,42 @@ export const FIELD_SUPPORT_ITEMS = [
     category: 'facility',
     name_text_id: 'ui.paid_item.facility.access_lane',
     active_flag_id: 'support.facility.access_lane.active',
+    visual_asset_path: 'assets/episode01/items/access-lane.webp',
   },
   {
     item_id: 'facility.lighting_pack',
     category: 'facility',
     name_text_id: 'ui.paid_item.facility.lighting_pack',
     active_flag_id: 'support.facility.lighting_pack.active',
+    visual_asset_path: 'assets/episode01/scene-elements/temporary-lighting-pack.webp',
   },
   {
     item_id: 'facility.logistics_zone',
     category: 'facility',
     name_text_id: 'ui.paid_item.facility.logistics_zone',
     active_flag_id: 'support.facility.logistics_zone.active',
+    visual_asset_path: 'assets/episode01/scene-elements/material-yard.webp',
   },
   {
     item_id: 'equipment.radio_pack',
     category: 'equipment',
     name_text_id: 'ui.paid_item.equipment.radio_pack',
     active_flag_id: 'support.equipment.radio_pack.active',
+    visual_asset_path: 'assets/episode01/items/radio-pack.webp',
   },
   {
     item_id: 'equipment.inspection_kit',
     category: 'equipment',
     name_text_id: 'ui.paid_item.equipment.inspection_kit',
     active_flag_id: 'support.equipment.inspection_kit.active',
+    visual_asset_path: 'assets/episode01/items/inspection-kit.webp',
   },
   {
     item_id: 'equipment.traffic_control_pack',
     category: 'equipment',
     name_text_id: 'ui.paid_item.equipment.traffic_control_pack',
     active_flag_id: 'support.equipment.traffic_control_pack.active',
+    visual_asset_path: 'assets/episode01/items/traffic-control-pack.webp',
   },
 ] as const satisfies readonly FieldSupportItemDefinition[];
 

@@ -17,11 +17,11 @@ describe('game hub navigation', () => {
     try {
       expect(session.start(session.getSnapshot().revision)).toBe(true);
       act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} />));
-      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(5);
+      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(3);
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');
-      click('.commercial-title-action:nth-child(3)');
+      click('.commercial-title-features button:first-child');
       expect(host.querySelector('.hub-page-map')).not.toBeNull();
       expect(host.querySelectorAll('.hub-route-node')).toHaveLength(5);
       click('.hub-nav button:nth-child(3)');

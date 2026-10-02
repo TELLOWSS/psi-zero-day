@@ -110,8 +110,11 @@ export function StrategyLoopPanel({
       </div> : null}
       {outcome.reconsideration ? <details className="strategy-replan-card" data-paid-item={outcome.reconsideration.item_id}>
         <summary>
-          <strong>{text('ui.paid_item.replan')}</strong>
-          <span>{text('ui.paid_item.owned')} {outcome.reconsideration.remaining}</span>
+          <img src="assets/episode01/items/replan-pass.webp" alt="" className="strategy-replan-thumb" aria-hidden="true" />
+          <div className="strategy-replan-info">
+            <strong>{text('ui.paid_item.replan')}</strong>
+            <span>{text('ui.paid_item.owned')} {outcome.reconsideration.remaining}</span>
+          </div>
         </summary>
         <small>{text('ui.paid_item.replan_guard')}</small>
         {!reconsiderConfirm ? <button

@@ -114,6 +114,70 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.audio.voice_junho_signal",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/voice-junho-signal.ogg",
+          "format": "ogg",
+          "bytes": 42337,
+          "hash": "1bbe652e14aab6cb4abec30f7072701c6d11b8133b055f3709993a08df0bd950"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.voice_kang_first_contact",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/voice-kang-first-contact.ogg",
+          "format": "ogg",
+          "bytes": 68167,
+          "hash": "2c7d6b06f4911a07d6162f864848567fd0c06120c2dfc951f0b5041de624d648"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.voice_lee_delay",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/voice-lee-delay.ogg",
+          "format": "ogg",
+          "bytes": 45677,
+          "hash": "20a180a6937d95f68f21bf09548366c9cb95a9a80b8699d16ce24f3d0b45aa67"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.audio.voice_oh_record_judgment",
+      "type": "audio",
+      "group_id": "ep01.audio",
+      "variants": [
+        {
+          "uri": "assets/episode01/audio/voice-oh-record-judgment.ogg",
+          "format": "ogg",
+          "bytes": 56027,
+          "hash": "eb41f06924085cb384966013911f9169c0e8ce8c751c8f9cb42f1d6dabadebdd"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "on_demand",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.audio.workface_pressure",
       "type": "audio",
       "group_id": "ep01.audio",
@@ -194,6 +258,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.kang_taesik.performance.conflict",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/kang-taesik-conflict.webp",
+          "format": "webp",
+          "bytes": 199724,
+          "hash": "353619aec821ec95abb6a517c3a2c6cf5541780d39833b5c71ee2e13023b2401"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.kang_taesik.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -242,6 +322,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.lee_jaehoon.performance.concern",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/lee-jaehoon-concern.webp",
+          "format": "webp",
+          "bytes": 128518,
+          "hash": "93a1573121705cdc489c01b64f22c308c41bd5704d5ef9f0b9214b421d19b5e6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.lee_jaehoon.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -283,6 +379,22 @@
           "format": "webp",
           "bytes": 84476,
           "hash": "f8e4b106be57942d9408f866ac4fc5a609ab6226a3d37679a457032b106722ae"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.character.lim_junho.performance.relief",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/lim-junho-relief.webp",
+          "format": "webp",
+          "bytes": 150304,
+          "hash": "f6af2ced769422ec7240a5e2c733922b0c2f5274c90879a986a9a4e807544b2d"
         }
       ],
       "dependencies": [],
@@ -354,6 +466,22 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.character.player.performance.resolve",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/player-resolve.webp",
+          "format": "webp",
+          "bytes": 135228,
+          "hash": "7ed2c13978cc75b51cbadd99e48d789f525ae496ec345b61bc8d56b179671f8e"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.character.player.portrait",
       "type": "image",
       "group_id": "ep01.characters",
@@ -379,6 +507,22 @@
           "format": "webp",
           "bytes": 65344,
           "hash": "912bb70a0944c0d325a9c9d3e6c0175fc434bd5539ccc35d8443f517c3ee4485"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.character.seo_jeongmin.performance.neutral",
+      "type": "image",
+      "group_id": "ep01.character_performance",
+      "variants": [
+        {
+          "uri": "assets/episode01/characters/performance/seo-jeongmin-neutral.webp",
+          "format": "webp",
+          "bytes": 113766,
+          "hash": "cf1c13696d50b89938ef142b7f19930d6ed77a00d7aa9a203c696ccbc6432b68"
         }
       ],
       "dependencies": [],
@@ -594,6 +738,118 @@
       "version": "1"
     },
     {
+      "asset_id": "ep01.scene_element.concrete_pour_zone",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/concrete-pour-zone.webp",
+          "format": "webp",
+          "bytes": 291842,
+          "hash": "9551c76f17d02b03514e81f44d315832df12801b32c7e89a748fe5ada2254b76"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.concrete_vibrator_cable",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/concrete-vibrator-cable.webp",
+          "format": "webp",
+          "bytes": 75350,
+          "hash": "482f02c248b898d6e955519ad7ffdc230f473b23044de114b93ba54f4374e56b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.confined_space_attendant",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/confined-space-attendant.webp",
+          "format": "webp",
+          "bytes": 104530,
+          "hash": "940cf343c5cfa4ac6b52c49d1f1de50636dff58229b2dfda7ac67eb26d623061"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.confined_space_meter",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/confined-space-meter.webp",
+          "format": "webp",
+          "bytes": 92736,
+          "hash": "f2e279ad70cc4ce889f1ba290f9680802add56b5dd96f627fa05987eba9687b2"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.dismantle_drop_zone",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/dismantle-drop-zone.webp",
+          "format": "webp",
+          "bytes": 188140,
+          "hash": "206a78a1d19ec4457bff924dd38abf2511e9b7709cb1cbc272e2a8df2f582577"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.dismantled_formwork_stack",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/dismantled-formwork-stack.webp",
+          "format": "webp",
+          "bytes": 119860,
+          "hash": "f1f77cdb6b8778834f7050fee555ddab533aa8ebd8a0471b7853f63013d30bcd"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.dismantled_guardrail",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/dismantled-guardrail.webp",
+          "format": "webp",
+          "bytes": 102234,
+          "hash": "6138317f9494dc3e52038f3efab098d800e1bcac82051b2834db47f4175cc38f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.euroform_wall_panel",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -603,6 +859,38 @@
           "format": "webp",
           "bytes": 184348,
           "hash": "c9f082661d04dd721e7e159df9b3548595a51dd5b291d8d4f2b091289b259ece"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.ev_pit_access_route",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/ev-pit-access-route.webp",
+          "format": "webp",
+          "bytes": 132786,
+          "hash": "db6f6c72ace3123a2a09e8c898d044e094d6b1e7ce7cbe72928965162492411b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.ev_pit_opening",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/ev-pit-opening.webp",
+          "format": "webp",
+          "bytes": 96692,
+          "hash": "a49776fd45b37501de197e23bc115cc686f8e63af7c32ed39002f57f6b6fd94c"
         }
       ],
       "dependencies": [],
@@ -706,6 +994,70 @@
       "version": "2"
     },
     {
+      "asset_id": "ep01.scene_element.foundation_blinding_edge",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-blinding-edge.webp",
+          "format": "webp",
+          "bytes": 25546,
+          "hash": "f9a22a076a81769badd9cc6173c6846b0073e2f1cf1b03f692089b6b06ae4583"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.foundation_rebar_mat",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-rebar-mat.webp",
+          "format": "webp",
+          "bytes": 35778,
+          "hash": "503efef361fd54592b00b5862ad0e91be13e771267607def92fbebb1190c76fe"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.foundation_sump_pump",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-sump-pump.webp",
+          "format": "webp",
+          "bytes": 105686,
+          "hash": "9c0a4c228145defdcf64ce7fafe3988516f469bd7e6f2c339bfb8dab9703e829"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.foundation_temporary_walkway",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/foundation-temporary-walkway.webp",
+          "format": "webp",
+          "bytes": 110784,
+          "hash": "7579832b18849163f9a205b231068b20d860d92f339695e2b4f5dc3523fdc063"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
       "asset_id": "ep01.scene_element.gangform_lift_wire22",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -731,6 +1083,22 @@
           "format": "webp",
           "bytes": 389334,
           "hash": "69b4f5fad24fa17fa18aef0a97c77be0043cb91499885d5ba8a8a68afe209990"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.inspection_kit",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/inspection-kit.webp",
+          "format": "webp",
+          "bytes": 130254,
+          "hash": "b27561030859b03ccb33514dc9b5af662a12ba33f7390eb594a34844c49e2659"
         }
       ],
       "dependencies": [],
@@ -768,6 +1136,22 @@
       "dependencies": [],
       "preload_policy": "next_scene",
       "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.mobile_scaffold",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/mobile-scaffold.webp",
+          "format": "webp",
+          "bytes": 98826,
+          "hash": "78ff430b2a807e01d4d3aaf53929bdec011162a62e0bf9351b55fef7f0838f3f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
       "asset_id": "ep01.scene_element.open_edge",
@@ -834,6 +1218,102 @@
       "version": "2"
     },
     {
+      "asset_id": "ep01.scene_element.pump_hose_route",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/pump-hose-route.webp",
+          "format": "webp",
+          "bytes": 59604,
+          "hash": "39198c81521b463cd2a73281e875561bd73c7744ae1e3977f7a756eeb766f7c2"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.pump_outrigger",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/pump-outrigger.webp",
+          "format": "webp",
+          "bytes": 96196,
+          "hash": "0e8e0b5ed171659baf6d789398ab6c27a51be80080fd614ffca3e2d45d341394"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.radio_pack",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/radio-pack.webp",
+          "format": "webp",
+          "bytes": 383546,
+          "hash": "43e0dcecd09f1849e5f8754471c5d2080316c374540e8acdad71ca4aa33ab36b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.rebar_chair_support",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/rebar-chair-support.webp",
+          "format": "webp",
+          "bytes": 90596,
+          "hash": "0eaf2e0ec9693cf2e01d3b956fecb33ee056158096c9ebd22a3299d324576a1f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.rebar_lifting_bundle",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/rebar-lifting-bundle.webp",
+          "format": "webp",
+          "bytes": 93026,
+          "hash": "f8c0ff2c009bef868cb3d00e2731acd10a1a5cec2112652efd74befe6e602071"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.shoring_deformation_watch",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/shoring-deformation-watch.webp",
+          "format": "webp",
+          "bytes": 171414,
+          "hash": "790d52c87a7db57126047ed1a4394830ad9af06979d47c9d5c901c6d60725bda"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
       "asset_id": "ep01.scene_element.site_gate",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -866,6 +1346,54 @@
       "version": "2"
     },
     {
+      "asset_id": "ep01.scene_element.slab_formwork_edge",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/slab-formwork-edge.webp",
+          "format": "webp",
+          "bytes": 98444,
+          "hash": "e38cb95ac6d2e991c260b437948f5f9632b6e33531fc291181627beab7038aec"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.slab_opening_cover",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/slab-opening-cover.webp",
+          "format": "webp",
+          "bytes": 98996,
+          "hash": "8be6e53320e759fbf0268de02c107fd993dbef512ab4320ee880492ee2f90af6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.starter_rebar_protrusion",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/starter-rebar-protrusion.webp",
+          "format": "webp",
+          "bytes": 131206,
+          "hash": "629f92935f6e59685988aafec6a94f6048dd6f8a9a1fff0b2811b28d3262223b"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
       "asset_id": "ep01.scene_element.suspended_load",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -880,6 +1408,70 @@
       "dependencies": [],
       "preload_policy": "next_scene",
       "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.system_shoring_jackbase",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/system-shoring-jackbase.webp",
+          "format": "webp",
+          "bytes": 65440,
+          "hash": "93efecc3acc0da62fc979e6fca1ed017adec5deebdd7225525ed10f6403c4c31"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.system_shoring_ledger",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/system-shoring-ledger.webp",
+          "format": "webp",
+          "bytes": 51042,
+          "hash": "7162b1d5084ce5860a95e36d7c44005293dad9d8c00a35864430f85f4a659694"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.system_shoring_missing_brace",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/system-shoring-missing-brace.webp",
+          "format": "webp",
+          "bytes": 62796,
+          "hash": "f9c0902302f7d25818319bb8674a21f9a8f94063557d886dc89660369036e7d6"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.system_shoring_standard",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/system-shoring-standard.webp",
+          "format": "webp",
+          "bytes": 26878,
+          "hash": "b59fec09906e0f54e0efce7b079c5601356a152a45d739a621bf748d44629705"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
     },
     {
       "asset_id": "ep01.scene_element.temporary_distribution_board",
@@ -898,6 +1490,22 @@
       "version": "2"
     },
     {
+      "asset_id": "ep01.scene_element.temporary_electric_wet",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/temporary-electric-wet.webp",
+          "format": "webp",
+          "bytes": 87978,
+          "hash": "60159750c69f5283a88aa8a5b67f5776d395c101264aea3847a7213d9befbdc9"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
       "asset_id": "ep01.scene_element.temporary_lighting_pack",
       "type": "image",
       "group_id": "ep01.scene_elements",
@@ -907,6 +1515,54 @@
           "format": "webp",
           "bytes": 142140,
           "hash": "f1bc58b504229c93d1cff85dd29014643a08f45e435923fa2f0a08523083e4ec"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.temporary_stair",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/temporary-stair.webp",
+          "format": "webp",
+          "bytes": 91836,
+          "hash": "de705f9e939580606c3386d68f5980abdd5c2474cfe9c94000e846ec1b1f8e3d"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.traffic_control_pack",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/traffic-control-pack.webp",
+          "format": "webp",
+          "bytes": 79010,
+          "hash": "e0d318c44f2b00011f5ef78c726007b4ad2fef07945b20db331c7672c0fcfb7f"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
+    },
+    {
+      "asset_id": "ep01.scene_element.uhead_beam_alignment",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/uhead-beam-alignment.webp",
+          "format": "webp",
+          "bytes": 82586,
+          "hash": "b567eaa6520bce1176af3d088095f3ec9bc2cf806c77e225c9276f0ee6cda072"
         }
       ],
       "dependencies": [],
@@ -944,6 +1600,22 @@
       "dependencies": [],
       "preload_policy": "next_scene",
       "version": "2"
+    },
+    {
+      "asset_id": "ep01.scene_element.ventilation_fan_duct",
+      "type": "image",
+      "group_id": "ep01.scene_elements",
+      "variants": [
+        {
+          "uri": "assets/episode01/scene-elements/ventilation-fan-duct.webp",
+          "format": "webp",
+          "bytes": 126332,
+          "hash": "6299dbccee694e730bf900a57845dc3bf0e0d6611457e3019b47bbef5e23c930"
+        }
+      ],
+      "dependencies": [],
+      "preload_policy": "next_scene",
+      "version": "1"
     },
     {
       "asset_id": "ep01.scene_element.wet_floor",

@@ -8,6 +8,7 @@ const planPath = path.join(root, 'content/episode01/visuals.json');
 const elementCatalogPath = path.join(root, 'content/episode01/scene-element-catalog.json');
 const sceneBackgroundCatalogPath = path.join(root, 'content/episode01/scene-background-catalog.json');
 const audioProductionPath = path.join(root, 'content/episode01/audio-production.json');
+const characterPerformancePath = path.join(root, 'content/episode01/character-performance-production.json');
 const outputPath = path.join(root, 'content/episode01/assets.json');
 const checkOnly = process.argv.includes('--check');
 const fullProductionCheck = process.argv.includes('--production-check');
@@ -18,6 +19,7 @@ const plan = JSON.parse(await readFile(planPath, 'utf8'));
 const elementCatalog = JSON.parse(await readFile(elementCatalogPath, 'utf8'));
 const sceneBackgroundCatalog = JSON.parse(await readFile(sceneBackgroundCatalogPath, 'utf8'));
 const audioProduction = JSON.parse(await readFile(audioProductionPath, 'utf8'));
+const characterPerformance = JSON.parse(await readFile(characterPerformancePath, 'utf8'));
 
 const planned = [];
 const dialogueArt = JSON.parse(await readFile(path.join(root, 'content/episode01/dialogue-art.json'), 'utf8'));
@@ -91,6 +93,19 @@ for (const definition of audioProduction.assets ?? []) {
     preload_policy: definition.loop_candidate ? 'next_scene' : 'on_demand',
     source: `audio:${definition.key}`,
     production_scope: 'audio',
+    allow_rc_fallback: false,
+  });
+}
+for (const asset of characterPerformance.generated_wave_01?.assets ?? []) {
+  if (!asset?.asset_id || !asset?.path) continue;
+  planned.push({
+    asset_id: asset.asset_id,
+    uri: asset.path,
+    type: 'image',
+    group_id: 'ep01.character_performance',
+    preload_policy: 'next_scene',
+    source: `character_performance:${asset.asset_id}`,
+    production_scope: 'character-performance',
     allow_rc_fallback: false,
   });
 }

@@ -43,6 +43,26 @@ export interface StrategySupportItem {
   readonly remaining: number;
   readonly active: boolean;
   readonly enabled: boolean;
+  readonly visual_asset_path?: string;
+}
+
+function supportItemIconUri(itemId: string): string | null {
+  switch (itemId) {
+    case 'facility.access_lane':
+      return 'assets/episode01/items/access-lane.webp';
+    case 'facility.lighting_pack':
+      return 'assets/episode01/scene-elements/temporary-lighting-pack.webp';
+    case 'facility.logistics_zone':
+      return 'assets/episode01/scene-elements/material-yard.webp';
+    case 'equipment.radio_pack':
+      return 'assets/episode01/items/radio-pack.webp';
+    case 'equipment.inspection_kit':
+      return 'assets/episode01/items/inspection-kit.webp';
+    case 'equipment.traffic_control_pack':
+      return 'assets/episode01/items/traffic-control-pack.webp';
+    default:
+      return null;
+  }
 }
 
 function signalIcon(kind: StrategySignalKind): string {
@@ -236,15 +256,19 @@ export function StrategyMapShell({
       {supportItems.length ? <section className="strategy-support-panel" aria-label={text('ui.paid_item.support_title')}>
         <h2>{text('ui.paid_item.support_title')}</h2>
         <div className="strategy-support-list">
-          {supportItems.map(item => <article key={item.item_id} data-support-item={item.item_id} data-support-active={item.active ? 'true' : 'false'}>
-            <span>{text(`ui.paid_item.${item.category}`)}</span>
-            <strong>{text(item.name_text_id)}</strong>
-            {item.active ? <em>{text('ui.paid_item.active')}</em> : <button
-              type="button"
-              disabled={!item.enabled}
-              onClick={() => item.enabled && onSupportItemUse?.(item.item_id)}
-            >{item.category === 'facility' ? text('ui.paid_item.deploy') : text('ui.paid_item.commit')} · {text('ui.paid_item.owned')} {item.remaining}</button>}
-          </article>)}
+          {supportItems.map(item => {
+            const iconUri = item.visual_asset_path ?? supportItemIconUri(item.item_id);
+            return <article key={item.item_id} data-support-item={item.item_id} data-support-active={item.active ? 'true' : 'false'}>
+              {iconUri ? <img src={iconUri} alt="" className="strategy-support-item-thumb" aria-hidden="true" /> : null}
+              <span>{text(`ui.paid_item.${item.category}`)}</span>
+              <strong>{text(item.name_text_id)}</strong>
+              {item.active ? <em>{text('ui.paid_item.active')}</em> : <button
+                type="button"
+                disabled={!item.enabled}
+                onClick={() => item.enabled && onSupportItemUse?.(item.item_id)}
+              >{item.category === 'facility' ? text('ui.paid_item.deploy') : text('ui.paid_item.commit')} · {text('ui.paid_item.owned')} {item.remaining}</button>}
+            </article>;
+          })}
         </div>
       </section> : null}
     </aside>

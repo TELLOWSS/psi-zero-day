@@ -47,7 +47,7 @@ describe('DEF-HD01-PQ representative benchmark contract', () => {
       marshalUri: 'assets/episode01/characters/choi-minseok-map.webp',
       barrierUri: 'assets/episode01/scene-elements/access-barrier.webp',
     });
-    expect(defenseSwiftPqAsset()).toBeNull();
+    expect(defenseSwiftPqAsset()).not.toBeNull();
     expect(benchmark.benchmark.risk.target.kind).toBe('LEGACY_SVG_REFERENCE');
     expect(benchmark.manualReview.swift.assessment).toBe('REJECT_AS_FINAL');
 

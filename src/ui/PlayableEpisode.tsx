@@ -378,6 +378,18 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       const target = e.target instanceof Element ? e.target : null;
       if (target?.closest('input, textarea, select, summary, [contenteditable="true"], .debug-panel')) return;
       if (e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key === 'h' || e.key === 'H') {
+        e.preventDefault();
+        setHistoryOpen(open => !open);
+        return;
+      }
+      if (e.key === 'Escape') {
+        if (historyOpen) {
+          e.preventDefault();
+          setHistoryOpen(false);
+          return;
+        }
+      }
       if (e.repeat) { if (e.key === 'Enter' || e.code === 'Space') e.preventDefault(); return; }
       if (voiceLocked && (e.key === 'Enter' || e.code === 'Space' || /^[1-4]$/.test(e.key))) {
         e.preventDefault();
@@ -404,7 +416,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue]);
+  }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen]);
 
   const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
