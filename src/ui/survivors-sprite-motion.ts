@@ -1,5 +1,5 @@
 import { ACTOR_RIGS } from './survivors-animation-rig';
-import { soleContact } from './survivors-ground-contact';
+import { gaitStride, soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; pose: SpritePose }
 export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
@@ -22,7 +22,9 @@ export class SpriteMotionTracker {
     const moving = elapsed > 0 && distance > 0.015 && distance < 80;
     const speed = moving ? distance / elapsed : 0;
     const running = speed > 145;
-    const cycle = moving ? ((previous?.cycle ?? 0) + distance * Math.PI * 2 / (running ? 66 : 54)) % (Math.PI * 2) : previous?.cycle ?? 0;
+    const directionY = moving ? dy / distance : previous?.pose.directionY ?? 0;
+    const stride = moving ? gaitStride(running, directionY) : previous?.pose.stride ?? 54;
+    const cycle = moving ? ((previous?.cycle ?? 0) + distance * Math.PI * 2 / stride) % (Math.PI * 2) : previous?.cycle ?? 0;
     const facing = moving && Math.abs(dx) > 0.04 ? (dx < 0 ? -1 : 1) : previous?.facing ?? 1;
     const reactionUntil = previous && hp < previous.hp ? clock + .18 : previous?.reactionUntil ?? 0;
     const reaction = Math.max(0, Math.min(1, (reactionUntil - clock) / .18));
@@ -33,7 +35,7 @@ export class SpriteMotionTracker {
       lean: moving ? Math.max(-.035, Math.min(.035, dx / Math.max(elapsed, .001) * .0002)) : reaction * .025,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
-      stride: moving ? running ? 66 : 54 : previous?.pose.stride ?? 54, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY: moving ? dy / distance : previous?.pose.directionY ?? 0,
+      stride, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY,
       mode: reaction > 0 ? 'brace' : moving ? running ? 'run' : 'walk' : action > 0 ? 'action' : 'idle',
     };
     this.samples.set(entity, { x, y, clock, hp, cycle, facing, reactionUntil, actionUntil, pose });

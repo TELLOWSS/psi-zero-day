@@ -57,7 +57,7 @@ function legRows(p:Prepared,source:LegRig,other:LegRig,left:boolean):{y:number;l
  return rows;
 }
 const rowsCache=new WeakMap<Prepared,ReturnType<typeof legRows>[]>();
-function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:number,action:number,blend:number,height:number):HTMLCanvasElement {
+function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:number,action:number,blend:number,height:number,stride:number):HTMLCanvasElement {
  const canvas=document.createElement('canvas');canvas.width=WIDTH;canvas.height=HEIGHT;const ctx=canvas.getContext('2d')!;
  ctx.translate(ORIGIN_X-p.width/2,ORIGIN_Y-BODY);
  const sources=[pixels(p.rig.left,p.width),pixels(p.rig.right,p.width)];
@@ -65,7 +65,7 @@ function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:nu
  const cycle=phase/16*Math.PI*2;
  const torsoY=(Math.cos(cycle*2)*(running?1.1:.55)*blend-brace*2)*BODY/74;
  const targets=sources.map((l,i)=>{
-  const amplitude=brace>0?0:blend;const step=footTravel(cycle,i===1,running,directionY,amplitude);
+  const amplitude=brace>0?0:blend;const step=footTravel(cycle,i===1,running,directionY,amplitude,stride);
   const offsetX=step.x*BODY/height;
   const offsetY=(step.y-step.lift)*BODY/height;
   const hip={x:l.hip.x+(action*1.4)*BODY/74,y:l.hip.y+torsoY};
@@ -102,13 +102,14 @@ export function drawRiggedActor(ctx:CanvasRenderingContext2D,image:HTMLImageElem
  const phase=Math.floor(pose.cycle/(Math.PI*2)*16)%16;
  const dy=Math.round(pose.directionY*32)/32;
  const reaction=Math.round(pose.reaction*3)/3,action=Math.round(pose.action*2)/2;
- const running=pose.stride===66,blend=Math.round(pose.gaitBlend*4)/4;
- const key=`${phase}:${running}:${dy}:${reaction}:${action}:${blend}:${height}`;
- let frame=p.frames.get(key);if(!frame){frame=bake(p,phase,running,dy,reaction,action,blend,height);p.frames.set(key,frame);if(p.frames.size>24)p.frames.delete(p.frames.keys().next().value!);}
+ const stride=Math.round(pose.stride*10)/10;
+ const running=pose.stride/Math.sqrt(1-.64*pose.directionY*pose.directionY)>60,blend=Math.round(pose.gaitBlend*4)/4;
+ const key=`${phase}:${running}:${dy}:${reaction}:${action}:${blend}:${height}:${stride}`;
+ let frame=p.frames.get(key);if(!frame){frame=bake(p,phase,running,dy,reaction,action,blend,height,stride);p.frames.set(key,frame);if(p.frames.size>24)p.frames.delete(p.frames.keys().next().value!);}
  else {p.frames.delete(key);p.frames.set(key,frame);}
  const scale=height/BODY;
  ctx.save();ctx.scale(pose.facing,1);ctx.transform(1,0,pose.lean,1,0,0);
  // Each support foot has a fixed ground contact; raised feet get a softer, smaller shadow.
- for(const opposite of [false,true]){const step=footTravel(phase/16*Math.PI*2,opposite,running,dy,reaction>0?0:blend);const sole=opposite?p.rig.right.sole:p.rig.left.sole;const contact=soleContact(sole,p.width/BODY,height,step);ctx.fillStyle=`rgba(0,0,0,${step.planted?.35:.16})`;ctx.beginPath();ctx.ellipse(contact.x,contact.y+1,(step.planted?5:3)*height/74,2*height/74,0,0,Math.PI*2);ctx.fill();}
+ for(const opposite of [false,true]){const step=footTravel(phase/16*Math.PI*2,opposite,running,dy,reaction>0?0:blend,stride);const sole=opposite?p.rig.right.sole:p.rig.left.sole;const contact=soleContact(sole,p.width/BODY,height,step);ctx.fillStyle=`rgba(0,0,0,${step.planted?.35:.16})`;ctx.beginPath();ctx.ellipse(contact.x,contact.y+1,(step.planted?5:3)*height/74,2*height/74,0,0,Math.PI*2);ctx.fill();}
  ctx.drawImage(frame,-ORIGIN_X*scale,-ORIGIN_Y*scale,WIDTH*scale,HEIGHT*scale);ctx.restore();return true;
 }

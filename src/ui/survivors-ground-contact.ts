@@ -1,8 +1,12 @@
 import { footstep, type Joint } from './survivors-animation-rig';
 
 /** World-space foot travel. No isometric compression: movement is already in world coordinates. */
-export function footTravel(cycle: number, opposite: boolean, running: boolean, directionY: number, blend: number) {
-  const step = footstep(cycle, opposite, running);
+export function gaitStride(running: boolean, directionY: number): number {
+  return (running ? 66 : 54) * Math.sqrt(1 - .64 * Math.min(1, directionY * directionY));
+}
+
+export function footTravel(cycle: number, opposite: boolean, running: boolean, directionY: number, blend: number, stride = running ? 66 : 54) {
+  const step = footstep(cycle, opposite, running, stride);
   const dy = Math.max(-1, Math.min(1, directionY));
   return { x: step.offset * Math.sqrt(1 - dy * dy) * blend, y: step.offset * dy * blend, lift: step.lift * blend, planted: step.planted };
 }
