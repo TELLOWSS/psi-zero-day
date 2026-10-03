@@ -25,7 +25,7 @@ try {
       window.__psiRigFrames = new Set();
       const draw = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function(source,...args) {
-        if (source instanceof HTMLCanvasElement && source.width === 224 && source.height === 240) window.__psiRigFrames.add(source);
+        if (source instanceof HTMLCanvasElement && source.width === 300 && source.height === 320) window.__psiRigFrames.add(source);
         return draw.call(this,source,...args);
       };
       window.__psiDecodedAudioDurations = [];

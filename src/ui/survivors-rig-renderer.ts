@@ -1,9 +1,9 @@
 import { ACTOR_RIGS, footstep, solveKnee, type ActorRig, type Joint, type LegRig } from './survivors-animation-rig';
 import type { SpritePose } from './survivors-sprite-motion';
 interface SourceRect {x:number;y:number;width:number;height:number}
-interface Prepared { texture:HTMLCanvasElement; rig:ActorRig; frames:Map<string,HTMLCanvasElement>; width:number }
+interface Prepared { texture:HTMLCanvasElement; legTexture:HTMLCanvasElement; rig:ActorRig; frames:Map<string,HTMLCanvasElement>; width:number }
 const prepared = new WeakMap<HTMLImageElement,Prepared>();
-const BODY=192, WIDTH=224, HEIGHT=240, ORIGIN_X=112, ORIGIN_Y=220;
+const BODY=256, WIDTH=300, HEIGHT=320, ORIGIN_X=150, ORIGIN_Y=294;
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const joint=(a:Joint,b:Joint,t:number):Joint=>({x:mix(a.x,b.x,t),y:mix(a.y,b.y,t)});
 export function prepareActorRig(image:HTMLImageElement,source:SourceRect):void {
@@ -12,7 +12,10 @@ export function prepareActorRig(image:HTMLImageElement,source:SourceRect):void {
  const texture=document.createElement('canvas'); texture.height=BODY;texture.width=Math.ceil(BODY*source.width/source.height);
  const ctx=texture.getContext('2d'); if(!ctx)return;
  ctx.drawImage(image,source.x,source.y,source.width,source.height,0,0,texture.width,BODY);
- prepared.set(image,{texture,rig,width:texture.width,frames:new Map()});
+ const legTexture=document.createElement('canvas');legTexture.width=texture.width;legTexture.height=BODY;
+ const legCtx=legTexture.getContext('2d')!;legCtx.drawImage(texture,0,0);
+ for(const polygon of rig.protected ?? []){legCtx.save();legCtx.beginPath();polygon.forEach((point,i)=>{if(i===0)legCtx.moveTo(point.x*texture.width,point.y*BODY);else legCtx.lineTo(point.x*texture.width,point.y*BODY)});legCtx.closePath();legCtx.clip();legCtx.clearRect(0,0,texture.width,BODY);legCtx.restore();}
+ prepared.set(image,{texture,legTexture,rig,width:texture.width,frames:new Map()});
 }
 function triangle(ctx:CanvasRenderingContext2D,texture:HTMLCanvasElement,s:Joint[],d:Joint[]):void {
  const [a,b,c]=s as [Joint,Joint,Joint], [p,q,r]=d as [Joint,Joint,Joint];
@@ -35,7 +38,7 @@ function rowAt(l:LegRig,y:number):Joint {
  return joint(l.ankle,l.sole,(y-l.ankle.y)/(l.sole.y-l.ankle.y));
 }
 function legRows(p:Prepared,source:LegRig,other:LegRig,left:boolean):{y:number;lo:number;hi:number}[] {
- const image=p.texture.getContext('2d')!.getImageData(0,0,p.width,BODY).data;
+ const image=p.legTexture.getContext('2d')!.getImageData(0,0,p.width,BODY).data;
  const rows=[];
  for(let i=0;i<=8;i++){
   const y=mix(source.hip.y,source.sole.y,i/8),center=rowAt(source,y),opposite=rowAt(other,Math.min(y,other.sole.y));
@@ -84,13 +87,12 @@ function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:nu
   for(let row=0;row<rr.length-1;row++){
    const a=rr[row]!,b=rr[row+1]!,d=dest[row]!,e=dest[row+1]!;
    const s0={x:a.lo,y:a.y},s1={x:a.hi,y:a.y},s2={x:b.lo,y:b.y},s3={x:b.hi,y:b.y};
-   triangle(ctx,p.texture,[s0,s1,s2],[d[0]!,d[1]!,e[0]!]);triangle(ctx,p.texture,[s1,s3,s2],[d[1]!,e[1]!,e[0]!]);
+   triangle(ctx,p.legTexture,[s0,s1,s2],[d[0]!,d[1]!,e[0]!]);triangle(ctx,p.legTexture,[s1,s3,s2],[d[1]!,e[1]!,e[0]!]);
   }
  }
- ctx.save();ctx.beginPath();ctx.rect(0,0,p.width,BODY);
- // Subtract only the leg regions; low hanging hands and tools outside these regions remain intact.
- for(const rr of rows){ctx.moveTo(rr[0]!.lo,rr[0]!.y+3);for(const row of rr)ctx.lineTo(row.lo,row.y+3);for(const row of [...rr].reverse())ctx.lineTo(row.hi,row.y+3);ctx.closePath();}
- ctx.clip('evenodd');ctx.translate(action*1.4*BODY/74,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();
+ ctx.save();ctx.beginPath();ctx.rect(0,0,p.width,p.rig.waist*BODY+5);
+ ctx.clip();ctx.translate(action*1.4*BODY/74,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();
+ for(const polygon of p.rig.protected ?? []){ctx.save();ctx.beginPath();polygon.forEach((point,i)=>{if(i===0)ctx.moveTo(point.x*p.width,point.y*BODY);else ctx.lineTo(point.x*p.width,point.y*BODY)});ctx.closePath();ctx.clip();ctx.translate(action*1.4*BODY/74,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();}
  return canvas;
 }
 /** Cached textured joint poses: no redraw of dozens of mesh triangles during steady gameplay. */

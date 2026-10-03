@@ -1,6 +1,6 @@
 export interface Joint { x: number; y: number }
 export interface LegRig { hip: Joint; knee: Joint; ankle: Joint; sole: Joint }
-export interface ActorRig { waist: number; left: LegRig; right: LegRig }
+export interface ActorRig { waist: number; left: LegRig; right: LegRig; protected?: Joint[][] }
 const leg = (hx:number, hy:number, kx:number, ky:number, ax:number, ay:number, sx:number, sy:number):LegRig => ({hip:{x:hx,y:hy},knee:{x:kx,y:ky},ankle:{x:ax,y:ay},sole:{x:sx,y:sy}});
 /** Coordinates relative to each approved sprite's opaque bounds; original identity stays intact. */
 export const ACTOR_RIGS: Record<string, ActorRig> = {
@@ -30,3 +30,10 @@ export function solveKnee(hip:Joint, ankle:Joint, upper:number, lower:number, be
  const perpendicular=Math.sqrt(Math.max(0,upper*upper-along*along));
  return {x:hip.x+dx/actual*along-dy/actual*perpendicular*bend,y:hip.y+dy/actual*along+dx/actual*perpendicular*bend};
 }
+
+// Hands and carried equipment crossing the waist belong to the upper-body layer.
+ACTOR_RIGS['yoon-sungho-map.webp']!.protected=[[{x:.64,y:.40},{x:.86,y:.40},{x:.90,y:.47},{x:.85,y:.55},{x:.70,y:.55},{x:.64,y:.48}]];
+ACTOR_RIGS['sprite_player_yoon.webp']!.protected=ACTOR_RIGS['yoon-sungho-map.webp']!.protected;
+ACTOR_RIGS['kang-taesik-map.webp']!.protected=[[{x:.88,y:.49},{x:1,y:.49},{x:1,y:.65},{x:.88,y:.65},{x:.85,y:.59}]];
+ACTOR_RIGS['lee-jaehoon-map.webp']!.protected=[[{x:.18,y:.40},{x:.43,y:.43},{x:.43,y:.51},{x:.29,y:.52},{x:.18,y:.47}]];
+ACTOR_RIGS['lim-junho-map.webp']!.protected=[[{x:.28,y:.39},{x:.59,y:.40},{x:.61,y:.47},{x:.45,y:.49},{x:.28,y:.45}]];
