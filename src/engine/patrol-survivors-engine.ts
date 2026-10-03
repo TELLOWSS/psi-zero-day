@@ -168,13 +168,13 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
 export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   yoon: {
     id: 'yoon',
-    name: '윤재호',
-    role: '신임 안전관리자',
-    title: '초감각 감지관',
-    description: '현장 위험 신호를 빠르게 캐치합니다. PSI 데이터 흡수 반경 +30%, 레벨업 요구치 경감.',
+    name: '윤성호',
+    role: '총괄 현장소장',
+    title: '작업중지권 총괄 지휘관',
+    description: '30년 경력의 베테랑 현장소장. 확성기 사자후 게이지 충전속도 +30%, 위험 캐치 반경 확장.',
     startingWeapon: 'radio_boost',
     avatar: '👨‍💼',
-    color: '#38bdf8',
+    color: '#84cc16',
   },
   park: {
     id: 'park',

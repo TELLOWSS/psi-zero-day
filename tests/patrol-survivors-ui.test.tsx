@@ -81,7 +81,7 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Verify 3 character selection cards exist
-      expect(host.textContent).toContain('윤재호');
+      expect(host.textContent).toContain('윤성호');
       expect(host.textContent).toContain('박기철');
       expect(host.textContent).toContain('정민주');
 
@@ -138,6 +138,8 @@ describe('PatrolSurvivorsGame UI', () => {
     const root = createRoot(host);
 
     try {
+      localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05']));
+
       act(() => {
         root.render(<PatrolSurvivorsGame onExit={handleExit} audioMuted={true} />);
       });
@@ -162,6 +164,7 @@ describe('PatrolSurvivorsGame UI', () => {
       });
       expect(stage2Btn?.className).toContain('is-selected');
     } finally {
+      localStorage.removeItem('psi.survivors.unlocked_stages');
       act(() => root.unmount());
       host.remove();
     }

@@ -47,6 +47,8 @@ interface Particle {
 
 const STORAGE_KEY_UPGRADES = 'psi.survivors.rd_upgrades';
 const STORAGE_KEY_CREDITS = 'psi.survivors.credits';
+const STORAGE_KEY_UNLOCKED_STAGES = 'psi.survivors.unlocked_stages';
+const STORAGE_KEY_STAGE_STARS = 'psi.survivors.stage_stars';
 
 export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurvivorsGameProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -84,6 +86,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('yoon');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
+  const [unlockedStages, setUnlockedStages] = useState<PatrolStageId[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_UNLOCKED_STAGES);
+      return saved ? JSON.parse(saved) : ['stage_01'];
+    } catch {
+      return ['stage_01'];
+    }
+  });
+  const [stageStars, setStageStars] = useState<Record<string, boolean[]>>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_STAGE_STARS);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
   const [permanentUpgrades, setPermanentUpgrades] = useState<PermanentUpgrades>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UPGRADES);
@@ -622,6 +640,47 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (engine.state.phase === 'victory' || engine.state.phase === 'defeat') {
             // Save earned credits
             saveMetaProgress(permanentUpgrades, psiCredits + engine.state.psiCredits);
+
+            if (engine.state.phase === 'victory') {
+              // Unlock next stage in order
+              const stageOrder: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
+              const currentIdx = stageOrder.indexOf(selectedStage);
+              if (currentIdx !== -1 && currentIdx < stageOrder.length - 1) {
+                const nextStageId = stageOrder[currentIdx + 1];
+                if (nextStageId) {
+                  setUnlockedStages(prev => {
+                    if (!prev.includes(nextStageId)) {
+                      const updated = [...prev, nextStageId];
+                      try {
+                        localStorage.setItem(STORAGE_KEY_UNLOCKED_STAGES, JSON.stringify(updated));
+                      } catch {
+                        // ignore
+                      }
+                      return updated;
+                    }
+                    return prev;
+                  });
+                }
+              }
+
+              // Save star challenges
+              setStageStars(prev => {
+                const current = prev[selectedStage] || [false, false, false];
+                const earned = engine.state.starsEarned;
+                const merged = [
+                  current[0] || earned[0],
+                  current[1] || earned[1],
+                  current[2] || earned[2],
+                ];
+                const updated = { ...prev, [selectedStage]: merged };
+                try {
+                  localStorage.setItem(STORAGE_KEY_STAGE_STARS, JSON.stringify(updated));
+                } catch {
+                  // ignore
+                }
+                return updated;
+              });
+            }
           }
         }
       }
@@ -721,7 +780,63 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
         ctx.fillText('⛑️ 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
       }
-      ctx.restore();
+      // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
+      if (selectedStage === 'stage_02') {
+        // High-Rise Core Frame: High-altitude wind gust vapor streaks
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < 7; i++) {
+          const wx = ((time * 0.18 + i * 280) % (WORLD_WIDTH + 200)) - 100;
+          const wy = 120 + i * 160;
+          ctx.beginPath();
+          ctx.moveTo(wx, wy);
+          ctx.lineTo(wx + 110, wy - 18);
+          ctx.stroke();
+        }
+        ctx.restore();
+      } else if (selectedStage === 'stage_03') {
+        // Tower Crane Lifting Zone: Overhead giant crane boom rotating shadow
+        ctx.save();
+        const craneAngle = (time / 14000) * Math.PI * 2;
+        ctx.translate(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        ctx.rotate(craneAngle);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+        ctx.fillRect(-18, -600, 36, 1200);
+        ctx.fillRect(-40, -40, 80, 80);
+        ctx.restore();
+      } else if (selectedStage === 'stage_04') {
+        // Confined Space Pit: Emergency green exit beacon lights along tunnel perimeter
+        ctx.save();
+        const greenPulse = (Math.sin(time / 350) + 1) * 0.5;
+        ctx.fillStyle = `rgba(16, 185, 129, ${0.15 + greenPulse * 0.2})`;
+        for (let x = 120; x < WORLD_WIDTH; x += 240) {
+          ctx.beginPath();
+          ctx.arc(x, 28, 5 + greenPulse * 3, 0, Math.PI * 2);
+          ctx.arc(x, WORLD_HEIGHT - 28, 5 + greenPulse * 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      } else if (selectedStage === 'stage_05') {
+        // Typhoon Night Pour: Torrential diagonal rain streaks and lightning flashes
+        ctx.save();
+        ctx.strokeStyle = 'rgba(186, 230, 253, 0.26)';
+        ctx.lineWidth = 1.2;
+        for (let r = 0; r < 45; r++) {
+          const rx = ((r * 71 + time * 1.3) % WORLD_WIDTH);
+          const ry = ((r * 109 + time * 1.9) % WORLD_HEIGHT);
+          ctx.beginPath();
+          ctx.moveTo(rx, ry);
+          ctx.lineTo(rx - 15, ry + 22);
+          ctx.stroke();
+        }
+        // Dramatic atmospheric storm lightning flash
+        if (Math.sin(time / 1600) > 0.988) {
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+          ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        }
+        ctx.restore();
+      }
 
       // Perimeter Safety Boundary (45-degree yellow/black hazard chevron barrier)
       ctx.save();
@@ -1653,28 +1768,39 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-stage-select-section">
               <span className="survivors-section-label">작전 구역 선택 (5대 산업 스테이지)</span>
               <div className="survivors-stage-cards">
-                {(Object.values(PATROL_STAGES)).map(stg => (
-                  <button
-                    key={stg.id}
-                    type="button"
-                    className={`survivors-stage-card ${selectedStage === stg.id ? 'is-selected' : ''}`}
-                    onClick={() => {
-                      setSelectedStage(stg.id);
-                      initGame(selectedChar, stg.id);
-                    }}
-                  >
-                    <div className="survivors-stage-badge">
-                      <span>{stg.icon}</span>
-                      <strong>STAGE 0{stg.stageNumber}</strong>
-                    </div>
-                    <h4>{stg.name}</h4>
-                    <span className="survivors-stage-sub">{stg.subtitle}</span>
-                    <p>{stg.description}</p>
-                    <div className="survivors-stage-meta">
-                      <span>👹 {stg.bossName}</span>
-                    </div>
-                  </button>
-                ))}
+                {(Object.values(PATROL_STAGES)).map(stg => {
+                  const isUnlocked = unlockedStages.includes(stg.id);
+                  const stars = stageStars[stg.id] || [false, false, false];
+                  return (
+                    <button
+                      key={stg.id}
+                      type="button"
+                      disabled={!isUnlocked}
+                      className={`survivors-stage-card ${selectedStage === stg.id ? 'is-selected' : ''} ${!isUnlocked ? 'is-locked' : ''}`}
+                      onClick={() => {
+                        if (!isUnlocked) return;
+                        setSelectedStage(stg.id);
+                        initGame(selectedChar, stg.id);
+                      }}
+                    >
+                      <div className="survivors-stage-badge">
+                        <span>{isUnlocked ? stg.icon : '🔒'}</span>
+                        <strong>STAGE 0{stg.stageNumber}</strong>
+                        {isUnlocked && (
+                          <span className="survivors-stage-stars-tag">
+                            {stars.map(s => (s ? '⭐' : '⚪')).join('')}
+                          </span>
+                        )}
+                      </div>
+                      <h4>{stg.name}</h4>
+                      <span className="survivors-stage-sub">{stg.subtitle}</span>
+                      <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE 0${stg.stageNumber - 1}) 완수 시 해금`}</p>
+                      <div className="survivors-stage-meta">
+                        <span>{isUnlocked ? `👹 ${stg.bossName}` : '보안 인가 필요'}</span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
