@@ -139,8 +139,13 @@ try {
     const perk=combatPage.locator('.survivors-perk-card').first();
     if(await perk.isVisible()) {
       combat.checks.upgradeButton = await perk.getAttribute('aria-keyshortcuts') === '1' && await perk.evaluate(e=>e.tagName==='BUTTON');
+      const previousChoice = await perk.innerText();
       await combatPage.keyboard.press('1');
-      await perk.waitFor({state:'hidden'});
+      // Bulk experience can immediately show the next level instead of closing.
+      await combatPage.waitForFunction(text=>{
+        const card=document.querySelector('.survivors-perk-card');
+        return !card || card.innerText!==text;
+      },previousChoice);
       combat.checks.numberedUpgrade = true;
     }
     const key=['d','s','a','w'][tick%4];
