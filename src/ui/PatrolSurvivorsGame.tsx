@@ -1,3 +1,5 @@
+import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
+import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
@@ -117,6 +119,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     groundV2?: HTMLImageElement;
     riskAtlasV2?: HTMLImageElement;
     itemsAtlas?: HTMLImageElement;
+    equipmentAtlas?: HTMLImageElement;
+    stageFloors: Record<string,HTMLImageElement>;
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
     excavationGround?: HTMLImageElement;
@@ -127,6 +131,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }>({
     characters: {},
     characterMaps: {},
+    stageFloors: {},
   });
 
   useEffect(() => {
@@ -203,8 +208,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const atlas = new Image();
     atlas.onload = () => { spritesRef.current.riskAtlasV2 = atlas; };
     const items = new Image();
-    items.onload = () => { spritesRef.current.itemsAtlas = items; };
-    items.src = '/assets/survivors/tactical-items-v1.webp';
+    items.onload = () => { registerPropAtlas(items,4,2); spritesRef.current.itemsAtlas = items; };
+    items.src = PICKUP_ART;
+    const equipment = new Image();
+    equipment.onload = () => { registerPropAtlas(equipment,3,5); spritesRef.current.equipmentAtlas = equipment; };
+    equipment.src = EQUIPMENT_ART;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
     const sImg = new Image();
@@ -223,6 +231,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
+  useEffect(() => {
+    const uri=stageGroundUri(selectedStage);
+    if(!spritesRef.current.stageFloors[uri]) {const image=new Image();image.src=uri;spritesRef.current.stageFloors[uri]=image;}
+  },[selectedStage]);
+  useEffect(() => {
+    const scrollY=window.scrollY,overflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';window.scrollTo?.(0,0);
+    return ()=>{document.body.style.overflow=overflow;window.scrollTo?.(0,scrollY);};
+  },[]);
+
   const [unlockedStages, setUnlockedStages] = useState<PatrolStageId[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UNLOCKED_STAGES);
@@ -472,12 +490,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Floating text & particle helpers
   const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24', isCrit = false) => {
+    floatingTextsRef.current = floatingTextsRef.current.slice(-5);
     floatingTextsRef.current.push({
       id: floatingIdRef.current++,
       x,
       y,
-      text: isCrit ? `CRIT! ${text}` : text,
-      color: isCrit ? '#f43f5e' : color,
+      text,
+      color,
       life: isCrit ? 1.0 : 0.75,
       maxLife: isCrit ? 1.0 : 0.75,
     });
@@ -575,7 +594,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       screenShakeRef.current = 24;
       spawnParticles(engine.state.player.x, engine.state.player.y, '#f59e0b', 40, 160, 5);
-      spawnFloating(engine.state.player.x, engine.state.player.y - 40, '🚨 소장 샤우팅 발동!! 🚨', '#f59e0b', true);
+      spawnFloating(engine.state.player.x, engine.state.player.y - 40, combatText.shout_activated, '#f59e0b', true);
     }
   };
 
@@ -852,11 +871,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               spawnHelmetSnap(ev.x, ev.y);
               spawnApprovedStamp(ev.x, ev.y);
               spawnParticles(ev.x, ev.y - 20, '#10b981', 8, 65, 3.5);
-              spawnFloating(ev.x, ev.y - 35, '+안전모 착용 완료! ✔', '#10b981');
+              spawnFloating(ev.x, ev.y - 35, combatText.worker_resolved, '#10b981');
             } else if (ev.type === 'CRANE_BOSS') {
               screenShakeRef.current = 28;
               spawnParticles(ev.x, ev.y, '#f59e0b', 40, 160, 5);
-              spawnFloating(ev.x, ev.y - 50, '양중 작업 정지·작업반경 통제 완료', '#fbbf24', true);
+              spawnFloating(ev.x, ev.y - 50, combatText.lifting_resolved, '#fbbf24', true);
             }
           }
 
@@ -865,12 +884,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           setCombo(currentCombo);
           if (currentCombo >= 2) {
             if (currentCombo % 5 === 0) {
-              screenShakeRef.current = Math.min(20, 8 + currentCombo * 0.9);
-              spawnFloating(engine.state.player.x, engine.state.player.y - 65, `🔥 ${currentCombo}연속 계도! 현장 안전 행진!`, '#fbbf24', true);
+              screenShakeRef.current = 3;
             }
           }
 
-          spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', diff * 5, 80);
+          spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', Math.min(16,diff * 5), 80);
         }
         if (engine.state.comboCount !== combo) {
           setCombo(engine.state.comboCount);
@@ -974,8 +992,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // High-DPI Resolution & Mobile Resize
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const displayW = window.innerWidth;
-      const displayH = window.innerHeight;
+      const displayW = containerRef.current?.clientWidth || window.innerWidth;
+      const displayH = containerRef.current?.clientHeight || window.innerHeight;
       const targetCanvasW = Math.floor(displayW * dpr);
       const targetCanvasH = Math.floor(displayH * dpr);
 
@@ -1039,7 +1057,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const processGround = spritesRef.current.groundAtlasV2;
       const useGroundArt = stage.id === 'stage_01' ? Boolean(groundV2?.naturalWidth) : Boolean(processGround?.naturalWidth);
       const excavationGround = spritesRef.current.excavationGround;
-      if (['stage_02', 'stage_06'].includes(stage.id) && excavationGround?.naturalWidth) {
+      const fullGround=spritesRef.current.stageFloors[stageGroundUri(stage.id)];
+      if(fullGround?.naturalWidth) {
+        ctx.drawImage(fullGround,0,0,WORLD_WIDTH,WORLD_HEIGHT);
+        ctx.fillStyle=stage.ambientColor;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
+      } else if (['stage_02', 'stage_06'].includes(stage.id) && excavationGround?.naturalWidth) {
         ctx.drawImage(excavationGround, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
       } else if (stage.id !== 'stage_01' && processGround?.naturalWidth) {
         const tile = ['stage_02', 'stage_06'].includes(stage.id) ? 0
@@ -1117,7 +1139,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillRect(walkX, 0, walkW, WORLD_HEIGHT);
 
       // Walkway 45-degree hazard stripe markings inside
-      ctx.strokeStyle = 'rgba(34, 197, 94, 0.14)';
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.06)';
       ctx.lineWidth = 4;
       for (let sy = -walkW; sy < WORLD_HEIGHT + walkW; sy += 48) {
         ctx.beginPath();
@@ -1276,8 +1298,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (h.type === 'floodlight_tower') {
             ctx.save();
             const grad = ctx.createRadialGradient(h.x, h.y, 15, h.x, h.y, h.radius);
-            grad.addColorStop(0, 'rgba(251, 191, 36, 0.32)');
-            grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.15)');
+            grad.addColorStop(0, 'rgba(251, 191, 36, 0.18)');
+            grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.07)');
             grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
             ctx.fillStyle = grad;
             ctx.beginPath();
@@ -1285,29 +1307,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fill();
 
             // Light perimeter dashed circle
-            ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.25)';
             ctx.lineWidth = 2;
             ctx.setLineDash([8, 6]);
             ctx.beginPath();
             ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Tripod tower base
-            ctx.setLineDash([]);
-            ctx.fillStyle = '#475569';
-            ctx.beginPath();
-            ctx.arc(h.x, h.y, 16, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#fbbf24';
-            ctx.beginPath();
-            ctx.arc(h.x, h.y, 8, 0, Math.PI * 2);
-            ctx.fill();
+            drawProp(ctx,spritesRef.current.itemsAtlas,7,h.x,h.y,48);
 
             // Zone tag
             ctx.font = 'bold 10px sans-serif';
             ctx.fillStyle = '#fbbf24';
             ctx.textAlign = 'center';
-            ctx.fillText(combatText.light_zone, h.x, h.y - 24);
+            ctx.fillText(combatText.light_zone, h.x, h.y - 56);
             ctx.restore();
           }
 
@@ -1498,7 +1511,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.scale(1, 0.58);
         const auraRadius = 100 + activePerks.floodlight * 28;
         const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
-        grad.addColorStop(0, 'rgba(251, 191, 36, 0.35)');
+        grad.addColorStop(0, `rgba(251,191,36,${.16+activePerks.floodlight*.025})`);
         grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.16)');
         grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = grad;
@@ -1530,23 +1543,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.beginPath();
           ctx.ellipse(0, 5, 12, 5, 0, 0, Math.PI * 2);
           ctx.fill();
-          // 2.5D Traffic Cone Standing Billboard
-          ctx.fillStyle = '#ea580c';
-          ctx.beginPath();
-          ctx.moveTo(0, -22);
-          ctx.lineTo(11, 4);
-          ctx.lineTo(-11, 4);
-          ctx.closePath();
-          ctx.fill();
-          // White reflective retro tape
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.moveTo(-5, -6);
-          ctx.lineTo(5, -6);
-          ctx.lineTo(7, -1);
-          ctx.lineTo(-7, -1);
-          ctx.closePath();
-          ctx.fill();
+          drawEquipment(ctx,spritesRef.current.equipmentAtlas,'cone_trap',activePerks.cone_trap,0,4,32,spritesRef.current.itemsAtlas);
           ctx.restore();
         }
       }
@@ -1579,68 +1576,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       for (const item of entityList) {
         if (item.kind === 'drop') {
           const drop = item.data;
-          if (drop.itemKind) {
-            const meta = TACTICAL_ITEMS[drop.itemKind];
-            const atlas = spritesRef.current.itemsAtlas;
-            ctx.save();
-            ctx.translate(drop.x, drop.y);
-            ctx.strokeStyle = meta.color; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.ellipse(0, 4, 22, 9, 0, 0, Math.PI * 2); ctx.stroke();
-            if (atlas?.naturalWidth) {
-              const w=atlas.naturalWidth/2,h=atlas.naturalHeight/2;
-              ctx.drawImage(atlas, meta.atlasCell%2*w, Math.floor(meta.atlasCell/2)*h,w,h,-26,-43+Math.sin(time/220)*3,52,52);
-            }
-            ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle=meta.color;
-            ctx.strokeStyle='#111827';ctx.lineWidth=3;
-            ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);
-            ctx.restore();
-          } else if (drop.isHeal) {
-            ctx.save();
-            // 2.5D Ground Shadow
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-            ctx.beginPath();
-            ctx.ellipse(drop.x, drop.y + 4, 11, 5, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Floating Aid Kit Box
-            const floatY = drop.y - 6 + Math.sin(time / 200) * 3;
-            ctx.shadowColor = '#10b981';
-            ctx.shadowBlur = 12;
-            ctx.fillStyle = '#10b981';
-            ctx.fillRect(drop.x - 9, floatY - 9, 18, 18);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(drop.x - 7, floatY - 2.5, 14, 5);
-            ctx.fillRect(drop.x - 2.5, floatY - 7, 5, 14);
-            ctx.restore();
-          } else {
-            ctx.save();
-            // 2.5D Ground Shadow
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-            ctx.beginPath();
-            ctx.ellipse(drop.x, drop.y + 4, 10, 4.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Floating Rotating PSI Crystal
-            const floatY = drop.y - 7 + Math.sin(time / 220) * 3;
-            ctx.translate(drop.x, floatY);
-            const spin = (time / 1000) * 3.5;
-            ctx.rotate(spin);
-            ctx.fillStyle = '#38bdf8';
-            ctx.shadowColor = '#0ea5e9';
-            ctx.shadowBlur = 16;
-            ctx.beginPath();
-            ctx.moveTo(0, -11);
-            ctx.lineTo(8, 0);
-            ctx.lineTo(0, 11);
-            ctx.lineTo(-8, 0);
-            ctx.closePath();
-            ctx.fill();
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(0, 0, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-          }
+          ctx.save();ctx.translate(drop.x,drop.y);
+          const meta=drop.itemKind?TACTICAL_ITEMS[drop.itemKind]:null;
+          const size=drop.itemKind?38:drop.isHeal?30:drop.exp>=8?27:22;
+          ctx.fillStyle='rgba(0,0,0,.34)';ctx.beginPath();ctx.ellipse(0,2,size*.32,size*.13,0,0,Math.PI*2);ctx.fill();
+          if(meta){ctx.strokeStyle=meta.color;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(0,3,21,8,0,0,Math.PI*2);ctx.stroke();}
+          drawProp(ctx,spritesRef.current.itemsAtlas,meta?.atlasCell ?? (drop.isHeal?1:0),0,1,size);
+          if(drop.itemKind){ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
+          ctx.restore();
         } else if (item.kind === 'hazard') {
           const h = item.data;
           const hazardPose = motions.sample(h, h.x, h.y, engine.state.gameTime, h.hp);
@@ -1950,6 +1893,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#86efac';
             ctx.fillText(`${itemText.kit_status} ${kit.charges} · ${Math.ceil(kit.remaining)}s`,0,38);
           }
+          const buffs=[engine.state.fieldRecovery?`${itemText.recovery_status} · ${Math.ceil(engine.state.fieldRecovery.remaining)}s`:null,engine.state.routeLantern?`${itemText.route_status} · ${Math.ceil(engine.state.routeLantern.remaining)}s`:null].filter(Boolean);
+          if(buffs.length){ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2e8f0';ctx.strokeStyle='#111827';ctx.lineWidth=3;const text=buffs.join(' / ');ctx.strokeText(text,0,kit?54:38);ctx.fillText(text,0,kit?54:38);}
           const notice = engine.state.itemNotice;
           if (notice) {
             ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle=TACTICAL_ITEMS[notice.kind].color;
@@ -2033,16 +1978,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fillRect(-4.5, -53.5 + bobY, 9, 3);
           }
 
-          // Handheld Megaphone / Tactical Safety Equipment (Mounted at waist level)
-          ctx.fillStyle = '#eab308'; // Industrial yellow megaphone
-          ctx.fillRect(10, -36 + bobY, 8, 6);
-          ctx.beginPath();
-          ctx.moveTo(18, -39 + bobY);
-          ctx.lineTo(25, -43 + bobY);
-          ctx.lineTo(25, -29 + bobY);
-          ctx.lineTo(18, -33 + bobY);
-          ctx.closePath();
-          ctx.fill();
+          const handheld = activePerks.extinguisher>activePerks.radio_boost ? 'extinguisher' : activePerks.radio_boost>0 ? 'radio_boost' : null;
+          if(handheld) drawEquipment(ctx,spritesRef.current.equipmentAtlas,handheld,activePerks[handheld],20,-25,22,spritesRef.current.itemsAtlas);
+          if(activePerks.satellite_broadcast>0) drawEquipment(ctx,spritesRef.current.equipmentAtlas,'satellite_broadcast',1,-28,1,32,spritesRef.current.itemsAtlas);
 
           ctx.restore(); // restore facing flip
           ctx.restore(); // restore player translate
@@ -2122,12 +2060,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         } else if (p.kind === 'radio') {
           ctx.save();
           ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 3.5;
+          const radioLevel=activePerks.radio_boost || 1;
+          ctx.lineWidth = 1.5+radioLevel*.4;
+          ctx.setLineDash(radioLevel>=4?[8,3]:[]);
           ctx.shadowColor = '#f59e0b';
           ctx.shadowBlur = 18;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.stroke();
+          if(radioLevel>=3){ctx.beginPath();ctx.arc(p.x,p.y,Math.max(0,p.radius-4),0,Math.PI*2);ctx.stroke();}
           ctx.restore();
         } else if (p.kind === 'drone_laser') {
           ctx.save();
@@ -2160,22 +2101,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.ellipse(dX, groundY + 4, 10, 4.5, 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // 2.5D Drone Body
-          ctx.translate(dX, flightY);
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath();
-          ctx.arc(0, 0, 9, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = hasHunter ? '#a855f7' : '#38bdf8';
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
-
-          // Propeller rotor glow
-          ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(0, 0, 14, 0, Math.PI * 2);
-          ctx.stroke();
+          ctx.translate(dX,flightY);
+          drawEquipment(ctx,spritesRef.current.equipmentAtlas,hasHunter?'hunter_swarm':'safety_drone',hasHunter?1:activePerks.safety_drone,0,12,hasHunter?42:30,spritesRef.current.itemsAtlas);
+          ctx.strokeStyle='rgba(226,232,240,.22)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-5,13,4,engine.state.gameTime*12,0,Math.PI*2);ctx.stroke();
           ctx.restore();
         }
       }
@@ -2248,7 +2176,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ft.y -= 38 * dt;
         if (ft.life > 0) {
           ctx.save();
-          ctx.font = '900 16px sans-serif';
+          ctx.font = 'bold 11px sans-serif';
           ctx.fillStyle = ft.color;
           ctx.shadowColor = '#000000';
           ctx.shadowBlur = 5;
@@ -2442,7 +2370,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           .filter(([, lvl]) => lvl > 0)
           .map(([id, lvl]) => (
             <div key={id} className="survivors-perk-badge" title={`${PERK_CATALOG[id].name} (Lv.${lvl})`}>
-              <span>{PERK_CATALOG[id].icon}</span>
+              <SurvivorsEquipmentIcon id={id} level={lvl} />
               <small>{lvl}</small>
             </div>
           ))}
@@ -2829,6 +2757,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-perk-cards">
               {perkOptions.map((perk, index) => {
                 const isEvo = perk.category === 'evolution';
+                const previousId=isEvo ? equipmentAppearance(perk.id,1)?.base ?? perk.id : perk.id;
+                const previousLevel=activePerks[previousId];
                 return (
                   <button
                     type="button"
@@ -2837,13 +2767,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     className={`survivors-perk-card ${isEvo ? 'is-evolution' : ''}`}
                     onClick={() => handleSelectPerk(perk.id)}
                   >
-                    <div className="survivors-perk-card-icon">{perk.icon}</div>
+                    <div className="survivors-perk-card-icon"><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>
                     <div className="survivors-perk-card-info">
                       <h4>
                         {index + 1}. {perk.name}
                         <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
                       </h4>
                       <p>{perk.description}</p>
+                      {perk.category !== 'support' && <div className="survivors-upgrade-preview">{previousLevel>0&&<SurvivorsEquipmentIcon id={previousId} level={previousLevel} />}<span>{itemText.upgrade_preview} →</span><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>}
                     </div>
                   </button>
                 );

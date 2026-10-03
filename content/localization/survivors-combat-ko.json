@@ -13,5 +13,8 @@
   "shout_line": "작업중지 돌아버려 씨~!!!",
   "shout_sub": "위험 설비 정지 · 근로자 대피 · 안전 데이터 회수",
   "shout_alt": "확성기로 작업중지를 외치는 한국인 현장소장",
-  "crane_warning": "인양물 낙하 위험"
+  "crane_warning": "인양물 낙하 위험",
+  "worker_resolved": "안전모 착용 완료",
+  "lifting_resolved": "양중 정지 · 반경 통제 완료",
+  "shout_activated": "작업중지 발동"
 }

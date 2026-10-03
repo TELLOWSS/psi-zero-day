@@ -23,8 +23,10 @@ try {
     page.on('pageerror', e => row.errors.push(String(e)));
     await page.addInitScript(() => {
       window.__psiRigFrames = new Set();
+      window.__psiPropFrames = new Set();
       const draw = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function(source,...args) {
+        if(source instanceof HTMLCanvasElement && source.width===256 && source.height===256) window.__psiPropFrames.add(source);
         if (source instanceof HTMLCanvasElement && source.width === 300 && source.height === 320) window.__psiRigFrames.add(source);
         return draw.call(this,source,...args);
       };
@@ -75,6 +77,7 @@ try {
     await page.waitForTimeout(1000);
     await page.waitForFunction(() => window.__psiDecodedAudioDurations.some(d => d >= 3.9 && d <= 4.1), undefined, {timeout: 10000});
     row.checks.suppliedShoutDecoded = true;
+    row.checks.viewportPinned=await page.locator('.survivors-container').evaluate(e=>{const r=e.getBoundingClientRect();return r.top===0 && r.left===0 && Math.abs(r.height-innerHeight)<2;});
     row.checks.nonblank = await page.locator('canvas').evaluate(c => {
       const ctx = c.getContext('2d'); const data = ctx.getImageData(0,0,c.width,c.height).data;
       const colors = new Set(); for(let i=0;i<data.length;i+=Math.max(4,Math.floor(data.length/400/4)*4)) colors.add(`${data[i]},${data[i+1]},${data[i+2]}`);
@@ -99,6 +102,7 @@ try {
     const name = `${viewport.width}x${viewport.height}`;
     await page.screenshot({path:path.join(out,`${name}-playing.png`)});
     await page.waitForTimeout(12000);
+    row.checks.propSprites=await page.evaluate(()=>window.__psiPropFrames.size>=2);
     await page.screenshot({path:path.join(out,`${name}-encounter.png`)});
     row.checks.alertLane = await page.evaluate(() => {
       const hud = document.querySelector('.survivors-hud-top').getBoundingClientRect();
@@ -121,13 +125,15 @@ try {
   }
   const processPage = await browser.newPage({viewport:{width:1440,height:900}});
   await processPage.addInitScript(() => localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`))));
-  for (const stageNumber of ['02','07','10']) {
+  for (const stageNumber of ['02','03','07','10']) {
     await processPage.goto(report.baseUrl,{waitUntil:'networkidle'});
     await processPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
     await processPage.locator('.survivors-stage-card').filter({hasText:`STAGE ${stageNumber}`}).click();
     await processPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     await processPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
     await processPage.waitForTimeout(2000);
+    const ground=await processPage.evaluate(async n=>{const paths=n==='02'?'excavation':n==='07'?'demolition':n==='03'?'concrete':'industrial';const im=new Image();im.src='/assets/survivors/'+paths+'-ground-v3.webp';await im.decode();return {width:im.naturalWidth,height:im.naturalHeight};},stageNumber);
+    if(ground.width<1500 || ground.height<1000) throw new Error('Process ground lacks native high-resolution source');
     await processPage.screenshot({path:path.join(out,`stage-${stageNumber}-saved-unlock-fixture.png`)});
   }
   await processPage.close();
@@ -139,12 +145,13 @@ try {
     localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
     localStorage.setItem('psi.survivors.rd_upgrades', JSON.stringify({vitality:5,mobility:5,intelligence:5,firstAid:1,reroll:3}));
     window.__psiCombatWarnings = {cart:false,fall:false,supply:false,pickup:false};
+    window.__psiSupplyKinds=new Set();
     const original=CanvasRenderingContext2D.prototype.fillText;
     CanvasRenderingContext2D.prototype.fillText=function(text,...args) {
       if (text === '진행 방향 · 옆으로 회피') window.__psiCombatWarnings.cart=true;
       if (text === '낙하 예고 · 원 밖으로') window.__psiCombatWarnings.fall=true;
-      if (['기록 회수 비콘','무전 배터리','긴급 통제 키트'].includes(text)) {
-        if(args[1]===23) window.__psiCombatWarnings.supply=true;
+      if (['기록 회수 비콘','무전 배터리','긴급 통제 키트','현장 회복 보급','안전 유도등'].includes(text)) {
+        if(args[1]===23){window.__psiCombatWarnings.supply=true;window.__psiSupplyKinds.add(text);}
         if(args[1]===-100) window.__psiCombatWarnings.pickup=true;
       }
       return original.call(this,text,...args);
@@ -159,11 +166,14 @@ try {
   report.combat = combat;
   combatPage.on('pageerror',e=>combat.errors.push(String(e)));
   let bossCaptured=false, shoutCaptured=false;
+  const equipmentLevels=new Set();
   for(let tick=0;tick<110;tick++) {
+    for(const lv of await combatPage.locator('.survivors-perks-tray [data-equipment-level]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.equipmentLevel))))equipmentLevels.add(lv);
     const perk=combatPage.locator('.survivors-perk-card').first();
     if(await perk.isVisible()) {
       combat.checks.upgradeButton = await perk.getAttribute('aria-keyshortcuts') === '1' && await perk.evaluate(e=>e.tagName==='BUTTON');
       const previousChoice = await perk.innerText();
+      if(!combat.checks.upgradeArt){combat.checks.upgradeArt=await combatPage.locator('.survivors-upgrade-preview [data-equipment-cell]').count()>0;await combatPage.screenshot({path:path.join(out,'390x844-real-equipment-upgrade.png')});}
       await combatPage.keyboard.press('1');
       // Bulk experience can immediately show the next level instead of closing.
       await combatPage.waitForFunction(text=>{
@@ -173,7 +183,7 @@ try {
       combat.checks.numberedUpgrade = true;
     }
     const shoutButton=combatPage.getByRole('button',{name:'현장소장 사자후 궁극기 발동',exact:true});
-    if(!shoutCaptured && await shoutButton.isEnabled()) {
+    if(!shoutCaptured && await shoutButton.isVisible() && await shoutButton.isEnabled()) {
       await shoutButton.click();
       const cutin=combatPage.locator('.survivors-director-cutin-layer');
       await cutin.waitFor({state:'visible'});
@@ -200,6 +210,9 @@ try {
   }
   Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
   combat.checks.bossSeen=bossCaptured;
+  combat.equipmentLevels=[...equipmentLevels].sort();
+  combat.supplyKinds=await combatPage.evaluate(()=>[...window.__psiSupplyKinds]);
+  combat.checks.actualEquipmentGrowth=equipmentLevels.size>=3;
   combat.checks.shoutSeen=shoutCaptured;
   combat.status=Object.values(combat.checks).some(v=>v===false)||combat.errors.length?'FAIL':'PASS';
   await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat.png')});

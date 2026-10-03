@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
-import { applyTacticalItem, tacticalSupplyFor } from '../src/engine/survivors-items';
+import { applyTacticalItem, tacticalSupplyFor, tickTacticalItems } from '../src/engine/survivors-items';
 import { CHARACTER_PROFILES, createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 const idle={moveX:0,moveY:0};
 function engine(){const e=new SurvivorsEngine(createInitialSurvivorsState(),42);e.start();e.state.interactiveHazards=[];return e;}
@@ -10,7 +10,7 @@ describe('tactical supplies and build progression',()=>{
  });
  it('cycles milestone supplies and supplies a control kit for a designated boss',()=>{
   expect(tacticalSupplyFor(0,false)).toBe(null);expect(tacticalSupplyFor(11,false)).toBe(null);
-  expect([12,24,36,48].map(n=>tacticalSupplyFor(n,false))).toEqual(['record_beacon','radio_battery','control_kit','record_beacon']);
+  expect([12,24,36,48,60,72].map(n=>tacticalSupplyFor(n,false))).toEqual(['record_beacon','radio_battery','control_kit','field_rations','route_lantern','record_beacon']);
   expect(tacticalSupplyFor(13,true)).toBe('control_kit');
  });
  it('spawns one milestone item from actual control and never duplicates boss/milestone drops',()=>{
@@ -58,5 +58,27 @@ describe('tactical supplies and build progression',()=>{
   const e=engine();e.triggerLevelUp();expect(e.state.perkOptions[0]!.id).toBe('radio_boost');
   e.state.activePerks.radio_boost=5;e.triggerLevelUp();expect(e.state.perkOptions[0]!.id).toBe('magnet_beacon');
   e.state.activePerks.magnet_beacon=1;e.triggerLevelUp();expect(e.state.perkOptions[0]!.id).toBe('satellite_broadcast');
+ });
+});
+
+describe('new field supplies',()=>{
+ it('rations collect through production pickup, heal exactly 24 and never award XP',()=>{
+  const e=engine();e.state.player.hp=40;e.state.drops=[{id:'ration',x:700,y:450,exp:0,itemKind:'field_rations'}];e.update(1/60,idle);
+  expect(e.state.fieldRecovery).toEqual({remaining:8});expect(e.state.currentExp).toBe(0);
+  tickTacticalItems(e.state,8);expect(e.state.player.hp).toBe(64);expect(e.state.fieldRecovery).toBeUndefined();
+  e.state.player.hp=e.state.player.maxHp-1;applyTacticalItem(e.state,'field_rations');tickTacticalItems(e.state,8);expect(e.state.player.hp).toBe(e.state.player.maxHp);
+ });
+ it('rations refresh rather than stack, pause freezes both buffs, resume expires them',()=>{
+  const e=engine();e.state.player.hp=40;applyTacticalItem(e.state,'field_rations');applyTacticalItem(e.state,'route_lantern');
+  tickTacticalItems(e.state,4);applyTacticalItem(e.state,'field_rations');expect(e.state.fieldRecovery!.remaining).toBe(8);
+  const hp=e.state.player.hp;e.setPaused(true);e.update(.1,idle);expect(e.state.player.hp).toBe(hp);expect(e.state.fieldRecovery!.remaining).toBe(8);expect(e.state.routeLantern!.remaining).toBe(6);
+  e.setPaused(false);tickTacticalItems(e.state,10);expect(e.state.fieldRecovery).toBeUndefined();expect(e.state.routeLantern).toBeUndefined();
+ });
+ it('lantern boosts actual movement by 20% without changing base speed or accumulating',()=>{
+  const a=engine(),b=engine();const start=a.state.player.x,base=b.state.player.speed;
+  applyTacticalItem(b.state,'route_lantern');applyTacticalItem(b.state,'route_lantern');
+  a.update(.1,{moveX:1,moveY:0});b.update(.1,{moveX:1,moveY:0});
+  expect(b.state.player.x-start).toBeCloseTo((a.state.player.x-start)*1.2);expect(b.state.player.speed).toBe(base);
+  tickTacticalItems(b.state,10);const x=b.state.player.x;b.update(.1,{moveX:1,moveY:0});expect(b.state.player.x-x).toBeCloseTo(base*.1);
  });
 });
