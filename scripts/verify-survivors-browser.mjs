@@ -102,7 +102,50 @@ try {
   }
   await processPage.close();
   report.processCaptureScope = 'Saved unlock fixture for Stage02/07/10 display, not natural unlock progression.';
-  report.status = report.rows.some(r=>r.status==='FAIL') ? 'FAIL' : 'SMOKE_PASS';
+  // Exercise production simulation without injecting live engine state. Saved
+  // unlock/R&D fixtures only make late-stage readability inspection repeatable.
+  const combatPage = await browser.newPage({viewport:{width:390,height:844}});
+  await combatPage.addInitScript(() => {
+    localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
+    localStorage.setItem('psi.survivors.rd_upgrades', JSON.stringify({vitality:5,mobility:5,intelligence:5,firstAid:1,reroll:3}));
+    window.__psiCombatWarnings = {cart:false,fall:false};
+    const original=CanvasRenderingContext2D.prototype.fillText;
+    CanvasRenderingContext2D.prototype.fillText=function(text,...args) {
+      if (text === '진행 방향 · 옆으로 회피') window.__psiCombatWarnings.cart=true;
+      if (text === '낙하 예고 · 원 밖으로') window.__psiCombatWarnings.fall=true;
+      return original.call(this,text,...args);
+    };
+  });
+  await combatPage.goto(report.baseUrl,{waitUntil:'networkidle'});
+  await combatPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+  await combatPage.locator('.survivors-stage-card').filter({hasText:'STAGE 10'}).click();
+  await combatPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
+  await combatPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
+  const combat = {status:'RUNNING',scope:'Stage10 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
+  report.combat = combat;
+  combatPage.on('pageerror',e=>combat.errors.push(String(e)));
+  let bossCaptured=false;
+  for(let tick=0;tick<110;tick++) {
+    const perk=combatPage.locator('.survivors-perk-card').first();
+    if(await perk.isVisible()) await perk.click();
+    const key=['d','s','a','w'][tick%4];
+    await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
+    if(!bossCaptured && await combatPage.locator('.survivors-boss-risk').isVisible()) {
+      bossCaptured=true;
+      combat.checks.bossRisk=await combatPage.getByRole('progressbar',{name:'대표 위험 잔여량'}).getAttribute('value').then(v=>Number(v)>0 && Number(v)<=100);
+      combat.checks.hudFits=await combatPage.locator('.survivors-hud-top').evaluate(h=>[...h.querySelectorAll('*')].every(e=>{const r=e.getBoundingClientRect();return r.left>=0 && r.right<=innerWidth;}));
+      await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat-boss.png')});
+    }
+    const warnings=await combatPage.evaluate(()=>window.__psiCombatWarnings);
+    if(warnings.cart && warnings.fall && bossCaptured) break;
+    if(await combatPage.getByRole('heading',{name:'🚨 현장 중대위험 발생',exact:true}).isVisible()) break;
+  }
+  Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall})));
+  combat.checks.bossSeen=bossCaptured;
+  combat.status=Object.values(combat.checks).some(v=>v===false)||combat.errors.length?'FAIL':'PASS';
+  await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat.png')});
+  await combatPage.close();
+  report.status = report.rows.some(r=>r.status==='FAIL') || combat.status==='FAIL' ? 'FAIL' : 'SMOKE_PASS';
 } catch (err) {
   report.errors.push(String(err));
   if (report.status !== 'NOT_RUN') report.status = 'FAIL';
