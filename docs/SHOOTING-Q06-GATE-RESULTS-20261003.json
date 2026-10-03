@@ -1,0 +1,37 @@
+{
+  "source_base_sha": "32b07b34affd15a314814f5296bf03905bd5aedf",
+  "delivery_commit": "GitHub PR 88 head SHA",
+  "release": "HOLD",
+  "tests": {
+    "status": "PASS",
+    "files": 185,
+    "tests": 1003
+  },
+  "typecheck": "PASS",
+  "build_with_prebuild": "PASS",
+  "build_node_options": "--max-old-space-size=8192",
+  "g8a_final_audio": {
+    "status": "PASS",
+    "approved": 24,
+    "present": 24
+  },
+  "browser": {
+    "status": "NOT_RUN",
+    "baseUrl": "http://127.0.0.1:4173",
+    "rows": [],
+    "errors": [
+      "Error: browserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+    ]
+  },
+  "android": "NOT_RUN",
+  "direct_listening": "NOT_RUN",
+  "real_10_minute_trace": "NOT_RUN",
+  "new_user_study": "NOT_RUN",
+  "survivors_final_audio_slots": {
+    "total": 21,
+    "status": "MISSING_FINAL"
+  },
+  "stage_01_final_art": "MISSING_FINAL",
+  "director_direction": "isolation-control-evacuation",
+  "notes": "Synthetic tests do not establish browser, audio or device production quality."
+}

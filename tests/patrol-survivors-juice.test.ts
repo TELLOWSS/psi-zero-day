@@ -10,7 +10,7 @@ describe('Patrol Survivors Screen Juice & Impact Systems', () => {
     expect(state.lastKilledEvents).toEqual([]);
   });
 
-  it('applies radial physics knockback when projectile hits hazard', () => {
+  it('pauses a worker on an intervention signal without bodily knockback', () => {
     const state = createInitialSurvivorsState('yoon');
     const engine = new SurvivorsEngine(state);
     engine.start();
@@ -44,13 +44,14 @@ describe('Patrol Survivors Screen Juice & Impact Systems', () => {
     });
 
     const prevX = state.hazards[0]!.x;
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
 
     const worker = state.hazards[0]!;
     expect(worker.hp).toBeLessThan(100);
     // Worker is to the left of player (500 < 1200), so knockback pushes it further left
-    expect(worker.x).toBeLessThan(prevX);
-    expect(worker.vx).toBeLessThan(0);
+    expect(worker.x).toBeGreaterThanOrEqual(prevX);
+    expect(worker.vx).toBe(0);
+    expect(worker.isStunned).toBeGreaterThan(0);
   });
 
   it('increments combo count and emits kill events on hazard neutralized', () => {
@@ -85,7 +86,7 @@ describe('Patrol Survivors Screen Juice & Impact Systems', () => {
       kind: 'radio',
     });
 
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
 
     expect(state.hazardsNeutralized).toBe(1);
     expect(state.comboCount).toBe(1);

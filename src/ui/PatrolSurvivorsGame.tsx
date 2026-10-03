@@ -1,3 +1,5 @@
+import { parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
+import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   CharacterId,
@@ -182,7 +184,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [unlockedStages, setUnlockedStages] = useState<PatrolStageId[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UNLOCKED_STAGES);
-      return saved ? JSON.parse(saved) : ['stage_01'];
+      return validStages(parseSave(saved));
     } catch {
       return ['stage_01'];
     }
@@ -190,7 +192,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [stageStars, setStageStars] = useState<Record<string, boolean[]>>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_STAGE_STARS);
-      return saved ? JSON.parse(saved) : {};
+      return validStars(parseSave(saved));
     } catch {
       return {};
     }
@@ -198,7 +200,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [permanentUpgrades, setPermanentUpgrades] = useState<PermanentUpgrades>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UPGRADES);
-      return saved ? JSON.parse(saved) : DEFAULT_PERMANENT_UPGRADES;
+      return validUpgrades(parseSave(saved));
     } catch {
       return DEFAULT_PERMANENT_UPGRADES;
     }
@@ -206,7 +208,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [psiCredits, setPsiCredits] = useState<number>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_CREDITS);
-      return saved ? Number(saved) : 0;
+      return safeNumber(saved);
     } catch {
       return 0;
     }
@@ -283,14 +285,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
-  // Web Audio Pro Synthesizer (Commercial Grade Sound FX)
-  const playSfx = useCallback((type: 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution') => {
+  const audioRef = useRef(new SurvivorsSessionAudio());
+  const rewardedRef = useRef(new WeakSet<SurvivorsEngine>());
+  useEffect(() => () => audioRef.current.dispose(), []);
+  useEffect(() => { audioRef.current.setMuted(audioMuted); if (phase === 'paused' || phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase]);
+
+  // Development synth; final orchestral assets are a separate production gate.
+  const playSfx = useCallback((type: 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
+      const ctx = audioRef.current.getContext();
+      if (!ctx) return;
       const now = ctx.currentTime;
+      const priority = type === 'boss_alarm' || type === 'shout' ? 4 : type === 'hit' || type === 'win' || type === 'defeat' ? 3 : type === 'pickup' || type === 'levelup' || type === 'evolution' ? 2 : 1;
+      const listener = engineRef.current?.state.player;
 
       if (type === 'shoot') {
         const osc = ctx.createOscillator();
@@ -300,8 +308,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc.frequency.exponentialRampToValueAtTime(220, now + 0.1);
         gain.gain.setValueAtTime(0.25, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        if (!audioRef.current.track(osc, gain, priority)) return;
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.1);
       } else if (type === 'laser') {
@@ -312,24 +321,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc.frequency.exponentialRampToValueAtTime(350, now + 0.09);
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.09);
+        if (!audioRef.current.track(osc, gain, priority)) return;
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.09);
       } else if (type === 'spray') {
-        const bufferSize = ctx.sampleRate * 0.15;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
-        }
+        const buffer = audioRef.current.noiseBuffer(ctx);
         const noise = ctx.createBufferSource();
         noise.buffer = buffer;
         const gain = ctx.createGain();
         gain.gain.setValueAtTime(0.18, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+        if (!audioRef.current.track(noise, gain, priority)) return;
         noise.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(noise, gain, position, listener);
         noise.start(now);
       } else if (type === 'pickup') {
         [659.25, 1046.5].forEach((freq, i) => {
@@ -340,12 +346,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.frequency.setValueAtTime(freq, t);
           gain.gain.setValueAtTime(0.18, t);
           gain.gain.exponentialRampToValueAtTime(0.005, t + 0.14);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
+          if (!audioRef.current.track(osc, gain, priority)) return;
+        osc.connect(gain);
+          audioRef.current.connectSfx(osc, gain, position, listener);
           osc.start(t);
           osc.stop(t + 0.14);
         });
-      } else if (type === 'levelup') {
+      } else if (type === 'levelup' || type === 'win') {
         const notes = [440, 554.37, 659.25, 880, 1108.73];
         notes.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
@@ -355,8 +362,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.frequency.setValueAtTime(freq, t);
           gain.gain.setValueAtTime(0.28, t);
           gain.gain.linearRampToValueAtTime(0.01, t + 0.28);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
+          if (!audioRef.current.track(osc, gain, priority)) return;
+        osc.connect(gain);
+          audioRef.current.connectSfx(osc, gain, position, listener);
           osc.start(t);
           osc.stop(t + 0.28);
         });
@@ -369,8 +377,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc.frequency.exponentialRampToValueAtTime(45, now + 0.8);
         gain.gain.setValueAtTime(0.65, now);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        if (!audioRef.current.track(osc, gain, priority)) return;
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.8);
 
@@ -382,8 +391,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc2.frequency.exponentialRampToValueAtTime(80, now + 0.5);
         gain2.gain.setValueAtTime(0.4, now);
         gain2.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        if (!audioRef.current.track(osc2, gain2, priority)) return;
         osc2.connect(gain2);
-        gain2.connect(ctx.destination);
+        audioRef.current.connectSfx(osc2, gain2, position, listener);
         osc2.start(now);
         osc2.stop(now + 0.5);
       } else if (type === 'evolution') {
@@ -397,12 +407,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.frequency.setValueAtTime(freq, t);
           gain.gain.setValueAtTime(0.3, t);
           gain.gain.exponentialRampToValueAtTime(0.005, t + 0.45);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
+          if (!audioRef.current.track(osc, gain, priority)) return;
+        osc.connect(gain);
+          audioRef.current.connectSfx(osc, gain, position, listener);
           osc.start(t);
           osc.stop(t + 0.45);
         });
-      } else if (type === 'hit') {
+      } else if (type === 'hit' || type === 'defeat') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'square';
@@ -410,8 +421,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc.frequency.exponentialRampToValueAtTime(45, now + 0.14);
         gain.gain.setValueAtTime(0.35, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.14);
+        if (!audioRef.current.track(osc, gain, priority)) return;
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.14);
       } else if (type === 'boss_alarm') {
@@ -423,13 +435,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         osc.frequency.linearRampToValueAtTime(320, now + 0.4);
         gain.gain.setValueAtTime(0.3, now);
         gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        if (!audioRef.current.track(osc, gain, priority)) return;
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.4);
       }
-    } catch {
-      // AudioContext blocked
+    } catch (err) {
+      audioRef.current.reportFailure(String(err));
     }
   }, [audioMuted]);
 
@@ -485,7 +498,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
   const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId));
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId), crypto.getRandomValues(new Uint32Array(1))[0]);
+    audioRef.current.silence();
+    floatingTextsRef.current = [];
+    particlesRef.current = [];
+    helmetSnapsRef.current = [];
+    approvedStampsRef.current = [];
+    setCombo(0);
+    setEvolutionBanner(null);
+    setBossAlert(null);
+    keysRef.current = {};
     engineRef.current = engine;
     touchVectorRef.current = { x: 0, y: 0 };
     touchIdRef.current = null;
@@ -507,7 +529,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }, [selectedChar, selectedStage, permanentUpgrades]);
 
   useEffect(() => {
-    initGame(selectedChar, selectedStage);
+    if (!engineRef.current || engineRef.current.state.phase === 'ready') initGame(selectedChar, selectedStage);
   }, [initGame, selectedChar, selectedStage]);
 
   const startGame = () => {
@@ -525,7 +547,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
     const ok = engine.triggerDirectorShout();
     if (ok) {
-      playSfx('shout');
+
       screenShakeRef.current = 24;
       spawnParticles(engine.state.player.x, engine.state.player.y, '#f59e0b', 40, 160, 5);
       spawnFloating(engine.state.player.x, engine.state.player.y - 40, '🚨 소장 샤우팅 발동!! 🚨', '#f59e0b', true);
@@ -569,11 +591,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       keysRef.current[e.code] = true;
-      if (e.code === 'Escape' || e.code === 'KeyP') {
+      if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) {
         const engine = engineRef.current;
         if (engine && (engine.state.phase === 'playing' || engine.state.phase === 'paused')) {
           const next = engine.state.phase === 'playing' ? 'paused' : 'playing';
-          engine.state.phase = next;
+          engine.setPaused(next === 'paused');
           setPhase(next);
         }
       }
@@ -595,6 +617,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       window.removeEventListener('keyup', handleKeyUp);
     };
   });
+
+  const interruptSession = useCallback(() => {
+    keysRef.current = {};
+    touchIdRef.current = null;
+    touchCenterRef.current = null;
+    touchVectorRef.current = { x: 0, y: 0 };
+    setJoystickVisual(prev => ({ ...prev, visible: false }));
+    audioRef.current.silence();
+    const engine = engineRef.current;
+    if (engine?.state.phase === 'playing') { engine.setPaused(true); setPhase('paused'); }
+    lastTimeRef.current = performance.now();
+  }, []);
+  useEffect(() => {
+    const hidden = () => { if (document.hidden) interruptSession(); };
+    window.addEventListener('blur', interruptSession);
+    document.addEventListener('visibilitychange', hidden);
+    return () => {
+      window.removeEventListener('blur', interruptSession);
+      document.removeEventListener('visibilitychange', hidden);
+    };
+  }, [interruptSession]);
 
   // Touch Event Handlers for Mobile Virtual Joystick
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -670,6 +713,24 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
+  const reducedMotionRef = useRef(false);
+  useEffect(() => {
+    const query = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const update = () => { reducedMotionRef.current = query?.matches ?? false; };
+    update(); query?.addEventListener('change', update);
+    const header = containerRef.current?.querySelector('header');
+    const reserveHud = () => {
+      if (header && containerRef.current) {
+        const bottom = header.getBoundingClientRect().bottom - containerRef.current.getBoundingClientRect().top;
+        containerRef.current.style.setProperty('--survivors-hud-bottom', `${Math.ceil(bottom + 8)}px`);
+      }
+    };
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(reserveHud) : null;
+    if (header) observer?.observe(header);
+    window.addEventListener('resize', reserveHud); reserveHud();
+    return () => { observer?.disconnect(); window.removeEventListener('resize', reserveHud); query?.removeEventListener('change', update); };
+  }, []);
+
   // Main Render & Physics Loop
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -677,6 +738,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let lastHudTime = -Infinity;
+    let previousEngine: SurvivorsEngine | null = null;
     let prevNeutralized = 0;
     let prevHp = 100;
     let prevLevel = 1;
@@ -685,11 +748,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const renderLoop = (time: number) => {
       requestRef.current = requestAnimationFrame(renderLoop);
 
-      const dt = Math.min((time - lastTimeRef.current) / 1000, 0.1);
+      const dt = Math.max(0, (time - lastTimeRef.current) / 1000);
       lastTimeRef.current = time;
 
       const engine = engineRef.current;
       if (!engine) return;
+      if (previousEngine !== engine) {
+        previousEngine = engine;
+        prevNeutralized = engine.state.hazardsNeutralized;
+        prevHp = engine.state.player.hp;
+        prevLevel = engine.state.level;
+        facingAngle = 0;
+      }
 
       try {
 
@@ -713,6 +783,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Update engine physics if playing
       if (engine.state.phase === 'playing') {
         engine.update(dt, { moveX, moveY });
+        const events = engine.drainAudioEvents();
+        const audible = new Set<string>();
+        for (const event of events) {
+          const cue = event.type === 'impact' ? 'shoot' : event.type === 'control' ? 'pickup' : event.type;
+          // Coalesce dense events per rendered batch. Engine event IDs remain unique.
+          if (!audible.has(cue)) { audible.add(cue); playSfx(cue, event.x === undefined || event.y === undefined ? undefined : {x: event.x, y: event.y}); }
+          if (event.type === 'boss_alarm' || event.type === 'shout') audioRef.current.duckMusic();
+        }
 
         // Check state changes
         if (engine.state.hazardsNeutralized > prevNeutralized) {
@@ -732,7 +810,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             } else if (ev.type === 'CRANE_BOSS') {
               screenShakeRef.current = 28;
               spawnParticles(ev.x, ev.y, '#f59e0b', 40, 160, 5);
-              spawnFloating(ev.x, ev.y - 50, '🚨 타워크레인 붕괴 위험 원천 차단!', '#fbbf24', true);
+              spawnFloating(ev.x, ev.y - 50, '양중 작업 정지·작업반경 통제 완료', '#fbbf24', true);
             }
           }
 
@@ -753,7 +831,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
 
         if (engine.state.player.hp < prevHp) {
-          playSfx('hit');
+
           screenShakeRef.current = 14;
           damageFlashRef.current = 0.45; // Red damage vignette flash
           spawnFloating(engine.state.player.x, engine.state.player.y - 25, `-${Math.round(prevHp - engine.state.player.hp)}`, '#ef4444');
@@ -763,11 +841,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           prevHp = engine.state.player.hp;
         }
         if (engine.state.level > prevLevel) {
-          playSfx('levelup');
+
           spawnParticles(engine.state.player.x, engine.state.player.y, '#fbbf24', 20, 140);
           prevLevel = engine.state.level;
         }
 
+        // Render physics at RAF cadence; mirrors update at 12Hz or immediately on phase change.
+        if (time - lastHudTime >= 1000 / 12 || engine.state.phase !== 'playing') {
+        lastHudTime = time;
         // Sync React HUD
         setHp(Math.round(engine.state.player.hp));
         setMaxHp(engine.state.player.maxHp);
@@ -779,6 +860,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
+        }
 
         if (engine.state.phase !== 'playing') {
           setPhase(engine.state.phase);
@@ -786,12 +868,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             setPerkOptions(engine.state.perkOptions);
             setRerollsLeft(engine.state.rerollsLeft);
           }
-          if (engine.state.phase === 'victory' || engine.state.phase === 'defeat') {
+          if ((engine.state.phase === 'victory' || engine.state.phase === 'defeat') && !rewardedRef.current.has(engine)) {
+            rewardedRef.current.add(engine);
             // Save earned credits & Field Guide Points
             saveMetaProgress(permanentUpgrades, psiCredits + engine.state.psiCredits);
             try {
               const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (engine.state.phase === 'victory' ? 5 : 0);
-              const currentFg = Number(localStorage.getItem(STORAGE_KEY_FG_POINTS) || '0');
+              const currentFg = safeNumber(localStorage.getItem(STORAGE_KEY_FG_POINTS));
               localStorage.setItem(STORAGE_KEY_FG_POINTS, String(currentFg + earnedFg));
             } catch {
               // ignore
@@ -800,7 +883,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             if (engine.state.phase === 'victory') {
               // Unlock next stage in order
               const stageOrder: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
-              const currentIdx = stageOrder.indexOf(selectedStage);
+              const currentIdx = stageOrder.indexOf(engine.state.stageId);
               if (currentIdx !== -1 && currentIdx < stageOrder.length - 1) {
                 const nextStageId = stageOrder[currentIdx + 1];
                 if (nextStageId) {
@@ -821,14 +904,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
               // Save star challenges
               setStageStars(prev => {
-                const current = prev[selectedStage] || [false, false, false];
+                const current = prev[engine.state.stageId] || [false, false, false];
                 const earned = engine.state.starsEarned;
                 const merged = [
                   current[0] || earned[0],
                   current[1] || earned[1],
                   current[2] || earned[2],
                 ];
-                const updated = { ...prev, [selectedStage]: merged };
+                const updated = { ...prev, [engine.state.stageId]: merged };
                 try {
                   localStorage.setItem(STORAGE_KEY_STAGE_STARS, JSON.stringify(updated));
                 } catch {
@@ -858,7 +941,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
       let shakeY = 0;
-      if (screenShakeRef.current > 0) {
+      if (screenShakeRef.current > 0 && !reducedMotionRef.current) {
         const clampedShake = Math.min(3.5, screenShakeRef.current * 0.25);
         shakeX = Math.round((Math.random() - 0.5) * clampedShake * 2);
         shakeY = Math.round((Math.random() - 0.5) * clampedShake * 2);
@@ -883,7 +966,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.scale(dpr * baseZoom, dpr * baseZoom);
 
       // Invert color flash during Director Shout 'invert' phase
-      if (engine.state.directorCutinPhase === 'invert') {
+      if (engine.state.directorCutinPhase === 'invert' && !reducedMotionRef.current) {
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, viewW, viewH);
       } else {
@@ -984,9 +1067,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillStyle = 'rgba(34, 197, 94, 0.45)';
       ctx.textAlign = 'center';
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
-        ctx.fillText('⛑️ 2.5D 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
+        if (y === 180) ctx.fillText('안전통로', WORLD_WIDTH / 2, y);
       }
       ctx.restore();
+
+      // Resolved workers leave the risk area along the safety corridor.
+      for (const worker of engine.state.resolvedWorkers ?? []) {
+        const sprite = spritesRef.current.mobWorker;
+        if (!sprite?.complete || !sprite.naturalWidth) continue;
+        ctx.save(); ctx.globalAlpha = Math.min(1, worker.remaining);
+        ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
+        ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(worker.x, worker.y - 43, 7, Math.PI, 0); ctx.fill();
+        ctx.font = 'bold 10px sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
+        ctx.fillText('안전통로 이동', worker.x, worker.y - 65); ctx.restore();
+      }
 
       // RENDER 2.5D APPROVED SAFETY STAMPS ON FLOOR
       const aliveStamps: ApprovedStamp[] = [];
@@ -1023,7 +1117,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       approvedStampsRef.current = aliveStamps;
 
       // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
-      if (selectedStage === 'stage_02') {
+      if (engine.state.stageId === 'stage_02') {
         // High-Rise Core Frame: High-altitude wind gust vapor streaks
         ctx.save();
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
@@ -1037,7 +1131,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.stroke();
         }
         ctx.restore();
-      } else if (selectedStage === 'stage_03') {
+      } else if (engine.state.stageId === 'stage_03') {
         // Tower Crane Lifting Zone: Overhead giant crane boom rotating shadow
         ctx.save();
         const craneAngle = (time / 14000) * Math.PI * 2;
@@ -1047,7 +1141,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.fillRect(-18, -600, 36, 1200);
         ctx.fillRect(-40, -40, 80, 80);
         ctx.restore();
-      } else if (selectedStage === 'stage_04') {
+      } else if (engine.state.stageId === 'stage_04') {
         // Confined Space Pit: Emergency green exit beacon lights along tunnel perimeter
         ctx.save();
         const greenPulse = (Math.sin(time / 350) + 1) * 0.5;
@@ -1059,7 +1153,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fill();
         }
         ctx.restore();
-      } else if (selectedStage === 'stage_05') {
+      } else if (engine.state.stageId === 'stage_05') {
         // Typhoon Night Pour: Torrential diagonal rain streaks and lightning flashes
         ctx.save();
         ctx.strokeStyle = 'rgba(186, 230, 253, 0.26)';
@@ -1174,7 +1268,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.font = 'bold 12px sans-serif';
               ctx.fillStyle = '#ef4444';
               ctx.textAlign = 'center';
-              ctx.fillText(`⚠️ CRANE DROP: ${h.timer.toFixed(1)}s ⚠️`, h.x, h.y);
+              ctx.fillText(`양중 경고 · 통제 필요 ${h.timer.toFixed(1)}s`, h.x, h.y);
             } else if (h.state === 'active') {
               ctx.fillStyle = 'rgba(239, 68, 68, 0.45)';
               ctx.beginPath();
@@ -1189,7 +1283,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.font = 'bold 11px sans-serif';
               ctx.fillStyle = '#f87171';
               ctx.textAlign = 'center';
-              ctx.fillText('5,000 CRUSH', h.x, h.y + 4);
+              ctx.fillText('위험구역 접근 금지', h.x, h.y + 4);
             } else {
               ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
               ctx.lineWidth = 2;
@@ -1200,15 +1294,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.font = '9px sans-serif';
               ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
               ctx.textAlign = 'center';
-              ctx.fillText('HOIST ZONE', h.x, h.y);
+              ctx.fillText(h.state === 'cooldown' ? '작업 정지·구역 통제' : '양중 작업반경', h.x, h.y);
             }
             ctx.restore();
           }
 
-          // D. Explosive Barrel
+          // D. Isolate flammable storage (legacy type ID retained)
           if (h.type === 'explosive_barrel') {
             ctx.save();
-            if (h.state === 'warning') {
+            if (h.state === 'active') {
+              ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 3; ctx.setLineDash([8, 6]);
+              ctx.beginPath(); ctx.arc(h.x, h.y, 50, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+              ctx.font = 'bold 11px sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
+              ctx.fillText('위험원 격리 완료', h.x, h.y - 58);
+            } else if (h.state === 'warning') {
               const pulse = (Math.sin(time / 50) + 1) * 0.5;
               ctx.fillStyle = pulse > 0.5 ? '#ef4444' : '#f97316';
               ctx.beginPath();
@@ -1218,7 +1317,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.font = 'bold 11px sans-serif';
               ctx.fillStyle = '#ffffff';
               ctx.textAlign = 'center';
-              ctx.fillText('💥 IGNITE!', h.x, h.y - h.radius - 8);
+              ctx.fillText('격리·대피 진행', h.x, h.y - h.radius - 8);
             } else if (h.state === 'idle') {
               ctx.fillStyle = '#ea580c';
               ctx.beginPath();
@@ -1231,7 +1330,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.font = '14px sans-serif';
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText('🔥', h.x, h.y);
+              ctx.fillText('⚠️', h.x, h.y);
 
               const barW = 32;
               const barH = 4;
@@ -1982,7 +2081,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       floatingTextsRef.current = aliveTexts;
 
       // 12. SCREEN-SPACE DAMAGE VIGNETTE FLASH (Tactile Pain Feedback)
-      if (damageFlashRef.current > 0) {
+      if (damageFlashRef.current > 0 && !reducedMotionRef.current) {
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0); // screen coordinates
         const cX = canvas.width / 2;
@@ -2009,6 +2108,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     };
   }, [playSfx, permanentUpgrades, psiCredits]);
 
+  const exitSession = () => {
+    interruptSession();
+    audioRef.current.dispose();
+    onExit();
+  };
+
   // Format time MM:SS
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -2023,7 +2128,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEndOrCancel}
-      onTouchCancel={handleTouchEndOrCancel}
+      onTouchCancel={interruptSession}
     >
       {/* EXP PROGRESS BAR */}
       <div className="survivors-exp-bar-wrap">
@@ -2059,7 +2164,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
           <div className="survivors-kills-badge">
             <span>🛡️</span>
-            <b>{kills} 제압</b>
+            <b>{kills} 통제</b>
           </div>
         </div>
 
@@ -2071,26 +2176,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               const engine = engineRef.current;
               if (engine && (phase === 'playing' || phase === 'paused')) {
                 const next = phase === 'playing' ? 'paused' : 'playing';
-                engine.state.phase = next;
+                engine.setPaused(next === 'paused');
                 setPhase(next);
               }
             }}
           >
             {phase === 'paused' ? '재개 (P)' : '일시정지 (P)'}
           </button>
-          <button type="button" className="survivors-btn-icon" onClick={onExit}>
+          <button type="button" className="survivors-btn-icon" onClick={exitSession}>
             현장 복귀
           </button>
         </div>
       </header>
 
       {/* COMBO JUICE BANNER */}
-      {combo >= 2 && phase === 'playing' && (
+      {combo >= 2 && phase === 'playing' && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && (
         <aside
+          className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"
           style={{
             position: 'absolute',
-            top: 72,
+            top: 'var(--survivors-hud-bottom, 160px)',
             right: 24,
             display: 'flex',
             alignItems: 'center',
@@ -2120,19 +2226,19 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* BOSS ALERT BANNER */}
-      {bossAlert && (
+      {bossAlert && directorCutinPhase === 'none' && (
         <div className="survivors-boss-alert" role="alert">
           <span className="survivors-hazard-stripe" />
           <div className="survivors-boss-alert-text">
             <strong>⚠️ EMERGENCY: {bossAlert} 출현! ⚠️</strong>
-            <small>모든 화력을 집중하여 중대사고를 방지하세요!</small>
+            <small>작업반경을 통제하고 정지 지시를 전달하세요!</small>
           </div>
           <span className="survivors-hazard-stripe" />
         </div>
       )}
 
       {/* SUPER PROTOCOL EVOLUTION BANNER */}
-      {evolutionBanner && (
+      {evolutionBanner && !bossAlert && directorCutinPhase === 'none' && (
         <div className="survivors-evo-banner" role="status">
           <div className="survivors-evo-banner-icon">{evolutionBanner.icon}</div>
           <div className="survivors-evo-banner-content">
@@ -2341,9 +2447,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 🔬 R&D 연구소
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowArsenalModal(true)}>
-                📖 무기 진화 도감
+                📖 대응 도구 진화 도감
               </button>
-              <button type="button" className="survivors-btn-secondary" onClick={onExit}>
+              <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 취소
               </button>
             </div>
@@ -2485,7 +2591,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title is-gold">📖 안전 장비 & 5대 슈퍼 프로토콜 진화 도감</h2>
             <p className="survivors-modal-sub">
-              기본 무기 Lv.5 + 지원 퍽을 습득하면 최강의 진화 무기(Super Protocol)가 발동됩니다!
+              기본 대응 도구 Lv.5 + 지원 퍽을 습득하면 강화 통제 프로토콜이 열립니다!
             </p>
 
             <div className="survivors-recipes-grid">
@@ -2573,7 +2679,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 className="survivors-btn-primary"
                 onClick={() => {
                   if (engineRef.current) {
-                    engineRef.current.state.phase = 'playing';
+                    engineRef.current.setPaused(false);
                     setPhase('playing');
                     lastTimeRef.current = performance.now();
                   }
@@ -2581,7 +2687,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               >
                 순찰 재개
               </button>
-              <button type="button" className="survivors-btn-secondary" onClick={onExit}>
+              <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 메인으로 나가기
               </button>
             </div>
@@ -2628,7 +2734,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               >
                 다시 순찰하기
               </button>
-              <button type="button" className="survivors-btn-secondary" onClick={onExit}>
+              <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 현장 복귀
               </button>
             </div>
@@ -2727,7 +2833,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               >
                 스테이지 재도전
               </button>
-              <button type="button" className="survivors-btn-secondary" onClick={onExit}>
+              <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 현장 복귀
               </button>
             </div>

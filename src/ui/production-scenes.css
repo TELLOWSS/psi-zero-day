@@ -7875,3 +7875,28 @@
     z-index:13!important;
   }
 }
+
+/* Keep the first FIELD narration reachable after the cold-open overlay closes. */
+@media (orientation:portrait) and (max-width:620px) {
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"].phase-playing {
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    overflow:hidden!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"].phase-playing .play-panel {
+    position:absolute!important;
+    top:auto!important;
+    bottom:max(8px,env(safe-area-inset-bottom))!important;
+    left:8px!important;
+    right:8px!important;
+    min-height:0!important;
+    max-height:40dvh!important;
+    margin:0!important;
+  }
+  .game-frame[data-production-scene="FIELD"][data-field-ui="observe"] .presentation-area {
+    min-height:0!important;
+    max-height:calc(40dvh - 32px)!important;
+    overflow:auto!important;
+  }
+}

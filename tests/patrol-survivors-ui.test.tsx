@@ -116,7 +116,7 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Click Arsenal modal button
       const arsenalBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent?.includes('무기 진화 도감'),
+        btn => btn.textContent?.includes('대응 도구 진화 도감'),
       );
       expect(arsenalBtn).toBeDefined();
       act(() => {

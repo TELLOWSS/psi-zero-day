@@ -162,6 +162,9 @@ export interface SurvivorsGameState {
   gameTime: number; // in seconds
   maxTime: number; // target survival time (e.g. 180s)
   player: PlayerStats;
+  // Legacy hp/damage/entity IDs denote remaining risk and intervention strength.
+  // People are guided to safety; they are not attack targets.
+  resolvedWorkers?: Array<{id: string; x: number; y: number; remaining: number}>;
   hazards: Hazard[];
   projectiles: Projectile[];
   drops: SafetyDrop[];

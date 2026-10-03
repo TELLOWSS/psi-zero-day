@@ -1392,12 +1392,12 @@
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-sub-entry{
     grid-column:auto;
-    min-height:40px;
+    min-height:44px;
     padding:4px 6px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
     grid-column:auto;
-    min-height:40px;
+    min-height:44px;
     opacity:.68;
     border-color:rgba(168,197,210,.24);
     background:rgba(5,18,27,.54);
@@ -2092,5 +2092,12 @@
   .commercial-title-action.is-survivors-entry {
     width: 100%;
     min-height: 56px;
+  }
+}
+
+/* Short landscape screens prioritize the title and reachable mode entries. */
+@media (orientation:landscape) and (max-height:560px) {
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-triad-dashboard {
+    display:none!important;
   }
 }
