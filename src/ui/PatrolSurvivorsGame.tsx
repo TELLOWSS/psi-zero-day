@@ -64,35 +64,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Screen shake
   const screenShakeRef = useRef<number>(0);
 
-  // High-Resolution Manhwa Game Sprites Cache
+  // Authentic Construction Safety Assets Cache
   const spritesRef = useRef<{
-    playerHunter?: HTMLImageElement;
+    playerYoon?: HTMLImageElement;
     mobWorker?: HTMLImageElement;
-    bossCrane?: HTMLImageElement;
-    mapFloor?: HTMLImageElement;
   }>({});
-  const floorPatternRef = useRef<CanvasPattern | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const pImg = new Image();
-    pImg.src = '/assets/survivors/sprite_player_hunter.jpg';
-    pImg.onload = () => { spritesRef.current.playerHunter = pImg; };
+    pImg.src = '/assets/survivors/sprite_player_yoon.webp';
+    pImg.onload = () => { spritesRef.current.playerYoon = pImg; };
 
     const mImg = new Image();
-    mImg.src = '/assets/survivors/sprite_mob_worker.jpg';
+    mImg.src = '/assets/survivors/sprite_mob_worker.webp';
     mImg.onload = () => { spritesRef.current.mobWorker = mImg; };
-
-    const bImg = new Image();
-    bImg.src = '/assets/survivors/sprite_boss_crane.jpg';
-    bImg.onload = () => { spritesRef.current.bossCrane = bImg; };
-
-    const fImg = new Image();
-    fImg.src = '/assets/survivors/map_floor_monarch_dungeon.jpg';
-    fImg.onload = () => {
-      spritesRef.current.mapFloor = fImg;
-      floorPatternRef.current = null; // Invalidate to rebuild pattern
-    };
   }, []);
 
   // Meta Progression (Stored in LocalStorage)
@@ -654,13 +640,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
 
-      // Decay screen shake
+      // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
       let shakeY = 0;
       if (screenShakeRef.current > 0) {
-        shakeX = (Math.random() - 0.5) * screenShakeRef.current;
-        shakeY = (Math.random() - 0.5) * screenShakeRef.current;
-        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 25);
+        const clampedShake = Math.min(3.5, screenShakeRef.current * 0.25);
+        shakeX = Math.round((Math.random() - 0.5) * clampedShake * 2);
+        shakeY = Math.round((Math.random() - 0.5) * clampedShake * 2);
+        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 40);
       }
 
       // Responsive Portrait / Landscape Zoom Factor
@@ -669,9 +656,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const viewW = displayW / baseZoom;
       const viewH = displayH / baseZoom;
 
-      // CAMERA FOLLOW (Center on player)
-      const camX = player.x - viewW / 2 + shakeX;
-      const camY = player.y - viewH / 2 + shakeY;
+      // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
+      const camX = Math.floor(player.x - viewW / 2 + shakeX);
+      const camY = Math.floor(player.y - viewH / 2 + shakeY);
 
       ctx.save();
       ctx.scale(dpr * baseZoom, dpr * baseZoom);
@@ -688,51 +675,62 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Translate view to camera
       ctx.translate(-camX, -camY);
 
-      // 1. RENDER WORLD FLOOR & GRID (Solo Leveling High-Res Manhwa Dungeon Tile)
+      // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering Concrete Foundation Slab)
       const stage = engine.state.stage;
-      const fSpr = spritesRef.current.mapFloor;
-      if (fSpr && fSpr.complete) {
-        if (!floorPatternRef.current) {
-          floorPatternRef.current = ctx.createPattern(fSpr, 'repeat');
-        }
-        if (floorPatternRef.current) {
-          ctx.save();
-          ctx.fillStyle = floorPatternRef.current;
-          ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-          // Dark ambient atmospheric overlay matching dark manhwa mood
-          ctx.fillStyle = 'rgba(10, 14, 26, 0.38)';
-          ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-          ctx.restore();
-        }
-      } else {
-        const slabSize = 100;
-        ctx.fillStyle = stage?.floorColor || '#0c1219';
-        ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      ctx.fillStyle = stage?.floorColor || '#0f141c';
+      ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
-        ctx.lineWidth = 2;
-        for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, WORLD_HEIGHT);
-          ctx.stroke();
-        }
-        for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(WORLD_WIDTH, y);
-          ctx.stroke();
+      // Concrete slabs & rebar expansion grid (120px slabs)
+      const slabSize = 120;
+      ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
+      ctx.lineWidth = 1.5;
+      for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, WORLD_HEIGHT);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(WORLD_WIDTH, y);
+        ctx.stroke();
+      }
+
+      // Rebar intersection anchor nodes
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
+      for (let x = slabSize; x < WORLD_WIDTH; x += slabSize * 2) {
+        for (let y = slabSize; y < WORLD_HEIGHT; y += slabSize * 2) {
+          ctx.fillRect(x - 2, y - 2, 4, 4);
         }
       }
 
-      // Safety perimeter boundary
+      // Designated Green/Yellow Safety Walkway (안전통로)
       ctx.save();
-      ctx.lineWidth = 14;
-      ctx.strokeStyle = stage?.borderColor || '#f59e0b';
-      ctx.strokeRect(7, 7, WORLD_WIDTH - 14, WORLD_HEIGHT - 14);
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.05)';
+      ctx.fillRect(WORLD_WIDTH / 2 - 90, 0, 180, WORLD_HEIGHT);
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.25)';
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
-      ctx.strokeRect(18, 18, WORLD_WIDTH - 36, WORLD_HEIGHT - 36);
+      ctx.setLineDash([12, 10]);
+      ctx.strokeRect(WORLD_WIDTH / 2 - 90, 0, 180, WORLD_HEIGHT);
+
+      // Safety Walkway Stencil Markings
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.4)';
+      ctx.textAlign = 'center';
+      for (let y = 180; y < WORLD_HEIGHT; y += 320) {
+        ctx.fillText('⛑️ 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
+      }
+      ctx.restore();
+
+      // Perimeter Safety Boundary (45-degree yellow/black hazard chevron barrier)
+      ctx.save();
+      ctx.lineWidth = 16;
+      ctx.strokeStyle = stage?.borderColor || '#f59e0b';
+      ctx.strokeRect(8, 8, WORLD_WIDTH - 16, WORLD_HEIGHT - 16);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
+      ctx.strokeRect(20, 20, WORLD_WIDTH - 40, WORLD_HEIGHT - 40);
       ctx.restore();
 
       // 1.5. RENDER STAGE INTERACTIVE HAZARDS
@@ -1119,179 +1117,182 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      // 6. RENDER HAZARDS (Solo Leveling High-Quality Sprites & Animations)
+      // 6. RENDER HAZARDS (Authentic Industrial Construction Safety Incidents)
       for (const h of hazards) {
         ctx.save();
         ctx.translate(h.x, h.y);
 
         if (h.type === 'UNHELMETED') {
-          // Shadow Ghoul Worker
+          // Unhelmeted Construction Worker in Danger
           const mSpr = spritesRef.current.mobWorker;
-          const stalkBob = Math.sin(time / 100 + h.x) * 2.5;
 
-          // Shadow mist aura under feet
-          ctx.fillStyle = 'rgba(88, 28, 135, 0.45)';
+          // Ground shadow
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
           ctx.beginPath();
-          ctx.ellipse(0, 10, h.radius * 1.1, h.radius * 0.55, 0, 0, Math.PI * 2);
+          ctx.ellipse(0, 10, h.radius * 1.1, h.radius * 0.5, 0, 0, Math.PI * 2);
           ctx.fill();
 
           if (mSpr && mSpr.complete) {
             ctx.save();
-            ctx.shadowColor = '#a855f7';
-            ctx.shadowBlur = 12;
             ctx.beginPath();
-            ctx.arc(0, stalkBob, h.radius + 3, 0, Math.PI * 2);
+            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
             ctx.clip();
-            ctx.drawImage(mSpr, -h.radius - 5, -h.radius - 5 + stalkBob, (h.radius + 5) * 2, (h.radius + 5) * 2);
+            ctx.drawImage(mSpr, -h.radius - 2, -h.radius - 2, (h.radius + 2) * 2, (h.radius + 2) * 2);
             ctx.restore();
 
-            // Threat boundary ring
+            // Hazard border ring
             ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.beginPath();
-            ctx.arc(0, stalkBob, h.radius + 3, 0, Math.PI * 2);
+            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
             ctx.stroke();
           } else {
-            ctx.fillStyle = '#334155';
+            // Procedural unhelmeted worker
+            ctx.fillStyle = '#334155'; // Work clothes
             ctx.beginPath();
-            ctx.arc(0, stalkBob, h.radius, 0, Math.PI * 2);
+            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
             ctx.fill();
+
+            // Exposed hair (no hard hat!)
+            ctx.fillStyle = '#1e1b4b';
+            ctx.beginPath();
+            ctx.arc(0, -3, 8, 0, Math.PI * 2);
+            ctx.fill();
+
             ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
             ctx.stroke();
           }
 
-          // Menacing eye glint
-          ctx.fillStyle = '#ef4444';
-          ctx.shadowColor = '#ff0000';
-          ctx.shadowBlur = 8;
-          ctx.beginPath();
-          ctx.arc(-4, stalkBob - 2, 2.5, 0, Math.PI * 2);
-          ctx.arc(4, stalkBob - 2, 2.5, 0, Math.PI * 2);
-          ctx.fill();
+          // Clear Visual Badge: [⚠️ 안전모 미착용]
+          const alertPulse = Math.sin(time / 200) > 0;
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillStyle = alertPulse ? '#ef4444' : '#f59e0b';
+          ctx.textAlign = 'center';
+          ctx.fillText('⚠️ 안전모 미착용', 0, -h.radius - 10);
         } else if (h.type === 'RUNAWAY_CART') {
-          // High-Tech Autonomous Industrial Cart / Dump Truck
-          const rumble = Math.sin(time / 25) * 1.5;
+          // Runaway Construction Heavy Equipment (Mini Dump Truck / Transport Cart)
           const angle = Math.atan2(player.y - h.y, player.x - h.x);
-
           ctx.rotate(angle);
 
-          // Headlight cone on ground
-          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 70, 0, 70);
-          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
+          // Dual halogen headlights on concrete floor
+          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 80, 0, 80);
+          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.5)');
           lightGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
           ctx.fillStyle = lightGrad;
           ctx.beginPath();
           ctx.moveTo(h.radius, -8);
-          ctx.lineTo(h.radius + 75, -28);
-          ctx.lineTo(h.radius + 75, 28);
+          ctx.lineTo(h.radius + 80, -32);
+          ctx.lineTo(h.radius + 80, 32);
           ctx.lineTo(h.radius, 8);
           ctx.closePath();
           ctx.fill();
 
-          // Armored chassis
-          ctx.fillStyle = '#1e293b';
-          ctx.fillRect(-h.radius, -h.radius + 3 + rumble, h.radius * 2, h.radius * 2 - 6);
+          // Industrial Yellow Vehicle Body
+          ctx.fillStyle = '#d97706';
+          ctx.fillRect(-h.radius, -h.radius + 4, h.radius * 2, h.radius * 2 - 8);
 
-          // Hazard chevron stripes
-          ctx.fillStyle = '#f59e0b';
-          ctx.fillRect(-h.radius + 4, -h.radius + 5 + rumble, h.radius * 2 - 8, 4);
-          ctx.fillRect(-h.radius + 4, h.radius - 9 + rumble, h.radius * 2 - 8, 4);
+          // Black/Yellow Hazard Stripes on Hood
+          ctx.fillStyle = '#18181b';
+          ctx.fillRect(-h.radius + 3, -h.radius + 6, h.radius * 2 - 6, 4);
+          ctx.fillRect(-h.radius + 3, h.radius - 10, h.radius * 2 - 6, 4);
 
-          // Engine core
-          ctx.fillStyle = '#ef4444';
-          ctx.shadowColor = '#ef4444';
-          ctx.shadowBlur = 10;
-          ctx.fillRect(-6, -4 + rumble, 12, 8);
+          // Cab window & Flashing Beacon
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(-2, -h.radius + 8, 10, h.radius * 2 - 16);
 
-          // Wheels
+          // Flashing Yellow Warning Strobe
+          const strobe = Math.sin(time / 120) > 0;
+          ctx.fillStyle = strobe ? '#ef4444' : '#facc15';
+          ctx.beginPath();
+          ctx.arc(0, 0, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Heavy industrial wheels
           ctx.fillStyle = '#0f172a';
-          ctx.fillRect(-h.radius + 2, -h.radius, 8, 3);
-          ctx.fillRect(h.radius - 10, -h.radius, 8, 3);
-          ctx.fillRect(-h.radius + 2, h.radius - 3, 8, 3);
-          ctx.fillRect(h.radius - 10, h.radius - 3, 8, 3);
+          ctx.fillRect(-h.radius + 2, -h.radius - 2, 7, 4);
+          ctx.fillRect(h.radius - 9, -h.radius - 2, 7, 4);
+          ctx.fillRect(-h.radius + 2, h.radius - 2, 7, 4);
+          ctx.fillRect(h.radius - 9, h.radius - 2, 7, 4);
         } else if (h.type === 'GAS_LEAK') {
-          // Volumetric Animated Toxic Cloud
-          const pulse = (Math.sin(time / 140) + 1) * 0.5;
-          const cloudGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, h.radius + pulse * 6);
-          cloudGrad.addColorStop(0, 'rgba(34, 197, 94, 0.85)');
-          cloudGrad.addColorStop(0.5, 'rgba(16, 185, 129, 0.45)');
-          cloudGrad.addColorStop(1, 'rgba(5, 150, 105, 0)');
+          // Confined Space Toxic Gas Pocket (H2S / CO / O2 Low)
+          const pulse = (Math.sin(time / 260) + 1) * 0.5;
+          const currentRadius = h.radius + pulse * 4;
+
+          const cloudGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, currentRadius);
+          cloudGrad.addColorStop(0, 'rgba(234, 179, 8, 0.45)');
+          cloudGrad.addColorStop(0.6, 'rgba(34, 197, 94, 0.25)');
+          cloudGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
           ctx.fillStyle = cloudGrad;
           ctx.beginPath();
-          ctx.arc(0, 0, h.radius + pulse * 6, 0, Math.PI * 2);
+          ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
           ctx.fill();
 
-          // Toxic skull symbol
-          ctx.font = 'bold 12px sans-serif';
-          ctx.fillStyle = '#f0fdf4';
-          ctx.shadowColor = '#22c55e';
-          ctx.shadowBlur = 10;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('☣', 0, 0);
-        } else if (h.type === 'CRANE_BOSS') {
-          // Colossal Calamity Crane Titan (Boss)
-          const bSpr = spritesRef.current.bossCrane;
-          const stomp = Math.sin(time / 70) * 3;
-
-          // Shadow pool
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-          ctx.beginPath();
-          ctx.ellipse(0, 24, h.radius * 1.4, h.radius * 0.75, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          if (bSpr && bSpr.complete) {
-            ctx.save();
-            ctx.shadowColor = '#dc2626';
-            ctx.shadowBlur = 28;
-            ctx.beginPath();
-            ctx.arc(0, stomp, h.radius + 14, 0, Math.PI * 2);
-            ctx.clip();
-            const drawSize = (h.radius + 18) * 2;
-            ctx.drawImage(bSpr, -drawSize / 2, -drawSize / 2 + stomp, drawSize, drawSize);
-            ctx.restore();
-
-            // Demonic Crimson Rune Ring
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 4;
-            ctx.shadowColor = '#f87171';
-            ctx.shadowBlur = 18;
-            ctx.beginPath();
-            ctx.arc(0, stomp, h.radius + 14, 0, Math.PI * 2);
-            ctx.stroke();
-          } else {
-            ctx.fillStyle = '#7f1d1d';
-            ctx.beginPath();
-            ctx.arc(0, stomp, h.radius + 8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 5;
-            ctx.stroke();
-          }
-
-          // Boss Title Tag
-          ctx.font = 'bold 12px sans-serif';
+          // Industrial Gas Warning Label
+          ctx.font = 'bold 11px sans-serif';
           ctx.fillStyle = '#fef08a';
-          ctx.shadowColor = '#ef4444';
-          ctx.shadowBlur = 10;
           ctx.textAlign = 'center';
-          ctx.fillText('👹 CALAMITY BOSS', 0, -h.radius - 22);
+          ctx.fillText('☣ 유독가스 주의', 0, -4);
+          ctx.font = '9px sans-serif';
+          ctx.fillStyle = '#86efac';
+          ctx.fillText('밀폐구역 환기필요', 0, 10);
+        } else if (h.type === 'CRANE_BOSS') {
+          // Giant Tower Crane Rigging Failure Hazard (Boss)
+          // Ground Drop Hazard Red Zone
+          ctx.strokeStyle = 'rgba(239, 68, 68, 0.65)';
+          ctx.lineWidth = 3;
+          ctx.setLineDash([10, 8]);
+          ctx.beginPath();
+          ctx.arc(0, 0, h.radius + 12, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Crane drop shadow
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+          ctx.beginPath();
+          ctx.ellipse(0, 15, h.radius * 1.3, h.radius * 0.7, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Heavy steel crane hook block
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(-h.radius + 6, -h.radius + 6, (h.radius - 6) * 2, (h.radius - 6) * 2);
+
+          // Yellow/Black Crane Hazard Stripes
+          ctx.fillStyle = '#eab308';
+          ctx.fillRect(-h.radius + 10, -h.radius + 10, (h.radius - 10) * 2, 6);
+          ctx.fillRect(-h.radius + 10, h.radius - 16, (h.radius - 10) * 2, 6);
+
+          // Giant Steel Hook & Rebar Load
+          ctx.strokeStyle = '#cbd5e1';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(0, -h.radius);
+          ctx.lineTo(0, h.radius - 6);
+          ctx.arc(8, h.radius - 6, 8, Math.PI, 0, true);
+          ctx.stroke();
+
+          // Boss Hazard Title Tag
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillStyle = '#f87171';
+          ctx.textAlign = 'center';
+          ctx.fillText('🚨 타워크레인 양중 와이어 파망 위험', 0, -h.radius - 18);
         }
 
-        // Mini HP Bar with stylized shield styling
+        // Mini HP Bar with clear contrast
         const barW = Math.max(30, h.radius * 2.2);
-        const barH = 5.5;
+        const barH = 5;
         const hpPercent = Math.max(0, h.hp / h.maxHp);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-        ctx.fillRect(-barW / 2, -h.radius - 12, barW, barH);
+        ctx.fillRect(-barW / 2, -h.radius - 8, barW, barH);
         ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
-        ctx.fillRect(-barW / 2, -h.radius - 12, barW * hpPercent, barH);
+        ctx.fillRect(-barW / 2, -h.radius - 8, barW * hpPercent, barH);
         ctx.restore();
       }
 
-      // 7. RENDER PLAYER (Solo Leveling High-Quality Sprite & Animation)
+      // 7. RENDER PLAYER (Safety Director Yoon Sung-ho & Character Profiles)
       ctx.save();
       ctx.translate(player.x, player.y);
 
@@ -1299,78 +1300,77 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.globalAlpha = 0.45;
       }
 
-      const walkCycle = time / 100;
-      const isMoving = inputMag > 0.05;
-      const bobY = isMoving ? Math.sin(walkCycle) * 3 : Math.sin(time / 450) * 1.5;
-      const walkTilt = isMoving ? Math.sin(walkCycle * 0.5) * 0.08 : 0;
-
-      // A. Shadow Monarch Aura pool (발 밑 심연 오라)
-      const auraPulse = (Math.sin(time / 180) + 1) * 0.5;
-      const auraSize = 22 + auraPulse * 4;
-      ctx.fillStyle = 'rgba(76, 29, 149, 0.45)';
+      // Ground shadow
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.beginPath();
-      ctx.ellipse(0, 12, auraSize, auraSize * 0.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 12, 18, 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // B. High-Res Character Sprite (or styled manhwa token)
-      const pSpr = spritesRef.current.playerHunter;
-      if (pSpr && pSpr.complete) {
+      // Safety Leadership Radius (은은한 안전지휘 반경 링)
+      ctx.strokeStyle = 'rgba(250, 204, 21, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath();
+      ctx.arc(0, 0, 28, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      const pSpr = spritesRef.current.playerYoon;
+      if (pSpr && pSpr.complete && engine.state.characterId === 'yoon') {
+        // High-Quality Yoon Sung-ho Token
         ctx.save();
-        ctx.rotate(walkTilt);
-        ctx.shadowColor = '#38bdf8';
-        ctx.shadowBlur = 18;
         ctx.beginPath();
-        ctx.arc(0, bobY, 20, 0, Math.PI * 2);
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
         ctx.clip();
-        ctx.drawImage(pSpr, -28, -28 + bobY, 56, 56);
+        ctx.drawImage(pSpr, -24, -24, 48, 48);
         ctx.restore();
 
-        // Neon Cyan Energy Ring
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = '#00f0ff';
-        ctx.shadowBlur = 12;
+        // High-Visibility Neon-Lime Outer Ring
+        ctx.strokeStyle = '#84cc16';
+        ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(0, bobY, 20, 0, Math.PI * 2);
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
         ctx.stroke();
       } else {
-        // Fallback procedural tactical hero
+        // Procedural Tactical Safety Officer
         const charColor = CHARACTER_PROFILES[engine.state.characterId].color;
+
+        // Dark tactical work jacket
         ctx.fillStyle = '#1e293b';
         ctx.beginPath();
-        ctx.arc(0, bobY, 17, 0, Math.PI * 2);
+        ctx.arc(0, 0, 18, 0, Math.PI * 2);
         ctx.fill();
 
+        // High-Visibility Safety Vest
         ctx.fillStyle = charColor;
         ctx.beginPath();
-        ctx.arc(0, bobY, 15, -Math.PI / 3, Math.PI / 3);
+        ctx.arc(0, 0, 15, -Math.PI / 3, Math.PI / 3);
         ctx.fill();
 
+        // White Safety Helmet with Green Safety Cross
         ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = charColor;
-        ctx.shadowBlur = 10;
         ctx.beginPath();
-        ctx.arc(0, bobY - 2, 11, 0, Math.PI * 2);
+        ctx.arc(0, -3, 11, 0, Math.PI * 2);
         ctx.fill();
+
+        // Green Safety Cross Emblem (안전제일 십자 마크)
+        ctx.fillStyle = '#16a34a';
+        ctx.fillRect(-2, -7, 4, 8);
+        ctx.fillRect(-4, -5, 8, 4);
       }
 
-      // C. Solo Leveling Demon Eye Flame Trail (푸른 마안 화염 궤적)
+      // Handheld Megaphone / Equipment Directional Pointer
       ctx.save();
-      ctx.strokeStyle = '#38bdf8';
-      ctx.shadowColor = '#00f0ff';
-      ctx.shadowBlur = 18;
-      ctx.lineWidth = 3;
+      ctx.rotate(facingAngle);
+      ctx.fillStyle = '#eab308'; // Industrial yellow megaphone
+      ctx.fillRect(14, -3, 8, 6);
       ctx.beginPath();
-      const eyeX = Math.cos(facingAngle) * 8;
-      const eyeY = Math.sin(facingAngle) * 8 + bobY - 4;
-      ctx.moveTo(eyeX, eyeY);
-      for (let i = 1; i <= 3; i++) {
-        const wave = Math.sin(time / 70 + i) * 3.5;
-        const trailX = eyeX - Math.cos(facingAngle) * (i * 12) + wave;
-        const trailY = eyeY - Math.sin(facingAngle) * (i * 12) + wave;
-        ctx.lineTo(trailX, trailY);
-      }
-      ctx.stroke();
+      ctx.moveTo(22, -6);
+      ctx.lineTo(29, -10);
+      ctx.lineTo(29, 10);
+      ctx.lineTo(22, 6);
+      ctx.closePath();
+      ctx.fill();
       ctx.restore();
 
       ctx.restore();
@@ -1584,14 +1584,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-cutin-speedlines" />
           <div className="survivors-cutin-diagonal-banner">
             <img
-              src="/assets/survivors/solo_shout_cutin.jpg"
-              alt="현장소장 사자후 각성"
+              src="/assets/survivors/director_yoon_shout_cutin.jpg"
+              alt="현장소장 윤성호 작업중지권 사자후"
               className="survivors-cutin-portrait"
             />
             <div className="survivors-cutin-textbox">
-              <span className="survivors-cutin-kicker">⚡ 국가권력급 안전관리 권한 각성 ⚡</span>
-              <h2 className="survivors-cutin-shout">"작업 중지! 전원 멈춰어어엇---!!"</h2>
-              <p className="survivors-cutin-sub">모든 재해 스웜 시공간 정지 · 전리품 하이퍼 마그넷 강제 회수</p>
+              <span className="survivors-cutin-kicker">🚨 중대재해 차단 긴급 작업중지권 발동! 🚨</span>
+              <h2 className="survivors-cutin-shout">"작업 중지! 전원 대피해--!!"</h2>
+              <p className="survivors-cutin-sub">전 구역 위험 설비 강제 정지 · 근로자 긴급 대피 · 안전 데이터 흡수</p>
             </div>
           </div>
         </div>
@@ -1625,21 +1625,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog">
-            {/* SOLO LEVELING GRADE PROTAGONIST BANNER */}
+            {/* DIRECTOR YOON SUNG-HO HERO KEY VISUAL BANNER */}
             <div className="survivors-monarch-hero-banner">
               <img
-                src="/assets/survivors/solo_monarch_hero.jpg"
-                alt="각성 안전관리자"
+                src="/assets/survivors/director_yoon_hero.jpg"
+                alt="현장소장 윤성호"
                 className="survivors-monarch-hero-img"
               />
               <div className="survivors-monarch-hero-content">
-                <span className="survivors-monarch-badge">⚡ S-RANK AWAKENING</span>
-                <h3>국가권력급 안전관리관 프로토콜</h3>
-                <p>"현장의 모든 재해는 나의 푸른 마안과 그림자 안전 군단 앞에 굴복한다."</p>
+                <span className="survivors-monarch-badge">🛡️ ZERO-BREACH COMMANDER</span>
+                <h3>현장 지휘관 윤성호 소장</h3>
+                <p>"30년 현장 경력의 베테랑 · 작업중지권 절대 사수 · 오늘도 무사히"</p>
                 <div className="survivors-monarch-perks">
-                  <span>✦ 푸른 마안 위험 감지</span>
-                  <span>✦ 그림자 군단 자동 요격</span>
-                  <span>✦ 소장 사자후 시공간 정지</span>
+                  <span>✦ 확성기 사자후 제압</span>
+                  <span>✦ 전 구역 작업중지권</span>
+                  <span>✦ 현장 근로자 전원 구출</span>
                 </div>
               </div>
             </div>

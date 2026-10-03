@@ -1546,13 +1546,13 @@
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.08em;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
   padding: 3px 10px;
   border-radius: 999px;
   margin-bottom: 6px;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
 }
 
 .survivors-monarch-hero-content h3 {
