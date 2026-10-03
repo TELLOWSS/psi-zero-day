@@ -378,6 +378,7 @@ export function DefenseGame({
   const [selectedTowerId, setSelectedTowerId] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
   const [portrait, setPortrait] = useState(() => window.matchMedia?.('(orientation: portrait)').matches ?? false);
+  const [forcePortraitPlay, setForcePortraitPlay] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const mapFrame = defenseMapFrame(content.map.id, portrait, content.map.width, content.map.height);
   const visualPath = defenseVisualPath(content.map.id, content.map.path);
@@ -1010,8 +1011,16 @@ export function DefenseGame({
 
     <DefenseConflictOverlay controller={persistence} />
 
-    {portrait && !oneStep.active ? <section className="zb-rotate" role="dialog" aria-modal="true">
-      <div><span aria-hidden="true">↻</span><h2>{t('defense.ui.rotate.title')}</h2><p>{t('defense.ui.rotate.body')}</p><button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button></div>
+    {portrait && !forcePortraitPlay && !oneStep.active ? <section className="zb-rotate" role="dialog" aria-modal="true">
+      <div>
+        <span aria-hidden="true">↻</span>
+        <h2>{t('defense.ui.rotate.title')}</h2>
+        <p>{t('defense.ui.rotate.body')}</p>
+        <div className="zb-rotate-actions">
+          <button type="button" className="zb-continue-portrait" onClick={() => setForcePortraitPlay(true)}>세로 모드로 계속 플레이</button>
+          <button type="button" onClick={() => { void persistence.exitToMain(); }}>{t('defense.ui.exit')}</button>
+        </div>
+      </div>
     </section> : null}
   </main>;
 }

@@ -230,8 +230,10 @@
 .zb-result small{color:var(--zb-accent);letter-spacing:.14em}.zb-result h2,.zb-rotate h2{font-size:30px;margin:5px 0 20px}
 .zb-result dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0}.zb-result dl div{padding:12px;border-radius:8px;background:#1b303d}.zb-result dt{font-size:9px;color:var(--zb-muted)}.zb-result dd{margin:4px 0 0;font-size:18px;font-weight:900}
 .zb-result-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}.zb-result-actions button,.zb-rotate button{min-height:48px;border:1px solid var(--zb-accent);border-radius:8px;background:#eaa63c;color:#17242c;font-weight:900}
+.zb-rotate-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:20px}
+.zb-rotate-actions .zb-continue-portrait{background:var(--zb-accent);color:#17242c;border:1px solid var(--zb-accent);box-shadow:0 4px 14px rgba(255,173,66,.35)}
 .zb-rotate{display:none}.zb-rotate span{font-size:42px;color:var(--zb-accent)}.zb-rotate p{color:var(--zb-muted);line-height:1.6}
-@media (orientation: portrait), (max-width: 600px) {
+@media (orientation: portrait), (max-width: 900px) {
   .zb-shell:not(.zb-prep) {
     height: 100dvh;
     min-height: 0;
