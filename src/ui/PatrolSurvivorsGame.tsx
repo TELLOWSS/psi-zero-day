@@ -76,18 +76,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Screen shake
   const screenShakeRef = useRef<number>(0);
 
-  // Authentic Construction Safety Assets Cache
+  // Authentic Construction Safety Assets Cache (including 2.5D Quarter-view standing maps)
   const spritesRef = useRef<{
     playerYoon?: HTMLImageElement;
     playerPark?: HTMLImageElement;
     playerJung?: HTMLImageElement;
     characters: Record<string, HTMLImageElement>;
+    characterMaps: Record<string, HTMLImageElement>;
     mobWorker?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
   }>({
     characters: {},
+    characterMaps: {},
   });
 
   useEffect(() => {
@@ -103,6 +105,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           spritesRef.current.characters[cId] = img;
         };
       }
+    });
+
+    // Load 2.5D Quarter-View Standing Character Map Arts
+    const mapArtSources: Record<string, string> = {
+      player: '/assets/episode01/characters/player-map.webp',
+      kang_taesik: '/assets/episode01/characters/kang-taesik-map.webp',
+      yoon_sungho: '/assets/episode01/characters/yoon-sungho-map.webp',
+      lee_jaehoon: '/assets/episode01/characters/lee-jaehoon-map.webp',
+      lim_junho: '/assets/episode01/characters/lim-junho-map.webp',
+      // Legacy compatibility keys
+      park: '/assets/episode01/characters/kang-taesik-map.webp',
+      yoon: '/assets/episode01/characters/yoon-sungho-map.webp',
+      jung: '/assets/episode01/characters/player-map.webp',
+    };
+
+    Object.entries(mapArtSources).forEach(([cId, src]) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        spritesRef.current.characterMaps[cId] = img;
+      };
     });
 
     const pImg = new Image();
@@ -803,51 +826,97 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Translate view to camera
       ctx.translate(-camX, -camY);
 
-      // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering Concrete Foundation Slab)
+      // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering 2.5D Foundation Slab)
       const stage = engine.state.stage;
       ctx.fillStyle = stage?.floorColor || '#0f141c';
       ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-      // Concrete slabs & rebar expansion grid (120px slabs)
-      const slabSize = 120;
-      ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
-      ctx.lineWidth = 1.5;
-      for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, WORLD_HEIGHT);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(WORLD_WIDTH, y);
-        ctx.stroke();
-      }
+      // Concrete slabs & 45-degree Isometric Foundation Grid
+      const isoStep = 96;
+      ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.09)';
+      ctx.lineWidth = 1.4;
 
-      // Rebar intersection anchor nodes
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.12)';
-      for (let x = slabSize; x < WORLD_WIDTH; x += slabSize * 2) {
-        for (let y = slabSize; y < WORLD_HEIGHT; y += slabSize * 2) {
-          ctx.fillRect(x - 2, y - 2, 4, 4);
+      // Diagonal family 1: / (slope +1, y - x = c)
+      const minC1 = -WORLD_WIDTH;
+      const maxC1 = WORLD_HEIGHT;
+      for (let c = Math.floor(minC1 / isoStep) * isoStep; c <= maxC1; c += isoStep) {
+        const x1 = Math.max(0, -c);
+        const y1 = x1 + c;
+        const x2 = Math.min(WORLD_WIDTH, WORLD_HEIGHT - c);
+        const y2 = x2 + c;
+        if (x1 < x2) {
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
         }
       }
 
-      // Designated Green/Yellow Safety Walkway (안전통로)
+      // Diagonal family 2: \ (slope -1, y + x = c)
+      const maxC2 = WORLD_WIDTH + WORLD_HEIGHT;
+      for (let c = 0; c <= maxC2; c += isoStep) {
+        const x1 = Math.max(0, c - WORLD_HEIGHT);
+        const y1 = c - x1;
+        const x2 = Math.min(WORLD_WIDTH, c);
+        const y2 = c - x2;
+        if (x1 < x2) {
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+      }
+
+      // 45-degree Diamond Rebar Anchor Plates at diagonal intersections
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.16)';
+      const nodeStep = isoStep * 2;
+      for (let nx = 0; nx < WORLD_WIDTH; nx += nodeStep) {
+        for (let ny = 0; ny < WORLD_HEIGHT; ny += nodeStep) {
+          ctx.beginPath();
+          ctx.moveTo(nx, ny - 3.5);
+          ctx.lineTo(nx + 3.5, ny);
+          ctx.lineTo(nx, ny + 3.5);
+          ctx.lineTo(nx - 3.5, ny);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      // Designated Green/Yellow Safety Walkway (안전통로: 45도 투시감 강화)
       ctx.save();
-      ctx.fillStyle = 'rgba(34, 197, 94, 0.05)';
-      ctx.fillRect(WORLD_WIDTH / 2 - 90, 0, 180, WORLD_HEIGHT);
-      ctx.strokeStyle = 'rgba(34, 197, 94, 0.25)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([12, 10]);
-      ctx.strokeRect(WORLD_WIDTH / 2 - 90, 0, 180, WORLD_HEIGHT);
+      const walkW = 180;
+      const walkX = WORLD_WIDTH / 2 - walkW / 2;
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.06)';
+      ctx.fillRect(walkX, 0, walkW, WORLD_HEIGHT);
+
+      // Walkway 45-degree hazard stripe markings inside
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.14)';
+      ctx.lineWidth = 4;
+      for (let sy = -walkW; sy < WORLD_HEIGHT + walkW; sy += 48) {
+        ctx.beginPath();
+        ctx.moveTo(walkX, sy);
+        ctx.lineTo(walkX + walkW, sy + walkW * 0.7);
+        ctx.stroke();
+      }
+
+      // Walkway borders
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.35)';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([14, 10]);
+      ctx.beginPath();
+      ctx.moveTo(walkX, 0);
+      ctx.lineTo(walkX, WORLD_HEIGHT);
+      ctx.moveTo(walkX + walkW, 0);
+      ctx.lineTo(walkX + walkW, WORLD_HEIGHT);
+      ctx.stroke();
+      ctx.setLineDash([]);
 
       // Safety Walkway Stencil Markings
       ctx.font = 'bold 13px sans-serif';
-      ctx.fillStyle = 'rgba(34, 197, 94, 0.4)';
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.45)';
       ctx.textAlign = 'center';
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
-        ctx.fillText('⛑️ 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
+        ctx.fillText('⛑️ 2.5D 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
       }
       ctx.restore();
       // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
@@ -1105,89 +1174,499 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      // 2. DIRECTIONAL FLASHLIGHT BEAM
+      // 2. DIRECTIONAL 2.5D QUARTER-VIEW FLASHLIGHT CONE (Projected onto 45-degree concrete floor)
       ctx.save();
-      const beamDist = 280;
-      const beamHalfAngle = Math.PI / 4.4;
-      const beamGrad = ctx.createRadialGradient(player.x, player.y, 12, player.x, player.y, beamDist);
-      beamGrad.addColorStop(0, 'rgba(254, 240, 138, 0.42)');
-      beamGrad.addColorStop(0.3, 'rgba(253, 224, 71, 0.18)');
-      beamGrad.addColorStop(0.7, 'rgba(250, 204, 21, 0.06)');
+      ctx.translate(player.x, player.y);
+      ctx.save();
+      ctx.scale(1, 0.58); // 45-degree isometric floor plane compression
+      ctx.rotate(facingAngle);
+      const beamDist = 320;
+      const beamHalfAngle = Math.PI / 4.2;
+      const beamGrad = ctx.createRadialGradient(16, 0, 8, beamDist, 0, 140);
+      beamGrad.addColorStop(0, 'rgba(254, 240, 138, 0.48)');
+      beamGrad.addColorStop(0.35, 'rgba(253, 224, 71, 0.2)');
+      beamGrad.addColorStop(0.75, 'rgba(250, 204, 21, 0.07)');
       beamGrad.addColorStop(1, 'rgba(250, 204, 21, 0)');
 
       ctx.fillStyle = beamGrad;
       ctx.beginPath();
-      ctx.moveTo(player.x, player.y);
-      ctx.arc(player.x, player.y, beamDist, facingAngle - beamHalfAngle, facingAngle + beamHalfAngle);
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, beamDist, -beamHalfAngle, beamHalfAngle);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
+      ctx.restore();
 
-      // 3. FLOODLIGHT / TESLA DOME AURA
+      // 3. FLOODLIGHT / TESLA DOME AURA (2.5D Ground Ellipse Projection)
       if (activePerks.tesla_dome > 0) {
-        // High voltage electric blue tesla dome
         ctx.save();
-        const auraRadius = 220;
-        const grad = ctx.createRadialGradient(player.x, player.y, 10, player.x, player.y, auraRadius);
+        ctx.translate(player.x, player.y);
+        ctx.scale(1, 0.58);
+        const auraRadius = 240;
+        const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
         grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
         grad.addColorStop(0.6, 'rgba(14, 165, 233, 0.2)');
         grad.addColorStop(1, 'rgba(14, 165, 233, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(player.x, player.y, auraRadius, 0, Math.PI * 2);
+        ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.strokeStyle = '#38bdf8';
         ctx.lineWidth = 3;
         ctx.stroke();
         ctx.restore();
       } else if (activePerks.floodlight > 0) {
-        const auraRadius = 90 + activePerks.floodlight * 24;
-        const grad = ctx.createRadialGradient(player.x, player.y, 10, player.x, player.y, auraRadius);
+        ctx.save();
+        ctx.translate(player.x, player.y);
+        ctx.scale(1, 0.58);
+        const auraRadius = 100 + activePerks.floodlight * 28;
+        const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
         grad.addColorStop(0, 'rgba(251, 191, 36, 0.35)');
         grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.16)');
         grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(player.x, player.y, auraRadius, 0, Math.PI * 2);
+        ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
 
-      // 4. RENDER DROPS (PSI Safety Logs / Crystals)
-      for (const drop of drops) {
-        if (drop.isHeal) {
+      // 4. RENDER GROUND PROJECTILES (Mist & Traps lying on slab floor)
+      for (const p of projectiles) {
+        if (p.kind === 'extinguisher') {
           ctx.save();
-          ctx.shadowColor = '#10b981';
-          ctx.shadowBlur = 12;
-          ctx.fillStyle = '#10b981';
-          ctx.fillRect(drop.x - 9, drop.y - 9, 18, 18);
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(drop.x - 7, drop.y - 2.5, 14, 5);
-          ctx.fillRect(drop.x - 2.5, drop.y - 7, 5, 14);
-          ctx.restore();
-        } else {
-          ctx.save();
-          ctx.translate(drop.x, drop.y);
-          const spin = (time / 1000) * 3.5;
-          ctx.rotate(spin);
-          ctx.fillStyle = '#38bdf8';
-          ctx.shadowColor = '#0ea5e9';
-          ctx.shadowBlur = 16;
+          ctx.translate(p.x, p.y);
+          ctx.scale(1, 0.55); // ground spread
+          const mistGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.radius);
+          mistGrad.addColorStop(0, 'rgba(240, 249, 255, 0.85)');
+          mistGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
+          ctx.fillStyle = mistGrad;
           ctx.beginPath();
-          ctx.moveTo(0, -11);
-          ctx.lineTo(8, 0);
-          ctx.lineTo(0, 11);
-          ctx.lineTo(-8, 0);
+          ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (p.kind === 'cone_trap') {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          // Ground shadow
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+          ctx.beginPath();
+          ctx.ellipse(0, 5, 12, 5, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // 2.5D Traffic Cone Standing Billboard
+          ctx.fillStyle = '#ea580c';
+          ctx.beginPath();
+          ctx.moveTo(0, -22);
+          ctx.lineTo(11, 4);
+          ctx.lineTo(-11, 4);
           ctx.closePath();
           ctx.fill();
+          // White reflective retro tape
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.arc(0, 0, 3, 0, Math.PI * 2);
+          ctx.moveTo(-5, -6);
+          ctx.lineTo(5, -6);
+          ctx.lineTo(7, -1);
+          ctx.lineTo(-7, -1);
+          ctx.closePath();
           ctx.fill();
           ctx.restore();
         }
       }
 
-      // 5. RENDER PROJECTILES (Standard & Super Protocol Evolutions)
+      // 5. Y-SORTED ENTITY RENDER PIPELINE (Depth Ordering for Drops, Hazards, and Player)
+      type EntityItem =
+        | { kind: 'drop'; y: number; data: typeof drops[0] }
+        | { kind: 'hazard'; y: number; data: typeof hazards[0] }
+        | { kind: 'player'; y: number };
+
+      const entityList: EntityItem[] = [];
+      for (const d of drops) {
+        entityList.push({ kind: 'drop', y: d.y, data: d });
+      }
+      for (const h of hazards) {
+        entityList.push({ kind: 'hazard', y: h.y, data: h });
+      }
+      entityList.push({ kind: 'player', y: player.y });
+
+      // Sort strictly by ground contact feet y-coordinate (ascending)
+      entityList.sort((a, b) => a.y - b.y);
+
+      for (const item of entityList) {
+        if (item.kind === 'drop') {
+          const drop = item.data;
+          if (drop.isHeal) {
+            ctx.save();
+            // 2.5D Ground Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.beginPath();
+            ctx.ellipse(drop.x, drop.y + 4, 11, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Floating Aid Kit Box
+            const floatY = drop.y - 6 + Math.sin(time / 200) * 3;
+            ctx.shadowColor = '#10b981';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#10b981';
+            ctx.fillRect(drop.x - 9, floatY - 9, 18, 18);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(drop.x - 7, floatY - 2.5, 14, 5);
+            ctx.fillRect(drop.x - 2.5, floatY - 7, 5, 14);
+            ctx.restore();
+          } else {
+            ctx.save();
+            // 2.5D Ground Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+            ctx.beginPath();
+            ctx.ellipse(drop.x, drop.y + 4, 10, 4.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Floating Rotating PSI Crystal
+            const floatY = drop.y - 7 + Math.sin(time / 220) * 3;
+            ctx.translate(drop.x, floatY);
+            const spin = (time / 1000) * 3.5;
+            ctx.rotate(spin);
+            ctx.fillStyle = '#38bdf8';
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 16;
+            ctx.beginPath();
+            ctx.moveTo(0, -11);
+            ctx.lineTo(8, 0);
+            ctx.lineTo(0, 11);
+            ctx.lineTo(-8, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, 0, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        } else if (item.kind === 'hazard') {
+          const h = item.data;
+          ctx.save();
+          ctx.translate(h.x, h.y);
+
+          if (h.type === 'UNHELMETED') {
+            // 2.5D Ground Ellipse Contact Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.beginPath();
+            ctx.ellipse(0, 2, h.radius * 1.05, h.radius * 0.44, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 2.5D Standing Worker Billboard
+            const mSpr = spritesRef.current.mobWorker;
+            const runPhase = time / 80 + h.x;
+            const bob = Math.abs(Math.sin(runPhase)) * 3.5;
+
+            if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
+              const drawW = 42;
+              const drawH = 56;
+              ctx.save();
+              ctx.drawImage(mSpr, -drawW / 2, -drawH + 4 + bob, drawW, drawH);
+              ctx.restore();
+            } else {
+              // High-Quality Procedural 2.5D Unhelmeted Worker
+              // Work Pants & Boots
+              ctx.fillStyle = '#1e293b';
+              ctx.fillRect(-8, -14 + bob, 6, 14);
+              ctx.fillRect(2, -14 - bob + 3, 6, 14);
+              // Work Jacket
+              ctx.fillStyle = '#334155';
+              ctx.fillRect(-10, -34 + bob, 20, 20);
+              // Exposed Head & Dark Hair (No Helmet!)
+              ctx.fillStyle = '#fed7aa';
+              ctx.beginPath();
+              ctx.arc(0, -41 + bob, 7, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#0f172a';
+              ctx.beginPath();
+              ctx.arc(0, -43 + bob, 7.5, Math.PI, 0);
+              ctx.fill();
+            }
+
+            // 3D Billboard Floating Alert Badge
+            const alertPulse = Math.sin(time / 200) > 0;
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillStyle = alertPulse ? '#ef4444' : '#f59e0b';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚠️ 안전모 미착용', 0, -h.radius - 22);
+          } else if (h.type === 'RUNAWAY_CART') {
+            // 2.5D Ground Contact Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.beginPath();
+            ctx.ellipse(0, 8, h.radius * 1.3, h.radius * 0.6, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Dual halogen headlights on concrete floor (2.5D Ground Ellipse Cone)
+            const angle = Math.atan2(player.y - h.y, player.x - h.x);
+            ctx.save();
+            ctx.scale(1, 0.58);
+            ctx.rotate(angle);
+            const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 95, 0, 95);
+            lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.6)');
+            lightGrad.addColorStop(0.5, 'rgba(254, 240, 138, 0.22)');
+            lightGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+            ctx.fillStyle = lightGrad;
+            ctx.beginPath();
+            ctx.moveTo(h.radius, -8);
+            ctx.lineTo(h.radius + 95, -38);
+            ctx.lineTo(h.radius + 95, 38);
+            ctx.lineTo(h.radius, 8);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            // 2.5D Isometric Cubic Transport Cart Body
+            ctx.save();
+            // Side panel (Shadowed)
+            ctx.fillStyle = '#b45309';
+            ctx.fillRect(-h.radius, -h.radius + 2, h.radius * 2, h.radius * 1.4);
+            // Top panel (Lit)
+            ctx.fillStyle = '#f59e0b';
+            ctx.fillRect(-h.radius, -h.radius - 8, h.radius * 2, 12);
+            // Black/Yellow Hazard Stripes on Front
+            ctx.fillStyle = '#18181b';
+            ctx.fillRect(-h.radius + 4, -h.radius + 6, h.radius * 2 - 8, 4);
+            ctx.fillRect(-h.radius + 4, -h.radius + 14, h.radius * 2 - 8, 4);
+
+            // Flashing Yellow Warning Strobe Beacon on top
+            const strobe = Math.sin(time / 120) > 0;
+            ctx.fillStyle = strobe ? '#ef4444' : '#facc15';
+            ctx.beginPath();
+            ctx.arc(0, -h.radius - 12, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Industrial wheels
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(-h.radius + 2, 4, 8, 6);
+            ctx.fillRect(h.radius - 10, 4, 8, 6);
+            ctx.restore();
+          } else if (h.type === 'GAS_LEAK') {
+            // Confined Space Toxic Gas Pocket (Projected onto 45-degree Ground Plane)
+            ctx.save();
+            ctx.scale(1, 0.58);
+            const pulse = (Math.sin(time / 260) + 1) * 0.5;
+            const currentRadius = h.radius + pulse * 5;
+
+            const cloudGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, currentRadius);
+            cloudGrad.addColorStop(0, 'rgba(234, 179, 8, 0.48)');
+            cloudGrad.addColorStop(0.6, 'rgba(34, 197, 94, 0.28)');
+            cloudGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+            ctx.fillStyle = cloudGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Swirling toxic gas eddies
+            for (let i = 0; i < 4; i++) {
+              const swirlAngle = (time / 500) + (i * Math.PI) / 2;
+              const swirlDist = (h.radius * 0.45) * (0.8 + Math.sin(time / 300 + i) * 0.2);
+              const sx = Math.cos(swirlAngle) * swirlDist;
+              const sy = Math.sin(swirlAngle) * swirlDist;
+              ctx.fillStyle = 'rgba(234, 179, 8, 0.22)';
+              ctx.beginPath();
+              ctx.arc(sx, sy, h.radius * 0.4, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+
+            // Industrial Gas Warning Label
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillStyle = '#fef08a';
+            ctx.textAlign = 'center';
+            ctx.fillText('☣ 유독가스 주의', 0, -h.radius * 0.5);
+            ctx.font = '9px sans-serif';
+            ctx.fillStyle = '#86efac';
+            ctx.fillText('CO/H2S: 140PPM', 0, -h.radius * 0.5 + 13);
+          } else if (h.type === 'CRANE_BOSS') {
+            // Giant Tower Crane Rigging Failure Hazard (Boss)
+            // 1. 2.5D Ground Drop Hazard Warning Ring (Oval)
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.75)';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([12, 8]);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, h.radius + 16, (h.radius + 16) * 0.52, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 2. 2.5D Giant Crane Heavy Ground Contact Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, h.radius * 1.35, h.radius * 0.6, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Overhead 3D Suspended Load (Z-axis offset + sway)
+            const swayX = Math.sin(time / 450) * 9;
+            const zOffset = -42 + Math.sin(time / 400) * 8; // Floating in the air!
+
+            // Two high-tension steel wire ropes coming from overhead crane boom
+            ctx.strokeStyle = 'rgba(203, 213, 225, 0.65)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(-16 + swayX, zOffset);
+            ctx.lineTo(-24, -380);
+            ctx.moveTo(16 + swayX, zOffset);
+            ctx.lineTo(24, -380);
+            ctx.stroke();
+
+            // Render authentic high-res rebar bundle / sling choker if available
+            const sImg = spritesRef.current.slingChoker;
+            const rImg = spritesRef.current.rebarBundle;
+
+            ctx.save();
+            ctx.translate(swayX, zOffset);
+
+            if (sImg && sImg.complete && sImg.naturalWidth > 0) {
+              const drawSize = (h.radius + 12) * 2;
+              ctx.drawImage(sImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+            } else if (rImg && rImg.complete && rImg.naturalWidth > 0) {
+              const drawSize = (h.radius + 12) * 2;
+              ctx.drawImage(rImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+            } else {
+              // Procedural Heavy Steel Rebar & Crane Block
+              ctx.fillStyle = '#1e293b';
+              ctx.fillRect(-h.radius + 6, -h.radius + 6, (h.radius - 6) * 2, (h.radius - 6) * 2);
+
+              // Yellow/Black Crane Hazard Stripes
+              ctx.fillStyle = '#eab308';
+              ctx.fillRect(-h.radius + 10, -h.radius + 10, (h.radius - 10) * 2, 6);
+              ctx.fillRect(-h.radius + 10, h.radius - 16, (h.radius - 10) * 2, 6);
+
+              // Heavy Steel Hook
+              ctx.strokeStyle = '#cbd5e1';
+              ctx.lineWidth = 4;
+              ctx.beginPath();
+              ctx.moveTo(0, -h.radius);
+              ctx.lineTo(0, h.radius - 6);
+              ctx.arc(8, h.radius - 6, 8, Math.PI, 0, true);
+              ctx.stroke();
+            }
+            ctx.restore();
+
+            // Boss Hazard Title Tag
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillStyle = '#f87171';
+            ctx.textAlign = 'center';
+            ctx.fillText('🚨 타워크레인 슬링 와이어 붕괴 위험', 0, zOffset - h.radius - 14);
+          }
+
+          // Mini HP Bar with clear contrast
+          const barW = Math.max(32, h.radius * 2.2);
+          const barH = 5;
+          const hpPercent = Math.max(0, h.hp / h.maxHp);
+          const barY = h.type === 'CRANE_BOSS' ? -h.radius - 48 : -h.radius - 8;
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+          ctx.fillRect(-barW / 2, barY, barW, barH);
+          ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
+          ctx.fillRect(-barW / 2, barY, barW * hpPercent, barH);
+          ctx.restore();
+        } else if (item.kind === 'player') {
+          // 7. RENDER PLAYER (2.5D Standing Billboard + Realistic Ground Shadow + Equipment)
+          ctx.save();
+          ctx.translate(player.x, player.y);
+
+          // 2.5D Ground Contact Ellipse Shadow
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
+          ctx.beginPath();
+          ctx.ellipse(0, 2, 22, 9.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // 2.5D Safety Leadership Radius (Subtle Oval Leadership Ring)
+          ctx.strokeStyle = 'rgba(250, 204, 21, 0.35)';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6, 6]);
+          ctx.beginPath();
+          ctx.ellipse(0, 2, 34, 15, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Invincibility flashing feedback
+          if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
+            ctx.globalAlpha = 0.45;
+          }
+
+          // Movement Walk Bob & Tilt
+          const isMoving = inputMag > 0.05;
+          const bobY = isMoving ? Math.abs(Math.sin(time / 85)) * 4.5 : Math.sin(time / 400) * 1.5;
+          const isFacingLeft = Math.cos(facingAngle) < -0.05;
+
+          ctx.save();
+          if (isFacingLeft) {
+            ctx.scale(-1, 1);
+          }
+
+          const charProfile = CHARACTER_PROFILES[engine.state.characterId];
+          const charMapSpr = spritesRef.current.characterMaps[engine.state.characterId]
+            || (engine.state.characterId === 'yoon'
+              ? spritesRef.current.characterMaps['yoon_sungho']
+              : engine.state.characterId === 'park'
+              ? spritesRef.current.characterMaps['kang_taesik']
+              : spritesRef.current.characterMaps['player']);
+
+          if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
+            // High-Resolution 2.5D Quarter-View Standing Character Map Sprite
+            const sprW = 48;
+            const sprH = 74;
+            // Draw grounded with feet touching ground contact shadow (0, 0)
+            ctx.drawImage(charMapSpr, -sprW / 2, -sprH + 4 + bobY, sprW, sprH);
+
+            // Ground Accent Indicator Ring under character's feet
+            ctx.strokeStyle = charProfile?.color || '#84cc16';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.ellipse(0, 2, 16, 7, 0, 0, Math.PI * 2);
+            ctx.stroke();
+          } else {
+            // High-Quality Procedural 2.5D Construction Safety Officer
+            const charColor = charProfile?.color || '#84cc16';
+
+            // Work Boots & Heavy Duty Cargo Pants
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(-9, -16 + bobY, 7, 16);
+            ctx.fillRect(2, -16 - bobY + 4, 7, 16);
+
+            // High-Visibility Safety Vest & Work Jacket
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(-12, -44 + bobY, 24, 28);
+            ctx.fillStyle = charColor;
+            ctx.fillRect(-10, -42 + bobY, 20, 20);
+
+            // Silver 3M Reflective Safety Stripes
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(-10, -32 + bobY, 20, 3.5);
+            ctx.fillRect(-6, -42 + bobY, 3, 10);
+            ctx.fillRect(3, -42 + bobY, 3, 10);
+
+            // White Safety Hard Hat & Green Cross (안전모 & 안전제일 십자)
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(0, -52 + bobY, 9.5, 0, Math.PI * 2);
+            ctx.fill();
+            // Green Cross Emblem
+            ctx.fillStyle = '#16a34a';
+            ctx.fillRect(-2, -55 + bobY, 4, 7);
+            ctx.fillRect(-4.5, -53.5 + bobY, 9, 3);
+          }
+
+          // Handheld Megaphone / Tactical Safety Equipment (Mounted at waist level)
+          ctx.fillStyle = '#eab308'; // Industrial yellow megaphone
+          ctx.fillRect(10, -36 + bobY, 8, 6);
+          ctx.beginPath();
+          ctx.moveTo(18, -39 + bobY);
+          ctx.lineTo(25, -43 + bobY);
+          ctx.lineTo(25, -29 + bobY);
+          ctx.lineTo(18, -33 + bobY);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.restore(); // restore facing flip
+          ctx.restore(); // restore player translate
+        }
+      }
+
+      // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
         if (p.kind === 'shout_shockwave') {
           // Massive expanding golden sonic ring of Site Director's Roar
@@ -1267,16 +1746,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
-        } else if (p.kind === 'extinguisher') {
-          ctx.save();
-          const mistGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-          mistGrad.addColorStop(0, 'rgba(240, 249, 255, 0.85)');
-          mistGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
-          ctx.fillStyle = mistGrad;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
         } else if (p.kind === 'drone_laser') {
           ctx.save();
           ctx.fillStyle = '#06b6d4';
@@ -1286,368 +1755,43 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
-        } else if (p.kind === 'cone_trap') {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.fillStyle = '#ea580c';
-          ctx.beginPath();
-          ctx.moveTo(0, -16);
-          ctx.lineTo(12, 10);
-          ctx.lineTo(-12, 10);
-          ctx.closePath();
-          ctx.fill();
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(-7, -4, 14, 4.5);
-          ctx.restore();
         }
       }
 
-      // 6. RENDER HAZARDS (Authentic Industrial Construction Safety Incidents)
-      for (const h of hazards) {
-        ctx.save();
-        ctx.translate(h.x, h.y);
-
-        if (h.type === 'UNHELMETED') {
-          // Unhelmeted Construction Worker in Danger
-          const mSpr = spritesRef.current.mobWorker;
-          const runPhase = time / 80 + h.x;
-          const legOffset = Math.sin(runPhase) * 4;
-
-          // Ground shadow
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-          ctx.beginPath();
-          ctx.ellipse(0, 12, h.radius * 1.1, h.radius * 0.5, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Walking work boots
-          ctx.fillStyle = '#334155';
-          ctx.fillRect(-6, h.radius - 2 + legOffset, 4, 6);
-          ctx.fillRect(2, h.radius - 2 - legOffset, 4, 6);
-
-          if (mSpr && mSpr.complete) {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-            ctx.clip();
-            ctx.drawImage(mSpr, -h.radius - 2, -h.radius - 2, (h.radius + 2) * 2, (h.radius + 2) * 2);
-            ctx.restore();
-
-            // Hazard border ring
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-            ctx.stroke();
-          } else {
-            // Procedural unhelmeted worker
-            ctx.fillStyle = '#334155'; // Work clothes
-            ctx.beginPath();
-            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Exposed hair (no hard hat!)
-            ctx.fillStyle = '#1e1b4b';
-            ctx.beginPath();
-            ctx.arc(0, -3, 8, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-            ctx.stroke();
-          }
-
-          // Clear Visual Badge: [⚠️ 안전모 미착용]
-          const alertPulse = Math.sin(time / 200) > 0;
-          ctx.font = 'bold 11px sans-serif';
-          ctx.fillStyle = alertPulse ? '#ef4444' : '#f59e0b';
-          ctx.textAlign = 'center';
-          ctx.fillText('⚠️ 안전모 미착용', 0, -h.radius - 10);
-        } else if (h.type === 'RUNAWAY_CART') {
-          // Runaway Construction Heavy Equipment (Mini Dump Truck / Transport Cart)
-          const angle = Math.atan2(player.y - h.y, player.x - h.x);
-          ctx.rotate(angle);
-
-          // Dual halogen headlights on concrete floor
-          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 85, 0, 85);
-          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.55)');
-          lightGrad.addColorStop(0.5, 'rgba(254, 240, 138, 0.2)');
-          lightGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
-          ctx.fillStyle = lightGrad;
-          ctx.beginPath();
-          ctx.moveTo(h.radius, -8);
-          ctx.lineTo(h.radius + 85, -34);
-          ctx.lineTo(h.radius + 85, 34);
-          ctx.lineTo(h.radius, 8);
-          ctx.closePath();
-          ctx.fill();
-
-          // Industrial Yellow Vehicle Body
-          ctx.fillStyle = '#d97706';
-          ctx.fillRect(-h.radius, -h.radius + 4, h.radius * 2, h.radius * 2 - 8);
-
-          // Black/Yellow Hazard Stripes on Hood
-          ctx.fillStyle = '#18181b';
-          ctx.fillRect(-h.radius + 3, -h.radius + 6, h.radius * 2 - 6, 4);
-          ctx.fillRect(-h.radius + 3, h.radius - 10, h.radius * 2 - 6, 4);
-
-          // Cab window & Flashing Beacon
-          ctx.fillStyle = '#38bdf8';
-          ctx.fillRect(-2, -h.radius + 8, 10, h.radius * 2 - 16);
-
-          // Flashing Yellow Warning Strobe
-          const strobe = Math.sin(time / 120) > 0;
-          ctx.fillStyle = strobe ? '#ef4444' : '#facc15';
-          ctx.beginPath();
-          ctx.arc(0, 0, 5, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Heavy industrial wheels
-          ctx.fillStyle = '#0f172a';
-          ctx.fillRect(-h.radius + 2, -h.radius - 2, 7, 4);
-          ctx.fillRect(h.radius - 9, -h.radius - 2, 7, 4);
-          ctx.fillRect(-h.radius + 2, h.radius - 2, 7, 4);
-          ctx.fillRect(h.radius - 9, h.radius - 2, 7, 4);
-        } else if (h.type === 'GAS_LEAK') {
-          // Confined Space Toxic Gas Pocket (H2S / CO / O2 Low)
-          const pulse = (Math.sin(time / 260) + 1) * 0.5;
-          const currentRadius = h.radius + pulse * 4;
-
-          const cloudGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, currentRadius);
-          cloudGrad.addColorStop(0, 'rgba(234, 179, 8, 0.45)');
-          cloudGrad.addColorStop(0.6, 'rgba(34, 197, 94, 0.25)');
-          cloudGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
-
-          ctx.fillStyle = cloudGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Swirling toxic gas eddies
-          for (let i = 0; i < 4; i++) {
-            const swirlAngle = (time / 500) + (i * Math.PI) / 2;
-            const swirlDist = (h.radius * 0.45) * (0.8 + Math.sin(time / 300 + i) * 0.2);
-            const sx = Math.cos(swirlAngle) * swirlDist;
-            const sy = Math.sin(swirlAngle) * swirlDist;
-            ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
-            ctx.beginPath();
-            ctx.arc(sx, sy, h.radius * 0.4, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // Industrial Gas Warning Label
-          ctx.font = 'bold 11px sans-serif';
-          ctx.fillStyle = '#fef08a';
-          ctx.textAlign = 'center';
-          ctx.fillText('☣ 유독가스 주의', 0, -4);
-          ctx.font = '9px sans-serif';
-          ctx.fillStyle = '#86efac';
-          ctx.fillText('CO/H2S: 140PPM', 0, 10);
-        } else if (h.type === 'CRANE_BOSS') {
-          // Giant Tower Crane Rigging Failure Hazard (Boss)
-          // Ground Drop Hazard Red Zone
-          ctx.strokeStyle = 'rgba(239, 68, 68, 0.65)';
-          ctx.lineWidth = 3;
-          ctx.setLineDash([10, 8]);
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius + 14, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          // Crane drop shadow
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-          ctx.beginPath();
-          ctx.ellipse(0, 15, h.radius * 1.3, h.radius * 0.7, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Render authentic high-res rebar bundle / sling choker if available
-          const sImg = spritesRef.current.slingChoker;
-          const rImg = spritesRef.current.rebarBundle;
-          const swayX = Math.sin(time / 450) * 8;
-
-          if (sImg && sImg.complete) {
-            ctx.save();
-            ctx.translate(swayX, 0);
-            const drawSize = (h.radius + 10) * 2;
-            ctx.drawImage(sImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
-            ctx.restore();
-          } else if (rImg && rImg.complete) {
-            ctx.save();
-            ctx.translate(swayX, 0);
-            const drawSize = (h.radius + 10) * 2;
-            ctx.drawImage(rImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
-            ctx.restore();
-          } else {
-            // Heavy steel crane hook block
-            ctx.save();
-            ctx.translate(swayX, 0);
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(-h.radius + 6, -h.radius + 6, (h.radius - 6) * 2, (h.radius - 6) * 2);
-
-            // Yellow/Black Crane Hazard Stripes
-            ctx.fillStyle = '#eab308';
-            ctx.fillRect(-h.radius + 10, -h.radius + 10, (h.radius - 10) * 2, 6);
-            ctx.fillRect(-h.radius + 10, h.radius - 16, (h.radius - 10) * 2, 6);
-
-            // Giant Steel Hook & Rebar Load
-            ctx.strokeStyle = '#cbd5e1';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(0, -h.radius);
-            ctx.lineTo(0, h.radius - 6);
-            ctx.arc(8, h.radius - 6, 8, Math.PI, 0, true);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // Boss Hazard Title Tag
-          ctx.font = 'bold 12px sans-serif';
-          ctx.fillStyle = '#f87171';
-          ctx.textAlign = 'center';
-          ctx.fillText('🚨 타워크레인 슬링 와이어 붕괴 위험', 0, -h.radius - 18);
-        }
-
-        // Mini HP Bar with clear contrast
-        const barW = Math.max(30, h.radius * 2.2);
-        const barH = 5;
-        const hpPercent = Math.max(0, h.hp / h.maxHp);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-        ctx.fillRect(-barW / 2, -h.radius - 8, barW, barH);
-        ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
-        ctx.fillRect(-barW / 2, -h.radius - 8, barW * hpPercent, barH);
-        ctx.restore();
-      }
-
-      // 7. RENDER PLAYER (Safety Director Yoon Sung-ho & Character Profiles)
-      ctx.save();
-      ctx.translate(player.x, player.y);
-
-      // Real-time Tactical Flashlight Cone (어두운 현장을 밝히는 전방 조명 빔)
-      ctx.save();
-      ctx.rotate(facingAngle);
-      const flashGrad = ctx.createRadialGradient(16, 0, 5, 160, 0, 110);
-      flashGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
-      flashGrad.addColorStop(0.4, 'rgba(254, 240, 138, 0.18)');
-      flashGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
-      ctx.fillStyle = flashGrad;
-      ctx.beginPath();
-      ctx.moveTo(16, -6);
-      ctx.lineTo(160, -55);
-      ctx.lineTo(160, 55);
-      ctx.lineTo(16, 6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-      if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
-        ctx.globalAlpha = 0.45;
-      }
-
-      // Ground shadow
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-      ctx.beginPath();
-      ctx.ellipse(0, 12, 18, 8, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Safety Leadership Radius (은은한 안전지휘 반경 링)
-      ctx.strokeStyle = 'rgba(250, 204, 21, 0.3)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6, 6]);
-      ctx.beginPath();
-      ctx.arc(0, 0, 28, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      const charProfile = CHARACTER_PROFILES[engine.state.characterId];
-      const pSpr = spritesRef.current.characters[engine.state.characterId]
-        || (engine.state.characterId === 'yoon'
-          ? spritesRef.current.playerYoon
-          : engine.state.characterId === 'park'
-          ? spritesRef.current.playerPark
-          : spritesRef.current.playerJung);
-
-      if (pSpr && pSpr.complete && pSpr.naturalWidth > 0) {
-        // High-Quality Character Art Token
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(0, 0, 20, 0, Math.PI * 2);
-        ctx.clip();
-        try {
-          ctx.drawImage(pSpr, -24, -24, 48, 48);
-        } catch {
-          // ignore
-        }
-        ctx.restore();
-
-        // High-Visibility Glow Outer Ring
-        ctx.strokeStyle = charProfile?.color || '#84cc16';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(0, 0, 20, 0, Math.PI * 2);
-        ctx.stroke();
-      } else {
-        // Procedural Tactical Safety Officer
-        const charColor = charProfile?.color || '#84cc16';
-
-        // Dark tactical work jacket
-        ctx.fillStyle = '#1e293b';
-        ctx.beginPath();
-        ctx.arc(0, 0, 18, 0, Math.PI * 2);
-        ctx.fill();
-
-        // High-Visibility Safety Vest
-        ctx.fillStyle = charColor;
-        ctx.beginPath();
-        ctx.arc(0, 0, 15, -Math.PI / 3, Math.PI / 3);
-        ctx.fill();
-
-        // White Safety Helmet with Green Safety Cross
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(0, -3, 11, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Green Safety Cross Emblem (안전제일 십자 마크)
-        ctx.fillStyle = '#16a34a';
-        ctx.fillRect(-2, -7, 4, 8);
-        ctx.fillRect(-4, -5, 8, 4);
-      }
-
-      // Handheld Megaphone / Equipment Directional Pointer
-      ctx.save();
-      ctx.rotate(facingAngle);
-      ctx.fillStyle = '#eab308'; // Industrial yellow megaphone
-      ctx.fillRect(14, -3, 8, 6);
-      ctx.beginPath();
-      ctx.moveTo(22, -6);
-      ctx.lineTo(29, -10);
-      ctx.lineTo(29, 10);
-      ctx.lineTo(22, 6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-      ctx.restore();
-
-      // 8. RENDER SAFETY DRONES (Single or Hunter Swarm)
+      // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
       const hasHunter = activePerks.hunter_swarm > 0;
       const droneCount = hasHunter ? 3 : activePerks.safety_drone > 0 ? 1 : 0;
       if (droneCount > 0 && engine.state.droneAngle !== undefined) {
         for (let d = 0; d < droneCount; d++) {
           const a = (engine.state.droneAngle ?? 0) + (d * Math.PI * 2) / droneCount;
           const dist = hasHunter ? 85 : 65;
+          // 2.5D compressed elliptical orbit
           const dX = player.x + Math.cos(a) * dist;
-          const dY = player.y + Math.sin(a) * dist;
+          const groundY = player.y + Math.sin(a) * (dist * 0.55);
+          const flightY = groundY - 32; // Floating at 32px height
 
+          // Ground shadow for floating drone
           ctx.save();
-          ctx.translate(dX, dY);
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+          ctx.beginPath();
+          ctx.ellipse(dX, groundY + 4, 10, 4.5, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // 2.5D Drone Body
+          ctx.translate(dX, flightY);
           ctx.fillStyle = '#0f172a';
           ctx.beginPath();
           ctx.arc(0, 0, 9, 0, Math.PI * 2);
           ctx.fill();
           ctx.strokeStyle = hasHunter ? '#a855f7' : '#38bdf8';
           ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // Propeller rotor glow
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, 14, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         }
