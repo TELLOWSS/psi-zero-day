@@ -194,6 +194,9 @@ try {
         return !card || card.innerText!==text;
       },previousChoice);
       combat.checks.numberedUpgrade = true;
+      // A bulk pickup may have queued another choice. Finish choices on their
+      // own iterations before attempting an intervention behind a modal.
+      continue;
     }
     const shoutButton=combatPage.getByRole('button',{name:'현장소장 사자후 궁극기 발동',exact:true});
     if(!shoutCaptured && await shoutButton.isVisible() && await shoutButton.isEnabled()) {
