@@ -64,6 +64,37 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Screen shake
   const screenShakeRef = useRef<number>(0);
 
+  // High-Resolution Manhwa Game Sprites Cache
+  const spritesRef = useRef<{
+    playerHunter?: HTMLImageElement;
+    mobWorker?: HTMLImageElement;
+    bossCrane?: HTMLImageElement;
+    mapFloor?: HTMLImageElement;
+  }>({});
+  const floorPatternRef = useRef<CanvasPattern | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const pImg = new Image();
+    pImg.src = '/assets/survivors/sprite_player_hunter.jpg';
+    pImg.onload = () => { spritesRef.current.playerHunter = pImg; };
+
+    const mImg = new Image();
+    mImg.src = '/assets/survivors/sprite_mob_worker.jpg';
+    mImg.onload = () => { spritesRef.current.mobWorker = mImg; };
+
+    const bImg = new Image();
+    bImg.src = '/assets/survivors/sprite_boss_crane.jpg';
+    bImg.onload = () => { spritesRef.current.bossCrane = bImg; };
+
+    const fImg = new Image();
+    fImg.src = '/assets/survivors/map_floor_monarch_dungeon.jpg';
+    fImg.onload = () => {
+      spritesRef.current.mapFloor = fImg;
+      floorPatternRef.current = null; // Invalidate to rebuild pattern
+    };
+  }, []);
+
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('yoon');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
@@ -657,25 +688,41 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Translate view to camera
       ctx.translate(-camX, -camY);
 
-      // 1. RENDER WORLD FLOOR & GRID
-      const slabSize = 100;
+      // 1. RENDER WORLD FLOOR & GRID (Solo Leveling High-Res Manhwa Dungeon Tile)
       const stage = engine.state.stage;
-      ctx.fillStyle = stage?.floorColor || '#0c1219';
-      ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      const fSpr = spritesRef.current.mapFloor;
+      if (fSpr && fSpr.complete) {
+        if (!floorPatternRef.current) {
+          floorPatternRef.current = ctx.createPattern(fSpr, 'repeat');
+        }
+        if (floorPatternRef.current) {
+          ctx.save();
+          ctx.fillStyle = floorPatternRef.current;
+          ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+          // Dark ambient atmospheric overlay matching dark manhwa mood
+          ctx.fillStyle = 'rgba(10, 14, 26, 0.38)';
+          ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+          ctx.restore();
+        }
+      } else {
+        const slabSize = 100;
+        ctx.fillStyle = stage?.floorColor || '#0c1219';
+        ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-      ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
-      ctx.lineWidth = 2;
-      for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, WORLD_HEIGHT);
-        ctx.stroke();
-      }
-      for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(WORLD_WIDTH, y);
-        ctx.stroke();
+        ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
+        ctx.lineWidth = 2;
+        for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, WORLD_HEIGHT);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(WORLD_WIDTH, y);
+          ctx.stroke();
+        }
       }
 
       // Safety perimeter boundary
@@ -1072,67 +1119,179 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      // 6. RENDER HAZARDS
+      // 6. RENDER HAZARDS (Solo Leveling High-Quality Sprites & Animations)
       for (const h of hazards) {
         ctx.save();
         ctx.translate(h.x, h.y);
 
         if (h.type === 'UNHELMETED') {
-          ctx.fillStyle = '#334155';
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#ef4444';
-          ctx.lineWidth = 3;
-          ctx.stroke();
+          // Shadow Ghoul Worker
+          const mSpr = spritesRef.current.mobWorker;
+          const stalkBob = Math.sin(time / 100 + h.x) * 2.5;
 
-          ctx.fillStyle = '#0f172a';
+          // Shadow mist aura under feet
+          ctx.fillStyle = 'rgba(88, 28, 135, 0.45)';
           ctx.beginPath();
-          ctx.arc(0, -3, h.radius * 0.58, 0, Math.PI * 2);
+          ctx.ellipse(0, 10, h.radius * 1.1, h.radius * 0.55, 0, 0, Math.PI * 2);
           ctx.fill();
 
+          if (mSpr && mSpr.complete) {
+            ctx.save();
+            ctx.shadowColor = '#a855f7';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(0, stalkBob, h.radius + 3, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.drawImage(mSpr, -h.radius - 5, -h.radius - 5 + stalkBob, (h.radius + 5) * 2, (h.radius + 5) * 2);
+            ctx.restore();
+
+            // Threat boundary ring
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, stalkBob, h.radius + 3, 0, Math.PI * 2);
+            ctx.stroke();
+          } else {
+            ctx.fillStyle = '#334155';
+            ctx.beginPath();
+            ctx.arc(0, stalkBob, h.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+          }
+
+          // Menacing eye glint
           ctx.fillStyle = '#ef4444';
-          ctx.font = '900 13px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText('⚠ NO HELMET', 0, -h.radius - 14);
+          ctx.shadowColor = '#ff0000';
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(-4, stalkBob - 2, 2.5, 0, Math.PI * 2);
+          ctx.arc(4, stalkBob - 2, 2.5, 0, Math.PI * 2);
+          ctx.fill();
         } else if (h.type === 'RUNAWAY_CART') {
-          ctx.fillStyle = '#b45309';
-          ctx.fillRect(-h.radius, -h.radius + 4, h.radius * 2, h.radius * 2 - 8);
-          ctx.strokeStyle = '#fef08a';
-          ctx.lineWidth = 3;
-          ctx.strokeRect(-h.radius + 2, -h.radius + 6, h.radius * 2 - 4, h.radius * 2 - 12);
-        } else if (h.type === 'GAS_LEAK') {
-          ctx.fillStyle = 'rgba(34, 197, 94, 0.7)';
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (h.type === 'CRANE_BOSS') {
-          ctx.fillStyle = '#7f1d1d';
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = '#ef4444';
-          ctx.lineWidth = 5;
-          ctx.stroke();
+          // High-Tech Autonomous Industrial Cart / Dump Truck
+          const rumble = Math.sin(time / 25) * 1.5;
+          const angle = Math.atan2(player.y - h.y, player.x - h.x);
 
-          ctx.fillStyle = '#ffffff';
-          ctx.font = '900 14px sans-serif';
+          ctx.rotate(angle);
+
+          // Headlight cone on ground
+          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 70, 0, 70);
+          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
+          lightGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+          ctx.fillStyle = lightGrad;
+          ctx.beginPath();
+          ctx.moveTo(h.radius, -8);
+          ctx.lineTo(h.radius + 75, -28);
+          ctx.lineTo(h.radius + 75, 28);
+          ctx.lineTo(h.radius, 8);
+          ctx.closePath();
+          ctx.fill();
+
+          // Armored chassis
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(-h.radius, -h.radius + 3 + rumble, h.radius * 2, h.radius * 2 - 6);
+
+          // Hazard chevron stripes
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(-h.radius + 4, -h.radius + 5 + rumble, h.radius * 2 - 8, 4);
+          ctx.fillRect(-h.radius + 4, h.radius - 9 + rumble, h.radius * 2 - 8, 4);
+
+          // Engine core
+          ctx.fillStyle = '#ef4444';
+          ctx.shadowColor = '#ef4444';
+          ctx.shadowBlur = 10;
+          ctx.fillRect(-6, -4 + rumble, 12, 8);
+
+          // Wheels
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(-h.radius + 2, -h.radius, 8, 3);
+          ctx.fillRect(h.radius - 10, -h.radius, 8, 3);
+          ctx.fillRect(-h.radius + 2, h.radius - 3, 8, 3);
+          ctx.fillRect(h.radius - 10, h.radius - 3, 8, 3);
+        } else if (h.type === 'GAS_LEAK') {
+          // Volumetric Animated Toxic Cloud
+          const pulse = (Math.sin(time / 140) + 1) * 0.5;
+          const cloudGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, h.radius + pulse * 6);
+          cloudGrad.addColorStop(0, 'rgba(34, 197, 94, 0.85)');
+          cloudGrad.addColorStop(0.5, 'rgba(16, 185, 129, 0.45)');
+          cloudGrad.addColorStop(1, 'rgba(5, 150, 105, 0)');
+
+          ctx.fillStyle = cloudGrad;
+          ctx.beginPath();
+          ctx.arc(0, 0, h.radius + pulse * 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Toxic skull symbol
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillStyle = '#f0fdf4';
+          ctx.shadowColor = '#22c55e';
+          ctx.shadowBlur = 10;
           ctx.textAlign = 'center';
-          ctx.fillText('🚨 TOWER CRANE', 0, 5);
+          ctx.textBaseline = 'middle';
+          ctx.fillText('☣', 0, 0);
+        } else if (h.type === 'CRANE_BOSS') {
+          // Colossal Calamity Crane Titan (Boss)
+          const bSpr = spritesRef.current.bossCrane;
+          const stomp = Math.sin(time / 70) * 3;
+
+          // Shadow pool
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+          ctx.beginPath();
+          ctx.ellipse(0, 24, h.radius * 1.4, h.radius * 0.75, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (bSpr && bSpr.complete) {
+            ctx.save();
+            ctx.shadowColor = '#dc2626';
+            ctx.shadowBlur = 28;
+            ctx.beginPath();
+            ctx.arc(0, stomp, h.radius + 14, 0, Math.PI * 2);
+            ctx.clip();
+            const drawSize = (h.radius + 18) * 2;
+            ctx.drawImage(bSpr, -drawSize / 2, -drawSize / 2 + stomp, drawSize, drawSize);
+            ctx.restore();
+
+            // Demonic Crimson Rune Ring
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#f87171';
+            ctx.shadowBlur = 18;
+            ctx.beginPath();
+            ctx.arc(0, stomp, h.radius + 14, 0, Math.PI * 2);
+            ctx.stroke();
+          } else {
+            ctx.fillStyle = '#7f1d1d';
+            ctx.beginPath();
+            ctx.arc(0, stomp, h.radius + 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+          }
+
+          // Boss Title Tag
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillStyle = '#fef08a';
+          ctx.shadowColor = '#ef4444';
+          ctx.shadowBlur = 10;
+          ctx.textAlign = 'center';
+          ctx.fillText('👹 CALAMITY BOSS', 0, -h.radius - 22);
         }
 
-        // Mini HP Bar
-        const barW = Math.max(28, h.radius * 2.2);
+        // Mini HP Bar with stylized shield styling
+        const barW = Math.max(30, h.radius * 2.2);
         const barH = 5.5;
         const hpPercent = Math.max(0, h.hp / h.maxHp);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-        ctx.fillRect(-barW / 2, -h.radius - 8, barW, barH);
+        ctx.fillRect(-barW / 2, -h.radius - 12, barW, barH);
         ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
-        ctx.fillRect(-barW / 2, -h.radius - 8, barW * hpPercent, barH);
+        ctx.fillRect(-barW / 2, -h.radius - 12, barW * hpPercent, barH);
         ctx.restore();
       }
 
-      // 7. RENDER PLAYER (With Character Visual Styling)
+      // 7. RENDER PLAYER (Solo Leveling High-Quality Sprite & Animation)
       ctx.save();
       ctx.translate(player.x, player.y);
 
@@ -1140,32 +1299,79 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.globalAlpha = 0.45;
       }
 
-      // Drop shadow
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      const walkCycle = time / 100;
+      const isMoving = inputMag > 0.05;
+      const bobY = isMoving ? Math.sin(walkCycle) * 3 : Math.sin(time / 450) * 1.5;
+      const walkTilt = isMoving ? Math.sin(walkCycle * 0.5) * 0.08 : 0;
+
+      // A. Shadow Monarch Aura pool (발 밑 심연 오라)
+      const auraPulse = (Math.sin(time / 180) + 1) * 0.5;
+      const auraSize = 22 + auraPulse * 4;
+      ctx.fillStyle = 'rgba(76, 29, 149, 0.45)';
       ctx.beginPath();
-      ctx.ellipse(0, 10, 16, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 12, auraSize, auraSize * 0.5, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Body
-      const charColor = CHARACTER_PROFILES[engine.state.characterId].color;
-      ctx.fillStyle = '#1e293b';
-      ctx.beginPath();
-      ctx.arc(0, 0, 17, 0, Math.PI * 2);
-      ctx.fill();
+      // B. High-Res Character Sprite (or styled manhwa token)
+      const pSpr = spritesRef.current.playerHunter;
+      if (pSpr && pSpr.complete) {
+        ctx.save();
+        ctx.rotate(walkTilt);
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.arc(0, bobY, 20, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(pSpr, -28, -28 + bobY, 56, 56);
+        ctx.restore();
 
-      // High-Vis Safety Vest
-      ctx.fillStyle = charColor;
-      ctx.beginPath();
-      ctx.arc(0, 0, 15, -Math.PI / 3, Math.PI / 3);
-      ctx.fill();
+        // Neon Cyan Energy Ring
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#00f0ff';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(0, bobY, 20, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        // Fallback procedural tactical hero
+        const charColor = CHARACTER_PROFILES[engine.state.characterId].color;
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(0, bobY, 17, 0, Math.PI * 2);
+        ctx.fill();
 
-      // Hard hat helmet
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = charColor;
-      ctx.shadowBlur = 10;
+        ctx.fillStyle = charColor;
+        ctx.beginPath();
+        ctx.arc(0, bobY, 15, -Math.PI / 3, Math.PI / 3);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = charColor;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(0, bobY - 2, 11, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // C. Solo Leveling Demon Eye Flame Trail (푸른 마안 화염 궤적)
+      ctx.save();
+      ctx.strokeStyle = '#38bdf8';
+      ctx.shadowColor = '#00f0ff';
+      ctx.shadowBlur = 18;
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(0, -2, 11, 0, Math.PI * 2);
-      ctx.fill();
+      const eyeX = Math.cos(facingAngle) * 8;
+      const eyeY = Math.sin(facingAngle) * 8 + bobY - 4;
+      ctx.moveTo(eyeX, eyeY);
+      for (let i = 1; i <= 3; i++) {
+        const wave = Math.sin(time / 70 + i) * 3.5;
+        const trailX = eyeX - Math.cos(facingAngle) * (i * 12) + wave;
+        const trailY = eyeY - Math.sin(facingAngle) * (i * 12) + wave;
+        ctx.lineTo(trailX, trailY);
+      }
+      ctx.stroke();
+      ctx.restore();
 
       ctx.restore();
 
