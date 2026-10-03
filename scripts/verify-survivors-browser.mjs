@@ -17,7 +17,7 @@ try {
   browser = await playwright.chromium.launch({headless: true, ...(process.env.CHROME_BIN ? {executablePath: process.env.CHROME_BIN} : {})});
   report.status = 'RUNNING';
   for (const viewport of [{width:360,height:800},{width:390,height:844},{width:844,height:390},{width:1440,height:900}]) {
-    const page = await browser.newPage({viewport, hasTouch: true});
+    const page = await browser.newPage({viewport, hasTouch: true, ...(viewport.width === 390 ? {recordVideo:{dir:out,size:viewport}} : {})});
     const row = {viewport, status: 'RUNNING', checks: {}, errors: []};
     report.rows.push(row);
     page.on('pageerror', e => row.errors.push(String(e)));
@@ -73,7 +73,9 @@ try {
       const colors = new Set(); for(let i=0;i<data.length;i+=Math.max(4,Math.floor(data.length/400/4)*4)) colors.add(`${data[i]},${data[i+1]},${data[i+2]}`);
       return colors.size > 4;
     });
-    await page.keyboard.down('d'); await page.waitForTimeout(800); await page.keyboard.up('d');
+    for (const key of viewport.width === 390 ? ['d','a','w','s'] : ['d']) {
+      await page.keyboard.down(key); await page.waitForTimeout(800); await page.keyboard.up(key);
+    }
     await page.keyboard.press('p');
     row.checks.pause = await page.getByRole('button',{name:'순찰 재개',exact:true}).isVisible();
     await page.getByRole('button',{name:'순찰 재개',exact:true}).click();
@@ -105,7 +107,9 @@ try {
     row.checks.errorOverlay = await page.locator('vite-error-overlay').count() === 0;
     row.checks.fullGrowthUltimateResult = 'NOT_RUN';
     row.status = Object.values(row.checks).some(v => v === false) || row.errors.length ? 'FAIL' : 'SMOKE_PASS';
+    const motionVideo = page.video();
     await page.close();
+    if (motionVideo) await motionVideo.saveAs(path.join(out,'390x844-grounded-motion.webm'));
   }
   const processPage = await browser.newPage({viewport:{width:1440,height:900}});
   await processPage.addInitScript(() => localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`))));
