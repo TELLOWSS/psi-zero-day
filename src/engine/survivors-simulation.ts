@@ -13,5 +13,6 @@ export function sweptCircle(ax: number, ay: number, bx: number, by: number, tx: 
   const dx = bx - ax, dy = by - ay;
   const lengthSq = dx * dx + dy * dy;
   const t = lengthSq > 0 ? Math.max(0, Math.min(1, ((tx - ax) * dx + (ty - ay) * dy) / lengthSq)) : 0;
-  return Math.hypot(ax + t * dx - tx, ay + t * dy - ty) <= radius;
+  const offsetX = ax + t * dx - tx, offsetY = ay + t * dy - ty;
+  return offsetX * offsetX + offsetY * offsetY <= radius * radius;
 }
