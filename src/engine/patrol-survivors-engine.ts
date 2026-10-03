@@ -766,10 +766,19 @@ export class SurvivorsEngine {
       this.state.psiCredits += Math.round(this.state.score / 10);
       this.checkStarChallenges();
     }
+    // Keep the intervention visible before spending its bulk XP. Terminal
+    // outcomes take precedence; a queued upgrade must never replace a result.
+    const outcome = this.state.phase as SurvivorsGameState['phase'];
+    if (outcome === 'victory' || outcome === 'defeat') {
+      this.state.directorShoutTimer = 0;
+      this.state.directorCutinPhase = 'none';
+    } else if (this.state.phase === 'playing' && this.state.directorShoutTimer === 0 && this.state.currentExp >= this.state.nextLevelExp) {
+      this.addExp(0);
+    }
   }
 
   triggerDirectorShout(): boolean {
-    if (this.state.phase !== 'playing') return false;
+    if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return false;
     if (this.state.ultimateCharge < this.state.maxUltimateCharge) {
       return false;
     }
@@ -1768,7 +1777,7 @@ export class SurvivorsEngine {
 
   addExp(amount: number) {
     this.state.currentExp += amount;
-    if (this.state.phase === 'levelup') return; // Queue bulk pickups behind the current choice.
+    if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return; // Preserve bulk XP until the intervention/current choice finishes.
     if (this.state.currentExp >= this.state.nextLevelExp) {
       this.state.currentExp -= this.state.nextLevelExp;
       this.state.level += 1;

@@ -60,16 +60,23 @@ try {
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-manual.png`)});
     await page.getByRole('button', {name:'설명서 닫기', exact:true}).click();
     await page.getByRole('button', {name:/야간 긴급 순찰/}).click({timeout:30000});
+    await page.locator('.survivors-ready-launch').waitFor({state:'visible'});
+    row.checks.startBeforeScroll = await page.getByRole('button',{name:'순찰 시작하기',exact:true}).evaluate(button => {const r=button.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight;});
+    row.checks.missionBrief = await page.locator('.survivors-mission-brief li').count() === 3;
+    await page.locator('.survivors-stage-select-section > summary').click();
     await page.locator('.survivors-stage-card').first().waitFor({state:'visible'});
     row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
     row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
     row.checks.characterHero = await page.locator('.survivors-monarch-hero-img').evaluate(async image=>{await image.decode();return image.naturalWidth>0;});
+    await page.locator('.survivors-stage-select-section > summary').click();
+    await page.getByText('보급 아이템과 장비 성장 알아보기',{exact:true}).click();
     await page.locator('.survivors-supply-guide summary').click();
     row.checks.supplyGuide = await page.locator('.survivors-supply-cards article').count() === 5 && await page.locator('.survivors-supply-cards').innerText().then(text=>['기록 회수 비콘','무전 배터리','긴급 통제 키트','현장 회복 보급','안전 유도등'].every(name=>text.includes(name)));
     row.checks.evolutionRecipes = await page.locator('.survivors-supply-guide li').count() === 5;
     row.checks.itemArt = await page.evaluate(async()=>{const image=new Image();image.src='/assets/survivors/pickup-atlas-v2.webp';await image.decode();return image.naturalWidth>=1700&&image.naturalHeight>=850&&Math.abs(image.naturalWidth/image.naturalHeight-2)<.01;});
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-supplies.png`)});
     await page.locator('.survivors-supply-guide summary').click();
+    await page.locator('.survivors-char-select-section > summary').click();
     await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-watch-selection.png`)});
     row.checks.watchOfficer = await page.locator('.survivors-char-card.is-selected').innerText().then(t => t.includes('안전감시단'));
@@ -130,7 +137,9 @@ try {
   for (const stageNumber of ['02','03','07','10']) {
     await processPage.goto(report.baseUrl,{waitUntil:'networkidle'});
     await processPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+    await processPage.locator('.survivors-stage-select-section > summary').click();
     await processPage.locator('.survivors-stage-card').filter({hasText:`STAGE ${stageNumber}`}).click();
+    await processPage.locator('.survivors-char-select-section > summary').click();
     await processPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     await processPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
     await processPage.waitForTimeout(2000);
@@ -161,7 +170,9 @@ try {
   });
   await combatPage.goto(report.baseUrl,{waitUntil:'networkidle'});
   await combatPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+  await combatPage.locator('.survivors-stage-select-section > summary').click();
   await combatPage.locator('.survivors-stage-card').filter({hasText:'STAGE 10'}).click();
+  await combatPage.locator('.survivors-char-select-section > summary').click();
   await combatPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
   await combatPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
   const combat = {status:'RUNNING',scope:'Stage10 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
@@ -183,6 +194,9 @@ try {
         return !card || card.innerText!==text;
       },previousChoice);
       combat.checks.numberedUpgrade = true;
+      // A bulk pickup may have queued another choice. Finish choices on their
+      // own iterations before attempting an intervention behind a modal.
+      continue;
     }
     const shoutButton=combatPage.getByRole('button',{name:'현장소장 사자후 궁극기 발동',exact:true});
     if(!shoutCaptured && await shoutButton.isVisible() && await shoutButton.isEnabled()) {
