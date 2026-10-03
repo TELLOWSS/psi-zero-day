@@ -70,6 +70,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const spritesRef = useRef<{
     playerYoon?: HTMLImageElement;
     mobWorker?: HTMLImageElement;
+    slingChoker?: HTMLImageElement;
+    rebarBundle?: HTMLImageElement;
+    fanDuct?: HTMLImageElement;
   }>({});
 
   useEffect(() => {
@@ -81,6 +84,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const mImg = new Image();
     mImg.src = '/assets/survivors/sprite_mob_worker.webp';
     mImg.onload = () => { spritesRef.current.mobWorker = mImg; };
+
+    const sImg = new Image();
+    sImg.src = '/assets/episode01/scene-elements/suspended-load-round-sling-choker.webp';
+    sImg.onload = () => { spritesRef.current.slingChoker = sImg; };
+
+    const rImg = new Image();
+    rImg.src = '/assets/episode01/scene-elements/rebar-lifting-bundle.webp';
+    rImg.onload = () => { spritesRef.current.rebarBundle = rImg; };
+
+    const fImg = new Image();
+    fImg.src = '/assets/episode01/scene-elements/ventilation-fan-duct.webp';
+    fImg.onload = () => { spritesRef.current.fanDuct = fImg; };
   }, []);
 
   // Meta Progression (Stored in LocalStorage)
@@ -1240,12 +1255,19 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (h.type === 'UNHELMETED') {
           // Unhelmeted Construction Worker in Danger
           const mSpr = spritesRef.current.mobWorker;
+          const runPhase = time / 80 + h.x;
+          const legOffset = Math.sin(runPhase) * 4;
 
           // Ground shadow
           ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
           ctx.beginPath();
-          ctx.ellipse(0, 10, h.radius * 1.1, h.radius * 0.5, 0, 0, Math.PI * 2);
+          ctx.ellipse(0, 12, h.radius * 1.1, h.radius * 0.5, 0, 0, Math.PI * 2);
           ctx.fill();
+
+          // Walking work boots
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(-6, h.radius - 2 + legOffset, 4, 6);
+          ctx.fillRect(2, h.radius - 2 - legOffset, 4, 6);
 
           if (mSpr && mSpr.complete) {
             ctx.save();
@@ -1293,14 +1315,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.rotate(angle);
 
           // Dual halogen headlights on concrete floor
-          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 80, 0, 80);
-          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.5)');
+          const lightGrad = ctx.createRadialGradient(h.radius, 0, 5, h.radius + 85, 0, 85);
+          lightGrad.addColorStop(0, 'rgba(254, 240, 138, 0.55)');
+          lightGrad.addColorStop(0.5, 'rgba(254, 240, 138, 0.2)');
           lightGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
           ctx.fillStyle = lightGrad;
           ctx.beginPath();
           ctx.moveTo(h.radius, -8);
-          ctx.lineTo(h.radius + 80, -32);
-          ctx.lineTo(h.radius + 80, 32);
+          ctx.lineTo(h.radius + 85, -34);
+          ctx.lineTo(h.radius + 85, 34);
           ctx.lineTo(h.radius, 8);
           ctx.closePath();
           ctx.fill();
@@ -1346,6 +1369,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.arc(0, 0, currentRadius, 0, Math.PI * 2);
           ctx.fill();
 
+          // Swirling toxic gas eddies
+          for (let i = 0; i < 4; i++) {
+            const swirlAngle = (time / 500) + (i * Math.PI) / 2;
+            const swirlDist = (h.radius * 0.45) * (0.8 + Math.sin(time / 300 + i) * 0.2);
+            const sx = Math.cos(swirlAngle) * swirlDist;
+            const sy = Math.sin(swirlAngle) * swirlDist;
+            ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
+            ctx.beginPath();
+            ctx.arc(sx, sy, h.radius * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
           // Industrial Gas Warning Label
           ctx.font = 'bold 11px sans-serif';
           ctx.fillStyle = '#fef08a';
@@ -1353,7 +1388,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fillText('☣ 유독가스 주의', 0, -4);
           ctx.font = '9px sans-serif';
           ctx.fillStyle = '#86efac';
-          ctx.fillText('밀폐구역 환기필요', 0, 10);
+          ctx.fillText('CO/H2S: 140PPM', 0, 10);
         } else if (h.type === 'CRANE_BOSS') {
           // Giant Tower Crane Rigging Failure Hazard (Boss)
           // Ground Drop Hazard Red Zone
@@ -1361,7 +1396,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.lineWidth = 3;
           ctx.setLineDash([10, 8]);
           ctx.beginPath();
-          ctx.arc(0, 0, h.radius + 12, 0, Math.PI * 2);
+          ctx.arc(0, 0, h.radius + 14, 0, Math.PI * 2);
           ctx.stroke();
           ctx.setLineDash([]);
 
@@ -1371,29 +1406,51 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.ellipse(0, 15, h.radius * 1.3, h.radius * 0.7, 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // Heavy steel crane hook block
-          ctx.fillStyle = '#1e293b';
-          ctx.fillRect(-h.radius + 6, -h.radius + 6, (h.radius - 6) * 2, (h.radius - 6) * 2);
+          // Render authentic high-res rebar bundle / sling choker if available
+          const sImg = spritesRef.current.slingChoker;
+          const rImg = spritesRef.current.rebarBundle;
+          const swayX = Math.sin(time / 450) * 8;
 
-          // Yellow/Black Crane Hazard Stripes
-          ctx.fillStyle = '#eab308';
-          ctx.fillRect(-h.radius + 10, -h.radius + 10, (h.radius - 10) * 2, 6);
-          ctx.fillRect(-h.radius + 10, h.radius - 16, (h.radius - 10) * 2, 6);
+          if (sImg && sImg.complete) {
+            ctx.save();
+            ctx.translate(swayX, 0);
+            const drawSize = (h.radius + 10) * 2;
+            ctx.drawImage(sImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+            ctx.restore();
+          } else if (rImg && rImg.complete) {
+            ctx.save();
+            ctx.translate(swayX, 0);
+            const drawSize = (h.radius + 10) * 2;
+            ctx.drawImage(rImg, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
+            ctx.restore();
+          } else {
+            // Heavy steel crane hook block
+            ctx.save();
+            ctx.translate(swayX, 0);
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(-h.radius + 6, -h.radius + 6, (h.radius - 6) * 2, (h.radius - 6) * 2);
 
-          // Giant Steel Hook & Rebar Load
-          ctx.strokeStyle = '#cbd5e1';
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.moveTo(0, -h.radius);
-          ctx.lineTo(0, h.radius - 6);
-          ctx.arc(8, h.radius - 6, 8, Math.PI, 0, true);
-          ctx.stroke();
+            // Yellow/Black Crane Hazard Stripes
+            ctx.fillStyle = '#eab308';
+            ctx.fillRect(-h.radius + 10, -h.radius + 10, (h.radius - 10) * 2, 6);
+            ctx.fillRect(-h.radius + 10, h.radius - 16, (h.radius - 10) * 2, 6);
+
+            // Giant Steel Hook & Rebar Load
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(0, -h.radius);
+            ctx.lineTo(0, h.radius - 6);
+            ctx.arc(8, h.radius - 6, 8, Math.PI, 0, true);
+            ctx.stroke();
+            ctx.restore();
+          }
 
           // Boss Hazard Title Tag
           ctx.font = 'bold 12px sans-serif';
           ctx.fillStyle = '#f87171';
           ctx.textAlign = 'center';
-          ctx.fillText('🚨 타워크레인 양중 와이어 파망 위험', 0, -h.radius - 18);
+          ctx.fillText('🚨 타워크레인 슬링 와이어 붕괴 위험', 0, -h.radius - 18);
         }
 
         // Mini HP Bar with clear contrast
@@ -1410,6 +1467,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // 7. RENDER PLAYER (Safety Director Yoon Sung-ho & Character Profiles)
       ctx.save();
       ctx.translate(player.x, player.y);
+
+      // Real-time Tactical Flashlight Cone (어두운 현장을 밝히는 전방 조명 빔)
+      ctx.save();
+      ctx.rotate(facingAngle);
+      const flashGrad = ctx.createRadialGradient(16, 0, 5, 160, 0, 110);
+      flashGrad.addColorStop(0, 'rgba(254, 240, 138, 0.45)');
+      flashGrad.addColorStop(0.4, 'rgba(254, 240, 138, 0.18)');
+      flashGrad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+      ctx.fillStyle = flashGrad;
+      ctx.beginPath();
+      ctx.moveTo(16, -6);
+      ctx.lineTo(160, -55);
+      ctx.lineTo(160, 55);
+      ctx.lineTo(16, 6);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
 
       if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
         ctx.globalAlpha = 0.45;
