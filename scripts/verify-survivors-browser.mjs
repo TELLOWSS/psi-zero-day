@@ -181,6 +181,8 @@ try {
       combat.checks.shoutArt = await cutin.locator('img').evaluate(image=>image.naturalWidth>=1600 && image.src.includes('shout-v3'));
       combat.checks.shoutText = await cutin.locator('h2').innerText().then(text=>text==='작업중지 돌아버려 씨~!!!');
       combat.checks.shoutFits = await cutin.locator('.survivors-cutin-diagonal-banner').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0 && r.right<=innerWidth && r.top>=0 && r.bottom<=innerHeight;});
+      // Review the settled cut-in, not the first transparent animation frame.
+      await combatPage.waitForTimeout(300);
       await combatPage.screenshot({path:path.join(out,'390x844-real-director-shout.png')});
       shoutCaptured=true;
     }
