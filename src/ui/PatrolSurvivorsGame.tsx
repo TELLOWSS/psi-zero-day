@@ -1,3 +1,4 @@
+import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
 import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
@@ -7,7 +8,7 @@ import combatText from '../../content/localization/survivors-combat-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
 import { TACTICAL_ITEMS } from '../engine/survivors-items';
 import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
-import { DIRECTOR_SHOUT_VOICE } from '../app/survivors-audio-manifest';
+import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivors-audio-manifest';
 import { STAGE_IDS, parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -348,10 +349,24 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
+  const scoreStateRef = useRef<PatrolScoreState>('foundation');
+  const scoreHoldRef = useRef(0);
+  const scoreCheckRef = useRef(0);
+  const playScore = (name: string, seconds?: number) => {
+    const asset = SURVIVORS_SCORE_CANDIDATES.find(a => a.id === `patrol.${name}`);
+    if (asset) void audioRef.current.auditionScore(asset, seconds);
+  };
   const sfxTimesRef = useRef(new Map<string, number>());
   const rewardedRef = useRef(new WeakSet<SurvivorsEngine>());
   useEffect(() => () => audioRef.current.dispose(), []);
   useEffect(() => { audioRef.current.setMuted(audioMuted); if (phase === 'paused' || phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase]);
+
+  useEffect(() => {
+    if (audioMuted || phase === 'ready' || phase === 'paused' || phase === 'levelup') { audioRef.current.stopScore(); return; }
+    if (phase === 'playing') { scoreHoldRef.current = 0; playScore(scoreStateRef.current); }
+    if (phase === 'victory') playScore('success', 12);
+    if (phase === 'defeat') playScore('failure', 10);
+  }, [phase, audioMuted]);
 
   // Development synth; final orchestral assets are a separate production gate.
   const playSfx = useCallback((type: 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
@@ -359,6 +374,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     try {
       const ctx = audioRef.current.getContext();
       if (!ctx) return;
+      if (type === 'shout' || type === 'evolution') {
+        scoreHoldRef.current = performance.now() + (type === 'shout' ? 4500 : 3500);
+        playScore(type === 'shout' ? 'intervention' : 'evolution', type === 'shout' ? 4 : 3);
+      }
       const now = ctx.currentTime;
       const interval = type === 'pickup' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
       const previous = sfxTimesRef.current.get(type);
@@ -578,6 +597,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const startGame = () => {
     if (!engineRef.current) return;
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
+    scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;
     engineRef.current.start();
     setPhase('playing');
     lastTimeRef.current = performance.now();
@@ -847,6 +867,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Update engine physics if playing
       if (engine.state.phase === 'playing') {
         engine.update(dt, { moveX, moveY });
+        if (time >= scoreCheckRef.current && performance.now() >= scoreHoldRef.current) {
+          scoreCheckRef.current = time + 1000;
+          const live = engine.state.hazards.filter(h => h.hp > 0);
+          const next = selectPatrolScore(engine.state.player.hp / engine.state.player.maxHp, live.length, live.some(h => h.isStageBoss), scoreStateRef.current);
+          scoreStateRef.current = next;
+          playScore(next);
+        }
         const events = engine.drainAudioEvents();
         const audible = new Set<string>();
         for (const event of events) {

@@ -15,3 +15,14 @@ export const DIRECTOR_SHOUT_VOICE: SurvivorsAudioAsset = {
  rights: 'Director-provided recording; game excerpt use authorized in session 2026-10-03',
  sha256: '71f69cb73be9d5908d08d5d35e2473b9381374944fb0133c8e0fb4f5f74b68d7',
 };
+
+// Runtime audition authorized by Director. Technical pass does not imply listening/production lock.
+export const SURVIVORS_SCORE_CANDIDATES: readonly SurvivorsAudioAsset[] = [
+ {id: 'patrol.foundation', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M02_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '874fb3543abd976d15a41bfee9317858d25d1e6d51b586e08f0047e2fbfb17ed'},
+ {id: 'patrol.pressure', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M03_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '6d75bb2f95c25f0cd80d92c50066d6d3203f42dcbc16aff5b3416cc6bbea11cd'},
+ {id: 'patrol.heavy_risk', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M04_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '6ea354c3f3e602f7b3129892c3910d903081128847cd4ea21ed90a8f56f95473'},
+ {id: 'patrol.intervention', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M05_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: 'ed49d000428594aa83ea702a9e5e5b6339f9b5711458d30a28f74ba046253185'},
+ {id: 'patrol.evolution', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M06_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '0ecf1a5ead2ffb66483a185d067cefc9c0e9d2244d68944f2dfd19f0db4eff8a'},
+ {id: 'patrol.success', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M07_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '3fdf62cfb79e6499435bb7c2152ed87fa0d8ca728f26dcadf2024f6ece431c02'},
+ {id: 'patrol.failure', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M08_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '007187bae9583f70d7690411ebee29f3f42250dfc8ce3496872153804168fb59'},
+];

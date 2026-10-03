@@ -9,6 +9,57 @@ export class SurvivorsSessionAudio {
   private buffers = new Map<string, Promise<AudioBuffer>>();
   readonly failures: string[] = [];
   private epoch = 0;
+  private scoreId: string | null = null;
+  private scoreEpoch = 0;
+  private scoreTimer: ReturnType<typeof setTimeout> | null = null;
+  private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
+  /** Explicit Director-authorized audition path; never promotes candidate approval. */
+  async auditionScore(asset: SurvivorsAudioAsset, cueSeconds?: number): Promise<boolean> {
+    if (asset.bus !== 'Music' || asset.status !== 'CANDIDATE' || !asset.uri || !asset.rights || !asset.sha256) return false;
+    if (this.scoreId === asset.id && asset.loop) return true;
+    const ctx = this.ensureBuses(); if (!ctx) return false;
+    this.scoreId = asset.id;
+    const token = ++this.scoreEpoch;
+    if (this.scoreTimer) clearTimeout(this.scoreTimer);
+    this.scoreTimer = null;
+    try {
+      const buffer = await this.decodeAsset(ctx, asset);
+      if (token !== this.scoreEpoch || this.muted || ctx !== this.context) return false;
+      const now = ctx.currentTime;
+      for (const [source, gain] of this.scoreNodes) {
+        gain.gain.cancelScheduledValues(now); gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.4);
+        try { source.stop(now + 0.45); } catch { /* ended */ }
+      }
+      const duration = Math.min(buffer.duration, cueSeconds ?? buffer.duration);
+      const overlap = Math.min(0.8, duration / 4);
+      const schedule = (start: number) => {
+        if (token !== this.scoreEpoch) return;
+        const source = ctx.createBufferSource(), gain = ctx.createGain();
+        source.buffer = buffer; source.connect(gain); gain.connect(this.buses!.Music);
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(0.55, start + overlap);
+        gain.gain.setValueAtTime(0.55, start + duration - overlap);
+        gain.gain.linearRampToValueAtTime(0, start + duration);
+        this.scoreNodes.set(source, gain);
+        source.onended = () => { this.scoreNodes.delete(source); source.disconnect(); gain.disconnect(); };
+        source.start(start, 0, duration);
+        if (asset.loop) {
+          const next = start + duration - overlap;
+          this.scoreTimer = setTimeout(() => schedule(Math.max(ctx.currentTime + 0.03, next)), Math.max(0, (next - ctx.currentTime - 1) * 1000));
+        }
+      };
+      schedule(now + 0.05);
+      return true;
+    } catch (err) { if (token === this.scoreEpoch) this.scoreId = null; this.buffers.delete(asset.uri); this.fail(String(err)); return false; }
+  }
+  stopScore() {
+    this.scoreEpoch++; this.scoreId = null;
+    if (this.scoreTimer) clearTimeout(this.scoreTimer);
+    this.scoreTimer = null;
+    for (const [source, gain] of this.scoreNodes) { source.onended = null; try { source.stop(); } catch { /* ended */ } source.disconnect(); gain.disconnect(); }
+    this.scoreNodes.clear();
+  }
   private priorities = new Map<AudioScheduledSourceNode, number>();
   private spatialNodes = new Map<AudioScheduledSourceNode, AudioNode[]>();
   private voices = new Map<AudioScheduledSourceNode, AudioNode>();
@@ -132,6 +183,7 @@ export class SurvivorsSessionAudio {
     source.disconnect(); gain.disconnect();
   }
   silence() {
+    this.stopScore();
     this.epoch++;
     for (const source of this.voices.keys()) this.release(source, true);
     if (this.buses && this.context) { const gain = this.buses.Music.gain; gain.cancelScheduledValues(this.context.currentTime); gain.value = 1; }
