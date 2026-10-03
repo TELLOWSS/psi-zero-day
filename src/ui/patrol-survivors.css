@@ -1951,3 +1951,9 @@
   .survivors-boss-alert-text { padding: 5px 9px; }
   .survivors-boss-alert-text small { display: block; font-size: 10px; }
 }
+
+.survivors-story-brief { padding: 12px 16px; border-left: 3px solid #38bdf8; background: rgba(15,23,42,.7); border-radius: 8px; text-align: left; }
+.survivors-story-brief strong { color: #7dd3fc; font-size: 13px; }
+.survivors-story-brief p, .survivors-story-result { color: #e2e8f0; font-size: 14px; line-height: 1.65; }
+.survivors-story-brief small { display: block; color: #a7f3d0; line-height: 1.6; }
+.survivors-story-result { margin: 14px 0; padding: 12px; border-left: 3px solid #34d399; background: rgba(16,185,129,.08); }

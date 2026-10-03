@@ -1,3 +1,4 @@
+import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
 import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
@@ -402,7 +403,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 야간 순찰 (슈팅)</span>
-          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 10 구역 해금</strong>
+          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong>
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 제로 브리치 (디펜스)</span>

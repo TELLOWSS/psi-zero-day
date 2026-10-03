@@ -71,8 +71,8 @@ try {
     row.checks.missionBrief = await page.locator('.survivors-mission-brief li').count() === 3;
     await page.locator('.survivors-stage-select-section > summary').click();
     await page.locator('.survivors-stage-card').first().waitFor({state:'visible'});
-    row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
-    row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
+    row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 20;
+    row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 20') && !t.includes('STAGE 010'));
     row.checks.characterHero = await page.locator('.survivors-monarch-hero-img').evaluate(async image=>{await image.decode();return image.naturalWidth>0;});
     await page.locator('.survivors-stage-select-section > summary').click();
     await page.getByText('보급 아이템과 장비 성장 알아보기',{exact:true}).click();
@@ -140,8 +140,8 @@ try {
     if (motionVideo) await motionVideo.saveAs(path.join(out,'390x844-grounded-motion.webm'));
   }
   const processPage = await browser.newPage({viewport:{width:1440,height:900}});
-  await processPage.addInitScript(() => localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`))));
-  for (const stageNumber of ['02','03','07','10']) {
+  await processPage.addInitScript(() => localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:20},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`))));
+  for (const stageNumber of ['02','03','07','10','11','20']) {
     await processPage.goto(report.baseUrl,{waitUntil:'networkidle'});
     await processPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
     await processPage.locator('.survivors-stage-select-section > summary').click();
@@ -150,17 +150,17 @@ try {
     await processPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     await processPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
     await processPage.waitForTimeout(2000);
-    const ground=await processPage.evaluate(async n=>{const paths=n==='02'?'excavation':n==='07'?'demolition':n==='03'?'concrete':'industrial';const im=new Image();im.src='/assets/survivors/'+paths+'-ground-v3.webp';await im.decode();return {width:im.naturalWidth,height:im.naturalHeight};},stageNumber);
+    const ground=await processPage.evaluate(async n=>{const paths=n==='02'?'excavation':n==='07'?'demolition':['03','11'].includes(n)?'concrete':'industrial';const im=new Image();im.src='/assets/survivors/'+paths+'-ground-v3.webp';await im.decode();return {width:im.naturalWidth,height:im.naturalHeight};},stageNumber);
     if(ground.width<1500 || ground.height<1000) throw new Error('Process ground lacks native high-resolution source');
     await processPage.screenshot({path:path.join(out,`stage-${stageNumber}-saved-unlock-fixture.png`)});
   }
   await processPage.close();
-  report.processCaptureScope = 'Saved unlock fixture for Stage02/03/07/10 display, not natural unlock progression.';
+  report.processCaptureScope = 'Saved unlock fixture for Stage02/03/07/10/11/20 display, not natural unlock progression.';
   // Exercise production simulation without injecting live engine state. Saved
   // unlock/R&D fixtures only make late-stage readability inspection repeatable.
   const combatPage = await browser.newPage({viewport:{width:390,height:844}});
   await combatPage.addInitScript(() => {
-    localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
+    localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:20},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
     localStorage.setItem('psi.survivors.rd_upgrades', JSON.stringify({vitality:5,mobility:5,intelligence:5,firstAid:1,reroll:3}));
     window.__psiCombatWarnings = {cart:false,fall:false,supply:false,pickup:false};
     window.__psiSupplyKinds=new Set();
@@ -178,11 +178,11 @@ try {
   await combatPage.goto(report.baseUrl,{waitUntil:'networkidle'});
   await combatPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
   await combatPage.locator('.survivors-stage-select-section > summary').click();
-  await combatPage.locator('.survivors-stage-card').filter({hasText:'STAGE 10'}).click();
+  await combatPage.locator('.survivors-stage-card').filter({hasText:'STAGE 20'}).click();
   await combatPage.locator('.survivors-char-select-section > summary').click();
   await combatPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
   await combatPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
-  const combat = {status:'RUNNING',scope:'Stage10 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
+  const combat = {status:'RUNNING',scope:'Stage20 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
   report.combat = combat;
   combatPage.on('pageerror',e=>combat.errors.push(String(e)));
   let bossCaptured=false, shoutCaptured=false;

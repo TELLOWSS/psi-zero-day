@@ -25,3 +25,10 @@ export function validUpgrades(v: unknown): PermanentUpgrades {
   return { vitality: safeNumber(data.vitality, 5), mobility: safeNumber(data.mobility, 5),
     intelligence: safeNumber(data.intelligence, 5), firstAid: safeNumber(data.firstAid, 1), reroll: safeNumber(data.reroll, 3) };
 }
+
+/** Recover the next mission for saves written before new stages existed. */
+export function stagesFromSave(unlocked: unknown, stars: unknown): PatrolStageId[] {
+  const ids=new Set(validStages(unlocked));const completed=validStars(stars);
+  STAGE_IDS.forEach((id,i)=>{if(completed[id]?.[0] && STAGE_IDS[i+1]) ids.add(STAGE_IDS[i+1]!);});
+  return STAGE_IDS.filter(id=>ids.has(id));
+}
