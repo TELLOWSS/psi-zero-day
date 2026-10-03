@@ -56,7 +56,10 @@ export interface SafetyDrop {
   y: number;
   exp: number;
   isHeal?: boolean;
+  itemKind?: TacticalItemId;
 }
+
+export type TacticalItemId = 'record_beacon' | 'radio_battery' | 'control_kit';
 
 export type BaseWeaponId =
   | 'radio_boost'
@@ -206,6 +209,8 @@ export interface SurvivorsGameState {
   permanentUpgrades: PermanentUpgrades;
   hasRevived: boolean;
   rerollsLeft: number;
+  controlKit?: { charges: number; remaining: number };
+  itemNotice?: { id: string; kind: TacticalItemId; remaining: number };
 
   // Screen Juice & Impact Feedback
   hitStopTimer?: number;
@@ -278,4 +283,3 @@ export interface PatrolStageDefinition {
   bossType: HazardType;
   bossHp: number;
 }
-

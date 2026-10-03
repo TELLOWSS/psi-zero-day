@@ -51,6 +51,13 @@ try {
     await page.locator('.survivors-stage-card').first().waitFor({state:'visible'});
     row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
     row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
+    row.checks.characterHero = await page.locator('.survivors-monarch-hero-img').evaluate(async image=>{await image.decode();return image.naturalWidth>0;});
+    await page.locator('.survivors-supply-guide summary').click();
+    row.checks.supplyGuide = await page.locator('.survivors-supply-cards article').count() === 3;
+    row.checks.evolutionRecipes = await page.locator('.survivors-supply-guide li').count() === 5;
+    row.checks.itemArt = await page.evaluate(async()=>{const image=new Image();image.src='/assets/survivors/tactical-items-v1.webp';await image.decode();return image.naturalWidth===1254&&image.naturalHeight===1254;});
+    await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-supplies.png`)});
+    await page.locator('.survivors-supply-guide summary').click();
     await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     row.checks.watchOfficer = await page.locator('.survivors-char-card.is-selected').innerText().then(t => t.includes('안전감시단'));
     await page.getByRole('button', {name:'순찰 시작하기', exact:true}).click();
@@ -108,11 +115,15 @@ try {
   await combatPage.addInitScript(() => {
     localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
     localStorage.setItem('psi.survivors.rd_upgrades', JSON.stringify({vitality:5,mobility:5,intelligence:5,firstAid:1,reroll:3}));
-    window.__psiCombatWarnings = {cart:false,fall:false};
+    window.__psiCombatWarnings = {cart:false,fall:false,supply:false,pickup:false};
     const original=CanvasRenderingContext2D.prototype.fillText;
     CanvasRenderingContext2D.prototype.fillText=function(text,...args) {
       if (text === '진행 방향 · 옆으로 회피') window.__psiCombatWarnings.cart=true;
       if (text === '낙하 예고 · 원 밖으로') window.__psiCombatWarnings.fall=true;
+      if (['기록 회수 비콘','무전 배터리','긴급 통제 키트'].includes(text)) {
+        if(args[1]===23) window.__psiCombatWarnings.supply=true;
+        if(args[1]===-100) window.__psiCombatWarnings.pickup=true;
+      }
       return original.call(this,text,...args);
     };
   });
@@ -129,8 +140,13 @@ try {
     const perk=combatPage.locator('.survivors-perk-card').first();
     if(await perk.isVisible()) {
       combat.checks.upgradeButton = await perk.getAttribute('aria-keyshortcuts') === '1' && await perk.evaluate(e=>e.tagName==='BUTTON');
+      const previousChoice = await perk.innerText();
       await combatPage.keyboard.press('1');
-      await perk.waitFor({state:'hidden'});
+      // Bulk experience can immediately show the next level instead of closing.
+      await combatPage.waitForFunction(text=>{
+        const card=document.querySelector('.survivors-perk-card');
+        return !card || card.innerText!==text;
+      },previousChoice);
       combat.checks.numberedUpgrade = true;
     }
     const key=['d','s','a','w'][tick%4];
@@ -142,10 +158,10 @@ try {
       await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat-boss.png')});
     }
     const warnings=await combatPage.evaluate(()=>window.__psiCombatWarnings);
-    if(warnings.cart && warnings.fall && bossCaptured) break;
+    if(warnings.cart && warnings.fall && warnings.supply && warnings.pickup && bossCaptured) break;
     if(await combatPage.getByRole('heading',{name:'🚨 현장 중대위험 발생',exact:true}).isVisible()) break;
   }
-  Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall})));
+  Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
   combat.checks.bossSeen=bossCaptured;
   combat.status=Object.values(combat.checks).some(v=>v===false)||combat.errors.length?'FAIL':'PASS';
   await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat.png')});

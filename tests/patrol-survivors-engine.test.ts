@@ -214,8 +214,8 @@ describe('Patrol Survivors Engine', () => {
     engine.state.activePerks.radio_boost = 5;
     engine.state.activePerks.magnet_beacon = 1;
 
-    // Trigger level up via addExp
-    engine.addExp(100);
+    // Supply exactly one level: bulk XP now queues additional choices.
+    engine.addExp(engine.state.nextLevelExp);
 
     expect(engine.state.phase).toBe('levelup');
     const evoOption = engine.state.perkOptions.find(p => p.id === 'satellite_broadcast');

@@ -1,5 +1,8 @@
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
+import itemText from '../../content/localization/survivors-items-ko.json';
+import { TACTICAL_ITEMS } from '../engine/survivors-items';
+import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
 import { DIRECTOR_SHOUT_VOICE } from '../app/survivors-audio-manifest';
 import { STAGE_IDS, parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
@@ -111,6 +114,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     mobWorker?: HTMLImageElement;
     groundV2?: HTMLImageElement;
     riskAtlasV2?: HTMLImageElement;
+    itemsAtlas?: HTMLImageElement;
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
@@ -185,6 +189,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     groundAtlasV2.onload = () => { spritesRef.current.groundAtlasV2 = groundAtlasV2; };
     const atlas = new Image();
     atlas.onload = () => { spritesRef.current.riskAtlasV2 = atlas; };
+    const items = new Image();
+    items.onload = () => { spritesRef.current.itemsAtlas = items; };
+    items.src = '/assets/survivors/tactical-items-v1.webp';
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
     const sImg = new Image();
@@ -563,6 +570,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
     const meta = PERK_CATALOG[perkId];
     engine.applyPerk(perkId);
+    setLevel(engine.state.level);
+    setExp(engine.state.currentExp);
+    setNextExp(engine.state.nextLevelExp);
+    if (engine.state.phase === 'levelup') setPerkOptions([...engine.state.perkOptions]);
 
     if (meta.category === 'evolution') {
       playSfx('evolution');
@@ -598,7 +609,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented || (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [role="dialog"]'))) return;
-      if (e.target instanceof HTMLElement && e.target.closest('button') && (e.code === 'Space' || e.code === 'Enter')) return;
+      if (e.target instanceof HTMLElement && e.target.closest('button, summary') && (e.code === 'Space' || e.code === 'Enter')) return;
       const engine = engineRef.current;
       if (engine?.state.phase === 'levelup' && !e.repeat) {
         const match = /^(?:Digit|Numpad)([123])$/.exec(e.code);
@@ -607,7 +618,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (e.code === 'KeyR') { e.preventDefault(); inputActionsRef.current.reroll(); return; }
       }
       keysRef.current[e.code] = true;
-      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+      if (engine?.state.phase === 'playing' && ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
       if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) {
         const engine = engineRef.current;
         if (engine && (engine.state.phase === 'playing' || engine.state.phase === 'paused')) {
@@ -1532,7 +1543,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       for (const item of entityList) {
         if (item.kind === 'drop') {
           const drop = item.data;
-          if (drop.isHeal) {
+          if (drop.itemKind) {
+            const meta = TACTICAL_ITEMS[drop.itemKind];
+            const atlas = spritesRef.current.itemsAtlas;
+            ctx.save();
+            ctx.translate(drop.x, drop.y);
+            ctx.strokeStyle = meta.color; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.ellipse(0, 4, 22, 9, 0, 0, Math.PI * 2); ctx.stroke();
+            if (atlas?.naturalWidth) {
+              const w=atlas.naturalWidth/2,h=atlas.naturalHeight/2;
+              ctx.drawImage(atlas, meta.atlasCell%2*w, Math.floor(meta.atlasCell/2)*h,w,h,-26,-43+Math.sin(time/220)*3,52,52);
+            }
+            ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle=meta.color;
+            ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);
+            ctx.restore();
+          } else if (drop.isHeal) {
             ctx.save();
             // 2.5D Ground Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
@@ -1856,6 +1882,19 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // 7. RENDER PLAYER (2.5D Standing Billboard + Realistic Ground Shadow + Equipment)
           ctx.save();
           ctx.translate(player.x, player.y);
+          const kit = engine.state.controlKit;
+          if (kit && kit.remaining > 0 && kit.charges > 0) {
+            ctx.strokeStyle='#4ade80';ctx.lineWidth=3;ctx.setLineDash([8,5]);
+            ctx.beginPath();ctx.ellipse(0,4,36,16,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+            ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#86efac';
+            ctx.fillText(`${itemText.kit_status} ${kit.charges} · ${Math.ceil(kit.remaining)}s`,0,38);
+          }
+          const notice = engine.state.itemNotice;
+          if (notice) {
+            ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.fillStyle=TACTICAL_ITEMS[notice.kind].color;
+            ctx.strokeStyle='#111827';ctx.lineWidth=4;
+            ctx.strokeText(itemText[notice.kind].name,0,-100);ctx.fillText(itemText[notice.kind].name,0,-100);
+          }
 
           // 2.5D Ground Contact Ellipse Shadow
           ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
@@ -2450,6 +2489,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             })()}
 
             <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
+            <SurvivorsSupplyGuide />
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
               야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
@@ -2773,6 +2813,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
+            <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button
                 type="button"

@@ -32,6 +32,18 @@ it('selects numbered upgrades, ignores held-key repeats and installs the global 
     expect(engine!.state.phase).toBe('levelup');expect(engine!.state.activePerks.steel_boots).toBe(0);
     act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'Digit1',cancelable:true})));
     expect(engine!.state.activePerks.steel_boots).toBe(1);expect(engine!.state.phase).toBe('playing');
+    vi.mocked(engine!.update).mockImplementationOnce(()=>engine!.addExp(100));
+    tick();
+    let queuedChoices=0;
+    while(engine!.state.phase==='levelup' && queuedChoices<8) {
+      const beforeLevel=engine!.state.level;
+      const card=host.querySelector<HTMLButtonElement>('button.survivors-perk-card')!;
+      expect(card).toBeTruthy();
+      expect(card.textContent).toContain(`LV ${engine!.state.perkOptions[0]!.level}`);
+      act(()=>card.click());queuedChoices++;
+      if(engine!.state.phase==='levelup') expect(engine!.state.level).toBe(beforeLevel+1);
+    }
+    expect(queuedChoices).toBeGreaterThan(1);expect(engine!.state.phase).toBe('playing');
     tick();tick();
     expect(events.mock.calls.filter(([name])=>name==='keydown')).toHaveLength(1);
   } finally {act(()=>root.unmount());host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
