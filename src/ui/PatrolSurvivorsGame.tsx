@@ -1,3 +1,4 @@
+import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
@@ -159,6 +160,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const img = new Image();
       img.src = src;
       img.onload = () => {
+        registerSpriteBounds(img);
         spritesRef.current.characterMaps[cId] = img;
       };
     });
@@ -184,7 +186,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     ground.src = '/assets/survivors/stage-01-ground-v2.webp';
     const workerV2 = new Image();
     workerV2.src = '/assets/survivors/worker-korean-v2.webp';
-    workerV2.onload = () => { spritesRef.current.workerV2 = workerV2; };
+    workerV2.onload = () => { registerSpriteBounds(workerV2); spritesRef.current.workerV2 = workerV2; };
     const excavationGround = new Image();
     excavationGround.src = '/assets/survivors/excavation-ground-v3.webp';
     excavationGround.onload = () => { spritesRef.current.excavationGround = excavationGround; };
@@ -772,6 +774,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let motions = new SpriteMotionTracker();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let prevNeutralized = 0;
@@ -789,6 +792,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (!engine) return;
       if (previousEngine !== engine) {
         previousEngine = engine;
+        motions = new SpriteMotionTracker();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -973,6 +977,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
+      const playerPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
 
       // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
@@ -1141,7 +1146,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.save(); ctx.globalAlpha = Math.min(1, worker.remaining);
         const workerArt = spritesRef.current.workerV2;
         if (workerArt?.naturalWidth) {
-          ctx.drawImage(workerArt, worker.x - 24, worker.y - 68, 48, 72);
+          ctx.save(); ctx.translate(worker.x, worker.y);
+          drawGroundedSprite(ctx, workerArt, 72, motions.sample(worker, worker.x, worker.y, engine.state.gameTime));
+          ctx.restore();
         } else {
           ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
         }
@@ -1626,6 +1633,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
         } else if (item.kind === 'hazard') {
           const h = item.data;
+          const hazardPose = motions.sample(h, h.x, h.y, engine.state.gameTime, h.hp);
           ctx.save();
           ctx.translate(h.x, h.y);
 
@@ -1665,19 +1673,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // 2.5D Ground Ellipse Contact Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
             ctx.beginPath();
-            ctx.ellipse(0, 2, h.radius * 1.05, h.radius * 0.44, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 1, 12, 4.5, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // 2.5D Standing Worker Billboard
             const mSpr = spritesRef.current.mobWorker;
-            const runPhase = time / 80 + h.x;
-            const bob = Math.abs(Math.sin(runPhase)) * 3.5;
+            const bob = 0;
 
             const workerArt = spritesRef.current.workerV2;
             if (workerArt?.naturalWidth) {
               ctx.save();
-              if (player.x < h.x) ctx.scale(-1, 1);
-              ctx.drawImage(workerArt, -24, -68 + bob * 0.4, 48, 72);
+              drawGroundedSprite(ctx, workerArt, 72, hazardPose);
               ctx.restore();
             } else if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
               const drawW = 42;
@@ -1715,7 +1721,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // 2.5D Ground Contact Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
             ctx.beginPath();
-            ctx.ellipse(0, 8, h.radius * 1.3, h.radius * 0.6, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 1, h.radius * 1.15, h.radius * 0.42, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // Dual halogen headlights on concrete floor (2.5D Ground Ellipse Cone)
@@ -1740,7 +1746,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const cartAtlas = spritesRef.current.riskAtlasV2;
             if (cartAtlas?.naturalWidth) {
               const width = Math.max(58, h.radius * 2.6);
-              ctx.drawImage(cartAtlas, 650, 90, 620, 580, -width / 2, -width * 0.82, width, width * 0.94);
+              ctx.save();
+              ctx.scale(hazardPose.facing, 1);
+              ctx.transform(1, 0, hazardPose.lean * .5, 1 - hazardPose.reaction * .02, 0, 0);
+              ctx.drawImage(cartAtlas, 650, 90, 620, 580, -width / 2, -width * .94, width, width * .94);
+              ctx.restore();
             } else {
             // 2.5D Isometric Cubic Transport Cart Body
             ctx.save();
@@ -1918,7 +1928,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // 2.5D Ground Contact Ellipse Shadow
           ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
           ctx.beginPath();
-          ctx.ellipse(0, 2, 22, 9.5, 0, 0, Math.PI * 2);
+          ctx.ellipse(0, 1, 12, 4.5, 0, 0, Math.PI * 2);
           ctx.fill();
 
           // 2.5D Safety Leadership Radius (Subtle Oval Leadership Ring)
@@ -1936,14 +1946,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
 
           // Movement Walk Bob & Tilt
-          const isMoving = inputMag > 0.05;
-          const bobY = isMoving ? Math.abs(Math.sin(time / 85)) * 4.5 : Math.sin(time / 400) * 1.5;
-          const isFacingLeft = Math.cos(facingAngle) < -0.05;
-
+          const bobY = 0;
           ctx.save();
-          if (isFacingLeft) {
-            ctx.scale(-1, 1);
-          }
 
           const charProfile = CHARACTER_PROFILES[engine.state.characterId];
           const charMapSpr = spritesRef.current.characterMaps[engine.state.characterId]
@@ -1955,10 +1959,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
           if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
             // High-Resolution 2.5D Quarter-View Standing Character Map Sprite
-            const sprW = 48;
             const sprH = 74;
             // Draw grounded with feet touching ground contact shadow (0, 0)
-            ctx.drawImage(charMapSpr, -sprW / 2, -sprH + 4 + bobY, sprW, sprH);
+            drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
 
             // Ground Accent Indicator Ring under character's feet
             ctx.strokeStyle = charProfile?.color || '#84cc16';
