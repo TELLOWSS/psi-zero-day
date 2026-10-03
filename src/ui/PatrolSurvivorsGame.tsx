@@ -1,3 +1,4 @@
+import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
 import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
@@ -1205,6 +1206,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       ctx.restore();
 
+      if (stage.id === 'stage_01') drawStageSpatialContext(ctx, engine.state.interactiveHazards);
+
       // Resolved workers leave the risk area along the safety corridor.
       for (const worker of engine.state.resolvedWorkers ?? []) {
         const sprite = spritesRef.current.mobWorker;
@@ -1661,7 +1664,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
           if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
             ctx.beginPath();
             ctx.ellipse(0, 1, 12, 4.5, 0, 0, Math.PI * 2);
             ctx.fill();
@@ -2383,14 +2386,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* BOSS ALERT BANNER */}
-      {bossAlert && directorCutinPhase === 'none' && (
+      {phase === 'playing' && bossAlert && directorCutinPhase === 'none' && (
         <div className="survivors-boss-alert" role="alert">
-          <span className="survivors-hazard-stripe" />
           <div className="survivors-boss-alert-text">
-            <strong>⚠️ EMERGENCY: {bossAlert} 출현! ⚠️</strong>
-            <small>작업반경을 통제하고 정지 지시를 전달하세요!</small>
+            <strong>{combatText.boss_alert_title} · {bossAlert}</strong>
+            <small>{PATROL_STAGES[selectedStage].bossType === 'RUNAWAY_CART' ? combatText.boss_cart_guidance : PATROL_STAGES[selectedStage].bossType === 'CRANE_BOSS' ? combatText.boss_crane_guidance : PATROL_STAGES[selectedStage].bossType === 'FALLING_DEBRIS' ? combatText.boss_fall_guidance : combatText.boss_gas_guidance}</small>
           </div>
-          <span className="survivors-hazard-stripe" />
         </div>
       )}
 

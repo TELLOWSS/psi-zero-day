@@ -1,3 +1,5 @@
+import { ACTOR_RIGS } from './survivors-animation-rig';
+import { soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; pose: SpritePose }
 export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
@@ -65,7 +67,13 @@ export function drawGroundedSprite(ctx: CanvasRenderingContext2D, image: HTMLIma
   if(drawRiggedActor(ctx,image,height,pose))return;
   const source = bounds.get(image) ?? { x: 0, y: 0, width: image.naturalWidth, height: image.naturalHeight };
   const width = height * source.width / source.height;
-  ctx.save(); ctx.scale(pose.facing, 1); ctx.transform(1, 0, pose.lean + pose.action*.025, pose.scaleY-pose.action*.008, 0, 0);
+  ctx.save(); ctx.scale(pose.facing, 1);
+  const rig = ACTOR_RIGS[image.src.split('/').pop() ?? ''];
+  if (rig) for (const leg of [rig.left, rig.right]) {
+    const foot = soleContact(leg.sole, source.width / source.height, height, { x: 0, y: 0 });
+    ctx.fillStyle = 'rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(foot.x, foot.y + 1, 5 * height / 74, 2 * height / 74, 0, 0, Math.PI * 2);ctx.fill();
+  }
+  ctx.transform(1, 0, pose.lean + pose.action*.025, pose.scaleY-pose.action*.008, 0, 0);
   ctx.drawImage(image, source.x, source.y, source.width, source.height, -width / 2, -height, width, height);
   ctx.restore();
 }

@@ -23,6 +23,12 @@ try {
     page.on('pageerror', e => row.errors.push(String(e)));
     await page.addInitScript(() => {
       window.__psiRigFrames = new Set();
+      window.__psiLandmarks = new Set();
+      const paintText = CanvasRenderingContext2D.prototype.fillText;
+      CanvasRenderingContext2D.prototype.fillText = function(text,...args) {
+        if(['북측 투광 구역','남측 투광 구역','서측 인화물 보관','동측 인화물 보관'].includes(text)) window.__psiLandmarks.add(text);
+        return paintText.call(this,text,...args);
+      };
       window.__psiPropFrames = new Set();
       const draw = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function(source,...args) {
@@ -86,6 +92,7 @@ try {
     row.checks.suppliedShoutDecoded = true;
     await page.waitForFunction(() => window.__psiDecodedAudioDurations.some(d => d > 77 && d < 79), undefined, {timeout: 15000});
     row.checks.orchestralPatrolDecoded = true;
+    row.checks.stage01LandmarkPaint = await page.evaluate(()=>window.__psiLandmarks.size===4);
     row.checks.viewportPinned=await page.locator('.survivors-container').evaluate(e=>{const r=e.getBoundingClientRect();return r.top===0 && r.left===0 && Math.abs(r.height-innerHeight)<2;});
     row.checks.nonblank = await page.locator('canvas').evaluate(c => {
       const ctx = c.getContext('2d'); const data = ctx.getImageData(0,0,c.width,c.height).data;
@@ -212,6 +219,12 @@ try {
       await combatPage.screenshot({path:path.join(out,'390x844-real-director-shout.png')});
       shoutCaptured=true;
     }
+    const bossBanner=combatPage.locator('.survivors-boss-alert');
+    if(!combat.checks.compactBossAlert && await bossBanner.isVisible()) {
+      combat.checks.compactBossAlert=await bossBanner.evaluate(e=>{const r=e.getBoundingClientRect();const hud=document.querySelector('.survivors-hud-top').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=hud.bottom&&r.height<132&&getComputedStyle(e).pointerEvents==='none';});
+      combat.checks.bossActionHint=await bossBanner.innerText().then(text=>text.includes('대표 위험 경보') && (text.includes('밖으로')||text.includes('벗어나')));
+      await combatPage.screenshot({path:path.join(out,'390x844-compact-boss-warning.png')});
+    }
     const key=['d','s','a','w'][tick%4];
     await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
     if(!bossCaptured && await combatPage.locator('.survivors-boss-risk').isVisible()) {
@@ -226,6 +239,7 @@ try {
   }
   Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
   combat.checks.bossSeen=bossCaptured;
+  combat.checks.compactBossAlert=Boolean(combat.checks.compactBossAlert);
   combat.equipmentLevels=[...equipmentLevels].sort();
   combat.supplyKinds=await combatPage.evaluate(()=>[...window.__psiSupplyKinds]);
   combat.checks.actualEquipmentGrowth=equipmentLevels.size>=3;

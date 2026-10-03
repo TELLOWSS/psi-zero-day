@@ -1929,3 +1929,25 @@
 .survivors-perk-card-icon .survivors-equipment-icon { width:52px; height:52px; }
 .survivors-upgrade-preview { display:flex; align-items:center; gap:12px; margin-top:8px; font-size:11px; color:#f8d477; }
 .survivors-upgrade-preview .survivors-equipment-icon { width:42px; height:42px; }
+
+/* G08: compact alert outside the player focus; readable instruction at mobile sizes. */
+.survivors-boss-alert {
+  left: auto;
+  right: max(12px, env(safe-area-inset-right));
+  transform: none;
+  width: min(calc(100% - 24px), 440px);
+  border-width: 1px;
+  border-left: 4px solid #f97316;
+  background: rgba(15, 23, 42, .95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .28);
+  animation: none;
+  pointer-events: none;
+}
+.survivors-boss-alert-text { text-align: left; padding: 8px 12px; gap: 4px; }
+.survivors-boss-alert-text strong { font-size: clamp(12px, 2vw, 15px); line-height: 1.35; }
+.survivors-boss-alert-text small { display: block; color: #fed7aa; font-size: 11px; line-height: 1.4; }
+@media (max-height: 480px) and (orientation: landscape) {
+  .survivors-boss-alert { width: min(44%, 440px); }
+  .survivors-boss-alert-text { padding: 5px 9px; }
+  .survivors-boss-alert-text small { display: block; font-size: 10px; }
+}
