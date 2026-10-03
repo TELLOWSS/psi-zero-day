@@ -959,13 +959,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Responsive Portrait / Landscape Zoom Factor
       const isPortrait = displayH > displayW;
-      const baseZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
+      const preferredZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
+      // Cover the viewport with the world; never reveal a large empty off-map strip.
+      const baseZoom = Math.max(preferredZoom, displayW / WORLD_WIDTH, displayH / WORLD_HEIGHT);
       const viewW = displayW / baseZoom;
       const viewH = displayH / baseZoom;
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
-      const camX = Math.floor(player.x - viewW / 2 + shakeX);
-      const camY = Math.floor(player.y - viewH / 2 + shakeY);
+      const camX = Math.floor(Math.max(0, Math.min(WORLD_WIDTH - viewW, player.x - viewW / 2)) + shakeX);
+      const camY = Math.floor(Math.max(0, Math.min(WORLD_HEIGHT - viewH, player.y - viewH / 2)) + shakeY);
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
       ctx.setTransform(1, 0, 0, 1, 0, 0);

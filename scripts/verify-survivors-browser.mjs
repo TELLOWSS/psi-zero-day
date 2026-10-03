@@ -45,6 +45,8 @@ try {
     await page.getByRole('button',{name:'순찰 재개',exact:true}).click();
     const name = `${viewport.width}x${viewport.height}`;
     await page.screenshot({path:path.join(out,`${name}-playing.png`)});
+    await page.waitForTimeout(12000);
+    await page.screenshot({path:path.join(out,`${name}-encounter.png`)});
     row.checks.alertLane = await page.evaluate(() => {
       const hud = document.querySelector('.survivors-hud-top').getBoundingClientRect();
       return [...document.querySelectorAll('.survivors-combo-banner,.survivors-boss-alert,.survivors-evo-banner')].every(e => e.getBoundingClientRect().top >= hud.bottom);
