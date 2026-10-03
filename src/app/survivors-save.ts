@@ -1,5 +1,6 @@
 import type { PermanentUpgrades, PatrolStageId } from '../domain/patrol-survivors';
-export const STAGE_IDS: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
+import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
+export const STAGE_IDS: readonly PatrolStageId[] = PATROL_STAGE_IDS;
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 export function safeNumber(v: unknown, max = Number.MAX_SAFE_INTEGER): number {
   const n = typeof v === 'number' ? v : typeof v === 'string' && v.trim() ? Number(v) : 0;

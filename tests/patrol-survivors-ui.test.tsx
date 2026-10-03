@@ -82,12 +82,12 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Verify 3 character selection cards exist
       expect(host.textContent).toContain('윤성호');
-      expect(host.textContent).toContain('박기철');
-      expect(host.textContent).toContain('정민주');
+      expect(host.textContent).toContain('강태식');
+      expect(host.textContent).toContain('현장 안전관리자');
 
       // Click Park Ki-cheol
       const parkBtn = Array.from(host.querySelectorAll('.survivors-char-card')).find(
-        card => card.textContent?.includes('박기철'),
+        card => card.textContent?.includes('강태식'),
       ) as HTMLButtonElement | undefined;
       expect(parkBtn).toBeDefined();
 
@@ -131,7 +131,7 @@ describe('PatrolSurvivorsGame UI', () => {
     }
   });
 
-  it('renders 5 industrial stage cards and allows stage selection', () => {
+  it('renders 10 construction stage cards and allows stage selection', () => {
     const handleExit = vi.fn();
     const host = document.createElement('div');
     document.body.appendChild(host);
@@ -145,7 +145,7 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Verify stage cards
-      expect(host.textContent).toContain('작전 구역 선택 (5대 산업 스테이지)');
+      expect(host.textContent).toContain('작전 구역 선택 (현장 공정 10단계)');
       expect(host.textContent).toContain('STAGE 01');
       expect(host.textContent).toContain('서측 게이트 및 지상 복합 하역장');
       expect(host.textContent).toContain('STAGE 02');
@@ -153,6 +153,9 @@ describe('PatrolSurvivorsGame UI', () => {
       expect(host.textContent).toContain('STAGE 03');
       expect(host.textContent).toContain('45층 초고층 메가 골조 슬래브');
 
+      expect(host.querySelectorAll('.survivors-stage-card')).toHaveLength(10);
+      expect(host.textContent).toContain('STAGE 10');
+      expect(host.textContent).not.toContain('STAGE 010');
       // Click Stage 02
       const stage2Btn = Array.from(host.querySelectorAll('.survivors-stage-card')).find(
         card => card.textContent?.includes('STAGE 02'),

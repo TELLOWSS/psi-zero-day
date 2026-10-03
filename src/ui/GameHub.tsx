@@ -1,3 +1,5 @@
+import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
+import { GameManual, gameManualText } from './GameManual';
 import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
@@ -286,6 +288,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
+  const [showSongPlayer, setShowSongPlayer] = useState(false);
+  const [showManual, setShowManual] = useState(false);
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
@@ -346,6 +350,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   }, []);
 
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
+    {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
+    {showManual && <GameManual onClose={() => setShowManual(false)} />}
     <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
@@ -360,12 +366,15 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         <span>{t('ui.title.topline')}</span>
       </div>
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
+        <button type="button" aria-label={gameManualText('open')} title={gameManualText('open')} onClick={() => setShowManual(true)}><HubIcon kind="guide" /><span>{gameManualText('open')}</span></button>
         <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
         <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
         <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
         <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
       </nav>
     </header>
+
+    <button type="button" className="work-stop-song-open" onClick={() => setShowSongPlayer(true)}>♫ {workStopSongText('open')}</button>
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
@@ -392,7 +401,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 야간 순찰 (슈팅)</span>
-          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 5 구역 해금</strong>
+          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 10 구역 해금</strong>
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 제로 브리치 (디펜스)</span>

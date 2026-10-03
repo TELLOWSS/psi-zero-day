@@ -2,6 +2,7 @@
   "locale": "ko",
   "messages": {
     "ep01.title": "첫 타설",
+    "cast.nationality.korean": "대한민국",
     "cast.player.name": "플레이어",
     "cast.player.role": "현장 안전관리자",
     "cast.kang_taesik.name": "강태식",

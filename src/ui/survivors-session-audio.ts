@@ -52,17 +52,30 @@ export class SurvivorsSessionAudio {
     if (gain) gain.gain.value = Math.max(0, Math.min(1, value));
   }
   sfxDestination(): AudioNode { this.ensureBuses(); return this.buses!.SFX; }
-  duckMusic() {
+  duckMusic(holdSeconds = 0.6) {
     const ctx = this.ensureBuses(); if (!ctx) return;
     const gain = this.buses!.Music.gain;
     gain.cancelScheduledValues(ctx.currentTime);
     gain.setValueAtTime(gain.value, ctx.currentTime);
     gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
-    gain.linearRampToValueAtTime(1, ctx.currentTime + 0.6);
+    gain.linearRampToValueAtTime(1, ctx.currentTime + Math.max(0.1, holdSeconds));
   }
   private fail(message: string) {
     this.failures.push(message); if (this.failures.length > 32) this.failures.shift();
     console.warn('[SURVIVORS audio]', message);
+  }
+  private decodeAsset(ctx: AudioContext, asset: SurvivorsAudioAsset): Promise<AudioBuffer> {
+    if (!this.buffers.has(asset.uri!)) this.buffers.set(asset.uri!, fetch(asset.uri!).then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}: ${asset.id}`);
+      return r.arrayBuffer();
+    }).then(bytes => ctx.decodeAudioData(bytes)));
+    return this.buffers.get(asset.uri!)!;
+  }
+  async preloadApproved(assets: readonly SurvivorsAudioAsset[]): Promise<boolean> {
+    if (!assets.length || assets.some(a => a.status !== 'PRODUCTION_APPROVED' || !a.uri || !a.rights || !a.sha256)) return false;
+    const ctx = this.getContext(); if (!ctx) return false;
+    try { await Promise.all(assets.map(a => this.decodeAsset(ctx, a))); return true; }
+    catch (err) { this.fail(String(err)); this.buffers.clear(); return false; }
   }
   async playApproved(assets: readonly SurvivorsAudioAsset[]): Promise<boolean> {
     // Synchronize approved stems using one future clock point; fail closed for missing approvals/rights.
@@ -70,17 +83,13 @@ export class SurvivorsSessionAudio {
     const ctx = this.ensureBuses(); if (!ctx) return false;
     const epoch = this.epoch;
     try {
-      const decoded = await Promise.all(assets.map(a => {
-        if (!this.buffers.has(a.uri!)) this.buffers.set(a.uri!, fetch(a.uri!).then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}: ${a.id}`); return r.arrayBuffer();
-        }).then(bytes => ctx.decodeAudioData(bytes)));
-        return this.buffers.get(a.uri!)!;
-      }));
+      const decoded = await Promise.all(assets.map(a => this.decodeAsset(ctx, a)));
       if (epoch !== this.epoch || ctx !== this.context) return false;
       const start = ctx.currentTime + 0.05;
       assets.forEach((asset, i) => {
         const source = ctx.createBufferSource(), gain = ctx.createGain();
         source.buffer = decoded[i]!; source.loop = asset.loop;
+        if (asset.bus === 'Voice') this.duckMusic(decoded[i]!.duration + 0.1);
         source.connect(gain); gain.connect(this.buses![asset.bus]);
         if (this.track(source, gain, asset.bus === 'Voice' ? 4 : asset.bus === 'Music' ? 0 : 1)) source.start(start);
       });

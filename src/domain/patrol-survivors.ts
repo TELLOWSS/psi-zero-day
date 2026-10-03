@@ -12,6 +12,7 @@ export interface Hazard {
   damage: number;
   expValue: number;
   isStunned?: number; // duration in seconds
+  isStageBoss?: boolean;
   vx?: number;
   vy?: number;
 }
@@ -88,7 +89,7 @@ export interface Perk {
   };
 }
 
-export type CanonicalCharacterId = 'player' | 'kang_taesik' | 'yoon_sungho' | 'lee_jaehoon' | 'lim_junho';
+export type CanonicalCharacterId = 'player' | 'kang_taesik' | 'yoon_sungho' | 'lee_jaehoon' | 'lim_junho' | 'safety_monitor';
 export type LegacyCharacterId = 'yoon' | 'park' | 'jung';
 export type CharacterId = CanonicalCharacterId | LegacyCharacterId;
 
@@ -158,6 +159,8 @@ export interface EvolutionBanner {
 
 export interface SurvivorsGameState {
   phase: 'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat';
+  stageBossSpawned?: boolean;
+  stageBossNeutralized?: boolean;
   characterId: CharacterId;
   gameTime: number; // in seconds
   maxTime: number; // target survival time (e.g. 180s)
@@ -213,7 +216,8 @@ export interface SurvivorsGameState {
   inFloodlight: boolean;
 }
 
-export type PatrolStageId = 'stage_01' | 'stage_02' | 'stage_03' | 'stage_04' | 'stage_05';
+export const PATROL_STAGE_IDS = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05', 'stage_06', 'stage_07', 'stage_08', 'stage_09', 'stage_10'] as const;
+export type PatrolStageId = typeof PATROL_STAGE_IDS[number];
 
 export type StageHazardType =
   | 'explosive_barrel'
@@ -237,6 +241,7 @@ export interface StageHazardObject {
 }
 
 export interface StageStarChallenge {
+  metric?: 'victory' | 'environmental' | 'neutralized' | 'shout' | 'hp' | 'boss';
   starIndex: 1 | 2 | 3;
   title: string;
   description: string;
@@ -248,6 +253,9 @@ export interface StageStarChallenge {
 export interface PatrolStageDefinition {
   id: PatrolStageId;
   stageNumber: number;
+  siteProfileId?: string;
+  hazardMix?: readonly HazardType[];
+  difficulty?: number;
   name: string;
   subtitle: string;
   theme: 'surface_logistics' | 'deep_excavation' | 'highrise_slab' | 'curing_chamber' | 'datacenter';

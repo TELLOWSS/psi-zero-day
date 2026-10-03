@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { COMPANY_NAME } from '../app/brand';
 import { formatCharacterIdentity } from '../app/character-label';
-import { projectSupportAssistedActions, strategyActionExecutionChoiceId, strategyActionsForMapTarget, strategyActionsForTarget } from '../app/strategy-actions';
+import { projectSupportAssistedActions, strategyActionTargetKey, strategyActionExecutionChoiceId, strategyActionsForMapTarget, strategyActionsForTarget } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
 import type { StrategyVisualAssets } from '../app/strategy-assets';
 import type { StrategyView } from '../app/strategy-view';
@@ -94,7 +94,7 @@ export function StrategyMapShell({
   readonly text: (textId: string) => string;
   readonly person: (characterId: string) => StrategyPersonLabel | undefined;
   readonly actions?: readonly StrategyAction[];
-  readonly onAction?: (action: StrategyAction) => void;
+  readonly onAction?: (action: StrategyAction) => boolean | void;
   readonly visualAssets?: StrategyVisualAssets;
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
@@ -165,7 +165,7 @@ export function StrategyMapShell({
     const executionChoiceId = strategyActionExecutionChoiceId(action);
     const engineAction = actions.find(candidate => candidate.instance_id === action.instance_id
       && candidate.node_id === action.node_id && candidate.choice_id === executionChoiceId);
-    onAction(engineAction ?? action);
+    return onAction(engineAction ?? action);
   };
 
   const zones = STRATEGY_ZONE_ANCHOR_IDS;
@@ -185,6 +185,14 @@ export function StrategyMapShell({
   const loopPhase = outcome ? 'result' : focusId ? 'action' : 'target';
 
   return <main className="strategy-shell" data-stage={view.construction.stage_id} data-visual-mode={hasBackgroundArt ? 'art' : 'css'} data-loop-phase={loopPhase}>
+    {effectiveActions.some(action => action.enabled) && !outcome ? <details className="strategy-target-shortcuts">
+      <summary>{text('ui.strategy.target_shortcuts')}</summary>
+      {[...new Map(effectiveActions.filter(action => action.enabled).map(action => [strategyActionTargetKey(action.target), action])).entries()].map(([key, action]) =>
+        <button key={key} type="button" onClick={event => {
+          setFocusId(key);
+          event.currentTarget.closest('details')?.removeAttribute('open');
+        }}>{actionTargetLabel(action)} →</button>)}
+    </details> : null}
     {visualAssets?.background_uri ? <img className="strategy-world-backdrop" src={visualAssets.background_uri} alt="" aria-hidden="true" /> : null}
     <div className="strategy-world-atmosphere" aria-hidden="true" />
     <div className="strategy-entry-slate" aria-hidden="true">

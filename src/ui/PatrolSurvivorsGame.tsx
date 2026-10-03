@@ -1,4 +1,6 @@
-import { parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
+import { GameManual, gameManualText } from './GameManual';
+import { DIRECTOR_SHOUT_VOICE } from '../app/survivors-audio-manifest';
+import { STAGE_IDS, parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
@@ -74,6 +76,7 @@ export const CANONICAL_CHAR_IDS: CharacterId[] = [
   'yoon_sungho',
   'lee_jaehoon',
   'lim_junho',
+  'safety_monitor',
 ];
 
 export const STORAGE_KEY_FG_POINTS = 'psi.fieldguide.points';
@@ -107,6 +110,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     mobWorker?: HTMLImageElement;
     groundV2?: HTMLImageElement;
     riskAtlasV2?: HTMLImageElement;
+    workerV2?: HTMLImageElement;
+    groundAtlasV2?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
@@ -137,9 +142,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       yoon_sungho: '/assets/episode01/characters/yoon-sungho-map.webp',
       lee_jaehoon: '/assets/episode01/characters/lee-jaehoon-map.webp',
       lim_junho: '/assets/episode01/characters/lim-junho-map.webp',
+      safety_monitor: '/assets/survivors/safety-monitor-v2.webp',
       // Legacy compatibility keys
       park: '/assets/episode01/characters/kang-taesik-map.webp',
-      yoon: '/assets/episode01/characters/yoon-sungho-map.webp',
+      yoon: '/assets/survivors/sprite_player_yoon.webp',
       jung: '/assets/episode01/characters/player-map.webp',
     };
 
@@ -170,6 +176,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const ground = new Image();
     ground.onload = () => { spritesRef.current.groundV2 = ground; };
     ground.src = '/assets/survivors/stage-01-ground-v2.webp';
+    const workerV2 = new Image();
+    workerV2.src = '/assets/survivors/worker-korean-v2.webp';
+    workerV2.onload = () => { spritesRef.current.workerV2 = workerV2; };
+    const groundAtlasV2 = new Image();
+    groundAtlasV2.src = '/assets/survivors/process-ground-atlas-v2.webp';
+    groundAtlasV2.onload = () => { spritesRef.current.groundAtlasV2 = groundAtlasV2; };
     const atlas = new Image();
     atlas.onload = () => { spritesRef.current.riskAtlasV2 = atlas; };
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
@@ -224,6 +236,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   });
 
   // Modal Views in Ready screen
+  const [showManual, setShowManual] = useState(false);
   const [showRdModal, setShowRdModal] = useState(false);
   const [showArsenalModal, setShowArsenalModal] = useState(false);
 
@@ -378,33 +391,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.stop(t + 0.28);
         });
       } else if (type === 'shout') {
-        // Massive bass boom + siren sweep + distorted megaphone thunder
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(45, now + 0.8);
-        gain.gain.setValueAtTime(0.65, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-        if (!audioRef.current.track(osc, gain, priority)) return;
-        osc.connect(gain);
-        audioRef.current.connectSfx(osc, gain, position, listener);
-        osc.start(now);
-        osc.stop(now + 0.8);
-
-        // Second resonant harmonic
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = 'square';
-        osc2.frequency.setValueAtTime(320, now);
-        osc2.frequency.exponentialRampToValueAtTime(80, now + 0.5);
-        gain2.gain.setValueAtTime(0.4, now);
-        gain2.gain.linearRampToValueAtTime(0.01, now + 0.5);
-        if (!audioRef.current.track(osc2, gain2, priority)) return;
-        osc2.connect(gain2);
-        audioRef.current.connectSfx(osc2, gain2, position, listener);
-        osc2.start(now);
-        osc2.stop(now + 0.5);
+        // The supplied Director voice replaces the synth roar.
+        void audioRef.current.playApproved([DIRECTOR_SHOUT_VOICE]);
       } else if (type === 'evolution') {
         // Epic Ascension Major Chime
         const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98];
@@ -543,6 +531,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   const startGame = () => {
     if (!engineRef.current) return;
+    void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
     engineRef.current.start();
     setPhase('playing');
     lastTimeRef.current = performance.now();
@@ -891,7 +880,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             if (engine.state.phase === 'victory') {
               // Unlock next stage in order
-              const stageOrder: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
+              const stageOrder = STAGE_IDS;
               const currentIdx = stageOrder.indexOf(engine.state.stageId);
               if (currentIdx !== -1 && currentIdx < stageOrder.length - 1) {
                 const nextStageId = stageOrder[currentIdx + 1];
@@ -994,8 +983,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
       const groundV2 = spritesRef.current.groundV2;
-      const useGroundArt = stage?.id === 'stage_01' && Boolean(groundV2?.naturalWidth);
-      if (useGroundArt && groundV2) {
+      const processGround = spritesRef.current.groundAtlasV2;
+      const useGroundArt = stage.id === 'stage_01' ? Boolean(groundV2?.naturalWidth) : Boolean(processGround?.naturalWidth);
+      if (stage.id !== 'stage_01' && processGround?.naturalWidth) {
+        const tile = ['stage_02', 'stage_06'].includes(stage.id) ? 0
+          : ['stage_03', 'stage_04', 'stage_08'].includes(stage.id) ? 1
+          : stage.id === 'stage_07' ? 2 : 3;
+        const tileW = processGround.naturalWidth / 2;
+        const tileH = processGround.naturalHeight / 2;
+        ctx.drawImage(processGround, (tile % 2) * tileW, Math.floor(tile / 2) * tileH, tileW, tileH, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        ctx.fillStyle = stage.ambientColor;
+        ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      } else if (useGroundArt && groundV2) {
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(groundV2, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
@@ -1097,9 +1096,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const sprite = spritesRef.current.mobWorker;
         if (!sprite?.complete || !sprite.naturalWidth) continue;
         ctx.save(); ctx.globalAlpha = Math.min(1, worker.remaining);
-        const atlas = spritesRef.current.riskAtlasV2;
-        if (atlas?.naturalWidth) {
-          ctx.drawImage(atlas, 175, 20, 310, 635, worker.x - 17, worker.y - 68, 34, 72);
+        const workerArt = spritesRef.current.workerV2;
+        if (workerArt?.naturalWidth) {
+          ctx.drawImage(workerArt, worker.x - 24, worker.y - 68, 48, 72);
         } else {
           ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
         }
@@ -1384,18 +1383,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fillText('⚡', h.x, h.y);
 
             if (h.state === 'active') {
-              ctx.strokeStyle = '#38bdf8';
-              ctx.shadowColor = '#0284c7';
-              ctx.shadowBlur = 15;
-              ctx.lineWidth = 2;
-              for (let i = 0; i < 6; i++) {
-                const angle = (i * Math.PI) / 3 + Math.random() * 0.3;
-                const r = 80 + Math.random() * 100;
-                ctx.beginPath();
-                ctx.moveTo(h.x, h.y);
-                ctx.lineTo(h.x + Math.cos(angle) * r, h.y + Math.sin(angle) * r);
-                ctx.stroke();
-              }
+              ctx.strokeStyle = '#86efac'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
+              ctx.beginPath(); ctx.arc(h.x, h.y, 200, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+              ctx.font = 'bold 11px sans-serif'; ctx.fillStyle = '#86efac';
+              ctx.fillText('전원 차단 · 구역 격리', h.x, h.y - 36);
             }
             ctx.restore();
           }
@@ -1587,11 +1578,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const runPhase = time / 80 + h.x;
             const bob = Math.abs(Math.sin(runPhase)) * 3.5;
 
-            const atlas = spritesRef.current.riskAtlasV2;
-            if (atlas?.naturalWidth) {
+            const workerArt = spritesRef.current.workerV2;
+            if (workerArt?.naturalWidth) {
               ctx.save();
               if (player.x < h.x) ctx.scale(-1, 1);
-              ctx.drawImage(atlas, 175, 20, 310, 635, -17, -68 + bob * 0.4, 34, 72);
+              ctx.drawImage(workerArt, -24, -68 + bob * 0.4, 48, 72);
               ctx.restore();
             } else if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
               const drawW = 42;
@@ -2370,6 +2361,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       )}
 
+      {showManual && <GameManual onClose={() => setShowManual(false)} />}
       {/* READY / START SCREEN WITH CHARACTER SELECT */}
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
@@ -2400,6 +2392,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               );
             })()}
 
+            <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
               야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
@@ -2407,9 +2400,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
             <div className="survivors-stage-select-section">
-              <span className="survivors-section-label">작전 구역 선택 (5대 산업 스테이지)</span>
+              <span className="survivors-section-label">작전 구역 선택 (현장 공정 10단계)</span>
               <div className="survivors-stage-cards">
-                {(Object.values(PATROL_STAGES)).map(stg => {
+                {STAGE_IDS.map(id => PATROL_STAGES[id]).map(stg => {
                   const isUnlocked = unlockedStages.includes(stg.id);
                   const stars = stageStars[stg.id] || [false, false, false];
                   return (
@@ -2426,7 +2419,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     >
                       <div className="survivors-stage-badge">
                         <span>{isUnlocked ? stg.icon : '🔒'}</span>
-                        <strong>STAGE 0{stg.stageNumber}</strong>
+                        <strong>STAGE {String(stg.stageNumber).padStart(2, '0')}</strong>
                         {isUnlocked && (
                           <span className="survivors-stage-stars-tag">
                             {stars.map(s => (s ? '⭐' : '⚪')).join('')}
@@ -2435,7 +2428,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       </div>
                       <h4>{stg.name}</h4>
                       <span className="survivors-stage-sub">{stg.subtitle}</span>
-                      <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE 0${stg.stageNumber - 1}) 완수 시 해금`}</p>
+                      <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE ${String(stg.stageNumber - 1).padStart(2, '0')}) 완수 시 해금`}</p>
                       <div className="survivors-stage-meta">
                         <span>{isUnlocked ? `👹 ${stg.bossName}` : '보안 인가 필요'}</span>
                       </div>
@@ -2447,7 +2440,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             {/* CHARACTER SELECTOR */}
             <div className="survivors-char-select-section">
-              <span className="survivors-section-label">순찰 요원 선택 (스토리 5대 핵심 인물)</span>
+              <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
               <div className="survivors-char-cards">
                 {CANONICAL_CHAR_IDS.map(id => CHARACTER_PROFILES[id]).filter(Boolean).map(char => (
                   <button
@@ -2496,6 +2489,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowArsenalModal(true)}>
                 📖 대응 도구 진화 도감
               </button>
+              <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
               <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 취소
               </button>
@@ -2794,7 +2788,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title is-green">
-              🏆 {engineRef.current?.state.stage ? `${engineRef.current.state.stage.icon} STAGE 0${engineRef.current.state.stage.stageNumber} 클리어!` : '야간 무사고 달성 완료!'}
+              🏆 {engineRef.current?.state.stage ? `${engineRef.current.state.stage.icon} STAGE ${String(engineRef.current.state.stage.stageNumber).padStart(2, '0')} 클리어!` : '야간 무사고 달성 완료!'}
             </h2>
             <p className="survivors-modal-sub">
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
@@ -2849,7 +2843,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             <div className="survivors-actions-row">
               {(() => {
-                const stageList: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
+                const stageList = STAGE_IDS;
                 const currentIdx = stageList.indexOf(selectedStage);
                 const nextStage = currentIdx >= 0 && currentIdx < stageList.length - 1 ? stageList[currentIdx + 1] : null;
 

@@ -1,3 +1,4 @@
+import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
 import type {
@@ -25,9 +26,11 @@ export const WORLD_HEIGHT = 900;
 export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
 
 export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
+  ...ADDITIONAL_PATROL_STAGES,
   stage_01: {
     id: 'stage_01',
     stageNumber: 1,
+    siteProfileId: 'apt-new-bottom-up-excavation',
     name: '서측 게이트 및 지상 복합 하역장',
     subtitle: 'Surface Logistics Hub',
     theme: 'surface_logistics',
@@ -46,7 +49,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
       { id: 'floodlight_02', type: 'floodlight_tower', x: 700, y: 680, radius: 180, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '야간 투광기' },
     ],
     starChallenges: [
-      { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성 및 보스 격퇴', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
       { starIndex: 2, title: '격리·대피 조치 완료', description: '인화물 보관구역 격리로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
       { starIndex: 3, title: '소장 권한 마스터리', description: '현장소장 샤우팅 1회 이상 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
@@ -58,6 +61,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_02: {
     id: 'stage_02',
     stageNumber: 2,
+    siteProfileId: 'apt-new-top-down-under-slab',
     name: '대심도 기초 굴착 구역 (-4F)',
     subtitle: 'Deep Underground Pit',
     theme: 'deep_excavation',
@@ -86,6 +90,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_03: {
     id: 'stage_03',
     stageNumber: 3,
+    siteProfileId: 'apt-new-bottom-up-rc-frame',
     name: '45층 초고층 메가 골조 슬래브',
     subtitle: 'High-Rise Superframe Slab',
     theme: 'highrise_slab',
@@ -103,7 +108,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     starChallenges: [
       { starIndex: 1, title: '고공 풍압 극복', description: '45층 골조 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
       { starIndex: 2, title: '양중 작업반경 통제', description: '양중 작업반경 통제로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
-      { starIndex: 3, title: '타워크레인 격추', description: '보스 광폭화 크레인 아라크네 제압', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 3, title: '타워크레인 작업 통제', description: '대표 타워크레인 작업반경 통제', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '광폭화 타워크레인 아라크네',
     bossTitle: 'TOWER CRANE ARACHNE',
@@ -113,6 +118,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_04: {
     id: 'stage_04',
     stageNumber: 4,
+    siteProfileId: 'apt-new-top-down-concurrent',
     name: '혹한기 동절기 밀폐 양생 챔버',
     subtitle: 'Sub-Zero Winter Curing Chamber',
     theme: 'curing_chamber',
@@ -140,10 +146,11 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   stage_05: {
     id: 'stage_05',
     stageNumber: 5,
+    siteProfileId: 'data-center-electrical-ups',
     name: '하이퍼스케일 전산 플랜트',
     subtitle: 'Hyperscale Data Center Plant',
     theme: 'datacenter',
-    description: '최종 결전지. 특고압 수전설비와 서버 랙이 늘어선 사이버네틱 시설. 제로 데이 AI 코어 프로토콜 오메가를 셧다운하십시오.',
+    description: '데이터센터 전기·UPS 설치 구역. 전원 차단과 작업구역 격리로 위험 노출을 줄이고 중량 설비 반입 동선을 통제하십시오.',
     floorColor: '#070a10',
     gridColor: 'rgba(168, 85, 247, 0.08)',
     borderColor: '#a855f7',
@@ -152,25 +159,38 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     hazards: [
       { id: 'trans_01', type: 'electric_transformer', x: 450, y: 300, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
       { id: 'trans_02', type: 'electric_transformer', x: 950, y: 600, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
-      { id: 'crane_drop_04', type: 'crane_drop_zone', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '서지 방전 구역' },
+      { id: 'crane_drop_04', type: 'crane_drop_zone', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '설비 반입 작업반경' },
     ],
     starChallenges: [
-      { starIndex: 1, title: '제로 데이 셧다운', description: '데이터센터 180초 방어 및 코어 파괴', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '변전반 아크 방전', description: '특고압 변전반 3회 이상 가동', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 1, title: '제로 데이 셧다운', description: '데이터센터 설치 구역 180초 순찰 완료', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '전원 차단·구역 격리', description: '전원 차단·격리로 위험 노출 3건 해소', isCompleted: false, currentValue: 0, targetValue: 3 },
       { starIndex: 3, title: '최종 사자후 피니시', description: '소장 샤우팅으로 피니시 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
-    bossName: '재해 예측 AI 코어 프로토콜 오메가',
-    bossTitle: 'CORE PROTOCOL OMEGA',
+    bossName: 'UPS 중량 설비 반입 작업반경',
+    bossTitle: 'UPS INSTALLATION CONTROL',
     bossType: 'CRANE_BOSS',
     bossHp: 1800,
   },
 };
 
+const legacyMetrics = [['victory','environmental','shout'], ['victory','neutralized','hp'], ['victory','environmental','boss'], ['victory','environmental','boss'], ['victory','environmental','shout']] as const;
+for (let i = 0; i < 5; i++) {
+  const stage = PATROL_STAGES[`stage_0${i + 1}` as PatrolStageId];
+  stage.starChallenges.forEach((challenge, j) => { challenge.metric = legacyMetrics[i]![j]!; });
+}
+
 
 export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
+  safety_monitor: {
+    id: 'safety_monitor', name: '안전감시단', role: '현장 안전감시원', title: '작업반경·출입 통제 담당',
+    description: '한국 현장의 안전감시원. 무전 지시로 위험 노출을 줄이고 작업반경을 순찰합니다. 이동 속도 +20, 수집 반경 +20.',
+    startingWeapon: 'radio_boost', avatar: '🦺', portraitUri: '/assets/survivors/safety-monitor-v2.webp', heroBannerUri: '/assets/survivors/safety-monitor-v2.webp',
+    quote: '작업반경을 비우고, 확인 후 이동하세요.', traits: ['✦ 무전 지시 자동 조치', '✦ 이동 속도 +20', '✦ 수집 반경 +20'], color: '#a3e635',
+    statModifiers: { speedBonus: 20, pickupRadiusBonus: 20 },
+  },
   player: {
     id: 'player',
-    name: '윤안전 (정민주)',
+    name: '현장 안전관리자',
     role: '공인 산업안전관리자',
     title: '안전 하한선 총괄 책임자',
     description: '원칙과 법적 기준을 수호하는 안전관리자. 태블릿 스마트 센서로 위험 탐색 반경 및 경험치 수집 +25%, 쿨다운 -10%.',
@@ -185,8 +205,8 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   },
   kang_taesik: {
     id: 'kang_taesik',
-    name: '강태식 (박기철)',
-    role: '베테랑 골조반장',
+    name: '강태식',
+    role: '형틀반장',
     title: '30년 현장의 버팀목',
     description: '수십 년 현장 경험으로 다져진 강인한 피지컬과 통솔력. 최대 HP +60, 넉백 파워 +40%, 피해 감소.',
     startingWeapon: 'extinguisher',
@@ -201,7 +221,7 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   yoon_sungho: {
     id: 'yoon_sungho',
     name: '윤성호',
-    role: '철근 숙련 기능공',
+    role: '철근반장',
     title: '철근 결속의 달인',
     description: '묵묵히 현장을 지탱하는 베테랑 철근공. 낙하물 완충 및 근접 제압 대미지 +30%, 든든한 맷집.',
     startingWeapon: 'cone_trap',
@@ -231,7 +251,7 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   lim_junho: {
     id: 'lim_junho',
     name: '임준호',
-    role: '현장 신입 신호수',
+    role: '신입근로자',
     title: '고속 기동 신호 유도원',
     description: '누구보다 빠른 발과 예리한 시야로 위험을 먼저 발견하는 신호수. 이동 속도 +40, 회피 기동 특화.',
     startingWeapon: 'radio_boost',
@@ -1175,7 +1195,7 @@ export class SurvivorsEngine {
     const timeProgress = this.state.gameTime / this.state.maxTime; // 0.0 to 1.0
 
     // Progressive spawn rate (faster as time goes on)
-    const spawnInterval = Math.max(0.2, 1.4 - timeProgress * 1.15);
+    const spawnInterval = Math.max(0.2, (1.4 - timeProgress * 1.15) / (this.state.stage.difficulty ?? 1));
 
     if (this.cooldowns.spawnTimer <= 0) {
       this.cooldowns.spawnTimer = spawnInterval;
@@ -1186,9 +1206,10 @@ export class SurvivorsEngine {
       const stageBossName = stage ? `${stage.bossName} (${stage.bossTitle})` : '타이탄 크레인 8000 (TITAN CRANE)';
       const stageBossType = stage?.bossType || 'CRANE_BOSS';
       const stageBossHp = stage?.bossHp;
-      if (time === 60 && !this.state.hazards.some(h => h.type === stageBossType)) {
+      if (time >= 60 && !this.state.stageBossSpawned) {
+        this.state.stageBossSpawned = true;
         this.triggerBossAlert(stageBossName);
-        this.spawnHazard(stageBossType, stageBossHp);
+        this.spawnHazard(stageBossType, stageBossHp, true);
         return;
       }
 
@@ -1204,6 +1225,9 @@ export class SurvivorsEngine {
         type = 'GAS_LEAK';
       }
 
+      if (stage.hazardMix && this.state.gameTime > 20) {
+        type = stage.hazardMix[Math.floor(this.random() * stage.hazardMix.length)] ?? type;
+      }
       this.spawnHazard(type);
     }
   }
@@ -1214,7 +1238,7 @@ export class SurvivorsEngine {
     this.state.bossName = name;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number) {
+  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false) {
     let x = 0;
     let y = 0;
     const side = Math.floor(this.random() * 4);
@@ -1250,6 +1274,8 @@ export class SurvivorsEngine {
       radius = 12;
       damage = 8;
       expValue = 3;
+    } else if (type === 'FALLING_DEBRIS') {
+      hp = 45; speed = 105; radius = 18; damage = 18; expValue = 5;
     } else if (type === 'CRANE_BOSS') {
       hp = overrideHp || 500;
       speed = 65;
@@ -1268,6 +1294,7 @@ export class SurvivorsEngine {
 
     this.state.hazards.push({
       id: this.genId(`haz_${type}`),
+      isStageBoss,
       type,
       x,
       y,
@@ -1423,6 +1450,7 @@ export class SurvivorsEngine {
         }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
+        if (h.isStageBoss) this.state.stageBossNeutralized = true;
         this.emitAudio('control', h.x, h.y);
 
         // Combo chain system
@@ -1585,14 +1613,14 @@ export class SurvivorsEngine {
         }
       }
 
-      // 3. Electric Transformer (Surge discharge)
+      // 3. Power isolation clears exposure; it never rewards energizing equipment.
       if (hazard.type === 'electric_transformer') {
         if (hazard.state === 'active') {
           hazard.timer -= dt;
           for (const h of hazards) {
             const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-            if (d <= 200 + h.radius) {
-              h.hp -= 1500 * dt;
+            if (h.hp > 0 && d <= 200 + h.radius) {
+              h.hp = 0;
               h.isStunned = 0.8;
               if (h.hp <= 0) {
                 this.state.environmentalKills++;
@@ -1612,53 +1640,21 @@ export class SurvivorsEngine {
   }
 
   private checkStarChallenges() {
-    const { stage, gameTime, maxTime, environmentalKills, hazardsNeutralized, player, directorShoutTimer, phase } = this.state;
-    if (!stage || !stage.starChallenges) return;
-
+    const { stage, environmentalKills, hazardsNeutralized, player, directorShoutTimer, phase } = this.state;
+    for (const challenge of stage.starChallenges) {
+      let value = 0;
+      switch (challenge.metric) {
+        case 'victory': value = phase === 'victory' ? 1 : 0; break;
+        case 'environmental': value = environmentalKills; break;
+        case 'neutralized': value = hazardsNeutralized; break;
+        case 'boss': value = this.state.stageBossNeutralized ? 1 : 0; break;
+        case 'shout': value = directorShoutTimer > 0 || challenge.isCompleted ? 1 : 0; break;
+        case 'hp': value = phase === 'victory' ? player.hp / player.maxHp * 100 : 0; break;
+      }
+      challenge.currentValue = Math.round(value);
+      challenge.isCompleted = value >= challenge.targetValue;
+    }
     const challenges = stage.starChallenges;
-
-    // Challenge 1: Survival time >= maxTime or victory
-    if (challenges[0]) {
-      challenges[0].currentValue = Math.min(challenges[0].targetValue, phase === 'victory' || gameTime >= maxTime ? 1 : 0);
-      if (challenges[0].currentValue >= challenges[0].targetValue) {
-        challenges[0].isCompleted = true;
-      }
-    }
-
-    // Challenge 2: Stage specific targets
-    if (challenges[1]) {
-      if (stage.id === 'stage_01' || stage.id === 'stage_03' || stage.id === 'stage_05') {
-        challenges[1].currentValue = environmentalKills;
-      } else {
-        challenges[1].currentValue = hazardsNeutralized;
-      }
-      if (challenges[1].currentValue >= challenges[1].targetValue) {
-        challenges[1].isCompleted = true;
-      }
-    }
-
-    // Challenge 3: Mastery / Shout / HP check
-    if (challenges[2]) {
-      if (stage.id === 'stage_01' || stage.id === 'stage_04' || stage.id === 'stage_05') {
-        if (directorShoutTimer > 0) {
-          challenges[2].currentValue = 1;
-          challenges[2].isCompleted = true;
-        }
-      } else if (stage.id === 'stage_02') {
-        if (phase === 'victory') {
-          const hpPercent = (player.hp / player.maxHp) * 100;
-          challenges[2].currentValue = Math.round(hpPercent);
-          if (hpPercent >= challenges[2].targetValue) {
-            challenges[2].isCompleted = true;
-          }
-        }
-      } else if (stage.id === 'stage_03') {
-        challenges[2].currentValue = hazardsNeutralized;
-        if (challenges[2].currentValue >= challenges[2].targetValue) {
-          challenges[2].isCompleted = true;
-        }
-      }
-    }
 
     this.state.starsEarned = [
       Boolean(challenges[0]?.isCompleted),

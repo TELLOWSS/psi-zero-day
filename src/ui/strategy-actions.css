@@ -253,3 +253,13 @@
     max-height:44%;
   }
 }
+
+.strategy-target-shortcuts { display:grid; gap:6px; margin-bottom:10px; }
+.strategy-target-shortcuts button { min-height:44px; padding:8px 12px; text-align:left; border:1px solid #dd9b4c; border-radius:8px; background:#fff4df; color:#19304a; font-weight:700; cursor:pointer; }
+.strategy-action-confirm-buttons { position:sticky; bottom:-12px; padding:8px 0; background:#e5f1f7; }
+
+.strategy-target-shortcuts { position:absolute; z-index:61; top:120px; left:12px; width:min(280px,75%); border:1px solid #deac66; border-radius:9px; background:#122c3fed; color:#fff; padding:6px; max-height:45%; overflow:auto; }
+.strategy-target-shortcuts:not([open]) { width:auto; }
+.strategy-target-shortcuts summary { min-height:44px; display:flex; align-items:center; padding:0 8px; cursor:pointer; font-weight:700; }
+.strategy-target-shortcuts button { display:block; width:100%; margin-top:6px; }
+@media(orientation:portrait) { .strategy-target-shortcuts { top:24%; } }

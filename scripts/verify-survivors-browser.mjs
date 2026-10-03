@@ -21,10 +21,41 @@ try {
     const row = {viewport, status: 'RUNNING', checks: {}, errors: []};
     report.rows.push(row);
     page.on('pageerror', e => row.errors.push(String(e)));
+    await page.addInitScript(() => {
+      window.__psiDecodedAudioDurations = [];
+      const original = AudioContext.prototype.decodeAudioData;
+      AudioContext.prototype.decodeAudioData = function(...args) {
+        return original.apply(this, args).then(buffer => {
+          window.__psiDecodedAudioDurations.push(buffer.duration);
+          return buffer;
+        });
+      };
+    });
     await page.goto(report.baseUrl, {waitUntil: 'networkidle'});
+    await page.getByRole('button', {name:/작업중지 BGM 들어보기/}).click();
+    const audio = page.locator('.work-stop-song-player audio');
+    await audio.evaluate(a => new Promise(resolve => {
+      if (a.readyState >= 1) resolve(); else a.addEventListener('loadedmetadata',resolve,{once:true});
+    }));
+    row.checks.fullSongDuration = await audio.evaluate(a => a.duration > 161.9 && a.duration < 162.2);
+    await audio.evaluate(async a => { window.__psiSongElement = a; a.currentTime = 140; await a.play(); });
+    await page.waitForTimeout(500);
+    row.checks.fullSongPlayback = await audio.evaluate(a => !a.paused && a.currentTime > 140);
+    await page.getByRole('button', {name:'플레이어 닫기', exact:true}).click();
+    row.checks.fullSongStopsOnClose = await page.evaluate(() => window.__psiSongElement.paused);
+    await page.getByRole('button', {name:'게임 설명서', exact:true}).click();
+    row.checks.manual = await page.getByRole('dialog', {name:'처음 시작하는 게임 설명서'}).isVisible();
+    await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-manual.png`)});
+    await page.getByRole('button', {name:'설명서 닫기', exact:true}).click();
     await page.getByRole('button', {name:/야간 긴급 순찰/}).click({timeout:30000});
+    row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
+    row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
+    await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
+    row.checks.watchOfficer = await page.locator('.survivors-char-card.is-selected').innerText().then(t => t.includes('안전감시단'));
     await page.getByRole('button', {name:'순찰 시작하기', exact:true}).click();
     await page.waitForTimeout(1000);
+    await page.waitForFunction(() => window.__psiDecodedAudioDurations.some(d => d >= 3.9 && d <= 4.1), undefined, {timeout: 10000});
+    row.checks.suppliedShoutDecoded = true;
     row.checks.nonblank = await page.locator('canvas').evaluate(c => {
       const ctx = c.getContext('2d'); const data = ctx.getImageData(0,0,c.width,c.height).data;
       const colors = new Set(); for(let i=0;i<data.length;i+=Math.max(4,Math.floor(data.length/400/4)*4)) colors.add(`${data[i]},${data[i+1]},${data[i+2]}`);
@@ -57,6 +88,19 @@ try {
     row.status = Object.values(row.checks).some(v => v === false) || row.errors.length ? 'FAIL' : 'SMOKE_PASS';
     await page.close();
   }
+  const processPage = await browser.newPage({viewport:{width:1440,height:900}});
+  await processPage.addInitScript(() => localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:10},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`))));
+  for (const stageNumber of ['02','07','10']) {
+    await processPage.goto(report.baseUrl,{waitUntil:'networkidle'});
+    await processPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+    await processPage.locator('.survivors-stage-card').filter({hasText:`STAGE ${stageNumber}`}).click();
+    await processPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
+    await processPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
+    await processPage.waitForTimeout(2000);
+    await processPage.screenshot({path:path.join(out,`stage-${stageNumber}-saved-unlock-fixture.png`)});
+  }
+  await processPage.close();
+  report.processCaptureScope = 'Saved unlock fixture for Stage02/07/10 display, not natural unlock progression.';
   report.status = report.rows.some(r=>r.status==='FAIL') ? 'FAIL' : 'SMOKE_PASS';
 } catch (err) {
   report.errors.push(String(err));

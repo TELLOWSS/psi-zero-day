@@ -146,6 +146,22 @@ async function mount(view: StrategyView, actions: readonly StrategyAction[], onA
 }
 
 describe('Strategy stage 2 interaction flow', () => {
+  it('lets a beginner select an actionable target directly and retry a rejected dispatch', async () => {
+    const onAction = vi.fn().mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const { host, root } = await mount(baseView, entryActions, onAction);
+    const target = host.querySelector('.strategy-target-shortcuts button') as HTMLButtonElement;
+    expect(target).toBeInstanceOf(HTMLButtonElement);
+    await act(async () => target.click());
+    await act(async () => (host.querySelector('.strategy-action-list button') as HTMLButtonElement).click());
+    const execute = host.querySelector('.strategy-action-confirm .strategy-execute-button') as HTMLButtonElement;
+    await act(async () => execute.click());
+    expect(execute.disabled).toBe(false);
+    expect(host.querySelector('[role="alert"]')).not.toBeNull();
+    await act(async () => execute.click());
+    expect(onAction).toHaveBeenCalledTimes(2);
+    expect(execute.disabled).toBe(true);
+    await act(async () => root.unmount()); host.remove();
+  });
   it('keeps the command tray visible while the engine is still on a non-choice strategy node', async () => {
     const onTransitionContinue = vi.fn();
     const { host, root } = await mount(baseView, []);

@@ -2,7 +2,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
-import { SURVIVORS_AUDIO_MANIFEST } from '../src/app/survivors-audio-manifest';
+import { DIRECTOR_SHOUT_VOICE, SURVIVORS_AUDIO_MANIFEST } from '../src/app/survivors-audio-manifest';
 import type { SurvivorsAudioAsset } from '../src/domain/survivors-audio';
 afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks();});
 it('engine emits real shots, impacts, controls and terminal events once and drain consumes them',()=>{
@@ -48,4 +48,17 @@ it('important alerts cannot be evicted by low-priority chatter and mute blocks n
  for(let i=0;i<24;i++)expect(audio.track(voice() as unknown as AudioScheduledSourceNode,{disconnect:vi.fn()} as unknown as AudioNode,4)).toBe(true);
  expect(audio.track(voice() as unknown as AudioScheduledSourceNode,{disconnect:vi.fn()} as unknown as AudioNode,1)).toBe(false);
  expect(audio.voiceCount).toBe(24);audio.setMuted(true);expect(audio.voiceCount).toBe(0);expect(audio.getContext()).toBeNull();audio.dispose();
+});
+
+it('supplied shout warms the cache without playing, reuses it once and obeys mute',async()=>{
+ const {context,starts}=mockContext();
+ const fetchMock=vi.fn(async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)}));vi.stubGlobal('fetch',fetchMock);
+ const audio=new SurvivorsSessionAudio();
+ expect(await audio.preloadApproved([DIRECTOR_SHOUT_VOICE])).toBe(true);
+ expect(starts).toEqual([]);expect(audio.voiceCount).toBe(0);
+ expect(await audio.playApproved([DIRECTOR_SHOUT_VOICE])).toBe(true);
+ expect(starts).toEqual([2.05]);expect(fetchMock).toHaveBeenCalledOnce();expect(context.decodeAudioData).toHaveBeenCalledOnce();
+ audio.setMuted(true);expect(audio.voiceCount).toBe(0);
+ expect(await audio.playApproved([DIRECTOR_SHOUT_VOICE])).toBe(false);
+ expect(await audio.preloadApproved([DIRECTOR_SHOUT_VOICE])).toBe(false);audio.dispose();
 });
