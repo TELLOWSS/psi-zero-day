@@ -1,3 +1,5 @@
+import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
+import { GameManual, gameManualText } from './GameManual';
 import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
@@ -124,12 +126,13 @@ function GameplayChunkFallback() {
     <div><strong>{GAME_TITLE}</strong><span>{COMPANY_NAME}</span><p>현장을 불러오고 있습니다.</p></div>
   </main>;
 }
-export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' }) {
+export function HubIcon({ kind }: { kind: HubPage | 'play' | 'lock' | 'check' | 'help' }) {
   const paths = {
     home: 'M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10',
     map: 'm3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16',
     site: 'm3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16m6-14v16',
     people: 'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 10v-3a6 6 0 0 1 12 0v3m3-17a4 4 0 0 1 0 8m1 3a5 5 0 0 1 4 5v1',
+    help: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20M9.5 8.5a2.5 2.5 0 1 1 4.2 1.8C12.5 11.2 12 12 12 14M12 17v.1',
     guide: 'M12 5C8 2 4 3 2 4v16c3-2 6-2 10 0 4-2 7-2 10 0V4c-3-1-6-2-10 1Zm0 0v15',
     journal: 'M6 3h14v18H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm0 0v18m4-13h6m-6 4h6m-6 4h4',
     play: 'm8 4 12 8-12 8Z', lock: 'M6 10h12v11H6Zm2 0V6a4 4 0 0 1 8 0v4m-4 5v2', check: 'm4 12 5 5L20 6',
@@ -286,6 +289,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
 }) {
   const snapshot = useSyncExternalStore(session.subscribe, session.getSnapshot, session.getSnapshot);
   const audioMuted = useSyncExternalStore(subscribeAudioMuted, readAudioMuted, () => false);
+  const [showSongPlayer, setShowSongPlayer] = useState(false);
+  const [showManual, setShowManual] = useState(false);
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
@@ -346,6 +351,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   }, []);
 
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
+    {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
+    {showManual && <GameManual onClose={() => setShowManual(false)} />}
     <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
@@ -360,12 +367,15 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         <span>{t('ui.title.topline')}</span>
       </div>
       <nav className="commercial-title-utility" aria-label={t('ui.title.utility')}>
+        <button type="button" aria-label={gameManualText('open')} title={gameManualText('open')} onClick={() => setShowManual(true)}><HubIcon kind="help" /><span>{gameManualText('open')}</span></button>
         <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
         <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
         <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
         <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
       </nav>
     </header>
+
+    <button type="button" className="work-stop-song-open" onClick={() => setShowSongPlayer(true)}>♫ {workStopSongText('open')}</button>
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
@@ -392,7 +402,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 야간 순찰 (슈팅)</span>
-          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 5 구역 해금</strong>
+          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 10 구역 해금</strong>
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 제로 브리치 (디펜스)</span>

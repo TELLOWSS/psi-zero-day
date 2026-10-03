@@ -1,0 +1,13 @@
+# SURVIVORS visual assets v2
+
+Director requested a high-quality, gameplay-readable map and distinct risk sprites. Built-in image generation produced a Stage 01 loading-yard ground plate and transparent industrial sprite atlas. These are original project assets; final Director visual acceptance remains pending. Collision radii and playable world dimensions are retained. Later scope adds construction missions and repairs progression metrics; see SURVIVORS-STAGE10-MANUAL-STORY-20261003.md.
+
+Ground: `public/assets/survivors/stage-01-ground-v2.webp`, 1564×1006, mapped to the existing 1400×900 world. The center remains open, with peripheral materials, slab texture, drainage and restrained work lights. Stage 01 uses this plate. Stage02–10 use the four-quadrant process-ground atlas and retain existing theme props and warning overlays. Generation did not deliver the requested 2800×1800 resolution, and no artificial upscale is claimed.
+
+Atlas: `public/assets/survivors/risk-atlas-v2.webp`, 1300×1210 with alpha. Material trolley and concrete-debris source rectangles are rendered as grounded billboards. Its first worker candidate is superseded by the Korean reference-matched worker-korean-v2.webp. Equipment blower candidate is not used as a gas source. Existing gas warning and crane boss art remain. Mirroring and small bob motion are presentation only; no eight-direction animation is claimed.
+
+Final generation prompts: ground — orthographic night construction loading yard, quiet concrete central play space, central green safety corridor, edge-only materials and drainage, no people/UI/labels or interior obstacles. Atlas — transparent quarter-view unhelmeted worker with radio, loaded yellow industrial trolley, concrete/rebar fragments and ventilation blower, separated silhouettes, no weapons/gore/UI/labels.
+
+Director also requested exact shout copy: `작업중지 돌아버려 씨~!!!`. This is the displayed cut-in line. Director provided `마지막_경고.mp4`; its subtitle-matched 68–72s refrain excerpt is integrated as a 4s mono MP3. Original musical accompaniment remains. Loudness normalization and short edge fades were applied; measured peak -3.9 dBFS. The supplied clip replaces the synthesized roar and uses the Voice bus with full-clip music ducking. Pause, mute and exit share the bounded session lifecycle. The exact spoken boundaries/listening require Director review; selection used embedded subtitles, not a claim of manual listening.
+
+Validation requires typecheck, full regression/build, real SURVIVORS smoke screenshots at 360×800, 390×844, 844×390 and 1440×900. Device performance, full growth/ultimate/results and listening remain separate pending gates.

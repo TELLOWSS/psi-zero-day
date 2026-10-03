@@ -54,7 +54,7 @@ export function StrategyLoopPanel({
   readonly text: (id: string) => string;
   readonly personName: (characterId: string) => string;
   readonly targetLabel: (action: StrategyAction) => string;
-  readonly onAction?: (action: StrategyAction) => void;
+  readonly onAction?: (action: StrategyAction) => boolean | void;
   readonly outcome?: StrategyMapOutcome;
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
@@ -64,6 +64,8 @@ export function StrategyLoopPanel({
   readonly transitionPrompt?: string;
   readonly onTransitionContinue?: () => void;
 }) {
+  const confirmRef = useRef<HTMLDivElement>(null);
+  const [rejected, setRejected] = useState(false);
   const [pending, setPending] = useState<StrategyAction | null>(null);
   const [reconsiderConfirm, setReconsiderConfirm] = useState(false);
   const [executing, setExecuting] = useState(false);
@@ -71,17 +73,26 @@ export function StrategyLoopPanel({
   const actionSetKey = useMemo(() => actions.map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`).join('|'), [actions]);
 
   useEffect(() => {
+    setRejected(false);
     setPending(null);
     setReconsiderConfirm(false);
     setExecuting(false);
     executingRef.current = false;
   }, [actionSetKey, focusId, outcome?.key]);
 
+  useEffect(() => {
+    if (pending) confirmRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
+  }, [pending]);
+
   const executePending = () => {
     if (!pending?.enabled || !onAction || executingRef.current) return;
     executingRef.current = true;
     setExecuting(true);
-    onAction(pending);
+    if (onAction(pending) === false) {
+      executingRef.current = false;
+      setExecuting(false);
+      setRejected(true);
+    }
   };
 
   const step = outcome ? 3 : pending ? 2 : focusId ? 2 : 1;
@@ -138,6 +149,7 @@ export function StrategyLoopPanel({
         <strong>{nextStep.title}</strong>
         <small>{nextStep.hint}</small>
       </div>
+      {rejected ? <p role="alert">{text('ui.strategy.retry_action')}</p> : null}
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
       {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
       {transitionPrompt ? <div className="strategy-transition-card" data-strategy-transition="true">
@@ -181,7 +193,7 @@ export function StrategyLoopPanel({
           </div>
         </>}
 
-      {pending ? <div className="strategy-action-confirm" data-pending-choice={pending.choice_id}>
+      {pending ? <div ref={confirmRef} className="strategy-action-confirm" data-pending-choice={pending.choice_id}>
         <strong className="strategy-action-confirm-title">{text('ui.strategy.guide.confirm_title')}</strong>
         <div><span>{text('ui.strategy.actor')}</span><strong>{personName(pending.actor_character_id)}</strong></div>
         <div><span>{text('ui.strategy.target')}</span><strong>{targetLabel(pending)}</strong></div>

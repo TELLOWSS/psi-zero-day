@@ -1,3 +1,4 @@
+import { GameManual, gameManualText } from './GameManual';
 import { readFgPoints, subscribeUnifiedMeta } from '../app/unified-meta-bridge';
 import { useEffect, useMemo, useState } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
@@ -88,6 +89,7 @@ function GuideVisual({ session, entry, itemKey, alt, className }: {
 }
 
 export function FieldGuide({ session }: { session: EpisodeSession }) {
+  const [showManual, setShowManual] = useState(false);
   const entries = useMemo(() => orderedEntries(), []);
   const sections = useMemo(() => {
     const map = new Map<string, number>();
@@ -111,6 +113,8 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
   const legal = legalItems[key];
 
   return <div className="field-guide">
+    {showManual && <GameManual onClose={() => setShowManual(false)} />}
+    <button type="button" className="hub-primary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
     <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.8rem' }}>
       <div>
         <span className="hub-kicker">FIELD GUIDE / {entries.length}</span>

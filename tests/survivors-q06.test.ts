@@ -17,6 +17,6 @@ it('deterministic engine smoke: movement, attacks, collection, perk choice/rerol
  e.state.maxTime=e.state.gameTime+0.01;e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');
  const restart=new SurvivorsEngine(createInitialSurvivorsState(),123);expect(restart.state.phase).toBe('ready');expect(restart.state.psiCredits).toBe(0);
 });
-it('all five stage identities survive a terminal engine result (controlled fixture)',()=>{
+it('all ten stage identities survive a terminal engine result (controlled fixture)',()=>{
  for(const stageId of STAGE_IDS){const e=new SurvivorsEngine(createInitialSurvivorsState('player',undefined,stageId),1);e.start();e.state.maxTime=1/60;e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');expect(e.state.stageId).toBe(stageId);expect(e.state.stage.id).toBe(stageId);}
 });
