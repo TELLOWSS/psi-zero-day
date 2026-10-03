@@ -21,5 +21,10 @@
   "first_patrol": "이동하며 노란 위험 경로를 피하세요. 자동 조치 후 생긴 파란 기록을 모으면 장비를 강화합니다. 샤우팅이 준비되면 버튼 또는 Space/F로 작업중지를 지시하세요.",
   "supply_help": "보급 아이템과 장비 성장 알아보기",
   "stage_select": "다른 공정 구역 선택",
-  "agent_select": "다른 순찰 요원 선택"
+  "agent_select": "다른 순찰 요원 선택",
+  "damage_sources": { "UNHELMETED": "작업자 안전거리 부족", "RUNAWAY_CART": "운반 장비 접근", "GAS_LEAK": "유독가스 노출", "FALLING_DEBRIS": "낙하물 접촉", "CRANE_BOSS": "양중 반경 침범", "CRANE_DROP": "인양물 낙하" },
+  "damage_prefix": "최근 방호 손실",
+  "retry_hint": "다음 순찰에서는 노란 예고 경로 밖으로 이동하고, 회수한 기록으로 장비를 강화하세요.",
+  "objective_progress": "별 목표 진행",
+  "objective_done": "완료"
 }
