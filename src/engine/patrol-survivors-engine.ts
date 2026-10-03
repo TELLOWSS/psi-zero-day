@@ -591,6 +591,12 @@ export class SurvivorsEngine {
 
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState()) {}
 
+  setPaused(paused: boolean) {
+    if (this.state.phase === 'playing' || this.state.phase === 'paused') {
+      this.state.phase = paused ? 'paused' : 'playing';
+    }
+  }
+
   start() {
     if (this.state.phase === 'ready') {
       this.state.phase = 'playing';
