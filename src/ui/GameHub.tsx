@@ -3,7 +3,13 @@ import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
 import { projectEpisodeJourney } from '../app/episode-journey';
-import { characterMapUri, characterPortraitUri, episode01BackgroundUri } from '../app/episode-visual-assets';
+import {
+  characterHighResPortraitUri,
+  characterMapUri,
+  characterPortraitUri,
+  episode01BackgroundUri,
+  HIRES_KEY_ART,
+} from '../app/episode-visual-assets';
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
@@ -322,7 +328,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
 
 
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
-    <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
+    <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
     <div className="commercial-title-grade" aria-hidden="true" />
     <div className="commercial-title-grain" aria-hidden="true" />
     <div className="commercial-title-sun-glow" aria-hidden="true" />
@@ -528,7 +534,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   </main>;
 
   return <main className={`game-hub hub-page-${page}`}>
-    <VisualImage uri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
+    <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="hub-backdrop" />
     <div className="hub-shade" />
     <header className="hub-header">
       <div className="hub-brand"><span>{GAME_TITLE}</span><small>{t('ui.hub.brandline')}</small></div>
@@ -562,9 +568,9 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       </> : page === 'people' ? <div className="hub-people">
         <div className="hub-section-title"><span className="hub-kicker">FIELD TEAM / 08</span><h1>{t('ui.hub.people')}</h1><p>{t('ui.hub.people.intro')}</p></div>
         <div className="hub-person-grid">{castPlan.characters.map(character => <button type="button" key={character.id} aria-pressed={selectedPerson === character.id} onClick={() => setSelectedPerson(character.id)}>
-          <VisualImage uri={characterPortraitUri(character.id, resolve)} alt="" /><strong>{session.character(character.id)?.name}</strong><small>{session.character(character.id)?.role}</small>
+          <VisualImage uri={characterHighResPortraitUri(character.id, resolve)} fallbackUri={characterPortraitUri(character.id, resolve)} alt="" /><strong>{session.character(character.id)?.name}</strong><small>{session.character(character.id)?.role}</small>
         </button>)}</div>
-        <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
+        <aside className="hub-person-detail" aria-live="polite"><VisualImage uri={characterHighResPortraitUri(selectedPerson, resolve)} fallbackUri={characterPortraitUri(selectedPerson, resolve)} alt={person?.name ?? ''} /><div><small>{person?.role}</small><h2>{person?.name}</h2><p>{t(`ui.hub.person.${selectedPerson}`)}</p>{castDetail ? <span className="hub-person-tag">{t('ui.hub.team_tag')}</span> : null}</div></aside>
       </div> : page === 'guide' ? <RecoverableFieldGuide session={session} onHome={() => setPage('home')} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}

@@ -8,7 +8,13 @@ import { FIELD_SUPPORT_ITEMS, isFieldSupportItemActive } from '../app/field-supp
 import { completedTraining } from '../app/training';
 import { isStrategyFieldActionEvent, projectStrategyActions } from '../app/strategy-actions';
 import type { StrategyAction } from '../app/strategy-actions';
-import { characterMapUri, characterPortraitUri, episode01BackgroundUri, projectStrategyVisualAssets } from '../app/strategy-assets';
+import {
+  characterHighResPortraitUri,
+  characterMapUri,
+  characterPortraitUri,
+  episode01BackgroundUri,
+  projectStrategyVisualAssets,
+} from '../app/strategy-assets';
 import { psiCuesForChoice } from '../app/strategy-psi';
 import { episodeCinematicBeat } from '../app/episode-cinematic-beats';
 import { episodePresentationAudioCue, episodePresentationNodeCue } from '../app/episode-presentation-cues';
@@ -418,9 +424,10 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
     return () => window.removeEventListener('keydown', onKey);
   }, [session, snapshot.revision, snapshot.phase, presentation, mapOutcomeActive, executedEngineResult, fallbackEngineOutcome, voiceLocked, playUiCue, historyOpen]);
 
+  const fallbackBasePortraitUri = person ? characterPortraitUri(person.id, resolveAsset) : undefined;
   const basePortraitUri = portrait?.kind === 'asset'
     ? resolveAsset(portrait.id)
-    : person ? characterPortraitUri(person.id, resolveAsset) : undefined;
+    : person ? characterHighResPortraitUri(person.id, resolveAsset) : undefined;
   const dialoguePortraitUri = dialogueExpressionUri(person?.id, snapshot.dialogue?.text_id, resolveAsset) ?? basePortraitUri;
   const dialogueGrowth = person && snapshot.state ? projectCharacterGrowth(snapshot.state.flags, person.id) : undefined;
   const dialogueLoadout = person && snapshot.state ? projectCharacterLoadout(snapshot.state.flags, person.id) : undefined;
@@ -575,7 +582,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         {person ? <CharacterCard
           person={person}
           portraitUri={productionScene === 'OFFICE' ? basePortraitUri : dialoguePortraitUri}
-          fallbackPortraitUri={basePortraitUri}
+          fallbackPortraitUri={fallbackBasePortraitUri ?? basePortraitUri}
           growth={dialogueGrowth}
           loadout={dialogueLoadout}
           equipmentTitle={t('ui.equipment.title')}

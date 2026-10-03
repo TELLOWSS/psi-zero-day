@@ -59,6 +59,23 @@ export function projectCharacterVisualAssets(
   });
 }
 
+export const HIRES_PORTRAITS: Readonly<Record<string, string>> = Object.freeze({
+  kang_taesik: 'assets/episode01/hires/kang-taesik-portrait.webp',
+  yoon_sungho: 'assets/episode01/hires/yoon-sungho-portrait.webp',
+  lim_junho: 'assets/episode01/hires/lim-junho-portrait.webp',
+});
+
+export const HIRES_KEY_ART = Object.freeze({
+  night_pour: 'assets/episode01/hires/night-pour-hero.webp',
+});
+
+export function characterHighResPortraitUri(characterId: Id, resolve: AssetResolver): string | undefined {
+  if (HIRES_PORTRAITS[characterId]) {
+    return HIRES_PORTRAITS[characterId];
+  }
+  return characterPortraitUri(characterId, resolve);
+}
+
 export function characterPortraitUri(characterId: Id, resolve: AssetResolver): string | undefined {
   const plan = (visuals.characters as Readonly<Record<string, CharacterVisualPlan>>)[characterId];
   return plan ? resolve(plan.portrait_asset_id) : undefined;
@@ -80,3 +97,4 @@ export function backgroundAssetUri(assetId: Id, resolve: AssetResolver): string 
 export function episode01BackgroundUri(resolve: AssetResolver): string | undefined {
   return backgroundAssetUri(visuals.backgrounds.foundation.map_asset_id, resolve);
 }
+

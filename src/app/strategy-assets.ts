@@ -2,9 +2,12 @@ import sceneElementCatalog from '../../content/episode01/scene-element-runtime.j
 import type { Id } from '../domain';
 import {
   backgroundAssetUri,
+  characterHighResPortraitUri,
   characterMapUri,
   characterPortraitUri,
   episode01BackgroundUri,
+  HIRES_KEY_ART,
+  HIRES_PORTRAITS,
   projectCharacterVisualAssets,
   type AssetResolver,
   type StrategyCharacterVisual,
@@ -12,9 +15,12 @@ import {
 
 export {
   backgroundAssetUri,
+  characterHighResPortraitUri,
   characterMapUri,
   characterPortraitUri,
   episode01BackgroundUri,
+  HIRES_KEY_ART,
+  HIRES_PORTRAITS,
   projectCharacterVisualAssets,
 };
 export type { AssetResolver, StrategyCharacterVisual };
