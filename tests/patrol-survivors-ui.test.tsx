@@ -131,7 +131,7 @@ describe('PatrolSurvivorsGame UI', () => {
     }
   });
 
-  it('renders 10 construction stage cards and allows stage selection', () => {
+  it('renders 20 construction stage cards and allows stage selection', () => {
     const handleExit = vi.fn();
     const host = document.createElement('div');
     document.body.appendChild(host);
@@ -145,7 +145,7 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Verify stage cards
-      expect(host.textContent).toContain('작전 구역 선택 (현장 공정 10단계)');
+      expect(host.textContent).toContain('작전 구역 선택 (현장 공정 20단계)');
       expect(host.textContent).toContain('STAGE 01');
       expect(host.textContent).toContain('서측 게이트 및 지상 복합 하역장');
       expect(host.textContent).toContain('STAGE 02');
@@ -153,7 +153,7 @@ describe('PatrolSurvivorsGame UI', () => {
       expect(host.textContent).toContain('STAGE 03');
       expect(host.textContent).toContain('45층 초고층 메가 골조 슬래브');
 
-      expect(host.querySelectorAll('.survivors-stage-card')).toHaveLength(10);
+      expect(host.querySelectorAll('.survivors-stage-card')).toHaveLength(20);
       expect(host.textContent).toContain('STAGE 10');
       expect(host.textContent).not.toContain('STAGE 010');
       // Click Stage 02

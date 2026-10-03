@@ -230,7 +230,7 @@ export interface SurvivorsGameState {
   inFloodlight: boolean;
 }
 
-export const PATROL_STAGE_IDS = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05', 'stage_06', 'stage_07', 'stage_08', 'stage_09', 'stage_10'] as const;
+export const PATROL_STAGE_IDS = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05', 'stage_06', 'stage_07', 'stage_08', 'stage_09', 'stage_10', 'stage_11', 'stage_12', 'stage_13', 'stage_14', 'stage_15', 'stage_16', 'stage_17', 'stage_18', 'stage_19', 'stage_20'] as const;
 export type PatrolStageId = typeof PATROL_STAGE_IDS[number];
 
 export type StageHazardType =
@@ -285,4 +285,5 @@ export interface PatrolStageDefinition {
   bossTitle: string;
   bossType: HazardType;
   bossHp: number;
+  narrative?: { speaker: CharacterId; brief: string; success: string; residual: string };
 }

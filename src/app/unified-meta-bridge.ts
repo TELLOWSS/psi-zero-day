@@ -1,3 +1,4 @@
+import { stagesFromSave, parseSave } from './survivors-save';
 /**
  * PSI : ZERO DAY — Unified Triad Meta Bridge
  * 스토리(Story) · 슈팅(Patrol Survivors) · 디펜스(Zero Breach) · 현장도감(Field Guide)
@@ -51,7 +52,7 @@ export function readUnlockedPatrolStages(): readonly string[] {
   if (typeof window === 'undefined') return ['stage_01'];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_SURVIVORS_UNLOCKED);
-    return raw ? JSON.parse(raw) : ['stage_01'];
+    return stagesFromSave(parseSave(raw),parseSave(localStorage.getItem('psi.survivors.stage_stars')));
   } catch {
     return ['stage_01'];
   }

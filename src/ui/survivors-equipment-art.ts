@@ -1,3 +1,4 @@
+import campaign from '../../content/localization/survivors-campaign20-ko.json';
 import type { BaseWeaponId, PerkId } from '../domain/patrol-survivors';
 
 export const PICKUP_ART='/assets/survivors/pickup-atlas-v2.webp';
@@ -12,6 +13,7 @@ export function equipmentAppearance(id:PerkId,level:number) {
  return {base:base as BaseWeaponId,level:lv,tier,cell:EQUIPMENT_ROWS[base as BaseWeaponId]*3+tier,evolved,module:lv===2||lv===4,scale:1+(lv-1)*.055};
 }
 export function stageGroundUri(stageId:string):string {
+ const sequel=campaign.stages.find(stage=>stage.id===stageId);if(sequel)return `/assets/survivors/${sequel.ground}-ground-v3.webp`;
  if(['stage_02','stage_06'].includes(stageId)) return '/assets/survivors/excavation-ground-v3.webp';
  if(stageId==='stage_07') return '/assets/survivors/demolition-ground-v3.webp';
  if(['stage_05','stage_09','stage_10'].includes(stageId)) return '/assets/survivors/industrial-ground-v3.webp';

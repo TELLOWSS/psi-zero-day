@@ -1,3 +1,5 @@
+import campaign from '../../content/localization/survivors-campaign20-ko.json';
+import type { CharacterId, PatrolStageId } from '../domain/patrol-survivors';
 import type { HazardType, PatrolStageDefinition, StageHazardObject } from '../domain/patrol-survivors';
 
 const object = (id: string, type: StageHazardObject['type'], x: number, y: number, label: string): StageHazardObject => ({
@@ -30,5 +32,29 @@ export const ADDITIONAL_PATROL_STAGES = {
   stage_07: mission(7, '리모델링 선택 철거', 'apt-remodel-selective-demolition', '철거 낙하물 경고원을 벗어나고 양중 작업을 중지합니다. 무전 조치로 낙하 작업반경을 비우세요.', ['UNHELMETED','FALLING_DEBRIS','FALLING_DEBRIS','RUNAWAY_CART'], [object('demo_1','crane_drop_zone',350,280,'철거 양중 통제'), object('demo_2','crane_drop_zone',1050,620,'폐기물 반출 통제'), object('demo_3','crane_drop_zone',700,450,'낙하 작업반경')], 'boss', 1),
   stage_08: mission(8, '기존·신설 구조 접합', 'apt-remodel-old-new-connection', '접합부 작업과 자재 반입 동선이 겹칩니다. 양중 중지와 기존 설비 격리를 조합해 통로를 확보하세요.', ['UNHELMETED','FALLING_DEBRIS','RUNAWAY_CART','UNHELMETED'], [object('join_1','crane_drop_zone',420,300,'접합부 양중 중지'),object('join_2','crane_drop_zone',980,600,'보강재 양중 중지'),object('join_power','electric_transformer',700,220,'기존 설비 격리')], 'hp', 60),
   stage_09: mission(9, '데이터센터 MEP 설치', 'data-center-mep', '배관·공조·전기 설치가 동시에 진행됩니다. 설비 반입 동선과 가스 위험을 구분하고 전원 차단을 확인하세요.', ['UNHELMETED','GAS_LEAK','RUNAWAY_CART','GAS_LEAK'], [object('mep_power1','electric_transformer',400,280,'전기 구역 격리'),object('mep_power2','electric_transformer',1000,620,'공조 전원 차단'),object('mep_store1','explosive_barrel',400,620,'용제 보관구역 격리'),object('mep_store2','explosive_barrel',1000,280,'작업구역 대피')], 'shout', 1),
-  stage_10: mission(10, '데이터센터 통합 시운전', 'data-center-commissioning', '전체 공정 통제를 점검하는 마지막 순찰입니다. 차단·격리 상태를 확보하고 대표 설비 위험까지 통제하세요.', ['UNHELMETED','GAS_LEAK','RUNAWAY_CART','FALLING_DEBRIS'], [object('test_power1','electric_transformer',350,280,'수전 구역 차단'),object('test_power2','electric_transformer',1050,620,'UPS 전원 격리'),object('test_power3','electric_transformer',700,220,'시운전 구역 격리'),object('test_lift1','crane_drop_zone',420,600,'설비 반입 중지'),object('test_lift2','crane_drop_zone',980,300,'양중 작업반경')], 'boss', 1),
+  stage_10: mission(10, '데이터센터 통합 시운전', 'data-center-commissioning', '기존 공정 훈련을 마무리하고 다음 현장 작전으로 이어지는 순찰입니다. 차단·격리 상태를 확보하고 대표 설비 위험까지 통제하세요.', ['UNHELMETED','GAS_LEAK','RUNAWAY_CART','FALLING_DEBRIS'], [object('test_power1','electric_transformer',350,280,'수전 구역 차단'),object('test_power2','electric_transformer',1050,620,'UPS 전원 격리'),object('test_power3','electric_transformer',700,220,'시운전 구역 격리'),object('test_lift1','crane_drop_zone',420,600,'설비 반입 중지'),object('test_lift2','crane_drop_zone',980,300,'양중 작업반경')], 'boss', 1),
 };
+
+
+/** A connected follow-up operation using existing engine hazards, not ten renamed clones. */
+export const CAMPAIGN_PATROL_STAGES = Object.fromEntries(campaign.stages.map(row => {
+  const n=row.stageNumber, x=320+(n%3)*70, y=250+(n%2)*80;
+  const gas=row.hazardMix.filter(type=>type==='GAS_LEAK').length>1;
+  const objects = [object(`${row.id}_light`,'floodlight_tower',700,n%2?220:680,'공정 작업 조명'),
+    object(`${row.id}_control_a`,gas?'electric_transformer':'crane_drop_zone',x,y,'서측 작업반경 통제'),
+    object(`${row.id}_control_b`,gas?'explosive_barrel':'crane_drop_zone',1400-x,900-y,'동측 작업반경 통제'),
+    object(`${row.id}_power`,'electric_transformer',n%2?980:420,n%2?300:620,'작업구역 전원 격리')];
+  const stage: PatrolStageDefinition = {
+    id:row.id as PatrolStageId,stageNumber:n,name:row.name,siteProfileId:row.siteProfileId,
+    subtitle:campaign.chapter,description:row.brief,theme:row.theme as PatrolStageDefinition['theme'],
+    hazardMix:row.hazardMix as HazardType[],difficulty:row.difficulty,
+    floorColor:'#17212a',gridColor:'rgba(148,163,184,.08)',borderColor:'#f59e0b',ambientColor:'rgba(148,163,184,.04)',icon:'🏗️',
+    hazards:objects,bossName:row.name+' 대표 작업반경',bossTitle:'STOP · ISOLATE · VERIFY',bossType:row.bossType as HazardType,bossHp:row.bossHp,
+    narrative:{speaker:row.speaker as CharacterId,brief:row.brief,success:row.success,residual:row.residual},
+    starChallenges:[
+      {starIndex:1,metric:'victory',title:'현장 작전 완수',description:'3분간 방호 한계를 지키고 순찰 완료',currentValue:0,targetValue:1,isCompleted:false},
+      {starIndex:2,metric:'environmental',title:'인계 전 통제 확인',description:`구역 격리·양중 중지로 위험 노출 ${row.environmentTarget}건 해소`,currentValue:0,targetValue:row.environmentTarget,isCompleted:false},
+      {starIndex:3,metric:n%3===0?'shout':'boss',title:n%3===0?'긴급 작업중지':'대표 위험 통제',description:n%3===0?'소장 샤우팅 1회 성공':'경보로 등장한 대표 위험 통제',currentValue:0,targetValue:1,isCompleted:false}
+    ]
+  };return [stage.id,stage];
+})) as Record<Extract<PatrolStageId,`stage_1${number}`|'stage_20'>,PatrolStageDefinition>;

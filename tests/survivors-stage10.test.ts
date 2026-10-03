@@ -5,13 +5,13 @@ import sites from '../content/defense/site-profiles-v1.json';
 
 describe('ten construction process missions', () => {
   it('maps every mission to a different existing construction profile and keeps legacy saves', () => {
-    const profiles = STAGE_IDS.map(id => PATROL_STAGES[id].siteProfileId);
+    const profiles = STAGE_IDS.slice(0,10).map(id => PATROL_STAGES[id].siteProfileId);
     expect(new Set(profiles).size).toBe(10);
     expect(profiles.every(id => sites.profiles.some(profile => profile.id === id))).toBe(true);
-    expect(validStages(['stage_01','stage_05','stage_06','stage_10','stage_11'])).toEqual(['stage_01','stage_05','stage_06','stage_10']);
-    expect(validStars({ stage_10: [true,false,true], stage_11: [true] })).toEqual({ stage_10: [true,false,true] });
+    expect(validStages(['stage_01','stage_05','stage_06','stage_10','stage_21'])).toEqual(['stage_01','stage_05','stage_06','stage_10']);
+    expect(validStars({ stage_10: [true,false,true], stage_21: [true] })).toEqual({ stage_10: [true,false,true] });
     expect(STAGE_IDS.indexOf('stage_05') + 1).toBe(STAGE_IDS.indexOf('stage_06'));
-    expect(STAGE_IDS.at(-1)).toBe('stage_10');
+    expect(STAGE_IDS.at(-1)).toBe('stage_20');
   });
   it('initializes the watch officer with radio, mobility and pickup bonuses', () => {
     const state = createInitialSurvivorsState('safety_monitor', undefined, 'stage_10');

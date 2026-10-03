@@ -1,5 +1,5 @@
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
-import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
+import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
 import { applyTacticalItem, tacticalSupplyFor, tickTacticalItems } from './survivors-items';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
@@ -31,6 +31,7 @@ export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
 
 export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   ...ADDITIONAL_PATROL_STAGES,
+  ...CAMPAIGN_PATROL_STAGES,
   stage_01: {
     id: 'stage_01',
     stageNumber: 1,
@@ -614,8 +615,8 @@ export class SurvivorsEngine {
 
   private audioSequence = 0;
   private audioEvents: SurvivorsAudioEvent[] = [];
-  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number) {
-    this.audioEvents.push({id: ++this.audioSequence, type, x, y});
+  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number, feedback: Pick<SurvivorsAudioEvent, 'outcome' | 'actorKind'> = {}) {
+    this.audioEvents.push({id: ++this.audioSequence, type, x, y, ...feedback});
     if (this.audioEvents.length > 256) this.audioEvents.shift();
   }
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
@@ -1422,7 +1423,7 @@ export class SurvivorsEngine {
           const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           h.hp -= damageDealt;
-          this.emitAudio('impact', h.x, h.y);
+          this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -1511,7 +1512,7 @@ export class SurvivorsEngine {
         const supply = tacticalSupplyFor(this.state.hazardsNeutralized, Boolean(h.isStageBoss));
         if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
         if (h.isStageBoss) this.state.stageBossNeutralized = true;
-        this.emitAudio('control', h.x, h.y);
+        this.emitAudio('control', h.x, h.y, { ...(h.isStageBoss ? { outcome: 'boss' as const } : {}), actorKind: h.type });
 
         // Combo chain system
         this.state.comboCount = (this.state.comboCount || 0) + 1;
@@ -1530,11 +1531,11 @@ export class SurvivorsEngine {
         );
 
         // Boss death slow-motion execution finish
-        if (h.type === 'CRANE_BOSS') {
+        if (h.type === 'CRANE_BOSS' || h.isStageBoss) {
           this.state.timeDilation = 0.25;
           this.state.timeDilationTimer = 0.8;
           this.state.hitStopTimer = 0.08;
-          this.state.score += 2500;
+          if (h.type === 'CRANE_BOSS') this.state.score += 2500;
         }
 
         // Drop safety log (exp gem) - always provides EXP
