@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { characterPortraitUri } from '../app/episode-visual-assets';
@@ -430,6 +430,64 @@ export function DefenseGame({
     }
   }, [result?.won, result?.stars]);
 
+  // Phase 2: Active E-Stop emergency brake & Tactical Radio Chatter (Tick-based, zero extra timers)
+  const eStopCooldownUntilTickRef = useRef<number>(0);
+  const eStopActiveUntilTickRef = useRef<number>(0);
+  const radioUntilTickRef = useRef<number>(0);
+  const [radioChatter, setRadioChatter] = useState<{
+    speaker: string;
+    role: string;
+    portraitUri?: string;
+    text: string;
+  } | null>(null);
+  const lastReportedWaveRef = useRef<number>(0);
+
+  const eStopActive = state ? Math.max(0, ((eStopActiveUntilTickRef.current - state.tick) * content.tickMs) / 1000) : 0;
+  const eStopCooldown = state ? Math.max(0, ((eStopCooldownUntilTickRef.current - state.tick) * content.tickMs) / 1000) : 0;
+  const isRadioVisible = Boolean(radioChatter && state && state.tick < radioUntilTickRef.current);
+
+  const triggerRadio = (speaker: string, role: string, text: string, portraitUri?: string) => {
+    setRadioChatter({ speaker, role, portraitUri, text });
+    if (state) {
+      radioUntilTickRef.current = state.tick + 80;
+    }
+    if (typeof window !== 'undefined' && state && state.tick > 0 && !audio.muted) {
+      audio.playCue('radio');
+    }
+  };
+
+  const triggerEStop = () => {
+    if (!state || state.status !== 'RUNNING' || state.paused || eStopCooldown > 0) return;
+    eStopCooldownUntilTickRef.current = state.tick + 560;
+    eStopActiveUntilTickRef.current = state.tick + 70;
+    dispatch({ type: 'TriggerEStop' });
+    if (!audio.muted) audio.playCue('estop');
+    const chiefPortrait = characterPortraitUri('yoon_sungho', id => session.assetUri(id));
+    triggerRadio('윤성호 소장', '현장 총괄 소장', '전 구역 긴급 E-STOP 발동! 전원 위험 반경에서 물러서고 상황 재정비하라!', chiefPortrait);
+  };
+
+  // Tactical Radio triggers when enemies first engage in wave 1 or periodic waves
+  useEffect(() => {
+    if (!state || state.status !== 'RUNNING' || lastReportedWaveRef.current === state.waveId) return;
+    if (state.waveId === 1 && state.enemies.length === 0) return; // wait for first hazard to enter site
+    lastReportedWaveRef.current = state.waveId;
+    const foremanPortrait = characterPortraitUri('kang_taesik', id => session.assetUri(id));
+    const engineerPortrait = characterPortraitUri('lee_jaehoon', id => session.assetUri(id));
+    if (state.waveId === 1) {
+      triggerRadio('강태식 반장', '안전 총괄', '현장 작업선 접근 감지! 각 타워 제어 라인 통제 시작한다!', foremanPortrait);
+    } else if (state.waveId % 3 === 0) {
+      triggerRadio('이재훈 대리', '품질안전', '진동 및 균열 계측치 상승 중. 위험 요소 누출 없도록 집중 대응 바람!', engineerPortrait);
+    }
+  }, [state?.waveId, state?.status, state?.enemies.length]);
+
+  // Tactical Radio trigger on shield breach
+  useEffect(() => {
+    if (effects.shieldHit && state && state.status === 'RUNNING') {
+      const foremanPortrait = characterPortraitUri('kang_taesik', id => session.assetUri(id));
+      triggerRadio('강태식 반장', '안전 총괄', '외벽 쉴드 충격 감지! 차단벽 긴급 점검 및 타워 화력 집중하라!', foremanPortrait);
+    }
+  }, [effects.shieldHit]);
+
   useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
     const timer = window.setInterval(() => {
@@ -534,6 +592,15 @@ export function DefenseGame({
         return;
       }
 
+      // Emergency E-Stop (E)
+      if (event.key === 'e' || event.key === 'E') {
+        if (state.status === 'RUNNING' && !state.paused && eStopCooldown <= 0) {
+          event.preventDefault();
+          triggerEStop();
+        }
+        return;
+      }
+
       // Tower building hotkeys 1, 2, 3, 4 when empty pad is selected
       if (selectedPad && !selectedPadTower) {
         const keyMap: Record<string, DefenseTowerId> = {
@@ -589,7 +656,7 @@ export function DefenseGame({
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [state, selectedPad, selectedPadTower, selectedTower, selectedLevel, upgrades, settingsOpen, content, TOWER_IDS, dispatch]);
+  }, [state, selectedPad, selectedPadTower, selectedTower, selectedLevel, upgrades, settingsOpen, content, TOWER_IDS, dispatch, eStopCooldown, triggerEStop]);
 
   const choosePad = (padId: string) => {
     if (!state) return;
@@ -885,6 +952,27 @@ export function DefenseGame({
           <button type="button" className="zb-camera-reset" onClick={camera.resetZoom} aria-label="배율 초기화">{Math.round(camera.manualScale * 100)}%</button>
           <button type="button" onClick={camera.zoomIn} disabled={camera.manualScale >= 1.8} aria-label="확대">＋</button>
         </div> : null}
+
+        {/* Phase 2: Active E-Stop Banner */}
+        {eStopActive > 0 ? <div className="zb-estop-banner" role="alert" aria-live="assertive">
+          <span>🚨</span>
+          <strong>현장 비상 정지(E-STOP) 발동 중! 전 구역 정지 ({eStopActive.toFixed(1)}s)</strong>
+        </div> : null}
+
+        {/* Phase 2: Tactical Radio Chatter Walkie-Talkie HUD */}
+        {isRadioVisible && radioChatter ? <div className="zb-radio-chatter" role="status" aria-live="polite">
+          {radioChatter.portraitUri
+            ? <img src={radioChatter.portraitUri} alt="" className="zb-radio-portrait" />
+            : <div className="zb-radio-portrait" />}
+          <div className="zb-radio-content">
+            <div className="zb-radio-header">
+              <span className="zb-radio-channel">CH-1 현장무전</span>
+              <strong className="zb-radio-speaker">{radioChatter.speaker}</strong>
+              <span className="zb-radio-role">{radioChatter.role}</span>
+            </div>
+            <p className="zb-radio-text">{radioChatter.text}</p>
+          </div>
+        </div> : null}
       </div>
     </section>
 
@@ -966,6 +1054,20 @@ export function DefenseGame({
           >
             {state.supportCooldownRemaining > 0 ? `${supportCooldownSeconds}s` : t('defense.ui.support')}
             {state.supportCooldownRemaining <= 0 ? <kbd className="zb-hotkey">Q</kbd> : null}
+          </button>
+        </div>
+
+        {/* Phase 2: Active E-Stop Button */}
+        <div className="zb-estop-action">
+          <span><small>EMERGENCY</small><strong>비상 정지 (E-STOP)</strong></span>
+          <button
+            type="button"
+            className="zb-estop-btn"
+            disabled={state.status !== 'RUNNING' || state.paused || eStopCooldown > 0}
+            onClick={triggerEStop}
+          >
+            {eStopCooldown > 0 ? `${Math.ceil(eStopCooldown)}s` : '🚨 E-STOP'}
+            {eStopCooldown <= 0 ? <kbd className="zb-hotkey" style={{ marginLeft: 4 }}>E</kbd> : null}
           </button>
         </div>
         {(state.status === 'READY' || state.status === 'INTERMISSION') ? <button

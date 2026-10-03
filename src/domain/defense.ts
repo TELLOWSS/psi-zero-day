@@ -172,6 +172,7 @@ export type DefenseCommand =
   | { readonly type: 'SetTargetMode'; readonly towerInstanceId: string; readonly targetMode: DefenseTargetMode }
   | { readonly type: 'StartWave' }
   | { readonly type: 'UseSupport' }
+  | { readonly type: 'TriggerEStop' }
   | { readonly type: 'SetSpeed'; readonly speed: 1 | 2 }
   | { readonly type: 'SetPaused'; readonly paused: boolean };
 

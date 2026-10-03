@@ -153,6 +153,19 @@ export function applyDefenseCommand(state: DefenseRunState, content: DefenseCont
         : state.enemies,
     };
   }
+  if (command.type === 'TriggerEStop') {
+    if (state.status !== 'RUNNING' || state.paused) throw new Error('E-Stop requires active combat');
+    const freezeTicks = 70; // 3.5 seconds all-stop freeze at 50ms/tick
+    return {
+      ...state,
+      freezeMovementUntilTick: Math.max(state.freezeMovementUntilTick, state.tick + freezeTicks),
+      revealAllUntilTick: Math.max(state.revealAllUntilTick, state.tick + freezeTicks),
+      enemies: state.enemies.map(enemy => ({
+        ...enemy,
+        revealUntilTick: Math.max(enemy.revealUntilTick, state.tick + freezeTicks),
+      })),
+    };
+  }
   const canManageTower = state.status === 'READY' || state.status === 'RUNNING' || state.status === 'INTERMISSION';
   if (!canManageTower) return state;
   if (command.type === 'Build') {

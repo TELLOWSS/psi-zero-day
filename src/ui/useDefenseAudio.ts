@@ -14,6 +14,8 @@ export type DefenseAudioCue =
   | 'area_resolve'
   | 'leak'
   | 'support'
+  | 'estop'
+  | 'radio'
   | 'win'
   | 'loss';
 
@@ -38,6 +40,8 @@ const PROFILES: Readonly<Record<DefenseAudioCue, DefenseAudioProfile>> = {
   area_resolve: { startHz: 390, endHz: 190, durationMs: 95, oscillator: 'triangle', gain: 0.014 },
   leak: { startHz: 160, endHz: 92, durationMs: 135, oscillator: 'triangle', gain: 0.031 },
   support: { startHz: 350, endHz: 790, durationMs: 175, oscillator: 'sine', gain: 0.03 },
+  estop: { startHz: 880, endHz: 440, durationMs: 400, oscillator: 'sawtooth', gain: 0.045 },
+  radio: { startHz: 650, endHz: 950, durationMs: 120, oscillator: 'square', gain: 0.02 },
   win: { startHz: 520, endHz: 920, durationMs: 250, oscillator: 'sine', gain: 0.032 },
   loss: { startHz: 230, endHz: 105, durationMs: 270, oscillator: 'triangle', gain: 0.032 },
 };
@@ -114,7 +118,7 @@ export function useDefenseAudio(state: DefenseRunState | null, mapId?: string | 
     if (!armedRef.current || muted || typeof window === 'undefined') return;
     window.dispatchEvent(new CustomEvent(DEFENSE_AUDIO_CUE_EVENT, { detail: { cue } }));
 
-    const premiumUri = premiumDefenseCueUri(cue);
+    const premiumUri = (cue === 'estop' || cue === 'radio') ? null : premiumDefenseCueUri(cue);
     if (premiumUri && typeof Audio !== 'undefined') {
       const element = new Audio(premiumUri);
       element.preload = 'auto';
