@@ -1,0 +1,9 @@
+# Shooting cut-in realism and screenshot review
+
+Replaces the active director shout v2 with v3, artwork only. Source generated using built-in image generation from the old v2, keeping Korean veteran face, white helmet, reflective vest and gold megaphone. Prompt: preserve identity and urgent pose; cinematic realistic skin/cloth/industrial dusk; remove all text, bubbles, sound effects, lightning and logos. Original PNG 1672×941; WebP quality88, 297148 bytes. No upscaling. Asset: public/assets/survivors/director-yoon-shout-v3.webp. The close-up helmet edge reaches the upper frame; full-body cast art is unchanged.
+
+Exact authorized dialogue remains `작업중지 돌아버려 씨~!!!`, rendered from localization as DOM text, never baked into art. Removes misspelled `45년 산전기작`, duplicate dialogue, comic onomatopoeia and neon slash framing. Mobile uses portrait art plus separate readable text, landscape overlays text on a dark gradient. No fullscreen inversion flash. Existing four-second supplied voice and gameplay timing/rules preserved.
+
+Attached 87617/87619 show older oversized HUD/combo and dark mud, already fixed in PR93. 87622/87624 show the later compact HUD but duplicate long crane labels; nearest crane now displays one short localized caption, with every hazard and danger ring retained. 87626 shows the monitor thumbnail cropped at center of full-body art, removing head: top-anchored zoom now keeps helmet/face visible, without modifying the original sprite. Full body still used in the game.
+
+Validation: typecheck, full test suite and production build; four viewport browser regression; actual Stage10 saved-unlock/valid permanent-upgrade fixture charges and triggers shout, checks image dimensions, exact text and mobile bounds, captures actual runtime. Not proof of natural Stage10 unlock or physical-phone endurance. CI artifacts include character selection and shout screenshots. Final artwork and runtime screenshots require visual review before merge.
