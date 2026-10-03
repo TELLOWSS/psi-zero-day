@@ -1,3 +1,4 @@
+import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
 import { applyTacticalItem, tacticalSupplyFor, tickTacticalItems } from './survivors-items';
@@ -361,7 +362,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   steel_boots: {
     id: 'steel_boots',
     name: '초경량 절연 안전화',
-    description: '현장 기동성을 대폭 향상시켜 이동 속도가 15% 빨라집니다.',
+    description: '현장 기동성을 대폭 향상시켜 이동 속도가 30 증가합니다.',
     icon: '👟',
     maxLevel: 3,
     category: 'support',
@@ -369,7 +370,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   magnet_beacon: {
     id: 'magnet_beacon',
     name: '무선 안전 센서 비콘',
-    description: '바닥에 떨어진 안전 기록(PSI 데이터)의 자석 흡수 반경이 35% 증가합니다.',
+    description: '바닥에 떨어진 안전 기록(PSI 데이터)의 자석 흡수 반경이 35 증가합니다.',
     icon: '🧲',
     maxLevel: 3,
     category: 'support',
@@ -700,6 +701,7 @@ export class SurvivorsEngine {
 
     this.state.gameTime += effectiveDt;
     tickTacticalItems(this.state,effectiveDt);
+    if (this.state.lastDamage) this.state.lastDamage.remaining = Math.max(0, this.state.lastDamage.remaining - effectiveDt);
     if (this.state.controlKit) {
       this.state.controlKit.remaining = Math.max(0, this.state.controlKit.remaining - effectiveDt);
       if (this.state.controlKit.remaining === 0 || this.state.controlKit.charges === 0) this.state.controlKit = undefined;
@@ -897,9 +899,9 @@ export class SurvivorsEngine {
     if (hasSatellite) {
       this.cooldowns.satellite -= dt;
       if (this.cooldowns.satellite <= 0) {
-        this.cooldowns.satellite = 1.1 * cdReduction;
+        this.cooldowns.satellite = equipmentTuning('satellite_broadcast', 1)!.interval * cdReduction;
         // Fire 8-directional cosmic sonic waves across the screen
-        const count = 8;
+        const count = equipmentTuning('satellite_broadcast', 1)!.count;
         for (let i = 0; i < count; i++) {
           const angle = (i * Math.PI * 2) / count;
           this.addProjectile({
@@ -908,10 +910,10 @@ export class SurvivorsEngine {
             y: player.y,
             vx: Math.cos(angle) * 580,
             vy: Math.sin(angle) * 580,
-            radius: 28,
-            damage: 95 * player.damageMultiplier,
-            duration: 2.2,
-            pierce: 99,
+            radius: equipmentTuning('satellite_broadcast', 1)!.radius,
+            damage: equipmentTuning('satellite_broadcast', 1)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('satellite_broadcast', 1)!.duration,
+            pierce: equipmentTuning('satellite_broadcast', 1)!.pierce,
             kind: 'satellite_wave',
             color: '#38bdf8',
           });
@@ -921,7 +923,7 @@ export class SurvivorsEngine {
       const radioLvl = activePerks.radio_boost;
       if (radioLvl > 0) {
         this.cooldowns.radio -= dt;
-        const radioBaseCd = Math.max(0.4, 1.2 - radioLvl * 0.15) * cdReduction;
+        const radioBaseCd = equipmentTuning('radio_boost', radioLvl)!.interval * cdReduction;
         if (this.cooldowns.radio <= 0) {
           this.cooldowns.radio = radioBaseCd;
           const target = this.findNearestHazard(player.x, player.y);
@@ -929,7 +931,7 @@ export class SurvivorsEngine {
             const dx = target.x - player.x;
             const dy = target.y - player.y;
             const dist = Math.hypot(dx, dy) || 1;
-            const bulletCount = radioLvl >= 4 ? 3 : radioLvl >= 2 ? 2 : 1;
+            const bulletCount = equipmentTuning('radio_boost', radioLvl)!.count;
 
             for (let i = 0; i < bulletCount; i++) {
               const spreadAngle = (i - (bulletCount - 1) / 2) * 0.22;
@@ -944,10 +946,10 @@ export class SurvivorsEngine {
                 y: player.y,
                 vx: ndx * 480,
                 vy: ndy * 480,
-                radius: 10,
-                damage: (22 + radioLvl * 8) * player.damageMultiplier,
-                duration: 1.4,
-                pierce: radioLvl >= 3 ? 2 : 1,
+                radius: equipmentTuning('radio_boost', radioLvl)!.radius,
+                damage: equipmentTuning('radio_boost', radioLvl)!.damage * player.damageMultiplier,
+                duration: equipmentTuning('radio_boost', radioLvl)!.duration,
+                pierce: equipmentTuning('radio_boost', radioLvl)!.pierce,
                 kind: 'radio',
               });
             }
@@ -963,9 +965,9 @@ export class SurvivorsEngine {
     if (hasCryo) {
       this.cooldowns.cryo -= dt;
       if (this.cooldowns.cryo <= 0) {
-        this.cooldowns.cryo = 1.6 * cdReduction;
+        this.cooldowns.cryo = equipmentTuning('cryo_blizzard', 1)!.interval * cdReduction;
         // 360-degree freezing blizzard
-        const sprays = 16;
+        const sprays = equipmentTuning('cryo_blizzard', 1)!.count;
         for (let i = 0; i < sprays; i++) {
           const angle = (i * Math.PI * 2) / sprays + (this.random() - 0.5) * 0.2;
           this.addProjectile({
@@ -974,10 +976,10 @@ export class SurvivorsEngine {
             y: player.y,
             vx: Math.cos(angle) * 360,
             vy: Math.sin(angle) * 360,
-            radius: 20,
-            damage: 60 * player.damageMultiplier,
-            duration: 0.8,
-            pierce: 99,
+            radius: equipmentTuning('cryo_blizzard', 1)!.radius,
+            damage: equipmentTuning('cryo_blizzard', 1)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('cryo_blizzard', 1)!.duration,
+            pierce: equipmentTuning('cryo_blizzard', 1)!.pierce,
             kind: 'cryo_blast',
             color: '#a5f3fc',
           });
@@ -987,10 +989,10 @@ export class SurvivorsEngine {
       const extLvl = activePerks.extinguisher;
       if (extLvl > 0) {
         this.cooldowns.extinguisher -= dt;
-        const extBaseCd = Math.max(0.6, 2.0 - extLvl * 0.25) * cdReduction;
+        const extBaseCd = equipmentTuning('extinguisher', extLvl)!.interval * cdReduction;
         if (this.cooldowns.extinguisher <= 0) {
           this.cooldowns.extinguisher = extBaseCd;
-          const sprayCount = 4 + extLvl * 2;
+          const sprayCount = equipmentTuning('extinguisher', extLvl)!.count;
           const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
 
           for (let i = 0; i < sprayCount; i++) {
@@ -1004,10 +1006,10 @@ export class SurvivorsEngine {
               y: player.y,
               vx: Math.cos(sprayAngle) * speed,
               vy: Math.sin(sprayAngle) * speed,
-              radius: 12 + extLvl * 2,
-              damage: (14 + extLvl * 6) * player.damageMultiplier,
-              duration: 0.65,
-              pierce: 3,
+              radius: equipmentTuning('extinguisher', extLvl)!.radius,
+              damage: equipmentTuning('extinguisher', extLvl)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('extinguisher', extLvl)!.duration,
+              pierce: equipmentTuning('extinguisher', extLvl)!.pierce,
               kind: 'extinguisher',
             });
           }
@@ -1021,25 +1023,25 @@ export class SurvivorsEngine {
     const hasTesla = activePerks.tesla_dome > 0;
     if (hasTesla) {
       this.cooldowns.tesla -= dt;
-      const radius = 220;
+      const radius = equipmentTuning('tesla_dome', 1)!.radius;
       // Continuous aura + chain lightning
       for (const h of hazards) {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
-          h.hp -= 90 * player.damageMultiplier * dt;
+          h.hp -= equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt;
           h.speed = Math.max(25, h.speed * 0.7);
         }
       }
       if (this.cooldowns.tesla <= 0) {
-        this.cooldowns.tesla = 0.5 * cdReduction;
+        this.cooldowns.tesla = equipmentTuning('tesla_dome', 1)!.interval * cdReduction;
         // Strike up to 4 targets with lightning
         let strikes = 0;
         for (const h of hazards) {
-          if (strikes >= 4) break;
+          if (strikes >= equipmentTuning('tesla_dome', 1)!.count) break;
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (dist <= radius + 100) {
-            h.hp -= 80 * player.damageMultiplier;
+            h.hp -= equipmentTuning('tesla_dome', 1)!.damage * player.damageMultiplier;
             strikes++;
             this.addProjectile({
               id: this.genId('proj_tesla'),
@@ -1048,7 +1050,7 @@ export class SurvivorsEngine {
               vx: 0,
               vy: 0,
               radius: 25,
-              damage: 40 * player.damageMultiplier,
+              damage: equipmentTuning('tesla_dome', 1)!.secondaryDamage! * player.damageMultiplier,
               duration: 0.3,
               pierce: 99,
               kind: 'tesla_bolt',
@@ -1060,8 +1062,8 @@ export class SurvivorsEngine {
     } else {
       const floodLvl = activePerks.floodlight;
       if (floodLvl > 0) {
-        const radius = 90 + floodLvl * 22;
-        const auraDps = (18 + floodLvl * 9) * player.damageMultiplier;
+        const radius = equipmentTuning('floodlight', floodLvl)!.radius;
+        const auraDps = equipmentTuning('floodlight', floodLvl)!.continuousDamage! * player.damageMultiplier;
         for (const h of hazards) {
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (dist <= radius + h.radius) {
@@ -1079,7 +1081,7 @@ export class SurvivorsEngine {
     if (hasEmf) {
       this.cooldowns.emf -= dt;
       if (this.cooldowns.emf <= 0) {
-        this.cooldowns.emf = 1.2 * cdReduction;
+        this.cooldowns.emf = equipmentTuning('emf_barricade', 1)!.interval * cdReduction;
         // Drop high-tech laser pylon
         this.addProjectile({
           id: this.genId('proj_emf'),
@@ -1087,10 +1089,10 @@ export class SurvivorsEngine {
           y: player.y,
           vx: 0,
           vy: 0,
-          radius: 36,
-          damage: 180 * player.damageMultiplier,
-          duration: 15.0,
-          pierce: 99,
+          radius: equipmentTuning('emf_barricade', 1)!.radius,
+          damage: equipmentTuning('emf_barricade', 1)!.damage * player.damageMultiplier,
+          duration: equipmentTuning('emf_barricade', 1)!.duration,
+          pierce: equipmentTuning('emf_barricade', 1)!.pierce,
           kind: 'emf_beam',
           color: '#ec4899',
         });
@@ -1099,7 +1101,7 @@ export class SurvivorsEngine {
       const coneLvl = activePerks.cone_trap;
       if (coneLvl > 0) {
         this.cooldowns.cone -= dt;
-        const coneCd = Math.max(1.8, 3.5 - coneLvl * 0.4) * cdReduction;
+        const coneCd = equipmentTuning('cone_trap', coneLvl)!.interval * cdReduction;
         if (this.cooldowns.cone <= 0) {
           this.cooldowns.cone = coneCd;
           this.addProjectile({
@@ -1108,10 +1110,10 @@ export class SurvivorsEngine {
             y: player.y,
             vx: 0,
             vy: 0,
-            radius: 16 + coneLvl * 2,
-            damage: (50 + coneLvl * 25) * player.damageMultiplier,
-            duration: 12.0,
-            pierce: 1 + Math.floor(coneLvl / 2),
+            radius: equipmentTuning('cone_trap', coneLvl)!.radius,
+            damage: equipmentTuning('cone_trap', coneLvl)!.damage * player.damageMultiplier,
+            duration: equipmentTuning('cone_trap', coneLvl)!.duration,
+            pierce: equipmentTuning('cone_trap', coneLvl)!.pierce,
             kind: 'cone_trap',
           });
         }
@@ -1125,10 +1127,10 @@ export class SurvivorsEngine {
     if (hasHunter) {
       this.cooldowns.hunter -= dt;
       if (this.cooldowns.hunter <= 0) {
-        this.cooldowns.hunter = 0.22 * cdReduction;
+        this.cooldowns.hunter = equipmentTuning('hunter_swarm', 1)!.interval * cdReduction;
         // 3 drones firing
         const angleBase = this.state.droneAngle ?? 0;
-        for (let d = 0; d < 3; d++) {
+        for (let d = 0; d < equipmentTuning('hunter_swarm', 1)!.count; d++) {
           const angle = angleBase + (d * Math.PI * 2) / 3;
           const droneX = player.x + Math.cos(angle) * 85;
           const droneY = player.y + Math.sin(angle) * 85;
@@ -1143,10 +1145,10 @@ export class SurvivorsEngine {
               y: droneY,
               vx: (dx / dist) * 750,
               vy: (dy / dist) * 750,
-              radius: 9,
-              damage: 48 * player.damageMultiplier,
-              duration: 1.2,
-              pierce: 4,
+              radius: equipmentTuning('hunter_swarm', 1)!.radius,
+              damage: equipmentTuning('hunter_swarm', 1)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('hunter_swarm', 1)!.duration,
+              pierce: equipmentTuning('hunter_swarm', 1)!.pierce,
               kind: 'hunter_beam',
               color: '#a855f7',
             });
@@ -1157,7 +1159,7 @@ export class SurvivorsEngine {
       const droneLvl = activePerks.safety_drone;
       if (droneLvl > 0) {
         this.cooldowns.drone -= dt;
-        const droneCd = Math.max(0.3, 0.9 - droneLvl * 0.12) * cdReduction;
+        const droneCd = equipmentTuning('safety_drone', droneLvl)!.interval * cdReduction;
         if (this.cooldowns.drone <= 0) {
           this.cooldowns.drone = droneCd;
           const angle = this.state.droneAngle ?? 0;
@@ -1174,10 +1176,10 @@ export class SurvivorsEngine {
               y: droneY,
               vx: (dx / dist) * 550,
               vy: (dy / dist) * 550,
-              radius: 7,
-              damage: (16 + droneLvl * 8) * player.damageMultiplier,
-              duration: 1.0,
-              pierce: 1,
+              radius: equipmentTuning('safety_drone', droneLvl)!.radius,
+              damage: equipmentTuning('safety_drone', droneLvl)!.damage * player.damageMultiplier,
+              duration: equipmentTuning('safety_drone', droneLvl)!.duration,
+              pierce: equipmentTuning('safety_drone', droneLvl)!.pierce,
               kind: 'drone_laser',
             });
           }
@@ -1570,6 +1572,7 @@ export class SurvivorsEngine {
             this.emitAudio('control', player.x, player.y);
           } else {
             player.hp -= h.damage;
+            this.state.lastDamage = { source: h.type, amount: h.damage, remaining: 2 };
             this.emitAudio('hit');
           }
           player.invincibleTime = 0.6; // 0.6s grace period
@@ -1664,6 +1667,7 @@ export class SurvivorsEngine {
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
             if (pDist <= hazard.radius && player.invincibleTime <= 0) {
               player.hp = Math.max(1, player.hp - 30);
+              this.state.lastDamage = { source: 'CRANE_DROP', amount: 30, remaining: 2 };
               player.invincibleTime = 1.0;
             }
 
@@ -1884,20 +1888,11 @@ export class SurvivorsEngine {
       this.state.score += 1000;
     }
 
-    // Apply immediate passive stat effects
-    if (perkId === 'steel_boots') {
-      player.speed += 30;
-    } else if (perkId === 'magnet_beacon') {
-      player.pickupRadius += 35;
-    } else if (perkId === 'safety_harness') {
-      player.maxHp += 30;
-      player.hp = Math.min(player.maxHp, player.hp + 30);
-      player.regenRate += 1.5;
-    } else if (perkId === 'quick_reflexes') {
-      player.cooldownReduction += 0.12;
-    } else if (perkId === 'data_chip') {
-      player.critRate += 0.10;
-      player.damageMultiplier += 0.15;
+    // Shared with upgrade cards; preserve existing additive passive effects.
+    const support = SUPPORT_EFFECTS[perkId];
+    if (support) {
+      for (const [key, delta] of Object.entries(support) as [keyof typeof support, number][]) player[key] += delta;
+      if (support.maxHp) player.hp = Math.min(player.maxHp, player.hp + support.maxHp);
     }
 
     this.state.perkOptions = [];

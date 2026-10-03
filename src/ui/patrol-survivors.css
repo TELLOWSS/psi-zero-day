@@ -1079,6 +1079,14 @@
 .survivors-mission-brief li span { display: block; color: #cbd5e1; font-size: 14px; }
 .survivors-ready-details { text-align: left; margin: 16px 0; }
 .survivors-ready-details > summary { cursor: pointer; padding: 12px; border: 1px solid #526074; border-radius: 8px; color: #fbbf24; }
+.survivors-upgrade-stats { margin: 12px 0; font-size: 13px; }
+.survivors-upgrade-stats dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+.survivors-upgrade-stats dt { color: #cbd5e1; }
+.survivors-upgrade-stats dd { margin: 0; color: #94a3b8; }
+.survivors-upgrade-stats .is-changed strong { color: #7ee8bb; }
+.survivors-upgrade-stats small { display: block; color: #94a3b8; margin-top: 8px; line-height: 1.5; }
+.survivors-damage-notice { position: absolute; top: calc(var(--survivors-hud-bottom, 160px) + 8px); right: 16px; max-width: calc(100% - 32px); padding: 10px 14px; border: 1px solid #fb7185; border-radius: 12px; background: #221922; color: #fecdd3; font-weight: 700; pointer-events: none; }
+.survivors-live-objective { max-width: 260px; margin-top: 4px; font-size: 12px; color: #d9f9ec; white-space: normal; line-height: 1.4; }
 @media (max-width: 600px) {
   .survivors-ready-launch { top: -20px; flex-wrap: wrap; gap: 8px; }
   .survivors-ready-launch .survivors-btn-primary { width: 100%; padding: 12px; }

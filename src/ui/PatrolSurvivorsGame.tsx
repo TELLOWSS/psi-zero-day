@@ -1,6 +1,7 @@
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
 import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
+import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
@@ -18,6 +19,7 @@ import type {
   PerkId,
   PermanentUpgrades,
   PatrolStageId,
+  SurvivorsGameState,
 } from '../domain/patrol-survivors';
 import {
   CHARACTER_PROFILES,
@@ -300,6 +302,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // React UI Mirrors for HUD & Modals
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
+  const [lastDamage, setLastDamage] = useState<SurvivorsGameState['lastDamage']>();
+  const [missionProgress, setMissionProgress] = useState(PATROL_STAGES[selectedStage].starChallenges.map(goal => ({ ...goal })));
   const [level, setLevel] = useState(1);
   const [hp, setHp] = useState(100);
   const [maxHp, setMaxHp] = useState(100);
@@ -567,6 +571,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     helmetSnapsRef.current = [];
     approvedStampsRef.current = [];
     setCombo(0);
+    setLastDamage(undefined);
+    setMissionProgress(engine.state.stage.starChallenges.map(goal => ({ ...goal })));
     setEvolutionBanner(null);
     setBossAlert(null);
     keysRef.current = {};
@@ -942,6 +948,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         lastHudTime = time;
         // Sync React HUD
         setHp(Math.round(engine.state.player.hp));
+        const damage = engine.state.lastDamage;
+        setLastDamage(previous => previous?.source === damage?.source && previous?.amount === damage?.amount && Boolean(previous && previous.remaining > 0) === Boolean(damage && damage.remaining > 0) ? previous : damage ? { ...damage } : undefined);
+        setMissionProgress(previous => previous.every((goal, i) => goal.currentValue === engine.state.stage.starChallenges[i]!.currentValue && goal.isCompleted === engine.state.stage.starChallenges[i]!.isCompleted) ? previous : engine.state.stage.starChallenges.map(goal => ({ ...goal })));
         setMaxHp(engine.state.player.maxHp);
         setExp(engine.state.currentExp);
         setNextExp(engine.state.nextLevelExp);
@@ -1605,9 +1614,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const drop = item.data;
           ctx.save();ctx.translate(drop.x,drop.y);
           const meta=drop.itemKind?TACTICAL_ITEMS[drop.itemKind]:null;
-          const size=drop.itemKind?38:drop.isHeal?30:drop.exp>=8?27:22;
+          const size=drop.itemKind?42:drop.isHeal?34:drop.exp>=8?30:27;
           ctx.fillStyle='rgba(0,0,0,.34)';ctx.beginPath();ctx.ellipse(0,2,size*.32,size*.13,0,0,Math.PI*2);ctx.fill();
-          if(meta){ctx.strokeStyle=meta.color;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(0,3,21,8,0,0,Math.PI*2);ctx.stroke();}
+          ctx.fillStyle='rgba(8,16,28,.7)';ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.fill();
+          ctx.strokeStyle=meta?.color ?? (drop.isHeal?'#34d399':'#7dd3fc');ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,3,size*.55,size*.22,0,0,Math.PI*2);ctx.stroke();
           drawProp(ctx,spritesRef.current.itemsAtlas,meta?.atlasCell ?? (drop.isHeal?1:0),0,1,size);
           if(drop.itemKind){ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.fillStyle=meta!.color;ctx.strokeStyle='#111827';ctx.lineWidth=3;ctx.strokeText(itemText[drop.itemKind].name,0,23);ctx.fillText(itemText[drop.itemKind].name,0,23);}
           ctx.restore();
@@ -2256,6 +2266,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const secs = seconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
+  const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
 
   return (
     <div
@@ -2332,8 +2343,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
+      {phase === 'playing' && lastDamage && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
+
       {/* COMBO JUICE BANNER */}
-      {combo >= 2 && phase === 'playing' && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && (
+      {(combo >= 2 || activeMission) && phase === 'playing' && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
         <aside
           className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"
@@ -2356,14 +2369,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             zIndex: 40,
           }}
         >
-          <span style={{ fontSize: '20px' }}>🔥</span>
+          <span style={{ fontSize: '20px' }}>{combo >= 2 ? '🔥' : '☆'}</span>
           <div>
-            <div style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+            {combo >= 2 && <div style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
               {combo} {combatText.combo}
-            </div>
-            <div style={{ fontSize: '10px', opacity: 0.9, fontWeight: 700 }}>
+            </div>}
+            {combo >= 2 && <div style={{ fontSize: '10px', opacity: 0.9, fontWeight: 700 }}>
               +{combo * 5}% {combatText.bonus}
-            </div>
+            </div>}
+            {activeMission && <div className="survivors-live-objective" title={activeMission.description}>{activeMission.title} · {activeMission.currentValue}/{activeMission.targetValue}</div>}
           </div>
         </aside>
       )}
@@ -2810,6 +2824,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
                       </h4>
                       <p>{perk.description}</p>
+                      {engineRef.current && <SurvivorsUpgradeStats id={perk.id} level={perk.level} previousId={previousId} previousLevel={previousLevel ?? 0} player={engineRef.current.state.player} inFloodlight={Boolean(engineRef.current.state.inFloodlight)} />}
                       {perk.category !== 'support' && <div className="survivors-upgrade-preview">{previousLevel>0&&<SurvivorsEquipmentIcon id={previousId} level={previousLevel} />}<span>{itemText.upgrade_preview} →</span><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>}
                     </div>
                   </button>
@@ -2834,6 +2849,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
+            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
@@ -2866,6 +2882,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <p className="survivors-modal-sub">
               안전관리자의 방호 한계 초과로 현장에 사고가 발생했습니다.
             </p>
+            {lastDamage && <p className="survivors-modal-sub">{combatText.damage_prefix}: {combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</p>}
+            <p className="survivors-modal-sub">{combatText.retry_hint}</p>
 
             <div className="survivors-results-grid">
               <div className="survivors-stat-box">
