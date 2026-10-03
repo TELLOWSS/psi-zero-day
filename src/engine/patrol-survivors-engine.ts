@@ -1,3 +1,5 @@
+import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
+import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
 import type {
   CharacterId,
   CharacterProfile,
@@ -29,7 +31,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     name: '서측 게이트 및 지상 복합 하역장',
     subtitle: 'Surface Logistics Hub',
     theme: 'surface_logistics',
-    description: '야간 콘크리트 타설을 앞두고 덤프트럭과 자재가 뒤엉킨 하역 광장. 이동식 투광기를 활용하고 시너 드럼통을 유폭시켜 스웜을 섬멸하십시오.',
+    description: '야간 콘크리트 타설을 앞두고 덤프트럭과 자재가 뒤엉킨 하역 광장. 이동식 투광기로 동선을 확인하고 인화물 보관구역을 격리하여 주변 작업자를 안전통로로 대피시키십시오.',
     floorColor: '#0c1219',
     gridColor: 'rgba(148, 163, 184, 0.08)',
     borderColor: '#f59e0b',
@@ -45,7 +47,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성 및 보스 격퇴', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '환경 기믹 마스터', description: '드럼통 유폭으로 적 5마리 이상 처치', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 2, title: '격리·대피 조치 완료', description: '인화물 보관구역 격리로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
       { starIndex: 3, title: '소장 권한 마스터리', description: '현장소장 샤우팅 1회 이상 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '폭주 덤프트럭 골리앗',
@@ -73,7 +75,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '지하 탈출 성공', description: '대심도 생존 시간 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '토사 재해 극복', description: '적 80마리 이상 제압', isCompleted: false, currentValue: 0, targetValue: 80 },
+      { starIndex: 2, title: '토사 재해 극복', description: '위험 노출 80건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 80 },
       { starIndex: 3, title: '안전 수칙 준수', description: '체력 50% 이상 유지한 채 승리', isCompleted: false, currentValue: 0, targetValue: 50 },
     ],
     bossName: '자율 크롤러 굴삭기 베헤모스',
@@ -87,7 +89,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     name: '45층 초고층 메가 골조 슬래브',
     subtitle: 'High-Rise Superframe Slab',
     theme: 'highrise_slab',
-    description: '외벽이 트인 180m 초고층 슬래브. 타워크레인 와이어가 휘몰아치는 낙하 경고 구역에 적을 유인하여 5,000 압살 피해를 입히십시오.',
+    description: '외벽이 트인 180m 초고층 슬래브. 양중 작업반경 경고를 읽고 무전 지시로 인양을 중지하여 위험 구역을 비우십시오.',
     floorColor: '#101720',
     gridColor: 'rgba(56, 189, 248, 0.08)',
     borderColor: '#0284c7',
@@ -100,7 +102,7 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '고공 풍압 극복', description: '45층 골조 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '낙하물 유인 압살', description: '크레인 낙하 구역으로 적 5마리 이상 압살', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 2, title: '양중 작업반경 통제', description: '양중 작업반경 통제로 위험 노출 5건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 5 },
       { starIndex: 3, title: '타워크레인 격추', description: '보스 광폭화 크레인 아라크네 제압', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '광폭화 타워크레인 아라크네',
@@ -127,8 +129,8 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
     ],
     starChallenges: [
       { starIndex: 1, title: '동절기 혹한 극복', description: '혹한 양생실 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
-      { starIndex: 2, title: '화염 버너 유폭', description: '연료통 유폭 3회 이상 발동', isCompleted: false, currentValue: 0, targetValue: 3 },
-      { starIndex: 3, title: '펌프카 격파', description: '인페르노 매머드 처치 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '가열기 연료 격리', description: '연료 보관구역 위험 노출 3건 이상 해소', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 3, title: '펌프카 작업반경 통제', description: '대표 펌프카 위험 통제 완료', isCompleted: false, currentValue: 0, targetValue: 1 },
     ],
     bossName: '초대형 펌프카 인페르노 매머드',
     bossTitle: 'INFERNO PUMP MAMMOTH',
@@ -368,7 +370,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   data_chip: {
     id: 'data_chip',
     name: '스마트 설계 데이터칩',
-    description: '정밀 센서 칩셋을 연동하여 치명타 확률 +10%, 공격력 배율 +15% 향상됩니다.',
+    description: '정밀 센서 칩셋을 연동하여 치명타 확률 +10%, 대응력 배율 +15% 향상됩니다.',
     icon: '💾',
     maxLevel: 3,
     category: 'support',
@@ -387,7 +389,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   cryo_blizzard: {
     id: 'cryo_blizzard',
     name: '★ 극저온 액화질소 블리자드',
-    description: '[진화 소화기] 영하 196도의 액화질소를 전방위에 뿜어내어 적을 얼리고 연쇄 동결 폭발을 일으킵니다.',
+    description: '[진화 소화기] 광역 안전 지시를 전달하여 작업을 멈추고 위험구역 이탈을 돕습니다.',
     icon: '❄️',
     maxLevel: 1,
     category: 'evolution',
@@ -396,7 +398,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   tesla_dome: {
     id: 'tesla_dome',
     name: '★ 고전압 테슬라 통제 돔',
-    description: '[진화 투광등] 안전 지대가 테슬라 타워로 변환되어 접근하는 적들에게 연쇄 감전 번개를 내리꽂습니다.',
+    description: '[진화 투광등] 감지망이 위험 접근을 읽고 순차적으로 작업중지 지시를 전달합니다.',
     icon: '⚡',
     maxLevel: 1,
     category: 'evolution',
@@ -414,7 +416,7 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
   hunter_swarm: {
     id: 'hunter_swarm',
     name: '★ 자율 비행 헌터-킬러 편대',
-    description: '[진화 드론] 드론이 3기의 공격 편대로 증강되어 360도 연속 관통 고출력 레이저를 퍼붓습니다.',
+    description: '[진화 드론] 드론 3기가 작업반경을 감시하고 연속 지시 신호로 위험 접근을 차단합니다.',
     icon: '🛸',
     maxLevel: 1,
     category: 'evolution',
@@ -505,6 +507,7 @@ export function createInitialSurvivorsState(
     maxTime: TARGET_SURVIVAL_TIME,
     player: initialPlayer,
     hazards: [],
+    resolvedWorkers: [],
     projectiles: [],
     drops: [],
     level: 1,
@@ -553,10 +556,6 @@ export function createInitialSurvivorsState(
   };
 }
 
-let nextEntityId = 1;
-function genId(prefix: string): string {
-  return `${prefix}_${nextEntityId++}`;
-}
 
 // Cooldown trackers
 interface Cooldowns {
@@ -589,11 +588,33 @@ export class SurvivorsEngine {
   private lastFacingX = 1;
   private lastFacingY = 0;
 
-  constructor(public state: SurvivorsGameState = createInitialSurvivorsState()) {}
+  private audioSequence = 0;
+  private audioEvents: SurvivorsAudioEvent[] = [];
+  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number) {
+    this.audioEvents.push({id: ++this.audioSequence, type, x, y});
+    if (this.audioEvents.length > 256) this.audioEvents.shift();
+  }
+  drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
+  private addProjectile(projectile: Projectile) {
+    this.state.projectiles.push(projectile);
+    if (projectile.kind === 'radio') this.emitAudio('shoot', projectile.x, projectile.y);
+    else if (projectile.kind === 'extinguisher' || projectile.kind === 'cryo_blast') this.emitAudio('spray', projectile.x, projectile.y);
+    else if (projectile.kind !== 'shout_shockwave') this.emitAudio('laser', projectile.x, projectile.y);
+  }
+  private nextEntityId = 1;
+  private readonly random: () => number;
+  private accumulator = 0;
+  private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
+  constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349) {
+    this.random = seededRandom(seed);
+  }
+  private genId(prefix: string) { return `${prefix}_${this.nextEntityId++}`; }
+
 
   setPaused(paused: boolean) {
     if (this.state.phase === 'playing' || this.state.phase === 'paused') {
       this.state.phase = paused ? 'paused' : 'playing';
+      this.accumulator = 0;
     }
   }
 
@@ -603,7 +624,25 @@ export class SurvivorsEngine {
     }
   }
 
+  // Fixed 60Hz physics preserves legacy 60Hz damage cadence. At most 250ms is
+  // caught up per call; longer foreground stalls discard excess wall time.
   update(dt: number, input: GameInput): void {
+    if (this.state.phase !== 'playing') { this.accumulator = 0; return; }
+    if (!Number.isFinite(dt) || dt <= 0) return;
+    this.accumulator += Math.min(dt, MAX_CATCH_UP_SECONDS);
+    const kills: NonNullable<SurvivorsGameState['lastKilledEvents']> = [];
+    while (this.accumulator + 1e-9 >= SIMULATION_STEP && this.state.phase === 'playing') {
+      this.accumulator -= SIMULATION_STEP;
+      this.step(SIMULATION_STEP, input);
+      if ((this.state.phase as string) === 'victory') this.emitAudio('win');
+      else if ((this.state.phase as string) === 'defeat') this.emitAudio('defeat');
+      kills.push(...(this.state.lastKilledEvents ?? []));
+    }
+    this.state.lastKilledEvents = kills;
+    if (this.state.phase !== 'playing') this.accumulator = 0;
+  }
+
+  private step(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
 
     // Reset single-frame kill events
@@ -672,6 +711,12 @@ export class SurvivorsEngine {
     }
 
     this.updatePlayer(effectiveDt, input);
+    for (const worker of this.state.resolvedWorkers ?? []) {
+      worker.remaining -= effectiveDt;
+      worker.x += Math.sign(WORLD_WIDTH / 2 - worker.x) * Math.min(Math.abs(WORLD_WIDTH / 2 - worker.x), 80 * effectiveDt);
+      worker.y += (worker.y < WORLD_HEIGHT / 2 ? -1 : 1) * 100 * effectiveDt;
+    }
+    this.state.resolvedWorkers = (this.state.resolvedWorkers ?? []).filter(w => w.remaining > 0);
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
     this.updateSpawns(effectiveDt);
@@ -682,7 +727,7 @@ export class SurvivorsEngine {
     this.checkStarChallenges();
 
     // Check survival victory
-    if (this.state.gameTime >= this.state.maxTime) {
+    if (this.state.gameTime >= this.state.maxTime && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10);
@@ -696,6 +741,7 @@ export class SurvivorsEngine {
       return false;
     }
 
+    this.emitAudio('shout');
     this.state.ultimateCharge = 0;
     this.state.directorShoutTimer = 2.0;
     this.state.directorCutinPhase = 'cutin';
@@ -707,8 +753,8 @@ export class SurvivorsEngine {
     }
 
     // 2. Spawn massive expanding shockwave
-    this.state.projectiles.push({
-      id: genId('proj_shout'),
+    this.addProjectile({
+      id: this.genId('proj_shout'),
       x: this.state.player.x,
       y: this.state.player.y,
       vx: 0,
@@ -814,8 +860,8 @@ export class SurvivorsEngine {
         const count = 8;
         for (let i = 0; i < count; i++) {
           const angle = (i * Math.PI * 2) / count;
-          this.state.projectiles.push({
-            id: genId('proj_satellite'),
+          this.addProjectile({
+            id: this.genId('proj_satellite'),
             x: player.x,
             y: player.y,
             vx: Math.cos(angle) * 580,
@@ -850,8 +896,8 @@ export class SurvivorsEngine {
               const ndx = (dx / dist) * cos - (dy / dist) * sin;
               const ndy = (dx / dist) * sin + (dy / dist) * cos;
 
-              this.state.projectiles.push({
-                id: genId('proj_radio'),
+              this.addProjectile({
+                id: this.genId('proj_radio'),
                 x: player.x,
                 y: player.y,
                 vx: ndx * 480,
@@ -879,9 +925,9 @@ export class SurvivorsEngine {
         // 360-degree freezing blizzard
         const sprays = 16;
         for (let i = 0; i < sprays; i++) {
-          const angle = (i * Math.PI * 2) / sprays + (Math.random() - 0.5) * 0.2;
-          this.state.projectiles.push({
-            id: genId('proj_cryo'),
+          const angle = (i * Math.PI * 2) / sprays + (this.random() - 0.5) * 0.2;
+          this.addProjectile({
+            id: this.genId('proj_cryo'),
             x: player.x,
             y: player.y,
             vx: Math.cos(angle) * 360,
@@ -906,12 +952,12 @@ export class SurvivorsEngine {
           const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
 
           for (let i = 0; i < sprayCount; i++) {
-            const angleOffset = (Math.random() - 0.5) * 0.75;
+            const angleOffset = (this.random() - 0.5) * 0.75;
             const sprayAngle = baseAngle + angleOffset;
-            const speed = 260 + Math.random() * 80;
+            const speed = 260 + this.random() * 80;
 
-            this.state.projectiles.push({
-              id: genId('proj_ext'),
+            this.addProjectile({
+              id: this.genId('proj_ext'),
               x: player.x,
               y: player.y,
               vx: Math.cos(sprayAngle) * speed,
@@ -936,6 +982,7 @@ export class SurvivorsEngine {
       const radius = 220;
       // Continuous aura + chain lightning
       for (const h of hazards) {
+        if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
           h.hp -= 90 * player.damageMultiplier * dt;
@@ -952,8 +999,8 @@ export class SurvivorsEngine {
           if (dist <= radius + 100) {
             h.hp -= 80 * player.damageMultiplier;
             strikes++;
-            this.state.projectiles.push({
-              id: genId('proj_tesla'),
+            this.addProjectile({
+              id: this.genId('proj_tesla'),
               x: h.x,
               y: h.y,
               vx: 0,
@@ -992,8 +1039,8 @@ export class SurvivorsEngine {
       if (this.cooldowns.emf <= 0) {
         this.cooldowns.emf = 1.2 * cdReduction;
         // Drop high-tech laser pylon
-        this.state.projectiles.push({
-          id: genId('proj_emf'),
+        this.addProjectile({
+          id: this.genId('proj_emf'),
           x: player.x,
           y: player.y,
           vx: 0,
@@ -1013,8 +1060,8 @@ export class SurvivorsEngine {
         const coneCd = Math.max(1.8, 3.5 - coneLvl * 0.4) * cdReduction;
         if (this.cooldowns.cone <= 0) {
           this.cooldowns.cone = coneCd;
-          this.state.projectiles.push({
-            id: genId('proj_cone'),
+          this.addProjectile({
+            id: this.genId('proj_cone'),
             x: player.x,
             y: player.y,
             vx: 0,
@@ -1048,8 +1095,8 @@ export class SurvivorsEngine {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
             const dist = Math.hypot(dx, dy) || 1;
-            this.state.projectiles.push({
-              id: genId('proj_hunter'),
+            this.addProjectile({
+              id: this.genId('proj_hunter'),
               x: droneX,
               y: droneY,
               vx: (dx / dist) * 750,
@@ -1079,8 +1126,8 @@ export class SurvivorsEngine {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
             const dist = Math.hypot(dx, dy) || 1;
-            this.state.projectiles.push({
-              id: genId('proj_drone'),
+            this.addProjectile({
+              id: this.genId('proj_drone'),
               x: droneX,
               y: droneY,
               vx: (dx / dist) * 550,
@@ -1100,6 +1147,7 @@ export class SurvivorsEngine {
   private updateProjectiles(dt: number) {
     const alive: Projectile[] = [];
     for (const p of this.state.projectiles) {
+      this.paths.set(p, {x: p.x, y: p.y});
       p.duration -= dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
@@ -1145,7 +1193,7 @@ export class SurvivorsEngine {
       }
 
       // Determine enemy type by elapsed time
-      const rand = Math.random();
+      const rand = this.random();
       let type: HazardType = 'UNHELMETED';
 
       if (this.state.gameTime > 120 && rand < 0.12) {
@@ -1162,25 +1210,26 @@ export class SurvivorsEngine {
 
   private triggerBossAlert(name: string) {
     this.state.bossAlertTimer = 3.5;
+    this.emitAudio('boss_alarm');
     this.state.bossName = name;
   }
 
   private spawnHazard(type: HazardType, overrideHp?: number) {
     let x = 0;
     let y = 0;
-    const side = Math.floor(Math.random() * 4);
+    const side = Math.floor(this.random() * 4);
     if (side === 0) {
-      x = Math.random() * WORLD_WIDTH;
+      x = this.random() * WORLD_WIDTH;
       y = -20;
     } else if (side === 1) {
       x = WORLD_WIDTH + 20;
-      y = Math.random() * WORLD_HEIGHT;
+      y = this.random() * WORLD_HEIGHT;
     } else if (side === 2) {
-      x = Math.random() * WORLD_WIDTH;
+      x = this.random() * WORLD_WIDTH;
       y = WORLD_HEIGHT + 20;
     } else {
       x = -20;
-      y = Math.random() * WORLD_HEIGHT;
+      y = this.random() * WORLD_HEIGHT;
     }
 
     let hp = 30;
@@ -1218,7 +1267,7 @@ export class SurvivorsEngine {
     }
 
     this.state.hazards.push({
-      id: genId(`haz_${type}`),
+      id: this.genId(`haz_${type}`),
       type,
       x,
       y,
@@ -1281,12 +1330,14 @@ export class SurvivorsEngine {
     for (const p of projectiles) {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
-        const dist = Math.hypot(p.x - h.x, p.y - h.y);
-        if (dist <= p.radius + h.radius) {
+        if (p.duration <= 0 || p.pierce <= 0) break;
+        const previous = this.paths.get(p) ?? p;
+        if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
           // Critical hit calculation
-          const isCrit = Math.random() < player.critRate;
+          const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           h.hp -= damageDealt;
+          this.emitAudio('impact', h.x, h.y);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -1294,26 +1345,10 @@ export class SurvivorsEngine {
             this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, 0.045);
           }
 
-          // Dynamic Physics Radial Knockback impulse
-          const knockBase = p.kind === 'shout_shockwave' ? 340
-            : p.kind === 'satellite_wave' ? 190
-            : p.kind === 'cone_trap' ? 140
-            : p.kind === 'radio' ? 95
-            : 55;
-          // Boss has high mass resistance
-          const massFactor = h.type === 'CRANE_BOSS' ? 0.2 : h.type === 'RUNAWAY_CART' ? 0.5 : 1.0;
-          const knockForce = knockBase * massFactor;
-
-          const kx = (h.x - player.x) || 1;
-          const ky = (h.y - player.y) || 1;
-          const klen = Math.hypot(kx, ky) || 1;
-          h.vx = (h.vx || 0) + (kx / klen) * knockForce;
-          h.vy = (h.vy || 0) + (ky / klen) * knockForce;
-
-          // Direct displacement fallback
-          const directPush = knockForce * 0.15;
-          h.x += (kx / klen) * directPush;
-          h.y += (ky / klen) * directPush;
+          // A received instruction pauses the worker/equipment; no bodily knockback.
+          if (h.type === 'UNHELMETED' || h.type === 'RUNAWAY_CART' || h.type === 'CRANE_BOSS') {
+            h.vx = 0; h.vy = 0; h.isStunned = Math.max(h.isStunned ?? 0, 0.15);
+          }
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
@@ -1329,9 +1364,20 @@ export class SurvivorsEngine {
         if (p.duration <= 0) continue;
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed' || env.state === 'active') continue;
-          if (env.type === 'explosive_barrel' && env.state === 'idle') {
-            const dist = Math.hypot(p.x - env.x, p.y - env.y);
-            if (dist <= p.radius + env.radius) {
+          if (env.type === 'crane_drop_zone' && env.state === 'warning') {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              env.state = 'cooldown'; env.timer = 0.6;
+              let cleared = 0;
+              for (const h of hazards) if (h.hp > 0 && Math.hypot(h.x - env.x, h.y - env.y) <= env.radius + h.radius) {
+                h.hp = 0; cleared++;
+              }
+              this.state.environmentalKills += cleared; this.state.score += cleared * 80;
+              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; break;}
+            }
+          } else if (env.type === 'explosive_barrel' && env.state === 'idle') {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1344,8 +1390,8 @@ export class SurvivorsEngine {
               }
             }
           } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
-            const dist = Math.hypot(p.x - env.x, p.y - env.y);
-            if (dist <= p.radius + env.radius) {
+            const previous = this.paths.get(p) ?? p;
+            if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1370,8 +1416,14 @@ export class SurvivorsEngine {
 
     for (const h of hazards) {
       if (h.hp <= 0) {
+        if (h.type === 'UNHELMETED') {
+          const workers = this.state.resolvedWorkers ??= [];
+          workers.push({id: h.id, x: h.x, y: h.y, remaining: 3});
+          if (workers.length > 128) workers.shift();
+        }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
+        this.emitAudio('control', h.x, h.y);
 
         // Combo chain system
         this.state.comboCount = (this.state.comboCount || 0) + 1;
@@ -1399,18 +1451,18 @@ export class SurvivorsEngine {
 
         // Drop safety log (exp gem) - always provides EXP
         this.state.drops.push({
-          id: genId('drop_log'),
+          id: this.genId('drop_log'),
           x: h.x,
           y: h.y,
           exp: h.expValue,
         });
 
         // 6% chance to drop separate heal pack
-        if (Math.random() < 0.06) {
+        if (this.random() < 0.06) {
           this.state.drops.push({
-            id: genId('drop_heal'),
-            x: h.x + (Math.random() - 0.5) * 20,
-            y: h.y + (Math.random() - 0.5) * 20,
+            id: this.genId('drop_heal'),
+            x: h.x + (this.random() - 0.5) * 20,
+            y: h.y + (this.random() - 0.5) * 20,
             exp: 0,
             isHeal: true,
           });
@@ -1424,9 +1476,11 @@ export class SurvivorsEngine {
     // 2. Hazards vs Player
     if (player.invincibleTime <= 0) {
       for (const h of hazards) {
+        if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= h.radius + 14) {
           player.hp -= h.damage;
+          this.emitAudio('hit');
           player.invincibleTime = 0.6; // 0.6s grace period
           // Knockback hazard slightly
           const dx = h.x - player.x || 1;
@@ -1442,8 +1496,8 @@ export class SurvivorsEngine {
               player.hp = Math.round(player.maxHp * 0.5);
               player.invincibleTime = 3.0; // 3 seconds invincible
               // Trigger emergency shockwave
-              this.state.projectiles.push({
-                id: genId('proj_revive_wave'),
+              this.addProjectile({
+                id: this.genId('proj_revive_wave'),
                 x: player.x,
                 y: player.y,
                 vx: 0,
@@ -1472,7 +1526,7 @@ export class SurvivorsEngine {
     if (!interactiveHazards) return;
 
     for (const hazard of (interactiveHazards as StageHazardObject[])) {
-      // 1. Explosive Barrel
+      // 1. Flammable storage isolation (legacy explosive_barrel ID retained)
       if (hazard.type === 'explosive_barrel') {
         if (hazard.state === 'warning') {
           hazard.timer -= dt;
@@ -1480,42 +1534,19 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.45;
 
-            // Massive 3000 AoE blast
-            const blastRadius = 220;
-            let killedCount = 0;
+            // Isolate the store and direct nearby exposed actors to safety.
+            // Legacy hp is remaining risk; this is not an explosion or injury.
+            const isolationRadius = 220;
+            let cleared = 0;
             for (const h of hazards) {
-              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-              if (d <= blastRadius + h.radius) {
-                h.hp -= 3000;
-                if (h.hp <= 0) {
-                  killedCount++;
-                }
+              if (h.hp > 0 && Math.hypot(h.x - hazard.x, h.y - hazard.y) <= isolationRadius + h.radius) {
+                h.hp = Math.max(0, h.hp - 3000);
+                if (h.hp <= 0) cleared++;
               }
             }
-            this.state.environmentalKills += killedCount;
-            this.state.score += killedCount * 50;
-
-            // Player caught too close takes minor self-damage
-            const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
-            if (pDist <= 100 && player.invincibleTime <= 0) {
-              player.hp = Math.max(1, player.hp - 15);
-              player.invincibleTime = 0.8;
-            }
-
-            // Explosion shockwave projectile
-            this.state.projectiles.push({
-              id: genId('barrel_blast'),
-              x: hazard.x,
-              y: hazard.y,
-              vx: 0,
-              vy: 0,
-              radius: 60,
-              damage: 600,
-              duration: 0.5,
-              pierce: 99,
-              kind: 'shout_shockwave',
-              color: '#f97316',
-            });
+            this.state.environmentalKills += cleared;
+            this.state.score += cleared * 50;
+            this.emitAudio('control', hazard.x, hazard.y);
           }
         } else if (hazard.state === 'active') {
           hazard.timer -= dt;
@@ -1538,19 +1569,6 @@ export class SurvivorsEngine {
             hazard.state = 'active';
             hazard.timer = 0.6; // Impact duration
 
-            let crushedCount = 0;
-            for (const h of hazards) {
-              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
-              if (d <= hazard.radius + h.radius) {
-                h.hp -= 5000;
-                if (h.hp <= 0) {
-                  crushedCount++;
-                }
-              }
-            }
-            this.state.environmentalKills += crushedCount;
-            this.state.score += crushedCount * 80;
-
             // Player crushed if inside
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
             if (pDist <= hazard.radius && player.invincibleTime <= 0) {
@@ -1558,22 +1576,8 @@ export class SurvivorsEngine {
               player.invincibleTime = 1.0;
             }
 
-            // Impact shockwave
-            this.state.projectiles.push({
-              id: genId('crane_slam'),
-              x: hazard.x,
-              y: hazard.y,
-              vx: 0,
-              vy: 0,
-              radius: 70,
-              damage: 1000,
-              duration: 0.5,
-              pierce: 99,
-              kind: 'shout_shockwave',
-              color: '#ef4444',
-            });
           }
-        } else if (hazard.state === 'active') {
+        } else if (hazard.state === 'active' || hazard.state === 'cooldown') {
           if (hazard.timer <= 0) {
             hazard.state = 'idle';
             hazard.timer = 14; // Next drop in 14 seconds
@@ -1696,6 +1700,7 @@ export class SurvivorsEngine {
   }
 
   private collectDrop(drop: SafetyDrop) {
+    this.emitAudio('pickup', drop.x, drop.y);
     if (drop.isHeal) {
       this.state.player.hp = Math.min(this.state.player.maxHp, this.state.player.hp + 25);
     } else {
@@ -1719,6 +1724,7 @@ export class SurvivorsEngine {
   }
 
   triggerLevelUp() {
+    this.emitAudio('levelup');
     this.state.phase = 'levelup';
 
     // 1. Check if any Super Protocol evolution is ready!
@@ -1743,7 +1749,12 @@ export class SurvivorsEngine {
       return currentLevel < meta.maxLevel;
     });
 
-    const shuffled = [...availablePerkIds].sort(() => Math.random() - 0.5);
+    const shuffled = [...availablePerkIds];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(this.random() * (i + 1));
+      const a = shuffled[i]!, b = shuffled[j]!;
+      shuffled[i] = b; shuffled[j] = a;
+    }
 
     // If an evolution is available, include it as the first gold option!
     const selectedIds: PerkId[] = [];

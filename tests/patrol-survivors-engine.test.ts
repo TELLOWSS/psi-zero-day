@@ -91,7 +91,7 @@ describe('Patrol Survivors Engine', () => {
       kind: 'radio',
     });
 
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
 
     // Hazard should be dead, drop created
     expect(engine.state.hazards.length).toBe(0);
@@ -133,7 +133,7 @@ describe('Patrol Survivors Engine', () => {
       expValue: 10,
     });
 
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
     expect(engine.state.player.hp).toBe(0);
     expect(engine.state.phase).toBe('defeat');
   });
@@ -279,7 +279,7 @@ describe('Patrol Survivors Engine', () => {
       expValue: 10,
     });
 
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
 
     // Should revive, not defeat!
     expect(engine.state.hasRevived).toBe(true);
@@ -334,11 +334,11 @@ describe('Patrol Survivors Engine', () => {
     engine.state.player.x = 700;
     engine.state.player.y = 220;
 
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
     expect(engine.state.inFloodlight).toBe(true);
   });
 
-  it('detonates explosive barrel upon projectile damage, neutralizing nearby hazards', () => {
+  it('isolates flammable storage after intervention, clearing nearby exposure', () => {
     const engine = new SurvivorsEngine(createInitialSurvivorsState('yoon', undefined, 'stage_01'));
     engine.start();
 
@@ -374,7 +374,7 @@ describe('Patrol Survivors Engine', () => {
     });
 
     // Step 1: projectile hits barrel -> barrel enters warning fuse state
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
     expect(barrel.state).toBe('warning');
     expect(barrel.timer).toBeGreaterThan(0);
 
@@ -399,7 +399,7 @@ describe('Patrol Survivors Engine', () => {
     expect(engine.state.directorShoutTimer).toBeGreaterThan(0);
 
     // Update engine to evaluate star challenges
-    engine.update(0.016, { moveX: 0, moveY: 0 });
+    engine.update(1 / 60, { moveX: 0, moveY: 0 });
 
     // Challenge 3 (Shouting mastery) should now be completed
     expect(engine.state.stage.starChallenges[2]?.isCompleted).toBe(true);
