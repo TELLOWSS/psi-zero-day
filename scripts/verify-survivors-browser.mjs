@@ -127,7 +127,12 @@ try {
   let bossCaptured=false;
   for(let tick=0;tick<110;tick++) {
     const perk=combatPage.locator('.survivors-perk-card').first();
-    if(await perk.isVisible()) await perk.click();
+    if(await perk.isVisible()) {
+      combat.checks.upgradeButton = await perk.getAttribute('aria-keyshortcuts') === '1' && await perk.evaluate(e=>e.tagName==='BUTTON');
+      await combatPage.keyboard.press('1');
+      await perk.waitFor({state:'hidden'});
+      combat.checks.numberedUpgrade = true;
+    }
     const key=['d','s','a','w'][tick%4];
     await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
     if(!bossCaptured && await combatPage.locator('.survivors-boss-risk').isVisible()) {

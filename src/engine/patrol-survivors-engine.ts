@@ -1,4 +1,5 @@
 import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
+import { SurvivorsCollisionGrid } from './survivors-collision-grid';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
@@ -626,6 +627,7 @@ export class SurvivorsEngine {
   private readonly random: () => number;
   private accumulator = 0;
   private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
+  private readonly directedHits = new WeakMap<Projectile, Set<string>>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349) {
     this.random = seededRandom(seed);
   }
@@ -1168,7 +1170,9 @@ export class SurvivorsEngine {
   private updateProjectiles(dt: number) {
     const alive: Projectile[] = [];
     for (const p of this.state.projectiles) {
-      this.paths.set(p, {x: p.x, y: p.y});
+      const path = this.paths.get(p);
+      if (path) { path.x = p.x; path.y = p.y; }
+      else this.paths.set(p, {x: p.x, y: p.y});
       p.duration -= dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
@@ -1376,14 +1380,23 @@ export class SurvivorsEngine {
 
   private checkCollisions() {
     const { player, hazards, projectiles } = this.state;
+    const grid = hazards.length >= 128 && hazards.length * projectiles.length >= 12000 ? new SurvivorsCollisionGrid(hazards) : null;
 
     // 1. Projectiles vs Hazards
     for (const p of projectiles) {
-      for (const h of hazards) {
-        if (h.hp <= 0) continue;
+      if (p.duration <= 0 || p.pierce <= 0) continue;
+      const previous = this.paths.get(p) ?? p;
+      const candidates = grid?.candidates(previous.x, previous.y, p.x, p.y, p.radius) ?? hazards;
+      const directed = p.kind === 'radio' || p.kind === 'drone_laser' || p.kind === 'hunter_beam';
+      let hits = directed ? this.directedHits.get(p) : undefined;
+      for (const h of candidates) {
+        if (h.hp <= 0 || h.motion?.phase === 'spent' || hits?.has(h.id)) continue;
         if (p.duration <= 0 || p.pierce <= 0) break;
-        const previous = this.paths.get(p) ?? p;
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
+          if (directed) {
+            if (!hits) { hits = new Set(); this.directedHits.set(p, hits); }
+            hits.add(h.id);
+          }
           // Critical hit calculation
           const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
@@ -1858,7 +1871,9 @@ export class SurvivorsEngine {
     let bestDist = Infinity;
     let nearest: Hazard | null = null;
     for (const h of this.state.hazards) {
-      const dist = Math.hypot(h.x - x, h.y - y);
+      if (h.hp <= 0 || h.motion?.phase === 'spent') continue;
+      const dx = h.x - x, dy = h.y - y;
+      const dist = dx * dx + dy * dy;
       if (dist < bestDist) {
         bestDist = dist;
         nearest = h;

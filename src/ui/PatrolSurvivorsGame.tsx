@@ -558,6 +558,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const handleSelectPerk = (perkId: PerkId) => {
     const engine = engineRef.current;
     if (!engine) return;
+    keysRef.current = {};
+    touchVectorRef.current = { x: 0, y: 0 };
 
     const meta = PERK_CATALOG[perkId];
     engine.applyPerk(perkId);
@@ -587,10 +589,25 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
-  // Keyboard Event Handlers
+  const inputActionsRef = useRef({shout: handleTriggerDirectorShout, reroll: handleRerollPerks, select: handleSelectPerk});
+  useEffect(() => {
+    inputActionsRef.current = {shout: handleTriggerDirectorShout, reroll: handleRerollPerks, select: handleSelectPerk};
+  });
+
+  // Install once; actions read current engine state instead of render snapshots.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [role="dialog"]'))) return;
+      if (e.target instanceof HTMLElement && e.target.closest('button') && (e.code === 'Space' || e.code === 'Enter')) return;
+      const engine = engineRef.current;
+      if (engine?.state.phase === 'levelup' && !e.repeat) {
+        const match = /^(?:Digit|Numpad)([123])$/.exec(e.code);
+        const option = match ? engine.state.perkOptions[Number(match[1]) - 1] : undefined;
+        if (option) { e.preventDefault(); inputActionsRef.current.select(option.id); return; }
+        if (e.code === 'KeyR') { e.preventDefault(); inputActionsRef.current.reroll(); return; }
+      }
       keysRef.current[e.code] = true;
+      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
       if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) {
         const engine = engineRef.current;
         if (engine && (engine.state.phase === 'playing' || engine.state.phase === 'paused')) {
@@ -599,11 +616,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           setPhase(next);
         }
       }
-      if (e.code === 'Space' || e.code === 'KeyF') {
-        handleTriggerDirectorShout();
-      }
-      if (e.code === 'KeyR' && phase === 'levelup') {
-        handleRerollPerks();
+      if ((e.code === 'Space' || e.code === 'KeyF') && !e.repeat) {
+        inputActionsRef.current.shout();
       }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -616,7 +630,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  });
+  }, []);
 
   const interruptSession = useCallback(() => {
     keysRef.current = {};
@@ -2719,10 +2733,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </p>
 
             <div className="survivors-perk-cards">
-              {perkOptions.map(perk => {
+              {perkOptions.map((perk, index) => {
                 const isEvo = perk.category === 'evolution';
                 return (
-                  <div
+                  <button
+                    type="button"
+                    aria-keyshortcuts={String(index + 1)}
                     key={perk.id}
                     className={`survivors-perk-card ${isEvo ? 'is-evolution' : ''}`}
                     onClick={() => handleSelectPerk(perk.id)}
@@ -2730,12 +2746,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     <div className="survivors-perk-card-icon">{perk.icon}</div>
                     <div className="survivors-perk-card-info">
                       <h4>
-                        {perk.name}
+                        {index + 1}. {perk.name}
                         <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
                       </h4>
                       <p>{perk.description}</p>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>

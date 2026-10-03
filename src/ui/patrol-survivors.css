@@ -371,6 +371,10 @@
 }
 
 .survivors-perk-card {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  color: inherit;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -1796,4 +1800,9 @@
 }
 @media (max-width: 600px) {
   .survivors-boss-risk { max-width: 92px; font-size: 9px; }
+}
+
+.survivors-perk-card:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 3px;
 }
