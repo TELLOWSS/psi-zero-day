@@ -2466,11 +2466,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       )}
 
-      {showManual && <GameManual onClose={() => setShowManual(false)} />}
+      {showManual && <GameManual initialSection="survivors" onClose={() => setShowManual(false)} />}
       {/* READY / START SCREEN WITH CHARACTER SELECT */}
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog">
+            <header className="survivors-ready-launch">
+              <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
+              <button type="button" className="survivors-btn-primary" onClick={startGame}>순찰 시작하기</button>
+            </header>
+            <section className="survivors-mission-brief" aria-label={combatText.mission_title}>
+              <h3>{combatText.mission_title}</h3>
+              <p>{PATROL_STAGES[selectedStage].description}</p>
+              <ol>{PATROL_STAGES[selectedStage].starChallenges.map(goal => <li key={goal.starIndex}><strong>{goal.title}</strong><span>{goal.description}</span></li>)}</ol>
+              <p>{combatText.first_patrol}</p>
+            </section>
             {/* DYNAMIC HERO KEY VISUAL BANNER (SELECTED PATROL AGENT) */}
             {(() => {
               const activeChar = CHARACTER_PROFILES[selectedChar] || CHARACTER_PROFILES['yoon'];
@@ -2498,14 +2508,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             })()}
 
             <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
-            <SurvivorsSupplyGuide />
+            <details className="survivors-ready-details"><summary>{combatText.supply_help}</summary><SurvivorsSupplyGuide /></details>
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
               야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
             </p>
 
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
-            <div className="survivors-stage-select-section">
+            <details className="survivors-stage-select-section survivors-ready-details">
+              <summary>{combatText.stage_select}</summary>
               <span className="survivors-section-label">작전 구역 선택 (현장 공정 10단계)</span>
               <div className="survivors-stage-cards">
                 {STAGE_IDS.map(id => PATROL_STAGES[id]).map(stg => {
@@ -2542,10 +2553,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                   );
                 })}
               </div>
-            </div>
+            </details>
 
             {/* CHARACTER SELECTOR */}
-            <div className="survivors-char-select-section">
+            <details className="survivors-char-select-section survivors-ready-details">
+              <summary>{combatText.agent_select}</summary>
               <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
               <div className="survivors-char-cards">
                 {CANONICAL_CHAR_IDS.map(id => CHARACTER_PROFILES[id]).filter(Boolean).map(char => (
@@ -2577,7 +2589,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                   </button>
                 ))}
               </div>
-            </div>
+            </details>
 
             <div className="survivors-controls-guide">
               <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
@@ -2586,9 +2598,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
 
             <div className="survivors-actions-row">
-              <button type="button" className="survivors-btn-primary" onClick={startGame}>
-                순찰 시작하기
-              </button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowRdModal(true)}>
                 🔬 R&D 연구소
               </button>
@@ -2827,6 +2836,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
+              <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
               <button
                 type="button"
                 className="survivors-btn-primary"
@@ -2967,7 +2977,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       onClick={() => {
                         setSelectedStage(nextStage);
                         initGame(selectedChar, nextStage);
-                        setTimeout(() => startGame(), 60);
                       }}
                     >
                       다음 스테이지 진출 ➔

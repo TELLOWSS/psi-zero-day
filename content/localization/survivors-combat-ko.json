@@ -16,5 +16,10 @@
   "crane_warning": "인양물 낙하 위험",
   "worker_resolved": "안전모 착용 완료",
   "lifting_resolved": "양중 정지 · 반경 통제 완료",
-  "shout_activated": "작업중지 발동"
+  "shout_activated": "작업중지 발동",
+  "mission_title": "이번 구역의 별 목표",
+  "first_patrol": "이동하며 노란 위험 경로를 피하세요. 자동 조치 후 생긴 파란 기록을 모으면 장비를 강화합니다. 샤우팅이 준비되면 버튼 또는 Space/F로 작업중지를 지시하세요.",
+  "supply_help": "보급 아이템과 장비 성장 알아보기",
+  "stage_select": "다른 공정 구역 선택",
+  "agent_select": "다른 순찰 요원 선택"
 }

@@ -4,7 +4,7 @@ import './game-manual.css';
 
 export const gameManualText = (id: 'title' | 'open' | 'close') => copy[id];
 
-export function GameManual({ onClose }: { readonly onClose: () => void }) {
+export function GameManual({ onClose, initialSection = 'story' }: { readonly onClose: () => void; readonly initialSection?: string }) {
   const dialogRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
@@ -25,7 +25,7 @@ export function GameManual({ onClose }: { readonly onClose: () => void }) {
       }}>
       <header><h2>{copy.title}</h2><button type="button" onClick={onClose}>{copy.close}</button></header>
       <p>{copy.intro}</p>
-      {copy.sections.map(section => <details key={section.id} open={section.id === 'story'}>
+      {copy.sections.map(section => <details key={section.id} open={section.id === initialSection}>
         <summary>{section.title}</summary>
         <ol>{section.steps.map((step, index) => <li key={index}>{step}</li>)}</ol>
       </details>)}
