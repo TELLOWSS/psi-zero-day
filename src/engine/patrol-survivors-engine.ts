@@ -1,4 +1,5 @@
 import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
+import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
 import type {
@@ -1292,6 +1293,12 @@ export class SurvivorsEngine {
       hp = Math.round(hp * scale);
     }
 
+    // Falling material targets the observed position, never follows after warning.
+    if (type === 'FALLING_DEBRIS') {
+      x = Math.max(60, Math.min(WORLD_WIDTH - 60, this.state.player.x + (this.random() - 0.5) * 180));
+      y = Math.max(60, Math.min(WORLD_HEIGHT - 60, this.state.player.y + (this.random() - 0.5) * 180));
+      radius = 38;
+    }
     this.state.hazards.push({
       id: this.genId(`haz_${type}`),
       isStageBoss,
@@ -1304,6 +1311,11 @@ export class SurvivorsEngine {
       radius,
       damage,
       expValue,
+      motion: type === 'RUNAWAY_CART'
+        ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
+        : type === 'FALLING_DEBRIS'
+          ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
+          : undefined,
     });
   }
 
@@ -1340,7 +1352,17 @@ export class SurvivorsEngine {
         }
       }
 
-      // Chase player
+      if (updateHazardMotion(h, player, dt, hazardSpeed)) {
+        if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'charge' &&
+            (h.x < 20 || h.x > WORLD_WIDTH - 20 || h.y < 20 || h.y > WORLD_HEIGHT - 20)) {
+          h.x = Math.max(20, Math.min(WORLD_WIDTH - 20, h.x));
+          h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
+          h.motion.phase = 'cooldown'; h.motion.timer = 1.1;
+        }
+        continue;
+      }
+
+      // Workers and diffuse risks retain their existing approach behavior.
       const dx = player.x - h.x;
       const dy = player.y - h.y;
       const dist = Math.hypot(dx, dy) || 1;
@@ -1348,6 +1370,8 @@ export class SurvivorsEngine {
       h.x += (dx / dist) * hazardSpeed * dt;
       h.y += (dy / dist) * hazardSpeed * dt;
     }
+    // Avoided falls expire without granting control score, drops, or boss stars.
+    this.state.hazards = this.state.hazards.filter(h => !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
   }
 
   private checkCollisions() {
@@ -1506,7 +1530,7 @@ export class SurvivorsEngine {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
-        if (dist <= h.radius + 14) {
+        if (isHazardContactActive(h) && dist <= h.radius + 14) {
           player.hp -= h.damage;
           this.emitAudio('hit');
           player.invincibleTime = 0.6; // 0.6s grace period

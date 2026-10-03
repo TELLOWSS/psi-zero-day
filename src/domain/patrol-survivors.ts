@@ -13,6 +13,12 @@ export interface Hazard {
   expValue: number;
   isStunned?: number; // duration in seconds
   isStageBoss?: boolean;
+  motion?: {
+    phase: 'approach' | 'warning' | 'charge' | 'cooldown' | 'fall' | 'spent';
+    timer: number;
+    directionX: number;
+    directionY: number;
+  };
   vx?: number;
   vy?: number;
 }
@@ -272,5 +278,4 @@ export interface PatrolStageDefinition {
   bossType: HazardType;
   bossHp: number;
 }
-
 

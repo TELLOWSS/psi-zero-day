@@ -1,4 +1,5 @@
 import { GameManual, gameManualText } from './GameManual';
+import combatText from '../../content/localization/survivors-combat-ko.json';
 import { DIRECTOR_SHOUT_VOICE } from '../app/survivors-audio-manifest';
 import { STAGE_IDS, parseSave, safeNumber, validStages, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
@@ -294,6 +295,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [directorCutinPhase, setDirectorCutinPhase] = useState<'none' | 'cutin' | 'shout' | 'invert' | 'recovering'>('none');
   const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string } | null>(null);
   const [bossAlert, setBossAlert] = useState<string | null>(null);
+  const [bossRisk, setBossRisk] = useState<number | null>(null);
 
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number) => {
@@ -858,6 +860,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
+        const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
+        setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
         if (engine.state.phase !== 'playing') {
@@ -1566,6 +1570,38 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.save();
           ctx.translate(h.x, h.y);
 
+          // Telegraphs share the engine's locked trajectory and contact window.
+          if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'warning') {
+            ctx.save();
+            ctx.rotate(Math.atan2(h.motion.directionY, h.motion.directionX));
+            ctx.fillStyle = 'rgba(245,158,11,.20)';
+            ctx.fillRect(0, -h.radius - 14, h.speed * 2.1 * 1.05, (h.radius + 14) * 2);
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+            ctx.setLineDash([12, 8]);
+            ctx.strokeRect(0, -h.radius - 14, h.speed * 2.1 * 1.05, (h.radius + 14) * 2);
+            ctx.restore();
+          }
+          if (h.type === 'FALLING_DEBRIS' && h.motion) {
+            ctx.fillStyle = h.motion.phase === 'fall' ? 'rgba(239,68,68,.35)' : 'rgba(245,158,11,.16)';
+            ctx.strokeStyle = h.motion.phase === 'fall' ? '#ef4444' : '#fbbf24';
+            ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(0, 0, h.radius + 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            if (h.motion.phase === 'warning') {
+              ctx.beginPath(); ctx.arc(0, 0, h.radius + 20, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - h.motion.timer / 1.25)); ctx.stroke();
+            }
+          }
+          if (h.motion?.phase === 'warning') {
+            ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+            ctx.lineWidth = 4; ctx.strokeStyle = '#111827'; ctx.fillStyle = '#fef3c7';
+            const warning = h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
+            ctx.strokeText(warning, 0, h.radius + 40); ctx.fillText(warning, 0, h.radius + 40);
+          }
+          if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning') {
+            ctx.restore();
+            continue;
+          }
+          if (h.motion?.phase === 'spent') ctx.globalAlpha = 0.35;
+
           if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
@@ -2201,8 +2237,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <strong>{score.toLocaleString()}</strong>
           </div>
           <div className="survivors-kills-badge">
+            {bossRisk === null ? <>
             <span>🛡️</span>
             <b>{kills} 통제</b>
+            </> : (
+            <div className="survivors-boss-risk" title={combatText.boss_guidance}>
+              <span>{combatText.boss_risk} {bossRisk}%</span>
+              <progress aria-label={combatText.boss_risk} value={bossRisk} max={100} />
+            </div>
+          )}
           </div>
         </div>
 
