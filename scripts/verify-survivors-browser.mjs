@@ -69,6 +69,7 @@ try {
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-supplies.png`)});
     await page.locator('.survivors-supply-guide summary').click();
     await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
+    await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-watch-selection.png`)});
     row.checks.watchOfficer = await page.locator('.survivors-char-card.is-selected').innerText().then(t => t.includes('안전감시단'));
     await page.getByRole('button', {name:'순찰 시작하기', exact:true}).click();
     await page.waitForTimeout(1000);
@@ -157,7 +158,7 @@ try {
   const combat = {status:'RUNNING',scope:'Stage10 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
   report.combat = combat;
   combatPage.on('pageerror',e=>combat.errors.push(String(e)));
-  let bossCaptured=false;
+  let bossCaptured=false, shoutCaptured=false;
   for(let tick=0;tick<110;tick++) {
     const perk=combatPage.locator('.survivors-perk-card').first();
     if(await perk.isVisible()) {
@@ -171,6 +172,20 @@ try {
       },previousChoice);
       combat.checks.numberedUpgrade = true;
     }
+    const shoutButton=combatPage.getByRole('button',{name:'현장소장 사자후 궁극기 발동',exact:true});
+    if(!shoutCaptured && await shoutButton.isEnabled()) {
+      await shoutButton.click();
+      const cutin=combatPage.locator('.survivors-director-cutin-layer');
+      await cutin.waitFor({state:'visible'});
+      await cutin.locator('img').evaluate(image=>image.decode());
+      combat.checks.shoutArt = await cutin.locator('img').evaluate(image=>image.naturalWidth>=1600 && image.src.includes('shout-v3'));
+      combat.checks.shoutText = await cutin.locator('h2').innerText().then(text=>text==='작업중지 돌아버려 씨~!!!');
+      combat.checks.shoutFits = await cutin.locator('.survivors-cutin-diagonal-banner').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0 && r.right<=innerWidth && r.top>=0 && r.bottom<=innerHeight;});
+      // Review the settled cut-in, not the first transparent animation frame.
+      await combatPage.waitForTimeout(300);
+      await combatPage.screenshot({path:path.join(out,'390x844-real-director-shout.png')});
+      shoutCaptured=true;
+    }
     const key=['d','s','a','w'][tick%4];
     await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
     if(!bossCaptured && await combatPage.locator('.survivors-boss-risk').isVisible()) {
@@ -180,11 +195,12 @@ try {
       await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat-boss.png')});
     }
     const warnings=await combatPage.evaluate(()=>window.__psiCombatWarnings);
-    if(warnings.cart && warnings.fall && warnings.supply && warnings.pickup && bossCaptured) break;
+    if(warnings.cart && warnings.fall && warnings.supply && warnings.pickup && bossCaptured && shoutCaptured) break;
     if(await combatPage.getByRole('heading',{name:'🚨 현장 중대위험 발생',exact:true}).isVisible()) break;
   }
   Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
   combat.checks.bossSeen=bossCaptured;
+  combat.checks.shoutSeen=shoutCaptured;
   combat.status=Object.values(combat.checks).some(v=>v===false)||combat.errors.length?'FAIL':'PASS';
   await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat.png')});
   await combatPage.close();

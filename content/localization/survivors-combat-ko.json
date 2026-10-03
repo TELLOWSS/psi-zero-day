@@ -8,5 +8,10 @@
   "mud_zone": "진흙 · 감속",
   "gas_warning": "유독가스 주의",
   "combo": "연속 계도",
-  "bonus": "안전 점수"
+  "bonus": "안전 점수",
+  "shout_kicker": "긴급 작업중지",
+  "shout_line": "작업중지 돌아버려 씨~!!!",
+  "shout_sub": "위험 설비 정지 · 근로자 대피 · 안전 데이터 회수",
+  "shout_alt": "확성기로 작업중지를 외치는 한국인 현장소장",
+  "crane_warning": "인양물 낙하 위험"
 }

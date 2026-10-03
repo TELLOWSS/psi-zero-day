@@ -120,6 +120,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
     excavationGround?: HTMLImageElement;
+    directorShoutArt?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
@@ -130,6 +131,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Cache the cut-in during selection so emergency activation never waits for art.
+    const directorShoutArt = new Image();
+    directorShoutArt.src = '/assets/survivors/director-yoon-shout-v3.webp';
+    spritesRef.current.directorShoutArt = directorShoutArt;
 
     // Load canonical character portraits
     CANONICAL_CHAR_IDS.forEach(cId => {
@@ -1568,6 +1574,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const distance = (hazard: typeof h) => (hazard.x - engine.state.player.x) ** 2 + (hazard.y - engine.state.player.y) ** 2;
           return !closest || distance(h) < distance(closest) ? h : closest;
         }, undefined);
+      const closestCrane = hazards.filter(h => h.type === 'CRANE_BOSS')
+        .sort((a,b) => Math.hypot(a.x-player.x,a.y-player.y)-Math.hypot(b.x-player.x,b.y-player.y))[0];
       for (const item of entityList) {
         if (item.kind === 'drop') {
           const drop = item.data;
@@ -1914,7 +1922,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 12px sans-serif';
             ctx.fillStyle = '#f87171';
             ctx.textAlign = 'center';
-            ctx.fillText('🚨 타워크레인 슬링 와이어 붕괴 위험', 0, zOffset - h.radius - 14);
+            if (h === closestCrane) {
+              ctx.lineWidth = 4; ctx.strokeStyle = '#111827';
+              ctx.strokeText(combatText.crane_warning, swayX, zOffset - h.radius - 14);
+              ctx.fillText(combatText.crane_warning, swayX, zOffset - h.radius - 14);
+            }
           }
 
           // Mini HP Bar with clear contrast
@@ -2462,14 +2474,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-cutin-speedlines" />
           <div className="survivors-cutin-diagonal-banner">
             <img
-              src="/assets/survivors/director-yoon-shout-v2.webp"
-              alt="현장소장 윤성호 작업중지권 사자후"
+              src="/assets/survivors/director-yoon-shout-v3.webp"
+              alt={combatText.shout_alt}
               className="survivors-cutin-portrait"
             />
             <div className="survivors-cutin-textbox">
-              <span className="survivors-cutin-kicker">🚨 중대재해 차단 긴급 작업중지권 발동! 🚨</span>
-              <h2 className="survivors-cutin-shout">작업중지 돌아버려 씨~!!!</h2>
-              <p className="survivors-cutin-sub">전 구역 위험 설비 강제 정지 · 근로자 긴급 대피 · 안전 데이터 흡수</p>
+              <span className="survivors-cutin-kicker">{combatText.shout_kicker}</span>
+              <h2 className="survivors-cutin-shout">{combatText.shout_line}</h2>
+              <p className="survivors-cutin-sub">{combatText.shout_sub}</p>
             </div>
           </div>
         </div>
@@ -2598,7 +2610,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         boxShadow: selectedChar === char.id ? `0 0 16px ${char.color}` : undefined,
                       }}
                     >
-                      <img src={char.portraitUri} alt={char.name} className="survivors-char-portrait-thumb" />
+                      <img src={char.portraitUri} alt={char.name} className={`survivors-char-portrait-thumb ${char.id === 'safety_monitor' ? 'is-fullbody' : ''}`} />
                       <span className="survivors-char-avatar-badge">{char.avatar}</span>
                     </div>
                     <strong style={{ color: char.color }}>{char.name}</strong>
