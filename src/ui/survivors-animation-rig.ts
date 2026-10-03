@@ -14,9 +14,9 @@ export const ACTOR_RIGS: Record<string, ActorRig> = {
  'sprite_player_yoon.webp': {waist:.475,left:leg(.30,.485,.24,.71,.14,.88,.12,1),right:leg(.61,.485,.64,.71,.69,.88,.83,.98)},
 };
 export interface Footstep { offset: number; lift: number; planted: boolean }
-export function footstep(cycle:number, opposite=false, running=false):Footstep {
+export function footstep(cycle:number, opposite=false, running=false, authoredStride=running?66:54):Footstep {
  const p=((cycle/(Math.PI*2)+(opposite?.5:0))%1+1)%1;
- const stride=running?66:54;
+ const stride=authoredStride;
  if(p<.5) return {offset:stride*(.25-p),lift:0,planted:true};
  const swing=(p-.5)*2;
  return {offset:stride*(-.25+.5*(swing*swing*(3-2*swing))),lift:Math.sin(swing*Math.PI)*(running?8:5),planted:false};
