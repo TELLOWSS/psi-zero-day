@@ -120,6 +120,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
     excavationGround?: HTMLImageElement;
+    directorShoutArt?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
@@ -130,6 +131,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Cache the cut-in during selection so emergency activation never waits for art.
+    const directorShoutArt = new Image();
+    directorShoutArt.src = '/assets/survivors/director-yoon-shout-v3.webp';
+    spritesRef.current.directorShoutArt = directorShoutArt;
 
     // Load canonical character portraits
     CANONICAL_CHAR_IDS.forEach(cId => {
