@@ -48,6 +48,7 @@ try {
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-manual.png`)});
     await page.getByRole('button', {name:'설명서 닫기', exact:true}).click();
     await page.getByRole('button', {name:/야간 긴급 순찰/}).click({timeout:30000});
+    await page.locator('.survivors-stage-card').first().waitFor({state:'visible'});
     row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
     row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
     await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();

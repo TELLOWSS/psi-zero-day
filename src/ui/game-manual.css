@@ -11,6 +11,6 @@
 
 .game-manual-open { position:absolute; right:12px; top:70px; z-index:60; min-height:44px; padding:8px 12px; color:#fff; background:#18364de8; border:1px solid #7195af; border-radius:8px; cursor:pointer; }
 
-.work-stop-song-open { position:absolute; left:20px; bottom:18px; z-index:20; min-height:44px; padding:8px 14px; border:1px solid #e4bc70; border-radius:9px; background:#112a3bea; color:#ffe0a6; font-weight:700; cursor:pointer; }
+.work-stop-song-open { position:absolute; right:20px; bottom:18px; z-index:20; min-height:44px; padding:8px 14px; border:1px solid #e4bc70; border-radius:9px; background:#112a3bea; color:#ffe0a6; font-weight:700; cursor:pointer; }
 
-@media(orientation:portrait) and (max-width:768px) { .work-stop-song-open { position:relative; left:auto; bottom:auto; margin:12px 20px; order:20; align-self:flex-start; } }
+@media(orientation:portrait) and (max-width:768px) { .work-stop-song-open { position:relative; left:auto; right:auto; bottom:auto; margin:12px 20px; order:20; align-self:flex-start; } }
