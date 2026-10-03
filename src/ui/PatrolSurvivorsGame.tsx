@@ -362,8 +362,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => { audioRef.current.setMuted(audioMuted); if (phase === 'paused' || phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase]);
 
   useEffect(() => {
-    if (audioMuted || phase === 'ready' || phase === 'paused' || phase === 'levelup') { audioRef.current.stopScore(); return; }
-    if (phase === 'playing') { scoreHoldRef.current = 0; playScore(scoreStateRef.current); }
+    if (audioMuted || phase === 'ready' || phase === 'paused' || phase === 'levelup') { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
+    if (phase === 'playing' && performance.now() >= scoreHoldRef.current) playScore(scoreStateRef.current);
     if (phase === 'victory') playScore('success', 12);
     if (phase === 'defeat') playScore('failure', 10);
   }, [phase, audioMuted]);
