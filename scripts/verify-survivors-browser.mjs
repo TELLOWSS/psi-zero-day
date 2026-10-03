@@ -23,6 +23,7 @@ try {
     page.on('pageerror', e => row.errors.push(String(e)));
     await page.addInitScript(() => {
       window.__psiRigFrames = new Set();
+      window.__psiProjectileMaterials = new Set();
       window.__psiLandmarks = new Set();
       const paintText = CanvasRenderingContext2D.prototype.fillText;
       CanvasRenderingContext2D.prototype.fillText = function(text,...args) {
@@ -32,6 +33,7 @@ try {
       window.__psiPropFrames = new Set();
       const draw = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function(source,...args) {
+        if(source instanceof HTMLCanvasElement && source.dataset.projectileVfx)window.__psiProjectileMaterials.add(source.dataset.projectileVfx);
         if(source instanceof HTMLCanvasElement && source.width===256 && source.height===256) window.__psiPropFrames.add(source);
         if (source instanceof HTMLCanvasElement && source.width === 300 && source.height === 320) window.__psiRigFrames.add(source);
         return draw.call(this,source,...args);
@@ -162,6 +164,9 @@ try {
   await combatPage.addInitScript(() => {
     localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(Array.from({length:20},(_,i)=>`stage_${String(i+1).padStart(2,'0')}`)));
     localStorage.setItem('psi.survivors.rd_upgrades', JSON.stringify({vitality:5,mobility:5,intelligence:5,firstAid:1,reroll:3}));
+    window.__psiProjectileMaterials = new Set();
+    const drawMaterial=CanvasRenderingContext2D.prototype.drawImage;
+    CanvasRenderingContext2D.prototype.drawImage=function(source,...args){if(source instanceof HTMLCanvasElement&&source.dataset.projectileVfx)window.__psiProjectileMaterials.add(source.dataset.projectileVfx);return drawMaterial.call(this,source,...args);};
     window.__psiCombatWarnings = {cart:false,fall:false,supply:false,pickup:false};
     window.__psiSupplyKinds=new Set();
     const original=CanvasRenderingContext2D.prototype.fillText;
@@ -238,6 +243,7 @@ try {
     if(await combatPage.getByRole('heading',{name:'🚨 현장 중대위험 발생',exact:true}).isVisible()) break;
   }
   Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
+  combat.checks.projectileMaterials=await combatPage.evaluate(()=>window.__psiProjectileMaterials.size>0);
   combat.checks.bossSeen=bossCaptured;
   combat.checks.compactBossAlert=Boolean(combat.checks.compactBossAlert);
   combat.equipmentLevels=[...equipmentLevels].sort();

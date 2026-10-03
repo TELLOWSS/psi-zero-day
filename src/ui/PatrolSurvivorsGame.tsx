@@ -1,3 +1,4 @@
+import { drawProjectileVfx } from './survivors-projectile-vfx';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
@@ -1585,17 +1586,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // 4. RENDER GROUND PROJECTILES (Mist & Traps lying on slab floor)
       for (const p of projectiles) {
         if (p.kind === 'extinguisher') {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.scale(1, 0.55); // ground spread
-          const mistGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.radius);
-          mistGrad.addColorStop(0, 'rgba(240, 249, 255, 0.85)');
-          mistGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
-          ctx.fillStyle = mistGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
+          drawProjectileVfx(ctx,p,activePerks.extinguisher,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90);
         } else if (p.kind === 'cone_trap') {
           ctx.save();
           ctx.translate(p.x, p.y);
@@ -2051,97 +2042,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
-        if (p.kind === 'shout_shockwave') {
-          // Massive expanding golden sonic ring of Site Director's Roar
-          ctx.save();
-          ctx.strokeStyle = '#f59e0b';
-          ctx.shadowColor = '#fbbf24';
-          ctx.shadowBlur = 25;
-          ctx.lineWidth = 12;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.stroke();
-
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 4;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, Math.max(0, p.radius - 10), 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        } else if (p.kind === 'satellite_wave') {
-          // Cosmic expanding sonic ring
-          ctx.save();
-          ctx.strokeStyle = '#38bdf8';
-          ctx.shadowColor = '#0284c7';
-          ctx.shadowBlur = 20;
-          ctx.lineWidth = 5;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        } else if (p.kind === 'cryo_blast') {
-          // Freezing ice blast
-          ctx.save();
-          ctx.fillStyle = 'rgba(165, 243, 252, 0.85)';
-          ctx.shadowColor = '#38bdf8';
-          ctx.shadowBlur = 15;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        } else if (p.kind === 'tesla_bolt') {
-          // Electric chain lightning
-          ctx.save();
-          ctx.fillStyle = '#fbbf24';
-          ctx.shadowColor = '#f59e0b';
-          ctx.shadowBlur = 20;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        } else if (p.kind === 'emf_beam') {
-          // Magenta laser barricade
-          ctx.save();
-          ctx.fillStyle = '#ec4899';
-          ctx.shadowColor = '#f43f5e';
-          ctx.shadowBlur = 18;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        } else if (p.kind === 'hunter_beam') {
-          // Hyper laser sniper
-          ctx.save();
-          ctx.fillStyle = '#a855f7';
-          ctx.shadowColor = '#c084fc';
-          ctx.shadowBlur = 16;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        } else if (p.kind === 'radio') {
-          ctx.save();
-          ctx.strokeStyle = '#fbbf24';
-          const radioLevel=activePerks.radio_boost || 1;
-          ctx.lineWidth = 1.5+radioLevel*.4;
-          ctx.setLineDash(radioLevel>=4?[8,3]:[]);
-          ctx.shadowColor = '#f59e0b';
-          ctx.shadowBlur = 18;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.stroke();
-          if(radioLevel>=3){ctx.beginPath();ctx.arc(p.x,p.y,Math.max(0,p.radius-4),0,Math.PI*2);ctx.stroke();}
-          ctx.restore();
-        } else if (p.kind === 'drone_laser') {
-          ctx.save();
-          ctx.fillStyle = '#06b6d4';
-          ctx.shadowColor = '#22d3ee';
-          ctx.shadowBlur = 14;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        }
+        if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
+        drawProjectileVfx(ctx,p,p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90);
       }
 
       // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
