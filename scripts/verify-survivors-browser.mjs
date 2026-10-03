@@ -65,9 +65,9 @@ try {
     row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
     row.checks.characterHero = await page.locator('.survivors-monarch-hero-img').evaluate(async image=>{await image.decode();return image.naturalWidth>0;});
     await page.locator('.survivors-supply-guide summary').click();
-    row.checks.supplyGuide = await page.locator('.survivors-supply-cards article').count() === 3;
+    row.checks.supplyGuide = await page.locator('.survivors-supply-cards article').count() === 5 && await page.locator('.survivors-supply-cards').innerText().then(text=>['기록 회수 비콘','무전 배터리','긴급 통제 키트','현장 회복 보급','안전 유도등'].every(name=>text.includes(name)));
     row.checks.evolutionRecipes = await page.locator('.survivors-supply-guide li').count() === 5;
-    row.checks.itemArt = await page.evaluate(async()=>{const image=new Image();image.src='/assets/survivors/tactical-items-v1.webp';await image.decode();return image.naturalWidth===1254&&image.naturalHeight===1254;});
+    row.checks.itemArt = await page.evaluate(async()=>{const image=new Image();image.src='/assets/survivors/pickup-atlas-v2.webp';await image.decode();return image.naturalWidth>=1700&&image.naturalHeight>=850&&Math.abs(image.naturalWidth/image.naturalHeight-2)<.01;});
     await page.screenshot({path:path.join(out,`${viewport.width}x${viewport.height}-supplies.png`)});
     await page.locator('.survivors-supply-guide summary').click();
     await page.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
@@ -137,7 +137,7 @@ try {
     await processPage.screenshot({path:path.join(out,`stage-${stageNumber}-saved-unlock-fixture.png`)});
   }
   await processPage.close();
-  report.processCaptureScope = 'Saved unlock fixture for Stage02/07/10 display, not natural unlock progression.';
+  report.processCaptureScope = 'Saved unlock fixture for Stage02/03/07/10 display, not natural unlock progression.';
   // Exercise production simulation without injecting live engine state. Saved
   // unlock/R&D fixtures only make late-stage readability inspection repeatable.
   const combatPage = await browser.newPage({viewport:{width:390,height:844}});
