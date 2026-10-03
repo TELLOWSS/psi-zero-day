@@ -1,5 +1,6 @@
 import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
+import { applyTacticalItem, tacticalSupplyFor } from './survivors-items';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
@@ -698,6 +699,14 @@ export class SurvivorsEngine {
     }
 
     this.state.gameTime += effectiveDt;
+    if (this.state.controlKit) {
+      this.state.controlKit.remaining = Math.max(0, this.state.controlKit.remaining - effectiveDt);
+      if (this.state.controlKit.remaining === 0 || this.state.controlKit.charges === 0) this.state.controlKit = undefined;
+    }
+    if (this.state.itemNotice) {
+      this.state.itemNotice.remaining -= effectiveDt;
+      if (this.state.itemNotice.remaining <= 0) this.state.itemNotice = undefined;
+    }
 
     // Update timers
     if (this.state.bossAlertTimer > 0) {
@@ -1487,6 +1496,8 @@ export class SurvivorsEngine {
         }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
+        const supply = tacticalSupplyFor(this.state.hazardsNeutralized, Boolean(h.isStageBoss));
+        if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
         if (h.isStageBoss) this.state.stageBossNeutralized = true;
         this.emitAudio('control', h.x, h.y);
 
@@ -1544,8 +1555,13 @@ export class SurvivorsEngine {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (isHazardContactActive(h) && dist <= h.radius + 14) {
-          player.hp -= h.damage;
-          this.emitAudio('hit');
+          if (this.state.controlKit && this.state.controlKit.charges > 0 && this.state.controlKit.remaining > 0) {
+            this.state.controlKit.charges -= 1;
+            this.emitAudio('control', player.x, player.y);
+          } else {
+            player.hp -= h.damage;
+            this.emitAudio('hit');
+          }
           player.invincibleTime = 0.6; // 0.6s grace period
           // Knockback hazard slightly
           const dx = h.x - player.x || 1;
@@ -1734,13 +1750,16 @@ export class SurvivorsEngine {
 
   private collectDrop(drop: SafetyDrop) {
     this.emitAudio('pickup', drop.x, drop.y);
-    if (drop.isHeal) {
+    if (drop.itemKind) {
+      applyTacticalItem(this.state, drop.itemKind);
+      this.state.itemNotice = {id: drop.id, kind: drop.itemKind, remaining: 2.4};
+    } else if (drop.isHeal) {
       this.state.player.hp = Math.min(this.state.player.maxHp, this.state.player.hp + 25);
     } else {
       this.addExp(drop.exp);
     }
     // Increment ultimate charge by +0.8%
-    this.state.ultimateCharge = Math.min(
+    if (!drop.itemKind) this.state.ultimateCharge = Math.min(
       this.state.maxUltimateCharge,
       this.state.ultimateCharge + 0.8,
     );
@@ -1748,6 +1767,7 @@ export class SurvivorsEngine {
 
   addExp(amount: number) {
     this.state.currentExp += amount;
+    if (this.state.phase === 'levelup') return; // Queue bulk pickups behind the current choice.
     if (this.state.currentExp >= this.state.nextLevelExp) {
       this.state.currentExp -= this.state.nextLevelExp;
       this.state.level += 1;
@@ -1793,6 +1813,13 @@ export class SurvivorsEngine {
     const selectedIds: PerkId[] = [];
     if (availableEvolutions.length > 0) {
       selectedIds.push(availableEvolutions[0]!);
+    } else {
+      const missingSupport = Object.values(EVOLUTION_RECIPES).find(recipe =>
+        (this.state.activePerks[recipe.weapon] ?? 0) >= 5 &&
+        (this.state.activePerks[recipe.support] ?? 0) === 0 && availablePerkIds.includes(recipe.support));
+      const buildOption = missingSupport?.support ?? shuffled.find(id =>
+        PERK_CATALOG[id].category === 'weapon' && (this.state.activePerks[id] ?? 0) > 0);
+      if (buildOption) selectedIds.push(buildOption);
     }
 
     for (const id of shuffled) {
@@ -1865,6 +1892,7 @@ export class SurvivorsEngine {
 
     this.state.perkOptions = [];
     this.state.phase = 'playing';
+    if (this.state.currentExp >= this.state.nextLevelExp) this.addExp(0);
   }
 
   private findNearestHazard(x: number, y: number): Hazard | null {

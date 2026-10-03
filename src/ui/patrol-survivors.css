@@ -1806,3 +1806,12 @@
   outline: 2px solid #fbbf24;
   outline-offset: 3px;
 }
+
+.survivors-supply-guide { margin: 12px 0; padding: 12px; border: 1px solid #475569; border-radius: 10px; text-align: left; color: #cbd5e1; }
+.survivors-supply-guide summary { cursor: pointer; min-height: 32px; font-weight: 700; color: #fbbf24; }
+.survivors-supply-guide p { margin: 6px 0 12px; font-size: 12px; line-height: 1.6; }
+.survivors-supply-guide ul { padding-left: 20px; font-size: 12px; line-height: 1.8; }
+.survivors-supply-guide small { color: #38bdf8; }
+.survivors-supply-cards { display: grid; gap: 10px; margin-bottom: 14px; }
+.survivors-supply-cards article { display: flex; gap: 12px; align-items: center; }
+.survivors-supply-art { display: block; flex: 0 0 54px; width: 54px; height: 54px; background-image: url('/assets/survivors/tactical-items-v1.webp'); background-size: 200% 200%; background-repeat: no-repeat; }
