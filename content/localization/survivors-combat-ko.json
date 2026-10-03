@@ -3,5 +3,10 @@
   "fall_warning": "낙하 예고 · 원 밖으로",
   "boss_risk": "대표 위험 잔여량",
   "boss_guidance": "방향 예고를 보고 회피하며 자동 조치하세요.",
-  "boss_controlled": "대표 위험 통제 완료"
+  "boss_controlled": "대표 위험 통제 완료",
+  "light_zone": "조명 · 이동 증가",
+  "mud_zone": "진흙 · 감속",
+  "gas_warning": "유독가스 주의",
+  "combo": "연속 계도",
+  "bonus": "안전 점수"
 }
