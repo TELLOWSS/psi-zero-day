@@ -532,6 +532,11 @@ export function createInitialSurvivorsState(
     hasRevived: false,
     rerollsLeft: upgrades.reroll,
 
+    hitStopTimer: 0,
+    comboCount: 0,
+    comboTimer: 0,
+    lastKilledEvents: [],
+
     stageId: stage.id,
     stage: {
       ...stage,
@@ -594,6 +599,23 @@ export class SurvivorsEngine {
 
   update(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
+
+    // Reset single-frame kill events
+    this.state.lastKilledEvents = [];
+
+    // Micro Freeze / Hit Stop (Impact Screen Juice)
+    if (this.state.hitStopTimer && this.state.hitStopTimer > 0) {
+      this.state.hitStopTimer = Math.max(0, this.state.hitStopTimer - dt);
+      return; // Freeze game physics update for micro duration to deliver weighted impact feel
+    }
+
+    // Combo countdown decay
+    if (this.state.comboTimer > 0) {
+      this.state.comboTimer -= dt;
+      if (this.state.comboTimer <= 0) {
+        this.state.comboCount = 0;
+      }
+    }
 
     // Cap delta time to prevent physics tunneling
     let effectiveDt = Math.min(dt, 0.1);
@@ -1206,6 +1228,17 @@ export class SurvivorsEngine {
   private updateHazards(dt: number) {
     const { player } = this.state;
     for (const h of this.state.hazards) {
+      // 1. Radial Physics Knockback Deceleration
+      if (h.vx || h.vy) {
+        h.x += (h.vx || 0) * dt;
+        h.y += (h.vy || 0) * dt;
+        const friction = Math.pow(0.03, dt);
+        h.vx = (h.vx || 0) * friction;
+        h.vy = (h.vy || 0) * friction;
+        if (Math.abs(h.vx) < 1) h.vx = 0;
+        if (Math.abs(h.vy) < 1) h.vy = 0;
+      }
+
       if (h.isStunned && h.isStunned > 0) {
         h.isStunned -= dt;
         continue;
@@ -1250,13 +1283,31 @@ export class SurvivorsEngine {
           h.hp -= damageDealt;
           p.pierce -= 1;
 
-          // Push back
-          const knockback = p.kind === 'cone_trap' ? 55 : p.kind === 'radio' ? 25 : 8;
+          // Impact Hit Stop (Micro Freeze Juice)
+          if (isCrit) {
+            this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, 0.045);
+          }
+
+          // Dynamic Physics Radial Knockback impulse
+          const knockBase = p.kind === 'shout_shockwave' ? 340
+            : p.kind === 'satellite_wave' ? 190
+            : p.kind === 'cone_trap' ? 140
+            : p.kind === 'radio' ? 95
+            : 55;
+          // Boss has high mass resistance
+          const massFactor = h.type === 'CRANE_BOSS' ? 0.2 : h.type === 'RUNAWAY_CART' ? 0.5 : 1.0;
+          const knockForce = knockBase * massFactor;
+
           const kx = (h.x - player.x) || 1;
           const ky = (h.y - player.y) || 1;
-          const klen = Math.hypot(kx, ky);
-          h.x += (kx / klen) * knockback;
-          h.y += (ky / klen) * knockback;
+          const klen = Math.hypot(kx, ky) || 1;
+          h.vx = (h.vx || 0) + (kx / klen) * knockForce;
+          h.vy = (h.vy || 0) + (ky / klen) * knockForce;
+
+          // Direct displacement fallback
+          const directPush = knockForce * 0.15;
+          h.x += (kx / klen) * directPush;
+          h.y += (ky / klen) * directPush;
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
@@ -1305,12 +1356,25 @@ export class SurvivorsEngine {
       }
     }
 
-    // Filter dead hazards and spawn drops
+    // Filter dead hazards and spawn drops + Combo & Impact Juice events
     const survivingHazards: Hazard[] = [];
+    if (!this.state.lastKilledEvents) {
+      this.state.lastKilledEvents = [];
+    }
+
     for (const h of hazards) {
       if (h.hp <= 0) {
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
+
+        // Combo chain system
+        this.state.comboCount = (this.state.comboCount || 0) + 1;
+        this.state.comboTimer = 2.4; // 2.4 seconds combo window
+        this.state.lastKilledEvents.push({
+          type: h.type,
+          x: h.x,
+          y: h.y,
+        });
 
         // Ultimate gauge increment
         const ultGain = h.type === 'CRANE_BOSS' ? 12 : 2.5;
@@ -1323,6 +1387,7 @@ export class SurvivorsEngine {
         if (h.type === 'CRANE_BOSS') {
           this.state.timeDilation = 0.25;
           this.state.timeDilationTimer = 0.8;
+          this.state.hitStopTimer = 0.08;
           this.state.score += 2500;
         }
 

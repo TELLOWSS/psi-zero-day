@@ -195,6 +195,12 @@ export interface SurvivorsGameState {
   hasRevived: boolean;
   rerollsLeft: number;
 
+  // Screen Juice & Impact Feedback
+  hitStopTimer?: number;
+  comboCount: number;
+  comboTimer: number;
+  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean }>;
+
   // Stage & Level Architecture
   stageId: PatrolStageId;
   stage: PatrolStageDefinition;

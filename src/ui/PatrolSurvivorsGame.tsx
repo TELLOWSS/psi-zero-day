@@ -45,6 +45,22 @@ interface Particle {
   maxLife: number;
 }
 
+export interface ApprovedStamp {
+  id: number;
+  x: number;
+  y: number;
+  life: number;
+  maxLife: number;
+}
+
+export interface HelmetSnap {
+  id: number;
+  x: number;
+  y: number;
+  life: number;
+  maxLife: number;
+}
+
 const STORAGE_KEY_UPGRADES = 'psi.survivors.rd_upgrades';
 const STORAGE_KEY_CREDITS = 'psi.survivors.credits';
 const STORAGE_KEY_UNLOCKED_STAGES = 'psi.survivors.unlocked_stages';
@@ -69,12 +85,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const floatingTextsRef = useRef<FloatingText[]>([]);
   const floatingIdRef = useRef(1);
   const particlesRef = useRef<Particle[]>([]);
+  const approvedStampsRef = useRef<ApprovedStamp[]>([]);
+  const helmetSnapsRef = useRef<HelmetSnap[]>([]);
 
   // Keyboard input state
   const keysRef = useRef<{ [key: string]: boolean }>({});
 
-  // Screen shake
+  // Screen shake & Damage Flash
   const screenShakeRef = useRef<number>(0);
+  const damageFlashRef = useRef<number>(0);
 
   // Authentic Construction Safety Assets Cache (including 2.5D Quarter-view standing maps)
   const spritesRef = useRef<{
@@ -225,6 +244,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [gameTime, setGameTime] = useState(0);
   const [score, setScore] = useState(0);
   const [kills, setKills] = useState(0);
+  const [combo, setCombo] = useState(0);
   const [perkOptions, setPerkOptions] = useState<Perk[]>([]);
   const [rerollsLeft, setRerollsLeft] = useState(0);
   const [activePerks, setActivePerks] = useState<Record<PerkId, number>>({
@@ -441,6 +461,26 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         maxLife: 0.7,
       });
     }
+  };
+
+  const spawnHelmetSnap = (x: number, y: number) => {
+    helmetSnapsRef.current.push({
+      id: Date.now() + Math.random(),
+      x,
+      y,
+      life: 0.65,
+      maxLife: 0.65,
+    });
+  };
+
+  const spawnApprovedStamp = (x: number, y: number) => {
+    approvedStampsRef.current.push({
+      id: Date.now() + Math.random(),
+      x,
+      y,
+      life: 1.8,
+      maxLife: 1.8,
+    });
   };
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
@@ -680,16 +720,44 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           prevNeutralized = engine.state.hazardsNeutralized;
           setKills(prevNeutralized);
           setScore(engine.state.score);
-          spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', diff * 5, 80);
-          if (diff > 0) {
-            spawnFloating(engine.state.player.x, engine.state.player.y - 45, `+안전 계도 완료!`, '#10b981');
+
+          // Process kill events (Golden helmet snap, approved stamp, boss defeat)
+          const killEvents = engine.state.lastKilledEvents || [];
+          for (const ev of killEvents) {
+            if (ev.type === 'UNHELMETED') {
+              spawnHelmetSnap(ev.x, ev.y);
+              spawnApprovedStamp(ev.x, ev.y);
+              spawnParticles(ev.x, ev.y - 20, '#10b981', 8, 65, 3.5);
+              spawnFloating(ev.x, ev.y - 35, '+안전모 착용 완료! ✔', '#10b981');
+            } else if (ev.type === 'CRANE_BOSS') {
+              screenShakeRef.current = 28;
+              spawnParticles(ev.x, ev.y, '#f59e0b', 40, 160, 5);
+              spawnFloating(ev.x, ev.y - 50, '🚨 타워크레인 붕괴 위험 원천 차단!', '#fbbf24', true);
+            }
           }
+
+          // Combo Juice Feedback
+          const currentCombo = engine.state.comboCount;
+          setCombo(currentCombo);
+          if (currentCombo >= 2) {
+            if (currentCombo % 5 === 0) {
+              screenShakeRef.current = Math.min(20, 8 + currentCombo * 0.9);
+              spawnFloating(engine.state.player.x, engine.state.player.y - 65, `🔥 ${currentCombo}연속 계도! 현장 안전 행진!`, '#fbbf24', true);
+            }
+          }
+
+          spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', diff * 5, 80);
         }
+        if (engine.state.comboCount !== combo) {
+          setCombo(engine.state.comboCount);
+        }
+
         if (engine.state.player.hp < prevHp) {
           playSfx('hit');
-          screenShakeRef.current = 10;
+          screenShakeRef.current = 14;
+          damageFlashRef.current = 0.45; // Red damage vignette flash
           spawnFloating(engine.state.player.x, engine.state.player.y - 25, `-${Math.round(prevHp - engine.state.player.hp)}`, '#ef4444');
-          spawnParticles(engine.state.player.x, engine.state.player.y, '#ef4444', 12, 110);
+          spawnParticles(engine.state.player.x, engine.state.player.y, '#ef4444', 16, 120);
           prevHp = engine.state.player.hp;
         } else if (engine.state.player.hp > prevHp) {
           prevHp = engine.state.player.hp;
@@ -919,6 +987,41 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.fillText('⛑️ 2.5D 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
       }
       ctx.restore();
+
+      // RENDER 2.5D APPROVED SAFETY STAMPS ON FLOOR
+      const aliveStamps: ApprovedStamp[] = [];
+      for (const st of approvedStampsRef.current) {
+        st.life -= dt;
+        if (st.life > 0) {
+          ctx.save();
+          ctx.translate(st.x, st.y);
+          ctx.scale(1, 0.52); // 2.5D ground projection
+          const alpha = Math.min(1.0, st.life / (st.maxLife * 0.4));
+          ctx.globalAlpha = alpha;
+
+          // Green safety approval ring
+          ctx.strokeStyle = '#10b981';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, 24, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Green fill wash
+          ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+          ctx.fill();
+
+          // APPROVED stamp text
+          ctx.font = 'bold 9px sans-serif';
+          ctx.fillStyle = '#10b981';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('APPROVED ✔', 0, 0);
+          ctx.restore();
+          aliveStamps.push(st);
+        }
+      }
+      approvedStampsRef.current = aliveStamps;
+
       // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
       if (selectedStage === 'stage_02') {
         // High-Rise Core Frame: High-altitude wind gust vapor streaks
@@ -1816,7 +1919,49 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       particlesRef.current = aliveParticles;
 
-      // 10. RENDER FLOATING TEXTS
+      // 10. RENDER 2.5D HELMET SNAP-ON PARTICLES (Golden Hard Hat Drops onto Worker's Head)
+      const aliveHelmets: HelmetSnap[] = [];
+      for (const hs of helmetSnapsRef.current) {
+        hs.life -= dt;
+        if (hs.life > 0) {
+          ctx.save();
+          const progress = 1 - (hs.life / hs.maxLife); // 0 to 1
+          // Fall from y - 48 to y - 22 with elastic snap
+          const startY = hs.y - 48;
+          const targetY = hs.y - 22;
+          const currentY = startY + (targetY - startY) * Math.min(1.0, progress * 1.5);
+
+          ctx.translate(hs.x, currentY);
+          // Golden/White Hard Hat Icon
+          ctx.fillStyle = '#facc15';
+          ctx.shadowColor = '#eab308';
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.arc(0, 0, 9, Math.PI, 0);
+          ctx.fill();
+          // Green cross
+          ctx.fillStyle = '#16a34a';
+          ctx.fillRect(-1.5, -6, 3, 5);
+          ctx.fillRect(-3.5, -4.5, 7, 2);
+
+          // Impact star sparkle when helmet snaps (progress > 0.6)
+          if (progress > 0.6) {
+            const sparkleAlpha = (1 - progress) / 0.4;
+            ctx.fillStyle = `rgba(254, 240, 138, ${sparkleAlpha})`;
+            ctx.font = '14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('✨', 12, -4);
+            ctx.fillText('✨', -12, -4);
+          }
+
+          ctx.restore();
+          aliveHelmets.push(hs);
+        }
+      }
+      helmetSnapsRef.current = aliveHelmets;
+
+      // 11. RENDER FLOATING TEXTS
       const aliveTexts: FloatingText[] = [];
       for (const ft of floatingTextsRef.current) {
         ft.life -= dt;
@@ -1835,6 +1980,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
       floatingTextsRef.current = aliveTexts;
+
+      // 12. SCREEN-SPACE DAMAGE VIGNETTE FLASH (Tactile Pain Feedback)
+      if (damageFlashRef.current > 0) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // screen coordinates
+        const cX = canvas.width / 2;
+        const cY = canvas.height / 2;
+        const rMax = Math.hypot(cX, cY);
+        const grad = ctx.createRadialGradient(cX, cY, rMax * 0.45, cX, cY, rMax);
+        grad.addColorStop(0, 'rgba(239, 68, 68, 0)');
+        grad.addColorStop(1, `rgba(239, 68, 68, ${Math.min(0.65, damageFlashRef.current)})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+        damageFlashRef.current = Math.max(0, damageFlashRef.current - dt * 2.2);
+      }
 
       ctx.restore();
       } catch (err) {
@@ -1922,6 +2083,41 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </button>
         </div>
       </header>
+
+      {/* COMBO JUICE BANNER */}
+      {combo >= 2 && phase === 'playing' && (
+        <aside
+          aria-label="연속 계도 콤보 알림"
+          style={{
+            position: 'absolute',
+            top: 72,
+            right: 24,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95))',
+            color: '#ffffff',
+            padding: '8px 16px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(245, 158, 11, 0.5), 0 0 0 2px rgba(254, 240, 138, 0.8)',
+            fontWeight: 900,
+            fontSize: '15px',
+            letterSpacing: '0.5px',
+            pointerEvents: 'none',
+            zIndex: 40,
+          }}
+        >
+          <span style={{ fontSize: '20px' }}>🔥</span>
+          <div>
+            <div style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              {combo} COMBO!
+            </div>
+            <div style={{ fontSize: '10px', opacity: 0.9, fontWeight: 700 }}>
+              +{combo * 5}% SAFE POINT BONUS
+            </div>
+          </div>
+        </aside>
+      )}
 
       {/* BOSS ALERT BANNER */}
       {bossAlert && (
