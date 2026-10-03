@@ -137,7 +137,9 @@ try {
   for (const stageNumber of ['02','03','07','10']) {
     await processPage.goto(report.baseUrl,{waitUntil:'networkidle'});
     await processPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+    await processPage.locator('.survivors-stage-select-section > summary').click();
     await processPage.locator('.survivors-stage-card').filter({hasText:`STAGE ${stageNumber}`}).click();
+    await processPage.locator('.survivors-char-select-section > summary').click();
     await processPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
     await processPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
     await processPage.waitForTimeout(2000);
@@ -168,7 +170,9 @@ try {
   });
   await combatPage.goto(report.baseUrl,{waitUntil:'networkidle'});
   await combatPage.getByRole('button',{name:/야간 긴급 순찰/}).click();
+  await combatPage.locator('.survivors-stage-select-section > summary').click();
   await combatPage.locator('.survivors-stage-card').filter({hasText:'STAGE 10'}).click();
+  await combatPage.locator('.survivors-char-select-section > summary').click();
   await combatPage.locator('.survivors-char-card').filter({hasText:'안전감시단'}).click();
   await combatPage.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
   const combat = {status:'RUNNING',scope:'Stage10 saved unlock and maximum valid permanent upgrades; real simulation, not natural progression proof.',checks:{},errors:[]};
