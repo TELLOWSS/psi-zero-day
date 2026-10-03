@@ -3,7 +3,7 @@ export type DefenseTargetMode = 'FIRST' | 'STRONG';
 export type DefenseStatus = 'READY' | 'RUNNING' | 'INTERMISSION' | 'WON' | 'LOST';
 export type DefenseTowerId = 'PULSE' | 'BURST' | 'CONTROL' | 'SENSOR';
 export type DefenseEnemyId = 'NORMAL' | 'SWIFT' | 'ARMORED' | 'SWARM' | 'VEILED' | 'BOSS';
-export type DefenseSupportId = 'COORDINATOR' | 'OBSERVER';
+export type DefenseSupportId = 'COORDINATOR' | 'OBSERVER' | 'COMMANDER' | 'REBAR_LEAD' | 'ENGINEER';
 export type DefenseLevelId = 'L1' | 'L2' | 'L3A' | 'L3B';
 
 export interface DefensePoint { readonly x: number; readonly y: number }

@@ -420,6 +420,17 @@ export function DefenseGame({
     : null;
 
   useEffect(() => {
+    if (!result || !result.won) return;
+    try {
+      const earnedFg = 10 + result.stars * 5;
+      const current = Number(localStorage.getItem('psi.fieldguide.points') || '0');
+      localStorage.setItem('psi.fieldguide.points', String(current + earnedFg));
+    } catch {
+      // ignore
+    }
+  }, [result?.won, result?.stars]);
+
+  useEffect(() => {
     if (!state || state.paused || (state.status !== 'RUNNING' && state.status !== 'INTERMISSION')) return;
     const timer = window.setInterval(() => {
       setState(current => {
@@ -978,6 +989,7 @@ export function DefenseGame({
           <div><dt>{t('defense.ui.score')}</dt><dd>{result.score.toLocaleString()}</dd></div>
           <div><dt>{t('defense.ui.completed')}</dt><dd>{result.completedWaves} / 10</dd></div>
           <div><dt>{t('defense.ui.shield')}</dt><dd>{result.shield}</dd></div>
+          <div><dt>현장도감 연구</dt><dd>+{result.won ? 10 + result.stars * 5 : 2} FG</dd></div>
         </dl>
         {activeEvent && eventDebriefTextId ? <section className="zb-event-debrief" data-event-debrief={activeEvent.id}>
           <strong>{t(activeEvent.titleTextId)}</strong>

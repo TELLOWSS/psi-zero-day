@@ -24,7 +24,7 @@ const towerIdValue = (value: unknown): value is DefenseTowerId =>
 const enemyIdValue = (value: unknown): value is DefenseEnemyId =>
   value === 'NORMAL' || value === 'SWIFT' || value === 'ARMORED' || value === 'SWARM' || value === 'VEILED' || value === 'BOSS';
 const supportIdValue = (value: unknown): value is DefenseSupportId =>
-  value === 'COORDINATOR' || value === 'OBSERVER';
+  value === 'COORDINATOR' || value === 'OBSERVER' || value === 'COMMANDER' || value === 'REBAR_LEAD' || value === 'ENGINEER';
 const levelIdValue = (value: unknown): value is DefenseLevelId =>
   value === 'L1' || value === 'L2' || value === 'L3A' || value === 'L3B';
 

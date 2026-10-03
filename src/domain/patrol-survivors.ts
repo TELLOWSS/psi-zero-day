@@ -88,7 +88,9 @@ export interface Perk {
   };
 }
 
-export type CharacterId = 'yoon' | 'park' | 'jung';
+export type CanonicalCharacterId = 'player' | 'kang_taesik' | 'yoon_sungho' | 'lee_jaehoon' | 'lim_junho';
+export type LegacyCharacterId = 'yoon' | 'park' | 'jung';
+export type CharacterId = CanonicalCharacterId | LegacyCharacterId;
 
 export interface CharacterProfile {
   readonly id: CharacterId;
@@ -98,7 +100,31 @@ export interface CharacterProfile {
   readonly description: string;
   readonly startingWeapon: BaseWeaponId;
   readonly avatar: string;
+  readonly portraitUri: string;
+  readonly heroBannerUri: string;
+  readonly quote: string;
+  readonly traits: string[];
   readonly color: string;
+  readonly statModifiers?: Partial<{
+    maxHpBonus: number;
+    speedBonus: number;
+    pickupRadiusBonus: number;
+    cooldownBonus: number;
+    damageBonus: number;
+  }>;
+}
+
+export interface FieldGuidePerkBonus {
+  readonly fgId: string;
+  readonly title: string;
+  readonly targetKey: PerkId | 'maxHp' | 'speed' | 'pickupRadius' | 'defense';
+  readonly value: number;
+  readonly description: string;
+}
+
+export interface FieldGuideIntegrationSummary {
+  readonly totalDiscovered: number;
+  readonly activeBonuses: readonly FieldGuidePerkBonus[];
 }
 
 export interface PermanentUpgrades {

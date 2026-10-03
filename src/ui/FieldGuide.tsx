@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { readFgPoints, subscribeUnifiedMeta } from '../app/unified-meta-bridge';
+import { useEffect, useMemo, useState } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import catalog from '../../content/episode01/scene-element-catalog.json';
 import legalBasis from '../../content/episode01/field-guide-legal-basis.json';
@@ -97,6 +98,9 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
     return [...map.entries()].sort((a,b) => a[1]-b[1]).map(([name]) => name);
   }, [entries]);
 
+  const [fgPoints, setFgPoints] = useState(() => readFgPoints());
+  useEffect(() => subscribeUnifiedMeta(() => setFgPoints(readFgPoints())), []);
+
   const [section, setSection] = useState(sections[0] ?? '');
   const visible = entries.filter(([, entry]) => !section || entry.field_guide?.section === section);
   const [selected, setSelected] = useState(visible[0]?.[0] ?? entries[0]?.[0] ?? '');
@@ -107,10 +111,27 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
   const legal = legalItems[key];
 
   return <div className="field-guide">
-    <header>
-      <span className="hub-kicker">FIELD GUIDE / {entries.length}</span>
-      <h1>{session.t('ui.guide.title')}</h1>
-      <p>{session.t('ui.guide.intro')}</p>
+    <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '0.8rem' }}>
+      <div>
+        <span className="hub-kicker">FIELD GUIDE / {entries.length}</span>
+        <h1>{session.t('ui.guide.title')}</h1>
+        <p>{session.t('ui.guide.intro')}</p>
+      </div>
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        background: 'rgba(2, 132, 199, 0.2)',
+        border: '1px solid #0284c7',
+        padding: '0.4rem 0.9rem',
+        borderRadius: '999px',
+        color: '#38bdf8',
+        fontSize: '0.9rem',
+        fontWeight: 'bold',
+      }}>
+        <span>🔬 현장도감 연구 데이터:</span>
+        <strong style={{ color: '#fff', fontSize: '1.05rem' }}>{fgPoints} FG</strong>
+      </div>
     </header>
 
     <nav className="field-guide-sections" aria-label="현장 도감 공정 섹션">
@@ -176,6 +197,34 @@ export function FieldGuide({ session }: { session: EpisodeSession }) {
           </div> : null}
           <small className="field-guide-legal-note">{session.t('ui.guide.legal.notice')}</small>
         </section> : null}
+
+        {/* TRIAD GAMEPLAY UNIFICATION PANEL */}
+        <section className="field-guide-triad-integration" aria-label="3대 게임플레이 일체화 연계 효과" style={{
+          marginTop: '1.2rem',
+          padding: '1rem',
+          background: 'rgba(15, 23, 42, 0.75)',
+          border: '1px solid rgba(56, 189, 248, 0.3)',
+          borderRadius: '8px',
+        }}>
+          <h3 style={{ fontSize: '0.95rem', color: '#38bdf8', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span>🔗</span> 4위 1체 시스템 연계 효과
+          </h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.6rem', fontSize: '0.85rem' }}>
+            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
+              <strong style={{ color: '#fbbf24', display: 'block', marginBottom: '0.2rem' }}>📖 스토리 모드</strong>
+              <span style={{ color: '#cbd5e1' }}>에피소드 {meta?.episode ?? '01'} 현장 실무 및 갈등 조정 시 핵심 하한선 근거로 적용</span>
+            </div>
+            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
+              <strong style={{ color: '#34d399', display: 'block', marginBottom: '0.2rem' }}>📢 순찰 슈팅</strong>
+              <span style={{ color: '#cbd5e1' }}>순찰 중 관련 위험 요소 즉각 탐지 및 계도력 +15% 시너지</span>
+            </div>
+            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '0.6rem', borderRadius: '6px' }}>
+              <strong style={{ color: '#60a5fa', display: 'block', marginBottom: '0.2rem' }}>🛡️ 전술 디펜스</strong>
+              <span style={{ color: '#cbd5e1' }}>고위험 공정 방어선 내 가설 방호벽/차단 센서로 전술 배치</span>
+            </div>
+          </div>
+        </section>
+
         <small>{session.t('ui.guide.note')}</small>
       </div>
     </article>

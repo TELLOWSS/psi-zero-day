@@ -25,6 +25,9 @@ import {
 import { zeroBreachContent } from '../content/defense';
 import { defenseEvents } from '../content/defense-events';
 import { browserLocalStoragePort } from '../platform/browser-storage';
+import {
+  readFgPoints, readSurvivorsCredits, readUnlockedPatrolStages, subscribeUnifiedMeta,
+} from '../app/unified-meta-bridge';
 
 type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -326,6 +329,21 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
+  const [unifiedMeta, setUnifiedMeta] = useState(() => ({
+    fgPoints: readFgPoints(),
+    unlockedStages: readUnlockedPatrolStages(),
+    credits: readSurvivorsCredits(),
+  }));
+
+  useEffect(() => {
+    return subscribeUnifiedMeta(() => {
+      setUnifiedMeta({
+        fgPoints: readFgPoints(),
+        unlockedStages: readUnlockedPatrolStages(),
+        credits: readSurvivorsCredits(),
+      });
+    });
+  }, []);
 
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
     <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />
@@ -355,6 +373,36 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">Proactive Safety Intelligence · FIELD DEFENSE</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
+
+      {/* 4위 1체 통합 관제 상태 요약 바 */}
+      <div className="commercial-triad-dashboard" style={{
+        margin: '0.8rem 0 1rem 0',
+        padding: '0.7rem 1rem',
+        background: 'rgba(15, 23, 42, 0.85)',
+        border: '1px solid rgba(56, 189, 248, 0.35)',
+        borderRadius: '8px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+        gap: '0.6rem',
+        fontSize: '0.8rem',
+      }}>
+        <div>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>📖 스토리 진행</span>
+          <strong style={{ color: '#fbbf24' }}>EP.01 · {progress}%</strong>
+        </div>
+        <div>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 야간 순찰 (슈팅)</span>
+          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / 5 구역 해금</strong>
+        </div>
+        <div>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 제로 브리치 (디펜스)</span>
+          <strong style={{ color: '#60a5fa' }}>무재해 방어선 가동</strong>
+        </div>
+        <div>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🔬 현장도감 연구</span>
+          <strong style={{ color: '#a78bfa' }}>{unifiedMeta.fgPoints} FG 연구 데이터</strong>
+        </div>
+      </div>
 
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button

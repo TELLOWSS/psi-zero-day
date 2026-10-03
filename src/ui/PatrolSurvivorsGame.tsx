@@ -50,6 +50,16 @@ const STORAGE_KEY_CREDITS = 'psi.survivors.credits';
 const STORAGE_KEY_UNLOCKED_STAGES = 'psi.survivors.unlocked_stages';
 const STORAGE_KEY_STAGE_STARS = 'psi.survivors.stage_stars';
 
+export const CANONICAL_CHAR_IDS: CharacterId[] = [
+  'player',
+  'kang_taesik',
+  'yoon_sungho',
+  'lee_jaehoon',
+  'lim_junho',
+];
+
+export const STORAGE_KEY_FG_POINTS = 'psi.fieldguide.points';
+
 export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurvivorsGameProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -69,17 +79,43 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Authentic Construction Safety Assets Cache
   const spritesRef = useRef<{
     playerYoon?: HTMLImageElement;
+    playerPark?: HTMLImageElement;
+    playerJung?: HTMLImageElement;
+    characters: Record<string, HTMLImageElement>;
     mobWorker?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
-  }>({});
+  }>({
+    characters: {},
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Load canonical character portraits
+    CANONICAL_CHAR_IDS.forEach(cId => {
+      const prof = CHARACTER_PROFILES[cId];
+      if (prof?.portraitUri) {
+        const img = new Image();
+        img.src = prof.portraitUri;
+        img.onload = () => {
+          spritesRef.current.characters[cId] = img;
+        };
+      }
+    });
+
     const pImg = new Image();
     pImg.src = '/assets/survivors/sprite_player_yoon.webp';
     pImg.onload = () => { spritesRef.current.playerYoon = pImg; };
+
+    const parkImg = new Image();
+    parkImg.src = '/assets/episode01/characters/kang-taesik-portrait.webp';
+    parkImg.onload = () => { spritesRef.current.playerPark = parkImg; };
+
+    const jungImg = new Image();
+    jungImg.src = '/assets/episode01/characters/player-portrait.webp';
+    jungImg.onload = () => { spritesRef.current.playerJung = jungImg; };
 
     const mImg = new Image();
     mImg.src = '/assets/survivors/sprite_mob_worker.webp';
@@ -99,7 +135,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }, []);
 
   // Meta Progression (Stored in LocalStorage)
-  const [selectedChar, setSelectedChar] = useState<CharacterId>('yoon');
+  const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
   const [unlockedStages, setUnlockedStages] = useState<PatrolStageId[]>(() => {
     try {
@@ -584,11 +620,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let facingAngle = 0;
 
     const renderLoop = (time: number) => {
+      requestRef.current = requestAnimationFrame(renderLoop);
+
       const dt = Math.min((time - lastTimeRef.current) / 1000, 0.1);
       lastTimeRef.current = time;
 
       const engine = engineRef.current;
       if (!engine) return;
+
+      try {
 
       // Merge Inputs (Touch Virtual Joystick + Keyboard WASD)
       let moveX = touchVectorRef.current.x;
@@ -618,6 +658,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           setKills(prevNeutralized);
           setScore(engine.state.score);
           spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', diff * 5, 80);
+          if (diff > 0) {
+            spawnFloating(engine.state.player.x, engine.state.player.y - 45, `+안전 계도 완료!`, '#10b981');
+          }
         }
         if (engine.state.player.hp < prevHp) {
           playSfx('hit');
@@ -653,8 +696,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             setRerollsLeft(engine.state.rerollsLeft);
           }
           if (engine.state.phase === 'victory' || engine.state.phase === 'defeat') {
-            // Save earned credits
+            // Save earned credits & Field Guide Points
             saveMetaProgress(permanentUpgrades, psiCredits + engine.state.psiCredits);
+            try {
+              const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (engine.state.phase === 'victory' ? 5 : 0);
+              const currentFg = Number(localStorage.getItem(STORAGE_KEY_FG_POINTS) || '0');
+              localStorage.setItem(STORAGE_KEY_FG_POINTS, String(currentFg + earnedFg));
+            } catch {
+              // ignore
+            }
 
             if (engine.state.phase === 'victory') {
               // Unlock next stage in order
@@ -734,6 +784,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const camX = Math.floor(player.x - viewW / 2 + shakeX);
       const camY = Math.floor(player.y - viewH / 2 + shakeY);
 
+      // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       ctx.save();
       ctx.scale(dpr * baseZoom, dpr * baseZoom);
 
@@ -795,6 +849,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
         ctx.fillText('⛑️ 안전통로 / SAFETY WALKWAY ⛑️', WORLD_WIDTH / 2, y);
       }
+      ctx.restore();
       // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
       if (selectedStage === 'stage_02') {
         // High-Rise Core Frame: High-altitude wind gust vapor streaks
@@ -1504,25 +1559,36 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.stroke();
       ctx.setLineDash([]);
 
-      const pSpr = spritesRef.current.playerYoon;
-      if (pSpr && pSpr.complete && engine.state.characterId === 'yoon') {
-        // High-Quality Yoon Sung-ho Token
+      const charProfile = CHARACTER_PROFILES[engine.state.characterId];
+      const pSpr = spritesRef.current.characters[engine.state.characterId]
+        || (engine.state.characterId === 'yoon'
+          ? spritesRef.current.playerYoon
+          : engine.state.characterId === 'park'
+          ? spritesRef.current.playerPark
+          : spritesRef.current.playerJung);
+
+      if (pSpr && pSpr.complete && pSpr.naturalWidth > 0) {
+        // High-Quality Character Art Token
         ctx.save();
         ctx.beginPath();
         ctx.arc(0, 0, 20, 0, Math.PI * 2);
         ctx.clip();
-        ctx.drawImage(pSpr, -24, -24, 48, 48);
+        try {
+          ctx.drawImage(pSpr, -24, -24, 48, 48);
+        } catch {
+          // ignore
+        }
         ctx.restore();
 
-        // High-Visibility Neon-Lime Outer Ring
-        ctx.strokeStyle = '#84cc16';
+        // High-Visibility Glow Outer Ring
+        ctx.strokeStyle = charProfile?.color || '#84cc16';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(0, 0, 20, 0, Math.PI * 2);
         ctx.stroke();
       } else {
         // Procedural Tactical Safety Officer
-        const charColor = CHARACTER_PROFILES[engine.state.characterId].color;
+        const charColor = charProfile?.color || '#84cc16';
 
         // Dark tactical work jacket
         ctx.fillStyle = '#1e293b';
@@ -1627,8 +1693,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       floatingTextsRef.current = aliveTexts;
 
       ctx.restore();
-
-      requestRef.current = requestAnimationFrame(renderLoop);
+      } catch (err) {
+        console.error('Survivors render error:', err);
+      }
     };
 
     requestRef.current = requestAnimationFrame(renderLoop);
@@ -1814,24 +1881,31 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog">
-            {/* DIRECTOR YOON SUNG-HO HERO KEY VISUAL BANNER */}
-            <div className="survivors-monarch-hero-banner">
-              <img
-                src="/assets/survivors/director_yoon_hero.jpg"
-                alt="현장소장 윤성호"
-                className="survivors-monarch-hero-img"
-              />
-              <div className="survivors-monarch-hero-content">
-                <span className="survivors-monarch-badge">🛡️ ZERO-BREACH COMMANDER</span>
-                <h3>현장 지휘관 윤성호 소장</h3>
-                <p>"30년 현장 경력의 베테랑 · 작업중지권 절대 사수 · 오늘도 무사히"</p>
-                <div className="survivors-monarch-perks">
-                  <span>✦ 확성기 사자후 제압</span>
-                  <span>✦ 전 구역 작업중지권</span>
-                  <span>✦ 현장 근로자 전원 구출</span>
+            {/* DYNAMIC HERO KEY VISUAL BANNER (SELECTED PATROL AGENT) */}
+            {(() => {
+              const activeChar = CHARACTER_PROFILES[selectedChar] || CHARACTER_PROFILES['yoon'];
+              return (
+                <div className="survivors-monarch-hero-banner" style={{ borderColor: activeChar.color }}>
+                  <img
+                    src={activeChar.heroBannerUri || activeChar.portraitUri}
+                    alt={activeChar.name}
+                    className="survivors-monarch-hero-img"
+                  />
+                  <div className="survivors-monarch-hero-content">
+                    <span className="survivors-monarch-badge" style={{ borderColor: activeChar.color, color: activeChar.color }}>
+                      🛡️ {activeChar.title}
+                    </span>
+                    <h3>{activeChar.role} {activeChar.name}</h3>
+                    <p>{activeChar.quote}</p>
+                    <div className="survivors-monarch-perks">
+                      {activeChar.traits.map(t => (
+                        <span key={t}>{t}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
@@ -1880,9 +1954,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             {/* CHARACTER SELECTOR */}
             <div className="survivors-char-select-section">
-              <span className="survivors-section-label">순찰 요원 선택</span>
+              <span className="survivors-section-label">순찰 요원 선택 (스토리 5대 핵심 인물)</span>
               <div className="survivors-char-cards">
-                {(Object.values(CHARACTER_PROFILES)).map(char => (
+                {CANONICAL_CHAR_IDS.map(id => CHARACTER_PROFILES[id]).filter(Boolean).map(char => (
                   <button
                     key={char.id}
                     type="button"
@@ -1892,7 +1966,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       initGame(char.id, selectedStage);
                     }}
                   >
-                    <span className="survivors-char-avatar">{char.avatar}</span>
+                    <div
+                      className="survivors-char-portrait-frame"
+                      style={{
+                        borderColor: selectedChar === char.id ? char.color : 'rgba(255, 255, 255, 0.2)',
+                        boxShadow: selectedChar === char.id ? `0 0 16px ${char.color}` : undefined,
+                      }}
+                    >
+                      <img src={char.portraitUri} alt={char.name} className="survivors-char-portrait-thumb" />
+                      <span className="survivors-char-avatar-badge">{char.avatar}</span>
+                    </div>
                     <strong style={{ color: char.color }}>{char.name}</strong>
                     <small>{char.role}</small>
                     <p>{char.description}</p>

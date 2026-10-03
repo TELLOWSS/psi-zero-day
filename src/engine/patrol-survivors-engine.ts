@@ -166,6 +166,82 @@ export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
 
 
 export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
+  player: {
+    id: 'player',
+    name: '윤안전 (정민주)',
+    role: '공인 산업안전관리자',
+    title: '안전 하한선 총괄 책임자',
+    description: '원칙과 법적 기준을 수호하는 안전관리자. 태블릿 스마트 센서로 위험 탐색 반경 및 경험치 수집 +25%, 쿨다운 -10%.',
+    startingWeapon: 'safety_drone',
+    avatar: '👩‍💼',
+    portraitUri: '/assets/episode01/characters/player-portrait.webp',
+    heroBannerUri: '/assets/episode01/hires/key-art.webp',
+    quote: '"법은 하한선이며, 안전은 타협의 대상이 아닙니다."',
+    traits: ['✦ 스마트 태블릿 센서 탐색', '✦ 경험치 자석 반경 +30', '✦ 전 구역 작업중지권'],
+    color: '#2563eb',
+    statModifiers: { pickupRadiusBonus: 35, cooldownBonus: 0.1 },
+  },
+  kang_taesik: {
+    id: 'kang_taesik',
+    name: '강태식 (박기철)',
+    role: '베테랑 골조반장',
+    title: '30년 현장의 버팀목',
+    description: '수십 년 현장 경험으로 다져진 강인한 피지컬과 통솔력. 최대 HP +60, 넉백 파워 +40%, 피해 감소.',
+    startingWeapon: 'extinguisher',
+    avatar: '👷‍♂️',
+    portraitUri: '/assets/episode01/characters/kang-taesik-portrait.webp',
+    heroBannerUri: '/assets/episode01/hires/kang-taesik-portrait.webp',
+    quote: '"철근과 콘크리트는 거짓말 안 해. 안전 하한선 넘으면 다 무너지는 거여."',
+    traits: ['✦ 최대 체력 +60', '✦ 분말 소화기 광역 압제', '✦ 넉백 충격파 +40%'],
+    color: '#f97316',
+    statModifiers: { maxHpBonus: 60, damageBonus: 0.2 },
+  },
+  yoon_sungho: {
+    id: 'yoon_sungho',
+    name: '윤성호',
+    role: '철근 숙련 기능공',
+    title: '철근 결속의 달인',
+    description: '묵묵히 현장을 지탱하는 베테랑 철근공. 낙하물 완충 및 근접 제압 대미지 +30%, 든든한 맷집.',
+    startingWeapon: 'cone_trap',
+    avatar: '💪',
+    portraitUri: '/assets/episode01/characters/yoon-sungho-portrait.webp',
+    heroBannerUri: '/assets/episode01/hires/yoon-sungho-portrait.webp',
+    quote: '"반장님이랑 관리자님 믿고 묶습니다. 결속선 하나도 대충 안 옙니다."',
+    traits: ['✦ 방호 콘 바리케이드', '✦ 근접 충돌 피해 -30%', '✦ 이동식 방호벽 가설'],
+    color: '#d97706',
+    statModifiers: { maxHpBonus: 30, damageBonus: 0.25 },
+  },
+  lee_jaehoon: {
+    id: 'lee_jaehoon',
+    name: '이재훈',
+    role: '공사팀 시공대리',
+    title: '도면·공정 분석관',
+    description: '정밀 설계와 공정 효율을 계산하는 시공 엔지니어. 크리티컬 확률 +20%, 쿨다운 단축.',
+    startingWeapon: 'floodlight',
+    avatar: '📐',
+    portraitUri: '/assets/episode01/characters/lee-jaehoon-portrait.webp',
+    heroBannerUri: '/assets/episode01/characters/lee-jaehoon-portrait.webp',
+    quote: '"도면상 규격과 실제 현장 설치 상태가 다르면 즉시 시정해야 합니다."',
+    traits: ['✦ 360도 투광등 사각 제거', '✦ 크리티컬 확률 +20%', '✦ 시공 오차 원거리 보정'],
+    color: '#0284c7',
+    statModifiers: { cooldownBonus: 0.15 },
+  },
+  lim_junho: {
+    id: 'lim_junho',
+    name: '임준호',
+    role: '현장 신입 신호수',
+    title: '고속 기동 신호 유도원',
+    description: '누구보다 빠른 발과 예리한 시야로 위험을 먼저 발견하는 신호수. 이동 속도 +40, 회피 기동 특화.',
+    startingWeapon: 'radio_boost',
+    avatar: '🦺',
+    portraitUri: '/assets/episode01/characters/lim-junho-portrait.webp',
+    heroBannerUri: '/assets/episode01/characters/lim-junho-portrait.webp',
+    quote: '"양중 작업 반경 내 접근 금지입니다! 신호 확인 후 이동하세요!"',
+    traits: ['✦ 초고속 기동 속도 +40', '✦ 신호 유도 무전 전파', '✦ 긴급 회피율 증가'],
+    color: '#10b981',
+    statModifiers: { speedBonus: 40 },
+  },
+  // Legacy aliases for backward compatibility & test suites
   yoon: {
     id: 'yoon',
     name: '윤성호',
@@ -174,7 +250,12 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
     description: '30년 경력의 베테랑 현장소장. 확성기 사자후 게이지 충전속도 +30%, 위험 캐치 반경 확장.',
     startingWeapon: 'radio_boost',
     avatar: '👨‍💼',
+    portraitUri: '/assets/episode01/characters/yoon-sungho-portrait.webp',
+    heroBannerUri: '/assets/survivors/director_yoon_hero.jpg',
+    quote: '"30년 현장 경력의 베테랑 · 작업중지권 절대 사수 · 오늘도 무사히"',
+    traits: ['✦ 확성기 사자후 제압', '✦ 전 구역 작업중지권', '✦ 현장 근로자 전원 구출'],
     color: '#84cc16',
+    statModifiers: {},
   },
   park: {
     id: 'park',
@@ -184,7 +265,12 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
     description: '수십 년 현장 경험으로 다져진 강인한 체력. 최대 HP +50, 충돌 넉백 저항 및 높은 위력.',
     startingWeapon: 'extinguisher',
     avatar: '👷‍♂️',
+    portraitUri: '/assets/episode01/characters/kang-taesik-portrait.webp',
+    heroBannerUri: '/assets/episode01/hires/kang-taesik-portrait.webp',
+    quote: '"철근과 콘크리트는 거짓말을 안 해 · 안전이 무너지면 건물도 무너진다"',
+    traits: ['✦ 최대 체력 +50', '✦ 분말 소화기 광역 냉각', '✦ 충돌 넉백 완충'],
     color: '#f97316',
+    statModifiers: { maxHpBonus: 50, damageBonus: 0.2 },
   },
   jung: {
     id: 'jung',
@@ -194,7 +280,12 @@ export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
     description: '드론과 센서 통제 전문가. 모든 쿨다운 -15%, 치명타 확률 +15%, 스마트 드론으로 순찰 시작.',
     startingWeapon: 'safety_drone',
     avatar: '👩‍🔬',
+    portraitUri: '/assets/episode01/characters/player-portrait.webp',
+    heroBannerUri: '/assets/episode01/hires/key-art.webp',
+    quote: '"사고가 터진 뒤엔 늦습니다 · 데이터와 센서 신호로 0.1초 앞을 봅니다"',
+    traits: ['✦ 쿨다운 -15% 가속', '✦ 치명타 확률 +15%', '✦ 스마트 드론 자동 레이저'],
     color: '#a855f7',
+    statModifiers: { cooldownBonus: 0.15, damageBonus: 0.1 },
   },
 };
 
@@ -363,13 +454,14 @@ export function createInitialSurvivorsState(
   const profile = CHARACTER_PROFILES[characterId];
   const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
 
-  // Base stats influenced by character & permanent upgrades
-  const baseHp = (characterId === 'park' ? 150 : 100) + upgrades.vitality * 15;
-  const baseSpeed = (characterId === 'park' ? 200 : characterId === 'yoon' ? 230 : 220) + upgrades.mobility * 15;
-  const basePickup = (characterId === 'yoon' ? 115 : 90) + upgrades.intelligence * 20;
-  const baseCooldown = characterId === 'jung' ? 0.15 : 0;
-  const baseCrit = characterId === 'jung' ? 0.20 : 0.05;
-  const baseDmg = characterId === 'park' ? 1.2 : 1.0;
+  // Base stats influenced by character profile statModifiers & permanent upgrades
+  const mods = profile.statModifiers || {};
+  const baseHp = 100 + (mods.maxHpBonus || 0) + upgrades.vitality * 15;
+  const baseSpeed = 220 + (mods.speedBonus || 0) + upgrades.mobility * 15;
+  const basePickup = 90 + (mods.pickupRadiusBonus || 0) + upgrades.intelligence * 20;
+  const baseCooldown = mods.cooldownBonus || 0;
+  const baseCrit = 0.05 + (mods.damageBonus ? 0.05 : 0);
+  const baseDmg = 1.0 + (mods.damageBonus || 0);
 
   const initialPlayer: PlayerStats = {
     x: WORLD_WIDTH / 2,
