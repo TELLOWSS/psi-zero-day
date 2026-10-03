@@ -2094,3 +2094,10 @@
     min-height: 56px;
   }
 }
+
+/* Short landscape screens prioritize the title and reachable mode entries. */
+@media (orientation:landscape) and (max-height:560px) {
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-triad-dashboard {
+    display:none!important;
+  }
+}
