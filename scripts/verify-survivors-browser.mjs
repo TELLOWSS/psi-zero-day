@@ -77,6 +77,8 @@ try {
     await page.waitForTimeout(1000);
     await page.waitForFunction(() => window.__psiDecodedAudioDurations.some(d => d >= 3.9 && d <= 4.1), undefined, {timeout: 10000});
     row.checks.suppliedShoutDecoded = true;
+    await page.waitForFunction(() => window.__psiDecodedAudioDurations.some(d => d > 77 && d < 79), undefined, {timeout: 15000});
+    row.checks.orchestralPatrolDecoded = true;
     row.checks.viewportPinned=await page.locator('.survivors-container').evaluate(e=>{const r=e.getBoundingClientRect();return r.top===0 && r.left===0 && Math.abs(r.height-innerHeight)<2;});
     row.checks.nonblank = await page.locator('canvas').evaluate(c => {
       const ctx = c.getContext('2d'); const data = ctx.getImageData(0,0,c.width,c.height).data;
