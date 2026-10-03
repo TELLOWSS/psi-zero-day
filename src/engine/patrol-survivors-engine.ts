@@ -13,11 +13,157 @@ import type {
   BaseWeaponId,
   EvolutionPerkId,
   SupportPerkId,
+  PatrolStageId,
+  PatrolStageDefinition,
+  StageHazardObject,
 } from '../domain/patrol-survivors';
 
 export const WORLD_WIDTH = 1400;
 export const WORLD_HEIGHT = 900;
 export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
+
+export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
+  stage_01: {
+    id: 'stage_01',
+    stageNumber: 1,
+    name: '서측 게이트 및 지상 복합 하역장',
+    subtitle: 'Surface Logistics Hub',
+    theme: 'surface_logistics',
+    description: '야간 콘크리트 타설을 앞두고 덤프트럭과 자재가 뒤엉킨 하역 광장. 이동식 투광기를 활용하고 시너 드럼통을 유폭시켜 스웜을 섬멸하십시오.',
+    floorColor: '#0c1219',
+    gridColor: 'rgba(148, 163, 184, 0.08)',
+    borderColor: '#f59e0b',
+    ambientColor: 'rgba(245, 158, 11, 0.05)',
+    icon: '🏗️',
+    hazards: [
+      { id: 'barrel_01', type: 'explosive_barrel', x: 380, y: 280, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '인화성 드럼통' },
+      { id: 'barrel_02', type: 'explosive_barrel', x: 1020, y: 300, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '인화성 드럼통' },
+      { id: 'barrel_03', type: 'explosive_barrel', x: 420, y: 640, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '인화성 드럼통' },
+      { id: 'barrel_04', type: 'explosive_barrel', x: 980, y: 660, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '인화성 드럼통' },
+      { id: 'floodlight_01', type: 'floodlight_tower', x: 700, y: 220, radius: 180, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '야간 투광기' },
+      { id: 'floodlight_02', type: 'floodlight_tower', x: 700, y: 680, radius: 180, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '야간 투광기' },
+    ],
+    starChallenges: [
+      { starIndex: 1, title: '생존 작전 완수', description: '생존 시간 180초 달성 및 보스 격퇴', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '환경 기믹 마스터', description: '드럼통 유폭으로 적 5마리 이상 처치', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 3, title: '소장 권한 마스터리', description: '현장소장 샤우팅 1회 이상 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
+    ],
+    bossName: '폭주 덤프트럭 골리앗',
+    bossTitle: 'HEAVY GOLIATH 25T',
+    bossType: 'RUNAWAY_CART',
+    bossHp: 800,
+  },
+  stage_02: {
+    id: 'stage_02',
+    stageNumber: 2,
+    name: '대심도 기초 굴착 구역 (-4F)',
+    subtitle: 'Deep Underground Pit',
+    theme: 'deep_excavation',
+    description: '지하 20m 대심도 굴착 참호. 지반 침하와 암반 균열로 발생한 진흙 슬러지 웅덩이를 피해 기동하며 자율 굴착기를 제압하십시오.',
+    floorColor: '#120f0c',
+    gridColor: 'rgba(180, 140, 100, 0.08)',
+    borderColor: '#d97706',
+    ambientColor: 'rgba(217, 119, 6, 0.06)',
+    icon: '⛏️',
+    hazards: [
+      { id: 'slurry_01', type: 'slurry_puddle', x: 450, y: 350, radius: 130, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '진흙 웅덩이' },
+      { id: 'slurry_02', type: 'slurry_puddle', x: 950, y: 550, radius: 140, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '진흙 웅덩이' },
+      { id: 'barrel_05', type: 'explosive_barrel', x: 700, y: 450, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '인화성 드럼통' },
+      { id: 'floodlight_03', type: 'floodlight_tower', x: 700, y: 200, radius: 170, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '굴착 투광등' },
+    ],
+    starChallenges: [
+      { starIndex: 1, title: '지하 탈출 성공', description: '대심도 생존 시간 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '토사 재해 극복', description: '적 80마리 이상 제압', isCompleted: false, currentValue: 0, targetValue: 80 },
+      { starIndex: 3, title: '안전 수칙 준수', description: '체력 50% 이상 유지한 채 승리', isCompleted: false, currentValue: 0, targetValue: 50 },
+    ],
+    bossName: '자율 크롤러 굴삭기 베헤모스',
+    bossTitle: 'EXCAVATOR BEHEMOTH',
+    bossType: 'RUNAWAY_CART',
+    bossHp: 1000,
+  },
+  stage_03: {
+    id: 'stage_03',
+    stageNumber: 3,
+    name: '45층 초고층 메가 골조 슬래브',
+    subtitle: 'High-Rise Superframe Slab',
+    theme: 'highrise_slab',
+    description: '외벽이 트인 180m 초고층 슬래브. 타워크레인 와이어가 휘몰아치는 낙하 경고 구역에 적을 유인하여 5,000 압살 피해를 입히십시오.',
+    floorColor: '#101720',
+    gridColor: 'rgba(56, 189, 248, 0.08)',
+    borderColor: '#0284c7',
+    ambientColor: 'rgba(2, 132, 199, 0.06)',
+    icon: '🏢',
+    hazards: [
+      { id: 'crane_drop_01', type: 'crane_drop_zone', x: 700, y: 450, radius: 140, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '크레인 낙하 구역' },
+      { id: 'crane_drop_02', type: 'crane_drop_zone', x: 380, y: 300, radius: 120, hp: 9999, maxHp: 9999, state: 'idle', timer: 16, label: '크레인 낙하 구역' },
+      { id: 'crane_drop_03', type: 'crane_drop_zone', x: 1020, y: 600, radius: 120, hp: 9999, maxHp: 9999, state: 'idle', timer: 22, label: '크레인 낙하 구역' },
+    ],
+    starChallenges: [
+      { starIndex: 1, title: '고공 풍압 극복', description: '45층 골조 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '낙하물 유인 압살', description: '크레인 낙하 구역으로 적 5마리 이상 압살', isCompleted: false, currentValue: 0, targetValue: 5 },
+      { starIndex: 3, title: '타워크레인 격추', description: '보스 광폭화 크레인 아라크네 제압', isCompleted: false, currentValue: 0, targetValue: 1 },
+    ],
+    bossName: '광폭화 타워크레인 아라크네',
+    bossTitle: 'TOWER CRANE ARACHNE',
+    bossType: 'CRANE_BOSS',
+    bossHp: 1200,
+  },
+  stage_04: {
+    id: 'stage_04',
+    stageNumber: 4,
+    name: '혹한기 동절기 밀폐 양생 챔버',
+    subtitle: 'Sub-Zero Winter Curing Chamber',
+    theme: 'curing_chamber',
+    description: '영하 15도 방풍 천막 내부. 바닥의 빙판 관성과 일산화탄소 위험을 이겨내고 초대형 콘크리트 펌프카를 격퇴하십시오.',
+    floorColor: '#0a1622',
+    gridColor: 'rgba(147, 197, 253, 0.09)',
+    borderColor: '#38bdf8',
+    ambientColor: 'rgba(56, 189, 248, 0.08)',
+    icon: '❄️',
+    hazards: [
+      { id: 'barrel_06', type: 'explosive_barrel', x: 450, y: 300, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '가열기 연료통' },
+      { id: 'barrel_07', type: 'explosive_barrel', x: 950, y: 600, radius: 22, hp: 40, maxHp: 40, state: 'idle', timer: 0, label: '가열기 연료통' },
+      { id: 'slurry_03', type: 'slurry_puddle', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'active', timer: 0, label: '동결 빙판' },
+    ],
+    starChallenges: [
+      { starIndex: 1, title: '동절기 혹한 극복', description: '혹한 양생실 생존 180초 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '화염 버너 유폭', description: '연료통 유폭 3회 이상 발동', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 3, title: '펌프카 격파', description: '인페르노 매머드 처치 성공', isCompleted: false, currentValue: 0, targetValue: 1 },
+    ],
+    bossName: '초대형 펌프카 인페르노 매머드',
+    bossTitle: 'INFERNO PUMP MAMMOTH',
+    bossType: 'RUNAWAY_CART',
+    bossHp: 1400,
+  },
+  stage_05: {
+    id: 'stage_05',
+    stageNumber: 5,
+    name: '하이퍼스케일 전산 플랜트',
+    subtitle: 'Hyperscale Data Center Plant',
+    theme: 'datacenter',
+    description: '최종 결전지. 특고압 수전설비와 서버 랙이 늘어선 사이버네틱 시설. 제로 데이 AI 코어 프로토콜 오메가를 셧다운하십시오.',
+    floorColor: '#070a10',
+    gridColor: 'rgba(168, 85, 247, 0.08)',
+    borderColor: '#a855f7',
+    ambientColor: 'rgba(168, 85, 247, 0.08)',
+    icon: '⚡',
+    hazards: [
+      { id: 'trans_01', type: 'electric_transformer', x: 450, y: 300, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
+      { id: 'trans_02', type: 'electric_transformer', x: 950, y: 600, radius: 30, hp: 60, maxHp: 60, state: 'idle', timer: 0, label: '특고압 변전반' },
+      { id: 'crane_drop_04', type: 'crane_drop_zone', x: 700, y: 450, radius: 150, hp: 9999, maxHp: 9999, state: 'idle', timer: 10, label: '서지 방전 구역' },
+    ],
+    starChallenges: [
+      { starIndex: 1, title: '제로 데이 셧다운', description: '데이터센터 180초 방어 및 코어 파괴', isCompleted: false, currentValue: 0, targetValue: 1 },
+      { starIndex: 2, title: '변전반 아크 방전', description: '특고압 변전반 3회 이상 가동', isCompleted: false, currentValue: 0, targetValue: 3 },
+      { starIndex: 3, title: '최종 사자후 피니시', description: '소장 샤우팅으로 피니시 달성', isCompleted: false, currentValue: 0, targetValue: 1 },
+    ],
+    bossName: '재해 예측 AI 코어 프로토콜 오메가',
+    bossTitle: 'CORE PROTOCOL OMEGA',
+    bossType: 'CRANE_BOSS',
+    bossHp: 1800,
+  },
+};
+
 
 export const CHARACTER_PROFILES: Record<CharacterId, CharacterProfile> = {
   yoon: {
@@ -212,8 +358,10 @@ export const DEFAULT_PERMANENT_UPGRADES: PermanentUpgrades = {
 export function createInitialSurvivorsState(
   characterId: CharacterId = 'yoon',
   upgrades: PermanentUpgrades = DEFAULT_PERMANENT_UPGRADES,
+  stageId: PatrolStageId = 'stage_01',
 ): SurvivorsGameState {
   const profile = CHARACTER_PROFILES[characterId];
+  const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
 
   // Base stats influenced by character & permanent upgrades
   const baseHp = (characterId === 'park' ? 150 : 100) + upgrades.vitality * 15;
@@ -291,6 +439,20 @@ export function createInitialSurvivorsState(
     permanentUpgrades: { ...upgrades },
     hasRevived: false,
     rerollsLeft: upgrades.reroll,
+
+    stageId: stage.id,
+    stage: {
+      ...stage,
+      starChallenges: [
+        { ...stage.starChallenges[0] },
+        { ...stage.starChallenges[1] },
+        { ...stage.starChallenges[2] },
+      ],
+    },
+    interactiveHazards: stage.hazards.map(h => ({ ...h })),
+    environmentalKills: 0,
+    starsEarned: [false, false, false],
+    inFloodlight: false,
   };
 }
 
@@ -394,14 +556,17 @@ export class SurvivorsEngine {
     this.updateProjectiles(effectiveDt);
     this.updateSpawns(effectiveDt);
     this.updateHazards(effectiveDt);
+    this.updateStageHazards(effectiveDt);
     this.updateDrops(effectiveDt);
     this.checkCollisions();
+    this.checkStarChallenges();
 
     // Check survival victory
     if (this.state.gameTime >= this.state.maxTime) {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10);
+      this.checkStarChallenges();
     }
   }
 
@@ -454,13 +619,33 @@ export class SurvivorsEngine {
   private updatePlayer(dt: number, input: GameInput) {
     const { player } = this.state;
 
+    // Environmental zone effects (Floodlight buff, Slurry drag)
+    let speedMod = 1.0;
+    let inFloodlight = false;
+    if (this.state.interactiveHazards) {
+      for (const h of this.state.interactiveHazards) {
+        if (h.state === 'destroyed') continue;
+        const dist = Math.hypot(player.x - h.x, player.y - h.y);
+        if (h.type === 'floodlight_tower' && dist <= h.radius) {
+          inFloodlight = true;
+        } else if (h.type === 'slurry_puddle' && dist <= h.radius) {
+          speedMod *= 0.65;
+        }
+      }
+    }
+    if (inFloodlight) {
+      speedMod *= 1.25; // 25% speed buff under floodlight
+    }
+    this.state.inFloodlight = inFloodlight;
+
     // Direction normalize
     const len = Math.hypot(input.moveX, input.moveY);
     if (len > 0.001) {
       const nx = input.moveX / len;
       const ny = input.moveY / len;
-      player.x += nx * player.speed * dt;
-      player.y += ny * player.speed * dt;
+      const currentSpeed = player.speed * speedMod;
+      player.x += nx * currentSpeed * dt;
+      player.y += ny * currentSpeed * dt;
       this.lastFacingX = nx;
       this.lastFacingY = ny;
     }
@@ -488,7 +673,13 @@ export class SurvivorsEngine {
   }
 
   private updateWeapons(dt: number, _input?: GameInput) {
-    const { player, activePerks, hazards } = this.state;
+    const { activePerks, hazards } = this.state;
+    // Apply 30% damage buff if standing in floodlight zone
+    const floodlightDmgBonus = this.state.inFloodlight ? 1.3 : 1.0;
+    const player = {
+      ...this.state.player,
+      damageMultiplier: this.state.player.damageMultiplier * floodlightDmgBonus,
+    };
     const cdReduction = 1 - Math.min(0.6, player.cooldownReduction);
 
     // ==========================================
@@ -821,11 +1012,15 @@ export class SurvivorsEngine {
     if (this.cooldowns.spawnTimer <= 0) {
       this.cooldowns.spawnTimer = spawnInterval;
 
-      // Boss event checking at 60s, 120s, 160s
+      // Boss event checking at 60s, 120s
       const time = Math.floor(this.state.gameTime);
-      if (time === 60 && !this.state.hazards.some(h => h.type === 'CRANE_BOSS')) {
-        this.triggerBossAlert('타이탄 크레인 8000 (TITAN CRANE)');
-        this.spawnHazard('CRANE_BOSS');
+      const stage = this.state.stage;
+      const stageBossName = stage ? `${stage.bossName} (${stage.bossTitle})` : '타이탄 크레인 8000 (TITAN CRANE)';
+      const stageBossType = stage?.bossType || 'CRANE_BOSS';
+      const stageBossHp = stage?.bossHp;
+      if (time === 60 && !this.state.hazards.some(h => h.type === stageBossType)) {
+        this.triggerBossAlert(stageBossName);
+        this.spawnHazard(stageBossType, stageBossHp);
         return;
       }
 
@@ -834,7 +1029,7 @@ export class SurvivorsEngine {
       let type: HazardType = 'UNHELMETED';
 
       if (this.state.gameTime > 120 && rand < 0.12) {
-        type = 'CRANE_BOSS';
+        type = stageBossType;
       } else if (this.state.gameTime > 60 && rand < 0.35) {
         type = 'RUNAWAY_CART';
       } else if (this.state.gameTime > 30 && rand < 0.6) {
@@ -850,7 +1045,7 @@ export class SurvivorsEngine {
     this.state.bossName = name;
   }
 
-  private spawnHazard(type: HazardType) {
+  private spawnHazard(type: HazardType, overrideHp?: number) {
     let x = 0;
     let y = 0;
     const side = Math.floor(Math.random() * 4);
@@ -887,16 +1082,20 @@ export class SurvivorsEngine {
       damage = 8;
       expValue = 3;
     } else if (type === 'CRANE_BOSS') {
-      hp = 500;
+      hp = overrideHp || 500;
       speed = 65;
       radius = 34;
       damage = 35;
       expValue = 45;
     }
 
-    // Time scaling
-    const scale = 1 + (this.state.gameTime / 60) * 0.45;
-    hp = Math.round(hp * scale);
+    // Time scaling (if not explicit boss HP override)
+    if (overrideHp) {
+      hp = overrideHp;
+    } else {
+      const scale = 1 + (this.state.gameTime / 60) * 0.45;
+      hp = Math.round(hp * scale);
+    }
 
     this.state.hazards.push({
       id: genId(`haz_${type}`),
@@ -920,13 +1119,27 @@ export class SurvivorsEngine {
         continue;
       }
 
+      // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
+      let hazardSpeed = h.speed;
+      if (this.state.interactiveHazards) {
+        for (const env of this.state.interactiveHazards) {
+          if (env.state === 'destroyed') continue;
+          const dist = Math.hypot(env.x - h.x, env.y - h.y);
+          if (env.type === 'floodlight_tower' && dist <= env.radius) {
+            hazardSpeed *= 0.55; // 45% slow under spotlight
+          } else if (env.type === 'slurry_puddle' && dist <= env.radius) {
+            hazardSpeed *= 0.65; // 35% slow in slurry mud
+          }
+        }
+      }
+
       // Chase player
       const dx = player.x - h.x;
       const dy = player.y - h.y;
       const dist = Math.hypot(dx, dy) || 1;
 
-      h.x += (dx / dist) * h.speed * dt;
-      h.y += (dy / dist) * h.speed * dt;
+      h.x += (dx / dist) * hazardSpeed * dt;
+      h.y += (dy / dist) * hazardSpeed * dt;
     }
   }
 
@@ -956,6 +1169,45 @@ export class SurvivorsEngine {
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
             break;
+          }
+        }
+      }
+    }
+
+    // 1-b. Projectiles vs Interactive Hazards (Barrels, Transformers)
+    if (this.state.interactiveHazards) {
+      for (const p of projectiles) {
+        if (p.duration <= 0) continue;
+        for (const env of this.state.interactiveHazards) {
+          if (env.state === 'destroyed' || env.state === 'active') continue;
+          if (env.type === 'explosive_barrel' && env.state === 'idle') {
+            const dist = Math.hypot(p.x - env.x, p.y - env.y);
+            if (dist <= p.radius + env.radius) {
+              env.hp -= p.damage;
+              p.pierce -= 1;
+              if (env.hp <= 0) {
+                env.state = 'warning';
+                env.timer = 0.8; // 0.8s countdown fuse
+              }
+              if (p.pierce <= 0) {
+                p.duration = 0;
+                break;
+              }
+            }
+          } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
+            const dist = Math.hypot(p.x - env.x, p.y - env.y);
+            if (dist <= p.radius + env.radius) {
+              env.hp -= p.damage;
+              p.pierce -= 1;
+              if (env.hp <= 0) {
+                env.state = 'active';
+                env.timer = 2.0; // 2 seconds arc discharge
+              }
+              if (p.pierce <= 0) {
+                p.duration = 0;
+                break;
+              }
+            }
           }
         }
       }
@@ -1050,6 +1302,202 @@ export class SurvivorsEngine {
         }
       }
     }
+  }
+
+  private updateStageHazards(dt: number) {
+    const { player, interactiveHazards, hazards } = this.state;
+    if (!interactiveHazards) return;
+
+    for (const hazard of (interactiveHazards as StageHazardObject[])) {
+      // 1. Explosive Barrel
+      if (hazard.type === 'explosive_barrel') {
+        if (hazard.state === 'warning') {
+          hazard.timer -= dt;
+          if (hazard.timer <= 0) {
+            hazard.state = 'active';
+            hazard.timer = 0.45;
+
+            // Massive 3000 AoE blast
+            const blastRadius = 220;
+            let killedCount = 0;
+            for (const h of hazards) {
+              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
+              if (d <= blastRadius + h.radius) {
+                h.hp -= 3000;
+                if (h.hp <= 0) {
+                  killedCount++;
+                }
+              }
+            }
+            this.state.environmentalKills += killedCount;
+            this.state.score += killedCount * 50;
+
+            // Player caught too close takes minor self-damage
+            const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
+            if (pDist <= 100 && player.invincibleTime <= 0) {
+              player.hp = Math.max(1, player.hp - 15);
+              player.invincibleTime = 0.8;
+            }
+
+            // Explosion shockwave projectile
+            this.state.projectiles.push({
+              id: genId('barrel_blast'),
+              x: hazard.x,
+              y: hazard.y,
+              vx: 0,
+              vy: 0,
+              radius: 60,
+              damage: 600,
+              duration: 0.5,
+              pierce: 99,
+              kind: 'shout_shockwave',
+              color: '#f97316',
+            });
+          }
+        } else if (hazard.state === 'active') {
+          hazard.timer -= dt;
+          if (hazard.timer <= 0) {
+            hazard.state = 'destroyed';
+          }
+        }
+      }
+
+      // 2. Crane Drop Zone (Periodic overhead crush hazard)
+      if (hazard.type === 'crane_drop_zone') {
+        hazard.timer -= dt;
+        if (hazard.state === 'idle') {
+          if (hazard.timer <= 0) {
+            hazard.state = 'warning';
+            hazard.timer = 2.2; // 2.2s warning telegraph
+          }
+        } else if (hazard.state === 'warning') {
+          if (hazard.timer <= 0) {
+            hazard.state = 'active';
+            hazard.timer = 0.6; // Impact duration
+
+            let crushedCount = 0;
+            for (const h of hazards) {
+              const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
+              if (d <= hazard.radius + h.radius) {
+                h.hp -= 5000;
+                if (h.hp <= 0) {
+                  crushedCount++;
+                }
+              }
+            }
+            this.state.environmentalKills += crushedCount;
+            this.state.score += crushedCount * 80;
+
+            // Player crushed if inside
+            const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
+            if (pDist <= hazard.radius && player.invincibleTime <= 0) {
+              player.hp = Math.max(1, player.hp - 30);
+              player.invincibleTime = 1.0;
+            }
+
+            // Impact shockwave
+            this.state.projectiles.push({
+              id: genId('crane_slam'),
+              x: hazard.x,
+              y: hazard.y,
+              vx: 0,
+              vy: 0,
+              radius: 70,
+              damage: 1000,
+              duration: 0.5,
+              pierce: 99,
+              kind: 'shout_shockwave',
+              color: '#ef4444',
+            });
+          }
+        } else if (hazard.state === 'active') {
+          if (hazard.timer <= 0) {
+            hazard.state = 'idle';
+            hazard.timer = 14; // Next drop in 14 seconds
+          }
+        }
+      }
+
+      // 3. Electric Transformer (Surge discharge)
+      if (hazard.type === 'electric_transformer') {
+        if (hazard.state === 'active') {
+          hazard.timer -= dt;
+          for (const h of hazards) {
+            const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
+            if (d <= 200 + h.radius) {
+              h.hp -= 1500 * dt;
+              h.isStunned = 0.8;
+              if (h.hp <= 0) {
+                this.state.environmentalKills++;
+              }
+            }
+          }
+          if (hazard.timer <= 0) {
+            hazard.state = 'idle';
+            hazard.hp = hazard.maxHp;
+            hazard.timer = 12; // Cooldown
+          }
+        } else if (hazard.state === 'idle' && hazard.timer > 0) {
+          hazard.timer -= dt;
+        }
+      }
+    }
+  }
+
+  private checkStarChallenges() {
+    const { stage, gameTime, maxTime, environmentalKills, hazardsNeutralized, player, directorShoutTimer, phase } = this.state;
+    if (!stage || !stage.starChallenges) return;
+
+    const challenges = stage.starChallenges;
+
+    // Challenge 1: Survival time >= maxTime or victory
+    if (challenges[0]) {
+      challenges[0].currentValue = Math.min(challenges[0].targetValue, phase === 'victory' || gameTime >= maxTime ? 1 : 0);
+      if (challenges[0].currentValue >= challenges[0].targetValue) {
+        challenges[0].isCompleted = true;
+      }
+    }
+
+    // Challenge 2: Stage specific targets
+    if (challenges[1]) {
+      if (stage.id === 'stage_01' || stage.id === 'stage_03' || stage.id === 'stage_05') {
+        challenges[1].currentValue = environmentalKills;
+      } else {
+        challenges[1].currentValue = hazardsNeutralized;
+      }
+      if (challenges[1].currentValue >= challenges[1].targetValue) {
+        challenges[1].isCompleted = true;
+      }
+    }
+
+    // Challenge 3: Mastery / Shout / HP check
+    if (challenges[2]) {
+      if (stage.id === 'stage_01' || stage.id === 'stage_04' || stage.id === 'stage_05') {
+        if (directorShoutTimer > 0) {
+          challenges[2].currentValue = 1;
+          challenges[2].isCompleted = true;
+        }
+      } else if (stage.id === 'stage_02') {
+        if (phase === 'victory') {
+          const hpPercent = (player.hp / player.maxHp) * 100;
+          challenges[2].currentValue = Math.round(hpPercent);
+          if (hpPercent >= challenges[2].targetValue) {
+            challenges[2].isCompleted = true;
+          }
+        }
+      } else if (stage.id === 'stage_03') {
+        challenges[2].currentValue = hazardsNeutralized;
+        if (challenges[2].currentValue >= challenges[2].targetValue) {
+          challenges[2].isCompleted = true;
+        }
+      }
+    }
+
+    this.state.starsEarned = [
+      Boolean(challenges[0]?.isCompleted),
+      Boolean(challenges[1]?.isCompleted),
+      Boolean(challenges[2]?.isCompleted),
+    ];
   }
 
   private updateDrops(dt: number) {

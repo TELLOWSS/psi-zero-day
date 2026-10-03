@@ -168,5 +168,66 @@ export interface SurvivorsGameState {
   permanentUpgrades: PermanentUpgrades;
   hasRevived: boolean;
   rerollsLeft: number;
+
+  // Stage & Level Architecture
+  stageId: PatrolStageId;
+  stage: PatrolStageDefinition;
+  interactiveHazards: StageHazardObject[];
+  environmentalKills: number;
+  starsEarned: [boolean, boolean, boolean];
+  inFloodlight: boolean;
 }
+
+export type PatrolStageId = 'stage_01' | 'stage_02' | 'stage_03' | 'stage_04' | 'stage_05';
+
+export type StageHazardType =
+  | 'explosive_barrel'
+  | 'floodlight_tower'
+  | 'crane_drop_zone'
+  | 'slurry_puddle'
+  | 'electric_transformer';
+
+export interface StageHazardObject {
+  id: string;
+  type: StageHazardType;
+  x: number;
+  y: number;
+  radius: number;
+  hp: number;
+  maxHp: number;
+  state: 'idle' | 'warning' | 'active' | 'cooldown' | 'destroyed';
+  timer: number;
+  value?: number;
+  label?: string;
+}
+
+export interface StageStarChallenge {
+  starIndex: 1 | 2 | 3;
+  title: string;
+  description: string;
+  isCompleted: boolean;
+  currentValue: number;
+  targetValue: number;
+}
+
+export interface PatrolStageDefinition {
+  id: PatrolStageId;
+  stageNumber: number;
+  name: string;
+  subtitle: string;
+  theme: 'surface_logistics' | 'deep_excavation' | 'highrise_slab' | 'curing_chamber' | 'datacenter';
+  description: string;
+  floorColor: string;
+  gridColor: string;
+  borderColor: string;
+  ambientColor: string;
+  icon: string;
+  hazards: StageHazardObject[];
+  starChallenges: [StageStarChallenge, StageStarChallenge, StageStarChallenge];
+  bossName: string;
+  bossTitle: string;
+  bossType: HazardType;
+  bossHp: number;
+}
+
 

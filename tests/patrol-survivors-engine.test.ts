@@ -312,5 +312,98 @@ describe('Patrol Survivors Engine', () => {
     expect(engine.state.rerollsLeft).toBe(1);
     expect(engine.state.perkOptions.length).toBeGreaterThan(0);
   });
+
+  it('initializes with stage architecture and interactive hazards', () => {
+    const stage1State = createInitialSurvivorsState('yoon', undefined, 'stage_01');
+    expect(stage1State.stageId).toBe('stage_01');
+    expect(stage1State.stage.name).toBe('서측 게이트 및 지상 복합 하역장');
+    expect(stage1State.interactiveHazards.length).toBeGreaterThan(0);
+    expect(stage1State.stage.starChallenges.length).toBe(3);
+
+    const stage3State = createInitialSurvivorsState('park', undefined, 'stage_03');
+    expect(stage3State.stageId).toBe('stage_03');
+    expect(stage3State.stage.name).toBe('45층 초고층 메가 골조 슬래브');
+    expect(stage3State.interactiveHazards.some(h => h.type === 'crane_drop_zone')).toBe(true);
+  });
+
+  it('applies floodlight buff when player stands within floodlight tower zone', () => {
+    const engine = new SurvivorsEngine(createInitialSurvivorsState('yoon', undefined, 'stage_01'));
+    engine.start();
+
+    // Place player directly on floodlight tower 01 (x: 700, y: 220)
+    engine.state.player.x = 700;
+    engine.state.player.y = 220;
+
+    engine.update(0.016, { moveX: 0, moveY: 0 });
+    expect(engine.state.inFloodlight).toBe(true);
+  });
+
+  it('detonates explosive barrel upon projectile damage, neutralizing nearby hazards', () => {
+    const engine = new SurvivorsEngine(createInitialSurvivorsState('yoon', undefined, 'stage_01'));
+    engine.start();
+
+    const barrel = engine.state.interactiveHazards.find(h => h.type === 'explosive_barrel')!;
+    expect(barrel).toBeDefined();
+
+    // Spawn a hazard near the barrel
+    engine.state.hazards.push({
+      id: 'barrel_target',
+      type: 'UNHELMETED',
+      x: barrel.x + 30,
+      y: barrel.y,
+      hp: 150,
+      maxHp: 150,
+      speed: 0,
+      radius: 15,
+      damage: 10,
+      expValue: 10,
+    });
+
+    // Fire high-damage projectile at barrel
+    engine.state.projectiles.push({
+      id: 'barrel_shooter',
+      x: barrel.x,
+      y: barrel.y,
+      vx: 0,
+      vy: 0,
+      radius: 10,
+      damage: 100,
+      duration: 1,
+      pierce: 1,
+      kind: 'radio',
+    });
+
+    // Step 1: projectile hits barrel -> barrel enters warning fuse state
+    engine.update(0.016, { moveX: 0, moveY: 0 });
+    expect(barrel.state).toBe('warning');
+    expect(barrel.timer).toBeGreaterThan(0);
+
+    // Step 2: advance past warning fuse timer (0.8s) with multiple frames
+    for (let i = 0; i < 10; i++) {
+      engine.update(0.1, { moveX: 0, moveY: 0 });
+    }
+
+    // Barrel exploded, enemy neutralized, environmental kill recorded!
+    expect(barrel.state === 'active' || barrel.state === 'destroyed').toBe(true);
+    expect(engine.state.environmentalKills).toBeGreaterThanOrEqual(1);
+    expect(engine.state.hazards.some(h => h.id === 'barrel_target')).toBe(false);
+  });
+
+  it('updates star challenges when victory or conditions are met', () => {
+    const engine = new SurvivorsEngine(createInitialSurvivorsState('yoon', undefined, 'stage_01'));
+    engine.start();
+
+    // Trigger director shout
+    engine.state.ultimateCharge = 100;
+    engine.triggerDirectorShout();
+    expect(engine.state.directorShoutTimer).toBeGreaterThan(0);
+
+    // Update engine to evaluate star challenges
+    engine.update(0.016, { moveX: 0, moveY: 0 });
+
+    // Challenge 3 (Shouting mastery) should now be completed
+    expect(engine.state.stage.starChallenges[2]?.isCompleted).toBe(true);
+    expect(engine.state.starsEarned[2]).toBe(true);
+  });
 });
 

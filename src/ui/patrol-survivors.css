@@ -1318,3 +1318,175 @@
   box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
 }
 
+/* ==========================================================================
+   5 INDUSTRIAL STAGE SELECTOR & 3-STAR CHALLENGES
+   ========================================================================== */
+
+.survivors-stage-select-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.survivors-stage-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.survivors-stage-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  color: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.survivors-stage-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.survivors-stage-card.is-selected {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(245, 158, 11, 0.15));
+  border-color: #f59e0b;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+}
+
+.survivors-stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #fbbf24;
+  margin-bottom: 6px;
+  background: rgba(245, 158, 11, 0.15);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.survivors-stage-card h4 {
+  margin: 0 0 2px 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.survivors-stage-sub {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.survivors-stage-card p {
+  margin: 0 0 8px 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #cbd5e1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.survivors-stage-meta {
+  margin-top: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f87171;
+}
+
+/* --- 3-Star Debriefing in Victory Screen --- */
+.survivors-stage-debriefing {
+  width: 100%;
+  margin: 14px 0;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 14px;
+  text-align: left;
+}
+
+.survivors-debriefing-title {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fbbf24;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.survivors-star-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.survivors-star-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.survivors-star-item.is-earned {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.survivors-star-badge {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.survivors-star-info {
+  flex: 1;
+}
+
+.survivors-star-info strong {
+  display: block;
+  font-size: 13px;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.survivors-star-info p {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.survivors-star-progress {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.survivors-star-item.is-earned .survivors-star-progress {
+  color: #34d399;
+}
+
+

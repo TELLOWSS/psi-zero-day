@@ -4,11 +4,13 @@ import type {
   Perk,
   PerkId,
   PermanentUpgrades,
+  PatrolStageId,
 } from '../domain/patrol-survivors';
 import {
   CHARACTER_PROFILES,
   DEFAULT_PERMANENT_UPGRADES,
   EVOLUTION_RECIPES,
+  PATROL_STAGES,
   PERK_CATALOG,
   SurvivorsEngine,
   WORLD_HEIGHT,
@@ -64,6 +66,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('yoon');
+  const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
   const [permanentUpgrades, setPermanentUpgrades] = useState<PermanentUpgrades>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UPGRADES);
@@ -331,9 +334,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
-  // Initialize Game Engine with selected character & permanent upgrades
-  const initGame = useCallback((charId: CharacterId = selectedChar) => {
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades));
+  // Initialize Game Engine with selected character, permanent upgrades & stage
+  const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId));
     engineRef.current = engine;
     touchVectorRef.current = { x: 0, y: 0 };
     touchIdRef.current = null;
@@ -352,11 +355,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
-  }, [selectedChar, permanentUpgrades]);
+  }, [selectedChar, selectedStage, permanentUpgrades]);
 
   useEffect(() => {
-    initGame(selectedChar);
-  }, [initGame, selectedChar]);
+    initGame(selectedChar, selectedStage);
+  }, [initGame, selectedChar, selectedStage]);
 
   const startGame = () => {
     if (!engineRef.current) return;
@@ -656,10 +659,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 1. RENDER WORLD FLOOR & GRID
       const slabSize = 100;
-      ctx.fillStyle = '#0c1219';
+      const stage = engine.state.stage;
+      ctx.fillStyle = stage?.floorColor || '#0c1219';
       ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-      ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+      ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.08)';
       ctx.lineWidth = 2;
       for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
         ctx.beginPath();
@@ -677,12 +681,199 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Safety perimeter boundary
       ctx.save();
       ctx.lineWidth = 14;
-      ctx.strokeStyle = '#f59e0b';
+      ctx.strokeStyle = stage?.borderColor || '#f59e0b';
       ctx.strokeRect(7, 7, WORLD_WIDTH - 14, WORLD_HEIGHT - 14);
       ctx.lineWidth = 2;
       ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
       ctx.strokeRect(18, 18, WORLD_WIDTH - 36, WORLD_HEIGHT - 36);
       ctx.restore();
+
+      // 1.5. RENDER STAGE INTERACTIVE HAZARDS
+      if (engine.state.interactiveHazards) {
+        for (const h of engine.state.interactiveHazards) {
+          if (h.state === 'destroyed') continue;
+
+          // A. Floodlight Tower (Safety Light Zone)
+          if (h.type === 'floodlight_tower') {
+            ctx.save();
+            const grad = ctx.createRadialGradient(h.x, h.y, 15, h.x, h.y, h.radius);
+            grad.addColorStop(0, 'rgba(251, 191, 36, 0.32)');
+            grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.15)');
+            grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Light perimeter dashed circle
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([8, 6]);
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Tripod tower base
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#475569';
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Zone tag
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = '#fbbf24';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚡ BUFF ZONE (+25% SPD)', h.x, h.y - 24);
+            ctx.restore();
+          }
+
+          // B. Slurry Puddle (Mud Drag)
+          if (h.type === 'slurry_puddle') {
+            ctx.save();
+            ctx.fillStyle = 'rgba(68, 50, 32, 0.65)';
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(160, 110, 60, 0.35)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = '#d97706';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚠️ SLURRY MUD (SLOW)', h.x, h.y);
+            ctx.restore();
+          }
+
+          // C. Crane Drop Zone (Periodic overhead danger)
+          if (h.type === 'crane_drop_zone') {
+            ctx.save();
+            if (h.state === 'warning') {
+              const pulse = (Math.sin(time / 80) + 1) * 0.5;
+              ctx.strokeStyle = `rgba(239, 68, 68, ${0.4 + pulse * 0.5})`;
+              ctx.lineWidth = 4;
+              ctx.setLineDash([12, 8]);
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+              ctx.stroke();
+
+              ctx.fillStyle = `rgba(239, 68, 68, ${0.12 + pulse * 0.15})`;
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.setLineDash([]);
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#ef4444';
+              ctx.textAlign = 'center';
+              ctx.fillText(`⚠️ CRANE DROP: ${h.timer.toFixed(1)}s ⚠️`, h.x, h.y);
+            } else if (h.state === 'active') {
+              ctx.fillStyle = 'rgba(239, 68, 68, 0.45)';
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.fillStyle = '#334155';
+              ctx.fillRect(h.x - 45, h.y - 30, 90, 60);
+              ctx.strokeStyle = '#ef4444';
+              ctx.lineWidth = 3;
+              ctx.strokeRect(h.x - 45, h.y - 30, 90, 60);
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillStyle = '#f87171';
+              ctx.textAlign = 'center';
+              ctx.fillText('5,000 CRUSH', h.x, h.y + 4);
+            } else {
+              ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+              ctx.lineWidth = 2;
+              ctx.setLineDash([6, 6]);
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.font = '9px sans-serif';
+              ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+              ctx.textAlign = 'center';
+              ctx.fillText('HOIST ZONE', h.x, h.y);
+            }
+            ctx.restore();
+          }
+
+          // D. Explosive Barrel
+          if (h.type === 'explosive_barrel') {
+            ctx.save();
+            if (h.state === 'warning') {
+              const pulse = (Math.sin(time / 50) + 1) * 0.5;
+              ctx.fillStyle = pulse > 0.5 ? '#ef4444' : '#f97316';
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius + pulse * 4, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillStyle = '#ffffff';
+              ctx.textAlign = 'center';
+              ctx.fillText('💥 IGNITE!', h.x, h.y - h.radius - 8);
+            } else if (h.state === 'idle') {
+              ctx.fillStyle = '#ea580c';
+              ctx.beginPath();
+              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.strokeStyle = '#7c2d12';
+              ctx.lineWidth = 3;
+              ctx.stroke();
+
+              ctx.font = '14px sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText('🔥', h.x, h.y);
+
+              const barW = 32;
+              const barH = 4;
+              const hpRatio = Math.max(0, h.hp / h.maxHp);
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+              ctx.fillRect(h.x - barW / 2, h.y - h.radius - 8, barW, barH);
+              ctx.fillStyle = '#f97316';
+              ctx.fillRect(h.x - barW / 2, h.y - h.radius - 8, barW * hpRatio, barH);
+            }
+            ctx.restore();
+          }
+
+          // E. Electric Transformer
+          if (h.type === 'electric_transformer') {
+            ctx.save();
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(h.x - 22, h.y - 22, 44, 44);
+            ctx.strokeStyle = h.state === 'active' ? '#38bdf8' : '#64748b';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(h.x - 22, h.y - 22, 44, 44);
+
+            ctx.font = '16px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('⚡', h.x, h.y);
+
+            if (h.state === 'active') {
+              ctx.strokeStyle = '#38bdf8';
+              ctx.shadowColor = '#0284c7';
+              ctx.shadowBlur = 15;
+              ctx.lineWidth = 2;
+              for (let i = 0; i < 6; i++) {
+                const angle = (i * Math.PI) / 3 + Math.random() * 0.3;
+                const r = 80 + Math.random() * 100;
+                ctx.beginPath();
+                ctx.moveTo(h.x, h.y);
+                ctx.lineTo(h.x + Math.cos(angle) * r, h.y + Math.sin(angle) * r);
+                ctx.stroke();
+              }
+            }
+            ctx.restore();
+          }
+        }
+      }
 
       // 2. DIRECTIONAL FLASHLIGHT BEAM
       ctx.save();
@@ -1233,6 +1424,35 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
             </p>
 
+            {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
+            <div className="survivors-stage-select-section">
+              <span className="survivors-section-label">작전 구역 선택 (5대 산업 스테이지)</span>
+              <div className="survivors-stage-cards">
+                {(Object.values(PATROL_STAGES)).map(stg => (
+                  <button
+                    key={stg.id}
+                    type="button"
+                    className={`survivors-stage-card ${selectedStage === stg.id ? 'is-selected' : ''}`}
+                    onClick={() => {
+                      setSelectedStage(stg.id);
+                      initGame(selectedChar, stg.id);
+                    }}
+                  >
+                    <div className="survivors-stage-badge">
+                      <span>{stg.icon}</span>
+                      <strong>STAGE 0{stg.stageNumber}</strong>
+                    </div>
+                    <h4>{stg.name}</h4>
+                    <span className="survivors-stage-sub">{stg.subtitle}</span>
+                    <p>{stg.description}</p>
+                    <div className="survivors-stage-meta">
+                      <span>👹 {stg.bossName}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* CHARACTER SELECTOR */}
             <div className="survivors-char-select-section">
               <span className="survivors-section-label">순찰 요원 선택</span>
@@ -1244,7 +1464,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     className={`survivors-char-card ${selectedChar === char.id ? 'is-selected' : ''}`}
                     onClick={() => {
                       setSelectedChar(char.id);
-                      initGame(char.id);
+                      initGame(char.id, selectedStage);
                     }}
                   >
                     <span className="survivors-char-avatar">{char.avatar}</span>
@@ -1554,7 +1774,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 type="button"
                 className="survivors-btn-primary"
                 onClick={() => {
-                  initGame(selectedChar);
+                  initGame(selectedChar, selectedStage);
                   setTimeout(() => startGame(), 50);
                 }}
               >
@@ -1572,10 +1792,36 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'victory' && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title is-green">🏆 야간 무사고 달성 완료!</h2>
+            <h2 className="survivors-modal-title is-green">
+              🏆 {engineRef.current?.state.stage ? `${engineRef.current.state.stage.icon} STAGE 0${engineRef.current.state.stage.stageNumber} 클리어!` : '야간 무사고 달성 완료!'}
+            </h2>
             <p className="survivors-modal-sub">
-              3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!
+              {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
+
+            {/* 3-STAR CHALLENGES DEBRIEFING */}
+            {engineRef.current?.state.stage && (
+              <div className="survivors-stage-debriefing">
+                <h4 className="survivors-debriefing-title">⭐ 스테이지 미션 달성 현황</h4>
+                <div className="survivors-star-checklist">
+                  {engineRef.current.state.stage.starChallenges.map((star, idx) => {
+                    const isEarned = engineRef.current?.state.starsEarned[idx];
+                    return (
+                      <div key={star.starIndex} className={`survivors-star-item ${isEarned ? 'is-earned' : ''}`}>
+                        <div className="survivors-star-badge">{isEarned ? '⭐' : '⚪'}</div>
+                        <div className="survivors-star-info">
+                          <strong>{star.title}</strong>
+                          <p>{star.description}</p>
+                        </div>
+                        <span className="survivors-star-progress">
+                          {isEarned ? '달성 완료' : `${star.currentValue} / ${star.targetValue}`}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div className="survivors-results-grid">
               <div className="survivors-stat-box">
@@ -1591,21 +1837,47 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 <strong>{kills}건</strong>
               </div>
               <div className="survivors-stat-box">
+                <span>환경 기믹 격퇴</span>
+                <strong style={{ color: '#38bdf8' }}>{engineRef.current?.state.environmentalKills ?? 0}건</strong>
+              </div>
+              <div className="survivors-stat-box">
                 <span>획득 PSI 크레딧</span>
                 <strong style={{ color: '#fbbf24' }}>+{Math.round(score / 10)} PSI</strong>
               </div>
             </div>
 
             <div className="survivors-actions-row">
+              {(() => {
+                const stageList: PatrolStageId[] = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05'];
+                const currentIdx = stageList.indexOf(selectedStage);
+                const nextStage = currentIdx >= 0 && currentIdx < stageList.length - 1 ? stageList[currentIdx + 1] : null;
+
+                if (nextStage) {
+                  return (
+                    <button
+                      type="button"
+                      className="survivors-btn-primary"
+                      onClick={() => {
+                        setSelectedStage(nextStage);
+                        initGame(selectedChar, nextStage);
+                        setTimeout(() => startGame(), 60);
+                      }}
+                    >
+                      다음 스테이지 진출 ➔
+                    </button>
+                  );
+                }
+                return null;
+              })()}
               <button
                 type="button"
-                className="survivors-btn-primary"
+                className="survivors-btn-secondary"
                 onClick={() => {
-                  initGame(selectedChar);
+                  initGame(selectedChar, selectedStage);
                   setTimeout(() => startGame(), 50);
                 }}
               >
-                재도전
+                스테이지 재도전
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={onExit}>
                 현장 복귀

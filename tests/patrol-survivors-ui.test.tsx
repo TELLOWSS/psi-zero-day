@@ -130,5 +130,41 @@ describe('PatrolSurvivorsGame UI', () => {
       host.remove();
     }
   });
+
+  it('renders 5 industrial stage cards and allows stage selection', () => {
+    const handleExit = vi.fn();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const root = createRoot(host);
+
+    try {
+      act(() => {
+        root.render(<PatrolSurvivorsGame onExit={handleExit} audioMuted={true} />);
+      });
+
+      // Verify stage cards
+      expect(host.textContent).toContain('작전 구역 선택 (5대 산업 스테이지)');
+      expect(host.textContent).toContain('STAGE 01');
+      expect(host.textContent).toContain('서측 게이트 및 지상 복합 하역장');
+      expect(host.textContent).toContain('STAGE 02');
+      expect(host.textContent).toContain('대심도 기초 굴착 구역 (-4F)');
+      expect(host.textContent).toContain('STAGE 03');
+      expect(host.textContent).toContain('45층 초고층 메가 골조 슬래브');
+
+      // Click Stage 02
+      const stage2Btn = Array.from(host.querySelectorAll('.survivors-stage-card')).find(
+        card => card.textContent?.includes('STAGE 02'),
+      ) as HTMLButtonElement | undefined;
+      expect(stage2Btn).toBeDefined();
+
+      act(() => {
+        stage2Btn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(stage2Btn?.className).toContain('is-selected');
+    } finally {
+      act(() => root.unmount());
+      host.remove();
+    }
+  });
 });
 
