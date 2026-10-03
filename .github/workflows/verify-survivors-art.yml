@@ -1,0 +1,41 @@
+name: Verify SURVIVORS Art
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ui/PatrolSurvivorsGame.tsx'
+      - 'public/assets/survivors/**'
+      - 'scripts/verify-survivors-browser.mjs'
+      - '.github/workflows/verify-survivors-art.yml'
+permissions:
+  contents: read
+jobs:
+  survivors-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: npm run typecheck && npm test && npm run build
+      - name: Browser smoke and captures
+        shell: bash
+        run: |
+          export CHROME_BIN="$(command -v google-chrome || command -v chromium)"
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/survivors-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          node scripts/verify-survivors-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: survivors-art-v2-captures
+          path: artifacts/survivors-browser

@@ -105,6 +105,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     characters: Record<string, HTMLImageElement>;
     characterMaps: Record<string, HTMLImageElement>;
     mobWorker?: HTMLImageElement;
+    groundV2?: HTMLImageElement;
+    riskAtlasV2?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
@@ -164,6 +166,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const mImg = new Image();
     mImg.src = '/assets/survivors/sprite_mob_worker.webp';
     mImg.onload = () => { spritesRef.current.mobWorker = mImg; };
+
+    const ground = new Image();
+    ground.onload = () => { spritesRef.current.groundV2 = ground; };
+    ground.src = '/assets/survivors/stage-01-ground-v2.webp';
+    const atlas = new Image();
+    atlas.onload = () => { spritesRef.current.riskAtlasV2 = atlas; };
+    atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
     const sImg = new Image();
     sImg.src = '/assets/episode01/scene-elements/suspended-load-round-sling-choker.webp';
@@ -982,6 +991,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillStyle = stage?.floorColor || '#0f141c';
       ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
+      const groundV2 = spritesRef.current.groundV2;
+      const useGroundArt = stage?.id === 'stage_01' && Boolean(groundV2?.naturalWidth);
+      if (useGroundArt && groundV2) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(groundV2, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      }
+      if (!useGroundArt) {
       // Concrete slabs & 45-degree Isometric Foundation Grid
       const isoStep = 96;
       ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.09)';
@@ -1033,6 +1050,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
+      }
+
       // Designated Green/Yellow Safety Walkway (안전통로: 45도 투시감 강화)
       ctx.save();
       const walkW = 180;
@@ -1076,8 +1095,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const sprite = spritesRef.current.mobWorker;
         if (!sprite?.complete || !sprite.naturalWidth) continue;
         ctx.save(); ctx.globalAlpha = Math.min(1, worker.remaining);
-        ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
-        ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(worker.x, worker.y - 43, 7, Math.PI, 0); ctx.fill();
+        const atlas = spritesRef.current.riskAtlasV2;
+        if (atlas?.naturalWidth) {
+          ctx.drawImage(atlas, 175, 20, 310, 635, worker.x - 17, worker.y - 68, 34, 72);
+        } else {
+          ctx.drawImage(sprite, worker.x - 21, worker.y - 52, 42, 56);
+        }
+        ctx.fillStyle = '#facc15'; ctx.beginPath(); ctx.arc(worker.x, worker.y - 61, 7, Math.PI, 0); ctx.fill();
         ctx.font = 'bold 10px sans-serif'; ctx.fillStyle = '#86efac'; ctx.textAlign = 'center';
         ctx.fillText('안전통로 이동', worker.x, worker.y - 65); ctx.restore();
       }
@@ -1561,7 +1585,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const runPhase = time / 80 + h.x;
             const bob = Math.abs(Math.sin(runPhase)) * 3.5;
 
-            if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
+            const atlas = spritesRef.current.riskAtlasV2;
+            if (atlas?.naturalWidth) {
+              ctx.save();
+              if (player.x < h.x) ctx.scale(-1, 1);
+              ctx.drawImage(atlas, 175, 20, 310, 635, -17, -68 + bob * 0.4, 34, 72);
+              ctx.restore();
+            } else if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
               const drawW = 42;
               const drawH = 56;
               ctx.save();
@@ -1592,7 +1622,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 11px sans-serif';
             ctx.fillStyle = alertPulse ? '#ef4444' : '#f59e0b';
             ctx.textAlign = 'center';
-            ctx.fillText('⚠️ 안전모 미착용', 0, -h.radius - 22);
+            ctx.fillText('⚠ 안전모 미착용', 0, -88);
           } else if (h.type === 'RUNAWAY_CART') {
             // 2.5D Ground Contact Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
@@ -1619,6 +1649,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fill();
             ctx.restore();
 
+            const cartAtlas = spritesRef.current.riskAtlasV2;
+            if (cartAtlas?.naturalWidth) {
+              const width = Math.max(58, h.radius * 2.6);
+              ctx.drawImage(cartAtlas, 650, 90, 620, 580, -width / 2, -width * 0.82, width, width * 0.94);
+            } else {
             // 2.5D Isometric Cubic Transport Cart Body
             ctx.save();
             // Side panel (Shadowed)
@@ -1644,6 +1679,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fillRect(-h.radius + 2, 4, 8, 6);
             ctx.fillRect(h.radius - 10, 4, 8, 6);
             ctx.restore();
+            }
+          } else if (h.type === 'FALLING_DEBRIS') {
+            const atlas = spritesRef.current.riskAtlasV2;
+            const width = Math.max(32, h.radius * 2.4);
+            ctx.fillStyle = 'rgba(0,0,0,.4)';
+            ctx.beginPath();
+            ctx.ellipse(0, 3, width * .45, width * .18, 0, 0, Math.PI * 2);
+            ctx.fill();
+            if (atlas?.naturalWidth) ctx.drawImage(atlas, 35, 700, 585, 500, -width / 2, -width * .7, width, width * .85);
+            else { ctx.fillStyle = '#94a3b8'; ctx.fillRect(-h.radius, -h.radius, h.radius * 2, h.radius * 2); }
           } else if (h.type === 'GAS_LEAK') {
             // Confined Space Toxic Gas Pocket (Projected onto 45-degree Ground Plane)
             ctx.save();
@@ -1758,7 +1803,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
           const hpPercent = Math.max(0, h.hp / h.maxHp);
-          const barY = h.type === 'CRANE_BOSS' ? -h.radius - 48 : -h.radius - 8;
+          const barY = h.type === 'CRANE_BOSS' ? -h.radius - 48 : h.type === 'UNHELMETED' ? -80 : h.type === 'RUNAWAY_CART' ? -Math.max(58, h.radius * 2.6) * .82 - 8 : -h.radius - 8;
           ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
           ctx.fillRect(-barW / 2, barY, barW, barH);
           ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
@@ -2286,13 +2331,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-cutin-speedlines" />
           <div className="survivors-cutin-diagonal-banner">
             <img
-              src="/assets/survivors/director_yoon_shout_cutin.jpg"
+              src="/assets/survivors/director-yoon-shout-v2.webp"
               alt="현장소장 윤성호 작업중지권 사자후"
               className="survivors-cutin-portrait"
             />
             <div className="survivors-cutin-textbox">
               <span className="survivors-cutin-kicker">🚨 중대재해 차단 긴급 작업중지권 발동! 🚨</span>
-              <h2 className="survivors-cutin-shout">"작업 중지! 전원 대피해--!!"</h2>
+              <h2 className="survivors-cutin-shout">작업중지 돌아버려 씨~!!!</h2>
               <p className="survivors-cutin-sub">전 구역 위험 설비 강제 정지 · 근로자 긴급 대피 · 안전 데이터 흡수</p>
             </div>
           </div>
