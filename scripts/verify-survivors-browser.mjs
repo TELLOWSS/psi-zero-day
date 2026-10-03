@@ -22,6 +22,12 @@ try {
     report.rows.push(row);
     page.on('pageerror', e => row.errors.push(String(e)));
     await page.addInitScript(() => {
+      window.__psiRigFrames = new Set();
+      const draw = CanvasRenderingContext2D.prototype.drawImage;
+      CanvasRenderingContext2D.prototype.drawImage = function(source,...args) {
+        if (source instanceof HTMLCanvasElement && source.width === 224 && source.height === 240) window.__psiRigFrames.add(source);
+        return draw.call(this,source,...args);
+      };
       window.__psiDecodedAudioDurations = [];
       const original = AudioContext.prototype.decodeAudioData;
       AudioContext.prototype.decodeAudioData = function(...args) {
@@ -76,6 +82,7 @@ try {
     for (const key of viewport.width === 390 ? ['d','a','w','s'] : ['d']) {
       await page.keyboard.down(key); await page.waitForTimeout(800); await page.keyboard.up(key);
     }
+    row.checks.articulatedMotion = await page.evaluate(() => window.__psiRigFrames.size >= 3);
     await page.keyboard.press('p');
     row.checks.pause = await page.getByRole('button',{name:'순찰 재개',exact:true}).isVisible();
     await page.getByRole('button',{name:'순찰 재개',exact:true}).click();

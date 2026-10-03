@@ -824,6 +824,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const events = engine.drainAudioEvents();
         const audible = new Set<string>();
         for (const event of events) {
+          if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.gameTime);
           const cue = event.type === 'impact' ? 'shoot' : event.type === 'control' ? 'pickup' : event.type;
           // Coalesce dense events per rendered batch. Engine event IDs remain unique.
           if (!audible.has(cue)) { audible.add(cue); playSfx(cue, event.x === undefined || event.y === undefined ? undefined : {x: event.x, y: event.y}); }
@@ -1725,7 +1726,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fill();
 
             // Dual halogen headlights on concrete floor (2.5D Ground Ellipse Cone)
-            const angle = Math.atan2(player.y - h.y, player.x - h.x);
+            const angle = h.motion?.phase === 'warning' || h.motion?.phase === 'charge'
+              ? Math.atan2(h.motion.directionY,h.motion.directionX)
+              : Math.atan2(hazardPose.directionY,hazardPose.facing*Math.sqrt(Math.max(0,1-hazardPose.directionY**2)));
             ctx.save();
             ctx.scale(1, 0.58);
             ctx.rotate(angle);
@@ -1750,6 +1753,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.scale(hazardPose.facing, 1);
               ctx.transform(1, 0, hazardPose.lean * .5, 1 - hazardPose.reaction * .02, 0, 0);
               ctx.drawImage(cartAtlas, 650, 90, 620, 580, -width / 2, -width * .94, width, width * .94);
+              const tyreScale = width / 620;
+              for (const wheel of [{x:700,y:460,rx:24,ry:32},{x:945,y:595,rx:27,ry:38}]) {
+                ctx.save();
+                ctx.translate(-width/2+(wheel.x-650)*tyreScale,-width*.94+(wheel.y-90)*tyreScale);
+                ctx.scale(wheel.rx*tyreScale,wheel.ry*tyreScale);
+                ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.clip();
+                ctx.rotate(hazardPose.travel / (45*tyreScale));
+                ctx.drawImage(cartAtlas,wheel.x-wheel.rx,wheel.y-wheel.ry,wheel.rx*2,wheel.ry*2,-1,-1,2,2);
+                ctx.restore();
+              }
               ctx.restore();
             } else {
             // 2.5D Isometric Cubic Transport Cart Body
