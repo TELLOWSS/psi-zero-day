@@ -1378,14 +1378,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-cutin-speedlines" />
           <div className="survivors-cutin-diagonal-banner">
             <img
-              src="/assets/episode01/characters/lee-jaehoon-portrait.webp"
-              alt="현장소장 이재훈"
+              src="/assets/survivors/solo_shout_cutin.jpg"
+              alt="현장소장 사자후 각성"
               className="survivors-cutin-portrait"
             />
             <div className="survivors-cutin-textbox">
-              <span className="survivors-cutin-kicker">🚨 현 장 소 장  전 권  발 동 🚨</span>
+              <span className="survivors-cutin-kicker">⚡ 국가권력급 안전관리 권한 각성 ⚡</span>
               <h2 className="survivors-cutin-shout">"작업 중지! 전원 멈춰어어엇---!!"</h2>
-              <p className="survivors-cutin-sub">모든 위험 강제 무력화 및 전 구역 안전 데이터 강제 회수</p>
+              <p className="survivors-cutin-sub">모든 재해 스웜 시공간 정지 · 전리품 하이퍼 마그넷 강제 회수</p>
             </div>
           </div>
         </div>
@@ -1419,6 +1419,25 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog">
+            {/* SOLO LEVELING GRADE PROTAGONIST BANNER */}
+            <div className="survivors-monarch-hero-banner">
+              <img
+                src="/assets/survivors/solo_monarch_hero.jpg"
+                alt="각성 안전관리자"
+                className="survivors-monarch-hero-img"
+              />
+              <div className="survivors-monarch-hero-content">
+                <span className="survivors-monarch-badge">⚡ S-RANK AWAKENING</span>
+                <h3>국가권력급 안전관리관 프로토콜</h3>
+                <p>"현장의 모든 재해는 나의 푸른 마안과 그림자 안전 군단 앞에 굴복한다."</p>
+                <div className="survivors-monarch-perks">
+                  <span>✦ 푸른 마안 위험 감지</span>
+                  <span>✦ 그림자 군단 자동 요격</span>
+                  <span>✦ 소장 사자후 시공간 정지</span>
+                </div>
+              </div>
+            </div>
+
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
               야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
