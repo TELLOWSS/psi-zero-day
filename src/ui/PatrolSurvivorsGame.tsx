@@ -1,3 +1,4 @@
+import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
@@ -824,6 +825,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const events = engine.drainAudioEvents();
         const audible = new Set<string>();
         for (const event of events) {
+          if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.gameTime);
           const cue = event.type === 'impact' ? 'shoot' : event.type === 'control' ? 'pickup' : event.type;
           // Coalesce dense events per rendered batch. Engine event IDs remain unique.
           if (!audible.has(cue)) { audible.add(cue); playSfx(cue, event.x === undefined || event.y === undefined ? undefined : {x: event.x, y: event.y}); }
@@ -1663,7 +1665,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const warning = h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
             ctx.strokeText(warning, 0, h.radius + 40); ctx.fillText(warning, 0, h.radius + 40);
           }
-          if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning') {
+          if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning' && h.motion.timer > .3) {
             ctx.restore();
             continue;
           }
@@ -1725,7 +1727,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fill();
 
             // Dual halogen headlights on concrete floor (2.5D Ground Ellipse Cone)
-            const angle = Math.atan2(player.y - h.y, player.x - h.x);
+            const angle = h.motion?.phase === 'warning' || h.motion?.phase === 'charge'
+              ? Math.atan2(h.motion.directionY,h.motion.directionX)
+              : Math.atan2(hazardPose.directionY,hazardPose.facing*Math.sqrt(Math.max(0,1-hazardPose.directionY**2)));
             ctx.save();
             ctx.scale(1, 0.58);
             ctx.rotate(angle);
@@ -1750,6 +1754,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.scale(hazardPose.facing, 1);
               ctx.transform(1, 0, hazardPose.lean * .5, 1 - hazardPose.reaction * .02, 0, 0);
               ctx.drawImage(cartAtlas, 650, 90, 620, 580, -width / 2, -width * .94, width, width * .94);
+              const tyreScale = width / 620;
+              for (const wheel of [{x:700,y:460,rx:24,ry:32},{x:945,y:595,rx:27,ry:38}]) {
+                ctx.save();
+                ctx.translate(-width/2+(wheel.x-650)*tyreScale,-width*.94+(wheel.y-90)*tyreScale);
+                ctx.scale(wheel.rx*tyreScale,wheel.ry*tyreScale);
+                ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.clip();
+                ctx.rotate(hazardPose.travel / (45*tyreScale));
+                ctx.drawImage(cartAtlas,wheel.x-wheel.rx,wheel.y-wheel.ry,wheel.rx*2,wheel.ry*2,-1,-1,2,2);
+                ctx.restore();
+              }
               ctx.restore();
             } else {
             // 2.5D Isometric Cubic Transport Cart Body
@@ -1781,12 +1795,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           } else if (h.type === 'FALLING_DEBRIS') {
             const atlas = spritesRef.current.riskAtlasV2;
             const width = Math.max(32, h.radius * 2.4);
-            ctx.fillStyle = 'rgba(0,0,0,.4)';
+            const elevation=debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0);
+            ctx.fillStyle = `rgba(0,0,0,${.18+(1-elevation/120)*.22})`;
             ctx.beginPath();
-            ctx.ellipse(0, 3, width * .45, width * .18, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 1, width * .40, width * .14, 0, 0, Math.PI * 2);
             ctx.fill();
-            if (atlas?.naturalWidth) ctx.drawImage(atlas, 35, 700, 585, 500, -width / 2, -width * .7, width, width * .85);
-            else { ctx.fillStyle = '#94a3b8'; ctx.fillRect(-h.radius, -h.radius, h.radius * 2, h.radius * 2); }
+            if (atlas?.naturalWidth) ctx.drawImage(atlas, 61, 719, 536, 441, -width / 2, -width * 441/536-elevation, width, width * 441/536);
+            else { ctx.fillStyle = '#94a3b8'; ctx.fillRect(-h.radius, -h.radius-elevation, h.radius * 2, h.radius * 2); }
+            if(h.motion?.phase==='fall' && h.motion.timer>.42){
+              const progress=(.65-h.motion.timer)/.23;ctx.strokeStyle=`rgba(203,213,225,${Math.max(0,.35*(1-progress))})`;ctx.lineWidth=2;
+              ctx.beginPath();ctx.ellipse(0,1,width*(.4+progress*.2),width*(.14+progress*.08),0,0,Math.PI*2);ctx.stroke();
+            }
           } else if (h.type === 'GAS_LEAK') {
             // Confined Space Toxic Gas Pocket (Projected onto 45-degree Ground Plane)
             ctx.save();
@@ -1836,15 +1855,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // 2. 2.5D Giant Crane Heavy Ground Contact Shadow
+            const loadPose = suspendedLoadPose(engine.state.gameTime);
+            // 2. Ground shadow follows the suspended load, inside its warned radius.
             ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
             ctx.beginPath();
-            ctx.ellipse(0, 0, h.radius * 1.35, h.radius * 0.6, 0, 0, Math.PI * 2);
+            ctx.ellipse(loadPose.x, 0, h.radius * 1.35, h.radius * 0.6, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // 3. Overhead 3D Suspended Load (Z-axis offset + sway)
-            const swayX = Math.sin(time / 450) * 9;
-            const zOffset = -42 + Math.sin(time / 400) * 8; // Floating in the air!
+            const swayX = loadPose.x;
+            const zOffset = loadPose.y;
 
             // Two high-tension steel wire ropes coming from overhead crane boom
             ctx.strokeStyle = 'rgba(203, 213, 225, 0.65)';

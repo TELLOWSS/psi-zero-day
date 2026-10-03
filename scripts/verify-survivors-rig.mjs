@@ -1,0 +1,52 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {stripTypeScriptTypes} from 'node:module';
+const require=createRequire(import.meta.url);
+const playwright=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
+const out=path.resolve(process.env.PSI_SURVIVORS_QA_DIR||'artifacts/survivors-browser');
+fs.mkdirSync(out,{recursive:true});
+const files=['survivors-animation-rig','survivors-rig-renderer','survivors-sprite-motion'];
+const code=files.map(name=>stripTypeScriptTypes(fs.readFileSync(`src/ui/${name}.ts`,'utf8').replace(/^import .*;\n/gm,'').replace(/export /g,''),{mode:'strip'})).join('\n');
+const browser=await playwright.chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
+const page=await browser.newPage({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}}});
+const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:4173',{waitUntil:'networkidle'});
+await page.setContent('<html><body style="margin:0;background:#1e293b"><canvas width="1440" height="900"></canvas></body></html>');
+await page.addScriptTag({content:code+`
+window.__rigReview={fixture:'PRESENTATION_ONLY_NOT_GAMEPLAY',actorCount:0,frameChanges:0,modes:[],intervals:[]};
+const actorSources=['player','kang-taesik','yoon-sungho','lee-jaehoon','lim-junho'].map(n=>'/assets/episode01/characters/'+n+'-map.webp').concat(['/assets/survivors/safety-monitor-v2.webp','/assets/survivors/worker-korean-v2.webp']);
+Promise.all(actorSources.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{registerSpriteBounds(img);resolve(img)};img.onerror=reject;img.src=src}))).then(actors=>{
+ window.__rigReview.actorCount=actors.length;
+ const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),tracker=new SpriteMotionTracker(),entities=actors.map(()=>({}));
+ let clock=0,last=0,previous='',started=performance.now();
+ function frame(now){const elapsed=last?(now-last)/1000:.016;const dt=Math.min(.05,elapsed);last=now;clock+=dt;
+  ctx.fillStyle='#263342';ctx.fillRect(0,0,1440,900);
+  const moving=clock%10<7;const running=clock%10>=3.5&&moving;const speed=moving?(running?180:70):0;
+  window.__rigReview.intervals.push(elapsed*1000);
+  actors.forEach((art,i)=>{const entity=entities[i];entity.x=(entity.x||0)+speed*dt;entity.y=0;
+   if(clock%10>8&&clock%10<8.1)tracker.act(entity,clock);
+   const pose=tracker.sample(entity,entity.x,0,clock,clock%10>6.15?90:100);
+   window.__rigReview.mode=pose.mode;if(!window.__rigReview.modes.includes(pose.mode))window.__rigReview.modes.push(pose.mode);const x=105+(i%4)*350,y=i<4?390:810;
+   ctx.save();ctx.translate(x,y);ctx.fillStyle='rgba(0,0,0,.3)';ctx.beginPath();ctx.ellipse(0,2,33,10,0,0,Math.PI*2);ctx.fill();drawGroundedSprite(ctx,art,260,pose);ctx.restore();
+   ctx.fillStyle='#e2e8f0';ctx.font='16px sans-serif';ctx.fillText(art.src.split('/').pop(),x-80,y+35);ctx.fillText(pose.mode,x-80,y+58);
+  });
+  if(window.__rigReview.mode==='brace'&&!window.__rigReview.braceImage)window.__rigReview.braceImage=canvas.toDataURL('image/png');
+  // Compare actual lower-body pixels, not state labels, so repeated standing images fail review.
+  const pixels=ctx.getImageData(20,240,250,155).data;let signature=0;for(let p=0;p<pixels.length;p+=16)signature=(signature*31+pixels[p]+pixels[p+1])>>>0;
+  if(previous!==String(signature))window.__rigReview.frameChanges++;previous=String(signature);
+  if(now-started<11000)requestAnimationFrame(frame);else window.__rigReview.done=true;
+ }
+ requestAnimationFrame(frame);
+});`});
+await page.waitForFunction(()=>window.__rigReview.actorCount===7);
+await page.waitForTimeout(1500);await page.screenshot({path:path.join(out,'rig-walking-all-cast.png')});
+await page.waitForTimeout(3500);await page.screenshot({path:path.join(out,'rig-running-all-cast.png')});
+await page.waitForFunction(()=>window.__rigReview.done,{timeout:15000});
+const result=await page.evaluate(()=>{const r=window.__rigReview;const sorted=r.intervals.slice(20).sort((a,b)=>a-b);return {...r,braceImage:undefined,intervals:undefined,medianFrameMs:sorted[Math.floor(sorted.length*.5)],p95FrameMs:sorted[Math.floor(sorted.length*.95)]}});
+const braceImage=await page.evaluate(()=>window.__rigReview.braceImage);
+if(braceImage)fs.writeFileSync(path.join(out,'rig-contact-all-cast.png'),Buffer.from(braceImage.split(',')[1],'base64'));
+result.errors=errors;result.pass=result.actorCount===7&&result.frameChanges>40&&['idle','walk','run','brace','action'].every(m=>result.modes.includes(m))&&errors.length===0;
+fs.writeFileSync(path.join(out,'rig-review.json'),JSON.stringify(result,null,2));
+const video=page.video();await page.close();await video.saveAs(path.join(out,'all-cast-articulated-motion.webm'));await browser.close();
+console.log(JSON.stringify(result,null,2));if(!result.pass)process.exitCode=1;

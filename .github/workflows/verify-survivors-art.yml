@@ -39,6 +39,7 @@ jobs:
             sleep 0.25
           done
           node scripts/verify-survivors-browser.mjs
+          node scripts/verify-survivors-rig.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

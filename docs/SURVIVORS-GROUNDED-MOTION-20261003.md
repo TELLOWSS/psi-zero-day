@@ -1,5 +1,7 @@
 # Grounded motion foundation
 
+Historical PR94 baseline. Follow-up runtime walk/run joint animation, tool/contact states and rolling wheels are described in [SURVIVORS-ARTICULATED-MOTION-20261003.md](SURVIVORS-ARTICULATED-MOTION-20261003.md). The limitations below describe the earlier foundation, not the follow-up implementation.
+
 The user identified people and mobile risks floating/sliding. Existing rendering added whole-image Y bob from wall time; idle actors also moved vertically, and transparent sprite padding was scaled as part of the actor.
 
 Implemented for every playable character, unsafe worker and guided worker: opaque bounds cached on image load, bottom of boots anchored to ground, restrained breathing/weight compression around the fixed foot anchor, movement lean and facing from actual world displacement, brief contact/interaction brace from HP changes. Distance-based cycle and engine clock preserve poses during pause/level selection and between fixed physics ticks. No walking motion when input is blocked by a boundary; no stride on teleport. Cart wheels meet ground baseline; direction follows actual movement, with body lean and contact compression. Gameplay coordinates, collisions, damage and rewards are untouched.
