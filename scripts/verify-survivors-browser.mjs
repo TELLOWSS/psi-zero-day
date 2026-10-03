@@ -219,14 +219,14 @@ try {
       await combatPage.screenshot({path:path.join(out,'390x844-real-director-shout.png')});
       shoutCaptured=true;
     }
+    const key=['d','s','a','w'][tick%4];
+    await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
     const bossBanner=combatPage.locator('.survivors-boss-alert');
     if(!combat.checks.compactBossAlert && await bossBanner.isVisible()) {
       combat.checks.compactBossAlert=await bossBanner.evaluate(e=>{const r=e.getBoundingClientRect();const hud=document.querySelector('.survivors-hud-top').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=hud.bottom&&r.height<132&&getComputedStyle(e).pointerEvents==='none';});
       combat.checks.bossActionHint=await bossBanner.innerText().then(text=>text.includes('대표 위험 경보') && (text.includes('밖으로')||text.includes('벗어나')));
       await combatPage.screenshot({path:path.join(out,'390x844-compact-boss-warning.png')});
     }
-    const key=['d','s','a','w'][tick%4];
-    await combatPage.keyboard.down(key);await combatPage.waitForTimeout(800);await combatPage.keyboard.up(key);
     if(!bossCaptured && await combatPage.locator('.survivors-boss-risk').isVisible()) {
       bossCaptured=true;
       combat.checks.bossRisk=await combatPage.getByRole('progressbar',{name:'대표 위험 잔여량'}).getAttribute('value').then(v=>Number(v)>0 && Number(v)<=100);
@@ -234,7 +234,7 @@ try {
       await combatPage.screenshot({path:path.join(out,'390x844-stage10-combat-boss.png')});
     }
     const warnings=await combatPage.evaluate(()=>window.__psiCombatWarnings);
-    if(warnings.cart && warnings.fall && warnings.supply && warnings.pickup && bossCaptured && shoutCaptured) break;
+    if(warnings.cart && warnings.fall && warnings.supply && warnings.pickup && bossCaptured && shoutCaptured && combat.checks.compactBossAlert) break;
     if(await combatPage.getByRole('heading',{name:'🚨 현장 중대위험 발생',exact:true}).isVisible()) break;
   }
   Object.assign(combat.checks,await combatPage.evaluate(()=>({cartTelegraph:window.__psiCombatWarnings.cart,fallTelegraph:window.__psiCombatWarnings.fall,supplySpawn:window.__psiCombatWarnings.supply,supplyPickup:window.__psiCombatWarnings.pickup})));
