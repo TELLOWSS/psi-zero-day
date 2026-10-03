@@ -12,6 +12,8 @@ Milestone/boss coincidence produces one kit, not duplicate supplies. Pickups dis
 
 Level-up reserves a slot for upgrading an owned weapon. Once a weapon reaches Lv.5, its missing evolution support is prioritized; an available evolution remains first priority. Other choices remain shuffled. Bulk XP preserves the current choices, queues later levels and refreshes the mounted UI on each selection rather than overwriting cards. Existing tests using 100 XP to represent one level were adjusted to explicitly single-level or queued-choice scope.
 
+Capture review also found a missing `hires/key-art.webp` reference on the initial player/legacy researcher hero. Both now use the existing approved player portrait; a profile-wide media test and browser image decoding prevent regressions.
+
 Ready and pause screens include a collapsible supply/build guide, all five existing recipes and paused-run progress. The beginner manual documents supplies and sequential choices.
 
 ## Asset register

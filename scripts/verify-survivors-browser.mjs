@@ -51,6 +51,7 @@ try {
     await page.locator('.survivors-stage-card').first().waitFor({state:'visible'});
     row.checks.stageCount = await page.locator('.survivors-stage-card').count() === 10;
     row.checks.lastStage = await page.locator('.survivors-stage-card').last().innerText().then(t => t.includes('STAGE 10') && !t.includes('STAGE 010'));
+    row.checks.characterHero = await page.locator('.survivors-monarch-hero-img').evaluate(async image=>{await image.decode();return image.naturalWidth>0;});
     await page.locator('.survivors-supply-guide summary').click();
     row.checks.supplyGuide = await page.locator('.survivors-supply-cards article').count() === 3;
     row.checks.evolutionRecipes = await page.locator('.survivors-supply-guide li').count() === 5;

@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { existsSync } from 'node:fs';
 import { applyTacticalItem, tacticalSupplyFor } from '../src/engine/survivors-items';
-import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
+import { CHARACTER_PROFILES, createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 const idle={moveX:0,moveY:0};
 function engine(){const e=new SurvivorsEngine(createInitialSurvivorsState(),42);e.start();e.state.interactiveHazards=[];return e;}
 describe('tactical supplies and build progression',()=>{
+ it('every character profile references an existing hero image',()=>{
+  for(const profile of Object.values(CHARACTER_PROFILES)) expect(existsSync(new URL('../public'+profile.heroBannerUri,import.meta.url))).toBe(true);
+ });
  it('cycles milestone supplies and supplies a control kit for a designated boss',()=>{
   expect(tacticalSupplyFor(0,false)).toBe(null);expect(tacticalSupplyFor(11,false)).toBe(null);
   expect([12,24,36,48].map(n=>tacticalSupplyFor(n,false))).toEqual(['record_beacon','radio_battery','control_kit','record_beacon']);
