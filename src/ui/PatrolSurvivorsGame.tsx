@@ -947,7 +947,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setNextExp(engine.state.nextLevelExp);
         setLevel(engine.state.level);
         setGameTime(Math.floor(engine.state.gameTime));
-        setUltimateCharge(Math.round(engine.state.ultimateCharge));
+        setUltimateCharge(Math.floor(engine.state.ultimateCharge));
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
@@ -2410,7 +2410,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             type="button"
             className={`survivors-ultimate-btn ${ultimateCharge >= 100 ? 'is-ready' : ''}`}
             onClick={handleTriggerDirectorShout}
-            disabled={ultimateCharge < 100}
+            disabled={ultimateCharge < 100 || directorCutinPhase !== 'none'}
             aria-label="현장소장 사자후 궁극기 발동"
           >
             <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as React.CSSProperties} />

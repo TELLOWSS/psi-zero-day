@@ -25,6 +25,11 @@ it('shows mission conditions before start, opens the shooting manual while pause
     for (const goal of PATROL_STAGES.stage_01.starChallenges) expect(host.querySelector('.survivors-mission-brief')?.textContent).toContain(goal.description);
     expect(host.querySelectorAll('details.survivors-ready-details[open]')).toHaveLength(0);
     click('순찰 시작하기');
+    vi.spyOn(engine!, 'update').mockImplementationOnce(() => { engine!.state.ultimateCharge = 99.6; });
+    act(() => frame(performance.now() + 100));
+    const shout = host.querySelector<HTMLButtonElement>('[aria-label="현장소장 사자후 궁극기 발동"]')!;
+    expect(shout.disabled).toBe(true);
+    expect(shout.textContent).toContain('99%');
     click('일시정지 (P)');
     click('게임 설명서');
     const expanded = host.querySelector('.game-manual details[open]');
@@ -33,7 +38,7 @@ it('shows mission conditions before start, opens the shooting manual while pause
     click('설명서 닫기');
     expect(engine!.state.phase).toBe('paused');
     click('순찰 재개');
-    vi.spyOn(engine!, 'update').mockImplementationOnce(() => { engine!.state.phase = 'victory'; });
+    vi.mocked(engine!.update).mockImplementationOnce(() => { engine!.state.phase = 'victory'; });
     act(() => frame(performance.now() + 20));
     click('다음 스테이지 진출 ➔');
     expect(host.querySelector('.survivors-ready-launch')?.textContent).toContain('STAGE 02');
