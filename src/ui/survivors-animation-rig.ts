@@ -37,3 +37,13 @@ ACTOR_RIGS['sprite_player_yoon.webp']!.protected=ACTOR_RIGS['yoon-sungho-map.web
 ACTOR_RIGS['kang-taesik-map.webp']!.protected=[[{x:.88,y:.49},{x:1,y:.49},{x:1,y:.65},{x:.88,y:.65},{x:.85,y:.59}]];
 ACTOR_RIGS['lee-jaehoon-map.webp']!.protected=[[{x:.18,y:.40},{x:.43,y:.43},{x:.43,y:.51},{x:.29,y:.52},{x:.18,y:.47}]];
 ACTOR_RIGS['lim-junho-map.webp']!.protected=[[{x:.28,y:.39},{x:.59,y:.40},{x:.61,y:.47},{x:.45,y:.49},{x:.28,y:.45}]];
+
+/** Late warning descent lands before the engine's existing dangerous contact phase. */
+export function debrisElevation(phase:string,timer:number):number {
+ if(phase!=='warning')return 0;
+ const progress=Math.max(0,Math.min(1,1-timer/.3));return 120*(1-progress*progress);
+}
+export function suspendedLoadPose(clock:number):{x:number;y:number} {
+ const angle=Math.sin(clock*.65)*.055,rope=338;
+ return {x:Math.sin(angle)*rope,y:-42+(1-Math.cos(angle))*rope};
+}

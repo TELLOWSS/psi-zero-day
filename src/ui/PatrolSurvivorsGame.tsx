@@ -1,3 +1,4 @@
+import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
@@ -1664,7 +1665,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const warning = h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
             ctx.strokeText(warning, 0, h.radius + 40); ctx.fillText(warning, 0, h.radius + 40);
           }
-          if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning') {
+          if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning' && h.motion.timer > .3) {
             ctx.restore();
             continue;
           }
@@ -1794,12 +1795,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           } else if (h.type === 'FALLING_DEBRIS') {
             const atlas = spritesRef.current.riskAtlasV2;
             const width = Math.max(32, h.radius * 2.4);
-            ctx.fillStyle = 'rgba(0,0,0,.4)';
+            const elevation=debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0);
+            ctx.fillStyle = `rgba(0,0,0,${.18+(1-elevation/120)*.22})`;
             ctx.beginPath();
-            ctx.ellipse(0, 3, width * .45, width * .18, 0, 0, Math.PI * 2);
+            ctx.ellipse(0, 1, width * .40, width * .14, 0, 0, Math.PI * 2);
             ctx.fill();
-            if (atlas?.naturalWidth) ctx.drawImage(atlas, 35, 700, 585, 500, -width / 2, -width * .7, width, width * .85);
-            else { ctx.fillStyle = '#94a3b8'; ctx.fillRect(-h.radius, -h.radius, h.radius * 2, h.radius * 2); }
+            if (atlas?.naturalWidth) ctx.drawImage(atlas, 61, 719, 536, 441, -width / 2, -width * 441/536-elevation, width, width * 441/536);
+            else { ctx.fillStyle = '#94a3b8'; ctx.fillRect(-h.radius, -h.radius-elevation, h.radius * 2, h.radius * 2); }
+            if(h.motion?.phase==='fall' && h.motion.timer>.42){
+              const progress=(.65-h.motion.timer)/.23;ctx.strokeStyle=`rgba(203,213,225,${Math.max(0,.35*(1-progress))})`;ctx.lineWidth=2;
+              ctx.beginPath();ctx.ellipse(0,1,width*(.4+progress*.2),width*(.14+progress*.08),0,0,Math.PI*2);ctx.stroke();
+            }
           } else if (h.type === 'GAS_LEAK') {
             // Confined Space Toxic Gas Pocket (Projected onto 45-degree Ground Plane)
             ctx.save();
@@ -1849,15 +1855,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // 2. 2.5D Giant Crane Heavy Ground Contact Shadow
+            const loadPose = suspendedLoadPose(engine.state.gameTime);
+            // 2. Ground shadow follows the suspended load, inside its warned radius.
             ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
             ctx.beginPath();
-            ctx.ellipse(0, 0, h.radius * 1.35, h.radius * 0.6, 0, 0, Math.PI * 2);
+            ctx.ellipse(loadPose.x, 0, h.radius * 1.35, h.radius * 0.6, 0, 0, Math.PI * 2);
             ctx.fill();
 
             // 3. Overhead 3D Suspended Load (Z-axis offset + sway)
-            const swayX = Math.sin(time / 450) * 9;
-            const zOffset = -42 + Math.sin(time / 400) * 8; // Floating in the air!
+            const swayX = loadPose.x;
+            const zOffset = loadPose.y;
 
             // Two high-tension steel wire ropes coming from overhead crane boom
             ctx.strokeStyle = 'rgba(203, 213, 225, 0.65)';

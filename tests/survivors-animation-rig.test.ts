@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ACTOR_RIGS, footstep, solveKnee } from '../src/ui/survivors-animation-rig';
+import { ACTOR_RIGS, footstep, solveKnee, debrisElevation, suspendedLoadPose } from '../src/ui/survivors-animation-rig';
 import { SpriteMotionTracker } from '../src/ui/survivors-sprite-motion';
 describe('articulated construction actors',()=>{
  it('keeps at least one support foot grounded through an entire walk and run cycle',()=>{
@@ -39,6 +39,15 @@ describe('articulated construction actors',()=>{
   tracker.act(actor,.3);const action=tracker.sample(actor,25,0,.3);
   expect(action.mode).toBe('action');expect(tracker.sample(actor,25,0,.3)).toEqual(action);
   expect(tracker.sample(actor,25,0,.6).mode).toBe('idle');
+ });
+ it('lands debris at the end of warning, before dangerous contact starts',()=>{
+  expect(debrisElevation('warning',.3)).toBe(120);expect(debrisElevation('warning',0)).toBe(0);
+  expect(debrisElevation('fall',.65)).toBe(0);expect(debrisElevation('spent',.3)).toBe(0);
+  expect(debrisElevation('warning',.15)).toBeGreaterThan(debrisElevation('warning',.05));
+ });
+ it('moves suspended loads along a fixed rope arc and freezes on simulation pause',()=>{
+  for(let clock=0;clock<10;clock+=.1){const p=suspendedLoadPose(clock);expect(Math.hypot(p.x,338-(p.y+42))).toBeCloseTo(338,7);}
+  expect(suspendedLoadPose(3)).toEqual(suspendedLoadPose(3));
  });
  it('does not spin cart wheels at rest and keeps rolling distance across gait wraps',()=>{
   const tracker=new SpriteMotionTracker(),cart={};tracker.sample(cart,0,0,0);

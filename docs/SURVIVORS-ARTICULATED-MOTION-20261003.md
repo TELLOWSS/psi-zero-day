@@ -10,6 +10,7 @@ This completes the runtime motion work after PR94 grounding, using the existing 
 - Starting/stopping eases the gait envelope. Idle breathing, tool-event upper-body settle, contact brace and safe worker exit share the same simulation clock. Pauses and fixed-step intermediate renders freeze the exact pose.
 - Original face, helmet, vest, trousers and held equipment textures stay intact. Alpha bounds and source rig preparation are cached on load. Textured leg meshes are baked lazily into 300×320 canvases, with at most 24 LRU frames per source image, then drawn as ordinary sprites. No per-frame full image alpha scan.
 - Cart wheel hub texture rotates from cumulative travelled distance, independent of gait wrap. Tyres remain grounded; lights follow the locked trajectory during warning/charge and actual heading while travelling.
+- Falling debris descends with acceleration in the final 0.3s of warning, reaches the floor before the existing dangerous contact phase, and has a short ground impact ring. Suspended crane loads follow a fixed rope pendulum arc using the simulation clock instead of unrelated wall-time vertical bobbing.
 - Movement/collision/hit-window/score/risk resolution rules remain owned by the existing engine.
 
 ## Verification
