@@ -117,6 +117,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     itemsAtlas?: HTMLImageElement;
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
+    excavationGround?: HTMLImageElement;
     slingChoker?: HTMLImageElement;
     rebarBundle?: HTMLImageElement;
     fanDuct?: HTMLImageElement;
@@ -184,6 +185,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const workerV2 = new Image();
     workerV2.src = '/assets/survivors/worker-korean-v2.webp';
     workerV2.onload = () => { spritesRef.current.workerV2 = workerV2; };
+    const excavationGround = new Image();
+    excavationGround.src = '/assets/survivors/excavation-ground-v3.webp';
+    excavationGround.onload = () => { spritesRef.current.excavationGround = excavationGround; };
     const groundAtlasV2 = new Image();
     groundAtlasV2.src = '/assets/survivors/process-ground-atlas-v2.webp';
     groundAtlasV2.onload = () => { spritesRef.current.groundAtlasV2 = groundAtlasV2; };
@@ -317,6 +321,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
+  const sfxTimesRef = useRef(new Map<string, number>());
   const rewardedRef = useRef(new WeakSet<SurvivorsEngine>());
   useEffect(() => () => audioRef.current.dispose(), []);
   useEffect(() => { audioRef.current.setMuted(audioMuted); if (phase === 'paused' || phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase]);
@@ -328,6 +333,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const ctx = audioRef.current.getContext();
       if (!ctx) return;
       const now = ctx.currentTime;
+      const interval = type === 'pickup' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
+      const previous = sfxTimesRef.current.get(type);
+      if (interval && previous !== undefined && now >= previous && now - previous < interval) return;
+      sfxTimesRef.current.set(type, now);
       const priority = type === 'boss_alarm' || type === 'shout' ? 4 : type === 'hit' || type === 'win' || type === 'defeat' ? 3 : type === 'pickup' || type === 'levelup' || type === 'evolution' ? 2 : 1;
       const listener = engineRef.current?.state.player;
 
@@ -1011,10 +1020,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fillStyle = stage?.floorColor || '#0f141c';
       ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
       const groundV2 = spritesRef.current.groundV2;
       const processGround = spritesRef.current.groundAtlasV2;
       const useGroundArt = stage.id === 'stage_01' ? Boolean(groundV2?.naturalWidth) : Boolean(processGround?.naturalWidth);
-      if (stage.id !== 'stage_01' && processGround?.naturalWidth) {
+      const excavationGround = spritesRef.current.excavationGround;
+      if (['stage_02', 'stage_06'].includes(stage.id) && excavationGround?.naturalWidth) {
+        ctx.drawImage(excavationGround, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      } else if (stage.id !== 'stage_01' && processGround?.naturalWidth) {
         const tile = ['stage_02', 'stage_06'].includes(stage.id) ? 0
           : ['stage_03', 'stage_04', 'stage_08'].includes(stage.id) ? 1
           : stage.id === 'stage_07' ? 2 : 3;
@@ -1100,7 +1114,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       // Walkway borders
-      ctx.strokeStyle = 'rgba(34, 197, 94, 0.35)';
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.18)';
       ctx.lineWidth = 2.5;
       ctx.setLineDash([14, 10]);
       ctx.beginPath();
@@ -1113,7 +1127,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Safety Walkway Stencil Markings
       ctx.font = 'bold 13px sans-serif';
-      ctx.fillStyle = 'rgba(34, 197, 94, 0.45)';
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.16)';
       ctx.textAlign = 'center';
       for (let y = 180; y < WORLD_HEIGHT; y += 320) {
         if (y === 180) ctx.fillText('안전통로', WORLD_WIDTH / 2, y);
@@ -1278,14 +1292,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 10px sans-serif';
             ctx.fillStyle = '#fbbf24';
             ctx.textAlign = 'center';
-            ctx.fillText('⚡ BUFF ZONE (+25% SPD)', h.x, h.y - 24);
+            ctx.fillText(combatText.light_zone, h.x, h.y - 24);
             ctx.restore();
           }
 
           // B. Slurry Puddle (Mud Drag)
           if (h.type === 'slurry_puddle') {
             ctx.save();
-            ctx.fillStyle = 'rgba(68, 50, 32, 0.65)';
+            ctx.fillStyle = 'rgba(68, 50, 32, 0.22)';
             ctx.beginPath();
             ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
             ctx.fill();
@@ -1297,7 +1311,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 10px sans-serif';
             ctx.fillStyle = '#d97706';
             ctx.textAlign = 'center';
-            ctx.fillText('⚠️ SLURRY MUD (SLOW)', h.x, h.y);
+            ctx.fillText(combatText.mud_zone, h.x, h.y);
             ctx.restore();
           }
 
@@ -1540,6 +1554,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Sort strictly by ground contact feet y-coordinate (ascending)
       entityList.sort((a, b) => a.y - b.y);
 
+      const closestWarning = engine.state.hazards.filter(h => h.motion?.phase === 'warning')
+        .reduce<typeof engine.state.hazards[number] | undefined>((closest, h) => {
+          const distance = (hazard: typeof h) => (hazard.x - engine.state.player.x) ** 2 + (hazard.y - engine.state.player.y) ** 2;
+          return !closest || distance(h) < distance(closest) ? h : closest;
+        }, undefined);
       for (const item of entityList) {
         if (item.kind === 'drop') {
           const drop = item.data;
@@ -1630,7 +1649,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.beginPath(); ctx.arc(0, 0, h.radius + 20, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - h.motion.timer / 1.25)); ctx.stroke();
             }
           }
-          if (h.motion?.phase === 'warning') {
+          if (h.motion?.phase === 'warning' && h === closestWarning) {
             ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
             ctx.lineWidth = 4; ctx.strokeStyle = '#111827'; ctx.fillStyle = '#fef3c7';
             const warning = h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
@@ -1792,10 +1811,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 11px sans-serif';
             ctx.fillStyle = '#fef08a';
             ctx.textAlign = 'center';
-            ctx.fillText('☣ 유독가스 주의', 0, -h.radius * 0.5);
+            ctx.fillText(combatText.gas_warning, 0, -h.radius * 0.5);
             ctx.font = '9px sans-serif';
             ctx.fillStyle = '#86efac';
-            ctx.fillText('CO/H2S: 140PPM', 0, -h.radius * 0.5 + 13);
+
           } else if (h.type === 'CRANE_BOSS') {
             // Giant Tower Crane Rigging Failure Hazard (Boss)
             // 1. 2.5D Ground Drop Hazard Warning Ring (Oval)
@@ -2350,10 +2369,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <span style={{ fontSize: '20px' }}>🔥</span>
           <div>
             <div style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-              {combo} COMBO!
+              {combo} {combatText.combo}
             </div>
             <div style={{ fontSize: '10px', opacity: 0.9, fontWeight: 700 }}>
-              +{combo * 5}% SAFE POINT BONUS
+              +{combo * 5}% {combatText.bonus}
             </div>
           </div>
         </aside>

@@ -1815,3 +1815,30 @@
 .survivors-supply-cards { display: grid; gap: 10px; margin-bottom: 14px; }
 .survivors-supply-cards article { display: flex; gap: 12px; align-items: center; }
 .survivors-supply-art { display: block; flex: 0 0 54px; width: 54px; height: 54px; background-image: url('/assets/survivors/tactical-items-v1.webp'); background-size: 200% 200%; background-repeat: no-repeat; }
+
+/* Keep mobile combat visible: status and actions share two compact rows. */
+.survivors-combo-banner {
+  background: rgba(15, 23, 34, .82) !important;
+  box-shadow: none !important;
+  border: 1px solid rgba(251, 191, 36, .4);
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+.survivors-combo-banner > span { display: none; }
+.survivors-combo-banner > div { display: flex; gap: 8px; align-items: center; }
+@media (max-width: 600px) and (orientation: portrait) {
+  .survivors-hud-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 6px 8px; top: max(4px, env(safe-area-inset-top)); border-radius: 10px; }
+  .survivors-player-hud { grid-column: 1 / -1; }
+  .survivors-hud-center { padding: 0; gap: 4px; }
+  .survivors-top-actions { gap: 4px; }
+  .survivors-btn-icon { min-height: 36px; padding: 4px 6px; font-size: 10px; }
+  .survivors-score-badge { padding: 0 4px; }
+  .survivors-score-badge span { font-size: 8px; }
+  .survivors-timer strong { font-size: 16px; }
+  .survivors-timer small { font-size: 9px; }
+  .survivors-ultimate-btn { width: 64px; height: 64px; min-width: 0; padding: 4px; }
+  .survivors-ultimate-btn.is-ready { animation: none; box-shadow: 0 0 12px rgba(245,158,11,.35); }
+  .survivors-ultimate-icon { font-size: 21px; }
+  .survivors-ultimate-info { font-size: 10px; }
+  .survivors-ultimate-info small { font-size: 9px; }
+}

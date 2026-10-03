@@ -32,6 +32,10 @@ try {
       };
     });
     await page.goto(report.baseUrl, {waitUntil: 'networkidle'});
+    row.checks.excavationGround = await page.evaluate(async () => {
+      const art = new Image(); art.src = '/assets/survivors/excavation-ground-v3.webp';
+      await art.decode(); return art.naturalWidth >= 1400 && art.naturalHeight >= 900;
+    });
     await page.getByRole('button', {name:/작업중지 BGM 들어보기/}).click();
     const audio = page.locator('.work-stop-song-player audio');
     await audio.evaluate(a => new Promise(resolve => {
@@ -90,6 +94,13 @@ try {
       const hud = document.querySelector('.survivors-hud-top').getBoundingClientRect();
       return [...document.querySelectorAll('.survivors-combo-banner,.survivors-boss-alert,.survivors-evo-banner')].every(e => e.getBoundingClientRect().top >= hud.bottom);
     });
+    row.checks.hudVisible = await page.locator('.survivors-hud-top').evaluate(h => {
+      const r = h.getBoundingClientRect();
+      return r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth;
+    });
+    if (viewport.width <= 600 && viewport.height > viewport.width) {
+      row.checks.compactHud = await page.locator('.survivors-hud-top').evaluate(h => h.getBoundingClientRect().height <= 110);
+    }
     // No synthetic engine state is injected. These captures document actual visible gameplay.
     row.checks.errorOverlay = await page.locator('vite-error-overlay').count() === 0;
     row.checks.fullGrowthUltimateResult = 'NOT_RUN';
