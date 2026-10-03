@@ -1814,7 +1814,7 @@
 .survivors-supply-guide small { color: #38bdf8; }
 .survivors-supply-cards { display: grid; gap: 10px; margin-bottom: 14px; }
 .survivors-supply-cards article { display: flex; gap: 12px; align-items: center; }
-.survivors-supply-art { display: block; flex: 0 0 54px; width: 54px; height: 54px; background-image: url('/assets/survivors/tactical-items-v1.webp'); background-size: 200% 200%; background-repeat: no-repeat; }
+.survivors-supply-art { display: block; flex: 0 0 54px; width: 54px; height: 54px; background-image: url('/assets/survivors/pickup-atlas-v2.webp'); background-size: 400% 200%; background-repeat: no-repeat; }
 
 /* Keep mobile combat visible: status and actions share two compact rows. */
 .survivors-combo-banner {
@@ -1880,3 +1880,16 @@
 @media (prefers-reduced-motion: reduce) {
  .survivors-director-cutin-layer, .survivors-cutin-diagonal-banner { animation: none; transition: none; }
 }
+
+/* Full visual viewport keeps HUD above document scroll and browser chrome changes. */
+.survivors-container { position: fixed; inset: 0; height: 100dvh; max-height: none; z-index: 50; }
+.survivors-equipment-icon { display:inline-block; width:36px; height:36px; position:relative; background-size:300% 500%; background-repeat:no-repeat; flex-shrink:0; }
+.survivors-equipment-module { position:absolute; width:15px; height:15px; right:-3px; bottom:2px; background-size:400% 200%; background-repeat:no-repeat; }
+.survivors-equipment-pips { position:absolute; bottom:-2px; left:50%; transform:translateX(-50%); display:flex; gap:2px; }
+.survivors-equipment-pips i { width:3px; height:3px; background:#f8cd67; border-radius:1px; box-shadow:0 0 2px #000; }
+.survivors-equipment-icon.is-evolved { filter:drop-shadow(0 0 3px #bd84fb); }
+.survivors-equipment-icon.is-evolved .survivors-equipment-pips i { background:#c4b5fd; }
+.survivors-perk-badge .survivors-equipment-icon { width:28px; height:28px; }
+.survivors-perk-card-icon .survivors-equipment-icon { width:52px; height:52px; }
+.survivors-upgrade-preview { display:flex; align-items:center; gap:12px; margin-top:8px; font-size:11px; color:#f8d477; }
+.survivors-upgrade-preview .survivors-equipment-icon { width:42px; height:42px; }

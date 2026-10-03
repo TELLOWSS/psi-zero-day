@@ -40,6 +40,7 @@ jobs:
           done
           node scripts/verify-survivors-browser.mjs
           node scripts/verify-survivors-rig.mjs
+          node scripts/verify-survivors-props.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

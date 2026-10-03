@@ -59,7 +59,7 @@ export interface SafetyDrop {
   itemKind?: TacticalItemId;
 }
 
-export type TacticalItemId = 'record_beacon' | 'radio_battery' | 'control_kit';
+export type TacticalItemId = 'record_beacon' | 'radio_battery' | 'control_kit' | 'field_rations' | 'route_lantern';
 
 export type BaseWeaponId =
   | 'radio_boost'
@@ -210,6 +210,8 @@ export interface SurvivorsGameState {
   hasRevived: boolean;
   rerollsLeft: number;
   controlKit?: { charges: number; remaining: number };
+  fieldRecovery?: { remaining: number };
+  routeLantern?: { remaining: number };
   itemNotice?: { id: string; kind: TacticalItemId; remaining: number };
 
   // Screen Juice & Impact Feedback

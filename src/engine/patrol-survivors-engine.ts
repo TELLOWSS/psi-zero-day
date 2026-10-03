@@ -1,6 +1,6 @@
 import { ADDITIONAL_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
-import { applyTacticalItem, tacticalSupplyFor } from './survivors-items';
+import { applyTacticalItem, tacticalSupplyFor, tickTacticalItems } from './survivors-items';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
@@ -699,6 +699,7 @@ export class SurvivorsEngine {
     }
 
     this.state.gameTime += effectiveDt;
+    tickTacticalItems(this.state,effectiveDt);
     if (this.state.controlKit) {
       this.state.controlKit.remaining = Math.max(0, this.state.controlKit.remaining - effectiveDt);
       if (this.state.controlKit.remaining === 0 || this.state.controlKit.charges === 0) this.state.controlKit = undefined;
@@ -841,7 +842,7 @@ export class SurvivorsEngine {
     if (len > 0.001) {
       const nx = input.moveX / len;
       const ny = input.moveY / len;
-      const currentSpeed = player.speed * speedMod;
+      const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1);
       player.x += nx * currentSpeed * dt;
       player.y += ny * currentSpeed * dt;
       this.lastFacingX = nx;
