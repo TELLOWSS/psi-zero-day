@@ -153,4 +153,164 @@ describe('Patrol Survivors Engine', () => {
     engine.applyPerk('safety_harness');
     expect(engine.state.player.maxHp).toBe(baseMaxHp + 30);
   });
+
+  it('charges and triggers Director Shout ultimate with cut-in and global magnet', () => {
+    const engine = new SurvivorsEngine();
+    engine.start();
+
+    // Initial charge is 0, cannot trigger
+    expect(engine.triggerDirectorShout()).toBe(false);
+
+    // Charge up to 100
+    engine.state.ultimateCharge = 100;
+
+    // Spawn test hazard and drop far away
+    engine.state.hazards.push({
+      id: 'target_haz',
+      type: 'UNHELMETED',
+      x: 100,
+      y: 100,
+      hp: 100,
+      maxHp: 100,
+      speed: 10,
+      radius: 15,
+      damage: 10,
+      expValue: 5,
+    });
+    engine.state.drops.push({
+      id: 'far_drop',
+      x: 200,
+      y: 200,
+      exp: 10,
+    });
+
+    const triggered = engine.triggerDirectorShout();
+    expect(triggered).toBe(true);
+    expect(engine.state.ultimateCharge).toBe(0);
+    expect(engine.state.directorShoutTimer).toBeGreaterThan(0);
+    expect(engine.state.directorCutinPhase).toBe('cutin');
+
+    // Hazards should be stunned and damaged
+    expect(engine.state.hazards[0]?.isStunned).toBeGreaterThan(0);
+    expect(engine.state.hazards[0]?.hp).toBeLessThanOrEqual(0);
+
+    // Shockwave projectile should be active
+    const shockwave = engine.state.projectiles.find(p => p.kind === 'shout_shockwave');
+    expect(shockwave).toBeDefined();
+
+    // Far drop should be pulled closer to player
+    const distToPlayer = Math.hypot(
+      engine.state.player.x - engine.state.drops[0]!.x,
+      engine.state.player.y - engine.state.drops[0]!.y,
+    );
+    expect(distToPlayer).toBeLessThan(700);
+  });
+
+  it('offers Super Protocol Evolution when weapon and support perk requirements are met', () => {
+    const engine = new SurvivorsEngine();
+    engine.start();
+
+    // Radio Lv.5 + Magnet Lv.1 -> Satellite Broadcast evolution
+    engine.state.activePerks.radio_boost = 5;
+    engine.state.activePerks.magnet_beacon = 1;
+
+    // Trigger level up via addExp
+    engine.addExp(100);
+
+    expect(engine.state.phase).toBe('levelup');
+    const evoOption = engine.state.perkOptions.find(p => p.id === 'satellite_broadcast');
+    expect(evoOption).toBeDefined();
+    expect(evoOption?.category).toBe('evolution');
+
+    // Select evolution
+    engine.applyPerk('satellite_broadcast');
+    expect(engine.state.activePerks.satellite_broadcast).toBe(1);
+    expect(engine.state.evolutionBanner).toBeDefined();
+    expect(engine.state.evolutionBanner?.title).toContain('위성');
+
+    // Advance time and check satellite projectile fires
+    engine.update(0.1, { moveX: 0, moveY: 0 });
+    const satelliteProj = engine.state.projectiles.find(p => p.kind === 'satellite_wave');
+    expect(satelliteProj).toBeDefined();
+  });
+
+  it('initializes different characters with unique stats and starting weapons', () => {
+    // Yoon (Safety Manager)
+    const yoonEngine = new SurvivorsEngine(createInitialSurvivorsState('yoon'));
+    expect(yoonEngine.state.characterId).toBe('yoon');
+    expect(yoonEngine.state.activePerks.radio_boost).toBe(1);
+
+    // Park (Veteran Foreman Tanker)
+    const parkEngine = new SurvivorsEngine(createInitialSurvivorsState('park'));
+    expect(parkEngine.state.characterId).toBe('park');
+    expect(parkEngine.state.player.hp).toBe(150);
+    expect(parkEngine.state.activePerks.extinguisher).toBe(1);
+
+    // Jung (Smart Researcher)
+    const jungEngine = new SurvivorsEngine(createInitialSurvivorsState('jung'));
+    expect(jungEngine.state.characterId).toBe('jung');
+    expect(jungEngine.state.activePerks.safety_drone).toBe(1);
+    expect(jungEngine.state.player.cooldownReduction).toBeGreaterThan(0);
+  });
+
+  it('supports 1-time Revive from permanent First Aid upgrade', () => {
+    const engine = new SurvivorsEngine(
+      createInitialSurvivorsState('yoon', {
+        vitality: 0,
+        mobility: 0,
+        intelligence: 0,
+        firstAid: 1, // Has 1 revive
+        reroll: 1,
+      }),
+    );
+    engine.start();
+
+    engine.state.player.hp = 10;
+    engine.state.hazards.push({
+      id: 'boss_hit',
+      type: 'CRANE_BOSS',
+      x: engine.state.player.x,
+      y: engine.state.player.y,
+      hp: 100,
+      maxHp: 100,
+      speed: 0,
+      radius: 30,
+      damage: 100, // fatal
+      expValue: 10,
+    });
+
+    engine.update(0.016, { moveX: 0, moveY: 0 });
+
+    // Should revive, not defeat!
+    expect(engine.state.hasRevived).toBe(true);
+    expect(engine.state.phase).toBe('playing');
+    expect(engine.state.player.hp).toBeGreaterThan(0);
+    expect(engine.state.player.invincibleTime).toBeGreaterThan(0);
+  });
+
+  it('allows rerolling perk options when rerolls are available', () => {
+    const engine = new SurvivorsEngine(
+      createInitialSurvivorsState('yoon', {
+        vitality: 0,
+        mobility: 0,
+        intelligence: 0,
+        firstAid: 0,
+        reroll: 2,
+      }),
+    );
+    engine.start();
+
+    // Force levelup via addExp
+    engine.addExp(100);
+    expect(engine.state.phase).toBe('levelup');
+    expect(engine.state.rerollsLeft).toBe(2);
+
+    const firstOptions = [...engine.state.perkOptions];
+    expect(firstOptions.length).toBeGreaterThan(0);
+    const rerolled = engine.rerollPerks();
+    expect(rerolled).toBe(true);
+    expect(engine.state.rerollsLeft).toBe(1);
+    expect(engine.state.perkOptions.length).toBeGreaterThan(0);
+  });
 });
+

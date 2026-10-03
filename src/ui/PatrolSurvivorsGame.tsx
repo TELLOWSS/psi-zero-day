@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Perk, PerkId } from '../domain/patrol-survivors';
+import type {
+  CharacterId,
+  Perk,
+  PerkId,
+  PermanentUpgrades,
+} from '../domain/patrol-survivors';
 import {
+  CHARACTER_PROFILES,
+  DEFAULT_PERMANENT_UPGRADES,
+  EVOLUTION_RECIPES,
   PERK_CATALOG,
   SurvivorsEngine,
   WORLD_HEIGHT,
   WORLD_WIDTH,
+  createInitialSurvivorsState,
 } from '../engine/patrol-survivors-engine';
 import './patrol-survivors.css';
 
@@ -34,6 +43,9 @@ interface Particle {
   maxLife: number;
 }
 
+const STORAGE_KEY_UPGRADES = 'psi.survivors.rd_upgrades';
+const STORAGE_KEY_CREDITS = 'psi.survivors.credits';
+
 export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurvivorsGameProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -49,6 +61,29 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Screen shake
   const screenShakeRef = useRef<number>(0);
+
+  // Meta Progression (Stored in LocalStorage)
+  const [selectedChar, setSelectedChar] = useState<CharacterId>('yoon');
+  const [permanentUpgrades, setPermanentUpgrades] = useState<PermanentUpgrades>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_UPGRADES);
+      return saved ? JSON.parse(saved) : DEFAULT_PERMANENT_UPGRADES;
+    } catch {
+      return DEFAULT_PERMANENT_UPGRADES;
+    }
+  });
+  const [psiCredits, setPsiCredits] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_CREDITS);
+      return saved ? Number(saved) : 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  // Modal Views in Ready screen
+  const [showRdModal, setShowRdModal] = useState(false);
+  const [showArsenalModal, setShowArsenalModal] = useState(false);
 
   // Virtual Touch Joystick state
   const touchIdRef = useRef<number | null>(null);
@@ -79,6 +114,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [score, setScore] = useState(0);
   const [kills, setKills] = useState(0);
   const [perkOptions, setPerkOptions] = useState<Perk[]>([]);
+  const [rerollsLeft, setRerollsLeft] = useState(0);
   const [activePerks, setActivePerks] = useState<Record<PerkId, number>>({
     radio_boost: 1,
     extinguisher: 0,
@@ -89,10 +125,34 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     magnet_beacon: 0,
     safety_harness: 0,
     quick_reflexes: 0,
+    data_chip: 0,
+    satellite_broadcast: 0,
+    cryo_blizzard: 0,
+    tesla_dome: 0,
+    emf_barricade: 0,
+    hunter_swarm: 0,
   });
 
-  // Simple procedural Web Audio SFX
-  const playSfx = useCallback((type: 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win') => {
+  // Ultimate Director Roar & Boss Alert Mirrors
+  const [ultimateCharge, setUltimateCharge] = useState(0);
+  const [directorCutinPhase, setDirectorCutinPhase] = useState<'none' | 'cutin' | 'shout' | 'invert' | 'recovering'>('none');
+  const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string } | null>(null);
+  const [bossAlert, setBossAlert] = useState<string | null>(null);
+
+  // Save Meta Progress to LocalStorage
+  const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number) => {
+    setPermanentUpgrades(newUpgrades);
+    setPsiCredits(newCredits);
+    try {
+      localStorage.setItem(STORAGE_KEY_UPGRADES, JSON.stringify(newUpgrades));
+      localStorage.setItem(STORAGE_KEY_CREDITS, String(newCredits));
+    } catch {
+      // LocalStorage unavailable
+    }
+  };
+
+  // Web Audio Pro Synthesizer (Commercial Grade Sound FX)
+  const playSfx = useCallback((type: 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution') => {
     if (audioMuted) return;
     try {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -103,94 +163,177 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (type === 'shoot') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(150, now + 0.12);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.1);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.12);
-      } else if (type === 'pickup') {
+        osc.stop(now + 0.1);
+      } else if (type === 'laser') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(350, now + 0.09);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.09);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.08);
+        osc.stop(now + 0.09);
+      } else if (type === 'spray') {
+        const bufferSize = ctx.sampleRate * 0.15;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+        noise.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start(now);
+      } else if (type === 'pickup') {
+        [659.25, 1046.5].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const t = now + i * 0.04;
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.18, t);
+          gain.gain.exponentialRampToValueAtTime(0.005, t + 0.14);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.14);
+        });
       } else if (type === 'levelup') {
-        const notes = [440, 554, 659, 880];
+        const notes = [440, 554.37, 659.25, 880, 1108.73];
         notes.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           const t = now + idx * 0.07;
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(freq, t);
-          gain.gain.setValueAtTime(0.25, t);
-          gain.gain.linearRampToValueAtTime(0.01, t + 0.2);
+          gain.gain.setValueAtTime(0.28, t);
+          gain.gain.linearRampToValueAtTime(0.01, t + 0.28);
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(t);
-          osc.stop(t + 0.2);
+          osc.stop(t + 0.28);
+        });
+      } else if (type === 'shout') {
+        // Massive bass boom + siren sweep + distorted megaphone thunder
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.8);
+        gain.gain.setValueAtTime(0.65, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.8);
+
+        // Second resonant harmonic
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'square';
+        osc2.frequency.setValueAtTime(320, now);
+        osc2.frequency.exponentialRampToValueAtTime(80, now + 0.5);
+        gain2.gain.setValueAtTime(0.4, now);
+        gain2.gain.linearRampToValueAtTime(0.01, now + 0.5);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now);
+        osc2.stop(now + 0.5);
+      } else if (type === 'evolution') {
+        // Epic Ascension Major Chime
+        const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98];
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const t = now + idx * 0.06;
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.3, t);
+          gain.gain.exponentialRampToValueAtTime(0.005, t + 0.45);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.45);
         });
       } else if (type === 'hit') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(140, now);
-        osc.frequency.linearRampToValueAtTime(40, now + 0.15);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.14);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.14);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.15);
+        osc.stop(now + 0.14);
+      } else if (type === 'boss_alarm') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.linearRampToValueAtTime(640, now + 0.2);
+        osc.frequency.linearRampToValueAtTime(320, now + 0.4);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
       }
     } catch {
-      // AudioContext blocked or not supported
+      // AudioContext blocked
     }
   }, [audioMuted]);
 
-  // Spawn floating number
-  const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24') => {
+  // Floating text & particle helpers
+  const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24', isCrit = false) => {
     floatingTextsRef.current.push({
       id: floatingIdRef.current++,
       x,
       y,
-      text,
-      color,
-      life: 0.8,
-      maxLife: 0.8,
+      text: isCrit ? `CRIT! ${text}` : text,
+      color: isCrit ? '#f43f5e' : color,
+      life: isCrit ? 1.0 : 0.75,
+      maxLife: isCrit ? 1.0 : 0.75,
     });
   };
 
-  // Spawn impact / dust particles
-  const spawnParticles = (x: number, y: number, color: string, count = 8, speed = 60) => {
+  const spawnParticles = (x: number, y: number, color: string, count = 8, speed = 60, size = 3) => {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const spd = (0.3 + Math.random() * 0.7) * speed;
+      const spd = (0.2 + Math.random() * 0.8) * speed;
       particlesRef.current.push({
         x,
         y,
         vx: Math.cos(angle) * spd,
         vy: Math.sin(angle) * spd,
         color,
-        size: 2 + Math.random() * 3,
-        life: 0.4 + Math.random() * 0.3,
+        size: Math.max(1.5, (0.6 + Math.random() * 0.8) * size),
+        life: 0.35 + Math.random() * 0.35,
         maxLife: 0.7,
       });
     }
   };
 
-  // Initialize Game Engine
-  const initGame = useCallback(() => {
-    const engine = new SurvivorsEngine();
+  // Initialize Game Engine with selected character & permanent upgrades
+  const initGame = useCallback((charId: CharacterId = selectedChar) => {
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades));
     engineRef.current = engine;
     touchVectorRef.current = { x: 0, y: 0 };
     touchIdRef.current = null;
@@ -198,19 +341,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setJoystickVisual({ visible: false, baseX: 0, baseY: 0, knobX: 0, knobY: 0 });
     setPhase('ready');
     setLevel(1);
-    setHp(100);
-    setMaxHp(100);
+    setHp(engine.state.player.hp);
+    setMaxHp(engine.state.player.maxHp);
     setExp(0);
     setNextExp(10);
     setGameTime(0);
     setScore(0);
     setKills(0);
+    setUltimateCharge(0);
+    setDirectorCutinPhase('none');
+    setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
-  }, []);
+  }, [selectedChar, permanentUpgrades]);
 
   useEffect(() => {
-    initGame();
-  }, [initGame]);
+    initGame(selectedChar);
+  }, [initGame, selectedChar]);
 
   const startGame = () => {
     if (!engineRef.current) return;
@@ -219,15 +365,52 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     lastTimeRef.current = performance.now();
   };
 
+  // Trigger Director Roaring Shout Ultimate
+  const handleTriggerDirectorShout = () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (engine.state.ultimateCharge < engine.state.maxUltimateCharge) return;
+
+    const ok = engine.triggerDirectorShout();
+    if (ok) {
+      playSfx('shout');
+      screenShakeRef.current = 24;
+      spawnParticles(engine.state.player.x, engine.state.player.y, '#f59e0b', 40, 160, 5);
+      spawnFloating(engine.state.player.x, engine.state.player.y - 40, '🚨 소장 샤우팅 발동!! 🚨', '#f59e0b', true);
+    }
+  };
+
   // Perk Selection handler
   const handleSelectPerk = (perkId: PerkId) => {
     const engine = engineRef.current;
     if (!engine) return;
+
+    const meta = PERK_CATALOG[perkId];
     engine.applyPerk(perkId);
-    playSfx('levelup');
+
+    if (meta.category === 'evolution') {
+      playSfx('evolution');
+      screenShakeRef.current = 18;
+      spawnParticles(engine.state.player.x, engine.state.player.y, '#fbbf24', 35, 140, 4);
+    } else {
+      playSfx('levelup');
+      spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', 16, 90, 3);
+    }
+
     setActivePerks({ ...engine.state.activePerks });
     setPhase(engine.state.phase);
     lastTimeRef.current = performance.now();
+  };
+
+  // Reroll handler in Level Up Modal
+  const handleRerollPerks = () => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (engine.rerollPerks()) {
+      playSfx('pickup');
+      setRerollsLeft(engine.state.rerollsLeft);
+      setPerkOptions([...engine.state.perkOptions]);
+    }
   };
 
   // Keyboard Event Handlers
@@ -242,6 +425,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           setPhase(next);
         }
       }
+      if (e.code === 'Space' || e.code === 'KeyF') {
+        handleTriggerDirectorShout();
+      }
+      if (e.code === 'KeyR' && phase === 'levelup') {
+        handleRerollPerks();
+      }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
       keysRef.current[e.code] = false;
@@ -253,7 +442,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  });
 
   // Touch Event Handlers for Mobile Virtual Joystick
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -298,11 +487,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           knobY = touchCenterRef.current.y + Math.sin(angle) * maxRadius;
         }
 
-        setJoystickVisual(prev => ({
-          ...prev,
-          knobX,
-          knobY,
-        }));
+        setJoystickVisual(prev => ({ ...prev, knobX, knobY }));
 
         if (dist > deadzone) {
           const angle = Math.atan2(dy, dx);
@@ -403,11 +588,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setNextExp(engine.state.nextLevelExp);
         setLevel(engine.state.level);
         setGameTime(Math.floor(engine.state.gameTime));
+        setUltimateCharge(Math.round(engine.state.ultimateCharge));
+        setDirectorCutinPhase(engine.state.directorCutinPhase);
+        setEvolutionBanner(engine.state.evolutionBanner ?? null);
+        setBossAlert(engine.state.bossName);
 
         if (engine.state.phase !== 'playing') {
           setPhase(engine.state.phase);
           if (engine.state.phase === 'levelup') {
             setPerkOptions(engine.state.perkOptions);
+            setRerollsLeft(engine.state.rerollsLeft);
+          }
+          if (engine.state.phase === 'victory' || engine.state.phase === 'defeat') {
+            // Save earned credits
+            saveMetaProgress(permanentUpgrades, psiCredits + engine.state.psiCredits);
           }
         }
       }
@@ -448,50 +642,57 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.save();
       ctx.scale(dpr * baseZoom, dpr * baseZoom);
 
-      // Clear background (Industrial Night Concrete floor)
-      ctx.fillStyle = '#0a0e13';
-      ctx.fillRect(0, 0, viewW, viewH);
+      // Invert color flash during Director Shout 'invert' phase
+      if (engine.state.directorCutinPhase === 'invert') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, viewW, viewH);
+      } else {
+        ctx.fillStyle = '#0a0e13';
+        ctx.fillRect(0, 0, viewW, viewH);
+      }
 
       // Translate view to camera
       ctx.translate(-camX, -camY);
 
       // 1. RENDER WORLD FLOOR & GRID
-      const gridSize = 70;
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x <= WORLD_WIDTH; x += gridSize) {
+      const slabSize = 100;
+      ctx.fillStyle = '#0c1219';
+      ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+      ctx.lineWidth = 2;
+      for (let x = 0; x <= WORLD_WIDTH; x += slabSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, WORLD_HEIGHT);
         ctx.stroke();
       }
-      for (let y = 0; y <= WORLD_HEIGHT; y += gridSize) {
+      for (let y = 0; y <= WORLD_HEIGHT; y += slabSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(WORLD_WIDTH, y);
         ctx.stroke();
       }
 
-      // Construction Boundary Stripes (Yellow/Black Hazard Edge)
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 5;
-      ctx.strokeRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-
-      // Warning chevron marks at corners
-      ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
-      ctx.fillRect(0, 0, WORLD_WIDTH, 12);
-      ctx.fillRect(0, WORLD_HEIGHT - 12, WORLD_WIDTH, 12);
-      ctx.fillRect(0, 0, 12, WORLD_HEIGHT);
-      ctx.fillRect(WORLD_WIDTH - 12, 0, 12, WORLD_HEIGHT);
-
-      // 2. DIRECTIONAL FLASHLIGHT BEAM (Headlamp Cone)
+      // Safety perimeter boundary
       ctx.save();
-      const beamDist = 260;
-      const beamHalfAngle = Math.PI / 4.8;
-      const beamGrad = ctx.createRadialGradient(player.x, player.y, 10, player.x, player.y, beamDist);
-      beamGrad.addColorStop(0, 'rgba(254, 240, 138, 0.32)');
-      beamGrad.addColorStop(0.5, 'rgba(253, 224, 71, 0.12)');
-      beamGrad.addColorStop(1, 'rgba(253, 224, 71, 0)');
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.strokeRect(7, 7, WORLD_WIDTH - 14, WORLD_HEIGHT - 14);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)';
+      ctx.strokeRect(18, 18, WORLD_WIDTH - 36, WORLD_HEIGHT - 36);
+      ctx.restore();
+
+      // 2. DIRECTIONAL FLASHLIGHT BEAM
+      ctx.save();
+      const beamDist = 280;
+      const beamHalfAngle = Math.PI / 4.4;
+      const beamGrad = ctx.createRadialGradient(player.x, player.y, 12, player.x, player.y, beamDist);
+      beamGrad.addColorStop(0, 'rgba(254, 240, 138, 0.42)');
+      beamGrad.addColorStop(0.3, 'rgba(253, 224, 71, 0.18)');
+      beamGrad.addColorStop(0.7, 'rgba(250, 204, 21, 0.06)');
+      beamGrad.addColorStop(1, 'rgba(250, 204, 21, 0)');
 
       ctx.fillStyle = beamGrad;
       ctx.beginPath();
@@ -501,226 +702,249 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.fill();
       ctx.restore();
 
-      // 3. FLOODLIGHT AURA (If perk active)
-      if (activePerks.floodlight > 0) {
+      // 3. FLOODLIGHT / TESLA DOME AURA
+      if (activePerks.tesla_dome > 0) {
+        // High voltage electric blue tesla dome
+        ctx.save();
+        const auraRadius = 220;
+        const grad = ctx.createRadialGradient(player.x, player.y, 10, player.x, player.y, auraRadius);
+        grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+        grad.addColorStop(0.6, 'rgba(14, 165, 233, 0.2)');
+        grad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, auraRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.restore();
+      } else if (activePerks.floodlight > 0) {
         const auraRadius = 90 + activePerks.floodlight * 24;
         const grad = ctx.createRadialGradient(player.x, player.y, 10, player.x, player.y, auraRadius);
-        grad.addColorStop(0, 'rgba(251, 191, 36, 0.32)');
-        grad.addColorStop(0.7, 'rgba(245, 158, 11, 0.14)');
+        grad.addColorStop(0, 'rgba(251, 191, 36, 0.35)');
+        grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.16)');
         grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(player.x, player.y, auraRadius, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.strokeStyle = 'rgba(251, 191, 36, 0.45)';
-        ctx.setLineDash([6, 6]);
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.setLineDash([]);
       }
 
       // 4. RENDER DROPS (PSI Safety Logs / Crystals)
       for (const drop of drops) {
         if (drop.isHeal) {
-          // Green Heal Medkit with glow
           ctx.save();
           ctx.shadowColor = '#10b981';
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = 12;
           ctx.fillStyle = '#10b981';
-          ctx.fillRect(drop.x - 8, drop.y - 8, 16, 16);
+          ctx.fillRect(drop.x - 9, drop.y - 9, 18, 18);
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(drop.x - 6, drop.y - 2, 12, 4);
-          ctx.fillRect(drop.x - 2, drop.y - 6, 4, 12);
+          ctx.fillRect(drop.x - 7, drop.y - 2.5, 14, 5);
+          ctx.fillRect(drop.x - 2.5, drop.y - 7, 5, 14);
           ctx.restore();
         } else {
-          // Cyan PSI Data Crystal with pulsing glow
           ctx.save();
           ctx.translate(drop.x, drop.y);
-          const spin = (time / 1000) * 3;
+          const spin = (time / 1000) * 3.5;
           ctx.rotate(spin);
           ctx.fillStyle = '#38bdf8';
           ctx.shadowColor = '#0ea5e9';
-          ctx.shadowBlur = 12;
+          ctx.shadowBlur = 16;
           ctx.beginPath();
-          ctx.moveTo(0, -9);
-          ctx.lineTo(7, 0);
-          ctx.lineTo(0, 9);
-          ctx.lineTo(-7, 0);
+          ctx.moveTo(0, -11);
+          ctx.lineTo(8, 0);
+          ctx.lineTo(0, 11);
+          ctx.lineTo(-8, 0);
           ctx.closePath();
           ctx.fill();
-
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.arc(0, 0, 2.5, 0, Math.PI * 2);
+          ctx.arc(0, 0, 3, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         }
       }
 
-      // 5. RENDER PROJECTILES
+      // 5. RENDER PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
-        if (p.kind === 'radio') {
-          // Golden radio wave ring
+        if (p.kind === 'shout_shockwave') {
+          // Massive expanding golden sonic ring of Site Director's Roar
+          ctx.save();
+          ctx.strokeStyle = '#f59e0b';
+          ctx.shadowColor = '#fbbf24';
+          ctx.shadowBlur = 25;
+          ctx.lineWidth = 12;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(0, p.radius - 10), 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        } else if (p.kind === 'satellite_wave') {
+          // Cosmic expanding sonic ring
+          ctx.save();
+          ctx.strokeStyle = '#38bdf8';
+          ctx.shadowColor = '#0284c7';
+          ctx.shadowBlur = 20;
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        } else if (p.kind === 'cryo_blast') {
+          // Freezing ice blast
+          ctx.save();
+          ctx.fillStyle = 'rgba(165, 243, 252, 0.85)';
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 15;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (p.kind === 'tesla_bolt') {
+          // Electric chain lightning
+          ctx.save();
+          ctx.fillStyle = '#fbbf24';
+          ctx.shadowColor = '#f59e0b';
+          ctx.shadowBlur = 20;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (p.kind === 'emf_beam') {
+          // Magenta laser barricade
+          ctx.save();
+          ctx.fillStyle = '#ec4899';
+          ctx.shadowColor = '#f43f5e';
+          ctx.shadowBlur = 18;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (p.kind === 'hunter_beam') {
+          // Hyper laser sniper
+          ctx.save();
+          ctx.fillStyle = '#a855f7';
+          ctx.shadowColor = '#c084fc';
+          ctx.shadowBlur = 16;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        } else if (p.kind === 'radio') {
           ctx.save();
           ctx.strokeStyle = '#fbbf24';
           ctx.lineWidth = 3.5;
           ctx.shadowColor = '#f59e0b';
-          ctx.shadowBlur = 14;
+          ctx.shadowBlur = 18;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         } else if (p.kind === 'extinguisher') {
-          // White-cyan extinguisher mist
           ctx.save();
-          ctx.fillStyle = 'rgba(224, 242, 254, 0.75)';
-          ctx.shadowColor = '#38bdf8';
-          ctx.shadowBlur = 8;
+          const mistGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+          mistGrad.addColorStop(0, 'rgba(240, 249, 255, 0.85)');
+          mistGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
+          ctx.fillStyle = mistGrad;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         } else if (p.kind === 'drone_laser') {
-          // Cyan high-tech laser beam
           ctx.save();
           ctx.fillStyle = '#06b6d4';
           ctx.shadowColor = '#22d3ee';
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = 14;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.restore();
         } else if (p.kind === 'cone_trap') {
-          // Industrial Traffic Cone
           ctx.save();
           ctx.translate(p.x, p.y);
           ctx.fillStyle = '#ea580c';
-          ctx.shadowColor = '#c2410c';
-          ctx.shadowBlur = 8;
           ctx.beginPath();
-          ctx.moveTo(0, -15);
-          ctx.lineTo(11, 9);
-          ctx.lineTo(-11, 9);
+          ctx.moveTo(0, -16);
+          ctx.lineTo(12, 10);
+          ctx.lineTo(-12, 10);
           ctx.closePath();
           ctx.fill();
-
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(-6, -3, 12, 4);
+          ctx.fillRect(-7, -4, 14, 4.5);
           ctx.restore();
         }
       }
 
-      // 6. RENDER HAZARDS (High-Impact Modern Visuals)
+      // 6. RENDER HAZARDS
       for (const h of hazards) {
         ctx.save();
         ctx.translate(h.x, h.y);
 
         if (h.type === 'UNHELMETED') {
-          // Worker without hard hat: Dark uniform + warning outline
-          ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius + 6, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#374151';
+          ctx.fillStyle = '#334155';
           ctx.beginPath();
           ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.strokeStyle = '#ef4444';
-          ctx.lineWidth = 2.5;
+          ctx.lineWidth = 3;
           ctx.stroke();
 
-          // Black hair (unhelmeted)
-          ctx.fillStyle = '#111827';
+          ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.arc(0, -2, h.radius * 0.55, 0, Math.PI * 2);
+          ctx.arc(0, -3, h.radius * 0.58, 0, Math.PI * 2);
           ctx.fill();
 
-          // Warning badge above
           ctx.fillStyle = '#ef4444';
-          ctx.font = '900 11px sans-serif';
+          ctx.font = '900 13px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('⚠', 0, -h.radius - 12);
+          ctx.fillText('⚠ NO HELMET', 0, -h.radius - 14);
         } else if (h.type === 'RUNAWAY_CART') {
-          // Speeding industrial trolley cart with hazard stripes
           ctx.fillStyle = '#b45309';
           ctx.fillRect(-h.radius, -h.radius + 4, h.radius * 2, h.radius * 2 - 8);
-
-          // Diagonal hazard warning stripes
-          ctx.strokeStyle = '#fbbf24';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(-h.radius + 4, -h.radius + 6);
-          ctx.lineTo(-h.radius + 12, h.radius - 6);
-          ctx.moveTo(-h.radius + 14, -h.radius + 6);
-          ctx.lineTo(-h.radius + 22, h.radius - 6);
-          ctx.stroke();
-
-          // Industrial Wheels
-          ctx.fillStyle = '#111827';
-          ctx.beginPath();
-          ctx.arc(-9, 11, 4.5, 0, Math.PI * 2);
-          ctx.arc(9, 11, 4.5, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.strokeStyle = '#fef08a';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(-h.radius + 2, -h.radius + 6, h.radius * 2 - 4, h.radius * 2 - 12);
         } else if (h.type === 'GAS_LEAK') {
-          // Swirling toxic gas cloud
-          const pulse = Math.sin(time / 200) * 3;
-          const gasGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, h.radius + pulse);
-          gasGrad.addColorStop(0, 'rgba(34, 197, 94, 0.85)');
-          gasGrad.addColorStop(0.6, 'rgba(16, 185, 129, 0.45)');
-          gasGrad.addColorStop(1, 'rgba(5, 150, 105, 0)');
-          ctx.fillStyle = gasGrad;
-          ctx.beginPath();
-          ctx.arc(0, 0, h.radius + pulse, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = '#dcfce7';
-          ctx.font = 'bold 10px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText('GAS', 0, 3);
-        } else if (h.type === 'CRANE_BOSS') {
-          // Heavy industrial crane gantry & hook boss
-          ctx.shadowColor = '#dc2626';
-          ctx.shadowBlur = 18;
-          ctx.fillStyle = '#991b1b';
+          ctx.fillStyle = 'rgba(34, 197, 94, 0.7)';
           ctx.beginPath();
           ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
           ctx.fill();
-          ctx.strokeStyle = '#f87171';
-          ctx.lineWidth = 4;
+        } else if (h.type === 'CRANE_BOSS') {
+          ctx.fillStyle = '#7f1d1d';
+          ctx.beginPath();
+          ctx.arc(0, 0, h.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 5;
           ctx.stroke();
 
-          // Rotating warning beacon on boss
-          const beaconAngle = (time / 150) % (Math.PI * 2);
-          ctx.fillStyle = '#fbbf24';
-          ctx.beginPath();
-          ctx.arc(Math.cos(beaconAngle) * (h.radius - 8), Math.sin(beaconAngle) * (h.radius - 8), 5, 0, Math.PI * 2);
-          ctx.fill();
-
           ctx.fillStyle = '#ffffff';
-          ctx.font = '900 13px sans-serif';
+          ctx.font = '900 14px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('CRANE', 0, 5);
+          ctx.fillText('🚨 TOWER CRANE', 0, 5);
         }
 
-        // Mini HP Bar above hazard
-        const barW = Math.max(24, h.radius * 2);
-        const barH = 5;
+        // Mini HP Bar
+        const barW = Math.max(28, h.radius * 2.2);
+        const barH = 5.5;
         const hpPercent = Math.max(0, h.hp / h.maxHp);
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
         ctx.fillRect(-barW / 2, -h.radius - 8, barW, barH);
-        ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#ef4444' : '#f59e0b';
+        ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
         ctx.fillRect(-barW / 2, -h.radius - 8, barW * hpPercent, barH);
-
         ctx.restore();
       }
 
-      // 7. RENDER PLAYER (High-Vis Safety Officer)
+      // 7. RENDER PLAYER (With Character Visual Styling)
       ctx.save();
       ctx.translate(player.x, player.y);
 
-      // Invincible flash
       if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
         ctx.globalAlpha = 0.45;
       }
@@ -731,73 +955,50 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.ellipse(0, 10, 16, 8, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Body (Navy Field Work Uniform)
+      // Body
+      const charColor = CHARACTER_PROFILES[engine.state.characterId].color;
       ctx.fillStyle = '#1e293b';
       ctx.beginPath();
       ctx.arc(0, 0, 17, 0, Math.PI * 2);
       ctx.fill();
 
-      // Hi-Vis Fluorescent Lime Safety Vest
-      ctx.fillStyle = '#84cc16';
+      // High-Vis Safety Vest
+      ctx.fillStyle = charColor;
       ctx.beginPath();
-      ctx.arc(0, 0, 14, 0, Math.PI * 2);
+      ctx.arc(0, 0, 15, -Math.PI / 3, Math.PI / 3);
       ctx.fill();
 
-      // Retroreflective Silver Stripes
-      ctx.fillStyle = '#f1f5f9';
-      ctx.fillRect(-7, -4, 14, 8);
-
-      // Hard Hat (White Construction Safety Helmet with visor)
-      ctx.fillStyle = '#f8fafc';
-      ctx.shadowColor = '#000000';
-      ctx.shadowBlur = 8;
+      // Hard hat helmet
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = charColor;
+      ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.arc(0, -3, 11, 0, Math.PI * 2);
+      ctx.arc(0, -2, 11, 0, Math.PI * 2);
       ctx.fill();
-
-      // NEW PSI Green Cross Symbol on helmet
-      ctx.fillStyle = '#16a34a';
-      ctx.fillRect(-4, -4, 8, 2.5);
-      ctx.fillRect(-1.25, -7, 2.5, 8);
 
       ctx.restore();
 
-      // 8. RENDER SAFETY DRONE (If active)
-      if (activePerks.safety_drone > 0 && engine.state.droneAngle !== undefined) {
-        const droneDist = 65;
-        const dX = player.x + Math.cos(engine.state.droneAngle) * droneDist;
-        const dY = player.y + Math.sin(engine.state.droneAngle) * droneDist;
+      // 8. RENDER SAFETY DRONES (Single or Hunter Swarm)
+      const hasHunter = activePerks.hunter_swarm > 0;
+      const droneCount = hasHunter ? 3 : activePerks.safety_drone > 0 ? 1 : 0;
+      if (droneCount > 0 && engine.state.droneAngle !== undefined) {
+        for (let d = 0; d < droneCount; d++) {
+          const a = (engine.state.droneAngle ?? 0) + (d * Math.PI * 2) / droneCount;
+          const dist = hasHunter ? 85 : 65;
+          const dX = player.x + Math.cos(a) * dist;
+          const dY = player.y + Math.sin(a) * dist;
 
-        ctx.save();
-        ctx.translate(dX, dY);
-
-        // Drone body
-        ctx.fillStyle = '#0f172a';
-        ctx.beginPath();
-        ctx.arc(0, 0, 9, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-
-        // 4 Rotor arms & spinning blades
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 4; i++) {
-          const a = (i * Math.PI) / 2 + (time / 80);
+          ctx.save();
+          ctx.translate(dX, dY);
+          ctx.fillStyle = '#0f172a';
           ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(Math.cos(a) * 11, Math.sin(a) * 11);
+          ctx.arc(0, 0, 9, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = hasHunter ? '#a855f7' : '#38bdf8';
+          ctx.lineWidth = 2.5;
           ctx.stroke();
+          ctx.restore();
         }
-
-        // Green scanning sensor LED
-        ctx.fillStyle = '#22c55e';
-        ctx.beginPath();
-        ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.restore();
       }
 
       // 9. RENDER PARTICLES
@@ -839,7 +1040,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       floatingTextsRef.current = aliveTexts;
 
-      ctx.restore(); // Restore camera translation & scaling
+      ctx.restore();
 
       requestRef.current = requestAnimationFrame(renderLoop);
     };
@@ -848,9 +1049,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [playSfx]);
+  }, [playSfx, permanentUpgrades, psiCredits]);
 
-  // Format time as MM:SS
+  // Format time MM:SS
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -876,7 +1077,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {/* TOP COMPACT HUD */}
       <header className="survivors-hud-top" role="toolbar" aria-label="순찰 상황판">
-        {/* PLAYER STATUS & HP */}
         <div className="survivors-player-hud">
           <div className="survivors-hp-container">
             <span className="survivors-level-tag">LV {level}</span>
@@ -890,7 +1090,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
         </div>
 
-        {/* TIMER & SCORE */}
         <div className="survivors-hud-center">
           <div className="survivors-timer">
             <strong>{formatTime(gameTime)}</strong>
@@ -906,7 +1105,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
         </div>
 
-        {/* TOP ACTIONS */}
         <div className="survivors-top-actions">
           <button
             type="button"
@@ -928,6 +1126,29 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
+      {/* BOSS ALERT BANNER */}
+      {bossAlert && (
+        <div className="survivors-boss-alert" role="alert">
+          <span className="survivors-hazard-stripe" />
+          <div className="survivors-boss-alert-text">
+            <strong>⚠️ EMERGENCY: {bossAlert} 출현! ⚠️</strong>
+            <small>모든 화력을 집중하여 중대사고를 방지하세요!</small>
+          </div>
+          <span className="survivors-hazard-stripe" />
+        </div>
+      )}
+
+      {/* SUPER PROTOCOL EVOLUTION BANNER */}
+      {evolutionBanner && (
+        <div className="survivors-evo-banner" role="status">
+          <div className="survivors-evo-banner-icon">{evolutionBanner.icon}</div>
+          <div className="survivors-evo-banner-content">
+            <h4>{evolutionBanner.title}</h4>
+            <p>{evolutionBanner.subtitle}</p>
+          </div>
+        </div>
+      )}
+
       {/* ACTIVE PERKS TRAY */}
       <div className="survivors-perks-tray">
         {(Object.entries(activePerks) as [PerkId, number][])
@@ -940,10 +1161,49 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ))}
       </div>
 
+      {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
+      {phase === 'playing' && (
+        <div className="survivors-ultimate-control">
+          <button
+            type="button"
+            className={`survivors-ultimate-btn ${ultimateCharge >= 100 ? 'is-ready' : ''}`}
+            onClick={handleTriggerDirectorShout}
+            disabled={ultimateCharge < 100}
+            aria-label="현장소장 사자후 궁극기 발동"
+          >
+            <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as React.CSSProperties} />
+            <span className="survivors-ultimate-icon">📢</span>
+            <div className="survivors-ultimate-info">
+              <strong>소장 샤우팅</strong>
+              <small>{ultimateCharge >= 100 ? 'READY [Space/F]' : `${ultimateCharge}%`}</small>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* FULL-SCREEN CINEMATIC DIRECTOR CUT-IN OVERLAY */}
+      {directorCutinPhase !== 'none' && (
+        <div className={`survivors-director-cutin-layer phase-${directorCutinPhase}`} aria-live="assertive">
+          <div className="survivors-cutin-speedlines" />
+          <div className="survivors-cutin-diagonal-banner">
+            <img
+              src="/assets/episode01/characters/lee-jaehoon-portrait.webp"
+              alt="현장소장 이재훈"
+              className="survivors-cutin-portrait"
+            />
+            <div className="survivors-cutin-textbox">
+              <span className="survivors-cutin-kicker">🚨 현 장 소 장  전 권  발 동 🚨</span>
+              <h2 className="survivors-cutin-shout">"작업 중지! 전원 멈춰어어엇---!!"</h2>
+              <p className="survivors-cutin-sub">모든 위험 강제 무력화 및 전 구역 안전 데이터 강제 회수</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* MAIN GAME CANVAS */}
       <canvas ref={canvasRef} className="survivors-canvas" />
 
-      {/* MOBILE VIRTUAL JOYSTICK (VISIBLE ON TOUCH) */}
+      {/* MOBILE VIRTUAL JOYSTICK */}
       {joystickVisual.visible && (
         <div
           className="survivors-touch-joystick"
@@ -964,32 +1224,56 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       )}
 
-      {/* MOBILE TOUCH HINT (BOTTOM CORNER) */}
-      {phase === 'playing' && !joystickVisual.visible && (
-        <div className="survivors-mobile-touch-hint" aria-hidden="true">
-          <span>🕹️ 화면을 터치해 이동</span>
-        </div>
-      )}
-
-      {/* READY / START MODAL */}
-      {phase === 'ready' && (
+      {/* READY / START SCREEN WITH CHARACTER SELECT */}
+      {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
+          <div className="survivors-modal-content survivors-ready-dialog">
             <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
             <p className="survivors-modal-sub">
-              야간 타설 공사 중 쏟아지는 현장 위험 요소들을 직접 누비며 제압하고 3분간 무사고를 달성하세요!
+              야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
             </p>
 
+            {/* CHARACTER SELECTOR */}
+            <div className="survivors-char-select-section">
+              <span className="survivors-section-label">순찰 요원 선택</span>
+              <div className="survivors-char-cards">
+                {(Object.values(CHARACTER_PROFILES)).map(char => (
+                  <button
+                    key={char.id}
+                    type="button"
+                    className={`survivors-char-card ${selectedChar === char.id ? 'is-selected' : ''}`}
+                    onClick={() => {
+                      setSelectedChar(char.id);
+                      initGame(char.id);
+                    }}
+                  >
+                    <span className="survivors-char-avatar">{char.avatar}</span>
+                    <strong style={{ color: char.color }}>{char.name}</strong>
+                    <small>{char.role}</small>
+                    <p>{char.description}</p>
+                    <div className="survivors-char-weapon-tag">
+                      시작: {PERK_CATALOG[char.startingWeapon].name}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="survivors-controls-guide">
-              <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>방향키</kbd> 또는 <strong>화면 터치 드래그</strong> : 안전관리자 이동</div>
-              <div>📢 <strong>자동 요격</strong>: 접근하는 위험에 무전 경고 및 소화기 자동 발사</div>
-              <div>💎 <strong>안전 기록(PSI 큐브)</strong>: 위험 제압 후 떨어지는 데이터를 모아 레벨업 & 안전 도구 강화</div>
-              <div><kbd>P</kbd> / <kbd>ESC</kbd> : 게임 일시정지</div>
+              <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
+              <div>⚡ <strong>소장 샤우팅</strong>: <kbd>Space</kbd> / <kbd>F</kbd> (전화면 1.5초 시공간 정지 & 전리품 흡수)</div>
+              <div>💼 <strong>보유 안전 크레딧</strong>: <strong>{psiCredits.toLocaleString()} PSI</strong></div>
             </div>
 
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-primary" onClick={startGame}>
                 순찰 시작하기
+              </button>
+              <button type="button" className="survivors-btn-secondary" onClick={() => setShowRdModal(true)}>
+                🔬 R&D 연구소
+              </button>
+              <button type="button" className="survivors-btn-secondary" onClick={() => setShowArsenalModal(true)}>
+                📖 무기 진화 도감
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={onExit}>
                 취소
@@ -999,33 +1283,212 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       )}
 
-      {/* LEVEL UP MODAL (3-Choice Perk Selection) */}
+      {/* R&D RESEARCH LAB MODAL */}
+      {showRdModal && (
+        <div className="survivors-modal-backdrop">
+          <div className="survivors-modal-content">
+            <h2 className="survivors-modal-title is-gold">🔬 R&D 안전 본부 영구 강화</h2>
+            <p className="survivors-modal-sub">
+              누적된 안전 크레딧으로 안전관리자의 기본 역량을 영구 업그레이드하세요!
+            </p>
+            <div className="survivors-credit-counter">
+              보유 크레딧: <strong>{psiCredits.toLocaleString()} PSI</strong>
+            </div>
+
+            <div className="survivors-rd-grid">
+              <div className="survivors-rd-item">
+                <div>
+                  <strong>기본 생명력 (Vitality)</strong>
+                  <small>최대 HP +15 (현재 Lv.{permanentUpgrades.vitality}/5)</small>
+                </div>
+                <button
+                  type="button"
+                  disabled={permanentUpgrades.vitality >= 5 || psiCredits < 200}
+                  onClick={() => {
+                    if (psiCredits >= 200 && permanentUpgrades.vitality < 5) {
+                      saveMetaProgress(
+                        { ...permanentUpgrades, vitality: permanentUpgrades.vitality + 1 },
+                        psiCredits - 200,
+                      );
+                    }
+                  }}
+                >
+                  강화 (200 PSI)
+                </button>
+              </div>
+
+              <div className="survivors-rd-item">
+                <div>
+                  <strong>신속 기동 (Mobility)</strong>
+                  <small>기본 이동속도 +15 (현재 Lv.{permanentUpgrades.mobility}/5)</small>
+                </div>
+                <button
+                  type="button"
+                  disabled={permanentUpgrades.mobility >= 5 || psiCredits < 250}
+                  onClick={() => {
+                    if (psiCredits >= 250 && permanentUpgrades.mobility < 5) {
+                      saveMetaProgress(
+                        { ...permanentUpgrades, mobility: permanentUpgrades.mobility + 1 },
+                        psiCredits - 250,
+                      );
+                    }
+                  }}
+                >
+                  강화 (250 PSI)
+                </button>
+              </div>
+
+              <div className="survivors-rd-item">
+                <div>
+                  <strong>위기 분석력 (Intelligence)</strong>
+                  <small>데이터 흡수 반경 +20 (현재 Lv.{permanentUpgrades.intelligence}/5)</small>
+                </div>
+                <button
+                  type="button"
+                  disabled={permanentUpgrades.intelligence >= 5 || psiCredits < 300}
+                  onClick={() => {
+                    if (psiCredits >= 300 && permanentUpgrades.intelligence < 5) {
+                      saveMetaProgress(
+                        { ...permanentUpgrades, intelligence: permanentUpgrades.intelligence + 1 },
+                        psiCredits - 300,
+                      );
+                    }
+                  }}
+                >
+                  강화 (300 PSI)
+                </button>
+              </div>
+
+              <div className="survivors-rd-item">
+                <div>
+                  <strong>긴급 처치 키트 (First Aid)</strong>
+                  <small>런당 1회 사망 시 50% HP로 부활 ({permanentUpgrades.firstAid > 0 ? '해금 완료' : '미보유'})</small>
+                </div>
+                <button
+                  type="button"
+                  disabled={permanentUpgrades.firstAid >= 1 || psiCredits < 1000}
+                  onClick={() => {
+                    if (psiCredits >= 1000 && permanentUpgrades.firstAid === 0) {
+                      saveMetaProgress(
+                        { ...permanentUpgrades, firstAid: 1 },
+                        psiCredits - 1000,
+                      );
+                    }
+                  }}
+                >
+                  {permanentUpgrades.firstAid > 0 ? '완료' : '해금 (1,000 PSI)'}
+                </button>
+              </div>
+
+              <div className="survivors-rd-item">
+                <div>
+                  <strong>현장 재검토 (Reroll)</strong>
+                  <small>레벨업 퍽 새로고침 기회 +1회 (현재 Lv.{permanentUpgrades.reroll}/3)</small>
+                </div>
+                <button
+                  type="button"
+                  disabled={permanentUpgrades.reroll >= 3 || psiCredits < 500}
+                  onClick={() => {
+                    if (psiCredits >= 500 && permanentUpgrades.reroll < 3) {
+                      saveMetaProgress(
+                        { ...permanentUpgrades, reroll: permanentUpgrades.reroll + 1 },
+                        psiCredits - 500,
+                      );
+                    }
+                  }}
+                >
+                  강화 (500 PSI)
+                </button>
+              </div>
+            </div>
+
+            <div className="survivors-actions-row">
+              <button type="button" className="survivors-btn-primary" onClick={() => setShowRdModal(false)}>
+                완료 및 닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ARSENAL & EVOLUTION ARCHIVE MODAL */}
+      {showArsenalModal && (
+        <div className="survivors-modal-backdrop">
+          <div className="survivors-modal-content">
+            <h2 className="survivors-modal-title is-gold">📖 안전 장비 & 5대 슈퍼 프로토콜 진화 도감</h2>
+            <p className="survivors-modal-sub">
+              기본 무기 Lv.5 + 지원 퍽을 습득하면 최강의 진화 무기(Super Protocol)가 발동됩니다!
+            </p>
+
+            <div className="survivors-recipes-grid">
+              {(Object.entries(EVOLUTION_RECIPES)).map(([evoId, recipe]) => {
+                const evo = PERK_CATALOG[evoId as PerkId];
+                const weapon = PERK_CATALOG[recipe.weapon];
+                const support = PERK_CATALOG[recipe.support];
+                return (
+                  <div key={evoId} className="survivors-recipe-card">
+                    <div className="survivors-recipe-head">
+                      <span>{evo.icon}</span>
+                      <h4>{evo.name}</h4>
+                    </div>
+                    <div className="survivors-recipe-parts">
+                      <span className="survivors-recipe-part">{weapon.icon} {weapon.name} (Lv.5)</span>
+                      <b>+</b>
+                      <span className="survivors-recipe-part">{support.icon} {support.name}</span>
+                    </div>
+                    <p>{evo.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="survivors-actions-row">
+              <button type="button" className="survivors-btn-primary" onClick={() => setShowArsenalModal(false)}>
+                도감 닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LEVEL UP MODAL */}
       {phase === 'levelup' && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title is-gold">⚡ 안전 장비 & 역량 강화</h2>
             <p className="survivors-modal-sub">
-              현장 안전 데이터 확보! 보급받을 안전 장비 또는 훈련을 선택하세요.
+              현장 안전 데이터 확보! 보급받을 안전 장비 또는 슈퍼 프로토콜을 선택하세요.
             </p>
 
             <div className="survivors-perk-cards">
-              {perkOptions.map(perk => (
-                <div
-                  key={perk.id}
-                  className="survivors-perk-card"
-                  onClick={() => handleSelectPerk(perk.id)}
-                >
-                  <div className="survivors-perk-card-icon">{perk.icon}</div>
-                  <div className="survivors-perk-card-info">
-                    <h4>
-                      {perk.name}
-                      <span>LV {perk.level}</span>
-                    </h4>
-                    <p>{perk.description}</p>
+              {perkOptions.map(perk => {
+                const isEvo = perk.category === 'evolution';
+                return (
+                  <div
+                    key={perk.id}
+                    className={`survivors-perk-card ${isEvo ? 'is-evolution' : ''}`}
+                    onClick={() => handleSelectPerk(perk.id)}
+                  >
+                    <div className="survivors-perk-card-icon">{perk.icon}</div>
+                    <div className="survivors-perk-card-info">
+                      <h4>
+                        {perk.name}
+                        <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
+                      </h4>
+                      <p>{perk.description}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+
+            {rerollsLeft > 0 && (
+              <div className="survivors-reroll-wrap">
+                <button type="button" className="survivors-btn-reroll" onClick={handleRerollPerks}>
+                  🎲 퍽 새로고침 (REROLL) — 잔여 {rerollsLeft}회 [R]
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1081,8 +1544,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 <strong>{kills}건</strong>
               </div>
               <div className="survivors-stat-box">
-                <span>도달 안전 등급</span>
-                <strong>LV {level}</strong>
+                <span>획득 PSI 크레딧</span>
+                <strong style={{ color: '#fbbf24' }}>+{Math.round(score / 15)} PSI</strong>
               </div>
             </div>
 
@@ -1091,7 +1554,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 type="button"
                 className="survivors-btn-primary"
                 onClick={() => {
-                  initGame();
+                  initGame(selectedChar);
                   setTimeout(() => startGame(), 50);
                 }}
               >
@@ -1128,8 +1591,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 <strong>{kills}건</strong>
               </div>
               <div className="survivors-stat-box">
-                <span>최종 장비 레벨</span>
-                <strong>LV {level}</strong>
+                <span>획득 PSI 크레딧</span>
+                <strong style={{ color: '#fbbf24' }}>+{Math.round(score / 10)} PSI</strong>
               </div>
             </div>
 
@@ -1138,7 +1601,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 type="button"
                 className="survivors-btn-primary"
                 onClick={() => {
-                  initGame();
+                  initGame(selectedChar);
                   setTimeout(() => startGame(), 50);
                 }}
               >

@@ -689,3 +689,632 @@
     padding: 12px;
   }
 }
+
+/* ==========================================================================
+   DIRECTOR CUT-IN ANIMATION & SHOUT SYSTEM
+   ========================================================================== */
+
+.survivors-director-cutin-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.survivors-director-cutin-layer.phase-cutin {
+  background: rgba(0, 0, 0, 0.65);
+  animation: cutinBgFade 0.25s ease-out forwards;
+}
+
+.survivors-director-cutin-layer.phase-shout {
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.survivors-director-cutin-layer.phase-invert {
+  background: #ffffff;
+  mix-blend-mode: difference;
+  animation: flashInvert 0.15s ease-out;
+}
+
+.survivors-director-cutin-layer.phase-recovering {
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+@keyframes cutinBgFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes flashInvert {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Concentric Anime Speedlines */
+.survivors-cutin-speedlines {
+  position: absolute;
+  inset: -50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(245, 158, 11, 0.15) 0deg 2deg,
+    transparent 2deg 8deg
+  );
+  animation: speedlinesSpin 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes speedlinesSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Diagonal Anime Slash Banner */
+.survivors-cutin-diagonal-banner {
+  position: relative;
+  width: 120%;
+  height: 220px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.95) 0%,
+    rgba(180, 83, 9, 0.92) 40%,
+    rgba(220, 38, 38, 0.95) 100%
+  );
+  border-top: 4px solid #fbbf24;
+  border-bottom: 4px solid #fbbf24;
+  box-shadow: 0 0 45px rgba(245, 158, 11, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.6);
+  transform: rotate(-3deg) scaleY(0);
+  animation: bannerSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 0 60px;
+}
+
+@keyframes bannerSlideIn {
+  0% {
+    transform: rotate(-3deg) scaleY(0) translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-3deg) scaleY(1) translateX(0);
+    opacity: 1;
+  }
+}
+
+.survivors-cutin-portrait {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fbbf24;
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.85);
+  animation: portraitPunchIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
+}
+
+@keyframes portraitPunchIn {
+  0% {
+    transform: scale(0.4) rotate(-15deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.survivors-cutin-textbox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.survivors-cutin-kicker {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fef08a;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 3px 10px;
+  border-radius: 6px;
+  align-self: flex-start;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  animation: kickerPulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes kickerPulse {
+  0% { transform: scale(0.98); }
+  100% { transform: scale(1.03); }
+}
+
+.survivors-cutin-shout {
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 30%, #fef08a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.9));
+  animation: shoutSlam 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both;
+}
+
+@keyframes shoutSlam {
+  0% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.survivors-cutin-sub {
+  font-size: 14px;
+  color: #fed7aa;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   ULTIMATE CONTROLLER BUTTON (HUD)
+   ========================================================================== */
+
+.survivors-ultimate-control {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+}
+
+.survivors-ultimate-btn {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1e293b 30%, #0f172a 100%);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.survivors-ultimate-btn.is-ready {
+  border-color: #fbbf24;
+  background: radial-gradient(circle, #b45309 20%, #78350f 100%);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.8), 0 0 50px rgba(245, 158, 11, 0.3);
+  animation: ultReadyPulse 1.2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes ultReadyPulse {
+  0% { transform: scale(1); box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+  50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(245, 158, 11, 1); }
+  100% { transform: scale(1); box-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+}
+
+.survivors-ultimate-btn:active {
+  transform: scale(0.92);
+}
+
+.survivors-ultimate-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.survivors-ultimate-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 9px;
+  color: #fef08a;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.survivors-ultimate-info small {
+  font-size: 8px;
+  color: #94a3b8;
+}
+
+.survivors-ultimate-btn.is-ready .survivors-ultimate-info small {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   BOSS ALERT & EVOLUTION BANNERS
+   ========================================================================== */
+
+.survivors-boss-alert {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 32px), 720px);
+  background: rgba(127, 29, 29, 0.92);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.7);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 35;
+  animation: alertBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes alertBounce {
+  0% { transform: translate(-50%, -30px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.survivors-hazard-stripe {
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ef4444,
+    #ef4444 12px,
+    #000000 12px,
+    #000000 24px
+  );
+  animation: stripeMove 1s linear infinite;
+}
+
+@keyframes stripeMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 34px 0; }
+}
+
+.survivors-boss-alert-text {
+  padding: 10px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.survivors-boss-alert-text strong {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.survivors-boss-alert-text small {
+  color: #fca5a5;
+  font-size: 12px;
+}
+
+/* Super Protocol Evolution Announcement */
+.survivors-evo-banner {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.95), rgba(88, 28, 135, 0.95));
+  border: 2px solid #fbbf24;
+  border-radius: 16px;
+  box-shadow: 0 0 35px rgba(251, 191, 36, 0.75);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 36;
+  animation: evoPopup 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes evoPopup {
+  0% { transform: translate(-50%, -40px) scale(0.8); opacity: 0; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+.survivors-evo-banner-icon {
+  font-size: 38px;
+  filter: drop-shadow(0 0 10px #fbbf24);
+}
+
+.survivors-evo-banner-content h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #fbbf24;
+}
+
+.survivors-evo-banner-content p {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #e2e8f0;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   CHARACTER SELECTION & READY SCREEN
+   ========================================================================== */
+
+.survivors-ready-dialog {
+  max-width: 820px !important;
+}
+
+.survivors-char-select-section {
+  width: 100%;
+  margin: 14px 0;
+}
+
+.survivors-section-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.survivors-char-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 680px) {
+  .survivors-char-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.survivors-char-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.survivors-char-card:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(245, 158, 11, 0.5);
+  transform: translateY(-2px);
+}
+
+.survivors-char-card.is-selected {
+  border-color: #fbbf24;
+  background: rgba(30, 41, 59, 0.95);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.survivors-char-avatar {
+  font-size: 36px;
+  margin-bottom: 6px;
+}
+
+.survivors-char-card strong {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.survivors-char-card small {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.survivors-char-card p {
+  font-size: 11px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  margin: 0 0 10px 0;
+}
+
+.survivors-char-weapon-tag {
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fef08a;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* ==========================================================================
+   R&D RESEARCH LAB & ARSENAL MODAL
+   ========================================================================== */
+
+.survivors-credit-counter {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 8px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.survivors-credit-counter strong {
+  color: #fbbf24;
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+.survivors-rd-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  margin-bottom: 18px;
+}
+
+.survivors-rd-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  gap: 12px;
+}
+
+.survivors-rd-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.survivors-rd-item strong {
+  font-size: 14px;
+  color: #f8fafc;
+}
+
+.survivors-rd-item small {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.survivors-rd-item button {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  border: 1px solid #38bdf8;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.survivors-rd-item button:hover:not(:disabled) {
+  background: #0ea5e9;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.survivors-rd-item button:disabled {
+  background: #334155;
+  border-color: #475569;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* Arsenal Recipes Grid */
+.survivors-recipes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 420px;
+  overflow-y: auto;
+  margin-bottom: 18px;
+}
+
+.survivors-recipe-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.survivors-recipe-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.survivors-recipe-head span {
+  font-size: 22px;
+}
+
+.survivors-recipe-head h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 900;
+  color: #fbbf24;
+}
+
+.survivors-recipe-parts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.survivors-recipe-part {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.survivors-recipe-card p {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   LEVEL UP EVOLUTION CARDS & REROLL
+   ========================================================================== */
+
+.survivors-perk-card.is-evolution {
+  border-color: #fbbf24;
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.9), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);
+}
+
+.survivors-perk-card.is-evolution .survivors-perk-card-icon {
+  background: #fbbf24;
+  color: #000000;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.8);
+}
+
+.survivors-reroll-wrap {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.survivors-btn-reroll {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  color: #fef08a;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.survivors-btn-reroll:hover {
+  background: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+}
+

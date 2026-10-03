@@ -68,4 +68,67 @@ describe('PatrolSurvivorsGame UI', () => {
       host.remove();
     }
   });
+
+  it('allows character selection and opening R&D and Arsenal modals', () => {
+    const handleExit = vi.fn();
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const root = createRoot(host);
+
+    try {
+      act(() => {
+        root.render(<PatrolSurvivorsGame onExit={handleExit} audioMuted={true} />);
+      });
+
+      // Verify 3 character selection cards exist
+      expect(host.textContent).toContain('윤재호');
+      expect(host.textContent).toContain('박기철');
+      expect(host.textContent).toContain('정민주');
+
+      // Click Park Ki-cheol
+      const parkBtn = Array.from(host.querySelectorAll('.survivors-char-card')).find(
+        card => card.textContent?.includes('박기철'),
+      ) as HTMLButtonElement | undefined;
+      expect(parkBtn).toBeDefined();
+
+      act(() => {
+        parkBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(parkBtn?.className).toContain('is-selected');
+
+      // Click R&D Lab button
+      const rdBtn = Array.from(host.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('R&D 연구소'),
+      );
+      expect(rdBtn).toBeDefined();
+      act(() => {
+        rdBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(host.textContent).toContain('R&D 안전 본부 영구 강화');
+
+      // Close R&D modal
+      const closeRdBtn = Array.from(host.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('완료 및 닫기'),
+      );
+      act(() => {
+        closeRdBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+
+      // Click Arsenal modal button
+      const arsenalBtn = Array.from(host.querySelectorAll('button')).find(
+        btn => btn.textContent?.includes('무기 진화 도감'),
+      );
+      expect(arsenalBtn).toBeDefined();
+      act(() => {
+        arsenalBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      });
+      expect(host.textContent).toContain('5대 슈퍼 프로토콜 진화 도감');
+      expect(host.textContent).toContain('위성 브로드캐스트');
+      expect(host.textContent).toContain('극저온 액화질소 블리자드');
+    } finally {
+      act(() => root.unmount());
+      host.remove();
+    }
+  });
 });
+

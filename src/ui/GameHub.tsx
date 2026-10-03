@@ -363,28 +363,23 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           onMouseEnter={() => { void loadSurvivorsGame(); }}
           onFocus={() => { void loadSurvivorsGame(); }}
           onClick={() => onSurvivors?.()}
-          style={{
-            borderColor: 'rgba(245, 158, 11, 0.7)',
-            background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.22), rgba(22, 28, 36, 0.85))',
-            boxShadow: '0 0 20px rgba(245, 158, 11, 0.25)',
-          }}
         >
-          <span className="commercial-title-action-icon" style={{ color: '#fbbf24', fontSize: '20px' }}>⚡</span>
+          <span className="commercial-title-action-icon is-lightning">⚡</span>
           <span className="commercial-title-action-copy">
-            <strong style={{ color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <strong className="commercial-title-survivors-title">
               야간 긴급 순찰 (SURVIVORS)
-              <span style={{ fontSize: '10px', background: '#f59e0b', color: '#111827', padding: '1px 5px', borderRadius: '4px', fontWeight: 900 }}>NEW MODE</span>
+              <span className="commercial-title-badge-new">NEW MODE</span>
             </strong>
-            <small>주인공 직접 조작 · 현장 위험 실시간 요격 & 퍽 강화 서바이벌</small>
+            <small>주인공 직접 조작 · 현장 위험 실시간 요격 &amp; 퍽 강화 서바이벌</small>
           </span>
-          <b style={{ color: '#fbbf24' }}>›</b>
+          <b>›</b>
         </button> : null}
         {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" data-title-primary-cta="defense" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>
           <b>›</b>
         </button> : null}
-        <button className="commercial-title-action" type="button" onClick={onPlay} disabled={!canContinue}>
+        <button className="commercial-title-action is-story-entry" type="button" onClick={onPlay} disabled={!canContinue}>
           <span className="commercial-title-action-icon"><HubIcon kind="journal" /></span>
           <span className="commercial-title-action-copy">
             <strong>스토리 이어하기</strong>
@@ -393,12 +388,12 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           {canContinue ? <em>EP.01 · {progress}%</em> : null}
           <b>›</b>
         </button>
-        <button className="commercial-title-action" type="button" onClick={() => setPage('site')}>
+        <button className="commercial-title-action is-sub-entry" type="button" onClick={() => setPage('site')}>
           <span className="commercial-title-action-icon"><HubIcon kind="map" /></span>
           <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
           <b>›</b>
         </button>
-        <button className="commercial-title-action is-quiet" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
+        <button className="commercial-title-action is-quiet is-sub-entry" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
           <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
           <span className="commercial-title-action-copy"><strong>새 스토리 시작</strong><small>{t('ui.title.new_game.hint')}</small></span>
           <b>›</b>

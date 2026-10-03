@@ -786,14 +786,111 @@
   letter-spacing:-.01em!important;
   word-break:keep-all;
 }
-.commercial-title-actions.is-defense-first{margin-top:14px}
+.commercial-title-actions.is-defense-first{
+  width:min(440px,32vw);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:16px;
+}
+.commercial-title-action.is-survivors-entry,
+.commercial-title-action.is-defense-entry,
+.commercial-title-action.is-story-entry{
+  grid-column:1 / -1;
+}
+.commercial-title-action.is-survivors-entry{
+  min-height:72px;
+  padding:8px 14px;
+  border-color:rgba(245,158,11,.85);
+  background:linear-gradient(95deg,rgba(18,36,48,.96) 0%,rgba(38,28,14,.96) 55%,rgba(52,36,12,.94) 100%);
+  box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 24px rgba(245,158,11,.22),inset 0 1px 0 rgba(255,230,160,.35);
+  position:relative;
+  overflow:hidden;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.commercial-title-action.is-survivors-entry::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,215,120,.16),transparent);
+  transform:skewX(-20deg);
+  animation:psi-survivor-shimmer 4.5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes psi-survivor-shimmer{
+  0%,70%{left:-100%}
+  100%{left:200%}
+}
+.commercial-title-action.is-survivors-entry:hover:not(:disabled),
+.commercial-title-action.is-survivors-entry:focus-visible{
+  transform:translateY(-2px);
+  border-color:#fbbf24;
+  box-shadow:0 16px 40px rgba(0,0,0,.45),0 0 32px rgba(245,158,11,.4),inset 0 1px 0 rgba(255,255,255,.5);
+}
+.commercial-title-action.is-survivors-entry .commercial-title-action-icon.is-lightning{
+  color:#fbbf24;
+  font-size:24px;
+  filter:drop-shadow(0 0 8px rgba(251,191,36,.7));
+}
+.commercial-title-action.is-survivors-entry .commercial-title-survivors-title{
+  color:#fbbf24;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:clamp(15px,1.25vw,20px);
+}
+.commercial-title-badge-new{
+  font-size:9px;
+  letter-spacing:.06em;
+  font-weight:950;
+  color:#0a131b;
+  background:linear-gradient(135deg,#f59e0b,#fbbf24);
+  padding:2px 7px;
+  border-radius:4px;
+  box-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+.commercial-title-action.is-survivors-entry small{
+  color:#d4dcde;
+}
+.commercial-title-action.is-survivors-entry>b{
+  color:#fbbf24;
+}
 .commercial-title-action.is-defense-entry{
-  min-height:82px;
+  min-height:74px;
   border-color:#ffd260;
   box-shadow:0 0 0 1px rgba(255,210,96,.16),0 14px 36px rgba(0,0,0,.28);
 }
 .commercial-title-action.is-defense-entry .commercial-title-action-copy strong{font-size:clamp(17px,1.42vw,23px)}
 .commercial-title-action.is-defense-entry .commercial-title-action-copy small{color:#5b481e}
+.commercial-title-action.is-story-entry{
+  min-height:60px;
+  border-color:rgba(105,159,190,.55);
+  background:linear-gradient(90deg,rgba(7,24,38,.92),rgba(11,32,48,.86));
+}
+.commercial-title-action.is-story-entry:hover:not(:disabled),
+.commercial-title-action.is-story-entry:focus-visible{
+  border-color:#65c4e8;
+  transform:translateY(-2px);
+}
+.commercial-title-action.is-sub-entry{
+  grid-column:auto;
+  min-height:50px;
+  padding:6px 12px;
+}
+.commercial-title-action.is-sub-entry .commercial-title-action-icon{
+  width:32px;
+  height:32px;
+}
+.commercial-title-action.is-sub-entry .commercial-title-action-icon svg{
+  width:22px;
+  height:22px;
+}
+.commercial-title-action.is-sub-entry .commercial-title-action-copy strong{
+  font-size:clamp(13px,1vw,16px);
+}
+.commercial-title-action.is-sub-entry .commercial-title-action-copy small{
+  font-size:clamp(8px,.6vw,10px);
+}
 .commercial-title-action.is-quiet{opacity:.78}
 .commercial-title-field-status{
   position:absolute;
@@ -1257,45 +1354,62 @@
   }
 
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-actions.is-defense-first{
-    width:320px;
-    margin-top:10px;
+    width:330px;
+    margin-top:8px;
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:6px;
+    gap:5px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action{
-    min-height:44px;
-    padding:5px 8px;
-    grid-template-columns:28px minmax(0,1fr) auto;
+    min-height:42px;
+    padding:4px 8px;
+    grid-template-columns:26px minmax(0,1fr) auto;
     gap:6px;
     border-radius:7px;
     background:linear-gradient(90deg,rgba(7,24,36,.90),rgba(9,29,42,.78));
     box-shadow:0 8px 22px rgba(0,0,0,.23);
     backdrop-filter:blur(7px);
   }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry{
+    grid-column:1/-1;
+    min-height:48px;
+    padding:5px 10px;
+    border-color:rgba(245,158,11,.85);
+    background:linear-gradient(95deg,rgba(20,38,50,.96) 0%,rgba(38,28,14,.96) 60%,rgba(52,36,12,.94) 100%);
+  }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry{
     grid-column:1/-1;
-    min-height:56px;
-    padding:6px 10px;
-    grid-template-columns:34px minmax(0,1fr) auto;
+    min-height:52px;
+    padding:5px 10px;
+    grid-template-columns:30px minmax(0,1fr) auto;
     border-color:#ffd260;
     background:linear-gradient(104deg,#e2a126 0%,#ffd45e 58%,#e3a12c 100%);
   }
-  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-story-entry{
     grid-column:1/-1;
     min-height:44px;
+    padding:4px 8px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-sub-entry{
+    grid-column:auto;
+    min-height:40px;
+    padding:4px 6px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
+    grid-column:auto;
+    min-height:40px;
     opacity:.68;
     border-color:rgba(168,197,210,.24);
     background:rgba(5,18,27,.54);
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-icon{
-    width:27px;height:27px;
+    width:24px;height:24px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-icon{
-    width:33px;height:33px;
+    width:28px;height:28px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-icon svg{
-    width:21px;height:21px;
+    width:19px;height:19px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-copy{
     gap:1px;
@@ -1304,24 +1418,38 @@
     font-size:10px;
     line-height:1.05;
   }
-  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy strong{
-    font-size:14px;
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry .commercial-title-action-copy strong{
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    gap:4px;
+    color:#fbbf24;
   }
-  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-copy small{
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy strong{
+    font-size:13px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action:not(.is-defense-entry):not(.is-survivors-entry) .commercial-title-action-copy small{
     display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry .commercial-title-action-copy small{
+    display:block;
+    margin-top:1px!important;
+    font-size:7px;
+    line-height:1.2;
+    color:#d1d5db;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy small{
     display:block;
-    margin-top:2px!important;
+    margin-top:1px!important;
     font-size:7px;
-    line-height:1.25;
+    line-height:1.2;
     color:#55431e;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action em{
     display:none;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action>b{
-    font-size:17px;
+    font-size:16px;
   }
 
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-cast{
@@ -1613,109 +1741,158 @@
 }
 
 
-/* H-01~H-04 portrait title composition — first-screen entry, no vertical spill. */
-@media (orientation:portrait) and (max-width:560px){
+/* Mobile portrait title composition — responsive vertical scroll, touch ergonomics, and non-overlapping briefing */
+@media (orientation:portrait) and (max-width:768px), (max-width:560px){
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"]{
-    height:100dvh;
+    height:auto;
     min-height:100dvh;
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    display:flex;
+    flex-direction:column;
+    padding-bottom:max(36px, env(safe-area-inset-bottom));
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-backdrop{
+    position:fixed;
     inset:-2%;
     width:104%;
-    height:104%;
+    height:104dvh;
     object-position:58% 48%;
     filter:saturate(.92) contrast(1.06) brightness(.76);
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-grade{
+    position:fixed;
     background:
-      linear-gradient(180deg,rgba(2,8,13,.78) 0%,rgba(3,10,16,.60) 34%,rgba(4,12,19,.28) 58%,rgba(3,9,15,.80) 100%),
-      linear-gradient(90deg,rgba(2,8,14,.88),rgba(5,15,24,.24));
+      linear-gradient(180deg,rgba(2,8,13,.84) 0%,rgba(3,10,16,.68) 34%,rgba(4,12,19,.40) 58%,rgba(3,9,15,.92) 100%),
+      linear-gradient(90deg,rgba(2,8,14,.92),rgba(5,15,24,.35));
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-grain,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-depth,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-sun-glow{
+    position:fixed;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-topline{
-    left:16px;
-    right:16px;
-    top:10px;
-    min-height:34px;
+    position:relative;
+    left:auto;
+    right:auto;
+    top:auto;
+    margin:0;
+    padding:max(12px, env(safe-area-inset-top)) 16px 6px;
+    min-height:36px;
+    display:flex;
+    justify-content:space-between;
     align-items:center;
+    z-index:15;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta small,
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta b{
     display:none;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-meta span{
-    font-size:9px;
+    font-size:9.5px;
+    font-weight:750;
+    color:#e5edf0;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility{
-    gap:3px;
+    gap:4px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility button{
-    width:32px;
-    height:32px;
+    width:34px;
+    height:34px;
     padding:0;
     display:grid;
     place-items:center;
-    border-radius:7px;
-    background:rgba(6,20,29,.42);
+    border-radius:8px;
+    background:rgba(6,20,29,.55);
+    border:1px solid rgba(175,200,212,.18);
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-utility button span:last-child{
     display:none;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"]{
-    position:absolute;
-    left:16px;
-    right:16px;
-    top:58px;
-    width:auto;
+    position:relative;
+    left:auto;
+    right:auto;
+    top:auto;
+    width:100%;
+    padding:10px 16px 0;
+    box-sizing:border-box;
     z-index:12;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] .commercial-title-kicker{
-    margin-bottom:5px;
-    font-size:8px;
+    margin-bottom:4px;
+    font-size:8.5px;
+    letter-spacing:.16em;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] .commercial-title-logo{
-    font-size:clamp(45px,13.5vw,56px);
+    font-size:clamp(42px,12.5vw,56px);
     line-height:.92;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-copy[data-title-hierarchy="H01_LOCKED"] h1{
-    max-width:340px;
-    margin:10px 0 5px;
-    font-size:clamp(25px,7.3vw,31px);
-    line-height:1.08;
+    max-width:100%;
+    margin:8px 0 4px;
+    font-size:clamp(23px,6.8vw,30px);
+    line-height:1.1;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-english{
     font-size:9px!important;
+    letter-spacing:.04em!important;
+    opacity:.88;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-subcopy{
     display:block!important;
-    max-width:340px;
-    margin-top:7px!important;
-    font-size:9px!important;
+    max-width:100%;
+    margin-top:6px!important;
+    font-size:9.5px!important;
     line-height:1.45!important;
+    color:#cbd6da!important;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-actions.is-defense-first{
     width:100%;
     margin-top:14px;
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:7px;
+    gap:8px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action{
     min-height:48px;
-    padding:5px 8px;
-    grid-template-columns:30px minmax(0,1fr) auto;
-    gap:5px;
-    border-radius:7px;
+    padding:6px 10px;
+    grid-template-columns:28px minmax(0,1fr) auto;
+    gap:6px;
+    border-radius:8px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry{
+    grid-column:1/-1;
+    min-height:60px;
+    padding:8px 12px;
+    border-color:rgba(245,158,11,.85);
+    background:linear-gradient(95deg,rgba(22,38,50,.96) 0%,rgba(40,30,16,.96) 60%,rgba(52,36,12,.94) 100%);
+    box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 16px rgba(245,158,11,.2);
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry{
     grid-column:1/-1;
-    min-height:66px;
+    min-height:58px;
+    padding:8px 12px;
+    border-color:#ffd260;
+    background:linear-gradient(104deg,#e2a126 0%,#ffd45e 58%,#e3a12c 100%);
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-story-entry{
+    grid-column:1/-1;
+    min-height:52px;
+    padding:7px 12px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-sub-entry{
+    grid-column:auto;
+    min-height:48px;
     padding:6px 10px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-quiet{
-    grid-column:1/-1;
-    min-height:44px;
-    opacity:.68;
+    grid-column:auto;
+    min-height:48px;
+    opacity:.72;
+    border-color:rgba(168,197,210,.28);
+    background:rgba(5,18,27,.6);
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-icon{
     width:28px;
@@ -1726,31 +1903,52 @@
     height:21px;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action-copy strong{
-    font-size:11px;
+    font-size:12px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry .commercial-title-action-copy strong{
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+    color:#fbbf24;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy strong{
     font-size:15px;
   }
-  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action:not(.is-defense-entry) .commercial-title-action-copy small,
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-story-entry .commercial-title-action-copy strong{
+    font-size:13px;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action:not(.is-defense-entry):not(.is-survivors-entry) .commercial-title-action-copy small,
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action em{
     display:none;
+  }
+  .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-survivors-entry .commercial-title-action-copy small{
+    display:block;
+    margin-top:2px!important;
+    font-size:8px;
+    line-height:1.25;
+    color:#d1d5db;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-action.is-defense-entry .commercial-title-action-copy small{
     display:block;
     margin-top:2px!important;
-    font-size:7px;
+    font-size:8px;
     line-height:1.25;
+    color:#55431e;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status[data-title-role="live-briefing"]{
-    position:absolute;
-    left:16px;
-    right:16px;
+    position:relative;
+    left:auto;
+    right:auto;
     top:auto;
-    bottom:16px;
-    width:auto;
-    margin:0;
-    padding:11px 12px;
+    bottom:auto;
+    width:calc(100% - 32px);
+    margin:14px 16px 0;
+    padding:12px 14px;
     border-radius:10px;
+    box-sizing:border-box;
+    z-index:11;
   }
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-title-field-status>strong{
     font-size:13px;
