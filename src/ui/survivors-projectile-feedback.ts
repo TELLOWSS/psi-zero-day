@@ -1,3 +1,4 @@
+import {cinematicLook,drawCinematicContact} from './survivors-cinematic-vfx';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
 
@@ -31,7 +32,7 @@ export class ProjectileFeedbackLayer {
       this.effects.push({event, age:0, duration});
     }
   }
-  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false): void {
+  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
     for (const effect of this.effects) {
       const {event:e, age, duration} = effect;
       const t = age/duration, spec = PROJECTILE_VFX[e.kind];
@@ -40,6 +41,12 @@ export class ProjectileFeedbackLayer {
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      // Raster contacts replace the old wire cross; never double-stack white cores.
+      if(!e.worker&&!reducedMotion&&cinematic?.atlas?.naturalWidth&&(spec.family==='beam'||spec.family==='signal')) {
+        drawCinematicContact(ctx,e,age,duration,cinematicLook(e.kind,cinematic.levels?.[e.kind]??1,cinematic.equipped),cinematic.atlas,false,busy);
+        ctx.restore();
+        continue;
+      }
       // Fast exposure attack, expanding contact, slower material release.
       // Confirmed contacts only; workers retain the calm instruction receipt.
       if(!e.worker&&!reducedMotion&&spec.family!=='physical') {
@@ -79,6 +86,7 @@ export class ProjectileFeedbackLayer {
         const r = 5+(e.phase === 'impact' ? t*13 : (1-t)*6);
         ctx.beginPath();ctx.ellipse(0,0,r,r*.45,0,0,Math.PI*2);ctx.stroke();
       }
+      if(cinematic)drawCinematicContact(ctx,e,age,duration,cinematicLook(e.kind,cinematic.levels?.[e.kind]??1,cinematic.equipped),cinematic.atlas,reducedMotion,busy);
       // Contact material follows the locked incoming direction. Never on workers.
       if (!e.worker && !reducedMotion && !busy && e.phase === 'impact' && spec.family !== 'powder' && spec.family !== 'frost') {
         ctx.rotate(e.angle);

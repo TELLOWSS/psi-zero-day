@@ -1,3 +1,4 @@
+import {drawCinematicFlight,type CinematicLook} from './survivors-cinematic-vfx';
 import type { Projectile, ProjectileKind } from '../domain/patrol-survivors';
 
 /** Presentation only: no collision, damage, lifetime or simulation mutation. */
@@ -65,7 +66,8 @@ function line(ctx:CanvasRenderingContext2D,points:readonly (readonly [number,num
   ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
 }
 
-export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,level:number,time:number,reducedMotion=false,busy=false):void {
+export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,level:number,time:number,reducedMotion=false,busy=false,cinematic?:{atlas?:HTMLImageElement;look:CinematicLook}):void {
+  if(cinematic && drawCinematicFlight(ctx,p,cinematic.look,cinematic.atlas,reducedMotion,busy))return;
   if(p.kind==='cone_trap')return; // Approved equipment sprite belongs to the ground pass.
   const v=projectileVisual(p,level,reducedMotion,busy),{spec,radius:r}=v;
   ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=v.alpha;ctx.lineCap='round';ctx.lineJoin='round';
