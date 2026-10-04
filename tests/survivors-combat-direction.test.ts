@@ -9,6 +9,13 @@ it('uses bounded local camera impulses, decays without input and respects reduce
  for(let i=0;i<6;i++)d.advance(.05);
  expect(Math.abs(d.camera(false).x)).toBeLessThan(.002);expect(d.lightCount).toBe(0);
 });
+it('gives Sync Gauntlet a stronger but still bounded presentation kick',()=>{
+ const normal=new CombatDirection();normal.ingest([event],['broadcast_crown'],{x:0,y:0});
+ const sync=new CombatDirection();sync.ingest([event],['sync_gauntlet'],{x:0,y:0});
+ expect(Math.abs(sync.camera(false).x)).toBeGreaterThan(Math.abs(normal.camera(false).x));
+ expect(Math.abs(sync.camera(false).x)).toBeLessThan(1.5);
+ expect(sync.lightCount).toBe(1);
+});
 it('never dramatizes worker contacts or offscreen hazards and bounds busy light pools',()=>{
  const d=new CombatDirection();d.ingest([{...event,worker:true},{...event,x:600}],[],{x:0,y:0});
  expect(d.lightCount).toBe(0);expect(d.camera(false)).toEqual({x:0,y:0});
