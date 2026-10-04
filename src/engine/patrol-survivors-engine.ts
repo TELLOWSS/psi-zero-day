@@ -943,7 +943,7 @@ export class SurvivorsEngine {
       ...this.state.player,
       damageMultiplier: this.state.player.damageMultiplier * floodlightDmgBonus,
     };
-    const cdReduction = 1 - Math.min(0.6, player.cooldownReduction);
+    const cdReduction = 1 - Math.min(0.45, player.cooldownReduction);
 
     // ==========================================
     // 1. Radio Weapon & Evolution: Satellite Broadcast
