@@ -1,3 +1,4 @@
+import {storeEffects, type StoreInventory} from '../domain/survivors-store';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
@@ -485,15 +486,17 @@ export function createInitialSurvivorsState(
   upgrades: PermanentUpgrades = DEFAULT_PERMANENT_UPGRADES,
   stageId: PatrolStageId = 'stage_01',
   difficulty: PatrolDifficulty = 'standard',
+  inventory: StoreInventory = {owned: [], equipped: []},
 ): SurvivorsGameState {
   const profile = CHARACTER_PROFILES[characterId];
   const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
 
   // Base stats influenced by character profile statModifiers & permanent upgrades
   const mods = profile.statModifiers || {};
-  const baseHp = 100 + (mods.maxHpBonus || 0) + upgrades.vitality * 15;
-  const baseSpeed = 220 + (mods.speedBonus || 0) + upgrades.mobility * 15;
-  const basePickup = 90 + (mods.pickupRadiusBonus || 0) + upgrades.intelligence * 20;
+  const gear = storeEffects(inventory);
+  const baseHp = 100 + (mods.maxHpBonus || 0) + upgrades.vitality * 15 + gear.hp;
+  const baseSpeed = 220 + (mods.speedBonus || 0) + upgrades.mobility * 15 + gear.speed;
+  const basePickup = 90 + (mods.pickupRadiusBonus || 0) + upgrades.intelligence * 20 + gear.pickup;
   const baseCooldown = mods.cooldownBonus || 0;
   const baseCrit = 0.05 + (mods.damageBonus ? 0.05 : 0);
   const baseDmg = 1.0 + (mods.damageBonus || 0);
@@ -506,10 +509,10 @@ export function createInitialSurvivorsState(
     speed: baseSpeed,
     invincibleTime: 0,
     pickupRadius: basePickup,
-    cooldownReduction: baseCooldown,
-    damageMultiplier: baseDmg,
-    critRate: baseCrit,
-    regenRate: 0,
+    cooldownReduction: baseCooldown + gear.cooldown,
+    damageMultiplier: baseDmg + gear.damage,
+    critRate: baseCrit + gear.crit,
+    regenRate: gear.regen,
   };
 
   const initialPerks: Record<PerkId, number> = {
