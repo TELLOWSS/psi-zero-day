@@ -46,7 +46,7 @@ export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageEl
   drawVfxCell(ctx,atlas,evolved?2:1,x,y+10,(evolved?19:12)*breath,evolved?30:20,evolved?.60:.38,Math.PI/2);
   ctx.restore();
 }
-export const PREMIUM_VFX_SIGNATURES={
+export function premiumVfxDetailLevel(equippedCount:number,busy:boolean,reduced:boolean):0|1|2 {\n  if(reduced)return 0;\n  if(busy||equippedCount>=5)return 1;\n  return 2;\n}\n\nexport const PREMIUM_VFX_SIGNATURES={
   voice_lens:'communication:advanced:voice-scan',
   command_array:'communication:elite:network-array',
   broadcast_crown:'communication:legendary:broadcast-crown',
@@ -65,7 +65,7 @@ export const PREMIUM_VFX_SIGNATURES={
   predictive_watch:'tactics:elite:future-watch',
 } as const;
 
-export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,movingAngle?:number):void {
+export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,movingAngle?:number,busy=false):void {
   const gear=state.premiumGear;if(!gear?.equipped.length||!atlas?.naturalWidth)return;
   const x=state.player.x,y=state.player.y,time=state.gameTime;
   const hasId=(id:string)=>gear.equipped.includes(id);
@@ -77,14 +77,14 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   // COMMUNICATION — each paid tier has its own signal grammar.
   if(hasId('broadcast_crown')){
     ctx.strokeStyle='#ffd181';ctx.lineWidth=2.4;ctx.globalAlpha=.68;
-    const bands=reduced?2:4;
+    const bands=detail===2?4:2;
     for(let i=0;i<bands;i++){const phase=sweep+i*.62,r=(24+i*9)*pulse;ctx.beginPath();ctx.ellipse(x,y+2,r,10+i*3.2,0,phase,phase+Math.PI*1.38);ctx.stroke();}
     drawVfxCell(ctx,atlas,0,x-19,y-30,34,26,.58);
-    if(!reduced){const broadcast=(Math.sin(time*3.2)+1)/2;ctx.globalAlpha=.10+broadcast*.16;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(x,y+5,74+broadcast*26,30+broadcast*10,0,0,Math.PI*2);ctx.stroke();}
+    if(detail===2){const broadcast=(Math.sin(time*3.2)+1)/2;ctx.globalAlpha=.10+broadcast*.16;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(x,y+5,74+broadcast*26,30+broadcast*10,0,0,Math.PI*2);ctx.stroke();}
   } else if(hasId('command_array')){
     ctx.strokeStyle='#75e8ff';ctx.lineWidth=1.8;ctx.globalAlpha=.50;
-    for(let i=0;i<(reduced?2:3);i++){const a=sweep+i*Math.PI*2/3;ctx.beginPath();ctx.ellipse(x,y+1,31+i*7,12+i*3,0,a,a+Math.PI*.82);ctx.stroke();}
-    for(let i=0;i<(reduced?2:3);i++){const a=sweep+i*Math.PI*2/3;drawVfxCell(ctx,atlas,1,x+Math.cos(a)*32,y-18+Math.sin(a)*12,16,16,.30);}
+    for(let i=0;i<(detail===2?3:2);i++){const a=sweep+i*Math.PI*2/3;ctx.beginPath();ctx.ellipse(x,y+1,31+i*7,12+i*3,0,a,a+Math.PI*.82);ctx.stroke();}
+    for(let i=0;i<(detail===2?3:2);i++){const a=sweep+i*Math.PI*2/3;drawVfxCell(ctx,atlas,1,x+Math.cos(a)*32,y-18+Math.sin(a)*12,16,16,.30);}
     drawVfxCell(ctx,atlas,1,x-18,y-30,28,22,.42);
   } else if(hasId('voice_lens')){
     ctx.strokeStyle='#ff9d66';ctx.lineWidth=1.6;ctx.globalAlpha=.48;
@@ -118,19 +118,19 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   if(hasId('extraction_pack')){
     const radius=Math.min(state.player.pickupRadius,220);
     ctx.strokeStyle='#ffd181';ctx.lineWidth=1.6;ctx.globalAlpha=.28;ctx.beginPath();ctx.ellipse(x,y+4,radius,radius*.58,0,0,Math.PI*2);ctx.stroke();
-    for(let i=0;i<(reduced?3:6);i++){const a=sweep+i*Math.PI*2/(reduced?3:6),travel=reduced?.78:.58+.18*Math.sin(time*2+i);drawVfxCell(ctx,atlas,4,x+Math.cos(a)*radius*travel,y+4+Math.sin(a)*radius*.58*travel,24,9,reduced?.16:.24,a+Math.PI);}
-    if(movingAngle!==undefined&&!reduced)drawVfxCell(ctx,atlas,4,x-Math.cos(facing)*28,y-Math.sin(facing)*28,76,18,.42,facing);
+    for(let i=0;i<(detail===2?6:3);i++){const a=sweep+i*Math.PI*2/(detail===2?6:3),travel=reduced?.78:.58+.18*Math.sin(time*2+i);drawVfxCell(ctx,atlas,4,x+Math.cos(a)*radius*travel,y+4+Math.sin(a)*radius*.58*travel,24,9,reduced?.16:.24,a+Math.PI);}
+    if(movingAngle!==undefined&&!reduced)drawVfxCell(ctx,atlas,4,x-Math.cos(facing)*28,y-Math.sin(facing)*28,constrained?60:76,constrained?14:18,constrained?.28:.42,facing);
   } else if(hasId('dispatch_drive')){
     const radius=Math.min(state.player.pickupRadius,150);
     ctx.strokeStyle='#ffb45c';ctx.lineWidth=1.2;ctx.globalAlpha=.22;ctx.beginPath();ctx.ellipse(x,y+4,radius,radius*.55,0,0,Math.PI*2);ctx.stroke();
     if(movingAngle!==undefined&&!reduced){
-      drawVfxCell(ctx,atlas,5,x-Math.cos(facing)*25-Math.sin(facing)*9,y-Math.sin(facing)*25+Math.cos(facing)*5,58,12,.34,facing);
+      drawVfxCell(ctx,atlas,5,x-Math.cos(facing)*25-Math.sin(facing)*9,y-Math.sin(facing)*25+Math.cos(facing)*5,constrained?48:58,constrained?10:12,constrained?.24:.34,facing);
       drawVfxCell(ctx,atlas,5,x-Math.cos(facing)*20+Math.sin(facing)*9,y-Math.sin(facing)*20-Math.cos(facing)*5,46,10,.25,facing);
     }
   } else if(hasId('recovery_mesh')){
     const radius=Math.min(state.player.pickupRadius,135);
     ctx.strokeStyle='#8ae9d1';ctx.lineWidth=1;ctx.globalAlpha=.20;ctx.beginPath();ctx.ellipse(x,y+4,radius,radius*.58,0,0,Math.PI*2);ctx.stroke();
-    for(let i=0;i<(reduced?2:4);i++){const a=sweep+i*Math.PI/2,travel=.66+.08*Math.sin(time*2.4+i);drawVfxCell(ctx,atlas,4,x+Math.cos(a)*radius*travel,y+4+Math.sin(a)*radius*.58*travel,15,7,.18,a+Math.PI);}
+    for(let i=0;i<(detail===2?4:2);i++){const a=sweep+i*Math.PI/2,travel=.66+.08*Math.sin(time*2.4+i);drawVfxCell(ctx,atlas,4,x+Math.cos(a)*radius*travel,y+4+Math.sin(a)*radius*.58*travel,15,7,.18,a+Math.PI);}
   }
 
   // PROTECTION — silhouette, healing cadence and shield all have different paid identities.
@@ -154,7 +154,7 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   if(hasId('inspection_wing')){
     ctx.strokeStyle='#75e8ff';ctx.lineWidth=1.1;ctx.globalAlpha=.22;
     const radius=180;ctx.beginPath();ctx.ellipse(x,y,radius,radius*.58,0,sweep,sweep+Math.PI*.62);ctx.stroke();
-    for(let i=0;i<(reduced?2:4);i++){const a=sweep+i*Math.PI/2;drawVfxCell(ctx,atlas,1,x+Math.cos(a)*52,y-22+Math.sin(a)*24,14,14,.20);}
+    for(let i=0;i<(detail===2?4:2);i++){const a=sweep+i*Math.PI/2;drawVfxCell(ctx,atlas,1,x+Math.cos(a)*52,y-22+Math.sin(a)*24,14,14,.20);}
   } else if(hasId('rescue_wing')){
     const healing=state.player.hp<state.player.maxHp;
     ctx.strokeStyle='#74f4c4';ctx.lineWidth=1.5;ctx.globalAlpha=healing?.38:.20;
@@ -172,8 +172,8 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
     const charge=Math.max(0,Math.min(1,state.ultimateCharge/Math.max(1,state.maxUltimateCharge)));
     ctx.strokeStyle='#f3c674';ctx.lineWidth=1.3;ctx.globalAlpha=.30;
     ctx.beginPath();ctx.ellipse(x,y+4,38,16,0,-Math.PI/2,-Math.PI/2+Math.PI*2*charge);ctx.stroke();
-    for(let i=0;i<(reduced?2:4);i++){const a=sweep+i*Math.PI/2,r=42+i%2*9;drawVfxCell(ctx,atlas,0,x+Math.cos(a)*r,y-18+Math.sin(a)*r*.45,13,13,.19);}
-    if(!reduced){ctx.globalAlpha=.16;ctx.beginPath();ctx.ellipse(x+Math.cos(facing)*62,y+Math.sin(facing)*34,25,9,0,facing-.6,facing+.6);ctx.stroke();}
+    for(let i=0;i<(detail===2?4:2);i++){const a=sweep+i*Math.PI/2,r=42+i%2*9;drawVfxCell(ctx,atlas,0,x+Math.cos(a)*r,y-18+Math.sin(a)*r*.45,13,13,.19);}
+    if(detail===2){ctx.globalAlpha=.16;ctx.beginPath();ctx.ellipse(x+Math.cos(facing)*62,y+Math.sin(facing)*34,25,9,0,facing-.6,facing+.6);ctx.stroke();}
   }
 
   ctx.restore();
