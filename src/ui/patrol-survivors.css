@@ -2163,3 +2163,18 @@
   .survivors-store-card { padding: 10px; }
   .survivors-store-card strong { font-size: 14px; }
 }
+
+.survivors-premium-live { flex-wrap: wrap; max-width: min(100%, 420px); }
+.survivors-premium-live > span { display: inline-flex; align-items: center; gap: 3px; }
+.survivors-premium-live-label {
+  color: #f3d38d;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-shadow: 0 0 8px rgba(243,211,141,.35);
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .survivors-player-hud:has(.survivors-premium-live) { gap: 2px; }
+  .survivors-premium-live { max-width: 34vw; font-size: 9px; line-height: 1.2; }
+  .survivors-premium-live > span:not(.survivors-premium-live-label) { display: none; }
+  .survivors-premium-live-label::after { content: ' · ACTIVE'; color: #9ceaf1; letter-spacing: .03em; }
+}
