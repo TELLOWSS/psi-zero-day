@@ -29,7 +29,7 @@ export function SurvivorsFittingPreview({ state }: { state: SurvivorsGameState }
         drawWearableLayer(ctx, state, actor, 74, pose, wearables, 'back');
         drawGroundedSprite(ctx, actor, 74, pose);
         drawWearableLayer(ctx, state, actor, 74, pose, wearables, 'front');
-        drawPremiumGear(ctx, { ...state, player: { ...state.player, x: 0, y: 0 } }, gear, true, 0, pickups, wearables);
+        drawPremiumGear(ctx, { ...state, player: { ...state.player, x: 0, y: 0 } }, gear, true, 0, pickups, wearables, {actor,height:74,pose});
         ctx.restore(); setLoaded(true);
       }).catch(() => { if (!disposed) setFailed(true); });
     return () => { disposed = true; };

@@ -1,6 +1,6 @@
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import { ACTOR_RIGS } from './survivors-animation-rig';
-import { applyActorTorsoTransform } from './survivors-rig-renderer';
+import { actorTorsoPoint, applyActorTorsoTransform } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 
 export const WEARABLE_ART = {
@@ -33,6 +33,13 @@ export const WEARABLE_PROFILES: Record<string, FittingProfile> = {
 WEARABLE_PROFILES.park = WEARABLE_PROFILES.kang_taesik!;
 WEARABLE_PROFILES.jung = WEARABLE_PROFILES.player!;
 WEARABLE_PROFILES.yoon = WEARABLE_PROFILES.yoon_sungho!;
+
+export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose):{x:number;y:number}|undefined {
+  const socket=WEARABLE_PROFILES[characterId]?.sockets.inspection_wing;
+  if(!socket)return;
+  const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
+  return actorTorsoPoint({x:(socket.x+socket.w/2-.5)*width,y:(socket.y+socket.h/2-1)*height},pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop() ?? '']));
+}
 
 export function hasWearable(state: SurvivorsGameState, id: string, images: WearableImages): boolean {
   return Boolean(WEARABLE_PROFILES[state.characterId]) && id in WEARABLE_ART && Boolean(images[id as WearableId]?.naturalWidth);

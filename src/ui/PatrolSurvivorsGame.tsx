@@ -2188,7 +2188,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables);
+      const inspectionActor=spritesRef.current.characterMaps[engine.state.characterId];
+      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose}:undefined);
       const projectileBusy=projectiles.length>60;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Inspection Flight Renderer Fixture</title>
+<style>body{margin:16px;background:#202b27;color:#fff;font:14px sans-serif}button,label{margin-right:12px}button{min-height:44px}canvas{display:block;width:min(100%,900px);height:auto;margin-top:16px;background:#35413a}output{display:block;margin-top:12px}</style>
+<button id="target">Eligible Target</button><button id="leave">Target Leaves Range</button><button id="step">Advance 100ms</button>
+<label><input id="reduced" type="checkbox">Reduced Motion</label><label><input id="left" type="checkbox">Face Left</label>
+<output id="status">Loading</output><canvas id="stage" width="900" height="600"></canvas>
+<script type="module">
+import {createInitialSurvivorsState} from '/src/engine/patrol-survivors-engine.ts';
+import {drawPremiumGear} from '/src/ui/survivors-premium-render.ts';
+import {drawWearableLayer,loadWearableImages,inspectionDockAnchor} from '/src/ui/survivors-wearable-art.ts';
+import {EQUIPMENT_ART,PICKUP_ART,registerPropAtlas} from '/src/ui/survivors-equipment-art.ts';
+import {SpriteMotionTracker,registerSpriteBounds,drawGroundedSprite} from '/src/ui/survivors-sprite-motion.ts';
+import {InspectionFlightTracker} from '/src/ui/survivors-inspection-flight.ts';
+const state=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['inspection_wing'],equipped:['inspection_wing']});
+state.phase='playing';state.player.x=0;state.player.y=0;state.hazards=[];
+const load=src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src;});
+const [actor,gear,pickups,wearables]=await Promise.all([load('/assets/episode01/characters/player-map.webp'),load(EQUIPMENT_ART),load(PICKUP_ART),loadWearableImages('player')]);
+registerSpriteBounds(actor);registerPropAtlas(gear,3,5);registerPropAtlas(pickups,4,2);
+const canvas=document.querySelector('#stage'),ctx=canvas.getContext('2d'),tracker=new InspectionFlightTracker();
+const pose=new SpriteMotionTracker().sample(state.player,0,0,0);
+function render(){
+ const currentPose={...pose,facing:document.querySelector('#left').checked?-1:1};
+ const reduced=document.querySelector('#reduced').checked;
+ const dock=inspectionDockAnchor('player',actor,74,currentPose);
+ const flight=tracker.sample(state,dock,reduced);
+ ctx.clearRect(0,0,900,600);ctx.save();ctx.translate(390,450);ctx.scale(3,3);
+ drawWearableLayer(ctx,state,actor,74,currentPose,wearables,'back');drawGroundedSprite(ctx,actor,74,currentPose);
+ drawWearableLayer(ctx,state,actor,74,currentPose,wearables,'front');
+ drawPremiumGear(ctx,state,gear,reduced,0,pickups,wearables,{actor,height:74,pose:currentPose});
+ if(state.hazards.length){ctx.strokeStyle='#ddd';ctx.lineWidth=1;ctx.strokeRect(state.hazards[0].x-8,-8,16,16);}
+ ctx.restore();
+ const status=document.querySelector('#status');status.textContent=JSON.stringify(flight);status.dataset.phase=flight.phase;status.dataset.x=String(flight.x);status.dataset.y=String(flight.y);
+}
+document.querySelector('#target').onclick=()=>{state.hazards=[{id:'fixture-gas',type:'GAS_LEAK',x:85,y:0,hp:50,radius:12}];render();};
+document.querySelector('#leave').onclick=()=>{if(state.hazards[0])state.hazards[0].x=181;render();};
+document.querySelector('#step').onclick=()=>{state.gameTime+=.1;render();};
+document.querySelector('#reduced').onchange=render;document.querySelector('#left').onchange=render;
+render();
+</script></html>

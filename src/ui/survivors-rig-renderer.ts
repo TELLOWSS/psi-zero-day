@@ -12,13 +12,24 @@ export function riggedTorsoOffset(phase:number,running:boolean,brace:number,acti
 }
 
 /** Wearable layers use the same quantized torso pose as the actor's cached mesh. */
-export function applyActorTorsoTransform(ctx:CanvasRenderingContext2D,pose:SpritePose,height:number,rigged:boolean):void {
- ctx.scale(pose.facing,1);
+function torsoOffset(pose:SpritePose,height:number,rigged:boolean):Joint|null {
  if(rigged && (pose.gaitBlend>0 || pose.reaction>0 || pose.action>0)){
   const phase=Math.floor(pose.cycle/(Math.PI*2)*16)%16;
   const dy=Math.round(pose.directionY*32)/32;
   const running=pose.stride/Math.sqrt(1-.64*dy*dy)>60;
-  const offset=riggedTorsoOffset(phase,running,Math.round(pose.reaction*3)/3,Math.round(pose.action*2)/2,Math.round(pose.gaitBlend*4)/4,height);
+  return riggedTorsoOffset(phase,running,Math.round(pose.reaction*3)/3,Math.round(pose.action*2)/2,Math.round(pose.gaitBlend*4)/4,height);
+ }
+ return null;
+}
+export function actorTorsoPoint(point:Joint,pose:SpritePose,height:number,rigged:boolean):Joint {
+ const offset=torsoOffset(pose,height,rigged);
+ if(offset) return {x:pose.facing*(point.x+offset.x+pose.lean*(point.y+offset.y)),y:point.y+offset.y};
+ return {x:pose.facing*(point.x+(pose.lean+pose.action*.025)*point.y),y:(pose.scaleY-pose.action*.008)*point.y};
+}
+export function applyActorTorsoTransform(ctx:CanvasRenderingContext2D,pose:SpritePose,height:number,rigged:boolean):void {
+ ctx.scale(pose.facing,1);
+ const offset=torsoOffset(pose,height,rigged);
+ if(offset){
   ctx.transform(1,0,pose.lean,1,0,0);ctx.translate(offset.x,offset.y);
  }else ctx.transform(1,0,pose.lean+pose.action*.025,pose.scaleY-pose.action*.008,0,0);
 }

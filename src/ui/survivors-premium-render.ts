@@ -1,11 +1,18 @@
 import type {SurvivorsGameState} from '../domain/patrol-survivors';
 import {STORE_ITEMS} from '../domain/survivors-store';
 import {drawEquipment,drawProp} from './survivors-equipment-art';
-import {hasWearable,type WearableImages} from './survivors-wearable-art';
+import {hasWearable,inspectionDockAnchor,type WearableImages} from './survivors-wearable-art';
+import {InspectionFlightTracker} from './survivors-inspection-flight';
+import type {SpritePose} from './survivors-sprite-motion';
+import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
+const inspectionFlights=new InspectionFlightTracker();
 /** Raster art stays in presentation; status is read exclusively from the engine. */
-export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reducedMotion:boolean,facing=0,itemsAtlas?:HTMLImageElement,wearables:WearableImages={}):void {
+export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reducedMotion:boolean,facing=0,itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose}):void {
   const gear=state.premiumGear;if(!gear||!gear.equipped.length)return;
   const {x,y}=state.player;
+  const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
+  const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose):undefined;
+  const flight=fittedInspection&&dock?inspectionFlights.sample(state,dock,reducedMotion):undefined;
   if(gear.effects.shield>0) {
     ctx.save();ctx.translate(x,y-37);ctx.strokeStyle=gear.shield>0?'#7fe7ff':'#637e89';
     ctx.globalAlpha=gear.shield>0?.55:.22;ctx.lineWidth=gear.feedback>0?4:1.5;
@@ -13,13 +20,13 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
     if(gear.feedback>0){ctx.globalAlpha=gear.feedback*.35;ctx.fillStyle='#82eaff';ctx.beginPath();ctx.ellipse(0,0,24,39,0,0,Math.PI*2);ctx.fill();}
     ctx.restore();
   }
-  if(gear.effects.suppression>0) {
+  const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);
+  if(suppressed.length) {
     ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=.16;ctx.lineWidth=1;ctx.setLineDash([6,10]);
-    ctx.beginPath();ctx.ellipse(x,y,180,105,0,0,Math.PI*2);ctx.stroke();ctx.restore();
-    for(const hazard of state.hazards){
-      if(hazard.hp<=0 || !['GAS_LEAK','RUNAWAY_CART'].includes(hazard.type) || Math.hypot(hazard.x-x,hazard.y-y)>180)continue;
+    ctx.beginPath();ctx.arc(x,y,180,0,Math.PI*2);ctx.stroke();ctx.restore();
+    for(const hazard of suppressed){
       ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=.45;ctx.lineWidth=1.2;
-      ctx.beginPath();ctx.moveTo(x,y-24);ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x+(flight?.x??0),y+(flight?.y??-24));ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();
       ctx.beginPath();ctx.ellipse(hazard.x,hazard.y,hazard.radius+5,(hazard.radius+5)*.58,0,0,Math.PI*2);ctx.stroke();ctx.restore();
     }
   }
@@ -45,9 +52,13 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   if(companion) {
     const angle=reducedMotion?.5:state.gameTime*.9;
     const fitted=hasWearable(state,companion,wearables);
-    const px=x+Math.cos(angle)*(fitted?34:48),py=y-22+Math.sin(angle)*(fitted?14:20);
-    ctx.save();ctx.fillStyle='#061017';ctx.globalAlpha=.4;ctx.beginPath();ctx.ellipse(px,py+25,13,5,0,0,Math.PI*2);ctx.fill();ctx.restore();
-    draw(companion,px,py,fitted?24:36);
+    const px=x+(flight?.x??Math.cos(angle)*(fitted?34:48)),py=y+(flight?.y??(-22+Math.sin(angle)*(fitted?14:20)));
+    const docked=flight?.phase==='docked';
+    const deployment=flight&&dock?Math.min(1,Math.hypot(flight.x-dock.x,flight.y-dock.y)/40):1;
+    const size=flight?16+8*(flight.phase==='inspecting'?1:deployment):fitted?24:36;
+    if(!docked){ctx.save();ctx.fillStyle='#061017';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(px,y+(flight?.y??0)+28,9,3.5,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+    draw(companion,px,py,size);
+    if(flight){ctx.save();ctx.fillStyle=docked?'#b7ebae':flight.phase==='inspecting'?'#66dcd4':'#e8c578';ctx.fillRect(px-1,py+size*.22,2,1.5);ctx.restore();}
   }
   // Body sockets follow the same facing as the character, rather than floating badges.
   const direction=Math.cos(facing)<0?-1:1;

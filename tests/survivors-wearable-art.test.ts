@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 import { createInitialSurvivorsState } from '../src/engine/patrol-survivors-engine';
-import { drawWearableLayer, hasWearable, WEARABLE_PROFILES, type WearableImages } from '../src/ui/survivors-wearable-art';
+import { drawWearableLayer, hasWearable, inspectionDockAnchor, WEARABLE_PROFILES, type WearableImages } from '../src/ui/survivors-wearable-art';
 import { SpriteMotionTracker } from '../src/ui/survivors-sprite-motion';
 import { applyActorTorsoTransform, riggedTorsoOffset } from '../src/ui/survivors-rig-renderer';
 
@@ -53,4 +53,14 @@ it('shares the cached rig torso offset for movement, hit reactions and facing', 
   const phase = Math.floor(pose.cycle / (Math.PI*2) * 16) % 16;
   const expected = riggedTorsoOffset(phase, false, Math.round(pose.reaction*3)/3, Math.round(pose.action*2)/2, Math.round(pose.gaitBlend*4)/4, 74);
   expect(ctx.translate).toHaveBeenCalledWith(expected.x, expected.y);
+});
+
+it('mirrors the physical drone dock with the actor without changing socket height',()=>{
+  const state=createInitialSurvivorsState('player'),actor=image('player-map.webp');
+  const pose=new SpriteMotionTracker().sample(state.player,0,0,0);
+  const right=inspectionDockAnchor('player',actor,74,{...pose,facing:1})!;
+  const left=inspectionDockAnchor('player',actor,74,{...pose,facing:-1})!;
+  expect(left.x).toBe(-right.x);expect(left.y).toBe(right.y);
+  expect(right.y).toBeLessThan(-40);expect(right.y).toBeGreaterThan(-65);
+  expect(inspectionDockAnchor('unknown',actor,74,pose)).toBeUndefined();
 });
