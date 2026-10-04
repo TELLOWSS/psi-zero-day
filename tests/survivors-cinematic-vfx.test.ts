@@ -1,5 +1,5 @@
 import {describe,it,expect,vi} from 'vitest';
-import {cinematicLook,drawCinematicFlight,drawCinematicContact,drawPremiumProtocol,drawDroneEmission,PREMIUM_VFX_SIGNATURES} from '../src/ui/survivors-cinematic-vfx';
+import {cinematicLook,drawCinematicFlight,drawCinematicContact,drawPremiumProtocol,drawDroneEmission,PREMIUM_VFX_SIGNATURES,premiumVfxDetailLevel} from '../src/ui/survivors-cinematic-vfx';
 import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import type {Projectile,ProjectileKind} from '../src/domain/patrol-survivors';
@@ -38,6 +38,12 @@ describe('premium and high-tier cinematic presentation',()=>{
     drawPremiumProtocol(ctx,state,atlas,false,1);drawDroneEmission(ctx,atlas,10,20,true,2,false);
     expect(ctx.drawImage).toHaveBeenCalled();expect(JSON.stringify(state)).toBe(snapshot);
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
+  });
+  it('caps premium detail under reduced motion, crowded combat and five-plus simultaneous categories',()=>{
+    expect(premiumVfxDetailLevel(4,false,false)).toBe(2);
+    expect(premiumVfxDetailLevel(5,false,false)).toBe(1);
+    expect(premiumVfxDetailLevel(3,true,false)).toBe(1);
+    expect(premiumVfxDetailLevel(1,false,true)).toBe(0);
   });
   it('assigns every paid store item a distinct visual identity and tier signature',()=>{
     const ids=STORE_ITEMS.map(item=>item.id);
