@@ -1,3 +1,4 @@
+import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
@@ -1239,13 +1240,9 @@ export class SurvivorsEngine {
 
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
-    const timeProgress = this.state.gameTime / this.state.maxTime; // 0.0 to 1.0
-
-    // Progressive spawn rate (faster as time goes on)
-    const spawnInterval = Math.max(0.2, (1.4 - timeProgress * 1.15) / (this.state.stage.difficulty ?? 1));
-
+    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime);
     if (this.cooldowns.spawnTimer <= 0) {
-      this.cooldowns.spawnTimer = spawnInterval;
+      this.cooldowns.spawnTimer = pressure.interval;
 
       // Boss event checking at 60s, 120s
       const time = Math.floor(this.state.gameTime);
@@ -1260,20 +1257,13 @@ export class SurvivorsEngine {
         return;
       }
 
-      // Determine enemy type by elapsed time
-      const rand = this.random();
-      let type: HazardType = 'UNHELMETED';
-
-      if (this.state.gameTime > 120 && rand < 0.12) {
-        type = stageBossType;
-      } else if (this.state.gameTime > 60 && rand < 0.35) {
-        type = 'RUNAWAY_CART';
-      } else if (this.state.gameTime > 30 && rand < 0.6) {
-        type = 'GAS_LEAK';
-      }
-
-      if (stage.hazardMix && this.state.gameTime > 20) {
-        type = stage.hazardMix[Math.floor(this.random() * stage.hazardMix.length)] ?? type;
+      const alive = this.state.hazards.filter(h => h.hp > 0);
+      if (alive.length >= pressure.activeLimit) return;
+      let type = selectStageHazard(stage, this.state.gameTime, this.random());
+      const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
+      // Bound concurrent charging/falling threats without shortening their warnings.
+      if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
+        type = 'UNHELMETED';
       }
       this.spawnHazard(type);
     }
@@ -1335,7 +1325,7 @@ export class SurvivorsEngine {
     if (overrideHp) {
       hp = overrideHp;
     } else {
-      const scale = 1 + (this.state.gameTime / 60) * 0.45;
+      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime).hpScale;
       hp = Math.round(hp * scale);
     }
 
