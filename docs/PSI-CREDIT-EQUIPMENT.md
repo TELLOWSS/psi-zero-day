@@ -1,0 +1,9 @@
+# PSI credit equipment
+
+Earned PSI credits buy permanent equipment in the existing R&D headquarters. There is no real-money checkout, random paid pack, expiry, or repeat purchase. Ownership and wallet balance share a single local save; purchase fails without deduction if that save cannot be written. Legacy credit balances migrate on first use. Data stays on this device/browser.
+
+Four categories, two items each; one equipped item per category. Equip/unequip before patrol; the next initialized run receives the loadout. This does not grant weapon levels or bypass evolution recipes. Categories: instruction effectiveness, response cadence/precision, collection/mobility, protection/recovery. Higher price buys a specialized or stronger capability, while existing late-run threats and difficulty remain unchanged.
+
+References checked 2026-10-04: Fortnite official Item Shop (https://www.fortnite.com/item-shop), Call of Duty official bundles (https://www.callofduty.com/en/store/bundles), EA Apex currency guide (https://help.ea.com/en/articles/apex-legends/crafting-and-currency/). These are three prominent reference games, not a verified global popularity ranking. Borrowed concepts: collection cards, identifiable equipment blueprints, clear ownership/equipping and aspirational long-term purchases. Do not attribute PSI stat advantages to those games' cosmetic purchases. Existing production equipment art is reused; no new final-art claim.
+
+Validation: full prior regression 1138 passed / 1 skipped; targeted new shop domain + rendered UI 5 passed; typecheck and production build passed. Browser visual and real Android performance/play balance remain pending: Chromium is unavailable in this workspace. Review earning pace versus 700–2800 PSI prices and higher difficulty before calling the economy locked.
