@@ -8,6 +8,7 @@ import operationText from '../../content/localization/survivors-operation-ko.jso
 import { operationProgress, recordOperationControls } from './survivors-operation';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
+import { stageFrontPressure } from '../domain/survivors-front-pressure';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
@@ -1300,7 +1301,10 @@ export class SurvivorsEngine {
       if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
         type = 'UNHELMETED';
       }
-      this.spawnHazard(type);
+      const front = (type === 'UNHELMETED' || type === 'GAS_LEAK')
+        ? stageFrontPressure(stage.id, this.state.gameTime, this.seed)
+        : null;
+      this.spawnHazard(type, undefined, false, front ?? undefined);
     }
   }
 
@@ -1310,22 +1314,29 @@ export class SurvivorsEngine {
     this.state.bossName = name;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false) {
+  private spawnHazard(
+    type: HazardType,
+    overrideHp?: number,
+    isStageBoss = false,
+    front?: { side: 0 | 1 | 2 | 3; anchorRatio: number; spread: number },
+  ) {
     let x = 0;
     let y = 0;
-    const side = Math.floor(this.random() * 4);
-    if (side === 0) {
-      x = this.random() * WORLD_WIDTH;
-      y = -20;
-    } else if (side === 1) {
-      x = WORLD_WIDTH + 20;
-      y = this.random() * WORLD_HEIGHT;
-    } else if (side === 2) {
-      x = this.random() * WORLD_WIDTH;
-      y = WORLD_HEIGHT + 20;
+    // Preserve the existing RNG consumption so seeded tests and difficulty curves
+    // remain stable even when Stage 01 visually groups diffuse risks into a front.
+    const sideRoll = this.random();
+    const coordinateRoll = this.random();
+    const side = front?.side ?? Math.floor(sideRoll * 4);
+    if (side === 0 || side === 2) {
+      const anchor = front ? front.anchorRatio * WORLD_WIDTH : coordinateRoll * WORLD_WIDTH;
+      const spread = front ? (coordinateRoll - 0.5) * front.spread : 0;
+      x = Math.max(30, Math.min(WORLD_WIDTH - 30, anchor + spread));
+      y = side === 0 ? -20 : WORLD_HEIGHT + 20;
     } else {
-      x = -20;
-      y = this.random() * WORLD_HEIGHT;
+      const anchor = front ? front.anchorRatio * WORLD_HEIGHT : coordinateRoll * WORLD_HEIGHT;
+      const spread = front ? (coordinateRoll - 0.5) * front.spread : 0;
+      x = side === 1 ? WORLD_WIDTH + 20 : -20;
+      y = Math.max(30, Math.min(WORLD_HEIGHT - 30, anchor + spread));
     }
 
     let hp = 30;
