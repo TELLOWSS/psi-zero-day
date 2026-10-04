@@ -239,8 +239,8 @@ export class SurvivorsWebglFx {
       const dx = projectile.vx / speed;
       const dy = projectile.vy / speed;
       const premium = look.premium;
-      const trailLength = (premium ? 74 : 48) + look.tier * 8;
-      const samples = premium ? 7 : 5;
+      const trailLength = (premium ? 118 : 58) + look.tier * (premium ? 12 : 9);
+      const samples = premium ? 9 : 6;
       for (let i = samples; i >= 1; i--) {
         const t = i / samples;
         const distance = trailLength * t;
@@ -248,13 +248,13 @@ export class SurvivorsWebglFx {
         addPoint(
           projectile.x - dx * distance,
           projectile.y - dy * distance,
-          (premium ? 22 : 15) * taper + Math.max(2, projectile.radius * 0.45),
+          (premium ? 31 : 18) * taper + Math.max(2, projectile.radius * 0.55),
           color,
-          (premium ? 0.22 : 0.12) * taper,
+          (premium ? 0.34 : 0.15) * taper,
         );
       }
-      addPoint(projectile.x, projectile.y, premium ? 28 : 19, color, premium ? 0.48 : 0.30);
-      addPoint(projectile.x, projectile.y, premium ? 11 : 8, [1, 0.98, 0.88], premium ? 0.78 : 0.58);
+      addPoint(projectile.x, projectile.y, premium ? 38 : 22, color, premium ? 0.62 : 0.34);
+      addPoint(projectile.x, projectile.y, premium ? 15 : 9, [1, 0.98, 0.88], premium ? 0.90 : 0.62);
     }
 
     for (const pulse of this.pulses) {
