@@ -1,4 +1,4 @@
-import type { PatrolStageId } from '../domain/patrol-survivors';
+import type { PatrolStageId, Projectile } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { cinematicLook } from './survivors-cinematic-vfx';
 
@@ -9,6 +9,7 @@ export interface ProductionPulseSpec {
   readonly life: number;
   readonly color: Rgb;
   readonly alpha: number;
+  readonly ring: boolean;
 }
 
 interface ProductionPulse extends ProductionPulseSpec {
@@ -29,6 +30,8 @@ export interface ProductionFxFrame {
   readonly floodlights: readonly { x: number; y: number; active: boolean }[];
   readonly player: { x: number; y: number };
   readonly premiumEquipped: boolean;
+  readonly equipped: readonly string[];
+  readonly projectiles: readonly Pick<Projectile, 'x' | 'y' | 'vx' | 'vy' | 'radius' | 'kind'>[];
 }
 
 /**
@@ -56,7 +59,8 @@ export function productionPulseSpec(
     size: (impact ? 54 : 34) + (critical ? 14 : 0) + (premium ? 22 : 0),
     life: impact ? 0.20 : 0.11,
     color: palette[look.palette],
-    alpha: Math.min(0.92, (impact ? 0.54 : 0.38) + (critical ? 0.12 : 0) + (premium ? 0.16 : 0)),
+    alpha: Math.min(0.96, (impact ? 0.58 : 0.40) + (critical ? 0.12 : 0) + (premium ? 0.18 : 0)),
+    ring: impact,
   };
 }
 
@@ -214,15 +218,64 @@ export class SurvivorsWebglFx {
 
     // GPU light pools establish depth without changing collision, telegraphs or actor positions.
     for (const light of frame.floodlights) {
-      if (light.active) addPoint(light.x, light.y + 20, 132, [1, 0.73, 0.30], 0.075);
+      if (light.active) {
+        addPoint(light.x, light.y + 20, 154, [1, 0.73, 0.30], 0.082);
+        addPoint(light.x, light.y - 8, 42, [1, 0.88, 0.58], 0.12);
+      }
     }
-    if (frame.premiumEquipped) addPoint(frame.player.x, frame.player.y + 8, 96, [0.18, 0.78, 1], 0.055);
+    if (frame.premiumEquipped) {
+      addPoint(frame.player.x, frame.player.y + 8, 122, [0.18, 0.78, 1], 0.075);
+      addPoint(frame.player.x, frame.player.y - 18, 38, [0.70, 0.94, 1], 0.11);
+    }
+
+    // Live projectile splats turn the old hairline shots into a tapered optical trail.
+    // This is presentation-only: the authoritative projectile coordinates remain untouched.
+    const liveLimit = frame.projectiles.length > 90 ? 42 : 72;
+    for (const projectile of frame.projectiles.slice(0, liveLimit)) {
+      if (!['radio', 'satellite_wave', 'drone_laser', 'hunter_beam', 'tesla_bolt'].includes(projectile.kind)) continue;
+      const look = cinematicLook(projectile.kind, 5, frame.equipped);
+      const color: Rgb = look.palette === 'gold' ? [1, 0.69, 0.24] : look.palette === 'cyan' ? [0.18, 0.78, 1] : [0.68, 0.36, 1];
+      const speed = Math.hypot(projectile.vx, projectile.vy) || 1;
+      const dx = projectile.vx / speed;
+      const dy = projectile.vy / speed;
+      const premium = look.premium;
+      const trailLength = (premium ? 74 : 48) + look.tier * 8;
+      const samples = premium ? 7 : 5;
+      for (let i = samples; i >= 1; i--) {
+        const t = i / samples;
+        const distance = trailLength * t;
+        const taper = 1 - t * 0.70;
+        addPoint(
+          projectile.x - dx * distance,
+          projectile.y - dy * distance,
+          (premium ? 22 : 15) * taper + Math.max(2, projectile.radius * 0.45),
+          color,
+          (premium ? 0.22 : 0.12) * taper,
+        );
+      }
+      addPoint(projectile.x, projectile.y, premium ? 28 : 19, color, premium ? 0.48 : 0.30);
+      addPoint(projectile.x, projectile.y, premium ? 11 : 8, [1, 0.98, 0.88], premium ? 0.78 : 0.58);
+    }
 
     for (const pulse of this.pulses) {
       const t = pulse.age / pulse.life;
       const fade = (1 - t) * (1 - t);
-      addPoint(pulse.x, pulse.y, pulse.size * (1 + t * 0.45), pulse.color, pulse.alpha * fade);
-      addPoint(pulse.x, pulse.y, pulse.size * 0.42, pulse.color, Math.min(1, pulse.alpha * 1.25) * fade);
+      addPoint(pulse.x, pulse.y, pulse.size * (1 + t * 0.48), pulse.color, pulse.alpha * fade);
+      addPoint(pulse.x, pulse.y, pulse.size * 0.40, pulse.color, Math.min(1, pulse.alpha * 1.28) * fade);
+      if (pulse.ring) {
+        const radius = pulse.size * (0.28 + t * 0.72);
+        const sparks = 8;
+        for (let i = 0; i < sparks; i++) {
+          const angle = i * Math.PI * 2 / sparks;
+          addPoint(
+            pulse.x + Math.cos(angle) * radius,
+            pulse.y + Math.sin(angle) * radius * 0.55,
+            8 + (1 - t) * 5,
+            pulse.color,
+            pulse.alpha * fade * 0.42,
+          );
+        }
+      }
     }
 
     if (vertices.length === 0) return;
