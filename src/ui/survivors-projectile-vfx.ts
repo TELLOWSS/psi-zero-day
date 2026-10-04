@@ -56,6 +56,11 @@ function texture(name:string,color:string):HTMLCanvasElement | undefined {
 function stamp(ctx:CanvasRenderingContext2D,name:string,color:string,x:number,y:number,w:number,h:number) {
   const image=texture(name,color);if(image)ctx.drawImage(image,x-w/2,y-h/2,w,h);
 }
+/** Local exposure from a cached texture, never a fullscreen flash or live blur. */
+export function drawProjectileLight(ctx:CanvasRenderingContext2D,color:string,x:number,y:number,radius:number,alpha:number):void {
+  ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=alpha;
+  stamp(ctx,'light',color,x,y,radius*2,radius*1.2);ctx.restore();
+}
 function line(ctx:CanvasRenderingContext2D,points:readonly (readonly [number,number])[],color:string,width:number) {
   ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();
 }
@@ -69,10 +74,27 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
     ctx.rotate(v.angle);const cloud=spec.family==='powder'?'powder':'frost';
     ctx.globalAlpha=v.alpha*.82;stamp(ctx,cloud,spec.color,0,0,r*2.3,r*1.45);
     if(v.trail){ctx.globalAlpha=v.alpha*.26;stamp(ctx,cloud,spec.color,-v.trail*.6,0,r*2.5,r*1.25);}
-    if(v.detail){ctx.globalAlpha=v.alpha*.32;for(let i=0;i<3;i++)stamp(ctx,cloud,spec.color,-i*7,Math.sin(phase+i*2)*r*.22,r*1.1,r*.8);}
+    if(v.detail){
+      // Separate turbulent lobes, with a moving granular wake instead of one flat disc.
+      ctx.globalAlpha=v.alpha*.32;
+      for(let i=0;i<3;i++)stamp(ctx,cloud,spec.color,-i*7,Math.sin(phase+i*2)*r*.22,r*1.1,r*.8);
+      for(let i=0;i<6;i++){
+        const drift=(time*2+i/6)%1,spread=Math.sin(i*2.39996)*r*(.2+drift*.45);
+        ctx.globalAlpha=v.alpha*(1-drift)*.4;
+        stamp(ctx,cloud,spec.color,-drift*(v.trail+r),spread,r*(.3+drift*.45),r*(.25+drift*.35));
+      }
+    }
   } else if(spec.family==='beam'){
-    ctx.rotate(v.angle);stamp(ctx,'beam',spec.color,-v.trail*.35,0,v.trail+r*2,r*2);
-    if(v.detail){ctx.globalAlpha=v.alpha*.65;for(let i=0;i<v.tier;i++)line(ctx,[[-v.trail+i*5,5+i*2],[-r-i*2,2+i*2]],spec.color,1);}
+    ctx.rotate(v.angle);
+    const length=v.trail*(1+v.tier*.18)+r*2;
+    // Wide optical envelope, narrow hot core, directional wake. No parallel wire bundle.
+    ctx.globalCompositeOperation='lighter';
+    ctx.globalAlpha=v.alpha*.38;stamp(ctx,'beam',spec.color,-length*.32,0,length,r*3);
+    ctx.globalAlpha=v.alpha;stamp(ctx,'beam',spec.color,-length*.25,0,length,r*1.1);
+    if(v.detail){drawProjectileLight(ctx,spec.color,0,0,r*2,.5*v.alpha);
+      ctx.globalAlpha=v.alpha*.45;
+      for(let i=0;i<2;i++){const progress=(time*7+i*.5)%1;stamp(ctx,'light',spec.color,-progress*length,0,r*(1-progress*.6),r*.45);}
+    }
   } else if(spec.family==='signal'){
     ctx.rotate(v.angle);stamp(ctx,'beam',spec.color,-v.trail*.30,0,v.trail+r,r*.85);
     for(let i=0;i<v.tier+1;i++){
