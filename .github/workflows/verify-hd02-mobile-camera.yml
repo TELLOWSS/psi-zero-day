@@ -1,0 +1,122 @@
+name: HD-02 mobile camera visual QA
+
+on:
+  push:
+    branches:
+      - sol/hd02-mobile-camera-20260924
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hd02-mobile-camera-visual-qa
+  cancel-in-progress: true
+
+jobs:
+  hd02-visual-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build current HD-02 commit
+        run: npm run build
+
+      - name: Install Korean QA font
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - name: Locate Chromium
+        shell: bash
+        run: |
+          CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "Chrome/Chromium not found on runner."
+            exit 1
+          fi
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+
+      - name: Run exact HD-02 viewport QA
+        shell: bash
+        env:
+          PSI_RESPONSIVE_PROFILE: hd02
+          PSI_RESPONSIVE_ARTIFACT_DIR: artifacts/hd02-responsive
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/psi-hd02-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          cleanup() {
+            kill "$PREVIEW_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          READY=0
+          for attempt in $(seq 1 80); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              READY=1
+              break
+            fi
+            sleep 0.25
+          done
+
+          if [ "$READY" -ne 1 ]; then
+            cat /tmp/psi-hd02-preview.log
+            exit 1
+          fi
+
+          node scripts/verify-episode01-responsive.mjs
+
+      - name: Persist compact HD-02 visual evidence
+        if: always()
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          mkdir -p qa/hd02-preview
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          src = Path('artifacts/hd02-responsive')
+          out = Path('qa/hd02-preview')
+          out.mkdir(parents=True, exist_ok=True)
+
+          for path in sorted(src.glob('*-episode01-strategy.png')):
+              image = Image.open(path).convert('RGB')
+              if image.width > 900:
+                  height = round(image.height * 900 / image.width)
+                  image = image.resize((900, height), Image.Resampling.LANCZOS)
+              jpg = out / (path.stem + '.jpg')
+              image.save(jpg, 'JPEG', quality=78, optimize=True)
+              b64 = out / (jpg.name + '.b64')
+              import base64
+              b64.write_text(base64.b64encode(jpg.read_bytes()).decode('ascii'), encoding='ascii')
+
+          report = src / 'responsive-report.json'
+          if report.exists():
+              (out / 'responsive-report.json').write_bytes(report.read_bytes())
+          PY
+
+          rm -rf qa/hd02
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A qa
+          if git diff --cached --quiet; then
+            echo "No HD-02 QA evidence changes."
+            exit 0
+          fi
+          git commit -m "qa: store compact HD-02 visual previews [skip ci]"
+          git push origin HEAD:"$GITHUB_REF_NAME"
