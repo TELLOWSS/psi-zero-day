@@ -32,6 +32,7 @@ export interface ProductionFxFrame {
   readonly premiumEquipped: boolean;
   readonly equipped: readonly string[];
   readonly projectiles: readonly Pick<Projectile, 'x' | 'y' | 'vx' | 'vy' | 'radius' | 'kind'>[];
+  readonly front?: { x: number; y: number; horizontal: boolean; strength: number };
 }
 
 /**
@@ -226,6 +227,16 @@ export class SurvivorsWebglFx {
     if (frame.premiumEquipped) {
       addPoint(frame.player.x, frame.player.y + 8, 122, [0.18, 0.78, 1], 0.075);
       addPoint(frame.player.x, frame.player.y - 18, 38, [0.70, 0.94, 1], 0.11);
+    }
+
+    if (frame.front) {
+      const color: Rgb = [1, 0.36, 0.16];
+      const span = 150;
+      for (let i = -2; i <= 2; i++) {
+        const x = frame.front.x + (frame.front.horizontal ? i * span : 0);
+        const y = frame.front.y + (frame.front.horizontal ? 0 : i * span);
+        addPoint(x, y, 118 - Math.abs(i) * 12, color, 0.025 * frame.front.strength);
+      }
     }
 
     // Live projectile splats turn the old hairline shots into a tapered optical trail.
