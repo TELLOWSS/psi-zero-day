@@ -1,3 +1,4 @@
+import { ProjectileFeedbackLayer } from './survivors-projectile-feedback';
 import { drawProjectileVfx } from './survivors-projectile-vfx';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
@@ -112,6 +113,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Screen shake & Damage Flash
   const screenShakeRef = useRef<number>(0);
+  const projectileFeedbackRef = useRef(new ProjectileFeedbackLayer());
   const impactFeedbackRef = useRef<Array<{x:number;y:number;life:number;duration:number;boss:boolean;critical:boolean;worker:boolean}>>([]);
   const damageFlashRef = useRef<number>(0);
 
@@ -583,6 +585,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setEvolutionBanner(null);
     setBossAlert(null);
     impactFeedbackRef.current=[];
+    projectileFeedbackRef.current.clear();
     keysRef.current = {};
     engineRef.current = engine;
     touchVectorRef.current = { x: 0, y: 0 };
@@ -880,7 +883,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Update engine physics if playing
       if (engine.state.phase === 'playing') {
+        projectileFeedbackRef.current.advance(dt);
         engine.update(dt, { moveX, moveY });
+        projectileFeedbackRef.current.ingest(engine.drainProjectileFeedback(), engine.state.projectiles.length>90);
         if (time >= scoreCheckRef.current && performance.now() >= scoreHoldRef.current) {
           scoreCheckRef.current = time + 1000;
           const live = engine.state.hazards.filter(h => h.hp > 0);
@@ -893,7 +898,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         for (const event of events) {
           if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.gameTime);
           const cue = event.type === 'control' ? event.outcome === 'boss' ? 'control_heavy' : 'pickup' : event.type;
-          if ((event.type === 'impact' || event.type === 'control') && event.x !== undefined && event.y !== undefined) {
+          if (event.type === 'control' && event.x !== undefined && event.y !== undefined) {
             const boss=event.outcome==='boss',critical=event.outcome==='critical',duration=boss?.45:critical?.22:.12;
             impactFeedbackRef.current.push({x:event.x,y:event.y,life:duration,duration,boss,critical,worker:event.actorKind==='UNHELMETED'});
             if(impactFeedbackRef.current.length>24)impactFeedbackRef.current.shift();
@@ -2045,6 +2050,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
         drawProjectileVfx(ctx,p,p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90);
       }
+
+      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectiles.length>90);
 
       // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
       const hasHunter = activePerks.hunter_swarm > 0;

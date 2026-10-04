@@ -1,3 +1,4 @@
+import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
@@ -620,8 +621,25 @@ export class SurvivorsEngine {
     if (this.audioEvents.length > 256) this.audioEvents.shift();
   }
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
+  private projectileFeedback: ProjectileFeedback[] = [];
+  private readonly releasedProjectiles = new WeakSet<Projectile>();
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false) {
+    if (phase === 'release') {
+      if (this.releasedProjectiles.has(p)) return;
+      this.releasedProjectiles.add(p);
+    }
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical});
+    if (this.projectileFeedback.length > 192) {
+      const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
+      this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
+    }
+  }
+  drainProjectileFeedback(): ProjectileFeedback[] {
+    const events = this.projectileFeedback; this.projectileFeedback = []; return events;
+  }
   private addProjectile(projectile: Projectile) {
     this.state.projectiles.push(projectile);
+    this.emitProjectileFeedback(projectile, 'launch');
     if (projectile.kind === 'radio') this.emitAudio('shoot', projectile.x, projectile.y);
     else if (projectile.kind === 'extinguisher' || projectile.kind === 'cryo_blast') this.emitAudio('spray', projectile.x, projectile.y);
     else if (projectile.kind !== 'shout_shockwave') this.emitAudio('laser', projectile.x, projectile.y);
@@ -1212,6 +1230,8 @@ export class SurvivorsEngine {
         p.y <= WORLD_HEIGHT + 100
       ) {
         alive.push(p);
+      } else {
+        this.emitProjectileFeedback(p, 'release');
       }
     }
     this.state.projectiles = alive;
@@ -1424,6 +1444,7 @@ export class SurvivorsEngine {
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           h.hp -= damageDealt;
           this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -1438,6 +1459,7 @@ export class SurvivorsEngine {
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
+            this.emitProjectileFeedback(p, 'release', h.x, h.y, h.type === 'UNHELMETED');
             break;
           }
         }
@@ -1459,11 +1481,13 @@ export class SurvivorsEngine {
                 h.hp = 0; cleared++;
               }
               this.state.environmentalKills += cleared; this.state.score += cleared * 80;
-              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; break;}
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
+              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; this.emitProjectileFeedback(p, 'release', env.x, env.y); break;}
             }
           } else if (env.type === 'explosive_barrel' && env.state === 'idle') {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1472,12 +1496,14 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }
           } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1486,6 +1512,7 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }
