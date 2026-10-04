@@ -1182,7 +1182,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Responsive Portrait / Landscape Zoom Factor
       const isPortrait = displayH > displayW;
-      const preferredZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
+      // Portrait gameplay needs larger readable actors and less dead floor than the old validation view.
+      // This affects presentation framing only; simulation world coordinates remain unchanged.
+      const preferredZoom = isPortrait ? Math.max(0.98, Math.min(1.08, displayW / 420)) : 1.0;
       // Cover the viewport with the world; never reveal a large empty off-map strip.
       const baseZoom = Math.max(preferredZoom, displayW / WORLD_WIDTH, displayH / WORLD_HEIGHT);
       const viewW = displayW / baseZoom;
@@ -1208,6 +1210,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           .map(object => ({ x: object.x, y: object.y, active: object.state === 'active' })),
         player: engine.state.player,
         premiumEquipped: Boolean(engine.state.premiumGear?.equipped.length),
+        equipped: engine.state.premiumGear?.equipped ?? [],
+        projectiles: engine.state.projectiles,
       });
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
@@ -1834,7 +1838,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const workerArt = spritesRef.current.workerV2;
             if (workerArt?.naturalWidth) {
               ctx.save();
-              drawGroundedSprite(ctx, workerArt, 72, hazardPose);
+              drawGroundedSprite(ctx, workerArt, engine.state.stageId === 'stage_01' ? 82 : 72, hazardPose);
               ctx.restore();
             } else if (mSpr && mSpr.complete && mSpr.naturalWidth > 0) {
               const drawW = 42;
@@ -2141,7 +2145,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
           if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
             // High-Resolution 2.5D Quarter-View Standing Character Map Sprite
-            const sprH = 74;
+            const sprH = engine.state.stageId === 'stage_01' ? 90 : 74;
             // Draw grounded with feet touching ground contact shadow (0, 0)
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
 
@@ -2229,7 +2233,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
           drawDroneEmission(ctx,spritesRef.current.cinematicAtlas,dX,flightY,hasHunter,engine.state.gameTime,reducedMotionRef.current);
           ctx.translate(dX,flightY);
-          drawEquipment(ctx,spritesRef.current.equipmentAtlas,hasHunter?'hunter_swarm':'safety_drone',hasHunter?1:activePerks.safety_drone,0,12,hasHunter?42:30,spritesRef.current.itemsAtlas);
+          drawEquipment(ctx,spritesRef.current.equipmentAtlas,hasHunter?'hunter_swarm':'safety_drone',hasHunter?1:activePerks.safety_drone,0,12,engine.state.stageId==='stage_01'?(hasHunter?52:38):(hasHunter?42:30),spritesRef.current.itemsAtlas);
           ctx.strokeStyle='rgba(226,232,240,.22)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-5,13,4,engine.state.gameTime*12,0,Math.PI*2);ctx.stroke();
           ctx.restore();
         }
