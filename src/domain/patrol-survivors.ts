@@ -169,6 +169,7 @@ export interface EvolutionBanner {
 }
 
 export interface SurvivorsGameState {
+  difficulty?: import('./survivors-challenge').PatrolDifficulty;
   phase: 'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat';
   stageBossSpawned?: boolean;
   stageBossNeutralized?: boolean;
