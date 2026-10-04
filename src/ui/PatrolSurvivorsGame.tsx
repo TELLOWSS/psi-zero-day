@@ -1,3 +1,5 @@
+import operationText from '../../content/localization/survivors-operation-ko.json';
+import { operationPlan, operationProgress } from '../engine/survivors-operation';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -2312,7 +2314,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'playing' && lastDamage && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
       {/* COMBO JUICE BANNER */}
-      {(combo >= 2 || activeMission) && phase === 'playing' && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
+      {phase === 'playing' && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
         <aside
           className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"
@@ -2343,7 +2345,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {combo >= 2 && <div style={{ fontSize: '10px', opacity: 0.9, fontWeight: 700 }}>
               +{combo * 5}% {combatText.bonus}
             </div>}
-            {activeMission && <div className="survivors-live-objective" title={activeMission.description}>{activeMission.title} · {activeMission.currentValue}/{activeMission.targetValue}</div>}
+            {engineRef.current && (() => {
+              const progress=operationProgress(engineRef.current.state);
+              const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : `${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
+              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}</div>;
+            })()}
           </div>
         </aside>
       )}
@@ -2531,6 +2537,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       </div>
                       <h4>{stg.name}</h4>
                       <span className="survivors-stage-sub">{stg.subtitle}</span>
+                      {isUnlocked && <small className="survivors-operation-preview">{operationText.modes[operationPlan(stg).mode]} · {operationPlan(stg).earliest}–180s</small>}
                       <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE ${String(stg.stageNumber - 1).padStart(2, '0')}) 완수 시 해금`}</p>
                       <div className="survivors-stage-meta">
                         <span>{isUnlocked ? `👹 ${stg.bossName}` : '보안 인가 필요'}</span>
@@ -2821,7 +2828,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
-            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
+            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
@@ -2906,6 +2913,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
 
+            <p className="survivors-story-result">{engineRef.current && operationProgress(engineRef.current.state).complete ? operationText.handoff : operationText.timeout}</p>
             {/* 3-STAR CHALLENGES DEBRIEFING */}
             {engineRef.current?.state.stage && (
               <div className="survivors-stage-debriefing">
@@ -2933,7 +2941,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-results-grid">
               <div className="survivors-stat-box">
                 <span>최종 안전 등급</span>
-                <strong style={{ color: '#10b981' }}>ZERO DAY S급</strong>
+                <strong style={{ color: '#10b981' }}>{operationText.grades[engineRef.current?.state.starsEarned.filter(Boolean).length ?? 0]}</strong>
               </div>
               <div className="survivors-stat-box">
                 <span>최종 안전 점수</span>

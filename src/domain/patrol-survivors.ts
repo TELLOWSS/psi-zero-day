@@ -226,6 +226,7 @@ export interface SurvivorsGameState {
   stage: PatrolStageDefinition;
   interactiveHazards: StageHazardObject[];
   environmentalKills: number;
+  operationControlledZones?: string[];
   starsEarned: [boolean, boolean, boolean];
   inFloodlight: boolean;
 }

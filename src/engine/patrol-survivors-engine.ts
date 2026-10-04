@@ -1,3 +1,5 @@
+import operationText from '../../content/localization/survivors-operation-ko.json';
+import { operationProgress, recordOperationControls } from './survivors-operation';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -571,7 +573,7 @@ export function createInitialSurvivorsState(
     stage: {
       ...stage,
       starChallenges: [
-        { ...stage.starChallenges[0] },
+        { ...stage.starChallenges[0], description: operationText.victory_goal },
         { ...stage.starChallenges[1] },
         { ...stage.starChallenges[2] },
       ],
@@ -776,13 +778,15 @@ export class SurvivorsEngine {
     this.updateProjectiles(effectiveDt);
     this.updateSpawns(effectiveDt);
     this.updateHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateStageHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateDrops(effectiveDt);
     this.checkCollisions();
     this.checkStarChallenges();
 
-    // Check survival victory
-    if (this.state.gameTime >= this.state.maxTime && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    // Objective handoff can finish a successful patrol before the survival deadline.
+    if ((this.state.gameTime >= this.state.maxTime || operationProgress(this.state).complete) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10);

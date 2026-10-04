@@ -1996,3 +1996,4 @@
 .survivors-btn-icon { border-color: rgba(193,210,223,.24); box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
 .survivors-stage-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 4px 14px rgba(0,0,0,.2); }
 .survivors-stage-card:focus-visible { outline: 2px solid #f8d792; outline-offset: 3px; }
+.survivors-operation-preview { display:block; margin:8px 0 0; color:#9ae5d0; font-size:11px; letter-spacing:.03em; }
