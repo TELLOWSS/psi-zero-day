@@ -1,3 +1,4 @@
+import type { StoreEffects } from './survivors-store';
 import type { FieldTactics } from './survivors-field-tactics';
 export type HazardType = 'UNHELMETED' | 'RUNAWAY_CART' | 'GAS_LEAK' | 'FALLING_DEBRIS' | 'CRANE_BOSS';
 
@@ -208,6 +209,8 @@ export interface SurvivorsGameState {
   bossName: string | null;
   timeDilation: number; // 1.0 = normal, 0.2 = slow-mo
   timeDilationTimer: number;
+
+  premiumGear?: { equipped: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number };
 
   // Meta stats & run perks
   psiCredits: number;

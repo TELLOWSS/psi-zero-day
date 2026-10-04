@@ -1,4 +1,5 @@
-import {storeEffects, type StoreInventory} from '../domain/survivors-store';
+import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
+import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
@@ -567,6 +568,7 @@ export function createInitialSurvivorsState(
     timeDilation: 1.0,
     timeDilationTimer: 0,
 
+    premiumGear: {equipped:sanitizeInventory(inventory).equipped, effects:gear, shield:gear.shield, shieldCooldown:0, feedback:0},
     psiCredits: 0,
     permanentUpgrades: { ...upgrades },
     hasRevived: false,
@@ -588,7 +590,7 @@ export function createInitialSurvivorsState(
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
-    fieldTactics: createFieldTactics(),
+    fieldTactics: {...createFieldTactics(), supportCharges:2 + gear.support, lineCharges:2 + gear.lines},
     starsEarned: [false, false, false],
     inFloodlight: false,
   };
@@ -785,6 +787,7 @@ export class SurvivorsEngine {
     }
 
     const hpBefore=this.state.player.hp;
+    tickPremiumGear(this.state,effectiveDt);
     this.updatePlayer(effectiveDt, input);
     tickFieldTactics(this.state,effectiveDt,(x,y)=>{
       for(const [offset,kind] of [[-18,'field_rations'],[18,'radio_battery']] as const) {
@@ -1412,7 +1415,7 @@ export class SurvivorsEngine {
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
-      let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type);
+      let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type) * premiumHazardSpeed(this.state,h);
       if (this.state.interactiveHazards) {
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed') continue;
@@ -1630,9 +1633,10 @@ export class SurvivorsEngine {
             this.state.controlKit.charges -= 1;
             this.emitAudio('control', player.x, player.y);
           } else {
-            player.hp -= h.damage;
-            this.state.lastDamage = { source: h.type, amount: h.damage, remaining: 2 };
-            this.emitAudio('hit');
+            const damage = absorbPremiumDamage(this.state,h.damage);
+            player.hp -= damage;
+            this.state.lastDamage = { source: h.type, amount: damage, remaining: 2 };
+            this.emitAudio(damage>0?'hit':'control');
           }
           player.invincibleTime = 0.6; // 0.6s grace period
           // Knockback hazard slightly
@@ -1725,8 +1729,9 @@ export class SurvivorsEngine {
             // Player crushed if inside
             const pDist = Math.hypot(player.x - hazard.x, player.y - hazard.y);
             if (pDist <= hazard.radius && player.invincibleTime <= 0) {
-              player.hp = Math.max(1, player.hp - 30);
-              this.state.lastDamage = { source: 'CRANE_DROP', amount: 30, remaining: 2 };
+              const damage = absorbPremiumDamage(this.state,30);
+              player.hp = Math.max(1, player.hp - damage);
+              this.state.lastDamage = { source: 'CRANE_DROP', amount: damage, remaining: 2 };
               player.invincibleTime = 1.0;
             }
 
