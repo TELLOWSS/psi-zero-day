@@ -2088,3 +2088,78 @@
 .survivors-premium-hp-badge { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; color:#c8e6ec; }
 .survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
 .survivors-premium-hp-badge small { font-size:9px; }
+
+
+/* 2026-10-04 BALANCE / LANDSCAPE LAYOUT LOCK
+   The board remains dominant in landscape; HUD and modal chrome are compressed. */
+@media (orientation: landscape) and (max-height: 600px) {
+  .survivors-hud-top {
+    top: max(6px, env(safe-area-inset-top));
+    width: min(calc(100% - 20px), 1180px);
+    padding: 5px 10px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+  .survivors-player-hud,
+  .survivors-hud-center,
+  .survivors-top-actions { gap: 5px; }
+  .survivors-hp-container { padding: 2px 7px; }
+  .survivors-hp-bar-bg { width: clamp(90px, 16vw, 190px); height: 8px; }
+  .survivors-timer strong { font-size: clamp(16px, 2.6vw, 22px); }
+  .survivors-score-badge { padding: 0 8px; }
+  .survivors-score-badge span { font-size: 8px; }
+  .survivors-score-badge strong { font-size: 14px; }
+  .survivors-btn-icon { min-height: 32px; padding: 4px 8px; font-size: 11px; }
+  .survivors-perks-tray {
+    left: max(8px, env(safe-area-inset-left));
+    right: auto;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    max-width: 34%;
+    gap: 4px;
+  }
+  .survivors-perk-badge { width: 28px; height: 28px; font-size: 13px; }
+  .survivors-tactical-actions {
+    bottom: max(8px, env(safe-area-inset-bottom));
+    max-width: 42%;
+    gap: 4px;
+  }
+  .survivors-tactical-actions button { min-height: 34px; padding: 4px 7px; font-size: 10px; }
+  .survivors-ultimate-control {
+    right: max(8px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .survivors-ultimate-btn { width: 60px; height: 60px; }
+  .survivors-boss-alert {
+    top: max(74px, calc(env(safe-area-inset-top) + 62px));
+    right: max(10px, env(safe-area-inset-right));
+    width: min(32vw, 420px);
+    max-height: 58px;
+    overflow: hidden;
+  }
+  .survivors-boss-alert-text { padding: 5px 9px; }
+  .survivors-boss-alert-text strong { font-size: 11px; }
+  .survivors-boss-alert-text small { font-size: 9px; }
+  .survivors-modal-backdrop { padding: 8px; }
+  .survivors-modal-content {
+    width: min(1040px, calc(100% - 16px));
+    max-width: none;
+    max-height: calc(100dvh - 16px);
+    padding: 16px 20px;
+    border-radius: 14px;
+    text-align: left;
+  }
+  .survivors-modal-title { font-size: clamp(18px, 3vw, 25px); }
+  .survivors-modal-sub { margin-bottom: 12px; }
+  .survivors-perk-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .survivors-perk-card { padding: 10px 12px; gap: 10px; }
+  .survivors-perk-card-icon { width: 42px; height: 42px; font-size: 24px; }
+  .survivors-perk-card-info h4 { font-size: 14px; }
+  .survivors-perk-card-info p { font-size: 11px; line-height: 1.3; }
+  .survivors-results-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 10px; margin: 10px 0; }
+  .survivors-stat-box strong { font-size: 16px; }
+  .survivors-actions-row { justify-content: flex-end; gap: 8px; margin-top: 12px; }
+  .survivors-btn-primary, .survivors-btn-secondary { min-height: 40px; padding: 8px 18px; font-size: 13px; width: auto; }
+  .survivors-store-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .survivors-store-card { padding: 10px; }
+  .survivors-store-card strong { font-size: 14px; }
+}
