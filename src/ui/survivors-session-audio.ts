@@ -1,3 +1,4 @@
+import { cinematicLook } from './survivors-cinematic-vfx';
 import { equipmentSoundSamples } from './survivors-equipment-sound';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
@@ -133,7 +134,7 @@ export class SurvivorsSessionAudio {
     gain.setValueAtTime(.35,this.duckUntil);gain.linearRampToValueAtTime(1,this.duckUntil+.18);
   }
   /** Equipment material sound remains procedural until the final recording gate. */
-  playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false):void {
+  playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false,equipped:readonly string[]=[]):void {
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
     const key=event.kind+':'+event.phase,now=ctx.currentTime,previous=this.equipmentTimes.get(key);
@@ -142,10 +143,12 @@ export class SurvivorsSessionAudio {
     const impact=event.phase==='impact',release=event.phase==='release';
     const level=release?.035:impact?.20:.13;
     const priority=impact?2:1;
-    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker);
+    const look=cinematicLook(event.kind,5,equipped);
+    const signature=look.premium&&!event.worker?look.palette:'base';
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature;
     let buffer=this.equipmentBuffers.get(bufferKey);
     if(!buffer) {
-      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate);
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped);
       buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
       buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
     }
@@ -156,6 +159,20 @@ export class SurvivorsSessionAudio {
     if(!this.track(source,gain,priority))return;
     source.connect(gain);this.connectSfx(source,gain,{x:event.x,y:event.y},listener);
     source.start(now);source.stop(now+duration);
+  }
+  /** Quiet boot contact supports grounded gait without masking alarms or speech. */
+  playFootstep(running:boolean):void {
+    const ctx=this.ensureBuses();if(!ctx)return;
+    const now=ctx.currentTime,previous=this.equipmentTimes.get('footstep');
+    if(previous!==undefined&&now-previous<.16)return;
+    this.equipmentTimes.set('footstep',now);
+    const source=ctx.createBufferSource(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+    source.buffer=this.noiseBuffer(ctx);filter.type='lowpass';filter.frequency.value=running?1050:750;
+    gain.gain.setValueAtTime(running?.035:.023,now);gain.gain.exponentialRampToValueAtTime(.001,now+.075);
+    if(!this.track(source,gain,0)){filter.disconnect();return;}
+    source.connect(filter);filter.connect(gain);gain.connect(this.buses!.SFX);
+    this.spatialNodes.set(source,[filter]);
+    source.start(now);source.stop(now+.08);
   }
   playDecisionCue(kind:'evidence'|'record'|'hold'|'exclude'):void {
     const ctx=this.ensureBuses();if(!ctx)return;

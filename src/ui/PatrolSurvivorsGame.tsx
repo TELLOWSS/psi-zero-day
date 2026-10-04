@@ -1,3 +1,4 @@
+import { CombatDirection } from './survivors-combat-direction';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
@@ -909,6 +910,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if (!ctx) return;
 
     let motions = new SpriteMotionTracker();
+    let direction = new CombatDirection();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let prevNeutralized = 0;
@@ -927,6 +929,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (previousEngine !== engine) {
         previousEngine = engine;
         motions = new SpriteMotionTracker();
+        direction = new CombatDirection();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -955,6 +958,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Update engine physics if playing
       if (engine.state.phase === 'playing') {
         projectileFeedbackRef.current.advance(dt);
+        direction.advance(dt);
         engine.update(dt, { moveX, moveY });
         const encounter=ACCOUNTABILITY_CASES.find(row=>row.stage===engine.state.stageId);
         const ledger=accountabilityRef.current;
@@ -965,7 +969,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
         const projectileEvents=engine.drainProjectileFeedback();
         projectileFeedbackRef.current.ingest(projectileEvents, engine.state.projectiles.length>90);
-        for(const event of projectileEvents)audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90);
+        const equippedNow=engine.state.premiumGear?.equipped??[];
+        direction.ingest(projectileEvents,equippedNow,engine.state.player,engine.state.projectiles.length>90);
+        for(const event of projectileEvents){
+          if(event.phase==='launch'&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.gameTime);
+          audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
+        }
         if (time >= scoreCheckRef.current && performance.now() >= scoreHoldRef.current) {
           scoreCheckRef.current = time + 1000;
           const live = engine.state.hazards.filter(h => h.hp > 0);
@@ -1143,13 +1152,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
       const playerPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
 
+      if(engine.state.phase==='playing'&&direction.footstep(playerPose.travel,playerPose.moving))audioRef.current.playFootstep(playerPose.speed>145);
+
       // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
       let shakeY = 0;
       if (screenShakeRef.current > 0 && !reducedMotionRef.current) {
         const clampedShake = Math.min(3.5, screenShakeRef.current * 0.25);
-        shakeX = Math.round((Math.random() - 0.5) * clampedShake * 2);
-        shakeY = Math.round((Math.random() - 0.5) * clampedShake * 2);
+        shakeX = Math.round((Math.sin(engine.state.gameTime * 71) * 0.5) * clampedShake * 2);
+        shakeY = Math.round((Math.sin(engine.state.gameTime * 93 + 1.4) * 0.5) * clampedShake * 2);
         screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 40);
       }
 
@@ -1163,8 +1174,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
       const camera=survivorsCamera(player,viewW,viewH,WORLD_WIDTH,WORLD_HEIGHT,baseZoom);
-      const camX = camera.x + shakeX;
-      const camY = camera.y + shakeY;
+      const kick=direction.camera(reducedMotionRef.current);
+      const camX = camera.x + shakeX + kick.x;
+      const camY = camera.y + shakeY + kick.y;
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1274,6 +1286,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
+      direction.drawFloor(ctx,spritesRef.current.cinematicAtlas,reducedMotionRef.current);
       for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
       const tactics=engine.state.fieldTactics;
