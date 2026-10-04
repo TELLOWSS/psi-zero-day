@@ -161,6 +161,7 @@ export interface PlayerStats {
 }
 
 export interface EvolutionBanner {
+  equipmentId?: PerkId;
   title: string;
   subtitle: string;
   icon: string;
