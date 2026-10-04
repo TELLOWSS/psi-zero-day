@@ -2161,7 +2161,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawPremiumGear(ctx,engine.state,spritesRef.current.premiumAtlas,reducedMotionRef.current);
-      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined);
+      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectiles.length>70||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
       let cinematicFlights=0;
