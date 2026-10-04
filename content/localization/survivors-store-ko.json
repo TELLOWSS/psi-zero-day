@@ -1,0 +1,51 @@
+{
+  "title": "PSI 프리미엄 장비실",
+  "intro": "순찰로 모은 PSI로 영구 소유하세요. 카테고리별 1개 장착 · 다음 순찰부터 적용 · 반복 구매 없음",
+  "categories": {
+    "communication": "계도 전달",
+    "tempo": "대응 방식",
+    "logistics": "보급·출동",
+    "protection": "생존 지원"
+  },
+  "items": {
+    "voice_lens": {
+      "name": "지향성 계도 렌즈",
+      "description": "대응 효과 +15%"
+    },
+    "command_array": {
+      "name": "PSI 지휘 어레이",
+      "description": "대응 효과 +25%"
+    },
+    "relay_core": {
+      "name": "교육 신호 중계 코어",
+      "description": "대응 재사용 대기 감소 +6%p"
+    },
+    "precision_link": {
+      "name": "정밀 통제 링크",
+      "description": "정밀 대응 확률 +12%p"
+    },
+    "recovery_mesh": {
+      "name": "보급 회수망",
+      "description": "회수 반경 +45"
+    },
+    "dispatch_drive": {
+      "name": "긴급 출동 드라이브",
+      "description": "이동 속도 +30 · 회수 반경 +20"
+    },
+    "rescue_shell": {
+      "name": "구조용 보호 셸",
+      "description": "최대 안전 체력 +30"
+    },
+    "recovery_cell": {
+      "name": "지속 회복 셀",
+      "description": "안전 체력 초당 +0.6"
+    }
+  },
+  "buy": "구매",
+  "equip": "장착",
+  "remove": "해제",
+  "owned": "보유",
+  "equipped": "장착 중",
+  "failure": "저장하지 못했습니다. 크레딧은 차감되지 않았습니다.",
+  "empty": "장착 장비 없음"
+}
