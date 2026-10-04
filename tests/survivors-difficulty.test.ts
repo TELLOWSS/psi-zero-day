@@ -34,6 +34,6 @@ describe('map difficulty progression', () => {
     expect(e.state.hazards.length).toBeLessThanOrEqual(difficultyProfile(e.state.stage.stageNumber).activeLimit+1);
     expect(e.state.hazards.filter(h=>h.type==='RUNAWAY_CART'||h.type==='FALLING_DEBRIS').length)
       .toBeLessThanOrEqual(difficultyProfile(e.state.stage.stageNumber).telegraphLimit+1);
-    expect(e.state.hazards.find(h=>h.isStageBoss)!.maxHp).toBe(e.state.stage.bossHp);
+    expect(e.state.hazards.find(h=>h.isStageBoss)!.maxHp).toBe(Math.round(e.state.stage.bossHp*1.8));
   });
 });

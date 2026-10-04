@@ -2,6 +2,7 @@ import type { FieldTactics } from './survivors-field-tactics';
 export type HazardType = 'UNHELMETED' | 'RUNAWAY_CART' | 'GAS_LEAK' | 'FALLING_DEBRIS' | 'CRANE_BOSS';
 
 export interface Hazard {
+  variant?: 'reinforced_cart' | 'pulse_gas' | 'split_gas';
   readonly id: string;
   readonly type: HazardType;
   x: number;

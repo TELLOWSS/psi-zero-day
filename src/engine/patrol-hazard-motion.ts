@@ -4,6 +4,20 @@ import type { Hazard, PlayerStats } from '../domain/patrol-survivors';
 export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, speed: number): boolean {
   const motion = h.motion;
   if (!motion) return false;
+  if(h.variant==='pulse_gas') {
+    if(motion.phase==='approach') {
+      const dx=player.x-h.x,dy=player.y-h.y,distance=Math.hypot(dx,dy)||1;
+      if(distance<=90){motion.phase='warning';motion.timer=1.25;}
+      else {h.x+=dx/distance*speed*dt;h.y+=dy/distance*speed*dt;}
+      return true;
+    }
+    motion.timer=Math.max(0,motion.timer-dt);
+    if(motion.timer===0){
+      if(motion.phase==='warning'){motion.phase='charge';motion.timer=.65;}
+      else {motion.phase='approach';motion.timer=0;}
+    }
+    return true;
+  }
   if (h.type === 'FALLING_DEBRIS') {
     motion.timer = Math.max(0, motion.timer - dt);
     if (motion.timer === 0 && motion.phase === 'warning') {
@@ -37,8 +51,9 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
   }
   motion.timer = Math.max(0, motion.timer - dt);
   if (motion.phase === 'charge') {
-    h.x += motion.directionX * speed * 2.1 * dt;
-    h.y += motion.directionY * speed * 2.1 * dt;
+    const burst=h.variant==='reinforced_cart'&&h.hp<h.maxHp*.5?1.35:1;
+    h.x += motion.directionX * speed * 2.1 * burst * dt;
+    h.y += motion.directionY * speed * 2.1 * burst * dt;
   }
   if (motion.timer === 0) {
     if (motion.phase === 'warning') {
@@ -53,5 +68,6 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
 }
 
 export function isHazardContactActive(h: Hazard): boolean {
+  if(h.variant==='pulse_gas')return h.motion?.phase==='charge';
   return h.type !== 'FALLING_DEBRIS' || !h.motion || h.motion.phase === 'fall';
 }
