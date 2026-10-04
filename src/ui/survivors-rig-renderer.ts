@@ -7,6 +7,21 @@ const prepared = new WeakMap<HTMLImageElement,Prepared>();
 const BODY=256, WIDTH=300, HEIGHT=320, ORIGIN_X=150, ORIGIN_Y=294;
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const joint=(a:Joint,b:Joint,t:number):Joint=>({x:mix(a.x,b.x,t),y:mix(a.y,b.y,t)});
+export function riggedTorsoOffset(phase:number,running:boolean,brace:number,action:number,blend:number,height:number):Joint {
+ return {x:action*1.4*height/74,y:(Math.cos(phase/16*Math.PI*4)*(running?1.1:.55)*blend-brace*2)*height/74};
+}
+
+/** Wearable layers use the same quantized torso pose as the actor's cached mesh. */
+export function applyActorTorsoTransform(ctx:CanvasRenderingContext2D,pose:SpritePose,height:number,rigged:boolean):void {
+ ctx.scale(pose.facing,1);
+ if(rigged && (pose.gaitBlend>0 || pose.reaction>0 || pose.action>0)){
+  const phase=Math.floor(pose.cycle/(Math.PI*2)*16)%16;
+  const dy=Math.round(pose.directionY*32)/32;
+  const running=pose.stride/Math.sqrt(1-.64*dy*dy)>60;
+  const offset=riggedTorsoOffset(phase,running,Math.round(pose.reaction*3)/3,Math.round(pose.action*2)/2,Math.round(pose.gaitBlend*4)/4,height);
+  ctx.transform(1,0,pose.lean,1,0,0);ctx.translate(offset.x,offset.y);
+ }else ctx.transform(1,0,pose.lean+pose.action*.025,pose.scaleY-pose.action*.008,0,0);
+}
 export function prepareActorRig(image:HTMLImageElement,source:SourceRect):void {
  const rig=ACTOR_RIGS[image.src.split('/').pop() ?? ''];
  if(!rig) return;
@@ -63,12 +78,13 @@ function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:nu
  const sources=[pixels(p.rig.left,p.width),pixels(p.rig.right,p.width)];
  let rows=rowsCache.get(p);if(!rows){rows=[legRows(p,sources[0]!,sources[1]!,true),legRows(p,sources[1]!,sources[0]!,false)];rowsCache.set(p,rows);}
  const cycle=phase/16*Math.PI*2;
- const torsoY=(Math.cos(cycle*2)*(running?1.1:.55)*blend-brace*2)*BODY/74;
+ const torso=riggedTorsoOffset(phase,running,brace,action,blend,BODY);
+ const torsoY=torso.y;
  const targets=sources.map((l,i)=>{
   const amplitude=brace>0?0:blend;const step=footTravel(cycle,i===1,running,directionY,amplitude,stride);
   const offsetX=step.x*BODY/height;
   const offsetY=(step.y-step.lift)*BODY/height;
-  const hip={x:l.hip.x+(action*1.4)*BODY/74,y:l.hip.y+torsoY};
+  const hip={x:l.hip.x+torso.x,y:l.hip.y+torsoY};
   const ankle={x:l.ankle.x+offsetX,y:l.ankle.y+offsetY};
   const upper=Math.hypot(l.knee.x-l.hip.x,l.knee.y-l.hip.y)*1.04;
   const lower=Math.hypot(l.ankle.x-l.knee.x,l.ankle.y-l.knee.y)*1.04;
@@ -92,8 +108,8 @@ function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:nu
   }
  }
  ctx.save();ctx.beginPath();ctx.rect(0,0,p.width,p.rig.waist*BODY+5);
- ctx.clip();ctx.translate(action*1.4*BODY/74,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();
- for(const polygon of p.rig.protected ?? []){ctx.save();ctx.beginPath();polygon.forEach((point,i)=>{if(i===0)ctx.moveTo(point.x*p.width,point.y*BODY);else ctx.lineTo(point.x*p.width,point.y*BODY)});ctx.closePath();ctx.clip();ctx.translate(action*1.4*BODY/74,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();}
+ ctx.clip();ctx.translate(torso.x,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();
+ for(const polygon of p.rig.protected ?? []){ctx.save();ctx.beginPath();polygon.forEach((point,i)=>{if(i===0)ctx.moveTo(point.x*p.width,point.y*BODY);else ctx.lineTo(point.x*p.width,point.y*BODY)});ctx.closePath();ctx.clip();ctx.translate(torso.x,torsoY);ctx.drawImage(p.texture,0,0);ctx.restore();}
  return canvas;
 }
 /** Cached textured joint poses: no redraw of dozens of mesh triangles during steady gameplay. */

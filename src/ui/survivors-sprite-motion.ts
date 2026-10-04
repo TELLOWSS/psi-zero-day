@@ -46,6 +46,10 @@ export class SpriteMotionTracker {
 interface Bounds { x: number; y: number; width: number; height: number }
 const bounds = new WeakMap<HTMLImageElement, Bounds>();
 
+export function spriteOpaqueBounds(image: HTMLImageElement): Bounds {
+  return bounds.get(image) ?? { x: 0, y: 0, width: image.naturalWidth, height: image.naturalHeight };
+}
+
 /** Cache opaque bounds on load, so transparent padding cannot lift feet off the floor. */
 export function registerSpriteBounds(image: HTMLImageElement): void {
   const canvas = document.createElement('canvas');
@@ -70,7 +74,7 @@ export function drawGroundedSprite(ctx: CanvasRenderingContext2D, image: HTMLIma
   ctx.save();ctx.fillStyle='rgba(3,10,18,.14)';ctx.beginPath();
   ctx.ellipse(height*.14,3,height*.29,height*.075,.18,0,Math.PI*2);ctx.fill();ctx.restore();
   if(drawRiggedActor(ctx,image,height,pose))return;
-  const source = bounds.get(image) ?? { x: 0, y: 0, width: image.naturalWidth, height: image.naturalHeight };
+  const source = spriteOpaqueBounds(image);
   const width = height * source.width / source.height;
   ctx.save(); ctx.scale(pose.facing, 1);
   const rig = ACTOR_RIGS[image.src.split('/').pop() ?? ''];

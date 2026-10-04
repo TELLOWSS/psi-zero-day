@@ -4,6 +4,7 @@ import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
+import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory} from '../domain/survivors-store';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
@@ -151,6 +152,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     equipmentAtlas?: HTMLImageElement;
     premiumAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
+    wearables?: WearableImages;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
     stageFloors: Record<string,HTMLImageElement>;
@@ -263,6 +265,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
+  useEffect(() => {
+    let disposed = false;
+    void loadWearableImages(selectedChar).then(images => { if (!disposed) spritesRef.current.wearables = images; });
+    return () => { disposed = true; };
+  }, [selectedChar]);
   const [accountability,setAccountability]=useState(()=>{try{return readAccountability(localStorage.getItem(ACCOUNTABILITY_SAVE_KEY));}catch{return readAccountability(null);}});
   const [accountabilityCase,setAccountabilityCase]=useState<typeof ACCOUNTABILITY_CASES[number]|null>(null);
   const accountabilityRef=useRef(accountability);accountabilityRef.current=accountability;
@@ -2101,7 +2108,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // High-Resolution 2.5D Quarter-View Standing Character Map Sprite
             const sprH = 74;
             // Draw grounded with feet touching ground contact shadow (0, 0)
+            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back');
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
+            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front');
 
             // Ground Accent Indicator Ring under character's feet
             ctx.strokeStyle = charProfile?.color || '#84cc16';
@@ -2150,7 +2159,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas);
+      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables);
       const projectileBusy=projectiles.length>60;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
