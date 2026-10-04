@@ -1,3 +1,5 @@
+import {RESOURCE_PROFILES,SUPPLY_CYCLE} from './survivors-resources';
+export {SUPPLY_CYCLE} from './survivors-resources';
 import type { SurvivorsGameState, TacticalItemId } from '../domain/patrol-survivors';
 
 export const TACTICAL_ITEMS = {
@@ -7,12 +9,11 @@ export const TACTICAL_ITEMS = {
   field_rations: { atlasCell: 5, color: '#fb923c' },
   route_lantern: { atlasCell: 6, color: '#22d3ee' },
 } as const;
-export const SUPPLY_CYCLE: readonly TacticalItemId[] = ['record_beacon','radio_battery','control_kit','field_rations','route_lantern'];
 
 export function applyTacticalItem(state: SurvivorsGameState, kind: TacticalItemId): void {
   const potency=state.difficulty==='extreme'?1.5:state.difficulty==='hard'?1.25:1;
   if (kind === 'radio_battery') {
-    state.ultimateCharge = Math.min(state.maxUltimateCharge, state.ultimateCharge + 30*potency);
+    state.ultimateCharge = Math.min(state.maxUltimateCharge, state.ultimateCharge + RESOURCE_PROFILES[state.difficulty??'standard'].batteryCharge);
   } else if (kind === 'control_kit') {
     state.controlKit = {charges: potency===1.5?3:2, remaining: 12*potency};
   } else if (kind === 'field_rations') {

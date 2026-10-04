@@ -1,3 +1,4 @@
+import type {PatrolDifficulty} from './survivors-challenge';
 import type { PerkId } from './patrol-survivors';
 export type StoreCategory = 'communication' | 'tempo' | 'logistics' | 'protection' | 'companion' | 'tactics';
 export interface StoreEffects { damage?: number; cooldown?: number; crit?: number; pickup?: number; speed?: number; hp?: number; regen?: number; shield?: number; shieldPeriod?: number; suppression?: number; ultimate?: number; support?: number; lines?: number }
@@ -182,7 +183,7 @@ export const STORE_ITEMS: readonly StoreItem[] = [
     "price": 3400,
     "icon": "quick_reflexes",
     "effects": {
-      "ultimate": 0.9,
+      "ultimate": 0.35,
       "support": 2
     },
     "art": 15,
@@ -222,4 +223,17 @@ export function storeEffects(inventory: StoreInventory): Required<StoreEffects> 
     }
   }
   return total;
+}
+
+/** A useful owned item in an empty slot comes first; no purchase or automatic replacement. */
+export function recommendedStoreItem(inventory:StoreInventory,difficulty:PatrolDifficulty):StoreItem {
+  const safe=sanitizeInventory(inventory);
+  const priorities=difficulty==='hard'||difficulty==='extreme'
+    ? ['shock_mantle','inspection_wing','predictive_watch','relay_core','recovery_mesh']
+    : ['relay_core','rescue_shell','recovery_mesh','inspection_wing','barrier_forge'];
+  const slots=new Set(safe.equipped.map(id=>STORE_ITEMS.find(i=>i.id===id)!.category));
+  const candidates=priorities.map(id=>STORE_ITEMS.find(i=>i.id===id)!);
+  return candidates.find(item=>safe.owned.includes(item.id)&&!slots.has(item.category))
+    ?? candidates.find(item=>!slots.has(item.category))
+    ?? STORE_ITEMS.find(item=>safe.equipped.includes(item.id))!;
 }
