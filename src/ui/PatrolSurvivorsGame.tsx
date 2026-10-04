@@ -1,3 +1,5 @@
+import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
+import {drawPremiumGear} from './survivors-premium-render';
 import {STORE_ITEMS, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
@@ -142,6 +144,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     riskAtlasV2?: HTMLImageElement;
     itemsAtlas?: HTMLImageElement;
     equipmentAtlas?: HTMLImageElement;
+    premiumAtlas?: HTMLImageElement;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
     stageFloors: Record<string,HTMLImageElement>;
@@ -244,6 +247,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const equipment = new Image();
     equipment.onload = () => { registerPropAtlas(equipment,3,5); spritesRef.current.equipmentAtlas = equipment; };
     equipment.src = EQUIPMENT_ART;
+    const premium = new Image();
+    premium.onload = () => {spritesRef.current.premiumAtlas=premium;};
+    premium.src = PREMIUM_ATLAS;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
     const sImg = new Image();
@@ -2136,6 +2142,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
+      drawPremiumGear(ctx,engine.state,spritesRef.current.premiumAtlas,reducedMotionRef.current);
+
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
         if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
@@ -2294,6 +2302,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const fieldIncident=ACCOUNTABILITY_CASES.find(row=>row.stage===selectedStage);
   const incidentPending=fieldIncident&&accountability.access==='active'&&!accountability.decisions.some(d=>d.caseId===fieldIncident.id);
   const fieldRadio=incidentPending?fieldIncident.line:accountability.decisions.at(-1)?accountabilityText.radioAfter[accountability.decisions.at(-1)!.outcome]:'';
+  const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
 
   return (
@@ -2326,6 +2335,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
             <span className="survivors-hp-text">{hp}/{maxHp}</span>
           </div>
+          {liveGear && liveGear.equipped.length>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
+            <span className="survivors-premium-live-icons">{liveGear.equipped.map(id => <SurvivorsPremiumArt key={id} item={STORE_ITEMS.find(item=>item.id===id)!}/>)}</span>
+            {liveGear.effects.shield>0 && <span>{storeText.shield} {Math.ceil(liveGear.shield)}/{liveGear.effects.shield}{liveGear.shieldCooldown>0?` · ${storeText.recharge} ${Math.ceil(liveGear.shieldCooldown)}s`:''}</span>}
+          </div>}
         </div>
 
         <div className="survivors-hud-center">
@@ -2371,7 +2384,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
-      {phase === 'playing' && lastDamage && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
+      {phase === 'playing' && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
       {/* COMBO JUICE BANNER */}
       {phase === 'playing' && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
@@ -2662,7 +2675,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
               <div>⚡ <strong>소장 샤우팅</strong>: <kbd>Space</kbd> / <kbd>F</kbd> (전화면 1.5초 시공간 정지 & 전리품 흡수)</div>
               <div>💼 <strong>보유 안전 크레딧</strong>: <strong>{psiCredits.toLocaleString()} PSI</strong></div>
-              <p className="survivors-store-loadout">{storeInventory.equipped.map(id => storeText.items[id as keyof typeof storeText.items].name).join(' · ') || storeText.empty}</p>
+              <div className="survivors-store-loadout" aria-label={storeText.status}>{storeInventory.equipped.length ? storeInventory.equipped.map(id => <span key={id}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===id)!}/>{storeText.items[id as keyof typeof storeText.items].name}</span>) : storeText.empty}</div>
             </div>
 
             <div className="survivors-actions-row">
@@ -2702,11 +2715,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                   const text = storeText.items[item.id as keyof typeof storeText.items];
                   const owned = storeInventory.owned.includes(item.id);
                   const equipped = storeInventory.equipped.includes(item.id);
-                  return <article key={item.id} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
-                    <SurvivorsEquipmentIcon id={item.icon} level={1} />
-                    <strong>{text.name}</strong><span>{text.description}</span>
+                  return <article key={item.id} data-rarity={item.rarity} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
+                    <span className="survivors-premium-rarity">{storeText[item.rarity]}</span>
+                    <SurvivorsPremiumArt item={item} />
+                    <strong>{text.name}</strong><span>{text.description}</span><p className="survivors-premium-use">{text.use}</p>
                     <small>{equipped ? storeText.equipped : owned ? storeText.owned : `${item.price.toLocaleString()} PSI`}</small>
                     <button type="button" aria-pressed={owned ? equipped : undefined} disabled={!owned && psiCredits < item.price} onClick={() => changeStore(item.id,!owned)}>{owned ? equipped ? storeText.remove : storeText.equip : `${storeText.buy} · ${item.price.toLocaleString()} PSI`}</button>
+                    <details><summary>{storeText.preview}</summary><SurvivorsPremiumArt item={item} large/><p>{storeText.recommend}: {text.use}</p></details>
                   </article>;
                 })}</div>
               </section>)}

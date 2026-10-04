@@ -5,40 +5,90 @@
     "communication": "계도 전달",
     "tempo": "대응 방식",
     "logistics": "보급·출동",
-    "protection": "생존 지원"
+    "protection": "생존 지원",
+    "companion": "동행 지원",
+    "tactics": "현장 전술"
   },
   "items": {
     "voice_lens": {
       "name": "지향성 계도 렌즈",
-      "description": "대응 효과 +15%"
+      "description": "대응 효과 +15%",
+      "use": "계도 전달의 기본 대응력을 강화"
     },
     "command_array": {
       "name": "PSI 지휘 어레이",
-      "description": "대응 효과 +25%"
+      "description": "대응 효과 +25%",
+      "use": "후반 고체력 위험을 더 빠르게 통제"
     },
     "relay_core": {
       "name": "교육 신호 중계 코어",
-      "description": "대응 재사용 대기 감소 +6%p"
+      "description": "대응 재사용 대기 감소 +6%p",
+      "use": "일정한 대응 간격을 단축"
     },
     "precision_link": {
       "name": "정밀 통제 링크",
-      "description": "정밀 대응 확률 +12%p"
+      "description": "정밀 대응 확률 +12%p",
+      "use": "정밀 대응으로 강한 한 번을 기대"
     },
     "recovery_mesh": {
       "name": "보급 회수망",
-      "description": "회수 반경 +45"
+      "description": "회수 반경 +45",
+      "use": "위험에 접근하지 않고 보급 회수"
     },
     "dispatch_drive": {
       "name": "긴급 출동 드라이브",
-      "description": "이동 속도 +30 · 회수 반경 +20"
+      "description": "이동 속도 +30 · 회수 반경 +20",
+      "use": "회피와 회수를 함께 지원"
     },
     "rescue_shell": {
       "name": "구조용 보호 셸",
-      "description": "최대 안전 체력 +30"
+      "description": "최대 안전 체력 +30",
+      "use": "반복 접촉에 버틸 여유를 확보"
     },
     "recovery_cell": {
       "name": "지속 회복 셀",
-      "description": "안전 체력 초당 +0.6"
+      "description": "안전 체력 초당 +0.6",
+      "use": "짧은 안전 구간마다 체력을 회복"
+    },
+    "broadcast_crown": {
+      "name": "광역 교육 크라운",
+      "description": "대응 효과 +38% · 대기 감소 +4%p",
+      "use": "밀려오는 후반 위험을 빠르게 통제"
+    },
+    "sync_gauntlet": {
+      "name": "동기화 지휘 건틀릿",
+      "description": "대기 감소 +16%p · 정밀 확률 +6%p",
+      "use": "짧아진 대응 간격으로 빈틈을 메움"
+    },
+    "extraction_pack": {
+      "name": "긴급 회수 백팩",
+      "description": "이동 +50 · 회수 반경 +65",
+      "use": "혼잡한 구역에서 보급을 모으며 탈출"
+    },
+    "shock_mantle": {
+      "name": "충격 흡수 맨틀",
+      "description": "체력 +20 · 보호막 45 / 소진 후 18초 복구",
+      "use": "돌진·가스·낙하 접촉 피해를 먼저 흡수"
+    },
+    "inspection_wing": {
+      "name": "PSI 감시 윙",
+      "description": "반경 180 내 카트·가스 이동 20% 감속",
+      "use": "위험 접근을 늦춰 회피 공간 확보"
+    },
+    "barrier_forge": {
+      "name": "통제선 포지",
+      "description": "순찰 시작 통제선 +3회",
+      "use": "집중 위험 구역에 통제선을 연속 배치"
+    },
+    "rescue_wing": {
+      "name": "구조지원 윙",
+      "description": "초당 회복 +0.8 · 보호막 15 / 소진 후 24초 복구",
+      "use": "장기 순찰의 누적 피해를 복구"
+    },
+    "predictive_watch": {
+      "name": "예측 지휘 워치",
+      "description": "초당 샤우팅 충전 +0.9 · 보급 호출 +2회",
+      "use": "통제 성과가 적어도 긴급 지휘를 준비"
     }
   },
   "buy": "구매",
@@ -47,5 +97,16 @@
   "owned": "보유",
   "equipped": "장착 중",
   "failure": "저장하지 못했습니다. 크레딧은 차감되지 않았습니다.",
-  "empty": "장착 장비 없음"
+  "empty": "장착 장비 없음",
+  "status": "장착 프로토콜",
+  "shield": "보호막",
+  "recharge": "복구",
+  "ready": "준비",
+  "preview": "장비 상세",
+  "all": "전체 장비",
+  "next": "다음 순찰 적용",
+  "recommend": "어려운 상황에서의 역할",
+  "legendary": "전설",
+  "elite": "정예",
+  "advanced": "첨단"
 }
