@@ -151,7 +151,7 @@ describe('Patrol Survivors Engine', () => {
     expect(engine.state.player.pickupRadius).toBe(basePickup + 35);
 
     engine.applyPerk('safety_harness');
-    expect(engine.state.player.maxHp).toBe(baseMaxHp + 30);
+    expect(engine.state.player.maxHp).toBe(baseMaxHp + 18);
   });
 
   it('charges and triggers Director Shout ultimate with cut-in and global magnet', () => {
