@@ -1989,6 +1989,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
           }
 
+          if(h.variant){
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle=h.variant==='pulse_gas'?'#a7f3d0':'#f8d477';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            ctx.strokeText(challengeText.variants[h.variant],0,-h.radius-22);ctx.fillText(challengeText.variants[h.variant],0,-h.radius-22);
+            if(h.variant==='pulse_gas'){ctx.globalAlpha=.65;ctx.strokeStyle=h.motion?.phase==='charge'?'#fb7185':'#a7f3d0';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,h.radius,0,Math.PI*2);ctx.stroke();}
+            else if(h.variant==='reinforced_cart'){ctx.strokeStyle=h.hp<h.maxHp*.5?'#fb923c':'#7dd3fc';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,2,h.radius*1.25,h.radius*.45,0,0,Math.PI*2);ctx.stroke();}
+            ctx.restore();
+          }
           // Mini HP Bar with clear contrast
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
