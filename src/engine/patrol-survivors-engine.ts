@@ -1429,7 +1429,7 @@ export class SurvivorsEngine {
       h.y += (dy / dist) * hazardSpeed * dt;
     }
     // Avoided falls expire without granting control score, drops, or boss stars.
-    this.state.hazards = this.state.hazards.filter(h => !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
+    this.state.hazards = this.state.hazards.filter(h => h.isStageBoss || !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
   }
 
   private checkCollisions() {
