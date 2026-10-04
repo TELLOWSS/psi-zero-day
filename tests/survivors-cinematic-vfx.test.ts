@@ -1,8 +1,9 @@
 import {describe,it,expect,vi} from 'vitest';
-import {cinematicLook,drawCinematicFlight,drawCinematicContact,drawPremiumProtocol,drawDroneEmission} from '../src/ui/survivors-cinematic-vfx';
+import {cinematicLook,drawCinematicFlight,drawCinematicContact,drawPremiumProtocol,drawDroneEmission,PREMIUM_VFX_SIGNATURES} from '../src/ui/survivors-cinematic-vfx';
 import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import type {Projectile,ProjectileKind} from '../src/domain/patrol-survivors';
+import {STORE_ITEMS} from '../src/domain/survivors-store';
 const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),arc:vi.fn(),stroke:vi.fn()}) as unknown as CanvasRenderingContext2D;
 const shot=(kind:ProjectileKind):Projectile=>({id:'p',kind,x:50,y:60,vx:100,vy:0,radius:4,damage:12,duration:.2,pierce:1});
@@ -37,6 +38,21 @@ describe('premium and high-tier cinematic presentation',()=>{
     drawPremiumProtocol(ctx,state,atlas,false,1);drawDroneEmission(ctx,atlas,10,20,true,2,false);
     expect(ctx.drawImage).toHaveBeenCalled();expect(JSON.stringify(state)).toBe(snapshot);
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
+  });
+  it('assigns every paid store item a distinct visual identity and tier signature',()=>{
+    const ids=STORE_ITEMS.map(item=>item.id);
+    expect(Object.keys(PREMIUM_VFX_SIGNATURES).sort()).toEqual([...ids].sort());
+    expect(new Set(Object.values(PREMIUM_VFX_SIGNATURES)).size).toBe(STORE_ITEMS.length);
+    expect(PREMIUM_VFX_SIGNATURES.broadcast_crown).toContain('legendary');
+    expect(PREMIUM_VFX_SIGNATURES.voice_lens).toContain('advanced');
+    expect(PREMIUM_VFX_SIGNATURES.command_array).toContain('elite');
+  });
+  it('renders materially different runtime complexity across advanced elite and legendary communication gear',()=>{
+    const draw=(id:string)=>{const state=createInitialSurvivorsState('yoon',undefined,undefined,undefined,{owned:[id],equipped:[id]});state.gameTime=3;const ctx=context();drawPremiumProtocol(ctx,state,atlas,false,0);return {images:vi.mocked(ctx.drawImage).mock.calls.length,ellipses:vi.mocked(ctx.ellipse).mock.calls.length};};
+    const advanced=draw('voice_lens'),elite=draw('command_array'),legendary=draw('broadcast_crown');
+    expect(elite.images).toBeGreaterThan(advanced.images);
+    expect(legendary.ellipses).toBeGreaterThan(advanced.ellipses);
+    expect(elite.ellipses).toBeGreaterThan(advanced.ellipses);
   });
   it('uses the equipped gold material for an engine impact and replaces the old wire response',()=>{
     const layer=new ProjectileFeedbackLayer(),ctx=context();
