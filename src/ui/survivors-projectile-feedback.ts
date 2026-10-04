@@ -1,5 +1,5 @@
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
-import { drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
+import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
 
 type Effect = { event: ProjectileFeedback; age: number; duration: number };
 export const MAX_PROJECTILE_FEEDBACK = 64;
@@ -40,6 +40,12 @@ export class ProjectileFeedbackLayer {
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      // Fast exposure attack, expanding contact, slower material release.
+      // Confirmed contacts only; workers retain the calm instruction receipt.
+      if(!e.worker&&!reducedMotion&&spec.family!=='physical') {
+        const lightRadius=e.phase==='launch'?10*(1-t*.6):e.phase==='impact'?(e.critical?24:17)*(1+t*.5):12*(1-t);
+        drawProjectileLight(ctx,spec.color,0,0,lightRadius,(1-t)*(1-t)*(busy?.25:.65));
+      }
       // Instruction received: a calm floor check, never sparks on a person.
       if (e.worker) {
         ctx.beginPath();ctx.moveTo(-6,1);ctx.lineTo(-1,5);ctx.lineTo(8,-5);ctx.stroke();
@@ -54,10 +60,12 @@ export class ProjectileFeedbackLayer {
         const r = Math.min(30, Math.max(5,e.radius*.55)) * (e.phase === 'impact' ? 1+t*.7 : 1-t*.35);
         drawProjectileVfx(ctx, {id:e.projectileId,kind:e.kind,x:0,y:0,vx:Math.cos(e.angle),vy:Math.sin(e.angle),radius:r,damage:0,pierce:0,duration:(1-t)*spec.life},1,age,false,busy);
       } else if (spec.family === 'beam') {
+        ctx.save();
         ctx.rotate(e.angle);
-        const reach = e.phase === 'impact' ? 9+t*8 : 8*(1-t);
+        const reach = e.phase === 'impact' ? 12+t*12 : 14*(1-t);
         ctx.beginPath();ctx.moveTo(-reach,0);ctx.lineTo(reach,0);ctx.stroke();
         if (e.phase === 'impact') {ctx.beginPath();ctx.moveTo(0,-4);ctx.lineTo(0,4);ctx.stroke();}
+        ctx.restore();
       } else if (spec.family === 'arc') {
         const r = 6+(e.phase === 'impact' ? t*12 : (1-t)*5);
         ctx.beginPath();ctx.moveTo(-r,2);ctx.lineTo(-r*.3,-3);ctx.lineTo(1,3);ctx.lineTo(r,-2);ctx.stroke();
@@ -74,14 +82,16 @@ export class ProjectileFeedbackLayer {
       // Contact material follows the locked incoming direction. Never on workers.
       if (!e.worker && !reducedMotion && !busy && e.phase === 'impact' && spec.family !== 'powder' && spec.family !== 'frost') {
         ctx.rotate(e.angle);
-        const count=e.critical?7:4;
+        const count=e.critical?9:6;
         for(let i=0;i<count;i++) {
           const a=(i/(count-1)-.5)*1.9;
-          const distance=5+t*(e.critical?24:17),length=4*(1-t);
+          // Ballistic spray decelerates; individual grains settle toward the floor.
+          const distance=5+(1-(1-t)*(1-t))*(e.critical?32:23),length=5*(1-t);
+          const fall=t*t*8;
           ctx.globalAlpha=(1-t)*(i%2?.5:.85);
           ctx.strokeStyle=i%2?spec.color:'#fff5df';ctx.lineWidth=i%2?1:1.7;
-          ctx.beginPath();ctx.moveTo(Math.cos(a)*distance,Math.sin(a)*distance);
-          ctx.lineTo(Math.cos(a)*(distance+length),Math.sin(a)*(distance+length));ctx.stroke();
+          ctx.beginPath();ctx.moveTo(Math.cos(a)*distance,Math.sin(a)*distance+fall);
+          ctx.lineTo(Math.cos(a)*(distance+length),Math.sin(a)*(distance+length)+fall);ctx.stroke();
         }
       }
       ctx.restore();

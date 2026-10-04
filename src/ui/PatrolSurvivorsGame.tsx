@@ -8,6 +8,7 @@ import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writ
 import { decideAccountability } from '../domain/survivors-accountability';
 import { ProjectileFeedbackLayer } from './survivors-projectile-feedback';
 import { drawProjectileVfx } from './survivors-projectile-vfx';
+import { survivorsCamera } from './survivors-camera';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
@@ -363,7 +364,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Ultimate Director Roar & Boss Alert Mirrors
   const [ultimateCharge, setUltimateCharge] = useState(0);
   const [directorCutinPhase, setDirectorCutinPhase] = useState<'none' | 'cutin' | 'shout' | 'invert' | 'recovering'>('none');
-  const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string } | null>(null);
+  const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string; equipmentId?: PerkId } | null>(null);
   const [bossAlert, setBossAlert] = useState<string | null>(null);
   const [bossRisk, setBossRisk] = useState<number | null>(null);
 
@@ -1122,8 +1123,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const viewH = displayH / baseZoom;
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
-      const camX = Math.floor(Math.max(0, Math.min(WORLD_WIDTH - viewW, player.x - viewW / 2)) + shakeX);
-      const camY = Math.floor(Math.max(0, Math.min(WORLD_HEIGHT - viewH, player.y - viewH / 2)) + shakeY);
+      const camera=survivorsCamera(player,viewW,viewH,WORLD_WIDTH,WORLD_HEIGHT,baseZoom);
+      const camX = camera.x + shakeX;
+      const camY = camera.y + shakeY;
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1147,7 +1149,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering 2.5D Foundation Slab)
       const stage = engine.state.stage;
       ctx.fillStyle = stage?.floorColor || '#0f141c';
-      ctx.fillRect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+      ctx.fillRect(-camera.marginX-4, -camera.marginY-4, WORLD_WIDTH+camera.marginX*2+8, WORLD_HEIGHT+camera.marginY*2+8);
 
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
@@ -1156,6 +1158,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const useGroundArt = stage.id === 'stage_01' ? Boolean(groundV2?.naturalWidth) : Boolean(processGround?.naturalWidth);
       const excavationGround = spritesRef.current.excavationGround;
       const fullGround=spritesRef.current.stageFloors[stageGroundUri(stage.id)];
+      // Scenic surround only: the original floor and boundary paint stay at exact world coordinates.
+      const surround=fullGround?.naturalWidth?fullGround:excavationGround?.naturalWidth?excavationGround:groundV2;
+      if(surround?.naturalWidth)ctx.drawImage(surround,-camera.marginX-4,-camera.marginY-4,WORLD_WIDTH+camera.marginX*2+8,WORLD_HEIGHT+camera.marginY*2+8);
       if(fullGround?.naturalWidth) {
         ctx.drawImage(fullGround,0,0,WORLD_WIDTH,WORLD_HEIGHT);
         ctx.fillStyle=stage.ambientColor;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
@@ -2387,7 +2392,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* SUPER PROTOCOL EVOLUTION BANNER */}
       {evolutionBanner && !bossAlert && directorCutinPhase === 'none' && (
         <div className="survivors-evo-banner" role="status">
-          <div className="survivors-evo-banner-icon">{evolutionBanner.icon}</div>
+          <div className="survivors-evo-banner-icon">{evolutionBanner.equipmentId ? <SurvivorsEquipmentIcon id={evolutionBanner.equipmentId} level={5} /> : evolutionBanner.icon}</div>
           <div className="survivors-evo-banner-content">
             <h4>{evolutionBanner.title}</h4>
             <p>{evolutionBanner.subtitle}</p>

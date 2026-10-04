@@ -1018,6 +1018,9 @@
   box-shadow: 0 0 35px rgba(251, 191, 36, 0.75);
   padding: 12px 24px;
   display: flex;
+  width: min(420px, calc(100% - 32px));
+  box-sizing: border-box;
+  pointer-events: none;
   align-items: center;
   gap: 16px;
   z-index: 36;
@@ -1030,6 +1033,7 @@
 }
 
 .survivors-evo-banner-icon {
+  flex: 0 0 auto;
   font-size: 38px;
   filter: drop-shadow(0 0 10px #fbbf24);
 }
@@ -1040,6 +1044,8 @@
   font-weight: 900;
   color: #fbbf24;
 }
+
+.survivors-evo-banner-content { min-width: 0; }
 
 .survivors-evo-banner-content p {
   margin: 2px 0 0 0;
@@ -1795,7 +1801,7 @@
 .survivors-container { --survivors-hud-bottom: 160px; }
 .survivors-boss-alert, .survivors-evo-banner { top: var(--survivors-hud-bottom, 160px); max-width: calc(100% - 32px); }
 .survivors-combo-banner { max-width: calc(100% - 32px); }
-.survivors-boss-alert-text strong, .survivors-evo-banner-content h4 { overflow-wrap: anywhere; }
+.survivors-boss-alert-text strong, .survivors-evo-banner-content h4 { word-break: keep-all; overflow-wrap: break-word; }
 .survivors-hud-center, .survivors-player-hud { min-width: 0; }
 .survivors-score-badge strong, .survivors-kills-badge { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .survivors-perks-tray { top: var(--survivors-hud-bottom, 160px); max-width: 45%; }
@@ -1862,6 +1868,8 @@
 }
 .survivors-combo-banner > span { display: none; }
 .survivors-combo-banner > div { display: flex; gap: 8px; align-items: center; }
+.survivors-combo-banner > div > div:not(.survivors-live-objective) { flex-shrink: 0; white-space: nowrap; }
+.survivors-live-objective { min-width: 0; word-break: keep-all; overflow-wrap: break-word; }
 @media (max-width: 600px) and (orientation: portrait) {
   .survivors-hud-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 6px 8px; top: max(4px, env(safe-area-inset-top)); border-radius: 10px; }
   .survivors-player-hud { grid-column: 1 / -1; }
@@ -2003,7 +2011,18 @@
 .survivors-tactical-actions button:focus-visible { outline:2px solid #f8d792;outline-offset:2px; }
 .survivors-tactical-actions small { color:#97b3bf;margin-left:4px; }
 .survivors-tactical-actions .is-handoff { border-color:#84cba4;color:#bbf7d0; }
-@media(max-width:600px) and (orientation:portrait) { .survivors-tactical-actions { max-width:calc(100% - 155px);bottom:max(18px,env(safe-area-inset-bottom));gap:4px; } .survivors-tactical-actions button { width:100%;min-height:34px;font-size:10px;padding:5px 7px; } .survivors-tactical-actions small { display:none; } }
+@media(max-width:600px) and (orientation:portrait) {
+  .survivors-tactical-actions { width:calc(100% - 24px);max-width:none;bottom:calc(max(18px,env(safe-area-inset-bottom)) + 76px);gap:4px;flex-wrap:nowrap; }
+  .survivors-tactical-actions button { flex:1;min-width:0;min-height:44px;font-size:10px;padding:5px 4px;word-break:keep-all; }
+  .survivors-tactical-actions small { display:none; }
+  .survivors-combo-banner { left:12px;right:12px !important;max-width:none;box-sizing:border-box; }
+  .survivors-combo-banner > div { flex-wrap:wrap;gap:2px 8px; }
+  .survivors-live-objective { flex-basis:100%;max-width:none;margin-top:0;font-size:11px; }
+  .survivors-evo-banner { gap:10px;padding:10px 12px;border-radius:10px;box-shadow:0 0 16px rgba(251,191,36,.3); }
+  .survivors-evo-banner-icon { font-size:28px; }
+  .survivors-evo-banner-content h4 { font-size:14px;line-height:1.4; }
+  .survivors-evo-banner-content p { font-size:9px;letter-spacing:0; }
+}
 /* The old left+right anchored wrapper must not swallow tactical button taps. */
 .survivors-ultimate-control { right:auto; width:max-content; pointer-events:none; }
 .survivors-ultimate-control button { pointer-events:auto; }

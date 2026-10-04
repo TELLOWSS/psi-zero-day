@@ -1920,6 +1920,7 @@ export class SurvivorsEngine {
     // Check Evolution Announcement Banner
     if (perkMeta.category === 'evolution') {
       this.state.evolutionBanner = {
+        equipmentId: perkId,
         title: perkMeta.name,
         subtitle: '★ SUPER PROTOCOL EVOLUTION ACTIVATED ★',
         icon: perkMeta.icon,
