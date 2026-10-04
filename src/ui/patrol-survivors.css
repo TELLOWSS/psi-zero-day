@@ -1046,6 +1046,14 @@
 }
 
 .survivors-evo-banner-content { min-width: 0; }
+.survivors-challenge-select { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0;border:1px solid #52616d;border-radius:12px;padding:12px;text-align:left; }
+.survivors-challenge-select legend { color:#f8d477;font-size:13px; }
+.survivors-challenge-select button { display:grid;gap:6px;min-height:80px;padding:10px 8px;color:#dbe8ee;background:#172632;border:1px solid #52616d;border-radius:8px;cursor:pointer;font:inherit; }
+.survivors-challenge-select button[aria-pressed=true] { border-color:#f8d477;background:#374038; }
+.survivors-challenge-select button:focus-visible { outline:2px solid #f8d477;outline-offset:2px; }
+.survivors-challenge-select small { font-size:10px;line-height:1.5; }
+.survivors-challenge-select p { grid-column:1/-1;font-size:12px;line-height:1.6;color:#b9cbd5;margin:4px 0; }
+@media(max-width:600px) { .survivors-challenge-select { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 
 .survivors-evo-banner-content p {
   margin: 2px 0 0 0;
@@ -2026,3 +2034,5 @@
 /* The old left+right anchored wrapper must not swallow tactical button taps. */
 .survivors-ultimate-control { right:auto; width:max-content; pointer-events:none; }
 .survivors-ultimate-control button { pointer-events:auto; }
+
+.survivors-supply-countdown { display:block;color:#f8d477;font-size:10px;font-weight:500;line-height:1.5; }
