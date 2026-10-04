@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-04",
+  "method": "built-in image_gen",
+  "status": "PRODUCTION_CANDIDATE_RUNTIME_INTEGRATED_NOT_DIRECTOR_LOCKED",
+  "assets": [
+    {
+      "uri": "/assets/survivors/flammable-drum-v1.webp",
+      "source": "exec-86ef713d-fe63-496c-8ad6-248bd6a8872f.png",
+      "prompt": "Use case: stylized-concept. Asset type: production candidate sprite for a grounded 2.5D construction-site safety game. Create ONE sealed industrial flammable-solvent storage drum, weathered burnt-orange painted steel, convincing rolled metal rims, closed lid with bung, subtle scratches and dust, small white diamond with black flame pictogram, no lettering. Elevated three-quarter view from front-right, approximately 35 degrees looking down, matching realistic painterly game props. Warm key light upper left, cool fill right, crisp legible silhouette at 64px, restrained material highlights, no glow. Fully isolated genuinely transparent background, no floor, no cast shadow, no humans, no extra equipment, no UI, no caption, whole drum visible centered with generous padding. Final-quality game material, not a concept sketch."
+    },
+    {
+      "uri": "/assets/survivors/distribution-cabinet-v1.webp",
+      "source": "exec-41992c7b-9e6e-4ffe-94b4-b8907e58ad70.png",
+      "prompt": "Use case: stylized-concept. Asset type: production candidate sprite for grounded 2.5D construction-site safety game. ONE closed temporary construction-site electrical distribution cabinet, standing short rectangular galvanized steel cabinet on sturdy low steel feet, shut door with visible latch and hinges, worn dark teal paint, yellow triangular black lightning pictogram on door, small red isolation handle protected by a guard, realistic dusty edges and brushed metal wear. NO visible exposed wiring. Elevated three-quarter view from front-right about 35 degrees looking down. Realistic painterly game-prop finish, warm upper-left key and cool right fill, legible robust silhouette at 64px, restrained highlights no glow. Genuinely transparent background, NO floor, NO cast shadow, NO people, NO additional objects, NO UI, NO lettering or caption. Entire cabinet centered with generous padding. Final-quality game material, not a concept sketch."
+    }
+  ],
+  "conversion": "ffmpeg libwebp quality 92 width 512, alpha retained; source images preserved"
+}

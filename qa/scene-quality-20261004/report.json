@@ -1,0 +1,138 @@
+{
+  "scope": "CHROMIUM_REAL_EARLY_GAMEPLAY_SAVED_UNLOCK_FIXTURE_NOT_ANDROID_FPS",
+  "rows": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "01",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "07",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "10",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "20",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "01",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "07",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "10",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "20",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "01",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "07",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "10",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "20",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    }
+  ],
+  "pass": true
+}

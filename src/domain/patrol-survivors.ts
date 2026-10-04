@@ -1,3 +1,4 @@
+import type { FieldTactics } from './survivors-field-tactics';
 export type HazardType = 'UNHELMETED' | 'RUNAWAY_CART' | 'GAS_LEAK' | 'FALLING_DEBRIS' | 'CRANE_BOSS';
 
 export interface Hazard {
@@ -226,6 +227,8 @@ export interface SurvivorsGameState {
   stage: PatrolStageDefinition;
   interactiveHazards: StageHazardObject[];
   environmentalKills: number;
+  operationControlledZones?: string[];
+  fieldTactics?: FieldTactics;
   starsEarned: [boolean, boolean, boolean];
   inFloodlight: boolean;
 }

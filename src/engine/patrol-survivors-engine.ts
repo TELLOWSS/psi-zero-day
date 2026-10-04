@@ -1,3 +1,8 @@
+import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
+import operationText from '../../content/localization/survivors-operation-ko.json';
+import { operationProgress, recordOperationControls } from './survivors-operation';
+import { spawnPressure, selectStageHazard } from './survivors-difficulty';
+import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
@@ -569,13 +574,14 @@ export function createInitialSurvivorsState(
     stage: {
       ...stage,
       starChallenges: [
-        { ...stage.starChallenges[0] },
+        { ...stage.starChallenges[0], description: operationText.victory_goal },
         { ...stage.starChallenges[1] },
         { ...stage.starChallenges[2] },
       ],
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
+    fieldTactics: createFieldTactics(),
     starsEarned: [false, false, false],
     inFloodlight: false,
   };
@@ -620,8 +626,25 @@ export class SurvivorsEngine {
     if (this.audioEvents.length > 256) this.audioEvents.shift();
   }
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
+  private projectileFeedback: ProjectileFeedback[] = [];
+  private readonly releasedProjectiles = new WeakSet<Projectile>();
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false) {
+    if (phase === 'release') {
+      if (this.releasedProjectiles.has(p)) return;
+      this.releasedProjectiles.add(p);
+    }
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical});
+    if (this.projectileFeedback.length > 192) {
+      const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
+      this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
+    }
+  }
+  drainProjectileFeedback(): ProjectileFeedback[] {
+    const events = this.projectileFeedback; this.projectileFeedback = []; return events;
+  }
   private addProjectile(projectile: Projectile) {
     this.state.projectiles.push(projectile);
+    this.emitProjectileFeedback(projectile, 'launch');
     if (projectile.kind === 'radio') this.emitAudio('shoot', projectile.x, projectile.y);
     else if (projectile.kind === 'extinguisher' || projectile.kind === 'cryo_blast') this.emitAudio('spray', projectile.x, projectile.y);
     else if (projectile.kind !== 'shout_shockwave') this.emitAudio('laser', projectile.x, projectile.y);
@@ -667,6 +690,14 @@ export class SurvivorsEngine {
     this.state.lastKilledEvents = kills;
     if (this.state.phase !== 'playing') this.accumulator = 0;
   }
+
+  requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  requestHandoff():boolean {
+    if(this.state.phase!=='playing'||!operationProgress(this.state).complete||!this.state.fieldTactics||this.state.fieldTactics.handoff)return false;
+    this.state.fieldTactics.handoff={x:this.state.player.x,y:this.state.player.y,remaining:4};return true;
+  }
+  cancelHandoff():void { if(this.state.fieldTactics)this.state.fieldTactics.handoff=undefined; }
 
   private step(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
@@ -746,7 +777,14 @@ export class SurvivorsEngine {
       }
     }
 
+    const hpBefore=this.state.player.hp;
     this.updatePlayer(effectiveDt, input);
+    tickFieldTactics(this.state,effectiveDt,(x,y)=>{
+      for(const [offset,kind] of [[-18,'field_rations'],[18,'radio_battery']] as const) {
+        this.state.drops.push({id:this.genId('field_support'),x:Math.max(20,Math.min(WORLD_WIDTH-20,x+offset)),y:Math.max(20,Math.min(WORLD_HEIGHT-20,y)),exp:0,isHeal:false,itemKind:kind});
+      }
+      this.emitAudio('pickup',x,y);
+    });
     for (const worker of this.state.resolvedWorkers ?? []) {
       worker.remaining -= effectiveDt;
       worker.x += Math.sign(WORLD_WIDTH / 2 - worker.x) * Math.min(Math.abs(WORLD_WIDTH / 2 - worker.x), 80 * effectiveDt);
@@ -757,13 +795,16 @@ export class SurvivorsEngine {
     this.updateProjectiles(effectiveDt);
     this.updateSpawns(effectiveDt);
     this.updateHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateStageHazards(effectiveDt);
+    recordOperationControls(this.state);
     this.updateDrops(effectiveDt);
     this.checkCollisions();
+    if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
-    // Check survival victory
-    if (this.state.gameTime >= this.state.maxTime && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    // Objective handoff can finish a successful patrol before the survival deadline.
+    if ((this.state.gameTime >= this.state.maxTime || (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0)) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10);
@@ -1212,6 +1253,8 @@ export class SurvivorsEngine {
         p.y <= WORLD_HEIGHT + 100
       ) {
         alive.push(p);
+      } else {
+        this.emitProjectileFeedback(p, 'release');
       }
     }
     this.state.projectiles = alive;
@@ -1219,13 +1262,9 @@ export class SurvivorsEngine {
 
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
-    const timeProgress = this.state.gameTime / this.state.maxTime; // 0.0 to 1.0
-
-    // Progressive spawn rate (faster as time goes on)
-    const spawnInterval = Math.max(0.2, (1.4 - timeProgress * 1.15) / (this.state.stage.difficulty ?? 1));
-
+    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime);
     if (this.cooldowns.spawnTimer <= 0) {
-      this.cooldowns.spawnTimer = spawnInterval;
+      this.cooldowns.spawnTimer = pressure.interval;
 
       // Boss event checking at 60s, 120s
       const time = Math.floor(this.state.gameTime);
@@ -1240,20 +1279,13 @@ export class SurvivorsEngine {
         return;
       }
 
-      // Determine enemy type by elapsed time
-      const rand = this.random();
-      let type: HazardType = 'UNHELMETED';
-
-      if (this.state.gameTime > 120 && rand < 0.12) {
-        type = stageBossType;
-      } else if (this.state.gameTime > 60 && rand < 0.35) {
-        type = 'RUNAWAY_CART';
-      } else if (this.state.gameTime > 30 && rand < 0.6) {
-        type = 'GAS_LEAK';
-      }
-
-      if (stage.hazardMix && this.state.gameTime > 20) {
-        type = stage.hazardMix[Math.floor(this.random() * stage.hazardMix.length)] ?? type;
+      const alive = this.state.hazards.filter(h => h.hp > 0);
+      if (alive.length >= pressure.activeLimit) return;
+      let type = selectStageHazard(stage, this.state.gameTime, this.random());
+      const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
+      // Bound concurrent charging/falling threats without shortening their warnings.
+      if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
+        type = 'UNHELMETED';
       }
       this.spawnHazard(type);
     }
@@ -1315,7 +1347,7 @@ export class SurvivorsEngine {
     if (overrideHp) {
       hp = overrideHp;
     } else {
-      const scale = 1 + (this.state.gameTime / 60) * 0.45;
+      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime).hpScale;
       hp = Math.round(hp * scale);
     }
 
@@ -1365,7 +1397,7 @@ export class SurvivorsEngine {
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
-      let hazardSpeed = h.speed;
+      let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type);
       if (this.state.interactiveHazards) {
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed') continue;
@@ -1397,7 +1429,7 @@ export class SurvivorsEngine {
       h.y += (dy / dist) * hazardSpeed * dt;
     }
     // Avoided falls expire without granting control score, drops, or boss stars.
-    this.state.hazards = this.state.hazards.filter(h => !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
+    this.state.hazards = this.state.hazards.filter(h => h.isStageBoss || !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
   }
 
   private checkCollisions() {
@@ -1424,6 +1456,7 @@ export class SurvivorsEngine {
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           h.hp -= damageDealt;
           this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -1438,6 +1471,7 @@ export class SurvivorsEngine {
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
+            this.emitProjectileFeedback(p, 'release', h.x, h.y, h.type === 'UNHELMETED');
             break;
           }
         }
@@ -1459,11 +1493,13 @@ export class SurvivorsEngine {
                 h.hp = 0; cleared++;
               }
               this.state.environmentalKills += cleared; this.state.score += cleared * 80;
-              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; break;}
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
+              this.emitAudio('control', env.x, env.y); p.pierce--; if (p.pierce <= 0) {p.duration = 0; this.emitProjectileFeedback(p, 'release', env.x, env.y); break;}
             }
           } else if (env.type === 'explosive_barrel' && env.state === 'idle') {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1472,12 +1508,14 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }
           } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
               if (env.hp <= 0) {
@@ -1486,6 +1524,7 @@ export class SurvivorsEngine {
               }
               if (p.pierce <= 0) {
                 p.duration = 0;
+                this.emitProjectileFeedback(p, 'release', env.x, env.y);
                 break;
               }
             }

@@ -1,0 +1,150 @@
+{
+  "scope": "CHROMIUM_REAL_EARLY_GAMEPLAY_SAVED_UNLOCK_FIXTURE_NOT_ANDROID_FPS",
+  "rows": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "01",
+      "objective": "신속 통제 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "02",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "03",
+      "objective": "집중 대응 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stage": "20",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "01",
+      "objective": "신속 통제 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "02",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "03",
+      "objective": "집중 대응 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": "20",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "01",
+      "objective": "신속 통제 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "02",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "03",
+      "objective": "집중 대응 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stage": "20",
+      "objective": "구역 확보 · 대표 위험 통제",
+      "hud": true,
+      "pause": true,
+      "errors": [],
+      "pass": true
+    }
+  ],
+  "pass": true
+}

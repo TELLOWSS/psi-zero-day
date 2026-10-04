@@ -1,3 +1,5 @@
+import { equipmentSoundSamples } from './survivors-equipment-sound';
+import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
 // Development synth lifecycle only; this is not final orchestral audio.
 export class SurvivorsSessionAudio {
@@ -5,6 +7,12 @@ export class SurvivorsSessionAudio {
   private muted = false;
   private synthNoise: AudioBuffer | null = null;
   private master: GainNode | null = null;
+  private musicDuck: GainNode | null = null;
+  private limiter: DynamicsCompressorNode | null = null;
+  private duckUntil = 0;
+  private dialogueFocus = false;
+  private equipmentBuffers = new Map<string, AudioBuffer>();
+  private equipmentTimes = new Map<string,number>();
   private buses: Record<SurvivorsAudioBus, GainNode> | null = null;
   private buffers = new Map<string, Promise<AudioBuffer>>();
   readonly failures: string[] = [];
@@ -79,9 +87,16 @@ export class SurvivorsSessionAudio {
     const ctx = this.getContext();
     if (!ctx) return null;
     if (!this.master) {
-      this.master = ctx.createGain(); this.master.connect(ctx.destination);
+      this.master = ctx.createGain();
+      if(typeof ctx.createDynamicsCompressor==='function') {
+        this.limiter=ctx.createDynamicsCompressor();
+        this.limiter.threshold.value=-12;this.limiter.knee.value=12;this.limiter.ratio.value=4;
+        this.limiter.attack.value=.003;this.limiter.release.value=.18;
+        this.master.connect(this.limiter);this.limiter.connect(ctx.destination);
+      } else this.master.connect(ctx.destination);
+      this.musicDuck=ctx.createGain();this.musicDuck.connect(this.master);
       this.buses = Object.fromEntries(['Music', 'SFX', 'Voice', 'Ambience'].map(name => {
-        const gain = ctx.createGain(); gain.connect(this.master!); return [name, gain];
+        const gain = ctx.createGain(); gain.connect(name==='Music'?this.musicDuck!:this.master!); return [name, gain];
       })) as Record<SurvivorsAudioBus, GainNode>;
     }
     return ctx;
@@ -103,13 +118,52 @@ export class SurvivorsSessionAudio {
     if (gain) gain.gain.value = Math.max(0, Math.min(1, value));
   }
   sfxDestination(): AudioNode { this.ensureBuses(); return this.buses!.SFX; }
+  setDialogueFocus(active:boolean) {
+    this.dialogueFocus=active;const ctx=this.ensureBuses();if(!ctx)return;
+    const gain=this.musicDuck!.gain;gain.cancelScheduledValues(ctx.currentTime);
+    gain.setValueAtTime(gain.value,ctx.currentTime);gain.linearRampToValueAtTime(active?.24:1,ctx.currentTime+.12);
+    if(!active)this.duckUntil=0;
+  }
   duckMusic(holdSeconds = 0.6) {
-    const ctx = this.ensureBuses(); if (!ctx) return;
-    const gain = this.buses!.Music.gain;
-    gain.cancelScheduledValues(ctx.currentTime);
-    gain.setValueAtTime(gain.value, ctx.currentTime);
-    gain.linearRampToValueAtTime(0.5, ctx.currentTime + 0.05);
-    gain.linearRampToValueAtTime(1, ctx.currentTime + Math.max(0.1, holdSeconds));
+    const ctx = this.ensureBuses(); if (!ctx || this.dialogueFocus) return;
+    const now=ctx.currentTime,gain=this.musicDuck!.gain;
+    this.duckUntil=Math.max(this.duckUntil,now+Math.max(.1,holdSeconds));
+    gain.cancelScheduledValues(now);gain.setValueAtTime(gain.value,now);
+    gain.linearRampToValueAtTime(.35,now+.035);
+    gain.setValueAtTime(.35,this.duckUntil);gain.linearRampToValueAtTime(1,this.duckUntil+.18);
+  }
+  /** Equipment material sound remains procedural until the final recording gate. */
+  playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false):void {
+    if(busy&&event.phase==='release')return;
+    const ctx=this.ensureBuses();if(!ctx)return;
+    const key=event.kind+':'+event.phase,now=ctx.currentTime,previous=this.equipmentTimes.get(key);
+    if(previous!==undefined&&now-previous<(busy?.16:.08))return;
+    this.equipmentTimes.set(key,now);
+    const impact=event.phase==='impact',release=event.phase==='release';
+    const level=release?.035:impact?.20:.13;
+    const priority=impact?2:1;
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker);
+    let buffer=this.equipmentBuffers.get(bufferKey);
+    if(!buffer) {
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate);
+      buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
+      buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
+    }
+    const duration=buffer.duration,source=ctx.createBufferSource();source.buffer=buffer;
+    const distance=Math.hypot(event.x-listener.x,event.y-listener.y);
+    const audibleLevel=level/(1+distance/650);
+    const gain=ctx.createGain();gain.gain.setValueAtTime(.001,now);gain.gain.linearRampToValueAtTime(audibleLevel,now+.006);gain.gain.setValueAtTime(audibleLevel,now+.018);gain.gain.exponentialRampToValueAtTime(.001,now+duration);
+    if(!this.track(source,gain,priority))return;
+    source.connect(gain);this.connectSfx(source,gain,{x:event.x,y:event.y},listener);
+    source.start(now);source.stop(now+duration);
+  }
+  playDecisionCue(kind:'evidence'|'record'|'hold'|'exclude'):void {
+    const ctx=this.ensureBuses();if(!ctx)return;
+    const source=ctx.createOscillator(),gain=ctx.createGain(),now=ctx.currentTime;
+    source.type='sine';source.frequency.setValueAtTime(kind==='evidence'?420:kind==='record'?260:kind==='hold'?160:110,now);
+    gain.gain.setValueAtTime(.001,now);gain.gain.linearRampToValueAtTime(.065,now+.015);gain.gain.exponentialRampToValueAtTime(.001,now+.18);
+    if(!this.track(source,gain,3))return;
+    source.connect(gain);gain.connect(this.buses!.SFX);source.start(now);source.stop(now+.18);
   }
   private fail(message: string) {
     this.failures.push(message); if (this.failures.length > 32) this.failures.shift();
@@ -186,12 +240,14 @@ export class SurvivorsSessionAudio {
     this.stopScore();
     this.epoch++;
     for (const source of this.voices.keys()) this.release(source, true);
-    if (this.buses && this.context) { const gain = this.buses.Music.gain; gain.cancelScheduledValues(this.context.currentTime); gain.value = 1; }
+    this.equipmentTimes.clear();this.duckUntil=0;this.dialogueFocus=false;
+    if (this.musicDuck && this.context) { const gain = this.musicDuck.gain; gain.cancelScheduledValues(this.context.currentTime); gain.value = 1; }
   }
   dispose() {
     this.silence();
     const context = this.context; this.context = null;
     if (this.buses) for (const bus of Object.values(this.buses)) bus.disconnect();
+    this.musicDuck?.disconnect();this.musicDuck=null;this.limiter?.disconnect();this.limiter=null;
     this.master?.disconnect(); this.master = null; this.buses = null; this.buffers.clear(); this.synthNoise = null;
     if (context) void context.close().catch(() => {});
   }

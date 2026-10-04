@@ -9,7 +9,13 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
     if (motion.timer === 0 && motion.phase === 'warning') {
       motion.phase = 'fall'; motion.timer = 0.65;
     } else if (motion.timer === 0 && motion.phase === 'fall') {
-      motion.phase = 'spent'; motion.timer = 0.4;
+      motion.phase = 'spent'; motion.timer = h.isStageBoss ? 3 : 0.4;
+    } else if (motion.timer === 0 && motion.phase === 'spent' && h.isStageBoss && h.hp > 0) {
+      // A designated operation risk persists until controlled; each new warning
+      // locks the newly observed position and leaves the usual escape window.
+      h.x = Math.max(60, Math.min(1340, player.x));
+      h.y = Math.max(60, Math.min(840, player.y));
+      motion.phase = 'warning'; motion.timer = 1.25;
     }
     return true;
   }
