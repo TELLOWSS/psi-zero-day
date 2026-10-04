@@ -46,7 +46,13 @@ export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageEl
   drawVfxCell(ctx,atlas,evolved?2:1,x,y+10,(evolved?19:12)*breath,evolved?30:20,evolved?.60:.38,Math.PI/2);
   ctx.restore();
 }
-export function premiumVfxDetailLevel(equippedCount:number,busy:boolean,reduced:boolean):0|1|2 {\n  if(reduced)return 0;\n  if(busy||equippedCount>=5)return 1;\n  return 2;\n}\n\nexport const PREMIUM_VFX_SIGNATURES={
+export function premiumVfxDetailLevel(equippedCount:number,busy:boolean,reduced:boolean):0|1|2 {
+  if(reduced)return 0;
+  if(busy||equippedCount>=5)return 1;
+  return 2;
+}
+
+export const PREMIUM_VFX_SIGNATURES={
   voice_lens:'communication:advanced:voice-scan',
   command_array:'communication:elite:network-array',
   broadcast_crown:'communication:legendary:broadcast-crown',
@@ -69,6 +75,8 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   const gear=state.premiumGear;if(!gear?.equipped.length||!atlas?.naturalWidth)return;
   const x=state.player.x,y=state.player.y,time=state.gameTime;
   const hasId=(id:string)=>gear.equipped.includes(id);
+  const detail=premiumVfxDetailLevel(gear.equipped.length,busy,reduced);
+  const constrained=detail<2;
   const pulse=reduced?1:1+Math.sin(time*2.8)*.055;
   const sweep=reduced?0:time*.72;
   const facing=movingAngle??-Math.PI/2;
