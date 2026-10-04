@@ -21,7 +21,7 @@ describe('twenty-stage connected campaign', () => {
     const e=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,id),42);e.start();e.state.gameTime=61;
     for(let i=0;i<100;i++) e.update(1/60,{moveX:0,moveY:0});
     const boss=e.state.hazards.find(h=>h.isStageBoss)!;
-    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(stage.bossHp);
+    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.8));
     boss.hp=0;e.update(1/60,{moveX:0,moveY:0});
     expect(e.drainAudioEvents().some(a=>a.type==='control'&&a.outcome==='boss'&&a.actorKind===stage.bossType)).toBe(true);
   });
