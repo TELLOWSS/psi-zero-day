@@ -25,6 +25,7 @@ import campaignText from '../../content/localization/survivors-campaign20-ko.jso
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
 import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
+import { drawStageWorkface } from './survivors-stage-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
@@ -37,6 +38,7 @@ import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
 import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivors-audio-manifest';
 import { STAGE_IDS, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
+import { SurvivorsAudioMixer } from './SurvivorsAudioMixer';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   CharacterId,
@@ -276,10 +278,19 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const accountabilityCaseRef=useRef(accountabilityCase);accountabilityCaseRef.current=accountabilityCase;
   const [selectedDifficulty, setSelectedDifficulty] = useState<PatrolDifficulty>('standard');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
+  const [loadedGround, setLoadedGround] = useState(stageGroundUri('stage_01'));
+  const [failedGround, setFailedGround] = useState<string | null>(null);
+  const [groundRetry, setGroundRetry] = useState(0);
   useEffect(() => {
     const uri=stageGroundUri(selectedStage);
-    if(!spritesRef.current.stageFloors[uri]) {const image=new Image();image.src=uri;spritesRef.current.stageFloors[uri]=image;}
-  },[selectedStage]);
+    const cached = spritesRef.current.stageFloors[uri];
+    if (cached?.naturalWidth) {setLoadedGround(uri); setFailedGround(null); return;}
+    let active = true; const image = new Image();
+    image.onload = () => {if (active) {setLoadedGround(uri); setFailedGround(null);}};
+    image.onerror = () => {if (active) setFailedGround(uri);};
+    spritesRef.current.stageFloors[uri] = image; image.src = uri;
+    return () => {active = false;};
+  },[selectedStage, groundRetry]);
   useEffect(() => {
     const scrollY=window.scrollY,overflow=document.body.style.overflow;
     document.body.style.overflow='hidden';window.scrollTo?.(0,0);
@@ -330,6 +341,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Modal Views in Ready screen
   const [showManual, setShowManual] = useState(false);
   const [showRdModal, setShowRdModal] = useState(false);
+  const storeDialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!showRdModal) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const dialog = storeDialogRef.current; if (!dialog) return;
+    dialog.querySelector<HTMLButtonElement>('button')?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {event.preventDefault(); setShowRdModal(false); return;}
+      if (event.key !== 'Tab') return;
+      const elements = [...dialog.querySelectorAll<HTMLElement>('button:not(:disabled), select, input, summary, [tabindex="0"]')].filter(element => element.getClientRects().length > 0);
+      const first = elements[0], last = elements[elements.length - 1];
+      if (event.shiftKey && document.activeElement === first) {event.preventDefault(); last?.focus();}
+      else if (!event.shiftKey && document.activeElement === last) {event.preventDefault(); first?.focus();}
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {document.removeEventListener('keydown', onKey); previous?.focus();};
+  }, [showRdModal]);
   const [showArsenalModal, setShowArsenalModal] = useState(false);
 
   // Virtual Touch Joystick state
@@ -1339,6 +1367,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.restore();
 
       if (stage.id === 'stage_01') drawStageSpatialContext(ctx, engine.state.interactiveHazards);
+      drawStageWorkface(ctx, stage.id, engine.state.interactiveHazards);
 
       // Short ground-contact strokes at actual impact positions, never fullscreen flashes.
       impactFeedbackRef.current=impactFeedbackRef.current.filter(effect=>{effect.life-=dt;return effect.life>0;});
@@ -2571,8 +2600,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content survivors-ready-dialog">
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
-              <button type="button" className="survivors-btn-primary" onClick={startGame}>순찰 시작하기</button>
+              <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>순찰 시작하기</button>
             </header>
+            <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
+            {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
               {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small></button>)}
               <p>{challengeText.description}</p>
@@ -2717,6 +2748,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div className="survivors-store-loadout" aria-label={storeText.status}>{storeInventory.equipped.length ? storeInventory.equipped.map(id => <span key={id}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===id)!}/>{storeText.items[id as keyof typeof storeText.items].name}</span>) : storeText.empty}</div>
             </div>
 
+            <SurvivorsAudioMixer audio={audioRef.current}/>
+
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowRdModal(true)}>
                 🔬 R&D 연구소
@@ -2736,18 +2769,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* R&D RESEARCH LAB MODAL */}
       {showRdModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content survivors-equipment-workspace">
-            <h2 className="survivors-modal-title is-gold">🔬 R&D 안전 본부 영구 강화</h2>
-            <p className="survivors-modal-sub">
-              누적된 안전 크레딧으로 안전관리자의 기본 역량을 영구 업그레이드하세요!
-            </p>
-            <div className="survivors-credit-counter">
-              보유 크레딧: <strong>{psiCredits.toLocaleString()} PSI</strong>
-            </div>
+          <div ref={storeDialogRef} className="survivors-modal-content survivors-equipment-workspace" role="dialog" aria-modal="true" aria-label={storeText.title}>
+            <div className="survivors-equipment-toolbar"><h2>{storeText.title}</h2><button type="button" title={storeText.close} aria-label={storeText.close} onClick={() => setShowRdModal(false)}>×</button></div>
 
             <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} characterId={selectedChar} upgrades={permanentUpgrades}/>
 
-            <div className="survivors-rd-grid">
+            <details className="survivors-store-upgrades"><summary>{storeText.upgrades}</summary><div className="survivors-rd-grid">
               <div className="survivors-rd-item">
                 <div>
                   <strong>기본 생명력 (Vitality)</strong>
@@ -2854,7 +2881,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </div>
             </div>
 
-            <div className="survivors-actions-row">
+            </details><div className="survivors-actions-row">
               <button type="button" className="survivors-btn-primary" onClick={() => setShowRdModal(false)}>
                 완료 및 닫기
               </button>
@@ -2957,6 +2984,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
+            <SurvivorsAudioMixer audio={audioRef.current}/>
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">

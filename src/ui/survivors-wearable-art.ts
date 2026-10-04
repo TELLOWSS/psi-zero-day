@@ -16,13 +16,30 @@ const sockets = {
   shock_mantle: { x: .34, y: .17, w: .48, h: .32, layer: 'front' },
   inspection_wing: { x: .16, y: .17, w: .30, h: .22, layer: 'back' },
 } as const;
+type Socket = { x: number; y: number; w: number; h: number; layer: 'front' | 'back' };
+type FittingProfile = { sockets: Record<WearableId, Socket>; occluders: number[][][] };
+const profile = (x: number, y: number, w: number, h: number, occluders: number[][][]): FittingProfile => ({
+  sockets: { shock_mantle: {x,y,w,h,layer:'front'}, voice_lens: {x:x-.08,y:y-.025,w:.19,h:.18,layer:'front'}, inspection_wing: {x:x-.10,y:y+.015,w:.27,h:.20,layer:'back'} }, occluders,
+});
+/** Authored against each original full-body sprite, not a universal floating badge. */
+export const WEARABLE_PROFILES: Record<string, FittingProfile> = {
+  safety_monitor: {sockets, occluders: [[[.24,.25],[.29,.18],[.42,.16],[.49,.20],[.44,.27],[.34,.29]],[[.63,.32],[1,.30],[1,.42],[.68,.43],[.60,.38]]]},
+  player: profile(.29,.19,.40,.24, [[[.44,.29],[.65,.27],[1,.24],[1,.39],[.65,.40],[.44,.36]]]),
+  kang_taesik: profile(.39,.23,.38,.29, []),
+  yoon_sungho: profile(.30,.24,.40,.25, [[[.23,.39],[.58,.39],[.62,.47],[.30,.48]]]),
+  lee_jaehoon: profile(.30,.19,.41,.25, [[[.68,.19],[1,.18],[1,.44],[.64,.43]],[[.18,.40],[.43,.43],[.43,.51],[.29,.52],[.18,.47]]]),
+  lim_junho: profile(.31,.21,.43,.24, [[[.64,.14],[.90,.10],[1,.28],[.75,.34],[.62,.27]],[[.28,.39],[.59,.40],[.61,.47],[.45,.49],[.28,.45]]]),
+};
+WEARABLE_PROFILES.park = WEARABLE_PROFILES.kang_taesik!;
+WEARABLE_PROFILES.jung = WEARABLE_PROFILES.player!;
+WEARABLE_PROFILES.yoon = WEARABLE_PROFILES.yoon_sungho!;
 
 export function hasWearable(state: SurvivorsGameState, id: string, images: WearableImages): boolean {
-  return state.characterId === 'safety_monitor' && id in WEARABLE_ART && Boolean(images[id as WearableId]?.naturalWidth);
+  return Boolean(WEARABLE_PROFILES[state.characterId]) && id in WEARABLE_ART && Boolean(images[id as WearableId]?.naturalWidth);
 }
 
 export async function loadWearableImages(characterId: string): Promise<WearableImages> {
-  if (characterId !== 'safety_monitor') return {};
+  if (!WEARABLE_PROFILES[characterId]) return {};
   const entries = await Promise.all(Object.entries(WEARABLE_ART).map(async ([key, src]) => {
     const id = key as WearableId;
     let pending = imagePromises.get(id);
@@ -42,13 +59,13 @@ export async function loadWearableImages(characterId: string): Promise<WearableI
 
 /** Origin is the actor's feet; sockets are authored in opaque body coordinates. */
 export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: SurvivorsGameState, actor: HTMLImageElement, height: number, pose: SpritePose, images: WearableImages, layer: 'front' | 'back'): void {
-  if (state.characterId !== 'safety_monitor') return;
+  const fitting = WEARABLE_PROFILES[state.characterId]; if (!fitting) return;
   const body = spriteOpaqueBounds(actor), width = height * body.width / body.height;
   ctx.save(); applyActorTorsoTransform(ctx, pose, height, Boolean(ACTOR_RIGS[actor.src.split('/').pop() ?? '']));
   let drawn = false;
   for (const id of state.premiumGear?.equipped ?? []) {
     if (!hasWearable(state, id, images)) continue;
-    const socket = sockets[id as WearableId]; if (socket.layer !== layer) continue;
+    const socket = fitting.sockets[id as WearableId]; if (socket.layer !== layer) continue;
     const image = images[id as WearableId]!, source = spriteOpaqueBounds(image);
     const scale = Math.min(socket.w * width / source.width, socket.h * height / source.height);
     const w = source.width * scale, h = source.height * scale;
@@ -64,10 +81,8 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
   }
   // The authored glove and tablet remain in front of the chest-mounted equipment.
   if (drawn && layer === 'front') {
-    const occluders = [
-      [[.24,.25],[.29,.18],[.42,.16],[.49,.20],[.44,.27],[.34,.29]],
-      [[.63,.32],[1,.30],[1,.42],[.68,.43],[.60,.38]],
-    ];
+    const occluders = fitting.occluders;
+    if (!occluders.length) { ctx.restore(); return; }
     ctx.save(); ctx.beginPath();
     for (const polygon of occluders) {
       polygon.forEach(([x,y], i) => { const px=x!*width-width/2, py=y!*height-height; if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py); }); ctx.closePath();

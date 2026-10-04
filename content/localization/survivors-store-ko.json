@@ -1,5 +1,12 @@
 {
   "title": "PSI 프리미엄 장비실",
+  "browse": "장비 목록",
+  "loadout": "현재 장착",
+  "close": "장비실 닫기",
+  "upgrades": "기본 역량 강화",
+  "mapLoading": "현장 지도 불러오는 중",
+  "mapFailure": "현장 지도를 불러오지 못했습니다",
+  "mapRetry": "지도 다시 불러오기",
   "fitting": "착용 미리보기",
   "tryOn": "착용해 보기",
   "currentLoadout": "현재 장착",

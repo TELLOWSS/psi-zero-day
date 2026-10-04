@@ -15,6 +15,7 @@ export class SurvivorsSessionAudio {
   private equipmentBuffers = new Map<string, AudioBuffer>();
   private equipmentTimes = new Map<string,number>();
   private buses: Record<SurvivorsAudioBus, GainNode> | null = null;
+  private volumes: Partial<Record<SurvivorsAudioBus | 'Master', number>> = {};
   private buffers = new Map<string, Promise<AudioBuffer>>();
   readonly failures: string[] = [];
   private epoch = 0;
@@ -89,6 +90,7 @@ export class SurvivorsSessionAudio {
     if (!ctx) return null;
     if (!this.master) {
       this.master = ctx.createGain();
+      this.master.gain.value = this.volumes.Master ?? 1;
       if(typeof ctx.createDynamicsCompressor==='function') {
         this.limiter=ctx.createDynamicsCompressor();
         this.limiter.threshold.value=-12;this.limiter.knee.value=12;this.limiter.ratio.value=4;
@@ -97,7 +99,7 @@ export class SurvivorsSessionAudio {
       } else this.master.connect(ctx.destination);
       this.musicDuck=ctx.createGain();this.musicDuck.connect(this.master);
       this.buses = Object.fromEntries(['Music', 'SFX', 'Voice', 'Ambience'].map(name => {
-        const gain = ctx.createGain(); gain.connect(name==='Music'?this.musicDuck!:this.master!); return [name, gain];
+        const gain = ctx.createGain(); gain.gain.value = this.volumes[name as SurvivorsAudioBus] ?? 1; gain.connect(name==='Music'?this.musicDuck!:this.master!); return [name, gain];
       })) as Record<SurvivorsAudioBus, GainNode>;
     }
     return ctx;
@@ -114,9 +116,9 @@ export class SurvivorsSessionAudio {
   reportFailure(message: string) { this.fail(message); }
   setVolume(bus: SurvivorsAudioBus | 'Master', value: number) {
     if (!Number.isFinite(value)) return;
-    this.ensureBuses();
+    this.volumes[bus] = Math.max(0, Math.min(1, value));
     const gain = bus === 'Master' ? this.master : this.buses?.[bus];
-    if (gain) gain.gain.value = Math.max(0, Math.min(1, value));
+    if (gain) gain.gain.value = this.volumes[bus]!;
   }
   sfxDestination(): AudioNode { this.ensureBuses(); return this.buses!.SFX; }
   setDialogueFocus(active:boolean) {

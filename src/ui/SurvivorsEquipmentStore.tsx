@@ -16,6 +16,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   const [ownedOnly, setOwnedOnly] = useState(false);
   const [affordableOnly, setAffordableOnly] = useState(false);
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [view, setView] = useState<'browse' | 'fitting' | 'loadout'>('browse');
   const baseline = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, inventory), [characterId, upgrades, inventory]);
   const preview = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, fittingInventory(inventory, previewId)), [characterId, upgrades, inventory, previewId]);
   const previewItem = STORE_ITEMS.find(item => item.id === previewId);
@@ -33,14 +34,28 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   return <section className="survivors-store" aria-label={copy.title}>
     <header className="survivors-store-heading"><div><h3>{copy.title}</h3><p>{copy.intro}</p></div>
       <strong className="survivors-store-wallet">{credits.toLocaleString()} PSI</strong></header>
+    <div className="survivors-store-tabs" role="tablist" aria-label={copy.title}>
+      {(['browse', 'fitting', 'loadout'] as const).map((tab, index, tabs) => <button key={tab} type="button" role="tab" id={`store-tab-${tab}`} aria-selected={view === tab} aria-controls={`store-panel-${tab}`} tabIndex={view === tab ? 0 : -1} onClick={() => setView(tab)} onKeyDown={event => {
+        const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+        if (!offset) return; event.preventDefault();
+        const next = tabs[(index + offset + tabs.length) % tabs.length]!;
+        setView(next); document.getElementById(`store-tab-${next}`)?.focus();
+      }}>{copy[tab]}</button>)}
+    </div>
+    {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
+    <div id="store-panel-fitting" role="tabpanel" aria-labelledby="store-tab-fitting" hidden={view !== 'fitting'}>
     <div className="survivors-fitting">
       <SurvivorsFittingPreview state={preview}/>
       <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[characterId].name}</h4>
         <p role="status">{previewItem ? `${copy.fitting}: ${copy.items[previewItem.id as keyof typeof copy.items].name}` : copy.currentLoadout}</p>
         <dl>{comparisons.map(([label, before, after]) => <div key={label}><dt>{label}</dt><dd>{Number(after.toFixed(1))}{Math.abs(after-before) > .01 && <span> ({after > before ? '+' : ''}{Number((after-before).toFixed(1))})</span>}</dd></div>)}</dl>
-        {previewItem && <><p>{copy.items[previewItem.id as keyof typeof copy.items].description}</p><button type="button" onClick={() => setPreviewId(null)}>{copy.resetFitting}</button></>}
+        {previewItem && <><p>{copy.items[previewItem.id as keyof typeof copy.items].description}</p><button type="button" onClick={() => {setPreviewId(null); setView('browse');}}>{copy.resetFitting}</button></>}
       </div>
     </div>
+    {previewItem && <div className="survivors-fitting-action"><strong>{copy.items[previewItem.id as keyof typeof copy.items].name}</strong><button type="button" disabled={!inventory.owned.includes(previewItem.id) && credits < previewItem.price} onClick={() => onChange(previewItem.id, !inventory.owned.includes(previewItem.id))}>{inventory.owned.includes(previewItem.id) ? inventory.equipped.includes(previewItem.id) ? copy.remove : copy.equip : `${copy.buy} · ${previewItem.price.toLocaleString()} PSI`}</button>
+    {!inventory.owned.includes(previewItem.id) && credits < previewItem.price && <small>{copy.shortfall} {(previewItem.price-credits).toLocaleString()} PSI</small>}</div>}
+    </div>
+    <div id="store-panel-loadout" role="tabpanel" aria-labelledby="store-tab-loadout" hidden={view !== 'loadout'}>
     <div className="survivors-store-slots" aria-label={copy.status}>{categories.map(slot => {
       const item = STORE_ITEMS.find(item => item.category === slot && inventory.equipped.includes(item.id));
       return <div key={slot}><small>{copy.categories[slot]}</small>{item
@@ -48,6 +63,8 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
           <button type="button" onClick={() => onChange(item.id, false)} aria-label={`${copy.items[item.id as keyof typeof copy.items].name} ${copy.remove}`}>{copy.remove}</button></>
         : <span>{copy.emptySlot}</span>}</div>;
     })}</div>
+    </div>
+    <div id="store-panel-browse" role="tabpanel" aria-labelledby="store-tab-browse" hidden={view !== 'browse'}>
     <div className="survivors-store-filters">
       <label>{copy.category}<select value={category} onChange={event => setCategory(event.target.value as StoreCategory | 'all')}>
         <option value="all">{copy.all}</option>{categories.map(slot => <option key={slot} value={slot}>{copy.categories[slot]}</option>)}</select></label>
@@ -55,7 +72,6 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
       <label><input type="checkbox" checked={affordableOnly} onChange={event => setAffordableOnly(event.target.checked)}/>{copy.affordableOnly}</label>
       <span aria-live="polite">{items.length} / {STORE_ITEMS.length}</span>
     </div>
-    {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
     {!items.length && <p role="status">{copy.noResults}</p>}
     <div className="survivors-store-grid">{items.map(item => {
       const text = copy.items[item.id as keyof typeof copy.items];
@@ -67,11 +83,13 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
         <small>{equipped ? copy.equipped : owned ? copy.owned : `${item.price.toLocaleString()} PSI`}</small>
         {replaced && <small className="survivors-store-replacement">{copy.replaces} {copy.items[replaced.id as keyof typeof copy.items].name}</small>}
         {!owned && credits < item.price && <small>{copy.shortfall} {(item.price-credits).toLocaleString()} PSI</small>}
-        <button type="button" aria-pressed={owned ? equipped : undefined} disabled={!owned && credits < item.price} onClick={() => onChange(item.id, !owned)}>
+        <div className="survivors-store-card-actions"><button type="button" aria-pressed={owned ? equipped : undefined} disabled={!owned && credits < item.price} onClick={() => onChange(item.id, !owned)}>
           {owned ? equipped ? copy.remove : copy.equip : `${copy.buy} · ${item.price.toLocaleString()} PSI`}</button>
-        <button type="button" className="survivors-fitting-button" aria-pressed={previewId === item.id} onClick={() => setPreviewId(item.id)}>{copy.tryOn}</button>
+        <button type="button" className="survivors-fitting-button" aria-pressed={previewId === item.id} onClick={() => {setPreviewId(item.id); setView('fitting'); document.getElementById('store-tab-fitting')?.focus();}}>{copy.tryOn}</button>
+        </div>
         <details><summary>{copy.preview}</summary><SurvivorsPremiumArt item={item} large/><p>{copy.recommend}: {text.use}</p><small>{copy.next}</small></details>
       </article>;
     })}</div>
+    </div>
   </section>;
 }

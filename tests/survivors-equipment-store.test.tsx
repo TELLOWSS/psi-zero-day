@@ -10,6 +10,11 @@ it('filters gear, shows the replacement slot and never offers an unaffordable pu
   try{
     act(()=>root.render(<SurvivorsEquipmentStore inventory={{owned:['voice_lens','command_array'],equipped:['voice_lens']}} credits={500} message="" onChange={change}/>));
     expect(host.querySelectorAll('article')).toHaveLength(16);
+    expect(host.querySelector('#store-panel-fitting')?.hasAttribute('hidden')).toBe(true);
+    const tabs = host.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    act(() => tabs[0]!.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowRight', bubbles:true})));
+    expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
+    act(() => tabs[0]!.click());
     const select=host.querySelector('select')!;
     act(()=>{select.value='communication';select.dispatchEvent(new Event('change',{bubbles:true}));});
     expect(host.querySelectorAll('article')).toHaveLength(3);
@@ -31,6 +36,8 @@ it('trying an unaffordable item changes only the fitting view', () => {
     const crown = [...host.querySelectorAll('article')].find(card => card.textContent?.includes('광역 교육 크라운'))!;
     act(() => [...crown.querySelectorAll('button')].find(button => button.textContent === '착용해 보기')!.click());
     expect(host.querySelector('.survivors-fitting-summary')?.textContent).toContain('광역 교육 크라운');
+    expect(host.querySelector('#store-panel-fitting')?.hasAttribute('hidden')).toBe(false);
+    expect(host.querySelector<HTMLButtonElement>('.survivors-fitting-action button')?.disabled).toBe(true);
     expect(change).not.toHaveBeenCalled();
     expect(inventory).toEqual({ owned: ['voice_lens'], equipped: ['voice_lens'] });
     act(() => host.querySelector<HTMLButtonElement>('.survivors-fitting-summary button')!.click());

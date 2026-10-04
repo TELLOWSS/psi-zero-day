@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 import { createInitialSurvivorsState } from '../src/engine/patrol-survivors-engine';
-import { drawWearableLayer, hasWearable, type WearableImages } from '../src/ui/survivors-wearable-art';
+import { drawWearableLayer, hasWearable, WEARABLE_PROFILES, type WearableImages } from '../src/ui/survivors-wearable-art';
 import { SpriteMotionTracker } from '../src/ui/survivors-sprite-motion';
 import { applyActorTorsoTransform, riggedTorsoOffset } from '../src/ui/survivors-rig-renderer';
 
@@ -30,7 +30,17 @@ it('does not promote missing artwork or sockets for uncalibrated characters', ()
   expect(hasWearable(state, 'voice_lens', {})).toBe(false);
   expect(hasWearable(state, 'broadcast_crown', images)).toBe(false);
   state.characterId = 'player';
-  expect(hasWearable(state, 'voice_lens', images)).toBe(false);
+  expect(hasWearable(state, 'voice_lens', images)).toBe(true);
+});
+
+it('keeps every calibrated body socket within the original torso bounds', () => {
+  expect(Object.keys(WEARABLE_PROFILES)).toHaveLength(9);
+  for (const fitting of Object.values(WEARABLE_PROFILES)) for (const socket of Object.values(fitting.sockets)) {
+    expect(socket.x).toBeGreaterThanOrEqual(0); expect(socket.y).toBeGreaterThanOrEqual(0);
+    expect(socket.x + socket.w).toBeLessThanOrEqual(1);
+    expect(socket.y + socket.h).toBeLessThanOrEqual(.55);
+  }
+  expect(WEARABLE_PROFILES.player!.sockets).not.toEqual(WEARABLE_PROFILES.kang_taesik!.sockets);
 });
 
 it('shares the cached rig torso offset for movement, hit reactions and facing', () => {

@@ -104,7 +104,7 @@ describe('PatrolSurvivorsGame UI', () => {
       act(() => {
         rdBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
-      expect(host.textContent).toContain('R&D 안전 본부 영구 강화');
+      expect(host.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('PSI 프리미엄 장비실');
 
       // Close R&D modal
       const closeRdBtn = Array.from(host.querySelectorAll('button')).find(
