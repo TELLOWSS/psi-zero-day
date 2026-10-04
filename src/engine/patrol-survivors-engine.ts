@@ -1,3 +1,4 @@
+import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
@@ -580,6 +581,7 @@ export function createInitialSurvivorsState(
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
+    fieldTactics: createFieldTactics(),
     starsEarned: [false, false, false],
     inFloodlight: false,
   };
@@ -689,6 +691,14 @@ export class SurvivorsEngine {
     if (this.state.phase !== 'playing') this.accumulator = 0;
   }
 
+  requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  requestHandoff():boolean {
+    if(this.state.phase!=='playing'||!operationProgress(this.state).complete||!this.state.fieldTactics||this.state.fieldTactics.handoff)return false;
+    this.state.fieldTactics.handoff={x:this.state.player.x,y:this.state.player.y,remaining:4};return true;
+  }
+  cancelHandoff():void { if(this.state.fieldTactics)this.state.fieldTactics.handoff=undefined; }
+
   private step(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
 
@@ -767,7 +777,14 @@ export class SurvivorsEngine {
       }
     }
 
+    const hpBefore=this.state.player.hp;
     this.updatePlayer(effectiveDt, input);
+    tickFieldTactics(this.state,effectiveDt,(x,y)=>{
+      for(const [offset,kind] of [[-18,'field_rations'],[18,'radio_battery']] as const) {
+        this.state.drops.push({id:this.genId('field_support'),x:Math.max(20,Math.min(WORLD_WIDTH-20,x+offset)),y:Math.max(20,Math.min(WORLD_HEIGHT-20,y)),exp:0,isHeal:false,itemKind:kind});
+      }
+      this.emitAudio('pickup',x,y);
+    });
     for (const worker of this.state.resolvedWorkers ?? []) {
       worker.remaining -= effectiveDt;
       worker.x += Math.sign(WORLD_WIDTH / 2 - worker.x) * Math.min(Math.abs(WORLD_WIDTH / 2 - worker.x), 80 * effectiveDt);
@@ -783,10 +800,11 @@ export class SurvivorsEngine {
     recordOperationControls(this.state);
     this.updateDrops(effectiveDt);
     this.checkCollisions();
+    if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
     // Objective handoff can finish a successful patrol before the survival deadline.
-    if ((this.state.gameTime >= this.state.maxTime || operationProgress(this.state).complete) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    if ((this.state.gameTime >= this.state.maxTime || (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0)) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10);
@@ -1379,7 +1397,7 @@ export class SurvivorsEngine {
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
-      let hazardSpeed = h.speed;
+      let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type);
       if (this.state.interactiveHazards) {
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed') continue;

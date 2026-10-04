@@ -1,3 +1,4 @@
+import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationPlan, operationProgress } from '../engine/survivors-operation';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
@@ -716,6 +717,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (e.code === 'KeyR') { e.preventDefault(); inputActionsRef.current.reroll(); return; }
       }
       if(accountabilityCaseRef.current)return;
+      if(engine?.state.phase==='playing'&&!e.repeat) {
+        if(e.code==='KeyQ'){e.preventDefault();engine.requestSupport();return;}
+        if(e.code==='KeyE'){e.preventDefault();engine.deployControlLine();return;}
+        if(e.code==='KeyX'){e.preventDefault();if(engine.state.fieldTactics?.handoff)engine.cancelHandoff();else engine.requestHandoff();return;}
+      }
       keysRef.current[e.code] = true;
       if (engine?.state.phase === 'playing' && ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
       if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) {
@@ -1225,6 +1231,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
       for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
+
+      const tactics=engine.state.fieldTactics;
+      for(const line of tactics?.lines ?? []) {
+        ctx.save();ctx.strokeStyle='#8dd8cb';ctx.lineWidth=2;ctx.setLineDash([9,6]);
+        ctx.beginPath();ctx.arc(line.x,line.y,line.radius,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+        drawProp(ctx,spritesRef.current.itemsAtlas,4,line.x-75,line.y+20,34);
+        drawProp(ctx,spritesRef.current.itemsAtlas,4,line.x+75,line.y+20,34);ctx.restore();
+      }
+      for(const marker of [tactics?.pendingSupport,tactics?.handoff])if(marker) {
+        ctx.save();ctx.strokeStyle=marker===tactics?.handoff?'#86efac':'#7dd3fc';ctx.lineWidth=2;
+        ctx.beginPath();ctx.ellipse(marker.x,marker.y,marker===tactics?.handoff?72:38,marker===tactics?.handoff?72:18,0,0,Math.PI*2);ctx.stroke();
+        ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#e2edf4';
+        ctx.fillText(`${marker===tactics?.handoff?tacticsText.hold:tacticsText.support_wait} ${Math.ceil(marker.remaining)}s`,marker.x,marker.y-45);ctx.restore();
+      }
 
       // Designated Green/Yellow Safety Walkway (안전통로: 45도 투시감 강화)
       ctx.save();
@@ -2347,7 +2367,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>}
             {engineRef.current && (() => {
               const progress=operationProgress(engineRef.current.state);
-              const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : `${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
+              const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : progress.complete?tacticsText.continue:`${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
               return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}</div>;
             })()}
           </div>
@@ -2388,6 +2408,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       </div>
 
       {phase==='playing'&&fieldIncident&&gameTime>=2&&gameTime<=14&&fieldRadio&&<aside className="survivors-field-radio" aria-live="polite"><strong>{accountabilityText.worker} · {accountabilityText.warning} {accountability.warnings}/3</strong><p>{fieldRadio}</p></aside>}
+      {phase==='playing' && engineRef.current?.state.fieldTactics && (()=>{
+        const engine=engineRef.current!,t=engine.state.fieldTactics!,ready=operationProgress(engine.state).complete;
+        return <div className="survivors-tactical-actions" aria-label={tacticsText.support}>
+          <button type="button" title={tacticsText.support_description} disabled={t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}>{tacticsText.supply} · {t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges} <small>Q</small></button>
+          <button type="button" title={tacticsText.line_description} disabled={t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}>{tacticsText.line} · {t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges} <small>E</small></button>
+          {ready&&<button type="button" className="is-handoff" onClick={()=>t.handoff?engine.cancelHandoff():engine.requestHandoff()}>{t.handoff?tacticsText.cancel:tacticsText.handoff} <small>X</small></button>}
+        </div>;
+      })()}
       {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
       {phase === 'playing' && (
         <div className="survivors-ultimate-control">
@@ -2828,7 +2856,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
-            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
+            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
@@ -2913,7 +2941,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
 
-            <p className="survivors-story-result">{engineRef.current && operationProgress(engineRef.current.state).complete ? operationText.handoff : operationText.timeout}</p>
+            <p className="survivors-story-result">{engineRef.current?.state.fieldTactics?.handoff?.remaining === 0 && engineRef.current.state.gameTime < engineRef.current.state.maxTime ? operationText.handoff : operationText.timeout}</p>
             {/* 3-STAR CHALLENGES DEBRIEFING */}
             {engineRef.current?.state.stage && (
               <div className="survivors-stage-debriefing">

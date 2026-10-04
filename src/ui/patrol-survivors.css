@@ -1997,3 +1997,13 @@
 .survivors-stage-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 4px 14px rgba(0,0,0,.2); }
 .survivors-stage-card:focus-visible { outline: 2px solid #f8d792; outline-offset: 3px; }
 .survivors-operation-preview { display:block; margin:8px 0 0; color:#9ae5d0; font-size:11px; letter-spacing:.03em; }
+.survivors-tactical-actions { position:absolute;z-index:24;bottom:max(18px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:6px;max-width:calc(100% - 180px);flex-wrap:wrap;justify-content:center; }
+.survivors-tactical-actions button { min-height:38px;border:1px solid #5f8292;border-radius:9px;padding:6px 9px;background:rgba(13,29,39,.94);color:#d8e9ee;font-family:inherit;font-weight:600;font-size:11px;cursor:pointer; }
+.survivors-tactical-actions button:disabled { opacity:.5;cursor:default; }
+.survivors-tactical-actions button:focus-visible { outline:2px solid #f8d792;outline-offset:2px; }
+.survivors-tactical-actions small { color:#97b3bf;margin-left:4px; }
+.survivors-tactical-actions .is-handoff { border-color:#84cba4;color:#bbf7d0; }
+@media(max-width:600px) and (orientation:portrait) { .survivors-tactical-actions { max-width:calc(100% - 155px);bottom:max(18px,env(safe-area-inset-bottom));gap:4px; } .survivors-tactical-actions button { width:100%;min-height:34px;font-size:10px;padding:5px 7px; } .survivors-tactical-actions small { display:none; } }
+/* The old left+right anchored wrapper must not swallow tactical button taps. */
+.survivors-ultimate-control { right:auto; width:max-content; pointer-events:none; }
+.survivors-ultimate-control button { pointer-events:auto; }
