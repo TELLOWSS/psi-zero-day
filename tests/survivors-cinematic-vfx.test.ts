@@ -13,6 +13,14 @@ describe('premium and high-tier cinematic presentation',()=>{
     expect(cinematicLook('hunter_beam',5,['sync_gauntlet']).palette).toBe('violet');
     expect(cinematicLook('hunter_beam',5).premium).toBe(false);
   });
+  it('gives Sync Gauntlet its own violet signature and layered flight material',()=>{
+    const look=cinematicLook('hunter_beam',5,['sync_gauntlet']);
+    expect(look).toMatchObject({palette:'violet',premium:true,tier:3,signature:'sync_gauntlet'});
+    const ctx=context(),p=Object.freeze(shot('hunter_beam'));
+    expect(drawCinematicFlight(ctx,p,look,atlas,false,false)).toBe(true);
+    expect(ctx.drawImage).toHaveBeenCalledTimes(4);
+    expect(p).toEqual(shot('hunter_beam'));
+  });
   it('makes premium and max tiers materially wider while preserving the projectile',()=>{
     const p=Object.freeze(shot('drone_laser')),ctx=context();
     const draw=(lv:number,gear:string[],reduced=false,busy=false)=>{
