@@ -1,3 +1,4 @@
+import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
@@ -482,6 +483,7 @@ export function createInitialSurvivorsState(
   characterId: CharacterId = 'yoon',
   upgrades: PermanentUpgrades = DEFAULT_PERMANENT_UPGRADES,
   stageId: PatrolStageId = 'stage_01',
+  difficulty: PatrolDifficulty = 'standard',
 ): SurvivorsGameState {
   const profile = CHARACTER_PROFILES[characterId];
   const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
@@ -532,6 +534,7 @@ export function createInitialSurvivorsState(
 
   return {
     phase: 'ready',
+    difficulty,
     characterId,
     gameTime: 0,
     maxTime: TARGET_SURVIVAL_TIME,
@@ -807,7 +810,7 @@ export class SurvivorsEngine {
     if ((this.state.gameTime >= this.state.maxTime || (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0)) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
-      this.state.psiCredits += Math.round(this.state.score / 10);
+      this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
       this.checkStarChallenges();
     }
     // Keep the intervention visible before spending its bulk XP. Terminal
@@ -1262,7 +1265,7 @@ export class SurvivorsEngine {
 
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
-    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime);
+    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty);
     if (this.cooldowns.spawnTimer <= 0) {
       this.cooldowns.spawnTimer = pressure.interval;
 
@@ -1345,9 +1348,9 @@ export class SurvivorsEngine {
 
     // Time scaling (if not explicit boss HP override)
     if (overrideHp) {
-      hp = overrideHp;
+      hp = Math.round(overrideHp * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].hp);
     } else {
-      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime).hpScale;
+      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty).hpScale;
       hp = Math.round(hp * scale);
     }
 
@@ -1357,6 +1360,7 @@ export class SurvivorsEngine {
       y = Math.max(60, Math.min(WORLD_HEIGHT - 60, this.state.player.y + (this.random() - 0.5) * 180));
       radius = 38;
     }
+    if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
     this.state.hazards.push({
       id: this.genId(`haz_${type}`),
       isStageBoss,
@@ -1548,7 +1552,7 @@ export class SurvivorsEngine {
         }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
-        const supply = tacticalSupplyFor(this.state.hazardsNeutralized, Boolean(h.isStageBoss));
+        const supply = tacticalSupplyFor(this.state.hazardsNeutralized, Boolean(h.isStageBoss), PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].supplyEvery);
         if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
         if (h.isStageBoss) this.state.stageBossNeutralized = true;
         this.emitAudio('control', h.x, h.y, { ...(h.isStageBoss ? { outcome: 'boss' as const } : {}), actorKind: h.type });
