@@ -435,6 +435,7 @@ export function StrategyMapShell({
       onOutcomeContinue={onOutcomeContinue}
       onOutcomeReconsider={onOutcomeReconsider}
       onActionFocus={setActionFocusId}
+      onTargetSelect={setFocusId}
       guidanceText={guidedSignal ? text('ui.strategy.signal_guided') : undefined}
       emptyText={informationOnlySignal ? text('ui.strategy.signal_info_only') : undefined}
       transitionPrompt={transitionPrompt}
