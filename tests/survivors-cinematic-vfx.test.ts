@@ -8,11 +8,12 @@ const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),arc:vi.fn(),stroke:vi.fn()}) as unknown as CanvasRenderingContext2D;
 const shot=(kind:ProjectileKind):Projectile=>({id:'p',kind,x:50,y:60,vx:100,vy:0,radius:4,damage:12,duration:.2,pierce:1});
 describe('premium and high-tier cinematic presentation',()=>{
-  it('passes actual paid communication and tempo ownership into flight identity',()=>{
-    expect(cinematicLook('drone_laser',5,['broadcast_crown'])).toMatchObject({palette:'gold',premium:true,tier:3,flightCell:4,impactCell:8});
-    expect(cinematicLook('radio',2,['command_array']).palette).toBe('cyan');
-    expect(cinematicLook('hunter_beam',5,['sync_gauntlet']).palette).toBe('violet');
-    expect(cinematicLook('hunter_beam',5).premium).toBe(false);
+  it('keeps premium projectile identity weapon-specific instead of recoloring the whole battlefield',()=>{
+    expect(cinematicLook('radio',5,['broadcast_crown'])).toMatchObject({palette:'gold',premium:true,tier:3,flightCell:4,impactCell:8});
+    expect(cinematicLook('drone_laser',5,['broadcast_crown'])).toMatchObject({palette:'cyan',premium:false});
+    expect(cinematicLook('radio',2,['command_array'])).toMatchObject({palette:'cyan',premium:true});
+    expect(cinematicLook('hunter_beam',5,['sync_gauntlet'])).toMatchObject({palette:'violet',premium:true});
+    expect(cinematicLook('radio',5,['sync_gauntlet']).premium).toBe(false);
   });
   it('makes premium and max tiers materially wider while preserving the projectile',()=>{
     const p=Object.freeze(shot('drone_laser')),ctx=context();
@@ -20,7 +21,7 @@ describe('premium and high-tier cinematic presentation',()=>{
       vi.mocked(ctx.drawImage).mockClear();expect(drawCinematicFlight(ctx,p,cinematicLook(p.kind,lv,gear),atlas,reduced,busy)).toBe(true);
       return vi.mocked(ctx.drawImage).mock.calls[0]!.slice(-2) as number[];
     };
-    const basic=draw(1,[]),max=draw(5,[]),premium=draw(5,['broadcast_crown']),quiet=draw(5,['broadcast_crown'],true),busy=draw(5,['broadcast_crown'],false,true);
+    const basic=draw(1,[]),max=draw(5,[]),premium=draw(5,['sync_gauntlet']),quiet=draw(5,['sync_gauntlet'],true),busy=draw(5,['sync_gauntlet'],false,true);
     expect(max[0]).toBeGreaterThan(basic[0]!);expect(premium[1]).toBeGreaterThan(max[1]!);
     expect(quiet[0]).toBeLessThan(premium[0]!);expect(busy[1]).toBeLessThan(premium[1]!);
     expect(p).toEqual(shot('drone_laser'));expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
