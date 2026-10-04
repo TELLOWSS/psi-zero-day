@@ -1,3 +1,5 @@
+import challengeText from '../../content/localization/survivors-challenge-ko.json';
+import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationPlan, operationProgress } from '../engine/survivors-operation';
@@ -261,6 +263,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [accountabilityCase,setAccountabilityCase]=useState<typeof ACCOUNTABILITY_CASES[number]|null>(null);
   const accountabilityRef=useRef(accountability);accountabilityRef.current=accountability;
   const accountabilityCaseRef=useRef(accountabilityCase);accountabilityCaseRef.current=accountabilityCase;
+  const [selectedDifficulty, setSelectedDifficulty] = useState<PatrolDifficulty>('standard');
   const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
   useEffect(() => {
     const uri=stageGroundUri(selectedStage);
@@ -597,7 +600,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
   const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId), crypto.getRandomValues(new Uint32Array(1))[0]);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty), crypto.getRandomValues(new Uint32Array(1))[0]);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -629,7 +632,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
-  }, [selectedChar, selectedStage, permanentUpgrades]);
+  }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty]);
 
   useEffect(() => {
     if (!engineRef.current || engineRef.current.state.phase === 'ready') initGame(selectedChar, selectedStage);
@@ -2373,7 +2376,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {engineRef.current && (() => {
               const progress=operationProgress(engineRef.current.state);
               const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : progress.complete?tacticsText.continue:`${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
-              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}</div>;
+              const cadence=PATROL_DIFFICULTIES[engineRef.current.state.difficulty ?? 'standard'].supplyEvery;
+              const remaining=cadence-engineRef.current.state.hazardsNeutralized%cadence;
+              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
@@ -2493,6 +2498,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
               <button type="button" className="survivors-btn-primary" onClick={startGame}>순찰 시작하기</button>
             </header>
+            <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
+              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply}</small></button>)}
+              <p>{challengeText.description}</p>
+            </fieldset>
             {PATROL_STAGES[selectedStage].narrative && <aside className="survivors-story-brief">
               <strong>{CHARACTER_PROFILES[PATROL_STAGES[selectedStage].narrative!.speaker].name} · {PATROL_STAGES[selectedStage].subtitle}</strong>
               <p>{PATROL_STAGES[selectedStage].narrative!.brief}</p>
