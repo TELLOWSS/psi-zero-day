@@ -44,7 +44,7 @@ describe('premium and high-tier cinematic presentation',()=>{
     layer.draw(ctx,false,false,{atlas,equipped:['broadcast_crown'],levels:{hunter_beam:5}});
     const args=vi.mocked(ctx.drawImage).mock.calls[0]!;
     expect(args[1]).toBe(0);expect(args[2]).toBe(724); // Gold impact cell 8.
-    expect(ctx.drawImage).toHaveBeenCalledOnce();
+    expect(vi.mocked(ctx.drawImage).mock.calls.length).toBeGreaterThanOrEqual(2);
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
   });
   it('keeps the existing renderer when the raster asset is not loaded and cones on the ground pass',()=>{
