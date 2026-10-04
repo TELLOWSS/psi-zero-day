@@ -5,11 +5,11 @@ import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine
 import type {Projectile,ProjectileKind} from '../src/domain/patrol-survivors';
 import {STORE_ITEMS} from '../src/domain/survivors-store';
 const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
-const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),arc:vi.fn(),stroke:vi.fn()}) as unknown as CanvasRenderingContext2D;
+const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),arc:vi.fn(),stroke:vi.fn(),moveTo:vi.fn(),lineTo:vi.fn()}) as unknown as CanvasRenderingContext2D;
 const shot=(kind:ProjectileKind):Projectile=>({id:'p',kind,x:50,y:60,vx:100,vy:0,radius:4,damage:12,duration:.2,pierce:1});
 describe('premium and high-tier cinematic presentation',()=>{
   it('keeps premium projectile identity weapon-specific instead of recoloring the whole battlefield',()=>{
-    expect(cinematicLook('radio',5,['broadcast_crown'])).toMatchObject({palette:'gold',premium:true,tier:3,flightCell:4,impactCell:8});
+    expect(cinematicLook('radio',5,['broadcast_crown'])).toMatchObject({palette:'gold',premium:true,tier:5,flightCell:4,impactCell:8});
     expect(cinematicLook('drone_laser',5,['broadcast_crown'])).toMatchObject({palette:'cyan',premium:false});
     expect(cinematicLook('radio',2,['command_array'])).toMatchObject({palette:'cyan',premium:true});
     expect(cinematicLook('hunter_beam',5,['sync_gauntlet'])).toMatchObject({palette:'violet',premium:true});
@@ -61,12 +61,12 @@ describe('premium and high-tier cinematic presentation',()=>{
     expect(legendary.ellipses).toBeGreaterThan(advanced.ellipses);
     expect(elite.ellipses).toBeGreaterThan(advanced.ellipses);
   });
-  it('uses the equipped gold material for an engine impact and replaces the old wire response',()=>{
+  it('keeps hunter impact violet when communication gear affects only radio weapons',()=>{
     const layer=new ProjectileFeedbackLayer(),ctx=context();
     layer.ingest([{projectileId:'actual-event',kind:'hunter_beam',phase:'impact',x:10,y:20,angle:1,radius:3}]);
     layer.draw(ctx,false,false,{atlas,equipped:['broadcast_crown'],levels:{hunter_beam:5}});
     const args=vi.mocked(ctx.drawImage).mock.calls[0]!;
-    expect(args[1]).toBe(0);expect(args[2]).toBe(724); // Gold impact cell 8.
+    expect(args[1]).toBe(724);expect(args[2]).toBe(724); // Violet impact cell 10.
     expect(ctx.drawImage).toHaveBeenCalledOnce();
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
   });

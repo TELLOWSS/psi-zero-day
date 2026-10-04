@@ -18,7 +18,7 @@ export const PROJECTILE_VFX = {
 export function projectileVisual(p: Readonly<Projectile>, level: number, reducedMotion: boolean, busy: boolean) {
   const spec=PROJECTILE_VFX[p.kind];
   return {spec, angle:Math.atan2(p.vy,p.vx), radius:Math.max(1,p.radius),
-    tier:Math.min(3,Math.max(1,Math.ceil(level/2))),
+    tier:Math.min(5,Math.max(1,level)),
     alpha:Math.max(0,Math.min(1,p.duration/spec.life)),
     trail:reducedMotion?0:spec.trail*(.7+Math.min(3,Math.max(1,Math.ceil(level/2)))*.1), detail:!reducedMotion&&!busy};
 }
@@ -71,6 +71,10 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
   if(p.kind==='cone_trap')return; // Approved equipment sprite belongs to the ground pass.
   const v=projectileVisual(p,level,reducedMotion,busy),{spec,radius:r}=v;
   ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=v.alpha;ctx.lineCap='round';ctx.lineJoin='round';
+  if(v.tier>1 && spec.family!=='physical'){
+    ctx.save();ctx.rotate(v.angle);ctx.strokeStyle=spec.color;ctx.lineWidth=1.1;ctx.globalAlpha=v.alpha*.55;
+    for(let i=0;i<v.tier;i++){ctx.beginPath();ctx.moveTo(-r-5-i*5,-3);ctx.lineTo(-r-5-i*5,3);ctx.stroke();}ctx.restore();
+  }
   const phase=reducedMotion?0:time*3;
   if(spec.family==='powder'||spec.family==='frost'){
     ctx.rotate(v.angle);const cloud=spec.family==='powder'?'powder':'frost';

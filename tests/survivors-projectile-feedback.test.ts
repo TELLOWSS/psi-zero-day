@@ -19,6 +19,7 @@ describe('confirmed projectile lifecycle', () => {
   });
   it('observing feedback cannot change deterministic simulation or audio', () => {
     const a=new SurvivorsEngine(),b=new SurvivorsEngine();a.start();b.start();
+    for(const engine of [a,b]) engine.state.hazards.push({id:'in-range',type:'GAS_LEAK',x:engine.state.player.x+100,y:engine.state.player.y,hp:10000,maxHp:10000,speed:0,radius:15,damage:0,expValue:0});
     let launches=0;
     for(let i=0;i<180;i++){
       a.update(1/60,{moveX:1,moveY:0});b.update(1/60,{moveX:1,moveY:0});

@@ -1978,6 +1978,35 @@
 .survivors-accountability-event {width:min(740px,100%);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:clamp(18px,3vw,30px);color:#e5edf1;background:linear-gradient(140deg,#1b2935,#101b24);border:1px solid #b69755;border-radius:14px;box-shadow:0 20px 70px #0008;text-align:left;}
 .survivors-accountability-event header small {color:#f2c677;letter-spacing:.08em;}
 .survivors-accountability-event h2 {font-size:clamp(21px,4vw,30px);margin:10px 0;}
+.survivors-equipment-workspace {width:min(960px,calc(100vw - 32px));max-width:960px;border-radius:8px;}
+.survivors-store-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.survivors-store-wallet {white-space:nowrap;color:#b7edc6;font-size:18px;}
+.survivors-store-slots {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-block:1px solid #647581;margin:16px 0;}
+.survivors-store-slots>div {display:grid;grid-template-columns:42px minmax(0,1fr);gap:6px;padding:12px;border-bottom:1px solid #ffffff15;align-items:center;}
+.survivors-store-slots small {grid-column:1/-1;color:#b7c7ce;}
+.survivors-store-slots strong {font-size:12px;overflow-wrap:anywhere;}
+.survivors-store-slots .survivors-premium-art {width:40px;height:40px;min-width:0;}
+.survivors-store-slots button {grid-column:2;min-height:32px;padding:4px 8px;border:1px solid #5b7e7a;border-radius:4px;background:#16362f;color:#d7f5e6;cursor:pointer;}
+.survivors-store-slots button:focus-visible {outline:2px solid #a8e3c1;outline-offset:2px;}
+.survivors-store-slots>div>span:not(.survivors-premium-art) {color:#84989f;font-size:12px;grid-column:1/-1;}
+.survivors-store-filters {display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:16px 0;}
+.survivors-store-filters label {display:flex;align-items:center;gap:8px;font-size:13px;}
+.survivors-store-filters select {max-width:200px;background:#16242a;color:#eef6f6;border:1px solid #627b84;padding:10px;border-radius:4px;}
+.survivors-store-filters input {accent-color:#71d2bc;width:18px;height:18px;}
+.survivors-store-filters>span {margin-left:auto;color:#adbec6;font-size:12px;}
+.survivors-store .survivors-store-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.survivors-store-item-head {display:flex;align-items:center;gap:12px;min-width:0;}
+.survivors-store-item-head>div {display:grid;gap:5px;min-width:0;}
+.survivors-store-item-head .survivors-premium-art {width:64px;height:64px;flex:0 0 64px;}
+.survivors-store-card {border-radius:6px;min-width:0;overflow-wrap:anywhere;}
+.survivors-store-item-head strong {font-size:14px;line-height:1.5;}
+.survivors-store-item-head small {font-size:11px;color:#b5c6c8;}
+.survivors-store-effect {color:#a9e6c6;font-size:13px;line-height:1.6;}
+.survivors-store-replacement {color:#f0cd8d;}
+.survivors-store-card>button {margin-top:auto;min-height:44px;white-space:normal;}
+.survivors-store-card details {border-top:1px solid #ffffff20;padding-top:8px;}
+@media(max-width:850px){.survivors-store .survivors-store-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.survivors-store-slots{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:500px){.survivors-store .survivors-store-grid{grid-template-columns:minmax(0,1fr);}.survivors-store-filters{gap:12px;}.survivors-store-slots>div{padding:8px;}}
 .survivors-accountability-event header span {color:#a8bbc7;font-size:13px;}
 .accountability-dialogue {padding:16px;border-left:3px solid #dbba77;background:#ffffff06;line-height:1.8;}
 .accountability-policy,.accountability-record {color:#b9c9d2;font-size:12px;line-height:1.7;}
@@ -2088,3 +2117,17 @@
 .survivors-premium-hp-badge { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; color:#c8e6ec; }
 .survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
 .survivors-premium-hp-badge small { font-size:9px; }
+.survivors-fitting { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 24px; align-items: center; padding: 12px 0 24px; border-bottom: 1px solid #34443a; margin-bottom: 20px; }
+.survivors-fitting-art { margin: 0; min-width: 0; position: relative; aspect-ratio: 9 / 8; background: #26332e; }
+.survivors-fitting-art canvas { display: block; width: 100%; height: 100%; }
+.survivors-fitting-art figcaption { position: absolute; bottom: 8px; left: 8px; right: 8px; text-align: center; font-size: 12px; }
+.survivors-fitting-summary { min-width: 0; }
+.survivors-fitting-summary h4 { margin: 0; font-size: 18px; }
+.survivors-fitting-summary p { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.survivors-fitting-summary dl { margin: 12px 0; font-size: 13px; }
+.survivors-fitting-summary dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid #34443a; }
+.survivors-fitting-summary dd { margin: 0; font-variant-numeric: tabular-nums; }
+.survivors-fitting-summary dd span { color: #b7ebae; }
+.survivors-fitting-summary button, .survivors-store-card .survivors-fitting-button { background: transparent; border: 1px solid #688373; color: #e2eee6; border-radius: 4px; padding: 8px 10px; cursor: pointer; }
+.survivors-store-card .survivors-fitting-button[aria-pressed="true"] { border-color: #b7ebae; background: #283f31; }
+@media (max-width: 500px) { .survivors-fitting { grid-template-columns: 1fr; gap: 12px; } .survivors-fitting-art { width: min(100%, 280px); justify-self: center; } }

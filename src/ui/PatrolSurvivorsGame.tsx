@@ -2,7 +2,9 @@ import { CombatDirection } from './survivors-combat-direction';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
-import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
+import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
+import {CHARACTER_MAP_ART} from './survivors-character-art';
+import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory} from '../domain/survivors-store';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
@@ -16,6 +18,7 @@ import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writ
 import { decideAccountability } from '../domain/survivors-accountability';
 import { ProjectileFeedbackLayer } from './survivors-projectile-feedback';
 import { drawProjectileVfx } from './survivors-projectile-vfx';
+import { equipmentTuning } from '../engine/survivors-equipment-tuning';
 import { survivorsCamera } from './survivors-camera';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
@@ -185,20 +188,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     });
 
     // Load 2.5D Quarter-View Standing Character Map Arts
-    const mapArtSources: Record<string, string> = {
-      player: '/assets/episode01/characters/player-map.webp',
-      kang_taesik: '/assets/episode01/characters/kang-taesik-map.webp',
-      yoon_sungho: '/assets/episode01/characters/yoon-sungho-map.webp',
-      lee_jaehoon: '/assets/episode01/characters/lee-jaehoon-map.webp',
-      lim_junho: '/assets/episode01/characters/lim-junho-map.webp',
-      safety_monitor: '/assets/survivors/safety-monitor-v2.webp',
-      // Legacy compatibility keys
-      park: '/assets/episode01/characters/kang-taesik-map.webp',
-      yoon: '/assets/survivors/sprite_player_yoon.webp',
-      jung: '/assets/episode01/characters/player-map.webp',
-    };
-
-    Object.entries(mapArtSources).forEach(([cId, src]) => {
+    Object.entries(CHARACTER_MAP_ART).forEach(([cId, src]) => {
       const img = new Image();
       img.src = src;
       img.onload = () => {
@@ -417,7 +407,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setStoreInventory(result.inventory);
     creditsRef.current = result.credits;
     setPsiCredits(result.credits);
-    setStoreMessage('');
+    setStoreMessage(purchase ? storeText.purchased : result.inventory.equipped.includes(id) ? storeText.equipSuccess : storeText.removeSuccess);
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
@@ -1664,7 +1654,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.save();
         ctx.translate(player.x, player.y);
         ctx.scale(1, 0.58);
-        const auraRadius = 240;
+        const auraRadius = equipmentTuning('tesla_dome',1)!.radius;
         const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
         grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
         grad.addColorStop(0.6, 'rgba(14, 165, 233, 0.2)');
@@ -1681,7 +1671,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.save();
         ctx.translate(player.x, player.y);
         ctx.scale(1, 0.58);
-        const auraRadius = 100 + activePerks.floodlight * 28;
+        const auraRadius = equipmentTuning('floodlight',activePerks.floodlight)!.radius;
         const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
         grad.addColorStop(0, `rgba(251,191,36,${.16+activePerks.floodlight*.025})`);
         grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.16)');
@@ -2160,7 +2150,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
 
-      drawPremiumGear(ctx,engine.state,spritesRef.current.premiumAtlas,reducedMotionRef.current);
+      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas);
       const projectileBusy=projectiles.length>60;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
@@ -2737,7 +2727,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* R&D RESEARCH LAB MODAL */}
       {showRdModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
+          <div className="survivors-modal-content survivors-equipment-workspace">
             <h2 className="survivors-modal-title is-gold">🔬 R&D 안전 본부 영구 강화</h2>
             <p className="survivors-modal-sub">
               누적된 안전 크레딧으로 안전관리자의 기본 역량을 영구 업그레이드하세요!
@@ -2746,26 +2736,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               보유 크레딧: <strong>{psiCredits.toLocaleString()} PSI</strong>
             </div>
 
-            <section className="survivors-store" aria-label={storeText.title}>
-              <h3>{storeText.title}</h3><p>{storeText.intro}</p>
-              {storeMessage && <p role="alert">{storeMessage}</p>}
-              {(Object.keys(storeText.categories) as StoreCategory[]).map(category => <section key={category}>
-                <h4>{storeText.categories[category]}</h4>
-                <div className="survivors-store-grid">{STORE_ITEMS.filter(item => item.category === category).map(item => {
-                  const text = storeText.items[item.id as keyof typeof storeText.items];
-                  const owned = storeInventory.owned.includes(item.id);
-                  const equipped = storeInventory.equipped.includes(item.id);
-                  return <article key={item.id} data-rarity={item.rarity} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
-                    <span className="survivors-premium-rarity">{storeText[item.rarity]}</span>
-                    <SurvivorsPremiumArt item={item} />
-                    <strong>{text.name}</strong><span>{text.description}</span><p className="survivors-premium-use">{text.use}</p>
-                    <small>{equipped ? storeText.equipped : owned ? storeText.owned : `${item.price.toLocaleString()} PSI`}</small>
-                    <button type="button" aria-pressed={owned ? equipped : undefined} disabled={!owned && psiCredits < item.price} onClick={() => changeStore(item.id,!owned)}>{owned ? equipped ? storeText.remove : storeText.equip : `${storeText.buy} · ${item.price.toLocaleString()} PSI`}</button>
-                    <details><summary>{storeText.preview}</summary><SurvivorsPremiumArt item={item} large/><p>{storeText.recommend}: {text.use}</p></details>
-                  </article>;
-                })}</div>
-              </section>)}
-            </section>
+            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} characterId={selectedChar} upgrades={permanentUpgrades}/>
 
             <div className="survivors-rd-grid">
               <div className="survivors-rd-item">

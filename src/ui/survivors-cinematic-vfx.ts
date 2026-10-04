@@ -3,7 +3,7 @@ import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v1.webp';
 export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
-  const tier=Math.min(3,Math.max(1,Math.ceil(level/2)));
+  const tier=Math.min(5,Math.max(1,level));
   const communication=equipped.some(id=>['voice_lens','command_array','broadcast_crown'].includes(id));
   const tempo=equipped.some(id=>['relay_core','precision_link','sync_gauntlet'].includes(id));
   const communicationShot=communication&&(kind==='radio'||kind==='satellite_wave');
@@ -29,11 +29,14 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
   if(!['radio','satellite_wave','drone_laser','hunter_beam'].includes(p.kind)||!atlas?.naturalWidth)return false;
   const alpha=Math.min(1,Math.max(0,p.duration/.12));
   const angle=Math.atan2(p.vy,p.vx);
-  const length=reduced?26:36+look.tier*15+(look.premium?8:0);
-  const width=(reduced?10:11+look.tier*4+(look.premium?3:0))*(busy?.72:1);
+  const length=reduced?26:32+look.tier*9+(look.premium?8:0);
+  const width=(reduced?10:10+look.tier*2+(look.premium?3:0))*(busy?.72:1);
   // Screen blending keeps the colored envelope rather than adding it to white.
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,look.flightCell,p.x-Math.cos(angle)*length*.20,p.y-Math.sin(angle)*length*.20,length,width,alpha*(look.premium?.92:.76),angle);
+  // Static pulse count remains legible even with reduced motion enabled.
+  ctx.translate(p.x,p.y);ctx.rotate(angle);ctx.strokeStyle=look.color;ctx.lineWidth=1.2;ctx.globalAlpha=alpha*.75;
+  for(let i=0;i<look.tier;i++){ctx.beginPath();ctx.moveTo(-8-i*7,-width*.3);ctx.lineTo(-8-i*7,width*.3);ctx.stroke();}
   ctx.restore();return true;
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {

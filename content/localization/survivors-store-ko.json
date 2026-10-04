@@ -1,5 +1,16 @@
 {
   "title": "PSI 프리미엄 장비실",
+  "fitting": "착용 미리보기",
+  "tryOn": "착용해 보기",
+  "currentLoadout": "현재 장착",
+  "resetFitting": "현재 장착으로 돌아가기",
+  "fittingLoading": "착용 이미지 불러오는 중",
+  "fittingFailure": "착용 이미지를 불러오지 못했습니다",
+  "fittingHp": "안전 체력",
+  "fittingSpeed": "이동 속도",
+  "fittingPickup": "회수 반경",
+  "fittingDamage": "대응 효과 (%)",
+  "fittingCooldown": "대기 감소 (%)",
   "intro": "순찰로 모은 PSI로 영구 소유하세요. 카테고리별 1개 장착 · 다음 순찰부터 적용 · 반복 구매 없음",
   "categories": {
     "communication": "계도 전달",
@@ -91,6 +102,16 @@
       "use": "통제 성과가 적어도 긴급 지휘를 준비"
     }
   },
+  "category": "분류",
+  "ownedOnly": "보유 장비",
+  "affordableOnly": "구매 가능",
+  "emptySlot": "미장착",
+  "noResults": "조건에 맞는 장비가 없습니다.",
+  "replaces": "교체 대상:",
+  "shortfall": "부족:",
+  "purchased": "구매 완료 · 장착을 선택하세요",
+  "equipSuccess": "장착 완료 · 다음 순찰에 적용",
+  "removeSuccess": "장착 해제 완료",
   "buy": "구매",
   "equip": "장착",
   "remove": "해제",

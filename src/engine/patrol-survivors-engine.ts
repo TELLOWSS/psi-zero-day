@@ -1083,7 +1083,6 @@ export class SurvivorsEngine {
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
           h.hp -= equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt;
-          h.speed = Math.max(25, h.speed * 0.7);
         }
       }
       if (this.cooldowns.tesla <= 0) {
@@ -1093,7 +1092,7 @@ export class SurvivorsEngine {
         for (const h of hazards) {
           if (strikes >= equipmentTuning('tesla_dome', 1)!.count) break;
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
-          if (dist <= radius + 100) {
+          if (h.hp > 0 && dist <= radius + h.radius) {
             h.hp -= equipmentTuning('tesla_dome', 1)!.damage * player.damageMultiplier;
             strikes++;
             this.addProjectile({
@@ -1105,7 +1104,7 @@ export class SurvivorsEngine {
               radius: 25,
               damage: equipmentTuning('tesla_dome', 1)!.secondaryDamage! * player.damageMultiplier,
               duration: 0.3,
-              pierce: 99,
+              pierce: equipmentTuning('tesla_dome', 1)!.pierce,
               kind: 'tesla_bolt',
               color: '#fbbf24',
             });
@@ -1121,7 +1120,6 @@ export class SurvivorsEngine {
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (dist <= radius + h.radius) {
             h.hp -= auraDps * dt;
-            h.speed = Math.max(30, h.speed * 0.85); // slow down
           }
         }
       }
@@ -1187,7 +1185,7 @@ export class SurvivorsEngine {
           const angle = angleBase + (d * Math.PI * 2) / 3;
           const droneX = player.x + Math.cos(angle) * 85;
           const droneY = player.y + Math.sin(angle) * 85;
-          const target = this.findNearestHazard(droneX, droneY);
+          const target = this.findNearestHazard(droneX, droneY, 260);
           if (target) {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
@@ -1218,7 +1216,7 @@ export class SurvivorsEngine {
           const angle = this.state.droneAngle ?? 0;
           const droneX = player.x + Math.cos(angle) * 65;
           const droneY = player.y + Math.sin(angle) * 65;
-          const target = this.findNearestHazard(droneX, droneY);
+          const target = this.findNearestHazard(droneX, droneY, 300);
           if (target) {
             const dx = target.x - droneX;
             const dy = target.y - droneY;
@@ -1417,6 +1415,11 @@ export class SurvivorsEngine {
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
       let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type) * premiumHazardSpeed(this.state,h);
+      const aura = this.state.activePerks.tesla_dome > 0 ? 'tesla_dome' : 'floodlight';
+      const auraLevel = this.state.activePerks[aura];
+      if (auraLevel > 0 && Math.hypot(h.x-player.x,h.y-player.y) <= equipmentTuning(aura,auraLevel)!.radius+h.radius) {
+        hazardSpeed *= aura === 'tesla_dome' ? .7 : .85;
+      }
       if (this.state.interactiveHazards) {
         for (const env of this.state.interactiveHazards) {
           if (env.state === 'destroyed') continue;
@@ -1966,8 +1969,8 @@ export class SurvivorsEngine {
     if (this.state.currentExp >= this.state.nextLevelExp) this.addExp(0);
   }
 
-  private findNearestHazard(x: number, y: number): Hazard | null {
-    let bestDist = Infinity;
+  private findNearestHazard(x: number, y: number, range = 450): Hazard | null {
+    let bestDist = range * range;
     let nearest: Hazard | null = null;
     for (const h of this.state.hazards) {
       if (h.hp <= 0 || h.motion?.phase === 'spent') continue;

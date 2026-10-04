@@ -12,7 +12,8 @@ describe('equipment-specific projectile presentation',()=>{
   it('keeps collision radius intact, clamps opacity, and reduces detail without changing state',()=>{
     const p=Object.freeze(projectile('radio'));
     expect(projectileVisual(p,1,false,false).tier).toBe(1);
-    expect(projectileVisual(p,5,false,false).tier).toBe(3);
+    expect(projectileVisual(p,5,false,false).tier).toBe(5);
+    expect([1,2,3,4,5].map(level=>projectileVisual(p,level,true,false).tier)).toEqual([1,2,3,4,5]);
     expect(projectileVisual(p,5,true,false)).toMatchObject({trail:0,detail:false,radius:p.radius});
     expect(projectileVisual(p,5,false,true).detail).toBe(false);
     expect(projectileVisual({...p,duration:0},1,false,false).alpha).toBe(0);
