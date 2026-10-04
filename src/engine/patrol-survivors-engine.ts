@@ -1,3 +1,4 @@
+import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
@@ -10,7 +11,7 @@ import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
-import { applyTacticalItem, tacticalSupplyFor, tickTacticalItems } from './survivors-items';
+import { applyTacticalItem, tickTacticalItems } from './survivors-items';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
 import type { SurvivorsAudioEvent } from '../domain/survivors-audio';
 import { seededRandom, sweptCircle, SIMULATION_STEP, MAX_CATCH_UP_SECONDS } from './survivors-simulation';
@@ -1570,7 +1571,7 @@ export class SurvivorsEngine {
         }
         this.state.score += h.expValue * 15;
         this.state.hazardsNeutralized += 1;
-        const supply = tacticalSupplyFor(this.state.hazardsNeutralized, Boolean(h.isStageBoss), PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].supplyEvery);
+        const supply = earnedTacticalSupply(this.state,Boolean(h.isStageBoss));
         if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
         if (h.isStageBoss) this.state.stageBossNeutralized = true;
         this.emitAudio('control', h.x, h.y, { ...(h.isStageBoss ? { outcome: 'boss' as const } : {}), actorKind: h.type });
@@ -1585,7 +1586,7 @@ export class SurvivorsEngine {
         });
 
         // Ultimate gauge increment
-        const ultGain = h.type === 'CRANE_BOSS' ? 12 : 2.5;
+        const ultGain = this.state.directorShoutTimer>0 ? 0 : (h.type === 'CRANE_BOSS' || h.isStageBoss) ? 8 : resourceProfile(this.state.difficulty).controlCharge;
         this.state.ultimateCharge = Math.min(
           this.state.maxUltimateCharge,
           this.state.ultimateCharge + ultGain,
@@ -1608,7 +1609,7 @@ export class SurvivorsEngine {
         });
 
         // 6% chance to drop separate heal pack
-        if (this.random() < 0.06) {
+        if (this.random() < resourceProfile(this.state.difficulty).healChance) {
           this.state.drops.push({
             id: this.genId('drop_heal'),
             x: h.x + (this.random() - 0.5) * 20,
@@ -1836,10 +1837,10 @@ export class SurvivorsEngine {
     } else {
       this.addExp(drop.exp);
     }
-    // Increment ultimate charge by +0.8%
-    if (!drop.itemKind) this.state.ultimateCharge = Math.min(
+    // Safety records retain full EXP; resource charge follows the selected contract.
+    if (!drop.itemKind && this.state.directorShoutTimer<=0) this.state.ultimateCharge = Math.min(
       this.state.maxUltimateCharge,
-      this.state.ultimateCharge + 0.8,
+      this.state.ultimateCharge + resourceProfile(this.state.difficulty).logCharge,
     );
   }
 

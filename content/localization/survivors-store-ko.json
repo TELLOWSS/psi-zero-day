@@ -87,7 +87,7 @@
     },
     "predictive_watch": {
       "name": "예측 지휘 워치",
-      "description": "초당 샤우팅 충전 +0.9 · 보급 호출 +2회",
+      "description": "초당 샤우팅 충전 +0.35 · 보급 호출 +2회",
       "use": "통제 성과가 적어도 긴급 지휘를 준비"
     }
   },
@@ -108,5 +108,12 @@
   "recommend": "어려운 상황에서의 역할",
   "legendary": "전설",
   "elite": "정예",
-  "advanced": "첨단"
+  "advanced": "첨단",
+  "briefTitle": "순찰 준비 · 장비의 역할",
+  "briefHard": "보급이 드문 고난도에서는 돌진 회피와 누적 피해 관리가 중요합니다.",
+  "briefStandard": "대응 간격·회수 거리·보호 장비를 준비하면 위기 때 여유를 확보할 수 있습니다.",
+  "briefOwned": "보유 장비 · 지금 장착할 수 있습니다",
+  "briefEquipped": "장착 완료 · 이번 순찰에 적용됩니다",
+  "briefBrowse": "장비 살펴보기",
+  "briefCredits": "모은 PSI로 구매 · 장비는 선택 사항"
 }

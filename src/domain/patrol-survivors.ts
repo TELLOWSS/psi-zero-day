@@ -210,6 +210,7 @@ export interface SurvivorsGameState {
   timeDilation: number; // 1.0 = normal, 0.2 = slow-mo
   timeDilationTimer: number;
 
+  supplyGate?: {nextControl:number;availableAt:number;cycle:number};
   premiumGear?: { equipped: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number };
 
   // Meta stats & run perks

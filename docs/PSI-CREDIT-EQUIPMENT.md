@@ -6,7 +6,7 @@ Six categories, sixteen items; one equipped item per category. Equip/unequip bef
 
 References checked 2026-10-04: Fortnite official Item Shop (https://www.fortnite.com/item-shop), Call of Duty official bundles (https://www.callofduty.com/en/store/bundles), EA Apex currency guide (https://help.ea.com/en/articles/apex-legends/crafting-and-currency/). These are three prominent reference games, not a verified global popularity ranking. Borrowed concepts: collection cards, identifiable equipment blueprints, clear ownership/equipping and aspirational long-term purchases. Do not attribute PSI stat advantages to those games' cosmetic purchases. Dedicated sixteen-cell premium equipment raster art replaces reused shop icons. This is a new production candidate, not a completed browser visual or Android performance lock.
 
-Validation: full regression 1144 passed / 1 skipped; premium intervention and store tests passed; typecheck and production build passed. Browser visual and real Android performance/play balance remain pending: Chromium is unavailable in this workspace. Review earning pace versus 700–5200 PSI prices and higher difficulty before calling the economy locked.
+Validation: full regression 1151 passed / 1 skipped; premium intervention and store tests passed; typecheck and production build passed. Browser visual and real Android performance/play balance remain pending: Chromium is unavailable in this workspace. Review earning pace versus 700–5200 PSI prices and higher difficulty before calling the economy locked.
 
 
 ## Intervention behavior
@@ -14,7 +14,7 @@ Validation: full regression 1144 passed / 1 skipped; premium intervention and st
 - Shock mantle: +20 HP, 45 shield. Contact and crane damage drain shield first; overflow damages HP. Only complete depletion starts an 18-second refill. Partial shield does not regenerate continuously.
 - Rescue wing: 0.8 HP/s plus 15 shield with 24-second refill. When combined with mantle, shield capacity is 60 and the faster generator refills the shared capacity after 18 seconds.
 - Inspection wing: cart/gas movement at 80% within 180 world units. Does not change worker movement, falling material or warning clocks.
-- Predictive watch: 0.9 shout charge per simulation second, capped at 100; two additional support calls. Barrier forge grants three additional control lines. Same-category equipment cannot stack.
+- Predictive watch: 0.35 shout charge per simulation second, capped at 100; two additional support calls. Barrier forge grants three additional control lines. Same-category equipment cannot stack.
 - Stronger broadcast, cadence, precision and recovery equipment complement existing weapons. No weapon level or evolution ingredient is granted. Equipment cadence pauses with the simulation.
 
 ## Premium artwork provenance

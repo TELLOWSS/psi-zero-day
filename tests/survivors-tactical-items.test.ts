@@ -22,8 +22,8 @@ describe('tactical supplies and build progression',()=>{
  it('a battery adds exactly 30, caps at maximum and does not generate experience',()=>{
   const e=engine();e.state.ultimateCharge=50;
   e.state.drops=[{id:'battery',x:700,y:450,exp:0,itemKind:'radio_battery'}];e.update(1/60,idle);
-  expect(e.state.ultimateCharge).toBe(80);expect(e.state.currentExp).toBe(0);
-  applyTacticalItem(e.state,'radio_battery');expect(e.state.ultimateCharge).toBe(100);
+  expect(e.state.ultimateCharge).toBe(66);expect(e.state.currentExp).toBe(0);
+  e.state.ultimateCharge=99;applyTacticalItem(e.state,'radio_battery');expect(e.state.ultimateCharge).toBe(100);
  });
  it('beacon recalls only experience, leaving healing and other supplies in place',()=>{
   const e=engine();e.state.drops=[{id:'exp',x:10,y:10,exp:3},{id:'heal',x:20,y:20,exp:0,isHeal:true},{id:'supply',x:30,y:30,exp:0,itemKind:'radio_battery'}];

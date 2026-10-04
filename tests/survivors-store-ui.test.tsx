@@ -32,3 +32,20 @@ it('purchases, equips and restores gear; storage failure never charges the walle
     expect(host.textContent).toContain('4,200');
   } finally {act(()=>root.unmount());host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
 });
+
+it('shows an owned useful item before patrol and equips it without a purchase',()=>{
+  localStorage.clear();localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:300,inventory:{owned:['inspection_wing'],equipped:[]}}));
+  vi.stubGlobal('requestAnimationFrame',()=>1);vi.stubGlobal('cancelAnimationFrame',vi.fn());
+  vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(null);
+  const host=document.createElement('div');document.body.append(host);const root=createRoot(host);
+  try {
+    act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));
+    const hint=host.querySelector('.survivors-preflight-gear')!;
+    expect(hint.textContent).toContain('PSI 감시 윙');
+    expect(hint.textContent).toContain('보유 장비');
+    act(()=>hint.querySelector('button')!.click());
+    const wallet=JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!);
+    expect(wallet.credits).toBe(300);expect(wallet.inventory.equipped).toEqual(['inspection_wing']);
+    expect(host.querySelector('.survivors-store-loadout')?.textContent).toContain('PSI 감시 윙');
+  } finally {act(()=>root.unmount());host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
+});

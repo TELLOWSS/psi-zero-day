@@ -42,7 +42,7 @@ describe('premium equipment intervention in difficult patrols',()=>{
     expect(state.fieldTactics!.supportCharges).toBe(2);
     const watch=stateWith('predictive_watch');watch.phase='playing';
     expect(watch.fieldTactics!.supportCharges).toBe(4);
-    watch.ultimateCharge=99;tickPremiumGear(watch,2);expect(watch.ultimateCharge).toBe(100);
+    watch.ultimateCharge=99;tickPremiumGear(watch,4);expect(watch.ultimateCharge).toBe(100);
     watch.ultimateCharge=0;watch.phase='paused';tickPremiumGear(watch,20);expect(watch.ultimateCharge).toBe(0);
   });
   it('keeps all artwork cells unique and combines protection cadence deterministically',()=>{

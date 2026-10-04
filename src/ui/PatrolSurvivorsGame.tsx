@@ -1,6 +1,6 @@
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
-import {STORE_ITEMS, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
+import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
@@ -2302,6 +2302,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const fieldIncident=ACCOUNTABILITY_CASES.find(row=>row.stage===selectedStage);
   const incidentPending=fieldIncident&&accountability.access==='active'&&!accountability.decisions.some(d=>d.caseId===fieldIncident.id);
   const fieldRadio=incidentPending?fieldIncident.line:accountability.decisions.at(-1)?accountabilityText.radioAfter[accountability.decisions.at(-1)!.outcome]:'';
+  const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
+  const recommendedCopy = storeText.items[recommendedGear.id as keyof typeof storeText.items];
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
 
@@ -2422,8 +2424,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               const progress=operationProgress(engineRef.current.state);
               const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : progress.complete?tacticsText.continue:`${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
               const cadence=PATROL_DIFFICULTIES[engineRef.current.state.difficulty ?? 'standard'].supplyEvery;
-              const remaining=cadence-engineRef.current.state.hazardsNeutralized%cadence;
-              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
+              const gate=engineRef.current.state.supplyGate;
+              const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
+              const wait=Math.max(0,Math.ceil((gate?.availableAt??0)-engineRef.current.state.gameTime));
+              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
@@ -2544,9 +2548,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <button type="button" className="survivors-btn-primary" onClick={startGame}>순찰 시작하기</button>
             </header>
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
-              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply}</small></button>)}
+              {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small></button>)}
               <p>{challengeText.description}</p>
             </fieldset>
+            <aside className="survivors-preflight-gear" aria-label={storeText.briefTitle}>
+              <SurvivorsPremiumArt item={recommendedGear}/>
+              <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
+                <small>{storeInventory.equipped.includes(recommendedGear.id)?storeText.briefEquipped:storeInventory.owned.includes(recommendedGear.id)?storeText.briefOwned:`${recommendedGear.price.toLocaleString()} PSI · ${storeText.briefCredits}`}</small>
+              </div>
+              {storeInventory.owned.includes(recommendedGear.id)&&!storeInventory.equipped.includes(recommendedGear.id)
+                ? <button type="button" onClick={()=>changeStore(recommendedGear.id,false)}>{storeText.equip}</button>
+                : <button type="button" onClick={()=>setShowRdModal(true)}>{storeText.briefBrowse}</button>}
+            </aside>
             {PATROL_STAGES[selectedStage].narrative && <aside className="survivors-story-brief">
               <strong>{CHARACTER_PROFILES[PATROL_STAGES[selectedStage].narrative!.speaker].name} · {PATROL_STAGES[selectedStage].subtitle}</strong>
               <p>{PATROL_STAGES[selectedStage].narrative!.brief}</p>
