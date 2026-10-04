@@ -1366,7 +1366,7 @@ export class SurvivorsEngine {
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
     const variant=isStageBoss?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random());
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
-    if(variant==='pulse_gas'){radius=58;speed=0;expValue*=2;}
+    if(variant==='pulse_gas'){radius=58;expValue*=2;}
     if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
     this.state.hazards.push({
       variant,
@@ -1381,7 +1381,7 @@ export class SurvivorsEngine {
       radius,
       damage,
       expValue,
-      motion: variant==='pulse_gas'?{phase:'warning',timer:1.25,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
+      motion: variant==='pulse_gas'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
         ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
         : type === 'FALLING_DEBRIS'
           ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
