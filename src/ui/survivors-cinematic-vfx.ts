@@ -1,7 +1,8 @@
 import type {Projectile,ProjectileKind,SurvivorsGameState} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
+import {drawBroadcastCrownContact,drawBroadcastCrownEmitter,drawBroadcastCrownFlight} from './survivors-premium-vfx';
 export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v1.webp';
-export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
+export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number;signature:'default'|'broadcast_crown'}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
   const tier=Math.min(3,Math.max(1,Math.ceil(level/2)));
   const communication=equipped.some(id=>['voice_lens','command_array','broadcast_crown'].includes(id));
@@ -9,7 +10,7 @@ export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly
   const premium=communication||tempo;
   const palette=communication ? (equipped.includes('command_array')?'cyan':'gold') : tempo?'violet':kind==='hunter_beam'?'violet':kind==='radio'?'gold':'cyan';
   const index=palette==='gold'?0:palette==='cyan'?1:2;
-  return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index};
+  return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index,signature:equipped.includes('broadcast_crown')?'broadcast_crown':'default'};
 }
 /** One shared raster atlas, no per-frame allocation, blur or full-screen flash. */
 export function drawVfxCell(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,cell:number,x:number,y:number,w:number,h:number,alpha:number,angle=0):boolean {
@@ -20,6 +21,7 @@ export function drawVfxCell(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|
   ctx.restore();return true;
 }
 export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):boolean {
+  if(look.signature==='broadcast_crown'&&drawBroadcastCrownFlight(ctx,p,atlas,reduced,busy))return true;
   if(!['radio','satellite_wave','drone_laser','hunter_beam'].includes(p.kind)||!atlas?.naturalWidth)return false;
   const alpha=Math.min(1,Math.max(0,p.duration/.12));
   const angle=Math.atan2(p.vy,p.vx);
@@ -31,6 +33,7 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
   ctx.restore();return true;
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {
+  if(look.signature==='broadcast_crown'&&drawBroadcastCrownContact(ctx,event,age,duration,atlas,reduced,busy))return;
   if(event.worker||reduced||!atlas?.naturalWidth||event.kind==='cone_trap')return;
   const t=Math.min(1,age/duration),fade=(1-t)*(1-t);
   const extent=(event.phase==='launch'?22:event.phase==='impact'?30:16)+look.tier*5+(look.premium?12:0);
@@ -53,11 +56,15 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   const pulse=reduced?1:1+Math.sin(state.gameTime*2.8)*.055;
   ctx.save();ctx.globalCompositeOperation='screen';
   if(has(['voice_lens','command_array','broadcast_crown'])) {
-    const color=gear.equipped.includes('command_array')?'#75e8ff':'#ffd181';
-    ctx.strokeStyle=color;ctx.lineWidth=2;ctx.globalAlpha=.55;
-    ctx.beginPath();ctx.ellipse(x,y+2,24*pulse,10*pulse,0,.2,Math.PI*1.8);ctx.stroke();
-    // A quiet emitter lens near the actual held equipment, not a new attack.
-    drawVfxCell(ctx,atlas,gear.equipped.includes('command_array')?1:0,x-19,y-30,26,20,.38);
+    if(gear.equipped.includes('broadcast_crown')) {
+      drawBroadcastCrownEmitter(ctx,atlas,x,y,state.gameTime,reduced);
+    } else {
+      const color=gear.equipped.includes('command_array')?'#75e8ff':'#ffd181';
+      ctx.strokeStyle=color;ctx.lineWidth=2;ctx.globalAlpha=.55;
+      ctx.beginPath();ctx.ellipse(x,y+2,24*pulse,10*pulse,0,.2,Math.PI*1.8);ctx.stroke();
+      // A quiet emitter lens near the actual held equipment, not a new attack.
+      drawVfxCell(ctx,atlas,gear.equipped.includes('command_array')?1:0,x-19,y-30,26,20,.38);
+    }
   }
   if(has(['relay_core','precision_link','sync_gauntlet'])) {
     ctx.strokeStyle='#cea3ff';ctx.lineWidth=1.5;ctx.globalAlpha=.48;

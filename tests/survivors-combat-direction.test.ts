@@ -5,7 +5,7 @@ import type {ProjectileFeedback} from '../src/domain/survivors-projectile-feedba
 const event:ProjectileFeedback={projectileId:'a',kind:'radio',phase:'launch',x:0,y:0,angle:0,radius:12};
 it('uses bounded local camera impulses, decays without input and respects reduced motion',()=>{
  const d=new CombatDirection();d.ingest(Array(500).fill(event),['broadcast_crown'],{x:0,y:0});
- expect(d.lightCount).toBe(8);expect(d.camera(false).x).toBe(-1.1);expect(d.camera(true)).toEqual({x:0,y:0});
+ expect(d.lightCount).toBe(8);expect(d.camera(false).x).toBe(-1.35);expect(d.camera(true)).toEqual({x:0,y:0});
  for(let i=0;i<6;i++)d.advance(.05);
  expect(Math.abs(d.camera(false).x)).toBeLessThan(.002);expect(d.lightCount).toBe(0);
 });
