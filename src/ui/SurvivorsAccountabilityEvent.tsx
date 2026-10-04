@@ -9,6 +9,9 @@ export function SurvivorsAccountabilityEvent({incident,state,portraitUri,onDecid
   onContinue:()=>void;onLeave:()=>void;onEvidence:()=>void;
 }) {
   const [seen,setSeen]=useState([false,false,false]);const [result,setResult]=useState('');
+  const [handoff,setHandoff]=useState([false,false,false]);
+  const requiresHandoff=state.access==='excluded'||state.access==='held';
+  const canResume=!requiresHandoff||handoff.every(Boolean);
   const dialog=useRef<HTMLDivElement>(null);
   useEffect(()=>{
     const previous=document.activeElement as HTMLElement|null;
@@ -19,7 +22,7 @@ export function SurvivorsAccountabilityEvent({incident,state,portraitUri,onDecid
   },[]);
   return <div className="survivors-accountability-backdrop">
     <div ref={dialog} className="survivors-accountability-event" role="dialog" aria-modal="true" aria-labelledby="accountability-title" tabIndex={-1} onKeyDown={event=>{
-      if(event.key==='Escape'){event.preventDefault();result?onContinue():onLeave();}
+      if(event.key==='Escape'){event.preventDefault();if(result){if(canResume)onContinue();}else onLeave();}
       if(event.key==='Tab'){
         const buttons=dialog.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)');
         const first=buttons?.[0],last=buttons?.[buttons.length-1];
@@ -41,7 +44,11 @@ export function SurvivorsAccountabilityEvent({incident,state,portraitUri,onDecid
           <button type="button" className="survivors-btn-secondary" onClick={()=>setResult(onDecide('hold',seen))}>{text.hold}</button>
           <button type="button" className="survivors-btn-secondary" onClick={onLeave}>{text.close}</button>
         </div>
-      </> : <><p className="accountability-result" role="status">{result}</p><button type="button" className="survivors-btn-primary" onClick={onContinue}>{text.continue}</button></>}
+      </> : <><p className="accountability-result" role="status">{result}</p>
+        {requiresHandoff&&<fieldset className="accountability-handoff"><legend>{text.handoffTitle}</legend><p>{text.handoffReason}</p>
+          {text.handoffChecks.map((label,index)=><label key={label}><input type="checkbox" checked={handoff[index]||false} onChange={event=>{const checked=event.target.checked;setHandoff(previous=>previous.map((value,i)=>i===index?checked:value));}}/>{label}</label>)}
+        </fieldset>}
+        <button type="button" className="survivors-btn-primary" disabled={!canResume} onClick={onContinue}>{text.continue}</button></>}
     </div>
   </div>;
 }
