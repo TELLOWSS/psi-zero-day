@@ -2161,20 +2161,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawPremiumGear(ctx,engine.state,spritesRef.current.premiumAtlas,reducedMotionRef.current);
-      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectiles.length>70||hazards.length>45);
+      const projectileBusy=projectiles.length>60;
+      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
+      const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;
       let cinematicFlights=0;
 
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
         if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
         const lv=p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5;
-        const cinematic=cinematicFlights++<64?{atlas:spritesRef.current.cinematicAtlas,look:cinematicLook(p.kind,lv,equipped)}:undefined;
-        drawProjectileVfx(ctx,p,lv,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90,cinematic);
+        const cinematic=cinematicFlights++<cinematicFlightBudget?{atlas:spritesRef.current.cinematicAtlas,look:cinematicLook(p.kind,lv,equipped)}:undefined;
+        drawProjectileVfx(ctx,p,lv,engine.state.gameTime,reducedMotionRef.current,projectileBusy,cinematic);
       }
 
-      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectiles.length>90,{atlas:spritesRef.current.cinematicAtlas,equipped,levels:vfxLevels});
+      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,equipped,levels:vfxLevels});
 
       // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
       const hasHunter = activePerks.hunter_swarm > 0;
