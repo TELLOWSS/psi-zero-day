@@ -1980,3 +1980,19 @@
 .survivors-field-radio strong {color:#ebc77e;font-size:11px;}
 .survivors-field-radio p {font-size:12px;line-height:1.65;margin:5px 0 0;}
 @media (max-height:480px) {.survivors-field-radio {bottom:70px;max-height:96px;width:min(370px,calc(100% - 220px));}}
+
+/* Scene-wide material finish: a quiet instrument panel leaves the site dominant. */
+.survivors-hud-top {
+  background: linear-gradient(180deg, rgba(28,39,48,.94), rgba(10,20,29,.91));
+  border-color: rgba(191,209,220,.23);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 4px 16px rgba(0,0,0,.32);
+}
+.survivors-level-tag { box-shadow: none; }
+.survivors-hp-bar-fill { background: linear-gradient(180deg,#75ddb5,#218c71); box-shadow: inset 0 1px 0 rgba(255,255,255,.24); }
+.survivors-timer strong { color: #f8e1ad; text-shadow: none; }
+.survivors-exp-bar-wrap { height: 4px; }
+.survivors-exp-bar { box-shadow: none; background: linear-gradient(90deg,#2684a4,#9ae5f2); }
+.survivors-btn-icon { border-color: rgba(193,210,223,.24); box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
+.survivors-stage-card { box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 4px 14px rgba(0,0,0,.2); }
+.survivors-stage-card:focus-visible { outline: 2px solid #f8d792; outline-offset: 3px; }

@@ -1,3 +1,4 @@
+import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
 import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writeAccountability, accountabilityResult, accountabilityMemory } from '../app/survivors-accountability';
@@ -133,6 +134,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     riskAtlasV2?: HTMLImageElement;
     itemsAtlas?: HTMLImageElement;
     equipmentAtlas?: HTMLImageElement;
+    flammableDrum?: HTMLImageElement;
+    distributionCabinet?: HTMLImageElement;
     stageFloors: Record<string,HTMLImageElement>;
     workerV2?: HTMLImageElement;
     groundAtlasV2?: HTMLImageElement;
@@ -205,6 +208,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const mImg = new Image();
     mImg.src = '/assets/survivors/sprite_mob_worker.webp';
     mImg.onload = () => { spritesRef.current.mobWorker = mImg; };
+
+    const drum = new Image();
+    drum.onload = () => { registerPropAtlas(drum,1,1);spritesRef.current.flammableDrum=drum; };
+    drum.src='/assets/survivors/flammable-drum-v1.webp';
+    const cabinet = new Image();
+    cabinet.onload = () => { registerPropAtlas(cabinet,1,1);spritesRef.current.distributionCabinet=cabinet; };
+    cabinet.src='/assets/survivors/distribution-cabinet-v1.webp';
 
     const ground = new Image();
     ground.onload = () => { spritesRef.current.groundV2 = ground; };
@@ -1157,7 +1167,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(groundV2, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
       }
-      if (!useGroundArt) {
+      if (!fullGround?.naturalWidth && !useGroundArt && !excavationGround?.naturalWidth) {
       // Concrete slabs & 45-degree Isometric Foundation Grid
       const isoStep = 96;
       ctx.strokeStyle = stage?.gridColor || 'rgba(148, 163, 184, 0.09)';
@@ -1210,6 +1220,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       }
+
+      drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
+      for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
       // Designated Green/Yellow Safety Walkway (안전통로: 45도 투시감 강화)
       ctx.save();
@@ -1382,7 +1395,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Perimeter Safety Boundary (45-degree yellow/black hazard chevron barrier)
       ctx.save();
-      ctx.lineWidth = 16;
+      ctx.lineWidth = 4;
+      ctx.globalAlpha = .65;
       ctx.strokeStyle = stage?.borderColor || '#f59e0b';
       ctx.strokeRect(8, 8, WORLD_WIDTH - 16, WORLD_HEIGHT - 16);
       ctx.lineWidth = 3;
@@ -1499,6 +1513,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // D. Isolate flammable storage (legacy type ID retained)
           if (h.type === 'explosive_barrel') {
             ctx.save();
+            drawProp(ctx,spritesRef.current.flammableDrum,0,h.x,h.y+8,64);
             if (h.state === 'active') {
               ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 3; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 50, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
@@ -1506,29 +1521,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               ctx.fillText('위험원 격리 완료', h.x, h.y - 58);
             } else if (h.state === 'warning') {
               const pulse = (Math.sin(time / 50) + 1) * 0.5;
-              ctx.fillStyle = pulse > 0.5 ? '#ef4444' : '#f97316';
+              ctx.strokeStyle = '#fbbf24';ctx.lineWidth=2;
               ctx.beginPath();
               ctx.arc(h.x, h.y, h.radius + pulse * 4, 0, Math.PI * 2);
-              ctx.fill();
+              ctx.stroke();
 
               ctx.font = 'bold 11px sans-serif';
               ctx.fillStyle = '#ffffff';
               ctx.textAlign = 'center';
               ctx.fillText('격리·대피 진행', h.x, h.y - h.radius - 8);
             } else if (h.state === 'idle') {
-              ctx.fillStyle = '#ea580c';
-              ctx.beginPath();
-              ctx.arc(h.x, h.y, h.radius, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.strokeStyle = '#7c2d12';
-              ctx.lineWidth = 3;
-              ctx.stroke();
-
-              ctx.font = '14px sans-serif';
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText('⚠️', h.x, h.y);
-
               const barW = 32;
               const barH = 4;
               const hpRatio = Math.max(0, h.hp / h.maxHp);
@@ -1543,17 +1545,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // E. Electric Transformer
           if (h.type === 'electric_transformer') {
             ctx.save();
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(h.x - 22, h.y - 22, 44, 44);
-            ctx.strokeStyle = h.state === 'active' ? '#38bdf8' : '#64748b';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(h.x - 22, h.y - 22, 44, 44);
-
-            ctx.font = '16px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('⚡', h.x, h.y);
-
+            drawProp(ctx,spritesRef.current.distributionCabinet,0,h.x,h.y+8,68);
             if (h.state === 'active') {
               ctx.strokeStyle = '#86efac'; ctx.lineWidth = 2; ctx.setLineDash([8, 6]);
               ctx.beginPath(); ctx.arc(h.x, h.y, 200, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
@@ -1647,9 +1639,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const entityList: EntityItem[] = [];
       for (const d of drops) {
+        if(d.x<camX-100||d.x>camX+viewW+100||d.y<camY-100||d.y>camY+viewH+100)continue;
         entityList.push({ kind: 'drop', y: d.y, data: d });
       }
       for (const h of hazards) {
+        // Keep warning trajectories even when their source is outside the view.
+        if(!h.isStageBoss&&h.type!=='CRANE_BOSS'&&h.motion?.phase!=='warning'&&(h.x<camX-180||h.x>camX+viewW+180||h.y<camY-180||h.y>camY+viewH+180))continue;
         entityList.push({ kind: 'hazard', y: h.y, data: h });
       }
       entityList.push({ kind: 'player', y: player.y });

@@ -66,6 +66,9 @@ export function registerSpriteBounds(image: HTMLImageElement): void {
 }
 
 export function drawGroundedSprite(ctx: CanvasRenderingContext2D, image: HTMLImageElement, height: number, pose: SpritePose): void {
+  // Common grounded penumbra, below both rigged and unrigged approved actors.
+  ctx.save();ctx.fillStyle='rgba(3,10,18,.14)';ctx.beginPath();
+  ctx.ellipse(height*.14,3,height*.29,height*.075,.18,0,Math.PI*2);ctx.fill();ctx.restore();
   if(drawRiggedActor(ctx,image,height,pose))return;
   const source = bounds.get(image) ?? { x: 0, y: 0, width: image.naturalWidth, height: image.naturalHeight };
   const width = height * source.width / source.height;
