@@ -1,4 +1,5 @@
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
+import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
@@ -1285,6 +1286,8 @@ export class SurvivorsEngine {
       const alive = this.state.hazards.filter(h => h.hp > 0);
       if (alive.length >= pressure.activeLimit) return;
       let type = selectStageHazard(stage, this.state.gameTime, this.random());
+      // Later waves mix real risks rather than filling spare slots only with workers.
+      if(this.state.gameTime>=90&&type==='UNHELMETED'&&this.random()<.5)type=this.random()<.5?'GAS_LEAK':'RUNAWAY_CART';
       const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
       // Bound concurrent charging/falling threats without shortening their warnings.
       if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
@@ -1361,7 +1364,12 @@ export class SurvivorsEngine {
       radius = 38;
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
+    const variant=isStageBoss?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random());
+    if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
+    if(variant==='pulse_gas'){radius=58;speed=0;expValue*=2;}
+    if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
     this.state.hazards.push({
+      variant,
       id: this.genId(`haz_${type}`),
       isStageBoss,
       type,
@@ -1373,7 +1381,7 @@ export class SurvivorsEngine {
       radius,
       damage,
       expValue,
-      motion: type === 'RUNAWAY_CART'
+      motion: variant==='pulse_gas'?{phase:'warning',timer:1.25,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
         ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
         : type === 'FALLING_DEBRIS'
           ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
@@ -1539,12 +1547,16 @@ export class SurvivorsEngine {
 
     // Filter dead hazards and spawn drops + Combo & Impact Juice events
     const survivingHazards: Hazard[] = [];
+    const fragments:Hazard[]=[];
     if (!this.state.lastKilledEvents) {
       this.state.lastKilledEvents = [];
     }
 
     for (const h of hazards) {
       if (h.hp <= 0) {
+        if(h.variant==='split_gas'&&hazards.length+fragments.length<spawnPressure(this.state.stage.stageNumber,this.state.gameTime,this.state.difficulty).activeLimit-1){
+          for(const side of [-1,1])fragments.push({...h,id:this.genId('gas_fragment'),variant:undefined,x:Math.max(30,Math.min(WORLD_WIDTH-30,h.x+side*30)),hp:Math.max(12,Math.round(h.maxHp*.22)),maxHp:Math.max(12,Math.round(h.maxHp*.22)),radius:16,speed:h.speed*1.2,expValue:2});
+        }
         if (h.type === 'UNHELMETED') {
           const workers = this.state.resolvedWorkers ??= [];
           workers.push({id: h.id, x: h.x, y: h.y, remaining: 3});
@@ -1603,7 +1615,7 @@ export class SurvivorsEngine {
         survivingHazards.push(h);
       }
     }
-    this.state.hazards = survivingHazards;
+    this.state.hazards = [...survivingHazards,...fragments];
 
     // 2. Hazards vs Player
     if (player.invincibleTime <= 0) {
