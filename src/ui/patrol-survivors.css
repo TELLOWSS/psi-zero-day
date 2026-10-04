@@ -2042,3 +2042,13 @@
 .accountability-handoff p { font-size:12px;line-height:1.7; }
 .accountability-handoff label { display:flex;align-items:center;gap:10px;min-height:48px;padding:6px;font-size:13px;line-height:1.6;cursor:pointer; }
 .accountability-handoff input { width:20px;height:20px;flex-shrink:0;accent-color:#eac06e; }
+
+.survivors-store { margin: 20px 0; text-align: left; }
+.survivors-store p,.survivors-store-loadout { font-size: 13px; line-height: 1.5; color: #bfe8df; word-break: keep-all; }
+.survivors-store-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.survivors-store-card { display: flex; flex-direction: column; gap: 8px; padding: 14px; background: #142735; border: 1px solid #47616c; border-radius: 12px; }
+.survivors-store-card.is-equipped { border-color: #80efc6; background: #183c37; }
+.survivors-store-card span { font-size: 13px; word-break: keep-all; }
+.survivors-store-card button { margin-top: auto; min-height: 44px; color: #f2ffff; background: #245461; border: 1px solid #699da4; border-radius: 8px; cursor: pointer; }
+.survivors-store-card button:disabled { opacity: .45; cursor: default; }
+@media(max-width:420px) { .survivors-store-grid { grid-template-columns: 1fr; } }
