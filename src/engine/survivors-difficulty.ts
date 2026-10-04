@@ -1,4 +1,5 @@
 import type { HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
+import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 
 /** Authored map progression; independent of permanent upgrades and player performance. */
 export function difficultyProfile(stageNumber: number) {
@@ -14,11 +15,12 @@ export function difficultyProfile(stageNumber: number) {
 }
 
 /** Recovery follows each pressure wave, with room to read the first boss alert. */
-export function spawnPressure(stageNumber: number, time: number) {
+export function spawnPressure(stageNumber: number, time: number, difficulty:PatrolDifficulty='standard') {
   const p = difficultyProfile(stageNumber);
   const progress = Math.max(0, Math.min(1, time / 180));
   const recovery = (time >= 60 && time < 68) || (time >= 95 && time < 105) || (time >= 140 && time < 150);
-  return { ...p, recovery, interval: (p.openingInterval + (p.finalInterval - p.openingInterval) * progress) * (recovery ? 1.8 : 1) };
+  const contract=PATROL_DIFFICULTIES[difficulty];
+  return { ...p, hpScale:p.hpScale*contract.hp, recovery, interval: (p.openingInterval + (p.finalInterval - p.openingInterval) * progress) * (recovery ? 1.8 : 1)*contract.spawn };
 }
 
 const introductoryMixes: readonly (readonly HazardType[])[] = [
