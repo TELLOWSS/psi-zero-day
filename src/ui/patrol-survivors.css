@@ -1957,3 +1957,26 @@
 .survivors-story-brief p, .survivors-story-result { color: #e2e8f0; font-size: 14px; line-height: 1.65; }
 .survivors-story-brief small { display: block; color: #a7f3d0; line-height: 1.6; }
 .survivors-story-result { margin: 14px 0; padding: 12px; border-left: 3px solid #34d399; background: rgba(16,185,129,.08); }
+
+.survivors-accountability-backdrop {position:fixed;inset:0;z-index:160;display:grid;place-items:center;padding:16px;background:rgba(5,12,19,.8);backdrop-filter:blur(5px);}
+.survivors-accountability-event {width:min(740px,100%);max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;padding:clamp(18px,3vw,30px);color:#e5edf1;background:linear-gradient(140deg,#1b2935,#101b24);border:1px solid #b69755;border-radius:14px;box-shadow:0 20px 70px #0008;text-align:left;}
+.survivors-accountability-event header small {color:#f2c677;letter-spacing:.08em;}
+.survivors-accountability-event h2 {font-size:clamp(21px,4vw,30px);margin:10px 0;}
+.survivors-accountability-event header span {color:#a8bbc7;font-size:13px;}
+.accountability-dialogue {padding:16px;border-left:3px solid #dbba77;background:#ffffff06;line-height:1.8;}
+.accountability-policy,.accountability-record {color:#b9c9d2;font-size:12px;line-height:1.7;}
+.accountability-facts section {border-top:1px solid #ffffff15;padding:10px 0;}
+.accountability-facts button {width:100%;padding:12px;border:1px solid #607887;border-radius:7px;background:#243642;color:#e6eef2;text-align:left;cursor:pointer;}
+.accountability-facts p,.accountability-result {font-size:14px;line-height:1.8;padding:4px 8px;}
+.accountability-actions {display:grid;gap:10px;margin-top:14px;}
+.accountability-actions button {width:100%;min-height:44px;white-space:normal;}
+.accountability-actions button:disabled {opacity:.4;cursor:not-allowed;}
+.survivors-accountability-event button:focus-visible {outline:3px solid #f2c677;outline-offset:3px;}
+.accountability-result {border-left:3px solid #d9b56b;padding:16px;background:#ffffff06;}
+.accountability-dialogue-row {display:flex;align-items:center;gap:12px;}
+.accountability-dialogue-row img {width:clamp(62px,12vw,96px);height:clamp(82px,16vw,128px);object-fit:cover;object-position:top;border:1px solid #6b7b85;border-radius:8px;}
+.accountability-dialogue-row p {flex:1;}
+.survivors-field-radio {position:absolute;left:12px;bottom:100px;z-index:22;width:min(420px,calc(100% - 108px));max-height:125px;overflow:auto;padding:10px 12px;border-left:3px solid #d4b06a;background:rgba(14,24,33,.88);border-radius:7px;color:#e1ebf0;pointer-events:none;}
+.survivors-field-radio strong {color:#ebc77e;font-size:11px;}
+.survivors-field-radio p {font-size:12px;line-height:1.65;margin:5px 0 0;}
+@media (max-height:480px) {.survivors-field-radio {bottom:70px;max-height:96px;width:min(370px,calc(100% - 220px));}}
