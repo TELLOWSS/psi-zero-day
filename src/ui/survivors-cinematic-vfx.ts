@@ -6,8 +6,14 @@ export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly
   const tier=Math.min(3,Math.max(1,Math.ceil(level/2)));
   const communication=equipped.some(id=>['voice_lens','command_array','broadcast_crown'].includes(id));
   const tempo=equipped.some(id=>['relay_core','precision_link','sync_gauntlet'].includes(id));
-  const premium=communication||tempo;
-  const palette=communication ? (equipped.includes('command_array')?'cyan':'gold') : tempo?'violet':kind==='hunter_beam'?'violet':kind==='radio'?'gold':'cyan';
+  const communicationShot=communication&&(kind==='radio'||kind==='satellite_wave');
+  const tempoShot=tempo&&(kind==='drone_laser'||kind==='hunter_beam');
+  const premium=communicationShot||tempoShot;
+  const palette=communicationShot
+    ? (equipped.includes('command_array')?'cyan':'gold')
+    : tempoShot?'violet'
+    : kind==='hunter_beam'?'violet'
+    : kind==='radio'?'gold':'cyan';
   const index=palette==='gold'?0:palette==='cyan'?1:2;
   return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index};
 }
@@ -23,8 +29,8 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
   if(!['radio','satellite_wave','drone_laser','hunter_beam'].includes(p.kind)||!atlas?.naturalWidth)return false;
   const alpha=Math.min(1,Math.max(0,p.duration/.12));
   const angle=Math.atan2(p.vy,p.vx);
-  const length=reduced?26:36+look.tier*15+(look.premium?20:0);
-  const width=(reduced?10:11+look.tier*4+(look.premium?6:0))*(busy?.8:1);
+  const length=reduced?26:36+look.tier*15+(look.premium?8:0);
+  const width=(reduced?10:11+look.tier*4+(look.premium?3:0))*(busy?.72:1);
   // Screen blending keeps the colored envelope rather than adding it to white.
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,look.flightCell,p.x-Math.cos(angle)*length*.20,p.y-Math.sin(angle)*length*.20,length,width,alpha*(look.premium?.92:.76),angle);
