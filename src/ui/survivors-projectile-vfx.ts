@@ -34,6 +34,8 @@ function texture(name:string,color:string):HTMLCanvasElement | undefined {
     ctx.fillStyle=g;
     for(let i=5;i>=1;i--){ctx.globalAlpha=i===1?.95:.08;ctx.beginPath();ctx.ellipse(132,64,110,i*5,0,0,Math.PI*2);ctx.fill();}
     ctx.globalAlpha=1;ctx.fillStyle='#f4fcff';ctx.fillRect(95,62,144,3);
+    ctx.globalAlpha=.5;ctx.fillStyle=color;for(let i=0;i<9;i++)ctx.fillRect(32+i*21,57+(i%3),9,1);
+    ctx.globalAlpha=1;
   } else {
     const g=ctx.createRadialGradient(128,64,2,128,64,60);
     g.addColorStop(0,color);g.addColorStop(.30,color);g.addColorStop(1,'transparent');
@@ -65,12 +67,12 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
   const phase=reducedMotion?0:time*3;
   if(spec.family==='powder'||spec.family==='frost'){
     ctx.rotate(v.angle);const cloud=spec.family==='powder'?'powder':'frost';
-    ctx.globalAlpha=v.alpha*.68;stamp(ctx,cloud,spec.color,0,0,r*2.3,r*1.45);
+    ctx.globalAlpha=v.alpha*.82;stamp(ctx,cloud,spec.color,0,0,r*2.3,r*1.45);
     if(v.trail){ctx.globalAlpha=v.alpha*.26;stamp(ctx,cloud,spec.color,-v.trail*.6,0,r*2.5,r*1.25);}
     if(v.detail){ctx.globalAlpha=v.alpha*.32;for(let i=0;i<3;i++)stamp(ctx,cloud,spec.color,-i*7,Math.sin(phase+i*2)*r*.22,r*1.1,r*.8);}
   } else if(spec.family==='beam'){
     ctx.rotate(v.angle);stamp(ctx,'beam',spec.color,-v.trail*.35,0,v.trail+r*2,r*2);
-    if(v.detail){ctx.globalAlpha=v.alpha*.42;for(let i=0;i<v.tier;i++)line(ctx,[[-v.trail+i*5,5+i*2],[-r-i*2,2+i*2]],spec.color,1);}
+    if(v.detail){ctx.globalAlpha=v.alpha*.65;for(let i=0;i<v.tier;i++)line(ctx,[[-v.trail+i*5,5+i*2],[-r-i*2,2+i*2]],spec.color,1);}
   } else if(spec.family==='signal'){
     ctx.rotate(v.angle);stamp(ctx,'beam',spec.color,-v.trail*.30,0,v.trail+r,r*.85);
     for(let i=0;i<v.tier+1;i++){

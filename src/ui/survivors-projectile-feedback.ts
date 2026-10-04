@@ -71,6 +71,19 @@ export class ProjectileFeedbackLayer {
         const r = 5+(e.phase === 'impact' ? t*13 : (1-t)*6);
         ctx.beginPath();ctx.ellipse(0,0,r,r*.45,0,0,Math.PI*2);ctx.stroke();
       }
+      // Contact material follows the locked incoming direction. Never on workers.
+      if (!e.worker && !reducedMotion && !busy && e.phase === 'impact' && spec.family !== 'powder' && spec.family !== 'frost') {
+        ctx.rotate(e.angle);
+        const count=e.critical?7:4;
+        for(let i=0;i<count;i++) {
+          const a=(i/(count-1)-.5)*1.9;
+          const distance=5+t*(e.critical?24:17),length=4*(1-t);
+          ctx.globalAlpha=(1-t)*(i%2?.5:.85);
+          ctx.strokeStyle=i%2?spec.color:'#fff5df';ctx.lineWidth=i%2?1:1.7;
+          ctx.beginPath();ctx.moveTo(Math.cos(a)*distance,Math.sin(a)*distance);
+          ctx.lineTo(Math.cos(a)*(distance+length),Math.sin(a)*(distance+length));ctx.stroke();
+        }
+      }
       ctx.restore();
     }
   }

@@ -1,3 +1,4 @@
+import { equipmentSoundSamples } from './survivors-equipment-sound';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
 // Development synth lifecycle only; this is not final orchestral audio.
@@ -10,6 +11,7 @@ export class SurvivorsSessionAudio {
   private limiter: DynamicsCompressorNode | null = null;
   private duckUntil = 0;
   private dialogueFocus = false;
+  private equipmentBuffers = new Map<string, AudioBuffer>();
   private equipmentTimes = new Map<string,number>();
   private buses: Record<SurvivorsAudioBus, GainNode> | null = null;
   private buffers = new Map<string, Promise<AudioBuffer>>();
@@ -140,23 +142,19 @@ export class SurvivorsSessionAudio {
     const impact=event.phase==='impact',release=event.phase==='release';
     const level=release?.035:impact?.20:.13;
     const priority=impact?2:1;
-    const duration=event.kind==='extinguisher'||event.kind==='cryo_blast'?.14:.085;
-    const noise=!event.worker&&(event.kind==='extinguisher'||event.kind==='cryo_blast'||event.kind==='radio'||event.kind==='satellite_wave');
-    const source=noise?ctx.createBufferSource():ctx.createOscillator();
-    if('buffer' in source)source.buffer=this.noiseBuffer(ctx);
-    else {
-      source.type=event.kind==='tesla_bolt'?'triangle':'sine';
-      const frequency=event.worker?510:event.kind==='cone_trap'?135:event.kind==='emf_beam'?175:event.kind==='tesla_bolt'?340:event.kind==='shout_shockwave'?100:740;
-      source.frequency.setValueAtTime(frequency,now);source.frequency.exponentialRampToValueAtTime(Math.max(60,frequency*(release?.8:impact?.55:.75)),now+duration);
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker);
+    let buffer=this.equipmentBuffers.get(bufferKey);
+    if(!buffer) {
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate);
+      buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
+      buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
     }
-    const gain=ctx.createGain();gain.gain.setValueAtTime(.001,now);gain.gain.linearRampToValueAtTime(level,now+.006);gain.gain.setValueAtTime(level,now+.018);gain.gain.exponentialRampToValueAtTime(.001,now+duration);
+    const duration=buffer.duration,source=ctx.createBufferSource();source.buffer=buffer;
+    const distance=Math.hypot(event.x-listener.x,event.y-listener.y);
+    const audibleLevel=level/(1+distance/650);
+    const gain=ctx.createGain();gain.gain.setValueAtTime(.001,now);gain.gain.linearRampToValueAtTime(audibleLevel,now+.006);gain.gain.setValueAtTime(audibleLevel,now+.018);gain.gain.exponentialRampToValueAtTime(.001,now+duration);
     if(!this.track(source,gain,priority))return;
-    if(noise&&typeof ctx.createBiquadFilter==='function') {
-      const filter=ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.value=event.kind==='cryo_blast'?2800:event.kind==='extinguisher'?1700:1100;filter.Q.value=.7;
-      source.connect(filter);filter.connect(gain);
-      this.connectSfx(source,gain,{x:event.x,y:event.y},listener);
-      this.spatialNodes.set(source,[...(this.spatialNodes.get(source)||[]),filter]);
-    } else {source.connect(gain);this.connectSfx(source,gain,{x:event.x,y:event.y},listener);}
+    source.connect(gain);this.connectSfx(source,gain,{x:event.x,y:event.y},listener);
     source.start(now);source.stop(now+duration);
   }
   playDecisionCue(kind:'evidence'|'record'|'hold'|'exclude'):void {
