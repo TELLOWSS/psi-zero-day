@@ -1,3 +1,5 @@
+import {STORE_ITEMS, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
+import storeText from '../../content/localization/survivors-store-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
@@ -299,14 +301,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       return DEFAULT_PERMANENT_UPGRADES;
     }
   });
+  const [storeInventory, setStoreInventory] = useState<StoreInventory>(() => {
+    try { return sanitizeInventory(JSON.parse(localStorage.getItem('psi.survivors.store_wallet') || 'null')?.inventory); } catch { return {owned:[],equipped:[]}; }
+  });
+  const inventoryRef = useRef(storeInventory);
+  const [storeMessage, setStoreMessage] = useState('');
   const [psiCredits, setPsiCredits] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY_CREDITS);
+      const wallet = JSON.parse(localStorage.getItem('psi.survivors.store_wallet') || 'null');
+      const saved = wallet && Number.isFinite(wallet.credits) ? String(Math.max(0,wallet.credits)) : localStorage.getItem(STORAGE_KEY_CREDITS);
       return safeNumber(saved);
     } catch {
       return 0;
     }
   });
+
+  const creditsRef = useRef(psiCredits);
 
   // Modal Views in Ready screen
   const [showManual, setShowManual] = useState(false);
@@ -375,12 +385,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number) => {
     setPermanentUpgrades(newUpgrades);
     setPsiCredits(newCredits);
+    creditsRef.current = newCredits;
     try {
       localStorage.setItem(STORAGE_KEY_UPGRADES, JSON.stringify(newUpgrades));
       localStorage.setItem(STORAGE_KEY_CREDITS, String(newCredits));
+      localStorage.setItem('psi.survivors.store_wallet', JSON.stringify({credits:newCredits, inventory:inventoryRef.current}));
     } catch {
       // LocalStorage unavailable
     }
+  };
+
+  const changeStore = (id: string, purchase: boolean) => {
+    const result = purchase ? buyStoreItem(inventoryRef.current, creditsRef.current, id) : {inventory:equipStoreItem(inventoryRef.current,id), credits:creditsRef.current};
+    if (!result) return;
+    try {
+      localStorage.setItem('psi.survivors.store_wallet', JSON.stringify(result));
+    } catch { setStoreMessage(storeText.failure); return; }
+    inventoryRef.current = result.inventory;
+    setStoreInventory(result.inventory);
+    creditsRef.current = result.credits;
+    setPsiCredits(result.credits);
+    setStoreMessage('');
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
@@ -600,7 +625,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
   const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty), crypto.getRandomValues(new Uint32Array(1))[0]);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory), crypto.getRandomValues(new Uint32Array(1))[0]);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -632,7 +657,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
-  }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty]);
+  }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty, storeInventory]);
 
   useEffect(() => {
     if (!engineRef.current || engineRef.current.state.phase === 'ready') initGame(selectedChar, selectedStage);
@@ -2637,6 +2662,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
               <div>⚡ <strong>소장 샤우팅</strong>: <kbd>Space</kbd> / <kbd>F</kbd> (전화면 1.5초 시공간 정지 & 전리품 흡수)</div>
               <div>💼 <strong>보유 안전 크레딧</strong>: <strong>{psiCredits.toLocaleString()} PSI</strong></div>
+              <p className="survivors-store-loadout">{storeInventory.equipped.map(id => storeText.items[id as keyof typeof storeText.items].name).join(' · ') || storeText.empty}</p>
             </div>
 
             <div className="survivors-actions-row">
@@ -2666,6 +2692,25 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-credit-counter">
               보유 크레딧: <strong>{psiCredits.toLocaleString()} PSI</strong>
             </div>
+
+            <section className="survivors-store" aria-label={storeText.title}>
+              <h3>{storeText.title}</h3><p>{storeText.intro}</p>
+              {storeMessage && <p role="alert">{storeMessage}</p>}
+              {(Object.keys(storeText.categories) as StoreCategory[]).map(category => <section key={category}>
+                <h4>{storeText.categories[category]}</h4>
+                <div className="survivors-store-grid">{STORE_ITEMS.filter(item => item.category === category).map(item => {
+                  const text = storeText.items[item.id as keyof typeof storeText.items];
+                  const owned = storeInventory.owned.includes(item.id);
+                  const equipped = storeInventory.equipped.includes(item.id);
+                  return <article key={item.id} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
+                    <SurvivorsEquipmentIcon id={item.icon} level={1} />
+                    <strong>{text.name}</strong><span>{text.description}</span>
+                    <small>{equipped ? storeText.equipped : owned ? storeText.owned : `${item.price.toLocaleString()} PSI`}</small>
+                    <button type="button" aria-pressed={owned ? equipped : undefined} disabled={!owned && psiCredits < item.price} onClick={() => changeStore(item.id,!owned)}>{owned ? equipped ? storeText.remove : storeText.equip : `${storeText.buy} · ${item.price.toLocaleString()} PSI`}</button>
+                  </article>;
+                })}</div>
+              </section>)}
+            </section>
 
             <div className="survivors-rd-grid">
               <div className="survivors-rd-item">
