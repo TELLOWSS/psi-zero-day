@@ -2084,3 +2084,7 @@
 .survivors-preflight-gear small { color:#b0bfc5; font-size:11px; }
 .survivors-preflight-gear button { min-height:44px; padding:8px 12px; background:#244957; color:#e9faff; border:1px solid #6b8d98; border-radius:8px; cursor:pointer; }
 @media (max-width:600px) { .survivors-preflight-gear { grid-template-columns:56px minmax(0,1fr); gap:8px; } .survivors-preflight-gear > .survivors-premium-art { width:56px; } .survivors-preflight-gear button { grid-column:2; justify-self:start; } }
+
+.survivors-premium-hp-badge { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; color:#c8e6ec; }
+.survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
+.survivors-premium-hp-badge small { font-size:9px; }

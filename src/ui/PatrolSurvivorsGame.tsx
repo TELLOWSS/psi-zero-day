@@ -1,3 +1,4 @@
+import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory, type StoreCategory} from '../domain/survivors-store';
@@ -145,6 +146,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     itemsAtlas?: HTMLImageElement;
     equipmentAtlas?: HTMLImageElement;
     premiumAtlas?: HTMLImageElement;
+    cinematicAtlas?: HTMLImageElement;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
     stageFloors: Record<string,HTMLImageElement>;
@@ -250,6 +252,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const premium = new Image();
     premium.onload = () => {spritesRef.current.premiumAtlas=premium;};
     premium.src = PREMIUM_ATLAS;
+    const cinematic = new Image();
+    cinematic.onload=()=>{spritesRef.current.cinematicAtlas=cinematic;};
+    cinematic.src=CINEMATIC_VFX_ATLAS;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
     const sImg = new Image();
@@ -2143,14 +2148,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawPremiumGear(ctx,engine.state,spritesRef.current.premiumAtlas,reducedMotionRef.current);
+      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined);
+      const equipped=engine.state.premiumGear?.equipped??[];
+      const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
+      let cinematicFlights=0;
 
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
         if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
-        drawProjectileVfx(ctx,p,p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90);
+        const lv=p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5;
+        const cinematic=cinematicFlights++<64?{atlas:spritesRef.current.cinematicAtlas,look:cinematicLook(p.kind,lv,equipped)}:undefined;
+        drawProjectileVfx(ctx,p,lv,engine.state.gameTime,reducedMotionRef.current,projectiles.length>90,cinematic);
       }
 
-      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectiles.length>90);
+      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectiles.length>90,{atlas:spritesRef.current.cinematicAtlas,equipped,levels:vfxLevels});
 
       // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
       const hasHunter = activePerks.hunter_swarm > 0;
@@ -2171,6 +2182,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.ellipse(dX, groundY + 4, 10, 4.5, 0, 0, Math.PI * 2);
           ctx.fill();
 
+          drawDroneEmission(ctx,spritesRef.current.cinematicAtlas,dX,flightY,hasHunter,engine.state.gameTime,reducedMotionRef.current);
           ctx.translate(dX,flightY);
           drawEquipment(ctx,spritesRef.current.equipmentAtlas,hasHunter?'hunter_swarm':'safety_drone',hasHunter?1:activePerks.safety_drone,0,12,hasHunter?42:30,spritesRef.current.itemsAtlas);
           ctx.strokeStyle='rgba(226,232,240,.22)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-5,13,4,engine.state.gameTime*12,0,Math.PI*2);ctx.stroke();
@@ -2329,6 +2341,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         <div className="survivors-player-hud">
           <div className="survivors-hp-container">
             <span className="survivors-level-tag">LV {level}</span>
+            {liveGear && liveGear.equipped.length>0 && <span className="survivors-premium-hp-badge" aria-label={storeText.status} title={liveGear.equipped.map(id=>storeText.items[id as keyof typeof storeText.items].name).join(' · ')}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===liveGear.equipped[0])!}/>{liveGear.equipped.length>1&&<small>+{liveGear.equipped.length-1}</small>}</span>}
             <div className="survivors-hp-bar-bg">
               <div
                 className="survivors-hp-bar-fill"
@@ -2337,8 +2350,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
             <span className="survivors-hp-text">{hp}/{maxHp}</span>
           </div>
-          {liveGear && liveGear.equipped.length>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
-            <span className="survivors-premium-live-icons">{liveGear.equipped.map(id => <SurvivorsPremiumArt key={id} item={STORE_ITEMS.find(item=>item.id===id)!}/>)}</span>
+          {liveGear && liveGear.effects.shield>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
             {liveGear.effects.shield>0 && <span>{storeText.shield} {Math.ceil(liveGear.shield)}/{liveGear.effects.shield}{liveGear.shieldCooldown>0?` · ${storeText.recharge} ${Math.ceil(liveGear.shieldCooldown)}s`:''}</span>}
           </div>}
         </div>
