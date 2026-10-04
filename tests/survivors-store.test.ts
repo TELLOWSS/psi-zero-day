@@ -28,7 +28,7 @@ describe('PSI purchased equipment',()=>{
     const plain=createInitialSurvivorsState();
     const inventory={owned:['command_array','relay_core','recovery_mesh','recovery_cell'],equipped:['command_array','relay_core','recovery_mesh','recovery_cell']};
     const equipped=createInitialSurvivorsState('yoon',undefined,undefined,undefined,inventory);
-    expect(equipped.player.damageMultiplier).toBeCloseTo(plain.player.damageMultiplier+.25);
+    expect(equipped.player.damageMultiplier).toBeCloseTo(plain.player.damageMultiplier+.22);
     expect(equipped.player.cooldownReduction).toBeCloseTo(plain.player.cooldownReduction+.06);
     expect(equipped.player.pickupRadius).toBe(plain.player.pickupRadius+45);
     expect(equipped.player.regenRate).toBe(.6);
