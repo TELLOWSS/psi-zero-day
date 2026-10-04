@@ -1,4 +1,5 @@
 import { CombatDirection } from './survivors-combat-direction';
+import { SurvivorsWebglFx } from './survivors-webgl-fx';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
@@ -116,6 +117,8 @@ export const STORAGE_KEY_FG_POINTS = 'psi.fieldguide.points';
 export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurvivorsGameProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const webglFxCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const webglFxRef = useRef<SurvivorsWebglFx | null>(null);
   const engineRef = useRef<SurvivorsEngine | null>(null);
   const requestRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number>(performance.now());
@@ -163,6 +166,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     characterMaps: {},
     stageFloors: {},
   });
+
+  useEffect(() => {
+    const canvas = webglFxCanvasRef.current;
+    if (!canvas || typeof window === 'undefined') return;
+    const renderer = new SurvivorsWebglFx(canvas);
+    webglFxRef.current = renderer;
+    return () => {
+      renderer.dispose();
+      if (webglFxRef.current === renderer) webglFxRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -959,6 +973,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (engine.state.phase === 'playing') {
         projectileFeedbackRef.current.advance(dt);
         direction.advance(dt);
+        webglFxRef.current?.advance(dt);
         engine.update(dt, { moveX, moveY });
         const encounter=ACCOUNTABILITY_CASES.find(row=>row.stage===engine.state.stageId);
         const ledger=accountabilityRef.current;
@@ -971,6 +986,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         projectileFeedbackRef.current.ingest(projectileEvents, engine.state.projectiles.length>90);
         const equippedNow=engine.state.premiumGear?.equipped??[];
         direction.ingest(projectileEvents,equippedNow,engine.state.player,engine.state.projectiles.length>90);
+        webglFxRef.current?.ingest(projectileEvents,equippedNow,engine.state.projectiles.length>90);
         for(const event of projectileEvents){
           if(event.phase==='launch'&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.gameTime);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
@@ -1177,6 +1193,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const kick=direction.camera(reducedMotionRef.current);
       const camX = camera.x + shakeX + kick.x;
       const camY = camera.y + shakeY + kick.y;
+
+      webglFxRef.current?.render({
+        width: canvas.width,
+        height: canvas.height,
+        cameraX: camX,
+        cameraY: camY,
+        zoom: baseZoom,
+        dpr,
+        stageId: engine.state.stageId,
+        reducedMotion: reducedMotionRef.current,
+        floodlights: engine.state.interactiveHazards
+          .filter(object => object.type === 'floodlight_tower')
+          .map(object => ({ x: object.x, y: object.y, active: object.state === 'active' })),
+        player: engine.state.player,
+        premiumEquipped: Boolean(engine.state.premiumGear?.equipped.length),
+      });
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -2539,8 +2571,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       )}
 
-      {/* MAIN GAME CANVAS */}
+      {/* MAIN GAME CANVAS + Stage 01 GPU production-light vertical slice */}
       <canvas ref={canvasRef} className="survivors-canvas" />
+      <canvas ref={webglFxCanvasRef} className="survivors-webgl-fx" aria-hidden="true" />
 
       {/* MOBILE VIRTUAL JOYSTICK */}
       {joystickVisual.visible && (
