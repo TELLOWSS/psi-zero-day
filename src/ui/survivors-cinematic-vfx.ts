@@ -54,14 +54,18 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   ctx.save();ctx.globalCompositeOperation='screen';
   if(has(['voice_lens','command_array','broadcast_crown'])) {
     const color=gear.equipped.includes('command_array')?'#75e8ff':'#ffd181';
-    ctx.strokeStyle=color;ctx.lineWidth=2;ctx.globalAlpha=.55;
-    ctx.beginPath();ctx.ellipse(x,y+2,24*pulse,10*pulse,0,.2,Math.PI*1.8);ctx.stroke();
-    // A quiet emitter lens near the actual held equipment, not a new attack.
-    drawVfxCell(ctx,atlas,gear.equipped.includes('command_array')?1:0,x-19,y-30,26,20,.38);
+    ctx.strokeStyle=color;ctx.lineWidth=2.4;ctx.globalAlpha=.72;
+    ctx.beginPath();ctx.ellipse(x,y+2,30*pulse,12*pulse,0,.12,Math.PI*1.88);ctx.stroke();
+    ctx.globalAlpha=.34;ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.ellipse(x,y+2,39*pulse,16*pulse,0,Math.PI*.96,Math.PI*1.72);ctx.stroke();
+    // A visible premium emitter lens near the held equipment; still presentation-only.
+    drawVfxCell(ctx,atlas,gear.equipped.includes('command_array')?1:0,x-19,y-30,34,25,.52);
   }
   if(has(['relay_core','precision_link','sync_gauntlet'])) {
-    ctx.strokeStyle='#cea3ff';ctx.lineWidth=1.5;ctx.globalAlpha=.48;
-    ctx.beginPath();ctx.ellipse(x,y+3,30,12,0,reduced?0:state.gameTime, (reduced?0:state.gameTime)+Math.PI*1.4);ctx.stroke();
+    ctx.strokeStyle='#cea3ff';ctx.lineWidth=2;ctx.globalAlpha=.68;
+    ctx.beginPath();ctx.ellipse(x,y+3,36*pulse,14*pulse,0,reduced?0:state.gameTime, (reduced?0:state.gameTime)+Math.PI*1.55);ctx.stroke();
+    ctx.globalAlpha=.26;ctx.lineWidth=1;
+    ctx.beginPath();ctx.ellipse(x,y+3,46*pulse,18*pulse,0,reduced?Math.PI:state.gameTime+Math.PI, (reduced?Math.PI:state.gameTime+Math.PI)+Math.PI*1.2);ctx.stroke();
   }
   if(gear.effects.pickup>0){ctx.strokeStyle='#8ae9d1';ctx.lineWidth=1;ctx.globalAlpha=.15;ctx.beginPath();ctx.ellipse(x,y+4,state.player.pickupRadius,state.player.pickupRadius*.58,0,0,Math.PI*2);ctx.stroke();}
   if(gear.effects.speed>0&&movingAngle!==undefined&&!reduced)drawVfxCell(ctx,atlas,5,x-Math.cos(movingAngle)*24,y-Math.sin(movingAngle)*24,52,14,.25,movingAngle);
