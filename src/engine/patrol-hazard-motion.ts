@@ -5,10 +5,16 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
   const motion = h.motion;
   if (!motion) return false;
   if(h.variant==='pulse_gas') {
+    if(motion.phase==='approach') {
+      const dx=player.x-h.x,dy=player.y-h.y,distance=Math.hypot(dx,dy)||1;
+      if(distance<=90){motion.phase='warning';motion.timer=1.25;}
+      else {h.x+=dx/distance*speed*dt;h.y+=dy/distance*speed*dt;}
+      return true;
+    }
     motion.timer=Math.max(0,motion.timer-dt);
     if(motion.timer===0){
       if(motion.phase==='warning'){motion.phase='charge';motion.timer=.65;}
-      else {motion.phase='warning';motion.timer=1.25;}
+      else {motion.phase='approach';motion.timer=0;}
     }
     return true;
   }
