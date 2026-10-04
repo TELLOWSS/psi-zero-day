@@ -20,6 +20,11 @@ describe('graphics vertical slice production pulse contract', () => {
     expect(premium.alpha).toBeGreaterThan(normal.alpha);
   });
 
+  it('marks impacts for the GPU burst ring but keeps launches directional', () => {
+    expect(productionPulseSpec(base, [])?.ring).toBe(true);
+    expect(productionPulseSpec({ ...base, phase: 'launch' }, [])?.ring).toBe(false);
+  });
+
   it('never dramatizes a worker confirmation as a combat hit', () => {
     expect(productionPulseSpec({ ...base, worker: true }, ['broadcast_crown'])).toBeNull();
   });
