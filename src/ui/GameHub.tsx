@@ -1,4 +1,5 @@
 import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
+import './shooting-entry.css';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
 import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
@@ -351,7 +352,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     });
   }, []);
 
-  if (page === 'home') return <main className="commercial-title-home" data-title-layout="PHYSICAL_PHONE_V10">
+  if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
     <VisualImage uri={HIRES_KEY_ART.night_pour} fallbackUri={episode01BackgroundUri(resolve)} alt="" className="commercial-title-backdrop" />

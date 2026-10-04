@@ -7,6 +7,7 @@ import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory} from '../domain/survivors-store';
 import storeText from '../../content/localization/survivors-store-ko.json';
+import preflightText from '../../content/localization/survivors-preflight-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
@@ -380,6 +381,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // React UI Mirrors for HUD & Modals
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
+  const [preflightTab, setPreflightTab] = useState<'brief'|'stage'|'agent'|'settings'>('brief');
   const [lastDamage, setLastDamage] = useState<SurvivorsGameState['lastDamage']>();
   const [missionProgress, setMissionProgress] = useState(PATROL_STAGES[selectedStage].starChallenges.map(goal => ({ ...goal })));
   const [level, setLevel] = useState(1);
@@ -2598,11 +2600,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* READY / START SCREEN WITH CHARACTER SELECT */}
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content survivors-ready-dialog">
+          <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab}>
+            <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><button type="button" onClick={exitSession}>{preflightText.exit}</button></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
-              <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>순찰 시작하기</button>
+              <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>{preflightText.launch}</button>
             </header>
+            <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
+            <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
@@ -2659,13 +2664,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
             <details className="survivors-ready-details"><summary>{combatText.supply_help}</summary><SurvivorsSupplyGuide /></details>
-            <h2 className="survivors-modal-title is-gold">PSI: 야간 긴급 순찰 (SURVIVORS)</h2>
-            <p className="survivors-modal-sub">
-              야간 타설 현장을 직접 누비며 위험 요소를 요격하고 3분간 무사고를 달성하세요!
-            </p>
+            </div>
 
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
-            <details className="survivors-stage-select-section survivors-ready-details">
+            <details open className="survivors-stage-select-section survivors-ready-details" hidden={preflightTab!=='stage'}>
               <summary>{combatText.stage_select}</summary>
               <span className="survivors-section-label">작전 구역 선택 (현장 공정 20단계)</span>
               <div className="survivors-stage-cards">
@@ -2707,7 +2709,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </details>
 
             {/* CHARACTER SELECTOR */}
-            <details className="survivors-char-select-section survivors-ready-details">
+            <details open className="survivors-char-select-section survivors-ready-details" hidden={preflightTab!=='agent'}>
               <summary>{combatText.agent_select}</summary>
               <span className="survivors-section-label">순찰 요원 선택 (한국 현장팀 · 안전감시단)</span>
               <div className="survivors-char-cards">
@@ -2742,14 +2744,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </div>
             </details>
 
-            <div className="survivors-controls-guide">
+            <div className="survivors-controls-guide" hidden={preflightTab!=='settings'}>
               <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / <kbd>터치 드래그</kbd> : 이동 | 📢 <strong>자동 요격</strong></div>
               <div>⚡ <strong>소장 샤우팅</strong>: <kbd>Space</kbd> / <kbd>F</kbd> (전화면 1.5초 시공간 정지 & 전리품 흡수)</div>
               <div>💼 <strong>보유 안전 크레딧</strong>: <strong>{psiCredits.toLocaleString()} PSI</strong></div>
               <div className="survivors-store-loadout" aria-label={storeText.status}>{storeInventory.equipped.length ? storeInventory.equipped.map(id => <span key={id}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===id)!}/>{storeText.items[id as keyof typeof storeText.items].name}</span>) : storeText.empty}</div>
             </div>
 
-            <SurvivorsAudioMixer audio={audioRef.current}/>
+            <div hidden={preflightTab!=='settings'}><SurvivorsAudioMixer audio={audioRef.current}/><button type="button" className="survivors-btn-secondary" onClick={()=>setShowManual(true)}>{gameManualText('open')}</button></div>
 
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowRdModal(true)}>
@@ -2757,10 +2759,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowArsenalModal(true)}>
                 📖 대응 도구 진화 도감
-              </button>
-              <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
-              <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
-                취소
               </button>
             </div>
           </div>

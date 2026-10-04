@@ -23,7 +23,12 @@ it('shows mission conditions before start, opens the shooting manual while pause
     const launch = host.querySelector('.survivors-ready-launch')!;
     expect(launch.textContent).toContain('순찰 시작하기');
     for (const goal of PATROL_STAGES.stage_01.starChallenges) expect(host.querySelector('.survivors-mission-brief')?.textContent).toContain(goal.description);
-    expect(host.querySelectorAll('details.survivors-ready-details[open]')).toHaveLength(0);
+    expect(host.querySelectorAll('details.survivors-ready-details[open]:not([hidden])')).toHaveLength(0);
+    click('작전 구역');
+    expect(host.querySelector('.survivors-stage-select-section')?.hasAttribute('hidden')).toBe(false);
+    expect(host.querySelector('.survivors-char-select-section')?.hasAttribute('hidden')).toBe(true);
+    click('순찰 요원');
+    expect(host.querySelector('.survivors-char-select-section')?.hasAttribute('hidden')).toBe(false);
     click('순찰 시작하기');
     vi.spyOn(engine!, 'update').mockImplementationOnce(() => { engine!.state.ultimateCharge = 99.6; });
     act(() => frame(performance.now() + 100));
