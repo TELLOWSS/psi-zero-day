@@ -2075,3 +2075,4 @@
 .survivors-premium-live-icons { display:flex; }
 .survivors-premium-live .survivors-premium-art { width:20px; height:20px; border-radius:4px; }
 @media (max-width:420px) { .survivors-store-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; } .survivors-store-card { padding:10px; } .survivors-store-card strong { font-size:14px; } }
+.survivors-player-hud:has(.survivors-premium-live) { flex-direction:column; align-items:stretch; gap:3px; }
