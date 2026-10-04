@@ -96,7 +96,7 @@ try {
     row.checks.orchestralPatrolDecoded = true;
     row.checks.stage01LandmarkPaint = await page.evaluate(()=>window.__psiLandmarks.size===4);
     row.checks.viewportPinned=await page.locator('.survivors-container').evaluate(e=>{const r=e.getBoundingClientRect();return r.top===0 && r.left===0 && Math.abs(r.height-innerHeight)<2;});
-    row.checks.nonblank = await page.locator('canvas').evaluate(c => {
+    // The presentation now has a separate transparent WebGL canvas. Sample only the\n    // authoritative 2D gameplay canvas so strict locator mode and pixel inspection remain stable.\n    row.checks.nonblank = await page.locator('.survivors-canvas').evaluate(c => {
       const ctx = c.getContext('2d'); const data = ctx.getImageData(0,0,c.width,c.height).data;
       const colors = new Set(); for(let i=0;i<data.length;i+=Math.max(4,Math.floor(data.length/400/4)*4)) colors.add(`${data[i]},${data[i+1]},${data[i+2]}`);
       return colors.size > 4;
