@@ -1,7 +1,7 @@
 import type {Projectile,ProjectileKind,SurvivorsGameState} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v1.webp';
-export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
+export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number;signature:'default'|'sync_gauntlet'}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
   const tier=Math.min(3,Math.max(1,Math.ceil(level/2)));
   const communication=equipped.some(id=>['voice_lens','command_array','broadcast_crown'].includes(id));
@@ -9,7 +9,7 @@ export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly
   const premium=communication||tempo;
   const palette=communication ? (equipped.includes('command_array')?'cyan':'gold') : tempo?'violet':kind==='hunter_beam'?'violet':kind==='radio'?'gold':'cyan';
   const index=palette==='gold'?0:palette==='cyan'?1:2;
-  return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index};
+  return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index,signature:equipped.includes('sync_gauntlet')?'sync_gauntlet':'default'};
 }
 /** One shared raster atlas, no per-frame allocation, blur or full-screen flash. */
 export function drawVfxCell(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,cell:number,x:number,y:number,w:number,h:number,alpha:number,angle=0):boolean {
@@ -27,7 +27,18 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
   const width=(reduced?10:11+look.tier*4+(look.premium?6:0))*(busy?.8:1);
   // Screen blending keeps the colored envelope rather than adding it to white.
   ctx.save();ctx.globalCompositeOperation='screen';
-  drawVfxCell(ctx,atlas,look.flightCell,p.x-Math.cos(angle)*length*.20,p.y-Math.sin(angle)*length*.20,length,width,alpha*(look.premium?.92:.76),angle);
+  if(look.signature==='sync_gauntlet'&&!reduced) {
+    // Legendary tempo gear gets a recognisable three-layer violet ribbon without
+    // creating extra projectiles or changing collision/damage.
+    const nx=-Math.sin(angle),ny=Math.cos(angle);
+    const sx=p.x-Math.cos(angle)*length*.25,sy=p.y-Math.sin(angle)*length*.25;
+    drawVfxCell(ctx,atlas,look.flightCell,sx,sy,length*1.34,width*1.72,alpha*(busy?.54:.74),angle);
+    drawVfxCell(ctx,atlas,look.flightCell,sx+nx*4.5,sy+ny*4.5,length*1.18,width*.78,alpha*(busy?.48:.82),angle);
+    drawVfxCell(ctx,atlas,look.flightCell,sx-nx*4.5,sy-ny*4.5,length*1.18,width*.78,alpha*(busy?.48:.82),angle);
+    drawVfxCell(ctx,atlas,look.flightCell,p.x,p.y,Math.max(18,width*1.2),Math.max(11,width*.82),alpha*.96,angle);
+  } else {
+    drawVfxCell(ctx,atlas,look.flightCell,p.x-Math.cos(angle)*length*.20,p.y-Math.sin(angle)*length*.20,length,width,alpha*(look.premium?.92:.76),angle);
+  }
   ctx.restore();return true;
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {
@@ -37,7 +48,19 @@ export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly
   const scale=event.phase==='impact'?1+t*.45:1-t*.3;
   const cell=event.phase==='launch'?look.launchCell:look.impactCell;
   ctx.save();ctx.globalCompositeOperation='screen';
-  drawVfxCell(ctx,atlas,cell,0,0,extent*scale,extent*scale*(event.phase==='launch'?.60:1),fade*(busy?.35:.8),event.phase==='launch'?event.angle:0);
+  if(look.signature==='sync_gauntlet'&&event.phase==='impact') {
+    const base=extent*scale;
+    drawVfxCell(ctx,atlas,cell,0,0,base*1.75,base*1.32,fade*(busy?.30:.76),0);
+    drawVfxCell(ctx,atlas,cell,0,0,base*.92,base*.92,fade*(busy?.34:.94),0);
+    if(!busy) {
+      for(let i=0;i<6;i++) {
+        const a=i*Math.PI/3;
+        drawVfxCell(ctx,atlas,look.flightCell,Math.cos(a)*base*.72,Math.sin(a)*base*.46,base*.48,base*.18,fade*.48,a);
+      }
+    }
+  } else {
+    drawVfxCell(ctx,atlas,cell,0,0,extent*scale,extent*scale*(event.phase==='launch'?.60:1),fade*(busy?.35:.8),event.phase==='launch'?event.angle:0);
+  }
   ctx.restore();
 }
 export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,x:number,y:number,evolved:boolean,time:number,reduced:boolean):void {
@@ -60,8 +83,14 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
     drawVfxCell(ctx,atlas,gear.equipped.includes('command_array')?1:0,x-19,y-30,26,20,.38);
   }
   if(has(['relay_core','precision_link','sync_gauntlet'])) {
-    ctx.strokeStyle='#cea3ff';ctx.lineWidth=1.5;ctx.globalAlpha=.48;
-    ctx.beginPath();ctx.ellipse(x,y+3,30,12,0,reduced?0:state.gameTime, (reduced?0:state.gameTime)+Math.PI*1.4);ctx.stroke();
+    const sync=gear.equipped.includes('sync_gauntlet');
+    ctx.strokeStyle=sync?'#e2b7ff':'#cea3ff';ctx.lineWidth=sync?2.4:1.5;ctx.globalAlpha=sync?.72:.48;
+    ctx.beginPath();ctx.ellipse(x,y+3,(sync?37:30)*pulse,(sync?15:12)*pulse,0,reduced?0:state.gameTime,(reduced?0:state.gameTime)+Math.PI*(sync?1.65:1.4));ctx.stroke();
+    if(sync) {
+      ctx.globalAlpha=.34;ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.ellipse(x,y+3,48*pulse,19*pulse,0,reduced?Math.PI:state.gameTime+Math.PI,(reduced?Math.PI:state.gameTime+Math.PI)+Math.PI*1.2);ctx.stroke();
+      drawVfxCell(ctx,atlas,6,x-18,y-29,38,24,.46*pulse);
+    }
   }
   if(gear.effects.pickup>0){ctx.strokeStyle='#8ae9d1';ctx.lineWidth=1;ctx.globalAlpha=.15;ctx.beginPath();ctx.ellipse(x,y+4,state.player.pickupRadius,state.player.pickupRadius*.58,0,0,Math.PI*2);ctx.stroke();}
   if(gear.effects.speed>0&&movingAngle!==undefined&&!reduced)drawVfxCell(ctx,atlas,5,x-Math.cos(movingAngle)*24,y-Math.sin(movingAngle)*24,52,14,.25,movingAngle);
