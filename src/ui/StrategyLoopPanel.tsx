@@ -42,6 +42,7 @@ export function StrategyLoopPanel({
   onOutcomeContinue,
   onOutcomeReconsider,
   onActionFocus,
+  onTargetSelect,
   guidanceText,
   emptyText,
   transitionPrompt,
@@ -59,6 +60,7 @@ export function StrategyLoopPanel({
   readonly onOutcomeContinue?: () => void;
   readonly onOutcomeReconsider?: () => void;
   readonly onActionFocus?: (targetKey: string | null) => void;
+  readonly onTargetSelect?: (targetKey: string) => void;
   readonly guidanceText?: string;
   readonly emptyText?: string;
   readonly transitionPrompt?: string;
@@ -71,6 +73,11 @@ export function StrategyLoopPanel({
   const [executing, setExecuting] = useState(false);
   const executingRef = useRef(false);
   const actionSetKey = useMemo(() => actions.map(action => `${action.instance_id}:${action.node_id}:${action.choice_id}:${action.enabled}`).join('|'), [actions]);
+  const targetOptions = useMemo(() => [...new Map(
+    actions
+      .filter(action => action.enabled)
+      .map(action => [strategyActionTargetKey(action.target), action] as const),
+  ).values()], [actions]);
 
   useEffect(() => {
     setRejected(false);
@@ -151,6 +158,25 @@ export function StrategyLoopPanel({
       </div>
       {rejected ? <p role="alert">{text('ui.strategy.retry_action')}</p> : null}
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
+      {!focusId && targetOptions.length ? <div className="strategy-target-picker" aria-label={text('ui.strategy.guide.target_title')}>
+        {targetOptions.map(action => {
+          const targetKey = strategyActionTargetKey(action.target);
+          return <button
+            key={targetKey}
+            type="button"
+            data-target-shortcut={targetKey}
+            onMouseEnter={() => onActionFocus?.(targetKey)}
+            onMouseLeave={() => onActionFocus?.(null)}
+            onFocus={() => onActionFocus?.(targetKey)}
+            onBlur={() => onActionFocus?.(null)}
+            onClick={() => onTargetSelect?.(targetKey)}
+          >
+            <span className="strategy-target-picker-icon" aria-hidden="true">{actionIcon(action.intent)}</span>
+            <span><strong>{targetLabel(action)}</strong><small>{text(action.label_text_id)}</small></span>
+            <b aria-hidden="true">›</b>
+          </button>;
+        })}
+      </div> : null}
       {guidanceText ? <p className="strategy-action-guidance">{guidanceText}</p> : null}
       {transitionPrompt ? <div className="strategy-transition-card" data-strategy-transition="true">
         <p>{transitionPrompt}</p>
