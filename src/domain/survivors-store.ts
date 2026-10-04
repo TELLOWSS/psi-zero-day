@@ -21,7 +21,8 @@ export const STORE_ITEMS: readonly StoreItem[] = [
     "price": 2400,
     "icon": "satellite_broadcast",
     "effects": {
-      "damage": 0.25
+      "damage": 0.22,
+      "ultimate": 0.08
     },
     "art": 1,
     "rarity": "elite"
@@ -99,8 +100,9 @@ export const STORE_ITEMS: readonly StoreItem[] = [
     "price": 4800,
     "icon": "satellite_broadcast",
     "effects": {
-      "damage": 0.38,
-      "cooldown": 0.04
+      "damage": 0.32,
+      "cooldown": 0.03,
+      "ultimate": 0.16
     },
     "art": 8,
     "rarity": "legendary"

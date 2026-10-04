@@ -50,5 +50,8 @@ describe('premium equipment intervention in difficult patrols',()=>{
     expect(new Set(STORE_ITEMS.map(i=>i.art)).size).toBe(16);
     const effects=storeEffects({owned:['shock_mantle','rescue_wing'],equipped:['shock_mantle','rescue_wing']});
     expect(effects.shield).toBe(60);expect(effects.shieldPeriod).toBe(18);
+    const command=storeEffects({owned:['broadcast_crown'],equipped:['broadcast_crown']});
+    expect(command.ultimate).toBe(.16);
+    expect(command.damage).toBe(.32);
   });
 });
