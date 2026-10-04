@@ -1,5 +1,6 @@
 import { CombatDirection } from './survivors-combat-direction';
 import { SurvivorsWebglFx } from './survivors-webgl-fx';
+import { stageFrontPressure } from '../domain/survivors-front-pressure';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
@@ -1196,6 +1197,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const camX = camera.x + shakeX + kick.x;
       const camY = camera.y + shakeY + kick.y;
 
+      const frontBand = stageFrontPressure(engine.state.stageId, engine.state.gameTime, engine.seed);
+      const frontFx = frontBand ? (() => {
+        if (frontBand.side === 0) return { x: frontBand.anchorRatio * WORLD_WIDTH, y: 34, horizontal: true, strength: 1 };
+        if (frontBand.side === 1) return { x: WORLD_WIDTH - 34, y: frontBand.anchorRatio * WORLD_HEIGHT, horizontal: false, strength: 1 };
+        if (frontBand.side === 2) return { x: frontBand.anchorRatio * WORLD_WIDTH, y: WORLD_HEIGHT - 34, horizontal: true, strength: 1 };
+        return { x: 34, y: frontBand.anchorRatio * WORLD_HEIGHT, horizontal: false, strength: 1 };
+      })() : undefined;
+
       webglFxRef.current?.render({
         width: canvas.width,
         height: canvas.height,
@@ -1212,6 +1221,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         premiumEquipped: Boolean(engine.state.premiumGear?.equipped.length),
         equipped: engine.state.premiumGear?.equipped ?? [],
         projectiles: engine.state.projectiles,
+        front: frontFx,
       });
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
