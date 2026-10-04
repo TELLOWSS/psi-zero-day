@@ -10,15 +10,16 @@ export const TACTICAL_ITEMS = {
 export const SUPPLY_CYCLE: readonly TacticalItemId[] = ['record_beacon','radio_battery','control_kit','field_rations','route_lantern'];
 
 export function applyTacticalItem(state: SurvivorsGameState, kind: TacticalItemId): void {
+  const potency=state.difficulty==='extreme'?1.5:state.difficulty==='hard'?1.25:1;
   if (kind === 'radio_battery') {
-    state.ultimateCharge = Math.min(state.maxUltimateCharge, state.ultimateCharge + 30);
+    state.ultimateCharge = Math.min(state.maxUltimateCharge, state.ultimateCharge + 30*potency);
   } else if (kind === 'control_kit') {
-    state.controlKit = {charges: 2, remaining: 12};
+    state.controlKit = {charges: potency===1.5?3:2, remaining: 12*potency};
   } else if (kind === 'field_rations') {
     // Refresh duration, never stack regeneration or increase maximum HP.
-    state.fieldRecovery = {remaining: 8};
+    state.fieldRecovery = {remaining: 8*potency};
   } else if (kind === 'route_lantern') {
-    state.routeLantern = {remaining: 10};
+    state.routeLantern = {remaining: 10*potency};
   } else {
     for (const drop of state.drops) {
       if (!drop.isHeal && !drop.itemKind) { drop.x = state.player.x; drop.y = state.player.y; }
@@ -39,8 +40,8 @@ export function tickTacticalItems(state: SurvivorsGameState, dt: number): void {
   }
 }
 
-export function tacticalSupplyFor(count: number, designatedBoss: boolean): TacticalItemId | null {
+export function tacticalSupplyFor(count: number, designatedBoss: boolean, cadence=12): TacticalItemId | null {
   if (designatedBoss) return 'control_kit';
-  if (count <= 0 || count % 12 !== 0) return null;
-  return SUPPLY_CYCLE[(count / 12 - 1) % SUPPLY_CYCLE.length]!;
+  if (count <= 0 || count % cadence !== 0) return null;
+  return SUPPLY_CYCLE[(count / cadence - 1) % SUPPLY_CYCLE.length]!;
 }
