@@ -2365,8 +2365,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
             <span className="survivors-hp-text">{hp}/{maxHp}</span>
           </div>
-          {liveGear && liveGear.effects.shield>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
-            {liveGear.effects.shield>0 && <span>{storeText.shield} {Math.ceil(liveGear.shield)}/{liveGear.effects.shield}{liveGear.shieldCooldown>0?` · ${storeText.recharge} ${Math.ceil(liveGear.shieldCooldown)}s`:''}</span>}
+          {liveGear && liveGear.equipped.length>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
+            <span className="survivors-premium-live-label">PREMIUM</span>
+            {liveGear.effects.shield>0 && <span>{storeText.shield} {Math.ceil(liveGear.shield)}/{liveGear.effects.shield}{liveGear.shieldCooldown>0 ? ` · ${storeText.recharge} ${Math.ceil(liveGear.shieldCooldown)}s` : ''}</span>}
+            {liveGear.effects.ultimate>0 && <span>PSI +{Math.round(liveGear.effects.ultimate * 100)}%</span>}
+            {liveGear.effects.suppression>0 && <span>위험 접근 −{Math.round(liveGear.effects.suppression * 100)}%</span>}
+            {liveGear.effects.lines>0 && <span>통제선 ×{liveGear.effects.lines}</span>}
           </div>}
         </div>
 
