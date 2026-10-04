@@ -6,6 +6,18 @@ import { SurvivorsAccountabilityEvent } from '../src/ui/SurvivorsAccountabilityE
 import { ACCOUNTABILITY_CASES } from '../src/app/survivors-accountability';
 import { emptyAccountability } from '../src/domain/survivors-accountability';
 afterEach(()=>{document.body.replaceChildren();vi.unstubAllGlobals();});
+it('blocks resumed patrol and Escape until the excluded worker replacement handoff is checked',async()=>{
+ vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT',true);
+ const host=document.createElement('div');document.body.append(host);const root=createRoot(host),proceed=vi.fn();
+ await act(async()=>root.render(<SurvivorsAccountabilityEvent incident={ACCOUNTABILITY_CASES[3]!} state={{decisions:[],warnings:3,access:'excluded'}} portraitUri="/test-only.png" onDecide={()=>'출입배제 기록'} onContinue={proceed} onLeave={()=>{}} onEvidence={()=>{}}/>));
+ for(const button of host.querySelectorAll<HTMLButtonElement>('.accountability-facts button'))await act(async()=>button.click());
+ await act(async()=>host.querySelector<HTMLButtonElement>('.survivors-btn-primary')!.click());
+ const resume=host.querySelector<HTMLButtonElement>('.survivors-btn-primary')!;expect(resume.disabled).toBe(true);
+ await act(async()=>host.querySelector('[role="dialog"]')!.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true})));expect(proceed).not.toHaveBeenCalled();
+ for(const input of host.querySelectorAll<HTMLInputElement>('.accountability-handoff input'))await act(async()=>input.click());
+ expect(resume.disabled).toBe(false);await act(async()=>resume.click());expect(proceed).toHaveBeenCalledOnce();
+ await act(async()=>root.unmount());
+});
 it('gates confirmation on all evidence and exposes the actual recorded consequence',async()=>{
  vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT',true);
  const host=document.createElement('div');document.body.append(host);const root=createRoot(host),decide=vi.fn(()=> '인계할 결과'),proceed=vi.fn();
