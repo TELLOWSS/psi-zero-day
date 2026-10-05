@@ -544,12 +544,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const openStore=()=>{
     void audioRef.current.preloadEquipmentRecordings();
     const engine=engineRef.current;
+    if(engine?.state.bossEncounter&&engine.state.bossEncounter.phase!=='combat')return;
     if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
     keysRef.current={};touchVectorRef.current={x:0,y:0};setStoreMessage('');setShowRdModal(true);
   };
   const openArsenal=()=>{
     const engine=engineRef.current;
+    if(engine?.state.bossEncounter&&engine.state.bossEncounter.phase!=='combat')return;
     if (showRdModal || accountabilityCase) return;
     if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
@@ -2509,6 +2511,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const liveGear = engineRef.current?.state.premiumGear;
   const activeMission = missionProgress.find(goal => goal.metric !== 'victory' && !goal.isCompleted);
 
+  const encounterLocked=!!engineRef.current?.state.bossEncounter&&engineRef.current.state.bossEncounter.phase!=='combat';
   return (
     <div
       ref={containerRef}
@@ -2569,7 +2572,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
 
         <div className="survivors-top-actions">
-          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={showRdModal || showArsenalModal} onClick={openStore}>{storeText.shopShort}</button>}
+          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={encounterLocked || showRdModal || showArsenalModal} onClick={openStore}>{storeText.shopShort}</button>}
           <button
             type="button"
             className="survivors-btn-icon survivors-pause-command"
@@ -2684,7 +2687,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         {(Object.entries(activePerks) as [PerkId, number][])
           .filter(([id, lvl]) => lvl > 0 && !Object.entries(EVOLUTION_RECIPES).some(([evoId, recipe]) => recipe.weapon === id && (activePerks[evoId as PerkId] ?? 0)>0))
           .map(([id, lvl]) => (
-            <button type="button" key={id} className="survivors-perk-badge" disabled={showRdModal || showArsenalModal || !!accountabilityCase} onClick={openArsenal} aria-label={`${PERK_CATALOG[id].name} (Lv.${lvl}) · ${itemText.evolution_progress}`} title={`${PERK_CATALOG[id].name} (Lv.${lvl})`}>
+            <button type="button" key={id} className="survivors-perk-badge" disabled={encounterLocked || showRdModal || showArsenalModal || !!accountabilityCase} onClick={openArsenal} aria-label={`${PERK_CATALOG[id].name} (Lv.${lvl}) · ${itemText.evolution_progress}`} title={`${PERK_CATALOG[id].name} (Lv.${lvl})`}>
               <SurvivorsEquipmentIcon id={id} level={lvl} />
               <small>{lvl}</small>
             </button>
@@ -2695,8 +2698,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase==='playing' && engineRef.current?.state.fieldTactics && (()=>{
         const engine=engineRef.current!,t=engine.state.fieldTactics!;
         return <div className="survivors-tactical-actions" aria-label={tacticsText.support}>
-          <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>
-          <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>
+          <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>
+          <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>
         </div>;
       })()}
       {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
@@ -2704,16 +2707,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         <div className="survivors-ultimate-control">
           <button
             type="button"
-            className={`survivors-ultimate-btn ${ultimateCharge >= 100 ? 'is-ready' : ''}`}
+            className={`survivors-ultimate-btn ${!encounterLocked && ultimateCharge >= 100 ? 'is-ready' : ''}`}
             onClick={handleTriggerDirectorShout}
-            disabled={ultimateCharge < 100 || directorCutinPhase !== 'none'}
+            disabled={encounterLocked || ultimateCharge < 100 || directorCutinPhase !== 'none'}
             aria-label="현장소장 사자후 궁극기 발동"
           >
             <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as React.CSSProperties} />
             <span className="survivors-ultimate-icon">📢</span>
             <div className="survivors-ultimate-info">
               <strong>소장 샤우팅</strong>
-              <small>{ultimateCharge >= 100 ? 'READY [Space/F]' : `${ultimateCharge}%`}</small>
+              <small>{!encounterLocked && ultimateCharge >= 100 ? 'READY [Space/F]' : `${ultimateCharge}%`}</small>
             </div>
           </button>
         </div>

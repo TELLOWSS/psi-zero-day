@@ -17,6 +17,7 @@ try{
   await page.evaluate(()=>{window.qaEngine.state.gameTime=61;});
   await page.getByRole('alert').filter({hasText:'대표 위험 출현'}).waitFor();
   const notice=await page.locator('.survivors-encounter-notice').boundingBox();
+  if(await page.locator('.survivors-tactical-actions button:enabled, .survivors-ultimate-btn:enabled, .survivors-live-shop:enabled').count())throw new Error('Encounter arrival controls remain enabled');
   if(!notice||notice.width<100||notice.height<30)throw new Error('Encounter notice is visually clipped');
   await page.screenshot({path:path.join(out,`${width}x${height}-arrival.png`)});
   const arrival=await page.evaluate(()=>({phase:window.qaEngine.state.bossEncounter.phase,bossHp:window.qaEngine.state.hazards.find(h=>h.isStageBoss).hp}));
@@ -28,6 +29,7 @@ try{
    window.qaUpdate.call(e,1/60,{moveX:0,moveY:0});
    return {hp:h.hp,max:h.maxHp,blocked:e.drainProjectileFeedback().some(ev=>ev.projectileId==='qa-locked'&&ev.blocked)};
   });
+  await page.waitForFunction(()=>document.querySelectorAll('.survivors-tactical-actions button:enabled').length===2);
   const readout=page.locator(width<=900?'.survivors-focus-status':'.survivors-boss-readout');
   await page.waitForFunction(()=>document.querySelector('.survivors-boss-readout')?.dataset.core==='interlocked');
   if(!(await readout.innerText()).includes('인터록 잠김'))throw new Error('Locked core feedback missing');
@@ -44,6 +46,10 @@ try{
   await page.waitForFunction(()=>document.querySelector('.survivors-focus-status')?.dataset.core==='secured');
   if(!(await page.locator('.survivors-focus-status').innerText()).includes('대표 위험 통제 완료'))throw new Error('Secured focus feedback missing');
   if(await page.locator('.survivors-combo-banner, .survivors-damage-notice, .survivors-supply-countdown').count())throw new Error('Combat notices remain during clear confirmation');
+  if(await page.locator('.survivors-tactical-actions button:enabled, .survivors-ultimate-btn:enabled, .survivors-live-shop:enabled').count())throw new Error('Secured controls remain enabled');
+  const chargesBefore=await page.evaluate(()=>JSON.stringify(window.qaEngine.state.fieldTactics));
+  await page.keyboard.press('q');await page.keyboard.press('e');
+  if(await page.evaluate(()=>JSON.stringify(window.qaEngine.state.fieldTactics))!==chargesBefore)throw new Error('Secured keyboard commands consumed charges');
   await page.screenshot({path:path.join(out,`${width}x${height}-secured.png`)});
   const secured=await page.evaluate(()=>({phase:window.qaEngine.state.phase,encounter:window.qaEngine.state.bossEncounter.phase,remaining:window.qaEngine.state.bossEncounter.remaining}));
   const aura=await page.evaluate(async()=>{

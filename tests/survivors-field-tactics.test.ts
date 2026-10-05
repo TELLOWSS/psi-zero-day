@@ -1,6 +1,15 @@
 import {expect,it} from 'vitest';
 import {controlLineSpeed,tickFieldTactics} from '../src/engine/survivors-field-tactics';
 import {createInitialSurvivorsState,SurvivorsEngine} from '../src/engine/patrol-survivors-engine';
+it.each(['arrival','secured'] as const)('does not consume tactical charges during %s',phase=>{
+ const s=createInitialSurvivorsState(),e=new SurvivorsEngine(s);e.start();
+ s.bossEncounter={bossId:'boss',phase,remaining:2};
+ const before=structuredClone(s.fieldTactics);
+ expect(e.requestSupport()).toBe(false);expect(e.deployControlLine()).toBe(false);
+ expect(s.fieldTactics).toEqual(before);
+ s.bossEncounter.phase='combat';
+ expect(e.requestSupport()).toBe(true);expect(e.deployControlLine()).toBe(true);
+});
 it('support arrives at the locked call position and uses finite charges/cooldown',()=>{
  const s=createInitialSurvivorsState();const e=new SurvivorsEngine(s,42);e.start();expect(e.requestSupport()).toBe(true);expect(e.requestSupport()).toBe(false);
  const x=s.player.x;s.player.x+=150;const supply:Array<[number,number]>=[];

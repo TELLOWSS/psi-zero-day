@@ -3,12 +3,12 @@ import type { FieldTactics } from '../domain/survivors-field-tactics';
 export const createFieldTactics=():FieldTactics=>({supportCharges:2,supportCooldown:0,lineCharges:2,lineCooldown:0,lines:[]});
 export function requestFieldSupport(state:SurvivorsGameState):boolean {
  const t=state.fieldTactics;
- if(state.phase!=='playing'||!t||t.supportCharges<=0||t.supportCooldown>0||t.pendingSupport)return false;
+ if(state.phase!=='playing'||state.bossEncounter&&state.bossEncounter.phase!=='combat'||!t||t.supportCharges<=0||t.supportCooldown>0||t.pendingSupport)return false;
  t.supportCharges--;t.supportCooldown=30;t.pendingSupport={x:state.player.x,y:state.player.y,remaining:1.2};return true;
 }
 export function placeControlLine(state:SurvivorsGameState):boolean {
  const t=state.fieldTactics;
- if(state.phase!=='playing'||!t||t.lineCharges<=0||t.lineCooldown>0)return false;
+ if(state.phase!=='playing'||state.bossEncounter&&state.bossEncounter.phase!=='combat'||!t||t.lineCharges<=0||t.lineCooldown>0)return false;
  t.lineCharges--;t.lineCooldown=8;t.lines.push({x:state.player.x,y:state.player.y,radius:110,remaining:10});return true;
 }
 /** Existing safety objects keep their warning clocks; utility affects approach speed only. */
