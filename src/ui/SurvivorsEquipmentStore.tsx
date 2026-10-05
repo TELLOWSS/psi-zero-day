@@ -6,8 +6,9 @@ import type { CharacterId, PermanentUpgrades } from '../domain/patrol-survivors'
 import { fittingLoadout } from '../domain/survivors-fitting';
 import { createInitialSurvivorsState, DEFAULT_PERMANENT_UPGRADES, CHARACTER_PROFILES } from '../engine/patrol-survivors-engine';
 import { SurvivorsFittingPreview } from './SurvivorsFittingPreview';
-import {ArrowLeft,ArrowRight,PersonStanding,Footprints,Zap,Play,Pause} from 'lucide-react';
+import {ArrowLeft,ArrowRight,Play,Pause} from 'lucide-react';
 import type {FittingMotion} from './survivors-fitting-pose';
+import type {AttackMotion} from './survivors-attack-motion';
 
 export function SurvivorsEquipmentStore({ inventory, credits, message, onChange, onRepair, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
   inventory: StoreInventory; credits: number; message: string;
@@ -23,6 +24,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   const [facing,setFacing]=useState<1|-1>(1);
   const [zoom,setZoom]=useState(1);
   const [motion,setMotion]=useState<FittingMotion>('idle');
+  const [attackKind,setAttackKind]=useState<AttackMotion>('shot');
   const [previewPlaying,setPreviewPlaying]=useState(true);
   const [view, setView] = useState<'browse' | 'fitting' | 'loadout'>('browse');
   const baseline = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, inventory), [characterId, upgrades, inventory]);
@@ -63,9 +65,9 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
     {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
     <div id="store-panel-fitting" role="tabpanel" aria-labelledby="store-tab-fitting" hidden={view !== 'fitting'}>
     <div className="survivors-fitting">
-      <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom} motion={motion} playing={previewPlaying} active={view==='fitting'}/>
+      <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom} motion={motion} playing={previewPlaying} active={view==='fitting'} attackKind={attackKind}/>
         <div className="survivors-fitting-controls"><button type="button" aria-label={copy.leftView} title={copy.leftView} aria-pressed={facing===-1} onClick={()=>setFacing(-1)}><ArrowLeft size={18}/></button><button type="button" aria-label={copy.rightView} title={copy.rightView} aria-pressed={facing===1} onClick={()=>setFacing(1)}><ArrowRight size={18}/></button><label>{copy.zoom}<input type="range" min={.8} max={1.25} step={.05} value={zoom} onChange={event=>setZoom(Number(event.target.value))}/></label></div>
-        <div className="survivors-fitting-controls" role="group" aria-label={copy.pose}><button type="button" aria-label={copy.poseIdle} title={copy.poseIdle} aria-pressed={motion==='idle'} onClick={()=>setMotion('idle')}><PersonStanding size={18}/></button><button type="button" aria-label={copy.poseWalk} title={copy.poseWalk} aria-pressed={motion==='walk'} onClick={()=>setMotion('walk')}><Footprints size={18}/></button><button type="button" aria-label={copy.poseAction} title={copy.poseAction} aria-pressed={motion==='action'} onClick={()=>setMotion('action')}><Zap size={18}/></button><button type="button" aria-label={previewPlaying?copy.pausePreview:copy.playPreview} title={previewPlaying?copy.pausePreview:copy.playPreview} aria-pressed={previewPlaying} onClick={()=>setPreviewPlaying(value=>!value)}>{previewPlaying?<Pause size={18}/>:<Play size={18}/>}</button></div>
+        <div className="survivors-fitting-controls survivors-fitting-motion-controls" role="group" aria-label={copy.pose}><select className="survivors-fitting-attack-select" aria-label={copy.attackMotion} value={motion==='action'?attackKind:motion} onChange={event=>{const value=event.target.value;if(value==='idle'||value==='walk')setMotion(value);else if(value==='shot'||value==='spray'||value==='ultimate'){setAttackKind(value);setMotion('action');}}}><option value="idle">{copy.poseIdle}</option><option value="walk">{copy.poseWalk}</option><option value="shot">{copy.attackShot}</option><option value="spray">{copy.attackSpray}</option><option value="ultimate">{copy.attackUltimate}</option></select><button type="button" aria-label={previewPlaying?copy.pausePreview:copy.playPreview} title={previewPlaying?copy.pausePreview:copy.playPreview} aria-pressed={previewPlaying} onClick={()=>setPreviewPlaying(value=>!value)}>{previewPlaying?<Pause size={18}/>:<Play size={18}/>}</button></div>
       </div>
       <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[characterId].name}</h4>
         <p role="status">{previewItem ? `${copy.fitting}: ${copy.items[previewItem.id as keyof typeof copy.items].name}` : copy.currentLoadout}</p>

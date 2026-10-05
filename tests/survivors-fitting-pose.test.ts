@@ -16,3 +16,10 @@ it('rejects nonfinite or negative preview clocks without producing invalid trans
  expect(fittingPose(NaN,'walk',1,false)).toEqual(fittingPose(0,'walk',1,false));
  expect(fittingPose(-1,'action',1,false)).toEqual(fittingPose(0,'action',1,false));
 });
+it('uses the selected attack profile without changing the walk or reduced-motion pose',()=>{
+ expect(fittingPose(.3,'action',1,false,'shot').action).toBe(0);
+ expect(fittingPose(.3,'action',1,false,'spray').action).toBeGreaterThan(0);
+ expect(fittingPose(.3,'action',1,false,'ultimate').action).toBeGreaterThan(fittingPose(.3,'action',1,false,'spray').action);
+ expect(fittingPose(.3,'walk',1,false,'spray')).toEqual(fittingPose(.3,'walk',1,false,'shot'));
+ expect(fittingPose(.3,'action',1,true,'ultimate').action).toBe(0);
+});

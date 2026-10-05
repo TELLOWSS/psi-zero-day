@@ -67,8 +67,11 @@ it('changes fitting pose and playback without purchasing or changing the loadout
  try{
   act(()=>root.render(<SurvivorsEquipmentStore inventory={inventory} credits={0} message="" onChange={change}/>));
   const button=(name:string)=>host.querySelector<HTMLButtonElement>(`button[aria-label="${name}"]`)!;
-  act(()=>button('이동 포즈').click());expect(button('이동 포즈').getAttribute('aria-pressed')).toBe('true');
-  act(()=>button('공격 포즈').click());expect(button('공격 포즈').getAttribute('aria-pressed')).toBe('true');
+  const select=host.querySelector<HTMLSelectElement>('select[aria-label="미리보기 동작"]')!;
+  for(const value of ['walk','shot','spray','ultimate']){
+   act(()=>{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));});
+   expect(select.value).toBe(value);
+  }
   act(()=>button('미리보기 일시정지').click());expect(button('미리보기 재생').getAttribute('aria-pressed')).toBe('false');
   act(()=>button('왼쪽').click());expect(button('왼쪽').getAttribute('aria-pressed')).toBe('true');
   expect(change).not.toHaveBeenCalled();expect(inventory.equipped).toEqual(['voice_lens']);

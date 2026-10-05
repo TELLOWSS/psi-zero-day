@@ -12,14 +12,16 @@ import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from '.
 import {drawCarriedEquipment} from './survivors-carried-equipment';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {fittingPose,type FittingMotion} from './survivors-fitting-pose';
+import type {AttackMotion} from './survivors-attack-motion';
 
-export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='idle',playing=true,active=true }: { state: SurvivorsGameState; facing?:1|-1; zoom?:number;motion?:FittingMotion;playing?:boolean;active?:boolean }) {
+export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='idle',playing=true,active=true,attackKind='shot' }: { state: SurvivorsGameState; facing?:1|-1; zoom?:number;motion?:FittingMotion;playing?:boolean;active?:boolean;attackKind?:AttackMotion }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [assets,setAssets]=useState<{actor:HTMLImageElement;gear:HTMLImageElement;pickups:HTMLImageElement;wearables:WearableImages;cinematic:HTMLImageElement}>();
   const [reduced,setReduced]=useState(false);
   const clock=useRef(0);
+  useEffect(()=>{if(motion==='action')clock.current=0;},[motion,attackKind]);
   useEffect(()=>{
     const media=window.matchMedia?.('(prefers-reduced-motion: reduce)');if(!media)return;
     const change=()=>setReduced(media.matches);change();media.addEventListener('change',change);
@@ -50,7 +52,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
         ctx.clearRect(0, 0, 360, 360);
         const scale=Math.min(3.4,3*Math.max(.8,Math.min(1.25,zoom)));
         ctx.save(); ctx.translate(180, 360-28*scale); ctx.scale(scale, scale);
-        const pose=fittingPose(clock.current,motion,facing,reduced);
+        const pose=fittingPose(clock.current,motion,facing,reduced,attackKind);
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back');
         drawGroundedSprite(ctx, actor, 74, pose);
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front');
@@ -69,7 +71,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
     const visibility=()=>{cancelAnimationFrame(request);last=undefined;if(active&&playing&&!reduced&&!document.hidden)request=requestAnimationFrame(tick);};
     draw();setLoaded(true);visibility();document.addEventListener('visibilitychange',visibility);
     return ()=>{cancelAnimationFrame(request);document.removeEventListener('visibilitychange',visibility);};
-  },[assets,state,facing,zoom,motion,playing,active,reduced]);
+  },[assets,state,facing,zoom,motion,playing,active,reduced,attackKind]);
   return <figure className="survivors-fitting-art">
     <canvas ref={canvas} width={360} height={360} role="img" aria-label={`${CHARACTER_PROFILES[state.characterId].name} ${copy.fitting}`}/>
     {!loaded && <figcaption role="status">{failed ? copy.fittingFailure : copy.fittingLoading}</figcaption>}

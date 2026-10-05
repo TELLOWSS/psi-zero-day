@@ -15,15 +15,18 @@ try{
   await page.waitForFunction(()=>!document.querySelector('.survivors-fitting-art figcaption'));
   const storage=await page.evaluate(()=>JSON.stringify({...localStorage}));
   const pixels=()=>page.evaluate(()=>{const c=document.querySelector('.survivors-fitting-art canvas'),data=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=2166136261,nonblank=0;for(let i=0;i<data.length;i++){hash=Math.imul(hash^data[i],16777619);if(i%4===3&&data[i])nonblank++;}return {hash:hash>>>0,nonblank};});
-  await page.getByRole('button',{name:'이동 포즈',exact:true}).click();await page.waitForTimeout(100);const early=await pixels();await page.waitForTimeout(340);const moving=await pixels();
+  await page.getByRole('combobox',{name:'미리보기 동작',exact:true}).selectOption('walk');await page.waitForTimeout(100);const early=await pixels();await page.waitForTimeout(340);const moving=await pixels();
   await page.getByRole('button',{name:'미리보기 일시정지',exact:true}).click();const stopped=await pixels();await page.waitForTimeout(220);const still=await pixels();
   await page.getByRole('button',{name:'왼쪽',exact:true}).click();const mirrored=await pixels();
-  await page.getByRole('button',{name:'공격 포즈',exact:true}).click();await page.getByRole('button',{name:'미리보기 재생',exact:true}).click();await page.waitForTimeout(180);const action=await pixels();
+  await page.getByRole('combobox',{name:'미리보기 동작',exact:true}).selectOption('shot');await page.getByRole('button',{name:'미리보기 재생',exact:true}).click();await page.waitForTimeout(180);const action=await pixels();
+  const attackSelect=page.getByRole('combobox',{name:'미리보기 동작',exact:true});
+  for(const kind of ['shot','spray','ultimate']){await attackSelect.selectOption(kind);if(await attackSelect.inputValue()!==kind)throw new Error('Attack selection failed');}
+  await page.waitForTimeout(180);
   await page.screenshot({path:path.join(out,`${width}x${height}-action.png`)});
   if(width>height&&height<=560){
    const fits=await page.evaluate(()=>{
     const canvas=document.querySelector('.survivors-fitting-art canvas').getBoundingClientRect(),tabs=document.querySelector('.survivors-store-tabs').getBoundingClientRect();
-    return canvas.top>=tabs.bottom&&[...document.querySelectorAll('.survivors-fitting-controls button')].every(button=>button.getBoundingClientRect().bottom<=innerHeight-16);
+    return canvas.top>=tabs.bottom&&[...document.querySelectorAll('.survivors-fitting-controls button, .survivors-fitting-attack-select')].every(button=>button.getBoundingClientRect().bottom<=innerHeight-16);
    });if(!fits)throw new Error('Landscape fitting canvas or controls are clipped');
   }
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);const reduced=await pixels();await page.waitForTimeout(240);const quiet=await pixels();

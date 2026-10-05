@@ -2218,6 +2218,8 @@
 .survivors-fitting-controls button[aria-pressed="true"] {background:#a5dfbd;color:#10281b;}
 .survivors-fitting-controls label {display:flex;align-items:center;gap:8px;font-size:12px;}
 .survivors-fitting-controls input {max-width:130px;min-height:44px;accent-color:#a5dfbd;}
+.survivors-fitting-motion-controls { flex-wrap:nowrap; }
+.survivors-fitting-attack-select { flex:1; min-width:0; min-height:44px; padding:6px 8px; border:1px solid #688373; border-radius:4px; background:#20352a; color:#e4f3ea; font-size:13px; }
 .survivors-fitting-slots {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
 .survivors-fitting-slots label {display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;color:#d8e8de;}
 .survivors-fitting-slots select {width:100%;max-width:100%;min-height:44px;background:#20352a;color:#eef5f0;border:1px solid #688373;border-radius:4px;padding:8px;font-size:13px;}
