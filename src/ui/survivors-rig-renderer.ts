@@ -1,6 +1,7 @@
 import { footTravel, soleContact } from './survivors-ground-contact';
 import { ACTOR_RIGS, solveKnee, type ActorRig, type Joint, type LegRig } from './survivors-animation-rig';
 import type { SpritePose } from './survivors-sprite-motion';
+import {cachedGaitPhase,GAIT_PHASES} from './survivors-gait-phase';
 interface SourceRect {x:number;y:number;width:number;height:number}
 interface Prepared { texture:HTMLCanvasElement; legTexture:HTMLCanvasElement; rig:ActorRig; frames:Map<string,HTMLCanvasElement>; width:number }
 const prepared = new WeakMap<HTMLImageElement,Prepared>();
@@ -126,13 +127,13 @@ function bake(p:Prepared,phase:number,running:boolean,directionY:number,brace:nu
 /** Cached textured joint poses: no redraw of dozens of mesh triangles during steady gameplay. */
 export function drawRiggedActor(ctx:CanvasRenderingContext2D,image:HTMLImageElement,height:number,pose:SpritePose):boolean {
  const p=prepared.get(image);if(!p || (pose.gaitBlend===0 && pose.reaction===0 && pose.action===0))return false;
- const phase=Math.floor(pose.cycle/(Math.PI*2)*16)%16;
+ const phase=cachedGaitPhase(pose.cycle);
  const dy=Math.round(pose.directionY*32)/32;
  const reaction=Math.round(pose.reaction*3)/3,action=Math.round(pose.action*2)/2;
  const stride=Math.round(pose.stride*10)/10;
  const running=pose.stride/Math.sqrt(1-.64*pose.directionY*pose.directionY)>60,blend=Math.round(pose.gaitBlend*4)/4;
  const key=`${phase}:${running}:${dy}:${reaction}:${action}:${blend}:${height}:${stride}`;
- let frame=p.frames.get(key);if(!frame){frame=bake(p,phase,running,dy,reaction,action,blend,height,stride);p.frames.set(key,frame);if(p.frames.size>24)p.frames.delete(p.frames.keys().next().value!);}
+ let frame=p.frames.get(key);if(!frame){frame=bake(p,phase,running,dy,reaction,action,blend,height,stride);p.frames.set(key,frame);if(p.frames.size>GAIT_PHASES)p.frames.delete(p.frames.keys().next().value!);}
  else {p.frames.delete(key);p.frames.set(key,frame);}
  const scale=height/BODY;
  ctx.save();ctx.scale(pose.facing,1);ctx.transform(1,0,pose.lean,1,0,0);

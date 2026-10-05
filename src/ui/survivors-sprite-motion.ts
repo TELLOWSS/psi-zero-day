@@ -30,9 +30,12 @@ export class SpriteMotionTracker {
     const reaction = Math.max(0, Math.min(1, (reactionUntil - clock) / .18));
     const actionUntil = this.actions.get(entity) ?? 0;
     const action = Math.max(0, Math.min(1, (actionUntil - clock) / .24));
+    const targetLean = moving ? Math.max(-.035, Math.min(.035, dx / Math.max(elapsed, .001) * .0002)) : reaction * .025;
+    const leanBlend = 1 - Math.exp(-Math.max(0, elapsed) / .075);
+    const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
     const pose: SpritePose = {
       moving, cycle, facing,
-      lean: moving ? Math.max(-.035, Math.min(.035, dx / Math.max(elapsed, .001) * .0002)) : reaction * .025,
+      lean,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
       stride, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY,
