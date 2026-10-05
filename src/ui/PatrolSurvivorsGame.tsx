@@ -1,4 +1,5 @@
 import { CombatDirection } from './survivors-combat-direction';
+import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
 import { Pause, Play, Package, Shield, ArrowUp } from 'lucide-react';
 import focusText from '../../content/localization/survivors-focus-ko.json';
@@ -1040,6 +1041,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
     let motions = new SpriteMotionTracker();
     let direction = new CombatDirection();
+    let bossDirection=new BossEncounterDirection();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let prevNeutralized = 0;
@@ -1059,6 +1061,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         previousEngine = engine;
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
+        bossDirection=new BossEncounterDirection();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -1088,7 +1091,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (engine.state.phase === 'playing') {
         projectileFeedbackRef.current.advance(dt);
         direction.advance(dt);
+        bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+        bossDirection.observe(engine.state);
         const encounter=ACCOUNTABILITY_CASES.find(row=>row.stage===engine.state.stageId);
         const ledger=accountabilityRef.current;
         if(encounter&&engine.state.gameTime>=2&&!storyRadioRef.current.has(engine)){storyRadioRef.current.add(engine);audioRef.current.playDecisionCue('evidence');audioRef.current.duckMusic(.8);}
@@ -1423,6 +1428,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
       direction.drawFloor(ctx,spritesRef.current.cinematicAtlas,reducedMotionRef.current);
+      bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
       for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
       const tactics=engine.state.fieldTactics;
