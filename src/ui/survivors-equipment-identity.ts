@@ -22,9 +22,9 @@ export const EQUIPMENT_AURAS={
 export const EVOLUTION_IDENTITIES:Record<EvolutionPerkId,{kind:ProjectileKind;color:string;cell:number;marks:number}>={
   satellite_broadcast:{kind:'satellite_wave',color:'#ffd478',cell:0,marks:5},
   cryo_blizzard:{kind:'cryo_blast',color:'#b2f3ff',cell:1,marks:6},
-  tesla_dome:{kind:'tesla_bolt',color:'#a8ed86',cell:1,marks:3},
-  emf_barricade:{kind:'emf_beam',color:'#ffbd72',cell:0,marks:4},
-  hunter_swarm:{kind:'hunter_beam',color:'#e2b6ff',cell:2,marks:3},
+  tesla_dome:{kind:'tesla_bolt',color:'#a8ed86',cell:2,marks:3},
+  emf_barricade:{kind:'emf_beam',color:'#ffbd72',cell:3,marks:4},
+  hunter_swarm:{kind:'hunter_beam',color:'#e2b6ff',cell:10,marks:3},
 };
 export function isEvolvedProjectile(kind:ProjectileKind):boolean {
   return Object.values(EVOLUTION_IDENTITIES).some(identity=>identity.kind===kind);
@@ -36,6 +36,20 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   if(!ids.length)return;
   const time=reduced?0:state.gameTime;
   ctx.save();ctx.translate(state.player.x,state.player.y+3);
+  if(!reduced&&atlas?.naturalWidth){
+    const budget=Math.min(6,ids.length),strength=busy?.2:.34;
+    ctx.globalCompositeOperation='screen';
+    drawVfxCell(ctx,atlas,7,0,2,76,38,strength);
+    ids.slice(0,budget).forEach((id,index)=>{
+      const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
+      const angle=-Math.PI+index*Math.PI*2/budget;
+      const breath=1+Math.sin(time*1.6+index)*.035;
+      const x=Math.cos(angle)*28,y=Math.sin(angle)*11+4;
+      // Material fragments hug the foot plane, not floating beside the body.
+      drawVfxCell(ctx,atlas,aura.cell,x,y,(18+aura.marks*2)*breath,12+aura.marks,strength*.8,angle);
+    });
+    ctx.restore();return;
+  }
   ids.slice(0,6).forEach((id,index)=>{
     const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
     const angle=-Math.PI+index*Math.PI*2/Math.max(1,ids.length);
@@ -66,6 +80,17 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   const active=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0);
   if(!active.length)return;
   ctx.save();ctx.translate(state.player.x,state.player.y+4);
+  if(!reduced&&atlas?.naturalWidth){
+    ctx.globalCompositeOperation='screen';
+    drawVfxCell(ctx,atlas,7,0,3,92,46,busy?.16:.28);
+    active.forEach(([,identity],index)=>{
+      const width=40+identity.marks*2;
+      const breath=1+Math.sin(state.gameTime*1.7+index)*.035;
+      for(const side of [-1,1]){
+        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2),6,width*breath,30,busy?.17:.3,side*.3);
+      }
+    });ctx.restore();return;
+  }
   active.forEach(([,identity],index)=>{
     const phase=reduced?0:state.gameTime*.5;
     const radius=40+index*3;

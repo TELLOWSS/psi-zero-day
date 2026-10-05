@@ -29,7 +29,7 @@ it('gives all 16 purchases distinct aura identities without modifying gameplay',
   const ids=['broadcast_crown','sync_gauntlet','extraction_pack','shock_mantle','inspection_wing','barrier_forge'];
   const state=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
   const before=JSON.stringify(state),ctx=context();drawEquipmentIdentity(ctx,state,atlas,false);
-  expect(ctx.drawImage).toHaveBeenCalledTimes(6);expect(JSON.stringify(state)).toBe(before);
+  expect(ctx.drawImage).toHaveBeenCalledTimes(7);expect(JSON.stringify(state)).toBe(before);
   const quiet=context();drawEquipmentIdentity(quiet,state,atlas,true,true);
   expect(quiet.drawImage).not.toHaveBeenCalled();expect(quiet.stroke).toHaveBeenCalled();
   expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);

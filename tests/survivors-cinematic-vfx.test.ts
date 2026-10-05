@@ -54,12 +54,12 @@ describe('premium and high-tier cinematic presentation',()=>{
     expect(PREMIUM_VFX_SIGNATURES.voice_lens).toContain('advanced');
     expect(PREMIUM_VFX_SIGNATURES.command_array).toContain('elite');
   });
-  it('renders materially different runtime complexity across advanced elite and legendary communication gear',()=>{
-    const draw=(id:string)=>{const state=createInitialSurvivorsState('yoon',undefined,undefined,undefined,{owned:[id],equipped:[id]});state.gameTime=3;const ctx=context();drawPremiumProtocol(ctx,state,atlas,false,0);return {images:vi.mocked(ctx.drawImage).mock.calls.length,ellipses:vi.mocked(ctx.ellipse).mock.calls.length};};
-    const advanced=draw('voice_lens'),elite=draw('command_array'),legendary=draw('broadcast_crown');
-    expect(elite.images).toBeGreaterThan(advanced.images);
-    expect(legendary.ellipses).toBeGreaterThan(advanced.ellipses);
-    expect(elite.ellipses).toBeGreaterThan(advanced.ellipses);
+  it('keeps idle protocols quiet and responds to actual movement and healing',()=>{
+    const state=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['recovery_cell','extraction_pack'],equipped:['recovery_cell','extraction_pack']});
+    const ctx=context();drawPremiumProtocol(ctx,state,atlas,false);
+    expect(ctx.drawImage).not.toHaveBeenCalled();expect(ctx.ellipse).not.toHaveBeenCalled();
+    state.player.hp-=10;drawPremiumProtocol(ctx,state,atlas,false,0);
+    expect(ctx.drawImage).toHaveBeenCalledTimes(2);
   });
   it('keeps hunter impact violet when communication gear affects only radio weapons',()=>{
     const layer=new ProjectileFeedbackLayer(),ctx=context();

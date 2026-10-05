@@ -17,11 +17,10 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
   const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose):undefined;
   const flight=fittedInspection&&dock?inspectionFlights.sample(state,dock,reducedMotion):undefined;
-  if(gear.effects.shield>0) {
-    ctx.save();ctx.translate(x,y-37);ctx.strokeStyle=gear.shield>0?'#7fe7ff':'#637e89';
-    ctx.globalAlpha=gear.shield>0?.55:.22;ctx.lineWidth=gear.feedback>0?4:1.5;
-    ctx.beginPath();ctx.ellipse(0,0,22,38,0,-Math.PI/2,-Math.PI/2+Math.PI*2*(gear.shield/gear.effects.shield));ctx.stroke();
-    if(gear.feedback>0){ctx.globalAlpha=gear.feedback*.35;ctx.fillStyle='#82eaff';ctx.beginPath();ctx.ellipse(0,0,24,39,0,0,Math.PI*2);ctx.fill();}
+  if(gear.effects.shield>0&&gear.shield>0&&actorPose?.vfxAtlas?.naturalWidth) {
+    ctx.save();ctx.globalCompositeOperation='screen';
+    const ratio=Math.min(1,gear.shield/gear.effects.shield);
+    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,58,68,(gear.feedback>0&&!reducedMotion?.36:.12)*ratio);
     ctx.restore();
   }
   const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);

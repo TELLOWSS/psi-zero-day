@@ -3,6 +3,7 @@ import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol}
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {drawEquipmentIdentity,drawEvolutionIdentity} from './survivors-equipment-identity';
+import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
@@ -349,6 +350,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [showArsenalModal, setShowArsenalModal] = useState(false);
   const arsenalDialogRef = useRef<HTMLDivElement>(null);
   const upgradeDialogRef = useRef<HTMLDivElement>(null);
+  const ascensionRef = useRef(new EquipmentAscensionLayer());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
   const pendingStoreConfirmationRef=useRef(false);
@@ -2235,6 +2237,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
+      ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
       const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;
