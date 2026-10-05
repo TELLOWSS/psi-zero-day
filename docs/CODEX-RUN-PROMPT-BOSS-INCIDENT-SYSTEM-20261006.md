@@ -7,28 +7,84 @@ Read in this order:
 2. `GAMEPLAY_DOCTRINE.md`
 3. `docs/SURVIVORS-50-BOSS-GAMEPLAY-BIBLE-20261006.md`
 4. `content/design/survivors-boss-gameplay-v1.json`
-5. `docs/CODEX-HANDOFF-BOSS-INCIDENT-SYSTEM-20261006.md`
-6. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
-7. `content/design/survivors-boss-incidents-v1.json`
-8. `content/design/survivors-boss-control-gates-v1.json`
-9. existing boss engine/phase documents
+5. `src/domain/survivors-boss-gameplay.ts`
+6. `src/engine/survivors-boss-gameplay.ts`
+7. `tests/survivors-boss-gameplay.test.ts`
+8. `docs/CODEX-HANDOFF-BOSS-INCIDENT-SYSTEM-20261006.md`
+9. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
+10. `content/design/survivors-boss-incidents-v1.json`
+11. existing boss engine/phase documents
 
-Critical rebaseline:
-- Gameplay comes first in player experience: target perception 80% game / 20% explicit safety explanation.
-- Incident Bible is the realism source, NOT a player-facing checklist.
-- Ordinary bosses have one mandatory signature mechanic, not 2–3 explicit safety steps.
-- Combat loop is PATTERN → READ → WEAK POINT → BURST → FINISHER.
-- Raw DPS cannot erase the signature pattern, but build strength must matter strongly during burst.
-- Premium gear may improve combat expression and burst efficiency; it must never auto-solve the pattern.
-- Equipment/process danger may be visually exaggerated into a strong boss silhouette, but workers never become targets and machinery must remain recognizable.
-- Keep combat text short. Real-world meaning appears after clear in one sentence.
+## Director rebaseline
+
+- Player experience target: 80% game / 20% explicit safety explanation.
+- Incident Bible is the realism source, not a player-facing checklist.
+- Ordinary bosses have one signature mechanic.
+- Combat loop: PATTERN → READ → WEAK POINT → BURST → FINISHER.
+- Raw DPS cannot erase the signature pattern, but build strength must matter strongly during the burst window.
+- Premium gear may make combat more powerful, expressive and forgiving; it must never auto-solve the signature pattern.
+- Process/equipment danger may be theatrically exaggerated while remaining recognizable.
+- Workers never become attack targets.
+- Combat text stays short; real-world meaning is one sentence after clear.
 - Stage 50 alone becomes the whole-site Boss Wave.
 
-Start with Slice A:
-1. Add typed loader/registry for `survivors-boss-gameplay-v1.json`.
-2. Validate exactly 50 stage mappings and incident bossId references.
-3. Add no gameplay behavior yet.
-4. Run unit tests and typecheck.
-5. Stop and report using AGENTS.md format.
+## Already implemented — do not redo
 
-Do not implement old all-gates-before-core behavior. That rule is superseded by this gameplay rebaseline.
+Slice A is complete:
+- 50-entry gameplay overlay
+- typed gameplay domain contracts
+- validated gameplay registry
+- incident bossId cross-check
+- stage uniqueness/phase/timing tests
+- Stage 14 gameplay reference lock
+- Stage 50 final-wave content lock
+
+Do not rewrite the content unless a failing test proves a contradiction.
+
+## Start here — Slice B
+
+Implement the generic gameplay state machine only:
+
+```ts
+type BossCombatPhase =
+  | 'arrival'
+  | 'pattern'
+  | 'weak_point'
+  | 'burst'
+  | 'recovery'
+  | 'secured';
+```
+
+Required behavior:
+1. Existing boss arrival/secured compatibility remains intact.
+2. Each boss cycle begins in its authored signature pattern.
+3. The signature mechanic resolves through a reusable adapter result, not Korean prose parsing.
+4. Successful signature resolution enters `weak_point` then `burst`.
+5. `burstRemaining` uses the authored `burstWindowSeconds`.
+6. Stronger builds may finish inside fewer burst cycles.
+7. Pre-burst raw DPS cannot erase the signature mechanic.
+8. After a failed/incomplete burst, return to recovery then another pattern cycle.
+9. Existing phase-2 safe-boundary behavior stays unchanged.
+10. Ordinary non-boss hazards stay unchanged.
+11. No UI redesign in Slice B.
+12. No Stage 50 special implementation yet.
+
+Add focused unit tests for:
+- pre-burst damage floor/interlock
+- signature success opens burst
+- authored burst duration
+- insufficient burst damage returns to another cycle
+- phase-2 safe boundary remains stable
+- premium gear does not auto-resolve signature
+- ordinary hazards unaffected
+
+Run:
+- `npm test`
+- `npm run typecheck`
+
+Stop after Slice B and report only:
+- IMPLEMENTED
+- FILES
+- TEST
+- TODO
+- DIRECTOR REVIEW
