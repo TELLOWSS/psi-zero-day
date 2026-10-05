@@ -1,0 +1,743 @@
+{
+  "id": "survivors-boss-control-gates-v1",
+  "version": "1.0.0",
+  "status": "SOURCE_SEMANTICS_ONLY",
+  "gateVocabulary": [
+    {
+      "id": "STOP_WORK",
+      "description": "작업/장비를 즉시 안전정지 상태로 전환"
+    },
+    {
+      "id": "EVACUATE_ZONE",
+      "description": "위험반경 내 인원을 대피시키고 진입을 차단"
+    },
+    {
+      "id": "SEPARATE_ROUTE",
+      "description": "차량/자재/보행 또는 공종 동선을 물리적으로 분리"
+    },
+    {
+      "id": "ESTABLISH_SPOTTER",
+      "description": "신호수·유도원 또는 명확한 시야 연결을 확보"
+    },
+    {
+      "id": "LOCKOUT_TAGOUT",
+      "description": "에너지원 차단·잠금·표시"
+    },
+    {
+      "id": "VERIFY_ZERO_ENERGY",
+      "description": "검전/압력/운동 등 제로에너지 상태를 실제 확인"
+    },
+    {
+      "id": "ISOLATE_STORAGE",
+      "description": "가연물·용제·위험물 보관구역을 격리"
+    },
+    {
+      "id": "VENTILATE_MEASURE",
+      "description": "환기 후 계측으로 안전농도를 확인"
+    },
+    {
+      "id": "RESTORE_GUARD",
+      "description": "난간·덮개·가드·작업발판 등 집단방호를 복구"
+    },
+    {
+      "id": "VERIFY_RIGGING",
+      "description": "슬링·샤클·인양점·체결·하중상태를 확인"
+    },
+    {
+      "id": "STABILIZE_LOAD",
+      "description": "쐐기·받침·임시고정·결속 등으로 전도/이동을 안정화"
+    },
+    {
+      "id": "SHORE_SUPPORT",
+      "description": "동바리·버팀·임시지지로 하중경로를 확보"
+    },
+    {
+      "id": "CLEAR_BELOW",
+      "description": "낙하/양중 하부 작업자를 0명으로 만들고 출입을 통제"
+    },
+    {
+      "id": "HANDOFF_CONFIRM",
+      "description": "담당·잔여위험·재개조건을 기록하고 상대 팀 확인응답까지 완료"
+    },
+    {
+      "id": "VERIFY_EGRESS",
+      "description": "실제 피난/대피 통로가 연속적으로 확보됐는지 확인"
+    },
+    {
+      "id": "DEPRESSURIZE_VERIFY",
+      "description": "잔압을 제거하고 압력 0을 계측으로 확인"
+    },
+    {
+      "id": "ISOLATE_LINE",
+      "description": "배관/유체 계통의 상하류·바이패스를 식별해 격리"
+    },
+    {
+      "id": "DRAIN_DRY_AREA",
+      "description": "침수/고임수를 제거하고 전기 작업면을 건조·분리"
+    },
+    {
+      "id": "ESTABLISH_SAFE_ACCESS",
+      "description": "사다리/작업대/승강 접근을 안정화하고 하부를 통제"
+    }
+  ],
+  "mechanicProfiles": [
+    {
+      "id": "LINE_CHARGE_WITH_SPOTTER_GATE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "SWING_ARC_EXCLUSION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "DUAL_DROP_RIGGING_BALANCE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "INVISIBLE_PULSE_SENSOR_GATE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "TOPPLE_MOMENTUM",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "HIDDEN_SOURCE_DISCOVERY",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "PROGRESSIVE_COLLAPSE_POINTS",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "CONNECTION_PINCH_INTERLOCK",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "IGNITION_AND_VAPOR_DUAL_GATE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "CHAPTER_MULTI_INTERLOCK",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LOAD_PATH_TRANSFER",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "ROLLING_INERTIA",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "HOSE_WHIP_PRESSURE_RELEASE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LOWER_ZONE_AND_RIGGING",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "MISSING_WORKFACE_GUARD",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "WIND_SWING_EDGE_COMBO",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "VAPOR_LAYER_SENSOR",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "PANEL_TOPPLE_DIRECTION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "DUAL_SOURCE_BACKFEED",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LOW_VISIBILITY_CROSSING",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "WATER_CONDUCTIVITY_LINK",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "REPEATED_ROUTE_PRESSURE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "VERTICAL_LAYER_INTERLOCK",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "STALE_ROUTE_MISMATCH",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "PIPE_NETWORK_PRESSURE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "OCCLUSION_BLIND_ZONE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LAST_CENTIMETER_PINCH",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "DUAL_SOURCE_IDENTITY",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "EGRESS_AND_ATMOSPHERE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "EDGE_RUNAWAY_DUAL_CONSEQUENCE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "EARLY_STRIKE_LOAD_PATH",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LONG_LOAD_DUAL_END_SWING",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "POUR_RATE_PRESSURE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "SNAGGED_SCAFFOLD_TENSION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "RECEIVING_PAD_AND_WIND",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "MOVING_VAPOR_WIND",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "TOPPLE_ESCAPE_SIDE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "SWARM_TO_BOSS_DROPS",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "STORED_ENERGY_NETWORK",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "POWER_AND_CONTROL_DUAL_ISOLATION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "HIGH_COG_TURNING",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "WRONG_CUBICLE_IDENTIFICATION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "CENTER_OF_GRAVITY_DISCOVERY",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "HIDDEN_AUTOSTART_TIMER",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "CASCADE_SYSTEM_START",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "ELEVATED_REINSPECTION",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "LIVE_HANDOVER_ROUTE_TEST",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    },
+    {
+      "id": "ZERO_DAY_WHOLE_SITE",
+      "description": "See 50 Boss Incident Bible and stage mapping; implement as reusable adapter, not stage-specific branch."
+    }
+  ],
+  "stages": [
+    {
+      "stageId": "stage_01",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SEPARATE_ROUTE",
+        "ESTABLISH_SPOTTER"
+      ],
+      "mechanicId": "LINE_CHARGE_WITH_SPOTTER_GATE"
+    },
+    {
+      "stageId": "stage_02",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "SWING_ARC_EXCLUSION"
+    },
+    {
+      "stageId": "stage_03",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "CLEAR_BELOW",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "DUAL_DROP_RIGGING_BALANCE"
+    },
+    {
+      "stageId": "stage_04",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "VENTILATE_MEASURE"
+      ],
+      "mechanicId": "INVISIBLE_PULSE_SENSOR_GATE"
+    },
+    {
+      "stageId": "stage_05",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "TOPPLE_MOMENTUM"
+    },
+    {
+      "stageId": "stage_06",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "LOCKOUT_TAGOUT",
+        "VERIFY_ZERO_ENERGY"
+      ],
+      "mechanicId": "HIDDEN_SOURCE_DISCOVERY"
+    },
+    {
+      "stageId": "stage_07",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "SHORE_SUPPORT"
+      ],
+      "mechanicId": "PROGRESSIVE_COLLAPSE_POINTS"
+    },
+    {
+      "stageId": "stage_08",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "CONNECTION_PINCH_INTERLOCK"
+    },
+    {
+      "stageId": "stage_09",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "ISOLATE_STORAGE",
+        "VENTILATE_MEASURE"
+      ],
+      "mechanicId": "IGNITION_AND_VAPOR_DUAL_GATE"
+    },
+    {
+      "stageId": "stage_10",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "LOCKOUT_TAGOUT",
+        "VERIFY_ZERO_ENERGY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "CHAPTER_MULTI_INTERLOCK"
+    },
+    {
+      "stageId": "stage_11",
+      "requiredGateIds": [
+        "EVACUATE_ZONE",
+        "SHORE_SUPPORT",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "LOAD_PATH_TRANSFER"
+    },
+    {
+      "stageId": "stage_12",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "ROLLING_INERTIA"
+    },
+    {
+      "stageId": "stage_13",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "DEPRESSURIZE_VERIFY"
+      ],
+      "mechanicId": "HOSE_WHIP_PRESSURE_RELEASE"
+    },
+    {
+      "stageId": "stage_14",
+      "requiredGateIds": [
+        "CLEAR_BELOW",
+        "STOP_WORK",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "LOWER_ZONE_AND_RIGGING"
+    },
+    {
+      "stageId": "stage_15",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "RESTORE_GUARD",
+        "CLEAR_BELOW"
+      ],
+      "mechanicId": "MISSING_WORKFACE_GUARD"
+    },
+    {
+      "stageId": "stage_16",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "RESTORE_GUARD",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "WIND_SWING_EDGE_COMBO"
+    },
+    {
+      "stageId": "stage_17",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "ISOLATE_STORAGE",
+        "VENTILATE_MEASURE"
+      ],
+      "mechanicId": "VAPOR_LAYER_SENSOR"
+    },
+    {
+      "stageId": "stage_18",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "PANEL_TOPPLE_DIRECTION"
+    },
+    {
+      "stageId": "stage_19",
+      "requiredGateIds": [
+        "LOCKOUT_TAGOUT",
+        "VERIFY_ZERO_ENERGY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "DUAL_SOURCE_BACKFEED"
+    },
+    {
+      "stageId": "stage_20",
+      "requiredGateIds": [
+        "RESTORE_GUARD",
+        "LOCKOUT_TAGOUT",
+        "HANDOFF_CONFIRM",
+        "VERIFY_EGRESS"
+      ],
+      "mechanicId": "CHAPTER_MULTI_INTERLOCK"
+    },
+    {
+      "stageId": "stage_21",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SEPARATE_ROUTE",
+        "ESTABLISH_SPOTTER"
+      ],
+      "mechanicId": "LOW_VISIBILITY_CROSSING"
+    },
+    {
+      "stageId": "stage_22",
+      "requiredGateIds": [
+        "LOCKOUT_TAGOUT",
+        "DRAIN_DRY_AREA",
+        "VERIFY_ZERO_ENERGY"
+      ],
+      "mechanicId": "WATER_CONDUCTIVITY_LINK"
+    },
+    {
+      "stageId": "stage_23",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SEPARATE_ROUTE",
+        "ESTABLISH_SPOTTER",
+        "VERIFY_EGRESS"
+      ],
+      "mechanicId": "REPEATED_ROUTE_PRESSURE"
+    },
+    {
+      "stageId": "stage_24",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "CLEAR_BELOW",
+        "RESTORE_GUARD"
+      ],
+      "mechanicId": "VERTICAL_LAYER_INTERLOCK"
+    },
+    {
+      "stageId": "stage_25",
+      "requiredGateIds": [
+        "HANDOFF_CONFIRM",
+        "SEPARATE_ROUTE",
+        "VERIFY_EGRESS"
+      ],
+      "mechanicId": "STALE_ROUTE_MISMATCH"
+    },
+    {
+      "stageId": "stage_26",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "ISOLATE_LINE",
+        "DEPRESSURIZE_VERIFY"
+      ],
+      "mechanicId": "PIPE_NETWORK_PRESSURE"
+    },
+    {
+      "stageId": "stage_27",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SEPARATE_ROUTE",
+        "ESTABLISH_SPOTTER"
+      ],
+      "mechanicId": "OCCLUSION_BLIND_ZONE"
+    },
+    {
+      "stageId": "stage_28",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "LAST_CENTIMETER_PINCH"
+    },
+    {
+      "stageId": "stage_29",
+      "requiredGateIds": [
+        "LOCKOUT_TAGOUT",
+        "VERIFY_ZERO_ENERGY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "DUAL_SOURCE_IDENTITY"
+    },
+    {
+      "stageId": "stage_30",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "VERIFY_EGRESS",
+        "VENTILATE_MEASURE",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "EGRESS_AND_ATMOSPHERE"
+    },
+    {
+      "stageId": "stage_31",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "RESTORE_GUARD"
+      ],
+      "mechanicId": "EDGE_RUNAWAY_DUAL_CONSEQUENCE"
+    },
+    {
+      "stageId": "stage_32",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SHORE_SUPPORT",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "EARLY_STRIKE_LOAD_PATH"
+    },
+    {
+      "stageId": "stage_33",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "CLEAR_BELOW",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "LONG_LOAD_DUAL_END_SWING"
+    },
+    {
+      "stageId": "stage_34",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "SHORE_SUPPORT"
+      ],
+      "mechanicId": "POUR_RATE_PRESSURE"
+    },
+    {
+      "stageId": "stage_35",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "SHORE_SUPPORT"
+      ],
+      "mechanicId": "SNAGGED_SCAFFOLD_TENSION"
+    },
+    {
+      "stageId": "stage_36",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "RESTORE_GUARD",
+        "VERIFY_RIGGING"
+      ],
+      "mechanicId": "RECEIVING_PAD_AND_WIND"
+    },
+    {
+      "stageId": "stage_37",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "ISOLATE_STORAGE",
+        "VENTILATE_MEASURE"
+      ],
+      "mechanicId": "MOVING_VAPOR_WIND"
+    },
+    {
+      "stageId": "stage_38",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "TOPPLE_ESCAPE_SIDE"
+    },
+    {
+      "stageId": "stage_39",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "CLEAR_BELOW",
+        "RESTORE_GUARD"
+      ],
+      "mechanicId": "SWARM_TO_BOSS_DROPS"
+    },
+    {
+      "stageId": "stage_40",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "RESTORE_GUARD",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "CHAPTER_MULTI_INTERLOCK"
+    },
+    {
+      "stageId": "stage_41",
+      "requiredGateIds": [
+        "ISOLATE_LINE",
+        "DEPRESSURIZE_VERIFY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "STORED_ENERGY_NETWORK"
+    },
+    {
+      "stageId": "stage_42",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "LOCKOUT_TAGOUT",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "POWER_AND_CONTROL_DUAL_ISOLATION"
+    },
+    {
+      "stageId": "stage_43",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "STABILIZE_LOAD",
+        "SEPARATE_ROUTE"
+      ],
+      "mechanicId": "HIGH_COG_TURNING"
+    },
+    {
+      "stageId": "stage_44",
+      "requiredGateIds": [
+        "LOCKOUT_TAGOUT",
+        "VERIFY_ZERO_ENERGY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "WRONG_CUBICLE_IDENTIFICATION"
+    },
+    {
+      "stageId": "stage_45",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "VERIFY_RIGGING",
+        "CLEAR_BELOW"
+      ],
+      "mechanicId": "CENTER_OF_GRAVITY_DISCOVERY"
+    },
+    {
+      "stageId": "stage_46",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "LOCKOUT_TAGOUT",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "HIDDEN_AUTOSTART_TIMER"
+    },
+    {
+      "stageId": "stage_47",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "LOCKOUT_TAGOUT",
+        "DEPRESSURIZE_VERIFY",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "CASCADE_SYSTEM_START"
+    },
+    {
+      "stageId": "stage_48",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "ESTABLISH_SAFE_ACCESS",
+        "CLEAR_BELOW"
+      ],
+      "mechanicId": "ELEVATED_REINSPECTION"
+    },
+    {
+      "stageId": "stage_49",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "SEPARATE_ROUTE",
+        "VERIFY_EGRESS",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "LIVE_HANDOVER_ROUTE_TEST"
+    },
+    {
+      "stageId": "stage_50",
+      "requiredGateIds": [
+        "STOP_WORK",
+        "EVACUATE_ZONE",
+        "CLEAR_BELOW",
+        "LOCKOUT_TAGOUT",
+        "VERIFY_EGRESS",
+        "HANDOFF_CONFIRM"
+      ],
+      "mechanicId": "ZERO_DAY_WHOLE_SITE"
+    }
+  ],
+  "usage": {
+    "precedence": "survivors-boss-gameplay-v1.json controls player-facing combat behavior",
+    "rule": "These gates describe the real-world safety meaning behind each incident. They are NOT a requirement to expose every gate as a separate player action.",
+    "translation": "Gameplay adapters may compress multiple safety truths into one signature mechanic, weak-point condition, stagger, route change or pattern cancel."
+  }
+}
