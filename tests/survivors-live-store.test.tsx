@@ -35,5 +35,11 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   const wallet=JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!);
   expect(wallet.credits).toBe(4850);expect(wallet.inventory.durability).toEqual({voice_lens:85,shock_mantle:85});
   expect(host.querySelector('.survivors-clear-maintenance')?.textContent).toContain('85/100');
+  expect(host.querySelector('.survivors-results-grid')?.textContent).toContain('+50 PSI');
+  const starts=vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length;
+  click('같은 작전 다시 준비');
+  expect(vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length).toBe(starts);
+  expect(host.textContent).toContain('순찰 시작하기');
+  expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(4850);
  }finally{act(()=>root.unmount());}
 });

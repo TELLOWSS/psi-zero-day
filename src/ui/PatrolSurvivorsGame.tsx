@@ -20,6 +20,7 @@ import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equi
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
 import {persistStoreWallet,type StoreWallet} from '../app/survivors-store-wallet';
 import storeText from '../../content/localization/survivors-store-ko.json';
+import resultText from '../../content/localization/survivors-result-ko.json';
 import preflightText from '../../content/localization/survivors-preflight-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
@@ -3225,7 +3226,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </div>
               <div className="survivors-stat-box">
                 <span>획득 PSI 크레딧</span>
-                <strong style={{ color: '#fbbf24' }}>+{Math.round(score / 15)} PSI</strong>
+                <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
               </div>
             </div>
 
@@ -3235,10 +3236,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 className="survivors-btn-primary"
                 onClick={() => {
                   initGame(selectedChar, selectedStage);
-                  setTimeout(() => startGame(), 50);
                 }}
               >
-                다시 순찰하기
+                {resultText.retry_ready}
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 현장 복귀
@@ -3305,7 +3305,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </div>
               <div className="survivors-stat-box">
                 <span>획득 PSI 크레딧</span>
-                <strong style={{ color: '#fbbf24' }}>+{Math.round(score / 10)} PSI</strong>
+                <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
               </div>
             </div>
 
@@ -3331,7 +3331,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         initGame(selectedChar, nextStage);
                       }}
                     >
-                      다음 스테이지 진출 ➔
+                      {resultText.next_ready}
                     </button>
                   );
                 }
@@ -3342,10 +3342,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 className="survivors-btn-secondary"
                 onClick={() => {
                   initGame(selectedChar, selectedStage);
-                  setTimeout(() => startGame(), 50);
                 }}
               >
-                스테이지 재도전
+                {resultText.retry_ready}
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={exitSession}>
                 현장 복귀

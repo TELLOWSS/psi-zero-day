@@ -45,7 +45,7 @@ it('shows mission conditions before start, opens the shooting manual while pause
     click('순찰 재개');
     vi.mocked(engine!.update).mockImplementationOnce(() => { engine!.state.phase = 'victory'; });
     act(() => frame(performance.now() + 20));
-    click('다음 스테이지 진출 ➔');
+  click('다음 작전 준비');
     expect(host.querySelector('.survivors-ready-launch')?.textContent).toContain('STAGE 02');
     expect(host.querySelector('.survivors-mission-brief')?.textContent).toContain(PATROL_STAGES.stage_02.description);
     expect(host.querySelector('.survivors-ready-dialog')).not.toBeNull();
