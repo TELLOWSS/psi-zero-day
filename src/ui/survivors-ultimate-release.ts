@@ -2,6 +2,7 @@ import {drawVfxCell} from './survivors-cinematic-vfx';
 import {ATTACK_MOTION} from './survivors-attack-motion';
 
 export const ULTIMATE_RELEASE_DURATION=ATTACK_MOTION.ultimate.duration;
+export function ultimateSourceObscured(phase:string):boolean {return phase==='cutin'||phase==='shout';}
 /** Presentation clock only: ignition, pressure release, then a quiet material tail. */
 export function ultimateReleaseFrame(age:number){
   if(!Number.isFinite(age)||age<0||age>=ULTIMATE_RELEASE_DURATION)return undefined;

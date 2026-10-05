@@ -1932,7 +1932,7 @@
 
 /* Text-free realistic emergency art; Korean captions remain selectable runtime text. */
 .survivors-cutin-speedlines { display: none; }
-.survivors-director-cutin-layer.phase-invert { background: transparent; mix-blend-mode: normal; animation: none; }
+.survivors-director-cutin-layer.phase-invert { background: transparent; mix-blend-mode: normal; animation: none; opacity: 0; transition: none; }
 .survivors-cutin-diagonal-banner {
   width: min(960px, calc(100% - 32px)); height: auto; min-height: 280px;
   padding: 0; gap: 0; display: block; overflow: hidden;

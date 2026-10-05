@@ -1,5 +1,5 @@
 import {it,expect,vi} from 'vitest';
-import {ultimateReleaseFrame,drawUltimateRelease,ULTIMATE_RELEASE_DURATION} from '../src/ui/survivors-ultimate-release';
+import {ultimateReleaseFrame,drawUltimateRelease,ULTIMATE_RELEASE_DURATION,ultimateSourceObscured} from '../src/ui/survivors-ultimate-release';
 import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
 const atlas={naturalWidth:1536,naturalHeight:1024} as HTMLImageElement;
 const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn()}) as unknown as CanvasRenderingContext2D;
@@ -24,4 +24,18 @@ it('keeps only ultimate launch feedback alive for the authored gesture duration'
  const ctx=context();layer.draw(ctx,false,false,{atlas,equipped:[]});expect(ctx.drawImage).toHaveBeenCalledTimes(7);
  layer.advance(.25);expect(layer.size).toBe(1);layer.advance(.07);expect(layer.size).toBe(0);
  expect(event.radius).toBe(40);
+});
+it('holds the ultimate source behind the portrait, protects it in crowded feedback and releases once',()=>{
+ expect(ultimateSourceObscured('cutin')).toBe(true);expect(ultimateSourceObscured('shout')).toBe(true);
+ for(const phase of ['invert','recovering','none'])expect(ultimateSourceObscured(phase)).toBe(false);
+ const layer=new ProjectileFeedbackLayer(),ctx=context();
+ const event={projectileId:'held',kind:'shout_shockwave' as const,phase:'launch' as const,x:10,y:20,angle:0,radius:40};
+ layer.advance(0,true);layer.ingest([event]);
+ for(let i=0;i<8;i++)layer.advance(.25,true);
+ layer.draw(ctx,false,false,{atlas,equipped:[]});expect(ctx.drawImage).not.toHaveBeenCalled();expect(layer.size).toBe(1);
+ layer.ingest(Array.from({length:100},(_,i)=>({...event,projectileId:`contact${i}`,kind:'radio' as const,phase:'impact' as const,x:i*30})),true);
+ expect(layer.size).toBe(64);layer.advance(.25,true);expect(layer.size).toBe(1);
+ layer.advance(.05,false);layer.draw(ctx,false,false,{atlas,equipped:[]});expect(ctx.drawImage).toHaveBeenCalledTimes(7);
+ layer.advance(.25);layer.advance(.13);expect(layer.size).toBe(0);
+ layer.advance(0,true);layer.ingest([event]);layer.clear();layer.ingest([event]);layer.advance(.25);layer.advance(.2);expect(layer.size).toBe(0);
 });

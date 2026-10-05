@@ -10,11 +10,14 @@ export const MAX_PROJECTILE_FEEDBACK = 64;
 /** A bounded presentation pool; hit positions come only from confirmed engine events. */
 export class ProjectileFeedbackLayer {
   private effects: Effect[] = [];
+  private ultimateObscured=false;
+  private heldUltimate(e:Effect):boolean {return this.ultimateObscured&&e.event.kind==='shout_shockwave'&&e.event.phase==='launch'&&!e.event.worker;}
   get size(): number { return this.effects.length; }
-  clear(): void { this.effects.length = 0; }
-  advance(dt: number): void {
+  clear(): void { this.effects.length = 0;this.ultimateObscured=false; }
+  advance(dt: number,ultimateObscured=false): void {
+    this.ultimateObscured=ultimateObscured;
     const delta = Math.max(0, Math.min(.25, dt));
-    this.effects = this.effects.filter(e => { e.age += delta; return e.age < e.duration; });
+    this.effects = this.effects.filter(e => { if(!this.heldUltimate(e))e.age += delta; return e.age < e.duration; });
   }
   ingest(events: readonly ProjectileFeedback[], busy = false): void {
     // Area effects can report many contacts in one tick. Keep one response per
@@ -27,15 +30,18 @@ export class ProjectileFeedbackLayer {
       if (busy && event.phase === 'release') continue;
       const duration = event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:.10) : event.phase === 'impact' ? (event.critical ? .24 : .18) : .16;
       if (this.effects.length >= MAX_PROJECTILE_FEEDBACK) {
-        const decorative = this.effects.findIndex(e => e.event.phase !== 'impact');
+        const decorative = this.effects.findIndex(e => e.event.phase !== 'impact'&&!this.heldUltimate(e));
         if (decorative < 0 && event.phase !== 'impact') continue;
-        this.effects.splice(decorative < 0 ? 0 : decorative, 1);
+        const replace=decorative<0?this.effects.findIndex(e=>!this.heldUltimate(e)):decorative;
+        if(replace<0)continue;
+        this.effects.splice(replace, 1);
       }
       this.effects.push({event, age:0, duration});
     }
   }
   draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
     for (const effect of this.effects) {
+      if(this.heldUltimate(effect))continue;
       const {event:e, age, duration} = effect;
       if(e.blocked&&e.phase==='release')continue;
       const t = age/duration, spec = PROJECTILE_VFX[e.kind];

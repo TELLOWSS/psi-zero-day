@@ -16,6 +16,7 @@ import growthText from '../../content/localization/survivors-campaign50-ko.json'
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
+import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
@@ -1078,6 +1079,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let prevHp = 100;
     let prevLevel = 1;
     let facingAngle = 0;
+    let directorWasObscured=false;
 
     const renderLoop = (time: number) => {
       requestRef.current = requestAnimationFrame(renderLoop);
@@ -1089,6 +1091,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (!engine) return;
       if (previousEngine !== engine) {
         previousEngine = engine;
+        directorWasObscured=false;
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
         bossDirection=new BossEncounterDirection();
@@ -1119,10 +1122,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Update engine physics if playing
       if (engine.state.phase === 'playing') {
-        projectileFeedbackRef.current.advance(dt);
         direction.advance(dt);
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+        const directorObscured=ultimateSourceObscured(engine.state.directorCutinPhase);
+        projectileFeedbackRef.current.advance(dt,directorObscured);
+        if(directorWasObscured&&!directorObscured&&engine.state.directorCutinPhase==='invert')motions.act(engine.state.player,engine.state.gameTime,'ultimate');
+        directorWasObscured=directorObscured;
         bossDirection.observe(engine.state);
         const encounter=ACCOUNTABILITY_CASES.find(row=>row.stage===engine.state.stageId);
         const ledger=accountabilityRef.current;
