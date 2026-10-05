@@ -32,7 +32,7 @@ export const ADVANCED_PATROL_STAGES=Object.fromEntries(copy.stages.map(row=>{
     theme:chapter===2?'deep_excavation':chapter===3?'highrise_slab':'datacenter',
     floorColor:'#27322f',gridColor:'rgba(180,200,190,.06)',borderColor:chapter===2?'#76d9bd':chapter===3?'#efc876':'#81dcea',ambientColor:'rgba(220,230,210,.04)',icon:'🏗️',
     hazards:objects,hazardMix:row.mix as HazardType[],difficulty:1.6+(n-21)*.012,
-    bossName:row.name,bossTitle:'STOP · ISOLATE · VERIFY',bossType:row.boss as HazardType,bossHp:2600+(n-21)*35,
+    bossName:`${row.name} · ${copy.bosses[row.boss as keyof typeof copy.bosses]}`,bossTitle:'STOP · ISOLATE · VERIFY',bossType:row.boss as HazardType,bossHp:2600+(n-21)*35,
     narrative:{speaker:speakers[(n-21)%speakers.length]!,brief:row.brief,success:copy.success,residual:copy.residual},
     starChallenges:[
       {starIndex:1,metric:'victory',title:copy.objectives.clear,description:copy.objectives.clear_detail,currentValue:0,targetValue:1,isCompleted:false},

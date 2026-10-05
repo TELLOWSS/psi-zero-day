@@ -816,8 +816,8 @@ export class SurvivorsEngine {
     if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
-    // Objective handoff can finish a successful patrol before the survival deadline.
-    if ((this.state.gameTime >= this.state.maxTime || (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0)) && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    // Time alone never resolves an uncontrolled worksite.
+    if (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0 && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
@@ -1284,7 +1284,9 @@ export class SurvivorsEngine {
       const stageBossName = stage ? `${stage.bossName} (${stage.bossTitle})` : '타이탄 크레인 8000 (TITAN CRANE)';
       const stageBossType = stage?.bossType || 'CRANE_BOSS';
       const stageBossHp = stage?.bossHp;
-      if (time >= 60 && !this.state.stageBossSpawned) {
+      const operation = operationProgress(this.state);
+      const riskExposed = time >= operation.revealAt && operation.zonesSecured >= operation.zones && operation.controlsDone >= operation.controls;
+      if ((time >= operation.bossAt || riskExposed) && !this.state.stageBossSpawned) {
         this.state.stageBossSpawned = true;
         this.triggerBossAlert(stageBossName);
         this.spawnHazard(stageBossType, stageBossHp, true);
@@ -1372,7 +1374,7 @@ export class SurvivorsEngine {
       radius = 38;
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
-    const variant=isStageBoss?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random());
+    const variant=isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random());
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
     if(variant==='pulse_gas'){radius=58;expValue*=2;}
     if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}

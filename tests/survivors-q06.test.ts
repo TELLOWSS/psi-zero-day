@@ -1,4 +1,5 @@
 import { it, expect } from 'vitest';
+import { completedOperation } from './fixtures/survivors-completed-operation';
 import { SurvivorsEngine, createInitialSurvivorsState, PERK_CATALOG } from '../src/engine/patrol-survivors-engine';
 import { STAGE_IDS } from '../src/app/survivors-save';
 it('deterministic engine smoke: movement, attacks, collection, perk choice/reroll, evolution, ultimate, pause, result and restart',()=>{
@@ -16,9 +17,9 @@ it('deterministic engine smoke: movement, attacks, collection, perk choice/rerol
  e.state.activePerks.radio_boost=PERK_CATALOG.radio_boost.maxLevel;
  e.applyPerk('satellite_broadcast');expect(e.state.activePerks.satellite_broadcast).toBe(1);
  e.state.ultimateCharge=100;expect(e.triggerDirectorShout()).toBe(true);expect(e.state.directorCutinPhase).toBe('cutin');
- e.state.maxTime=e.state.gameTime+0.01;e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');
+ completedOperation(e.state);e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');
  const restart=new SurvivorsEngine(createInitialSurvivorsState(),123);expect(restart.state.phase).toBe('ready');expect(restart.state.psiCredits).toBe(0);
 });
 it('all ten stage identities survive a terminal engine result (controlled fixture)',()=>{
- for(const stageId of STAGE_IDS){const e=new SurvivorsEngine(createInitialSurvivorsState('player',undefined,stageId),1);e.start();e.state.maxTime=1/60;e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');expect(e.state.stageId).toBe(stageId);expect(e.state.stage.id).toBe(stageId);}
+ for(const stageId of STAGE_IDS){const e=new SurvivorsEngine(createInitialSurvivorsState('player',undefined,stageId),1);e.start();completedOperation(e.state);e.update(1/60,{moveX:0,moveY:0});expect(e.state.phase).toBe('victory');expect(e.state.stageId).toBe(stageId);expect(e.state.stage.id).toBe(stageId);}
 });

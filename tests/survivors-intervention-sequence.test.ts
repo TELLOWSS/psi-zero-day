@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
+import { completedOperation } from './fixtures/survivors-completed-operation';
 
 const idle = { moveX: 0, moveY: 0 };
 function shouting() {
@@ -54,7 +55,7 @@ describe('intervention before queued upgrades', () => {
   it('keeps a simultaneous victory ahead of pending upgrades and clears the cutin', () => {
     const engine = shouting();
     engine.addExp(100);
-    engine.state.gameTime = engine.state.maxTime - 0.001;
+    completedOperation(engine.state);
     engine.update(1 / 60, idle);
     expect(engine.state.phase).toBe('victory');
     expect(engine.state.currentExp).toBe(100);

@@ -2492,7 +2492,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         <div className="survivors-hud-center">
           <div className="survivors-timer">
             <strong>{formatTime(gameTime)}</strong>
-            <small>/ 03:00</small>
+            <small>{operationText.time}</small>
           </div>
           <div className="survivors-score-badge">
             <span>SAFE SCORE</span>
@@ -2570,7 +2570,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>}
             {engineRef.current && (() => {
               const progress=operationProgress(engineRef.current.state);
-              const next=!progress.boss ? operationText.boss : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : progress.complete?tacticsText.continue:`${operationText.time} ${Math.floor(engineRef.current.state.gameTime)}/${progress.earliest}s`;
+              const boss=engineRef.current.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+              const next=boss ? `${engineRef.current.state.stage.bossName} · ${Math.ceil(boss.hp)}/${boss.maxHp}` : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : !progress.boss ? `${operationText.boss} · ${engineRef.current.state.stage.bossName}` : tacticsText.continue;
               const cadence=PATROL_DIFFICULTIES[engineRef.current.state.difficulty ?? 'standard'].supplyEvery;
               const gate=engineRef.current.state.supplyGate;
               const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
@@ -2799,7 +2800,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       <h4>{stg.name}</h4>
                       {stg.stageNumber>20&&<small className="survivors-stage-tier">{stg.stageNumber===50?growthText.final_stage:growthText.high_stage} · {String(stg.stageNumber).padStart(2,'0')}/50</small>}
                       <span className="survivors-stage-sub">{stg.subtitle}</span>
-                      {isUnlocked && <small className="survivors-operation-preview">{operationText.modes[operationPlan(stg).mode]} · {operationPlan(stg).earliest}–180s</small>}
+                      {isUnlocked && <small className="survivors-operation-preview">{operationText.modes[operationPlan(stg).mode]} · {operationText.victory_goal}</small>}
                       <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE ${String(stg.stageNumber - 1).padStart(2, '0')}) 완수 시 해금`}</p>
                       <div className="survivors-stage-meta">
                         <span>{isUnlocked ? `👹 ${stg.bossName}` : '보안 인가 필요'}</span>
@@ -3091,7 +3092,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
             <SurvivorsAudioMixer audio={audioRef.current}/>
-            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
+            <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls}</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>{storeText.shopEntry}</button>
@@ -3177,7 +3178,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
 
-            <p className="survivors-story-result">{engineRef.current?.state.fieldTactics?.handoff?.remaining === 0 && engineRef.current.state.gameTime < engineRef.current.state.maxTime ? operationText.handoff : operationText.timeout}</p>
+            <p className="survivors-story-result">{operationText.handoff}</p>
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}
             {storeMessage===storeText.failure&&<p role="alert">{storeMessage}</p>}
             {/* 3-STAR CHALLENGES DEBRIEFING */}

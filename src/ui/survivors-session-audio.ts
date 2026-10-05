@@ -37,11 +37,11 @@ export class SurvivorsSessionAudio {
     }));return results.every(Boolean);
   }
   /** One session-owned recording per event; bounded, cached and cancelled on pause/dispose. */
-  playRecordedEffect(id:RecordedSfxId,position?:{x:number;y:number},listener?:{x:number;y:number},busy=false):boolean {
+  playRecordedEffect(id:RecordedSfxId,position?:{x:number;y:number},listener?:{x:number;y:number},busy=false,rate=1,variant=''):boolean {
     if(this.recordedFailures.has(id))return false;
     const asset=recordedSfxAsset(id),ctx=this.ensureBuses();
     if(!ctx||this.muted||!asset.uri||!asset.sha256||!asset.rights)return false;
-    const now=ctx.currentTime,key='recorded:'+id,previous=this.equipmentTimes.get(key);
+    const now=ctx.currentTime,key='recorded:'+id+':'+variant,previous=this.equipmentTimes.get(key);
     if(previous!==undefined&&now-previous<(busy?.16:id.startsWith('drone_')&&id!=='drone_release'?.35:.10))return true;
     this.equipmentTimes.set(key,now);
     const epoch=this.epoch;
@@ -50,10 +50,13 @@ export class SurvivorsSessionAudio {
       const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.003;
       const ui=id.startsWith('ui_'),distance=position&&listener?Math.hypot(position.x-listener.x,position.y-listener.y):0;
       const level=(ui?.45:id==='pickup'?.28:.6)/(1+distance/650);
-      source.buffer=buffer;gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
-      gain.gain.setValueAtTime(level,start+Math.max(.004,buffer.duration-.025));gain.gain.linearRampToValueAtTime(0,start+buffer.duration);
+      const playbackRate=Math.max(.75,Math.min(1.25,Number.isFinite(rate)?rate:1));
+      const duration=buffer.duration/playbackRate;
+      source.buffer=buffer;if(source.playbackRate)source.playbackRate.value=playbackRate;
+      gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
+      gain.gain.setValueAtTime(level,start+Math.max(.004,duration-.025));gain.gain.linearRampToValueAtTime(0,start+duration);
       if(!this.track(source,gain,ui?4:id==='pickup'?0:2))return;
-      source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+buffer.duration);
+      source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+duration);
     }).catch(error=>{if(epoch===this.epoch){this.recordedFailures.add(id);this.buffers.delete(asset.uri!);this.fail(String(error));}});
     return true;
   }
@@ -92,8 +95,8 @@ export class SurvivorsSessionAudio {
         const source = ctx.createBufferSource(), gain = ctx.createGain();
         source.buffer = buffer; source.connect(gain); gain.connect(this.buses!.Music);
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(0.55, start + overlap);
-        gain.gain.setValueAtTime(0.55, start + duration - (asset.loop?overlap:Math.min(.25,duration/4)));
+        gain.gain.linearRampToValueAtTime(0.95, start + overlap);
+        gain.gain.setValueAtTime(0.95, start + duration - (asset.loop?overlap:Math.min(.25,duration/4)));
         gain.gain.linearRampToValueAtTime(0, start + duration);
         this.scoreNodes.set(source, gain);
         source.onended = () => { this.scoreNodes.delete(source); source.disconnect(); gain.disconnect(); };
@@ -193,7 +196,7 @@ export class SurvivorsSessionAudio {
   setDialogueFocus(active:boolean) {
     this.dialogueFocus=active;const ctx=this.ensureBuses();if(!ctx)return;
     const gain=this.musicDuck!.gain;gain.cancelScheduledValues(ctx.currentTime);
-    gain.setValueAtTime(gain.value,ctx.currentTime);gain.linearRampToValueAtTime(active?.24:1,ctx.currentTime+.12);
+    gain.setValueAtTime(gain.value,ctx.currentTime);gain.linearRampToValueAtTime(active?.38:1,ctx.currentTime+.12);
     if(!active)this.duckUntil=0;
   }
   duckMusic(holdSeconds = 0.6) {
@@ -201,27 +204,28 @@ export class SurvivorsSessionAudio {
     const now=ctx.currentTime,gain=this.musicDuck!.gain;
     this.duckUntil=Math.max(this.duckUntil,now+Math.max(.1,holdSeconds));
     gain.cancelScheduledValues(now);gain.setValueAtTime(gain.value,now);
-    gain.linearRampToValueAtTime(.35,now+.035);
-    gain.setValueAtTime(.35,this.duckUntil);gain.linearRampToValueAtTime(1,this.duckUntil+.18);
+    gain.linearRampToValueAtTime(.65,now+.035);
+    gain.setValueAtTime(.65,this.duckUntil);gain.linearRampToValueAtTime(1,this.duckUntil+.18);
   }
   /** Equipment material sound remains procedural until the final recording gate. */
   playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false,equipped:readonly string[]=[]):void {
     const recorded=recordedEquipmentCue(event);
-    if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy))return;
+    const rate=event.kind==='satellite_wave'?.8:event.kind==='hunter_beam'?.86:1;
+    if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
     const key=event.kind+':'+event.phase,now=ctx.currentTime,previous=this.equipmentTimes.get(key);
     if(previous!==undefined&&now-previous<(busy?.16:.08))return;
     this.equipmentTimes.set(key,now);
     const impact=event.phase==='impact',release=event.phase==='release';
-    const level=release?.035:impact?.20:.13;
+    const level=event.worker?.13:release?.065:impact?.42:.32;
     const priority=impact?2:1;
     const look=cinematicLook(event.kind,5,equipped);
     const signature=look.premium&&!event.worker?look.palette:'base';
-    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature;
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature+':'+event.actorKind;
     let buffer=this.equipmentBuffers.get(bufferKey);
     if(!buffer) {
-      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped);
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped,event.actorKind);
       buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
       buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
     }

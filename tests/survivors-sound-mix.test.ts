@@ -9,7 +9,7 @@ it('ducking and silence preserve the user Music bus volume and overlapping alert
  }};
  vi.stubGlobal('AudioContext',vi.fn(function(){return ctx;}));
  const audio=new SurvivorsSessionAudio();audio.setVolume('Music',.2);audio.duckMusic(2);ctx.currentTime=2.3;audio.duckMusic(.1);
- const duck=params.find(p=>p.setValueAtTime.mock.calls.some(call=>call[0]===.35))!;
+ const duck=params.find(p=>p.setValueAtTime.mock.calls.some(call=>call[0]===.65))!;
  expect(duck.linearRampToValueAtTime).toHaveBeenLastCalledWith(1,4.18);
  audio.silence();expect(params.some(p=>p.value===.2)).toBe(true);
 });

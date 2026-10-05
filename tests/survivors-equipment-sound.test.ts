@@ -18,3 +18,9 @@ it('bakes distinct bounded signatures with quiet boundaries and deterministic ou
 it('uses the same calm confirmation on workers across equipment',()=>{
   expect(equipmentSoundSamples('radio','impact',true,48000)).toEqual(equipmentSoundSamples('tesla_bolt','impact',true,48000));
 });
+it('distinguishes metal, rubble and gas impacts without changing worker confirmations',()=>{
+ const types=['RUNAWAY_CART','FALLING_DEBRIS','GAS_LEAK'] as const;
+ expect(new Set(types.map(type=>equipmentSoundSamples('radio','impact',false,48000,[],type).slice(100,120).join(','))).size).toBe(3);
+ const calm=equipmentSoundSamples('radio','impact',true,48000);
+ for(const type of types)expect(equipmentSoundSamples('radio','impact',true,48000,[],type)).toEqual(calm);
+});

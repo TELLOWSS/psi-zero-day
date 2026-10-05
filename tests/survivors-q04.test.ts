@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { afterEach, expect, it, vi } from 'vitest';
 import { SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
+import { completedOperation } from './fixtures/survivors-completed-operation';
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
 import { DIRECTOR_SHOUT_VOICE, SURVIVORS_AUDIO_MANIFEST } from '../src/app/survivors-audio-manifest';
 import type { SurvivorsAudioAsset } from '../src/domain/survivors-audio';
@@ -12,7 +13,7 @@ it('engine emits real shots, impacts, controls and terminal events once and drai
  for(let i=0;i<40;i++)e.update(1/60,{moveX:0,moveY:0});
  const events=e.drainAudioEvents();expect(events.some(ev=>ev.type==='impact')).toBe(true);expect(events.some(ev=>ev.type==='control')).toBe(true);
  expect(new Set([...first,...events].map(ev=>ev.id)).size).toBe(first.length+events.length);
- const result=new SurvivorsEngine();result.start();result.state.maxTime=1/60;result.update(1/60,{moveX:0,moveY:0});result.update(1,{moveX:0,moveY:0});
+ const result=new SurvivorsEngine();result.start();completedOperation(result.state);result.update(1/60,{moveX:0,moveY:0});result.update(1,{moveX:0,moveY:0});
  expect(result.drainAudioEvents().filter(ev=>ev.type==='win')).toHaveLength(1);
 });
 it('no missing/unsigned manifest asset can be promoted or trigger decoding',async()=>{
