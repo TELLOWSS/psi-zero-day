@@ -128,7 +128,7 @@ describe('PatrolSurvivorsGame UI', () => {
       act(() => {
         arsenalBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
-      expect(host.textContent).toContain('5대 슈퍼 프로토콜 진화 도감');
+      expect(host.textContent).toContain('장비 성장 · 최종 진화');
       expect(host.textContent).toContain('위성 브로드캐스트');
       expect(host.textContent).toContain('극저온 액화질소 블리자드');
     } finally {

@@ -32,6 +32,7 @@ import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageG
 import { drawStageWorkface } from './survivors-stage-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
+import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { GameManual, gameManualText } from './GameManual';
@@ -347,6 +348,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [showRdModal, setShowRdModal] = useState(false);
   const [showArsenalModal, setShowArsenalModal] = useState(false);
   const arsenalDialogRef = useRef<HTMLDivElement>(null);
+  const upgradeDialogRef = useRef<HTMLDivElement>(null);
+  const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
   const pendingStoreConfirmationRef=useRef(false);
   const [clearGearWear,setClearGearWear]=useState<string[]>([]);
@@ -367,6 +370,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     document.addEventListener('keydown', onKey);
     return () => {document.removeEventListener('keydown', onKey); previous?.focus();};
   }, [showRdModal, showArsenalModal]);
+  useEffect(() => {
+    if (phase !== 'levelup') return;
+    const dialog = upgradeDialogRef.current;
+    if (!dialog) return;
+    dialog.querySelector<HTMLButtonElement>('button')?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const buttons = [...dialog.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')];
+      const first = buttons[0], last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [phase]);
 
   // Virtual Touch Joystick state
   const touchIdRef = useRef<number | null>(null);
@@ -387,7 +405,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   });
 
   // React UI Mirrors for HUD & Modals
-  const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const [preflightTab, setPreflightTab] = useState<'brief'|'stage'|'agent'|'settings'>('brief');
   const [readyMusic, setReadyMusic] = useState(false);
   const [lastDamage, setLastDamage] = useState<SurvivorsGameState['lastDamage']>();
@@ -2962,8 +2979,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* LEVEL UP MODAL */}
       {phase === 'levelup' && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title is-gold">⚡ 안전 장비 & 역량 강화</h2>
+          <div ref={upgradeDialogRef} className="survivors-modal-content survivors-upgrade-dialog" role="dialog" aria-modal="true" aria-labelledby="survivors-upgrade-title">
+            <h2 id="survivors-upgrade-title" className="survivors-modal-title is-gold">⚡ 안전 장비 & 역량 강화</h2>
             <p className="survivors-modal-sub">
               현장 안전 데이터 확보! 보급받을 안전 장비 또는 슈퍼 프로토콜을 선택하세요.
             </p>
@@ -2988,6 +3005,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
                       </h4>
                       <p>{perk.description}</p>
+                      <SurvivorsEvolutionPreview id={perk.id} level={perk.level} active={activePerks} />
                       {engineRef.current && <SurvivorsUpgradeStats id={perk.id} level={perk.level} previousId={previousId} previousLevel={previousLevel ?? 0} player={engineRef.current.state.player} inFloodlight={Boolean(engineRef.current.state.inFloodlight)} />}
                       {perk.category !== 'support' && <div className="survivors-upgrade-preview">{previousLevel>0&&<SurvivorsEquipmentIcon id={previousId} level={previousLevel} />}<span>{itemText.upgrade_preview} →</span><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>}
                     </div>

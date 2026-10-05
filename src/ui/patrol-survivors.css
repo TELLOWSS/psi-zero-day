@@ -2221,6 +2221,20 @@
   padding: 4px;
 }
 .survivors-perks-tray .survivors-perk-badge { width: 44px; height: 44px; flex-shrink: 0; }
+.survivors-upgrade-dialog { max-height: calc(100dvh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+.survivors-upgrade-dialog .survivors-perk-card { border-radius: 8px; }
+.survivors-upgrade-dialog .survivors-perk-card-info { min-width: 0; }
+.survivors-choice-evolution { display: flex; flex-direction: column; gap: 4px; padding: 8px 0; border-top: 1px solid #49606a; }
+.survivors-choice-evolution strong { font-size: 12px; color: #dde8ea; }
+.survivors-choice-evolution span, .survivors-choice-evolution small { font-size: 11px; color: #a8bcc0; }
+.survivors-choice-evolution[data-status="ready"] small { color: #65e2b7; }
+.survivors-choice-evolution[data-status="evolved"] small { color: #ffd265; }
+@media (min-width: 1100px) and (min-height: 600px) {
+  .survivors-upgrade-dialog { width: min(1080px, calc(100% - 32px)); max-width: 1080px; }
+  .survivors-upgrade-dialog .survivors-perk-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .survivors-upgrade-dialog .survivors-perk-card { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; }
+  .survivors-upgrade-dialog .survivors-perk-card-icon { align-self: flex-start; }
+}
 .survivors-arsenal-dialog {
   display: flex;
   flex-direction: column;
