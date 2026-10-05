@@ -52,6 +52,16 @@ export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly
   const cell=event.phase==='launch'?look.launchCell:look.impactCell;
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,cell,0,0,extent*scale,extent*scale*(event.phase==='launch'?.60:1),fade*(busy?.35:.8),event.phase==='launch'?event.angle:0);
+  if(event.phase==='impact'&&(look.premium||look.evolved)&&!busy){
+    // A directional hot core and material fragments, not a screen-wide flash.
+    drawVfxCell(ctx,atlas,look.launchCell,0,0,extent*.46,extent*.28,fade*.9,event.angle);
+    ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.7;ctx.globalAlpha=fade*.85;
+    for(let i=0;i<4;i++){
+      const angle=event.angle+(i-1.5)*.42,r=8+t*22;
+      ctx.beginPath();ctx.moveTo(Math.cos(angle)*r,Math.sin(angle)*r);
+      ctx.lineTo(Math.cos(angle)*(r+7),Math.sin(angle)*(r+7));ctx.stroke();
+    }
+  }
   if(look.evolved&&event.phase==='impact'){
     ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.4;ctx.globalAlpha=fade*(busy?.4:.85);
     const radius=12+t*14,marks=busy?3:kindContactMarks(event.kind);

@@ -4,7 +4,7 @@ import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
-import {drawEquipmentIdentity,drawEvolutionIdentity} from './survivors-equipment-identity';
+import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from './survivors-equipment-identity';
 import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
@@ -1776,16 +1776,24 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.scale(1, 0.58);
         const auraRadius = equipmentTuning('tesla_dome',1)!.radius;
         const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
-        grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
-        grad.addColorStop(0.6, 'rgba(14, 165, 233, 0.2)');
-        grad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+        grad.addColorStop(0, 'rgba(168, 237, 134, 0.20)');
+        grad.addColorStop(0.6, 'rgba(98, 210, 153, 0.08)');
+        grad.addColorStop(1, 'rgba(98, 210, 153, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 3;
-        ctx.stroke();
+        ctx.strokeStyle = 'rgba(168,237,134,.55)';
+        ctx.lineWidth = 1.3;
+        for(let i=0;i<6;i++){
+          const angle=i*Math.PI/3;
+          ctx.beginPath();ctx.arc(0,0,auraRadius,angle+.12,angle+.62);ctx.stroke();
+          const pulse=reducedMotionRef.current?0:Math.sin(engine.state.gameTime*3+i)*3;
+          const r=auraRadius-8;
+          ctx.beginPath();ctx.moveTo(Math.cos(angle)*(r-8),Math.sin(angle)*(r-8));
+          ctx.lineTo(Math.cos(angle+.035)*(r+pulse),Math.sin(angle+.035)*(r+pulse));
+          ctx.lineTo(Math.cos(angle)*(r+8),Math.sin(angle)*(r+8));ctx.stroke();
+        }
         ctx.restore();
       } else if (activePerks.floodlight > 0) {
         ctx.save();
@@ -2289,6 +2297,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
+      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};

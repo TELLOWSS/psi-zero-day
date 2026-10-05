@@ -31,7 +31,7 @@ describe('premium and high-tier cinematic presentation',()=>{
     const event={projectileId:'p',kind:'radio' as const,phase:'impact' as const,x:4,y:8,angle:0,radius:5};
     drawCinematicContact(ctx,{...event,worker:true},0,.2,look,atlas,false,false);expect(ctx.drawImage).not.toHaveBeenCalled();
     drawCinematicContact(ctx,event,0,.2,look,atlas,true,false);expect(ctx.drawImage).not.toHaveBeenCalled();
-    drawCinematicContact(ctx,event,0,.2,look,atlas,false,false);expect(ctx.drawImage).toHaveBeenCalledOnce();
+    drawCinematicContact(ctx,event,0,.2,look,atlas,false,false);expect(ctx.drawImage).toHaveBeenCalledTimes(2);
   });
   it('adds equipment presence and rotor emissions without changing gameplay state',()=>{
     const state=createInitialSurvivorsState('yoon',undefined,undefined,undefined,{owned:['broadcast_crown','shock_mantle','dispatch_drive'],equipped:['broadcast_crown','shock_mantle','dispatch_drive']});
@@ -67,7 +67,7 @@ describe('premium and high-tier cinematic presentation',()=>{
     layer.draw(ctx,false,false,{atlas,equipped:['broadcast_crown'],levels:{hunter_beam:5}});
     const args=vi.mocked(ctx.drawImage).mock.calls[0]!;
     expect(args[1]).toBe(724);expect(args[2]).toBe(724); // Violet impact cell 10.
-    expect(ctx.drawImage).toHaveBeenCalledOnce();
+    expect(ctx.drawImage).toHaveBeenCalledTimes(2);
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
   });
   it('keeps the existing renderer when the raster asset is not loaded and cones on the ground pass',()=>{

@@ -37,9 +37,9 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   const time=reduced?0:state.gameTime;
   ctx.save();ctx.translate(state.player.x,state.player.y+3);
   if(!reduced&&atlas?.naturalWidth){
-    const budget=Math.min(6,ids.length),strength=busy?.2:.34;
+    const budget=Math.min(6,ids.length),strength=busy?.32:.52;
     ctx.globalCompositeOperation='screen';
-    drawVfxCell(ctx,atlas,7,0,2,76,38,strength);
+    drawVfxCell(ctx,atlas,7,0,2,90,42,strength);
     ids.slice(0,budget).forEach((id,index)=>{
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
       const angle=-Math.PI+index*Math.PI*2/budget;
@@ -48,14 +48,14 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
       // Material fragments hug the foot plane, not floating beside the body.
       drawVfxCell(ctx,atlas,aura.cell,x,y,(18+aura.marks*2)*breath,12+aura.marks,strength*.8,angle);
     });
-    ctx.restore();return;
+    ctx.globalCompositeOperation='source-over';
   }
   ids.slice(0,6).forEach((id,index)=>{
     const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
     const angle=-Math.PI+index*Math.PI*2/Math.max(1,ids.length);
     const span=Math.min(1.4,Math.PI*1.65/Math.max(1,ids.length));
     const radius=28+index%2*4,breath=reduced?1:1+Math.sin(time*2+index)*.025;
-    ctx.strokeStyle=aura.color;ctx.lineWidth=1.4;ctx.globalAlpha=busy?.38:.65;
+    ctx.strokeStyle=aura.color;ctx.lineWidth=1.8;ctx.globalAlpha=busy?.48:.86;
     ctx.beginPath();ctx.ellipse(0,0,radius*breath,radius*.38*breath,0,angle,angle+span);ctx.stroke();
     const x=Math.cos(angle+span/2)*radius,y=Math.sin(angle+span/2)*radius*.38;
     ctx.save();ctx.translate(x,y);ctx.globalAlpha=busy?.45:.8;
@@ -70,7 +70,6 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
     else if(aura.motif==='shield'||aura.motif==='crown'){ctx.moveTo(-5,-3);ctx.lineTo(-3,2);ctx.lineTo(0,5);ctx.lineTo(3,2);ctx.lineTo(5,-3);}
     else {ctx.moveTo(-5,-3);ctx.lineTo(0,1);ctx.lineTo(5,-3);}
     ctx.stroke();ctx.restore();
-    if(!reduced&&!busy){ctx.save();ctx.globalCompositeOperation='screen';drawVfxCell(ctx,atlas,aura.cell,x,y,16,8,.22);ctx.restore();}
   });
   ctx.restore();
 }
@@ -82,24 +81,49 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   ctx.save();ctx.translate(state.player.x,state.player.y+4);
   if(!reduced&&atlas?.naturalWidth){
     ctx.globalCompositeOperation='screen';
-    drawVfxCell(ctx,atlas,7,0,3,92,46,busy?.16:.28);
+    drawVfxCell(ctx,atlas,7,0,3,104,48,busy?.27:.46);
     active.forEach(([,identity],index)=>{
       const width=40+identity.marks*2;
       const breath=1+Math.sin(state.gameTime*1.7+index)*.035;
       for(const side of [-1,1]){
-        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2),6,width*breath,30,busy?.17:.3,side*.3);
+        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2),6,width*breath,30,busy?.25:.44,side*.3);
       }
-    });ctx.restore();return;
+    });ctx.globalCompositeOperation='source-over';
   }
   active.forEach(([,identity],index)=>{
     const phase=reduced?0:state.gameTime*.5;
     const radius=40+index*3;
-    ctx.strokeStyle=identity.color;ctx.globalAlpha=busy?.35:.65;ctx.lineWidth=1.8;
+    ctx.strokeStyle=identity.color;ctx.globalAlpha=busy?.46:.85;ctx.lineWidth=2;
     for(let i=0;i<identity.marks;i++){
       const angle=i*Math.PI*2/identity.marks+phase;
       const x=Math.cos(angle)*radius,y=Math.sin(angle)*radius*.38;
       ctx.beginPath();ctx.moveTo(x-3,y-2);ctx.lineTo(x,y-5);ctx.lineTo(x+3,y-2);ctx.stroke();
-      if(!reduced&&!busy){ctx.save();ctx.globalCompositeOperation='screen';drawVfxCell(ctx,atlas,identity.cell,x,y,18,10,.28);ctx.restore();}
     }
   });ctx.restore();
+}
+
+/** Two dominant signatures hug the silhouette; no world-space range or floating item. */
+export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false):void {
+  const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([,v])=>({...v,evolved:true}));
+  const premium=(state.premiumGear?.equipped??[]).map(id=>EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]).filter(Boolean).sort((a,b)=>b.marks-a.marks).map(v=>({...v,evolved:false}));
+  const signatures=[...evolutions,...premium].slice(0,busy?1:2);
+  if(!signatures.length)return;
+  ctx.save();ctx.translate(state.player.x,state.player.y);
+  for(let i=0;i<signatures.length;i++){
+    const signature=signatures[i]!,side=i===0?-1:1;
+    const pulse=reduced?1:1+Math.sin(state.gameTime*2.6+i)*.06;
+    ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
+    ctx.globalAlpha=busy?.45:.75;
+    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.lineTo(side*22,-29);ctx.lineTo(side*17,-52);ctx.stroke();
+    if(!reduced&&atlas?.naturalWidth){
+      ctx.globalCompositeOperation='screen';
+      drawVfxCell(ctx,atlas,signature.cell,side*17,-32,signature.evolved?30:23,56*pulse,busy?.30:.48,side*.12);
+      drawVfxCell(ctx,atlas,signature.cell,side*11,-57,21,14,busy?.25:.48);
+      ctx.globalCompositeOperation='source-over';
+    }
+    if(signature.evolved){
+      ctx.globalAlpha=busy?.5:.9;ctx.beginPath();ctx.moveTo(side*9,-61);ctx.lineTo(side*15,-66);ctx.lineTo(side*20,-61);ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
