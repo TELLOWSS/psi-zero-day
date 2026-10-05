@@ -9,9 +9,24 @@ import {cinematicLook,drawCinematicContact} from '../src/ui/survivors-cinematic-
 import {CombatDirection} from '../src/ui/survivors-combat-direction';
 import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
 import {equipmentSoundSamples} from '../src/ui/survivors-equipment-sound';
+import {applyActorTorsoTransform} from '../src/ui/survivors-rig-renderer';
 const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} as HTMLImageElement;
 const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>new Proxy({} as CanvasRenderingContext2D,{get(target,key){if(!Reflect.has(target,key))Reflect.set(target,key,vi.fn());return Reflect.get(target,key);}});
+it('attaches the silhouette mantle to the same rigged torso transform as worn equipment',()=>{
+ const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['shock_mantle'],equipped:['shock_mantle']});
+ const base=new SpriteMotionTracker().sample(s.player,0,0,0);
+ const pose={...base,cycle:Math.PI/2,gaitBlend:1,action:1,reaction:.5,lean:.03,facing:-1 as const};
+ const expected=context();applyActorTorsoTransform(expected,pose,74,true);
+ const c=context(),before=JSON.stringify(s);drawEquipmentMantle(c,s,atlas,false,false,0,0,{pose,height:74,rigged:true});
+ expect(vi.mocked(c.scale).mock.calls).toEqual(vi.mocked(expected.scale).mock.calls);
+ expect(vi.mocked(c.transform).mock.calls).toEqual(vi.mocked(expected.transform).mock.calls);
+ expect(vi.mocked(c.translate).mock.calls.slice(1,2)).toEqual(vi.mocked(expected.translate).mock.calls);
+ expect(JSON.stringify(s)).toBe(before);
+ const quiet=context();drawEquipmentMantle(quiet,s,atlas,true,false,0,1,{pose,height:74,rigged:true});
+ expect(quiet.transform).not.toHaveBeenCalled();expect(quiet.scale).toHaveBeenCalledWith(-1,1);
+ expect(quiet.drawImage).not.toHaveBeenCalled();
+});
 it('uses a restrained shield receipt for locked hits without critical camera kick',()=>{
  const event={projectileId:'locked',kind:'radio' as const,phase:'impact' as const,x:0,y:0,angle:0,radius:10,blocked:true,critical:true,actorKind:'CRANE_BOSS' as const};
  const layer=new ProjectileFeedbackLayer(),ctx=context();layer.ingest([event]);layer.draw(ctx,false,false,{atlas,materialAtlas:atlas,equipped:[]});

@@ -70,12 +70,16 @@ try{
   const aura=await page.evaluate(async()=>{
    const {drawEquipmentIdentity,drawEquipmentMantle,drawEvolutionIdentity}=await import('/src/ui/survivors-equipment-identity.ts');
    const {createInitialSurvivorsState}=await import('/src/engine/patrol-survivors-engine.ts');
+   const {SpriteMotionTracker}=await import('/src/ui/survivors-sprite-motion.ts');
    const ids=['broadcast_crown','sync_gauntlet','shock_mantle'],s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
    s.player.x=120;s.player.y=120;s.activePerks.tesla_dome=1;const atlas=new Image();atlas.src='/assets/survivors/cinematic-vfx-v2.webp';await atlas.decode();
    const c=document.createElement('canvas');c.width=240;c.height=180;const ctx=c.getContext('2d');
    const frame=(time,reduced=false,action=0)=>{ctx.clearRect(0,0,240,180);s.gameTime=time;drawEquipmentIdentity(ctx,s,atlas,reduced);drawEvolutionIdentity(ctx,s,atlas,reduced);drawEquipmentMantle(ctx,s,atlas,reduced,false,undefined,action);return Array.from(ctx.getImageData(0,0,240,180).data);};
    const diff=(a,b)=>a.reduce((sum,v,i)=>sum+(v!==b[i]?1:0),0);
-   return {changed:diff(frame(0),frame(.8)),actionChanged:diff(frame(.8),frame(.8,false,1)),paused:diff(frame(.8),frame(.8)),reduced:diff(frame(0,true),frame(.8,true)),nonblank:frame(0).some(v=>v>0)};
+   const base=new SpriteMotionTracker().sample(s.player,120,120,.8);
+   const action={...base,cycle:Math.PI/2,gaitBlend:1,lean:.03,action:1,reaction:.5};
+   const attached=(pose,reduced=false)=>{ctx.clearRect(0,0,240,180);s.gameTime=.8;drawEquipmentMantle(ctx,s,atlas,reduced,false,undefined,0,{pose,height:74,rigged:true});return Array.from(ctx.getImageData(0,0,240,180).data);};
+   return {changed:diff(frame(0),frame(.8)),actionChanged:diff(frame(.8),frame(.8,false,1)),paused:diff(frame(.8),frame(.8)),reduced:diff(frame(0,true),frame(.8,true)),nonblank:frame(0).some(v=>v>0),attachedChanged:diff(attached(base),attached(action)),mirrorChanged:diff(attached(action),attached({...action,facing:-1})),attachedPaused:diff(attached(action),attached(action)),attachedReduced:diff(attached(base,true),attached(action,true))};
   });
   const bossArt=await page.evaluate(async()=>{
    const {BossEncounterDirection}=await import('/src/ui/survivors-boss-direction.ts');
@@ -101,7 +105,7 @@ try{
    const buffer=await a.buffers.get(a.scoreUri);return [...a.scoreNodes.keys()].some(source=>source.buffer===buffer);
   });
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  results.push({width,height,arrival,locked,secured,soundtrack,aura,bossArt,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
+  results.push({width,height,arrival,locked,secured,soundtrack,aura,bossArt,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&aura.attachedChanged>0&&aura.mirrorChanged>0&&aura.attachedPaused===0&&aura.attachedReduced===0&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
   await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({scope:'REAL_SPAWN_AND_CONTROLLED_CLEAR_UI_PLUS_RASTER_AURA_FRAMES',results},null,2));console.log(JSON.stringify(results));if(results.some(r=>!r.pass))process.exitCode=1;

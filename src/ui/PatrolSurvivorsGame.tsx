@@ -7,6 +7,7 @@ import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol}
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from './survivors-equipment-identity';
+import {ACTOR_RIGS} from './survivors-animation-rig';
 import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
@@ -2337,10 +2338,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const inspectionPhase=drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose,vfxAtlas:spritesRef.current.cinematicAtlas}:undefined);
       audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
       const projectileBusy=projectiles.length>60;
-      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
-      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined);
+      const auraMovingAngle=engine.state.phase==='playing'&&playerPose.moving?facingAngle:undefined;
+      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,auraMovingAngle,projectileBusy||hazards.length>45);
+      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle);
       drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
-      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined,direction.auraStrength);
+      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle,direction.auraStrength,inspectionActor?.naturalWidth?{pose:playerPose,height:74,rigged:Boolean(ACTOR_RIGS[inspectionActor.src.split('/').pop()??''])}:undefined);
       ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
