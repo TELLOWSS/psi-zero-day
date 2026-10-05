@@ -67,7 +67,7 @@ function line(ctx:CanvasRenderingContext2D,points:readonly (readonly [number,num
 }
 
 export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,level:number,time:number,reducedMotion=false,busy=false,cinematic?:{atlas?:HTMLImageElement;look:CinematicLook}):void {
-  if(cinematic && drawCinematicFlight(ctx,p,cinematic.look,cinematic.atlas,reducedMotion,busy))return;
+  if(cinematic && drawCinematicFlight(ctx,p,cinematic.look,cinematic.atlas,reducedMotion,busy,time))return;
   if(p.kind==='cone_trap')return; // Approved equipment sprite belongs to the ground pass.
   const v=projectileVisual(p,level,reducedMotion,busy),{spec,radius:r}=v;
   ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=v.alpha;ctx.lineCap='round';ctx.lineJoin='round';

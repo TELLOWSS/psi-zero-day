@@ -458,7 +458,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // React UI Mirrors for HUD & Modals
   const [preflightTab, setPreflightTab] = useState<'brief'|'stage'|'agent'|'settings'>('brief');
-  const [readyMusic, setReadyMusic] = useState(false);
+  const [readyMusic, setReadyMusic] = useState(true);
   const [lastDamage, setLastDamage] = useState<SurvivorsGameState['lastDamage']>();
   const [missionProgress, setMissionProgress] = useState(PATROL_STAGES[selectedStage].starChallenges.map(goal => ({ ...goal })));
   const [level, setLevel] = useState(1);
@@ -567,16 +567,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const sfxTimesRef = useRef(new Map<string, number>());
   const rewardedRef = useRef(new WeakSet<SurvivorsEngine>());
   useEffect(() => () => audioRef.current.dispose(), []);
-  useEffect(() => { audioRef.current.setMuted(audioMuted); if ((phase === 'paused'&&!accountabilityCase)||phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase, accountabilityCase]);
-
   useEffect(() => {
-    if(accountabilityCase&&!audioMuted){playScore('pressure');audioRef.current.setDialogueFocus(true);return;}
-    if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
-    if (phase === 'ready') playScore('ready');
-    if (phase === 'playing' && performance.now() >= scoreHoldRef.current) playScore(scoreStateRef.current);
-    if (phase === 'victory') playScore('success', 12);
-    if (phase === 'defeat') playScore('failure', 10);
-  }, [phase, audioMuted, accountabilityCase, readyMusic]);
+    // Scheduled music waits silently for browser permission, then resumes on ordinary interaction.
+    const unlock = () => { audioRef.current.getContext(); };
+    window.addEventListener('pointerdown', unlock, true);
+    return () => {
+      window.removeEventListener('pointerdown', unlock, true);
+    };
+  }, []);
+  useEffect(() => { audioRef.current.setMuted(audioMuted); if ((phase === 'paused'&&!accountabilityCase)||phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase, accountabilityCase]);
 
   // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
   const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
@@ -788,6 +787,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if(pendingStoreConfirmationRef.current){pendingStoreConfirmationRef.current=false;audioRef.current.playRecordedEffect('ui_equip');}
   }, [initGame, selectedChar, selectedStage]);
 
+  // Initialization cancels the old session's audio; schedule its replacement afterwards.
+  useEffect(() => {
+    if(accountabilityCase&&!audioMuted){playScore('pressure');audioRef.current.setDialogueFocus(true);return;}
+    if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
+    if (phase === 'ready') playScore('ready');
+    if (phase === 'playing' && performance.now() >= scoreHoldRef.current) playScore(scoreStateRef.current);
+    if (phase === 'victory') playScore('success', 12);
+    if (phase === 'defeat') playScore('failure', 10);
+  }, [phase, audioMuted, accountabilityCase, readyMusic, initGame]);
+
   const beginPatrol = () => {
     if (!engineRef.current) return;
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
@@ -863,6 +872,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Install once; actions read current engine state instead of render snapshots.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      audioRef.current.getContext();
       if(storeOpenRef.current)return;
       if (e.defaultPrevented || (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [role="dialog"]'))) return;
       if (e.target instanceof HTMLElement && e.target.closest('button, summary') && (e.code === 'Space' || e.code === 'Enter')) return;

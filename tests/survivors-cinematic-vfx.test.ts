@@ -8,6 +8,31 @@ const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>({save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),drawImage:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),arc:vi.fn(),stroke:vi.fn(),moveTo:vi.fn(),lineTo:vi.fn()}) as unknown as CanvasRenderingContext2D;
 const shot=(kind:ProjectileKind):Projectile=>({id:'p',kind,x:50,y:60,vx:100,vy:0,radius:4,damage:12,duration:.2,pierce:1});
 describe('premium and high-tier cinematic presentation',()=>{
+  it('advects item-specific pulses on simulation time and freezes reduced-motion flight',()=>{
+    for(const kind of ['radio','satellite_wave','drone_laser','hunter_beam'] as const){
+      const ctx=context(),p=Object.freeze(shot(kind)),look=cinematicLook(kind,5,['sync_gauntlet']);
+      const frame=(time:number,reduced=false)=>{
+        vi.mocked(ctx.moveTo).mockClear();vi.mocked(ctx.drawImage).mockClear();
+        drawCinematicFlight(ctx,p,look,atlas,reduced,false,time);
+        return {image:vi.mocked(ctx.drawImage).mock.calls.map(call=>call.slice(5)),pulses:vi.mocked(ctx.moveTo).mock.calls.slice()};
+      };
+      expect(frame(.1)).not.toEqual(frame(.22));
+      expect(frame(.22)).toEqual(frame(.22));
+      expect(frame(.1,true)).toEqual(frame(.22,true));
+      expect(p).toEqual(shot(kind));
+    }
+  });
+  it('expands contact fronts while the directional hot core settles',()=>{
+    const ctx=context(),look=cinematicLook('hunter_beam',5,['sync_gauntlet']);
+    const event={projectileId:'p',kind:'hunter_beam' as const,phase:'impact' as const,x:4,y:8,angle:0,radius:5};
+    const frame=(age:number)=>{
+      vi.mocked(ctx.drawImage).mockClear();drawCinematicContact(ctx,event,age,.4,look,atlas,false,false);
+      return vi.mocked(ctx.drawImage).mock.calls.map(call=>call[7] as number);
+    };
+    const early=frame(0),late=frame(.2);
+    expect(late[0]).toBeGreaterThan(early[0]!);expect(late[1]).toBeLessThan(early[1]!);
+    expect(frame(-1)).toEqual(early);
+  });
   it('keeps premium projectile identity weapon-specific instead of recoloring the whole battlefield',()=>{
     expect(cinematicLook('radio',5,['broadcast_crown'])).toMatchObject({palette:'gold',premium:true,tier:5,flightCell:4,impactCell:8});
     expect(cinematicLook('drone_laser',5,['broadcast_crown'])).toMatchObject({palette:'cyan',premium:false});

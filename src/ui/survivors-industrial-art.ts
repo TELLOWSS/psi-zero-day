@@ -129,8 +129,9 @@ export function industrialContactCell(actor: HazardType | undefined, critical: b
 export function drawIndustrialContact(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, event: ProjectileFeedback, age: number, duration: number, reduced: boolean, busy: boolean): boolean {
   const cell = industrialContactCell(event.actorKind, Boolean(event.critical));
   if (event.phase !== 'impact' || event.worker || reduced || cell === null || !atlas?.naturalWidth) return false;
-  const t = Math.min(1, age / duration);
-  const size = (event.critical ? 60 : 40) * (1 + t * .28);
+  const t = Math.min(1, Math.max(0, age / Math.max(.001, duration)));
+  const expansion=1-(1-t)**3;
+  const size = (event.critical ? 60 : 40) * (.72 + expansion * .56);
   ctx.save();ctx.rotate(event.angle);
   ctx.globalAlpha = (1 - t) ** 2 * (busy ? .6 : .95);
   // Each painted contact core is left of center; align it to the engine's hit point.

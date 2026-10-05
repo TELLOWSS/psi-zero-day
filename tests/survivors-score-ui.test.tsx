@@ -14,17 +14,26 @@ it('preserves evolution cue across perk-choice resume then restores patrol music
  const gradient={addColorStop:vi.fn()};
  const ctx=new Proxy({}, {get:(_,key)=>key==='createLinearGradient'||key==='createRadialGradient'?()=>gradient:key==='measureText'?()=>({width:10}):vi.fn(),set:()=>true});
  vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(ctx as CanvasRenderingContext2D);
- vi.spyOn(SurvivorsSessionAudio.prototype,'getContext').mockReturnValue({currentTime:0} as AudioContext);
+ const unlock=vi.spyOn(SurvivorsSessionAudio.prototype,'getContext').mockReturnValue({currentTime:0} as AudioContext);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
  const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
+ const silence=vi.spyOn(SurvivorsSessionAudio.prototype,'silence');
  let engine!:SurvivorsEngine;const start=SurvivorsEngine.prototype.start;
  vi.spyOn(SurvivorsEngine.prototype,'start').mockImplementation(function(this:SurvivorsEngine){engine=this;start.call(this);});
  const host=document.createElement('div');document.body.append(host);const root=createRoot(host);
  const tick=()=>act(()=>frame(clock));
  try {
   act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} />));
+  expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.ready');
+  expect(music.mock.invocationCallOrder.at(-1)).toBeGreaterThan(silence.mock.invocationCallOrder.at(-1)!);
+  const musicToggle=[...host.querySelectorAll('button')].find(b=>b.textContent==='배경 음악')!;
+  expect(musicToggle.getAttribute('aria-pressed')).toBe('true');
+  unlock.mockClear();act(()=>window.dispatchEvent(new Event('pointerdown')));
+  expect(unlock).toHaveBeenCalledTimes(1);
+  act(()=>musicToggle.click());expect(musicToggle.getAttribute('aria-pressed')).toBe('false');
+  act(()=>musicToggle.click());expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.ready');
   act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='순찰 시작하기')!.click());
   vi.spyOn(engine,'update').mockImplementationOnce(()=>{engine.state.phase='levelup';engine.state.perkOptions=[{...PERK_CATALOG.satellite_broadcast,level:1}];});
   clock=20;tick();music.mockClear();
@@ -34,5 +43,5 @@ it('preserves evolution cue across perk-choice resume then restores patrol music
   vi.spyOn(engine,'update').mockImplementation(()=>{});
   clock=500;tick();expect(music.mock.calls).toHaveLength(1);
   clock=4000;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.foundation');
- } finally {act(()=>root.unmount());host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
+ } finally {act(()=>root.unmount());unlock.mockClear();window.dispatchEvent(new Event('pointerdown'));expect(unlock).not.toHaveBeenCalled();host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
 });

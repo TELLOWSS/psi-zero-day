@@ -26,18 +26,25 @@ export function drawVfxCell(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|
   ctx.drawImage(atlas,cell%4*cw,Math.floor(cell/4)*ch,cw,ch,-w/2,-h/2,w,h);
   ctx.restore();return true;
 }
-export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):boolean {
+export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Projectile>,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean,time=0):boolean {
   if(!['radio','satellite_wave','drone_laser','hunter_beam'].includes(p.kind)||!atlas?.naturalWidth)return false;
   const alpha=Math.min(1,Math.max(0,p.duration/.12));
   const angle=Math.atan2(p.vy,p.vx);
-  const length=reduced?26:32+look.tier*9+(look.premium?8:0);
-  const width=(reduced?10:10+look.tier*2+(look.premium?3:0))*(busy?.72:1);
+  const beam=p.kind==='drone_laser'||p.kind==='hunter_beam';
+  const phase=reduced?0:((time*(beam?4:2.4)+p.duration*.3)%1+1)%1;
+  const breath=reduced?1:1+Math.sin(phase*Math.PI*2)*(busy?.025:.07);
+  const length=(reduced?26:32+look.tier*9+(look.premium?8:0))*breath;
+  const width=(reduced?10:10+look.tier*2+(look.premium?3:0))*(busy?.72:1)/breath;
   // Screen blending keeps the colored envelope rather than adding it to white.
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,look.flightCell,p.x-Math.cos(angle)*length*.20,p.y-Math.sin(angle)*length*.20,length,width,alpha*(look.premium?.92:.76),angle);
-  // Static pulse count remains legible even with reduced motion enabled.
+  // Advect small pulses along the painted envelope; never move the actual projectile.
   ctx.translate(p.x,p.y);ctx.rotate(angle);ctx.strokeStyle=look.color;ctx.lineWidth=1.2;ctx.globalAlpha=alpha*.75;
-  for(let i=0;i<look.tier;i++){ctx.beginPath();ctx.moveTo(-8-i*7,-width*.3);ctx.lineTo(-8-i*7,width*.3);ctx.stroke();}
+  for(let i=0;i<look.tier;i++){
+    const x=reduced?-8-i*7:-5-((i+phase)%look.tier)*7;
+    const spread=width*(beam?.18+.14*(1-phase):.3+.10*phase);
+    ctx.beginPath();ctx.moveTo(x,-spread);ctx.lineTo(x,spread);ctx.stroke();
+  }
   if(look.evolved){
     ctx.lineWidth=1.6;ctx.globalAlpha=alpha*(busy?.45:.8);
     for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(-length*.62,side*width*.42);ctx.lineTo(-length*.18,side*width*.28);ctx.lineTo(5,side*width*.12);ctx.stroke();}
@@ -46,26 +53,28 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {
   if(event.worker||reduced||!atlas?.naturalWidth||event.kind==='cone_trap')return;
-  const t=Math.min(1,age/duration),fade=(1-t)*(1-t);
+  const t=Math.min(1,Math.max(0,age/Math.max(.001,duration))),fade=(1-t)*(1-t);
+  const travel=1-(1-t)**3;
   const extent=(event.phase==='launch'?22:event.phase==='impact'?30:16)+look.tier*5+(look.premium?12:0);
-  const scale=event.phase==='impact'?1+t*.45:1-t*.3;
+  const scale=event.phase==='impact'?.72+travel*.73:event.phase==='launch'?.65+Math.sin(Math.min(1,t*2)*Math.PI/2)*.45:1-t*.3;
   const cell=event.phase==='launch'?look.launchCell:look.impactCell;
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,cell,0,0,extent*scale,extent*scale*(event.phase==='launch'?.60:1),fade*(busy?.35:.8),event.phase==='launch'?event.angle:0);
   if(event.phase==='impact'&&(look.premium||look.evolved)&&!busy){
     // A directional hot core and material fragments, not a screen-wide flash.
-    drawVfxCell(ctx,atlas,look.launchCell,0,0,extent*.46,extent*.28,fade*.9,event.angle);
+    drawVfxCell(ctx,atlas,look.launchCell,0,0,extent*(.46-travel*.20),extent*(.28-travel*.12),fade*.9,event.angle);
     ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.7;ctx.globalAlpha=fade*.85;
     for(let i=0;i<4;i++){
-      const angle=event.angle+(i-1.5)*.42,r=8+t*22;
+      const angle=event.angle+(i-1.5)*.42,r=8+travel*22;
       ctx.beginPath();ctx.moveTo(Math.cos(angle)*r,Math.sin(angle)*r);
       ctx.lineTo(Math.cos(angle)*(r+7),Math.sin(angle)*(r+7));ctx.stroke();
     }
   }
   if(look.evolved&&event.phase==='impact'){
     ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.4;ctx.globalAlpha=fade*(busy?.4:.85);
-    const radius=12+t*14,marks=busy?3:kindContactMarks(event.kind);
-    for(let i=0;i<marks;i++){const a=event.angle+i*Math.PI*2/marks;ctx.beginPath();ctx.moveTo(Math.cos(a)*radius,Math.sin(a)*radius*.6);ctx.lineTo(Math.cos(a)*(radius+6),Math.sin(a)*(radius+6)*.6);ctx.stroke();}
+    const radius=12+travel*14,marks=busy?3:kindContactMarks(event.kind);
+    const spin=event.kind==='tesla_bolt'?t*.7:event.kind==='hunter_beam'?-t*.35:0;
+    for(let i=0;i<marks;i++){const a=event.angle+i*Math.PI*2/marks+spin;ctx.beginPath();ctx.moveTo(Math.cos(a)*radius,Math.sin(a)*radius*.6);ctx.lineTo(Math.cos(a)*(radius+6*(1-t)),Math.sin(a)*(radius+6*(1-t))*.6);ctx.stroke();}
   }
   ctx.restore();
 }
