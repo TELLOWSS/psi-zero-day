@@ -57,8 +57,10 @@ export class SurvivorsSessionAudio {
     const family=recordedSfxFamily(id,this.recordedVersion).filter(asset=>asset.uri&&!this.recordedFailures.has(asset.uri));
     if(!family.length)return false;
     const ctx=this.ensureBuses();if(!ctx||this.muted)return false;
-    const now=ctx.currentTime,key='recorded:'+id+':'+variant,previous=this.equipmentTimes.get(key);
-    const interval=busy?.16:['drone_launch','drone_dock'].includes(id)?.35:['boss_alert','incident_secured'].includes(id)?.5:.10;
+    // Multiple drone types share a cadence so upgrades cannot stack repetitive launches.
+    const drone=['drone_release','drone_premium_release','drone_hunter_burst'].includes(id);
+    const now=ctx.currentTime,key=drone?'recorded:drone-fire':'recorded:'+id+':'+variant,previous=this.equipmentTimes.get(key);
+    const interval=drone?(busy?.30:.22):busy?.16:['drone_launch','drone_dock'].includes(id)?.35:['boss_alert','incident_secured'].includes(id)?.5:.10;
     if(previous!==undefined&&now-previous<interval)return true;
     const asset=family[this.recordedVariants.next(id,family.length)]!;
     if(!asset.uri||!asset.sha256||!asset.rights)return false;
@@ -68,12 +70,13 @@ export class SurvivorsSessionAudio {
       if(epoch!==this.epoch||this.muted||ctx!==this.context||ctx.currentTime-now>.2)return;
       const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.003;
       const ui=id.startsWith('ui_'),distance=position&&listener?Math.hypot(position.x-listener.x,position.y-listener.y):0;
-      const level=(ui?.45:id==='pickup'?.28:.6)/(1+distance/650);
+      const sustained=drone&&previous!==undefined&&now-previous<.8;
+      const level=(drone?(sustained?.22:.30):ui?.45:id==='pickup'?.28:.6)/(1+distance/650);
       const playbackRate=Math.max(.75,Math.min(1.25,Number.isFinite(rate)?rate:1));
-      const duration=buffer.duration/playbackRate;
+      const duration=Math.min(buffer.duration/playbackRate,drone?(id==='drone_hunter_burst'?.16:.12):Infinity);
       source.buffer=buffer;if(source.playbackRate)source.playbackRate.value=playbackRate;
       gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
-      gain.gain.setValueAtTime(level,start+Math.max(.004,duration-.025));gain.gain.linearRampToValueAtTime(0,start+duration);
+      gain.gain.setValueAtTime(level,start+Math.max(.004,duration-(drone?.04:.025)));gain.gain.linearRampToValueAtTime(0,start+duration);
       if(!this.track(source,gain,ui?4:['boss_alert','incident_secured','player_hit'].includes(id)?3:id==='pickup'?0:2))return;
       source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+duration);
     }).catch(error=>{if(epoch===this.epoch){this.recordedFailures.add(asset.uri!);this.buffers.delete(asset.uri!);this.fail(String(error));}});

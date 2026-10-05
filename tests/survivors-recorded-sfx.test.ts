@@ -28,6 +28,24 @@ it('validates all supplied files, applies only explicit mappings and preserves c
     expect(ingest.find(entry=>entry.id===asset.id)!.gainDb).toBeLessThanOrEqual(12);
   }
 });
+it('shares drone cadence across variants, shortens tails and softens sustained fire',async()=>{
+ const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();await audio.preloadEquipmentRecordings();
+ const gains:ReturnType<typeof ctx.createGain>[]=[];const createGain=ctx.createGain;
+ ctx.createGain=()=>{const node=createGain();gains.push(node);return node;};
+ audio.playRecordedEffect('drone_release',undefined,undefined,false,1,'base');await Promise.resolve();
+ ctx.currentTime=.1;audio.playRecordedEffect('drone_premium_release',undefined,undefined,false,1,'premium');await Promise.resolve();
+ expect(sources).toHaveLength(1);
+ ctx.currentTime=.23;audio.playRecordedEffect('drone_hunter_burst');await Promise.resolve();
+ expect(sources).toHaveLength(2);
+ expect(gains[0]!.gain.linearRampToValueAtTime).toHaveBeenCalledWith(.30,.006);
+ expect(gains[1]!.gain.linearRampToValueAtTime.mock.calls[0]![0]).toBe(.22);
+ expect(gains[1]!.gain.linearRampToValueAtTime.mock.calls[0]![1]).toBeCloseTo(.236);
+ expect(sources[0]!.stop).toHaveBeenCalledWith(.123);
+ expect(sources[1]!.stop).toHaveBeenCalledWith(.393);
+ ctx.currentTime=.46;audio.playRecordedEffect('drone_release',undefined,undefined,true);await Promise.resolve();expect(sources).toHaveLength(2);
+ ctx.currentTime=1.2;audio.playRecordedEffect('drone_release');await Promise.resolve();
+ expect(gains[2]!.gain.linearRampToValueAtTime.mock.calls[0]![0]).toBe(.30);audio.dispose();
+});
 it('maps trigger discharge not projectile expiry and preserves calm worker confirmations',()=>{
   const event={projectileId:'p',kind:'radio' as const,phase:'launch' as const,x:0,y:0,angle:0,radius:4};
   expect(recordedEquipmentCue(event)).toBe('radio_release');
