@@ -382,6 +382,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // React UI Mirrors for HUD & Modals
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const [preflightTab, setPreflightTab] = useState<'brief'|'stage'|'agent'|'settings'>('brief');
+  const [readyMusic, setReadyMusic] = useState(false);
   const [lastDamage, setLastDamage] = useState<SurvivorsGameState['lastDamage']>();
   const [missionProgress, setMissionProgress] = useState(PATROL_STAGES[selectedStage].starChallenges.map(goal => ({ ...goal })));
   const [level, setLevel] = useState(1);
@@ -463,28 +464,37 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   useEffect(() => {
     if(accountabilityCase&&!audioMuted){playScore('pressure');audioRef.current.setDialogueFocus(true);return;}
-    if (audioMuted || phase === 'ready' || phase === 'paused' || phase === 'levelup') { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
+    if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
+    if (phase === 'ready') playScore('ready');
     if (phase === 'playing' && performance.now() >= scoreHoldRef.current) playScore(scoreStateRef.current);
     if (phase === 'victory') playScore('success', 12);
     if (phase === 'defeat') playScore('failure', 10);
-  }, [phase, audioMuted, accountabilityCase]);
+  }, [phase, audioMuted, accountabilityCase, readyMusic]);
 
-  // Development synth; final orchestral assets are a separate production gate.
+  // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
   const playSfx = useCallback((type: 'impact' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
       const ctx = audioRef.current.getContext();
       if (!ctx) return;
-      if (type === 'shout' || type === 'evolution') {
-        scoreHoldRef.current = performance.now() + (type === 'shout' ? 4500 : 3500);
-        playScore(type === 'shout' ? 'intervention' : 'evolution', type === 'shout' ? 4 : 3);
+      if (type === 'evolution') {
+        scoreHoldRef.current = performance.now() + 3500;
+        playScore('evolution', 3);
+        return;
+      }
+      if(type==='win'||type==='defeat')return;
+      if(type==='shout'||type==='boss_alarm'){
+        const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id===`patrol.${type==='shout'?'intervention':'boss_alert'}`);
+        if(cue)void audioRef.current.auditionCue(cue);
+        if(type==='shout')void audioRef.current.playApproved([DIRECTOR_SHOUT_VOICE]);
+        return;
       }
       const now = ctx.currentTime;
       const interval = type === 'impact' ? .06 : type === 'control_heavy' ? .5 : type === 'pickup' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
       const previous = sfxTimesRef.current.get(type);
       if (interval && previous !== undefined && now >= previous && now - previous < interval) return;
       sfxTimesRef.current.set(type, now);
-      const priority = type === 'boss_alarm' || type === 'shout' ? 4 : type === 'control_heavy' || type === 'hit' || type === 'win' || type === 'defeat' ? 3 : type === 'pickup' || type === 'levelup' || type === 'evolution' ? 2 : 1;
+      const priority = type === 'control_heavy' || type === 'hit' ? 3 : type === 'pickup' || type === 'levelup' ? 2 : 1;
       const listener = engineRef.current?.state.player;
 
       if (type === 'impact') {
@@ -542,7 +552,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.start(t);
           osc.stop(t + 0.14);
         });
-      } else if (type === 'control_heavy' || type === 'levelup' || type === 'win') {
+      } else if (type === 'control_heavy' || type === 'levelup') {
         const notes = type === 'control_heavy' ? [220,330,440] : [440, 554.37, 659.25, 880, 1108.73];
         notes.forEach((freq, idx) => {
           const osc = ctx.createOscillator();
@@ -558,27 +568,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           osc.start(t);
           osc.stop(t + 0.28);
         });
-      } else if (type === 'shout') {
-        // The supplied Director voice replaces the synth roar.
-        void audioRef.current.playApproved([DIRECTOR_SHOUT_VOICE]);
-      } else if (type === 'evolution') {
-        // Epic Ascension Major Chime
-        const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98];
-        notes.forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const t = now + idx * 0.06;
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, t);
-          gain.gain.setValueAtTime(0.3, t);
-          gain.gain.exponentialRampToValueAtTime(0.005, t + 0.45);
-          if (!audioRef.current.track(osc, gain, priority)) return;
-        osc.connect(gain);
-          audioRef.current.connectSfx(osc, gain, position, listener);
-          osc.start(t);
-          osc.stop(t + 0.45);
-        });
-      } else if (type === 'hit' || type === 'defeat') {
+      } else if (type === 'hit') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'square';
@@ -591,20 +581,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         audioRef.current.connectSfx(osc, gain, position, listener);
         osc.start(now);
         osc.stop(now + 0.14);
-      } else if (type === 'boss_alarm') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(320, now);
-        osc.frequency.linearRampToValueAtTime(640, now + 0.2);
-        osc.frequency.linearRampToValueAtTime(320, now + 0.4);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
-        if (!audioRef.current.track(osc, gain, priority)) return;
-        osc.connect(gain);
-        audioRef.current.connectSfx(osc, gain, position, listener);
-        osc.start(now);
-        osc.stop(now + 0.4);
       }
     } catch (err) {
       audioRef.current.reportFailure(String(err));
@@ -705,6 +681,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const beginPatrol = () => {
     if (!engineRef.current) return;
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
+    void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
     scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;
     engineRef.current.start();
     setPhase('playing');
@@ -2601,7 +2578,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'ready' && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab}>
-            <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><button type="button" onClick={exitSession}>{preflightText.exit}</button></div>
+            <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
               <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>{preflightText.launch}</button>

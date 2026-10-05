@@ -33,3 +33,17 @@ it('rejects unapproved or incomplete assets and cancels late decode after exit',
  const pending=a.auditionScore(asset);await vi.waitFor(()=>expect(resolve).toBeDefined());a.silence();resolve({duration:77});
  expect(await pending).toBe(false);expect(sources).toHaveLength(0);a.dispose();
 });
+it('mixes event recordings separately, rejects loops and cancels late cues on mute',async()=>{
+ const {ctx,sources}=context();const audio=new SurvivorsSessionAudio();
+ const cue=SURVIVORS_SCORE_CANDIDATES.find(asset=>asset.id==='patrol.boss_alert')!;
+ expect(await audio.auditionCue({...cue,loop:true})).toBe(false);
+ expect(await audio.auditionCue({...cue,rights:null})).toBe(false);
+ expect(await audio.auditionCue(cue)).toBe(true);
+ expect(audio.voiceCount).toBe(1);
+ audio.setMuted(true);expect(sources[0]!.stop).toHaveBeenCalled();expect(audio.voiceCount).toBe(0);
+ audio.setMuted(false);let resolve!:(value:{duration:number})=>void;
+ ctx.decodeAudioData.mockImplementation(()=>new Promise(r=>{resolve=r;}));
+ const pending=audio.auditionCue({...cue,uri:'/new-cue.ogg'});
+ await vi.waitFor(()=>expect(resolve).toBeDefined());audio.silence();resolve({duration:1.5});
+ expect(await pending).toBe(false);expect(sources).toHaveLength(1);audio.dispose();
+});

@@ -1,4 +1,5 @@
 import type { SurvivorsAudioAsset } from '../domain/survivors-audio';
+import scoreV2 from '../../content/survivors-score-v2-ingest.json';
 // No defense approval is inherited by SURVIVORS. Null URI prevents accidental placeholder promotion.
 export const SURVIVORS_AUDIO_MANIFEST: readonly SurvivorsAudioAsset[] = [
  ...['foundation', 'pressure', 'heavy_risk'].map(id => ({ id: `patrol.${id}`, bus: 'Music' as const, loop: true })),
@@ -17,7 +18,7 @@ export const DIRECTOR_SHOUT_VOICE: SurvivorsAudioAsset = {
 };
 
 // Runtime audition authorized by Director. Technical pass does not imply listening/production lock.
-export const SURVIVORS_SCORE_CANDIDATES: readonly SurvivorsAudioAsset[] = [
+export const SURVIVORS_SCORE_V1_ARCHIVE: readonly SurvivorsAudioAsset[] = [
  {id: 'patrol.foundation', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M02_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '874fb3543abd976d15a41bfee9317858d25d1e6d51b586e08f0047e2fbfb17ed'},
  {id: 'patrol.pressure', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M03_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '6d75bb2f95c25f0cd80d92c50066d6d3203f42dcbc16aff5b3416cc6bbea11cd'},
  {id: 'patrol.heavy_risk', bus: 'Music', loop: true, uri: '/assets/survivors/score-v1/PSI_M04_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '6ea354c3f3e602f7b3129892c3910d903081128847cd4ea21ed90a8f56f95473'},
@@ -26,3 +27,10 @@ export const SURVIVORS_SCORE_CANDIDATES: readonly SurvivorsAudioAsset[] = [
  {id: 'patrol.success', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M07_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '3fdf62cfb79e6499435bb7c2152ed87fa0d8ca728f26dcadf2024f6ece431c02'},
  {id: 'patrol.failure', bus: 'Music', loop: false, uri: '/assets/survivors/score-v1/PSI_M08_A_v01_review.ogg', status: 'CANDIDATE', rights: 'Director-provided Gemini generation; game use authorized in session', sha256: '007187bae9583f70d7690411ebee29f3f42250dfc8ce3496872153804168fb59'},
 ];
+
+// User-supplied Gemini recordings authorized for runtime integration, not final listening lock.
+export const SURVIVORS_SCORE_CANDIDATES: readonly SurvivorsAudioAsset[] = scoreV2.map(asset=>({
+ id:`patrol.${asset.id}`,bus:'Music',loop:['ready','foundation','pressure','heavy_risk'].includes(asset.id),
+ uri:asset.uri,status:'CANDIDATE',sha256:asset.sha256,
+ rights:'User-supplied Gemini generation; runtime integration authorized 2026-10-05. Source hashes and edits recorded in survivors-score-v2-ingest.json.',
+}));

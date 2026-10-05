@@ -53,6 +53,8 @@
 .survivors-ready-dialog[data-preflight] [hidden] {display:none!important;}
 .survivors-preflight-top {display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .survivors-preflight-top h2 {margin:0;font-size:22px;letter-spacing:0;}
+.survivors-preflight-top>div {display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.survivors-preflight-top button[aria-pressed="true"] {background:#a5dfbd;color:#10281b;}
 .survivors-preflight-top button,.survivors-preflight-tabs button {min-height:44px;border:1px solid #638170;background:#20372c;color:#e9f3ee;padding:10px 14px;border-radius:4px;cursor:pointer;font:inherit;}
 .survivors-ready-dialog[data-preflight] .survivors-ready-launch {position:sticky;top:-24px;background:#15221e;border-color:#638170;padding:14px 0;z-index:4;}
 .survivors-preflight-tabs {display:flex;gap:8px;border-bottom:1px solid #638170;padding:12px 0;margin-bottom:16px;}

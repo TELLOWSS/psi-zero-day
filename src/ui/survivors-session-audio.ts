@@ -2,7 +2,7 @@ import { cinematicLook } from './survivors-cinematic-vfx';
 import { equipmentSoundSamples } from './survivors-equipment-sound';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
-// Development synth lifecycle only; this is not final orchestral audio.
+// Recorded score/cues and procedural effects share one session-owned audio lifecycle.
 export class SurvivorsSessionAudio {
   private context: AudioContext | null = null;
   private muted = false;
@@ -20,6 +20,7 @@ export class SurvivorsSessionAudio {
   readonly failures: string[] = [];
   private epoch = 0;
   private scoreId: string | null = null;
+  private scoreUri: string | null = null;
   private scoreEpoch = 0;
   private scoreTimer: ReturnType<typeof setTimeout> | null = null;
   private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
@@ -28,6 +29,8 @@ export class SurvivorsSessionAudio {
     if (asset.bus !== 'Music' || asset.status !== 'CANDIDATE' || !asset.uri || !asset.rights || !asset.sha256) return false;
     if (this.scoreId === asset.id && asset.loop) return true;
     const ctx = this.ensureBuses(); if (!ctx) return false;
+    if(this.scoreUri&&this.scoreUri!==asset.uri)this.buffers.delete(this.scoreUri);
+    this.scoreUri=asset.uri;
     this.scoreId = asset.id;
     const token = ++this.scoreEpoch;
     if (this.scoreTimer) clearTimeout(this.scoreTimer);
@@ -42,14 +45,14 @@ export class SurvivorsSessionAudio {
         try { source.stop(now + 0.45); } catch { /* ended */ }
       }
       const duration = Math.min(buffer.duration, cueSeconds ?? buffer.duration);
-      const overlap = Math.min(0.8, duration / 4);
+      const overlap = asset.loop ? Math.min(0.8, duration / 4) : 0.015;
       const schedule = (start: number) => {
         if (token !== this.scoreEpoch) return;
         const source = ctx.createBufferSource(), gain = ctx.createGain();
         source.buffer = buffer; source.connect(gain); gain.connect(this.buses!.Music);
         gain.gain.setValueAtTime(0, start);
         gain.gain.linearRampToValueAtTime(0.55, start + overlap);
-        gain.gain.setValueAtTime(0.55, start + duration - overlap);
+        gain.gain.setValueAtTime(0.55, start + duration - (asset.loop?overlap:Math.min(.25,duration/4)));
         gain.gain.linearRampToValueAtTime(0, start + duration);
         this.scoreNodes.set(source, gain);
         source.onended = () => { this.scoreNodes.delete(source); source.disconnect(); gain.disconnect(); };
@@ -65,10 +68,35 @@ export class SurvivorsSessionAudio {
   }
   stopScore() {
     this.scoreEpoch++; this.scoreId = null;
+    if(this.scoreUri)this.buffers.delete(this.scoreUri);
+    this.scoreUri=null;
     if (this.scoreTimer) clearTimeout(this.scoreTimer);
     this.scoreTimer = null;
     for (const [source, gain] of this.scoreNodes) { source.onended = null; try { source.stop(); } catch { /* ended */ } source.disconnect(); gain.disconnect(); }
     this.scoreNodes.clear();
+  }
+  async preloadCandidates(assets:readonly SurvivorsAudioAsset[]):Promise<boolean> {
+    if(assets.some(a=>a.status!=='CANDIDATE'||!a.uri||!a.rights||!a.sha256))return false;
+    const ctx=this.getContext();if(!ctx)return false;
+    try {await Promise.all(assets.map(a=>this.decodeAsset(ctx,a)));return true;}
+    catch(err){this.fail(String(err));return false;}
+  }
+  /** Event cues share cached recordings without replacing the adaptive score. */
+  async auditionCue(asset:SurvivorsAudioAsset):Promise<boolean> {
+    if(asset.status!=='CANDIDATE'||asset.loop||asset.bus!=='Music'||!asset.uri||!asset.rights||!asset.sha256)return false;
+    const ctx=this.ensureBuses();if(!ctx)return false;
+    const epoch=this.epoch;
+    try {
+      const buffer=await this.decodeAsset(ctx,asset);
+      if(epoch!==this.epoch||this.muted||ctx!==this.context)return false;
+      const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.02;
+      source.buffer=buffer;source.connect(gain);gain.connect(this.buses!.SFX);
+      gain.gain.setValueAtTime(.55,start);
+      gain.gain.setValueAtTime(.55,start+Math.max(0,buffer.duration-.2));
+      gain.gain.linearRampToValueAtTime(0,start+buffer.duration);
+      if(!this.track(source,gain,4))return false;
+      this.duckMusic(Math.min(3,buffer.duration));source.start(start);return true;
+    }catch(err){this.buffers.delete(asset.uri);this.fail(String(err));return false;}
   }
   private priorities = new Map<AudioScheduledSourceNode, number>();
   private spatialNodes = new Map<AudioScheduledSourceNode, AudioNode[]>();
