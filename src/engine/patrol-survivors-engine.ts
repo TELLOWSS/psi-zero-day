@@ -9,6 +9,7 @@ import { operationProgress, recordOperationControls } from './survivors-operatio
 import { advanceBossPhase, bossPattern, bossCoreFloor } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
+import {tickGangform,gangformContact,hitGangformZone,gangformTarget} from './survivors-boss-gangform';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -1454,6 +1455,7 @@ export class SurvivorsEngine {
       if(h.bossGameplay){
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
+        if(tickGangform(h,player,dt))continue;
         if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
       }
       if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
@@ -1529,6 +1531,11 @@ export class SurvivorsEngine {
     for (const p of projectiles) {
       if (p.duration <= 0 || p.pierce <= 0) continue;
       const previous = this.paths.get(p) ?? p;
+      for(const h of hazards){
+        const zone=hitGangformZone(h,p,previous);
+        if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
+      }
+      if(p.duration<=0||p.pierce<=0)continue;
       const candidates = grid?.candidates(previous.x, previous.y, p.x, p.y, p.radius) ?? hazards;
       const directed = p.kind === 'radio' || p.kind === 'drone_laser' || p.kind === 'hunter_beam';
       let hits = directed ? this.directedHits.get(p) : undefined;
@@ -1701,7 +1708,7 @@ export class SurvivorsEngine {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
-        if (isHazardContactActive(h) && dist <= h.radius + 14) {
+        if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
           if (this.state.controlKit && this.state.controlKit.charges > 0 && this.state.controlKit.remaining > 0) {
             this.state.controlKit.charges -= 1;
             this.emitAudio('control', player.x, player.y);
@@ -1716,8 +1723,7 @@ export class SurvivorsEngine {
           const dx = h.x - player.x || 1;
           const dy = h.y - player.y || 1;
           const dlen = Math.hypot(dx, dy);
-          h.x += (dx / dlen) * 30;
-          h.y += (dy / dlen) * 30;
+          if(!h.bossEncounterManaged){h.x += (dx / dlen) * 30;h.y += (dy / dlen) * 30;}
 
           if (player.hp <= 0) {
             // Check 1-time Revive from R&D First Aid upgrade
@@ -2043,11 +2049,12 @@ export class SurvivorsEngine {
     let nearest: Hazard | null = null;
     for (const h of this.state.hazards) {
       if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss) continue;
-      const dx = h.x - x, dy = h.y - y;
+      const target=gangformTarget(h,x,y);
+      const dx = target.x - x, dy = target.y - y;
       const dist = dx * dx + dy * dy;
       if (dist < bestDist) {
         bestDist = dist;
-        nearest = h;
+        nearest = target;
       }
     }
     return nearest;

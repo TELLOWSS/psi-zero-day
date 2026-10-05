@@ -12,6 +12,13 @@ export interface BossGameplayProgress {
   burstRemaining: number;
   remaining: number;
   cycleCount: number;
+  gangform?: {
+    step: 'pendulum_warning' | 'pendulum' | 'debris_warning' | 'debris' | 'drop_zone';
+    remaining: number;
+    anchorX: number;
+    anchorY: number;
+    zones: Array<{x:number;y:number;radius:number;hp:number;maxHp:number}>;
+  };
 }
 
 export type BossCombatArchetype = 'ACTION' | 'PATTERN' | 'PUZZLE' | 'SURVIVAL' | 'MULTI' | 'FINAL';

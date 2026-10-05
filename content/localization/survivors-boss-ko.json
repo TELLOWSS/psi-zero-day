@@ -1,4 +1,5 @@
 {
+  "gangform": {"pendulum_warning":"PENDULUM", "pendulum":"PENDULUM", "debris_warning":"DEBRIS RAIN", "debris":"DEBRIS RAIN", "drop_zone":"DROP ZONE BREAK"},
   "combat": {"arrival":"BOSS INCOMING", "pattern":"READ SIGNAL", "weak_point":"WEAK POINT", "burst":"BURST", "recovery":"RECOVERY", "secured":"ALL CLEAR"},
   "combatHint": {"arrival":"GET READY", "pattern":"DODGE PATTERN", "weak_point":"BREAK CORE", "burst":"FULL POWER", "recovery":"NEXT PATTERN", "secured":"ALL CLEAR"},
   "arrival": "대표 위험 출현 · 현장 대응 준비",
