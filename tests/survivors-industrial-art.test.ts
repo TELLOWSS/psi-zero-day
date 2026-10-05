@@ -27,6 +27,9 @@ describe('industrial art identity', () => {
     expect(cartActionPose({motion:{...motion,timer:-99}},false).compression).toBe(.035);
   });
   it('keeps the entire lifting asset below its title and freezes sway for reduced motion', () => {
+    const elevated=craneArtPose(34,1,false,70);
+    expect(elevated.x).toBe(0);expect(elevated.top).toBe(elevated.bottom-elevated.size);
+    expect(elevated.bottom).toBe(-54);
     const a=craneArtPose(34,0,false),b=craneArtPose(34,1,false);
     expect(a.size).toBe(112);expect(a.top).toBe(a.bottom-a.size);
     expect(b.x).not.toBe(a.x);expect(Math.abs(b.x)).toBeLessThan(20);

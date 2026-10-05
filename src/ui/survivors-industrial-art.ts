@@ -8,6 +8,7 @@ import { bossPattern } from '../engine/survivors-boss-pattern';
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
 export const INDUSTRIAL_CRANE_ART = '/assets/survivors/crane-load-v4.webp';
+export const INDUSTRIAL_CRANE_BOSS_ART = '/assets/survivors/crane-boss-load-v1.webp';
 export const INDUSTRIAL_CART_BOSS_ART = '/assets/survivors/runaway-carrier-boss-v1.webp';
 
 export function usesCarrierBossArt(h:Pick<Hazard,'type'|'isStageBoss'>):boolean {
@@ -26,10 +27,11 @@ export function cartActionPose(h: Pick<Hazard,'motion'|'isStageBoss'>, reduced: 
   return {lean:-.04*brake,compression:.045*brake,brake};
 }
 
-export function craneArtPose(radius:number,clock:number,reduced:boolean) {
+export function craneArtPose(radius:number,clock:number,reduced:boolean,elevation?:number) {
   const sway=suspendedLoadPose(reduced?0:clock);
   const size=Math.min(220,Math.max(112,radius*2.7));
-  return {x:sway.x,bottom:sway.y+16,size,top:sway.y+16-size};
+  const bottom=elevation===undefined?sway.y+16:16-elevation;
+  return {x:elevation===undefined?sway.x:0,bottom,size,top:bottom-size};
 }
 
 export function craneAttackElevation(h:Hazard,reduced:boolean):number {
@@ -44,8 +46,7 @@ export function craneAttackElevation(h:Hazard,reduced:boolean):number {
 
 export function drawIndustrialCrane(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,radius:number,clock:number,reduced:boolean,reaction:number,elevation?:number):boolean {
   if(!atlas?.naturalWidth)return false;
-  const p=craneArtPose(radius,clock,reduced);
-  if(elevation!==undefined){p.x=0;p.bottom=16-elevation;p.top=p.bottom-p.size;}
+  const p=craneArtPose(radius,clock,reduced,elevation);
   ctx.save();ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();
   ctx.ellipse(p.x,2,radius*1.35,radius*.48,0,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle='rgba(203,213,225,.65)';ctx.lineWidth=2;
