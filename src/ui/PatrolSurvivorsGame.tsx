@@ -2598,8 +2598,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
         const deadline = Math.max(0, operationPlan(state.stage).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
-        return <aside className="survivors-focus-status" data-core={boss?bossCoreStatus(boss):undefined} aria-label={boss ? state.stage.bossName : focusText.bossIncoming}>
-          {boss ? <>
+        return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
+          {bossSecured ? <span>{bossText.secured}</span> : boss ? <>
             <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
             <strong>{state.stage.bossName}</strong>
             <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
@@ -2608,10 +2608,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>;
       })()}
 
-      {phase === 'playing' && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
+      {phase === 'playing' && !bossSecured && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
       {/* COMBO JUICE BANNER */}
-      {phase === 'playing' && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
+      {phase === 'playing' && !bossSecured && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
         <aside
           className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"

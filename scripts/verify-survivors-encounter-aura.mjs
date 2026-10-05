@@ -41,6 +41,9 @@ try{
    boss.hp=0;window.qaUpdate.call(e,1/60,{moveX:0,moveY:0});
   });
   await page.getByRole('status').filter({hasText:'대표 위험 통제 완료'}).waitFor();
+  await page.waitForFunction(()=>document.querySelector('.survivors-focus-status')?.dataset.core==='secured');
+  if(!(await page.locator('.survivors-focus-status').innerText()).includes('대표 위험 통제 완료'))throw new Error('Secured focus feedback missing');
+  if(await page.locator('.survivors-combo-banner, .survivors-damage-notice, .survivors-supply-countdown').count())throw new Error('Combat notices remain during clear confirmation');
   await page.screenshot({path:path.join(out,`${width}x${height}-secured.png`)});
   const secured=await page.evaluate(()=>({phase:window.qaEngine.state.phase,encounter:window.qaEngine.state.bossEncounter.phase,remaining:window.qaEngine.state.bossEncounter.remaining}));
   const aura=await page.evaluate(async()=>{
