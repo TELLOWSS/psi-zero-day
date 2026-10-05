@@ -44,7 +44,7 @@ try {
    await page.screenshot({path:path.join(out,`${width}x${height}-${number}-${phase}.png`)});
   }
   const layout=await page.evaluate(()=>{
-   const readout=document.querySelector('.survivors-boss-readout'),r=readout?.getBoundingClientRect(),canvas=document.querySelector('canvas');
+   const readout=document.querySelector(innerWidth<=900?'.survivors-focus-status':'.survivors-boss-readout'),r=readout?.getBoundingClientRect(),canvas=document.querySelector('canvas');
    return {text:readout?.textContent,bar:readout?.querySelector('progress')?.value,overflow:document.documentElement.scrollWidth>innerWidth,
     inside:!!r&&r.left>=0&&r.right<=innerWidth&&r.bottom<=innerHeight,
     nonblank:canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data.some((v,i)=>i%4!==3&&v>30)};

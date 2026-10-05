@@ -43,7 +43,7 @@ import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
-import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose, craneAttackElevation } from './survivors-industrial-art';
+import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, INDUSTRIAL_CART_BOSS_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose, craneAttackElevation } from './survivors-industrial-art';
 import { cacheStageFloor } from './survivors-stage-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
@@ -170,6 +170,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     premiumAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
     industrialHazards?: HTMLImageElement;
+    carrierBoss?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
     industrialCrane?: HTMLImageElement;
     wearables?: WearableImages;
@@ -269,6 +270,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     cinematic.onload=()=>{spritesRef.current.cinematicAtlas=cinematic;};
     const industrialHazards = new Image(); industrialHazards.src = INDUSTRIAL_HAZARD_ART;
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
+    const carrierBoss=new Image();carrierBoss.src=INDUSTRIAL_CART_BOSS_ART;
+    carrierBoss.onload=()=>{registerPropAtlas(carrierBoss,1,1);spritesRef.current.carrierBoss=carrierBoss;};
     const industrialContacts = new Image(); industrialContacts.src = INDUSTRIAL_CONTACT_ART;
     industrialContacts.onload = () => { registerPropAtlas(industrialContacts,3,2); spritesRef.current.industrialContacts = industrialContacts; };
     const industrialCrane = new Image(); industrialCrane.src = INDUSTRIAL_CRANE_ART;
@@ -1906,7 +1909,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow

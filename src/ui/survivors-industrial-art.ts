@@ -8,6 +8,11 @@ import { bossPattern } from '../engine/survivors-boss-pattern';
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
 export const INDUSTRIAL_CRANE_ART = '/assets/survivors/crane-load-v4.webp';
+export const INDUSTRIAL_CART_BOSS_ART = '/assets/survivors/runaway-carrier-boss-v1.webp';
+
+export function usesCarrierBossArt(h:Pick<Hazard,'type'|'isStageBoss'>):boolean {
+  return h.type==='RUNAWAY_CART'&&h.isStageBoss===true;
+}
 
 export function cartActionPose(h: Pick<Hazard,'motion'|'isStageBoss'>, reduced: boolean): {lean:number;compression:number;brake:number} {
   if (reduced || !h.motion) return {lean:0,compression:0,brake:0};
@@ -59,7 +64,7 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
 }
 
 /** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, clock: number, reduced: boolean, elevation: number): boolean {
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement): boolean {
   const cell = industrialHazardCell(h, ground);
   if (cell === null || !atlas?.naturalWidth) return false;
   const gas = h.type === 'GAS_LEAK';
@@ -70,6 +75,16 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     ctx.ellipse(0, 2, size * .4, size * .13, 0, 0, Math.PI * 2);ctx.fill();
   }
   if (h.type === 'RUNAWAY_CART') {
+    const heading=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)?Math.atan2(h.motion.directionY,h.motion.directionX):Math.atan2(pose.directionY,pose.facing);
+    ctx.save();ctx.rotate(heading);
+    const beam=ctx.createLinearGradient(size*.2,0,size*.9,0);
+    beam.addColorStop(0,h.isStageBoss?'rgba(255,218,152,.24)':'rgba(255,236,194,.14)');beam.addColorStop(1,'rgba(255,236,194,0)');
+    ctx.fillStyle=beam;
+    for(const side of [-1,1]){
+      ctx.beginPath();ctx.moveTo(size*.2,side*size*.12-3);ctx.lineTo(size*.9,side*size*.12-14);
+      ctx.lineTo(size*.9,side*size*.12+14);ctx.lineTo(size*.2,side*size*.12+3);ctx.closePath();ctx.fill();
+    }
+    ctx.restore();
     const facing=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)&&Math.abs(h.motion.directionX)>.04?(h.motion.directionX<0?-1:1):pose.facing;
     const action=cartActionPose(h,reduced);
     ctx.scale(facing, 1);
@@ -79,7 +94,8 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   const pressure = !reduced && h.variant === 'pulse_gas' ? 1 + Math.sin(clock * 8) * .045 : 1;
   ctx.scale(pressure, pressure);
   if (gas) ctx.globalAlpha *= .82;
-  const drawn = drawProp(ctx, atlas, cell, 0, gas ? size * .43 : -elevation, size);
+  const boss=usesCarrierBossArt(h)&&carrierBoss?.naturalWidth;
+  const drawn = drawProp(ctx, boss?carrierBoss:atlas, boss?0:cell, 0, gas ? size * .43 : -elevation, size);
   ctx.restore();
   return drawn;
 }

@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose } from '../src/ui/survivors-industrial-art';
+import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose,usesCarrierBossArt } from '../src/ui/survivors-industrial-art';
 import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import type { HazardType } from '../src/domain/patrol-survivors';
 
 describe('industrial art identity', () => {
+  it('reserves the dedicated heavy-carrier asset for designated cart bosses',()=>{
+    expect(usesCarrierBossArt({type:'RUNAWAY_CART',isStageBoss:true})).toBe(true);
+    expect(usesCarrierBossArt({type:'RUNAWAY_CART'})).toBe(false);
+    expect(usesCarrierBossArt({type:'CRANE_BOSS',isStageBoss:true})).toBe(false);
+    expect(usesCarrierBossArt({type:'UNHELMETED',isStageBoss:true})).toBe(false);
+  });
   it('prepares, charges and brakes against actual locked phase without changing state', () => {
     const cart={motion:{phase:'warning' as const,timer:0,directionX:1,directionY:0}};
     const before=JSON.stringify(cart),warning=cartActionPose(cart,false);
