@@ -17,6 +17,7 @@ const planHands=[box(.62,.20,.35,.27),box(.66,.17,.32,.28),box(.69,.18,.30,.28),
 // The 105px neutral gains 24px of transparent room for the outward plan gesture.
 const planX=(x:number)=>.5+(x-.5)*105/129;
 const paddedPlanHands=planHands.map(polygons=>polygons.map(polygon=>polygon.map(([x,y])=>[planX(x!),y!])));
+const monitorHands=[box(.25,.19,.25,.15),box(.27,.18,.25,.15),box(.29,.16,.25,.15),box(.30,.15,.25,.15),box(.28,.18,.25,.15),box(.26,.19,.25,.15),box(.25,.20,.25,.15),box(.25,.19,.25,.15)].map(hand=>[hand,box(.61,.32,.38,.15)]);
 
 /** Production command art is opt-in by exact actor filename, including legacy aliases. */
 export const COMMAND_ART: Readonly<Record<string,CommandArtProfile>> = {
@@ -43,6 +44,11 @@ export const COMMAND_ART: Readonly<Record<string,CommandArtProfile>> = {
     art:'/assets/survivors/lee-command-v1.png',top:.16,bottom:.54,horizontalPadding:24,
     preserve:{x:planX(.32),y:0,width:.46*105/129,height:.19},occluders:paddedPlanHands,
     rig:{waist:.49,left:{hip:{x:planX(.34),y:.50},knee:{x:planX(.29),y:.72},ankle:{x:planX(.21),y:.90},sole:{x:planX(.20),y:1}},right:{hip:{x:planX(.66),y:.50},knee:{x:planX(.65),y:.72},ankle:{x:planX(.68),y:.90},sole:{x:planX(.86),y:.97}},protected:[box(.20,.43,.22,.10).map(([x,y])=>({x:planX(x!),y:y!}))]},
+  },
+  'safety-monitor-v2.webp': {
+    art:'/assets/survivors/safety-command-v1.png',top:.15,bottom:.47,
+    occluders:monitorHands,
+    rig:{waist:.51,left:{hip:{x:.30,y:.52},knee:{x:.24,y:.73},ankle:{x:.17,y:.90},sole:{x:.16,y:1}},right:{hip:{x:.61,y:.52},knee:{x:.62,y:.73},ankle:{x:.68,y:.90},sole:{x:.83,y:.99}}},
   },
 };
 

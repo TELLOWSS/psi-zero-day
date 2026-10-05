@@ -18,4 +18,4 @@ Full test suite: 1,364 passed, one skipped. Production build and both TypeScript
 
 ## Director review / TODO
 
-Review Lee's identity continuity, plan grip and gesture timing. This is not final cinematic quality approval: authored pose spacing is uneven, and actual directional sheets remain outstanding. The safety monitor still needs dedicated intermediate poses. Left/right currently mirror one camera view.
+Review Lee's identity continuity, plan grip and gesture timing. This is not final cinematic quality approval: authored pose spacing is uneven, and actual directional sheets remain outstanding. The subsequent [safety monitor integration](SURVIVORS-SAFETY-COMMAND-20261006.md) adds dedicated radio poses. Left/right currently mirror one camera view.
