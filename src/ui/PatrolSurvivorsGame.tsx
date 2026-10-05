@@ -404,6 +404,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [showArsenalModal, setShowArsenalModal] = useState(false);
   const arsenalDialogRef = useRef<HTMLDivElement>(null);
   const upgradeDialogRef = useRef<HTMLDivElement>(null);
+  const resultDialogRef = useRef<HTMLDivElement>(null);
   const ascensionRef = useRef(new EquipmentAscensionLayer());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
@@ -443,6 +444,28 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }, [phase]);
 
   // Virtual Touch Joystick state
+  useEffect(() => {
+    if (phase !== 'victory' && phase !== 'defeat') return;
+    const dialog = resultDialogRef.current;
+    if (!dialog) return;
+    const previous = document.activeElement as HTMLElement | null;
+    dialog.querySelector<HTMLButtonElement>('.survivors-result-actions button')?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const buttons = [...dialog.querySelectorAll<HTMLElement>('button:not(:disabled), [tabindex="0"]')];
+      const first = buttons[0], last = buttons[buttons.length - 1];
+      if (!dialog.contains(document.activeElement)) {
+        event.preventDefault(); (event.shiftKey ? last : first)?.focus();
+      } else if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('keydown', onKey); if (previous?.isConnected) previous.focus(); };
+  }, [phase]);
+
   const touchIdRef = useRef<number | null>(null);
   const touchCenterRef = useRef<{ x: number; y: number } | null>(null);
   const touchVectorRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -3203,8 +3226,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* DEFEAT MODAL */}
       {phase === 'defeat' && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title is-red">🚨 현장 중대위험 발생</h2>
+          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
+            <div className="survivors-result-body" tabIndex={0}>
+            <h2 id="survivors-result-title" className="survivors-modal-title is-red">🚨 현장 중대위험 발생</h2>
             <p className="survivors-modal-sub">
               안전관리자의 방호 한계 초과로 현장에 사고가 발생했습니다.
             </p>
@@ -3230,7 +3254,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </div>
             </div>
 
-            <div className="survivors-actions-row">
+            </div>
+            <div className="survivors-actions-row survivors-result-actions">
               <button
                 type="button"
                 className="survivors-btn-primary"
@@ -3251,8 +3276,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* VICTORY MODAL */}
       {phase === 'victory' && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title is-green">
+          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
+            <div className="survivors-result-body" tabIndex={0}>
+            <h2 id="survivors-result-title" className="survivors-modal-title is-green">
               🏆 {engineRef.current?.state.stage ? `${engineRef.current.state.stage.icon} STAGE ${String(engineRef.current.state.stage.stageNumber).padStart(2, '0')} 클리어!` : '야간 무사고 달성 완료!'}
             </h2>
             <p className="survivors-modal-sub">
@@ -3314,7 +3340,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <p role={growthSaveFailed?'alert':'status'}>{growthSaveFailed?growthText.growth_unsaved:growthText.growth_saved}</p>
             {growthSaveFailed&&<button type="button" onClick={()=>persistGrowth(growthRecords)}>{growthText.growth_retry}</button>}
             {accountabilityMemory(accountability)&&<p className="survivors-story-result">{accountabilityMemory(accountability)}</p>}
-            <div className="survivors-actions-row">
+            </div>
+            <div className="survivors-actions-row survivors-result-actions">
               {(() => {
                 const stageList = STAGE_IDS;
                 const currentIdx = stageList.indexOf(selectedStage);

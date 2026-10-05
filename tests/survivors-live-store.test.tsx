@@ -15,6 +15,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
  const start=SurvivorsEngine.prototype.start;
  vi.spyOn(SurvivorsEngine.prototype,'start').mockImplementation(function(this:SurvivorsEngine){engine=this;start.call(this);});
  const host=document.createElement('div'),root=createRoot(host);
+ document.body.append(host);
  const click=(text:string)=>act(()=>[...host.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent?.trim()===text)!.click());
  const tick=()=>act(()=>frame(performance.now()+16));
  try{
@@ -35,11 +36,20 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   const wallet=JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!);
   expect(wallet.credits).toBe(4850);expect(wallet.inventory.durability).toEqual({voice_lens:85,shock_mantle:85});
   expect(host.querySelector('.survivors-clear-maintenance')?.textContent).toContain('85/100');
+  const dialog=host.querySelector<HTMLElement>('[role="dialog"][aria-labelledby="survivors-result-title"]')!;
+  expect(dialog.getAttribute('aria-modal')).toBe('true');
+  const actions=dialog.querySelectorAll<HTMLButtonElement>('.survivors-result-actions button');
+  expect(document.activeElement).toBe(actions[0]);
+  actions[actions.length-1]!.focus();
+  act(()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',bubbles:true,cancelable:true})));
+  expect(document.activeElement).toBe(dialog.querySelector('.survivors-result-body'));
+  act(()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true,cancelable:true})));
+  expect(document.activeElement).toBe(actions[actions.length-1]);
   expect(host.querySelector('.survivors-results-grid')?.textContent).toContain('+50 PSI');
   const starts=vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length;
   click('같은 작전 다시 준비');
   expect(vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length).toBe(starts);
   expect(host.textContent).toContain('순찰 시작하기');
   expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(4850);
- }finally{act(()=>root.unmount());}
+ }finally{act(()=>root.unmount());host.remove();}
 });
