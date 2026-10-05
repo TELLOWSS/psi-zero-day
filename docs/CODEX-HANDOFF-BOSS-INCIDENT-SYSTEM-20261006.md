@@ -1,317 +1,348 @@
-# CODEX HANDOFF — 50 Stage Boss Incident System
+# CODEX HANDOFF — 50 Stage Boss Gameplay + Incident System
 
 **Branch:** `codex/boss-incident-system-20261006`  
-**Director approval:** 2026-10-06  
-**Goal:** 50개 스테이지를 50개의 서로 다른 공정 재해사건으로 전환한다. 기존 보스 엔진을 버리지 않고, 스테이지별 사고 메커니즘·필수 안전조치·원화 전환·검증 피니시를 데이터 주도로 추가한다.
+**Director gameplay rebaseline:** 2026-10-06
 
-## 1. Read first
+## 0. Precedence
+
+Read these in order:
 
 1. `AGENTS.md`
 2. `GAMEPLAY_DOCTRINE.md`
-3. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
-4. `content/design/survivors-boss-incidents-v1.json`
-5. `content/design/survivors-boss-incident-art-v1.json`
-6. `docs/SURVIVORS-BOSS-PHASES-20261005.md`
-7. `docs/SURVIVORS-BOSS-DIRECTION-20261005.md`
+3. `docs/SURVIVORS-50-BOSS-GAMEPLAY-BIBLE-20261006.md`
+4. `content/design/survivors-boss-gameplay-v1.json`
+5. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
+6. `content/design/survivors-boss-incidents-v1.json`
+7. `content/design/survivors-boss-control-gates-v1.json`
+8. `content/design/survivors-boss-incident-art-v1.json`
+9. existing boss phase/direction documents
 
-## 2. Existing runtime facts that MUST be preserved
+**Gameplay Bible overrides player-facing pacing, mandatory interaction count and combat presentation.**  
+Incident Bible remains the realism/source layer: process, accident mechanism, telegraphs, safety meaning and post-clear learning.
 
-- Pure TypeScript engine owns gameplay state/rules.
-- Existing boss encounter already has `arrival → combat → secured`.
-- Arrival currently freezes gameplay by early-returning from the engine step.
-- Existing stage boss is spawned once after operation timing/controls.
-- Existing boss families: `RUNAWAY_CART | CRANE_BOSS | FALLING_DEBRIS | GAS_LEAK`.
-- Existing phase 2 latches at <= 50% at safe attack boundaries.
-- Existing `bossCoreFloor` / `bossCoreStatus` provide an interlock concept.
-- Reduced-motion behavior must remain functional.
-- Existing save/unlock/stars must not be broken.
-- Workers remain guide/rescue targets, never attack targets.
+## 1. Director intent
 
-## 3. Target architecture
+The player should feel:
 
-### 3.1 New domain model
+> “강력한 보스 패턴을 읽고 약점을 열어 폭딜했다.”
 
-Create `src/domain/survivors-boss-incident.ts`.
+before feeling:
 
-Recommended contract:
+> “이 패턴이 실제 현장의 이런 위험을 표현한 것이구나.”
 
-```ts
-export type BossIncidentEngineFamily =
-  | 'RUNAWAY_CART'
-  | 'CRANE_BOSS'
-  | 'FALLING_DEBRIS'
-  | 'GAS_LEAK'
-  | 'MULTI';
+Target perceived ratio: **Gameplay 80 / Safety explanation 20.**
 
-export interface BossIncidentDefinition {
-  id: string;
-  stageId: PatrolStageId;
-  bossName: string;
-  codeName: string;
-  engineFamily: BossIncidentEngineFamily;
-  accidentClass: string;
-  caseArchetype: string;
-  telegraphs: readonly string[];
-  requiredControls: readonly string[];
-  uniqueMechanic: string;
-  finisher: string;
-  learningPoint: string;
-  presentation: {
-    intro: 'full_bleed_original_art';
-    introSeconds: number;
-    gameplayFreeze: true;
-    skippableAfterSeconds: number;
-    returnToMapSeconds: number;
-  };
-}
+The game must not become a safety checklist simulator.
 
-export interface BossIncidentProgress {
-  incidentId: string;
-  phase: 'arrival' | 'read' | 'control' | 'verify' | 'secured';
-  discoveredSignals: string[];
-  completedControls: string[];
-  verificationReady: boolean;
-}
-```
-
-Do not bind localization text directly into engine logic. A loader/registry may ingest JSON and convert it to typed content.
-
-### 3.2 Stage contract
-
-Extend `PatrolStageDefinition` with:
-
-```ts
-bossIncidentId?: string;
-```
-
-Map all 50 stages to exactly one incident ID. Stage 50 uses the dedicated `MULTI` final-wave path.
-
-### 3.3 State contract
-
-Extend `SurvivorsGameState` without removing the existing `bossEncounter` compatibility fields.
-
-Recommended:
-
-```ts
-bossIncident?: BossIncidentProgress;
-```
-
-During migration, `bossEncounter.phase` remains the external compatibility state. `bossIncident.phase` owns detailed incident progression.
-
-## 4. Gameplay rule
-
-Raw damage must NEVER be able to skip required safety controls.
-
-Recommended rule:
+## 2. New boss formula
 
 ```txt
-arrival
-  -> read at intro completion
-  -> control after minimum signal discovery
-  -> verify when all stage-required controls are satisfied
-  -> secured after verification window/condition
+ATTACK PATTERN
+→ READ SIGNAL
+→ OPEN WEAK POINT
+→ BURST DAMAGE
+→ FINISHER
+→ ONE-LINE REAL-WORLD DEBRIEF
 ```
 
-Before `verify`, `bossCoreFloor` clamps HP/risk above a protected floor. After all required controls are met, the protected floor drops and the existing damage/response loop can close the encounter.
+Safety logic is embedded under the combat mechanic.
 
-This preserves the current satisfying impact system while changing the reason the player wins.
+Examples:
 
-## 5. Control gates
+| Safety truth | Player-facing game verb |
+| --- | --- |
+| STOP WORK | STAGGER / PATTERN CANCEL |
+| LOTO | SHIELD BREAK |
+| Clear below | DROP ATTACK CANCEL |
+| Restore guard | SAFE ZONE |
+| Separate route | ROUTE CHANGE |
+| Verify rigging | WEAK POINT REVEAL |
+| Ventilate | HAZARD FIELD SHRINK |
+| Stabilize load | STAGGER |
+| Verify egress | ESCAPE ROUTE |
 
-Do NOT implement 50 unrelated one-off systems first.
+Do not display long safety procedure text during combat.
 
-Create a small reusable gate vocabulary and compose it per stage:
+## 3. Mandatory mechanic budget
 
-- `STOP_WORK`
-- `EVACUATE_ZONE`
-- `SEPARATE_ROUTE`
-- `LOCKOUT_TAGOUT`
-- `VERIFY_ZERO_ENERGY`
-- `ISOLATE_STORAGE`
-- `VENTILATE_MEASURE`
-- `RESTORE_GUARD`
-- `VERIFY_RIGGING`
-- `STABILIZE_LOAD`
-- `SHORE_SUPPORT`
-- `CLEAR_BELOW`
-- `ESTABLISH_SPOTTER`
-- `HANDOFF_CONFIRM`
-- `VERIFY_EGRESS`
+### Regular boss
+- 2 phases
+- exactly **one signature mandatory mechanic**
+- 2.4s first-play intro
+- replay skip after 0.35s
+- one clear burst window
 
-Translate the 50 human-readable `requiredControls` strings in the design JSON into these semantic IDs in a separate authored mapping. Do not infer them at runtime from Korean text.
+### Major boss (stage divisible by 5, not chapter)
+- 3 phases
+- one signature mechanic plus one escalation
+- 3.2s first-play intro
 
-## 6. Unique mechanic adapters
+### Chapter boss 10/20/30/40
+- 3 phases
+- 2–3 previously learned mechanics combined
+- 4.2s first-play intro
 
-Implement a small adapter layer instead of branching the main engine 50 times.
+### Stage 50
+- 4 phases
+- whole-site final wave
+- 5.5s first-play intro
+- prior mechanics return as short variants
 
-Suggested `BossIncidentMechanicId` examples:
+Do not make ordinary stages require all semantic safety gates as explicit player actions.
 
-- `LINE_CHARGE_WITH_SPOTTER_GATE` — Stage 01
-- `SWING_ARC_EXCLUSION` — Stage 02
-- `DUAL_DROP_RIGGING_BALANCE` — Stage 03
-- `INVISIBLE_PULSE_SENSOR_GATE` — Stage 04
-- `TOPPLE_MOMENTUM` — Stage 05/18/38/43 variants
-- `HIDDEN_SOURCE_DISCOVERY` — Stage 06/19/29/44
-- `PROGRESSIVE_COLLAPSE_POINTS` — Stage 07/11/32/34
-- `VERTICAL_LAYER_INTERLOCK` — Stage 24/39
-- `STALE_ROUTE_MISMATCH` — Stage 25
-- `EGRESS_AND_ATMOSPHERE` — Stage 30
-- `CHAPTER_MULTI_INTERLOCK` — 10/20/30/40
-- `ZERO_DAY_WHOLE_SITE` — Stage 50
+## 4. DPS and progression rule
 
-Each adapter may alter warning geometry, discovery information or interlock progression, but must not mutate unrelated systems.
+Previous handoff language that required all safety controls before the core can fully open is superseded.
 
-## 7. Boss introduction UI
+New rule:
 
-Replace the current text-only boss alert experience with a dedicated component:
+- Every boss has one signature pattern the player must engage with.
+- Raw DPS cannot delete or bypass that signature pattern.
+- Successfully reading/countering the signature pattern creates a **burst window**.
+- During the burst window, weapon strength, build quality, upgrades and premium equipment matter substantially.
+- Strong builds may clear in fewer cycles.
+- Weak builds may need additional cycles.
+- No build gets automatic pattern completion or invulnerability.
 
-`src/ui/SurvivorsBossIncidentTransition.tsx`
+This preserves both game skill and build progression.
 
-Rules:
-- full-bleed original art from `content/design/survivors-boss-incident-art-v1.json`
-- 5s ordinary boss / 8s chapter boss
-- gameplay remains frozen during arrival
-- title + one-line accident clue may be DOM text, never baked into artwork
-- user may skip only after 1.5s
-- transition back to exact gameplay position within 0.3–0.5s
-- 16:9 first; 9:16 safe crop required
-- reduced motion: no zoom/parallax, simple dissolve
-- no generic fallback artwork is production-acceptable. Missing final asset = keep feature flagged/off for that stage.
+## 5. Premium item rule
 
-Do not make this a modal with a card floating over the game. It should read as a page/scene transition.
+Premium gear must feel premium without becoming pay-to-skip.
 
-## 8. Art asset naming
+Allowed:
+- stronger burst damage
+- richer VFX/SFX
+- longer or more forgiving weak-point exposure
+- faster cleanup of secondary nodes
+- clearer high-quality targeting feedback
+- distinctive premium animation
 
-Final assets:
-- `public/assets/survivors/boss-incidents/stage-01-intro-v1.webp`
-- ...
-- `public/assets/survivors/boss-incidents/stage-50-intro-v1.webp`
+Forbidden:
+- auto-identify puzzle answer
+- automatic gate completion
+- immunity to boss pattern
+- one-shot every boss regardless of pattern
 
-Portrait safe-crop optional companion:
-- `stage-XX-intro-portrait-v1.webp`
+## 6. Visual identity
 
-Use `content/design/survivors-boss-incident-art-v1.json` as the source of truth.
+The old restriction “never make bosses monster-like” is narrowed.
 
-## 9. Finisher / clear presentation
+Forbidden:
+- human workers as enemies
+- faces/eyes/mouths pasted onto cranes/equipment
+- fantasy creature anatomy replacing the real process
 
-Do not explode bosses into fantasy debris as the primary finish.
+Allowed and encouraged:
+- exaggerated scale and silhouette
+- crane cables dominating the arena like a web
+- hose behaving like a violent whip
+- rebar cage reading like a rotating spear field
+- vapor behaving like a living zone
+- electrical network behaving like a hostile circuit
+- collapse propagation behaving like a boss phase
 
-Required finish sequence:
-1. danger motion stops
-2. active hazard audio drops
-3. control/verification state becomes visibly stable
-4. short strong confirmation cue
-5. workers/routes/equipment visibly move into a safe state
-6. result text states what was controlled and what can safely resume
+The process stays recognizable; danger may be theatrically amplified.
 
-The 'dopamine' moment is the sudden release of tension and visible restoration of control.
+## 7. Intro transition
 
-## 10. Stage 50 special rule
+Use `SurvivorsBossIncidentTransition`, but it must feel like a boss entrance, not an education modal.
 
-Stage 50 is not a giant `CRANE_BOSS`.
+- full-bleed art
+- boss name
+- one short combat clue, 1–4 words
+- no paragraph
+- no safety checklist
+- ordinary: 2.4s first play
+- major: 3.2s
+- chapter: 4.2s
+- final: 5.5s
+- replay skip after 0.35s
+- return to gameplay in <=0.5s
+- reduced motion = dissolve only
 
-Implement it last.
+Missing final art keeps the art enhancement off; it must not block core gameplay implementation.
 
-- no single monster/entity as the final meaning
-- whole site is the boss wave
-- combine vehicle, lifting, falling, stored-energy and communication signals
-- reuse learned gate vocabulary
-- previously established records/relationships may reduce discovery delay or auto-surface a signal, but must not auto-win
-- climax: all site audio narrows/dropouts → STOP WORK → signals resolve one by one → normal site audio returns
-- final meaning: accident did not happen because the chain was broken early
+## 8. Data model
 
-## 11. Implementation slices
+Keep the incident content model, but add a separate gameplay overlay.
 
-### Slice A — content + registry
-- typed loader
-- 50 IDs unique
-- stage mapping
-- schema validation tests
-- no gameplay change yet
+Source:
+`content/design/survivors-boss-gameplay-v1.json`
 
-### Slice B — generic incident state machine
-- detailed phases
-- generic control gate progress
-- HP/risk interlock integration
-- existing 4 base boss families unchanged when incident feature disabled
+Recommended typed contract:
 
-### Slice C — intro transition
-- new transition component
-- asset manifest loader
-- reduced-motion path
-- responsive portrait/landscape tests
+```ts
+export type BossCombatArchetype =
+  | 'ACTION'
+  | 'PATTERN'
+  | 'PUZZLE'
+  | 'SURVIVAL'
+  | 'MULTI'
+  | 'FINAL';
 
-### Slice D — first 5 representative incidents
-Implement and tune:
-- Stage 01 vehicle blind reverse
-- Stage 03 lifting balance
-- Stage 04 invisible atmosphere
-- Stage 07 progressive demolition collapse
-- Stage 19 electrical backfeed
+export interface BossGameplayDefinition {
+  stageId: PatrolStageId;
+  bossId: string;
+  combatArchetype: BossCombatArchetype;
+  primarySkill: string;
+  patternId: string;
+  encounterTier: 'REGULAR' | 'MAJOR' | 'CHAPTER' | 'FINAL';
+  phaseCount: number;
+  combatLoop: string;
+  weakPointId: string;
+  burstWindowSeconds: number;
+  playerFacingMechanic: string;
+  premiumHook: string;
+  failureRead: string;
+}
+```
 
-These five cover moving, lifting, invisible, structural and electrical patterns.
+Engine code must consume semantic IDs, not parse Korean prose.
 
-### Slice E — Chapter Bosses
-- 10 / 20 / 30 / 40
+## 9. Engine architecture
 
-### Slice F — remaining 41 ordinary incidents
-Use adapters, not 41 giant bespoke engine branches.
+Do not create 50 boss classes.
 
-### Slice G — Stage 50
-Whole-site final wave after all reusable mechanics are stable.
+Use:
+- existing four physical families
+- reusable warning geometry
+- reusable weak-point state
+- reusable burst-window state
+- reusable pattern adapters
+- stage gameplay data overlay
 
-## 12. Tests / acceptance
+Recommended generic state:
 
-### Data tests
-- exactly 50 incident definitions
-- all stage IDs 01–50 exactly once
-- boss IDs unique
-- each incident has >=3 telegraphs and >=3 required controls
-- no blank learning point/finisher
-- every art manifest entry matches an incident
+```ts
+type BossCombatPhase =
+  | 'arrival'
+  | 'pattern'
+  | 'weak_point'
+  | 'burst'
+  | 'recovery'
+  | 'secured';
 
-### Engine tests
-- raw damage cannot cross protected floor before gate completion
-- completing the right controls exposes verify phase
-- wrong/unrelated control does not advance incident
-- phase 2 still changes only at a safe motion boundary
-- ordinary non-boss hazards retain current behavior
-- pause/store/arsenal remain blocked during non-combat arrival/secured transitions
-- reduced-motion does not change collision/timing
+interface BossGameplayProgress {
+  bossId: string;
+  combatPhase: BossCombatPhase;
+  phaseIndex: number;
+  signatureResolvedThisCycle: boolean;
+  burstRemaining: number;
+  cycleCount: number;
+}
+```
 
-### UI tests
-- transition is not a floating modal
-- 360x800, 390x844, 844x390, 1440x900 no overflow
-- title remains DOM text
-- portrait safe crop preserves hazard clue
-- skip unavailable before 1.5s
-- return-to-play camera/map location remains coherent
+The existing boss phase 2 safe-boundary behavior must remain compatible.
 
-### Stage 50 tests
-- no requirement for a single boss sprite
-- all required hazard classes appear as authored signals
-- STOP WORK transition cannot be skipped by DPS
-- victory only after final verify/handoff state
+## 10. Representative first implementation set
 
-## 13. Non-goals for this task
+Implement these first because together they test the full design:
 
-- Do not rebalance the entire weapons economy.
-- Do not redesign the 50 stage maps.
-- Do not alter unrelated Episode 01 story content.
-- Do not add backend/cloud systems.
-- Do not fabricate real named accident victims/sites.
-- Do not call placeholder art 'Production Locked'.
+- Stage 01 — ACTION / reverse charge
+- Stage 03 — PATTERN / dual-drop rigging
+- Stage 04 — SURVIVAL / invisible field
+- Stage 07 — SURVIVAL / progressive collapse
+- Stage 19 — PUZZLE / backfeed
+- Stage 14 — PATTERN / pendulum + debris, visual benchmark
 
-## 14. Completion report format
+Stage 14 is the visual/combat reference:
+`PENDULUM → DEBRIS RAIN → DROP ZONE BREAK → 4.5s BURST`
 
-Follow `AGENTS.md` exactly:
+## 11. Chapter bosses
 
+Stages 10/20/30/40 combine learned mechanics. They must not become four-step forms.
+
+Each phase should read primarily through movement, warning geometry, audio and visual state.
+
+At most one short objective label should be active at a time.
+
+## 12. Stage 50
+
+Implement last.
+
+Stage 50 intentionally breaks the single-boss expectation.
+
+- vehicle
+- lifting
+- falling object
+- energy
+- communication/process pressure
+
+return as compact overlapping variants.
+
+Three major crisis chains must be broken. Then open an 8-second final ALL CLEAR resolution.
+
+The final realization is narrative, not tutorial text:
+
+> the bosses were faces of accident chains before they became accidents.
+
+## 13. Player-facing text
+
+During combat use only concise game language such as:
+
+- BLIND SIDE
+- LOAD UNSTABLE
+- CLEAR BELOW
+- CORE EXPOSED
+- POWER LIVE
+- ROUTE BLOCKED
+- PRESSURE RISING
+- STAGGER
+- ALL CLEAR
+
+Real-world safety explanation belongs after clear in one short sentence sourced from the Incident Bible.
+
+## 14. Tests / acceptance
+
+### Data
+- exactly 50 gameplay entries
+- stage_01..stage_50 exactly once
+- gameplay bossId resolves to incident bossId
+- archetype is valid
+- regular bosses have phaseCount=2
+- chapter bosses have phaseCount=3
+- Stage 50 phaseCount=4
+
+### Combat
+- signature mechanic cannot be bypassed by pre-burst raw DPS
+- after signature success, burst window opens
+- strong build materially increases damage during burst
+- boss can require another cycle if damage is insufficient
+- premium gear does not auto-resolve signature pattern
+- ordinary hazards remain unchanged
+- existing phase-boundary timing remains stable
+
+### Pacing
+- no ordinary boss asks for 3 explicit safety actions
+- no long safety prose in combat
+- ordinary first-play boss interruption <=2.4s
+- replay interruption <=0.35s before skip
+- five consecutive stages include varied combat rhythms
+
+### Presentation
+- boss process still recognizable
+- visual exaggeration improves intimidation without fantasy monster faces
+- finisher is satisfying stabilization/control rather than gore
+
+## 15. Implementation slices
+
+A. Typed gameplay registry + validation only.  
+B. Generic signature → weak point → burst state.  
+C. Stage 01/03/04/07/19/14 adapters.  
+D. Boss entrance timing/UI rebaseline.  
+E. Chapter bosses 10/20/30/40.  
+F. Remaining regular/major stages.  
+G. Stage 50.  
+H. Natural-play tuning for fun, build diversity and repetition.
+
+Do not advance from a failing slice.
+
+## 16. Completion report
+
+Follow `AGENTS.md`:
 - IMPLEMENTED
 - FILES
 - TEST
 - TODO
 - DIRECTOR REVIEW
-
-## 15. Director intent in one sentence
-
-> 50개의 스테이지를 50개의 서로 다른 실제 현장형 재해사건으로 기억하게 만들고, 플레이어가 위험을 이해해야만 통제할 수 있게 한다.
