@@ -240,7 +240,7 @@ export interface SurvivorsGameState {
   inFloodlight: boolean;
 }
 
-export const PATROL_STAGE_IDS = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05', 'stage_06', 'stage_07', 'stage_08', 'stage_09', 'stage_10', 'stage_11', 'stage_12', 'stage_13', 'stage_14', 'stage_15', 'stage_16', 'stage_17', 'stage_18', 'stage_19', 'stage_20'] as const;
+export const PATROL_STAGE_IDS = ['stage_01', 'stage_02', 'stage_03', 'stage_04', 'stage_05', 'stage_06', 'stage_07', 'stage_08', 'stage_09', 'stage_10', 'stage_11', 'stage_12', 'stage_13', 'stage_14', 'stage_15', 'stage_16', 'stage_17', 'stage_18', 'stage_19', 'stage_20', 'stage_21', 'stage_22', 'stage_23', 'stage_24', 'stage_25', 'stage_26', 'stage_27', 'stage_28', 'stage_29', 'stage_30', 'stage_31', 'stage_32', 'stage_33', 'stage_34', 'stage_35', 'stage_36', 'stage_37', 'stage_38', 'stage_39', 'stage_40', 'stage_41', 'stage_42', 'stage_43', 'stage_44', 'stage_45', 'stage_46', 'stage_47', 'stage_48', 'stage_49', 'stage_50'] as const;
 export type PatrolStageId = typeof PATROL_STAGE_IDS[number];
 
 export type StageHazardType =

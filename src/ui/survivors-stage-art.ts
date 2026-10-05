@@ -1,9 +1,10 @@
 import type { StageHazardObject } from '../domain/patrol-survivors';
+import campaign from '../../content/localization/survivors-campaign50-ko.json';
 
 export interface StageArtProfile { ground: string; accent: string; detail: number; layout: number }
 const floor = (name: string) => `/assets/survivors/maps/${name}-v1.png`;
 const stage = (ground: string, accent: string, detail: number, layout: number): StageArtProfile => ({ground, accent, detail, layout});
-/** Existing twenty-stage campaign only. Art families follow the actual workface, not theme aliases. */
+/** Art families follow the actual workface, not theme aliases. */
 export const STAGE_ART: Record<string, StageArtProfile> = {
   stage_01: stage('/assets/survivors/stage-01-ground-v2.webp', '#d4d8ca', 1, 0),
   stage_02: stage('/assets/survivors/excavation-ground-v3.webp', '#b6c6b2', 1, 1),
@@ -25,6 +26,11 @@ export const STAGE_ART: Record<string, StageArtProfile> = {
   stage_18: stage(floor('finish'), '#dce2dd', 4, 17),
   stage_19: stage(floor('datacenter'), '#c9e7d9', 4, 18),
   stage_20: stage(floor('handover'), '#e6ede4', 5, 19),
+  ...Object.fromEntries(campaign.stages.map(row=>[
+    `stage_${row.number}`,
+    stage(['deepworks','skydeck','plant'].includes(row.ground)?`/assets/survivors/maps/${row.ground}-v2.webp`:row.ground==='demolition'?'/assets/survivors/demolition-ground-v3.webp':floor(row.ground),
+      row.number<=30?'#9dd8bc':row.number<=40?'#e7d89b':'#a4dfe7',Math.floor((row.number-1)/10)+4,row.number-1),
+  ])),
 };
 export function stageArtProfile(id: string): StageArtProfile { return STAGE_ART[id] ?? STAGE_ART.stage_01!; }
 
@@ -52,7 +58,7 @@ export function drawStageWorkface(ctx: CanvasRenderingContext2D, id: string, haz
     }
   }
   // Survey ticks are flat floor markings; successive workfaces gain finer installation detail.
-  if (art.detail >= 2) for (let i = 0; i < art.detail * 3; i++) {
+  if (art.detail >= 2) for (let i = 0; i < Math.min(16,art.detail * 3); i++) {
     const x = 110 + i * 80, y = id === 'stage_13' ? 120 : 110 + (art.layout % 3) * 20;
     ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x, y + 4); ctx.moveTo(x - 4, y); ctx.lineTo(x + 4, y); ctx.stroke();
   }

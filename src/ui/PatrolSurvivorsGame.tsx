@@ -4,6 +4,9 @@ import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {drawEquipmentIdentity,drawEvolutionIdentity} from './survivors-equipment-identity';
 import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
+import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
+import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
+import growthText from '../../content/localization/survivors-campaign50-ko.json';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
@@ -319,6 +322,25 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       return {};
     }
   });
+  const [growthRecords,setGrowthRecords]=useState<PatrolClearRecord[]>(()=>{
+    try{return validGrowthRecords(parseSave(localStorage.getItem('psi.survivors.growth_v1')));}catch{return [];}
+  });
+  const growthRef=useRef(growthRecords);growthRef.current=growthRecords;
+  const [growthSaveFailed,setGrowthSaveFailed]=useState(false);
+  const [stageChapter,setStageChapter]=useState(0);
+  const chapterTabsRef=useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    const node=chapterTabsRef.current;if(!node)return;
+    const reveal=()=>node.querySelector<HTMLElement>('[aria-selected="true"]')?.scrollIntoView?.({block:'nearest',inline:'nearest'});
+    reveal();
+    if(typeof ResizeObserver==='undefined')return;
+    const observer=new ResizeObserver(reveal);observer.observe(node);
+    return ()=>observer.disconnect();
+  },[stageChapter]);
+  const persistGrowth=(records:PatrolClearRecord[])=>{
+    try{localStorage.setItem('psi.survivors.growth_v1',JSON.stringify(records));setGrowthSaveFailed(false);}
+    catch{setGrowthSaveFailed(true);}
+  };
   const [permanentUpgrades, setPermanentUpgrades] = useState<PermanentUpgrades>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_UPGRADES);
@@ -1161,6 +1183,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
 
             if (engine.state.phase === 'victory') {
+              const nextGrowth=recordPatrolClear(growthRef.current,engine.state);
+              growthRef.current=nextGrowth;setGrowthRecords(nextGrowth);persistGrowth(nextGrowth);
               // Unlock next stage in order
               const stageOrder = STAGE_IDS;
               const currentIdx = stageOrder.indexOf(engine.state.stageId);
@@ -2440,6 +2464,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
             <span className="survivors-hp-text">{hp}/{maxHp}</span>
           </div>
+          <span className="survivors-campaign-position" data-advanced={PATROL_STAGES[selectedStage].stageNumber>20} title={PATROL_STAGES[selectedStage].name}>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2,'0')}/50</span>
           {liveGear && liveGear.effects.shield>0 && <div className="survivors-premium-live" aria-label={storeText.status}>
             {liveGear.effects.shield>0 && <span>{storeText.shield} {Math.ceil(liveGear.shield)}/{liveGear.effects.shield}{liveGear.shieldCooldown>0?` · ${storeText.recharge} ${Math.ceil(liveGear.shieldCooldown)}s`:''}</span>}
           </div>}
@@ -2531,7 +2556,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               const gate=engineRef.current.state.supplyGate;
               const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
               const wait=Math.max(0,Math.ceil((gate?.availableAt??0)-engineRef.current.state.gameTime));
-              return <div className="survivors-live-objective" title={activeMission?.description}>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
+              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
@@ -2649,7 +2674,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content survivors-ready-dialog" data-preflight={preflightTab}>
             <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
             <header className="survivors-ready-launch">
-              <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')} · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
+              <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
               <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>{preflightText.launch}</button>
             </header>
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
@@ -2677,6 +2702,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 return record?.[0] && narrative ? <small>{campaignText.memory_label}: {record[1]?narrative.success:narrative.residual}</small> : null; })()}
             </aside>}
             {accountabilityMemory(accountability)&&<aside className="survivors-story-brief"><strong>{accountabilityText.memory}</strong><p>{accountabilityMemory(accountability)}</p></aside>}
+            <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar} legacy={Object.values(stageStars).some(stars=>stars[0])}/>
             <section className="survivors-mission-brief" aria-label={combatText.mission_title}>
               <h3>{combatText.mission_title}</h3>
               <p>{PATROL_STAGES[selectedStage].description}</p>
@@ -2716,9 +2742,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
             <details open className="survivors-stage-select-section survivors-ready-details" hidden={preflightTab!=='stage'}>
               <summary>{combatText.stage_select}</summary>
-              <span className="survivors-section-label">작전 구역 선택 (현장 공정 20단계)</span>
+              <span className="survivors-section-label">{growthText.stage_select}</span>
+              <div ref={chapterTabsRef} className="survivors-chapter-tabs" role="tablist" aria-label={growthText.stage_select}>
+                {growthText.chapters.map((name,index)=><button type="button" role="tab" tabIndex={stageChapter===index?0:-1} aria-selected={stageChapter===index} aria-controls="survivors-chapter-stages" id={`survivors-chapter-${index}`} key={name} onClick={()=>setStageChapter(index)} onKeyDown={event=>{
+                  const next=event.key==='ArrowRight'?(index+1)%5:event.key==='ArrowLeft'?(index+4)%5:event.key==='Home'?0:event.key==='End'?4:null;
+                  if(next!==null){event.preventDefault();setStageChapter(next);event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('button')[next]?.focus();}
+                }}>{name}</button>)}
+              </div>
+              <p className="survivors-chapter-story">{growthText.chapter_stories[stageChapter]}</p>
+              <div id="survivors-chapter-stages" role="tabpanel" aria-labelledby={`survivors-chapter-${stageChapter}`}>
               <div className="survivors-stage-cards">
-                {STAGE_IDS.map(id => PATROL_STAGES[id]).map(stg => {
+                {STAGE_IDS.slice(stageChapter*10,stageChapter*10+10).map(id => PATROL_STAGES[id]).map(stg => {
                   const isUnlocked = unlockedStages.includes(stg.id);
                   const stars = stageStars[stg.id] || [false, false, false];
                   return (
@@ -2733,6 +2767,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         initGame(selectedChar, stg.id);
                       }}
                     >
+                      <img className="survivors-stage-thumbnail" src={stageGroundUri(stg.id)} alt="" loading="lazy" decoding="async"/>
                       <div className="survivors-stage-badge">
                         <span>{isUnlocked ? stg.icon : '🔒'}</span>
                         <strong>STAGE {String(stg.stageNumber).padStart(2, '0')}</strong>
@@ -2743,6 +2778,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         )}
                       </div>
                       <h4>{stg.name}</h4>
+                      {stg.stageNumber>20&&<small className="survivors-stage-tier">{stg.stageNumber===50?growthText.final_stage:growthText.high_stage} · {String(stg.stageNumber).padStart(2,'0')}/50</small>}
                       <span className="survivors-stage-sub">{stg.subtitle}</span>
                       {isUnlocked && <small className="survivors-operation-preview">{operationText.modes[operationPlan(stg).mode]} · {operationPlan(stg).earliest}–180s</small>}
                       <p>{isUnlocked ? stg.description : `🔒 이전 구역 (STAGE ${String(stg.stageNumber - 1).padStart(2, '0')}) 완수 시 해금`}</p>
@@ -2752,6 +2788,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                     </button>
                   );
                 })}
+              </div>
               </div>
             </details>
 
@@ -3172,6 +3209,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
 
             {PATROL_STAGES[selectedStage].narrative && <p className="survivors-story-result">{engineRef.current?.state.starsEarned[1] ? PATROL_STAGES[selectedStage].narrative!.success : PATROL_STAGES[selectedStage].narrative!.residual}</p>}
+            <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar}/>
+            <p role={growthSaveFailed?'alert':'status'}>{growthSaveFailed?growthText.growth_unsaved:growthText.growth_saved}</p>
+            {growthSaveFailed&&<button type="button" onClick={()=>persistGrowth(growthRecords)}>{growthText.growth_retry}</button>}
             {accountabilityMemory(accountability)&&<p className="survivors-story-result">{accountabilityMemory(accountability)}</p>}
             <div className="survivors-actions-row">
               {(() => {
@@ -3186,6 +3226,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                       className="survivors-btn-primary"
                       onClick={() => {
                         setSelectedStage(nextStage);
+                        setStageChapter(Math.floor(STAGE_IDS.indexOf(nextStage)/10));
                         initGame(selectedChar, nextStage);
                       }}
                     >

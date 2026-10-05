@@ -10,7 +10,7 @@ it('assigns every campaign workface an existing raster asset and monotonic detai
     expect(existsSync(`public${stageGroundUri(id)}`)).toBe(true);
     expect(STAGE_ART[id]!.detail).toBeGreaterThanOrEqual(previous); previous = STAGE_ART[id]!.detail;
   }
-  expect(new Set(Object.values(STAGE_ART).map(p => p.ground)).size).toBe(15);
+  expect(new Set(Object.values(STAGE_ART).map(p => p.ground)).size).toBe(18);
   expect(stageGroundUri('stage_06')).toContain('remodel');
   expect(stageGroundUri('stage_04')).toContain('winter');
   expect(stageGroundUri('stage_13')).toContain('pour');

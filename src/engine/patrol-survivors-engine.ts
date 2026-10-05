@@ -10,6 +10,7 @@ import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
+import { ADVANCED_PATROL_STAGES } from './patrol-stage50';
 import { SurvivorsCollisionGrid } from './survivors-collision-grid';
 import { applyTacticalItem, tickTacticalItems } from './survivors-items';
 import { isHazardContactActive, updateHazardMotion } from './patrol-hazard-motion';
@@ -40,6 +41,7 @@ export const WORLD_HEIGHT = 900;
 export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
 
 export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
+  ...ADVANCED_PATROL_STAGES,
   ...ADDITIONAL_PATROL_STAGES,
   ...CAMPAIGN_PATROL_STAGES,
   stage_01: {

@@ -2229,6 +2229,27 @@
 .survivors-choice-evolution span, .survivors-choice-evolution small { font-size: 11px; color: #a8bcc0; }
 .survivors-choice-evolution[data-status="ready"] small { color: #65e2b7; }
 .survivors-choice-evolution[data-status="evolved"] small { color: #ffd265; }
+.survivors-chapter-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0; }
+.survivors-chapter-tabs button { flex: 0 0 auto; min-height: 44px; border: 1px solid #536c70; border-radius: 4px; background: #1e3034; color: #dbe9e6; padding: 8px 12px; font: inherit; font-size: 12px; cursor: pointer; }
+.survivors-chapter-tabs button[aria-selected="true"] { background: #b9e2cc; color: #152c24; border-color: #b9e2cc; }
+.survivors-chapter-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.survivors-chapter-story { font-size: 13px; color: #bdd3d5; line-height: 1.6; }
+.survivors-stage-tier { color: #f1cf8c; font-size: 12px; }
+.survivors-stage-thumbnail { display: block; width: 100%; height: 92px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; }
+.survivors-campaign-position { display: block; font-size: 10px; color: #adcbc5; margin-top: 3px; }
+.survivors-campaign-position[data-advanced="true"] { color: #f0d48f; }
+.survivors-current-workface { display: block; color: #d4e3df; font-size: 10px; white-space: normal; line-height: 1.4; margin-bottom: 3px; }
+.survivors-growth-record { border-top: 1px solid #4b6565; padding: 14px 0; text-align: left; }
+.survivors-growth-record h3 { font-size: 15px; margin: 0 0 10px; color: #d7eee1; }
+.survivors-growth-record dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 0; }
+.survivors-growth-record dt { font-size: 11px; color: #a6bbc0; }
+.survivors-growth-record dd { margin: 4px 0; font-size: 18px; color: #f3d99b; }
+.survivors-growth-record p { font-size: 12px; line-height: 1.6; color: #c5d7d4; }
+.survivors-growth-skills { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 16px; }
+.survivors-growth-skills label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: #a9cdc0; }
+.survivors-growth-skills span { display: flex; justify-content: space-between; gap: 4px; }
+.survivors-growth-skills progress { width: 100%; height: 5px; accent-color: #8bd5b1; }
+.survivors-growth-record small { display: block; font-size: 11px; color: #a9bfc0; margin-top: 8px; line-height: 1.5; }
 @media (min-width: 1100px) and (min-height: 600px) {
   .survivors-upgrade-dialog { width: min(1080px, calc(100% - 32px)); max-width: 1080px; }
   .survivors-upgrade-dialog .survivors-perk-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }

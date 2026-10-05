@@ -3,13 +3,14 @@ import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-ch
 
 /** Authored map progression; independent of permanent upgrades and player performance. */
 export function difficultyProfile(stageNumber: number) {
-  const n = Math.max(1, Math.min(20, Math.floor(stageNumber)));
+  const number=Number.isFinite(stageNumber)?Math.max(1,Math.min(50,Math.floor(stageNumber))):1;
+  const n = Math.min(20,number),advanced=Math.max(0,number-20);
   return {
-    openingInterval: 1.65 - (n - 1) * .035,
-    finalInterval: .72 - (n - 1) * .012,
-    activeLimit: 18 + (n - 1) * 2,
+    openingInterval: 1.65 - (n - 1) * .035-advanced*.008,
+    finalInterval: .72 - (n - 1) * .012-advanced*.004,
+    activeLimit: 18 + (n - 1) * 2+Math.floor(advanced/3),
     telegraphLimit: n <= 5 ? 2 : n <= 12 ? 3 : 4,
-    hpScale: 1 + (n - 1) * .018,
+    hpScale: 1 + (n - 1) * .018+advanced*.01,
     introductionTime: n <= 3 ? 30 : n <= 10 ? 20 : 12,
   };
 }
