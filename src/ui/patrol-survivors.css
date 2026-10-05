@@ -2216,9 +2216,11 @@
  .survivors-store-heading {margin-bottom:4px;}
  .survivors-durability-rule {margin:4px 0;}
  .survivors-store-heading p {margin:4px 0;font-size:12px;}
- .survivors-fitting {grid-template-columns:minmax(160px,32%) minmax(0,1fr);gap:16px;align-items:start;}
- .survivors-fitting-visual {position:sticky;top:44px;}
- .survivors-fitting-art {width:min(100%,210px);}
+ .survivors-fitting {grid-template-columns:minmax(220px,32%) minmax(0,1fr);gap:16px;align-items:start;}
+ .survivors-fitting-visual {position:sticky;top:52px;}
+ .survivors-store .survivors-fitting-visual .survivors-fitting-art {width:min(100%,180px,max(110px,calc((100dvh - 260px)*1.125)));}
+ .survivors-fitting-controls label {gap:4px;}
+ .survivors-fitting-controls input {width:80px;max-width:80px;}
  .survivors-fitting-summary dl {display:grid;grid-template-columns:1fr 1fr;gap:0 12px;}
  .survivors-fitting-slots {grid-template-columns:1fr 1fr;}
  .survivors-fitting-action {grid-template-columns:1fr auto;position:static;}

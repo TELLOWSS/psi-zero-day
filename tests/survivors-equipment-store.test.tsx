@@ -62,3 +62,15 @@ it('trying an unaffordable item changes only the fitting view', () => {
     expect(host.querySelector('.survivors-fitting-summary')?.textContent).toContain('현재 장착');
   } finally { act(() => root.unmount()); }
 });
+it('changes fitting pose and playback without purchasing or changing the loadout',()=>{
+ const host=document.createElement('div'),root=createRoot(host),change=vi.fn(),inventory={owned:['voice_lens'],equipped:['voice_lens']};
+ try{
+  act(()=>root.render(<SurvivorsEquipmentStore inventory={inventory} credits={0} message="" onChange={change}/>));
+  const button=(name:string)=>host.querySelector<HTMLButtonElement>(`button[aria-label="${name}"]`)!;
+  act(()=>button('이동 포즈').click());expect(button('이동 포즈').getAttribute('aria-pressed')).toBe('true');
+  act(()=>button('공격 포즈').click());expect(button('공격 포즈').getAttribute('aria-pressed')).toBe('true');
+  act(()=>button('미리보기 일시정지').click());expect(button('미리보기 재생').getAttribute('aria-pressed')).toBe('false');
+  act(()=>button('왼쪽').click());expect(button('왼쪽').getAttribute('aria-pressed')).toBe('true');
+  expect(change).not.toHaveBeenCalled();expect(inventory.equipped).toEqual(['voice_lens']);
+ }finally{act(()=>root.unmount());}
+});

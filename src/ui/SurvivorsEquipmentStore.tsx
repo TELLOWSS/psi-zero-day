@@ -6,6 +6,8 @@ import type { CharacterId, PermanentUpgrades } from '../domain/patrol-survivors'
 import { fittingLoadout } from '../domain/survivors-fitting';
 import { createInitialSurvivorsState, DEFAULT_PERMANENT_UPGRADES, CHARACTER_PROFILES } from '../engine/patrol-survivors-engine';
 import { SurvivorsFittingPreview } from './SurvivorsFittingPreview';
+import {ArrowLeft,ArrowRight,PersonStanding,Footprints,Zap,Play,Pause} from 'lucide-react';
+import type {FittingMotion} from './survivors-fitting-pose';
 
 export function SurvivorsEquipmentStore({ inventory, credits, message, onChange, onRepair, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
   inventory: StoreInventory; credits: number; message: string;
@@ -20,6 +22,8 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   const [draft, setDraft] = useState<string[]>([...inventory.equipped]);
   const [facing,setFacing]=useState<1|-1>(1);
   const [zoom,setZoom]=useState(1);
+  const [motion,setMotion]=useState<FittingMotion>('idle');
+  const [previewPlaying,setPreviewPlaying]=useState(true);
   const [view, setView] = useState<'browse' | 'fitting' | 'loadout'>('browse');
   const baseline = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, inventory), [characterId, upgrades, inventory]);
   const preview = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, fittingLoadout(inventory, draft)), [characterId, upgrades, inventory, draft]);
@@ -59,8 +63,9 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
     {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
     <div id="store-panel-fitting" role="tabpanel" aria-labelledby="store-tab-fitting" hidden={view !== 'fitting'}>
     <div className="survivors-fitting">
-      <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom}/>
-        <div className="survivors-fitting-controls"><button type="button" aria-pressed={facing===-1} onClick={()=>setFacing(-1)}>{copy.leftView}</button><button type="button" aria-pressed={facing===1} onClick={()=>setFacing(1)}>{copy.rightView}</button><label>{copy.zoom}<input type="range" min={.8} max={1.25} step={.05} value={zoom} onChange={event=>setZoom(Number(event.target.value))}/></label></div>
+      <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom} motion={motion} playing={previewPlaying} active={view==='fitting'}/>
+        <div className="survivors-fitting-controls"><button type="button" aria-label={copy.leftView} title={copy.leftView} aria-pressed={facing===-1} onClick={()=>setFacing(-1)}><ArrowLeft size={18}/></button><button type="button" aria-label={copy.rightView} title={copy.rightView} aria-pressed={facing===1} onClick={()=>setFacing(1)}><ArrowRight size={18}/></button><label>{copy.zoom}<input type="range" min={.8} max={1.25} step={.05} value={zoom} onChange={event=>setZoom(Number(event.target.value))}/></label></div>
+        <div className="survivors-fitting-controls" role="group" aria-label={copy.pose}><button type="button" aria-label={copy.poseIdle} title={copy.poseIdle} aria-pressed={motion==='idle'} onClick={()=>setMotion('idle')}><PersonStanding size={18}/></button><button type="button" aria-label={copy.poseWalk} title={copy.poseWalk} aria-pressed={motion==='walk'} onClick={()=>setMotion('walk')}><Footprints size={18}/></button><button type="button" aria-label={copy.poseAction} title={copy.poseAction} aria-pressed={motion==='action'} onClick={()=>setMotion('action')}><Zap size={18}/></button><button type="button" aria-label={previewPlaying?copy.pausePreview:copy.playPreview} title={previewPlaying?copy.pausePreview:copy.playPreview} aria-pressed={previewPlaying} onClick={()=>setPreviewPlaying(value=>!value)}>{previewPlaying?<Pause size={18}/>:<Play size={18}/>}</button></div>
       </div>
       <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[characterId].name}</h4>
         <p role="status">{previewItem ? `${copy.fitting}: ${copy.items[previewItem.id as keyof typeof copy.items].name}` : copy.currentLoadout}</p>
