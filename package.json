@@ -88,6 +88,7 @@
   "dependencies": {
     "@capacitor/android": "8.5.2",
     "@capacitor/core": "8.5.2",
+    "lucide-react": "^1.52.0",
     "phaser": "4.2.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",

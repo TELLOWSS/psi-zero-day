@@ -18,7 +18,7 @@ export function operationProgress(state:SurvivorsGameState) {
   }
   const zones=controlled.size;
   const boss=Boolean(state.stageBossNeutralized);
-  const complete=boss&&zones>=plan.zones&&state.hazardsNeutralized>=plan.controls;
+  const complete=boss;
   return {...plan,zonesSecured:zones,boss,controlsDone:state.hazardsNeutralized,complete};
 }
 

@@ -1,4 +1,6 @@
 import { CombatDirection } from './survivors-combat-direction';
+import { Pause, Play, Package, Shield, ArrowUp } from 'lucide-react';
+import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
@@ -2462,7 +2464,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   return (
     <div
       ref={containerRef}
-      className="survivors-container"
+      className={`survivors-container${phase === 'playing' ? ' is-combat' : ''}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEndOrCancel}
@@ -2522,7 +2524,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={showRdModal || showArsenalModal} onClick={openStore}>{storeText.shopShort}</button>}
           <button
             type="button"
-            className="survivors-btn-icon"
+            className="survivors-btn-icon survivors-pause-command"
+            aria-label={phase === 'paused' ? focusText.resume : focusText.pause}
+            title={phase === 'paused' ? focusText.resume : focusText.pause}
             disabled={showRdModal || showArsenalModal}
             onClick={() => {
               const engine = engineRef.current;
@@ -2533,13 +2537,28 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               }
             }}
           >
-            {phase === 'paused' ? '재개 (P)' : '일시정지 (P)'}
+            {phase === 'paused' ? <Play size={20}/> : <Pause size={20}/>}<span>{phase === 'paused' ? '재개 (P)' : '일시정지 (P)'}</span>
           </button>
           <button type="button" className="survivors-btn-icon" onClick={exitSession}>
             현장 복귀
           </button>
         </div>
       </header>
+
+      {phase === 'playing' && engineRef.current && (() => {
+        const state = engineRef.current.state;
+        const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
+        const deadline = Math.max(0, operationPlan(state.stage).bossAt - gameTime);
+        const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
+        return <aside className="survivors-focus-status" aria-label={boss ? state.stage.bossName : focusText.bossIncoming}>
+          {boss ? <>
+            <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
+            <strong>{state.stage.bossName}</strong>
+            <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
+            <span>{bossText.status[boss.motion?.phase ?? 'approach']} · {bossRisk}%</span>
+          </> : <span>{focusText.bossDeadline} {deadline}s</span>}
+        </aside>;
+      })()}
 
       {phase === 'playing' && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
@@ -2624,11 +2643,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {phase==='playing'&&fieldIncident&&gameTime>=2&&gameTime<=14&&fieldRadio&&<aside className="survivors-field-radio" aria-live="polite"><strong>{accountabilityText.worker} · {accountabilityText.warning} {accountability.warnings}/3</strong><p>{fieldRadio}</p></aside>}
       {phase==='playing' && engineRef.current?.state.fieldTactics && (()=>{
-        const engine=engineRef.current!,t=engine.state.fieldTactics!,ready=operationProgress(engine.state).complete;
+        const engine=engineRef.current!,t=engine.state.fieldTactics!;
         return <div className="survivors-tactical-actions" aria-label={tacticsText.support}>
-          <button type="button" title={tacticsText.support_description} disabled={t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}>{tacticsText.supply} · {t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges} <small>Q</small></button>
-          <button type="button" title={tacticsText.line_description} disabled={t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}>{tacticsText.line} · {t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges} <small>E</small></button>
-          {ready&&<button type="button" className="is-handoff" onClick={()=>t.handoff?engine.cancelHandoff():engine.requestHandoff()}>{t.handoff?tacticsText.cancel:tacticsText.handoff} <small>X</small></button>}
+          <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>
+          <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>
         </div>;
       })()}
       {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
@@ -3103,6 +3121,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>{storeText.shopEntry}</button>
+              <button type="button" className="survivors-btn-secondary" onClick={openArsenal}>{focusText.equipment}</button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
               <button
                 type="button"

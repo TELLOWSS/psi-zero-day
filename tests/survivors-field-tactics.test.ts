@@ -19,15 +19,14 @@ it('rejects gameplay commands during pauses and does not advance pending actions
  const remaining=s.fieldTactics!.pendingSupport!.remaining;tickFieldTactics(s,3,()=>{throw Error('paused delivery');});
  expect(s.fieldTactics!.pendingSupport!.remaining).toBe(remaining);expect(e.requestSupport()).toBe(false);expect(e.deployControlLine()).toBe(false);expect(e.requestHandoff()).toBe(false);
 });
-it('objective readiness grants a choice instead of an automatic win; moving cancels handoff',()=>{
+it('boss resolution ends the stage without a separate handoff command',()=>{
  const s=createInitialSurvivorsState();const e=new SurvivorsEngine(s,42);e.start();s.gameTime=100;s.stageBossSpawned=true;s.stageBossNeutralized=true;s.hazardsNeutralized=100;
  for(const h of s.interactiveHazards)if(h.type==='explosive_barrel')h.state='destroyed';
- e.update(1/60,{moveX:0,moveY:0});expect(s.phase).toBe('playing');expect(e.requestHandoff()).toBe(true);
- s.player.x+=73;tickFieldTactics(s,.1,()=>{});expect(s.fieldTactics!.handoff).toBeUndefined();expect(s.phase).toBe('playing');
+ e.update(1/60,{moveX:0,moveY:0});expect(s.phase).toBe('victory');expect(e.requestHandoff()).toBe(false);
 });
 it('damage cancels an ongoing handoff without rewarding incomplete evacuation',()=>{
- const s=createInitialSurvivorsState();const e=new SurvivorsEngine(s,42);e.start();s.gameTime=100;s.stageBossSpawned=true;s.stageBossNeutralized=true;s.hazardsNeutralized=100;
+ const s=createInitialSurvivorsState();const e=new SurvivorsEngine(s,42);e.start();s.gameTime=100;s.stageBossSpawned=true;s.hazardsNeutralized=100;
  for(const h of s.interactiveHazards)if(h.type==='explosive_barrel')h.state='destroyed';
- expect(e.requestHandoff()).toBe(true);s.hazards.push({id:'fixture',type:'GAS_LEAK',x:s.player.x,y:s.player.y,hp:10000,maxHp:10000,speed:0,radius:20,damage:2,expValue:0});
+ s.fieldTactics!.handoff={x:s.player.x,y:s.player.y,remaining:4};s.hazards.push({id:'fixture',type:'GAS_LEAK',x:s.player.x,y:s.player.y,hp:10000,maxHp:10000,speed:0,radius:20,damage:2,expValue:0});
  e.update(1/60,{moveX:0,moveY:0});expect(s.fieldTactics!.handoff).toBeUndefined();expect(s.phase).toBe('playing');
 });

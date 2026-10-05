@@ -817,8 +817,8 @@ export class SurvivorsEngine {
     if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
-    // Time alone never resolves an uncontrolled worksite.
-    if (operationProgress(this.state).complete && this.state.fieldTactics?.handoff?.remaining === 0 && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+    // Boss resolution ends the stage; control objectives remain optional achievements.
+    if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
@@ -1276,12 +1276,10 @@ export class SurvivorsEngine {
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
     const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty);
-    if (this.cooldowns.spawnTimer <= 0) {
-      this.cooldowns.spawnTimer = pressure.interval;
-
-      // Boss event checking at 60s, 120s
+    const stage = this.state.stage;
+    if (!this.state.stageBossSpawned) {
+      // The boss deadline is independent of ordinary spawn cadence and capacity.
       const time = Math.floor(this.state.gameTime);
-      const stage = this.state.stage;
       const stageBossName = stage ? `${stage.bossName} (${stage.bossTitle})` : '타이탄 크레인 8000 (TITAN CRANE)';
       const stageBossType = stage?.bossType || 'CRANE_BOSS';
       const stageBossHp = stage?.bossHp;
@@ -1293,7 +1291,9 @@ export class SurvivorsEngine {
         this.spawnHazard(stageBossType, stageBossHp, true);
         return;
       }
-
+    }
+    if (this.cooldowns.spawnTimer <= 0) {
+      this.cooldowns.spawnTimer = pressure.interval;
       const alive = this.state.hazards.filter(h => h.hp > 0);
       if (alive.length >= pressure.activeLimit) return;
       let type = selectStageHazard(stage, this.state.gameTime, this.random());

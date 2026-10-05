@@ -37,8 +37,8 @@ it.skipIf(process.env.PSI_CALIBRATE!=='1')('calibrates fifty maps with normal in
  expect(rows).toHaveLength(Object.keys(PATROL_STAGES).length*3);
  const baseline=rows.filter(r=>Number(r.stage.slice(6))<=20);
  expect(baseline).toHaveLength(60);
- // No universal 180-second win expectation: bosses and interruptible handoffs can fail.
- for(const id of Object.keys(PATROL_STAGES))expect(rows.some(r=>r.stage===id&&r.phase==='victory'&&r.boss&&r.requests>0)).toBe(true);
+ // No universal 180-second win expectation: a player can lose before boss resolution.
+ for(const id of Object.keys(PATROL_STAGES))expect(rows.some(r=>r.stage===id&&r.phase==='victory'&&r.boss)).toBe(true);
  expect(rows.every(r=>r.phase==='victory'||r.phase==='defeat')).toBe(true);
- expect(rows.filter(r=>r.phase==='victory').every(r=>r.boss&&r.requests>0)).toBe(true);
+ expect(rows.filter(r=>r.phase==='victory').every(r=>r.boss)).toBe(true);
 },120000);
