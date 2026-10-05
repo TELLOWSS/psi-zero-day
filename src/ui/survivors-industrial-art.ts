@@ -10,6 +10,14 @@ export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.
 export const INDUSTRIAL_CRANE_ART = '/assets/survivors/crane-load-v4.webp';
 export const INDUSTRIAL_CRANE_BOSS_ART = '/assets/survivors/crane-boss-load-v1.webp';
 export const INDUSTRIAL_CART_BOSS_ART = '/assets/survivors/runaway-carrier-boss-v1.webp';
+export const INDUSTRIAL_MATERIAL_BOSS_ART={GAS_LEAK:'/assets/survivors/gas-manifold-boss-v1.webp',FALLING_DEBRIS:'/assets/survivors/collapse-core-boss-v1.webp'} as const;
+export type MaterialBossImages=Partial<Record<keyof typeof INDUSTRIAL_MATERIAL_BOSS_ART,HTMLImageElement>>;
+
+export function industrialHazardPlacement(h:Pick<Hazard,'type'|'radius'>,elevation:number,solidBoss=false) {
+  const gas=h.type==='GAS_LEAK';
+  const size=gas?Math.max(solidBoss?76:0,h.radius*2.05):h.type==='FALLING_DEBRIS'?Math.max(solidBoss?72:32,h.radius*2.4):Math.max(58,h.radius*2.6);
+  return {size,y:gas&&!solidBoss?size*.43:-elevation,solid:!gas||solidBoss};
+}
 
 export function usesCarrierBossArt(h:Pick<Hazard,'type'|'isStageBoss'>):boolean {
   return h.type==='RUNAWAY_CART'&&h.isStageBoss===true;
@@ -65,13 +73,15 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
 }
 
 /** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement): boolean {
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages): boolean {
   const cell = industrialHazardCell(h, ground);
   if (cell === null || !atlas?.naturalWidth) return false;
   const gas = h.type === 'GAS_LEAK';
-  const size = gas ? h.radius * 2.05 : h.type === 'FALLING_DEBRIS' ? Math.max(32, h.radius * 2.4) : Math.max(58, h.radius * 2.6);
+  const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
+  const boss=Boolean(bossImage?.naturalWidth);
+  const placement=industrialHazardPlacement(h,elevation,boss),size=placement.size;
   ctx.save();
-  if (!gas) {
+  if (placement.solid) {
     ctx.fillStyle = 'rgba(0,0,0,.28)';ctx.beginPath();
     ctx.ellipse(0, 2, size * .4, size * .13, 0, 0, Math.PI * 2);ctx.fill();
   }
@@ -92,11 +102,10 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
     ctx.transform(1, 0, pose.lean+action.lean, 1 - action.compression - (reduced ? 0 : pose.reaction * .06), 0, 0);
   }
-  const pressure = !reduced && h.variant === 'pulse_gas' ? 1 + Math.sin(clock * 8) * .045 : 1;
+  const pressure = !boss && !reduced && h.variant === 'pulse_gas' ? 1 + Math.sin(clock * 8) * .045 : 1;
   ctx.scale(pressure, pressure);
-  if (gas) ctx.globalAlpha *= .82;
-  const boss=usesCarrierBossArt(h)&&carrierBoss?.naturalWidth;
-  const drawn = drawProp(ctx, boss?carrierBoss:atlas, boss?0:cell, 0, gas ? size * .43 : -elevation, size);
+  if (gas&&!boss) ctx.globalAlpha *= .82;
+  const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
   ctx.restore();
   return drawn;
 }

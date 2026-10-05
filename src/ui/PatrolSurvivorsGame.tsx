@@ -1,4 +1,5 @@
 import { CombatDirection } from './survivors-combat-direction';
+import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
 import { Pause, Play, Package, Shield, ArrowUp } from 'lucide-react';
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
@@ -174,6 +175,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     industrialContacts?: HTMLImageElement;
     industrialCrane?: HTMLImageElement;
     craneBoss?: HTMLImageElement;
+    materialBosses?:MaterialBossImages;
     wearables?: WearableImages;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
@@ -279,6 +281,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     industrialCrane.onload = () => { registerPropAtlas(industrialCrane,1,1); spritesRef.current.industrialCrane = industrialCrane; };
     const craneBoss=new Image();craneBoss.src=INDUSTRIAL_CRANE_BOSS_ART;
     craneBoss.onload=()=>{registerPropAtlas(craneBoss,1,1);spritesRef.current.craneBoss=craneBoss;};
+    for(const [type,url] of Object.entries(INDUSTRIAL_MATERIAL_BOSS_ART)){
+      const image=new Image();image.src=url;
+      image.onload=()=>{registerPropAtlas(image,1,1);(spritesRef.current.materialBosses??={})[type as keyof MaterialBossImages]=image;};
+    }
     cinematic.src=CINEMATIC_VFX_ATLAS;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
@@ -1912,7 +1918,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
@@ -2173,9 +2179,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
           }
 
+          const materialBoss=!!(h.isStageBoss&&spritesRef.current.materialBosses?.[h.type as keyof MaterialBossImages]?.naturalWidth);
+          const hazardPlacement=industrialHazardPlacement(h,h.type==='FALLING_DEBRIS'?debrisElevation(h.motion?.phase??'fall',h.motion?.timer??0):0,materialBoss);
           if(h.variant){
             ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle=h.variant==='pulse_gas'?'#a7f3d0':'#f8d477';ctx.strokeStyle='#111827';ctx.lineWidth=3;
-            ctx.strokeText(challengeText.variants[h.variant],0,-h.radius-22);ctx.fillText(challengeText.variants[h.variant],0,-h.radius-22);
+            if(!h.isStageBoss||displayW>900){
+              const labelY=hazardPlacement.y-hazardPlacement.size*.82-24;
+              ctx.strokeText(challengeText.variants[h.variant],0,labelY);ctx.fillText(challengeText.variants[h.variant],0,labelY);
+            }
             if(h.variant==='pulse_gas'){ctx.globalAlpha=.65;ctx.strokeStyle=h.motion?.phase==='charge'?'#fb7185':'#a7f3d0';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,h.radius,0,Math.PI*2);ctx.stroke();}
             else if(h.variant==='reinforced_cart'){ctx.strokeStyle=h.hp<h.maxHp*.5?'#fb923c':'#7dd3fc';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,2,h.radius*1.25,h.radius*.45,0,0,Math.PI*2);ctx.stroke();}
             ctx.restore();
@@ -2184,7 +2195,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
           const hpPercent = Math.max(0, h.hp / h.maxHp);
-          const barY = h.type === 'CRANE_BOSS' ? spritesRef.current.industrialCrane?.naturalWidth ? craneArtPose(h.radius,engine.state.gameTime,reducedMotionRef.current,h.isStageBoss?craneAttackElevation(h,reducedMotionRef.current):undefined).top-12 : -h.radius - 48 : h.type === 'UNHELMETED' ? -80 : h.type === 'RUNAWAY_CART' ? -Math.max(58, h.radius * 2.6) * .82 - 8 : -h.radius - 8;
+          const barY = h.type === 'CRANE_BOSS' ? spritesRef.current.industrialCrane?.naturalWidth ? craneArtPose(h.radius,engine.state.gameTime,reducedMotionRef.current,h.isStageBoss?craneAttackElevation(h,reducedMotionRef.current):undefined).top-12 : -h.radius - 48 : h.type === 'UNHELMETED' ? -80 : hazardPlacement.y-hazardPlacement.size*.82-8;
           ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
           ctx.fillRect(-barW / 2, barY, barW, barH);
           ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';

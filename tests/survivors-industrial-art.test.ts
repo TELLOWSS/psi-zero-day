@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose,usesCarrierBossArt } from '../src/ui/survivors-industrial-art';
+import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose,usesCarrierBossArt,industrialHazardPlacement } from '../src/ui/survivors-industrial-art';
 import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import type { HazardType } from '../src/domain/patrol-survivors';
 
 describe('industrial art identity', () => {
+  it('grounds solid pressure hardware and follows actual debris elevation without changing radius',()=>{
+    const gas={type:'GAS_LEAK' as const,radius:30},debris={type:'FALLING_DEBRIS' as const,radius:20};
+    expect(industrialHazardPlacement(gas,0,true)).toEqual({size:76,y:-0,solid:true});
+    expect(industrialHazardPlacement(gas,0).y).toBeGreaterThan(0);
+    expect(industrialHazardPlacement(gas,0).solid).toBe(false);
+    expect(industrialHazardPlacement(debris,70,true)).toEqual({size:72,y:-70,solid:true});
+    expect(gas.radius).toBe(30);expect(debris.radius).toBe(20);
+  });
   it('reserves the dedicated heavy-carrier asset for designated cart bosses',()=>{
     expect(usesCarrierBossArt({type:'RUNAWAY_CART',isStageBoss:true})).toBe(true);
     expect(usesCarrierBossArt({type:'RUNAWAY_CART'})).toBe(false);
