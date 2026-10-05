@@ -54,7 +54,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back');
         drawGroundedSprite(ctx, actor, 74, pose);
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front');
-        drawCarriedEquipment(ctx,previewState,actor,74,pose,gear,pickups);
+        drawCarriedEquipment(ctx,previewState,actor,74,pose,gear,pickups,reduced);
         drawPremiumGear(ctx,previewState,gear,reduced,0,pickups,wearables,{actor,height:74,pose,vfxAtlas:cinematic});
         const angle=pose.moving?(facing===1?0:Math.PI):undefined;
         drawEquipmentIdentity(ctx,previewState,cinematic,reduced,false,angle);drawEvolutionIdentity(ctx,previewState,cinematic,reduced);

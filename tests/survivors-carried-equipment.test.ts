@@ -7,7 +7,7 @@ import {applyActorTorsoTransform} from '../src/ui/survivors-rig-renderer';
 vi.mock('../src/ui/survivors-equipment-art',async original=>({...await original<typeof import('../src/ui/survivors-equipment-art')>(),drawEquipment:vi.fn(()=>true)}));
 import {drawEquipment} from '../src/ui/survivors-equipment-art';
 const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} as HTMLImageElement;
-const context=()=>({save:vi.fn(),restore:vi.fn(),scale:vi.fn(),transform:vi.fn(),translate:vi.fn()}) as unknown as CanvasRenderingContext2D;
+const context=()=>({save:vi.fn(),restore:vi.fn(),scale:vi.fn(),transform:vi.fn(),translate:vi.fn(),rotate:vi.fn()}) as unknown as CanvasRenderingContext2D;
 it('selects actual evolutions rather than showing level-five as an evolution',()=>{
  const s=createInitialSurvivorsState();s.activePerks.radio_boost=5;
  expect(carriedTool(s)).toEqual({id:'radio_boost',level:5,left:false});
