@@ -43,15 +43,15 @@ it('keeps every calibrated body socket within the original torso bounds', () => 
   expect(WEARABLE_PROFILES.player!.sockets).not.toEqual(WEARABLE_PROFILES.kang_taesik!.sockets);
 });
 
-it('shares the cached rig torso offset for movement, hit reactions and facing', () => {
+it('shares a continuous torso offset for movement, hit reactions and facing', () => {
   const tracker = new SpriteMotionTracker(), entity = {};
   tracker.sample(entity, 0, 0, 0, 100);
   tracker.act(entity, .1);
   const pose = tracker.sample(entity, -10, 0, .1, 90), ctx = context();
   applyActorTorsoTransform(ctx as unknown as CanvasRenderingContext2D, pose, 74, true);
   expect(ctx.scale).toHaveBeenCalledWith(-1, 1);
-  const phase = Math.floor(pose.cycle / (Math.PI*2) * 16) % 16;
-  const expected = riggedTorsoOffset(phase, false, Math.round(pose.reaction*3)/3, Math.round(pose.action*2)/2, Math.round(pose.gaitBlend*4)/4, 74);
+  const phase = pose.cycle / (Math.PI*2) * 16;
+  const expected = riggedTorsoOffset(phase, false, pose.reaction, pose.action, pose.gaitBlend, 74);
   expect(ctx.translate).toHaveBeenCalledWith(expected.x, expected.y);
 });
 

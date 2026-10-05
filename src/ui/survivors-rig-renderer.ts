@@ -11,13 +11,13 @@ export function riggedTorsoOffset(phase:number,running:boolean,brace:number,acti
  return {x:action*1.4*height/74,y:(Math.cos(phase/16*Math.PI*4)*(running?1.1:.55)*blend-brace*2)*height/74};
 }
 
-/** Wearable layers use the same quantized torso pose as the actor's cached mesh. */
+/** Keep attachments continuous while the expensive leg mesh remains cached. */
 function torsoOffset(pose:SpritePose,height:number,rigged:boolean):Joint|null {
  if(rigged && (pose.gaitBlend>0 || pose.reaction>0 || pose.action>0)){
-  const phase=Math.floor(pose.cycle/(Math.PI*2)*16)%16;
+  const phase=pose.cycle/(Math.PI*2)*16;
   const dy=Math.round(pose.directionY*32)/32;
   const running=pose.stride/Math.sqrt(1-.64*dy*dy)>60;
-  return riggedTorsoOffset(phase,running,Math.round(pose.reaction*3)/3,Math.round(pose.action*2)/2,Math.round(pose.gaitBlend*4)/4,height);
+  return riggedTorsoOffset(phase,running,pose.reaction,pose.action,pose.gaitBlend,height);
  }
  return null;
 }
@@ -138,5 +138,8 @@ export function drawRiggedActor(ctx:CanvasRenderingContext2D,image:HTMLImageElem
  ctx.save();ctx.scale(pose.facing,1);ctx.transform(1,0,pose.lean,1,0,0);
  // Each support foot has a fixed ground contact; raised feet get a softer, smaller shadow.
  for(const opposite of [false,true]){const step=footTravel(phase/16*Math.PI*2,opposite,running,dy,reaction>0?0:blend,stride);const sole=opposite?p.rig.right.sole:p.rig.left.sole;const contact=soleContact(sole,p.width/BODY,height,step);ctx.fillStyle=`rgba(0,0,0,${step.planted?.35:.16})`;ctx.beginPath();ctx.ellipse(contact.x,contact.y+1,(step.planted?5:3)*height/74,2*height/74,0,0,Math.PI*2);ctx.fill();}
+ const continuous=torsoOffset(pose,height,true)!;
+ const cached=riggedTorsoOffset(phase,running,reaction,action,blend,height);
+ ctx.translate(continuous.x-cached.x,continuous.y-cached.y);
  ctx.drawImage(frame,-ORIGIN_X*scale,-ORIGIN_Y*scale,WIDTH*scale,HEIGHT*scale);ctx.restore();return true;
 }

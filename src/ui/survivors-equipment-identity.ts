@@ -2,6 +2,7 @@ import type {EvolutionPerkId,ProjectileKind,SurvivorsGameState} from '../domain/
 import {drawVfxCell} from './survivors-cinematic-vfx';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import type {SpritePose} from './survivors-sprite-motion';
+import {auraFlow} from './survivors-aura-flow';
 
 export const EQUIPMENT_AURAS={
   voice_lens:{color:'#ffab76',motif:'signal',marks:1,cell:0},
@@ -125,11 +126,13 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4*(attachment?.pose.facing??1):0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
     ctx.globalAlpha=busy?.45:.75;
-    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.lineTo(side*(22+flow)+drag,-29-flow);ctx.lineTo(side*17+drag,-52-flow);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.bezierCurveTo(side*(28+flow)+drag,-22,side*(9-flow)+drag,-42,side*17+drag,-52-flow);ctx.stroke();
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
-      drawVfxCell(ctx,atlas,signature.cell,side*(17+flow*.4)+drag,-32-flow,(signature.evolved?30:23)*(1+action*.10),56*pulse,(busy?.30:.48)+action*(busy?.04:.12),side*(.12+flow*.02));
-      drawVfxCell(ctx,atlas,signature.cell,side*11+drag,-57-flow,21,14*pulse,busy?.25:.48);
+      for(let segment=0;segment<(busy?2:3);segment++){
+        const wisp=auraFlow(state.gameTime+i*.37,segment,side,action);
+        drawVfxCell(ctx,atlas,signature.cell,wisp.x+drag,wisp.y,wisp.width*(signature.evolved?1.2:1),wisp.height*pulse,wisp.alpha*(busy?.65:1),wisp.rotation);
+      }
       ctx.globalCompositeOperation='source-over';
     }
     if(signature.evolved){
