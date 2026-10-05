@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import type { Hazard } from '../src/domain/patrol-survivors';
-import { advanceBossPhase, bossPattern } from '../src/engine/survivors-boss-pattern';
+import { advanceBossPhase, bossPattern,bossCoreFloor,bossCoreStatus } from '../src/engine/survivors-boss-pattern';
 import { updateHazardMotion, isHazardContactActive } from '../src/engine/patrol-hazard-motion';
 import { SurvivorsEngine, createInitialSurvivorsState } from '../src/engine/patrol-survivors-engine';
 import { craneAttackElevation } from '../src/ui/survivors-industrial-art';
@@ -10,6 +10,22 @@ function boss(type:Hazard['type']):Hazard {
   variant:type==='GAS_LEAK'?'pulse_gas':undefined,motion:{phase:'approach',timer:0,directionX:0,directionY:0}};
 }
 const player=createInitialSurvivorsState().player;
+it('shares the actual structural floor with readable locked and exposed states',()=>{
+ const h=boss('CRANE_BOSS');h.bossEncounterManaged=true;h.hp=50;
+ expect(bossCoreFloor(h)).toBe(50);expect(bossCoreStatus(h)).toBe('interlocked');
+ h.bossPhase=2;h.hp=8;h.bossAttackCycles=0;expect(bossCoreFloor(h)).toBe(8);expect(bossCoreStatus(h)).toBe('interlocked');
+ h.bossAttackCycles=1;h.motion!.phase='spent';expect(bossCoreFloor(h)).toBe(0);expect(bossCoreStatus(h)).toBe('exposed');
+ h.motion!.phase='warning';expect(bossCoreStatus(h)).toBe('active');
+});
+it('reports a locked projectile contact without damage, critical stop or destructive impact audio',()=>{
+ const s=createInitialSurvivorsState(),e=new SurvivorsEngine(s,42);e.start();s.stageBossSpawned=true;
+ const h=boss('CRANE_BOSS');h.bossEncounterManaged=true;h.bossAttackCycles=0;h.hp=50;h.speed=0;
+ s.hazards=[h];s.bossEncounter={bossId:h.id,phase:'combat',remaining:0};s.player.critRate=1;
+ s.projectiles=[{id:'blocked',kind:'radio',x:h.x,y:h.y,vx:0,vy:0,radius:10,damage:9999,duration:1,pierce:1}];
+ e.update(1/60,{moveX:0,moveY:0});
+ expect(h.hp).toBe(50);expect(e.drainProjectileFeedback().find(ev=>ev.projectileId==='blocked'&&ev.phase==='impact')).toMatchObject({blocked:true,critical:false});
+ expect(e.drainAudioEvents().some(ev=>ev.type==='impact')).toBe(false);expect(s.hitStopTimer??0).toBe(0);
+});
 it('renders a continuous final descent and a still reduced-motion load',()=>{
  const h=boss('CRANE_BOSS');h.motion!.phase='warning';h.motion!.timer=1.4;
  expect(craneAttackElevation(h,false)).toBe(70);h.motion!.timer=.15;expect(craneAttackElevation(h,false)).toBe(52.5);

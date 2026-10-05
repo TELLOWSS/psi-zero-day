@@ -7,10 +7,26 @@ import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
 import {EQUIPMENT_AURAS,EVOLUTION_IDENTITIES,drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from '../src/ui/survivors-equipment-identity';
 import {cinematicLook,drawCinematicContact} from '../src/ui/survivors-cinematic-vfx';
 import {CombatDirection} from '../src/ui/survivors-combat-direction';
+import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
 import {equipmentSoundSamples} from '../src/ui/survivors-equipment-sound';
 const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} as HTMLImageElement;
 const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>new Proxy({} as CanvasRenderingContext2D,{get(target,key){if(!Reflect.has(target,key))Reflect.set(target,key,vi.fn());return Reflect.get(target,key);}});
+it('uses a restrained shield receipt for locked hits without critical camera kick',()=>{
+ const event={projectileId:'locked',kind:'radio' as const,phase:'impact' as const,x:0,y:0,angle:0,radius:10,blocked:true,critical:true,actorKind:'CRANE_BOSS' as const};
+ const layer=new ProjectileFeedbackLayer(),ctx=context();layer.ingest([event]);layer.draw(ctx,false,false,{atlas,materialAtlas:atlas,equipped:[]});
+ expect(ctx.drawImage).toHaveBeenCalledTimes(1);expect(ctx.ellipse).toHaveBeenCalledTimes(1);
+ const direction=new CombatDirection();direction.ingest([event],[],{x:0,y:0});expect(direction.camera(false)).toEqual({x:0,y:0});expect(direction.lightCount).toBe(0);
+});
+it('pulses the aura only on a local firing event and decays within bounded dimensions',()=>{
+ const direction=new CombatDirection(),s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['shock_mantle'],equipped:['shock_mantle']});
+ const event={projectileId:'fire',kind:'radio' as const,phase:'launch' as const,x:0,y:0,angle:0,radius:10};
+ direction.ingest([{...event,x:500}],[],{x:0,y:0});expect(direction.auraStrength).toBe(0);
+ direction.ingest([event],[],{x:0,y:0});expect(direction.auraStrength).toBe(1);
+ direction.advance(.1);expect(direction.auraStrength).toBeLessThan(.31);
+ const draw=(strength:number,reduced=false)=>{const ctx=context();drawEquipmentMantle(ctx,s,atlas,reduced,false,undefined,strength);return vi.mocked(ctx.drawImage).mock.calls.map(call=>call.slice(5));};
+ expect(draw(1)).not.toEqual(draw(0));expect(draw(100)).toEqual(draw(1));expect(draw(NaN)).toEqual(draw(0));expect(draw(1,true)).toEqual(draw(0,true));
+});
 it('flows aura seals and silhouette energy on simulation time, with stable reduced motion and movement drag',()=>{
  const ids=['broadcast_crown','sync_gauntlet'];
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});s.activePerks.tesla_dome=1;

@@ -6,7 +6,7 @@ import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
-import { advanceBossPhase, bossPattern } from './survivors-boss-pattern';
+import { advanceBossPhase, bossPattern, bossCoreFloor } from './survivors-boss-pattern';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -641,12 +641,12 @@ export class SurvivorsEngine {
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
   private projectileFeedback: ProjectileFeedback[] = [];
   private readonly releasedProjectiles = new WeakSet<Projectile>();
-  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind']) {
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false) {
     if (phase === 'release') {
       if (this.releasedProjectiles.has(p)) return;
       this.releasedProjectiles.add(p);
     }
-    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind});
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{})});
     if (this.projectileFeedback.length > 192) {
       const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
       this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
@@ -1347,8 +1347,8 @@ export class SurvivorsEngine {
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       // Structural interlocks expose the next core only after its risk cycle settles.
-      const floor=h.bossPhase!==2?h.maxHp*.5:(h.bossAttackCycles??0)<1?h.maxHp*.08:0;
-      h.hp=Math.max(floor,h.hp-Math.max(0,amount));
+      const floor=bossCoreFloor(h);
+      h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
     } else h.hp-=amount;
   }
 
@@ -1526,13 +1526,15 @@ export class SurvivorsEngine {
           // Critical hit calculation
           const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
+          const beforeHp=h.hp;
           this.damageHazard(h,damageDealt);
-          this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
-          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit, h.type);
+          const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(!blocked)this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit&&!blocked, h.type,blocked);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
-          if (isCrit) {
+          if (isCrit&&!blocked) {
             this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, 0.045);
           }
 
@@ -1543,7 +1545,7 @@ export class SurvivorsEngine {
 
           if (p.pierce <= 0) {
             p.duration = 0; // destroyed
-            this.emitProjectileFeedback(p, 'release', h.x, h.y, h.type === 'UNHELMETED');
+            this.emitProjectileFeedback(p, 'release', h.x, h.y, h.type === 'UNHELMETED',false,h.type,blocked);
             break;
           }
         }

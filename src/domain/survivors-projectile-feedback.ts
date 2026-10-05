@@ -12,4 +12,5 @@ export interface ProjectileFeedback {
   readonly worker?: boolean;
   readonly critical?: boolean;
   readonly actorKind?: HazardType;
+  readonly blocked?: boolean;
 }

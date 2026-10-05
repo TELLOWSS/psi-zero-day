@@ -23,7 +23,7 @@ import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-ch
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import bossText from '../../content/localization/survivors-boss-ko.json';
-import { bossPattern } from '../engine/survivors-boss-pattern';
+import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import { operationPlan, operationProgress } from '../engine/survivors-operation';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
@@ -498,6 +498,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossRisk, setBossRisk] = useState<number | null>(null);
   const [bossBeat, setBossBeat] = useState('');
   const [bossSecured,setBossSecured]=useState(false);
+  const [encounterRemaining,setEncounterRemaining]=useState(0);
 
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
@@ -1200,8 +1201,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
+        setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
-        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}`:'');
+        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}:${bossCoreStatus(designatedBoss)}`:'');
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
@@ -2328,7 +2330,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
       drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined);
       drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
-      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined);
+      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined,direction.auraStrength);
       ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
@@ -2590,12 +2592,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
         const deadline = Math.max(0, operationPlan(state.stage).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
-        return <aside className="survivors-focus-status" aria-label={boss ? state.stage.bossName : focusText.bossIncoming}>
+        return <aside className="survivors-focus-status" data-core={boss?bossCoreStatus(boss):undefined} aria-label={boss ? state.stage.bossName : focusText.bossIncoming}>
           {boss ? <>
             <ArrowUp size={18} aria-label={focusText.bossDirection} style={{transform:`rotate(${bearing}deg)`}}/>
             <strong>{state.stage.bossName}</strong>
             <progress aria-label={operationText.boss} value={boss.hp} max={boss.maxHp}/>
-            <span>{bossText.status[boss.motion?.phase ?? 'approach']} · {bossRisk}%</span>
+            <span>{bossCoreStatus(boss)==='active'?bossText.status[boss.motion?.phase ?? 'approach']:bossText.core[bossCoreStatus(boss)]} · {bossRisk}%</span>
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}
@@ -2642,14 +2644,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               const gate=engineRef.current.state.supplyGate;
               const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
               const wait=Math.max(0,Math.ceil((gate?.availableAt??0)-engineRef.current.state.gameTime));
-              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}{boss&&<div className="survivors-boss-readout" data-state={bossBeat}><strong>{engineRef.current.state.stage.bossName}</strong><progress aria-label={bossText.health} value={Math.max(0,boss.hp)} max={boss.maxHp}/><span>{bossText.status[boss.motion?.phase??'approach']} · {Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)}%</span><small>{bossText.hint[boss.type]}</small></div>}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
+              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}{boss&&<div className="survivors-boss-readout" data-state={bossBeat} data-core={bossCoreStatus(boss)}><strong>{engineRef.current.state.stage.bossName}</strong><progress aria-label={bossText.health} value={Math.max(0,boss.hp)} max={boss.maxHp}/><span>{bossCoreStatus(boss)==='active'?bossText.status[boss.motion?.phase??'approach']:bossText.core[bossCoreStatus(boss)]} · {Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)}%</span><small>{bossCoreStatus(boss)==='interlocked'?bossText.interlock:bossText.hint[boss.type]}</small></div>}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
       )}
 
       {/* BOSS ALERT BANNER */}
-      {phase==='playing'&&bossSecured&&<div className="survivors-boss-alert survivors-encounter-notice" role="status"><div className="survivors-boss-alert-text"><strong>{bossText.secured}</strong><small>{bossText.clearConfirm}</small></div></div>}
+      {phase==='playing'&&bossSecured&&<div className="survivors-boss-alert survivors-encounter-notice" role="status"><div className="survivors-boss-alert-text"><strong>{bossText.secured}</strong><small>{bossText.clearConfirm}</small><progress aria-label={bossText.confirmationProgress} max={2.4} value={Math.max(0,2.4-encounterRemaining)}/></div></div>}
       {phase === 'playing' && bossAlert && directorCutinPhase === 'none' && (
         <div className={`survivors-boss-alert ${engineRef.current?.state.bossEncounter?.phase==='arrival'?'survivors-encounter-notice':''}`} role="alert">
           <div className="survivors-boss-alert-text">

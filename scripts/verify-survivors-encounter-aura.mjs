@@ -21,6 +21,20 @@ try{
   await page.screenshot({path:path.join(out,`${width}x${height}-arrival.png`)});
   const arrival=await page.evaluate(()=>({phase:window.qaEngine.state.bossEncounter.phase,bossHp:window.qaEngine.state.hazards.find(h=>h.isStageBoss).hp}));
   await page.waitForFunction(()=>window.qaEngine.state.bossEncounter.phase==='combat');
+  const locked=await page.evaluate(()=>{
+   window.qaFreeze=true;const e=window.qaEngine,s=e.state,h=s.hazards.find(h=>h.isStageBoss);
+   s.hazards=[h];s.interactiveHazards=[];h.hp=h.maxHp*.5;h.bossPhase=1;h.bossAttackCycles=0;h.motion={phase:'cooldown',timer:2,directionX:0,directionY:0};
+   e.drainProjectileFeedback();s.projectiles=[{id:'qa-locked',kind:'radio',x:h.x,y:h.y,vx:0,vy:0,radius:10,damage:9999,duration:1,pierce:1}];
+   window.qaUpdate.call(e,1/60,{moveX:0,moveY:0});
+   return {hp:h.hp,max:h.maxHp,blocked:e.drainProjectileFeedback().some(ev=>ev.projectileId==='qa-locked'&&ev.blocked)};
+  });
+  const readout=page.locator(width<=900?'.survivors-focus-status':'.survivors-boss-readout');
+  await page.waitForFunction(()=>document.querySelector('.survivors-boss-readout')?.dataset.core==='interlocked');
+  if(!(await readout.innerText()).includes('인터록 잠김'))throw new Error('Locked core feedback missing');
+  await page.screenshot({path:path.join(out,`${width}x${height}-locked.png`)});
+  await page.evaluate(()=>{const h=window.qaEngine.state.hazards.find(h=>h.isStageBoss);h.bossPhase=2;h.bossAttackCycles=1;h.hp=h.maxHp*.08;h.motion.phase='cooldown';});
+  await page.waitForFunction(()=>document.querySelector('.survivors-boss-readout')?.dataset.core==='exposed');
+  if(!(await readout.innerText()).includes('핵심부 개방'))throw new Error('Open core feedback missing');
   await page.evaluate(()=>{
    window.qaFreeze=true;const e=window.qaEngine,s=e.state,boss=s.hazards.find(h=>h.isStageBoss);s.hazards=[boss];s.projectiles=[];
    // Controlled resolution fixture; the full engine tests cover earned attack-cycle unlocks.
@@ -35,14 +49,14 @@ try{
    const ids=['broadcast_crown','sync_gauntlet','shock_mantle'],s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
    s.player.x=120;s.player.y=120;s.activePerks.tesla_dome=1;const atlas=new Image();atlas.src='/assets/survivors/cinematic-vfx-v2.webp';await atlas.decode();
    const c=document.createElement('canvas');c.width=240;c.height=180;const ctx=c.getContext('2d');
-   const frame=(time,reduced=false)=>{ctx.clearRect(0,0,240,180);s.gameTime=time;drawEquipmentIdentity(ctx,s,atlas,reduced);drawEvolutionIdentity(ctx,s,atlas,reduced);drawEquipmentMantle(ctx,s,atlas,reduced);return Array.from(ctx.getImageData(0,0,240,180).data);};
+   const frame=(time,reduced=false,action=0)=>{ctx.clearRect(0,0,240,180);s.gameTime=time;drawEquipmentIdentity(ctx,s,atlas,reduced);drawEvolutionIdentity(ctx,s,atlas,reduced);drawEquipmentMantle(ctx,s,atlas,reduced,false,undefined,action);return Array.from(ctx.getImageData(0,0,240,180).data);};
    const diff=(a,b)=>a.reduce((sum,v,i)=>sum+(v!==b[i]?1:0),0);
-   return {changed:diff(frame(0),frame(.8)),paused:diff(frame(.8),frame(.8)),reduced:diff(frame(0,true),frame(.8,true)),nonblank:frame(0).some(v=>v>0)};
+   return {changed:diff(frame(0),frame(.8)),actionChanged:diff(frame(.8),frame(.8,false,1)),paused:diff(frame(.8),frame(.8)),reduced:diff(frame(0,true),frame(.8,true)),nonblank:frame(0).some(v=>v>0)};
   });
   await page.evaluate(()=>{for(let i=0;i<150;i++)window.qaUpdate.call(window.qaEngine,1/60,{moveX:0,moveY:0});});
   await page.waitForFunction(()=>window.qaEngine.state.phase==='victory');
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  results.push({width,height,arrival,secured,aura,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&!overflow&&!errors.length});
+  results.push({width,height,arrival,locked,secured,aura,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&!overflow&&!errors.length});
   await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({scope:'REAL_SPAWN_AND_CONTROLLED_CLEAR_UI_PLUS_RASTER_AURA_FRAMES',results},null,2));console.log(JSON.stringify(results));if(results.some(r=>!r.pass))process.exitCode=1;

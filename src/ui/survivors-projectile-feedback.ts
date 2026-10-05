@@ -1,4 +1,4 @@
-import {cinematicLook,drawCinematicContact} from './survivors-cinematic-vfx';
+import {cinematicLook,drawCinematicContact,drawVfxCell} from './survivors-cinematic-vfx';
 import {drawIndustrialContact} from './survivors-industrial-art';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
@@ -36,12 +36,20 @@ export class ProjectileFeedbackLayer {
   draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
     for (const effect of this.effects) {
       const {event:e, age, duration} = effect;
+      if(e.blocked&&e.phase==='release')continue;
       const t = age/duration, spec = PROJECTILE_VFX[e.kind];
       ctx.save();
       ctx.translate(e.x,e.y);
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      if(e.blocked&&!e.worker&&e.phase==='impact'){
+        ctx.strokeStyle='#82d7e5';ctx.lineWidth=1.5;
+        const spread=reducedMotion?9:9+(1-(1-t)**2)*6;
+        ctx.beginPath();ctx.ellipse(0,0,spread,spread*.6,e.angle,0,Math.PI*2);ctx.stroke();
+        if(!reducedMotion)drawVfxCell(ctx,cinematic?.atlas,3,0,0,24,18,(1-t)*.35,e.angle);
+        ctx.restore();continue;
+      }
       if (['beam','signal','arc'].includes(spec.family) && drawIndustrialContact(ctx, cinematic?.materialAtlas, e, age, duration, reducedMotion, busy)) {
         ctx.restore();
         continue;

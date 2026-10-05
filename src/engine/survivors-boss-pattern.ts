@@ -1,5 +1,15 @@
 import type { Hazard } from '../domain/patrol-survivors';
 
+export function bossCoreFloor(h:Readonly<Hazard>):number {
+  if(!h.bossEncounterManaged)return 0;
+  return h.bossPhase!==2?h.maxHp*.5:(h.bossAttackCycles??0)<1?h.maxHp*.08:0;
+}
+export function bossCoreStatus(h:Readonly<Hazard>):'active'|'interlocked'|'exposed' {
+  const floor=bossCoreFloor(h);
+  if(floor>0&&h.hp<=floor+.001)return 'interlocked';
+  return floor===0&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent')?'exposed':'active';
+}
+
 /** A new phase latches only between attacks, never inside an existing warning. */
 export function advanceBossPhase(h: Hazard): boolean {
   if (!h.isStageBoss || h.hp <= 0 || h.hp > h.maxHp * .5 || h.bossPhase === 2) return false;

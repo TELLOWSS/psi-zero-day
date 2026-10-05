@@ -105,15 +105,16 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
 }
 
 /** Two dominant signatures hug the silhouette; no world-space range or floating item. */
-export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number):void {
+export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number,actionStrength=0):void {
   const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([,v])=>({...v,evolved:true}));
   const premium=(state.premiumGear?.equipped??[]).map(id=>EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]).filter(Boolean).sort((a,b)=>b.marks-a.marks).map(v=>({...v,evolved:false}));
   const signatures=[...evolutions,...premium].slice(0,busy?1:2);
   if(!signatures.length)return;
+  const action=reduced?0:Math.max(0,Math.min(1,Number.isFinite(actionStrength)?actionStrength:0));
   ctx.save();ctx.translate(state.player.x,state.player.y);
   for(let i=0;i<signatures.length;i++){
     const signature=signatures[i]!,side=i===0?-1:1;
-    const pulse=reduced?1:1+Math.sin(state.gameTime*2.6+i)*.06;
+    const pulse=reduced?1:1+Math.sin(state.gameTime*2.6+i)*.06+action*.10;
     const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4:0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
@@ -121,7 +122,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     ctx.beginPath();ctx.moveTo(side*14,-7);ctx.lineTo(side*(22+flow)+drag,-29-flow);ctx.lineTo(side*17+drag,-52-flow);ctx.stroke();
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
-      drawVfxCell(ctx,atlas,signature.cell,side*(17+flow*.4)+drag,-32-flow,signature.evolved?30:23,56*pulse,busy?.30:.48,side*(.12+flow*.02));
+      drawVfxCell(ctx,atlas,signature.cell,side*(17+flow*.4)+drag,-32-flow,(signature.evolved?30:23)*(1+action*.10),56*pulse,(busy?.30:.48)+action*(busy?.04:.12),side*(.12+flow*.02));
       drawVfxCell(ctx,atlas,signature.cell,side*11+drag,-57-flow,21,14*pulse,busy?.25:.48);
       ctx.globalCompositeOperation='source-over';
     }

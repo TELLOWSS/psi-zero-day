@@ -209,6 +209,10 @@ export class SurvivorsSessionAudio {
   }
   /** Equipment material sound remains procedural until the final recording gate. */
   playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false,equipped:readonly string[]=[]):void {
+    if(event.blocked){
+      this.playEquipmentFeedback({...event,blocked:false,critical:false,kind:'emf_beam',phase:'release'},listener,busy,equipped);
+      return;
+    }
     const recorded=recordedEquipmentCue(event);
     const rate=event.kind==='satellite_wave'?.8:event.kind==='hunter_beam'?.86:1;
     if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
