@@ -3,6 +3,7 @@ import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback
 import type { SpritePose } from './survivors-sprite-motion';
 import { drawProp } from './survivors-equipment-art';
 import { suspendedLoadPose } from './survivors-animation-rig';
+import { bossPattern } from '../engine/survivors-boss-pattern';
 
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
@@ -26,9 +27,20 @@ export function craneArtPose(radius:number,clock:number,reduced:boolean) {
   return {x:sway.x,bottom:sway.y+16,size,top:sway.y+16-size};
 }
 
-export function drawIndustrialCrane(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,radius:number,clock:number,reduced:boolean,reaction:number):boolean {
+export function craneAttackElevation(h:Hazard,reduced:boolean):number {
+  if(reduced||!h.isStageBoss||!h.motion)return 0;
+  if(h.motion.phase==='warning') {
+    const descent=Math.max(0,Math.min(1,1-h.motion.timer/.3));
+    return 70*(1-descent*descent);
+  }
+  if(h.motion.phase==='spent')return 70*Math.max(0,Math.min(1,(bossPattern(h).recovery-h.motion.timer)/.5));
+  return 0;
+}
+
+export function drawIndustrialCrane(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,radius:number,clock:number,reduced:boolean,reaction:number,elevation?:number):boolean {
   if(!atlas?.naturalWidth)return false;
   const p=craneArtPose(radius,clock,reduced);
+  if(elevation!==undefined){p.x=0;p.bottom=16-elevation;p.top=p.bottom-p.size;}
   ctx.save();ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();
   ctx.ellipse(p.x,2,radius*1.35,radius*.48,0,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle='rgba(203,213,225,.65)';ctx.lineWidth=2;

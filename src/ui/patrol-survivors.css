@@ -1103,6 +1103,13 @@
 .survivors-upgrade-stats small { display: block; color: #94a3b8; margin-top: 8px; line-height: 1.5; }
 .survivors-damage-notice { position: absolute; top: calc(var(--survivors-hud-bottom, 160px) + 8px); right: 16px; max-width: calc(100% - 32px); padding: 10px 14px; border: 1px solid #fb7185; border-radius: 12px; background: #221922; color: #fecdd3; font-weight: 700; pointer-events: none; }
 .survivors-live-objective { max-width: 260px; margin-top: 4px; font-size: 12px; color: #d9f9ec; white-space: normal; line-height: 1.4; }
+.survivors-boss-readout { display: grid; gap: 3px; margin-top: 4px; min-width: 0; }
+.survivors-boss-readout strong { font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.survivors-boss-readout progress { display: block; width: 100%; height: 6px; border: 0; accent-color: #edb35a; }
+.survivors-boss-readout progress::-webkit-progress-bar { background: #243932; }
+.survivors-boss-readout progress::-webkit-progress-value { background: #edb35a; }
+.survivors-boss-readout span { font-size: 11px; color: #f4d19a; }
+.survivors-boss-readout small { font-size: 10px; color: #b8d4c5; }
 @media (max-width: 600px) {
   .survivors-ready-launch { top: -20px; flex-wrap: wrap; gap: 8px; }
   .survivors-ready-launch .survivors-btn-primary { width: 100%; padding: 12px; }

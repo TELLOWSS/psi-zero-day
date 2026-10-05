@@ -16,6 +16,7 @@ export interface Hazard {
   expValue: number;
   isStunned?: number; // duration in seconds
   isStageBoss?: boolean;
+  bossPhase?: 1 | 2;
   motion?: {
     phase: 'approach' | 'warning' | 'charge' | 'cooldown' | 'fall' | 'spent';
     timer: number;

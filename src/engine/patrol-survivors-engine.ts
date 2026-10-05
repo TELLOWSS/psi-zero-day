@@ -6,6 +6,7 @@ import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
+import { advanceBossPhase, bossPattern } from './survivors-boss-pattern';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -1391,7 +1392,7 @@ export class SurvivorsEngine {
       radius,
       damage,
       expValue,
-      motion: variant==='pulse_gas'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
+      motion: variant==='pulse_gas'||isStageBoss&&type==='CRANE_BOSS'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
         ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
         : type === 'FALLING_DEBRIS'
           ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
@@ -1402,6 +1403,10 @@ export class SurvivorsEngine {
   private updateHazards(dt: number) {
     const { player } = this.state;
     for (const h of this.state.hazards) {
+      if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
+      if(h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
+        h.vx=0;h.vy=0;
+      }
       // 1. Radial Physics Knockback Deceleration
       if (h.vx || h.vy) {
         h.x += (h.vx || 0) * dt;
@@ -1442,7 +1447,7 @@ export class SurvivorsEngine {
             (h.x < 20 || h.x > WORLD_WIDTH - 20 || h.y < 20 || h.y > WORLD_HEIGHT - 20)) {
           h.x = Math.max(20, Math.min(WORLD_WIDTH - 20, h.x));
           h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
-          h.motion.phase = 'cooldown'; h.motion.timer = 1.1;
+          h.motion.phase = 'cooldown'; h.motion.timer = h.isStageBoss?bossPattern(h).recovery:1.1;
         }
         continue;
       }

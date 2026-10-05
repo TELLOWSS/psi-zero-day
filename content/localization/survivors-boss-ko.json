@@ -1,0 +1,7 @@
+{
+  "phase": ["1페이즈 · 위험 파악", "2페이즈 · 집중 통제"],
+  "health": "대표 위험 잔여량",
+  "status": {"approach":"다음 경고 준비", "warning":"경고 · 작업반경 이탈", "charge":"위험 활성 · 접근 금지", "fall":"낙하 활성 · 접근 금지", "cooldown":"회복 구간 · 통제 기회", "spent":"작업 중지 · 통제 기회"},
+  "warning": {"RUNAWAY_CART":"고정 진로 · 측면 대피", "CRANE_BOSS":"양중 낙하 · 원형 구역 이탈", "FALLING_DEBRIS":"붕괴 예고 · 원형 구역 이탈", "GAS_LEAK":"압력 분출 · 누출 반경 이탈", "UNHELMETED":"안전한 동선 안내"},
+  "hint": {"RUNAWAY_CART":"돌진을 옆으로 피하고 제동 중 통제", "CRANE_BOSS":"예고 지점을 벗어난 뒤 양중 정지 중 통제", "FALLING_DEBRIS":"낙하 지점을 피하고 잔재 회복 중 통제", "GAS_LEAK":"분출을 피하고 압력 회복 중 통제", "UNHELMETED":"작업자에게 안전 안내"}
+}

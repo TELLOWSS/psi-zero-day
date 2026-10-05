@@ -1,9 +1,11 @@
 import type { Hazard, PlayerStats } from '../domain/patrol-survivors';
+import { bossPattern } from './survivors-boss-pattern';
 
 /** Locked directions make equipment readable and let movement defeat a charge. */
 export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, speed: number): boolean {
   const motion = h.motion;
   if (!motion) return false;
+  const pattern=bossPattern(h);
   if(h.variant==='pulse_gas') {
     if(motion.phase==='approach') {
       const dx=player.x-h.x,dy=player.y-h.y,distance=Math.hypot(dx,dy)||1;
@@ -13,23 +15,29 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
     }
     motion.timer=Math.max(0,motion.timer-dt);
     if(motion.timer===0){
-      if(motion.phase==='warning'){motion.phase='charge';motion.timer=.65;}
+      if(motion.phase==='warning'){motion.phase='charge';motion.timer=h.isStageBoss?pattern.pulseDuration:.65;}
+      else if(motion.phase==='charge'&&h.isStageBoss){motion.phase='cooldown';motion.timer=pattern.recovery;}
       else {motion.phase='approach';motion.timer=0;}
     }
     return true;
   }
-  if (h.type === 'FALLING_DEBRIS') {
+  if (h.type === 'FALLING_DEBRIS' || h.type==='CRANE_BOSS'&&h.isStageBoss) {
+    if(motion.phase==='approach') {
+      h.x=Math.max(60,Math.min(1340,player.x));h.y=Math.max(60,Math.min(840,player.y));
+      motion.phase='warning';motion.timer=pattern.warning;
+      return true;
+    }
     motion.timer = Math.max(0, motion.timer - dt);
     if (motion.timer === 0 && motion.phase === 'warning') {
       motion.phase = 'fall'; motion.timer = 0.65;
     } else if (motion.timer === 0 && motion.phase === 'fall') {
-      motion.phase = 'spent'; motion.timer = h.isStageBoss ? 3 : 0.4;
+      motion.phase = 'spent'; motion.timer = h.isStageBoss ? pattern.recovery : 0.4;
     } else if (motion.timer === 0 && motion.phase === 'spent' && h.isStageBoss && h.hp > 0) {
       // A designated operation risk persists until controlled; each new warning
       // locks the newly observed position and leaves the usual escape window.
       h.x = Math.max(60, Math.min(1340, player.x));
       h.y = Math.max(60, Math.min(840, player.y));
-      motion.phase = 'warning'; motion.timer = 1.25;
+      motion.phase = 'warning'; motion.timer = pattern.warning;
     }
     return true;
   }
@@ -51,7 +59,7 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
   }
   motion.timer = Math.max(0, motion.timer - dt);
   if (motion.phase === 'charge') {
-    const burst=h.variant==='reinforced_cart'&&h.hp<h.maxHp*.5?1.35:1;
+    const burst=h.isStageBoss?pattern.burst:h.variant==='reinforced_cart'&&h.hp<h.maxHp*.5?1.35:1;
     h.x += motion.directionX * speed * 2.1 * burst * dt;
     h.y += motion.directionY * speed * 2.1 * burst * dt;
   }
@@ -59,7 +67,7 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
     if (motion.phase === 'warning') {
       motion.phase = 'charge'; motion.timer = 1.05;
     } else if (motion.phase === 'charge') {
-      motion.phase = 'cooldown'; motion.timer = 1.1;
+      motion.phase = 'cooldown'; motion.timer = h.isStageBoss?pattern.recovery:1.1;
     } else {
       motion.phase = 'approach';
     }
@@ -68,6 +76,8 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
 }
 
 export function isHazardContactActive(h: Hazard): boolean {
+  if(h.isStageBoss&&h.type==='RUNAWAY_CART')return h.motion?.phase==='charge';
+  if(h.isStageBoss&&h.type==='CRANE_BOSS')return h.motion?.phase==='fall';
   if(h.variant==='pulse_gas')return h.motion?.phase==='charge';
   return h.type !== 'FALLING_DEBRIS' || !h.motion || h.motion.phase === 'fall';
 }

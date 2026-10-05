@@ -19,6 +19,8 @@ import challengeText from '../../content/localization/survivors-challenge-ko.jso
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
 import operationText from '../../content/localization/survivors-operation-ko.json';
+import bossText from '../../content/localization/survivors-boss-ko.json';
+import { bossPattern } from '../engine/survivors-boss-pattern';
 import { operationPlan, operationProgress } from '../engine/survivors-operation';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
@@ -39,7 +41,7 @@ import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
-import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose } from './survivors-industrial-art';
+import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose, craneAttackElevation } from './survivors-industrial-art';
 import { cacheStageFloor } from './survivors-stage-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
@@ -480,6 +482,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [evolutionBanner, setEvolutionBanner] = useState<{ title: string; subtitle: string; icon: string; equipmentId?: PerkId } | null>(null);
   const [bossAlert, setBossAlert] = useState<string | null>(null);
   const [bossRisk, setBossRisk] = useState<number | null>(null);
+  const [bossBeat, setBossBeat] = useState('');
 
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
@@ -1171,6 +1174,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
+        setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}`:'');
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
@@ -1865,25 +1869,25 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.save();
             ctx.rotate(Math.atan2(h.motion.directionY, h.motion.directionX));
             ctx.fillStyle = 'rgba(245,158,11,.20)';
-            ctx.fillRect(0, -h.radius - 14, h.speed * 2.1 * 1.05, (h.radius + 14) * 2);
+            ctx.fillRect(0, -h.radius - 14, h.speed * 2.1 * 1.05 * (h.isStageBoss?bossPattern(h).burst:1), (h.radius + 14) * 2);
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
             ctx.setLineDash([12, 8]);
-            ctx.strokeRect(0, -h.radius - 14, h.speed * 2.1 * 1.05, (h.radius + 14) * 2);
+            ctx.strokeRect(0, -h.radius - 14, h.speed * 2.1 * 1.05 * (h.isStageBoss?bossPattern(h).burst:1), (h.radius + 14) * 2);
             ctx.restore();
           }
-          if (h.type === 'FALLING_DEBRIS' && h.motion) {
+          if ((h.type === 'FALLING_DEBRIS'||h.type==='CRANE_BOSS'&&h.isStageBoss) && h.motion && (h.motion.phase==='warning'||h.motion.phase==='fall')) {
             ctx.fillStyle = h.motion.phase === 'fall' ? 'rgba(239,68,68,.35)' : 'rgba(245,158,11,.16)';
             ctx.strokeStyle = h.motion.phase === 'fall' ? '#ef4444' : '#fbbf24';
             ctx.lineWidth = 3;
             ctx.beginPath(); ctx.arc(0, 0, h.radius + 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             if (h.motion.phase === 'warning') {
-              ctx.beginPath(); ctx.arc(0, 0, h.radius + 20, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - h.motion.timer / 1.25)); ctx.stroke();
+              ctx.beginPath(); ctx.arc(0, 0, h.radius + 20, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - h.motion.timer / bossPattern(h).warning)); ctx.stroke();
             }
           }
           if (h.motion?.phase === 'warning' && h === closestWarning) {
             ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
             ctx.lineWidth = 4; ctx.strokeStyle = '#111827'; ctx.fillStyle = '#fef3c7';
-            const warning = h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
+            const warning = h.isStageBoss?bossText.warning[h.type]:h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
             ctx.strokeText(warning, 0, h.radius + 40); ctx.fillText(warning, 0, h.radius + 40);
           }
           if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning' && h.motion.timer > .3) {
@@ -2070,6 +2074,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           } else if (h.type === 'CRANE_BOSS') {
             // Giant Tower Crane Rigging Failure Hazard (Boss)
             // 1. 2.5D Ground Drop Hazard Warning Ring (Oval)
+            if(!h.isStageBoss) {
             ctx.strokeStyle = 'rgba(239, 68, 68, 0.75)';
             ctx.lineWidth = 3;
             ctx.setLineDash([12, 8]);
@@ -2078,10 +2083,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.stroke();
             ctx.setLineDash([]);
 
+            }
+
             const loadPose = suspendedLoadPose(reducedMotionRef.current?0:engine.state.gameTime);
             const swayX = loadPose.x;
             const zOffset = loadPose.y;
-            const paintedCrane=drawIndustrialCrane(ctx,spritesRef.current.industrialCrane,h.radius,engine.state.gameTime,reducedMotionRef.current,hazardPose.reaction);
+            const paintedCrane=drawIndustrialCrane(ctx,spritesRef.current.industrialCrane,h.radius,engine.state.gameTime,reducedMotionRef.current,hazardPose.reaction,h.isStageBoss?craneAttackElevation(h,reducedMotionRef.current):undefined);
             if(!paintedCrane){
             // 2. Ground shadow follows the suspended load, inside its warned radius.
             ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
@@ -2571,12 +2578,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {engineRef.current && (() => {
               const progress=operationProgress(engineRef.current.state);
               const boss=engineRef.current.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
-              const next=boss ? `${engineRef.current.state.stage.bossName} · ${Math.ceil(boss.hp)}/${boss.maxHp}` : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : !progress.boss ? `${operationText.boss} · ${engineRef.current.state.stage.bossName}` : tacticsText.continue;
+              const next=boss ? bossText.phase[(boss.bossPhase??1)-1] : progress.zonesSecured<progress.zones ? `${operationText.zones} ${progress.zonesSecured}/${progress.zones}` : progress.controlsDone<progress.controls ? `${operationText.controls} ${progress.controlsDone}/${progress.controls}` : !progress.boss ? `${operationText.boss} · ${engineRef.current.state.stage.bossName}` : tacticsText.continue;
               const cadence=PATROL_DIFFICULTIES[engineRef.current.state.difficulty ?? 'standard'].supplyEvery;
               const gate=engineRef.current.state.supplyGate;
               const remaining=Math.max(0,(gate?.nextControl??cadence)-engineRef.current.state.hazardsNeutralized);
               const wait=Math.max(0,Math.ceil((gate?.availableAt??0)-engineRef.current.state.gameTime));
-              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
+              return <div className="survivors-live-objective" title={activeMission?.description}><small className="survivors-current-workface">{PATROL_STAGES[selectedStage].name}</small>{operationText.modes[progress.mode]} · {next}{boss&&<div className="survivors-boss-readout" data-state={bossBeat}><strong>{engineRef.current.state.stage.bossName}</strong><progress aria-label={bossText.health} value={Math.max(0,boss.hp)} max={boss.maxHp}/><span>{bossText.status[boss.motion?.phase??'approach']} · {Math.ceil(Math.max(0,boss.hp)/boss.maxHp*100)}%</span><small>{bossText.hint[boss.type]}</small></div>}<small className="survivors-supply-countdown">{challengeText[selectedDifficulty]} · {challengeText.next} {remaining}{challengeText.controls}{wait>0?` · ${challengeText.wait} ${wait}s`: ''}{selectedDifficulty==='extreme'?` · ${challengeText.elite}`:selectedDifficulty==='hard'?` · ${challengeText.enhanced}`:''}</small></div>;
             })()}
           </div>
         </aside>
