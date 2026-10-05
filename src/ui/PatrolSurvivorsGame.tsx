@@ -1894,7 +1894,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.restore();
             continue;
           }
-          if (h.motion?.phase === 'spent') ctx.globalAlpha = 0.35;
+          if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
           if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0)) {
             // Actual raster materials replace the legacy shape renderer below.
