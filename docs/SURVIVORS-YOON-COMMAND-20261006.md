@@ -18,4 +18,4 @@ Prompt brief: preserve the exact mature worker identity, helmet, vest, workwear,
 
 ## Director review / remaining scope
 
-This is not a final cinematic lock. Pose spacing is still uneven and generation did not provide the requested generous gutters. Runtime registration stabilizes the neutral regions; character identity and the timing of the wrist sequence require visual approval. Lee and the safety monitor still need authored intermediate poses. Actual front/back/eight-direction artwork remains outstanding; horizontal facing mirrors the current sheet.
+This is not a final cinematic lock. Pose spacing is still uneven and generation did not provide the requested generous gutters. Runtime registration stabilizes the neutral regions; character identity and the timing of the wrist sequence require visual approval. The subsequent [Lee integration](SURVIVORS-LEE-COMMAND-20261006.md) adds his plan gesture; the safety monitor still needs authored intermediate poses. Actual front/back/eight-direction artwork remains outstanding; horizontal facing mirrors the current sheet.

@@ -9,12 +9,13 @@ describe('character-specific authored command art',()=>{
   expect(commandArtProfile(CHARACTER_MAP_ART.kang_taesik)).toBe(commandArtProfile(CHARACTER_MAP_ART.park));
   expect(commandArtProfile(CHARACTER_MAP_ART.lim_junho)?.art).toContain('lim-command');
   expect(commandArtProfile(CHARACTER_MAP_ART.yoon_sungho)?.art).toContain('yoon-command');
-  for(const id of ['lee_jaehoon','safety_monitor','yoon'] as const)expect(commandArtProfile(CHARACTER_MAP_ART[id])).toBeUndefined();
+  expect(commandArtProfile(CHARACTER_MAP_ART.lee_jaehoon)?.art).toContain('lee-command');
+  for(const id of ['safety_monitor','yoon'] as const)expect(commandArtProfile(CHARACTER_MAP_ART[id])).toBeUndefined();
  });
  it('only accepts explicit authored files and keeps each production sheet distinct',async()=>{
   for(const file of ['unknown.webp','constructor','toString','__proto__'])expect(commandArtProfile(file)).toBeUndefined();
-  expect(new Set(Object.values(COMMAND_ART).map(profile=>profile.art)).size).toBe(4);
-  expect(await loadAuthoredCommand({src:CHARACTER_MAP_ART.lee_jaehoon} as HTMLImageElement)).toBe(false);
+  expect(new Set(Object.values(COMMAND_ART).map(profile=>profile.art)).size).toBe(5);
+  expect(await loadAuthoredCommand({src:CHARACTER_MAP_ART.safety_monitor} as HTMLImageElement)).toBe(false);
  });
  it('keeps hands, protected face regions and command bands inside canonical body space',()=>{
   for(const profile of Object.values(COMMAND_ART)){
@@ -32,5 +33,9 @@ describe('character-specific authored command art',()=>{
   expect(wire.occluders![0]![0]).not.toEqual(wire.occluders![3]![0]);
   expect(wire.occluders![0]![1]).toEqual(wire.occluders![3]![1]);
   expect(wire.rig.protected).toHaveLength(2);
+  const plan=COMMAND_ART['lee-jaehoon-map.webp']!;
+  expect(plan.horizontalPadding).toBe(24);
+  expect(plan.occluders![0]![0]).not.toEqual(plan.occluders![3]![0]);
+  expect(plan.occluders![0]![1]).toEqual(plan.occluders![3]![1]);
  });
 });

@@ -18,7 +18,7 @@ try{
   const {createInitialSurvivorsState}=await import('/src/engine/patrol-survivors-engine.ts');
   const hash=data=>{let value=2166136261;for(const byte of data)value=Math.imul(value^byte,16777619);return value>>>0;};
   const rows=[];
-  for(const id of ['player','kang_taesik','lim_junho','yoon_sungho']){
+  for(const id of ['player','kang_taesik','lim_junho','yoon_sungho','lee_jaehoon']){
    const actor=new Image();actor.src=CHARACTER_MAP_ART[id];await actor.decode();registerSpriteBounds(actor);const registered=await loadAuthoredCommand(actor);
    const profile=COMMAND_ART[actor.src.split('/').pop()],bounds=spriteOpaqueBounds(actor);
    const state=createInitialSurvivorsState(id,undefined,undefined,undefined,{owned:['shock_mantle','voice_lens'],equipped:['shock_mantle','voice_lens']}),base=new SpriteMotionTracker().sample(state.player,0,0,0);
@@ -45,7 +45,7 @@ try{
  for(const row of cast){fs.writeFileSync(path.join(out,`${row.id}-poses.png`),Buffer.from(row.sheet.split(',')[1],'base64'));delete row.sheet;}
  await page.close();
  const views=[];
- for(const [width,height] of [[1440,900],[390,844],[844,390],[568,320]])for(const [id,name] of [['kang_taesik','강태식'],['lim_junho','임준호'],['yoon_sungho','윤성호']]){
+ for(const [width,height] of [[1440,900],[390,844],[844,390],[568,320]])for(const [id,name] of [['kang_taesik','강태식'],['lim_junho','임준호'],['yoon_sungho','윤성호'],['lee_jaehoon','이재훈']]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',error=>errors.push(String(error)));
   await page.addInitScript(()=>performance.setResourceTimingBufferSize(3000));
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();await page.getByRole('button',{name:'순찰 요원',exact:true}).click();

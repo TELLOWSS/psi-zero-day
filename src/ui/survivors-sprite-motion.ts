@@ -79,8 +79,8 @@ export function registerCommandSprite(image:HTMLImageElement,sheet:HTMLImageElem
     }
     return {canvas,left,top,width:right-left+1,height,foot:foot/weight};
   });
-  const base=cells[0]!,height=256,width=Math.ceil(base.width*height/base.height)+8;
-  const anchor=4+base.foot*height/base.height;
+  const base=cells[0]!,height=256,padding=profile.horizontalPadding??0,width=Math.ceil(base.width*height/base.height)+8+padding;
+  const anchor=4+padding/2+base.foot*height/base.height;
   const aligned=cells.map(cell=>{
     const texture=document.createElement('canvas');texture.width=width;texture.height=height;
     const scale=height/cell.height;
