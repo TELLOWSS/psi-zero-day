@@ -6,7 +6,7 @@ import { PatrolSurvivorsGame } from '../src/ui/PatrolSurvivorsGame';
 import { PERK_CATALOG, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
-it('preserves evolution cue across perk-choice resume then restores patrol music',()=>{
+it('layers evolution over resumed patrol music and holds boss score through secured confirmation',()=>{
  let frame:FrameRequestCallback=()=>{}; let clock=0;
  vi.spyOn(performance,'now').mockImplementation(()=>clock);
  vi.stubGlobal('requestAnimationFrame',(cb:FrameRequestCallback)=>{frame=cb;return 1;});
@@ -16,9 +16,11 @@ it('preserves evolution cue across perk-choice resume then restores patrol music
  vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(ctx as CanvasRenderingContext2D);
  const unlock=vi.spyOn(SurvivorsSessionAudio.prototype,'getContext').mockReturnValue({currentTime:0} as AudioContext);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'preloadCandidates').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
  const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
+ const cues=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionCue').mockResolvedValue(true);
  const silence=vi.spyOn(SurvivorsSessionAudio.prototype,'silence');
  let engine!:SurvivorsEngine;const start=SurvivorsEngine.prototype.start;
  vi.spyOn(SurvivorsEngine.prototype,'start').mockImplementation(function(this:SurvivorsEngine){engine=this;start.call(this);});
@@ -39,9 +41,17 @@ it('preserves evolution cue across perk-choice resume then restores patrol music
   clock=20;tick();music.mockClear();
   act(()=>host.querySelector<HTMLButtonElement>('.survivors-perk-card')!.click());
   expect(engine.state.phase).toBe('playing');
-  expect(music.mock.calls.map(([asset])=>asset.id)).toEqual(['patrol.evolution']);
+  expect(cues.mock.calls.at(-1)?.[0].id).toBe('patrol.evolution');
+  expect(cues.mock.calls.at(-1)?.[1]).toBe(3);
+  expect(music.mock.calls.map(([asset])=>asset.id)).toEqual(['patrol.foundation']);
   vi.spyOn(engine,'update').mockImplementation(()=>{});
-  clock=500;tick();expect(music.mock.calls).toHaveLength(1);
+  clock=500;tick();expect(music.mock.calls.every(([asset])=>asset.id==='patrol.foundation')).toBe(true);
   clock=4000;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.foundation');
+  engine.state.bossEncounter={bossId:'boss',phase:'arrival',remaining:3.5};
+  clock=4010;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.heavy_risk');
+  engine.state.bossEncounter.phase='secured';engine.state.hazards=[];
+  clock=4020;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.heavy_risk');
+  vi.spyOn(engine,'update').mockImplementationOnce(()=>{engine.state.phase='victory';});clock=4200;tick();
+  expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.success');
  } finally {act(()=>root.unmount());unlock.mockClear();window.dispatchEvent(new Event('pointerdown'));expect(unlock).not.toHaveBeenCalled();host.remove();vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();}
 });

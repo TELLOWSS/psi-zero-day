@@ -126,20 +126,22 @@ export class SurvivorsSessionAudio {
     catch(err){this.fail(String(err));return false;}
   }
   /** Event cues share cached recordings without replacing the adaptive score. */
-  async auditionCue(asset:SurvivorsAudioAsset):Promise<boolean> {
+  async auditionCue(asset:SurvivorsAudioAsset,cueSeconds?:number):Promise<boolean> {
     if(asset.status!=='CANDIDATE'||asset.loop||asset.bus!=='Music'||!asset.uri||!asset.rights||!asset.sha256)return false;
+    if(cueSeconds!==undefined&&(!Number.isFinite(cueSeconds)||cueSeconds<=0))return false;
     const ctx=this.ensureBuses();if(!ctx)return false;
     const epoch=this.epoch;
     try {
       const buffer=await this.decodeAsset(ctx,asset);
       if(epoch!==this.epoch||this.muted||ctx!==this.context)return false;
       const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.02;
+      const duration=Math.min(buffer.duration,cueSeconds??buffer.duration);
       source.buffer=buffer;source.connect(gain);gain.connect(this.buses!.SFX);
       gain.gain.setValueAtTime(.55,start);
-      gain.gain.setValueAtTime(.55,start+Math.max(0,buffer.duration-.2));
-      gain.gain.linearRampToValueAtTime(0,start+buffer.duration);
+      gain.gain.setValueAtTime(.55,start+Math.max(0,duration-.2));
+      gain.gain.linearRampToValueAtTime(0,start+duration);
       if(!this.track(source,gain,4))return false;
-      this.duckMusic(Math.min(3,buffer.duration));source.start(start);return true;
+      this.duckMusic(Math.min(3,duration));source.start(start,0,duration);return true;
     }catch(err){this.buffers.delete(asset.uri);this.fail(String(err));return false;}
   }
   private priorities = new Map<AudioScheduledSourceNode, number>();

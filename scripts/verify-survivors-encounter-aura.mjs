@@ -10,12 +10,19 @@ try{
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
   await page.evaluate(async()=>{
+   const {SurvivorsSessionAudio}=await import('/src/ui/survivors-session-audio.ts');
+   const score=SurvivorsSessionAudio.prototype.auditionScore;window.qaScores=[];
+   SurvivorsSessionAudio.prototype.auditionScore=function(asset,seconds){window.qaAudio=this;window.qaScores.push(asset.id);return score.call(this,asset,seconds);};
    const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');const update=SurvivorsEngine.prototype.update;window.qaUpdate=update;
    SurvivorsEngine.prototype.update=function(dt,input){window.qaEngine=this;if(!window.qaFreeze)return update.call(this,dt,input);};
   });
   await page.getByRole('button',{name:'순찰 시작하기',exact:true}).click();await page.waitForFunction(()=>window.qaEngine?.state.gameTime>.3);
   await page.evaluate(()=>{window.qaEngine.state.gameTime=61;});
   await page.getByRole('alert').filter({hasText:'대표 위험 출현'}).waitFor();
+  await page.waitForFunction(async()=>{
+   const a=window.qaAudio;if(a?.scoreId!=='patrol.heavy_risk')return false;
+   const buffer=await a.buffers.get(a.scoreUri);return [...a.scoreNodes.keys()].some(source=>source.buffer===buffer);
+  });
   const notice=await page.locator('.survivors-encounter-notice').boundingBox();
   if(await page.locator('.survivors-tactical-actions button:enabled, .survivors-ultimate-btn:enabled, .survivors-live-shop:enabled').count())throw new Error('Encounter arrival controls remain enabled');
   if(!notice||notice.width<100||notice.height<30)throw new Error('Encounter notice is visually clipped');
@@ -50,6 +57,14 @@ try{
   const chargesBefore=await page.evaluate(()=>JSON.stringify(window.qaEngine.state.fieldTactics));
   await page.keyboard.press('q');await page.keyboard.press('e');
   if(await page.evaluate(()=>JSON.stringify(window.qaEngine.state.fieldTactics))!==chargesBefore)throw new Error('Secured keyboard commands consumed charges');
+  const soundtrack=await page.evaluate(async()=>{
+   const {SURVIVORS_SCORE_CANDIDATES}=await import('/src/app/survivors-audio-manifest.ts');
+   const audio=window.qaAudio,epoch=audio.scoreEpoch;
+   const overlay=await audio.auditionCue(SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.evolution'),3);
+   const bossIndex=window.qaScores.indexOf('patrol.heavy_risk');
+   return {overlay,score:audio.scoreId,unchangedEpoch:audio.scoreEpoch===epoch,voices:audio.voiceCount,continuousBoss:bossIndex>=0&&window.qaScores.slice(bossIndex).every(id=>id==='patrol.heavy_risk'),failures:audio.failures};
+  });
+  if(!soundtrack.overlay||soundtrack.score!=='patrol.heavy_risk'||!soundtrack.unchangedEpoch||!soundtrack.voices||!soundtrack.continuousBoss||soundtrack.failures.length)throw new Error('Encounter soundtrack continuity failed');
   await page.screenshot({path:path.join(out,`${width}x${height}-secured.png`)});
   const secured=await page.evaluate(()=>({phase:window.qaEngine.state.phase,encounter:window.qaEngine.state.bossEncounter.phase,remaining:window.qaEngine.state.bossEncounter.remaining}));
   const aura=await page.evaluate(async()=>{
@@ -79,10 +94,14 @@ try{
    }
    return rows;
   });
-  await page.evaluate(()=>{for(let i=0;i<150;i++)window.qaUpdate.call(window.qaEngine,1/60,{moveX:0,moveY:0});});
+  await page.evaluate(()=>{window.qaFreeze=false;});
   await page.waitForFunction(()=>window.qaEngine.state.phase==='victory');
+  await page.waitForFunction(async()=>{
+   const a=window.qaAudio;if(a?.scoreId!=='patrol.success')return false;
+   const buffer=await a.buffers.get(a.scoreUri);return [...a.scoreNodes.keys()].some(source=>source.buffer===buffer);
+  });
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  results.push({width,height,arrival,locked,secured,aura,bossArt,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
+  results.push({width,height,arrival,locked,secured,soundtrack,aura,bossArt,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
   await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({scope:'REAL_SPAWN_AND_CONTROLLED_CLEAR_UI_PLUS_RASTER_AURA_FRAMES',results},null,2));console.log(JSON.stringify(results));if(results.some(r=>!r.pass))process.exitCode=1;

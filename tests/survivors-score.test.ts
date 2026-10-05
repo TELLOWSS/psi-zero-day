@@ -4,6 +4,9 @@ import { selectPatrolScore } from '../src/domain/survivors-score';
 import { SURVIVORS_SCORE_CANDIDATES } from '../src/app/survivors-audio-manifest';
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
 afterEach(() => { vi.useRealTimers(); vi.unstubAllGlobals(); });
+it.each(['arrival','combat','secured'] as const)('holds heavy score during %s even without a live boss',phase=>{
+ expect(selectPatrolScore(1,0,false,'foundation',phase)).toBe('heavy_risk');
+});
 it('uses hysteresis so danger oscillation does not chatter between scores', () => {
  expect(selectPatrolScore(1, 18, false, 'foundation')).toBe('pressure');
  expect(selectPatrolScore(1, 12, false, 'pressure')).toBe('pressure');
@@ -19,6 +22,18 @@ function context() {
  vi.stubGlobal('fetch',vi.fn(async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(4)})));
  return {ctx,sources};
 }
+it('limits evolution overlays without replacing the looping score',async()=>{
+ vi.useFakeTimers();const {sources}=context(),audio=new SurvivorsSessionAudio();
+ const score=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.foundation')!;
+ const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.evolution')!;
+ await audio.auditionScore(score);await audio.auditionCue(cue,3);
+ expect(sources[0]!.stop).not.toHaveBeenCalled();
+ expect(sources[1]!.start).toHaveBeenCalledWith(.02,0,3);
+ await audio.auditionScore(score);expect(sources).toHaveLength(2);
+ expect(await audio.auditionCue(cue,0)).toBe(false);
+ expect(await audio.auditionCue(cue,NaN)).toBe(false);
+ audio.dispose();expect(vi.getTimerCount()).toBe(0);
+});
 it('deduplicates score, cancels scheduled loops on mute, restarts on unmute', async () => {
  vi.useFakeTimers(); const {sources}=context();const a=new SurvivorsSessionAudio(); const asset=SURVIVORS_SCORE_CANDIDATES[0]!;
  expect(await a.auditionScore(asset)).toBe(true);await a.auditionScore(asset);expect(sources).toHaveLength(1);

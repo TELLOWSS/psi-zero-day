@@ -562,7 +562,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   const audioRef = useRef(new SurvivorsSessionAudio());
   const scoreStateRef = useRef<PatrolScoreState>('foundation');
-  const scoreHoldRef = useRef(0);
+  const scoreEncounterRef = useRef<string | undefined>(undefined);
   const scoreCheckRef = useRef(0);
   const storyRadioRef=useRef(new WeakSet<SurvivorsEngine>());
   const playScore = (name: string, seconds?: number) => {
@@ -589,8 +589,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const ctx = audioRef.current.getContext();
       if (!ctx) return;
       if (type === 'evolution') {
-        scoreHoldRef.current = performance.now() + 3500;
-        playScore('evolution', 3);
+        const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.evolution');
+        if(cue)void audioRef.current.auditionCue(cue,3);
         return;
       }
       if(type==='win'||type==='defeat')return;
@@ -796,9 +796,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Initialization cancels the old session's audio; schedule its replacement afterwards.
   useEffect(() => {
     if(accountabilityCase&&!audioMuted){playScore('pressure');audioRef.current.setDialogueFocus(true);return;}
-    if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { scoreHoldRef.current = 0; audioRef.current.stopScore(); return; }
+    if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { audioRef.current.stopScore(); return; }
     if (phase === 'ready') playScore('ready');
-    if (phase === 'playing' && performance.now() >= scoreHoldRef.current) playScore(scoreStateRef.current);
+    if (phase === 'playing') playScore(scoreStateRef.current);
     if (phase === 'victory') playScore('success', 12);
     if (phase === 'defeat') playScore('failure', 10);
   }, [phase, audioMuted, accountabilityCase, readyMusic, initGame]);
@@ -808,7 +808,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
     void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
     void audioRef.current.preloadEquipmentRecordings();
-    scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;
+    scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;scoreEncounterRef.current=undefined;
     engineRef.current.start();
     setPhase('playing');
     lastTimeRef.current = performance.now();
@@ -1111,10 +1111,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if(event.phase==='launch'&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.gameTime);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
         }
-        if (time >= scoreCheckRef.current && performance.now() >= scoreHoldRef.current) {
+        const scoreEncounter=engine.state.bossEncounter?.phase;
+        if (engine.state.phase==='playing' && (time >= scoreCheckRef.current || scoreEncounter!==scoreEncounterRef.current)) {
+          scoreEncounterRef.current=scoreEncounter;
           scoreCheckRef.current = time + 1000;
           const live = engine.state.hazards.filter(h => h.hp > 0);
-          const next = selectPatrolScore(engine.state.player.hp / engine.state.player.maxHp, live.length, live.some(h => h.isStageBoss), scoreStateRef.current);
+          const next = selectPatrolScore(engine.state.player.hp / engine.state.player.maxHp, live.length, live.some(h => h.isStageBoss), scoreStateRef.current,scoreEncounter);
           scoreStateRef.current = next;
           playScore(next);
         }
