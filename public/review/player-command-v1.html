@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PSI · 공격 동작 제작 후보</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f4f5;color:#172126;font:14px system-ui,sans-serif;letter-spacing:0}main{max-width:1040px;margin:auto;padding:24px}header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #bac5c9;margin-bottom:16px}h1{font-size:22px;margin:0 0 12px}header span{color:#55666e}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:20px}.stage{width:100%;aspect-ratio:4/3;display:block;border:1px solid #bac5c9;background:repeating-conic-gradient(#dde3e6 0% 25%,#f7f9fa 0% 50%) 0 0/20px 20px}aside{border-left:1px solid #bac5c9;padding-left:16px}aside h2{font-size:15px;margin:0 0 8px}.original{display:block;width:100%;height:290px;object-fit:contain}.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}.controls label{display:flex;align-items:center;gap:8px;min-height:44px}.controls input[type=range]{width:120px}.controls button,select,.frames button{min-height:44px;border:1px solid #758b93;border-radius:4px;padding:8px 12px;background:#fff;color:#172126;font:inherit;cursor:pointer}.controls button{background:#16584a;color:white;min-width:80px}.frames{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.frames button{padding:4px;min-width:0}.frames canvas{width:100%;aspect-ratio:1;display:block;background:#e6ecef}.frames button[aria-pressed=true]{outline:2px solid #b37c16;outline-offset:1px}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #27836d;outline-offset:2px}output{font-variant-numeric:tabular-nums;min-width:40px}#status{color:#536770} @media(max-width:650px){main{padding:12px}.workspace{grid-template-columns:minmax(0,1fr)}aside{border-left:0;border-top:1px solid #bac5c9;padding:12px 0 0;display:flex;align-items:center;gap:12px}.original{width:80px;height:140px}.controls{gap:8px}.controls input[type=range]{width:88px}h1{font-size:19px}}@media(orientation:landscape) and (max-height:500px){main{padding:12px}.workspace{grid-template-columns:minmax(0,1fr) 120px}.stage{aspect-ratio:2/1}.original{height:160px}.controls{margin:8px 0}.frames canvas{height:90px;aspect-ratio:auto}.frames button{padding:2px}aside{display:block;border-left:1px solid #bac5c9;border-top:0;padding:0 0 0 12px}}
+@media(orientation:landscape) and (max-height:500px){main{padding:8px}.workspace{grid-template-columns:minmax(0,1fr)}aside{display:none}.stage{aspect-ratio:auto;height:max(90px,calc(100dvh - 250px))}.frames canvas{display:none}.controls{gap:6px}.controls input[type=range]{width:80px}.controls button,select{padding:6px 8px;font-size:13px}header{margin-bottom:8px}h1{font-size:18px;margin-bottom:6px}.frames button{min-height:44px}#status{margin:8px 0}}
+</style>
+</head>
+<body><main>
+<header><h1>PSI · 태블릿 지휘 동작</h1><span>제작 후보 v01 · 게임 미적용</span></header>
+<div class="workspace"><section aria-label="동작 검토">
+<canvas id="stage" class="stage" width="720" height="540" role="img" aria-label="주인공 공격 동작 후보"></canvas>
+<div class="controls"><button id="play" type="button" disabled>재생</button><output id="frame" aria-live="off">01 / 04</output><label>속도<input id="speed" type="range" min="0.25" max="2" step="0.25" value="1"><output id="speedValue">1×</output></label><label>정렬<select id="alignment"><option value="foot">발 기준</option><option value="cell">원본 셀</option></select></label><label>크기<select id="size"><option value="large">확대</option><option value="game">게임 74px</option></select></label><label><input id="overlay" type="checkbox">원본 겹침</label></div>
+<div class="frames" id="frames" role="group" aria-label="개별 프레임"></div>
+<p id="status" role="status">이미지 확인 중</p>
+</section><aside><h2>기존 캐릭터</h2><img id="reference" class="original" src="../assets/episode01/characters/player-map.webp" alt="기존 주인공 원본"></aside></div>
+</main>
+<script type="module">
+const stage=document.querySelector('#stage'),ctx=stage.getContext('2d'),play=document.querySelector('#play'),speed=document.querySelector('#speed'),alignment=document.querySelector('#alignment'),size=document.querySelector('#size'),overlay=document.querySelector('#overlay'),frameLabel=document.querySelector('#frame'),status=document.querySelector('#status');
+const media=matchMedia('(prefers-reduced-motion: reduce)');
+const pixelRatio=Math.min(2,devicePixelRatio||1);
+let sheet,reference,frames=[],referenceBounds,index=0,playing=false,request=0,last,clock=0;
+function bounds(image,x,y,width,height){
+ const c=document.createElement('canvas');c.width=width;c.height=height;const p=c.getContext('2d');p.drawImage(image,x,y,width,height,0,0,width,height);
+ const data=p.getImageData(0,0,width,height).data;let left=width,top=height,right=-1,bottom=-1;
+ for(let py=0;py<height;py++)for(let px=0;px<width;px++)if(data[(py*width+px)*4+3]>32){left=Math.min(left,px);top=Math.min(top,py);right=Math.max(right,px);bottom=Math.max(bottom,py);}
+ if(right<left)throw new Error('비어 있는 프레임');
+ let sum=0,count=0;for(let py=bottom-Math.floor((bottom-top)*.035);py<=bottom;py++)for(let px=left;px<=right;px++)if(data[(py*width+px)*4+3]>32){sum+=px;count++;}
+ return {x:x+left,y:y+top,width:right-left+1,height:bottom-top+1,foot:sum/count-left,margin:Math.min(left,top,width-right-1,height-bottom-1)};
+}
+function drawImage(context,image,b,width,height,cell=false,actual=false){
+ const h=actual?74*pixelRatio:height*.84,scale=h/b.height;
+ if(cell){const factor=actual?scale:Math.min(width/b.cellWidth,height/b.cellHeight);const w=b.cellWidth*factor,h=b.cellHeight*factor;context.drawImage(image,b.cellX,b.cellY,b.cellWidth,b.cellHeight,(width-w)/2,(height-h)/2,w,h);}
+ else context.drawImage(image,b.x,b.y,b.width,b.height,width*.46-b.foot*scale,height*.92-h,b.width*scale,h);
+}
+function draw(){
+ if(!sheet)return;ctx.clearRect(0,0,stage.width,stage.height);
+ if(overlay.checked){ctx.save();ctx.globalAlpha=.35;drawImage(ctx,reference,referenceBounds,stage.width,stage.height,false,size.value==='game');ctx.restore();}
+ drawImage(ctx,sheet,frames[index],stage.width,stage.height,alignment.value==='cell',size.value==='game');
+ frameLabel.textContent=`${String(index+1).padStart(2,'0')} / 04`;
+ document.querySelectorAll('.frames button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+}
+function tick(now){if(last!==undefined)clock+=Math.min(.1,Math.max(0,(now-last)/1000))*Number(speed.value);last=now;index=Math.floor(clock*6)%4;draw();request=requestAnimationFrame(tick);}
+function playback(value){playing=value&&!media.matches;cancelAnimationFrame(request);last=undefined;play.textContent=playing?'일시정지':'재생';play.setAttribute('aria-pressed',String(playing));if(playing&&!document.hidden)request=requestAnimationFrame(tick);}
+play.onclick=()=>playback(!playing);speed.oninput=()=>{document.querySelector('#speedValue').textContent=`${speed.value}×`;};alignment.onchange=draw;size.onchange=draw;overlay.onchange=draw;
+media.addEventListener('change',()=>{if(media.matches)playback(false);});document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(request);last=undefined;if(playing&&!document.hidden)request=requestAnimationFrame(tick);});
+try{
+ sheet=new Image();sheet.src='player-command-v1.png';reference=document.querySelector('#reference');await Promise.all([sheet.decode(),reference.decode()]);
+ const w=sheet.naturalWidth/2,h=sheet.naturalHeight/2;if(!Number.isInteger(w)||!Number.isInteger(h))throw new Error('셀 크기 오류');
+ frames=Array.from({length:4},(_,i)=>({...bounds(sheet,i%2*w,Math.floor(i/2)*h,w,h),cellX:i%2*w,cellY:Math.floor(i/2)*h,cellWidth:w,cellHeight:h}));
+ referenceBounds=bounds(reference,0,0,reference.naturalWidth,reference.naturalHeight);
+ frames.forEach((b,i)=>{const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`프레임 ${i+1}`);button.setAttribute('aria-pressed',String(i===0));const c=document.createElement('canvas');c.width=160;c.height=160;drawImage(c.getContext('2d'),sheet,b,160,160);button.append(c,document.createTextNode(String(i+1).padStart(2,'0')));button.onclick=()=>{playback(false);index=i;clock=i/6;draw();};document.querySelector('#frames').append(button);});
+ const resize=()=>{stage.width=Math.round(stage.clientWidth*pixelRatio);stage.height=Math.round(stage.clientHeight*pixelRatio);draw();};new ResizeObserver(resize).observe(stage);resize();
+ play.disabled=false;status.textContent='4프레임 · 준비 / 활성화 / 복귀 · 후보 검토';draw();playback(!media.matches);
+ window.attackReview={frames,stop:()=>playback(false),frame:()=>index};
+}catch(error){playback(false);status.setAttribute('role','alert');status.textContent=`이미지 검증 실패: ${error.message}`;}
+</script>
+</body></html>
