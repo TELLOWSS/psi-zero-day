@@ -2214,3 +2214,35 @@
   .survivors-store .survivors-fitting-art { width: min(100%, 240px); }
   .survivors-store .survivors-store-slots { grid-template-columns: minmax(0, 1fr); }
 }
+.survivors-perks-tray {
+  pointer-events: auto;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 4px;
+}
+.survivors-perks-tray .survivors-perk-badge { width: 44px; height: 44px; flex-shrink: 0; }
+.survivors-arsenal-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 32px);
+  overflow: hidden;
+}
+.survivors-arsenal-dialog .survivors-recipes-grid { min-height: 0; flex: 1 1 auto; }
+.survivors-arsenal-dialog .survivors-actions-row { flex-shrink: 0; }
+@media (max-height: 480px) {
+  .survivors-arsenal-dialog { padding: 12px 20px; }
+  .survivors-arsenal-dialog .survivors-modal-title { font-size: 20px; margin: 0 0 6px; }
+  .survivors-arsenal-dialog .survivors-modal-sub { font-size: 11px; margin-bottom: 10px; }
+  .survivors-arsenal-dialog .survivors-recipes-grid { margin-bottom: 10px; }
+}
+.survivors-perks-tray {
+  pointer-events: auto;
+}
+.survivors-perk-badge { cursor: pointer; }
+.survivors-perk-badge:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.survivors-arsenal-dialog .survivors-recipe-card { border-radius: 8px; }
+.survivors-arsenal-dialog .survivors-recipe-parts { flex-wrap: wrap; }
+.survivors-arsenal-dialog progress { width: 100%; height: 8px; accent-color: #55dcb2; }
+.survivors-evolution-status { font-size: 12px; color: #55dcb2; }
+.survivors-arsenal-dialog .survivors-recipe-head .survivors-equipment-icon { flex-shrink: 0; }
+

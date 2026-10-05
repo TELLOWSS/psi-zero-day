@@ -901,12 +901,13 @@ export class SurvivorsEngine {
     }
     this.state.inFloodlight = inFloodlight;
 
-    // Direction normalize
-    const len = Math.hypot(input.moveX, input.moveY);
+    // Preserve analog precision while capping keyboard diagonals at full speed.
+    const len = Number.isFinite(input.moveX) && Number.isFinite(input.moveY)
+      ? Math.hypot(input.moveX, input.moveY) : 0;
     if (len > 0.001) {
       const nx = input.moveX / len;
       const ny = input.moveY / len;
-      const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1);
+      const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1) * Math.min(1, len);
       player.x += nx * currentSpeed * dt;
       player.y += ny * currentSpeed * dt;
       this.lastFacingX = nx;

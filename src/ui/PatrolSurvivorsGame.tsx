@@ -345,17 +345,19 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Modal Views in Ready screen
   const [showManual, setShowManual] = useState(false);
   const [showRdModal, setShowRdModal] = useState(false);
-  const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal;
+  const [showArsenalModal, setShowArsenalModal] = useState(false);
+  const arsenalDialogRef = useRef<HTMLDivElement>(null);
+  const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
   const pendingStoreConfirmationRef=useRef(false);
   const [clearGearWear,setClearGearWear]=useState<string[]>([]);
   const storeDialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!showRdModal) return;
+    if (!showRdModal && !showArsenalModal) return;
     const previous = document.activeElement as HTMLElement | null;
-    const dialog = storeDialogRef.current; if (!dialog) return;
+    const dialog = showRdModal ? storeDialogRef.current : arsenalDialogRef.current; if (!dialog) return;
     dialog.querySelector<HTMLButtonElement>('button')?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {event.preventDefault(); setShowRdModal(false); return;}
+      if (event.key === 'Escape') {event.preventDefault(); setShowRdModal(false); setShowArsenalModal(false); return;}
       if (event.key !== 'Tab') return;
       const elements = [...dialog.querySelectorAll<HTMLElement>('button:not(:disabled), select, input, summary, [tabindex="0"]')].filter(element => element.getClientRects().length > 0);
       const first = elements[0], last = elements[elements.length - 1];
@@ -364,8 +366,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     };
     document.addEventListener('keydown', onKey);
     return () => {document.removeEventListener('keydown', onKey); previous?.focus();};
-  }, [showRdModal]);
-  const [showArsenalModal, setShowArsenalModal] = useState(false);
+  }, [showRdModal, showArsenalModal]);
 
   // Virtual Touch Joystick state
   const touchIdRef = useRef<number | null>(null);
@@ -473,6 +474,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
     keysRef.current={};touchVectorRef.current={x:0,y:0};setStoreMessage('');setShowRdModal(true);
+  };
+  const openArsenal=()=>{
+    const engine=engineRef.current;
+    if (showRdModal || accountabilityCase) return;
+    if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
+    if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
+    if(engine)setActivePerks({...engine.state.activePerks});
+    keysRef.current={};touchVectorRef.current={x:0,y:0};
+    setShowArsenalModal(true);
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
@@ -2438,11 +2448,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
 
         <div className="survivors-top-actions">
-          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={showRdModal} onClick={openStore}>{storeText.shopShort}</button>}
+          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={showRdModal || showArsenalModal} onClick={openStore}>{storeText.shopShort}</button>}
           <button
             type="button"
             className="survivors-btn-icon"
-            disabled={showRdModal}
+            disabled={showRdModal || showArsenalModal}
             onClick={() => {
               const engine = engineRef.current;
               if (engine && (phase === 'playing' || phase === 'paused')) {
@@ -2531,12 +2541,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* ACTIVE PERKS TRAY */}
       <div className="survivors-perks-tray">
         {(Object.entries(activePerks) as [PerkId, number][])
-          .filter(([, lvl]) => lvl > 0)
+          .filter(([id, lvl]) => lvl > 0 && !Object.entries(EVOLUTION_RECIPES).some(([evoId, recipe]) => recipe.weapon === id && (activePerks[evoId as PerkId] ?? 0)>0))
           .map(([id, lvl]) => (
-            <div key={id} className="survivors-perk-badge" title={`${PERK_CATALOG[id].name} (Lv.${lvl})`}>
+            <button type="button" key={id} className="survivors-perk-badge" disabled={showRdModal || showArsenalModal || !!accountabilityCase} onClick={openArsenal} aria-label={`${PERK_CATALOG[id].name} (Lv.${lvl}) · ${itemText.evolution_progress}`} title={`${PERK_CATALOG[id].name} (Lv.${lvl})`}>
               <SurvivorsEquipmentIcon id={id} level={lvl} />
               <small>{lvl}</small>
-            </div>
+            </button>
           ))}
       </div>
 
@@ -2910,10 +2920,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* ARSENAL & EVOLUTION ARCHIVE MODAL */}
       {showArsenalModal && (
         <div className="survivors-modal-backdrop">
-          <div className="survivors-modal-content">
-            <h2 className="survivors-modal-title is-gold">📖 안전 장비 & 5대 슈퍼 프로토콜 진화 도감</h2>
+          <div ref={arsenalDialogRef} role="dialog" aria-modal="true" aria-labelledby="survivors-arsenal-title" className="survivors-modal-content survivors-arsenal-dialog">
+            <h2 id="survivors-arsenal-title" className="survivors-modal-title is-gold">{itemText.loadout_title}</h2>
             <p className="survivors-modal-sub">
-              기본 대응 도구 Lv.5 + 지원 퍽을 습득하면 강화 통제 프로토콜이 열립니다!
+              {itemText.evolution_rule}
             </p>
 
             <div className="survivors-recipes-grid">
@@ -2924,14 +2934,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 return (
                   <div key={evoId} className="survivors-recipe-card">
                     <div className="survivors-recipe-head">
-                      <span>{evo.icon}</span>
+                      <SurvivorsEquipmentIcon id={evoId as PerkId} level={1} />
                       <h4>{evo.name}</h4>
                     </div>
                     <div className="survivors-recipe-parts">
-                      <span className="survivors-recipe-part">{weapon.icon} {weapon.name} (Lv.5)</span>
+                      <span className="survivors-recipe-part">{weapon.name} ({activePerks[recipe.weapon] ?? 0}/5)</span>
                       <b>+</b>
-                      <span className="survivors-recipe-part">{support.icon} {support.name}</span>
+                      <span className="survivors-recipe-part">{support.name} ({Math.min(1, activePerks[recipe.support] ?? 0)}/1)</span>
                     </div>
+                    <progress aria-label={`${weapon.name} · ${itemText.equipment_progress}`} max={5} value={Math.min(5, activePerks[recipe.weapon] ?? 0)} />
+                    <strong className="survivors-evolution-status">{(activePerks[evoId as PerkId] ?? 0)>0 ? itemText.evolution_complete : (activePerks[recipe.weapon] ?? 0)>=5 && (activePerks[recipe.support] ?? 0)>=1 ? itemText.evolution_ready : itemText.evolution_progress}</strong>
                     <p>{evo.description}</p>
                   </div>
                 );
@@ -2996,7 +3008,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* PAUSE MODAL */}
-      {phase === 'paused' && !accountabilityCase && !showRdModal && (
+      {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
