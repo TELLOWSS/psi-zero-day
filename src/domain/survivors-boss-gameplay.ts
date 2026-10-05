@@ -1,5 +1,19 @@
 import type { PatrolStageId } from './patrol-survivors';
 
+export type BossCombatPhase = 'arrival' | 'pattern' | 'weak_point' | 'burst' | 'recovery' | 'secured';
+export interface BossGameplayProgress {
+  readonly bossId: string;
+  readonly patternId: string;
+  readonly weakPointId: string;
+  combatPhase: BossCombatPhase;
+  phaseIndex: number;
+  signatureResolvedThisCycle: boolean;
+  patternContact: boolean;
+  burstRemaining: number;
+  remaining: number;
+  cycleCount: number;
+}
+
 export type BossCombatArchetype = 'ACTION' | 'PATTERN' | 'PUZZLE' | 'SURVIVAL' | 'MULTI' | 'FINAL';
 export type BossPrimarySkill = 'DODGE' | 'POSITION' | 'READ' | 'TIMING' | 'ROUTE' | 'MASTERY';
 export type BossEncounterTier = 'REGULAR' | 'MAJOR' | 'CHAPTER' | 'FINAL';

@@ -7,6 +7,8 @@ import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTac
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
 import { advanceBossPhase, bossPattern, bossCoreFloor } from './survivors-boss-pattern';
+import { bossGameplayForStage } from './survivors-boss-gameplay';
+import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -723,7 +725,11 @@ export class SurvivorsEngine {
       encounter.remaining=Math.max(0,encounter.remaining-dt);
       if(encounter.phase==='arrival'){
         this.state.bossAlertTimer=encounter.remaining;
-        if(encounter.remaining===0){encounter.phase='combat';this.state.bossName=null;}
+        if(encounter.remaining===0){
+          encounter.phase='combat';this.state.bossName=null;
+          const progress=this.state.hazards.find(h=>h.id===encounter.bossId)?.bossGameplay;
+          if(progress)progress.combatPhase='pattern';
+        }
       } else if(encounter.remaining===0){
         this.state.phase='victory';
         this.state.score+=5000;
@@ -1314,6 +1320,8 @@ export class SurvivorsEngine {
         this.spawnHazard(stageBossType, stageBossHp, true);
         const boss=this.state.hazards.at(-1)!;
         boss.bossEncounterManaged=true;boss.bossAttackCycles=0;
+        // Final wave and stage-specific adapters are later implementation slices.
+        if(stage.stageNumber!==50)boss.bossGameplay=createBossCombat(bossGameplayForStage(stage.id));
         // The introduction must be on the current workface, not outside the camera.
         boss.x=Math.max(90,Math.min(WORLD_WIDTH-90,this.state.player.x+120));
         boss.y=Math.max(90,Math.min(WORLD_HEIGHT-90,this.state.player.y-105));
@@ -1343,9 +1351,10 @@ export class SurvivorsEngine {
     this.state.bossName = name;
   }
 
-  private damageHazard(h: Hazard, amount: number): void {
+  private damageHazard(h: Hazard, amount: number, projectile=false): void {
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
+      if(h.bossGameplay){bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);return;}
       // Structural interlocks expose the next core only after its risk cycle settles.
       const floor=bossCoreFloor(h);
       h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
@@ -1442,6 +1451,11 @@ export class SurvivorsEngine {
     const { player } = this.state;
     for (const h of this.state.hazards) {
       if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
+      if(h.bossGameplay){
+        h.bossGameplay.phaseIndex=h.bossPhase??1;
+        if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
+        if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
+      }
       if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
         h.vx=0;h.vy=0;
       }
@@ -1488,7 +1502,10 @@ export class SurvivorsEngine {
           h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
           h.motion.phase = 'cooldown'; h.motion.timer = h.isStageBoss?bossPattern(h).recovery:1.1;
         }
-        if(h.bossEncounterManaged&&(previousMotion==='charge'||previousMotion==='fall')&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent'))h.bossAttackCycles=(h.bossAttackCycles??0)+1;
+        if(h.bossGameplay&&isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
+        if(h.bossEncounterManaged&&(previousMotion==='charge'||previousMotion==='fall')&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent')){
+          h.bossAttackCycles=(h.bossAttackCycles??0)+1;resolveBossSignature(h);
+        }
         continue;
       }
 
@@ -1527,7 +1544,7 @@ export class SurvivorsEngine {
           const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           const beforeHp=h.hp;
-          this.damageHazard(h,damageDealt);
+          this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
           this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit&&!blocked, h.type,blocked);

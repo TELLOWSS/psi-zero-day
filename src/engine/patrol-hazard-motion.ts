@@ -78,6 +78,7 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
 }
 
 export function isHazardContactActive(h: Hazard): boolean {
+  if(h.bossGameplay&&h.bossGameplay.combatPhase!=='pattern')return false;
   if(h.isStageBoss&&h.type==='RUNAWAY_CART')return h.motion?.phase==='charge';
   if(h.isStageBoss&&h.type==='CRANE_BOSS')return h.motion?.phase==='fall';
   if(h.variant==='pulse_gas')return h.motion?.phase==='charge';
