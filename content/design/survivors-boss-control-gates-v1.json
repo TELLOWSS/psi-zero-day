@@ -1,7 +1,7 @@
 {
   "id": "survivors-boss-control-gates-v1",
   "version": "1.0.0",
-  "status": "CODEX_READY_MAPPING",
+  "status": "SOURCE_SEMANTICS_ONLY",
   "gateVocabulary": [
     {
       "id": "STOP_WORK",
@@ -734,5 +734,10 @@
       ],
       "mechanicId": "ZERO_DAY_WHOLE_SITE"
     }
-  ]
+  ],
+  "usage": {
+    "precedence": "survivors-boss-gameplay-v1.json controls player-facing combat behavior",
+    "rule": "These gates describe the real-world safety meaning behind each incident. They are NOT a requirement to expose every gate as a separate player action.",
+    "translation": "Gameplay adapters may compress multiple safety truths into one signature mechanic, weak-point condition, stagger, route change or pattern cancel."
+  }
 }
