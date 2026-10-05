@@ -13,7 +13,7 @@ try {
     await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196');
     await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
     const assets=await page.evaluate(async()=>{
-      const names=['industrial-hazards-v3.webp','industrial-contacts-v3.webp'];
+      const names=['industrial-hazards-v3.webp','industrial-contacts-v3.webp','crane-load-v4.webp'];
       const images=await Promise.all(names.map(name=>new Promise((resolve,reject)=>{
         const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=`/assets/survivors/${name}`;
       })));
@@ -32,7 +32,7 @@ try {
         const result=update.call(this,dt,input);window.psiIndustrialEngine=this;
         if(!this.qaIndustrial&&this.state.phase==='playing') {
           this.qaIndustrial=true;const {x,y}=this.state.player;
-          this.state.hazards=[['RUNAWAY_CART',undefined,-100,-70],['RUNAWAY_CART','reinforced_cart',85,-70],['GAS_LEAK','pulse_gas',-95,70],['GAS_LEAK','split_gas',90,70],['FALLING_DEBRIS',undefined,0,-140]].map(([type,variant,dx,dy],i)=>({id:`qa-${i}`,type,variant,x:x+dx,y:y+dy,hp:100000,maxHp:100000,speed:0,radius:25,damage:0,expValue:0}));
+          this.state.hazards=[['RUNAWAY_CART',undefined,-100,-70],['RUNAWAY_CART','reinforced_cart',85,-70],['GAS_LEAK','pulse_gas',-95,70],['GAS_LEAK','split_gas',90,70],['FALLING_DEBRIS',undefined,0,-140],['CRANE_BOSS',undefined,0,160]].map(([type,variant,dx,dy],i)=>({id:`qa-${i}`,type,variant,x:x+dx,y:y+dy,hp:100000,maxHp:100000,speed:0,radius:type==='CRANE_BOSS'?34:25,damage:0,expValue:0}));
         }
         return result;
       };
@@ -60,11 +60,27 @@ try {
     });
     await page.locator('#psi-contact-proof').screenshot({path:path.join(out,`${width}x${height}-contacts.png`)});
     await page.evaluate(()=>document.querySelector('#psi-contact-proof').remove());
+    const motion=await page.evaluate(async()=>{
+      const {drawIndustrialCrane,drawIndustrialHazard}=await import('/src/ui/survivors-industrial-art.ts');
+      const {registerPropAtlas}=await import('/src/ui/survivors-equipment-art.ts');
+      const crane=new Image();crane.src='/assets/survivors/crane-load-v4.webp';await crane.decode();registerPropAtlas(crane,1,1);
+      const carts=new Image();carts.src='/assets/survivors/industrial-hazards-v3.webp';await carts.decode();registerPropAtlas(carts,3,2);
+      const c=document.createElement('canvas');c.width=260;c.height=280;const ctx=c.getContext('2d');
+      const render=(draw)=>{ctx.clearRect(0,0,260,280);ctx.save();ctx.translate(130,250);draw();ctx.restore();return ctx.getImageData(0,0,260,280).data;};
+      const difference=(a,b)=>a.reduce((n,v,i)=>n+(v!==b[i]?1:0),0);
+      const first=render(()=>drawIndustrialCrane(ctx,crane,34,0,false,0)),next=render(()=>drawIndustrialCrane(ctx,crane,34,1,false,0));
+      const reducedA=render(()=>drawIndustrialCrane(ctx,crane,34,0,true,0)),reducedB=render(()=>drawIndustrialCrane(ctx,crane,34,1,true,0));
+      const pose={facing:1,lean:0,reaction:0};
+      const cart={type:'RUNAWAY_CART',radius:25,motion:{phase:'warning',timer:0,directionX:1,directionY:0}};
+      const prepare=render(()=>drawIndustrialHazard(ctx,carts,cart,pose,'handover',0,false,0));
+      const charge=render(()=>drawIndustrialHazard(ctx,carts,{...cart,motion:{...cart.motion,phase:'charge'}},pose,'handover',0,false,0));
+      return {swayPixels:difference(first,next),reducedPixels:difference(reducedA,reducedB),cartPhasePixels:difference(prepare,charge)};
+    });
     const result=await page.evaluate(()=>{
       const c=document.querySelector('canvas'),d=c.getContext('2d').getImageData(0,0,c.width,c.height).data;
       return {overflow:document.documentElement.scrollWidth>innerWidth,nonblank:d.some((n,i)=>i%4!==3&&n>50),hazards:window.psiIndustrialEngine.state.hazards.length};
     });
-    results.push({width,height,assets,contacts,...result,errors,pass:assets.every(a=>a.transparent>300000&&a.opaque>10000)&&contacts.every(c=>c.drawn&&c.pixels>40)&&result.nonblank&&!result.overflow&&!errors.length});
+    results.push({width,height,assets,contacts,motion,...result,errors,pass:assets.every(a=>a.transparent>300000&&a.opaque>10000)&&contacts.every(c=>c.drawn&&c.pixels>40)&&motion.swayPixels>100&&motion.reducedPixels===0&&motion.cartPhasePixels>100&&result.nonblank&&!result.overflow&&!errors.length});
     await page.close();
   }
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({scope:'CONSTRUCTED_HAZARD_FIXTURES_NOT_NATURAL_PLAY',results},null,2));

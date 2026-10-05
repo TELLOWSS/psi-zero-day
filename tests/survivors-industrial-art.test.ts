@@ -1,9 +1,32 @@
 import { describe, expect, it } from 'vitest';
-import { industrialHazardCell, industrialContactCell, drawIndustrialContact } from '../src/ui/survivors-industrial-art';
+import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose } from '../src/ui/survivors-industrial-art';
 import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import type { HazardType } from '../src/domain/patrol-survivors';
 
 describe('industrial art identity', () => {
+  it('prepares, charges and brakes against actual locked phase without changing state', () => {
+    const cart={motion:{phase:'warning' as const,timer:0,directionX:1,directionY:0}};
+    const before=JSON.stringify(cart),warning=cartActionPose(cart,false);
+    expect(warning.lean).toBeLessThan(0);expect(warning.compression).toBeGreaterThan(0);
+    expect(cartActionPose({...cart,motion:{...cart.motion,phase:'charge'}},false).lean).toBeGreaterThan(0);
+    expect(cartActionPose({...cart,motion:{...cart.motion,phase:'cooldown',timer:1.1}},false).brake).toBe(1);
+    expect(cartActionPose({...cart,motion:{...cart.motion,phase:'cooldown',timer:.5}},false).brake).toBe(0);
+    expect(cartActionPose(cart,true)).toEqual({lean:0,compression:0,brake:0});
+    expect(JSON.stringify(cart)).toBe(before);
+  });
+  it('uses the designated boss preparation window and bounds the pose', () => {
+    const motion={phase:'warning' as const,timer:.9,directionX:1,directionY:0};
+    expect(cartActionPose({motion},false).compression).toBe(0);
+    expect(cartActionPose({motion,isStageBoss:true},false).compression).toBeGreaterThan(0);
+    expect(cartActionPose({motion:{...motion,timer:-99}},false).compression).toBe(.035);
+  });
+  it('keeps the entire lifting asset below its title and freezes sway for reduced motion', () => {
+    const a=craneArtPose(34,0,false),b=craneArtPose(34,1,false);
+    expect(a.size).toBe(112);expect(a.top).toBe(a.bottom-a.size);
+    expect(b.x).not.toBe(a.x);expect(Math.abs(b.x)).toBeLessThan(20);
+    expect(craneArtPose(34,1,true)).toEqual(craneArtPose(34,100,true));
+    expect(craneArtPose(999,0,false).size).toBe(220);
+  });
   it('distinguishes reinforced frames and twin vapor cores without random skins', () => {
     expect(industrialHazardCell({type:'RUNAWAY_CART'},'handover')).toBe(0);
     expect(industrialHazardCell({type:'RUNAWAY_CART'},'datacenter-v1.png')).toBe(2);

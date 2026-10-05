@@ -2,9 +2,42 @@ import type { Hazard, HazardType } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SpritePose } from './survivors-sprite-motion';
 import { drawProp } from './survivors-equipment-art';
+import { suspendedLoadPose } from './survivors-animation-rig';
 
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
+export const INDUSTRIAL_CRANE_ART = '/assets/survivors/crane-load-v4.webp';
+
+export function cartActionPose(h: Pick<Hazard,'motion'|'isStageBoss'>, reduced: boolean): {lean:number;compression:number;brake:number} {
+  if (reduced || !h.motion) return {lean:0,compression:0,brake:0};
+  const {phase,timer}=h.motion;
+  if (phase === 'warning') {
+    const t=Math.max(0,Math.min(1,1-timer/(h.isStageBoss?1.2:.9)));
+    return {lean:-.025*t,compression:.035*t,brake:0};
+  }
+  if (phase === 'charge') return {lean:.035,compression:.018,brake:0};
+  const brake=phase==='cooldown'?Math.max(0,Math.min(1,(timer-.8)/.3)):0;
+  return {lean:-.04*brake,compression:.045*brake,brake};
+}
+
+export function craneArtPose(radius:number,clock:number,reduced:boolean) {
+  const sway=suspendedLoadPose(reduced?0:clock);
+  const size=Math.min(220,Math.max(112,radius*2.7));
+  return {x:sway.x,bottom:sway.y+16,size,top:sway.y+16-size};
+}
+
+export function drawIndustrialCrane(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,radius:number,clock:number,reduced:boolean,reaction:number):boolean {
+  if(!atlas?.naturalWidth)return false;
+  const p=craneArtPose(radius,clock,reduced);
+  ctx.save();ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();
+  ctx.ellipse(p.x,2,radius*1.35,radius*.48,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(203,213,225,.65)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(p.x,p.top+3);ctx.lineTo(0,-380);ctx.stroke();
+  ctx.translate(p.x,p.bottom);
+  if(!reduced)ctx.rotate(Math.min(1,Math.max(0,reaction))*.016);
+  const drawn=drawProp(ctx,atlas,0,0,0,p.size);
+  ctx.restore();return drawn;
+}
 
 export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground: string): number | null {
   if (h.type === 'RUNAWAY_CART') return h.variant === 'reinforced_cart' ? 1 : ground.includes('datacenter') ? 2 : 0;
@@ -25,9 +58,11 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     ctx.ellipse(0, 2, size * .4, size * .13, 0, 0, Math.PI * 2);ctx.fill();
   }
   if (h.type === 'RUNAWAY_CART') {
-    ctx.scale(pose.facing, 1);
+    const facing=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)&&Math.abs(h.motion.directionX)>.04?(h.motion.directionX<0?-1:1):pose.facing;
+    const action=cartActionPose(h,reduced);
+    ctx.scale(facing, 1);
     // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
-    ctx.transform(1, 0, pose.lean, 1 - (reduced ? 0 : pose.reaction * .06), 0, 0);
+    ctx.transform(1, 0, pose.lean+action.lean, 1 - action.compression - (reduced ? 0 : pose.reaction * .06), 0, 0);
   }
   const pressure = !reduced && h.variant === 'pulse_gas' ? 1 + Math.sin(clock * 8) * .045 : 1;
   ctx.scale(pressure, pressure);

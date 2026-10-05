@@ -39,7 +39,7 @@ import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
-import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, drawIndustrialHazard } from './survivors-industrial-art';
+import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose } from './survivors-industrial-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
@@ -166,6 +166,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     cinematicAtlas?: HTMLImageElement;
     industrialHazards?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
+    industrialCrane?: HTMLImageElement;
     wearables?: WearableImages;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
@@ -265,6 +266,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
     const industrialContacts = new Image(); industrialContacts.src = INDUSTRIAL_CONTACT_ART;
     industrialContacts.onload = () => { registerPropAtlas(industrialContacts,3,2); spritesRef.current.industrialContacts = industrialContacts; };
+    const industrialCrane = new Image(); industrialCrane.src = INDUSTRIAL_CRANE_ART;
+    industrialCrane.onload = () => { registerPropAtlas(industrialCrane,1,1); spritesRef.current.industrialCrane = industrialCrane; };
     cinematic.src=CINEMATIC_VFX_ATLAS;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
@@ -2073,7 +2076,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.stroke();
             ctx.setLineDash([]);
 
-            const loadPose = suspendedLoadPose(engine.state.gameTime);
+            const loadPose = suspendedLoadPose(reducedMotionRef.current?0:engine.state.gameTime);
+            const swayX = loadPose.x;
+            const zOffset = loadPose.y;
+            const paintedCrane=drawIndustrialCrane(ctx,spritesRef.current.industrialCrane,h.radius,engine.state.gameTime,reducedMotionRef.current,hazardPose.reaction);
+            if(!paintedCrane){
             // 2. Ground shadow follows the suspended load, inside its warned radius.
             ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
             ctx.beginPath();
@@ -2081,8 +2088,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fill();
 
             // 3. Overhead 3D Suspended Load (Z-axis offset + sway)
-            const swayX = loadPose.x;
-            const zOffset = loadPose.y;
 
             // Two high-tension steel wire ropes coming from overhead crane boom
             ctx.strokeStyle = 'rgba(203, 213, 225, 0.65)';
@@ -2128,14 +2133,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
             ctx.restore();
 
+            }
+
             // Boss Hazard Title Tag
             ctx.font = 'bold 12px sans-serif';
             ctx.fillStyle = '#f87171';
             ctx.textAlign = 'center';
             if (h === closestCrane) {
               ctx.lineWidth = 4; ctx.strokeStyle = '#111827';
-              ctx.strokeText(combatText.crane_warning, swayX, zOffset - h.radius - 14);
-              ctx.fillText(combatText.crane_warning, swayX, zOffset - h.radius - 14);
+              const titleY=paintedCrane?craneArtPose(h.radius,engine.state.gameTime,reducedMotionRef.current).top-24:zOffset-h.radius-14;
+              ctx.strokeText(combatText.crane_warning, swayX, titleY);
+              ctx.fillText(combatText.crane_warning, swayX, titleY);
             }
           }
 
@@ -2150,7 +2158,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
           const hpPercent = Math.max(0, h.hp / h.maxHp);
-          const barY = h.type === 'CRANE_BOSS' ? -h.radius - 48 : h.type === 'UNHELMETED' ? -80 : h.type === 'RUNAWAY_CART' ? -Math.max(58, h.radius * 2.6) * .82 - 8 : -h.radius - 8;
+          const barY = h.type === 'CRANE_BOSS' ? spritesRef.current.industrialCrane?.naturalWidth ? craneArtPose(h.radius,engine.state.gameTime,reducedMotionRef.current).top-12 : -h.radius - 48 : h.type === 'UNHELMETED' ? -80 : h.type === 'RUNAWAY_CART' ? -Math.max(58, h.radius * 2.6) * .82 - 8 : -h.radius - 8;
           ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
           ctx.fillRect(-barW / 2, barY, barW, barH);
           ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
