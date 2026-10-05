@@ -2,6 +2,7 @@ import {cinematicLook,drawCinematicContact,drawVfxCell} from './survivors-cinema
 import {drawIndustrialContact} from './survivors-industrial-art';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
+import {drawUltimateRelease,ULTIMATE_RELEASE_DURATION} from './survivors-ultimate-release';
 
 type Effect = { event: ProjectileFeedback; age: number; duration: number };
 export const MAX_PROJECTILE_FEEDBACK = 64;
@@ -24,7 +25,7 @@ export class ProjectileFeedbackLayer {
       if (seen.has(key)) continue;
       seen.add(key);
       if (busy && event.phase === 'release') continue;
-      const duration = event.phase === 'launch' ? .10 : event.phase === 'impact' ? (event.critical ? .24 : .18) : .16;
+      const duration = event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:.10) : event.phase === 'impact' ? (event.critical ? .24 : .18) : .16;
       if (this.effects.length >= MAX_PROJECTILE_FEEDBACK) {
         const decorative = this.effects.findIndex(e => e.event.phase !== 'impact');
         if (decorative < 0 && event.phase !== 'impact') continue;
@@ -43,6 +44,9 @@ export class ProjectileFeedbackLayer {
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      if(!e.worker&&e.kind==='shout_shockwave'&&e.phase==='launch'&&drawUltimateRelease(ctx,cinematic?.atlas,age,reducedMotion,busy)){
+        ctx.restore();continue;
+      }
       if(e.blocked&&!e.worker&&e.phase==='impact'){
         ctx.strokeStyle='#82d7e5';ctx.lineWidth=1.5;
         const spread=reducedMotion?9:9+(1-(1-t)**2)*6;
