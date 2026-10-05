@@ -1,0 +1,1886 @@
+{
+  "id": "survivors-boss-incidents-v1",
+  "version": "1.0.0",
+  "status": "DIRECTOR_DESIGN_HANDOFF",
+  "generatedFor": "Codex implementation handoff",
+  "doctrine": [
+    "보스는 사람이 아니라 사고로 성장하기 전의 복합 위험상황이다.",
+    "각 사건은 SIGNAL → READ → DECIDE → DEPLOY → IMPACT → VERIFY → NEXT 흐름을 유지한다.",
+    "실제 재해의 고통을 오락으로 소비하지 않는다. 사고 직전의 메커니즘·전조·통제·검증에 집중한다.",
+    "caseArchetype은 특정 실명 사고의 사실 재현이 아니라 반복적으로 발생하는 건설재해 메커니즘을 설계 모티프로 정리한 것이다."
+  ],
+  "implementationIntent": {
+    "reuseExistingBossStateMachine": true,
+    "currentStates": [
+      "arrival",
+      "combat",
+      "secured"
+    ],
+    "requiredExtension": [
+      "stage-specific incident registry",
+      "required-control gates",
+      "boss intro art transition",
+      "per-stage unique mechanic adapter",
+      "verify/finisher resolution",
+      "stage50 whole-site boss wave"
+    ],
+    "doNot": [
+      "replace pure TypeScript engine with UI state",
+      "turn workers into attack targets",
+      "make raw damage bypass required-control gates",
+      "show graphic injury"
+    ]
+  },
+  "incidents": [
+    {
+      "stageId": "stage_01",
+      "stageNumber": 1,
+      "stageName": "서측 게이트 및 지상 복합 하역장",
+      "bossId": "incident_01",
+      "bossName": "사각 후진 25T",
+      "codeName": "BLIND REVERSER",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "차량·보행자 충돌",
+      "caseArchetype": "후진 덤프트럭과 보행 동선이 겹치고 신호수/운전자 시야가 끊겨 보행자를 충격하는 사고 모티프",
+      "telegraphs": [
+        "후진경고음이 다른 장비음에 묻힘",
+        "유도원 부재",
+        "보행자가 차량 후방 사각으로 진입"
+      ],
+      "requiredControls": [
+        "차량 즉시 정지",
+        "보행통로 완전 분리",
+        "유도원 배치 후 재개"
+      ],
+      "uniqueMechanic": "후진 직선 예고선이 잠기며, 유도원 배치 전에는 코어가 열리지 않는다",
+      "finisher": "차량 제동등 점등→작업자 대피→통제선이 녹색으로 전환",
+      "learningPoint": "차량 위험은 속도보다 사각지대와 동선 중첩에서 먼저 시작된다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_02",
+      "stageNumber": 2,
+      "stageName": "대심도 기초 굴착 구역 (-4F)",
+      "bossId": "incident_02",
+      "bossName": "선회반경 베헤모스",
+      "codeName": "SWING RADIUS",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "굴착기 협착·충돌",
+      "caseArchetype": "굴착기 선회/후진 중 작업자가 카운터웨이트와 구조물 사이에 끼이거나 충격받는 사고 모티프",
+      "telegraphs": [
+        "카운터웨이트 사각",
+        "협소 통로",
+        "연약한 바닥으로 장비 진로 흔들림"
+      ],
+      "requiredControls": [
+        "굴착기 정지",
+        "선회반경 출입금지",
+        "보행 우회로 확보"
+      ],
+      "uniqueMechanic": "직선 돌진 대신 120도 선회 부채꼴을 예고하고, 사각지대 센서를 켜야 약점이 보인다",
+      "finisher": "버킷 착지→엔진 아이들→선회반경 바닥표시 고정",
+      "learningPoint": "중장비 주변에서는 작업자와 장비의 공간을 먼저 분리해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_03",
+      "stageNumber": 3,
+      "stageName": "45층 초고층 메가 골조 슬래브",
+      "bossId": "incident_03",
+      "bossName": "편심 양중 아라크네",
+      "codeName": "OFF-CENTER LIFT",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중물 낙하·충돌",
+      "caseArchetype": "불균형 슬링/체결과 하부 잔류 때문에 인양물이 기울거나 회전해 작업자를 타격하는 사고 모티프",
+      "telegraphs": [
+        "슬링 장력 불균형",
+        "하부 작업자 잔류",
+        "태그라인 미사용"
+      ],
+      "requiredControls": [
+        "양중 중지",
+        "하부 전원 대피",
+        "체결·슬링 각도 확인"
+      ],
+      "uniqueMechanic": "하중이 두 개의 낙하 예고점을 만들며 체결 확인 후 하나로 안정되어 코어가 열린다",
+      "finisher": "하중 수평 복귀→훅 정지→하부 작업면 재개",
+      "learningPoint": "양중 사고는 하중보다 체결·반경·하부 통제가 핵심이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_04",
+      "stageNumber": 4,
+      "stageName": "혹한기 동절기 밀폐 양생 챔버",
+      "bossId": "incident_04",
+      "bossName": "무음의 양생실",
+      "codeName": "SILENT CO CHAMBER",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "질식·중독",
+      "caseArchetype": "밀폐 천막 안 연소식 가열기 배기가 축적되고 환기 부족으로 작업자가 위험에 노출되는 사고 모티프",
+      "telegraphs": [
+        "환기구 결로/막힘",
+        "가스측정기 상승",
+        "가열기 주변 공기 흐름 정체"
+      ],
+      "requiredControls": [
+        "가열기 정지",
+        "전원 대피·환기",
+        "재측정 후 재개"
+      ],
+      "uniqueMechanic": "시야를 흐리는 무색 펄스가 확대되고 측정기 확인 전에는 직접 대응이 무효화된다",
+      "finisher": "가열기 정지→천막 개방→가스수치 녹색",
+      "learningPoint": "보이지 않는 위험은 감각이 아니라 측정과 환기로 확인해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_05",
+      "stageNumber": 5,
+      "stageName": "하이퍼스케일 전산 플랜트",
+      "bossId": "incident_05",
+      "bossName": "고중심 UPS 큐브",
+      "codeName": "TOPPLE CUBE",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "중량물 전도·협착",
+      "caseArchetype": "고중심 UPS 캐비닛을 롤러/대차로 이동하다 바닥 단차나 방향전환에서 전도되어 작업자를 협착하는 사고 모티프",
+      "telegraphs": [
+        "장비가 한쪽으로 기울음",
+        "바닥 단차",
+        "손이 장비와 벽 사이에 위치"
+      ],
+      "requiredControls": [
+        "이동 중지",
+        "쐐기·가이드로 안정화",
+        "밀기/당기기 작업구역 분리"
+      ],
+      "uniqueMechanic": "직선 돌진 중 기울기 게이지가 쌓이며 안정화 조치 없이는 제동 후에도 재전도한다",
+      "finisher": "UPS 수직 복귀→고정구 체결→통로 개방",
+      "learningPoint": "중량물은 무게보다 무게중심과 협착점 관리가 중요하다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_06",
+      "stageNumber": 6,
+      "stageName": "리모델링 사전 조사·전원 차단",
+      "bossId": "incident_06",
+      "bossName": "숨은 활선",
+      "codeName": "HIDDEN LIVE LINE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "감전·아크",
+      "caseArchetype": "도면과 실제 배선이 다른 리모델링 현장에서 미확인 활선/배관을 천공·절단해 감전 또는 아크가 발생하는 사고 모티프",
+      "telegraphs": [
+        "구도면과 표기 불일치",
+        "미표시 회로",
+        "탐지기 간헐 경고"
+      ],
+      "requiredControls": [
+        "작업 중지",
+        "회로 추적·식별",
+        "LOTO 후 무전압 확인"
+      ],
+      "uniqueMechanic": "세 개 후보 회로 중 실제 활선이 처음에는 HIDDEN이며 탐지 후에만 격리 타깃이 열린다",
+      "finisher": "전압 파형 소거→태그 부착→천공 지점 안전표시",
+      "learningPoint": "리모델링에서는 도면보다 실제 상태 확인이 우선이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_07",
+      "stageNumber": 7,
+      "stageName": "리모델링 선택 철거",
+      "bossId": "incident_07",
+      "bossName": "떠받침 없는 벽",
+      "codeName": "UNSUPPORTED REMNANT",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "철거 구조물 붕괴",
+      "caseArchetype": "부분 철거 후 남은 벽체/슬래브 지지조건이 바뀌어 예기치 않게 붕괴하는 사고 모티프",
+      "telegraphs": [
+        "균열 진행",
+        "진동 증가",
+        "임시지지 제거 흔적"
+      ],
+      "requiredControls": [
+        "작업자 대피",
+        "위험구역 통제",
+        "임시 지지 후 철거순서 재설정"
+      ],
+      "uniqueMechanic": "균열이 세 방향으로 번지며 지지점 확보 수만큼 낙하 구역이 줄어든다",
+      "finisher": "균열 멈춤→지지대 체결→계획된 철거 재개",
+      "learningPoint": "철거는 없애는 작업이 아니라 남은 구조의 힘 흐름을 관리하는 작업이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_08",
+      "stageNumber": 8,
+      "stageName": "기존·신설 구조 접합",
+      "bossId": "incident_08",
+      "bossName": "회전하는 보강재",
+      "codeName": "PINCH BRACE",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중재 협착",
+      "caseArchetype": "보강 철골/브레이스를 접합 위치에 맞추는 동안 부재가 회전해 작업자를 기존 구조물 사이에 협착하는 사고 모티프",
+      "telegraphs": [
+        "편심 체결",
+        "손으로 부재를 직접 유도",
+        "임시 지지 부족"
+      ],
+      "requiredControls": [
+        "양중 정지",
+        "태그라인·임시지지 설치",
+        "비접촉 정렬 후 접합"
+      ],
+      "uniqueMechanic": "보강재가 두 구조 사이를 왕복하며 손 접근 시 협착 게이지가 급상승한다",
+      "finisher": "부재 임시고정→훅 장력 제거→접합점 녹색",
+      "learningPoint": "정렬 작업은 손의 힘이 아니라 임시고정과 유도도구로 해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_09",
+      "stageNumber": 9,
+      "stageName": "데이터센터 MEP 설치",
+      "bossId": "incident_09",
+      "bossName": "점화 전의 증기",
+      "codeName": "FLASH VAPOR",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "화재·폭발",
+      "caseArchetype": "용제·단열재 등 가연성 물질이 있는 설비구역에서 용접/절단 불티가 증기와 만나 착화되는 사고 모티프",
+      "telegraphs": [
+        "용제 냄새/센서 경고",
+        "가연물과 화기 작업 근접",
+        "환기 정체"
+      ],
+      "requiredControls": [
+        "화기작업 중지",
+        "가연물 격리",
+        "환기·화재감시 배치"
+      ],
+      "uniqueMechanic": "점화원이 켜진 동안 증기 농도가 상승하며 두 조건을 동시에 끊어야 코어 노출",
+      "finisher": "스파크 정지→증기 제거→화재감시 위치 고정",
+      "learningPoint": "화재는 불티 하나보다 가연물·환기·작업중첩의 조합에서 생긴다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_10",
+      "stageNumber": 10,
+      "stageName": "데이터센터 통합 시운전",
+      "bossId": "incident_10",
+      "bossName": "원격 기동",
+      "codeName": "REMOTE START",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "예기치 않은 기동·협착",
+      "caseArchetype": "시운전 중 펌프·팬·구동부가 원격 명령으로 갑자기 기동해 점검자를 끼이게 하는 사고 모티프",
+      "telegraphs": [
+        "현장/중앙 제어 명령 충돌",
+        "LOTO 누락",
+        "가드 열린 상태"
+      ],
+      "requiredControls": [
+        "작업중지",
+        "에너지 격리·LOTO",
+        "현장-중앙 재가동 권한 일치 확인"
+      ],
+      "uniqueMechanic": "CHAPTER BOSS: 기계·전기·원격명령 3개의 인터록을 순서대로 해제해야 최종 코어가 열린다",
+      "finisher": "회전체 완전정지→LOTO 확인→통제실 재가동 승인",
+      "learningPoint": "시운전의 핵심은 설비가 움직이는지가 아니라 누가 언제 움직일 수 있는지를 통제하는 것이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 8,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_11",
+      "stageNumber": 11,
+      "stageName": "형틀·시스템동바리 조립",
+      "bossId": "incident_11",
+      "bossName": "기울어진 지지축",
+      "codeName": "BROKEN LOAD PATH",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "동바리·거푸집 붕괴",
+      "caseArchetype": "받침·U헤드·수직도·바닥지지 불량과 상부 적재가 겹쳐 지지계가 연쇄적으로 불안정해지는 사고 모티프",
+      "telegraphs": [
+        "기울어진 동바리",
+        "받침판 뜸",
+        "상부 자재 집중 적재"
+      ],
+      "requiredControls": [
+        "상부 적재 제거",
+        "출입통제",
+        "지지부 재점검·보강"
+      ],
+      "uniqueMechanic": "하중선이 시각화되고 불량 지지점을 고치지 않으면 다른 위치로 붕괴 예고가 전이된다",
+      "finisher": "하중선 수직화→보강 완료→작업면 재개",
+      "learningPoint": "가시설 붕괴는 한 부재가 아니라 전체 하중 전달 경로의 문제다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_12",
+      "stageNumber": 12,
+      "stageName": "철근 반입·배근",
+      "bossId": "incident_12",
+      "bossName": "굴러오는 철근묶음",
+      "codeName": "ROLLING BUNDLE",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "자재 전도·협착",
+      "caseArchetype": "장척 철근 묶음이 경사·대차·포크 위에서 이동하거나 굴러 작업자를 압박하는 사고 모티프",
+      "telegraphs": [
+        "결속밴드 이완",
+        "받침목 부족",
+        "작업자가 손으로 방향 유도"
+      ],
+      "requiredControls": [
+        "반입 정지",
+        "쐐기·받침 설치",
+        "작업자 동선 분리"
+      ],
+      "uniqueMechanic": "철근 묶음이 회전관성을 가져 제동 후 한 번 더 굴러가며 고정조치가 있어야 정지한다",
+      "finisher": "받침목 체결→묶음 정렬→배근구역 인계",
+      "learningPoint": "장척 자재는 멈춰 보여도 구름·미끄럼 에너지가 남아 있다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_13",
+      "stageNumber": 13,
+      "stageName": "야간 콘크리트 타설",
+      "bossId": "incident_13",
+      "bossName": "압력 채찍",
+      "codeName": "HOSE WHIP",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "펌프호스 휘둘림·충격",
+      "caseArchetype": "콘크리트 펌프 막힘/압력변동 후 호스가 급격히 휘둘러 주변 작업자를 타격하는 사고 모티프",
+      "telegraphs": [
+        "호스 비정상 진동",
+        "압력계 요동",
+        "어두운 작업반경"
+      ],
+      "requiredControls": [
+        "펌프 정지",
+        "압력 해제",
+        "호스 반경 비우고 점검"
+      ],
+      "uniqueMechanic": "호스 끝이 예고선 뒤 곡선으로 휘며 압력 해제 액션 전에는 반복 공격한다",
+      "finisher": "펌프 압력 0→호스 지면 고정→조명 복구",
+      "learningPoint": "막힘을 힘으로 밀어내기 전에 압력과 사람의 위치를 먼저 통제해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_14",
+      "stageNumber": 14,
+      "stageName": "갱폼 인양·해체",
+      "bossId": "incident_14",
+      "bossName": "매달린 갱폼",
+      "codeName": "DEADLINE LIFT",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중물 낙하·하부 피격",
+      "caseArchetype": "갱폼/부속 인양 시 체결핀·잔재물·부속품이 떨어지거나 하부 작업자가 남아 피격되는 사고 모티프",
+      "telegraphs": [
+        "하부 인원 잔류",
+        "체결핀/부속 흔들림",
+        "무전 신호 중복"
+      ],
+      "requiredControls": [
+        "하부 전원 대피",
+        "양중 정지",
+        "체결·잔재물 확인"
+      ],
+      "uniqueMechanic": "원화 컷인 후 하부 실루엣과 갱폼 부속 3개가 위험 포인트로 표시되고 모두 확인해야 코어가 열린다",
+      "finisher": "와이어 장력 이완→갱폼 고정→하부 통로 녹색",
+      "learningPoint": "양중 전에는 들어올릴 것뿐 아니라 떨어질 것과 아래 사람까지 확인해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_15",
+      "stageNumber": 15,
+      "stageName": "외부 비계·작업발판",
+      "bossId": "incident_15",
+      "bossName": "비어버린 한 칸",
+      "codeName": "MISSING BAY",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "추락·낙하",
+      "caseArchetype": "작업발판 일부 또는 안전난간이 해체된 상태에서 자재 운반 중 작업자가 개방부로 추락하거나 자재가 하부로 떨어지는 사고 모티프",
+      "telegraphs": [
+        "난간 한 구간 없음",
+        "발판 틈",
+        "자재가 통로 가장자리에 적치"
+      ],
+      "requiredControls": [
+        "상부 작업 중지",
+        "난간·발판 복구",
+        "하부 출입 통제"
+      ],
+      "uniqueMechanic": "발판 빈 칸이 이동 경로를 끊고 복구 전에는 보스 외피가 무적 상태를 유지한다",
+      "finisher": "발판 연속성 복구→난간 잠금→하부 경고원 소거",
+      "learningPoint": "고소작업의 안전은 개인 회피가 아니라 작업면 자체를 완성하는 데서 시작된다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_16",
+      "stageNumber": 16,
+      "stageName": "옥탑·지붕층 복합 작업",
+      "bossId": "incident_16",
+      "bossName": "바람에 밀린 하중",
+      "codeName": "ROOF SWING",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "고소·양중 복합",
+      "caseArchetype": "지붕층에서 인양물을 유도하던 작업자가 돌풍과 하중 회전에 밀려 가장자리 위험에 노출되는 사고 모티프",
+      "telegraphs": [
+        "풍속 상승",
+        "개방된 가장자리",
+        "태그라인 부족"
+      ],
+      "requiredControls": [
+        "양중 일시 중지",
+        "가장자리 방호·추락방지 확보",
+        "태그라인으로 원격 유도"
+      ],
+      "uniqueMechanic": "풍속 펄스가 하중 스윙 폭을 키우며 방호와 태그라인 두 조건을 충족해야 안정된다",
+      "finisher": "하중 착지→가장자리 방호 잠금→풍속 경보 해제",
+      "learningPoint": "옥상 양중은 하중과 추락위험을 동시에 관리해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_17",
+      "stageNumber": 17,
+      "stageName": "방수·용제 보관",
+      "bossId": "incident_17",
+      "bossName": "증기의 방",
+      "codeName": "VAPOR ROOM",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "화재·중독",
+      "caseArchetype": "밀폐·반밀폐 방수 작업에서 용제 증기 축적과 점화원/노출이 겹치는 사고 모티프",
+      "telegraphs": [
+        "용기 개방",
+        "환기 부족",
+        "점화원 접근"
+      ],
+      "requiredControls": [
+        "보관구역 격리",
+        "점화원 제거",
+        "환기 후 농도 확인"
+      ],
+      "uniqueMechanic": "가시성 낮은 증기층이 바닥에서 차오르고 센서가 없으면 안전구역 경계를 오판한다",
+      "finisher": "용기 밀폐→환기팬 가동→농도 정상",
+      "learningPoint": "휘발성 물질은 눈에 보이지 않아도 작업공간 전체의 조건을 바꾼다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_18",
+      "stageNumber": 18,
+      "stageName": "내부 마감·양중 동선",
+      "bossId": "incident_18",
+      "bossName": "넘어지는 패널",
+      "codeName": "TIPPING PANEL",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "전도·협착",
+      "caseArchetype": "석고보드·유리·대형 마감패널이 세워진 대차/랙에서 이동 중 전도되어 작업자를 협착하는 사고 모티프",
+      "telegraphs": [
+        "패널 상부 흔들림",
+        "좁은 회전구간",
+        "작업자가 측면을 손으로 지지"
+      ],
+      "requiredControls": [
+        "반입 중지",
+        "랙 고정·결속",
+        "회전구간과 작업자 위치 분리"
+      ],
+      "uniqueMechanic": "회전 코너에서 전도 게이지가 급증하며 정면/측면 접근을 구분해야 한다",
+      "finisher": "랙 잠금→저속 반입→통로 인계",
+      "learningPoint": "대형 패널은 무게보다 전도 방향과 협착 공간을 읽어야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_19",
+      "stageNumber": 19,
+      "stageName": "설비 시험·전원 격리",
+      "bossId": "incident_19",
+      "bossName": "돌아오는 전원",
+      "codeName": "BACKFEED CORE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "감전·아크플래시",
+      "caseArchetype": "다중 전원/UPS/발전기에서 한 전원을 차단했지만 다른 경로로 역송전되어 작업자가 노출되는 사고 모티프",
+      "telegraphs": [
+        "차단기는 내려감",
+        "다른 전원표시가 미약하게 살아있음",
+        "시험일정 압박"
+      ],
+      "requiredControls": [
+        "작업중지",
+        "모든 전원원 식별·격리",
+        "검전·접지 후 작업허가"
+      ],
+      "uniqueMechanic": "두 개의 전원 코어가 존재하고 하나만 끄면 다른 쪽이 다시 활성화되는 백피드 패턴",
+      "finisher": "양쪽 전원 0V→접지 표시→시험구역 승인",
+      "learningPoint": "전기 격리는 스위치 한 번이 아니라 모든 에너지원을 확인하는 절차다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_20",
+      "stageNumber": 20,
+      "stageName": "준공 전 최종 현장 인계",
+      "bossId": "incident_20",
+      "bossName": "남겨진 임시상태",
+      "codeName": "RESIDUAL STATE",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "잔여 위험·인계 실패",
+      "caseArchetype": "준공 직전 임시전원·개구부·가설통로·잔여자재가 서로 다른 담당자 사이에서 미조치로 남아 후속 작업자가 노출되는 사고 모티프",
+      "telegraphs": [
+        "완료 스티커와 실제 상태 불일치",
+        "임시조치 표지 누락",
+        "후속팀 조기 진입"
+      ],
+      "requiredControls": [
+        "잔여 위험 재순찰",
+        "미완료 구역 격리",
+        "완료/잔여를 분리 기록 후 인계"
+      ],
+      "uniqueMechanic": "CHAPTER BOSS: 개구부·임시전원·통로 3개 잔여위험이 순차 재활성화되어 기록까지 끝내야 승리",
+      "finisher": "잔여목록 0이 아니라 '격리+담당+재개조건' 확정→인계서 봉인",
+      "learningPoint": "준공은 위험이 사라지는 순간이 아니라 남은 위험의 주인이 명확해지는 순간이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 8,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_21",
+      "stageNumber": 21,
+      "stageName": "역타 지하 작업면 진입",
+      "bossId": "incident_21",
+      "bossName": "낮은 천장의 사각차량",
+      "codeName": "LOW-HEAD BLIND RUN",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "차량 충돌·협착",
+      "caseArchetype": "역타 슬래브 하부의 좁고 어두운 진입로에서 반입차량과 보행자가 시야 제한으로 충돌하는 사고 모티프",
+      "telegraphs": [
+        "낮은 조도",
+        "기둥 뒤 사각",
+        "차량과 보행 공용로"
+      ],
+      "requiredControls": [
+        "차량 정지",
+        "일방통행/보행로 분리",
+        "교차점 신호수 배치"
+      ],
+      "uniqueMechanic": "기둥이 시야를 가리는 구간에서만 돌진 방향이 늦게 보이며 조명 확보 시 예고시간 증가",
+      "finisher": "교차로 점등→차량 대기→보행로 녹색",
+      "learningPoint": "지하에서는 속도보다 보이는 거리와 피할 공간이 더 중요하다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_22",
+      "stageNumber": 22,
+      "stageName": "지하 환기·배수 확보",
+      "bossId": "incident_22",
+      "bossName": "젖은 전원",
+      "codeName": "WET POWER",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "감전",
+      "caseArchetype": "배수펌프·임시전기 케이블이 젖은 작업면에서 손상되거나 접속부가 침수돼 감전 위험이 발생하는 사고 모티프",
+      "telegraphs": [
+        "고인 물 확대",
+        "케이블 외피 손상",
+        "차단기 반복 트립"
+      ],
+      "requiredControls": [
+        "전원 차단",
+        "배수·건조",
+        "케이블/누전보호기 점검 후 재가동"
+      ],
+      "uniqueMechanic": "물 웅덩이가 전기 펄스 범위를 연결해 확대하며 배수해야 격리 효과가 유지된다",
+      "finisher": "수위 하강→검전 0→펌프 정상 재가동",
+      "learningPoint": "물과 전기는 각각이 아니라 서로 연결될 때 위험도가 급격히 커진다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_23",
+      "stageNumber": 23,
+      "stageName": "슬래브 하부 굴착 반출",
+      "bossId": "incident_23",
+      "bossName": "후진 반출차",
+      "codeName": "SPOIL REVERSER",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "차량·보행자 충돌",
+      "caseArchetype": "굴착토 반출차가 반복 후진하는 좁은 경로에서 신호가 끊겨 작업자를 충격하는 사고 모티프",
+      "telegraphs": [
+        "반복 후진으로 경계심 저하",
+        "신호수 시야 단절",
+        "대피공간 부족"
+      ],
+      "requiredControls": [
+        "반출 정지",
+        "대피포켓 확보",
+        "신호수-운전자 시야 연결"
+      ],
+      "uniqueMechanic": "같은 경로를 반복할수록 돌진 속도가 오르며 대피포켓 확보 시 속도 상승이 끊긴다",
+      "finisher": "차량 정렬주차→대피포켓 점등→반출 재개",
+      "learningPoint": "반복 작업의 익숙함이 위험을 정상처럼 보이게 만든다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_24",
+      "stageNumber": 24,
+      "stageName": "지하·지상 동시 작업",
+      "bossId": "incident_24",
+      "bossName": "위에서 오는 것",
+      "codeName": "VERTICAL CROSSING",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "낙하물·교차작업",
+      "caseArchetype": "지상 양중/해체와 지하 설비 작업이 수직으로 겹쳐 개구부·슬래브 경계를 통해 물체가 하부 작업자에게 낙하하는 사고 모티프",
+      "telegraphs": [
+        "상부 작업음",
+        "하부 인원 이동",
+        "개구부 주변 자재"
+      ],
+      "requiredControls": [
+        "상부 작업중지",
+        "하부 대피·출입통제",
+        "개구부 덮개/낙하방지 확인"
+      ],
+      "uniqueMechanic": "상·하부 두 레이어가 번갈아 활성화되고 한쪽만 통제하면 다른 층에서 공격이 이어진다",
+      "finisher": "상부 중지등→하부 대피 완료→개구부 보호",
+      "learningPoint": "교차작업은 각 팀의 안전조치가 아니라 층간 시간과 공간을 분리하는 문제다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_25",
+      "stageNumber": 25,
+      "stageName": "굴착면 중간 인계",
+      "bossId": "incident_25",
+      "bossName": "어제의 통로",
+      "codeName": "STALE ROUTE",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "인계·동선 혼선",
+      "caseArchetype": "교대/공정 전환 후 기존 안전통로가 자재·장비 배치로 바뀌었지만 이전 지시가 그대로 전달돼 작업자가 새 위험구역으로 진입하는 사고 모티프",
+      "telegraphs": [
+        "표지와 실제 동선 불일치",
+        "조명은 옛 통로를 비춤",
+        "신규팀이 과거 표지만 확인"
+      ],
+      "requiredControls": [
+        "현장 재확인",
+        "새 통로 재표시",
+        "인계 브리핑·확인응답"
+      ],
+      "uniqueMechanic": "플레이어가 이전 안전경로를 따라가면 함정이 되고 실제 현장을 읽어 새 경로를 만들어야 한다",
+      "finisher": "신규 경로 점등→옛 표지 제거→인계 확인",
+      "learningPoint": "인계 정보는 맞았던 정보도 현장이 바뀌면 위험해질 수 있다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_26",
+      "stageNumber": 26,
+      "stageName": "리모델링 기존 설비 재조사",
+      "bossId": "incident_26",
+      "bossName": "압력이 남은 배관",
+      "codeName": "LIVE PIPE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "압력방출·화학노출",
+      "caseArchetype": "기존 배관을 폐관/비가동으로 오인하고 절단·분해했지만 잔압이나 연결계통이 남아 유체가 분출되는 사고 모티프",
+      "telegraphs": [
+        "밸브 표시 불명확",
+        "배관 온도/진동 미세",
+        "도면과 실제 연결 다름"
+      ],
+      "requiredControls": [
+        "작업중지",
+        "계통 추적·밸브 격리",
+        "잔압 제거·제로에너지 확인"
+      ],
+      "uniqueMechanic": "배관 노드가 연결되어 잘못된 밸브를 닫으면 다른 경로로 압력이 우회한다",
+      "finisher": "압력계 0→블라인드/락 확인→절단 허가",
+      "learningPoint": "오래된 설비의 '사용 안 함'은 에너지 0을 뜻하지 않는다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_27",
+      "stageNumber": 27,
+      "stageName": "철거 폐기물 반출 분리",
+      "bossId": "incident_27",
+      "bossName": "철거물 사이의 로더",
+      "codeName": "DEBRIS LOADER",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "장비 충돌·협착",
+      "caseArchetype": "철거물 적재·반출 중 로더/스키드로더가 더미와 벽 사이에서 후진해 작업자를 협착하는 사고 모티프",
+      "telegraphs": [
+        "높은 폐기물 더미가 시야 차단",
+        "반출차 대기 압박",
+        "보행자 임시횡단"
+      ],
+      "requiredControls": [
+        "장비 정지",
+        "장비전용 구역 설정",
+        "폐기물 더미 높이/시야 확보"
+      ],
+      "uniqueMechanic": "폐기물 더미가 시야 블록으로 작동하며 치우지 않으면 경고선 일부가 보이지 않는다",
+      "finisher": "시야 확보→장비구역 폐쇄→반출 재개",
+      "learningPoint": "철거현장에서는 잔해 자체가 장비의 시야와 대피공간을 없앤다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_28",
+      "stageNumber": 28,
+      "stageName": "보강재 양중·접합",
+      "bossId": "incident_28",
+      "bossName": "끼이는 접합점",
+      "codeName": "CONNECTION PINCH",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중·협착",
+      "caseArchetype": "보강재를 기존 구조에 맞추는 과정에서 하중이 미세 이동해 손·몸이 접합면 사이에 끼이는 사고 모티프",
+      "telegraphs": [
+        "부재 정렬 오차",
+        "손으로 직접 밀기",
+        "임시고정 전 훅 장력 변화"
+      ],
+      "requiredControls": [
+        "하중 정지",
+        "비접촉 정렬도구 사용",
+        "임시고정 후 훅 이완"
+      ],
+      "uniqueMechanic": "접합부 3개가 순서대로 잠기며 손 접근 구역에 있으면 다음 코어가 열리지 않는다",
+      "finisher": "핀 체결→임시지지 확인→훅 이완",
+      "learningPoint": "접합 공정의 위험은 큰 이동보다 마지막 몇 센티미터에서 가장 커진다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_29",
+      "stageNumber": 29,
+      "stageName": "기존·신설 설비 동시 격리",
+      "bossId": "incident_29",
+      "bossName": "두 개의 전원",
+      "codeName": "DUAL SOURCE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "감전·오조작",
+      "caseArchetype": "기존·신설 설비가 공존하며 표시/회로 구분이 혼재해 다른 계통을 차단하거나 신설측에서 역전원이 들어오는 사고 모티프",
+      "telegraphs": [
+        "색상/라벨 혼재",
+        "한쪽 차단 후 표시등 잔류",
+        "작업자별 다른 계통 인식"
+      ],
+      "requiredControls": [
+        "계통별 식별",
+        "양측 LOTO",
+        "상호 검전·교차확인"
+      ],
+      "uniqueMechanic": "두 회로를 잘못 짝지으면 한쪽 격리가 다른 쪽 위험을 키우는 퍼즐형 인터록",
+      "finisher": "구/신설 모두 무전압→라벨 통일→작업허가",
+      "learningPoint": "복합 설비에서는 '전원 차단'보다 어떤 전원인지 합의하는 것이 먼저다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_30",
+      "stageNumber": 30,
+      "stageName": "복합 지하 작업면 최종 인계",
+      "bossId": "incident_30",
+      "bossName": "막힌 탈출로",
+      "codeName": "NO EXIT",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "비상대피·환기 실패",
+      "caseArchetype": "지하 최종작업 중 자재 적치와 임시호스가 피난통로를 막고 환기 이상까지 겹쳐 비상 시 작업자가 신속히 빠져나오지 못하는 사고 모티프",
+      "telegraphs": [
+        "피난표지 일부 가림",
+        "통로 폭 축소",
+        "환기 경보 간헐"
+      ],
+      "requiredControls": [
+        "작업중지",
+        "피난통로 완전 확보",
+        "환기 정상화·전원 인원 확인"
+      ],
+      "uniqueMechanic": "CHAPTER BOSS: 산소/가스 게이지와 탈출경로가 동시에 악화되며 통로 확보 없이는 환기만 해도 승리 불가",
+      "finisher": "탈출로 연속 점등→환기 정상→인원점검 완료",
+      "learningPoint": "비상대피는 표지판이 아니라 실제로 사람이 빠져나갈 수 있는 연속된 공간이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 8,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_31",
+      "stageNumber": 31,
+      "stageName": "상부 기준층 자재 반입",
+      "bossId": "incident_31",
+      "bossName": "가장자리로 달리는 대차",
+      "codeName": "EDGE RUNNER",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "대차 전도·추락",
+      "caseArchetype": "상부 슬래브에서 중량 대차/파렛트잭이 경사·관성으로 가장자리 방향으로 움직여 작업자를 치거나 자재가 추락하는 사고 모티프",
+      "telegraphs": [
+        "바닥 미세경사",
+        "브레이크 미체결",
+        "가장자리 방호 일부 개방"
+      ],
+      "requiredControls": [
+        "대차 제동",
+        "바퀴고정/쐐기",
+        "가장자리 방호·반입경로 재설정"
+      ],
+      "uniqueMechanic": "대차 진행선 끝에 가장자리 게이지가 있어 충돌 전 제동뿐 아니라 방호복구가 필요하다",
+      "finisher": "바퀴 잠금→가장자리 방호 폐쇄→반입선 녹색",
+      "learningPoint": "고층 반입에서는 같은 이동에 충돌과 추락 두 결과가 동시에 존재한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_32",
+      "stageNumber": 32,
+      "stageName": "상부 형틀·지지부 확인",
+      "bossId": "incident_32",
+      "bossName": "너무 일찍 뺀 지지",
+      "codeName": "EARLY STRIKE",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "거푸집·슬래브 붕괴",
+      "caseArchetype": "콘크리트 강도/재지지 확인 전에 동바리·거푸집을 조기 해체해 슬래브 또는 지지계가 불안정해지는 사고 모티프",
+      "telegraphs": [
+        "해체 표시와 강도기록 불일치",
+        "재지지 누락",
+        "일정 압박"
+      ],
+      "requiredControls": [
+        "해체 중지",
+        "강도·존치기간 확인",
+        "재지지 설치·작업순서 재승인"
+      ],
+      "uniqueMechanic": "지지대를 제거할수록 하중선이 재분배되어 특정 임계점을 넘으면 붕괴 예고가 연쇄 발생",
+      "finisher": "재지지 복원→강도확인→승인된 해체순서 표시",
+      "learningPoint": "형틀 해체 시점은 일정이 아니라 구조가 버틸 준비가 되었는지로 결정한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_33",
+      "stageNumber": 33,
+      "stageName": "상부 철근 반입·배근",
+      "bossId": "incident_33",
+      "bossName": "회전하는 철근케이지",
+      "codeName": "REBAR CAGE SWING",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중·협착",
+      "caseArchetype": "장척 철근케이지가 인양 중 바람/편심으로 회전해 배근 작업자를 치거나 가장자리로 밀어내는 사고 모티프",
+      "telegraphs": [
+        "케이지 편심",
+        "태그라인 한쪽만 사용",
+        "배근팀이 작업반경 안에 잔류"
+      ],
+      "requiredControls": [
+        "양중 중지",
+        "배근팀 대피",
+        "양쪽 태그라인·체결 재확인"
+      ],
+      "uniqueMechanic": "긴 케이지가 화면을 가로지르는 회전축을 갖고 두 끝의 스윙을 모두 제어해야 한다",
+      "finisher": "회전 0→케이지 착지→배근팀 재진입",
+      "learningPoint": "긴 자재는 한 점이 아니라 전체 길이가 위험반경이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_34",
+      "stageNumber": 34,
+      "stageName": "상부 타설 구역 교차 통제",
+      "bossId": "incident_34",
+      "bossName": "거푸집 파열선",
+      "codeName": "POUR BLOWOUT",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "거푸집 파손·콘크리트 유출",
+      "caseArchetype": "타설속도·측압 증가와 체결/보강 부족이 겹쳐 거푸집이 벌어지고 콘크리트가 급격히 유출되는 사고 모티프",
+      "telegraphs": [
+        "폼 타이 변형",
+        "패널 이음부 누수",
+        "펌프 타설속도 상승"
+      ],
+      "requiredControls": [
+        "타설 즉시 중지",
+        "작업자 대피",
+        "체결·버팀 보강 후 저속 재개"
+      ],
+      "uniqueMechanic": "타설 게이지가 구조 허용치를 넘으면 벽면 여러 지점에 파열 예고가 생긴다",
+      "finisher": "펌프 정지→압력 안정→보강완료",
+      "learningPoint": "콘크리트 타설 위험은 재료보다 속도와 거푸집이 받을 힘을 함께 봐야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_35",
+      "stageNumber": 35,
+      "stageName": "외부 비계·양중 협업",
+      "bossId": "incident_35",
+      "bossName": "붙잡힌 비계",
+      "codeName": "SNAGGED SCAFFOLD",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "비계 붕괴·추락",
+      "caseArchetype": "양중물/로프가 비계 부재나 적치물에 걸려 비계 연결·벽이음에 비정상 하중을 주어 일부가 변형·붕괴하는 사고 모티프",
+      "telegraphs": [
+        "양중 경로와 비계 근접",
+        "벽이음 일부 해체",
+        "로프가 부재에 접촉"
+      ],
+      "requiredControls": [
+        "양중 정지",
+        "비계 작업자 대피",
+        "걸림 제거·벽이음 점검"
+      ],
+      "uniqueMechanic": "양중 훅과 비계가 물리적으로 연결된 긴장 게이지를 만들며 둘을 분리해야 낙하 패턴 종료",
+      "finisher": "로프 이격→벽이음 잠금→비계 수직복귀",
+      "learningPoint": "서로 다른 공정의 장비가 접촉하는 순간 각각의 안전계획은 하나의 위험이 된다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_36",
+      "stageNumber": 36,
+      "stageName": "옥탑 설비 반입",
+      "bossId": "incident_36",
+      "bossName": "옥상 AHU 스윙",
+      "codeName": "ROOFTOP RECEIVER",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "양중물 충돌·추락",
+      "caseArchetype": "대형 공조기/AHU를 옥상에 받는 과정에서 풍압과 좁은 착지면 때문에 하중이 회전해 유도자를 밀치거나 가장자리 위험을 만드는 사고 모티프",
+      "telegraphs": [
+        "풍향변화",
+        "착지면 협소",
+        "작업자가 하중 가까이 접근"
+      ],
+      "requiredControls": [
+        "양중 중지",
+        "착지면 확보·가장자리 방호",
+        "태그라인/유도자 위치 재설정"
+      ],
+      "uniqueMechanic": "착지 패드 밖에서는 하중이 계속 회전하고 패드 확보 후에만 최종 하강 가능",
+      "finisher": "AHU 착지→슬링 이완→가장자리 통제 해제",
+      "learningPoint": "대형 설비 양중은 들어올리는 능력보다 안전하게 받을 공간이 중요하다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_37",
+      "stageNumber": 37,
+      "stageName": "옥탑 방수·설비 작업 분리",
+      "bossId": "incident_37",
+      "bossName": "불꽃과 프라이머",
+      "codeName": "TORCH & PRIMER",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "화재·폭발",
+      "caseArchetype": "토치 작업과 방수 프라이머/용제가 가까운 구역에서 동시 진행돼 증기 착화 위험이 높아지는 사고 모티프",
+      "telegraphs": [
+        "프라이머 용기 개방",
+        "바람이 증기를 화기 쪽으로 이동",
+        "화기작업 경계 중첩"
+      ],
+      "requiredControls": [
+        "화기작업 중지",
+        "용제 격리·밀폐",
+        "풍향 고려 환기·감시"
+      ],
+      "uniqueMechanic": "풍향이 가스 구름을 이동시키므로 고정 원형 회피가 아니라 작업 순서를 끊어야 한다",
+      "finisher": "토치 소화→용기 밀폐→안전거리 표시",
+      "learningPoint": "옥상이라고 항상 환기가 충분한 것은 아니며 바람은 위험을 다른 작업으로 운반할 수 있다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_38",
+      "stageNumber": 38,
+      "stageName": "상부 마감팀 동선 인계",
+      "bossId": "incident_38",
+      "bossName": "유리랙 전도",
+      "codeName": "GLASS RACK",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "자재 전도·절상/협착",
+      "caseArchetype": "유리·석재·파티션 등 대형 판재 랙이 바닥 단차·방향전환·결속불량으로 전도되는 사고 모티프",
+      "telegraphs": [
+        "A프레임 결속 느슨함",
+        "문턱 단차",
+        "작업자 측면 동행"
+      ],
+      "requiredControls": [
+        "반입 중지",
+        "결속·받침 재확인",
+        "평탄 경로·대피측 확보"
+      ],
+      "uniqueMechanic": "랙의 전도 방향이 이동방향과 달라 플레이어가 대피측을 선택해야 한다",
+      "finisher": "랙 수직 고정→단차 보호판 설치→마감팀 인계",
+      "learningPoint": "판재 운반은 이동방향보다 쓰러질 방향을 먼저 읽어야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_39",
+      "stageNumber": 39,
+      "stageName": "상부·하부 공정 동시 확인",
+      "bossId": "incident_39",
+      "bossName": "한 층 아래",
+      "codeName": "ONE FLOOR BELOW",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "낙하물",
+      "caseArchetype": "상부 작업의 공구·클램프·자재가 개구부/외곽을 통해 하부 작업자에게 떨어지는 사고 모티프",
+      "telegraphs": [
+        "상부 소형자재 가장자리 적치",
+        "토보드/낙하방지 미흡",
+        "하부팀 작업 지속"
+      ],
+      "requiredControls": [
+        "상부 작업중지",
+        "하부 출입통제",
+        "소형자재 고정·낙하방지 복구"
+      ],
+      "uniqueMechanic": "작은 낙하물 여러 개가 서로 다른 지점에 예고되어 SWARM→BOSS로 결합한다",
+      "finisher": "상부 자재 고정→하부 인원 0→방호 복구",
+      "learningPoint": "낙하물은 크기보다 높이와 아래 사람의 존재가 결과를 결정한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_40",
+      "stageNumber": 40,
+      "stageName": "상부 교차작업 총괄 인계",
+      "bossId": "incident_40",
+      "bossName": "열린 가장자리",
+      "codeName": "EDGE LEFT OPEN",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "추락·인계 실패",
+      "caseArchetype": "양중을 위해 임시로 해체한 안전난간/개구부 방호가 작업 종료 후 복구되지 않아 다음 공정 작업자가 노출되는 사고 모티프",
+      "telegraphs": [
+        "양중은 끝났지만 난간 비어있음",
+        "인계표에는 완료 표시",
+        "다음 팀 진입"
+      ],
+      "requiredControls": [
+        "작업면 폐쇄",
+        "난간/개구부 방호 복구",
+        "실물 확인 후 인계"
+      ],
+      "uniqueMechanic": "CHAPTER BOSS: 이전 공정의 완료표시와 실제 방호상태가 충돌하며 플레이어가 현장을 직접 검증해야 한다",
+      "finisher": "난간 연속 복구→사진/확인기록→다음팀 진입",
+      "learningPoint": "작업 종료는 사용한 방호를 원상복구하고 확인할 때 끝난다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 8,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_41",
+      "stageNumber": 41,
+      "stageName": "통합 설비실 진입",
+      "bossId": "incident_41",
+      "bossName": "남아 있는 압력",
+      "codeName": "STORED PRESSURE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "압력방출·협착",
+      "caseArchetype": "배관/설비가 정지 상태처럼 보여도 압축공기·냉매·유체 잔압이 남아 플랜지/밸브 해체 시 분출하는 사고 모티프",
+      "telegraphs": [
+        "압력계 미세잔압",
+        "바이패스 밸브 연결",
+        "장비 소음이 없어 안심"
+      ],
+      "requiredControls": [
+        "계통 격리",
+        "감압·배출",
+        "제로압 확인 후 접근"
+      ],
+      "uniqueMechanic": "압력 노드가 배관망을 따라 이동하며 밸브 순서를 틀리면 다른 구간 압력이 상승한다",
+      "finisher": "압력 0→블리드 고정→작업허가",
+      "learningPoint": "정지된 설비에도 저장된 에너지는 남아 있을 수 있다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_42",
+      "stageNumber": 42,
+      "stageName": "전기·공조 구역 분리",
+      "bossId": "incident_42",
+      "bossName": "돌아가는 팬",
+      "codeName": "UNEXPECTED ROTOR",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "회전체 끼임",
+      "caseArchetype": "전기·공조 시운전 경계가 섞여 점검 중인 팬/댐퍼가 인접팀 명령으로 갑자기 움직이는 사고 모티프",
+      "telegraphs": [
+        "현장 스위치 OFF지만 BMS 자동모드",
+        "가드 개방",
+        "인접팀 테스트 시작"
+      ],
+      "requiredControls": [
+        "작업중지",
+        "전원·제어신호 모두 격리",
+        "가드 복구 후 공동 재가동 승인"
+      ],
+      "uniqueMechanic": "기계전원과 제어신호 두 인터록을 모두 끊어야 회전이 완전히 멈춘다",
+      "finisher": "회전 0→가드 잠금→BMS 수동승인",
+      "learningPoint": "자동화 설비는 전원뿐 아니라 제어명령도 에너지다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_43",
+      "stageNumber": 43,
+      "stageName": "UPS 장비 반입",
+      "bossId": "incident_43",
+      "bossName": "기울어지는 UPS",
+      "codeName": "HIGH COG",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "중량설비 전도·협착",
+      "caseArchetype": "대형 UPS를 스케이트/잭으로 이동 중 방향전환이나 바닥 이음에서 고중심 장비가 기울어 전도되는 사고 모티프",
+      "telegraphs": [
+        "장비 상부 흔들림",
+        "스케이트 높이 불균형",
+        "회전반경 내 작업자"
+      ],
+      "requiredControls": [
+        "이동 정지",
+        "스케이트 높이/결속 보정",
+        "대피측 확보 후 저속 회전"
+      ],
+      "uniqueMechanic": "회전각과 기울기 게이지가 연동되어 급회전할수록 코어 방어가 강해진다",
+      "finisher": "수평계 중앙→휠 잠금→설치구역 진입",
+      "learningPoint": "고중심 장비는 속도보다 작은 높이차와 급한 방향전환에 취약하다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_44",
+      "stageNumber": 44,
+      "stageName": "수전·배전 구역 격리",
+      "bossId": "incident_44",
+      "bossName": "잘못 닫힌 큐비클",
+      "codeName": "WRONG CUBICLE",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "아크플래시·감전",
+      "caseArchetype": "유사한 배전반/큐비클 중 다른 회로를 차단하고 작업 대상은 살아있는 상태에서 접근하는 사고 모티프",
+      "telegraphs": [
+        "패널 외형 동일",
+        "회로명 유사",
+        "차단 후에도 표시 일부 유지"
+      ],
+      "requiredControls": [
+        "대상 회로 재식별",
+        "상·하류 전원 격리",
+        "검전·접지"
+      ],
+      "uniqueMechanic": "여러 패널 중 올바른 계통을 센서/기록으로 찾아야 하며 오격리 시 경고 펄스 강화",
+      "finisher": "대상 무전압→접지→작업구역 봉인",
+      "learningPoint": "전기 작업에서 '꺼진 것'과 '내가 작업할 것이 꺼진 것'은 다르다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_45",
+      "stageNumber": 45,
+      "stageName": "통합 설비 양중 중지",
+      "bossId": "incident_45",
+      "bossName": "펌프스키드 슬링",
+      "codeName": "SKID RIGGING",
+      "engineFamily": "CRANE_BOSS",
+      "accidentClass": "중량물 낙하·협착",
+      "caseArchetype": "펌프스키드/대형 덕트 등 비대칭 설비를 잘못된 인양점에서 들어 올려 기울거나 슬링이 이동하는 사고 모티프",
+      "telegraphs": [
+        "무게중심 표기 불명확",
+        "슬링각 불균형",
+        "착지작업자 근접"
+      ],
+      "requiredControls": [
+        "양중 중지",
+        "무게중심/인양점 확인",
+        "하부 대피·재체결"
+      ],
+      "uniqueMechanic": "무게중심 마커가 실제 하중 중심과 다르게 시작하고 조사 후 올바른 리깅 포인트가 드러난다",
+      "finisher": "하중 수평→착지→슬링 무장력",
+      "learningPoint": "비대칭 설비는 외형의 중심과 무게중심이 다를 수 있다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_46",
+      "stageNumber": 46,
+      "stageName": "시운전 작업면 사전 확인",
+      "bossId": "incident_46",
+      "bossName": "자동모드 대기",
+      "codeName": "AUTO MODE ARMED",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "예기치 않은 기동",
+      "caseArchetype": "시운전 전 점검 중 설비가 자동모드/예약명령에 남아 있어 작업자가 접근한 순간 펌프·댐퍼·컨베이어가 작동하는 사고 모티프",
+      "telegraphs": [
+        "자동모드 표시",
+        "예약 명령 큐",
+        "현장 인원이 가드 내부"
+      ],
+      "requiredControls": [
+        "자동기동 해제",
+        "LOTO",
+        "중앙/현장 상태 대조·승인"
+      ],
+      "uniqueMechanic": "카운트다운이 보이지 않는 숨은 기동 타이머를 PSI/현장 확인으로 찾아 중단해야 한다",
+      "finisher": "예약명령 삭제→LOTO→현장 확인",
+      "learningPoint": "시운전 전에는 현재 상태뿐 아니라 다음에 실행될 명령까지 확인해야 한다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_47",
+      "stageNumber": 47,
+      "stageName": "다중 구역 통합 시운전",
+      "bossId": "incident_47",
+      "bossName": "동시에 켜지는 것들",
+      "codeName": "CASCADE START",
+      "engineFamily": "GAS_LEAK",
+      "accidentClass": "복합 시운전 재해",
+      "caseArchetype": "여러 설비 구역을 통합 시운전하며 전기·압력·회전체가 연쇄적으로 기동해 작업반경이 겹치는 사고 모티프",
+      "telegraphs": [
+        "구역별 준비상태 다름",
+        "한 시스템 기동이 다른 시스템 트리거",
+        "무전 채널 혼선"
+      ],
+      "requiredControls": [
+        "전면 HOLD",
+        "구역별 준비상태 확인",
+        "순차 기동계획·공통 승인"
+      ],
+      "uniqueMechanic": "전기→압력→회전체 3페이즈가 연쇄되며 한 구역 실패가 다음 구역 공격을 강화한다",
+      "finisher": "모든 구역 HOLD→순차 승인등 점등→재기동",
+      "learningPoint": "통합 시운전의 위험은 설비 하나가 아니라 시스템 간 연결에서 생긴다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_48",
+      "stageNumber": 48,
+      "stageName": "최종 결함 구역 재확인",
+      "bossId": "incident_48",
+      "bossName": "천장 속 마지막 결함",
+      "codeName": "LAST DEFECT ABOVE",
+      "engineFamily": "FALLING_DEBRIS",
+      "accidentClass": "사다리·고소 추락/낙하",
+      "caseArchetype": "마감 완료 구역의 천장·설비 결함을 임시 사다리로 재확인하다 불안정한 발판, 위쪽 활선/부품, 통행자와 겹쳐 사고가 나는 모티프",
+      "telegraphs": [
+        "사다리 바닥 보호재 위 설치",
+        "상부 작업공간 협소",
+        "하부 통행 지속"
+      ],
+      "requiredControls": [
+        "하부 통제",
+        "적정 작업대/사다리 재설치",
+        "상부 에너지·낙하물 확인"
+      ],
+      "uniqueMechanic": "작업높이가 높아질수록 안전 작업대 미확보 시 흔들림과 낙하 예고가 동시에 증가한다",
+      "finisher": "작업대 고정→하부 통제→결함 확인",
+      "learningPoint": "마지막 작은 결함일수록 임시방편으로 처리하려는 압박이 커진다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_49",
+      "stageNumber": 49,
+      "stageName": "운영팀 인계 동선 확보",
+      "bossId": "incident_49",
+      "bossName": "막힌 운영동선",
+      "codeName": "HANDOVER BOTTLENECK",
+      "engineFamily": "RUNAWAY_CART",
+      "accidentClass": "대피·동선 충돌",
+      "caseArchetype": "운영팀이 들어오는 시점에도 잔여 자재·공사용 케이블·반입 작업이 통로를 점유해 비상동선과 작업동선이 충돌하는 사고 모티프",
+      "telegraphs": [
+        "운영동선과 물류동선 교차",
+        "비상구 일부 가림",
+        "공사차량 마지막 반입"
+      ],
+      "requiredControls": [
+        "반입 중지",
+        "운영/물류 동선 완전 분리",
+        "비상구·조명 실사용 확인"
+      ],
+      "uniqueMechanic": "운영팀 NPC가 실제 동선을 따라 이동하며 막힌 구간이 있으면 인계가 완료되지 않는다",
+      "finisher": "운영팀 무정지 통과→비상구 녹색→물류구역 폐쇄",
+      "learningPoint": "인계는 서류가 아니라 다음 사용자가 실제로 안전하게 움직일 수 있어야 완료된다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 5,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    },
+    {
+      "stageId": "stage_50",
+      "stageNumber": 50,
+      "stageName": "ZERO DAY · 통합 현장 인계",
+      "bossId": "incident_50",
+      "bossName": "ZERO DAY",
+      "codeName": "THE ACCIDENT THAT DID NOT HAPPEN",
+      "engineFamily": "MULTI",
+      "accidentClass": "복합위험·시스템 사고",
+      "caseArchetype": "양중·차량·낙하·전기/압력·신규인원·통신·공정지연 등 여러 위험신호가 같은 시간대에 겹쳐 하나의 중대사고 경로를 만드는 최종 사건 모티프",
+      "telegraphs": [
+        "크레인 이동과 차량 진입 동시",
+        "상부·하부 작업 중첩",
+        "통신 지연·공정 압박·신규인원"
+      ],
+      "requiredControls": [
+        "STOP WORK 선언",
+        "구역별 인원 대피·에너지 격리",
+        "관계/기록을 활용해 순차 재개 조건 확정"
+      ],
+      "uniqueMechanic": "FINAL BOSS WAVE: 단일 보스 엔티티가 아니라 현장 전체가 보스. 이전 스테이지에서 배운 통제 패턴과 관계/기록이 지원 행동으로 돌아온다",
+      "finisher": "전체 소음 급감→STOP WORK→위험 신호 순차 소거→사람들이 스스로 서로 멈춰 세움→'오늘도 무사히'",
+      "learningPoint": "ZERO DAY는 사고가 없었던 평범한 날이 아니라 사고로 향하던 흐름을 먼저 읽고 끊어낸 날이다",
+      "presentation": {
+        "intro": "full_bleed_original_art",
+        "introSeconds": 8,
+        "gameplayFreeze": true,
+        "skippableAfterSeconds": 1.5,
+        "returnToMapSeconds": 0.4
+      },
+      "safetyPresentation": {
+        "gore": false,
+        "victimImpactCloseup": false,
+        "showNearMissMechanism": true,
+        "focus": "signal-cause-control-verify"
+      }
+    }
+  ]
+}
