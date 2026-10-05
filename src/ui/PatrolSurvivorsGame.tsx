@@ -5,7 +5,9 @@ import {drawPremiumGear} from './survivors-premium-render';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
-import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem, type StoreInventory} from '../domain/survivors-store';
+import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
+import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
+import {persistStoreWallet,type StoreWallet} from '../app/survivors-store-wallet';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import preflightText from '../../content/localization/survivors-preflight-ko.json';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
@@ -342,6 +344,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Modal Views in Ready screen
   const [showManual, setShowManual] = useState(false);
   const [showRdModal, setShowRdModal] = useState(false);
+  const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal;
+  const [clearGearWear,setClearGearWear]=useState<string[]>([]);
   const storeDialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!showRdModal) return;
@@ -422,30 +426,48 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossRisk, setBossRisk] = useState<number | null>(null);
 
   // Save Meta Progress to LocalStorage
-  const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number) => {
+  const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
+    try {persistStoreWallet({credits:newCredits,inventory});}catch{setStoreMessage(storeText.failure);return false;}
     setPermanentUpgrades(newUpgrades);
     setPsiCredits(newCredits);
     creditsRef.current = newCredits;
+    inventoryRef.current=inventory;setStoreInventory(inventory);
     try {
       localStorage.setItem(STORAGE_KEY_UPGRADES, JSON.stringify(newUpgrades));
-      localStorage.setItem(STORAGE_KEY_CREDITS, String(newCredits));
-      localStorage.setItem('psi.survivors.store_wallet', JSON.stringify({credits:newCredits, inventory:inventoryRef.current}));
     } catch {
       // LocalStorage unavailable
     }
+    return true;
   };
 
-  const changeStore = (id: string, purchase: boolean) => {
-    const result = purchase ? buyStoreItem(inventoryRef.current, creditsRef.current, id) : {inventory:equipStoreItem(inventoryRef.current,id), credits:creditsRef.current};
-    if (!result) return;
+  const commitStoreChange=(result:StoreWallet|null,message:string)=>{
+    if(!result){setStoreMessage(storeText.repairFirst);return;}
+    const engine=engineRef.current;
+    if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused'){setStoreMessage(storeText.failure);return;}
     try {
-      localStorage.setItem('psi.survivors.store_wallet', JSON.stringify(result));
+      persistStoreWallet(result);
     } catch { setStoreMessage(storeText.failure); return; }
     inventoryRef.current = result.inventory;
     setStoreInventory(result.inventory);
     creditsRef.current = result.credits;
     setPsiCredits(result.credits);
-    setStoreMessage(purchase ? storeText.purchased : result.inventory.equipped.includes(id) ? storeText.equipSuccess : storeText.removeSuccess);
+    if(engine?.state.phase==='paused'){
+      applyPremiumLoadout(engine.state,result.inventory);
+      setHp(engine.state.player.hp);setMaxHp(engine.state.player.maxHp);
+    }
+    setStoreMessage(engine?.state.phase==='paused'?`${message} · ${storeText.liveApplied}`:message);
+  };
+  const changeStore = (id: string, purchase: boolean) => {
+    const result=purchase?buyStoreItem(inventoryRef.current,creditsRef.current,id):{inventory:equipStoreItem(inventoryRef.current,id),credits:creditsRef.current};
+    commitStoreChange(result,purchase?storeText.purchased:result?.inventory.equipped.includes(id)?storeText.equipSuccess:storeText.removeSuccess);
+  };
+  const repairStore=(id:string)=>commitStoreChange(repairStoreItem(inventoryRef.current,creditsRef.current,id),storeText.repaired);
+  const applyStore=(ids:string[])=>commitStoreChange(buyAndEquipLoadout(inventoryRef.current,creditsRef.current,ids),storeText.appliedLoadout);
+  const openStore=()=>{
+    const engine=engineRef.current;
+    if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
+    if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
+    keysRef.current={};touchVectorRef.current={x:0,y:0};setStoreMessage('');setShowRdModal(true);
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
@@ -647,6 +669,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     helmetSnapsRef.current = [];
     approvedStampsRef.current = [];
     setCombo(0);
+    setClearGearWear([]);
     setLastDamage(undefined);
     setMissionProgress(engine.state.stage.starChallenges.map(goal => ({ ...goal })));
     setEvolutionBanner(null);
@@ -752,6 +775,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Install once; actions read current engine state instead of render snapshots.
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if(storeOpenRef.current)return;
       if (e.defaultPrevented || (e.target instanceof HTMLElement && e.target.closest('input, textarea, select, [role="dialog"]'))) return;
       if (e.target instanceof HTMLElement && e.target.closest('button, summary') && (e.code === 'Space' || e.code === 'Enter')) return;
       const engine = engineRef.current;
@@ -1088,7 +1112,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if ((engine.state.phase === 'victory' || engine.state.phase === 'defeat') && !rewardedRef.current.has(engine)) {
             rewardedRef.current.add(engine);
             // Save earned credits & Field Guide Points
-            saveMetaProgress(permanentUpgrades, psiCredits + engine.state.psiCredits);
+            const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
+            const settled=engine.state.phase==='victory'?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
+            if(saveMetaProgress(permanentUpgrades,creditsRef.current+engine.state.psiCredits,settled)&&engine.state.phase==='victory')setClearGearWear([...new Set(used)]);
             try {
               const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (engine.state.phase === 'victory' ? 5 : 0);
               const currentFg = safeNumber(localStorage.getItem(STORAGE_KEY_FG_POINTS));
@@ -2401,9 +2427,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
 
         <div className="survivors-top-actions">
+          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={showRdModal} onClick={openStore}>{storeText.shopShort}</button>}
           <button
             type="button"
             className="survivors-btn-icon"
+            disabled={showRdModal}
             onClick={() => {
               const engine = engineRef.current;
               if (engine && (phase === 'playing' || phase === 'paused')) {
@@ -2595,10 +2623,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <SurvivorsPremiumArt item={recommendedGear}/>
               <div><strong>{storeText.briefTitle}</strong><p>{selectedDifficulty==='hard'||selectedDifficulty==='extreme'?storeText.briefHard:storeText.briefStandard}</p><b>{recommendedCopy.name}</b><p>{recommendedCopy.use} · {recommendedCopy.description}</p>
                 <small>{storeInventory.equipped.includes(recommendedGear.id)?storeText.briefEquipped:storeInventory.owned.includes(recommendedGear.id)?storeText.briefOwned:`${recommendedGear.price.toLocaleString()} PSI · ${storeText.briefCredits}`}</small>
+                {storeInventory.owned.includes(recommendedGear.id)&&<small>{storeText.durability} {itemDurability(storeInventory,recommendedGear.id)}/100 {itemDurability(storeInventory,recommendedGear.id)===0?storeText.broken:''}</small>}
               </div>
-              {storeInventory.owned.includes(recommendedGear.id)&&!storeInventory.equipped.includes(recommendedGear.id)
+              {storeInventory.owned.includes(recommendedGear.id)&&!storeInventory.equipped.includes(recommendedGear.id)&&itemDurability(storeInventory,recommendedGear.id)>0
                 ? <button type="button" onClick={()=>changeStore(recommendedGear.id,false)}>{storeText.equip}</button>
-                : <button type="button" onClick={()=>setShowRdModal(true)}>{storeText.briefBrowse}</button>}
+                : <button type="button" onClick={openStore}>{storeText.briefBrowse}</button>}
             </aside>
             {PATROL_STAGES[selectedStage].narrative && <aside className="survivors-story-brief">
               <strong>{CHARACTER_PROFILES[PATROL_STAGES[selectedStage].narrative!.speaker].name} · {PATROL_STAGES[selectedStage].subtitle}</strong>
@@ -2731,8 +2760,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div hidden={preflightTab!=='settings'}><SurvivorsAudioMixer audio={audioRef.current}/><button type="button" className="survivors-btn-secondary" onClick={()=>setShowManual(true)}>{gameManualText('open')}</button></div>
 
             <div className="survivors-actions-row">
-              <button type="button" className="survivors-btn-secondary" onClick={() => setShowRdModal(true)}>
-                🔬 R&D 연구소
+              <button type="button" className="survivors-btn-secondary" onClick={openStore}>
+                {storeText.shopEntry}
               </button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowArsenalModal(true)}>
                 📖 대응 도구 진화 도감
@@ -2748,9 +2777,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div ref={storeDialogRef} className="survivors-modal-content survivors-equipment-workspace" role="dialog" aria-modal="true" aria-label={storeText.title}>
             <div className="survivors-equipment-toolbar"><h2>{storeText.title}</h2><button type="button" title={storeText.close} aria-label={storeText.close} onClick={() => setShowRdModal(false)}>×</button></div>
 
-            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} characterId={selectedChar} upgrades={permanentUpgrades}/>
+            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} onRepair={repairStore} onApply={applyStore} live={phase==='paused'} characterId={selectedChar} upgrades={permanentUpgrades}/>
+            {phase==='paused'&&<p className="survivors-durability-rule">{storeText.healthRule}</p>}
 
-            <details className="survivors-store-upgrades"><summary>{storeText.upgrades}</summary><div className="survivors-rd-grid">
+            <details hidden={phase==='paused'} className="survivors-store-upgrades"><summary>{storeText.upgrades}</summary><div className="survivors-rd-grid">
               <div className="survivors-rd-item">
                 <div>
                   <strong>기본 생명력 (Vitality)</strong>
@@ -2955,7 +2985,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* PAUSE MODAL */}
-      {phase === 'paused' && !accountabilityCase && (
+      {phase === 'paused' && !accountabilityCase && !showRdModal && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
@@ -2964,6 +2994,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls} · {operationText.time} {p.earliest}s</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
+              <button type="button" className="survivors-btn-secondary" onClick={openStore}>{storeText.shopEntry}</button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
               <button
                 type="button"
@@ -3047,6 +3078,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </p>
 
             <p className="survivors-story-result">{engineRef.current?.state.fieldTactics?.handoff?.remaining === 0 && engineRef.current.state.gameTime < engineRef.current.state.maxTime ? operationText.handoff : operationText.timeout}</p>
+            {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}
+            {storeMessage===storeText.failure&&<p role="alert">{storeMessage}</p>}
             {/* 3-STAR CHALLENGES DEBRIEFING */}
             {engineRef.current?.state.stage && (
               <div className="survivors-stage-debriefing">

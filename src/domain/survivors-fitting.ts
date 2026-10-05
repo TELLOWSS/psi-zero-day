@@ -10,3 +10,6 @@ export function fittingInventory(inventory: StoreInventory, itemId: string | nul
     equipped: [...current.equipped.filter(id => STORE_ITEMS.find(other => other.id === id)?.category !== item.category), item.id],
   });
 }
+export function fittingLoadout(inventory:StoreInventory,ids:readonly string[]):StoreInventory {
+  return sanitizeInventory({owned:[...new Set([...inventory.owned,...ids])],equipped:[...ids],durability:Object.fromEntries([...inventory.owned,...ids].map(id=>[id,100]))});
+}

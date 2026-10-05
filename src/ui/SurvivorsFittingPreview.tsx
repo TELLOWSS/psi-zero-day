@@ -8,7 +8,7 @@ import { SpriteMotionTracker, drawGroundedSprite, registerSpriteBounds } from '.
 import copy from '../../content/localization/survivors-store-ko.json';
 import { drawWearableLayer, loadWearableImages } from './survivors-wearable-art';
 
-export function SurvivorsFittingPreview({ state }: { state: SurvivorsGameState }) {
+export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1 }: { state: SurvivorsGameState; facing?:1|-1; zoom?:number }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -24,8 +24,9 @@ export function SurvivorsFittingPreview({ state }: { state: SurvivorsGameState }
         const ctx = canvas.current?.getContext('2d'); if (!ctx) return;
         registerSpriteBounds(actor); registerPropAtlas(gear, 3, 5); registerPropAtlas(pickups, 4, 2);
         ctx.clearRect(0, 0, 360, 320);
-        ctx.save(); ctx.translate(180, 285); ctx.scale(3, 3);
-        const pose = new SpriteMotionTracker().sample(state.player, 0, 0, 0);
+        const scale=3*Math.max(.8,Math.min(1.25,zoom));
+        ctx.save(); ctx.translate(180, 285); ctx.scale(scale, scale);
+        const pose = {...new SpriteMotionTracker().sample(state.player, 0, 0, 0),facing};
         drawWearableLayer(ctx, state, actor, 74, pose, wearables, 'back');
         drawGroundedSprite(ctx, actor, 74, pose);
         drawWearableLayer(ctx, state, actor, 74, pose, wearables, 'front');
@@ -33,7 +34,7 @@ export function SurvivorsFittingPreview({ state }: { state: SurvivorsGameState }
         ctx.restore(); setLoaded(true);
       }).catch(() => { if (!disposed) setFailed(true); });
     return () => { disposed = true; };
-  }, [state]);
+  }, [state,facing,zoom]);
   return <figure className="survivors-fitting-art">
     <canvas ref={canvas} width={360} height={320} role="img" aria-label={`${CHARACTER_PROFILES[state.characterId].name} ${copy.fitting}`}/>
     {!loaded && <figcaption role="status">{failed ? copy.fittingFailure : copy.fittingLoading}</figcaption>}

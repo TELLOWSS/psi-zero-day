@@ -569,7 +569,7 @@ export function createInitialSurvivorsState(
     timeDilation: 1.0,
     timeDilationTimer: 0,
 
-    premiumGear: {equipped:sanitizeInventory(inventory).equipped, effects:gear, shield:gear.shield, shieldCooldown:0, feedback:0},
+    premiumGear: {equipped:sanitizeInventory(inventory).equipped, used:[...sanitizeInventory(inventory).equipped], effects:gear, shield:gear.shield, shieldCooldown:0, feedback:0},
     psiCredits: 0,
     permanentUpgrades: { ...upgrades },
     hasRevived: false,

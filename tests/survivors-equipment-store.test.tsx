@@ -15,7 +15,7 @@ it('filters gear, shows the replacement slot and never offers an unaffordable pu
     act(() => tabs[0]!.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowRight', bubbles:true})));
     expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
     act(() => tabs[0]!.click());
-    const select=host.querySelector('select')!;
+    const select=host.querySelector<HTMLSelectElement>('#store-panel-browse select')!;
     act(()=>{select.value='communication';select.dispatchEvent(new Event('change',{bubbles:true}));});
     expect(host.querySelectorAll('article')).toHaveLength(3);
     const array=[...host.querySelectorAll('article')].find(card=>card.textContent?.includes('PSI 지휘 어레이'))!;
@@ -23,9 +23,27 @@ it('filters gear, shows the replacement slot and never offers an unaffordable pu
     act(()=>array.querySelector('button')!.click());expect(change).toHaveBeenCalledWith('command_array',false);
     const crown=[...host.querySelectorAll('article')].find(card=>card.textContent?.includes('광역 교육 크라운'))!;
     expect(crown.querySelector('button')!.disabled).toBe(true);
-    act(()=>host.querySelectorAll<HTMLInputElement>('input')[0]!.click());
+    act(()=>host.querySelectorAll<HTMLInputElement>('#store-panel-browse input')[0]!.click());
     expect(host.querySelectorAll('article')).toHaveLength(2);
   }finally{act(()=>root.unmount());}
+});
+it('previews six slots together, quotes one purchase and blocks broken gear until repaired',()=>{
+ const host=document.createElement('div'),root=createRoot(host),change=vi.fn(),apply=vi.fn(),repair=vi.fn();
+ const inventory={owned:['voice_lens'],equipped:['voice_lens'],durability:{voice_lens:0}};
+ try{
+  act(()=>root.render(<SurvivorsEquipmentStore inventory={inventory} credits={10000} message="" onChange={change} onApply={apply} onRepair={repair}/>));
+  act(()=>host.querySelectorAll<HTMLButtonElement>('[role=tab]')[1]!.click());
+  const select=(slot:string,id:string)=>act(()=>{const s=host.querySelector<HTMLSelectElement>(`select[aria-label="${slot}"]`)!;s.value=id;s.dispatchEvent(new Event('change',{bubbles:true}));});
+  select('계도 전달','voice_lens');select('생존 지원','rescue_shell');select('동행 지원','inspection_wing');
+  const action=host.querySelector<HTMLButtonElement>('.survivors-fitting-action button')!;
+  expect(action.textContent).toContain('4,500 PSI');expect(action.disabled).toBe(true);
+  expect(host.querySelector('.survivors-fitting-action')?.textContent).toContain('3/6');
+  const repairButton=host.querySelector<HTMLButtonElement>('.survivors-fitting-slots button')!;
+  act(()=>repairButton.click());expect(repair).toHaveBeenCalledWith('voice_lens');
+  select('계도 전달','');expect(action.disabled).toBe(false);
+  act(()=>action.click());expect(apply).toHaveBeenCalledWith(['rescue_shell','inspection_wing']);
+  expect(change).not.toHaveBeenCalled();expect(inventory.owned).toEqual(['voice_lens']);
+ }finally{act(()=>root.unmount());}
 });
 
 it('trying an unaffordable item changes only the fitting view', () => {

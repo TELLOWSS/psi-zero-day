@@ -2117,7 +2117,7 @@
 .survivors-premium-hp-badge { display:inline-flex; align-items:center; gap:2px; flex-shrink:0; color:#c8e6ec; }
 .survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
 .survivors-premium-hp-badge small { font-size:9px; }
-.survivors-fitting { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 24px; align-items: center; padding: 12px 0 24px; border-bottom: 1px solid #34443a; margin-bottom: 20px; }
+.survivors-fitting { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 12px 0 24px; border-bottom: 1px solid #34443a; margin-bottom: 20px; }
 .survivors-fitting-art { margin: 0; min-width: 0; position: relative; aspect-ratio: 9 / 8; background: #26332e; }
 .survivors-fitting-art canvas { display: block; width: 100%; height: 100%; }
 .survivors-fitting-art figcaption { position: absolute; bottom: 8px; left: 8px; right: 8px; text-align: center; font-size: 12px; }
@@ -2157,6 +2157,50 @@
 .survivors-fitting-action small { grid-column: 1 / -1; }
 .survivors-store .survivors-store-card { border-radius: 6px; background: #202b27; box-shadow: none; min-width: 0; }
 .survivors-store-card-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.survivors-store [hidden] {display:none!important;}
+.survivors-store-live {border-left:3px solid #a5dfbd;padding:8px 12px;background:#243d30;color:#e4f7ec;}
+.survivors-durability-rule {font-size:12px;line-height:1.6;color:#bdd2c7;text-align:left;}
+.survivors-item-condition {display:grid;grid-template-columns:1fr;gap:4px;font-size:12px;grid-column:1/-1;}
+.survivors-item-condition progress,.survivors-store-slots progress {width:100%;height:6px;accent-color:#a5dfbd;}
+.survivors-item-condition[data-low="true"] {color:#ffc985;}
+.survivors-item-condition[data-low="true"] progress {accent-color:#ffc985;}
+.survivors-store-card-actions .survivors-repair-button {grid-column:1/-1;background:#284238;color:#dff3e7;border:1px solid #719b87;}
+.survivors-fitting-controls {display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.survivors-fitting-controls button {min-height:44px;border:1px solid #688373;background:#20352a;color:#e4f3ea;padding:8px 12px;border-radius:4px;cursor:pointer;}
+.survivors-fitting-controls button[aria-pressed="true"] {background:#a5dfbd;color:#10281b;}
+.survivors-fitting-controls label {display:flex;align-items:center;gap:8px;font-size:12px;}
+.survivors-fitting-controls input {max-width:130px;min-height:44px;accent-color:#a5dfbd;}
+.survivors-fitting-slots {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+.survivors-fitting-slots label {display:flex;flex-direction:column;gap:6px;min-width:0;font-size:12px;color:#d8e8de;}
+.survivors-fitting-slots select {width:100%;max-width:100%;min-height:44px;background:#20352a;color:#eef5f0;border:1px solid #688373;border-radius:4px;padding:8px;font-size:13px;}
+.survivors-fitting-slots small {min-height:32px;line-height:1.4;}
+.survivors-fitting-action strong small {display:block;font-size:11px;color:#bdd2c7;margin-top:4px;}
+.survivors-live-shop {border-color:#a5dfbd!important;color:#bfe8cf!important;}
+.survivors-clear-maintenance {border-top:1px solid #719b87;border-bottom:1px solid #719b87;padding:12px 0;text-align:left;}
+.survivors-clear-maintenance h3 {font-size:16px;margin:0 0 8px;}
+.survivors-clear-maintenance p {font-size:13px;margin:4px 0;}
+@media(max-width:600px) {
+ .survivors-fitting {grid-template-columns:1fr;gap:12px;}
+ .survivors-fitting-visual {width:min(100%,280px);justify-self:center;}
+ .survivors-fitting-slots {grid-template-columns:1fr;gap:10px;}
+ .survivors-fitting-action {grid-template-columns:1fr;}
+ .survivors-fitting-action button {width:100%;}
+ .survivors-top-actions {flex-wrap:wrap;justify-content:flex-end;}
+ .survivors-top-actions .survivors-live-shop {min-height:44px;}
+}
+@media(orientation:landscape) and (max-height:560px) {
+ .survivors-equipment-toolbar {margin-bottom:8px;}
+ .survivors-equipment-toolbar h2 {font-size:18px;margin:0;}
+ .survivors-store-heading {margin-bottom:4px;}
+ .survivors-durability-rule {margin:4px 0;}
+ .survivors-store-heading p {margin:4px 0;font-size:12px;}
+ .survivors-fitting {grid-template-columns:minmax(160px,32%) minmax(0,1fr);gap:16px;align-items:start;}
+ .survivors-fitting-visual {position:sticky;top:44px;}
+ .survivors-fitting-art {width:min(100%,210px);}
+ .survivors-fitting-summary dl {display:grid;grid-template-columns:1fr 1fr;gap:0 12px;}
+ .survivors-fitting-slots {grid-template-columns:1fr 1fr;}
+ .survivors-fitting-action {grid-template-columns:1fr auto;position:static;}
+}
 @media (max-width: 600px) {
   .survivors-store .survivors-store-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .survivors-store .survivors-store-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 12px; }

@@ -190,28 +190,63 @@ export const STORE_ITEMS: readonly StoreItem[] = [
     "rarity": "elite"
   }
 ];
-export interface StoreInventory { owned: string[]; equipped: string[] }
+export interface StoreInventory { owned: string[]; equipped: string[]; durability?: Record<string,number> }
+export const STORE_DURABILITY_MAX=100;
+export const STORE_CLEAR_WEAR=15;
+export function itemDurability(inventory:StoreInventory,id:string):number {
+  const value=inventory.durability?.[id];
+  return typeof value==='number'&&Number.isFinite(value)?Math.max(0,Math.min(100,Math.floor(value))):100;
+}
 export function sanitizeInventory(value: unknown): StoreInventory {
   const raw = value as Partial<StoreInventory> | null;
   const owned = Array.isArray(raw?.owned) ? [...new Set(raw.owned.filter(id => STORE_ITEMS.some(i => i.id === id)))] : [];
   const equipped: string[] = [];
   if (Array.isArray(raw?.equipped)) for (const id of raw.equipped) {
     const item = STORE_ITEMS.find(i => i.id === id);
-    if (item && owned.includes(id) && !equipped.some(e => STORE_ITEMS.find(i => i.id === e)?.category === item.category)) equipped.push(id);
+    if (item && owned.includes(id) && itemDurability(raw as StoreInventory,id)>0 && !equipped.some(e => STORE_ITEMS.find(i => i.id === e)?.category === item.category)) equipped.push(id);
   }
-  return { owned, equipped };
+  const durability=raw?.durability&&typeof raw.durability==='object'&&!Array.isArray(raw.durability)
+    ? Object.fromEntries(owned.map(id=>[id,itemDurability(raw as StoreInventory,id)])):undefined;
+  return durability?{owned,equipped,durability}:{owned,equipped};
 }
 export function buyStoreItem(inventory: StoreInventory, credits: number, id: string): {inventory: StoreInventory; credits: number} | null {
   const item = STORE_ITEMS.find(i => i.id === id);
   if (!item || !Number.isFinite(credits) || credits < item.price || inventory.owned.includes(id)) return null;
-  return {inventory: {...inventory, owned: [...inventory.owned, id]}, credits: credits - item.price};
+  const safe=sanitizeInventory(inventory);
+  return {inventory: {...safe, owned: [...safe.owned, id],durability:{...safe.durability,[id]:100}}, credits: credits - item.price};
 }
 export function equipStoreItem(inventory: StoreInventory, id: string): StoreInventory {
   const item = STORE_ITEMS.find(i => i.id === id);
-  if (!item || !inventory.owned.includes(id)) return inventory;
+  if (!item || !inventory.owned.includes(id) || itemDurability(inventory,id)===0) return inventory;
   const equipped = inventory.equipped.filter(e => STORE_ITEMS.find(i => i.id === e)?.category !== item.category);
   if (!inventory.equipped.includes(id)) equipped.push(id);
   return {...inventory, equipped};
+}
+export function storeRepairCost(inventory:StoreInventory,id:string):number {
+  const item=STORE_ITEMS.find(item=>item.id===id);
+  return item&&inventory.owned.includes(id)?Math.ceil(item.price*.2*(100-itemDurability(inventory,id))/100):0;
+}
+export function repairStoreItem(inventory:StoreInventory,credits:number,id:string):{inventory:StoreInventory;credits:number}|null {
+  const cost=storeRepairCost(inventory,id);
+  if(!cost||!Number.isFinite(credits)||credits<cost)return null;
+  return {inventory:{...sanitizeInventory(inventory),durability:{...sanitizeInventory(inventory).durability,[id]:100}},credits:credits-cost};
+}
+/** All equipment used during a cleared patrol wears once; ownership is permanent. */
+export function wearStoreItems(inventory:StoreInventory,used:readonly string[]):StoreInventory {
+  const safe=sanitizeInventory(inventory),durability={...safe.durability};
+  for(const id of new Set(used))if(safe.owned.includes(id))durability[id]=Math.max(0,itemDurability(safe,id)-STORE_CLEAR_WEAR);
+  return sanitizeInventory({...safe,durability});
+}
+/** One quote/transaction for a complete multi-slot loadout; never partially charges. */
+export function buyAndEquipLoadout(inventory:StoreInventory,credits:number,requested:readonly string[]):{inventory:StoreInventory;credits:number}|null {
+  const safe=sanitizeInventory(inventory),ids=[...new Set(requested)];
+  if(!Number.isFinite(credits)||credits<0||ids.some(id=>!STORE_ITEMS.some(item=>item.id===id)))return null;
+  const items=ids.map(id=>STORE_ITEMS.find(item=>item.id===id)!);
+  if(new Set(items.map(item=>item.category)).size!==items.length)return null;
+  if(ids.some(id=>safe.owned.includes(id)&&itemDurability(safe,id)===0))return null;
+  const cost=items.reduce((sum,item)=>sum+(safe.owned.includes(item.id)?0:item.price),0);
+  if(cost>credits)return null;
+  return {credits:credits-cost,inventory:sanitizeInventory({owned:[...new Set([...safe.owned,...ids])],equipped:ids,durability:{...safe.durability,...Object.fromEntries(ids.filter(id=>!safe.owned.includes(id)).map(id=>[id,100]))}})};
 }
 export function storeEffects(inventory: StoreInventory): Required<StoreEffects> {
   const total = {damage:0,cooldown:0,crit:0,pickup:0,speed:0,hp:0,regen:0,shield:0,shieldPeriod:0,suppression:0,ultimate:0,support:0,lines:0};

@@ -104,7 +104,7 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Click R&D Lab button
       const rdBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent?.includes('R&D 연구소'),
+        btn => btn.textContent?.includes('PSI 상점'),
       );
       expect(rdBtn).toBeDefined();
       act(() => {

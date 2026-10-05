@@ -211,7 +211,7 @@ export interface SurvivorsGameState {
   timeDilationTimer: number;
 
   supplyGate?: {nextControl:number;availableAt:number;cycle:number};
-  premiumGear?: { equipped: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number };
+  premiumGear?: { equipped: string[]; used?: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number };
 
   // Meta stats & run perks
   psiCredits: number;
