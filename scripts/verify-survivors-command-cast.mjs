@@ -18,7 +18,7 @@ try{
   const {createInitialSurvivorsState}=await import('/src/engine/patrol-survivors-engine.ts');
   const hash=data=>{let value=2166136261;for(const byte of data)value=Math.imul(value^byte,16777619);return value>>>0;};
   const rows=[];
-  for(const id of ['player','kang_taesik','lim_junho']){
+  for(const id of ['player','kang_taesik','lim_junho','yoon_sungho']){
    const actor=new Image();actor.src=CHARACTER_MAP_ART[id];await actor.decode();registerSpriteBounds(actor);const registered=await loadAuthoredCommand(actor);
    const profile=COMMAND_ART[actor.src.split('/').pop()],bounds=spriteOpaqueBounds(actor);
    const state=createInitialSurvivorsState(id,undefined,undefined,undefined,{owned:['shock_mantle','voice_lens'],equipped:['shock_mantle','voice_lens']}),base=new SpriteMotionTracker().sample(state.player,0,0,0);
@@ -45,7 +45,7 @@ try{
  for(const row of cast){fs.writeFileSync(path.join(out,`${row.id}-poses.png`),Buffer.from(row.sheet.split(',')[1],'base64'));delete row.sheet;}
  await page.close();
  const views=[];
- for(const [width,height] of [[1440,900],[390,844],[844,390],[568,320]])for(const [id,name] of [['kang_taesik','강태식'],['lim_junho','임준호']]){
+ for(const [width,height] of [[1440,900],[390,844],[844,390],[568,320]])for(const [id,name] of [['kang_taesik','강태식'],['lim_junho','임준호'],['yoon_sungho','윤성호']]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',error=>errors.push(String(error)));
   await page.addInitScript(()=>performance.setResourceTimingBufferSize(3000));
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();await page.getByRole('button',{name:'순찰 요원',exact:true}).click();
@@ -59,7 +59,7 @@ try{
   await page.screenshot({path:path.join(out,`${id}-${width}x${height}.png`)});
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(80);const quiet=await pixels();await page.waitForTimeout(150);const reduced=quiet===await pixels();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  const loaded=await page.evaluate(()=>performance.getEntriesByType('resource').some(resource=>resource.name.includes('command-v1.png')));
+  const loaded=await page.evaluate(id=>performance.getEntriesByType('resource').some(resource=>resource.name.includes(`${id.split('_')[0]}-command-v1.png`)),id);
   const pass=attack!==next&&paused&&mirrored&&reduced&&loaded&&!overflow&&!errors.length;views.push({id,width,height,paused,mirrored,reduced,loaded,overflow,errors,pass});await page.close();
  }
  const report={cast,views,errors,pass:cast.every(row=>row.pass)&&views.every(row=>row.pass)&&!errors.length};fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));if(!report.pass)process.exitCode=1;
