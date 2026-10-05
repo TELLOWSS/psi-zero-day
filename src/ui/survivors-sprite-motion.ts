@@ -1,20 +1,24 @@
 import { ACTOR_RIGS } from './survivors-animation-rig';
 import { gaitStride, soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
-interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; pose: SpritePose }
+import {ATTACK_MOTION,attackEnvelope,type AttackMotion} from './survivors-attack-motion';
+interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
 export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
   private samples = new WeakMap<object, Sample>();
-  private actions = new WeakMap<object, number>();
-  act(entity: object, clock: number): void {
-    const until = this.actions.get(entity) ?? 0;
-    if (clock >= until) this.actions.set(entity, clock + .24);
+  private actions = new WeakMap<object, {start:number;kind:AttackMotion}>();
+  act(entity: object, clock: number,kind:AttackMotion='shot'): void {
+    const previous=this.actions.get(entity);
+    if(previous?.kind==='ultimate'&&kind!=='ultimate'&&clock>=previous.start&&clock<previous.start+ATTACK_MOTION.ultimate.duration)return;
+    if (!previous || clock<previous.start || clock-previous.start>=.065 || kind==='ultimate'&&previous.kind!=='ultimate') this.actions.set(entity,{start:clock,kind});
   }
   sample(entity: object, x: number, y: number, clock: number, hp = 1): SpritePose {
     const previous = this.samples.get(entity);
-    if (previous && clock === previous.clock && x === previous.x && y === previous.y && hp === previous.hp && (this.actions.get(entity) ?? 0) === previous.actionUntil) return previous.pose;
+    const attack=this.actions.get(entity);
+    const actionUntil=attack?attack.start+ATTACK_MOTION[attack.kind].duration:0;
+    if (previous && clock === previous.clock && x === previous.x && y === previous.y && hp === previous.hp && actionUntil === previous.actionUntil && (attack?.start??-1)===previous.actionStart && attack?.kind===previous.actionKind) return previous.pose;
     const dx = previous ? x - previous.x : 0;
     const dy = previous ? y - previous.y : 0;
     const elapsed = previous ? clock - previous.clock : 0;
@@ -28,8 +32,7 @@ export class SpriteMotionTracker {
     const facing = moving && Math.abs(dx) > 0.04 ? (dx < 0 ? -1 : 1) : previous?.facing ?? 1;
     const reactionUntil = previous && hp < previous.hp ? clock + .18 : previous?.reactionUntil ?? 0;
     const reaction = Math.max(0, Math.min(1, (reactionUntil - clock) / .18));
-    const actionUntil = this.actions.get(entity) ?? 0;
-    const action = Math.max(0, Math.min(1, (actionUntil - clock) / .24));
+    const action = attack?attackEnvelope(clock-attack.start,attack.kind):0;
     const targetLean = moving ? Math.max(-.035, Math.min(.035, dx / Math.max(elapsed, .001) * .0002)) : reaction * .025;
     const leanBlend = 1 - Math.exp(-Math.max(0, elapsed) / .075);
     const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
@@ -39,9 +42,9 @@ export class SpriteMotionTracker {
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
       stride, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY,
-      mode: reaction > 0 ? 'brace' : moving ? running ? 'run' : 'walk' : action > 0 ? 'action' : 'idle',
+      mode: reaction > 0 ? 'brace' : moving ? running ? 'run' : 'walk' : attack && clock>=attack.start && clock<actionUntil ? 'action' : 'idle',
     };
-    this.samples.set(entity, { x, y, clock, hp, cycle, facing, reactionUntil, actionUntil, pose });
+    this.samples.set(entity, { x, y, clock, hp, cycle, facing, reactionUntil, actionUntil, actionStart:attack?.start??-1,actionKind:attack?.kind,pose });
     return pose;
   }
 }
