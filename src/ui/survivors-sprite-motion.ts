@@ -2,6 +2,7 @@ import { ACTOR_RIGS } from './survivors-animation-rig';
 import { gaitStride, soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
 import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './survivors-attack-motion';
+import {commandArtProfile} from './survivors-command-art';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
 export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
@@ -59,7 +60,8 @@ const commandTextures = new WeakMap<HTMLImageElement, HTMLCanvasElement[]>();
 
 /** Register one canonical body, with authored arm poses aligned by the support boot. */
 export function registerCommandSprite(image:HTMLImageElement,sheet:HTMLImageElement):boolean {
-  if(!image.src.endsWith('/player-map.webp')||!sheet.naturalWidth||!sheet.naturalHeight)return false;
+  const profile=commandArtProfile(image.src);
+  if(!profile||!sheet.naturalWidth||!sheet.naturalHeight)return false;
   const cached=commandTextures.get(sheet);
   if(cached){const source={x:0,y:0,width:cached[0]!.width,height:cached[0]!.height};prepareActorRig(image,source,cached);bounds.set(image,source);return true;}
   const cw=sheet.naturalWidth/4,ch=sheet.naturalHeight/2;
@@ -89,8 +91,12 @@ export function registerCommandSprite(image:HTMLImageElement,sheet:HTMLImageElem
     const frame=document.createElement('canvas');frame.width=width;frame.height=height;
     const ctx=frame.getContext('2d')!;ctx.drawImage(aligned[0]!,0,0);
     // Face, PPE, hips and boots stay canonical. Only the authored command layer changes.
-    const top=height*.21,bottom=height*.48;
+    const top=Math.floor(height*profile.top),bottom=Math.ceil(height*profile.bottom);
     ctx.clearRect(0,top,width,bottom-top);ctx.drawImage(texture,0,top,width,bottom-top,0,top,width,bottom-top);
+    if(profile.preserve){
+      const p=profile.preserve,x=Math.floor(p.x*width),y=Math.floor(p.y*height),w=Math.ceil(p.width*width),h=Math.ceil(p.height*height);
+      ctx.clearRect(x,y,w,h);ctx.drawImage(aligned[0]!,x,y,w,h,x,y,w,h);
+    }
     return frame;
   });
   const source={x:0,y:0,width,height};

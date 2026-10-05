@@ -1,6 +1,6 @@
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import { ACTOR_RIGS } from './survivors-animation-rig';
-import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody } from './survivors-rig-renderer';
+import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody, authoredEquipmentOccluders } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 import type {StoreCategory} from '../domain/survivors-store';
 
@@ -60,10 +60,11 @@ export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:
 }
 
 export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number,pose?:SpritePose):void {
-  const fitting=WEARABLE_PROFILES[characterId];if(!fitting?.occluders.length)return;
+  const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
+  const occluders=authoredEquipmentOccluders(actor,pose)??fitting.occluders;if(!occluders.length)return;
   const body=spriteOpaqueBounds(actor),width=height*body.width/body.height;
   ctx.save();ctx.beginPath();
-  for(const polygon of fitting.occluders){polygon.forEach(([x,y],i)=>{const px=x!*width-width/2,py=y!*height-height;i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.closePath();}
+  for(const polygon of occluders){polygon.forEach(([x,y],i)=>{const px=x!*width-width/2,py=y!*height-height;i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.closePath();}
   ctx.clip();if(!drawAuthoredBody(ctx,actor,height,pose))ctx.drawImage(actor,body.x,body.y,body.width,body.height,-width/2,-height,width,height);ctx.restore();
 }
 
@@ -121,7 +122,7 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
   }
   // The authored glove and tablet remain in front of the chest-mounted equipment.
   if (drawn && layer === 'front') {
-    const occluders = fitting.occluders;
+    const occluders = authoredEquipmentOccluders(actor,pose)??fitting.occluders;
     if (!occluders.length) { ctx.restore(); return; }
     ctx.save(); ctx.beginPath();
     for (const polygon of occluders) {

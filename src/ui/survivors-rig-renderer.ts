@@ -3,6 +3,7 @@ import { ACTOR_RIGS, solveKnee, type ActorRig, type Joint, type LegRig } from '.
 import type { SpritePose } from './survivors-sprite-motion';
 import {cachedGaitPhase,GAIT_PHASES} from './survivors-gait-phase';
 import {commandFrame} from './survivors-attack-motion';
+import {commandArtProfile} from './survivors-command-art';
 interface SourceRect {x:number;y:number;width:number;height:number}
 interface Prepared { texture:HTMLCanvasElement; legTexture:HTMLCanvasElement; rig:ActorRig; frames:Map<string,HTMLCanvasElement>; width:number; commands?:HTMLCanvasElement[] }
 const prepared = new WeakMap<HTMLImageElement,Prepared>();
@@ -37,7 +38,7 @@ export function applyActorTorsoTransform(ctx:CanvasRenderingContext2D,pose:Sprit
 }
 export function prepareActorRig(image:HTMLImageElement,source:SourceRect,commands?:HTMLCanvasElement[]):void {
  const original=ACTOR_RIGS[image.src.split('/').pop() ?? ''];
- const rig=commands&&original?{...original,waist:.47,left:{hip:{x:.35,y:.48},knee:{x:.23,y:.70},ankle:{x:.13,y:.90},sole:{x:.12,y:1}},right:{hip:{x:.65,y:.48},knee:{x:.64,y:.70},ankle:{x:.65,y:.90},sole:{x:.75,y:.97}}}:original;
+ const rig=commands?commandArtProfile(image.src)?.rig:original;
  if(!rig) return;
  const texture=document.createElement('canvas'); texture.height=BODY;texture.width=Math.ceil(BODY*source.width/source.height);
  const ctx=texture.getContext('2d'); if(!ctx)return;
@@ -52,6 +53,10 @@ export function drawAuthoredBody(ctx:CanvasRenderingContext2D,image:HTMLImageEle
  const p=prepared.get(image);if(!p?.commands)return false;
  const width=p.width*height/BODY;
  ctx.drawImage(p.commands[commandFrame(pose?.actionProgress)]!, -width/2,-height,width,height);return true;
+}
+export function authoredEquipmentOccluders(image:HTMLImageElement,pose?:SpritePose):number[][][]|undefined {
+ if(!prepared.get(image)?.commands)return;
+ return commandArtProfile(image.src)?.occluders?.[commandFrame(pose?.actionProgress)];
 }
 function triangle(ctx:CanvasRenderingContext2D,texture:HTMLCanvasElement,s:Joint[],d:Joint[]):void {
  const [a,b,c]=s as [Joint,Joint,Joint], [p,q,r]=d as [Joint,Joint,Joint];
@@ -153,8 +158,11 @@ export function drawRiggedActor(ctx:CanvasRenderingContext2D,image:HTMLImageElem
  ctx.translate(continuous.x-cached.x,continuous.y-cached.y);
  ctx.drawImage(frame,-ORIGIN_X*scale,-ORIGIN_Y*scale,WIDTH*scale,HEIGHT*scale);
  if(p.commands){
-  ctx.translate(cached.x,cached.y);ctx.beginPath();ctx.rect(-p.width*scale/2,-height,p.width*scale,p.rig.waist*height+5*scale);ctx.clip();
-  drawAuthoredBody(ctx,image,height,pose);
+  ctx.translate(cached.x,cached.y);ctx.save();ctx.beginPath();ctx.rect(-p.width*scale/2,-height,p.width*scale,p.rig.waist*height+5*scale);ctx.clip();
+  drawAuthoredBody(ctx,image,height,pose);ctx.restore();
+  for(const polygon of p.rig.protected??[]){
+   ctx.save();ctx.beginPath();polygon.forEach((point,i)=>{const x=(point.x-.5)*p.width*scale,y=(point.y-1)*height;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});ctx.closePath();ctx.clip();drawAuthoredBody(ctx,image,height,pose);ctx.restore();
+  }
  }
  ctx.restore();return true;
 }

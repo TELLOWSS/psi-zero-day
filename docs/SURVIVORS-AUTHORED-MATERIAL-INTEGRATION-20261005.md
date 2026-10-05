@@ -2,7 +2,7 @@
 
 ## Implemented scope
 
-The player and legacy jung alias now share an eight-pose tablet-command sheet in gameplay and fitting. Other characters keep their existing approved art and rig; their bespoke arm sheets are not claimed complete. The new neutral body also supplies the walking leg mesh, so attacks do not switch between two body designs.
+The player and legacy jung alias now share an eight-pose tablet-command sheet in gameplay and fitting. At this initial integration, other characters kept their existing approved art and rig. The subsequent Kang/park and Lim command integration is recorded in [Character command animation follow-up](SURVIVORS-COMMAND-CAST-20261005.md); the remaining cast's bespoke sheets are not complete. The new neutral body also supplies the walking leg mesh, so attacks do not switch between two body designs.
 
 The sheet is normalized once on load to 256px body height using the support-boot centroid. Each command composite retains the neutral face, PPE, hips and boots and replaces only the authored upper-body command region. The generated PNG itself is preserved unchanged. Body equipment uses that same canonical width, torso transform and active command occlusion layer. Player chest and belt sockets were recalibrated. Animation follows attack progress in simulation seconds; fitting uses its own isolated presentation clock. Reduced motion suppresses authored attack gestures.
 
