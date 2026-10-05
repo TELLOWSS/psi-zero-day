@@ -18,6 +18,7 @@ export function stageGroundUri(stageId:string):string {
 
 // Scan alpha and bake the tightly fitted texture once; steady frames use drawImage.
 const atlases=new WeakMap<HTMLImageElement,HTMLCanvasElement[]>();
+const materialTints=new WeakMap<HTMLImageElement,Map<string,HTMLCanvasElement>>();
 export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:number):void {
  if(atlases.has(image)||!image.naturalWidth) return;
  const scratch=document.createElement('canvas');scratch.width=image.naturalWidth;scratch.height=image.naturalHeight;
@@ -38,6 +39,19 @@ export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:num
 export function drawProp(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,cell:number,x:number,y:number,size:number):boolean {
  if(!image)return false;const frame=atlases.get(image)?.[cell];if(!frame)return false;
  ctx.drawImage(frame,x-size/2,y-size,size,size);return true;
+}
+/** Cache a material-colored silhouette once; never filter or read pixels in steady frames. */
+export function drawPropReaction(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,cell:number,x:number,y:number,size:number,color:string,strength:number):void {
+ const frame=image&&atlases.get(image)?.[cell];if(!image||!frame||strength<=0)return;
+ let cache=materialTints.get(image);if(!cache){cache=new Map();materialTints.set(image,cache);}
+ const key=cell+':'+color;let tinted=cache.get(key);
+ if(!tinted){
+  tinted=document.createElement('canvas');tinted.width=frame.width;tinted.height=frame.height;
+  const paint=tinted.getContext('2d');if(!paint)return;
+  paint.drawImage(frame,0,0);paint.globalCompositeOperation='source-in';paint.fillStyle=color;paint.fillRect(0,0,frame.width,frame.height);
+  if(cache.size>=18)cache.delete(cache.keys().next().value!);cache.set(key,tinted);
+ }
+ ctx.save();ctx.globalAlpha*=Math.min(.28,Math.max(0,strength));ctx.drawImage(tinted,x-size/2,y-size,size,size);ctx.restore();
 }
 export function drawEquipment(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,id:PerkId,level:number,x:number,y:number,size:number,pickupImage?:HTMLImageElement):boolean {
  const art=equipmentAppearance(id,level);if(!art)return false;

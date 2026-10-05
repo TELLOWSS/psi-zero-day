@@ -1,7 +1,7 @@
 import type { Hazard, HazardType } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SpritePose } from './survivors-sprite-motion';
-import { drawProp } from './survivors-equipment-art';
+import { drawProp,drawPropReaction } from './survivors-equipment-art';
 import { suspendedLoadPose } from './survivors-animation-rig';
 import { bossPattern } from '../engine/survivors-boss-pattern';
 
@@ -21,6 +21,14 @@ export function industrialHazardPlacement(h:Pick<Hazard,'type'|'radius'>,elevati
 
 export function usesCarrierBossArt(h:Pick<Hazard,'type'|'isStageBoss'>):boolean {
   return h.type==='RUNAWAY_CART'&&h.isStageBoss===true;
+}
+
+export function industrialResponse(h:Pick<Hazard,'type'>,pose:Pick<SpritePose,'reaction'|'moving'|'cycle'|'facing'>,reduced:boolean) {
+  const reaction=reduced?0:Math.min(1,Math.max(0,pose.reaction));
+  const cart=h.type==='RUNAWAY_CART',gas=h.type==='GAS_LEAK';
+  return {reaction,compression:cart?reaction*.025:0,tilt:gas?0:reaction*(cart?.012:.025)*pose.facing,
+    suspension:!reduced&&cart&&pose.moving?Math.abs(Math.sin(pose.cycle))*.012:0,
+    color:gas?'#9de5be':h.type==='FALLING_DEBRIS'?'#e6d6ba':'#ffd995'};
 }
 
 export function cartActionPose(h: Pick<Hazard,'motion'|'isStageBoss'>, reduced: boolean): {lean:number;compression:number;brake:number} {
@@ -80,6 +88,7 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
   const boss=Boolean(bossImage?.naturalWidth);
   const placement=industrialHazardPlacement(h,elevation,boss),size=placement.size;
+  const response=industrialResponse(h,pose,reduced);
   ctx.save();
   if (placement.solid) {
     ctx.fillStyle = 'rgba(0,0,0,.28)';ctx.beginPath();
@@ -100,12 +109,14 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     const action=cartActionPose(h,reduced);
     ctx.scale(facing, 1);
     // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
-    ctx.transform(1, 0, pose.lean+action.lean, 1 - action.compression - (reduced ? 0 : pose.reaction * .06), 0, 0);
+    ctx.transform(1, 0, pose.lean+action.lean+response.tilt, 1-action.compression-response.compression-response.suspension, 0, 0);
   }
-  const pressure = !boss && !reduced && h.variant === 'pulse_gas' ? 1 + Math.sin(clock * 8) * .045 : 1;
+  if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.translate(0,elevation);}
+  const pressure = !boss&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
   ctx.scale(pressure, pressure);
   if (gas&&!boss) ctx.globalAlpha *= .82;
   const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
+  if(drawn&&response.reaction>0)drawPropReaction(ctx,boss?bossImage:atlas,boss?0:cell,0,placement.y,size,response.color,response.reaction*.24);
   ctx.restore();
   return drawn;
 }
@@ -124,6 +135,16 @@ export function drawIndustrialContact(ctx: CanvasRenderingContext2D, atlas: HTML
   ctx.globalAlpha = (1 - t) ** 2 * (busy ? .6 : .95);
   // Each painted contact core is left of center; align it to the engine's hit point.
   const drawn = drawProp(ctx, atlas, cell, size * .18, size * .5, size);
+  if(drawn&&!busy){
+    const material=event.actorKind==='GAS_LEAK'?'#96e7bb':event.actorKind==='FALLING_DEBRIS'?'#d8c8ad':'#ffd595';
+    ctx.strokeStyle=material;ctx.lineWidth=event.critical?2:1.3;
+    const count=event.actorKind==='GAS_LEAK'?3:event.critical?6:4;
+    for(let i=0;i<count;i++){
+      const angle=(i/(count-1)-.5)*1.7,r=5+(1-(1-t)**2)*22,fall=t*t*7;
+      ctx.beginPath();ctx.moveTo(Math.cos(angle)*r,Math.sin(angle)*r+fall);
+      ctx.lineTo(Math.cos(angle)*(r+5*(1-t)),Math.sin(angle)*(r+5*(1-t))+fall);ctx.stroke();
+    }
+  }
   ctx.restore();
   return drawn;
 }

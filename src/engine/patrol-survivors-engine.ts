@@ -1476,7 +1476,7 @@ export class SurvivorsEngine {
       const directed = p.kind === 'radio' || p.kind === 'drone_laser' || p.kind === 'hunter_beam';
       let hits = directed ? this.directedHits.get(p) : undefined;
       for (const h of candidates) {
-        if (h.hp <= 0 || h.motion?.phase === 'spent' || hits?.has(h.id)) continue;
+        if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss || hits?.has(h.id)) continue;
         if (p.duration <= 0 || p.pierce <= 0) break;
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
           if (directed) {
@@ -1983,7 +1983,7 @@ export class SurvivorsEngine {
     let bestDist = range * range;
     let nearest: Hazard | null = null;
     for (const h of this.state.hazards) {
-      if (h.hp <= 0 || h.motion?.phase === 'spent') continue;
+      if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss) continue;
       const dx = h.x - x, dy = h.y - y;
       const dist = dx * dx + dy * dy;
       if (dist < bestDist) {

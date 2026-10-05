@@ -1,9 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose,usesCarrierBossArt,industrialHazardPlacement } from '../src/ui/survivors-industrial-art';
+import { industrialHazardCell, industrialContactCell, drawIndustrialContact, cartActionPose, craneArtPose,usesCarrierBossArt,industrialHazardPlacement,industrialResponse } from '../src/ui/survivors-industrial-art';
 import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import type { HazardType } from '../src/domain/patrol-survivors';
 
 describe('industrial art identity', () => {
+  it.each<HazardType>(['CRANE_BOSS','FALLING_DEBRIS'])('lets real projectiles control a recovering %s boss but ignores spent ordinary material',type=>{
+    for(const isStageBoss of [false,true]){
+      const s=createInitialSurvivorsState(),e=new SurvivorsEngine(s,42);e.start();s.interactiveHazards=[];s.player.critRate=0;
+      const h={id:'recovering',type,x:s.player.x+80,y:s.player.y,hp:10000,maxHp:10000,speed:0,radius:20,damage:0,expValue:0,isStageBoss,motion:{phase:'spent' as const,timer:2,directionX:0,directionY:0}};
+      s.hazards=[h];s.projectiles=[{id:'recovery-hit',kind:'radio',x:h.x,y:h.y,vx:0,vy:0,radius:10,damage:10,pierce:1,duration:1}];
+      e.update(1/60,{moveX:0,moveY:0});expect(h.hp).toBe(isStageBoss?9990:10000);
+      expect(e.drainProjectileFeedback().some(ev=>ev.projectileId==='recovery-hit'&&ev.phase==='impact')).toBe(isStageBoss);
+    }
+  });
+  it('bounds material response, keeps suspension tied to travel and respects reduced motion',()=>{
+    const pose={reaction:1,moving:true,cycle:Math.PI/2,facing:1 as const},h={type:'RUNAWAY_CART' as const};
+    const before=JSON.stringify(pose),r=industrialResponse(h,pose,false);
+    expect(r.compression).toBe(.025);expect(r.suspension).toBe(.012);
+    expect(industrialResponse(h,{...pose,moving:false},false).suspension).toBe(0);
+    expect(industrialResponse(h,pose,true).reaction).toBe(0);expect(industrialResponse(h,pose,true).suspension).toBe(0);
+    expect(industrialResponse({type:'GAS_LEAK'},pose,false).tilt).toBe(0);
+    expect(industrialResponse(h,{...pose,reaction:99},false).reaction).toBe(1);
+    expect(JSON.stringify(pose)).toBe(before);
+  });
   it('grounds solid pressure hardware and follows actual debris elevation without changing radius',()=>{
     const gas={type:'GAS_LEAK' as const,radius:30},debris={type:'FALLING_DEBRIS' as const,radius:20};
     expect(industrialHazardPlacement(gas,0,true)).toEqual({size:76,y:-0,solid:true});
