@@ -1,7 +1,7 @@
 import type {Projectile,ProjectileKind,SurvivorsGameState} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v1.webp';
-export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
+export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;evolved:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
   const tier=Math.min(5,Math.max(1,level));
   const communication=equipped.some(id=>['voice_lens','command_array','broadcast_crown'].includes(id));
@@ -9,13 +9,14 @@ export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly
   const communicationShot=communication&&(kind==='radio'||kind==='satellite_wave');
   const tempoShot=tempo&&(kind==='drone_laser'||kind==='hunter_beam');
   const premium=communicationShot||tempoShot;
+  const evolved=['satellite_wave','cryo_blast','tesla_bolt','emf_beam','hunter_beam'].includes(kind);
   const palette=communicationShot
     ? (equipped.includes('command_array')?'cyan':'gold')
     : tempoShot?'violet'
     : kind==='hunter_beam'?'violet'
-    : kind==='radio'?'gold':'cyan';
+    : ['radio','satellite_wave','emf_beam'].includes(kind)?'gold':'cyan';
   const index=palette==='gold'?0:palette==='cyan'?1:2;
-  return {palette,premium,tier,color:['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index};
+  return {palette,premium,evolved,tier,color:kind==='tesla_bolt'?'#a8ed86':kind==='cryo_blast'?'#b2f3ff':['#ffd181','#75e8ff','#d1a3ff'][index]!,flightCell:4+index,launchCell:index,impactCell:8+index};
 }
 /** One shared raster atlas, no per-frame allocation, blur or full-screen flash. */
 export function drawVfxCell(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,cell:number,x:number,y:number,w:number,h:number,alpha:number,angle=0):boolean {
@@ -37,6 +38,10 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
   // Static pulse count remains legible even with reduced motion enabled.
   ctx.translate(p.x,p.y);ctx.rotate(angle);ctx.strokeStyle=look.color;ctx.lineWidth=1.2;ctx.globalAlpha=alpha*.75;
   for(let i=0;i<look.tier;i++){ctx.beginPath();ctx.moveTo(-8-i*7,-width*.3);ctx.lineTo(-8-i*7,width*.3);ctx.stroke();}
+  if(look.evolved){
+    ctx.lineWidth=1.6;ctx.globalAlpha=alpha*(busy?.45:.8);
+    for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(-length*.62,side*width*.42);ctx.lineTo(-length*.18,side*width*.28);ctx.lineTo(5,side*width*.12);ctx.stroke();}
+  }
   ctx.restore();return true;
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {
@@ -47,8 +52,14 @@ export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly
   const cell=event.phase==='launch'?look.launchCell:look.impactCell;
   ctx.save();ctx.globalCompositeOperation='screen';
   drawVfxCell(ctx,atlas,cell,0,0,extent*scale,extent*scale*(event.phase==='launch'?.60:1),fade*(busy?.35:.8),event.phase==='launch'?event.angle:0);
+  if(look.evolved&&event.phase==='impact'){
+    ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.4;ctx.globalAlpha=fade*(busy?.4:.85);
+    const radius=12+t*14,marks=busy?3:kindContactMarks(event.kind);
+    for(let i=0;i<marks;i++){const a=event.angle+i*Math.PI*2/marks;ctx.beginPath();ctx.moveTo(Math.cos(a)*radius,Math.sin(a)*radius*.6);ctx.lineTo(Math.cos(a)*(radius+6),Math.sin(a)*(radius+6)*.6);ctx.stroke();}
+  }
   ctx.restore();
 }
+function kindContactMarks(kind:ProjectileKind):number {return kind==='cryo_blast'?6:kind==='emf_beam'?4:kind==='hunter_beam'?3:5;}
 export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,x:number,y:number,evolved:boolean,time:number,reduced:boolean):void {
   const breath=reduced?1:1+Math.sin(time*9)*.08;
   ctx.save();ctx.globalCompositeOperation='screen';

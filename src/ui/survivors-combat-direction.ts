@@ -25,7 +25,7 @@ export class CombatDirection {
       if(['radio','satellite_wave','drone_laser','hunter_beam','tesla_bolt','emf_beam','shout_shockwave'].includes(e.kind)&&this.pulses.length<(busy?4:8))this.pulses.push({x:e.x,y:e.y,age:0,life:e.phase==='launch'?.10:.22,cell:look.impactCell,strength:e.phase==='launch'?.12:.22});
       // One local launch or confirmed critical contact per cooldown; dense fire cannot sustain shake.
       if(this.cooldown===0&&((e.phase==='launch'&&Math.hypot(e.x-listener.x,e.y-listener.y)<85)||(e.critical&&Math.hypot(e.x-listener.x,e.y-listener.y)<260))&&!launch) {
-        const power=e.phase==='impact'?1.8:look.premium?1.1:.65;
+        const power=e.phase==='impact'?2.2:look.evolved?(busy?1.0:1.5):look.premium?1.1:.65;
         this.kickX=-Math.cos(e.angle)*power;this.kickY=-Math.sin(e.angle)*power;
         this.cooldown=.14;launch=true;
       }

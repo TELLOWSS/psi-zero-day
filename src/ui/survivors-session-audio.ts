@@ -2,6 +2,8 @@ import { cinematicLook } from './survivors-cinematic-vfx';
 import { equipmentSoundSamples } from './survivors-equipment-sound';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
+import {RECORDED_SFX,recordedSfxAsset,recordedEquipmentCue,type RecordedSfxId} from '../app/survivors-sfx-assets';
+import type {InspectionPhase} from './survivors-inspection-flight';
 // Recorded score/cues and procedural effects share one session-owned audio lifecycle.
 export class SurvivorsSessionAudio {
   private context: AudioContext | null = null;
@@ -14,6 +16,9 @@ export class SurvivorsSessionAudio {
   private dialogueFocus = false;
   private equipmentBuffers = new Map<string, AudioBuffer>();
   private equipmentTimes = new Map<string,number>();
+  private recordedFailures=new Set<RecordedSfxId>();
+  private inspectionPhase:InspectionPhase|undefined;
+  private inspectionRun:object|undefined;
   private buses: Record<SurvivorsAudioBus, GainNode> | null = null;
   private volumes: Partial<Record<SurvivorsAudioBus | 'Master', number>> = {};
   private buffers = new Map<string, Promise<AudioBuffer>>();
@@ -24,6 +29,42 @@ export class SurvivorsSessionAudio {
   private scoreEpoch = 0;
   private scoreTimer: ReturnType<typeof setTimeout> | null = null;
   private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
+  async preloadEquipmentRecordings():Promise<boolean> {
+    const ctx=this.ensureBuses();if(!ctx)return false;
+    const results=await Promise.all(RECORDED_SFX.map(async asset=>{
+      try{await this.decodeAsset(ctx,asset);return true;}
+      catch(error){this.recordedFailures.add(asset.id as RecordedSfxId);this.fail(String(error));return false;}
+    }));return results.every(Boolean);
+  }
+  /** One session-owned recording per event; bounded, cached and cancelled on pause/dispose. */
+  playRecordedEffect(id:RecordedSfxId,position?:{x:number;y:number},listener?:{x:number;y:number},busy=false):boolean {
+    if(this.recordedFailures.has(id))return false;
+    const asset=recordedSfxAsset(id),ctx=this.ensureBuses();
+    if(!ctx||this.muted||!asset.uri||!asset.sha256||!asset.rights)return false;
+    const now=ctx.currentTime,key='recorded:'+id,previous=this.equipmentTimes.get(key);
+    if(previous!==undefined&&now-previous<(busy?.16:id.startsWith('drone_')&&id!=='drone_release'?.35:.10))return true;
+    this.equipmentTimes.set(key,now);
+    const epoch=this.epoch;
+    void this.decodeAsset(ctx,asset).then(buffer=>{
+      if(epoch!==this.epoch||this.muted||ctx!==this.context||ctx.currentTime-now>.2)return;
+      const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.003;
+      const ui=id.startsWith('ui_'),distance=position&&listener?Math.hypot(position.x-listener.x,position.y-listener.y):0;
+      const level=(ui?.45:id==='pickup'?.28:.6)/(1+distance/650);
+      source.buffer=buffer;gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
+      gain.gain.setValueAtTime(level,start+Math.max(.004,buffer.duration-.025));gain.gain.linearRampToValueAtTime(0,start+buffer.duration);
+      if(!this.track(source,gain,ui?4:id==='pickup'?0:2))return;
+      source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+buffer.duration);
+    }).catch(error=>{if(epoch===this.epoch){this.recordedFailures.add(id);this.buffers.delete(asset.uri!);this.fail(String(error));}});
+    return true;
+  }
+  playInspectionPhase(phase:InspectionPhase|undefined,playing:boolean,run?:object):void {
+    if(!playing)return;
+    if(run&&run!==this.inspectionRun){this.inspectionRun=run;this.inspectionPhase=undefined;}
+    const previous=this.inspectionPhase;this.inspectionPhase=phase;
+    if(phase===previous||!phase)return;
+    if(phase==='launching'||phase==='inspecting'&&previous==='docked')this.playRecordedEffect('drone_launch');
+    else if(phase==='docked'&&previous&&previous!=='docked')this.playRecordedEffect('drone_dock');
+  }
   /** Explicit Director-authorized audition path; never promotes candidate approval. */
   async auditionScore(asset: SurvivorsAudioAsset, cueSeconds?: number): Promise<boolean> {
     if (asset.bus !== 'Music' || asset.status !== 'CANDIDATE' || !asset.uri || !asset.rights || !asset.sha256) return false;
@@ -165,6 +206,8 @@ export class SurvivorsSessionAudio {
   }
   /** Equipment material sound remains procedural until the final recording gate. */
   playEquipmentFeedback(event:ProjectileFeedback,listener:{x:number;y:number},busy=false,equipped:readonly string[]=[]):void {
+    const recorded=recordedEquipmentCue(event);
+    if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy))return;
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
     const key=event.kind+':'+event.phase,now=ctx.currentTime,previous=this.equipmentTimes.get(key);
@@ -295,7 +338,7 @@ export class SurvivorsSessionAudio {
     const context = this.context; this.context = null;
     if (this.buses) for (const bus of Object.values(this.buses)) bus.disconnect();
     this.musicDuck?.disconnect();this.musicDuck=null;this.limiter?.disconnect();this.limiter=null;
-    this.master?.disconnect(); this.master = null; this.buses = null; this.buffers.clear(); this.synthNoise = null;
+    this.master?.disconnect(); this.master = null; this.buses = null; this.buffers.clear();this.recordedFailures.clear();this.inspectionPhase=undefined;this.inspectionRun=undefined; this.synthNoise = null;
     if (context) void context.close().catch(() => {});
   }
 }

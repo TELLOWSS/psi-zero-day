@@ -2,6 +2,7 @@ import { CombatDirection } from './survivors-combat-direction';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
+import {drawEquipmentIdentity,drawEvolutionIdentity} from './survivors-equipment-identity';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
@@ -345,6 +346,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [showManual, setShowManual] = useState(false);
   const [showRdModal, setShowRdModal] = useState(false);
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal;
+  const pendingStoreConfirmationRef=useRef(false);
   const [clearGearWear,setClearGearWear]=useState<string[]>([]);
   const storeDialogRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -441,12 +443,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const commitStoreChange=(result:StoreWallet|null,message:string)=>{
-    if(!result){setStoreMessage(storeText.repairFirst);return;}
+    if(!result){setStoreMessage(storeText.repairFirst);audioRef.current.playRecordedEffect('ui_denied');return;}
     const engine=engineRef.current;
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused'){setStoreMessage(storeText.failure);return;}
     try {
       persistStoreWallet(result);
-    } catch { setStoreMessage(storeText.failure); return; }
+    } catch { setStoreMessage(storeText.failure);audioRef.current.playRecordedEffect('ui_denied'); return; }
     inventoryRef.current = result.inventory;
     setStoreInventory(result.inventory);
     creditsRef.current = result.credits;
@@ -456,6 +458,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       setHp(engine.state.player.hp);setMaxHp(engine.state.player.maxHp);
     }
     setStoreMessage(engine?.state.phase==='paused'?`${message} · ${storeText.liveApplied}`:message);
+    if(engine?.state.phase==='ready')pendingStoreConfirmationRef.current=true;
+    else audioRef.current.playRecordedEffect('ui_equip');
   };
   const changeStore = (id: string, purchase: boolean) => {
     const result=purchase?buyStoreItem(inventoryRef.current,creditsRef.current,id):{inventory:equipStoreItem(inventoryRef.current,id),credits:creditsRef.current};
@@ -464,6 +468,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const repairStore=(id:string)=>commitStoreChange(repairStoreItem(inventoryRef.current,creditsRef.current,id),storeText.repaired);
   const applyStore=(ids:string[])=>commitStoreChange(buyAndEquipLoadout(inventoryRef.current,creditsRef.current,ids),storeText.appliedLoadout);
   const openStore=()=>{
+    void audioRef.current.preloadEquipmentRecordings();
     const engine=engineRef.current;
     if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
@@ -494,7 +499,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }, [phase, audioMuted, accountabilityCase, readyMusic]);
 
   // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
-  const playSfx = useCallback((type: 'impact' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
+  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
       const ctx = audioRef.current.getContext();
@@ -512,12 +517,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         return;
       }
       const now = ctx.currentTime;
-      const interval = type === 'impact' ? .06 : type === 'control_heavy' ? .5 : type === 'pickup' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
+      const interval = type === 'impact' ? .06 : type === 'control_heavy' ? .5 : type === 'pickup' || type === 'control' ? 0.12 : type === 'shoot' || type === 'spray' || type === 'laser' ? 0.08 : 0;
       const previous = sfxTimesRef.current.get(type);
       if (interval && previous !== undefined && now >= previous && now - previous < interval) return;
       sfxTimesRef.current.set(type, now);
       const priority = type === 'control_heavy' || type === 'hit' ? 3 : type === 'pickup' || type === 'levelup' ? 2 : 1;
       const listener = engineRef.current?.state.player;
+      if(type==='pickup'&&audioRef.current.playRecordedEffect('pickup',position,listener))return;
 
       if (type === 'impact') {
         const osc=ctx.createOscillator(), gain=ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(260,now);osc.frequency.exponentialRampToValueAtTime(70,now+.085);gain.gain.setValueAtTime(.12,now);gain.gain.exponentialRampToValueAtTime(.005,now+.1);
@@ -559,7 +565,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         noise.connect(gain);
         audioRef.current.connectSfx(noise, gain, position, listener);
         noise.start(now);
-      } else if (type === 'pickup') {
+      } else if (type === 'pickup' || type === 'control') {
         [659.25, 1046.5].forEach((freq, i) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -699,12 +705,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   useEffect(() => {
     if (!engineRef.current || engineRef.current.state.phase === 'ready') initGame(selectedChar, selectedStage);
+    if(pendingStoreConfirmationRef.current){pendingStoreConfirmationRef.current=false;audioRef.current.playRecordedEffect('ui_equip');}
   }, [initGame, selectedChar, selectedStage]);
 
   const beginPatrol = () => {
     if (!engineRef.current) return;
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
     void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
+    void audioRef.current.preloadEquipmentRecordings();
     scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;
     engineRef.current.start();
     setPhase('playing');
@@ -1014,7 +1022,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const audible = new Set<string>();
         for (const event of events) {
           if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.gameTime);
-          const cue = event.type === 'control' ? event.outcome === 'boss' ? 'control_heavy' : 'pickup' : event.type;
+          const cue = event.type === 'control' ? event.outcome === 'boss' ? 'control_heavy' : 'control' : event.type;
           if (event.type === 'control' && event.x !== undefined && event.y !== undefined) {
             const boss=event.outcome==='boss',critical=event.outcome==='critical',duration=boss?.45:critical?.22:.12;
             impactFeedbackRef.current.push({x:event.x,y:event.y,life:duration,duration,boss,critical,worker:event.actorKind==='UNHELMETED'});
@@ -2194,9 +2202,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const inspectionActor=spritesRef.current.characterMaps[engine.state.characterId];
-      drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose}:undefined);
+      const inspectionPhase=drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose,vfxAtlas:spritesRef.current.cinematicAtlas}:undefined);
+      audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
       const projectileBusy=projectiles.length>60;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
+      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
+      drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
       const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;

@@ -2,6 +2,7 @@ import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import { ACTOR_RIGS } from './survivors-animation-rig';
 import { actorTorsoPoint, applyActorTorsoTransform } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
+import type {StoreCategory} from '../domain/survivors-store';
 
 export const WEARABLE_ART = {
   voice_lens: '/assets/survivors/wearables/voice-lens-v1.png',
@@ -33,6 +34,31 @@ export const WEARABLE_PROFILES: Record<string, FittingProfile> = {
 WEARABLE_PROFILES.park = WEARABLE_PROFILES.kang_taesik!;
 WEARABLE_PROFILES.jung = WEARABLE_PROFILES.player!;
 WEARABLE_PROFILES.yoon = WEARABLE_PROFILES.yoon_sungho!;
+
+/** Body-local attachment coordinates; the actor transform owns facing and recoil. */
+export function premiumBodySocket(characterId:string,actor:HTMLImageElement,height:number,category:StoreCategory):{x:number;y:number;size:number}|undefined {
+  const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
+  const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
+  const chest=fitting.sockets.shock_mantle,radio=fitting.sockets.voice_lens,back=fitting.sockets.inspection_wing;
+  const positions:Record<StoreCategory,[number,number,number]>={
+    communication:[radio.x+radio.w/2,radio.y+radio.h/2,.14],
+    tempo:[chest.x+chest.w*.85,chest.y+chest.h*.75,.12],
+    logistics:[back.x+back.w/2,back.y+back.h*.85,.17],
+    protection:[chest.x+chest.w/2,chest.y+chest.h/2,.18],
+    tactics:[chest.x+chest.w*.24,chest.y+chest.h*.95,.11],
+    companion:[back.x+back.w/2,back.y+back.h/2,.19],
+  };
+  const [x,y,size]=positions[category];
+  return {x:(x-.5)*width,y:(y-1)*height,size:height*size};
+}
+
+export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number):void {
+  const fitting=WEARABLE_PROFILES[characterId];if(!fitting?.occluders.length)return;
+  const body=spriteOpaqueBounds(actor),width=height*body.width/body.height;
+  ctx.save();ctx.beginPath();
+  for(const polygon of fitting.occluders){polygon.forEach(([x,y],i)=>{const px=x!*width-width/2,py=y!*height-height;i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.closePath();}
+  ctx.clip();ctx.drawImage(actor,body.x,body.y,body.width,body.height,-width/2,-height,width,height);ctx.restore();
+}
 
 export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose):{x:number;y:number}|undefined {
   const socket=WEARABLE_PROFILES[characterId]?.sockets.inspection_wing;

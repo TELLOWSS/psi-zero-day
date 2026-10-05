@@ -16,6 +16,7 @@ it('preserves evolution cue across perk-choice resume then restores patrol music
  vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(ctx as CanvasRenderingContext2D);
  vi.spyOn(SurvivorsSessionAudio.prototype,'getContext').mockReturnValue({currentTime:0} as AudioContext);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
  const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
  let engine!:SurvivorsEngine;const start=SurvivorsEngine.prototype.start;

@@ -31,9 +31,10 @@ export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFee
     const body=Math.sin(carrier)*(worker?.55:.38);
     const grain=worker?0:(noise-low)*texture*(.42*Math.exp(-t/ .028)+.16);
     const ring=worker?0:Math.sin(carrier*2.73)*resonance*Math.exp(-u*6);
-    const pressure=worker?0:Math.sin(2*Math.PI*(phase==='impact'?82:120)*t)*.18*Math.exp(-t/.035);
+    const pressure=worker?0:Math.sin(2*Math.PI*(phase==='impact'?82:120)*t)*(look.evolved?.26:.18)*Math.exp(-t/(look.evolved?.05:.035));
     const harmonic=premium?Math.sin(carrier*1.5)*.10*Math.exp(-u*4):0;
-    data[i]=(body+grain+ring+pressure+harmonic)*envelope*.65;
+    const transient=look.evolved&&!worker&&phase!=='release'?(noise-low)*.14*Math.exp(-t/.012):0;
+    data[i]=(body+grain+ring+pressure+harmonic+transient)*envelope*.65;
   }
   return data;
 }

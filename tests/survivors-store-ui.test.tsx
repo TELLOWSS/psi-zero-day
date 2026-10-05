@@ -3,6 +3,7 @@ import {act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {it,expect,vi} from 'vitest';
 import {PatrolSurvivorsGame} from '../src/ui/PatrolSurvivorsGame';
+import {SurvivorsSessionAudio} from '../src/ui/survivors-session-audio';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
 it('purchases, equips and restores gear; storage failure never charges the wallet',()=>{
   localStorage.clear();localStorage.setItem('psi.survivors.credits','5000');
@@ -11,12 +12,16 @@ it('purchases, equips and restores gear; storage failure never charges the walle
   localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:5000,inventory:{owned:[],equipped:[]}}));
   vi.stubGlobal('requestAnimationFrame',()=>1);vi.stubGlobal('cancelAnimationFrame',vi.fn());
   vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(null);
+  const audioOrder:string[]=[];
+  vi.spyOn(SurvivorsSessionAudio.prototype,'silence').mockImplementation(()=>{audioOrder.push('silence');});
+  vi.spyOn(SurvivorsSessionAudio.prototype,'playRecordedEffect').mockImplementation(id=>{audioOrder.push(id);return true;});
   const host=document.createElement('div');document.body.append(host);let root=createRoot(host);
   const click=(text:string)=>act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent?.includes(text))!.click());
   try {
     act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));
     click('PSI 상점');
     click('구매 · 800');
+    expect(audioOrder.at(-1)).toBe('ui_equip');
     expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(4200);
     const card=[...host.querySelectorAll('article')].find(a=>a.textContent?.includes('지향성 계도 렌즈'))!;
     act(()=>card.querySelector('button')!.click());
