@@ -72,7 +72,8 @@ try{
    const {createInitialSurvivorsState}=await import('/src/engine/patrol-survivors-engine.ts');
    const {SpriteMotionTracker}=await import('/src/ui/survivors-sprite-motion.ts');
    const ids=['broadcast_crown','sync_gauntlet','shock_mantle'],s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
-   s.player.x=120;s.player.y=120;s.activePerks.tesla_dome=1;const atlas=new Image();atlas.src='/assets/survivors/cinematic-vfx-v2.webp';await atlas.decode();
+   const {CINEMATIC_VFX_ATLAS}=await import('/src/ui/survivors-cinematic-vfx.ts');
+   s.player.x=120;s.player.y=120;s.activePerks.tesla_dome=1;const atlas=new Image();atlas.src=CINEMATIC_VFX_ATLAS;await atlas.decode();
    const c=document.createElement('canvas');c.width=240;c.height=180;const ctx=c.getContext('2d');
    const frame=(time,reduced=false,action=0)=>{ctx.clearRect(0,0,240,180);s.gameTime=time;drawEquipmentIdentity(ctx,s,atlas,reduced);drawEvolutionIdentity(ctx,s,atlas,reduced);drawEquipmentMantle(ctx,s,atlas,reduced,false,undefined,action);return Array.from(ctx.getImageData(0,0,240,180).data);};
    const diff=(a,b)=>a.reduce((sum,v,i)=>sum+(v!==b[i]?1:0),0);
@@ -110,6 +111,7 @@ try{
    let row=0;
    for(const [id,uri] of Object.entries(CHARACTER_MAP_ART)){
     const image=new Image();image.src=uri;await image.decode();registerSpriteBounds(image);
+    const {loadAuthoredCommand}=await import('/src/ui/survivors-authored-command.ts');await loadAuthoredCommand(image);
     const s=createInitialSurvivorsState(id),base=new SpriteMotionTracker().sample(s.player,0,0,0);
     s.activePerks.radio_boost=5;
     const poses=[base,{...base,lean:.03,action:1,gaitBlend:1,cycle:Math.PI/2},{...base,lean:-.03,action:1,gaitBlend:1,cycle:Math.PI/2,facing:-1}];

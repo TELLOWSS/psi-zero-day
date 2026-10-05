@@ -78,7 +78,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
       attached=true;
     }
   }
-  if(attached)drawActorEquipmentOcclusion(ctx,state.characterId,actorPose.actor,actorPose.height);
+  if(attached)drawActorEquipmentOcclusion(ctx,state.characterId,actorPose.actor,actorPose.height,actorPose.pose);
   ctx.restore();
   return flight?.phase;
 }

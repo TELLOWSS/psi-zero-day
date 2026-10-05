@@ -1,18 +1,22 @@
 import { ACTOR_RIGS } from './survivors-animation-rig';
 import { gaitStride, soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
-import {ATTACK_MOTION,attackEnvelope,type AttackMotion} from './survivors-attack-motion';
+import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './survivors-attack-motion';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
-export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
   private samples = new WeakMap<object, Sample>();
-  private actions = new WeakMap<object, {start:number;kind:AttackMotion}>();
+  private actions = new WeakMap<object, {start:number;kind:AttackMotion;gestureStart:number;gestureKind:AttackMotion}>();
   act(entity: object, clock: number,kind:AttackMotion='shot'): void {
     const previous=this.actions.get(entity);
     if(previous?.kind==='ultimate'&&kind!=='ultimate'&&clock>=previous.start&&clock<previous.start+ATTACK_MOTION.ultimate.duration)return;
-    if (!previous || clock<previous.start || clock-previous.start>=.065 || kind==='ultimate'&&previous.kind!=='ultimate') this.actions.set(entity,{start:clock,kind});
+    if (!previous || clock<previous.start || clock-previous.start>=.065 || kind==='ultimate'&&previous.kind!=='ultimate') {
+      // Rapid emissions retrigger recoil, but let the authored hand gesture finish.
+      const continuing=previous&&clock>=previous.gestureStart&&clock<previous.gestureStart+ATTACK_MOTION[previous.gestureKind].duration&&kind!=='ultimate';
+      this.actions.set(entity,{start:clock,kind,gestureStart:continuing?previous.gestureStart:clock,gestureKind:continuing?previous.gestureKind:kind});
+    }
   }
   sample(entity: object, x: number, y: number, clock: number, hp = 1): SpritePose {
     const previous = this.samples.get(entity);
@@ -38,7 +42,7 @@ export class SpriteMotionTracker {
     const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
     const pose: SpritePose = {
       moving, cycle, facing,
-      lean,
+      lean, actionProgress: attack ? attackProgress(clock-attack.gestureStart,attack.gestureKind) : 0,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
       stride, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY,
@@ -51,6 +55,48 @@ export class SpriteMotionTracker {
 
 interface Bounds { x: number; y: number; width: number; height: number }
 const bounds = new WeakMap<HTMLImageElement, Bounds>();
+const commandTextures = new WeakMap<HTMLImageElement, HTMLCanvasElement[]>();
+
+/** Register one canonical body, with authored arm poses aligned by the support boot. */
+export function registerCommandSprite(image:HTMLImageElement,sheet:HTMLImageElement):boolean {
+  if(!image.src.endsWith('/player-map.webp')||!sheet.naturalWidth||!sheet.naturalHeight)return false;
+  const cached=commandTextures.get(sheet);
+  if(cached){const source={x:0,y:0,width:cached[0]!.width,height:cached[0]!.height};prepareActorRig(image,source,cached);bounds.set(image,source);return true;}
+  const cw=sheet.naturalWidth/4,ch=sheet.naturalHeight/2;
+  const cells=Array.from({length:8},(_,index)=>{
+    const canvas=document.createElement('canvas');canvas.width=Math.ceil(cw);canvas.height=Math.ceil(ch);
+    const ctx=canvas.getContext('2d')!;ctx.drawImage(sheet,index%4*cw,Math.floor(index/4)*ch,cw,ch,0,0,canvas.width,canvas.height);
+    const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+    let left=canvas.width,right=-1,top=canvas.height,bottom=-1;
+    for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++)if(pixels[(y*canvas.width+x)*4+3]!>=32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+    if(right<left)throw new Error('Empty authored command cell');
+    const height=bottom-top+1;let foot=0,weight=0;
+    for(let y=bottom-Math.ceil(height*.025);y<=bottom;y++)for(let x=left;x<=right;x++){
+      const alpha=pixels[(y*canvas.width+x)*4+3]!;
+      if(alpha>=32){foot+=(x-left)*alpha;weight+=alpha;}
+    }
+    return {canvas,left,top,width:right-left+1,height,foot:foot/weight};
+  });
+  const base=cells[0]!,height=256,width=Math.ceil(base.width*height/base.height)+8;
+  const anchor=4+base.foot*height/base.height;
+  const aligned=cells.map(cell=>{
+    const texture=document.createElement('canvas');texture.width=width;texture.height=height;
+    const scale=height/cell.height;
+    texture.getContext('2d')!.drawImage(cell.canvas,cell.left,cell.top,cell.width,cell.height,anchor-cell.foot*scale,0,cell.width*scale,height);
+    return texture;
+  });
+  const frames=aligned.map(texture=>{
+    const frame=document.createElement('canvas');frame.width=width;frame.height=height;
+    const ctx=frame.getContext('2d')!;ctx.drawImage(aligned[0]!,0,0);
+    // Face, PPE, hips and boots stay canonical. Only the authored command layer changes.
+    const top=height*.21,bottom=height*.48;
+    ctx.clearRect(0,top,width,bottom-top);ctx.drawImage(texture,0,top,width,bottom-top,0,top,width,bottom-top);
+    return frame;
+  });
+  const source={x:0,y:0,width,height};
+  commandTextures.set(sheet,frames);
+  prepareActorRig(image,source,frames);bounds.set(image,source);return true;
+}
 
 export function spriteOpaqueBounds(image: HTMLImageElement): Bounds {
   return bounds.get(image) ?? { x: 0, y: 0, width: image.naturalWidth, height: image.naturalHeight };

@@ -26,3 +26,7 @@ Review the candidate at actual 74px gameplay scale, settle character registratio
 Typecheck, production build and the regression suite passed (1,354 tests passed, one skipped). Browser checks passed at 1440x900, 390x844, 844x390 and 568x320: four distinct frames, 74px opaque character height, stable bottom alignment, pause, original overlay, playback and reduced motion. No horizontal overflow or browser errors were observed; compact landscape keeps the stage in view.
 
 The sheet's minimum opaque-to-cell margin is only 3px, so the requested generous padding is not fully achieved. Foot registration is corrected only in the review renderer. Neither these checks nor the candidate publication constitute production character approval.
+
+## Follow-Up
+
+The separate v2 eight-pose sheet is now integrated for the player and jung alias with a canonical neutral/walk body, support-boot alignment and active arm occlusion. See `SURVIVORS-AUTHORED-MATERIAL-INTEGRATION-20261005.md`. This original v1 sheet remains a review-only candidate; it was not promoted into gameplay.

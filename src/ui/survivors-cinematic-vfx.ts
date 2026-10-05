@@ -1,6 +1,6 @@
 import type {Projectile,ProjectileKind,SurvivorsGameState} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
-export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v2.webp';
+export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v3.png';
 export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;evolved:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
   const tier=Math.min(5,Math.max(1,level));

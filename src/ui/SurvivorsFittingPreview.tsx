@@ -3,6 +3,7 @@ import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import { CHARACTER_PROFILES } from '../engine/patrol-survivors-engine';
 import { drawPremiumGear } from './survivors-premium-render';
 import { CHARACTER_MAP_ART } from './survivors-character-art';
+import {loadAuthoredCommand} from './survivors-authored-command';
 import { EQUIPMENT_ART, PICKUP_ART, registerPropAtlas } from './survivors-equipment-art';
 import { drawGroundedSprite, registerSpriteBounds } from './survivors-sprite-motion';
 import copy from '../../content/localization/survivors-store-ko.json';
@@ -35,9 +36,10 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
       const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src;
     });
     Promise.all([load(CHARACTER_MAP_ART[state.characterId]), load(EQUIPMENT_ART), load(PICKUP_ART), loadWearableImages(state.characterId),load(CINEMATIC_VFX_ATLAS)])
-      .then(([actor, gear, pickups, wearables, cinematic]) => {
+      .then(async ([actor, gear, pickups, wearables, cinematic]) => {
         if (disposed) return;
         registerSpriteBounds(actor); registerPropAtlas(gear, 3, 5); registerPropAtlas(pickups, 4, 2);
+        await loadAuthoredCommand(actor);if(disposed)return;
         setAssets({actor,gear,pickups,wearables,cinematic});
       }).catch(() => { if (!disposed) setFailed(true); });
     return () => { disposed = true; };

@@ -15,6 +15,7 @@ import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
+import {loadAuthoredCommand} from './survivors-authored-command';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
@@ -224,7 +225,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       img.src = src;
       img.onload = () => {
         registerSpriteBounds(img);
-        spritesRef.current.characterMaps[cId] = img;
+        void loadAuthoredCommand(img).then(()=>{spritesRef.current.characterMaps[cId] = img;});
       };
     });
 
@@ -1323,7 +1324,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
-      const playerPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
+      const trackedPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
+      const playerPose = reducedMotionRef.current ? {...trackedPose,action:0,actionProgress:0} : trackedPose;
 
       if(engine.state.phase==='playing'&&direction.footstep(playerPose.travel,playerPose.moving))audioRef.current.playFootstep(playerPose.speed>145);
 

@@ -2,7 +2,7 @@ import type {EvolutionPerkId,ProjectileKind,SurvivorsGameState} from '../domain/
 import {drawVfxCell} from './survivors-cinematic-vfx';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import type {SpritePose} from './survivors-sprite-motion';
-import {auraFlow} from './survivors-aura-flow';
+import {drawMaterialRibbon} from './survivors-material-ribbon';
 
 export const EQUIPMENT_AURAS={
   voice_lens:{color:'#ffab76',motif:'signal',marks:1,cell:0},
@@ -121,18 +121,15 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
   }
   for(let i=0;i<signatures.length;i++){
     const signature=signatures[i]!,side=i===0?-1:1;
-    const pulse=reduced?1:1+Math.sin(state.gameTime*2.6+i)*.06+action*.10;
     const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4*(attachment?.pose.facing??1):0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
     ctx.globalAlpha=busy?.45:.75;
-    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.bezierCurveTo(side*(28+flow)+drag,-22,side*(9-flow)+drag,-42,side*17+drag,-52-flow);ctx.stroke();
+    if(reduced||!atlas?.naturalWidth){ctx.beginPath();ctx.moveTo(side*14,-7);ctx.bezierCurveTo(side*(28+flow)+drag,-22,side*(9-flow)+drag,-42,side*17+drag,-52-flow);ctx.stroke();}
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
-      for(let segment=0;segment<(busy?2:3);segment++){
-        const wisp=auraFlow(state.gameTime+i*.37,segment,side,action);
-        drawVfxCell(ctx,atlas,signature.cell,wisp.x+drag,wisp.y,wisp.width*(signature.evolved?1.2:1),wisp.height*pulse,wisp.alpha*(busy?.65:1),wisp.rotation);
-      }
+      const materialCell=signature.cell===11?11:signature.cell===3?3:signature.cell===0||signature.cell===8?4:signature.cell===1?5:6;
+      drawMaterialRibbon(ctx,atlas,materialCell,state.gameTime+i*.37,side,action,drag,busy);
       ctx.globalCompositeOperation='source-over';
     }
     if(signature.evolved){

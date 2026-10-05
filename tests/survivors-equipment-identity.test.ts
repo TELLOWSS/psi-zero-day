@@ -53,10 +53,10 @@ it('keeps raster-loaded item motifs and bounds the silhouette mantle without cha
  const ids=['broadcast_crown','shock_mantle','sync_gauntlet'];
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
  const before=JSON.stringify(s),c=context();drawEquipmentIdentity(c,s,atlas,false);expect(c.stroke).toHaveBeenCalled();
- const mantle=context();drawEquipmentMantle(mantle,s,atlas,false);expect(mantle.drawImage).toHaveBeenCalledTimes(6);
- const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(2);
+ const mantle=context();drawEquipmentMantle(mantle,s,atlas,false);expect(mantle.drawImage).toHaveBeenCalledTimes(16);
+ const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(4);
  const reduced=context();drawEquipmentMantle(reduced,s,atlas,true);expect(reduced.drawImage).not.toHaveBeenCalled();expect(reduced.stroke).toHaveBeenCalled();
- expect(JSON.stringify(s)).toBe(before);expect(mantle.save).toHaveBeenCalledTimes(7);expect(mantle.restore).toHaveBeenCalledTimes(7);
+ expect(JSON.stringify(s)).toBe(before);expect(mantle.save).toHaveBeenCalledTimes(17);expect(mantle.restore).toHaveBeenCalledTimes(17);
 });
 it('calibrates all six categories for every character and mirrors the actual torso frame',()=>{
   const state=createInitialSurvivorsState(),pose=new SpriteMotionTracker().sample(state.player,0,0,0);

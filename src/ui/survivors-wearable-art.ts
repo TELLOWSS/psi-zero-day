@@ -1,6 +1,6 @@
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import { ACTOR_RIGS } from './survivors-animation-rig';
-import { actorTorsoPoint, applyActorTorsoTransform } from './survivors-rig-renderer';
+import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 import type {StoreCategory} from '../domain/survivors-store';
 
@@ -25,7 +25,7 @@ const profile = (x: number, y: number, w: number, h: number, occluders: number[]
 /** Authored against each original full-body sprite, not a universal floating badge. */
 export const WEARABLE_PROFILES: Record<string, FittingProfile> = {
   safety_monitor: {sockets, occluders: [[[.24,.25],[.29,.18],[.42,.16],[.49,.20],[.44,.27],[.34,.29]],[[.63,.32],[1,.30],[1,.42],[.68,.43],[.60,.38]]]},
-  player: profile(.29,.19,.40,.24, [[[.44,.29],[.65,.27],[1,.24],[1,.39],[.65,.40],[.44,.36]]]),
+  player: profile(.30,.24,.40,.22, [[[.10,.23],[.58,.21],[.66,.29],[.55,.37],[.13,.34]],[[.59,.24],[1,.23],[1,.43],[.61,.43]]]),
   kang_taesik: profile(.39,.23,.38,.29, []),
   yoon_sungho: profile(.30,.24,.40,.25, [[[.23,.39],[.58,.39],[.62,.47],[.30,.48]]]),
   lee_jaehoon: profile(.30,.19,.41,.25, [[[.68,.19],[1,.18],[1,.44],[.64,.43]],[[.18,.40],[.43,.43],[.43,.51],[.29,.52],[.18,.47]]]),
@@ -59,12 +59,12 @@ export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:
   return {x:(chest.x+chest.w*(left?.12:.88)-.5)*width,y:(chest.y+chest.h*1.15-1)*height,size:height*(left?.18:.15)};
 }
 
-export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number):void {
+export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number,pose?:SpritePose):void {
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting?.occluders.length)return;
   const body=spriteOpaqueBounds(actor),width=height*body.width/body.height;
   ctx.save();ctx.beginPath();
   for(const polygon of fitting.occluders){polygon.forEach(([x,y],i)=>{const px=x!*width-width/2,py=y!*height-height;i?ctx.lineTo(px,py):ctx.moveTo(px,py);});ctx.closePath();}
-  ctx.clip();ctx.drawImage(actor,body.x,body.y,body.width,body.height,-width/2,-height,width,height);ctx.restore();
+  ctx.clip();if(!drawAuthoredBody(ctx,actor,height,pose))ctx.drawImage(actor,body.x,body.y,body.width,body.height,-width/2,-height,width,height);ctx.restore();
 }
 
 export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose):{x:number;y:number}|undefined {
@@ -127,7 +127,7 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
     for (const polygon of occluders) {
       polygon.forEach(([x,y], i) => { const px=x!*width-width/2, py=y!*height-height; if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py); }); ctx.closePath();
     }
-    ctx.clip(); ctx.drawImage(actor, body.x, body.y, body.width, body.height, -width/2, -height, width, height); ctx.restore();
+    ctx.clip(); if(!drawAuthoredBody(ctx,actor,height,pose))ctx.drawImage(actor, body.x, body.y, body.width, body.height, -width/2, -height, width, height); ctx.restore();
   }
   ctx.restore();
 }
