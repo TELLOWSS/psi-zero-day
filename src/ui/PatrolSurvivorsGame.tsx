@@ -39,6 +39,7 @@ import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
 import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
+import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, drawIndustrialHazard } from './survivors-industrial-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
@@ -163,6 +164,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     equipmentAtlas?: HTMLImageElement;
     premiumAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
+    industrialHazards?: HTMLImageElement;
+    industrialContacts?: HTMLImageElement;
     wearables?: WearableImages;
     flammableDrum?: HTMLImageElement;
     distributionCabinet?: HTMLImageElement;
@@ -258,6 +261,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     premium.src = PREMIUM_ATLAS;
     const cinematic = new Image();
     cinematic.onload=()=>{spritesRef.current.cinematicAtlas=cinematic;};
+    const industrialHazards = new Image(); industrialHazards.src = INDUSTRIAL_HAZARD_ART;
+    industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
+    const industrialContacts = new Image(); industrialContacts.src = INDUSTRIAL_CONTACT_ART;
+    industrialContacts.onload = () => { registerPropAtlas(industrialContacts,3,2); spritesRef.current.industrialContacts = industrialContacts; };
     cinematic.src=CINEMATIC_VFX_ATLAS;
     atlas.src = '/assets/survivors/risk-atlas-v2.webp';
 
@@ -1880,7 +1887,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = 0.35;
 
-          if (h.type === 'UNHELMETED') {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0)) {
+            // Actual raster materials replace the legacy shape renderer below.
+          } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
             ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
             ctx.beginPath();
@@ -2275,7 +2284,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         drawProjectileVfx(ctx,p,lv,engine.state.gameTime,reducedMotionRef.current,projectileBusy,cinematic);
       }
 
-      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,equipped,levels:vfxLevels});
+      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,materialAtlas:spritesRef.current.industrialContacts,equipped,levels:vfxLevels});
 
       // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
       const hasHunter = activePerks.hunter_swarm > 0;

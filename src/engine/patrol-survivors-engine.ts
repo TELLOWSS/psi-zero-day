@@ -640,12 +640,12 @@ export class SurvivorsEngine {
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
   private projectileFeedback: ProjectileFeedback[] = [];
   private readonly releasedProjectiles = new WeakSet<Projectile>();
-  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false) {
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind']) {
     if (phase === 'release') {
       if (this.releasedProjectiles.has(p)) return;
       this.releasedProjectiles.add(p);
     }
-    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical});
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind});
     if (this.projectileFeedback.length > 192) {
       const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
       this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
@@ -1481,7 +1481,7 @@ export class SurvivorsEngine {
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
           h.hp -= damageDealt;
           this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
-          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit);
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit, h.type);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)

@@ -1,4 +1,5 @@
 import {cinematicLook,drawCinematicContact} from './survivors-cinematic-vfx';
+import {drawIndustrialContact} from './survivors-industrial-art';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
 
@@ -32,7 +33,7 @@ export class ProjectileFeedbackLayer {
       this.effects.push({event, age:0, duration});
     }
   }
-  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
+  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
     for (const effect of this.effects) {
       const {event:e, age, duration} = effect;
       const t = age/duration, spec = PROJECTILE_VFX[e.kind];
@@ -41,6 +42,10 @@ export class ProjectileFeedbackLayer {
       ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
+      if (['beam','signal','arc'].includes(spec.family) && drawIndustrialContact(ctx, cinematic?.materialAtlas, e, age, duration, reducedMotion, busy)) {
+        ctx.restore();
+        continue;
+      }
       // Raster contacts replace the old wire cross; never double-stack white cores.
       if(!e.worker&&!reducedMotion&&cinematic?.atlas?.naturalWidth&&(spec.family==='beam'||spec.family==='signal')) {
         drawCinematicContact(ctx,e,age,duration,cinematicLook(e.kind,cinematic.levels?.[e.kind]??1,cinematic.equipped),cinematic.atlas,false,busy);

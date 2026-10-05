@@ -1,4 +1,4 @@
-import type { ProjectileKind } from './patrol-survivors';
+import type { HazardType, ProjectileKind } from './patrol-survivors';
 
 /** Facts emitted by the simulation. Consumers may decorate but never alter rules. */
 export interface ProjectileFeedback {
@@ -11,4 +11,5 @@ export interface ProjectileFeedback {
   readonly radius: number;
   readonly worker?: boolean;
   readonly critical?: boolean;
+  readonly actorKind?: HazardType;
 }
