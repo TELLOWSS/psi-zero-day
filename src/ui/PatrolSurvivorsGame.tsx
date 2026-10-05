@@ -497,6 +497,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossAlert, setBossAlert] = useState<string | null>(null);
   const [bossRisk, setBossRisk] = useState<number | null>(null);
   const [bossBeat, setBossBeat] = useState('');
+  const [bossSecured,setBossSecured]=useState(false);
 
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
@@ -759,6 +760,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setMissionProgress(engine.state.stage.starChallenges.map(goal => ({ ...goal })));
     setEvolutionBanner(null);
     setBossAlert(null);
+    setBossSecured(false);
     impactFeedbackRef.current=[];
     projectileFeedbackRef.current.clear();
     keysRef.current = {};
@@ -1197,6 +1199,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
+        setBossSecured(engine.state.bossEncounter?.phase==='secured');
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
         setBossBeat(designatedBoss?`${designatedBoss.id}:${designatedBoss.bossPhase??1}:${designatedBoss.motion?.phase??'approach'}`:'');
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
@@ -2323,9 +2326,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
       const projectileBusy=projectiles.length>60;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,inputMag>.05?facingAngle:undefined,projectileBusy||hazards.length>45);
-      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
+      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined);
       drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
-      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
+      drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,inputMag>.05?facingAngle:undefined);
       ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
@@ -2646,10 +2649,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* BOSS ALERT BANNER */}
+      {phase==='playing'&&bossSecured&&<div className="survivors-boss-alert survivors-encounter-notice" role="status"><div className="survivors-boss-alert-text"><strong>{bossText.secured}</strong><small>{bossText.clearConfirm}</small></div></div>}
       {phase === 'playing' && bossAlert && directorCutinPhase === 'none' && (
-        <div className="survivors-boss-alert" role="alert">
+        <div className={`survivors-boss-alert ${engineRef.current?.state.bossEncounter?.phase==='arrival'?'survivors-encounter-notice':''}`} role="alert">
           <div className="survivors-boss-alert-text">
-            <strong>{combatText.boss_alert_title} · {bossAlert}</strong>
+            <strong>{engineRef.current?.state.bossEncounter?.phase==='arrival'?bossText.arrival:combatText.boss_alert_title} · {bossAlert}</strong>
+            {engineRef.current?.state.bossEncounter?.phase==='arrival'&&<small>{bossText.interlock}</small>}
             <small>{PATROL_STAGES[selectedStage].bossType === 'RUNAWAY_CART' ? combatText.boss_cart_guidance : PATROL_STAGES[selectedStage].bossType === 'CRANE_BOSS' ? combatText.boss_crane_guidance : PATROL_STAGES[selectedStage].bossType === 'FALLING_DEBRIS' ? combatText.boss_fall_guidance : combatText.boss_gas_guidance}</small>
           </div>
         </div>

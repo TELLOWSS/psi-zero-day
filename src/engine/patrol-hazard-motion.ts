@@ -8,8 +8,9 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
   const pattern=bossPattern(h);
   if(h.variant==='pulse_gas') {
     if(motion.phase==='approach') {
+      if(h.bossEncounterManaged)motion.timer+=dt;
       const dx=player.x-h.x,dy=player.y-h.y,distance=Math.hypot(dx,dy)||1;
-      if(distance<=90){motion.phase='warning';motion.timer=1.25;}
+      if(distance<=90||h.bossEncounterManaged&&motion.timer>=2.5){motion.phase='warning';motion.timer=1.25;}
       else {h.x+=dx/distance*speed*dt;h.y+=dy/distance*speed*dt;}
       return true;
     }
@@ -46,7 +47,8 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
   const dy = player.y - h.y;
   const distance = Math.hypot(dx, dy) || 1;
   if (motion.phase === 'approach') {
-    if (distance <= 320) {
+    if(h.bossEncounterManaged)motion.timer+=dt;
+    if (distance <= 320 || h.bossEncounterManaged&&motion.timer>=2.5) {
       motion.phase = 'warning';
       motion.timer = h.isStageBoss ? 1.2 : 0.9;
       motion.directionX = dx / distance;

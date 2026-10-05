@@ -26,8 +26,9 @@ try {
   const transition=await page.evaluate(()=>{
    const e=window.qaEngine,s=e.state;s.gameTime=61;
    for(let i=0;i<120&&!s.stageBossSpawned;i++)e.update(1/60,{moveX:0,moveY:0});
+   for(let i=0;i<220;i++)e.update(1/60,{moveX:0,moveY:0});
    const h=s.hazards.find(h=>h.isStageBoss);s.hazards=[h];s.projectiles=[];s.player.x=510;s.player.y=450;
-   h.x=580;h.y=450;h.hp=h.maxHp*.45;h.motion={phase:'cooldown',timer:2,directionX:1,directionY:0};
+   h.x=580;h.y=450;h.hp=h.maxHp*.45;h.bossAttackCycles=1;h.motion={phase:'cooldown',timer:2,directionX:1,directionY:0};
    s.bossAlertTimer=0;s.bossName=null;e.drainAudioEvents();e.update(1/60,{moveX:0,moveY:0});window.qaFreeze=true;
    return {type:h.type,phase:h.bossPhase,cues:e.drainAudioEvents().filter(ev=>ev.type==='boss_alarm').length};
   });

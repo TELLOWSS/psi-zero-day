@@ -11,6 +11,13 @@ import {equipmentSoundSamples} from '../src/ui/survivors-equipment-sound';
 const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} as HTMLImageElement;
 const atlas={naturalWidth:1448,naturalHeight:1086} as HTMLImageElement;
 const context=()=>new Proxy({} as CanvasRenderingContext2D,{get(target,key){if(!Reflect.has(target,key))Reflect.set(target,key,vi.fn());return Reflect.get(target,key);}});
+it('flows aura seals and silhouette energy on simulation time, with stable reduced motion and movement drag',()=>{
+ const ids=['broadcast_crown','sync_gauntlet'];
+ const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});s.activePerks.tesla_dome=1;
+ const frame=(time:number,reduced=false,movingAngle?:number)=>{s.gameTime=time;const c=context();drawEquipmentIdentity(c,s,atlas,reduced,false,movingAngle);drawEvolutionIdentity(c,s,atlas,reduced);drawEquipmentMantle(c,s,atlas,reduced,false,movingAngle);return {translate:vi.mocked(c.translate).mock.calls,images:vi.mocked(c.drawImage).mock.calls.map(call=>call.slice(5)),lines:vi.mocked(c.lineTo).mock.calls};};
+ expect(frame(0)).not.toEqual(frame(1));expect(frame(1)).toEqual(frame(1));
+ expect(frame(0,true)).toEqual(frame(1,true));expect(frame(1,false,0)).not.toEqual(frame(1,false,Math.PI));
+});
 it('keeps raster-loaded item motifs and bounds the silhouette mantle without changing game state',()=>{
  const ids=['broadcast_crown','shock_mantle','sync_gauntlet'];
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});

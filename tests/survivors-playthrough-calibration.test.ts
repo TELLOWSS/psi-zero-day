@@ -31,7 +31,7 @@ it.skipIf(process.env.PSI_CALIBRATE!=='1')('calibrates fifty maps with normal in
    if(s.fieldTactics?.handoff){dx=0;dy=0;}else{len=Math.hypot(dx,dy)||1;dx/=len;dy/=len;}
    e.update(1/60,{moveX:dx,moveY:dy});e.drainAudioEvents();e.drainProjectileFeedback();
   }
-  const progress=operationProgress(s);rows.push({stage:id,seed,phase:s.phase,time:Math.round(s.gameTime),hp:Math.round(s.player.hp),level:s.level,boss:progress.boss,zones:progress.zonesSecured,zoneTarget:progress.zones,controls:progress.controlsDone,controlTarget:progress.controls,readyAt:readyAt===null?null:Math.round(readyAt),calls,lines,requests,choices});
+  const progress=operationProgress(s);rows.push({stage:id,seed,phase:s.phase,time:Math.round(s.gameTime),hp:Math.round(s.player.hp),level:s.level,boss:progress.boss,bossState:s.hazards.filter(h=>h.isStageBoss).map(h=>({type:h.type,hp:h.hp,phase:h.bossPhase,cycles:h.bossAttackCycles,motion:h.motion,x:h.x,y:h.y})),zones:progress.zonesSecured,zoneTarget:progress.zones,controls:progress.controlsDone,controlTarget:progress.controls,readyAt:readyAt===null?null:Math.round(readyAt),calls,lines,requests,choices});
  }
  fs.mkdirSync('artifacts/boss-audio',{recursive:true});fs.writeFileSync('artifacts/boss-audio/calibration.json',JSON.stringify({scope:'SCRIPTED_AGENT_NORMAL_ENGINE_NO_UPGRADE_OR_HP_INJECTION_NOT_HUMAN_WIN_RATE_NOT_UI_STORY',rows},null,2));
  expect(rows).toHaveLength(Object.keys(PATROL_STAGES).length*3);

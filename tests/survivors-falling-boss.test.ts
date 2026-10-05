@@ -11,6 +11,6 @@ it('keeps a designated falling risk until controlled and locks each new warning 
 });
 it('does not silently remove a spent boss before confirmed control accounting',()=>{
  const s=createInitialSurvivorsState('yoon',undefined,'stage_15'),e=new SurvivorsEngine(s,42);e.start();s.gameTime=61;
- for(let i=0;i<100;i++)e.update(1/60,{moveX:0,moveY:0});const boss=s.hazards.find(h=>h.isStageBoss)!;
+ for(let i=0;i<240;i++)e.update(1/60,{moveX:0,moveY:0});const boss=s.hazards.find(h=>h.isStageBoss)!;
  boss.motion!.phase='spent';boss.motion!.timer=0;boss.hp=0;e.update(1/60,{moveX:0,moveY:0});expect(s.stageBossNeutralized).toBe(true);expect(s.hazards.some(h=>h.id===boss.id)).toBe(false);
 });

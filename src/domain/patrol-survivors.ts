@@ -17,6 +17,8 @@ export interface Hazard {
   isStunned?: number; // duration in seconds
   isStageBoss?: boolean;
   bossPhase?: 1 | 2;
+  bossEncounterManaged?: boolean;
+  bossAttackCycles?: number;
   motion?: {
     phase: 'approach' | 'warning' | 'charge' | 'cooldown' | 'fall' | 'spent';
     timer: number;
@@ -176,6 +178,7 @@ export interface SurvivorsGameState {
   phase: 'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat';
   stageBossSpawned?: boolean;
   stageBossNeutralized?: boolean;
+  bossEncounter?: { bossId: string; phase: 'arrival' | 'combat' | 'secured'; remaining: number };
   characterId: CharacterId;
   gameTime: number; // in seconds
   maxTime: number; // target survival time (e.g. 180s)

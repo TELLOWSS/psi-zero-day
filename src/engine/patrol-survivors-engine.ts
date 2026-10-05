@@ -718,6 +718,21 @@ export class SurvivorsEngine {
     // Reset single-frame kill events
     this.state.lastKilledEvents = [];
 
+    const encounter=this.state.bossEncounter;
+    if(encounter && encounter.phase!=='combat'){
+      encounter.remaining=Math.max(0,encounter.remaining-dt);
+      if(encounter.phase==='arrival'){
+        this.state.bossAlertTimer=encounter.remaining;
+        if(encounter.remaining===0){encounter.phase='combat';this.state.bossName=null;}
+      } else if(encounter.remaining===0){
+        this.state.phase='victory';
+        this.state.score+=5000;
+        this.state.psiCredits+=Math.round(this.state.score/10*PATROL_DIFFICULTIES[this.state.difficulty??'standard'].reward);
+        this.checkStarChallenges();
+      }
+      return;
+    }
+
     // Micro Freeze / Hit Stop (Impact Screen Juice)
     if (this.state.hitStopTimer && this.state.hitStopTimer > 0) {
       this.state.hitStopTimer = Math.max(0, this.state.hitStopTimer - dt);
@@ -808,6 +823,7 @@ export class SurvivorsEngine {
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
     this.updateSpawns(effectiveDt);
+    if(this.state.bossEncounter?.phase==='arrival')return;
     this.updateHazards(effectiveDt);
     recordOperationControls(this.state);
     this.updateStageHazards(effectiveDt);
@@ -819,6 +835,12 @@ export class SurvivorsEngine {
 
     // Boss resolution ends the stage; control objectives remain optional achievements.
     if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
+      if(this.state.bossEncounter){
+        this.state.bossEncounter.phase='secured';this.state.bossEncounter.remaining=2.4;
+        this.state.bossName=null;this.state.bossAlertTimer=0;
+        this.state.directorShoutTimer=0;this.state.directorCutinPhase='none';
+        return;
+      }
       this.state.phase = 'victory';
       this.state.score += 5000;
       this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
@@ -836,6 +858,7 @@ export class SurvivorsEngine {
   }
 
   triggerDirectorShout(): boolean {
+    if(this.state.bossEncounter&&this.state.bossEncounter.phase!=='combat')return false;
     if (this.state.phase !== 'playing' || this.state.directorShoutTimer > 0) return false;
     if (this.state.ultimateCharge < this.state.maxUltimateCharge) {
       return false;
@@ -849,7 +872,7 @@ export class SurvivorsEngine {
     // 1. Time freeze & stun all existing hazards, deal massive damage
     for (const h of this.state.hazards) {
       h.isStunned = 3.5;
-      h.hp -= 9999;
+      this.damageHazard(h,9999);
     }
 
     // 2. Spawn massive expanding shockwave
@@ -1086,7 +1109,7 @@ export class SurvivorsEngine {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (dist <= radius + h.radius) {
-          h.hp -= equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt;
+          this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.continuousDamage! * player.damageMultiplier * dt);
         }
       }
       if (this.cooldowns.tesla <= 0) {
@@ -1097,7 +1120,7 @@ export class SurvivorsEngine {
           if (strikes >= equipmentTuning('tesla_dome', 1)!.count) break;
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (h.hp > 0 && dist <= radius + h.radius) {
-            h.hp -= equipmentTuning('tesla_dome', 1)!.damage * player.damageMultiplier;
+            this.damageHazard(h,equipmentTuning('tesla_dome', 1)!.damage * player.damageMultiplier);
             strikes++;
             this.addProjectile({
               id: this.genId('proj_tesla'),
@@ -1123,7 +1146,7 @@ export class SurvivorsEngine {
         for (const h of hazards) {
           const dist = Math.hypot(h.x - player.x, h.y - player.y);
           if (dist <= radius + h.radius) {
-            h.hp -= auraDps * dt;
+            this.damageHazard(h,auraDps * dt);
           }
         }
       }
@@ -1289,6 +1312,12 @@ export class SurvivorsEngine {
         this.state.stageBossSpawned = true;
         this.triggerBossAlert(stageBossName);
         this.spawnHazard(stageBossType, stageBossHp, true);
+        const boss=this.state.hazards.at(-1)!;
+        boss.bossEncounterManaged=true;boss.bossAttackCycles=0;
+        // The introduction must be on the current workface, not outside the camera.
+        boss.x=Math.max(90,Math.min(WORLD_WIDTH-90,this.state.player.x+120));
+        boss.y=Math.max(90,Math.min(WORLD_HEIGHT-90,this.state.player.y-105));
+        this.state.bossEncounter={bossId:boss.id,phase:'arrival',remaining:3.5};
         return;
       }
     }
@@ -1312,6 +1341,15 @@ export class SurvivorsEngine {
     this.state.bossAlertTimer = 3.5;
     this.emitAudio('boss_alarm');
     this.state.bossName = name;
+  }
+
+  private damageHazard(h: Hazard, amount: number): void {
+    if(h.bossEncounterManaged){
+      if(this.state.bossEncounter?.phase!=='combat')return;
+      // Structural interlocks expose the next core only after its risk cycle settles.
+      const floor=h.bossPhase!==2?h.maxHp*.5:(h.bossAttackCycles??0)<1?h.maxHp*.08:0;
+      h.hp=Math.max(floor,h.hp-Math.max(0,amount));
+    } else h.hp-=amount;
   }
 
   private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false) {
@@ -1404,7 +1442,7 @@ export class SurvivorsEngine {
     const { player } = this.state;
     for (const h of this.state.hazards) {
       if(advanceBossPhase(h))this.emitAudio('boss_alarm',h.x,h.y);
-      if(h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
+      if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
         h.vx=0;h.vy=0;
       }
       // 1. Radial Physics Knockback Deceleration
@@ -1420,7 +1458,7 @@ export class SurvivorsEngine {
 
       if (h.isStunned && h.isStunned > 0) {
         h.isStunned -= dt;
-        continue;
+        if(!h.bossEncounterManaged)continue;
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
@@ -1442,6 +1480,7 @@ export class SurvivorsEngine {
         }
       }
 
+      const previousMotion=h.motion?.phase;
       if (updateHazardMotion(h, player, dt, hazardSpeed)) {
         if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'charge' &&
             (h.x < 20 || h.x > WORLD_WIDTH - 20 || h.y < 20 || h.y > WORLD_HEIGHT - 20)) {
@@ -1449,6 +1488,7 @@ export class SurvivorsEngine {
           h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
           h.motion.phase = 'cooldown'; h.motion.timer = h.isStageBoss?bossPattern(h).recovery:1.1;
         }
+        if(h.bossEncounterManaged&&(previousMotion==='charge'||previousMotion==='fall')&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent'))h.bossAttackCycles=(h.bossAttackCycles??0)+1;
         continue;
       }
 
@@ -1486,7 +1526,7 @@ export class SurvivorsEngine {
           // Critical hit calculation
           const isCrit = this.random() < player.critRate;
           const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
-          h.hp -= damageDealt;
+          this.damageHazard(h,damageDealt);
           this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
           this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit, h.type);
           p.pierce -= 1;
@@ -1522,7 +1562,7 @@ export class SurvivorsEngine {
               env.state = 'cooldown'; env.timer = 0.6;
               let cleared = 0;
               for (const h of hazards) if (h.hp > 0 && Math.hypot(h.x - env.x, h.y - env.y) <= env.radius + h.radius) {
-                h.hp = 0; cleared++;
+                this.damageHazard(h,h.hp); if(h.hp<=0)cleared++;
               }
               this.state.environmentalKills += cleared; this.state.score += cleared * 80;
               this.emitProjectileFeedback(p, 'impact', env.x, env.y);
@@ -1711,7 +1751,7 @@ export class SurvivorsEngine {
             let cleared = 0;
             for (const h of hazards) {
               if (h.hp > 0 && Math.hypot(h.x - hazard.x, h.y - hazard.y) <= isolationRadius + h.radius) {
-                h.hp = Math.max(0, h.hp - 3000);
+                this.damageHazard(h,3000);
                 if (h.hp <= 0) cleared++;
               }
             }
@@ -1765,7 +1805,7 @@ export class SurvivorsEngine {
           for (const h of hazards) {
             const d = Math.hypot(h.x - hazard.x, h.y - hazard.y);
             if (h.hp > 0 && d <= 200 + h.radius) {
-              h.hp = 0;
+              this.damageHazard(h,h.hp);
               h.isStunned = 0.8;
               if (h.hp <= 0) {
                 this.state.environmentalKills++;

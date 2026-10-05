@@ -31,18 +31,19 @@ export function isEvolvedProjectile(kind:ProjectileKind):boolean {
 }
 
 /** Compact item seals, not gameplay-range circles. Six selections share one ground band. */
-export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false):void {
+export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number):void {
   const ids=state.premiumGear?.equipped??[];
   if(!ids.length)return;
   const time=reduced?0:state.gameTime;
-  ctx.save();ctx.translate(state.player.x,state.player.y+3);
+  const drift=!reduced&&movingAngle!==undefined?4:0;
+  ctx.save();ctx.translate(state.player.x-Math.cos(movingAngle??0)*drift,state.player.y+3-Math.sin(movingAngle??0)*drift*.4);
   if(!reduced&&atlas?.naturalWidth){
     const budget=Math.min(6,ids.length),strength=busy?.32:.52;
     ctx.globalCompositeOperation='screen';
     drawVfxCell(ctx,atlas,7,0,2,90,42,strength);
     ids.slice(0,budget).forEach((id,index)=>{
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
-      const angle=-Math.PI+index*Math.PI*2/budget;
+      const angle=-Math.PI+index*Math.PI*2/budget+time*(aura.motif==='inward'?-.35:.35);
       const breath=1+Math.sin(time*1.6+index)*.035;
       const x=Math.cos(angle)*28,y=Math.sin(angle)*11+4;
       // Material fragments hug the foot plane, not floating beside the body.
@@ -52,7 +53,7 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   }
   ids.slice(0,6).forEach((id,index)=>{
     const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];if(!aura)return;
-    const angle=-Math.PI+index*Math.PI*2/Math.max(1,ids.length);
+    const angle=-Math.PI+index*Math.PI*2/Math.max(1,ids.length)+time*(aura.motif==='clock'?.7:aura.motif==='inward'?-.35:.35);
     const span=Math.min(1.4,Math.PI*1.65/Math.max(1,ids.length));
     const radius=28+index%2*4,breath=reduced?1:1+Math.sin(time*2+index)*.025;
     ctx.strokeStyle=aura.color;ctx.lineWidth=1.8;ctx.globalAlpha=busy?.48:.86;
@@ -84,9 +85,10 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
     drawVfxCell(ctx,atlas,7,0,3,104,48,busy?.27:.46);
     active.forEach(([,identity],index)=>{
       const width=40+identity.marks*2;
-      const breath=1+Math.sin(state.gameTime*1.7+index)*.035;
+      const breath=1+Math.sin(state.gameTime*1.7+index)*.065;
       for(const side of [-1,1]){
-        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2),6,width*breath,30,busy?.25:.44,side*.3);
+        const flow=Math.sin(state.gameTime*1.7+index+side)*4;
+        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2+flow),6+Math.cos(state.gameTime*1.7+index+side)*2,width*breath,30,busy?.25:.44,side*(.3+flow*.02));
       }
     });ctx.globalCompositeOperation='source-over';
   }
@@ -103,7 +105,7 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
 }
 
 /** Two dominant signatures hug the silhouette; no world-space range or floating item. */
-export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false):void {
+export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number):void {
   const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([,v])=>({...v,evolved:true}));
   const premium=(state.premiumGear?.equipped??[]).map(id=>EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]).filter(Boolean).sort((a,b)=>b.marks-a.marks).map(v=>({...v,evolved:false}));
   const signatures=[...evolutions,...premium].slice(0,busy?1:2);
@@ -112,13 +114,15 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
   for(let i=0;i<signatures.length;i++){
     const signature=signatures[i]!,side=i===0?-1:1;
     const pulse=reduced?1:1+Math.sin(state.gameTime*2.6+i)*.06;
+    const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
+    const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4:0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
     ctx.globalAlpha=busy?.45:.75;
-    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.lineTo(side*22,-29);ctx.lineTo(side*17,-52);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(side*14,-7);ctx.lineTo(side*(22+flow)+drag,-29-flow);ctx.lineTo(side*17+drag,-52-flow);ctx.stroke();
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
-      drawVfxCell(ctx,atlas,signature.cell,side*17,-32,signature.evolved?30:23,56*pulse,busy?.30:.48,side*.12);
-      drawVfxCell(ctx,atlas,signature.cell,side*11,-57,21,14,busy?.25:.48);
+      drawVfxCell(ctx,atlas,signature.cell,side*(17+flow*.4)+drag,-32-flow,signature.evolved?30:23,56*pulse,busy?.30:.48,side*(.12+flow*.02));
+      drawVfxCell(ctx,atlas,signature.cell,side*11+drag,-57-flow,21,14*pulse,busy?.25:.48);
       ctx.globalCompositeOperation='source-over';
     }
     if(signature.evolved){
