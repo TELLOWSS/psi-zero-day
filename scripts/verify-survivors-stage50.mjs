@@ -7,7 +7,7 @@ const out=path.resolve('artifacts/stage50');fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const results=[];
 try {
-  for(const [width,height,number] of [[1440,900,21],[390,844,31],[844,390,50]]){
+  for(const [width,height,number] of [[1440,900,22],[390,844,36],[844,390,50]]){
     const page=await browser.newPage({viewport:{width,height},hasTouch:true}),errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
     await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196');

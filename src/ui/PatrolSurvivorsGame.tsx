@@ -40,6 +40,7 @@ import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose } from './survivors-industrial-art';
+import { cacheStageFloor } from './survivors-stage-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
@@ -303,11 +304,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => {
     const uri=stageGroundUri(selectedStage);
     const cached = spritesRef.current.stageFloors[uri];
-    if (cached?.naturalWidth) {setLoadedGround(uri); setFailedGround(null); return;}
+    const pinned=engineRef.current?stageGroundUri(engineRef.current.state.stageId):undefined;
+    if (cached?.naturalWidth) {cacheStageFloor(spritesRef.current.stageFloors,uri,cached,pinned);setLoadedGround(uri); setFailedGround(null); return;}
     let active = true; const image = new Image();
     image.onload = () => {if (active) {setLoadedGround(uri); setFailedGround(null);}};
     image.onerror = () => {if (active) setFailedGround(uri);};
-    spritesRef.current.stageFloors[uri] = image; image.src = uri;
+    cacheStageFloor(spritesRef.current.stageFloors,uri,image,pinned); image.src = uri;
     return () => {active = false;};
   },[selectedStage, groundRetry]);
   useEffect(() => {

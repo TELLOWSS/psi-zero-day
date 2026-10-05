@@ -1,10 +1,11 @@
 import type { StageHazardObject } from '../domain/patrol-survivors';
 import campaign from '../../content/localization/survivors-campaign50-ko.json';
+import uniqueMaps from '../../content/design/survivors-stage-backgrounds-v1.json';
 
 export interface StageArtProfile { ground: string; accent: string; detail: number; layout: number }
 const floor = (name: string) => `/assets/survivors/maps/${name}-v1.png`;
 const stage = (ground: string, accent: string, detail: number, layout: number): StageArtProfile => ({ground, accent, detail, layout});
-/** Art families follow the actual workface, not theme aliases. */
+/** Every workface owns its background; retained originals are assigned only once. */
 export const STAGE_ART: Record<string, StageArtProfile> = {
   stage_01: stage('/assets/survivors/stage-01-ground-v2.webp', '#d4d8ca', 1, 0),
   stage_02: stage('/assets/survivors/excavation-ground-v3.webp', '#b6c6b2', 1, 1),
@@ -32,7 +33,19 @@ export const STAGE_ART: Record<string, StageArtProfile> = {
       row.number<=30?'#9dd8bc':row.number<=40?'#e7d89b':'#a4dfe7',Math.floor((row.number-1)/10)+4,row.number-1),
   ])),
 };
+for (const [id,ground] of Object.entries(uniqueMaps)) {
+  STAGE_ART[id]={...STAGE_ART[id]!,ground};
+}
 export function stageArtProfile(id: string): StageArtProfile { return STAGE_ART[id] ?? STAGE_ART.stage_01!; }
+
+/** Bound decoded-image references while retaining the selected and live combat floors. */
+export function cacheStageFloor<T>(cache:Record<string,T>,uri:string,image:T,pinned?:string):void {
+  delete cache[uri];cache[uri]=image;
+  for(const key of Object.keys(cache)) {
+    if(Object.keys(cache).length<=3)break;
+    if(key!==uri&&key!==pinned)delete cache[key];
+  }
+}
 
 /** Paint references real equipment positions and states; it never invents collision or attack zones. */
 export function drawStageWorkface(ctx: CanvasRenderingContext2D, id: string, hazards: readonly StageHazardObject[]): void {
