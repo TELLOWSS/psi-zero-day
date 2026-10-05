@@ -1,0 +1,25 @@
+{
+  "id": "survivors-sfx-v2-source-pack",
+  "version": "2.0.0",
+  "originalUpload": {
+    "name": "PSI_ZERO_DAY_SFX_V2_WAV_PACK.zip",
+    "sha256": "f70c6dddaa173159f2bc7dec39c2c178ceb4cc775029d5b44e05132f7fad9b1f",
+    "files": 43,
+    "format": "48kHz 24-bit WAV source pack"
+  },
+  "gameReadyPack": {
+    "name": "PSI_ZERO_DAY_SFX_V2_GAME_READY_OGG.zip",
+    "sha256": "edde3782a1145bc226b1dca1865a9c379a751f931b86e4a73f93d71910326809",
+    "libraryPath": "/PSI_ZERO_DAY/PSI_ZERO_DAY_SFX_V2_GAME_READY_OGG.zip",
+    "format": "48kHz Vorbis q5 runtime candidates"
+  },
+  "qaManifest": {
+    "libraryPath": "/PSI_ZERO_DAY/survivors-sfx-v2-ingest.json"
+  },
+  "approval": "TECHNICAL_QA_PASS_LISTENING_PENDING",
+  "notes": [
+    "Raw Manus WAVs are preserved as sources.",
+    "Runtime candidates use DC cleanup, 20 Hz high-pass, category level normalization and a -1.5 dBFS peak ceiling.",
+    "Do not mark production-approved until phone/headphone/desktop listening review."
+  ]
+}
