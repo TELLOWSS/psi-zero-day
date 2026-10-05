@@ -8,6 +8,7 @@ import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
 import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from './survivors-equipment-identity';
 import {ACTOR_RIGS} from './survivors-animation-rig';
+import {drawCarriedEquipment} from './survivors-carried-equipment';
 import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
@@ -2286,6 +2287,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back');
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front');
+            drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas);
 
             // Ground Accent Indicator Ring under character's feet
             ctx.strokeStyle = charProfile?.color || '#84cc16';
@@ -2324,10 +2326,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.fillRect(-2, -55 + bobY, 4, 7);
             ctx.fillRect(-4.5, -53.5 + bobY, 9, 3);
           }
-
-          const handheld = activePerks.extinguisher>activePerks.radio_boost ? 'extinguisher' : activePerks.radio_boost>0 ? 'radio_boost' : null;
-          if(handheld) drawEquipment(ctx,spritesRef.current.equipmentAtlas,handheld,activePerks[handheld],20,-25,22,spritesRef.current.itemsAtlas);
-          if(activePerks.satellite_broadcast>0) drawEquipment(ctx,spritesRef.current.equipmentAtlas,'satellite_broadcast',1,-28,1,32,spritesRef.current.itemsAtlas);
 
           ctx.restore(); // restore facing flip
           ctx.restore(); // restore player translate

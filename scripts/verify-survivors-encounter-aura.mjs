@@ -98,6 +98,35 @@ try{
    }
    return rows;
   });
+  const carried=await page.evaluate(async()=>{
+   const {CHARACTER_MAP_ART}=await import('/src/ui/survivors-character-art.ts');
+   const {createInitialSurvivorsState}=await import('/src/engine/patrol-survivors-engine.ts');
+   const {SpriteMotionTracker,registerSpriteBounds,drawGroundedSprite}=await import('/src/ui/survivors-sprite-motion.ts');
+   const {drawCarriedEquipment}=await import('/src/ui/survivors-carried-equipment.ts');
+   const {registerPropAtlas,EQUIPMENT_ART}=await import('/src/ui/survivors-equipment-art.ts');
+   const atlas=new Image();atlas.src=EQUIPMENT_ART;await atlas.decode();registerPropAtlas(atlas,3,5);
+   const c=document.createElement('canvas');c.width=150;c.height=120;const ctx=c.getContext('2d'),rows=[];
+   const sheet=document.createElement('canvas');sheet.width=450;sheet.height=Object.keys(CHARACTER_MAP_ART).length*120;const paint=sheet.getContext('2d');
+   let row=0;
+   for(const [id,uri] of Object.entries(CHARACTER_MAP_ART)){
+    const image=new Image();image.src=uri;await image.decode();registerSpriteBounds(image);
+    const s=createInitialSurvivorsState(id),base=new SpriteMotionTracker().sample(s.player,0,0,0);
+    s.activePerks.radio_boost=5;
+    const poses=[base,{...base,lean:.03,action:1,gaitBlend:1,cycle:Math.PI/2},{...base,lean:-.03,action:1,gaitBlend:1,cycle:Math.PI/2,facing:-1}];
+    let visible=true;
+    for(let index=0;index<poses.length;index++){
+     const pose=poses[index];ctx.clearRect(0,0,150,120);ctx.save();ctx.translate(75,105);drawGroundedSprite(ctx,image,74,pose);ctx.restore();
+     const before=ctx.getImageData(0,0,150,120).data;
+     ctx.save();ctx.translate(75,105);drawCarriedEquipment(ctx,s,image,74,pose,atlas,undefined);ctx.restore();
+     const after=ctx.getImageData(0,0,150,120).data;visible&&=after.some((v,i)=>v!==before[i]);
+     paint.drawImage(c,index*150,row*120);paint.fillStyle='#ffffff';paint.font='10px sans-serif';paint.fillText(id,index*150+6,row*120+12);
+    }
+    rows.push({id,visible});row++;
+   }
+   return {rows,sheet:sheet.toDataURL('image/png')};
+  });
+  fs.writeFileSync(path.join(out,`${width}x${height}-carried.png`),Buffer.from(carried.sheet.split(',')[1],'base64'));delete carried.sheet;
+  if(carried.rows.some(row=>!row.visible))throw new Error('A character tool mount did not render');
   await page.evaluate(()=>{window.qaFreeze=false;});
   await page.waitForFunction(()=>window.qaEngine.state.phase==='victory');
   await page.waitForFunction(async()=>{
@@ -105,7 +134,7 @@ try{
    const buffer=await a.buffers.get(a.scoreUri);return [...a.scoreNodes.keys()].some(source=>source.buffer===buffer);
   });
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  results.push({width,height,arrival,locked,secured,soundtrack,aura,bossArt,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&aura.attachedChanged>0&&aura.mirrorChanged>0&&aura.attachedPaused===0&&aura.attachedReduced===0&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
+  results.push({width,height,arrival,locked,secured,soundtrack,aura,bossArt,carried,overflow,errors,pass:arrival.phase==='arrival'&&arrival.bossHp>0&&locked.blocked&&locked.hp===locked.max*.5&&secured.phase==='playing'&&secured.encounter==='secured'&&secured.remaining>0&&aura.changed>0&&aura.actionChanged>0&&aura.paused===0&&aura.reduced===0&&aura.nonblank&&aura.attachedChanged>0&&aura.mirrorChanged>0&&aura.attachedPaused===0&&aura.attachedReduced===0&&bossArt.every(r=>r.nonblank&&r.changed>0&&r.endedBlank)&&!overflow&&!errors.length});
   await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({scope:'REAL_SPAWN_AND_CONTROLLED_CLEAR_UI_PLUS_RASTER_AURA_FRAMES',results},null,2));console.log(JSON.stringify(results));if(results.some(r=>!r.pass))process.exitCode=1;

@@ -52,6 +52,13 @@ export function premiumBodySocket(characterId:string,actor:HTMLImageElement,heig
   return {x:(x-.5)*width,y:(y-1)*height,size:height*size};
 }
 
+/** Existing tablet poses retain their hands; base tools mount at the belt. */
+export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:number,left:boolean):{x:number;y:number;size:number}|undefined {
+  const chest=WEARABLE_PROFILES[characterId]?.sockets.shock_mantle;if(!chest)return;
+  const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
+  return {x:(chest.x+chest.w*(left?.12:.88)-.5)*width,y:(chest.y+chest.h*1.15-1)*height,size:height*(left?.18:.15)};
+}
+
 export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number):void {
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting?.occluders.length)return;
   const body=spriteOpaqueBounds(actor),width=height*body.width/body.height;
