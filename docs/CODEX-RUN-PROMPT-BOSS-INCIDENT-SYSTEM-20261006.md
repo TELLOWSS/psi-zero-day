@@ -1,57 +1,34 @@
-# CODEX RUN PROMPT — Boss Incident System
+# CODEX RUN PROMPT — Gameplay-First 50 Boss System
 
-You are implementing the Director-approved PSI : ZERO DAY 50-stage boss incident redesign on branch `codex/boss-incident-system-20261006`.
+Implement the Director-approved gameplay rebaseline on branch `codex/boss-incident-system-20261006`.
 
-Read and obey, in this order:
+Read in this order:
 1. `AGENTS.md`
 2. `GAMEPLAY_DOCTRINE.md`
-3. `docs/CODEX-HANDOFF-BOSS-INCIDENT-SYSTEM-20261006.md`
-4. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
-5. `content/design/survivors-boss-incidents-v1.json`
-6. `content/design/survivors-boss-control-gates-v1.json`
-7. `content/design/survivors-boss-incident-art-v1.json`
-8. existing `docs/SURVIVORS-BOSS-PHASES-20261005.md` and `docs/SURVIVORS-BOSS-DIRECTION-20261005.md`
+3. `docs/SURVIVORS-50-BOSS-GAMEPLAY-BIBLE-20261006.md`
+4. `content/design/survivors-boss-gameplay-v1.json`
+5. `docs/CODEX-HANDOFF-BOSS-INCIDENT-SYSTEM-20261006.md`
+6. `docs/SURVIVORS-50-BOSS-INCIDENT-BIBLE-20261006.md`
+7. `content/design/survivors-boss-incidents-v1.json`
+8. `content/design/survivors-boss-control-gates-v1.json`
+9. existing boss engine/phase documents
 
-Director intent:
-- 50 stages must feel like 50 different construction accident scenarios, not four boss skins.
-- The map/process and the boss accident mechanism must agree.
-- Bosses represent a dangerous work situation, not a human enemy or fantasy monster.
-- Replace the current text-only boss arrival with a cinematic page/scene transition using per-stage original art slots.
-- The player must understand and perform the stage-specific safety controls before the boss core can fully open.
-- Raw DPS must never bypass required safety controls.
-- Finishing a boss should feel powerful because the site becomes controlled, quiet and safe, not because a creature explodes.
-- Stage 50 is a whole-site Boss Wave, not one giant boss sprite.
+Critical rebaseline:
+- Gameplay comes first in player experience: target perception 80% game / 20% explicit safety explanation.
+- Incident Bible is the realism source, NOT a player-facing checklist.
+- Ordinary bosses have one mandatory signature mechanic, not 2–3 explicit safety steps.
+- Combat loop is PATTERN → READ → WEAK POINT → BURST → FINISHER.
+- Raw DPS cannot erase the signature pattern, but build strength must matter strongly during burst.
+- Premium gear may improve combat expression and burst efficiency; it must never auto-solve the pattern.
+- Equipment/process danger may be visually exaggerated into a strong boss silhouette, but workers never become targets and machinery must remain recognizable.
+- Keep combat text short. Real-world meaning appears after clear in one sentence.
+- Stage 50 alone becomes the whole-site Boss Wave.
 
-Implementation order:
-A. Typed content registry + schema validation + 50 stage mappings.
-B. Generic BossIncidentProgress state machine and semantic control-gate tracking.
-C. Integrate protected core/risk floor with completed controls.
-D. Build responsive full-bleed `SurvivorsBossIncidentTransition` using final-art manifest; keep production feature disabled for missing final art rather than inventing a placeholder.
-E. Implement representative stages 01, 03, 04, 07, 19 first and run tests.
-F. Implement chapter bosses 10/20/30/40.
-G. Roll reusable mechanic adapters across remaining stages.
-H. Implement Stage 50 last.
+Start with Slice A:
+1. Add typed loader/registry for `survivors-boss-gameplay-v1.json`.
+2. Validate exactly 50 stage mappings and incident bossId references.
+3. Add no gameplay behavior yet.
+4. Run unit tests and typecheck.
+5. Stop and report using AGENTS.md format.
 
-Do not:
-- redesign the maps,
-- rebalance the whole weapons economy,
-- place gameplay rules in React,
-- branch the engine 50 separate ways,
-- infer semantic gates from Korean text at runtime,
-- create fake accident names/victim details as factual history,
-- use graphic injury,
-- call placeholder imagery final,
-- change ordinary non-boss hazard behavior unless required by a reusable adapter.
-
-Acceptance:
-- exactly 50 unique incident definitions mapped to stage_01..stage_50
-- semantic gates authored from the mapping JSON
-- no DPS bypass before gates
-- existing phase-2 safe-boundary rule preserved
-- reduced motion preserved
-- 360x800 / 390x844 / 844x390 / 1440x900 no transition overflow
-- all existing tests remain green plus new incident tests
-- Stage 50 victory requires whole-site verify/handoff
-- final report follows AGENTS.md: IMPLEMENTED / FILES / TEST / TODO / DIRECTOR REVIEW
-
-Start with Slice A only. Complete and test Slice A before moving to Slice B. Do not skip ahead after a failing gate.
+Do not implement old all-gates-before-core behavior. That rule is superseded by this gameplay rebaseline.
