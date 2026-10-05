@@ -1,6 +1,6 @@
 # Eight-Direction Production Requirements
 
-Status: source art missing; NOT integrated, NOT visually locked.
+Status: Director-authorized player walking candidate cleaned and integrated; NOT visually locked. Other actors and authored directional idle/command/ultimate remain pending.
 
 ## First Generated Candidate Review
 
@@ -42,4 +42,4 @@ Match `voice_lens`, `shock_mantle`, `inspection_wing` and existing base tools. D
 5. Test walk stop/start, diagonal transitions, direction changes during command, pause, reduced motion, and all three wearables together.
 6. Verify raster differences across all eight views, foot drift at native scale, equipment occlusion, and mobile performance before production approval.
 
-The current runtime remains unchanged until real source artwork and anchors pass these gates. Generating a candidate contact sheet alone is not completed animation integration.
+The initial rejection above is historical. After Director authorization to reuse the previous work, the player sheet received transparent-background cleanup and runtime extraction. Eight travel sectors, retained idle facing, shared frame/socket selection and rear equipment occlusion are now connected. See `SURVIVORS-RUNTIME-V2-INTEGRATION-20261006.md` for measured scope and remaining approval gates. A generated contact sheet alone is not final animation approval.

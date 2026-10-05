@@ -57,7 +57,7 @@ const defs=[
 const output='public/assets/survivors/sfx-v2';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const run=args=>{
- const result=spawnSync(ffmpeg,args,{maxBuffer:256*1024*1024});
+ const result=spawnSync(ffmpeg,args,{maxBuffer:256*1024*1024,windowsHide:true});
  if(result.status!==0)throw new Error(result.stderr.toString());
  return result.stdout;
 };
@@ -98,6 +98,12 @@ for(const [id,variant,name,targetRmsDb] of defs){
    run(['-v','error','-y','-i',input,'-af',`highpass=f=20,volume=${gainDb}dB,afade=t=in:d=${fade},afade=t=out:st=${Math.max(0,duration-fade)}:d=${fade}`,'-ar','48000','-c:a','libvorbis','-q:a','5',destination]);
    entry.uri='/assets/survivors/sfx-v2/'+runtimeName;
    entry.sha256=hash(readFileSync(destination));
+   const decoded=run(['-v','error','-i',destination,'-f','f32le','-ac',String(channels),'-ar','48000','pipe:1']);
+   const runtime=new Float32Array(decoded.buffer,decoded.byteOffset,decoded.length/4);
+   let runtimePeak=0,runtimeClipped=0;
+   for(const sample of runtime){runtimePeak=Math.max(runtimePeak,Math.abs(sample));if(Math.abs(sample)>=1)runtimeClipped++;}
+   entry.runtimePeakDbfs=db(runtimePeak);entry.runtimeOverFullScaleSamples=runtimeClipped;
+   if(runtimeClipped)throw new Error('Runtime decode clips: '+runtimeName);
  }
  report.push(entry);
 }

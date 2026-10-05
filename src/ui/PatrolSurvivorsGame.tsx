@@ -16,6 +16,7 @@ import growthText from '../../content/localization/survivors-campaign50-ko.json'
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
+import {loadDirectionalActor,isDirectionalActor} from './survivors-directional-art';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
@@ -226,7 +227,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       img.src = src;
       img.onload = () => {
         registerSpriteBounds(img);
-        void loadAuthoredCommand(img).then(()=>{spritesRef.current.characterMaps[cId] = img;});
+        void loadAuthoredCommand(img).then(()=>loadDirectionalActor(img)).then(()=>{spritesRef.current.characterMaps[cId] = img;});
       };
     });
 
@@ -623,6 +624,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         return;
       }
       if(type==='win'||type==='defeat')return;
+      if(type==='boss_alarm'&&audioRef.current.playRecordedEffect('boss_alert',position,engineRef.current?.state.player)){audioRef.current.duckMusic(1.5);return;}
       if(type==='shout'||type==='boss_alarm'){
         const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id===`patrol.${type==='shout'?'intervention':'boss_alert'}`);
         if(cue)void audioRef.current.auditionCue(cue);
@@ -637,6 +639,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const priority = type === 'control_heavy' || type === 'hit' ? 3 : type === 'pickup' || type === 'levelup' ? 2 : 1;
       const listener = engineRef.current?.state.player;
       if(type==='pickup'&&audioRef.current.playRecordedEffect('pickup',position,listener))return;
+      if(type==='hit'&&audioRef.current.playRecordedEffect('player_hit',position,listener))return;
 
       if (type === 'impact') {
         const osc=ctx.createOscillator(), gain=ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(260,now);osc.frequency.exponentialRampToValueAtTime(70,now+.085);gain.gain.setValueAtTime(.12,now);gain.gain.exponentialRampToValueAtTime(.005,now+.1);
@@ -1125,6 +1128,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         direction.advance(dt);
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+        const incidentSecured=audioRef.current.playEncounterPhase(engine.state.bossEncounter,engine.state.phase==='playing',engine);
         const directorObscured=ultimateSourceObscured(engine.state.directorCutinPhase);
         projectileFeedbackRef.current.advance(dt,directorObscured);
         if(directorWasObscured&&!directorObscured&&engine.state.directorCutinPhase==='invert')motions.act(engine.state.player,engine.state.gameTime,'ultimate');
@@ -1170,7 +1174,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if ((event.type==='shoot'||event.type==='spray'||event.type==='laser')&&projectileEvents.some(e=>e.phase==='launch'))continue;
           if (event.type==='impact'&&projectileEvents.some(e=>e.phase==='impact'))continue;
           // Coalesce dense events per rendered batch. Engine event IDs remain unique.
-          if (!audible.has(cue)) { audible.add(cue); playSfx(cue, event.x === undefined || event.y === undefined ? undefined : {x: event.x, y: event.y}); }
+          if (!audible.has(cue)) {
+            audible.add(cue);
+            const position=event.x===undefined||event.y===undefined?undefined:{x:event.x,y:event.y};
+            const controlled=cue==='control'&&event.actorKind!=='UNHELMETED'&&audioRef.current.playRecordedEffect('target_controlled',position,engine.state.player);
+            if(!controlled&&!(cue==='control_heavy'&&incidentSecured))playSfx(cue,position);
+          }
           if (event.type === 'boss_alarm' || event.type === 'shout') audioRef.current.duckMusic();
         }
 
@@ -1331,7 +1340,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
       const trackedPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
-      const playerPose = reducedMotionRef.current ? {...trackedPose,action:0,actionProgress:0} : trackedPose;
+      const actor=spritesRef.current.characterMaps[engine.state.characterId];
+      const playerPose = {...trackedPose,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0}: {})};
 
       if(engine.state.phase==='playing'&&direction.footstep(playerPose.travel,playerPose.moving))audioRef.current.playFootstep(playerPose.speed>145);
 

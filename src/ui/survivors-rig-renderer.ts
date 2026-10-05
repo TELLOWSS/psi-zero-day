@@ -15,6 +15,7 @@ export function riggedTorsoOffset(phase:number,running:boolean,brace:number,acti
 
 /** Keep attachments continuous while the expensive leg mesh remains cached. */
 function torsoOffset(pose:SpritePose,height:number,rigged:boolean):Joint|null {
+ if(pose.directional)return {x:pose.action*1.4*height/74,y:-pose.reaction*2*height/74};
  if(rigged && (pose.gaitBlend>0 || pose.reaction>0 || pose.action>0)){
   const phase=pose.cycle/(Math.PI*2)*16;
   const dy=Math.round(pose.directionY*32)/32;
@@ -25,11 +26,11 @@ function torsoOffset(pose:SpritePose,height:number,rigged:boolean):Joint|null {
 }
 export function actorTorsoPoint(point:Joint,pose:SpritePose,height:number,rigged:boolean):Joint {
  const offset=torsoOffset(pose,height,rigged);
- if(offset) return {x:pose.facing*(point.x+offset.x+pose.lean*(point.y+offset.y)),y:point.y+offset.y};
+ if(offset) return {x:(pose.directional?1:pose.facing)*(point.x+offset.x+pose.lean*(point.y+offset.y)),y:point.y+offset.y};
  return {x:pose.facing*(point.x+(pose.lean+pose.action*.025)*point.y),y:(pose.scaleY-pose.action*.008)*point.y};
 }
 export function applyActorTorsoTransform(ctx:CanvasRenderingContext2D,pose:SpritePose,height:number,rigged:boolean):void {
- ctx.scale(pose.facing,1);
+ ctx.scale(pose.directional?1:pose.facing,1);
  const offset=torsoOffset(pose,height,rigged);
  if(offset){
   ctx.transform(1,0,pose.lean,1,0,0);ctx.translate(offset.x,offset.y);

@@ -3,6 +3,7 @@ import { ACTOR_RIGS } from './survivors-animation-rig';
 import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody, authoredEquipmentOccluders } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 import type {StoreCategory} from '../domain/survivors-store';
+import {isDirectionalActor,directionalSocket,drawDirectionalBody} from './survivors-directional-art';
 
 export const WEARABLE_ART = {
   voice_lens: '/assets/survivors/wearables/voice-lens-v1.png',
@@ -36,7 +37,11 @@ WEARABLE_PROFILES.jung = WEARABLE_PROFILES.player!;
 WEARABLE_PROFILES.yoon = WEARABLE_PROFILES.yoon_sungho!;
 
 /** Body-local attachment coordinates; the actor transform owns facing and recoil. */
-export function premiumBodySocket(characterId:string,actor:HTMLImageElement,height:number,category:StoreCategory):{x:number;y:number;size:number}|undefined {
+export function premiumBodySocket(characterId:string,actor:HTMLImageElement,height:number,category:StoreCategory,pose?:SpritePose):{x:number;y:number;size:number}|undefined {
+  if(isDirectionalActor(actor)){
+    const kind=category==='communication'?'head':category==='logistics'||category==='companion'?'back':category==='tactics'?'belt':'chest';
+    const socket=directionalSocket(actor,pose,height,kind);return socket?.rear&&kind==='chest'?undefined:socket;
+  }
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
   const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
   const chest=fitting.sockets.shock_mantle,radio=fitting.sockets.voice_lens,back=fitting.sockets.inspection_wing;
@@ -53,13 +58,18 @@ export function premiumBodySocket(characterId:string,actor:HTMLImageElement,heig
 }
 
 /** Existing tablet poses retain their hands; base tools mount at the belt. */
-export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:number,left:boolean):{x:number;y:number;size:number}|undefined {
+export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:number,left:boolean,pose?:SpritePose):{x:number;y:number;size:number}|undefined {
+  if(isDirectionalActor(actor)){const socket=directionalSocket(actor,pose,height,'belt');return socket?{...socket,x:socket.x+socket.size*(left?-.3:.3),size:height*.15}:undefined;}
   const chest=WEARABLE_PROFILES[characterId]?.sockets.shock_mantle;if(!chest)return;
   const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
   return {x:(chest.x+chest.w*(left?.12:.88)-.5)*width,y:(chest.y+chest.h*1.15-1)*height,size:height*(left?.18:.15)};
 }
 
 export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number,pose?:SpritePose):void {
+  if(isDirectionalActor(actor)&&pose){
+    const socket=directionalSocket(actor,pose,height,'chest');if(!socket||socket.rear)return;
+    ctx.save();ctx.beginPath();ctx.rect(socket.x-socket.size*.5,socket.y+socket.size*.1,socket.size,socket.size*.5);ctx.clip();drawDirectionalBody(ctx,actor,height,pose,false);ctx.restore();return;
+  }
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
   const occluders=authoredEquipmentOccluders(actor,pose)??fitting.occluders;if(!occluders.length)return;
   const body=spriteOpaqueBounds(actor),width=height*body.width/body.height;
@@ -69,6 +79,7 @@ export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,charact
 }
 
 export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose):{x:number;y:number}|undefined {
+  if(isDirectionalActor(actor)){const socket=directionalSocket(actor,pose,height,'back');return socket?actorTorsoPoint(socket,{...pose,directional:true},height,true):undefined;}
   const socket=WEARABLE_PROFILES[characterId]?.sockets.inspection_wing;
   if(!socket)return;
   const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
@@ -100,6 +111,20 @@ export async function loadWearableImages(characterId: string): Promise<WearableI
 
 /** Origin is the actor's feet; sockets are authored in opaque body coordinates. */
 export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: SurvivorsGameState, actor: HTMLImageElement, height: number, pose: SpritePose, images: WearableImages, layer: 'front' | 'back'): void {
+  if(isDirectionalActor(actor)){
+    ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);let drawn=false;
+    for(const id of state.premiumGear?.equipped??[]){
+      if(!hasWearable(state,id,images))continue;
+      const kind=id==='voice_lens'?'head':id==='inspection_wing'?'back':'chest';
+      const socket=directionalSocket(actor,pose,height,kind);if(!socket||socket.rear&&kind==='chest')continue;
+      const order=kind==='back'&&!socket.rear?'back':'front';if(layer!==order)continue;
+      const image=images[id as WearableId]!,source=spriteOpaqueBounds(image),size=socket.size;
+      const scale=size/Math.max(source.width,source.height),w=source.width*scale,h=source.height*scale;
+      ctx.drawImage(image,source.x,source.y,source.width,source.height,socket.x-w/2,socket.y-h/2,w,h);drawn=true;
+    }
+    if(drawn&&layer==='front')drawActorEquipmentOcclusion(ctx,state.characterId,actor,height,pose);
+    ctx.restore();return;
+  }
   const fitting = WEARABLE_PROFILES[state.characterId]; if (!fitting) return;
   const body = spriteOpaqueBounds(actor), width = height * body.width / body.height;
   ctx.save(); applyActorTorsoTransform(ctx, pose, height, Boolean(ACTOR_RIGS[actor.src.split('/').pop() ?? '']));

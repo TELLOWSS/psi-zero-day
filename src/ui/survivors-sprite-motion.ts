@@ -3,8 +3,9 @@ import { gaitStride, soleContact } from './survivors-ground-contact';
 import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
 import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './survivors-attack-motion';
 import {commandArtProfile} from './survivors-command-art';
+import {movementDirection,drawDirectionalBody} from './survivors-directional-art';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
-export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+export interface SpritePose { moving: boolean; cycle: number; facing: 1 | -1; direction?:number;directional?:boolean; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
@@ -42,7 +43,7 @@ export class SpriteMotionTracker {
     const leanBlend = 1 - Math.exp(-Math.max(0, elapsed) / .075);
     const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
     const pose: SpritePose = {
-      moving, cycle, facing,
+      moving, cycle, facing,direction:moving?movementDirection(dx,dy,previous?.pose.direction??2):previous?.pose.direction??2,
       lean, actionProgress: attack ? attackProgress(clock-attack.gestureStart,attack.gestureKind) : 0,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
@@ -131,6 +132,7 @@ export function drawGroundedSprite(ctx: CanvasRenderingContext2D, image: HTMLIma
   // Common grounded penumbra, below both rigged and unrigged approved actors.
   ctx.save();ctx.fillStyle='rgba(3,10,18,.14)';ctx.beginPath();
   ctx.ellipse(height*.14,3,height*.29,height*.075,.18,0,Math.PI*2);ctx.fill();ctx.restore();
+  if(drawDirectionalBody(ctx,image,height,pose))return;
   if(drawRiggedActor(ctx,image,height,pose))return;
   const source = spriteOpaqueBounds(image);
   const width = height * source.width / source.height;

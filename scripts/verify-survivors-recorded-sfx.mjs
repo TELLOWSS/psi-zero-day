@@ -6,29 +6,34 @@ const {chromium}=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULE
 const out=path.resolve(process.env.PSI_SURVIVORS_QA_DIR||'artifacts/recorded-sfx');fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 try{
- const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],loaded=new Set();
+ const reports=[];
+ for(const [width,height] of [[390,844],[844,390]]){
+ const page=await browser.newPage({viewport:{width,height}}),errors=[],loaded=new Set();
  page.on('pageerror',error=>errors.push(String(error)));
- page.on('response',response=>{if(response.url().includes('/sfx-v1/')&&response.ok())loaded.add(response.url().split('/').pop());});
+ page.on('response',response=>{if(response.url().includes('/sfx-v2/')&&response.ok())loaded.add(response.url().split('/').pop());});
  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196');
  await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
  await page.getByRole('button',{name:'PSI 상점 · 구매·수리',exact:true}).click();
  const result=await page.evaluate(async()=>{
    const {RECORDED_SFX}=await import('/src/app/survivors-sfx-assets.ts');
+   const {default:manifest}=await import('/content/survivors-sfx-v2-ingest.json');
    const {SurvivorsSessionAudio}=await import('/src/ui/survivors-session-audio.ts');
    const audio=new SurvivorsSessionAudio(),ctx=audio.getContext();await ctx.resume();
    const decoded=[];
-   for(const asset of RECORDED_SFX){
+   for(const asset of manifest){
      const response=await fetch(asset.uri),buffer=await ctx.decodeAudioData(await response.arrayBuffer());
      let peak=0,energy=0;const data=buffer.getChannelData(0);
      for(const value of data){peak=Math.max(peak,Math.abs(value));energy+=value*value;}
-     decoded.push({id:asset.id,duration:buffer.duration,peak,rms:Math.sqrt(energy/data.length),channels:buffer.numberOfChannels});
+     decoded.push({id:asset.id,variant:asset.variant,duration:buffer.duration,peak,rms:Math.sqrt(energy/data.length),channels:buffer.numberOfChannels});
    }
    const preloaded=await audio.preloadEquipmentRecordings();
-   for(const asset of RECORDED_SFX)audio.playRecordedEffect(asset.id);
+   for(const id of new Set(RECORDED_SFX.map(asset=>asset.id)))audio.playRecordedEffect(id);
    await new Promise(resolve=>setTimeout(resolve,40));const voices=audio.voiceCount;
    audio.setMuted(true);const cancelled=audio.voiceCount===0;audio.dispose();
    return {decoded,preloaded,voices,cancelled,pass:preloaded&&voices>0&&voices<=24&&cancelled&&decoded.every(item=>item.duration>0&&item.peak<1&&item.rms>0)};
  });
- const report={...result,loaded:[...loaded],errors,scope:'CHROMIUM_DECODE_AND_LIFECYCLE_NOT_SEMANTIC_LISTENING_APPROVAL',pass:result.pass&&!errors.length&&loaded.size===8};
- fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));if(!report.pass)process.exitCode=1;
+ const report={width,height,...result,loaded:[...loaded],errors,scope:'CHROMIUM_DECODE_AND_LIFECYCLE_NOT_SEMANTIC_LISTENING_APPROVAL',pass:result.pass&&!errors.length&&loaded.size===43};
+ reports.push(report);console.log(JSON.stringify(report));if(!report.pass)process.exitCode=1;await page.close();
+ }
+ fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(reports,null,2));
 }finally{await browser.close();}

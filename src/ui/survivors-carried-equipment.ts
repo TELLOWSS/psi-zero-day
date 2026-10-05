@@ -18,7 +18,7 @@ export function carriedTool(state:Readonly<SurvivorsGameState>):{id:PerkId;level
 /** One body-mounted tool uses the exact torso frame shared by wearables. */
 export function drawCarriedEquipment(ctx:CanvasRenderingContext2D,state:Readonly<SurvivorsGameState>,actor:HTMLImageElement,height:number,pose:SpritePose,atlas:HTMLImageElement|undefined,pickups:HTMLImageElement|undefined,reduced=false):void {
  const tool=carriedTool(state);if(!tool)return;
- const socket=baseToolSocket(state.characterId,actor,height,tool.left);if(!socket)return;
+ const socket=baseToolSocket(state.characterId,actor,height,tool.left,pose);if(!socket)return;
  const appearance=equipmentAppearance(tool.id,tool.level)!;
  ctx.save();applyActorTorsoTransform(ctx,pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
  ctx.translate(socket.x,socket.y);

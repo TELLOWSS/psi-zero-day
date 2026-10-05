@@ -70,7 +70,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   let attached=false;
   for(const id of gear.equipped){
     const item=STORE_ITEMS.find(item=>item.id===id);if(!item||item.category==='companion')continue;
-    const socket=premiumBodySocket(state.characterId,actorPose.actor,actorPose.height,item.category);
+    const socket=premiumBodySocket(state.characterId,actorPose.actor,actorPose.height,item.category,actorPose.pose);
     if(socket){
       if(!hasWearable(state,id,wearables))draw(id,socket.x,socket.y,socket.size);
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
