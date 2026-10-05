@@ -9,7 +9,7 @@ try{
  const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(String(error)));
  await page.goto('http://127.0.0.1:5196');
  const cast=await page.evaluate(async()=>{
-  const {COMMAND_ART}=await import('/src/ui/survivors-command-art.ts');
+  const {COMMAND_ART,authoredCommandFrame}=await import('/src/ui/survivors-command-art.ts');
   const {loadAuthoredCommand}=await import('/src/ui/survivors-authored-command.ts');
   const {CHARACTER_MAP_ART}=await import('/src/ui/survivors-character-art.ts');
   const {registerSpriteBounds,spriteOpaqueBounds,SpriteMotionTracker,drawGroundedSprite}=await import('/src/ui/survivors-sprite-motion.ts');
@@ -38,7 +38,10 @@ try{
      paint.drawImage(c,0,0,320,140,index%4*320,580+Math.floor(index/4)*140+(facing===1?0:70),320,140);
     }
    }
-   rows.push({id,registered,bounds,frames,sheet:sheet.toDataURL(),pass:registered&&bounds.height===256&&new Set(frames.map(f=>f.body)).size===8&&new Set(frames.map(f=>f.face)).size===1&&new Set(frames.map(f=>f.legs)).size===1});
+   const sequence=frames.map(f=>authoredCommandFrame(actor.src,(f.index+.5)/8));
+   ctx.clearRect(0,0,320,290);ctx.save();ctx.translate(160,270);drawAuthoredBody(ctx,actor,256,{...base,actionProgress:.98});ctx.restore();
+   const settled=hash(ctx.getImageData(0,0,320,290).data)===frames[0].body;
+   rows.push({id,registered,bounds,frames,sequence,settled,sheet:sheet.toDataURL(),pass:registered&&bounds.height===256&&new Set(frames.map(f=>f.body)).size===new Set(sequence).size&&settled&&new Set(frames.map(f=>f.face)).size===1&&new Set(frames.map(f=>f.legs)).size===1});
   }
   return rows;
  });

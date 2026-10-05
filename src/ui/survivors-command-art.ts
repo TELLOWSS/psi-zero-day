@@ -5,6 +5,7 @@ export interface CommandArtProfile {
   top: number;
   bottom: number;
   horizontalPadding?: number;
+  sequence?: readonly number[];
   rig: ActorRig;
   preserve?: {x:number;y:number;width:number;height:number};
   occluders?: number[][][][];
@@ -27,6 +28,7 @@ export const COMMAND_ART: Readonly<Record<string,CommandArtProfile>> = {
   },
   'kang-taesik-map.webp': {
     art:'/assets/survivors/kang-command-v1.png',top:0,bottom:.65,
+    sequence:[0,1,2,3,2,1,6,7],
     rig:ACTOR_RIGS['kang-taesik-map.webp']!,preserve:{x:.43,y:0,width:.40,height:.24},occluders:foremanHands,
   },
   'lim-junho-map.webp': {
@@ -55,4 +57,12 @@ export const COMMAND_ART: Readonly<Record<string,CommandArtProfile>> = {
 export function commandArtProfile(src:string):CommandArtProfile|undefined {
   const file=src.split('/').pop()??'';
   return Object.prototype.hasOwnProperty.call(COMMAND_ART,file)?COMMAND_ART[file]:undefined;
+}
+
+const commandStarts=[0,.10,.20,.32,.48,.62,.75,.88] as const;
+/** Recovery revisits real intermediate poses; the final hold matches the idle body. */
+export function authoredCommandFrame(src:string,progress=0):number {
+  if(!Number.isFinite(progress)||progress<=0||progress>=.96)return 0;
+  let index=0;while(index<7&&progress>=commandStarts[index+1]!)index++;
+  return commandArtProfile(src)?.sequence?.[index]??index;
 }

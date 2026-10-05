@@ -2,8 +2,7 @@ import { footTravel, soleContact } from './survivors-ground-contact';
 import { ACTOR_RIGS, solveKnee, type ActorRig, type Joint, type LegRig } from './survivors-animation-rig';
 import type { SpritePose } from './survivors-sprite-motion';
 import {cachedGaitPhase,GAIT_PHASES} from './survivors-gait-phase';
-import {commandFrame} from './survivors-attack-motion';
-import {commandArtProfile} from './survivors-command-art';
+import {commandArtProfile,authoredCommandFrame} from './survivors-command-art';
 interface SourceRect {x:number;y:number;width:number;height:number}
 interface Prepared { texture:HTMLCanvasElement; legTexture:HTMLCanvasElement; rig:ActorRig; frames:Map<string,HTMLCanvasElement>; width:number; commands?:HTMLCanvasElement[] }
 const prepared = new WeakMap<HTMLImageElement,Prepared>();
@@ -52,11 +51,11 @@ export function prepareActorRig(image:HTMLImageElement,source:SourceRect,command
 export function drawAuthoredBody(ctx:CanvasRenderingContext2D,image:HTMLImageElement,height:number,pose?:SpritePose):boolean {
  const p=prepared.get(image);if(!p?.commands)return false;
  const width=p.width*height/BODY;
- ctx.drawImage(p.commands[commandFrame(pose?.actionProgress)]!, -width/2,-height,width,height);return true;
+ ctx.drawImage(p.commands[authoredCommandFrame(image.src,pose?.actionProgress)]!, -width/2,-height,width,height);return true;
 }
 export function authoredEquipmentOccluders(image:HTMLImageElement,pose?:SpritePose):number[][][]|undefined {
  if(!prepared.get(image)?.commands)return;
- return commandArtProfile(image.src)?.occluders?.[commandFrame(pose?.actionProgress)];
+ return commandArtProfile(image.src)?.occluders?.[authoredCommandFrame(image.src,pose?.actionProgress)];
 }
 function triangle(ctx:CanvasRenderingContext2D,texture:HTMLCanvasElement,s:Joint[],d:Joint[]):void {
  const [a,b,c]=s as [Joint,Joint,Joint], [p,q,r]=d as [Joint,Joint,Joint];
