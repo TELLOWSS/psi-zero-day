@@ -53,7 +53,7 @@ import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
-import {signatureEventIdentity,type SignatureEventId} from '../engine/survivors-signature-events';
+import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -1324,9 +1324,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           } else if(liveSignature!.phase==='impact'){
             signaturePressureRef.current=Math.max(signaturePressureRef.current,identity.cameraPressure);
             screenShakeRef.current=Math.max(screenShakeRef.current,7+identity.cameraPressure*13);
-            if(liveSignature!.id==='cart_convoy'||liveSignature!.id==='equipment_pincer'){
+            if(liveSignature!.materialCue==='electric'){
+              audioRef.current.playRecordedEffect('tesla_control',center,engine.state.player);
+            } else if(liveSignature!.materialCue==='metal'){
               audioRef.current.playRecordedEffect('impact_steel',center,engine.state.player);
-            } else if(liveSignature!.id==='lifting_cross'||liveSignature!.id==='debris_corridor'||liveSignature!.id==='precollapse_signal'){
+            } else if(liveSignature!.materialCue==='concrete'){
               audioRef.current.playRecordedEffect('impact_concrete',center,engine.state.player);
             } else {
               playSfx('spray',center);
@@ -2524,7 +2526,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
@@ -3236,9 +3238,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {signatureEvent && phase === 'playing' && !bossAlert && (
-        <aside className={`survivors-signature-event event-${signatureEvent.id} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive">
+        <aside className={`survivors-signature-event event-${signatureEvent.id} theme-${signatureEvent.stageSkin} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive" style={{'--signature-stage-accent':signatureEvent.stageAccent} as React.CSSProperties}>
           <span>WAVE {signatureEvent.wave} · {signatureEvent.phase==='warning'?'SIGNATURE WARNING':signatureEvent.phase==='impact'?'SIGNATURE EVENT':'SIGNATURE CONTROLLED'}</span>
           <em>{signatureEvent.mechanic}</em>
+          <b>{signatureEvent.workface}</b>
           <strong>{signatureEvent.title}</strong>
           <small>{signatureEvent.phase==='resolved'?`${signatureEvent.detail} · +${signatureEvent.reward??0} PSI`:signatureEvent.detail}</small>
         </aside>
@@ -3481,6 +3484,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
+            <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
+              <strong>SIGNATURE EVENTS · {signatureEventPlan(PATROL_STAGES[selectedStage])[0]?.workface}</strong>
+              {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as React.CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}</small></span>)}
+            </aside>
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
               {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small></button>)}
