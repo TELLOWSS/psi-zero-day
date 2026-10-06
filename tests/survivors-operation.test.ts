@@ -42,11 +42,16 @@ it('spawns the designated boss at the deadline independently of the ordinary spa
  for(let i=0;i<30;i++)e.update(1/60,{moveX:0,moveY:0});
  expect(s.hazards.filter(h=>h.isStageBoss)).toHaveLength(1);
 });
-it('exposes the map boss after Wave 3 opens when interventions are already complete',()=>{
+it('exposes the map boss after Wave 3 signature pressure is controlled and interventions are complete',()=>{
  const s=createInitialSurvivorsState();const e=new SurvivorsEngine(s,42);e.start();
  const p=operationPlan(s.stage,s.maxTime);
  s.gameTime=p.revealAt+1;s.hazardsNeutralized=p.controls;
  s.operationControlledZones=s.interactiveHazards.map(h=>h.id);
+ // A resumed/time-jumped run first materializes any elapsed signature set pieces.
+ e.update(1/60,{moveX:0,moveY:0});
+ expect(s.hazards.some(h=>h.signatureEventId&&h.hp>0)).toBe(true);
+ expect(s.stageBossSpawned).not.toBe(true);
+ for(const h of s.hazards)if(h.signatureEventId)h.hp=0;
  for(let i=0;i<120&&!s.stageBossSpawned;i++)e.update(1/60,{moveX:0,moveY:0});
  expect(s.stageBossSpawned).toBe(true);expect(s.hazards.some(h=>h.isStageBoss&&h.type===s.stage.bossType)).toBe(true);
  expect(s.phase).toBe('playing');
