@@ -54,6 +54,7 @@ import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
+import {signatureCounterplayProfile} from '../engine/survivors-signature-counterplay';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -3251,6 +3252,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <b>{signatureEvent.workface}</b>
           <strong>{signatureEvent.title}</strong>
           <small>{signatureEvent.phase==='resolved'?`${signatureEvent.detail} · +${signatureEvent.reward??0} PSI`:signatureEvent.detail}</small>
+          {signatureEvent.phase!=='resolved' && <i>COUNTERPLAY · {signatureCounterplayProfile(signatureEvent.id as SignatureEventId).condition}</i>}
         </aside>
       )}
 
@@ -3508,7 +3510,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
             <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
               <strong>SIGNATURE EVENTS · {signatureEventPlan(PATROL_STAGES[selectedStage])[0]?.workface}</strong>
-              {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}</small></span>)}
+              {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}<u>{signatureCounterplayProfile(event.id).condition}</u></small></span>)}
             </aside>
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
