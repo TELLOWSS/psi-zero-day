@@ -254,6 +254,10 @@ export interface SurvivorsGameState {
     detail: string;
     severity: 'amber' | 'red';
     mechanic: string;
+    workface: string;
+    stageSkin: PatrolStageDefinition['theme'];
+    stageAccent: string;
+    materialCue: 'metal' | 'concrete' | 'vapor' | 'electric';
     phase: 'warning' | 'impact' | 'resolved';
     positions: Array<{x:number;y:number;type:HazardType}>;
     reward?: number;
