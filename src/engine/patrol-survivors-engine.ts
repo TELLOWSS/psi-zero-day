@@ -2198,9 +2198,10 @@ export class SurvivorsEngine {
 
         // Boss death slow-motion execution finish
         if (h.type === 'CRANE_BOSS' || h.isStageBoss) {
-          this.state.timeDilation = 0.25;
-          this.state.timeDilationTimer = 0.8;
-          this.state.hitStopTimer = 0.08;
+          const zeroDayFinish=Boolean(h.isStageBoss&&this.state.signatureMastery?.zeroDay);
+          this.state.timeDilation = zeroDayFinish ? 0.12 : 0.25;
+          this.state.timeDilationTimer = zeroDayFinish ? Math.max(this.state.timeDilationTimer,1.25) : 0.8;
+          this.state.hitStopTimer = Math.max(this.state.hitStopTimer??0,zeroDayFinish?.14:.08);
           if (h.type === 'CRANE_BOSS') this.state.score += 2500;
         }
 
