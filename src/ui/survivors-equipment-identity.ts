@@ -107,12 +107,11 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   });ctx.restore();
 }
 
-export function mantleSignatures(state:SurvivorsGameState,busy=false){
+export function mantleSignatures(state:SurvivorsGameState,_busy=false){
   const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([id,v])=>({id,...v,evolved:true}));
   const premium=[...new Set(state.premiumGear?.equipped??[])].map(id=>({id,aura:EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]})).filter(v=>v.aura).sort((a,b)=>b.aura.marks-a.aura.marks).map(v=>({id:v.id,...v.aura,evolved:false}));
-  const limit=busy?2:4;
-  const reserved=premium.slice(0,Math.min(2,limit));
-  return [...reserved,...evolutions,...premium.slice(reserved.length)].slice(0,limit);
+  // All six equipped slots retain an identity; share texture work, not visibility.
+  return [...premium.slice(0,6),...evolutions.slice(0,Math.max(2,8-premium.length))].slice(0,8);
 }
 
 /** Premium signatures retain reserved body slots even with multiple acquired evolutions. */
@@ -120,6 +119,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
   const signatures=mantleSignatures(state,busy);
   if(!signatures.length)return;
   const action=reduced?0:Math.max(0,Math.min(1,Number.isFinite(actionStrength)?actionStrength:0));
+  const segments=Math.max(2,Math.min(8,Math.floor((busy?16:32)/signatures.length)));
   ctx.save();ctx.translate(state.player.x,state.player.y);
   if(attachment){
     if(reduced)ctx.scale(attachment.pose.facing,1);
@@ -127,7 +127,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
   }
   for(let i=0;i<signatures.length;i++){
     const signature=signatures[i]!,side=i%2===0?-1:1;
-    ctx.save();if(i>=2)ctx.translate(side*5,10);
+    ctx.save();if(i>=2)ctx.translate(side*Math.floor(i/2)*4,Math.floor(i/2)*8);
     const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4*(attachment?.pose.facing??1):0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
@@ -136,7 +136,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
       const materialCell=signature.cell===11?11:signature.cell===3?3:signature.cell===0||signature.cell===8?4:signature.cell===1?5:6;
-      drawMaterialRibbon(ctx,atlas,materialCell,state.gameTime+i*.37,side,action,drag,busy);
+      drawMaterialRibbon(ctx,atlas,materialCell,state.gameTime+i*.37,side,action,drag,busy,segments);
       ctx.globalCompositeOperation='source-over';
     }
     if(signature.evolved){

@@ -3,6 +3,7 @@ import type { BaseWeaponId, PerkId } from '../domain/patrol-survivors';
 
 export const PICKUP_ART='/assets/survivors/pickup-atlas-v2.webp';
 export const EQUIPMENT_ART='/assets/survivors/equipment-growth-v1.webp';
+export const EVOLUTION_ART='/assets/survivors/equipment-evolution-v1.webp';
 export const EQUIPMENT_ROWS: Record<BaseWeaponId,number>={radio_boost:0,extinguisher:1,floodlight:2,cone_trap:3,safety_drone:4};
 const EVOLVED: Partial<Record<PerkId,BaseWeaponId>>={satellite_broadcast:'radio_boost',cryo_blizzard:'extinguisher',tesla_dome:'floodlight',emf_barricade:'cone_trap',hunter_swarm:'safety_drone'};
 export function equipmentAppearance(id:PerkId,level:number) {
@@ -10,7 +11,7 @@ export function equipmentAppearance(id:PerkId,level:number) {
  if(!(base in EQUIPMENT_ROWS)) return null;
  const lv=Math.min(5,Math.max(1,Math.round(level))),evolved=Boolean(EVOLVED[id]);
  const tier=evolved?2:Math.floor((lv-1)/2);
- return {base:base as BaseWeaponId,level:lv,tier,cell:EQUIPMENT_ROWS[base as BaseWeaponId]*3+tier,evolved,module:lv===2||lv===4,scale:1+(lv-1)*.055};
+ return {base:base as BaseWeaponId,level:lv,tier,cell:evolved?EQUIPMENT_ROWS[base as BaseWeaponId]:EQUIPMENT_ROWS[base as BaseWeaponId]*3+tier,evolved,module:!evolved&&(lv===2||lv===4),scale:1+(lv-1)*.055};
 }
 export function stageGroundUri(stageId:string):string {
  return stageArtProfile(stageId).ground;
@@ -18,6 +19,10 @@ export function stageGroundUri(stageId:string):string {
 
 // Scan alpha and bake the tightly fitted texture once; steady frames use drawImage.
 const atlases=new WeakMap<HTMLImageElement,HTMLCanvasElement[]>();
+const evolutionAtlases=new WeakMap<HTMLImageElement,HTMLImageElement>();
+export function registerEvolutionAtlas(base:HTMLImageElement,evolution:HTMLImageElement):void {
+ registerPropAtlas(evolution,3,2);evolutionAtlases.set(base,evolution);
+}
 const materialTints=new WeakMap<HTMLImageElement,Map<string,HTMLCanvasElement>>();
 export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:number):void {
  if(atlases.has(image)||!image.naturalWidth) return;
@@ -55,7 +60,8 @@ export function drawPropReaction(ctx:CanvasRenderingContext2D,image:HTMLImageEle
 }
 export function drawEquipment(ctx:CanvasRenderingContext2D,image:HTMLImageElement|undefined,id:PerkId,level:number,x:number,y:number,size:number,pickupImage?:HTMLImageElement):boolean {
  const art=equipmentAppearance(id,level);if(!art)return false;
- if(!drawProp(ctx,image,art.cell,x,y,size*art.scale))return false;
+ const source=art.evolved?(image&&evolutionAtlases.get(image)):image;
+ if(!drawProp(ctx,source,art.cell,x,y,size*art.scale))return false;
  if(art.module){ // Added power/controller modules use the approved pickup texture.
   drawProp(ctx,pickupImage,art.base==='cone_trap'?6:3,x+size*.30,y+size*.04,size*.36);
  }

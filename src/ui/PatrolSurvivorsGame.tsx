@@ -7,7 +7,7 @@ import { Pause, Play, Package, Shield, ArrowUp, SkipForward } from 'lucide-react
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
-import {drawPremiumGear} from './survivors-premium-render';
+import {drawPremiumGear,PREMIUM_MOUNTED_ART} from './survivors-premium-render';
 import {drawEquipmentMantle} from './survivors-equipment-identity';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {drawCarriedEquipment} from './survivors-carried-equipment';
@@ -63,7 +63,7 @@ import { survivorsCamera } from './survivors-camera';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
-import { drawProp, drawEquipment, registerPropAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART } from './survivors-equipment-art';
+import { drawProp, drawEquipment, registerPropAtlas, registerEvolutionAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART, EVOLUTION_ART } from './survivors-equipment-art';
 import { drawStageWorkface } from './survivors-stage-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
@@ -79,7 +79,7 @@ import itemText from '../../content/localization/survivors-items-ko.json';
 import { TACTICAL_ITEMS } from '../engine/survivors-items';
 import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
 import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivors-audio-manifest';
-import { STAGE_IDS, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
+import { STAGE_IDS, LAST_PATROL_STAGE_KEY, resumePatrolStage, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { SurvivorsAudioMixer } from './SurvivorsAudioMixer';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -197,6 +197,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     itemsAtlas?: HTMLImageElement;
     equipmentAtlas?: HTMLImageElement;
     premiumAtlas?: HTMLImageElement;
+    premiumMountedAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
     groundContactAtlas?: HTMLImageElement;
     shockContactAtlas?: HTMLCanvasElement;
@@ -295,11 +296,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     items.onload = () => { registerPropAtlas(items,4,2); spritesRef.current.itemsAtlas = items; };
     items.src = PICKUP_ART;
     const equipment = new Image();
-    equipment.onload = () => { registerPropAtlas(equipment,3,5); spritesRef.current.equipmentAtlas = equipment; };
+    const evolution = new Image();
+    evolution.onload = () => { if(equipment.naturalWidth) registerEvolutionAtlas(equipment,evolution); };
+    equipment.onload = () => { registerPropAtlas(equipment,3,5); if(evolution.naturalWidth) registerEvolutionAtlas(equipment,evolution); spritesRef.current.equipmentAtlas = equipment; };
+    evolution.src = EVOLUTION_ART;
     equipment.src = EQUIPMENT_ART;
     const premium = new Image();
     premium.onload = () => {spritesRef.current.premiumAtlas=premium;};
     premium.src = PREMIUM_ATLAS;
+    const mountedPremium = new Image();
+    mountedPremium.onload = () => { registerPropAtlas(mountedPremium,4,4); spritesRef.current.premiumMountedAtlas=mountedPremium; };
+    mountedPremium.src=PREMIUM_MOUNTED_ART;
     const cinematic = new Image();
     cinematic.onload=()=>{spritesRef.current.cinematicAtlas=cinematic;};
     const groundContact = new Image();
@@ -381,8 +388,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const accountabilityRef=useRef(accountability);accountabilityRef.current=accountability;
   const accountabilityCaseRef=useRef(accountabilityCase);accountabilityCaseRef.current=accountabilityCase;
   const [selectedDifficulty, setSelectedDifficulty] = useState<PatrolDifficulty>('standard');
-  const [selectedStage, setSelectedStage] = useState<PatrolStageId>('stage_01');
-  const [loadedGround, setLoadedGround] = useState(stageGroundUri('stage_01'));
+  const [selectedStage, setSelectedStage] = useState<PatrolStageId>(() => {
+    try {
+      return resumePatrolStage(localStorage.getItem(LAST_PATROL_STAGE_KEY),
+        parseSave(localStorage.getItem(STORAGE_KEY_UNLOCKED_STAGES)),
+        parseSave(localStorage.getItem(STORAGE_KEY_STAGE_STARS)));
+    } catch { return 'stage_01'; }
+  });
+  const [loadedGround, setLoadedGround] = useState<string | null>(null);
   const [failedGround, setFailedGround] = useState<string | null>(null);
   const [groundRetry, setGroundRetry] = useState(0);
   useEffect(() => {
@@ -424,7 +437,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const growthRef=useRef(growthRecords);growthRef.current=growthRecords;
   const stageReplayRef=useRef(stageStars);stageReplayRef.current=stageStars;
   const [growthSaveFailed,setGrowthSaveFailed]=useState(false);
-  const [stageChapter,setStageChapter]=useState(0);
+  const [stageChapter,setStageChapter]=useState(() => Math.floor(STAGE_IDS.indexOf(selectedStage) / 10));
   const chapterTabsRef=useRef<HTMLDivElement>(null);
   useEffect(()=>{
     const node=chapterTabsRef.current;if(!node)return;
@@ -902,6 +915,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   const beginPatrol = () => {
     if (!engineRef.current) return;
+    // Browsing another map must not replace the last actually played operation.
+    try { localStorage.setItem(LAST_PATROL_STAGE_KEY, engineRef.current.state.stageId); } catch { /* Play remains available without storage. */ }
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
     void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
     void audioRef.current.preloadEquipmentRecordings();
@@ -2443,7 +2458,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const inspectionActor=spritesRef.current.characterMaps[engine.state.characterId];
-      const inspectionPhase=drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose,vfxAtlas:spritesRef.current.cinematicAtlas}:undefined);
+      const inspectionPhase=drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose,vfxAtlas:spritesRef.current.cinematicAtlas,premiumAtlas:spritesRef.current.premiumMountedAtlas}:undefined);
       audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
       const projectileBusy=projectiles.length>60;
       const auraMovingAngle=engine.state.phase==='playing'&&playerPose.moving?facingAngle:undefined;

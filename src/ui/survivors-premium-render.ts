@@ -1,6 +1,6 @@
 import type {SurvivorsGameState} from '../domain/patrol-survivors';
 import {STORE_ITEMS} from '../domain/survivors-store';
-import {drawEquipment,drawProp} from './survivors-equipment-art';
+import {drawProp} from './survivors-equipment-art';
 import {hasWearable,inspectionDockAnchor,premiumBodySocket,drawActorEquipmentOcclusion,type WearableImages} from './survivors-wearable-art';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import {ACTOR_RIGS} from './survivors-animation-rig';
@@ -10,8 +10,9 @@ import {InspectionFlightTracker,type InspectionPhase} from './survivors-inspecti
 import type {SpritePose} from './survivors-sprite-motion';
 import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
 const inspectionFlights=new InspectionFlightTracker();
+export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
 /** Raster art stays in presentation; status is read exclusively from the engine. */
-export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement}):InspectionPhase|undefined {
+export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,_atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,_itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement;premiumAtlas?:HTMLImageElement}):InspectionPhase|undefined {
   const gear=state.premiumGear;if(!gear||!gear.equipped.length)return;
   const {x,y}=state.player;
   const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
@@ -40,16 +41,11 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
       ctx.beginPath();ctx.moveTo(drop.x,drop.y);ctx.lineTo(x,y-14);ctx.stroke();
     }ctx.restore();
   }
-  if(!atlas?.naturalWidth)return;
+  if(!actorPose?.premiumAtlas?.naturalWidth)return flight?.phase;
   const draw=(id:string,px:number,py:number,size:number)=>{
     const item=STORE_ITEMS.find(item=>item.id===id);if(!item)return;
-    const level=item.rarity==='legendary'?5:item.rarity==='elite'?3:1;
-    if(item.category==='communication')drawEquipment(ctx,atlas,'radio_boost',level,px,py+size/2,size,itemsAtlas);
-    else if(item.category==='companion')drawEquipment(ctx,atlas,'safety_drone',level,px,py+size/2,size,itemsAtlas);
-    else if(item.category==='protection'){
-      ctx.save();ctx.strokeStyle='#9ef5d0';ctx.lineWidth=1.5;ctx.globalAlpha=.6;
-      ctx.beginPath();ctx.ellipse(px,py,8,13,0,0,Math.PI*2);ctx.stroke();ctx.restore();
-    } else drawProp(ctx,itemsAtlas,item.category==='tempo'?3:item.category==='logistics'?2:4,px,py+size/2,size);
+    // Never substitute another purchase's category icon when this asset is unavailable.
+    drawProp(ctx,actorPose?.premiumAtlas,item.art,px,py+size/2,size);
   };
   const companion=gear.equipped.find(id=>STORE_ITEMS.find(item=>item.id===id)?.category==='companion');
   if(companion) {
