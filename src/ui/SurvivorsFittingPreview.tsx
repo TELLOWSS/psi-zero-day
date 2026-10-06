@@ -9,7 +9,11 @@ import { drawGroundedSprite, registerSpriteBounds } from './survivors-sprite-mot
 import copy from '../../content/localization/survivors-store-ko.json';
 import { drawWearableLayer, loadWearableImages,type WearableImages } from './survivors-wearable-art';
 import {CINEMATIC_VFX_ATLAS} from './survivors-cinematic-vfx';
-import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from './survivors-equipment-identity';
+import {drawEquipmentMantle} from './survivors-equipment-identity';
+import {loadDirectionalActor} from './survivors-directional-art';
+import {preparePremiumPresence,type PremiumPresenceImages} from './survivors-equipment-animation';
+import {drawPremiumPresence} from './survivors-premium-presence';
+import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import {drawCarriedEquipment} from './survivors-carried-equipment';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {fittingPose,type FittingMotion} from './survivors-fitting-pose';
@@ -19,7 +23,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
   const canvas = useRef<HTMLCanvasElement>(null);
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [assets,setAssets]=useState<{actor:HTMLImageElement;gear:HTMLImageElement;pickups:HTMLImageElement;wearables:WearableImages;cinematic:HTMLImageElement}>();
+  const [assets,setAssets]=useState<{actor:HTMLImageElement;gear:HTMLImageElement;pickups:HTMLImageElement;wearables:WearableImages;cinematic:HTMLImageElement;presence?:PremiumPresenceImages}>();
   const [reduced,setReduced]=useState(false);
   const clock=useRef(0);
   useEffect(()=>{if(motion==='action')clock.current=0;},[motion,attackKind]);
@@ -35,18 +39,19 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
     const load = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src;
     });
-    Promise.all([load(CHARACTER_MAP_ART[state.characterId]), load(EQUIPMENT_ART), load(PICKUP_ART), loadWearableImages(state.characterId),load(CINEMATIC_VFX_ATLAS)])
-      .then(async ([actor, gear, pickups, wearables, cinematic]) => {
+    Promise.all([load(CHARACTER_MAP_ART[state.characterId]), load(EQUIPMENT_ART), load(PICKUP_ART), loadWearableImages(state.characterId),load(CINEMATIC_VFX_ATLAS),load('/assets/survivors/premium-presence-v1.png').catch(()=>undefined)])
+      .then(async ([actor, gear, pickups, wearables, cinematic, presenceImage]) => {
         if (disposed) return;
-        registerSpriteBounds(actor); registerPropAtlas(gear, 3, 5); registerPropAtlas(pickups, 4, 2);
-        await loadAuthoredCommand(actor);if(disposed)return;
-        setAssets({actor,gear,pickups,wearables,cinematic});
+        registerPropAtlas(gear, 3, 5); registerPropAtlas(pickups, 4, 2);
+        if(!await loadDirectionalActor(actor)){registerSpriteBounds(actor);await loadAuthoredCommand(actor);}if(disposed)return;
+        const presence=presenceImage?preparePremiumPresence(presenceImage):undefined;
+        setAssets({actor,gear,pickups,wearables,cinematic,presence});
       }).catch(() => { if (!disposed) setFailed(true); });
     return () => { disposed = true; };
   }, [state.characterId]);
   useEffect(()=>{
     const ctx=canvas.current?.getContext('2d');if(!ctx||!assets)return;
-    const {actor,gear,pickups,wearables,cinematic}=assets;
+    const {actor,gear,pickups,wearables,cinematic,presence}=assets;
     const previewState={...state,player:{...state.player,x:0,y:0}};
     let request=0,last:number|undefined,paintAt=-Infinity;
     const draw=()=>{
@@ -55,13 +60,14 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
         const scale=Math.min(3.4,3*Math.max(.8,Math.min(1.25,zoom)));
         ctx.save(); ctx.translate(180, 360-28*scale); ctx.scale(scale, scale);
         const pose=fittingPose(clock.current,motion,facing,reduced,attackKind);
+        ctx.save();applyActorTorsoTransform(ctx,pose,74,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
+        drawPremiumPresence(ctx,presence,previewState.premiumGear?.equipped??[],previewState.gameTime,reduced,false,pose.action);ctx.restore();
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back');
         drawGroundedSprite(ctx, actor, 74, pose);
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front');
         drawCarriedEquipment(ctx,previewState,actor,74,pose,gear,pickups,reduced);
         drawPremiumGear(ctx,previewState,gear,reduced,0,pickups,wearables,{actor,height:74,pose,vfxAtlas:cinematic});
         const angle=pose.moving?(facing===1?0:Math.PI):undefined;
-        drawEquipmentIdentity(ctx,previewState,cinematic,reduced,false,angle);drawEvolutionIdentity(ctx,previewState,cinematic,reduced);
         drawEquipmentMantle(ctx,previewState,cinematic,reduced,false,angle,pose.action,{pose,height:74,rigged:Boolean(ACTOR_RIGS[actor.src.split('/').pop()??''])});
         ctx.restore();
     };
