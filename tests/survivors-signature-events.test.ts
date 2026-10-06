@@ -333,7 +333,7 @@ describe('wave signature events',()=>{
     expect(engine.state.signatureEvent?.phase).toBe('resolved');
     expect(engine.state.signatureEvent?.reward).toBe(event.reward);
     expect(engine.state.signatureCounterplay).toBeDefined();
-    expect(engine.state.score).toBe(scoreBefore+650);
+    expect(engine.state.score).toBe(scoreBefore+1050);
     expect(engine.state.psiCredits).toBe(creditsBefore+event.reward);
     expect(engine.drainAudioEvents().some(audio=>audio.type==='control'&&audio.x!==undefined&&audio.y!==undefined)).toBe(true);
   });
