@@ -2511,6 +2511,34 @@
   font-weight: 950;
   color: #fff;
 }
+.survivors-signature-event > em {
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 950;
+  letter-spacing: .18em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(2,6,23,.5);
+  color: #fff;
+}
+
+.survivors-signature-event.event-cart_convoy { border-color:#fb923c; box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(251,146,60,.30); }
+.survivors-signature-event.event-cart_convoy > em { color:#fed7aa; }
+.survivors-signature-event.event-gas_bloom { border-color:#22c55e; background:linear-gradient(135deg,rgba(5,46,22,.96),rgba(20,83,45,.93)); box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(34,197,94,.28); }
+.survivors-signature-event.event-gas_bloom > em { color:#bbf7d0; }
+.survivors-signature-event.event-lifting_cross { border-color:#facc15; background:linear-gradient(135deg,rgba(66,32,6,.96),rgba(113,63,18,.93)); }
+.survivors-signature-event.event-lifting_cross > em { color:#fef08a; }
+.survivors-signature-event.event-debris_corridor { border-color:#f97316; background:linear-gradient(135deg,rgba(67,20,7,.97),rgba(124,45,18,.94)); }
+.survivors-signature-event.event-debris_corridor > em { color:#ffedd5; }
+.survivors-signature-event.event-equipment_pincer { border-color:#ef4444; background:linear-gradient(135deg,rgba(69,10,10,.98),rgba(127,29,29,.95)); }
+.survivors-signature-event.event-equipment_pincer > em { color:#fecaca; }
+.survivors-signature-event.event-precollapse_signal { border-color:#dc2626; background:linear-gradient(135deg,rgba(24,3,3,.99),rgba(69,10,10,.97)); box-shadow:0 18px 44px rgba(0,0,0,.62),0 0 44px rgba(220,38,38,.34); }
+.survivors-signature-event.event-precollapse_signal > em { color:#fecaca; animation:survivors-collapse-label .5s ease-in-out infinite alternate; }
+
+@keyframes survivors-collapse-label {
+  from { opacity:.65; letter-spacing:.16em; }
+  to { opacity:1; letter-spacing:.22em; }
+}
 
 .survivors-signature-event > small {
   max-width: 540px;
@@ -2602,6 +2630,7 @@
     padding: 8px 10px;
   }
   .survivors-signature-event > strong { font-size: 14px; }
+  .survivors-signature-event > em { font-size: 8px; }
   .survivors-signature-event > small { font-size: 10px; }
 
   .survivors-wave-director-notice {
