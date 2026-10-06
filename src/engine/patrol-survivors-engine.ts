@@ -13,7 +13,7 @@ import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamag
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
 import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
-import { signatureEventPlan } from './survivors-signature-events';
+import { signatureEventIdentity, signatureEventPlan } from './survivors-signature-events';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
@@ -1622,7 +1622,7 @@ export class SurvivorsEngine {
           this.state.signatureEvent={
             id:event.id,wave:event.wave,title:`${event.title} · 통제 완료`,
             detail:'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
-            severity:event.severity,phase:'resolved',
+            severity:event.severity,mechanic:event.mechanic,phase:'resolved',
             positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
             reward:event.reward,remaining:2.1,
           };
@@ -1637,7 +1637,7 @@ export class SurvivorsEngine {
         this.signatureEventsWarned.add(key);
         this.state.signatureEvent={
           id:event.id,wave:event.wave,title:event.title,detail:event.detail,
-          severity:event.severity,phase:'warning',
+          severity:event.severity,mechanic:event.mechanic,phase:'warning',
           positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
           remaining:event.warningLead,
         };
@@ -1648,18 +1648,23 @@ export class SurvivorsEngine {
       if(this.state.stageBossSpawned||this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
       this.signatureEventsTriggered.add(key);
       for(const spawn of event.spawns) {
-        this.spawnHazard(spawn.type,undefined,false,{x:spawn.x,y:spawn.y,variant:spawn.variant,signatureEventId:key});
+        this.spawnHazard(spawn.type,undefined,false,{
+          x:spawn.x,y:spawn.y,variant:spawn.variant,signatureEventId:key,
+          speedScale:spawn.speedScale,hpScale:spawn.hpScale,radiusScale:spawn.radiusScale,
+          warningTimer:spawn.warningTimer,directionX:spawn.directionX,directionY:spawn.directionY,
+        });
       }
       this.state.signatureEvent={
         id:event.id,wave:event.wave,title:event.title,detail:event.detail,
-        severity:event.severity,phase:'impact',
+        severity:event.severity,mechanic:event.mechanic,phase:'impact',
         positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
         remaining:event.severity==='red'?3.2:2.7,
       };
       this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.severity==='red'?1.3:.85);
-      this.state.timeDilation=event.severity==='red'?.76:.88;
-      this.state.timeDilationTimer=event.severity==='red'?.20:.12;
-      this.emitAudio('impact',centroid.x,centroid.y);
+      const identity=signatureEventIdentity(event.id);
+      this.state.timeDilation=1-(identity.cameraPressure*(event.severity==='red'?.24:.12));
+      this.state.timeDilationTimer=.10+identity.cameraPressure*.12;
+      this.emitAudio('impact',centroid.x,centroid.y,{actorKind:identity.impactActor});
     }
   }
 
@@ -1729,7 +1734,10 @@ export class SurvivorsEngine {
     } else h.hp-=amount;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {x:number;y:number;variant?:Hazard['variant'];signatureEventId?:string}) {
+  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {
+    x:number;y:number;variant?:Hazard['variant'];signatureEventId?:string;
+    speedScale?:number;hpScale?:number;radiusScale?:number;warningTimer?:number;directionX?:number;directionY?:number;
+  }) {
     let x = 0;
     let y = 0;
     const side = Math.floor(this.random() * 4);
@@ -1801,6 +1809,16 @@ export class SurvivorsEngine {
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
     if(variant==='pulse_gas'){radius=58;expValue*=2;}
     if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
+    if(authored?.hpScale)hp=Math.max(1,Math.round(hp*authored.hpScale));
+    if(authored?.speedScale)speed*=authored.speedScale;
+    if(authored?.radiusScale)radius*=authored.radiusScale;
+    const authoredMotion=(type==='RUNAWAY_CART'&&authored?.warningTimer!==undefined)
+      ? {phase:'warning' as const,timer:authored.warningTimer,directionX:authored.directionX??0,directionY:authored.directionY??0}
+      : (type==='FALLING_DEBRIS'&&authored?.warningTimer!==undefined)
+        ? {phase:'warning' as const,timer:authored.warningTimer,directionX:0,directionY:0}
+        : (variant==='pulse_gas'&&authored?.warningTimer!==undefined)
+          ? {phase:'warning' as const,timer:authored.warningTimer,directionX:0,directionY:0}
+          : undefined;
     this.state.hazards.push({
       variant,
       id: this.genId(`haz_${type}`),
@@ -1815,11 +1833,11 @@ export class SurvivorsEngine {
       radius,
       damage,
       expValue,
-      motion: variant==='pulse_gas'||isStageBoss&&type==='CRANE_BOSS'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
+      motion: authoredMotion ?? (variant==='pulse_gas'||isStageBoss&&type==='CRANE_BOSS'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
         ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
         : type === 'FALLING_DEBRIS'
           ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
-          : undefined,
+          : undefined),
     });
   }
 
