@@ -54,7 +54,7 @@ it('keeps raster-loaded item motifs and bounds the silhouette mantle without cha
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
  const before=JSON.stringify(s),c=context();drawEquipmentIdentity(c,s,atlas,false);expect(c.stroke).toHaveBeenCalled();
  const mantle=context();drawEquipmentMantle(mantle,s,atlas,false);expect(mantle.drawImage).toHaveBeenCalledTimes(24);
- const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(8);
+ const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(15);
  const reduced=context();drawEquipmentMantle(reduced,s,atlas,true);expect(reduced.drawImage).not.toHaveBeenCalled();expect(reduced.stroke).toHaveBeenCalled();
  expect(JSON.stringify(s)).toBe(before);expect(mantle.save).toHaveBeenCalledTimes(28);expect(mantle.restore).toHaveBeenCalledTimes(28);
 });
@@ -63,8 +63,11 @@ it('reserves paid signatures when all evolution identities are active',()=>{
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
  for(const id of Object.keys(EVOLUTION_IDENTITIES))s.activePerks[id as keyof typeof EVOLUTION_IDENTITIES]=1;
  const before=JSON.stringify(s),normal=mantleSignatures(s),busy=mantleSignatures(s,true);
- expect(normal).toHaveLength(4);expect(normal.filter(v=>!v.evolved)).toHaveLength(2);
- expect(busy).toHaveLength(2);expect(busy.every(v=>!v.evolved)).toBe(true);
+ expect(normal).toHaveLength(8);expect(normal.filter(v=>!v.evolved)).toHaveLength(6);
+ expect(busy).toHaveLength(8);expect(busy.filter(v=>!v.evolved).map(v=>v.id).sort()).toEqual([...ids].sort());
+ const regular=context(),crowded=context();
+ drawEquipmentMantle(regular,s,atlas,false);drawEquipmentMantle(crowded,s,atlas,false,true);
+ expect(regular.drawImage).toHaveBeenCalledTimes(32);expect(crowded.drawImage).toHaveBeenCalledTimes(16);
  expect(JSON.stringify(s)).toBe(before);
 });
 it('calibrates all six categories for every character and mirrors the actual torso frame',()=>{

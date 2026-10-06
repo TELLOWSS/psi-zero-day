@@ -15,7 +15,7 @@ it('updates touch direction immediately without a React commit per move and clea
  const touch=(kind:string,x:number,y:number)=>act(()=>{const e=new Event(kind,{bubbles:true,cancelable:true});Object.defineProperty(e,'changedTouches',{value:[{identifier:1,clientX:x,clientY:y}]});host.querySelector('.survivors-container')!.dispatchEvent(e);});
  try{
   act(()=>root.render(<Profiler id="touch" onRender={()=>commits++}><PatrolSurvivorsGame onExit={()=>{}} audioMuted/></Profiler>));
-  act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='순찰 시작하기')!.click());
+  act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='시그널 워치 시작')!.click());
   const update=vi.spyOn(engine,'update').mockImplementation(()=>{});
   touch('touchstart',100,200);const before=commits;
   for(let i=0;i<20;i++)touch('touchmove',110+i,200);

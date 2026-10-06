@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CHARACTER_PROFILES, PATROL_STAGES, createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import { STAGE_IDS, validStages, validStars } from '../src/app/survivors-save';
 import sites from '../content/defense/site-profiles-v1.json';
+import {operationTiming} from '../src/engine/survivors-operation';
 
 describe('ten construction process missions', () => {
   it('maps every mission to a different existing construction profile and keeps legacy saves', () => {
@@ -21,13 +22,13 @@ describe('ten construction process missions', () => {
     expect(state.player.pickupRadius - base.player.pickupRadius).toBe(20);
     expect(CHARACTER_PROFILES.safety_monitor.portraitUri).toContain('safety-monitor-v2.webp');
   });
-  it('spawns the designated boss after 60s even when another cart exists, only once', () => {
+  it('spawns the designated boss at the authored wave time even when another cart exists, only once', () => {
     const e = new SurvivorsEngine(createInitialSurvivorsState('safety_monitor'),42);
-    e.start(); e.state.gameTime = 60.5;
+    e.start(); e.state.gameTime = operationTiming(e.state.maxTime).bossAt;
     e.state.hazards.push({ id:'ordinary-cart',type:'RUNAWAY_CART',x:10,y:10,hp:10,maxHp:10,speed:0,radius:10,damage:0,expValue:1 });
     for (let i = 0; i < 100; i++) e.update(1/60,{moveX:0,moveY:0});
     expect(e.state.hazards.filter(h => h.isStageBoss)).toHaveLength(1);
-    e.state.gameTime = 62;
+    e.state.gameTime = operationTiming(e.state.maxTime).bossAt+2;
     e.update(1/60,{moveX:0,moveY:0});
     expect(e.state.hazards.filter(h => h.isStageBoss)).toHaveLength(1);
   });

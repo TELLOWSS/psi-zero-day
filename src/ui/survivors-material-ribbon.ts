@@ -28,8 +28,8 @@ function materialStrips(atlas:HTMLImageElement,cell:number):HTMLCanvasElement[]|
 }
 
 /** Advected strips bend a real optical texture along the silhouette, rather than moving a decal. */
-export function drawMaterialRibbon(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement,cell:number,time:number,side:number,action:number,drag:number,busy:boolean):void {
- const count=busy?4:8,cw=atlas.naturalWidth/4,ch=atlas.naturalHeight/3;
+export function drawMaterialRibbon(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement,cell:number,time:number,side:number,action:number,drag:number,busy:boolean,segments=busy?4:8):void {
+ const count=Math.max(2,Math.min(8,Math.floor(segments))),cw=atlas.naturalWidth/4,ch=atlas.naturalHeight/3;
  const strips=materialStrips(atlas,cell);
  for(let i=0;i<count;i++){
   const p=materialRibbonPoint((i+.5)/count,time,side,action),next=materialRibbonPoint(Math.min(1,(i+.5)/count+.01),time,side,action);

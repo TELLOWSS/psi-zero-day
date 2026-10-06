@@ -19,8 +19,9 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
  const click=(text:string)=>act(()=>[...host.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent?.trim()===text)!.click());
  const tick=()=>act(()=>frame(performance.now()+16));
  try{
-  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted/>));click('순찰 시작하기');
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted/>));click('시그널 워치 시작');
   engine.state.player.hp=40;engine.state.gameTime=100;
+  act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));
   click('PSI 상점');expect(engine.state.phase).toBe('paused');
   act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));expect(engine.state.phase).toBe('paused');
   const mantle=[...host.querySelectorAll('article')].find(card=>card.textContent?.includes('충격 흡수 맨틀'))!;
@@ -49,7 +50,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   const starts=vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length;
   click('같은 작전 다시 준비');
   expect(vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length).toBe(starts);
-  expect(host.textContent).toContain('순찰 시작하기');
+  expect(host.textContent).toContain('시그널 워치 시작');
   expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(4850);
  }finally{act(()=>root.unmount());host.remove();}
 });

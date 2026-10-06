@@ -21,14 +21,14 @@ describe('commercial hub mode readiness',()=>{
 
   it('wires three distinct authored mode artworks and a full preview dialog',()=>{
     expect(hub).toContain("/mode-previews/signal-watch.webp");
-    expect(hub).toContain("/mode-previews/defense-coming-soon.webp");
-    expect(hub).toContain("/mode-previews/story-coming-soon.webp");
+    expect(hub).toContain("/mode-previews/defense-coming-soon-v2.webp");
+    expect(hub).toContain("/mode-previews/story-coming-soon-v2.webp");
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
     expect(hub).toContain('현재 플레이 가능 모드는 시그널 워치입니다.');
-    expect(hub).toContain('mode-preview-cta-correction');
+    expect(hub).not.toContain('mode-preview-cta-correction');
     expect(hub).toContain('탭하여 보기');
-    expect(css).toContain('.mode-preview-cta-correction');
+    expect(css).not.toContain('.mode-preview-cta-correction');
   });
 });

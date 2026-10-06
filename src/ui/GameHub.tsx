@@ -43,8 +43,8 @@ const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: modu
 const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
 const MODE_PREVIEW_ART = {
   signal: '/mode-previews/signal-watch.webp',
-  defense: '/mode-previews/defense-coming-soon.webp',
-  story: '/mode-previews/story-coming-soon.webp',
+  defense: '/mode-previews/defense-coming-soon-v2.webp',
+  story: '/mode-previews/story-coming-soon-v2.webp',
 } as const;
 type ModePreviewKind = keyof typeof MODE_PREVIEW_ART;
 const PatrolSurvivorsGame = lazy(() => loadSurvivorsGame().then(module => ({ default: module.PatrolSurvivorsGame })));
@@ -561,7 +561,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         <button type="button" className="mode-preview-close" aria-label="프리뷰 닫기" onClick={() => setModePreview(null)}>×</button>
         <div className="mode-preview-visual">
           <img src={MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 모드 준비중':'스토리 모드 준비중'} />
-          {modePreview==='story' ? <span className="mode-preview-cta-correction">탭하여 보기</span> : null}
         </div>
         <div className="mode-preview-copy">
           <span>{modePreview==='defense'?'TACTICAL DEFENSE':'CINEMATIC STORY'}</span>

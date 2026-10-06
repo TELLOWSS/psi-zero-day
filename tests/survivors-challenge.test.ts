@@ -13,7 +13,8 @@ describe('selected patrol challenge',()=>{
     expect(spawnPressure(5,100,'standard')).toEqual(normal);
     expect(hard.interval).toBeLessThan(normal.interval);expect(extreme.interval).toBeLessThan(hard.interval);
     expect(extreme.hpScale).toBeGreaterThan(hard.hpScale);
-    expect(extreme.telegraphLimit).toBe(normal.telegraphLimit);expect(extreme.recovery).toBe(true);
+    expect(extreme.telegraphLimit).toBe(normal.telegraphLimit);expect(extreme.recovery).toBe(normal.recovery);
+    expect(spawnPressure(5,63,'extreme').recovery).toBe(true);
   });
   it('guarantees tactical supplies at the selected milestone and preserves boss drops',()=>{
     expect(tacticalSupplyFor(8,false,8)).toBe('record_beacon');expect(tacticalSupplyFor(7,false,8)).toBeNull();

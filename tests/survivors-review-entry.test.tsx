@@ -21,7 +21,7 @@ it('shows mission conditions before start, opens the shooting manual while pause
   try {
     act(() => root.render(<PatrolSurvivorsGame onExit={() => {}} audioMuted />));
     const launch = host.querySelector('.survivors-ready-launch')!;
-    expect(launch.textContent).toContain('순찰 시작하기');
+    expect(launch.textContent).toContain('시그널 워치 시작');
     for (const goal of PATROL_STAGES.stage_01.starChallenges) expect(host.querySelector('.survivors-mission-brief')?.textContent).toContain(goal.description);
     expect(host.querySelectorAll('details.survivors-ready-details[open]:not([hidden])')).toHaveLength(0);
     click('작전 구역');
@@ -29,7 +29,7 @@ it('shows mission conditions before start, opens the shooting manual while pause
     expect(host.querySelector('.survivors-char-select-section')?.hasAttribute('hidden')).toBe(true);
     click('순찰 요원');
     expect(host.querySelector('.survivors-char-select-section')?.hasAttribute('hidden')).toBe(false);
-    click('순찰 시작하기');
+    click('시그널 워치 시작');
     vi.spyOn(engine!, 'update').mockImplementationOnce(() => { engine!.state.ultimateCharge = 99.6; });
     act(() => frame(performance.now() + 100));
     const shout = host.querySelector<HTMLButtonElement>('[aria-label="현장소장 사자후 궁극기 발동"]')!;

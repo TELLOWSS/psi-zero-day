@@ -20,7 +20,7 @@ it('selects numbered upgrades, ignores held-key repeats and installs the global 
   const tick=()=>act(()=>frame(performance.now()+20));
   try {
     act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));
-    act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='순찰 시작하기')!.click());
+    act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='시그널 워치 시작')!.click());
     vi.spyOn(engine!,'update').mockImplementation(()=>{});
     const levelup=()=>{engine!.state.phase='playing';vi.mocked(engine!.update).mockImplementationOnce(()=>{engine!.state.phase='levelup';engine!.state.perkOptions=[{...PERK_CATALOG.steel_boots,level:1},{...PERK_CATALOG.magnet_beacon,level:1}];});tick();};
     levelup();

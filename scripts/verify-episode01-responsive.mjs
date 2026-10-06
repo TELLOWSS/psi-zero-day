@@ -804,6 +804,24 @@ try {
       if (homeFailures.length) failed = true;
       await screenshot(cdp, viewport.name + '-home.png');
 
+      // Current release intentionally gates Story. Verify that gate, never unlock it for QA.
+      const gatedRelease = await evaluate(cdp, "Boolean(document.querySelector('[data-title-layout=\"MODE_SELECT_V11\"] .is-story-entry.is-coming-soon'))");
+      if (gatedRelease) {
+        await evaluate(cdp, "document.querySelector('.is-story-entry')?.click(); true");
+        await waitFor(cdp, "Boolean(document.querySelector('.mode-preview-dialog'))", 5000);
+        const gate = await evaluate(cdp, `(async () => {
+          const image=document.querySelector('.mode-preview-visual img');await image.decode();
+          return {previewVisible:Boolean(document.querySelector('.mode-preview-dialog')),width:image.naturalWidth,height:image.naturalHeight,
+            episodeStarted:Boolean(document.querySelector('.cinematic-loading,.game-frame')),overflow:document.documentElement.scrollWidth>innerWidth+1};
+        })()`);
+        const failures=[];
+        if(!gate.previewVisible||gate.episodeStarted||gate.width<1600||gate.height<900||gate.overflow)failures.push('Story lock preview contract failed');
+        report.push({viewportName:viewport.name,stage:'story-release-gate',...gate,episodeRuntime:'NOT_RUN_LOCKED_BY_RELEASE',failures});
+        if(failures.length)failed=true;
+        await screenshot(cdp,viewport.name+'-story-release-gate.png');
+        continue;
+      }
+
       // The product home is now Defense-first. Episode regression must explicitly
       // use the secondary "new story" entry instead of assuming the primary CTA is story.
       await evaluate(cdp, "document.querySelector('.commercial-title-action.is-quiet')?.click(); true");

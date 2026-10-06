@@ -31,6 +31,7 @@ jobs:
         shell: bash
         env:
           CODEX_PRIMARY_RUNTIME_NODE_MODULES: /tmp/psi-browser-tools/node_modules
+          PSI_PREVIEW_URL: http://127.0.0.1:4173
         run: |
           export CHROME_BIN="$(command -v google-chrome || command -v chromium)"
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/survivors-preview.log 2>&1 &
@@ -40,7 +41,9 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 0.25
           done
-          node scripts/verify-survivors-browser.mjs
+          node scripts/verify-survivors-mode-previews.mjs
+          node scripts/verify-survivors-stage-resume.mjs
+          node scripts/verify-survivors-fitting-motion.mjs
           node scripts/verify-survivors-rig.mjs
           node scripts/verify-survivors-props.mjs
           node scripts/verify-survivors-projectiles.mjs
@@ -48,4 +51,8 @@ jobs:
         if: always()
         with:
           name: survivors-art-v2-captures
-          path: artifacts/survivors-browser
+          path: |
+            artifacts/survivors-browser
+            artifacts/mode-preview-release
+            artifacts/stage-resume
+            artifacts/fitting-motion
