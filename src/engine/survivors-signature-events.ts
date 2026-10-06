@@ -23,6 +23,8 @@ export interface WaveSignatureEvent {
   title: string;
   detail: string;
   severity: 'amber' | 'red';
+  warningLead: number;
+  reward: number;
   spawns: readonly SignatureSpawn[];
 }
 
@@ -108,12 +110,14 @@ export function signatureEventPlan(stage:PatrolStageDefinition,maxTime=180):read
       id:w2,wave:2,
       at:timing.wave2At+(compact?4:12),
       title:w2Copy.title,detail:w2Copy.detail,severity:'amber',
+      warningLead:compact?.85:1.15,reward:30,
       spawns:eventSpawns(w2,stage.stageNumber),
     },
     {
       id:w3,wave:3,
       at:Math.min(timing.bossRevealAt-(compact?.45:4),timing.wave3At+(compact?.6:5)),
       title:w3Copy.title,detail:w3Copy.detail,severity:'red',
+      warningLead:compact?.95:1.35,reward:50,
       spawns:eventSpawns(w3,stage.stageNumber),
     },
   ];
