@@ -167,7 +167,12 @@ export function signatureStageFusion(stage:Pick<PatrolStageDefinition,'theme'|'n
     },
   };
   const skin=table[stage.theme];
-  return {stageSkin:stage.theme,workface:skin.workface,title:skin.titles[id],detail:skin.details[id],accent:skin.accent,materialCue:skin.materialCue};
+  const materialCue:SignatureStageFusion['materialCue'] =
+    id==='gas_bloom' ? 'vapor'
+    : id==='cart_convoy'||id==='equipment_pincer' ? 'metal'
+    : stage.theme==='datacenter' ? 'electric'
+    : 'concrete';
+  return {stageSkin:stage.theme,workface:skin.workface,title:skin.titles[id],detail:skin.details[id],accent:skin.accent,materialCue};
 }
 
 
@@ -231,6 +236,39 @@ function eventSpawns(id:SignatureEventId, stageNumber:number):readonly Signature
 
 
 
+const SIGNATURE_WORLD_WIDTH=1400;
+const SIGNATURE_WORLD_HEIGHT=900;
+
+function snapDatacenterAisle(y:number):number {
+  if(y<450)return 270;
+  if(y>450)return 630;
+  return 450;
+}
+
+/** The same event keeps its mechanic while each workface changes the approach geometry. */
+export function signatureEventSpawns(stage:PatrolStageDefinition,id:SignatureEventId):readonly SignatureSpawn[] {
+  const base=eventSpawns(id,stage.stageNumber);
+  const mirrorHighrise=stage.theme==='highrise_slab'&&stage.stageNumber%2===1;
+  return base.map(spawn=>{
+    let x=spawn.x,y=spawn.y,directionX=spawn.directionX,directionY=spawn.directionY;
+    if(mirrorHighrise){
+      x=SIGNATURE_WORLD_WIDTH-x;
+      if(directionX!==undefined)directionX=-directionX;
+    }
+    if(stage.theme==='datacenter'){
+      y=snapDatacenterAisle(y);
+    } else if(spawn.type!=='RUNAWAY_CART'&&stage.theme==='deep_excavation'){
+      x=SIGNATURE_WORLD_WIDTH/2+(x-SIGNATURE_WORLD_WIDTH/2)*.84;
+      y=SIGNATURE_WORLD_HEIGHT/2+(y-SIGNATURE_WORLD_HEIGHT/2)*.78;
+    } else if(spawn.type!=='RUNAWAY_CART'&&stage.theme==='curing_chamber'){
+      x=SIGNATURE_WORLD_WIDTH/2+(x-SIGNATURE_WORLD_WIDTH/2)*.76;
+      y=SIGNATURE_WORLD_HEIGHT/2+(y-SIGNATURE_WORLD_HEIGHT/2)*.70;
+    }
+    return {...spawn,x,y,directionX,directionY};
+  });
+}
+
+
 /** Two authored beats per stage: a Wave 2 disruption and a Wave 3 pre-boss signature. */
 export function signatureEventPlan(stage:PatrolStageDefinition,maxTime=180):readonly WaveSignatureEvent[] {
   const timing=operationTiming(maxTime);
@@ -246,7 +284,7 @@ export function signatureEventPlan(stage:PatrolStageDefinition,maxTime=180):read
       title:w2Fusion.title,detail:w2Fusion.detail,severity:'amber',
       warningLead:compact?.85:1.15,reward:30,mechanic:signatureEventIdentity(w2).mechanic,
       stageSkin:w2Fusion.stageSkin,workface:w2Fusion.workface,stageAccent:w2Fusion.accent,materialCue:w2Fusion.materialCue,
-      spawns:eventSpawns(w2,stage.stageNumber),
+      spawns:signatureEventSpawns(stage,w2),
     },
     {
       id:w3,wave:3,
@@ -254,7 +292,7 @@ export function signatureEventPlan(stage:PatrolStageDefinition,maxTime=180):read
       title:w3Fusion.title,detail:w3Fusion.detail,severity:'red',
       warningLead:compact?.95:1.35,reward:50,mechanic:signatureEventIdentity(w3).mechanic,
       stageSkin:w3Fusion.stageSkin,workface:w3Fusion.workface,stageAccent:w3Fusion.accent,materialCue:w3Fusion.materialCue,
-      spawns:eventSpawns(w3,stage.stageNumber),
+      spawns:signatureEventSpawns(stage,w3),
     },
   ];
 }
