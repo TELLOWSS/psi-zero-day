@@ -622,6 +622,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
   const [waveDirectorNotice,setWaveDirectorNotice]=useState<{wave:SurvivorsWave;title:string;detail:string}|null>(null);
   const [signatureEvent,setSignatureEvent]=useState<SurvivorsGameState['signatureEvent']>();
+  const signatureCinematicRef=useRef('');
+  const signaturePressureRef=useRef(0);
   const [currentWave, setCurrentWave] = useState<SurvivorsWave>(1);
   const currentWaveRef=useRef<SurvivorsWave>(1);
   const wave1ShopTriggeredRef = useRef(false);
@@ -964,6 +966,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setWaveSupplyNotice(null);
     setWaveDirectorNotice(null);
     setSignatureEvent(undefined);
+    signatureCinematicRef.current='';
+    signaturePressureRef.current=0;
     currentWaveRef.current=1;
     setCurrentWave(1);
     setContainerShopWave(1);
@@ -1303,6 +1307,35 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
 
+        const liveSignature=engine.state.signatureEvent;
+        const signatureToken=liveSignature?`${liveSignature.id}:${liveSignature.phase}`:'';
+        if(signatureToken&&signatureCinematicRef.current!==signatureToken){
+          signatureCinematicRef.current=signatureToken;
+          const positions=liveSignature!.positions;
+          const center=positions.reduce((acc,p)=>({x:acc.x+p.x,y:acc.y+p.y}),{x:0,y:0});
+          center.x/=Math.max(1,positions.length);center.y/=Math.max(1,positions.length);
+          if(liveSignature!.phase==='warning'){
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,liveSignature!.severity==='red'?.72:.48);
+            screenShakeRef.current=Math.max(screenShakeRef.current,liveSignature!.severity==='red'?8:4);
+            audioRef.current.duckMusic(liveSignature!.severity==='red'?.9:.55);
+            spawnFloating(center.x,center.y-42,`⚠ ${liveSignature!.title}`,liveSignature!.severity==='red'?'#f87171':'#fbbf24',true);
+          } else if(liveSignature!.phase==='impact'){
+            signaturePressureRef.current=1;
+            screenShakeRef.current=Math.max(screenShakeRef.current,liveSignature!.severity==='red'?18:11);
+            for(const point of positions){
+              const debris=point.type==='FALLING_DEBRIS';
+              spawnParticles(point.x,point.y,debris?'#d6d3d1':'#fb923c',liveSignature!.severity==='red'?14:9,115,debris?3.2:2.7);
+              spawnShockwave(point.x,point.y,liveSignature!.severity==='red'?'#ef4444':'#f59e0b',liveSignature!.severity==='red'?68:48,3.5,.32);
+            }
+          } else {
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,.22);
+            screenShakeRef.current=Math.max(screenShakeRef.current,4);
+            spawnParticles(center.x,center.y,'#34d399',26,135,4);
+            spawnShockwave(center.x,center.y,'#10b981',90,4,.48);
+            spawnFloating(center.x,center.y-46,`✓ ${liveSignature!.title} · +${liveSignature!.reward??0} PSI`,'#34d399',true);
+          }
+        }
+
         // Wave progression stays continuous. Supply access is opt-in from the pause menu:
         // never interrupt active combat with a shop-style modal.
         const maxSurvivalTime = engine.state.maxTime || 180;
@@ -1541,8 +1574,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
-        setSignatureEvent(previous => previous?.id===engine.state.signatureEvent?.id && previous?.remaining===engine.state.signatureEvent?.remaining
-          ? previous : engine.state.signatureEvent ? {...engine.state.signatureEvent} : undefined);
+        setSignatureEvent(previous => previous?.id===engine.state.signatureEvent?.id && previous?.phase===engine.state.signatureEvent?.phase && previous?.remaining===engine.state.signatureEvent?.remaining
+          ? previous : engine.state.signatureEvent ? {...engine.state.signatureEvent,positions:engine.state.signatureEvent.positions.map(point=>({...point}))} : undefined);
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
@@ -1652,10 +1685,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Responsive Portrait / Landscape Zoom Factor
       const isPortrait = displayH > displayW;
       const preferredZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
-      // Cover the viewport with the world; never reveal a large empty off-map strip.
+      // Signature events apply a brief, controlled push-in instead of a disorienting hard cut.
       const baseZoom = Math.max(preferredZoom, displayW / WORLD_WIDTH, displayH / WORLD_HEIGHT);
-      const viewW = displayW / baseZoom;
-      const viewH = displayH / baseZoom;
+      const pressure=signaturePressureRef.current;
+      signaturePressureRef.current=Math.max(0,pressure-dt*1.55);
+      const renderZoom=baseZoom*(1+(reducedMotionRef.current?0:pressure*.018));
+      const viewW = displayW / renderZoom;
+      const viewH = displayH / renderZoom;
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
       const camera=survivorsCamera(player,viewW,viewH,WORLD_WIDTH,WORLD_HEIGHT,baseZoom);
@@ -1668,7 +1704,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       ctx.save();
-      ctx.scale(dpr * baseZoom, dpr * baseZoom);
+      ctx.scale(dpr * renderZoom, dpr * renderZoom);
 
       // Invert color flash during Director Shout 'invert' phase
       if (engine.state.directorCutinPhase === 'invert' && !reducedMotionRef.current) {
@@ -1830,6 +1866,40 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       if (stage.id === 'stage_01') drawStageSpatialContext(ctx, engine.state.interactiveHazards);
       drawStageWorkface(ctx, stage.id, engine.state.interactiveHazards);
+
+      const signature=engine.state.signatureEvent;
+      if(signature?.phase==='warning'){
+        const pulse=.55+.35*Math.sin(engine.state.gameTime*13);
+        ctx.save();
+        ctx.globalAlpha=pulse;
+        ctx.lineWidth=signature.severity==='red'?4:3;
+        ctx.strokeStyle=signature.severity==='red'?'#ef4444':'#f59e0b';
+        ctx.fillStyle=signature.severity==='red'?'rgba(239,68,68,.09)':'rgba(245,158,11,.08)';
+        ctx.setLineDash([12,8]);
+        const falling=signature.positions.filter(point=>point.type==='FALLING_DEBRIS');
+        if(falling.length>1){
+          ctx.beginPath();ctx.moveTo(falling[0]!.x,falling[0]!.y);
+          for(const point of falling.slice(1))ctx.lineTo(point.x,point.y);
+          ctx.stroke();
+        }
+        for(const point of signature.positions){
+          if(point.type==='RUNAWAY_CART'){
+            const fromLeft=point.x<WORLD_WIDTH/2;
+            const x=fromLeft?0:WORLD_WIDTH;
+            ctx.fillRect(fromLeft?0:WORLD_WIDTH*.58,point.y-28,WORLD_WIDTH*.42,56);
+            ctx.beginPath();ctx.moveTo(x,point.y);ctx.lineTo(WORLD_WIDTH/2,point.y);ctx.stroke();
+          } else {
+            const radius=point.type==='GAS_LEAK'?78:54;
+            ctx.beginPath();ctx.arc(point.x,point.y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();
+            if(point.type==='FALLING_DEBRIS'){
+              ctx.beginPath();ctx.moveTo(point.x-radius-16,point.y);ctx.lineTo(point.x+radius+16,point.y);
+              ctx.moveTo(point.x,point.y-radius-16);ctx.lineTo(point.x,point.y+radius+16);ctx.stroke();
+            }
+          }
+        }
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
 
       // Short ground-contact strokes at actual impact positions, never fullscreen flashes.
       impactFeedbackRef.current=impactFeedbackRef.current.filter(effect=>{effect.life-=dt;return effect.life>0;});
@@ -3113,10 +3183,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {signatureEvent && phase === 'playing' && !bossAlert && (
-        <aside className={`survivors-signature-event is-${signatureEvent.severity}`} role="alert" aria-live="assertive">
-          <span>WAVE {signatureEvent.wave} · SIGNATURE EVENT</span>
+        <aside className={`survivors-signature-event is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive">
+          <span>WAVE {signatureEvent.wave} · {signatureEvent.phase==='warning'?'SIGNATURE WARNING':signatureEvent.phase==='impact'?'SIGNATURE EVENT':'SIGNATURE CONTROLLED'}</span>
           <strong>{signatureEvent.title}</strong>
-          <small>{signatureEvent.detail}</small>
+          <small>{signatureEvent.phase==='resolved'?`${signatureEvent.detail} · +${signatureEvent.reward??0} PSI`:signatureEvent.detail}</small>
         </aside>
       )}
 
