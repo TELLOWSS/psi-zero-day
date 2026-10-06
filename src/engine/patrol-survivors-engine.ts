@@ -1642,7 +1642,7 @@ export class SurvivorsEngine {
           remaining:event.warningLead,
         };
         this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.warningLead+.25);
-        this.emitAudio(event.severity==='red'?'boss_alarm':'control',centroid.x,centroid.y);
+        this.emitAudio('boss_alarm',centroid.x,centroid.y);
       }
 
       if(this.state.stageBossSpawned||this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
