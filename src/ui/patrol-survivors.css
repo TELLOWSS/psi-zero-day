@@ -2591,6 +2591,14 @@
   text-overflow:ellipsis;
   white-space:nowrap;
 }
+.survivors-signature-brief > span > small > u {
+  display:block;
+  margin-top:2px;
+  color:#94a3b8;
+  font-size:9px;
+  font-weight:800;
+  text-decoration:none;
+}
 
 .survivors-signature-event.event-cart_convoy { border-color:#fb923c; box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(251,146,60,.30); }
 .survivors-signature-event.event-cart_convoy > em { color:#fed7aa; }
@@ -2615,6 +2623,17 @@
   font-size: 11px;
   font-weight: 700;
   color: #e2e8f0;
+}
+.survivors-signature-event > i {
+  font-style:normal;
+  margin-top:2px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(2,6,23,.42);
+  color:#f8fafc;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.05em;
 }
 
 .survivors-signature-event.is-amber {
@@ -2760,6 +2779,7 @@
   .survivors-signature-event > em { font-size: 8px; }
   .survivors-signature-event > b { font-size: 9px; }
   .survivors-signature-event > small { font-size: 10px; }
+  .survivors-signature-event > i { font-size:8px; }
   .survivors-signature-brief > span { grid-template-columns:28px 90px minmax(0,1fr); gap:5px; padding:5px 6px; }
   .survivors-signature-brief > span > em { font-size:8px; }
   .survivors-signature-brief > span > small { font-size:10px; }
