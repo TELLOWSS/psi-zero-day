@@ -1,0 +1,75 @@
+{
+  "id": "survivors-drone-sfx-v3-runtime",
+  "version": "3.0.0",
+  "status": "TECHNICAL_QA_PASS_LISTENING_PENDING",
+  "sourcePack": {
+    "filename": "PSI_ZERO_DAY_PREMIUM_DRONE_SFX_V3.zip",
+    "sha256": "ab8bb67dbf4c18ae9a652e38df811520682a4b84ce443829cb86610bd140de14",
+    "wavCount": 27,
+    "sampleRate": 48000,
+    "bitDepth": 24,
+    "channels": "mono",
+    "clippedSamples": 0
+  },
+  "runtimeStrategy": "Use producer-authored MIX_NORMAL/MIX_PREMIUM as base/premium releases; use authored Hunter gestures and Launch/Dock. Layer stems remain source material for later tuning.",
+  "assets": [
+    {
+      "id": "base_release",
+      "source": "PSI_DRONE_V3_MIX_NORMAL.wav",
+      "duration": 0.22,
+      "sourceRmsDbfs": -17.18,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_base_release.ogg",
+      "sha256": "fdae8d1f5cc3c645ecd93899e0dcaf087f45ed4a4ffd4f54bb0296e5ce25a891"
+    },
+    {
+      "id": "premium_release",
+      "source": "PSI_DRONE_V3_MIX_PREMIUM.wav",
+      "duration": 0.22,
+      "sourceRmsDbfs": -16.93,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_premium_release.ogg",
+      "sha256": "7c20fc7ea420b8662ada640fd2f0ddbc2ad8eba6b44e8f933246137553a9108c"
+    },
+    {
+      "id": "hunter_a",
+      "source": "PSI_DRONE_V3_HUNTER_GESTURE_A.wav",
+      "duration": 0.36,
+      "sourceRmsDbfs": -17.2,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_hunter_a.ogg",
+      "sha256": "1dada3c4a8927063d71949b24913bfe94ecc883d43633ca0f51ac83570e92837"
+    },
+    {
+      "id": "hunter_b",
+      "source": "PSI_DRONE_V3_HUNTER_GESTURE_B.wav",
+      "duration": 0.36,
+      "sourceRmsDbfs": -17.2,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_hunter_b.ogg",
+      "sha256": "c601c039532f10254f8e5c19b22c282b142394a03fdd455be147a42dee2db2ef"
+    },
+    {
+      "id": "launch",
+      "source": "PSI_DRONE_V3_LAUNCH_A.wav",
+      "duration": 0.7,
+      "sourceRmsDbfs": -19.17,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_launch.ogg",
+      "sha256": "30833ebd4c5da245d68c8d061eab565d7a8e42f373ffc45d1dc5ef87ec9d8558"
+    },
+    {
+      "id": "dock",
+      "source": "PSI_DRONE_V3_DOCK_A.wav",
+      "duration": 0.65,
+      "sourceRmsDbfs": -16.64,
+      "uri": "/assets/survivors/drone-sfx-v3/drone_dock.ogg",
+      "sha256": "a7400562937471143132e2c527c97bf8264e02df66433a0275d08985b9302b22"
+    }
+  ],
+  "approval": {
+    "technical": true,
+    "perceptual": false,
+    "required": [
+      "phone speaker",
+      "headphones",
+      "desktop speakers",
+      "30-trigger repeated-fire fatigue"
+    ]
+  }
+}

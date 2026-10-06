@@ -21,5 +21,18 @@
     "Raw Manus WAVs are preserved as sources.",
     "Runtime candidates use DC cleanup, 20 Hz high-pass, category level normalization and a -1.5 dBFS peak ceiling.",
     "Do not mark production-approved until phone/headphone/desktop listening review."
-  ]
+  ],
+  "listeningDecision": {
+    "date": "2026-10-06",
+    "director": "REJECTED_DRONE_FAMILY",
+    "rejectedFamilies": [
+      "drone_release",
+      "drone_premium_release",
+      "drone_hunter_burst",
+      "drone_launch",
+      "drone_dock"
+    ],
+    "reason": "Director reports the V2 drone family is not premium enough. Preserve it only as archived source/candidate material; production runtime uses Drone SFX V3.",
+    "replacementTarget": "SURVIVORS_DRONE_SFX_V3_RUNTIME"
+  }
 }
