@@ -13,6 +13,10 @@ export const PROJECTILE_VFX = {
   emf_beam: { family:'barrier', color:'#dfb4d4', trail:0, life:.3 },
   shout_shockwave: { family:'shock', color:'#f7d689', trail:0, life:.3 },
   cone_trap: { family:'physical', color:'#f7b34f', trail:0, life:.3 },
+  grout_slug: { family:'physical', color:'#94a3b8', trail:24, life:.35 },
+  hydraulic_wave: { family:'shock', color:'#38bdf8', trail:36, life:.3 },
+  emp_pulse: { family:'arc', color:'#60a5fa', trail:0, life:.4 },
+  plasma_arc: { family:'arc', color:'#a78bfa', trail:0, life:.4 },
 } as const satisfies Record<ProjectileKind,{family:string;color:string;trail:number;life:number}>;
 
 export function projectileVisual(p: Readonly<Projectile>, level: number, reducedMotion: boolean, busy: boolean) {

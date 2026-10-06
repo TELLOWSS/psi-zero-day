@@ -118,6 +118,19 @@ interface FloatingText {
   color: string;
   life: number;
   maxLife: number;
+  isCrit?: boolean;
+}
+
+export interface ShockwaveRing {
+  id: number;
+  x: number;
+  y: number;
+  radius: number;
+  maxRadius: number;
+  color: string;
+  lineWidth: number;
+  life: number;
+  maxLife: number;
 }
 
 interface Particle {
@@ -174,6 +187,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const particlesRef = useRef<Particle[]>([]);
   const approvedStampsRef = useRef<ApprovedStamp[]>([]);
   const helmetSnapsRef = useRef<HelmetSnap[]>([]);
+  const shockwavesRef = useRef<ShockwaveRing[]>([]);
 
   // Keyboard input state
   const keysRef = useRef<{ [key: string]: boolean }>({});
@@ -574,6 +588,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     floodlight: 0,
     cone_trap: 0,
     safety_drone: 0,
+    grouting_gun: 0,
+    emp_generator: 0,
     steel_boots: 0,
     magnet_beacon: 0,
     safety_harness: 0,
@@ -584,6 +600,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     tesla_dome: 0,
     emf_barricade: 0,
     hunter_swarm: 0,
+    hydraulic_ram: 0,
+    plasma_grid: 0,
   });
 
   // Ultimate Director Roar & Boss Alert Mirrors
@@ -602,6 +620,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [currentWave, setCurrentWave] = useState(1);
   const wave1ShopTriggeredRef = useRef(false);
   const wave2ShopTriggeredRef = useRef(false);
+
+  // Extraction Climax (긴급 탈출 · 인계 클라이맥스) State & Refs
+  const [extractionState, setExtractionState] = useState<{
+    active: boolean;
+    countdown: number;
+    playerInside: boolean;
+    status: 'inbound' | 'active' | 'secured';
+  }>({ active: false, countdown: 15, playerInside: false, status: 'inbound' });
+  const extractionTimerRef = useRef(15);
+  const extractionTriggeredRef = useRef(false);
+  const extractionCompletedRef = useRef(false);
 
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
@@ -805,7 +834,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Floating text & particle helpers
   const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24', isCrit = false) => {
-    floatingTextsRef.current = floatingTextsRef.current.slice(-5);
+    floatingTextsRef.current = floatingTextsRef.current.slice(-12);
     floatingTextsRef.current.push({
       id: floatingIdRef.current++,
       x,
@@ -814,7 +843,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       color,
       life: isCrit ? 1.0 : 0.75,
       maxLife: isCrit ? 1.0 : 0.75,
+      isCrit,
     });
+  };
+
+  const spawnShockwave = (x: number, y: number, color = '#38bdf8', maxRadius = 60, lineWidth = 3.5, life = 0.35) => {
+    shockwavesRef.current.push({
+      id: Date.now() + Math.random(),
+      x,
+      y,
+      radius: 8,
+      maxRadius,
+      color,
+      lineWidth,
+      life,
+      maxLife: life,
+    });
+    if (shockwavesRef.current.length > 25) shockwavesRef.current.shift();
   };
 
   const spawnParticles = (x: number, y: number, color: string, count = 8, speed = 60, size = 3) => {
@@ -861,6 +906,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
+    shockwavesRef.current = [];
+    extractionTriggeredRef.current = false;
+    extractionCompletedRef.current = false;
+    extractionTimerRef.current = 15;
+    setExtractionState({ active: false, countdown: 15, playerInside: false, status: 'inbound' });
     helmetSnapsRef.current = [];
     approvedStampsRef.current = [];
     setCombo(0);
@@ -1252,6 +1302,60 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (currentWave !== 1) setCurrentWave(1);
         }
 
+        // Trigger Extraction Climax (긴급 탈출 · 인계 클라이맥스) when Wave 3 completes or boss neutralized
+        if (engine.state.phase === 'playing' && (engine.state.gameTime >= maxSurvivalTime || engine.state.stageBossNeutralized) && !extractionTriggeredRef.current && !extractionCompletedRef.current) {
+          extractionTriggeredRef.current = true;
+          engine.state.extractionPhase = {
+            x: WORLD_WIDTH / 2,
+            y: WORLD_HEIGHT / 2,
+            radius: 155,
+            countdown: 15,
+            totalTime: 15,
+            status: 'inbound',
+            playerInside: false,
+          };
+          setExtractionState({ active: true, countdown: 15, playerInside: false, status: 'inbound' });
+          screenShakeRef.current = 14;
+          spawnShockwave(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, '#10b981', 140, 5, 0.7);
+          spawnFloating(WORLD_WIDTH / 2, WORLD_HEIGHT / 2 - 40, '🚨 긴급 탈출 호송반 출동! 랑데부 구역을 사수하십시오!', '#10b981', true);
+          playSfx('boss_alarm');
+        }
+
+        // Process interactive extraction climax timer and holding zone
+        if (extractionTriggeredRef.current && !extractionCompletedRef.current) {
+          const lzX = WORLD_WIDTH / 2;
+          const lzY = WORLD_HEIGHT / 2;
+          const lzDist = Math.hypot(engine.state.player.x - lzX, engine.state.player.y - lzY);
+          const inside = lzDist <= 155;
+          extractionTimerRef.current = Math.max(0, extractionTimerRef.current - dt);
+          if (engine.state.extractionPhase) {
+            engine.state.extractionPhase.countdown = extractionTimerRef.current;
+            engine.state.extractionPhase.playerInside = inside;
+            engine.state.extractionPhase.status = inside ? 'active' : 'inbound';
+          }
+          setExtractionState({
+            active: true,
+            countdown: Math.ceil(extractionTimerRef.current),
+            playerInside: inside,
+            status: inside ? 'active' : 'inbound',
+          });
+
+          if (extractionTimerRef.current <= 0) {
+            extractionCompletedRef.current = true;
+            if (engine.state.extractionPhase) engine.state.extractionPhase.status = 'secured';
+            setExtractionState(prev => ({ ...prev, active: false, status: 'secured' }));
+            // Green flare burst & victory transition
+            spawnParticles(lzX, lzY, '#10b981', 70, 200, 5.5);
+            spawnParticles(lzX, lzY, '#ffffff', 25, 240, 3.5);
+            spawnShockwave(lzX, lzY, '#34d399', 180, 6, 0.9);
+            spawnFloating(lzX, lzY - 50, '🚁 탈출 호송 성공! 현장 전원 인계 완료!', '#10b981', true);
+            audioRef.current.playRecordedEffect('target_controlled', { x: lzX, y: lzY });
+            engine.state.phase = 'victory';
+            engine.state.score += 8000;
+            engine.state.psiCredits += 250;
+          }
+        }
+
         const incidentSecured=audioRef.current.playEncounterPhase(engine.state.bossEncounter,engine.state.phase==='playing',engine);
         const directorObscured=ultimateSourceObscured(engine.state.directorCutinPhase);
         projectileFeedbackRef.current.advance(dt,directorObscured);
@@ -1276,17 +1380,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
 
-          // Visual Juice: Sparks, fragments, and hit-stop screen shake on projectile impact
+          // Visual Juice: Sparks, fragments, shockwaves, and hit-stop screen shake on projectile impact
           if (event.phase === 'impact') {
             if (event.critical) {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 8.5);
+              spawnParticles(event.x, event.y, '#f59e0b', 12, 120, 3.5); // Golden welding sparks
+              spawnParticles(event.x, event.y, '#ffffff', 5, 140, 2.2); // Bright white core
+              spawnShockwave(event.x, event.y, '#fbbf24', 55, 3.5, 0.28);
+            } else if (event.kind === 'hydraulic_wave') {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 10.0);
+              spawnParticles(event.x, event.y, '#38bdf8', 14, 130, 4.0); // High-pressure hydraulic spray
+              spawnShockwave(event.x, event.y, '#0284c7', 75, 4.5, 0.35);
+            } else if (event.kind === 'emp_pulse' || event.kind === 'plasma_arc') {
               screenShakeRef.current = Math.max(screenShakeRef.current, 7.5);
-              spawnParticles(event.x, event.y, '#f59e0b', 9, 110, 3.2); // Golden welding sparks
-              spawnParticles(event.x, event.y, '#ffffff', 4, 130, 2.0); // Bright white core
+              spawnParticles(event.x, event.y, '#a78bfa', 12, 115, 3.2); // Electric plasma sparks
+              spawnShockwave(event.x, event.y, '#c084fc', 65, 3.8, 0.32);
             } else if (event.actorKind === 'RUNAWAY_CART' || event.actorKind === 'FALLING_DEBRIS') {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 4.0);
-              spawnParticles(event.x, event.y, '#f97316', 6, 85, 2.4); // Industrial fragments
+              screenShakeRef.current = Math.max(screenShakeRef.current, 5.0);
+              spawnParticles(event.x, event.y, '#f97316', 7, 95, 2.6); // Industrial fragments
+              spawnShockwave(event.x, event.y, '#ea580c', 42, 2.5, 0.22);
             } else {
-              spawnParticles(event.x, event.y, '#94a3b8', 3, 50, 1.8); // Steel/concrete contact dust
+              spawnParticles(event.x, event.y, '#94a3b8', 4, 60, 2.0); // Steel/concrete contact dust
             }
           }
         }
@@ -1339,8 +1453,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               spawnParticles(ev.x, ev.y - 20, '#10b981', 8, 65, 3.5);
               spawnFloating(ev.x, ev.y - 35, combatText.worker_resolved, '#10b981');
             } else if (ev.type === 'CRANE_BOSS') {
-              screenShakeRef.current = 28;
-              spawnParticles(ev.x, ev.y, '#f59e0b', 40, 160, 5);
+              screenShakeRef.current = 32;
+              spawnParticles(ev.x, ev.y, '#f59e0b', 50, 180, 5.5);
+              spawnShockwave(ev.x, ev.y, '#fbbf24', 120, 6, 0.6);
               spawnFloating(ev.x, ev.y - 50, combatText.lifting_resolved, '#fbbf24', true);
             }
           }
@@ -1400,13 +1515,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setBossRisk(designatedBoss ? Math.max(0, Math.ceil(designatedBoss.hp / designatedBoss.maxHp * 100)) : null);
         }
 
-        if (engine.state.phase !== 'playing') {
-          setPhase(engine.state.phase);
-          if (engine.state.phase === 'levelup') {
+        const currentPhase = engine.state.phase as SurvivorsGameState['phase'];
+        if (currentPhase !== 'playing') {
+          setPhase(currentPhase);
+          if (currentPhase === 'levelup') {
             setPerkOptions(engine.state.perkOptions);
             setRerollsLeft(engine.state.rerollsLeft);
           }
-          if ((engine.state.phase === 'victory' || engine.state.phase === 'defeat') && !rewardedRef.current.has(engine)) {
+          if ((currentPhase === 'victory' || currentPhase === 'defeat') && !rewardedRef.current.has(engine)) {
             rewardedRef.current.add(engine);
             // Save earned credits & Field Guide Points
             const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
@@ -1750,6 +1866,116 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
       approvedStampsRef.current = aliveStamps;
+
+      // RENDER SHOCKWAVE EXPANDING IMPACT RINGS
+      const aliveShockwaves: ShockwaveRing[] = [];
+      for (const sw of shockwavesRef.current) {
+        sw.life -= dt;
+        const progress = 1 - (sw.life / sw.maxLife);
+        sw.radius = 8 + (sw.maxRadius - 8) * Math.sin(progress * Math.PI / 2);
+        if (sw.life > 0) {
+          ctx.save();
+          ctx.translate(sw.x, sw.y);
+          ctx.scale(1, 0.58); // 2.5D ground contact oval
+          ctx.strokeStyle = sw.color;
+          ctx.lineWidth = Math.max(1, sw.lineWidth * (1 - progress * 0.7));
+          ctx.globalAlpha = Math.max(0, (1 - progress) * 0.85);
+          ctx.beginPath();
+          ctx.arc(0, 0, sw.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+          aliveShockwaves.push(sw);
+        }
+      }
+      shockwavesRef.current = aliveShockwaves;
+
+      // RENDER EXTRACTION LANDING ZONE (LZ) CLIMAX
+      if (extractionTriggeredRef.current && !extractionCompletedRef.current) {
+        const lzX = WORLD_WIDTH / 2;
+        const lzY = WORLD_HEIGHT / 2;
+        const lzRadius = 155;
+        const playerDist = Math.hypot(player.x - lzX, player.y - lzY);
+        const inside = playerDist <= lzRadius;
+        const pulse = 1 + Math.sin(time / 200) * 0.06;
+
+        ctx.save();
+        ctx.translate(lzX, lzY);
+        ctx.scale(1, 0.58); // 2.5D isometric ground projection
+
+        // 1. Glowing ground wash
+        const grad = ctx.createRadialGradient(0, 0, 20, 0, 0, lzRadius * pulse);
+        grad.addColorStop(0, inside ? 'rgba(16, 185, 129, 0.35)' : 'rgba(245, 158, 11, 0.22)');
+        grad.addColorStop(0.65, inside ? 'rgba(16, 185, 129, 0.12)' : 'rgba(245, 158, 11, 0.08)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(0, 0, lzRadius * pulse, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. Rotating radar beacon ring
+        ctx.strokeStyle = inside ? '#10b981' : '#f59e0b';
+        ctx.lineWidth = 4;
+        ctx.setLineDash([16, 12]);
+        ctx.beginPath();
+        ctx.arc(0, 0, lzRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 3. Rotating crosshair landing beacon
+        const beaconAngle = (time / 800) * Math.PI;
+        ctx.save();
+        ctx.rotate(beaconAngle);
+        ctx.strokeStyle = inside ? 'rgba(52, 211, 153, 0.6)' : 'rgba(251, 191, 36, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-lzRadius * 0.9, 0); ctx.lineTo(lzRadius * 0.9, 0);
+        ctx.moveTo(0, -lzRadius * 0.9); ctx.lineTo(0, lzRadius * 0.9);
+        ctx.stroke();
+        ctx.restore();
+
+        // 4. Central Helipad / Landing Pad Markings
+        ctx.strokeStyle = inside ? '#34d399' : '#fbbf24';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 48, 0, Math.PI * 2);
+        ctx.stroke();
+        // Big "H" (Helicopter / Evacuation mark)
+        ctx.font = 'bold 36px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = inside ? '#10b981' : '#f59e0b';
+        ctx.fillText('H', 0, 0);
+
+        // 5. Ground text status
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillStyle = inside ? '#6ee7b7' : '#fde047';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 6;
+        const statusText = inside
+          ? `[랑데부 구역 사수 중: ${Math.ceil(extractionTimerRef.current)}초]`
+          : `[랑데부 구역 진입 필요: ${Math.ceil(extractionTimerRef.current)}초]`;
+        ctx.fillText(statusText, 0, lzRadius + 28);
+        ctx.restore();
+
+        // 6. Directional navigation pointer if player is outside LZ
+        if (!inside) {
+          const dirAngle = Math.atan2(lzY - player.y, lzX - player.x);
+          ctx.save();
+          ctx.translate(player.x, player.y - 20);
+          ctx.rotate(dirAngle);
+          ctx.fillStyle = '#f59e0b';
+          ctx.shadowColor = '#fbbf24';
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.moveTo(55, 0);
+          ctx.lineTo(38, -10);
+          ctx.lineTo(42, 0);
+          ctx.lineTo(38, 10);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
 
       // STAGE-SPECIFIC ATMOSPHERIC WEATHER & INDUSTRIAL ENVIRONMENT
       if (engine.state.stageId === 'stage_02') {
@@ -2101,6 +2327,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const hazardPose = motions.sample(h, h.x, h.y, engine.state.gameTime, h.hp);
           ctx.save();
           ctx.translate(h.x, h.y);
+          if (h.hitFlashTimer && h.hitFlashTimer > 0) {
+            ctx.filter = 'brightness(3.2) contrast(1.6)';
+          }
 
           // Telegraphs share the engine's locked trajectory and contact window.
           if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'warning') {
@@ -2621,6 +2850,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         p.life -= dt;
         p.x += p.vx * dt;
         p.y += p.vy * dt;
+        p.vx *= 0.94; // air friction deceleration
+        p.vy = p.vy * 0.94 + 75 * dt; // gravity
         if (p.life > 0) {
           ctx.save();
           ctx.fillStyle = p.color;
@@ -2676,20 +2907,24 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       helmetSnapsRef.current = aliveHelmets;
 
-      // 11. RENDER FLOATING TEXTS
+      // 11. RENDER FLOATING TEXTS (With Critical Impact Pop & Golden Glow)
       const aliveTexts: FloatingText[] = [];
       for (const ft of floatingTextsRef.current) {
         ft.life -= dt;
-        ft.y -= 38 * dt;
+        ft.y -= (ft.isCrit ? 46 : 38) * dt;
         if (ft.life > 0) {
           ctx.save();
-          ctx.font = 'bold 11px sans-serif';
+          const progress = 1 - (ft.life / ft.maxLife);
+          const scale = ft.isCrit ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
+          ctx.translate(ft.x, ft.y);
+          ctx.scale(scale, scale);
+          ctx.font = ft.isCrit ? '900 15px sans-serif' : 'bold 11px sans-serif';
           ctx.fillStyle = ft.color;
-          ctx.shadowColor = '#000000';
-          ctx.shadowBlur = 5;
+          ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';
+          ctx.shadowBlur = ft.isCrit ? 10 : 5;
           ctx.textAlign = 'center';
-          ctx.globalAlpha = ft.life / ft.maxLife;
-          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.globalAlpha = Math.min(1, ft.life / (ft.maxLife * 0.55));
+          ctx.fillText(ft.text, 0, 0);
           ctx.restore();
           aliveTexts.push(ft);
         }
@@ -2847,6 +3082,45 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}
+
+      {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
+      {phase === 'playing' && extractionState.active && (
+        <aside
+          className="survivors-extraction-banner"
+          aria-live="assertive"
+          style={{
+            position: 'absolute',
+            top: 76,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: extractionState.playerInside
+              ? 'linear-gradient(135deg, rgba(6, 78, 59, 0.94), rgba(4, 120, 87, 0.97))'
+              : 'linear-gradient(135deg, rgba(120, 53, 15, 0.94), rgba(180, 83, 9, 0.97))',
+            border: extractionState.playerInside ? '2px solid #34d399' : '2px solid #fbbf24',
+            borderRadius: 14,
+            padding: '10px 24px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.7), 0 0 20px rgba(16,185,129,0.45)',
+            color: '#ffffff',
+            fontWeight: 800,
+            fontSize: '15px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            zIndex: 65,
+            pointerEvents: 'none',
+          }}
+        >
+          <span style={{ fontSize: '26px' }}>🚨</span>
+          <div>
+            <div style={{ letterSpacing: '0.04em', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+              {extractionState.playerInside ? '안전 호송반 랑데부 구역 확보 중! [대기 사수]' : '경고: 랑데부 구역(중앙 LZ)으로 신속히 이동하십시오!'}
+            </div>
+            <div style={{ fontSize: '12px', color: extractionState.playerInside ? '#a7f3d0' : '#fde68a', fontWeight: 600 }}>
+              비상 호송 완료까지: <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초</span>
+            </div>
+          </div>
+        </aside>
+      )}
 
       {phase === 'playing' && !bossSecured && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 

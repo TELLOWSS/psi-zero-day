@@ -35,6 +35,10 @@ function buildTuning(id: PerkId, level: number): EquipmentTuning | undefined {
     case 'tesla_dome': return { damage: 80, secondaryDamage: 40, continuousDamage: 65, interval: .8, count: 3, radius: 155, pierce: 2, duration: .3 };
     case 'emf_barricade': return { damage: 180, interval: 2.4, count: 1, radius: 30, pierce: 6, duration: 6 };
     case 'hunter_swarm': return { damage: 48, interval: .4, count: 3, radius: 9, pierce: 2, duration: .38 };
+    case 'grouting_gun': return { damage: 24 + level * 8, interval: Math.max(.7, 1.8 - level * .2), count: 3 + Math.floor(level / 2), radius: 14 + level * 2, pierce: 3 + Math.floor(level / 2), duration: .75 };
+    case 'emp_generator': return { damage: 40 + level * 16, interval: Math.max(1.5, 3.2 - level * .3), count: 1, radius: 85 + level * 15, pierce: 99, duration: .4 };
+    case 'hydraulic_ram': return { damage: 190, interval: 1.5, count: 5, radius: 24, pierce: 8, duration: .85 };
+    case 'plasma_grid': return { damage: 110, continuousDamage: 75, interval: .85, count: 1, radius: 165, pierce: 99, duration: .55 };
     default: return undefined;
   }
 }

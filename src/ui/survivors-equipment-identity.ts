@@ -28,6 +28,8 @@ export const EVOLUTION_IDENTITIES:Record<EvolutionPerkId,{kind:ProjectileKind;co
   tesla_dome:{kind:'tesla_bolt',color:'#a8ed86',cell:2,marks:3},
   emf_barricade:{kind:'emf_beam',color:'#ffbd72',cell:3,marks:4},
   hunter_swarm:{kind:'hunter_beam',color:'#e2b6ff',cell:10,marks:3},
+  hydraulic_ram:{kind:'hydraulic_wave',color:'#38bdf8',cell:4,marks:5},
+  plasma_grid:{kind:'plasma_arc',color:'#a78bfa',cell:5,marks:6},
 };
 export function isEvolvedProjectile(kind:ProjectileKind):boolean {
   return Object.values(EVOLUTION_IDENTITIES).some(identity=>identity.kind===kind);

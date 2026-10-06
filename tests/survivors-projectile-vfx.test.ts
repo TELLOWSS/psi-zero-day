@@ -5,7 +5,7 @@ import type { Projectile, ProjectileKind } from '../src/domain/patrol-survivors'
 const projectile=(kind:ProjectileKind):Projectile=>({id:kind,x:10,y:20,vx:240,vy:120,radius:12,damage:10,duration:.2,pierce:1,kind});
 describe('equipment-specific projectile presentation',()=>{
   it('covers every engine kind while keeping physical cones on their approved sprite pass',()=>{
-    expect(Object.keys(PROJECTILE_VFX)).toHaveLength(10);
+    expect(Object.keys(PROJECTILE_VFX)).toHaveLength(14);
     expect(new Set(Object.values(PROJECTILE_VFX).map(v=>v.family)).size).toBe(8);
     expect(PROJECTILE_VFX.cone_trap.family).toBe('physical');
   });

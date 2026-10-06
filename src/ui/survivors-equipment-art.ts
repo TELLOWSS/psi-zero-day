@@ -3,8 +3,8 @@ import type { BaseWeaponId, PerkId } from '../domain/patrol-survivors';
 
 export const PICKUP_ART='/assets/survivors/pickup-atlas-v2.webp';
 export const EQUIPMENT_ART='/assets/survivors/equipment-growth-v1.webp';
-export const EQUIPMENT_ROWS: Record<BaseWeaponId,number>={radio_boost:0,extinguisher:1,floodlight:2,cone_trap:3,safety_drone:4};
-const EVOLVED: Partial<Record<PerkId,BaseWeaponId>>={satellite_broadcast:'radio_boost',cryo_blizzard:'extinguisher',tesla_dome:'floodlight',emf_barricade:'cone_trap',hunter_swarm:'safety_drone'};
+export const EQUIPMENT_ROWS: Record<BaseWeaponId,number>={radio_boost:0,extinguisher:1,floodlight:2,cone_trap:3,safety_drone:4,grouting_gun:1,emp_generator:2};
+const EVOLVED: Partial<Record<PerkId,BaseWeaponId>>={satellite_broadcast:'radio_boost',cryo_blizzard:'extinguisher',tesla_dome:'floodlight',emf_barricade:'cone_trap',hunter_swarm:'safety_drone',hydraulic_ram:'grouting_gun',plasma_grid:'emp_generator'};
 export function equipmentAppearance(id:PerkId,level:number) {
  const base=EVOLVED[id] ?? id;
  if(!(base in EQUIPMENT_ROWS)) return null;

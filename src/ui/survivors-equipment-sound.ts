@@ -9,6 +9,8 @@ const signatures: Record<ProjectileKind, readonly [number, number, number, numbe
   drone_laser: [1050, .12, .08, .16], hunter_beam: [710, .16, .12, .22],
   tesla_bolt: [210, .20, .48, .28], emf_beam: [125, .26, .14, .25],
   shout_shockwave: [85, .28, .40, .08], cone_trap: [180, .17, .50, .14],
+  grout_slug: [140, .18, .60, .10], hydraulic_wave: [110, .32, .50, .18],
+  emp_pulse: [190, .26, .35, .25], plasma_arc: [280, .28, .40, .30],
 };
 /** Deterministic baked PCM: no per-frame oscillators or additional voice layers. */
 export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFeedback['phase'], worker: boolean, sampleRate: number, equipped:readonly string[]=[], actorKind?:ProjectileFeedback['actorKind']): Float32Array {

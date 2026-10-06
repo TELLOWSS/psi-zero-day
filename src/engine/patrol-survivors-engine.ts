@@ -376,6 +376,22 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
     maxLevel: 5,
     category: 'weapon',
   },
+  grouting_gun: {
+    id: 'grouting_gun',
+    name: '초고압 그라우팅 주입건',
+    description: '고압 시멘트 몰탈을 전방에 관통 분사하여 밀어내고 슬로우를 부여합니다.',
+    icon: '🔫',
+    maxLevel: 5,
+    category: 'weapon',
+  },
+  emp_generator: {
+    id: 'emp_generator',
+    name: '휴대용 발전기 EMP 쇼크웨이브',
+    description: '주기적으로 고압 펄스를 방출해 주변 기계 위험 요소를 스턴시키고 피해를 입힙니다.',
+    icon: '🔋',
+    maxLevel: 5,
+    category: 'weapon',
+  },
 
   // --- Support Perks ---
   steel_boots: {
@@ -465,6 +481,24 @@ export const PERK_CATALOG: Record<PerkId, Omit<Perk, 'level'>> = {
     category: 'evolution',
     recipe: { weapon: 'safety_drone', support: 'data_chip' },
   },
+  hydraulic_ram: {
+    id: 'hydraulic_ram',
+    name: '★ 유압식 충격 램 브레이커',
+    description: '[진화 그라우팅건] 전방 180도에 초강력 유압 충격을 가해 경로상의 모든 위협을 분쇄 및 기절시킵니다.',
+    icon: '💥',
+    maxLevel: 1,
+    category: 'evolution',
+    recipe: { weapon: 'grouting_gun', support: 'steel_boots' },
+  },
+  plasma_grid: {
+    id: 'plasma_grid',
+    name: '★ 초전도 플라즈마 그리드 돔',
+    description: '[진화 EMP] 전자기 돔이 지속 전도되어 영역 내 모든 적에게 연쇄 번개 피해 및 주기적 마비 충격을 가합니다.',
+    icon: '🌐',
+    maxLevel: 1,
+    category: 'evolution',
+    recipe: { weapon: 'emp_generator', support: 'data_chip' },
+  },
 };
 
 export const EVOLUTION_RECIPES: Record<EvolutionPerkId, { weapon: BaseWeaponId; support: SupportPerkId }> = {
@@ -473,6 +507,8 @@ export const EVOLUTION_RECIPES: Record<EvolutionPerkId, { weapon: BaseWeaponId; 
   tesla_dome: { weapon: 'floodlight', support: 'safety_harness' },
   emf_barricade: { weapon: 'cone_trap', support: 'steel_boots' },
   hunter_swarm: { weapon: 'safety_drone', support: 'data_chip' },
+  hydraulic_ram: { weapon: 'grouting_gun', support: 'steel_boots' },
+  plasma_grid: { weapon: 'emp_generator', support: 'data_chip' },
 };
 
 export interface GameInput {
@@ -537,6 +573,8 @@ export function createInitialSurvivorsState(
     floodlight: 0,
     cone_trap: 0,
     safety_drone: 0,
+    grouting_gun: 0,
+    emp_generator: 0,
     steel_boots: 0,
     magnet_beacon: 0,
     safety_harness: 0,
@@ -547,6 +585,8 @@ export function createInitialSurvivorsState(
     tesla_dome: 0,
     emf_barricade: 0,
     hunter_swarm: 0,
+    hydraulic_ram: 0,
+    plasma_grid: 0,
   };
 
   // Set starting weapon
@@ -623,6 +663,8 @@ interface Cooldowns {
   tesla: number;
   emf: number;
   hunter: number;
+  grouting: number;
+  emp: number;
   spawnTimer: number;
 }
 
@@ -637,6 +679,8 @@ export class SurvivorsEngine {
     tesla: 0,
     emf: 0,
     hunter: 0,
+    grouting: 0,
+    emp: 0,
     spawnTimer: 1.5,
   };
 
@@ -1343,6 +1387,135 @@ export class SurvivorsEngine {
         }
       }
     }
+
+    // ==========================================
+    // 6. Grouting Gun & Evolution: Hydraulic Ram
+    // ==========================================
+    const hasRam = activePerks.hydraulic_ram > 0;
+    if (hasRam) {
+      this.cooldowns.grouting -= dt;
+      if (this.cooldowns.grouting <= 0) {
+        this.cooldowns.grouting = equipmentTuning('hydraulic_ram', 1)!.interval * cdReduction;
+        const tuning = equipmentTuning('hydraulic_ram', 1)!;
+        const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
+        for (let i = 0; i < tuning.count; i++) {
+          const spread = (i - (tuning.count - 1) / 2) * 0.28;
+          const angle = baseAngle + spread;
+          this.addProjectile({
+            id: this.genId('proj_ram'),
+            x: player.x,
+            y: player.y,
+            vx: Math.cos(angle) * 520,
+            vy: Math.sin(angle) * 520,
+            radius: tuning.radius,
+            damage: tuning.damage * player.damageMultiplier,
+            duration: tuning.duration,
+            pierce: tuning.pierce,
+            kind: 'hydraulic_wave',
+            color: '#38bdf8',
+          });
+        }
+      }
+    } else {
+      const groutLvl = activePerks.grouting_gun;
+      if (groutLvl > 0) {
+        this.cooldowns.grouting -= dt;
+        const groutCd = equipmentTuning('grouting_gun', groutLvl)!.interval * cdReduction;
+        if (this.cooldowns.grouting <= 0) {
+          this.cooldowns.grouting = groutCd;
+          const tuning = equipmentTuning('grouting_gun', groutLvl)!;
+          const baseAngle = Math.atan2(this.lastFacingY, this.lastFacingX);
+          for (let i = 0; i < tuning.count; i++) {
+            const spread = (i - (tuning.count - 1) / 2) * 0.22;
+            const angle = baseAngle + spread;
+            const spd = 400 + (this.random() - 0.5) * 60;
+            this.addProjectile({
+              id: this.genId('proj_grout'),
+              x: player.x,
+              y: player.y,
+              vx: Math.cos(angle) * spd,
+              vy: Math.sin(angle) * spd,
+              radius: tuning.radius,
+              damage: tuning.damage * player.damageMultiplier,
+              duration: tuning.duration,
+              pierce: tuning.pierce,
+              kind: 'grout_slug',
+              color: '#94a3b8',
+            });
+          }
+        }
+      }
+    }
+
+    // ==========================================
+    // 7. EMP Generator & Evolution: Plasma Grid
+    // ==========================================
+    const hasPlasma = activePerks.plasma_grid > 0;
+    if (hasPlasma) {
+      this.cooldowns.emp -= dt;
+      const tuning = equipmentTuning('plasma_grid', 1)!;
+      for (const h of hazards) {
+        if (h.hp <= 0) continue;
+        const dist = Math.hypot(h.x - player.x, h.y - player.y);
+        if (dist <= tuning.radius + h.radius) {
+          this.damageHazard(h, tuning.continuousDamage! * player.damageMultiplier * dt);
+        }
+      }
+      if (this.cooldowns.emp <= 0) {
+        this.cooldowns.emp = tuning.interval * cdReduction;
+        for (const h of hazards) {
+          if (h.hp <= 0) continue;
+          const dist = Math.hypot(h.x - player.x, h.y - player.y);
+          if (dist <= tuning.radius + h.radius) {
+            this.damageHazard(h, tuning.damage * player.damageMultiplier);
+            h.isStunned = Math.max(h.isStunned || 0, 1.4);
+          }
+        }
+        this.addProjectile({
+          id: this.genId('proj_plasma'),
+          x: player.x,
+          y: player.y,
+          vx: 0,
+          vy: 0,
+          radius: tuning.radius,
+          damage: tuning.damage * player.damageMultiplier,
+          duration: tuning.duration,
+          pierce: tuning.pierce,
+          kind: 'plasma_arc',
+          color: '#a78bfa',
+        });
+      }
+    } else {
+      const empLvl = activePerks.emp_generator;
+      if (empLvl > 0) {
+        this.cooldowns.emp -= dt;
+        const tuning = equipmentTuning('emp_generator', empLvl)!;
+        if (this.cooldowns.emp <= 0) {
+          this.cooldowns.emp = tuning.interval * cdReduction;
+          for (const h of hazards) {
+            if (h.hp <= 0) continue;
+            const dist = Math.hypot(h.x - player.x, h.y - player.y);
+            if (dist <= tuning.radius + h.radius) {
+              this.damageHazard(h, tuning.damage * player.damageMultiplier);
+              h.isStunned = Math.max(h.isStunned || 0, 1.0);
+            }
+          }
+          this.addProjectile({
+            id: this.genId('proj_emp'),
+            x: player.x,
+            y: player.y,
+            vx: 0,
+            vy: 0,
+            radius: tuning.radius,
+            damage: tuning.damage * player.damageMultiplier,
+            duration: tuning.duration,
+            pierce: tuning.pierce,
+            kind: 'emp_pulse',
+            color: '#60a5fa',
+          });
+        }
+      }
+    }
   }
 
   private updateProjectiles(dt: number) {
@@ -1356,8 +1529,8 @@ export class SurvivorsEngine {
       p.y += p.vy * dt;
 
       // Expand shockwave radius smoothly
-      if (p.kind === 'shout_shockwave') {
-        p.radius += 600 * dt;
+      if (p.kind === 'shout_shockwave' || p.kind === 'emp_pulse' || p.kind === 'hydraulic_wave') {
+        p.radius += 400 * dt;
       }
 
       if (
@@ -1428,6 +1601,9 @@ export class SurvivorsEngine {
   }
 
   private damageHazard(h: Hazard, amount: number, projectile=false): void {
+    if (amount > 0) {
+      h.hitFlashTimer = 0.08;
+    }
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
       if(h.bossGameplay){bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);return;}
@@ -1557,6 +1733,10 @@ export class SurvivorsEngine {
         if (h.weakPointTimer === 0) {
           h.weakPointExposed = false;
         }
+      }
+
+      if ((h.hitFlashTimer ?? 0) > 0) {
+        h.hitFlashTimer = Math.max(0, (h.hitFlashTimer ?? 0) - dt);
       }
 
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
