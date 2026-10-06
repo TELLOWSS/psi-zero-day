@@ -626,7 +626,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [signatureEvent,setSignatureEvent]=useState<SurvivorsGameState['signatureEvent']>();
   const [signatureCounterplay,setSignatureCounterplay]=useState<SurvivorsGameState['signatureCounterplay']>();
   const [signatureCounterplayBuffs,setSignatureCounterplayBuffs]=useState<SurvivorsGameState['signatureCounterplayBuffs']>();
+  const [signatureMastery,setSignatureMastery]=useState<SurvivorsGameState['signatureMastery']>();
   const signatureCinematicRef=useRef('');
+  const masteryCinematicRef=useRef('');
   const signaturePressureRef=useRef(0);
   const [currentWave, setCurrentWave] = useState<SurvivorsWave>(1);
   const currentWaveRef=useRef<SurvivorsWave>(1);
@@ -736,7 +738,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   useEffect(() => { audioRef.current.setMuted(audioMuted); if ((phase === 'paused'&&!accountabilityCase)||phase === 'ready') audioRef.current.silence(); }, [audioMuted, phase, accountabilityCase]);
 
   // Supplied event recordings replace their synth cues; remaining equipment effects are procedural.
-  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution', position?: { x: number; y: number }) => {
+  const playSfx = useCallback((type: 'impact' | 'control' | 'control_heavy' | 'shoot' | 'spray' | 'hit' | 'pickup' | 'levelup' | 'defeat' | 'win' | 'laser' | 'boss_alarm' | 'shout' | 'evolution' | 'mastery', position?: { x: number; y: number }) => {
     if (audioMuted) return;
     try {
       const ctx = audioRef.current.getContext();
@@ -744,6 +746,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if (type === 'evolution') {
         const cue=SURVIVORS_SCORE_CANDIDATES.find(a=>a.id==='patrol.evolution');
         if(cue)void audioRef.current.auditionCue(cue,3);
+        return;
+      }
+      if(type==='mastery'){
+        const now=ctx.currentTime;
+        audioRef.current.duckMusic(1.1);
+        [261.63,392,523.25,783.99].forEach((freq,idx)=>{
+          const osc=ctx.createOscillator(),gain=ctx.createGain(),t=now+idx*.055;
+          osc.type=idx<2?'triangle':'sine';
+          osc.frequency.setValueAtTime(freq,t);
+          gain.gain.setValueAtTime(.001,t);
+          gain.gain.linearRampToValueAtTime(idx===3?.34:.24,t+.018);
+          gain.gain.exponentialRampToValueAtTime(.001,t+.34);
+          if(!audioRef.current.track(osc,gain,4))return;
+          osc.connect(gain);audioRef.current.connectSfx(osc,gain,position,engineRef.current?.state.player);
+          osc.start(t);osc.stop(t+.35);
+        });
         return;
       }
       if(type==='win'||type==='defeat')return;
@@ -972,7 +990,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setSignatureEvent(undefined);
     setSignatureCounterplay(undefined);
     setSignatureCounterplayBuffs(undefined);
+    setSignatureMastery(undefined);
     signatureCinematicRef.current='';
+    masteryCinematicRef.current='';
     signaturePressureRef.current=0;
     currentWaveRef.current=1;
     setCurrentWave(1);
@@ -1355,6 +1375,44 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
         }
 
+        const masteryNotice=engine.state.signatureMastery?.notice;
+        const masteryToken=masteryNotice?`${masteryNotice.kind}:${masteryNotice.chain}`:'';
+        if(masteryToken&&masteryCinematicRef.current!==masteryToken){
+          masteryCinematicRef.current=masteryToken;
+          const finisher=engine.state.lastKilledEvents?.find(event=>event.mastery);
+          const fxX=finisher?.x??engine.state.player.x;
+          const fxY=finisher?.y??engine.state.player.y;
+          if(masteryNotice!.kind==='perfect'){
+            spawnParticles(fxX,fxY,'#67e8f9',18,105,3.2);
+            spawnShockwave(fxX,fxY,'#22d3ee',72,3.5,.38);
+            spawnFloating(fxX,fxY-44,'PERFECT · CHAIN START','#67e8f9',true);
+          }else if(masteryNotice!.kind==='armed'){
+            screenShakeRef.current=Math.max(screenShakeRef.current,11);
+            audioRef.current.duckMusic(.9);
+            playSfx('mastery',{x:fxX,y:fxY});
+            spawnParticles(fxX,fxY,'#fbbf24',34,155,4.2);
+            spawnParticles(fxX,fxY,'#ffffff',14,185,2.8);
+            spawnShockwave(fxX,fxY,'#f59e0b',118,5,.58);
+            spawnFloating(fxX,fxY-54,'PERFECT ×2 · FINISHER ARMED','#fde68a',true);
+          }else if(masteryNotice!.kind==='broken'){
+            spawnShockwave(fxX,fxY,'#ef4444',62,2.5,.28);
+            spawnFloating(fxX,fxY-40,'CHAIN BROKEN','#fca5a5',true);
+          }else if(masteryNotice!.kind==='zero_day'){
+            screenShakeRef.current=Math.max(screenShakeRef.current,38);
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,1);
+            audioRef.current.duckMusic(1.6);
+            playSfx('mastery',{x:fxX,y:fxY});
+            audioRef.current.playRecordedEffect('target_controlled',{x:fxX,y:fxY},engine.state.player);
+            spawnParticles(fxX,fxY,'#fbbf24',72,250,5.5);
+            spawnParticles(fxX,fxY,'#67e8f9',48,220,4.5);
+            spawnParticles(fxX,fxY,'#ffffff',32,280,3.2);
+            spawnShockwave(fxX,fxY,'#fbbf24',190,7,.85);
+            spawnShockwave(fxX,fxY,'#22d3ee',245,4.5,1.05);
+            spawnFloating(fxX,fxY-66,'ZERO DAY CHAIN · PERFECT ×3','#fef3c7',true);
+          }
+        }
+        if(!masteryNotice)masteryCinematicRef.current='';
+
         // Wave progression stays continuous. Supply access is opt-in from the pause menu:
         // never interrupt active combat with a shop-style modal.
         const maxSurvivalTime = engine.state.maxTime || 180;
@@ -1598,6 +1656,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setSignatureCounterplay(previous => previous?.eventId===engine.state.signatureCounterplay?.eventId && previous?.kind===engine.state.signatureCounterplay?.kind && previous?.remaining===engine.state.signatureCounterplay?.remaining
           ? previous : engine.state.signatureCounterplay ? {...engine.state.signatureCounterplay} : undefined);
         setSignatureCounterplayBuffs(engine.state.signatureCounterplayBuffs?{...engine.state.signatureCounterplayBuffs}:undefined);
+        setSignatureMastery(engine.state.signatureMastery?{
+          ...engine.state.signatureMastery,
+          perfectEvents:[...engine.state.signatureMastery.perfectEvents],
+          notice:engine.state.signatureMastery.notice?{...engine.state.signatureMastery.notice}:undefined,
+        }:undefined);
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
@@ -3264,6 +3327,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
+      {phase === 'playing' && signatureMastery && signatureMastery.chain>0 && (
+        <aside className={`survivors-mastery-meter${signatureMastery.finisherArmed?' is-armed':''}${signatureMastery.zeroDay?' is-zero-day':''}`} aria-label="Signature Mastery 연쇄 상태">
+          <span>SIGNATURE MASTERY</span>
+          <strong>{signatureMastery.zeroDay?'ZERO DAY CHAIN':`PERFECT ×${signatureMastery.chain}`}</strong>
+          <small>{signatureMastery.finisherArmed?'BOSS FINISHER ARMED':signatureMastery.zeroDay?'PERFECT ×3 COMPLETE':'다음 Signature 완벽 대응으로 연쇄 강화'}</small>
+        </aside>
+      )}
+
+      {phase === 'playing' && signatureMastery?.notice && (
+        <aside className={`survivors-mastery-notice is-${signatureMastery.notice.kind}`} role="status" aria-live="assertive">
+          <span>{signatureMastery.notice.kind==='zero_day'?'MASTER CLEAR':'SIGNATURE MASTERY'}</span>
+          <strong>{signatureMastery.notice.title}</strong>
+          <small>{signatureMastery.notice.detail}</small>
+        </aside>
+      )}
+
       {phase === 'playing' && signatureCounterplayBuffs && ((signatureCounterplayBuffs.cooldownRush??0)>0 || (signatureCounterplayBuffs.bossWeakPointSeconds??0)>0) && (
         <aside className="survivors-counterplay-active" aria-live="polite">
           {(signatureCounterplayBuffs.cooldownRush??0)>0 && <span>⚡ 대응속도 가속 <b>{signatureCounterplayBuffs.cooldownRush!.toFixed(1)}s</b></span>}
@@ -3960,6 +4039,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div className="survivors-stat-box">
                 <span>획득 PSI 크레딧</span>
                 <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
+              </div>
+              <div className="survivors-stat-box">
+                <span>Signature Mastery</span>
+                <strong className={engineRef.current?.state.signatureMastery?.zeroDay?'is-zero-day-mastery':''}>
+                  {engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`}
+                </strong>
               </div>
             </div>
 
