@@ -623,6 +623,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
   const [waveDirectorNotice,setWaveDirectorNotice]=useState<{wave:SurvivorsWave;title:string;detail:string}|null>(null);
   const [signatureEvent,setSignatureEvent]=useState<SurvivorsGameState['signatureEvent']>();
+  const [signatureCounterplay,setSignatureCounterplay]=useState<SurvivorsGameState['signatureCounterplay']>();
+  const [signatureCounterplayBuffs,setSignatureCounterplayBuffs]=useState<SurvivorsGameState['signatureCounterplayBuffs']>();
   const signatureCinematicRef=useRef('');
   const signaturePressureRef=useRef(0);
   const [currentWave, setCurrentWave] = useState<SurvivorsWave>(1);
@@ -967,6 +969,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setWaveSupplyNotice(null);
     setWaveDirectorNotice(null);
     setSignatureEvent(undefined);
+    setSignatureCounterplay(undefined);
+    setSignatureCounterplayBuffs(undefined);
     signatureCinematicRef.current='';
     signaturePressureRef.current=0;
     currentWaveRef.current=1;
@@ -1590,6 +1594,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setBossAlert(engine.state.bossName);
         setSignatureEvent(previous => previous?.id===engine.state.signatureEvent?.id && previous?.phase===engine.state.signatureEvent?.phase && previous?.remaining===engine.state.signatureEvent?.remaining
           ? previous : engine.state.signatureEvent ? {...engine.state.signatureEvent,positions:engine.state.signatureEvent.positions.map(point=>({...point}))} : undefined);
+        setSignatureCounterplay(previous => previous?.eventId===engine.state.signatureCounterplay?.eventId && previous?.kind===engine.state.signatureCounterplay?.kind && previous?.remaining===engine.state.signatureCounterplay?.remaining
+          ? previous : engine.state.signatureCounterplay ? {...engine.state.signatureCounterplay} : undefined);
+        setSignatureCounterplayBuffs(engine.state.signatureCounterplayBuffs?{...engine.state.signatureCounterplayBuffs}:undefined);
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
@@ -3244,6 +3251,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <b>{signatureEvent.workface}</b>
           <strong>{signatureEvent.title}</strong>
           <small>{signatureEvent.phase==='resolved'?`${signatureEvent.detail} · +${signatureEvent.reward??0} PSI`:signatureEvent.detail}</small>
+        </aside>
+      )}
+
+      {signatureCounterplay && phase === 'playing' && (
+        <aside className={`survivors-counterplay-banner kind-${signatureCounterplay.kind}`} role="status" aria-live="assertive" style={{'--counterplay-accent':signatureCounterplay.accent} as CSSProperties}>
+          <span>SKILL COUNTERPLAY · PERFECT RESPONSE</span>
+          <strong>{signatureCounterplay.title}</strong>
+          <small>{signatureCounterplay.detail}</small>
+        </aside>
+      )}
+
+      {phase === 'playing' && signatureCounterplayBuffs && ((signatureCounterplayBuffs.cooldownRush??0)>0 || (signatureCounterplayBuffs.bossWeakPointSeconds??0)>0) && (
+        <aside className="survivors-counterplay-active" aria-live="polite">
+          {(signatureCounterplayBuffs.cooldownRush??0)>0 && <span>⚡ 대응속도 가속 <b>{signatureCounterplayBuffs.cooldownRush!.toFixed(1)}s</b></span>}
+          {(signatureCounterplayBuffs.bossWeakPointSeconds??0)>0 && <span>◎ 보스 약점 선공개 <b>{signatureCounterplayBuffs.bossWeakPointSeconds!.toFixed(1)}s</b></span>}
         </aside>
       )}
 
