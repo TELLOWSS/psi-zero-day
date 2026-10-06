@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationPlan,operationTiming} from '../src/engine/survivors-operation';
-import {signatureEventPlan} from '../src/engine/survivors-signature-events';
+import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../src/engine/survivors-signature-events';
 
 describe('wave signature events',()=>{
   it('authors one Wave 2 and one Wave 3 event for all 50 stages',()=>{
@@ -32,6 +32,66 @@ describe('wave signature events',()=>{
     ]));
   });
 
+  it('locks six different gameplay identities rather than six cosmetic labels',()=>{
+    const ids:SignatureEventId[]=['cart_convoy','gas_bloom','lifting_cross','debris_corridor','equipment_pincer','precollapse_signal'];
+    const identities=ids.map(id=>signatureEventIdentity(id));
+    expect(new Set(identities.map(row=>row.mechanic)).size).toBe(6);
+    expect(new Set(identities.map(row=>row.accent)).size).toBe(6);
+    expect(signatureEventIdentity('precollapse_signal').cameraPressure)
+      .toBeGreaterThan(signatureEventIdentity('gas_bloom').cameraPressure);
+  });
+
+  it('authors distinct hazard physics for speed, space, timing, pincer and collapse play',()=>{
+    const all=Object.values(PATROL_STAGES).flatMap(stage=>signatureEventPlan(stage,180));
+    const event=(id:SignatureEventId)=>all.find(row=>row.id===id)!;
+
+    const convoy=event('cart_convoy');
+    expect(convoy.spawns.every(spawn=>spawn.type==='RUNAWAY_CART')).toBe(true);
+    expect(convoy.spawns.every(spawn=>(spawn.speedScale??0)>1.4)).toBe(true);
+    expect(convoy.spawns.every(spawn=>spawn.directionX===1&&spawn.directionY===0)).toBe(true);
+    expect(new Set(convoy.spawns.map(spawn=>spawn.warningTimer)).size).toBe(3);
+
+    const gas=event('gas_bloom');
+    expect(gas.spawns.every(spawn=>spawn.type==='GAS_LEAK')).toBe(true);
+    expect(gas.spawns.every(spawn=>(spawn.speedScale??1)<.3)).toBe(true);
+    expect(gas.spawns.every(spawn=>(spawn.radiusScale??1)>1.3)).toBe(true);
+
+    const cross=event('lifting_cross');
+    const crossDebris=cross.spawns.filter(spawn=>spawn.type==='FALLING_DEBRIS');
+    expect(crossDebris.map(spawn=>spawn.warningTimer)).toEqual([.66,.94,1.22]);
+    expect(cross.spawns.find(spawn=>spawn.type==='RUNAWAY_CART')?.directionX).toBe(-1);
+
+    const corridor=event('debris_corridor');
+    expect(corridor.spawns.map(spawn=>spawn.warningTimer)).toEqual([.48,.72,.96,1.2]);
+    expect(corridor.spawns.every(spawn=>(spawn.radiusScale??1)>1)).toBe(true);
+
+    const pincer=event('equipment_pincer');
+    const carts=pincer.spawns.filter(spawn=>spawn.type==='RUNAWAY_CART');
+    expect(carts.map(spawn=>spawn.directionX)).toEqual([1,-1]);
+    expect(pincer.spawns.filter(spawn=>spawn.type==='GAS_LEAK').every(spawn=>(spawn.radiusScale??1)>1.5)).toBe(true);
+
+    const collapse=event('precollapse_signal');
+    const collapseDebris=collapse.spawns.filter(spawn=>spawn.type==='FALLING_DEBRIS');
+    expect(collapseDebris[0]!.warningTimer).toBeGreaterThan(collapseDebris.at(-1)!.warningTimer!);
+    expect(collapse.spawns.find(spawn=>spawn.type==='GAS_LEAK')!.radiusScale).toBeGreaterThan(1.7);
+  });
+
+  it('materializes authored physics into live hazards',()=>{
+    const stage=Object.values(PATROL_STAGES).find(row=>signatureEventPlan(row,180).some(event=>event.id==='cart_convoy'))!;
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,stage.id),2048);
+    const trigger=engine as unknown as {updateSignatureEvents():void};
+    const convoy=signatureEventPlan(stage,engine.state.maxTime).find(event=>event.id==='cart_convoy')!;
+    engine.state.gameTime=convoy.at;
+    trigger.updateSignatureEvents();
+    const carts=engine.state.hazards.filter(h=>h.signatureEventId===`2:cart_convoy`);
+    expect(carts).toHaveLength(3);
+    expect(carts.every(h=>h.motion?.phase==='warning')).toBe(true);
+    expect(carts.every(h=>h.motion?.directionX===1&&h.motion?.directionY===0)).toBe(true);
+    expect(new Set(carts.map(h=>h.motion?.timer)).size).toBe(3);
+    expect(carts.every(h=>h.speed>180)).toBe(true);
+    expect(engine.state.signatureEvent?.mechanic).toBe('SPEED CHECK');
+  });
+
   it('scales signature timings into the compact 60-second operation',()=>{
     const timing=operationTiming(60);
     const plan=signatureEventPlan(PATROL_STAGES.stage_01,60);
@@ -58,6 +118,7 @@ describe('wave signature events',()=>{
     const afterWave2=engine.state.hazards.length;
     expect(afterWave2).toBe(plan[0]!.spawns.length);
     expect(engine.state.signatureEvent?.wave).toBe(2);
+    expect(engine.state.signatureEvent?.mechanic).toBe(plan[0]!.mechanic);
     expect(engine.state.signatureEvent?.phase).toBe('impact');
     expect(engine.state.hazards.every(h=>!h.isStageBoss)).toBe(true);
     expect(engine.state.hazards.every(h=>h.signatureEventId===`2:${plan[0]!.id}`)).toBe(true);
