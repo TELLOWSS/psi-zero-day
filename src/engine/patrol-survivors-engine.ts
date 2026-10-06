@@ -801,6 +801,12 @@ export class SurvivorsEngine {
     // Cap delta time to prevent physics tunneling
     let effectiveDt = Math.min(dt, 0.1);
 
+    // Apply Hit-Stop (Micro freeze on critical / weak point impact)
+    if ((this.state.hitStopTimer ?? 0) > 0) {
+      this.state.hitStopTimer = Math.max(0, (this.state.hitStopTimer ?? 0) - effectiveDt);
+      effectiveDt *= 0.15;
+    }
+
     // Apply Time Dilation (e.g. boss finish slow-motion)
     if (this.state.timeDilationTimer > 0) {
       this.state.timeDilationTimer -= effectiveDt;

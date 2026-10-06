@@ -31,6 +31,7 @@ import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../do
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
+import {SurvivorsContainerShop} from './SurvivorsContainerShop';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
 import {loadDirectionalActor,isDirectionalActor} from './survivors-directional-art';
@@ -595,6 +596,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossSecured,setBossSecured]=useState(false);
   const [encounterRemaining,setEncounterRemaining]=useState(0);
 
+  // Wave Progression & Container Shop
+  const [showContainerShop, setShowContainerShop] = useState(false);
+  const [containerShopWave, setContainerShopWave] = useState(1);
+  const [currentWave, setCurrentWave] = useState(1);
+  const wave1ShopTriggeredRef = useRef(false);
+  const wave2ShopTriggeredRef = useRef(false);
+
   // Save Meta Progress to LocalStorage
   const saveMetaProgress = (newUpgrades: PermanentUpgrades, newCredits: number, inventory:StoreInventory=inventoryRef.current) => {
     try {persistStoreWallet({credits:newCredits,inventory});}catch{setStoreMessage(storeText.failure);return false;}
@@ -883,6 +891,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setDirectorCutinPhase('none');
     setRerollsLeft(engine.state.rerollsLeft);
     setActivePerks({ ...engine.state.activePerks });
+    wave1ShopTriggeredRef.current = false;
+    wave2ShopTriggeredRef.current = false;
+    setShowContainerShop(false);
+    setCurrentWave(1);
+    setContainerShopWave(1);
   }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty, storeInventory]);
 
   useEffect(() => {
@@ -1203,6 +1216,42 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         direction.advance(dt);
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+
+        // Wave Progression & Quick Maintenance Container Shop Intermission
+        const maxSurvivalTime = engine.state.maxTime || 180;
+        const wave1Time = maxSurvivalTime <= 60 ? 20 : 45;
+        const wave2Time = maxSurvivalTime <= 60 ? 40 : 110;
+
+        if (engine.state.gameTime >= wave2Time) {
+          if (currentWave !== 3) setCurrentWave(3);
+          if (!wave2ShopTriggeredRef.current && engine.state.phase === 'playing') {
+            wave2ShopTriggeredRef.current = true;
+            engine.setPaused(true);
+            setPhase('paused');
+            engine.state.psiCredits += 180;
+            setPsiCredits(engine.state.psiCredits);
+            creditsRef.current = engine.state.psiCredits;
+            setContainerShopWave(2);
+            setShowContainerShop(true);
+            audioRef.current.playRecordedEffect('ui_equip');
+          }
+        } else if (engine.state.gameTime >= wave1Time) {
+          if (currentWave !== 2) setCurrentWave(2);
+          if (!wave1ShopTriggeredRef.current && engine.state.phase === 'playing') {
+            wave1ShopTriggeredRef.current = true;
+            engine.setPaused(true);
+            setPhase('paused');
+            engine.state.psiCredits += 120;
+            setPsiCredits(engine.state.psiCredits);
+            creditsRef.current = engine.state.psiCredits;
+            setContainerShopWave(1);
+            setShowContainerShop(true);
+            audioRef.current.playRecordedEffect('ui_equip');
+          }
+        } else {
+          if (currentWave !== 1) setCurrentWave(1);
+        }
+
         const incidentSecured=audioRef.current.playEncounterPhase(engine.state.bossEncounter,engine.state.phase==='playing',engine);
         const directorObscured=ultimateSourceObscured(engine.state.directorCutinPhase);
         projectileFeedbackRef.current.advance(dt,directorObscured);
@@ -1226,6 +1275,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const attackMotion=projectileAttackMotion(event.kind);
           if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
+
+          // Visual Juice: Sparks, fragments, and hit-stop screen shake on projectile impact
+          if (event.phase === 'impact') {
+            if (event.critical) {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 7.5);
+              spawnParticles(event.x, event.y, '#f59e0b', 9, 110, 3.2); // Golden welding sparks
+              spawnParticles(event.x, event.y, '#ffffff', 4, 130, 2.0); // Bright white core
+            } else if (event.actorKind === 'RUNAWAY_CART' || event.actorKind === 'FALLING_DEBRIS') {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 4.0);
+              spawnParticles(event.x, event.y, '#f97316', 6, 85, 2.4); // Industrial fragments
+            } else {
+              spawnParticles(event.x, event.y, '#94a3b8', 3, 50, 1.8); // Steel/concrete contact dust
+            }
+          }
         }
         const scoreEncounter=engine.state.bossEncounter?.phase;
         if (engine.state.phase==='playing' && (time >= scoreCheckRef.current || scoreEncounter!==scoreEncounterRef.current)) {
@@ -1429,10 +1492,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       let shakeX = 0;
       let shakeY = 0;
       if (screenShakeRef.current > 0 && !reducedMotionRef.current) {
-        const clampedShake = Math.min(3.5, screenShakeRef.current * 0.25);
+        const clampedShake = Math.min(8.0, screenShakeRef.current * 0.35);
         shakeX = Math.round((Math.sin(engine.state.gameTime * 71) * 0.5) * clampedShake * 2);
         shakeY = Math.round((Math.sin(engine.state.gameTime * 93 + 1.4) * 0.5) * clampedShake * 2);
-        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 40);
+        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 35);
       }
 
       // Responsive Portrait / Landscape Zoom Factor
@@ -2724,6 +2787,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <strong>{formatTime(gameTime)}</strong>
             <small>{operationText.time}</small>
           </div>
+          <div className="survivors-wave-badge" title="현재 방호 웨이브 진행도">
+            <span>WAVE {currentWave}/3</span>
+            <small>{currentWave === 1 ? '기초 방호' : currentWave === 2 ? '고위험 대응' : '최종 클라이맥스'}</small>
+          </div>
           <div className="survivors-score-badge">
             <span>SAFE SCORE</span>
             <strong>{score.toLocaleString()}</strong>
@@ -3546,6 +3613,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         onContinue={()=>{setAccountabilityCase(null);audioRef.current.setDialogueFocus(false);audioRef.current.stopScore();engineRef.current?.setPaused(false);setPhase('playing');lastTimeRef.current=performance.now();}}
         onLeave={()=>{setAccountabilityCase(null);audioRef.current.setDialogueFocus(false);exitSession();}}
       />}
+      {showContainerShop && engineRef.current && (
+        <SurvivorsContainerShop
+          completedWave={containerShopWave}
+          gameState={engineRef.current.state}
+          onContinue={() => {
+            setShowContainerShop(false);
+            if (engineRef.current) {
+              engineRef.current.setPaused(false);
+              setPhase('playing');
+              lastTimeRef.current = performance.now();
+            }
+          }}
+          playSfx={playSfx}
+        />
+      )}
     </div>
   );
 }
