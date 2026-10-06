@@ -723,7 +723,9 @@ export class SurvivorsEngine {
   private accumulator = 0;
   private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
   private readonly directedHits = new WeakMap<Projectile, Set<string>>();
+  private readonly signatureEventsWarned = new Set<string>();
   private readonly signatureEventsTriggered = new Set<string>();
+  private readonly signatureEventsResolved = new Set<string>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
@@ -1605,21 +1607,59 @@ export class SurvivorsEngine {
   }
 
   private updateSignatureEvents():void {
-    if(this.state.stageBossSpawned)return;
     const plan=signatureEventPlan(this.state.stage,this.state.maxTime);
     for(const event of plan) {
       const key=`${event.wave}:${event.id}`;
-      if(this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
+      const centroid=event.spawns.reduce((acc,spawn)=>({x:acc.x+spawn.x,y:acc.y+spawn.y}),{x:0,y:0});
+      centroid.x/=event.spawns.length;centroid.y/=event.spawns.length;
+
+      if(this.signatureEventsTriggered.has(key)&&!this.signatureEventsResolved.has(key)){
+        const alive=this.state.hazards.some(h=>h.signatureEventId===key&&h.hp>0);
+        if(!alive){
+          this.signatureEventsResolved.add(key);
+          this.state.score+=event.wave===3?1000:650;
+          this.state.psiCredits+=event.reward;
+          this.state.signatureEvent={
+            id:event.id,wave:event.wave,title:`${event.title} · 통제 완료`,
+            detail:'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
+            severity:event.severity,phase:'resolved',
+            positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+            reward:event.reward,remaining:2.1,
+          };
+          this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,.8);
+          this.emitAudio('control',centroid.x,centroid.y);
+        }
+        continue;
+      }
+
+      if(this.signatureEventsResolved.has(key))continue;
+      if(!this.signatureEventsWarned.has(key)&&this.state.gameTime+1e-6>=event.at-event.warningLead){
+        this.signatureEventsWarned.add(key);
+        this.state.signatureEvent={
+          id:event.id,wave:event.wave,title:event.title,detail:event.detail,
+          severity:event.severity,phase:'warning',
+          positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+          remaining:event.warningLead,
+        };
+        this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.warningLead+.25);
+        this.emitAudio(event.severity==='red'?'boss_alarm':'control',centroid.x,centroid.y);
+      }
+
+      if(this.state.stageBossSpawned||this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
       this.signatureEventsTriggered.add(key);
       for(const spawn of event.spawns) {
-        this.spawnHazard(spawn.type,undefined,false,{x:spawn.x,y:spawn.y,variant:spawn.variant});
+        this.spawnHazard(spawn.type,undefined,false,{x:spawn.x,y:spawn.y,variant:spawn.variant,signatureEventId:key});
       }
       this.state.signatureEvent={
         id:event.id,wave:event.wave,title:event.title,detail:event.detail,
-        severity:event.severity,remaining:event.severity==='red'?3.6:3.1,
+        severity:event.severity,phase:'impact',
+        positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
+        remaining:event.severity==='red'?3.2:2.7,
       };
-      this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.severity==='red'?1.15:.7);
-      this.emitAudio(event.severity==='red'?'boss_alarm':'control',this.state.player.x,this.state.player.y);
+      this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.severity==='red'?1.3:.85);
+      this.state.timeDilation=event.severity==='red'?.76:.88;
+      this.state.timeDilationTimer=event.severity==='red'?.20:.12;
+      this.emitAudio('impact',centroid.x,centroid.y);
     }
   }
 
@@ -1686,7 +1726,7 @@ export class SurvivorsEngine {
     } else h.hp-=amount;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {x:number;y:number;variant?:Hazard['variant']}) {
+  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {x:number;y:number;variant?:Hazard['variant'];signatureEventId?:string}) {
     let x = 0;
     let y = 0;
     const side = Math.floor(this.random() * 4);
@@ -1762,6 +1802,7 @@ export class SurvivorsEngine {
       variant,
       id: this.genId(`haz_${type}`),
       isStageBoss,
+      signatureEventId: authored?.signatureEventId,
       type,
       x,
       y,
