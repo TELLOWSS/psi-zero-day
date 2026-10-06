@@ -13,6 +13,7 @@ import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamag
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
 import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
+import { signatureEventPlan } from './survivors-signature-events';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
@@ -722,6 +723,7 @@ export class SurvivorsEngine {
   private accumulator = 0;
   private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
   private readonly directedHits = new WeakMap<Projectile, Set<string>>();
+  private readonly signatureEventsTriggered = new Set<string>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
@@ -912,6 +914,10 @@ export class SurvivorsEngine {
       this.state.itemNotice.remaining -= effectiveDt;
       if (this.state.itemNotice.remaining <= 0) this.state.itemNotice = undefined;
     }
+    if (this.state.signatureEvent) {
+      this.state.signatureEvent.remaining -= effectiveDt;
+      if (this.state.signatureEvent.remaining <= 0) this.state.signatureEvent = undefined;
+    }
 
     // Update timers
     if (this.state.bossAlertTimer > 0) {
@@ -964,6 +970,7 @@ export class SurvivorsEngine {
     this.state.resolvedWorkers = (this.state.resolvedWorkers ?? []).filter(w => w.remaining > 0);
     this.updateWeapons(effectiveDt, input);
     this.updateProjectiles(effectiveDt);
+    this.updateSignatureEvents();
     this.updateSpawns(effectiveDt);
     if(this.state.bossEncounter?.phase==='arrival')return;
     this.updateHazards(effectiveDt);
@@ -1597,6 +1604,25 @@ export class SurvivorsEngine {
     this.state.projectiles = alive;
   }
 
+  private updateSignatureEvents():void {
+    if(this.state.stageBossSpawned)return;
+    const plan=signatureEventPlan(this.state.stage,this.state.maxTime);
+    for(const event of plan) {
+      const key=`${event.wave}:${event.id}`;
+      if(this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
+      this.signatureEventsTriggered.add(key);
+      for(const spawn of event.spawns) {
+        this.spawnHazard(spawn.type,undefined,false,{x:spawn.x,y:spawn.y,variant:spawn.variant});
+      }
+      this.state.signatureEvent={
+        id:event.id,wave:event.wave,title:event.title,detail:event.detail,
+        severity:event.severity,remaining:event.severity==='red'?3.6:3.1,
+      };
+      this.cooldowns.spawnTimer=Math.max(this.cooldowns.spawnTimer,event.severity==='red'?1.15:.7);
+      this.emitAudio(event.severity==='red'?'boss_alarm':'control',this.state.player.x,this.state.player.y);
+    }
+  }
+
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
     const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty, this.state.maxTime);
@@ -1660,7 +1686,7 @@ export class SurvivorsEngine {
     } else h.hp-=amount;
   }
 
-  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false) {
+  private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {x:number;y:number;variant?:Hazard['variant']}) {
     let x = 0;
     let y = 0;
     const side = Math.floor(this.random() * 4);
@@ -1676,6 +1702,11 @@ export class SurvivorsEngine {
     } else {
       x = -20;
       y = this.random() * WORLD_HEIGHT;
+    }
+
+    if(authored){
+      x=Math.max(20,Math.min(WORLD_WIDTH-20,authored.x));
+      y=Math.max(20,Math.min(WORLD_HEIGHT-20,authored.y));
     }
 
     let hp = 30;
@@ -1716,12 +1747,14 @@ export class SurvivorsEngine {
 
     // Falling material targets the observed position, never follows after warning.
     if (type === 'FALLING_DEBRIS') {
-      x = Math.max(60, Math.min(WORLD_WIDTH - 60, this.state.player.x + (this.random() - 0.5) * 180));
-      y = Math.max(60, Math.min(WORLD_HEIGHT - 60, this.state.player.y + (this.random() - 0.5) * 180));
+      if(!authored){
+        x = Math.max(60, Math.min(WORLD_WIDTH - 60, this.state.player.x + (this.random() - 0.5) * 180));
+        y = Math.max(60, Math.min(WORLD_HEIGHT - 60, this.state.player.y + (this.random() - 0.5) * 180));
+      }
       radius = 38;
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
-    const variant=isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random());
+    const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random()));
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
     if(variant==='pulse_gas'){radius=58;expValue*=2;}
     if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
