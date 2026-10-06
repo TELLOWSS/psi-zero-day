@@ -19,6 +19,8 @@ describe('wave signature events',()=>{
       expect(plan[1]!.at).toBeLessThan(timing.bossRevealAt);
       for(const event of plan){
         ids.add(event.id);
+        expect(event.warningLead).toBeGreaterThan(0);
+        expect(event.reward).toBeGreaterThan(0);
         expect(event.spawns.length).toBeGreaterThanOrEqual(3);
         expect(event.spawns.length).toBeLessThanOrEqual(5);
         expect(event.spawns.every(spawn=>spawn.type!=='CRANE_BOSS')).toBe(true);
@@ -43,12 +45,22 @@ describe('wave signature events',()=>{
     const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_04'),73);
     const trigger=engine as unknown as {updateSignatureEvents():void};
     const plan=signatureEventPlan(engine.state.stage,engine.state.maxTime);
+    engine.state.gameTime=plan[0]!.at-plan[0]!.warningLead;
+    trigger.updateSignatureEvents();
+    expect(engine.state.signatureEvent?.phase).toBe('warning');
+    expect(engine.state.hazards).toHaveLength(0);
+    const warningAudio=engine.drainAudioEvents().find(event=>event.type==='boss_alarm');
+    expect(warningAudio?.x).toBeTypeOf('number');
+    expect(warningAudio?.y).toBeTypeOf('number');
+
     engine.state.gameTime=plan[0]!.at;
     trigger.updateSignatureEvents();
     const afterWave2=engine.state.hazards.length;
     expect(afterWave2).toBe(plan[0]!.spawns.length);
     expect(engine.state.signatureEvent?.wave).toBe(2);
+    expect(engine.state.signatureEvent?.phase).toBe('impact');
     expect(engine.state.hazards.every(h=>!h.isStageBoss)).toBe(true);
+    expect(engine.state.hazards.every(h=>h.signatureEventId===`2:${plan[0]!.id}`)).toBe(true);
 
     trigger.updateSignatureEvents();
     expect(engine.state.hazards).toHaveLength(afterWave2);
@@ -58,10 +70,28 @@ describe('wave signature events',()=>{
     expect(engine.state.hazards).toHaveLength(afterWave2+plan[1]!.spawns.length);
     expect(engine.state.signatureEvent?.wave).toBe(3);
     expect(engine.state.signatureEvent?.severity).toBe('red');
+    expect(engine.state.signatureEvent?.phase).toBe('impact');
     expect(engine.state.hazards.every(h=>!h.isStageBoss&&h.type!=='CRANE_BOSS')).toBe(true);
 
     trigger.updateSignatureEvents();
     expect(engine.state.hazards).toHaveLength(afterWave2+plan[1]!.spawns.length);
+  });
+
+  it('releases pressure with a controlled reward only after every signature hazard is resolved',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_05'),117);
+    const trigger=engine as unknown as {updateSignatureEvents():void};
+    const event=signatureEventPlan(engine.state.stage,engine.state.maxTime)[0]!;
+    engine.state.gameTime=event.at;
+    trigger.updateSignatureEvents();
+    engine.drainAudioEvents();
+    const scoreBefore=engine.state.score,creditsBefore=engine.state.psiCredits;
+    for(const hazard of engine.state.hazards.filter(h=>h.signatureEventId===`2:${event.id}`))hazard.hp=0;
+    trigger.updateSignatureEvents();
+    expect(engine.state.signatureEvent?.phase).toBe('resolved');
+    expect(engine.state.signatureEvent?.reward).toBe(event.reward);
+    expect(engine.state.score).toBe(scoreBefore+650);
+    expect(engine.state.psiCredits).toBe(creditsBefore+event.reward);
+    expect(engine.drainAudioEvents().some(audio=>audio.type==='control'&&audio.x!==undefined&&audio.y!==undefined)).toBe(true);
   });
 
   it('preserves authored set-piece placement instead of retargeting falling debris at spawn',()=>{
