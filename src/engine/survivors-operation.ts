@@ -1,15 +1,23 @@
 import type { PatrolStageDefinition, SurvivorsGameState } from '../domain/patrol-survivors';
 
+export function operationTiming(maxTime=180) {
+  if (maxTime <= 60) {
+    return {wave2At:20,wave3At:40,bossRevealAt:42,bossAt:48,extractionHold:10};
+  }
+  return {wave2At:45,wave3At:110,bossRevealAt:120,bossAt:135,extractionHold:15};
+}
+
 /** Different authored routes to completion, never a performance-based difficulty penalty. */
-export function operationPlan(stage:PatrolStageDefinition) {
+export function operationPlan(stage:PatrolStageDefinition,maxTime=180) {
   const mode=(stage.stageNumber-1)%3;
   const available=stage.hazards.filter(h=>h.type==='explosive_barrel'||h.type==='electric_transformer'||h.type==='crane_drop_zone').length;
   const advanced=Math.max(0,Math.floor((stage.stageNumber-21)/10)+1);
-  return {mode,bossAt:60,revealAt:15,
+  const timing=operationTiming(maxTime);
+  return {mode,bossAt:timing.bossAt,revealAt:timing.bossRevealAt,
     zones:Math.min(available,(mode===1?2:1)+(advanced>=2?1:0)),controls:mode===2?18+stage.stageNumber:8+Math.floor(stage.stageNumber/2)};
 }
 export function operationProgress(state:SurvivorsGameState) {
-  const plan=operationPlan(state.stage);
+  const plan=operationPlan(state.stage,state.maxTime);
   const controlled=new Set(state.operationControlledZones ?? []);
   for(const h of state.interactiveHazards) {
     if((h.type==='explosive_barrel'&&(h.state==='active'||h.state==='destroyed')) ||
