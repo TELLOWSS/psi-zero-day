@@ -275,6 +275,20 @@ export interface SurvivorsGameState {
     cooldownRush?: number;
     bossWeakPointSeconds?: number;
   };
+  signatureMastery?: {
+    chain: number;
+    best: number;
+    perfectEvents: string[];
+    finisherArmed: boolean;
+    zeroDay: boolean;
+    notice?: {
+      kind: 'perfect' | 'armed' | 'broken' | 'zero_day';
+      title: string;
+      detail: string;
+      chain: number;
+      remaining: number;
+    };
+  };
 
   // Screen Juice & Impact Feedback
   hitStopTimer?: number;
