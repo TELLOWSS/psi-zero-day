@@ -246,6 +246,14 @@ export interface SurvivorsGameState {
   fieldRecovery?: { remaining: number };
   routeLantern?: { remaining: number };
   itemNotice?: { id: string; kind: TacticalItemId; remaining: number };
+  signatureEvent?: {
+    id: string;
+    wave: 2 | 3;
+    title: string;
+    detail: string;
+    severity: 'amber' | 'red';
+    remaining: number;
+  };
 
   // Screen Juice & Impact Feedback
   hitStopTimer?: number;
