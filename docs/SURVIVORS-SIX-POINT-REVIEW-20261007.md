@@ -1,5 +1,40 @@
 # 2026-10-07 Six-Point Review
 
+## Updated Review After Main Integration
+
+### Release Follow-Up
+
+The user subsequently authorized GitHub and Vercel synchronization. Equipped material flow and socket pulses now follow the body animation clock, so player movement during combat hit-stop does not leave their feedback frozen on world time. Fitting overrides that clock explicitly to avoid inheriting a paused runtime timestamp. Two tests cover actual hit-stop movement, pause freezing and invalid/legacy timestamps. Full suite: 1591 passed, 1 existing skipped; typecheck and production build passed. Walking intermediate art and independent equipment animation completion remain out of this release.
+
+This section supersedes the initial findings below. The initial checkout lacked the reported lock previews and extraction UI. Locally merging origin/main at 6a8b34f exposed both. Existing wave, mastery, dash and extraction mechanics remain intact; these presentation fixes change no engine/domain rules. No push or deployment performed.
+
+1. Item identity: five original evolved weapons now use a dedicated transparent 3x2 atlas. Grouting and EMP no longer reuse extinguisher/floodlight rows; a 4x2 tactical atlas supplies their progression and evolution forms. HUD, icons and canvas use matching sources/cells. Equipped premium props now retain all sixteen shop identities instead of generic category props; dedicated wearables retain priority. This is not completion of all articulated garments.
+2. Typography: a single Pretendard/system/Korean fallback family, tighter label tracking, title/body hierarchy and aligned numbers. No decorative font mixture or new font binary.
+3. Locked modes: replaced legacy 560x315 images with generated 1672x941 Defense/Story scenes. Titles and controls remain HTML; removed the cover over the old baked button. Unfinished modes remain locked.
+4. Resume: last actually launched stage and chapter restore; browsing does not overwrite them. Browser checks launch stage 14, pause-menu exit and re-enter successfully on PC, portrait and landscape.
+5. Extraction: 46px desktop / 40px mobile edge status replaces the central banner, cannot intercept input and takes priority over wave/supply notices. Rules remain a 15-second hold inside LZ, paused outside, not a 15-second arrival deadline. Browser status screenshots are explicitly component fixtures over gameplay, not proof of naturally completed runs. Engine tests separately exercise extraction APIs and single reward.
+6. Motion/feedback: body and attachments share directional pose, fixing double mirroring in left-facing fitting. All six premium identities survive the aura selection budget, with bounded 32 normal / 16 busy ribbon segments. Five-view fitting checks cover walk/action/left/pause/reduced-motion/hidden-tab and six concurrent items. Actual alternating-foot intermediate art and all independent equipment animation assets remain incomplete.
+
+### Current Verification
+
+- Three-view visual checks: both preview assets resolve at 1672x941; fourteen ordinary/evolved equipment renders populated and pixel-distinct; edge status does not cover the viewport center, intercept input or cause overflow. No browser exceptions.
+- Five fitting viewports passed. Reports: artifacts/fitting-motion, artifacts/six-points, artifacts/stage-resume.
+- Legacy regression fixtures updated to current entry labels, gated modes and authored boss timing. Boss collision tests isolate incidental actors/environment, allow hit-stop frames and explicitly start/tick extraction as runtime does.
+- Final full suite: 1589 passed, 1 pre-existing skipped (286 files passed, 1 skipped). Final typecheck and production build passed. The additional short-run status assertion also passes: its progress uses the real 10-second total rather than assuming 15. Vite retains a >500 kB shooting-chunk warning; no performance claim is based on build success.
+- Physical S26 Ultra performance, naturally played fresh-save extraction, genuine opposite-foot walk art and character-by-character articulated garment approval are still required.
+
+### Art Provenance And Revision Prompts
+
+Built-in image generation/editing only; no external paid API or copied third-party game assets. Transparent atlas packing uses Sharp crops/resizing without painted alterations. Prompts below preserve production requirements for further revisions, not verbatim tool transcripts.
+
+- Evolution: five distinct isometric industrial cutouts in 3x2 grid: satellite panels, cryogenic turbine, copper Tesla tower, magnetic rails, red/black six-arm Hunter. Match referenced game equipment and camera; isolated transparent cells, no labels/UI. Output: public/assets/survivors/equipment-evolution-v1.webp.
+- Premium: preserve sixteen referenced shop designs in 4x4 cell order; remove backdrops, retain distinct silhouettes/materials, isolated transparent cells, no invented item identity/text. Output: public/assets/survivors/premium-equipment-mounted-v1.png.
+- Tactical: eight isometric transparent cutouts in 4x2: three progressing grouting guns plus hydraulic ram; three progressing EMP generators plus plasma grid. Match existing art/camera, no extinguisher/floodlight duplicates or labels. Output: public/assets/survivors/tactical-equipment-v1.webp.
+- Defense: detailed widescreen night construction defense scene with worker, machinery, barriers/cranes; readable actual subject, no typography/buttons/logos/lock symbols. Output: public/mode-previews/defense-coming-soon-v2.webp.
+- Story: detailed widescreen night-site investigation, workers/documents/supervision; clear characters/environment, no typography/buttons/logos/lock symbols. Output: public/mode-previews/story-coming-soon-v2.webp.
+
+## Initial Review (Historical, Superseded Above)
+
 ## Implemented
 
 - Operation preparation restores the last actually launched stage, including its chapter. Browsing the stage list does not overwrite the played-stage record. Invalid, locked and inaccessible storage values fall back safely to stage 01.

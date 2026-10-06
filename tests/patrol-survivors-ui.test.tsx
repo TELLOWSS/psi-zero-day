@@ -19,18 +19,18 @@ describe('PatrolSurvivorsGame UI', () => {
       });
 
       // Check title and guide
-      expect(host.querySelector('.survivors-preflight-top h2')?.textContent).toBe('야간 긴급 순찰');
+      expect(host.querySelector('.survivors-preflight-top h2')?.textContent).toBe('시그널 워치');
       expect(host.querySelector('.survivors-ready-dialog')?.getAttribute('data-preflight')).toBe('brief');
       const settings = Array.from(host.querySelectorAll('.survivors-preflight-tabs button')).find(button=>button.textContent==='설정')!;
       act(()=>settings.dispatchEvent(new MouseEvent('click',{bubbles:true})));
       expect(settings.getAttribute('aria-pressed')).toBe('true');
       expect(host.querySelector('.survivors-controls-guide')?.hasAttribute('hidden')).toBe(false);
       expect(host.querySelector('.survivors-preflight-panel')?.hasAttribute('hidden')).toBe(true);
-      expect(host.textContent).toContain('순찰 시작하기');
+      expect(host.textContent).toContain('시그널 워치 시작');
 
       // Click start
       const startBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent === '순찰 시작하기'
+        btn => btn.textContent === '시그널 워치 시작'
       );
       expect(startBtn).toBeDefined();
 

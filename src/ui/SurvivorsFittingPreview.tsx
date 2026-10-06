@@ -4,13 +4,13 @@ import { CHARACTER_PROFILES } from '../engine/patrol-survivors-engine';
 import { drawPremiumGear, PREMIUM_MOUNTED_ART } from './survivors-premium-render';
 import { CHARACTER_MAP_ART } from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
-import { EQUIPMENT_ART, EVOLUTION_ART, PICKUP_ART, registerPropAtlas, registerEvolutionAtlas } from './survivors-equipment-art';
+import { EQUIPMENT_ART, EVOLUTION_ART, TACTICAL_EQUIPMENT_ART, PICKUP_ART, registerPropAtlas, registerEvolutionAtlas, registerTacticalEquipmentAtlas } from './survivors-equipment-art';
 import { drawGroundedSprite, registerSpriteBounds } from './survivors-sprite-motion';
 import copy from '../../content/localization/survivors-store-ko.json';
 import { drawWearableLayer, loadWearableImages,type WearableImages } from './survivors-wearable-art';
 import {CINEMATIC_VFX_ATLAS} from './survivors-cinematic-vfx';
 import {drawEquipmentMantle} from './survivors-equipment-identity';
-import {loadDirectionalActor} from './survivors-directional-art';
+import {loadDirectionalActor,isDirectionalActor} from './survivors-directional-art';
 import {preparePremiumPresence,type PremiumPresenceImages} from './survivors-equipment-animation';
 import {drawPremiumPresence} from './survivors-premium-presence';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
@@ -39,11 +39,12 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
     const load = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
       const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src;
     });
-    Promise.all([load(CHARACTER_MAP_ART[state.characterId]), load(EQUIPMENT_ART), load(PICKUP_ART), loadWearableImages(state.characterId),load(CINEMATIC_VFX_ATLAS),load('/assets/survivors/premium-presence-v1.png').catch(()=>undefined),load(EVOLUTION_ART),load(PREMIUM_MOUNTED_ART)])
-      .then(async ([actor, gear, pickups, wearables, cinematic, presenceImage, evolution, premium]) => {
+    Promise.all([load(CHARACTER_MAP_ART[state.characterId]), load(EQUIPMENT_ART), load(PICKUP_ART), loadWearableImages(state.characterId),load(CINEMATIC_VFX_ATLAS),load('/assets/survivors/premium-presence-v1.png').catch(()=>undefined),load(EVOLUTION_ART),load(PREMIUM_MOUNTED_ART),load(TACTICAL_EQUIPMENT_ART)])
+      .then(async ([actor, gear, pickups, wearables, cinematic, presenceImage, evolution, premium, tactical]) => {
         if (disposed) return;
         registerPropAtlas(gear, 3, 5); registerPropAtlas(pickups, 4, 2);
         registerEvolutionAtlas(gear,evolution);
+        registerTacticalEquipmentAtlas(gear,tactical);
         registerPropAtlas(premium,4,4);
         if(!await loadDirectionalActor(actor)){registerSpriteBounds(actor);await loadAuthoredCommand(actor);}if(disposed)return;
         const presence=presenceImage?preparePremiumPresence(presenceImage):undefined;
@@ -58,10 +59,11 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
     let request=0,last:number|undefined,paintAt=-Infinity;
     const draw=()=>{
         previewState.gameTime=reduced?0:clock.current;
+        previewState.playerMotionTime=previewState.gameTime;
         ctx.clearRect(0, 0, 360, 360);
         const scale=Math.min(3.4,3*Math.max(.8,Math.min(1.25,zoom)));
         ctx.save(); ctx.translate(180, 360-28*scale); ctx.scale(scale, scale);
-        const pose=fittingPose(clock.current,motion,facing,reduced,attackKind);
+        const pose={...fittingPose(clock.current,motion,facing,reduced,attackKind),directional:isDirectionalActor(actor)};
         ctx.save();applyActorTorsoTransform(ctx,pose,74,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
         drawPremiumPresence(ctx,presence,previewState.premiumGear?.equipped??[],previewState.gameTime,reduced,false,pose.action);ctx.restore();
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back');

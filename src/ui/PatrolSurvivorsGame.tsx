@@ -4,6 +4,7 @@ import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
 import { Pause, Play, Package, Shield, ArrowUp, SkipForward } from 'lucide-react';
+import { SurvivorsExtractionStatus } from './SurvivorsExtractionStatus';
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
@@ -67,7 +68,7 @@ import { survivorsCamera } from './survivors-camera';
 import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
-import { drawProp, drawEquipment, registerPropAtlas, registerEvolutionAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART, EVOLUTION_ART } from './survivors-equipment-art';
+import { drawProp, drawEquipment, registerPropAtlas, registerEvolutionAtlas, registerTacticalEquipmentAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART, EVOLUTION_ART, TACTICAL_EQUIPMENT_ART } from './survivors-equipment-art';
 import { drawStageWorkface } from './survivors-stage-art';
 import { SurvivorsEquipmentIcon } from './SurvivorsEquipmentIcon';
 import { SurvivorsUpgradeStats } from './SurvivorsUpgradeStats';
@@ -315,9 +316,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     items.src = PICKUP_ART;
     const equipment = new Image();
     const evolution = new Image();
+    const tactical = new Image();
+    tactical.onload = () => { if(equipment.naturalWidth) registerTacticalEquipmentAtlas(equipment,tactical); };
     evolution.onload = () => { if(equipment.naturalWidth) registerEvolutionAtlas(equipment,evolution); };
-    equipment.onload = () => { registerPropAtlas(equipment,3,5); if(evolution.naturalWidth) registerEvolutionAtlas(equipment,evolution); spritesRef.current.equipmentAtlas = equipment; };
+    equipment.onload = () => { registerPropAtlas(equipment,3,5); if(evolution.naturalWidth) registerEvolutionAtlas(equipment,evolution); if(tactical.naturalWidth) registerTacticalEquipmentAtlas(equipment,tactical); spritesRef.current.equipmentAtlas = equipment; };
     evolution.src = EVOLUTION_ART;
+    tactical.src = TACTICAL_EQUIPMENT_ART;
     equipment.src = EQUIPMENT_ART;
     const premium = new Image();
     premium.onload = () => {spritesRef.current.premiumAtlas=premium;};
@@ -3315,7 +3319,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
-      {waveDirectorNotice && phase === 'playing' && (
+      {waveDirectorNotice && phase === 'playing' && !extractionState.active && (
         <aside className={`survivors-wave-director-notice is-wave-${waveDirectorNotice.wave}`} role="status" aria-live="assertive">
           <span>WAVE {waveDirectorNotice.wave}/3 · DIRECTOR SHIFT</span>
           <strong>{waveDirectorNotice.title}</strong>
@@ -3365,7 +3369,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {waveSupplyNotice && phase === 'playing' && (
+      {waveSupplyNotice && phase === 'playing' && !extractionState.active && (
         <aside className={`survivors-wave-supply-notice${waveDirectorNotice?' has-director':''}`} aria-live="polite">
           <strong>WAVE {waveSupplyNotice.wave} 완료 · 현장 보급 +{waveSupplyNotice.credits} PSI</strong>
           <span>플레이는 계속됩니다. 정비 보급은 일시정지 메뉴에서 직접 선택할 수 있습니다.</span>
@@ -3389,41 +3393,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
       {phase === 'playing' && extractionState.active && (
-        <aside
-          className="survivors-extraction-banner"
-          aria-live="assertive"
-          style={{
-            position: 'absolute',
-            top: 76,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: extractionState.playerInside
-              ? 'linear-gradient(135deg, rgba(6, 78, 59, 0.94), rgba(4, 120, 87, 0.97))'
-              : 'linear-gradient(135deg, rgba(120, 53, 15, 0.94), rgba(180, 83, 9, 0.97))',
-            border: extractionState.playerInside ? '2px solid #34d399' : '2px solid #fbbf24',
-            borderRadius: 14,
-            padding: '10px 24px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.7), 0 0 20px rgba(16,185,129,0.45)',
-            color: '#ffffff',
-            fontWeight: 800,
-            fontSize: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
-            zIndex: 65,
-            pointerEvents: 'none',
-          }}
-        >
-          <span style={{ fontSize: '26px' }}>🚨</span>
-          <div>
-            <div style={{ letterSpacing: '0.04em', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-              {extractionState.playerInside ? '안전 호송반 랑데부 구역 확보 중! [대기 사수]' : '경고: 랑데부 구역(중앙 LZ)으로 신속히 이동하십시오!'}
-            </div>
-            <div style={{ fontSize: '12px', color: extractionState.playerInside ? '#a7f3d0' : '#fde68a', fontWeight: 600 }}>
-              {extractionState.playerInside ? <>구역 사수 완료까지: <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초</span></> : <>LZ 진입 후 사수 시작 · <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초 대기</span></>}
-            </div>
-          </div>
-        </aside>
+        <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} />
       )}
 
       {phase === 'playing' && (!bossSecured || extractionState.active) && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}

@@ -26,7 +26,7 @@ describe('fifty authored patrol workfaces',()=>{
     expect(plan.bossAt).toBeLessThan(180);
     expect(plan.zones).toBeLessThanOrEqual(stage.hazards.filter(h=>h.type!=='floodlight_tower'&&h.type!=='slurry_puddle').length);
     for(const h of stage.hazards){expect(h.x).toBeGreaterThan(80);expect(h.x).toBeLessThan(WORLD_WIDTH-80);expect(h.y).toBeGreaterThan(80);expect(h.y).toBeLessThan(WORLD_HEIGHT-80);expect(Math.hypot(h.x-700,h.y-450)).toBeGreaterThan(100);}
-    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,id),42);engine.start();engine.state.gameTime=61;
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,id),42);engine.start();engine.state.gameTime=plan.bossAt;
     for(let i=0;i<100;i++)engine.update(1/60,{moveX:0,moveY:0});
     const boss=engine.state.hazards.find(h=>h.isStageBoss)!;
     expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.8));

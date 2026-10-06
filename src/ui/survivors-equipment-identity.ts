@@ -3,6 +3,7 @@ import {drawVfxCell} from './survivors-cinematic-vfx';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import type {SpritePose} from './survivors-sprite-motion';
 import {drawMaterialRibbon} from './survivors-material-ribbon';
+import {equipmentAnimationTime} from './survivors-equipment-clock';
 
 export const EQUIPMENT_AURAS={
   voice_lens:{color:'#ffab76',motif:'signal',marks:1,cell:0},
@@ -39,7 +40,7 @@ export function isEvolvedProjectile(kind:ProjectileKind):boolean {
 export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number):void {
   const ids=state.premiumGear?.equipped??[];
   if(!ids.length)return;
-  const time=reduced?0:state.gameTime;
+  const time=reduced?0:equipmentAnimationTime(state);
   const drift=!reduced&&movingAngle!==undefined?4:0;
   ctx.save();ctx.translate(state.player.x-Math.cos(movingAngle??0)*drift,state.player.y+3-Math.sin(movingAngle??0)*drift*.4);
   if(!reduced&&atlas?.naturalWidth){
@@ -84,21 +85,22 @@ export function drawEquipmentIdentity(ctx:CanvasRenderingContext2D,state:Survivo
 export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false):void {
   const active=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0);
   if(!active.length)return;
+  const time=reduced?0:equipmentAnimationTime(state);
   ctx.save();ctx.translate(state.player.x,state.player.y+4);
   if(!reduced&&atlas?.naturalWidth){
     ctx.globalCompositeOperation='screen';
     drawVfxCell(ctx,atlas,7,0,3,104,48,busy?.27:.46);
     active.forEach(([,identity],index)=>{
       const width=40+identity.marks*2;
-      const breath=1+Math.sin(state.gameTime*1.7+index)*.065;
+      const breath=1+Math.sin(time*1.7+index)*.065;
       for(const side of [-1,1]){
-        const flow=Math.sin(state.gameTime*1.7+index+side)*4;
-        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2+flow),6+Math.cos(state.gameTime*1.7+index+side)*2,width*breath,30,busy?.25:.44,side*(.3+flow*.02));
+        const flow=Math.sin(time*1.7+index+side)*4;
+        drawVfxCell(ctx,atlas,identity.cell,side*(30+index*2+flow),6+Math.cos(time*1.7+index+side)*2,width*breath,30,busy?.25:.44,side*(.3+flow*.02));
       }
     });ctx.globalCompositeOperation='source-over';
   }
   active.forEach(([,identity],index)=>{
-    const phase=reduced?0:state.gameTime*.5;
+    const phase=time*.5;
     const radius=40+index*3;
     ctx.strokeStyle=identity.color;ctx.globalAlpha=busy?.46:.85;ctx.lineWidth=2;
     for(let i=0;i<identity.marks;i++){
@@ -120,6 +122,7 @@ export function mantleSignatures(state:SurvivorsGameState,_busy=false){
 export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number,actionStrength=0,attachment?:{pose:SpritePose;height:number;rigged:boolean}):void {
   const signatures=mantleSignatures(state,busy);
   if(!signatures.length)return;
+  const time=reduced?0:equipmentAnimationTime(state);
   const action=reduced?0:Math.max(0,Math.min(1,Number.isFinite(actionStrength)?actionStrength:0));
   const segments=Math.max(2,Math.min(8,Math.floor((busy?16:32)/signatures.length)));
   ctx.save();ctx.translate(state.player.x,state.player.y);
@@ -130,7 +133,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
   for(let i=0;i<signatures.length;i++){
     const signature=signatures[i]!,side=i%2===0?-1:1;
     ctx.save();if(i>=2)ctx.translate(side*Math.floor(i/2)*4,Math.floor(i/2)*8);
-    const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
+    const flow=reduced?0:Math.sin(time*2.2+i)*3;
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4*(attachment?.pose.facing??1):0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
     ctx.globalAlpha=busy?.45:.75;
@@ -138,7 +141,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     if(!reduced&&atlas?.naturalWidth){
       ctx.globalCompositeOperation='screen';
       const materialCell=signature.cell===11?11:signature.cell===3?3:signature.cell===0||signature.cell===8?4:signature.cell===1?5:6;
-      drawMaterialRibbon(ctx,atlas,materialCell,state.gameTime+i*.37,side,action,drag,busy,segments);
+      drawMaterialRibbon(ctx,atlas,materialCell,time+i*.37,side,action,drag,busy,segments);
       ctx.globalCompositeOperation='source-over';
     }
     if(signature.evolved){

@@ -9,6 +9,7 @@ import {drawVfxCell} from './survivors-cinematic-vfx';
 import {InspectionFlightTracker,type InspectionPhase} from './survivors-inspection-flight';
 import type {SpritePose} from './survivors-sprite-motion';
 import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
+import {equipmentAnimationTime} from './survivors-equipment-clock';
 const inspectionFlights=new InspectionFlightTracker();
 export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
 /** Raster art stays in presentation; status is read exclusively from the engine. */
@@ -70,7 +71,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
     if(socket){
       if(!hasWearable(state,id,wearables))draw(id,socket.x,socket.y,socket.size);
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
-      if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(state.gameTime*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
+      if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(equipmentAnimationTime(state)*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
       attached=true;
     }
   }
