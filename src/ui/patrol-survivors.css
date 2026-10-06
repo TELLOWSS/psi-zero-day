@@ -2810,3 +2810,119 @@
     top: calc(var(--survivors-hud-reserve, 66px) + 78px);
   }
 }
+
+
+/* Signature Mastery & Chain Lock */
+.survivors-mastery-meter {
+  position:absolute;
+  left:14px;
+  top:calc(var(--survivors-hud-reserve,76px) + 10px);
+  z-index:61;
+  min-width:168px;
+  display:grid;
+  gap:1px;
+  padding:8px 11px;
+  border:1px solid rgba(103,232,249,.46);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(8,47,73,.90),rgba(6,78,59,.88));
+  box-shadow:0 10px 26px rgba(0,0,0,.34),0 0 24px rgba(34,211,238,.16);
+  pointer-events:none;
+  backdrop-filter:blur(9px);
+}
+.survivors-mastery-meter > span {font-size:8px;font-weight:950;letter-spacing:.14em;color:#a5f3fc;}
+.survivors-mastery-meter > strong {font-size:15px;font-weight:1000;letter-spacing:.035em;color:#fff;}
+.survivors-mastery-meter > small {font-size:9px;font-weight:800;color:#bae6fd;}
+.survivors-mastery-meter.is-armed {
+  border-color:rgba(251,191,36,.72);
+  background:linear-gradient(135deg,rgba(69,26,3,.95),rgba(120,53,15,.91));
+  box-shadow:0 12px 30px rgba(0,0,0,.4),0 0 30px rgba(245,158,11,.24);
+}
+.survivors-mastery-meter.is-armed > span,.survivors-mastery-meter.is-armed > small {color:#fde68a;}
+.survivors-mastery-meter.is-zero-day {
+  border-color:rgba(250,204,21,.9);
+  background:linear-gradient(135deg,rgba(8,47,73,.97),rgba(88,28,135,.95),rgba(120,53,15,.94));
+  box-shadow:0 14px 34px rgba(0,0,0,.48),0 0 36px rgba(34,211,238,.25),0 0 50px rgba(250,204,21,.18);
+}
+.survivors-mastery-notice {
+  position:absolute;
+  left:50%;
+  top:calc(var(--survivors-hud-reserve,76px) + 184px);
+  z-index:67;
+  width:min(650px,calc(100% - 30px));
+  transform:translateX(-50%);
+  display:grid;
+  justify-items:center;
+  gap:4px;
+  padding:11px 18px;
+  border:1px solid rgba(103,232,249,.7);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(8,47,73,.97),rgba(6,78,59,.95));
+  box-shadow:0 18px 48px rgba(0,0,0,.54),0 0 42px rgba(34,211,238,.24);
+  text-align:center;
+  pointer-events:none;
+  animation:survivors-mastery-enter 280ms cubic-bezier(.16,1,.3,1);
+}
+.survivors-mastery-notice > span {font-size:9px;font-weight:1000;letter-spacing:.18em;color:#a5f3fc;}
+.survivors-mastery-notice > strong {font-size:20px;font-weight:1000;letter-spacing:.035em;color:#fff;text-shadow:0 2px 14px rgba(255,255,255,.18);}
+.survivors-mastery-notice > small {font-size:11px;font-weight:800;color:#dbeafe;}
+.survivors-mastery-notice.is-armed {
+  border-color:rgba(251,191,36,.9);
+  background:linear-gradient(135deg,rgba(69,26,3,.98),rgba(146,64,14,.95));
+  box-shadow:0 20px 52px rgba(0,0,0,.58),0 0 52px rgba(245,158,11,.33);
+}
+.survivors-mastery-notice.is-armed > span,.survivors-mastery-notice.is-armed > small {color:#fde68a;}
+.survivors-mastery-notice.is-broken {
+  border-color:rgba(248,113,113,.64);
+  background:linear-gradient(135deg,rgba(69,10,10,.94),rgba(127,29,29,.90));
+  box-shadow:0 14px 36px rgba(0,0,0,.46),0 0 26px rgba(239,68,68,.18);
+}
+.survivors-mastery-notice.is-zero_day {
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(760px,calc(100% - 26px));
+  padding:20px 24px;
+  border:2px solid rgba(250,204,21,.94);
+  background:linear-gradient(120deg,rgba(3,7,18,.98),rgba(8,47,73,.97),rgba(88,28,135,.95),rgba(120,53,15,.96));
+  box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 70px rgba(34,211,238,.32),0 0 90px rgba(250,204,21,.28);
+  animation:survivors-zero-day-enter 420ms cubic-bezier(.16,1,.3,1),survivors-zero-day-glow .72s ease-in-out infinite alternate;
+}
+.survivors-mastery-notice.is-zero_day > span {font-size:11px;color:#67e8f9;}
+.survivors-mastery-notice.is-zero_day > strong {font-size:30px;color:#fef3c7;text-shadow:0 0 24px rgba(250,204,21,.44);}
+.survivors-mastery-notice.is-zero_day > small {font-size:13px;color:#fff;}
+.is-zero-day-mastery {
+  color:#fbbf24 !important;
+  text-shadow:0 0 18px rgba(250,204,21,.34);
+}
+@keyframes survivors-mastery-enter {
+  0% {opacity:0;transform:translate(-50%,12px) scale(.92);}
+  70% {opacity:1;transform:translate(-50%,-2px) scale(1.03);}
+  100% {opacity:1;transform:translate(-50%,0) scale(1);}
+}
+@keyframes survivors-zero-day-enter {
+  0% {opacity:0;transform:translate(-50%,-50%) scale(.76);filter:brightness(1.8);}
+  70% {opacity:1;transform:translate(-50%,-50%) scale(1.045);}
+  100% {opacity:1;transform:translate(-50%,-50%) scale(1);}
+}
+@keyframes survivors-zero-day-glow {
+  from {box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 42px rgba(34,211,238,.22),0 0 54px rgba(250,204,21,.20);}
+  to {box-shadow:0 28px 80px rgba(0,0,0,.72),0 0 82px rgba(34,211,238,.38),0 0 104px rgba(250,204,21,.34);}
+}
+@media (max-width: 760px) {
+  .survivors-mastery-meter {
+    left:8px;
+    top:calc(var(--survivors-hud-reserve,70px) + 6px);
+    min-width:145px;
+    padding:6px 8px;
+  }
+  .survivors-mastery-meter > strong {font-size:12px;}
+  .survivors-mastery-notice {
+    top:calc(var(--survivors-hud-reserve,70px) + 170px);
+    padding:9px 12px;
+  }
+  .survivors-mastery-notice > strong {font-size:16px;}
+  .survivors-mastery-notice.is-zero_day {
+    top:48%;
+    padding:16px 14px;
+  }
+  .survivors-mastery-notice.is-zero_day > strong {font-size:23px;}
+}
