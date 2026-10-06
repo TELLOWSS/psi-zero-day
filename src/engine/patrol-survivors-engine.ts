@@ -838,8 +838,17 @@ export class SurvivorsEngine {
   private beginBossCombat():void {
     const e=this.state.bossEncounter;if(!e||e.phase!=='arrival')return;
     e.phase='combat';e.remaining=0;this.state.bossName=null;this.state.bossAlertTimer=0;
-    const progress=this.state.hazards.find(h=>h.id===e.bossId)?.bossGameplay;
-    if(progress)progress.combatPhase='pattern';
+    const boss=this.state.hazards.find(h=>h.id===e.bossId);
+    const progress=boss?.bossGameplay;
+    if(progress){
+      if(boss?.weakPointExposed&&(boss.weakPointTimer??0)>0){
+        progress.signatureResolvedThisCycle=true;
+        progress.combatPhase='weak_point';
+        progress.remaining=boss.weakPointTimer??0;
+      }else{
+        progress.combatPhase='pattern';
+      }
+    }
   }
 
   private step(dt: number, input: GameInput): void {
