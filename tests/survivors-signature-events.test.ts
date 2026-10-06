@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationPlan,operationTiming} from '../src/engine/survivors-operation';
-import {signatureEventIdentity,signatureEventPlan,signatureStageFusion,type SignatureEventId} from '../src/engine/survivors-signature-events';
+import {signatureEventIdentity,signatureEventPlan,signatureEventSpawns,signatureStageFusion,type SignatureEventId} from '../src/engine/survivors-signature-events';
 
 describe('wave signature events',()=>{
   it('authors one Wave 2 and one Wave 3 event for all 50 stages',()=>{
@@ -58,6 +58,40 @@ describe('wave signature events',()=>{
     expect(signatureStageFusion(PATROL_STAGES.stage_03,'lifting_cross').title).toContain('타워크레인');
     expect(signatureStageFusion(PATROL_STAGES.stage_04,'gas_bloom').title).toContain('CO');
     expect(signatureStageFusion(PATROL_STAGES.stage_05,'cart_convoy').title).toContain('UPS');
+  });
+
+  it('adapts material sound cues to the incident inside each workface',()=>{
+    expect(signatureStageFusion(PATROL_STAGES.stage_01,'cart_convoy').materialCue).toBe('metal');
+    expect(signatureStageFusion(PATROL_STAGES.stage_01,'gas_bloom').materialCue).toBe('vapor');
+    expect(signatureStageFusion(PATROL_STAGES.stage_03,'lifting_cross').materialCue).toBe('concrete');
+    expect(signatureStageFusion(PATROL_STAGES.stage_05,'lifting_cross').materialCue).toBe('electric');
+    expect(signatureStageFusion(PATROL_STAGES.stage_05,'equipment_pincer').materialCue).toBe('metal');
+  });
+
+  it('changes signature approach geometry by construction workface',()=>{
+    const highrise=signatureEventSpawns(PATROL_STAGES.stage_07,'cart_convoy');
+    expect(highrise.every(spawn=>spawn.x>1300)).toBe(true);
+    expect(highrise.every(spawn=>spawn.directionX===-1)).toBe(true);
+
+    const datacenter=signatureEventSpawns(PATROL_STAGES.stage_09,'gas_bloom');
+    expect(datacenter.every(spawn=>[270,450,630].includes(spawn.y))).toBe(true);
+
+    const curing=signatureEventSpawns(PATROL_STAGES.stage_04,'debris_corridor');
+    const curingY=curing.map(spawn=>spawn.y);
+    expect(Math.max(...curingY)-Math.min(...curingY)).toBeLessThan(160);
+
+    const excavation=signatureEventSpawns(PATROL_STAGES.stage_02,'gas_bloom');
+    const excavationX=excavation.map(spawn=>spawn.x);
+    expect(Math.max(...excavationX)-Math.min(...excavationX)).toBeLessThan(400);
+
+    for(const stage of Object.values(PATROL_STAGES)){
+      for(const id of ['cart_convoy','gas_bloom','lifting_cross','debris_corridor','equipment_pincer','precollapse_signal'] as SignatureEventId[]){
+        for(const spawn of signatureEventSpawns(stage,id)){
+          expect(spawn.x).toBeGreaterThanOrEqual(0);expect(spawn.x).toBeLessThanOrEqual(1400);
+          expect(spawn.y).toBeGreaterThanOrEqual(0);expect(spawn.y).toBeLessThanOrEqual(900);
+        }
+      }
+    }
   });
 
   it('locks six different gameplay identities rather than six cosmetic labels',()=>{
