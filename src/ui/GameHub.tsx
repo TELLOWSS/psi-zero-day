@@ -288,7 +288,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
+export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
@@ -302,7 +302,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
-  const [confirmNewGame, setConfirmNewGame] = useState(false);
   const [showTitleSettings, setShowTitleSettings] = useState(false);
   const [modePreview,setModePreview]=useState<Exclude<ModePreviewKind,'signal'>|null>(null);
   const [motionEnabled, setMotionEnabled] = useState(true);
@@ -633,7 +632,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
       {page === 'site' ? <SiteProfileScreen
         onBack={() => setPage('home')}
-        onPracticeScenario={scenarioId => onDefense?.(scenarioId)}
+        onPracticeScenario={() => setModePreview('defense')}
       /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
@@ -643,7 +642,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           </button>)}
         </div>
         <section className="hub-route-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(detail.character, resolve)} alt="" /><div><small>{t(`ui.hub.step.${detail.status}`)}</small><h2>{t(detail.title)}</h2><p>{t(detail.hint)}</p>{detail.status === 'locked' ? <p>{t('ui.hub.locked_hint')}</p> : null}</div>
-          <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
+          <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
         </section>
       </> : page === 'people' ? <div className="hub-people">
         <div className="hub-section-title"><span className="hub-kicker">FIELD TEAM / 08</span><h1>{t('ui.hub.people')}</h1><p>{t('ui.hub.people.intro')}</p></div>
@@ -654,7 +653,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       </div> : page === 'guide' ? <RecoverableFieldGuide session={session} onHome={() => setPage('home')} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
-        <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
+        <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
       </div>}
     </section>
     <footer className="hub-footer"><span>{GAME_TITLE}</span><span>{t('ui.hub.footer')}</span><small>EPISODE 01 · {t('ep01.title')}</small></footer>
