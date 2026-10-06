@@ -13,8 +13,21 @@ export function directionalFrame(cycle:number,moving:boolean):number {
  const phase=((cycle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2);
  return moving?Math.floor(phase*8)%8:Math.round(phase*2)%2*4;
 }
-interface Cell {canvas:HTMLCanvasElement;width:number;height:number}
-interface Sheet {cells:Cell[];bodyHeight:number}
+export function directionalFrameWeights(cycle:number,moving:boolean,gaitBlend=moving?1:0):{frame:number;weight:number}[] {
+ const safe=Number.isFinite(cycle)?cycle:0,phase=((safe%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2)*8;
+ // Keep the authored pose sharp; a short boundary bridge avoids sustained double limbs.
+ const frame=Math.floor(phase)%8,t=Math.max(0,(phase-Math.floor(phase)-.82)/.18),smooth=t*t*(3-2*t);
+ const rawGait=Math.max(0,Math.min(1,Number.isFinite(gaitBlend)?gaitBlend:0));
+ const gait=rawGait*rawGait*(3-2*rawGait);
+ const weights=new Map<number,number>();
+ const add=(f:number,w:number)=>{if(w>0)weights.set(f,(weights.get(f)??0)+w);};
+ add(frame,(1-smooth)*gait);add((frame+1)%8,smooth*gait);
+ add(directionalFrame(safe,false),1-gait);
+ return [...weights].map(([frame,weight])=>({frame,weight}));
+}
+interface Cell {canvas:HTMLCanvasElement;width:number;height:number;anchor:number}
+interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number};direction:number;weights:{frame:number;weight:number}[]}
+interface Sheet {cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;key:string;lastPose?:SpritePose;lastFrame?:Frame}
 function actorBounds(pixels:Uint8ClampedArray,width:number,height:number):{left:number;top:number;right:number;bottom:number} {
  const seen=new Uint8Array(width*height),queue=new Int32Array(width*height);let largest=0,result={left:width,top:height,right:-1,bottom:-1};
  // Adjacent cell helmet fragments must not become this actor's foot pivot.
@@ -50,20 +63,42 @@ export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boole
    const {left,top,right,bottom}=actorBounds(pixels,canvas.width,canvas.height);
    if(right<left||transparent<canvas.width*canvas.height*.15)throw new Error('Invalid directional cell alpha');
    const crop=document.createElement('canvas');crop.width=right-left+1;crop.height=bottom-top+1;crop.getContext('2d')!.drawImage(canvas,left,top,crop.width,crop.height,0,0,crop.width,crop.height);
-   cells.push({canvas:crop,width:crop.width,height:crop.height});bodyHeight=Math.max(bodyHeight,crop.height);
+   // Align the pelvis, not the swinging boot/arm bounding-box midpoint.
+   let weightedX=0,weight=0;
+   for(let y=top+Math.floor(crop.height*.46);y<=top+Math.floor(crop.height*.6);y++)for(let x=left;x<=right;x++){
+    const alpha=pixels[(y*canvas.width+x)*4+3]!;if(alpha<32)continue;
+    weightedX+=(x-left)*alpha;weight+=alpha;
+   }
+   cells.push({canvas:crop,width:crop.width,height:crop.height,anchor:weight?weightedX/weight:crop.width/2});bodyHeight=Math.max(bodyHeight,crop.height);
   }
-  sharedSheet={cells,bodyHeight};sheets.set(actor,sharedSheet);return true;
+  // Normalize scale before interpolation: differing source crop heights must not double the helmet.
+  for(const c of cells){const scale=bodyHeight/c.height;c.width*=scale;c.anchor*=scale;c.height=bodyHeight;}
+  const composite=document.createElement('canvas');
+  composite.width=Math.ceil(Math.max(...cells.map(c=>Math.max(c.anchor,c.width-c.anchor)))*2+4);composite.height=bodyHeight;
+  sharedSheet={cells,bodyHeight,composite,key:''};sheets.set(actor,sharedSheet);return true;
  }catch{return false;}
 }
-function cell(actor:HTMLImageElement,pose:SpritePose):{sheet:Sheet;cell:Cell;direction:number}|undefined {
+function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  const sheet=sheets.get(actor);if(!sheet)return;
- const direction=pose.direction??2;return {sheet,cell:sheet.cells[direction*8+directionalFrame(pose.authoredCycle??pose.cycle,pose.moving)]!,direction};
+ if(sheet.lastPose===pose)return sheet.lastFrame;
+ const direction=pose.direction??2;
+ const weights=directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend);
+ const shape={width:0,height:0,anchor:0};
+ for(const sample of weights){const c=sheet.cells[direction*8+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;}
+ const result={sheet,cell:shape,direction,weights};sheet.lastPose=pose;sheet.lastFrame=result;return result;
 }
 export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
  const frame=cell(actor,pose);if(!frame)return false;
- const scale=height/frame.sheet.bodyHeight,w=frame.cell.width*scale,h=frame.cell.height*scale;
+ const sheet=frame.sheet,key=frame.direction+':'+frame.weights.map(w=>w.frame+':'+w.weight).join(',');
+ if(sheet.key!==key){
+  const composite=sheet.composite,paint=composite.getContext('2d')!;
+  paint.clearRect(0,0,composite.width,composite.height);paint.globalCompositeOperation='lighter';
+  for(const sample of frame.weights){const c=sheet.cells[frame.direction*8+sample.frame]!;paint.globalAlpha=sample.weight;paint.drawImage(c.canvas,composite.width/2-c.anchor,composite.height-c.height,c.width,c.height);}
+  paint.globalAlpha=1;paint.globalCompositeOperation='source-over';sheet.key=key;
+ }
+ const scale=height/sheet.bodyHeight,w=sheet.composite.width*scale,h=sheet.composite.height*scale;
  ctx.save();if(transform)applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
- ctx.drawImage(frame.cell.canvas,-w/2,-h,w,h);ctx.restore();return true;
+ ctx.drawImage(sheet.composite,-w/2,-h,w,h);ctx.restore();return true;
 }
 export function directionalSocket(actor:HTMLImageElement,pose:SpritePose|undefined,height:number,kind:'head'|'chest'|'back'|'belt'):({x:number;y:number;size:number;rear:boolean})|undefined {
  if(!pose)return;const frame=cell(actor,pose);if(!frame)return;
@@ -72,5 +107,5 @@ export function directionalSocket(actor:HTMLImageElement,pose:SpritePose|undefin
  const x=kind==='head'?chestX:kind==='back'?1-chestX:chestX;
  const y=kind==='head'?.18:kind==='belt'?.55:.36;
  const scale=height/frame.sheet.bodyHeight;
- return {x:(x-.5)*frame.cell.width*scale,y:(y-1)*frame.cell.height*scale,size:height*(kind==='head'?.14:.22),rear};
+ return {x:(x*frame.cell.width-frame.cell.anchor)*scale,y:(y-1)*frame.cell.height*scale,size:height*(kind==='head'?.14:.22),rear};
 }

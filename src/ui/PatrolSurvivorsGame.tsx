@@ -2760,7 +2760,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <span className="survivors-ultimate-icon">📢</span>
             <div className="survivors-ultimate-info">
               <strong>소장 샤우팅</strong>
-              <small>{!encounterLocked && ultimateCharge >= 100 ? 'READY [Space/F]' : `${ultimateCharge}%`}</small>
+              <small>{!encounterLocked && ultimateCharge >= 100 ? <><span>READY</span><kbd className="survivors-ultimate-key">Space/F</kbd></> : `${ultimateCharge}%`}</small>
             </div>
           </button>
         </div>

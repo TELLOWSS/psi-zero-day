@@ -1,6 +1,7 @@
 import type {SurvivorsGameState, EvolutionPerkId} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 import {EVOLUTION_IDENTITIES} from './survivors-equipment-identity';
+import {cinematicLook} from './survivors-cinematic-vfx';
 
 type Material = 'electric' | 'pressure' | 'metal';
 export const GROUND_MATERIALS:Record<string,Material> = {
@@ -42,15 +43,17 @@ export class EquipmentGroundContact {
     for(const event of events){
       if(event.worker||event.blocked||event.phase==='release')continue;
       const evolution=evolved.some(id=>EVOLUTION_IDENTITIES[id as EvolutionPerkId].kind===event.kind);
-      if(!equipped.length&&!evolution)continue;
       const local=Math.hypot(event.x-state.player.x,event.y-state.player.y)<85;
-      if(event.phase==='launch'&&!local)continue;
-      if(event.phase==='impact'&&!evolution&&!event.critical)continue;
+      const premium=cinematicLook(event.kind,1,equipped).premium||
+        (event.kind==='drone_laser'||event.kind==='hunter_beam')&&equipped.some(id=>id==='inspection_wing'||id==='rescue_wing');
+      if(Math.hypot(event.x-state.player.x,event.y-state.player.y)>460)continue;
+      // Ordinary gear gets a brief confirmed contact, never a firing carpet.
+      if(event.phase==='launch'&&(!local||!premium&&!evolution))continue;
       const material:Material=event.kind==='tesla_bolt'||event.kind==='drone_laser'?'electric':event.kind==='emf_beam'||event.kind==='hunter_beam'?'metal':'pressure';
       const key=event.phase+material;
       if(now<(this.cooldown.get(key)??-1))continue;
-      this.cooldown.set(key,now+(busy?.55:.34));
-      emit(material,event.phase==='launch'?state.player.x:event.x,event.phase==='launch'?state.player.y+3:event.y,evolution?1.15:event.phase==='launch'?.5:.85,event.angle);
+      this.cooldown.set(key,now+(busy?.55:event.phase==='impact'?.18:.34));
+      emit(material,event.x,event.phase==='launch'?event.y+3:event.y,evolution?1.15:premium?.75:event.critical?.65:.4,event.angle);
     }
   }
   draw(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false):void {

@@ -17,7 +17,7 @@ try {
    const frames=[];
    const state={characterId:'player',premiumGear:{equipped:['voice_lens','shock_mantle','inspection_wing'],shield:10,feedback:0}};
    for(let direction=0;direction<8;direction++)for(let frame=0;frame<8;frame++){
-    const pose={moving:true,cycle:(frame+.2)/8*Math.PI*2,facing:direction>=3&&direction<=5?-1:1,direction,directional:true,lean:0,scaleY:1,reaction:0,action:0};
+    const pose={moving:true,cycle:(frame+.5)/8*Math.PI*2,facing:direction>=3&&direction<=5?-1:1,direction,directional:true,lean:0,scaleY:1,reaction:0,action:0};
     ctx.clearRect(0,0,c.width,c.height);ctx.save();ctx.translate(80,170);drawDirectionalBody(ctx,actor,154,pose);ctx.restore();
     const data=ctx.getImageData(0,0,160,180).data;let hash=2166136261,top=180,bottom=-1,count=0;
     for(let i=0;i<data.length;i++){hash=Math.imul(hash^data[i],16777619);if(i%4===3&&data[i]>32){const y=Math.floor(i/4/160);top=Math.min(top,y);bottom=Math.max(bottom,y);count++;}}
@@ -27,9 +27,15 @@ try {
    }
    const pose={moving:false,cycle:0,facing:-1,direction:6,directional:true,lean:0,scaleY:1,reaction:0,action:0};
    const back=directionalSocket(actor,pose,154,'back');
+   let socketJump=0;
+   for(let direction=0;direction<8;direction++)for(let frame=1;frame<=8;frame++){
+    const a=directionalSocket(actor,{...pose,moving:true,direction,cycle:(frame-.0001)/8*Math.PI*2},154,'chest');
+    const b=directionalSocket(actor,{...pose,moving:true,direction,cycle:(frame+.0001)/8*Math.PI*2},154,'chest');
+    socketJump=Math.max(socketJump,Math.hypot(a.x-b.x,a.y-b.y));
+   }
    const allocation=document.createElement;let allocations=0;document.createElement=function(...args){allocations++;return allocation.apply(this,args);};
    try{for(let i=0;i<100;i++)drawDirectionalBody(ctx,actor,74,{...pose,moving:true,cycle:i*.1});}finally{document.createElement=allocation;}
-   return {loaded,frames,allocations,back,contactSheet:sheet.toDataURL(),pass:loaded&&allocations===0&&new Set(frames.filter(f=>f.frame===0).map(f=>f.hash)).size===8&&frames.every(f=>f.count>1000&&f.bottom>=168&&f.bottom<=169)&&Array.from({length:8},(_,d)=>new Set(frames.filter(f=>f.direction===d).map(f=>f.hash)).size>=6).every(Boolean)};
+   return {loaded,frames,allocations,back,socketJump,contactSheet:sheet.toDataURL(),pass:loaded&&allocations===0&&socketJump<.01&&new Set(frames.filter(f=>f.frame===0).map(f=>f.hash)).size===8&&frames.every(f=>f.count>1000&&f.bottom>=168&&f.bottom<=169)&&Array.from({length:8},(_,d)=>new Set(frames.filter(f=>f.direction===d).map(f=>f.hash)).size>=6).every(Boolean)};
   });
   fs.writeFileSync(path.join(out,`${width}x${height}.png`),Buffer.from(report.contactSheet.split(',')[1],'base64'));delete report.contactSheet;
   await page.evaluate(async()=>{

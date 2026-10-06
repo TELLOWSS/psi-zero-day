@@ -8,7 +8,7 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.CH
 try{
  const reports=[];
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
-  const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  const mobile=width<900,page=await browser.newPage({viewport:{width,height},hasTouch:mobile}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
   const report=await page.evaluate(async()=>{
    const {EquipmentGroundContact}=await import('/src/ui/survivors-equipment-ground-contact.ts');
@@ -18,8 +18,8 @@ try{
    const rawCtx=raw.getContext('2d');rawCtx.drawImage(atlas,0,0);const cornerAlpha=rawCtx.getImageData(0,0,1,1).data[3];
    const sheet=document.createElement('canvas');sheet.width=900;sheet.height=360;const ctx=sheet.getContext('2d');ctx.fillStyle='#39453c';ctx.fillRect(0,0,900,360);
    const frames=[];
-   for(const [row,kind] of ['tesla_bolt','shout_shockwave','emf_beam'].entries()){
-    const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['shock_mantle'],equipped:['shock_mantle']});s.player.x=0;s.player.y=0;
+   for(const [row,kind] of ['tesla_bolt','radio','emf_beam'].entries()){
+    const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['command_array'],equipped:['command_array']});s.player.x=0;s.player.y=0;s.activePerks.tesla_dome=1;s.activePerks.emf_barricade=1;
     const layer=new EquipmentGroundContact();layer.observe(s,[]);s.gameTime=1;layer.observe(s,[{projectileId:'q',kind,phase:'launch',x:0,y:0,angle:0,radius:4}]);
     for(let frame=0;frame<6;frame++){
      s.gameTime=1+frame*.075;ctx.save();ctx.translate(75+frame*150,60+row*120);ctx.scale(2,2);layer.draw(ctx,s,atlas,false);ctx.restore();
@@ -34,11 +34,12 @@ try{
   });
   fs.writeFileSync(path.join(out,`${width}x${height}-frames.png`),Buffer.from(report.gallery.split(',')[1],'base64'));delete report.gallery;
   await page.getByRole('button',{name:'순찰 시작하기',exact:true}).click();await page.waitForFunction(()=>window.qaEngine);
-  await page.evaluate(()=>{const s=window.qaEngine.state;s.activePerks.tesla_dome=1;s.player.invincible=100;});
+  await page.evaluate(()=>{const s=window.qaEngine.state;s.activePerks.tesla_dome=1;s.player.invincible=100;s.ultimateCharge=100;s.premiumGear.equipped=['voice_lens','shock_mantle','inspection_wing'];});
   await page.keyboard.down('ArrowRight');await page.waitForTimeout(300);await page.keyboard.up('ArrowRight');
   await page.screenshot({path:path.join(out,`${width}x${height}-game.png`)});
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  reports.push({width,height,...report,errors,overflow,pass:report.pass&&!errors.length&&!overflow});await page.close();
+  const keyVisible=await page.locator('.survivors-ultimate-key').isVisible();
+  reports.push({width,height,...report,errors,overflow,keyVisible,pass:report.pass&&!errors.length&&!overflow&&keyVisible===!mobile});await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(reports,null,2));console.log(JSON.stringify(reports));if(reports.some(r=>!r.pass))process.exitCode=1;
 }finally{await browser.close();}

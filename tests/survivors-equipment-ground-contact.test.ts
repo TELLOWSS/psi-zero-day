@@ -23,11 +23,27 @@ it('anchors a contact to its birth position, blends authored frames and expires'
  expect(vi.mocked(b.drawImage).mock.calls).toEqual(vi.mocked(a.drawImage).mock.calls);
  s.gameTime=2;layer.observe(s,[]);expect(layer.count).toBe(0);
 });
-it('suppresses normal, blocked and worker events and honors reduced motion',()=>{
+it('suppresses ordinary launch, blocked and worker events and honors reduced motion',()=>{
  const s=createInitialSurvivorsState(),layer=new EquipmentGroundContact();layer.observe(s,[event]);expect(layer.count).toBe(0);
  s.activePerks.tesla_dome=1;layer.observe(s,[]);s.gameTime=1;
  layer.observe(s,[{...event,blocked:true},{...event,worker:true}]);expect(layer.count).toBe(0);
  layer.observe(s,[event]);const c=ctx();layer.draw(c,s,atlas,true);expect(c.drawImage).not.toHaveBeenCalled();
+});
+it('gives ordinary confirmed hits a small contact but never reacts to unrelated equipped armor or remote hits',()=>{
+ const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['shock_mantle'],equipped:['shock_mantle']});
+ s.player.x=0;s.player.y=0;const layer=new EquipmentGroundContact();layer.observe(s,[]);s.gameTime=1;
+ layer.observe(s,[{...event,kind:'drone_laser'}]);expect(layer.count).toBe(0);
+ layer.observe(s,[{...event,kind:'drone_laser',phase:'impact',x:700}]);expect(layer.count).toBe(0);
+ layer.observe(s,[{...event,kind:'drone_laser',phase:'impact',x:60}]);expect(layer.count).toBe(1);
+ const c=ctx();layer.draw(c,s,atlas,false);expect(c.drawImage).toHaveBeenCalledTimes(1);
+ s.gameTime=2;layer.observe(s,[]);expect(layer.count).toBe(0);
+});
+it('places companion launch light under the emitting drone instead of teleporting it to the actor',()=>{
+ const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:['inspection_wing'],equipped:['inspection_wing']});
+ s.player.x=0;s.player.y=0;const layer=new EquipmentGroundContact();layer.observe(s,[]);s.gameTime=1;
+ layer.observe(s,[{...event,kind:'drone_laser',x:40,y:10}]);expect(layer.count).toBe(1);
+ const c=ctx();layer.draw(c,s,atlas,false);const call=vi.mocked(c.drawImage).mock.calls[0]!;
+ expect(call[5]!+(call[7] as number)/2).toBeCloseTo(40);expect(call[6]!+(call[8] as number)/2).toBeCloseTo(13);
 });
 it('bounds dense event bursts and resets on a new run',()=>{
  const s=createInitialSurvivorsState();for(const id of ['tesla_dome','emf_barricade','hunter_swarm'] as const)s.activePerks[id]=1;

@@ -941,6 +941,11 @@
   color: #94a3b8;
 }
 
+.survivors-ultimate-key { display:block; font:inherit; font-size:8px; }
+@media (hover:none), (pointer:coarse) {
+  .survivors-ultimate-key { display:none; }
+}
+
 .survivors-ultimate-btn.is-ready .survivors-ultimate-info small {
   color: #ffffff;
   font-weight: 900;
