@@ -44,5 +44,6 @@ describe('Survivors boss gameplay content', () => {
     expect(final.patternId).toBe('ZERO_DAY_WAVE');
     expect(final.phaseCount).toBe(4);
     expect(final.intro.firstPlaySeconds).toBe(5.5);
+    expect(final.burstWindowSeconds).toBe(8);
   });
 });

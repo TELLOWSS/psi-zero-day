@@ -20,13 +20,13 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   if(gear.effects.shield>0&&gear.shield>0&&actorPose?.vfxAtlas?.naturalWidth) {
     ctx.save();ctx.globalCompositeOperation='screen';
     const ratio=Math.min(1,gear.shield/gear.effects.shield);
-    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,58,68,(gear.feedback>0&&!reducedMotion?.36:.12)*ratio);
+    const active=gear.feedback>0;
+    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,active?62:42,active?76:58,
+      (active?(reducedMotion?.24:.7):.10)*ratio);
     ctx.restore();
   }
   const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);
   if(suppressed.length) {
-    ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=.16;ctx.lineWidth=1;ctx.setLineDash([6,10]);
-    ctx.beginPath();ctx.arc(x,y,180,0,Math.PI*2);ctx.stroke();ctx.restore();
     for(const hazard of suppressed){
       ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=.45;ctx.lineWidth=1.2;
       ctx.beginPath();ctx.moveTo(x+(flight?.x??0),y+(flight?.y??-24));ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();
@@ -74,7 +74,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
     if(socket){
       if(!hasWearable(state,id,wearables))draw(id,socket.x,socket.y,socket.size);
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
-      if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,13,11,.18);ctx.restore();}
+      if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(state.gameTime*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
       attached=true;
     }
   }

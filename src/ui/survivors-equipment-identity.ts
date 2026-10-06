@@ -107,11 +107,17 @@ export function drawEvolutionIdentity(ctx:CanvasRenderingContext2D,state:Survivo
   });ctx.restore();
 }
 
-/** Two dominant signatures hug the silhouette; no world-space range or floating item. */
+export function mantleSignatures(state:SurvivorsGameState,busy=false){
+  const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([id,v])=>({id,...v,evolved:true}));
+  const premium=[...new Set(state.premiumGear?.equipped??[])].map(id=>({id,aura:EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]})).filter(v=>v.aura).sort((a,b)=>b.aura.marks-a.aura.marks).map(v=>({id:v.id,...v.aura,evolved:false}));
+  const limit=busy?2:4;
+  const reserved=premium.slice(0,Math.min(2,limit));
+  return [...reserved,...evolutions,...premium.slice(reserved.length)].slice(0,limit);
+}
+
+/** Premium signatures retain reserved body slots even with multiple acquired evolutions. */
 export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,busy=false,movingAngle?:number,actionStrength=0,attachment?:{pose:SpritePose;height:number;rigged:boolean}):void {
-  const evolutions=Object.entries(EVOLUTION_IDENTITIES).filter(([id])=>state.activePerks[id as EvolutionPerkId]>0).map(([,v])=>({...v,evolved:true}));
-  const premium=(state.premiumGear?.equipped??[]).map(id=>EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS]).filter(Boolean).sort((a,b)=>b.marks-a.marks).map(v=>({...v,evolved:false}));
-  const signatures=[...evolutions,...premium].slice(0,busy?1:2);
+  const signatures=mantleSignatures(state,busy);
   if(!signatures.length)return;
   const action=reduced?0:Math.max(0,Math.min(1,Number.isFinite(actionStrength)?actionStrength:0));
   ctx.save();ctx.translate(state.player.x,state.player.y);
@@ -120,7 +126,8 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     else applyActorTorsoTransform(ctx,attachment.pose,attachment.height,attachment.rigged);
   }
   for(let i=0;i<signatures.length;i++){
-    const signature=signatures[i]!,side=i===0?-1:1;
+    const signature=signatures[i]!,side=i%2===0?-1:1;
+    ctx.save();if(i>=2)ctx.translate(side*5,10);
     const flow=reduced?0:Math.sin(state.gameTime*2.2+i)*3;
     const drag=!reduced&&movingAngle!==undefined?-Math.cos(movingAngle)*4*(attachment?.pose.facing??1):0;
     ctx.strokeStyle=signature.color;ctx.lineWidth=signature.evolved?2:1.5;
@@ -135,6 +142,7 @@ export function drawEquipmentMantle(ctx:CanvasRenderingContext2D,state:Survivors
     if(signature.evolved){
       ctx.globalAlpha=busy?.5:.9;ctx.beginPath();ctx.moveTo(side*9,-61);ctx.lineTo(side*15,-66);ctx.lineTo(side*20,-61);ctx.stroke();
     }
+    ctx.restore();
   }
   ctx.restore();
 }

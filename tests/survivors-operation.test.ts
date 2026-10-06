@@ -22,7 +22,8 @@ it('finishes via engine rules and awards terminal rewards only once',()=>{
   const s=createInitialSurvivorsState(undefined,undefined,stage.id);const e=new SurvivorsEngine(s,42);e.start();s.gameTime=60;
   e.update(1/60,{moveX:0,moveY:0});
   const boss=s.hazards.find(h=>h.isStageBoss)!;expect(boss).toBeDefined();boss.hp=0;
-  for(let i=0;i<370;i++)e.update(1/60,{moveX:0,moveY:0});expect(s.phase).toBe('victory');expect(s.stageBossNeutralized).toBe(true);
+  const completionFrames=Math.ceil(((s.bossEncounter!.introDuration??0)+2.4)*60)+10;
+  for(let i=0;i<completionFrames;i++)e.update(1/60,{moveX:0,moveY:0});expect(s.phase).toBe('victory');expect(s.stageBossNeutralized).toBe(true);
   expect(s.fieldTactics?.handoff).toBeFalsy();const score=s.score,credits=s.psiCredits;
   e.update(1/60,{moveX:0,moveY:0});expect(s.score).toBe(score);expect(s.psiCredits).toBe(credits);
  }

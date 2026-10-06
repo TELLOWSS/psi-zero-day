@@ -1,11 +1,34 @@
 import {describe,it,expect} from 'vitest';
 import {createInitialSurvivorsState,SurvivorsEngine} from '../src/engine/patrol-survivors-engine';
-import {absorbPremiumDamage,tickPremiumGear,premiumHazardSpeed} from '../src/engine/survivors-premium-gear';
+import {absorbPremiumDamage,tickPremiumGear,premiumHazardSpeed,applyPremiumLoadout} from '../src/engine/survivors-premium-gear';
 import {STORE_ITEMS,storeEffects} from '../src/domain/survivors-store';
 import type {Hazard} from '../src/domain/patrol-survivors';
 const stateWith=(...equipped:string[])=>createInitialSurvivorsState('yoon',undefined,'stage_01','extreme',{owned:equipped,equipped});
 const threat=(state:ReturnType<typeof stateWith>,type:Hazard['type']='GAS_LEAK'):Hazard=>({id:'risk',type,x:state.player.x,y:state.player.y,hp:99999,maxHp:99999,damage:30,radius:20,speed:0,expValue:1});
 describe('premium equipment intervention in difficult patrols',()=>{
+  it('records actual regeneration and respects full health, pause and unequip',()=>{
+    const state=stateWith('recovery_cell');
+    const engine=new SurvivorsEngine(state,42);engine.start();
+    state.hazards=[];state.interactiveHazards=[];
+    state.player.hp=state.player.maxHp-1;
+    const before=state.player.hp;
+    engine.update(1/60,{moveX:0,moveY:0});
+    expect(state.premiumGear!.recoveryAmount).toBeCloseTo(state.player.hp-before);
+    expect(state.premiumGear!.recoveryAmount).toBeGreaterThan(0);
+    const receipt=state.premiumGear!.recoveryAmount;
+    state.phase='paused';tickPremiumGear(state,1);
+    expect(state.premiumGear!.recoveryAmount).toBe(receipt);
+    state.phase='playing';
+    state.player.hp=state.player.maxHp;
+    engine.update(1/60,{moveX:0,moveY:0});
+    expect(state.premiumGear!.recoveryAmount).toBe(0);
+    state.player.hp-=1;state.player.regenRate=0;
+    engine.update(1/60,{moveX:0,moveY:0});
+    expect(state.premiumGear!.recoveryAmount).toBe(0);
+    state.phase='paused';
+    expect(applyPremiumLoadout(state,{owned:['recovery_cell'],equipped:[]})).toBe(true);
+    expect(state.premiumGear!.recoveryAmount??0).toBe(0);
+  });
   it('absorbs a burst, passes overflow and only restores after depletion cadence',()=>{
     const state=stateWith('shock_mantle');state.phase='playing';
     expect(absorbPremiumDamage(state,30)).toBe(0);

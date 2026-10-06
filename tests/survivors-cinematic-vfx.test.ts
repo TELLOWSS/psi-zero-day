@@ -65,9 +65,9 @@ describe('premium and high-tier cinematic presentation',()=>{
     expect(ctx.drawImage).toHaveBeenCalled();expect(JSON.stringify(state)).toBe(snapshot);
     expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
   });
-  it('caps premium detail under reduced motion, crowded combat and five-plus simultaneous categories',()=>{
+  it('caps crowded combat and reduced motion without penalizing equipment count',()=>{
     expect(premiumVfxDetailLevel(4,false,false)).toBe(2);
-    expect(premiumVfxDetailLevel(5,false,false)).toBe(1);
+    expect(premiumVfxDetailLevel(5,false,false)).toBe(2);
     expect(premiumVfxDetailLevel(3,true,false)).toBe(1);
     expect(premiumVfxDetailLevel(1,false,true)).toBe(0);
   });
@@ -84,6 +84,9 @@ describe('premium and high-tier cinematic presentation',()=>{
     const ctx=context();drawPremiumProtocol(ctx,state,atlas,false);
     expect(ctx.drawImage).not.toHaveBeenCalled();expect(ctx.ellipse).not.toHaveBeenCalled();
     state.player.hp-=10;drawPremiumProtocol(ctx,state,atlas,false,0);
+    expect(ctx.drawImage).toHaveBeenCalledTimes(1);
+    vi.mocked(ctx.drawImage).mockClear();state.premiumGear!.recoveryAmount=.01;
+    drawPremiumProtocol(ctx,state,atlas,false,0);
     expect(ctx.drawImage).toHaveBeenCalledTimes(2);
   });
   it('keeps hunter impact violet when communication gear affects only radio weapons',()=>{

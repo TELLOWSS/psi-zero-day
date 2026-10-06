@@ -4,7 +4,7 @@ import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine
 import {premiumBodySocket,WEARABLE_PROFILES} from '../src/ui/survivors-wearable-art';
 import {actorTorsoPoint} from '../src/ui/survivors-rig-renderer';
 import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
-import {EQUIPMENT_AURAS,EVOLUTION_IDENTITIES,drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from '../src/ui/survivors-equipment-identity';
+import {EQUIPMENT_AURAS,EVOLUTION_IDENTITIES,drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle,mantleSignatures} from '../src/ui/survivors-equipment-identity';
 import {cinematicLook,drawCinematicContact} from '../src/ui/survivors-cinematic-vfx';
 import {CombatDirection} from '../src/ui/survivors-combat-direction';
 import {ProjectileFeedbackLayer} from '../src/ui/survivors-projectile-feedback';
@@ -53,10 +53,19 @@ it('keeps raster-loaded item motifs and bounds the silhouette mantle without cha
  const ids=['broadcast_crown','shock_mantle','sync_gauntlet'];
  const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
  const before=JSON.stringify(s),c=context();drawEquipmentIdentity(c,s,atlas,false);expect(c.stroke).toHaveBeenCalled();
- const mantle=context();drawEquipmentMantle(mantle,s,atlas,false);expect(mantle.drawImage).toHaveBeenCalledTimes(16);
- const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(4);
+ const mantle=context();drawEquipmentMantle(mantle,s,atlas,false);expect(mantle.drawImage).toHaveBeenCalledTimes(24);
+ const busy=context();drawEquipmentMantle(busy,s,atlas,false,true);expect(busy.drawImage).toHaveBeenCalledTimes(8);
  const reduced=context();drawEquipmentMantle(reduced,s,atlas,true);expect(reduced.drawImage).not.toHaveBeenCalled();expect(reduced.stroke).toHaveBeenCalled();
- expect(JSON.stringify(s)).toBe(before);expect(mantle.save).toHaveBeenCalledTimes(17);expect(mantle.restore).toHaveBeenCalledTimes(17);
+ expect(JSON.stringify(s)).toBe(before);expect(mantle.save).toHaveBeenCalledTimes(28);expect(mantle.restore).toHaveBeenCalledTimes(28);
+});
+it('reserves paid signatures when all evolution identities are active',()=>{
+ const ids=['broadcast_crown','shock_mantle','sync_gauntlet','barrier_forge','extraction_pack','inspection_wing'];
+ const s=createInitialSurvivorsState('player',undefined,undefined,undefined,{owned:ids,equipped:ids});
+ for(const id of Object.keys(EVOLUTION_IDENTITIES))s.activePerks[id as keyof typeof EVOLUTION_IDENTITIES]=1;
+ const before=JSON.stringify(s),normal=mantleSignatures(s),busy=mantleSignatures(s,true);
+ expect(normal).toHaveLength(4);expect(normal.filter(v=>!v.evolved)).toHaveLength(2);
+ expect(busy).toHaveLength(2);expect(busy.every(v=>!v.evolved)).toBe(true);
+ expect(JSON.stringify(s)).toBe(before);
 });
 it('calibrates all six categories for every character and mirrors the actual torso frame',()=>{
   const state=createInitialSurvivorsState(),pose=new SpriteMotionTracker().sample(state.player,0,0,0);

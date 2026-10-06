@@ -2003,6 +2003,9 @@
 .survivors-boss-alert-text strong { font-size: clamp(12px, 2vw, 15px); line-height: 1.35; }
 .survivors-boss-alert-text small { display: block; color: #fed7aa; font-size: 11px; line-height: 1.4; }
 .survivors-boss-alert-text progress { width:100%; height:6px; accent-color:#8ee2ae; }
+.survivors-boss-skip { pointer-events:auto; align-self:flex-end; display:grid; place-items:center; width:44px; height:44px; flex-shrink:0; border:1px solid #8ee2ae; border-radius:4px; color:#d9f7e2; background:#20352c; cursor:pointer; }
+.survivors-boss-skip:disabled { opacity:.4; cursor:default; }
+.survivors-boss-skip:focus-visible { outline:2px solid #fff; outline-offset:2px; }
 .survivors-boss-readout[data-core="interlocked"] progress,
 .survivors-focus-status[data-core="interlocked"] progress { accent-color:#82d7e5; }
 .survivors-boss-readout[data-core="exposed"] progress,

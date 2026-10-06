@@ -1,0 +1,9 @@
+# V3 drone repetition mix
+
+The supplied V3 assets remain unchanged and retain CANDIDATE/listening-review status. Prior service admission allowed normal/premium releases and hunter gestures separate0.09s cadences, which could overlap with multi-drone builds. New playback admission shares a fire cadence across those families:0.22s normal/0.30s busy. Launch/dock retain independent0.35s cadence. Suppressed events are consumed, not played through a procedural fallback.
+
+An accepted repeated shot within0.8s of the previous fire uses72% of the original gain (about-2.85dB); after a gap the full first-shot accent returns. Base/premium/hunter source distinction, authored full duration and tiny normal-shot pitch cycle remain. No tail cutting/remixing/random gameplay calls. Silence resets cadence. This is a fatigue mitigation, not proof of subjective listening approval.
+
+New timed WebAudio test covers shared admission across base/premium/hunter, busy cadence, lower repeated gain, full0.48s mocked source tail, accent recovery and reset. Focused audio/recorded/mix14 passed. Phone speaker/headphone30-repeat listening remains pending. No new generated sound or rejected V1/V2 drone assets introduced.
+
+Actual Chromium V3 verification (not the archived43-asset V2 decoder): all six V3 recordings decoded with nonzero RMS and peak below1. Forty alternating base/premium/hunter requests at100ms spacing admitted15 normal /14 busy sources, observed minimum gaps.2213/.3093 seconds. Every admitted source retained its complete decoded tail. Launch/dock started independently, mute cancelled all voices, no failures/page errors. Evidence: artifacts/drone-v3-cadence/report.json and scripts/verify-survivors-drone-v3-cadence.mjs. This is technical playback/cadence proof, not subjective listening approval.

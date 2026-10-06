@@ -2,7 +2,7 @@ export function materialRibbonPoint(u:number,time:number,side:number,action=0) {
  const t=Number.isFinite(time)?Math.max(0,time):0;
  const p=Math.max(0,Math.min(1,u)),charge=Math.max(0,Math.min(1,action));
  return {x:side*(15+Math.sin(p*Math.PI)*8+Math.sin(t*1.9+p*4)*2),y:-9-p*52,
-  width:5+Math.sin(p*Math.PI)*(5+charge*2),alpha:Math.sin(p*Math.PI)**2*(.20+charge*.12),
+  width:6+Math.sin(p*Math.PI)*(6+charge*4),alpha:Math.sin(p*Math.PI)**2*(.46+charge*.24),
   texture:.5+.5*Math.sin(t*2-p*5)};
 }
 
@@ -34,7 +34,7 @@ export function drawMaterialRibbon(ctx:CanvasRenderingContext2D,atlas:HTMLImageE
  for(let i=0;i<count;i++){
   const p=materialRibbonPoint((i+.5)/count,time,side,action),next=materialRibbonPoint(Math.min(1,(i+.5)/count+.01),time,side,action);
   const angle=Math.atan2(next.y-p.y,next.x-p.x);
-  ctx.save();ctx.translate(p.x+drag,p.y);ctx.rotate(angle);ctx.globalAlpha=p.alpha*(busy?.65:1);
+  ctx.save();ctx.translate(p.x+drag,p.y);ctx.rotate(angle);ctx.globalAlpha=p.alpha*(busy?.82:1);
   const sx=(cell%4+.1+p.texture*.6)*cw,sy=(Math.floor(cell/4)+.2)*ch;
   if(strips)ctx.drawImage(strips[Math.round(p.texture*15)]!,-52/count*.7,-p.width/2,52/count*1.4,p.width);
   else ctx.drawImage(atlas,sx,sy,cw*.2,ch*.6,-52/count*.7,-p.width/2,52/count*1.4,p.width);

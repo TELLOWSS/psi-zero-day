@@ -26,6 +26,7 @@ export function applyPremiumLoadout(state:SurvivorsGameState,inventory:StoreInve
 export function tickPremiumGear(state:SurvivorsGameState,dt:number):void {
   const gear=state.premiumGear;
   if(!gear || state.phase !== 'playing' || dt <= 0) return;
+  gear.recoveryAmount=0;
   gear.feedback=Math.max(0,gear.feedback-dt);
   state.ultimateCharge=Math.min(state.maxUltimateCharge,state.ultimateCharge+gear.effects.ultimate*dt);
   if(gear.shieldCooldown>0) {

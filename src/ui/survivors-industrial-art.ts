@@ -4,6 +4,11 @@ import type { SpritePose } from './survivors-sprite-motion';
 import { drawProp,drawPropReaction } from './survivors-equipment-art';
 import { suspendedLoadPose } from './survivors-animation-rig';
 import { bossPattern } from '../engine/survivors-boss-pattern';
+import {materialContactMotion,materialFragmentMotion} from './survivors-material-contact-motion';
+import {materialFragmentTexture} from './survivors-material-fragments';
+import {drawAuthoredMetalImpact} from './survivors-authored-metal-impact';
+import {drawAuthoredDebrisImpact} from './survivors-authored-debris-impact';
+import {drawAuthoredVaporImpact} from './survivors-authored-vapor-impact';
 
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
@@ -26,7 +31,8 @@ export function usesCarrierBossArt(h:Pick<Hazard,'type'|'isStageBoss'>):boolean 
 export function industrialResponse(h:Pick<Hazard,'type'>,pose:Pick<SpritePose,'reaction'|'moving'|'cycle'|'facing'>,reduced:boolean) {
   const reaction=reduced?0:Math.min(1,Math.max(0,pose.reaction));
   const cart=h.type==='RUNAWAY_CART',gas=h.type==='GAS_LEAK';
-  return {reaction,compression:cart?reaction*.025:0,tilt:gas?0:reaction*(cart?.012:.025)*pose.facing,
+  const recoil=reaction===0?0:reaction*Math.cos((1-reaction)*Math.PI*1.5);
+  return {reaction,compression:cart?reaction*.025:0,tilt:gas?0:recoil*(cart?.032:.045)*pose.facing,
     suspension:!reduced&&cart&&pose.moving?Math.abs(Math.sin(pose.cycle))*.012:0,
     color:gas?'#9de5be':h.type==='FALLING_DEBRIS'?'#e6d6ba':'#ffd995'};
 }
@@ -111,9 +117,10 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
     ctx.transform(1, 0, pose.lean+action.lean+response.tilt, 1-action.compression-response.compression-response.suspension, 0, 0);
   }
-  if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.translate(0,elevation);}
+  if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.scale(1+response.reaction*.035,1-response.reaction*.035);ctx.translate(0,elevation);}
   const pressure = !boss&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
   ctx.scale(pressure, pressure);
+  if(gas&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
   if (gas&&!boss) ctx.globalAlpha *= .82;
   const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
   if(drawn&&response.reaction>0)drawPropReaction(ctx,boss?bossImage:atlas,boss?0:cell,0,placement.y,size,response.color,response.reaction*.24);
@@ -126,16 +133,38 @@ export function industrialContactCell(actor: HazardType | undefined, critical: b
   return material === null ? null : material + (critical ? 3 : 0);
 }
 
-export function drawIndustrialContact(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, event: ProjectileFeedback, age: number, duration: number, reduced: boolean, busy: boolean): boolean {
+export function drawIndustrialContact(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, event: ProjectileFeedback, age: number, duration: number, reduced: boolean, busy: boolean,metalAtlas?:HTMLImageElement,debrisAtlas?:HTMLImageElement,vaporAtlas?:HTMLImageElement): boolean {
+  if(drawAuthoredMetalImpact(ctx,metalAtlas,event,age,duration,reduced,busy))return true;
+  if(drawAuthoredDebrisImpact(ctx,debrisAtlas,event,age,duration,reduced,busy))return true;
+  if(drawAuthoredVaporImpact(ctx,vaporAtlas,event,age,duration,reduced,busy))return true;
   const cell = industrialContactCell(event.actorKind, Boolean(event.critical));
   if (event.phase !== 'impact' || event.worker || reduced || cell === null || !atlas?.naturalWidth) return false;
   const t = Math.min(1, Math.max(0, age / Math.max(.001, duration)));
-  const expansion=1-(1-t)**3;
-  const size = (event.critical ? 60 : 40) * (.72 + expansion * .56);
+  const motion=materialContactMotion(age,duration,event.actorKind==='GAS_LEAK');
+  const extent=event.critical?60:40;
+  const size = extent * motion.coreScale;
   ctx.save();ctx.rotate(event.angle);
-  ctx.globalAlpha = (1 - t) ** 2 * (busy ? .6 : .95);
+  ctx.globalAlpha = motion.coreAlpha * (busy ? .6 : .95);
   // Each painted contact core is left of center; align it to the engine's hit point.
   const drawn = drawProp(ctx, atlas, cell, size * .18, size * .5, size);
+  if(drawn){
+    // Sample painted material away from its hot core, then advect each piece independently.
+    const gas=event.actorKind==='GAS_LEAK',count=busy?2:event.critical?5:3;
+    for(let i=0;i<count;i++){
+      const phase=i/(count-1),fragment=materialFragmentMotion(age,duration,gas,i,count);
+      const w=extent*(gas?.28:.18)*fragment.scale,h=w*(gas?1.15:.75);
+      ctx.save();ctx.translate(fragment.x,fragment.y);
+      ctx.rotate(fragment.rotation);ctx.globalAlpha=fragment.alpha*(busy?.4:.72);
+      const texture=materialFragmentTexture(atlas,cell,Math.round(phase*4));
+      if(texture)ctx.drawImage(texture,-w/2,-h/2,w,h);ctx.restore();
+    }
+    if(!busy){
+      ctx.globalAlpha=motion.tailAlpha;
+      const tail=extent*motion.tailScale;
+      const texture=materialFragmentTexture(atlas,cell,5);
+      if(texture)ctx.drawImage(texture,8,-tail*.28+motion.fragmentFall,tail*.72,tail*.56);
+    }
+  }
   if(drawn&&!busy){
     const material=event.actorKind==='GAS_LEAK'?'#96e7bb':event.actorKind==='FALLING_DEBRIS'?'#d8c8ad':'#ffd595';
     ctx.strokeStyle=material;ctx.lineWidth=event.critical?2:1.3;

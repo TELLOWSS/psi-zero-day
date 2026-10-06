@@ -20,9 +20,9 @@ it('caps raster stamps, restores context and draws identical geometry at paused 
 });
 it('keeps only ultimate launch feedback alive for the authored gesture duration',()=>{
  const layer=new ProjectileFeedbackLayer();const event={projectileId:'u',kind:'shout_shockwave' as const,phase:'launch' as const,x:10,y:20,angle:0,radius:40};
- layer.ingest([event,{...event,projectileId:'r',kind:'radio'}]);layer.advance(.11);expect(layer.size).toBe(1);
+ layer.ingest([event,{...event,projectileId:'r',kind:'radio'}]);layer.advance(.15);expect(layer.size).toBe(1);
  const ctx=context();layer.draw(ctx,false,false,{atlas,equipped:[]});expect(ctx.drawImage).toHaveBeenCalledTimes(7);
- layer.advance(.25);expect(layer.size).toBe(1);layer.advance(.07);expect(layer.size).toBe(0);
+ layer.advance(.20);expect(layer.size).toBe(1);layer.advance(.08);expect(layer.size).toBe(0);
  expect(event.radius).toBe(40);
 });
 it('holds the ultimate source behind the portrait, protects it in crowded feedback and releases once',()=>{

@@ -11,7 +11,7 @@ export function bossPresentationPose(state:Readonly<SurvivorsGameState>,boss:Rea
  const phase=encounter.phase==='combat'?bossCoreStatus(boss):encounter.phase;
  // Never paint a second footprint over a locked danger trajectory.
  if(phase==='active'||encounter.phase==='combat'&&['warning','charge','fall'].includes(boss.motion?.phase??''))return null;
- const progress=phase==='arrival'?Math.max(0,Math.min(1,1-encounter.remaining/3.5)):phase==='secured'?Math.max(0,Math.min(1,1-encounter.remaining/2.4)):0;
+ const progress=phase==='arrival'?Math.max(0,Math.min(1,1-encounter.remaining/(encounter.introDuration??3.5))):phase==='secured'?Math.max(0,Math.min(1,1-encounter.remaining/2.4)):0;
  const pulse=reduced?0:Math.sin(state.gameTime*2.4)*.04;
  const expansion=reduced?1:phase==='arrival'?.8+(1-(1-progress)**3)*.2:phase==='secured'?1+progress*.12:1+pulse;
  return {phase,progress,width:Math.min(106,Math.max(64,boss.radius*1.6))*expansion,

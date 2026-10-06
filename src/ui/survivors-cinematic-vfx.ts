@@ -1,5 +1,6 @@
 import type {Projectile,ProjectileKind,SurvivorsGameState} from '../domain/patrol-survivors';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
+import {weaponContactEnvelope} from './survivors-vfx-timing';
 export const CINEMATIC_VFX_ATLAS='/assets/survivors/cinematic-vfx-v3.png';
 export interface CinematicLook {palette:'gold'|'cyan'|'violet';premium:boolean;evolved:boolean;tier:number;color:string;flightCell:number;launchCell:number;impactCell:number}
 export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly string[]=[]):CinematicLook {
@@ -53,8 +54,7 @@ export function drawCinematicFlight(ctx:CanvasRenderingContext2D,p:Readonly<Proj
 }
 export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,reduced:boolean,busy:boolean):void {
   if(event.worker||reduced||!atlas?.naturalWidth||event.kind==='cone_trap')return;
-  const t=Math.min(1,Math.max(0,age/Math.max(.001,duration))),fade=(1-t)*(1-t);
-  const travel=1-(1-t)**3;
+  const {t,exposure:fade,travel,material}=weaponContactEnvelope(event.phase,age,duration);
   const extent=(event.phase==='launch'?22:event.phase==='impact'?30:16)+look.tier*5+(look.premium?12:0);
   const scale=event.phase==='impact'?.72+travel*.73:event.phase==='launch'?.65+Math.sin(Math.min(1,t*2)*Math.PI/2)*.45:1-t*.3;
   const cell=event.phase==='launch'?look.launchCell:look.impactCell;
@@ -63,7 +63,7 @@ export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly
   if(event.phase==='impact'&&(look.premium||look.evolved)&&!busy){
     // A directional hot core and material fragments, not a screen-wide flash.
     drawVfxCell(ctx,atlas,look.launchCell,0,0,extent*(.46-travel*.20),extent*(.28-travel*.12),fade*.9,event.angle);
-    ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.7;ctx.globalAlpha=fade*.85;
+    ctx.strokeStyle=look.color;ctx.lineWidth=event.critical?2.4:1.7;ctx.globalAlpha=material*.85;
     for(let i=0;i<4;i++){
       const angle=event.angle+(i-1.5)*.42,r=8+travel*22;
       ctx.beginPath();ctx.moveTo(Math.cos(angle)*r,Math.sin(angle)*r);
@@ -78,6 +78,16 @@ export function drawCinematicContact(ctx:CanvasRenderingContext2D,event:Readonly
   }
   ctx.restore();
 }
+/** Directional colored wake only; the material layer already owns the bright impact core. */
+export function drawCinematicAccent(ctx:CanvasRenderingContext2D,event:Readonly<ProjectileFeedback>,age:number,duration:number,look:CinematicLook,atlas:HTMLImageElement|undefined,busy:boolean):void {
+  if(event.worker||event.blocked||!atlas?.naturalWidth||event.phase==='release')return;
+  const envelope=weaponContactEnvelope(event.phase,age,duration);
+  const power=look.premium||look.evolved?1:.7;
+  const distance=6+envelope.travel*14;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  drawVfxCell(ctx,atlas,look.flightCell,-Math.cos(event.angle)*distance,-Math.sin(event.angle)*distance,28+envelope.travel*18,8+power*5,envelope.material*power*(busy?.38:.64),event.angle);
+  ctx.restore();
+}
 function kindContactMarks(kind:ProjectileKind):number {return kind==='cryo_blast'?6:kind==='emf_beam'?4:kind==='hunter_beam'?3:5;}
 export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement|undefined,x:number,y:number,evolved:boolean,time:number,reduced:boolean):void {
   const breath=reduced?1:1+Math.sin(time*9)*.08;
@@ -85,9 +95,9 @@ export function drawDroneEmission(ctx:CanvasRenderingContext2D,atlas:HTMLImageEl
   drawVfxCell(ctx,atlas,evolved?2:1,x,y+10,(evolved?19:12)*breath,evolved?30:20,evolved?.60:.38,Math.PI/2);
   ctx.restore();
 }
-export function premiumVfxDetailLevel(equippedCount:number,busy:boolean,reduced:boolean):0|1|2 {
+export function premiumVfxDetailLevel(_equippedCount:number,busy:boolean,reduced:boolean):0|1|2 {
   if(reduced)return 0;
-  if(busy||equippedCount>=5)return 1;
+  if(busy)return 1;
   return 2;
 }
 
@@ -110,7 +120,7 @@ export const PREMIUM_VFX_SIGNATURES={
   predictive_watch:'tactics:elite:future-watch',
 } as const;
 
-export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,movingAngle?:number,busy=false):void {
+export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,atlas:HTMLImageElement|undefined,reduced:boolean,movingAngle?:number,busy=false,recoveryCellAuthored=false):void {
   const gear=state.premiumGear;
   if(!gear?.equipped.length||!atlas?.naturalWidth)return;
   const has=(id:string)=>gear.equipped.includes(id);
@@ -118,17 +128,13 @@ export function drawPremiumProtocol(ctx:CanvasRenderingContext2D,state:Survivors
   const detail=premiumVfxDetailLevel(gear.equipped.length,busy,reduced);
   ctx.save();ctx.globalCompositeOperation='screen';
   // Idle presence belongs to the grounded identity layer; these respond to actual state.
-  if(gear.feedback>0&&gear.shield>0&&has('shock_mantle')){
-    drawVfxCell(ctx,atlas,3,x,y-20,76,86,busy?.28:.48);
-  }
-  if(state.player.hp<state.player.maxHp&&(has('recovery_cell')||has('rescue_wing'))){
+  // Shield feedback is owned by drawPremiumGear in gameplay and fitting alike.
+  if((gear.recoveryAmount??0)>0&&((has('recovery_cell')&&!recoveryCellAuthored)||has('rescue_wing'))){
     drawVfxCell(ctx,atlas,11,x,y+2,52,40,reduced?.14:busy?.18:.28);
   }
-  if(movingAngle!==undefined&&detail>0&&(has('dispatch_drive')||has('extraction_pack'))){
-    const legendary=has('extraction_pack');
-    const length=legendary?60:42;
-    drawVfxCell(ctx,atlas,legendary?4:5,x-Math.cos(movingAngle)*20,y+5-Math.sin(movingAngle)*10,
-      length,legendary?18:12,busy?.18:.3,movingAngle);
+  if(movingAngle!==undefined&&detail>0&&has('extraction_pack')){
+    drawVfxCell(ctx,atlas,4,x-Math.cos(movingAngle)*20,y+5-Math.sin(movingAngle)*10,
+      60,18,busy?.18:.3,movingAngle);
   }
   if(gear.feedback>0&&has('barrier_forge')){
     drawVfxCell(ctx,atlas,8,x,y+8,58,24,busy?.2:.32);

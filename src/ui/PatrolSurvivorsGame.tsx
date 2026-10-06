@@ -1,7 +1,9 @@
 import { CombatDirection } from './survivors-combat-direction';
+import {warningLabelLayout} from './survivors-warning-layout';
+import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
-import { Pause, Play, Package, Shield, ArrowUp } from 'lucide-react';
+import { Pause, Play, Package, Shield, ArrowUp, SkipForward } from 'lucide-react';
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
@@ -10,6 +12,21 @@ import {drawEquipmentMantle} from './survivors-equipment-identity';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {drawCarriedEquipment} from './survivors-carried-equipment';
 import {EquipmentGroundContact} from './survivors-equipment-ground-contact';
+import {prepareShockAnimation,prepareBarrierAnimation,prepareDispatchAnimation,preparePremiumPresence,type PremiumPresenceImages} from './survivors-equipment-animation';
+import {drawPremiumPresence} from './survivors-premium-presence';
+import {applyActorTorsoTransform} from './survivors-rig-renderer';
+import {cinematicFlightSelection} from './survivors-vfx-composition';
+import {prepareMaterialFragments} from './survivors-material-fragments';
+import {METAL_IMPACT_ART} from './survivors-authored-metal-impact';
+import {INSPECTION_DRONE_LAUNCH_ART,HUNTER_DRONE_LAUNCH_ART} from './survivors-authored-drone-launch';
+import {VOICE_LENS_RELEASE_ART} from './survivors-authored-radio-launch';
+import {RadioEmissionProjection,radioToolOffset} from './survivors-tool-emission';
+import {groundFacingAngle} from './survivors-ground-projection';
+import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
+import {DEBRIS_IMPACT_ART} from './survivors-authored-debris-impact';
+import {VAPOR_IMPACT_ART} from './survivors-authored-vapor-impact';
+import {DispatchTrail} from './survivors-dispatch-trail';
+import {RecoveryFlow,RECOVERY_CELL_FLOW_ART} from './survivors-recovery-flow';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
@@ -163,6 +180,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Screen shake & Damage Flash
   const screenShakeRef = useRef<number>(0);
   const projectileFeedbackRef = useRef(new ProjectileFeedbackLayer());
+  const radioProjectionRef=useRef(new RadioEmissionProjection());
   const impactFeedbackRef = useRef<Array<{x:number;y:number;life:number;duration:number;boss:boolean;critical:boolean;worker:boolean}>>([]);
   const damageFlashRef = useRef<number>(0);
 
@@ -181,9 +199,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     premiumAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
     groundContactAtlas?: HTMLImageElement;
+    shockContactAtlas?: HTMLCanvasElement;
+    barrierContactAtlas?: HTMLCanvasElement;
+    dispatchTrailAtlas?: HTMLCanvasElement;
+    premiumPresence?: PremiumPresenceImages;
     industrialHazards?: HTMLImageElement;
     carrierBoss?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
+    metalImpact?: HTMLImageElement;
+    debrisImpact?: HTMLImageElement;
+    vaporImpact?: HTMLImageElement;
+    droneLaunch?: HTMLImageElement;
+    hunterLaunch?: HTMLImageElement;
+    radioLaunch?: HTMLImageElement;
+    recoveryFlow?: HTMLImageElement;
     industrialCrane?: HTMLImageElement;
     craneBoss?: HTMLImageElement;
     materialBosses?:MaterialBossImages;
@@ -276,12 +305,31 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const groundContact = new Image();
     groundContact.onload=()=>{spritesRef.current.groundContactAtlas=groundContact;};
     groundContact.src='/assets/survivors/equipment-ground-contact-v1.png';
+    const shockContact = new Image();
+    shockContact.onload=()=>{spritesRef.current.shockContactAtlas=prepareShockAnimation(shockContact);};
+    shockContact.src='/assets/survivors/shock-mantle-discharge-v1.png';
+    const barrierContact = new Image();
+    barrierContact.onload=()=>{spritesRef.current.barrierContactAtlas=prepareBarrierAnimation(barrierContact);};
+    barrierContact.src='/assets/survivors/barrier-forge-deploy-v1.png';
+    const dispatchTrail = new Image();
+    dispatchTrail.onload=()=>{spritesRef.current.dispatchTrailAtlas=prepareDispatchAnimation(dispatchTrail);};
+    dispatchTrail.src='/assets/survivors/dispatch-drive-wake-v1.png';
+    const premiumPresence = new Image();
+    premiumPresence.onload=()=>{spritesRef.current.premiumPresence=preparePremiumPresence(premiumPresence);};
+    premiumPresence.src='/assets/survivors/premium-presence-v1.png';
     const industrialHazards = new Image(); industrialHazards.src = INDUSTRIAL_HAZARD_ART;
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
     const carrierBoss=new Image();carrierBoss.src=INDUSTRIAL_CART_BOSS_ART;
     carrierBoss.onload=()=>{registerPropAtlas(carrierBoss,1,1);spritesRef.current.carrierBoss=carrierBoss;};
     const industrialContacts = new Image(); industrialContacts.src = INDUSTRIAL_CONTACT_ART;
-    industrialContacts.onload = () => { registerPropAtlas(industrialContacts,3,2); spritesRef.current.industrialContacts = industrialContacts; };
+    industrialContacts.onload = () => { registerPropAtlas(industrialContacts,3,2);prepareMaterialFragments(industrialContacts); spritesRef.current.industrialContacts = industrialContacts; };
+    const metalImpact=new Image();metalImpact.onload=()=>{spritesRef.current.metalImpact=metalImpact;};metalImpact.src=METAL_IMPACT_ART;
+    const debrisImpact=new Image();debrisImpact.onload=()=>{spritesRef.current.debrisImpact=debrisImpact;};debrisImpact.src=DEBRIS_IMPACT_ART;
+    const vaporImpact=new Image();vaporImpact.onload=()=>{spritesRef.current.vaporImpact=vaporImpact;};vaporImpact.src=VAPOR_IMPACT_ART;
+    const droneLaunch=new Image();droneLaunch.onload=()=>{spritesRef.current.droneLaunch=droneLaunch;};droneLaunch.src=INSPECTION_DRONE_LAUNCH_ART;
+    const hunterLaunch=new Image();hunterLaunch.onload=()=>{spritesRef.current.hunterLaunch=hunterLaunch;};hunterLaunch.src=HUNTER_DRONE_LAUNCH_ART;
+    const radioLaunch=new Image();radioLaunch.onload=()=>{spritesRef.current.radioLaunch=radioLaunch;};radioLaunch.src=VOICE_LENS_RELEASE_ART;
+    const recoveryFlow=new Image();recoveryFlow.onload=()=>{spritesRef.current.recoveryFlow=recoveryFlow;};recoveryFlow.src=RECOVERY_CELL_FLOW_ART;
     const industrialCrane = new Image(); industrialCrane.src = INDUSTRIAL_CRANE_ART;
     industrialCrane.onload = () => { registerPropAtlas(industrialCrane,1,1); spritesRef.current.industrialCrane = industrialCrane; };
     const craneBoss=new Image();craneBoss.src=INDUSTRIAL_CRANE_BOSS_ART;
@@ -374,6 +422,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     try{return validGrowthRecords(parseSave(localStorage.getItem('psi.survivors.growth_v1')));}catch{return [];}
   });
   const growthRef=useRef(growthRecords);growthRef.current=growthRecords;
+  const stageReplayRef=useRef(stageStars);stageReplayRef.current=stageStars;
   const [growthSaveFailed,setGrowthSaveFailed]=useState(false);
   const [stageChapter,setStageChapter]=useState(0);
   const chapterTabsRef=useRef<HTMLDivElement>(null);
@@ -422,6 +471,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const upgradeDialogRef = useRef<HTMLDivElement>(null);
   const resultDialogRef = useRef<HTMLDivElement>(null);
   const groundContactRef = useRef(new EquipmentGroundContact());
+  const dispatchTrailRef = useRef(new DispatchTrail());
+  const recoveryFlowRef = useRef(new RecoveryFlow());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
   const pendingStoreConfirmationRef=useRef(false);
@@ -797,7 +848,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Initialize Game Engine with selected character, permanent upgrades & stage
   const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory), crypto.getRandomValues(new Uint32Array(1))[0]);
+    const replay=Boolean(stageReplayRef.current[stageId]?.[0])||growthRef.current.some(record=>record.stageId===stageId);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory), crypto.getRandomValues(new Uint32Array(1))[0],replay);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -1106,6 +1158,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const engine = engineRef.current;
       if (!engine) return;
+      let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
         previousEngine = engine;
         directorWasObscured=false;
@@ -1145,7 +1198,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const incidentSecured=audioRef.current.playEncounterPhase(engine.state.bossEncounter,engine.state.phase==='playing',engine);
         const directorObscured=ultimateSourceObscured(engine.state.directorCutinPhase);
         projectileFeedbackRef.current.advance(dt,directorObscured);
-        if(directorWasObscured&&!directorObscured&&engine.state.directorCutinPhase==='invert')motions.act(engine.state.player,engine.state.gameTime,'ultimate');
+        if(directorWasObscured&&!directorObscured&&engine.state.directorCutinPhase==='invert')motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,'ultimate');
         directorWasObscured=directorObscured;
         bossDirection.observe(engine.state);
         const encounter=ACCOUNTABILITY_CASES.find(row=>row.stage===engine.state.stageId);
@@ -1155,14 +1208,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           engine.setPaused(true);keysRef.current={};touchVectorRef.current={x:0,y:0};
           setAccountabilityCase(encounter);setPhase('paused');
         }
-        const projectileEvents=engine.drainProjectileFeedback();
-        projectileFeedbackRef.current.ingest(projectileEvents, engine.state.projectiles.length>90);
+        projectileEvents=engine.drainProjectileFeedback();
         const equippedNow=engine.state.premiumGear?.equipped??[];
         groundContactRef.current.observe(engine.state,projectileEvents,engine.state.projectiles.length>90);
+        dispatchTrailRef.current.observe(engine.state,engine.state.projectiles.length>90);
+        recoveryFlowRef.current.observe(engine.state);
         direction.ingest(projectileEvents,equippedNow,engine.state.player,engine.state.projectiles.length>90);
         for(const event of projectileEvents){
           const attackMotion=projectileAttackMotion(event.kind);
-          if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.gameTime,attackMotion);
+          if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
         }
         const scoreEncounter=engine.state.bossEncounter?.phase;
@@ -1177,7 +1231,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const events = engine.drainAudioEvents();
         const audible = new Set<string>();
         for (const event of events) {
-          if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.gameTime,event.type==='shout'?'ultimate':event.type==='spray'?'spray':'shot');
+          if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.playerMotionTime??engine.state.gameTime,event.type==='shout'?'ultimate':event.type==='spray'?'spray':'shot');
           const cue = event.type === 'control' ? event.outcome === 'boss' ? 'control_heavy' : 'control' : event.type;
           if (event.type === 'control' && event.x !== undefined && event.y !== undefined) {
             const boss=event.outcome==='boss',critical=event.outcome==='critical',duration=boss?.45:critical?.22:.12;
@@ -1354,9 +1408,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
-      const trackedPose = motions.sample(player, player.x, player.y, engine.state.gameTime, player.hp);
+      const trackedPose = motions.sample(player, player.x, player.y, engine.state.playerMotionTime??engine.state.gameTime, player.hp);
       const actor=spritesRef.current.characterMaps[engine.state.characterId];
       const playerPose = {...trackedPose,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0}: {})};
+      radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));
+      projectileFeedbackRef.current.ingest(projectileEvents.map(event=>radioProjectionRef.current.feedback(event)),
+        projectiles.length>90,engine.state.premiumGear?.equipped??[]);
 
       if(engine.state.phase==='playing'&&direction.footstep(playerPose.travel,playerPose.moving))audioRef.current.playFootstep(playerPose.speed>145);
 
@@ -1492,7 +1549,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
-      groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90);
+      groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
+      dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
       for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
@@ -1849,7 +1907,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.translate(player.x, player.y);
       ctx.save();
       ctx.scale(1, 0.58); // 45-degree isometric floor plane compression
-      ctx.rotate(facingAngle);
+      ctx.rotate(groundFacingAngle(facingAngle,.58));
       const beamDist = 320;
       const beamHalfAngle = Math.PI / 4.2;
       const beamGrad = ctx.createRadialGradient(16, 0, 8, beamDist, 0, 140);
@@ -1997,7 +2055,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
             ctx.lineWidth = 4; ctx.strokeStyle = '#111827'; ctx.fillStyle = '#fef3c7';
             const warning = h.isStageBoss?bossText.warning[h.type]:h.type === 'FALLING_DEBRIS' ? combatText.fall_warning : combatText.cart_warning;
-            ctx.strokeText(warning, 0, h.radius + 40); ctx.fillText(warning, 0, h.radius + 40);
+            const label=warningLabelLayout({x:h.x,y:h.y+h.radius+40},ctx.measureText(warning).width,
+              {x:camX,y:camY,width:viewW,height:viewH,zoom:baseZoom});
+            ctx.font=`bold ${12*label.fontScale}px sans-serif`;
+            ctx.strokeText(warning,label.x-h.x,label.y-h.y);ctx.fillText(warning,label.x-h.x,label.y-h.y);
           }
           if (h.type === 'FALLING_DEBRIS' && h.motion?.phase === 'warning' && h.motion.timer > .3) {
             ctx.restore();
@@ -2334,6 +2395,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (charMapSpr && charMapSpr.complete && charMapSpr.naturalWidth > 0) {
             // High-Resolution 2.5D Quarter-View Standing Character Map Sprite
             const sprH = 74;
+            ctx.save();
+            applyActorTorsoTransform(ctx,playerPose,sprH,Boolean(ACTOR_RIGS[charMapSpr.src.split('/').pop()??'']));
+            drawPremiumPresence(ctx,spritesRef.current.premiumPresence,engine.state.premiumGear?.equipped??[],engine.state.gameTime,reducedMotionRef.current,projectiles.length>60||hazards.length>45,direction.auraStrength);
+            ctx.restore();
             // Draw grounded with feet touching ground contact shadow (0, 0)
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back');
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
@@ -2382,34 +2447,34 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
       const projectileBusy=projectiles.length>60;
       const auraMovingAngle=engine.state.phase==='playing'&&playerPose.moving?facingAngle:undefined;
-      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,auraMovingAngle,projectileBusy||hazards.length>45);
+      const recoveryCellAuthored=recoveryFlowRef.current.draw(ctx,engine.state,spritesRef.current.recoveryFlow,reducedMotionRef.current,projectileBusy||hazards.length>45,inspectionActor?.naturalWidth?{image:inspectionActor,height:74,pose:playerPose}:undefined);
+      drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,auraMovingAngle,projectileBusy||hazards.length>45,recoveryCellAuthored);
       drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle,direction.auraStrength,inspectionActor?.naturalWidth?{pose:playerPose,height:74,rigged:Boolean(ACTOR_RIGS[inspectionActor.src.split('/').pop()??''])}:undefined);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
       const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;
-      let cinematicFlights=0;
+      const cinematicFlights=cinematicFlightSelection(projectiles,equipped,cinematicFlightBudget,player);
 
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
         if(p.kind==='extinguisher'||p.kind==='cone_trap')continue;
         const lv=p.kind==='radio'?activePerks.radio_boost:p.kind==='drone_laser'?activePerks.safety_drone:5;
-        const cinematic=cinematicFlights++<cinematicFlightBudget?{atlas:spritesRef.current.cinematicAtlas,look:cinematicLook(p.kind,lv,equipped)}:undefined;
+        const cinematic=cinematicFlights.has(p)?{atlas:spritesRef.current.cinematicAtlas,look:cinematicLook(p.kind,lv,equipped)}:undefined;
+        const projection=radioProjectionRef.current.flightOffset(p);
+        if(projection){ctx.save();ctx.translate(projection.x,projection.y);}
         drawProjectileVfx(ctx,p,lv,engine.state.gameTime,reducedMotionRef.current,projectileBusy,cinematic);
+        if(projection)ctx.restore();
       }
 
-      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,materialAtlas:spritesRef.current.industrialContacts,equipped,levels:vfxLevels});
+      projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,materialAtlas:spritesRef.current.industrialContacts,metalAtlas:spritesRef.current.metalImpact,debrisAtlas:spritesRef.current.debrisImpact,vaporAtlas:spritesRef.current.vaporImpact,droneLaunchAtlas:spritesRef.current.droneLaunch,hunterLaunchAtlas:spritesRef.current.hunterLaunch,radioLaunchAtlas:spritesRef.current.radioLaunch,equipped,levels:vfxLevels});
 
-      // 7. RENDER SAFETY DRONES (2.5D Oval Airborne Orbit)
+      // 7. RENDER SAFETY DRONES AT THE AUTHORITATIVE EMISSION ORIGIN
       const hasHunter = activePerks.hunter_swarm > 0;
       const droneCount = hasHunter ? 3 : activePerks.safety_drone > 0 ? 1 : 0;
       if (droneCount > 0 && engine.state.droneAngle !== undefined) {
         for (let d = 0; d < droneCount; d++) {
-          const a = (engine.state.droneAngle ?? 0) + (d * Math.PI * 2) / droneCount;
-          const dist = hasHunter ? 85 : 65;
-          // 2.5D compressed elliptical orbit
-          const dX = player.x + Math.cos(a) * dist;
-          const groundY = player.y + Math.sin(a) * (dist * 0.55);
-          const flightY = groundY - 32; // Floating at 32px height
+          const {x:dX,y:flightY}=droneEmissionOrigin(player,engine.state.droneAngle,hasHunter,d);
+          const groundY=flightY+32;
 
           // Ground shadow for floating drone
           ctx.save();
@@ -2710,6 +2775,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-boss-alert-text">
             <strong>{engineRef.current?.state.bossEncounter?.phase==='arrival'?bossText.arrival:combatText.boss_alert_title} · {bossAlert}</strong>
             {engineRef.current?.state.bossEncounter?.phase==='arrival'&&<small>{bossText.interlock}</small>}
+            {engineRef.current?.state.bossEncounter?.phase==='arrival'&&engineRef.current.state.bossEncounter.replay&&<button type="button" className="survivors-boss-skip" title={bossText.skipIntro} aria-label={bossText.skipIntro} disabled={!engineRef.current.canSkipBossIntro()} onClick={()=>{
+              if(engineRef.current?.skipBossIntro()){keysRef.current={};touchVectorRef.current={x:0,y:0};setBossAlert(null);}
+            }}><SkipForward size={18}/></button>}
             <small>{PATROL_STAGES[selectedStage].bossType === 'RUNAWAY_CART' ? combatText.boss_cart_guidance : PATROL_STAGES[selectedStage].bossType === 'CRANE_BOSS' ? combatText.boss_crane_guidance : PATROL_STAGES[selectedStage].bossType === 'FALLING_DEBRIS' ? combatText.boss_fall_guidance : combatText.boss_gas_guidance}</small>
           </div>
         </div>

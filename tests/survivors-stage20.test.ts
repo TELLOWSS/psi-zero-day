@@ -19,7 +19,8 @@ describe('twenty-stage connected campaign', () => {
     expect(stage.hazards).toHaveLength(4);
     expect(stage.starChallenges.map(c=>c.targetValue).every(v=>v>0)).toBe(true);
     const e=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,id),42);e.start();e.state.gameTime=61;
-    for(let i=0;i<240;i++) e.update(1/60,{moveX:0,moveY:0});
+    e.update(1/60,{moveX:0,moveY:0});
+    for(let i=0;i<Math.ceil(e.state.bossEncounter!.introDuration!*60)+2;i++) e.update(1/60,{moveX:0,moveY:0});
     const boss=e.state.hazards.find(h=>h.isStageBoss)!;
     expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.8));
     boss.hp=0;e.update(1/60,{moveX:0,moveY:0});

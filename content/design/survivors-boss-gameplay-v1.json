@@ -1268,7 +1268,7 @@
       "phaseCount": 4,
       "combatLoop": "차량·양중·낙하·에너지·통신이 순차가 아니라 겹쳐 나온다. 이전 49스테이지 패턴이 짧게 변주된다.",
       "weakPointId": "ZERO_DAY_BREAK",
-      "burstWindowSeconds": 6,
+      "burstWindowSeconds": 8,
       "playerFacingMechanic": "3개의 대형 위기연쇄를 끊으면 마지막 8초 ALL CLEAR 폭딜/통제 피니시.",
       "premiumHook": "좋은 빌드는 대응 여유를 늘리지만 어떤 장비도 자동승리하지 않는다.",
       "failureRead": "마지막은 HP 0보다 전체 현장 통제상태 달성이 승리 조건.",

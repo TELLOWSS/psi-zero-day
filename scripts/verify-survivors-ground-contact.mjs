@@ -12,8 +12,21 @@ try{
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
   const report=await page.evaluate(async()=>{
    const {EquipmentGroundContact}=await import('/src/ui/survivors-equipment-ground-contact.ts');
+   const {prepareShockAnimation}=await import('/src/ui/survivors-equipment-animation.ts');
    const {createInitialSurvivorsState,SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
    const atlas=new Image();atlas.src='/assets/survivors/equipment-ground-contact-v1.png';await atlas.decode();
+   const shockImage=new Image();shockImage.src='/assets/survivors/shock-mantle-discharge-v1.png';await shockImage.decode();
+   const shock=prepareShockAnimation(shockImage),shockCtx=shock.getContext('2d'),shockFrames=[];
+   for(let frame=0;frame<6;frame++){
+    const pixels=shockCtx.getImageData(frame*256,0,256,256).data;
+    let edge=0,visible=0,coreWeight=0,coreX=0,coreY=0;
+    for(let y=0;y<256;y++)for(let x=0;x<256;x++){
+     const i=(y*256+x)*4,a=pixels[i+3];if(a<=16)continue;visible++;
+     if(x<25||x>=231||y<25||y>=231)edge++;
+     if(Math.hypot(x-128,y-128)<20&&pixels[i]>200&&pixels[i+1]>220&&pixels[i+2]>220){coreWeight+=a;coreX+=x*a;coreY+=y*a;}
+    }
+    shockFrames.push({edge,visible,coreOffset:coreWeight?Math.hypot(coreX/coreWeight-128,coreY/coreWeight-128):999});
+   }
    const raw=document.createElement('canvas');raw.width=atlas.naturalWidth;raw.height=atlas.naturalHeight;
    const rawCtx=raw.getContext('2d');rawCtx.drawImage(atlas,0,0);const cornerAlpha=rawCtx.getImageData(0,0,1,1).data[3];
    const sheet=document.createElement('canvas');sheet.width=900;sheet.height=360;const ctx=sheet.getContext('2d');ctx.fillStyle='#39453c';ctx.fillRect(0,0,900,360);
@@ -30,9 +43,10 @@ try{
     s.gameTime=2;layer.observe(s,[]);if(layer.count)throw Error('idle ground not empty');
    }
    const update=SurvivorsEngine.prototype.update;SurvivorsEngine.prototype.update=function(...args){window.qaEngine=this;return update.apply(this,args);};
-   return {cornerAlpha,frames,gallery:sheet.toDataURL(),pass:cornerAlpha===0&&frames.every(n=>n>20)};
+   return {cornerAlpha,frames,shockFrames,shockGallery:shock.toDataURL(),gallery:sheet.toDataURL(),pass:cornerAlpha===0&&frames.every(n=>n>20)&&shockFrames.every(f=>f.edge===0&&f.visible>20&&f.coreOffset<8)};
   });
   fs.writeFileSync(path.join(out,`${width}x${height}-frames.png`),Buffer.from(report.gallery.split(',')[1],'base64'));delete report.gallery;
+  fs.writeFileSync(path.join(out,`${width}x${height}-shock-frames.png`),Buffer.from(report.shockGallery.split(',')[1],'base64'));delete report.shockGallery;
   await page.getByRole('button',{name:'순찰 시작하기',exact:true}).click();await page.waitForFunction(()=>window.qaEngine);
   await page.evaluate(()=>{const s=window.qaEngine.state;s.activePerks.tesla_dome=1;s.player.invincible=100;s.ultimateCharge=100;s.premiumGear.equipped=['voice_lens','shock_mantle','inspection_wing'];});
   await page.keyboard.down('ArrowRight');await page.waitForTimeout(300);await page.keyboard.up('ArrowRight');

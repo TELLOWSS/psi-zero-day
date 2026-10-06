@@ -3,6 +3,7 @@
   "combat": {"arrival":"BOSS INCOMING", "pattern":"READ SIGNAL", "weak_point":"WEAK POINT", "burst":"BURST", "recovery":"RECOVERY", "secured":"ALL CLEAR"},
   "combatHint": {"arrival":"GET READY", "pattern":"DODGE PATTERN", "weak_point":"BREAK CORE", "burst":"FULL POWER", "recovery":"NEXT PATTERN", "secured":"ALL CLEAR"},
   "arrival": "대표 위험 출현 · 현장 대응 준비",
+  "skipIntro": "등장 연출 건너뛰기",
   "secured": "대표 위험 통제 완료",
   "clearConfirm": "현장 안전 확인 · 보상 정산 중",
   "interlock": "안전 인터록 · 위험 패턴 종료 후 핵심부 개방",

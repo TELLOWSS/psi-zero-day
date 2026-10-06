@@ -100,8 +100,9 @@ export class SurvivorsSessionAudio {
     const asset=droneV3Asset(id),ctx=this.ensureBuses();
     if(!ctx||this.muted||!asset.uri||!asset.sha256||!asset.rights)return false;
     const family=id==='hunter_a'||id==='hunter_b'?'hunter':id==='base_release'||id==='premium_release'?'release':id;
-    const now=ctx.currentTime,key='drone-v3:'+family,previous=this.equipmentTimes.get(key);
-    const minimum=(family==='launch'||family==='dock') ? .35 : busy ? .16 : .09;
+    const firing=family==='hunter'||family==='release';
+    const now=ctx.currentTime,key='drone-v3:'+(firing?'fire':family),previous=this.equipmentTimes.get(key);
+    const minimum=firing?(busy?.30:.22):.35;
     if(previous!==undefined&&now-previous<minimum)return true;
     this.equipmentTimes.set(key,now);
     const epoch=this.epoch;
@@ -110,7 +111,8 @@ export class SurvivorsSessionAudio {
       const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.003;
       const distance=position&&listener?Math.hypot(position.x-listener.x,position.y-listener.y):0;
       const baseLevel=(family==='launch'||family==='dock') ? .54 : family==='hunter' ? .60 : id==='premium_release' ? .62 : .58;
-      const level=baseLevel/(1+distance/650);
+      const sustained=firing&&previous!==undefined&&now-previous<.8;
+      const level=baseLevel*(sustained?.72:1)/(1+distance/650);
       const playbackRate=Math.max(.94,Math.min(1.06,Number.isFinite(rate)?rate:1));
       const duration=buffer.duration/playbackRate;
       source.buffer=buffer;if(source.playbackRate)source.playbackRate.value=playbackRate;

@@ -1,4 +1,5 @@
 import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
+import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
@@ -9,7 +10,8 @@ import { operationProgress, recordOperationControls } from './survivors-operatio
 import { advanceBossPhase, bossPattern, bossCoreFloor } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
-import {tickGangform,gangformContact,hitGangformZone,gangformTarget} from './survivors-boss-gangform';
+import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
+import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
@@ -670,7 +672,7 @@ export class SurvivorsEngine {
   private accumulator = 0;
   private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
   private readonly directedHits = new WeakMap<Projectile, Set<string>>();
-  constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349) {
+  constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
   private genId(prefix: string) { return `${prefix}_${this.nextEntityId++}`; }
@@ -715,6 +717,22 @@ export class SurvivorsEngine {
   }
   cancelHandoff():void { if(this.state.fieldTactics)this.state.fieldTactics.handoff=undefined; }
 
+  canSkipBossIntro():boolean {
+    const e=this.state.bossEncounter;
+    return this.state.phase==='playing'&&e?.phase==='arrival'&&e.replay===true&&
+      (e.introDuration??0)-e.remaining+1e-8>=(e.replaySkippableAfter??Infinity);
+  }
+  skipBossIntro():boolean {
+    if(!this.canSkipBossIntro())return false;
+    this.beginBossCombat();return true;
+  }
+  private beginBossCombat():void {
+    const e=this.state.bossEncounter;if(!e||e.phase!=='arrival')return;
+    e.phase='combat';e.remaining=0;this.state.bossName=null;this.state.bossAlertTimer=0;
+    const progress=this.state.hazards.find(h=>h.id===e.bossId)?.bossGameplay;
+    if(progress)progress.combatPhase='pattern';
+  }
+
   private step(dt: number, input: GameInput): void {
     if (this.state.phase !== 'playing') return;
 
@@ -727,9 +745,7 @@ export class SurvivorsEngine {
       if(encounter.phase==='arrival'){
         this.state.bossAlertTimer=encounter.remaining;
         if(encounter.remaining===0){
-          encounter.phase='combat';this.state.bossName=null;
-          const progress=this.state.hazards.find(h=>h.id===encounter.bossId)?.bossGameplay;
-          if(progress)progress.combatPhase='pattern';
+          this.beginBossCombat();
         }
       } else if(encounter.remaining===0){
         this.state.phase='victory';
@@ -743,7 +759,10 @@ export class SurvivorsEngine {
     // Micro Freeze / Hit Stop (Impact Screen Juice)
     if (this.state.hitStopTimer && this.state.hitStopTimer > 0) {
       this.state.hitStopTimer = Math.max(0, this.state.hitStopTimer - dt);
-      return; // Freeze game physics update for micro duration to deliver weighted impact feel
+      this.state.playerMotionTime=(this.state.playerMotionTime??this.state.gameTime)+dt;
+      if(this.state.premiumGear)this.state.premiumGear.recoveryAmount=0;
+      this.movePlayer(dt,input);
+      return;
     }
 
     // Combo countdown decay
@@ -767,6 +786,7 @@ export class SurvivorsEngine {
     }
 
     this.state.gameTime += effectiveDt;
+    this.state.playerMotionTime=(this.state.playerMotionTime??this.state.gameTime-effectiveDt)+effectiveDt;
     tickTacticalItems(this.state,effectiveDt);
     if (this.state.lastDamage) this.state.lastDamage.remaining = Math.max(0, this.state.lastDamage.remaining - effectiveDt);
     if (this.state.controlKit) {
@@ -912,7 +932,7 @@ export class SurvivorsEngine {
     return true;
   }
 
-  private updatePlayer(dt: number, input: GameInput) {
+  private movePlayer(dt: number, input: GameInput) {
     const { player } = this.state;
 
     // Environmental zone effects (Floodlight buff, Slurry drag)
@@ -951,6 +971,11 @@ export class SurvivorsEngine {
     const padding = 20;
     player.x = Math.max(padding, Math.min(WORLD_WIDTH - padding, player.x));
     player.y = Math.max(padding, Math.min(WORLD_HEIGHT - padding, player.y));
+  }
+
+  private updatePlayer(dt: number, input: GameInput) {
+    this.movePlayer(dt,input);
+    const {player}=this.state;
 
     // Invincibility decay
     if (player.invincibleTime > 0) {
@@ -959,7 +984,11 @@ export class SurvivorsEngine {
 
     // HP regen
     if (player.regenRate > 0 && player.hp < player.maxHp) {
+      const before = player.hp;
       player.hp = Math.min(player.maxHp, player.hp + player.regenRate * dt);
+      if (this.state.premiumGear && this.state.premiumGear.effects.regen > 0) {
+        this.state.premiumGear.recoveryAmount = player.hp - before;
+      }
     }
 
     // Drone orbit angle
@@ -1216,9 +1245,7 @@ export class SurvivorsEngine {
         // 3 drones firing
         const angleBase = this.state.droneAngle ?? 0;
         for (let d = 0; d < equipmentTuning('hunter_swarm', 1)!.count; d++) {
-          const angle = angleBase + (d * Math.PI * 2) / 3;
-          const droneX = player.x + Math.cos(angle) * 85;
-          const droneY = player.y + Math.sin(angle) * 85;
+          const {x:droneX,y:droneY}=droneEmissionOrigin(player,angleBase,true,d);
           const target = this.findNearestHazard(droneX, droneY, 260);
           if (target) {
             const dx = target.x - droneX;
@@ -1248,8 +1275,7 @@ export class SurvivorsEngine {
         if (this.cooldowns.drone <= 0) {
           this.cooldowns.drone = droneCd;
           const angle = this.state.droneAngle ?? 0;
-          const droneX = player.x + Math.cos(angle) * 65;
-          const droneY = player.y + Math.sin(angle) * 65;
+          const {x:droneX,y:droneY}=droneEmissionOrigin(player,angle,false);
           const target = this.findNearestHazard(droneX, droneY, 300);
           if (target) {
             const dx = target.x - droneX;
@@ -1326,7 +1352,10 @@ export class SurvivorsEngine {
         // The introduction must be on the current workface, not outside the camera.
         boss.x=Math.max(90,Math.min(WORLD_WIDTH-90,this.state.player.x+120));
         boss.y=Math.max(90,Math.min(WORLD_HEIGHT-90,this.state.player.y-105));
-        this.state.bossEncounter={bossId:boss.id,phase:'arrival',remaining:3.5};
+        const intro=bossGameplayForStage(stage.id).intro;
+        this.state.bossEncounter={bossId:boss.id,phase:'arrival',remaining:intro.firstPlaySeconds,
+          introDuration:intro.firstPlaySeconds,replay:this.bossIntroReplay,replaySkippableAfter:intro.replaySkippableAfterSeconds};
+        this.state.bossAlertTimer=intro.firstPlaySeconds;
         return;
       }
     }
@@ -2045,18 +2074,6 @@ export class SurvivorsEngine {
   }
 
   private findNearestHazard(x: number, y: number, range = 450): Hazard | null {
-    let bestDist = range * range;
-    let nearest: Hazard | null = null;
-    for (const h of this.state.hazards) {
-      if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss) continue;
-      const target=gangformTarget(h,x,y);
-      const dx = target.x - x, dy = target.y - y;
-      const dist = dx * dx + dy * dy;
-      if (dist < bestDist) {
-        bestDist = dist;
-        nearest = target;
-      }
-    }
-    return nearest;
+    return selectSurvivorsAutoTarget(this.state.hazards,x,y,range);
   }
 }

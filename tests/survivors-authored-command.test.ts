@@ -41,7 +41,7 @@ describe('authored command and optical material motion',()=>{
   for(let u=0;u<=1;u+=.1)for(let time=0;time<2;time+=.05){
    const a=materialRibbonPoint(u,time,1),b=materialRibbonPoint(u,time+.001,1),left=materialRibbonPoint(u,time,-1);
    expect(a.x).toBe(-left.x);expect(a.y).toBe(left.y);expect(Math.abs(a.texture-b.texture)).toBeLessThan(.002);
-   expect(a.alpha).toBeGreaterThanOrEqual(0);expect(a.alpha).toBeLessThanOrEqual(.20);
+   expect(a.alpha).toBeGreaterThanOrEqual(0);expect(a.alpha).toBeLessThanOrEqual(.46);
    expect(a.texture).toBeGreaterThanOrEqual(0);expect(a.texture).toBeLessThanOrEqual(1);
   }
   expect(materialRibbonPoint(0,0,1).alpha).toBe(0);expect(materialRibbonPoint(1,0,1).alpha).toBeLessThan(1e-20);

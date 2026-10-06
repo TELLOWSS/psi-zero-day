@@ -180,9 +180,10 @@ export interface SurvivorsGameState {
   phase: 'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat';
   stageBossSpawned?: boolean;
   stageBossNeutralized?: boolean;
-  bossEncounter?: { bossId: string; phase: 'arrival' | 'combat' | 'secured'; remaining: number };
+  bossEncounter?: { bossId: string; phase: 'arrival' | 'combat' | 'secured'; remaining: number; introDuration?: number; replay?: boolean; replaySkippableAfter?: number };
   characterId: CharacterId;
   gameTime: number; // in seconds
+  playerMotionTime?: number;
   maxTime: number; // target survival time (e.g. 180s)
   player: PlayerStats;
   lastDamage?: { source: HazardType | 'CRANE_DROP'; amount: number; remaining: number };
@@ -217,7 +218,7 @@ export interface SurvivorsGameState {
   timeDilationTimer: number;
 
   supplyGate?: {nextControl:number;availableAt:number;cycle:number};
-  premiumGear?: { equipped: string[]; used?: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number };
+  premiumGear?: { equipped: string[]; used?: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number; recoveryAmount?: number };
 
   // Meta stats & run perks
   psiCredits: number;

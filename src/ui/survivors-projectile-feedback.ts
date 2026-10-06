@@ -1,8 +1,11 @@
-import {cinematicLook,drawCinematicContact,drawVfxCell} from './survivors-cinematic-vfx';
+import {cinematicLook,drawCinematicContact,drawCinematicAccent,drawVfxCell} from './survivors-cinematic-vfx';
+import {balancedFeedbackPool,feedbackCoreOwners} from './survivors-vfx-composition';
 import {drawIndustrialContact} from './survivors-industrial-art';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { drawProjectileLight, drawProjectileVfx, PROJECTILE_VFX } from './survivors-projectile-vfx';
 import {drawUltimateRelease,ULTIMATE_RELEASE_DURATION} from './survivors-ultimate-release';
+import {drawAuthoredDroneLaunch} from './survivors-authored-drone-launch';
+import {drawAuthoredRadioLaunch,VOICE_LENS_RELEASE_DURATION} from './survivors-authored-radio-launch';
 
 type Effect = { event: ProjectileFeedback; age: number; duration: number };
 export const MAX_PROJECTILE_FEEDBACK = 64;
@@ -19,7 +22,7 @@ export class ProjectileFeedbackLayer {
     const delta = Math.max(0, Math.min(.25, dt));
     this.effects = this.effects.filter(e => { if(!this.heldUltimate(e))e.age += delta; return e.age < e.duration; });
   }
-  ingest(events: readonly ProjectileFeedback[], busy = false): void {
+  ingest(events: readonly ProjectileFeedback[], busy = false,equipped:readonly string[]=[]): void {
     // Area effects can report many contacts in one tick. Keep one response per
     // projectile/phase/cell, while preserving separate worker confirmations.
     const seen = new Set<string>();
@@ -28,18 +31,14 @@ export class ProjectileFeedbackLayer {
       if (seen.has(key)) continue;
       seen.add(key);
       if (busy && event.phase === 'release') continue;
-      const duration = event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:.10) : event.phase === 'impact' ? (event.critical ? .24 : .18) : .16;
-      if (this.effects.length >= MAX_PROJECTILE_FEEDBACK) {
-        const decorative = this.effects.findIndex(e => e.event.phase !== 'impact'&&!this.heldUltimate(e));
-        if (decorative < 0 && event.phase !== 'impact') continue;
-        const replace=decorative<0?this.effects.findIndex(e=>!this.heldUltimate(e)):decorative;
-        if(replace<0)continue;
-        this.effects.splice(replace, 1);
-      }
+      const duration = event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:
+        event.kind==='radio'&&equipped.includes('voice_lens')?VOICE_LENS_RELEASE_DURATION:.14) : event.phase === 'impact' ? (event.critical ? .30 : .24) : .22;
       this.effects.push({event, age:0, duration});
     }
+    this.effects=balancedFeedbackPool(this.effects,MAX_PROJECTILE_FEEDBACK,equipped,e=>this.heldUltimate(e));
   }
-  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
+  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;metalAtlas?:HTMLImageElement;debrisAtlas?:HTMLImageElement;vaporAtlas?:HTMLImageElement;droneLaunchAtlas?:HTMLImageElement;hunterLaunchAtlas?:HTMLImageElement;radioLaunchAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
+    const cores=feedbackCoreOwners(this.effects,cinematic?.equipped);
     for (const effect of this.effects) {
       if(this.heldUltimate(effect))continue;
       const {event:e, age, duration} = effect;
@@ -60,7 +59,18 @@ export class ProjectileFeedbackLayer {
         if(!reducedMotion)drawVfxCell(ctx,cinematic?.atlas,3,0,0,24,18,(1-t)*.35,e.angle);
         ctx.restore();continue;
       }
-      if (['beam','signal','arc'].includes(spec.family) && drawIndustrialContact(ctx, cinematic?.materialAtlas, e, age, duration, reducedMotion, busy)) {
+      if(!e.worker&&!reducedMotion&&e.kind!=='shout_shockwave'&&e.phase!=='release'&&!cores.has(effect)&&cinematic?.atlas?.naturalWidth){
+        drawCinematicAccent(ctx,e,age,duration,cinematicLook(e.kind,cinematic.levels?.[e.kind]??1,cinematic.equipped),cinematic.atlas,busy);
+        ctx.restore();continue;
+      }
+      if(cores.has(effect)&&drawAuthoredDroneLaunch(ctx,cinematic?.droneLaunchAtlas,e,age,duration,reducedMotion,busy,cinematic?.equipped??[],cinematic?.hunterLaunchAtlas)){
+        ctx.restore();continue;
+      }
+      if(cores.has(effect)&&drawAuthoredRadioLaunch(ctx,cinematic?.radioLaunchAtlas,e,age,duration,reducedMotion,busy,cinematic?.equipped??[])){
+        ctx.restore();continue;
+      }
+      if (['beam','signal','arc'].includes(spec.family) && drawIndustrialContact(ctx, cinematic?.materialAtlas, e, age, duration, reducedMotion, busy,cinematic?.metalAtlas,cinematic?.debrisAtlas,cinematic?.vaporAtlas)) {
+        if(!reducedMotion&&cinematic)drawCinematicAccent(ctx,e,age,duration,cinematicLook(e.kind,cinematic.levels?.[e.kind]??1,cinematic.equipped),cinematic.atlas,busy);
         ctx.restore();
         continue;
       }
