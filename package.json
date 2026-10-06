@@ -11,7 +11,7 @@
     "dev": "vite",
     "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run --maxConcurrency=4",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:survivors-wave-supply && npm run test:survivors-wave-director && npm run test:survivors-signature-events && npm run test:hub-mode-lock && npm run test:survivors-flow && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:mode-previews && npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:survivors-wave-supply && npm run test:survivors-wave-director && npm run test:survivors-signature-events && npm run test:hub-mode-lock && npm run test:survivors-flow && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -88,7 +88,8 @@
     "test:survivors-flow": "vitest run tests/survivors-operation.test.ts tests/survivors-extraction-and-tactical-arsenal.test.ts",
     "test:survivors-wave-director": "vitest run tests/survivors-difficulty.test.ts",
     "test:survivors-signature-events": "vitest run tests/survivors-signature-events.test.ts",
-    "test:hub-mode-lock": "vitest run tests/gamehub-mode-lock.test.ts"
+    "test:hub-mode-lock": "vitest run tests/gamehub-mode-lock.test.ts",
+    "assets:mode-previews": "node scripts/materialize-mode-preview-art.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
