@@ -49,9 +49,9 @@ it('shares drone cadence across variants, shortens tails and softens sustained f
 it('maps trigger discharge not projectile expiry and preserves calm worker confirmations',()=>{
   const event={projectileId:'p',kind:'radio' as const,phase:'launch' as const,x:0,y:0,angle:0,radius:4};
   expect(recordedEquipmentCue(event)).toBe('radio_release');
-  expect(recordedEquipmentCue({...event,kind:'hunter_beam'})).toBe('drone_hunter_burst');
-  expect(recordedEquipmentCue({...event,kind:'drone_laser'},['precision_link'])).toBe('drone_premium_release');
-  expect(recordedEquipmentCue({...event,kind:'drone_laser'},['shock_mantle'])).toBe('drone_release');
+  expect(recordedEquipmentCue({...event,kind:'hunter_beam'})).toBeUndefined();
+  expect(recordedEquipmentCue({...event,kind:'drone_laser'},['precision_link'])).toBeUndefined();
+  expect(recordedEquipmentCue({...event,kind:'drone_laser'},['shock_mantle'])).toBeUndefined();
   expect(recordedEquipmentCue({...event,kind:'tesla_bolt',phase:'impact'})).toBe('tesla_control');
   expect(recordedEquipmentCue({...event,phase:'release'})).toBeUndefined();
   expect(recordedEquipmentCue({...event,worker:true})).toBeUndefined();
@@ -63,7 +63,7 @@ it('maps trigger discharge not projectile expiry and preserves calm worker confi
 it('preloads Wave 1 once and replaces repeated shot synthesis with a rate-limited recording',async()=>{
   const {sources}=context(),audio=new SurvivorsSessionAudio();
   expect(await audio.preloadEquipmentRecordings()).toBe(true);expect(await audio.preloadEquipmentRecordings()).toBe(true);
-  expect(fetch).toHaveBeenCalledTimes(34);
+  expect(fetch).toHaveBeenCalledTimes(30);
   for(let i=0;i<100;i++)audio.playEquipmentFeedback({projectileId:String(i),kind:'radio',phase:'launch',x:0,y:0,angle:0,radius:4},{x:0,y:0});
   await vi.waitFor(()=>expect(sources).toHaveLength(1));expect(audio.voiceCount).toBe(1);
   audio.silence();expect(sources[0]!.stop).toHaveBeenCalled();expect(audio.voiceCount).toBe(0);audio.dispose();
@@ -98,7 +98,7 @@ it('routes secured only once per designated boss and retains V1 rollback',async(
  expect(audio.playEncounterPhase({bossId:'b',phase:'secured'},true,run)).toBe(false);
  expect(play).toHaveBeenCalledExactlyOnceWith('incident_secured');play.mockRestore();
  audio.setRecordedSfxVersion('v1');expect(await audio.preloadEquipmentRecordings()).toBe(true);
- expect(fetch).toHaveBeenCalledTimes(8);expect(audio.playRecordedEffect('incident_secured')).toBe(false);
+ expect(fetch).toHaveBeenCalledTimes(11);expect(audio.playRecordedEffect('incident_secured')).toBe(false);
  audio.playEquipmentFeedback({projectileId:'p',kind:'hunter_beam',phase:'launch',x:0,y:0,angle:0,radius:4},{x:0,y:0});
  await vi.waitFor(()=>expect(sources).toHaveLength(1));audio.dispose();
 });
@@ -119,10 +119,10 @@ it('cancels delayed decoded recordings after mute and avoids phantom initial doc
   ctx.decodeAudioData.mockImplementation(()=>new Promise(done=>{resolve=done;}));
   audio.playRecordedEffect('ui_equip');await vi.waitFor(()=>expect(resolve).toBeDefined());
   audio.setMuted(true);resolve({duration:.48});await Promise.resolve();await Promise.resolve();expect(sources).toHaveLength(0);
-  const play=vi.spyOn(audio,'playRecordedEffect').mockReturnValue(true);
+  const play=vi.spyOn(audio,'playDroneV3').mockReturnValue(true);
   audio.playInspectionPhase('docked',true);expect(play).not.toHaveBeenCalled();
   audio.playInspectionPhase('launching',true);audio.playInspectionPhase('launching',true);expect(play).toHaveBeenCalledTimes(1);
   audio.silence();audio.playInspectionPhase('launching',true);expect(play).toHaveBeenCalledTimes(1);
   audio.playInspectionPhase('returning',false);audio.playInspectionPhase('returning',true);audio.playInspectionPhase('docked',true);
-  expect(play.mock.calls.map(call=>call[0])).toEqual(['drone_launch','drone_dock']);audio.dispose();
+  expect(play.mock.calls.map(call=>call[0])).toEqual(['launch','dock']);audio.dispose();
 });

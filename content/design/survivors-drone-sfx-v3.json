@@ -1,0 +1,157 @@
+{
+  "id": "survivors-drone-sfx-v3-layered",
+  "version": "3.0.0",
+  "status": "DIRECTOR_TARGET",
+  "objective": "Replace one-shot sci-fi drone sounds with a layered premium industrial drone audio system.",
+  "identity": [
+    "precision robotics",
+    "premium camera-gimbal mechanics",
+    "compact BLDC motor",
+    "magnetic actuator",
+    "controlled electromagnetic impulse",
+    "subtle air displacement"
+  ],
+  "forbidden": [
+    "arcade pew",
+    "laser zap",
+    "gunshot",
+    "missile",
+    "toy servo",
+    "retro beep",
+    "long synth tail",
+    "huge cinematic boom",
+    "obvious musical pitch"
+  ],
+  "runtime": {
+    "maxReleaseDurationSeconds": 0.24,
+    "maxPremiumAccentSeconds": 0.18,
+    "noLongReverb": true,
+    "repeatedAttackFatigueTestTriggers": 30,
+    "mobileSpeakerPriority": true,
+    "randomization": {
+      "gameplayRng": false,
+      "pitchSemitones": [
+        -0.35,
+        0.35
+      ],
+      "gainDb": [
+        -0.8,
+        0.5
+      ],
+      "noImmediateVariantRepeat": true
+    }
+  },
+  "layers": [
+    {
+      "id": "servo_tick",
+      "role": "physical trigger",
+      "duration": [
+        0.018,
+        0.045
+      ],
+      "target": "dry micro mechanical ceramic/metal actuator, expensive camera-gimbal precision"
+    },
+    {
+      "id": "pulse_body",
+      "role": "power/body",
+      "duration": [
+        0.055,
+        0.11
+      ],
+      "target": "compact low-mid impulse with controlled pressure, no explosion or gun body"
+    },
+    {
+      "id": "air_slice",
+      "role": "motion/space",
+      "duration": [
+        0.06,
+        0.14
+      ],
+      "target": "short focused air displacement, not a generic whoosh"
+    },
+    {
+      "id": "tech_sheen",
+      "role": "premium detail",
+      "duration": [
+        0.08,
+        0.18
+      ],
+      "target": "very subtle high-detail electronic/metallic decay, non-tonal and non-piercing"
+    },
+    {
+      "id": "motor_micro",
+      "role": "drone mechanism",
+      "duration": [
+        0.07,
+        0.16
+      ],
+      "target": "small BLDC/gimbal correction texture, never toy quadcopter"
+    },
+    {
+      "id": "premium_accent",
+      "role": "premium equipment identity",
+      "duration": [
+        0.07,
+        0.18
+      ],
+      "target": "clean magnetic/ceramic accent, wider and denser but not louder"
+    }
+  ],
+  "families": {
+    "base": {
+      "composition": [
+        "servo_tick",
+        "pulse_body",
+        "air_slice"
+      ],
+      "feel": "precision industrial inspection drone",
+      "variants": 3
+    },
+    "premium": {
+      "composition": [
+        "servo_tick",
+        "pulse_body",
+        "air_slice",
+        "tech_sheen",
+        "premium_accent"
+      ],
+      "feel": "expensive aerospace/industrial instrumentation; denser detail, cleaner transient, slightly deeper body",
+      "variants": 3
+    },
+    "hunter": {
+      "composition": [
+        "servo_tick",
+        "pulse_body",
+        "air_slice",
+        "motor_micro"
+      ],
+      "feel": "three coordinated micro-drones; three offset pulses as one designed gesture, not machine-gun fire",
+      "variants": 2
+    }
+  },
+  "events": {
+    "release": "layered transient; main repeated attack sound",
+    "lock": "short servo + magnetic confirmation before/at target acquisition, rate-limited",
+    "launch": "magnetic unlock + BLDC rise + rotor stabilization + air lift",
+    "dock": "motor decay + alignment servo + magnetic seat + satisfying latch",
+    "targetControlled": "short restrained acknowledgement; not a coin/reward chime"
+  },
+  "mix": {
+    "servo_tickDb": -12,
+    "pulse_bodyDb": -8,
+    "air_sliceDb": -14,
+    "tech_sheenDb": -20,
+    "motor_microDb": -17,
+    "premium_accentDb": -15,
+    "overallPeakCeilingDbfs": -2,
+    "note": "Values are starting mix offsets, not loudness guarantees. Final tune by device listening."
+  },
+  "application": {
+    "status": "RUNTIME_CANDIDATE_APPLIED",
+    "date": "2026-10-06",
+    "strategy": "Producer-authored MIX_NORMAL and MIX_PREMIUM are primary releases; Hunter A/B gestures alternate; Launch/Dock use authored masters; stems retained for later mix tuning.",
+    "v1DroneRuntimeMapping": false,
+    "fallback": "procedural equipment sound only if V3 release loading fails",
+    "perceptualApproval": false
+  }
+}

@@ -4,6 +4,7 @@ import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback
 import type { SurvivorsAudioAsset, SurvivorsAudioBus } from '../domain/survivors-audio';
 import {RECORDED_SFX,RECORDED_SFX_V1,recordedSfxFamily,recordedEquipmentCue,type RecordedSfxId,type RecordedSfxVersion} from '../app/survivors-sfx-assets';
 import {RecordedSfxVariants} from '../app/survivors-sfx-variants';
+import {DRONE_V3_ASSETS,droneV3Asset,type DroneV3Id} from '../app/survivors-drone-sfx-v3';
 import type {InspectionPhase} from './survivors-inspection-flight';
 // Recorded score/cues and procedural effects share one session-owned audio lifecycle.
 export class SurvivorsSessionAudio {
@@ -18,6 +19,9 @@ export class SurvivorsSessionAudio {
   private equipmentBuffers = new Map<string, AudioBuffer>();
   private equipmentTimes = new Map<string,number>();
   private recordedFailures=new Set<string>();
+  private droneV3Failures=new Set<DroneV3Id>();
+  private droneSequence=0;
+  private hunterSequence=0;
   private recordedVersion:RecordedSfxVersion=import.meta.env.VITE_SURVIVORS_SFX_VERSION==='v1'?'v1':'v2';
   private recordedVariants=new RecordedSfxVariants();
   private securedBoss:string|undefined;
@@ -36,10 +40,18 @@ export class SurvivorsSessionAudio {
   private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
   async preloadEquipmentRecordings():Promise<boolean> {
     const ctx=this.ensureBuses();if(!ctx)return false;
-    const results=await Promise.all((this.recordedVersion==='v1'?RECORDED_SFX_V1:RECORDED_SFX).map(async asset=>{
+    const selected=this.recordedVersion==='v1'?RECORDED_SFX_V1:RECORDED_SFX;
+    const legacy=selected.filter(asset=>!asset.id.startsWith('drone_'));
+    const legacyResults=await Promise.all(legacy.map(async asset=>{
       try{await this.decodeAsset(ctx,asset);return true;}
       catch(error){if(asset.uri)this.recordedFailures.add(asset.uri);this.fail(String(error));return false;}
-    }));return results.every(Boolean);
+    }));
+    const droneResults=await Promise.all(DRONE_V3_ASSETS.map(async asset=>{
+      const id=asset.id.replace('drone_v3.','') as DroneV3Id;
+      try{await this.decodeAsset(ctx,asset);return true;}
+      catch(error){this.droneV3Failures.add(id);this.fail(String(error));return false;}
+    }));
+    return legacyResults.every(Boolean)&&droneResults.every(Boolean);
   }
   setRecordedSfxVersion(version:RecordedSfxVersion):void {
     if(version===this.recordedVersion)return;
@@ -82,13 +94,42 @@ export class SurvivorsSessionAudio {
     }).catch(error=>{if(epoch===this.epoch){this.recordedFailures.add(asset.uri!);this.buffers.delete(asset.uri!);this.fail(String(error));}});
     return true;
   }
+  /** Director-approved Premium Drone SFX V3 runtime; V2 drone family is archive-only. */
+  playDroneV3(id:DroneV3Id,position?:{x:number;y:number},listener?:{x:number;y:number},busy=false,rate=1):boolean {
+    if(this.droneV3Failures.has(id))return false;
+    const asset=droneV3Asset(id),ctx=this.ensureBuses();
+    if(!ctx||this.muted||!asset.uri||!asset.sha256||!asset.rights)return false;
+    const family=id==='hunter_a'||id==='hunter_b'?'hunter':id==='base_release'||id==='premium_release'?'release':id;
+    const now=ctx.currentTime,key='drone-v3:'+family,previous=this.equipmentTimes.get(key);
+    const minimum=(family==='launch'||family==='dock') ? .35 : busy ? .16 : .09;
+    if(previous!==undefined&&now-previous<minimum)return true;
+    this.equipmentTimes.set(key,now);
+    const epoch=this.epoch;
+    void this.decodeAsset(ctx,asset).then(buffer=>{
+      if(epoch!==this.epoch||this.muted||ctx!==this.context||ctx.currentTime-now>.2)return;
+      const source=ctx.createBufferSource(),gain=ctx.createGain(),start=ctx.currentTime+.003;
+      const distance=position&&listener?Math.hypot(position.x-listener.x,position.y-listener.y):0;
+      const baseLevel=(family==='launch'||family==='dock') ? .54 : family==='hunter' ? .60 : id==='premium_release' ? .62 : .58;
+      const level=baseLevel/(1+distance/650);
+      const playbackRate=Math.max(.94,Math.min(1.06,Number.isFinite(rate)?rate:1));
+      const duration=buffer.duration/playbackRate;
+      source.buffer=buffer;if(source.playbackRate)source.playbackRate.value=playbackRate;
+      gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
+      gain.gain.setValueAtTime(level,start+Math.max(.004,duration-.018));gain.gain.linearRampToValueAtTime(0,start+duration);
+      if(!this.track(source,gain,family==='launch'||family==='dock'?2:1))return;
+      source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+duration);
+    }).catch(error=>{
+      if(epoch===this.epoch){this.droneV3Failures.add(id);this.buffers.delete(asset.uri!);this.fail(String(error));}
+    });
+    return true;
+  }
   playInspectionPhase(phase:InspectionPhase|undefined,playing:boolean,run?:object):void {
     if(!playing)return;
     if(run&&run!==this.inspectionRun){this.inspectionRun=run;this.inspectionPhase=undefined;}
     const previous=this.inspectionPhase;this.inspectionPhase=phase;
     if(phase===previous||!phase)return;
-    if(phase==='launching'||phase==='inspecting'&&previous==='docked')this.playRecordedEffect('drone_launch');
-    else if(phase==='docked'&&previous&&previous!=='docked')this.playRecordedEffect('drone_dock');
+    if(phase==='launching'||phase==='inspecting'&&previous==='docked')this.playDroneV3('launch');
+    else if(phase==='docked'&&previous&&previous!=='docked')this.playDroneV3('dock');
   }
   /** Explicit Director-authorized audition path; never promotes candidate approval. */
   async auditionScore(asset: SurvivorsAudioAsset, cueSeconds?: number): Promise<boolean> {
@@ -237,9 +278,17 @@ export class SurvivorsSessionAudio {
       this.playEquipmentFeedback({...event,blocked:false,critical:false,kind:'emf_beam',phase:'release'},listener,busy,equipped);
       return;
     }
-    let recorded=recordedEquipmentCue(event,equipped);
-    if(this.recordedVersion==='v1'&&(recorded==='drone_premium_release'||recorded==='drone_hunter_burst'))recorded='drone_release';
-    const rate=this.recordedVersion==='v1'?(event.kind==='satellite_wave'?.8:event.kind==='hunter_beam'?.86:1):1;
+    if(!event.worker&&event.phase==='launch'&&(event.kind==='drone_laser'||event.kind==='hunter_beam')){
+      const premium=equipped.some(id=>['relay_core','precision_link','sync_gauntlet'].includes(id));
+      const id:DroneV3Id=event.kind==='hunter_beam'
+        ? (this.hunterSequence++%2===0?'hunter_a':'hunter_b')
+        : premium?'premium_release':'base_release';
+      const rates=[.985,1,1.015] as const;
+      const rate=event.kind==='hunter_beam'?1:rates[this.droneSequence++%rates.length]!;
+      if(this.playDroneV3(id,{x:event.x,y:event.y},listener,busy,rate))return;
+    }
+    const recorded=recordedEquipmentCue(event,equipped);
+    const rate=event.kind==='satellite_wave'?.8:1;
     if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
@@ -363,7 +412,7 @@ export class SurvivorsSessionAudio {
     this.stopScore();
     this.epoch++;
     for (const source of this.voices.keys()) this.release(source, true);
-    this.equipmentTimes.clear();this.duckUntil=0;this.dialogueFocus=false;
+    this.equipmentTimes.clear();this.droneSequence=0;this.hunterSequence=0;this.duckUntil=0;this.dialogueFocus=false;
     if (this.musicDuck && this.context) { const gain = this.musicDuck.gain; gain.cancelScheduledValues(this.context.currentTime); gain.value = 1; }
   }
   dispose() {
@@ -371,7 +420,7 @@ export class SurvivorsSessionAudio {
     const context = this.context; this.context = null;
     if (this.buses) for (const bus of Object.values(this.buses)) bus.disconnect();
     this.musicDuck?.disconnect();this.musicDuck=null;this.limiter?.disconnect();this.limiter=null;
-    this.master?.disconnect(); this.master = null; this.buses = null; this.buffers.clear();this.recordedFailures.clear();this.recordedVariants=new RecordedSfxVariants();this.securedBoss=undefined;this.encounterRun=undefined;this.inspectionPhase=undefined;this.inspectionRun=undefined; this.synthNoise = null;
+    this.master?.disconnect(); this.master = null; this.buses = null; this.buffers.clear();this.recordedFailures.clear();this.droneV3Failures.clear();this.recordedVariants=new RecordedSfxVariants();this.securedBoss=undefined;this.encounterRun=undefined;this.inspectionPhase=undefined;this.inspectionRun=undefined; this.synthNoise = null;
     if (context) void context.close().catch(() => {});
   }
 }

@@ -15,13 +15,13 @@ export const RECORDED_SFX:readonly SurvivorsAudioAsset[]=ingestV2.filter(row=>![
 export function recordedSfxFamily(id:RecordedSfxId,version:RecordedSfxVersion='v2'):readonly SurvivorsAudioAsset[] {return (version==='v1'?RECORDED_SFX_V1:RECORDED_SFX).filter(asset=>asset.id===id);}
 export function recordedSfxAsset(id:RecordedSfxId,index=0,version:RecordedSfxVersion='v2'):SurvivorsAudioAsset|undefined {return recordedSfxFamily(id,version)[index];}
 /** RELEASE filenames describe discharge, not expiry. Worker receipts remain calm. */
-export function recordedEquipmentCue(event:Readonly<ProjectileFeedback>,equipped:readonly string[]=[]):RecordedSfxId|undefined {
+export function recordedEquipmentCue(event:Readonly<ProjectileFeedback>,_equipped:readonly string[]=[]):RecordedSfxId|undefined {
   if(event.worker)return;
   if(event.phase==='launch'){
     if(event.kind==='radio'||event.kind==='satellite_wave')return 'radio_release';
     if(event.kind==='extinguisher'||event.kind==='cryo_blast')return 'extinguisher_release';
-    if(event.kind==='hunter_beam')return 'drone_hunter_burst';
-    if(event.kind==='drone_laser')return equipped.some(id=>['relay_core','precision_link','sync_gauntlet'].includes(id))?'drone_premium_release':'drone_release';
+    // Drone fire is owned by the Director-approved V3 runtime path.
+    // V2 drone assets remain archived in the registry for rollback/QA only.
   }
   if(event.phase==='impact'){
     if(event.kind==='tesla_bolt')return 'tesla_control';
