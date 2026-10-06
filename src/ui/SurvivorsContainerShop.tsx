@@ -168,12 +168,12 @@ export function SurvivorsContainerShop({
         <div className="shop-header">
           <div className="shop-header-title">
             <span className="shop-badge">WAVE {completedWave} CLEARED</span>
-            <h2 id="shop-title">현장 간이 안전 컨테이너 정비소</h2>
-            <p>위험 구역 순찰을 성공적으로 완료했습니다. 자재 크레딧으로 장비를 튜닝하십시오.</p>
+            <h2 id="shop-title">현장 정비 보급소</h2>
+            <p>게임 내 PSI 보급 포인트로 이번 순찰 장비를 튜닝합니다. 현금 결제나 유료 구매는 없습니다.</p>
           </div>
           <div className="shop-wallet">
-            <span className="shop-wallet-label">PSI CREDITS</span>
-            <span className="shop-wallet-amount">💎 {credits.toLocaleString()}</span>
+            <span className="shop-wallet-label">FIELD SUPPLY · GAME CREDIT</span>
+            <span className="shop-wallet-amount">PSI {credits.toLocaleString()}</span>
           </div>
         </div>
 
@@ -205,7 +205,7 @@ export function SurvivorsContainerShop({
                       disabled={!canAfford}
                       onClick={() => handleBuy(item)}
                     >
-                      <span>{item.cost} Credits</span>
+                      <span>{item.cost} PSI</span>
                     </button>
                   )}
                 </div>
@@ -221,10 +221,10 @@ export function SurvivorsContainerShop({
             className="shop-reroll-btn"
             disabled={credits < REROLL_COST}
             onClick={handleReroll}
-            title={`자재 리롤 (비용: ${REROLL_COST} 크레딧)`}
+            title={`보급 목록 갱신 (비용: ${REROLL_COST} PSI)`}
           >
             <RefreshCw size={18} />
-            <span>새로고침 ({REROLL_COST} 크레딧)</span>
+            <span>보급 목록 갱신 ({REROLL_COST} PSI)</span>
           </button>
 
           <button
@@ -232,7 +232,7 @@ export function SurvivorsContainerShop({
             className="shop-continue-btn"
             onClick={onContinue}
           >
-            <span>다음 순찰 시작 (Wave {completedWave + 1}) ≫</span>
+            <span>정비 완료 · 순찰 재개 (Wave {completedWave + 1}) ≫</span>
           </button>
         </div>
       </div>
