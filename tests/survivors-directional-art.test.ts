@@ -8,7 +8,7 @@ it('selects eight actual travel directions and retains facing on stop/noisy inpu
 });
 it('uses authored eight-frame cycles without advancing on a stopped or paused actor',()=>{
  for(let frame=0;frame<8;frame++)expect(directionalFrame((frame+.2)/8*Math.PI*2,true)).toBe(frame);
- expect(directionalFrame(2,false)).toBe(0);expect(directionalFrame(NaN,true)).toBe(0);
+ expect(directionalFrame(2,false)).toBe(4);expect(directionalFrame(NaN,true)).toBe(0);
  const tracker=new SpriteMotionTracker(),actor={};tracker.sample(actor,0,0,0);
  const moved=tracker.sample(actor,-10,-10,.1);expect(moved.direction).toBe(5);
  expect(tracker.sample(actor,-10,-10,.1)).toBe(moved);expect(tracker.sample(actor,-10,-10,.2).direction).toBe(5);

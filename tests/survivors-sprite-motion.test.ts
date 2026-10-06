@@ -2,6 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { SpriteMotionTracker } from '../src/ui/survivors-sprite-motion';
 
 describe('grounded presentation motion', () => {
+  it('keeps authored walk cadence identical in every direction and on same-tick recoil',()=>{
+    const cycles=Array.from({length:8},(_,direction)=>{
+      const t=new SpriteMotionTracker(),actor={},a=direction*Math.PI/4;t.sample(actor,0,0,0);
+      const pose=t.sample(actor,Math.cos(a)*56,Math.sin(a)*56,.3);
+      t.act(actor,.3);const recoil=t.sample(actor,Math.cos(a)*56,Math.sin(a)*56,.3);
+      expect(recoil.moving).toBe(true);expect(recoil.authoredCycle).toBe(pose.authoredCycle);expect(Number.isFinite(recoil.directionY)).toBe(true);
+      return pose.authoredCycle;
+    });
+    for(const cycle of cycles)expect(cycle).toBeCloseTo(Math.PI,9);
+  });
   it('uses travelled distance equally at 30, 60 and 120 render samples', () => {
     const cycles = [30, 60, 120].map(rate => {
       const tracker = new SpriteMotionTracker(), entity = {};

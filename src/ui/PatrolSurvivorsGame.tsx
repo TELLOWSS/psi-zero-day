@@ -223,15 +223,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
     });
 
-    // Load 2.5D Quarter-View Standing Character Map Arts
-    Object.entries(CHARACTER_MAP_ART).forEach(([cId, src]) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        registerSpriteBounds(img);
-        void loadAuthoredCommand(img).then(()=>loadDirectionalActor(img)).then(()=>{spritesRef.current.characterMaps[cId] = img;});
-      };
-    });
 
     const pImg = new Image();
     pImg.src = '/assets/survivors/sprite_player_yoon.webp';
@@ -313,6 +304,21 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
+  useEffect(()=>{
+    if(spritesRef.current.characterMaps[selectedChar])return;
+    let cancelled=false;const actor=new Image();
+    actor.onload=()=>{
+      if(cancelled)return;
+      void (async()=>{
+        const directional=await loadDirectionalActor(actor);
+        if(cancelled)return;
+        if(!directional){registerSpriteBounds(actor);await loadAuthoredCommand(actor);}
+        if(!cancelled)spritesRef.current.characterMaps[selectedChar]=actor;
+      })();
+    };
+    actor.src=CHARACTER_MAP_ART[selectedChar];
+    return ()=>{cancelled=true;};
+  },[selectedChar]);
   useEffect(() => {
     let disposed = false;
     void loadWearableImages(selectedChar).then(images => { if (!disposed) spritesRef.current.wearables = images; });
@@ -475,6 +481,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const touchIdRef = useRef<number | null>(null);
   const touchCenterRef = useRef<{ x: number; y: number } | null>(null);
   const touchVectorRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const joystickKnobRef = useRef<HTMLDivElement>(null);
   const [joystickVisual, setJoystickVisual] = useState<{
     visible: boolean;
     baseX: number;
@@ -1009,7 +1016,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const dy = touch.clientY - touchCenterRef.current.y;
         const dist = Math.hypot(dx, dy);
         const maxRadius = 55;
-        const deadzone = 6;
+        const deadzone = 4;
 
         let knobX = touch.clientX;
         let knobY = touch.clientY;
@@ -1019,7 +1026,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           knobY = touchCenterRef.current.y + Math.sin(angle) * maxRadius;
         }
 
-        setJoystickVisual(prev => ({ ...prev, knobX, knobY }));
+        // Touch input stays synchronous; moving the knob must not rerender the full game UI.
+        if(joystickKnobRef.current)joystickKnobRef.current.style.transform=`translate3d(${knobX-touchCenterRef.current.x}px,${knobY-touchCenterRef.current.y}px,0)`;
 
         if (dist > deadzone) {
           const angle = Math.atan2(dy, dx);
@@ -2806,6 +2814,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         >
           <div
             className="survivors-touch-knob"
+            ref={joystickKnobRef}
             style={{
               left: `${joystickVisual.knobX - joystickVisual.baseX + 60}px`,
               top: `${joystickVisual.knobY - joystickVisual.baseY + 60}px`,

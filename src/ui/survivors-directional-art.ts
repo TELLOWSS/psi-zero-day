@@ -8,7 +8,11 @@ export function movementDirection(dx:number,dy:number,previous=2):number {
  if(difference<Math.PI/8+.06)return previous;
  return ((Math.round(angle/(Math.PI/4))%8)+8)%8;
 }
-export function directionalFrame(cycle:number,moving:boolean):number {return moving&&Number.isFinite(cycle)?Math.floor(((cycle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2)*8)%8:0;}
+export function directionalFrame(cycle:number,moving:boolean):number {
+ if(!Number.isFinite(cycle))return 0;
+ const phase=((cycle%(Math.PI*2)+Math.PI*2)%(Math.PI*2))/(Math.PI*2);
+ return moving?Math.floor(phase*8)%8:Math.round(phase*2)%2*4;
+}
 interface Cell {canvas:HTMLCanvasElement;width:number;height:number}
 interface Sheet {cells:Cell[];bodyHeight:number}
 function actorBounds(pixels:Uint8ClampedArray,width:number,height:number):{left:number;top:number;right:number;bottom:number} {
@@ -18,7 +22,11 @@ function actorBounds(pixels:Uint8ClampedArray,width:number,height:number):{left:
   if(seen[start]||pixels[start*4+3]!<32)continue;
   let head=0,tail=1,left=width,top=height,right=-1,bottom=-1;queue[0]=start;seen[start]=1;
   while(head<tail){const index=queue[head++]!,x=index%width,y=Math.floor(index/width);left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
-   for(const next of [x>0?index-1:-1,x<width-1?index+1:-1,y>0?index-width:-1,y<height-1?index+width:-1])if(next>=0&&!seen[next]&&pixels[next*4+3]!>=32){seen[next]=1;queue[tail++]=next;}
+   // Avoid a fresh neighbor array for every opaque pixel during mobile loading.
+   let next=index-1;if(x>0&&!seen[next]&&pixels[next*4+3]!>=32){seen[next]=1;queue[tail++]=next;}
+   next=index+1;if(x<width-1&&!seen[next]&&pixels[next*4+3]!>=32){seen[next]=1;queue[tail++]=next;}
+   next=index-width;if(y>0&&!seen[next]&&pixels[next*4+3]!>=32){seen[next]=1;queue[tail++]=next;}
+   next=index+width;if(y<height-1&&!seen[next]&&pixels[next*4+3]!>=32){seen[next]=1;queue[tail++]=next;}
   }
   if(tail>largest){largest=tail;result={left,top,right,bottom};}
  }
@@ -49,7 +57,7 @@ export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boole
 }
 function cell(actor:HTMLImageElement,pose:SpritePose):{sheet:Sheet;cell:Cell;direction:number}|undefined {
  const sheet=sheets.get(actor);if(!sheet)return;
- const direction=pose.direction??2;return {sheet,cell:sheet.cells[direction*8+directionalFrame(pose.cycle,pose.moving)]!,direction};
+ const direction=pose.direction??2;return {sheet,cell:sheet.cells[direction*8+directionalFrame(pose.authoredCycle??pose.cycle,pose.moving)]!,direction};
 }
 export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
  const frame=cell(actor,pose);if(!frame)return false;
