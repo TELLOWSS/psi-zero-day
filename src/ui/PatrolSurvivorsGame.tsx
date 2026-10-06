@@ -621,6 +621,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [availableContainerShopWave, setAvailableContainerShopWave] = useState<number | null>(null);
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
   const [waveDirectorNotice,setWaveDirectorNotice]=useState<{wave:SurvivorsWave;title:string;detail:string}|null>(null);
+  const [signatureEvent,setSignatureEvent]=useState<SurvivorsGameState['signatureEvent']>();
   const [currentWave, setCurrentWave] = useState<SurvivorsWave>(1);
   const currentWaveRef=useRef<SurvivorsWave>(1);
   const wave1ShopTriggeredRef = useRef(false);
@@ -962,6 +963,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setAvailableContainerShopWave(null);
     setWaveSupplyNotice(null);
     setWaveDirectorNotice(null);
+    setSignatureEvent(undefined);
     currentWaveRef.current=1;
     setCurrentWave(1);
     setContainerShopWave(1);
@@ -1539,6 +1541,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         setDirectorCutinPhase(engine.state.directorCutinPhase);
         setEvolutionBanner(engine.state.evolutionBanner ?? null);
         setBossAlert(engine.state.bossName);
+        setSignatureEvent(previous => previous?.id===engine.state.signatureEvent?.id && previous?.remaining===engine.state.signatureEvent?.remaining
+          ? previous : engine.state.signatureEvent ? {...engine.state.signatureEvent} : undefined);
         setBossSecured(engine.state.bossEncounter?.phase==='secured');
         setEncounterRemaining(Math.ceil((engine.state.bossEncounter?.remaining??0)*10)/10);
         const designatedBoss = engine.state.hazards.find(h => h.isStageBoss && h.hp > 0);
@@ -3105,6 +3109,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <span>WAVE {waveDirectorNotice.wave}/3 · DIRECTOR SHIFT</span>
           <strong>{waveDirectorNotice.title}</strong>
           <small>{waveDirectorNotice.detail}</small>
+        </aside>
+      )}
+
+      {signatureEvent && phase === 'playing' && !bossAlert && (
+        <aside className={`survivors-signature-event is-${signatureEvent.severity}`} role="alert" aria-live="assertive">
+          <span>WAVE {signatureEvent.wave} · SIGNATURE EVENT</span>
+          <strong>{signatureEvent.title}</strong>
+          <small>{signatureEvent.detail}</small>
         </aside>
       )}
 
