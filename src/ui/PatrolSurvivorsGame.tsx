@@ -617,6 +617,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Wave Progression & Container Shop
   const [showContainerShop, setShowContainerShop] = useState(false);
   const [containerShopWave, setContainerShopWave] = useState(1);
+  const [availableContainerShopWave, setAvailableContainerShopWave] = useState<number | null>(null);
+  const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
   const [currentWave, setCurrentWave] = useState(1);
   const wave1ShopTriggeredRef = useRef(false);
   const wave2ShopTriggeredRef = useRef(false);
@@ -679,6 +681,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if(engine?.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused')return;
     keysRef.current={};touchVectorRef.current={x:0,y:0};setStoreMessage('');setShowRdModal(true);
+  };
+  const openContainerShop=()=>{
+    const engine=engineRef.current;
+    if(!engine || availableContainerShopWave===null || showRdModal || showArsenalModal || accountabilityCase)return;
+    if(engine.state.phase==='playing'){engine.setPaused(true);setPhase('paused');}
+    if(engine.state.phase!=='paused')return;
+    keysRef.current={};touchVectorRef.current={x:0,y:0};
+    setContainerShopWave(availableContainerShopWave);
+    setAvailableContainerShopWave(null);
+    setShowContainerShop(true);
   };
   const openArsenal=()=>{
     const engine=engineRef.current;
@@ -944,6 +956,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     wave1ShopTriggeredRef.current = false;
     wave2ShopTriggeredRef.current = false;
     setShowContainerShop(false);
+    setAvailableContainerShopWave(null);
+    setWaveSupplyNotice(null);
     setCurrentWave(1);
     setContainerShopWave(1);
   }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty, storeInventory]);
@@ -952,6 +966,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     if (!engineRef.current || engineRef.current.state.phase === 'ready') initGame(selectedChar, selectedStage);
     if(pendingStoreConfirmationRef.current){pendingStoreConfirmationRef.current=false;audioRef.current.playRecordedEffect('ui_equip');}
   }, [initGame, selectedChar, selectedStage]);
+
+  useEffect(() => {
+    if (!waveSupplyNotice) return;
+    const timer = window.setTimeout(() => setWaveSupplyNotice(null), 2800);
+    return () => window.clearTimeout(timer);
+  }, [waveSupplyNotice]);
 
   // Initialization cancels the old session's audio; schedule its replacement afterwards.
   useEffect(() => {
@@ -1267,7 +1287,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
 
-        // Wave Progression & Quick Maintenance Container Shop Intermission
+        // Wave progression stays continuous. Supply access is opt-in from the pause menu:
+        // never interrupt active combat with a shop-style modal.
         const maxSurvivalTime = engine.state.maxTime || 180;
         const wave1Time = maxSurvivalTime <= 60 ? 20 : 45;
         const wave2Time = maxSurvivalTime <= 60 ? 40 : 110;
@@ -1276,26 +1297,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (currentWave !== 3) setCurrentWave(3);
           if (!wave2ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave2ShopTriggeredRef.current = true;
-            engine.setPaused(true);
-            setPhase('paused');
             engine.state.psiCredits += 180;
             setPsiCredits(engine.state.psiCredits);
             creditsRef.current = engine.state.psiCredits;
-            setContainerShopWave(2);
-            setShowContainerShop(true);
+            setAvailableContainerShopWave(2);
+            setWaveSupplyNotice({ wave: 2, credits: 180 });
             audioRef.current.playRecordedEffect('ui_equip');
           }
         } else if (engine.state.gameTime >= wave1Time) {
           if (currentWave !== 2) setCurrentWave(2);
           if (!wave1ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave1ShopTriggeredRef.current = true;
-            engine.setPaused(true);
-            setPhase('paused');
             engine.state.psiCredits += 120;
             setPsiCredits(engine.state.psiCredits);
             creditsRef.current = engine.state.psiCredits;
-            setContainerShopWave(1);
-            setShowContainerShop(true);
+            setAvailableContainerShopWave(1);
+            setWaveSupplyNotice({ wave: 1, credits: 120 });
             audioRef.current.playRecordedEffect('ui_equip');
           }
         } else {
@@ -3044,7 +3061,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
 
         <div className="survivors-top-actions">
-          {(phase==='playing'||phase==='paused')&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={encounterLocked || showRdModal || showArsenalModal} onClick={openStore}>{storeText.shopShort}</button>}
+          {phase==='paused'&&!accountabilityCase&&availableContainerShopWave!==null&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={encounterLocked || showRdModal || showArsenalModal || showContainerShop} onClick={openContainerShop}>정비 보급</button>}
+          {phase==='paused'&&!accountabilityCase&&<button type="button" className="survivors-btn-icon survivors-live-shop" disabled={encounterLocked || showRdModal || showArsenalModal || showContainerShop} onClick={openStore}>{storeText.shopShort}</button>}
           <button
             type="button"
             className="survivors-btn-icon survivors-pause-command"
@@ -3067,6 +3085,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </button>
         </div>
       </header>
+
+      {waveSupplyNotice && phase === 'playing' && (
+        <aside className="survivors-wave-supply-notice" aria-live="polite">
+          <strong>WAVE {waveSupplyNotice.wave} 완료 · 현장 보급 +{waveSupplyNotice.credits} PSI</strong>
+          <span>플레이는 계속됩니다. 정비 보급은 일시정지 메뉴에서 직접 선택할 수 있습니다.</span>
+        </aside>
+      )}
 
       {phase === 'playing' && engineRef.current && (() => {
         const state = engineRef.current.state;
@@ -3693,6 +3718,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls}</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">
+              {availableContainerShopWave!==null&&<button type="button" className="survivors-btn-primary" onClick={openContainerShop}>WAVE {availableContainerShopWave} 정비 보급 열기</button>}
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>{storeText.shopEntry}</button>
               <button type="button" className="survivors-btn-secondary" onClick={openArsenal}>{focusText.equipment}</button>
               <button type="button" className="survivors-btn-secondary" onClick={() => setShowManual(true)}>{gameManualText('open')}</button>
@@ -3893,6 +3919,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           gameState={engineRef.current.state}
           onContinue={() => {
             setShowContainerShop(false);
+            setWaveSupplyNotice(null);
             if (engineRef.current) {
               engineRef.current.setPaused(false);
               setPhase('playing');
