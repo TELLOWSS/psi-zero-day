@@ -315,7 +315,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
   const castDetail = castPlan.characters.find(character => character.id === selectedPerson);
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
-  const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
   const openGuide = () => setPage('guide');
   const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
@@ -590,18 +589,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <input type="checkbox" checked={!audioMuted} onChange={event => setAudioMuted(!event.currentTarget.checked)} />
         </label>
         <button type="button" onClick={() => setShowTitleSettings(false)}>{t('ui.title.settings.close')}</button>
-      </section>
-    </div> : null}
-
-    {confirmNewGame ? <div className="commercial-title-dialog-backdrop" role="presentation" onMouseDown={() => setConfirmNewGame(false)}>
-      <section className="commercial-title-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-confirm-title" onMouseDown={event => event.stopPropagation()}>
-        <span>{GAME_TITLE}</span>
-        <h2 id="new-game-confirm-title">{t('ui.title.confirm_new')}</h2>
-        <p>{t('ui.title.confirm_new.hint')}</p>
-        <div>
-          <button type="button" onClick={() => setConfirmNewGame(false)}>{t('ui.title.cancel')}</button>
-          <button className="is-danger" type="button" onClick={() => { setConfirmNewGame(false); onNewGame(); }}>{t('ui.title.restart')}</button>
-        </div>
       </section>
     </div> : null}
 
