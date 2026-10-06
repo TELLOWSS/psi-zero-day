@@ -27,5 +27,8 @@ describe('commercial hub mode readiness',()=>{
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
     expect(hub).toContain('현재 플레이 가능 모드는 시그널 워치입니다.');
+    expect(hub).toContain('mode-preview-cta-correction');
+    expect(hub).toContain('탭하여 보기');
+    expect(css).toContain('.mode-preview-cta-correction');
   });
 });
