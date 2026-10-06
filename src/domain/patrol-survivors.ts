@@ -253,6 +253,7 @@ export interface SurvivorsGameState {
     title: string;
     detail: string;
     severity: 'amber' | 'red';
+    mechanic: string;
     phase: 'warning' | 'impact' | 'resolved';
     positions: Array<{x:number;y:number;type:HazardType}>;
     reward?: number;
