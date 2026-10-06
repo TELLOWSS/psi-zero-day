@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
-import {operationTiming} from '../src/engine/survivors-operation';
+import {operationPlan,operationTiming} from '../src/engine/survivors-operation';
 import {signatureEventPlan} from '../src/engine/survivors-signature-events';
 
 describe('wave signature events',()=>{
@@ -92,6 +92,27 @@ describe('wave signature events',()=>{
     expect(engine.state.score).toBe(scoreBefore+650);
     expect(engine.state.psiCredits).toBe(creditsBefore+event.reward);
     expect(engine.drainAudioEvents().some(audio=>audio.type==='control'&&audio.x!==undefined&&audio.y!==undefined)).toBe(true);
+  });
+
+  it('blocks an early boss reveal while a Wave 3 signature set piece is still live',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_04'),1337);
+    engine.start();
+    const plan=operationPlan(engine.state.stage,engine.state.maxTime);
+    engine.state.gameTime=plan.revealAt;
+    engine.state.hazardsNeutralized=plan.controls;
+    engine.state.operationControlledZones=Array.from({length:plan.zones},(_,index)=>`zone-${index}`);
+    engine.state.hazards.push({
+      id:'signature-blocker',type:'GAS_LEAK',x:700,y:450,hp:1,maxHp:1,speed:0,radius:20,damage:0,expValue:0,
+      signatureEventId:'3:precollapse_signal',
+    });
+    const internal=engine as unknown as {updateSpawns(dt:number):void};
+    internal.updateSpawns(0);
+    expect(engine.state.stageBossSpawned).not.toBe(true);
+
+    engine.state.hazards[0]!.hp=0;
+    internal.updateSpawns(0);
+    expect(engine.state.stageBossSpawned).toBe(true);
+    expect(engine.state.bossEncounter?.phase).toBe('arrival');
   });
 
   it('preserves authored set-piece placement instead of retargeting falling debris at spawn',()=>{
