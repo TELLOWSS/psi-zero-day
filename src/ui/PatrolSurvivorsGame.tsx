@@ -6,10 +6,10 @@ import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear} from './survivors-premium-render';
-import {drawEquipmentIdentity,drawEvolutionIdentity,drawEquipmentMantle} from './survivors-equipment-identity';
+import {drawEquipmentMantle} from './survivors-equipment-identity';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {drawCarriedEquipment} from './survivors-carried-equipment';
-import {EquipmentAscensionLayer} from './survivors-equipment-ascension';
+import {EquipmentGroundContact} from './survivors-equipment-ground-contact';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
@@ -180,6 +180,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     equipmentAtlas?: HTMLImageElement;
     premiumAtlas?: HTMLImageElement;
     cinematicAtlas?: HTMLImageElement;
+    groundContactAtlas?: HTMLImageElement;
     industrialHazards?: HTMLImageElement;
     carrierBoss?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
@@ -272,6 +273,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     premium.src = PREMIUM_ATLAS;
     const cinematic = new Image();
     cinematic.onload=()=>{spritesRef.current.cinematicAtlas=cinematic;};
+    const groundContact = new Image();
+    groundContact.onload=()=>{spritesRef.current.groundContactAtlas=groundContact;};
+    groundContact.src='/assets/survivors/equipment-ground-contact-v1.png';
     const industrialHazards = new Image(); industrialHazards.src = INDUSTRIAL_HAZARD_ART;
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
     const carrierBoss=new Image();carrierBoss.src=INDUSTRIAL_CART_BOSS_ART;
@@ -417,7 +421,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const arsenalDialogRef = useRef<HTMLDivElement>(null);
   const upgradeDialogRef = useRef<HTMLDivElement>(null);
   const resultDialogRef = useRef<HTMLDivElement>(null);
-  const ascensionRef = useRef(new EquipmentAscensionLayer());
+  const groundContactRef = useRef(new EquipmentGroundContact());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
   const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
   const pendingStoreConfirmationRef=useRef(false);
@@ -1154,6 +1158,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const projectileEvents=engine.drainProjectileFeedback();
         projectileFeedbackRef.current.ingest(projectileEvents, engine.state.projectiles.length>90);
         const equippedNow=engine.state.premiumGear?.equipped??[];
+        groundContactRef.current.observe(engine.state,projectileEvents,engine.state.projectiles.length>90);
         direction.ingest(projectileEvents,equippedNow,engine.state.player,engine.state.projectiles.length>90);
         for(const event of projectileEvents){
           const attackMotion=projectileAttackMotion(event.kind);
@@ -1487,7 +1492,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
-      direction.drawFloor(ctx,spritesRef.current.cinematicAtlas,reducedMotionRef.current);
+      groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
       for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
@@ -2309,15 +2314,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.ellipse(0, 1, 12, 4.5, 0, 0, Math.PI * 2);
           ctx.fill();
 
-          // 2.5D Safety Leadership Radius (Subtle Oval Leadership Ring)
-          ctx.strokeStyle = 'rgba(250, 204, 21, 0.35)';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([6, 6]);
-          ctx.beginPath();
-          ctx.ellipse(0, 2, 34, 15, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.setLineDash([]);
-
           // Invincibility flashing feedback
           if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
             ctx.globalAlpha = 0.45;
@@ -2344,12 +2340,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front');
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current);
 
-            // Ground Accent Indicator Ring under character's feet
-            ctx.strokeStyle = charProfile?.color || '#84cc16';
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.ellipse(0, 2, 16, 7, 0, 0, Math.PI * 2);
-            ctx.stroke();
           } else {
             // High-Quality Procedural 2.5D Construction Safety Officer
             const charColor = charProfile?.color || '#84cc16';
@@ -2393,10 +2383,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const projectileBusy=projectiles.length>60;
       const auraMovingAngle=engine.state.phase==='playing'&&playerPose.moving?facingAngle:undefined;
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,auraMovingAngle,projectileBusy||hazards.length>45);
-      drawEquipmentIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle);
-      drawEvolutionIdentity(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle,direction.auraStrength,inspectionActor?.naturalWidth?{pose:playerPose,height:74,rigged:Boolean(ACTOR_RIGS[inspectionActor.src.split('/').pop()??''])}:undefined);
-      ascensionRef.current.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
       const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;
