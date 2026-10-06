@@ -157,6 +157,40 @@ describe('wave signature events',()=>{
     expect(collapse.engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBe(7.5);
   });
 
+  it('denies no-contact counterplay after an actual signature collision',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_02'),777);
+    const internal=engine as unknown as {updateSignatureEvents():void;checkCollisions():void};
+    const event=signatureEventPlan(engine.state.stage,engine.state.maxTime).find(row=>row.id==='cart_convoy')!;
+    engine.state.gameTime=event.at;
+    internal.updateSignatureEvents();
+    const cart=engine.state.hazards.find(h=>h.signatureEventId===`2:cart_convoy`)!;
+    engine.state.player.x=cart.x;engine.state.player.y=cart.y;engine.state.player.invincibleTime=0;
+    if(cart.motion){cart.motion.phase='charge';cart.motion.timer=.4;}
+    internal.checkCollisions();
+    for(const hazard of engine.state.hazards.filter(h=>h.signatureEventId===`2:cart_convoy`))hazard.hp=0;
+    internal.updateSignatureEvents();
+    expect(engine.state.signatureEvent?.phase).toBe('resolved');
+    expect(engine.state.signatureCounterplay).toBeUndefined();
+    expect(engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBeUndefined();
+  });
+
+  it('makes cooldown rush reduce actual weapon reset time',()=>{
+    const make=(rush:boolean)=>{
+      const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_01'),442);
+      engine.state.activePerks.radio_boost=1;
+      engine.state.hazards.push({id:'target',type:'GAS_LEAK',x:900,y:450,hp:999,maxHp:999,speed:0,radius:15,damage:0,expValue:0});
+      if(rush)engine.state.signatureCounterplayBuffs={cooldownRush:8};
+      const internal=engine as unknown as {updateWeapons(dt:number):void;cooldowns:{radio:number}};
+      internal.cooldowns.radio=0;
+      internal.updateWeapons(0);
+      return internal.cooldowns.radio;
+    };
+    const normal=make(false),rushed=make(true);
+    expect(rushed).toBeGreaterThan(0);
+    expect(rushed).toBeLessThan(normal);
+    expect(rushed/normal).toBeLessThan(.8);
+  });
+
   it('transfers an earned pre-read into the next boss weak point window',()=>{
     const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_05'),9001);
     engine.start();
@@ -170,6 +204,11 @@ describe('wave signature events',()=>{
     expect(boss.weakPointExposed).toBe(true);
     expect(boss.weakPointTimer).toBe(7.5);
     expect(engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBeUndefined();
+    const combat=engine as unknown as {beginBossCombat():void};
+    combat.beginBossCombat();
+    expect(engine.state.bossEncounter?.phase).toBe('combat');
+    expect(boss.bossGameplay?.combatPhase).toBe('weak_point');
+    expect(boss.bossGameplay?.remaining).toBe(7.5);
   });
 
   it('locks six different gameplay identities rather than six cosmetic labels',()=>{
