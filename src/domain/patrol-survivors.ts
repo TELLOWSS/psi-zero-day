@@ -17,6 +17,7 @@ export interface Hazard {
   expValue: number;
   isStunned?: number; // duration in seconds
   isStageBoss?: boolean;
+  signatureEventId?: string;
   bossPhase?: 1 | 2;
   bossEncounterManaged?: boolean;
   bossAttackCycles?: number;
@@ -252,6 +253,9 @@ export interface SurvivorsGameState {
     title: string;
     detail: string;
     severity: 'amber' | 'red';
+    phase: 'warning' | 'impact' | 'resolved';
+    positions: Array<{x:number;y:number;type:HazardType}>;
+    reward?: number;
     remaining: number;
   };
 
