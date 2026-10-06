@@ -11,7 +11,7 @@
     "dev": "vite",
     "pretest": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:embedded && npm run assets:vector && npm run assets:manifest && npm run assets:scene-elements-contract",
     "test": "vitest run --maxConcurrency=4",
-    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:survivors-wave-supply && npm run test:survivors-flow && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
+    "prebuild": "npm run assets:scene-runtime && npm run assets:choice-visual-check && npm run assets:node-visual-check && npm run assets:scene-background-status && npm run assets:visual-production-queue-check && npm run assets:scene-background-brief-check && npm run assets:scene-background-imagegen-check && npm run assets:final-art-ingest-status && npm run audio:contract-check && npm run test:survivors-wave-supply && npm run test:survivors-wave-director && npm run test:survivors-flow && npm run test:field-guide-recovery && npm run test:strategy-stage2 && npm run test:episode01-visual && npm run test:episode01-audio && npm run assets:embedded && npm run assets:vector && npm run assets:manifest",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.engine.json",
@@ -85,7 +85,8 @@
     "defense:g8a-premium-audio-technical-check": "node scripts/check-g8a-premium-audio-technical.mjs --require-final",
     "defense:g8a-premium-audio-browser-check": "node scripts/verify-g8a-premium-audio-browser.mjs",
     "test:survivors-wave-supply": "vitest run tests/survivors-container-shop-and-juice.test.ts",
-    "test:survivors-flow": "vitest run tests/survivors-operation.test.ts tests/survivors-extraction-and-tactical-arsenal.test.ts"
+    "test:survivors-flow": "vitest run tests/survivors-operation.test.ts tests/survivors-extraction-and-tactical-arsenal.test.ts",
+    "test:survivors-wave-director": "vitest run tests/survivors-difficulty.test.ts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",
