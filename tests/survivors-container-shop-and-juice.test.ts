@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SurvivorsEngine, createInitialSurvivorsState } from '../src/engine/patrol-survivors-engine';
 import { SurvivorsContainerShop } from '../src/ui/SurvivorsContainerShop';
@@ -18,6 +19,34 @@ describe('Survivors Container Shop and Hit Juice Physics', () => {
     engine.update(0.02, { moveX: 0, moveY: 0 });
     expect(engine.state.gameTime).toBe(timeBeforeFreeze);
     expect(engine.state.hitStopTimer).toBeCloseTo(0.03, 2);
+  });
+
+  it('wave supply stays non-blocking and can only open from an explicit player action', () => {
+    const gameSource = readFileSync(new URL('../src/ui/PatrolSurvivorsGame.tsx', import.meta.url), 'utf8');
+    const waveStart = gameSource.indexOf('// Wave progression stays continuous.');
+    const waveEnd = gameSource.indexOf('// Trigger Extraction Climax', waveStart);
+    const waveBlock = gameSource.slice(waveStart, waveEnd);
+
+    expect(waveStart).toBeGreaterThan(-1);
+    expect(waveEnd).toBeGreaterThan(waveStart);
+    expect(waveBlock).not.toContain('setPaused(true)');
+    expect(waveBlock).not.toContain('setShowContainerShop(true)');
+    expect(waveBlock).toContain('setAvailableContainerShopWave(1)');
+    expect(waveBlock).toContain('setAvailableContainerShopWave(2)');
+
+    const openStart = gameSource.indexOf('const openContainerShop=');
+    const openEnd = gameSource.indexOf('const openArsenal=', openStart);
+    const explicitOpenBlock = gameSource.slice(openStart, openEnd);
+    expect(openStart).toBeGreaterThan(-1);
+    expect(explicitOpenBlock).toContain('setShowContainerShop(true)');
+    expect((gameSource.match(/setShowContainerShop\(true\)/g) ?? [])).toHaveLength(1);
+  });
+
+  it('labels wave supply as game-only PSI rather than a real-money purchase', () => {
+    const shopSource = readFileSync(new URL('../src/ui/SurvivorsContainerShop.tsx', import.meta.url), 'utf8');
+    expect(shopSource).toContain('현금 결제나 유료 구매는 없습니다.');
+    expect(shopSource).toContain('FIELD SUPPLY · GAME CREDIT');
+    expect(shopSource).not.toContain('💎');
   });
 
   it('container shop upgrade catalog modifies player stats correctly', () => {
