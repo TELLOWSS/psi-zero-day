@@ -21,6 +21,8 @@ export interface Hazard {
   bossEncounterManaged?: boolean;
   bossAttackCycles?: number;
   bossGameplay?: BossGameplayProgress;
+  weakPointExposed?: boolean;
+  weakPointTimer?: number;
   motion?: {
     phase: 'approach' | 'warning' | 'charge' | 'cooldown' | 'fall' | 'spent';
     timer: number;
@@ -165,6 +167,12 @@ export interface PlayerStats {
   damageMultiplier: number;
   critRate: number;
   regenRate: number;
+  dashCooldown?: number;
+  dashMaxCooldown?: number;
+  dashDuration?: number;
+  isDashing?: boolean;
+  dashVx?: number;
+  dashVy?: number;
 }
 
 export interface EvolutionBanner {

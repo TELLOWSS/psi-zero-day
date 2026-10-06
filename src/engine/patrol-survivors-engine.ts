@@ -7,7 +7,7 @@ import {lateThreatVariant} from './survivors-late-threats';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
-import { advanceBossPhase, bossPattern, bossCoreFloor } from './survivors-boss-pattern';
+import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus } from './survivors-boss-pattern';
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
@@ -523,6 +523,12 @@ export function createInitialSurvivorsState(
     damageMultiplier: baseDmg + gear.damage,
     critRate: baseCrit + gear.crit,
     regenRate: gear.regen,
+    dashCooldown: 0,
+    dashMaxCooldown: 3.2,
+    dashDuration: 0,
+    isDashing: false,
+    dashVx: 0,
+    dashVy: 0,
   };
 
   const initialPerks: Record<PerkId, number> = {
@@ -711,6 +717,25 @@ export class SurvivorsEngine {
 
   requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
   deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  triggerPlayerDash():boolean {
+    if (this.state.phase !== 'playing') return false;
+    const player = this.state.player;
+    if ((player.dashCooldown ?? 0) > 0 || player.isDashing) return false;
+    let dirX = this.lastFacingX;
+    let dirY = this.lastFacingY;
+    const len = Math.hypot(dirX, dirY) || 1;
+    dirX /= len;
+    dirY /= len;
+    const dashSpeed = player.speed * 2.5;
+    player.dashVx = dirX * dashSpeed;
+    player.dashVy = dirY * dashSpeed;
+    player.isDashing = true;
+    player.dashDuration = 0.22;
+    player.dashCooldown = player.dashMaxCooldown ?? 3.2;
+    player.invincibleTime = Math.max(player.invincibleTime, 0.28);
+    this.emitAudio('control', player.x, player.y);
+    return true;
+  }
   requestHandoff():boolean {
     if(this.state.phase!=='playing'||!operationProgress(this.state).complete||!this.state.fieldTactics||this.state.fieldTactics.handoff)return false;
     this.state.fieldTactics.handoff={x:this.state.player.x,y:this.state.player.y,remaining:4};return true;
@@ -954,17 +979,27 @@ export class SurvivorsEngine {
     }
     this.state.inFloodlight = inFloodlight;
 
-    // Preserve analog precision while capping keyboard diagonals at full speed.
-    const len = Number.isFinite(input.moveX) && Number.isFinite(input.moveY)
-      ? Math.hypot(input.moveX, input.moveY) : 0;
-    if (len > 0.001) {
-      const nx = input.moveX / len;
-      const ny = input.moveY / len;
-      const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1) * Math.min(1, len);
-      player.x += nx * currentSpeed * dt;
-      player.y += ny * currentSpeed * dt;
-      this.lastFacingX = nx;
-      this.lastFacingY = ny;
+    // Handle Active Dash Motion
+    if ((player.dashDuration ?? 0) > 0) {
+      player.dashDuration = Math.max(0, (player.dashDuration ?? 0) - dt);
+      player.x += (player.dashVx ?? 0) * dt;
+      player.y += (player.dashVy ?? 0) * dt;
+      if (player.dashDuration === 0) {
+        player.isDashing = false;
+      }
+    } else {
+      // Preserve analog precision while capping keyboard diagonals at full speed.
+      const len = Number.isFinite(input.moveX) && Number.isFinite(input.moveY)
+        ? Math.hypot(input.moveX, input.moveY) : 0;
+      if (len > 0.001) {
+        const nx = input.moveX / len;
+        const ny = input.moveY / len;
+        const currentSpeed = player.speed * speedMod * (this.state.routeLantern ? 1.2 : 1) * Math.min(1, len);
+        player.x += nx * currentSpeed * dt;
+        player.y += ny * currentSpeed * dt;
+        this.lastFacingX = nx;
+        this.lastFacingY = ny;
+      }
     }
 
     // Clamp inside world boundaries
@@ -976,6 +1011,11 @@ export class SurvivorsEngine {
   private updatePlayer(dt: number, input: GameInput) {
     this.movePlayer(dt,input);
     const {player}=this.state;
+
+    // Dash cooldown decay
+    if ((player.dashCooldown ?? 0) > 0) {
+      player.dashCooldown = Math.max(0, (player.dashCooldown ?? 0) - dt);
+    }
 
     // Invincibility decay
     if (player.invincibleTime > 0) {
@@ -1506,6 +1546,13 @@ export class SurvivorsEngine {
         if(!h.bossEncounterManaged)continue;
       }
 
+      if ((h.weakPointTimer ?? 0) > 0) {
+        h.weakPointTimer = Math.max(0, (h.weakPointTimer ?? 0) - dt);
+        if (h.weakPointTimer === 0) {
+          h.weakPointExposed = false;
+        }
+      }
+
       // Environmental zone speed modifier (Light beam suppression, Slurry puddle drag)
       let hazardSpeed = h.speed * controlLineSpeed(this.state,h.x,h.y,h.type) * premiumHazardSpeed(this.state,h);
       const aura = this.state.activePerks.tesla_dome > 0 ? 'tesla_dome' : 'floodlight';
@@ -1532,6 +1579,7 @@ export class SurvivorsEngine {
           h.x = Math.max(20, Math.min(WORLD_WIDTH - 20, h.x));
           h.y = Math.max(20, Math.min(WORLD_HEIGHT - 20, h.y));
           h.motion.phase = 'cooldown'; h.motion.timer = h.isStageBoss?bossPattern(h).recovery:1.1;
+          h.weakPointExposed = true; h.weakPointTimer = h.isStageBoss ? 2.5 : 2.0;
         }
         if(h.bossGameplay&&isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
         if(h.bossEncounterManaged&&(previousMotion==='charge'||previousMotion==='fall')&&(h.motion?.phase==='cooldown'||h.motion?.phase==='spent')){
@@ -1576,19 +1624,24 @@ export class SurvivorsEngine {
             if (!hits) { hits = new Set(); this.directedHits.set(p, hits); }
             hits.add(h.id);
           }
-          // Critical hit calculation
-          const isCrit = this.random() < player.critRate;
-          const damageDealt = isCrit ? p.damage * 2.0 : p.damage;
+          // Critical & Weak Point hit calculation
+          const isWeakPoint = Boolean(
+            h.weakPointExposed ||
+            (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
+            (h.bossEncounterManaged && bossCoreStatus(h) === 'exposed')
+          );
+          const isCrit = isWeakPoint || this.random() < player.critRate;
+          const damageDealt = isWeakPoint ? p.damage * 2.5 : isCrit ? p.damage * 2.0 : p.damage;
           const beforeHp=h.hp;
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
-          if(!blocked)this.emitAudio('impact', h.x, h.y, { ...(isCrit ? { outcome: 'critical' as const } : {}), actorKind: h.type });
-          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', isCrit&&!blocked, h.type,blocked);
+          if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
-          if (isCrit&&!blocked) {
-            this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, 0.045);
+          if ((isCrit || isWeakPoint)&&!blocked) {
+            this.state.hitStopTimer = Math.max(this.state.hitStopTimer || 0, isWeakPoint ? 0.06 : 0.045);
           }
 
           // A received instruction pauses the worker/equipment; no bodily knockback.
@@ -1733,7 +1786,7 @@ export class SurvivorsEngine {
     this.state.hazards = [...survivingHazards,...fragments];
 
     // 2. Hazards vs Player
-    if (player.invincibleTime <= 0) {
+    if (player.invincibleTime <= 0 && !player.isDashing) {
       for (const h of hazards) {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);

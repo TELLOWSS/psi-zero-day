@@ -991,9 +991,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if(e.code==='KeyQ'){e.preventDefault();engine.requestSupport();return;}
         if(e.code==='KeyE'){e.preventDefault();engine.deployControlLine();return;}
         if(e.code==='KeyX'){e.preventDefault();if(engine.state.fieldTactics?.handoff)engine.cancelHandoff();else engine.requestHandoff();return;}
+        if(e.code==='ShiftLeft'||e.code==='ShiftRight'||e.code==='KeyC'){e.preventDefault();engine.triggerPlayerDash();return;}
       }
       keysRef.current[e.code] = true;
-      if (engine?.state.phase === 'playing' && ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+      if (engine?.state.phase === 'playing' && ['Space', 'ShiftLeft', 'ShiftRight', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
       if ((e.code === 'Escape' || e.code === 'KeyP') && !e.repeat) {
         const engine = engineRef.current;
         if (engine && (engine.state.phase === 'playing' || engine.state.phase === 'paused')) {
@@ -1003,7 +1004,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
       }
       if ((e.code === 'Space' || e.code === 'KeyF') && !e.repeat) {
-        inputActionsRef.current.shout();
+        const engine = engineRef.current;
+        if (engine && engine.state.phase === 'playing') {
+          if (engine.state.ultimateCharge >= engine.state.maxUltimateCharge) {
+            inputActionsRef.current.shout();
+          } else if (e.code === 'Space') {
+            engine.triggerPlayerDash();
+          }
+        }
       }
     };
     const handleKeyUp = (e: KeyboardEvent) => {
@@ -2348,11 +2356,64 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fillRect(-barW / 2, barY, barW, barH);
           ctx.fillStyle = h.type === 'CRANE_BOSS' ? '#dc2626' : '#f59e0b';
           ctx.fillRect(-barW / 2, barY, barW * hpPercent, barH);
+
+          // Glowing Weak Point Reticle & Burst Indicator
+          const isWeakPoint = Boolean(
+            h.weakPointExposed ||
+            (h.bossGameplay && (h.bossGameplay.combatPhase === 'burst' || h.bossGameplay.combatPhase === 'weak_point')) ||
+            (h.isStageBoss && bossCoreStatus(h) === 'exposed')
+          );
+          if (isWeakPoint) {
+            ctx.save();
+            const pulse = 1 + Math.sin(engine.state.gameTime * 10) * 0.15;
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#fbbf24';
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(0, 0, Math.max(22, h.radius * 0.75) * pulse, 0, Math.PI * 2);
+            ctx.stroke();
+            const rLen = 8;
+            ctx.beginPath();
+            ctx.moveTo(-rLen, 0); ctx.lineTo(rLen, 0);
+            ctx.moveTo(0, -rLen); ctx.lineTo(0, rLen);
+            ctx.stroke();
+            ctx.font = '900 11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#fde047';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3;
+            const wpText = 'WEAK POINT [2.5x]';
+            ctx.strokeText(wpText, 0, barY - 14);
+            ctx.fillText(wpText, 0, barY - 14);
+            ctx.restore();
+          }
           ctx.restore();
         } else if (item.kind === 'player') {
           // 7. RENDER PLAYER (2.5D Standing Billboard + Realistic Ground Shadow + Equipment)
           ctx.save();
           ctx.translate(player.x, player.y);
+
+          // Cyan Motion Blur & Trail on Emergency Dash
+          if (player.isDashing) {
+            ctx.save();
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 3;
+            ctx.globalAlpha = 0.65;
+            ctx.shadowColor = '#22d3ee';
+            ctx.shadowBlur = 14;
+            ctx.beginPath();
+            ctx.ellipse(0, 4, 38, 14, Math.atan2(player.dashVy ?? 0, player.dashVx ?? 0), 0, Math.PI * 2);
+            ctx.stroke();
+            const tAngle = Math.atan2(player.dashVy ?? 0, player.dashVx ?? 0) + Math.PI;
+            ctx.beginPath();
+            ctx.moveTo(0, -10);
+            ctx.lineTo(Math.cos(tAngle) * 32, -10 + Math.sin(tAngle) * 32);
+            ctx.moveTo(0, -32);
+            ctx.lineTo(Math.cos(tAngle) * 40, -32 + Math.sin(tAngle) * 40);
+            ctx.stroke();
+            ctx.restore();
+          }
           const kit = engine.state.controlKit;
           if (kit && kit.remaining > 0 && kit.charges > 0) {
             ctx.strokeStyle='#4ade80';ctx.lineWidth=3;ctx.setLineDash([8,5]);
@@ -2807,11 +2868,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       </div>
 
       {phase==='playing'&&fieldIncident&&gameTime>=2&&gameTime<=14&&fieldRadio&&<aside className="survivors-field-radio" aria-live="polite"><strong>{accountabilityText.worker} · {accountabilityText.warning} {accountability.warnings}/3</strong><p>{fieldRadio}</p></aside>}
-      {phase==='playing' && engineRef.current?.state.fieldTactics && (()=>{
-        const engine=engineRef.current!,t=engine.state.fieldTactics!;
+      {phase==='playing' && (()=>{
+        const engine=engineRef.current;
+        if (!engine) return null;
+        const t=engine.state.fieldTactics;
+        const p=engine.state.player;
+        const dashCd=p.dashCooldown ?? 0;
         return <div className="survivors-tactical-actions" aria-label={tacticsText.support}>
-          <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>
-          <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>
+          <button type="button" aria-label={tacticsText.dash ?? '긴급 회피'} title={tacticsText.dash_description ?? '0.25초 무적 회피'} disabled={encounterLocked||dashCd>0} onClick={()=>engine.triggerPlayerDash()}><ArrowUp size={20}/><span>{tacticsText.dash ?? '긴급 회피'}</span><b>{dashCd>0?Math.ceil(dashCd)+'s':'READY'}</b><small>Space/Shift</small></button>
+          {t && <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>}
+          {t && <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>}
         </div>;
       })()}
       {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
@@ -2828,7 +2894,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <span className="survivors-ultimate-icon">📢</span>
             <div className="survivors-ultimate-info">
               <strong>소장 샤우팅</strong>
-              <small>{!encounterLocked && ultimateCharge >= 100 ? <><span>READY</span><kbd className="survivors-ultimate-key">Space/F</kbd></> : `${ultimateCharge}%`}</small>
+              <small>{!encounterLocked && ultimateCharge >= 100 ? <><span>READY</span><kbd className="survivors-ultimate-key">F/Space</kbd></> : `${ultimateCharge}%`}</small>
             </div>
           </button>
         </div>
