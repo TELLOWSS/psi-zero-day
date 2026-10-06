@@ -8,7 +8,7 @@ const browser=await chromium.launch({headless:true,executablePath:process.env.CH
 try{
  for(const [width,height] of [[1440,900],[390,844],[844,390],[667,375],[568,320]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
-  await page.goto('http://127.0.0.1:5196',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196',{waitUntil:'domcontentloaded'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
   await page.getByRole('button',{name:'PSI로 장비 구매·수리',exact:true}).click();
   await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
   for(const [slot,id] of [['계도 전달','broadcast_crown'],['대응 방식','sync_gauntlet'],['보급·출동','extraction_pack'],['생존 지원','shock_mantle'],['동행 지원','inspection_wing'],['현장 전술','barrier_forge']])await page.getByLabel(slot,{exact:true}).selectOption(id);

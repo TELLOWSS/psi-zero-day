@@ -6,8 +6,8 @@ const require=createRequire(import.meta.url);
 const playwright=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
 const out=path.resolve(process.env.PSI_SURVIVORS_QA_DIR||'artifacts/survivors-browser');
 fs.mkdirSync(out,{recursive:true});
-const files=['survivors-animation-rig','survivors-ground-contact','survivors-rig-renderer','survivors-sprite-motion'];
-const code=files.map(name=>stripTypeScriptTypes(fs.readFileSync(`src/ui/${name}.ts`,'utf8').replace(/^import .*;\n/gm,'').replace(/export /g,''),{mode:'strip'})).join('\n');
+const files=['survivors-animation-rig','survivors-ground-contact','survivors-gait-phase','survivors-command-art','survivors-attack-motion','survivors-rig-renderer','survivors-directional-art','survivors-sprite-motion'];
+const code=files.map(name=>stripTypeScriptTypes(fs.readFileSync(`src/ui/${name}.ts`,'utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,''),{mode:'strip'})).join('\n');
 const browser=await playwright.chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const page=await browser.newPage({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}}});
 const errors=[];page.on('pageerror',e=>errors.push(String(e)));
@@ -39,7 +39,7 @@ Promise.all(actorSources.map(src=>new Promise((resolve,reject)=>{const img=new I
  }
  requestAnimationFrame(frame);
 });`});
-await page.waitForFunction(()=>window.__rigReview.actorCount===7);
+await page.waitForFunction(()=>window.__rigReview?.actorCount===7);
 await page.waitForTimeout(1500);await page.screenshot({path:path.join(out,'rig-walking-all-cast.png')});
 await page.waitForTimeout(3500);await page.screenshot({path:path.join(out,'rig-running-all-cast.png')});
 await page.waitForFunction(()=>window.__rigReview.done,{timeout:15000});

@@ -4,7 +4,7 @@ import {createRequire,stripTypeScriptTypes} from 'node:module';
 const require=createRequire(import.meta.url);
 const playwright=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
 const out=path.resolve(process.env.PSI_SURVIVORS_QA_DIR||'artifacts/survivors-browser');
-const code=stripTypeScriptTypes(fs.readFileSync('src/ui/survivors-equipment-art.ts','utf8').replace(/^import .*;\n/gm,'').replace(/export /g,''),{mode:'strip'});
+const code=stripTypeScriptTypes(fs.readFileSync('src/ui/survivors-equipment-art.ts','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,''),{mode:'strip'});
 const browser=await playwright.chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const page=await browser.newPage({viewport:{width:1500,height:1100}}),errors=[];
 page.on('pageerror',e=>errors.push(String(e)));

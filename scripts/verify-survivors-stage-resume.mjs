@@ -19,7 +19,7 @@ try {
       localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(['stage_01', 'stage_14']));
       localStorage.setItem('psi.survivors.last_played_stage', 'stage_14');
     });
-    await page.goto('http://127.0.0.1:5196', { waitUntil: 'domcontentloaded' });
+    await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196', { waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
     await page.waitForSelector('.survivors-stage-preview');
     const preview = await page.locator('.survivors-stage-preview').getAttribute('src');
