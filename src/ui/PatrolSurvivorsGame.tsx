@@ -1537,17 +1537,17 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             rewardedRef.current.add(engine);
             // Save earned credits & Field Guide Points
             const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
-            const settled=engine.state.phase==='victory'?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
-            if(saveMetaProgress(permanentUpgrades,creditsRef.current+engine.state.psiCredits,settled)&&engine.state.phase==='victory')setClearGearWear([...new Set(used)]);
+            const settled=currentPhase==='victory'?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
+            if(saveMetaProgress(permanentUpgrades,creditsRef.current+engine.state.psiCredits,settled)&&currentPhase==='victory')setClearGearWear([...new Set(used)]);
             try {
-              const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (engine.state.phase === 'victory' ? 5 : 0);
+              const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (currentPhase === 'victory' ? 5 : 0);
               const currentFg = safeNumber(localStorage.getItem(STORAGE_KEY_FG_POINTS));
               localStorage.setItem(STORAGE_KEY_FG_POINTS, String(currentFg + earnedFg));
             } catch {
               // ignore
             }
 
-            if (engine.state.phase === 'victory') {
+            if (currentPhase === 'victory') {
               const nextGrowth=recordPatrolClear(growthRef.current,engine.state);
               growthRef.current=nextGrowth;setGrowthRecords(nextGrowth);persistGrowth(nextGrowth);
               // Unlock next stage in order
