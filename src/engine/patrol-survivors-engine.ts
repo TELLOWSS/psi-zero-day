@@ -15,6 +15,7 @@ import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import { signatureEventIdentity, signatureEventPlan, type WaveSignatureEvent } from './survivors-signature-events';
 import { signatureCounterplayProfile, signatureCounterplayQualified } from './survivors-signature-counterplay';
+import { createSignatureMasteryState, signatureMasteryBossFinish, signatureMasteryBreak, signatureMasterySuccess } from './survivors-signature-mastery';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
@@ -729,6 +730,7 @@ export class SurvivorsEngine {
   private readonly signatureEventsResolved = new Set<string>();
   private readonly signatureEventsFailed = new Set<string>();
   private readonly signatureEventStartedAt = new Map<string,number>();
+  private readonly masteryBossFinishIds = new Set<string>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
@@ -935,6 +937,10 @@ export class SurvivorsEngine {
     if (this.state.signatureCounterplay) {
       this.state.signatureCounterplay.remaining -= effectiveDt;
       if (this.state.signatureCounterplay.remaining <= 0) this.state.signatureCounterplay = undefined;
+    }
+    if(this.state.signatureMastery?.notice){
+      this.state.signatureMastery.notice.remaining=Math.max(0,this.state.signatureMastery.notice.remaining-effectiveDt);
+      if(this.state.signatureMastery.notice.remaining===0)this.state.signatureMastery.notice=undefined;
     }
     if ((this.state.signatureCounterplayBuffs?.cooldownRush ?? 0) > 0) {
       this.state.signatureCounterplayBuffs!.cooldownRush=Math.max(0,this.state.signatureCounterplayBuffs!.cooldownRush!-effectiveDt);
@@ -1633,7 +1639,11 @@ export class SurvivorsEngine {
     const startedAt=this.signatureEventStartedAt.get(key)??this.state.gameTime;
     const clearSeconds=Math.max(0,this.state.gameTime-startedAt);
     const contactFailed=this.signatureEventsFailed.has(key);
-    if(!signatureCounterplayQualified(event.id,contactFailed,clearSeconds))return false;
+    const mastery=this.state.signatureMastery??createSignatureMasteryState();
+    if(!signatureCounterplayQualified(event.id,contactFailed,clearSeconds)){
+      this.state.signatureMastery=signatureMasteryBreak(mastery);
+      return false;
+    }
 
     const profile=signatureCounterplayProfile(event.id);
     this.state.signatureCounterplay={
@@ -1678,6 +1688,7 @@ export class SurvivorsEngine {
         this.state.ultimateCharge=Math.min(this.state.maxUltimateCharge,this.state.ultimateCharge+profile.value);
         break;
     }
+    this.state.signatureMastery=signatureMasterySuccess(mastery,event.id);
     this.emitAudio('control',centroid.x,centroid.y);
     return true;
   }
@@ -2048,6 +2059,7 @@ export class SurvivorsEngine {
           const beforeHp=h.hp;
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
           this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked);
           p.pierce -= 1;
@@ -2147,7 +2159,23 @@ export class SurvivorsEngine {
         this.state.hazardsNeutralized += 1;
         const supply = earnedTacticalSupply(this.state,Boolean(h.isStageBoss));
         if (supply) this.state.drops.push({id: this.genId('drop_supply'), x: h.x + 24, y: h.y, exp: 0, itemKind: supply});
-        if (h.isStageBoss) this.state.stageBossNeutralized = true;
+        if (h.isStageBoss) {
+          this.state.stageBossNeutralized = true;
+          const masteryBefore=this.state.signatureMastery??createSignatureMasteryState();
+          const finisherQualified=this.masteryBossFinishIds.delete(h.id);
+          if(finisherQualified){
+            const masteryAfter=signatureMasteryBossFinish(masteryBefore);
+            const zeroDayNew=masteryAfter.zeroDay&&!masteryBefore.zeroDay;
+            this.state.signatureMastery=masteryAfter;
+            if(zeroDayNew){
+              this.state.score+=3000;
+              this.state.psiCredits+=75;
+              this.state.timeDilation=.12;
+              this.state.timeDilationTimer=Math.max(this.state.timeDilationTimer,1.25);
+              this.state.hitStopTimer=Math.max(this.state.hitStopTimer??0,.14);
+            }
+          }
+        }
         this.emitAudio('control', h.x, h.y, { ...(h.isStageBoss ? { outcome: 'boss' as const } : {}), actorKind: h.type });
 
         // Combo chain system
@@ -2157,6 +2185,8 @@ export class SurvivorsEngine {
           type: h.type,
           x: h.x,
           y: h.y,
+          boss:Boolean(h.isStageBoss),
+          mastery:Boolean(h.isStageBoss&&this.state.signatureMastery?.zeroDay),
         });
 
         // Ultimate gauge increment
