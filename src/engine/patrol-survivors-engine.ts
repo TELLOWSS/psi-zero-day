@@ -1599,7 +1599,7 @@ export class SurvivorsEngine {
 
   private updateSpawns(dt: number) {
     this.cooldowns.spawnTimer -= dt;
-    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty);
+    const pressure = spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty, this.state.maxTime);
     const stage = this.state.stage;
     if (!this.state.stageBossSpawned) {
       // The boss deadline is independent of ordinary spawn cadence and capacity.
@@ -1631,9 +1631,7 @@ export class SurvivorsEngine {
       this.cooldowns.spawnTimer = pressure.interval;
       const alive = this.state.hazards.filter(h => h.hp > 0);
       if (alive.length >= pressure.activeLimit) return;
-      let type = selectStageHazard(stage, this.state.gameTime, this.random());
-      // Later waves mix real risks rather than filling spare slots only with workers.
-      if(this.state.gameTime>=90&&type==='UNHELMETED'&&this.random()<.5)type=this.random()<.5?'GAS_LEAK':'RUNAWAY_CART';
+      let type = selectStageHazard(stage, this.state.gameTime, this.random(), this.state.maxTime, this.random());
       const telegraphs = alive.filter(h => h.type === 'FALLING_DEBRIS' || h.type === 'RUNAWAY_CART').length;
       // Bound concurrent charging/falling threats without shortening their warnings.
       if ((type === 'FALLING_DEBRIS' || type === 'RUNAWAY_CART') && telegraphs >= pressure.telegraphLimit) {
@@ -1712,7 +1710,7 @@ export class SurvivorsEngine {
     if (overrideHp) {
       hp = Math.round(overrideHp * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].hp);
     } else {
-      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty).hpScale;
+      const scale = (1 + (this.state.gameTime / 60) * 0.30) * spawnPressure(this.state.stage.stageNumber, this.state.gameTime, this.state.difficulty, this.state.maxTime).hpScale;
       hp = Math.round(hp * scale);
     }
 
