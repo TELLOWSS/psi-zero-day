@@ -51,7 +51,7 @@ import bossText from '../../content/localization/survivors-boss-ko.json';
 import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
-import { operationPlan, operationProgress } from '../engine/survivors-operation';
+import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -1290,8 +1290,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         // Wave progression stays continuous. Supply access is opt-in from the pause menu:
         // never interrupt active combat with a shop-style modal.
         const maxSurvivalTime = engine.state.maxTime || 180;
-        const wave1Time = maxSurvivalTime <= 60 ? 20 : 45;
-        const wave2Time = maxSurvivalTime <= 60 ? 40 : 110;
+        const flowTiming = operationTiming(maxSurvivalTime);
+        const wave1Time = flowTiming.wave2At;
+        const wave2Time = flowTiming.wave3At;
 
         if (engine.state.gameTime >= wave2Time) {
           if (currentWave !== 3) setCurrentWave(3);
@@ -1319,57 +1320,44 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (currentWave !== 1) setCurrentWave(1);
         }
 
-        // Trigger Extraction Climax (긴급 탈출 · 인계 클라이맥스) when Wave 3 completes or boss neutralized
-        if (engine.state.phase === 'playing' && (engine.state.gameTime >= maxSurvivalTime || engine.state.stageBossNeutralized) && !extractionTriggeredRef.current && !extractionCompletedRef.current) {
-          extractionTriggeredRef.current = true;
-          engine.state.extractionPhase = {
-            x: WORLD_WIDTH / 2,
-            y: WORLD_HEIGHT / 2,
-            radius: 155,
-            countdown: 15,
-            totalTime: 15,
-            status: 'inbound',
-            playerInside: false,
-          };
-          setExtractionState({ active: true, countdown: 15, playerInside: false, status: 'inbound' });
-          screenShakeRef.current = 14;
-          spawnShockwave(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, '#10b981', 140, 5, 0.7);
-          spawnFloating(WORLD_WIDTH / 2, WORLD_HEIGHT / 2 - 40, '🚨 긴급 탈출 호송반 출동! 랑데부 구역을 사수하십시오!', '#10b981', true);
-          playSfx('boss_alarm');
+        // The final boss belongs to Wave 3. Extraction begins only after that boss is
+        // actually neutralized, so a high-damage build cannot skip the three-wave arc.
+        if (engine.state.phase === 'playing' && engine.state.stageBossNeutralized && engine.state.gameTime >= flowTiming.wave3At && !extractionTriggeredRef.current && !extractionCompletedRef.current) {
+          if (engine.beginExtraction(flowTiming.extractionHold)) {
+            extractionTriggeredRef.current = true;
+            const extraction = engine.state.extractionPhase!;
+            extractionTimerRef.current = extraction.countdown;
+            setExtractionState({ active: true, countdown: Math.ceil(extraction.countdown), playerInside: false, status: 'inbound' });
+            screenShakeRef.current = 14;
+            spawnShockwave(extraction.x, extraction.y, '#10b981', 140, 5, 0.7);
+            spawnFloating(extraction.x, extraction.y - 40, '🚨 긴급 탈출 호송반 출동! 랑데부 구역을 사수하십시오!', '#10b981', true);
+            playSfx('boss_alarm');
+          }
         }
 
-        // Process interactive extraction climax timer and holding zone
-        if (extractionTriggeredRef.current && !extractionCompletedRef.current) {
-          const lzX = WORLD_WIDTH / 2;
-          const lzY = WORLD_HEIGHT / 2;
-          const lzDist = Math.hypot(engine.state.player.x - lzX, engine.state.player.y - lzY);
-          const inside = lzDist <= 155;
-          extractionTimerRef.current = Math.max(0, extractionTimerRef.current - dt);
-          if (engine.state.extractionPhase) {
-            engine.state.extractionPhase.countdown = extractionTimerRef.current;
-            engine.state.extractionPhase.playerInside = inside;
-            engine.state.extractionPhase.status = inside ? 'active' : 'inbound';
-          }
+        // Extraction is an active final objective: the hold timer advances only while
+        // the player is physically inside the rendezvous zone.
+        if (extractionTriggeredRef.current && !extractionCompletedRef.current && engine.state.extractionPhase) {
+          const completed = engine.tickExtraction(dt);
+          const extraction = engine.state.extractionPhase;
+          extractionTimerRef.current = extraction.countdown;
           setExtractionState({
-            active: true,
-            countdown: Math.ceil(extractionTimerRef.current),
-            playerInside: inside,
-            status: inside ? 'active' : 'inbound',
+            active: !completed && extraction.status !== 'secured',
+            countdown: Math.ceil(extraction.countdown),
+            playerInside: extraction.playerInside,
+            status: extraction.status,
           });
 
-          if (extractionTimerRef.current <= 0) {
+          if (completed) {
             extractionCompletedRef.current = true;
-            if (engine.state.extractionPhase) engine.state.extractionPhase.status = 'secured';
-            setExtractionState(prev => ({ ...prev, active: false, status: 'secured' }));
+            const lzX = extraction.x;
+            const lzY = extraction.y;
             // Green flare burst & victory transition
             spawnParticles(lzX, lzY, '#10b981', 70, 200, 5.5);
             spawnParticles(lzX, lzY, '#ffffff', 25, 240, 3.5);
             spawnShockwave(lzX, lzY, '#34d399', 180, 6, 0.9);
             spawnFloating(lzX, lzY - 50, '🚁 탈출 호송 성공! 현장 전원 인계 완료!', '#10b981', true);
             audioRef.current.playRecordedEffect('target_controlled', { x: lzX, y: lzY });
-            engine.state.phase = 'victory';
-            engine.state.score += 8000;
-            engine.state.psiCredits += 250;
           }
         }
 
@@ -1397,14 +1385,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
 
-          // Visual Juice: Sparks, fragments, shockwaves, and hit-stop screen shake on projectile impact
+          // Visual Juice: preserve each tactical weapon's material identity even on a
+          // critical hit, then layer the golden critical confirmation on top.
           if (event.phase === 'impact') {
-            if (event.critical) {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 8.5);
-              spawnParticles(event.x, event.y, '#f59e0b', 12, 120, 3.5); // Golden welding sparks
-              spawnParticles(event.x, event.y, '#ffffff', 5, 140, 2.2); // Bright white core
-              spawnShockwave(event.x, event.y, '#fbbf24', 55, 3.5, 0.28);
-            } else if (event.kind === 'hydraulic_wave') {
+            if (event.kind === 'hydraulic_wave') {
               screenShakeRef.current = Math.max(screenShakeRef.current, 10.0);
               spawnParticles(event.x, event.y, '#38bdf8', 14, 130, 4.0); // High-pressure hydraulic spray
               spawnShockwave(event.x, event.y, '#0284c7', 75, 4.5, 0.35);
@@ -1412,12 +1396,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               screenShakeRef.current = Math.max(screenShakeRef.current, 7.5);
               spawnParticles(event.x, event.y, '#a78bfa', 12, 115, 3.2); // Electric plasma sparks
               spawnShockwave(event.x, event.y, '#c084fc', 65, 3.8, 0.32);
+            } else if (event.kind === 'grout_slug') {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 4.5);
+              spawnParticles(event.x, event.y, '#cbd5e1', 8, 82, 3.0); // Mortar chip burst
+              spawnParticles(event.x, event.y, '#64748b', 5, 58, 2.2);
             } else if (event.actorKind === 'RUNAWAY_CART' || event.actorKind === 'FALLING_DEBRIS') {
               screenShakeRef.current = Math.max(screenShakeRef.current, 5.0);
               spawnParticles(event.x, event.y, '#f97316', 7, 95, 2.6); // Industrial fragments
               spawnShockwave(event.x, event.y, '#ea580c', 42, 2.5, 0.22);
             } else {
               spawnParticles(event.x, event.y, '#94a3b8', 4, 60, 2.0); // Steel/concrete contact dust
+            }
+            if (event.critical) {
+              screenShakeRef.current = Math.max(screenShakeRef.current, 8.5);
+              spawnParticles(event.x, event.y, '#f59e0b', 12, 120, 3.5); // Golden welding sparks
+              spawnParticles(event.x, event.y, '#ffffff', 5, 140, 2.2); // Bright white core
+              spawnShockwave(event.x, event.y, '#fbbf24', 55, 3.5, 0.28);
             }
           }
         }
@@ -1970,7 +1964,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.shadowBlur = 6;
         const statusText = inside
           ? `[랑데부 구역 사수 중: ${Math.ceil(extractionTimerRef.current)}초]`
-          : `[랑데부 구역 진입 필요: ${Math.ceil(extractionTimerRef.current)}초]`;
+          : `[랑데부 구역 진입 필요 · 사수 타이머 정지: ${Math.ceil(extractionTimerRef.current)}초]`;
         ctx.fillText(statusText, 0, lzRadius + 28);
         ctx.restore();
 
@@ -3141,16 +3135,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {extractionState.playerInside ? '안전 호송반 랑데부 구역 확보 중! [대기 사수]' : '경고: 랑데부 구역(중앙 LZ)으로 신속히 이동하십시오!'}
             </div>
             <div style={{ fontSize: '12px', color: extractionState.playerInside ? '#a7f3d0' : '#fde68a', fontWeight: 600 }}>
-              비상 호송 완료까지: <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초</span>
+              {extractionState.playerInside ? <>구역 사수 완료까지: <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초</span></> : <>LZ 진입 후 사수 시작 · <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900 }}>{extractionState.countdown}초 대기</span></>}
             </div>
           </div>
         </aside>
       )}
 
-      {phase === 'playing' && !bossSecured && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
+      {phase === 'playing' && (!bossSecured || extractionState.active) && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
       {/* COMBO JUICE BANNER */}
-      {phase === 'playing' && !bossSecured && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
+      {phase === 'playing' && (!bossSecured || extractionState.active) && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
         <aside
           className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"
@@ -3196,7 +3190,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* BOSS ALERT BANNER */}
-      {phase==='playing'&&bossSecured&&<div className="survivors-boss-alert survivors-encounter-notice" role="status"><div className="survivors-boss-alert-text"><strong>{bossText.secured}</strong><small>{bossText.clearConfirm}</small><progress aria-label={bossText.confirmationProgress} max={2.4} value={Math.max(0,2.4-encounterRemaining)}/></div></div>}
+      {phase==='playing'&&bossSecured&&!extractionState.active&&<div className="survivors-boss-alert survivors-encounter-notice" role="status"><div className="survivors-boss-alert-text"><strong>{bossText.secured}</strong><small>{bossText.clearConfirm}</small><progress aria-label={bossText.confirmationProgress} max={2.4} value={Math.max(0,2.4-encounterRemaining)}/></div></div>}
       {phase === 'playing' && bossAlert && directorCutinPhase === 'none' && (
         <div className={`survivors-boss-alert ${engineRef.current?.state.bossEncounter?.phase==='arrival'?'survivors-encounter-notice':''}`} role="alert">
           <div className="survivors-boss-alert-text">
