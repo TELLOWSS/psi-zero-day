@@ -1622,7 +1622,7 @@ export class SurvivorsEngine {
           this.state.signatureEvent={
             id:event.id,wave:event.wave,title:`${event.title} · 통제 완료`,
             detail:'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
-            severity:event.severity,mechanic:event.mechanic,phase:'resolved',
+            severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'resolved',
             positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
             reward:event.reward,remaining:2.1,
           };
@@ -1637,7 +1637,7 @@ export class SurvivorsEngine {
         this.signatureEventsWarned.add(key);
         this.state.signatureEvent={
           id:event.id,wave:event.wave,title:event.title,detail:event.detail,
-          severity:event.severity,mechanic:event.mechanic,phase:'warning',
+          severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'warning',
           positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
           remaining:event.warningLead,
         };
@@ -1656,7 +1656,7 @@ export class SurvivorsEngine {
       }
       this.state.signatureEvent={
         id:event.id,wave:event.wave,title:event.title,detail:event.detail,
-        severity:event.severity,mechanic:event.mechanic,phase:'impact',
+        severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'impact',
         positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
         remaining:event.severity==='red'?3.2:2.7,
       };
