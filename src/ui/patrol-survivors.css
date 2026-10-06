@@ -2521,6 +2521,76 @@
   background: rgba(2,6,23,.5);
   color: #fff;
 }
+.survivors-signature-event > b {
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .06em;
+  color: var(--signature-stage-accent, #cbd5e1);
+}
+
+.survivors-signature-event::after {
+  content:'';
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:-1px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--signature-stage-accent,#94a3b8),transparent);
+  opacity:.9;
+}
+
+.survivors-signature-event.theme-deep_excavation { backdrop-filter:blur(12px) sepia(.12); }
+.survivors-signature-event.theme-highrise_slab { box-shadow:0 16px 42px rgba(0,0,0,.48),0 0 34px rgba(56,189,248,.22); }
+.survivors-signature-event.theme-curing_chamber { box-shadow:0 16px 42px rgba(0,0,0,.5),0 0 36px rgba(125,211,252,.24); }
+.survivors-signature-event.theme-datacenter { box-shadow:0 16px 44px rgba(0,0,0,.52),0 0 38px rgba(167,139,250,.26); }
+
+.survivors-signature-brief {
+  display:grid;
+  gap:7px;
+  padding:10px 12px;
+  margin-top:8px;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(7,13,22,.78));
+}
+
+.survivors-signature-brief > strong {
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.12em;
+  color:#cbd5e1;
+}
+
+.survivors-signature-brief > span {
+  display:grid;
+  grid-template-columns:34px 112px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  padding:6px 8px;
+  border-left:3px solid var(--brief-accent,#94a3b8);
+  background:rgba(15,23,42,.56);
+  border-radius:7px;
+}
+
+.survivors-signature-brief > span > b {
+  font-size:10px;
+  color:var(--brief-accent,#cbd5e1);
+}
+.survivors-signature-brief > span > em {
+  font-style:normal;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  color:#f8fafc;
+}
+.survivors-signature-brief > span > small {
+  font-size:11px;
+  font-weight:700;
+  color:#cbd5e1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 
 .survivors-signature-event.event-cart_convoy { border-color:#fb923c; box-shadow:0 16px 38px rgba(0,0,0,.48),0 0 34px rgba(251,146,60,.30); }
 .survivors-signature-event.event-cart_convoy > em { color:#fed7aa; }
@@ -2631,7 +2701,11 @@
   }
   .survivors-signature-event > strong { font-size: 14px; }
   .survivors-signature-event > em { font-size: 8px; }
+  .survivors-signature-event > b { font-size: 9px; }
   .survivors-signature-event > small { font-size: 10px; }
+  .survivors-signature-brief > span { grid-template-columns:28px 90px minmax(0,1fr); gap:5px; padding:5px 6px; }
+  .survivors-signature-brief > span > em { font-size:8px; }
+  .survivors-signature-brief > span > small { font-size:10px; }
 
   .survivors-wave-director-notice {
     top: calc(var(--survivors-hud-reserve, 66px) + 6px);
