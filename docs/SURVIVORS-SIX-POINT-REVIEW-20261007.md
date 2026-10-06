@@ -4,6 +4,8 @@
 
 ### Release Follow-Up
 
+Release CI previously expected playable Defense/Story and the old patrol label, even though main intentionally locks those modes. Current gates verify native previews, no unintended mode entry, real Signal Watch launch, stage resume and fitting; rig/prop/projectile fixture harnesses retain their checks and include current dependencies. Episode browser QA explicitly reports NOT_RUN_LOCKED_BY_RELEASE for cinematic gameplay while checking the real Story gate; this is not a claim of Episode runtime verification.
+
 The user subsequently authorized GitHub and Vercel synchronization. Equipped material flow and socket pulses now follow the body animation clock, so player movement during combat hit-stop does not leave their feedback frozen on world time. Fitting overrides that clock explicitly to avoid inheriting a paused runtime timestamp. Two tests cover actual hit-stop movement, pause freezing and invalid/legacy timestamps. Full suite: 1591 passed, 1 existing skipped; typecheck and production build passed. Walking intermediate art and independent equipment animation completion remain out of this release.
 
 This section supersedes the initial findings below. The initial checkout lacked the reported lock previews and extraction UI. Locally merging origin/main at 6a8b34f exposed both. Existing wave, mastery, dash and extraction mechanics remain intact; these presentation fixes change no engine/domain rules. No push or deployment performed.
