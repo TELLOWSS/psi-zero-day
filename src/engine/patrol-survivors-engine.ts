@@ -1674,7 +1674,10 @@ export class SurvivorsEngine {
       const stageBossType = stage?.bossType || 'CRANE_BOSS';
       const stageBossHp = stage?.bossHp;
       const operation = operationProgress(this.state);
-      const riskExposed = time >= operation.revealAt && operation.zonesSecured >= operation.zones && operation.controlsDone >= operation.controls;
+      const signatureBlocking=this.state.hazards.some(h=>Boolean(h.signatureEventId)&&h.hp>0);
+      // A successfully read operation may reveal the boss early, but never while a Wave 3
+      // signature set-piece is still unresolved. The hard boss deadline remains authoritative.
+      const riskExposed = time >= operation.revealAt && !signatureBlocking && operation.zonesSecured >= operation.zones && operation.controlsDone >= operation.controls;
       if ((time >= operation.bossAt || riskExposed) && !this.state.stageBossSpawned) {
         this.state.stageBossSpawned = true;
         this.triggerBossAlert(stageBossName);
