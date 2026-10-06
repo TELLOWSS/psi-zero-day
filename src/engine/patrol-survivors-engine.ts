@@ -786,6 +786,39 @@ export class SurvivorsEngine {
   }
   cancelHandoff():void { if(this.state.fieldTactics)this.state.fieldTactics.handoff=undefined; }
 
+  beginExtraction(totalTime=15):boolean {
+    if(this.state.phase!=='playing'||!this.state.stageBossNeutralized||this.state.extractionPhase)return false;
+    this.state.extractionPhase={
+      x:WORLD_WIDTH/2,
+      y:WORLD_HEIGHT/2,
+      radius:155,
+      countdown:Math.max(1,totalTime),
+      totalTime:Math.max(1,totalTime),
+      status:'inbound',
+      playerInside:false,
+    };
+    return true;
+  }
+
+  tickExtraction(dt:number):boolean {
+    const extraction=this.state.extractionPhase;
+    if(!extraction||this.state.phase!=='playing'||extraction.status==='secured')return false;
+    const inside=Math.hypot(this.state.player.x-extraction.x,this.state.player.y-extraction.y)<=extraction.radius;
+    extraction.playerInside=inside;
+    extraction.status=inside?'active':'inbound';
+    if(inside&&Number.isFinite(dt)&&dt>0)extraction.countdown=Math.max(0,extraction.countdown-dt);
+    if(extraction.countdown>0)return false;
+    extraction.status='secured';
+    this.state.score+=8000;
+    this.state.psiCredits+=250;
+    this.state.phase='victory';
+    this.state.directorShoutTimer=0;
+    this.state.directorCutinPhase='none';
+    this.checkStarChallenges();
+    this.emitAudio('win');
+    return true;
+  }
+
   canSkipBossIntro():boolean {
     const e=this.state.bossEncounter;
     return this.state.phase==='playing'&&e?.phase==='arrival'&&e.replay===true&&
@@ -809,20 +842,27 @@ export class SurvivorsEngine {
     this.state.lastKilledEvents = [];
 
     const encounter=this.state.bossEncounter;
+    const extractionInProgress=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
     if(encounter && encounter.phase!=='combat'){
-      encounter.remaining=Math.max(0,encounter.remaining-dt);
-      if(encounter.phase==='arrival'){
-        this.state.bossAlertTimer=encounter.remaining;
-        if(encounter.remaining===0){
-          this.beginBossCombat();
+      if(encounter.phase==='secured'&&extractionInProgress){
+        // Extraction owns the final outcome. Keep simulation live so the player can
+        // move into the rendezvous zone and survive the final holding action.
+        encounter.remaining=0;
+      } else {
+        encounter.remaining=Math.max(0,encounter.remaining-dt);
+        if(encounter.phase==='arrival'){
+          this.state.bossAlertTimer=encounter.remaining;
+          if(encounter.remaining===0){
+            this.beginBossCombat();
+          }
+        } else if(encounter.remaining===0){
+          this.state.phase='victory';
+          this.state.score+=5000;
+          this.state.psiCredits+=Math.round(this.state.score/10*PATROL_DIFFICULTIES[this.state.difficulty??'standard'].reward);
+          this.checkStarChallenges();
         }
-      } else if(encounter.remaining===0){
-        this.state.phase='victory';
-        this.state.score+=5000;
-        this.state.psiCredits+=Math.round(this.state.score/10*PATROL_DIFFICULTIES[this.state.difficulty??'standard'].reward);
-        this.checkStarChallenges();
+        return;
       }
-      return;
     }
 
     // Micro Freeze / Hit Stop (Impact Screen Juice)
@@ -935,18 +975,27 @@ export class SurvivorsEngine {
     if(this.state.player.hp<hpBefore)this.cancelHandoff();
     this.checkStarChallenges();
 
-    // Boss resolution ends the stage; control objectives remain optional achievements.
+    // Boss resolution normally ends the stage after a short confirmation.
+    // Once extraction has begun, however, the extraction hold owns the terminal outcome.
     if (this.state.stageBossNeutralized && (this.state.phase as SurvivorsGameState['phase']) !== 'defeat') {
-      if(this.state.bossEncounter){
+      const extractionActive=Boolean(this.state.extractionPhase&&this.state.extractionPhase.status!=='secured');
+      if(extractionActive){
+        if(this.state.bossEncounter){
+          this.state.bossEncounter.phase='secured';this.state.bossEncounter.remaining=0;
+          this.state.bossName=null;this.state.bossAlertTimer=0;
+          this.state.directorShoutTimer=0;this.state.directorCutinPhase='none';
+        }
+      } else if(this.state.bossEncounter){
         this.state.bossEncounter.phase='secured';this.state.bossEncounter.remaining=2.4;
         this.state.bossName=null;this.state.bossAlertTimer=0;
         this.state.directorShoutTimer=0;this.state.directorCutinPhase='none';
         return;
+      } else {
+        this.state.phase = 'victory';
+        this.state.score += 5000;
+        this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
+        this.checkStarChallenges();
       }
-      this.state.phase = 'victory';
-      this.state.score += 5000;
-      this.state.psiCredits += Math.round(this.state.score / 10 * PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].reward);
-      this.checkStarChallenges();
     }
     // Keep the intervention visible before spending its bulk XP. Terminal
     // outcomes take precedence; a queued upgrade must never replace a result.
