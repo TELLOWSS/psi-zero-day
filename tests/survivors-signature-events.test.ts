@@ -1,0 +1,80 @@
+import {describe,expect,it} from 'vitest';
+import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
+import {operationTiming} from '../src/engine/survivors-operation';
+import {signatureEventPlan} from '../src/engine/survivors-signature-events';
+
+describe('wave signature events',()=>{
+  it('authors one Wave 2 and one Wave 3 event for all 50 stages',()=>{
+    const ids=new Set<string>();
+    const stages=Object.values(PATROL_STAGES);
+    expect(stages).toHaveLength(50);
+    for(const stage of stages){
+      const timing=operationTiming(180);
+      const plan=signatureEventPlan(stage,180);
+      expect(plan).toHaveLength(2);
+      expect(plan.map(event=>event.wave)).toEqual([2,3]);
+      expect(plan[0]!.at).toBeGreaterThanOrEqual(timing.wave2At);
+      expect(plan[0]!.at).toBeLessThan(timing.wave3At);
+      expect(plan[1]!.at).toBeGreaterThanOrEqual(timing.wave3At);
+      expect(plan[1]!.at).toBeLessThan(timing.bossRevealAt);
+      for(const event of plan){
+        ids.add(event.id);
+        expect(event.spawns.length).toBeGreaterThanOrEqual(3);
+        expect(event.spawns.length).toBeLessThanOrEqual(5);
+        expect(event.spawns.every(spawn=>spawn.type!=='CRANE_BOSS')).toBe(true);
+      }
+    }
+    expect(ids).toEqual(new Set([
+      'cart_convoy','gas_bloom','lifting_cross',
+      'debris_corridor','equipment_pincer','precollapse_signal',
+    ]));
+  });
+
+  it('scales signature timings into the compact 60-second operation',()=>{
+    const timing=operationTiming(60);
+    const plan=signatureEventPlan(PATROL_STAGES.stage_01,60);
+    expect(plan[0]!.at).toBeGreaterThan(timing.wave2At);
+    expect(plan[0]!.at).toBeLessThan(timing.wave3At);
+    expect(plan[1]!.at).toBeGreaterThan(timing.wave3At);
+    expect(plan[1]!.at).toBeLessThan(timing.bossRevealAt);
+  });
+
+  it('executes each event once and never marks signature hazards as bosses',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_04'),73);
+    const trigger=engine as unknown as {updateSignatureEvents():void};
+    const plan=signatureEventPlan(engine.state.stage,engine.state.maxTime);
+    engine.state.gameTime=plan[0]!.at;
+    trigger.updateSignatureEvents();
+    const afterWave2=engine.state.hazards.length;
+    expect(afterWave2).toBe(plan[0]!.spawns.length);
+    expect(engine.state.signatureEvent?.wave).toBe(2);
+    expect(engine.state.hazards.every(h=>!h.isStageBoss)).toBe(true);
+
+    trigger.updateSignatureEvents();
+    expect(engine.state.hazards).toHaveLength(afterWave2);
+
+    engine.state.gameTime=plan[1]!.at;
+    trigger.updateSignatureEvents();
+    expect(engine.state.hazards).toHaveLength(afterWave2+plan[1]!.spawns.length);
+    expect(engine.state.signatureEvent?.wave).toBe(3);
+    expect(engine.state.signatureEvent?.severity).toBe('red');
+    expect(engine.state.hazards.every(h=>!h.isStageBoss&&h.type!=='CRANE_BOSS')).toBe(true);
+
+    trigger.updateSignatureEvents();
+    expect(engine.state.hazards).toHaveLength(afterWave2+plan[1]!.spawns.length);
+  });
+
+  it('preserves authored set-piece placement instead of retargeting falling debris at spawn',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_04'),91);
+    const trigger=engine as unknown as {updateSignatureEvents():void};
+    const red=signatureEventPlan(engine.state.stage,engine.state.maxTime)[1]!;
+    expect(red.id).toBe('debris_corridor');
+    engine.state.gameTime=red.at;
+    // Mark Wave 2 as already elapsed through a separate engine-level call.
+    trigger.updateSignatureEvents();
+    const authored=red.spawns.filter(spawn=>spawn.type==='FALLING_DEBRIS');
+    for(const spawn of authored){
+      expect(engine.state.hazards.some(h=>h.type==='FALLING_DEBRIS'&&h.x===spawn.x&&h.y===spawn.y)).toBe(true);
+    }
+  });
+});
