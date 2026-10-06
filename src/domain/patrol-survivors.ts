@@ -263,6 +263,18 @@ export interface SurvivorsGameState {
     reward?: number;
     remaining: number;
   };
+  signatureCounterplay?: {
+    eventId: string;
+    kind: 'boss_weakpoint' | 'cooldown_rush' | 'instant_counter' | 'dash_reset' | 'ultimate_surge' | 'boss_prereveal';
+    title: string;
+    detail: string;
+    accent: string;
+    remaining: number;
+  };
+  signatureCounterplayBuffs?: {
+    cooldownRush?: number;
+    bossWeakPointSeconds?: number;
+  };
 
   // Screen Juice & Impact Feedback
   hitStopTimer?: number;
