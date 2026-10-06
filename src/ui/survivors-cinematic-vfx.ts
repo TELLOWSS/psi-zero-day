@@ -10,7 +10,7 @@ export function cinematicLook(kind:ProjectileKind,level:number,equipped:readonly
   const communicationShot=communication&&(kind==='radio'||kind==='satellite_wave');
   const tempoShot=tempo&&(kind==='drone_laser'||kind==='hunter_beam');
   const premium=communicationShot||tempoShot;
-  const evolved=['satellite_wave','cryo_blast','tesla_bolt','emf_beam','hunter_beam'].includes(kind);
+  const evolved=['satellite_wave','cryo_blast','tesla_bolt','emf_beam','hunter_beam','hydraulic_wave','plasma_arc'].includes(kind);
   const palette=communicationShot
     ? (equipped.includes('command_array')?'cyan':'gold')
     : tempoShot?'violet'

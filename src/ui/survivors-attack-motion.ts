@@ -16,7 +16,7 @@ export function attackEnvelope(elapsed:number,kind:AttackMotion='shot'):number {
 }
 export function projectileAttackMotion(kind:ProjectileKind):AttackMotion|undefined {
  if(kind==='radio'||kind==='satellite_wave')return 'shot';
- if(kind==='extinguisher'||kind==='cryo_blast')return 'spray';
- if(kind==='shout_shockwave')return 'ultimate';
+ if(kind==='extinguisher'||kind==='cryo_blast'||kind==='grout_slug'||kind==='hydraulic_wave')return 'spray';
+ if(kind==='shout_shockwave'||kind==='emp_pulse'||kind==='plasma_arc')return 'ultimate';
  return undefined;
 }

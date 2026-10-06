@@ -1,4 +1,4 @@
-import type { Hazard, HazardType } from '../domain/patrol-survivors';
+import type { Hazard, HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SpritePose } from './survivors-sprite-motion';
 import { drawProp,drawPropReaction } from './survivors-equipment-art';
@@ -87,7 +87,7 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
 }
 
 /** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages): boolean {
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages): boolean {
   const cell = industrialHazardCell(h, ground);
   if (cell === null || !atlas?.naturalWidth) return false;
   const gas = h.type === 'GAS_LEAK';
@@ -124,6 +124,30 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   if (gas&&!boss) ctx.globalAlpha *= .82;
   const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
   if(drawn&&response.reaction>0)drawPropReaction(ctx,boss?bossImage:atlas,boss?0:cell,0,placement.y,size,response.color,response.reaction*.24);
+  if(drawn&&h.signatureEventId&&!boss){
+    const pulse=reduced?1:.72+.28*Math.sin(clock*7);
+    const themeAccent:Record<PatrolStageDefinition['theme'],string>={
+      surface_logistics:'#fb923c',deep_excavation:'#d97706',highrise_slab:'#38bdf8',curing_chamber:'#7dd3fc',datacenter:'#a78bfa'
+    };
+    const accent=themeAccent[theme];
+    ctx.save();ctx.globalAlpha=.35*pulse;ctx.strokeStyle=accent;ctx.lineWidth=2;
+    if(theme==='surface_logistics'){
+      ctx.setLineDash([8,5]);ctx.beginPath();ctx.ellipse(0,3,size*.52,size*.18,0,0,Math.PI*2);ctx.stroke();
+    } else if(theme==='deep_excavation'){
+      ctx.fillStyle='rgba(120,72,28,.18)';ctx.beginPath();ctx.ellipse(0,5,size*.56,size*.2,0,0,Math.PI*2);ctx.fill();
+      ctx.setLineDash([4,7]);ctx.beginPath();ctx.ellipse(0,4,size*.6,size*.23,0,0,Math.PI*2);ctx.stroke();
+    } else if(theme==='highrise_slab'){
+      ctx.beginPath();ctx.moveTo(-size*.42,-size*.48);ctx.lineTo(0,-size*.7);ctx.lineTo(size*.42,-size*.48);ctx.stroke();
+      ctx.beginPath();ctx.ellipse(0,3,size*.48,size*.16,0,0,Math.PI*2);ctx.stroke();
+    } else if(theme==='curing_chamber'){
+      ctx.setLineDash([3,6]);ctx.beginPath();ctx.arc(0,-size*.16,size*.48,Math.PI*.12,Math.PI*.88);ctx.stroke();
+      ctx.beginPath();ctx.ellipse(0,4,size*.5,size*.17,0,0,Math.PI*2);ctx.stroke();
+    } else {
+      ctx.setLineDash([6,4]);ctx.strokeRect(-size*.48,-size*.52,size*.96,size*.82);
+      ctx.beginPath();ctx.moveTo(-size*.58,0);ctx.lineTo(-size*.42,0);ctx.moveTo(size*.42,0);ctx.lineTo(size*.58,0);ctx.stroke();
+    }
+    ctx.restore();
+  }
   ctx.restore();
   return drawn;
 }

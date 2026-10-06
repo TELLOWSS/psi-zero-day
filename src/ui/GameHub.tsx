@@ -41,6 +41,12 @@ const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ defau
 const loadDefenseGame = () => import('./DefenseGame');
 const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
 const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
+const MODE_PREVIEW_ART = {
+  signal: '/mode-previews/signal-watch.webp',
+  defense: '/mode-previews/defense-coming-soon.webp',
+  story: '/mode-previews/story-coming-soon.webp',
+} as const;
+type ModePreviewKind = keyof typeof MODE_PREVIEW_ART;
 const PatrolSurvivorsGame = lazy(() => loadSurvivorsGame().then(module => ({ default: module.PatrolSurvivorsGame })));
 type FieldGuideModuleLoader = () => Promise<{ readonly FieldGuide: ComponentType<{ session: EpisodeSession }> }>;
 
@@ -282,7 +288,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   />;
 }
 
-export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: {
+export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDefense, onSurvivors }: {
   session: EpisodeSession;
   onPlay: () => void;
   onNewGame: () => void;
@@ -296,8 +302,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const [page, setPage] = useState<HubPage>('home');
   const [selectedPerson, setSelectedPerson] = useState('player');
   const [selectedStep, setSelectedStep] = useState<string | null>(null);
-  const [confirmNewGame, setConfirmNewGame] = useState(false);
   const [showTitleSettings, setShowTitleSettings] = useState(false);
+  const [modePreview,setModePreview]=useState<Exclude<ModePreviewKind,'signal'>|null>(null);
   const [motionEnabled, setMotionEnabled] = useState(true);
   const [castQuotesEnabled, setCastQuotesEnabled] = useState(true);
   const t = session.t;
@@ -309,8 +315,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const castDetail = castPlan.characters.find(character => character.id === selectedPerson);
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
-  const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
-  const canContinue = snapshot.phase !== 'start';
   const openGuide = () => setPage('guide');
   const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
@@ -399,16 +403,16 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         fontSize: '0.8rem',
       }}>
         <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>📖 스토리 진행</span>
-          <strong style={{ color: '#fbbf24' }}>EP.01 · {progress}%</strong>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>📖 스토리 모드</span>
+          <strong style={{ color: '#fbbf24' }}>준비중 · 시네마틱 프리뷰</strong>
         </div>
         <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 야간 순찰 (슈팅)</span>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 시그널 워치 (SURVIVORS)</span>
           <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong>
         </div>
         <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 제로 브리치 (디펜스)</span>
-          <strong style={{ color: '#60a5fa' }}>무재해 방어선 가동</strong>
+          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 디펜스 모드</span>
+          <strong style={{ color: '#60a5fa' }}>준비중 · 전술 방어선 고도화</strong>
         </div>
         <div>
           <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🔬 현장도감 연구</span>
@@ -418,34 +422,40 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
 
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
-          className="commercial-title-action is-survivors-entry"
+          className="commercial-title-action is-survivors-entry has-mode-art"
           type="button"
           onMouseEnter={() => { void loadSurvivorsGame(); }}
           onFocus={() => { void loadSurvivorsGame(); }}
           onClick={() => onSurvivors?.()}
         >
+          <img src={MODE_PREVIEW_ART.signal} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon is-lightning">⚡</span>
           <span className="commercial-title-action-copy">
             <strong className="commercial-title-survivors-title">
-              야간 긴급 순찰 (SURVIVORS)
-              <span className="commercial-title-badge-new">NEW MODE</span>
+              시그널 워치 (SURVIVORS)
+              <span className="commercial-title-badge-new">LIVE</span>
             </strong>
-            <small>주인공 직접 조작 · 현장 위험 실시간 요격 &amp; 퍽 강화 서바이벌</small>
+            <small>사고 전 신호 포착 · 현장 위험 실시간 요격 · 3-Wave 시네마틱 서바이벌</small>
           </span>
           <b>›</b>
         </button> : null}
-        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry" data-title-primary-cta="defense" type="button" onMouseEnter={() => { void loadDefenseGame(); }} onFocus={() => { void loadDefenseGame(); }} onClick={() => onDefense?.()}>
-          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>현장 디펜스 시작</strong><small>신호를 읽고 · 개입하고 · 달라진 현장을 확인합니다</small></span>
+        {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art is-coming-soon" data-title-primary-cta="defense" type="button" onClick={() => setModePreview('defense')}>
+          <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <span className="commercial-title-action-shade" aria-hidden="true" />
+          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
+          <span className="commercial-title-action-copy"><strong>디펜스 모드 · 준비중</strong><small>전술 방어선과 현장 개입 시스템을 최종 고도화하고 있습니다 · 탭하여 보기</small></span>
           <b>›</b>
         </button> : null}
-        <button className="commercial-title-action is-story-entry" type="button" onClick={onPlay} disabled={!canContinue}>
-          <span className="commercial-title-action-icon"><HubIcon kind="journal" /></span>
+        <button className="commercial-title-action is-story-entry has-mode-art is-coming-soon" type="button" onClick={() => setModePreview('story')}>
+          <img src={MODE_PREVIEW_ART.story} alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <span className="commercial-title-action-shade" aria-hidden="true" />
+          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
           <span className="commercial-title-action-copy">
-            <strong>스토리 이어하기</strong>
-            <small>{canContinue ? '현장 사람들과 이전 판단의 결과를 이어갑니다' : t('ui.title.no_save')}</small>
+            <strong>스토리 모드 · 준비중</strong>
+            <small>사람·증거·판단이 연결되는 본편 시네마틱을 완성하고 있습니다 · 탭하여 보기</small>
           </span>
-          {canContinue ? <em>EP.01 · {progress}%</em> : null}
+          <em>EP.01</em>
           <b>›</b>
         </button>
         <button className="commercial-title-action is-sub-entry" type="button" onClick={() => setPage('site')}>
@@ -453,9 +463,9 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
           <b>›</b>
         </button>
-        <button className="commercial-title-action is-quiet is-sub-entry" type="button" onClick={() => canContinue ? setConfirmNewGame(true) : onNewGame()}>
-          <span className="commercial-title-action-icon"><HubIcon kind="play" /></span>
-          <span className="commercial-title-action-copy"><strong>새 스토리 시작</strong><small>{t('ui.title.new_game.hint')}</small></span>
+        <button className="commercial-title-action is-quiet is-sub-entry is-coming-soon" type="button" onClick={() => setModePreview('story')}>
+          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
+          <span className="commercial-title-action-copy"><strong>새 스토리 · 준비중</strong><small>본편 완성 후 공개됩니다</small></span>
           <b>›</b>
         </button>
       </div>
@@ -466,10 +476,8 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       data-title-role="live-briefing"
       data-title-live-entry="DEF-CORE-01"
       type="button"
-      aria-label="대표 시나리오 서측 Gate 차량-보행 간섭 시작"
-      onMouseEnter={() => { void loadDefenseGame(); }}
-      onFocus={() => { void loadDefenseGame(); }}
-      onClick={() => onDefense(defenseEvents[0]?.id ?? null)}
+      aria-label="디펜스 모드 준비중 프리뷰 보기"
+      onClick={() => setModePreview('defense')}
     >
       <div className="commercial-title-field-status-head">
         <span>LIVE SITE</span><b>DEF-CORE-01</b>
@@ -481,7 +489,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
         <span><i>02</i><b>CONTROL</b><small>유도 · 통로 분리</small></span>
         <span><i>03</i><b>PSI</b><small>약한 신호 읽기</small></span>
       </div>
-      <span className="commercial-title-field-status-cta">대표 시나리오 바로 시작 <b aria-hidden="true">›</b></span>
+      <span className="commercial-title-field-status-cta">디펜스 모드 준비중 · 프리뷰 보기 <b aria-hidden="true">›</b></span>
       <p>현장 종류·공법·공정에 따라 위험 우선순위가 달라지는 SITE PROFILE 시스템으로 확장됩니다.</p>
     </button> : null}
 
@@ -548,6 +556,24 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       <span>NEW PSI · FIELD</span><small>EP.01 · {snapshot.completed}/{snapshot.total}</small>
     </button>
 
+    {modePreview ? <div className="mode-preview-backdrop" role="presentation" onMouseDown={() => setModePreview(null)}>
+      <section className={`mode-preview-dialog is-${modePreview}`} role="dialog" aria-modal="true" aria-labelledby="mode-preview-title" onMouseDown={event => event.stopPropagation()}>
+        <button type="button" className="mode-preview-close" aria-label="프리뷰 닫기" onClick={() => setModePreview(null)}>×</button>
+        <div className="mode-preview-visual">
+          <img src={MODE_PREVIEW_ART[modePreview]} alt={modePreview==='defense'?'디펜스 모드 준비중':'스토리 모드 준비중'} />
+          {modePreview==='story' ? <span className="mode-preview-cta-correction">탭하여 보기</span> : null}
+        </div>
+        <div className="mode-preview-copy">
+          <span>{modePreview==='defense'?'TACTICAL DEFENSE':'CINEMATIC STORY'}</span>
+          <h2 id="mode-preview-title">{modePreview==='defense'?'디펜스 모드':'스토리 모드'} <b>준비중</b></h2>
+          <p>{modePreview==='defense'
+            ? '현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.'
+            : '현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.'}</p>
+          <small>곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.</small>
+        </div>
+      </section>
+    </div> : null}
+
     {showTitleSettings ? <div className="commercial-title-settings-backdrop" role="presentation" onMouseDown={() => setShowTitleSettings(false)}>
       <section className="commercial-title-settings" role="dialog" aria-modal="true" aria-labelledby="title-settings-heading" onMouseDown={event => event.stopPropagation()}>
         <span>{GAME_TITLE}</span>
@@ -566,18 +592,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           <input type="checkbox" checked={!audioMuted} onChange={event => setAudioMuted(!event.currentTarget.checked)} />
         </label>
         <button type="button" onClick={() => setShowTitleSettings(false)}>{t('ui.title.settings.close')}</button>
-      </section>
-    </div> : null}
-
-    {confirmNewGame ? <div className="commercial-title-dialog-backdrop" role="presentation" onMouseDown={() => setConfirmNewGame(false)}>
-      <section className="commercial-title-dialog" role="dialog" aria-modal="true" aria-labelledby="new-game-confirm-title" onMouseDown={event => event.stopPropagation()}>
-        <span>{GAME_TITLE}</span>
-        <h2 id="new-game-confirm-title">{t('ui.title.confirm_new')}</h2>
-        <p>{t('ui.title.confirm_new.hint')}</p>
-        <div>
-          <button type="button" onClick={() => setConfirmNewGame(false)}>{t('ui.title.cancel')}</button>
-          <button className="is-danger" type="button" onClick={() => { setConfirmNewGame(false); onNewGame(); }}>{t('ui.title.restart')}</button>
-        </div>
       </section>
     </div> : null}
 
@@ -608,7 +622,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
     <section className="hub-main" aria-label={page === 'site' ? '현장 · 공정' : t(`ui.hub.${page}`)}>
       {page === 'site' ? <SiteProfileScreen
         onBack={() => setPage('home')}
-        onPracticeScenario={scenarioId => onDefense?.(scenarioId)}
+        onPracticeScenario={() => setModePreview('defense')}
       /> : page === 'map' ? <>
         <div className="hub-map-heading"><span className="hub-kicker">EPISODE 01</span><h1>{t('ep01.title')}</h1><p>{t('ui.hub.route_hint')}</p></div>
         <div className="hub-route">
@@ -618,7 +632,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
           </button>)}
         </div>
         <section className="hub-route-detail" aria-live="polite"><VisualImage uri={characterPortraitUri(detail.character, resolve)} alt="" /><div><small>{t(`ui.hub.step.${detail.status}`)}</small><h2>{t(detail.title)}</h2><p>{t(detail.hint)}</p>{detail.status === 'locked' ? <p>{t('ui.hub.locked_hint')}</p> : null}</div>
-          <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
+          <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
         </section>
       </> : page === 'people' ? <div className="hub-people">
         <div className="hub-section-title"><span className="hub-kicker">FIELD TEAM / 08</span><h1>{t('ui.hub.people')}</h1><p>{t('ui.hub.people.intro')}</p></div>
@@ -629,7 +643,7 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
       </div> : page === 'guide' ? <RecoverableFieldGuide session={session} onHome={() => setPage('home')} /> : <div className="hub-journal">
         <span className="hub-kicker">FIELD JOURNAL</span><h1>{t('ui.review.title')}</h1><p>{t('ui.review.hint')}</p>
         {review.length ? <EpisodeRecord entries={review} t={t} /> : <div className="hub-empty"><HubIcon kind="journal" /><h2>{t('ui.hub.journal.empty')}</h2><p>{t('ui.hub.journal.empty_hint')}</p></div>}
-        <button className="hub-primary" type="button" onClick={onPlay}><HubIcon kind="play" />{playLabel}</button>
+        <button className="hub-primary" type="button" onClick={() => setModePreview('story')}><HubIcon kind="lock" />스토리 모드 · 준비중</button>
       </div>}
     </section>
     <footer className="hub-footer"><span>{GAME_TITLE}</span><span>{t('ui.hub.footer')}</span><small>EPISODE 01 · {t('ep01.title')}</small></footer>

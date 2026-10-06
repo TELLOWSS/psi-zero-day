@@ -13,7 +13,7 @@ it('bakes distinct bounded signatures with quiet boundaries and deterministic ou
       fingerprints.add(samples.slice(100,110).join(','));
     }
   }
-  expect(fingerprints.size).toBe(30);
+  expect(fingerprints.size).toBe(Object.keys(PROJECTILE_VFX).length * 3);
 });
 it('uses the same calm confirmation on workers across equipment',()=>{
   expect(equipmentSoundSamples('radio','impact',true,48000)).toEqual(equipmentSoundSamples('tesla_bolt','impact',true,48000));

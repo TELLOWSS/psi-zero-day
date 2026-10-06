@@ -102,7 +102,8 @@ it('distinguishes acquired evolutions from level five and keeps reduced-motion m
   }
   expect(cinematicLook('radio',5).evolved).toBe(false);
   const before=JSON.stringify(state);drawEvolutionIdentity(ctx,state,atlas,true);
-  expect(ctx.stroke).toHaveBeenCalledTimes(21);expect(ctx.drawImage).not.toHaveBeenCalled();expect(JSON.stringify(state)).toBe(before);
+  const totalMarks = Object.values(EVOLUTION_IDENTITIES).reduce((sum, e) => sum + e.marks, 0);
+  expect(ctx.stroke).toHaveBeenCalledTimes(totalMarks);expect(ctx.drawImage).not.toHaveBeenCalled();expect(JSON.stringify(state)).toBe(before);
 });
 it('adds confirmed evolution contact marks, bounded recoil and non-clipping sonic weight',()=>{
   const event={projectileId:'e',kind:'hunter_beam' as const,phase:'impact' as const,x:0,y:0,angle:0,radius:4,critical:true};
