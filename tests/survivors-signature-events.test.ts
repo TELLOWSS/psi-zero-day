@@ -1,7 +1,8 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationPlan,operationTiming} from '../src/engine/survivors-operation';
-import {signatureEventIdentity,signatureEventPlan,signatureEventSpawns,signatureStageFusion,type SignatureEventId} from '../src/engine/survivors-signature-events';
+import {signatureEventIdentity,signatureEventPlan,signatureEventSpawns,signatureStageFusion,type SignatureEventId,type WaveSignatureEvent} from '../src/engine/survivors-signature-events';
+import {signatureCounterplayProfile,signatureCounterplayQualified} from '../src/engine/survivors-signature-counterplay';
 
 describe('wave signature events',()=>{
   it('authors one Wave 2 and one Wave 3 event for all 50 stages',()=>{
@@ -92,6 +93,83 @@ describe('wave signature events',()=>{
         }
       }
     }
+  });
+
+  it('locks six skill rewards with explicit success conditions',()=>{
+    const ids:SignatureEventId[]=['cart_convoy','gas_bloom','lifting_cross','debris_corridor','equipment_pincer','precollapse_signal'];
+    const profiles=ids.map(id=>signatureCounterplayProfile(id));
+    expect(new Set(profiles.map(profile=>profile.kind)).size).toBe(6);
+    expect(signatureCounterplayQualified('cart_convoy',false,20)).toBe(true);
+    expect(signatureCounterplayQualified('cart_convoy',true,1)).toBe(false);
+    expect(signatureCounterplayQualified('gas_bloom',true,7)).toBe(true);
+    expect(signatureCounterplayQualified('gas_bloom',false,8)).toBe(false);
+    expect(signatureCounterplayQualified('lifting_cross',false,6)).toBe(true);
+    expect(signatureCounterplayQualified('lifting_cross',false,7)).toBe(false);
+    expect(signatureCounterplayQualified('precollapse_signal',false,20)).toBe(true);
+    expect(signatureCounterplayQualified('precollapse_signal',true,2)).toBe(false);
+  });
+
+  it('applies all six counterplay rewards to real engine state',()=>{
+    const apply=(id:SignatureEventId)=>{
+      const stage=Object.values(PATROL_STAGES).find(candidate=>signatureEventPlan(candidate,180).some(event=>event.id===id))!;
+      const event=signatureEventPlan(stage,180).find(row=>row.id===id)!;
+      const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,stage.id),3200+stage.stageNumber);
+      const internal=engine as unknown as {
+        applySignatureCounterplay(event:WaveSignatureEvent,key:string,centroid:{x:number;y:number}):boolean;
+        signatureEventStartedAt:Map<string,number>;
+      };
+      const key=`${event.wave}:${event.id}`;
+      internal.signatureEventStartedAt.set(key,engine.state.gameTime);
+      return {engine,event,applied:internal.applySignatureCounterplay(event,key,{x:700,y:450})};
+    };
+
+    const cart=apply('cart_convoy');
+    expect(cart.applied).toBe(true);
+    expect(cart.engine.state.signatureCounterplay?.kind).toBe('boss_weakpoint');
+    expect(cart.engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBe(4);
+
+    const gas=apply('gas_bloom');
+    expect(gas.engine.state.signatureCounterplay?.kind).toBe('cooldown_rush');
+    expect(gas.engine.state.signatureCounterplayBuffs?.cooldownRush).toBe(8);
+
+    const lift=apply('lifting_cross');
+    expect(lift.engine.state.signatureCounterplay?.kind).toBe('instant_counter');
+    expect(lift.engine.state.projectiles.some(projectile=>projectile.kind==='shout_shockwave'&&projectile.damage===240)).toBe(true);
+
+    const corridor=apply('debris_corridor');
+    corridor.engine.state.player.dashCooldown=3;
+    const corridorInternal=corridor.engine as unknown as {
+      applySignatureCounterplay(event:WaveSignatureEvent,key:string,centroid:{x:number;y:number}):boolean;
+      signatureEventStartedAt:Map<string,number>;
+    };
+    const corridorKey=`${corridor.event.wave}:${corridor.event.id}`;
+    corridorInternal.signatureEventStartedAt.set(corridorKey,corridor.engine.state.gameTime);
+    corridorInternal.applySignatureCounterplay(corridor.event,corridorKey,{x:700,y:450});
+    expect(corridor.engine.state.player.dashCooldown).toBe(0);
+    expect(corridor.engine.state.player.invincibleTime).toBeGreaterThanOrEqual(.75);
+
+    const pincer=apply('equipment_pincer');
+    expect(pincer.engine.state.signatureCounterplay?.kind).toBe('ultimate_surge');
+    expect(pincer.engine.state.ultimateCharge).toBe(35);
+
+    const collapse=apply('precollapse_signal');
+    expect(collapse.engine.state.signatureCounterplay?.kind).toBe('boss_prereveal');
+    expect(collapse.engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBe(7.5);
+  });
+
+  it('transfers an earned pre-read into the next boss weak point window',()=>{
+    const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,'stage_05'),9001);
+    engine.start();
+    engine.state.signatureCounterplayBuffs={bossWeakPointSeconds:7.5};
+    const plan=operationPlan(engine.state.stage,engine.state.maxTime);
+    engine.state.gameTime=plan.bossAt;
+    const internal=engine as unknown as {updateSpawns(dt:number):void};
+    internal.updateSpawns(0);
+    const boss=engine.state.hazards.find(h=>h.isStageBoss)!;
+    expect(boss).toBeTruthy();
+    expect(boss.weakPointExposed).toBe(true);
+    expect(boss.weakPointTimer).toBe(7.5);
+    expect(engine.state.signatureCounterplayBuffs?.bossWeakPointSeconds).toBeUndefined();
   });
 
   it('locks six different gameplay identities rather than six cosmetic labels',()=>{
@@ -215,6 +293,7 @@ describe('wave signature events',()=>{
     trigger.updateSignatureEvents();
     expect(engine.state.signatureEvent?.phase).toBe('resolved');
     expect(engine.state.signatureEvent?.reward).toBe(event.reward);
+    expect(engine.state.signatureCounterplay).toBeDefined();
     expect(engine.state.score).toBe(scoreBefore+650);
     expect(engine.state.psiCredits).toBe(creditsBefore+event.reward);
     expect(engine.drainAudioEvents().some(audio=>audio.type==='control'&&audio.x!==undefined&&audio.y!==undefined)).toBe(true);
