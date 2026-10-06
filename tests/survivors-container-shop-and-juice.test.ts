@@ -23,8 +23,8 @@ describe('Survivors Container Shop and Hit Juice Physics', () => {
 
   it('wave supply stays non-blocking and can only open from an explicit player action', () => {
     const gameSource = readFileSync(new URL('../src/ui/PatrolSurvivorsGame.tsx', import.meta.url), 'utf8');
-    const waveStart = gameSource.indexOf('// Wave progression stays continuous.');
-    const waveEnd = gameSource.indexOf('// Trigger Extraction Climax', waveStart);
+    const waveStart = gameSource.indexOf('const maxSurvivalTime = engine.state.maxTime || 180;');
+    const waveEnd = gameSource.indexOf('const incidentSecured=', waveStart);
     const waveBlock = gameSource.slice(waveStart, waveEnd);
 
     expect(waveStart).toBeGreaterThan(-1);
