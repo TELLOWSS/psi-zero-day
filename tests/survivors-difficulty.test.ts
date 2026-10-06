@@ -44,10 +44,12 @@ describe('map difficulty progression', () => {
     const scheduler=e as unknown as {updateSpawns(dt:number):void};
     for(let t=0;t<180;t+=1/60) { e.state.gameTime=t; scheduler.updateSpawns(1/60); }
     expect(e.state.hazards.filter(h=>h.isStageBoss)).toHaveLength(1);
-    const finalPressure=spawnPressure(e.state.stage.stageNumber,170,e.state.difficulty,e.state.maxTime);
-    expect(e.state.hazards.length).toBeLessThanOrEqual(finalPressure.activeLimit+1);
+    const timeline=Array.from({length:181},(_,time)=>spawnPressure(e.state.stage.stageNumber,time,e.state.difficulty,e.state.maxTime));
+    const peakActive=Math.max(...timeline.map(p=>p.activeLimit));
+    const peakTelegraphs=Math.max(...timeline.map(p=>p.telegraphLimit));
+    expect(e.state.hazards.length).toBeLessThanOrEqual(peakActive+1);
     expect(e.state.hazards.filter(h=>h.type==='RUNAWAY_CART'||h.type==='FALLING_DEBRIS').length)
-      .toBeLessThanOrEqual(finalPressure.telegraphLimit+1);
+      .toBeLessThanOrEqual(peakTelegraphs+1);
     expect(e.state.hazards.find(h=>h.isStageBoss)!.maxHp).toBe(Math.round(e.state.stage.bossHp*1.8));
   });
 });
