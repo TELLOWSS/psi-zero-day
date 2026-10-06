@@ -13,7 +13,8 @@ import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamag
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
 import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
-import { signatureEventIdentity, signatureEventPlan } from './survivors-signature-events';
+import { signatureEventIdentity, signatureEventPlan, type WaveSignatureEvent } from './survivors-signature-events';
+import { signatureCounterplayProfile, signatureCounterplayQualified } from './survivors-signature-counterplay';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import { equipmentTuning, SUPPORT_EFFECTS } from './survivors-equipment-tuning';
 import { ADDITIONAL_PATROL_STAGES, CAMPAIGN_PATROL_STAGES } from './patrol-stage-expansion';
@@ -726,6 +727,8 @@ export class SurvivorsEngine {
   private readonly signatureEventsWarned = new Set<string>();
   private readonly signatureEventsTriggered = new Set<string>();
   private readonly signatureEventsResolved = new Set<string>();
+  private readonly signatureEventsFailed = new Set<string>();
+  private readonly signatureEventStartedAt = new Map<string,number>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
@@ -919,6 +922,16 @@ export class SurvivorsEngine {
     if (this.state.signatureEvent) {
       this.state.signatureEvent.remaining -= effectiveDt;
       if (this.state.signatureEvent.remaining <= 0) this.state.signatureEvent = undefined;
+    }
+    if (this.state.signatureCounterplay) {
+      this.state.signatureCounterplay.remaining -= effectiveDt;
+      if (this.state.signatureCounterplay.remaining <= 0) this.state.signatureCounterplay = undefined;
+    }
+    if ((this.state.signatureCounterplayBuffs?.cooldownRush ?? 0) > 0) {
+      this.state.signatureCounterplayBuffs!.cooldownRush=Math.max(0,this.state.signatureCounterplayBuffs!.cooldownRush!-effectiveDt);
+      if(this.state.signatureCounterplayBuffs!.cooldownRush===0&&!(this.state.signatureCounterplayBuffs!.bossWeakPointSeconds??0)) {
+        this.state.signatureCounterplayBuffs=undefined;
+      }
     }
 
     // Update timers
@@ -1154,7 +1167,8 @@ export class SurvivorsEngine {
       ...this.state.player,
       damageMultiplier: this.state.player.damageMultiplier * floodlightDmgBonus,
     };
-    const cdReduction = 1 - Math.min(0.6, player.cooldownReduction);
+    const signatureCooldownBonus=(this.state.signatureCounterplayBuffs?.cooldownRush??0)>0?.25:0;
+    const cdReduction = 1 - Math.min(0.75, player.cooldownReduction+signatureCooldownBonus);
 
     // ==========================================
     // 1. Radio Weapon & Evolution: Satellite Broadcast
@@ -1606,6 +1620,59 @@ export class SurvivorsEngine {
     this.state.projectiles = alive;
   }
 
+  private applySignatureCounterplay(event:WaveSignatureEvent,key:string,centroid:{x:number;y:number}):boolean {
+    const startedAt=this.signatureEventStartedAt.get(key)??this.state.gameTime;
+    const clearSeconds=Math.max(0,this.state.gameTime-startedAt);
+    const contactFailed=this.signatureEventsFailed.has(key);
+    if(!signatureCounterplayQualified(event.id,contactFailed,clearSeconds))return false;
+
+    const profile=signatureCounterplayProfile(event.id);
+    this.state.signatureCounterplay={
+      eventId:event.id,kind:profile.kind,title:profile.title,detail:profile.detail,
+      accent:event.stageAccent,remaining:3.2,
+    };
+    this.state.score+=400;
+    switch(profile.kind){
+      case 'boss_weakpoint':
+      case 'boss_prereveal': {
+        const liveBoss=this.state.hazards.find(h=>h.isStageBoss&&h.hp>0);
+        if(liveBoss){
+          liveBoss.weakPointExposed=true;
+          liveBoss.weakPointTimer=Math.max(liveBoss.weakPointTimer??0,profile.value);
+        } else {
+          this.state.signatureCounterplayBuffs={
+            ...(this.state.signatureCounterplayBuffs??{}),
+            bossWeakPointSeconds:Math.max(this.state.signatureCounterplayBuffs?.bossWeakPointSeconds??0,profile.value),
+          };
+        }
+        break;
+      }
+      case 'cooldown_rush':
+        this.state.signatureCounterplayBuffs={
+          ...(this.state.signatureCounterplayBuffs??{}),
+          cooldownRush:Math.max(this.state.signatureCounterplayBuffs?.cooldownRush??0,profile.duration??8),
+        };
+        break;
+      case 'instant_counter':
+        this.addProjectile({
+          id:this.genId('proj_signature_counter'),x:this.state.player.x,y:this.state.player.y,
+          vx:0,vy:0,radius:90,damage:profile.value,duration:.55,pierce:99,
+          kind:'shout_shockwave',color:event.stageAccent,
+        });
+        this.state.hitStopTimer=Math.max(this.state.hitStopTimer??0,.08);
+        break;
+      case 'dash_reset':
+        this.state.player.dashCooldown=0;
+        this.state.player.invincibleTime=Math.max(this.state.player.invincibleTime,profile.value);
+        break;
+      case 'ultimate_surge':
+        this.state.ultimateCharge=Math.min(this.state.maxUltimateCharge,this.state.ultimateCharge+profile.value);
+        break;
+    }
+    this.emitAudio('control',centroid.x,centroid.y);
+    return true;
+  }
+
   private updateSignatureEvents():void {
     const plan=signatureEventPlan(this.state.stage,this.state.maxTime);
     for(const event of plan) {
@@ -1619,9 +1686,10 @@ export class SurvivorsEngine {
           this.signatureEventsResolved.add(key);
           this.state.score+=event.wave===3?1000:650;
           this.state.psiCredits+=event.reward;
+          const counterplay=this.applySignatureCounterplay(event,key,centroid);
           this.state.signatureEvent={
             id:event.id,wave:event.wave,title:`${event.title} · 통제 완료`,
-            detail:'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
+            detail:counterplay?'정확한 대응으로 COUNTERPLAY 보너스를 획득했습니다.':'위험 동선을 해소했습니다. 다음 압박에 대비하십시오.',
             severity:event.severity,mechanic:event.mechanic,workface:event.workface,stageSkin:event.stageSkin,stageAccent:event.stageAccent,materialCue:event.materialCue,phase:'resolved',
             positions:event.spawns.map(spawn=>({x:spawn.x,y:spawn.y,type:spawn.type})),
             reward:event.reward,remaining:2.1,
@@ -1647,6 +1715,7 @@ export class SurvivorsEngine {
 
       if(this.state.stageBossSpawned||this.signatureEventsTriggered.has(key)||this.state.gameTime+1e-6<event.at)continue;
       this.signatureEventsTriggered.add(key);
+      this.signatureEventStartedAt.set(key,this.state.gameTime);
       for(const spawn of event.spawns) {
         this.spawnHazard(spawn.type,undefined,false,{
           x:spawn.x,y:spawn.y,variant:spawn.variant,signatureEventId:key,
@@ -1689,6 +1758,13 @@ export class SurvivorsEngine {
         this.spawnHazard(stageBossType, stageBossHp, true);
         const boss=this.state.hazards.at(-1)!;
         boss.bossEncounterManaged=true;boss.bossAttackCycles=0;
+        const earnedWeakPoint=this.state.signatureCounterplayBuffs?.bossWeakPointSeconds??0;
+        if(earnedWeakPoint>0){
+          boss.weakPointExposed=true;
+          boss.weakPointTimer=Math.max(boss.weakPointTimer??0,earnedWeakPoint);
+          if(this.state.signatureCounterplayBuffs)delete this.state.signatureCounterplayBuffs.bossWeakPointSeconds;
+          if(this.state.signatureCounterplayBuffs&&!(this.state.signatureCounterplayBuffs.cooldownRush??0))this.state.signatureCounterplayBuffs=undefined;
+        }
         // Final wave and stage-specific adapters are later implementation slices.
         if(stage.stageNumber!==50)boss.bossGameplay=createBossCombat(bossGameplayForStage(stage.id));
         // The introduction must be on the current workface, not outside the camera.
@@ -2119,6 +2195,7 @@ export class SurvivorsEngine {
         if (h.hp <= 0) continue;
         const dist = Math.hypot(h.x - player.x, h.y - player.y);
         if (gangformContact(h,player) || isHazardContactActive(h) && dist <= h.radius + 14) {
+          if(h.signatureEventId)this.signatureEventsFailed.add(h.signatureEventId);
           if (this.state.controlKit && this.state.controlKit.charges > 0 && this.state.controlKit.remaining > 0) {
             this.state.controlKit.charges -= 1;
             this.emitAudio('control', player.x, player.y);
