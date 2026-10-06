@@ -53,6 +53,7 @@ import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
+import {signatureEventIdentity,type SignatureEventId} from '../engine/survivors-signature-events';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -1312,27 +1313,38 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if(signatureToken&&signatureCinematicRef.current!==signatureToken){
           signatureCinematicRef.current=signatureToken;
           const positions=liveSignature!.positions;
+          const identity=signatureEventIdentity(liveSignature!.id as SignatureEventId);
           const center=positions.reduce((acc,p)=>({x:acc.x+p.x,y:acc.y+p.y}),{x:0,y:0});
           center.x/=Math.max(1,positions.length);center.y/=Math.max(1,positions.length);
           if(liveSignature!.phase==='warning'){
-            signaturePressureRef.current=Math.max(signaturePressureRef.current,liveSignature!.severity==='red'?.72:.48);
-            screenShakeRef.current=Math.max(screenShakeRef.current,liveSignature!.severity==='red'?8:4);
-            audioRef.current.duckMusic(liveSignature!.severity==='red'?.9:.55);
-            spawnFloating(center.x,center.y-42,`⚠ ${liveSignature!.title}`,liveSignature!.severity==='red'?'#f87171':'#fbbf24',true);
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,identity.cameraPressure*.72);
+            screenShakeRef.current=Math.max(screenShakeRef.current,2+identity.cameraPressure*7);
+            audioRef.current.duckMusic(.45+identity.cameraPressure*.55);
+            spawnFloating(center.x,center.y-42,`⚠ ${identity.mechanic} · ${liveSignature!.title}`,identity.accent,true);
           } else if(liveSignature!.phase==='impact'){
-            signaturePressureRef.current=1;
-            screenShakeRef.current=Math.max(screenShakeRef.current,liveSignature!.severity==='red'?18:11);
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,identity.cameraPressure);
+            screenShakeRef.current=Math.max(screenShakeRef.current,7+identity.cameraPressure*13);
+            if(liveSignature!.id==='cart_convoy'||liveSignature!.id==='equipment_pincer'){
+              audioRef.current.playRecordedEffect('impact_steel',center,engine.state.player);
+            } else if(liveSignature!.id==='lifting_cross'||liveSignature!.id==='debris_corridor'||liveSignature!.id==='precollapse_signal'){
+              audioRef.current.playRecordedEffect('impact_concrete',center,engine.state.player);
+            } else {
+              playSfx('spray',center);
+            }
             for(const point of positions){
               const debris=point.type==='FALLING_DEBRIS';
-              spawnParticles(point.x,point.y,debris?'#d6d3d1':'#fb923c',liveSignature!.severity==='red'?14:9,115,debris?3.2:2.7);
-              spawnShockwave(point.x,point.y,liveSignature!.severity==='red'?'#ef4444':'#f59e0b',liveSignature!.severity==='red'?68:48,3.5,.32);
+              const gas=point.type==='GAS_LEAK';
+              const color=gas?'#22c55e':debris?'#d6d3d1':identity.accent;
+              spawnParticles(point.x,point.y,color,liveSignature!.severity==='red'?16:10,115,debris?3.4:gas?2.2:2.8);
+              spawnShockwave(point.x,point.y,identity.accent,liveSignature!.severity==='red'?72:50,3.5,.34);
             }
           } else {
-            signaturePressureRef.current=Math.max(signaturePressureRef.current,.22);
+            signaturePressureRef.current=Math.max(signaturePressureRef.current,.2);
             screenShakeRef.current=Math.max(screenShakeRef.current,4);
-            spawnParticles(center.x,center.y,'#34d399',26,135,4);
-            spawnShockwave(center.x,center.y,'#10b981',90,4,.48);
-            spawnFloating(center.x,center.y-46,`✓ ${liveSignature!.title} · +${liveSignature!.reward??0} PSI`,'#34d399',true);
+            audioRef.current.playRecordedEffect('target_controlled',center,engine.state.player);
+            spawnParticles(center.x,center.y,'#34d399',30,140,4);
+            spawnShockwave(center.x,center.y,'#10b981',96,4,.52);
+            spawnFloating(center.x,center.y-46,`✓ ${identity.mechanic} CLEAR · +${liveSignature!.reward??0} PSI`,'#34d399',true);
           }
         }
 
@@ -1869,12 +1881,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const signature=engine.state.signatureEvent;
       if(signature?.phase==='warning'){
-        const pulse=.55+.35*Math.sin(engine.state.gameTime*13);
+        const identity=signatureEventIdentity(signature.id as SignatureEventId);
+        const pulse=.55+.35*Math.sin(engine.state.gameTime*(signature.id==='precollapse_signal'?8:13));
         ctx.save();
         ctx.globalAlpha=pulse;
         ctx.lineWidth=signature.severity==='red'?4:3;
-        ctx.strokeStyle=signature.severity==='red'?'#ef4444':'#f59e0b';
-        ctx.fillStyle=signature.severity==='red'?'rgba(239,68,68,.09)':'rgba(245,158,11,.08)';
+        ctx.strokeStyle=identity.accent;
+        ctx.fillStyle=signature.id==='gas_bloom'?'rgba(34,197,94,.11)':signature.severity==='red'?'rgba(239,68,68,.09)':'rgba(245,158,11,.08)';
         ctx.setLineDash([12,8]);
         const falling=signature.positions.filter(point=>point.type==='FALLING_DEBRIS');
         if(falling.length>1){
@@ -1886,10 +1899,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if(point.type==='RUNAWAY_CART'){
             const fromLeft=point.x<WORLD_WIDTH/2;
             const x=fromLeft?0:WORLD_WIDTH;
-            ctx.fillRect(fromLeft?0:WORLD_WIDTH*.58,point.y-28,WORLD_WIDTH*.42,56);
+            const laneWidth=signature.id==='cart_convoy'?72:56;
+            ctx.fillRect(fromLeft?0:WORLD_WIDTH*.58,point.y-laneWidth/2,WORLD_WIDTH*.42,laneWidth);
             ctx.beginPath();ctx.moveTo(x,point.y);ctx.lineTo(WORLD_WIDTH/2,point.y);ctx.stroke();
+            if(signature.id==='cart_convoy'||signature.id==='equipment_pincer'){
+              for(let streak=0;streak<4;streak++){
+                const offset=(streak-1.5)*11;
+                ctx.beginPath();ctx.moveTo(fromLeft?20:WORLD_WIDTH-20,point.y+offset);
+                ctx.lineTo(fromLeft?WORLD_WIDTH*.38:WORLD_WIDTH*.62,point.y+offset);ctx.stroke();
+              }
+            }
           } else {
-            const radius=point.type==='GAS_LEAK'?78:54;
+            const radius=point.type==='GAS_LEAK'?(signature.id==='gas_bloom'||signature.id==='precollapse_signal'?108:78):54;
             ctx.beginPath();ctx.arc(point.x,point.y,radius,0,Math.PI*2);ctx.fill();ctx.stroke();
             if(point.type==='FALLING_DEBRIS'){
               ctx.beginPath();ctx.moveTo(point.x-radius-16,point.y);ctx.lineTo(point.x+radius+16,point.y);
@@ -1897,7 +1918,39 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
           }
         }
+        if(signature.id==='lifting_cross'){
+          ctx.setLineDash([18,10]);
+          ctx.beginPath();ctx.moveTo(310,180);ctx.lineTo(1090,720);ctx.moveTo(1090,180);ctx.lineTo(310,720);ctx.stroke();
+        }
+        if(signature.id==='debris_corridor'&&falling.length>1){
+          ctx.lineWidth=18;ctx.globalAlpha*=.28;ctx.setLineDash([]);
+          ctx.beginPath();ctx.moveTo(falling[0]!.x,falling[0]!.y);
+          for(const point of falling.slice(1))ctx.lineTo(point.x,point.y);ctx.stroke();
+        }
+        if(signature.id==='precollapse_signal'){
+          ctx.setLineDash([]);
+          ctx.globalAlpha=.16+.08*Math.sin(engine.state.gameTime*9);
+          ctx.fillStyle='#450a0a';ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
+          ctx.strokeStyle='#fca5a5';ctx.lineWidth=2;
+          for(const point of falling){
+            ctx.beginPath();ctx.moveTo(point.x,point.y);ctx.lineTo(WORLD_WIDTH/2,WORLD_HEIGHT/2);ctx.stroke();
+          }
+        }
         ctx.setLineDash([]);
+        ctx.restore();
+      } else if(signature?.phase==='impact'&&(signature.id==='gas_bloom'||signature.id==='precollapse_signal')){
+        ctx.save();
+        if(signature.id==='gas_bloom'){
+          for(const point of signature.positions.filter(point=>point.type==='GAS_LEAK')){
+            const fog=ctx.createRadialGradient(point.x,point.y,18,point.x,point.y,150);
+            fog.addColorStop(0,'rgba(34,197,94,.18)');fog.addColorStop(1,'rgba(34,197,94,0)');
+            ctx.fillStyle=fog;ctx.beginPath();ctx.arc(point.x,point.y,150,0,Math.PI*2);ctx.fill();
+          }
+        } else {
+          const vignette=ctx.createRadialGradient(WORLD_WIDTH/2,WORLD_HEIGHT/2,220,WORLD_WIDTH/2,WORLD_HEIGHT/2,760);
+          vignette.addColorStop(0,'rgba(0,0,0,0)');vignette.addColorStop(1,'rgba(69,10,10,.32)');
+          ctx.fillStyle=vignette;ctx.fillRect(0,0,WORLD_WIDTH,WORLD_HEIGHT);
+        }
         ctx.restore();
       }
 
@@ -3183,8 +3236,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {signatureEvent && phase === 'playing' && !bossAlert && (
-        <aside className={`survivors-signature-event is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive">
+        <aside className={`survivors-signature-event event-${signatureEvent.id} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive">
           <span>WAVE {signatureEvent.wave} · {signatureEvent.phase==='warning'?'SIGNATURE WARNING':signatureEvent.phase==='impact'?'SIGNATURE EVENT':'SIGNATURE CONTROLLED'}</span>
+          <em>{signatureEvent.mechanic}</em>
           <strong>{signatureEvent.title}</strong>
           <small>{signatureEvent.phase==='resolved'?`${signatureEvent.detail} · +${signatureEvent.reward??0} PSI`:signatureEvent.detail}</small>
         </aside>
