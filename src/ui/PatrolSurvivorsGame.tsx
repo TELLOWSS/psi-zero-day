@@ -85,7 +85,7 @@ import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivo
 import { STAGE_IDS, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { SurvivorsAudioMixer } from './SurvivorsAudioMixer';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type {
   CharacterId,
   Perk,
@@ -3238,7 +3238,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {signatureEvent && phase === 'playing' && !bossAlert && (
-        <aside className={`survivors-signature-event event-${signatureEvent.id} theme-${signatureEvent.stageSkin} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive" style={{'--signature-stage-accent':signatureEvent.stageAccent} as React.CSSProperties}>
+        <aside className={`survivors-signature-event event-${signatureEvent.id} theme-${signatureEvent.stageSkin} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive" style={{'--signature-stage-accent':signatureEvent.stageAccent} as CSSProperties}>
           <span>WAVE {signatureEvent.wave} · {signatureEvent.phase==='warning'?'SIGNATURE WARNING':signatureEvent.phase==='impact'?'SIGNATURE EVENT':'SIGNATURE CONTROLLED'}</span>
           <em>{signatureEvent.mechanic}</em>
           <b>{signatureEvent.workface}</b>
@@ -3417,7 +3417,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             disabled={encounterLocked || ultimateCharge < 100 || directorCutinPhase !== 'none'}
             aria-label="현장소장 사자후 궁극기 발동"
           >
-            <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as React.CSSProperties} />
+            <div className="survivors-ultimate-ring" style={{ '--charge': `${ultimateCharge}%` } as CSSProperties} />
             <span className="survivors-ultimate-icon">📢</span>
             <div className="survivors-ultimate-info">
               <strong>소장 샤우팅</strong>
@@ -3486,7 +3486,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
             <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
               <strong>SIGNATURE EVENTS · {signatureEventPlan(PATROL_STAGES[selectedStage])[0]?.workface}</strong>
-              {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as React.CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}</small></span>)}
+              {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}</small></span>)}
             </aside>
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
