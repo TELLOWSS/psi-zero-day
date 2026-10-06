@@ -1,7 +1,7 @@
 import {describe,expect,it} from 'vitest';
 import {PATROL_STAGES,SurvivorsEngine,createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 import {operationPlan,operationTiming} from '../src/engine/survivors-operation';
-import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../src/engine/survivors-signature-events';
+import {signatureEventIdentity,signatureEventPlan,signatureStageFusion,type SignatureEventId} from '../src/engine/survivors-signature-events';
 
 describe('wave signature events',()=>{
   it('authors one Wave 2 and one Wave 3 event for all 50 stages',()=>{
@@ -19,6 +19,10 @@ describe('wave signature events',()=>{
       expect(plan[1]!.at).toBeLessThan(timing.bossRevealAt);
       for(const event of plan){
         ids.add(event.id);
+        expect(event.stageSkin).toBe(stage.theme);
+        expect(event.workface.length).toBeGreaterThan(4);
+        expect(event.stageAccent).toMatch(/^#/);
+        expect(['metal','concrete','vapor','electric']).toContain(event.materialCue);
         expect(event.warningLead).toBeGreaterThan(0);
         expect(event.reward).toBeGreaterThan(0);
         expect(event.spawns.length).toBeGreaterThanOrEqual(3);
@@ -30,6 +34,30 @@ describe('wave signature events',()=>{
       'cart_convoy','gas_bloom','lifting_cross',
       'debris_corridor','equipment_pincer','precollapse_signal',
     ]));
+  });
+
+  it('fuses every signature with five distinct construction workfaces',()=>{
+    const representatives=[
+      PATROL_STAGES.stage_01,
+      PATROL_STAGES.stage_02,
+      PATROL_STAGES.stage_03,
+      PATROL_STAGES.stage_04,
+      PATROL_STAGES.stage_05,
+    ];
+    const ids:SignatureEventId[]=['cart_convoy','gas_bloom','lifting_cross','debris_corridor','equipment_pincer','precollapse_signal'];
+    expect(new Set(representatives.map(stage=>stage.theme)).size).toBe(5);
+    for(const id of ids){
+      const fused=representatives.map(stage=>signatureStageFusion(stage,id));
+      expect(new Set(fused.map(row=>row.title)).size).toBe(5);
+      expect(new Set(fused.map(row=>row.workface)).size).toBe(5);
+      expect(new Set(fused.map(row=>row.accent)).size).toBe(5);
+      expect(fused.every(row=>row.detail.length>20)).toBe(true);
+    }
+    expect(signatureStageFusion(PATROL_STAGES.stage_01,'cart_convoy').title).toContain('덤프트럭');
+    expect(signatureStageFusion(PATROL_STAGES.stage_02,'precollapse_signal').title).toContain('흙막이');
+    expect(signatureStageFusion(PATROL_STAGES.stage_03,'lifting_cross').title).toContain('타워크레인');
+    expect(signatureStageFusion(PATROL_STAGES.stage_04,'gas_bloom').title).toContain('CO');
+    expect(signatureStageFusion(PATROL_STAGES.stage_05,'cart_convoy').title).toContain('UPS');
   });
 
   it('locks six different gameplay identities rather than six cosmetic labels',()=>{
@@ -119,6 +147,9 @@ describe('wave signature events',()=>{
     expect(afterWave2).toBe(plan[0]!.spawns.length);
     expect(engine.state.signatureEvent?.wave).toBe(2);
     expect(engine.state.signatureEvent?.mechanic).toBe(plan[0]!.mechanic);
+    expect(engine.state.signatureEvent?.workface).toBe(plan[0]!.workface);
+    expect(engine.state.signatureEvent?.stageSkin).toBe(engine.state.stage.theme);
+    expect(engine.state.signatureEvent?.materialCue).toBe(plan[0]!.materialCue);
     expect(engine.state.signatureEvent?.phase).toBe('impact');
     expect(engine.state.hazards.every(h=>!h.isStageBoss)).toBe(true);
     expect(engine.state.hazards.every(h=>h.signatureEventId===`2:${plan[0]!.id}`)).toBe(true);
