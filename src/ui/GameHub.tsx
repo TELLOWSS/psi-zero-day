@@ -317,7 +317,6 @@ export function GameHub({ session, onPlay, onNewGame, onDefense, onSurvivors }: 
   const review = session.review();
   const progress = snapshot.phase === 'complete' ? 100 : snapshot.total ? Math.round(snapshot.completed / snapshot.total * 100) : 0;
   const playLabel = t(snapshot.phase === 'start' ? 'ui.hub.start' : snapshot.phase === 'complete' ? 'ui.hub.results' : 'ui.hub.continue');
-  const canContinue = snapshot.phase !== 'start';
   const openGuide = () => setPage('guide');
   const preloadGuide = () => { void preloadFieldGuide(); };
   const titleFeatureVisuals = {
