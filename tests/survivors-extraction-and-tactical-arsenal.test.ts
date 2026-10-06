@@ -5,6 +5,7 @@ import { PROJECTILE_VFX } from '../src/ui/survivors-projectile-vfx';
 import { EVOLUTION_IDENTITIES } from '../src/ui/survivors-equipment-identity';
 import { cinematicLook } from '../src/ui/survivors-cinematic-vfx';
 import { evolutionPreview } from '../src/engine/survivors-evolution-preview';
+import { operationTiming } from '../src/engine/survivors-operation';
 
 describe('Tactical Arsenal & Evolution Synergies (4순위)', () => {
   it('registers grouting_gun and emp_generator in PERK_CATALOG with proper categories', () => {
@@ -139,20 +140,62 @@ describe('Maximized Hit Juice Feedback & Extraction Climax (1순위)', () => {
     expect(state.projectiles.some(p => p.kind === 'emp_pulse')).toBe(true);
   });
 
-  it('supports extractionPhase state schema for emergency extraction climax', () => {
-    const state = createInitialSurvivorsState('player', undefined, 'stage_01');
-    state.extractionPhase = {
-      x: 1000,
-      y: 800,
-      radius: 155,
-      countdown: 15,
-      totalTime: 15,
-      status: 'inbound',
-      playerInside: false,
-    };
+  it('orders Wave 1 → Wave 2 → Wave 3 → boss → extraction for a standard run', () => {
+    const timing = operationTiming(180);
+    expect(timing.wave2At).toBe(45);
+    expect(timing.wave3At).toBe(110);
+    expect(timing.bossRevealAt).toBeGreaterThan(timing.wave3At);
+    expect(timing.bossAt).toBeGreaterThan(timing.bossRevealAt);
+    expect(timing.extractionHold).toBe(15);
+  });
 
-    expect(state.extractionPhase.status).toBe('inbound');
-    expect(state.extractionPhase.countdown).toBe(15);
-    expect(state.extractionPhase.radius).toBe(155);
+  it('starts extraction only after boss neutralization and pauses the hold timer outside the LZ', () => {
+    const state = createInitialSurvivorsState('player', undefined, 'stage_01');
+    const engine = new SurvivorsEngine(state, 12345);
+    engine.start();
+
+    expect(engine.beginExtraction(1)).toBe(false);
+    state.stageBossNeutralized = true;
+    expect(engine.beginExtraction(1)).toBe(true);
+    expect(state.extractionPhase?.status).toBe('inbound');
+
+    state.player.x = 20;
+    state.player.y = 20;
+    expect(engine.tickExtraction(0.6)).toBe(false);
+    expect(state.extractionPhase?.countdown).toBe(1);
+    expect(state.extractionPhase?.playerInside).toBe(false);
+    expect(state.phase).toBe('playing');
+
+    state.player.x = state.extractionPhase!.x;
+    state.player.y = state.extractionPhase!.y;
+    expect(engine.tickExtraction(0.4)).toBe(false);
+    expect(state.extractionPhase?.countdown).toBeCloseTo(0.6, 5);
+    expect(state.extractionPhase?.status).toBe('active');
+
+    expect(engine.tickExtraction(0.6)).toBe(true);
+    expect(state.extractionPhase?.status).toBe('secured');
+    expect(state.phase).toBe('victory');
+    expect(state.score).toBe(8000);
+    expect(state.psiCredits).toBe(250);
+  });
+
+  it('keeps movement and simulation live after the boss is secured while extraction is active', () => {
+    const state = createInitialSurvivorsState('player', undefined, 'stage_01');
+    const engine = new SurvivorsEngine(state, 12345);
+    engine.start();
+    state.stageBossNeutralized = true;
+    state.stageBossSpawned = true;
+    state.bossEncounter = { bossId: 'boss', phase: 'secured', remaining: 2.4 };
+    expect(engine.beginExtraction(2)).toBe(true);
+
+    state.player.x = 500;
+    state.player.y = 450;
+    const beforeX = state.player.x;
+    engine.update(0.1, { moveX: 1, moveY: 0 });
+
+    expect(state.phase).toBe('playing');
+    expect(state.player.x).toBeGreaterThan(beforeX);
+    expect(state.bossEncounter.remaining).toBe(0);
+    expect(state.extractionPhase?.status).not.toBe('secured');
   });
 });
