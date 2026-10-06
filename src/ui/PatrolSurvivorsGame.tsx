@@ -52,6 +52,7 @@ import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
+import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import { drawSceneLighting, drawEquipmentCastShadow } from './survivors-scene-lighting';
 import { SurvivorsAccountabilityEvent } from './SurvivorsAccountabilityEvent';
 import accountabilityText from '../../content/localization/survivors-accountability-ko.json';
@@ -619,7 +620,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [containerShopWave, setContainerShopWave] = useState(1);
   const [availableContainerShopWave, setAvailableContainerShopWave] = useState<number | null>(null);
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
-  const [currentWave, setCurrentWave] = useState(1);
+  const [waveDirectorNotice,setWaveDirectorNotice]=useState<{wave:SurvivorsWave;title:string;detail:string}|null>(null);
+  const [currentWave, setCurrentWave] = useState<SurvivorsWave>(1);
+  const currentWaveRef=useRef<SurvivorsWave>(1);
   const wave1ShopTriggeredRef = useRef(false);
   const wave2ShopTriggeredRef = useRef(false);
 
@@ -958,6 +961,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setShowContainerShop(false);
     setAvailableContainerShopWave(null);
     setWaveSupplyNotice(null);
+    setWaveDirectorNotice(null);
+    currentWaveRef.current=1;
     setCurrentWave(1);
     setContainerShopWave(1);
   }, [selectedChar, selectedStage, permanentUpgrades, selectedDifficulty, storeInventory]);
@@ -969,9 +974,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   useEffect(() => {
     if (!waveSupplyNotice) return;
-    const timer = window.setTimeout(() => setWaveSupplyNotice(null), 2800);
+    const timer = window.setTimeout(() => setWaveSupplyNotice(null), 4200);
     return () => window.clearTimeout(timer);
   }, [waveSupplyNotice]);
+
+  useEffect(() => {
+    if (!waveDirectorNotice) return;
+    const timer=window.setTimeout(()=>setWaveDirectorNotice(null),3000);
+    return ()=>window.clearTimeout(timer);
+  },[waveDirectorNotice]);
 
   // Initialization cancels the old session's audio; schedule its replacement afterwards.
   useEffect(() => {
@@ -989,6 +1000,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
     void audioRef.current.preloadEquipmentRecordings();
     scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;scoreEncounterRef.current=undefined;
+    const opening=waveDirector(0,engineRef.current.state.maxTime);
+    currentWaveRef.current=1;setCurrentWave(1);
+    setWaveDirectorNotice({wave:1,title:opening.title,detail:opening.detail});
     engineRef.current.start();
     setPhase('playing');
     lastTimeRef.current = performance.now();
@@ -1291,11 +1305,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         // never interrupt active combat with a shop-style modal.
         const maxSurvivalTime = engine.state.maxTime || 180;
         const flowTiming = operationTiming(maxSurvivalTime);
-        const wave1Time = flowTiming.wave2At;
-        const wave2Time = flowTiming.wave3At;
+        const director=waveDirector(engine.state.gameTime,maxSurvivalTime);
+        const nextWave=director.wave;
 
-        if (engine.state.gameTime >= wave2Time) {
-          if (currentWave !== 3) setCurrentWave(3);
+        if(currentWaveRef.current!==nextWave){
+          currentWaveRef.current=nextWave;
+          setCurrentWave(nextWave);
+          setWaveDirectorNotice({wave:nextWave,title:director.title,detail:director.detail});
+          screenShakeRef.current=Math.max(screenShakeRef.current,nextWave===3?8:4);
+          audioRef.current.duckMusic(nextWave===3?1.0:.55);
+          scoreStateRef.current=nextWave===3?'heavy_risk':'pressure';
+          playScore(scoreStateRef.current);
+        }
+
+        if (nextWave >= 3) {
           if (!wave2ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave2ShopTriggeredRef.current = true;
             engine.state.psiCredits += 180;
@@ -1305,8 +1328,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             setWaveSupplyNotice({ wave: 2, credits: 180 });
             audioRef.current.playRecordedEffect('ui_equip');
           }
-        } else if (engine.state.gameTime >= wave1Time) {
-          if (currentWave !== 2) setCurrentWave(2);
+        } else if (nextWave >= 2) {
           if (!wave1ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave1ShopTriggeredRef.current = true;
             engine.state.psiCredits += 120;
@@ -1316,8 +1338,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             setWaveSupplyNotice({ wave: 1, credits: 120 });
             audioRef.current.playRecordedEffect('ui_equip');
           }
-        } else {
-          if (currentWave !== 1) setCurrentWave(1);
         }
 
         // The final boss belongs to Wave 3. Extraction begins only after that boss is
@@ -3035,7 +3055,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
           <div className="survivors-wave-badge" title="현재 방호 웨이브 진행도">
             <span>WAVE {currentWave}/3</span>
-            <small>{currentWave === 1 ? '기초 방호' : currentWave === 2 ? '고위험 대응' : '최종 클라이맥스'}</small>
+            <small>{currentWave === 1 ? '탐색 · 빌드업' : currentWave === 2 ? '압박 · 변칙' : 'RED ZONE'}</small>
           </div>
           <div className="survivors-score-badge">
             <span>SAFE SCORE</span>
@@ -3080,8 +3100,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
+      {waveDirectorNotice && phase === 'playing' && (
+        <aside className={`survivors-wave-director-notice is-wave-${waveDirectorNotice.wave}`} role="status" aria-live="assertive">
+          <span>WAVE {waveDirectorNotice.wave}/3 · DIRECTOR SHIFT</span>
+          <strong>{waveDirectorNotice.title}</strong>
+          <small>{waveDirectorNotice.detail}</small>
+        </aside>
+      )}
+
       {waveSupplyNotice && phase === 'playing' && (
-        <aside className="survivors-wave-supply-notice" aria-live="polite">
+        <aside className={`survivors-wave-supply-notice${waveDirectorNotice?' has-director':''}`} aria-live="polite">
           <strong>WAVE {waveSupplyNotice.wave} 완료 · 현장 보급 +{waveSupplyNotice.credits} PSI</strong>
           <span>플레이는 계속됩니다. 정비 보급은 일시정지 메뉴에서 직접 선택할 수 있습니다.</span>
         </aside>
@@ -3090,7 +3118,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {phase === 'playing' && engineRef.current && (() => {
         const state = engineRef.current.state;
         const boss = state.hazards.find(h => h.isStageBoss && h.hp > 0);
-        const deadline = Math.max(0, operationPlan(state.stage).bossAt - gameTime);
+        const deadline = Math.max(0, operationPlan(state.stage,state.maxTime).bossAt - gameTime);
         const bearing = boss ? Math.atan2(boss.y-state.player.y,boss.x-state.player.x)*180/Math.PI+90 : 0;
         return <aside className="survivors-focus-status" data-core={bossSecured?'secured':boss?bossCoreStatus(boss):undefined} aria-label={bossSecured ? bossText.secured : boss ? state.stage.bossName : focusText.bossIncoming}>
           {bossSecured ? <span>{bossText.secured}</span> : boss ? <>
