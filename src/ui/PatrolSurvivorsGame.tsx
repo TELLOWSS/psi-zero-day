@@ -4040,12 +4040,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 <span>획득 PSI 크레딧</span>
                 <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
               </div>
-              <div className="survivors-stat-box">
-                <span>Signature Mastery</span>
-                <strong className={engineRef.current?.state.signatureMastery?.zeroDay?'is-zero-day-mastery':''}>
-                  {engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`}
-                </strong>
-              </div>
             </div>
 
             </div>
@@ -4126,6 +4120,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div className="survivors-stat-box">
                 <span>획득 PSI 크레딧</span>
                 <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
+              </div>
+              <div className="survivors-stat-box">
+                <span>Signature Mastery</span>
+                <strong className={engineRef.current?.state.signatureMastery?.zeroDay?'is-zero-day-mastery':''}>
+                  {engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`}
+                </strong>
               </div>
             </div>
 
