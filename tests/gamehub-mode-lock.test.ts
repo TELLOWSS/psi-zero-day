@@ -13,6 +13,10 @@ describe('commercial hub mode readiness',()=>{
     expect(hub).toContain('스토리 모드 · 준비중');
     expect(hub).not.toContain('야간 긴급 순찰 (SURVIVORS)');
     expect(hub).not.toContain('현장 디펜스 시작');
+    expect(hub).not.toContain('onClick={onPlay}');
+    expect(hub).not.toContain('onPracticeScenario={scenarioId => onDefense');
+    expect(hub).toContain("onPracticeScenario={() => setModePreview('defense')}");
+    expect((hub.match(/setModePreview\('story'\)/g)??[]).length).toBeGreaterThanOrEqual(3);
   });
 
   it('wires three distinct authored mode artworks and a full preview dialog',()=>{
@@ -22,5 +26,6 @@ describe('commercial hub mode readiness',()=>{
     expect(hub).toContain('mode-preview-dialog');
     expect(css).toContain('.mode-preview-dialog');
     expect(css).toContain('.commercial-title-action-art');
+    expect(hub).toContain('현재 플레이 가능 모드는 시그널 워치입니다.');
   });
 });
