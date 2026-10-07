@@ -18,6 +18,7 @@ it('layers evolution over resumed patrol music and holds boss score through secu
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadCandidates').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
+ const speech=vi.spyOn(SurvivorsSessionAudio.prototype,'playPlayerVoice').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
  const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
  const cues=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionCue').mockResolvedValue(true);
@@ -46,6 +47,10 @@ it('layers evolution over resumed patrol music and holds boss score through secu
   expect(music.mock.calls.map(([asset])=>asset.id)).toEqual(['patrol.foundation']);
   vi.spyOn(engine,'update').mockImplementation(()=>{});
   clock=500;tick();expect(music.mock.calls.every(([asset])=>asset.id==='patrol.foundation')).toBe(true);
+  expect(speech.mock.calls.filter(([cue])=>cue==='START')).toHaveLength(1);
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));clock=510;tick();
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted={false} />));clock=520;tick();
+  expect(speech.mock.calls.filter(([cue])=>cue==='START')).toHaveLength(1);
   clock=4000;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.foundation');
   engine.state.bossEncounter={bossId:'boss',phase:'arrival',remaining:3.5};
   clock=4010;tick();expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.heavy_risk');
