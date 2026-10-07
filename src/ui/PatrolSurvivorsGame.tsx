@@ -736,6 +736,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
+  const playerVoiceDirectionsRef = useRef(new WeakMap<SurvivorsEngine, PlayerVoiceDirection>());
   const scoreStateRef = useRef<PatrolScoreState>('foundation');
   const scoreEncounterRef = useRef<string | undefined>(undefined);
   const scoreCheckRef = useRef(0);
@@ -1323,7 +1324,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
         previousEngine = engine;
-        playerVoice = new PlayerVoiceDirection();
+        playerVoice = playerVoiceDirectionsRef.current.get(engine) ?? new PlayerVoiceDirection();
+        playerVoiceDirectionsRef.current.set(engine, playerVoice);
         directorWasObscured=false;
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
