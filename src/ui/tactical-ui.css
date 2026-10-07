@@ -60,7 +60,7 @@ html[lang="ko"] .survivors-container {
   border-radius: 4px;
   color: #e5f0eb;
 }
-.survivors-container .survivors-preflight-top button[aria-pressed="true"] { color: #ceffeb; border-color: #a4f4d2; }
+.survivors-container .survivors-preflight-top button[aria-pressed="true"] { background: #35594a; color: #ceffeb; border-color: #a4f4d2; }
 .survivors-container .survivors-ready-dialog[data-preflight] .survivors-actions-row button {
   background: #252e30;
   border-color: #677b78;
