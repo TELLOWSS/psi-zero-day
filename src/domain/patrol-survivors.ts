@@ -294,7 +294,7 @@ export interface SurvivorsGameState {
   hitStopTimer?: number;
   comboCount: number;
   comboTimer: number;
-  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean }>;
+  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean; projectileId?: string }>;
 
   // Stage & Level Architecture
   stageId: PatrolStageId;

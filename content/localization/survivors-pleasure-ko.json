@@ -1,0 +1,6 @@
+{
+  "collected": "회수 ×{count}",
+  "group": "한 공격 · {count}건 통제",
+  "finish": "현재 위협 해소",
+  "repair": "수리 복구 · 내구도 100"
+}
