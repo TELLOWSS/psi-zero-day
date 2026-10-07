@@ -1,5 +1,11 @@
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 export const METAL_IMPACT_ART='/assets/survivors/metal-impact-sequence-v1.png';
+/** Bounded response to confirmed HP loss; authored frames and contact origin stay intact. */
+export function confirmedImpactScale(event:Readonly<ProjectileFeedback>):number {
+ if(event.blocked||event.appliedDamage===0)return .75;
+ if(event.appliedDamage===undefined||!Number.isFinite(event.appliedDamage))return 1;
+ return Math.min(1.25,Math.max(.85,.85+Math.log2(1+Math.max(0,event.appliedDamage)/30)*.12));
+}
 const keys=[0,.07,.23,.46,.72,1] as const;
 const origins=[[256,249],[249,252],[231,253],[256,256],[256,256],[256,256]] as const;
 export function metalImpactFrame(age:number,duration:number){
@@ -17,6 +23,7 @@ export function drawAuthoredMetalImpact(ctx:CanvasRenderingContext2D,atlas:HTMLI
 export function drawAuthoredImpactSequence(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement,event:Readonly<ProjectileFeedback>,age:number,duration:number,busy:boolean,origins:readonly (readonly [number,number])[],opacity=.9,extent=event.critical?104:76):boolean{
  const pose=metalImpactFrame(age,duration);if(!pose)return false;
  const cw=atlas.naturalWidth/3,ch=atlas.naturalHeight/2;
+ extent=Math.min(132,extent*confirmedImpactScale(event));
  ctx.save();ctx.rotate(event.angle);ctx.globalCompositeOperation='source-over';
  const stamp=(frame:number,weight:number)=>{
   const [ox,oy]=origins[frame]!;ctx.globalAlpha=pose.alpha*weight*(busy?Math.min(.65,opacity):opacity);

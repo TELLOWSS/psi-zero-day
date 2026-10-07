@@ -34,7 +34,10 @@ it('compares actual support stats, preserves additive upgrades and respects the 
   for (const row of rows) expect(engine.state.player[row.key as 'maxHp' | 'regenRate']).toBe(row.after);
   expect(engine.state.player.hp).toBe(oldHp + 30);
   engine.state.player.cooldownReduction = .55;
-  expect(upgradeComparison('quick_reflexes', 1, 'quick_reflexes', 0, engine.state.player, false)).toEqual([{ key: 'cooldownReduction', before: .55, after: .6 }]);
+  const cooldown=upgradeComparison('quick_reflexes', 1, 'quick_reflexes', 0, engine.state.player, false);
+  engine.applyPerk('quick_reflexes');
+  expect(cooldown[0]?.after).toBeCloseTo(engine.state.player.cooldownReduction);
+  expect(cooldown[0]?.before).toBe(.55);
 });
 
 it('records real contact damage but does not blame a hazard absorbed by a control kit', () => {

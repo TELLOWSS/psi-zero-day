@@ -55,12 +55,12 @@ export const SUPPORT_EFFECTS: Partial<Record<PerkId, Partial<SupportStats>>> = {
 export interface UpgradeStat { key: keyof EquipmentTuning | keyof SupportStats; before: number | null; after: number; }
 export function upgradeComparison(id: PerkId, nextLevel: number, previousId: PerkId, previousLevel: number, player: PlayerStats, inFloodlight: boolean): UpgradeStat[] {
   const support = SUPPORT_EFFECTS[id];
-  if (support) return (Object.entries(support) as [keyof SupportStats, number][]).map(([key, delta]) => ({ key, before: key === 'cooldownReduction' ? Math.min(.6, player[key]) : player[key], after: key === 'cooldownReduction' ? Math.min(.6, player[key] + delta) : player[key] + delta }));
+  if (support) return (Object.entries(support) as [keyof SupportStats, number][]).map(([key, delta]) => ({ key, before: key === 'cooldownReduction' ? Math.min(.75, player[key]) : player[key], after: key === 'cooldownReduction' ? Math.min(.75, player[key] + delta) : player[key] + delta }));
   const before = equipmentTuning(previousId, previousLevel);
   const after = equipmentTuning(id, nextLevel);
   if (!after) return [];
   const damageScale = player.damageMultiplier * (inFloodlight ? 1.3 : 1);
-  const intervalScale = 1 - Math.min(.6, player.cooldownReduction);
+  const intervalScale = 1 - Math.min(.75, player.cooldownReduction);
   return (['damage', 'continuousDamage', 'secondaryDamage', 'count', 'interval', 'radius', 'pierce', 'duration'] as const)
     .filter(key => (after[key] ?? 0) > 0)
     .map(key => {
