@@ -11,6 +11,7 @@ try{
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto(url,{waitUntil:'domcontentloaded'});
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click({noWaitAfter:true});
   await page.locator('.survivors-ready-launch .survivors-btn-primary').click({noWaitAfter:true});
+  await page.locator('.survivors-container.is-combat').waitFor();
   await page.screenshot({path:`artifacts/combat-debrief-ui/${width}x${height}-hud.png`});
   const hudFits=await page.locator('.survivors-hud-top').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&el.scrollWidth<=el.clientWidth+1;});
   await page.keyboard.press('KeyP');
