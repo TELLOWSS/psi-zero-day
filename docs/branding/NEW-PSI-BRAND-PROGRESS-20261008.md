@@ -109,3 +109,11 @@
 - 운영 새 브라우저 저장에서 엔진 변경 없이 무입력/레벨업 선택만으로 실제 패배 진행. `대응 중단` 문구, 24 PSI 보상과 지갑 일치, 같은 첫 구역 재준비 및 새로고침 복구, 오류/가로 넘침 없음. 별도 랜덤 실행이며 이전 12/18 PSI 검사와 구분한다.
 - 운영 증거 `artifacts/natural-defeat/report.json`. 실제 플레이 검증이며 사람이 직접 조작한 실기기 검수는 아님.
 - PR #137 base를 main으로 전환하고 draft 해제. 최신 main을 병합해 타이틀/음성 잠금 CI 재실행. 모든 최신 검사와 preview 성공 전에는 운영 병합하지 않는다.
+
+### 타이틀 운영 반영 완료
+
+- PR #137 최종 head `216daafd5710388cac9ac133429fb43a852d1a2f`의 검사 3개 및 Vercel preview 성공 후 main 병합. 운영 커밋 `116e1e4a3ee257cd62c1c7e8bd4cd62d821ceccc`, 배포 `dpl_BdY7Y9m9kBtTEucK6DFXMLmtEaDf` READY 및 운영 별칭 확인.
+- 외부 한국어 폰트 설치 지연을 저장소의 Black Han Sans/OFL 설치로 해소. 전체 `ko` 언어 태그 확인은 실패해 실제 한글 글리프 U+D55C의 fontconfig 선택 확인으로 수정했다. 최신 Linux CI에서 폰트 준비, 본편 화면, 전체 회귀 모두 통과.
+- 공개 운영 주소에서 1440x900/390x844/844x390/1024x768의 공식 제목/한국어 보조 문구/모드 잠금/넘침/실행 오류 검증 통과. 낮은 모바일 가로 보조 문구 숨김은 기존 의도대로 유지.
+- 증거 `artifacts/brand-title/report.json` 및 화면별 PNG. 보호된 preview의 직접 검증은 로그인 전환으로 실패했으므로 운영 검증과 구분한다.
+- 후속 PR #138을 main으로 전환하고 draft 해제. 자산 사용권 기준선은 `NEW-PSI-BRAND-ASSET-RIGHTS-20261008.md` 참조. 사용자 음성 네 버전 공개 배포권 확인과 최종 청취 승인을 구분한다.
