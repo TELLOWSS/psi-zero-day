@@ -37,6 +37,7 @@
   "equipment_progress": "장비 성장",
   "equipment_rule": "장비 레벨마다 모듈·표시등·작동 효과가 변합니다. Lv.3·Lv.5에서 본체가 바뀌고, 조합 진화는 별도 장비로 전환됩니다.",
   "upgrade_preview": "다음 강화",
+  "choice_details": "상세 정보",
   "tier_names": [
     "기본",
     "모듈 추가",

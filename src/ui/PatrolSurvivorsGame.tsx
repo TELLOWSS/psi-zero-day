@@ -1,4 +1,5 @@
 import { CombatDirection } from './survivors-combat-direction';
+import {selectCombatNotice} from './survivors-notice-priority';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
@@ -85,7 +86,7 @@ import itemText from '../../content/localization/survivors-items-ko.json';
 import { TACTICAL_ITEMS } from '../engine/survivors-items';
 import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
 import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivors-audio-manifest';
-import { STAGE_IDS, LAST_PATROL_STAGE_KEY, resumePatrolStage, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
+import { STAGE_IDS, LAST_PATROL_STAGE_KEY, nextPreparedPatrolStage, resumePatrolStage, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
 import { SurvivorsAudioMixer } from './SurvivorsAudioMixer';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
@@ -1704,6 +1705,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
 
             if (currentPhase === 'victory') {
+              try {localStorage.setItem(LAST_PATROL_STAGE_KEY,nextPreparedPatrolStage(engine.state.stageId));}catch{/* Result remains available without storage. */}
               const nextGrowth=recordPatrolClear(growthRef.current,engine.state);
               growthRef.current=nextGrowth;setGrowthRecords(nextGrowth);persistGrowth(nextGrowth);
               // Unlock next stage in order
@@ -3223,6 +3225,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
   const fieldIncident=ACCOUNTABILITY_CASES.find(row=>row.stage===selectedStage);
+  const combatNotice=phase==='playing'&&!extractionState.active&&directorCutinPhase==='none'?selectCombatNotice({boss:Boolean(bossAlert||bossSecured),damage:Boolean(lastDamage&&lastDamage.amount>0&&lastDamage.remaining>0),evolution:Boolean(evolutionBanner),signature:Boolean(signatureEvent),mastery:Boolean(signatureMastery?.notice),counterplay:Boolean(signatureCounterplay),wave:Boolean(waveDirectorNotice),supply:Boolean(waveSupplyNotice)},signatureEvent?.phase==='warning'||signatureEvent?.phase==='impact'):undefined;
   const incidentPending=fieldIncident&&accountability.access==='active'&&!accountability.decisions.some(d=>d.caseId===fieldIncident.id);
   const fieldRadio=incidentPending?fieldIncident.line:accountability.decisions.at(-1)?accountabilityText.radioAfter[accountability.decisions.at(-1)!.outcome]:'';
   const recommendedGear = recommendedStoreItem(storeInventory,selectedDifficulty);
@@ -3320,7 +3323,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </div>
       </header>
 
-      {waveDirectorNotice && phase === 'playing' && !extractionState.active && (
+      {waveDirectorNotice && combatNotice==='wave' && (
         <aside className={`survivors-wave-director-notice is-wave-${waveDirectorNotice.wave}`} role="status" aria-live="assertive">
           <span>WAVE {waveDirectorNotice.wave}/3 · DIRECTOR SHIFT</span>
           <strong>{waveDirectorNotice.title}</strong>
@@ -3328,7 +3331,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {signatureEvent && phase === 'playing' && !bossAlert && (
+      {signatureEvent && combatNotice==='signature' && (
         <aside className={`survivors-signature-event event-${signatureEvent.id} theme-${signatureEvent.stageSkin} is-${signatureEvent.severity} is-${signatureEvent.phase}`} role="alert" aria-live="assertive" style={{'--signature-stage-accent':signatureEvent.stageAccent} as CSSProperties}>
           <span>WAVE {signatureEvent.wave} · {signatureEvent.phase==='warning'?'SIGNATURE WARNING':signatureEvent.phase==='impact'?'SIGNATURE EVENT':'SIGNATURE CONTROLLED'}</span>
           <em>{signatureEvent.mechanic}</em>
@@ -3339,7 +3342,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {signatureCounterplay && phase === 'playing' && (
+      {signatureCounterplay && combatNotice==='counterplay' && (
         <aside className={`survivors-counterplay-banner kind-${signatureCounterplay.kind}`} role="status" aria-live="assertive" style={{'--counterplay-accent':signatureCounterplay.accent} as CSSProperties}>
           <span>SKILL COUNTERPLAY · PERFECT RESPONSE</span>
           <strong>{signatureCounterplay.title}</strong>
@@ -3347,7 +3350,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {phase === 'playing' && signatureMastery && signatureMastery.chain>0 && (
+      {phase === 'playing' && !combatNotice && !extractionState.active && signatureMastery && signatureMastery.chain>0 && (
         <aside className={`survivors-mastery-meter${signatureMastery.finisherArmed?' is-armed':''}${signatureMastery.zeroDay?' is-zero-day':''}`} aria-label="Signature Mastery 연쇄 상태">
           <span>SIGNATURE MASTERY</span>
           <strong>{signatureMastery.zeroDay?'ZERO DAY CHAIN':`PERFECT ×${signatureMastery.chain}`}</strong>
@@ -3355,7 +3358,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {phase === 'playing' && signatureMastery?.notice && (
+      {combatNotice==='mastery' && signatureMastery?.notice && (
         <aside className={`survivors-mastery-notice is-${signatureMastery.notice.kind}`} role="status" aria-live="assertive">
           <span>{signatureMastery.notice.kind==='zero_day'?'MASTER CLEAR':'SIGNATURE MASTERY'}</span>
           <strong>{signatureMastery.notice.title}</strong>
@@ -3370,7 +3373,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>
       )}
 
-      {waveSupplyNotice && phase === 'playing' && !extractionState.active && (
+      {waveSupplyNotice && combatNotice==='supply' && (
         <aside className={`survivors-wave-supply-notice${waveDirectorNotice?' has-director':''}`} aria-live="polite">
           <strong>WAVE {waveSupplyNotice.wave} 완료 · 현장 보급 +{waveSupplyNotice.credits} PSI</strong>
           <span>플레이는 계속됩니다. 정비 보급은 일시정지 메뉴에서 직접 선택할 수 있습니다.</span>
@@ -3397,10 +3400,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} />
       )}
 
-      {phase === 'playing' && (!bossSecured || extractionState.active) && lastDamage && lastDamage.amount > 0 && lastDamage.remaining > 0 && !bossAlert && !evolutionBanner && directorCutinPhase === 'none' && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
+      {combatNotice==='damage' && lastDamage && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
 
       {/* COMBO JUICE BANNER */}
-      {phase === 'playing' && (!bossSecured || extractionState.active) && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
+      {phase === 'playing' && !combatNotice && (!bossSecured || extractionState.active) && !bossAlert && !evolutionBanner && !(lastDamage && lastDamage.remaining > 0) && directorCutinPhase === 'none' && (
         <aside
           className="survivors-combo-banner"
           aria-label="연속 계도 콤보 알림"
@@ -3461,7 +3464,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* SUPER PROTOCOL EVOLUTION BANNER */}
-      {evolutionBanner && !bossAlert && directorCutinPhase === 'none' && (
+      {evolutionBanner && combatNotice==='evolution' && (
         <div className="survivors-evo-banner" role="status">
           <div className="survivors-evo-banner-icon">{evolutionBanner.equipmentId ? <SurvivorsEquipmentIcon id={evolutionBanner.equipmentId} level={5} /> : evolutionBanner.icon}</div>
           <div className="survivors-evo-banner-content">
@@ -3483,7 +3486,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ))}
       </div>
 
-      {phase==='playing'&&fieldIncident&&gameTime>=2&&gameTime<=14&&fieldRadio&&<aside className="survivors-field-radio" aria-live="polite"><strong>{accountabilityText.worker} · {accountabilityText.warning} {accountability.warnings}/3</strong><p>{fieldRadio}</p></aside>}
+      {phase==='playing'&&!combatNotice&&fieldIncident&&gameTime>=2&&gameTime<=14&&fieldRadio&&<aside className="survivors-field-radio" aria-live="polite"><strong>{accountabilityText.worker} · {accountabilityText.warning} {accountability.warnings}/3</strong><p>{fieldRadio}</p></aside>}
       {phase==='playing' && (()=>{
         const engine=engineRef.current;
         if (!engine) return null;
@@ -3928,10 +3931,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 const previousId=isEvo ? equipmentAppearance(perk.id,1)?.base ?? perk.id : perk.id;
                 const previousLevel=activePerks[previousId];
                 return (
-                  <button
+                  <div className="survivors-perk-option" key={perk.id}><button
                     type="button"
                     aria-keyshortcuts={String(index + 1)}
-                    key={perk.id}
                     className={`survivors-perk-card ${isEvo ? 'is-evolution' : ''}`}
                     onClick={() => handleSelectPerk(perk.id)}
                   >
@@ -3942,11 +3944,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                         <span>{isEvo ? '★ SUPER EVOLUTION' : `LV ${perk.level}`}</span>
                       </h4>
                       <p>{perk.description}</p>
-                      <SurvivorsEvolutionPreview id={perk.id} level={perk.level} active={activePerks} />
-                      {engineRef.current && <SurvivorsUpgradeStats id={perk.id} level={perk.level} previousId={previousId} previousLevel={previousLevel ?? 0} player={engineRef.current.state.player} inFloodlight={Boolean(engineRef.current.state.inFloodlight)} />}
-                      {perk.category !== 'support' && <div className="survivors-upgrade-preview">{previousLevel>0&&<SurvivorsEquipmentIcon id={previousId} level={previousLevel} />}<span>{itemText.upgrade_preview} →</span><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>}
+                      {engineRef.current && <SurvivorsUpgradeStats compact id={perk.id} level={perk.level} previousId={previousId} previousLevel={previousLevel ?? 0} player={engineRef.current.state.player} inFloodlight={Boolean(engineRef.current.state.inFloodlight)} />}
                     </div>
-                  </button>
+                  </button><details className="survivors-perk-detail"><summary>{itemText.choice_details} · {perk.name}</summary>
+                    <p>{perk.description}</p><SurvivorsEvolutionPreview id={perk.id} level={perk.level} active={activePerks} />
+                    {engineRef.current && <SurvivorsUpgradeStats id={perk.id} level={perk.level} previousId={previousId} previousLevel={previousLevel ?? 0} player={engineRef.current.state.player} inFloodlight={Boolean(engineRef.current.state.inFloodlight)} />}
+                    {perk.category !== 'support' && <div className="survivors-upgrade-preview">{previousLevel>0&&<SurvivorsEquipmentIcon id={previousId} level={previousLevel} />}<span>{itemText.upgrade_preview} →</span><SurvivorsEquipmentIcon id={perk.id} level={perk.level} /></div>}
+                  </details></div>
                 );
               })}
             </div>
