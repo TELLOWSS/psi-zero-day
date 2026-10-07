@@ -2,6 +2,7 @@ import { CombatDirection } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {PleasureFeedback} from './survivors-pleasure-feedback';
+import {EquipmentCheckDirection} from './survivors-equipment-check';
 import pleasureText from '../../content/localization/survivors-pleasure-ko.json';
 import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
@@ -209,6 +210,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const radioProjectionRef=useRef(new RadioEmissionProjection());
   const impactFeedbackRef = useRef<Array<{x:number;y:number;life:number;duration:number;boss:boolean;critical:boolean;worker:boolean}>>([]);
   const pleasureRef=useRef(new PleasureFeedback());
+  const equipmentCheckRef=useRef(new EquipmentCheckDirection());
   const [repairedIds,setRepairedIds]=useState<string[]>([]);
   const damageFlashRef = useRef<number>(0);
 
@@ -1005,6 +1007,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setBossSecured(false);
     impactFeedbackRef.current=[];
     pleasureRef.current.reset();
+    equipmentCheckRef.current.reset();
     projectileFeedbackRef.current.clear();
     keysRef.current = {};
     engineRef.current = engine;
@@ -1816,7 +1819,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
       const trackedPose = motions.sample(player, player.x, player.y, engine.state.playerMotionTime??engine.state.gameTime, player.hp);
       const actor=spritesRef.current.characterMaps[engine.state.characterId];
-      const playerPose = {...trackedPose,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0,reaction:0}: {})};
+      const checkDanger=player.hp<=player.maxHp*.4||hazards.some(h=>h.hp>0&&Math.hypot(h.x-player.x,h.y-player.y)<420)
+        ||engine.state.bossAlertTimer>0||Boolean(engine.state.signatureEvent&&engine.state.signatureEvent.phase!=='resolved')
+        ||engine.state.directorCutinPhase!=='none'||engine.state.interactiveHazards.some(h=>(h.state==='active'||h.state==='warning')&&Math.hypot(h.x-player.x,h.y-player.y)<420);
+      const equipmentCheck=equipmentCheckRef.current.sample({clock:engine.state.gameTime,phase:engine.state.phase,moving:trackedPose.moving,action:trackedPose.action,reaction:trackedPose.reaction,danger:checkDanger,reduced:reducedMotionRef.current,player:engine.state.characterId==='player'});
+      const playerPose = {...trackedPose,equipmentCheck,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0,reaction:0,equipmentCheck:0}: {})};
       radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));
       projectileFeedbackRef.current.ingest(projectileEvents.map(event=>radioProjectionRef.current.feedback(event)),
         projectiles.length>90,engine.state.premiumGear?.equipped??[]);

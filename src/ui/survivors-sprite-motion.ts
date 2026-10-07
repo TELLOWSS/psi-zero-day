@@ -5,7 +5,7 @@ import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './s
 import {commandArtProfile} from './survivors-command-art';
 import {movementDirection,drawDirectionalBody} from './survivors-directional-art';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
-export interface SpritePose { moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+export interface SpritePose { moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; equipmentCheck?:number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
