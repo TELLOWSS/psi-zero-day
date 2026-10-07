@@ -18,6 +18,13 @@ on:
       - 'public/fonts/**'
       - 'scripts/verify-tactical-ui.mjs'
       - 'src/ui/survivors-projectile-vfx.ts'
+      - 'src/ui/survivors-authored-metal-impact.ts'
+      - 'src/engine/patrol-survivors-engine.ts'
+      - 'src/engine/survivors-equipment-tuning.ts'
+      - 'src/domain/survivors-projectile-feedback.ts'
+      - 'tests/survivors-equipment-damage-audit.test.ts'
+      - 'tests/survivors-confirmed-impact.test.ts'
+      - 'scripts/verify-survivors-confirmed-impact.mjs'
       - 'scripts/verify-survivors-projectiles.mjs'
       - 'public/assets/survivors/**'
       - 'scripts/verify-survivors-browser.mjs'
@@ -60,6 +67,7 @@ jobs:
           node scripts/verify-survivors-rig.mjs
           node scripts/verify-survivors-props.mjs
           node scripts/verify-survivors-projectiles.mjs
+          node scripts/verify-survivors-confirmed-impact.mjs
           npm run dev -- --host 127.0.0.1 --port 4174 > /tmp/survivors-pleasure-dev.log 2>&1 &
           DEV_PID=$!
           trap 'kill "$PREVIEW_PID" "$DEV_PID" 2>/dev/null || true' EXIT
@@ -86,3 +94,4 @@ jobs:
             artifacts/store-maintenance
             artifacts/tactical-ui
             artifacts/combat-debrief-ui
+            artifacts/confirmed-impact

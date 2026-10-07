@@ -60,7 +60,7 @@ export function upgradeComparison(id: PerkId, nextLevel: number, previousId: Per
   const after = equipmentTuning(id, nextLevel);
   if (!after) return [];
   const damageScale = player.damageMultiplier * (inFloodlight ? 1.3 : 1);
-  const intervalScale = 1 - Math.min(.6, player.cooldownReduction);
+  const intervalScale = 1 - Math.min(.75, player.cooldownReduction);
   return (['damage', 'continuousDamage', 'secondaryDamage', 'count', 'interval', 'radius', 'pierce', 'duration'] as const)
     .filter(key => (after[key] ?? 0) > 0)
     .map(key => {

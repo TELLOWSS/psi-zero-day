@@ -35,6 +35,7 @@ import type {
   PermanentUpgrades,
   PlayerStats,
   Projectile,
+  ProjectileKind,
   SafetyDrop,
   SurvivorsGameState,
   BaseWeaponId,
@@ -48,6 +49,7 @@ import type {
 export const WORLD_WIDTH = 1400;
 export const WORLD_HEIGHT = 900;
 export const TARGET_SURVIVAL_TIME = 180; // 3 minutes
+const REPEATED_CONTACT_KINDS:ReadonlySet<ProjectileKind>=new Set(['extinguisher','cryo_blast','cone_trap','emf_beam','tesla_bolt','shout_shockwave']);
 
 export const PATROL_STAGES: Record<PatrolStageId, PatrolStageDefinition> = {
   ...ADVANCED_PATROL_STAGES,
@@ -700,12 +702,12 @@ export class SurvivorsEngine {
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
   private projectileFeedback: ProjectileFeedback[] = [];
   private readonly releasedProjectiles = new WeakSet<Projectile>();
-  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false) {
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false, appliedDamage?: number) {
     if (phase === 'release') {
       if (this.releasedProjectiles.has(p)) return;
       this.releasedProjectiles.add(p);
     }
-    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{})});
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{}),...(appliedDamage!==undefined?{appliedDamage}:{})});
     if (this.projectileFeedback.length > 192) {
       const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
       this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
@@ -725,7 +727,7 @@ export class SurvivorsEngine {
   private readonly random: () => number;
   private accumulator = 0;
   private readonly paths = new WeakMap<Projectile, {x: number; y: number}>();
-  private readonly directedHits = new WeakMap<Projectile, Set<string>>();
+  private readonly projectileHits = new WeakMap<Projectile, Set<string>>();
   private readonly signatureEventsWarned = new Set<string>();
   private readonly signatureEventsTriggered = new Set<string>();
   private readonly signatureEventsResolved = new Set<string>();
@@ -1551,14 +1553,6 @@ export class SurvivorsEngine {
       }
       if (this.cooldowns.emp <= 0) {
         this.cooldowns.emp = tuning.interval * cdReduction;
-        for (const h of hazards) {
-          if (h.hp <= 0) continue;
-          const dist = Math.hypot(h.x - player.x, h.y - player.y);
-          if (dist <= tuning.radius + h.radius) {
-            this.damageHazard(h, tuning.damage * player.damageMultiplier);
-            h.isStunned = Math.max(h.isStunned || 0, 1.4);
-          }
-        }
         this.addProjectile({
           id: this.genId('proj_plasma'),
           x: player.x,
@@ -1580,14 +1574,6 @@ export class SurvivorsEngine {
         const tuning = equipmentTuning('emp_generator', empLvl)!;
         if (this.cooldowns.emp <= 0) {
           this.cooldowns.emp = tuning.interval * cdReduction;
-          for (const h of hazards) {
-            if (h.hp <= 0) continue;
-            const dist = Math.hypot(h.x - player.x, h.y - player.y);
-            if (dist <= tuning.radius + h.radius) {
-              this.damageHazard(h, tuning.damage * player.damageMultiplier);
-              h.isStunned = Math.max(h.isStunned || 0, 1.0);
-            }
-          }
           this.addProjectile({
             id: this.genId('proj_emp'),
             x: player.x,
@@ -1819,16 +1805,20 @@ export class SurvivorsEngine {
   }
 
   private damageHazard(h: Hazard, amount: number, projectile=false): void {
-    if (amount > 0) {
-      h.hitFlashTimer = 0.08;
-    }
+    if (!Number.isFinite(amount) || amount <= 0 || h.hp <= 0) return;
+    const beforeHp=h.hp;
     if(h.bossEncounterManaged){
       if(this.state.bossEncounter?.phase!=='combat')return;
-      if(h.bossGameplay){bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);return;}
+      if(h.bossGameplay){
+        bossCombatDamage(h,amount,bossGameplayForStage(this.state.stage.id),projectile);
+        if(h.hp<beforeHp)h.hitFlashTimer=0.08;
+        return;
+      }
       // Structural interlocks expose the next core only after its risk cycle settles.
       const floor=bossCoreFloor(h);
       h.hp=Math.min(h.hp,Math.max(floor,h.hp-Math.max(0,amount)));
-    } else h.hp-=amount;
+    } else h.hp=Math.max(0,h.hp-amount);
+    if(h.hp<beforeHp)h.hitFlashTimer=0.08;
   }
 
   private spawnHazard(type: HazardType, overrideHp?: number, isStageBoss = false, authored?: {
@@ -2039,14 +2029,15 @@ export class SurvivorsEngine {
       }
       if(p.duration<=0||p.pierce<=0)continue;
       const candidates = grid?.candidates(previous.x, previous.y, p.x, p.y, p.radius) ?? hazards;
-      const directed = p.kind === 'radio' || p.kind === 'drone_laser' || p.kind === 'hunter_beam';
-      let hits = directed ? this.directedHits.get(p) : undefined;
+      const repeatContact=REPEATED_CONTACT_KINDS.has(p.kind);
+      let hits = repeatContact?undefined:this.projectileHits.get(p);
       for (const h of candidates) {
         if (h.hp <= 0 || h.motion?.phase === 'spent' && !h.isStageBoss || hits?.has(h.id)) continue;
         if (p.duration <= 0 || p.pierce <= 0) break;
         if (sweptCircle(previous.x, previous.y, p.x, p.y, h.x, h.y, p.radius + h.radius)) {
-          if (directed) {
-            if (!hits) { hits = new Set(); this.directedHits.set(p, hits); }
+          // Ballistic/pulse pierce counts distinct targets; sprays/traps retain contact charges.
+          if(!repeatContact){
+            if (!hits) { hits = new Set(); this.projectileHits.set(p, hits); }
             hits.add(h.id);
           }
           // Critical & Weak Point hit calculation
@@ -2060,10 +2051,11 @@ export class SurvivorsEngine {
           const beforeHp=h.hp;
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(!blocked&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
           if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
           if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
-          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked);
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked,Math.max(0,beforeHp-h.hp));
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -2089,11 +2081,15 @@ export class SurvivorsEngine {
     if (this.state.interactiveHazards) {
       for (const p of projectiles) {
         if (p.duration <= 0) continue;
+        let hits=this.projectileHits.get(p);
         for (const env of this.state.interactiveHazards) {
+          const hitId=`environment:${env.id}`;
+          if(hits?.has(hitId))continue;
           if (env.state === 'destroyed' || env.state === 'active') continue;
           if (env.type === 'crane_drop_zone' && env.state === 'warning') {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
               env.state = 'cooldown'; env.timer = 0.6;
               let cleared = 0;
               for (const h of hazards) if (h.hp > 0 && Math.hypot(h.x - env.x, h.y - env.y) <= env.radius + h.radius) {
@@ -2106,6 +2102,7 @@ export class SurvivorsEngine {
           } else if (env.type === 'explosive_barrel' && env.state === 'idle') {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
               this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
@@ -2122,6 +2119,7 @@ export class SurvivorsEngine {
           } else if (env.type === 'electric_transformer' && env.state === 'idle' && env.timer <= 0) {
             const previous = this.paths.get(p) ?? p;
             if (sweptCircle(previous.x, previous.y, p.x, p.y, env.x, env.y, p.radius + env.radius)) {
+              if(!hits){hits=new Set();this.projectileHits.set(p,hits);}hits.add(hitId);
               this.emitProjectileFeedback(p, 'impact', env.x, env.y);
               env.hp -= p.damage;
               p.pierce -= 1;
