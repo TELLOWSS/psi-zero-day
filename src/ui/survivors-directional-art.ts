@@ -37,6 +37,14 @@ export function directionalFrameWeights(cycle:number,moving:boolean,gaitBlend=mo
  add(directionalFrame(safe,false),1-gait);
  return [...weights].map(([frame,weight])=>({frame,weight}));
 }
+export function directionalPoseWeights(pose:SpritePose):{frame:number;weight:number}[] {
+ const base=directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend);
+ const progress=pose.actionProgress??0;
+ if(pose.moving||(pose.actionKind!==undefined&&pose.actionKind!=='shot')||directionalActionFrame(progress)===undefined)return base;
+ // Short entry/recovery bridges keep the held command sharp without an abrupt silhouette swap.
+ const t=Math.max(0,Math.min(1,(progress-.12)/.08,(.56-progress)/.08)),blend=t*t*(3-2*t);
+ return [...base.map(sample=>({...sample,weight:sample.weight*(1-blend)})),{frame:10,weight:blend}].filter(sample=>sample.weight>0);
+}
 interface Cell {canvas:HTMLCanvasElement;width:number;height:number;anchor:number}
 interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number};direction:number;weights:{frame:number;weight:number}[]}
 interface Sheet {cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;lastPose?:SpritePose;lastFrame?:Frame}
@@ -99,8 +107,7 @@ function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  const sheet=sheets.get(actor);if(!sheet)return;
  if(sheet.lastPose===pose)return sheet.lastFrame;
  const direction=pose.direction??2;
- const action=!pose.moving?directionalActionFrame(pose.actionProgress??0):undefined;
- const weights=action===undefined?directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend):[{frame:action,weight:1}];
+ const weights=directionalPoseWeights(pose);
  const shape={width:0,height:0,anchor:0};
  for(const sample of weights){const c=sheet.cells[direction*FRAMES_PER_DIRECTION+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;}
  const result={sheet,cell:shape,direction,weights};sheet.lastPose=pose;sheet.lastFrame=result;return result;

@@ -45,7 +45,8 @@ try{
   const combat=await page.evaluate(()=>({counts:window.qaCombat,hp:window.qaEngine.state.player.hp,time:window.qaEngine.state.gameTime,overflow:document.documentElement.scrollWidth>innerWidth}));
   await page.screenshot({path:path.join(out,`${width}x${height}-game.png`)});
   await page.locator('.survivors-pause-command').click();
-  await page.waitForFunction(()=>window.qaEngine.state.phase==='paused');await page.waitForTimeout(120);
+  await page.waitForFunction(()=>window.qaEngine.state.phase==='paused');
+  await page.getByRole('button',{name:'순찰 재개',exact:true}).waitFor();await page.waitForTimeout(500);
   const pixelHash=()=>page.evaluate(()=>{const c=document.querySelector('.survivors-canvas'),data=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let hash=2166136261;for(const value of data)hash=Math.imul(hash^value,16777619);return hash>>>0;});
   const paused=await pixelHash();await page.waitForTimeout(200);const held=await pixelHash();
   const pass=art.loaded&&art.distinctCommands===8&&art.changedCommands&&art.counts.every(c=>c>1000)&&art.spill===0&&art.tinted>100&&combat.counts.impact>0&&!combat.overflow&&paused===held&&!errors.length;

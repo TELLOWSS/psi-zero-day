@@ -1,7 +1,19 @@
 import {it,expect} from 'vitest';
-import {movementDirection,directionalFrame,directionalFrameWeights,directionalActionFrame} from '../src/ui/survivors-directional-art';
+import {movementDirection,directionalFrame,directionalFrameWeights,directionalActionFrame,directionalPoseWeights} from '../src/ui/survivors-directional-art';
 import {actorTorsoPoint} from '../src/ui/survivors-rig-renderer';
 import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
+it('bridges radio entry/recovery continuously and never borrows radio art for other actions',()=>{
+ const pose={...new SpriteMotionTracker().sample({},0,0,0),actionKind:'shot' as const};
+ for(const progress of [0,.12,.16,.20,.3,.48,.52,.56,.8,NaN]){
+  const weights=directionalPoseWeights({...pose,actionProgress:progress});
+  expect(weights.reduce((sum,sample)=>sum+sample.weight,0)).toBeCloseTo(1,12);
+  expect(weights.every(sample=>sample.weight>0&&Number.isFinite(sample.weight))).toBe(true);
+ }
+ for(const progress of [.16,.52])expect(directionalPoseWeights({...pose,actionProgress:progress}).find(sample=>sample.frame===10)?.weight).toBeCloseTo(.5,12);
+ expect(directionalPoseWeights({...pose,actionProgress:.3})).toEqual([{frame:10,weight:1}]);
+ for(const actionKind of ['spray','ultimate'] as const)expect(directionalPoseWeights({...pose,actionKind,actionProgress:.3}).some(sample=>sample.frame===10)).toBe(false);
+ expect(directionalPoseWeights({...pose,moving:true,actionProgress:.3}).some(sample=>sample.frame===10)).toBe(false);
+});
 it('selects eight actual travel directions and retains facing on stop/noisy input',()=>{
  for(let direction=0;direction<8;direction++){const angle=direction*Math.PI/4;expect(movementDirection(Math.cos(angle),Math.sin(angle),2)).toBe(direction);}
  expect(movementDirection(0,0,7)).toBe(7);expect(movementDirection(NaN,1,4)).toBe(4);

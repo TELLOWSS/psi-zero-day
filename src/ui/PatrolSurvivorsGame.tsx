@@ -1307,14 +1307,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let facingAngle = 0;
     let directorWasObscured=false;
 
-    const renderLoop = (time: number) => {
+    const renderLoop = (wallTime: number) => {
       requestRef.current = requestAnimationFrame(renderLoop);
 
-      const dt = Math.max(0, (time - lastTimeRef.current) / 1000);
-      lastTimeRef.current = time;
+      let dt = Math.max(0, (wallTime - lastTimeRef.current) / 1000);
+      lastTimeRef.current = wallTime;
 
       const engine = engineRef.current;
       if (!engine) return;
+      const time=engine.state.gameTime*1000;
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
         previousEngine = engine;
@@ -1561,9 +1562,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
         }
         const scoreEncounter=engine.state.bossEncounter?.phase;
-        if (engine.state.phase==='playing' && (time >= scoreCheckRef.current || scoreEncounter!==scoreEncounterRef.current)) {
+        if (engine.state.phase==='playing' && (wallTime >= scoreCheckRef.current || scoreEncounter!==scoreEncounterRef.current)) {
           scoreEncounterRef.current=scoreEncounter;
-          scoreCheckRef.current = time + 1000;
+          scoreCheckRef.current = wallTime + 1000;
           const live = engine.state.hazards.filter(h => h.hp > 0);
           const next = selectPatrolScore(engine.state.player.hp / engine.state.player.maxHp, live.length, live.some(h => h.isStageBoss), scoreStateRef.current,scoreEncounter);
           scoreStateRef.current = next;
@@ -1648,8 +1649,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
 
         // Render physics at RAF cadence; mirrors update at 12Hz or immediately on phase change.
-        if (time - lastHudTime >= 1000 / 12 || engine.state.phase !== 'playing') {
-        lastHudTime = time;
+        if (wallTime - lastHudTime >= 1000 / 12 || engine.state.phase !== 'playing') {
+        lastHudTime = wallTime;
         // Sync React HUD
         setHp(Math.round(engine.state.player.hp));
         const damage = engine.state.lastDamage;
@@ -1747,6 +1748,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
         }
       }
+
+      // Freeze presentation on pause, choices and results, including a phase changed this update.
+      if(engine.state.phase!=='playing')dt=0;
 
       // High-DPI Resolution & Mobile Resize
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -3095,8 +3099,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         p.life -= dt;
         p.x += p.vx * dt;
         p.y += p.vy * dt;
-        p.vx *= 0.94; // air friction deceleration
-        p.vy = p.vy * 0.94 + 75 * dt; // gravity
+        if(dt>0){
+          p.vx *= 0.94; // air friction deceleration
+          p.vy = p.vy * 0.94 + 75 * dt; // gravity
+        }
         if (p.life > 0) {
           ctx.save();
           ctx.fillStyle = p.color;
