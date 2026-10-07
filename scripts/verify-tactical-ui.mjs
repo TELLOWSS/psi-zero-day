@@ -23,6 +23,7 @@ try {
     await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click({noWaitAfter:true});
     try { await page.getByRole('button',{name:copy.shopEntry,exact:true}).waitFor({timeout:60000}); }
     catch(error) { console.log(JSON.stringify({errors,body:await page.locator('body').innerText()}));await page.screenshot({path:`artifacts/tactical-ui/${width}x${height}-failure.png`});throw error; }
+    const ready=await page.locator('.survivors-ready-dialog').evaluate(element=>({surface:getComputedStyle(element).backgroundColor,title:getComputedStyle(element.querySelector('.survivors-preflight-top h2')).fontFamily}));
     await page.screenshot({path:`artifacts/tactical-ui/${width}x${height}-ready.png`});
     await page.getByRole('button',{name:copy.shopEntry,exact:true}).click({noWaitAfter:true});
     const tabs=[];
@@ -36,8 +37,8 @@ try {
       await page.screenshot({path:`artifacts/tactical-ui/${width}x${height}-${tabs.length}.png`});
       tabs.push({name,...bounds});
     }
-    const pass=fonts&&tabs.every(tab=>!tab.overflow&&tab.walletVisible&&tab.font.includes('Chakra Petch')&&tab.surface==='rgb(22, 26, 29)')&&!errors.length;
-    rows.push({width,height,fonts,tabs,errors,pass});await page.close();
+    const pass=fonts&&ready.surface==='rgb(22, 26, 29)'&&ready.title.includes('Black Han Sans')&&tabs.every(tab=>!tab.overflow&&tab.walletVisible&&tab.font.includes('Chakra Petch')&&tab.surface==='rgb(22, 26, 29)')&&!errors.length;
+    rows.push({width,height,fonts,ready,tabs,errors,pass});await page.close();
   }
   fs.writeFileSync('artifacts/tactical-ui/report.json',JSON.stringify({url,rows},null,2));
   console.log(JSON.stringify(rows));if(rows.some(row=>!row.pass))process.exitCode=1;
