@@ -40,7 +40,7 @@ try {
   await page.getByRole('button',{name:'장비 확인',exact:true}).click();
   const arsenal=await page.locator('.survivors-arsenal-dialog').isVisible();
   await page.getByRole('button',{name:'도감 닫기',exact:true}).click();
-  await page.getByRole('button',{name:'PSI 상점 · 구매·수리',exact:true}).click();
+  await page.getByRole('button',{name:'PSI 장비실 · 구매·수리',exact:true}).click();
   const shop=await page.getByRole('button',{name:'장비실 닫기',exact:true}).isVisible();
   await page.getByRole('button',{name:'장비실 닫기',exact:true}).click();
   await page.getByRole('button',{name:'순찰 재개',exact:true}).click();

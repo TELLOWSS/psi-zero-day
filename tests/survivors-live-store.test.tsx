@@ -22,7 +22,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted/>));click('시그널 워치 시작');
   engine.state.player.hp=40;engine.state.gameTime=100;
   act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));
-  click('PSI 상점');expect(engine.state.phase).toBe('paused');
+  click('PSI 장비실');expect(engine.state.phase).toBe('paused');
   act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));expect(engine.state.phase).toBe('paused');
   const mantle=[...host.querySelectorAll('article')].find(card=>card.textContent?.includes('충격 흡수 맨틀'))!;
   act(()=>mantle.querySelector<HTMLButtonElement>('button')!.click());

@@ -13,7 +13,7 @@ try{
  page.on('response',response=>{if(response.url().includes('/sfx-v2/')&&response.ok())loaded.add(response.url().split('/').pop());});
  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196');
  await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
- await page.getByRole('button',{name:'PSI 상점 · 구매·수리',exact:true}).click();
+ await page.getByRole('button',{name:'PSI 장비실 · 구매·수리',exact:true}).click();
  const result=await page.evaluate(async()=>{
    const {RECORDED_SFX}=await import('/src/app/survivors-sfx-assets.ts');
    const {default:manifest}=await import('/content/survivors-sfx-v2-ingest.json');
