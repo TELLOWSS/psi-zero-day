@@ -1,6 +1,6 @@
 import {describe,expect,it} from 'vitest';
 import type {Hazard,PerkId,ProjectileKind} from '../src/domain/patrol-survivors';
-import {createInitialSurvivorsState,SurvivorsEngine,PERK_CATALOG} from '../src/engine/patrol-survivors-engine';
+import {createInitialSurvivorsState,SurvivorsEngine,PERK_CATALOG,EVOLUTION_RECIPES} from '../src/engine/patrol-survivors-engine';
 import {equipmentTuning,upgradeComparison} from '../src/engine/survivors-equipment-tuning';
 import {createBossCombat} from '../src/engine/survivors-boss-combat';
 import {bossGameplayForStage} from '../src/engine/survivors-boss-gameplay';
@@ -22,6 +22,17 @@ const weapons:readonly [PerkId,ProjectileKind|null][]=[
 ];
 const repeatedKinds=['extinguisher','cryo_blast','cone_trap','emf_beam','tesla_bolt'];
 describe('equipment damage matches tuning and actual HP loss',()=>{
+ for(const [evolution,recipe] of Object.entries(EVOLUTION_RECIPES)){
+  it(`${evolution} replaces the base weapon instead of double-firing`,()=>{
+   const {state,target,passes}=fixture();state.activePerks[recipe.weapon]=5;state.activePerks[evolution as PerkId]=1;
+   passes.updateWeapons(.01);
+   const tuning=equipmentTuning(evolution as PerkId,1)!;
+   expect(1e6-target.hp).toBeCloseTo((tuning.continuousDamage??0)*.01+(evolution==='tesla_dome'?tuning.damage:0));
+   const baseKind=weapons.find(([id])=>id===recipe.weapon)?.[1];
+   if(baseKind)expect(state.projectiles.some(p=>p.kind===baseKind)).toBe(false);
+   expect(state.projectiles.every(p=>p.kind===weapons.find(([id])=>id===evolution)?.[1])).toBe(true);
+  });
+ }
  for(const [id,kind] of weapons){
   for(const level of PERK_CATALOG[id].category==='evolution'?[1]:[1,2,3,4,5]){
    it(`${id} level ${level}: scaled launch, contact and continuous damage`,()=>{
