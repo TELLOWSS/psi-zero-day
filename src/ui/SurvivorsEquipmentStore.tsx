@@ -138,7 +138,8 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
       return <article key={item.id} data-rarity={item.rarity} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
         <div className={`survivors-store-item-head${repairedIds.includes(item.id)?' is-repaired':''}`}><SurvivorsPremiumArt item={item}/><div><small>{copy.categories[item.category]} · {copy[item.rarity]}</small><strong>{text.name}</strong></div></div>
         <span className="survivors-store-effect">{text.description}</span><p className="survivors-premium-use">{text.use}</p>
-        <small>{equipped ? copy.equipped : owned ? copy.owned : `${item.price.toLocaleString()} PSI`}</small>
+        {owned ? <small className="survivors-store-ownership">{equipped ? copy.equipped : copy.owned}</small>
+          : <strong className="survivors-store-price">{item.price.toLocaleString()} <small>PSI</small></strong>}
         {owned?<label className="survivors-item-condition" data-low={itemDurability(inventory,item.id)<=30}>{copy.durability} {itemDurability(inventory,item.id)}/100 <progress max={100} value={itemDurability(inventory,item.id)}/>{itemDurability(inventory,item.id)===0&&<b>{copy.broken}</b>}</label>:<small>{copy.fullCondition}</small>}
         {replaced && <small className="survivors-store-replacement">{copy.replaces} {copy.items[replaced.id as keyof typeof copy.items].name}</small>}
         {!owned && credits < item.price && <small>{copy.shortfall} {(item.price-credits).toLocaleString()} PSI</small>}
