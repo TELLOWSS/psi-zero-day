@@ -1,5 +1,5 @@
 import {expect,it} from 'vitest';
-import {sanitizeInventory,itemDurability,repairStoreItem,storeRepairCost,wearStoreItems,buyAndEquipLoadout,equipStoreItem,storeEffects} from '../src/domain/survivors-store';
+import {sanitizeInventory,itemDurability,repairStoreItem,repairAllStoreItems,storeRepairTotal,storeRepairCost,wearStoreItems,buyAndEquipLoadout,equipStoreItem,storeEffects} from '../src/domain/survivors-store';
 import {fittingLoadout} from '../src/domain/survivors-fitting';
 import {applyPremiumLoadout} from '../src/engine/survivors-premium-gear';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
@@ -25,6 +25,18 @@ it('repairs proportionally, charges only on success, and does not auto-equip bro
  expect(result.credits).toBe(0);expect(result.inventory.durability?.voice_lens).toBe(100);expect(result.inventory.equipped).toEqual([]);
  expect(repairStoreItem(result.inventory,500,'voice_lens')).toBeNull();
  expect(repairStoreItem(inventory,Infinity,'voice_lens')).toBeNull();
+});
+it('repairs all owned damaged gear atomically, including broken unequipped gear',()=>{
+ const inventory={owned:['voice_lens','rescue_shell'],equipped:['rescue_shell'],durability:{voice_lens:0,rescue_shell:15}};
+ const before=structuredClone(inventory),cost=storeRepairTotal(inventory);
+ expect(cost).toBe(313);expect(repairAllStoreItems(inventory,cost-1)).toBeNull();
+ const result=repairAllStoreItems(inventory,cost)!;
+ expect(result.credits).toBe(0);expect(result.inventory.owned).toEqual(inventory.owned);
+ expect(result.inventory.durability).toEqual({voice_lens:100,rescue_shell:100});
+ expect(result.inventory.equipped).toEqual(['rescue_shell']);expect(inventory).toEqual(before);
+ expect(repairAllStoreItems(result.inventory,1000)).toBeNull();
+ const worn=wearStoreItems(inventory,['rescue_shell']);expect(worn.durability?.rescue_shell).toBe(0);
+ expect(worn.equipped).toEqual([]);expect(worn.owned).toEqual(inventory.owned);
 });
 it('atomically buys a multi-slot loadout; invalid/broken/over-budget quotes never partially charge',()=>{
  const inventory={owned:[],equipped:[]};

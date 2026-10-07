@@ -77,3 +77,17 @@ it('changes fitting pose and playback without purchasing or changing the loadout
   expect(change).not.toHaveBeenCalled();expect(inventory.equipped).toEqual(['voice_lens']);
  }finally{act(()=>root.unmount());}
 });
+it('shows broken owned gear in maintenance and explains repair shortfall',()=>{
+ const host=document.createElement('div'),root=createRoot(host),repair=vi.fn(),all=vi.fn();
+ const inventory={owned:['voice_lens','rescue_shell'],equipped:['rescue_shell'],durability:{voice_lens:0,rescue_shell:15}};
+ try{
+  const render=(credits:number)=>act(()=>root.render(<SurvivorsEquipmentStore inventory={inventory} credits={credits} message="" onChange={vi.fn()} onRepair={repair} onRepairAll={all}/>));
+  render(100);act(()=>host.querySelector<HTMLButtonElement>('#store-tab-maintenance')!.click());
+  const panel=host.querySelector('#store-panel-maintenance')!;
+  expect(panel.textContent).toContain('파손 · 사용 불가');expect(panel.textContent).toContain('다음 순찰에 사용하면 파손');
+  expect(panel.textContent).toContain('수리 포인트 부족');expect(panel.querySelectorAll('[role=listitem]')).toHaveLength(2);
+  expect(panel.querySelector<HTMLButtonElement>('button')!.disabled).toBe(true);
+  render(1000);act(()=>panel.querySelector<HTMLButtonElement>('button')!.click());expect(all).toHaveBeenCalledOnce();
+  act(()=>panel.querySelectorAll<HTMLButtonElement>('[role=listitem] button')[0]!.click());expect(repair).toHaveBeenCalledWith('voice_lens');
+ }finally{act(()=>root.unmount());}
+});

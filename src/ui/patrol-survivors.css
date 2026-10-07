@@ -244,6 +244,60 @@
 }
 
 /* ACTIVE PERKS TRAY (BELOW HUD) */
+.survivors-equipment-workspace {padding:16px;background:#111a19;border:1px solid #607872;box-shadow:0 20px 60px #0009;text-align:left;}
+.survivors-equipment-workspace .survivors-equipment-toolbar {position:sticky;top:-16px;z-index:6;min-height:64px;margin:-16px -16px 12px;padding:10px 16px;box-sizing:border-box;background:#182421;border-bottom:1px solid #607872;}
+.survivors-equipment-toolbar h2 {font-size:18px;flex:1;min-width:0;}
+.survivors-toolbar-wallet {display:flex;gap:8px;align-items:center;color:#ffdf86;font-variant-numeric:tabular-nums;flex-shrink:0;}
+.survivors-toolbar-wallet span {display:grid;gap:2px;}
+.survivors-toolbar-wallet small {font-size:11px;color:#c4d1cc;}
+.survivors-toolbar-wallet strong {font-size:18px;}
+.survivors-equipment-workspace .survivors-store-heading {display:none;}
+.survivors-store-wallet {display:flex;gap:8px;align-items:center;}
+.survivors-equipment-workspace .survivors-store-tabs {top:48px;grid-template-columns:repeat(4,minmax(0,1fr));background:#182421;border-bottom:1px solid #607872;}
+.survivors-maintenance-count {display:inline-block;padding:2px 5px;margin-left:5px;border-radius:4px;background:#ffe1a0;color:#241f15;font-size:11px;}
+.survivors-store .survivors-store-card {background:#1b2927;border:1px solid #566d68;border-radius:6px;padding:16px;gap:10px;}
+.survivors-store .survivors-store-card[data-rarity="elite"] {border-top:3px solid #77d8e8;}
+.survivors-store .survivors-store-card[data-rarity="legendary"] {border-top:3px solid #ffe1a0;}
+.survivors-store .survivors-store-card.is-equipped {border-color:#92e5b7;background:#213930;}
+.survivors-store .survivors-store-item-head {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start;}
+.survivors-store .survivors-store-item-head .survivors-premium-art {width:100%;height:auto;min-width:0;max-width:210px;aspect-ratio:1;border-radius:4px;background-color:#101918;}
+.survivors-store-item-head>div {display:grid;gap:6px;}
+.survivors-store-card strong {font-size:17px;letter-spacing:0;}
+.survivors-store .survivors-store-card button {border-radius:4px;padding:10px;min-height:44px;font:inherit;font-size:13px;}
+.survivors-store .survivors-store-card-actions .survivors-repair-button {background:#344331;border-color:#d7d19a;color:#fff5ca;}
+.survivors-condition-warning {color:#ffd68f;}
+.survivors-maintenance-summary {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid #566d68;}
+.survivors-maintenance-summary>div {display:grid;gap:6px;min-width:0;}
+.survivors-maintenance-summary strong {color:#ffe1a0;font-size:18px;}
+.survivors-maintenance-summary small,.survivors-maintenance-summary span {font-size:13px;}
+.survivors-maintenance-summary button,.survivors-maintenance-list button {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:4px;border:1px solid #d7d19a;background:#344331;color:#fff5ca;padding:10px 14px;cursor:pointer;font:inherit;font-size:13px;}
+.survivors-maintenance-summary button:disabled,.survivors-maintenance-list button:disabled {opacity:.5;cursor:not-allowed;}
+.survivors-maintenance-list>[role="listitem"] {display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #405752;}
+.survivors-maintenance-list .survivors-premium-art {width:88px;border-radius:4px;}
+.survivors-maintenance-list h4 {font-size:16px;margin:4px 0 8px;}
+.survivors-maintenance-list p {font-size:13px;margin:6px 0;color:#ffd68f;}
+.survivors-maintenance-list label {display:grid;gap:5px;font-size:12px;}
+.survivors-maintenance-list progress {width:100%;height:6px;accent-color:#91dbb3;}
+.survivors-maintenance-list [data-condition="broken"] p {color:#ffaaaa;}
+.survivors-maintenance-list [data-condition="critical"] progress {accent-color:#ffce7e;}
+@media(max-width:600px) {
+ .survivors-equipment-toolbar h2 {font-size:14px;}
+ .survivors-toolbar-wallet strong {font-size:16px;}
+ .survivors-equipment-toolbar {gap:8px;}
+ .survivors-store .survivors-store-item-head {grid-template-columns:100px minmax(0,1fr);align-items:center;gap:14px;}
+ .survivors-store .survivors-store-item-head .survivors-premium-art {width:100px;}
+ .survivors-maintenance-summary {flex-wrap:wrap;}
+ .survivors-maintenance-summary button {width:100%;}
+ .survivors-maintenance-list>[role="listitem"] {grid-template-columns:64px minmax(0,1fr);gap:12px;}
+ .survivors-maintenance-list .survivors-premium-art {width:64px;}
+ .survivors-maintenance-list button {grid-column:1/-1;}
+}
+@media(orientation:landscape) and (max-height:560px) {
+ .survivors-equipment-workspace .survivors-equipment-toolbar {min-height:52px;padding:6px 16px;margin-bottom:6px;}
+ .survivors-equipment-workspace .survivors-store-tabs {top:36px;margin:6px 0;}
+ .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art {width:min(100%,160px,max(56px,calc((100dvh - 310px)*1.125)));}
+ .survivors-equipment-workspace .survivors-fitting-visual {top:86px;}
+}
 .survivors-perks-tray {
   position: absolute;
   top: max(68px, calc(env(safe-area-inset-top) + 60px));
