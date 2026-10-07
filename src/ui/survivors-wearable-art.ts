@@ -4,6 +4,16 @@ import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody, authoredEq
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 import type {StoreCategory} from '../domain/survivors-store';
 import {isDirectionalActor,directionalSocket,drawDirectionalBody} from './survivors-directional-art';
+import {EquipmentMotion} from './survivors-equipment-motion';
+import {equipmentAnimationTime} from './survivors-equipment-clock';
+const wearableMotion=new EquipmentMotion();
+function drawMountedWearable(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,pose:SpritePose,id:WearableId,image:HTMLImageElement,source:{x:number;y:number;width:number;height:number},x:number,y:number,w:number,h:number,reduced:boolean):void {
+  const joint=id==='voice_lens'?'radio':id==='shock_mantle'?'armor':'dock';
+  ctx.save();ctx.translate(x+w/2,y+h/2);
+  ctx.rotate(wearableMotion.sample(state.player,equipmentAnimationTime(state),pose,reduced,id,joint));
+  ctx.drawImage(image,source.x,source.y,source.width,source.height,-w/2,-h/2,w,h);
+  ctx.restore();
+}
 
 export const WEARABLE_ART = {
   voice_lens: '/assets/survivors/wearables/voice-lens-v1.png',
@@ -110,7 +120,7 @@ export async function loadWearableImages(characterId: string): Promise<WearableI
 }
 
 /** Origin is the actor's feet; sockets are authored in opaque body coordinates. */
-export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: SurvivorsGameState, actor: HTMLImageElement, height: number, pose: SpritePose, images: WearableImages, layer: 'front' | 'back'): void {
+export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: SurvivorsGameState, actor: HTMLImageElement, height: number, pose: SpritePose, images: WearableImages, layer: 'front' | 'back',reduced=false): void {
   if(isDirectionalActor(actor)){
     ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);let drawn=false;
     for(const id of state.premiumGear?.equipped??[]){
@@ -120,7 +130,7 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
       const order=kind==='back'&&!socket.rear?'back':'front';if(layer!==order)continue;
       const image=images[id as WearableId]!,source=spriteOpaqueBounds(image),size=socket.size;
       const scale=size/Math.max(source.width,source.height),w=source.width*scale,h=source.height*scale;
-      ctx.drawImage(image,source.x,source.y,source.width,source.height,socket.x-w/2,socket.y-h/2,w,h);drawn=true;
+      drawMountedWearable(ctx,state,pose,id as WearableId,image,source,socket.x-w/2,socket.y-h/2,w,h,reduced);drawn=true;
     }
     if(drawn&&layer==='front')drawActorEquipmentOcclusion(ctx,state.characterId,actor,height,pose);
     ctx.restore();return;
@@ -137,7 +147,7 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
     const w = source.width * scale, h = source.height * scale;
     const x = (socket.x + socket.w / 2) * width - width / 2 - w / 2;
     const y = (socket.y + socket.h / 2) * height - height - h / 2;
-    ctx.drawImage(image, source.x, source.y, source.width, source.height, x, y, w, h);
+    drawMountedWearable(ctx,state,pose,id as WearableId,image,source,x,y,w,h,reduced);
     if (id === 'shock_mantle') {
       ctx.save(); ctx.globalAlpha = state.premiumGear!.shield > 0 ? .9 : .25;
       ctx.fillStyle = state.premiumGear!.feedback > 0 ? '#ecffff' : '#a3e635';

@@ -3003,9 +3003,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawPremiumPresence(ctx,spritesRef.current.premiumPresence,engine.state.premiumGear?.equipped??[],engine.state.gameTime,reducedMotionRef.current,projectiles.length>60||hazards.length>45,direction.auraStrength);
             ctx.restore();
             // Draw grounded with feet touching ground contact shadow (0, 0)
-            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back');
+            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
-            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front');
+            drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current);
 
           } else {

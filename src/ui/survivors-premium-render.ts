@@ -10,7 +10,10 @@ import {InspectionFlightTracker,type InspectionPhase} from './survivors-inspecti
 import type {SpritePose} from './survivors-sprite-motion';
 import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
 import {equipmentAnimationTime} from './survivors-equipment-clock';
+import {EquipmentMotion,type EquipmentJoint} from './survivors-equipment-motion';
 const inspectionFlights=new InspectionFlightTracker();
+const mountedMotion=new EquipmentMotion();
+const categoryJoints={communication:'radio',tempo:'wrist',logistics:'pack',protection:'armor',tactics:'belt',companion:'dock'} satisfies Record<string,EquipmentJoint>;
 export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
 /** Raster art stays in presentation; status is read exclusively from the engine. */
 export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,_atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,_itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement;premiumAtlas?:HTMLImageElement}):InspectionPhase|undefined {
@@ -69,7 +72,11 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
     const item=STORE_ITEMS.find(item=>item.id===id);if(!item||item.category==='companion')continue;
     const socket=premiumBodySocket(state.characterId,actorPose.actor,actorPose.height,item.category,actorPose.pose);
     if(socket){
-      if(!hasWearable(state,id,wearables))draw(id,socket.x,socket.y,socket.size);
+      if(!hasWearable(state,id,wearables)){
+        ctx.save();ctx.translate(socket.x,socket.y);
+        ctx.rotate(mountedMotion.sample(state.player,equipmentAnimationTime(state),actorPose.pose,reducedMotion,id,categoryJoints[item.category]));
+        draw(id,0,0,socket.size);ctx.restore();
+      }
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
       if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(equipmentAnimationTime(state)*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
       attached=true;

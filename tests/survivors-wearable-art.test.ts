@@ -5,7 +5,7 @@ import { SpriteMotionTracker } from '../src/ui/survivors-sprite-motion';
 import { applyActorTorsoTransform, riggedTorsoOffset } from '../src/ui/survivors-rig-renderer';
 
 const image = (name: string) => ({ src: `/assets/${name}`, naturalWidth: 600, naturalHeight: 1400 }) as HTMLImageElement;
-const context = () => ({ save: vi.fn(), restore: vi.fn(), scale: vi.fn(), transform: vi.fn(), translate: vi.fn(), drawImage: vi.fn(), fillRect: vi.fn(), beginPath: vi.fn(), moveTo: vi.fn(), lineTo: vi.fn(), closePath: vi.fn(), clip: vi.fn() });
+const context = () => ({ save: vi.fn(), restore: vi.fn(), scale: vi.fn(), rotate:vi.fn(), transform: vi.fn(), translate: vi.fn(), drawImage: vi.fn(), fillRect: vi.fn(), beginPath: vi.fn(), moveTo: vi.fn(), lineTo: vi.fn(), closePath: vi.fn(), clip: vi.fn() });
 const equipped = ['voice_lens', 'shock_mantle', 'inspection_wing'];
 const images: WearableImages = Object.fromEntries(equipped.map(id => [id, image(`${id}.png`)]));
 
