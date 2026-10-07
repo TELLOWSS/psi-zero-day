@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { chromium } = require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES, 'playwright'));
-const source = JSON.parse(fs.readFileSync('artifacts/natural-progression/brand-b0-extended/report.json', 'utf8'));
+const source = JSON.parse(fs.readFileSync(process.env.PSI_EARNED_REPORT ?? 'artifacts/natural-progression/brand-b0-extended/report.json', 'utf8'));
 if (source.outcome !== 'victory' || !source.last.bossNeutralized || !source.technicalPass) {
   throw new Error('A genuine UI-input victory report is required');
 }

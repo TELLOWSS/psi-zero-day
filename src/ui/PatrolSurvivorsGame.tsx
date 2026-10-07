@@ -47,6 +47,7 @@ import {drawWearableLayer,loadWearableImages,type WearableImages} from './surviv
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,repairAllStoreItems,storeRepairCost,storeRepairTotal,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
 import {persistStoreWallet,type StoreWallet} from '../app/survivors-store-wallet';
+import {settlePatrolCredits} from '../domain/survivors-credit-settlement';
 import storeText from '../../content/localization/survivors-store-ko.json';
 import resultText from '../../content/localization/survivors-result-ko.json';
 import preflightText from '../../content/localization/survivors-preflight-ko.json';
@@ -664,6 +665,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const currentWaveRef=useRef<SurvivorsWave>(1);
   const wave1ShopTriggeredRef = useRef(false);
   const wave2ShopTriggeredRef = useRef(false);
+  const transferredSessionCreditsRef = useRef(0);
 
   // Extraction Climax (긴급 탈출 · 인계 클라이맥스) State & Refs
   const [extractionState, setExtractionState] = useState<{
@@ -1032,6 +1034,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setActivePerks({ ...engine.state.activePerks });
     wave1ShopTriggeredRef.current = false;
     wave2ShopTriggeredRef.current = false;
+    transferredSessionCreditsRef.current = 0;
     setShowContainerShop(false);
     setAvailableContainerShopWave(null);
     setWaveSupplyNotice(null);
@@ -1490,8 +1493,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (!wave2ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave2ShopTriggeredRef.current = true;
             engine.state.psiCredits += 180;
-            setPsiCredits(engine.state.psiCredits);
-            creditsRef.current = engine.state.psiCredits;
+            if(saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,180,0)))transferredSessionCreditsRef.current+=180;
             setAvailableContainerShopWave(2);
             setWaveSupplyNotice({ wave: 2, credits: 180 });
             audioRef.current.playRecordedEffect('ui_equip');
@@ -1500,8 +1502,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           if (!wave1ShopTriggeredRef.current && engine.state.phase === 'playing') {
             wave1ShopTriggeredRef.current = true;
             engine.state.psiCredits += 120;
-            setPsiCredits(engine.state.psiCredits);
-            creditsRef.current = engine.state.psiCredits;
+            if(saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,120,0)))transferredSessionCreditsRef.current+=120;
             setAvailableContainerShopWave(1);
             setWaveSupplyNotice({ wave: 1, credits: 120 });
             audioRef.current.playRecordedEffect('ui_equip');
@@ -1744,7 +1745,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // Save earned credits & Field Guide Points
             const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
             const settled=currentPhase==='victory'?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
-            if(saveMetaProgress(permanentUpgrades,creditsRef.current+engine.state.psiCredits,settled)&&currentPhase==='victory')setClearGearWear([...new Set(used)]);
+            if(saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,engine.state.psiCredits,transferredSessionCreditsRef.current),settled)&&currentPhase==='victory')setClearGearWear([...new Set(used)]);
             try {
               const earnedFg = Math.max(1, Math.floor(engine.state.hazardsNeutralized / 8)) + (currentPhase === 'victory' ? 5 : 0);
               const currentFg = safeNumber(localStorage.getItem(STORAGE_KEY_FG_POINTS));
