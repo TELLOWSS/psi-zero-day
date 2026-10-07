@@ -130,8 +130,9 @@ export class SurvivorsSessionAudio {
     const ctx=this.ensureBuses();if(!ctx||this.muted)return false;
     // Multiple drone types share a cadence so upgrades cannot stack repetitive launches.
     const drone=['drone_release','drone_premium_release','drone_hunter_burst'].includes(id);
-    const now=ctx.currentTime,key=drone?'recorded:drone-fire':'recorded:'+id+':'+variant,previous=this.equipmentTimes.get(key);
-    const interval=drone?(busy?.30:.22):busy?.16:['drone_launch','drone_dock'].includes(id)?.35:['boss_alert','incident_secured'].includes(id)?.5:.10;
+    const impact=id.startsWith('impact_');
+    const now=ctx.currentTime,key=drone?'recorded:drone-fire':impact?'recorded:impact-contact':'recorded:'+id+':'+variant,previous=this.equipmentTimes.get(key);
+    const interval=id==='impact_finisher'?.45:impact?(busy?.24:.16):drone?(busy?.30:.22):busy?.16:['drone_launch','drone_dock'].includes(id)?.35:['boss_alert','incident_secured'].includes(id)?.5:.10;
     if(previous!==undefined&&now-previous<interval)return true;
     const asset=family[this.recordedVariants.next(id,family.length)]!;
     if(!asset.uri||!asset.sha256||!asset.rights)return false;
@@ -148,7 +149,7 @@ export class SurvivorsSessionAudio {
       source.buffer=buffer;if(source.playbackRate)source.playbackRate.value=playbackRate;
       gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level,start+.003);
       gain.gain.setValueAtTime(level,start+Math.max(.004,duration-(drone?.04:.025)));gain.gain.linearRampToValueAtTime(0,start+duration);
-      if(!this.track(source,gain,ui?4:['boss_alert','incident_secured','player_hit'].includes(id)?3:id==='pickup'?0:2))return;
+      if(!this.track(source,gain,ui?4:['boss_alert','incident_secured','player_hit','impact_finisher'].includes(id)?3:id==='pickup'?0:2))return;
       source.connect(gain);this.connectSfx(source,gain,position,listener);source.start(start);source.stop(start+duration);
     }).catch(error=>{if(epoch===this.epoch){this.recordedFailures.add(asset.uri!);this.buffers.delete(asset.uri!);this.fail(String(error));}});
     return true;
