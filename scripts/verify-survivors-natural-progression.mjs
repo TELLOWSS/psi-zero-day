@@ -27,9 +27,11 @@ try{
   const snapshot=await page.evaluate(()=>{
    const s=window.naturalEngine.state,p=s.player,b=s.hazards.find(h=>h.isStageBoss);
    let vx=0,vy=0;
-   const target=b?.bossGameplay?.combatPhase==='weak_point'||b?.bossGameplay?.combatPhase==='burst'?b:
-    s.drops.reduce((best,d)=>!best||Math.hypot(d.x-p.x,d.y-p.y)<Math.hypot(best.x-p.x,best.y-p.y)?d:best,null);
-   if(target){const dx=target.x-p.x,dy=target.y-p.y,n=Math.hypot(dx,dy)||1;vx=dx/n;vy=dy/n;}
+   const target=s.extractionPhase??(b?.bossGameplay?.combatPhase==='weak_point'||b?.bossGameplay?.combatPhase==='burst'?b:
+    s.drops.reduce((best,d)=>!best||Math.hypot(d.x-p.x,d.y-p.y)<Math.hypot(best.x-p.x,best.y-p.y)?d:best,null));
+   if(target){const dx=target.x-p.x,dy=target.y-p.y,n=Math.hypot(dx,dy)||1;vx=dx/n;vy=dy/n;
+    if(s.extractionPhase&&n<s.extractionPhase.radius*.4){vx=0;vy=0;}
+   }
    else{vx=Math.cos(s.gameTime*.3);vy=Math.sin(s.gameTime*.3);}
    for(const h of s.hazards){if(h.type==='UNHELMETED')continue;
     if(h.bossGameplay&&h.bossGameplay.combatPhase!=='pattern')continue;
@@ -76,11 +78,14 @@ try{
  await release();await page.waitForTimeout(300);await page.screenshot({path:path.join(out,'outcome.png')});
  const finalStorage=await page.evaluate(()=>({...localStorage}));
  const last=terminal??samples.at(-1);
+ const initialWallet=JSON.parse(initialStorage['psi.survivors.store_wallet']??'null');
+ const finalWallet=JSON.parse(finalStorage['psi.survivors.store_wallet']??'null');
+ const walletMatches=terminal?finalWallet?.credits===(initialWallet?.credits??0)+terminal.credits:null;
  const report={scope:'UNMODIFIED_NEW_SAVE_UI_INPUT_BOT_NOT_HUMAN_BALANCE_APPROVAL',seconds,
   outcome:terminal?.phase??'observation-timeout',initialStorage,finalStorage,choices,samples,errors,failed,
   reachedBoss:seen.has('boss-arrival')||samples.some(s=>s.boss),reachedBurst:seen.has('boss-burst'),
   falseTimerVictory:terminal?.phase==='victory'&&!terminal.bossNeutralized,
-  technicalPass:!errors.length&&!failed.length&&!samples.some(s=>s.overflow)&&!(terminal?.phase==='victory'&&!terminal.bossNeutralized),last};
+  walletMatches,technicalPass:!errors.length&&!failed.length&&!samples.some(s=>s.overflow)&&walletMatches!==false&&!(terminal?.phase==='victory'&&!terminal.bossNeutralized),last};
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
  console.log(JSON.stringify({...report,samples:`${samples.length} samples in report.json`}));
  if(!report.technicalPass)process.exitCode=1;
