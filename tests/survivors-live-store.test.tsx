@@ -30,6 +30,8 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   act(()=>mantle.querySelector<HTMLButtonElement>('button')!.click());
   expect(engine.state.premiumGear?.equipped).toEqual(['voice_lens','shock_mantle']);
   expect(engine.state.player.maxHp).toBe(120);expect(engine.state.player.hp).toBe(40);expect(engine.state.gameTime).toBe(100);
+  const health=host.querySelector('[role="progressbar"][aria-label="안전 체력"]')!;
+  expect(health.getAttribute('aria-valuenow')).toBe('40');expect(health.getAttribute('aria-valuemax')).toBe('120');
   act(()=>host.querySelector<HTMLButtonElement>('[aria-label="장비실 닫기"]')!.click());expect(engine.state.phase).toBe('paused');
   click('순찰 재개');expect(engine.state.phase).toBe('playing');
   vi.spyOn(engine,'update').mockImplementation(()=>{engine.state.phase='victory';engine.state.psiCredits=50;engine.state.starsEarned=[true,false,false];});
@@ -46,7 +48,9 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   expect(document.activeElement).toBe(dialog.querySelector('.survivors-result-body'));
   act(()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true,cancelable:true})));
   expect(document.activeElement).toBe(actions[actions.length-1]);
-  expect(host.querySelector('.survivors-results-grid')?.textContent).toContain('+50 PSI');
+  expect(host.querySelectorAll('.survivors-result-reward')).toHaveLength(1);
+  expect(host.querySelector('.survivors-result-reward strong')?.textContent).toBe('+50 PSI');
+  expect(host.querySelector('.survivors-results-grid')?.textContent).toContain('보완 인계');
   const starts=vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length;
   click('같은 작전 다시 준비');
   expect(vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length).toBe(starts);
