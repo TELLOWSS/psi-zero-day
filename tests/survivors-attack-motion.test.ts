@@ -9,6 +9,14 @@ it('gives each emitted attack a smooth bounded onset and recovery',()=>{
  }
  expect(attackEnvelope(NaN)).toBe(0);expect(attackEnvelope(-1)).toBe(0);
 });
+it('faces a stationary command toward actual emission and keeps travelling feet in their direction',()=>{
+ const tracker=new SpriteMotionTracker(),actor={};tracker.sample(actor,0,0,0);
+ tracker.act(actor,.1,'shot',Math.PI);const command=tracker.sample(actor,0,0,.125);
+ expect(command.direction).toBe(4);expect(command.attackAngle).toBe(Math.PI);
+ tracker.act(actor,.2,'shot',Math.PI/2);const moving=tracker.sample(actor,10,0,.225);
+ expect(moving.direction).toBe(0);expect(moving.attackAngle).toBe(Math.PI/2);
+ expect(tracker.sample(actor,10,0,.225)).toBe(moving);
+});
 it('does not animate player recoil for autonomous drone or trap emissions',()=>{
  expect(projectileAttackMotion('drone_laser')).toBeUndefined();expect(projectileAttackMotion('cone_trap')).toBeUndefined();
  expect(projectileAttackMotion('radio')).toBe('shot');expect(projectileAttackMotion('cryo_blast')).toBe('spray');expect(projectileAttackMotion('shout_shockwave')).toBe('ultimate');

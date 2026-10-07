@@ -8,6 +8,16 @@ vi.mock('../src/ui/survivors-equipment-art',async original=>({...await original<
 import {drawEquipment} from '../src/ui/survivors-equipment-art';
 const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} as HTMLImageElement;
 const context=()=>({save:vi.fn(),restore:vi.fn(),scale:vi.fn(),transform:vi.fn(),translate:vi.fn(),rotate:vi.fn()}) as unknown as CanvasRenderingContext2D;
+it('animates the carried item on body time during hit-stop and remains still for reduced motion',()=>{
+ const state=createInitialSurvivorsState('player'),pose={...new SpriteMotionTracker().sample(state.player,0,0,0),action:1};
+ const ctx=context();state.activePerks.radio_boost=1;state.gameTime=0;state.playerMotionTime=0;
+ drawCarriedEquipment(ctx,state,actor,74,pose,undefined,undefined);
+ state.playerMotionTime=.1;drawCarriedEquipment(ctx,state,actor,74,pose,undefined,undefined);
+ expect(vi.mocked(ctx.rotate).mock.calls.at(-1)![0]).toBeLessThan(0);
+ drawCarriedEquipment(ctx,state,actor,74,pose,undefined,undefined,true);
+ expect(vi.mocked(ctx.rotate).mock.calls.at(-1)![0]).toBe(0);
+ expect(state.gameTime).toBe(0);
+});
 it('selects actual evolutions rather than showing level-five as an evolution',()=>{
  const s=createInitialSurvivorsState();s.activePerks.radio_boost=5;
  expect(carriedTool(s)).toEqual({id:'radio_boost',level:5,left:false});

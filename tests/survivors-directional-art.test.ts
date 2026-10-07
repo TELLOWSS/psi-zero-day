@@ -1,16 +1,39 @@
 import {it,expect} from 'vitest';
-import {movementDirection,directionalFrame,directionalFrameWeights} from '../src/ui/survivors-directional-art';
+import {movementDirection,directionalFrame,directionalFrameWeights,directionalActionFrame,directionalPoseWeights} from '../src/ui/survivors-directional-art';
+import {actorTorsoPoint} from '../src/ui/survivors-rig-renderer';
 import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
+it('bridges radio entry/recovery continuously and never borrows radio art for other actions',()=>{
+ const pose={...new SpriteMotionTracker().sample({},0,0,0),actionKind:'shot' as const};
+ for(const progress of [0,.12,.16,.20,.3,.48,.52,.56,.8,NaN]){
+  const weights=directionalPoseWeights({...pose,actionProgress:progress});
+  expect(weights.reduce((sum,sample)=>sum+sample.weight,0)).toBeCloseTo(1,12);
+  expect(weights.every(sample=>sample.weight>0&&Number.isFinite(sample.weight))).toBe(true);
+ }
+ for(const progress of [.16,.52])expect(directionalPoseWeights({...pose,actionProgress:progress}).find(sample=>sample.frame===10)?.weight).toBeCloseTo(.5,12);
+ expect(directionalPoseWeights({...pose,actionProgress:.3})).toEqual([{frame:10,weight:1}]);
+ for(const actionKind of ['spray','ultimate'] as const)expect(directionalPoseWeights({...pose,actionKind,actionProgress:.3}).some(sample=>sample.frame===10)).toBe(false);
+ expect(directionalPoseWeights({...pose,moving:true,actionProgress:.3}).some(sample=>sample.frame===10)).toBe(false);
+});
 it('selects eight actual travel directions and retains facing on stop/noisy input',()=>{
  for(let direction=0;direction<8;direction++){const angle=direction*Math.PI/4;expect(movementDirection(Math.cos(angle),Math.sin(angle),2)).toBe(direction);}
  expect(movementDirection(0,0,7)).toBe(7);expect(movementDirection(NaN,1,4)).toBe(4);
  expect(movementDirection(Math.cos(.4),Math.sin(.4),0)).toBe(0);expect(movementDirection(Math.cos(.5),Math.sin(.5),0)).toBe(1);
 });
+it('uses a brief command pose and gives the body/attachments the same directional recoil',()=>{
+ expect(directionalActionFrame(0)).toBeUndefined();expect(directionalActionFrame(.2)).toBe(10);
+ expect(directionalActionFrame(.7)).toBeUndefined();expect(directionalActionFrame(NaN)).toBeUndefined();
+ const base={...new SpriteMotionTracker().sample({},0,0,0),directional:true,action:1};
+ const east=actorTorsoPoint({x:0,y:-30},{...base,attackAngle:0},74,true);
+ const west=actorTorsoPoint({x:0,y:-30},{...base,attackAngle:Math.PI},74,true);
+ expect(east.x).toBeLessThan(0);expect(west.x).toBeGreaterThan(0);expect(west.x).toBeCloseTo(-east.x);
+ const hit=actorTorsoPoint({x:0,y:-30},{...base,action:0,reaction:1},74,true);
+ expect(hit.y).toBeCloseTo(-32*.974);expect(Number.isFinite(hit.y)).toBe(true);
+});
 it('interpolates authored phases and settles to contact without alpha loss or state changes',()=>{
  for(const cycle of [-9,0,.13,1,3,6.27,9,NaN])for(const gait of [0,.25,.5,.75,1]){
   const weights=directionalFrameWeights(cycle,true,gait);
   expect(weights.reduce((sum,w)=>sum+w.weight,0)).toBeCloseTo(1,12);
-  expect(weights.every(w=>w.frame>=0&&w.frame<8&&w.weight>0)).toBe(true);
+  expect(weights.every(w=>w.frame>=0&&w.frame<10&&w.weight>0)).toBe(true);
  }
  expect(directionalFrameWeights(2,false,0)).toEqual([{frame:4,weight:1}]);
  expect(directionalFrameWeights(Math.PI/8,true,1)).toEqual([{frame:0,weight:1}]);
@@ -22,6 +45,20 @@ it('interpolates authored phases and settles to contact without alpha loss or st
  expect(stopped.authoredCycle).toBe(moved.authoredCycle);
  expect(tracker.sample(actor,10,0,.12)).toBe(stopped);
  expect(tracker.sample(actor,10,0,.3).gaitBlend).toBe(0);
+});
+it('renders each authored passing pose between strides and keeps contact poses on stopping',()=>{
+ for(const [phase,frame] of [[1.65,8],[5.65,9]] as const){
+  expect(directionalFrameWeights(phase/8*Math.PI*2,true,1)).toEqual([{frame,weight:1}]);
+  expect(directionalFrameWeights(phase/8*Math.PI*2,false,0).every(w=>w.frame===0||w.frame===4)).toBe(true);
+ }
+ const transition=directionalFrameWeights(1.455/8*Math.PI*2,true,1);
+ expect(transition.map(w=>w.frame)).toEqual([1,8]);
+ for(const sample of transition)expect(sample.weight).toBeCloseTo(.5,12);
+ for(let phase=0;phase<8;phase+=.013){
+  const weights=directionalFrameWeights(phase/8*Math.PI*2,true,1);
+  expect(weights.length).toBeLessThanOrEqual(2);
+  expect(weights.reduce((sum,w)=>sum+w.weight,0)).toBeCloseTo(1,12);
+ }
 });
 it('uses authored eight-frame cycles without advancing on a stopped or paused actor',()=>{
  for(let frame=0;frame<8;frame++)expect(directionalFrame((frame+.2)/8*Math.PI*2,true)).toBe(frame);

@@ -5,6 +5,7 @@ import type {SpritePose} from './survivors-sprite-motion';
 import {baseToolSocket} from './survivors-wearable-art';
 import {drawEquipment,equipmentAppearance} from './survivors-equipment-art';
 import {EquipmentMotion} from './survivors-equipment-motion';
+import {equipmentAnimationTime} from './survivors-equipment-clock';
 const equipmentMotion=new EquipmentMotion();
 
 export function carriedTool(state:Readonly<SurvivorsGameState>):{id:PerkId;level:number;left:boolean}|undefined {
@@ -22,7 +23,7 @@ export function drawCarriedEquipment(ctx:CanvasRenderingContext2D,state:Readonly
  const appearance=equipmentAppearance(tool.id,tool.level)!;
  ctx.save();applyActorTorsoTransform(ctx,pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
  ctx.translate(socket.x,socket.y);
- ctx.rotate(equipmentMotion.sample(state,state.gameTime,pose,reduced));
+ ctx.rotate(equipmentMotion.sample(state.player,equipmentAnimationTime(state),pose,reduced,tool.id,tool.left?'spray':'radio'));
  drawEquipment(ctx,atlas,tool.id,tool.level,0,socket.size*appearance.scale*.5,socket.size,pickups);
  ctx.restore();
 }

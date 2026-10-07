@@ -15,7 +15,9 @@ it('keeps ordinary purchases in the actor-specific animated torso frame',()=>{
   const ctx=context();vi.mocked(drawProp).mockClear();
   drawPremiumGear(ctx,state,atlas,false,0,atlas,{}, {actor,height:74,pose:{...pose,facing:-1,lean:.03,action:1},premiumAtlas:atlas});
   expect(ctx.translate).toHaveBeenCalledWith(state.player.x,state.player.y);expect(ctx.scale).toHaveBeenCalledWith(-1,1);
-  expect(vi.mocked(drawProp).mock.calls[0]!.slice(1)).toEqual([atlas,9,socket.x,socket.y+socket.size/2,socket.size]);
+  expect(ctx.translate).toHaveBeenCalledWith(socket.x,socket.y);
+  expect(ctx.rotate).toHaveBeenCalledWith(0);
+  expect(vi.mocked(drawProp).mock.calls[0]!.slice(1)).toEqual([atlas,9,0,socket.size/2,socket.size]);
   expect(vi.mocked(ctx.save).mock.calls.length).toBe(vi.mocked(ctx.restore).mock.calls.length);
 });
 it('docks rescue companions instead of orbiting without a gameplay action',()=>{

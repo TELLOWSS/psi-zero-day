@@ -290,7 +290,7 @@ export class SurvivorsSessionAudio {
       if(this.playDroneV3(id,{x:event.x,y:event.y},listener,busy,rate))return;
     }
     const recorded=recordedEquipmentCue(event,equipped);
-    const rate=event.kind==='satellite_wave'?.8:1;
+    const rate=(event.kind==='satellite_wave'?.8:1)*(event.critical&&!event.worker&&event.phase==='impact'?.95:1);
     if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
@@ -298,14 +298,14 @@ export class SurvivorsSessionAudio {
     if(previous!==undefined&&now-previous<(busy?.16:.08))return;
     this.equipmentTimes.set(key,now);
     const impact=event.phase==='impact',release=event.phase==='release';
-    const level=event.worker?.13:release?.065:impact?.42:.32;
+    const level=event.worker?.13:release?.065:impact?(event.critical?.46:.42):.32;
     const priority=impact?2:1;
     const look=cinematicLook(event.kind,5,equipped);
     const signature=look.premium&&!event.worker?look.palette:'base';
-    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature+':'+event.actorKind;
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature+':'+event.actorKind+':'+Boolean(event.critical&&!event.worker);
     let buffer=this.equipmentBuffers.get(bufferKey);
     if(!buffer) {
-      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped,event.actorKind);
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped,event.actorKind,Boolean(event.critical));
       buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
       buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
     }

@@ -112,7 +112,8 @@ it('adds confirmed evolution contact marks, bounded recoil and non-clipping soni
   const worker=context();drawCinematicContact(worker,{...event,worker:true},0,.2,cinematicLook(event.kind,5),atlas,false,false);
   expect(worker.drawImage).not.toHaveBeenCalled();
   const direction=new CombatDirection();direction.ingest(Array(200).fill({...event,phase:'launch'}),[],{x:0,y:0});
-  expect(direction.camera(false).x).toBe(-1.5);expect(direction.camera(true)).toEqual({x:0,y:0});expect(direction.lightCount).toBe(8);
+  expect(direction.camera(false).x).toBe(-1.5);expect(direction.camera(true)).toEqual({x:0,y:0});expect(direction.lightCount).toBe(1);
+  const distinct=new CombatDirection();distinct.ingest(Array.from({length:200},(_,i)=>({...event,phase:'launch' as const,projectileId:String(i)})),[],{x:0,y:0});expect(distinct.lightCount).toBe(8);
   for(const identity of Object.values(EVOLUTION_IDENTITIES))for(const phase of ['launch','impact','release'] as const){
     const data=equipmentSoundSamples(identity.kind,phase,false,48000);expect(data.every(value=>Number.isFinite(value)&&Math.abs(value)<1)).toBe(true);
   }

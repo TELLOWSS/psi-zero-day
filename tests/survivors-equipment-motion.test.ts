@@ -2,6 +2,20 @@ import {expect,it} from 'vitest';
 import {EquipmentMotion} from '../src/ui/survivors-equipment-motion';
 import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
 const base=new SpriteMotionTracker().sample({},0,0,0);
+it('keeps item springs independent at the same timestamp and resets only the reduced item',()=>{
+ const motion=new EquipmentMotion(),entity={},pose={...base,action:1,gaitBlend:1,cycle:1};
+ motion.sample(entity,0,pose,false,'radio','radio');motion.sample(entity,0,pose,false,'armor','armor');
+ const radio=motion.sample(entity,.1,pose,false,'radio','radio'),armor=motion.sample(entity,.1,pose,false,'armor','armor');
+ expect(radio).not.toBe(armor);expect(Math.abs(armor)).toBeLessThan(Math.abs(radio));
+ expect(motion.sample(entity,.1,base,false,'radio','radio')).toBe(radio);
+ expect(motion.sample(entity,.1,pose,true,'armor','armor')).toBe(0);
+ expect(motion.sample(entity,.1,pose,false,'radio','radio')).toBe(radio);
+ expect(motion.sample(entity,.1,pose,false,'spray','spray')).toBe(0);
+ for(let i=7;i<180;i++)for(const joint of ['radio','spray','armor','pack','wrist','dock','belt'] as const){
+  const angle=motion.sample(entity,i/60,pose,false,joint,joint);
+  expect(Number.isFinite(angle)).toBe(true);expect(Math.abs(angle)).toBeLessThanOrEqual(.12);
+ }
+});
 it('lags attack motion, remains bounded and settles after movement ends',()=>{
  const motion=new EquipmentMotion(),entity={};motion.sample(entity,0,base);
  const pose={...base,action:1,lean:.03,gaitBlend:1,cycle:1};

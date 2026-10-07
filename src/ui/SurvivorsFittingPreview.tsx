@@ -66,9 +66,9 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
         const pose={...fittingPose(clock.current,motion,facing,reduced,attackKind),directional:isDirectionalActor(actor)};
         ctx.save();applyActorTorsoTransform(ctx,pose,74,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
         drawPremiumPresence(ctx,presence,previewState.premiumGear?.equipped??[],previewState.gameTime,reduced,false,pose.action);ctx.restore();
-        drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back');
+        drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back',reduced);
         drawGroundedSprite(ctx, actor, 74, pose);
-        drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front');
+        drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front',reduced);
         drawCarriedEquipment(ctx,previewState,actor,74,pose,gear,pickups,reduced);
         drawPremiumGear(ctx,previewState,gear,reduced,0,pickups,wearables,{actor,height:74,pose,vfxAtlas:cinematic,premiumAtlas:premium});
         const angle=pose.moving?(facing===1?0:Math.PI):undefined;

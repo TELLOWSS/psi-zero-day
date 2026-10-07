@@ -13,7 +13,7 @@ const signatures: Record<ProjectileKind, readonly [number, number, number, numbe
   emp_pulse: [190, .26, .35, .25], plasma_arc: [280, .28, .40, .30],
 };
 /** Deterministic baked PCM: no per-frame oscillators or additional voice layers. */
-export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFeedback['phase'], worker: boolean, sampleRate: number, equipped:readonly string[]=[], actorKind?:ProjectileFeedback['actorKind']): Float32Array {
+export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFeedback['phase'], worker: boolean, sampleRate: number, equipped:readonly string[]=[], actorKind?:ProjectileFeedback['actorKind'],critical=false): Float32Array {
   const [base, tail, texture, resonance] = signatures[kind];
   const look=cinematicLook(kind,5,equipped);
   const premium=look.premium&&!worker;
@@ -39,7 +39,8 @@ export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFee
     const pulse=worker?1:kind==='radio'||kind==='drone_laser'?Math.max(0,Math.sin(2*Math.PI*32*t)):kind==='hunter_beam'?Math.max(0,Math.sin(2*Math.PI*48*t)):1;
     const material=worker||phase!=='impact'?0:actorKind==='FALLING_DEBRIS'?(noise-low)*.22*Math.exp(-t/.045):actorKind==='GAS_LEAK'?noise*.18*Math.exp(-t/.08):actorKind==='RUNAWAY_CART'||actorKind==='CRANE_BOSS'?Math.sin(carrier*4.17)*.17*Math.exp(-t/.06):0;
     const identity=worker?0:kind==='extinguisher'||kind==='cryo_blast'?(noise-low)*.20:kind==='tesla_bolt'?noise*.22*Math.pow(Math.max(0,Math.sin(t*970)),8):kind==='cone_trap'?Math.sin(t*2*Math.PI*1350)*.16*Math.exp(-t/.015):kind==='emf_beam'||kind==='satellite_wave'?Math.sin(t*2*Math.PI*65)*.19:0;
-    data[i]=Math.max(-.98,Math.min(.98,(body*pulse+grain+ring+pressure+harmonic+transient+identity+material)*envelope*.65));
+    const weight=critical&&!worker&&phase==='impact'?Math.sin(2*Math.PI*(76-24*u)*t)*.24*Math.exp(-t/.045)+(noise-low)*.08*Math.exp(-t/.009):0;
+    data[i]=Math.max(-.98,Math.min(.98,(body*pulse+grain+ring+pressure+harmonic+transient+identity+material+weight)*envelope*.65));
   }
   return data;
 }
