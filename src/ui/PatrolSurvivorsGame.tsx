@@ -1819,7 +1819,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
       const trackedPose = motions.sample(player, player.x, player.y, engine.state.playerMotionTime??engine.state.gameTime, player.hp);
       const actor=spritesRef.current.characterMaps[engine.state.characterId];
-      const checkDanger=hazards.some(h=>h.hp>0&&Math.hypot(h.x-player.x,h.y-player.y)<420)
+      const checkDanger=player.hp<=player.maxHp*.4||hazards.some(h=>h.hp>0&&Math.hypot(h.x-player.x,h.y-player.y)<420)
         ||engine.state.bossAlertTimer>0||Boolean(engine.state.signatureEvent&&engine.state.signatureEvent.phase!=='resolved')
         ||engine.state.directorCutinPhase!=='none'||engine.state.interactiveHazards.some(h=>(h.state==='active'||h.state==='warning')&&Math.hypot(h.x-player.x,h.y-player.y)<420);
       const equipmentCheck=equipmentCheckRef.current.sample({clock:engine.state.gameTime,phase:engine.state.phase,moving:trackedPose.moving,action:trackedPose.action,reaction:trackedPose.reaction,danger:checkDanger,reduced:reducedMotionRef.current,player:engine.state.characterId==='player'});
