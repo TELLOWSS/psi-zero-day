@@ -4,6 +4,18 @@ import { SurvivorsEngine, createInitialSurvivorsState } from '../src/engine/patr
 import { SurvivorsContainerShop } from '../src/ui/SurvivorsContainerShop';
 
 describe('Survivors Container Shop and Hit Juice Physics', () => {
+  it('does not stack the pause dialog behind wave supply', () => {
+    const source = readFileSync(new URL('../src/ui/PatrolSurvivorsGame.tsx', import.meta.url), 'utf8');
+    expect(source).toContain("phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && !showContainerShop");
+  });
+
+  it('keeps equipment condition and actions on separate rows', () => {
+    const css = readFileSync(new URL('../src/ui/patrol-survivors.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.survivors-store-slots label\s*\{grid-column:1\/-1;/);
+    expect(css).toMatch(/\.survivors-store-slots button\s*\{grid-column:1\/-1;/);
+    expect(css).toMatch(/\.survivors-fitting-action\s*\{ position: static;/);
+  });
+
   it('hitStopTimer freezes gameTime advancement during impact', () => {
     const engine = new SurvivorsEngine(createInitialSurvivorsState('player', undefined, 'stage_01'));
     engine.start();

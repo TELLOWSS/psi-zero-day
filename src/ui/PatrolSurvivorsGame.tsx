@@ -4050,7 +4050,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       )}
 
       {/* PAUSE MODAL */}
-      {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && (
+      {phase === 'paused' && !accountabilityCase && !showRdModal && !showArsenalModal && !showContainerShop && (
         <div className="survivors-modal-backdrop">
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
