@@ -102,3 +102,10 @@
 - 4개 viewport에서 공식 제목·보조 문구·넘침·준비 중 디펜스 프리뷰 검증 통과. PC/폰 세로/태블릿은 문구 표시, 낮은 모바일 가로는 기존 규칙에 따라 숨김 유지.
 - 폰트 준비와 진입 애니메이션이 끝난 실제 화면을 확인. 증거: `artifacts/brand-title/report.json`, viewport별 PNG.
 - PR #136 이후에 후속 PR을 main으로 적용하고 최신 검사 및 운영 확인을 별도로 수행한다. 로컬 검증을 운영 반영 완료로 표현하지 않음.
+
+### PR #136 운영 확인 및 타이틀 반영 준비
+
+- PR #136 검사 3개와 Vercel preview 성공 후 main 병합. 운영 커밋 `9b289566b05bd977d869a618325f600574cee9dd`, 배포 `dpl_GwNHdRyNWJHcqbv2gAxMWeG2NngP` READY 및 `psi-zero-day.vercel.app` 별칭 확인.
+- 운영 새 브라우저 저장에서 엔진 변경 없이 무입력/레벨업 선택만으로 실제 패배 진행. `대응 중단` 문구, 24 PSI 보상과 지갑 일치, 같은 첫 구역 재준비 및 새로고침 복구, 오류/가로 넘침 없음. 별도 랜덤 실행이며 이전 12/18 PSI 검사와 구분한다.
+- 운영 증거 `artifacts/natural-defeat/report.json`. 실제 플레이 검증이며 사람이 직접 조작한 실기기 검수는 아님.
+- PR #137 base를 main으로 전환하고 draft 해제. 최신 main을 병합해 타이틀/음성 잠금 CI 재실행. 모든 최신 검사와 preview 성공 전에는 운영 병합하지 않는다.
