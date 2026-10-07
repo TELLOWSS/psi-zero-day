@@ -33,11 +33,18 @@ try {
   const after=await pixels();await page.screenshot({path:path.join(out,`${width}x${height}-play.png`)});
   await page.locator('.survivors-pause-command').click();
   await page.getByRole('button',{name:'순찰 재개',exact:true}).waitFor();await page.waitForTimeout(500);
-  const paused=await pixels();await page.waitForTimeout(250);const held=await pixels();
+  let paused=await pixels(),held=paused,stablePause=false,stableSamples=0;
+  const pauseHashes=[paused.hash];
+  for(let attempt=0;attempt<8;attempt++){
+   await page.waitForTimeout(250);held=await pixels();pauseHashes.push(held.hash);
+   stableSamples=held.hash===paused.hash?stableSamples+1:0;
+   if(stableSamples>=2){stablePause=true;break;}
+   paused=held;
+  }
   await page.getByRole('button',{name:'순찰 재개',exact:true}).click();await page.waitForTimeout(350);const resumed=await pixels();
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  const pass=assets.every(asset=>asset.width>0&&asset.height>0)&&before.colored>1000&&after.hash!==before.hash&&paused.hash===held.hash&&resumed.hash!==held.hash&&!overflow&&!errors.length;
-  rows.push({width,height,assets,before,after,paused,held,resumed,overflow,errors,pass});await page.close();
+  const pass=assets.every(asset=>asset.width>0&&asset.height>0)&&before.colored>1000&&after.hash!==before.hash&&stablePause&&resumed.hash!==held.hash&&!overflow&&!errors.length;
+  rows.push({width,height,assets,before,after,paused,held,stablePause,pauseHashes,resumed,overflow,errors,pass});await page.close();
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({baseUrl,rows},null,2));console.log(JSON.stringify({baseUrl,rows}));
  if(rows.some(row=>!row.pass))process.exitCode=1;
