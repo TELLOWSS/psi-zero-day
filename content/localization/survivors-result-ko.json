@@ -1,4 +1,15 @@
 {
   "retry_ready": "같은 작전 다시 준비",
-  "next_ready": "다음 작전 준비"
+  "next_ready": "다음 작전 준비",
+  "summary": "작전 기록",
+  "credits": "획득 PSI 크레딧",
+  "survival": "순찰 생존 시간",
+  "score": "안전 기록 점수",
+  "finalScore": "최종 안전 점수",
+  "controlled": "차단한 위험 건수",
+  "totalControlled": "총 차단 위험",
+  "grade": "최종 안전 등급",
+  "environment": "환경 기믹 격퇴",
+  "mastery": "Signature Mastery",
+  "dangerTitle": "현장 중대위험 발생"
 }

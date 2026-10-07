@@ -7,6 +7,11 @@ on:
       - 'src/ui/*typography.css'
       - 'src/ui/tactical-ui.css'
       - 'src/ui/SurvivorsEquipmentStore.tsx'
+      - 'src/ui/SurvivorsResultSummary.tsx'
+      - 'tests/verify-survivors-combat-ui.mjs'
+      - 'tests/survivors-result*'
+      - 'tests/survivors-live-store.test.tsx'
+      - 'content/localization/survivors-result-ko.json'
       - 'public/fonts/**'
       - 'scripts/verify-tactical-ui.mjs'
       - 'src/ui/survivors-projectile-vfx.ts'
@@ -61,6 +66,7 @@ jobs:
           done
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-pleasure-motion.mjs
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-equipment-check-motion.mjs
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-survivors-combat-ui.mjs
           node tests/verify-survivors-store-maintenance.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
@@ -76,3 +82,4 @@ jobs:
             artifacts/equipment-check
             artifacts/store-maintenance
             artifacts/tactical-ui
+            artifacts/combat-debrief-ui

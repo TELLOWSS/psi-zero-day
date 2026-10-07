@@ -242,11 +242,50 @@ html[lang="ko"] .survivors-container {
 .survivors-container .survivors-maintenance-list [data-condition="broken"] p { color: #ffb0a8; }
 .survivors-container .survivors-store-slots { border-color: #52615f; }
 
+.survivors-container :is(.survivors-hp-text, .survivors-score-badge strong, .survivors-wave-badge > span) {
+  font-family: var(--psi-font-instrument);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.survivors-container .survivors-hp-bar-bg { border-color: #6c8780; background: #0c1412; box-shadow: inset 0 1px 4px #0008; }
+.survivors-container .survivors-hp-bar-fill { background: #a4f4d2; box-shadow: inset 0 1px #e9fff5; }
+.survivors-container .survivors-wave-badge { background: #252e30; border-color: #647876; border-radius: 4px; box-shadow: none; }
+.survivors-container .survivors-score-badge { border-color: #647876; background: transparent; border-radius: 0; box-shadow: none; }
+.survivors-container .survivors-score-badge strong { color: #ffd17c; text-shadow: none; }
+
+.survivors-container .survivors-result-dialog { border-top: 3px solid #a4f4d2; }
+.survivors-container .survivors-result-dialog[data-outcome="defeat"] { border-top-color: #ffb0a8; }
+.survivors-container .survivors-result-dialog .survivors-modal-title { display:flex; align-items:center; justify-content:center; gap:12px; font-size:24px; margin-bottom:12px; }
+.survivors-container .survivors-result-dialog .survivors-modal-title > svg { flex:0 0 26px; width:26px; height:26px; }
+.survivors-container .survivors-result-dialog .is-green { color:#c5ffe4; text-shadow:none; }
+.survivors-container .survivors-result-dialog .is-red { color:#ffb0a8; text-shadow:none; }
+.survivors-container .survivors-result-summary { margin:20px 0; text-align:left; }
+.survivors-container .survivors-result-reward { display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:16px 0; border-block:1px solid #8c7955; color:#ffd17c; }
+.survivors-container .survivors-result-reward > span { font-size:13px; color:#e6d9be; }
+.survivors-container .survivors-result-reward > strong { margin-left:auto; font:700 28px var(--psi-font-instrument); overflow-wrap:anywhere; }
+.survivors-container .survivors-result-reward small { font:600 12px var(--psi-font-body); }
+.survivors-container .survivors-result-summary .survivors-results-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 20px; padding:0; margin:0; border:0; border-radius:0; background:transparent; }
+.survivors-container .survivors-result-summary .survivors-stat-box { min-width:0; gap:8px; padding:16px 0; border-bottom:1px solid #465153; }
+.survivors-container .survivors-result-summary dt { font-size:12px; color:#b9c7c8; font-weight:500; }
+.survivors-container .survivors-result-summary dd { margin:0; color:#f0f8f6; font:700 22px var(--psi-font-instrument); overflow-wrap:anywhere; }
+.survivors-container .survivors-result-summary [data-tone="success"] dd { color:#b9f4d8; }
+.survivors-container .survivors-result-summary [data-tone="cyan"] dd { color:#9fe4ed; }
+.survivors-container .survivors-result-dialog .survivors-stage-debriefing { background:transparent; border:0; border-top:1px solid #465153; border-radius:0; padding:16px 0; }
+.survivors-container .survivors-result-dialog .survivors-star-item { border:0; border-bottom:1px solid #465153; border-radius:0; background:transparent; padding:12px 0; flex-wrap:wrap; }
+.survivors-container .survivors-result-dialog .survivors-star-info { min-width:140px; }
+.survivors-container .survivors-result-dialog .survivors-star-item.is-earned { background:transparent; }
+.survivors-container .survivors-result-dialog .survivors-star-item.is-earned .survivors-star-progress { color:#b9f4d8; }
+.survivors-container .survivors-result-dialog .survivors-star-info p { color:#b9c7c8; }
+.survivors-container .survivors-result-actions .survivors-btn-secondary { background:#252e30; color:#e5f0eb; border-color:#677b78; border-radius:4px; box-shadow:none; }
+
 html[lang="ko"] .game-hub .hub-nav button { border-radius: 6px; background: #191f22eb; }
 html[lang="ko"] .game-hub .hub-nav button[aria-current="page"] { background: #263e35eb; border-color: #a4f4d2; box-shadow: inset 3px 0 #a4f4d2; }
 html[lang="ko"] .game-hub .hub-primary { background: #b9f4d8; color: #10271e; border-color: #cefbe6; border-radius: 4px; box-shadow: 0 4px 14px #0005; }
 
 @media (max-width: 600px) {
+  .survivors-container .survivors-result-dialog .survivors-modal-title { font-size:20px; }
+  .survivors-container .survivors-result-reward > strong { font-size:24px; }
+  .survivors-container .survivors-result-summary dd { font-size:20px; }
   .survivors-container .survivors-equipment-workspace { padding: 16px; }
   .survivors-container .survivors-equipment-workspace .survivors-equipment-toolbar { top: -16px; margin: -16px -16px 12px; padding: 12px 16px; }
   .survivors-container .survivors-equipment-toolbar h2 { font-size: 16px; }
@@ -258,6 +297,9 @@ html[lang="ko"] .game-hub .hub-primary { background: #b9f4d8; color: #10271e; bo
 }
 
 @media (orientation: landscape) and (max-height: 560px) {
+  .survivors-container .survivors-result-dialog .survivors-modal-title { font-size:18px; margin-bottom:8px; }
+  .survivors-container .survivors-result-summary { margin:12px 0; }
+  .survivors-container .survivors-result-reward { padding:10px 0; }
   .survivors-container .survivors-equipment-workspace .survivors-equipment-toolbar { min-height: 52px; padding-block: 8px; margin-bottom: 6px; }
   .survivors-container .survivors-equipment-workspace .survivors-store-tabs { top: 40px; margin: 6px 0 12px; }
   .survivors-container .survivors-equipment-toolbar h2 { font-size: 16px; }
