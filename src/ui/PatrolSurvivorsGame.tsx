@@ -8,7 +8,8 @@ import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
-import { Pause, Play, Package, Shield, ArrowUp, SkipForward, Coins, X } from 'lucide-react';
+import { Pause, Play, Package, Shield, ShieldAlert, Trophy, ArrowUp, SkipForward, Coins, X } from 'lucide-react';
+import {SurvivorsResultSummary} from './SurvivorsResultSummary';
 import { SurvivorsExtractionStatus } from './SurvivorsExtractionStatus';
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
@@ -3333,7 +3334,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-hp-container">
             <span className="survivors-level-tag">LV {level}</span>
             {liveGear && liveGear.equipped.length>0 && <span className="survivors-premium-hp-badge" aria-label={storeText.status} title={liveGear.equipped.map(id=>storeText.items[id as keyof typeof storeText.items].name).join(' · ')}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===liveGear.equipped[0])!}/>{liveGear.equipped.length>1&&<small>+{liveGear.equipped.length-1}</small>}</span>}
-            <div className="survivors-hp-bar-bg">
+            <div className="survivors-hp-bar-bg" role="progressbar" aria-label={storeText.fittingHp} aria-valuemin={0} aria-valuemax={maxHp} aria-valuenow={Math.max(0,Math.min(maxHp,hp))}>
               <div
                 className="survivors-hp-bar-fill"
                 style={{ width: `${Math.max(0, (hp / maxHp) * 100)}%` }}
@@ -4085,33 +4086,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* DEFEAT MODAL */}
       {phase === 'defeat' && (
         <div className="survivors-modal-backdrop">
-          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
+          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" data-outcome="defeat" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
             <div className="survivors-result-body" tabIndex={0}>
-            <h2 id="survivors-result-title" className="survivors-modal-title is-red">🚨 현장 중대위험 발생</h2>
+            <h2 id="survivors-result-title" className="survivors-modal-title is-red"><ShieldAlert aria-hidden="true"/>{resultText.dangerTitle}</h2>
             <p className="survivors-modal-sub">
               안전관리자의 방호 한계 초과로 현장에 사고가 발생했습니다.
             </p>
             {lastDamage && <p className="survivors-modal-sub">{combatText.damage_prefix}: {combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</p>}
             <p className="survivors-modal-sub">{combatText.retry_hint}</p>
 
-            <div className="survivors-results-grid">
-              <div className="survivors-stat-box">
-                <span>순찰 생존 시간</span>
-                <strong>{formatTime(gameTime)}</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>안전 기록 점수</span>
-                <strong>{score.toLocaleString()}</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>차단한 위험 건수</span>
-                <strong>{kills}건</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>획득 PSI 크레딧</span>
-                <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
-              </div>
-            </div>
+            <SurvivorsResultSummary credits={engineRef.current?.state.psiCredits??0} stats={[
+              {label:resultText.survival,value:formatTime(gameTime)},
+              {label:resultText.score,value:score.toLocaleString()},
+              {label:resultText.controlled,value:`${kills}건`},
+            ]}/>
 
             </div>
             <div className="survivors-actions-row survivors-result-actions">
@@ -4136,15 +4124,22 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {/* VICTORY MODAL */}
       {phase === 'victory' && (
         <div className="survivors-modal-backdrop">
-          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
+          <div ref={resultDialogRef} className="survivors-modal-content survivors-result-dialog" data-outcome="victory" role="dialog" aria-modal="true" aria-labelledby="survivors-result-title">
             <div className="survivors-result-body" tabIndex={0}>
             <h2 id="survivors-result-title" className="survivors-modal-title is-green">
-              🏆 {engineRef.current?.state.stage ? `${engineRef.current.state.stage.icon} STAGE ${String(engineRef.current.state.stage.stageNumber).padStart(2, '0')} 클리어!` : '야간 무사고 달성 완료!'}
+              <Trophy aria-hidden="true"/>{engineRef.current?.state.stage ? `STAGE ${String(engineRef.current.state.stage.stageNumber).padStart(2, '0')} 클리어!` : '야간 무사고 달성 완료!'}
             </h2>
             <p className="survivors-modal-sub">
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
 
+            <SurvivorsResultSummary credits={engineRef.current?.state.psiCredits??0} stats={[
+              {label:resultText.grade,value:operationText.grades[engineRef.current?.state.starsEarned.filter(Boolean).length??0]??'',tone:'success'},
+              {label:resultText.finalScore,value:score.toLocaleString()},
+              {label:resultText.totalControlled,value:`${kills}건`},
+              {label:resultText.environment,value:`${engineRef.current?.state.environmentalKills??0}건`,tone:'cyan'},
+              {label:resultText.mastery,value:engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`},
+            ]}/>
             <p className="survivors-story-result">{operationText.handoff}</p>
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}
             {storeMessage===storeText.failure&&<p role="alert">{storeMessage}</p>}
@@ -4171,35 +4166,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 </div>
               </div>
             )}
-
-            <div className="survivors-results-grid">
-              <div className="survivors-stat-box">
-                <span>최종 안전 등급</span>
-                <strong style={{ color: '#10b981' }}>{operationText.grades[engineRef.current?.state.starsEarned.filter(Boolean).length ?? 0]}</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>최종 안전 점수</span>
-                <strong>{score.toLocaleString()}</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>총 차단 위험</span>
-                <strong>{kills}건</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>환경 기믹 격퇴</span>
-                <strong style={{ color: '#38bdf8' }}>{engineRef.current?.state.environmentalKills ?? 0}건</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>획득 PSI 크레딧</span>
-                <strong style={{ color: '#fbbf24' }}>+{engineRef.current?.state.psiCredits ?? 0} PSI</strong>
-              </div>
-              <div className="survivors-stat-box">
-                <span>Signature Mastery</span>
-                <strong className={engineRef.current?.state.signatureMastery?.zeroDay?'is-zero-day-mastery':''}>
-                  {engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`}
-                </strong>
-              </div>
-            </div>
 
             {PATROL_STAGES[selectedStage].narrative && <p className="survivors-story-result">{engineRef.current?.state.starsEarned[1] ? PATROL_STAGES[selectedStage].narrative!.success : PATROL_STAGES[selectedStage].narrative!.residual}</p>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar}/>
