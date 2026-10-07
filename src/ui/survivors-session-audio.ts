@@ -42,7 +42,13 @@ export class SurvivorsSessionAudio {
   private speechToken = 0;
   private speech: { priority: number; source?: AudioBufferSourceNode; gain?: GainNode; situational: boolean; cue?: PlayerVoiceCue } | null = null;
   private speechVariants = new Map<PlayerVoiceCue, number>();
-  async preloadPlayerVoice(): Promise<boolean> { return this.preloadCandidates(PLAYER_VOICE_ASSETS); }
+  async preloadPlayerVoice(): Promise<boolean> {
+    // Give the opening line a head start before competing with the other recordings.
+    const opening = playerVoiceAsset('START', 0);
+    const first = await this.preloadCandidates([opening]);
+    const remaining = await this.preloadCandidates(PLAYER_VOICE_ASSETS.filter(asset => asset.id !== opening.id));
+    return first && remaining;
+  }
   cancelPlayerVoice(preserveCue?: PlayerVoiceCue): void {
     if (!this.speech?.situational || preserveCue && this.speech.cue===preserveCue) return;
     this.stopSpeech();

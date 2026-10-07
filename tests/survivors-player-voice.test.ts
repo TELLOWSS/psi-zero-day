@@ -90,3 +90,30 @@ it('releases the speech owner when the shared voice budget evicts its source',as
   for(let i=0;i<24;i++)audio.track(ctx.createBufferSource() as unknown as AudioBufferSourceNode,ctx.createGain() as unknown as GainNode,4);
   expect(await audio.playPlayerVoice('SECURED',30)).toBe(true);audio.dispose();
 });
+it('allows a delayed opening but still expires it and cancels pending speech on pause',async()=>{
+  const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();
+  const engine=new SurvivorsEngine();engine.state.characterId='player';engine.start();
+  const request=new PlayerVoiceDirection().observe(engine.state)!;
+  expect(request).toMatchObject({cue:'START',expires:8});
+  let resolve!:(value:{duration:number})=>void;
+  ctx.decodeAudioData.mockImplementation(()=>new Promise(done=>{resolve=done;}));
+  const pending=audio.playPlayerVoice(request.cue,request.priority,request.expires);
+  await vi.waitFor(()=>expect(ctx.decodeAudioData).toHaveBeenCalledOnce());
+  ctx.currentTime=4;resolve({duration:3});expect(await pending).toBe(true);
+  audio.cancelPlayerVoice();expect(sources[0]!.stop).toHaveBeenCalled();
+  const late=audio.playPlayerVoice('START',40,request.expires,1);
+  await vi.waitFor(()=>expect(ctx.decodeAudioData).toHaveBeenCalledTimes(2));
+  ctx.currentTime=13;resolve({duration:3});expect(await late).toBe(false);
+  audio.dispose();
+});
+it('loads the opening recording before issuing the remaining voice requests',async()=>{
+  const {ctx}=context(),audio=new SurvivorsSessionAudio();
+  let resolve!:(value:{duration:number})=>void;
+  ctx.decodeAudioData.mockImplementationOnce(()=>new Promise(done=>{resolve=done;}));
+  const pending=audio.preloadPlayerVoice();
+  await vi.waitFor(()=>expect(ctx.decodeAudioData).toHaveBeenCalledOnce());
+  expect(fetch).toHaveBeenCalledOnce();
+  expect(vi.mocked(fetch).mock.calls[0]![0]).toContain('PSI_V_PLAYER_START_A_v01.wav');
+  resolve({duration:3});expect(await pending).toBe(true);
+  expect(fetch).toHaveBeenCalledTimes(26);audio.dispose();
+});
