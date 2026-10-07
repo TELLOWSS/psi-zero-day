@@ -40,11 +40,11 @@ export class SurvivorsSessionAudio {
   private scoreTimer: ReturnType<typeof setTimeout> | null = null;
   private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
   private speechToken = 0;
-  private speech: { priority: number; source?: AudioBufferSourceNode; gain?: GainNode; situational: boolean } | null = null;
+  private speech: { priority: number; source?: AudioBufferSourceNode; gain?: GainNode; situational: boolean; cue?: PlayerVoiceCue } | null = null;
   private speechVariants = new Map<PlayerVoiceCue, number>();
   async preloadPlayerVoice(): Promise<boolean> { return this.preloadCandidates(PLAYER_VOICE_ASSETS); }
-  cancelPlayerVoice(): void {
-    if (!this.speech?.situational) return;
+  cancelPlayerVoice(preserveCue?: PlayerVoiceCue): void {
+    if (!this.speech?.situational || preserveCue && this.speech.cue===preserveCue) return;
     this.stopSpeech();
   }
   private stopSpeech(): void {
@@ -64,7 +64,7 @@ export class SurvivorsSessionAudio {
     const ctx = this.ensureBuses(); if (!ctx || this.muted || this.dialogueFocus) return false;
     this.stopSpeech();
     const token = this.speechToken, epoch = this.epoch, requestedAt = ctx.currentTime;
-    this.speech = { priority, situational: true };
+    this.speech = { priority, situational: true, cue };
     const variant = forcedVariant ?? this.speechVariants.get(cue) ?? 0, asset = playerVoiceAsset(cue, variant);
     try {
       const buffer = await this.decodeAsset(ctx, asset);
@@ -74,7 +74,7 @@ export class SurvivorsSessionAudio {
       source.buffer = buffer; gain.gain.setValueAtTime(playerVoiceGain(asset), start);
       if (!this.track(source, gain, 4)) { this.stopSpeech(); return false; }
       source.connect(gain); gain.connect(this.buses!.Voice);
-      this.speech = { priority, source, gain, situational: true };
+      this.speech = { priority, source, gain, situational: true, cue };
       source.onended = () => { this.release(source, false); if (token === this.speechToken) this.speech = null; };
       this.speechVariants.set(cue, variant + 1);
       this.duckMusic(buffer.duration + .1); source.start(start); return true;

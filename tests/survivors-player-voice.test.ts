@@ -7,6 +7,8 @@ import { PlayerVoiceDirection } from '../src/ui/survivors-player-voice-direction
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
 import { PLAYER_VOICE_ASSETS, playerVoiceGain } from '../src/app/survivors-player-voice';
 import { DIRECTOR_SHOUT_VOICE } from '../src/app/survivors-audio-manifest';
+import p0 from '../content/survivors-player-voice-v1-ingest.json';
+import p1 from '../content/survivors-player-voice-p1-v1-ingest.json';
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 function context() {
@@ -20,11 +22,13 @@ function context() {
   vi.stubGlobal('fetch',vi.fn(async()=>({ok:true,arrayBuffer:async()=>new ArrayBuffer(1)})));
   return {ctx,sources};
 }
-it('keeps all 12 supplied recordings intact and does not invent final approval',()=>{
-  expect(PLAYER_VOICE_ASSETS).toHaveLength(12);
+it('keeps all 26 supplied recordings intact and does not invent final approval',()=>{
+  expect(PLAYER_VOICE_ASSETS).toHaveLength(26);
   for (const asset of PLAYER_VOICE_ASSETS) {
     expect(asset.status).toBe('CANDIDATE');
-    expect(playerVoiceGain(asset)).toBeGreaterThan(0);expect(playerVoiceGain(asset)).toBeLessThan(1);
+    const row=[...p0.assets,...p1.assets].find(row=>asset.id===row.file.replace('.wav',''))!;
+    expect(playerVoiceGain(asset)).toBeGreaterThan(0);
+    expect(row.peakDbFS+20*Math.log10(playerVoiceGain(asset))).toBeLessThanOrEqual(-3+1e-9);
     expect(createHash('sha256').update(readFileSync('public'+asset.uri)).digest('hex')).toBe(asset.sha256);
   }
 });
@@ -56,9 +60,9 @@ it('uses nearby real warning transitions, suppresses repeats, and keeps lifting 
   e.state.gameTime=9;e.state.hazards=[{...h,id:'far',x:h.x+1000}];expect(d.observe(e.state)).toBeUndefined();
   e.state.hazards=[{...h,id:'debris',type:'FALLING_DEBRIS'}];expect(d.observe(e.state)).toMatchObject({cue:'FALL_WARNING',variant:0});
 });
-it('does not speak for other characters or announce another map after final clear',()=>{
+it('does not speak for other characters and selects a final-map-specific clear',()=>{
   const e=new SurvivorsEngine(),d=new PlayerVoiceDirection();e.state.characterId='kang_taesik';e.start();expect(d.observe(e.state)).toBeUndefined();
-  e.state.characterId='player';e.state.stageId='stage_50';e.state.phase='victory';expect(d.observe(e.state)).toBeUndefined();
+  e.state.characterId='player';e.state.stageId='stage_50';e.state.phase='victory';expect(d.observe(e.state)?.cue).toBe('FINAL_CLEAR');
   const other=new SurvivorsEngine(), clear=new PlayerVoiceDirection();other.state.characterId='player';other.start();clear.observe(other.state);
   other.state.phase='victory';expect(clear.observe(other.state)?.cue).toBe('CLEAR');expect(clear.observe(other.state)).toBeUndefined();
 });

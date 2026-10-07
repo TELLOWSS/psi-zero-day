@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-const root = 'public/assets/survivors/voice-player-v1';
+const root = process.argv[2] ?? 'public/assets/survivors/voice-player-v1';
 const rows = fs.readdirSync(root).filter(name => name.endsWith('.wav')).sort().map(file => {
   const bytes = fs.readFileSync(path.join(root, file));
   if (bytes.toString('ascii', 0, 4) !== 'RIFF' || bytes.toString('ascii', 8, 12) !== 'WAVE') throw Error(file);

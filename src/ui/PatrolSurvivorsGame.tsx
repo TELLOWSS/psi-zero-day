@@ -737,6 +737,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   const audioRef = useRef(new SurvivorsSessionAudio());
   const playerVoiceDirectionsRef = useRef(new WeakMap<SurvivorsEngine, PlayerVoiceDirection>());
+  const retryVoiceRunsRef = useRef(new WeakSet<SurvivorsEngine>());
   const scoreStateRef = useRef<PatrolScoreState>('foundation');
   const scoreEncounterRef = useRef<string | undefined>(undefined);
   const scoreCheckRef = useRef(0);
@@ -1324,7 +1325,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
         previousEngine = engine;
-        playerVoice = playerVoiceDirectionsRef.current.get(engine) ?? new PlayerVoiceDirection();
+        playerVoice = playerVoiceDirectionsRef.current.get(engine) ?? new PlayerVoiceDirection(retryVoiceRunsRef.current.has(engine));
         playerVoiceDirectionsRef.current.set(engine, playerVoice);
         directorWasObscured=false;
         motions = new SpriteMotionTracker();
@@ -1759,7 +1760,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // Freeze presentation on pause, choices and results, including a phase changed this update.
       const voice = playerVoice.observe(engine.state);
-      if (!['playing', 'victory'].includes(engine.state.phase) || engine.state.directorCutinPhase !== 'none') audioRef.current.cancelPlayerVoice();
+      if (!['playing', 'victory'].includes(engine.state.phase) || engine.state.directorCutinPhase !== 'none') audioRef.current.cancelPlayerVoice(engine.state.phase==='ready'?'RETRY':undefined);
       if (voice) void audioRef.current.playPlayerVoice(voice.cue, voice.priority, voice.expires, voice.variant);
       if(engine.state.phase!=='playing')dt=0;
 
@@ -4048,6 +4049,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 className="survivors-btn-primary"
                 onClick={() => {
                   initGame(selectedChar, selectedStage);
+                  if(engineRef.current)retryVoiceRunsRef.current.add(engineRef.current);
                 }}
               >
                 {resultText.retry_ready}
