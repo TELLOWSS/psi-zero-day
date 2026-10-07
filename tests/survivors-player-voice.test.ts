@@ -5,12 +5,29 @@ import { createHash } from 'node:crypto';
 import { SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import { PlayerVoiceDirection } from '../src/ui/survivors-player-voice-direction';
 import { SurvivorsSessionAudio } from '../src/ui/survivors-session-audio';
-import { PLAYER_VOICE_ASSETS, playerVoiceGain } from '../src/app/survivors-player-voice';
+import { PLAYER_VOICE_ASSETS, PLAYER_VOICE_BANKS, playerVoiceAsset, sanitizePlayerVoiceVersion, playerVoiceGain } from '../src/app/survivors-player-voice';
 import { DIRECTOR_SHOUT_VOICE } from '../src/app/survivors-audio-manifest';
 import p0 from '../content/survivors-player-voice-v1-ingest.json';
 import p1 from '../content/survivors-player-voice-p1-v1-ingest.json';
+import covert from '../content/survivors-player-voice-covert-v1-ingest.json';
+import engineer from '../content/survivors-player-voice-engineer-v1-ingest.json';
 
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+it('keeps all voice banks complete, original bytes intact and conservative sample-peak gain',()=>{
+  expect(sanitizePlayerVoiceVersion('unknown')).toBe('original');
+  for(const version of ['original','covert','engineer'] as const){
+    expect(sanitizePlayerVoiceVersion(version)).toBe(version);
+    expect(PLAYER_VOICE_BANKS[version]).toHaveLength(26);
+    for(const original of PLAYER_VOICE_ASSETS){
+      const match=original.id.match(/^PSI_V_PLAYER_(.+)_([AB])_v01$/)!;
+      const asset=playerVoiceAsset(match[1] as Parameters<typeof playerVoiceAsset>[0],match[2]==='A'?0:1,version);
+      const row=[...p0.assets,...p1.assets,...covert.assets,...engineer.assets].find(row=>row.file.replace('.wav','')===asset.id)!;
+      expect(asset.status).toBe('CANDIDATE');
+      expect(createHash('sha256').update(readFileSync('public'+asset.uri)).digest('hex')).toBe(asset.sha256);
+      expect(row.peakDbFS+20*Math.log10(playerVoiceGain(asset))).toBeLessThanOrEqual(-3+1e-9);
+    }
+  }
+});
 function context() {
   const sources: Array<{start:ReturnType<typeof vi.fn>;stop:ReturnType<typeof vi.fn>;onended:(()=>void)|null}> = [];
   const ctx = {state:'running',currentTime:0,destination:{},close:vi.fn(async()=>{}),
@@ -116,4 +133,20 @@ it('loads the opening recording before issuing the remaining voice requests',asy
   expect(vi.mocked(fetch).mock.calls[0]![0]).toContain('PSI_V_PLAYER_START_A_v01.wav');
   resolve({duration:3});expect(await pending).toBe(true);
   expect(fetch).toHaveBeenCalledTimes(26);audio.dispose();
+});
+it('preloads only the selected bank and cancels a previous bank pending decode',async()=>{
+  const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();
+  let resolve!:(value:{duration:number})=>void;
+  ctx.decodeAudioData.mockImplementationOnce(()=>new Promise(done=>{resolve=done;}));
+  const previous=audio.playPlayerVoice('START',40,8);
+  await vi.waitFor(()=>expect(ctx.decodeAudioData).toHaveBeenCalledOnce());
+  audio.setPlayerVoiceVersion('covert');resolve({duration:3});
+  expect(await previous).toBe(false);expect(sources).toHaveLength(0);
+  vi.mocked(fetch).mockClear();expect(await audio.preloadPlayerVoice()).toBe(true);
+  expect(fetch).toHaveBeenCalledTimes(26);
+  expect(vi.mocked(fetch).mock.calls.every(([uri])=>String(uri).includes('voice-player-covert-v1'))).toBe(true);
+  expect(await audio.playPlayerVoice('START',40,8)).toBe(true);
+  audio.setPlayerVoiceVersion('engineer');expect(sources[0]!.stop).toHaveBeenCalled();
+  expect(await audio.playPlayerVoice('FINAL_CLEAR',85)).toBe(true);
+  expect(vi.mocked(fetch).mock.calls.at(-1)![0]).toContain('_FINAL_CLEAR_A_v01_engineer.wav');audio.dispose();
 });
