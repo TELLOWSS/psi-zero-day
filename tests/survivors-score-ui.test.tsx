@@ -38,6 +38,7 @@ it('layers evolution over resumed patrol music and holds boss score through secu
   act(()=>musicToggle.click());expect(musicToggle.getAttribute('aria-pressed')).toBe('false');
   act(()=>musicToggle.click());expect(music.mock.calls.at(-1)?.[0].id).toBe('patrol.ready');
   act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent==='시그널 워치 시작')!.click());
+  vi.spyOn(engine,'update').mockImplementationOnce(()=>{});clock=10;tick();
   vi.spyOn(engine,'update').mockImplementationOnce(()=>{engine.state.phase='levelup';engine.state.perkOptions=[{...PERK_CATALOG.satellite_broadcast,level:1}];});
   clock=20;tick();music.mockClear();
   act(()=>host.querySelector<HTMLButtonElement>('.survivors-perk-card')!.click());
