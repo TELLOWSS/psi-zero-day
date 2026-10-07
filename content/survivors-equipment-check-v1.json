@@ -1,0 +1,15 @@
+{
+  "id": "player-equipment-check-eight-v1",
+  "uri": "/assets/survivors/player-equipment-check-eight-v1.png",
+  "sha256": "06fe454ac678f73dc242a180f70b8e4ace7434d38d6982df4408a3ae44e229b2",
+  "width": 887,
+  "height": 1774,
+  "columns": 2,
+  "rows": 4,
+  "status": "FINAL_CANDIDATE",
+  "directorVisualApproval": false,
+  "sourceTool": "Built-in image_gen edit",
+  "reference": "public/assets/survivors/player-command-eight-v1.png",
+  "promptDocument": "docs/survivors-equipment-check-and-relief-production-20261007.md",
+  "generatedDate": "2026-10-07"
+}

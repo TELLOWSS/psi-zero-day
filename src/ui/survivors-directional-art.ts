@@ -3,9 +3,10 @@ import {applyActorTorsoTransform} from './survivors-rig-renderer';
 export const PLAYER_DIRECTIONAL_ART='/assets/survivors/player-walk-eight-v1.png';
 export const PLAYER_PASSING_ART='/assets/survivors/player-walk-passing-v1.png';
 export const PLAYER_ACTION_ART='/assets/survivors/player-command-eight-v1.png';
+export const PLAYER_CHECK_ART='/assets/survivors/player-equipment-check-eight-v1.png';
 const PHASES=[0,1,1.5,2,3,4,5,5.5,6,7] as const;
 const FRAMES=[0,1,8,2,3,4,5,9,6,7] as const;
-const FRAMES_PER_DIRECTION=11;
+const FRAMES_PER_DIRECTION=12;
 export function directionalActionFrame(progress:number):number|undefined {
  if(!Number.isFinite(progress)||progress<.12||progress>=.56)return;
  return 10;
@@ -39,6 +40,11 @@ export function directionalFrameWeights(cycle:number,moving:boolean,gaitBlend=mo
 }
 export function directionalPoseWeights(pose:SpritePose):{frame:number;weight:number}[] {
  const base=directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend);
+ const check=pose.equipmentCheck??0;
+ if(!pose.moving&&pose.action===0&&pose.reaction===0&&Number.isFinite(check)&&check>0&&check<1){
+  const t=Math.max(0,Math.min(1,check/.15,(1-check)/.15)),blend=t*t*(3-2*t);
+  return [...base.map(sample=>({...sample,weight:sample.weight*(1-blend)})),{frame:11,weight:blend}].filter(sample=>sample.weight>0);
+ }
  const progress=pose.actionProgress??0;
  if(pose.moving||(pose.actionKind!==undefined&&pose.actionKind!=='shot')||directionalActionFrame(progress)===undefined)return base;
  // Short entry/recovery bridges keep the held command sharp without an abrupt silhouette swap.
@@ -71,16 +77,16 @@ let sharedSheet:Sheet|undefined;
 export function isDirectionalActor(actor:HTMLImageElement):boolean {return sheets.has(actor);}
 export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boolean> {
  if(actor.src.split('/').pop()!=='player-map.webp')return false;
- if(!loaded)loaded=Promise.all([PLAYER_DIRECTIONAL_ART,PLAYER_PASSING_ART,PLAYER_ACTION_ART].map(src=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{loaded=undefined;reject(new Error('Directional sheet unavailable'));};image.src=src;})));
+ if(!loaded)loaded=Promise.all([PLAYER_DIRECTIONAL_ART,PLAYER_PASSING_ART,PLAYER_ACTION_ART,PLAYER_CHECK_ART].map(src=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{loaded=undefined;reject(new Error('Directional sheet unavailable'));};image.src=src;})));
  try {
   const images=await loaded;if(sharedSheet){sheets.set(actor,sharedSheet);return true;}
   const cells:Cell[]=[];let bodyHeight=0;
   for(let row=0;row<8;row++)for(let column=0;column<FRAMES_PER_DIRECTION;column++){
-   const image=images[column<8?0:column<10?1:2]!,columns=column<8?8:2,rows=column<10?8:4;
+   const image=images[column<8?0:column<10?1:column===10?2:3]!,columns=column<8?8:2,rows=column<10?8:4;
    const sourceColumn=column<8?column:column<10?column-8:row%2,sourceRow=column<10?row:Math.floor(row/2);
    const canvas=document.createElement('canvas');canvas.width=Math.ceil(image.naturalWidth/columns);canvas.height=Math.ceil(image.naturalHeight/rows);
    const ctx=canvas.getContext('2d',{willReadFrequently:true})!;
-   if(column===10&&(row===3||row===5)){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
+   if(column>=10&&(row===3||row===5)){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
    ctx.drawImage(image,sourceColumn*image.naturalWidth/columns,sourceRow*image.naturalHeight/rows,image.naturalWidth/columns,image.naturalHeight/rows,0,0,canvas.width,canvas.height);
    const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;let transparent=0;
    for(let i=3;i<pixels.length;i+=4)if(pixels[i]!<32)transparent++;

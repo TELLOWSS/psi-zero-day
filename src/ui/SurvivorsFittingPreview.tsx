@@ -26,7 +26,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
   const [assets,setAssets]=useState<{actor:HTMLImageElement;gear:HTMLImageElement;pickups:HTMLImageElement;wearables:WearableImages;cinematic:HTMLImageElement;premium:HTMLImageElement;presence?:PremiumPresenceImages}>();
   const [reduced,setReduced]=useState(false);
   const clock=useRef(0);
-  useEffect(()=>{if(motion==='action')clock.current=0;},[motion,attackKind]);
+  useEffect(()=>{if(motion==='action'||motion==='check')clock.current=0;},[motion,attackKind]);
   useEffect(()=>{
     const media=window.matchMedia?.('(prefers-reduced-motion: reduce)');if(!media)return;
     const change=()=>setReduced(media.matches);change();media.addEventListener('change',change);
