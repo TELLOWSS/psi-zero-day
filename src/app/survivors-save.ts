@@ -2,9 +2,16 @@ import type { PermanentUpgrades, PatrolStageId } from '../domain/patrol-survivor
 import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
 export const STAGE_IDS: readonly PatrolStageId[] = PATROL_STAGE_IDS;
 export const LAST_PATROL_STAGE_KEY = 'psi.survivors.last_played_stage';
+export function nextPreparedPatrolStage(stage:PatrolStageId):PatrolStageId {
+  const index=STAGE_IDS.indexOf(stage);
+  return STAGE_IDS[index+1]??stage;
+}
 export function resumePatrolStage(stage: unknown, unlocked: unknown, stars: unknown): PatrolStageId {
   const available = stagesFromSave(unlocked, stars);
-  return available.find(id => id === stage) ?? 'stage_01';
+  const completed=validStars(stars),saved=available.find(id=>id===stage);
+  if(saved)return completed[saved]?.[0]?nextPreparedPatrolStage(saved):saved;
+  const latest=[...STAGE_IDS].reverse().find(id=>completed[id]?.[0]);
+  return latest?nextPreparedPatrolStage(latest):'stage_01';
 }
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
 export function safeNumber(v: unknown, max = Number.MAX_SAFE_INTEGER): number {
