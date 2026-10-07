@@ -1,5 +1,32 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url('/fonts/PretendardVariable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Black Han Sans";
+  src: url('/fonts/BlackHanSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chakra Petch";
+  src: url('/fonts/ChakraPetch-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", system-ui, sans-serif;
+  --psi-font-body: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --psi-font-display: "Black Han Sans", "Pretendard", sans-serif;
+  --psi-font-instrument: "Chakra Petch", "Pretendard", sans-serif;
+  font-family: var(--psi-font-body);
   font-synthesis: none;
 }
 
@@ -8,7 +35,29 @@ html[lang="ko"] button,
 html[lang="ko"] input,
 html[lang="ko"] textarea,
 html[lang="ko"] select {
-  font-family: inherit;
+  font-family: var(--psi-font-body);
+}
+
+html[lang="ko"] :is(.game-hub, .survivors-container, .commercial-title-home) {
+  font-family: var(--psi-font-body);
+}
+
+html[lang="ko"] :is(.game-hub, .survivors-container, .commercial-title-home) * {
+  letter-spacing: 0;
+}
+
+html[lang="ko"] :is(.hub-brand > span, .commercial-title-survivors-title,
+  .hub-intro h1, .hub-section-title h1, .survivors-modal-title) {
+  font-family: var(--psi-font-display);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+html[lang="ko"] :is(.commercial-title-logo, .commercial-title-logo span, .hub-kicker, .chapter-number, .survivors-timer strong,
+  .survivors-toolbar-wallet strong, .survivors-level-tag, .survivors-store-price) {
+  font-family: var(--psi-font-instrument);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 html[lang="ko"] p,

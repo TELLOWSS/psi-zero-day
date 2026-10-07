@@ -1,0 +1,224 @@
+/* Shared materials retain the field artwork and existing interaction geometry. */
+html[lang="ko"] .survivors-container {
+  --psi-surface: #161a1d;
+  --psi-raised: #202629;
+  --psi-line: #465153;
+  --psi-muted: #b4c2c4;
+  --psi-mint: #a4f4d2;
+  --psi-amber: #ffd17c;
+}
+
+.survivors-container .survivors-modal-content {
+  background: var(--psi-surface);
+  border: 1px solid var(--psi-line);
+  border-radius: 8px;
+  box-shadow: 0 24px 80px #0009, inset 0 1px #ffffff12;
+}
+
+.survivors-container .survivors-modal-sub {
+  color: var(--psi-muted);
+  font-weight: 450;
+}
+
+.survivors-container .survivors-ready-launch {
+  background: var(--psi-surface);
+  border-color: var(--psi-line);
+}
+
+.survivors-container .survivors-btn-primary {
+  background: #b9f4d8;
+  color: #10271e;
+  border: 1px solid #d0ffe9;
+  border-radius: 4px;
+  box-shadow: inset 0 1px #ffffff66, 0 4px 12px #0004;
+  font-weight: 750;
+  text-shadow: none;
+}
+
+.survivors-container .survivors-btn-primary:hover:not(:disabled) {
+  background: #d0ffe9;
+  box-shadow: inset 0 1px #fff, 0 4px 14px #0005;
+}
+
+.survivors-container .survivors-hud-top {
+  background: #151a1deb;
+  border-color: #79898c66;
+  border-radius: 6px;
+  box-shadow: inset 0 1px #ffffff12, 0 5px 18px #0005;
+}
+
+.survivors-container .survivors-btn-icon {
+  border-radius: 4px;
+  border-color: #71808280;
+  background: #242c2e;
+}
+
+.survivors-container .survivors-stage-card {
+  border-radius: 6px;
+  border-color: #626e72;
+}
+
+.survivors-container .survivors-stage-card.is-selected {
+  border-color: #a4f4d2;
+  box-shadow: inset 0 -3px #a4f4d2, 0 4px 14px #0004;
+}
+
+.survivors-container .survivors-equipment-workspace {
+  padding: 20px;
+  background: #161a1d;
+  border-color: #627273;
+  border-radius: 6px;
+  scrollbar-color: #647775 #161a1d;
+}
+
+.survivors-container .survivors-equipment-workspace .survivors-equipment-toolbar {
+  top: -20px;
+  margin: -20px -20px 16px;
+  padding: 14px 20px;
+  background: #202629;
+  border-bottom: 1px solid #627273;
+  box-shadow: 0 5px 18px #0003;
+}
+
+.survivors-container .survivors-equipment-toolbar h2 {
+  font-size: 20px;
+  font-family: var(--psi-font-display);
+  font-weight: 400;
+  line-height: 1.3;
+  color: #f3f7f6;
+}
+
+.survivors-container .survivors-toolbar-wallet {
+  color: #ffd17c;
+  gap: 10px;
+  padding-left: 16px;
+  border-left: 1px solid #546361;
+}
+
+.survivors-container .survivors-toolbar-wallet small {
+  color: #c4cecd;
+  font-size: 11px;
+}
+
+.survivors-container .survivors-toolbar-wallet strong { font-size: 22px; line-height: 1.2; }
+.survivors-container .survivors-store { margin: 0; }
+.survivors-container .survivors-durability-rule {
+  color: #d0d8d6;
+  border-color: #5d6864;
+  background: transparent;
+  font-size: 12px;
+}
+
+.survivors-container .survivors-equipment-workspace .survivors-store-tabs {
+  top: 64px;
+  margin: 12px 0 20px;
+  background: #161a1d;
+  border-bottom: 1px solid #627273;
+}
+
+.survivors-container .survivors-store-tabs button {
+  color: #bbc9c8;
+  font-weight: 650;
+  min-height: 48px;
+  transition: color .15s ease, background-color .15s ease;
+}
+
+.survivors-container .survivors-store-tabs button[aria-selected="true"] {
+  color: #ceffeb;
+  background: #253a34;
+  box-shadow: inset 0 -2px #a4f4d2;
+}
+
+.survivors-container .survivors-store .survivors-store-card {
+  background: #202629;
+  border: 1px solid #465153;
+  border-top: 2px solid #8faaa3;
+  border-radius: 6px;
+  padding: 16px;
+  gap: 12px;
+  box-shadow: inset 0 1px #ffffff08;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.survivors-container .survivors-store .survivors-store-card[data-rarity="elite"] { border-top: 2px solid #7de0ee; }
+.survivors-container .survivors-store .survivors-store-card[data-rarity="legendary"] { border-top: 2px solid #ffd17c; }
+.survivors-container .survivors-store .survivors-store-card.is-equipped { background: #22312b; border-color: #82c6a8; box-shadow: none; }
+.survivors-container .survivors-store .survivors-store-card:hover { border-color: #98b7b0; }
+.survivors-container .survivors-store .survivors-store-item-head .survivors-premium-art {
+  max-width: 240px;
+  border-radius: 2px;
+  box-shadow: 0 8px 18px #0004;
+}
+.survivors-container .survivors-store-item-head strong { color: #f5f8f7; font-weight: 800; line-height: 1.4; }
+.survivors-container .survivors-store-item-head small { color: #c3cecc; font-size: 11px; }
+.survivors-container .survivors-store-effect { color: #b7f1d9; }
+.survivors-container .survivors-premium-use { color: #c0cdce !important; }
+.survivors-container .survivors-store-price { color: #ffd17c; font-size: 19px; }
+.survivors-container .survivors-store-price small { font: 500 11px var(--psi-font-body); color: #c5cecd; }
+.survivors-container .survivors-store-ownership { color: #b7f1d9; font-weight: 650; }
+
+.survivors-container .survivors-store .survivors-store-card-actions button {
+  background: #b9f4d8;
+  border-color: #cefbe6;
+  color: #10271e;
+  font-weight: 700;
+  margin-top: 0;
+}
+.survivors-container .survivors-store .survivors-store-card-actions .survivors-fitting-button {
+  background: transparent;
+  border-color: #6b8179;
+  color: #daf2e8;
+}
+.survivors-container .survivors-store .survivors-store-card-actions .survivors-repair-button,
+.survivors-container :is(.survivors-maintenance-summary, .survivors-maintenance-list) button {
+  background: #38352b;
+  border-color: #b59b65;
+  color: #ffe1a6;
+}
+.survivors-container .survivors-store button:disabled { opacity: .5; }
+.survivors-container .survivors-store :is(button, select, summary):focus-visible {
+  outline: 2px solid #ebfff5;
+  outline-offset: 3px;
+}
+.survivors-container .survivors-store-filters select,
+.survivors-container .survivors-fitting select {
+  background: #252e30;
+  border-color: #677b78;
+  color: #f2f8f6;
+  border-radius: 4px;
+  min-height: 44px;
+}
+.survivors-container .survivors-fitting-controls button { background: #252e30; border-color: #677b78; border-radius: 4px; }
+.survivors-container .survivors-fitting-controls button[aria-pressed="true"] { background: #35594a; color: #d2ffeb; }
+.survivors-container .survivors-fitting-action { background: #202629; border-color: #677b78; }
+.survivors-container .survivors-fitting-action button { background: #b9f4d8; color: #10271e; font-weight: 750; }
+.survivors-container .survivors-maintenance-summary { border-color: #52615f; }
+.survivors-container .survivors-maintenance-summary strong { color: #ffd17c; }
+.survivors-container .survivors-maintenance-list > [role="listitem"] { border-color: #465153; }
+.survivors-container .survivors-maintenance-list [data-condition="broken"] p { color: #ffb0a8; }
+.survivors-container .survivors-store-slots { border-color: #52615f; }
+
+html[lang="ko"] .game-hub .hub-nav button { border-radius: 6px; background: #191f22eb; }
+html[lang="ko"] .game-hub .hub-nav button[aria-current="page"] { background: #263e35eb; border-color: #a4f4d2; box-shadow: inset 3px 0 #a4f4d2; }
+html[lang="ko"] .game-hub .hub-primary { background: #b9f4d8; color: #10271e; border-color: #cefbe6; border-radius: 4px; box-shadow: 0 4px 14px #0005; }
+
+@media (max-width: 600px) {
+  .survivors-container .survivors-equipment-workspace { padding: 16px; }
+  .survivors-container .survivors-equipment-workspace .survivors-equipment-toolbar { top: -16px; margin: -16px -16px 12px; padding: 12px 16px; }
+  .survivors-container .survivors-equipment-toolbar h2 { font-size: 16px; }
+  .survivors-container .survivors-toolbar-wallet { gap: 6px; padding-left: 8px; }
+  .survivors-container .survivors-toolbar-wallet strong { font-size: 18px; }
+  .survivors-container .survivors-store .survivors-store-card { padding: 12px; gap: 10px; }
+  .survivors-container .survivors-equipment-workspace .survivors-store-tabs { top: 52px; margin: 10px 0 16px; }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .survivors-container .survivors-equipment-workspace .survivors-equipment-toolbar { min-height: 52px; padding-block: 8px; margin-bottom: 6px; }
+  .survivors-container .survivors-equipment-workspace .survivors-store-tabs { top: 40px; margin: 6px 0 12px; }
+  .survivors-container .survivors-equipment-toolbar h2 { font-size: 16px; }
+  .survivors-container .survivors-toolbar-wallet strong { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survivors-container .survivors-store :is(button, article) { transition: none; }
+}

@@ -116,6 +116,7 @@ import {
   createInitialSurvivorsState,
 } from '../engine/patrol-survivors-engine';
 import './patrol-survivors.css';
+import './tactical-ui.css';
 
 interface PatrolSurvivorsGameProps {
   onExit: () => void;
@@ -3246,7 +3247,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const scale = ft.isCrit ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
           ctx.translate(ft.x, ft.y);
           ctx.scale(scale, scale);
-          ctx.font = ft.isCrit ? '900 15px sans-serif' : 'bold 11px sans-serif';
+          ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
           ctx.fillStyle = ft.color;
           ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';
           ctx.shadowBlur = ft.isCrit ? 10 : 5;
