@@ -11,5 +11,6 @@
   "grade": "최종 안전 등급",
   "environment": "환경 기믹 격퇴",
   "mastery": "Signature Mastery",
-  "dangerTitle": "현장 중대위험 발생"
+  "dangerTitle": "대응 중단",
+  "defeat_description": "방호 한계에 도달해 이번 작전을 중단했습니다."
 }

@@ -4091,7 +4091,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-result-body" tabIndex={0}>
             <h2 id="survivors-result-title" className="survivors-modal-title is-red"><ShieldAlert aria-hidden="true"/>{resultText.dangerTitle}</h2>
             <p className="survivors-modal-sub">
-              안전관리자의 방호 한계 초과로 현장에 사고가 발생했습니다.
+              {resultText.defeat_description}
             </p>
             {lastDamage && <p className="survivors-modal-sub">{combatText.damage_prefix}: {combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</p>}
             <p className="survivors-modal-sub">{combatText.retry_hint}</p>
