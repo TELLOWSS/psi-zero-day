@@ -6,7 +6,7 @@ import {RECORDED_SFX,RECORDED_SFX_V1,recordedSfxFamily,recordedEquipmentCue,type
 import {RecordedSfxVariants} from '../app/survivors-sfx-variants';
 import {DRONE_V3_ASSETS,droneV3Asset,type DroneV3Id} from '../app/survivors-drone-sfx-v3';
 import type {InspectionPhase} from './survivors-inspection-flight';
-import { PLAYER_VOICE_ASSETS, playerVoiceAsset, playerVoiceGain, type PlayerVoiceCue } from '../app/survivors-player-voice';
+import { PLAYER_VOICE_BANKS, playerVoiceAsset, playerVoiceGain, type PlayerVoiceCue, type PlayerVoiceVersion } from '../app/survivors-player-voice';
 // Recorded score/cues and procedural effects share one session-owned audio lifecycle.
 export class SurvivorsSessionAudio {
   private context: AudioContext | null = null;
@@ -42,11 +42,19 @@ export class SurvivorsSessionAudio {
   private speechToken = 0;
   private speech: { priority: number; source?: AudioBufferSourceNode; gain?: GainNode; situational: boolean; cue?: PlayerVoiceCue } | null = null;
   private speechVariants = new Map<PlayerVoiceCue, number>();
+  private playerVoiceVersion: PlayerVoiceVersion = 'original';
+  setPlayerVoiceVersion(version: PlayerVoiceVersion): void {
+    if (version === this.playerVoiceVersion) return;
+    this.cancelPlayerVoice();
+    this.speechVariants.clear();
+    this.playerVoiceVersion = version;
+  }
   async preloadPlayerVoice(): Promise<boolean> {
     // Give the opening line a head start before competing with the other recordings.
-    const opening = playerVoiceAsset('START', 0);
+    const version = this.playerVoiceVersion, opening = playerVoiceAsset('START', 0, version);
     const first = await this.preloadCandidates([opening]);
-    const remaining = await this.preloadCandidates(PLAYER_VOICE_ASSETS.filter(asset => asset.id !== opening.id));
+    if (version !== this.playerVoiceVersion) return false;
+    const remaining = await this.preloadCandidates(PLAYER_VOICE_BANKS[version].filter(asset => asset.id !== opening.id));
     return first && remaining;
   }
   cancelPlayerVoice(preserveCue?: PlayerVoiceCue): void {
@@ -71,7 +79,7 @@ export class SurvivorsSessionAudio {
     this.stopSpeech();
     const token = this.speechToken, epoch = this.epoch, requestedAt = ctx.currentTime;
     this.speech = { priority, situational: true, cue };
-    const variant = forcedVariant ?? this.speechVariants.get(cue) ?? 0, asset = playerVoiceAsset(cue, variant);
+    const variant = forcedVariant ?? this.speechVariants.get(cue) ?? 0, asset = playerVoiceAsset(cue, variant, this.playerVoiceVersion);
     try {
       const buffer = await this.decodeAsset(ctx, asset);
       if (token !== this.speechToken || epoch !== this.epoch || ctx !== this.context || this.muted) return false;

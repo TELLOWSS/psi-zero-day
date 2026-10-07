@@ -1,5 +1,7 @@
 import ingest from '../../content/survivors-player-voice-v1-ingest.json';
 import p1 from '../../content/survivors-player-voice-p1-v1-ingest.json';
+import covert from '../../content/survivors-player-voice-covert-v1-ingest.json';
+import engineer from '../../content/survivors-player-voice-engineer-v1-ingest.json';
 import type { SurvivorsAudioAsset } from '../domain/survivors-audio';
 
 export type PlayerVoiceCue = 'START' | 'LOW_HP' | 'CART_WARNING' | 'FALL_WARNING' | 'SECURED' | 'CLEAR'
@@ -12,11 +14,24 @@ export const PLAYER_VOICE_ASSETS: readonly SurvivorsAudioAsset[] = [
   uri: `/assets/survivors/${row.folder}/${row.file}`, sha256: row.sha256,
   status: 'CANDIDATE', rights: row.authorization,
 }));
-export function playerVoiceAsset(cue: PlayerVoiceCue, variant: number): SurvivorsAudioAsset {
-  return PLAYER_VOICE_ASSETS.find(asset => asset.id === `PSI_V_PLAYER_${cue}_${variant % 2 === 0 ? 'A' : 'B'}_v01`)!;
+export type PlayerVoiceVersion = 'original' | 'covert' | 'engineer';
+export const PLAYER_VOICE_VERSION_KEY = 'psi.survivors.player_voice_version';
+export function sanitizePlayerVoiceVersion(value: unknown): PlayerVoiceVersion {
+  return value === 'covert' || value === 'engineer' ? value : 'original';
+}
+function versionAssets(version: 'covert' | 'engineer', intake: typeof covert): readonly SurvivorsAudioAsset[] {
+  return intake.assets.map(row => ({id:row.file.replace('.wav',''),bus:'Voice',loop:false,
+    uri:`/assets/survivors/voice-player-${version}-v1/${row.file}`,sha256:row.sha256,status:'CANDIDATE',rights:intake.authorization}));
+}
+export const PLAYER_VOICE_BANKS: Record<PlayerVoiceVersion, readonly SurvivorsAudioAsset[]> = {
+  original: PLAYER_VOICE_ASSETS, covert: versionAssets('covert',covert), engineer: versionAssets('engineer',engineer),
+};
+export function playerVoiceAsset(cue: PlayerVoiceCue, variant: number, version: PlayerVoiceVersion = 'original'): SurvivorsAudioAsset {
+  const suffix=version==='original'?'':`_${version}`;
+  return PLAYER_VOICE_BANKS[version].find(asset => asset.id === `PSI_V_PLAYER_${cue}_${variant % 2 === 0 ? 'A' : 'B'}_v01${suffix}`)!;
 }
 export function playerVoiceGain(asset: SurvivorsAudioAsset): number {
-  const row = [...ingest.assets,...p1.assets].find(entry => asset.id === entry.file.replace('.wav', ''))!;
+  const row = [...ingest.assets,...p1.assets,...covert.assets,...engineer.assets].find(entry => asset.id === entry.file.replace('.wav', ''))!;
   // Match short-line RMS conservatively, with at least 3 dB sample-peak headroom.
   return Math.min(10 ** ((-19 - row.rmsDbFS) / 20), 10 ** ((-3 - row.peakDbFS) / 20));
 }

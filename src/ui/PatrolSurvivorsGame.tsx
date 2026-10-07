@@ -46,6 +46,8 @@ import {persistStoreWallet,type StoreWallet} from '../app/survivors-store-wallet
 import storeText from '../../content/localization/survivors-store-ko.json';
 import resultText from '../../content/localization/survivors-result-ko.json';
 import preflightText from '../../content/localization/survivors-preflight-ko.json';
+import voiceVersionText from '../../content/localization/survivors-voice-version-ko.json';
+import {PLAYER_VOICE_VERSION_KEY,sanitizePlayerVoiceVersion,type PlayerVoiceVersion} from '../app/survivors-player-voice';
 import challengeText from '../../content/localization/survivors-challenge-ko.json';
 import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
 import tacticsText from '../../content/localization/survivors-field-tactics-ko.json';
@@ -736,6 +738,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const audioRef = useRef(new SurvivorsSessionAudio());
+  const [playerVoiceVersion,setPlayerVoiceVersion] = useState<PlayerVoiceVersion>(()=>{
+    try{return sanitizePlayerVoiceVersion(localStorage.getItem(PLAYER_VOICE_VERSION_KEY));}catch{return 'original';}
+  });
+  useEffect(()=>{audioRef.current.setPlayerVoiceVersion(playerVoiceVersion);},[playerVoiceVersion]);
+  const changePlayerVoiceVersion=(value:string)=>{
+    const version=sanitizePlayerVoiceVersion(value);
+    audioRef.current.setPlayerVoiceVersion(version);setPlayerVoiceVersion(version);
+    try{localStorage.setItem(PLAYER_VOICE_VERSION_KEY,version);}catch{/* Session selection remains available without storage. */}
+  };
   const playerVoiceDirectionsRef = useRef(new WeakMap<SurvivorsEngine, PlayerVoiceDirection>());
   const retryVoiceRunsRef = useRef(new WeakSet<SurvivorsEngine>());
   const scoreStateRef = useRef<PatrolScoreState>('foundation');
@@ -3583,6 +3594,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p></div>
               <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>{preflightText.launch}</button>
             </header>
+            <label className="survivors-voice-version">{voiceVersionText.label}
+              <select value={playerVoiceVersion} onChange={event=>changePlayerVoiceVersion(event.target.value)}>
+                {(['original','covert','engineer'] as const).map(version=><option key={version} value={version}>{voiceVersionText[version]}</option>)}
+              </select>
+            </label>
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
