@@ -385,9 +385,9 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
-      <div className="commercial-title-logo" data-title-rank="primary" aria-label="PSI : ZERO DAY"><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
+      <div className="commercial-title-logo" data-title-rank="primary" aria-label={GAME_TITLE}><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
-      <p className="commercial-title-english">Proactive Safety Intelligence · FIELD DEFENSE</p>
+      <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
 
       {/* 4위 1체 통합 관제 상태 요약 바 */}
