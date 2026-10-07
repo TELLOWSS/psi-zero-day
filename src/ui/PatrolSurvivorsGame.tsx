@@ -2108,7 +2108,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.beginPath();ctx.moveTo(mark.x-5,mark.y);ctx.lineTo(mark.x-1,mark.y+3);ctx.lineTo(mark.x+6,mark.y-4);ctx.stroke();
         }else{
           ctx.font=mark.kind==='finish'?'bold 15px sans-serif':'13px sans-serif';ctx.textAlign='center';
-          ctx.fillText(mark.kind==='finish'?pleasureText.finish:pleasureText.group.replace('{count}',String(mark.count)),mark.x,mark.y-38-(reducedMotionRef.current?0:progress*8));
+          const label=mark.kind==='finish'?pleasureText.finish:pleasureText.group.replace('{count}',String(mark.count));
+          const labelY=mark.y-(mark.kind==='finish'?70:44)-(reducedMotionRef.current?0:progress*8);
+          ctx.globalAlpha=Math.min(1,(1-progress)*4);ctx.strokeStyle='#10251f';ctx.lineWidth=3;
+          ctx.strokeText(label,mark.x,labelY);ctx.fillText(label,mark.x,labelY);
         }
         ctx.restore();
       }
