@@ -5,7 +5,7 @@ import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
-import { Pause, Play, Package, Shield, ArrowUp, SkipForward } from 'lucide-react';
+import { Pause, Play, Package, Shield, ArrowUp, SkipForward, Coins, X } from 'lucide-react';
 import { SurvivorsExtractionStatus } from './SurvivorsExtractionStatus';
 import focusText from '../../content/localization/survivors-focus-ko.json';
 import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
@@ -40,7 +40,7 @@ import {loadAuthoredCommand} from './survivors-authored-command';
 import {loadDirectionalActor,isDirectionalActor,drawDirectionalLight} from './survivors-directional-art';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
-import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
+import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,repairAllStoreItems,storeRepairCost,storeRepairTotal,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
 import {applyPremiumLoadout} from '../engine/survivors-premium-gear';
 import {persistStoreWallet,type StoreWallet} from '../app/survivors-store-wallet';
 import storeText from '../../content/localization/survivors-store-ko.json';
@@ -683,8 +683,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     return true;
   };
 
-  const commitStoreChange=(result:StoreWallet|null,message:string)=>{
-    if(!result){setStoreMessage(storeText.repairFirst);audioRef.current.playRecordedEffect('ui_denied');return;}
+  const commitStoreChange=(result:StoreWallet|null,message:string,failureMessage=storeText.repairFirst)=>{
+    if(!result){setStoreMessage(failureMessage);audioRef.current.playRecordedEffect('ui_denied');return;}
     const engine=engineRef.current;
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused'){setStoreMessage(storeText.failure);return;}
     try {
@@ -706,7 +706,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const result=purchase?buyStoreItem(inventoryRef.current,creditsRef.current,id):{inventory:equipStoreItem(inventoryRef.current,id),credits:creditsRef.current};
     commitStoreChange(result,purchase?storeText.purchased:result?.inventory.equipped.includes(id)?storeText.equipSuccess:storeText.removeSuccess);
   };
-  const repairStore=(id:string)=>commitStoreChange(repairStoreItem(inventoryRef.current,creditsRef.current,id),storeText.repaired);
+  const repairStore=(id:string)=>commitStoreChange(repairStoreItem(inventoryRef.current,creditsRef.current,id),storeText.repaired,
+    storeRepairCost(inventoryRef.current,id)>creditsRef.current?storeText.repairShortfall:storeText.repairComplete);
+  const repairAllStore=()=>commitStoreChange(repairAllStoreItems(inventoryRef.current,creditsRef.current),storeText.repaired,
+    storeRepairTotal(inventoryRef.current)>creditsRef.current?storeText.repairShortfall:storeText.maintenanceEmpty);
   const applyStore=(ids:string[])=>commitStoreChange(buyAndEquipLoadout(inventoryRef.current,creditsRef.current,ids),storeText.appliedLoadout);
   const openStore=()=>{
     void audioRef.current.preloadEquipmentRecordings();
@@ -3779,9 +3782,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       {showRdModal && (
         <div className="survivors-modal-backdrop">
           <div ref={storeDialogRef} className="survivors-modal-content survivors-equipment-workspace" role="dialog" aria-modal="true" aria-label={storeText.title}>
-            <div className="survivors-equipment-toolbar"><h2>{storeText.title}</h2><button type="button" title={storeText.close} aria-label={storeText.close} onClick={() => setShowRdModal(false)}>×</button></div>
+            <div className="survivors-equipment-toolbar"><h2>{storeText.title}</h2><output className="survivors-toolbar-wallet" aria-label={storeText.walletLabel} aria-live="polite"><Coins size={18}/><span><small>{storeText.walletLabel}</small><strong>{psiCredits.toLocaleString()} PSI</strong></span></output><button type="button" title={storeText.close} aria-label={storeText.close} onClick={() => setShowRdModal(false)}><X size={22}/></button></div>
 
-            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} onRepair={repairStore} onApply={applyStore} live={phase==='paused'} characterId={selectedChar} upgrades={permanentUpgrades}/>
+            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} onRepair={repairStore} onRepairAll={repairAllStore} onApply={applyStore} live={phase==='paused'} characterId={selectedChar} upgrades={permanentUpgrades}/>
             {phase==='paused'&&<p className="survivors-durability-rule">{storeText.healthRule}</p>}
 
             <details hidden={phase==='paused'} className="survivors-store-upgrades"><summary>{storeText.upgrades}</summary><div className="survivors-rd-grid">

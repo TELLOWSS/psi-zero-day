@@ -1,19 +1,19 @@
-import { useMemo, useState } from 'react';
-import { STORE_ITEMS, buyAndEquipLoadout,itemDurability,storeRepairCost,type StoreCategory, type StoreInventory } from '../domain/survivors-store';
+import { useMemo, useState, useRef } from 'react';
+import { STORE_ITEMS, STORE_CLEAR_WEAR, buyAndEquipLoadout,itemDurability,storeRepairCost,storeRepairTotal,type StoreCategory, type StoreInventory } from '../domain/survivors-store';
 import copy from '../../content/localization/survivors-store-ko.json';
 import { SurvivorsPremiumArt } from './SurvivorsPremiumArt';
 import type { CharacterId, PermanentUpgrades } from '../domain/patrol-survivors';
 import { fittingLoadout } from '../domain/survivors-fitting';
 import { createInitialSurvivorsState, DEFAULT_PERMANENT_UPGRADES, CHARACTER_PROFILES } from '../engine/patrol-survivors-engine';
 import { SurvivorsFittingPreview } from './SurvivorsFittingPreview';
-import {ArrowLeft,ArrowRight,Play,Pause} from 'lucide-react';
+import {ArrowLeft,ArrowRight,Play,Pause,Wrench,Coins} from 'lucide-react';
 import type {FittingMotion} from './survivors-fitting-pose';
 import type {AttackMotion} from './survivors-attack-motion';
 
-export function SurvivorsEquipmentStore({ inventory, credits, message, onChange, onRepair, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
+export function SurvivorsEquipmentStore({ inventory, credits, message, onChange, onRepair, onRepairAll, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
   inventory: StoreInventory; credits: number; message: string;
   onChange: (id: string, purchase: boolean) => void;
-  onRepair?: (id:string)=>void; onApply?:(ids:string[])=>void; live?:boolean;
+  onRepair?: (id:string)=>void; onRepairAll?:()=>void; onApply?:(ids:string[])=>void; live?:boolean;
   characterId?: CharacterId; upgrades?: PermanentUpgrades;
 }) {
   const [category, setCategory] = useState<StoreCategory | 'all'>('all');
@@ -26,7 +26,15 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   const [motion,setMotion]=useState<FittingMotion>('idle');
   const [attackKind,setAttackKind]=useState<AttackMotion>('shot');
   const [previewPlaying,setPreviewPlaying]=useState(true);
-  const [view, setView] = useState<'browse' | 'fitting' | 'loadout'>('browse');
+  const [view, setView] = useState<'browse' | 'fitting' | 'loadout' | 'maintenance'>('browse');
+  const sectionRef=useRef<HTMLElement>(null);
+  const changeView=(next:typeof view)=>{
+    setView(next);
+    const workspace=sectionRef.current?.closest<HTMLElement>('.survivors-equipment-workspace');
+    if(workspace)workspace.scrollTop=0;
+  };
+  const damaged=STORE_ITEMS.filter(item=>inventory.owned.includes(item.id)&&itemDurability(inventory,item.id)<100);
+  const repairTotal=storeRepairTotal(inventory);
   const baseline = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, inventory), [characterId, upgrades, inventory]);
   const preview = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, fittingLoadout(inventory, draft)), [characterId, upgrades, inventory, draft]);
   const previewItem = STORE_ITEMS.find(item => item.id === previewId);
@@ -49,20 +57,34 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
   const items = STORE_ITEMS.filter(item => (category === 'all' || item.category === category)
     && (!ownedOnly || inventory.owned.includes(item.id))
     && (!affordableOnly || inventory.owned.includes(item.id) || credits >= item.price));
-  return <section className="survivors-store" aria-label={copy.title}>
+  return <section ref={sectionRef} className="survivors-store" aria-label={copy.title}>
     <header className="survivors-store-heading"><div><h3>{copy.title}</h3><p>{copy.intro}</p></div>
-      <strong className="survivors-store-wallet">{credits.toLocaleString()} PSI</strong></header>
+      <strong className="survivors-store-wallet"><Coins size={18}/>{copy.walletLabel} · {credits.toLocaleString()} PSI</strong></header>
     {live&&<p className="survivors-store-live" role="status">{copy.liveShop}</p>}
-    <p className="survivors-durability-rule">{copy.wearRule}</p>
+    <p className="survivors-durability-rule" hidden={view==='fitting'||view==='loadout'}>{copy.wearRule}</p>
     <div className="survivors-store-tabs" role="tablist" aria-label={copy.title}>
-      {(['browse', 'fitting', 'loadout'] as const).map((tab, index, tabs) => <button key={tab} type="button" role="tab" id={`store-tab-${tab}`} aria-selected={view === tab} aria-controls={`store-panel-${tab}`} tabIndex={view === tab ? 0 : -1} onClick={() => setView(tab)} onKeyDown={event => {
+      {(['browse', 'fitting', 'loadout', 'maintenance'] as const).map((tab, index, tabs) => <button key={tab} type="button" role="tab" id={`store-tab-${tab}`} aria-selected={view === tab} aria-controls={`store-panel-${tab}`} tabIndex={view === tab ? 0 : -1} onClick={() => changeView(tab)} onKeyDown={event => {
         const offset = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
         if (!offset) return; event.preventDefault();
         const next = tabs[(index + offset + tabs.length) % tabs.length]!;
-        setView(next); document.getElementById(`store-tab-${next}`)?.focus();
-      }}>{copy[tab]}</button>)}
+        changeView(next); document.getElementById(`store-tab-${next}`)?.focus();
+      }}>{copy[tab]}{tab==='maintenance'&&damaged.length>0&&<span className="survivors-maintenance-count">{damaged.length}</span>}</button>)}
     </div>
     {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
+    <div id="store-panel-maintenance" role="tabpanel" aria-labelledby="store-tab-maintenance" hidden={view!=='maintenance'}>
+      <div className="survivors-maintenance-summary"><div><small>{copy.maintenanceDue} · {damaged.length}</small><strong>{copy.maintenanceReserve} · {repairTotal.toLocaleString()} PSI</strong><span>{repairTotal>credits?`${copy.repairShortfall} · ${(repairTotal-credits).toLocaleString()} PSI`:`${copy.afterMaintenance} · ${(credits-repairTotal).toLocaleString()} PSI`}</span></div>
+        <button type="button" disabled={!onRepairAll||!repairTotal||repairTotal>credits} onClick={onRepairAll}><Wrench size={18}/>{copy.repairAll}</button>
+      </div>
+      {!damaged.length&&<p role="status">{copy.maintenanceEmpty}</p>}
+      <div className="survivors-maintenance-list" role="list">{damaged.map(item=>{
+        const condition=itemDurability(inventory,item.id),cost=storeRepairCost(inventory,item.id);
+        return <div role="listitem" key={item.id} data-condition={condition===0?'broken':condition<=STORE_CLEAR_WEAR?'critical':'worn'}>
+          <SurvivorsPremiumArt item={item}/><div><small>{copy.categories[item.category]}</small><h4>{copy.items[item.id as keyof typeof copy.items].name}</h4><label>{copy.durability} {condition}/100<progress max={100} value={condition}/></label><p>{condition===0?copy.broken:condition<=STORE_CLEAR_WEAR?copy.nextClearBreak:copy.conditionLow}</p>
+            <small>{cost>credits?`${copy.repairShortfall} · ${(cost-credits).toLocaleString()} PSI`:`${copy.repairBalance} · ${(credits-cost).toLocaleString()} PSI`}</small></div>
+          <button type="button" disabled={!onRepair||cost>credits} aria-label={`${copy.items[item.id as keyof typeof copy.items].name} ${copy.repair}`} onClick={()=>onRepair?.(item.id)}><Wrench size={16}/>{copy.repair} · {cost.toLocaleString()} PSI</button>
+        </div>;
+      })}</div>
+    </div>
     <div id="store-panel-fitting" role="tabpanel" aria-labelledby="store-tab-fitting" hidden={view !== 'fitting'}>
     <div className="survivors-fitting">
       <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom} motion={motion} playing={previewPlaying} active={view==='fitting'} attackKind={attackKind}/>
@@ -117,9 +139,12 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
         {owned?<label className="survivors-item-condition" data-low={itemDurability(inventory,item.id)<=30}>{copy.durability} {itemDurability(inventory,item.id)}/100 <progress max={100} value={itemDurability(inventory,item.id)}/>{itemDurability(inventory,item.id)===0&&<b>{copy.broken}</b>}</label>:<small>{copy.fullCondition}</small>}
         {replaced && <small className="survivors-store-replacement">{copy.replaces} {copy.items[replaced.id as keyof typeof copy.items].name}</small>}
         {!owned && credits < item.price && <small>{copy.shortfall} {(item.price-credits).toLocaleString()} PSI</small>}
+        {!owned&&credits>=item.price&&<small>{copy.buyBalance} · {(credits-item.price).toLocaleString()} PSI</small>}
+        {owned&&itemDurability(inventory,item.id)>0&&itemDurability(inventory,item.id)<=STORE_CLEAR_WEAR&&<small role="status" className="survivors-condition-warning">{copy.nextClearBreak}</small>}
+        {owned&&itemDurability(inventory,item.id)<100&&credits<storeRepairCost(inventory,item.id)&&<small>{copy.repairShortfall} · {(storeRepairCost(inventory,item.id)-credits).toLocaleString()} PSI</small>}
         <div className="survivors-store-card-actions"><button type="button" aria-pressed={owned ? equipped : undefined} disabled={owned?itemDurability(inventory,item.id)===0:credits < item.price} onClick={() => onChange(item.id, !owned)}>
           {owned ? equipped ? copy.remove : copy.equip : `${copy.buy} · ${item.price.toLocaleString()} PSI`}</button>
-        <button type="button" className="survivors-fitting-button" aria-pressed={draft.includes(item.id)} onClick={() => {selectDraft(item.category,item.id); setView('fitting'); document.getElementById('store-tab-fitting')?.focus();}}>{copy.tryOn}</button>
+        <button type="button" className="survivors-fitting-button" aria-pressed={draft.includes(item.id)} onClick={() => {selectDraft(item.category,item.id); changeView('fitting'); document.getElementById('store-tab-fitting')?.focus();}}>{copy.tryOn}</button>
         {owned&&itemDurability(inventory,item.id)<100&&<button type="button" className="survivors-repair-button" disabled={!onRepair||credits<storeRepairCost(inventory,item.id)} onClick={()=>onRepair?.(item.id)}>{copy.repair} · {storeRepairCost(inventory,item.id).toLocaleString()} PSI</button>}
         </div>
         <details><summary>{copy.preview}</summary><SurvivorsPremiumArt item={item} large/><p>{copy.recommend}: {text.use}</p><small>{live ? copy.liveShop : copy.next}</small></details>

@@ -231,6 +231,15 @@ export function repairStoreItem(inventory:StoreInventory,credits:number,id:strin
   if(!cost||!Number.isFinite(credits)||credits<cost)return null;
   return {inventory:{...sanitizeInventory(inventory),durability:{...sanitizeInventory(inventory).durability,[id]:100}},credits:credits-cost};
 }
+export function storeRepairTotal(inventory:StoreInventory):number {
+  return sanitizeInventory(inventory).owned.reduce((sum,id)=>sum+storeRepairCost(inventory,id),0);
+}
+/** Maintenance is one transaction; an insufficient balance never partially repairs. */
+export function repairAllStoreItems(inventory:StoreInventory,credits:number):{inventory:StoreInventory;credits:number}|null {
+  const safe=sanitizeInventory(inventory),cost=storeRepairTotal(safe);
+  if(!cost||!Number.isFinite(credits)||credits<cost)return null;
+  return {inventory:{...safe,durability:Object.fromEntries(safe.owned.map(id=>[id,100]))},credits:credits-cost};
+}
 /** All equipment used during a cleared patrol wears once; ownership is permanent. */
 export function wearStoreItems(inventory:StoreInventory,used:readonly string[]):StoreInventory {
   const safe=sanitizeInventory(inventory),durability={...safe.durability};
