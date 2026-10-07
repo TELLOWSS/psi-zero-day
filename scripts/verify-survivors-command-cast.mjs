@@ -52,7 +52,7 @@ try{
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',error=>errors.push(String(error)));
   await page.addInitScript(()=>performance.setResourceTimingBufferSize(3000));
   await page.goto('http://127.0.0.1:5196');await page.getByRole('button',{name:/야간 긴급 순찰/}).click();await page.getByRole('button',{name:'순찰 요원',exact:true}).click();
-  await page.locator('.survivors-char-card').filter({hasText:name}).click();await page.getByRole('button',{name:'PSI 상점 · 구매·수리',exact:true}).click();await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
+  await page.locator('.survivors-char-card').filter({hasText:name}).click();await page.getByRole('button',{name:'PSI 장비실 · 구매·수리',exact:true}).click();await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
   await page.getByLabel('생존 지원',{exact:true}).selectOption('shock_mantle');await page.getByLabel('계도 전달',{exact:true}).selectOption('broadcast_crown');
   await page.waitForFunction(()=>!document.querySelector('.survivors-fitting-art figcaption'));
   const pixels=()=>page.evaluate(()=>{const c=document.querySelector('.survivors-fitting-art canvas'),data=c.getContext('2d').getImageData(0,0,c.width,c.height).data;let value=2166136261;for(const byte of data)value=Math.imul(value^byte,16777619);return value>>>0;});

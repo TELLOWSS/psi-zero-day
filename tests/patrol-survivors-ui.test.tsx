@@ -104,13 +104,13 @@ describe('PatrolSurvivorsGame UI', () => {
 
       // Click R&D Lab button
       const rdBtn = Array.from(host.querySelectorAll('button')).find(
-        btn => btn.textContent?.includes('PSI 상점'),
+        btn => btn.textContent?.includes('PSI 장비실'),
       );
       expect(rdBtn).toBeDefined();
       act(() => {
         rdBtn?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       });
-      expect(host.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('PSI 프리미엄 장비실');
+      expect(host.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe('PSI 장비실');
 
       // Close R&D modal
       const closeRdBtn = Array.from(host.querySelectorAll('button')).find(

@@ -8,23 +8,28 @@ fs.mkdirSync(output, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_BIN });
 const results = [];
 try {
-  for (const [width, height] of [[1440, 900], [390, 844], [844, 390]]) {
+  const cases = [[1440, 900], [390, 844], [844, 390], [1024, 768]]
+    .flatMap(([width, height]) => [false, true].map(completed => ({ width, height, completed })));
+  for (const { width, height, completed } of cases) {
     const page = await browser.newPage({ viewport: { width, height } });
     page.setDefaultTimeout(15000);
     page.setDefaultNavigationTimeout(15000);
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
-    console.log(`Checking ${width}x${height}`);
-    await page.addInitScript(() => {
+    console.log(`Checking ${width}x${height}, completed=${completed}`);
+    await page.addInitScript(completed => {
       localStorage.setItem('psi.survivors.unlocked_stages', JSON.stringify(['stage_01', 'stage_14']));
       localStorage.setItem('psi.survivors.last_played_stage', 'stage_14');
-    });
+      if (completed) localStorage.setItem('psi.survivors.stage_stars', JSON.stringify({ stage_14: [true, false, false] }));
+    }, completed);
     await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5196', { waitUntil: 'domcontentloaded' });
     await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
     await page.waitForSelector('.survivors-stage-preview');
     const preview = await page.locator('.survivors-stage-preview').getAttribute('src');
-    if (!preview.includes('14')) throw new Error(`Wrong restored map: ${preview}`);
-    await page.screenshot({ path: path.join(output, `${width}x${height}.png`) });
+    const uniqueMaps = JSON.parse(fs.readFileSync('content/design/survivors-stage-backgrounds-v1.json', 'utf8'));
+    const expectedMap = completed ? '/assets/survivors/maps/scaffold-v1.png' : uniqueMaps.stage_14;
+    if (preview !== expectedMap) throw new Error(`Wrong restored map: ${preview}`);
+    await page.screenshot({ path: path.join(output, `${width}x${height}-${completed ? 'completed' : 'unfinished'}.png`) });
     // Use the localized primary launch control rather than mutating the engine.
     const launchButton = page.locator('.survivors-ready-launch .survivors-btn-primary');
     await launchButton.click();
@@ -33,7 +38,7 @@ try {
     await page.getByRole('button', { name: /시그널 워치.*SURVIVORS/ }).click();
     if (await page.locator('.survivors-stage-preview').getAttribute('src') !== preview) throw new Error('Exit lost played map');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-    results.push({ width, height, preview, overflow, errors, pass: !overflow && !errors.length });
+    results.push({ width, height, completed, scope: 'Explicit saved-progress fixture; real UI launch, exit and reentry, not natural victory', preview, overflow, errors, pass: !overflow && !errors.length });
     await page.close();
   }
   fs.writeFileSync(path.join(output, 'report.json'), JSON.stringify(results, null, 2));

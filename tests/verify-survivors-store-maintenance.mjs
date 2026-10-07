@@ -7,7 +7,7 @@ const url=process.env.PSI_PREVIEW_URL;if(!url)throw Error('Set PSI_PREVIEW_URL')
 fs.mkdirSync('artifacts/store-maintenance',{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN}),rows=[];
 try{
- for(const [width,height] of [[1440,900],[390,844],[844,390]]){
+ for(const [width,height] of [[1440,900],[390,844],[844,390],[1024,768]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',error=>errors.push(String(error)));
   await page.addInitScript(()=>{if(!localStorage.getItem('qa.store.fixture')){localStorage.setItem('qa.store.fixture','1');localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:2000,inventory:{owned:['voice_lens','shock_mantle'],equipped:['shock_mantle'],durability:{voice_lens:0,shock_mantle:15}}}));}});
   await page.emulateMedia({reducedMotion:'reduce'});await page.goto(url,{waitUntil:'networkidle'});

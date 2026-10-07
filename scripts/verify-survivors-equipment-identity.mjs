@@ -16,7 +16,7 @@ try {
     await page.evaluate(ids=>{localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:12000,inventory:{owned:ids,equipped:ids}}));},equipped);
     await page.reload();
     await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
-    await page.getByRole('button',{name:'PSI 상점 · 구매·수리',exact:true}).click();
+    await page.getByRole('button',{name:'PSI 장비실 · 구매·수리',exact:true}).click();
     await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
     await page.waitForFunction(()=>!document.querySelector('.survivors-fitting-art figcaption'));
     await page.getByRole('button',{name:'왼쪽',exact:true}).click();
@@ -30,7 +30,7 @@ try {
     await page.getByRole('button',{name:'장비실 닫기',exact:true}).click();
     await page.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
     await page.keyboard.down('a');await page.waitForTimeout(1000);await page.keyboard.up('a');
-    await page.getByRole('button',{name:'PSI 상점',exact:true}).click();
+    await page.getByRole('button',{name:'PSI 장비실',exact:true}).click();
     await page.getByRole('button',{name:'장비실 닫기',exact:true}).click();
     const paused=await page.getByRole('button',{name:'순찰 재개',exact:true}).isVisible();
     await page.getByRole('button',{name:'순찰 재개',exact:true}).click();

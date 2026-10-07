@@ -19,7 +19,7 @@ it('purchases, equips and restores gear; storage failure never charges the walle
   const click=(text:string)=>act(()=>[...host.querySelectorAll('button')].find(b=>b.textContent?.includes(text))!.click());
   try {
     act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted />));
-    click('PSI 상점');
+    click('PSI 장비실');
     click('구매 · 800');
     expect(audioOrder.at(-1)).toBe('ui_equip');
     expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(4200);
