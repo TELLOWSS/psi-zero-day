@@ -1,5 +1,5 @@
 {
-  "title": "PSI 프리미엄 장비실",
+  "title": "PSI 장비실",
   "browse": "장비 목록",
   "loadout": "현재 장착",
   "close": "장비실 닫기",
@@ -43,7 +43,7 @@
   "broken": "파손 · 사용 불가 · 수리로 복구",
   "repairFirst": "내구도 0인 장비를 먼저 수리하세요",
   "clearWear": "사용 장비 내구도 감소",
-  "noWear": "이번 작전에서 사용한 프리미엄 장비가 없습니다",
+  "noWear": "이번 작전에서 사용한 구매 장비가 없습니다",
   "applyLoadout": "조합 장착",
   "buyLoadout": "조합 구매·장착",
   "appliedLoadout": "장비 조합 적용 완료",

@@ -5,7 +5,7 @@ const require=createRequire(import.meta.url);
 const {chromium}=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
 const out=path.resolve('artifacts/natural-progression',process.env.PSI_NATURAL_LABEL??'.');fs.mkdirSync(out,{recursive:true});
 const seconds=Number(process.env.PSI_NATURAL_SECONDS??240);
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN,args:['--renderer-process-limit=1']});
 try{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await context.newPage(),errors=[],failed=[],samples=[],choices=[];
@@ -15,10 +15,10 @@ try{
   if([...body.matchAll(pattern)].length!==1)throw new Error('Read-only engine capture unavailable');
   await route.fulfill({response,body:body.replace(pattern,m=>`${m}window.naturalEngine=this;`)});
  });
- await page.goto('http://127.0.0.1:5197');
+ await page.goto(process.env.PSI_PREVIEW_URL??'http://127.0.0.1:5197');
  const initialStorage=await page.evaluate(()=>({...localStorage}));
- await page.getByRole('button',{name:/야간 긴급 순찰/}).click();
- await page.getByRole('button',{name:'순찰 시작하기',exact:true}).click();
+ await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+ await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
  await page.waitForFunction(()=>window.naturalEngine?.state.phase==='playing');
  const started=Date.now(),held=new Set(),seen=new Set();
  let lastSample=0,lastUltimate=-10000,terminal=null;
