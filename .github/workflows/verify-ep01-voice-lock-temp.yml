@@ -58,9 +58,12 @@ jobs:
       - name: Install Korean QA font
         shell: bash
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-          fc-cache -f
+          FONT_DIR="$HOME/.local/share/fonts/psi-qa"
+          mkdir -p "$FONT_DIR"
+          cp public/fonts/BlackHanSans-Regular.ttf "$FONT_DIR/"
+          cp public/fonts/BlackHanSans-OFL.txt "$FONT_DIR/"
+          fc-cache -f "$FONT_DIR"
+          fc-query --format '%{lang}\n' "$FONT_DIR/BlackHanSans-Regular.ttf" | grep -Eq '(^|[|[:space:]])ko([|[:space:]]|$)'
 
       - name: Locate browser for responsive QA
         shell: bash
