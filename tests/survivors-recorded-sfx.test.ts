@@ -19,7 +19,7 @@ function context(){
   return {ctx,sources};
 }
 it('validates all supplied files, applies only explicit mappings and preserves candidate status',()=>{
-  expect(ingest).toHaveLength(15);expect(RECORDED_SFX_V1).toHaveLength(8);expect(RECORDED_SFX).toHaveLength(34);
+  expect(ingest).toHaveLength(15);expect(RECORDED_SFX_V1).toHaveLength(8);expect(RECORDED_SFX).toHaveLength(37);
   expect(ingest.filter(entry=>entry.id===null)).toHaveLength(7);
   expect(ingest.every(entry=>entry.duration>0&&entry.decodedOverFullScaleSamples===0&&!entry.listeningApproval)).toBe(true);
   for(const asset of RECORDED_SFX_V1){
@@ -62,7 +62,7 @@ it('maps trigger discharge not projectile expiry and preserves calm worker confi
 it('preloads Wave 1 once and replaces repeated shot synthesis with a rate-limited recording',async()=>{
   const {sources}=context(),audio=new SurvivorsSessionAudio();
   expect(await audio.preloadEquipmentRecordings()).toBe(true);expect(await audio.preloadEquipmentRecordings()).toBe(true);
-  expect(fetch).toHaveBeenCalledTimes(30);
+  expect(fetch).toHaveBeenCalledTimes(33);
   for(let i=0;i<100;i++)audio.playEquipmentFeedback({projectileId:String(i),kind:'radio',phase:'launch',x:0,y:0,angle:0,radius:4},{x:0,y:0});
   await vi.waitFor(()=>expect(sources).toHaveLength(1));expect(audio.voiceCount).toBe(1);
   audio.silence();expect(sources[0]!.stop).toHaveBeenCalled();expect(audio.voiceCount).toBe(0);audio.dispose();
@@ -87,6 +87,18 @@ it('shuffles complete bags with no adjacent repeats and does not consume global 
   if(count>1)expect(frames.every((frame,i)=>!i||frame!==frames[i-1])).toBe(true);
  }
  expect(random).not.toHaveBeenCalled();expect(()=>new RecordedSfxVariants().next('empty',0)).toThrow();
+});
+it('bounds shared material contacts across weapon variants and spaces decisive accents',async()=>{
+ const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();await audio.preloadEquipmentRecordings();
+ audio.playRecordedEffect('impact_steel',undefined,undefined,false,1,'radio');
+ await vi.waitFor(()=>expect(sources).toHaveLength(1));
+ ctx.currentTime=.08;audio.playRecordedEffect('impact_concrete',undefined,undefined,false,1,'hunter_beam');
+ expect(sources).toHaveLength(1);
+ ctx.currentTime=.2;audio.playRecordedEffect('impact_finisher');expect(sources).toHaveLength(1);
+ ctx.currentTime=.46;audio.playRecordedEffect('impact_finisher');
+ await vi.waitFor(()=>expect(sources).toHaveLength(2));
+ ctx.currentTime=.6;audio.playRecordedEffect('impact_finisher');expect(sources).toHaveLength(2);
+ audio.silence();expect(audio.voiceCount).toBe(0);audio.dispose();
 });
 it('routes secured only once per designated boss and retains V1 rollback',async()=>{
  const {sources}=context(),audio=new SurvivorsSessionAudio(),run={};
