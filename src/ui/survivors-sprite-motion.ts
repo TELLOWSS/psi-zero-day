@@ -5,19 +5,19 @@ import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './s
 import {commandArtProfile} from './survivors-command-art';
 import {movementDirection,drawDirectionalBody} from './survivors-directional-art';
 interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
-export interface SpritePose { moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+export interface SpritePose { moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
   private samples = new WeakMap<object, Sample>();
-  private actions = new WeakMap<object, {start:number;kind:AttackMotion;gestureStart:number;gestureKind:AttackMotion}>();
-  act(entity: object, clock: number,kind:AttackMotion='shot'): void {
+  private actions = new WeakMap<object, {start:number;kind:AttackMotion;gestureStart:number;gestureKind:AttackMotion;angle?:number}>();
+  act(entity: object, clock: number,kind:AttackMotion='shot',angle?:number): void {
     const previous=this.actions.get(entity);
     if(previous?.kind==='ultimate'&&kind!=='ultimate'&&clock>=previous.start&&clock<previous.start+ATTACK_MOTION.ultimate.duration)return;
     if (!previous || clock<previous.start || clock-previous.start>=.065 || kind==='ultimate'&&previous.kind!=='ultimate') {
       // Rapid emissions retrigger recoil, but let the authored hand gesture finish.
       const continuing=previous&&clock>=previous.gestureStart&&clock<previous.gestureStart+ATTACK_MOTION[previous.gestureKind].duration&&kind!=='ultimate';
-      this.actions.set(entity,{start:clock,kind,gestureStart:continuing?previous.gestureStart:clock,gestureKind:continuing?previous.gestureKind:kind});
+      this.actions.set(entity,{start:clock,kind,gestureStart:continuing?previous.gestureStart:clock,gestureKind:continuing?previous.gestureKind:kind,angle:Number.isFinite(angle)?angle:previous?.angle});
     }
   }
   sample(entity: object, x: number, y: number, clock: number, hp = 1): SpritePose {
@@ -46,7 +46,8 @@ export class SpriteMotionTracker {
     const leanBlend = 1 - Math.exp(-Math.max(0, elapsed) / .075);
     const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
     const pose: SpritePose = {
-      moving, cycle, authoredCycle, facing,direction:moving?movementDirection(dx,dy,previous?.pose.direction??2):previous?.pose.direction??2,
+      moving, cycle, authoredCycle, facing,direction:moving?movementDirection(dx,dy,previous?.pose.direction??2):attack?.angle!==undefined&&clock<actionUntil?movementDirection(Math.cos(attack.angle),Math.sin(attack.angle),previous?.pose.direction??2):previous?.pose.direction??2,
+      attackAngle:attack?.angle,actionKind:attack?.gestureKind,
       lean, actionProgress: attack ? attackProgress(clock-attack.gestureStart,attack.gestureKind) : 0,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
       reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),

@@ -1,4 +1,5 @@
 import { CombatDirection } from './survivors-combat-direction';
+import {selectImpactAccents} from './survivors-impact-direction';
 import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
@@ -35,7 +36,7 @@ import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {SurvivorsContainerShop} from './SurvivorsContainerShop';
 import {CHARACTER_MAP_ART} from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
-import {loadDirectionalActor,isDirectionalActor} from './survivors-directional-art';
+import {loadDirectionalActor,isDirectionalActor,drawDirectionalLight} from './survivors-directional-art';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
@@ -1531,38 +1532,31 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         dispatchTrailRef.current.observe(engine.state,engine.state.projectiles.length>90);
         recoveryFlowRef.current.observe(engine.state);
         direction.ingest(projectileEvents,equippedNow,engine.state.player,engine.state.projectiles.length>90);
+        const accentedContacts=selectImpactAccents(projectileEvents,engine.state.player,engine.state.projectiles.length>90);
         for(const event of projectileEvents){
           const attackMotion=projectileAttackMotion(event.kind);
-          if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion);
+          if(event.phase==='launch'&&attackMotion&&Math.hypot(event.x-engine.state.player.x,event.y-engine.state.player.y)<60)motions.act(engine.state.player,engine.state.playerMotionTime??engine.state.gameTime,attackMotion,event.angle);
           audioRef.current.playEquipmentFeedback(event,engine.state.player,engine.state.projectiles.length>90,equippedNow);
 
-          // Visual Juice: preserve each tactical weapon's material identity even on a
-          // critical hit, then layer the golden critical confirmation on top.
-          if (event.phase === 'impact') {
+          // Budget confirmed contacts while preserving each weapon's material identity.
+          if (accentedContacts.has(event)) {
             if (event.kind === 'hydraulic_wave') {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 10.0);
               spawnParticles(event.x, event.y, '#38bdf8', 14, 130, 4.0); // High-pressure hydraulic spray
               spawnShockwave(event.x, event.y, '#0284c7', 75, 4.5, 0.35);
             } else if (event.kind === 'emp_pulse' || event.kind === 'plasma_arc') {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 7.5);
               spawnParticles(event.x, event.y, '#a78bfa', 12, 115, 3.2); // Electric plasma sparks
               spawnShockwave(event.x, event.y, '#c084fc', 65, 3.8, 0.32);
             } else if (event.kind === 'grout_slug') {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 4.5);
               spawnParticles(event.x, event.y, '#cbd5e1', 8, 82, 3.0); // Mortar chip burst
               spawnParticles(event.x, event.y, '#64748b', 5, 58, 2.2);
             } else if (event.actorKind === 'RUNAWAY_CART' || event.actorKind === 'FALLING_DEBRIS') {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 5.0);
               spawnParticles(event.x, event.y, '#f97316', 7, 95, 2.6); // Industrial fragments
               spawnShockwave(event.x, event.y, '#ea580c', 42, 2.5, 0.22);
             } else {
               spawnParticles(event.x, event.y, '#94a3b8', 4, 60, 2.0); // Steel/concrete contact dust
             }
             if (event.critical) {
-              screenShakeRef.current = Math.max(screenShakeRef.current, 8.5);
-              spawnParticles(event.x, event.y, '#f59e0b', 12, 120, 3.5); // Golden welding sparks
-              spawnParticles(event.x, event.y, '#ffffff', 5, 140, 2.2); // Bright white core
-              spawnShockwave(event.x, event.y, '#fbbf24', 55, 3.5, 0.28);
+              spawnParticles(event.x, event.y, cinematicLook(event.kind,5,equippedNow).color, 6, 100, 2.3);
             }
           }
         }
@@ -1769,7 +1763,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
       const trackedPose = motions.sample(player, player.x, player.y, engine.state.playerMotionTime??engine.state.gameTime, player.hp);
       const actor=spritesRef.current.characterMaps[engine.state.characterId];
-      const playerPose = {...trackedPose,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0}: {})};
+      const playerPose = {...trackedPose,directional:actor?isDirectionalActor(actor):false,...(reducedMotionRef.current?{action:0,actionProgress:0,reaction:0}: {})};
       radioProjectionRef.current.observe(engine.state,projectileEvents,radioToolOffset(engine.state,actor,74,playerPose));
       projectileFeedbackRef.current.ingest(projectileEvents.map(event=>radioProjectionRef.current.feedback(event)),
         projectiles.length>90,engine.state.premiumGear?.equipped??[]);
@@ -3005,6 +2999,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             // Draw grounded with feet touching ground contact shadow (0, 0)
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
+            if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18));}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
             drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current);
 

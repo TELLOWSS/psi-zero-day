@@ -7,5 +7,5 @@ export function fittingPose(clock:number,motion:FittingMotion,facing:1|-1,reduce
  const action=!reduced&&motion==='action'?attackEnvelope(t%1.4,attackKind):0;
  const cycle=moving?t*120*Math.PI*2/54:0;
  const actionProgress=!reduced&&motion==='action'?attackProgress(t%1.4,attackKind):0;
- return {moving,cycle,authoredCycle:cycle,direction:facing===1?0:4,facing,lean:moving?facing*.024:0,scaleY:1-(moving?Math.abs(Math.sin(cycle))*.018:reduced?0:(1+Math.sin(t*2.4))*.002),reaction:0,action,actionProgress,speed:moving?120:0,gaitBlend:moving?1:0,stride:54,travel:moving?t*120:0,directionY:0,mode:moving?'walk':action>0?'action':'idle'};
+ return {moving,cycle,authoredCycle:cycle,direction:facing===1?0:4,facing,attackAngle:facing===1?0:Math.PI,actionKind:motion==='action'&&!reduced?attackKind:undefined,lean:moving?facing*.024:0,scaleY:1-(moving?Math.abs(Math.sin(cycle))*.018:reduced?0:(1+Math.sin(t*2.4))*.002),reaction:0,action,actionProgress,speed:moving?120:0,gaitBlend:moving?1:0,stride:54,travel:moving?t*120:0,directionY:0,mode:moving?'walk':action>0?'action':'idle'};
 }

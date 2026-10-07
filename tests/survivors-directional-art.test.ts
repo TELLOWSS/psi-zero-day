@@ -1,10 +1,21 @@
 import {it,expect} from 'vitest';
-import {movementDirection,directionalFrame,directionalFrameWeights} from '../src/ui/survivors-directional-art';
+import {movementDirection,directionalFrame,directionalFrameWeights,directionalActionFrame} from '../src/ui/survivors-directional-art';
+import {actorTorsoPoint} from '../src/ui/survivors-rig-renderer';
 import {SpriteMotionTracker} from '../src/ui/survivors-sprite-motion';
 it('selects eight actual travel directions and retains facing on stop/noisy input',()=>{
  for(let direction=0;direction<8;direction++){const angle=direction*Math.PI/4;expect(movementDirection(Math.cos(angle),Math.sin(angle),2)).toBe(direction);}
  expect(movementDirection(0,0,7)).toBe(7);expect(movementDirection(NaN,1,4)).toBe(4);
  expect(movementDirection(Math.cos(.4),Math.sin(.4),0)).toBe(0);expect(movementDirection(Math.cos(.5),Math.sin(.5),0)).toBe(1);
+});
+it('uses a brief command pose and gives the body/attachments the same directional recoil',()=>{
+ expect(directionalActionFrame(0)).toBeUndefined();expect(directionalActionFrame(.2)).toBe(10);
+ expect(directionalActionFrame(.7)).toBeUndefined();expect(directionalActionFrame(NaN)).toBeUndefined();
+ const base={...new SpriteMotionTracker().sample({},0,0,0),directional:true,action:1};
+ const east=actorTorsoPoint({x:0,y:-30},{...base,attackAngle:0},74,true);
+ const west=actorTorsoPoint({x:0,y:-30},{...base,attackAngle:Math.PI},74,true);
+ expect(east.x).toBeLessThan(0);expect(west.x).toBeGreaterThan(0);expect(west.x).toBeCloseTo(-east.x);
+ const hit=actorTorsoPoint({x:0,y:-30},{...base,action:0,reaction:1},74,true);
+ expect(hit.y).toBeCloseTo(-32*.974);expect(Number.isFinite(hit.y)).toBe(true);
 });
 it('interpolates authored phases and settles to contact without alpha loss or state changes',()=>{
  for(const cycle of [-9,0,.13,1,3,6.27,9,NaN])for(const gait of [0,.25,.5,.75,1]){

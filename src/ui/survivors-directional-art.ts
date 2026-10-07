@@ -2,9 +2,14 @@ import type {SpritePose} from './survivors-sprite-motion';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 export const PLAYER_DIRECTIONAL_ART='/assets/survivors/player-walk-eight-v1.png';
 export const PLAYER_PASSING_ART='/assets/survivors/player-walk-passing-v1.png';
+export const PLAYER_ACTION_ART='/assets/survivors/player-command-eight-v1.png';
 const PHASES=[0,1,1.5,2,3,4,5,5.5,6,7] as const;
 const FRAMES=[0,1,8,2,3,4,5,9,6,7] as const;
-const FRAMES_PER_DIRECTION=10;
+const FRAMES_PER_DIRECTION=11;
+export function directionalActionFrame(progress:number):number|undefined {
+ if(!Number.isFinite(progress)||progress<.12||progress>=.56)return;
+ return 10;
+}
 export function movementDirection(dx:number,dy:number,previous=2):number {
  if(!Number.isFinite(dx)||!Number.isFinite(dy)||Math.hypot(dx,dy)<.015)return previous;
  const angle=Math.atan2(dy,dx),turn=Math.PI*2,center=previous*Math.PI/4;
@@ -34,7 +39,7 @@ export function directionalFrameWeights(cycle:number,moving:boolean,gaitBlend=mo
 }
 interface Cell {canvas:HTMLCanvasElement;width:number;height:number;anchor:number}
 interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number};direction:number;weights:{frame:number;weight:number}[]}
-interface Sheet {cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;key:string;lastPose?:SpritePose;lastFrame?:Frame}
+interface Sheet {cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;lastPose?:SpritePose;lastFrame?:Frame}
 function actorBounds(pixels:Uint8ClampedArray,width:number,height:number):{left:number;top:number;right:number;bottom:number} {
  const seen=new Uint8Array(width*height),queue=new Int32Array(width*height);let largest=0,result={left:width,top:height,right:-1,bottom:-1};
  // Adjacent cell helmet fragments must not become this actor's foot pivot.
@@ -58,14 +63,17 @@ let sharedSheet:Sheet|undefined;
 export function isDirectionalActor(actor:HTMLImageElement):boolean {return sheets.has(actor);}
 export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boolean> {
  if(actor.src.split('/').pop()!=='player-map.webp')return false;
- if(!loaded)loaded=Promise.all([PLAYER_DIRECTIONAL_ART,PLAYER_PASSING_ART].map(src=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{loaded=undefined;reject(new Error('Directional sheet unavailable'));};image.src=src;})));
+ if(!loaded)loaded=Promise.all([PLAYER_DIRECTIONAL_ART,PLAYER_PASSING_ART,PLAYER_ACTION_ART].map(src=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{loaded=undefined;reject(new Error('Directional sheet unavailable'));};image.src=src;})));
  try {
   const images=await loaded;if(sharedSheet){sheets.set(actor,sharedSheet);return true;}
   const cells:Cell[]=[];let bodyHeight=0;
   for(let row=0;row<8;row++)for(let column=0;column<FRAMES_PER_DIRECTION;column++){
-   const image=images[column<8?0:1]!,columns=column<8?8:2,sourceColumn=column<8?column:column-8;
-   const canvas=document.createElement('canvas');canvas.width=Math.ceil(image.naturalWidth/columns);canvas.height=Math.ceil(image.naturalHeight/8);
-   const ctx=canvas.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(image,sourceColumn*image.naturalWidth/columns,row*image.naturalHeight/8,image.naturalWidth/columns,image.naturalHeight/8,0,0,canvas.width,canvas.height);
+   const image=images[column<8?0:column<10?1:2]!,columns=column<8?8:2,rows=column<10?8:4;
+   const sourceColumn=column<8?column:column<10?column-8:row%2,sourceRow=column<10?row:Math.floor(row/2);
+   const canvas=document.createElement('canvas');canvas.width=Math.ceil(image.naturalWidth/columns);canvas.height=Math.ceil(image.naturalHeight/rows);
+   const ctx=canvas.getContext('2d',{willReadFrequently:true})!;
+   if(column===10&&(row===3||row===5)){ctx.translate(canvas.width,0);ctx.scale(-1,1);}
+   ctx.drawImage(image,sourceColumn*image.naturalWidth/columns,sourceRow*image.naturalHeight/rows,image.naturalWidth/columns,image.naturalHeight/rows,0,0,canvas.width,canvas.height);
    const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;let transparent=0;
    for(let i=3;i<pixels.length;i+=4)if(pixels[i]!<32)transparent++;
    const {left,top,right,bottom}=actorBounds(pixels,canvas.width,canvas.height);
@@ -83,14 +91,16 @@ export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boole
   for(const c of cells){const scale=bodyHeight/c.height;c.width*=scale;c.anchor*=scale;c.height=bodyHeight;}
   const composite=document.createElement('canvas');
   composite.width=Math.ceil(Math.max(...cells.map(c=>Math.max(c.anchor,c.width-c.anchor)))*2+4);composite.height=bodyHeight;
-  sharedSheet={cells,bodyHeight,composite,key:''};sheets.set(actor,sharedSheet);return true;
+  const light=document.createElement('canvas');light.width=composite.width;light.height=composite.height;
+  sharedSheet={cells,bodyHeight,composite,light,key:'',lightKey:''};sheets.set(actor,sharedSheet);return true;
  }catch{return false;}
 }
 function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  const sheet=sheets.get(actor);if(!sheet)return;
  if(sheet.lastPose===pose)return sheet.lastFrame;
  const direction=pose.direction??2;
- const weights=directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend);
+ const action=!pose.moving?directionalActionFrame(pose.actionProgress??0):undefined;
+ const weights=action===undefined?directionalFrameWeights(pose.authoredCycle??pose.cycle,pose.moving,pose.gaitBlend):[{frame:action,weight:1}];
  const shape={width:0,height:0,anchor:0};
  for(const sample of weights){const c=sheet.cells[direction*FRAMES_PER_DIRECTION+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;}
  const result={sheet,cell:shape,direction,weights};sheet.lastPose=pose;sheet.lastFrame=result;return result;
@@ -107,6 +117,19 @@ export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImage
  const scale=height/sheet.bodyHeight,w=sheet.composite.width*scale,h=sheet.composite.height*scale;
  ctx.save();if(transform)applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
  ctx.drawImage(sheet.composite,-w/2,-h,w,h);ctx.restore();return true;
+}
+/** Reuse the exact sprite alpha for local light, without tinting the surrounding scene. */
+export function drawDirectionalLight(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,color:string,strength:number):boolean {
+ const sheet=sheets.get(actor);if(!sheet||!Number.isFinite(strength)||strength<=0)return false;
+ const key=sheet.key+':'+color;
+ if(sheet.lightKey!==key){
+  const paint=sheet.light.getContext('2d')!;paint.clearRect(0,0,sheet.light.width,sheet.light.height);
+  paint.drawImage(sheet.composite,0,0);paint.globalCompositeOperation='source-in';paint.fillStyle=color;paint.fillRect(0,0,sheet.light.width,sheet.light.height);
+  paint.globalCompositeOperation='source-over';sheet.lightKey=key;
+ }
+ const scale=height/sheet.bodyHeight,w=sheet.light.width*scale,h=sheet.light.height*scale;
+ ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);ctx.globalAlpha*=Math.min(.24,strength);
+ ctx.drawImage(sheet.light,-w/2,-h,w,h);ctx.restore();return true;
 }
 export function directionalSocket(actor:HTMLImageElement,pose:SpritePose|undefined,height:number,kind:'head'|'chest'|'back'|'belt'):({x:number;y:number;size:number;rear:boolean})|undefined {
  if(!pose)return;const frame=cell(actor,pose);if(!frame)return;

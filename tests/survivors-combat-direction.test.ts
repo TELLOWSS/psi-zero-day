@@ -4,7 +4,7 @@ import {equipmentSoundSamples} from '../src/ui/survivors-equipment-sound';
 import type {ProjectileFeedback} from '../src/domain/survivors-projectile-feedback';
 const event:ProjectileFeedback={projectileId:'a',kind:'radio',phase:'launch',x:0,y:0,angle:0,radius:12};
 it('uses bounded local camera impulses, decays without input and respects reduced motion',()=>{
- const d=new CombatDirection();d.ingest(Array(500).fill(event),['broadcast_crown'],{x:0,y:0});
+ const d=new CombatDirection();d.ingest(Array.from({length:500},(_,i)=>({...event,projectileId:String(i)})),['broadcast_crown'],{x:0,y:0});
  expect(d.lightCount).toBe(8);expect(d.camera(false).x).toBe(-1.1);expect(d.camera(true)).toEqual({x:0,y:0});
  for(let i=0;i<6;i++)d.advance(.05);
  expect(Math.abs(d.camera(false).x)).toBeLessThan(.002);expect(d.lightCount).toBe(0);
@@ -12,7 +12,15 @@ it('uses bounded local camera impulses, decays without input and respects reduce
 it('never dramatizes worker contacts or offscreen hazards and bounds busy light pools',()=>{
  const d=new CombatDirection();d.ingest([{...event,worker:true},{...event,x:600}],[],{x:0,y:0});
  expect(d.lightCount).toBe(0);expect(d.camera(false)).toEqual({x:0,y:0});
- d.ingest(Array(100).fill(event),[],{x:0,y:0},true);expect(d.lightCount).toBe(4);
+ d.ingest(Array.from({length:100},(_,i)=>({...event,projectileId:String(i)})),[],{x:0,y:0},true);expect(d.lightCount).toBe(4);
+});
+it('gives critical contact precedence over launch regardless of event order and deduplicates light',()=>{
+ const contact={...event,projectileId:'contact',phase:'impact' as const,critical:true,angle:Math.PI/2};
+ const a=new CombatDirection(),b=new CombatDirection();a.ingest([event,contact],[],{x:0,y:0});b.ingest([contact,event],[],{x:0,y:0});
+ expect(a.camera(false)).toEqual(b.camera(false));expect(a.camera(false).y).toBeCloseTo(-2.4);
+ expect(a.heroLight.strength).toBeGreaterThan(0);a.advance(.1);expect(a.heroLight.strength).toBeLessThan(.04);
+ const duplicates=new CombatDirection();duplicates.ingest(Array(100).fill(event),[],{x:0,y:0});expect(duplicates.lightCount).toBe(1);
+ const invalid=new CombatDirection();invalid.ingest([{...event,angle:NaN}],[],{x:0,y:0});expect(invalid.camera(false)).toEqual({x:0,y:0});
 });
 it('drives boot contacts from real travel and never catches up with a burst',()=>{
  const d=new CombatDirection();expect(d.footstep(0,false)).toBe(false);
