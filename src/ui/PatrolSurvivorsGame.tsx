@@ -88,6 +88,7 @@ import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
 import { DIRECTOR_SHOUT_VOICE, SURVIVORS_SCORE_CANDIDATES } from '../app/survivors-audio-manifest';
 import { STAGE_IDS, LAST_PATROL_STAGE_KEY, nextPreparedPatrolStage, resumePatrolStage, stagesFromSave, parseSave, safeNumber, validStars, validUpgrades } from '../app/survivors-save';
 import { SurvivorsSessionAudio } from './survivors-session-audio';
+import { PlayerVoiceDirection } from './survivors-player-voice-direction';
 import { SurvivorsAudioMixer } from './SurvivorsAudioMixer';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type {
@@ -1050,6 +1051,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     // Browsing another map must not replace the last actually played operation.
     try { localStorage.setItem(LAST_PATROL_STAGE_KEY, engineRef.current.state.stageId); } catch { /* Play remains available without storage. */ }
     void audioRef.current.preloadApproved([DIRECTOR_SHOUT_VOICE]);
+    void audioRef.current.preloadPlayerVoice();
     void audioRef.current.preloadCandidates(SURVIVORS_SCORE_CANDIDATES.filter(asset=>!asset.loop));
     void audioRef.current.preloadEquipmentRecordings();
     scoreStateRef.current = 'foundation'; scoreCheckRef.current = 0;scoreEncounterRef.current=undefined;
@@ -1302,6 +1304,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let bossDirection=new BossEncounterDirection();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
+    let playerVoice = new PlayerVoiceDirection();
     let prevNeutralized = 0;
     let prevHp = 100;
     let prevLevel = 1;
@@ -1320,6 +1323,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
         previousEngine = engine;
+        playerVoice = new PlayerVoiceDirection();
         directorWasObscured=false;
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
@@ -1752,6 +1756,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       // Freeze presentation on pause, choices and results, including a phase changed this update.
+      const voice = playerVoice.observe(engine.state);
+      if (!['playing', 'victory'].includes(engine.state.phase) || engine.state.directorCutinPhase !== 'none') audioRef.current.cancelPlayerVoice();
+      if (voice) void audioRef.current.playPlayerVoice(voice.cue, voice.priority, voice.expires, voice.variant);
       if(engine.state.phase!=='playing')dt=0;
 
       // High-DPI Resolution & Mobile Resize

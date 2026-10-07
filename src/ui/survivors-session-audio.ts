@@ -6,6 +6,7 @@ import {RECORDED_SFX,RECORDED_SFX_V1,recordedSfxFamily,recordedEquipmentCue,type
 import {RecordedSfxVariants} from '../app/survivors-sfx-variants';
 import {DRONE_V3_ASSETS,droneV3Asset,type DroneV3Id} from '../app/survivors-drone-sfx-v3';
 import type {InspectionPhase} from './survivors-inspection-flight';
+import { PLAYER_VOICE_ASSETS, playerVoiceAsset, playerVoiceGain, type PlayerVoiceCue } from '../app/survivors-player-voice';
 // Recorded score/cues and procedural effects share one session-owned audio lifecycle.
 export class SurvivorsSessionAudio {
   private context: AudioContext | null = null;
@@ -38,6 +39,50 @@ export class SurvivorsSessionAudio {
   private scoreEpoch = 0;
   private scoreTimer: ReturnType<typeof setTimeout> | null = null;
   private scoreNodes = new Map<AudioBufferSourceNode, GainNode>();
+  private speechToken = 0;
+  private speech: { priority: number; source?: AudioBufferSourceNode; gain?: GainNode; situational: boolean } | null = null;
+  private speechVariants = new Map<PlayerVoiceCue, number>();
+  async preloadPlayerVoice(): Promise<boolean> { return this.preloadCandidates(PLAYER_VOICE_ASSETS); }
+  cancelPlayerVoice(): void {
+    if (!this.speech?.situational) return;
+    this.stopSpeech();
+  }
+  private stopSpeech(): void {
+    this.speechToken++;
+    const speech = this.speech;
+    if (speech?.source && speech.gain && this.context) {
+      const now = this.context.currentTime;
+      speech.gain.gain.cancelScheduledValues(now);
+      speech.gain.gain.setValueAtTime(speech.gain.gain.value, now);
+      speech.gain.gain.linearRampToValueAtTime(0, now + .025);
+      try { speech.source.stop(now + .025); } catch { this.release(speech.source, true); }
+    }
+    this.speech = null;
+  }
+  async playPlayerVoice(cue: PlayerVoiceCue, priority: number, expires = 1, forcedVariant?: number): Promise<boolean> {
+    if (this.speech && this.speech.priority >= priority) return false;
+    const ctx = this.ensureBuses(); if (!ctx || this.muted || this.dialogueFocus) return false;
+    this.stopSpeech();
+    const token = this.speechToken, epoch = this.epoch, requestedAt = ctx.currentTime;
+    this.speech = { priority, situational: true };
+    const variant = forcedVariant ?? this.speechVariants.get(cue) ?? 0, asset = playerVoiceAsset(cue, variant);
+    try {
+      const buffer = await this.decodeAsset(ctx, asset);
+      if (token !== this.speechToken || epoch !== this.epoch || ctx !== this.context || this.muted) return false;
+      if (ctx.currentTime - requestedAt > expires) { this.stopSpeech(); return false; }
+      const source = ctx.createBufferSource(), gain = ctx.createGain(), start = ctx.currentTime + .01;
+      source.buffer = buffer; gain.gain.setValueAtTime(playerVoiceGain(asset), start);
+      if (!this.track(source, gain, 4)) { this.stopSpeech(); return false; }
+      source.connect(gain); gain.connect(this.buses!.Voice);
+      this.speech = { priority, source, gain, situational: true };
+      source.onended = () => { this.release(source, false); if (token === this.speechToken) this.speech = null; };
+      this.speechVariants.set(cue, variant + 1);
+      this.duckMusic(buffer.duration + .1); source.start(start); return true;
+    } catch (error) {
+      if (token === this.speechToken) { this.stopSpeech(); this.buffers.delete(asset.uri!); this.fail(String(error)); }
+      return false;
+    }
+  }
   async preloadEquipmentRecordings():Promise<boolean> {
     const ctx=this.ensureBuses();if(!ctx)return false;
     const selected=this.recordedVersion==='v1'?RECORDED_SFX_V1:RECORDED_SFX;
@@ -261,6 +306,7 @@ export class SurvivorsSessionAudio {
   }
   sfxDestination(): AudioNode { this.ensureBuses(); return this.buses!.SFX; }
   setDialogueFocus(active:boolean) {
+    if (active) this.cancelPlayerVoice();
     this.dialogueFocus=active;const ctx=this.ensureBuses();if(!ctx)return;
     const gain=this.musicDuck!.gain;gain.cancelScheduledValues(ctx.currentTime);
     gain.setValueAtTime(gain.value,ctx.currentTime);gain.linearRampToValueAtTime(active?.38:1,ctx.currentTime+.12);
@@ -359,21 +405,31 @@ export class SurvivorsSessionAudio {
   async playApproved(assets: readonly SurvivorsAudioAsset[]): Promise<boolean> {
     // Synchronize approved stems using one future clock point; fail closed for missing approvals/rights.
     if (!assets.length || assets.some(a => a.status !== 'PRODUCTION_APPROVED' || !a.uri || !a.rights || !a.sha256)) return false;
+    if (assets.filter(asset => asset.bus === 'Voice').length > 1) return false;
     const ctx = this.ensureBuses(); if (!ctx) return false;
     const epoch = this.epoch;
+    const hasVoice = assets.some(asset => asset.bus === 'Voice');
+    if (hasVoice) { this.stopSpeech(); this.speech = { priority: 101, situational: false }; }
+    const speechToken = this.speechToken;
     try {
       const decoded = await Promise.all(assets.map(a => this.decodeAsset(ctx, a)));
-      if (epoch !== this.epoch || ctx !== this.context) return false;
+      if (epoch !== this.epoch || ctx !== this.context || hasVoice && speechToken !== this.speechToken) return false;
       const start = ctx.currentTime + 0.05;
       assets.forEach((asset, i) => {
         const source = ctx.createBufferSource(), gain = ctx.createGain();
         source.buffer = decoded[i]!; source.loop = asset.loop;
         if (asset.bus === 'Voice') this.duckMusic(decoded[i]!.duration + 0.1);
         source.connect(gain); gain.connect(this.buses![asset.bus]);
-        if (this.track(source, gain, asset.bus === 'Voice' ? 4 : asset.bus === 'Music' ? 0 : 1)) source.start(start);
+        if (this.track(source, gain, asset.bus === 'Voice' ? 4 : asset.bus === 'Music' ? 0 : 1)) {
+          if (asset.bus === 'Voice') {
+            this.speech = { priority: 101, source, gain, situational: false };
+            source.onended = () => { this.release(source, false); if (speechToken === this.speechToken) this.speech = null; };
+          }
+          source.start(start);
+        }
       });
       return true;
-    } catch (err) { this.fail(String(err)); this.buffers.clear(); return false; }
+    } catch (err) { if (hasVoice && speechToken === this.speechToken) this.stopSpeech(); this.fail(String(err)); this.buffers.clear(); return false; }
   }
   connectSfx(source: AudioScheduledSourceNode, gain: AudioNode, position?: {x: number; y: number}, listener?: {x: number; y: number}) {
     const ctx = this.ensureBuses(); if (!ctx) return;
@@ -403,6 +459,7 @@ export class SurvivorsSessionAudio {
   private release(source: AudioScheduledSourceNode, stop: boolean) {
     const gain = this.voices.get(source);
     if (!gain) return;
+    if (this.speech?.source === source) { this.speech = null; this.speechToken++; }
     this.voices.delete(source); this.priorities.delete(source);
     for (const node of this.spatialNodes.get(source) ?? []) node.disconnect();
     this.spatialNodes.delete(source);
@@ -411,6 +468,7 @@ export class SurvivorsSessionAudio {
     source.disconnect(); gain.disconnect();
   }
   silence() {
+    this.stopSpeech();
     this.stopScore();
     this.epoch++;
     for (const source of this.voices.keys()) this.release(source, true);

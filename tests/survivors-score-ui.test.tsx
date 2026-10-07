@@ -18,6 +18,7 @@ it('layers evolution over resumed patrol music and holds boss score through secu
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadApproved').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadCandidates').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'preloadEquipmentRecordings').mockResolvedValue(true);
+ vi.spyOn(SurvivorsSessionAudio.prototype,'playPlayerVoice').mockResolvedValue(true);
  vi.spyOn(SurvivorsSessionAudio.prototype,'dispose').mockImplementation(()=>{});
  const music=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionScore').mockResolvedValue(true);
  const cues=vi.spyOn(SurvivorsSessionAudio.prototype,'auditionCue').mockResolvedValue(true);
