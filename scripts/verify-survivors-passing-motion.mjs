@@ -10,7 +10,8 @@ try {
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
-  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5197');
+  await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5197',{waitUntil:'networkidle'});
+  await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).waitFor();
   const result=await page.evaluate(async()=>{
    const {loadDirectionalActor,drawDirectionalBody,directionalSocket}=await import('/src/ui/survivors-directional-art.ts');
    const actor=new Image();actor.src='/assets/episode01/characters/player-map.webp';await actor.decode();

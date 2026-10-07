@@ -10,7 +10,7 @@ const actor={src:'/assets/player-map.webp',naturalWidth:600,naturalHeight:1400} 
 const context=()=>({save:vi.fn(),restore:vi.fn(),scale:vi.fn(),transform:vi.fn(),translate:vi.fn(),rotate:vi.fn()}) as unknown as CanvasRenderingContext2D;
 it('animates the carried item on body time during hit-stop and remains still for reduced motion',()=>{
  const state=createInitialSurvivorsState('player'),pose={...new SpriteMotionTracker().sample(state.player,0,0,0),action:1};
- const ctx=context();state.gameTime=0;state.playerMotionTime=0;
+ const ctx=context();state.activePerks.radio_boost=1;state.gameTime=0;state.playerMotionTime=0;
  drawCarriedEquipment(ctx,state,actor,74,pose,undefined,undefined);
  state.playerMotionTime=.1;drawCarriedEquipment(ctx,state,actor,74,pose,undefined,undefined);
  expect(vi.mocked(ctx.rotate).mock.calls.at(-1)![0]).toBeLessThan(0);
