@@ -692,7 +692,8 @@ export class SurvivorsEngine {
 
   private audioSequence = 0;
   private audioEvents: SurvivorsAudioEvent[] = [];
-  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number, feedback: Pick<SurvivorsAudioEvent, 'outcome' | 'actorKind'> = {}) {
+  private controlProjectileIds=new Map<string,string>();
+  private emitAudio(type: SurvivorsAudioEvent['type'], x?: number, y?: number, feedback: Pick<SurvivorsAudioEvent, 'outcome' | 'actorKind' | 'collected'> = {}) {
     this.audioEvents.push({id: ++this.audioSequence, type, x, y, ...feedback});
     if (this.audioEvents.length > 256) this.audioEvents.shift();
   }
@@ -2059,6 +2060,7 @@ export class SurvivorsEngine {
           const beforeHp=h.hp;
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
           if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
           this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked);
@@ -2187,7 +2189,9 @@ export class SurvivorsEngine {
           y: h.y,
           boss:Boolean(h.isStageBoss),
           mastery:Boolean(h.isStageBoss&&this.state.signatureMastery?.zeroDay),
+          projectileId:this.controlProjectileIds.get(h.id),
         });
+        this.controlProjectileIds.delete(h.id);
 
         // Ultimate gauge increment
         const ultGain = this.state.directorShoutTimer>0 ? 0 : (h.type === 'CRANE_BOSS' || h.isStageBoss) ? 8 : resourceProfile(this.state.difficulty).controlCharge;
@@ -2433,7 +2437,7 @@ export class SurvivorsEngine {
   }
 
   private collectDrop(drop: SafetyDrop) {
-    this.emitAudio('pickup', drop.x, drop.y);
+    this.emitAudio('pickup', drop.x, drop.y, {collected:true});
     if (drop.itemKind) {
       applyTacticalItem(this.state, drop.itemKind);
       this.state.itemNotice = {id: drop.id, kind: drop.itemKind, remaining: 2.4};

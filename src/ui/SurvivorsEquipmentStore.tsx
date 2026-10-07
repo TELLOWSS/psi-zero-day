@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef } from 'react';
 import { STORE_ITEMS, STORE_CLEAR_WEAR, buyAndEquipLoadout,itemDurability,storeRepairCost,storeRepairTotal,type StoreCategory, type StoreInventory } from '../domain/survivors-store';
 import copy from '../../content/localization/survivors-store-ko.json';
+import pleasureCopy from '../../content/localization/survivors-pleasure-ko.json';
 import { SurvivorsPremiumArt } from './SurvivorsPremiumArt';
 import type { CharacterId, PermanentUpgrades } from '../domain/patrol-survivors';
 import { fittingLoadout } from '../domain/survivors-fitting';
@@ -10,8 +11,9 @@ import {ArrowLeft,ArrowRight,Play,Pause,Wrench,Coins} from 'lucide-react';
 import type {FittingMotion} from './survivors-fitting-pose';
 import type {AttackMotion} from './survivors-attack-motion';
 
-export function SurvivorsEquipmentStore({ inventory, credits, message, onChange, onRepair, onRepairAll, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
+export function SurvivorsEquipmentStore({ inventory, credits, message, repairedIds=[], onChange, onRepair, onRepairAll, onApply, live=false, characterId = 'player', upgrades = DEFAULT_PERMANENT_UPGRADES }: {
   inventory: StoreInventory; credits: number; message: string;
+  repairedIds?:readonly string[];
   onChange: (id: string, purchase: boolean) => void;
   onRepair?: (id:string)=>void; onRepairAll?:()=>void; onApply?:(ids:string[])=>void; live?:boolean;
   characterId?: CharacterId; upgrades?: PermanentUpgrades;
@@ -71,6 +73,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
       }}>{copy[tab]}{tab==='maintenance'&&damaged.length>0&&<span className="survivors-maintenance-count">{damaged.length}</span>}</button>)}
     </div>
     {message && <p role={message === copy.failure ? 'alert' : 'status'}>{message}</p>}
+    {repairedIds.length>0&&<div className="survivors-repair-receipt">{STORE_ITEMS.filter(item=>repairedIds.includes(item.id)&&inventory.owned.includes(item.id)&&itemDurability(inventory,item.id)===100).map(item=><span key={item.id}><SurvivorsPremiumArt item={item}/><strong>{copy.items[item.id as keyof typeof copy.items].name}<small>{pleasureCopy.repair}</small></strong></span>)}</div>}
     <div id="store-panel-maintenance" role="tabpanel" aria-labelledby="store-tab-maintenance" hidden={view!=='maintenance'}>
       <div className="survivors-maintenance-summary"><div><small>{copy.maintenanceDue} · {damaged.length}</small><strong>{copy.maintenanceReserve} · {repairTotal.toLocaleString()} PSI</strong><span>{repairTotal>credits?`${copy.repairShortfall} · ${(repairTotal-credits).toLocaleString()} PSI`:`${copy.afterMaintenance} · ${(credits-repairTotal).toLocaleString()} PSI`}</span></div>
         <button type="button" disabled={!onRepairAll||!repairTotal||repairTotal>credits} onClick={onRepairAll}><Wrench size={18}/>{copy.repairAll}</button>
@@ -133,7 +136,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, onChange,
       const owned = inventory.owned.includes(item.id), equipped = inventory.equipped.includes(item.id);
       const replaced = STORE_ITEMS.find(other => other.category === item.category && inventory.equipped.includes(other.id) && other.id !== item.id);
       return <article key={item.id} data-rarity={item.rarity} className={`survivors-store-card ${equipped ? 'is-equipped' : ''}`}>
-        <div className="survivors-store-item-head"><SurvivorsPremiumArt item={item}/><div><small>{copy.categories[item.category]} · {copy[item.rarity]}</small><strong>{text.name}</strong></div></div>
+        <div className={`survivors-store-item-head${repairedIds.includes(item.id)?' is-repaired':''}`}><SurvivorsPremiumArt item={item}/><div><small>{copy.categories[item.category]} · {copy[item.rarity]}</small><strong>{text.name}</strong></div></div>
         <span className="survivors-store-effect">{text.description}</span><p className="survivors-premium-use">{text.use}</p>
         <small>{equipped ? copy.equipped : owned ? copy.owned : `${item.price.toLocaleString()} PSI`}</small>
         {owned?<label className="survivors-item-condition" data-low={itemDurability(inventory,item.id)<=30}>{copy.durability} {itemDurability(inventory,item.id)}/100 <progress max={100} value={itemDurability(inventory,item.id)}/>{itemDurability(inventory,item.id)===0&&<b>{copy.broken}</b>}</label>:<small>{copy.fullCondition}</small>}

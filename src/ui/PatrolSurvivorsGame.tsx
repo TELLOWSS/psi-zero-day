@@ -1,6 +1,8 @@
 import { CombatDirection } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
 import {selectImpactAccents} from './survivors-impact-direction';
+import {PleasureFeedback} from './survivors-pleasure-feedback';
+import pleasureText from '../../content/localization/survivors-pleasure-ko.json';
 import {warningLabelLayout} from './survivors-warning-layout';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {BossEncounterDirection} from './survivors-boss-direction';
@@ -206,6 +208,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const projectileFeedbackRef = useRef(new ProjectileFeedbackLayer());
   const radioProjectionRef=useRef(new RadioEmissionProjection());
   const impactFeedbackRef = useRef<Array<{x:number;y:number;life:number;duration:number;boss:boolean;critical:boolean;worker:boolean}>>([]);
+  const pleasureRef=useRef(new PleasureFeedback());
+  const [repairedIds,setRepairedIds]=useState<string[]>([]);
   const damageFlashRef = useRef<number>(0);
 
   // Authentic Construction Safety Assets Cache (including 2.5D Quarter-view standing maps)
@@ -684,6 +688,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const commitStoreChange=(result:StoreWallet|null,message:string,failureMessage=storeText.repairFirst)=>{
+    setRepairedIds([]);
     if(!result){setStoreMessage(failureMessage);audioRef.current.playRecordedEffect('ui_denied');return;}
     const engine=engineRef.current;
     if(engine&&engine.state.phase!=='ready'&&engine.state.phase!=='paused'){setStoreMessage(storeText.failure);return;}
@@ -691,6 +696,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       persistStoreWallet(result);
     } catch { setStoreMessage(storeText.failure);audioRef.current.playRecordedEffect('ui_denied'); return; }
     inventoryRef.current = result.inventory;
+    setRepairedIds(STORE_ITEMS.filter(item=>itemDurability(storeInventory,item.id)<100&&result.inventory.owned.includes(item.id)&&itemDurability(result.inventory,item.id)===100).map(item=>item.id));
     setStoreInventory(result.inventory);
     creditsRef.current = result.credits;
     setPsiCredits(result.credits);
@@ -712,6 +718,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     storeRepairTotal(inventoryRef.current)>creditsRef.current?storeText.repairShortfall:storeText.maintenanceEmpty);
   const applyStore=(ids:string[])=>commitStoreChange(buyAndEquipLoadout(inventoryRef.current,creditsRef.current,ids),storeText.appliedLoadout);
   const openStore=()=>{
+    setRepairedIds([]);
     void audioRef.current.preloadEquipmentRecordings();
     const engine=engineRef.current;
     if(engine?.state.bossEncounter&&engine.state.bossEncounter.phase!=='combat')return;
@@ -997,6 +1004,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     setBossAlert(null);
     setBossSecured(false);
     impactFeedbackRef.current=[];
+    pleasureRef.current.reset();
     projectileFeedbackRef.current.clear();
     keysRef.current = {};
     engineRef.current = engine;
@@ -1593,15 +1601,30 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           playScore(next);
         }
         const events = engine.drainAudioEvents();
+        const remainingThreats=engine.state.hazards.filter(h=>h.hp>0).length
+          +engine.state.interactiveHazards.filter(h=>h.state==='warning'||h.state==='active').length
+          +(engine.state.signatureEvent&&engine.state.signatureEvent.phase!=='resolved'?1:0)
+          +(engine.state.bossAlertTimer>0||engine.state.directorCutinPhase!=='none'?1:0);
+        const settled=pleasureRef.current.observe(events,engine.state.lastKilledEvents??[],remainingThreats,engine.state.gameTime);
+        if(settled){
+          audioRef.current.playRecordedEffect('impact_finisher',undefined,engine.state.player);
+          audioRef.current.duckMusic(.35);
+        }
+        const gathered=pleasureRef.current.update(dt,engine.state.gameTime);
+        if(gathered){
+          playSfx('pickup',engine.state.player);
+          if(gathered>1)spawnFloating(engine.state.player.x,engine.state.player.y-42,pleasureText.collected.replace('{count}',String(gathered)),'#78e8d5');
+        }
         const audible = new Set<string>();
         for (const event of events) {
+          if(event.type==='pickup'&&event.collected)continue;
           if (event.type === 'shoot' || event.type === 'spray' || event.type === 'shout') motions.act(engine.state.player, engine.state.playerMotionTime??engine.state.gameTime,event.type==='shout'?'ultimate':event.type==='spray'?'spray':'shot');
           const cue = event.type === 'control' ? event.outcome === 'boss' ? 'control_heavy' : 'control' : event.type;
           if (event.type === 'control' && event.x !== undefined && event.y !== undefined) {
             const boss=event.outcome==='boss',critical=event.outcome==='critical',duration=boss?.45:critical?.22:.12;
             impactFeedbackRef.current.push({x:event.x,y:event.y,life:duration,duration,boss,critical,worker:event.actorKind==='UNHELMETED'});
             if(impactFeedbackRef.current.length>24)impactFeedbackRef.current.shift();
-            if(boss){screenShakeRef.current=18;audioRef.current.duckMusic();}
+            if(boss){screenShakeRef.current=4;audioRef.current.duckMusic();}
           }
           // Equipment facts own their synchronized sound; retain other gameplay cues.
           if ((event.type==='shoot'||event.type==='spray'||event.type==='laser')&&projectileEvents.some(e=>e.phase==='launch'))continue;
@@ -1632,8 +1655,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               spawnParticles(ev.x, ev.y - 20, '#10b981', 8, 65, 3.5);
               spawnFloating(ev.x, ev.y - 35, combatText.worker_resolved, '#10b981');
             } else if (ev.type === 'CRANE_BOSS') {
-              screenShakeRef.current = 32;
-              spawnParticles(ev.x, ev.y, '#f59e0b', 50, 180, 5.5);
+              screenShakeRef.current = 6;
+              spawnParticles(ev.x, ev.y, '#f59e0b', 18, 140, 4);
               spawnShockwave(ev.x, ev.y, '#fbbf24', 120, 6, 0.6);
               spawnFloating(ev.x, ev.y - 50, combatText.lifting_resolved, '#fbbf24', true);
             }
@@ -1648,7 +1671,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             }
           }
 
-          spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', Math.min(16,diff * 5), 80);
+          if(!settled)spawnParticles(engine.state.player.x, engine.state.player.y, '#38bdf8', Math.min(16,diff * 5), 80);
         }
         if (engine.state.comboCount !== combo) {
           setCombo(engine.state.comboCount);
@@ -2071,6 +2094,27 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       // Short ground-contact strokes at actual impact positions, never fullscreen flashes.
+      for(const mark of pleasureRef.current.marks){
+        const progress=mark.age/mark.duration;
+        ctx.save();ctx.globalAlpha=(1-progress)*.65;ctx.strokeStyle='#78e8d5';ctx.fillStyle='#b9f4dc';ctx.lineWidth=2;
+        if(mark.kind==='pickup'){
+          if(!reducedMotionRef.current){
+            const eased=1-(1-progress)**2,x=mark.x+(player.x-mark.x)*eased,y=mark.y+(player.y-mark.y)*eased;
+            ctx.beginPath();ctx.moveTo(x-4,y);ctx.lineTo(x+4,y);ctx.moveTo(x,y-4);ctx.lineTo(x,y+4);ctx.stroke();
+          }
+        }else if(mark.kind==='safe'){
+          const radius=reducedMotionRef.current?16:12+progress*16;
+          ctx.beginPath();ctx.ellipse(mark.x,mark.y,radius,radius*.4,0,0,Math.PI*2);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(mark.x-5,mark.y);ctx.lineTo(mark.x-1,mark.y+3);ctx.lineTo(mark.x+6,mark.y-4);ctx.stroke();
+        }else{
+          ctx.font=mark.kind==='finish'?'bold 15px sans-serif':'13px sans-serif';ctx.textAlign='center';
+          const label=mark.kind==='finish'?pleasureText.finish:pleasureText.group.replace('{count}',String(mark.count));
+          const labelY=mark.y-(mark.kind==='finish'?70:44)-(reducedMotionRef.current?0:progress*8);
+          ctx.globalAlpha=Math.min(1,(1-progress)*4);ctx.strokeStyle='#10251f';ctx.lineWidth=3;
+          ctx.strokeText(label,mark.x,labelY);ctx.fillText(label,mark.x,labelY);
+        }
+        ctx.restore();
+      }
       impactFeedbackRef.current=impactFeedbackRef.current.filter(effect=>{effect.life-=dt;return effect.life>0;});
       if(!reducedMotionRef.current) for(const effect of impactFeedbackRef.current){
         const progress=1-effect.life/effect.duration,radius=(effect.boss?78:effect.critical?26:12)*progress+4;
@@ -3784,7 +3828,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div ref={storeDialogRef} className="survivors-modal-content survivors-equipment-workspace" role="dialog" aria-modal="true" aria-label={storeText.title}>
             <div className="survivors-equipment-toolbar"><h2>{storeText.title}</h2><output className="survivors-toolbar-wallet" aria-label={storeText.walletLabel} aria-live="polite"><Coins size={18}/><span><small>{storeText.walletLabel}</small><strong>{psiCredits.toLocaleString()} PSI</strong></span></output><button type="button" title={storeText.close} aria-label={storeText.close} onClick={() => setShowRdModal(false)}><X size={22}/></button></div>
 
-            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} onChange={changeStore} onRepair={repairStore} onRepairAll={repairAllStore} onApply={applyStore} live={phase==='paused'} characterId={selectedChar} upgrades={permanentUpgrades}/>
+            <SurvivorsEquipmentStore inventory={storeInventory} credits={psiCredits} message={storeMessage} repairedIds={repairedIds} onChange={changeStore} onRepair={repairStore} onRepairAll={repairAllStore} onApply={applyStore} live={phase==='paused'} characterId={selectedChar} upgrades={permanentUpgrades}/>
             {phase==='paused'&&<p className="survivors-durability-rule">{storeText.healthRule}</p>}
 
             <details hidden={phase==='paused'} className="survivors-store-upgrades"><summary>{storeText.upgrades}</summary><div className="survivors-rd-grid">

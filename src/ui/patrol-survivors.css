@@ -2260,6 +2260,14 @@
 .survivors-premium-hp-badge .survivors-premium-art { width:18px; height:18px; border-radius:4px; }
 .survivors-premium-hp-badge small { font-size:9px; }
 .survivors-fitting { display: grid; grid-template-columns: minmax(220px, 360px) minmax(0, 1fr); gap: 24px; align-items: start; padding: 12px 0 24px; border-bottom: 1px solid #34443a; margin-bottom: 20px; }
+.survivors-repair-receipt {display:flex;flex-wrap:wrap;gap:12px;border-block:1px solid #5d9279;padding:10px 0;margin:10px 0;}
+.survivors-repair-receipt > span {display:flex;gap:8px;align-items:center;min-width:0;}
+.survivors-repair-receipt .survivors-premium-art {width:48px;height:48px;flex:0 0 48px;}
+.survivors-repair-receipt strong {font-size:12px;overflow-wrap:anywhere;}
+.survivors-repair-receipt small {display:block;color:#a5e7c7;font-size:11px;}
+.survivors-repair-receipt .survivors-premium-art,.survivors-store-item-head.is-repaired .survivors-premium-art {animation:survivors-repair-ready .55s ease-out both;}
+@keyframes survivors-repair-ready {0%{filter:brightness(.8);}45%{filter:brightness(1.25);}100%{filter:brightness(1);}}
+@media (prefers-reduced-motion:reduce) {.survivors-repair-receipt .survivors-premium-art,.survivors-store-item-head.is-repaired .survivors-premium-art {animation:none;}}
 .survivors-fitting-art { margin: 0; min-width: 0; position: relative; aspect-ratio: 9 / 8; background: #26332e; }
 .survivors-fitting-art canvas { display: block; width: 100%; height: 100%; }
 .survivors-fitting-art figcaption { position: absolute; bottom: 8px; left: 8px; right: 8px; text-align: center; font-size: 12px; }
