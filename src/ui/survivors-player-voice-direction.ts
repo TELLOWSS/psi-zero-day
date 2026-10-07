@@ -35,7 +35,7 @@ export class PlayerVoiceDirection {
       if (state.gameTime - (this.times.get(cue) ?? -Infinity) >= cooldown) requests.push({ cue, priority, expires, variant });
     };
     if (this.retry && !this.retried && state.phase === 'ready') { this.retried = true; add('RETRY',35,0,2); }
-    if (state.phase === 'playing' && !this.started) { this.started = true; if (playing) add('START', 40, 0, 2); }
+    if (state.phase === 'playing' && !this.started) { this.started = true; if (playing) add('START', 40, 0, 8); }
     if (this.armed && previousRatio > .3 && this.ratio <= .3) {
       this.armed = false;
       if (playing) add('LOW_HP', 90, 20);

@@ -7,11 +7,15 @@ const url=process.env.PSI_PREVIEW_URL;if(!url)throw Error('Set PSI_PREVIEW_URL')
 const manifest=JSON.parse(fs.readFileSync('content/survivors-player-voice-v1-ingest.json','utf8'));
 manifest.assets.push(...JSON.parse(fs.readFileSync('content/survivors-player-voice-p1-v1-ingest.json','utf8')).assets);
 const fixtures=process.env.PSI_VOICE_FIXTURES==='1';
+const openingDelayMs=Number(process.env.PSI_VOICE_DELAY_MS??0);
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const rows=[];
 try {
   for (const [width,height] of [[1440,900],[390,844],[844,390]]) {
     const page=await browser.newPage({viewport:{width,height}}),errors=[];
+    if(openingDelayMs>0)await page.route('**/PSI_V_PLAYER_START_A_v01.wav',async route=>{
+      await new Promise(resolve=>setTimeout(resolve,openingDelayMs));await route.continue();
+    });
     page.on('pageerror',error=>errors.push(String(error)));
     await page.addInitScript(({assets})=>{
       performance.setResourceTimingBufferSize(5000);
