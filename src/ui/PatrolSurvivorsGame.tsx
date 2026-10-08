@@ -1312,6 +1312,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const reducedMotionRef = useRef(false);
+  const hudBottomRef = useRef(0);
   useEffect(() => {
     const query = window.matchMedia?.('(prefers-reduced-motion: reduce)');
     const update = () => { reducedMotionRef.current = query?.matches ?? false; };
@@ -1320,6 +1321,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const reserveHud = () => {
       if (header && containerRef.current) {
         const bottom = header.getBoundingClientRect().bottom - containerRef.current.getBoundingClientRect().top;
+        hudBottomRef.current=Math.ceil(bottom+8);
         containerRef.current.style.setProperty('--survivors-hud-bottom', `${Math.ceil(bottom + 8)}px`);
       }
     };
@@ -3261,7 +3263,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const placement=fitFeedbackToView(ft.x,metrics.width,scale,camX,camX+viewW);
           const vertical=placeFeedbackVertically(placement.x,ft.y,placement.width,
             (metrics.actualBoundingBoxAscent||15)*placement.scale,(metrics.actualBoundingBoxDescent||4)*placement.scale,
-            camY,camY+viewH,feedbackObstacles);
+            camY+hudBottomRef.current/renderZoom,camY+viewH,feedbackObstacles);
           if(!vertical){ctx.restore();continue;}
           feedbackObstacles.push(vertical.rect);
           ctx.translate(placement.x, vertical.y);
