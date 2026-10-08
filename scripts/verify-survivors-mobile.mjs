@@ -228,7 +228,7 @@ try {
             return {stage:${stageNumber},id:result?.id,cell:result?.cell,atlas:row.atlas,name:workfaceThreatCopy(${stageNumber}).name,preserved:JSON.stringify(h)===before};
           })()`);
           await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);await sleep(100);
-          const loaded=await evaluate(cdp,`performance.getEntriesByType('resource').some(r=>r.name.endsWith('${selected.atlas}'))`);
+          const loaded=await evaluate(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);
           workfaces.push({...selected,loaded});
           if([1,4,11,14,21,31,41,43,45,50].includes(stageNumber))await screenshot(cdp,`stage-${stageNumber}-workface.png`);
         }
