@@ -1,3 +1,4 @@
+import {stageThreatAppearance,threatSilhouettePose} from './survivors-threat-appearance';
 import type { Hazard, HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SpritePose } from './survivors-sprite-motion';
@@ -87,13 +88,18 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
 }
 
 /** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages): boolean {
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1): boolean {
   const cell = industrialHazardCell(h, ground);
   if (cell === null || !atlas?.naturalWidth) return false;
   const gas = h.type === 'GAS_LEAK';
   const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
   const boss=Boolean(bossImage?.naturalWidth);
-  const placement=industrialHazardPlacement(h,elevation,boss),size=placement.size;
+  const appearance=stageThreatAppearance(h,stageNumber,theme);
+  const useThreat=Boolean(appearance&&threatAtlas?.naturalWidth);
+  const source=boss?bossImage:useThreat?threatAtlas:atlas;
+  const sourceCell=boss?0:useThreat?appearance!.cell:cell;
+  const placement=industrialHazardPlacement(h,elevation,boss);
+  const size=useThreat&&gas?Math.max(38,placement.size):useThreat&&h.variant==='reinforced_cart'?Math.max(70,placement.size):placement.size;
   const response=industrialResponse(h,pose,reduced);
   ctx.save();
   if (placement.solid) {
@@ -113,7 +119,7 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     ctx.restore();
     const facing=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)&&Math.abs(h.motion.directionX)>.04?(h.motion.directionX<0?-1:1):pose.facing;
     const action=cartActionPose(h,reduced);
-    ctx.scale(facing, 1);
+    ctx.scale(useThreat?-facing:facing, 1);
     // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
     ctx.transform(1, 0, pose.lean+action.lean+response.tilt, 1-action.compression-response.compression-response.suspension, 0, 0);
   }
@@ -122,8 +128,12 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   ctx.scale(pressure, pressure);
   if(gas&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
   if (gas&&!boss) ctx.globalAlpha *= .82;
-  const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
-  if(drawn&&response.reaction>0)drawPropReaction(ctx,boss?bossImage:atlas,boss?0:cell,0,placement.y,size,response.color,response.reaction*.24);
+  const silhouette=useThreat?threatSilhouettePose(h,clock,reduced):{x:0,y:0,rotation:0,scaleX:1,scaleY:1};
+  ctx.save();ctx.translate(silhouette.x,silhouette.y);ctx.rotate(silhouette.rotation);ctx.scale(silhouette.scaleX,silhouette.scaleY);
+  const drawn = drawProp(ctx, source, sourceCell, 0, placement.y, size);
+  if(drawn&&response.reaction>0)drawPropReaction(ctx,source,sourceCell,0,placement.y,size,response.color,response.reaction*.24);
+  ctx.restore();
+
   if(drawn&&h.signatureEventId&&!boss){
     const pulse=reduced?1:.72+.28*Math.sin(clock*7);
     const themeAccent:Record<PatrolStageDefinition['theme'],string>={
@@ -202,3 +212,4 @@ export function drawIndustrialContact(ctx: CanvasRenderingContext2D, atlas: HTML
   ctx.restore();
   return drawn;
 }
+
