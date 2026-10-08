@@ -10,7 +10,8 @@
     {"id":"cast-player","selector":".commercial-title-worker[data-character=\"player\"] img","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
     {"id":"cast-junho","selector":".commercial-title-worker[data-character=\"lim_junho\"] img","uri":"/assets/episode01/characters/lim-junho-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
     {"id":"cast-jaehoon","selector":".commercial-title-worker[data-character=\"lee_jaehoon\"] img","uri":"/assets/episode01/characters/lee-jaehoon-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
-    {"id":"cast-jeongmin","selector":".commercial-title-worker[data-character=\"seo_jeongmin\"] img","uri":"/assets/episode01/characters/seo-jeongmin-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"}
+    {"id":"cast-jeongmin","selector":".commercial-title-worker[data-character=\"seo_jeongmin\"] img","uri":"/assets/episode01/characters/seo-jeongmin-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
+    {"id":"mobile-player","selector":".commercial-title-mobile-player","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"src/ui/GameHub.tsx"}
   ],
   "nonBinarySlots": [
     {"id":"wordmark","selector":".commercial-title-logo","currentType":"LIVE_TEXT","finalCandidate":"SEPARATE_DIRECTOR_FILE_APPROVAL_REQUIRED"},

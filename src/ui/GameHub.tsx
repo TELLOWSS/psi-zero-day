@@ -389,36 +389,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
-
-      {/* 4위 1체 통합 관제 상태 요약 바 */}
-      <div className="commercial-triad-dashboard" style={{
-        margin: '0.8rem 0 1rem 0',
-        padding: '0.7rem 1rem',
-        background: 'rgba(15, 23, 42, 0.85)',
-        border: '1px solid rgba(56, 189, 248, 0.35)',
-        borderRadius: '8px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-        gap: '0.6rem',
-        fontSize: '0.8rem',
-      }}>
-        <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>📖 스토리 모드</span>
-          <strong style={{ color: '#fbbf24' }}>준비중 · 시네마틱 프리뷰</strong>
-        </div>
-        <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>⚡ 시그널 워치 (SURVIVORS)</span>
-          <strong style={{ color: '#34d399' }}>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong>
-        </div>
-        <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🛡️ 디펜스 모드</span>
-          <strong style={{ color: '#60a5fa' }}>준비중 · 전술 방어선 고도화</strong>
-        </div>
-        <div>
-          <span style={{ color: '#94a3b8', display: 'block', fontSize: '0.72rem' }}>🔬 현장도감 연구</span>
-          <strong style={{ color: '#a78bfa' }}>{unifiedMeta.fgPoints} FG 연구 데이터</strong>
-        </div>
-      </div>
+      <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
 
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
@@ -468,6 +439,12 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-copy"><strong>새 스토리 · 준비중</strong><small>본편 완성 후 공개됩니다</small></span>
           <b>›</b>
         </button>
+      </div>
+      <div className="commercial-triad-dashboard">
+        <div><span>📖 스토리 모드</span><strong>준비중 · 시네마틱 프리뷰</strong></div>
+        <div><span>⚡ 시그널 워치 (SURVIVORS)</span><strong>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong></div>
+        <div><span>🛡️ 디펜스 모드</span><strong>준비중 · 전술 방어선 고도화</strong></div>
+        <div><span>🔬 현장도감 연구</span><strong>{unifiedMeta.fgPoints} FG 연구 데이터</strong></div>
       </div>
     </section>
 

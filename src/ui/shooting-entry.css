@@ -17,7 +17,10 @@
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-defense-entry,
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-story-entry {grid-column:auto;background:#172a23!important;color:#edf6ef!important;border-color:#749883!important;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-defense-entry small {color:#c1dacb!important;}
-.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-triad-dashboard {background:#14211dcc!important;border-color:#9fc3ae55!important;grid-template-columns:1fr 1fr!important;}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-triad-dashboard {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;padding:12px 0;border-top:1px solid #9fc3ae55;border-bottom:1px solid #9fc3ae55;font-size:12px;}
+.commercial-triad-dashboard span {display:block;color:#a8b8b0;font-size:11px;line-height:1.5;}
+.commercial-triad-dashboard strong {display:block;color:#d4e7dd;line-height:1.5;}
+.commercial-title-mobile-player {display:none;object-fit:contain;object-position:center bottom;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-cast {position:absolute;inset:160px 3% auto auto;width:38%;height:520px;pointer-events:none;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-worker blockquote {display:none;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-field-status,
@@ -52,6 +55,21 @@
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy {width:100%;}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-actions {grid-template-columns:repeat(3,minmax(0,1fr));}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-survivors-entry {grid-column:auto;}
+}
+
+@media(max-width:600px) and (orientation:portrait) {
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-mobile-player {display:block;position:absolute;top:14px;right:0;width:132px;height:208px;object-fit:contain;object-position:center bottom;pointer-events:none;filter:drop-shadow(0 8px 8px #0006);}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy h1,
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-english {max-width:calc(100% - 144px);}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-actions {margin-top:120px;}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-coming-soon {min-height:48px;padding:10px 14px;}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-coming-soon small {display:none;}
+}
+@media(max-width:360px) and (orientation:portrait) {
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-mobile-player {width:112px;}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy h1,
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-english {max-width:calc(100% - 124px);}
+ .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-logo {font-size:32px;}
 }
 .survivors-ready-dialog[data-preflight] {width:min(1100px,calc(100vw - 32px));max-width:1100px!important;height:calc(100svh - 32px);max-height:calc(100svh - 32px);box-sizing:border-box;padding:24px;text-align:left;border:1px solid #719b87;border-radius:8px;background:#15221e;}
 .survivors-ready-dialog[data-preflight] [hidden] {display:none!important;}

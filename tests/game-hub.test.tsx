@@ -9,6 +9,26 @@ import { episodeBounds, episodeOptions, playEpisode } from './helpers/episode01-
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 describe('game hub navigation', () => {
+  it('places live actions before the read-only status summary and keeps canonical character art', () => {
+    const session = new EpisodeSession();
+    const host = document.createElement('div');
+    const root = createRoot(host);
+    let launches = 0;
+    try {
+      act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={() => { throw new Error('Unreleased mode must remain a preview'); }} />));
+      const actions = host.querySelector('.commercial-title-actions')!;
+      const summary = host.querySelector('.commercial-triad-dashboard')!;
+      expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
+      expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/player-map.webp');
+      expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/player-map.webp');
+      act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
+      expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
+      act(() => host.querySelector<HTMLButtonElement>('.is-survivors-entry')!.click());
+      expect(launches).toBe(1);
+    } finally { act(() => root.unmount()); }
+  });
+
   it('opens the real run and preserves it when visiting the map and colleagues', async () => {
     const session = new EpisodeSession(episodeOptions(42), episodeBounds);
     const host = document.createElement('div');
