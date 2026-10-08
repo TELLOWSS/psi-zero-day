@@ -3083,3 +3083,17 @@
   .is-combat .survivors-tactical-actions button { flex-basis:52px; width:52px; height:52px; }
   .is-combat .survivors-ultimate-control { bottom:max(24px,env(safe-area-inset-bottom)); right:max(24px,env(safe-area-inset-right)); }
 }
+/* Transient wave notices must not cover the character on short landscape screens. */
+@media (pointer:coarse) {
+  .is-combat .survivors-wave-director-notice { padding:6px 9px; gap:2px; }
+  .is-combat .survivors-wave-director-notice > span { display:none; }
+  .is-combat .survivors-wave-director-notice > strong { font-size:13px; line-height:1.35; }
+  .is-combat .survivors-wave-director-notice > small { font-size:11px; line-height:1.4; }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px) {
+  .is-combat :is(.survivors-wave-director-notice,.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) {
+    left:max(12px,env(safe-area-inset-left)); right:auto; transform:none; text-align:left;
+    width:min(280px,calc(100% - 120px)); padding:4px 7px;
+  }
+  .is-combat .survivors-wave-director-notice > small { display:none; }
+}
