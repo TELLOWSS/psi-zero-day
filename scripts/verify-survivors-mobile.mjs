@@ -209,12 +209,46 @@ try {
         const specs=[['RUNAWAY_CART',null,null],['RUNAWAY_CART','reinforced_cart',null],['RUNAWAY_CART',null,'flanking_cart'],['GAS_LEAK','pulse_gas',null],['GAS_LEAK','split_gas',null],['GAS_LEAK',null,'crosswind'],['FALLING_DEBRIS',null,null],['FALLING_DEBRIS',null,'wide_debris'],['FALLING_DEBRIS',null,null]];
         e.state.hazards=[];e.state.interactiveHazards=[];e.state.perkOptions=[];
         const cells=[];
-        for(let i=0;i<9;i++){const [type,variant,behavior]=specs[i];e.spawnHazard(type);const h=e.state.hazards.at(-1);h.x=e.state.player.x+(i%3-1)*150;h.y=e.state.player.y+(Math.floor(i/3)-1)*140;h.speed=0;h.damage=0;h.variant=variant||undefined;h.behavior=behavior||undefined;h.isStageBoss=false;h.signatureEventId=undefined;h.motion={phase:type==='FALLING_DEBRIS'?'fall':'warning',timer:type==='FALLING_DEBRIS'?.15:1.25,directionX:1,directionY:0};if(i===4)h.y+=50;cells.push(stageThreatAppearance(h,i===8?5:3,i===8?'surface_logistics':'highrise_slab')?.cell);}
+        for(let i=0;i<9;i++){const [type,variant,behavior]=specs[i];e.spawnHazard(type);const h=e.state.hazards.at(-1);h.x=e.state.player.x+(i%3-1)*150;h.y=e.state.player.y+(Math.floor(i/3)-1)*140;h.speed=0;h.damage=0;h.variant=variant||undefined;h.behavior=behavior||undefined;h.id='qa_existing_3';h.isStageBoss=false;h.signatureEventId=undefined;h.motion={phase:type==='FALLING_DEBRIS'?'fall':'warning',timer:type==='FALLING_DEBRIS'?.15:1.25,directionX:1,directionY:0};if(i===4)h.y+=50;cells.push(stageThreatAppearance(h,i===8?5:3,i===8?'surface_logistics':'highrise_slab')?.cell);}
         return {width:image.naturalWidth,height:image.naturalHeight,cells,scope:'Synthetic nine-shape render fixture; no gameplay completion claim.'};
       })()`);
       await sleep(250);await screenshot(cdp,`${width}x${height}-threat-silhouettes.png`);
       await evaluate(cdp,"window.qaMobileEngine.state.stage={...window.qaMobileEngine.state.stage,theme:'surface_logistics',stageNumber:5}");
       await sleep(150);await screenshot(cdp,`${width}x${height}-steel-silhouettes.png`);
+      const workfaces=[],naturalMotion=[];
+      if(width===820&&height===1180){
+        for(let stageNumber=1;stageNumber<=50;stageNumber++){
+          const selected=await evaluate(cdp,`(async()=>{
+            const {workfaceThreat,workfaceThreatAppearance,workfaceThreatCopy}=await import('/src/ui/survivors-workface-threats.ts');
+            const {PATROL_STAGES}=await import('/src/engine/patrol-survivors-engine.ts');
+            const row=workfaceThreat(${stageNumber}),e=window.qaMobileEngine;
+            e.state.stage=PATROL_STAGES['stage_'+String(${stageNumber}).padStart(2,'0')];e.state.hazards=[];
+            e.spawnHazard(row.type);const h=e.state.hazards.at(-1);h.id='qa_workface_1';h.x=e.state.player.x+70;h.y=e.state.player.y+100;h.isStageBoss=false;h.signatureEventId=undefined;h.variant=undefined;h.behavior=undefined;h.motion={phase:h.type==='FALLING_DEBRIS'?'fall':h.type==='RUNAWAY_CART'?'charge':'approach',timer:.225,directionX:1,directionY:0};
+            const before=JSON.stringify(h);const result=workfaceThreatAppearance(h,${stageNumber});
+            return {stage:${stageNumber},id:result?.id,cell:result?.cell,atlas:row.atlas,name:workfaceThreatCopy(${stageNumber}).name,preserved:JSON.stringify(h)===before};
+          })()`);
+          await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);await sleep(100);
+          const loaded=await evaluate(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);
+          workfaces.push({...selected,loaded});
+          if([1,4,11,14,21,31,41,43,45,50].includes(stageNumber))await screenshot(cdp,`stage-${stageNumber}-workface.png`);
+        }
+      }
+      if(width===820&&height===1180){
+        for(const stageNumber of [1,22,34]){
+          const beforeMotion=await evaluate(cdp,`(async()=>{
+            const {workfaceThreat}=await import('/src/ui/survivors-workface-threats.ts');
+            const {PATROL_STAGES}=await import('/src/engine/patrol-survivors-engine.ts');
+            const e=window.qaMobileEngine,row=workfaceThreat(${stageNumber});e.state.stage=PATROL_STAGES['stage_'+String(${stageNumber}).padStart(2,'0')];e.state.gameTime=20;e.state.hazards=[];e.state.projectiles=[];for(const key of Object.keys(e.state.activePerks))e.state.activePerks[key]=0;
+            e.spawnHazard(row.type);const h=e.state.hazards.at(-1);h.id='qa_motion_1';h.x=e.state.player.x+160;h.y=e.state.player.y+100;h.hp=h.maxHp=100000;h.damage=0;h.speed=100;h.isStageBoss=false;h.signatureEventId=undefined;h.variant=undefined;h.behavior=undefined;h.motion={phase:h.type==='FALLING_DEBRIS'?'fall':h.type==='RUNAWAY_CART'?'charge':'approach',timer:h.type==='RUNAWAY_CART'?1.05:.45,directionX:-1,directionY:0};
+            return {stage:${stageNumber},type:h.type,x:h.x,y:h.y,timer:h.motion.timer};
+          })()`);
+          await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);
+          await evaluate(cdp,'window.qaVisualFreeze=false');await sleep(180);
+          const afterMotion=await evaluate(cdp,"(()=>{window.qaVisualFreeze=true;const h=window.qaMobileEngine.state.hazards.find(h=>h.id==='qa_motion_1');return h?{x:h.x,y:h.y,timer:h.motion?.timer,phase:h.motion?.phase}:null;})()");
+          const valid=afterMotion&&Number.isFinite(afterMotion.x)&&Number.isFinite(afterMotion.y)&&(beforeMotion.type==='FALLING_DEBRIS'?afterMotion.x===beforeMotion.x&&afterMotion.y===beforeMotion.y&&afterMotion.timer<beforeMotion.timer:Math.hypot(afterMotion.x-beforeMotion.x,afterMotion.y-beforeMotion.y)>0);
+          naturalMotion.push({before:beforeMotion,after:afterMotion,valid});await screenshot(cdp,`stage-${stageNumber}-natural-motion.png`);
+        }
+      }
       // Exercise real pause-menu controls, then reload to check persistence.
       await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
       await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
@@ -233,8 +267,8 @@ try {
       const restored=await evaluate(cdp,"document.querySelector('.survivors-display-settings select').value==='auto'&&!document.querySelector('.survivors-display-settings input').checked");
       const customization={qualities,savedDisplay,restored};
       await evaluate(cdp,"localStorage.removeItem('psi.survivors.display.v1')");
-      const pass=restored&&qualities[0]==='low'&&qualities[1]==='balanced'&&qualities[2]==='high'&&appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
-      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,errors,pass});
+      const pass=naturalMotion.every(r=>r.valid)&&workfaces.every(r=>r.loaded&&r.id&&r.preserved)&&restored&&qualities[0]==='low'&&qualities[1]==='balanced'&&qualities[2]==='high'&&appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
+      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,workfaces,naturalMotion,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
   }
 } finally {

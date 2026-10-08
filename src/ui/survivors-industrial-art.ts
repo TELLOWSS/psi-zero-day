@@ -1,3 +1,4 @@
+import {workfaceThreatAppearance,workfaceThreatPose} from './survivors-workface-threats';
 import {stageThreatAppearance,threatSilhouettePose} from './survivors-threat-appearance';
 import type { Hazard, HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
@@ -88,16 +89,18 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
 }
 
 /** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1): boolean {
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1,workfaceAtlas?:HTMLImageElement): boolean {
   const cell = industrialHazardCell(h, ground);
   if (cell === null || !atlas?.naturalWidth) return false;
   const gas = h.type === 'GAS_LEAK';
   const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
   const boss=Boolean(bossImage?.naturalWidth);
+  const workface=workfaceThreatAppearance(h,stageNumber);
+  const useWorkface=Boolean(workface&&workfaceAtlas?.naturalWidth);
   const appearance=stageThreatAppearance(h,stageNumber,theme);
-  const useThreat=Boolean(appearance&&threatAtlas?.naturalWidth);
-  const source=boss?bossImage:useThreat?threatAtlas:atlas;
-  const sourceCell=boss?0:useThreat?appearance!.cell:cell;
+  const useThreat=useWorkface||Boolean(appearance&&threatAtlas?.naturalWidth);
+  const source=boss?bossImage:useWorkface?workfaceAtlas:useThreat?threatAtlas:atlas;
+  const sourceCell=boss?0:useWorkface?workface!.cell:useThreat?appearance!.cell:cell;
   const placement=industrialHazardPlacement(h,elevation,boss);
   const size=useThreat&&gas?Math.max(38,placement.size):useThreat&&h.variant==='reinforced_cart'?Math.max(70,placement.size):placement.size;
   const response=industrialResponse(h,pose,reduced);
@@ -128,7 +131,7 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   ctx.scale(pressure, pressure);
   if(gas&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
   if (gas&&!boss) ctx.globalAlpha *= .82;
-  const silhouette=useThreat?threatSilhouettePose(h,clock,reduced):{x:0,y:0,rotation:0,scaleX:1,scaleY:1};
+  const silhouette=useWorkface?workfaceThreatPose(h,pose,clock,reduced):useThreat?threatSilhouettePose(h,clock,reduced):{x:0,y:0,rotation:0,scaleX:1,scaleY:1};
   ctx.save();ctx.translate(silhouette.x,silhouette.y);ctx.rotate(silhouette.rotation);ctx.scale(silhouette.scaleX,silhouette.scaleY);
   const drawn = drawProp(ctx, source, sourceCell, 0, placement.y, size);
   if(drawn&&response.reaction>0)drawPropReaction(ctx,source,sourceCell,0,placement.y,size,response.color,response.reaction*.24);

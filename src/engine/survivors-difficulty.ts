@@ -90,7 +90,7 @@ export function spawnPressure(stageNumber: number, time: number, difficulty:Patr
 
 const introductoryMixes: readonly (readonly HazardType[])[] = [
   ['UNHELMETED', 'UNHELMETED', 'RUNAWAY_CART'],
-  ['UNHELMETED', 'GAS_LEAK', 'GAS_LEAK'],
+  ['UNHELMETED', 'GAS_LEAK', 'GAS_LEAK', 'RUNAWAY_CART'],
   ['UNHELMETED', 'FALLING_DEBRIS', 'RUNAWAY_CART'],
   ['UNHELMETED', 'RUNAWAY_CART', 'RUNAWAY_CART', 'GAS_LEAK'],
   ['UNHELMETED', 'GAS_LEAK', 'FALLING_DEBRIS', 'RUNAWAY_CART'],
@@ -119,3 +119,4 @@ export function selectStageHazard(stage: PatrolStageDefinition, time: number, ro
   }
   return selected;
 }
+
