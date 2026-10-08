@@ -6,6 +6,31 @@ import {PatrolSurvivorsGame} from '../src/ui/PatrolSurvivorsGame';
 import {SurvivorsEngine} from '../src/engine/patrol-survivors-engine';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
 afterEach(()=>{vi.restoreAllMocks();vi.unstubAllGlobals();localStorage.clear();});
+it('locks pause shortcuts behind wave supply and resumes only on completion',()=>{
+ let frame:FrameRequestCallback=()=>{},engine!:SurvivorsEngine;
+ vi.stubGlobal('requestAnimationFrame',(callback:FrameRequestCallback)=>{frame=callback;return 1;});vi.stubGlobal('cancelAnimationFrame',vi.fn());
+ const ctx=new Proxy({}, {get:(_,key)=>key==='createLinearGradient'||key==='createRadialGradient'?()=>({addColorStop:vi.fn()}):key==='measureText'?()=>({width:10}):vi.fn(),set:()=>true});
+ vi.spyOn(HTMLCanvasElement.prototype,'getContext').mockReturnValue(ctx as CanvasRenderingContext2D);
+ const start=SurvivorsEngine.prototype.start;
+ vi.spyOn(SurvivorsEngine.prototype,'start').mockImplementation(function(this:SurvivorsEngine){engine=this;start.call(this);});
+ const host=document.createElement('div'),root=createRoot(host);document.body.append(host);
+ const click=(text:string)=>act(()=>[...host.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent?.includes(text))!.click());
+ try{
+  act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted/>));click('시그널 워치 시작');
+  engine.state.gameTime=100;
+  const update=vi.spyOn(engine,'update').mockImplementation(()=>{});
+  act(()=>frame(performance.now()+16));act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));
+  click('WAVE 1 정비 보급 열기');
+  expect(host.querySelector<HTMLButtonElement>('.survivors-pause-command')?.disabled).toBe(true);
+  expect(host.querySelector('.survivors-modal-title')?.textContent).not.toBe('일시 정지');
+  for(const code of ['KeyP','Escape'])act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code})));
+  expect(engine.state.phase).toBe('paused');expect(engine.state.gameTime).toBe(100);
+  click('정비 완료 · 순찰 재개');expect(engine.state.phase).toBe('playing');
+  update.mockRestore();act(()=>frame(performance.now()+50));
+  expect(engine.state.gameTime).toBeGreaterThan(100);
+  expect(host.textContent).not.toContain('정비 완료 · 순찰 재개');
+ }finally{act(()=>root.unmount());host.remove();}
+});
 it('pauses live purchases, applies gear without restarting, blocks resume keys, and settles wear/reward once',()=>{
  localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:10000,inventory:{owned:['voice_lens'],equipped:['voice_lens']}}));
  let frame:FrameRequestCallback=()=>{},engine!:SurvivorsEngine;
