@@ -1,7 +1,7 @@
 import {WorkfaceThreatArt,workfaceThreatAppearance,workfaceThreatCopy} from './survivors-workface-threats';
 import workfaceCopy from '../../content/localization/survivors-workface-threats-ko.json';
 import {SurvivorsDisplaySettings} from './SurvivorsDisplaySettings';
-import {readDisplaySettings,saveDisplaySettings,displayViewZoom,type DisplaySettings} from './survivors-display-settings';
+import {readDisplaySettings,saveDisplaySettings,displayViewZoom,decayDisplayEffect,type DisplaySettings} from './survivors-display-settings';
 import {STAGE_THREAT_ART,THREAT_ART_GRID} from './survivors-threat-appearance';
 import {SurvivorsPerformanceBudget,survivorsViewportZoom} from './survivors-performance';
 import threatText from '../../content/localization/survivors-stage-threats-ko.json';
@@ -1887,8 +1887,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         const clampedShake = Math.min(8.0, screenShakeRef.current * 0.35);
         shakeX = Math.round((Math.sin(engine.state.gameTime * 71) * 0.5) * clampedShake * 2);
         shakeY = Math.round((Math.sin(engine.state.gameTime * 93 + 1.4) * 0.5) * clampedShake * 2);
-        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 35);
       }
+
+      screenShakeRef.current=decayDisplayEffect(screenShakeRef.current,dt,35,!reducedMotionRef.current&&display.shake);
 
       // Responsive Portrait / Landscape Zoom Factor
 
@@ -3338,8 +3339,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
-        damageFlashRef.current = Math.max(0, damageFlashRef.current - dt * 2.2);
       }
+
+      damageFlashRef.current=decayDisplayEffect(damageFlashRef.current,dt,2.2,!reducedMotionRef.current&&display.flash);
 
       ctx.restore();
       } catch (err) {

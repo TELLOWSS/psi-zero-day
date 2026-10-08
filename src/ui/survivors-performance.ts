@@ -11,7 +11,10 @@ export class SurvivorsPerformanceBudget {
   constructor(private readonly coarse = false) {}
   sample(milliseconds: number): void {
     if(this.settings.quality!=='auto')return;
-    if (!Number.isFinite(milliseconds) || milliseconds <= 0 || milliseconds > 250) return;
+    if (!Number.isFinite(milliseconds) || milliseconds <= 0) return;
+    // Sustained foreground stalls must lower quality too; one stall cannot
+    // contribute an unbounded sampling interval or trigger immediate recovery.
+    milliseconds=Math.min(milliseconds,250);
     this.average += (milliseconds - this.average) * .08;
     this.sampled += milliseconds;
     this.stable = this.average < 19 ? this.stable + milliseconds : 0;

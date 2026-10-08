@@ -13,3 +13,8 @@ export function saveDisplaySettings(settings:DisplaySettings):boolean {try{local
 export function displayViewZoom(base:number,width:number,height:number,worldWidth:number,worldHeight:number,view:DisplaySettings['view']):number {
  return Math.max(width/worldWidth,height/worldHeight,base*(view==='wide'?.82:view==='close'?1.18:1));
 }
+
+/** Disabled presentation effects are discarded, including while paused. */
+export function decayDisplayEffect(value:number,seconds:number,decayPerSecond:number,enabled:boolean):number {
+ return enabled?Math.max(0,value-Math.max(0,seconds)*decayPerSecond):0;
+}

@@ -12,6 +12,20 @@ describe('presentation budget and responsive field of view',()=>{
     expect(budget.level).toBe('high');
     expect(budget.pixelRatio(3,1600,2560)**2*1600*2560).toBeLessThanOrEqual(2_800_001);
   });
+  it('adapts under repeated foreground stalls longer than a quarter second',()=>{
+    const budget=new SurvivorsPerformanceBudget(true);
+    for(let i=0;i<20;i++)budget.sample(400);
+    expect(budget.level).toBe('low');
+    for(let i=0;i<1200;i++)budget.sample(16.7);
+    expect(budget.level).toBe('high');
+  });
+  it('does not downgrade for one long interruption or invalid samples',()=>{
+    const budget=new SurvivorsPerformanceBudget(true);
+    for(const sample of [NaN,Infinity,-20,0])budget.sample(sample);
+    budget.sample(10000);
+    for(let i=0;i<120;i++)budget.sample(16.7);
+    expect(budget.level).toBe('high');
+  });
   it.each([[390,844],[360,650],[844,390],[568,320],[768,1024],[1366,1024]])('keeps %sx%s within world bounds', (width,height)=>{
     const zoom=survivorsViewportZoom(width,height,1400,900);
     expect(width/zoom).toBeLessThanOrEqual(1400.001);
