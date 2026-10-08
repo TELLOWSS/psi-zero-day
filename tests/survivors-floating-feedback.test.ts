@@ -1,8 +1,26 @@
 import {describe,expect,it} from 'vitest';
-import {selectFloatingFeedback,fitFeedbackToView} from '../src/ui/survivors-floating-feedback';
+import {selectFloatingFeedback,fitFeedbackToView,placeFeedbackVertically} from '../src/ui/survivors-floating-feedback';
 
 const item=(id:number,text='resolved',x=0)=>({id,text,x,y:0,life:.7});
 describe('combat floating feedback budget',()=>{
+  it('moves a full-width notice above the actor and keeps measured bounds inside the camera',()=>{
+    const actor=Object.freeze({left:164,right:236,top:216,bottom:312});
+    const result=placeFeedbackVertically(200,258,366,16,4,100,500,[actor])!;
+    expect(result.rect.bottom).toBeLessThanOrEqual(actor.top-6);
+    expect(result.rect.top).toBeGreaterThanOrEqual(106);
+    expect(actor.top).toBe(216);
+  });
+  it('uses the lower lane when the upper camera edge cannot fit and avoids earlier labels',()=>{
+    const actor={left:64,right:136,top:0,bottom:80};
+    const first=placeFeedbackVertically(100,40,80,12,3,0,200,[actor])!;
+    const second=placeFeedbackVertically(100,40,80,12,3,0,200,[actor,first.rect])!;
+    expect(first.rect.top).toBeGreaterThanOrEqual(86);
+    expect(second.rect.top).toBeGreaterThanOrEqual(first.rect.bottom+6);
+  });
+  it('keeps unblocked labels unchanged and declines a physically full viewport',()=>{
+    expect(placeFeedbackVertically(50,40,20,10,2,0,100,[])?.y).toBe(40);
+    expect(placeFeedbackVertically(50,40,80,10,2,0,100,[{left:0,right:100,top:0,bottom:100}])).toBeNull();
+  });
   it('fits long critical text and preserves both visible side margins',()=>{
     const result=fitFeedbackToView(1000,900,1.55,300,690);
     expect(result.width).toBeCloseTo(366);
