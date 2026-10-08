@@ -1,6 +1,6 @@
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
-import {selectFloatingFeedback} from './survivors-floating-feedback';
+import {selectFloatingFeedback,fitFeedbackToView} from './survivors-floating-feedback';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {PleasureFeedback} from './survivors-pleasure-feedback';
 import {EquipmentCheckDirection} from './survivors-equipment-check';
@@ -90,6 +90,7 @@ import { INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, IN
 import { cacheStageFloor } from './survivors-stage-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
+import extractionText from '../../content/localization/survivors-extraction-ko.json';
 import itemText from '../../content/localization/survivors-items-ko.json';
 import { TACTICAL_ITEMS } from '../engine/survivors-items';
 import { SurvivorsSupplyGuide } from './SurvivorsSupplyGuide';
@@ -1523,7 +1524,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             setExtractionState({ active: true, countdown: Math.ceil(extraction.countdown), playerInside: false, status: 'inbound' });
             screenShakeRef.current = 14;
             spawnShockwave(extraction.x, extraction.y, '#10b981', 140, 5, 0.7);
-            spawnFloating(extraction.x, extraction.y - 40, '🚨 긴급 탈출 호송반 출동! 랑데부 구역을 사수하십시오!', '#10b981', true);
+            spawnFloating(extraction.x, extraction.y - 40, extractionText.arrivalToast, '#10b981', true);
             playSfx('boss_alarm');
           }
         }
@@ -1549,7 +1550,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             spawnParticles(lzX, lzY, '#10b981', 70, 200, 5.5);
             spawnParticles(lzX, lzY, '#ffffff', 25, 240, 3.5);
             spawnShockwave(lzX, lzY, '#34d399', 180, 6, 0.9);
-            spawnFloating(lzX, lzY - 50, '🚁 탈출 호송 성공! 현장 전원 인계 완료!', '#10b981', true);
+            spawnFloating(lzX, lzY - 50, extractionText.securedToast, '#10b981', true);
             audioRef.current.playRecordedEffect('target_controlled', { x: lzX, y: lzY });
           }
         }
@@ -3248,12 +3249,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (ft.life > 0) aliveTexts.push(ft);
       }
       for (const ft of selectFloatingFeedback(aliveTexts, engine.state.hazards.length > 45 || engine.state.projectiles.length > 60)) {
+          if(ft.x<camX||ft.x>camX+viewW)continue;
           ctx.save();
           const progress = 1 - (ft.life / ft.maxLife);
           const scale = ft.isCrit && !reducedMotionRef.current ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
-          ctx.translate(ft.x, ft.y);
-          ctx.scale(scale, scale);
           ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
+          const placement=fitFeedbackToView(ft.x,ctx.measureText(ft.text).width,scale,camX,camX+viewW);
+          ctx.translate(placement.x, ft.y);
+          ctx.scale(placement.scale, placement.scale);
           ctx.fillStyle = ft.color;
           ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';
           ctx.shadowBlur = ft.isCrit ? 10 : 5;

@@ -30,6 +30,7 @@ import '../ui/phase-d-screenshot-polish.css';
 import '../ui/strategy-layout-recovery.css';
 import '../ui/defense-game.css';
 import '../ui/tactical-ui.css';
+import {BRAND_NAME,GAME_TITLE} from './brand';
 
 const root = document.getElementById('root') as HTMLElement | null;
 if (!root) throw new Error('Missing #root mount point');
@@ -37,8 +38,8 @@ const mount = root;
 
 mount.innerHTML = `
   <main class="runtime-bootstrap" role="status" aria-live="polite">
-    <div class="runtime-bootstrap-mark">NEW PSI</div>
-    <strong>PSI : ZERO DAY</strong>
+    <div class="runtime-bootstrap-mark">${BRAND_NAME}</div>
+    <strong>${GAME_TITLE}</strong>
     <span>Proactive Safety Intelligence</span>
     <p>현장을 준비하고 있습니다.</p>
   </main>
@@ -92,8 +93,8 @@ void bootstrap().catch(error => {
   console.error('PSI runtime bootstrap failed', error);
   mount.innerHTML = `
     <main class="runtime-bootstrap runtime-bootstrap-error" role="alert">
-      <div class="runtime-bootstrap-mark">NEW PSI</div>
-      <strong>PSI : ZERO DAY</strong>
+      <div class="runtime-bootstrap-mark">${BRAND_NAME}</div>
+      <strong>${GAME_TITLE}</strong>
       <p>현장을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</p>
     </main>
   `;

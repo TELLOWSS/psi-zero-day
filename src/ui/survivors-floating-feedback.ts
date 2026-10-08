@@ -8,6 +8,15 @@ export interface FloatingFeedback {
   priority?: boolean;
 }
 
+/** Fit to the visible world interval, not to the full map or CSS viewport. */
+export function fitFeedbackToView(x: number, measuredWidth: number, scale: number, left: number, right: number) {
+  const padding = Math.min(12, Math.max(0, right - left) * .1);
+  const available = Math.max(1, right - left - padding * 2);
+  const fittedScale = measuredWidth > 0 ? Math.min(scale, available / measuredWidth) : scale;
+  const width = Math.max(0, measuredWidth) * fittedScale;
+  return {x: Math.max(left + padding + width / 2, Math.min(right - padding - width / 2, x)), scale: fittedScale, width};
+}
+
 /** Presentation budget only; feedback events and rewards are never discarded. */
 export function selectFloatingFeedback<T extends FloatingFeedback>(items: readonly T[], busy: boolean): T[] {
   const selected: T[] = [];

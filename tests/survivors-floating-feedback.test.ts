@@ -1,8 +1,20 @@
 import {describe,expect,it} from 'vitest';
-import {selectFloatingFeedback} from '../src/ui/survivors-floating-feedback';
+import {selectFloatingFeedback,fitFeedbackToView} from '../src/ui/survivors-floating-feedback';
 
 const item=(id:number,text='resolved',x=0)=>({id,text,x,y:0,life:.7});
 describe('combat floating feedback budget',()=>{
+  it('fits long critical text and preserves both visible side margins',()=>{
+    const result=fitFeedbackToView(1000,900,1.55,300,690);
+    expect(result.width).toBeCloseTo(366);
+    expect(result.x-result.width/2).toBeGreaterThanOrEqual(312);
+    expect(result.x+result.width/2).toBeLessThanOrEqual(678);
+    expect(result.scale).toBeLessThan(1);
+  });
+  it('keeps short center labels unchanged and clamps labels at either camera edge',()=>{
+    expect(fitFeedbackToView(500,40,1,300,690)).toEqual({x:500,width:40,scale:1});
+    expect(fitFeedbackToView(200,40,1,300,690).x).toBe(332);
+    expect(fitFeedbackToView(800,40,1,300,690).x).toBe(658);
+  });
   it('keeps newest nearby repeated feedback without mutating its source',()=>{
     const input=Object.freeze([Object.freeze(item(1)),Object.freeze(item(2)),Object.freeze(item(3,'resolved',100))]);
     expect(selectFloatingFeedback(input,false).map(x=>x.id)).toEqual([2,3]);
