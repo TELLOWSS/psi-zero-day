@@ -15,6 +15,9 @@ on:
       - 'tests/survivors-store-effect-copy.test.ts'
       - 'tests/verify-store-reference-layout.mjs'
       - 'tests/verify-lz-guidance.mjs'
+      - 'tests/brand-production-slots.test.ts'
+      - 'scripts/audit-brand-production-slots.mjs'
+      - 'content/branding/production-slots-v1.json'
       - 'content/localization/survivors-store-ko.json'
       - 'content/localization/survivors-result-ko.json'
       - 'content/localization/survivors-boss-ko.json'
@@ -94,6 +97,7 @@ jobs:
           node tests/verify-survivors-store-maintenance.mjs
           node tests/verify-store-reference-layout.mjs
           node tests/verify-lz-guidance.mjs
+          node scripts/audit-brand-production-slots.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()
@@ -109,6 +113,7 @@ jobs:
             artifacts/store-maintenance
             artifacts/store-reference-layout
             artifacts/lz-guidance
+            artifacts/brand-production-slots
             artifacts/tactical-ui
             artifacts/combat-debrief-ui
             artifacts/confirmed-impact
