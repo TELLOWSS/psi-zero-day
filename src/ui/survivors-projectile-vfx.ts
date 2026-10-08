@@ -14,7 +14,7 @@ export const PROJECTILE_VFX = {
   shout_shockwave: { family:'shock', color:'#f7d689', trail:0, life:.3 },
   cone_trap: { family:'physical', color:'#f7b34f', trail:0, life:.3 },
   grout_slug: { family:'physical', color:'#cbd2c9', trail:24, life:.75 },
-  hydraulic_wave: { family:'shock', color:'#38bdf8', trail:36, life:.3 },
+  hydraulic_wave: { family:'shock', color:'#38bdf8', trail:36, life:.85 },
   emp_pulse: { family:'arc', color:'#60a5fa', trail:0, life:.4 },
   plasma_arc: { family:'arc', color:'#a78bfa', trail:0, life:.55 },
 } as const satisfies Record<ProjectileKind,{family:string;color:string;trail:number;life:number}>;
@@ -41,6 +41,19 @@ function texture(name:string,color:string):HTMLCanvasElement | undefined {
     ctx.globalAlpha=1;ctx.fillStyle='#f4fcff';ctx.fillRect(95,62,144,3);
     ctx.globalAlpha=.5;ctx.fillStyle=color;for(let i=0;i<9;i++)ctx.fillRect(32+i*21,57+(i%3),9,1);
     ctx.globalAlpha=1;
+  } else if(name==='grout') {
+    // Bake a dense, irregular material silhouette across the full stamp width.
+    for(let i=0;i<8;i++){
+      const x=30+i*26,y=64+Math.sin(i*2.4)*8,rx=18+i*1.3,ry=9+i*1.5;
+      const g=ctx.createRadialGradient(x+rx*.25,y-ry*.25,1,x,y,rx);
+      g.addColorStop(0,'#f0eee1');g.addColorStop(.35,color);g.addColorStop(1,'transparent');
+      ctx.globalAlpha=.85;ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();
+    }
+    for(let i=0;i<40;i++){
+      const x=24+(i*47)%208,y=64+Math.sin(i*2.39996)*(8+(i%5)*5);
+      ctx.globalAlpha=.45+(i%3)*.15;ctx.fillStyle=i%3===0?'#66766f':color;
+      ctx.beginPath();ctx.ellipse(x,y,1+(i%4),1+(i%3),0,0,Math.PI*2);ctx.fill();
+    }
   } else {
     const g=ctx.createRadialGradient(128,64,2,128,64,60);
     g.addColorStop(0,color);g.addColorStop(.30,color);g.addColorStop(1,'transparent');
@@ -50,7 +63,7 @@ function texture(name:string,color:string):HTMLCanvasElement | undefined {
       for(let i=0;i<48;i++){
         const a=i*2.39996,r=Math.sqrt((i+.5)/48)*54,x=128+Math.cos(a)*r,y=64+Math.sin(a)*r*.75;
         const dust=ctx.createRadialGradient(x,y,0,x,y,2+(i%5)*1.8);
-        dust.addColorStop(0,color);dust.addColorStop(1,'transparent');ctx.fillStyle=dust;ctx.globalAlpha=.18+(i%4)*.10;
+        dust.addColorStop(0,color);dust.addColorStop(1,'transparent');ctx.fillStyle=dust;ctx.globalAlpha=name==='grout'?.55+(i%4)*.10:.18+(i%4)*.10;
         ctx.fillRect(x-10,y-10,20,20);
       }
       if(name==='frost'){ctx.globalAlpha=.65;ctx.strokeStyle='#e8fdff';ctx.lineWidth=1;for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.moveTo(128+Math.cos(a)*12,64+Math.sin(a)*12);ctx.lineTo(128+Math.cos(a)*36,64+Math.sin(a)*36);ctx.stroke();}}
@@ -165,26 +178,35 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
   } else if(spec.family==='shock'){
     if(p.kind==='hydraulic_wave'){
       ctx.save();ctx.rotate(v.angle);
-      ctx.globalAlpha=v.alpha*(busy?.22:.4);
-      stamp(ctx,'grout','#cbd2c9',-r*.25,0,r*1.6,r*.55);
+      ctx.globalAlpha=v.alpha*(busy?.55:.8);
+      stamp(ctx,'grout','#89958e',-r*.45,r*.16,r*2.5,r*.9);
+      stamp(ctx,'grout','#e2e5d5',-r*.15,0,r*2.1,r*1.2);
+      ctx.globalAlpha=v.alpha*.65;
+      stamp(ctx,'grout','#f0eee1',r*.4,-r*.12,r*.8,r*.55);
       if(v.detail){
         for(let i=0;i<5;i++){
           const advance=(time*2+i*.2)%1;
-          ctx.globalAlpha=v.alpha*(1-advance)*.35;
-          stamp(ctx,'grout','#a6bcb8',r*(advance-.55),Math.sin(i*2.4)*r*.24,r*.32,r*.18);
+          ctx.globalAlpha=v.alpha*(1-advance)*.6;
+          stamp(ctx,'grout','#b9c5bb',-r*(.4+advance),Math.sin(i*2.4)*r*(.3+advance*.25),r*.6,r*.35);
         }
       }
       ctx.restore();
+      // Broken compression crests frame the material, not repeated ring outlines.
+      ctx.strokeStyle=spec.color;ctx.lineWidth=1.5;ctx.globalAlpha=v.alpha*(busy?.35:.55);
+      for(let i=0;i<(v.detail?3:2);i++){
+        const a=v.angle-.7+i*.65;
+        ctx.beginPath();ctx.arc(0,0,r*.85,a,a+.25);ctx.stroke();
+      }
+      ctx.restore();return;
     }
     // Thin concentric pressure fronts retain the floor and hazard telegraphs.
     for(let i=0;i<3;i++){
       const rr=Math.max(1,r-i*6);ctx.globalAlpha=v.alpha*(i===0?.80:.28);ctx.strokeStyle=i===0?'#fff4cb':spec.color;ctx.lineWidth=i===0?2.5:1;
       ctx.beginPath();
-      if(p.kind==='hydraulic_wave')ctx.arc(0,0,rr,v.angle-1.35,v.angle+1.35);
-      else ctx.arc(0,0,rr,0,Math.PI*2);
+      ctx.arc(0,0,rr,0,Math.PI*2);
       ctx.stroke();
     }
-    if(v.detail){ctx.globalAlpha=v.alpha*.45;for(let i=0;i<12;i++){const a=p.kind==='hydraulic_wave'?v.angle-1.3+i*2.6/11:i*Math.PI/6;line(ctx,[[Math.cos(a)*(r-4),Math.sin(a)*(r-4)],[Math.cos(a)*(r+4),Math.sin(a)*(r+4)]],spec.color,1.5);}}
+    if(v.detail){ctx.globalAlpha=v.alpha*.45;for(let i=0;i<12;i++){const a=i*Math.PI/6;line(ctx,[[Math.cos(a)*(r-4),Math.sin(a)*(r-4)],[Math.cos(a)*(r+4),Math.sin(a)*(r+4)]],spec.color,1.5);}}
   }
   ctx.restore();
 }

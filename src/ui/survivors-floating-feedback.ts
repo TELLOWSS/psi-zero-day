@@ -20,5 +20,12 @@ export function selectFloatingFeedback<T extends FloatingFeedback>(items: readon
       Math.hypot(other.x - item.x, other.y - item.y) < 90)) continue;
     selected.push(item);
   }
-  return selected.reverse();
+  const placed: T[] = [];
+  for (const item of selected) {
+    let y = item.y;
+    // Priority entries keep their anchor; later nearby notices move above them.
+    while (placed.some(other => Math.abs(other.x - item.x) < 120 && Math.abs(other.y - y) < 28)) y -= 28;
+    placed.push({...item, y});
+  }
+  return placed.reverse();
 }

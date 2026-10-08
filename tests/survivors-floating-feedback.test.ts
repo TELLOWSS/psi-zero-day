@@ -20,4 +20,11 @@ describe('combat floating feedback budget',()=>{
     expect(selectFloatingFeedback([{...item(1),life:0}],false)).toEqual([]);
     expect(selectFloatingFeedback([1,2].map(id=>({...item(id,'-20'),priority:true})),true)).toHaveLength(2);
   });
+  it('separates nearby distinct results while keeping damage anchored',()=>{
+    const damage={...item(1,'-20'),priority:true},clear={...item(2,'CLEAR'),isCrit:true};
+    const result=selectFloatingFeedback([damage,clear,item(3,'collected')],true);
+    expect(result.find(x=>x.id===1)!.y).toBe(0);
+    expect(new Set(result.map(x=>x.y)).size).toBe(3);
+    expect(clear.y).toBe(0);
+  });
 });
