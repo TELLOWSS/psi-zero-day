@@ -4,6 +4,13 @@ import type {PremiumPresenceImages} from '../src/ui/survivors-equipment-animatio
 const ids=['broadcast_crown','sync_gauntlet','extraction_pack','shock_mantle','inspection_wing','barrier_forge'];
 const images={gold:{},cyan:{},violet:{}} as PremiumPresenceImages;
 const ctx=()=>({save:vi.fn(),restore:vi.fn(),drawImage:vi.fn()} as unknown as CanvasRenderingContext2D);
+it('retains equipped identity while containing action exposure in crowded combat',()=>{
+ const normal=premiumPresenceProfile(ids,false,1),busy=premiumPresenceProfile(ids,true,1),idle=premiumPresenceProfile(ids,true,0);
+ expect(busy.alpha).toBeLessThan(normal.alpha*.65);
+ expect(busy.alpha).toBeGreaterThan(idle.alpha);
+ expect(busy.width).toBeLessThan(normal.width);expect(busy.height).toBeLessThan(normal.height);
+ expect(busy.count).toBe(normal.count);expect(busy.left).toBe(normal.left);expect(busy.right).toBe(normal.right);
+});
 it('increases equipped presence instead of reducing it at five-plus items',()=>{
  for(let n=1;n<=6;n++){
   const previous=premiumPresenceProfile(ids.slice(0,n-1)),next=premiumPresenceProfile(ids.slice(0,n));

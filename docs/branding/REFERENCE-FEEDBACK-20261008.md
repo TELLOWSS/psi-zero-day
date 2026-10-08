@@ -11,6 +11,16 @@
 
 ## 다음 순서
 
+EMP 후보는 2026-10-08 사용자가 보여준 표현의 운영 반영을 직접 승인. PR140 최종 f64d51a 검사 성공 후 운영 커밋 `b384914547f5df0b3a7fac3db4cb38d0a85a5de4`, 배포 `dpl_3tewDgkHfFtbfjtNwXq8KGWwyPNS` READY 및 별칭 확인. 운영 진화 fixture 6경로 통과. 전체 장비/오라/실기기 승인으로 확대하지 않음.
+
+오라 혼잡 후보: 기존 authored wisps/frame crossfade/장비 팔레트 유지. busy 발동 추가 alpha .54→.24, 팽창 폭 60%로 제한. 일반 발동과 idle 장비 수 증가 계약 유지. 집중9건 통과. 실제 장비 조합/혼잡 화면 캡처 및 위험예고 대비 검수 전 운영 적용 보류. 전체 장비 효과 그래픽 고도화 완료가 아님.
+
+오라 픽셀 후속: `tests/verify-aura-presence.mjs`는 게임과 같은 원화 준비/오라 렌더러 및 실제 장비 6종을 사용한다. 일반 alpha 합838518, busy400216(약48%), reduced0. 동일 시간의 픽셀 hash1731850211 유지, 변경 시간 hash247282030으로 변화. `artifacts/aura-presence/report.json`과 comparison.png를 확인했다. 이는 주인공 없는 분리 렌더러 fixture이며 실제 과밀 전투, 게임 일시정지, 모바일 몸체/위험예고 대비, 실기기 증거가 아니다. PR141 draft 및 운영140 유지.
+
+사진 동일 조합 레이아웃 후속: `tests/verify-store-reference-layout.mjs`는 지갑1260 PSI, broadcast_crown 내구도10, sync_gauntlet 내구도40의 저장 fixture로 실제 상점 UI를 연다. 1440x900/390x844/844x390/1024x768 모두 내구도와 해제/수리 버튼 bounding-box 교차 없음, 버튼44px, fitting summary와 static 적용 영역 비중첩, 스크롤 후 조합 장착 접근, 가로 넘침/실행 오류 없음. 모바일 세로 loadout 및 fitting-bottom PNG를 직접 확인했다. 증거 `artifacts/store-reference-layout/report.json`과 8 PNG. 사진 브라우저 주소창/물리 기기 재현 또는 실제 전투 오라 검증은 아니다. 제품 코드 추가 변경 없이 PR139의 레이아웃 수정을 후속 확인했다.
+
+전투 오라 후속: `tests/verify-aura-combat-scene.mjs`는 빌드의 실제 오라 렌더러 호출을 계측한다. 저장 장비6종, 정지된 위험물4/46개 warning 배치, 오라 action=1을 명시 주입한 fixture이다(originalAction=0도 보고). PC1440x900/폰390x844/가로844x390 x normal/busy/reduced 9경로 통과. 실제 authored asset 준비/장비6개/분기 호출, pause 게임시간 불변/연속 캔버스 hash 일치, nonblank/오류/넘침 없음. PC busy 및 모바일 normal/busy/reduced 화면을 직접 확인해 주인공 안전모·몸체와 주변 노란 위험 예고가 구분됨을 관찰했다. 첫 밀집 배치는 위험물 자체가 겹쳐 가림 평가가 불가능해 방사형 분산 배치로 바꿨으며, 이를 실제 과밀 전투 가림 해결로 주장하지 않는다. 증거 `artifacts/aura-combat-scene/report.json` 및9 PNG. 집중9건/타입 검사 재통과. 최종 시각 승인/자연 발동 도달/실제 과밀 성능/실기기는 미확정. 운영140 유지.
+
 2026-10-08 운영 PR139 커밋 `79aa594f211be0a0199191bb200ba68712d15014`에서 새 저장 UI 입력 bot으로 첫 보급 확인. 엔진 상태는 읽기만 하는 bundle 계측이며 이동/선택/보급은 UI 입력. 게임 시간 65.23768초에서 보급 pause, P/Esc 후 동일 시간, 완료 후 65.93768초/playing. 중복 pause 0, 오류/실패 요청/넘침 없음. 증거 `artifacts/natural-progression/supply-resume/report.json`; 사람/실기기 검증과 구분. 성공 후 조기 종료를 이전 보고서는 observation-timeout으로 표기했지만 supplyCheck.pass=true이며 후속 도구는 supply-check-complete로 표기하도록 정리.
 
 EMP 후보: 실제 활성 projectile 경로의 emp_pulse/plasma_arc를 긴 중심 방사선 대신 외곽 분절 방전/확산 파동으로 변경. plasma 시각 수명 .55초는 엔진 발사 수명과 일치. radius/피해/주기 미변경, reduced/busy 시 디테일 감소. 집중4건/타입 검사 통과. 실제 최종진화 화면/폰가로세로/위험예고 대비 검수 전 운영 적용 금지. 아이템 전체/오라 고도화 미완료.
