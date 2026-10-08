@@ -1,11 +1,16 @@
+import {DEFAULT_DISPLAY_SETTINGS,type DisplaySettings} from './survivors-display-settings';
 /** Presentation budget only: difficulty and simulation never depend on device speed. */
 export class SurvivorsPerformanceBudget {
   private average = 16.7;
   private sampled = 0;
   private stable = 0;
   private tier = 2;
+  private settings:DisplaySettings={...DEFAULT_DISPLAY_SETTINGS};
+  configure(settings:DisplaySettings):void {if(settings.quality!==this.settings.quality){this.average=16.7;this.sampled=0;this.stable=0;}this.settings={...settings};}
+  private get effectiveTier():number {return this.settings.quality==='auto'?this.tier:{low:0,balanced:1,high:2}[this.settings.quality];}
   constructor(private readonly coarse = false) {}
   sample(milliseconds: number): void {
+    if(this.settings.quality!=='auto')return;
     if (!Number.isFinite(milliseconds) || milliseconds <= 0 || milliseconds > 250) return;
     this.average += (milliseconds - this.average) * .08;
     this.sampled += milliseconds;
@@ -16,12 +21,12 @@ export class SurvivorsPerformanceBudget {
       this.tier++; this.sampled = 0; this.stable = 0;
     }
   }
-  get level(): 'high' | 'balanced' | 'low' { return ['low', 'balanced', 'high'][this.tier] as 'high' | 'balanced' | 'low'; }
-  get particleLimit(): number { return [80, 140, 240][this.tier]!; }
-  get particleFraction(): number { return [.3, .6, 1][this.tier]!; }
-  get ambientLighting(): boolean { return this.tier > 0; }
+  get level(): 'high' | 'balanced' | 'low' { return ['low', 'balanced', 'high'][this.effectiveTier] as 'high' | 'balanced' | 'low'; }
+  get particleLimit(): number { if(this.settings.particles==='off')return 0;return [80, 140, 240][this.effectiveTier]!; }
+  get particleFraction(): number { if(this.settings.particles==='off')return 0;return (this.settings.particles==='sparse'?.3:1)* [.3, .6, 1][this.effectiveTier]!; }
+  get ambientLighting(): boolean { return this.settings.lighting&&this.effectiveTier > 0; }
   pixelRatio(deviceRatio: number, width: number, height: number): number {
-    const ceiling = [1, 1.25, this.coarse ? 1.5 : 2][this.tier]!;
+    const ceiling = [1, 1.25, this.coarse ? 1.5 : 2][this.effectiveTier]!;
     // Large tablets must not allocate a multi-million-pixel canvas on every frame.
     const areaLimit = Math.sqrt(2_800_000 / Math.max(1, width * height));
     return Math.max(.5, Math.min(deviceRatio || 1, ceiling, areaLimit));
