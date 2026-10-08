@@ -461,6 +461,8 @@ export class SurvivorsSessionAudio {
       let victim: AudioScheduledSourceNode | undefined;
       let minimum = Infinity;
       for (const current of this.voices.keys()) {
+        // Speech interruption belongs to the voice director, not the SFX budget.
+        if (current === this.speech?.source) continue;
         const rank = this.priorities.get(current) ?? 1;
         if (rank < minimum) { victim = current; minimum = rank; }
       }
