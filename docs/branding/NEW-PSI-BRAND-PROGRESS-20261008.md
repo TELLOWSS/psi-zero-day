@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 보호 장비 자연발동 후속 `verify-shield-natural-play.mjs`: shock_mantle 소유/장착 저장fixture, actual build engine는 read-only 계측, 이동/레벨업선택 UI입력만. 실제 충돌 흡수7.7s/shield33, 소진30.7167s/0, recharge48.7167s/45(실제18초 cadence), 마지막49.1333s/HP117/보호막45/45. 최초 연출 관측 직후종료는 HUD갱신한주기전이라 보강: partial/depleted/final HUD 각각일치/234samples중233일치/오류넘침0. `artifacts/shield-natural-play/report.json`/native natural-cycle.webm. 함수 직접호출·phase변경·시간주입 없음. 새저장자연구매·사람/실기기/과밀성능·모바일표시가시성/최종청취·아트 승인 아님. 날씨/무적 합성의 몸체대비는 기존표현 미해결로 유지.
+- 위 실제 플레이 후보영상을 사용자에게 보여주고 보호 장비 시간축 범위의 운영 적용 판단을 요청. 답변 전 승인기록/운영적용을 자동으로 하지 않음. 후보/local만, Vercel154배포한도 실패 유지.
+
 - 보호 장비 실제 renderer 감쇠 후속: 기존27경로에 중간/종료54지점 추가 통과. actual tick함수와gameTime으로 흡수/소진 .225→.46초, 재충전 .3→.61초; 실제 VFX 호출alpha·phase 일치, 종료 시 소진 draw없음/잔량이 있으면42x58 idle, reduced 정적표시 유지. 폰세로 소진 중간/종료 직접확인. report27rows/54timeline, PNG33장. 정지 fixture의 HUD45/45는 의도적으로 React 미갱신이므로 실제 HUD/자연전투 증거가 아님. 제품 변경 없음, 다음 실제 충돌/UI tick에서 상태표시와 연출 인과 검증 및 후보 시각판단. Vercel한도 때문에 원격/운영 미반영 유지.
 
 - 보호 장비 실제 빌드 fixture `verify-shield-combat.mjs` 3viewport x normal/busy/reduced x 흡수/소진/재충전27경로 통과. 실제 compiled absorb/tick 호출로45→15(overflow0)→0(overflow15)→45 생성, 실제 cell3 draw 호출/atlas 준비/phase·alpha 일치/paused gameTime와연속canvas hash불변/nonblank/오류·넘침없음. `artifacts/shield-combat/report.json`/27PNG. 폰세로 소진·폰가로 혼잡재충전 직접 확인: 몸체·노란예고 구분. 정지된 엔진 직접호출 fixture이므로 React HUD는 이전45/45로 남음; HUD 동기화/자연충돌/실기기/최종아트 검증으로 확대 금지.
