@@ -3,6 +3,11 @@ import { cinematicLook, drawVfxCell } from './survivors-cinematic-vfx';
 import {PROJECTILE_VFX} from './survivors-projectile-vfx';
 
 interface LightPulse { x:number; y:number; age:number; life:number; cell:number; strength:number }
+export function playerDamageOpacity(invincibleTime:number,gameTime:number,reduced=false):number {
+  if(reduced||!Number.isFinite(invincibleTime)||invincibleTime<=0)return 1;
+  const time=Number.isFinite(gameTime)?Math.max(0,gameTime):0;
+  return Math.floor(time*12.5)%2===0?.8:1;
+}
 /** Event-driven presentation. No hit stop, time scaling, target movement or camera zoom. */
 export class CombatDirection {
   private pulses:LightPulse[]=[];

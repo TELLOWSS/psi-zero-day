@@ -15,6 +15,12 @@ it('handles invalid display values without changing extraction rules',()=>{
   const short=renderToStaticMarkup(<SurvivorsExtractionStatus remaining={8} total={10} inside />);
   expect(short).toContain('max="10"');expect(short).toContain('value="2"');
 });
+it('points from the player toward the LZ in every screen direction',()=>{
+ const directions=[[1,0,'오른쪽'],[1,1,'오른쪽 아래'],[0,1,'아래'],[-1,1,'왼쪽 아래'],[-1,0,'왼쪽'],[-1,-1,'왼쪽 위'],[0,-1,'위'],[1,-1,'오른쪽 위']] as const;
+ for(const [x,y,label] of directions){const markup=renderToStaticMarkup(<SurvivorsExtractionStatus remaining={15} inside={false} direction={{x,y}}/>);expect(markup).toContain(`${label} · 타이머 정지`);expect(markup).toContain('rotate(');expect(markup).toContain('hidden=""');}
+ const inside=renderToStaticMarkup(<SurvivorsExtractionStatus remaining={12} inside direction={{x:1,y:1}}/>);expect(inside).not.toContain('rotate(');expect(inside).not.toContain('타이머 정지');
+ for(const direction of [{x:0,y:0},{x:NaN,y:1}]){const markup=renderToStaticMarkup(<SurvivorsExtractionStatus remaining={15} inside={false} direction={direction}/>);expect(markup).not.toContain('rotate(');expect(markup).not.toContain('NaN');}
+});
 it('uses native high-resolution mode scenes rather than enlarged thumbnails',async()=>{
   for(const mode of ['defense','story']){
     const image=await sharp(`public/mode-previews/${mode}-coming-soon-v2.webp`).metadata();

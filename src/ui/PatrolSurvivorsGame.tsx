@@ -1,4 +1,4 @@
-import { CombatDirection } from './survivors-combat-direction';
+import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {PleasureFeedback} from './survivors-pleasure-feedback';
@@ -3058,9 +3058,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.fill();
 
           // Invincibility flashing feedback
-          if (player.invincibleTime > 0 && Math.floor(time / 80) % 2 === 0) {
-            ctx.globalAlpha = 0.45;
-          }
+          ctx.globalAlpha *= playerDamageOpacity(player.invincibleTime,engine.state.gameTime,reducedMotionRef.current);
 
           // Movement Walk Bob & Tilt
           const bobY = 0;
@@ -3476,7 +3474,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
       {phase === 'playing' && extractionState.active && (
-        <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} />
+        <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} direction={engineRef.current?.state.extractionPhase?{x:engineRef.current.state.extractionPhase.x-engineRef.current.state.player.x,y:engineRef.current.state.extractionPhase.y-engineRef.current.state.player.y}:undefined} />
       )}
 
       {combatNotice==='damage' && lastDamage && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
