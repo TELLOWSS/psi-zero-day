@@ -45,3 +45,16 @@ it('shows affected targets but never paints the large follower radius',()=>{
  state.hazards[0]!.x+=400;vi.mocked(ctx.lineTo).mockClear();drawPremiumGear(ctx,state,undefined,false);
  expect(ctx.lineTo).not.toHaveBeenCalled();
 });
+it('bounds crowded inspection marks without changing suppression or painting radial links',()=>{
+ const {state,ctx}=setup();state.premiumGear!.equipped=['inspection_wing'];state.premiumGear!.effects.suppression=.2;
+ state.hazards=Array.from({length:46},(_,i)=>({id:`cart-${i}`,type:'RUNAWAY_CART' as const,x:state.player.x+60,y:state.player.y+i,hp:10,maxHp:10,radius:20,speed:10,damage:1,expValue:1}));
+ const before=JSON.stringify(state);drawPremiumGear(ctx,state,undefined,false);
+ expect(ctx.lineTo).not.toHaveBeenCalled();expect(ctx.ellipse).toHaveBeenCalledTimes(8);expect(JSON.stringify(state)).toBe(before);
+});
+it('limits normal inspection links and keeps reduced motion target markers',()=>{
+ const {state,ctx}=setup();state.premiumGear!.equipped=['inspection_wing'];state.premiumGear!.effects.suppression=.2;
+ state.hazards=Array.from({length:20},(_,i)=>({id:`cart-${i}`,type:'RUNAWAY_CART' as const,x:state.player.x+60,y:state.player.y+i,hp:10,maxHp:10,radius:20,speed:10,damage:1,expValue:1}));
+ drawPremiumGear(ctx,state,undefined,false);expect(ctx.lineTo).toHaveBeenCalledTimes(3);expect(ctx.ellipse).toHaveBeenCalledTimes(16);
+ vi.mocked(ctx.lineTo).mockClear();vi.mocked(ctx.ellipse).mockClear();drawPremiumGear(ctx,state,undefined,true);
+ expect(ctx.lineTo).not.toHaveBeenCalled();expect(ctx.ellipse).toHaveBeenCalledTimes(16);
+});
