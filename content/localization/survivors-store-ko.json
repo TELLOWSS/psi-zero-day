@@ -13,7 +13,7 @@
   "resetFitting": "현재 장착으로 돌아가기",
   "fittingLoading": "착용 이미지 불러오는 중",
   "fittingFailure": "착용 이미지를 불러오지 못했습니다",
-  "fittingHp": "안전 체력",
+  "fittingHp": "최대 안전 체력",
   "fittingSpeed": "이동 속도",
   "fittingPickup": "회수 반경",
   "fittingDamage": "대응 효과 (%)",
