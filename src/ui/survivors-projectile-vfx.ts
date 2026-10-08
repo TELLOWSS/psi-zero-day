@@ -16,7 +16,7 @@ export const PROJECTILE_VFX = {
   grout_slug: { family:'physical', color:'#94a3b8', trail:24, life:.35 },
   hydraulic_wave: { family:'shock', color:'#38bdf8', trail:36, life:.3 },
   emp_pulse: { family:'arc', color:'#60a5fa', trail:0, life:.4 },
-  plasma_arc: { family:'arc', color:'#a78bfa', trail:0, life:.4 },
+  plasma_arc: { family:'arc', color:'#a78bfa', trail:0, life:.55 },
 } as const satisfies Record<ProjectileKind,{family:string;color:string;trail:number;life:number}>;
 
 export function projectileVisual(p: Readonly<Projectile>, level: number, reducedMotion: boolean, busy: boolean) {
@@ -112,6 +112,24 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
       ctx.beginPath();ctx.arc(-i*5,0,r*(.58+i*.16),-1.25,1.25);ctx.stroke();
     }
     if(p.kind==='satellite_wave'&&v.detail){ctx.globalAlpha=v.alpha*.55;line(ctx,[[-12,-r*.5],[-4,0],[-12,r*.5]],spec.color,1);}
+  } else if(p.kind==='emp_pulse'||p.kind==='plasma_arc'){
+    const progress=1-Math.max(0,Math.min(1,p.duration/spec.life));
+    const front=r*(reducedMotion?1:.65+.35*Math.sin(progress*Math.PI/2));
+    const segments=v.detail?8:4;
+    ctx.globalCompositeOperation='screen';
+    for(let i=0;i<segments;i++){
+      const angle=i*Math.PI*2/segments;
+      ctx.globalAlpha=v.alpha*(busy?.28:.5);ctx.strokeStyle=spec.color;ctx.lineWidth=4;
+      ctx.beginPath();ctx.arc(0,0,front,angle+.08,angle+Math.PI/segments);ctx.stroke();
+      ctx.globalAlpha=v.alpha*.7;ctx.strokeStyle='#e9faff';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(0,0,front,angle+.1,angle+Math.PI/segments-.02);ctx.stroke();
+      if(v.detail){
+        const a=angle+.2,spread=.16;
+        line(ctx,[[Math.cos(a)*front*.84,Math.sin(a)*front*.84],[Math.cos(a+spread)*front*.94,Math.sin(a+spread)*front*.94],[Math.cos(a)*front,Math.sin(a)*front]],spec.color,1.4);
+      }
+    }
+    ctx.globalAlpha=v.alpha*.2;ctx.strokeStyle=spec.color;ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(0,0,front*.86,0,Math.PI*2);ctx.stroke();
   } else if(spec.family==='arc'){
     stamp(ctx,'light',spec.color,0,0,r*2.3,r*1.4);
     const branches=v.detail?5:3;

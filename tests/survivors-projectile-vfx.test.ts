@@ -4,6 +4,12 @@ import type { Projectile, ProjectileKind } from '../src/domain/patrol-survivors'
 
 const projectile=(kind:ProjectileKind):Projectile=>({id:kind,x:10,y:20,vx:240,vy:120,radius:12,damage:10,duration:.2,pierce:1,kind});
 describe('equipment-specific projectile presentation',()=>{
+  it('matches plasma visual fade to its engine lifetime without altering its radius',()=>{
+    const p=Object.freeze({...projectile('plasma_arc'),radius:165,duration:.55});
+    expect(PROJECTILE_VFX.plasma_arc.life).toBe(.55);
+    expect(projectileVisual(p,1,false,false)).toMatchObject({alpha:1,radius:165});
+    expect(projectileVisual({...p,duration:.275},1,true,true).alpha).toBeCloseTo(.5);
+  });
   it('covers every engine kind while keeping physical cones on their approved sprite pass',()=>{
     expect(Object.keys(PROJECTILE_VFX)).toHaveLength(14);
     expect(new Set(Object.values(PROJECTILE_VFX).map(v=>v.family)).size).toBe(8);
