@@ -2281,15 +2281,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.fillStyle = inside ? '#10b981' : '#f59e0b';
         ctx.fillText('H', 0, 0);
 
-        // 5. Ground text status
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillStyle = inside ? '#6ee7b7' : '#fde047';
-        ctx.shadowColor = '#000000';
-        ctx.shadowBlur = 6;
-        const statusText = inside
-          ? `[랑데부 구역 사수 중: ${Math.ceil(extractionTimerRef.current)}초]`
-          : `[랑데부 구역 진입 필요 · 사수 타이머 정지: ${Math.ceil(extractionTimerRef.current)}초]`;
-        ctx.fillText(statusText, 0, lzRadius + 28);
+        // Status and countdown live in the HUD; keep the landing zone free of duplicate text.
         ctx.restore();
 
         // 6. Directional navigation pointer if player is outside LZ

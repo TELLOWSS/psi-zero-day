@@ -14,6 +14,7 @@ on:
       - 'tests/survivors-equipment-store.test.tsx'
       - 'tests/survivors-store-effect-copy.test.ts'
       - 'tests/verify-store-reference-layout.mjs'
+      - 'tests/verify-lz-guidance.mjs'
       - 'content/localization/survivors-store-ko.json'
       - 'content/localization/survivors-result-ko.json'
       - 'content/localization/survivors-boss-ko.json'
@@ -92,6 +93,7 @@ jobs:
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-survivors-combat-ui.mjs
           node tests/verify-survivors-store-maintenance.mjs
           node tests/verify-store-reference-layout.mjs
+          node tests/verify-lz-guidance.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()
@@ -106,6 +108,7 @@ jobs:
             artifacts/equipment-check
             artifacts/store-maintenance
             artifacts/store-reference-layout
+            artifacts/lz-guidance
             artifacts/tactical-ui
             artifacts/combat-debrief-ui
             artifacts/confirmed-impact
