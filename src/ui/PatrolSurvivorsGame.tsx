@@ -3351,7 +3351,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-hp-container">
             <span className="survivors-level-tag">LV {level}</span>
             {liveGear && liveGear.equipped.length>0 && <span className="survivors-premium-hp-badge" aria-label={storeText.status} title={liveGear.equipped.map(id=>storeText.items[id as keyof typeof storeText.items].name).join(' · ')}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===liveGear.equipped[0])!}/>{liveGear.equipped.length>1&&<small>+{liveGear.equipped.length-1}</small>}</span>}
-            <div className="survivors-hp-bar-bg" role="progressbar" aria-label={storeText.fittingHp} aria-valuemin={0} aria-valuemax={maxHp} aria-valuenow={Math.max(0,Math.min(maxHp,hp))}>
+            <div className="survivors-hp-bar-bg" role="progressbar" aria-label={storeText.currentHp} aria-valuemin={0} aria-valuemax={maxHp} aria-valuenow={Math.max(0,Math.min(maxHp,hp))}>
               <div
                 className="survivors-hp-bar-fill"
                 style={{ width: `${Math.max(0, (hp / maxHp) * 100)}%` }}
