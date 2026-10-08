@@ -1,0 +1,20 @@
+{
+  "id": "BR-ART-01-player-portrait-r1",
+  "status": "FINAL_CANDIDATE_REQUIRES_DIRECTOR_REVIEW",
+  "runtimeConnected": false,
+  "directorFileApproval": false,
+  "currentTitleSlotAssessment": "HOLD_FACE_CLIPPED_IN_LANDSCAPE_AND_UI_OCCLUSION_IN_PORTRAIT",
+  "rightsReview": "NOT_ESTABLISHED_BY_GENERATION_OR_REFERENCE_HASH",
+  "generator": "built-in image_gen",
+  "date": "2026-10-08",
+  "file": "docs/branding/candidates/BR-ART-01-player-portrait-r1.png",
+  "sha256": "097c8526cdc4fc90f110dda9bc24f20c972ed0e7f6320d2546509705d743dd34",
+  "width": 1024,
+  "height": 1536,
+  "references": [
+    {"role":"approved character identity","path":"public/assets/episode01/characters/player-map.webp","sha256":"830d0a44c71aec94d69dc77023e314bcb8cce67e9bdba5bebc975146127087f8"},
+    {"role":"existing construction world","path":"public/assets/episode01/hires/night-pour-hero.webp","sha256":"0c490698b7d680c62a5c82012153dad7f91c5e5897cdaf23c330d019ce1267a1"}
+  ],
+  "intendedUse": "Portrait representative art candidate. Not approved as universal title background or gameplay sprite.",
+  "promptFile": "docs/branding/candidates/BR-ART-01-player-portrait-r1-prompt.md"
+}

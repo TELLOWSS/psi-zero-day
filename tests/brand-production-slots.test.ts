@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import contract from '../content/branding/production-slots-v1.json';
 import { TITLE_CAST_IDS } from '../src/app/title-cast';
@@ -37,5 +38,19 @@ describe('brand production slot audit contract', () => {
       expect.objectContaining({ id: 'browser-icon', currentUri: 'data:,', finalCandidate: 'SEPARATE_DIRECTOR_FILE_APPROVAL_REQUIRED' }),
     ]);
     expect(readFileSync('index.html', 'utf8')).toContain('rel="icon" href="data:,"');
+  });
+
+  it('preserves the portrait candidate bytes and dimensions outside runtime', () => {
+    const record = JSON.parse(readFileSync('docs/branding/candidates/BR-ART-01-player-portrait-r1.json', 'utf8'));
+    const bytes = readFileSync(record.file);
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(record.sha256);
+    expect(bytes.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+    expect(bytes.readUInt32BE(16)).toBe(record.width);
+    expect(bytes.readUInt32BE(20)).toBe(record.height);
+    expect(record.runtimeConnected).toBe(false);
+    expect(record.directorFileApproval).toBe(false);
+    expect(record.currentTitleSlotAssessment).toBe('HOLD_FACE_CLIPPED_IN_LANDSCAPE_AND_UI_OCCLUSION_IN_PORTRAIT');
+    expect(record.file).toMatch(/^docs\/branding\/candidates\//);
+    expect(readFileSync('src/ui/GameHub.tsx', 'utf8')).not.toContain('BR-ART-01-player-portrait-r1');
   });
 });
