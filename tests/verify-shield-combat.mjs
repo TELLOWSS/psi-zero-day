@@ -72,7 +72,24 @@ try {
       const rendered = event.visual ? b.draw?.assetReady && b.draw.phase === expected && b.draw.alpha === event.visual.alpha : b.draw === null;
       const pass = rendered && a.hash === b.hash && a.time === b.time && b.nonblank && !b.overflow && b.phase === 'paused' && Boolean(b.reduced) === (mode === 'reduced') && Boolean(b.busy) === (mode === 'busy') && event.visual?.phase === expected && !errors.length;
       await page.screenshot({ path: `${output}/${width}x${height}-${mode}-${phase}.png` });
-      rows.push({ width, height, mode, phase, event, samples: [a, b], errors: [...errors], pass });
+      const timeline = [];
+      const duration = phase === 'recharge' ? .6 : .45;
+      for (const [point, dt] of [['middle', duration / 2], ['end', duration / 2 + .01]]) {
+        const visual = await page.evaluate(dt => {
+          const s = window.shieldEngine.state, p = window.shieldProbe;
+          s.gameTime += dt; s.phase = 'playing'; window.shieldTick(s, dt); s.phase = 'paused';
+          window.shieldDraw = null;
+          return p.tracker.sample(s, p.reduced, p.busy);
+        }, dt);
+        await page.waitForTimeout(100);
+        const actual = await sample();
+        const target = mode === 'reduced' || point === 'end' ? phase === 'depleted' ? undefined : 'charged' : phase;
+        const matched = visual ? actual.draw?.assetReady && actual.draw.alpha === visual.alpha && actual.draw.phase === target : actual.draw === null;
+        const fading = mode === 'reduced' || point === 'end' || visual.alpha < event.visual.alpha;
+        timeline.push({ point, dt, visual, actual, pass: matched && fading && visual?.phase === target && actual.nonblank && !actual.overflow && !errors.length });
+        if (width === 390 && mode === 'normal') await page.screenshot({ path: `${output}/${width}x${height}-${mode}-${phase}-${point}.png` });
+      }
+      rows.push({ width, height, mode, phase, event, samples: [a, b], timeline, errors: [...errors], pass: pass && timeline.every(point => point.pass) });
     }
     await page.close();
   }
