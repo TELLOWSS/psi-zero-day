@@ -205,7 +205,7 @@ try {
       const appearance=await evaluate(cdp,`(async()=>{
         const {stageThreatAppearance}=await import('/src/ui/survivors-threat-appearance.ts');
         const image=new Image();image.src='/assets/survivors/stage-threat-silhouettes-v1.webp';await image.decode();
-        const e=window.qaMobileEngine;window.qaVisualFreeze=true;
+        const e=window.qaMobileEngine;window.qaVisualFreeze=true;e.state.stage={...e.state.stage,theme:'highrise_slab',stageNumber:3};
         const specs=[['RUNAWAY_CART',null,null],['RUNAWAY_CART','reinforced_cart',null],['RUNAWAY_CART',null,'flanking_cart'],['GAS_LEAK','pulse_gas',null],['GAS_LEAK','split_gas',null],['GAS_LEAK',null,'crosswind'],['FALLING_DEBRIS',null,null],['FALLING_DEBRIS',null,'wide_debris'],['FALLING_DEBRIS',null,null]];
         e.state.hazards=[];e.state.interactiveHazards=[];e.state.perkOptions=[];
         const cells=[];
@@ -213,6 +213,8 @@ try {
         return {width:image.naturalWidth,height:image.naturalHeight,cells,scope:'Synthetic nine-shape render fixture; no gameplay completion claim.'};
       })()`);
       await sleep(250);await screenshot(cdp,`${width}x${height}-threat-silhouettes.png`);
+      await evaluate(cdp,"window.qaMobileEngine.state.stage={...window.qaMobileEngine.state.stage,theme:'surface_logistics',stageNumber:5}");
+      await sleep(150);await screenshot(cdp,`${width}x${height}-steel-silhouettes.png`);
       const pass=appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
       report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
