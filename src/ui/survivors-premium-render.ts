@@ -32,9 +32,12 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   }
   const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);
   if(suppressed.length) {
-    for(const hazard of suppressed){
-      ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=.45;ctx.lineWidth=1.2;
-      ctx.beginPath();ctx.moveTo(x+(flight?.x??0),y+(flight?.y??-24));ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();
+    const busy=state.hazards.length>45||state.projectiles.length>60;
+    // Bound presentation only: every eligible hazard still receives engine suppression.
+    const targets=suppressed.sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y)||a.id.localeCompare(b.id)).slice(0,busy?8:16);
+    for(const [index,hazard] of targets.entries()){
+      ctx.save();ctx.strokeStyle='#66dcd4';ctx.globalAlpha=busy?.28:.45;ctx.lineWidth=1.2;
+      if(!busy&&!reducedMotion&&index<3){ctx.beginPath();ctx.moveTo(x+(flight?.x??0),y+(flight?.y??-24));ctx.lineTo(hazard.x,hazard.y-10);ctx.stroke();}
       ctx.beginPath();ctx.ellipse(hazard.x,hazard.y,hazard.radius+5,(hazard.radius+5)*.58,0,0,Math.PI*2);ctx.stroke();ctx.restore();
     }
   }

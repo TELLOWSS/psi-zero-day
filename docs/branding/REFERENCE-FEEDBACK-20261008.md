@@ -11,6 +11,12 @@
 
 ## 다음 순서
 
+PR141 운영 동기화: 2026-10-08 사용자의 최신 수정 GitHub/Vercel 동기화 요청에 따라 검증된 혼잡 오라 개선을 반영했다. 최신 f5ac009 CI/preview 성공 후 main 병합, 운영 커밋 `517bbfae6a2d256abeb0ae6e3a16465b0354c618`, 배포 `dpl_5Wrgq1j1oaFFZ8C3cqBBUKqvXijc` READY/공개 별칭 확인. 운영 오라 fixture9경로 및 상점 사진조합4viewport 재통과. 아래의 과거 PR141 draft/운영140 문구는 해당 시점 기록이며 현재 상태가 아니다. 최종 전체 아트·자연 과밀·실기기 승인으로 확대하지 않는다.
+
+장비 효과 후속 후보: 실제 drawPremiumGear의 점검 드론 억제 연결선이 모든 대상에서 주인공으로 모이는 표현을 정리했다. 일반 연결선은 가까운3개, 대상 표식16개까지; 혼잡은 연결선0/표식8개, 움직임 감소는 연결선0/표식 유지. 거리/id 정렬로 표식 선택을 안정화하며 engine 감속 대상·180 범위·억제율·저장·원화는 불변. 집중16건/타입/prebuild/build 통과. 기존 실제 전투 renderer fixture PC/폰세로/가로 x normal/busy/reduced9경로 통과, 모바일 busy 캡처를 직접 확인해 중심 연결선 제거와 주인공/노란 예고 분리를 관찰했다. 증거 `artifacts/equipment-target-readability/report.json`과9 PNG. 명시적 action1/정지 위험물4·46 fixture이며 자연 발동/실기기 성능 증거가 아니다. 현재 운영은 PR141이며 이 후속 후보는 운영 미반영.
+
+후속 전체 회귀: 1,715건 통과·1건 제외. 기존 jsdom media/canvas 미구현 경고는 실제 브라우저 검증과 구분하며 테스트 실패로 발생하지 않았다. 최신 원격 CI 완료 전 병합하지 않는다.
+
 EMP 후보는 2026-10-08 사용자가 보여준 표현의 운영 반영을 직접 승인. PR140 최종 f64d51a 검사 성공 후 운영 커밋 `b384914547f5df0b3a7fac3db4cb38d0a85a5de4`, 배포 `dpl_3tewDgkHfFtbfjtNwXq8KGWwyPNS` READY 및 별칭 확인. 운영 진화 fixture 6경로 통과. 전체 장비/오라/실기기 승인으로 확대하지 않음.
 
 오라 혼잡 후보: 기존 authored wisps/frame crossfade/장비 팔레트 유지. busy 발동 추가 alpha .54→.24, 팽창 폭 60%로 제한. 일반 발동과 idle 장비 수 증가 계약 유지. 집중9건 통과. 실제 장비 조합/혼잡 화면 캡처 및 위험예고 대비 검수 전 운영 적용 보류. 전체 장비 효과 그래픽 고도화 완료가 아님.
