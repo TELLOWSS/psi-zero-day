@@ -11,6 +11,12 @@ try{
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.addInitScript(()=>localStorage.setItem('psi.survivors.store_wallet',JSON.stringify({credits:1260,inventory:{owned:['broadcast_crown','sync_gauntlet'],equipped:['broadcast_crown','sync_gauntlet'],durability:{broadcast_crown:10,sync_gauntlet:40}}})));
   await page.goto(url,{waitUntil:'networkidle'});await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.getByRole('button',{name:copy.shopEntry,exact:true}).click();
+  const descriptions=await page.locator('.survivors-store-card').evaluateAll((cards,expected)=>cards.map(card=>{
+   const label=card.querySelector('.survivors-store-effect'),use=card.querySelector('.survivors-premium-use'),a=label.getBoundingClientRect(),b=use.getBoundingClientRect(),c=card.getBoundingClientRect();
+   return {text:label.textContent,pass:Object.values(expected).some(item=>item.description===label.textContent)&&label.scrollWidth<=label.clientWidth+1&&a.left>=c.left&&a.right<=c.right+1&&a.bottom<=b.top+1};
+  }),copy.items);
+  await page.locator('.survivors-store-card').last().scrollIntoViewIfNeeded();
+  await page.screenshot({path:`${output}/${width}x${height}-effect-copy.png`});
   await page.getByRole('tab',{name:copy.loadout,exact:true}).click();
   const slots=await page.locator('#store-panel-loadout .survivors-store-slots > div').evaluateAll(elements=>elements.filter(e=>e.querySelector('label')).map(e=>{
    const box=x=>{const b=x.getBoundingClientRect();return {left:b.left,right:b.right,top:b.top,bottom:b.bottom,height:b.height};},label=box(e.querySelector('label')),buttons=[...e.querySelectorAll('button')].map(box),bounds=box(e);
@@ -25,7 +31,7 @@ try{
   });
   await page.screenshot({path:`${output}/${width}x${height}-fitting-bottom.png`});
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  rows.push({width,height,slots,fitting,overflow,errors,pass:slots.length===2&&slots.every(s=>s.pass)&&fitting.pass&&!overflow&&!errors.length});await page.close();
+  rows.push({width,height,descriptions,slots,fitting,overflow,errors,pass:descriptions.length===16&&descriptions.every(d=>d.pass)&&slots.length===2&&slots.every(s=>s.pass)&&fitting.pass&&!overflow&&!errors.length});await page.close();
  }
  fs.writeFileSync(`${output}/report.json`,JSON.stringify({scope:'EXPLICIT_REFERENCE_INVENTORY_UI_LAYOUT_NOT_PHYSICAL_DEVICE',url,rows},null,2));console.log(JSON.stringify(rows));if(rows.some(r=>!r.pass))process.exitCode=1;
 }finally{await browser.close();}

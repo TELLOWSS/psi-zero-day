@@ -76,12 +76,12 @@
   "items": {
     "voice_lens": {
       "name": "지향성 계도 렌즈",
-      "description": "대응 효과 +15%",
+      "description": "대응 효과 +15%p",
       "use": "계도 전달의 기본 대응력을 강화"
     },
     "command_array": {
       "name": "PSI 지휘 어레이",
-      "description": "대응 효과 +25%",
+      "description": "대응 효과 +25%p",
       "use": "후반 고체력 위험을 더 빠르게 통제"
     },
     "relay_core": {
@@ -116,7 +116,7 @@
     },
     "broadcast_crown": {
       "name": "광역 교육 크라운",
-      "description": "대응 효과 +38% · 대기 감소 +4%p",
+      "description": "대응 효과 +38%p · 대기 감소 +4%p",
       "use": "밀려오는 후반 위험을 빠르게 통제"
     },
     "sync_gauntlet": {
@@ -141,7 +141,7 @@
     },
     "barrier_forge": {
       "name": "통제선 포지",
-      "description": "순찰 시작 통제선 +3회",
+      "description": "작전당 최초 장착 시 통제선 +3회",
       "use": "집중 위험 구역에 통제선을 연속 배치"
     },
     "rescue_wing": {
@@ -151,7 +151,7 @@
     },
     "predictive_watch": {
       "name": "예측 지휘 워치",
-      "description": "초당 샤우팅 충전 +0.35 · 보급 호출 +2회",
+      "description": "초당 샤우팅 충전 +0.35 · 작전당 최초 장착 시 보급 호출 +2회",
       "use": "통제 성과가 적어도 긴급 지휘를 준비"
     }
   },
@@ -170,7 +170,7 @@
   "remove": "해제",
   "owned": "보유",
   "equipped": "장착 중",
-  "failure": "저장하지 못했습니다. 크레딧은 차감되지 않았습니다.",
+  "failure": "저장하지 못했습니다. PSI는 차감되지 않았습니다.",
   "empty": "장착 장비 없음",
   "status": "장착 프로토콜",
   "shield": "보호막",
