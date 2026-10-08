@@ -22,6 +22,10 @@ describe('game hub navigation', () => {
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
       expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/player-map.webp');
       expect(host.querySelector('.commercial-title-mobile-player')?.getAttribute('src')).toContain('characters/player-map.webp');
+      expect(host.querySelector('.commercial-title-logo')?.getAttribute('role')).toBe('img');
+      expect(host.querySelector('.commercial-title-logo')?.getAttribute('aria-label')).toBe('NEW PSI : ZERO DAY');
+      expect(host.querySelector('.commercial-title-wordmark img')?.getAttribute('src')).toBe('/assets/branding/new-psi-wordmark-stacked-chalk.svg');
+      expect(host.querySelector('.commercial-title-wordmark source')?.getAttribute('srcset')).toBe('/assets/branding/new-psi-wordmark-wide-chalk.svg');
       act(() => host.querySelector<HTMLButtonElement>('.is-defense-entry')!.click());
       expect(host.querySelector('.mode-preview-dialog')).not.toBeNull();
       act(() => host.querySelector<HTMLButtonElement>('.is-survivors-entry')!.click());

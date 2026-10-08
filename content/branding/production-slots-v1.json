@@ -1,5 +1,5 @@
 {
-  "scope": "B2_EXISTING_SLOT_AUDIT_ONLY",
+  "scope": "B2_EXISTING_AND_EXPLICITLY_APPROVED_SLOT_AUDIT_ONLY",
   "baselineCommit": "ca58e14a028adafcf9d03da7db92664132033e73",
   "finalApproval": "NOT_GRANTED_BY_THIS_CONTRACT",
   "slots": [
@@ -13,8 +13,6 @@
     {"id":"cast-jeongmin","selector":".commercial-title-worker[data-character=\"seo_jeongmin\"] img","uri":"/assets/episode01/characters/seo-jeongmin-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
     {"id":"mobile-player","selector":".commercial-title-mobile-player","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"src/ui/GameHub.tsx"}
   ],
-  "nonBinarySlots": [
-    {"id":"wordmark","selector":".commercial-title-logo","currentType":"LIVE_TEXT","finalCandidate":"SEPARATE_DIRECTOR_FILE_APPROVAL_REQUIRED"},
-    {"id":"browser-icon","selector":"link[rel=\"icon\"]","currentUri":"data:,","finalCandidate":"SEPARATE_DIRECTOR_FILE_APPROVAL_REQUIRED"}
-  ]
+  "nonBinarySlots": [],
+  "approvedBrandFiles": "docs/branding/candidates/BR-LOGO-02-APPROVAL.json"
 }

@@ -385,7 +385,12 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
 
     <section className="commercial-title-copy" data-title-hierarchy="H01_LOCKED">
       <span className="commercial-title-kicker" data-title-rank="brand">NEW PSI</span>
-      <div className="commercial-title-logo" data-title-rank="primary" aria-label={GAME_TITLE}><span>PSI</span><b>:</b><span>ZERO DAY</span></div>
+      <div className="commercial-title-logo" data-title-rank="primary" role="img" aria-label={GAME_TITLE}>
+        <picture className="commercial-title-wordmark">
+          <source media="(max-height: 460px) and (orientation: landscape)" srcSet="/assets/branding/new-psi-wordmark-wide-chalk.svg" />
+          <img src="/assets/branding/new-psi-wordmark-stacked-chalk.svg" alt="" width="460" height="144" />
+        </picture>
+      </div>
       <h1 data-title-rank="slogan">사고 전 신호를 읽고, 현장을 바꿔라.</h1>
       <p className="commercial-title-english">{t('ui.title.brand_descriptor')}</p>
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>

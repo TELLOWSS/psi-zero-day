@@ -46,7 +46,7 @@ try {
           const y = imageBox.top + imageBox.height - canvas.height * scale;
           alphaBounds = { left: x + left * scale, top: y + top * scale, right: x + right * scale, bottom: y + bottom * scale };
         }
-        const texts = [...document.querySelectorAll('.commercial-title-logo,.commercial-title-copy h1,.commercial-title-english')].filter(element => element.getBoundingClientRect().height > 0).map(box);
+        const texts = [...document.querySelectorAll('.commercial-title-wordmark img,.commercial-title-copy h1,.commercial-title-english')].filter(element => element.getBoundingClientRect().height > 0).map(box);
         const actorClear = !portrait || alphaBounds && alphaBounds.left >= 0 && alphaBounds.top >= 0 && alphaBounds.right <= innerWidth && alphaBounds.bottom <= innerHeight && !texts.some(b => intersects(alphaBounds, b)) && !actions.some(b => intersects(alphaBounds, b));
         const readyFit = primary.top >= 0 && primary.bottom <= innerHeight && primary.height >= 44;
         const actionFit = actions.every(b => b.left >= 0 && b.right <= innerWidth && b.height >= 44);

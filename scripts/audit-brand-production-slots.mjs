@@ -11,10 +11,13 @@ const output = 'artifacts/brand-production-slots';
 fs.mkdirSync(output, { recursive: true });
 const rows = [];
 const contract = JSON.parse(fs.readFileSync('content/branding/production-slots-v1.json', 'utf8'));
+const approval = JSON.parse(fs.readFileSync(contract.approvedBrandFiles, 'utf8'));
+if (approval.decision !== 'DESIGN_AND_FILES_APPROVED_APPLY_AFTER_VERIFICATION') throw new Error('Brand file approval is missing');
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_BIN });
 try {
-  for (const [width, height] of [[1440, 900], [390, 844], [844, 390], [1024, 768]]) {
-    const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
+  const views = [[1440, 900], [390, 844], [844, 390], [1024, 768]].flatMap(([width, height]) => ['light', 'dark'].map(colorScheme => ({ width, height, colorScheme })));
+  for (const { width, height, colorScheme } of views) {
+    const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce', colorScheme });
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
     await page.goto(url);
@@ -45,17 +48,32 @@ try {
       images.push({ id, ...metadata, matchesContract, visible: await locator.isVisible(),
         bytes: fs.statSync(file).size, sha256: createHash('sha256').update(fs.readFileSync(file)).digest('hex') });
     }
+    await page.locator('.commercial-title-wordmark img').evaluate(image => image.decode());
     const wordmark = await page.locator('.commercial-title-logo').evaluate(element => {
       const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
-      return { type: 'LIVE_TEXT_NOT_APPROVED_LOGO_BINARY', text: element.textContent,
+      const image = element.querySelector('img');
+      return { type: 'DIRECTOR_APPROVED_FILE_REQUIRES_RUNTIME_VERIFICATION', uri: new URL(image.currentSrc).pathname,
+        naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight,
         accessibleName: element.getAttribute('aria-label'), fontFamily: style.fontFamily,
         box: { x: rect.x, y: rect.y, width: rect.width, height: rect.height } };
     });
-    const icon = await page.locator('link[rel="icon"]').getAttribute('href');
+    const icon = await page.locator('link[rel="icon"]').evaluateAll(elements => elements.map(element => ({ uri: new URL(element.href).pathname, media: element.media, matches: matchMedia(element.media).matches })));
+    const brandFiles = [];
+    for (const uri of [wordmark.uri, ...icon.map(item => item.uri)]) {
+      const expected = approval.approvedRuntimeFiles.find(file => file.uri === uri);
+      if (!expected) throw new Error(`Unapproved brand delivery: ${uri}`);
+      const response = await page.request.get(new URL(uri, url).href);
+      const bytes = await response.body();
+      const sha256 = createHash('sha256').update(bytes).digest('hex');
+      brandFiles.push({ uri, sha256, matchesApproval: response.ok() && sha256 === expected.sha256 });
+    }
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-    await page.screenshot({ path: `${output}/${width}x${height}-title.png`, fullPage: true });
-    const pass = images.every(image => image.loaded && image.matchesContract) && !overflow && !errors.length;
-    rows.push({ width, height, images, wordmark, icon, overflow, errors, pass });
+    await page.screenshot({ path: `${output}/${width}x${height}-${colorScheme}-title.png`, fullPage: true });
+    const expectedWordmark = approval.approvedRuntimeFiles.find(file => file.uri === wordmark.uri);
+    const pass = images.every(image => image.loaded && image.matchesContract) && brandFiles.every(file => file.matchesApproval) &&
+      wordmark.accessibleName === 'NEW PSI : ZERO DAY' && wordmark.naturalWidth === expectedWordmark.width && wordmark.naturalHeight === expectedWordmark.height &&
+      icon.length === 2 && icon.filter(item => item.matches).length === 1 && !overflow && !errors.length;
+    rows.push({ width, height, colorScheme, images, wordmark, icon, brandFiles, overflow, errors, pass });
     await page.close();
   }
   const identities = new Map();
