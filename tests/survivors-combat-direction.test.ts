@@ -1,8 +1,12 @@
 import {expect,it} from 'vitest';
-import {CombatDirection} from '../src/ui/survivors-combat-direction';
+import {CombatDirection,playerDamageOpacity} from '../src/ui/survivors-combat-direction';
 import {equipmentSoundSamples} from '../src/ui/survivors-equipment-sound';
 import type {ProjectileFeedback} from '../src/domain/survivors-projectile-feedback';
 const event:ProjectileFeedback={projectileId:'a',kind:'radio',phase:'launch',x:0,y:0,angle:0,radius:12};
+it('keeps damaged heroes readable and pauses blinking with simulation time',()=>{
+ for(let i=0;i<50;i++){const time=i*.02;expect(playerDamageOpacity(1,time)).toBeGreaterThanOrEqual(.8);expect(playerDamageOpacity(1,time)).toBe(playerDamageOpacity(1,time));expect(playerDamageOpacity(1,time,true)).toBe(1);}
+ expect(playerDamageOpacity(1,0)).toBe(.8);expect(playerDamageOpacity(1,.09)).toBe(1);expect(playerDamageOpacity(0,0)).toBe(1);expect(playerDamageOpacity(NaN,NaN)).toBe(1);
+});
 it('uses bounded local camera impulses, decays without input and respects reduced motion',()=>{
  const d=new CombatDirection();d.ingest(Array.from({length:500},(_,i)=>({...event,projectileId:String(i)})),['broadcast_crown'],{x:0,y:0});
  expect(d.lightCount).toBe(8);expect(d.camera(false).x).toBe(-1.1);expect(d.camera(true)).toEqual({x:0,y:0});

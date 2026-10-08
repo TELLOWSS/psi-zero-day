@@ -3041,3 +3041,19 @@
   .survivors-perk-option .survivors-perk-card { flex-direction:row; align-items:flex-start; padding:8px; }
   .survivors-perk-option .survivors-perk-card-icon { display:none; }
 }
+
+@media (max-width:900px), (pointer:coarse) {
+  .is-combat .survivors-signature-event {
+    top:calc(var(--survivors-hud-bottom,76px) + 6px);
+    left:8px; right:auto; transform:none;
+    width:min(340px,calc(100% - 16px)); box-sizing:border-box;
+    padding:6px 9px; gap:2px; border-radius:4px; text-align:left; justify-items:start;
+    background:rgba(18,24,25,.94); box-shadow:none; backdrop-filter:none;
+    animation:none;
+  }
+  .is-combat .survivors-signature-event > :is(span,em,b) { display:none; }
+  .is-combat .survivors-signature-event > strong { font-size:13px; line-height:1.35; }
+  .is-combat .survivors-signature-event > small { font-size:11px; line-height:1.4; }
+  .is-combat .survivors-signature-event > i { font-size:10px; line-height:1.4; letter-spacing:0; }
+  .is-combat .survivors-signature-event > :is(strong,small,i) { max-width:100%; overflow-wrap:anywhere; }
+}
