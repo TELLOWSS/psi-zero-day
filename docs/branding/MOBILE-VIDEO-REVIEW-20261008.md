@@ -40,3 +40,9 @@
 - PR142 운영 커밋 `7e64323464a3359f4db12e3109184f43d9383a75`, 배포 `dpl_AToUsRX7u3YLXwJcLzZQDX1Dn85C` READY와 운영 별칭 확인. 공개 운영 장비/오라 9경로 fixture 재통과. 자연 과밀 전투나 실기기 검증은 아니다.
 - main142 통합 후 PR143 로컬 전체1,717건 통과·1건 제외 및 타입/prebuild/build 통과. head `8420c499616078ccf52dbf20d8dbd6cee28bf7bf`의 voice/preview는 성공했지만 art CI에서 본편 전체 선택 경로 UI 테스트가 기본5초 제한으로 실패했다. 이를 검사 성공으로 취급하거나 운영 병합하지 않았다.
 - 최대210회 UI 전환을 검증하는 `playable-ui` 경로4건에만15초 제한을 부여한다. 반복 상한·완주/동일 결과/재시작 assertions는 유지하며 검사를 생략하지 않는다. 집중12건 재통과. 새 head의 실제 CI 성공 확인이 필요하며 PR143은 아직 운영 미반영이다.
+
+## PR143 운영 완료
+
+- 최신 `ca2403febba6b64d6082405b9b506d7cf434e6dd` 검사3개와 Vercel preview 성공 확인 후 main 병합. 운영 커밋 `81ede887f15600da8090183d92914f8a9a35882b`, 배포 `dpl_4MD33AjsYXQnREcmQJcyGanULHg6` production READY와 `psi-zero-day.vercel.app` 별칭 확인.
+- 공개 운영 LZ3viewport: 구역 밖15초 유지/실좌표 방향·문구/내부 사수와 타이머 감소/넘침·오류 없음. 경고·무적3viewport: 모바일 경고88.33px/조건 유지/예상 몸체 bbox 비중첩/paused 시간과 연속 canvas hash 동일/오류 없음.
+- 명시적 상태 fixture 검증이며 자연 보스 완주·실기기·영상 전체 재연 증거가 아니다. 최신 그라우팅/문구 배치는 별도 후보이며 이 운영 커밋에 포함되지 않는다.

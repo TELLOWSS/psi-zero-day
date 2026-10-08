@@ -1,10 +1,26 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import * as vfx from '../src/ui/survivors-projectile-vfx';
 import { createInitialSurvivorsState, SurvivorsEngine } from '../src/engine/patrol-survivors-engine';
 import { ProjectileFeedbackLayer, MAX_PROJECTILE_FEEDBACK } from '../src/ui/survivors-projectile-feedback';
 import type { ProjectileFeedback } from '../src/domain/survivors-projectile-feedback';
 
 const feedback = (phase: ProjectileFeedback['phase'], n = 0): ProjectileFeedback => ({projectileId:String(n),kind:'radio',phase,x:n*30,y:0,angle:0,radius:10});
 describe('confirmed projectile lifecycle', () => {
+  it('reuses mortar material for confirmed launch and impact without changing events',()=>{
+    const draw=vi.spyOn(vfx,'drawProjectileVfx').mockImplementation(()=>{});
+    const light=vi.spyOn(vfx,'drawProjectileLight').mockImplementation(()=>{});
+    const ctx={save:vi.fn(),restore:vi.fn(),translate:vi.fn(),rotate:vi.fn(),beginPath:vi.fn(),ellipse:vi.fn(),stroke:vi.fn(),moveTo:vi.fn(),lineTo:vi.fn()};
+    try {
+      for(const kind of ['grout_slug','hydraulic_wave'] as const)for(const phase of ['launch','impact'] as const){
+        const layer=new ProjectileFeedbackLayer(),event=Object.freeze({...feedback(phase),kind});
+        layer.ingest([event]);layer.draw(ctx as unknown as CanvasRenderingContext2D);
+        expect(draw.mock.calls.at(-1)![1]).toMatchObject({kind,damage:0,pierce:0});
+        expect(event).toMatchObject({kind,phase});
+      }
+      expect(draw).toHaveBeenCalledTimes(4);
+      expect(ctx.save.mock.calls.length).toBe(ctx.restore.mock.calls.length);
+    } finally {draw.mockRestore();light.mockRestore();}
+  });
   it('reports a real contact and releases a consumed projectile exactly once', () => {
     const state = createInitialSurvivorsState();state.phase='playing';state.player.critRate=0;
     state.interactiveHazards=[];

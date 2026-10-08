@@ -1,9 +1,20 @@
 import { describe, expect, it, vi } from 'vitest';
 import { drawProjectileVfx, projectileVisual, PROJECTILE_VFX } from '../src/ui/survivors-projectile-vfx';
 import type { Projectile, ProjectileKind } from '../src/domain/patrol-survivors';
+import {equipmentTuning} from '../src/engine/survivors-equipment-tuning';
 
 const projectile=(kind:ProjectileKind):Projectile=>({id:kind,x:10,y:20,vx:240,vy:120,radius:12,damage:10,duration:.2,pierce:1,kind});
 describe('equipment-specific projectile presentation',()=>{
+  it('matches both mortar flight fade windows to engine tuning',()=>{
+    expect(PROJECTILE_VFX.grout_slug.life).toBe(equipmentTuning('grouting_gun',5)!.duration);
+    expect(PROJECTILE_VFX.hydraulic_wave.life).toBe(equipmentTuning('hydraulic_ram',1)!.duration);
+  });
+  it('keeps the mortar visible across its full engine lifetime',()=>{
+    const p=Object.freeze({...projectile('grout_slug'),duration:.75});
+    expect(PROJECTILE_VFX.grout_slug.life).toBe(.75);
+    expect(projectileVisual(p,5,false,false).alpha).toBe(1);
+    expect(projectileVisual({...p,duration:.375},5,true,true).alpha).toBe(.5);
+  });
   it('matches plasma visual fade to its engine lifetime without altering its radius',()=>{
     const p=Object.freeze({...projectile('plasma_arc'),radius:165,duration:.55});
     expect(PROJECTILE_VFX.plasma_arc.life).toBe(.55);

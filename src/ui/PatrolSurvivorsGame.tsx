@@ -1,5 +1,6 @@
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
+import {selectFloatingFeedback} from './survivors-floating-feedback';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {PleasureFeedback} from './survivors-pleasure-feedback';
 import {EquipmentCheckDirection} from './survivors-equipment-check';
@@ -134,6 +135,7 @@ interface FloatingText {
   life: number;
   maxLife: number;
   isCrit?: boolean;
+  priority?: boolean;
 }
 
 export interface ShockwaveRing {
@@ -923,7 +925,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   }, [audioMuted]);
 
   // Floating text & particle helpers
-  const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24', isCrit = false) => {
+  const spawnFloating = (x: number, y: number, text: string, color = '#fbbf24', isCrit = false, priority = false) => {
     floatingTextsRef.current = floatingTextsRef.current.slice(-12);
     floatingTextsRef.current.push({
       id: floatingIdRef.current++,
@@ -934,6 +936,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       life: isCrit ? 1.0 : 0.75,
       maxLife: isCrit ? 1.0 : 0.75,
       isCrit,
+      priority,
     });
   };
 
@@ -1688,7 +1691,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
           screenShakeRef.current = 14;
           damageFlashRef.current = 0.45; // Red damage vignette flash
-          spawnFloating(engine.state.player.x, engine.state.player.y - 25, `-${Math.round(prevHp - engine.state.player.hp)}`, '#ef4444');
+          spawnFloating(engine.state.player.x, engine.state.player.y - 25, `-${Math.round(prevHp - engine.state.player.hp)}`, '#ef4444', false, true);
           spawnParticles(engine.state.player.x, engine.state.player.y, '#ef4444', 16, 120);
           prevHp = engine.state.player.hp;
         } else if (engine.state.player.hp > prevHp) {
@@ -3241,11 +3244,13 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const aliveTexts: FloatingText[] = [];
       for (const ft of floatingTextsRef.current) {
         ft.life -= dt;
-        ft.y -= (ft.isCrit ? 46 : 38) * dt;
-        if (ft.life > 0) {
+        if (!reducedMotionRef.current) ft.y -= (ft.isCrit ? 46 : 38) * dt;
+        if (ft.life > 0) aliveTexts.push(ft);
+      }
+      for (const ft of selectFloatingFeedback(aliveTexts, engine.state.hazards.length > 45 || engine.state.projectiles.length > 60)) {
           ctx.save();
           const progress = 1 - (ft.life / ft.maxLife);
-          const scale = ft.isCrit ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
+          const scale = ft.isCrit && !reducedMotionRef.current ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
           ctx.translate(ft.x, ft.y);
           ctx.scale(scale, scale);
           ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
@@ -3256,8 +3261,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.globalAlpha = Math.min(1, ft.life / (ft.maxLife * 0.55));
           ctx.fillText(ft.text, 0, 0);
           ctx.restore();
-          aliveTexts.push(ft);
-        }
       }
       floatingTextsRef.current = aliveTexts;
 
