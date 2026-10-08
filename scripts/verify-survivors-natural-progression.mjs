@@ -5,6 +5,7 @@ const require=createRequire(import.meta.url);
 const {chromium}=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
 const out=path.resolve('artifacts/natural-progression',process.env.PSI_NATURAL_LABEL??'.');fs.mkdirSync(out,{recursive:true});
 const seconds=Number(process.env.PSI_NATURAL_SECONDS??240);
+const verifySupply=process.env.PSI_NATURAL_SUPPLY_CHECK==='1';
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN,args:['--renderer-process-limit=1']});
 try{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
@@ -22,6 +23,7 @@ try{
  await page.waitForFunction(()=>window.naturalEngine?.state.phase==='playing');
  const started=Date.now(),held=new Set(),seen=new Set();
  let lastSample=0,lastUltimate=-10000,terminal=null;
+ let supplyCheck=null;
  const release=async()=>{for(const key of held)await page.keyboard.up(key);held.clear();};
  while(Date.now()-started<seconds*1000){
   const snapshot=await page.evaluate(()=>{
@@ -55,6 +57,26 @@ try{
   });
   if(Date.now()-lastSample>1000){samples.push({elapsed:Date.now()-started,...snapshot});lastSample=Date.now();}
   if(['victory','defeat'].includes(snapshot.phase)){terminal=snapshot;break;}
+  if(verifySupply&&!supplyCheck&&snapshot.phase==='playing'&&snapshot.time>65&&snapshot.encounter!=='arrival'){
+   await release();await page.keyboard.press('KeyP');
+   const supply=page.getByRole('button',{name:/WAVE 1 정비 보급 열기/});
+   if(await supply.isVisible()){
+    await supply.click();
+    const complete=page.getByRole('button',{name:/정비 완료 · 순찰 재개/});
+    await complete.waitFor();
+    const before=await page.evaluate(()=>({time:window.naturalEngine.state.gameTime,phase:window.naturalEngine.state.phase}));
+    await page.keyboard.press('KeyP');await page.keyboard.press('Escape');await page.waitForTimeout(700);
+    const during=await page.evaluate(()=>({time:window.naturalEngine.state.gameTime,phase:window.naturalEngine.state.phase}));
+    const pauseDialogs=await page.locator('.survivors-modal-title').filter({hasText:/^일시 정지$/}).count();
+    await page.screenshot({path:path.join(out,'supply-paused.png')});
+    await complete.click();await page.waitForTimeout(700);
+    const after=await page.evaluate(()=>({time:window.naturalEngine.state.gameTime,phase:window.naturalEngine.state.phase}));
+    supplyCheck={before,during,after,pauseDialogs,pass:before.phase==='paused'&&during.phase==='paused'&&before.time===during.time&&pauseDialogs===0&&after.phase==='playing'&&after.time>during.time};
+    if(!supplyCheck.pass)throw Error(`Natural supply check failed: ${JSON.stringify(supplyCheck)}`);
+    await page.screenshot({path:path.join(out,'supply-resumed.png')});break;
+   }
+   await page.keyboard.press('KeyP');
+  }
   if(snapshot.phase!=='playing'){await release();
    if(snapshot.phase==='levelup'){
     const preferred=snapshot.options.findIndex(o=>['radio_boost','safety_drone','damage_up','attack_speed'].includes(o.id));
@@ -82,10 +104,10 @@ try{
  const finalWallet=JSON.parse(finalStorage['psi.survivors.store_wallet']??'null');
  const walletMatches=terminal?finalWallet?.credits===(initialWallet?.credits??0)+terminal.credits:null;
  const report={scope:'UNMODIFIED_NEW_SAVE_UI_INPUT_BOT_NOT_HUMAN_BALANCE_APPROVAL',seconds,
-  outcome:terminal?.phase??'observation-timeout',initialStorage,finalStorage,choices,samples,errors,failed,
+  outcome:terminal?.phase??(supplyCheck?.pass?'supply-check-complete':'observation-timeout'),initialStorage,finalStorage,choices,samples,errors,failed,
   reachedBoss:seen.has('boss-arrival')||samples.some(s=>s.boss),reachedBurst:seen.has('boss-burst'),
   falseTimerVictory:terminal?.phase==='victory'&&!terminal.bossNeutralized,
-  walletMatches,technicalPass:!errors.length&&!failed.length&&!samples.some(s=>s.overflow)&&walletMatches!==false&&!(terminal?.phase==='victory'&&!terminal.bossNeutralized),last};
+  walletMatches,supplyCheck,technicalPass:(!verifySupply||supplyCheck?.pass===true)&&!errors.length&&!failed.length&&!samples.some(s=>s.overflow)&&walletMatches!==false&&!(terminal?.phase==='victory'&&!terminal.bossNeutralized),last};
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
  console.log(JSON.stringify({...report,samples:`${samples.length} samples in report.json`}));
  if(!report.technicalPass)process.exitCode=1;

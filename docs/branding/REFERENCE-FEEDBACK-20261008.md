@@ -11,6 +11,14 @@
 
 ## 다음 순서
 
+2026-10-08 운영 PR139 커밋 `79aa594f211be0a0199191bb200ba68712d15014`에서 새 저장 UI 입력 bot으로 첫 보급 확인. 엔진 상태는 읽기만 하는 bundle 계측이며 이동/선택/보급은 UI 입력. 게임 시간 65.23768초에서 보급 pause, P/Esc 후 동일 시간, 완료 후 65.93768초/playing. 중복 pause 0, 오류/실패 요청/넘침 없음. 증거 `artifacts/natural-progression/supply-resume/report.json`; 사람/실기기 검증과 구분. 성공 후 조기 종료를 이전 보고서는 observation-timeout으로 표기했지만 supplyCheck.pass=true이며 후속 도구는 supply-check-complete로 표기하도록 정리.
+
+EMP 후보: 실제 활성 projectile 경로의 emp_pulse/plasma_arc를 긴 중심 방사선 대신 외곽 분절 방전/확산 파동으로 변경. plasma 시각 수명 .55초는 엔진 발사 수명과 일치. radius/피해/주기 미변경, reduced/busy 시 디테일 감소. 집중4건/타입 검사 통과. 실제 최종진화 화면/폰가로세로/위험예고 대비 검수 전 운영 적용 금지. 아이템 전체/오라 고도화 미완료.
+
+EMP 브라우저 후속: `tests/verify-survivors-emp.mjs`에서 빌드 번들의 엔진을 capture하고 명시적으로 plasma_grid/높은 체력 fixture를 주입했다. 엔진이 생성한 radius165 plasma 발사체를 실제 전투 renderer로 표시하고 pause overlay만 숨겨 캡처. 1440x900/390x844/844x390 x 일반/움직임 감소 6경로에서 실제 pulse 존재, 캔버스 nonblank, 오류/가로 넘침 없음. 폰 세로 캡처를 직접 확인했으며 몸체와 현장 경고 구역이 읽힌다. `artifacts/emp-fixture/report.json` 및 PNG. 자연 진화 도달/사람/실기기/혼잡 상태/전체 시간축/최종 아트 승인 증거가 아니다. PR140 draft 유지; 후속 혼잡/감쇠 검증 및 전체 회귀 필요.
+
+EMP 감쇠 후속: `tests/verify-emp-envelope.mjs`에서 실제 renderer를 일반/busy/reduced 상태별 시작(.55)/중간(.275)/종료(0)로 렌더링해 alpha 픽셀 검사. 9프레임 모두 중심48px 영역 alpha 합0, 중간 peak 감소, 종료 전체 alpha 합0 확인. busy 시작 alpha 합149255 < 일반268402. reduced는 움직임 감축이며 효과량 총합 감소를 주장하지 않음. `artifacts/emp-fixture/envelope.json`. 고정 캔버스 fixture이며 실제 과밀 전투/실기기 성능 증거는 아님.
+
 보급 입력 후속: 기존 모달 키보드 잠금과 상단 재개 버튼에 보급창을 포함했다. fixture UI 회귀에서 실제 보급창 열기, P/Esc 잠금, 일반 pause 중복 없음, 완료 버튼 후 playing 및 엔진 시간 증가를 확인했다. 자연 플레이/실기기 증거와 구분한다. EMP/오라 고도화는 아직 적용하지 않았다.
 
 1. 실제 보급 열기/닫기 후 이동·타이머·공격 재개 및 중복 dialog 없음 검증. 일반/보스 전환/레벨업 경계 상태 포함.
