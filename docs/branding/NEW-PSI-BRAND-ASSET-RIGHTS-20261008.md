@@ -26,7 +26,19 @@
 - 사용자 확인을 받으면 확인 날짜, 해당 파일/팩, 확인 주체를 기록한다. 제공자 약관 문서 미제공과 사용자 확인을 구분한다.
 - 파일 변경 시 원본 및 납품본 SHA-256을 함께 보존한다. 후보 교체는 기술 검사와 Director 승인 후 수행한다.
 
-## 아직 감사하지 않은 범위
+## 파일 기준선 추가 확인
+
+2026-10-08 저장소 납품본을 ingest 메타데이터와 대조했다. 아래 확인은 파일 존재와 SHA-256 일치만 의미하며 권리 또는 최종 승인 기록을 변경하지 않는다.
+
+| 범위 | 파일 대조 | 출처/승인 경계 |
+| --- | --- | --- |
+| Survivors Score V2 | `content/survivors-score-v2-ingest.json`의 9개 runtime URI 모두 존재, 납품본 SHA-256 모두 일치 | 원본 MP3 이름/해시가 기록되어 있으나 제공자 약관·공개 배포권 확인 근거는 이 목록에 없음. 최종 청취 승인 별도 |
+| Survivors SFX V1 | `content/survivors-sfx-v1-ingest.json` 중 runtime URI가 있는 8개 모두 존재/해시 일치 | 15개 기록 중 나머지 7개는 `id=null`, `AWAITING_DIRECTOR_MAPPING`이며 URI가 없는 미배치 후보. 운영 파일 누락으로 계산하지 않음. CANDIDATE/listeningApproval=false 유지 |
+| Episode 01 배경 | `content/episode01/final-art-ingest-manifest.json`의 8개 target_path 모두 존재/해시 일치 | ChatGPT image generation batch 및 runtime WebP 변환 기록. archive/ingest 검증은 제공자 약관 확인이나 최종 시각 승인과 다름 |
+
+음성 네 버전과 타격 효과음에 대한 사용자 권리 확인을 위 음악·SFX V1·배경에 확대 적용하지 않는다. 이번 문서 감사는 runtime, 원본 ingest 또는 승인 상태를 수정하지 않는다.
+
+## 남은 권리 확인
 
 - 타이틀 로고/대표 인물/배경/장비/애니메이션 원화 전체의 파일별 출처 및 제공자 약관.
 - 음악, SFX V1, 본편 성우/음원 전체의 파일별 권리와 최종 청취 승인.
