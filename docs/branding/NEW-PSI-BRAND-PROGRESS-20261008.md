@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 보호 장비 실제 빌드 fixture `verify-shield-combat.mjs` 3viewport x normal/busy/reduced x 흡수/소진/재충전27경로 통과. 실제 compiled absorb/tick 호출로45→15(overflow0)→0(overflow15)→45 생성, 실제 cell3 draw 호출/atlas 준비/phase·alpha 일치/paused gameTime와연속canvas hash불변/nonblank/오류·넘침없음. `artifacts/shield-combat/report.json`/27PNG. 폰세로 소진·폰가로 혼잡재충전 직접 확인: 몸체·노란예고 구분. 정지된 엔진 직접호출 fixture이므로 React HUD는 이전45/45로 남음; HUD 동기화/자연충돌/실기기/최종아트 검증으로 확대 금지.
+- 전체 첫 회귀1767pass/2fail/1skip은 이전 feedback 수동주입/즉시소진숨김 기대의 restraint2건. 실제absorb함수로 갱신, single shield owner/상태불변/감쇠끝 draw없음 조건 유지하여 집중10 및 전체1769pass1skip 재통과. 제품code는 전회eee17244 그대로. 실제 감쇠중간·끝 renderer 타임라인/자연발동과 최종시각검수는 후속. 배포한도 우회 없이 로컬 유지.
+
 - Vercel PR154 preview가 `Deployment rate limited - retry in 24 hours`로 실패. 운영153은 유지하며 한도 우회/유료 업그레이드/강제 운영배포를 하지 않음. 최신154 CI는 별도 확인 필요.
 - B3 보호 장비 후보: `ShieldPresentationTracker`가 실제 shield 감소/증가를 read-only로 관측. 흡수 .45초/소진 .45초/재충전 .6초로 기존 VFX cell3만 사용, 소진 직후0charge에서 기존 이펙트가 즉시 사라지는 경로 보완. 초기 관측·loadout replacement는 발동을 만들지 않음, gameTime pause 고정/혼잡 gain 제한/reduced 정적 잔량만 유지. 실제 absorb/tick/apply 함수 회귀 포함11건/타입/Vitebuild 통과. 새 원화·피해·capacity·cooldown·save 불변. branch `codex/brand-shield-events-20261008` 로컬 후보; 화면/픽셀/전체회귀/Director 검수 미완료, 운영/원격 미반영. 154문서 이력을 포함하지만 feature간 병합은 하지 않음.
 
