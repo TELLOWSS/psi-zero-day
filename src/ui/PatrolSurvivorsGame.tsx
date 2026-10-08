@@ -1,3 +1,5 @@
+import {SurvivorsDisplaySettings} from './SurvivorsDisplaySettings';
+import {readDisplaySettings,saveDisplaySettings,displayViewZoom,type DisplaySettings} from './survivors-display-settings';
 import {STAGE_THREAT_ART,THREAT_ART_GRID} from './survivors-threat-appearance';
 import {SurvivorsPerformanceBudget,survivorsViewportZoom} from './survivors-performance';
 import threatText from '../../content/localization/survivors-stage-threats-ko.json';
@@ -1322,14 +1324,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
+  const [displaySettings,setDisplaySettings]=useState(readDisplaySettings);
+  const [displaySaved,setDisplaySaved]=useState(true);
+  const displaySettingsRef=useRef(displaySettings);
+  const changeDisplaySettings=(next:DisplaySettings)=>{displaySettingsRef.current=next;performanceBudgetRef.current?.configure(next);setDisplaySettings(next);setDisplaySaved(saveDisplaySettings(next));};
   const performanceBudgetRef = useRef<SurvivorsPerformanceBudget | null>(null);
   if(!performanceBudgetRef.current)performanceBudgetRef.current=new SurvivorsPerformanceBudget(window.matchMedia?.('(pointer:coarse)').matches??false);
+  useEffect(()=>{performanceBudgetRef.current?.configure(displaySettingsRef.current);},[]);
+  const systemReducedMotionRef=useRef(false);
   const viewportRef = useRef({width:0,height:0});
   const reducedMotionRef = useRef(false);
   const hudBottomRef = useRef(0);
   useEffect(() => {
     const query = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-    const update = () => { reducedMotionRef.current = query?.matches ?? false; };
+    const update = () => { systemReducedMotionRef.current = query?.matches ?? false; };
     update(); query?.addEventListener('change', update);
     const header = containerRef.current?.querySelector('header');
     const measureViewport = () => {
@@ -1380,6 +1388,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       const engine = engineRef.current;
       if (!engine) return;
+      const display=displaySettingsRef.current;
+      reducedMotionRef.current=systemReducedMotionRef.current||display.motion==='reduced';
       const budget=performanceBudgetRef.current!;
       if(engine.state.phase==='playing')budget.sample(frameMilliseconds);
       if(containerRef.current)containerRef.current.dataset.quality=budget.level;
@@ -1868,7 +1878,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
       let shakeY = 0;
-      if (screenShakeRef.current > 0 && !reducedMotionRef.current) {
+      if (screenShakeRef.current > 0 && !reducedMotionRef.current && display.shake) {
         const clampedShake = Math.min(8.0, screenShakeRef.current * 0.35);
         shakeX = Math.round((Math.sin(engine.state.gameTime * 71) * 0.5) * clampedShake * 2);
         shakeY = Math.round((Math.sin(engine.state.gameTime * 93 + 1.4) * 0.5) * clampedShake * 2);
@@ -1878,16 +1888,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Responsive Portrait / Landscape Zoom Factor
 
       // Signature events apply a brief, controlled push-in instead of a disorienting hard cut.
-      const baseZoom = survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT);
+      const baseZoom = displayViewZoom(survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT),displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT,display.view);
       const pressure=signaturePressureRef.current;
       signaturePressureRef.current=Math.max(0,pressure-dt*1.55);
-      const renderZoom=baseZoom*(1+(reducedMotionRef.current?0:pressure*.018));
+      const renderZoom=baseZoom*(1+(reducedMotionRef.current||!display.shake?0:pressure*.018));
       const viewW = displayW / renderZoom;
       const viewH = displayH / renderZoom;
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
       const camera=survivorsCamera(player,viewW,viewH,WORLD_WIDTH,WORLD_HEIGHT,baseZoom);
-      const kick=direction.camera(reducedMotionRef.current);
+      const kick=direction.camera(reducedMotionRef.current||!display.shake);
       const camX = camera.x + shakeX + kick.x;
       const camY = camera.y + shakeY + kick.y;
 
@@ -3202,7 +3212,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 9. RENDER PARTICLES
       const aliveParticles: Particle[] = [];
-      for (const p of particlesRef.current) {
+      for (const p of particlesRef.current.slice(0,budget.particleLimit)) {
         p.life -= dt;
         p.x += p.vx * dt;
         p.y += p.vy * dt;
@@ -3301,7 +3311,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       floatingTextsRef.current = aliveTexts;
 
       // 12. SCREEN-SPACE DAMAGE VIGNETTE FLASH (Tactile Pain Feedback)
-      if (damageFlashRef.current > 0 && !reducedMotionRef.current) {
+      if (damageFlashRef.current > 0 && !reducedMotionRef.current && display.flash) {
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0); // screen coordinates
         const cX = canvas.width / 2;
@@ -3856,7 +3866,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <div className="survivors-store-loadout" aria-label={storeText.status}>{storeInventory.equipped.length ? storeInventory.equipped.map(id => <span key={id}><SurvivorsPremiumArt item={STORE_ITEMS.find(item=>item.id===id)!}/>{storeText.items[id as keyof typeof storeText.items].name}</span>) : storeText.empty}</div>
             </div>
 
-            <div hidden={preflightTab!=='settings'}><SurvivorsAudioMixer audio={audioRef.current}/><button type="button" className="survivors-btn-secondary" onClick={()=>setShowManual(true)}>{gameManualText('open')}</button></div>
+            <div hidden={preflightTab!=='settings'}><SurvivorsDisplaySettings settings={displaySettings} onChange={changeDisplaySettings} saved={displaySaved}/><SurvivorsAudioMixer audio={audioRef.current}/><button type="button" className="survivors-btn-secondary" onClick={()=>setShowManual(true)}>{gameManualText('open')}</button></div>
 
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>
@@ -4093,7 +4103,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <div className="survivors-modal-content">
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
-            <SurvivorsAudioMixer audio={audioRef.current}/>
+            <SurvivorsDisplaySettings settings={displaySettings} onChange={changeDisplaySettings} saved={displaySaved}/><SurvivorsAudioMixer audio={audioRef.current}/>
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls}</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">

@@ -215,8 +215,26 @@ try {
       await sleep(250);await screenshot(cdp,`${width}x${height}-threat-silhouettes.png`);
       await evaluate(cdp,"window.qaMobileEngine.state.stage={...window.qaMobileEngine.state.stage,theme:'surface_logistics',stageNumber:5}");
       await sleep(150);await screenshot(cdp,`${width}x${height}-steel-silhouettes.png`);
-      const pass=appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
-      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,errors,pass});
+      // Exercise real pause-menu controls, then reload to check persistence.
+      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
+      const qualities=[];
+      for(const quality of ['low','balanced','high','auto']){
+        await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');panel.open=true;const select=panel.querySelector('select');const setter=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set;setter.call(select,'${quality}');select.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+        await sleep(120);qualities.push(await evaluate(cdp,"document.querySelector('.survivors-container').dataset.quality"));
+      }
+      await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');const box=panel.querySelector('input[type=checkbox]');box.click();})()`);
+      const savedDisplay=await evaluate(cdp,"JSON.parse(localStorage.getItem('psi.survivors.display.v1'))");
+      await screenshot(cdp,`${width}x${height}-display-settings.png`);
+      await cdp.send('Page.navigate',{url:baseUrl});
+      await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
+      await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-display-settings'))");
+      const restored=await evaluate(cdp,"document.querySelector('.survivors-display-settings select').value==='auto'&&!document.querySelector('.survivors-display-settings input').checked");
+      const customization={qualities,savedDisplay,restored};
+      await evaluate(cdp,"localStorage.removeItem('psi.survivors.display.v1')");
+      const pass=restored&&qualities[0]==='low'&&qualities[1]==='balanced'&&qualities[2]==='high'&&appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
+      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
   }
 } finally {
