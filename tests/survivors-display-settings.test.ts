@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {sanitizeDisplaySettings,DEFAULT_DISPLAY_SETTINGS,displayViewZoom} from '../src/ui/survivors-display-settings';
+import {sanitizeDisplaySettings,DEFAULT_DISPLAY_SETTINGS,displayViewZoom,decayDisplayEffect} from '../src/ui/survivors-display-settings';
 import {SurvivorsPerformanceBudget} from '../src/ui/survivors-performance';
 describe('presentation customization',()=>{
  it('recovers corrupt/partial saves and rejects unknown values',()=>{
@@ -23,6 +23,15 @@ describe('presentation customization',()=>{
   expect(budget.particleLimit).toBe(0);expect(budget.particleFraction).toBe(0);expect(budget.ambientLighting).toBe(false);
   budget.configure({...DEFAULT_DISPLAY_SETTINGS,particles:'sparse'});expect(budget.particleFraction).toBeCloseTo(.3);
   expect(budget.pixelRatio(4,1180,820)**2*1180*820).toBeLessThanOrEqual(2800001);
+ });
+ it('discards disabled or reduced effects while paused and never replays them',()=>{
+  for(const [value,rate] of [[8,35],[.45,2.2]]){
+   const discarded=decayDisplayEffect(value!,0,rate!,false);
+   expect(discarded).toBe(0);
+   expect(decayDisplayEffect(discarded,.016,rate!,true)).toBe(0);
+   expect(decayDisplayEffect(value!,.016,rate!,true)).toBeGreaterThan(0);
+   expect(decayDisplayEffect(value!,1,rate!,true)).toBe(0);
+  }
  });
  it('widens/narrows view but never reveals space beyond the world',()=>{
   expect(displayViewZoom(.7,390,844,1400,1800,'wide')).toBeLessThan(.7);
