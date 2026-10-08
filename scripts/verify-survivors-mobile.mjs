@@ -238,8 +238,8 @@ try {
           const beforeMotion=await evaluate(cdp,`(async()=>{
             const {workfaceThreat}=await import('/src/ui/survivors-workface-threats.ts');
             const {PATROL_STAGES}=await import('/src/engine/patrol-survivors-engine.ts');
-            const e=window.qaMobileEngine,row=workfaceThreat(${stageNumber});e.state.stage=PATROL_STAGES['stage_'+String(${stageNumber}).padStart(2,'0')];e.state.gameTime=20;e.state.hazards=[];
-            e.spawnHazard(row.type);const h=e.state.hazards.at(-1);h.id='qa_motion_1';h.x=e.state.player.x+160;h.y=e.state.player.y+100;h.hp=h.maxHp=100000;h.damage=0;h.speed=100;h.isStageBoss=false;h.signatureEventId=undefined;h.variant=undefined;h.behavior=undefined;h.motion={phase:h.type==='FALLING_DEBRIS'?'fall':'approach',timer:.45,directionX:-1,directionY:0};
+            const e=window.qaMobileEngine,row=workfaceThreat(${stageNumber});e.state.stage=PATROL_STAGES['stage_'+String(${stageNumber}).padStart(2,'0')];e.state.gameTime=20;e.state.hazards=[];e.state.projectiles=[];for(const key of Object.keys(e.state.activePerks))e.state.activePerks[key]=0;
+            e.spawnHazard(row.type);const h=e.state.hazards.at(-1);h.id='qa_motion_1';h.x=e.state.player.x+160;h.y=e.state.player.y+100;h.hp=h.maxHp=100000;h.damage=0;h.speed=100;h.isStageBoss=false;h.signatureEventId=undefined;h.variant=undefined;h.behavior=undefined;h.motion={phase:h.type==='FALLING_DEBRIS'?'fall':h.type==='RUNAWAY_CART'?'charge':'approach',timer:h.type==='RUNAWAY_CART'?1.05:.45,directionX:-1,directionY:0};
             return {stage:${stageNumber},type:h.type,x:h.x,y:h.y,timer:h.motion.timer};
           })()`);
           await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);

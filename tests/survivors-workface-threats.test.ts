@@ -2,8 +2,8 @@ import {describe,it,expect} from 'vitest';
 import {readFile} from 'node:fs/promises';
 import sharp from 'sharp';
 import {WORKFACE_CROPS,WORKFACE_THREATS,workfaceThreatAppearance,workfaceThreatCopy,workfaceThreatPose} from '../src/ui/survivors-workface-threats';
-import {PATROL_STAGES} from '../engine/patrol-survivors-engine';
-import type {HazardType,PatrolStageId} from '../domain/patrol-survivors';
+import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
+import type {HazardType,PatrolStageId} from '../src/domain/patrol-survivors';
 describe('fifty authored workface identities',()=>{
  it('gives each existing stage a unique complete identity within its real spawn family',()=>{
   expect(WORKFACE_THREATS).toHaveLength(50);expect(new Set(WORKFACE_THREATS.map(r=>r.id)).size).toBe(50);
