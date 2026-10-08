@@ -10,9 +10,10 @@ export function premiumPresenceProfile(ids:readonly string[],busy=false,actionSt
   const palettes=(Object.keys(weights) as Palette[]).filter(p=>weights[p]>0).sort((a,b)=>weights[b]-weights[a]);
   const action=Number.isFinite(actionStrength)?Math.max(0,Math.min(1,actionStrength)):0;
   const count=Math.min(6,items.length);
+  const expansion=action*(busy?.6:1);
   return {count,left:palettes[0]??'gold',right:palettes[1]??palettes[0]??'gold',
-    width:88+count*3+action*32,height:104+count*3+action*28,
-    alpha:(busy?.12:.16)+count*.012+action*.54};
+    width:88+count*3+expansion*32,height:104+count*3+expansion*28,
+    alpha:(busy?.12:.16)+count*.012+action*(busy?.24:.54)};
 }
 
 /** Body-local authored wisps: the opaque actor is drawn afterward over the empty center. */

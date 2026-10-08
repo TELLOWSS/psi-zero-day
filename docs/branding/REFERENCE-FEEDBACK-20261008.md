@@ -11,6 +11,10 @@
 
 ## 다음 순서
 
+EMP 후보는 2026-10-08 사용자가 보여준 표현의 운영 반영을 직접 승인. PR140 최종 f64d51a 검사 성공 후 운영 커밋 `b384914547f5df0b3a7fac3db4cb38d0a85a5de4`, 배포 `dpl_3tewDgkHfFtbfjtNwXq8KGWwyPNS` READY 및 별칭 확인. 운영 진화 fixture 6경로 통과. 전체 장비/오라/실기기 승인으로 확대하지 않음.
+
+오라 혼잡 후보: 기존 authored wisps/frame crossfade/장비 팔레트 유지. busy 발동 추가 alpha .54→.24, 팽창 폭 60%로 제한. 일반 발동과 idle 장비 수 증가 계약 유지. 집중9건 통과. 실제 장비 조합/혼잡 화면 캡처 및 위험예고 대비 검수 전 운영 적용 보류. 전체 장비 효과 그래픽 고도화 완료가 아님.
+
 2026-10-08 운영 PR139 커밋 `79aa594f211be0a0199191bb200ba68712d15014`에서 새 저장 UI 입력 bot으로 첫 보급 확인. 엔진 상태는 읽기만 하는 bundle 계측이며 이동/선택/보급은 UI 입력. 게임 시간 65.23768초에서 보급 pause, P/Esc 후 동일 시간, 완료 후 65.93768초/playing. 중복 pause 0, 오류/실패 요청/넘침 없음. 증거 `artifacts/natural-progression/supply-resume/report.json`; 사람/실기기 검증과 구분. 성공 후 조기 종료를 이전 보고서는 observation-timeout으로 표기했지만 supplyCheck.pass=true이며 후속 도구는 supply-check-complete로 표기하도록 정리.
 
 EMP 후보: 실제 활성 projectile 경로의 emp_pulse/plasma_arc를 긴 중심 방사선 대신 외곽 분절 방전/확산 파동으로 변경. plasma 시각 수명 .55초는 엔진 발사 수명과 일치. radius/피해/주기 미변경, reduced/busy 시 디테일 감소. 집중4건/타입 검사 통과. 실제 최종진화 화면/폰가로세로/위험예고 대비 검수 전 운영 적용 금지. 아이템 전체/오라 고도화 미완료.
