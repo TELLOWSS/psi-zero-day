@@ -94,7 +94,7 @@ export class ProjectileFeedbackLayer {
         ctx.beginPath();ctx.ellipse(0,2,8,3,0,0,Math.PI*2);ctx.stroke();
       } else if (reducedMotion) {
         ctx.beginPath();ctx.ellipse(0,0,7,3,0,0,Math.PI*2);ctx.stroke();
-      } else if (spec.family === 'powder' || spec.family === 'frost') {
+      } else if (spec.family === 'powder' || spec.family === 'frost' || e.kind === 'grout_slug' || e.kind === 'hydraulic_wave') {
         // Reuse cached materials: a compact source puff becomes a broader
         // contact cloud and then a quiet, shrinking residual.
         const r = Math.min(30, Math.max(5,e.radius*.55)) * (e.phase === 'impact' ? 1+t*.7 : 1-t*.35);

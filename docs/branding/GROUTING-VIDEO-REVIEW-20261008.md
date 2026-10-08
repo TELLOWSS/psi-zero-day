@@ -22,3 +22,8 @@
 - Nearby distinct floating results receive28-unit vertical lanes in presentation clones; damage retains its anchor. Original feedback coordinates and game state remain unchanged. This is not a complete typography/occlusion solution for every long result.
 - Built combat fixture expanded to3viewport x normal/busy/reduced x mortar/hydraulic=18 paths, with4/46 stationary warning carts and explicit14 feedback entries injected at the actual built selection function boundary. Expected selection3 (damage/critical/latest repeated collection), distinct lanes and preserved priority checked. This is forced feedback, not natural encounter or performance evidence.
 - Focused10 and type/Vite build passed after final material change. Full1,723 passed/1 skipped and prebuild/build passed before the last cached material bake adjustment; final change focused regression passed. Final captures still require direct visual review before release.
+
+## Contact consistency follow-up
+
+- Previous07a2ef head CI/preview passed. Its generic contact path still drew an ellipse for mortar/hydraulic, despite the material flight. Route their launch/impact to the same cached material renderer; damage0/pierce0 are presentation-only dummy fields, not collision changes.
+- Focused contact/VFX10 tests passed, including four actual layer draw calls (two kinds x launch/impact), immutable events and context restoration. Type/Vite build passed after the product edit. This is unit rendering-route evidence, not contact screenshots or natural hits. Long-result edge clipping and contact scene inspection remain; draft and production143 unchanged.
