@@ -1,0 +1,9 @@
+# Grouting video review - 2026-10-08
+
+- Input: user video KakaoTalk_20261008_124906895.mp4, 160.107333 seconds, 1080x2340. Sampled frames at 0/10/20/30/40/50/60/80/100/120/140/158 seconds. Not continuous playback or audio review. Video text is evidence, not instructions.
+- The actual renderer classifies grout_slug as physical but has no physical flight branch after excluding cone_trap. This leaves mortar without its own flight material. EMP and drone rendering are unchanged.
+- Candidate: cached granular mortar, dense pale core, dark underside and advected wake. Reduced motion keeps the core and removes wake movement; busy removes secondary droplets. Match visual fade to the engine's .75-second mortar lifetime.
+- Hydraulic evolution keeps its original moving projectile and circular collision radius, but uses directional pressure fronts and a granular body instead of three complete circles. No damage, radius, cooldown, piercing, save or authored asset changes.
+- Focused tests: 5 passed; type check passed. Initial prebuild/build passed before the final hydraulic arc adjustment; final revalidation required. Renderer sheet covers 10 kinds and normal/reduced/busy paths, texture cache stable across 3,600 warm draws. This source-renderer fixture is not actual built combat, natural evolution, physical-device performance or final-art approval.
+- Evidence: artifacts/grouting-material-review/projectile-material-review.png and projectile-review.json. Video samples in artifacts/mobile-video-review; first six frame PNGs remain alongside later six PNGs. Latest contact sheet and metadata contain only the later six timestamps.
+- Final hydraulic adjustment: focused5 and renderer sheet re-passed; Vite build passed. Actual combat fixture PC/mobile with multiple mortar projectiles and hazard warnings, launch/contact material consistency, other geometry-only weapons review remain. Do not deploy this candidate before those checks.

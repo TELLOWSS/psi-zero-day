@@ -19,11 +19,11 @@ await page.addScriptTag({content:code+`
  ctx.fillStyle='rgba(12,22,32,.80)';ctx.fillRect(0,0,1440,1060);
  ctx.fillStyle='#e5e7eb';ctx.font='bold 23px sans-serif';ctx.fillText('발사체 실제 렌더러 · 형태 / 잔광 / 움직임 감소',28,40);
  ctx.font='16px sans-serif';ctx.fillText('표현 검수용 고정 장면 — 자연 진행 플레이 증거와 구분',28,68);
- const rows=[['radio','무전 지시',10],['extinguisher','분말 소화기',22],['drone_laser','드론 지시광',7],['satellite_wave','위성 브로드캐스트',28],['cryo_blast','극저온 분사',20],['tesla_bolt','테슬라 통제',25],['emf_beam','전자기 차단',36],['hunter_beam','진화 드론 지시광',9],['shout_shockwave','작업중지 압력파',40]];
+ const rows=[['radio','무전 지시',10],['extinguisher','분말 소화기',22],['drone_laser','드론 지시광',7],['satellite_wave','위성 브로드캐스트',28],['cryo_blast','극저온 분사',20],['tesla_bolt','테슬라 통제',25],['emf_beam','전자기 차단',36],['hunter_beam','진화 드론 지시광',9],['grout_slug','고압 몰탈 분사',22],['hydraulic_wave','진화 압력 분사',40]];
  const cols=[['기본 표현',1,false,false],['강화 표현',5,false,false],['움직임 감소 · 혼잡',5,true,true]],checks=[];
  cols.forEach(([label],i)=>ctx.fillText(label,400+i*340,110));
  for(let row=0;row<rows.length;row++){
-  const [kind,label,radius]=rows[row],y=170+row*102;ctx.fillStyle='#dbe5ee';ctx.fillText(label,25,y+6);
+  const [kind,label,radius]=rows[row],y=170+row*90;ctx.fillStyle='#dbe5ee';ctx.fillText(label,25,y+6);
   const hashes=[];
   for(let col=0;col<3;col++){
    const [,level,reduced,busy]=cols[col],x=470+col*340;
@@ -43,6 +43,6 @@ await page.addScriptTag({content:code+`
 })();`});
 await page.waitForFunction(()=>window.__vfxReview?.done);
 await page.screenshot({path:path.join(out,'projectile-material-review.png')});
-const result=await page.evaluate(()=>window.__vfxReview);result.errors=errors;result.pass=result.kinds.length===9&&result.radioLevelsDiffer&&result.textureCount===result.textureCountAfterWarmDraws&&!errors.length;
+const result=await page.evaluate(()=>window.__vfxReview);result.errors=errors;result.pass=result.kinds.length===10&&result.radioLevelsDiffer&&result.textureCount===result.textureCountAfterWarmDraws&&!errors.length;
 fs.writeFileSync(path.join(out,'projectile-review.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 await browser.close();if(!result.pass)process.exitCode=1;

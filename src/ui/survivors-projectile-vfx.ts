@@ -13,7 +13,7 @@ export const PROJECTILE_VFX = {
   emf_beam: { family:'barrier', color:'#dfb4d4', trail:0, life:.3 },
   shout_shockwave: { family:'shock', color:'#f7d689', trail:0, life:.3 },
   cone_trap: { family:'physical', color:'#f7b34f', trail:0, life:.3 },
-  grout_slug: { family:'physical', color:'#94a3b8', trail:24, life:.35 },
+  grout_slug: { family:'physical', color:'#cbd2c9', trail:24, life:.75 },
   hydraulic_wave: { family:'shock', color:'#38bdf8', trail:36, life:.3 },
   emp_pulse: { family:'arc', color:'#60a5fa', trail:0, life:.4 },
   plasma_arc: { family:'arc', color:'#a78bfa', trail:0, life:.55 },
@@ -45,7 +45,7 @@ function texture(name:string,color:string):HTMLCanvasElement | undefined {
     const g=ctx.createRadialGradient(128,64,2,128,64,60);
     g.addColorStop(0,color);g.addColorStop(.30,color);g.addColorStop(1,'transparent');
     ctx.globalAlpha=name==='powder'?.32:.20;ctx.fillStyle=g;ctx.fillRect(0,0,256,128);
-    if(name==='powder'||name==='frost') {
+    if(name==='powder'||name==='frost'||name==='grout') {
       // Deterministic granules avoid random flicker and allocate no particle objects.
       for(let i=0;i<48;i++){
         const a=i*2.39996,r=Math.sqrt((i+.5)/48)*54,x=128+Math.cos(a)*r,y=64+Math.sin(a)*r*.75;
@@ -80,7 +80,22 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
     for(let i=0;i<v.tier;i++){ctx.beginPath();ctx.moveTo(-r-5-i*5,-3);ctx.lineTo(-r-5-i*5,3);ctx.stroke();}ctx.restore();
   }
   const phase=reducedMotion?0:time*3;
-  if(spec.family==='powder'||spec.family==='frost'){
+  if(p.kind==='grout_slug'){
+    ctx.rotate(v.angle);
+    // Dense mortar core with a granular wake; never an emissive energy beam.
+    ctx.globalAlpha=v.alpha*.9;stamp(ctx,'grout',spec.color,0,0,r*2.1,r*.95);
+    ctx.globalAlpha=v.alpha*.62;stamp(ctx,'grout','#89958e',-r*.45,r*.12,r*1.5,r*.6);
+    ctx.strokeStyle='#edf0df';ctx.lineWidth=Math.max(2,r*.16);
+    line(ctx,[[-r*.65,-r*.12],[r*.35,0]],'#edf0df',Math.max(2,r*.16));
+    if(v.trail){ctx.globalAlpha=v.alpha*.38;stamp(ctx,'grout',spec.color,-v.trail*.65,0,r*2.1,r*.7);}
+    if(v.detail){
+      for(let i=0;i<5;i++){
+        const drift=(time*3+i*.2)%1;
+        ctx.globalAlpha=v.alpha*(1-drift)*.55;
+        stamp(ctx,'grout',spec.color,-r-drift*v.trail,Math.sin(i*2.4)*r*(.3+drift*.3),r*.45,r*.3);
+      }
+    }
+  } else if(spec.family==='powder'||spec.family==='frost'){
     ctx.rotate(v.angle);const cloud=spec.family==='powder'?'powder':'frost';
     ctx.globalAlpha=v.alpha*.82;stamp(ctx,cloud,spec.color,0,0,r*2.3,r*1.45);
     if(v.trail){ctx.globalAlpha=v.alpha*.26;stamp(ctx,cloud,spec.color,-v.trail*.6,0,r*2.5,r*1.25);}
@@ -148,12 +163,28 @@ export function drawProjectileVfx(ctx:CanvasRenderingContext2D,p:Readonly<Projec
     for(let i=0;i<columns;i++){const x=(i/(columns-1)-.5)*r*1.5,h=Math.sqrt(Math.max(0,r*r-x*x));line(ctx,[[x,-h],[x,h]],spec.color,.8);}
     ctx.globalAlpha=v.alpha*.8;line(ctx,[[-r*.75,0],[r*.75,0]],'#fceafa',2);
   } else if(spec.family==='shock'){
+    if(p.kind==='hydraulic_wave'){
+      ctx.save();ctx.rotate(v.angle);
+      ctx.globalAlpha=v.alpha*(busy?.22:.4);
+      stamp(ctx,'grout','#cbd2c9',-r*.25,0,r*1.6,r*.55);
+      if(v.detail){
+        for(let i=0;i<5;i++){
+          const advance=(time*2+i*.2)%1;
+          ctx.globalAlpha=v.alpha*(1-advance)*.35;
+          stamp(ctx,'grout','#a6bcb8',r*(advance-.55),Math.sin(i*2.4)*r*.24,r*.32,r*.18);
+        }
+      }
+      ctx.restore();
+    }
     // Thin concentric pressure fronts retain the floor and hazard telegraphs.
     for(let i=0;i<3;i++){
       const rr=Math.max(1,r-i*6);ctx.globalAlpha=v.alpha*(i===0?.80:.28);ctx.strokeStyle=i===0?'#fff4cb':spec.color;ctx.lineWidth=i===0?2.5:1;
-      ctx.beginPath();ctx.arc(0,0,rr,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();
+      if(p.kind==='hydraulic_wave')ctx.arc(0,0,rr,v.angle-1.35,v.angle+1.35);
+      else ctx.arc(0,0,rr,0,Math.PI*2);
+      ctx.stroke();
     }
-    if(v.detail){ctx.globalAlpha=v.alpha*.45;for(let i=0;i<12;i++){const a=i*Math.PI/6;line(ctx,[[Math.cos(a)*(r-4),Math.sin(a)*(r-4)],[Math.cos(a)*(r+4),Math.sin(a)*(r+4)]],spec.color,1.5);}}
+    if(v.detail){ctx.globalAlpha=v.alpha*.45;for(let i=0;i<12;i++){const a=p.kind==='hydraulic_wave'?v.angle-1.3+i*2.6/11:i*Math.PI/6;line(ctx,[[Math.cos(a)*(r-4),Math.sin(a)*(r-4)],[Math.cos(a)*(r+4),Math.sin(a)*(r+4)]],spec.color,1.5);}}
   }
   ctx.restore();
 }
