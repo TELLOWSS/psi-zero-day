@@ -24,14 +24,27 @@ try{
    return {text:e.querySelector('label').textContent,label,buttons,pass:buttons.every(b=>b.height>=43.5&&!overlap(label,b)&&b.left>=bounds.left-.5&&b.right<=bounds.right+.5)&&buttons.every((b,i)=>buttons.slice(i+1).every(other=>!overlap(b,other)))};
   }));
   await page.screenshot({path:`${output}/${width}x${height}-loadout.png`});
-  await page.getByRole('tab',{name:copy.fitting,exact:true}).click();await page.locator('.survivors-fitting-action button').scrollIntoViewIfNeeded();
+  await page.getByRole('tab',{name:copy.fitting,exact:true}).click();
+  for(const [category,id] of [['communication','broadcast_crown'],['tempo','sync_gauntlet'],['logistics','extraction_pack'],['protection','shock_mantle'],['companion','rescue_wing'],['tactics','predictive_watch']]){
+    await page.locator(`.survivors-fitting-slots select[aria-label="${copy.categories[category]}"]`).selectOption(id);
+  }
+  const comparisons=await page.locator('.survivors-fitting-summary dl > div').evaluateAll(rows=>rows.map(row=>{
+    const dt=row.querySelector('dt'),dd=row.querySelector('dd'),a=dt.getBoundingClientRect(),b=dd.getBoundingClientRect(),c=row.getBoundingClientRect();
+    return {label:dt.textContent,value:Number(dd.childNodes[0].textContent),pass:a.right<=b.left+1&&a.left>=c.left&&b.right<=c.right+1&&dt.scrollWidth<=dt.clientWidth+1&&dd.scrollWidth<=dd.clientWidth+1};
+  }));
+  const values=Object.fromEntries(comparisons.map(r=>[r.label,r.value]));
+  const effectValues=values[copy.fittingShield]===60&&values[copy.fittingShieldPeriod]===18&&values[copy.fittingRegen]===.8&&values[copy.fittingUltimate]===.35&&values[copy.fittingSupport]===2;
+  await page.locator('.survivors-fitting-summary dl').scrollIntoViewIfNeeded();
+  await page.screenshot({path:`${output}/${width}x${height}-fitting-effects.png`});
+  await page.locator('.survivors-fitting-action button').scrollIntoViewIfNeeded();
   const fitting=await page.evaluate(()=>{
    const action=document.querySelector('.survivors-fitting-action'),summary=document.querySelector('.survivors-fitting-summary'),button=action.querySelector('button'),b=button.getBoundingClientRect(),a=action.getBoundingClientRect(),s=summary.getBoundingClientRect(),modal=document.querySelector('.survivors-equipment-workspace').getBoundingClientRect();
    return {position:getComputedStyle(action).position,summaryBottom:s.bottom,actionTop:a.top,buttonHeight:b.height,buttonReachable:b.top>=modal.top&&b.bottom<=modal.bottom+1,pass:s.bottom<=a.top+1&&b.height>=43.5&&b.top>=modal.top&&b.bottom<=modal.bottom+1};
   });
   await page.screenshot({path:`${output}/${width}x${height}-fitting-bottom.png`});
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
-  rows.push({width,height,descriptions,slots,fitting,overflow,errors,pass:descriptions.length===16&&descriptions.every(d=>d.pass)&&slots.length===2&&slots.every(s=>s.pass)&&fitting.pass&&!overflow&&!errors.length});await page.close();
+  const wallet=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.survivors.store_wallet')));
+  rows.push({width,height,descriptions,slots,comparisons,effectValues,fitting,overflow,errors,pass:descriptions.length===16&&descriptions.every(d=>d.pass)&&slots.length===2&&slots.every(s=>s.pass)&&comparisons.every(r=>r.pass)&&effectValues&&wallet.credits===1260&&wallet.inventory.equipped.length===2&&fitting.pass&&!overflow&&!errors.length});await page.close();
  }
  fs.writeFileSync(`${output}/report.json`,JSON.stringify({scope:'EXPLICIT_REFERENCE_INVENTORY_UI_LAYOUT_NOT_PHYSICAL_DEVICE',url,rows},null,2));console.log(JSON.stringify(rows));if(rows.some(r=>!r.pass))process.exitCode=1;
 }finally{await browser.close();}

@@ -2277,7 +2277,8 @@
 .survivors-fitting-summary p { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .survivors-fitting-summary dl { margin: 12px 0; font-size: 13px; }
 .survivors-fitting-summary dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid #34443a; }
-.survivors-fitting-summary dd { margin: 0; font-variant-numeric: tabular-nums; }
+.survivors-fitting-summary dd { margin: 0; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.survivors-fitting-summary dt { min-width: 0; overflow-wrap: anywhere; }
 .survivors-fitting-summary dd span { color: #b7ebae; }
 .survivors-fitting-summary button, .survivors-store-card .survivors-fitting-button { background: transparent; border: 1px solid #688373; color: #e2eee6; border-radius: 4px; padding: 8px 10px; cursor: pointer; }
 .survivors-store-card .survivors-fitting-button[aria-pressed="true"] { border-color: #b7ebae; background: #283f31; }

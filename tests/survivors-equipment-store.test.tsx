@@ -3,8 +3,30 @@ import {act} from 'react';
 import {createRoot} from 'react-dom/client';
 import {expect,it,vi} from 'vitest';
 import {SurvivorsEquipmentStore} from '../src/ui/SurvivorsEquipmentStore';
+import copy from '../content/localization/survivors-store-ko.json';
+import {STORE_ITEMS} from '../src/domain/survivors-store';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
 vi.mock('../src/ui/SurvivorsFittingPreview', () => ({ SurvivorsFittingPreview: () => <div/> }));
+it.each([
+ ['precision_link',copy.fittingCrit,'crit',100],['recovery_cell',copy.fittingRegen,'regen',1],
+ ['shock_mantle',copy.fittingShield,'shield',1],['shock_mantle',copy.fittingShieldPeriod,'shieldPeriod',1],
+ ['inspection_wing',copy.fittingSuppression,'suppression',100],['predictive_watch',copy.fittingUltimate,'ultimate',1],
+ ['barrier_forge',copy.fittingLines,'lines',1],['predictive_watch',copy.fittingSupport,'support',1],
+] as const)('shows %s effect %s without a purchase',(id,label,key,multiplier)=>{
+ const host=document.createElement('div'),root=createRoot(host),change=vi.fn(),item=STORE_ITEMS.find(item=>item.id===id)!;
+ try{
+  act(()=>root.render(<SurvivorsEquipmentStore inventory={{owned:[],equipped:[]}} credits={0} message="" onChange={change} characterId="player"/>));
+  const row=()=>[...host.querySelectorAll('.survivors-fitting-summary dl > div')].find(r=>r.querySelector('dt')?.textContent===label);
+  const initial=Number(row()?.querySelector('dd')?.childNodes[0]?.textContent??0);
+  const select=host.querySelector<HTMLSelectElement>(`select[aria-label="${copy.categories[item.category]}"]`)!;
+  act(()=>{select.value=id;select.dispatchEvent(new Event('change',{bubbles:true}));});
+  const value=Number(row()!.querySelector('dd')!.childNodes[0]!.textContent);
+  expect(value).toBeCloseTo(initial+item.effects[key]!*multiplier);
+  expect(change).not.toHaveBeenCalled();
+  act(()=>{select.value='';select.dispatchEvent(new Event('change',{bubbles:true}));});
+  if(initial===0)expect(row()).toBeUndefined();
+ }finally{act(()=>root.unmount());}
+});
 it('filters gear, shows the replacement slot and never offers an unaffordable purchase',()=>{
   const host=document.createElement('div'),root=createRoot(host),change=vi.fn();
   try{

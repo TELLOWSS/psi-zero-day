@@ -54,6 +54,16 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
     [copy.fittingPickup, baseline.player.pickupRadius, preview.player.pickupRadius],
     [copy.fittingDamage, baseline.player.damageMultiplier * 100, preview.player.damageMultiplier * 100],
     [copy.fittingCooldown, baseline.player.cooldownReduction * 100, preview.player.cooldownReduction * 100],
+    ...([
+      [copy.fittingCrit, baseline.player.critRate * 100, preview.player.critRate * 100],
+      [copy.fittingRegen, baseline.player.regenRate, preview.player.regenRate],
+      [copy.fittingShield, baseline.premiumGear!.effects.shield, preview.premiumGear!.effects.shield],
+      [copy.fittingShieldPeriod, baseline.premiumGear!.effects.shieldPeriod, preview.premiumGear!.effects.shieldPeriod],
+      [copy.fittingSuppression, baseline.premiumGear!.effects.suppression * 100, preview.premiumGear!.effects.suppression * 100],
+      [copy.fittingUltimate, baseline.premiumGear!.effects.ultimate, preview.premiumGear!.effects.ultimate],
+      [copy.fittingLines, baseline.premiumGear!.effects.lines, preview.premiumGear!.effects.lines],
+      [copy.fittingSupport, baseline.premiumGear!.effects.support, preview.premiumGear!.effects.support],
+    ] as const).filter(([,before,after])=>before!==0||after!==0),
   ] as const;
   const categories = Object.keys(copy.categories) as StoreCategory[];
   const items = STORE_ITEMS.filter(item => (category === 'all' || item.category === category)
@@ -96,7 +106,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
       </div>
       <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[characterId].name}</h4>
         <p role="status">{previewItem ? `${copy.fitting}: ${copy.items[previewItem.id as keyof typeof copy.items].name}` : copy.currentLoadout}</p>
-        <dl>{comparisons.map(([label, before, after]) => <div key={label}><dt>{label}</dt><dd>{Number(after.toFixed(1))}{Math.abs(after-before) > .01 && <span> ({after > before ? '+' : ''}{Number((after-before).toFixed(1))})</span>}</dd></div>)}</dl>
+        <dl>{comparisons.map(([label, before, after]) => <div key={label}><dt>{label}</dt><dd>{Number(after.toFixed(2))}{Math.abs(after-before) > .01 && <span> ({after > before ? '+' : ''}{Number((after-before).toFixed(2))})</span>}</dd></div>)}</dl>
         <div className="survivors-fitting-slots" aria-label={copy.draftSlots}>{categories.map(slot=>{
           const selected=STORE_ITEMS.find(item=>item.category===slot&&draft.includes(item.id));
           return <label key={slot}>{copy.categories[slot]}<select aria-label={copy.categories[slot]} value={selected?.id??''} onChange={event=>selectDraft(slot,event.target.value)}><option value="">{copy.emptySlot}</option>{STORE_ITEMS.filter(item=>item.category===slot).map(item=><option key={item.id} value={item.id}>{copy.items[item.id as keyof typeof copy.items].name} · {inventory.owned.includes(item.id)?copy.owned:`${item.price.toLocaleString()} PSI`}</option>)}</select>
