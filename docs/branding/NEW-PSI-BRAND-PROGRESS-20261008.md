@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- Vercel PR154 preview가 `Deployment rate limited - retry in 24 hours`로 실패. 운영153은 유지하며 한도 우회/유료 업그레이드/강제 운영배포를 하지 않음. 최신154 CI는 별도 확인 필요.
+- B3 보호 장비 후보: `ShieldPresentationTracker`가 실제 shield 감소/증가를 read-only로 관측. 흡수 .45초/소진 .45초/재충전 .6초로 기존 VFX cell3만 사용, 소진 직후0charge에서 기존 이펙트가 즉시 사라지는 경로 보완. 초기 관측·loadout replacement는 발동을 만들지 않음, gameTime pause 고정/혼잡 gain 제한/reduced 정적 잔량만 유지. 실제 absorb/tick/apply 함수 회귀 포함11건/타입/Vitebuild 통과. 새 원화·피해·capacity·cooldown·save 불변. branch `codex/brand-shield-events-20261008` 로컬 후보; 화면/픽셀/전체회귀/Director 검수 미완료, 운영/원격 미반영. 154문서 이력을 포함하지만 feature간 병합은 하지 않음.
+
 - PR153 latest1933d507 검사/preview 성공 후 main `f15dfcbe577861071b74f42ea9c787367868c010` 병합, `dpl_83QJjhhSmPA3nPHY83bFndtj6Zqj` READY/정확SHA/별칭 확인. 공개 운영 원본26 decode/START_A/상단pause취소/정지중새start없음/resumeSTART재생없음 PC·폰세로·가로3경로 통과. 실제 UI/엔진주입없음, 자연과밀·실청취·실기기와 구분.
 - B3 실제 경로 재조사: passing frames8/9가 이미 연결되어 있어 이전 '중간 원화 없음' TODO를 현재 사실로 반복하지 않음. 장비별 spring은 독립 inertia이나 공통 pose.action을 사용하며 실제 발동 choreography와 다름. shield feedback은 흡수/복구가 같은 field를 쓰고 shield0이면 VFX branch가 생략됨. 다음 묶음은 실제 엔진 흡수·소진·재충전/장비교체 시간축 캡처 후 승인 원화 범위 표현 개선. `NEW-PSI-B3-RUNTIME-AUDIT-20261008.md`에 코드근거와 미확정 승인 분리. 제품/원본/승인metadata 변경 없음.
 

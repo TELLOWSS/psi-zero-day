@@ -11,8 +11,10 @@ import type {SpritePose} from './survivors-sprite-motion';
 import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
 import {equipmentAnimationTime} from './survivors-equipment-clock';
 import {EquipmentMotion,type EquipmentJoint} from './survivors-equipment-motion';
+import {ShieldPresentationTracker} from './survivors-shield-presentation';
 const inspectionFlights=new InspectionFlightTracker();
 const mountedMotion=new EquipmentMotion();
+const shieldPresentation=new ShieldPresentationTracker();
 const categoryJoints={communication:'radio',tempo:'wrist',logistics:'pack',protection:'armor',tactics:'belt',companion:'dock'} satisfies Record<string,EquipmentJoint>;
 export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
 /** Raster art stays in presentation; status is read exclusively from the engine. */
@@ -22,12 +24,10 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
   const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
   const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose):undefined;
   const flight=fittedInspection&&dock?inspectionFlights.sample(state,dock,reducedMotion):undefined;
-  if(gear.effects.shield>0&&gear.shield>0&&actorPose?.vfxAtlas?.naturalWidth) {
+  const shield=shieldPresentation.sample(state,reducedMotion,state.hazards.length>45||state.projectiles.length>60);
+  if(shield&&actorPose?.vfxAtlas?.naturalWidth) {
     ctx.save();ctx.globalCompositeOperation='screen';
-    const ratio=Math.min(1,gear.shield/gear.effects.shield);
-    const active=gear.feedback>0;
-    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,active?62:42,active?76:58,
-      (active?(reducedMotion?.24:.7):.10)*ratio);
+    drawVfxCell(ctx,actorPose.vfxAtlas,3,x,y-30,shield.width,shield.height,shield.alpha);
     ctx.restore();
   }
   const suppressed=state.hazards.filter(h=>h.hp>0&&premiumHazardSpeed(state,h)<1);
