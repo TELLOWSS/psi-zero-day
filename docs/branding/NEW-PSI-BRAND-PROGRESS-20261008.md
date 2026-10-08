@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 주인공 희미함 원인 재조사(제품 수정 아님): `audit-player-source-alpha.mjs` 원본5파일/97셀 read-only 픽셀·SHA 기록. visible alpha>=32 기준 median 최소249~253, solid alpha>=192 비율 최소87.6~98.0%. 원본 전반 반투명 가설의 근거 없음; 원본알파를 임의 불투명화하지 않음. `artifacts/player-source-alpha/report.json`.
+- 실제몸체 grounded draw 직전 계측 추가 자연 UI bot 재실행:3338몸체샘플 alpha .8~1, composite source-over, filter none, .8미만0. shield실제eventcycle/HUD부분·소진·복구 일치 재통과(261samples/258일치). main ctx 알파누수/brightness filter가 관측한 stage01 희미함 원인이라는 근거 없음. stage별weather code는02~05 ground-before-actor이며 이번stage01 실행에는 해당branch 없음. 따라서 '날씨 때문에 희미함'을 확정하지 않고 원화색/밝은바닥/heroLight·실제국소대비를 다음조사대상으로 좁힘. 자연봇/seededloadout이며 모든맵·실기기원인 해결 아님. 기존visual선택/assetbytes/palette/규칙 변경 없음.
+
 - 보호 장비 자연발동 후속 `verify-shield-natural-play.mjs`: shock_mantle 소유/장착 저장fixture, actual build engine는 read-only 계측, 이동/레벨업선택 UI입력만. 실제 충돌 흡수7.7s/shield33, 소진30.7167s/0, recharge48.7167s/45(실제18초 cadence), 마지막49.1333s/HP117/보호막45/45. 최초 연출 관측 직후종료는 HUD갱신한주기전이라 보강: partial/depleted/final HUD 각각일치/234samples중233일치/오류넘침0. `artifacts/shield-natural-play/report.json`/native natural-cycle.webm. 함수 직접호출·phase변경·시간주입 없음. 새저장자연구매·사람/실기기/과밀성능·모바일표시가시성/최종청취·아트 승인 아님. 날씨/무적 합성의 몸체대비는 기존표현 미해결로 유지.
 - 위 실제 플레이 후보영상을 사용자에게 보여주고 보호 장비 시간축 범위의 운영 적용 판단을 요청. 답변 전 승인기록/운영적용을 자동으로 하지 않음. 후보/local만, Vercel154배포한도 실패 유지.
 

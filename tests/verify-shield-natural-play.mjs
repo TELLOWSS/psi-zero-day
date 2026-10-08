@@ -12,12 +12,18 @@ try {
   await page.addInitScript(() => {
     localStorage.setItem('psi.survivors.store_wallet', JSON.stringify({ credits: 1260, inventory: { owned: ['shock_mantle'], equipped: ['shock_mantle'], durability: { shock_mantle: 100 } } }));
     window.shieldFrames = [];
+    window.playerAlphaFrames = [];
   });
   await page.route('**/assets/PatrolSurvivorsGame-*.js', async route => {
     const response = await route.fetch(); let body = await response.text();
     const engine = /update\([^)]*\)\{(?=if\(this\.state\.phase!==)/g;
     if ([...body.matchAll(engine)].length !== 1) throw Error('Read-only engine capture unavailable');
     body = body.replace(engine, match => `${match}window.shieldNaturalEngine=this;`);
+    const marker = body.indexOf('rgba(3,10,18,.14)'), start = body.lastIndexOf('function ', marker);
+    const header = /^function \w+\(([^)]+)\)\{/.exec(body.slice(start));
+    if (marker < 0 || !header || header[1].split(',').length !== 4) throw Error('Grounded actor alpha probe unavailable');
+    const [ctx, image, height, pose] = header[1].split(',');
+    body = body.slice(0, start) + body.slice(start).replace(header[0], header[0] + `if(${image}.src.endsWith('/player-map.webp')&&window.playerAlphaFrames.length<10000)window.playerAlphaFrames.push({time:window.shieldNaturalEngine.state.gameTime,alpha:${ctx}.globalAlpha,composite:${ctx}.globalCompositeOperation,filter:${ctx}.filter,height:${height},action:${pose}.action,reaction:${pose}.reaction,invincible:window.shieldNaturalEngine.state.player.invincibleTime});`);
     const draw = /(\w+)\((\w+),(\w+)\.vfxAtlas,3,(\w+),(\w+)-30,(\w+)\.width,\6\.height,\6\.alpha\)/g;
     if ([...body.matchAll(draw)].length !== 1) throw Error('Actual shield draw capture unavailable');
     body = body.replace(draw, (match, fn, ctx, actor, x, y, visual) => `(window.shieldFrames.length<10000&&window.shieldFrames.push({time:window.shieldNaturalEngine.state.gameTime,shield:window.shieldNaturalEngine.state.premiumGear.shield,...${visual}}),${match})`);
@@ -61,12 +67,13 @@ try {
   }
   await release(); await page.waitForTimeout(200);
   const frames = await page.evaluate(() => window.shieldFrames);
+  const playerAlpha = await page.evaluate(() => window.playerAlphaFrames);
   const final = await page.evaluate(() => ({ shield: window.shieldNaturalEngine.state.premiumGear.shield, hud: document.querySelector('.survivors-premium-live')?.textContent }));
   const matched = s => s.hud?.includes(`보호막 ${Math.ceil(s.shield)}/45`);
   const hudMatches = { total: samples.filter(matched).length, partial: samples.some(s => s.shield > 0 && s.shield < 45 && matched(s)), depleted: samples.some(s => s.shield === 0 && matched(s)), final: matched(final) };
   const pass = outcome === 'natural-event-cycle-observed' && hudMatches.partial && hudMatches.depleted && hudMatches.final && !errors.length && !samples.some(s => s.overflow);
   const video = page.video(); await page.close(); await video.saveAs(`${output}/natural-cycle.webm`);
-  fs.writeFileSync(`${output}/report.json`, JSON.stringify({ scope: 'SEEDED_OWNED_GEAR_SAVE_UI_INPUT_BOT_READ_ONLY_ENGINE_NATURAL_COLLISION_NOT_FRESH_PURCHASE_OR_DEVICE_OR_LISTENING_APPROVAL', outcome, samples, frames, choices, final, hudMatches, errors, pass }, null, 2));
+  fs.writeFileSync(`${output}/report.json`, JSON.stringify({ scope: 'SEEDED_OWNED_GEAR_SAVE_UI_INPUT_BOT_READ_ONLY_ENGINE_NATURAL_COLLISION_NOT_FRESH_PURCHASE_OR_DEVICE_OR_LISTENING_APPROVAL', outcome, samples, frames, playerAlpha, choices, final, hudMatches, errors, pass }, null, 2));
   console.log(JSON.stringify({ outcome, count: samples.length, phases: [...seen], hudMatches, errors, pass }));
   if (!pass) process.exitCode = 1;
 } finally { await browser.close(); }
