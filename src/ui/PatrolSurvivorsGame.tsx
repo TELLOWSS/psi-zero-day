@@ -1,6 +1,6 @@
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
-import {selectFloatingFeedback,fitFeedbackToView} from './survivors-floating-feedback';
+import {selectFloatingFeedback,fitFeedbackToView,placeFeedbackVertically,type FeedbackRect} from './survivors-floating-feedback';
 import {selectImpactAccents} from './survivors-impact-direction';
 import {PleasureFeedback} from './survivors-pleasure-feedback';
 import {EquipmentCheckDirection} from './survivors-equipment-check';
@@ -3248,14 +3248,23 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (!reducedMotionRef.current) ft.y -= (ft.isCrit ? 46 : 38) * dt;
         if (ft.life > 0) aliveTexts.push(ft);
       }
-      for (const ft of selectFloatingFeedback(aliveTexts, engine.state.hazards.length > 45 || engine.state.projectiles.length > 60)) {
-          if(ft.x<camX||ft.x>camX+viewW)continue;
+      // The authored actor is 74 world units tall; reserve its hands and safety helmet too.
+      const feedbackObstacles: FeedbackRect[] = [{left:player.x-36,right:player.x+36,top:player.y-84,bottom:player.y+12}];
+      for (const ft of selectFloatingFeedback(aliveTexts, engine.state.hazards.length > 45 || engine.state.projectiles.length > 60).reverse()) {
+          if(ft.x<camX||ft.x>camX+viewW||ft.y<camY||ft.y>camY+viewH)continue;
           ctx.save();
           const progress = 1 - (ft.life / ft.maxLife);
           const scale = ft.isCrit && !reducedMotionRef.current ? (progress < 0.22 ? 1 + progress * 2.5 : Math.max(1, 1.55 - (progress - 0.22) * 0.55)) : 1;
           ctx.font = ft.isCrit ? '700 15px "Chakra Petch", Pretendard, sans-serif' : '700 11px "Chakra Petch", Pretendard, sans-serif';
-          const placement=fitFeedbackToView(ft.x,ctx.measureText(ft.text).width,scale,camX,camX+viewW);
-          ctx.translate(placement.x, ft.y);
+          ctx.textBaseline='alphabetic';
+          const metrics=ctx.measureText(ft.text);
+          const placement=fitFeedbackToView(ft.x,metrics.width,scale,camX,camX+viewW);
+          const vertical=placeFeedbackVertically(placement.x,ft.y,placement.width,
+            (metrics.actualBoundingBoxAscent||15)*placement.scale,(metrics.actualBoundingBoxDescent||4)*placement.scale,
+            camY,camY+viewH,feedbackObstacles);
+          if(!vertical){ctx.restore();continue;}
+          feedbackObstacles.push(vertical.rect);
+          ctx.translate(placement.x, vertical.y);
           ctx.scale(placement.scale, placement.scale);
           ctx.fillStyle = ft.color;
           ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';

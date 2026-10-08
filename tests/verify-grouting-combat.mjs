@@ -12,13 +12,22 @@ try{
   await page.emulateMedia({reducedMotion:mode==='reduced'?'reduce':'no-preference'});
   await page.addInitScript(()=>{
     window.qaImages=[];window.feedbackPaint=[];
+    const translate=CanvasRenderingContext2D.prototype.translate;
+    CanvasRenderingContext2D.prototype.translate=function(x,y){
+      const p=window.groutEngine?.state.player,t=this.getTransform();
+      if(p&&x===p.x&&y===p.y&&this.canvas.classList.contains('survivors-canvas')&&t.a>0&&t.b===0){
+        const a=t.transformPoint(new DOMPoint(x-36,y-84)),b=t.transformPoint(new DOMPoint(x+36,y+12));
+        window.heroRect={left:a.x,right:b.x,top:a.y,bottom:b.y};
+      }
+      return Reflect.apply(translate,this,[x,y]);
+    };
     window.Image=new Proxy(window.Image,{construct(target,args){const image=Reflect.construct(target,args);window.qaImages.push(image);return image;}});
     const original=CanvasRenderingContext2D.prototype.fillText;
     CanvasRenderingContext2D.prototype.fillText=function(...args){
       const text=String(args[0]);
       if(this.canvas.classList.contains('survivors-canvas')&&['-20','위험 통제 완료','회수 +3','긴급 탈출 호송반 출동! 랑데부 구역을 사수하십시오!'].includes(text)){
-        const t=this.getTransform(),width=this.measureText(text).width*Math.abs(t.a);
-        window.feedbackPaint.push({text,left:t.e-width/2,right:t.e+width/2,canvasWidth:this.canvas.width});
+        const t=this.getTransform(),metrics=this.measureText(text),width=metrics.width*Math.abs(t.a);
+        window.feedbackPaint.push({text,left:t.e-width/2,right:t.e+width/2,top:t.f-metrics.actualBoundingBoxAscent*Math.abs(t.d),bottom:t.f+metrics.actualBoundingBoxDescent*Math.abs(t.d),canvasWidth:this.canvas.width,canvasHeight:this.canvas.height,hero:window.heroRect});
         window.feedbackPaint=window.feedbackPaint.slice(-12);
       }
       return Reflect.apply(original,this,args);
@@ -65,8 +74,9 @@ try{
     return {hash:hash>>>0,time:s.gameTime,phase:s.phase,count:s.projectiles.length,images:window.qaImages.filter(i=>i.complete&&i.naturalWidth>0).map(i=>i.src).filter(src=>/player-(walk|command|equipment)|industrial-hazards|runaway-carrier/.test(src)),paint:window.feedbackPaint,selected:window.feedbackSelected.map(({id,y,text})=>({id,y,text})),overflow:document.documentElement.scrollWidth>innerWidth+1};
    });
    await page.screenshot({path:`${output}/${width}x${height}-${kind}-${mode}.png`});
-   const paintedBounds=result.paint.length>=3&&result.paint.every(p=>p.left>=-1&&p.right<=p.canvasWidth+1);
-   rows.push({width,height,kind,mode,...result,errors:[...errors],pass:result.phase==='paused'&&result.count===5&&result.selected.length===3&&result.selected.some(x=>x.id===1)&&result.selected.some(x=>x.id===2)&&(edge||new Set(result.selected.map(x=>x.y)).size===3)&&paintedBounds&&!result.overflow&&!errors.length});
+   const paintedBounds=result.paint.length>=3&&result.paint.every(p=>p.left>=-1&&p.right<=p.canvasWidth+1&&p.top>=-1&&p.bottom<=p.canvasHeight+1);
+   const actorClear=result.paint.every(p=>p.hero&&(p.right<=p.hero.left||p.left>=p.hero.right||p.bottom<=p.hero.top||p.top>=p.hero.bottom));
+   rows.push({width,height,kind,mode,...result,actorClear,errors:[...errors],pass:result.phase==='paused'&&result.count===5&&result.selected.length===3&&result.selected.some(x=>x.id===1)&&result.selected.some(x=>x.id===2)&&(edge||new Set(result.selected.map(x=>x.y)).size===3)&&paintedBounds&&actorClear&&!result.overflow&&!errors.length});
   }
   await page.close();
  }

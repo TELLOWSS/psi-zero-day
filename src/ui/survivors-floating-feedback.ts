@@ -17,6 +17,28 @@ export function fitFeedbackToView(x: number, measuredWidth: number, scale: numbe
   return {x: Math.max(left + padding + width / 2, Math.min(right - padding - width / 2, x)), scale: fittedScale, width};
 }
 
+export interface FeedbackRect {left: number; right: number; top: number; bottom: number}
+
+/** Place measured labels around protected art and earlier labels without moving events. */
+export function placeFeedbackVertically(x: number, y: number, width: number, ascent: number, descent: number,
+  top: number, bottom: number, obstacles: readonly FeedbackRect[]) {
+  const gap = 6;
+  const minY = top + ascent + gap, maxY = bottom - descent - gap;
+  if (minY > maxY) return null;
+  const clamp = (value: number) => Math.max(minY, Math.min(maxY, value));
+  const candidates = [clamp(y)];
+  for (const rect of obstacles) {
+    candidates.push(clamp(rect.top - descent - gap), clamp(rect.bottom + ascent + gap));
+  }
+  candidates.sort((a, b) => Math.abs(a - y) - Math.abs(b - y) || a - b);
+  for (const baseline of candidates) {
+    const rect = {left: x - width / 2, right: x + width / 2, top: baseline - ascent, bottom: baseline + descent};
+    if (obstacles.every(other => rect.right + gap <= other.left || rect.left - gap >= other.right ||
+      rect.bottom + gap <= other.top || rect.top - gap >= other.bottom)) return {y: baseline, rect};
+  }
+  return null;
+}
+
 /** Presentation budget only; feedback events and rewards are never discarded. */
 export function selectFloatingFeedback<T extends FloatingFeedback>(items: readonly T[], busy: boolean): T[] {
   const selected: T[] = [];
