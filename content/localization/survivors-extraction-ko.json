@@ -3,6 +3,8 @@
   "move": "중앙 LZ로 이동",
   "hold": "LZ 사수 중",
   "paused": "구역 밖 · 타이머 정지",
+  "timerPaused": "타이머 정지",
   "progress": "호송 사수 진행",
-  "seconds": "초"
+  "seconds": "초",
+  "directions": ["오른쪽", "오른쪽 아래", "아래", "왼쪽 아래", "왼쪽", "왼쪽 위", "위", "오른쪽 위"]
 }

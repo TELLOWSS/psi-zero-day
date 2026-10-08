@@ -3476,7 +3476,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
       {phase === 'playing' && extractionState.active && (
-        <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} />
+        <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} direction={engineRef.current?.state.extractionPhase?{x:engineRef.current.state.extractionPhase.x-engineRef.current.state.player.x,y:engineRef.current.state.extractionPhase.y-engineRef.current.state.player.y}:undefined} />
       )}
 
       {combatNotice==='damage' && lastDamage && <aside className="survivors-damage-notice" aria-live="polite">{combatText.damage_sources[lastDamage.source]} · −{lastDamage.amount} HP</aside>}
