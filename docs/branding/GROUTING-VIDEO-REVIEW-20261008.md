@@ -11,6 +11,6 @@
 ## Gameplay readability follow-up
 
 - User requested gameplay improvement. Scope is readable combat feedback, not new mechanics or balance: prioritize damage, then critical outcomes, then newest routine text; collapse nearby identical routine notices. Presentation budget is9 normal/6 busy. Original events, lifetimes, rewards and save data remain unchanged. Reduced motion disables floating translation and critical scale pop.
-- Focused8 tests passed after correcting a test's expected draw-order (oldest first, prioritized entries drawn last). Type check and Vite build passed. Full regression is pending at this record.
+- Focused8 tests passed after correcting a test's expected draw-order (oldest first, prioritized entries drawn last). Type check and Vite build passed. Full regression: 1,721 passed, 1 skipped.
 - Actual built UI paused projectile fixture: PC1440x900/390x844/844x390, mortar/hydraulic five projectiles each, six paths passed with no runtime error or horizontal overflow. Mobile hydraulic screenshot directly reviewed: protagonist remains visible; arc repetition still reads as geometry and is NOT a final graphics-quality approval. Fixture has initial stage lighting, not busy combat hazard telegraphs or natural evolution.
 - Evidence: tests/verify-grouting-combat.mjs and artifacts/grouting-combat/report.json/six PNGs. Floating-text priority has unit evidence only; actual concurrent notices/hazard contrast/mobile readability remain to verify before release.
