@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- PR153 latest1933d507 검사/preview 성공 후 main `f15dfcbe577861071b74f42ea9c787367868c010` 병합, `dpl_83QJjhhSmPA3nPHY83bFndtj6Zqj` READY/정확SHA/별칭 확인. 공개 운영 원본26 decode/START_A/상단pause취소/정지중새start없음/resumeSTART재생없음 PC·폰세로·가로3경로 통과. 실제 UI/엔진주입없음, 자연과밀·실청취·실기기와 구분.
+- B3 실제 경로 재조사: passing frames8/9가 이미 연결되어 있어 이전 '중간 원화 없음' TODO를 현재 사실로 반복하지 않음. 장비별 spring은 독립 inertia이나 공통 pose.action을 사용하며 실제 발동 choreography와 다름. shield feedback은 흡수/복구가 같은 field를 쓰고 shield0이면 VFX branch가 생략됨. 다음 묶음은 실제 엔진 흡수·소진·재충전/장비교체 시간축 캡처 후 승인 원화 범위 표현 개선. `NEW-PSI-B3-RUNTIME-AUDIT-20261008.md`에 코드근거와 미확정 승인 분리. 제품/원본/승인metadata 변경 없음.
+
 - B3 브라우저 후속 `tests/verify-voice-budget.mjs`: 실제 Edge WebAudio/원본 CART_WARNING 디코딩·재생 후 명시적인 무음 loop 효과24개로 shared budget 포화. PC/폰세로/폰가로3경로에서 경고 source 유지, 효과 source 교체와24한도, 낮은/동순위 대사 거부, mute 취소, 새 START 재생 및 silence 취소/오류없음 통과. `artifacts/voice-budget/report.json`. 독립 audio class dev-module 검증이며 자연 전투/UI pause/실기기/실청취 승인 아님. 검증 전용5182 서버 종료, 기존5181 유지.
 
 - PR152 최신 `fbb7c54b05996706e0e0c0f6fd4d68bb06dde374` 검사4개/preview 성공 후 main `ed06b3f0d7c32ee7733fafc0365beb168cf51658` 병합. 운영 `dpl_6zkTBvc93vQHHA6CeaF5r9N68TBD` READY/정확 SHA/별칭 확인. 공개 운영 mobile16/slot8(밝음·어두움 및 승인 SVG SHA)/공식제목4 통과. 아래 후보 제작 당시 비연결·미승인은 역사적 기록이며 현재 BR-LOGO-02 승인 파일은 운영 연결 완료.
