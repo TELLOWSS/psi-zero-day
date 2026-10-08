@@ -1,3 +1,5 @@
+import {SurvivorsPerformanceBudget,survivorsViewportZoom} from './survivors-performance';
+import threatText from '../../content/localization/survivors-stage-threats-ko.json';
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
 import {selectFloatingFeedback,fitFeedbackToView,placeFeedbackVertically,type FeedbackRect} from './survivors-floating-feedback';
@@ -957,7 +959,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const spawnParticles = (x: number, y: number, color: string, count = 8, speed = 60, size = 3) => {
-    for (let i = 0; i < count; i++) {
+    const budget=performanceBudgetRef.current;
+    const limit=budget?.particleLimit??240;
+    const available=Math.max(0,limit-particlesRef.current.length);
+    const visibleCount=Math.min(available,Math.ceil(count*(budget?.particleFraction??1)));
+    for (let i = 0; i < visibleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
       const spd = (0.2 + Math.random() * 0.8) * speed;
       particlesRef.current.push({
@@ -1311,6 +1317,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
+  const performanceBudgetRef = useRef<SurvivorsPerformanceBudget | null>(null);
+  if(!performanceBudgetRef.current)performanceBudgetRef.current=new SurvivorsPerformanceBudget(window.matchMedia?.('(pointer:coarse)').matches??false);
+  const viewportRef = useRef({width:0,height:0});
   const reducedMotionRef = useRef(false);
   const hudBottomRef = useRef(0);
   useEffect(() => {
@@ -1318,7 +1327,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const update = () => { reducedMotionRef.current = query?.matches ?? false; };
     update(); query?.addEventListener('change', update);
     const header = containerRef.current?.querySelector('header');
+    const measureViewport = () => {
+      const container=containerRef.current;
+      if(container)viewportRef.current={width:container.clientWidth,height:container.clientHeight};
+    };
     const reserveHud = () => {
+      measureViewport();
       if (header && containerRef.current) {
         const bottom = header.getBoundingClientRect().bottom - containerRef.current.getBoundingClientRect().top;
         hudBottomRef.current=Math.ceil(bottom+8);
@@ -1327,6 +1341,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     };
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(reserveHud) : null;
     if (header) observer?.observe(header);
+    if(containerRef.current)observer?.observe(containerRef.current);
     window.addEventListener('resize', reserveHud); reserveHud();
     return () => { observer?.disconnect(); window.removeEventListener('resize', reserveHud); query?.removeEventListener('change', update); };
   }, []);
@@ -1353,11 +1368,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const renderLoop = (wallTime: number) => {
       requestRef.current = requestAnimationFrame(renderLoop);
 
-      let dt = Math.max(0, (wallTime - lastTimeRef.current) / 1000);
+      const frameMilliseconds=Math.max(0,wallTime-lastTimeRef.current);
+      // Bound expensive foreground catch-up to five fixed physics steps.
+      let dt = Math.min(5/60,frameMilliseconds/1000);
       lastTimeRef.current = wallTime;
 
       const engine = engineRef.current;
       if (!engine) return;
+      const budget=performanceBudgetRef.current!;
+      if(engine.state.phase==='playing')budget.sample(frameMilliseconds);
+      if(containerRef.current)containerRef.current.dataset.quality=budget.level;
       const time=engine.state.gameTime*1000;
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
@@ -1707,7 +1727,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
 
         // Render physics at RAF cadence; mirrors update at 12Hz or immediately on phase change.
-        if (wallTime - lastHudTime >= 1000 / 12 || engine.state.phase !== 'playing') {
+        if (wallTime - lastHudTime >= 1000 / (budget.level==='low'?6:10) || engine.state.phase !== 'playing') {
         lastHudTime = wallTime;
         // Sync React HUD
         setHp(Math.round(engine.state.player.hp));
@@ -1815,9 +1835,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if(engine.state.phase!=='playing')dt=0;
 
       // High-DPI Resolution & Mobile Resize
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const displayW = containerRef.current?.clientWidth || window.innerWidth;
-      const displayH = containerRef.current?.clientHeight || window.innerHeight;
+      const displayW = viewportRef.current.width || window.innerWidth;
+      const displayH = viewportRef.current.height || window.innerHeight;
+      const dpr = budget.pixelRatio(window.devicePixelRatio || 1,displayW,displayH);
       const targetCanvasW = Math.floor(displayW * dpr);
       const targetCanvasH = Math.floor(displayH * dpr);
 
@@ -1851,10 +1871,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       // Responsive Portrait / Landscape Zoom Factor
-      const isPortrait = displayH > displayW;
-      const preferredZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
+
       // Signature events apply a brief, controlled push-in instead of a disorienting hard cut.
-      const baseZoom = Math.max(preferredZoom, displayW / WORLD_WIDTH, displayH / WORLD_HEIGHT);
+      const baseZoom = survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT);
       const pressure=signaturePressureRef.current;
       signaturePressureRef.current=Math.max(0,pressure-dt*1.55);
       const renderZoom=baseZoom*(1+(reducedMotionRef.current?0:pressure*.018));
@@ -1974,11 +1993,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       }
 
-      drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
+      if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards);
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
       dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
-      for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
+      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
       const tactics=engine.state.fieldTactics;
       for(const line of tactics?.lines ?? []) {
@@ -2292,7 +2311,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.rotate(dirAngle);
           ctx.fillStyle = '#f59e0b';
           ctx.shadowColor = '#fbbf24';
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = budget.level==='low'?0:10;
           ctx.beginPath();
           ctx.moveTo(55, 0);
           ctx.lineTo(38, -10);
@@ -2966,6 +2985,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             else if(h.variant==='reinforced_cart'){ctx.strokeStyle=h.hp<h.maxHp*.5?'#fb923c':'#7dd3fc';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,2,h.radius*1.25,h.radius*.45,0,0,Math.PI*2);ctx.stroke();}
             ctx.restore();
           }
+          if(h.behavior){
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#a5f3fc';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            const labelY=hazardPlacement.y-hazardPlacement.size*.82-24;
+            ctx.strokeText(threatText.behaviors[h.behavior],0,labelY);ctx.fillText(threatText.behaviors[h.behavior],0,labelY);
+            ctx.restore();
+          }
           // Mini HP Bar with clear contrast
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
@@ -2988,7 +3013,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.strokeStyle = '#f59e0b';
             ctx.lineWidth = 3;
             ctx.shadowColor = '#fbbf24';
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = budget.level==='low'?0:12;
             ctx.beginPath();
             ctx.arc(0, 0, Math.max(22, h.radius * 0.75) * pulse, 0, Math.PI * 2);
             ctx.stroke();
@@ -3020,7 +3045,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.lineWidth = 3;
             ctx.globalAlpha = 0.65;
             ctx.shadowColor = '#22d3ee';
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = budget.level==='low'?0:14;
             ctx.beginPath();
             ctx.ellipse(0, 4, 38, 14, Math.atan2(player.dashVy ?? 0, player.dashVx ?? 0), 0, Math.PI * 2);
             ctx.stroke();
@@ -3209,7 +3234,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // Golden/White Hard Hat Icon
           ctx.fillStyle = '#facc15';
           ctx.shadowColor = '#eab308';
-          ctx.shadowBlur = 12;
+          ctx.shadowBlur = budget.level==='low'?0:12;
           ctx.beginPath();
           ctx.arc(0, 0, 9, Math.PI, 0);
           ctx.fill();
@@ -3262,7 +3287,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.scale(placement.scale, placement.scale);
           ctx.fillStyle = ft.color;
           ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';
-          ctx.shadowBlur = ft.isCrit ? 10 : 5;
+          ctx.shadowBlur = budget.level==='low'?0:ft.isCrit ? 10 : 5;
           ctx.textAlign = 'center';
           ctx.globalAlpha = Math.min(1, ft.life / (ft.maxLife * 0.55));
           ctx.fillText(ft.text, 0, 0);
@@ -4253,3 +4278,4 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     </div>
   );
 }
+

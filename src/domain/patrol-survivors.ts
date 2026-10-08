@@ -5,6 +5,7 @@ export type HazardType = 'UNHELMETED' | 'RUNAWAY_CART' | 'GAS_LEAK' | 'FALLING_D
 
 export interface Hazard {
   variant?: 'reinforced_cart' | 'pulse_gas' | 'split_gas';
+  behavior?: 'crosswind' | 'flanking_cart' | 'wide_debris';
   readonly id: string;
   readonly type: HazardType;
   x: number;
@@ -373,3 +374,4 @@ export interface PatrolStageDefinition {
   bossHp: number;
   narrative?: { speaker: CharacterId; brief: string; success: string; residual: string };
 }
+

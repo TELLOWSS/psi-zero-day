@@ -1,3 +1,4 @@
+import {flankingApproach} from './survivors-stage-threats';
 import type { Hazard, PlayerStats } from '../domain/patrol-survivors';
 import { bossPattern } from './survivors-boss-pattern';
 
@@ -43,6 +44,7 @@ export function updateHazardMotion(h: Hazard, player: PlayerStats, dt: number, s
     return true;
   }
   if (h.type !== 'RUNAWAY_CART') return false;
+  if (flankingApproach(h,player,dt,speed)) return true;
   const dx = player.x - h.x;
   const dy = player.y - h.y;
   const distance = Math.hypot(dx, dy) || 1;
@@ -85,3 +87,4 @@ export function isHazardContactActive(h: Hazard): boolean {
   if(h.variant==='pulse_gas')return h.motion?.phase==='charge';
   return h.type !== 'FALLING_DEBRIS' || !h.motion || h.motion.phase === 'fall';
 }
+

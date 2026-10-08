@@ -3058,3 +3058,42 @@
   .is-combat .survivors-signature-event > i { font-size:10px; line-height:1.4; letter-spacing:0; }
   .is-combat .survivors-signature-event > :is(strong,small,i) { max-width:100%; overflow-wrap:anywhere; }
 }
+
+
+/* Device budget affects presentation only; controls and warnings stay available. */
+.survivors-container { height:100dvh; }
+.survivors-container[data-quality="low"] :is(.survivors-hud-top,.survivors-modal,.survivors-focus-status) {
+  backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:none;
+}
+@media (pointer:coarse) {
+  .is-combat .survivors-hud-top { backdrop-filter:none; -webkit-backdrop-filter:none; }
+  .is-combat .survivors-player-hud,.is-combat .survivors-hud-center { min-width:0; }
+  .is-combat .survivors-wave-badge { flex-shrink:0; }
+  .survivors-modal { max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom))); overflow-y:auto; }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px) {
+  .is-combat .survivors-hud-top { width:min(620px,calc(100% - max(16px,env(safe-area-inset-left)) - max(16px,env(safe-area-inset-right)))); left:50%; right:auto; transform:translateX(-50%); }
+  .is-combat .survivors-tactical-actions { right:max(12px,env(safe-area-inset-right)); width:44px; flex-direction:column; bottom:calc(max(12px,env(safe-area-inset-bottom)) + 76px); }
+  .is-combat .survivors-focus-status { top:calc(var(--survivors-hud-bottom,60px) + 4px); height:22px; }
+  .is-combat :is(.survivors-signature-event,.survivors-wave-director-notice,.survivors-counterplay-banner,.survivors-mastery-notice) { top:calc(var(--survivors-hud-bottom,60px) + 30px); width:min(340px,calc(100% - 140px)); }
+}
+@media (pointer:coarse) and (min-width:768px) and (min-height:601px) {
+  .is-combat .survivors-hud-top { max-width:760px; margin:0 auto; }
+  .is-combat .survivors-tactical-actions { gap:12px; width:180px; bottom:calc(max(24px,env(safe-area-inset-bottom)) + 88px); }
+  .is-combat .survivors-tactical-actions button { flex-basis:52px; width:52px; height:52px; }
+  .is-combat .survivors-ultimate-control { bottom:max(24px,env(safe-area-inset-bottom)); right:max(24px,env(safe-area-inset-right)); }
+}
+/* Transient wave notices must not cover the character on short landscape screens. */
+@media (pointer:coarse) {
+  .is-combat .survivors-wave-director-notice { padding:6px 9px; gap:2px; }
+  .is-combat .survivors-wave-director-notice > span { display:none; }
+  .is-combat .survivors-wave-director-notice > strong { font-size:13px; line-height:1.35; }
+  .is-combat .survivors-wave-director-notice > small { font-size:11px; line-height:1.4; }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:600px) {
+  .is-combat :is(.survivors-wave-director-notice,.survivors-signature-event,.survivors-counterplay-banner,.survivors-mastery-notice) {
+    left:max(12px,env(safe-area-inset-left)); right:auto; transform:none; text-align:left;
+    width:min(280px,calc(100% - 120px)); padding:4px 7px;
+  }
+  .is-combat .survivors-wave-director-notice > small { display:none; }
+}

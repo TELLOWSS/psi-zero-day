@@ -1,3 +1,4 @@
+import {stageThreatTraits} from './survivors-stage-threats';
 import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
@@ -1892,7 +1893,10 @@ export class SurvivorsEngine {
       radius = 38;
     }
     if(type !== 'UNHELMETED') speed *= PATROL_DIFFICULTIES[this.state.difficulty ?? 'standard'].speed;
-    const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',this.random()));
+    const traitRoll=isStageBoss||authored?.variant ? 0 : this.random();
+    const traits:Pick<Hazard,'variant'|'behavior'>=isStageBoss||authored ? {} : stageThreatTraits(type,this.state.stage.stageNumber,this.state.gameTime,spawnPressure(this.state.stage.stageNumber,this.state.gameTime).introductionTime,traitRoll);
+    const variant=authored?.variant ?? (isStageBoss?(type==='GAS_LEAK'?'pulse_gas':undefined):traits.variant??(traits.behavior?undefined:lateThreatVariant(type,this.state.gameTime,this.state.difficulty??'standard',traitRoll)));
+    if(traits.behavior==='wide_debris')radius=52;
     if(variant==='reinforced_cart'){hp=Math.round(hp*1.65);expValue*=2;}
     if(variant==='pulse_gas'){radius=58;expValue*=2;}
     if(variant==='split_gas'){hp=Math.round(hp*1.3);expValue*=2;}
@@ -1908,6 +1912,7 @@ export class SurvivorsEngine {
           : undefined;
     this.state.hazards.push({
       variant,
+      behavior:traits.behavior,
       id: this.genId(`haz_${type}`),
       isStageBoss,
       signatureEventId: authored?.signatureEventId,
@@ -2008,8 +2013,10 @@ export class SurvivorsEngine {
       const dy = player.y - h.y;
       const dist = Math.hypot(dx, dy) || 1;
 
-      h.x += (dx / dist) * hazardSpeed * dt;
-      h.y += (dy / dist) * hazardSpeed * dt;
+      const drift=h.behavior==='crosswind' ? Math.sin(this.state.gameTime*1.6+(h.id.charCodeAt(h.id.length-1)%7))*.85 : 0;
+      const directionLength=Math.hypot(1,drift);
+      h.x += ((dx-dy*drift) / dist / directionLength) * hazardSpeed * dt;
+      h.y += ((dy+dx*drift) / dist / directionLength) * hazardSpeed * dt;
     }
     // Avoided falls expire without granting control score, drops, or boss stars.
     this.state.hazards = this.state.hazards.filter(h => h.isStageBoss || !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
@@ -2577,3 +2584,4 @@ export class SurvivorsEngine {
     return selectSurvivorsAutoTarget(this.state.hazards,x,y,range);
   }
 }
+
