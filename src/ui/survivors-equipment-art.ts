@@ -32,15 +32,16 @@ export function registerEvolutionAtlas(base:HTMLImageElement,evolution:HTMLImage
  registerPropAtlas(evolution,3,2);evolutionAtlases.set(base,evolution);
 }
 const materialTints=new WeakMap<HTMLImageElement,Map<string,HTMLCanvasElement>>();
-export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:number):void {
+export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:number,sourceRects?:readonly {x:number;y:number;width:number;height:number}[]):void {
  if(atlases.has(image)||!image.naturalWidth) return;
  const scratch=document.createElement('canvas');scratch.width=image.naturalWidth;scratch.height=image.naturalHeight;
  const ctx=scratch.getContext('2d',{willReadFrequently:true});if(!ctx)return;
  ctx.drawImage(image,0,0);const pixels=ctx.getImageData(0,0,scratch.width,scratch.height).data;
  const frames:HTMLCanvasElement[]=[];
  for(let cell=0;cell<columns*rows;cell++) {
-  const x0=Math.floor(cell%columns*scratch.width/columns),x1=Math.floor((cell%columns+1)*scratch.width/columns);
-  const y0=Math.floor(Math.floor(cell/columns)*scratch.height/rows),y1=Math.floor((Math.floor(cell/columns)+1)*scratch.height/rows);
+  const rect=sourceRects?.[cell];
+  const x0=rect?.x??Math.floor(cell%columns*scratch.width/columns),x1=rect?rect.x+rect.width:Math.floor((cell%columns+1)*scratch.width/columns);
+  const y0=rect?.y??Math.floor(Math.floor(cell/columns)*scratch.height/rows),y1=rect?rect.y+rect.height:Math.floor((Math.floor(cell/columns)+1)*scratch.height/rows);
   let left=x1,right=x0,top=y1,bottom=y0;
   for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++)if(pixels[(y*scratch.width+x)*4+3]!>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
   const frame=document.createElement('canvas');frame.width=256;frame.height=256;
@@ -75,3 +76,4 @@ export function drawEquipment(ctx:CanvasRenderingContext2D,image:HTMLImageElemen
  }
  return true;
 }
+

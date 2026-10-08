@@ -1,0 +1,457 @@
+{
+  "version": 1,
+  "columns": 2,
+  "rows": 5,
+  "stages": [
+    {
+      "stage": 1,
+      "id": "workface_01",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 0,
+      "motion": "rolling",
+      "subject": "yellow two-wheel trolley carrying a strapped orange closed industrial drum"
+    },
+    {
+      "stage": 2,
+      "id": "workface_02",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 1,
+      "motion": "rolling",
+      "subject": "low rusty four-wheel muck hopper loaded with dark soil"
+    },
+    {
+      "stage": 3,
+      "id": "workface_03",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 2,
+      "motion": "tumble",
+      "subject": "one silver rectangular aluminum formwork panel with stiffening ribs"
+    },
+    {
+      "stage": 4,
+      "id": "workface_04",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 3,
+      "motion": "vapor",
+      "subject": "warm pale amber vapor plume with three stacked rounded billows"
+    },
+    {
+      "stage": 5,
+      "id": "workface_05",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 4,
+      "motion": "vapor",
+      "subject": "icy cyan refrigerant cloud with a low branching fork silhouette"
+    },
+    {
+      "stage": 6,
+      "id": "workface_06",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 5,
+      "motion": "vapor",
+      "subject": "pale olive vapor curling into a thin tall corkscrew"
+    },
+    {
+      "stage": 7,
+      "id": "workface_07",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 6,
+      "motion": "tumble",
+      "subject": "loose cluster of red broken bricks and mortar chunks"
+    },
+    {
+      "stage": 8,
+      "id": "workface_08",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 7,
+      "motion": "tumble",
+      "subject": "two offset thick steel gusset plates with bolt holes"
+    },
+    {
+      "stage": 9,
+      "id": "workface_09",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 8,
+      "motion": "rolling",
+      "subject": "small gray four-wheel trolley carrying a round silver ventilation elbow"
+    },
+    {
+      "stage": 10,
+      "id": "workface_10",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-1-v1.webp",
+      "cell": 9,
+      "motion": "rolling",
+      "subject": "compact black battery module strapped on a low blue wheeled transport platform"
+    },
+    {
+      "stage": 11,
+      "id": "workface_11",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 0,
+      "motion": "tumble",
+      "subject": "bundle of green steel shoring U-heads with threaded stems"
+    },
+    {
+      "stage": 12,
+      "id": "workface_12",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 1,
+      "motion": "rolling",
+      "subject": "orange long low trolley with strapped bent rebar rods"
+    },
+    {
+      "stage": 13,
+      "id": "workface_13",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 2,
+      "motion": "rolling",
+      "subject": "small red wheeled concrete hopper with funnel and attached short hose"
+    },
+    {
+      "stage": 14,
+      "id": "workface_14",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 3,
+      "motion": "tumble",
+      "subject": "one yellow triangular steel gangform bracket with plate and gusset"
+    },
+    {
+      "stage": 15,
+      "id": "workface_15",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 4,
+      "motion": "tumble",
+      "subject": "short stack of galvanized perforated scaffold decks"
+    },
+    {
+      "stage": 16,
+      "id": "workface_16",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 5,
+      "motion": "rolling",
+      "subject": "weathered green four-wheel trolley carrying strapped gray concrete blocks"
+    },
+    {
+      "stage": 17,
+      "id": "workface_17",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 6,
+      "motion": "vapor",
+      "subject": "low broad violet vapor with two thin wisps rising at opposite ends"
+    },
+    {
+      "stage": 18,
+      "id": "workface_18",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 7,
+      "motion": "rolling",
+      "subject": "red low four-wheel A-frame trolley with cream gypsum boards"
+    },
+    {
+      "stage": 19,
+      "id": "workface_19",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 8,
+      "motion": "vapor",
+      "subject": "narrow pale blue upward vapor jet fanning into a flat three-lobe cap"
+    },
+    {
+      "stage": 20,
+      "id": "workface_20",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-2-v1.webp",
+      "cell": 9,
+      "motion": "rolling",
+      "subject": "small navy low platform trolley with stacked orange closed steel toolboxes"
+    },
+    {
+      "stage": 21,
+      "id": "workface_21",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 0,
+      "motion": "rolling",
+      "subject": "flat broad rusty brown low four-wheel trolley loaded with wet dark spoil"
+    },
+    {
+      "stage": 22,
+      "id": "workface_22",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 1,
+      "motion": "vapor",
+      "subject": "olive green low dense fog with a hollow crescent silhouette"
+    },
+    {
+      "stage": 23,
+      "id": "workface_23",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 2,
+      "motion": "rolling",
+      "subject": "small yellow four-wheel skip cart with an angular open steel bin"
+    },
+    {
+      "stage": 24,
+      "id": "workface_24",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 3,
+      "motion": "tumble",
+      "subject": "three cylindrical broken concrete core pieces with rough edges"
+    },
+    {
+      "stage": 25,
+      "id": "workface_25",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 4,
+      "motion": "tumble",
+      "subject": "short dark green hollow steel strut offcut with rusted ends"
+    },
+    {
+      "stage": 26,
+      "id": "workface_26",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 5,
+      "motion": "vapor",
+      "subject": "pale aqua low cloud with two unequal round lobes and tiny curling trails"
+    },
+    {
+      "stage": 27,
+      "id": "workface_27",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 6,
+      "motion": "rolling",
+      "subject": "dark gray low four-wheel metal debris cart with broken tiles"
+    },
+    {
+      "stage": 28,
+      "id": "workface_28",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 7,
+      "motion": "tumble",
+      "subject": "cluster of dark steel anchor plates with protruding anchor bolts"
+    },
+    {
+      "stage": 29,
+      "id": "workface_29",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 8,
+      "motion": "vapor",
+      "subject": "two separate amber curled vapor lobes joined by a thin transparent ribbon"
+    },
+    {
+      "stage": 30,
+      "id": "workface_30",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-3-v1.webp",
+      "cell": 9,
+      "motion": "rolling",
+      "subject": "compact orange dewatering pump strapped to a small black wheeled platform"
+    },
+    {
+      "stage": 31,
+      "id": "workface_31",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 0,
+      "motion": "rolling",
+      "subject": "narrow blue four-wheel trolley with a strapped bundle of square steel tubes"
+    },
+    {
+      "stage": 32,
+      "id": "workface_32",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 1,
+      "motion": "tumble",
+      "subject": "two brown plywood form panels with exposed wooden frame edges"
+    },
+    {
+      "stage": 33,
+      "id": "workface_33",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 2,
+      "motion": "rolling",
+      "subject": "orange metal trolley with distinctive curved U-shaped rebar stirrups"
+    },
+    {
+      "stage": 34,
+      "id": "workface_34",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 3,
+      "motion": "tumble",
+      "subject": "irregular rough gray hardened concrete splatter chunk with pebbles"
+    },
+    {
+      "stage": 35,
+      "id": "workface_35",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 4,
+      "motion": "tumble",
+      "subject": "two short diagonal galvanized scaffold braces crossing with clamp fittings"
+    },
+    {
+      "stage": 36,
+      "id": "workface_36",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 5,
+      "motion": "rolling",
+      "subject": "yellow four-wheel low trolley carrying a blue cylindrical industrial ventilation fan"
+    },
+    {
+      "stage": 37,
+      "id": "workface_37",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 6,
+      "motion": "vapor",
+      "subject": "wide magenta-gray translucent vapor ribbon curling back into a soft hook"
+    },
+    {
+      "stage": 38,
+      "id": "workface_38",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 7,
+      "motion": "rolling",
+      "subject": "light orange low trolley carrying strapped boxes and stacked white ceramic tiles"
+    },
+    {
+      "stage": 39,
+      "id": "workface_39",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 8,
+      "motion": "tumble",
+      "subject": "three silver steel pipe elbows and one short pipe section in a loose cluster"
+    },
+    {
+      "stage": 40,
+      "id": "workface_40",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-4-v1.webp",
+      "cell": 9,
+      "motion": "tumble",
+      "subject": "one gray grated steel protective cover plate with a yellow edge strip"
+    },
+    {
+      "stage": 41,
+      "id": "workface_41",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 0,
+      "motion": "vapor",
+      "subject": "tall white-blue vapor column with layered ring-like curls"
+    },
+    {
+      "stage": 42,
+      "id": "workface_42",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 1,
+      "motion": "vapor",
+      "subject": "long low cyan ribbon plume with three wave crests"
+    },
+    {
+      "stage": 43,
+      "id": "workface_43",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 2,
+      "motion": "rolling",
+      "subject": "heavy navy low four-wheel trolley holding two black ribbed rectangular UPS battery modules"
+    },
+    {
+      "stage": 44,
+      "id": "workface_44",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 3,
+      "motion": "vapor",
+      "subject": "small purple-gray vapor cloud with jagged wisps and an asymmetric triangular profile"
+    },
+    {
+      "stage": 45,
+      "id": "workface_45",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 4,
+      "motion": "tumble",
+      "subject": "one heavy blue industrial motor housing with exposed silver shaft"
+    },
+    {
+      "stage": 46,
+      "id": "workface_46",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 5,
+      "motion": "vapor",
+      "subject": "thin white vapor burst with a narrow waist and broad flat top"
+    },
+    {
+      "stage": 47,
+      "id": "workface_47",
+      "type": "GAS_LEAK",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 6,
+      "motion": "vapor",
+      "subject": "two interlocking teal and pale amber vapor swirls forming a hollow oval"
+    },
+    {
+      "stage": 48,
+      "id": "workface_48",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 7,
+      "motion": "rolling",
+      "subject": "green low trolley carrying a silver cylindrical valve actuator and orange toolbox"
+    },
+    {
+      "stage": 49,
+      "id": "workface_49",
+      "type": "RUNAWAY_CART",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 8,
+      "motion": "rolling",
+      "subject": "compact orange service trolley with coiled black hose and metal toolbox"
+    },
+    {
+      "stage": 50,
+      "id": "workface_50",
+      "type": "FALLING_DEBRIS",
+      "atlas": "workface-threats-5-v1.webp",
+      "cell": 9,
+      "motion": "tumble",
+      "subject": "a unique cluster of silver flanges, dark pipe fitting and ribbed metal coupling"
+    }
+  ]
+}

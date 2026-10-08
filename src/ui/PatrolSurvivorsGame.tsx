@@ -1,3 +1,5 @@
+import {WorkfaceThreatArt,workfaceThreatAppearance,workfaceThreatCopy} from './survivors-workface-threats';
+import workfaceCopy from '../../content/localization/survivors-workface-threats-ko.json';
 import {SurvivorsDisplaySettings} from './SurvivorsDisplaySettings';
 import {readDisplaySettings,saveDisplaySettings,displayViewZoom,type DisplaySettings} from './survivors-display-settings';
 import {STAGE_THREAT_ART,THREAT_ART_GRID} from './survivors-threat-appearance';
@@ -1328,6 +1330,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [displaySaved,setDisplaySaved]=useState(true);
   const displaySettingsRef=useRef(displaySettings);
   const changeDisplaySettings=(next:DisplaySettings)=>{displaySettingsRef.current=next;performanceBudgetRef.current?.configure(next);setDisplaySettings(next);setDisplaySaved(saveDisplaySettings(next));};
+  const workfaceArtRef=useRef<WorkfaceThreatArt|null>(null);
+  if(!workfaceArtRef.current)workfaceArtRef.current=new WorkfaceThreatArt();
+  useEffect(()=>{workfaceArtRef.current?.get(PATROL_STAGES[selectedStage].stageNumber);},[selectedStage]);
   const performanceBudgetRef = useRef<SurvivorsPerformanceBudget | null>(null);
   if(!performanceBudgetRef.current)performanceBudgetRef.current=new SurvivorsPerformanceBudget(window.matchMedia?.('(pointer:coarse)').matches??false);
   useEffect(()=>{performanceBudgetRef.current?.configure(displaySettingsRef.current);},[]);
@@ -1922,6 +1927,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering 2.5D Foundation Slab)
       const stage = engine.state.stage;
+      const workfaceAtlas=workfaceArtRef.current?.get(stage.stageNumber);
+      const workfaceReady=workfaceAtlas?.naturalWidth?'ready':'loading';
+      if(containerRef.current&&containerRef.current.dataset.workfaceStage!==String(stage.stageNumber))containerRef.current.dataset.workfaceStage=String(stage.stageNumber);
+      if(containerRef.current&&containerRef.current.dataset.workfaceArt!==workfaceReady)containerRef.current.dataset.workfaceArt=workfaceReady;
       ctx.fillStyle = stage?.floorColor || '#0f141c';
       ctx.fillRect(-camera.marginX-4, -camera.marginY-4, WORLD_WIDTH+camera.marginX*2+8, WORLD_HEIGHT+camera.marginY*2+8);
 
@@ -2727,7 +2736,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber,workfaceAtlas)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
@@ -2999,6 +3008,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             if(h.variant==='pulse_gas'){ctx.globalAlpha=.65;ctx.strokeStyle=h.motion?.phase==='charge'?'#fb7185':'#a7f3d0';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,h.radius,0,Math.PI*2);ctx.stroke();}
             else if(h.variant==='reinforced_cart'){ctx.strokeStyle=h.hp<h.maxHp*.5?'#fb923c':'#7dd3fc';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,2,h.radius*1.25,h.radius*.45,0,0,Math.PI*2);ctx.stroke();}
             ctx.restore();
+          }
+          const workfaceIdentity=workfaceAtlas?.naturalWidth?workfaceThreatAppearance(h,stage.stageNumber):undefined;
+          if(workfaceIdentity&&(hazards.length<15||h===closestWarning)){
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#b4f3d9';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            const text=workfaceThreatCopy(stage.stageNumber)!.name,labelY=hazardPlacement.y-hazardPlacement.size*.82-24-(h.behavior?16:0);
+            ctx.strokeText(text,0,labelY);ctx.fillText(text,0,labelY);ctx.restore();
           }
           if(h.behavior){
             ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#a5f3fc';ctx.strokeStyle='#111827';ctx.lineWidth=3;
@@ -3705,6 +3720,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </select>
             </label>
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
+            {preflightTab==='stage'&&workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)&&<section className="survivors-mission-brief"><h3>{workfaceCopy.title}</h3><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.name}</p><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.hint}</p></section>}
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
             <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
