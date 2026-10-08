@@ -102,10 +102,15 @@ it('cancels pending decoding on pause/mute and discards late warnings without re
   ctx.currentTime=2;resolve({duration:3});expect(await late).toBe(false);expect(sources).toHaveLength(0);
   audio.setMuted(true);expect(await audio.playPlayerVoice('CLEAR',85)).toBe(false);audio.dispose();
 });
-it('releases the speech owner when the shared voice budget evicts its source',async()=>{
-  const {ctx}=context(),audio=new SurvivorsSessionAudio();await audio.playPlayerVoice('START',40);
+it('preserves urgent speech when equal-priority effects saturate the shared voice budget',async()=>{
+  const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();await audio.playPlayerVoice('CART_WARNING',100);
+  const speech=sources[0]!;
   for(let i=0;i<24;i++)audio.track(ctx.createBufferSource() as unknown as AudioBufferSourceNode,ctx.createGain() as unknown as GainNode,4);
-  expect(await audio.playPlayerVoice('SECURED',30)).toBe(true);audio.dispose();
+  expect(speech.stop).not.toHaveBeenCalled();
+  expect(sources[1]!.stop).toHaveBeenCalledOnce();
+  expect(await audio.playPlayerVoice('SECURED',30)).toBe(false);
+  expect(await audio.playPlayerVoice('FALL_WARNING',100)).toBe(false);
+  audio.setMuted(true);expect(speech.stop).toHaveBeenCalled();audio.dispose();
 });
 it('allows a delayed opening but still expires it and cancels pending speech on pause',async()=>{
   const {ctx,sources}=context(),audio=new SurvivorsSessionAudio();
