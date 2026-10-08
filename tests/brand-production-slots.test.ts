@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
@@ -18,7 +18,19 @@ describe('brand production slot audit contract', () => {
     for (const slot of contract.slots) {
       expect(slot.uri).toMatch(/^\/[a-zA-Z0-9/.-]+\.webp$/);
       expect(slot.uri).not.toContain('..');
-      expect(existsSync(resolve('public', slot.uri.slice(1)))).toBe(true);
+      const delivery = resolve('public', slot.uri.slice(1));
+      if ('generatedSourcePrefix' in slot && slot.generatedSourcePrefix) {
+        const parts = readdirSync('content/mode-previews').filter(name => name.startsWith(`${slot.generatedSourcePrefix}.b64.`)).sort();
+        expect(parts.length).toBeGreaterThan(0);
+        const binary = Buffer.from(parts.map(name => readFileSync(resolve('content/mode-previews', name), 'utf8')).join(''), 'base64');
+        expect(binary.length).toBeGreaterThan(5000);
+        expect(binary.subarray(0, 4).toString()).toBe('RIFF');
+        expect(binary.subarray(8, 12).toString()).toBe('WEBP');
+        expect(existsSync(slot.materializer!)).toBe(true);
+        if (existsSync(delivery)) expect(readFileSync(delivery)).toEqual(binary);
+      } else {
+        expect(existsSync(delivery)).toBe(true);
+      }
       expect(existsSync(slot.source)).toBe(true);
       expect(slot.width).toBeGreaterThan(0);
       expect(slot.height).toBeGreaterThan(0);

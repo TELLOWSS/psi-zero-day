@@ -4,7 +4,7 @@
   "finalApproval": "NOT_GRANTED_BY_THIS_CONTRACT",
   "slots": [
     {"id":"title-background","selector":".commercial-title-backdrop","uri":"/assets/episode01/hires/night-pour-hero.webp","width":1920,"height":1080,"fit":"cover","source":"src/app/episode-visual-assets.ts"},
-    {"id":"signal-entry","selector":".is-survivors-entry .commercial-title-action-art","uri":"/mode-previews/signal-watch.webp","width":560,"height":315,"fit":"cover","source":"src/ui/GameHub.tsx"},
+    {"id":"signal-entry","selector":".is-survivors-entry .commercial-title-action-art","uri":"/mode-previews/signal-watch.webp","width":560,"height":315,"fit":"cover","source":"src/ui/GameHub.tsx","generatedSourcePrefix":"signal-watch","materializer":"scripts/materialize-mode-preview-art.mjs"},
     {"id":"defense-entry","selector":".is-defense-entry .commercial-title-action-art","uri":"/mode-previews/defense-coming-soon-v2.webp","width":1672,"height":941,"fit":"cover","source":"src/ui/GameHub.tsx"},
     {"id":"story-entry","selector":".is-story-entry .commercial-title-action-art","uri":"/mode-previews/story-coming-soon-v2.webp","width":1672,"height":941,"fit":"cover","source":"src/ui/GameHub.tsx"},
     {"id":"cast-player","selector":".commercial-title-worker[data-character=\"player\"] img","uri":"/assets/episode01/characters/player-map.webp","width":768,"height":1024,"fit":"contain","source":"content/episode01/visuals.json"},
