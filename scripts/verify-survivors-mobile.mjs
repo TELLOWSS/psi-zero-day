@@ -176,7 +176,7 @@ try {
       await evaluate(cdp,`(async()=>{
         const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
         const update=SurvivorsEngine.prototype.update;
-        SurvivorsEngine.prototype.update=function(dt,input){window.qaMobileEngine=this;window.qaInput={dt,...input};return update.call(this,dt,input);};
+        SurvivorsEngine.prototype.update=function(dt,input){window.qaMobileEngine=this;window.qaInput={dt,...input};if(window.qaVisualFreeze)return;return update.call(this,dt,input);};
       })()`);
       await evaluate(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary').click()");
       await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
@@ -201,8 +201,22 @@ try {
       await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});await sleep(2600);
       const stress=await evaluate(cdp,"({quality:document.querySelector('.survivors-container').dataset.quality,dt:window.qaInput.dt,finite:Number.isFinite(window.qaMobileEngine.state.player.x),hazards:window.qaMobileEngine.state.hazards.length})");
       await screenshot(cdp,`${width}x${height}-cpu-stress.png`);
-      const pass=!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
-      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,errors,pass});
+      await cdp.send('Emulation.setCPUThrottlingRate',{rate:1});
+      const appearance=await evaluate(cdp,`(async()=>{
+        const {stageThreatAppearance}=await import('/src/ui/survivors-threat-appearance.ts');
+        const image=new Image();image.src='/assets/survivors/stage-threat-silhouettes-v1.webp';await image.decode();
+        const e=window.qaMobileEngine;window.qaVisualFreeze=true;e.state.stage={...e.state.stage,theme:'highrise_slab',stageNumber:3};
+        const specs=[['RUNAWAY_CART',null,null],['RUNAWAY_CART','reinforced_cart',null],['RUNAWAY_CART',null,'flanking_cart'],['GAS_LEAK','pulse_gas',null],['GAS_LEAK','split_gas',null],['GAS_LEAK',null,'crosswind'],['FALLING_DEBRIS',null,null],['FALLING_DEBRIS',null,'wide_debris'],['FALLING_DEBRIS',null,null]];
+        e.state.hazards=[];e.state.interactiveHazards=[];e.state.perkOptions=[];
+        const cells=[];
+        for(let i=0;i<9;i++){const [type,variant,behavior]=specs[i];e.spawnHazard(type);const h=e.state.hazards.at(-1);h.x=e.state.player.x+(i%3-1)*150;h.y=e.state.player.y+(Math.floor(i/3)-1)*140;h.speed=0;h.damage=0;h.variant=variant||undefined;h.behavior=behavior||undefined;h.isStageBoss=false;h.signatureEventId=undefined;h.motion={phase:type==='FALLING_DEBRIS'?'fall':'warning',timer:type==='FALLING_DEBRIS'?.15:1.25,directionX:1,directionY:0};if(i===4)h.y+=50;cells.push(stageThreatAppearance(h,i===8?5:3,i===8?'surface_logistics':'highrise_slab')?.cell);}
+        return {width:image.naturalWidth,height:image.naturalHeight,cells,scope:'Synthetic nine-shape render fixture; no gameplay completion claim.'};
+      })()`);
+      await sleep(250);await screenshot(cdp,`${width}x${height}-threat-silhouettes.png`);
+      await evaluate(cdp,"window.qaMobileEngine.state.stage={...window.qaMobileEngine.state.stage,theme:'surface_logistics',stageNumber:5}");
+      await sleep(150);await screenshot(cdp,`${width}x${height}-steel-silhouettes.png`);
+      const pass=appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
+      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
   }
 } finally {

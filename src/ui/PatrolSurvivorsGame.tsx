@@ -1,3 +1,4 @@
+import {STAGE_THREAT_ART,THREAT_ART_GRID} from './survivors-threat-appearance';
 import {SurvivorsPerformanceBudget,survivorsViewportZoom} from './survivors-performance';
 import threatText from '../../content/localization/survivors-stage-threats-ko.json';
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
@@ -243,6 +244,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     dispatchTrailAtlas?: HTMLCanvasElement;
     premiumPresence?: PremiumPresenceImages;
     industrialHazards?: HTMLImageElement;
+    stageThreats?: HTMLImageElement;
     carrierBoss?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
     metalImpact?: HTMLImageElement;
@@ -365,6 +367,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const premiumPresence = new Image();
     premiumPresence.onload=()=>{spritesRef.current.premiumPresence=preparePremiumPresence(premiumPresence);};
     premiumPresence.src='/assets/survivors/premium-presence-v1.png';
+    const stageThreats=new Image();
+    stageThreats.onload=()=>{registerPropAtlas(stageThreats,THREAT_ART_GRID.columns,THREAT_ART_GRID.rows);spritesRef.current.stageThreats=stageThreats;};
+    stageThreats.src=STAGE_THREAT_ART;
     const industrialHazards = new Image(); industrialHazards.src = INDUSTRIAL_HAZARD_ART;
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
     const carrierBoss=new Image();carrierBoss.src=INDUSTRIAL_CART_BOSS_ART;
@@ -2712,7 +2717,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
@@ -4278,4 +4283,5 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     </div>
   );
 }
+
 
