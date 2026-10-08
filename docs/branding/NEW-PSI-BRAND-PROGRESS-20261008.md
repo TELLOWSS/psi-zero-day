@@ -2,6 +2,11 @@
 
 ## 최신 기준선
 
+- PR150 문서/QA 운영 동기화 완료: `f7ec0ff0a5f3736aa21a4f651537794ed47995d6`, `dpl_3mX9nrkeD1o2wPug8RC3cD2VCxFP` production READY/공개 별칭 확인. 최종748e54c3 검사3개/preview 성공 후 병합. 새 계약 단위 검사5건 및 Linux 전체/타입/빌드/실제8슬롯 감사 성공. R1 후보는 docs에만 보존하며 runtime 교체 없음; 기존 타이틀 폰가로 얼굴 잘림/폰세로 UI 가림으로 적용 HOLD.
+- B1 모바일 위계 후속 후보: 기존 승인 player-map.webp를 제목 그룹 안에만 재사용하여 폰세로 대표 인물 노출, 실제 플레이 행동을 read-only 상태 요약보다 앞에 배치. 준비 중 프리뷰 기능/PC4인/낮은 폰가로 간소화 유지. 새 자산/게임규칙/저장/권리·최종 승인 변경 없음. 전체1,762건 통과·1건 제외, 집중22/타입/prebuild/build 통과. 최종 작은 CSS 간격 및9번째 재사용 슬롯 보완 뒤 실제 빌드 감사 재통과; 8viewport 일반/움직임 감소16경로 alpha bounds/CTA/모드 잠금 검증을 보강한다.
+- 첫 모바일 시안에서 구 CSS의 display:none!important와 고정 화면 좌표의 큰 폰 버튼 겹침을 발견했다. 인물 원화를 제목 그룹 내부 별도 표시 슬롯으로 옮기고 실제 alpha32 경계를 계측하여 가림을 수정한다. 낮은 폰가로의 숨겨진 상태 요약은 DOM 순서와 visible 여부를 구분해 검사한다. 첫 실패를 통과로 계산하지 않는다.
+- 최종 로컬 모바일 위계16경로 모두 통과, 390/430 폰세로 최신 PNG 직접 확인. 9슬롯4viewport 감사와 최종 집중22/타입/Vite build 통과. 운영 반영은 최신 원격 검사 성공 이후 별도로 확인한다.
+
 - PR149 운영 완료: `27667547431e29c624563a0f4a0aca2d0888fbd2`, `dpl_GcFpyJX4sANFLDSbER8kZtQ6EBJF` production READY/공개 별칭 확인. 최종2c7c357a 검사3개/preview 성공 후 병합. 공개 LZ3viewport에서 중복 바닥 문구0/HUD 방향·범위 밖15초 유지·내부14.67/14.68/14.67 감소/오류없음 통과. 아래 영상 후속 후보는 적용 전 이력이다.
 - B2 독립 후속: `NEW-PSI-BRAND-PRODUCTION-SLOTS-20261008.md`와 QA 전용 계약 JSON에 실제 타이틀8개 이미지 슬롯/크롭/4인 identity·폰 hidden/텍스트 로고·빈 favicon 상태를 기록. 공개4viewport 연결/파일 크기/디코딩/object-fit 일치, 집중4건/타입 통과. runtime/기존 자산/권리·최종 승인 상태를 바꾸지 않는다.
 - 세로 대표 원화 최종 후보 R1을 기존 승인 주인공/현장 파일 참조로 built-in image_gen 제작, 원본/프롬프트/hash/승인 대기 기록 보존. `docs/branding/candidates`에만 저장하고 public/runtime에는 연결하지 않는다. 별도 브라우저 후보 대입4viewport 캡처는 크롭 검토이며 운영 배포 또는 시각 승인 증거가 아니다.

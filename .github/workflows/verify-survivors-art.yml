@@ -16,6 +16,10 @@ on:
       - 'tests/verify-store-reference-layout.mjs'
       - 'tests/verify-lz-guidance.mjs'
       - 'tests/brand-production-slots.test.ts'
+      - 'src/ui/GameHub.tsx'
+      - 'src/ui/shooting-entry.css'
+      - 'tests/game-hub.test.tsx'
+      - 'tests/verify-brand-mobile-hierarchy.mjs'
       - 'scripts/audit-brand-production-slots.mjs'
       - 'content/branding/production-slots-v1.json'
       - 'content/localization/survivors-store-ko.json'
@@ -98,6 +102,7 @@ jobs:
           node tests/verify-store-reference-layout.mjs
           node tests/verify-lz-guidance.mjs
           node scripts/audit-brand-production-slots.mjs
+          node tests/verify-brand-mobile-hierarchy.mjs
           node scripts/verify-tactical-ui.mjs
       - uses: actions/upload-artifact@v4
         if: always()
@@ -114,6 +119,7 @@ jobs:
             artifacts/store-reference-layout
             artifacts/lz-guidance
             artifacts/brand-production-slots
+            artifacts/brand-mobile-hierarchy
             artifacts/tactical-ui
             artifacts/combat-debrief-ui
             artifacts/confirmed-impact
