@@ -100,3 +100,7 @@ Use case: stylized-concept. Asset type: construction-game industrial enemy desig
 ## Final assets and sketch
 
 Runtime assets are format-only WebP conversions (quality 90, alpha retained) of the five spacing-edit images. Source images: `exec-6c0fcd6d-7356-4609-81b5-b2ba8a2e966e.png`, `exec-61fa6fd2-4e7d-443d-b090-b316758ab8d7.png`, `exec-ee008bd4-e28d-4514-9362-c003558ec46a.png`, `exec-cf67cf49-73d8-4073-88ba-7543485190b9.png`, `exec-559efcbd-161d-4ba7-861b-d64f2ff42477.png`. Documentation-only sketch: `docs/art/workface-threat-motion-sketches-v1.webp`, from `exec-f2e158fe-858e-4f9b-b885-689aeb9e0fa4.png`; never loaded by gameplay.
+
+## Verified spawn integration
+
+Stage 02 previously spawned only contact workers and gas after its introduction. Its authored soil hopper uses the existing cart family, so its ordinary mix now includes one cart entry alongside the two preserved gas entries. Spawn pressure, warning duration, collision, damage, bosses and signature events remain unchanged. All other 49 identities already match their existing ordinary spawn families. The roster test samples the real selectStageHazard function for every stage rather than relying on optional hazardMix metadata.
