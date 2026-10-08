@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 주인공 조명 분리 진단(제품 변경 아님): `tests/verify-player-light-contrast.mjs` 실제 빌드의 body-light 함수만 표시 계측/override하여 PC·폰세로·가로 x idle/walking 6조건에서 original/off/24% peak 비교18PNG 확보. paused gameTime 고정/오류·넘침없음. 변경 픽셀1345~1695개, 평균 RGB 차이29.93~30.99, 변경 픽셀 luma 약30~32 증가. 폰 walking off/peak 직접 확인: peak에서 작업복이 밝아짐. 모든 original strength는0이므로 자연 플레이에서 최대 조명이 실행됐다는 증거 또는 영상 희미함의 원인 확정이 아님. 국소 배경 대비율/자연 조명 분포/실기기/최종 시각 승인도 아님. `artifacts/player-light-contrast/report.json` 참조. 원본/게임 규칙/운영 표시 불변.
+- 현재 작업 트리에는 이전4파일 외 material-feel/workface 및 엔진·UI·조명·음향 등의 추가 사용자/다른 작업 변경이 있음. 이를 보존하며 이번 진단 결과를 해당 미검증 변경의 검증으로 확대하지 않음. 제품 가독성 조정 전 현재 소유 작업·실제 활성 경로를 다시 확인해야 함.
+
 - 주인공 희미함 원인 재조사(제품 수정 아님): `audit-player-source-alpha.mjs` 원본5파일/97셀 read-only 픽셀·SHA 기록. visible alpha>=32 기준 median 최소249~253, solid alpha>=192 비율 최소87.6~98.0%. 원본 전반 반투명 가설의 근거 없음; 원본알파를 임의 불투명화하지 않음. `artifacts/player-source-alpha/report.json`.
 - 실제몸체 grounded draw 직전 계측 추가 자연 UI bot 재실행:3338몸체샘플 alpha .8~1, composite source-over, filter none, .8미만0. shield실제eventcycle/HUD부분·소진·복구 일치 재통과(261samples/258일치). main ctx 알파누수/brightness filter가 관측한 stage01 희미함 원인이라는 근거 없음. stage별weather code는02~05 ground-before-actor이며 이번stage01 실행에는 해당branch 없음. 따라서 '날씨 때문에 희미함'을 확정하지 않고 원화색/밝은바닥/heroLight·실제국소대비를 다음조사대상으로 좁힘. 자연봇/seededloadout이며 모든맵·실기기원인 해결 아님. 기존visual선택/assetbytes/palette/규칙 변경 없음.
 
