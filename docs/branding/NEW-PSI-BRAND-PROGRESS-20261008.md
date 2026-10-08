@@ -2,6 +2,8 @@
 
 ## 최신 기준선
 
+- B3 브라우저 후속 `tests/verify-voice-budget.mjs`: 실제 Edge WebAudio/원본 CART_WARNING 디코딩·재생 후 명시적인 무음 loop 효과24개로 shared budget 포화. PC/폰세로/폰가로3경로에서 경고 source 유지, 효과 source 교체와24한도, 낮은/동순위 대사 거부, mute 취소, 새 START 재생 및 silence 취소/오류없음 통과. `artifacts/voice-budget/report.json`. 독립 audio class dev-module 검증이며 자연 전투/UI pause/실기기/실청취 승인 아님. 검증 전용5182 서버 종료, 기존5181 유지.
+
 - PR152 최신 `fbb7c54b05996706e0e0c0f6fd4d68bb06dde374` 검사4개/preview 성공 후 main `ed06b3f0d7c32ee7733fafc0365beb168cf51658` 병합. 운영 `dpl_6zkTBvc93vQHHA6CeaF5r9N68TBD` READY/정확 SHA/별칭 확인. 공개 운영 mobile16/slot8(밝음·어두움 및 승인 SVG SHA)/공식제목4 통과. 아래 후보 제작 당시 비연결·미승인은 역사적 기록이며 현재 BR-LOGO-02 승인 파일은 운영 연결 완료.
 - B3 후속: 공유24음원 슬롯에서 같은 우선순위 UI 효과가 진행 중인 경고 대사를 제거하는 경로를 확인. 슬롯 교체 대상에서 현재 speech owner만 제외하며 실제 음성 우선순위/중단·음소거 경로와 파일·볼륨·게임 규칙은 유지. 포화 회귀 포함12건/타입/Vite 빌드 통과. 최초 음소거 mock의 stop 1회 기대는 기존 silence의 이중 stop 호출과 달라 실패하여 취소 여부로 검증 수정. 실제 청취·자연 과밀·실기기 증거가 아니며 운영 후속 검증 전.
 
