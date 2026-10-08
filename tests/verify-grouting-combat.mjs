@@ -76,7 +76,7 @@ try{
     return {hash:hash>>>0,time:s.gameTime,phase:s.phase,count:s.projectiles.length,images:window.qaImages.filter(i=>i.complete&&i.naturalWidth>0).map(i=>i.src).filter(src=>/player-(walk|command|equipment)|industrial-hazards|runaway-carrier/.test(src)),paint:window.feedbackPaint,selected:window.feedbackSelected.map(({id,y,text})=>({id,y,text})),overflow:document.documentElement.scrollWidth>innerWidth+1};
    });
    await page.screenshot({path:`${output}/${width}x${height}-${kind}-${mode}.png`});
-   const paintedBounds=result.paint.length>=3&&result.paint.every(p=>p.left>=-1&&p.right<=p.canvasWidth+1&&p.top>=p.hudBottom&&p.bottom<=p.canvasHeight+1);
+   const paintedBounds=new Set(result.paint.map(p=>p.text)).size===3&&result.paint.every(p=>p.left>=-1&&p.right<=p.canvasWidth+1&&p.top>=p.hudBottom&&p.bottom<=p.canvasHeight+1);
    const actorClear=result.paint.every(p=>p.hero&&(p.right<=p.hero.left||p.left>=p.hero.right||p.bottom<=p.hero.top||p.top>=p.hero.bottom));
    rows.push({width,height,kind,mode,...result,actorClear,errors:[...errors],pass:result.phase==='paused'&&result.count===5&&result.selected.length===3&&result.selected.some(x=>x.id===1)&&result.selected.some(x=>x.id===2)&&(edge||new Set(result.selected.map(x=>x.y)).size===3)&&paintedBounds&&actorClear&&!result.overflow&&!errors.length});
   }
