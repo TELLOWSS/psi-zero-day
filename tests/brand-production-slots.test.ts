@@ -65,4 +65,17 @@ describe('brand production slot audit contract', () => {
     expect(record.file).toMatch(/^docs\/branding\/candidates\//);
     expect(readFileSync('src/ui/GameHub.tsx', 'utf8')).not.toContain('BR-ART-01-player-portrait-r1');
   });
+
+  it('keeps the incomplete wordmark delivery explicitly on hold outside runtime', () => {
+    const record = JSON.parse(readFileSync('docs/branding/candidates/BR-LOGO-01-wordmark-r1.json', 'utf8'));
+    expect(record.status).toBe('HOLD_NOT_PRODUCTION_ELIGIBLE');
+    expect(record.runtimeConnected).toBe(false);
+    expect(record.directorFileApproval).toBe(false);
+    expect(record.file).toMatch(/^docs\/branding\/candidates\//);
+    expect(createHash('sha256').update(readFileSync(record.file)).digest('hex')).toBe(record.sha256);
+    expect(record.missingDeliverables).toContain('editable vector');
+    expect(record.missingDeliverables).toContain('transparent delivery');
+    expect(readFileSync('src/ui/GameHub.tsx', 'utf8')).not.toContain(record.id);
+    expect(readFileSync('index.html', 'utf8')).toContain('rel="icon" href="data:,"');
+  });
 });
