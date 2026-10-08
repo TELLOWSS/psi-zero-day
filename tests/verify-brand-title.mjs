@@ -13,7 +13,9 @@ try {
   for (const [width, height] of [[1440, 900], [390, 844], [844, 390], [1024, 768]]) {
     const page = await browser.newPage({ viewport: { width, height } }), errors = [];
     page.on('pageerror', error => errors.push(String(error)));
-    await page.goto(url);
+    const response=await page.goto(url);
+    if(!response||!/<title>NEW PSI : ZERO DAY<\/title>/.test(await response.text()))throw new Error('Initial HTML title differs from official title');
+    if(await page.title()!=='NEW PSI : ZERO DAY')throw new Error('Browser document title differs from official title');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(2000);
     const descriptor = page.locator('.commercial-title-english');
