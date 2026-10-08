@@ -2,6 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {readFile} from 'node:fs/promises';
 import sharp from 'sharp';
 import {WORKFACE_CROPS,WORKFACE_THREATS,workfaceThreatAppearance,workfaceThreatCopy,workfaceThreatPose} from '../src/ui/survivors-workface-threats';
+import {selectStageHazard} from '../src/engine/survivors-difficulty';
 import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
 import type {HazardType,PatrolStageId} from '../src/domain/patrol-survivors';
 describe('fifty authored workface identities',()=>{
@@ -10,7 +11,8 @@ describe('fifty authored workface identities',()=>{
   expect(new Set(WORKFACE_THREATS.map(r=>r.atlas+':'+r.cell)).size).toBe(50);
   for(const row of WORKFACE_THREATS){
    const id=`stage_${String(row.stage).padStart(2,'0')}` as PatrolStageId;
-   expect(PATROL_STAGES[id].hazardMix).toContain(row.type);
+   const actualFamilies=new Set(Array.from({length:100},(_,i)=>selectStageHazard(PATROL_STAGES[id],60,i/100,180,.99)));
+   expect(actualFamilies.has(row.type as HazardType)).toBe(true);
    expect(workfaceThreatCopy(row.stage)?.name).toBeTruthy();
    expect(workfaceThreatAppearance({id:'hazard_1',type:row.type as HazardType},row.stage)?.id).toBe(row.id);
    expect(workfaceThreatAppearance({id:'hazard_3',type:row.type as HazardType},row.stage)).toBeUndefined();

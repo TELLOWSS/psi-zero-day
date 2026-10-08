@@ -23,6 +23,7 @@ export function workfaceThreatPose(h:Pick<Hazard,'motion'|'type'|'id'>,pose:Pick
  if(h.type==='RUNAWAY_CART'){
   const moving=pose.moving&&h.motion?.phase!=='warning'&&h.motion?.phase!=='cooldown';
   const amplitude=moving?Math.min(.8,Math.max(0,pose.speed)/240):0;
+  if(amplitude===0)return neutral;
   return {...neutral,y:Math.sin(pose.travel*.13+seed)*amplitude,rotation:Math.sin(pose.travel*.08+seed)*amplitude*.012};
  }
  if(h.type==='GAS_LEAK')return {...neutral,y:Math.sin(clock*1.4+seed)*1.1,rotation:Math.sin(clock*.9+seed)*.018,scaleX:1+Math.sin(clock*1.1+seed)*.025,scaleY:1+Math.cos(clock*1.3+seed)*.022};
