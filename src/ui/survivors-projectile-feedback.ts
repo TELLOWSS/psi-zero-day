@@ -27,17 +27,17 @@ export class ProjectileFeedbackLayer {
     // projectile/phase/cell, while preserving separate worker confirmations.
     const seen = new Set<string>();
     for (const event of events) {
-      const key = `${event.projectileId}:${event.phase}:${Math.floor(event.x/24)}:${Math.floor(event.y/24)}:${event.worker}`;
+      const key = `${event.projectileId}:${event.phase}:${event.targetId??`${Math.floor(event.x/24)}:${Math.floor(event.y/24)}`}:${event.worker}`;
       if (seen.has(key)) continue;
       seen.add(key);
       if (busy && event.phase === 'release') continue;
-      const duration = event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:
+      const duration = event.finishing&&!event.worker&&!event.blocked?.48:event.phase === 'launch' ? (event.kind==='shout_shockwave'?ULTIMATE_RELEASE_DURATION:
         event.kind==='radio'&&equipped.includes('voice_lens')?VOICE_LENS_RELEASE_DURATION:.14) : event.phase === 'impact' ? (event.critical ? .30 : .24) : .22;
       this.effects.push({event, age:0, duration});
     }
     this.effects=balancedFeedbackPool(this.effects,MAX_PROJECTILE_FEEDBACK,equipped,e=>this.heldUltimate(e));
   }
-  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;metalAtlas?:HTMLImageElement;debrisAtlas?:HTMLImageElement;vaporAtlas?:HTMLImageElement;droneLaunchAtlas?:HTMLImageElement;hunterLaunchAtlas?:HTMLImageElement;radioLaunchAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>}): void {
+  draw(ctx: CanvasRenderingContext2D, reducedMotion = false, busy = false, cinematic?:{atlas?:HTMLImageElement;materialAtlas?:HTMLImageElement;metalAtlas?:HTMLImageElement;debrisAtlas?:HTMLImageElement;vaporAtlas?:HTMLImageElement;droneLaunchAtlas?:HTMLImageElement;hunterLaunchAtlas?:HTMLImageElement;radioLaunchAtlas?:HTMLImageElement;equipped:readonly string[];levels?:Partial<Record<ProjectileFeedback['kind'],number>>;flashStrength?:number}): void {
     const cores=feedbackCoreOwners(this.effects,cinematic?.equipped);
     for (const effect of this.effects) {
       if(this.heldUltimate(effect))continue;
@@ -46,7 +46,7 @@ export class ProjectileFeedbackLayer {
       const t = age/duration, spec = PROJECTILE_VFX[e.kind];
       ctx.save();
       ctx.translate(e.x,e.y);
-      ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78);
+      ctx.globalAlpha = (1-t) * (e.phase === 'release' ? .28 : .78)*(e.worker?1:Math.max(.2,cinematic?.flashStrength??1));
       ctx.strokeStyle = e.worker ? '#34d399' : spec.color;
       ctx.lineWidth = e.critical ? 2.5 : 1.5;
       if(!e.worker&&e.kind==='shout_shockwave'&&e.phase==='launch'&&drawUltimateRelease(ctx,cinematic?.atlas,age,reducedMotion,busy)){

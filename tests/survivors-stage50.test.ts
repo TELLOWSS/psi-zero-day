@@ -29,7 +29,7 @@ describe('fifty authored patrol workfaces',()=>{
     const engine=new SurvivorsEngine(createInitialSurvivorsState('safety_monitor',undefined,id),42);engine.start();engine.state.gameTime=plan.bossAt;
     for(let i=0;i<100;i++)engine.update(1/60,{moveX:0,moveY:0});
     const boss=engine.state.hazards.find(h=>h.isStageBoss)!;
-    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.8));
+    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.15));
     engine.state.gameTime=180;engine.state.stageBossNeutralized=true;engine.state.hazardsNeutralized=plan.controls;
     engine.state.operationControlledZones=stage.hazards.filter(h=>h.type!=='floodlight_tower'&&h.type!=='slurry_puddle').map(h=>h.id);
     expect(operationProgress(engine.state).complete).toBe(true);

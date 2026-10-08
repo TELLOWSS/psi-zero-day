@@ -1,7 +1,9 @@
 import type { Hazard, HazardType, PatrolStageDefinition } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
 import type { SpritePose } from './survivors-sprite-motion';
-import { drawProp,drawPropReaction } from './survivors-equipment-art';
+import { drawProp,drawPropReaction,registerPropAtlas } from './survivors-equipment-art';
+import { WORKFACE_SPECIES } from '../engine/survivors-workface-roster';
+import {MATERIAL_FEEL} from '../domain/survivors-material-feel';
 import { suspendedLoadPose } from './survivors-animation-rig';
 import { bossPattern } from '../engine/survivors-boss-pattern';
 import {materialContactMotion,materialFragmentMotion} from './survivors-material-contact-motion';
@@ -11,6 +13,12 @@ import {drawAuthoredDebrisImpact} from './survivors-authored-debris-impact';
 import {drawAuthoredVaporImpact} from './survivors-authored-vapor-impact';
 
 export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
+export const WORKFACE_HAZARD_ART = '/assets/survivors/workface-hazards-v2.png';
+const workfaceAtlases=new WeakMap<HTMLImageElement,HTMLImageElement>();
+export function workfaceAtlas(base:HTMLImageElement|undefined):HTMLImageElement|undefined {return base&&workfaceAtlases.get(base);}
+export function registerWorkfaceHazards(base:HTMLImageElement,image:HTMLImageElement):void {
+  registerPropAtlas(image,4,3);workfaceAtlases.set(base,image);
+}
 export const INDUSTRIAL_CONTACT_ART = '/assets/survivors/industrial-contacts-v3.webp';
 export const INDUSTRIAL_CRANE_ART = '/assets/survivors/crane-load-v4.webp';
 export const INDUSTRIAL_CRANE_BOSS_ART = '/assets/survivors/crane-boss-load-v1.webp';
@@ -93,7 +101,12 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   const gas = h.type === 'GAS_LEAK';
   const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
   const boss=Boolean(bossImage?.naturalWidth);
-  const placement=industrialHazardPlacement(h,elevation,boss),size=placement.size;
+  const speciesAtlas=atlas&&workfaceAtlases.get(atlas);
+  const speciesCell=h.species?WORKFACE_SPECIES.indexOf(h.species):-1;
+  const authored=!boss&&speciesCell>=0&&Boolean(speciesAtlas?.naturalWidth);
+  const source=authored?speciesAtlas:boss?bossImage:atlas;
+  const sourceCell=authored?speciesCell:boss?0:cell;
+  const placement=industrialHazardPlacement(h,elevation,boss||authored&&gas),size=placement.size;
   const response=industrialResponse(h,pose,reduced);
   ctx.save();
   if (placement.solid) {
@@ -121,9 +134,15 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   const pressure = !boss&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
   ctx.scale(pressure, pressure);
   if(gas&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
-  if (gas&&!boss) ctx.globalAlpha *= .82;
-  const drawn = drawProp(ctx, boss?bossImage:atlas, boss?0:cell, 0, placement.y, size);
-  if(drawn&&response.reaction>0)drawPropReaction(ctx,boss?bossImage:atlas,boss?0:cell,0,placement.y,size,response.color,response.reaction*.24);
+  if (gas&&!boss&&!authored) ctx.globalAlpha *= .82;
+  const drawn = drawProp(ctx, source, sourceCell, 0, placement.y, size);
+  if(drawn&&h.species&&h.hp<h.maxHp&&!gas){
+    const wear=Math.max(0,Math.min(1,1-h.hp/Math.max(1,h.maxHp))),profile=MATERIAL_FEEL[h.species];
+    ctx.save();ctx.strokeStyle=profile.action==='crumble'?'#514b43':profile.color;ctx.globalAlpha=.35*wear;ctx.lineWidth=1.2;
+    const count=wear>.65?3:wear>.3?2:1;
+    for(let i=0;i<count;i++){const x=(i-1)*size*.12,y=placement.y-size*(.35+i*.1);ctx.beginPath();ctx.moveTo(x-5,y-8);ctx.lineTo(x+2,y-2);ctx.lineTo(x-2,y+3);ctx.lineTo(x+5,y+8);ctx.stroke();}ctx.restore();
+  }
+  if(drawn&&response.reaction>0)drawPropReaction(ctx,source,sourceCell,0,placement.y,size,response.color,response.reaction*.24);
   if(drawn&&h.signatureEventId&&!boss){
     const pulse=reduced?1:.72+.28*Math.sin(clock*7);
     const themeAccent:Record<PatrolStageDefinition['theme'],string>={

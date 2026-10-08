@@ -36,10 +36,12 @@ it.each(['victory', 'defeat'] as const)('recovers a failed supply write and sett
     expect(engine.state.psiCredits).toBe(120);
     expect(JSON.parse(localStorage.getItem(key)!).credits).toBe(10000);
     failure.mockRestore();
+    act(() => host.querySelector<HTMLButtonElement>('.shop-continue-btn')!.click());
     engine.state.gameTime = 110;
     tick(); tick();
     expect(engine.state.psiCredits).toBe(300);
     expect(JSON.parse(localStorage.getItem(key)!).credits).toBe(10180);
+    act(() => host.querySelector<HTMLButtonElement>('.shop-continue-btn')!.click());
     vi.mocked(engine.update).mockImplementation(() => {
       engine.state.phase = phase;
       engine.state.psiCredits = 350;

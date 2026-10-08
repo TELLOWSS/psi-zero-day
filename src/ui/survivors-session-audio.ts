@@ -352,10 +352,10 @@ export class SurvivorsSessionAudio {
     }
     const recorded=recordedEquipmentCue(event,equipped);
     const rate=(event.kind==='satellite_wave'?.8:1)*(event.critical&&!event.worker&&event.phase==='impact'?.95:1);
-    if(recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
+    if(!(event.species&&event.phase==='impact'&&!event.worker)&&recorded&&this.playRecordedEffect(recorded,{x:event.x,y:event.y},listener,busy,rate,event.kind))return;
     if(busy&&event.phase==='release')return;
     const ctx=this.ensureBuses();if(!ctx)return;
-    const key=event.kind+':'+event.phase,now=ctx.currentTime,previous=this.equipmentTimes.get(key);
+    const key=event.kind+':'+event.phase+':'+(event.species??'')+':'+Boolean(event.finishing),now=ctx.currentTime,previous=this.equipmentTimes.get(key);
     if(previous!==undefined&&now-previous<(busy?.16:.08))return;
     this.equipmentTimes.set(key,now);
     const impact=event.phase==='impact',release=event.phase==='release';
@@ -363,12 +363,14 @@ export class SurvivorsSessionAudio {
     const priority=impact?2:1;
     const look=cinematicLook(event.kind,5,equipped);
     const signature=look.premium&&!event.worker?look.palette:'base';
-    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature+':'+event.actorKind+':'+Boolean(event.critical&&!event.worker);
+    const bufferKey=event.kind+':'+event.phase+':'+Boolean(event.worker)+':'+signature+':'+event.actorKind+':'+Boolean(event.critical&&!event.worker)+':'+(event.species??'')+':'+Boolean(event.finishing);
     let buffer=this.equipmentBuffers.get(bufferKey);
     if(!buffer) {
-      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped,event.actorKind,Boolean(event.critical));
+      const samples=equipmentSoundSamples(event.kind,event.phase,Boolean(event.worker),ctx.sampleRate,equipped,event.actorKind,Boolean(event.critical),event.species,Boolean(event.finishing));
       buffer=ctx.createBuffer(1,samples.length,ctx.sampleRate);
-      buffer.getChannelData(0).set(samples);this.equipmentBuffers.set(bufferKey,buffer);
+      buffer.getChannelData(0).set(samples);
+      if(this.equipmentBuffers.size>=128)this.equipmentBuffers.delete(this.equipmentBuffers.keys().next().value!);
+      this.equipmentBuffers.set(bufferKey,buffer);
     }
     const duration=buffer.duration,source=ctx.createBufferSource();source.buffer=buffer;
     const distance=Math.hypot(event.x-listener.x,event.y-listener.y);

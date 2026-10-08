@@ -33,7 +33,7 @@ describe('Survivors Container Shop and Hit Juice Physics', () => {
     expect(engine.state.hitStopTimer).toBeCloseTo(0.03, 2);
   });
 
-  it('wave supply stays non-blocking and can only open from an explicit player action', () => {
+  it('wave supply pauses combat and opens the safe maintenance break', () => {
     const gameSource = readFileSync(new URL('../src/ui/PatrolSurvivorsGame.tsx', import.meta.url), 'utf8');
     const waveStart = gameSource.indexOf('const maxSurvivalTime = engine.state.maxTime || 180;');
     const waveEnd = gameSource.indexOf('const incidentSecured=', waveStart);
@@ -41,17 +41,16 @@ describe('Survivors Container Shop and Hit Juice Physics', () => {
 
     expect(waveStart).toBeGreaterThan(-1);
     expect(waveEnd).toBeGreaterThan(waveStart);
-    expect(waveBlock).not.toContain('setPaused(true)');
-    expect(waveBlock).not.toContain('setShowContainerShop(true)');
-    expect(waveBlock).toContain('setAvailableContainerShopWave(1)');
-    expect(waveBlock).toContain('setAvailableContainerShopWave(2)');
+    expect((waveBlock.match(/engine.setPaused\(true\)/g) ?? [])).toHaveLength(2);
+    expect(waveBlock).toContain('setContainerShopWave(1)');
+    expect(waveBlock).toContain('setContainerShopWave(2)');
 
     const openStart = gameSource.indexOf('const openContainerShop=');
     const openEnd = gameSource.indexOf('const openArsenal=', openStart);
     const explicitOpenBlock = gameSource.slice(openStart, openEnd);
     expect(openStart).toBeGreaterThan(-1);
     expect(explicitOpenBlock).toContain('setShowContainerShop(true)');
-    expect((gameSource.match(/setShowContainerShop\(true\)/g) ?? [])).toHaveLength(1);
+    expect((gameSource.match(/setShowContainerShop\(true\)/g) ?? [])).toHaveLength(3);
   });
 
   it('labels wave supply as game-only PSI rather than a real-money purchase', () => {

@@ -1,6 +1,7 @@
 import { cinematicLook } from './survivors-cinematic-vfx';
 import type { ProjectileKind } from '../domain/patrol-survivors';
 import type { ProjectileFeedback } from '../domain/survivors-projectile-feedback';
+import {MATERIAL_FEEL} from '../domain/survivors-material-feel';
 
 // Layered equipment signatures: pressure/body, transient and material tail.
 const signatures: Record<ProjectileKind, readonly [number, number, number, number]> = {
@@ -13,12 +14,13 @@ const signatures: Record<ProjectileKind, readonly [number, number, number, numbe
   emp_pulse: [190, .26, .35, .25], plasma_arc: [280, .28, .40, .30],
 };
 /** Deterministic baked PCM: no per-frame oscillators or additional voice layers. */
-export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFeedback['phase'], worker: boolean, sampleRate: number, equipped:readonly string[]=[], actorKind?:ProjectileFeedback['actorKind'],critical=false): Float32Array {
+export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFeedback['phase'], worker: boolean, sampleRate: number, equipped:readonly string[]=[], actorKind?:ProjectileFeedback['actorKind'],critical=false,species?:ProjectileFeedback['species'],finishing=false): Float32Array {
   const [base, tail, texture, resonance] = signatures[kind];
   const look=cinematicLook(kind,5,equipped);
   const premium=look.premium&&!worker;
   const pitch=premium?(look.palette==='gold'?.82:look.palette==='violet'?1.18:1.07):1;
-  const duration = worker ? .12 : phase === 'release' ? tail * .65 : phase === 'impact' ? tail : tail * .8;
+  const materialProfile=!worker&&phase==='impact'&&species?MATERIAL_FEEL[species]:undefined;
+  const duration = worker ? .12 : materialProfile?(finishing?materialProfile.decay:Math.min(.24,materialProfile.decay*.55)):phase === 'release' ? tail * .65 : phase === 'impact' ? tail : tail * .8;
   const data = new Float32Array(Math.ceil(sampleRate * duration));
   let random = 0x13579bdf, low = 0, carrier = 0;
   for (let i=0;i<data.length;i++) {
@@ -40,7 +42,14 @@ export function equipmentSoundSamples(kind: ProjectileKind, phase: ProjectileFee
     const material=worker||phase!=='impact'?0:actorKind==='FALLING_DEBRIS'?(noise-low)*.22*Math.exp(-t/.045):actorKind==='GAS_LEAK'?noise*.18*Math.exp(-t/.08):actorKind==='RUNAWAY_CART'||actorKind==='CRANE_BOSS'?Math.sin(carrier*4.17)*.17*Math.exp(-t/.06):0;
     const identity=worker?0:kind==='extinguisher'||kind==='cryo_blast'?(noise-low)*.20:kind==='tesla_bolt'?noise*.22*Math.pow(Math.max(0,Math.sin(t*970)),8):kind==='cone_trap'?Math.sin(t*2*Math.PI*1350)*.16*Math.exp(-t/.015):kind==='emf_beam'||kind==='satellite_wave'?Math.sin(t*2*Math.PI*65)*.19:0;
     const weight=critical&&!worker&&phase==='impact'?Math.sin(2*Math.PI*(76-24*u)*t)*.24*Math.exp(-t/.045)+(noise-low)*.08*Math.exp(-t/.009):0;
-    data[i]=Math.max(-.98,Math.min(.98,(body*pulse+grain+ring+pressure+harmonic+transient+identity+material+weight)*envelope*.65));
+    const m=materialProfile,delay=m?.action==='cascade'?Math.floor(t/.065):0;
+    const metal=m?Math.sin(2*Math.PI*m.pitch*(1+delay*.17)*t)*Math.exp(-t/(finishing?.24:.09))*.3:0;
+    const textureTail=m?m.action==='fan'?low*.25+Math.sin(2*Math.PI*m.pitch*(t-t*t/(2*duration)))*.18:
+      m.action==='seal'?low*.4+Math.sin(t*2*Math.PI*95)*Math.max(0,Math.sin(t*37))*.12:
+      m.action==='isolate'?low*.3+(noise-low)*.2*Math.exp(-(t% .12)*80):
+      m.action==='valve'?low*.6*(1-u):m.action==='crumble'?(noise-low)*.4*Math.exp(-t/.14):metal:0;
+    const finishWeight=m&&finishing?Math.sin(2*Math.PI*(62+20*m.weight)*t)*m.weight*.25*Math.exp(-t/.09):0;
+    data[i]=Math.max(-.98,Math.min(.98,(body*pulse+grain+ring+pressure+harmonic+transient+identity+material+weight+textureTail+finishWeight)*envelope*.65));
   }
   return data;
 }

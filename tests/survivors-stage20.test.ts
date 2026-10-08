@@ -23,7 +23,7 @@ describe('twenty-stage connected campaign', () => {
     e.update(1/60,{moveX:0,moveY:0});
     for(let i=0;i<Math.ceil(e.state.bossEncounter!.introDuration!*60)+2;i++) e.update(1/60,{moveX:0,moveY:0});
     const boss=e.state.hazards.find(h=>h.isStageBoss)!;
-    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.8));
+    expect(boss.type).toBe(stage.bossType);expect(boss.maxHp).toBe(Math.round(stage.bossHp*1.15));
     boss.hp=0;e.update(1/60,{moveX:0,moveY:0});
     expect(e.drainAudioEvents().some(a=>a.type==='control'&&a.outcome==='boss'&&a.actorKind===stage.bossType)).toBe(true);
   });

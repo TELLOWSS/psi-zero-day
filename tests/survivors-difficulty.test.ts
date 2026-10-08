@@ -50,6 +50,6 @@ describe('map difficulty progression', () => {
     expect(e.state.hazards.length).toBeLessThanOrEqual(peakActive+1);
     expect(e.state.hazards.filter(h=>h.type==='RUNAWAY_CART'||h.type==='FALLING_DEBRIS').length)
       .toBeLessThanOrEqual(peakTelegraphs+1);
-    expect(e.state.hazards.find(h=>h.isStageBoss)!.maxHp).toBe(Math.round(e.state.stage.bossHp*1.8));
+    expect(e.state.hazards.find(h=>h.isStageBoss)!.maxHp).toBe(Math.round(e.state.stage.bossHp*1.15));
   });
 });

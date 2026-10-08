@@ -1,7 +1,13 @@
 import { useState } from 'react';
-import { Package, Shield, Zap, Crosshair, Wrench, Heart, RefreshCw, ArrowUp, Activity } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import './survivors-container-shop.css';
+import safeSupplyText from '../../content/localization/survivors-safe-supply-ko.json';
+import supplyText from '../../content/localization/survivors-supply-ko.json';
+import {supplyPartners} from './survivors-supply-synergy';
+import {SurvivorsEquipmentIcon} from './SurvivorsEquipmentIcon';
+import {PERK_CATALOG} from '../engine/patrol-survivors-engine';
+import type {PerkId} from '../domain/patrol-survivors';
 
 export interface ShopUpgradeItem {
   id: string;
@@ -22,7 +28,7 @@ const UPGRADE_CATALOG: ShopUpgradeItem[] = [
     description: '소화기 및 냉각 가스의 분사 노즐을 개조하여 공격 범위와 지속력을 극대화합니다.',
     cost: 110,
     iconName: 'nozzle',
-    effectText: '전체 피해량 +15% 증폭',
+    effectText: '전체 피해 배율 +0.15',
     apply: s => { s.player.damageMultiplier += 0.15; },
   },
   {
@@ -32,7 +38,7 @@ const UPGRADE_CATALOG: ShopUpgradeItem[] = [
     description: '고휘도 타깃팅 레이저를 장착하여 치명타 확률을 크게 끌어올립니다.',
     cost: 130,
     iconName: 'laser',
-    effectText: '치명타율 +12% 증가',
+    effectText: '치명타 확률 +12%p',
     apply: s => { s.player.critRate += 0.12; },
   },
   {
@@ -62,7 +68,7 @@ const UPGRADE_CATALOG: ShopUpgradeItem[] = [
     description: '안전 드론의 순항 로직과 비행 축전지를 튜닝하여 쿨다운을 감소시킵니다.',
     cost: 130,
     iconName: 'drone',
-    effectText: '스킬 쿨다운 감소 +10%',
+    effectText: '공격 재사용 시간 감소 +10%p',
     apply: s => { s.player.cooldownReduction = Math.min(0.5, s.player.cooldownReduction + 0.1); },
   },
   {
@@ -82,7 +88,7 @@ const UPGRADE_CATALOG: ShopUpgradeItem[] = [
     description: '복합 섬유 완충 하네스로 불의의 충격에 대한 최대 생존력을 늘립니다.',
     cost: 120,
     iconName: 'harness',
-    effectText: '최대 체력 +40 및 생명력 회복',
+    effectText: '최대 체력 +40 · 현재 체력 +40',
     apply: s => { s.player.maxHp += 40; s.player.hp += 40; },
   },
   {
@@ -97,10 +103,13 @@ const UPGRADE_CATALOG: ShopUpgradeItem[] = [
   },
 ];
 
-function getRandomItems(count = 4, excludeIds: string[] = []): ShopUpgradeItem[] {
+function getRandomItems(count = 4, excludeIds: string[] = [],credits=Infinity): ShopUpgradeItem[] {
   const pool = UPGRADE_CATALOG.filter(item => !excludeIds.includes(item.id));
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  const selected=shuffled.slice(0, count);
+  const affordable=pool.find(item=>item.cost<=credits);
+  if(affordable&&!selected.some(item=>item.cost<=credits))selected[selected.length-1]=affordable;
+  return selected;
 }
 
 interface SurvivorsContainerShopProps {
@@ -116,7 +125,7 @@ export function SurvivorsContainerShop({
   onContinue,
   playSfx,
 }: SurvivorsContainerShopProps) {
-  const [items, setItems] = useState<ShopUpgradeItem[]>(() => getRandomItems(4));
+  const [items, setItems] = useState<ShopUpgradeItem[]>(() => getRandomItems(4,[],gameState.psiCredits));
   const [purchasedIds, setPurchasedIds] = useState<Set<string>>(new Set());
   const [credits, setCredits] = useState<number>(gameState.psiCredits);
 
@@ -144,22 +153,11 @@ export function SurvivorsContainerShop({
     setCredits(nextCredits);
 
     const boughtList = Array.from(purchasedIds);
-    setItems(getRandomItems(4, boughtList));
+    setItems(getRandomItems(4, boughtList,nextCredits));
     if (playSfx) playSfx('control');
   };
 
-  const renderIcon = (name: ShopUpgradeItem['iconName']) => {
-    switch (name) {
-      case 'nozzle': return <Package size={28} className="shop-item-icon-svg" />;
-      case 'laser': return <Crosshair size={28} className="shop-item-icon-svg" />;
-      case 'boots': return <ArrowUp size={28} className="shop-item-icon-svg" />;
-      case 'capacitor': return <Zap size={28} className="shop-item-icon-svg" />;
-      case 'drone': return <Activity size={28} className="shop-item-icon-svg" />;
-      case 'heal': return <Heart size={28} className="shop-item-icon-svg" />;
-      case 'harness': return <Shield size={28} className="shop-item-icon-svg" />;
-      case 'magnet': return <Wrench size={28} className="shop-item-icon-svg" />;
-    }
-  };
+  const artCells={nozzle:0,laser:1,boots:2,capacitor:3,drone:4,heal:5,harness:6,magnet:7};
 
   return (
     <div className="survivors-container-shop-backdrop" role="dialog" aria-modal="true" aria-labelledby="shop-title">
@@ -169,31 +167,35 @@ export function SurvivorsContainerShop({
           <div className="shop-header-title">
             <span className="shop-badge">WAVE {completedWave} CLEARED</span>
             <h2 id="shop-title">현장 정비 보급소</h2>
-            <p>게임 내 PSI 보급 포인트로 이번 순찰 장비를 튜닝합니다. 현금 결제나 유료 구매는 없습니다.</p>
+            <p role="status">{safeSupplyText.safeSupply}</p>
+            <details className="shop-currency-info"><summary>{supplyText.currencyDetails}</summary><p>게임 내 PSI 보급 포인트로 이번 순찰 장비를 튜닝합니다. 현금 결제나 유료 구매는 없습니다.</p></details>
           </div>
           <div className="shop-wallet">
-            <span className="shop-wallet-label">FIELD SUPPLY · GAME CREDIT</span>
+            <span className="shop-wallet-label" title="FIELD SUPPLY · GAME CREDIT">{supplyText.wallet}</span>
             <span className="shop-wallet-amount">PSI {credits.toLocaleString()}</span>
           </div>
         </div>
 
+        <section className="shop-loadout" aria-label={supplyText.loadout}><strong>{supplyText.loadout}</strong><div>{(Object.entries(gameState.activePerks) as [PerkId,number][]).filter(([,level])=>level>0).map(([id,level])=><span key={id}><SurvivorsEquipmentIcon id={id} level={level}/>{PERK_CATALOG[id].name} <small>Lv.{level}</small></span>)}</div><small>{supplyText.note}</small></section>
+        <details className="shop-detail"><summary>{supplyText.nextWave}</summary><p>{[...new Set(gameState.stage.hazardMix??[])].filter((id):id is keyof typeof supplyText.risks=>id in supplyText.risks).map(id=>supplyText.risks[id]).join(' · ')||gameState.stage.name}</p></details>
         {/* 4 UPGRADE CARDS */}
         <div className="shop-items-grid">
           {items.map((item, idx) => {
             const isBought = purchasedIds.has(item.id);
             const canAfford = credits >= item.cost;
+            const synergy=supplyPartners(item.id,gameState.activePerks);
+            const explanation=supplyText.items[item.id as keyof typeof supplyText.items];
             return (
               <div
                 key={`${item.id}-${idx}`}
                 className={`shop-card ${isBought ? 'is-purchased' : canAfford ? 'is-affordable' : 'is-expensive'}`}
               >
                 <div className="shop-card-badge">{item.tag}</div>
-                <div className="shop-card-icon-wrap">
-                  {renderIcon(item.iconName)}
-                </div>
+                <div className="shop-card-art" role="img" aria-label={item.name} style={{backgroundPosition:`${artCells[item.iconName]%4*100/3}% ${Math.floor(artCells[item.iconName]/4)*100}%`}}/>
                 <h3 className="shop-card-title">{item.name}</h3>
-                <p className="shop-card-desc">{item.description}</p>
                 <div className="shop-card-effect">{item.effectText}</div>
+                <section className={`shop-synergy${synergy.owned?' is-matched':''}`}><strong>{synergy.owned?supplyText.matched:supplyText.suggested}</strong><div>{synergy.ids.map(id=><span key={id}><SurvivorsEquipmentIcon id={id} level={gameState.activePerks[id]||1}/><small>{PERK_CATALOG[id].name}</small></span>)}</div><p>{explanation.reason}</p></section>
+                <details className="shop-detail"><summary>{supplyText.details}</summary><p>{explanation.detail}</p></details>
 
                 <div className="shop-card-bottom">
                   {isBought ? (
@@ -205,7 +207,7 @@ export function SurvivorsContainerShop({
                       disabled={!canAfford}
                       onClick={() => handleBuy(item)}
                     >
-                      <span>{item.cost} PSI</span>
+                      <span>{canAfford?supplyText.buy:supplyText.shortfall} · {item.cost} PSI</span>
                     </button>
                   )}
                 </div>

@@ -6,10 +6,12 @@ const {chromium}=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULE
 const out=path.resolve('artifacts/passing-motion');fs.mkdirSync(out,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const rows=[];
+const storeText=JSON.parse(fs.readFileSync('content/localization/survivors-store-ko.json','utf8'));
 try {
  for(const [width,height] of [[1440,900],[390,844],[844,390]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
+  await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto(process.env.PSI_PREVIEW_URL||'http://127.0.0.1:5197',{waitUntil:'networkidle'});
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).waitFor();
   const result=await page.evaluate(async()=>{
@@ -46,7 +48,8 @@ try {
    };
   });
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
-  await page.getByRole('button',{name:'PSI로 장비 구매·수리',exact:true}).click();
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.getByRole('button',{name:storeText.briefBrowse,exact:true}).click();
   await page.getByRole('tab',{name:'착용 미리보기',exact:true}).click();
   const selected=[['계도 전달','broadcast_crown'],['대응 방식','sync_gauntlet'],['보급·출동','extraction_pack'],['생존 지원','shock_mantle'],['동행 지원','inspection_wing'],['현장 전술','barrier_forge']];
   for(const [slot,id] of selected)await page.getByLabel(slot,{exact:true}).selectOption(id);

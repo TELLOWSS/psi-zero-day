@@ -14,6 +14,7 @@ it('swept collision catches a small target between high-speed projectile endpoin
   expect(sweptCircle(0, 0, 100, 0, 50, 0, 2)).toBe(true);
   expect(sweptCircle(0, 0, 100, 0, 50, 5, 2)).toBe(false);
   const e = new SurvivorsEngine(); e.start(); e.state.player.critRate = 0;
+  e.state.terrain=[]; // Isolate swept target collision from separately tested cover interception.
   e.state.hazards.push({id:'target',type:'UNHELMETED',x:500,y:400,hp:100,maxHp:100,speed:0,radius:2,damage:0,expValue:0});
   e.state.projectiles.push({id:'fast',kind:'radio',x:450,y:400,vx:6000,vy:0,radius:2,damage:10,duration:1,pierce:1});
   e.update(1/60,idle); expect(e.state.hazards.find(h=>h.id==='target')?.hp).toBe(90);

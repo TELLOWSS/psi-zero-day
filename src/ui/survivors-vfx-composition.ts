@@ -3,6 +3,7 @@ import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 import {cinematicLook} from './survivors-cinematic-vfx';
 
 export function feedbackPriority(event:ProjectileFeedback,equipped:readonly string[]=[]):number {
+  if(event.finishing&&!event.worker&&!event.blocked)return 110;
   if(event.kind==='shout_shockwave'&&event.phase==='launch'&&!event.worker)return 120;
   if(event.worker)return 110;
   if(event.blocked)return event.phase==='impact'?85:0;

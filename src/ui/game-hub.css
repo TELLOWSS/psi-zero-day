@@ -528,6 +528,7 @@
   background:rgba(2,8,13,.66);backdrop-filter:blur(10px)
 }
 .commercial-title-settings{
+  max-height:calc(100dvh - 32px);overflow-y:auto;
   width:min(480px,88vw);padding:28px;border:1px solid rgba(190,212,222,.55);border-radius:14px;
   background:linear-gradient(145deg,rgba(14,31,42,.98),rgba(7,18,27,.98));
   box-shadow:0 30px 90px rgba(0,0,0,.58);color:#edf4f6

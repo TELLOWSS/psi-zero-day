@@ -1,0 +1,10 @@
+.survivors-graphics-settings { margin:12px 0; }
+.survivors-graphics-settings p { font-size:13px; line-height:1.6; color:#b3c6cd; }
+.survivors-graphics-presets { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.survivors-graphics-presets button { display:flex; flex-direction:column; gap:7px; padding:12px; text-align:left; color:#e8f5fa; background:#17232c; border:1px solid #526570; border-radius:10px; cursor:pointer; }
+.survivors-graphics-presets button[aria-pressed=true] { border:2px solid #38bdf8; background:#12394b; }
+.survivors-graphics-presets button:focus-visible { outline:3px solid #fbbf24; outline-offset:2px; }
+.survivors-graphics-presets span { font-size:12px; color:#7dd3fc; }
+.survivors-graphics-presets small { font-size:12px; line-height:1.5; }
+.survivors-graphics-settings summary { cursor:pointer; padding:10px 0; }
+@media(max-width:600px) { .survivors-graphics-presets { grid-template-columns:1fr; } }

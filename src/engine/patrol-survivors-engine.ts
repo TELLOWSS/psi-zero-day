@@ -1,9 +1,11 @@
 import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
+import {createTerrain,terrainMove,terrainHit,terrainWaypoint,terrainFreePoint} from './survivors-terrain';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
 import {tickPremiumGear, absorbPremiumDamage, premiumHazardSpeed} from './survivors-premium-gear';
 import {storeEffects, sanitizeInventory, type StoreInventory} from '../domain/survivors-store';
-import {PATROL_DIFFICULTIES, type PatrolDifficulty} from '../domain/survivors-challenge';
+import {PATROL_DIFFICULTIES,DIFFICULTY_WARNING_SCALE, type PatrolDifficulty} from '../domain/survivors-challenge';
 import {lateThreatVariant} from './survivors-late-threats';
+import {workfaceSpecies,workfaceSpeedScale} from './survivors-workface-roster';
 import { createFieldTactics, requestFieldSupport, placeControlLine, tickFieldTactics, controlLineSpeed } from './survivors-field-tactics';
 import operationText from '../../content/localization/survivors-operation-ko.json';
 import { operationProgress, recordOperationControls } from './survivors-operation';
@@ -650,6 +652,8 @@ export function createInitialSurvivorsState(
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
+    terrain:createTerrain(stage),
+    terrainRecord:{cartStops:0,rubbleCleared:0,weakPointHits:0,damageTaken:0},
     fieldTactics: {...createFieldTactics(), supportCharges:2 + gear.support, lineCharges:2 + gear.lines},
     starsEarned: [false, false, false],
     inFloodlight: false,
@@ -702,12 +706,12 @@ export class SurvivorsEngine {
   drainAudioEvents(): SurvivorsAudioEvent[] { const events = this.audioEvents; this.audioEvents = []; return events; }
   private projectileFeedback: ProjectileFeedback[] = [];
   private readonly releasedProjectiles = new WeakSet<Projectile>();
-  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false, appliedDamage?: number) {
+  private emitProjectileFeedback(p: Projectile, phase: ProjectileFeedback['phase'], x = p.x, y = p.y, worker = false, critical = false, actorKind?: ProjectileFeedback['actorKind'], blocked = false, appliedDamage?: number, target?: Hazard) {
     if (phase === 'release') {
       if (this.releasedProjectiles.has(p)) return;
       this.releasedProjectiles.add(p);
     }
-    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{}),...(appliedDamage!==undefined?{appliedDamage}:{})});
+    this.projectileFeedback.push({projectileId:p.id, kind:p.kind, phase, x, y, angle:Math.atan2(p.vy,p.vx), radius:p.radius, worker, critical, actorKind,...(blocked?{blocked:true}:{}),...(appliedDamage!==undefined?{appliedDamage}:{}),...(target?{species:target.species,targetId:target.id,targetRadius:target.radius,finishing:!blocked&&target.hp<=0&&Boolean(appliedDamage)}:{})});
     if (this.projectileFeedback.length > 192) {
       const decorative = this.projectileFeedback.findIndex(e => e.phase !== 'impact');
       this.projectileFeedback.splice(decorative < 0 ? 0 : decorative, 1);
@@ -772,6 +776,14 @@ export class SurvivorsEngine {
   }
 
   requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
+  private terrainCleanupCooldown=0;
+  clearTerrain():boolean {
+    if(this.state.phase!=='playing'||this.terrainCleanupCooldown>0||this.state.bossEncounter&&this.state.bossEncounter.phase!=='combat')return false;
+    const o=this.state.terrain?.find(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(this.state.player.x-(o.x+o.width/2),this.state.player.y-(o.y+o.height/2))<120);
+    if(!o)return false;o.hp=Math.max(0,o.hp-40);this.terrainCleanupCooldown=.6;
+    if(o.hp===0&&this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+    this.emitAudio('control',o.x,o.y);return true;
+  }
   deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
   triggerPlayerDash():boolean {
     if (this.state.phase !== 'playing') return false;
@@ -896,6 +908,7 @@ export class SurvivorsEngine {
     }
 
     // Combo countdown decay
+    this.terrainCleanupCooldown=Math.max(0,this.terrainCleanupCooldown-dt);
     if (this.state.comboTimer > 0) {
       this.state.comboTimer -= dt;
       if (this.state.comboTimer <= 0) {
@@ -1098,6 +1111,7 @@ export class SurvivorsEngine {
 
   private movePlayer(dt: number, input: GameInput) {
     const { player } = this.state;
+    const previousPosition={x:player.x,y:player.y};
 
     // Environmental zone effects (Floodlight buff, Slurry drag)
     let speedMod = 1.0;
@@ -1142,6 +1156,8 @@ export class SurvivorsEngine {
     }
 
     // Clamp inside world boundaries
+    const resolved=terrainMove(this.state.terrain??[],previousPosition,player,14);
+    player.x=resolved.x;player.y=resolved.y;
     const padding = 20;
     player.x = Math.max(padding, Math.min(WORLD_WIDTH - padding, player.x));
     player.y = Math.max(padding, Math.min(WORLD_HEIGHT - padding, player.y));
@@ -1907,6 +1923,7 @@ export class SurvivorsEngine {
           ? {phase:'warning' as const,timer:authored.warningTimer,directionX:0,directionY:0}
           : undefined;
     this.state.hazards.push({
+      species: isStageBoss ? undefined : workfaceSpecies(this.state.stage.stageNumber,type),
       variant,
       id: this.genId(`haz_${type}`),
       isStageBoss,
@@ -1916,14 +1933,14 @@ export class SurvivorsEngine {
       y,
       hp,
       maxHp: hp,
-      speed,
+      speed: speed * (isStageBoss?1:workfaceSpeedScale(workfaceSpecies(this.state.stage.stageNumber,type))),
       radius,
       damage,
       expValue,
       motion: authoredMotion ?? (variant==='pulse_gas'||isStageBoss&&type==='CRANE_BOSS'?{phase:'approach',timer:0,directionX:0,directionY:0}:type === 'RUNAWAY_CART'
         ? { phase: 'approach', timer: 0, directionX: 0, directionY: 0 }
         : type === 'FALLING_DEBRIS'
-          ? { phase: 'warning', timer: 1.25, directionX: 0, directionY: 0 }
+          ? { phase: 'warning', timer: 1.25*DIFFICULTY_WARNING_SCALE[this.state.difficulty??'standard'], directionX: 0, directionY: 0 }
           : undefined),
     });
   }
@@ -1943,8 +1960,12 @@ export class SurvivorsEngine {
       }
       // 1. Radial Physics Knockback Deceleration
       if (h.vx || h.vy) {
+        const beforeKnockback={x:h.x,y:h.y};
         h.x += (h.vx || 0) * dt;
         h.y += (h.vy || 0) * dt;
+        if(h.type==='RUNAWAY_CART'||h.type==='UNHELMETED'){
+          const resolved=terrainMove(this.state.terrain??[],beforeKnockback,h,h.radius);h.x=resolved.x;h.y=resolved.y;
+        }
         const friction = Math.pow(0.03, dt);
         h.vx = (h.vx || 0) * friction;
         h.vy = (h.vy || 0) * friction;
@@ -1988,7 +2009,24 @@ export class SurvivorsEngine {
       }
 
       const previousMotion=h.motion?.phase;
-      if (updateHazardMotion(h, player, dt, hazardSpeed)) {
+      const beforeTerrain={x:h.x,y:h.y};
+      const terrain=this.state.terrain??[];
+      const groundActor=h.type!=='GAS_LEAK'&&h.type!=='FALLING_DEBRIS'&&h.type!=='CRANE_BOSS';
+      const waypoint=groundActor&&h.motion?.phase==='approach'?terrainWaypoint(terrain,h,player,h.radius):player;
+      // Steering changes the approach path, never the locked charge target.
+      if (updateHazardMotion(h, player, dt, hazardSpeed,DIFFICULTY_WARNING_SCALE[this.state.difficulty??'standard'])) {
+        if(groundActor&&previousMotion==='approach'&&h.motion?.phase==='approach'){
+          const distance=Math.hypot(waypoint.x-beforeTerrain.x,waypoint.y-beforeTerrain.y)||1;
+          h.x=beforeTerrain.x+(waypoint.x-beforeTerrain.x)/distance*hazardSpeed*.65*dt;
+          h.y=beforeTerrain.y+(waypoint.y-beforeTerrain.y)/distance*hazardSpeed*.65*dt;
+        }
+        const wall=groundActor?terrainHit(terrain,beforeTerrain,h,h.radius):undefined;
+        if(wall&&previousMotion==='charge'){
+          h.x=beforeTerrain.x+(h.x-beforeTerrain.x)*Math.max(0,wall.t-.001);h.y=beforeTerrain.y+(h.y-beforeTerrain.y)*Math.max(0,wall.t-.001);
+          h.motion!.phase='cooldown';h.motion!.timer=1.2;h.weakPointExposed=true;h.weakPointTimer=2;
+          h.vx=0;h.vy=0;if(this.state.terrainRecord)this.state.terrainRecord.cartStops++;
+          this.emitAudio('impact',h.x,h.y,{actorKind:h.type});
+        }else if(groundActor){const p=terrainMove(terrain,beforeTerrain,h,h.radius);h.x=p.x;h.y=p.y;}
         if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'charge' &&
             (h.x < 20 || h.x > WORLD_WIDTH - 20 || h.y < 20 || h.y > WORLD_HEIGHT - 20)) {
           h.x = Math.max(20, Math.min(WORLD_WIDTH - 20, h.x));
@@ -2004,12 +2042,14 @@ export class SurvivorsEngine {
       }
 
       // Workers and diffuse risks retain their existing approach behavior.
-      const dx = player.x - h.x;
-      const dy = player.y - h.y;
+      const destination=groundActor?terrainWaypoint(terrain,h,player,h.radius):player;
+      const dx = destination.x - h.x;
+      const dy = destination.y - h.y;
       const dist = Math.hypot(dx, dy) || 1;
 
       h.x += (dx / dist) * hazardSpeed * dt;
       h.y += (dy / dist) * hazardSpeed * dt;
+      if(groundActor){const p=terrainMove(terrain,beforeTerrain,h,h.radius);h.x=p.x;h.y=p.y;}
     }
     // Avoided falls expire without granting control score, drops, or boss stars.
     this.state.hazards = this.state.hazards.filter(h => h.isStageBoss || !(h.motion?.phase === 'spent' && h.motion.timer <= 0));
@@ -2023,6 +2063,16 @@ export class SurvivorsEngine {
     for (const p of projectiles) {
       if (p.duration <= 0 || p.pierce <= 0) continue;
       const previous = this.paths.get(p) ?? p;
+      // Local projectiles respect cover; expanding area pulses and gas cross it.
+      const blockedKinds=['radio','drone_laser','hunter_beam','grout_slug','extinguisher','cryo_blast'];
+      const terrainContact=blockedKinds.includes(p.kind)?terrainHit(this.state.terrain??[],previous,p,Math.min(p.radius,8)):undefined;
+      if(terrainContact){
+        p.x=previous.x+(p.x-previous.x)*Math.max(0,terrainContact.t-.001);p.y=previous.y+(p.y-previous.y)*Math.max(0,terrainContact.t-.001);
+        const o=terrainContact.object;
+        if(o.kind==='rubble'){
+          o.hp=Math.max(0,o.hp-p.damage);if(o.hp===0&&this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+        }
+      }
       for(const h of hazards){
         const zone=hitGangformZone(h,p,previous);
         if(zone){this.emitAudio('impact',zone.x,zone.y,{actorKind:'FALLING_DEBRIS'});this.emitProjectileFeedback(p,'impact',zone.x,zone.y,false,false,'FALLING_DEBRIS');break;}
@@ -2051,11 +2101,12 @@ export class SurvivorsEngine {
           const beforeHp=h.hp;
           this.damageHazard(h,damageDealt,true);
           const blocked=Boolean(h.bossEncounterManaged&&h.hp===beforeHp);
+          if(isWeakPoint&&!blocked&&this.state.terrainRecord)this.state.terrainRecord.weakPointHits++;
           if(!blocked&&(p.kind==='emp_pulse'||p.kind==='plasma_arc'))h.isStunned=Math.max(h.isStunned??0,p.kind==='plasma_arc'?1.4:1);
           if(beforeHp>0&&h.hp<=0&&!blocked)this.controlProjectileIds.set(h.id,p.id);
           if(h.isStageBoss&&beforeHp>0&&h.hp<=0&&isWeakPoint&&!blocked)this.masteryBossFinishIds.add(h.id);
           if(!blocked)this.emitAudio('impact', h.x, h.y, { ...((isCrit || isWeakPoint) ? { outcome: 'critical' as const } : {}), actorKind: h.type });
-          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked,Math.max(0,beforeHp-h.hp));
+          this.emitProjectileFeedback(p, 'impact', h.x, h.y, h.type === 'UNHELMETED', (isCrit || isWeakPoint)&&!blocked, h.type,blocked,Math.max(0,beforeHp-h.hp),h);
           p.pierce -= 1;
 
           // Impact Hit Stop (Micro Freeze Juice)
@@ -2075,6 +2126,7 @@ export class SurvivorsEngine {
           }
         }
       }
+      if(terrainContact)p.duration=0;
     }
 
     // 1-b. Projectiles vs Interactive Hazards (Barrels, Transformers)
@@ -2182,6 +2234,7 @@ export class SurvivorsEngine {
         this.state.comboCount = (this.state.comboCount || 0) + 1;
         this.state.comboTimer = 2.4; // 2.4 seconds combo window
         this.state.lastKilledEvents.push({
+          species:h.species,radius:h.radius,motion:h.motion?{...h.motion}:undefined,
           type: h.type,
           x: h.x,
           y: h.y,
@@ -2244,6 +2297,7 @@ export class SurvivorsEngine {
           } else {
             const damage = absorbPremiumDamage(this.state,h.damage);
             player.hp -= damage;
+            if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
             this.state.lastDamage = { source: h.type, amount: damage, remaining: 2 };
             this.emitAudio(damage>0?'hit':'control');
           }
@@ -2339,6 +2393,7 @@ export class SurvivorsEngine {
             if (pDist <= hazard.radius && player.invincibleTime <= 0) {
               const damage = absorbPremiumDamage(this.state,30);
               player.hp = Math.max(1, player.hp - damage);
+              if(this.state.terrainRecord)this.state.terrainRecord.damageTaken+=damage;
               this.state.lastDamage = { source: 'CRANE_DROP', amount: damage, remaining: 2 };
               player.invincibleTime = 1.0;
             }
@@ -2407,6 +2462,7 @@ export class SurvivorsEngine {
     const remainingDrops: SafetyDrop[] = [];
 
     for (const drop of drops) {
+      const accessible=terrainFreePoint(this.state.terrain??[],drop,10);drop.x=accessible.x;drop.y=accessible.y;
       const dist = Math.hypot(player.x - drop.x, player.y - drop.y);
 
       // Magnet pickup range
@@ -2574,6 +2630,6 @@ export class SurvivorsEngine {
   }
 
   private findNearestHazard(x: number, y: number, range = 450): Hazard | null {
-    return selectSurvivorsAutoTarget(this.state.hazards,x,y,range);
+    return selectSurvivorsAutoTarget(this.state.hazards,x,y,range,h=>!terrainHit(this.state.terrain??[],{x,y},h,2));
   }
 }

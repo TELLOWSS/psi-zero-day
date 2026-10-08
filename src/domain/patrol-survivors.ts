@@ -2,8 +2,10 @@ import type { StoreEffects } from './survivors-store';
 import type { FieldTactics } from './survivors-field-tactics';
 import type { BossGameplayProgress } from './survivors-boss-gameplay';
 export type HazardType = 'UNHELMETED' | 'RUNAWAY_CART' | 'GAS_LEAK' | 'FALLING_DEBRIS' | 'CRANE_BOSS';
+export type WorkfaceSpecies = 'forklift' | 'excavator' | 'rebar_rack' | 'pump_trolley' | 'masonry' | 'formwork_panel' | 'scaffold_tubes' | 'ductwork' | 'gas_cylinders' | 'curing_heater' | 'chemical_drum' | 'coolant_manifold';
 
 export interface Hazard {
+  species?: WorkfaceSpecies;
   variant?: 'reinforced_cart' | 'pulse_gas' | 'split_gas';
   readonly id: string;
   readonly type: HazardType;
@@ -294,13 +296,15 @@ export interface SurvivorsGameState {
   hitStopTimer?: number;
   comboCount: number;
   comboTimer: number;
-  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean; projectileId?: string }>;
+  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean; projectileId?: string; species?:WorkfaceSpecies; radius?:number; motion?:Hazard['motion'] }>;
 
   // Stage & Level Architecture
   stageId: PatrolStageId;
   stage: PatrolStageDefinition;
   interactiveHazards: StageHazardObject[];
   environmentalKills: number;
+  terrain?:import('./survivors-terrain').TerrainObject[];
+  terrainRecord?:import('./survivors-terrain').TerrainRecord;
   operationControlledZones?: string[];
   fieldTactics?: FieldTactics;
   starsEarned: [boolean, boolean, boolean];

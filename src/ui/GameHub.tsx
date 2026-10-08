@@ -1,5 +1,6 @@
 import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
 import './shooting-entry.css';
+import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
 import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
@@ -377,7 +378,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         <button type="button" onClick={() => setPage('journal')}><HubIcon kind="journal" /><span>{t('ui.title.utility.journal')}</span></button>
         <button type="button" onClick={() => setPage('people')}><HubIcon kind="people" /><span>{t('ui.title.utility.people')}</span></button>
         <button type="button" onMouseEnter={preloadGuide} onFocus={preloadGuide} onClick={openGuide}><HubIcon kind="guide" /><span>{t('ui.title.utility.guide')}</span></button>
-        <button type="button" onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
+        <button type="button" aria-label={t('ui.title.settings')} onClick={() => setShowTitleSettings(true)}><span className="commercial-title-settings-glyph" aria-hidden="true">⚙</span><span>{t('ui.title.settings')}</span></button>
       </nav>
     </header>
 
@@ -560,6 +561,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         <span>{GAME_TITLE}</span>
         <h2 id="title-settings-heading">{t('ui.title.settings')}</h2>
         <p>{t('ui.title.settings.hint')}</p>
+        <SurvivorsGraphicsSettings/>
         <label>
           <div><strong>{t('ui.title.settings.motion')}</strong><small>{t('ui.title.settings.motion.hint')}</small></div>
           <input type="checkbox" checked={motionEnabled} onChange={event => setMotionEnabled(event.currentTarget.checked)} />

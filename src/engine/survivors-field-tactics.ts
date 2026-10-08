@@ -1,5 +1,6 @@
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import type { FieldTactics } from '../domain/survivors-field-tactics';
+import {terrainContains} from './survivors-terrain';
 export const createFieldTactics=():FieldTactics=>({supportCharges:2,supportCooldown:0,lineCharges:2,lineCooldown:0,lines:[]});
 export function requestFieldSupport(state:SurvivorsGameState):boolean {
  const t=state.fieldTactics;
@@ -9,6 +10,7 @@ export function requestFieldSupport(state:SurvivorsGameState):boolean {
 export function placeControlLine(state:SurvivorsGameState):boolean {
  const t=state.fieldTactics;
  if(state.phase!=='playing'||state.bossEncounter&&state.bossEncounter.phase!=='combat'||!t||t.lineCharges<=0||t.lineCooldown>0)return false;
+ if(state.terrain?.some(o=>terrainContains(o,state.player,16)))return false;
  t.lineCharges--;t.lineCooldown=8;t.lines.push({x:state.player.x,y:state.player.y,radius:110,remaining:10});return true;
 }
 /** Existing safety objects keep their warning clocks; utility affects approach speed only. */

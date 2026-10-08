@@ -19,8 +19,7 @@ it('locks pause shortcuts behind wave supply and resumes only on completion',()=
   act(()=>root.render(<PatrolSurvivorsGame onExit={()=>{}} audioMuted/>));click('시그널 워치 시작');
   engine.state.gameTime=100;
   const update=vi.spyOn(engine,'update').mockImplementation(()=>{});
-  act(()=>frame(performance.now()+16));act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));
-  click('WAVE 1 정비 보급 열기');
+  act(()=>frame(performance.now()+16));
   expect(host.querySelector<HTMLButtonElement>('.survivors-pause-command')?.disabled).toBe(true);
   expect(host.querySelector('.survivors-modal-title')?.textContent).not.toBe('일시 정지');
   for(const code of ['KeyP','Escape'])act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code})));
@@ -50,6 +49,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   tick();tick();
   expect(engine.state.psiCredits).toBe(120);
   expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(10120);
+  act(()=>host.querySelector<HTMLButtonElement>('.shop-continue-btn')!.click());
   act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));
   click('PSI 장비실');expect(engine.state.phase).toBe('paused');
   act(()=>window.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP'})));expect(engine.state.phase).toBe('paused');
@@ -66,6 +66,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   engine.state.gameTime=110;tick();tick();
   expect(engine.state.psiCredits).toBe(300);
   expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(5100);
+  act(()=>host.querySelector<HTMLButtonElement>('.shop-continue-btn')!.click());
   vi.spyOn(engine,'update').mockImplementation(()=>{engine.state.phase='victory';engine.state.psiCredits=350;engine.state.starsEarned=[true,false,false];});
   tick();tick();tick();
   const wallet=JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!);
