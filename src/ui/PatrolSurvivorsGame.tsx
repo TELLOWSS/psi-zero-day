@@ -523,7 +523,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const dispatchTrailRef = useRef(new DispatchTrail());
   const recoveryFlowRef = useRef(new RecoveryFlow());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
-  const storeOpenRef=useRef(false);storeOpenRef.current=showRdModal || showArsenalModal;
+  const storeOpenRef=useRef(false);
   const pendingStoreConfirmationRef=useRef(false);
   const [clearGearWear,setClearGearWear]=useState<string[]>([]);
   const storeDialogRef = useRef<HTMLDivElement>(null);
@@ -650,6 +650,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Wave Progression & Container Shop
   const [showContainerShop, setShowContainerShop] = useState(false);
+  storeOpenRef.current=showRdModal || showArsenalModal || showContainerShop;
   const [containerShopWave, setContainerShopWave] = useState(1);
   const [availableContainerShopWave, setAvailableContainerShopWave] = useState<number | null>(null);
   const [waveSupplyNotice, setWaveSupplyNotice] = useState<{ wave: number; credits: number } | null>(null);
@@ -3383,7 +3384,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             className="survivors-btn-icon survivors-pause-command"
             aria-label={phase === 'paused' ? focusText.resume : focusText.pause}
             title={phase === 'paused' ? focusText.resume : focusText.pause}
-            disabled={showRdModal || showArsenalModal}
+            disabled={showRdModal || showArsenalModal || showContainerShop}
             onClick={() => {
               const engine = engineRef.current;
               if (engine && (phase === 'playing' || phase === 'paused')) {
