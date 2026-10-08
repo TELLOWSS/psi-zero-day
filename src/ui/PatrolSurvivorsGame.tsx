@@ -1,3 +1,10 @@
+import {WorkfaceThreatArt,workfaceThreatAppearance,workfaceThreatCopy} from './survivors-workface-threats';
+import workfaceCopy from '../../content/localization/survivors-workface-threats-ko.json';
+import {SurvivorsDisplaySettings} from './SurvivorsDisplaySettings';
+import {readDisplaySettings,saveDisplaySettings,displayViewZoom,decayDisplayEffect,type DisplaySettings} from './survivors-display-settings';
+import {STAGE_THREAT_ART,THREAT_ART_GRID} from './survivors-threat-appearance';
+import {SurvivorsPerformanceBudget,survivorsViewportZoom} from './survivors-performance';
+import threatText from '../../content/localization/survivors-stage-threats-ko.json';
 import { CombatDirection, playerDamageOpacity } from './survivors-combat-direction';
 import {selectCombatNotice} from './survivors-notice-priority';
 import {selectFloatingFeedback,fitFeedbackToView,placeFeedbackVertically,type FeedbackRect} from './survivors-floating-feedback';
@@ -256,6 +263,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     dispatchTrailAtlas?: HTMLCanvasElement;
     premiumPresence?: PremiumPresenceImages;
     industrialHazards?: HTMLImageElement;
+    stageThreats?: HTMLImageElement;
     carrierBoss?: HTMLImageElement;
     industrialContacts?: HTMLImageElement;
     metalImpact?: HTMLImageElement;
@@ -379,7 +387,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const premiumPresence = new Image();
     premiumPresence.onload=()=>{spritesRef.current.premiumPresence=preparePremiumPresence(premiumPresence);};
     premiumPresence.src='/assets/survivors/premium-presence-v1.png';
+    const stageThreats=new Image();
+    stageThreats.onload=()=>{registerPropAtlas(stageThreats,THREAT_ART_GRID.columns,THREAT_ART_GRID.rows);spritesRef.current.stageThreats=stageThreats;};
+    stageThreats.src=STAGE_THREAT_ART;
     const industrialHazards = new Image();
+
     industrialHazards.onload = () => { registerPropAtlas(industrialHazards,3,2); spritesRef.current.industrialHazards = industrialHazards; };
     const workfaceHazards=new Image();
     workfaceHazards.onload=()=>registerWorkfaceHazards(industrialHazards,workfaceHazards);
@@ -977,7 +989,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const spawnParticles = (x: number, y: number, color: string, count = 8, speed = 60, size = 3) => {
-    const visibleCount=Math.max(1,Math.round(count*GRAPHICS_PROFILES[getGraphicsMode()].particles));
+    const budget=performanceBudgetRef.current;
+    const limit=budget?.particleLimit??240;
+    const available=Math.max(0,limit-particlesRef.current.length);
+    const visibleCount=Math.min(available,Math.ceil(count*(budget?.particleFraction??1)*GRAPHICS_PROFILES[getGraphicsMode()].particles));
+
     for (let i = 0; i < visibleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
       const spd = (0.2 + Math.random() * 0.8) * speed;
@@ -1333,14 +1349,31 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     }
   };
 
+  const [displaySettings,setDisplaySettings]=useState(readDisplaySettings);
+  const [displaySaved,setDisplaySaved]=useState(true);
+  const displaySettingsRef=useRef(displaySettings);
+  const changeDisplaySettings=(next:DisplaySettings)=>{displaySettingsRef.current=next;performanceBudgetRef.current?.configure(next);setDisplaySettings(next);setDisplaySaved(saveDisplaySettings(next));};
+  const workfaceArtRef=useRef<WorkfaceThreatArt|null>(null);
+  if(!workfaceArtRef.current)workfaceArtRef.current=new WorkfaceThreatArt();
+  useEffect(()=>{workfaceArtRef.current?.get(PATROL_STAGES[selectedStage].stageNumber);},[selectedStage]);
+  const performanceBudgetRef = useRef<SurvivorsPerformanceBudget | null>(null);
+  if(!performanceBudgetRef.current)performanceBudgetRef.current=new SurvivorsPerformanceBudget(window.matchMedia?.('(pointer:coarse)').matches??false);
+  useEffect(()=>{performanceBudgetRef.current?.configure(displaySettingsRef.current);},[]);
+  const systemReducedMotionRef=useRef(false);
+  const viewportRef = useRef({width:0,height:0});
   const reducedMotionRef = useRef(false);
   const hudBottomRef = useRef(0);
   useEffect(() => {
     const query = window.matchMedia?.('(prefers-reduced-motion: reduce)');
-    const update = () => { reducedMotionRef.current = query?.matches ?? false; };
+    const update = () => { systemReducedMotionRef.current = query?.matches ?? false; };
     update(); query?.addEventListener('change', update);
     const header = containerRef.current?.querySelector('header');
+    const measureViewport = () => {
+      const container=containerRef.current;
+      if(container)viewportRef.current={width:container.clientWidth,height:container.clientHeight};
+    };
     const reserveHud = () => {
+      measureViewport();
       if (header && containerRef.current) {
         const bottom = header.getBoundingClientRect().bottom - containerRef.current.getBoundingClientRect().top;
         hudBottomRef.current=Math.ceil(bottom+8);
@@ -1349,6 +1382,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     };
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(reserveHud) : null;
     if (header) observer?.observe(header);
+    if(containerRef.current)observer?.observe(containerRef.current);
     window.addEventListener('resize', reserveHud); reserveHud();
     return () => { observer?.disconnect(); window.removeEventListener('resize', reserveHud); query?.removeEventListener('change', update); };
   }, []);
@@ -1375,11 +1409,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     const renderLoop = (wallTime: number) => {
       requestRef.current = requestAnimationFrame(renderLoop);
 
-      let dt = Math.max(0, (wallTime - lastTimeRef.current) / 1000);
+      const frameMilliseconds=Math.max(0,wallTime-lastTimeRef.current);
+      // Bound expensive foreground catch-up to five fixed physics steps.
+      let dt = Math.min(5/60,frameMilliseconds/1000);
       lastTimeRef.current = wallTime;
 
       const engine = engineRef.current;
       if (!engine) return;
+      const display=displaySettingsRef.current;
+      reducedMotionRef.current=systemReducedMotionRef.current||display.motion==='reduced';
+      const budget=performanceBudgetRef.current!;
+      if(engine.state.phase==='playing')budget.sample(frameMilliseconds);
+      if(containerRef.current)containerRef.current.dataset.quality=budget.level;
       const time=engine.state.gameTime*1000;
       let projectileEvents:ProjectileFeedback[]=[];
       if (previousEngine !== engine) {
@@ -1729,7 +1770,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
 
         // Render physics at RAF cadence; mirrors update at 12Hz or immediately on phase change.
-        if (wallTime - lastHudTime >= 1000 / 12 || engine.state.phase !== 'playing') {
+        if (wallTime - lastHudTime >= 1000 / (budget.level==='low'?6:10) || engine.state.phase !== 'playing') {
         lastHudTime = wallTime;
         // Sync React HUD
         setHp(Math.round(engine.state.player.hp));
@@ -1837,9 +1878,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       if(engine.state.phase!=='playing')dt=0;
 
       // High-DPI Resolution & Mobile Resize
-      const dpr = Math.min(window.devicePixelRatio || 1, GRAPHICS_PROFILES[getGraphicsMode()].pixelRatio);
-      const displayW = containerRef.current?.clientWidth || window.innerWidth;
-      const displayH = containerRef.current?.clientHeight || window.innerHeight;
+      const displayW = viewportRef.current.width || window.innerWidth;
+      const displayH = viewportRef.current.height || window.innerHeight;
+      const dpr = Math.min(budget.pixelRatio(window.devicePixelRatio || 1,displayW,displayH),GRAPHICS_PROFILES[getGraphicsMode()].pixelRatio);
+
       const targetCanvasW = Math.floor(displayW * dpr);
       const targetCanvasH = Math.floor(displayH * dpr);
 
@@ -1865,29 +1907,32 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       // Screen Shake: Controlled, tactile feedback without visual dizziness
       let shakeX = 0;
       let shakeY = 0;
-      if (screenShakeRef.current > 0 && !reducedMotionRef.current) {
+      if (screenShakeRef.current > 0 && !reducedMotionRef.current && display.shake) {
         const clampedShake = Math.min(8.0, screenShakeRef.current * 0.35);
         shakeX = Math.round((Math.sin(engine.state.gameTime * 71) * 0.5) * clampedShake * 2*feelSettingsRef.current.shake);
         shakeY = Math.round((Math.sin(engine.state.gameTime * 93 + 1.4) * 0.5) * clampedShake * 2*feelSettingsRef.current.shake);
-        screenShakeRef.current = Math.max(0, screenShakeRef.current - dt * 35);
+
+
       }
 
+      screenShakeRef.current=decayDisplayEffect(screenShakeRef.current,dt,35,!reducedMotionRef.current&&display.shake);
+
       // Responsive Portrait / Landscape Zoom Factor
-      const isPortrait = displayH > displayW;
-      const preferredZoom = isPortrait ? Math.max(0.72, Math.min(1.0, displayW / 560)) : 1.0;
+
       // Signature events apply a brief, controlled push-in instead of a disorienting hard cut.
-      const baseZoom = Math.max(preferredZoom, displayW / WORLD_WIDTH, displayH / WORLD_HEIGHT);
+      const baseZoom = displayViewZoom(survivorsViewportZoom(displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT),displayW,displayH,WORLD_WIDTH,WORLD_HEIGHT,display.view);
       const pressure=signaturePressureRef.current;
       signaturePressureRef.current=Math.max(0,pressure-dt*1.55);
-      const renderZoom=baseZoom*(1+(reducedMotionRef.current?0:pressure*.018));
+      const renderZoom=baseZoom*(1+(reducedMotionRef.current||!display.shake?0:pressure*.018));
       const viewW = displayW / renderZoom;
       const viewH = displayH / renderZoom;
 
       // CAMERA FOLLOW (Pixel-snapped integer positioning to eliminate fractional jitter/shimmer)
       const camera=survivorsCamera(player,viewW,viewH,WORLD_WIDTH,WORLD_HEIGHT,baseZoom);
-      const kick=direction.camera(reducedMotionRef.current);
+      const kick=direction.camera(reducedMotionRef.current||!display.shake);
       const camX = camera.x + shakeX + kick.x*feelSettingsRef.current.shake;
       const camY = camera.y + shakeY + kick.y*feelSettingsRef.current.shake;
+
 
       // Reset transform to identity and clear screen to guarantee zero cumulative matrix drift
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1905,6 +1950,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 1. RENDER WORLD FLOOR (Authentic Heavy Civil Engineering 2.5D Foundation Slab)
       const stage = engine.state.stage;
+      const workfaceAtlas=workfaceArtRef.current?.get(stage.stageNumber);
+      const workfaceReady=workfaceAtlas?.naturalWidth?'ready':'loading';
+      if(containerRef.current&&containerRef.current.dataset.workfaceStage!==String(stage.stageNumber))containerRef.current.dataset.workfaceStage=String(stage.stageNumber);
+      if(containerRef.current&&containerRef.current.dataset.workfaceArt!==workfaceReady)containerRef.current.dataset.workfaceArt=workfaceReady;
       ctx.fillStyle = stage?.floorColor || '#0f141c';
       ctx.fillRect(-camera.marginX-4, -camera.marginY-4, WORLD_WIDTH+camera.marginX*2+8, WORLD_HEIGHT+camera.marginY*2+8);
 
@@ -1991,13 +2040,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       }
 
-      drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
+      if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       drawTerrain(ctx,engine.state.terrain??[],spritesRef.current.terrain,engine.state.player);
       materialResolutionRef.current.drawGround(ctx);
+
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
       dispatchTrailRef.current.draw(ctx,engine.state,spritesRef.current.dispatchTrailAtlas,reducedMotionRef.current,projectiles.length>90);
       bossDirection.draw(ctx,engine.state,spritesRef.current.cinematicAtlas,{RUNAWAY_CART:spritesRef.current.carrierBoss,CRANE_BOSS:spritesRef.current.craneBoss,...spritesRef.current.materialBosses},reducedMotionRef.current,projectiles.length>60||hazards.length>45);
-      for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
+      if(budget.ambientLighting)for (const object of engine.state.interactiveHazards) drawEquipmentCastShadow(ctx, object);
 
       const tactics=engine.state.fieldTactics;
       for(const line of tactics?.lines ?? []) {
@@ -2311,7 +2361,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.rotate(dirAngle);
           ctx.fillStyle = '#f59e0b';
           ctx.shadowColor = '#fbbf24';
-          ctx.shadowBlur = 10;
+          ctx.shadowBlur = budget.level==='low'?0:10;
           ctx.beginPath();
           ctx.moveTo(55, 0);
           ctx.lineTo(38, -10);
@@ -2712,7 +2762,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber,workfaceAtlas)) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow
@@ -2985,6 +3035,18 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             else if(h.variant==='reinforced_cart'){ctx.strokeStyle=h.hp<h.maxHp*.5?'#fb923c':'#7dd3fc';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,2,h.radius*1.25,h.radius*.45,0,0,Math.PI*2);ctx.stroke();}
             ctx.restore();
           }
+          const workfaceIdentity=workfaceAtlas?.naturalWidth?workfaceThreatAppearance(h,stage.stageNumber):undefined;
+          if(workfaceIdentity&&(hazards.length<15||h===closestWarning)){
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#b4f3d9';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            const text=workfaceThreatCopy(stage.stageNumber)!.name,labelY=hazardPlacement.y-hazardPlacement.size*.82-24-(h.behavior?16:0);
+            ctx.strokeText(text,0,labelY);ctx.fillText(text,0,labelY);ctx.restore();
+          }
+          if(h.behavior){
+            ctx.save();ctx.textAlign='center';ctx.font='700 11px sans-serif';ctx.fillStyle='#a5f3fc';ctx.strokeStyle='#111827';ctx.lineWidth=3;
+            const labelY=hazardPlacement.y-hazardPlacement.size*.82-24;
+            ctx.strokeText(threatText.behaviors[h.behavior],0,labelY);ctx.fillText(threatText.behaviors[h.behavior],0,labelY);
+            ctx.restore();
+          }
           // Mini HP Bar with clear contrast
           const barW = Math.max(32, h.radius * 2.2);
           const barH = 5;
@@ -3007,7 +3069,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.strokeStyle = '#f59e0b';
             ctx.lineWidth = 3;
             ctx.shadowColor = '#fbbf24';
-            ctx.shadowBlur = 12;
+            ctx.shadowBlur = budget.level==='low'?0:12;
             ctx.beginPath();
             ctx.arc(0, 0, Math.max(22, h.radius * 0.75) * pulse, 0, Math.PI * 2);
             ctx.stroke();
@@ -3039,7 +3101,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             ctx.lineWidth = 3;
             ctx.globalAlpha = 0.65;
             ctx.shadowColor = '#22d3ee';
-            ctx.shadowBlur = 14;
+            ctx.shadowBlur = budget.level==='low'?0:14;
             ctx.beginPath();
             ctx.ellipse(0, 4, 38, 14, Math.atan2(player.dashVy ?? 0, player.dashVx ?? 0), 0, Math.PI * 2);
             ctx.stroke();
@@ -3192,7 +3254,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       // 9. RENDER PARTICLES
       const aliveParticles: Particle[] = [];
-      for (const p of particlesRef.current) {
+      for (const p of particlesRef.current.slice(0,budget.particleLimit)) {
         p.life -= dt;
         p.x += p.vx * dt;
         p.y += p.vy * dt;
@@ -3229,7 +3291,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           // Golden/White Hard Hat Icon
           ctx.fillStyle = '#facc15';
           ctx.shadowColor = '#eab308';
-          ctx.shadowBlur = 12;
+          ctx.shadowBlur = budget.level==='low'?0:12;
           ctx.beginPath();
           ctx.arc(0, 0, 9, Math.PI, 0);
           ctx.fill();
@@ -3282,7 +3344,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           ctx.scale(placement.scale, placement.scale);
           ctx.fillStyle = ft.color;
           ctx.shadowColor = ft.isCrit ? '#f59e0b' : '#000000';
-          ctx.shadowBlur = ft.isCrit ? 10 : 5;
+          ctx.shadowBlur = budget.level==='low'?0:ft.isCrit ? 10 : 5;
           ctx.textAlign = 'center';
           ctx.globalAlpha = Math.min(1, ft.life / (ft.maxLife * 0.55));
           ctx.fillText(ft.text, 0, 0);
@@ -3291,7 +3353,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       floatingTextsRef.current = aliveTexts;
 
       // 12. SCREEN-SPACE DAMAGE VIGNETTE FLASH (Tactile Pain Feedback)
-      if (damageFlashRef.current > 0 && !reducedMotionRef.current) {
+      if (damageFlashRef.current > 0 && !reducedMotionRef.current && display.flash) {
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0); // screen coordinates
         const cX = canvas.width / 2;
@@ -3303,8 +3365,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
-        damageFlashRef.current = Math.max(0, damageFlashRef.current - dt * 2.2);
       }
+
+      damageFlashRef.current=decayDisplayEffect(damageFlashRef.current,dt,2.2,!reducedMotionRef.current&&display.flash);
 
       ctx.restore();
       } catch (err) {
@@ -3686,6 +3749,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               </select>
             </label>
             <nav className="survivors-preflight-tabs" aria-label={preflightText.navigation}>{(['brief','stage','agent','settings'] as const).map(tab=><button key={tab} type="button" aria-pressed={preflightTab===tab} onClick={()=>setPreflightTab(tab)}>{preflightText[tab]}</button>)}</nav>
+            {preflightTab==='stage'&&workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)&&<section className="survivors-mission-brief"><h3>{workfaceCopy.title}</h3><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.name}</p><p>{workfaceThreatCopy(PATROL_STAGES[selectedStage].stageNumber)!.hint}</p></section>}
             <div className="survivors-preflight-panel" hidden={preflightTab!=='brief'}>
             <img className="survivors-stage-preview" src={stageGroundUri(selectedStage)} alt={PATROL_STAGES[selectedStage].name}/>
             <aside className="survivors-signature-brief" aria-label="Signature Event 예고">
@@ -3849,9 +3913,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             </div>
 
             <div hidden={preflightTab!=='settings'}>
-              <SurvivorsFeelSettings value={feelSettings} onChange={setFeelSettings}/>
+              <SurvivorsDisplaySettings settings={displaySettings} onChange={changeDisplaySettings} saved={displaySaved}/><SurvivorsFeelSettings value={feelSettings} onChange={setFeelSettings}/>
               <SurvivorsAudioMixer audio={audioRef.current}/><button type="button" className="survivors-btn-secondary" onClick={()=>setShowManual(true)}>{gameManualText('open')}</button>
             </div>
+
 
             <div className="survivors-actions-row">
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>
@@ -4089,9 +4154,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <h2 className="survivors-modal-title">일시 정지</h2>
             <p className="survivors-modal-sub">현장 순찰이 일시 중단되었습니다.</p>
             <details className="survivors-session-settings"><summary>{safeSupplyText.customization}</summary>
-              <SurvivorsFeelSettings value={feelSettings} onChange={setFeelSettings}/>
+              <SurvivorsDisplaySettings settings={displaySettings} onChange={changeDisplaySettings} saved={displaySaved}/><SurvivorsFeelSettings value={feelSettings} onChange={setFeelSettings}/>
               <SurvivorsAudioMixer audio={audioRef.current}/>
             </details>
+
             <section className="survivors-mission-brief" aria-label={combatText.objective_progress}><h3>{combatText.objective_progress}</h3><p>{operationText.brief}</p><p>{tacticsText.brief}</p>{engineRef.current && (() => {const p=operationProgress(engineRef.current.state);return <p>{operationText.modes[p.mode]} · {operationText.boss} {p.boss?'✓':'—'} · {operationText.zones} {p.zonesSecured}/{p.zones} · {operationText.controls} {p.controlsDone}/{p.controls}</p>;})()}<ol>{missionProgress.map(goal => <li key={goal.starIndex}><strong>{goal.title} · {goal.isCompleted ? combatText.objective_done : `${goal.currentValue}/${goal.targetValue}`}</strong><span>{goal.description}</span></li>)}</ol></section>
             <SurvivorsSupplyGuide activePerks={activePerks} />
             <div className="survivors-actions-row">

@@ -11,4 +11,3 @@ export function SurvivorsFeelSettings({value,onChange}:{value:FeelSettings;onCha
     <p>{graphicsCopy.comfortNote}</p>
   </fieldset></details></SurvivorsGraphicsSettings>;
 }
-

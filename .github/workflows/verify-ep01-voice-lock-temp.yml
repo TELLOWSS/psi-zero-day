@@ -99,9 +99,31 @@ jobs:
           fi
           node scripts/verify-episode01-responsive.mjs
 
+      - name: Verify Survivors mobile touch and tablet layout
+        shell: bash
+        run: |
+          npx vite --host 127.0.0.1 --port 4174 > /tmp/psi-mobile-vite.log 2>&1 &
+          MOBILE_VITE_PID=$!
+          trap 'kill "$MOBILE_VITE_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4174/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-mobile.mjs
+
+      - name: Upload Survivors mobile evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: survivors-mobile-qa
+          path: artifacts/survivors-mobile
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Run full regression suite
         run: npm test
 
       - name: Report Episode 01 production readiness
         run: npm run production:status
+
 

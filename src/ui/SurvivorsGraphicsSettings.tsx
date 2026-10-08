@@ -15,4 +15,3 @@ export function SurvivorsGraphicsSettings({children}:{children?:ReactNode}) {
     {children}
   </section>;
 }
-

@@ -7,6 +7,7 @@ export type WorkfaceSpecies = 'forklift' | 'excavator' | 'rebar_rack' | 'pump_tr
 export interface Hazard {
   species?: WorkfaceSpecies;
   variant?: 'reinforced_cart' | 'pulse_gas' | 'split_gas';
+  behavior?: 'crosswind' | 'flanking_cart' | 'wide_debris';
   readonly id: string;
   readonly type: HazardType;
   x: number;
@@ -377,3 +378,4 @@ export interface PatrolStageDefinition {
   bossHp: number;
   narrative?: { speaker: CharacterId; brief: string; success: string; residual: string };
 }
+
