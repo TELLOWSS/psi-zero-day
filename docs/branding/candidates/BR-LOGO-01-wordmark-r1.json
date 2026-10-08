@@ -1,0 +1,14 @@
+{
+  "id": "BR-LOGO-01-wordmark-r1",
+  "file": "docs/branding/candidates/BR-LOGO-01-wordmark-r1.png",
+  "sha256": "f5c190643662f49abde9389720d7d6e7e61d1f03498aa7a8afd4a6e1107d5231",
+  "status": "HOLD_NOT_PRODUCTION_ELIGIBLE",
+  "runtimeConnected": false,
+  "directorFileApproval": false,
+  "tool": "built-in image_gen",
+  "format": "RASTER_WHITE_PLATE_NOT_TRANSPARENT_OR_EDITABLE_VECTOR",
+  "intendedSlot": "wordmark",
+  "assessment": "OPEN_TRIANGLE_CAN_READ_AS_PLAY_BUTTON_NOT_CAPTURED_SIGNAL",
+  "rightsReview": "NOT_ESTABLISHED_BY_GENERATION",
+  "missingDeliverables": ["editable vector", "transparent delivery", "separate approved 24px/48px icon", "Director file approval", "rights review"]
+}

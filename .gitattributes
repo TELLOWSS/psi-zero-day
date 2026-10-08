@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Preserve byte-exact Director-approved vector deliveries across checkouts.
+docs/branding/candidates/BR-LOGO-02*.svg text eol=lf
+public/assets/branding/*.svg text eol=lf

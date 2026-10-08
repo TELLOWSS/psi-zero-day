@@ -5,6 +5,15 @@
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-topline {position:relative;inset:auto;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy {position:relative;inset:auto;width:min(640px,100%);max-width:none;margin:32px 0 0;padding:0;z-index:3;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-logo {font-size:48px;line-height:1.12;letter-spacing:0;flex-wrap:wrap;}
+.commercial-title-wordmark {display:block;width:100%;max-width:460px;}
+.commercial-title-wordmark img {display:block;width:100%;height:auto;object-fit:contain;aspect-ratio:460/144;}
+@media(max-height:460px) and (orientation:landscape) {
+ .commercial-title-wordmark {max-width:420px;}
+ .commercial-title-wordmark img {aspect-ratio:420/72;}
+}
+@media(max-height:380px) and (orientation:landscape) {
+ .commercial-title-wordmark {max-width:260px;}
+}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy h1 {font-size:22px;line-height:1.45;letter-spacing:0;margin:16px 0;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-actions {display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin:20px 0;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action {min-height:70px;height:auto;width:100%;padding:14px;box-sizing:border-box;border-radius:6px;transform:none;}
@@ -58,6 +67,7 @@
 }
 
 @media(max-width:600px) and (orientation:portrait) {
+ .commercial-title-wordmark {width:calc(100% - 144px);}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-mobile-player {display:block;position:absolute;top:14px;right:0;width:132px;height:208px;object-fit:contain;object-position:center bottom;pointer-events:none;filter:drop-shadow(0 8px 8px #0006);}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy h1,
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-english {max-width:calc(100% - 144px);}
@@ -66,6 +76,7 @@
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-coming-soon small {display:none;}
 }
 @media(max-width:360px) and (orientation:portrait) {
+ .commercial-title-wordmark {width:calc(100% - 124px);}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-mobile-player {width:112px;}
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-copy h1,
  .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-english {max-width:calc(100% - 124px);}

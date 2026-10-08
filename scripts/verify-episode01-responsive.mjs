@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 
 const baseUrl = process.env.PSI_PREVIEW_URL || 'http://127.0.0.1:4173';
 const outputDir = path.resolve(process.env.PSI_RESPONSIVE_ARTIFACT_DIR || 'artifacts/responsive');
@@ -20,12 +21,16 @@ if (!chrome) {
 }
 
 const port = Number(process.env.PSI_CHROME_DEBUG_PORT || 9222);
-const profile = fs.mkdtempSync('/tmp/psi-zero-day-chrome-');
+const profile = fs.mkdtempSync(path.join(tmpdir(), 'psi-zero-day-chrome-'));
 const browser = spawn(chrome, [
+  ...(process.platform === 'win32' && path.basename(chrome).toLowerCase() === 'msedge.exe' ? ['--edge-skip-compat-layer-relaunch'] : []),
   '--headless=new',
   '--no-sandbox',
   '--disable-gpu',
   '--disable-dev-shm-usage',
+  '--disable-extensions',
+  '--no-first-run',
+  '--no-default-browser-check',
   '--hide-scrollbars',
   '--mute-audio',
   '--remote-debugging-address=127.0.0.1',
@@ -36,6 +41,8 @@ const browser = spawn(chrome, [
 
 let browserStderr = '';
 browser.stderr.on('data', chunk => { browserStderr += chunk.toString(); });
+let browserSpawnError;
+browser.on('error', error => { browserSpawnError = error; });
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -43,15 +50,18 @@ async function waitForJson(url, timeoutMs = 10000) {
   const started = Date.now();
   let lastError;
   while (Date.now() - started < timeoutMs) {
+    if (browserSpawnError || browser.exitCode !== null || browser.signalCode !== null) {
+      throw new Error('Chrome exited before CDP readiness: ' + (browserSpawnError?.message ?? browser.exitCode ?? browser.signalCode) + '\n' + browserStderr.slice(-6000));
+    }
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { signal: AbortSignal.timeout(2000) });
       if (response.ok) return await response.json();
     } catch (error) {
       lastError = error;
     }
     await sleep(100);
   }
-  throw new Error('Timed out waiting for ' + url + ': ' + (lastError?.message || 'unknown error'));
+  throw new Error('Timed out waiting for ' + url + ': ' + (lastError?.message || 'unknown error') + '\nChrome stderr:\n' + browserStderr.slice(-6000));
 }
 
 class Cdp {
@@ -61,8 +71,13 @@ class Cdp {
     this.pending = new Map();
     this.events = new Map();
     this.opened = new Promise((resolve, reject) => {
-      this.socket.addEventListener('open', resolve, { once: true });
-      this.socket.addEventListener('error', reject, { once: true });
+      const timer = setTimeout(() => reject(new Error('CDP connection open timed out')), 10000);
+      this.socket.addEventListener('open', () => { clearTimeout(timer); resolve(); }, { once: true });
+      this.socket.addEventListener('error', error => { clearTimeout(timer); reject(error); }, { once: true });
+    });
+    this.socket.addEventListener('close', () => {
+      for (const pending of this.pending.values()) pending.reject(new Error('CDP connection closed'));
+      this.pending.clear();
     });
     this.socket.addEventListener('message', event => {
       const message = JSON.parse(event.data);
@@ -82,7 +97,10 @@ class Cdp {
   async send(method, params = {}) {
     await this.opened;
     const id = this.nextId++;
-    const result = new Promise((resolve, reject) => this.pending.set(id, { resolve, reject }));
+    const result = new Promise((resolve, reject) => {
+      const timer = setTimeout(() => { this.pending.delete(id); reject(new Error('CDP command timed out: ' + method)); }, 15000);
+      this.pending.set(id, { resolve: value => { clearTimeout(timer); resolve(value); }, reject: error => { clearTimeout(timer); reject(error); } });
+    });
     this.socket.send(JSON.stringify({ id, method, params }));
     return result;
   }
@@ -772,7 +790,7 @@ const report = [];
 let failed = false;
 
 try {
-  await waitForJson('http://127.0.0.1:' + port + '/json/version');
+  await waitForJson('http://127.0.0.1:' + port + '/json/version', 45000);
 
   for (const viewport of viewports) {
     const targetResponse = await fetch('http://127.0.0.1:' + port + '/json/new?about:blank', { method: 'PUT' });
@@ -795,7 +813,7 @@ try {
       const loaded = cdp.once('Page.loadEventFired', 12000);
       await cdp.send('Page.navigate', { url: baseUrl });
       await loaded;
-      await waitFor(cdp, "Boolean(document.body.innerText.includes('ZERO DAY') && document.querySelector('.commercial-title-home'))", 12000);
+      await waitFor(cdp, "Boolean(document.title === 'NEW PSI : ZERO DAY' && document.querySelector('.commercial-title-logo[aria-label=\"NEW PSI : ZERO DAY\"]'))", 12000);
       await sleep(350);
 
       const homeMetrics = await metrics(cdp, 'home', viewport.mobile);
@@ -947,7 +965,11 @@ try {
     sleep(1200),
   ]);
   try {
-    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 4, retryDelay: 100 });
+    const resolvedProfile = path.resolve(profile);
+    if (path.dirname(resolvedProfile) !== path.resolve(tmpdir()) || !path.basename(resolvedProfile).startsWith('psi-zero-day-chrome-')) {
+      throw new Error('Refusing cleanup outside the dedicated temporary Chrome profile');
+    }
+    fs.rmSync(resolvedProfile, { recursive: true, force: true, maxRetries: 4, retryDelay: 100 });
   } catch (error) {
     console.warn('Chrome profile cleanup skipped:', error.message);
   }

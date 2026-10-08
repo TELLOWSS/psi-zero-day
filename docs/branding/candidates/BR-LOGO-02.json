@@ -1,0 +1,77 @@
+{
+  "id": "BR-LOGO-02",
+  "status": "CANDIDATE_REQUIRES_DIRECTOR_FILE_REVIEW",
+  "runtimeConnected": false,
+  "directorFileApproval": false,
+  "scope": "B2_EDITABLE_VECTOR_AND_RASTER_DELIVERY_NOT_APPROVED_RUNTIME",
+  "font": {
+    "file": "public/fonts/ChakraPetch-Bold.ttf",
+    "sha256": "65fbf76d95651697275e19db4d717c0e95a789ddd3476478b05292104db278a0",
+    "license": "docs/branding/candidates/BR-LOGO-02-ChakraPetch-OFL.txt",
+    "modified": false
+  },
+  "geometry": "OPEN_RECTANGULAR_BOUNDARY_WITH_SEPARATE_SIGNAL_BAR",
+  "rightsReview": "FONT_OFL_RECORDED_NOT_TRADEMARK_CLEARANCE_OR_DIRECTOR_APPROVAL",
+  "files": [
+    {
+      "kind": "wordmark",
+      "tone": "ink",
+      "svg": "docs/branding/candidates/BR-LOGO-02-wordmark-ink.svg",
+      "svgSha256": "b17a4dd64f913a66ed62854908f4b9a6d7fd2bd9f5b1b56973f56266f1c30d20",
+      "png": "docs/branding/candidates/BR-LOGO-02-wordmark-ink.png",
+      "pngSha256": "cda6163b3156630b75aab7affe9e5a997045b514e3bd0b863d53a137b574ba7f",
+      "source": "docs/branding/candidates/BR-LOGO-02-wordmark-source.svg",
+      "sourceSha256": "854d711eb0f37bef77d2f187bb1f48b069eaea204e92391d5f8931bfad570ca4"
+    },
+    {
+      "kind": "wordmark",
+      "tone": "chalk",
+      "svg": "docs/branding/candidates/BR-LOGO-02-wordmark-chalk.svg",
+      "svgSha256": "d28f31456a9f295b2e4fcfa9a8e1bacbbbef2544795450c45bac3bea45e495d0",
+      "png": "docs/branding/candidates/BR-LOGO-02-wordmark-chalk.png",
+      "pngSha256": "8262444879a33bd392e32cb7f39daa97ede6f7386a83a52780c48071b73df0f4",
+      "source": "docs/branding/candidates/BR-LOGO-02-wordmark-source.svg",
+      "sourceSha256": "854d711eb0f37bef77d2f187bb1f48b069eaea204e92391d5f8931bfad570ca4"
+    },
+    {
+      "kind": "wordmark-wide",
+      "tone": "ink",
+      "svg": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-ink.svg",
+      "svgSha256": "0d84f31ba726c8832c73560b85dbea45952fa1685df84634f075d95ecc872f34",
+      "png": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-ink.png",
+      "pngSha256": "7e280612775844a5a6c0329e58377564642865c6ee39fc8562a66effef81e6a1",
+      "source": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-source.svg",
+      "sourceSha256": "bfecbcbf624400e9d80600548a63fa996df190fa9e9bc117d9c949ecb951bec3"
+    },
+    {
+      "kind": "wordmark-wide",
+      "tone": "chalk",
+      "svg": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-chalk.svg",
+      "svgSha256": "76c6a80a1c3055d439bfcf6ef6007c0c2f004f2419d54658a6690c44e24baf3d",
+      "png": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-chalk.png",
+      "pngSha256": "5e967677a5cb6df48b93028298203df3f71d0c50901137ce1584a136c156b399",
+      "source": "docs/branding/candidates/BR-LOGO-02-wordmark-wide-source.svg",
+      "sourceSha256": "bfecbcbf624400e9d80600548a63fa996df190fa9e9bc117d9c949ecb951bec3"
+    },
+    {
+      "kind": "symbol",
+      "tone": "ink",
+      "svg": "docs/branding/candidates/BR-LOGO-02-symbol-ink.svg",
+      "svgSha256": "d6657c9f9ff91aaef60a19e41b7eb74572d6c9dd737bf9b479a6d9aab2921480",
+      "png": "docs/branding/candidates/BR-LOGO-02-symbol-ink.png",
+      "pngSha256": "85371439738806c3638ecaa8e5132b53235e9600dd4099b737ed3b939f4f045c",
+      "source": "docs/branding/candidates/BR-LOGO-02-symbol-source.svg",
+      "sourceSha256": "d6657c9f9ff91aaef60a19e41b7eb74572d6c9dd737bf9b479a6d9aab2921480"
+    },
+    {
+      "kind": "symbol",
+      "tone": "chalk",
+      "svg": "docs/branding/candidates/BR-LOGO-02-symbol-chalk.svg",
+      "svgSha256": "d3ce77cf158163894c4e7ab13239c78f424fcd6ebe10985bf91273a2d79b041b",
+      "png": "docs/branding/candidates/BR-LOGO-02-symbol-chalk.png",
+      "pngSha256": "4132e61fb3c31abfd65543cb095cec0db8f3d0512531ddc70d1aece30b89b8ee",
+      "source": "docs/branding/candidates/BR-LOGO-02-symbol-source.svg",
+      "sourceSha256": "d6657c9f9ff91aaef60a19e41b7eb74572d6c9dd737bf9b479a6d9aab2921480"
+    }
+  ]
+}
