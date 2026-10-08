@@ -209,7 +209,7 @@ try {
         const specs=[['RUNAWAY_CART',null,null],['RUNAWAY_CART','reinforced_cart',null],['RUNAWAY_CART',null,'flanking_cart'],['GAS_LEAK','pulse_gas',null],['GAS_LEAK','split_gas',null],['GAS_LEAK',null,'crosswind'],['FALLING_DEBRIS',null,null],['FALLING_DEBRIS',null,'wide_debris'],['FALLING_DEBRIS',null,null]];
         e.state.hazards=[];e.state.interactiveHazards=[];e.state.perkOptions=[];
         const cells=[];
-        for(let i=0;i<9;i++){const [type,variant,behavior]=specs[i];e.spawnHazard(type);const h=e.state.hazards.at(-1);h.x=e.state.player.x+(i%3-1)*150;h.y=e.state.player.y+(Math.floor(i/3)-1)*140;h.speed=0;h.damage=0;h.variant=variant||undefined;h.behavior=behavior||undefined;h.isStageBoss=false;h.signatureEventId=undefined;h.motion={phase:'warning',timer:1.25,directionX:1,directionY:0};cells.push(stageThreatAppearance(h,i===8?5:3,i===8?'surface_logistics':'highrise_slab')?.cell);}
+        for(let i=0;i<9;i++){const [type,variant,behavior]=specs[i];e.spawnHazard(type);const h=e.state.hazards.at(-1);h.x=e.state.player.x+(i%3-1)*150;h.y=e.state.player.y+(Math.floor(i/3)-1)*140;h.speed=0;h.damage=0;h.variant=variant||undefined;h.behavior=behavior||undefined;h.isStageBoss=false;h.signatureEventId=undefined;h.motion={phase:type==='FALLING_DEBRIS'?'fall':'warning',timer:type==='FALLING_DEBRIS'?.15:1.25,directionX:1,directionY:0};if(i===4)h.y+=50;cells.push(stageThreatAppearance(h,i===8?5:3,i===8?'surface_logistics':'highrise_slab')?.cell);}
         return {width:image.naturalWidth,height:image.naturalHeight,cells,scope:'Synthetic nine-shape render fixture; no gameplay completion claim.'};
       })()`);
       await sleep(250);await screenshot(cdp,`${width}x${height}-threat-silhouettes.png`);
