@@ -4,6 +4,7 @@ import {describe,expect,it} from 'vitest';
 import imageApproval from '../docs/branding/PLAYER-STAGE12-HANDOFF-APPROVAL.json';
 import controlApproval from '../docs/branding/PLAYER-CONTROL-INTEREST-APPROVAL.json';
 import pairApproval from '../docs/branding/PLAYER-INTEREST-PAIR-APPROVAL.json';
+import focusedApproval from '../docs/branding/PLAYER-FOCUSED-PORTRAIT-APPROVAL.json';
 import dialogueApproval from '../docs/branding/PLAYER-STAGE12-DIALOGUE-APPROVAL.json';
 import directionApproval from '../docs/branding/PLAYER-NARRATIVE-DIRECTIONS-APPROVAL.json';
 import directionCopy from '../content/localization/survivors-narrative-direction-ko.json';
@@ -19,6 +20,8 @@ describe('exact approved growth pilot content',()=>{
   expect(controlApproval.approved_scope).toBe('design_and_exact_file');
   for(const asset of pairApproval.assets)expect(createHash('sha256').update(readFileSync(new URL('../'+asset.path,import.meta.url))).digest('hex')).toBe(asset.sha256);
   expect(pairApproval.career_reward_voice_change).toBe(false);
+  expect(createHash('sha256').update(readFileSync(new URL('../'+focusedApproval.path,import.meta.url))).digest('hex')).toBe(focusedApproval.sha256);
+  expect(focusedApproval.rule_save_equipment_changes).toBe(false);
  });
  it('uses only the two approved player statements without substituting draft replies',()=>{
   expect(dialogueApproval.event_id).toBe(HANDOFF_DIALOGUE_EVENT);

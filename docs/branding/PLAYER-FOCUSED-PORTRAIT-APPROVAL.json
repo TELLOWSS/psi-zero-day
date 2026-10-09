@@ -1,0 +1,14 @@
+{
+ "asset_id":"player-focused-portrait-v1",
+ "user_statement":"디자인·파일 승인, 검증 후 연결",
+ "approval_date":"2026-10-09",
+ "approved_scope":"design_and_exact_file",
+ "path":"public/assets/episode01/characters/player-focused-portrait-v1.png",
+ "sha256":"7cfb5713d404ce832352c46e3253efec6420beabc2dde63c71bf504b185f5b96",
+ "generator":"built-in image_gen",
+ "reference":"public/assets/episode01/characters/player-portrait.webp",
+ "runtime_gate":"CharacterCard person.id=player, matching growth.character_id=player, existing growth.stage=focused only",
+ "rule_save_equipment_changes":false,
+ "rights_physical_device_review":"separate",
+ "production_deployment":"not_requested_not_deployed"
+}
