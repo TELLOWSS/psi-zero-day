@@ -3112,3 +3112,5 @@
   }
   .is-combat .survivors-wave-director-notice > small { display:none; }
 }
+
+.survivors-clear-reward{border:1px solid #719b8755;background:#18322888;border-radius:8px;padding:12px;text-align:left;margin:12px 0}.survivors-clear-reward h3{font-size:15px;margin:0 0 8px;color:#a9f0c7}.survivors-clear-reward p{font-size:12px;margin:4px 0}

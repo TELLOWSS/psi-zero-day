@@ -51,7 +51,8 @@ it.each(['victory', 'defeat'] as const)('recovers a failed supply write and sett
     });
     tick(); tick(); tick();
     const wallet = JSON.parse(localStorage.getItem(key)!);
-    expect(wallet.credits).toBe(10350);
+    expect(wallet.credits).toBe(phase==='victory'?11000:10350);
+    expect(wallet.clearRewardClaims??[]).toEqual(phase==='victory'?['stage_01']:[]);
     expect(wallet.inventory.owned).toEqual(['voice_lens']);
     expect(wallet.inventory.durability.voice_lens).toBe(phase === 'victory' ? 85 : 100);
     if (phase === 'defeat') {

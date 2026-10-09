@@ -72,7 +72,7 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   vi.spyOn(engine,'update').mockImplementation(()=>{engine.state.phase='victory';engine.state.psiCredits=350;engine.state.starsEarned=[true,false,false];});
   tick();tick();tick();
   const wallet=JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!);
-  expect(wallet.credits).toBe(5150);expect(wallet.inventory.durability).toEqual({voice_lens:85,shock_mantle:85});
+  expect(wallet.credits).toBe(5800);expect(wallet.inventory.durability).toEqual({voice_lens:85,shock_mantle:85});
   expect(host.querySelector('.survivors-clear-maintenance')?.textContent).toContain('85/100');
   const dialog=host.querySelector<HTMLElement>('[role="dialog"][aria-labelledby="survivors-result-title"]')!;
   expect(dialog.getAttribute('aria-modal')).toBe('true');
@@ -84,12 +84,12 @@ it('pauses live purchases, applies gear without restarting, blocks resume keys, 
   act(()=>document.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true,cancelable:true})));
   expect(document.activeElement).toBe(actions[actions.length-1]);
   expect(host.querySelectorAll('.survivors-result-reward')).toHaveLength(1);
-  expect(host.querySelector('.survivors-result-reward strong')?.textContent).toBe('+350 PSI');
+  expect(host.querySelector('.survivors-result-reward strong')?.textContent).toBe('+1,000 PSI');
   expect(host.querySelector('.survivors-results-grid')?.textContent).toContain('보완 인계');
   const starts=vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length;
   click('같은 작전 다시 준비');
   expect(vi.mocked(SurvivorsEngine.prototype.start).mock.calls.length).toBe(starts);
   expect(host.textContent).toContain('시그널 워치 시작');
-  expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(5150);
+  expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).credits).toBe(5800);
  }finally{act(()=>root.unmount());host.remove();}
 });

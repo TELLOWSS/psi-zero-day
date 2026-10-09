@@ -34,7 +34,7 @@ it('Stage 01→02 stores stage_02 stars, unlocks stage_03, awards once and keeps
     const entries = Object.keys(localStorage).map(k => [k, localStorage.getItem(k)!] as const);
     expect(entries.some(([,v]) => v.includes('stage_03'))).toBe(true);
     expect(entries.some(([,v]) => v.includes('"stage_02":[true,false,true]'))).toBe(true);
-    expect(entries.some(([k,v]) => k.includes('credits') && v === '40')).toBe(true);
+    expect(entries.some(([k,v]) => k.includes('credits') && v === '1590')).toBe(true);
   } finally { act(() => root.unmount()); }
 });
 it('blur and touchcancel pause play, key repeat does not resume it', () => {

@@ -18,3 +18,8 @@ describe('optional offline pinball personal record',()=>{
   expect(()=>savePinballBest({score:500,combo:3})).not.toThrow();
  });
 });
+
+it('separates records for rule variants while preserving legacy classic records',()=>{
+ savePinballBest({score:200,combo:2});savePinballBest({score:900,combo:8},'bonus','rush');
+ expect(readPinballBest()).toEqual({score:200,combo:2});expect(readPinballBest('bonus','rush')).toEqual({score:900,combo:8});
+});

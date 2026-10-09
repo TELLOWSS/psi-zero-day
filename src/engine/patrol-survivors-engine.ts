@@ -1,3 +1,4 @@
+import {stageClearReward} from '../domain/survivors-recreation';
 import {stageThreatTraits} from './survivors-stage-threats';
 import {resolveHandoffCarry} from '../domain/survivors-handoff-carry';
 import type {OperationHandoff} from '../domain/survivors-operation-handoff';
@@ -746,6 +747,13 @@ export class SurvivorsEngine {
   private readonly masteryBossFinishIds = new Set<string>();
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
+  }
+  private clearRewardApplied=false;
+  /** Called only after the authoritative wallet transaction succeeds. */
+  applyStageClearReward(firstClear:boolean){
+    if(this.state.phase!=='victory'||this.clearRewardApplied)return null;
+    const reward=stageClearReward(this.state.stageId,this.state.difficulty??'standard',firstClear,this.state.starsEarned.filter(Boolean).length);
+    this.state.psiCredits+=reward.total;this.clearRewardApplied=true;return reward;
   }
   private equipmentPreviewOnly=false;
   private equipmentPreviewResetTime=0;

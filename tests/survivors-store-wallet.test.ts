@@ -16,3 +16,12 @@ it('does not save the compatibility balance when the authoritative transaction f
  expect(()=>persistStoreWallet({credits:0,inventory:{owned:['voice_lens'],equipped:[]}})).toThrow('quota');
  expect(readSurvivorsCredits()).toBe(500);expect(localStorage.getItem('psi.survivors.store_wallet')).toBeNull();
 });
+
+it('retains clear claims through purchases and writes them atomically with credits',()=>{
+ persistStoreWallet({credits:600,inventory:{owned:[],equipped:[]},clearRewardClaims:['stage_01']});
+ persistStoreWallet({credits:500,inventory:{owned:[],equipped:[]}});
+ expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!).clearRewardClaims).toEqual(['stage_01']);
+ vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw Error('quota');});
+ expect(()=>persistStoreWallet({credits:1500,inventory:{owned:[],equipped:[]},clearRewardClaims:['stage_02']})).toThrow();
+ expect(JSON.parse(localStorage.getItem('psi.survivors.store_wallet')!)).toMatchObject({credits:500,clearRewardClaims:['stage_01']});
+});

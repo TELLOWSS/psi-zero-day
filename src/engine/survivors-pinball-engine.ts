@@ -1,3 +1,4 @@
+import {PINBALL_RULES,pinballRewardBudget,availablePinballChoice,type PinballRule} from '../domain/survivors-recreation';
 export const PINBALL_WIDTH=600,PINBALL_HEIGHT=900;
 export const PINBALL_BUMPERS=[{x:204,y:220,r:49},{x:396,y:220,r:49},{x:300,y:352,r:49}] as const;
 export const PINBALL_RAILS=[[110,135,490,135],[110,135,90,280],[90,280,90,690],[490,135,510,280],[510,280,510,690],[90,690,170,790],[170,790,265,828],[510,690,430,790],[430,790,335,828]] as const;
@@ -9,31 +10,33 @@ export interface PinballBall {x:number;y:number;vx:number;vy:number;}
 export interface PinballEffect {x:number;y:number;kind:'metal'|'rubber'|'crane'|'perfect'|'jackpot';life:number;}
 export type PinballCallout='perfect'|'skillshot'|'rush'|'jackpot'|'tilt'|'';
 export class SurvivorsPinballEngine {
- constructor(readonly mode:PinballMode='bonus'){}
+ readonly rule:PinballRule;readonly budget:ReturnType<typeof pinballRewardBudget>;
+ constructor(readonly mode:PinballMode='bonus',options:{rule?:PinballRule;clears?:number}={}){this.rule=availablePinballChoice({rule:options.rule},options.clears??0).rule;this.budget=pinballRewardBudget(options.clears??0);}
+ private get rules(){return PINBALL_RULES[this.rule];}
  private sounds:{kind:'metal'|'rubber'|'crane'|'flipper';x:number}[]=[];
  drainSounds(){return this.sounds.splice(0);}
  readonly state={phase:'ready' as 'ready'|'playing'|'between'|'finished',ball:0,remaining:30,
   x:480,y:650,vx:0,vy:0,score:0,earned:0,combo:0,bestCombo:0,leftAngle:.35,rightAngle:Math.PI-.35,
   lit:[false,false,false],effects:[] as PinballEffect[],hits:0,saves:0,elapsed:0,
   extraBalls:[] as PinballBall[],rushTime:0,jackpots:0,perfects:0,skillTarget:0,
-  nudgesLeft:3,nudgeCooldown:0,tiltTime:0,callout:'' as PinballCallout,calloutTime:0};
+  nudgesLeft:3,nudgeCooldown:0,tiltTime:0,callout:'' as PinballCallout,calloutTime:0,calloutPoints:0};
  private cooldown=[0,0,0];private slingCooldown=[0,0];private comboTime=0;private protection=0;private launchedAt=0;private firstHit=true;
  private assistPulse={left:0,right:0};private assistCooldown={left:0,right:0};
  private manual={left:false,right:false};private pressAge={left:10,right:10};private strokeUsed={left:false,right:false};
  launch(power=.65){const s=this.state;if(s.phase!=='ready'&&s.phase!=='between')return false;const strength=Number.isFinite(power)?Math.max(.15,Math.min(1,power)):.65;
   s.ball++;s.phase='playing';s.remaining=30;Object.assign(s,{x:480,y:650,vx:-40-strength*200+(s.ball-1)*20,vy:-1080-(strength-.65)*350});s.combo=0;s.lit=[false,false,false];
-  s.extraBalls=[];s.rushTime=0;s.nudgesLeft=3;s.nudgeCooldown=0;s.tiltTime=0;s.callout='';s.calloutTime=0;s.leftAngle=.35;s.rightAngle=Math.PI-.35;s.skillTarget=(s.ball-1)%3;
+  s.extraBalls=[];s.rushTime=0;s.nudgesLeft=3;s.nudgeCooldown=0;s.tiltTime=0;s.callout='';s.calloutTime=0;s.calloutPoints=0;s.leftAngle=.35;s.rightAngle=Math.PI-.35;s.skillTarget=(s.ball-1)%3;
   this.protection=4;this.cooldown=[0,0,0];this.slingCooldown=[0,0];this.comboTime=0;this.launchedAt=s.elapsed;this.firstHit=true;
   this.assistPulse={left:0,right:0};this.assistCooldown={left:0,right:0};this.manual={left:false,right:false};this.pressAge={left:10,right:10};this.strokeUsed={left:false,right:false};
-  s.earned=this.mode==='practice'?0:Math.max(100,s.earned);return true;}
+  s.earned=this.mode==='practice'?0:Math.max(this.budget.base,s.earned);return true;}
  finish(){this.endBall(true);return this.state.earned;}
  nudge(){const s=this.state;if(s.phase!=='playing'||s.nudgesLeft===0||s.tiltTime>0)return false;
   if(s.nudgeCooldown>0){s.tiltTime=1.5;this.callout('tilt');return false;}
   s.nudgesLeft--;s.nudgeCooldown=1.2;for(const b of [s,...s.extraBalls]){b.vx+=b.x<300?100:-100;b.vy-=160;}this.hit(s.x,s.y,'rubber');return true;}
  update(dt:number,input:PinballInput){if(this.state.phase!=='playing'||!Number.isFinite(dt)||dt<=0)return;
   const count=Math.ceil(Math.min(dt,.1)*240),step=Math.min(dt,.1)/count;for(let i=0;i<count&&this.state.phase==='playing';i++)this.step(step,input);}
- private award(points:number){const s=this.state;s.score+=points;s.earned=this.mode==='practice'?0:Math.min(400,100+Math.floor(s.score/100)*5);}
- private callout(kind:PinballCallout){const s=this.state,p={perfect:1,skillshot:2,rush:3,jackpot:4,tilt:5,'':0};if(s.calloutTime>0&&p[s.callout]>p[kind])return;s.callout=kind;s.calloutTime=1.4;}
+ private award(points:number){const s=this.state;s.score+=points;s.earned=this.mode==='practice'?0:Math.min(this.budget.cap,this.budget.base+Math.floor(s.score/100)*5);}
+ private callout(kind:PinballCallout,points=0){const s=this.state,p={perfect:1,skillshot:2,rush:3,jackpot:4,tilt:5,'':0};if(s.calloutTime>0&&p[s.callout]>p[kind])return;s.callout=kind;s.calloutTime=1.4;s.calloutPoints=points;}
  private hit(x:number,y:number,kind:PinballEffect['kind']){
   this.sounds.push({kind:kind==='perfect'?'metal':kind==='jackpot'?'crane':kind,x});if(this.sounds.length>32)this.sounds.shift();
   this.state.effects.push({x,y,kind,life:kind==='crane'||kind==='jackpot'?1.2:.28});if(this.state.effects.length>24)this.state.effects.shift();}
@@ -49,14 +52,14 @@ export class SurvivorsPinballEngine {
   PINBALL_SLINGS.forEach(([ax,ay,bx,by],i)=>{const c=this.capsule(b,ax,ay,bx,by,8,.88,0,0,false);if(c&&c.relative<-120&&this.slingCooldown[i]===0){b.vx+=c.nx*120;b.vy-=150;this.slingCooldown[i]=.25;this.award(s.rushTime>0?100:50);this.hit(c.x,c.y,'rubber');}});
   for(const side of ['left','right'] as const){const p=PINBALL_PADDLES[side],angle=side==='left'?s.leftAngle:s.rightAngle,old=side==='left'?oldLeft:oldRight,dx=Math.cos(angle)*100,dy=Math.sin(angle)*100,omega=(angle-old)/dt,projection=Math.max(0,Math.min(1,((b.x-p.x)*dx+(b.y-p.y)*dy)/10000));
    const c=this.capsule(b,p.x,p.y,p.x+dx,p.y+dy,12,.88,-omega*dy*projection,omega*dx*projection);
-   if(c&&c.relative<0&&this.manual[side]&&this.pressAge[side]<.12&&!this.strokeUsed[side]&&Math.abs(omega)>8&&projection>.25&&b.vy<-250){this.strokeUsed[side]=true;s.perfects++;this.award(s.rushTime>0?500:250);this.hit(b.x,b.y,'perfect');this.callout('perfect');}}
+   if(c&&c.relative<0&&this.manual[side]&&this.pressAge[side]<.12&&!this.strokeUsed[side]&&Math.abs(omega)>8&&projection>.25&&b.vy<-250){this.strokeUsed[side]=true;s.perfects++;this.award(this.rules.perfectPoints*(s.rushTime>0?2:1));this.hit(b.x,b.y,'perfect');this.callout('perfect',this.rules.perfectPoints*(s.rushTime>0?2:1));}}
   PINBALL_BUMPERS.forEach((p,i)=>{const dx=b.x-p.x,dy=b.y-p.y,dist=Math.hypot(dx,dy);if(dist>=p.r+11)return;
    const nx=dist>1e-6?dx/dist:0,ny=dist>1e-6?dy/dist:-1;b.x=p.x+nx*(p.r+11+.2);b.y=p.y+ny*(p.r+11+.2);const speed=b.vx*nx+b.vy*ny;if(speed<0){b.vx-=1.85*speed*nx;b.vy-=1.85*speed*ny;}
-   if((this.cooldown[i]??0)>0)return;b.vx+=nx*180;b.vy+=ny*180;this.cooldown[i]=.16;s.hits++;s.combo++;s.bestCombo=Math.max(s.bestCombo,s.combo);this.comboTime=1.8;
+   if((this.cooldown[i]??0)>0)return;b.vx+=nx*180;b.vy+=ny*180;this.cooldown[i]=.16;s.hits++;s.combo++;s.bestCombo=Math.max(s.bestCombo,s.combo);this.comboTime=this.rules.comboWindow;
    this.award((100+Math.min(10,s.combo-1)*25)*(s.rushTime>0?2:1));s.lit[i]=true;this.hit(p.x,p.y,'metal');
-   if(this.firstHit){this.firstHit=false;if(i===s.skillTarget&&s.elapsed-this.launchedAt<=2.5){this.award(500);this.callout('skillshot');}}
-   if(s.lit.every(Boolean)){s.lit=[false,false,false];if(s.rushTime>0){this.award(2000);s.jackpots++;this.hit(300,155,'jackpot');this.callout('jackpot');}
-    else{this.award(1000);s.rushTime=10;s.extraBalls=[{x:140,y:340,vx:220,vy:-500},{x:460,y:340,vx:-220,vy:-500}];this.hit(300,155,'crane');this.callout('rush');}}});
+   if(this.firstHit){this.firstHit=false;if(i===s.skillTarget&&s.elapsed-this.launchedAt<=this.rules.skillWindow){this.award(this.rules.skillPoints);this.callout('skillshot',this.rules.skillPoints);}}
+   if(s.lit.filter(Boolean).length>=this.rules.rushLamps){s.lit=[false,false,false];if(s.rushTime>0){this.award(2000);s.jackpots++;this.hit(300,155,'jackpot');this.callout('jackpot',2000);}
+    else{this.award(1000);s.rushTime=this.rules.rushSeconds;s.extraBalls=[{x:140,y:340,vx:220,vy:-500},{x:460,y:340,vx:-220,vy:-500}];this.hit(300,155,'crane');this.callout('rush',1000);}}});
   const speed=Math.hypot(b.vx,b.vy);if(speed>1300){b.vx*=1300/speed;b.vy*=1300/speed;}return b.y<=846;}
  private step(dt:number,input:PinballInput){const s=this.state;s.elapsed+=dt;s.remaining=Math.max(0,s.remaining-dt);this.protection=Math.max(0,this.protection-dt);this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)s.combo=0;
   this.cooldown=this.cooldown.map(c=>Math.max(0,c-dt));this.slingCooldown=this.slingCooldown.map(c=>Math.max(0,c-dt));s.effects=s.effects.map(e=>({...e,life:e.life-dt})).filter(e=>e.life>0);
