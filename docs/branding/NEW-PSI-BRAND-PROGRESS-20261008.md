@@ -228,6 +228,8 @@
 
 ## 2026-10-09 승인 관심사 선택과 성장 시범 연결
 
+- 최신사용자 `새로운 원화 승인` 답변으로 조율/조사 정확2파일 승인기록 및3관심사 원화 로컬 연결. 집중13/type/prebuildbuild/실제3viewport×3imagedecodecontain/실패복구/actor분리/오류넘침0 통과. 남은전체기획 V2 실행순서·인물별브리프·저장자산경계로 재작성. 동기화는요청때만, 이번push/PR/merge/deploy없음.
+
 - 현장 통제 관심사 원화1장 built-in 생성 및 사용자 정확 파일 승인 후 로컬 연결. SHA41ac0833ddb196665d9ac29ada19f63b216b7b268ac037a754201882e51ebb75, 미래 관심사 삽화이며 직업/승진 아님. 유효한 player 인계/대화/저장control때만 표시. 집중9/type/prebuildbuild 및 실제 빌드3viewport decode/contain/타관심사숨김/실패이전값유지/retry/actor분리/오류넘침0 통과. 낮은 가로의 전체 그림 가시성 보완 뒤 Vitebuild/3화면 재통과, 가로 직접검수. 전체1894pass1skip은 연결직전 증거이며 최종전체회귀로 확대금지. 운영미반영·사용권/실기기별도.
 
 - 후속 키 부재시 seed 테스트의 실제 STAGE12 완주179.06669초/정리1/구역3 및 CG/A대화/관심사 연결 통과. 종료 후 별·지갑 원문 저장값이 reload 후 동일하고 STAGE13 준비 표시 확인. `artifacts/stage12-growth-shield-natural/settlement.json`. 장비 보유/선행 해금 fixture이며 자연구매/실기기/운영 증거 아님. 제품 규칙 변경 없음. PR162 최신13404 GitHub 성공/Vercel rate-limit 실패 재확인, push/배포/병합 안 함.

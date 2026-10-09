@@ -14,6 +14,8 @@ const approvedScenes=['PLAYER-STAGE12-HANDOFF-APPROVAL.json','PLAYER-CONTROL-INT
  const approval=read(`docs/branding/${file}`),actualSha256=hash(approval.path);
  return {approvalFile:file,assetId:approval.asset_id,path:approval.path,approvedScope:approval.approved_scope,actualSha256,exactBytesMatch:actualSha256===approval.sha256,runtimeGate:approval.runtime_gate,rightsReview:approval.rights_review};
 });
+const pair=read('docs/branding/PLAYER-INTEREST-PAIR-APPROVAL.json');
+for(const asset of pair.assets){const actualSha256=hash(asset.path);approvedScenes.push({approvalFile:'PLAYER-INTEREST-PAIR-APPROVAL.json',assetId:`player-${asset.direction}-interest-v1`,path:asset.path,approvedScope:pair.approved_scope,actualSha256,exactBytesMatch:actualSha256===asset.sha256,runtimeGate:pair.runtime_gate,rightsReview:pair.rights_and_physical_device_review});}
 const result={scope:'READ_ONLY_ASSET_AND_FLAG_INVENTORY_NOT_NEW_GROWTH_UNLOCK_OR_APPROVAL',policy:growth.policy,rows,approvedScenes,summary:{characters:rows.length,stageContracts:rows.reduce((sum,row)=>sum+row.stages.length,0),separateStageManifestAssets:rows.reduce((sum,row)=>sum+row.stageSpecificManifestAssets.length,0),approvedSceneByteChecks:approvedScenes.every(scene=>scene.exactBytesMatch)}};
 const output=path.join(root,'artifacts/growth-art-slots');fs.mkdirSync(output,{recursive:true});fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(result,null,2));
 console.log(JSON.stringify(result.summary));if(!result.summary.approvedSceneByteChecks)process.exitCode=1;

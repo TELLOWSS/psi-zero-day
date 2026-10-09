@@ -38,7 +38,7 @@ describe('narrative interest optional UI',()=>{
   const failure=vi.spyOn(Storage.prototype,'setItem').mockImplementation(()=>{throw Error('quota');});await click('관심사 저장');expect(host.querySelector('[role=alert]')).not.toBeNull();expect(localStorage.getItem(NARRATIVE_DIRECTION_KEY)).toBe(before);
   expect(host.querySelector('.survivors-narrative-interest-scene img')).not.toBeNull();
   failure.mockRestore();await click('관심사 저장');expect(JSON.parse(localStorage.getItem(NARRATIVE_DIRECTION_KEY)!).direction).toBe('coordination');expect(host.querySelector('[role=status]')).not.toBeNull();
-  expect(host.querySelector('.survivors-narrative-interest-scene img')).toBeNull();
+  expect(host.querySelector('.survivors-narrative-interest-scene img')?.getAttribute('src')).toContain('player-coordination-interest-v1.png');
   const writes=vi.spyOn(Storage.prototype,'setItem');await click('관심사 저장');expect(writes).not.toHaveBeenCalled();await click('나중에');expect(document.activeElement?.textContent).toBe('관심사 변경');
  });
 });

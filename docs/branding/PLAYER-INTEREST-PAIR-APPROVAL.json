@@ -1,0 +1,16 @@
+{
+  "user_statement": "새로운 원화 승인",
+  "approval_date": "2026-10-09",
+  "approved_scope": "design_and_exact_two_files",
+  "assets": [
+    {"direction":"coordination","path":"public/assets/survivors/growth/player-coordination-interest-v1.png","sha256":"32a6381f5c3156432eb12618a5593e93e36c5de64be74ff91785a44dc9e6a463"},
+    {"direction":"investigation","path":"public/assets/survivors/growth/player-investigation-interest-v1.png","sha256":"2e53e8606b32f7240c752edaf797c76837618138bd2a0aec46ba14fc9897439d"}
+  ],
+  "generator": "built-in image_gen",
+  "identity_reference": "public/assets/episode01/characters/player-portrait.webp",
+  "style_reference": "public/assets/survivors/growth/player-stage12-handoff-v1.png",
+  "runtime_gate": "valid player stage12 victory with rubble, approved dialogue, corresponding saved interest; outside combat",
+  "career_reward_voice_change": false,
+  "rights_and_physical_device_review": "separate",
+  "production_deployment": "not_requested_not_deployed"
+}
