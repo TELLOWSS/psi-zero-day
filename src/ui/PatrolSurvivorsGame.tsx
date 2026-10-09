@@ -88,6 +88,7 @@ import bossText from '../../content/localization/survivors-boss-ko.json';
 import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
+import {GangformMomentDirection} from './survivors-gangform-moment-direction';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
@@ -1393,6 +1394,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let motions = new SpriteMotionTracker();
     let direction = new CombatDirection();
     let bossDirection=new BossEncounterDirection();
+    let gangformMomentDirection=new GangformMomentDirection();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let playerVoice = new PlayerVoiceDirection();
@@ -1428,6 +1430,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
         bossDirection=new BossEncounterDirection();
+        gangformMomentDirection=new GangformMomentDirection();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -1458,6 +1461,20 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         direction.advance(dt);
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+        // ST14: scene punctuations follow actual boss edges, never a wall-clock
+        // imitation. Low-quality/reduced-motion modes avoid ornament and shake.
+        const gangformMoment=gangformMomentDirection.observe(
+          engine.state.stageId,engine.state.bossEncounter?.phase,engine.state.hazards,
+        );
+        if(gangformMoment) {
+          const point={x:gangformMoment.x,y:gangformMoment.y};
+          spawnFloating(point.x,point.y-45,gangformMoment.label,gangformMoment.color,false,true);
+          if(!reducedMotionRef.current&&budget.level!=='low') {
+            screenShakeRef.current=Math.max(screenShakeRef.current,gangformMoment.cameraStrength);
+            spawnShockwave(point.x,point.y,gangformMoment.color,gangformMoment.radius,2,.34);
+          }
+          audioRef.current.playRecordedEffect(gangformMoment.sfx,point,engine.state.player,budget.level==='low');
+        }
 
         const liveSignature=engine.state.signatureEvent;
         const signatureToken=liveSignature?`${liveSignature.id}:${liveSignature.phase}`:'';
