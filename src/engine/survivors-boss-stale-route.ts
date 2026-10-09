@@ -80,7 +80,7 @@ export function tickStaleRoute(h:Hazard,player:PlayerStats,terrain:readonly Terr
  if(route.oldMarkEnabled){
   const separation=Math.hypot(player.x-route.oldMark.x,player.y-route.oldMark.y);
   if(separation>56)route.oldRouteArmed=true;
-  if(separation<=35&&route.oldRouteArmed){
+  if(separation<=35&&route.oldRouteArmed&&route.warningRemaining===0){
    route.oldRouteArmed=false;
    route.misreads++;
    // Non-lethal but consequential: a wrong sign invalidates one checked point.
