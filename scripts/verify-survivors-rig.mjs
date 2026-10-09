@@ -16,7 +16,7 @@ await page.setContent('<html><body style="margin:0;background:#1e293b"><canvas w
 await page.addScriptTag({content:code+`
 window.__rigReview={fixture:'PRESENTATION_ONLY_NOT_GAMEPLAY',actorCount:0,frameChanges:0,modes:[],intervals:[]};
 const actorSources=['player','kang-taesik','yoon-sungho','lee-jaehoon','lim-junho'].map(n=>'/assets/episode01/characters/'+n+'-map.webp').concat(['/assets/survivors/safety-monitor-v2.webp','/assets/survivors/worker-korean-v2.webp']);
-Promise.all(actorSources.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{registerSpriteBounds(img);resolve(img)};img.onerror=reject;img.src=src}))).then(actors=>{
+Promise.all(actorSources.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{registerSpriteBounds(img);resolve(img)};img.onerror=()=>reject(new Error('Rig image failed to load: '+src));img.src=src}))).then(actors=>{
  window.__rigReview.actorCount=actors.length;
  const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),tracker=new SpriteMotionTracker(),entities=actors.map(()=>({}));
  let clock=0,last=0,previous='',started=performance.now();
@@ -38,8 +38,10 @@ Promise.all(actorSources.map(src=>new Promise((resolve,reject)=>{const img=new I
   if(now-started<11000)requestAnimationFrame(frame);else window.__rigReview.done=true;
  }
  requestAnimationFrame(frame);
-});`});
-await page.waitForFunction(()=>window.__rigReview?.actorCount===7);
+}).catch(error=>{window.__rigReview.error=String(error)});`});
+await page.waitForFunction(()=>window.__rigReview?.actorCount===7||window.__rigReview?.error,{timeout:16000}).catch(async error=>{const state=await page.evaluate(()=>({review:window.__rigReview,base:document.baseURI}));throw new Error('Rig boot timeout: '+JSON.stringify({state,errors,cause:String(error)}))});
+const boot=await page.evaluate(()=>window.__rigReview);
+if(boot.error)throw new Error('Rig fixture initialization failed: '+JSON.stringify({error:boot.error,errors}));
 await page.waitForTimeout(1500);await page.screenshot({path:path.join(out,'rig-walking-all-cast.png')});
 await page.waitForTimeout(3500);await page.screenshot({path:path.join(out,'rig-running-all-cast.png')});
 await page.waitForFunction(()=>window.__rigReview.done,{timeout:15000});
