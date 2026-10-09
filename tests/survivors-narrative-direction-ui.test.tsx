@@ -14,6 +14,14 @@ afterEach(async()=>{vi.restoreAllMocks();await act(async()=>root.unmount());host
 async function click(label:string){const button=[...host.querySelectorAll('button')].find(node=>node.textContent?.trim()===label);expect(button).toBeDefined();await act(async()=>button!.click());}
 async function select(value:string){await act(async()=>{const node=host.querySelector('select')!;node.value=value;node.dispatchEvent(new Event('change',{bubbles:true}));});}
 describe('narrative interest optional UI',()=>{
+ for(const [label,invalid] of [['no route',{...record,rubbleCleared:0}],['other actor',{...record,characterId:'lim_junho'}],['other stage',{...record,stageId:'stage_13',stageNumber:13}]] as const)it(`does not show saved art for ${label}`,async()=>{
+  localStorage.setItem(NARRATIVE_DIRECTION_KEY,JSON.stringify({version:1,characterId:'player',direction:'control'}));
+  await act(async()=>root.render(<SurvivorsNarrativeDirection record={invalid}/>));expect(host.textContent).toBe('');expect(host.querySelector('img')).toBeNull();
+ });
+ it('does not treat a corrupt saved dialogue as approval evidence',async()=>{
+  localStorage.setItem(HANDOFF_DIALOGUE_KEY,'{');localStorage.setItem(NARRATIVE_DIRECTION_KEY,JSON.stringify({version:1,characterId:'player',direction:'control'}));
+  await act(async()=>root.render(<SurvivorsNarrativeDirection record={record}/>));expect(host.textContent).toBe('');
+ });
  it('hides without approved dialogue and observed completion',async()=>{
   localStorage.removeItem(HANDOFF_DIALOGUE_KEY);await act(async()=>root.render(<SurvivorsNarrativeDirection record={record}/>));expect(host.textContent).toBe('');
   localStorage.setItem(HANDOFF_DIALOGUE_KEY,JSON.stringify({version:1,eventId:HANDOFF_DIALOGUE_EVENT,choice:'together'}));

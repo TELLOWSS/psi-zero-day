@@ -34,6 +34,7 @@ try{
   const unchanged=before===await snapshot();await page.screenshot({path:`${output}/${width}x${height}.png`});
   await page.reload();await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.locator('.survivors-operation-brief details').last().locator('summary').click();
   const actualRestored=(await direction.textContent()).includes('중지와 재개 경계를');
+  await direction.locator('.survivors-narrative-interest-scene img').evaluate(img=>img.decode());
   const reloadUnwritten=await page.evaluate(()=>window.directionWrites===0);
   await page.locator('.survivors-preflight-tabs button').nth(2).click();await page.locator('.survivors-char-card').filter({has:page.getByAltText('임준호',{exact:true})}).click();await page.locator('.survivors-preflight-tabs button').nth(0).click();
   const actorSeparated=await direction.count()===0;
