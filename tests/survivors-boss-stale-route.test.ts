@@ -66,7 +66,7 @@ describe('ST25 stale-route is physical puzzle, not narrative-only',()=>{
   expect(route.warningRemaining).toBe(0);
   expect(route.verified).toBe(1);
   for(let i=1;i<3;i++){
-    state.player.x=route.points[i].x;state.player.y=route.points[i].y;
+    state.player.x=route.points[i]!.x;state.player.y=route.points[i]!.y;
     tickStaleRoute(boss,state.player,state.terrain??[],1/60);
   }
   expect(route.verified).toBe(3);
