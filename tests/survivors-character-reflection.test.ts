@@ -1,10 +1,14 @@
 import {describe,it,expect} from 'vitest';
-import {characterReflection} from '../src/app/survivors-character-reflection';
+import {characterReflection,hasPlayerHandoffScene} from '../src/app/survivors-character-reflection';
 import type {OperationHandoff} from '../src/domain/survivors-operation-handoff';
 import {operationHandoff} from '../src/domain/survivors-operation-handoff';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 const record:OperationHandoff={version:1,characterId:'player',stageId:'stage_12',stageNumber:12,outcome:'victory',zones:2,cartStops:1,rubbleCleared:3,damageTaken:0,stars:[true,true,false]};
 describe('character reflection',()=>{
+ it('shows the approved scene only for the matching observed handoff',()=>{
+  expect(hasPlayerHandoffScene(record)).toBe(true);
+  for(const row of [{...record,characterId:'lim_junho' as const},{...record,rubbleCleared:0},{...record,outcome:'defeat' as const},{...record,stageId:'stage_13' as const,stageNumber:13}])expect(hasPlayerHandoffScene(row)).toBe(false);
+ });
  it('projects only observed evidence without changing records',()=>{
   const rows=[record],before=JSON.stringify(rows);
   expect(characterReflection(rows,'player')?.evidence).toEqual(['route','stop','zone']);

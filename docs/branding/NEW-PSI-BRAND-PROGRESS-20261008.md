@@ -2,6 +2,10 @@
 
 ## 최신 기준선
 
+- PR162 remote13404dabc05bf6d7828303cca312905f08e20e4c의 Linux verify-voice-lock 성공(모바일/전체회귀 포함). Vercel latest는 'Deployment rate limited — retry in 24 hours' 실패. 이전 preview 성공을 최신 성공으로 사용하지 않고 병합/운영 미반영 유지, 우회/유료업그레이드/반복배포 없음.
+- 사용자 첫 시범 안전관리자 선택 및 생성된 STAGE12 CG 직접 '디자인·파일 승인, 검증 후 연결' 답변 기록. 승인 SHA `0129709a46a7381b68491eba8c3b453b82fc9ae2b750470184ba5f18544da72e` 원본1672x941 유지. local 후속은 실제 player/stage12/victory/rubbleCleared>0 handoff에서만 서사 삽화 표시, 새로운 성장 상태/선택/보상 없음. `PLAYER-STAGE12-HANDOFF-APPROVAL.json`은 디자인/파일 승인과 대사/사용권/실기기/운영을 구분한다.
+- CG local 집중10/타입/최종CSS Vitebuild/전체1872pass1skip 성공. 실제 빌드9경로 이미지decode/원본비율/승리만표시/중단·활동0비표시/승인SHA/44px/저장불변/오류넘침0 재통과, 폰세로 직접 확인. `artifacts/character-reflection/report.json` 최신은 CG 포함local 증거이며 remote13404 제품 검증과 구분. 새로고침 자연STAGE01은 CG표시 조건을 충족하지 않는 이전 증거다. 후속 CG는 한도 대기로 아직push/운영 없음. 다음 대화2안은 `SURVIVORS-PLAYER-STAGE12-DIALOGUE-DRAFT-V1.md` 초안이며 임의 확정/운영 연결하지 않는다.
+
 - 새 저장 실제 UI 봇 후속: 안전관리자 STAGE01 무이동/레벨업 첫 선택만으로 57.13992초 defeat, 돌진제동2/통로0/구역0/피해102. 엔진 read-only 단일 소유 파일 계측(상태/시간/피해/phase 주입 없음), 종료 handoff와 실제 값 일치, 새로고침 후 같은 인물 회고·중단 문구 복구/오류0. `artifacts/character-reflection-natural/report.json`/restored.png. 최초 chunk 이동으로 marker 탐색 실패, 다음 새로고침의 동일 소유 파일을 중복으로 오판하여 URI별 단일 소유 검증으로 수정/재통과. STAGE12 성장 선택·자연 완주·진로/실기기 증거로 확대하지 않는다.
 
 - 2026-10-09 성장 시범 인물 사용자 직접 선택: 안전관리자(characterId player). STAGE 12 시범의 대표 인물 확정이며 대사/신규 CG/직업 조건 승인은 별도. 실제 aggregate 기록의 생산 경로와 추정 금지, 선택/재도전/저장 게이트는 `SURVIVORS-GROWTH-EVENT-CONTRACT-V1.md`로 연결.

@@ -13,3 +13,7 @@ export function characterReflection(records:readonly OperationHandoff[],characte
  if(record.outcome==='defeat')evidence.push('retry');
  return {record,evidence};
 }
+
+export function hasPlayerHandoffScene(record:OperationHandoff) {
+ return isOperationHandoff(record)&&record.characterId==='player'&&record.stageId==='stage_12'&&record.outcome==='victory'&&record.rubbleCleared>0;
+}
