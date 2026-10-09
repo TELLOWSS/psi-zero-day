@@ -40,6 +40,53 @@ describe('ST25 stale-route is physical puzzle, not narrative-only',()=>{
    for(const point of route!.points){expect(terrainHit(state.terrain??[],previous,point,19)).toBeUndefined();previous=point;}
   }
  });
+ it('warns and rolls back one verified checkpoint on the old marked route without HP loss',()=>{
+  const {state,boss}=fixture();
+  const p=boss.bossGameplay!;
+  expect(tickStaleRoute(boss,state.player,state.terrain??[],1/60)).toBe(true);
+  const route=p.staleRoute!;
+  expect(route.oldMarkEnabled).toBe(true);
+  const health=state.player.hp, bossHealth=boss.hp;
+  state.player.x=route.points[0].x;state.player.y=route.points[0].y;
+  tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  expect(route.verified).toBe(1);
+  state.player.x=route.oldMark.x;state.player.y=route.oldMark.y;
+  tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  expect(route).toMatchObject({verified:0,misreads:1,oldRouteArmed:false});
+  expect(route.warningRemaining).toBeGreaterThan(1);
+  for(let i=0;i<10;i++)tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  expect(route.misreads).toBe(1); // Staying in place never stacks damage/penalty.
+  expect(state.player.hp).toBe(health);
+  expect(boss.hp).toBe(bossHealth);
+  expect(p.combatPhase).toBe('pattern');
+  state.player.x=route.points[0].x;state.player.y=route.points[0].y;
+  tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  expect(route.verified).toBe(0); // Warning-time recovery is deliberately short.
+  for(let i=0;i<75;i++)tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  expect(route.warningRemaining).toBe(0);
+  expect(route.verified).toBe(1);
+  for(let i=1;i<3;i++){
+    state.player.x=route.points[i].x;state.player.y=route.points[i].y;
+    tickStaleRoute(boss,state.player,state.terrain??[],1/60);
+  }
+  expect(route.verified).toBe(3);
+  expect(p.combatPhase).toBe('burst');
+  expect(p.burstRemaining).toBe(4.5);
+ });
+ it('keeps obsolete lane outside every required traversable route segment',()=>{
+  const {state,boss}=fixture(),start={x:state.player.x,y:state.player.y};
+  const route=createStaleRoute(start,boss,state.terrain??[])!;
+  if(!route.oldMarkEnabled)return;
+  const chain=[start,...route.points];
+  for(let i=1;i<chain.length;i++){
+    const a=chain[i-1]!,b=chain[i]!,p=route.oldMark;
+    const dx=b.x-a.x,dy=b.y-a.y;
+    const t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy)));
+    const distance=Math.hypot(p.x-a.x-dx*t,p.y-a.y-dy*t);
+    expect(distance).toBeGreaterThan(61);
+  }
+  expect(terrainHit(state.terrain??[],route.oldMark,route.oldMark,19)).toBeUndefined();
+ });
  it('does not allow boss damage or signature shortcut before three verified visits',()=>{
   const {state,boss}=fixture(),p=boss.bossGameplay!;
   const hp=boss.hp;
