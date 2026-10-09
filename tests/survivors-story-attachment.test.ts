@@ -47,4 +47,24 @@ describe('Stage 12 story attachment — actual evidence only',()=>{
     const result=storyOutcome({...completed,characterId:'kang_taesik'},[completed])!;
     expect(result.alternateView).toContain('통제 구역 2');
   });
+  it('continues the last actually completed ST12 handoff into ST13 without inventing safety',()=>{
+    const recorded={...completed,zones:2,cartStops:3,rubbleCleared:0};
+    const next=storyBrief('stage_13','kang_taesik',[recorded]);
+    expect(next?.title).toContain('야간 타설');
+    expect(next?.evidence).toContain('임준호');
+    expect(next?.evidence).toContain('잔재물 정리 0');
+    expect(next?.characterLine).toContain('강태식');
+    expect(next?.opening).toContain('오늘의');
+    expect(storyBrief('stage_13','kang_taesik',[{...recorded,outcome:'defeat'}])).toBeNull();
+    expect(storyBrief('stage_14','kang_taesik',[recorded])).toBeNull();
+  });
+  it('uses the most recent ST12 actual victory and never attributes it to the wrong actor',()=>{
+    const earlier={...completed,characterId:'player' as const,zones:1,cartStops:0,rubbleCleared:1};
+    const latest={...completed,characterId:'yoon_sungho' as const,zones:4,cartStops:2,rubbleCleared:0};
+    const briefing=storyBrief('stage_13','safety_monitor',[earlier,latest])!;
+    expect(briefing.evidence).toContain('윤성호');
+    expect(briefing.evidence).toContain('통제 구역 4');
+    expect(briefing.evidence).not.toContain('안전관리자');
+  });
+
 });
