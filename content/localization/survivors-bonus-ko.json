@@ -51,5 +51,7 @@
   "musicShift": "After the Shift · 퇴근의 여운",
   "musicTheme": "Factory Pinball · 경쾌한 한 판",
   "audioError": "사운드를 불러오지 못했습니다. 플레이는 계속할 수 있습니다.",
-  "audioSettings": "음악 · 소리 설정"
+  "audioSettings": "음악 · 소리 설정",
+  "settingsPause": "설정을 보는 동안 공과 시간이 멈춥니다. 닫은 뒤 이어서 플레이를 눌러 주세요.",
+  "closeSettings": "설정 닫기"
 }

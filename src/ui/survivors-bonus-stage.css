@@ -38,3 +38,30 @@
 
 .pinball-audio-settings{font-size:12px;margin-top:6px}.pinball-audio-settings summary{cursor:pointer;padding:5px 0}
 @media(max-width:600px) and (orientation:portrait){.pinball-audio-settings{grid-column:1/-1}.pinball-table{width:min(100%,300px,calc((100dvh - 330px)*.66667))}}
+
+.survivors-modal-content.survivors-bonus-stage{box-sizing:border-box}
+.survivors-bonus-backdrop{position:fixed;padding:8px;overscroll-behavior:none}
+.pinball-console{position:relative}
+.pinball-console-main:not([hidden]){display:contents}
+.pinball-console-main[hidden]{display:none}
+.pinball-settings-toggle{grid-column:1/-1;background:transparent;border:1px solid #637467;border-radius:6px;color:#c9decf;padding:7px 10px;text-align:left;font-size:12px;cursor:pointer}
+.pinball-settings-panel{grid-column:1/-1;min-width:0;padding:8px 0;color:#d4e7d9}
+.pinball-settings-panel p{font-size:11px;line-height:1.5;margin:8px 0}
+.pinball-settings-panel button{margin-top:10px;width:100%;min-height:40px}
+.pinball-state-strip{position:absolute;left:8px;right:8px;top:8px;padding:7px 10px;border:1px solid #8e9a7966;border-radius:6px;background:#0d1b17e8;color:#f5e2b1;text-align:center;font-size:12px;pointer-events:none}
+.pinball-state-strip small{display:block;font-size:10px;line-height:1.4;margin-top:3px;color:#c8d8cd}
+.pinball-score small{line-height:1.4}
+@media(max-width:600px) and (orientation:portrait){
+ .survivors-modal-content.survivors-bonus-stage{height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);display:grid;grid-template-rows:auto minmax(0,1fr);padding:10px 12px;overflow:hidden}
+ .survivors-bonus-stage header{margin:0 0 8px;min-height:44px}
+ .pinball-layout{min-height:0;grid-template-rows:minmax(0,1fr) 204px;gap:10px}
+ .pinball-table-section{min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 48px;gap:6px;justify-items:center}
+ .pinball-table{height:auto;width:min(100%,calc((100dvh - 390px)*.66667));max-width:100%;min-height:0;box-sizing:border-box;align-self:center}
+ .pinball-paddles{margin:0;max-width:100%;height:48px}
+ .pinball-console{min-height:0;height:100%;overflow:auto;align-content:start;padding-bottom:0;gap:6px 12px}
+ .pinball-guide summary{padding:4px 0}
+ .pinball-settings-toggle{min-height:30px;padding:5px 8px;font-size:11px}
+ .pinball-actions{position:sticky;bottom:0;z-index:1;padding-top:4px;background:#12221c}
+ .survivors-bonus-stage .pinball-actions button{font-size:12px;line-height:1.35;padding:8px 6px}
+ .pinball-settings-panel{position:absolute;inset:0;padding:0 2px;overflow:auto}
+}

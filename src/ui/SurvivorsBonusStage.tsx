@@ -15,6 +15,13 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
  const art=useRef<{table:HTMLImageElement;paddle:HTMLImageElement;cargo:HTMLImageElement}|null>(null),paid=useRef(false),reward=useRef(onReward);reward.current=onReward;
  const [loaded,setLoaded]=useState(false),[assetError,setAssetError]=useState(false),[paused,setPaused]=useState(false),[assist,setAssist]=useState(true),[saved,setSaved]=useState<boolean|null>(null),[,refresh]=useState(0);
  const [best,setBest]=useState(readPinballBest);
+ const [settingsOpen,setSettingsOpen]=useState(false);
+ const settingsWasOpen=useRef(false);
+ useEffect(()=>{
+  if(settingsOpen)dialog.current?.querySelector<HTMLSelectElement>('.pinball-settings-panel select')?.focus({preventScroll:true});
+  else if(settingsWasOpen.current)dialog.current?.querySelector<HTMLButtonElement>('.pinball-settings-toggle')?.focus({preventScroll:true});
+  settingsWasOpen.current=settingsOpen;
+ },[settingsOpen]);
  const pausedRef=useRef(false),assistRef=useRef(true),muted=useRef(audioMuted);muted.current=audioMuted;
  const audio=useRef<PinballAudio|null>(null);
  const [soundOff,setSoundOff]=useState(false),[audioReady,setAudioReady]=useState(false),[audioError,setAudioError]=useState(false),[music,setMusic]=useState<PinballMusic>('shift');
@@ -23,16 +30,19 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
  useEffect(()=>{if(audioMuted||soundOff)audio.current?.setActive(false);},[audioMuted,soundOff]);
  const release=()=>{keys.current.clear();touches.current.left.clear();touches.current.right.clear();};
  const pause=(value:boolean)=>{pausedRef.current=value;setPaused(value);if(value)audio.current?.setActive(false);else void audio.current?.unlock();release();};
+ const toggleSettings=()=>{if(!settingsOpen&&engine.current.state.phase==='playing')pause(true);setSettingsOpen(!settingsOpen);};
  const settle=()=>{if(paid.current)return;pause(false);const earned=engine.current.finish();const ok=reward.current(earned);paid.current=ok;if(ok)setBest(savePinballBest({score:engine.current.state.score,combo:engine.current.state.bestCombo}));setSaved(ok);refresh(v=>v+1);};
  const launch=()=>{if(!loaded||pausedRef.current)return;void audio.current?.unlock();if(engine.current.launch()){refresh(v=>v+1);}};
- const actions=useRef({pause});actions.current={pause};
- useEffect(()=>{dialog.current?.focus();let disposed=false;
+ const actions=useRef({pause,settingsOpen});actions.current={pause,settingsOpen};
+ useEffect(()=>{dialog.current?.focus({preventScroll:true});let disposed=false;const previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
   const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=reject;image.src=src;});
   void Promise.all([load('/assets/survivors/pinball/factory-playfield-v2.png'),load('/assets/survivors/pinball/flipper-v1.png'),load('/assets/survivors/pinball/crane-cargo-v1.png')]).then(([table,paddle,cargo])=>{if(!disposed){art.current={table,paddle,cargo};setLoaded(true);}}).catch(()=>{if(!disposed)setAssetError(true);});
-  return()=>{disposed=true;};
+  return()=>{disposed=true;document.body.style.overflow=previousOverflow;};
  },[]);
  useEffect(()=>{
   const down=(e:KeyboardEvent)=>{if(e.repeat)return;
+   if(actions.current.settingsOpen)return;
+   if(e.target instanceof HTMLElement&&e.target.closest('select,textarea,input:not([type="checkbox"])'))return;
    if(['KeyA','KeyD','ArrowLeft','ArrowRight'].includes(e.code)){e.preventDefault();keys.current.add(e.code);}
    if(e.code==='KeyP'){e.preventDefault();actions.current.pause(!pausedRef.current);}
   };
@@ -70,28 +80,28 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
    <span aria-hidden="true">{side==='left'?'↖':'↗'}</span><span>{copy[side]}<small>{side==='left'?'A / ←':'D / →'}</small></span>
  </button>;
  return <div className="survivors-modal-backdrop survivors-bonus-backdrop"><div ref={dialog} tabIndex={-1} className="survivors-modal-content survivors-bonus-stage" role="dialog" aria-modal="true" aria-labelledby="bonus-title"
-  onKeyDown={e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();if(s.phase==='ready'||saved)onClose();else if(s.phase!=='finished')pause(!pausedRef.current);}
-   if(e.key==='Tab'){const controls=[...e.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled)')],first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||document.activeElement===e.currentTarget)){e.preventDefault();last?.focus();}else if(!e.shiftKey&&(document.activeElement===last||document.activeElement===e.currentTarget)){e.preventDefault();first?.focus();}}}}>
+  onKeyDown={e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();if(settingsOpen)setSettingsOpen(false);else if(s.phase==='ready'||saved)onClose();else if(s.phase!=='finished')pause(!pausedRef.current);}
+   if(e.key==='Tab'){const controls=[...e.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),select:not(:disabled),summary')].filter(el=>el.getClientRects().length>0),first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||document.activeElement===e.currentTarget)){e.preventDefault();last?.focus();}else if(!e.shiftKey&&(document.activeElement===last||document.activeElement===e.currentTarget)){e.preventDefault();first?.focus();}}}}>
   <header><div><span className="pinball-kicker">{copy.kicker}</span><h2 id="bonus-title">{copy.title}</h2><small className="pinball-mini-status">{s.ball}/3 {copy.ballShort} · {Math.ceil(s.remaining)}s</small></div><div className="pinball-score"><small>{copy.score}</small><strong>{s.score.toLocaleString()}</strong><small>{copy.personalBest} {best.score.toLocaleString()}</small></div></header>
   <div className="pinball-layout"><section className="pinball-table-section">
    <div className="pinball-table"><canvas ref={canvas} aria-label={copy.table}/>{!loaded&&<p className="pinball-table-message" role={assetError?'alert':'status'}>{assetError?copy.assetError:copy.loading}</p>}
-    {loaded&&(paused||s.phase==='between'||s.phase==='finished')&&<div className="pinball-table-message"><strong>{paused?copy.paused:s.phase==='between'?copy.nextBall:copy.result}</strong><small>{s.phase==='between'?copy.keep:copy.tableRest}</small></div>}
+    {loaded&&(paused||s.phase==='between'||s.phase==='finished')&&<div className="pinball-state-strip" role="status"><strong>{paused?copy.paused:s.phase==='between'?copy.nextBall:copy.result}</strong><small>{s.phase==='between'?copy.keep:copy.tableRest}</small></div>}
    </div><div className="pinball-paddles">{paddle('left')}{paddle('right')}</div>
-  </section><aside className="pinball-console"><div className="pinball-ball-counter"><span>{copy.chances}</span><strong>{s.ball}/3</strong><div aria-label={`${3-s.ball} ${copy.remaining}`} >{[1,2,3].map(n=><i key={n} className={n>s.ball?'available':n===s.ball&&s.phase==='playing'?'active':''}/>)}</div></div>
+  </section><aside className="pinball-console"><div className="pinball-console-main" hidden={settingsOpen}><div className="pinball-ball-counter"><span>{copy.chances}</span><strong>{s.ball}/3</strong><div aria-label={`${3-s.ball} ${copy.remaining}`} >{[1,2,3].map(n=><i key={n} className={n>s.ball?'available':n===s.ball&&s.phase==='playing'?'active':''}/>)}</div></div>
    <dl className="pinball-stats"><div><dt>{copy.time}</dt><dd>{Math.ceil(s.remaining)}s</dd></div><div><dt>{copy.combo}</dt><dd>×{s.combo}</dd></div><div><dt>{copy.reward}</dt><dd>+{s.earned} PSI</dd></div><div><dt>{copy.best}</dt><dd>×{s.bestCombo}</dd></div></dl>
-   {s.phase==='ready'&&<p className="pinball-brief"><strong>{CHARACTER_PROFILES[characterId].name}</strong> · {copy.roles[role]}<br/>{copy.brief}</p>}
-   <p className="pinball-hint">{copy.goal}</p><details className="pinball-guide"><summary>{copy.guide}</summary><p>{copy.controls}</p><p>{copy.protection}</p><p>{copy.rewardRule}</p></details>
+   <p className="pinball-hint">{copy.goal}</p><details className="pinball-guide" onToggle={e=>{if(e.currentTarget.open&&engine.current.state.phase==='playing')pause(true);}}><summary>{copy.guide}</summary>{s.phase==='ready'&&<p className="pinball-brief"><strong>{CHARACTER_PROFILES[characterId].name}</strong> · {copy.roles[role]}<br/>{copy.brief}</p>}<p>{copy.controls}</p><p>{copy.protection}</p><p>{copy.rewardRule}</p></details>
    <label className="pinball-assist"><input type="checkbox" checked={assist} onChange={e=>{setAssist(e.target.checked);assistRef.current=e.target.checked;}}/>{copy.assist}</label>
-   <details className="pinball-audio-settings"><summary>{copy.audioSettings}</summary><label className="pinball-assist"><input type="checkbox" checked={soundOff} onChange={e=>{void audio.current?.unlock();setSoundOff(e.target.checked);}}/>{copy.soundOff}</label>
-   <label className="pinball-music">{copy.music}<select value={music} onChange={e=>{const value=e.target.value as PinballMusic;setMusic(value);void audio.current?.unlock();audio.current?.setMusic(value);}}><option value="shift">{copy.musicShift}</option><option value="theme">{copy.musicTheme}</option></select></label>
-   </details>{audioError&&<p role="status">{copy.audioError}</p>}
+   <button type="button" className="pinball-settings-toggle" aria-expanded={settingsOpen} onClick={toggleSettings}>{copy.audioSettings}</button>{audioError&&<p role="status">{copy.audioError}</p>}
    <div className="pinball-actions">
     {(s.phase==='ready'||s.phase==='between')&&<button type="button" disabled={!loaded||paused} className="survivors-btn-primary" onClick={launch}>{s.phase==='ready'?copy.start:copy.launchNext}</button>}
     {(s.phase==='playing'||paused)&&s.phase!=='finished'&&<button type="button" className="survivors-btn-secondary" onClick={()=>pause(!paused)}>{paused?copy.resume:copy.pause}</button>}
     {s.phase==='ready'?<button type="button" className="survivors-btn-secondary" onClick={onClose}>{copy.close}</button>:s.phase!=='finished'?<button type="button" className="survivors-btn-secondary" onClick={settle}>{copy.finish}</button>:<>
      <p role={saved?'status':'alert'}>{saved?copy.saved:saved===false?copy.failed:copy.saving}</p>{!saved&&<button type="button" className="survivors-btn-primary" onClick={settle}>{copy.retry}</button>}{saved&&<button type="button" className="survivors-btn-primary" onClick={onClose}>{copy.close}</button>}
     </>}
-   </div>
+   </div></div>
+   {settingsOpen&&<section className="pinball-settings-panel" aria-label={copy.audioSettings}><strong>{copy.audioSettings}</strong><p>{copy.settingsPause}</p><label className="pinball-assist"><input type="checkbox" checked={soundOff} onChange={e=>{void audio.current?.unlock();setSoundOff(e.target.checked);}}/>{copy.soundOff}</label>
+    <label className="pinball-music">{copy.music}<select value={music} onChange={e=>{const value=e.target.value as PinballMusic;setMusic(value);void audio.current?.unlock();audio.current?.setMusic(value);}}><option value="shift">{copy.musicShift}</option><option value="theme">{copy.musicTheme}</option></select></label>
+    <button type="button" className="survivors-btn-secondary" onClick={toggleSettings}>{copy.closeSettings}</button></section>}
   </aside></div>
  </div></div>;
 }

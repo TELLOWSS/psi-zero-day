@@ -1,6 +1,8 @@
 export const PINBALL_WIDTH=600,PINBALL_HEIGHT=900;
 export const PINBALL_BUMPERS=[{x:204,y:220,r:49},{x:396,y:220,r:49},{x:300,y:352,r:49}] as const;
-export const PINBALL_RAILS=[ [110,135,490,135], [110,135,90,280], [90,280,90,640], [490,135,510,280], [510,280,510,640], [90,640,246,826], [510,640,354,826] ] as const;
+// Lower guides follow the painted funnel below the paddle axles, not through them.
+export const PINBALL_RAILS=[ [110,135,490,135], [110,135,90,280], [90,280,90,690], [490,135,510,280], [510,280,510,690], [90,690,170,790], [170,790,265,828], [510,690,430,790], [430,790,335,828] ] as const;
+export const PINBALL_PADDLES={left:{x:185,y:735,rest:.35,raised:-.55},right:{x:415,y:735,rest:Math.PI-.35,raised:Math.PI+.55},length:100,radius:12} as const;
 export interface PinballInput {left:boolean;right:boolean;assist:boolean;}
 export interface PinballEffect {x:number;y:number;kind:'metal'|'rubber'|'crane';life:number;}
 export class SurvivorsPinballEngine {
@@ -10,9 +12,10 @@ export class SurvivorsPinballEngine {
   x:480,y:650,vx:0,vy:0,score:0,earned:0,combo:0,bestCombo:0,
   leftAngle:.35,rightAngle:Math.PI-.35,lit:[false,false,false],effects:[] as PinballEffect[],hits:0,saves:0,elapsed:0};
  private cooldown=[0,0,0];private comboTime=0;private protection=0;
+ private assistPulse={left:0,right:0};private assistCooldown={left:0,right:0};
  launch(){const s=this.state;if(s.phase!=='ready'&&s.phase!=='between')return false;
   s.ball++;s.phase='playing';s.remaining=30;s.x=480;s.y=650;s.vx=-170+(s.ball-1)*20;s.vy=-1080;s.combo=0;s.lit=[false,false,false];
-  this.protection=4;this.cooldown=[0,0,0];this.comboTime=0;s.earned=Math.max(100,s.earned);return true;
+  this.protection=4;this.cooldown=[0,0,0];this.comboTime=0;this.assistPulse={left:0,right:0};this.assistCooldown={left:0,right:0};s.earned=Math.max(100,s.earned);return true;
  }
  finish(){this.state.phase='finished';return this.state.earned;}
  update(dt:number,input:PinballInput){
@@ -41,11 +44,18 @@ export class SurvivorsPinballEngine {
   this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)s.combo=0;
   this.cooldown=this.cooldown.map(c=>Math.max(0,c-dt));
   s.effects=s.effects.map(e=>({...e,life:e.life-dt})).filter(e=>e.life>0);
-  const auto=input.assist&&s.y>580&&s.vy>0;
+  // A short press near contact transfers angular velocity; holding early only makes a static ledge.
+  for(const side of ['left','right'] as const){
+   this.assistPulse[side]=Math.max(0,this.assistPulse[side]-dt);this.assistCooldown[side]=Math.max(0,this.assistCooldown[side]-dt);
+   if(!input.assist){this.assistPulse[side]=0;continue;}
+   const time=(715-s.y)/Math.max(1,s.vy),predictedX=s.x+s.vx*Math.max(0,time);
+   const inReach=side==='left'?predictedX>=175&&predictedX<=290:predictedX>=310&&predictedX<=425;
+   if(s.vy>35&&s.y>640&&s.y<770&&time<=.065&&inReach&&this.assistCooldown[side]===0){this.assistPulse[side]=.11;this.assistCooldown[side]=.24;}
+  }
   const oldLeft=s.leftAngle,oldRight=s.rightAngle;
   const approach=(angle:number,target:number)=>angle+Math.max(-14*dt,Math.min(14*dt,target-angle));
-  s.leftAngle=approach(s.leftAngle,input.left||(auto&&s.x<325)?-.55:.35);
-  s.rightAngle=approach(s.rightAngle,input.right||(auto&&s.x>275)?Math.PI+.55:Math.PI-.35);
+  s.leftAngle=approach(s.leftAngle,input.left||this.assistPulse.left>0?PINBALL_PADDLES.left.raised:PINBALL_PADDLES.left.rest);
+  s.rightAngle=approach(s.rightAngle,input.right||this.assistPulse.right>0?PINBALL_PADDLES.right.raised:PINBALL_PADDLES.right.rest);
   if(oldLeft===.35&&s.leftAngle<oldLeft)this.sounds.push({kind:'flipper',x:185});
   if(oldRight===Math.PI-.35&&s.rightAngle>oldRight)this.sounds.push({kind:'flipper',x:415});
   s.vy+=820*dt;s.vx*=Math.exp(-.055*dt);s.vy*=Math.exp(-.055*dt);s.x+=s.vx*dt;s.y+=s.vy*dt;
