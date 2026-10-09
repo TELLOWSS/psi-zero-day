@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {stage12RubbleRoute} from '../src/engine/survivors-stage12-route';
 import {createTerrain,terrainHit,terrainMove} from '../src/engine/survivors-terrain';
-import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
+import {PATROL_STAGES,createInitialSurvivorsState,SurvivorsEngine} from '../src/engine/patrol-survivors-engine';
 import {drawStage12RubbleRoute} from '../src/ui/survivors-stage12-route-renderer';
 import type {TerrainObject} from '../src/domain/survivors-terrain';
 
@@ -28,6 +28,30 @@ describe('ST12 Gate 1B — visible corridor and genuine movement collision',()=>
   const vertical:TerrainObject={id:'vertical',kind:'pillar',x:440,y:320,width:20,height:260,hp:1,maxHp:1};
   expect(stage12RubbleRoute([debris,horizontal,vertical])).toBeNull();
   expect(stage12RubbleRoute([])).toBeNull();
+ });
+
+ it('opens the visual route through two real cleanup actions, never awarding duplicate credits',()=>{
+   const state=createInitialSurvivorsState('lim_junho',undefined,'stage_12');
+   const routeBefore=stage12RubbleRoute(state.terrain??[]);
+   expect(routeBefore?.open).toBe(false);
+   const rubble=state.terrain?.find(o=>o.id===routeBefore!.rubbleId)!;
+   state.player.x=rubble.x-40;
+   state.player.y=rubble.y+rubble.height/2;
+   state.hazards=[];state.interactiveHazards=[];
+   const engine=new SurvivorsEngine(state);
+   engine.start();
+   const credits=state.psiCredits;
+   expect(engine.clearTerrain()).toBe(true);
+   expect(stage12RubbleRoute(state.terrain??[])?.open).toBe(false);
+   expect(engine.clearTerrain()).toBe(false); // Cooling down, not a double reward.
+   for(let i=0;i<50;i++)engine.update(1/60,{moveX:0,moveY:0});
+   expect(engine.clearTerrain()).toBe(true);
+   const routeAfter=stage12RubbleRoute(state.terrain??[]);
+   expect(routeAfter?.open).toBe(true);
+   expect(terrainMove(state.terrain??[],routeAfter!.from,routeAfter!.to,14)).toEqual(routeAfter!.to);
+   expect(state.terrainRecord?.rubbleCleared).toBe(1);
+   expect(state.psiCredits-credits).toBe(40);
+   expect(engine.clearTerrain()).toBe(false);
  });
  it('draws only the ST12 state, preserving the collision-derived label in reduced motion',()=>{
   const terrain=createTerrain(PATROL_STAGES.stage_12),labels:string[]=[];
