@@ -178,6 +178,9 @@ try {
         const update=SurvivorsEngine.prototype.update;
         SurvivorsEngine.prototype.update=function(dt,input){window.qaMobileEngine=this;window.qaInput={dt,...input};if(window.qaVisualFreeze)return;return update.call(this,dt,input);};
       })()`);
+      // The launch button is intentionally disabled until the actor and map have finished preparing.
+      // Clicking before readiness is a no-op and used to fail this QA at the 'playing' wait.
+      await waitFor(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary')?.disabled===false",25000);
       await evaluate(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary').click()");
       await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
       await sleep(500);
