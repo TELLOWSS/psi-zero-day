@@ -58,3 +58,22 @@ describe('ST12 player-facing story readouts',()=>{
  });
 
 });
+
+describe('ST14 boss and ST15 next-shift panels',()=>{
+ const bossWin:OperationHandoff={...completed,stageId:'stage_14',stageNumber:14,characterId:'kang_taesik',zones:2,damageTaken:5};
+ it('shows brief before gangform and exact result only on earned victory',()=>{
+  const p=render(<SurvivorsStoryBeat stageId="stage_14" characterId="lim_junho" view="brief"/>);
+  try{expect(p.host.textContent).toContain('4.5초');expect(p.host.textContent).toContain('임준호');}finally{p.dispose();}
+  const d=render(<SurvivorsStoryBeat stageId="stage_14" characterId="kang_taesik" view="result" record={{...bossWin,outcome:'defeat'}}/>);
+  try{expect(d.host.querySelector('.survivors-story-beat')).toBeNull();}finally{d.dispose();}
+  const w=render(<SurvivorsStoryBeat stageId="stage_14" characterId="kang_taesik" view="result" record={bossWin}/>);
+  try{expect(w.host.textContent).toContain('받은 피해 5');expect(w.host.textContent).toContain('다음 신호');}finally{w.dispose();}
+ });
+ it('reveals next missing-bay story only with saved boss victory',()=>{
+  const noRecord=render(<SurvivorsStoryBeat stageId="stage_15" characterId="lim_junho" view="brief"/>);
+  try{expect(noRecord.host.querySelector('.survivors-story-beat')).toBeNull();}finally{noRecord.dispose();}
+  localStorage.setItem(OPERATION_HANDOFF_KEY,JSON.stringify([bossWin]));
+  const earned=render(<SurvivorsStoryBeat stageId="stage_15" characterId="lim_junho" view="brief"/>);
+  try{expect(earned.host.textContent).toContain('사라진 한 칸');expect(earned.host.textContent).toContain('강태식');}finally{earned.dispose();}
+ });
+});
