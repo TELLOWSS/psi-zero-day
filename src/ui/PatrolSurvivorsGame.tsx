@@ -1,5 +1,6 @@
 import {drawEquipmentAura} from './survivors-equipment-aura';
 import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
+import {SurvivorsStoryBeat} from './SurvivorsStoryBeat';
 import {operationHandoff} from '../domain/survivors-operation-handoff';
 import {saveOperationHandoff} from './survivors-operation-handoff-store';
 import {SurvivorsBonusStage} from './SurvivorsBonusStage';
@@ -4194,6 +4195,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {label:resultText.mastery,value:engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`},
             ]}/>
             <p className="survivors-story-result">{operationText.handoff}</p>
+            {engineRef.current && <SurvivorsStoryBeat stageId={engineRef.current.state.stageId} characterId={engineRef.current.state.characterId} view="result" record={operationHandoff(engineRef.current.state)}/>}
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}
             {storeMessage===storeText.failure&&<p role="alert">{storeMessage}</p>}
             {/* 3-STAR CHALLENGES DEBRIEFING */}
