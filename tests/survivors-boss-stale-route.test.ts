@@ -29,6 +29,17 @@ describe('ST25 stale-route is physical puzzle, not narrative-only',()=>{
   }
   expect(new Set(route!.points.map(p=>p.x+':'+p.y)).size).toBe(3);
  });
+ it('finds a three-point corridor near world edges instead of dead-ending after the first',()=>{
+  const {state}=fixture();
+  for(const origin of [{x:70,y:70},{x:1330,y:70},{x:70,y:830},{x:1330,y:830},{x:700,y:450}]){
+   const boss={x:Math.max(80,Math.min(1320,origin.x+120)),y:Math.max(80,Math.min(820,origin.y-105))};
+   const route=createStaleRoute(origin,boss,state.terrain??[]);
+   expect(route,JSON.stringify({origin,boss})).not.toBeNull();
+   expect(route?.points).toHaveLength(3);
+   let previous=origin;
+   for(const point of route!.points){expect(terrainHit(state.terrain??[],previous,point,19)).toBeUndefined();previous=point;}
+  }
+ });
  it('does not allow boss damage or signature shortcut before three verified visits',()=>{
   const {state,boss}=fixture(),p=boss.bossGameplay!;
   const hp=boss.hp;
