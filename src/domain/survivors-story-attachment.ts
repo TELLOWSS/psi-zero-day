@@ -1,6 +1,7 @@
 import type {CharacterId, PatrolStageId} from './patrol-survivors';
 import type {OperationHandoff} from './survivors-operation-handoff';
 import copy from '../../content/localization/survivors-story-st12-ko.json';
+import st13 from '../../content/localization/survivors-story-st13-ko.json';
 
 /**
  * First narrative vertical slice. All achievements shown to the player are read
@@ -45,6 +46,26 @@ export function storyBrief(
   characterId: CharacterId,
   previous: readonly OperationHandoff[] = [],
 ): StoryReadout | null {
+  if (stageId === 'stage_13') {
+    // A new shift only receives a dispatch if an actual ST12 victory exists.
+    // Re-entering a stage never manufactures yesterday's outcome.
+    const prior = [...previous].reverse().find(row =>
+      row.stageId === 'stage_12' && row.outcome === 'victory'
+    );
+    if (!prior) return null;
+    const name = st13.sourceNames[storyCharacter(prior.characterId)];
+    return {
+      title: st13.title,
+      opening: st13.opening,
+      characterLine: st13.characterLines[storyCharacter(characterId)],
+      evidence: st13.evidence
+        .replace('{actor}', name)
+        .replace('{zones}', String(prior.zones))
+        .replace('{stops}', String(prior.cartStops))
+        .replace('{cleared}', String(prior.rubbleCleared)),
+      nextSignal: st13.nextSignal,
+    };
+  }
   if (stageId !== 'stage_12') return null;
   return {
     title: copy.title,
