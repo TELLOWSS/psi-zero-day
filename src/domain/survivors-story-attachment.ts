@@ -4,6 +4,7 @@ import copy from '../../content/localization/survivors-story-st12-ko.json';
 import st13 from '../../content/localization/survivors-story-st13-ko.json';
 import st14 from '../../content/localization/survivors-story-st14-ko.json';
 import st15 from '../../content/localization/survivors-story-st15-ko.json';
+import st25 from '../../content/localization/survivors-story-st25-ko.json';
 
 /**
  * First narrative vertical slice. All achievements shown to the player are read
@@ -48,6 +49,20 @@ export function storyBrief(
   characterId: CharacterId,
   previous: readonly OperationHandoff[] = [],
 ): StoryReadout | null {
+  if (stageId === 'stage_25') {
+    const preceding = [...previous].reverse().find(row=>row.stageId==='stage_24'&&row.outcome==='victory');
+    return {
+      title: st25.title,
+      opening: st25.briefOpening,
+      characterLine: st25.characterLines[storyCharacter(characterId)].brief,
+      evidence: st25.briefEvidence,
+      nextSignal: st25.briefNext,
+      alternateView: preceding ? st25.previous
+        .replace('{actor}',st13.sourceNames[storyCharacter(preceding.characterId)])
+        .replace('{zones}',String(preceding.zones))
+        .replace('{cleared}',String(preceding.rubbleCleared)) : undefined,
+    };
+  }
   if (stageId === 'stage_14') {
     const actor = storyCharacter(characterId);
     const prior = [...previous].reverse().find(row =>
@@ -117,6 +132,18 @@ export function storyOutcome(
   record: OperationHandoff | null,
   previous: readonly OperationHandoff[] = [],
 ): StoryReadout | null {
+  if(record?.stageId==='stage_25'&&record.outcome==='victory'){
+    return {
+      title:st25.resultTitle,opening:st25.resultOpening,
+      characterLine:st25.characterLines[storyCharacter(record.characterId)].result,
+      evidence:st25.resultEvidence
+        .replace('{zones}',String(record.zones))
+        .replace('{stops}',String(record.cartStops))
+        .replace('{cleared}',String(record.rubbleCleared))
+        .replace('{damage}',String(record.damageTaken)),
+      nextSignal:st25.resultNext,
+    };
+  }
   if (record?.stageId === 'stage_14' && record.outcome === 'victory') {
     const actor = storyCharacter(record.characterId);
     const earlier = [...previous].reverse().find(row =>
