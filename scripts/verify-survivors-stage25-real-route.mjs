@@ -32,15 +32,26 @@ try{
    await page.waitForFunction(()=>document.querySelector('.survivors-ready-launch .survivors-btn-primary')?.disabled===false,null,{timeout:20000});
    await start.click();
    await page.waitForFunction(()=>window.stage25Engine?.state?.phase==='playing',null,{timeout:15000});
-   await page.evaluate(()=>{
+   await page.evaluate(async()=>{
     const s=window.stage25Engine.state;
+    const {operationTiming}=await import('/src/engine/survivors-operation.ts');
     s.player.invincibleTime=1000;
-    // Boss is spawned by the unmodified engine; this only fast-forwards an otherwise
-    // three-minute test run, without fabricating boss HP or verified route nodes.
-    s.gameTime=s.maxTime;
+    // Move to the real boss reveal threshold, not the whole stage deadline:
+    // late signature events and expired mission clocks are unrelated to this QA.
+    s.gameTime=operationTiming(s.maxTime).bossAt;
     for(const key in s.activePerks)s.activePerks[key]=0;
    });
-   await page.waitForFunction(()=>window.stage25Engine?.state?.bossEncounter?.phase==='combat',null,{timeout:20000});
+   try {
+    await page.waitForFunction(()=>window.stage25Engine?.state?.bossEncounter?.phase==='combat',null,{timeout:15000});
+   } catch(error) {
+    const state=await page.evaluate(()=>{
+      const s=window.stage25Engine?.state;
+      return s?{phase:s.phase,gameTime:s.gameTime,bossSpawned:s.stageBossSpawned,
+        encounter:s.bossEncounter,stageId:s.stageId,boss:s.hazards.find(h=>h.isStageBoss)?.bossGameplay,
+        signature:s.signatureEvent?.phase,activeHazards:s.hazards.length}:null;
+    });
+    throw Error('ST25 boss never reached combat: '+JSON.stringify(state)+'; '+String(error));
+   }
    await page.waitForFunction(()=>{
     const b=window.stage25Engine?.state?.hazards.find(h=>h.isStageBoss);
     return !!b?.bossGameplay?.staleRoute;
