@@ -77,3 +77,28 @@ describe('ST14 boss and ST15 next-shift panels',()=>{
   try{expect(earned.host.textContent).toContain('사라진 한 칸');expect(earned.host.textContent).toContain('강태식');}finally{earned.dispose();}
  });
 });
+
+describe('ST25 playable twist and ST26 continuity',()=>{
+ const win:OperationHandoff={...completed,stageId:'stage_25',stageNumber:25,outcome:'victory',characterId:'lim_junho',damageTaken:3,zones:2};
+ it('renders ST25 briefing without inventing an already won route',()=>{
+  const v=render(<SurvivorsStoryBeat stageId="stage_25" characterId="lim_junho" view="brief"/>);
+  try{
+   expect(v.host.textContent).toContain('어제의 통로');
+   expect(v.host.textContent).toContain('3점');
+   expect(v.host.textContent).toContain('임준호');
+  }finally{v.dispose();}
+ });
+ it('displays exact ST25 victory and only then shows ST26 old-workface handoff',()=>{
+  const finish=render(<SurvivorsStoryBeat stageId="stage_25" characterId="lim_junho" view="result" record={win}/>);
+  try{expect(finish.host.textContent).toContain('피해 3');}finally{finish.dispose();}
+  const previous=render(<SurvivorsStoryBeat stageId="stage_26" characterId="lee_jaehoon" view="brief"/>);
+  try{expect(previous.host.querySelector('.survivors-story-beat')).toBeNull();}finally{previous.dispose();}
+  localStorage.setItem(OPERATION_HANDOFF_KEY,JSON.stringify([win]));
+  const next=render(<SurvivorsStoryBeat stageId="stage_26" characterId="lee_jaehoon" view="brief"/>);
+  try{
+   expect(next.host.textContent).toContain('설비 재조사');
+   expect(next.host.textContent).toContain('임준호');
+   expect(next.host.textContent).toContain('이재훈');
+  }finally{next.dispose();}
+ });
+});
