@@ -88,7 +88,7 @@ import bossText from '../../content/localization/survivors-boss-ko.json';
 import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
-import {GangformMomentDirection} from './survivors-gangform-moment-direction';
+import {GangformMomentDirection,type GangformMoment} from './survivors-gangform-moment-direction';
 import {GangformBeatDirector} from './survivors-gangform-direction';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
@@ -677,6 +677,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossAlert, setBossAlert] = useState<string | null>(null);
   const [bossRisk, setBossRisk] = useState<number | null>(null);
   const [bossBeat, setBossBeat] = useState('');
+  const [gangformRadio,setGangformRadio]=useState<GangformMoment|null>(null);
   const [bossSecured,setBossSecured]=useState(false);
   const [encounterRemaining,setEncounterRemaining]=useState(0);
 
@@ -1396,6 +1397,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let direction = new CombatDirection();
     let bossDirection=new BossEncounterDirection();
     let gangformMomentDirection=new GangformMomentDirection();
+    let gangformRadioUntil=0;
     let gangformBeatDirector=new GangformBeatDirector();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
@@ -1433,6 +1435,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         direction = new CombatDirection();
         bossDirection=new BossEncounterDirection();
         gangformMomentDirection=new GangformMomentDirection();
+        gangformRadioUntil=0;
+        setGangformRadio(null);
         gangformBeatDirector=new GangformBeatDirector();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
@@ -1476,6 +1480,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           engine.state.stageId,activeGangform,engine.state.characterId,
         );
         if(gangformMoment) {
+          // One compact radio line per real engine transition; no gameplay pause.
+          setGangformRadio(gangformMoment);
+          gangformRadioUntil=engine.state.gameTime+1.5;
           const point={x:gangformMoment.x,y:gangformMoment.y};
           // Radio varies with the actual selected character. It shares the
           // same on-field toast: never add a second competing HUD layer.
@@ -1485,6 +1492,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             spawnShockwave(point.x,point.y,gangformMoment.color,gangformMoment.radius,2,.34);
           }
           audioRef.current.playRecordedEffect(gangformMoment.sfx,point,engine.state.player,budget.level==='low');
+        }
+        if(gangformRadioUntil&&engine.state.gameTime>=gangformRadioUntil){
+          gangformRadioUntil=0;
+          setGangformRadio(null);
         }
 
         const liveSignature=engine.state.signatureEvent;
@@ -3542,6 +3553,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </> : <span>{focusText.bossDeadline} {deadline}s</span>}
         </aside>;
       })()}
+
+      {/* ST14 boss radio: real event-edge cues, kept outside combat hit targets. */}
+      {phase==='playing' && gangformRadio && engineRef.current?.state.stageId==='stage_14' && !bossSecured && (
+        <aside className="survivors-gangform-radio" data-beat={gangformRadio.kind} aria-live="polite" role="status">
+          <strong>{gangformRadio.label}</strong>
+          <span>{CHARACTER_PROFILES[selectedChar].name} · {gangformRadio.radio}</span>
+        </aside>
+      )}
 
       {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
       {phase === 'playing' && extractionState.active && (
