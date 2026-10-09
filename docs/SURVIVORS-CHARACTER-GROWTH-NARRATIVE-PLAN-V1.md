@@ -53,6 +53,8 @@
 
 ## 6. 기록과 시스템 경계
 
+현재 실제 필드/생산 경로/추정 금지와 STAGE 12의 연결 게이트는 `SURVIVORS-GROWTH-EVENT-CONTRACT-V1.md`에 대조한다. 현재 aggregate handoff는 시간순 선택 로그가 아니므로 기존 기록만으로 진로 조건을 소급 만들지 않는다.
+
 기존 인계 기록에서 실제 있는 사실만 참조한다. 추가 후보 필드는 characterId, chapterId, eventId, sourceRecordId, choiceId, unlockedSceneIds, chosenPathId, schemaVersion이다. 이는 저장 계약 제안이며 실제 저장 키·마이그레이션·Career 수치 도입 승인이 아니다.
 
 추가 구현 전 사건 ID와 재도전 갱신·중복 처리·저장 실패 재시도·6명 분리·기존 저장 복구를 정의한다. 동일 사건을 다시 재생하거나 결과 화면을 새로고침해 성장/보상을 중복 지급하지 않는다. 구매·수리·정산과 독립시킨다. 원래 지갑·인벤토리·클리어·작전 중 레벨을 바꾸지 않는다. 규칙은 domain/engine, 저장은 app, UI는 읽기와 선택 전달만 담당한다.
