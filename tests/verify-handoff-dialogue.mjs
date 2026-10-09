@@ -23,6 +23,7 @@ try{
   const before=await snapshot();
   await dialogue.getByRole('button',{name:'인계 대화',exact:true}).click();
   await dialogue.getByRole('button',{name:'나중에',exact:true}).click();
+  const skipFocus=await dialogue.getByRole('button',{name:'인계 대화',exact:true}).evaluate(element=>document.activeElement===element);
   const skipUnwritten=await page.evaluate(()=>localStorage.getItem('psi.survivors.handoff-dialogue.v1')===null&&window.dialogueWrites===0);
   await dialogue.getByRole('button',{name:'인계 대화',exact:true}).click();await page.evaluate(()=>window.failDialogue=true);
   const choiceHeights=await dialogue.locator('.survivors-handoff-choices button').evaluateAll(buttons=>buttons.map(button=>button.getBoundingClientRect().height));
@@ -31,6 +32,7 @@ try{
   const failureUnwritten=await page.evaluate(()=>localStorage.getItem('psi.survivors.handoff-dialogue.v1')===null&&window.dialogueWrites===0);
   await page.evaluate(()=>window.failDialogue=false);await dialogue.getByRole('button',{name:label,exact:true}).click();
   await dialogue.locator('.survivors-handoff-line').waitFor();await dialogue.getByRole('button',{name:'닫기',exact:true}).click();
+  const closeFocus=await dialogue.getByRole('button',{name:'다시보기',exact:true}).evaluate(element=>document.activeElement===element);
   await dialogue.getByRole('button',{name:'다시보기',exact:true}).click();await dialogue.scrollIntoViewIfNeeded();
   const geometry=await dialogue.evaluate(element=>({overflow:document.documentElement.scrollWidth>innerWidth+1,clipped:[...element.querySelectorAll('p,h4,button')].some(node=>node.scrollWidth>node.clientWidth+1),buttons:[...element.querySelectorAll('button')].map(button=>button.getBoundingClientRect().height)}));
   const persisted=await page.evaluate(()=>({value:JSON.parse(localStorage.getItem('psi.survivors.handoff-dialogue.v1')),writes:window.dialogueWrites}));
@@ -41,8 +43,8 @@ try{
   const restored=await dialogue.locator('.survivors-handoff-line').textContent();
   const replayWrites=await page.evaluate(()=>window.dialogueWrites);
   const focused=await dialogue.locator('.survivors-handoff-line').evaluate(element=>document.activeElement===element);
-  const pass=focused&&choiceHeights.length===2&&choiceHeights.every(height=>height>=44)&&skipUnwritten&&failureUnwritten&&persisted.value.choice===choice&&persisted.writes===1&&replayWrites===0&&before===after&&!geometry.overflow&&!geometry.clipped&&geometry.buttons.every(height=>height>=44)&&!errors.length&&restored.includes(choice==='together'?' 놓친 부분이 있다면':'확인하지 못한 곳은');
-  reports.push({width,height,choice,scope:'SEEDED_HANDOFF_UI_WITH_WRITE_FAILURE_NOT_NATURAL_STAGE12',skipUnwritten,failureUnwritten,persisted,replayWrites,focused,choiceHeights,unrelatedStorageUnchanged:before===after,restored,geometry,errors,pass});await page.close();
+  const pass=skipFocus&&closeFocus&&focused&&choiceHeights.length===2&&choiceHeights.every(height=>height>=44)&&skipUnwritten&&failureUnwritten&&persisted.value.choice===choice&&persisted.writes===1&&replayWrites===0&&before===after&&!geometry.overflow&&!geometry.clipped&&geometry.buttons.every(height=>height>=44)&&!errors.length&&restored.includes(choice==='together'?' 놓친 부분이 있다면':'확인하지 못한 곳은');
+  reports.push({width,height,choice,scope:'SEEDED_HANDOFF_UI_WITH_WRITE_FAILURE_NOT_NATURAL_STAGE12',skipFocus,closeFocus,skipUnwritten,failureUnwritten,persisted,replayWrites,focused,choiceHeights,unrelatedStorageUnchanged:before===after,restored,geometry,errors,pass});await page.close();
  }
  fs.writeFileSync(`${output}/report.json`,JSON.stringify(reports,null,2));console.log(JSON.stringify(reports));if(reports.some(row=>!row.pass))process.exitCode=1;
 }finally{await browser.close();}

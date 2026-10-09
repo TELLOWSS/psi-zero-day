@@ -19,6 +19,12 @@
 .survivors-handoff-dialogue button { min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border:1px solid #6c9d8b; border-radius:4px; background:#173e35; color:#d9f8e9; font:inherit; font-size:12px; cursor:pointer; white-space:normal; }
 .survivors-handoff-dialogue button:hover { background:#245947; }
 .survivors-handoff-dialogue button:focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
+.survivors-narrative-direction { border-top:1px solid #496663; margin-top:12px; padding-top:4px; }
+.survivors-narrative-direction button,.survivors-narrative-direction select { min-height:44px; max-width:100%; padding:8px 12px; border:1px solid #6c9d8b; border-radius:4px; background:#173e35; color:#d9f8e9; font:inherit; font-size:12px; }
+.survivors-narrative-direction select { width:100%; }
+.survivors-narrative-direction button { display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; }
+.survivors-narrative-direction button:disabled { opacity:.5; cursor:default; }
+.survivors-narrative-direction :focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
 .survivors-handoff-choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:8px; }
 .survivors-handoff-controls { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
 .survivors-result-handoff { margin:12px 0; border-top:1px solid #496663; padding-top:8px; text-align:left; }

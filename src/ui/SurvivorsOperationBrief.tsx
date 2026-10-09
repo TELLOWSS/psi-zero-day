@@ -1,4 +1,5 @@
 import type {CharacterId,PatrolStageDefinition} from '../domain/patrol-survivors';
+import {useState} from 'react';
 import {CHARACTER_PROFILES} from '../engine/patrol-survivors-engine';
 import copy from '../../content/localization/survivors-operation-brief-ko.json';
 import {readOperationHandoffs} from './survivors-operation-handoff-store';
@@ -6,7 +7,10 @@ import './survivors-operation-brief.css';
 import {characterReflection,hasPlayerHandoffScene,playerHandoffSceneRecord} from '../app/survivors-character-reflection';
 import reflectionCopy from '../../content/localization/survivors-character-reflection-ko.json';
 import {SurvivorsHandoffDialogue} from './SurvivorsHandoffDialogue';
+import {SurvivorsNarrativeDirection} from './SurvivorsNarrativeDirection';
 export function SurvivorsOperationBrief({characterId,stage}:{characterId:CharacterId;stage:PatrolStageDefinition}) {
+ const [,refreshDialogue]=useState(0);
+ const dialogueSaved=()=>refreshDialogue(value=>value+1);
  const roleId=characterId==='park'?'kang_taesik':characterId==='jung'?'player':characterId==='yoon'?'player':characterId;
  const rows=readOperationHandoffs();
  const role=copy.roles[roleId];const profile=CHARACTER_PROFILES[characterId];const speaker=CHARACTER_PROFILES[stage.narrative?.speaker??'player'];const reflection=characterReflection(rows,characterId);const record=reflection?.record;
@@ -23,8 +27,8 @@ export function SurvivorsOperationBrief({characterId,stage}:{characterId:Charact
  {hasPlayerHandoffScene(record)&&<figure className="survivors-handoff-scene"><img src="/assets/survivors/growth/player-stage12-handoff-v1.png" alt={reflectionCopy.sceneAlt}/><figcaption>{reflectionCopy.sceneCaption}</figcaption></figure>}
  {reflection!.evidence.length?<ul>{reflection!.evidence.map(id=><li key={id}>{reflectionCopy[id]}</li>)}</ul>:<p>{reflectionCopy.empty}</p>}
  <small>{reflectionCopy.boundary}</small>
- {hasPlayerHandoffScene(record)&&<SurvivorsHandoffDialogue/>}
+ {hasPlayerHandoffScene(record)&&<><SurvivorsHandoffDialogue onSaved={dialogueSaved}/><SurvivorsNarrativeDirection record={record}/></>}
  </>:<p>{copy.none}</p>}<small>{copy.future}</small></details>
- {archivedScene&&<details className="survivors-handoff-archive"><summary>{reflectionCopy.archiveTitle}</summary><figure className="survivors-handoff-scene"><img src="/assets/survivors/growth/player-stage12-handoff-v1.png" alt={reflectionCopy.sceneAlt}/><figcaption>{reflectionCopy.sceneCaption}</figcaption></figure><SurvivorsHandoffDialogue/></details>}
+ {archivedScene&&<details className="survivors-handoff-archive"><summary>{reflectionCopy.archiveTitle}</summary><figure className="survivors-handoff-scene"><img src="/assets/survivors/growth/player-stage12-handoff-v1.png" alt={reflectionCopy.sceneAlt}/><figcaption>{reflectionCopy.sceneCaption}</figcaption></figure><SurvivorsHandoffDialogue onSaved={dialogueSaved}/><SurvivorsNarrativeDirection record={archivedScene}/></details>}
  </aside>;
 }
