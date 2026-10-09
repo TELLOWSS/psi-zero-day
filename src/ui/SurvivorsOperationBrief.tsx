@@ -12,8 +12,8 @@ export function SurvivorsOperationBrief({characterId,stage}:{characterId:Charact
  {stage.narrative&&<details><summary>{copy.dispatch} · {speaker.name}</summary><p>{stage.narrative.brief}</p></details>}
  <p><strong>{copy.role}</strong>{role.action}</p>
  <p><strong>{copy.objective}</strong>{stage.starChallenges[1].description}</p>
+ <SurvivorsStoryBeat stageId={stage.id} characterId={characterId} view="brief"/>
  <div className="survivors-operation-links"><p><strong>{copy.story}</strong>{role.story}</p><p><strong>{copy.defense}</strong>{role.defense}</p></div>
  <details><summary>{copy.record}</summary>{record?<p>STAGE {record.stageNumber} · {record.outcome==='victory'?copy.won:copy.lost}<br/>{copy.zones} {record.zones} · {copy.stops} {record.cartStops} · {copy.routes} {record.rubbleCleared}</p>:<p>{copy.none}</p>}<small>{copy.future}</small></details>
- <SurvivorsStoryBeat stageId={stage.id} characterId={characterId} view="brief"/>
  </aside>;
 }
