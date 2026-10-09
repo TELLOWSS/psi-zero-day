@@ -172,7 +172,7 @@ try {
       await cdp.send('Page.navigate',{url:baseUrl});
       await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
       await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
-      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary'))");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary:not(:disabled)'))",30000);
       await evaluate(cdp,`(async()=>{
         const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
         const update=SurvivorsEngine.prototype.update;
