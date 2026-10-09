@@ -8,7 +8,7 @@ export function createBossCombat(definition: BossGameplayDefinition): BossGamepl
 }
 
 export function resolveBossSignature(h: Hazard): void {
-  const p=h.bossGameplay;if(!p||p.gangform||p.combatPhase!=='pattern')return;
+  const p=h.bossGameplay;if(!p||p.gangform||p.patternId==='STALE_ROUTE'||p.combatPhase!=='pattern')return;
   p.cycleCount++;
   p.signatureResolvedThisCycle=!p.patternContact;
   p.combatPhase=p.signatureResolvedThisCycle?'weak_point':'recovery';
@@ -29,7 +29,7 @@ export function tickBossCombat(h: Hazard, dt: number): boolean {
     if(p.remaining===0){
       if(p.combatPhase==='weak_point'){p.combatPhase='recovery';p.remaining=1.2;}
       else{
-        p.combatPhase='pattern';p.patternContact=false;p.signatureResolvedThisCycle=false;p.gangform=undefined;
+        p.combatPhase='pattern';p.patternContact=false;p.signatureResolvedThisCycle=false;p.gangform=undefined;p.staleRoute=undefined;
         if(h.motion){h.motion.phase='approach';h.motion.timer=0;}
       }
     }
