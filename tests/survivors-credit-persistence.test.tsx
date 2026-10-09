@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+// These flow fixtures omit network image loading; readiness is verified in browser QA.
+vi.mock('../src/ui/use-prepared-survivors-actor',()=>({usePreparedSurvivorsActor:(selected:string)=>selected}));
 import { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, expect, it, vi } from 'vitest';

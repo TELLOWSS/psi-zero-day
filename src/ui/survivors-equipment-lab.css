@@ -1,4 +1,6 @@
 .survivors-equipment-lab { margin:12px 0; padding:12px; border:1px solid #578582; border-radius:10px; background:#10252a; }
+.survivors-auto-quality-notice { position:absolute; left:12px; bottom:max(12px,env(safe-area-inset-bottom)); z-index:12; display:flex; gap:8px; align-items:center; min-height:44px; max-width:calc(100% - 160px); padding:6px 10px; border:1px solid #597778; border-radius:8px; background:rgba(12,29,34,.9); color:#c7ddd8; font:11px sans-serif; text-align:left; }
+.survivors-auto-quality-notice b { color:#8ed5c5; white-space:nowrap; }
 .survivors-equipment-lab summary { font-weight:700; cursor:pointer; color:#b0ede3; padding:4px 0; }
 .survivors-equipment-lab p { font-size:12px; line-height:1.55; }
 .survivors-lab-controls { display:flex; flex-wrap:wrap; align-items:end; gap:10px; }
@@ -7,6 +9,10 @@
 .survivors-lab-controls select { width:100%; min-width:0; }
 .survivors-equipment-lab .survivors-fitting-art.is-effect-test { width:100%; aspect-ratio:5/3; border-radius:10px; overflow:hidden; }
 .survivors-fitting-art:not(.is-effect-test) { aspect-ratio:1; border-radius:12px; overflow:hidden; border:1px solid #48655d; }
+@media (max-width:600px) and (orientation:portrait) {
+ .survivors-store .survivors-fitting-visual { width:100%; max-width:340px; }
+ .survivors-store .survivors-fitting-visual .survivors-fitting-art { width:100%; }
+}
 .survivors-fitting-direction-note { color:#bed2cd; font-size:12px; line-height:1.6; }
 .survivors-equipment-lab small { display:block; margin-top:6px; font-size:11px; color:#adc6c5; }
 .survivors-lab-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; font-size:12px; }
@@ -15,4 +21,6 @@
 .survivors-lab-stats dd { margin:4px 0 0; font-weight:700; color:#a1ead3; }
 @media(orientation:landscape) and (max-height:560px) {
  .survivors-equipment-workspace .survivors-store .survivors-fitting-visual { top:92px; }
+ .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art { width:min(100%,180px); }
+ .survivors-store .survivors-fitting-visual .survivors-fitting-art { min-width:min(100%,160px); }
 }

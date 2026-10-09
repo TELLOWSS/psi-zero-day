@@ -1,0 +1,780 @@
+{
+  "version": 1,
+  "status": "implemented-candidates-director-visual-lock-pending",
+  "contract": {
+    "directions": 8,
+    "framesPerDirection": 20,
+    "characters": 6,
+    "logicalSlots": 960,
+    "uniqueSourceCrops": 836
+  },
+  "actors": [
+    {
+      "id": "player",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 156,
+      "mirroredSourceCrops": 4
+    },
+    {
+      "id": "kang_taesik",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 136,
+      "mirroredSourceCrops": 24
+    },
+    {
+      "id": "yoon_sungho",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 136,
+      "mirroredSourceCrops": 24
+    },
+    {
+      "id": "lee_jaehoon",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 136,
+      "mirroredSourceCrops": 24
+    },
+    {
+      "id": "lim_junho",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 136,
+      "mirroredSourceCrops": 24
+    },
+    {
+      "id": "safety_monitor",
+      "directions": 8,
+      "logicalSlots": 160,
+      "uniqueSourceCrops": 136,
+      "mirroredSourceCrops": 24
+    }
+  ],
+  "sourceRecords": [
+    {
+      "id": "kang_taesik",
+      "direction": 0,
+      "file": "kang_taesik-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-04a30dac-3c8b-4938-9a69-3194d7db88d9.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: exact RIGHT side profile, facing screen right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 1,
+      "file": "kang_taesik-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-6fe9272d-0964-4627-b7e1-c5d48083f200.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: FRONT-RIGHT diagonal, facing lower-right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 2,
+      "file": "kang_taesik-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-20e2026c-3234-4b61-b169-b25ee17dcc0a.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: exact FRONT view facing viewer, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 3,
+      "file": "kang_taesik-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-3eeb539c-f5df-4f1e-957f-4dfa666033c7.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: FRONT-LEFT diagonal facing lower-left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 4,
+      "file": "kang_taesik-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-1a8ca9e4-e874-440a-9b25-601aaa254bc4.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: exact LEFT side profile facing screen left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 5,
+      "file": "kang_taesik-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-55f3a890-19a3-40dd-9aba-e7530f774cb3.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: BACK-LEFT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "retained-unselected-source",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 6,
+      "file": "kang_taesik-north-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-4fcbddae-3ac2-4eb2-82cd-5ddd60a0bef9.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: PURE BACK view facing away, face completely hidden, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "kang_taesik",
+      "direction": 7,
+      "file": "kang_taesik-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-211f58d4-dc50-426b-9bf0-e0e4ba3a9913.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: stocky middle-aged Korean male foreman, thick black mustache, orange hard hat, orange reflective vest over charcoal gray work clothes, dark gloves, heavy brown safety boots. No tablet. His command gesture is pointing with his gloved hand. Fixed camera for EVERY cell: BACK-RIGHT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 0,
+      "file": "yoon_sungho-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-6139176b-ceb5-4339-9117-b127f4ebc1b2.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: exact RIGHT side profile, facing screen right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 2,
+      "file": "yoon_sungho-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-31cdc982-feee-44cb-86aa-c25623e60317.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: exact FRONT view facing viewer, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 1,
+      "file": "yoon_sungho-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-e395a22c-e944-463c-99e1-2c00df9c2e62.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: FRONT-RIGHT diagonal, facing lower-right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 3,
+      "file": "yoon_sungho-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-7c58349d-528a-4b6d-825b-62af48decc73.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: FRONT-LEFT diagonal facing lower-left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 4,
+      "file": "yoon_sungho-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-7d7007d5-262f-44c0-8f8d-4f62c64885fe.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: exact LEFT side profile facing screen left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 5,
+      "file": "yoon_sungho-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-de0be577-63a1-4bae-ba24-23135bb218d5.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: BACK-LEFT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "retained-unselected-source",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 6,
+      "file": "yoon_sungho-north-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-a5d8a258-62e5-4f70-9b7d-ef0a948d29a7.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: PURE BACK view facing away, face completely hidden, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 0,
+      "file": "lee_jaehoon-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-350e2238-aaa9-41b3-88ea-671f021a3ae2.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: exact RIGHT side profile, facing screen right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 1,
+      "file": "lee_jaehoon-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-c6be0776-419b-427d-a345-c6e490ef20c6.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: FRONT-RIGHT diagonal, facing lower-right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "yoon_sungho",
+      "direction": 7,
+      "file": "yoon_sungho-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-1c876418-56c6-4368-bd7d-c6f86c581b55.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: sturdy middle-aged Korean male industrial technician, yellow hard hat, tan brown canvas utility vest with silver shoulder reflectors over charcoal work shirt and cargo trousers, gray gloves, brown safety boots, holds the SAME compact black circular tool/cable spool shown in reference in both hands near his belt. Fixed camera for EVERY cell: BACK-RIGHT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 4,
+      "file": "lee_jaehoon-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-18582c9b-5938-4a01-9ec8-bc33ead18002.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: exact LEFT side profile facing screen left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 2,
+      "file": "lee_jaehoon-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-4ea261d5-6fac-4abc-9e4b-d0f0a9ba7eb6.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: exact FRONT view facing viewer, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 3,
+      "file": "lee_jaehoon-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-0c604452-db70-4992-b823-58b4709d0a9a.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: FRONT-LEFT diagonal facing lower-left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 5,
+      "file": "lee_jaehoon-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-f16065ab-ef70-498d-91e8-cbee7e550b21.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: BACK-LEFT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "retained-unselected-source",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 6,
+      "file": "lee_jaehoon-north-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-d596d128-a20d-4aa1-9824-90a49d438796.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: PURE BACK view facing away, face completely hidden, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": 7,
+      "file": "lee_jaehoon-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-5772830c-385c-4782-8a87-c79de07db462.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: slender young adult Korean male engineer, white helmet with blue band, navy work clothes and blue vest with silver reflective straps, short black hair, black gloves and black safety boots, SAME rolled white blueprint held diagonally at his chest. Fixed camera for EVERY cell: BACK-RIGHT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 0,
+      "file": "lim_junho-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-ecae9375-5684-4bbf-8649-5b0ef1f522dc.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: exact RIGHT side profile, facing screen right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 1,
+      "file": "lim_junho-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-1280e14b-8744-46e8-b960-bf52f30074c7.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: FRONT-RIGHT diagonal, facing lower-right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 2,
+      "file": "lim_junho-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-fefe3537-3276-43ea-aca0-91cefaa6b65a.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: exact FRONT view facing viewer, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 4,
+      "file": "lim_junho-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-8345b934-2b9a-460c-9b40-04653d39aaf1.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: exact LEFT side profile facing screen left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 3,
+      "file": "lim_junho-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-14730938-5216-47a1-8ac2-cf7ee5e5a6d0.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: FRONT-LEFT diagonal facing lower-left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 5,
+      "file": "lim_junho-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-37e0c8ae-7574-4ba8-991e-e25d77cd9706.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: BACK-LEFT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "retained-unselected-source",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 6,
+      "file": "lim_junho-north-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-a2482811-f2d0-4ee2-a33f-aea703d8e8ff.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: PURE BACK view facing away, face completely hidden, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "lim_junho",
+      "direction": 7,
+      "file": "lim_junho-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-7ae40307-42e6-4160-aa0e-320b19c70d15.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male field coordinator, yellow hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black work gloves and black safety boots, holds SAME black radio at his mouth, other hand near his belt. Fixed camera for EVERY cell: BACK-RIGHT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 0,
+      "file": "safety_monitor-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-839f9de2-d531-47b6-ac5d-ac1d83f47dc2.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: exact RIGHT side profile, facing screen right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 1,
+      "file": "safety_monitor-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-b71072ae-955a-40b7-b931-2e308a71851a.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: FRONT-RIGHT diagonal, facing lower-right, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 2,
+      "file": "safety_monitor-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-2ff21ffe-3b8c-4772-ab77-246f29c6d17e.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: exact FRONT view facing viewer, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 3,
+      "file": "safety_monitor-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-dd238fad-5a2b-427b-a228-45b2f84b03ed.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: FRONT-LEFT diagonal facing lower-left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 4,
+      "file": "safety_monitor-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-2f6e17b1-5aa1-47fc-9f6b-0d19155a42c4.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: exact LEFT side profile facing screen left, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 5,
+      "file": "safety_monitor-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-fba7b5bc-4bd3-4b68-90bc-7387d73faa79.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: BACK-LEFT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "retained-unselected-source",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 6,
+      "file": "safety_monitor-north-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-f3e6aeac-d092-41b8-aa65-5c166e7822c9.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: PURE BACK view facing away, face completely hidden, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "direction": 7,
+      "file": "safety_monitor-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-0711ae3e-0b54-4874-97b3-eb0303785e7f.png",
+      "prompt": "Create FINAL production animation sheet for the EXACT SAME character from reference: young adult Korean male safety monitor, white hard hat, lime-yellow reflective safety vest over navy work clothes, short dark hair, black gloves and black safety boots, holds SAME black radio near chin in one hand and black tablet at belt in other hand. Fixed camera for EVERY cell: BACK-RIGHT diagonal, mostly vest back visible, elevated orthographic industrial shooter view. Maintain same anatomy, face, age, helmet, clothing, held tool and body proportions throughout. EXACT 5 columns x 4 rows =20 separated whole-body sprites, 60-pixel transparent gutters, no touching neighbors or clipping. Cell0 relaxed neutral standing. Cells1-8 eight consecutive walking phases: left heel contact/down/pass/up, right heel contact/down/pass/up. Cells9-12 four running phases, knees bend naturally, fixed thigh and shin lengths. Cells13-14 stationary left/right balancing pivot with BOTH boots on ground and same fixed heading. Cells15-17 three appropriate command/tool action arm phases, held tool stays attached to correct hand. Cells18-19 MINOR impact brace and recovery: pelvis drop only2%, torso remains at least95% upright height, absolutely NO CROUCH OR KNEEL. Same body scale and light all frames. Transparent background, no floor, no baked shadows, no text, no grid. Crisp detailed realistic PPE and textiles, soft upper-left industrial light. Avoid extra neutral figure in last row, exactly5 in every row. This is one fixed viewing direction motion sequence, not differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "file": "industrial-hazards-v4.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-7d07efaa-5886-4124-9fe7-51e784a4efb0.png",
+      "prompt": "Upgrade the SAME six existing industrial hazard sprites in this reference into final production game art. EXACT 3 columns by 2 rows, six separate objects, generous transparent gutters. Preserve reading-order identities: 0 yellow motorized loaded material trolley carrying strapped concrete blocks, 1 reinforced red-white loaded motorized cart, 2 blue electrical cable winch cart carrying two big cable reels, 3 broken concrete slab with exposed bent rebar, 4 single diffuse yellow-green gas leak plume, 5 three distinct connected teal-green vapor puffs as a single split leak group. Consistent elevated three-quarter orthographic camera and soft upper-left industrial light. Preserve current silhouette orientation and chassis proportions, no body floor shadows baked in. Metal should have crisp localized highlights, concrete matte with believable aggregate, rubber dark low shine, gas thin translucent readable edges with controlled dim core rather than fire or neon glow. Visible practical brake hardware, warning beacon and cable insulation on the carts, no invented text or symbols. Transparent background alpha, no floor, no people, no scenery, no explosions, no panel backgrounds. Detailed but silhouettes readable at 60 CSS px, each entire object isolated and fully contained inside its cell. Production replacements of the reference assets only.",
+      "status": "connected-candidate"
+    },
+    {
+      "id": "kang_taesik",
+      "identity": "stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet.",
+      "side": "front",
+      "kind": "braces",
+      "file": "kang_taesik-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-15c0bf92-79f1-4663-99ae-2e421610d252.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "kang_taesik",
+      "identity": "stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet.",
+      "side": "front",
+      "kind": "turns",
+      "file": "kang_taesik-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-19a2cb37-a1cb-4c68-9104-f7da97bd55ec.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "kang_taesik",
+      "identity": "stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet.",
+      "side": "rear",
+      "kind": "braces",
+      "file": "kang_taesik-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-f1a5e8a3-aa8c-448e-9db8-080be019a63c.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "kang_taesik",
+      "identity": "stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet.",
+      "side": "rear",
+      "kind": "turns",
+      "file": "kang_taesik-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-cf94eb05-3f82-435c-831a-34effcc39f44.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: stocky middle-aged Korean male foreman, black moustache, ORANGE hardhat and ORANGE reflective vest, charcoal work clothes, dark gloves, brown safety boots. His usual arm points forward, no tablet. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lee_jaehoon",
+      "identity": "slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest.",
+      "side": "front",
+      "kind": "braces",
+      "file": "lee_jaehoon-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-a89e7875-87fb-412d-b59a-4f01a76f4bf3.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lee_jaehoon",
+      "identity": "slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest.",
+      "side": "front",
+      "kind": "turns",
+      "file": "lee_jaehoon-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-3433e1ee-3df9-49ea-9dd8-c4bd15a70db5.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "rejected-face-identity",
+      "frameCount": 8
+    },
+    {
+      "id": "lee_jaehoon",
+      "direction": "front-turns",
+      "file": "lee_jaehoon-front-turns-v2.png",
+      "source": "C:/Users/user/.codex/generated_images/01a11d14-64ed-7052-a499-63110506a078/exec-3fd2bd2a-93f5-4a23-8564-d47e1935c1f7.png",
+      "prompt": "Edit the FIRST reference sprite sheet only. Preserve the 2 columns by 4 rows, all eight full body grounded pivot poses, exact crop spacing, blue reflective vest/navy uniform/white blue-banded hardhat, rolled blueprint, black gloves and boots. Remove ALL eyeglasses/sunglasses from every face: this worker Lee Jaehoon has clear uncovered eyes and no glasses. Match the bare face identity in the second reference. No other anatomy changes, no added effects, no shadows outside boot contact, no text, transparent background.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lee_jaehoon",
+      "identity": "slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest.",
+      "side": "rear",
+      "kind": "braces",
+      "file": "lee_jaehoon-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-56728125-188f-44ae-b8f5-0c4d9c72a20d.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lee_jaehoon",
+      "identity": "slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest.",
+      "side": "rear",
+      "kind": "turns",
+      "file": "lee_jaehoon-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-1de770bc-3f96-420a-a006-c43eb0e23dd8.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: slim young Korean male engineer, WHITE BLUE hardhat, navy blue vest with silver reflective straps, navy trousers, black boots. Preserve rolled WHITE BLUEPRINT held at chest. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lim_junho",
+      "identity": "young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth.",
+      "side": "front",
+      "kind": "braces",
+      "file": "lim_junho-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-5cb3824d-c178-4d62-b196-e946ba098c15.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lim_junho",
+      "identity": "young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth.",
+      "side": "front",
+      "kind": "turns",
+      "file": "lim_junho-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-c2d41b07-8392-42ce-b776-1e1adda56dff.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lim_junho",
+      "identity": "young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth.",
+      "side": "rear",
+      "kind": "braces",
+      "file": "lim_junho-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-5d51f35c-092e-416a-9c74-5712a301aec8.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "lim_junho",
+      "identity": "young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth.",
+      "side": "rear",
+      "kind": "turns",
+      "file": "lim_junho-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-31426bb7-6b7c-4fd2-a8b1-7a88d58b7ca3.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: young Korean male operator, YELLOW hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve BLACK RADIO near mouth. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "file": "plant-stage-42-graphics-v2.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-f41f26e4-3062-43b0-affd-a1423fb68b76.png",
+      "prompt": "Improve this exact existing FINAL industrial shooter stage 42 plant electrical services floor for production. Preserve the identical overhead orthographic camera, rectangular composition, all perimeter ventilation ducts, electrical cabinets, cable conduits, safety tape, red and green marked walkways and drain positions. Do not add obstacles, props or structures to the central playable region. Polish photographic 2.5D materials: brushed galvanized sheet metal with controlled highlights, matte worn concrete with subtle trolley tire scuffs and fine dust around perimeter only, rubber trim low reflectance. Consistent soft industrial light from upper left with perimeter contact shadows directed lower right. Central combat floor should be slightly darker cool neutral and lower contrast than perimeter, without vignette or glare, so navy characters and yellow hazards remain distinct. Clear crisp believable industrial environment, no text, no people, no monsters, no new layout. Keep playable middle open. Full opaque background, same landscape aspect ratio.",
+      "status": "connected-candidate"
+    },
+    {
+      "id": "player",
+      "file": "player-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-8f115687-b93e-43c9-8102-ef00fc71cd0d.png",
+      "prompt": "FINAL production subtle impact reaction poses for the SAME Korean female safety manager in reference. Preserve blue-white helmet, navy fitted work clothes, blue reflective PPE vest, long black ponytail, black safety boots, held black tablet. EXACT 2 columns x 4 rows = EIGHT completely isolated full-body sprites. Each row a FIXED view direction. LEFT pose: MINOR impact brace, tighten shoulders and elbows around the held tablet, knees bend only 5 degrees, pelvis drops ONLY 2 percent of standing height. RIGHT pose: recovery to neutral upright stance, same feet. ABSOLUTELY NO crouching, no kneeling, no running, no wide step, no head or body scale changes. Both boots remain grounded, body remains at least 95 percent of neutral height. First row right side profile, second row front-right diagonal, third row exact frontal facing viewer, fourth row front-left diagonal. Soft top-left light, elevated orthographic three-quarter camera, crisp consistent identity. Transparent background, no floor, no shadow, no text, no panel lines, generous transparent gaps.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "player",
+      "file": "player-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-0364f987-e193-492e-ba7a-6daf0c355751.png",
+      "prompt": "FINAL production balancing turn poses for the SAME Korean female safety manager in attached references. Same blue-white helmet, navy-blue work clothes, blue reflective vest, long black ponytail, black safety boots and black tablet. EXACT 2 columns x 4 rows = EIGHT isolated full body figures. In each row left column is stationary balance on LEFT foot with other boot pivoting subtly inward; right column stationary balance on RIGHT foot with other boot pivoting subtly outward. Both boots remain on ground, no running, no walking stride, no crouch, no crossed or elongated legs, knees relaxed only. Preserve body size, PPE, tablet and view direction per row. First row exact RIGHT profile facing right, second row front-right diagonal, third row exact FRONT facing viewer, fourth row front-left diagonal. Camera orthographic elevated quarter-view, soft upper-left light, no floor or baked shadow. Transparent background no text or grid. Huge empty gaps so no sprites touch. Crisp consistent master character. These are natural transition balance poses during turning, torso/pelvis gently aligned with direction but stable bone lengths.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "player",
+      "file": "player-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-5c342391-ff1e-437c-ba43-5cf48f4534ef.png",
+      "prompt": "FINAL production subtle impact reaction poses for the SAME Korean female safety manager in reference. Preserve blue-white helmet, navy fitted work clothes, blue reflective PPE vest, long black ponytail, black safety boots, held black tablet. EXACT 2 columns x 4 rows = EIGHT completely isolated full-body sprites. Each row a FIXED view direction. LEFT pose: MINOR impact brace, tighten shoulders and elbows around the held tablet, knees bend only 5 degrees, pelvis drops ONLY 2 percent of standing height. RIGHT pose: recovery to neutral upright stance, same feet. ABSOLUTELY NO crouching, no kneeling, no running, no wide step, no head or body scale changes. Both boots remain grounded, body remains at least 95 percent of neutral height. First row left side profile, second row rear-left diagonal, third row pure back facing away, face hidden, fourth row rear-right diagonal. Soft top-left light, elevated orthographic three-quarter camera, crisp consistent identity. Transparent background, no floor, no shadow, no text, no panel lines, generous transparent gaps.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "player",
+      "file": "player-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-96c63809-5984-47ac-9537-1ca60f2aa455.png",
+      "prompt": "FINAL production balancing turn poses for the SAME Korean female safety manager in attached references. Same blue-white helmet, navy-blue work clothes, blue reflective vest, long black ponytail, black safety boots and black tablet. EXACT 2 columns x 4 rows = EIGHT isolated full body figures. In each row left column is stationary balance on LEFT foot with other boot pivoting subtly inward; right column stationary balance on RIGHT foot with other boot pivoting subtly outward. Both boots remain on ground, no running, no walking stride, no crouch, no crossed or elongated legs, knees relaxed only. Preserve body size, PPE, tablet and view direction per row. First row exact LEFT profile facing left, second row rear-left diagonal, third row PURE BACK view facing away, no face visible, fourth row rear-right diagonal. Camera orthographic elevated quarter-view, soft upper-left light, no floor or baked shadow. Transparent background no text or grid. Huge empty gaps so no sprites touch. Crisp consistent master character. These are natural transition balance poses during turning, torso/pelvis gently aligned with direction but stable bone lengths.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "player",
+      "direction": 6,
+      "file": "player-north-v1.png",
+      "source": "C:/Users/user/.codex/generated_images/01a11d14-64ed-7052-a499-63110506a078/exec-70466066-f29f-4a10-ac31-aa1b04b44be2.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: PURE REAR view (back facing viewer), orthographic elevated quarter-view matching reference back column. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small rear-view pivot balance shift left/right, still rear; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the rear-facing column's motion expansion only, not 20 differently facing characters.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 5,
+      "file": "player-northwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-83086ccc-cb67-4bc7-88f6-fedfec522d29.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: REAR THREE QUARTER facing away to the upper LEFT; viewer sees the character BACK and LEFT side. Head remains pointed upper left, not front., orthographic elevated quarter-view matching reference back column. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small rear-view pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 7,
+      "file": "player-northeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-22114b6d-6fa5-475e-83c9-a989aca6ace3.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: REAR THREE QUARTER facing away to the upper RIGHT; viewer sees the character BACK and RIGHT side. Head remains pointed upper right, not front., orthographic elevated quarter-view matching reference back column. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small rear-view pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 2,
+      "file": "player-south-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-a4d42ee5-f7ec-496d-93ae-4beb8202ea0e.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: FRONT view facing toward the viewer; see her face and front of vest. Fixed orthographic elevated front-quarter view., orthographic elevated quarter-view matching reference back column. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small rear-view pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "rejected-merged-frames",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 0,
+      "file": "player-east-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-50ddea26-a9dc-460d-a649-6060823df3fb.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: EXACT RIGHT PROFILE view facing screen right. See right-facing helmet nose and tablet silhouette; no front or rear angle. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 1,
+      "file": "player-southeast-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-da41c21a-f184-462d-a58b-22da5d7fd9ce.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: FRONT-RIGHT diagonal view facing screen lower-right, with front vest and face visible. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 3,
+      "file": "player-southwest-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-31904827-a57b-4cb7-b335-34c82d141f60.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: FRONT-LEFT diagonal view facing screen lower-left, with front vest and face visible. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 4,
+      "file": "player-west-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-c448190b-edd0-48b3-b9a7-8b9c2a12bc18.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: EXACT LEFT PROFILE view facing screen left. See left-facing helmet nose and tablet silhouette; no front or rear angle. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small pivot balance shift left/right, retain EXACTLY the same side profile, never face the viewer; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "player",
+      "direction": 2,
+      "file": "player-south-v2.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-b3e3af01-005e-4d50-a48b-6fede07eb106.png",
+      "prompt": "Edit reference into FINAL production animation sprite sheet for the SAME Korean female industrial site safety manager. Preserve exactly her blue-white safety helmet, navy fitted work clothes, blue safety vest silver reflective straps, long black ponytail, black safety boots and black handheld tablet. One fixed camera: FRONT view facing toward the viewer; see her face and front of vest. Fixed orthographic elevated front-quarter view., orthographic elevated quarter-view matching reference back column. Same adult anatomy, same clothing and tablet in EVERY cell. Transparent background, no ground, no shadow, no text, no gridlines. EXACTLY 5 equal columns x 4 equal rows, 20 complete isolated full-body sprites with generous transparent gaps. Reading order: cell0 neutral standing; cells1-8 consecutive eight walking phases, subtle left contact/down/pass/up then right contact/down/pass/up, feet genuinely lift, knees bend with fixed bone lengths; cells9-12 four running phases with same anatomy; cells13-14 small rear-view pivot balance shift left/right, retain the same fixed viewing direction; cells15-17 three pointing/radio-command arm phases tablet stays held; cells18-19 two minor impact brace/recovery poses. Keep head/hip/body SCALE constant throughout and pelvis centered in every cell. No elongated legs, no cloning extra limbs, no clipping. Crisp game-ready consistent master character, detailed textile and PPE, soft industrial top-left light. Use large landscape 5:4 sprite sheet so each full body is clear at preview size. This is the single fixed viewing direction's motion expansion only, not 20 differently facing characters. Do not add an extra neutral sprite before the last row. Exactly 20 equal isolated cells. Last row ONLY three command arm poses, crouch brace, recovery. All five rows references are character identity guidance, not source atlas copying. IMPORTANT REPAIR: retain a minimum 60-pixel transparent gutter around every sprite; particularly running poses in row 3 must NEVER TOUCH neighboring sprite boots. Make bodies slightly smaller within the exact 5 x 4 equal grid to guarantee isolation. Front-facing character should face straight toward camera, no diagonal view in any neutral/walk cell. Face, helmet and hips fixed direction, same tablet. 20 full separate bodies not 19 merged figures. No duplicate body attached to another cell.",
+      "status": "connected-candidate",
+      "frameCount": 20
+    },
+    {
+      "id": "safety_monitor",
+      "identity": "adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand.",
+      "side": "front",
+      "kind": "braces",
+      "file": "safety_monitor-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-e016fc6f-a734-4139-ba07-d8c641f7304a.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "safety_monitor",
+      "identity": "adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand.",
+      "side": "front",
+      "kind": "turns",
+      "file": "safety_monitor-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-46e2c45f-3749-43c7-8c2f-67bec7c20d8c.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "safety_monitor",
+      "identity": "adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand.",
+      "side": "rear",
+      "kind": "braces",
+      "file": "safety_monitor-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-b8bda683-2a7c-4ff2-b3ee-bf7fe9de43c6.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "safety_monitor",
+      "identity": "adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand.",
+      "side": "rear",
+      "kind": "turns",
+      "file": "safety_monitor-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-8373008c-e510-4e38-9356-d3ffa8f23024.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "yoon_sungho",
+      "identity": "sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools.",
+      "side": "front",
+      "kind": "braces",
+      "file": "yoon_sungho-front-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-62794895-916e-4d2a-8dcb-d18c9c69fba6.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "yoon_sungho",
+      "identity": "sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools.",
+      "side": "front",
+      "kind": "turns",
+      "file": "yoon_sungho-front-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-7a050a6b-e970-4754-89c2-b5884816df40.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE RIGHT PROFILE; row2 FRONT RIGHT three-quarter; row3 PURE FRONT facing viewer; row4 FRONT LEFT three-quarter. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "yoon_sungho",
+      "identity": "sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools.",
+      "side": "rear",
+      "kind": "braces",
+      "file": "yoon_sungho-rear-braces-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-ca24cf3a-e00d-4595-b195-02284e8d23bb.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two minor impact response poses per row: left column tiny protective balance brace, right column relaxed recovery. Maintain almost upright body, knees flex only slightly, pelvis lowers at most TWO PERCENT, total body height at least 95 percent of neutral. Both boots grounded, NO crouch, NO squat, NO kneeling. Held tool and arms remain credible. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated braces poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    },
+    {
+      "id": "yoon_sungho",
+      "identity": "sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools.",
+      "side": "rear",
+      "kind": "turns",
+      "file": "yoon_sungho-rear-turns-v1.png",
+      "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-6e903bcb-a0e2-456a-97f2-96ebbc0662b2.png",
+      "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: sturdy middle-aged Korean male technician, YELLOW hardhat, TAN BROWN canvas utility vest with silver shoulder straps, charcoal clothes, gray gloves, brown boots. Preserve compact black circular tool or cable spool held near his waist, belt tools. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+      "status": "connected-candidate",
+      "frameCount": 8
+    }
+  ],
+  "layoutFile": "content/art/survivors-authored-actor-layouts-v1.json",
+  "jointFile": "content/art/survivors-authored-joints-v1.json",
+  "reuse": {
+    "northwest": "For five supporting characters, an explicitly mirrored northeast source replaces a wrong-heading northwest candidate.",
+    "inspection": "Existing tool/command poses are shared for equipment inspection; no dedicated inspection animation is claimed.",
+    "pivot": "Reviewed front/rear pairs and explicit mirrors replace unsuitable generated pivots.",
+    "sourcePreservation": "All original generated sources and rejected project versions are retained."
+  },
+  "visualApproval": false
+}

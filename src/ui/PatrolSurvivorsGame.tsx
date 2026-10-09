@@ -24,6 +24,8 @@ import {drawTerrain} from './survivors-terrain-renderer';
 import terrainText from '../../content/localization/survivors-terrain-ko.json';
 import {SurvivorsTerrainRecord} from './SurvivorsTerrainRecord';
 import {getGraphicsMode,GRAPHICS_PROFILES} from './survivors-graphics-settings';
+import {survivorsVisualBudget} from './survivors-visual-budget';
+import graphicsText from '../../content/localization/survivors-graphics-ko.json';
 import safeSupplyText from '../../content/localization/survivors-safe-supply-ko.json';
 import materialFeelText from '../../content/localization/survivors-material-feel-ko.json';
 import {EquipmentCheckDirection} from './survivors-equipment-check';
@@ -63,9 +65,8 @@ import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {SurvivorsContainerShop} from './SurvivorsContainerShop';
-import {CHARACTER_MAP_ART} from './survivors-character-art';
-import {loadAuthoredCommand} from './survivors-authored-command';
-import {loadDirectionalActor,isDirectionalActor,drawDirectionalLight} from './survivors-directional-art';
+import {usePreparedSurvivorsActor} from './use-prepared-survivors-actor';
+import {isDirectionalActor,drawDirectionalLight,drawDirectionalOutline} from './survivors-directional-art';
 import {ultimateSourceObscured} from './survivors-ultimate-release';
 import {drawWearableLayer,loadWearableImages,type WearableImages} from './survivors-wearable-art';
 import {STORE_ITEMS, recommendedStoreItem, sanitizeInventory, buyStoreItem, equipStoreItem,repairStoreItem,repairAllStoreItems,storeRepairCost,storeRepairTotal,buyAndEquipLoadout,wearStoreItems,itemDurability,STORE_CLEAR_WEAR, type StoreInventory} from '../domain/survivors-store';
@@ -439,21 +440,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Meta Progression (Stored in LocalStorage)
   const [selectedChar, setSelectedChar] = useState<CharacterId>('player');
-  useEffect(()=>{
-    if(spritesRef.current.characterMaps[selectedChar])return;
-    let cancelled=false;const actor=new Image();
-    actor.onload=()=>{
-      if(cancelled)return;
-      void (async()=>{
-        const directional=await loadDirectionalActor(actor);
-        if(cancelled)return;
-        if(!directional){registerSpriteBounds(actor);await loadAuthoredCommand(actor);}
-        if(!cancelled)spritesRef.current.characterMaps[selectedChar]=actor;
-      })();
-    };
-    actor.src=CHARACTER_MAP_ART[selectedChar];
-    return ()=>{cancelled=true;};
-  },[selectedChar]);
+  const preparedCharacter=usePreparedSurvivorsActor(selectedChar,spritesRef.current.characterMaps);
   useEffect(() => {
     let disposed = false;
     void loadWearableImages(selectedChar).then(images => { if (!disposed) spritesRef.current.wearables = images; });
@@ -1356,6 +1343,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   };
 
   const [displaySettings,setDisplaySettings]=useState(readDisplaySettings);
+  const [automaticQuality,setAutomaticQuality]=useState<'high'|'balanced'|'low'>('high');
   const [displaySaved,setDisplaySaved]=useState(true);
   const displaySettingsRef=useRef(displaySettings);
   const changeDisplaySettings=(next:DisplaySettings)=>{displaySettingsRef.current=next;performanceBudgetRef.current?.configure(next);setDisplaySettings(next);setDisplaySaved(saveDisplaySettings(next));};
@@ -1779,6 +1767,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         if (wallTime - lastHudTime >= 1000 / (budget.level==='low'?6:10) || engine.state.phase !== 'playing') {
         lastHudTime = wallTime;
         // Sync React HUD
+        setAutomaticQuality(previous=>previous===budget.level?previous:budget.level);
         setHp(Math.round(engine.state.player.hp));
         const damage = engine.state.lastDamage;
         setLastDamage(previous => previous?.source === damage?.source && previous?.amount === damage?.amount && Boolean(previous && previous.remaining > 0) === Boolean(damage && damage.remaining > 0) ? previous : damage ? { ...damage } : undefined);
@@ -1898,6 +1887,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
 
       const { player, hazards, projectiles, drops, activePerks } = engine.state;
+      const visualBudget=survivorsVisualBudget(getGraphicsMode(),budget.level,hazards.length,projectiles.length,reducedMotionRef.current);
       const trackedPose = motions.sample(player, player.x, player.y, engine.state.playerMotionTime??engine.state.gameTime, player.hp);
       const actor=spritesRef.current.characterMaps[engine.state.characterId];
       const checkDanger=player.hp<=player.maxHp*.4||hazards.some(h=>h.hp>0&&Math.hypot(h.x-player.x,h.y-player.y)<420)
@@ -2691,17 +2681,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           const hazardPose = motions.sample(h, h.x, h.y, engine.state.gameTime, h.hp);
           ctx.save();
           ctx.translate(h.x, h.y);
-          if (h.hitFlashTimer && h.hitFlashTimer > 0) {
-            ctx.filter = 'brightness(3.2) contrast(1.6)';
-          }
+          // Material contact owns the hit response; whole-object whitening hides warnings.
 
           // Telegraphs share the engine's locked trajectory and contact window.
           if (h.type === 'RUNAWAY_CART' && h.motion?.phase === 'warning') {
             ctx.save();
             ctx.rotate(Math.atan2(h.motion.directionY, h.motion.directionX));
-            ctx.fillStyle = 'rgba(245,158,11,.20)';
+            ctx.fillStyle = visualBudget.detailBusy?'rgba(249,115,22,.035)':'rgba(249,115,22,.10)';
             ctx.fillRect(0, -h.radius - 14, h.speed * 2.1 * 1.05 * (h.isStageBoss?bossPattern(h).burst:1), (h.radius + 14) * 2);
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 3;
+            ctx.strokeStyle = '#fb923c'; ctx.lineWidth = visualBudget.detailBusy?2:3;
             ctx.setLineDash([12, 8]);
             ctx.strokeRect(0, -h.radius - 14, h.speed * 2.1 * 1.05 * (h.isStageBoss?bossPattern(h).burst:1), (h.radius + 14) * 2);
             ctx.restore();
@@ -3099,10 +3087,12 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
 
           // 2.5D Ground Contact Ellipse Shadow
+          if(!playerPose.directional){
           ctx.fillStyle = 'rgba(0, 0, 0, 0.52)';
           ctx.beginPath();
           ctx.ellipse(0, 1, 12, 4.5, 0, 0, Math.PI * 2);
           ctx.fill();
+          }
 
           // Invincibility flashing feedback
           ctx.globalAlpha *= playerDamageOpacity(player.invincibleTime,engine.state.gameTime,reducedMotionRef.current);
@@ -3124,7 +3114,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             const sprH = 74;
             ctx.save();
             applyActorTorsoTransform(ctx,playerPose,sprH,Boolean(ACTOR_RIGS[charMapSpr.src.split('/').pop()??'']));
-            drawPremiumPresence(ctx,spritesRef.current.premiumPresence,engine.state.premiumGear?.equipped??[],engine.state.gameTime,reducedMotionRef.current,projectiles.length>60||hazards.length>45,direction.auraStrength);
+            drawPremiumPresence(ctx,spritesRef.current.premiumPresence,engine.state.premiumGear?.equipped??[],engine.state.gameTime,reducedMotionRef.current,visualBudget.detailBusy,direction.auraStrength*visualBudget.presenceStrength);
             ctx.restore();
             // Draw grounded with feet touching ground contact shadow (0, 0)
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'back',reducedMotionRef.current);
@@ -3173,15 +3163,16 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       const inspectionActor=spritesRef.current.characterMaps[engine.state.characterId];
       const inspectionPhase=drawPremiumGear(ctx,engine.state,spritesRef.current.equipmentAtlas,reducedMotionRef.current,facingAngle,spritesRef.current.itemsAtlas,spritesRef.current.wearables,inspectionActor?.naturalWidth?{actor:inspectionActor,height:74,pose:playerPose,vfxAtlas:spritesRef.current.cinematicAtlas,premiumAtlas:spritesRef.current.premiumMountedAtlas}:undefined);
       audioRef.current.playInspectionPhase(inspectionPhase,engine.state.phase==='playing',engine.state);
-      const projectileBusy=projectiles.length>60;
+      const projectileBusy=visualBudget.detailBusy;
       const auraMovingAngle=engine.state.phase==='playing'&&playerPose.moving?facingAngle:undefined;
       const recoveryCellAuthored=recoveryFlowRef.current.draw(ctx,engine.state,spritesRef.current.recoveryFlow,reducedMotionRef.current,projectileBusy||hazards.length>45,inspectionActor?.naturalWidth?{image:inspectionActor,height:74,pose:playerPose}:undefined);
       drawPremiumProtocol(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,auraMovingAngle,projectileBusy||hazards.length>45,recoveryCellAuthored);
       drawEquipmentMantle(ctx,engine.state,spritesRef.current.cinematicAtlas,reducedMotionRef.current,projectileBusy||hazards.length>45,auraMovingAngle,direction.auraStrength,inspectionActor?.naturalWidth?{pose:playerPose,height:74,rigged:Boolean(ACTOR_RIGS[inspectionActor.src.split('/').pop()??''])}:undefined);
       const equipped=engine.state.premiumGear?.equipped??[];
       const vfxLevels={radio:activePerks.radio_boost,satellite_wave:5,drone_laser:activePerks.safety_drone,hunter_beam:5};
-      const cinematicFlightBudget=projectileBusy?18:projectiles.length>35?28:42;
-      const cinematicFlights=cinematicFlightSelection(projectiles,equipped,cinematicFlightBudget,player);
+      const cinematicFlightBudget=visualBudget.flights;
+      const visibleOrnaments=projectiles.filter(p=>p.x>=camX-120&&p.x<=camX+viewW+120&&p.y>=camY-120&&p.y<=camY+viewH+120);
+      const cinematicFlights=cinematicFlightSelection(visibleOrnaments,equipped,cinematicFlightBudget,player);
 
       // 6. RENDER AIRBORNE PROJECTILES (Standard & Super Protocol Evolutions)
       for (const p of projectiles) {
@@ -3196,6 +3187,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       materialResolutionRef.current.draw(ctx,spritesRef.current.industrialHazards,reducedMotionRef.current,projectileBusy,feelSettingsRef.current.flash);
       projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current||feelSettingsRef.current.flash===0,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,materialAtlas:spritesRef.current.industrialContacts,metalAtlas:spritesRef.current.metalImpact,debrisAtlas:spritesRef.current.debrisImpact,vaporAtlas:spritesRef.current.vaporImpact,droneLaunchAtlas:spritesRef.current.droneLaunch,hunterLaunchAtlas:spritesRef.current.hunterLaunch,radioLaunchAtlas:spritesRef.current.radioLaunch,equipped,levels:vfxLevels,flashStrength:feelSettingsRef.current.flash});
+
+      // A compact outline retains body depth while exposing the player under a foreground hazard.
+      const heroOccluded=hazards.some(h=>h.y>=player.y-8&&h.y<=player.y+90&&Math.abs(h.x-player.x)<h.radius+20);
+      if(inspectionActor&&heroOccluded){ctx.save();ctx.translate(player.x,player.y);drawDirectionalOutline(ctx,inspectionActor,74,playerPose);ctx.restore();}
 
       // 7. RENDER SAFETY DRONES AT THE AUTHORITATIVE EMISSION ORIGIN
       drawSafetyDrones(ctx,engine.state,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,spritesRef.current.cinematicAtlas,reducedMotionRef.current);
@@ -3274,7 +3269,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       }
       // The authored actor is 74 world units tall; reserve its hands and safety helmet too.
       const feedbackObstacles: FeedbackRect[] = [{left:player.x-36,right:player.x+36,top:player.y-84,bottom:player.y+12}];
-      for (const ft of selectFloatingFeedback(aliveTexts, engine.state.hazards.length > 45 || engine.state.projectiles.length > 60).reverse()) {
+      for (const ft of selectFloatingFeedback(aliveTexts, visualBudget.detailBusy,visualBudget.feedbackLimit).reverse()) {
           if(ft.x<camX||ft.x>camX+viewW||ft.y<camY||ft.y>camY+viewH)continue;
           ctx.save();
           const progress = 1 - (ft.life / ft.maxLife);
@@ -3439,6 +3434,11 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </button>
         </div>
       </header>
+
+      {phase==='playing'&&!joystickVisual.visible&&displaySettings.quality==='auto'&&automaticQuality!=='high'&&<button type="button" className="survivors-auto-quality-notice" title={graphicsText.autoAdjustedHint} onClick={()=>{
+        engineRef.current?.setPaused(true);setPhase('paused');
+        requestAnimationFrame(()=>{const panel=containerRef.current?.querySelector<HTMLDetailsElement>('.survivors-session-settings');if(panel){panel.open=true;panel.querySelector('summary')?.focus();panel.scrollIntoView({block:'nearest'});}});
+      }}><span role="status">{graphicsText.autoAdjusted}</span><b>{graphicsText.adjustSettings}</b></button>}
 
       {waveDirectorNotice && combatNotice==='wave' && (
         <aside className={`survivors-wave-director-notice is-wave-${waveDirectorNotice.wave}`} role="status" aria-live="assertive">
@@ -3690,7 +3690,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-preflight-top"><h2>{preflightText.title}</h2><div><button type="button" aria-pressed={readyMusic} disabled={audioMuted} onClick={()=>{audioRef.current.getContext();setReadyMusic(value=>!value);}}>{preflightText.music}</button><button type="button" onClick={exitSession}>{preflightText.exit}</button></div></div>
             <header className="survivors-ready-launch">
               <div><strong>STAGE {String(PATROL_STAGES[selectedStage].stageNumber).padStart(2, '0')}/50 · {CHARACTER_PROFILES[selectedChar].name}</strong><p>{PATROL_STAGES[selectedStage].name}</p><small>{materialFeelText.themes[PATROL_STAGES[selectedStage].theme]}</small></div>
-              <button type="button" className="survivors-btn-primary" disabled={stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage)} onClick={startGame}>{preflightText.launch}</button>
+              <button type="button" className="survivors-btn-primary" disabled={preparedCharacter!==selectedChar||(stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage))} onClick={startGame}>{preflightText.launch}</button>
             </header>
             <label className="survivors-voice-version">{voiceVersionText.label}
               <select value={playerVoiceVersion} onChange={event=>changePlayerVoiceVersion(event.target.value)}>
@@ -3705,6 +3705,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               <strong>SIGNATURE EVENTS · {signatureEventPlan(PATROL_STAGES[selectedStage])[0]?.workface}</strong>
               {signatureEventPlan(PATROL_STAGES[selectedStage]).map(event=><span key={event.id} style={{'--brief-accent':event.stageAccent} as CSSProperties}><b>W{event.wave}</b><em>{event.mechanic}</em><small>{event.title}<u>{signatureCounterplayProfile(event.id).condition}</u></small></span>)}
             </aside>
+            {preparedCharacter!==selectedChar&&<p role="status">{graphicsText.characterLoading}</p>}
             {failedGround === stageGroundUri(selectedStage) ? <p role="alert">{storeText.mapFailure} <button type="button" onClick={() => setGroundRetry(value => value + 1)}>{storeText.mapRetry}</button></p> : stageGroundUri(selectedStage).includes('/maps/') && loadedGround !== stageGroundUri(selectedStage) && <p role="status">{storeText.mapLoading}</p>}
             <fieldset className="survivors-challenge-select"><legend>{challengeText.title}</legend>
               {(Object.keys(PATROL_DIFFICULTIES) as PatrolDifficulty[]).map(id=><button key={id} type="button" aria-pressed={selectedDifficulty===id} onClick={()=>setSelectedDifficulty(id)}><strong>{challengeText[id]}</strong><small>{challengeText.reward} ×{PATROL_DIFFICULTIES[id].reward}</small><small>{PATROL_DIFFICULTIES[id].supplyEvery} {challengeText.supply} · {PATROL_DIFFICULTIES[id].supplyCooldown}s</small></button>)}

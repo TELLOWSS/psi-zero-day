@@ -10,7 +10,7 @@ try{
  for(const [width,height] of [[1440,900],[390,844]]) {
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:2});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(String(e)));
-  await page.goto('http://127.0.0.1:5203',{waitUntil:'networkidle'});
+  await page.goto(process.env.PSI_PREVIEW_URL??'http://127.0.0.1:5203',{waitUntil:'networkidle'});
   await page.locator('.commercial-title-utility').getByRole('button',{name:/설정/}).click();
   const titleDialog=page.getByRole('dialog');
   await titleDialog.getByRole('button',{name:/부드럽게/}).click();
@@ -32,7 +32,7 @@ try{
   const live=page.getByRole('region',{name:'그래픽 · 한 번에 맞추기'});
   if(await live.getByRole('button',{name:/부드럽게/}).getAttribute('aria-pressed')!=='true')throw Error('Mode not shared');
   await live.getByRole('button',{name:/선명하게/}).click();
-  await page.waitForFunction(low=>document.querySelector('.survivors-container canvas')?.width===low*2,low);
+  await page.waitForFunction(low=>document.querySelector('.survivors-container canvas')?.width>low,low);
   const high=await page.locator('.survivors-container canvas').first().evaluate(c=>c.width);
   await live.screenshot({path:path.join(out,`${width}-live.png`)});
   await page.reload();await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();

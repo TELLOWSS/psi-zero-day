@@ -1,4 +1,16 @@
 import type {FootPoint} from './survivors-foot-lock';
+/** Preserve authored limb proportions even when a world contact trails the pelvis. */
+export function constrainContactFeet(source:readonly FootPoint[],target:readonly FootPoint[],height:number):FootPoint[]{
+ const hipY=-height*.4;
+ return source.map((foot,i)=>{
+  const wanted=target[i]??foot,rest=Math.max(height*.12,foot.y-hipY);
+  const dx=Math.max(-height*.12,Math.min(height*.12,wanted.x-foot.x));
+  // Vertical elongation is much more visible than lateral stance adjustment.
+  const dy=Math.max(rest*.72,Math.min(rest*1.08,wanted.y-hipY));
+  const length=Math.hypot(dx,dy),ratio=Math.min(1,rest*1.08/length);
+  return {x:foot.x+dx*ratio,y:hipY+dy*ratio};
+ });
+}
 /** Piecewise affine leg mesh; upper-body pixels and authored identity stay intact. */
 function triangle(ctx:CanvasRenderingContext2D,image:CanvasImageSource,s:FootPoint[],d:FootPoint[]):void{
  const [a,b,c]=s as [FootPoint,FootPoint,FootPoint],[p,q,r]=d as [FootPoint,FootPoint,FootPoint];
@@ -11,8 +23,9 @@ export function drawContactMesh(ctx:CanvasRenderingContext2D,image:HTMLCanvasEle
  const split=Math.max(image.width*.2,Math.min(image.width*.8,(source[0]!.x+source[1]!.x)*scale/2+origin));
  ctx.save();ctx.scale(1/scale,1/scale);ctx.translate(-origin,-image.height);
  const waist=Math.floor(image.height*.60);ctx.drawImage(image,0,0,image.width,waist+1,0,0,image.width,waist+1);
+ const leftLeg=source[0]!.x<=source[1]!.x?0:1;
  for(let leg=0;leg<2;leg++){
-  const screenLeft=source[leg]!.x<=source[1-leg]!.x;
+  const screenLeft=leg===leftLeg;
   const lo=screenLeft?0:split,hi=screenLeft?split:image.width;
   const delta={x:(target[leg]!.x-source[leg]!.x)*scale,y:(target[leg]!.y-source[leg]!.y)*scale};
   const sole=Math.max(waist+1,source[leg]!.y*scale+image.height),rows=[waist,waist+(sole-waist)*.35,waist+(sole-waist)*.7,sole,image.height];

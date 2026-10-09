@@ -1,10 +1,12 @@
+import {authoredBootSoles} from './survivors-authored-joints';
 import type {SpritePose} from './survivors-sprite-motion';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import {actorTorsoPoint} from './survivors-rig-renderer';
 import {CHARACTER_CONTACT_ART,contactFrameWeights} from './survivors-contact-art';
 import {FootContactTracker,swingContactPoints,type FootPoint} from './survivors-foot-lock';
-import {drawContactMesh} from './survivors-contact-mesh';
+import {drawContactMesh,constrainContactFeet} from './survivors-contact-mesh';
 import {DIRECTIONAL_WORN_CALIBRATIONS} from './survivors-worn-equipment-plan';
+import {authoredMotionWeights} from './survivors-authored-motion';
 const footContacts=new FootContactTracker();
 const contactSheets=new Map<string,Promise<Sheet|undefined>>();
 export const PLAYER_DIRECTIONAL_ART='/assets/survivors/player-walk-eight-v1.png';
@@ -58,9 +60,44 @@ export function directionalPoseWeights(pose:SpritePose):{frame:number;weight:num
  const t=Math.max(0,Math.min(1,(progress-.12)/.08,(.56-progress)/.08)),blend=t*t*(3-2*t);
  return [...base.map(sample=>({...sample,weight:sample.weight*(1-blend)})),{frame:10,weight:blend}].filter(sample=>sample.weight>0);
 }
-interface Cell {canvas:HTMLCanvasElement;width:number;height:number;anchor:number;coreWidth?:number;feet:{x:number;y:number}[]}
+type AuthoredSocketKind='head'|'chest'|'back'|'belt'|'wrist'|'tempo';
+interface Cell {sockets?:Partial<Record<AuthoredSocketKind,FootPoint>>;canvas:HTMLCanvasElement;width:number;height:number;anchor:number;coreWidth?:number;feet:{x:number;y:number}[]}
 interface Frame {sheet:Sheet;cell:{width:number;height:number;anchor:number;coreWidth:number};direction:number;facing:number;weights:{frame:number;weight:number;direction?:number}[]}
-interface Sheet {cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;characterId?:string;contact?:boolean;contactPose?:SpritePose;contactFeet?:FootPoint[];lastPose?:SpritePose;lastFrame?:Frame}
+interface Sheet {outline?:HTMLCanvasElement;outlineKey?:string;cells:Cell[];bodyHeight:number;composite:HTMLCanvasElement;light:HTMLCanvasElement;key:string;lightKey:string;characterId?:string;contact?:boolean;authored?:boolean;contactPose?:SpritePose;contactFeet?:FootPoint[];lastPose?:SpritePose;lastFrame?:Frame}
+const sheetStride=(sheet:Sheet)=>sheet.authored?20:sheet.contact?8:FRAMES_PER_DIRECTION;
+export interface AuthoredDirectionLayout {src:string;frames:{x:number;y:number;width:number;height:number;src?:string;referenceHeight?:number;mirror?:boolean;sockets?:Partial<Record<AuthoredSocketKind,FootPoint>>}[]}
+/** Explicit reviewed crops, fixed scale per direction: crouching never enlarges a character. */
+export async function loadAuthoredDirectionalActor(actor:HTMLImageElement,id:string,layouts:readonly AuthoredDirectionLayout[]):Promise<void>{
+ if(layouts.length!==8||layouts.some(l=>l.frames.length!==20))throw new Error('Eight directions with twenty reviewed frames required');
+ const urls=[...new Set(layouts.flatMap(l=>[l.src,...l.frames.flatMap(f=>f.src?[f.src]:[])]))];
+ const images=new Map(await Promise.all(urls.map(src=>new Promise<[string,HTMLImageElement]>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve([src,image]);image.onerror=reject;image.src=src;}))));
+ const referenceHeight=Math.max(...layouts.map(l=>l.frames[0]!.height)),cells:Cell[]=[];
+ for(let direction=0;direction<8;direction++){
+  const layout=layouts[direction]!;
+  for(let frame=0;frame<20;frame++){
+   const rect=layout.frames[frame]!,image=images.get(rect.src??layout.src)!,scale=referenceHeight/(rect.referenceHeight??layout.frames[0]!.height);if(rect.width<8||rect.height<24||rect.x<0||rect.y<0||rect.x+rect.width>image.naturalWidth||rect.y+rect.height>image.naturalHeight)throw new Error('Invalid authored crop');
+   const canvas=document.createElement('canvas');canvas.width=rect.width;canvas.height=rect.height;
+   canvas.dataset.contactSheet=rect.src??layout.src;canvas.dataset.contactFrame=String(frame);
+   const paint=canvas.getContext('2d',{willReadFrequently:true})!;if(rect.mirror){paint.translate(canvas.width,0);paint.scale(-1,1);}paint.drawImage(image,rect.x,rect.y,rect.width,rect.height,0,0,rect.width,rect.height);paint.setTransform(1,0,0,1,0,0);
+   const pixels=paint.getImageData(0,0,rect.width,rect.height).data;
+   let sum=0,count=0,coreWidth=0,rows=0;
+   for(let y=Math.floor(rect.height*.46);y<rect.height*.58;y++){
+    let lo=rect.width,hi=0;for(let x=0;x<rect.width;x++)if(pixels[(y*rect.width+x)*4+3]!>=32){sum+=x;count++;lo=Math.min(lo,x);hi=Math.max(hi,x);}
+    if(hi>=lo){coreWidth+=hi-lo+1;rows++;}
+   }
+   const anchor=count?sum/count:rect.width/2;
+   const feet=authoredBootSoles(pixels,rect.width,rect.height,anchor,['kang_taesik','yoon_sungho'].includes(id)).map(p=>({x:p.x*scale,y:p.y*scale}));
+   const phase=frame>=9&&frame<=12?(frame-9)/4:frame>=1&&frame<=8?(frame-1)/8:0;
+   const heading=direction*Math.PI/4,forward=(p:FootPoint)=>p.x*Math.cos(heading)+p.y*Math.sin(heading),first=forward(feet[0]!)>=forward(feet[1]!)?0:1,left=phase<.5?first:1-first;
+   const sockets=rect.sockets?Object.fromEntries(Object.entries(rect.sockets).map(([kind,p])=>[kind,{x:(rect.mirror?rect.width-p.x*rect.width:p.x*rect.width)*scale,y:p.y*rect.height*scale}])):undefined;
+   cells.push({sockets,canvas,width:rect.width*scale,height:rect.height*scale,anchor:anchor*scale,coreWidth:(rows?coreWidth/rows:rect.width*.5)*scale,feet:[feet[left]!,feet[1-left]!]});
+  }
+ }
+ const bodyHeight=Math.ceil(Math.max(...cells.map(c=>c.height))),composite=document.createElement('canvas');
+ composite.width=Math.ceil(Math.max(...cells.map(c=>Math.max(c.anchor,c.width-c.anchor)))*2+4);composite.height=bodyHeight;composite.dataset.contactSheet='authored-20:'+id;
+ const light=document.createElement('canvas');light.width=composite.width;light.height=composite.height;
+ sheets.set(actor,{cells,bodyHeight,composite,light,key:'',lightKey:'',characterId:id,contact:true,authored:true});
+}
 function actorBounds(pixels:Uint8ClampedArray,width:number,height:number,isolate=false):{left:number;top:number;right:number;bottom:number;component?:Int32Array} {
  const seen=new Uint8Array(width*height),queue=new Int32Array(width*height);let largest=0,component:Int32Array|undefined,result={left:width,top:height,right:-1,bottom:-1};
  // Adjacent cell helmet fragments must not become this actor's foot pivot.
@@ -127,6 +164,15 @@ let sharedSheet:Sheet|undefined;
 export function isDirectionalActor(actor:HTMLImageElement):boolean {return sheets.has(actor);}
 export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boolean> {
  const contactArt=CHARACTER_CONTACT_ART[actor.src.split('/').pop()??''];
+ if(contactArt){
+  const id=contactArt.split('/').pop()!.replace(/-contact-v\d+\.png$/,'');
+  const {default:authored}=await import('../../content/art/survivors-authored-actor-layouts-v1.json');
+  const layout=(authored as Record<string,AuthoredDirectionLayout[]>)[id];
+  if(layout){const key='authored-20:'+id;let pending=contactSheets.get(key);
+   if(!pending){pending=loadAuthoredDirectionalActor(actor,id,layout).then(()=>sheets.get(actor)).catch(()=>{contactSheets.delete(key);return undefined;});contactSheets.set(key,pending);}
+   const prepared=await pending;if(prepared){sheets.set(actor,prepared);return true;}
+  }
+ }
  if(contactArt){let pending=contactSheets.get(contactArt);if(!pending){pending=loadContactSheet(contactArt).catch(()=>{contactSheets.delete(contactArt);return undefined;});contactSheets.set(contactArt,pending);}const contact=await pending;if(contact){sheets.set(actor,contact);return true;}}
  if(actor.src.split('/').pop()!=='player-map.webp')return false;
  if(!loaded)loaded=Promise.all([PLAYER_DIRECTIONAL_ART,PLAYER_PASSING_ART,PLAYER_ACTION_ART,PLAYER_CHECK_ART].map(src=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{loaded=undefined;reject(new Error('Directional sheet unavailable'));};image.src=src;})));
@@ -172,14 +218,14 @@ export async function loadDirectionalActor(actor:HTMLImageElement):Promise<boole
 function cell(actor:HTMLImageElement,pose:SpritePose):Frame|undefined {
  const sheet=sheets.get(actor);if(!sheet)return;
  if(sheet.lastPose===pose)return sheet.lastFrame;
- let contact=sheet.contact?contactFrameWeights(pose.contactCycle??pose.authoredCycle??pose.cycle,pose.gaitBlend,Boolean(pose.turning),pose.visualAngle??(pose.direction??2)*Math.PI/4):undefined;
- if(contact&&sheet.characterId==='player'&&!pose.moving&&!pose.turning){const gesture=directionalPoseWeights(pose).find(s=>s.frame>=10);if(gesture){const direction=Math.round((pose.visualAngle??(pose.direction??2)*Math.PI/4)/(Math.PI/4)+8)%8;contact=[...contact.map(s=>({...s,weight:s.weight*(1-gesture.weight)})),{direction,frame:gesture.frame===10?6:7,weight:gesture.weight}].filter(s=>s.weight>0);}}
+ let contact=sheet.authored?authoredMotionWeights(pose):sheet.contact?contactFrameWeights(pose.contactCycle??pose.authoredCycle??pose.cycle,pose.gaitBlend,Boolean(pose.turning),pose.visualAngle??(pose.direction??2)*Math.PI/4):undefined;
+ if(contact&&!sheet.authored&&sheet.characterId==='player'&&!pose.moving&&!pose.turning){const gesture=directionalPoseWeights(pose).find(s=>s.frame>=10);if(gesture){const direction=Math.round((pose.visualAngle??(pose.direction??2)*Math.PI/4)/(Math.PI/4)+8)%8;contact=[...contact.map(s=>({...s,weight:s.weight*(1-gesture.weight)})),{direction,frame:gesture.frame===10?6:7,weight:gesture.weight}].filter(s=>s.weight>0);}}
  const direction=contact?contact.reduce((a,b)=>a.weight>=b.weight?a:b).direction:pose.direction??2;
  const weights:Frame['weights']=contact??directionalPoseWeights(pose);
  const shape={width:0,height:0,anchor:0,coreWidth:0};
- for(const sample of weights){const c=sheet.cells[(sample.direction??direction)*(sheet.contact?8:FRAMES_PER_DIRECTION)+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;shape.coreWidth+=(c.coreWidth??c.width*.5)*sample.weight;}
+ for(const sample of weights){const c=sheet.cells[(sample.direction??direction)*sheetStride(sheet)+sample.frame]!;shape.width+=c.width*sample.weight;shape.height+=c.height*sample.weight;shape.anchor+=c.anchor*sample.weight;shape.coreWidth+=(c.coreWidth??c.width*.5)*sample.weight;}
  const strongest=weights.reduce((a,b)=>a.weight>=b.weight?a:b);
- const facing=direction+(sheet.contact&&strongest.frame===1?.5:0);
+ const facing=direction+(sheet.contact&&!sheet.authored&&strongest.frame===1?.5:0);
  const result={sheet,cell:shape,direction,facing,weights};sheet.lastPose=pose;sheet.lastFrame=result;return result;
 }
 export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose,transform=true):boolean {
@@ -188,28 +234,44 @@ export function drawDirectionalBody(ctx:CanvasRenderingContext2D,actor:HTMLImage
  if(sheet.key!==key){
   const composite=sheet.composite,paint=composite.getContext('2d')!;
   paint.clearRect(0,0,composite.width,composite.height);paint.globalCompositeOperation='lighter';
-  for(const sample of frame.weights){const c=sheet.cells[(sample.direction??frame.direction)*(sheet.contact?8:FRAMES_PER_DIRECTION)+sample.frame]!;paint.globalAlpha=sample.weight;paint.drawImage(c.canvas,composite.width/2-c.anchor,composite.height-c.height,c.width,c.height);}
+  for(const sample of frame.weights){const c=sheet.cells[(sample.direction??frame.direction)*sheetStride(sheet)+sample.frame]!;paint.globalAlpha=sample.weight;paint.drawImage(c.canvas,composite.width/2-c.anchor,composite.height-c.height,c.width,c.height);}
   paint.globalAlpha=1;paint.globalCompositeOperation='source-over';sheet.key=key;
  }
  const scale=height/sheet.bodyHeight,w=sheet.composite.width*scale,h=sheet.composite.height*scale;
+ ctx.save();ctx.fillStyle='rgba(3,10,18,.12)';ctx.beginPath();ctx.ellipse(height*.14,3,height*.27,height*.065,.18,0,Math.PI*2);ctx.fill();ctx.restore();
  ctx.save();if(transform)applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
  if(sheet.contact&&transform&&pose.entity&&pose.worldX!==undefined&&pose.worldY!==undefined&&pose.clock!==undefined){
   const source=rawBootSockets(frame,height);
   let desired=source;
-  if(pose.moving&&!pose.turning){const scale=height/sheet.bodyHeight,keys=[0,1,2,3].map(phase=>{const c=sheet.cells[frame.direction*8+2+phase]!;return c.feet.map(p=>({x:(p.x-c.anchor)*scale,y:(p.y-c.height)*scale}));});
+  if(pose.moving&&!pose.turning){const scale=height/sheet.bodyHeight,keys=[0,1,2,3].map(phase=>{const c=sheet.cells[frame.direction*sheetStride(sheet)+(sheet.authored?(pose.speed>145?9+phase:1+phase*2):2+phase)]!;return c.feet.map(p=>({x:(p.x-c.anchor)*scale,y:(p.y-c.height)*scale}));});
    const swing=swingContactPoints(pose.contactCycle??0,keys,height);
    desired=source.map((p,i)=>({x:p.x+(swing[i]!.x-p.x)*pose.gaitBlend,y:p.y+(swing[i]!.y-p.y)*pose.gaitBlend}));
   }
   const worldSource=desired.map(p=>actorTorsoPoint(p,{...pose,directional:true},height,true));
   const phase=pose.turning&&!pose.moving?(((pose.visualAngle??0)/Math.PI)%1+1)%1:((pose.contactCycle??0)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)/(Math.PI*2);
   const flags=pose.turning&&!pose.moving?[phase<.5,phase>=.5]:pose.moving?[phase<.5,phase>=.5]:[true,true];
+  if(sheet.authored&&pose.moving&&(pose.speed>145||pose.mode==='run')){flags[0]=phase<.23;flags[1]=phase>=.5&&phase<.73;}
+  if(sheet.authored&&pose.moving)for(let i=0;i<2;i++)if(source[i]!.y<-height*.045)flags[i]=false;
   const held=footContacts.sample(pose.entity,pose.worldX,pose.worldY,pose.clock,worldSource,flags,height*.45);
   const o=actorTorsoPoint({x:0,y:0},{...pose,directional:true},height,true),u=actorTorsoPoint({x:1,y:0},{...pose,directional:true},height,true),v=actorTorsoPoint({x:0,y:1},{...pose,directional:true},height,true);
   const a=u.x-o.x,b=u.y-o.y,c=v.x-o.x,d=v.y-o.y,det=a*d-b*c;
-  const target=held.map(p=>({x:((p.x-o.x)*d-(p.y-o.y)*c)/det,y:((p.y-o.y)*a-(p.x-o.x)*b)/det}));
+  const requested=held.map(p=>({x:((p.x-o.x)*d-(p.y-o.y)*c)/det,y:((p.y-o.y)*a-(p.x-o.x)*b)/det}));
+  const target=constrainContactFeet(source,requested,height);
+  const resolved=target.map(p=>actorTorsoPoint(p,{...pose,directional:true},height,true));
+  ctx.canvas.dataset.contactSlip=String(Math.max(0,...resolved.map((p,i)=>flags[i]?Math.hypot(p.x-held[i]!.x,p.y-held[i]!.y):0)));
+  footContacts.resolve(pose.entity,pose.worldX,pose.worldY,pose.clock,resolved);
   sheet.contactPose=pose;sheet.contactFeet=target;
+  // Shadows belong to the floor, not to the leaning/rotating torso matrix.
+  ctx.restore();ctx.save();
+  for(let i=0;i<resolved.length;i++){
+   const foot=resolved[i]!;
+   ctx.fillStyle=flags[i]?'rgba(2,8,14,.30)':'rgba(2,8,14,.12)';
+   ctx.beginPath();ctx.ellipse(foot.x,2,height*(flags[i]?.065:.045),height*.023,0,0,Math.PI*2);ctx.fill();
+  }
+  applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
   drawContactMesh(ctx,sheet.composite,source,target,height);
-  const error=Math.max(...target.map((p,i)=>{const projected=actorTorsoPoint(p,{...pose,directional:true},height,true);return Math.hypot(projected.x-held[i]!.x,projected.y-held[i]!.y);}));
+  const error=Math.max(...requested.map((p,i)=>{const projected=actorTorsoPoint(p,{...pose,directional:true},height,true);return Math.hypot(projected.x-held[i]!.x,projected.y-held[i]!.y);}));
+  ctx.canvas.dataset.contactLegStretch=String(Math.max(...target.map((p,i)=>Math.hypot(p.x-source[i]!.x,p.y+height*.4)/Math.max(height*.12,source[i]!.y+height*.4))));
   ctx.canvas.dataset.contactArt='true';ctx.canvas.dataset.contactError=String(error);
  }else ctx.drawImage(sheet.composite,-w/2,-h,w,h);ctx.restore();return true;
 }
@@ -226,9 +288,33 @@ export function drawDirectionalLight(ctx:CanvasRenderingContext2D,actor:HTMLImag
  ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);ctx.globalAlpha*=Math.min(.24,strength);
  if(sheet.contactPose===pose&&sheet.contactFeet){const frame=cell(actor,pose)!;drawContactMesh(ctx,sheet.light,rawBootSockets(frame,height),sheet.contactFeet,height);}else ctx.drawImage(sheet.light,-w/2,-h,w,h);ctx.restore();return true;
 }
+/** Alpha outline only: no full-body glow, and no replacement of depth/collision rules. */
+export function drawDirectionalOutline(ctx:CanvasRenderingContext2D,actor:HTMLImageElement,height:number,pose:SpritePose):boolean {
+ const sheet=sheets.get(actor);if(!sheet||!sheet.key)return false;
+ const scale=height/sheet.bodyHeight,padding=Math.ceil(1.15/scale);
+ const key=sheet.key+':'+padding;
+ if(!sheet.outline)sheet.outline=document.createElement('canvas');
+ if(sheet.outlineKey!==key){
+  const canvas=sheet.outline;canvas.width=sheet.composite.width+padding*2;canvas.height=sheet.composite.height+padding*2;
+  const paint=canvas.getContext('2d')!;
+  for(const [x,y] of [[-padding,0],[padding,0],[0,-padding],[0,padding]] as const)paint.drawImage(sheet.composite,padding+x,padding+y);
+  paint.globalCompositeOperation='destination-out';paint.drawImage(sheet.composite,padding,padding);
+  paint.globalCompositeOperation='source-in';paint.fillStyle='#b7f4e3';paint.fillRect(0,0,canvas.width,canvas.height);
+  paint.globalCompositeOperation='source-over';sheet.outlineKey=key;
+ }
+ const outline=sheet.outline;ctx.save();ctx.globalAlpha*=.85;applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);
+ ctx.drawImage(outline,-outline.width*scale/2,-(sheet.composite.height+padding)*scale,outline.width*scale,outline.height*scale);
+ ctx.restore();ctx.canvas.dataset.heroOcclusionOutline='true';return true;
+}
 export function directionalSocket(actor:HTMLImageElement,pose:SpritePose|undefined,height:number,kind:'head'|'chest'|'back'|'belt'|'wrist'|'tempo'):({x:number;y:number;size:number;rear:boolean})|undefined {
  if(!pose)return;const frame=cell(actor,pose);if(!frame)return;
  const rear=frame.facing>=4.5;
+ let authoredX=0,authoredY=0,authoredWeight=0;
+ if(frame.sheet.authored){
+  for(const sample of frame.weights){const c=frame.sheet.cells[(sample.direction??frame.direction)*sheetStride(frame.sheet)+sample.frame]!,point=c.sockets?.[kind];
+   if(point){authoredX+=(point.x-c.anchor)*sample.weight;authoredY+=(point.y-c.height)*sample.weight;authoredWeight+=sample.weight;}}
+ }
+
  const chestXs=[.62,.55,.5,.40,.36,.42,.5,.57],base=Math.floor(frame.facing)%8,fraction=frame.facing%1;
  const chestX=chestXs[base]!*(1-fraction)+chestXs[(base+1)%8]!*fraction;
  const x=kind==='head'?chestX:kind==='back'?1-chestX:chestX;
@@ -237,7 +323,8 @@ export function directionalSocket(actor:HTMLImageElement,pose:SpritePose|undefin
  const scale=height/frame.sheet.bodyHeight;
  const wristX=profile?(profile.wristX[base]!*(1-fraction)+profile.wristX[(base+1)%8]!*fraction):0;
  const offset=kind==='wrist'?wristX:kind==='tempo'?(x-.5)*2+.30:(x-.5)*2;
- return {x:(frame.sheet.contact?offset*frame.cell.coreWidth:x*frame.cell.width-frame.cell.anchor)*scale,y:(y-1)*frame.cell.height*scale,size:height*(kind==='head'?.14:.22),rear};
+ const fallbackX=frame.sheet.contact?offset*frame.cell.coreWidth:x*frame.cell.width-frame.cell.anchor;
+ return {x:(authoredX+fallbackX*(1-authoredWeight))*scale,y:(authoredY+(y-1)*frame.cell.height*(1-authoredWeight))*scale,size:height*(kind==='head'?.14:.22),rear};
 }
 /** Alpha-derived boot contacts follow the same authored frame weights as the body. */
 export function directionalBootSockets(actor:HTMLImageElement,pose:SpritePose,height:number):{x:number;y:number}[] {
@@ -245,7 +332,7 @@ export function directionalBootSockets(actor:HTMLImageElement,pose:SpritePose,he
  if(frame.sheet.contactPose===pose&&frame.sheet.contactFeet)return frame.sheet.contactFeet;
  return rawBootSockets(frame,height);
 }
-function rawBootSockets(frame:Frame,height:number):FootPoint[]{return [0,1].map(side=>{let x=0,y=0;for(const sample of frame.weights){const c=frame.sheet.cells[(sample.direction??frame.direction)*(frame.sheet.contact?8:FRAMES_PER_DIRECTION)+sample.frame]!;x+=(c.feet[side]!.x-c.anchor)*sample.weight;y+=(c.feet[side]!.y-c.height)*sample.weight;}const scale=height/frame.sheet.bodyHeight;return {x:x*scale,y:y*scale};});}
+function rawBootSockets(frame:Frame,height:number):FootPoint[]{return [0,1].map(side=>{let x=0,y=0;for(const sample of frame.weights){const c=frame.sheet.cells[(sample.direction??frame.direction)*sheetStride(frame.sheet)+sample.frame]!;x+=(c.feet[side]!.x-c.anchor)*sample.weight;y+=(c.feet[side]!.y-c.height)*sample.weight;}const scale=height/frame.sheet.bodyHeight;return {x:x*scale,y:y*scale};});}
 export function renderedDirection(actor:HTMLImageElement,pose:SpritePose):number{return Math.round(cell(actor,pose)?.facing??pose.direction??2)%8;}
 
 /** Only authored hands/tools cover hardware; a generic chest rectangle would erase the wrist brace. */

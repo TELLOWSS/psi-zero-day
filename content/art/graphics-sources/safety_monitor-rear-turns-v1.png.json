@@ -1,0 +1,11 @@
+{
+  "id": "safety_monitor",
+  "identity": "adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand.",
+  "side": "rear",
+  "kind": "turns",
+  "file": "safety_monitor-rear-turns-v1.png",
+  "source": "C:\\Users\\user\\.codex\\generated_images\\01a11d14-64ed-7052-a499-63110506a078\\exec-8373008c-e510-4e38-9356-d3ffa8f23024.png",
+  "prompt": "Create FINAL production supplemental sprite sheet matching the SAME exact character in the reference: adult Korean male safety monitor, WHITE hardhat, LIME reflective vest, navy work clothes, dark gloves, black boots. Preserve radio near chin and black tablet held with other hand. Preserve face, adult anatomy, clothes, proportions, master scale and crisp detailed 2.5D industrial game art. Exactly TWO columns and FOUR rows, EIGHT isolated COMPLETE full-body sprites. row1 PURE LEFT PROFILE; row2 REAR LEFT three-quarter, nose pointing screen LEFT; row3 PURE REAR away from viewer; row4 REAR RIGHT three-quarter, nose pointing screen RIGHT. Two stationary pivot balance poses per row: left column weight shifts subtly to one boot, right column shifts to other boot. BOTH boots touch floor in EVERY pose. Small heel pivot only, no stride, no walking, no running, no lifted knee. Retain same body heading within each row, same arms and held tool as neutral reference. All cells same camera elevation, same upper-left soft light, same head size, same limb lengths. At least 80px fully TRANSPARENT empty gutters between sprites. TRUE transparent background ONLY, NO colored background, NO backdrop glow, NO floor, NO cast shadow, NO text, NO grid, NO extra sprites. The reference has 20 old motion poses; produce ONLY these EIGHT dedicated turns poses, do not copy its layout. Keep original handheld tools and PPE in every view, and do not change orientation to face front in rear rows.",
+  "status": "candidate",
+  "frameCount": 8
+}

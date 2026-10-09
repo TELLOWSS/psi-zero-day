@@ -13,6 +13,11 @@ export class FootContactTracker {
   });
   this.samples.set(entity,{x,y,clock,feet:world,planted:[...planted]});return world.map(p=>({x:p.x-x,y:p.y-y}));
  }
+ /** Rebase to the actually rendered contacts after a limb reaches its extension limit. */
+ resolve(entity:object,x:number,y:number,clock:number,feet:readonly FootPoint[]):void {
+  const sample=this.samples.get(entity);if(!sample||sample.clock!==clock||sample.x!==x||sample.y!==y)return;
+  sample.feet=feet.map(p=>({x:x+p.x,y:y+p.y}));
+ }
 }
 export function turnToward(angle:number,target:number,dt:number,rate=Math.PI*4):number {
  const delta=((target-angle+Math.PI)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)-Math.PI;

@@ -14,7 +14,7 @@ import { drawPremiumGear, PREMIUM_MOUNTED_ART } from './survivors-premium-render
 import { CHARACTER_MAP_ART } from './survivors-character-art';
 import {loadAuthoredCommand} from './survivors-authored-command';
 import { EQUIPMENT_ART, EVOLUTION_ART, TACTICAL_EQUIPMENT_ART, PICKUP_ART, registerPropAtlas, registerEvolutionAtlas, registerTacticalEquipmentAtlas } from './survivors-equipment-art';
-import { drawGroundedSprite, registerSpriteBounds, spriteOpaqueBounds } from './survivors-sprite-motion';
+import { drawGroundedSprite, registerSpriteBounds } from './survivors-sprite-motion';
 import copy from '../../content/localization/survivors-store-ko.json';
 import { drawWearableLayer, loadWearableImages,type WearableImages } from './survivors-wearable-art';
 import {CINEMATIC_VFX_ATLAS} from './survivors-cinematic-vfx';
@@ -30,7 +30,6 @@ import {attackEnvelope,attackProgress,projectileAttackMotion,type AttackMotion} 
 
 export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='idle',playing=true,active=true,attackKind='shot',equipment,stepToken=0,defenseToken=0 }: { state: SurvivorsGameState; facing?:1|-1; zoom?:number;motion?:FittingMotion;playing?:boolean;active?:boolean;attackKind?:AttackMotion;equipment?:{id:PerkId;level:number};stepToken?:number;defenseToken?:number }) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const detailActor=motion==='idle';
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [assets,setAssets]=useState<{characterId:SurvivorsGameState['characterId'];actor:HTMLImageElement;directionalActor:HTMLImageElement;gear:HTMLImageElement;pickups:HTMLImageElement;wearables:WearableImages;cinematic:HTMLImageElement;premium:HTMLImageElement;ground:HTMLImageElement;industrial:HTMLImageElement;presence?:PremiumPresenceImages}>();
@@ -60,8 +59,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
         registerEvolutionAtlas(gear,evolution);
         registerTacticalEquipmentAtlas(gear,tactical);
         registerPropAtlas(premium,4,4);registerPropAtlas(industrial,3,2);
-        // Separate image identities keep high-resolution idle sockets independent
-        // from the directional sheet, while preparing both before any pose switch.
+        // Prepare one authored body before any pose switch; idle and combat share its joints.
         registerSpriteBounds(actor);
         const directionalActor=await load(CHARACTER_MAP_ART[state.characterId]);
         if(disposed)return;
@@ -74,13 +72,13 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
   useEffect(()=>{
     const ctx=canvas.current?.getContext('2d');if(!ctx||!assets||assets.characterId!==state.characterId)return;
     const {gear,pickups,wearables,cinematic,presence,premium,ground,industrial}=assets;
-    const actor=detailActor?assets.actor:assets.directionalActor;
+    const actor=assets.directionalActor;
 
     const simulated=simulation?.state??state;
     const previewState={...simulated,player:{...simulated.player,x:0,y:0}};
     let request=0,last:number|undefined,paintAt=-Infinity;
     const draw=()=>{
-        if(canvas.current){canvas.current.dataset.previewClock=String(clock.current);canvas.current.dataset.previewMotion=motion;}
+        if(canvas.current){canvas.current.dataset.previewClock=String(clock.current);canvas.current.dataset.previewMotion=motion;canvas.current.dataset.previewActionEffects='false';}
         previewState.gameTime=reduced?0:clock.current;
         previewState.playerMotionTime=previewState.gameTime;
         const width=equipment?600:360;ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,width,360);
@@ -89,21 +87,21 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
           drawEquipmentAura(ctx,simulation.state,reduced);drawSafetyDrones(ctx,simulation.state,gear,pickups,cinematic,reduced);for(const h of simulation.state.hazards){ctx.save();ctx.translate(h.x,h.y);drawIndustrialHazard(ctx,industrial,h,fittingPose(0,'idle',-1,true),'site',simulation.state.stage.theme,clock.current,reduced,0);ctx.fillStyle='#152929';ctx.fillRect(-22,7,44,3);ctx.fillStyle='#84dcb5';ctx.fillRect(-22,7,44*Math.max(0,h.hp/h.maxHp),3);ctx.restore();}
           for(const p of simulation.state.projectiles)drawProjectileVfx(ctx,p,equipment!.level,clock.current,reduced,false,{atlas:cinematic,look:cinematicLook(p.kind,equipment!.level,state.premiumGear?.equipped??[])});
           feedback.draw(ctx,reduced,false,{atlas:cinematic,equipped:state.premiumGear?.equipped??[]});ctx.restore();}
-        ctx.fillStyle='rgba(2,7,10,.32)';ctx.beginPath();ctx.ellipse(equipment?170:180,equipment?264:334,equipment?42:75,equipment?10:16,0,0,Math.PI*2);ctx.fill();
+        if(!isDirectionalActor(actor)){ctx.fillStyle='rgba(2,7,10,.32)';ctx.beginPath();ctx.ellipse(equipment?170:180,equipment?264:334,equipment?42:75,equipment?10:16,0,0,Math.PI*2);ctx.fill();}
         const scale=equipment?2.35:Math.min(4,3.65*Math.max(.8,Math.min(1.25,zoom)));
         ctx.save(); ctx.translate(equipment?170:180,equipment?260:330); ctx.scale(scale, scale);
         const elapsed=clock.current-cue.current.at;
         const basePose=fittingPose(clock.current,motion,facing,reduced,attackKind);
         const pose={...basePose,...(equipment?{actionKind:cue.current.kind,action:reduced?0:attackEnvelope(elapsed,cue.current.kind),actionProgress:reduced?0:attackProgress(elapsed,cue.current.kind)}:{}),directional:isDirectionalActor(actor),entity:previewState.player,worldX:basePose.moving?clock.current*120*facing:0,worldY:0,clock:clock.current};
         ctx.save();applyActorTorsoTransform(ctx,pose,74,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
-        if(simulation&&pose.action>.05)drawPremiumPresence(ctx,presence,previewState.premiumGear?.equipped??[],previewState.gameTime,reduced,false,pose.action);ctx.restore();
+        if(pose.action>.05)drawPremiumPresence(ctx,presence,previewState.premiumGear?.equipped??[],previewState.gameTime,reduced,false,pose.action);ctx.restore();
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'back',reduced);
-        if(detailActor){const source=spriteOpaqueBounds(actor),w=74*source.width/source.height;ctx.save();applyActorTorsoTransform(ctx,pose,74,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(actor,source.x,source.y,source.width,source.height,-w/2,-74,w,74);ctx.restore();}else drawGroundedSprite(ctx, actor, 74, pose);
+        drawGroundedSprite(ctx,actor,74,pose);
         drawWearableLayer(ctx, previewState, actor, 74, pose, wearables, 'front',reduced);
         drawCarriedEquipment(ctx,previewState,actor,74,pose,gear,pickups,reduced,Boolean(wearables.communication),Boolean(wearables.normalWorn));
         drawPremiumGear(ctx,previewState,gear,reduced,0,pickups,wearables,{actor,height:74,pose,vfxAtlas:cinematic,premiumAtlas:premium,quiet:true});
         const angle=pose.moving?(facing===1?0:Math.PI):undefined;
-        if(simulation&&pose.action>.05)drawEquipmentMantle(ctx,previewState,cinematic,reduced,false,angle,pose.action,{pose,height:74,rigged:Boolean(ACTOR_RIGS[actor.src.split('/').pop()??''])});
+        if(pose.action>.05){drawEquipmentMantle(ctx,previewState,cinematic,reduced,false,angle,pose.action,{pose,height:74,rigged:Boolean(ACTOR_RIGS[actor.src.split('/').pop()??''])});if(canvas.current)canvas.current.dataset.previewActionEffects=String(!reduced&&Boolean(previewState.premiumGear?.equipped.length));}
         ctx.restore();
         if(simulation){ctx.fillStyle='rgba(6,20,24,.8)';ctx.fillRect(0,0,width,26);ctx.fillStyle='#d1f1e7';ctx.font='12px sans-serif';ctx.fillText(`${labCopy.hp} ${Math.ceil(simulation.state.player.hp)}/${simulation.state.player.maxHp} · ${labCopy.shield} ${Math.ceil(simulation.state.premiumGear?.shield??0)}`,12,18);}
     };
@@ -118,7 +116,7 @@ export function SurvivorsFittingPreview({ state, facing = 1, zoom = 1,motion='id
     const visibility=()=>{cancelAnimationFrame(request);last=undefined;if(active&&playing&&!reduced&&!document.hidden)request=requestAnimationFrame(tick);};
     draw();setLoaded(true);visibility();document.addEventListener('visibilitychange',visibility);
     return ()=>{cancelAnimationFrame(request);document.removeEventListener('visibilitychange',visibility);};
-  },[assets,state,facing,zoom,motion,playing,active,reduced,attackKind,detailActor,equipment?.id,equipment?.level,simulation,feedback,seenKinds,stepToken,defenseToken]);
+  },[assets,state,facing,zoom,motion,playing,active,reduced,attackKind,equipment?.id,equipment?.level,simulation,feedback,seenKinds,stepToken,defenseToken]);
   return <figure className={`survivors-fitting-art ${equipment?'is-effect-test':''}`}>
     <canvas ref={canvas} data-character-id={state.characterId} data-equipment-id={equipment?.id} width={equipment?1200:720} height={720} role="img" aria-label={`${CHARACTER_PROFILES[state.characterId].name} ${copy.fitting}`}/>
     {!loaded && <figcaption role="status">{failed ? copy.fittingFailure : copy.fittingLoading}</figcaption>}

@@ -176,7 +176,7 @@ function drawNewWornLayer(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,
   let order:'front'|'back'=plan.part==='back'?'back':'front';
   if(directional){
    const socket=directionalSocket(actor,pose,height,plan.part==='back'?'back':plan.part==='belt'?'belt':plan.part==='wrist'?'wrist':plan.part==='tempo'?'tempo':'chest');if(!socket)continue;
-   if(plan.part!=='back'&&plan.part!=='belt'&&socket.rear)continue;
+   if(socket.rear&&(plan.part==='chest'||plan.part==='tempo'||plan.part==='wrist'&&Math.abs(socket.x)<height*.13))continue;
    order=plan.part==='back'&&!socket.rear?'back':'front';
    point={x:socket.x+(plan.part==='back'?(socket.rear?0:-height*.12):0),y:socket.y};
   }

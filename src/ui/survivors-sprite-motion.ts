@@ -145,10 +145,10 @@ export function registerSpriteBounds(image: HTMLImageElement): void {
 }
 
 export function drawGroundedSprite(ctx: CanvasRenderingContext2D, image: HTMLImageElement, height: number, pose: SpritePose): void {
+  if(drawDirectionalBody(ctx,image,height,pose))return;
   // Common grounded penumbra, below both rigged and unrigged approved actors.
   ctx.save();ctx.fillStyle='rgba(3,10,18,.14)';ctx.beginPath();
   ctx.ellipse(height*.14,3,height*.29,height*.075,.18,0,Math.PI*2);ctx.fill();ctx.restore();
-  if(drawDirectionalBody(ctx,image,height,pose))return;
   if(drawRiggedActor(ctx,image,height,pose))return;
   const source = spriteOpaqueBounds(image);
   const width = height * source.width / source.height;

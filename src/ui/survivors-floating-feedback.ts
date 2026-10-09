@@ -40,13 +40,13 @@ export function placeFeedbackVertically(x: number, y: number, width: number, asc
 }
 
 /** Presentation budget only; feedback events and rewards are never discarded. */
-export function selectFloatingFeedback<T extends FloatingFeedback>(items: readonly T[], busy: boolean): T[] {
+export function selectFloatingFeedback<T extends FloatingFeedback>(items: readonly T[], busy: boolean, limit=busy?6:9): T[] {
   const selected: T[] = [];
   const ordered = items.filter(item => item.life > 0).slice().sort((a, b) =>
     Number(Boolean(b.priority)) - Number(Boolean(a.priority)) ||
     Number(Boolean(b.isCrit)) - Number(Boolean(a.isCrit)) || b.id - a.id);
   for (const item of ordered) {
-    if (selected.length >= (busy ? 6 : 9)) break;
+    if (selected.length >= limit) break;
     if (!item.priority && selected.some(other => other.text === item.text &&
       Math.hypot(other.x - item.x, other.y - item.y) < 90)) continue;
     selected.push(item);

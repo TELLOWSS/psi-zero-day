@@ -14,7 +14,7 @@ import {drawAuthoredMetalImpact} from './survivors-authored-metal-impact';
 import {drawAuthoredDebrisImpact} from './survivors-authored-debris-impact';
 import {drawAuthoredVaporImpact} from './survivors-authored-vapor-impact';
 
-export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/industrial-hazards-v3.webp';
+export const INDUSTRIAL_HAZARD_ART = '/assets/survivors/graphics-v1/industrial-hazards-v4.png';
 export const WORKFACE_HAZARD_ART = '/assets/survivors/workface-hazards-v2.png';
 const workfaceAtlases=new WeakMap<HTMLImageElement,HTMLImageElement>();
 export function workfaceAtlas(base:HTMLImageElement|undefined):HTMLImageElement|undefined {return base&&workfaceAtlases.get(base);}
@@ -135,8 +135,9 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     const facing=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)&&Math.abs(h.motion.directionX)>.04?(h.motion.directionX<0?-1:1):pose.facing;
     const action=cartActionPose(h,reduced);
     ctx.scale(useThreat?-facing:facing, 1);
-    // A brief chassis brace, not a teleporting knockback or per-frame texture filter.
-    ctx.transform(1, 0, pose.lean+action.lean+response.tilt, 1-action.compression-response.compression-response.suspension, 0, 0);
+    // Rigid metal rocks on its suspension; the chassis and wheels never squash.
+    ctx.translate(0,-size*(action.compression+response.compression+response.suspension)*.28);
+    ctx.rotate((pose.lean+action.lean+response.tilt)*.8);
   }
   if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.scale(1+response.reaction*.035,1-response.reaction*.035);ctx.translate(0,elevation);}
   const pressure = !boss&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
