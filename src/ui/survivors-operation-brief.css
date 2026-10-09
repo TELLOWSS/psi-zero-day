@@ -8,6 +8,9 @@
 .survivors-operation-brief p strong { display:block; margin-bottom:3px; color:#9ee6ce; }
 .survivors-operation-links { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .survivors-operation-brief details { padding:8px 0; border-top:1px solid #38504b; }
-.survivors-operation-brief summary { cursor:pointer; font-size:12px; }
+.survivors-operation-brief summary { cursor:pointer; font-size:12px; min-height:44px; align-content:center; }
+.survivors-operation-brief h4 { font-size:13px; margin:12px 0 6px; }
+.survivors-operation-brief ul { padding-left:18px; font-size:12px; line-height:1.65; }
+.survivors-operation-brief details p,.survivors-operation-brief li { overflow-wrap:anywhere; }
 .survivors-operation-brief details small { font-size:11px; color:#a6bab8; }
 @media(max-width:600px){.survivors-operation-links { grid-template-columns:1fr; gap:0; }}

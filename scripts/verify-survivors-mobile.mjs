@@ -144,7 +144,8 @@ async function waitFor(cdp, expression, timeoutMs = 10000) {
     if (await evaluate(cdp, expression)) return;
     await sleep(100);
   }
-  throw new Error('Timed out waiting for condition: ' + expression);
+  const state=await evaluate(cdp,"({phase:window.qaMobileEngine?.state.phase,pauseDisabled:document.querySelector('.survivors-pause-command')?.disabled,launchDisabled:document.querySelector('.survivors-ready-launch .survivors-btn-primary')?.disabled,container:document.querySelector('.survivors-container')?.dataset,supply:!!document.querySelector('.shop-continue-btn'),body:document.body.innerText.slice(-1600)})");
+  throw new Error('Timed out waiting for condition: ' + expression+' '+JSON.stringify(state));
 }
 
 async function screenshot(cdp, filename) {
@@ -172,7 +173,7 @@ try {
       await cdp.send('Page.navigate',{url:baseUrl});
       await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
       await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
-      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary'))");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary:not(:disabled)'))",30000);
       await evaluate(cdp,`(async()=>{
         const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
         const update=SurvivorsEngine.prototype.update;
@@ -202,6 +203,13 @@ try {
       const stress=await evaluate(cdp,"({quality:document.querySelector('.survivors-container').dataset.quality,dt:window.qaInput.dt,finite:Number.isFinite(window.qaMobileEngine.state.player.x),hazards:window.qaMobileEngine.state.hazards.length})");
       await screenshot(cdp,`${width}x${height}-cpu-stress.png`);
       await cdp.send('Emulation.setCPUThrottlingRate',{rate:1});
+      // The time-jump fixture can open wave supply. Resume through its real UI
+      // before freezing the renderer; the pause command is intentionally locked there.
+      const supplyOpen=await evaluate(cdp,"Boolean(document.querySelector('.shop-continue-btn'))");
+      if(supplyOpen){
+        await evaluate(cdp,"document.querySelector('.shop-continue-btn').click()");
+        await waitFor(cdp,"!document.querySelector('.shop-continue-btn')&&window.qaMobileEngine.state.phase==='playing'");
+      }
       const appearance=await evaluate(cdp,`(async()=>{
         const {stageThreatAppearance}=await import('/src/ui/survivors-threat-appearance.ts');
         const image=new Image();image.src='/assets/survivors/stage-threat-silhouettes-v1.webp';await image.decode();
