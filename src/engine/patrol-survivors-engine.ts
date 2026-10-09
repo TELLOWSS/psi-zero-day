@@ -2003,7 +2003,7 @@ export class SurvivorsEngine {
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
         if(tickGangform(h,player,dt))continue;
-        if(tickStaleRoute(h,player,this.state.terrain??[]))continue;
+        if(tickStaleRoute(h,player,this.state.terrain??[],dt))continue;
         if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
       }
       if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {
