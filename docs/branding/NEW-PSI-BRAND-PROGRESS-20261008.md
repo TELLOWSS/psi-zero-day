@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 사용자 직접 STAGE12 인계 대화 A/B '두 방향 승인, 검증 후 연결' 답변. 질문에 제시한 안전관리자 두 문장만 localization/UI 연결; 초안의 동료 응답·공통 시작·회고 추가 대사는 미연결. player/stage12/victory/통로정리>0 기존 근거 조건 유지. domain 사건/선택 검증, app 독립 `psi.survivors.handoff-dialogue.v1`에 최초 선택만 저장. skip은 저장 없음, 다시보기는 같은 선택 읽기만, 저장 실패 시 성공 표시 없음. 직업/능력치/보상/음성/기존 저장 변경 없음.
+- 집중11/전체1877pass1skip/타입/prebuild/build 성공. 이후 키보드 초점 보완은 타입/최종 Vitebuild와 UI 회귀로 별도 검증. 실제 빌드 PC/폰세로/폰가로 x2선택의6경로: skip/실패/재시도/최초쓰기1회/기존storage불변/새로고침복구/44px/넘침·오류없음. `artifacts/handoff-dialogue/report.json`/6PNG, 폰세로 B 직접 확인. 저장된 STAGE12 fixture이며 자연 완료/실기기 증거 아님. Vercel 한도 보존을 위해 localcommit 후 push/운영은 보류.
+
 - PR162 remote13404dabc05bf6d7828303cca312905f08e20e4c의 Linux verify-voice-lock 성공(모바일/전체회귀 포함). Vercel latest는 'Deployment rate limited — retry in 24 hours' 실패. 이전 preview 성공을 최신 성공으로 사용하지 않고 병합/운영 미반영 유지, 우회/유료업그레이드/반복배포 없음.
 - 사용자 첫 시범 안전관리자 선택 및 생성된 STAGE12 CG 직접 '디자인·파일 승인, 검증 후 연결' 답변 기록. 승인 SHA `0129709a46a7381b68491eba8c3b453b82fc9ae2b750470184ba5f18544da72e` 원본1672x941 유지. local 후속은 실제 player/stage12/victory/rubbleCleared>0 handoff에서만 서사 삽화 표시, 새로운 성장 상태/선택/보상 없음. `PLAYER-STAGE12-HANDOFF-APPROVAL.json`은 디자인/파일 승인과 대사/사용권/실기기/운영을 구분한다.
 - CG local 집중10/타입/최종CSS Vitebuild/전체1872pass1skip 성공. 실제 빌드9경로 이미지decode/원본비율/승리만표시/중단·활동0비표시/승인SHA/44px/저장불변/오류넘침0 재통과, 폰세로 직접 확인. `artifacts/character-reflection/report.json` 최신은 CG 포함local 증거이며 remote13404 제품 검증과 구분. 새로고침 자연STAGE01은 CG표시 조건을 충족하지 않는 이전 증거다. 후속 CG는 한도 대기로 아직push/운영 없음. 다음 대화2안은 `SURVIVORS-PLAYER-STAGE12-DIALOGUE-DRAFT-V1.md` 초안이며 임의 확정/운영 연결하지 않는다.

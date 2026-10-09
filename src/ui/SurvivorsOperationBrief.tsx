@@ -5,6 +5,7 @@ import {readOperationHandoffs} from './survivors-operation-handoff-store';
 import './survivors-operation-brief.css';
 import {characterReflection,hasPlayerHandoffScene} from '../app/survivors-character-reflection';
 import reflectionCopy from '../../content/localization/survivors-character-reflection-ko.json';
+import {SurvivorsHandoffDialogue} from './SurvivorsHandoffDialogue';
 export function SurvivorsOperationBrief({characterId,stage}:{characterId:CharacterId;stage:PatrolStageDefinition}) {
  const roleId=characterId==='park'?'kang_taesik':characterId==='jung'?'player':characterId==='yoon'?'player':characterId;
  const role=copy.roles[roleId];const profile=CHARACTER_PROFILES[characterId];const speaker=CHARACTER_PROFILES[stage.narrative?.speaker??'player'];const reflection=characterReflection(readOperationHandoffs(),characterId);const record=reflection?.record;
@@ -20,6 +21,7 @@ export function SurvivorsOperationBrief({characterId,stage}:{characterId:Charact
  {hasPlayerHandoffScene(record)&&<figure className="survivors-handoff-scene"><img src="/assets/survivors/growth/player-stage12-handoff-v1.png" alt={reflectionCopy.sceneAlt}/><figcaption>{reflectionCopy.sceneCaption}</figcaption></figure>}
  {reflection!.evidence.length?<ul>{reflection!.evidence.map(id=><li key={id}>{reflectionCopy[id]}</li>)}</ul>:<p>{reflectionCopy.empty}</p>}
  <small>{reflectionCopy.boundary}</small>
+ {hasPlayerHandoffScene(record)&&<SurvivorsHandoffDialogue/>}
  </>:<p>{copy.none}</p>}<small>{copy.future}</small></details>
  </aside>;
 }

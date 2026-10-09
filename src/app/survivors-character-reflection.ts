@@ -1,6 +1,7 @@
 import type {CharacterId} from '../domain/patrol-survivors';
 import type {OperationHandoff} from '../domain/survivors-operation-handoff';
 import {isOperationHandoff} from '../domain/operation-handoff-validation';
+import {canShowHandoffDialogue} from '../domain/survivors-handoff-dialogue';
 
 export type ReflectionEvidence='route'|'stop'|'zone'|'retry';
 export function characterReflection(records:readonly OperationHandoff[],characterId:CharacterId) {
@@ -15,5 +16,5 @@ export function characterReflection(records:readonly OperationHandoff[],characte
 }
 
 export function hasPlayerHandoffScene(record:OperationHandoff) {
- return isOperationHandoff(record)&&record.characterId==='player'&&record.stageId==='stage_12'&&record.outcome==='victory'&&record.rubbleCleared>0;
+ return canShowHandoffDialogue(record);
 }

@@ -15,5 +15,11 @@
 .survivors-handoff-scene { margin:10px 0; }
 .survivors-handoff-scene img { display:block; width:100%; height:auto; aspect-ratio:1672/941; object-fit:contain; }
 .survivors-handoff-scene figcaption { font-size:11px; line-height:1.6; color:#c4d6d1; margin-top:6px; }
+.survivors-handoff-dialogue { border-top:1px solid #496663; margin-top:12px; padding-top:4px; }
+.survivors-handoff-dialogue button { min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border:1px solid #6c9d8b; border-radius:4px; background:#173e35; color:#d9f8e9; font:inherit; font-size:12px; cursor:pointer; white-space:normal; }
+.survivors-handoff-dialogue button:hover { background:#245947; }
+.survivors-handoff-dialogue button:focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
+.survivors-handoff-choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:8px; }
+.survivors-handoff-controls { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
 .survivors-operation-brief details small { font-size:11px; color:#a6bab8; }
 @media(max-width:600px){.survivors-operation-links { grid-template-columns:1fr; gap:0; }}
