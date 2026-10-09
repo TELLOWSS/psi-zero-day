@@ -2,6 +2,8 @@
 
 ## 최신 기준선
 
+- 2026-10-09 성장 시범 인물 사용자 직접 선택: 안전관리자(characterId player). STAGE 12 시범의 대표 인물 확정이며 대사/신규 CG/직업 조건 승인은 별도. 실제 aggregate 기록의 생산 경로와 추정 금지, 선택/재도전/저장 게이트는 `SURVIVORS-GROWTH-EVENT-CONTRACT-V1.md`로 연결.
+
 - PR162 후속: 최근 인계 기록에서 해당 인물의 통로 정리/돌진 제동/통제 구역과 중단 사실만 읽는 회고 추가. 수치형 성격·직업·본편 성장 해금 및 새 저장/보상 없음. 집중9건/전체1,871통과·1제외/타입/prebuild/build 성공. 실제 빌드 3viewport x 승리/중단/활동0 저장fixture 9경로: 다른 인물 제외/44px/잘림·넘침·오류없음/전체 저장불변, 폰세로 직접 확인. `artifacts/character-reflection/report.json`/9PNG. 자연 성장·진로 해금·실기기·최종 아트 증거 아님.
 - PR162 기존 fdbcda25 Linux CI는 모바일 설정 대기에서 실패. 시간70초 stress fixture가 열 수 있는 보급은 실제 완료 버튼으로 재개한 뒤 정지 renderer를 검사하도록 수정하고, 시작 버튼은 자산 준비 후 enabled 상태까지 대기. 실패 진단에 phase/disabled/supply 상태 추가. Windows 로컬은 처음 자산 준비 대기 실패, 후속 CDP 연결 종료로 전체 모바일 검사 미통과. 최신 Linux 재검증 전 운영 병합 금지; preview 성공을 전체 CI 성공으로 확대하지 않는다.
 
