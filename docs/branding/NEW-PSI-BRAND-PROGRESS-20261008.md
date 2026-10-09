@@ -2,6 +2,8 @@
 
 ## 최신 기준선
 
+- 새 저장 실제 UI 봇 후속: 안전관리자 STAGE01 무이동/레벨업 첫 선택만으로 57.13992초 defeat, 돌진제동2/통로0/구역0/피해102. 엔진 read-only 단일 소유 파일 계측(상태/시간/피해/phase 주입 없음), 종료 handoff와 실제 값 일치, 새로고침 후 같은 인물 회고·중단 문구 복구/오류0. `artifacts/character-reflection-natural/report.json`/restored.png. 최초 chunk 이동으로 marker 탐색 실패, 다음 새로고침의 동일 소유 파일을 중복으로 오판하여 URI별 단일 소유 검증으로 수정/재통과. STAGE12 성장 선택·자연 완주·진로/실기기 증거로 확대하지 않는다.
+
 - 2026-10-09 성장 시범 인물 사용자 직접 선택: 안전관리자(characterId player). STAGE 12 시범의 대표 인물 확정이며 대사/신규 CG/직업 조건 승인은 별도. 실제 aggregate 기록의 생산 경로와 추정 금지, 선택/재도전/저장 게이트는 `SURVIVORS-GROWTH-EVENT-CONTRACT-V1.md`로 연결.
 
 - PR162 후속: 최근 인계 기록에서 해당 인물의 통로 정리/돌진 제동/통제 구역과 중단 사실만 읽는 회고 추가. 수치형 성격·직업·본편 성장 해금 및 새 저장/보상 없음. 집중9건/전체1,871통과·1제외/타입/prebuild/build 성공. 실제 빌드 3viewport x 승리/중단/활동0 저장fixture 9경로: 다른 인물 제외/44px/잘림·넘침·오류없음/전체 저장불변, 폰세로 직접 확인. `artifacts/character-reflection/report.json`/9PNG. 자연 성장·진로 해금·실기기·최종 아트 증거 아님.
