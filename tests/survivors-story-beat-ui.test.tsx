@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import {act} from 'react';
+import {act,type ReactNode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {afterEach,describe,expect,it} from 'vitest';
 import {SurvivorsStoryBeat} from '../src/ui/SurvivorsStoryBeat';
@@ -8,7 +8,7 @@ import type {OperationHandoff} from '../src/domain/survivors-operation-handoff';
 Object.assign(globalThis,{IS_REACT_ACT_ENVIRONMENT:true});
 afterEach(()=>localStorage.removeItem(OPERATION_HANDOFF_KEY));
 const completed:OperationHandoff={version:1,characterId:'lim_junho',stageId:'stage_12',stageNumber:12,outcome:'victory',zones:2,cartStops:4,rubbleCleared:0,damageTaken:1,stars:[true,false,false]};
-function render(ui:React.ReactNode) {
+function render(ui:ReactNode) {
  const host=document.createElement('div');
  document.body.appendChild(host);
  const root=createRoot(host);
