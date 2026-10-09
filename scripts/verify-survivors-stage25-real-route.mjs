@@ -66,8 +66,43 @@ try{
     return {phase:b.bossGameplay.combatPhase,verified:b.bossGameplay.staleRoute.verified,checks,points:b.bossGameplay.staleRoute.points,health:b.hp};
    });
    await page.screenshot({path:path.join(out,`${width}x${height}-old-mark.png`)});
-   const progress=[];
-   for(let i=0;i<3;i++){
+   // First demonstrate a real, avoidable obsolete-route misread and recovery.
+   const hasOldLane=await page.evaluate(()=>{
+    const b=window.stage25Engine.state.hazards.find(h=>h.isStageBoss);
+    return b.bossGameplay.staleRoute.oldMarkEnabled;
+   });
+   if(!hasOldLane)throw Error('ST25 standard map has no reachable obsolete-lane warning');
+   await page.evaluate(()=>{
+    const s=window.stage25Engine.state,b=s.hazards.find(h=>h.isStageBoss),p=b.bossGameplay.staleRoute.points[0];
+    s.player.x=p.x;s.player.y=p.y;s.player.invincibleTime=1000;
+   });
+   await page.waitForFunction(()=>{
+    const b=window.stage25Engine?.state.hazards.find(h=>h.isStageBoss);
+    return b?.bossGameplay?.staleRoute?.verified===1;
+   },null,{timeout:7000});
+   await page.evaluate(()=>{
+    const s=window.stage25Engine.state,b=s.hazards.find(h=>h.isStageBoss),p=b.bossGameplay.staleRoute.oldMark;
+    s.player.x=p.x;s.player.y=p.y;s.player.invincibleTime=1000;
+   });
+   await page.waitForFunction(()=>{
+    const b=window.stage25Engine?.state.hazards.find(h=>h.isStageBoss),r=b?.bossGameplay?.staleRoute;
+    return r?.misreads===1&&r.verified===0&&r.warningRemaining>0;
+   },null,{timeout:7000});
+   const misread=await page.evaluate(()=>{
+    const s=window.stage25Engine.state,b=s.hazards.find(h=>h.isStageBoss),r=b.bossGameplay.staleRoute;
+    return {misreads:r.misreads,verified:r.verified,warning:r.warningRemaining,hp:s.player.hp};
+   });
+   await page.screenshot({path:path.join(out,`${width}x${height}-obstructed.png`)});
+   await page.evaluate(()=>{
+    const s=window.stage25Engine.state,b=s.hazards.find(h=>h.isStageBoss),pt=b.bossGameplay.staleRoute.points[0];
+    s.player.x=pt.x;s.player.y=pt.y;s.player.invincibleTime=1000;
+   });
+   await page.waitForFunction(()=>{
+    const b=window.stage25Engine?.state.hazards.find(h=>h.isStageBoss),r=b?.bossGameplay?.staleRoute;
+    return r?.verified===1&&r?.warningRemaining===0&&r?.misreads===1;
+   },null,{timeout:7000});
+   const progress=[{verified:1,phase:'pattern'}];
+   for(let i=1;i<3;i++){
     await page.evaluate(i=>{
      const s=window.stage25Engine.state,b=s.hazards.find(h=>h.isStageBoss),pt=b.bossGameplay.staleRoute.points[i];
      s.player.x=pt.x;s.player.y=pt.y;s.player.invincibleTime=1000;
@@ -86,11 +121,12 @@ try{
    await page.screenshot({path:path.join(out,`${width}x${height}-burst.png`)});
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
    const pass=before.phase==='pattern'&&before.verified===0&&before.checks.every(Boolean)
+    &&misread.misreads===1&&misread.verified===0&&misread.warning>0
     &&progress.length===3&&progress[0].verified===1&&progress[1].verified===2
     &&progress[0].phase==='pattern'&&progress[1].phase==='pattern'
     &&progress[2].verified===3&&progress[2].phase==='burst'&&progress[2].window>0
     &&!overflow&&!errors.length;
-   report.push({width,height,before,progress,overflow,errors,pass,scope:'Real ST25 engine and UI after QA-only time jump and character reposition; not natural gameplay nor Android FPS'});
+   report.push({width,height,before,misread,progress,overflow,errors,pass,scope:'Real ST25 engine and UI after QA-only time jump and character reposition; not natural gameplay nor Android FPS'});
   }finally{await page.close();}
  }
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
