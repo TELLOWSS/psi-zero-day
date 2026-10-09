@@ -7,9 +7,17 @@ const output='artifacts/lz-guidance';fs.mkdirSync(output,{recursive:true});const
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN,args:['--renderer-process-limit=1']});
 try{for(const [width,height] of [[1440,900],[390,844],[844,390]]){
  const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
- await page.route('**/assets/PatrolSurvivorsGame-*.js',async route=>{const response=await route.fetch(),body=await response.text(),pattern=/update\([^)]*\)\{(?=if\(this\.state\.phase!==)/g;if([...body.matchAll(pattern)].length!==1)throw Error('Capture unavailable');await route.fulfill({response,body:body.replace(pattern,m=>`${m}window.lzEngine=this;`)});});
  await page.addInitScript(()=>{window.lzGroundLabels=[];const original=CanvasRenderingContext2D.prototype.fillText;CanvasRenderingContext2D.prototype.fillText=function(text,...args){if(String(text).includes('랑데부 구역'))window.lzGroundLabels.push(String(text));return original.call(this,text,...args);};});
- await page.goto(url);await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();await page.locator('.survivors-ready-launch .survivors-btn-primary').click();await page.waitForFunction(()=>window.lzEngine?.state.phase==='playing');
+ await page.goto(url);await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+ // Vite dev module hook avoids rewriting hashed/minified production JS with regex.
+ await page.evaluate(async()=>{
+  const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
+  const oldUpdate=SurvivorsEngine.prototype.update;
+  SurvivorsEngine.prototype.update=function(...args){window.lzEngine=this;return oldUpdate.apply(this,args);};
+ });
+ await page.waitForFunction(()=>document.querySelector('.survivors-ready-launch .survivors-btn-primary')?.disabled===false,null,{timeout:25000});
+ await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
+ await page.waitForFunction(()=>window.lzEngine?.state.phase==='playing',null,{timeout:25000});
  await page.evaluate(()=>{const s=window.lzEngine.state;s.gameTime=125;s.stageBossNeutralized=true;s.bossEncounter={bossId:'lz-review-boss',phase:'combat',remaining:0};s.player.hp=s.player.maxHp=10000;s.player.x+=450;s.hazards=[];});
  await page.locator('.survivors-extraction-status[data-inside="false"]').waitFor();await page.waitForTimeout(300);
  const outside=await page.locator('.survivors-extraction-status').evaluate(e=>{const b=e.getBoundingClientRect();return {text:e.textContent,arrow:e.querySelector('svg')?.getAttribute('style'),fits:e.scrollHeight<=e.clientHeight+1&&e.scrollWidth<=e.clientWidth+1,inViewport:b.left>=0&&b.right<=innerWidth&&b.top>=0&&b.bottom<=innerHeight};});
