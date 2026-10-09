@@ -5,6 +5,21 @@ import {drawProp} from './survivors-equipment-art';
 export function drawGangformPattern(ctx:CanvasRenderingContext2D,h:Readonly<Hazard>,atlas:HTMLImageElement|undefined):void {
  const p=h.bossGameplay,g=p?.gangform;if(!g||!p||!['pattern','weak_point'].includes(p.combatPhase))return;
  ctx.save();ctx.lineWidth=2;
+ // Suspended load rigging is attached to the REAL pendulum position.
+ // It remains behind the existing boss sprite and never changes hit boxes.
+ if(g.step==='pendulum_warning'||g.step==='pendulum'||g.step==='debris_warning'){
+  const beamY=g.anchorY-128,loadY=h.y-34;
+  ctx.lineCap='round';
+  ctx.strokeStyle='rgba(13,30,35,.65)';ctx.lineWidth=7;
+  ctx.beginPath();ctx.moveTo(g.anchorX,beamY);ctx.lineTo(h.x,loadY);ctx.stroke();
+  ctx.strokeStyle='#b5c8bb';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(g.anchorX,beamY);ctx.lineTo(h.x,loadY);ctx.stroke();
+  ctx.strokeStyle='rgba(220,237,227,.72)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(g.anchorX-18,beamY-5);ctx.lineTo(g.anchorX+18,beamY-5);ctx.stroke();
+  ctx.fillStyle='#facc73';ctx.beginPath();ctx.arc(g.anchorX,beamY,5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,224,171,.75)';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(h.x,loadY+4,8,0,Math.PI*2);ctx.stroke();
+ }
  if(g.step==='pendulum_warning'||g.step==='pendulum'){
   ctx.fillStyle='rgba(245,158,11,.12)';ctx.strokeStyle='#fbbf24';ctx.setLineDash([10,8]);
   ctx.fillRect(g.anchorX-110-h.radius,g.anchorY-h.radius-14,220+h.radius*2,(h.radius+14)*2);

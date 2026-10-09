@@ -1,0 +1,68 @@
+{
+  "swing": {
+    "title": "진자 예고",
+    "radio": {
+      "player": "좌우 진자, 궤도 밖으로!",
+      "kang_taesik": "갱폼이 돌아온다. 하부 비워!",
+      "yoon_sungho": "와이어 흔들림, 방향 확인!",
+      "lee_jaehoon": "진자 회전각 변화 포착!",
+      "lim_junho": "갱폼이 다시 돌아와요!",
+      "safety_monitor": "진자 작업반경 이탈!"
+    }
+  },
+  "fallWarning": {
+    "title": "잔재 낙하 예고",
+    "radio": {
+      "player": "낙하 지점 두 곳, 먼저 읽어!",
+      "kang_taesik": "아래 떨어진다! 구역 비워!",
+      "yoon_sungho": "부속 잔재, 낙하 두 지점!",
+      "lee_jaehoon": "낙하 좌표 고정, 접근 금지!",
+      "lim_junho": "아래 두 군데가 위험해요!",
+      "safety_monitor": "낙하 두 구역, 출입 통제!"
+    }
+  },
+  "impact": {
+    "title": "잔재 낙하",
+    "radio": {
+      "player": "낙하 구간 밖에서 대응!",
+      "kang_taesik": "떨어졌다, 아직 접근 마!",
+      "yoon_sungho": "잔재 낙하 확인!",
+      "lee_jaehoon": "위험 발생, 위치 재확인!",
+      "lim_junho": "잔재가 떨어졌어요!",
+      "safety_monitor": "낙하 직후, 구역 유지!"
+    }
+  },
+  "zones": {
+    "title": "위험지점 0/2",
+    "radio": {
+      "player": "하부 두 곳을 정확히 제어!",
+      "kang_taesik": "아래 두 곳, 하나씩 정리해!",
+      "yoon_sungho": "위험 포인트 두 곳이 열렸어!",
+      "lee_jaehoon": "표시된 두 좌표를 처리!",
+      "lim_junho": "빨간 두 지점을 막아야 해요!",
+      "safety_monitor": "하부 통제 대상 두 곳!"
+    }
+  },
+  "zoneOne": {
+    "title": "위험지점 1/2",
+    "radio": {
+      "player": "한 곳 제어, 나머지 한 곳!",
+      "kang_taesik": "하나 남았다, 서두르지 마!",
+      "yoon_sungho": "첫 지점 처리, 둘째로!",
+      "lee_jaehoon": "통제 1/2, 잔여 좌표 확인!",
+      "lim_junho": "하나 정리됐어요! 하나 더!",
+      "safety_monitor": "하부 1개 지점 잔여!"
+    }
+  },
+  "burst": {
+    "title": "약점 개방 · 4.5초",
+    "radio": {
+      "player": "지금! 핵심부에 집중!",
+      "kang_taesik": "갱폼 멈췄다! 지금이다!",
+      "yoon_sungho": "장력이 풀렸어, 집중!",
+      "lee_jaehoon": "약점 개방, 4.5초!",
+      "lim_junho": "멈췄어요! 지금이에요!",
+      "safety_monitor": "통제 확인, 집중 대응!"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import {drawEquipmentAura} from './survivors-equipment-aura';
 import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
+import {SurvivorsStoryBeat} from './SurvivorsStoryBeat';
 import {operationHandoff} from '../domain/survivors-operation-handoff';
 import {saveOperationHandoff} from './survivors-operation-handoff-store';
 import {SurvivorsBonusStage} from './SurvivorsBonusStage';
@@ -21,6 +22,7 @@ import {MaterialResolutionLayer} from './survivors-material-resolution';
 import {FEEL_SETTINGS_KEY,readFeelSettings} from './survivors-feel-settings';
 import {SurvivorsFeelSettings} from './SurvivorsFeelSettings';
 import {drawTerrain} from './survivors-terrain-renderer';
+import {drawStage12RubbleRoute} from './survivors-stage12-route-renderer';
 import terrainText from '../../content/localization/survivors-terrain-ko.json';
 import {SurvivorsTerrainRecord} from './SurvivorsTerrainRecord';
 import {getGraphicsMode,GRAPHICS_PROFILES} from './survivors-graphics-settings';
@@ -86,6 +88,8 @@ import bossText from '../../content/localization/survivors-boss-ko.json';
 import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
+import {drawStaleRoute} from './survivors-stale-route-render';
+import {GangformMomentDirection,type GangformMoment} from './survivors-gangform-moment-direction';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
@@ -673,6 +677,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const [bossAlert, setBossAlert] = useState<string | null>(null);
   const [bossRisk, setBossRisk] = useState<number | null>(null);
   const [bossBeat, setBossBeat] = useState('');
+  const [gangformRadio,setGangformRadio]=useState<GangformMoment|null>(null);
   const [bossSecured,setBossSecured]=useState(false);
   const [encounterRemaining,setEncounterRemaining]=useState(0);
 
@@ -1391,6 +1396,8 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let motions = new SpriteMotionTracker();
     let direction = new CombatDirection();
     let bossDirection=new BossEncounterDirection();
+    let gangformMomentDirection=new GangformMomentDirection();
+    let gangformRadioUntil=0;
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let playerVoice = new PlayerVoiceDirection();
@@ -1426,6 +1433,9 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         motions = new SpriteMotionTracker();
         direction = new CombatDirection();
         bossDirection=new BossEncounterDirection();
+        gangformMomentDirection=new GangformMomentDirection();
+        gangformRadioUntil=0;
+        setGangformRadio(null);
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -1456,6 +1466,28 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         direction.advance(dt);
         bossDirection.observe(engine.state);
         engine.update(dt, { moveX, moveY });
+        // ST14: scene punctuations follow actual boss edges, never a wall-clock
+        // imitation. Low-quality/reduced-motion modes avoid ornament and shake.
+        const gangformMoment=gangformMomentDirection.observe(
+          engine.state.stageId,engine.state.bossEncounter?.phase,engine.state.hazards,engine.state.characterId,
+        );
+        if(gangformMoment) {
+          // One compact radio line per real engine transition; no gameplay pause.
+          setGangformRadio(gangformMoment);
+          gangformRadioUntil=engine.state.gameTime+1.5;
+          const point={x:gangformMoment.x,y:gangformMoment.y};
+          // Combat marker stays short in world space; radio lives in one non-blocking HUD line.
+          spawnFloating(point.x,point.y-45,gangformMoment.label,gangformMoment.color,false,true);
+          if(!reducedMotionRef.current&&budget.level!=='low') {
+            screenShakeRef.current=Math.max(screenShakeRef.current,gangformMoment.cameraStrength);
+            spawnShockwave(point.x,point.y,gangformMoment.color,gangformMoment.radius,2,.34);
+          }
+          audioRef.current.playRecordedEffect(gangformMoment.sfx,point,engine.state.player,budget.level==='low');
+        }
+        if(gangformRadioUntil&&engine.state.gameTime>=gangformRadioUntil){
+          gangformRadioUntil=0;
+          setGangformRadio(null);
+        }
 
         const liveSignature=engine.state.signatureEvent;
         const signatureToken=liveSignature?`${liveSignature.id}:${liveSignature.phase}`:'';
@@ -2039,6 +2071,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       drawTerrain(ctx,engine.state.terrain??[],spritesRef.current.terrain,engine.state.player);
+      if(stage.id==='stage_12')drawStage12RubbleRoute(ctx,stage.id,engine.state.terrain??[],reducedMotionRef.current);
       materialResolutionRef.current.drawGround(ctx);
 
       groundContactRef.current.draw(ctx,engine.state,spritesRef.current.groundContactAtlas,reducedMotionRef.current,projectiles.length>90,spritesRef.current.shockContactAtlas,spritesRef.current.barrierContactAtlas);
@@ -2642,7 +2675,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         | { kind: 'player'; y: number };
 
       const entityList: EntityItem[] = [];
-      for(const h of hazards)drawGangformPattern(ctx,h,spritesRef.current.industrialHazards);
+      for(const h of hazards){
+        drawGangformPattern(ctx,h,spritesRef.current.industrialHazards);
+        if(stage.id==='stage_25')drawStaleRoute(ctx,h);
+      }
       for (const d of drops) {
         if(d.x<camX-100||d.x>camX+viewW+100||d.y<camY-100||d.y>camY+viewH+100)continue;
         entityList.push({ kind: 'drop', y: d.y, data: d });
@@ -3512,6 +3548,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         </aside>;
       })()}
 
+      {/* ST14 boss radio: real event-edge cues, kept outside combat hit targets. */}
+      {phase==='playing' && gangformRadio && engineRef.current?.state.stageId==='stage_14' && !bossSecured && (
+        <aside className="survivors-gangform-radio" data-beat={gangformRadio.kind} aria-live="polite" role="status">
+          <strong>{gangformRadio.label}</strong>
+          <span>{CHARACTER_PROFILES[selectedChar].name} · {gangformRadio.radio}</span>
+        </aside>
+      )}
+
       {/* EXTRACTION CLIMAX (긴급 탈출 · 인계 클라이맥스) HUD BANNER */}
       {phase === 'playing' && extractionState.active && (
         <SurvivorsExtractionStatus remaining={extractionState.countdown} inside={extractionState.playerInside} total={engineRef.current?.state.extractionPhase?.totalTime} direction={engineRef.current?.state.extractionPhase?{x:engineRef.current.state.extractionPhase.x-engineRef.current.state.player.x,y:engineRef.current.state.extractionPhase.y-engineRef.current.state.player.y}:undefined} />
@@ -4194,6 +4238,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {label:resultText.mastery,value:engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`},
             ]}/>
             <p className="survivors-story-result">{operationText.handoff}</p>
+            {engineRef.current && <SurvivorsStoryBeat stageId={engineRef.current.state.stageId} characterId={engineRef.current.state.characterId} view="result" record={operationHandoff(engineRef.current.state)}/>}
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}
             {storeMessage===storeText.failure&&<p role="alert">{storeMessage}</p>}
             {/* 3-STAR CHALLENGES DEBRIEFING */}

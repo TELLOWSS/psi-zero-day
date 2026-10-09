@@ -14,6 +14,7 @@ import { advanceBossPhase, bossPattern, bossCoreFloor, bossCoreStatus } from './
 import { bossGameplayForStage } from './survivors-boss-gameplay';
 import { createBossCombat, tickBossCombat, resolveBossSignature, bossCombatDamage } from './survivors-boss-combat';
 import {tickGangform,gangformContact,hitGangformZone} from './survivors-boss-gangform';
+import {tickStaleRoute} from './survivors-boss-stale-route';
 import {selectSurvivorsAutoTarget} from './survivors-auto-target';
 import { spawnPressure, selectStageHazard } from './survivors-difficulty';
 import { signatureEventIdentity, signatureEventPlan, type WaveSignatureEvent } from './survivors-signature-events';
@@ -2002,6 +2003,7 @@ export class SurvivorsEngine {
         h.bossGameplay.phaseIndex=h.bossPhase??1;
         if(tickBossCombat(h,dt)){h.vx=0;h.vy=0;continue;}
         if(tickGangform(h,player,dt))continue;
+        if(tickStaleRoute(h,player,this.state.terrain??[],dt))continue;
         if(isHazardContactActive(h)&&Math.hypot(h.x-player.x,h.y-player.y)<=h.radius+14)h.bossGameplay.patternContact=true;
       }
       if(h.bossEncounterManaged || h.isStageBoss&&(h.type==='CRANE_BOSS'||h.type==='FALLING_DEBRIS')&&h.motion?.phase!=='approach') {

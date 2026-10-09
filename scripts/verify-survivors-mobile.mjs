@@ -178,6 +178,9 @@ try {
         const update=SurvivorsEngine.prototype.update;
         SurvivorsEngine.prototype.update=function(dt,input){window.qaMobileEngine=this;window.qaInput={dt,...input};if(window.qaVisualFreeze)return;return update.call(this,dt,input);};
       })()`);
+      // The launch button is intentionally disabled until the actor and map have finished preparing.
+      // Clicking before readiness is a no-op and used to fail this QA at the 'playing' wait.
+      await waitFor(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary')?.disabled===false",25000);
       await evaluate(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary').click()");
       await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
       await sleep(500);
@@ -196,6 +199,21 @@ try {
         return {hud:box(hud),hudOverflow:hud.scrollWidth>hud.clientWidth+1,actions:[...document.querySelectorAll('.survivors-tactical-actions button')].map(box),pixels:canvas.width*canvas.height,overflow:document.documentElement.scrollWidth>innerWidth+1};
       })()`);
       await screenshot(cdp,`${width}x${height}-combat.png`);
+      // Inspect pause/settings on a CLEAN running scene before injecting 70 hazards
+      // and changing world stages. Synthetic combat fixtures can trigger
+      // accountability/level-up modals, making the pause test unrelated to UI.
+      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
+      const qualities=[];
+      for(const quality of ['low','balanced','high','auto']){
+        await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');panel.open=true;const select=panel.querySelector('select');const setter=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set;setter.call(select,'${quality}');select.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+        await sleep(120);qualities.push(await evaluate(cdp,"document.querySelector('.survivors-container').dataset.quality"));
+      }
+      await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');for(const box of panel.querySelectorAll('input[type=checkbox]'))if(box.checked)box.click();})()`);
+      const savedDisplay=await evaluate(cdp,"JSON.parse(localStorage.getItem('psi.survivors.display.v1'))");
+      await screenshot(cdp,`${width}x${height}-display-settings.png`);
+      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
+      await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
       // Explicit synthetic stress fixture, not evidence of a natural stage clear or Android FPS.
       await evaluate(cdp,`(()=>{const e=window.qaMobileEngine;e.state.player.hp=e.state.player.maxHp=100000;e.state.nextLevelExp=100000;e.state.gameTime=70;for(let i=0;i<70;i++)e.spawnHazard(i%2?'RUNAWAY_CART':'GAS_LEAK');})()`);
       await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});await sleep(2600);
@@ -243,23 +261,14 @@ try {
             return {stage:${stageNumber},type:h.type,x:h.x,y:h.y,timer:h.motion.timer};
           })()`);
           await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);
-          await evaluate(cdp,'window.qaVisualFreeze=false');await sleep(180);
+          // This is an isolated, synthetic motion probe. Prior crowd simulation may
+          // trigger an unrelated incident/pause, so advance engine frames directly.
+          await evaluate(cdp,"(()=>{const e=window.qaMobileEngine;e.state.phase='playing';window.qaVisualFreeze=false;for(let i=0;i<12;i++)e.update(1/60,{moveX:0,moveY:0});window.qaVisualFreeze=true;})()");
           const afterMotion=await evaluate(cdp,"(()=>{window.qaVisualFreeze=true;const h=window.qaMobileEngine.state.hazards.find(h=>h.id==='qa_motion_1');return h?{x:h.x,y:h.y,timer:h.motion?.timer,phase:h.motion?.phase}:null;})()");
           const valid=afterMotion&&Number.isFinite(afterMotion.x)&&Number.isFinite(afterMotion.y)&&(beforeMotion.type==='FALLING_DEBRIS'?afterMotion.x===beforeMotion.x&&afterMotion.y===beforeMotion.y&&afterMotion.timer<beforeMotion.timer:Math.hypot(afterMotion.x-beforeMotion.x,afterMotion.y-beforeMotion.y)>0);
           naturalMotion.push({before:beforeMotion,after:afterMotion,valid});await screenshot(cdp,`stage-${stageNumber}-natural-motion.png`);
         }
       }
-      // Exercise real pause-menu controls, then reload to check persistence.
-      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
-      await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
-      const qualities=[];
-      for(const quality of ['low','balanced','high','auto']){
-        await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');panel.open=true;const select=panel.querySelector('select');const setter=Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype,'value').set;setter.call(select,'${quality}');select.dispatchEvent(new Event('change',{bubbles:true}));})()`);
-        await sleep(120);qualities.push(await evaluate(cdp,"document.querySelector('.survivors-container').dataset.quality"));
-      }
-      await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');for(const box of panel.querySelectorAll('input[type=checkbox]'))if(box.checked)box.click();})()`);
-      const savedDisplay=await evaluate(cdp,"JSON.parse(localStorage.getItem('psi.survivors.display.v1'))");
-      await screenshot(cdp,`${width}x${height}-display-settings.png`);
       await cdp.send('Page.navigate',{url:baseUrl});
       await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
       await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
@@ -268,7 +277,7 @@ try {
       const customization={qualities,savedDisplay,restored};
       await evaluate(cdp,"localStorage.removeItem('psi.survivors.display.v1')");
       const pass=naturalMotion.every(r=>r.valid)&&workfaces.every(r=>r.loaded&&r.id&&r.preserved)&&restored&&qualities[0]==='low'&&qualities[1]==='balanced'&&qualities[2]==='high'&&appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
-      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,workfaces,naturalMotion,errors,pass});
+      report.push({width,height,scope:'Browser touch/geometry, synthetic crowd and direct 12-step engine motion fixture; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,workfaces,naturalMotion,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
   }
 } finally {

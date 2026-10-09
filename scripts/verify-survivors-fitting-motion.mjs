@@ -27,10 +27,27 @@ try{
   await page.waitForTimeout(180);
   await page.screenshot({path:path.join(out,`${width}x${height}-action.png`)});
   if(width>height&&height<=560){
-   const fits=await page.evaluate(()=>{
-    const canvas=document.querySelector('.survivors-fitting-art canvas').getBoundingClientRect(),tabs=document.querySelector('.survivors-store-tabs').getBoundingClientRect();
-    return canvas.top>=tabs.bottom&&[...document.querySelectorAll('.survivors-fitting-controls button, .survivors-fitting-attack-select')].every(button=>button.getBoundingClientRect().bottom<=innerHeight-16);
-   });if(!fits)throw new Error('Landscape fitting canvas or controls are clipped');
+   // Equipment fitting is scrollable in short landscape viewports. Requiring
+   // every control at once inside 320px incorrectly rejects accessible UI.
+   // Verify that the canvas and EACH control can be scrolled fully into view.
+   const canvas=page.locator('.survivors-fitting-art canvas');
+   await canvas.scrollIntoViewIfNeeded();
+   const canvasRect=await canvas.evaluate(el=>{
+    const r=el.getBoundingClientRect();
+    return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,viewport:innerHeight};
+   });
+   const controls=page.locator('.survivors-fitting-controls button, .survivors-fitting-attack-select');
+   const controlRects=[];
+   for(let i=0;i<await controls.count();i++){
+    const button=controls.nth(i);await button.scrollIntoViewIfNeeded();
+    controlRects.push(await button.evaluate(el=>{
+     const r=el.getBoundingClientRect();
+     return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,viewport:innerHeight,width:innerWidth};
+    }));
+   }
+   const controlsReachable=controlRects.every(r=>r.top>=-1&&r.bottom<=r.viewport+1&&r.left>=-1&&r.right<=r.width+1);
+   const canvasReachable=canvasRect.top>=-1&&canvasRect.bottom<=canvasRect.viewport+1&&canvasRect.left>=-1&&canvasRect.right<=width+1;
+   if(!controlsReachable||!canvasReachable)throw new Error('Landscape fitting content cannot be scrolled fully into view: '+JSON.stringify({canvasRect,controlRects}));
   }
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);const reduced=await pixels();await page.waitForTimeout(240);const quiet=await pixels();
   await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(100);
