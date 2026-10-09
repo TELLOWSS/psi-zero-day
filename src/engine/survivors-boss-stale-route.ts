@@ -14,22 +14,30 @@ function legal(point:FieldPoint,terrain:readonly TerrainObject[]):boolean {
 }
 /** Existing real collision test determines reachable verification nodes, not UI guesses. */
 export function createStaleRoute(player:FieldPoint,boss:FieldPoint,terrain:readonly TerrainObject[]):StaleRouteState|null {
- const nodes:FieldPoint[]=[];
- let from:FieldPoint={x:player.x,y:player.y};
+ // A bounded depth-three search, not a one-way greedy chain. Without
+ // backtracking, a legal first waypoint near a wall may lead to a dead end.
+ // Long strides are preferred, with one short-stride fallback for tight bays.
  const bearings=[-Math.PI/4,Math.PI/4,Math.PI*3/4,-Math.PI*3/4,0,Math.PI/2,Math.PI,-Math.PI/2];
- for(let step=0;step<3;step++){
-  let found:FieldPoint|undefined;
-  for(let i=0;i<bearings.length;i++){
-   const angle=bearings[(step*3+i)%bearings.length]!;
-   const target={x:Math.round(from.x+Math.cos(angle)*STEP),y:Math.round(from.y+Math.sin(angle)*STEP)};
-   if(!legal(target,terrain)||terrainHit(terrain,from,target,RADIUS))continue;
-   if(Math.hypot(target.x-boss.x,target.y-boss.y)<80)continue;
-   if(nodes.some(p=>Math.hypot(p.x-target.x,p.y-target.y)<70))continue;
-   found=target;break;
+ const startPoint={x:player.x,y:player.y};
+ const search=(from:FieldPoint,nodes:FieldPoint[]):FieldPoint[]|null=>{
+  if(nodes.length===3)return nodes;
+  const step=nodes.length;
+  for(const distance of [STEP,84]){
+   for(let i=0;i<bearings.length;i++){
+    const angle=bearings[(step*3+i)%bearings.length]!;
+    const target={x:Math.round(from.x+Math.cos(angle)*distance),y:Math.round(from.y+Math.sin(angle)*distance)};
+    if(!legal(target,terrain)||terrainHit(terrain,from,target,RADIUS))continue;
+    if(Math.hypot(target.x-boss.x,target.y-boss.y)<80)continue;
+    if(nodes.some(point=>Math.hypot(point.x-target.x,point.y-target.y)<70))continue;
+    if(Math.hypot(target.x-startPoint.x,target.y-startPoint.y)<70)continue;
+    const result=search(target,[...nodes,target]);
+    if(result)return result;
+   }
   }
-  if(!found)return null;
-  nodes.push(found);from=found;
- }
+  return null;
+ };
+ const nodes=search(startPoint,[]);
+ if(!nodes)return null;
  // The old mark is a visual reference marked 'RECHECK', not a false collision or lethal trap.
  const oldMark={x:Math.max(PADDING,Math.min(1400-PADDING,boss.x+110)),y:Math.max(PADDING,Math.min(900-PADDING,boss.y+45))};
  return {points:nodes as unknown as [FieldPoint,FieldPoint,FieldPoint],oldMark,verified:0};
