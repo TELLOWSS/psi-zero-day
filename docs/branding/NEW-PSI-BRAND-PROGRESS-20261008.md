@@ -2,6 +2,11 @@
 
 ## 최신 기준선
 
+- 2026-10-09 재기준화: 제품 기준 `5444a9ec2aafe90b49bd1b82b9352f31912e1dec`. 별도 사용자 작업이 동기화한 배포 `dpl_HSoXnPa2HN3g4ekBBycsTsvH9VZZ`의 정확한 프로젝트/SHA/production READY/`psi-zero-day.vercel.app` 별칭을 이 작업에서 읽기 확인했다. 이 작업이 해당 제품을 배포했거나 전체 회귀를 재실행한 것으로 기록하지 않는다. 과거 PR153 운영 유지 및 PR154 한도 대기는 당시 이력이며 현재 운영 기준이 아니다.
+- 현재 B3 소스 확인: premium renderer는 `ShieldPresentationTracker`를 호출하며 directional renderer는 authored/contact 원화를 준비하고 `authoredMotionWeights`를 사용한다. visual budget은 혼잡 오라·비행·문구 제한을 연결하고 body light는 flash 설정을 반영한다. 이전 'shield0이면 즉시 VFX 생략' 및 기존 walking 파일만 유지한다는 감사 문구는 과거 기준이며 현재 미구현 TODO로 반복하지 않는다.
+- 별도 작업의 `SURVIVORS-GRAPHICS-UPGRADE-IMPLEMENTATION.md`는 접점 이동 약5.64~8.07 CSS 단위와 VISUAL PRODUCTION LOCK 미승인을 명시한다. 좌표 역투영 오차1e-6을 완전 접지로 표현하지 않는다. `survivors-graphics-animation-v1.json`은 implemented-candidates-director-visual-lock-pending이며 960 logical slots/836 unique crops는 960 독립 원화 제작이나 최종 승인이 아니다.
+- 이번 묶음은 소스/문서 대조와 기록 갱신만 수행했다. 이전 원본97셀·강제24% light 진단을 새6명 원화의 품질 증거로 재사용하지 않는다. 다음은 현 운영 기준의 실제 흐름 검증이며 새 원화·청취·실기기 최종 승인과 사용권 질문은 별도로 남는다. 게임 규칙·저장·자산 바이트 변경 없음.
+
 - 주인공 조명 분리 진단(제품 변경 아님): `tests/verify-player-light-contrast.mjs` 실제 빌드의 body-light 함수만 표시 계측/override하여 PC·폰세로·가로 x idle/walking 6조건에서 original/off/24% peak 비교18PNG 확보. paused gameTime 고정/오류·넘침없음. 변경 픽셀1345~1695개, 평균 RGB 차이29.93~30.99, 변경 픽셀 luma 약30~32 증가. 폰 walking off/peak 직접 확인: peak에서 작업복이 밝아짐. 모든 original strength는0이므로 자연 플레이에서 최대 조명이 실행됐다는 증거 또는 영상 희미함의 원인 확정이 아님. 국소 배경 대비율/자연 조명 분포/실기기/최종 시각 승인도 아님. `artifacts/player-light-contrast/report.json` 참조. 원본/게임 규칙/운영 표시 불변.
 - 현재 작업 트리에는 이전4파일 외 material-feel/workface 및 엔진·UI·조명·음향 등의 추가 사용자/다른 작업 변경이 있음. 이를 보존하며 이번 진단 결과를 해당 미검증 변경의 검증으로 확대하지 않음. 제품 가독성 조정 전 현재 소유 작업·실제 활성 경로를 다시 확인해야 함.
 

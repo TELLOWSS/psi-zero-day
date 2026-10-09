@@ -15,7 +15,22 @@ listening, natural crowd combat or physical-device approval.
 | Voice priority | PR153 protects current speech owner from shared SFX budget eviction | Natural combat/listening fatigue and physical-device approval remain separate |
 | Reduced motion / pause | Equipment clock reads playerMotionTime/gameTime, springs reset under reduced motion; same timestamp retains angle | Actual renderer pause/turn combinations, not only coefficient tests |
 
-## Next Engineering Bundle
+## Superseding Baseline: 2026-10-09
+
+The findings above describe the earlier source revision, not the current remaining
+implementation queue. At product revision `5444a9ec2aafe90b49bd1b82b9352f31912e1dec`,
+the premium renderer calls `ShieldPresentationTracker`, and directional art prepares
+authored/contact sheets and samples `authoredMotionWeights`. Visual budgets now
+control presence, cinematic flights and floating feedback. Existing source-alpha
+and forced-light diagnostics do not certify the newer character sheets.
+
+See `../SURVIVORS-GRAPHICS-UPGRADE-IMPLEMENTATION.md` for the separate work's
+verification and remaining foot-slip/device limits. Runtime deployment does not
+change candidate metadata or grant VISUAL PRODUCTION LOCK. The earlier asset and
+shield findings below must not be repeated as current missing implementations.
+This update is a source/document comparison, not an independent full regression.
+
+## Historical Next Engineering Bundle
 
 1. Observe actual `absorbPremiumDamage` and recharge transitions without changing
    damage, capacity, cooldown or save schema. Record shield-before/after, feedback,
