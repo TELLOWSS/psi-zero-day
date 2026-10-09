@@ -1,4 +1,5 @@
 import { GameManual, gameManualText } from './GameManual';
+import {OperationHandoffDossier} from './OperationHandoffDossier';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { GameState } from '../domain';
 import type { EpisodeSession } from '../app/episode-session';
@@ -561,6 +562,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
       <div className="start-block"><div><span className="eyebrow">{t('ui.day')} 01</span><h2>{t('ep01.title')}</h2><p>{t('ui.start_hint')}</p></div>
         <button className="primary-button" type="button" onClick={e => { if (e.detail < 2) { playUiCue('continue'); session.start(snapshot.revision); } }}>{t('ui.start')}<span aria-hidden="true">↗</span></button>
       </div>
+      <OperationHandoffDossier mode="story"/>
     </section> : isPlaying ? <>
       {!strategyActive ? <section className="scene-heading"><span className="eyebrow">{t('ui.scene')}</span><h1>{snapshot.eventTitle}</h1></section> : null}
       <EpisodeImmersiveScene

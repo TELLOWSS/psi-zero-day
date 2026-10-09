@@ -27,12 +27,13 @@ it('lags attack motion, remains bounded and settles after movement ends',()=>{
  for(let i=3;i<180;i++){angle=motion.sample(entity,i/60,base);expect(Math.abs(angle)).toBeLessThanOrEqual(.12);}
  expect(Math.abs(angle)).toBeLessThan(.0001);
 });
-it('resets on reduced motion, clock jumps and facing changes without touching the pose',()=>{
+it('resets on reduced motion and clock jumps while preserving mirrored inertia without touching the pose',()=>{
  const motion=new EquipmentMotion(),entity={},pose={...base,action:1};
  const before=JSON.stringify(pose);motion.sample(entity,0,pose);motion.sample(entity,.1,pose);
  expect(motion.sample(entity,.1,pose,true)).toBe(0);
  expect(motion.sample(entity,.2,pose)).toBe(0);
- motion.sample(entity,.3,pose);expect(motion.sample(entity,.31,{...pose,facing:-1})).toBe(0);
+ const angle=motion.sample(entity,.3,pose);expect(angle).not.toBe(0);
+ expect(motion.sample(entity,.3,{...pose,facing:-1})).toBe(-angle);
  expect(motion.sample(entity,2,pose)).toBe(0);expect(motion.sample(entity,0,pose)).toBe(0);
  expect(JSON.stringify(pose)).toBe(before);
 });

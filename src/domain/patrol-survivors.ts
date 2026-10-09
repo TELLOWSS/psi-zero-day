@@ -242,6 +242,7 @@ export interface SurvivorsGameState {
   premiumGear?: { equipped: string[]; used?: string[]; effects: Required<StoreEffects>; shield: number; shieldCooldown: number; feedback: number; recoveryAmount?: number };
 
   // Meta stats & run perks
+  terrainGift?: {credits:number;remaining:number};
   psiCredits: number;
   permanentUpgrades: PermanentUpgrades;
   hasRevived: boolean;

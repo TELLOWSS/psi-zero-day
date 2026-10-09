@@ -3,9 +3,15 @@ import { ACTOR_RIGS } from './survivors-animation-rig';
 import { actorTorsoPoint, applyActorTorsoTransform, drawAuthoredBody, authoredEquipmentOccluders } from './survivors-rig-renderer';
 import { registerSpriteBounds, spriteOpaqueBounds, type SpritePose } from './survivors-sprite-motion';
 import type {StoreCategory} from '../domain/survivors-store';
-import {isDirectionalActor,directionalSocket,drawDirectionalBody} from './survivors-directional-art';
+import {isDirectionalActor,directionalSocket,drawDirectionalBody,directionalBootSockets,renderedDirection,directionalHandMasks} from './survivors-directional-art';
 import {EquipmentMotion} from './survivors-equipment-motion';
 import {equipmentAnimationTime} from './survivors-equipment-clock';
+import {drawProp,registerPropAtlas} from './survivors-equipment-art';
+import {COMMUNICATION_WEAR_ART,communicationWearPlan} from './survivors-communication-wear-plan';
+import {PREMIUM_WORN_ART,NORMAL_WORN_ART,wornEquipmentPlans,WORN_CALIBRATIONS,WORN_VIEW_ART,wornView} from './survivors-worn-equipment-plan';
+import {footTravel} from './survivors-ground-contact';
+import {InspectionFlightTracker} from './survivors-inspection-flight';
+const wornInspectionFlights=new InspectionFlightTracker();
 const wearableMotion=new EquipmentMotion();
 function drawMountedWearable(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,pose:SpritePose,id:WearableId,image:HTMLImageElement,source:{x:number;y:number;width:number;height:number},x:number,y:number,w:number,h:number,reduced:boolean):void {
   const joint=id==='voice_lens'?'radio':id==='shock_mantle'?'armor':'dock';
@@ -21,7 +27,12 @@ export const WEARABLE_ART = {
   inspection_wing: '/assets/survivors/wearables/inspection-dock-v1.png',
 } as const;
 export type WearableId = keyof typeof WEARABLE_ART;
-export type WearableImages = Partial<Record<WearableId, HTMLImageElement>>;
+export type WearableImages = Partial<Record<WearableId, HTMLImageElement>> & {communication?:HTMLImageElement;premiumWorn?:HTMLImageElement;normalWorn?:HTMLImageElement;premiumSide?:HTMLImageElement;premiumRear?:HTMLImageElement;normalSide?:HTMLImageElement;normalRear?:HTMLImageElement;emptyDock?:HTMLImageElement};
+const wornPromises=new Map<string,Promise<HTMLImageElement|undefined>>();
+function loadWorn(src:string,columns=4,rows=4):Promise<HTMLImageElement|undefined>{
+ let pending=wornPromises.get(src);if(!pending){const layouts=import('./survivors-art-frame-layouts');pending=new Promise(resolve=>{const image=new Image();image.onload=()=>{void layouts.then(({wornFrameLayouts})=>{const file=src.split('/').pop()!;registerPropAtlas(image,columns,rows,wornFrameLayouts[file as keyof typeof wornFrameLayouts]);resolve(image);}).catch(()=>{wornPromises.delete(src);resolve(undefined);});};image.onerror=()=>{wornPromises.delete(src);resolve(undefined);};image.src=src;});wornPromises.set(src,pending);}return pending;
+}
+let communicationPromise:Promise<HTMLImageElement|undefined>|undefined;
 const imagePromises = new Map<WearableId, Promise<HTMLImageElement | undefined>>();
 const sockets = {
   voice_lens: { x: .15, y: .14, w: .22, h: .22, layer: 'front' },
@@ -36,7 +47,7 @@ const profile = (x: number, y: number, w: number, h: number, occluders: number[]
 /** Authored against each original full-body sprite, not a universal floating badge. */
 export const WEARABLE_PROFILES: Record<string, FittingProfile> = {
   safety_monitor: {sockets, occluders: [[[.24,.25],[.29,.18],[.42,.16],[.49,.20],[.44,.27],[.34,.29]],[[.63,.32],[1,.30],[1,.42],[.68,.43],[.60,.38]]]},
-  player: profile(.30,.24,.40,.22, [[[.10,.23],[.58,.21],[.66,.29],[.55,.37],[.13,.34]],[[.59,.24],[1,.23],[1,.43],[.61,.43]]]),
+  player: profile(.30,.24,.40,.22, [[[.10,.31],[.45,.29],[.61,.32],[.58,.37],[.10,.37]],[[.59,.24],[1,.23],[1,.43],[.61,.43]]]),
   kang_taesik: profile(.39,.23,.38,.29, []),
   yoon_sungho: profile(.30,.24,.40,.25, [[[.23,.39],[.58,.39],[.62,.47],[.30,.48]]]),
   lee_jaehoon: profile(.34,.22,.33,.25, [[[.68,.19],[1,.18],[1,.44],[.64,.43]],[[.18,.40],[.43,.43],[.43,.51],[.29,.52],[.18,.47]]]),
@@ -47,10 +58,11 @@ WEARABLE_PROFILES.jung = WEARABLE_PROFILES.player!;
 WEARABLE_PROFILES.yoon = WEARABLE_PROFILES.yoon_sungho!;
 
 /** Body-local attachment coordinates; the actor transform owns facing and recoil. */
-export function premiumBodySocket(characterId:string,actor:HTMLImageElement,height:number,category:StoreCategory,pose?:SpritePose):{x:number;y:number;size:number}|undefined {
+export function premiumBodySocket(characterId:string,actor:HTMLImageElement,height:number,category:StoreCategory,pose?:SpritePose):{x:number;y:number;size:number;rear?:boolean}|undefined {
   if(isDirectionalActor(actor)){
-    const kind=category==='communication'?'head':category==='logistics'||category==='companion'?'back':category==='tactics'?'belt':'chest';
-    const socket=directionalSocket(actor,pose,height,kind);return socket?.rear&&kind==='chest'?undefined:socket;
+    const kind=category==='logistics'||category==='companion'?'back':category==='tactics'?'belt':'chest';
+    const socket=directionalSocket(actor,pose,height,kind);if(!socket||socket.rear&&kind==='chest')return;
+    return category==='communication'?{...socket,x:socket.x-socket.size*.45,y:socket.y-socket.size*.12,size:height*.13}:socket;
   }
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
   const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
@@ -78,7 +90,8 @@ export function baseToolSocket(characterId:string,actor:HTMLImageElement,height:
 export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,characterId:string,actor:HTMLImageElement,height:number,pose?:SpritePose):void {
   if(isDirectionalActor(actor)&&pose){
     const socket=directionalSocket(actor,pose,height,'chest');if(!socket||socket.rear)return;
-    ctx.save();ctx.beginPath();ctx.rect(socket.x-socket.size*.5,socket.y+socket.size*.1,socket.size,socket.size*.5);ctx.clip();drawDirectionalBody(ctx,actor,height,pose,false);ctx.restore();return;
+    const masks=directionalHandMasks(actor,pose,height);if(!masks.length)return;
+    ctx.save();ctx.beginPath();for(const mask of masks)ctx.rect(mask.x,mask.y,mask.width,mask.height);ctx.clip();drawDirectionalBody(ctx,actor,height,pose,false);ctx.restore();return;
   }
   const fitting=WEARABLE_PROFILES[characterId];if(!fitting)return;
   const occluders=authoredEquipmentOccluders(actor,pose)??fitting.occluders;if(!occluders.length)return;
@@ -88,15 +101,29 @@ export function drawActorEquipmentOcclusion(ctx:CanvasRenderingContext2D,charact
   ctx.clip();if(!drawAuthoredBody(ctx,actor,height,pose))ctx.drawImage(actor,body.x,body.y,body.width,body.height,-width/2,-height,width,height);ctx.restore();
 }
 
-export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose):{x:number;y:number}|undefined {
+export function inspectionDockAnchor(characterId:string,actor:HTMLImageElement,height:number,pose:SpritePose,state?:SurvivorsGameState):{x:number;y:number}|undefined {
+  const fitting=WORN_CALIBRATIONS[characterId];
+  if(fitting&&state){
+    const source=spriteOpaqueBounds(actor),width=height*source.width/source.height;
+    let point={x:(fitting.back[0]-.5)*width,y:(fitting.back[1]-1)*height};
+    if(isDirectionalActor(actor)){const socket=directionalSocket(actor,pose,height,'back');if(!socket)return;point={x:socket.x+(socket.rear?0:-height*.12),y:socket.y};}
+    const peers=wornEquipmentPlans(state).filter(plan=>plan.part==='back'),index=peers.findIndex(plan=>plan.id==='inspection_wing');
+    if(peers.length>1&&index>=0)point.x+=(index-(peers.length-1)/2)*height*.09;
+    return actorTorsoPoint(point,pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));
+  }
   if(isDirectionalActor(actor)){const socket=directionalSocket(actor,pose,height,'back');return socket?actorTorsoPoint(socket,{...pose,directional:true},height,true):undefined;}
   const socket=WEARABLE_PROFILES[characterId]?.sockets.inspection_wing;
   if(!socket)return;
   const bounds=spriteOpaqueBounds(actor),width=height*bounds.width/bounds.height;
   return actorTorsoPoint({x:(socket.x+socket.w/2-.5)*width,y:(socket.y+socket.h/2-1)*height},pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop() ?? '']));
 }
+export function inspectionWearFlight(state:SurvivorsGameState,actor:HTMLImageElement,height:number,pose:SpritePose,reduced=false){
+ const dock=inspectionDockAnchor(state.characterId,actor,height,pose,state);return dock?wornInspectionFlights.sample(state,dock,reduced):undefined;
+}
 
 export function hasWearable(state: SurvivorsGameState, id: string, images: WearableImages): boolean {
+  if(images.premiumWorn?.naturalWidth&&wornEquipmentPlans(state).some(plan=>plan.atlas==='premium'&&plan.id===id))return true;
+  if(['voice_lens','command_array','broadcast_crown'].includes(id)&&images.communication?.naturalWidth)return true;
   return Boolean(WEARABLE_PROFILES[state.characterId]) && id in WEARABLE_ART && Boolean(images[id as WearableId]?.naturalWidth);
 }
 
@@ -116,30 +143,89 @@ export async function loadWearableImages(characterId: string): Promise<WearableI
     }
     return [id, await pending] as const;
   }));
-  return Object.fromEntries(entries);
+  if(!communicationPromise)communicationPromise=new Promise(resolve=>{const image=new Image();image.onload=()=>{registerPropAtlas(image,4,3);resolve(image);};image.onerror=()=>{communicationPromise=undefined;resolve(undefined);};image.src=COMMUNICATION_WEAR_ART;});
+  const [premiumWorn,normalWorn]=await Promise.all([loadWorn(PREMIUM_WORN_ART),loadWorn(NORMAL_WORN_ART)]);
+  const [premiumSide,premiumRear,normalSide,normalRear,emptyDock]=await Promise.all([loadWorn(WORN_VIEW_ART.premiumSide),loadWorn(WORN_VIEW_ART.premiumRear),loadWorn(WORN_VIEW_ART.normalSide),loadWorn(WORN_VIEW_ART.normalRear),loadWorn(WORN_VIEW_ART.emptyDock,2,3)]);
+  return {...Object.fromEntries(entries),communication:await communicationPromise,premiumWorn,normalWorn,premiumSide,premiumRear,normalSide,normalRear,emptyDock};
+}
+
+const partJoint={chest:'armor',tempo:'wrist',back:'pack',belt:'belt',wrist:'wrist',boots:'armor'} as const;
+function drawNewWornLayer(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,actor:HTMLImageElement,height:number,pose:SpritePose,images:WearableImages,layer:'front'|'back',reduced:boolean,only?:'wrist'):boolean {
+ const fitting=WORN_CALIBRATIONS[state.characterId];if(!fitting)return false;
+ const source=spriteOpaqueBounds(actor),width=height*source.width/source.height,directional=isDirectionalActor(actor);
+ const plans=wornEquipmentPlans(state);let drawn=false;
+ const view=wornView(directional?renderedDirection(actor,pose):undefined);
+ for(const plan of plans){
+  if(only&&plan.part!==only)continue;
+  let image=plan.atlas==='premium'?(view.view==='side'?images.premiumSide:view.view==='rear'?images.premiumRear:images.premiumWorn):(view.view==='side'?images.normalSide:view.view==='rear'?images.normalRear:images.normalWorn);
+  let cell=plan.cell;
+  if(plan.id==='inspection_wing'&&inspectionWearFlight(state,actor,height,pose,reduced)?.phase!=='docked'){image=images.emptyDock;cell=(view.view==='rear'?2:view.view==='side'?1:0)*2;}
+  if(!image?.naturalWidth)continue;
+  if(plan.part==='boots'){
+   // Boot guards belong to the legs, never to the torso recoil frame.
+   if(layer!=='front')continue;
+   if(directional){ctx.save();applyActorTorsoTransform(ctx,pose,height,true);for(const foot of directionalBootSockets(actor,pose,height)){ctx.save();ctx.translate(foot.x,foot.y-height*.01);if(view.mirror)ctx.scale(-1,1);drawProp(ctx,image,cell,0,0,height*plan.size);ctx.restore();}ctx.restore();drawn=true;continue;}
+   const rig=ACTOR_RIGS[actor.src.split('/').pop()??''];if(!rig)continue;
+   for(const [i,leg] of [rig.left,rig.right].entries()){
+    const step=footTravel(pose.cycle,i===1,pose.mode==='run',pose.directionY,pose.reaction>0?0:pose.gaitBlend,pose.stride);
+    ctx.save();ctx.scale(pose.facing,1);ctx.transform(1,0,pose.lean,1,0,0);
+    drawProp(ctx,image,plan.cell,(leg.sole.x-.5)*width+step.x,(leg.sole.y-1)*height+step.y-step.lift-height*.018,height*plan.size);ctx.restore();
+   }drawn=true;continue;
+  }
+  let point={x:(fitting[plan.part][0]-.5)*width,y:(fitting[plan.part][1]-1)*height};
+  let order:'front'|'back'=plan.part==='back'?'back':'front';
+  if(directional){
+   const socket=directionalSocket(actor,pose,height,plan.part==='back'?'back':plan.part==='belt'?'belt':plan.part==='wrist'?'wrist':plan.part==='tempo'?'tempo':'chest');if(!socket)continue;
+   if(plan.part!=='back'&&plan.part!=='belt'&&socket.rear)continue;
+   order=plan.part==='back'&&!socket.rear?'back':'front';
+   point={x:socket.x+(plan.part==='back'?(socket.rear?0:-height*.12):0),y:socket.y};
+  }
+  if(order!==layer)continue;
+  // Fan multiple belt/back modules across their own mounts rather than stacking badges.
+  const peers=plans.filter(other=>other.part===plan.part&&other.part!=='chest'),index=peers.findIndex(other=>other.id===plan.id);
+  if(peers.length>1)point.x+=(index-(peers.length-1)/2)*height*.09;
+  const size=height*plan.size*fitting.scale;
+  ctx.save();applyActorTorsoTransform(ctx,pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));ctx.translate(point.x,point.y);
+  ctx.rotate(wearableMotion.sample(state.player,equipmentAnimationTime(state),pose,reduced,plan.id,partJoint[plan.part]));
+  if(view.mirror&&directional)ctx.scale(-1,1);
+  drawProp(ctx,image,cell,0,size/2,size);ctx.restore();drawn=true;
+ }
+ return drawn;
 }
 
 /** Origin is the actor's feet; sockets are authored in opaque body coordinates. */
 export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: SurvivorsGameState, actor: HTMLImageElement, height: number, pose: SpritePose, images: WearableImages, layer: 'front' | 'back',reduced=false): void {
+  const newDrawn=drawNewWornLayer(ctx,state,actor,height,pose,images,layer,reduced);
+  const directional=isDirectionalActor(actor),communication=images.communication&&communicationWearPlan(state,directional?renderedDirection(actor,pose):undefined);
+  let communicationDrawn=false;
+  if(communication&&communication.layer===layer){
+    let socket=communication.row===2?directionalSocket(actor,pose,height,'chest'):premiumBodySocket(state.characterId,actor,height,'communication',pose);
+    if(!directional&&(state.characterId==='player'||state.characterId==='jung')){const source=spriteOpaqueBounds(actor),width=height*source.width/source.height;socket={x:-.06*width,y:-.70*height,size:height*.18};}
+    if(socket){ctx.save();applyActorTorsoTransform(ctx,pose,height,Boolean(ACTOR_RIGS[actor.src.split('/').pop()??'']));ctx.translate(socket.x,socket.y);ctx.rotate(wearableMotion.sample(state.player,equipmentAnimationTime(state),pose,reduced,communication.id,'radio'));drawProp(ctx,images.communication,communication.cell,0,height*.09,height*.18);ctx.restore();communicationDrawn=true;}
+  }
   if(isDirectionalActor(actor)){
-    ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);let drawn=false;
+    ctx.save();applyActorTorsoTransform(ctx,{...pose,directional:true},height,true);let drawn=communicationDrawn||newDrawn;
     for(const id of state.premiumGear?.equipped??[]){
+      if(images.communication&&['voice_lens','command_array','broadcast_crown'].includes(id))continue;
+      if(images.premiumWorn)continue;
       if(!hasWearable(state,id,images))continue;
-      const kind=id==='voice_lens'?'head':id==='inspection_wing'?'back':'chest';
-      const socket=directionalSocket(actor,pose,height,kind);if(!socket||socket.rear&&kind==='chest')continue;
+      const kind=id==='inspection_wing'?'back':'chest';
+      const socket=id==='voice_lens'?premiumBodySocket(state.characterId,actor,height,'communication',pose):directionalSocket(actor,pose,height,kind);if(!socket||socket.rear&&kind==='chest')continue;
       const order=kind==='back'&&!socket.rear?'back':'front';if(layer!==order)continue;
       const image=images[id as WearableId]!,source=spriteOpaqueBounds(image),size=socket.size;
       const scale=size/Math.max(source.width,source.height),w=source.width*scale,h=source.height*scale;
       drawMountedWearable(ctx,state,pose,id as WearableId,image,source,socket.x-w/2,socket.y-h/2,w,h,reduced);drawn=true;
     }
     if(drawn&&layer==='front')drawActorEquipmentOcclusion(ctx,state.characterId,actor,height,pose);
-    ctx.restore();return;
+    ctx.restore();if(layer==='front')drawNewWornLayer(ctx,state,actor,height,pose,images,layer,reduced,'wrist');return;
   }
   const fitting = WEARABLE_PROFILES[state.characterId]; if (!fitting) return;
   const body = spriteOpaqueBounds(actor), width = height * body.width / body.height;
   ctx.save(); applyActorTorsoTransform(ctx, pose, height, Boolean(ACTOR_RIGS[actor.src.split('/').pop() ?? '']));
-  let drawn = false;
+  let drawn = communicationDrawn||newDrawn;
   for (const id of state.premiumGear?.equipped ?? []) {
+    if(images.communication&&['voice_lens','command_array','broadcast_crown'].includes(id))continue;
+    if(images.premiumWorn)continue;
     if (!hasWearable(state, id, images)) continue;
     const socket = fitting.sockets[id as WearableId]; if (socket.layer !== layer) continue;
     const image = images[id as WearableId]!, source = spriteOpaqueBounds(image);
@@ -166,4 +252,5 @@ export function drawWearableLayer(ctx: CanvasRenderingContext2D, state: Survivor
     ctx.clip(); if(!drawAuthoredBody(ctx,actor,height,pose))ctx.drawImage(actor, body.x, body.y, body.width, body.height, -width/2, -height, width, height); ctx.restore();
   }
   ctx.restore();
+  if(layer==='front')drawNewWornLayer(ctx,state,actor,height,pose,images,layer,reduced,'wrist');
 }

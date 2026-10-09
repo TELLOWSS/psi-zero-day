@@ -1,29 +1,28 @@
 import type {SurvivorsGameState} from '../domain/patrol-survivors';
 import {STORE_ITEMS} from '../domain/survivors-store';
 import {drawProp} from './survivors-equipment-art';
-import {hasWearable,inspectionDockAnchor,premiumBodySocket,drawActorEquipmentOcclusion,type WearableImages} from './survivors-wearable-art';
+import {hasWearable,inspectionDockAnchor,inspectionWearFlight,premiumBodySocket,drawActorEquipmentOcclusion,type WearableImages} from './survivors-wearable-art';
 import {applyActorTorsoTransform} from './survivors-rig-renderer';
 import {ACTOR_RIGS} from './survivors-animation-rig';
 import {EQUIPMENT_AURAS} from './survivors-equipment-identity';
 import {drawVfxCell} from './survivors-cinematic-vfx';
-import {InspectionFlightTracker,type InspectionPhase} from './survivors-inspection-flight';
+import {type InspectionPhase} from './survivors-inspection-flight';
 import type {SpritePose} from './survivors-sprite-motion';
 import {premiumHazardSpeed} from '../engine/survivors-premium-gear';
 import {equipmentAnimationTime} from './survivors-equipment-clock';
 import {EquipmentMotion,type EquipmentJoint} from './survivors-equipment-motion';
 import {ShieldPresentationTracker} from './survivors-shield-presentation';
-const inspectionFlights=new InspectionFlightTracker();
 const mountedMotion=new EquipmentMotion();
 const shieldPresentation=new ShieldPresentationTracker();
 const categoryJoints={communication:'radio',tempo:'wrist',logistics:'pack',protection:'armor',tactics:'belt',companion:'dock'} satisfies Record<string,EquipmentJoint>;
 export const PREMIUM_MOUNTED_ART='/assets/survivors/premium-equipment-mounted-v1.png';
 /** Raster art stays in presentation; status is read exclusively from the engine. */
-export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,_atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,_itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement;premiumAtlas?:HTMLImageElement}):InspectionPhase|undefined {
+export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGameState,_atlas:HTMLImageElement|undefined,reducedMotion:boolean,_facing=0,_itemsAtlas?:HTMLImageElement,wearables:WearableImages={},actorPose?:{actor:HTMLImageElement;height:number;pose:SpritePose;vfxAtlas?:HTMLImageElement;premiumAtlas?:HTMLImageElement;quiet?:boolean}):InspectionPhase|undefined {
   const gear=state.premiumGear;if(!gear||!gear.equipped.length)return;
   const {x,y}=state.player;
   const fittedInspection=gear.equipped.includes('inspection_wing')&&hasWearable(state,'inspection_wing',wearables);
-  const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose):undefined;
-  const flight=fittedInspection&&dock?inspectionFlights.sample(state,dock,reducedMotion):undefined;
+  const dock=actorPose?inspectionDockAnchor(state.characterId,actorPose.actor,actorPose.height,actorPose.pose,state):undefined;
+  const flight=fittedInspection&&dock&&actorPose?inspectionWearFlight(state,actorPose.actor,actorPose.height,actorPose.pose,reducedMotion):undefined;
   const shield=shieldPresentation.sample(state,reducedMotion,state.hazards.length>45||state.projectiles.length>60);
   if(shield&&actorPose?.vfxAtlas?.naturalWidth) {
     ctx.save();ctx.globalCompositeOperation='screen';
@@ -63,7 +62,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
     const deployment=flight&&dock?Math.min(1,Math.hypot(flight.x-dock.x,flight.y-dock.y)/40):1;
     const size=flight?12+12*(flight.phase==='inspecting'?1:deployment):fitted?12:14;
     if(!docked){ctx.save();ctx.fillStyle='#061017';ctx.globalAlpha=.3;ctx.beginPath();ctx.ellipse(px,y+(flight?.y??0)+28,9,3.5,0,0,Math.PI*2);ctx.fill();ctx.restore();}
-    draw(companion,px,py,size);
+    if(!docked||!fitted)draw(companion,px,py,size);
     if(flight){ctx.save();ctx.fillStyle=docked?'#b7ebae':flight.phase==='inspecting'?'#66dcd4':'#e8c578';ctx.fillRect(px-1,py+size*.22,2,1.5);ctx.restore();}
   }
   // All other purchases use the same character-specific torso frame as raster wearables.
@@ -81,7 +80,7 @@ export function drawPremiumGear(ctx:CanvasRenderingContext2D,state:SurvivorsGame
         draw(id,0,0,socket.size);ctx.restore();
       }
       const aura=EQUIPMENT_AURAS[id as keyof typeof EQUIPMENT_AURAS];
-      if(aura&&!reducedMotion){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(equipmentAnimationTime(state)*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
+      if(aura&&!reducedMotion&&!actorPose.quiet){ctx.save();ctx.globalCompositeOperation='screen';const pulse=.58+Math.sin(equipmentAnimationTime(state)*3+aura.marks)*.08;drawVfxCell(ctx,actorPose.vfxAtlas,aura.cell,socket.x,socket.y,21,17,pulse);ctx.restore();}
       attached=true;
     }
   }

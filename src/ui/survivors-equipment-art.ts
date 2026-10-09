@@ -45,6 +45,7 @@ export function registerPropAtlas(image:HTMLImageElement,columns:number,rows:num
   let left=x1,right=x0,top=y1,bottom=y0;
   for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++)if(pixels[(y*scratch.width+x)*4+3]!>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
   const frame=document.createElement('canvas');frame.width=256;frame.height=256;
+  frame.dataset.propAtlas=image.src;frame.dataset.propCell=String(cell);
   if(right>=left&&bottom>=top){const w=right-left+1,h=bottom-top+1,scale=248/Math.max(w,h);frame.getContext('2d')?.drawImage(image,left,top,w,h,(256-w*scale)/2,252-h*scale,w*scale,h*scale);}
   frames.push(frame);
  }

@@ -1,0 +1,18 @@
+.operation-handoff-dossier {box-sizing:border-box;min-width:0;margin:12px 0;padding:12px;border:1px solid #476459;border-radius:10px;background:#132520;color:#deebe4;text-align:left;}
+.operation-handoff-dossier summary {cursor:pointer;font-size:13px;font-weight:700;color:#a1e5c6;}
+.operation-handoff-dossier label {display:grid;gap:6px;margin-top:12px;font-size:12px;}
+.operation-handoff-dossier select {box-sizing:border-box;width:100%;min-width:0;max-width:100%;padding:9px;background:#0a1814;color:#edf8f1;border:1px solid #688977;border-radius:6px;font-size:12px;}
+.operation-handoff-dossier header {display:flex;gap:12px;align-items:center;margin:12px 0;}
+.operation-handoff-dossier header img {width:48px;height:60px;object-fit:cover;border-radius:6px;}
+.operation-handoff-dossier header div {display:grid;gap:4px;font-size:12px;}
+.operation-handoff-dossier header b {color:#b6e4ce;}
+.operation-handoff-dossier dl {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0;}
+.operation-handoff-dossier dl div {padding:8px;background:#1f352b;border-radius:6px;}
+.operation-handoff-dossier dt {font-size:11px;color:#acc4b7;}
+.operation-handoff-dossier dd {margin:4px 0 0;font-size:17px;font-weight:700;}
+.operation-handoff-dossier p {font-size:12px;line-height:1.65;}
+.operation-handoff-dossier p strong {display:block;color:#a1e5c6;}
+.operation-handoff-dossier small,.operation-handoff-dossier .operation-handoff-boundary {font-size:11px;color:#afc4b8;}
+.mode-preview-dialog .mode-preview-copy {min-width:0;overflow-y:auto;}
+.title-screen .operation-handoff-dossier {position:relative;z-index:2;width:min(640px,100%);}
+.zb-support-grid > .operation-handoff-dossier {grid-column:1/-1;}

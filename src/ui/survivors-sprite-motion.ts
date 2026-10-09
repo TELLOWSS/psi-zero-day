@@ -4,8 +4,9 @@ import { prepareActorRig, drawRiggedActor } from './survivors-rig-renderer';
 import {ATTACK_MOTION,attackEnvelope,attackProgress,type AttackMotion} from './survivors-attack-motion';
 import {commandArtProfile} from './survivors-command-art';
 import {movementDirection,drawDirectionalBody} from './survivors-directional-art';
-interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; pose: SpritePose }
-export interface SpritePose { moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; equipmentCheck?:number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
+import {turnToward} from './survivors-foot-lock';
+interface Sample { x: number; y: number; clock: number; hp: number; cycle: number; facing: 1 | -1; reactionUntil: number; actionUntil: number; actionStart:number; actionKind:AttackMotion|undefined; velocityX:number; gaitActivation:number; pose: SpritePose }
+export interface SpritePose { visualAngle?:number;turning?:boolean;contactCycle?:number;worldX?:number;worldY?:number;clock?:number;entity?:object; moving: boolean; cycle: number; authoredCycle?:number; facing: 1 | -1; direction?:number;directional?:boolean; attackAngle?:number; actionKind?:AttackMotion; lean: number; scaleY: number; reaction: number; action: number; actionProgress?: number; equipmentCheck?:number; speed: number; gaitBlend: number; stride: number; travel: number; directionY: number; mode: 'idle' | 'walk' | 'run' | 'brace' | 'action' }
 
 /** Presentation only: gait follows actual travelled distance, never input or wall time. */
 export class SpriteMotionTracker {
@@ -21,7 +22,9 @@ export class SpriteMotionTracker {
     }
   }
   sample(entity: object, x: number, y: number, clock: number, hp = 1): SpritePose {
-    const previous = this.samples.get(entity);
+    let previous = this.samples.get(entity);
+    // A resumed/rewound timeline is not a velocity sample.
+    if(previous && (clock<previous.clock || clock-previous.clock>.5)) previous=undefined;
     const attack=this.actions.get(entity);
     const actionUntil=attack?attack.start+ATTACK_MOTION[attack.kind].duration:0;
     if (previous && clock === previous.clock && x === previous.x && y === previous.y && hp === previous.hp && actionUntil === previous.actionUntil && (attack?.start??-1)===previous.actionStart && attack?.kind===previous.actionKind) return previous.pose;
@@ -30,11 +33,13 @@ export class SpriteMotionTracker {
     const elapsed = previous ? clock - previous.clock : 0;
     const distance = Math.hypot(dx, dy);
     const held = elapsed===0&&distance===0&&previous;
-    const moving = held ? previous.pose.moving : elapsed > 0 && distance > 0.015 && distance < 80;
-    const speed = held ? previous.pose.speed : moving ? distance / elapsed : 0;
+    const moving = held ? held.pose.moving : elapsed > 0 && distance / elapsed > .5 && distance < 80;
+    const speed = held ? held.pose.speed : moving ? distance / elapsed : 0;
     const running = speed > 145;
     const directionY = moving && distance>0 ? dy / distance : previous?.pose.directionY ?? 0;
-    const stride = moving ? gaitStride(running, directionY) : previous?.pose.stride ?? 54;
+    const runBlend = Math.max(0,Math.min(1,(speed-130)/50));
+    const smoothRun = runBlend*runBlend*(3-2*runBlend);
+    const stride = moving ? gaitStride(false,directionY)+(gaitStride(true,directionY)-gaitStride(false,directionY))*smoothRun : previous?.pose.stride ?? 54;
     const cycle = moving ? ((previous?.cycle ?? 0) + distance * Math.PI * 2 / stride) % (Math.PI * 2) : previous?.cycle ?? 0;
     // An authored cycle contains both steps; its cadence must not accelerate on vertical travel.
     const authoredCycle=((previous?.pose.authoredCycle??0)+(moving?distance*Math.PI*2/112:0))%(Math.PI*2);
@@ -42,19 +47,26 @@ export class SpriteMotionTracker {
     const reactionUntil = previous && hp < previous.hp ? clock + .18 : previous?.reactionUntil ?? 0;
     const reaction = Math.max(0, Math.min(1, (reactionUntil - clock) / .18));
     const action = attack?attackEnvelope(clock-attack.start,attack.kind):0;
-    const targetLean = moving ? Math.max(-.035, Math.min(.035, dx / Math.max(elapsed, .001) * .0002)) : reaction * .025;
     const leanBlend = 1 - Math.exp(-Math.max(0, elapsed) / .075);
-    const lean = previous ? previous.pose.lean + (targetLean - previous.pose.lean) * leanBlend : targetLean;
+    const velocity = held ? held.velocityX : moving ? dx/elapsed : 0;
+    const velocityX = previous ? previous.velocityX+(velocity-previous.velocityX)*leanBlend : 0;
+    const inertia = Math.max(-.012,Math.min(.012,(velocity-velocityX)*.00008));
+    const lean = Math.max(-.047,Math.min(.047,Math.max(-.035,Math.min(.035,velocityX*.0002))+inertia+reaction*.025));
+    const gaitActivation = held ? held.gaitActivation : Math.max(0,Math.min(1,(previous?.gaitActivation??0)+(moving?1:-1)*Math.max(0,elapsed)*10));
+    const direction=moving?movementDirection(dx,dy,previous?.pose.direction??2):attack?.angle!==undefined&&clock<actionUntil?movementDirection(Math.cos(attack.angle),Math.sin(attack.angle),previous?.pose.direction??2):previous?.pose.direction??2;
+    const visualAngle=previous?turnToward(previous.pose.visualAngle??(previous.pose.direction??2)*Math.PI/4,direction*Math.PI/4,Math.max(0,elapsed)):direction*Math.PI/4;
+    const turning=Math.abs(Math.atan2(Math.sin(direction*Math.PI/4-visualAngle),Math.cos(direction*Math.PI/4-visualAngle)))>.01;
+    const contactCycle=((previous?.pose.contactCycle??0)+(moving?distance*Math.PI*2/(64+32*smoothRun):0))%(Math.PI*2);
     const pose: SpritePose = {
-      moving, cycle, authoredCycle, facing,direction:moving?movementDirection(dx,dy,previous?.pose.direction??2):attack?.angle!==undefined&&clock<actionUntil?movementDirection(Math.cos(attack.angle),Math.sin(attack.angle),previous?.pose.direction??2):previous?.pose.direction??2,
+      moving, cycle, authoredCycle, facing,direction,visualAngle,turning,contactCycle,worldX:x,worldY:y,clock,entity,
       attackAngle:attack?.angle,actionKind:attack?.gestureKind,
       lean, actionProgress: attack ? attackProgress(clock-attack.gestureStart,attack.gestureKind) : 0,
       scaleY: 1 - (moving ? Math.abs(Math.sin(cycle)) * .018 : (1 + Math.sin(clock * 2.4)) * .002) - reaction * .035,
-      reaction, action, speed, gaitBlend: moving ? Math.min(1,(previous?.pose.gaitBlend ?? 0)+elapsed*10) : Math.max(0,(previous?.pose.gaitBlend ?? 0)-Math.max(0,elapsed)*10),
+      reaction, action, speed, gaitBlend: gaitActivation*gaitActivation*(3-2*gaitActivation),
       stride, travel: (previous?.pose.travel ?? 0) + (moving ? distance : 0), directionY,
       mode: reaction > 0 ? 'brace' : moving ? running ? 'run' : 'walk' : attack && clock>=attack.start && clock<actionUntil ? 'action' : 'idle',
     };
-    this.samples.set(entity, { x, y, clock, hp, cycle, facing, reactionUntil, actionUntil, actionStart:attack?.start??-1,actionKind:attack?.kind,pose });
+    this.samples.set(entity, { x, y, clock, hp, cycle, facing, reactionUntil, actionUntil, actionStart:attack?.start??-1,actionKind:attack?.kind,velocityX,gaitActivation,pose });
     return pose;
   }
 }

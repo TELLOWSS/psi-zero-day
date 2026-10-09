@@ -19,19 +19,26 @@ export class EquipmentMotion {
   let channels=this.samples.get(entity);
   if(!channels){channels=new Map();this.samples.set(entity,channels);}
   const previous=channels.get(id),profile=JOINTS[joint];
+  const facing=pose.directional?1:pose.facing;
   if(reduced){channels.delete(id);return 0;}
-  if(!previous||time<previous.clock||time-previous.clock>.25||previous.facing!==pose.facing){
-   channels.set(id,{clock:time,angle:0,velocity:0,facing:pose.facing});return 0;
+  if(!previous||time<previous.clock||time-previous.clock>.25){
+   channels.set(id,{clock:time,angle:0,velocity:0,facing});return 0;
   }
-  if(time===previous.clock)return previous.angle;
+  // Mirroring changes the local coordinate system, not the world-space inertia.
+  const sign=previous.facing===facing?1:-1;
+  if(time===previous.clock){
+   if(sign<0)channels.set(id,{...previous,angle:-previous.angle,velocity:-previous.velocity,facing});
+   return previous.angle*sign;
+  }
   const target=Math.max(-profile.limit,Math.min(profile.limit,-pose.lean*1.4+Math.sin(pose.cycle-profile.phase)*pose.gaitBlend*profile.sway-pose.action*profile.attack));
-  const dt=time-previous.clock,steps=Math.ceil(dt/(1/120)),step=dt/steps;
-  let {angle,velocity}=previous;
-  for(let i=0;i<steps;i++){
-   velocity+=((target-angle)*profile.stiffness-velocity*profile.damping)*step;
-   angle+=velocity*step;
-  }
+  // Exact damped spring for this sampled target; no frame-dependent Euler substeps.
+  const dt=time-previous.clock,decay=profile.damping/2;
+  const frequency=Math.sqrt(profile.stiffness-decay*decay);
+  const attenuation=Math.exp(-decay*dt),cos=Math.cos(frequency*dt),sin=Math.sin(frequency*dt);
+  const displacement=previous.angle*sign-target,initialVelocity=previous.velocity*sign;
+  let angle=target+attenuation*(displacement*cos+(initialVelocity+decay*displacement)/frequency*sin);
+  const velocity=attenuation*(initialVelocity*cos-(decay*initialVelocity+profile.stiffness*displacement)/frequency*sin);
   angle=Math.max(-profile.limit,Math.min(profile.limit,angle));
-  channels.set(id,{clock:time,angle,velocity,facing:pose.facing});return angle;
+  channels.set(id,{clock:time,angle,velocity,facing});return angle;
  }
 }

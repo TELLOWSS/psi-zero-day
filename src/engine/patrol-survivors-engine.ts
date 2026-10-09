@@ -742,6 +742,41 @@ export class SurvivorsEngine {
   constructor(public state: SurvivorsGameState = createInitialSurvivorsState(), readonly seed = 0x505349, readonly bossIntroReplay=false) {
     this.random = seededRandom(seed);
   }
+  private equipmentPreviewOnly=false;
+  private equipmentPreviewResetTime=0;
+  static equipmentPreview(source:SurvivorsGameState,perk:PerkId,level:number):SurvivorsEngine {
+    const state=JSON.parse(JSON.stringify(source)) as SurvivorsGameState,engine=new SurvivorsEngine(state,0x50524556);
+    engine.equipmentPreviewOnly=true;state.phase='playing';state.player.x=700;state.player.y=450;
+    state.player.invincibleTime=999;state.hazards=[];state.projectiles=[];state.drops=[];state.terrain=[];state.interactiveHazards=[];state.bossEncounter=undefined;
+    for(const key of Object.keys(state.activePerks) as PerkId[])state.activePerks[key]=0;
+    const recipe=EVOLUTION_RECIPES[perk as EvolutionPerkId];
+    if(recipe){state.activePerks[recipe.weapon]=5;engine.applyPerk(recipe.support);}
+    else if(PERK_CATALOG[perk].category==='support')state.activePerks[CHARACTER_PROFILES[state.characterId].startingWeapon]=1;
+    for(let n=0;n<Math.min(PERK_CATALOG[perk].maxLevel,Math.max(1,level));n++)engine.applyPerk(perk);
+    engine.resetPreviewHazards();return engine;
+  }
+  private resetPreviewHazards() {
+    const positions=[[760,450],[865,425],[720,525]];
+    this.state.hazards=[];
+    for(const p of positions){this.spawnHazard('RUNAWAY_CART',160);const h=this.state.hazards.at(-1)!;h.x=p[0]!;h.y=p[1]!;h.expValue=0;}
+  }
+  previewEquipmentDefense():boolean {
+    if(!this.equipmentPreviewOnly)return false;
+    if(!this.state.hazards.length)this.resetPreviewHazards();
+    const h=this.state.hazards[0]!,previous={x:h.x,y:h.y,motion:h.motion};
+    this.state.player.hp=this.state.player.maxHp;this.state.player.invincibleTime=0;
+    h.x=this.state.player.x;h.y=this.state.player.y;h.motion={phase:'charge',timer:1,directionX:1,directionY:0};
+    this.checkCollisions();h.x=previous.x;h.y=previous.y;h.motion=previous.motion;this.state.player.invincibleTime=999;return true;
+  }
+  advanceEquipmentPreview(dt:number):void {
+    if(!this.equipmentPreviewOnly||!Number.isFinite(dt)||dt<=0)return;
+    dt=Math.min(.05,dt);this.state.gameTime+=dt;this.state.phase='playing';this.state.lastKilledEvents=[];this.state.drops=[];tickPremiumGear(this.state,dt);
+    if(this.state.hazards.length<3){this.equipmentPreviewResetTime+=dt;if(this.equipmentPreviewResetTime>=1.2){this.resetPreviewHazards();this.equipmentPreviewResetTime=0;}}
+    for(const h of this.state.hazards){h.hitFlashTimer=Math.max(0,(h.hitFlashTimer??0)-dt);h.isStunned=Math.max(0,(h.isStunned??0)-dt);}
+    this.updateWeapons(dt);this.updateProjectiles(dt);this.checkCollisions();
+    this.state.projectiles=this.state.projectiles.filter(p=>p.duration>0&&p.pierce>0);
+    this.drainAudioEvents();
+  }
   private genId(prefix: string) { return `${prefix}_${this.nextEntityId++}`; }
 
 
@@ -778,11 +813,19 @@ export class SurvivorsEngine {
 
   requestSupport():boolean { const accepted=requestFieldSupport(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
   private terrainCleanupCooldown=0;
+  private rewardTerrainCleanup() {
+    if(this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+    this.state.psiCredits+=40;this.state.terrainGift={credits:40,remaining:2.5};
+  }
+  terrainCleanupStatus() {
+    const target=this.state.terrain?.find(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(this.state.player.x-(o.x+o.width/2),this.state.player.y-(o.y+o.height/2))<120);
+    return target?{remaining:Math.ceil(target.hp/40),cooldown:this.terrainCleanupCooldown,ready:this.state.phase==='playing'&&this.terrainCleanupCooldown<=0&&(!this.state.bossEncounter||this.state.bossEncounter.phase==='combat')}:null;
+  }
   clearTerrain():boolean {
     if(this.state.phase!=='playing'||this.terrainCleanupCooldown>0||this.state.bossEncounter&&this.state.bossEncounter.phase!=='combat')return false;
     const o=this.state.terrain?.find(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(this.state.player.x-(o.x+o.width/2),this.state.player.y-(o.y+o.height/2))<120);
     if(!o)return false;o.hp=Math.max(0,o.hp-40);this.terrainCleanupCooldown=.6;
-    if(o.hp===0&&this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+    if(o.hp===0)this.rewardTerrainCleanup();
     this.emitAudio('control',o.x,o.y);return true;
   }
   deployControlLine():boolean { const accepted=placeControlLine(this.state);if(accepted)this.emitAudio('control',this.state.player.x,this.state.player.y);return accepted; }
@@ -910,6 +953,7 @@ export class SurvivorsEngine {
 
     // Combo countdown decay
     this.terrainCleanupCooldown=Math.max(0,this.terrainCleanupCooldown-dt);
+    if(this.state.terrainGift)this.state.terrainGift.remaining=Math.max(0,this.state.terrainGift.remaining-dt);
     if (this.state.comboTimer > 0) {
       this.state.comboTimer -= dt;
       if (this.state.comboTimer <= 0) {
@@ -2078,7 +2122,7 @@ export class SurvivorsEngine {
         p.x=previous.x+(p.x-previous.x)*Math.max(0,terrainContact.t-.001);p.y=previous.y+(p.y-previous.y)*Math.max(0,terrainContact.t-.001);
         const o=terrainContact.object;
         if(o.kind==='rubble'){
-          o.hp=Math.max(0,o.hp-p.damage);if(o.hp===0&&this.state.terrainRecord)this.state.terrainRecord.rubbleCleared++;
+          o.hp=Math.max(0,o.hp-p.damage);if(o.hp===0)this.rewardTerrainCleanup();
         }
       }
       for(const h of hazards){

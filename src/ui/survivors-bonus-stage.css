@@ -1,0 +1,12 @@
+.survivors-bonus-backdrop { z-index:120; }
+.survivors-bonus-stage { width:min(580px,calc(100% - 24px)); max-height:calc(100dvh - 24px); overflow:auto; padding:18px; }
+.survivors-bonus-stage header,.survivors-bonus-hud { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.survivors-bonus-stage h2 { font-size:20px; margin:0 0 10px; }
+.survivors-bonus-stage header strong { color:#9af3cd; white-space:nowrap; }
+.survivors-bonus-stage p,.survivors-bonus-stage small { font-size:12px; line-height:1.6; }
+.survivors-bonus-stage button { margin-top:10px; margin-right:8px; }
+.survivors-bonus-hud { padding:8px 0; font-size:13px; }
+.survivors-bonus-field { position:relative; width:100%; height:clamp(180px,45dvh,380px); overflow:hidden; touch-action:none; user-select:none; border:2px solid #65dbaf; border-radius:12px; background-color:#24342e; background-image:linear-gradient(#14261f99,#14261f99),url('/assets/survivors/industrial-ground-v3.webp'); background-size:cover; }
+.survivors-bonus-box { position:absolute; width:46px; height:46px; transform:translate(-50%,-50%); background-image:url('/assets/survivors/supply-upgrades-v1.png'); background-size:400% 200%; background-position:0 0; pointer-events:none; }
+.survivors-bonus-player { position:absolute; width:38px; height:46px; object-fit:cover; border:2px solid #7dd3fc; border-radius:12px; transform:translate(-50%,-50%); pointer-events:none; box-shadow:0 3px 8px #0009; }
+@media (orientation:landscape) and (max-height:500px) { .survivors-bonus-stage { padding:10px 16px; } .survivors-bonus-field { height:180px; } .survivors-bonus-stage h2 { font-size:16px; margin:0; } }

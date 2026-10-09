@@ -1,0 +1,274 @@
+{
+  "player": {
+    "width": 1448,
+    "height": 1086,
+    "bands": [
+      {
+        "y": 0,
+        "height": 214
+      },
+      {
+        "y": 214,
+        "height": 201
+      },
+      {
+        "y": 415,
+        "height": 204
+      },
+      {
+        "y": 619,
+        "height": 211
+      },
+      {
+        "y": 830,
+        "height": 223
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 404
+      },
+      {
+        "y": 404,
+        "height": 385
+      },
+      {
+        "y": 789,
+        "height": 346
+      },
+      {
+        "y": 1135,
+        "height": 313
+      }
+    ]
+  },
+  "kang_taesik": {
+    "width": 1448,
+    "height": 1086,
+    "bands": [
+      {
+        "y": 0,
+        "height": 194
+      },
+      {
+        "y": 194,
+        "height": 185
+      },
+      {
+        "y": 379,
+        "height": 182
+      },
+      {
+        "y": 561,
+        "height": 181
+      },
+      {
+        "y": 742,
+        "height": 177
+      },
+      {
+        "y": 919,
+        "height": 167
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 352
+      },
+      {
+        "y": 352,
+        "height": 339
+      },
+      {
+        "y": 691,
+        "height": 298
+      },
+      {
+        "y": 989,
+        "height": 297
+      }
+    ]
+  },
+  "yoon_sungho": {
+    "width": 1448,
+    "height": 1086,
+    "bands": [
+      {
+        "y": 0,
+        "height": 215
+      },
+      {
+        "y": 215,
+        "height": 208
+      },
+      {
+        "y": 423,
+        "height": 208
+      },
+      {
+        "y": 631,
+        "height": 213
+      },
+      {
+        "y": 844,
+        "height": 214
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 215
+      },
+      {
+        "y": 215,
+        "height": 209
+      },
+      {
+        "y": 424,
+        "height": 208
+      },
+      {
+        "y": 632,
+        "height": 213
+      },
+      {
+        "y": 845,
+        "height": 241
+      }
+    ]
+  },
+  "lee_jaehoon": {
+    "width": 1586,
+    "height": 992,
+    "bands": [
+      {
+        "y": 0,
+        "height": 212
+      },
+      {
+        "y": 212,
+        "height": 205
+      },
+      {
+        "y": 417,
+        "height": 202
+      },
+      {
+        "y": 619,
+        "height": 193
+      },
+      {
+        "y": 812,
+        "height": 173
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 377
+      },
+      {
+        "y": 377,
+        "height": 372
+      },
+      {
+        "y": 749,
+        "height": 336
+      },
+      {
+        "y": 1085,
+        "height": 349
+      }
+    ]
+  },
+  "lim_junho": {
+    "width": 1448,
+    "height": 1086,
+    "bands": [
+      {
+        "y": 0,
+        "height": 203
+      },
+      {
+        "y": 203,
+        "height": 195
+      },
+      {
+        "y": 398,
+        "height": 187
+      },
+      {
+        "y": 585,
+        "height": 194
+      },
+      {
+        "y": 779,
+        "height": 205
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 391
+      },
+      {
+        "y": 391,
+        "height": 377
+      },
+      {
+        "y": 768,
+        "height": 342
+      },
+      {
+        "y": 1110,
+        "height": 338
+      }
+    ]
+  },
+  "safety_monitor": {
+    "width": 1448,
+    "height": 1086,
+    "bands": [
+      {
+        "y": 0,
+        "height": 209
+      },
+      {
+        "y": 209,
+        "height": 188
+      },
+      {
+        "y": 397,
+        "height": 187
+      },
+      {
+        "y": 584,
+        "height": 186
+      },
+      {
+        "y": 770,
+        "height": 200
+      }
+    ],
+    "supplementBands": [
+      {
+        "y": 0,
+        "height": 409
+      },
+      {
+        "y": 409,
+        "height": 392
+      },
+      {
+        "y": 801,
+        "height": 377
+      },
+      {
+        "y": 1178,
+        "height": 270
+      }
+    ]
+  }
+}

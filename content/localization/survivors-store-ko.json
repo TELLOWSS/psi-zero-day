@@ -64,6 +64,7 @@
   "pose": "착용 포즈",
   "poseIdle": "정지 포즈",
   "poseWalk": "이동 포즈",
+  "poseTurn": "접지·회전 확인",
   "poseAction": "공격 포즈",
   "attackMotion": "미리보기 동작",
   "attackShot": "통신 발사",

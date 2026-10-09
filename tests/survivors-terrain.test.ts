@@ -44,9 +44,9 @@ describe('workface terrain gameplay',()=>{
  });
  it('clears nonstructural rubble with a paced action and cannot clear concrete pillars',()=>{
   const s=createInitialSurvivorsState();s.terrain=[{...wall,kind:'rubble',hp:80,maxHp:80}];s.player.x=70;s.player.y=140;s.interactiveHazards=[];
-  const e=new SurvivorsEngine(s);e.start();expect(e.clearTerrain()).toBe(true);expect(e.clearTerrain()).toBe(false);
+  const e=new SurvivorsEngine(s);e.start();expect(e.terrainCleanupStatus()).toMatchObject({remaining:2,ready:true});expect(e.clearTerrain()).toBe(true);expect(e.terrainCleanupStatus()).toMatchObject({remaining:1,ready:false});expect(e.clearTerrain()).toBe(false);
   for(let i=0;i<50;i++)e.update(1/60,{moveX:0,moveY:0});expect(e.clearTerrain()).toBe(true);
-  expect(s.terrain[0]!.hp).toBe(0);expect(s.terrainRecord?.rubbleCleared).toBe(1);
+  expect(s.terrain[0]!.hp).toBe(0);expect(e.terrainCleanupStatus()).toBeNull();expect(s.psiCredits).toBe(40);expect(e.clearTerrain()).toBe(false);expect(s.psiCredits).toBe(40);expect(s.terrainRecord?.rubbleCleared).toBe(1);
   expect(terrainMove(s.terrain,{x:40,y:140},{x:240,y:140},14).x).toBe(240);
  });
  it('provides a clear central route and never places terrain on authored target footprints',()=>{

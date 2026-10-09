@@ -37,6 +37,7 @@ import { RemodelBoardOverlay } from './RemodelBoardOverlay';
 import { DataCenterBoardOverlay } from './DataCenterBoardOverlay';
 import { G8AActivityOverlay } from './G8AActivityOverlay';
 import { FieldHazardsOverlay } from './FieldHazardsOverlay';
+import {OperationHandoffDossier} from './OperationHandoffDossier';
 
 function statusLabel(state: DefenseRunState): string {
   return t(`defense.ui.${state.status.toLowerCase()}`);
@@ -753,6 +754,7 @@ export function DefenseGame({
       <p>{PRODUCTION_MAP ? '순타 굴착 대표 맵을 실제 현장 월드 플레이트 위에서 검증합니다. 게임 좌표는 런타임 topology가 계속 권위값입니다.' : activeSiteMap ? '동일한 현장 디펜스 규칙으로 공법·공정에 따른 동선과 개입 위치의 차이를 체험합니다.' : content.scenario.eventId ? t(defenseEventById(content.scenario.eventId)?.briefingTextId ?? 'defense.event.e1.briefing') : t('defense.ui.support.body')}</p>
     </section>
     <section className="zb-support-grid">
+      <OperationHandoffDossier mode="defense"/>
       {SUPPORT_IDS.map(id => <SupportCard
         key={id}
         session={session}

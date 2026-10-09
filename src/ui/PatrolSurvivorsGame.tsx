@@ -1,3 +1,10 @@
+import {drawEquipmentAura} from './survivors-equipment-aura';
+import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
+import {operationHandoff} from '../domain/survivors-operation-handoff';
+import {saveOperationHandoff} from './survivors-operation-handoff-store';
+import {SurvivorsBonusStage} from './SurvivorsBonusStage';
+import bonusText from '../../content/localization/survivors-bonus-ko.json';
+import {SurvivorsTerrainCleanup} from './SurvivorsTerrainCleanup';
 import {WorkfaceThreatArt,workfaceThreatAppearance,workfaceThreatCopy} from './survivors-workface-threats';
 import workfaceCopy from '../../content/localization/survivors-workface-threats-ko.json';
 import {SurvivorsDisplaySettings} from './SurvivorsDisplaySettings';
@@ -22,14 +29,14 @@ import materialFeelText from '../../content/localization/survivors-material-feel
 import {EquipmentCheckDirection} from './survivors-equipment-check';
 import pleasureText from '../../content/localization/survivors-pleasure-ko.json';
 import {warningLabelLayout} from './survivors-warning-layout';
-import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
+import {drawSafetyDrones} from './survivors-drone-render';
 import {BossEncounterDirection} from './survivors-boss-direction';
 import {INDUSTRIAL_MATERIAL_BOSS_ART,industrialHazardPlacement,type MaterialBossImages} from './survivors-industrial-art';
 import { Pause, Play, Package, Shield, ShieldAlert, Trophy, ArrowUp, SkipForward, Coins, X } from 'lucide-react';
 import {SurvivorsResultSummary} from './SurvivorsResultSummary';
 import { SurvivorsExtractionStatus } from './SurvivorsExtractionStatus';
 import focusText from '../../content/localization/survivors-focus-ko.json';
-import {CINEMATIC_VFX_ATLAS,cinematicLook,drawDroneEmission,drawPremiumProtocol} from './survivors-cinematic-vfx';
+import {CINEMATIC_VFX_ATLAS,cinematicLook,drawPremiumProtocol} from './survivors-cinematic-vfx';
 import {SurvivorsPremiumArt, PREMIUM_ATLAS} from './SurvivorsPremiumArt';
 import {drawPremiumGear,PREMIUM_MOUNTED_ART} from './survivors-premium-render';
 import {drawEquipmentMantle} from './survivors-equipment-identity';
@@ -89,9 +96,7 @@ import { ACCOUNTABILITY_CASES, ACCOUNTABILITY_SAVE_KEY, readAccountability, writ
 import { decideAccountability } from '../domain/survivors-accountability';
 import { ProjectileFeedbackLayer } from './survivors-projectile-feedback';
 import { drawProjectileVfx } from './survivors-projectile-vfx';
-import { equipmentTuning } from '../engine/survivors-equipment-tuning';
 import { survivorsCamera } from './survivors-camera';
-import campaignText from '../../content/localization/survivors-campaign20-ko.json';
 import { drawStageSpatialContext } from './survivors-spatial-context';
 import { selectPatrolScore, type PatrolScoreState } from '../domain/survivors-score';
 import { drawProp, drawEquipment, registerPropAtlas, registerEvolutionAtlas, registerTacticalEquipmentAtlas, equipmentAppearance, stageGroundUri, PICKUP_ART, EQUIPMENT_ART, EVOLUTION_ART, TACTICAL_EQUIPMENT_ART } from './survivors-equipment-art';
@@ -558,6 +563,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   const dispatchTrailRef = useRef(new DispatchTrail());
   const recoveryFlowRef = useRef(new RecoveryFlow());
   const [phase, setPhase] = useState<'ready' | 'playing' | 'paused' | 'levelup' | 'victory' | 'defeat'>('ready');
+  const [showBonusStage,setShowBonusStage]=useState(false);
   const storeOpenRef=useRef(false);
   const pendingStoreConfirmationRef=useRef(false);
   const [clearGearWear,setClearGearWear]=useState<string[]>([]);
@@ -1812,6 +1818,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if ((currentPhase === 'victory' || currentPhase === 'defeat') && !rewardedRef.current.has(engine)) {
             rewardedRef.current.add(engine);
+            const handoff=operationHandoff(engine.state);if(handoff)saveOperationHandoff(handoff);
             // Save earned credits & Field Guide Points
             const used=engine.state.premiumGear?.used??engine.state.premiumGear?.equipped??[];
             const settled=currentPhase==='victory'?wearStoreItems(inventoryRef.current,used):inventoryRef.current;
@@ -2619,46 +2626,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       ctx.restore();
 
       // 3. FLOODLIGHT / TESLA DOME AURA (2.5D Ground Ellipse Projection)
-      if (activePerks.tesla_dome > 0) {
-        ctx.save();
-        ctx.translate(player.x, player.y);
-        ctx.scale(1, 0.58);
-        const auraRadius = equipmentTuning('tesla_dome',1)!.radius;
-        const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
-        grad.addColorStop(0, 'rgba(168, 237, 134, 0.20)');
-        grad.addColorStop(0.6, 'rgba(98, 210, 153, 0.08)');
-        grad.addColorStop(1, 'rgba(98, 210, 153, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(168,237,134,.55)';
-        ctx.lineWidth = 1.3;
-        for(let i=0;i<6;i++){
-          const angle=i*Math.PI/3;
-          ctx.beginPath();ctx.arc(0,0,auraRadius,angle+.12,angle+.62);ctx.stroke();
-          const pulse=reducedMotionRef.current?0:Math.sin(engine.state.gameTime*3+i)*3;
-          const r=auraRadius-8;
-          ctx.beginPath();ctx.moveTo(Math.cos(angle)*(r-8),Math.sin(angle)*(r-8));
-          ctx.lineTo(Math.cos(angle+.035)*(r+pulse),Math.sin(angle+.035)*(r+pulse));
-          ctx.lineTo(Math.cos(angle)*(r+8),Math.sin(angle)*(r+8));ctx.stroke();
-        }
-        ctx.restore();
-      } else if (activePerks.floodlight > 0) {
-        ctx.save();
-        ctx.translate(player.x, player.y);
-        ctx.scale(1, 0.58);
-        const auraRadius = equipmentTuning('floodlight',activePerks.floodlight)!.radius;
-        const grad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRadius);
-        grad.addColorStop(0, `rgba(251,191,36,${.16+activePerks.floodlight*.025})`);
-        grad.addColorStop(0.6, 'rgba(245, 158, 11, 0.16)');
-        grad.addColorStop(1, 'rgba(245, 158, 11, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(0, 0, auraRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+      drawEquipmentAura(ctx,engine.state,reducedMotionRef.current);
 
       // 4. RENDER GROUND PROJECTILES (Mist & Traps lying on slab floor)
       for (const p of projectiles) {
@@ -3163,7 +3131,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             drawGroundedSprite(ctx, charMapSpr, sprH, playerPose);
             if(!reducedMotionRef.current){const light=direction.heroLight;drawDirectionalLight(ctx,charMapSpr,sprH,playerPose,playerPose.reaction>0?'#fff1cd':light.color,Math.max(light.strength,playerPose.reaction*.18)*feelSettingsRef.current.flash);}
             drawWearableLayer(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.wearables??{},'front',reducedMotionRef.current);
-            drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current);
+            drawCarriedEquipment(ctx,engine.state,charMapSpr,sprH,playerPose,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,reducedMotionRef.current,Boolean(spritesRef.current.wearables?.communication),Boolean(spritesRef.current.wearables?.normalWorn));
 
           } else {
             // High-Quality Procedural 2.5D Construction Safety Officer
@@ -3230,27 +3198,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
       projectileFeedbackRef.current.draw(ctx,reducedMotionRef.current||feelSettingsRef.current.flash===0,projectileBusy,{atlas:spritesRef.current.cinematicAtlas,materialAtlas:spritesRef.current.industrialContacts,metalAtlas:spritesRef.current.metalImpact,debrisAtlas:spritesRef.current.debrisImpact,vaporAtlas:spritesRef.current.vaporImpact,droneLaunchAtlas:spritesRef.current.droneLaunch,hunterLaunchAtlas:spritesRef.current.hunterLaunch,radioLaunchAtlas:spritesRef.current.radioLaunch,equipped,levels:vfxLevels,flashStrength:feelSettingsRef.current.flash});
 
       // 7. RENDER SAFETY DRONES AT THE AUTHORITATIVE EMISSION ORIGIN
-      const hasHunter = activePerks.hunter_swarm > 0;
-      const droneCount = hasHunter ? 3 : activePerks.safety_drone > 0 ? 1 : 0;
-      if (droneCount > 0 && engine.state.droneAngle !== undefined) {
-        for (let d = 0; d < droneCount; d++) {
-          const {x:dX,y:flightY}=droneEmissionOrigin(player,engine.state.droneAngle,hasHunter,d);
-          const groundY=flightY+32;
-
-          // Ground shadow for floating drone
-          ctx.save();
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
-          ctx.beginPath();
-          ctx.ellipse(dX, groundY + 4, 10, 4.5, 0, 0, Math.PI * 2);
-          ctx.fill();
-
-          drawDroneEmission(ctx,spritesRef.current.cinematicAtlas,dX,flightY,hasHunter,engine.state.gameTime,reducedMotionRef.current);
-          ctx.translate(dX,flightY);
-          drawEquipment(ctx,spritesRef.current.equipmentAtlas,hasHunter?'hunter_swarm':'safety_drone',hasHunter?1:activePerks.safety_drone,0,12,hasHunter?42:30,spritesRef.current.itemsAtlas);
-          ctx.strokeStyle='rgba(226,232,240,.22)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(0,-5,13,4,engine.state.gameTime*12,0,Math.PI*2);ctx.stroke();
-          ctx.restore();
-        }
-      }
+      drawSafetyDrones(ctx,engine.state,spritesRef.current.equipmentAtlas,spritesRef.current.itemsAtlas,spritesRef.current.cinematicAtlas,reducedMotionRef.current);
 
       // 9. RENDER PARTICLES
       const aliveParticles: Particle[] = [];
@@ -3666,9 +3614,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           <button type="button" aria-label={tacticsText.dash ?? '긴급 회피'} title={tacticsText.dash_description ?? '0.25초 무적 회피'} disabled={encounterLocked||dashCd>0} onClick={()=>engine.triggerPlayerDash()}><ArrowUp size={20}/><span>{tacticsText.dash ?? '긴급 회피'}</span><b>{dashCd>0?Math.ceil(dashCd)+'s':'READY'}</b><small>Space/Shift</small></button>
           {t && <button type="button" aria-label={tacticsText.supply} title={tacticsText.support_description} disabled={encounterLocked||t.supportCharges<=0||t.supportCooldown>0} onClick={()=>engine.requestSupport()}><Package size={20}/><span>{tacticsText.supply}</span><b>{t.supportCooldown>0?Math.ceil(t.supportCooldown)+'s':t.supportCharges}</b><small>Q</small></button>}
           {t && <button type="button" aria-label={tacticsText.line} title={tacticsText.line_description} disabled={encounterLocked||t.lineCharges<=0||t.lineCooldown>0} onClick={()=>engine.deployControlLine()}><Shield size={20}/><span>{tacticsText.line}</span><b>{t.lineCooldown>0?Math.ceil(t.lineCooldown)+'s':t.lineCharges}</b><small>E</small></button>}
-          {engine.state.terrain?.some(o=>o.kind==='rubble'&&o.hp>0&&Math.hypot(p.x-(o.x+o.width/2),p.y-(o.y+o.height/2))<120)&&<button type="button" aria-label={terrainText.cleanup} title={terrainText.cleanupHint} disabled={encounterLocked} onClick={()=>engine.clearTerrain()}><Package size={20}/><span>{terrainText.cleanup}</span><small>T</small></button>}
         </div>;
       })()}
+      {phase==='playing'&&(engineRef.current?.state.terrainGift?.remaining??0)>0&&<aside className="survivors-terrain-gift" role="status">{terrainText.cleanupGift} +{engineRef.current?.state.terrainGift?.credits} PSI<small>{terrainText.cleanupGiftNote}</small></aside>}
+      {phase==='playing'&&<SurvivorsTerrainCleanup status={engineRef.current?.terrainCleanupStatus()??null} onClear={()=>engineRef.current?.clearTerrain()}/>}
       {/* DIRECTOR SHOUT ULTIMATE BUTTON (HUD) */}
       {phase === 'playing' && (
         <div className="survivors-ultimate-control">
@@ -3772,12 +3721,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
                 ? <button type="button" onClick={()=>changeStore(recommendedGear.id,false)}>{storeText.equip}</button>
                 : <button type="button" onClick={openStore}>{storeText.briefBrowse}</button>}
             </aside>
-            {PATROL_STAGES[selectedStage].narrative && <aside className="survivors-story-brief">
-              <strong>{CHARACTER_PROFILES[PATROL_STAGES[selectedStage].narrative!.speaker].name} · {PATROL_STAGES[selectedStage].subtitle}</strong>
-              <p>{PATROL_STAGES[selectedStage].narrative!.brief}</p>
-              {(() => { const previous=STAGE_IDS[STAGE_IDS.indexOf(selectedStage)-1];const record=previous && stageStars[previous];const narrative=previous && PATROL_STAGES[previous].narrative;
-                return record?.[0] && narrative ? <small>{campaignText.memory_label}: {record[1]?narrative.success:narrative.residual}</small> : null; })()}
-            </aside>}
+            <SurvivorsOperationBrief characterId={selectedChar} stage={PATROL_STAGES[selectedStage]}/>
             {accountabilityMemory(accountability)&&<aside className="survivors-story-brief"><strong>{accountabilityText.memory}</strong><p>{accountabilityMemory(accountability)}</p></aside>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar} legacy={Object.values(stageStars).some(stars=>stars[0])}/>
             <section className="survivors-mission-brief" aria-label={combatText.mission_title}>
@@ -3919,6 +3863,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
 
             <div className="survivors-actions-row">
+              <button type="button" className="survivors-btn-secondary" onClick={()=>setShowBonusStage(true)}>{bonusText.entry}</button>
               <button type="button" className="survivors-btn-secondary" onClick={openStore}>
                 {storeText.shopEntry}
               </button>
@@ -4208,6 +4153,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             </div>
             <div className="survivors-actions-row survivors-result-actions">
+              <button type="button" className="survivors-btn-secondary" onClick={()=>setShowBonusStage(true)}>{bonusText.entry}</button>
               <button
                 type="button"
                 className="survivors-btn-primary"
@@ -4280,6 +4226,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {accountabilityMemory(accountability)&&<p className="survivors-story-result">{accountabilityMemory(accountability)}</p>}
             </div>
             <div className="survivors-actions-row survivors-result-actions">
+              <button type="button" className="survivors-btn-secondary" onClick={()=>setShowBonusStage(true)}>{bonusText.entry}</button>
               {(() => {
                 const stageList = STAGE_IDS;
                 const currentIdx = stageList.indexOf(selectedStage);
@@ -4318,6 +4265,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
         </div>
       )}
+      {showBonusStage&&<SurvivorsBonusStage onReward={earned=>saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,earned,0))} onClose={()=>setShowBonusStage(false)}/>}
       {accountabilityCase&&<SurvivorsAccountabilityEvent key={accountabilityCase.id} incident={accountabilityCase} state={accountability} portraitUri={CHARACTER_PROFILES.kang_taesik.portraitUri}
         onEvidence={()=>audioRef.current.playDecisionCue('evidence')}
         onDecide={(action,evidence)=>{

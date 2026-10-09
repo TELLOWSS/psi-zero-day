@@ -1,0 +1,14 @@
+.survivors-equipment-details {padding:14px;margin:12px 0;background:#112423;border:1px solid #416359;border-radius:10px;min-width:0;}
+.survivors-equipment-details header small {color:#88d8b6;font-size:11px;}
+.survivors-equipment-details h4,.survivors-equipment-details h5 {margin:6px 0;color:#e3f4eb;}
+.survivors-equipment-details p {font-size:12px;line-height:1.7;}
+.survivors-equipment-details p strong {display:block;color:#a0ddc5;margin-bottom:3px;}
+.survivors-equipment-detail-columns {display:grid;grid-template-columns:1fr 1fr;gap:0 16px;}
+.survivors-equipment-details dl {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.survivors-equipment-details dl div {padding:9px;border-radius:6px;background:#1b3430;min-width:0;}
+.survivors-equipment-details dt {font-size:11px;color:#b4cfc5;}
+.survivors-equipment-details dd {margin:5px 0 0;font-size:15px;font-weight:700;color:#dcf7e9;}
+.survivors-equipment-details > small {font-size:11px;line-height:1.7;color:#acc4ba;}
+.survivors-fitting-character {display:grid;gap:5px;font-size:12px;margin:12px 0;}
+.survivors-fitting-character select {width:100%;padding:9px;background:#10231f;color:#e3f4eb;border:1px solid #5a7c6c;border-radius:6px;}
+@media(max-width:600px){.survivors-equipment-detail-columns{grid-template-columns:1fr;}.survivors-equipment-details dl{grid-template-columns:repeat(2,minmax(0,1fr));}}

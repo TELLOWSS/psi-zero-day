@@ -42,6 +42,7 @@ const PlayableEpisode = lazy(() => loadPlayableEpisode().then(module => ({ defau
 const loadDefenseGame = () => import('./DefenseGame');
 const DefenseGame = lazy(() => loadDefenseGame().then(module => ({ default: module.DefenseGame })));
 const loadSurvivorsGame = () => import('./PatrolSurvivorsGame');
+const OperationHandoffDossier = lazy(() => import('./OperationHandoffDossier').then(module => ({default:module.OperationHandoffDossier})));
 const MODE_PREVIEW_ART = {
   signal: '/mode-previews/signal-watch.webp',
   defense: '/mode-previews/defense-coming-soon-v2.webp',
@@ -552,6 +553,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
             ? '현장 배치·업그레이드·작업반경 통제와 시네마틱 전투 연출을 상업 게임 수준으로 다듬고 있습니다.'
             : '현장 사람들의 목소리, 증거, 책임과 판단이 장면 단위로 연결되는 본편 시네마틱을 완성하고 있습니다.'}</p>
           <small>곧 공개됩니다 · 현재 플레이 가능 모드는 시그널 워치입니다.</small>
+          <Suspense fallback={null}><OperationHandoffDossier mode={modePreview}/></Suspense>
         </div>
       </section>
     </div> : null}

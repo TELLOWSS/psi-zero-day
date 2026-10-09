@@ -1,4 +1,8 @@
-import { useMemo, useState, useRef } from 'react';
+import {SurvivorsEquipmentLab} from './SurvivorsEquipmentLab';
+import labCopy from '../../content/localization/survivors-equipment-lab-ko.json';
+import { useMemo, useState, useRef, useEffect } from 'react';
+import {SurvivorsEquipmentDetails} from './SurvivorsEquipmentDetails';
+import detailCopy from '../../content/localization/survivors-equipment-details-ko.json';
 import { STORE_ITEMS, STORE_CLEAR_WEAR, buyAndEquipLoadout,itemDurability,storeRepairCost,storeRepairTotal,type StoreCategory, type StoreInventory } from '../domain/survivors-store';
 import copy from '../../content/localization/survivors-store-ko.json';
 import pleasureCopy from '../../content/localization/survivors-pleasure-ko.json';
@@ -22,6 +26,8 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
   const [ownedOnly, setOwnedOnly] = useState(false);
   const [affordableOnly, setAffordableOnly] = useState(false);
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [fittingCharacter,setFittingCharacter] = useState(characterId);
+  useEffect(()=>setFittingCharacter(characterId),[characterId]);
   const [draft, setDraft] = useState<string[]>([...inventory.equipped]);
   const [facing,setFacing]=useState<1|-1>(1);
   const [zoom,setZoom]=useState(1);
@@ -37,8 +43,8 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
   };
   const damaged=STORE_ITEMS.filter(item=>inventory.owned.includes(item.id)&&itemDurability(inventory,item.id)<100);
   const repairTotal=storeRepairTotal(inventory);
-  const baseline = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, inventory), [characterId, upgrades, inventory]);
-  const preview = useMemo(() => createInitialSurvivorsState(characterId, upgrades, undefined, undefined, fittingLoadout(inventory, draft)), [characterId, upgrades, inventory, draft]);
+  const baseline = useMemo(() => createInitialSurvivorsState(fittingCharacter, upgrades, undefined, undefined, inventory), [fittingCharacter, upgrades, inventory]);
+  const preview = useMemo(() => createInitialSurvivorsState(fittingCharacter, upgrades, undefined, undefined, fittingLoadout(inventory, draft)), [fittingCharacter, upgrades, inventory, draft]);
   const previewItem = STORE_ITEMS.find(item => item.id === previewId);
   const draftItems=STORE_ITEMS.filter(item=>draft.includes(item.id));
   const quote=buyAndEquipLoadout(inventory,credits,draft);
@@ -99,12 +105,16 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
       })}</div>
     </div>
     <div id="store-panel-fitting" role="tabpanel" aria-labelledby="store-tab-fitting" hidden={view !== 'fitting'}>
+    <label className="survivors-fitting-character">{detailCopy.character}<select aria-label={detailCopy.character} value={fittingCharacter} onChange={event=>setFittingCharacter(event.target.value as CharacterId)}>{(['player','kang_taesik','yoon_sungho','lee_jaehoon','lim_junho','safety_monitor'] as CharacterId[]).map(id=><option key={id} value={id}>{CHARACTER_PROFILES[id].name} · {CHARACTER_PROFILES[id].role}</option>)}</select></label>
+    <p>{detailCopy.previewOnly}</p>
+    <p className="survivors-fitting-direction-note"><strong>{labCopy.wearTitle}</strong><br/>{labCopy.wearNote}</p>
+    <SurvivorsEquipmentLab state={preview} active={view==='fitting'}/>
     <div className="survivors-fitting">
       <div className="survivors-fitting-visual"><SurvivorsFittingPreview state={preview} facing={facing} zoom={zoom} motion={motion} playing={previewPlaying} active={view==='fitting'} attackKind={attackKind}/>
         <div className="survivors-fitting-controls"><button type="button" aria-label={copy.leftView} title={copy.leftView} aria-pressed={facing===-1} onClick={()=>setFacing(-1)}><ArrowLeft size={18}/></button><button type="button" aria-label={copy.rightView} title={copy.rightView} aria-pressed={facing===1} onClick={()=>setFacing(1)}><ArrowRight size={18}/></button><label>{copy.zoom}<input type="range" min={.8} max={1.25} step={.05} value={zoom} onChange={event=>setZoom(Number(event.target.value))}/></label></div>
-        <div className="survivors-fitting-controls survivors-fitting-motion-controls" role="group" aria-label={copy.pose}><select className="survivors-fitting-attack-select" aria-label={copy.attackMotion} value={motion==='action'?attackKind:motion} onChange={event=>{const value=event.target.value;if(value==='idle'||value==='walk'||value==='check')setMotion(value);else if(value==='shot'||value==='spray'||value==='ultimate'){setAttackKind(value);setMotion('action');}}}><option value="idle">{copy.poseIdle}</option><option value="walk">{copy.poseWalk}</option><option value="check" disabled={characterId!=='player'}>{pleasureCopy.equipmentCheck}</option><option value="shot">{copy.attackShot}</option><option value="spray">{copy.attackSpray}</option><option value="ultimate">{copy.attackUltimate}</option></select><button type="button" aria-label={previewPlaying?copy.pausePreview:copy.playPreview} title={previewPlaying?copy.pausePreview:copy.playPreview} aria-pressed={previewPlaying} onClick={()=>setPreviewPlaying(value=>!value)}>{previewPlaying?<Pause size={18}/>:<Play size={18}/>}</button></div>
+        <div className="survivors-fitting-controls survivors-fitting-motion-controls" role="group" aria-label={copy.pose}><select className="survivors-fitting-attack-select" aria-label={copy.attackMotion} value={motion==='action'?attackKind:motion} onChange={event=>{const value=event.target.value;if(value==='idle'||value==='walk'||value==='check'||value==='turn')setMotion(value);else if(value==='shot'||value==='spray'||value==='ultimate'){setAttackKind(value);setMotion('action');}}}><option value="idle">{copy.poseIdle}</option><option value="walk">{copy.poseWalk}</option><option value="turn">{copy.poseTurn}</option><option value="check" disabled={fittingCharacter!=='player'}>{pleasureCopy.equipmentCheck}</option><option value="shot">{copy.attackShot}</option><option value="spray">{copy.attackSpray}</option><option value="ultimate">{copy.attackUltimate}</option></select><button type="button" aria-label={previewPlaying?copy.pausePreview:copy.playPreview} title={previewPlaying?copy.pausePreview:copy.playPreview} aria-pressed={previewPlaying} onClick={()=>setPreviewPlaying(value=>!value)}>{previewPlaying?<Pause size={18}/>:<Play size={18}/>}</button></div>
       </div>
-      <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[characterId].name}</h4>
+      <div className="survivors-fitting-summary"><h4>{CHARACTER_PROFILES[fittingCharacter].name}</h4>
         <p role="status">{previewItem ? `${copy.fitting}: ${copy.items[previewItem.id as keyof typeof copy.items].name}` : copy.currentLoadout}</p>
         <dl>{comparisons.map(([label, before, after]) => <div key={label}><dt>{label}</dt><dd>{Number(after.toFixed(2))}{Math.abs(after-before) > .01 && <span> ({after > before ? '+' : ''}{Number((after-before).toFixed(2))})</span>}</dd></div>)}</dl>
         <div className="survivors-fitting-slots" aria-label={copy.draftSlots}>{categories.map(slot=>{
@@ -118,6 +128,7 @@ export function SurvivorsEquipmentStore({ inventory, credits, message, repairedI
         <button type="button" onClick={() => {setPreviewId(null);setDraft([...inventory.equipped]);}}>{copy.resetFitting}</button>
       </div>
     </div>
+    {draftItems.length>0&&<details><summary>{detailCopy.title}</summary>{draftItems.map(item=><SurvivorsEquipmentDetails key={item.id} characterId={fittingCharacter} id={item.id} kind="premium"/>)}</details>}
     <div className="survivors-fitting-action"><strong>{copy.draftSlots} · {draft.length}/6 <small>{copy.fittingOnly}</small></strong><button type="button" disabled={!quote||(!onApply&&!previewItem)} onClick={()=>onApply?onApply(draft):previewItem&&onChange(previewItem.id,!inventory.owned.includes(previewItem.id))}>{price?`${copy.buyLoadout} · ${price.toLocaleString()} PSI`:copy.applyLoadout}</button>
     {price>credits&&<small>{copy.shortfall} {(price-credits).toLocaleString()} PSI</small>}{broken&&<small role="alert">{copy.repairFirst}</small>}</div>
     </div>
