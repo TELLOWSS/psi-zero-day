@@ -14,6 +14,7 @@ export function SurvivorsNarrativeDirection({record}:{record:OperationHandoff}) 
  if(!canChooseNarrativeDirection(record,readHandoffDialogue()))return null;
  return <section className="survivors-narrative-direction" aria-label={copy.title}>
  <h4>{copy.title}</h4>{selected&&<p>{copy.statements[selected]}</p>}
+ {selected==='control'&&<figure className="survivors-narrative-interest-scene"><img src="/assets/survivors/growth/player-control-interest-v1.png" alt={copy.labels.control}/></figure>}
  {!open?<button ref={trigger} type="button" onClick={()=>{setDraft(selected??'');setMessage(null);setOpen(true);}}>{selected?copy.change:copy.open}</button>:<>
  <select ref={selector} aria-label={copy.title} value={draft} onChange={event=>{setDraft(event.target.value as NarrativeDirection|'');setMessage(null);}}>
  <option value="">{copy.empty}</option>{(['control','coordination','investigation'] as const).map(id=><option key={id} value={id}>{copy.labels[id]}</option>)}

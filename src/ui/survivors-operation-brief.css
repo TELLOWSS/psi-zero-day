@@ -13,6 +13,9 @@
 .survivors-operation-brief ul { padding-left:18px; font-size:12px; line-height:1.65; }
 .survivors-operation-brief details p,.survivors-operation-brief li { overflow-wrap:anywhere; }
 .survivors-handoff-scene { margin:10px 0; }
+.survivors-narrative-interest-scene { margin:10px 0; }
+.survivors-narrative-interest-scene img { display:block; width:100%; height:auto; aspect-ratio:1672/941; object-fit:contain; }
+@media (max-height:450px) { .survivors-narrative-interest-scene img { max-height:calc(100dvh - 230px); } }
 .survivors-handoff-scene img { display:block; width:100%; height:auto; aspect-ratio:1672/941; object-fit:contain; }
 .survivors-handoff-scene figcaption { font-size:11px; line-height:1.6; color:#c4d6d1; margin-top:6px; }
 .survivors-handoff-dialogue { border-top:1px solid #496663; margin-top:12px; padding-top:4px; }

@@ -21,7 +21,8 @@ try{
   const before=await snapshot();await direction.getByRole('button',{name:'관심사 선택',exact:true}).click();await direction.locator('select').selectOption('control');await direction.getByRole('button',{name:'나중에',exact:true}).click();
   const skipUnwritten=await page.evaluate(()=>window.directionWrites===0&&localStorage.getItem('psi.survivors.narrative-direction.v1')===null);
   await direction.getByRole('button',{name:'관심사 선택',exact:true}).click();await direction.locator('select').selectOption('control');
-  for(const id of ['control','coordination','investigation']){await direction.locator('select').selectOption(id);await direction.getByRole('button',{name:'관심사 저장',exact:true}).click();}
+  const imageGates=[];
+  for(const id of ['control','coordination','investigation']){await direction.locator('select').selectOption(id);await direction.getByRole('button',{name:'관심사 저장',exact:true}).click();const image=direction.locator('.survivors-narrative-interest-scene img');if(id==='control'){await image.evaluate(img=>img.decode());imageGates.push(await image.evaluate(img=>img.naturalWidth>0&&getComputedStyle(img).objectFit==='contain'));await image.evaluate(img=>img.scrollIntoView({block:'center'}));await page.screenshot({path:`${output}/${width}x${height}-control-art.png`});}else imageGates.push(await image.count()===0);}
   await direction.getByRole('button',{name:'관심사 저장',exact:true}).click();
   await page.evaluate(()=>window.failDirection=true);await direction.locator('select').selectOption('control');await direction.getByRole('button',{name:'관심사 저장',exact:true}).click();await direction.getByRole('alert').waitFor();
   const failurePreserved=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.survivors.narrative-direction.v1')).direction==='investigation'&&window.directionWrites===3);
@@ -36,6 +37,7 @@ try{
   const reloadUnwritten=await page.evaluate(()=>window.directionWrites===0);
   await page.locator('.survivors-preflight-tabs button').nth(2).click();await page.locator('.survivors-char-card').filter({has:page.getByAltText('임준호',{exact:true})}).click();await page.locator('.survivors-preflight-tabs button').nth(0).click();
   const actorSeparated=await direction.count()===0;
+  if(!imageGates.every(Boolean))throw Error('Approved interest image gate or aspect ratio failed');
   rows.push({width,height,scope:'SEEDED_HANDOFF_UI_NOT_NATURAL_GROWTH_OR_DEVICE',hiddenBeforeDialogue,skipUnwritten,failurePreserved,closeFocus,geometry,unrelatedStorageUnchanged:unchanged,restored:actualRestored,reloadUnwritten,actorSeparated,errors,pass:hiddenBeforeDialogue&&skipUnwritten&&failurePreserved&&closeFocus&&actualRestored&&reloadUnwritten&&actorSeparated&&unchanged&&!geometry.overflow&&!geometry.clipped&&geometry.heights.every(h=>h>=44)&&!errors.length});await page.close();
  }
  fs.writeFileSync(`${output}/report.json`,JSON.stringify(rows,null,2));console.log(JSON.stringify(rows));if(rows.some(r=>!r.pass))process.exitCode=1;
