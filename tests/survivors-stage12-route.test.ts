@@ -1,4 +1,4 @@
-import {describe,it,expect,vi} from 'vitest';
+import {describe,it,expect} from 'vitest';
 import {stage12RubbleRoute} from '../src/engine/survivors-stage12-route';
 import {createTerrain,terrainHit,terrainMove} from '../src/engine/survivors-terrain';
 import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
