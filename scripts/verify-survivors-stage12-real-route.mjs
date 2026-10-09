@@ -37,7 +37,7 @@ try{
     };
    });
    await page.locator('.survivors-ready-launch .survivors-btn-primary').click();
-   await page.waitForFunction(()=>window.qaRouteEngine?.state?.phase==='playing',{timeout:15000});
+   await page.waitForFunction(()=>window.qaRouteEngine?.state?.phase==='playing',null,{timeout:15000});
    const before=await page.evaluate(async()=>{
     const {stage12RubbleRoute}=await import('/src/engine/survivors-stage12-route.ts');
     const {terrainHit,terrainMove}=await import('/src/engine/survivors-terrain.ts');
@@ -48,7 +48,7 @@ try{
     return {route:r,blocked:!!terrainHit(e.state.terrain,r.from,r.to,14),
       stopped:terrainMove(e.state.terrain,r.from,r.to,14),rubble:e.state.terrain.find(o=>o.id===r.rubbleId)?.hp};
    });
-   await page.waitForFunction(()=>window.qaRouteLabels.includes('잔재 장애 · 우회 필요'),{timeout:10000});
+   await page.waitForFunction(()=>window.qaRouteLabels.includes('잔재 장애 · 우회 필요'),null,{timeout:10000});
    await page.screenshot({path:path.join(out,`${width}x${height}-before.png`)});
    const first=await page.evaluate(()=>window.qaRouteEngine.clearTerrain());
    if(!first)throw Error('Real cleanup action did not start');
@@ -64,8 +64,10 @@ try{
       rubble:e.state.terrain.find(o=>o.id===r?.rubbleId)?.hp,
       rubbleCleared:e.state.terrainRecord?.rubbleCleared??0};
    });
-   await page.waitForFunction(()=>window.qaRouteLabels.includes('잔재 정리 · 직접 통과 가능'),{timeout:10000});
+   await page.waitForFunction(()=>window.qaRouteLabels.includes('잔재 정리 · 직접 통과 가능'),null,{timeout:10000});
    await page.screenshot({path:path.join(out,`${width}x${height}-after.png`)});
+   // Wait out the normal clear-action cooldown: the third attempt must still fail.
+   await page.waitForTimeout(800);
    const duplicate=await page.evaluate(()=>window.qaRouteEngine.clearTerrain());
    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);
    const passed=before.blocked&&before.route.open===false&&before.rubble>0
