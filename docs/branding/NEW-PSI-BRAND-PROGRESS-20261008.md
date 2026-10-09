@@ -2,6 +2,9 @@
 
 ## 최신 기준선
 
+- 사용자 인물 성장·스테이지 서사 실행 요청의 첫 묶음: 기존 `growth_v1` 완수 기록만 읽어 6명 x5장 역할 관점을 준비/결과의 '내가 지나온 현장'에 표시. 실제 완수/통제 수치, 캐릭터 분리·중복 기록 정규화 유지. 기록 없는 인물/legacy 전역 완수를 새 성장으로 추정하지 않는다. 진로/본편 단계/새 저장 키/수치/원화 불변. 신규 성장·50구역 서사 기획은 기존 본편3단계와 요원 기록을 연결하는 문서이며 전체 기능 완료가 아니다.
+- 집중4건/타입/prebuild/build 통과. 첫 테스트는 없는 testing-library 의존성으로 실패하여 기존 react-dom/server 방식으로 수정/재통과. 실제 빌드 PC1440x900/폰390x844/844x390 저장fixture의2장 기록/44px/잘림·넘침·오류없음/저장불변 통과, 폰세로 직접 화면 확인. 첫 저장 비교는 진입 초기화와 겹쳐 실패했으며 UI 준비/800ms 이후 정렬된 전체 storage 비교로 재통과. `artifacts/character-chapters/report.json`/3PNG. 자연 플레이/진로해금/실기기/최종아트 승인 증거 아님. 원격CI/운영 반영은 별도 후속.
+
 - 2026-10-09 재기준화: 제품 기준 `5444a9ec2aafe90b49bd1b82b9352f31912e1dec`. 별도 사용자 작업이 동기화한 배포 `dpl_HSoXnPa2HN3g4ekBBycsTsvH9VZZ`의 정확한 프로젝트/SHA/production READY/`psi-zero-day.vercel.app` 별칭을 이 작업에서 읽기 확인했다. 이 작업이 해당 제품을 배포했거나 전체 회귀를 재실행한 것으로 기록하지 않는다. 과거 PR153 운영 유지 및 PR154 한도 대기는 당시 이력이며 현재 운영 기준이 아니다.
 - 현재 B3 소스 확인: premium renderer는 `ShieldPresentationTracker`를 호출하며 directional renderer는 authored/contact 원화를 준비하고 `authoredMotionWeights`를 사용한다. visual budget은 혼잡 오라·비행·문구 제한을 연결하고 body light는 flash 설정을 반영한다. 이전 'shield0이면 즉시 VFX 생략' 및 기존 walking 파일만 유지한다는 감사 문구는 과거 기준이며 현재 미구현 TODO로 반복하지 않는다.
 - 별도 작업의 `SURVIVORS-GRAPHICS-UPGRADE-IMPLEMENTATION.md`는 접점 이동 약5.64~8.07 CSS 단위와 VISUAL PRODUCTION LOCK 미승인을 명시한다. 좌표 역투영 오차1e-6을 완전 접지로 표현하지 않는다. `survivors-graphics-animation-v1.json`은 implemented-candidates-director-visual-lock-pending이며 960 logical slots/836 unique crops는 960 독립 원화 제작이나 최종 승인이 아니다.

@@ -2397,6 +2397,10 @@
 .survivors-current-workface { display: block; color: #d4e3df; font-size: 10px; white-space: normal; line-height: 1.4; margin-bottom: 3px; }
 .survivors-growth-record { border-top: 1px solid #4b6565; padding: 14px 0; text-align: left; }
 .survivors-growth-record h3 { font-size: 15px; margin: 0 0 10px; color: #d7eee1; }
+.survivors-character-chapters summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: 13px; }
+.survivors-character-chapters section { padding: 8px 0; border-top: 1px solid #4b6565; }
+.survivors-character-chapters h4 { margin: 0; font-size: 13px; }
+.survivors-character-chapters p { overflow-wrap: anywhere; }
 .survivors-growth-record dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 0; }
 .survivors-growth-record dt { font-size: 11px; color: #a6bbc0; }
 .survivors-growth-record dd { margin: 4px 0; font-size: 18px; color: #f3d99b; }
