@@ -21,5 +21,8 @@
 .survivors-handoff-dialogue button:focus-visible { outline:2px solid #bef2d7; outline-offset:2px; }
 .survivors-handoff-choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:8px; }
 .survivors-handoff-controls { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+.survivors-result-handoff { margin:12px 0; border-top:1px solid #496663; padding-top:8px; text-align:left; }
+.survivors-result-handoff summary { min-height:44px; align-content:center; cursor:pointer; font-size:13px; }
+.survivors-result-handoff p { font-size:12px; line-height:1.65; }
 .survivors-operation-brief details small { font-size:11px; color:#a6bab8; }
 @media(max-width:600px){.survivors-operation-links { grid-template-columns:1fr; gap:0; }}

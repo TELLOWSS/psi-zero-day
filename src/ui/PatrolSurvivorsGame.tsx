@@ -62,6 +62,7 @@ import {DispatchTrail} from './survivors-dispatch-trail';
 import {RecoveryFlow,RECOVERY_CELL_FLOW_ART} from './survivors-recovery-flow';
 import {recordPatrolClear,validGrowthRecords,type PatrolClearRecord} from '../domain/survivors-growth';
 import {SurvivorsGrowthRecord} from './SurvivorsGrowthRecord';
+import {SurvivorsHandoffResult} from './SurvivorsHandoffResult';
 import growthText from '../../content/localization/survivors-campaign50-ko.json';
 import {SurvivorsEquipmentStore} from './SurvivorsEquipmentStore';
 import {SurvivorsContainerShop} from './SurvivorsContainerShop';
@@ -4222,6 +4223,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
             {PATROL_STAGES[selectedStage].narrative && <p className="survivors-story-result">{engineRef.current?.state.starsEarned[1] ? PATROL_STAGES[selectedStage].narrative!.success : PATROL_STAGES[selectedStage].narrative!.residual}</p>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar}/>
+            <SurvivorsHandoffResult record={engineRef.current?operationHandoff(engineRef.current.state):null}/>
             <p role={growthSaveFailed?'alert':'status'}>{growthSaveFailed?growthText.growth_unsaved:growthText.growth_saved}</p>
             {growthSaveFailed&&<button type="button" onClick={()=>persistGrowth(growthRecords)}>{growthText.growth_retry}</button>}
             {accountabilityMemory(accountability)&&<p className="survivors-story-result">{accountabilityMemory(accountability)}</p>}

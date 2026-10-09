@@ -1,10 +1,16 @@
 import {describe,it,expect} from 'vitest';
-import {characterReflection,hasPlayerHandoffScene,playerHandoffSceneRecord} from '../src/app/survivors-character-reflection';
+import {characterReflection,hasPlayerHandoffScene,playerHandoffSceneRecord,confirmedHandoffScene} from '../src/app/survivors-character-reflection';
 import type {OperationHandoff} from '../src/domain/survivors-operation-handoff';
 import {operationHandoff} from '../src/domain/survivors-operation-handoff';
 import {createInitialSurvivorsState} from '../src/engine/patrol-survivors-engine';
 const record:OperationHandoff={version:1,characterId:'player',stageId:'stage_12',stageNumber:12,outcome:'victory',zones:2,cartStops:1,rubbleCleared:3,damageTaken:0,stars:[true,true,false]};
 describe('character reflection',()=>{
+ it('requires a persisted matching source before offering result dialogue',()=>{
+  expect(confirmedHandoffScene(record,[record])).toEqual(record);
+  expect(confirmedHandoffScene(record,[])).toBeNull();
+  expect(confirmedHandoffScene(record,[{...record,rubbleCleared:1}])).toBeNull();
+  expect(confirmedHandoffScene(null,[record])).toBeNull();
+ });
  it('retains the stage12 scene after another stage without treating it as current evidence',()=>{
   const rows=[record,{...record,stageId:'stage_13' as const,stageNumber:13}];
   expect(characterReflection(rows,'player')?.record.stageNumber).toBe(13);

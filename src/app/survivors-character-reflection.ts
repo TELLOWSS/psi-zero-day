@@ -22,3 +22,9 @@ export function playerHandoffSceneRecord(records:readonly OperationHandoff[]) {
  const record=records.filter(isOperationHandoff).filter(row=>row.characterId==='player'&&row.stageId==='stage_12').at(-1);
  return record&&hasPlayerHandoffScene(record)?record:null;
 }
+export function confirmedHandoffScene(record:OperationHandoff|null,records:readonly OperationHandoff[]) {
+ if(!record||!hasPlayerHandoffScene(record))return null;
+ const saved=playerHandoffSceneRecord(records);
+ if(!saved)return null;
+ return saved.rubbleCleared===record.rubbleCleared&&saved.cartStops===record.cartStops&&saved.zones===record.zones&&saved.damageTaken===record.damageTaken&&saved.stars.length===record.stars.length&&saved.stars.every((star,index)=>star===record.stars[index])?record:null;
+}
