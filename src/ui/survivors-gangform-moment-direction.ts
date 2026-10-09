@@ -1,9 +1,12 @@
-import type {Hazard,PatrolStageId} from '../domain/patrol-survivors';
+import type {CharacterId,Hazard,PatrolStageId} from '../domain/patrol-survivors';
+import beatCopy from '../../content/localization/survivors-gangform-beats-ko.json';
 import type {RecordedSfxId} from '../app/survivors-sfx-assets';
 
 export type GangformMomentKind='swing_warning'|'swing'|'debris_warning'|'debris_impact'|'zone_exposure'|'zone_secured'|'burst';
 export interface GangformMoment {
   readonly kind:GangformMomentKind;
+  /** Short on-screen radio line; no speech audio is implied. */
+  readonly radio:string;
   readonly label:string;
   readonly x:number;
   readonly y:number;
@@ -23,6 +26,16 @@ const MOMENTS:Record<GangformMomentKind,Pick<GangformMoment,'label'|'color'|'sfx
   burst:{label:'핵심부 개방 · 4.5초',color:'#91f5cf',sfx:'target_controlled',cameraStrength:5,radius:120},
 };
 
+type RadioRole=keyof typeof beatCopy.swing.radio;
+const RADIO_BEAT:Record<GangformMomentKind,keyof typeof beatCopy>={
+  swing_warning:'swing',swing:'swing',debris_warning:'fallWarning',
+  debris_impact:'impact',zone_exposure:'zones',zone_secured:'zoneOne',burst:'burst',
+};
+function radioRole(id:CharacterId):RadioRole {
+  if(id==='park')return 'kang_taesik';
+  if(id==='yoon'||id==='jung')return 'player';
+  return id;
+}
 /**
  * Presentation-only, event-edge adapter for ST14. The boss engine owns the
  * mechanic, collision, and timing; this observes them without modifying HP,
@@ -35,6 +48,7 @@ export class GangformMomentDirection {
     stageId:PatrolStageId,
     encounterPhase:'arrival'|'combat'|'secured'|undefined,
     hazards:readonly Hazard[],
+    characterId:CharacterId='player',
   ):GangformMoment|null {
     if(stageId!=='stage_14'||encounterPhase!=='combat') {
       this.boss=undefined;
@@ -72,6 +86,7 @@ export class GangformMomentDirection {
     const point=(kind==='debris_impact'||kind==='debris_warning'||kind==='zone_exposure'||kind==='zone_secured')
       ?g.zones.find(z=>kind==='zone_secured'&&z.hp<=0)||g.zones[0]
       :undefined;
-    return {kind,...config,x:point?.x??g.anchorX,y:point?.y??g.anchorY};
+    const radio=beatCopy[RADIO_BEAT[kind]].radio[radioRole(characterId)];
+    return {kind,...config,radio,x:point?.x??g.anchorX,y:point?.y??g.anchorY};
   }
 }
