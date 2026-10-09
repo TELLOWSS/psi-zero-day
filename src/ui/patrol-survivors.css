@@ -296,7 +296,9 @@
  .survivors-equipment-workspace .survivors-equipment-toolbar {min-height:52px;padding:6px 16px;margin-bottom:6px;}
  .survivors-equipment-workspace .survivors-store-tabs {top:36px;margin:6px 0;}
  .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art {width:min(100%,160px,max(56px,calc((100dvh - 310px)*1.125)));}
- .survivors-equipment-workspace .survivors-fitting-visual {top:86px;}
+ /* Sticky fitting art traps touch controls below short landscape viewports. */
+ .survivors-equipment-workspace .survivors-fitting-visual {position:static;top:auto;}
+ .survivors-equipment-workspace {overscroll-behavior:contain;scroll-padding-block:64px 16px;}
 }
 .survivors-perks-tray {
   position: absolute;
