@@ -41,6 +41,14 @@ try{
     s.gameTime=operationTiming(s.maxTime).bossAt;
     for(const key in s.activePerks)s.activePerks[key]=0;
    });
+   // Jumping across wave boundaries legitimately opens the Wave 2 supply shop.
+   // Resume through the real UI, rather than mutating the engine out of pause.
+   await page.waitForFunction(()=>{
+     const e=window.stage25Engine?.state;
+     return e?.bossEncounter?.phase==='combat'||Boolean(document.querySelector('.survivors-container-shop-backdrop .shop-continue-btn'));
+   },null,{timeout:10000});
+   const supplyContinue=page.locator('.survivors-container-shop-backdrop .shop-continue-btn');
+   if(await supplyContinue.isVisible())await supplyContinue.click();
    try {
     await page.waitForFunction(()=>window.stage25Engine?.state?.bossEncounter?.phase==='combat',null,{timeout:15000});
    } catch(error) {
