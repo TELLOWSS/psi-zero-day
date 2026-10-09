@@ -4,7 +4,7 @@ import type {Hazard,PatrolStageId} from '../src/domain/patrol-survivors';
 
 function gangformBoss():Hazard {
  return {
-  id:'incident_14',isStageBoss:true,hp:350,x:680,y:390,radius:46,
+  id:'incident_14',type:'CRANE_BOSS',isStageBoss:true,hp:350,maxHp:350,speed:0,damage:20,expValue:5,x:680,y:390,radius:46,
   bossGameplay:{
    bossId:'incident_14',patternId:'PENDULUM_DEBRIS',weakPointId:'DROP_ZONE_BREAK',
    combatPhase:'pattern',phaseIndex:1,signatureResolvedThisCycle:false,
