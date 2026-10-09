@@ -261,7 +261,9 @@ try {
             return {stage:${stageNumber},type:h.type,x:h.x,y:h.y,timer:h.motion.timer};
           })()`);
           await waitFor(cdp,`document.querySelector('.survivors-container').dataset.workfaceArt==='ready'&&document.querySelector('.survivors-container').dataset.workfaceStage==='${stageNumber}'`);
-          await evaluate(cdp,'window.qaVisualFreeze=false');await sleep(180);
+          // This is an isolated, synthetic motion probe. Prior crowd simulation may
+          // trigger an unrelated incident/pause, so advance engine frames directly.
+          await evaluate(cdp,"(()=>{const e=window.qaMobileEngine;e.state.phase='playing';window.qaVisualFreeze=false;for(let i=0;i<12;i++)e.update(1/60,{moveX:0,moveY:0});window.qaVisualFreeze=true;})()");
           const afterMotion=await evaluate(cdp,"(()=>{window.qaVisualFreeze=true;const h=window.qaMobileEngine.state.hazards.find(h=>h.id==='qa_motion_1');return h?{x:h.x,y:h.y,timer:h.motion?.timer,phase:h.motion?.phase}:null;})()");
           const valid=afterMotion&&Number.isFinite(afterMotion.x)&&Number.isFinite(afterMotion.y)&&(beforeMotion.type==='FALLING_DEBRIS'?afterMotion.x===beforeMotion.x&&afterMotion.y===beforeMotion.y&&afterMotion.timer<beforeMotion.timer:Math.hypot(afterMotion.x-beforeMotion.x,afterMotion.y-beforeMotion.y)>0);
           naturalMotion.push({before:beforeMotion,after:afterMotion,valid});await screenshot(cdp,`stage-${stageNumber}-natural-motion.png`);
@@ -275,7 +277,7 @@ try {
       const customization={qualities,savedDisplay,restored};
       await evaluate(cdp,"localStorage.removeItem('psi.survivors.display.v1')");
       const pass=naturalMotion.every(r=>r.valid)&&workfaces.every(r=>r.loaded&&r.id&&r.preserved)&&restored&&qualities[0]==='low'&&qualities[1]==='balanced'&&qualities[2]==='high'&&appearance.width===1254&&appearance.cells.every((cell,i)=>cell===i)&&!errors.length&&!layout.overflow&&!layout.hudOverflow&&layout.hud.inside&&layout.actions.length===3&&layout.actions.every(a=>a.inside&&a.width>=44&&a.height>=44)&&layout.pixels<=2800001&&moved.x>before&&moved.input>0&&released===0&&stress.finite&&stress.dt<=5/60+.00001;
-      report.push({width,height,scope:'Browser touch/geometry and synthetic crowd with 4x CPU throttling; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,workfaces,naturalMotion,errors,pass});
+      report.push({width,height,scope:'Browser touch/geometry, synthetic crowd and direct 12-step engine motion fixture; not physical Android performance.',layout,movement:{before,...moved,released},stress,appearance,customization,workfaces,naturalMotion,errors,pass});
     } finally {cdp.close();await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`);}
   }
 } finally {
