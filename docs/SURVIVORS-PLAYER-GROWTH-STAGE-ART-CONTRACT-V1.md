@@ -18,4 +18,8 @@
 
 ## 숙련 파일 후보
 
+## 실제 본편 슬롯 관측
+
+`tests/verify-growth-episode-slot.mjs`는 실제 EpisodeSession의 시작 상태에 growth flag만 seed하고 승인 본편 명령으로 첫 player 대화(e01_02_meet_kang)에 도달해 전체 PlayableEpisode를 렌더한다. PC/폰 세로/가로 x focused/skilled 6경로에서 정확 초상 decode/넘침/오류 검증 성공. 그러나 TBM production scene이 CharacterCard를 display:none으로 숨겨 모든 카드 bounding box가0이었다. 따라서 분리 카드의 초상 검증을 실제 장면에 성장 초상이 보인다는 증거로 확대할 수 없다. 원래 본편 scene 연출을 임의 해제하지 않았다. 증거는 artifacts/growth-episode-slot/report.json와6PNG. 자연 훈련 도달이 아니며 현재 실제 immersive actor 경로의 단계 자산 연결 여부는 후속이다.
+
 내장 image_gen으로 기존 초상을 identity reference로 삼아 한 파일을 제작했다. `docs/branding/candidates/player-skilled-v1/player-skilled-portrait-v1.png`, SHA `6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357`. 침착한 열린 손 안내와 기존 tablet, 허리 camera/빈 카드 홀더를 표현한다. 사용자 '승인 및 나머지 사항 문의없이 알아서 계속진행.' 답변으로 정확 파일 디자인 승인을 기록하고 public에 동일 bytes 복사했다. player/skilled 일치만 연결하며 숙련 도달 조건·장착·능력치·직업·관심사 변경 없음. 집중31/type/Vitebuild 및 PC/폰세로/가로24경로 분리 fixture 검증. 본편 전체 슬롯·자연훈련·실기기·사용권 검수는 별도다.
