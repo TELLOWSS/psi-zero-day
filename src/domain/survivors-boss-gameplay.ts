@@ -12,6 +12,7 @@ export interface BossGameplayProgress {
   burstRemaining: number;
   remaining: number;
   cycleCount: number;
+  staleRoute?: import('../engine/survivors-boss-stale-route').StaleRouteState;
   gangform?: {
     step: 'pendulum_warning' | 'pendulum' | 'debris_warning' | 'debris' | 'drop_zone';
     remaining: number;
