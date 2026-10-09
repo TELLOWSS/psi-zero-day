@@ -116,3 +116,44 @@ describe('ST14 gangform and ST15 earned continuity',()=>{
   expect(storyOutcome(thisActor,[thisActor])?.alternateView).toBeUndefined();
  });
 });
+
+describe('ST25 actual route story and ST26 earned handoff',()=>{
+ const won:OperationHandoff={...completed,stageId:'stage_25',stageNumber:25,characterId:'lim_junho',zones:2,cartStops:0,rubbleCleared:0,damageTaken:4};
+ const prior:OperationHandoff={...completed,stageId:'stage_24',stageNumber:24,characterId:'lee_jaehoon',zones:3};
+ it('explains the stale marker and three sequential route checks without an automatic bypass',()=>{
+  const brief=storyBrief('stage_25','lim_junho')!;
+  expect(brief.title).toContain('어제의 통로');
+  expect(brief.opening).toContain('3점');
+  expect(brief.evidence).toContain('4.5초');
+  expect(brief.characterLine).toContain('임준호');
+  expect(brief.alternateView).toBeUndefined();
+  const previous=storyBrief('stage_25','safety_monitor',[prior])!;
+  expect(previous.alternateView).toContain('이재훈');
+  expect(previous.alternateView).toContain('통제 구역 3');
+  expect(storyBrief('stage_25','safety_monitor',[{...prior,outcome:'defeat'}])?.alternateView).toBeUndefined();
+ });
+ it('shows real win counters, not a fabricated control total, and omits defeats',()=>{
+  const result=storyOutcome(won)!;
+  expect(result.evidence).toContain('통제 구역 2');
+  expect(result.evidence).toContain('받은 피해 4');
+  expect(result.evidence).toContain('잔재 정리 0');
+  expect(storyOutcome({...won,outcome:'defeat'})).toBeNull();
+ });
+ it('distinguishes all six actors and does not overwrite other operations',()=>{
+  const roles:CharacterId[]=['player','kang_taesik','yoon_sungho','lee_jaehoon','lim_junho','safety_monitor'];
+  expect(new Set(roles.map(x=>storyBrief('stage_25',x)?.characterLine)).size).toBe(6);
+  expect(new Set(roles.map(x=>storyOutcome({...won,characterId:x})?.characterLine)).size).toBe(6);
+  expect(storyBrief('stage_27','player',[won])).toBeNull();
+ });
+ it('opens ST26 re-survey only after actual ST25 victory, preserving counters and new hazards',()=>{
+  expect(storyBrief('stage_26','player')).toBeNull();
+  expect(storyBrief('stage_26','player',[{...won,outcome:'defeat'}])).toBeNull();
+  const next=storyBrief('stage_26','lee_jaehoon',[won])!;
+  expect(next.title).toContain('설비 재조사');
+  expect(next.evidence).toContain('임준호');
+  expect(next.evidence).toContain('통제 구역 2');
+  expect(next.evidence).toContain('피해 4');
+  expect(next.opening).toContain('전원 차단');
+  expect(next.characterLine).toContain('이재훈');
+ });
+});
