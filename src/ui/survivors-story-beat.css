@@ -1,0 +1,8 @@
+.survivors-story-beat{box-sizing:border-box;max-width:100%;margin:12px 0;padding:12px 14px;border:1px solid #476b60;border-radius:12px;background:linear-gradient(120deg,#16332e,#12252a);color:#e7f7ed}
+.survivors-story-beat-title{display:block;font-size:14px;letter-spacing:.015em;color:#b1ffda}
+.survivors-story-beat p{font-size:12px;line-height:1.65;margin:8px 0;overflow-wrap:anywhere}
+.survivors-story-beat-radio{padding-left:9px;border-left:2px solid #80c6b0}
+.survivors-story-beat-evidence{display:block;font-size:11px;color:#bbd9d1}
+.survivors-story-beat-alternate{color:#b9d9f3}
+.survivors-story-beat-next{color:#b9e6c8;font-weight:600}
+@media(max-width:600px){.survivors-story-beat{padding:10px 11px}.survivors-story-beat p{font-size:12px}}
