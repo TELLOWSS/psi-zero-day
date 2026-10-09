@@ -72,7 +72,11 @@ try{
  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.survivors.operation-handoff.v1')||'[]'));
  const eligible=terminal.phase==='victory'&&terminal.record.rubbleCleared>0;
  if(clearRoute&&eligible){const result=page.locator('.survivors-result-handoff');await result.locator('summary').click();await result.getByRole('button',{name:'인계 대화',exact:true}).click();await result.getByRole('button',{name:'경계부터 함께 확인해요',exact:true}).click();}
+ const settledStorage=await page.evaluate(()=>({stars:localStorage.getItem('psi.survivors.stage_stars'),wallet:localStorage.getItem('psi.survivors.store_wallet')}));
  await page.reload();await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
+ const restoredStorage=await page.evaluate(()=>({stars:localStorage.getItem('psi.survivors.stage_stars'),wallet:localStorage.getItem('psi.survivors.store_wallet')}));
+ const settlementPreserved=JSON.stringify(settledStorage)===JSON.stringify(restoredStorage);
+ const nextStageReady=!stage12||terminal.phase!=='victory'||await page.locator('.survivors-ready-launch').textContent().then(text=>text.includes('STAGE 13/50'));
  const details=page.locator('.survivors-operation-brief').first().locator('details').last();
  await details.locator('summary').click();await details.scrollIntoViewIfNeeded();
  const text=await details.textContent();await page.screenshot({path:`${output}/restored.png`});
@@ -82,7 +86,8 @@ try{
  let directionSelected=false;
  if(clearRoute&&eligible){const direction=page.locator('.survivors-narrative-direction');await direction.getByRole('button',{name:'관심사 선택',exact:true}).click();await direction.locator('select').selectOption('control');await direction.getByRole('button',{name:'관심사 저장',exact:true}).click();directionSelected=await page.evaluate(()=>JSON.parse(localStorage.getItem('psi.survivors.narrative-direction.v1')||'null')?.direction==='control');await page.screenshot({path:`${output}/interest.png`});}
  const stageBoundary=!stage12||(terminal.stageId==='stage_12'&&sceneCount===(eligible?1:0)&&(clearRoute?eligible&&directionSelected&&!dialogueUnwritten:dialogueUnwritten));
- const pass=stageBoundary&&record?.outcome===terminal.phase&&record.rubbleCleared===terminal.record.rubbleCleared&&record.cartStops===terminal.record.cartStops&&record.zones===terminal.zones&&text.includes('이 작전에서 남긴 일')&&(terminal.phase!=='defeat'||text.includes('대응을 중단한 기록'))&&!errors.length;
+ const pass=settlementPreserved&&nextStageReady&&stageBoundary&&record?.outcome===terminal.phase&&record.rubbleCleared===terminal.record.rubbleCleared&&record.cartStops===terminal.record.cartStops&&record.zones===terminal.zones&&text.includes('이 작전에서 남긴 일')&&(terminal.phase!=='defeat'||text.includes('대응을 중단한 기록'))&&!errors.length;
  fs.writeFileSync(`${output}/report.json`,JSON.stringify({scope:shieldGear?'SEEDED_STAGE_UNLOCK_AND_OWNED_SHIELD_UI_BOT_NO_ENGINE_STATE_INJECTION_NOT_FRESH_PURCHASE_OR_PHYSICAL_DEVICE':stage12?'SEEDED_STAGE_UNLOCK_UI_BOT_NO_ENGINE_STATE_INJECTION_NOT_NATURAL_UNLOCK_OR_PHYSICAL_DEVICE':'FRESH_STORAGE_UI_BOT_NO_ENGINE_STATE_INJECTION_NOT_HUMAN_OR_PHYSICAL_DEVICE',testSha,moving,clearRoute,shieldGear,terminal,saved,text,samples,sceneCount,dialogueUnwritten,directionSelected,stageBoundary,errors,pass},null,2));
- console.log(JSON.stringify({terminal,record,pass,errors}));if(!pass)process.exitCode=1;
+ fs.writeFileSync(`${output}/settlement.json`,JSON.stringify({testSha,settledStorage,restoredStorage,settlementPreserved,nextStageReady,pass},null,2));
+ console.log(JSON.stringify({terminal,record,settlementPreserved,nextStageReady,pass,errors}));if(!pass)process.exitCode=1;
 }finally{await browser.close();}
