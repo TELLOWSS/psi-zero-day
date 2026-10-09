@@ -6,7 +6,7 @@ const require=createRequire(import.meta.url);
 const playwright=require(path.join(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES,'playwright'));
 const out=path.resolve(process.env.PSI_SURVIVORS_QA_DIR||'artifacts/survivors-browser');
 fs.mkdirSync(out,{recursive:true});
-const files=['survivors-animation-rig','survivors-ground-contact','survivors-gait-phase','survivors-command-art','survivors-attack-motion','survivors-rig-renderer','survivors-directional-art','survivors-sprite-motion'];
+const files=['survivors-animation-rig','survivors-ground-contact','survivors-gait-phase','survivors-command-art','survivors-attack-motion','survivors-foot-lock','survivors-authored-joints','survivors-contact-art','survivors-contact-mesh','survivors-worn-equipment-plan','survivors-authored-motion','survivors-rig-renderer','survivors-directional-art','survivors-sprite-motion'];
 const code=files.map(name=>stripTypeScriptTypes(fs.readFileSync(`src/ui/${name}.ts`,'utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,''),{mode:'strip'})).join('\n');
 const browser=await playwright.chromium.launch({headless:true,executablePath:process.env.CHROME_BIN});
 const page=await browser.newPage({viewport:{width:1440,height:900},recordVideo:{dir:out,size:{width:1440,height:900}}});
