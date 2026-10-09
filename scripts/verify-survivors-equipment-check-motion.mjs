@@ -15,7 +15,7 @@ try{
   const sheet=document.createElement('canvas');sheet.width=1760;sheet.height=480;const paint=sheet.getContext('2d');paint.fillStyle='#24352f';paint.fillRect(0,0,sheet.width,sheet.height);
   const frames=[];
   for(let direction=0;direction<8;direction++)for(const check of [false,true]){
-   const pose={...fittingPose(.45,check?'check':'idle',1,false),direction,directional:true};ctx.clearRect(0,0,220,240);ctx.save();ctx.translate(110,225);drawDirectionalBody(ctx,actor,210,pose,false);ctx.restore();
+   const pose={...fittingPose(.45,check?'check':'idle',1,false),direction,visualAngle:direction*Math.PI/4,directional:true};ctx.clearRect(0,0,220,240);ctx.save();ctx.translate(110,225);drawDirectionalBody(ctx,actor,210,pose,false);ctx.restore();
    const data=ctx.getImageData(0,0,220,240).data;let hash=2166136261,opaque=0,bottom=-1;
    for(let i=0;i<data.length;i++){hash=Math.imul(hash^data[i],16777619);if(i%4===3&&data[i]>32){opaque++;bottom=Math.max(bottom,Math.floor(i/4/220));}}
    frames.push({direction,check,hash:hash>>>0,opaque,bottom});paint.drawImage(canvas,direction*220,check?240:0);
