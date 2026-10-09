@@ -66,6 +66,9 @@ export class GangformMomentDirection {
       this.boss=boss;
       this.previousSignature='';
     }
+    // Do not latch an unverified burst. The legitimate second-zone hit sets
+    // signatureResolvedThisCycle; a premature read must not consume its cue.
+    if(progress.combatPhase==='burst'&&!progress.signatureResolvedThisCycle)return null;
     const secured=g.zones.filter(z=>z.hp<=0).length;
     const signature=`${progress.cycleCount}:${progress.combatPhase}:${g.step}:${secured}`;
     if(this.previousSignature===signature)return null;
