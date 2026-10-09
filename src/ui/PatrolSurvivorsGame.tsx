@@ -89,7 +89,6 @@ import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
 import {GangformMomentDirection,type GangformMoment} from './survivors-gangform-moment-direction';
-import {GangformBeatDirector} from './survivors-gangform-direction';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
 import {signatureEventIdentity,signatureEventPlan,type SignatureEventId} from '../engine/survivors-signature-events';
@@ -1398,7 +1397,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
     let bossDirection=new BossEncounterDirection();
     let gangformMomentDirection=new GangformMomentDirection();
     let gangformRadioUntil=0;
-    let gangformBeatDirector=new GangformBeatDirector();
     let lastHudTime = -Infinity;
     let previousEngine: SurvivorsEngine | null = null;
     let playerVoice = new PlayerVoiceDirection();
@@ -1437,7 +1435,6 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         gangformMomentDirection=new GangformMomentDirection();
         gangformRadioUntil=0;
         setGangformRadio(null);
-        gangformBeatDirector=new GangformBeatDirector();
         prevNeutralized = engine.state.hazardsNeutralized;
         prevHp = engine.state.player.hp;
         prevLevel = engine.state.level;
@@ -1471,22 +1468,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         // ST14: scene punctuations follow actual boss edges, never a wall-clock
         // imitation. Low-quality/reduced-motion modes avoid ornament and shake.
         const gangformMoment=gangformMomentDirection.observe(
-          engine.state.stageId,engine.state.bossEncounter?.phase,engine.state.hazards,
-        );
-        const activeGangform=engine.state.stageId==='stage_14'&&engine.state.bossEncounter?.phase==='combat'
-          ?engine.state.hazards.find(h=>h.isStageBoss&&h.hp>0&&h.bossGameplay?.patternId==='PENDULUM_DEBRIS')
-          :undefined;
-        const gangformRadio=gangformBeatDirector.observe(
-          engine.state.stageId,activeGangform,engine.state.characterId,
+          engine.state.stageId,engine.state.bossEncounter?.phase,engine.state.hazards,engine.state.characterId,
         );
         if(gangformMoment) {
           // One compact radio line per real engine transition; no gameplay pause.
           setGangformRadio(gangformMoment);
           gangformRadioUntil=engine.state.gameTime+1.5;
           const point={x:gangformMoment.x,y:gangformMoment.y};
-          // Radio varies with the actual selected character. It shares the
-          // same on-field toast: never add a second competing HUD layer.
-          spawnFloating(point.x,point.y-45,gangformRadio?.radio??gangformMoment.label,gangformMoment.color,false,true);
+          // Combat marker stays short in world space; radio lives in one non-blocking HUD line.
+          spawnFloating(point.x,point.y-45,gangformMoment.label,gangformMoment.color,false,true);
           if(!reducedMotionRef.current&&budget.level!=='low') {
             screenShakeRef.current=Math.max(screenShakeRef.current,gangformMoment.cameraStrength);
             spawnShockwave(point.x,point.y,gangformMoment.color,gangformMoment.radius,2,.34);
