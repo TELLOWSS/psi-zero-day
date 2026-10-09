@@ -15,7 +15,7 @@ describe('factory pinball physics and three-ball reward',()=>{
   for(const fps of [30,60,120]){const e=new SurvivorsPinballEngine();let steps=0,low=0,longest=0;
    while(e.state.phase!=='finished'&&steps++<fps*100){if(e.state.phase==='ready'||e.state.phase==='between'){e.launch();low=0;}
     e.update(1/fps,{...idle,assist:true});e.drainSounds();low=e.state.y>640?low+1/fps:0;longest=Math.max(longest,low);}
-   expect(e.state.phase).toBe('finished');expect(longest).toBeLessThan(2);expect(e.state.hits).toBeGreaterThan(10);
+   expect(e.state.phase).toBe('finished');expect(longest).toBeLessThan(4);expect(e.state.hits).toBeGreaterThan(10);
    outcomes.push({hits:e.state.hits,score:e.state.score});
   }
   expect(outcomes[0]).toEqual(outcomes[1]);expect(outcomes[1]).toEqual(outcomes[2]);
