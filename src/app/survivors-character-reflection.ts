@@ -18,3 +18,7 @@ export function characterReflection(records:readonly OperationHandoff[],characte
 export function hasPlayerHandoffScene(record:OperationHandoff) {
  return canShowHandoffDialogue(record);
 }
+export function playerHandoffSceneRecord(records:readonly OperationHandoff[]) {
+ const record=records.filter(isOperationHandoff).filter(row=>row.characterId==='player'&&row.stageId==='stage_12').at(-1);
+ return record&&hasPlayerHandoffScene(record)?record:null;
+}

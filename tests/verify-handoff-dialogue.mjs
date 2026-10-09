@@ -1,18 +1,20 @@
 import fs from 'node:fs';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES+'/playwright');
-const output='artifacts/handoff-dialogue';fs.mkdirSync(output,{recursive:true});
+const archive=process.env.PSI_ARCHIVE_QA==='1';
+const output=archive?'artifacts/handoff-archive':'artifacts/handoff-dialogue';fs.mkdirSync(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN}),reports=[];
 try{
  for(const [width,height] of [[1440,900],[390,844],[844,390]])for(const choice of ['together','explain']){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];
   page.on('pageerror',error=>errors.push(String(error)));
-  await page.addInitScript(()=>{
+  await page.addInitScript(archive=>{
    localStorage.setItem('psi.survivors.operation-handoff.v1',JSON.stringify([{version:1,characterId:'player',stageId:'stage_12',stageNumber:12,outcome:'victory',zones:0,cartStops:0,rubbleCleared:1,damageTaken:0,stars:[true,false,false]}]));
+   if(archive){const rows=JSON.parse(localStorage.getItem('psi.survivors.operation-handoff.v1'));rows.push({...rows[0],stageId:'stage_13',stageNumber:13,rubbleCleared:0});localStorage.setItem('psi.survivors.operation-handoff.v1',JSON.stringify(rows));}
    window.dialogueWrites=0;window.failDialogue=false;
    const set=Storage.prototype.setItem;
    Storage.prototype.setItem=function(key,value){if(key==='psi.survivors.handoff-dialogue.v1'){if(window.failDialogue)throw Error('QA write failure');window.dialogueWrites++;}return set.call(this,key,value);};
-  });
+  },archive);
   await page.goto(process.env.PSI_PREVIEW_URL,{waitUntil:'networkidle'});
   await page.getByRole('button',{name:/시그널 워치.*SURVIVORS/}).click();
   const details=page.locator('.survivors-operation-brief').first().locator('details').last();await details.locator('summary').click();

@@ -2,6 +2,8 @@
 
 ## 최신 기준선
 
+- 인계 다시보기 후속: 최근 기록이 STAGE13 등으로 바뀌어도 보존된 유효 player/STAGE12 완료·통로 정리 기록에서 별도 인계 archive를 제공한다. 현재 회고는 여전히 실제 최근 구역을 읽으며 두 사건을 섞지 않는다. 다른 캐릭터/실패/정리0 기록에서 장면을 새로 생성하지 않는다. 집중12/타입/Vitebuild 통과. PC/폰세로/폰가로 xA/B의 STAGE13 후속 저장fixture6경로에서 skip/실패retry/쓰기1/다시보기쓰기0/복구/44px/초점/기존저장불변/넘침오류 검증. `artifacts/handoff-archive/report.json`. 자연STAGE12·13 완료나 실기기 증거 아님. Vercel13404 한도실패 유지로 local후속 push/배포 보류.
+
 - 사용자 직접 STAGE12 인계 대화 A/B '두 방향 승인, 검증 후 연결' 답변. 질문에 제시한 안전관리자 두 문장만 localization/UI 연결; 초안의 동료 응답·공통 시작·회고 추가 대사는 미연결. player/stage12/victory/통로정리>0 기존 근거 조건 유지. domain 사건/선택 검증, app 독립 `psi.survivors.handoff-dialogue.v1`에 최초 선택만 저장. skip은 저장 없음, 다시보기는 같은 선택 읽기만, 저장 실패 시 성공 표시 없음. 직업/능력치/보상/음성/기존 저장 변경 없음.
 - 집중11/전체1877pass1skip/타입/prebuild/build 성공. 이후 키보드 초점 보완은 타입/최종 Vitebuild와 UI 회귀로 별도 검증. 실제 빌드 PC/폰세로/폰가로 x2선택의6경로: skip/실패/재시도/최초쓰기1회/기존storage불변/새로고침복구/44px/넘침·오류없음. `artifacts/handoff-dialogue/report.json`/6PNG, 폰세로 B 직접 확인. 저장된 STAGE12 fixture이며 자연 완료/실기기 증거 아님. Vercel 한도 보존을 위해 localcommit 후 push/운영은 보류.
 
