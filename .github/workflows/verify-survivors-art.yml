@@ -102,6 +102,7 @@ jobs:
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-equipment-check-motion.mjs
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-survivors-combat-ui.mjs
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-stage12-real-route.mjs
+          PSI_PREVIEW_URL=http://127.0.0.1:4174 node scripts/verify-survivors-stage25-real-route.mjs
           node tests/verify-survivors-store-maintenance.mjs
           node tests/verify-store-reference-layout.mjs
           PSI_PREVIEW_URL=http://127.0.0.1:4174 node tests/verify-lz-guidance.mjs
@@ -129,4 +130,5 @@ jobs:
             artifacts/tactical-ui
             artifacts/combat-debrief-ui
             artifacts/stage12-real-route
+            artifacts/stage25-real-route
             artifacts/confirmed-impact
