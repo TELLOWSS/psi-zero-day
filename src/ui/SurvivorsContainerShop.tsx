@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import {previewSupplyUpgrade} from '../app/survivors-supply-preview';
+import previewText from '../../content/localization/survivors-supply-preview-ko.json';
 import { RefreshCw } from 'lucide-react';
 import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import './survivors-container-shop.css';
@@ -182,6 +184,7 @@ export function SurvivorsContainerShop({
         <div className="shop-items-grid">
           {items.map((item, idx) => {
             const isBought = purchasedIds.has(item.id);
+            const preview=isBought?[]:previewSupplyUpgrade(gameState,item.apply);
             const canAfford = credits >= item.cost;
             const synergy=supplyPartners(item.id,gameState.activePerks);
             const explanation=supplyText.items[item.id as keyof typeof supplyText.items];
@@ -194,6 +197,11 @@ export function SurvivorsContainerShop({
                 <div className="shop-card-art" role="img" aria-label={item.name} style={{backgroundPosition:`${artCells[item.iconName]%4*100/3}% ${Math.floor(artCells[item.iconName]/4)*100}%`}}/>
                 <h3 className="shop-card-title">{item.name}</h3>
                 <div className="shop-card-effect">{item.effectText}</div>
+                {!isBought ? <details className="shop-detail"><summary>{previewText.title}</summary>{preview.length?preview.map(({field,before,after})=>{
+                  const percent=field==='critRate'||field==='cooldownReduction',scale=percent?100:1;
+                  const unit=percent?'%':field==='dashMaxCooldown'?previewText.seconds:'';
+                  return <p key={field}>{previewText.fields[field]}: {Number((before*scale).toFixed(2))}{unit} → {Number((after*scale).toFixed(2))}{unit}</p>;
+                }):<p>{previewText.unchanged}</p>}</details> : null}
                 <section className={`shop-synergy${synergy.owned?' is-matched':''}`}><strong>{synergy.owned?supplyText.matched:supplyText.suggested}</strong><div>{synergy.ids.map(id=><span key={id}><SurvivorsEquipmentIcon id={id} level={gameState.activePerks[id]||1}/><small>{PERK_CATALOG[id].name}</small></span>)}</div><p>{explanation.reason}</p></section>
                 <details className="shop-detail"><summary>{supplyText.details}</summary><p>{explanation.detail}</p></details>
 
