@@ -1,12 +1,12 @@
 {
-  "status": "DIRECTOR_FILE_REVIEW_PENDING",
+  "status": "DIRECTOR_DESIGN_FILE_APPROVED_SEE_PLAYER_SKILLED_PORTRAIT_APPROVAL",
   "file": "player-skilled-portrait-v1.png",
   "sha256": "6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357",
   "generator": "built-in image_gen",
   "reference": "public/assets/episode01/characters/player-portrait.webp",
   "brief": "Same protagonist identity and PPE, calm confident guiding open hand, existing tablet, inspection camera and blank stop-work card holder on belt, transparent portrait. No rank, medals, promotion, new text or powers.",
   "proposed_gate": "person.id=player and growth.character_id=player and growth.stage=skilled",
-  "runtime_connected": false,
+  "runtime_connected": true,
   "growth_rule_changed": false,
   "equipment_changed": false,
   "rights_and_device_review": "separate"

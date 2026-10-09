@@ -1,0 +1,10 @@
+{
+  "status": "DIRECTOR_DESIGN_FILE_APPROVED",
+  "user_statement": "승인 및 나머지 사항 문의없이 알아서 계속진행.",
+  "file": "public/assets/episode01/characters/player-skilled-portrait-v1.png",
+  "sha256": "6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357",
+  "gate": "person.id=player and growth.character_id=player and growth.stage=skilled",
+  "rules_save_equipment_changes": false,
+  "usage_rights_and_physical_device_review": "separate",
+  "deployment": "only when requested"
+}

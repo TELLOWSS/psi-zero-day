@@ -20,5 +20,7 @@ describe('localized growth presentation without state changes',()=>{
   expect(render('player')).toContain('player-focused-portrait-v1.png');
   expect(render('lim_junho')).not.toContain('player-focused-portrait-v1.png');
   for(const stage of ['initial','skilled','invalid'])expect(render('player',projectCharacterGrowth({'growth.player':stage},'player')!)).not.toContain('player-focused-portrait-v1.png');
+  expect(render('player',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).toContain('player-skilled-portrait-v1.png');
+  expect(render('lim_junho',projectCharacterGrowth({'growth.player':'skilled'},'player')!)).not.toContain('player-skilled-portrait-v1.png');
  });
 });

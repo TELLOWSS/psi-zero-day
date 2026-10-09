@@ -40,10 +40,10 @@
   .character-growth-summary, .character-loadout-summary { display: none; }
   .training-reward-panel { font-size: 9px; padding: 7px 9px; }
 }
-.character-card[data-focused-portrait="true"] .portrait-image {
+.character-card[data-growth-portrait="true"] .portrait-image {
   object-fit: contain;
   object-position: center;
 }
-.character-card[data-focused-portrait="true"] .portrait-slot:has(.portrait-image[data-loaded="true"]) .worker-mark {
+.character-card[data-growth-portrait="true"] .portrait-slot:has(.portrait-image[data-loaded="true"]) .worker-mark {
   visibility: hidden;
 }

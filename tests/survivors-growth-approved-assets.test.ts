@@ -22,6 +22,7 @@ describe('exact approved growth pilot content',()=>{
   expect(pairApproval.career_reward_voice_change).toBe(false);
   expect(createHash('sha256').update(readFileSync(new URL('../'+focusedApproval.path,import.meta.url))).digest('hex')).toBe(focusedApproval.sha256);
   expect(focusedApproval.rule_save_equipment_changes).toBe(false);
+  expect(createHash('sha256').update(readFileSync(new URL('../public/assets/episode01/characters/player-skilled-portrait-v1.png',import.meta.url))).digest('hex')).toBe('6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357');
  });
  it('uses only the two approved player statements without substituting draft replies',()=>{
   expect(dialogueApproval.event_id).toBe(HANDOFF_DIALOGUE_EVENT);

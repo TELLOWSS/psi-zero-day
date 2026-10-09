@@ -66,10 +66,13 @@ export function CharacterCard({ person, portraitUri, fallbackPortraitUri, growth
 }) {
   const visual = characterVisual(person.id);
   const focusedPortrait=person.id==='player'&&growth?.character_id===person.id&&growth.stage==='focused';
-  return <aside className="character-card" data-focused-portrait={focusedPortrait || undefined} data-first-contact={firstContact || undefined} style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
+  const skilledPortrait=person.id==='player'&&growth?.character_id===person.id&&growth.stage==='skilled';
+  const growthPortrait=focusedPortrait||skilledPortrait;
+  const growthPortraitUri=skilledPortrait?'assets/episode01/characters/player-skilled-portrait-v1.png':'assets/episode01/characters/player-focused-portrait-v1.png';
+  return <aside className="character-card" data-focused-portrait={focusedPortrait || undefined} data-growth-portrait={growthPortrait || undefined} data-first-contact={firstContact || undefined} style={{ '--person-accent': visual?.accent } as CSSProperties} aria-label={formatCharacterIdentity(person)}>
     <div className="portrait-slot">
       <div className="worker-mark" aria-hidden="true"><i className="hardhat" /><i className="worker-head" /><i className="worker-vest" /></div>
-      <VisualImage uri={focusedPortrait?'assets/episode01/characters/player-focused-portrait-v1.png':portraitUri} fallbackUri={focusedPortrait?portraitUri??fallbackPortraitUri:fallbackPortraitUri} alt={person.name} className="portrait-image" />
+      <VisualImage uri={growthPortrait?growthPortraitUri:portraitUri} fallbackUri={growthPortrait?portraitUri??fallbackPortraitUri:fallbackPortraitUri} alt={person.name} className="portrait-image" />
     </div>
     <div className="character-identity"><span className="identity-rule" /><div className="character-identity-line"><strong>{person.name}</strong><span data-kind="role">{person.role}</span>{person.trade && person.trade !== person.role ? <span data-kind="trade">{person.trade}</span> : null}</div></div>
     {introLine ? <div className="character-first-contact" role="note">

@@ -66,3 +66,9 @@ handoff는 캐릭터/구역의 최근 종료 수치다. 선택 시간순 로그,
 4. 안전관리자 시범이 닫힌 뒤 다음 한 인물/한 사건을 확정한다. 나머지 49구역/6명 전체의 후보를 동시에 무한 생성하지 않는다.
 
 기존 스토리·애착·보급/시너지 기획은 별도 작업과 소유 범위를 확인한 뒤 연결한다. 문서 작성만으로 그 기능을 구현 완료로 세지 않는다.
+
+## 최신 기준선: 2026-10-10
+
+위 초기 natural 실행과 배포 지시는 역사 기록이다. 이후 seed 수정 완주179.06669초/제동10/정리1/구역3/피해39에서 reload 별3개·wallet1930·내구85·STAGE13 ready 보존을 확인했다. 증거는 artifacts/stage12-growth-shield-natural/settlement.json이며 자연 구매/사람/실기기 증거는 아니다.
+
+사용자 최신 지시상 동기화는 요청 시만 진행한다. focused 및 skilled 초상은 각각 정확 파일 승인 후 기존 본편 growth.player 단계에만 로컬 연결했다. 분리 CharacterCard 실제 브라우저24경로/집중31/type/Vitebuild 통과. 사용권·실기기·본편 전체 슬롯 검수는 별도다. 승인 기록은 PLAYER-FOCUSED-PORTRAIT-APPROVAL.json 및 PLAYER-SKILLED-PORTRAIT-APPROVAL.json이다. 다음 인물의 미확정 사건/대사나 숙련 임계치를 임의 작성하지 않는다.

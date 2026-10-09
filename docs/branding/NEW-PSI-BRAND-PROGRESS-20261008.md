@@ -246,3 +246,4 @@
 - 집중 31건, 전체 1,924건 통과/1건 제외, 타입 및 prebuild/build 성공. PC/모바일 신규 초상 실제 브라우저 검수는 후속이며 자연 훈련·실기기 증거로 확대하지 않음.
 - 정확 SHA/승인 범위: PLAYER-FOCUSED-PORTRAIT-APPROVAL.json. 사용권 검토 별도. 동기화는 사용자 요청 시만 진행.
 - 후속 실제 CharacterCard/제품 CSS 분리 fixture 3viewport x6분기=18경로 통과. 투명 초상 위 worker-mark 중첩을 발견해 focused loaded에만 숨김/contain 적용 후 재검증. 폰 세로 직접 확인. 수정 후 집중30/타입/Vite build 통과. 전체1924는 해당 CSS 보완 전 증거이며 자연 훈련/실기기/전체 본편 레이아웃 증거로 확대하지 않는다.
+- 2026-10-10 skilled 직접 승인 후 로컬 연결 완료. 최신 제품 전체1924pass/1skip 재통과 및 승인 bytes 집중2 재통과. 24경로 분리 fixture는 이전 실제 브라우저 검증으로 구분. 성장 규칙/장착/저장 불변. 최신 상태 문서의 과거 seed/동기화 지시를 별도 기준선으로 정정. 원격 동기화 없음.

@@ -18,4 +18,4 @@
 
 ## 숙련 파일 후보
 
-내장 image_gen으로 기존 초상을 identity reference로 삼아 한 파일을 제작했다. `docs/branding/candidates/player-skilled-v1/player-skilled-portrait-v1.png`, SHA `6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357`. 침착한 열린 손 안내와 기존 tablet, 허리 camera/빈 카드 홀더를 표현한다. 얼굴/PPE/도구 직접 화면 검수 후 디자인·파일 승인 질문을 제시했다. 아직 승인 답변 없음. public/런타임 미연결이며 기존 skilled 초상 유지. 숙련 도달 조건·장착·능력치·직업·관심사 변경 없음.
+내장 image_gen으로 기존 초상을 identity reference로 삼아 한 파일을 제작했다. `docs/branding/candidates/player-skilled-v1/player-skilled-portrait-v1.png`, SHA `6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357`. 침착한 열린 손 안내와 기존 tablet, 허리 camera/빈 카드 홀더를 표현한다. 사용자 '승인 및 나머지 사항 문의없이 알아서 계속진행.' 답변으로 정확 파일 디자인 승인을 기록하고 public에 동일 bytes 복사했다. player/skilled 일치만 연결하며 숙련 도달 조건·장착·능력치·직업·관심사 변경 없음. 집중31/type/Vitebuild 및 PC/폰세로/가로24경로 분리 fixture 검증. 본편 전체 슬롯·자연훈련·실기기·사용권 검수는 별도다.

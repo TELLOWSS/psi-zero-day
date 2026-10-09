@@ -16,13 +16,13 @@ const server=await createServer({server:{host:'127.0.0.1',port:5196,strictPort:t
  });}}]});
 await server.listen();const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_BIN}),rows=[];
 try{
- for(const [width,height] of [[1440,900],[390,844],[844,390]])for(const [id,stage,fail] of [['player','initial',false],['player','focused',false],['player','skilled',false],['lim_junho','focused',false],['player','invalid',false],['player','focused',true]]){
+ for(const [width,height] of [[1440,900],[390,844],[844,390]])for(const [id,stage,fail] of [['player','initial',false],['player','focused',false],['player','skilled',false],['lim_junho','focused',false],['lim_junho','skilled',false],['player','invalid',false],['player','focused',true],['player','skilled',true]]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));
-  if(fail)await page.route('**/player-focused-portrait-v1.png',route=>route.abort());
+  if(fail)await page.route(`**/player-${stage}-portrait-v1.png`,route=>route.abort());
   await page.goto(`http://127.0.0.1:5196/qa-focused?id=${id}&stage=${stage}`);const img=page.locator('.portrait-image');
   await page.waitForFunction(()=>document.querySelector('.portrait-image')?.dataset.loaded==='true');await img.evaluate(img=>img.decode());
   const result=await page.evaluate(()=>{const img=document.querySelector('.portrait-image'),box=img.getBoundingClientRect(),canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;let solid=0;for(let i=3;i<data.length;i+=4)if(data[i]>0)solid++;return {src:img.getAttribute('src'),natural:[img.naturalWidth,img.naturalHeight],solid,fit:getComputedStyle(img).objectFit,box:{x:box.x,y:box.y,width:box.width,height:box.height},overflow:document.documentElement.scrollWidth>innerWidth,flags:window.qaFlags};});
-  const expected=id==='player'&&stage==='focused'&&!fail?'player-focused-portrait-v1.png':'player-portrait.webp';
+  const expected=id==='player'&&['focused','skilled'].includes(stage)&&!fail?`player-${stage}-portrait-v1.png`:'player-portrait.webp';
   const focusedStyle=await page.evaluate(()=>{const card=document.querySelector('.character-card');return {active:card.dataset.focusedPortrait==='true',mark:getComputedStyle(card.querySelector('.worker-mark')).visibility};});
   if(!result.src.endsWith(expected)||!result.solid||result.overflow||result.box.width<=0||errors.length||(id==='player'&&stage==='focused'&&(result.fit!=='contain'||focusedStyle.mark!=='hidden')))throw Error(JSON.stringify({id,stage,fail,result,focusedStyle,errors}));
   await page.screenshot({path:`${output}/${width}x${height}-${id}-${stage}${fail?'-fallback':''}.png`});rows.push({width,height,id,stage,fail,...result,errors});await page.close();
