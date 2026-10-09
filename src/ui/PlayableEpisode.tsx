@@ -570,6 +570,7 @@ export function PlayableEpisode({ session, onReturn }: { session: EpisodeSession
         nodeId={activeInstance?.current_node_id}
         speakerId={snapshot.dialogue?.speaker_id}
         speakerIdentity={person}
+        speakerGrowth={dialogueGrowth}
         relationshipCues={snapshot.relationshipFeedback.flatMap(({ npc_id, delta }) => {
           const cue = episode01RelationshipSceneCue(delta.applied_delta);
           return cue ? [{ character_id: npc_id, cue }] : [];

@@ -47,3 +47,20 @@
 .character-card[data-growth-portrait="true"] .portrait-slot:has(.portrait-image[data-loaded="true"]) .worker-mark {
   visibility: hidden;
 }
+.episode-immersive-speaker-tag:has(.episode-growth-speaker-portrait) {
+  padding-left: 56px;
+  min-height: 48px;
+}
+.episode-growth-speaker-portrait {
+  position: absolute;
+  left: 4px;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+.episode-growth-speaker-stage {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0;
+}

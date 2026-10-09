@@ -17,3 +17,9 @@ PlayableEpisode는 snapshot.state.flags에서 projectCharacterGrowth를 계산�
 - 기존 초상 승인 bytes는 유지한다. 새로운 full-body 파일은 별도 납품 파일이며 기존 초상 승인을 그대로 옮겨 기록하지 않는다.
 
 이번 확인은 코드 읽기 감사다. 새 브라우저/자연 플레이/전체 회귀를 수행하지 않았고 제품·저장·자산은 변경하지 않았다. 전체 성장 기획 완료로 계산하지 않는다. 동기화는 사용자 요청 시만 진행한다.
+
+## 후속 구현
+
+기존 speaker tag에 승인된 player focused/skilled 초상과 기존 stage_label을 표시했다. 전신 actor 우선순위와 카드 숨김은 유지한다. PlayableEpisode에서 기존 dialogueGrowth를 읽기 전달하며 player와growth.character_id 일치 조건으로만 표시한다. 새 자산/해금/능력치/장착/저장 변경 없음. 실패는 기존 map 이미지로 복구한다.
+
+actual EpisodeSession와 전체 PlayableEpisode source의 PC/폰 세로/폰 가로 x2단계6경로에서 이름표 초상 decode/실제48px bounding box/넘침/오류 검증 통과. 폰 세로 숙련 화면 직접 확인. 타입/Vitebuild 성공. seed 성장 flag 검증이며 자연훈련·모든장면·실기기·전신성장아트 구현 완료로 확대하지 않는다. 이전6경로는 카드 숨김 관측이었으며 최신 report는 이름표 표시 증거로 구분한다.
