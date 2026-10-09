@@ -4146,7 +4146,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <p className="survivors-modal-sub">{lastDamage?.source==='RUNAWAY_CART'?terrainText.retryCart:lastDamage?.source==='GAS_LEAK'?terrainText.retryGas:lastDamage?.source==='FALLING_DEBRIS'||lastDamage?.source==='CRANE_DROP'?terrainText.retryFall:terrainText.retryDefault}</p>
             <p className="survivors-modal-sub">{combatText.retry_hint}</p>
 
-            <SurvivorsResultSummary credits={engineRef.current?.state.psiCredits??0} stats={[
+            <SurvivorsResultSummary handoff={engineRef.current ? operationHandoff(engineRef.current.state) : null} credits={engineRef.current?.state.psiCredits??0} stats={[
               {label:resultText.survival,value:formatTime(gameTime)},
               {label:resultText.score,value:score.toLocaleString()},
               {label:resultText.controlled,value:`${kills}건`},
@@ -4186,7 +4186,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {engineRef.current?.state.stage ? `${engineRef.current.state.stage.name} (${engineRef.current.state.stage.subtitle}) 구역을 안전하게 사수했습니다!` : '3분간의 극한 야간 타설 현장을 단 한 건의 사고 없이 안전하게 사수했습니다!'}
             </p>
 
-            <SurvivorsResultSummary credits={engineRef.current?.state.psiCredits??0} stats={[
+            <SurvivorsResultSummary handoff={engineRef.current ? operationHandoff(engineRef.current.state) : null} credits={engineRef.current?.state.psiCredits??0} stats={[
               {label:resultText.grade,value:operationText.grades[engineRef.current?.state.starsEarned.filter(Boolean).length??0]??'',tone:'success'},
               {label:resultText.finalScore,value:score.toLocaleString()},
               {label:resultText.totalControlled,value:`${kills}건`},

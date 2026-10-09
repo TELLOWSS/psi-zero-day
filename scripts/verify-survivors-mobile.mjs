@@ -172,7 +172,7 @@ try {
       await cdp.send('Page.navigate',{url:baseUrl});
       await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
       await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
-      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary'))");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary:not(:disabled)'))",30000);
       await evaluate(cdp,`(async()=>{
         const {SurvivorsEngine}=await import('/src/engine/patrol-survivors-engine.ts');
         const update=SurvivorsEngine.prototype.update;
@@ -249,7 +249,13 @@ try {
           naturalMotion.push({before:beforeMotion,after:afterMotion,valid});await screenshot(cdp,`stage-${stageNumber}-natural-motion.png`);
         }
       }
-      // Exercise real pause-menu controls, then reload to check persistence.
+      // Crowd and motion probes mutate this engine; reload for an independent settings probe.
+      await cdp.send('Page.navigate',{url:baseUrl});
+      await waitFor(cdp,"[...document.querySelectorAll('button')].some(b=>/시그널 워치.*SURVIVORS/.test(b.textContent))");
+      await evaluate(cdp,"[...document.querySelectorAll('button')].find(b=>/시그널 워치.*SURVIVORS/.test(b.textContent)).click()");
+      await waitFor(cdp,"Boolean(document.querySelector('.survivors-ready-launch .survivors-btn-primary:not(:disabled)'))",30000);
+      await evaluate(cdp,"document.querySelector('.survivors-ready-launch .survivors-btn-primary').click()");
+      await waitFor(cdp,"document.querySelector('.survivors-pause-command')?.getAttribute('aria-label')==='일시정지'");
       await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
       await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
       const qualities=[];

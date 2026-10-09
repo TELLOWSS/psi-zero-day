@@ -27,10 +27,14 @@ try{
   await page.waitForTimeout(180);
   await page.screenshot({path:path.join(out,`${width}x${height}-action.png`)});
   if(width>height&&height<=560){
-   const fits=await page.evaluate(()=>{
-    const canvas=document.querySelector('.survivors-fitting-art canvas').getBoundingClientRect(),tabs=document.querySelector('.survivors-store-tabs').getBoundingClientRect();
-    return canvas.top>=tabs.bottom&&[...document.querySelectorAll('.survivors-fitting-controls button, .survivors-fitting-attack-select')].every(button=>button.getBoundingClientRect().bottom<=innerHeight-16);
-   });if(!fits)throw new Error('Landscape fitting canvas or controls are clipped');
+   const geometry=await page.evaluate(()=>{
+    const rect=el=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height};};
+    return {viewport:{width:innerWidth,height:innerHeight},tabs:rect(document.querySelector('.survivors-store-tabs')),
+      canvas:rect(document.querySelector('.survivors-fitting-art canvas')),
+      controls:[...document.querySelectorAll('.survivors-fitting-controls button, .survivors-fitting-attack-select')].map(el=>({label:el.getAttribute('aria-label')||el.textContent?.trim(),...rect(el)}))};
+   });
+   const fits=geometry.canvas.top>=geometry.tabs.bottom&&geometry.controls.every(el=>el.bottom<=geometry.viewport.height-16);
+   if(!fits){console.error('Landscape fitting geometry:',JSON.stringify(geometry));throw new Error('Landscape fitting canvas or controls are clipped');}
   }
   await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(100);const reduced=await pixels();await page.waitForTimeout(240);const quiet=await pixels();
   await page.emulateMedia({reducedMotion:'no-preference'});await page.waitForTimeout(100);
