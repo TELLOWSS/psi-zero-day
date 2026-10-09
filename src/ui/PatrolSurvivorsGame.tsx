@@ -23,6 +23,7 @@ import {FEEL_SETTINGS_KEY,readFeelSettings} from './survivors-feel-settings';
 import {SurvivorsFeelSettings} from './SurvivorsFeelSettings';
 import {drawTerrain} from './survivors-terrain-renderer';
 import {drawStage12RubbleRoute} from './survivors-stage12-route-renderer';
+import {drawStage12RubbleRoute} from './survivors-stage12-route-renderer';
 import terrainText from '../../content/localization/survivors-terrain-ko.json';
 import {SurvivorsTerrainRecord} from './SurvivorsTerrainRecord';
 import {getGraphicsMode,GRAPHICS_PROFILES} from './survivors-graphics-settings';
@@ -2041,6 +2042,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
       if(budget.ambientLighting)drawSceneLighting(ctx, stage, engine.state.interactiveHazards,engine.state.operationControlledZones??[]);
       drawTerrain(ctx,engine.state.terrain??[],spritesRef.current.terrain,engine.state.player);
+      if(stage.id==='stage_12')drawStage12RubbleRoute(ctx,stage.id,engine.state.terrain??[],reducedMotionRef.current);
       drawStage12RubbleRoute(ctx,stage.id,engine.state.terrain??[],reducedMotionRef.current);
       materialResolutionRef.current.drawGround(ctx);
 
