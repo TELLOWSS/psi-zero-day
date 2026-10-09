@@ -10,5 +10,9 @@ export function isOperationHandoff(value: unknown): value is OperationHandoff {
     && (r.outcome === 'victory' || r.outcome === 'defeat')
     && [r.zones, r.cartStops, r.rubbleCleared].every(v => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0)
     && typeof r.damageTaken === 'number' && Number.isFinite(r.damageTaken) && r.damageTaken >= 0
-    && Array.isArray(r.stars) && r.stars.length === 3 && r.stars.every(v => typeof v === 'boolean');
+    && Array.isArray(r.stars) && r.stars.length === 3 && r.stars.every(v => typeof v === 'boolean')
+    && (r.clearedTerrainIds===undefined || (Array.isArray(r.clearedTerrainIds)
+      && r.clearedTerrainIds.length<=Number(r.rubbleCleared) && r.clearedTerrainIds.length<=16
+      && new Set(r.clearedTerrainIds).size===r.clearedTerrainIds.length
+      && r.clearedTerrainIds.every(id=>typeof id==='string'&&/^terrain_[a-z_]{1,40}$/.test(id))));
 }

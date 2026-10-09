@@ -8,6 +8,7 @@ import {characterReflection,hasPlayerHandoffScene,playerHandoffSceneRecord} from
 import reflectionCopy from '../../content/localization/survivors-character-reflection-ko.json';
 import {SurvivorsHandoffDialogue} from './SurvivorsHandoffDialogue';
 import {SurvivorsNarrativeDirection} from './SurvivorsNarrativeDirection';
+import {SurvivorsOperationStory} from './SurvivorsOperationStory';
 export function SurvivorsOperationBrief({characterId,stage}:{characterId:CharacterId;stage:PatrolStageDefinition}) {
  const [,refreshDialogue]=useState(0);
  const dialogueSaved=()=>refreshDialogue(value=>value+1);
@@ -20,6 +21,7 @@ export function SurvivorsOperationBrief({characterId,stage}:{characterId:Charact
  {stage.narrative&&<details><summary>{copy.dispatch} · {speaker.name}</summary><p>{stage.narrative.brief}</p></details>}
  <p><strong>{copy.role}</strong>{role.action}</p>
  <p><strong>{copy.objective}</strong>{stage.starChallenges[1].description}</p>
+ <SurvivorsOperationStory characterId={characterId} stage={stage} records={rows}/>
  <div className="survivors-operation-links"><p><strong>{copy.story}</strong>{role.story}</p><p><strong>{copy.defense}</strong>{role.defense}</p></div>
  <details><summary>{copy.record}</summary>{record?<>
  <p>STAGE {record.stageNumber} · {record.outcome==='victory'?copy.won:copy.lost}<br/>{copy.zones} {record.zones} · {copy.stops} {record.cartStops} · {copy.routes} {record.rubbleCleared}</p>

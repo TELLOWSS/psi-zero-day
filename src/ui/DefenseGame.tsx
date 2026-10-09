@@ -1072,6 +1072,7 @@ export function DefenseGame({
             {eStopCooldown <= 0 ? <kbd className="zb-hotkey" style={{ marginLeft: 4 }}>E</kbd> : null}
           </button>
         </div>
+        {(state.status === 'READY' || state.status === 'INTERMISSION')&&<OperationHandoffDossier mode="defense" defense={{content,state,execute:dispatch,name:id=>towerName(content.map.id,id),pauseReading:()=>{if(state.status==='INTERMISSION'&&!state.paused)dispatch({type:'SetPaused',paused:true});}}}/>}
         {(state.status === 'READY' || state.status === 'INTERMISSION') ? <button
           className="zb-start-wave"
           type="button"

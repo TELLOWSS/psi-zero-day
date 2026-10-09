@@ -3,6 +3,7 @@ import type { StrategyAction, StrategyActionIntent } from '../app/strategy-actio
 import { strategyActionTargetKey } from '../app/strategy-actions';
 import type { PsiIndicatorId } from '../app/product-contract';
 import { psiIndicatorTextId } from '../app/strategy-psi';
+import {OperationHandoffDossier} from './OperationHandoffDossier';
 
 export interface StrategyOutcomeReconsideration {
   readonly item_id: string;
@@ -157,6 +158,7 @@ export function StrategyLoopPanel({
         <small>{nextStep.hint}</small>
       </div>
       {rejected ? <p role="alert">{text('ui.strategy.retry_action')}</p> : null}
+      <OperationHandoffDossier mode="story" story={{actions,text,execute:action=>{if(!executingRef.current&&action.enabled)setPending(action);}}}/>
       <div className="strategy-action-heading"><strong>{text('ui.strategy.actions')}</strong><span>{focusId ? focusTitle ?? text('ui.strategy.site') : text('ui.strategy.action_hint')}</span></div>
       {!focusId && targetOptions.length ? <div className="strategy-target-picker" aria-label={text('ui.strategy.guide.target_title')}>
         {targetOptions.map(action => {

@@ -1,0 +1,20 @@
+패키지: 공장 핀볼 프리미엄 사운드 방향 검증 후보 v1
+제작 도구: Manus / manus-tools generate_sound_effect, manus-tools generate_music
+Gemini 사용 여부: 사용하지 않음
+제작 상태: CANDIDATE — Director 청취 승인 전, 기존 자산 미교체
+생성 일자: 2026-10-10
+권리 기록: 특정 게임·작품의 효과음 또는 멜로디를 모사하지 않는 독창적 프롬프트로 생성. 최신 제공자 약관과 상업 배포 조건은 출시 전 재확인 필요.
+출력 주의: Manus 효과음 도구와 음악 도구가 제공한 네이티브 MP3를 보존함. WAV/PCM으로 변환하거나 업샘플링하지 않음.
+
+[파일 / 코덱 / 샘플레이트 / 채널 / 길이 / SHA-256]
+pinball_bumper_v01.mp3 | mp3,44100,2 | 0.522449s | 38c7690f9cfa6015ed1ad0e3dd90a0b7e3c77d1024ed3af07065353966c85e7b
+pinball_flipper_up_v01.mp3 | mp3,44100,2 | 0.522449s | 468be0092bc21f42ffe657f3f55c090596a8bbfbf82f32ecf0db7a7ebca94141
+pinball_rubber_v01.mp3 | mp3,44100,2 | 0.522449s | 4d02b2b51c2dd9d36fcf6a6401db69018ac404878561b0f46c5331c8dddfa244
+pinball_crane_reward_v01.mp3 | mp3,44100,2 | 1.515102s | 8831fbb657047369deb86bf130a31b9727634248cddc3ddf8d5364b0e732559f
+pinball_theme_v01.mp3 | mp3,44100,2 | 63.164042s | b690447e229ac34d57047fa83c7a5b73182e9e1634331dec3fab88ffe4c2b6b6
+
+[합격 전 확인 항목]
+- 실제 3구 플레이를 이어폰·PC·스마트폰 mono에서 청취
+- 기존 자산과 같은 체감 음량으로 비교
+- 시작 클릭, 절단된 잔향, 클리핑, 반복 피로, 이벤트 타이밍 확인
+- 음악은 루프 경계와 조작음 중역 마스킹 확인

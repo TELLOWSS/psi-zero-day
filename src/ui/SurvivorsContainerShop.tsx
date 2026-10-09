@@ -6,10 +6,18 @@ import type { SurvivorsGameState } from '../domain/patrol-survivors';
 import './survivors-container-shop.css';
 import safeSupplyText from '../../content/localization/survivors-safe-supply-ko.json';
 import supplyText from '../../content/localization/survivors-supply-ko.json';
-import {supplyPartners} from './survivors-supply-synergy';
+import {supplyPartners,supplyPartnerAvailability,supplyStageAdvice} from './survivors-supply-synergy';
 import {SurvivorsEquipmentIcon} from './SurvivorsEquipmentIcon';
-import {PERK_CATALOG} from '../engine/patrol-survivors-engine';
+import {PERK_CATALOG,CHARACTER_PROFILES} from '../engine/patrol-survivors-engine';
 import type {PerkId} from '../domain/patrol-survivors';
+import {operationStoryIntermission} from '../app/survivors-operation-story';
+import storyText from '../../content/localization/survivors-operation-story-ko.json';
+
+function supplyChangeText({field,before,after}:ReturnType<typeof previewSupplyUpgrade>[number]) {
+  const percent=field==='critRate'||field==='cooldownReduction',scale=percent?100:1;
+  const unit=percent?'%':field==='dashMaxCooldown'?previewText.seconds:'';
+  return `${previewText.fields[field]}: ${Number((before*scale).toFixed(2))}${unit} → ${Number((after*scale).toFixed(2))}${unit}`;
+}
 
 export interface ShopUpgradeItem {
   id: string;
@@ -160,6 +168,7 @@ export function SurvivorsContainerShop({
   };
 
   const artCells={nozzle:0,laser:1,boots:2,capacitor:3,drone:4,heal:5,harness:6,magnet:7};
+  const intermission=operationStoryIntermission(gameState,completedWave);
 
   return (
     <div className="survivors-container-shop-backdrop" role="dialog" aria-modal="true" aria-labelledby="shop-title">
@@ -178,6 +187,14 @@ export function SurvivorsContainerShop({
           </div>
         </div>
 
+        {intermission&&<section className="shop-operation-radio" aria-label={storyText.radio}>
+          <strong>{storyText.radio} · {CHARACTER_PROFILES[gameState.stage.narrative?.speaker??'safety_monitor'].name}</strong>
+          <p>{intermission.wave===1?storyText.radioIntro:storyText.radioMiddle}</p>
+          <details className="shop-detail"><summary>{storyText.facts}</summary>
+            <p>{CHARACTER_PROFILES[gameState.characterId].name} · {storyText.roles[intermission.role].goal}</p>
+            <small>{(['route','stop','zone'] as const).map(key=>`${storyText.metrics[key]} ${intermission.facts[key]}`).join(' · ')}</small>
+          </details>
+        </section>}
         <section className="shop-loadout" aria-label={supplyText.loadout}><strong>{supplyText.loadout}</strong><div>{(Object.entries(gameState.activePerks) as [PerkId,number][]).filter(([,level])=>level>0).map(([id,level])=><span key={id}><SurvivorsEquipmentIcon id={id} level={level}/>{PERK_CATALOG[id].name} <small>Lv.{level}</small></span>)}</div><small>{supplyText.note}</small></section>
         <details className="shop-detail"><summary>{supplyText.nextWave}</summary><p>{[...new Set(gameState.stage.hazardMix??[])].filter((id):id is keyof typeof supplyText.risks=>id in supplyText.risks).map(id=>supplyText.risks[id]).join(' · ')||gameState.stage.name}</p></details>
         {/* 4 UPGRADE CARDS */}
@@ -187,6 +204,7 @@ export function SurvivorsContainerShop({
             const preview=isBought?[]:previewSupplyUpgrade(gameState,item.apply);
             const canAfford = credits >= item.cost;
             const synergy=supplyPartners(item.id,gameState.activePerks);
+            const availability=supplyPartnerAvailability(item.id,gameState.activePerks);
             const explanation=supplyText.items[item.id as keyof typeof supplyText.items];
             return (
               <div
@@ -197,12 +215,11 @@ export function SurvivorsContainerShop({
                 <div className="shop-card-art" role="img" aria-label={item.name} style={{backgroundPosition:`${artCells[item.iconName]%4*100/3}% ${Math.floor(artCells[item.iconName]/4)*100}%`}}/>
                 <h3 className="shop-card-title">{item.name}</h3>
                 <div className="shop-card-effect">{item.effectText}</div>
-                {!isBought ? <details className="shop-detail"><summary>{previewText.title}</summary>{preview.length?preview.map(({field,before,after})=>{
-                  const percent=field==='critRate'||field==='cooldownReduction',scale=percent?100:1;
-                  const unit=percent?'%':field==='dashMaxCooldown'?previewText.seconds:'';
-                  return <p key={field}>{previewText.fields[field]}: {Number((before*scale).toFixed(2))}{unit} → {Number((after*scale).toFixed(2))}{unit}</p>;
-                }):<p>{previewText.unchanged}</p>}</details> : null}
+                {!isBought&&<p className={`shop-change-notice${preview.length?'':' is-unchanged'}`}>{preview[0]?`${supplyText.changeNow} · ${supplyChangeText(preview[0])}`:supplyText.noChange}</p>}
+                {!isBought ? <details className="shop-detail"><summary>{previewText.title}</summary>{preview.length?preview.map(change=><p key={change.field}>{supplyChangeText(change)}</p>):<p>{previewText.unchanged}</p>}</details> : null}
                 <section className={`shop-synergy${synergy.owned?' is-matched':''}`}><strong>{synergy.owned?supplyText.matched:supplyText.suggested}</strong><div>{synergy.ids.map(id=><span key={id}><SurvivorsEquipmentIcon id={id} level={gameState.activePerks[id]||1}/><small>{PERK_CATALOG[id].name}</small></span>)}</div><p>{explanation.reason}</p></section>
+                {availability.owned.length>0&&availability.missing.length>0&&<small className="shop-missing-partners">{supplyText.needed} · {availability.missing.map(id=>PERK_CATALOG[id].name).join(' · ')}</small>}
+                <details className="shop-detail"><summary>{supplyText.stageAdvice}</summary><p>{supplyText.advice[supplyStageAdvice(item.id,gameState.stage)]}</p></details>
                 <details className="shop-detail"><summary>{supplyText.details}</summary><p>{explanation.detail}</p></details>
 
                 <div className="shop-card-bottom">

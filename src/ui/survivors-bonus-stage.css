@@ -1,12 +1,40 @@
-.survivors-bonus-backdrop { z-index:120; }
-.survivors-bonus-stage { width:min(580px,calc(100% - 24px)); max-height:calc(100dvh - 24px); overflow:auto; padding:18px; }
-.survivors-bonus-stage header,.survivors-bonus-hud { display:flex; justify-content:space-between; align-items:center; gap:12px; }
-.survivors-bonus-stage h2 { font-size:20px; margin:0 0 10px; }
-.survivors-bonus-stage header strong { color:#9af3cd; white-space:nowrap; }
-.survivors-bonus-stage p,.survivors-bonus-stage small { font-size:12px; line-height:1.6; }
-.survivors-bonus-stage button { margin-top:10px; margin-right:8px; }
-.survivors-bonus-hud { padding:8px 0; font-size:13px; }
-.survivors-bonus-field { position:relative; width:100%; height:clamp(180px,45dvh,380px); overflow:hidden; touch-action:none; user-select:none; border:2px solid #65dbaf; border-radius:12px; background-color:#24342e; background-image:linear-gradient(#14261f99,#14261f99),url('/assets/survivors/industrial-ground-v3.webp'); background-size:cover; }
-.survivors-bonus-box { position:absolute; width:46px; height:46px; transform:translate(-50%,-50%); background-image:url('/assets/survivors/supply-upgrades-v1.png'); background-size:400% 200%; background-position:0 0; pointer-events:none; }
-.survivors-bonus-player { position:absolute; width:38px; height:46px; object-fit:cover; border:2px solid #7dd3fc; border-radius:12px; transform:translate(-50%,-50%); pointer-events:none; box-shadow:0 3px 8px #0009; }
-@media (orientation:landscape) and (max-height:500px) { .survivors-bonus-stage { padding:10px 16px; } .survivors-bonus-field { height:180px; } .survivors-bonus-stage h2 { font-size:16px; margin:0; } }
+.survivors-bonus-backdrop{z-index:120;background:#06110fed;backdrop-filter:blur(10px)}
+.pinball-mini-status{display:none}
+.survivors-modal-content.survivors-bonus-stage{max-width:1040px;width:min(1040px,calc(100% - 28px));text-align:left}
+.survivors-bonus-stage{width:min(1040px,calc(100% - 28px));max-height:calc(100dvh - 28px);overflow:auto;padding:20px 24px;background:linear-gradient(135deg,#1e302c,#0c1716);border:1px solid #7b8472;border-radius:18px;box-shadow:0 24px 80px #000a;color:#edf3e9}
+.survivors-bonus-stage header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.pinball-kicker{font-size:10px;letter-spacing:2px;color:#c9ab6d}.survivors-bonus-stage h2{font-size:23px;margin:5px 0 0}
+.pinball-score{text-align:right}.pinball-score small{display:block;font-size:10px;letter-spacing:3px;color:#c9ab6d}.pinball-score strong{font-size:30px;font-variant-numeric:tabular-nums;color:#ffe1a0}
+.pinball-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:26px;align-items:start}.pinball-table-section{min-width:0;display:flex;flex-direction:column;align-items:center}
+.pinball-table{position:relative;height:min(650px,calc(100dvh - 195px));aspect-ratio:2/3;max-width:100%;border:2px solid #65776a;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px #0009;background:#12201c}
+.pinball-table canvas{display:block;width:100%;height:100%}.pinball-table-message{position:absolute;inset:40% 10% auto;text-align:center;padding:15px;background:#0d1b17e8;border:1px solid #8e9a79;border-radius:10px;color:#f5e2b1;font-size:13px;pointer-events:none}.pinball-table-message strong,.pinball-table-message small{display:block}.pinball-table-message small{margin-top:7px;line-height:1.5;color:#d1dfd3;font-size:11px}
+.pinball-paddles{display:flex;width:100%;max-width:440px;gap:12px;margin-top:12px}.survivors-bonus-stage .pinball-paddle-button{flex:1;min-height:58px;display:flex;justify-content:center;align-items:center;gap:12px;margin:0;border:1px solid #a49464;border-radius:12px;background:linear-gradient(#354c42,#20362c);color:#f7e5ae;box-shadow:inset 0 1px #b7be9133,0 4px 0 #071510;touch-action:none;user-select:none;font-weight:700}.pinball-paddle-button>span:first-child{font-size:25px}.pinball-paddle-button small{display:block;font-size:10px;opacity:.6}.pinball-paddle-button:active{transform:translateY(3px);box-shadow:inset 0 1px #b7be9133}.pinball-paddle-button:disabled{opacity:.5}
+.pinball-console{min-width:0}.pinball-ball-counter{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid #74887344;font-size:12px}.pinball-ball-counter>strong{margin-left:auto;font-size:21px}.pinball-ball-counter>div{display:flex;gap:7px;width:100%}.pinball-ball-counter i{width:13px;height:13px;border:1px solid #637467;border-radius:50%;background:#15271e}.pinball-ball-counter i.available{background:linear-gradient(135deg,#fff,#91a7a1,#d6dbb8);box-shadow:0 0 8px #c1dac122}.pinball-ball-counter i.active{background:#e6bb53;box-shadow:0 0 8px #e6bb5355}
+.pinball-stats{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;margin:20px 0}.pinball-stats dt{font-size:11px;color:#9caf9f}.pinball-stats dd{margin:5px 0 0;font-size:24px;color:#f7e8c0;font-variant-numeric:tabular-nums}.pinball-stats div:nth-child(3) dd{font-size:22px;color:#9fedc7}.pinball-brief,.pinball-hint,.pinball-guide p,.pinball-actions p{font-size:12px;line-height:1.7}.pinball-hint{border-left:2px solid #d6ad58;padding-left:12px;color:#ead49f}.pinball-guide{font-size:12px;color:#b4c6b8;margin:16px 0}.pinball-guide summary{cursor:pointer;padding:8px 0}.pinball-assist{display:flex;align-items:center;gap:8px;font-size:12px;padding:12px 0}.pinball-assist input{width:18px;height:18px;accent-color:#9ce5b4}.pinball-actions{display:grid;gap:10px;margin-top:12px}.survivors-bonus-stage .pinball-actions button{margin:0;width:100%;min-height:44px;white-space:normal}
+@media(max-width:600px) and (orientation:portrait){.survivors-bonus-stage{padding:12px;width:calc(100% - 16px);max-height:calc(100dvh - 16px)}.survivors-bonus-stage h2{font-size:18px}.pinball-kicker{font-size:8px;letter-spacing:1px}.pinball-score strong{font-size:24px}.pinball-layout{grid-template-columns:1fr;gap:10px}.pinball-table{height:min(490px,calc(100dvh - 280px))}.pinball-console{display:flex;flex-wrap:wrap;gap:8px 14px}.pinball-ball-counter{flex:1;padding:0;border:0}.pinball-ball-counter>div{width:auto}.pinball-stats{flex:2;gap:8px;margin:0}.pinball-stats dd{font-size:17px;margin-top:2px}.pinball-stats div:nth-child(3) dd{font-size:17px}.pinball-brief{margin:0}.pinball-hint{display:none}.pinball-guide{margin:0;flex:1}.pinball-assist{padding:4px 0}.pinball-actions{width:100%;display:flex;flex-wrap:wrap;margin-top:0;gap:7px}.survivors-bonus-stage .pinball-actions button{width:auto;flex:1}.pinball-actions p{width:100%;margin:0}.pinball-paddles{margin-top:8px;gap:8px}.survivors-bonus-stage .pinball-paddle-button{min-height:48px}.survivors-bonus-stage header{margin-bottom:8px}}
+@media(orientation:landscape) and (max-height:500px){.survivors-bonus-stage{padding:10px 18px;max-height:calc(100dvh - 12px)}.survivors-bonus-stage header{margin-bottom:6px}.survivors-bonus-stage h2{font-size:16px}.pinball-kicker{font-size:8px}.pinball-layout{grid-template-columns:minmax(160px,1fr) minmax(260px,1.4fr);gap:18px}.pinball-table{height:calc(100dvh - 112px)}.pinball-paddles{margin-top:5px}.survivors-bonus-stage .pinball-paddle-button{min-height:40px;font-size:11px}.pinball-paddle-button small{display:none}.pinball-console{max-height:calc(100dvh - 85px);overflow:auto;padding-right:8px}.pinball-ball-counter{padding:5px 0}.pinball-ball-counter>div{width:auto}.pinball-stats{margin:10px 0;gap:10px}.pinball-stats dd{font-size:18px}.pinball-stats div:nth-child(3) dd{font-size:18px}.pinball-brief{margin:0}.pinball-guide{margin:0}.pinball-assist{padding:7px 0}.pinball-actions{margin-top:4px;gap:6px}.pinball-hint{margin:6px 0}}
+.pinball-table{height:auto;width:min(100%,433px,calc((100dvh - 195px)*.66667))}
+@media(max-width:600px) and (orientation:portrait){.pinball-table{height:auto;width:min(100%,327px,calc((100dvh - 280px)*.66667))}}
+@media(orientation:landscape) and (max-height:500px){.pinball-table{height:auto;width:min(100%,calc((100dvh - 112px)*.66667))}}
+@media(max-width:600px) and (orientation:portrait){
+ .pinball-console{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:9px 12px}
+ .pinball-ball-counter{grid-column:1;grid-row:1;align-content:start;gap:6px}
+ .pinball-ball-counter>span{width:100%;line-height:1.4}.pinball-ball-counter>strong{margin-left:0}.pinball-ball-counter>div{width:auto}
+ .pinball-stats{grid-column:2;grid-row:1;gap:6px 10px}.pinball-stats dt{font-size:10px;line-height:1.3;word-break:keep-all}
+ .pinball-guide{grid-column:1;min-width:0}.pinball-guide summary{white-space:nowrap;font-size:11px}
+ .pinball-assist{grid-column:2;font-size:11px;word-break:keep-all}.pinball-assist input{flex-shrink:0}
+ .pinball-brief,.pinball-actions{grid-column:1/-1}.pinball-actions{width:100%;gap:8px}
+}
+@media(orientation:landscape) and (max-height:500px){
+ .survivors-modal-content.survivors-bonus-stage{display:grid;grid-template-columns:minmax(150px,.85fr) minmax(260px,1.15fr);gap:6px 18px;align-items:start;overflow:hidden;padding:10px 18px}
+ .survivors-bonus-stage header{grid-column:2;grid-row:1;margin:0}
+ .pinball-mini-status{display:block;margin-top:6px;font-size:11px;color:#bce4c9;font-variant-numeric:tabular-nums}
+ .pinball-layout{display:contents}.pinball-table-section{grid-column:1;grid-row:1/span 2}
+ .pinball-table{height:auto;width:min(100%,calc((100dvh - 90px)*.66667))}
+ .pinball-console{grid-column:2;grid-row:2;max-height:calc(100dvh - 130px);min-height:0;overflow:auto}
+}
+
+.pinball-music{display:grid;gap:5px;font-size:12px}.pinball-music select{max-width:100%;padding:8px;background:#142b2e;color:#e6f4f1;border:1px solid #53797b;border-radius:6px}
+
+.pinball-audio-settings{font-size:12px;margin-top:6px}.pinball-audio-settings summary{cursor:pointer;padding:5px 0}
+@media(max-width:600px) and (orientation:portrait){.pinball-audio-settings{grid-column:1/-1}.pinball-table{width:min(100%,300px,calc((100dvh - 330px)*.66667))}}

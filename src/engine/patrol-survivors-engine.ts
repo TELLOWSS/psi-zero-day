@@ -1,4 +1,6 @@
 import {stageThreatTraits} from './survivors-stage-threats';
+import {resolveHandoffCarry} from '../domain/survivors-handoff-carry';
+import type {OperationHandoff} from '../domain/survivors-operation-handoff';
 import {resourceProfile, earnedTacticalSupply} from './survivors-resources';
 import {createTerrain,terrainMove,terrainHit,terrainWaypoint,terrainFreePoint} from './survivors-terrain';
 import {droneEmissionOrigin} from '../domain/survivors-drone-origin';
@@ -541,9 +543,11 @@ export function createInitialSurvivorsState(
   stageId: PatrolStageId = 'stage_01',
   difficulty: PatrolDifficulty = 'standard',
   inventory: StoreInventory = {owned: [], equipped: []},
+  handoffs: readonly OperationHandoff[] = [],
 ): SurvivorsGameState {
   const profile = CHARACTER_PROFILES[characterId];
   const stage = PATROL_STAGES[stageId] || PATROL_STAGES.stage_01;
+  const carry = resolveHandoffCarry(handoffs,stageId);
 
   // Base stats influenced by character profile statModifiers & permanent upgrades
   const mods = profile.statModifiers || {};
@@ -653,7 +657,8 @@ export function createInitialSurvivorsState(
     },
     interactiveHazards: stage.hazards.map(h => ({ ...h })),
     environmentalKills: 0,
-    terrain:createTerrain(stage),
+    terrain:createTerrain(stage).map(t=>carry?.clearedTerrainIds.includes(t.id)&&t.kind==='rubble'?{...t,hp:0}:t),
+    inheritedTerrainIds:carry?.clearedTerrainIds??[],
     terrainRecord:{cartStops:0,rubbleCleared:0,weakPointHits:0,damageTaken:0},
     fieldTactics: {...createFieldTactics(), supportCharges:2 + gear.support, lineCharges:2 + gear.lines},
     starsEarned: [false, false, false],

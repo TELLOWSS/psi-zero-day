@@ -1,8 +1,16 @@
 import {expect,it} from 'vitest';
-import {supplyPartners} from '../src/ui/survivors-supply-synergy';
+import {supplyPartners,supplyPartnerAvailability,supplyStageAdvice} from '../src/ui/survivors-supply-synergy';
+import {PATROL_STAGES} from '../src/engine/patrol-survivors-engine';
 it('prioritizes owned base and evolved partners',()=>{
  expect(supplyPartners('tuned_nozzle',{cryo_blizzard:1,radio_boost:3})).toEqual({owned:true,ids:['cryo_blizzard']});
  expect(supplyPartners('drone_overclock',{hunter_swarm:1,safety_drone:0})).toEqual({owned:true,ids:['hunter_swarm']});
+});
+it('distinguishes owned and missing equipment instead of claiming the whole combination is active',()=>{
+ const active={extinguisher:2,cryo_blizzard:0};const before=JSON.stringify(active);
+ expect(supplyPartnerAvailability('tuned_nozzle',active)).toEqual({owned:['extinguisher'],missing:['cryo_blizzard','grouting_gun','hydraulic_ram']});
+ expect(supplyStageAdvice('tuned_nozzle',PATROL_STAGES.stage_12)).toBe('cart');
+ expect(supplyStageAdvice('steel_toecap',PATROL_STAGES.stage_12)).toBe('mobility');
+ expect(JSON.stringify(active)).toBe(before);
 });
 it('labels missing partners as suggestions and never changes the build',()=>{
  const active={radio_boost:2};const snapshot={...active};

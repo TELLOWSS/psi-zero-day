@@ -35,3 +35,12 @@
 .survivors-result-handoff p { font-size:12px; line-height:1.65; }
 .survivors-operation-brief details small { font-size:11px; color:#a6bab8; }
 @media(max-width:600px){.survivors-operation-links { grid-template-columns:1fr; gap:0; }}
+.survivors-operation-story { border-left:3px solid #73c9ad; padding:4px 12px; margin:12px 0; text-align:left; }
+.survivors-operation-story h4 { margin:6px 0; font-size:14px; color:#d9f4e9; }
+.survivors-operation-story p { font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.survivors-operation-story p strong { display:block; color:#a6e5cf; margin-bottom:4px; }
+.survivors-operation-story small { font-size:11px; line-height:1.6; color:#b1c8c1; }
+.survivors-story-facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0; }
+.survivors-story-facts div { background:#203532; padding:8px; border-radius:4px; }
+.survivors-story-facts dt { font-size:11px; color:#b7d6ca; }
+.survivors-story-facts dd { margin:4px 0 0; font-size:18px; color:#e1f8eb; }

@@ -16,3 +16,5 @@
 .mode-preview-dialog .mode-preview-copy {min-width:0;overflow-y:auto;}
 .title-screen .operation-handoff-dossier {position:relative;z-index:2;width:min(640px,100%);}
 .zb-support-grid > .operation-handoff-dossier {grid-column:1/-1;}
+.operation-handoff-dossier button {min-height:44px;max-width:100%;white-space:normal;padding:8px 12px;border:1px solid #688977;border-radius:6px;background:#244438;color:#edf8f1;cursor:pointer;}
+.operation-handoff-dossier button:disabled {opacity:.5;cursor:default;}

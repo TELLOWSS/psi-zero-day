@@ -308,6 +308,7 @@ export interface SurvivorsGameState {
   terrain?:import('./survivors-terrain').TerrainObject[];
   terrainRecord?:import('./survivors-terrain').TerrainRecord;
   operationControlledZones?: string[];
+  inheritedTerrainIds?: string[];
   fieldTactics?: FieldTactics;
   starsEarned: [boolean, boolean, boolean];
   inFloodlight: boolean;

@@ -330,3 +330,8 @@
 .shop-detail summary { cursor:pointer; color:#c5d7db; padding:5px 0; }
 @media(max-width:680px) { .survivors-container-shop-modal .shop-items-grid { grid-template-columns:1fr; } }
 @media(prefers-reduced-motion:reduce) { .survivors-container-shop-backdrop { animation:none; } .shop-card,.shop-continue-btn { transition:none; } }
+.shop-operation-radio { margin:12px 0; padding:12px; border-left:3px solid #7ec5ab; background:#1a302c; }
+.shop-operation-radio strong { color:#c7edde; font-size:13px; }
+.shop-operation-radio p,.shop-operation-radio small,.shop-missing-partners,.shop-change-notice { font-size:12px; line-height:1.6; color:#b9d1c8; overflow-wrap:anywhere; }
+.shop-change-notice { margin:8px 0 0; }
+.shop-change-notice.is-unchanged { color:#ffd29b; background:#433426; border-radius:4px; padding:8px; }

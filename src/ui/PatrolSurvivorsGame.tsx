@@ -1,7 +1,9 @@
 import {drawEquipmentAura} from './survivors-equipment-aura';
 import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
+import {SurvivorsOperationStoryResult} from './SurvivorsOperationStory';
 import {operationHandoff} from '../domain/survivors-operation-handoff';
 import {saveOperationHandoff} from './survivors-operation-handoff-store';
+import {readOperationHandoffs} from '../app/operation-handoff-store';
 import {SurvivorsBonusStage} from './SurvivorsBonusStage';
 import bonusText from '../../content/localization/survivors-bonus-ko.json';
 import {SurvivorsTerrainCleanup} from './SurvivorsTerrainCleanup';
@@ -1027,7 +1029,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
   // Initialize Game Engine with selected character, permanent upgrades & stage
   const initGame = useCallback((charId: CharacterId = selectedChar, stageId: PatrolStageId = selectedStage) => {
     const replay=Boolean(stageReplayRef.current[stageId]?.[0])||growthRef.current.some(record=>record.stageId===stageId);
-    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory), crypto.getRandomValues(new Uint32Array(1))[0],replay);
+    const engine = new SurvivorsEngine(createInitialSurvivorsState(charId, permanentUpgrades, stageId, selectedDifficulty, storeInventory, readOperationHandoffs()), crypto.getRandomValues(new Uint32Array(1))[0],replay);
     audioRef.current.silence();
     floatingTextsRef.current = [];
     particlesRef.current = [];
@@ -1106,13 +1108,14 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
 
   // Initialization cancels the old session's audio; schedule its replacement afterwards.
   useEffect(() => {
+    if(showBonusStage){audioRef.current.silence();audioRef.current.stopScore();return;}
     if(accountabilityCase&&!audioMuted){playScore('pressure');audioRef.current.setDialogueFocus(true);return;}
     if (audioMuted || phase === 'paused' || phase === 'levelup' || (phase === 'ready'&&!readyMusic)) { audioRef.current.stopScore(); return; }
     if (phase === 'ready') playScore('ready');
     if (phase === 'playing') playScore(scoreStateRef.current);
     if (phase === 'victory') playScore('success', 12);
     if (phase === 'defeat') playScore('failure', 10);
-  }, [phase, audioMuted, accountabilityCase, readyMusic, initGame]);
+  }, [phase, audioMuted, accountabilityCase, readyMusic, initGame, showBonusStage]);
 
   const beginPatrol = () => {
     if (!engineRef.current) return;
@@ -4140,6 +4143,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             <div className="survivors-result-body" tabIndex={0}>
             <SurvivorsTerrainRecord record={engineRef.current?.state.terrainRecord} stage={selectedStage} difficulty={selectedDifficulty} victory={false}/>
             <h2 id="survivors-result-title" className="survivors-modal-title is-red"><ShieldAlert aria-hidden="true"/>{resultText.dangerTitle}</h2>
+            {engineRef.current&&<SurvivorsOperationStoryResult record={operationHandoff(engineRef.current.state)} stage={engineRef.current.state.stage}/>}
             <p className="survivors-modal-sub">
               {resultText.defeat_description}
             </p>
@@ -4224,6 +4228,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {PATROL_STAGES[selectedStage].narrative && <p className="survivors-story-result">{engineRef.current?.state.starsEarned[1] ? PATROL_STAGES[selectedStage].narrative!.success : PATROL_STAGES[selectedStage].narrative!.residual}</p>}
             <SurvivorsGrowthRecord records={growthRecords} characterId={selectedChar}/>
             <SurvivorsHandoffResult record={engineRef.current?operationHandoff(engineRef.current.state):null}/>
+            {engineRef.current&&<SurvivorsOperationStoryResult record={operationHandoff(engineRef.current.state)} stage={engineRef.current.state.stage}/>}
             <p role={growthSaveFailed?'alert':'status'}>{growthSaveFailed?growthText.growth_unsaved:growthText.growth_saved}</p>
             {growthSaveFailed&&<button type="button" onClick={()=>persistGrowth(growthRecords)}>{growthText.growth_retry}</button>}
             {accountabilityMemory(accountability)&&<p className="survivors-story-result">{accountabilityMemory(accountability)}</p>}
@@ -4268,7 +4273,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           </div>
         </div>
       )}
-      {showBonusStage&&<SurvivorsBonusStage onReward={earned=>saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,earned,0))} onClose={()=>setShowBonusStage(false)}/>}
+      {showBonusStage&&<SurvivorsBonusStage characterId={selectedChar} audioMuted={audioMuted} onReward={earned=>saveMetaProgress(permanentUpgrades,settlePatrolCredits(creditsRef.current,earned,0))} onClose={()=>setShowBonusStage(false)}/>}
       {accountabilityCase&&<SurvivorsAccountabilityEvent key={accountabilityCase.id} incident={accountabilityCase} state={accountability} portraitUri={CHARACTER_PROFILES.kang_taesik.portraitUri}
         onEvidence={()=>audioRef.current.playDecisionCue('evidence')}
         onDecide={(action,evidence)=>{
