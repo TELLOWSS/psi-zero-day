@@ -20,7 +20,7 @@ export function drawStaleRoute(ctx:CanvasRenderingContext2D,h:Readonly<Hazard>):
  ctx.fillStyle='#ffcc99';ctx.fillText('구 표식 · 재확인',old.x,old.y-34);
  ctx.setLineDash([6,7]);ctx.lineWidth=3;ctx.strokeStyle='rgba(120,235,225,.66)';
  ctx.beginPath();ctx.moveTo(r.points[0]!.x,r.points[0]!.y);
- for(let i=1;i<r.points.length;i++)ctx.lineTo(r.points[i].x,r.points[i].y);
+ for(let i=1;i<r.points.length;i++)ctx.lineTo(r.points[i]!.x,r.points[i]!.y);
  ctx.stroke();ctx.setLineDash([]);
  for(let i=0;i<r.points.length;i++){
   const pt=r.points[i]!,done=i<r.verified,active=i===r.verified;
