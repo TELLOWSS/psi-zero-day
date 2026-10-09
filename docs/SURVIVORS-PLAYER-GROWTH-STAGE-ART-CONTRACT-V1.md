@@ -15,3 +15,7 @@
 로컬 전체 회귀 1,924건 통과/1건 제외 및 prebuild/build 성공 후, 실제 CharacterCard/제품 CSS의 PC·폰 세로·가로 18경로를 검증했다. 초기/focused/skilled/다른 인물/invalid/로드 실패 fallback을 확인했다. 첫 모바일 캡처에서 기존 CSS worker-mark가 투명 초상에 겹쳐 focused에만 loaded 시 숨기고 contain을 적용했다. 재검증에서 디코딩/비어 있지 않은 픽셀/넘침/오류/fallback/표시 비율 통과, 폰 세로 직접 화면 확인. 수정 후 타입·Vite build 재통과. 이 증거는 분리 fixture이며 실제 본편 전체 레이아웃·자연 훈련 도달·실기기 검증이 아니다. GitHub/Vercel 동기화는 사용자 요청 전 진행하지 않는다.
 
 단계별 새 최종 파일 제작 시 identity reference와 정확SHA, 투명 초상/장면 CG의 슬롯 구분, 얼굴/PPE/도구/크롭, actor/stage 분리, invalid flag 초기 복귀, 장비 미자동장착, 저장 무변경 검증이 필요하다. 실기기/사용권/전체 최종아트 승인은 별도다.
+
+## 숙련 파일 후보
+
+내장 image_gen으로 기존 초상을 identity reference로 삼아 한 파일을 제작했다. `docs/branding/candidates/player-skilled-v1/player-skilled-portrait-v1.png`, SHA `6c4722740d3b9fd45faecbb2bb648cfed86aa887cf509739a35fec57d435a357`. 침착한 열린 손 안내와 기존 tablet, 허리 camera/빈 카드 홀더를 표현한다. 얼굴/PPE/도구 직접 화면 검수 후 디자인·파일 승인 질문을 제시했다. 아직 승인 답변 없음. public/런타임 미연결이며 기존 skilled 초상 유지. 숙련 도달 조건·장착·능력치·직업·관심사 변경 없음.
