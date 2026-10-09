@@ -5,19 +5,30 @@ export function drawStaleRoute(ctx:CanvasRenderingContext2D,h:Readonly<Hazard>):
  const p=h.bossGameplay,r=p?.staleRoute;
  if(!r||p?.patternId!=='STALE_ROUTE'||p.combatPhase==='secured')return;
  ctx.save();
- const old=r.oldMark;
- ctx.lineWidth=2;ctx.setLineDash([8,8]);
- ctx.strokeStyle='rgba(249,115,22,.8)';
- ctx.beginPath();ctx.moveTo(h.x,h.y);ctx.lineTo(old.x,old.y);ctx.stroke();
- ctx.setLineDash([]);
- ctx.fillStyle='rgba(111,32,16,.76)';
- ctx.beginPath();ctx.arc(old.x,old.y,27,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle='#fb923c';ctx.lineWidth=3;
- ctx.beginPath();ctx.moveTo(old.x-11,old.y-11);ctx.lineTo(old.x+11,old.y+11);ctx.moveTo(old.x+11,old.y-11);ctx.lineTo(old.x-11,old.y+11);ctx.stroke();
+ // Warning region is readable BEFORE entering its real 35px setback radius.
+ // Never draw a fake obstacle when placement cannot produce a safe bypass.
+ if(r.oldMarkEnabled){
+  const old=r.oldMark;
+  ctx.lineWidth=2;ctx.setLineDash([8,8]);
+  ctx.strokeStyle='rgba(249,115,22,.84)';
+  ctx.beginPath();ctx.moveTo(h.x,h.y);ctx.lineTo(old.x,old.y);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(111,32,16,.56)';
+  ctx.beginPath();ctx.arc(old.x,old.y,44,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#fb923c';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(old.x,old.y,40,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(old.x-11,old.y-11);ctx.lineTo(old.x+11,old.y+11);
+  ctx.moveTo(old.x+11,old.y-11);ctx.lineTo(old.x-11,old.y+11);ctx.stroke();
+  ctx.font='700 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+  ctx.lineWidth=3;ctx.strokeStyle='#23100a';
+  ctx.strokeText('구 통로 · 접근 금지',old.x,old.y-48);
+  ctx.fillStyle='#ffcc99';ctx.fillText('구 통로 · 접근 금지',old.x,old.y-48);
+  if(r.warningRemaining>0){
+   ctx.strokeText('경로 재확인!',old.x,old.y+62);
+   ctx.fillText('경로 재확인!',old.x,old.y+62);
+  }
+ }
  ctx.font='700 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
- ctx.lineWidth=3;ctx.strokeStyle='#23100a';
- ctx.strokeText('구 표식 · 재확인',old.x,old.y-34);
- ctx.fillStyle='#ffcc99';ctx.fillText('구 표식 · 재확인',old.x,old.y-34);
  ctx.setLineDash([6,7]);ctx.lineWidth=3;ctx.strokeStyle='rgba(120,235,225,.66)';
  ctx.beginPath();ctx.moveTo(r.points[0]!.x,r.points[0]!.y);
  for(let i=1;i<r.points.length;i++)ctx.lineTo(r.points[i]!.x,r.points[i]!.y);
@@ -34,7 +45,7 @@ export function drawStaleRoute(ctx:CanvasRenderingContext2D,h:Readonly<Hazard>):
  }
  ctx.textBaseline='bottom';
  ctx.font='700 14px sans-serif';
- const text=p.combatPhase==='burst'?'약점 개방 · 4.5초':`새 동선 확인 ${Math.min(3,r.verified)}/3`;
+ const text=p.combatPhase==='burst'?'약점 개방 · 4.5초':r.warningRemaining>0?'구 통로 차단 · 새 길로':`새 동선 확인 ${Math.min(3,r.verified)}/3`;
  ctx.strokeStyle='#0d2030';ctx.lineWidth=4;
  ctx.strokeText(text,h.x,h.y-h.radius-45);
  ctx.fillStyle=p.combatPhase==='burst'?'#a7f3d0':'#a5f3fc';
