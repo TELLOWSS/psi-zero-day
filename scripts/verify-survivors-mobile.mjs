@@ -199,7 +199,9 @@ try {
         return {hud:box(hud),hudOverflow:hud.scrollWidth>hud.clientWidth+1,actions:[...document.querySelectorAll('.survivors-tactical-actions button')].map(box),pixels:canvas.width*canvas.height,overflow:document.documentElement.scrollWidth>innerWidth+1};
       })()`);
       await screenshot(cdp,`${width}x${height}-combat.png`);
-      // Inspect pause/settings on a CLEAN running scene before injecting 70 hazards\n      // and changing world stages. Synthetic combat fixtures can trigger\n      // accountability/level-up modals, making the pause test unrelated to UI.
+      // Inspect pause/settings on a CLEAN running scene before injecting 70 hazards
+      // and changing world stages. Synthetic combat fixtures can trigger
+      // accountability/level-up modals, making the pause test unrelated to UI.
       await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
       await waitFor(cdp,"Boolean(document.querySelector('.survivors-modal-backdrop .survivors-display-settings'))");
       const qualities=[];
@@ -209,7 +211,9 @@ try {
       }
       await evaluate(cdp,`(()=>{const panel=document.querySelector('.survivors-modal-backdrop .survivors-display-settings');for(const box of panel.querySelectorAll('input[type=checkbox]'))if(box.checked)box.click();})()`);
       const savedDisplay=await evaluate(cdp,"JSON.parse(localStorage.getItem('psi.survivors.display.v1'))");
-      await screenshot(cdp,`${width}x${height}-display-settings.png`);\n      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");\n      await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
+      await screenshot(cdp,`${width}x${height}-display-settings.png`);
+      await evaluate(cdp,"document.querySelector('.survivors-pause-command').click()");
+      await waitFor(cdp,"window.qaMobileEngine?.state.phase==='playing'");
       // Explicit synthetic stress fixture, not evidence of a natural stage clear or Android FPS.
       await evaluate(cdp,`(()=>{const e=window.qaMobileEngine;e.state.player.hp=e.state.player.maxHp=100000;e.state.nextLevelExp=100000;e.state.gameTime=70;for(let i=0;i<70;i++)e.spawnHazard(i%2?'RUNAWAY_CART':'GAS_LEAK');})()`);
       await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});await sleep(2600);
