@@ -72,7 +72,6 @@ export class GangformMomentDirection {
     const secured=g.zones.filter(z=>z.hp<=0).length;
     const signature=`${progress.cycleCount}:${progress.combatPhase}:${g.step}:${secured}`;
     if(this.previousSignature===signature)return null;
-    this.previousSignature=signature;
 
     let kind:GangformMomentKind|undefined;
     if(progress.combatPhase==='burst'&&progress.signatureResolvedThisCycle)kind='burst';
@@ -83,7 +82,12 @@ export class GangformMomentDirection {
       else if(g.step==='debris_warning')kind='debris_warning';
       else if(g.step==='debris')kind='debris_impact';
     }
+    // Only consume a signature after the engine confirms a meaningful cue.
+    // A two-zone hit can put the boss in 'burst' before it latches the
+    // signatureResolvedThisCycle flag, so an ineligible early sample must not
+    // suppress the real weak-point-open event on the following frame.
     if(!kind)return null;
+    this.previousSignature=signature;
     const config=MOMENTS[kind];
     // Telegraphs originate at the real locked geometry; no fabricated hit point.
     const point=(kind==='debris_impact'||kind==='debris_warning'||kind==='zone_exposure'||kind==='zone_secured')
