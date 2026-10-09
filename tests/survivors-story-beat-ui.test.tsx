@@ -45,4 +45,16 @@ describe('ST12 player-facing story readouts',()=>{
    const w=render(<SurvivorsStoryBeat stageId="stage_12" characterId="kang_taesik" view="brief"/>);
    try{expect(w.host.textContent).not.toContain('다른 동료의 같은 현장 기록');}finally{w.dispose();}
  });
+ it('shows ST13 next-shift handoff only after a genuine ST12 completion',()=>{
+   const v=render(<SurvivorsStoryBeat stageId="stage_13" characterId="kang_taesik" view="brief"/>);
+   try{expect(v.host.querySelector('.survivors-story-beat')).toBeNull();}finally{v.dispose();}
+   localStorage.setItem(OPERATION_HANDOFF_KEY,JSON.stringify([completed]));
+   const withHistory=render(<SurvivorsStoryBeat stageId="stage_13" characterId="kang_taesik" view="brief"/>);
+   try{
+     expect(withHistory.host.textContent).toContain('어제의 인계');
+     expect(withHistory.host.textContent).toContain('잔재물 정리 0');
+     expect(withHistory.host.textContent).toContain('임준호');
+   }finally{withHistory.dispose();}
+ });
+
 });
