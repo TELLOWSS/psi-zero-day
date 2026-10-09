@@ -5,6 +5,7 @@ import st13 from '../../content/localization/survivors-story-st13-ko.json';
 import st14 from '../../content/localization/survivors-story-st14-ko.json';
 import st15 from '../../content/localization/survivors-story-st15-ko.json';
 import st25 from '../../content/localization/survivors-story-st25-ko.json';
+import st26 from '../../content/localization/survivors-story-st26-ko.json';
 
 /**
  * First narrative vertical slice. All achievements shown to the player are read
@@ -49,6 +50,24 @@ export function storyBrief(
   characterId: CharacterId,
   previous: readonly OperationHandoff[] = [],
 ): StoryReadout | null {
+  if (stageId === 'stage_26') {
+    // The next-shift message exists only after an actually saved ST25 victory.
+    // It never implies the new electrical workface is automatically safe.
+    const prior=[...previous].reverse().find(row =>
+      row.stageId==='stage_25'&&row.outcome==='victory'
+    );
+    if(!prior)return null;
+    return {
+      title:st26.title,
+      opening:st26.opening,
+      characterLine:st26.characterLines[storyCharacter(characterId)],
+      evidence:st26.evidence
+        .replace('{actor}',st13.sourceNames[storyCharacter(prior.characterId)])
+        .replace('{zones}',String(prior.zones))
+        .replace('{damage}',String(prior.damageTaken)),
+      nextSignal:st26.nextSignal,
+    };
+  }
   if (stageId === 'stage_25') {
     const preceding = [...previous].reverse().find(row=>row.stageId==='stage_24'&&row.outcome==='victory');
     return {
