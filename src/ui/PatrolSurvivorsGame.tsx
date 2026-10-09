@@ -88,6 +88,7 @@ import bossText from '../../content/localization/survivors-boss-ko.json';
 import { bossPattern, bossCoreStatus } from '../engine/survivors-boss-pattern';
 import {bossCombatReadout,bossCombatHint} from './survivors-boss-readout';
 import {drawGangformPattern} from './survivors-gangform-render';
+import {drawStaleRoute} from './survivors-stale-route-render';
 import {GangformMomentDirection,type GangformMoment} from './survivors-gangform-moment-direction';
 import { operationPlan, operationProgress, operationTiming } from '../engine/survivors-operation';
 import {waveDirector,type SurvivorsWave} from '../engine/survivors-difficulty';
@@ -2674,7 +2675,10 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         | { kind: 'player'; y: number };
 
       const entityList: EntityItem[] = [];
-      for(const h of hazards)drawGangformPattern(ctx,h,spritesRef.current.industrialHazards);
+      for(const h of hazards){
+        drawGangformPattern(ctx,h,spritesRef.current.industrialHazards);
+        if(stage.id==='stage_25')drawStaleRoute(ctx,h);
+      }
       for (const d of drops) {
         if(d.x<camX-100||d.x>camX+viewW+100||d.y<camY-100||d.y>camY+viewH+100)continue;
         entityList.push({ kind: 'drop', y: d.y, data: d });
