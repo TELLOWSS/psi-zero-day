@@ -1,6 +1,7 @@
 import {PATROL_STAGE_IDS,type PatrolStageId} from './patrol-survivors';
 import {PATROL_DIFFICULTIES,type PatrolDifficulty} from './survivors-challenge';
 import {validGrowthRecords} from './survivors-growth';
+import {PINBALL_TABLES,pinballTableProgress,type PinballTableId} from './survivors-pinball-tables';
 
 export function completedPatrolStages(stars:unknown,growth:unknown,claims:unknown=[]):PatrolStageId[] {
  const records=validGrowthRecords(growth);
@@ -18,6 +19,7 @@ export function stageClearReward(stage:PatrolStageId,difficulty:PatrolDifficulty
  return {clear,first,mastery,total:clear+first+mastery};
 }
 export const PINBALL_THEMES={
+ ...PINBALL_TABLES,
  factory:{unlock:0,asset:'/assets/survivors/pinball/factory-playfield-v2.png'},
  harbor:{unlock:1,asset:'/assets/survivors/pinball/harbor-playfield-v1.png'},
  steelworks:{unlock:3,asset:'/assets/survivors/pinball/steelworks-playfield-v1.png'},
@@ -32,9 +34,10 @@ export const PINBALL_RULES={
 export type PinballRule=keyof typeof PINBALL_RULES;
 export function recreationLevel(value:number){return Number.isFinite(value)?Math.max(0,Math.min(50,Math.floor(value))):0;}
 export function pinballRewardBudget(clears:number){const n=recreationLevel(clears);return {base:Math.min(300,100+n*20),cap:Math.min(1200,400+n*60)};}
-export function availablePinballChoice(value:unknown,clears:number):{theme:PinballTheme;rule:PinballRule}{
+export function availablePinballChoice(value:unknown,clears:number,stages?:readonly PatrolStageId[]):{theme:PinballTheme;rule:PinballRule}{
  const v=value&&typeof value==='object'?value as Record<string,unknown>:{};const n=recreationLevel(clears);
- const theme=Object.keys(PINBALL_THEMES).find(id=>id===v.theme&&PINBALL_THEMES[id as PinballTheme].unlock<=n) as PinballTheme|undefined;
+ const selected=stages&&v.theme==='harbor'?'cargo':stages&&v.theme==='steelworks'?'foundry':v.theme;
+ const theme=Object.keys(PINBALL_THEMES).find(id=>id===selected&&(stages?id in PINBALL_TABLES&&pinballTableProgress(id as PinballTableId,stages).unlocked:PINBALL_THEMES[id as PinballTheme].unlock<=n)) as PinballTheme|undefined;
  const rule=Object.keys(PINBALL_RULES).find(id=>id===v.rule&&PINBALL_RULES[id as PinballRule].unlock<=n) as PinballRule|undefined;
  return {theme:theme??'factory',rule:rule??'classic'};
 }

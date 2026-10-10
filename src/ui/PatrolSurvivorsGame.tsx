@@ -1,3 +1,5 @@
+import {SurvivorsPinballUnlockPreview} from './SurvivorsPinballCustomization';
+import {PINBALL_TABLE_IDS,pinballTableProgress} from '../domain/survivors-pinball-tables';
 import {drawEquipmentAura} from './survivors-equipment-aura';
 import {SurvivorsOperationBrief} from './SurvivorsOperationBrief';
 import {SurvivorsOperationStoryResult} from './SurvivorsOperationStory';
@@ -3782,7 +3784,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
             {/* STAGE SELECTOR (5 INDUSTRIAL ZONES) */}
             <details open className="survivors-stage-select-section survivors-ready-details" hidden={preflightTab!=='stage'}>
               <summary>{combatText.stage_select}</summary>
-              <span className="survivors-section-label">{growthText.stage_select}</span>
+              <SurvivorsPinballUnlockPreview completedStages={completedStages}/><span className="survivors-section-label">{growthText.stage_select}</span>
               <div ref={chapterTabsRef} className="survivors-chapter-tabs" role="tablist" aria-label={growthText.stage_select}>
                 {growthText.chapters.map((name,index)=><button type="button" role="tab" tabIndex={stageChapter===index?0:-1} aria-selected={stageChapter===index} aria-controls="survivors-chapter-stages" id={`survivors-chapter-${index}`} key={name} onClick={()=>setStageChapter(index)} onKeyDown={event=>{
                   const next=event.key==='ArrowRight'?(index+1)%5:event.key==='ArrowLeft'?(index+4)%5:event.key==='Home'?0:event.key==='End'?4:null;
@@ -4213,7 +4215,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
               {label:resultText.environment,value:`${engineRef.current?.state.environmentalKills??0}건`,tone:'cyan'},
               {label:resultText.mastery,value:engineRef.current?.state.signatureMastery?.zeroDay?'ZERO DAY ×3':`BEST ×${engineRef.current?.state.signatureMastery?.best??0}`},
             ]}/>
-            {clearReward&&<section className="survivors-clear-reward"><h3>{recreationText.stageReward} +{clearReward.total} PSI</h3><p>{recreationText.clearPay} +{clearReward.clear} · {recreationText.firstClear} +{clearReward.first} · {recreationText.masteryPay} +{clearReward.mastery}</p><p>{recreationText.progress.replace('{count}',String(completedStages.length))}</p></section>}
+            {clearReward&&<section className="survivors-clear-reward"><h3>{recreationText.stageReward} +{clearReward.total} PSI</h3><p>{recreationText.clearPay} +{clearReward.clear} · {recreationText.firstClear} +{clearReward.first} · {recreationText.masteryPay} +{clearReward.mastery}</p><p>{recreationText.progress.replace('{count}',String(completedStages.length))}</p>{clearReward.first>0&&PINBALL_TABLE_IDS.filter(id=>id!=='factory'&&pinballTableProgress(id,completedStages).unlocked&&!pinballTableProgress(id,completedStages.filter(stage=>stage!==selectedStage)).unlocked).map(id=><p key={id}><strong>{recreationText.newTable} · {recreationText.themes[id].name}</strong><br/>{recreationText.themes[id].detail}</p>)}<SurvivorsPinballUnlockPreview completedStages={completedStages}/></section>}
             {settlementFailed&&<p role="alert">{recreationText.saveFailed}<button type="button" onClick={()=>engineRef.current&&settleRun(engineRef.current)}>{recreationText.retry}</button></p>}
             <p className="survivors-story-result">{operationText.handoff}</p>
             {clearGearWear.length>0&&<section className="survivors-clear-maintenance"><h3>{storeText.clearWear} · −{STORE_CLEAR_WEAR}</h3>{clearGearWear.map(id=><p key={id}>{storeText.items[id as keyof typeof storeText.items].name} · {storeText.durability} {itemDurability(storeInventory,id)}/100 {itemDurability(storeInventory,id)===0?storeText.broken:''}</p>)}</section>}

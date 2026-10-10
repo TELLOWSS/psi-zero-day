@@ -1,11 +1,13 @@
 import {PINBALL_BUMPERS,type SurvivorsPinballEngine} from '../engine/survivors-pinball-engine';
-export function drawPinball(ctx:CanvasRenderingContext2D,s:SurvivorsPinballEngine['state'],table:HTMLImageElement,paddle:HTMLImageElement,cargo:HTMLImageElement,reduced:boolean){
+import {drawSiteEnvironment,drawSiteObjects} from './survivors-pinball-site-renderer';
+export function drawPinball(ctx:CanvasRenderingContext2D,s:SurvivorsPinballEngine['state'],table:HTMLImageElement,paddle:HTMLImageElement,cargo:HTMLImageElement,reduced:boolean,atlas?:HTMLImageElement,environment?:HTMLImageElement){
  ctx.clearRect(0,0,600,900);ctx.drawImage(table,0,0,600,900);
+ if(s.site&&atlas){drawSiteEnvironment(ctx,s.site,s.elapsed,reduced,atlas,environment);drawSiteObjects(ctx,s.site,atlas,s.elapsed,reduced,s.lit);}
  const lift=s.effects.find(e=>e.kind==='crane'||e.kind==='jackpot'),progress=lift&&!reduced?Math.sin((1-lift.life/1.2)*Math.PI):0;
  ctx.save();ctx.translate(300,110-progress*25);ctx.rotate(progress*.035);
  ctx.shadowColor='#0009';ctx.shadowBlur=8+progress*6;ctx.shadowOffsetY=7+progress*6;
- ctx.drawImage(cargo,-70,-35,140,70);ctx.restore();
- PINBALL_BUMPERS.forEach((b,i)=>{if(!s.lit[i])return;
+ if(!environment&&(!s.site||s.site.id==='factory'))ctx.drawImage(cargo,-70,-35,140,70);ctx.restore();
+ (s.site?.layout.bumper??PINBALL_BUMPERS).forEach((b,i)=>{if(!s.lit[i])return;
   ctx.save();ctx.globalCompositeOperation='screen';const g=ctx.createRadialGradient(b.x,b.y,14,b.x,b.y,65);
   g.addColorStop(0,'#8fffcc90');g.addColorStop(1,'#42dfac00');ctx.fillStyle=g;ctx.fillRect(b.x-65,b.y-65,130,130);ctx.restore();
  });
@@ -18,7 +20,7 @@ export function drawPinball(ctx:CanvasRenderingContext2D,s:SurvivorsPinballEngin
  if(!reduced&&s.phase==='playing'){
   const speed=Math.hypot(b.vx,b.vy),length=Math.min(38,speed*.025);
   if(speed>200){const tx=b.x-b.vx/speed*length,ty=b.y-b.vy/speed*length,g=ctx.createLinearGradient(tx,ty,b.x,b.y);
-   g.addColorStop(0,'#d9f3ff00');g.addColorStop(1,index?'#ffe2a888':'#d9f3ff88');ctx.save();ctx.strokeStyle=g;ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();}
+   g.addColorStop(0,'#d9f3ff00');g.addColorStop(1,index||s.site&&s.site.active>0?'#ffe2a888':'#d9f3ff88');ctx.save();ctx.strokeStyle=g;ctx.lineWidth=7;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore();}
  }
  // A reflective moving sphere and live collision lighting are presentation, not art stand-ins.
  ctx.save();ctx.shadowColor='#000b';ctx.shadowBlur=6;ctx.shadowOffsetY=7;
@@ -29,5 +31,10 @@ export function drawPinball(ctx:CanvasRenderingContext2D,s:SurvivorsPinballEngin
   const radius=e.kind==='crane'||e.kind==='jackpot'?100:e.kind==='perfect'?42:60,alpha=Math.min(1,e.life*4),g=ctx.createRadialGradient(e.x,e.y,2,e.x,e.y,radius);
   g.addColorStop(0,e.kind==='metal'?`rgba(255,214,132,${alpha})`:`rgba(111,255,202,${alpha*.8})`);g.addColorStop(1,'transparent');
   ctx.fillStyle=g;ctx.fillRect(e.x-radius,e.y-radius,radius*2,radius*2);
+  if(e.kind==='metal'||e.kind==='perfect'){
+   const age=Math.max(0,1-e.life/.28);ctx.strokeStyle=e.kind==='perfect'?`rgba(130,238,255,${1-age})`:`rgba(255,204,125,${1-age})`;ctx.lineWidth=e.kind==='perfect'?2:1.3;
+   for(let i=0;i<6;i++){const a=i*Math.PI/3+e.x*.01,from=8+age*18,to=from+(1-age)*10;ctx.beginPath();ctx.moveTo(e.x+Math.cos(a)*from,e.y+Math.sin(a)*from);ctx.lineTo(e.x+Math.cos(a)*to,e.y+Math.sin(a)*to);ctx.stroke();}
+   if(e.kind==='perfect'){ctx.beginPath();ctx.arc(e.x,e.y,12+age*32,0,Math.PI*2);ctx.stroke();}
+  }
   ctx.restore();}
 }
