@@ -26,7 +26,7 @@
 </aside></main><footer>© SIGNAL BREAKER PROTOTYPE · PSI : ZERO DAY · ORIGINAL GAMEPLAY SYSTEM <span>데모 시뮬레이션이며 실제 현장 안전조치를 대체하지 않습니다.</span></footer></div>
 <script src="src/engine.js"></script><script src="src/premium-art.js"></script><script src="src/premium-sound.js"></script><script src="src/app.js"></script>
 <script>
-if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
+if ("serviceWorker" in navigator && location.protocol === "https:") {
   window.addEventListener("load", () => { navigator.serviceWorker.register("./service-worker.js", {scope:"./"}).catch(error => console.info("Offline cache unavailable", error)); });
 }
 </script></body></html>
