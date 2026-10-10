@@ -80,6 +80,7 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
    if(!document.hidden&&!pausedRef.current){const k=keys.current,t=touches.current;engine.current.update(dt,{left:k.has('KeyA')||k.has('ArrowLeft')||t.left.size>0,right:k.has('KeyD')||k.has('ArrowRight')||t.right.size>0,assist:assistRef.current});}
    const s=engine.current.state;
    audio.current?.setActive(audioReady&&!muted.current&&!soundOffRef.current&&!pausedRef.current&&!document.hidden&&(s.phase==='playing'||s.phase==='between'));
+   for(const event of engine.current.site?.drainEvents()??[])audio.current?.playSite(engine.current.site!.id,event.kind,event.x);
    for(const event of engine.current.drainSounds())audio.current?.play(event.kind,event.x);
    if(s.phase!=='playing')release();
    const element=canvas.current,assets=art.current;

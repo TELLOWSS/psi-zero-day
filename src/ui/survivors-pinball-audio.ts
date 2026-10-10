@@ -1,3 +1,6 @@
+import {PINBALL_SUCCESS_CUES,type PinballCueNote} from '../domain/survivors-pinball-cues';
+import type {PinballTableId} from '../domain/survivors-pinball-tables';
+import type {SiteActionKind} from '../engine/survivors-pinball-site';
 export const PINBALL_AUDIO_FILES={
  metal:'pinball_bumper_v01.mp3',flipper:'pinball_flipper_up_v01.mp3',rubber:'pinball_rubber_v01.mp3',crane:'pinball_crane_reward_v01.mp3',
  theme:'pinball_theme_v01.mp3',shift:'after-the-shift-v01.mp3',
@@ -14,6 +17,7 @@ export class PinballAudio {
  private musicSource:AudioBufferSourceNode|null=null;
  private offset=0;private started=0;private enabled=false;private disposed=false;
  private selected:PinballMusic='shift';
+ private lastCue=-10;
  private last=new Map<PinballSound,number>();
  async load(){await Promise.all(Object.entries(PINBALL_AUDIO_FILES).map(async([key,file])=>{
   const response=await fetch('/assets/survivors/pinball/audio-candidates-v1/'+file);if(!response.ok)throw Error('Pinball audio: '+file);
@@ -47,6 +51,21 @@ export class PinballAudio {
   source.connect(gain);gain.connect(pan);pan.connect(this.master);this.voices.add(source);
   source.onended=()=>{this.voices.delete(source);source.disconnect();gain.disconnect();pan.disconnect();};source.start();
   if(kind==='crane'){const g=this.musicGain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(.16,now+.035);g.linearRampToValueAtTime(.23,now+buffer.duration+.4);}
+ }
+ playSite(table:PinballTableId,kind:SiteActionKind,x=300){
+  if(!this.enabled||this.disposed)return;const now=this.context.currentTime;
+  if(kind==='success'){if(now-this.lastCue<.25)return;this.lastCue=now;for(const note of PINBALL_SUCCESS_CUES[table])this.schedule(note,x,now);
+   const g=this.musicGain.gain;g.cancelScheduledValues(now);g.setValueAtTime(g.value,now);g.linearRampToValueAtTime(.12,now+.04);g.linearRampToValueAtTime(.23,now+2.6);
+  }else this.schedule({sample:kind==='capture'?'flipper':kind==='release'?'rubber':'metal',at:0,rate:kind==='impact'?.6:.8,gain:.4,pan:0,cutoff:5000},x,now);
+ }
+ private schedule(note:PinballCueNote,x:number,now:number){const buffer=this.buffers.get(note.sample);if(!buffer)return;
+  // Reserve enough voices for a motif; cancellation also covers notes which have not started yet.
+  if(this.voices.size>=12){const first=this.voices.values().next().value;if(first){first.stop();this.voices.delete(first);}}
+  const source=this.context.createBufferSource(),gain=this.context.createGain(),pan=this.context.createStereoPanner(),filter=this.context.createBiquadFilter();
+  source.buffer=buffer;source.playbackRate.value=note.rate;filter.type='lowpass';filter.frequency.value=note.cutoff;
+  const start=now+note.at,duration=Math.min(1.4,buffer.duration/note.rate);gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(note.gain,start+.012);gain.gain.setValueAtTime(note.gain,start+Math.max(.012,duration-.06));gain.gain.linearRampToValueAtTime(0,start+duration);
+  pan.pan.value=Math.max(-.6,Math.min(.6,(x-300)/550+note.pan));source.connect(filter);filter.connect(gain);gain.connect(pan);pan.connect(this.master);this.voices.add(source);
+  source.onended=()=>{this.voices.delete(source);source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect();};source.start(start);source.stop(start+duration);
  }
  dispose(){this.setActive(false);this.disposed=true;this.musicGain.disconnect();this.master.disconnect();void this.context.close();}
 }

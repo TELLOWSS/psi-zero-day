@@ -1,0 +1,8 @@
+import {describe,it,expect} from 'vitest';
+import {PinballSite} from '../src/engine/survivors-pinball-site';
+import {PINBALL_SUCCESS_CUES} from '../src/domain/survivors-pinball-cues';
+describe('physical machinery actions',()=>{
+ it('captures, releases and drains each event exactly once',()=>{const site=new PinballSite('tower'),ball={x:300,y:210,vx:0,vy:0};site.ball(ball,.01,()=>{},[],()=>{});expect(site.drainEvents().map(e=>e.kind)).toEqual(['capture']);expect(site.drainEvents()).toEqual([]);site.update(.46,()=>{},[],()=>{});expect(ball.vy).toBe(1100);expect(site.action?.kind).toBe('release');expect(site.drainEvents().map(e=>e.kind)).toEqual(['release']);site.update(.61,()=>{},[],()=>{});expect(site.action).toBeNull();});
+ it('starts success on a real lane completion and clears queued events on reset',()=>{const site=new PinballSite('cargo');site.charge=site.layout.charge-1;site.ball({x:450,y:230,vx:0,vy:0},.01,()=>{},[],()=>{});expect(site.action?.kind).toBe('success');expect(site.drainEvents()).toHaveLength(1);site.reset();expect(site.action).toBeNull();expect(site.drainEvents()).toEqual([]);});
+ it('has ten distinct bounded, finite success motifs',()=>{const motifs=Object.values(PINBALL_SUCCESS_CUES);expect(new Set(motifs.map(m=>JSON.stringify(m))).size).toBe(11);for(const motif of motifs){expect(motif.length).toBeLessThanOrEqual(4);for(const note of motif){expect(note.at).toBeGreaterThanOrEqual(0);expect(note.at).toBeLessThan(1);expect(note.gain).toBeLessThanOrEqual(.5);expect(note.rate).toBeGreaterThan(0);}}});
+});

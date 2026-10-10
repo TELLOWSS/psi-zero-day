@@ -11,6 +11,9 @@ const environmentRects=[
 function environmentSprite(ctx:CanvasRenderingContext2D,atlas:HTMLImageElement,tile:number,x:number,y:number,w:number,h:number,angle=0,alpha=1){const rect=environmentRects[tile];if(!rect)return;const [sx,sy,sw,sh]=rect;ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalAlpha=alpha;ctx.drawImage(atlas,sx*atlas.naturalWidth,sy*atlas.naturalHeight,sw*atlas.naturalWidth,sh*atlas.naturalHeight,-w/2,-h/2,w,h);ctx.restore();}
 export function drawSiteEnvironment(ctx:CanvasRenderingContext2D,site:PinballSite,time:number,reduced:boolean,atlas:HTMLImageElement,environment?:HTMLImageElement){
  const active=site.active>0,t=reduced?0:time;
+ const action=reduced?null:site.action,p=action?Math.min(1,action.age/action.duration):0;
+ const stroke=action?Math.sin(Math.PI*p)**2:0;
+ const travel=action?.kind==='success'?Math.sin(p*Math.PI*2)*38:0;
  // Edge bulbs have staggered breathing. The ball floor is never flooded with white.
  ctx.save();ctx.globalCompositeOperation='screen';for(const x of [35,565])for(let i=0;i<5;i++){const y=290+i*93,pulse=.12+(active?.2:.07)*(1+Math.sin(t*2.1+i*.8));const g=ctx.createRadialGradient(x,y,1,x,y,active?38:25);g.addColorStop(0,`rgba(255,194,83,${pulse})`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(x-38,y-38,76,76);}ctx.restore();
  if(environment){
@@ -20,15 +23,20 @@ export function drawSiteEnvironment(ctx:CanvasRenderingContext2D,site:PinballSit
    ctx.save();ctx.globalAlpha=reduced?0:.22;ctx.strokeStyle='#d5fbff';ctx.lineWidth=1;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(boatX-25-i*7,boatY,5+i*4,7+i*3,0,-.7,.7);ctx.stroke();}ctx.restore();
   }
   if(site.id==='cargo'||site.id==='tower'||site.id==='factory'){
-   environmentSprite(ctx,environment,0,300,62,185,49);const trolley=300+Math.sin(t*.65)*36,drop=active?Math.sin(t*2)*10:0;
+   environmentSprite(ctx,environment,0,300,62,185,49);const trolley=300+travel,drop=action?.kind==='release'?-28*p:action?.kind==='capture'?-18*p:-28*stroke;
    ctx.save();ctx.strokeStyle='#c0b9a1';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(trolley,65);ctx.lineTo(trolley,108-drop);ctx.stroke();ctx.restore();drawSiteSprite(ctx,atlas,4,trolley,115-drop,55,39,Math.sin(t*.65)*.04);
   }
-  if(site.id==='conveyor'||site.id==='foundry'||site.id==='demolition')environmentSprite(ctx,environment,3,300,87+(active?Math.sin(t*4)*5:Math.sin(t)*1.5),94,76);
+  if(site.id==='conveyor'||site.id==='foundry'||site.id==='demolition'){
+   // Keep the press frame bolted down; only the authored central piston/plate crop travels.
+   environmentSprite(ctx,environment,3,300,87,94,76);
+   if(stroke>0){ctx.save();ctx.beginPath();ctx.rect(280,76,40,37);ctx.clip();environmentSprite(ctx,environment,3,300,87+stroke*12,94,76);ctx.restore();}
+  }
   if(site.id==='conveyor'||site.id==='rail')environmentSprite(ctx,environment,4,300,110,78,37);
   if(site.id==='rail'||site.id==='power'){environmentSprite(ctx,environment,5,480,92,24,45);ctx.save();ctx.globalCompositeOperation='screen';ctx.fillStyle=site.switch%2?'#62ff9d77':'#ffba6466';ctx.beginPath();ctx.arc(480,site.switch%2?100:83,5,0,Math.PI*2);ctx.fill();ctx.restore();}
-  if(site.id==='zeroday'||site.id==='power')environmentSprite(ctx,environment,7,300,88,72,72,t*(active?1.5:.18));
+  if(site.id==='zeroday'||site.id==='power')environmentSprite(ctx,environment,7,300,88,72,72,t*.18+stroke*Math.PI);
   if(!reduced&&(site.id==='foundry'||site.id==='water'||site.id==='tunnel'||site.id==='demolition'))for(let i=0;i<3;i++){const f=(t*.22+i/3)%1;environmentSprite(ctx,environment,6,site.id==='water'?480:110+i*175,110-f*55,35+f*24,38+f*28,Math.sin(t+i)*.05,(1-f)*(active?.38:.18));}
  }
+ if(action){ctx.save();ctx.globalCompositeOperation='screen';const colors=site.id==='foundry'?'255,151,61':site.id==='power'||site.id==='zeroday'?'100,231,255':'255,219,140';const g=ctx.createRadialGradient(300,85,2,300,85,65+stroke*35);g.addColorStop(0,`rgba(${colors},${stroke*.35})`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(195,0,210,145);ctx.restore();}
  if(site.id==='factory')return;
  if(site.id==='cargo'||site.id==='water'){
   // Water highlights remain outside collision space, anchored to harbor/tank surfaces.
@@ -44,7 +52,7 @@ export function drawSiteEnvironment(ctx:CanvasRenderingContext2D,site:PinballSit
  if(site.id==='foundry'||site.id==='tunnel'||site.id==='demolition'){
   ctx.save();ctx.globalCompositeOperation='screen';for(let i=0;i<(reduced?0:7);i++){const f=(t*.25+i*.17)%1,x=120+i*58+Math.sin(t+i)*9,y=115-f*100;const g=ctx.createRadialGradient(x,y,1,x,y,9+f*14);g.addColorStop(0,`rgba(${site.id==='foundry'?'255,154,65':'177,187,182'},${.1*(1-f)})`);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(x-25,y-25,50,50);}ctx.restore();
  }
- if(site.id==='water')for(const x of [100,490])drawSiteSprite(ctx,atlas,6,x,105,30,30,t*(active?1.2:.25));
+ if(site.id==='water')for(const x of [100,490])drawSiteSprite(ctx,atlas,6,x,105,30,30,t*.25+stroke*Math.PI*2);
  // A separate cargo layer makes the crane physically sway/lift on successful activation.
  if(!environment&&(site.id==='cargo'||site.id==='tower'))drawSiteSprite(ctx,atlas,4,300+Math.sin(t*.7)*6,90-(active?18*(1+Math.sin(t*2)):0),75,55,Math.sin(t*.7)*.035);
 }
