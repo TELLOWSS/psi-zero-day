@@ -15,7 +15,7 @@ const {chromium}=req('playwright');
   await page.locator('#actorSelect').selectOption('kang_taesik');await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready&&SignalBreakerQA.actor()?.characterId==='kang_taesik');
   // Wait for all completed image requests to have durable cache entries, not a timer.
   await page.waitForFunction(async()=>{
-   const cache=await caches.open('psi-signal-breaker-webpreview-v0.6.1');
+   const cache=await caches.open('psi-signal-breaker-webpreview-v0.6.2');
    const images=performance.getEntriesByType('resource').filter(e=>/\.(webp|png)(?:\?|$)/.test(e.name)).map(e=>e.name);
    return images.length>0&&(await Promise.all(images.map(url=>cache.match(url)))).every(Boolean);
   });

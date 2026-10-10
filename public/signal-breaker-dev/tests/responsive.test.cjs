@@ -12,6 +12,6 @@ assert.ok(css.includes('touch-action:none')&&css.includes('env(safe-area-inset-l
 assert.ok(app.includes('window.matchMedia')&&app.includes('balanced'));
 assert.equal(manifest.scope,'./');assert.equal(manifest.orientation,'any');
 for(const f of ['responsive-platform-concept.webp','equipment-and-cores.webp','stage-boss-concept.webp'])assert.ok(existsSync(join(root,'art',f)),`missing sketch: ${f}`);
-const sw=readFileSync(join(root,'service-worker.js'),'utf8');assert.ok(sw.includes('v0.6.1'));
+const sw=readFileSync(join(root,'service-worker.js'),'utf8');assert.ok(sw.includes('v0.6.2'));
 console.log('PASS responsive contracts: phone / landscape / tablet / PC');
 console.log('PASS independent PWA manifest and local concept sketch files');
