@@ -7,6 +7,6 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
+start "SIGNAL BREAKER local server" cmd /k node "%~dp0dev-preview.mjs"
+timeout /t 2 /nobreak >nul
 start "" "http://127.0.0.1:5199/"
-node "%~dp0dev-preview.mjs"
-if errorlevel 1 pause
