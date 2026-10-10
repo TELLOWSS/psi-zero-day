@@ -1,11 +1,11 @@
-import type {PinballPhase1Sample,PinballPhase2Sample} from './survivors-pinball-audio-assets';
+import type {PinballPhase1Sample,PinballPhase2Sample,PinballPhase2cSample} from './survivors-pinball-audio-assets';
 import type {PinballTableId} from './survivors-pinball-tables';
-export interface PinballCueNote {sample:'metal'|'rubber'|'crane'|'flipper'|PinballPhase1Sample|PinballPhase2Sample;at:number;rate:number;gain:number;pan:number;cutoff:number;}
+export interface PinballCueNote {sample:'metal'|'rubber'|'crane'|'flipper'|PinballPhase1Sample|PinballPhase2Sample|PinballPhase2cSample;at:number;rate:number;gain:number;pan:number;cutoff:number;}
 const n=(sample:PinballCueNote['sample'],at:number,rate=1,gain=.4,pan=0,cutoff=12000):PinballCueNote=>({sample,at,rate,gain,pan,cutoff});
 /** Compositions of supplied mastered recordings. Scheduling is relative to the physical success event. */
 export const PINBALL_SUCCESS_CUES:Record<PinballTableId,readonly PinballCueNote[]>={
  factory:[n('crane',0,1,.5)],
- conveyor:[n('flipper',0,.85),n('metal',.16,1),n('metal',.32,1.2),n('crane',.48,1.1,.45)],
+ conveyor:[n('conveyorStart',0,1,.4),n('conveyorRun',.7,1,.2,0,6500),n('conveyorStop',1.9,1,.35),n('conveyorFinish',2.3,1,.45)],
  cargo:[n('flipper',0,.7,.3,-.3,2500),n('metal',.35,.75,.4,.3),n('crane',.65,.95,.5)],
  foundry:[n('rubber',0,.65,.4,0,1800),n('metal',.28,.7,.5),n('crane',.65,.8,.45,0,4500)],
  tunnel:[n('metal',0,.8,.35,-.3,4000),n('metal',.12,.9,.35,0,4500),n('metal',.24,1,.35,.3,5000),n('crane',.45,1.2,.45)],

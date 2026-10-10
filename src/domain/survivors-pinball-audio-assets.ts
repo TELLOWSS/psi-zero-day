@@ -18,3 +18,13 @@ export const PINBALL_PHASE2_ASSETS={
  "payout": "pneumatic_payout_short_01.mp3"
 } as const;
 export type PinballPhase2Sample=keyof typeof PINBALL_PHASE2_ASSETS;
+
+export const PINBALL_PHASE2C_ROOT='/assets/survivors/pinball/audio-phase2c-v1/';
+export const PINBALL_PHASE2C_ASSETS={
+ "conveyorStart": "conveyor_mechanism_start.wav",
+ "conveyorRun": "conveyor_mechanism_loop.wav",
+ "conveyorStop": "conveyor_mechanism_stop.wav",
+ "conveyorImpact": "conveyor_action_impact.wav",
+ "conveyorFinish": "conveyor_success_finish.wav"
+} as const;
+export type PinballPhase2cSample=keyof typeof PINBALL_PHASE2C_ASSETS;

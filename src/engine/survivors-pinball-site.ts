@@ -23,6 +23,8 @@ export class PinballSite {
  private damage(index:number,amount:number,award:(n:number)=>void,balls:PinballBall[],fx:(x:number,y:number,kind?:'special')=>void,chain=true){if((this.hp[index]??0)<=0)return;
   if(this.id==='power'&&this.active===0&&index!==this.sequence)return;
   const target=this.layout.targets[index];if(!target)return;this.hp[index]=Math.max(0,(this.hp[index]??0)-amount);award(75);fx(target.x,target.y);
+  // A real target hit emits audio without replacing the ongoing success animation.
+  if(this.id==='conveyor'){this.events.push({kind:'impact',x:target.x});this.events=this.events.slice(-16);}
   if(this.hp[index]>0)return;award(250);this.progress(award,balls,fx);
   for(let piece=0;piece<4;piece++){const angle=piece*Math.PI/2+this.activations*.3;this.fragments.push({x:target.x,y:target.y,vx:Math.cos(angle)*95,vy:Math.sin(angle)*95-60,angle,life:.8,tile:this.layout.sprite,piece});}this.fragments=this.fragments.slice(-48);
   if(this.id==='power')this.sequence=(this.sequence+1)%this.hp.length;
