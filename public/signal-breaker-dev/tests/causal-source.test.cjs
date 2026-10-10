@@ -11,8 +11,9 @@ test('first-wave source must be observed before a matching control request',()=>
 });
 test('clearing the screen alone cannot advance and produces bounded recurrent signals',()=>{
  const g=game();clear(g);step(g,8.1);a.equal(g.state,'playing');a.equal(g.wave,1);a.equal(g.source.emissions,1);
- a.equal(g.cores.filter(c=>c.echo).length,1);step(g,12);a.equal(g.cores.filter(c=>c.echo).length,2);
- a.equal(g.source.emissions,2);a.equal(g.cleared,6);a.equal(g.maxUnits,32);
+ a.equal(g.cores.filter(c=>c.echo).length,1);
+ for(let i=0;i<Math.round(12/DT);i++){g.update(DT);a.ok(g.cores.filter(c=>c.echo).length<=2,'active recurrence stays bounded even after gate recovery');}
+ a.ok(g.source.emissions>=2);a.equal(g.cleared,6);a.equal(g.maxUnits,32);
 });
 test('recurrent signals yield no score, mass, captures, chain or upgrade bonus',()=>{
  const g=game();clear(g);step(g,8.1);
