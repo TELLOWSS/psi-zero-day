@@ -42,7 +42,15 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.ok(marker.x>=19&&marker.x<=width-19&&marker.y>=32&&marker.y<=height-32,'source marker and label visible inside camera');
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.controlled),false);
    await page.screenshot({path:path.join(out,`observed-${width}.png`)});
-   await button.click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.controlled),true);
+   await button.click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.requested),true);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.controlled),false);
+   await page.waitForFunction(()=>document.getElementById('sourceBtn').disabled);
+   await page.screenshot({path:path.join(out,`executing-${width}.png`)});
+   await page.locator('#pauseBtn').click();const executionFrozen=await page.evaluate(()=>SignalBreakerQA.snapshot());
+   await page.waitForTimeout(180);a.deepEqual(await page.evaluate(()=>SignalBreakerQA.snapshot()),executionFrozen);
+   await page.locator('#overlayPrimary').click();
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().source.controlled);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.verified),false);
    await page.evaluate(clear);await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='intermission');
    await page.locator('[data-tuning]').first().waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.verified),true);
