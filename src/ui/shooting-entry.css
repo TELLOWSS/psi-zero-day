@@ -133,6 +133,15 @@
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.has-mode-art {position:relative;overflow:hidden;isolation:isolate;background:#13231d!important;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-art {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42;transform:scale(1.03);transition:transform .28s ease,opacity .28s ease;z-index:-2;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-shade {position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,16,14,.96) 0%,rgba(8,16,14,.78) 54%,rgba(8,16,14,.42) 100%);z-index:-1;}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-breaker-entry{grid-column:1/-1;min-height:70px;border-color:#83cdb5!important}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-actions{animation:none}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-art{z-index:0}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-shade{z-index:1}
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-copy,
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action-icon,
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action>b,
+.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action>em{position:relative;z-index:2}
+@media(max-width:600px) and (orientation:portrait){.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-actions{margin-top:16px}.commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-breaker-entry .commercial-title-action-copy strong{color:#e9fff1}}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.has-mode-art:hover .commercial-title-action-art,
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.has-mode-art:focus-visible .commercial-title-action-art {transform:scale(1.075);opacity:.58;}
 .commercial-title-home[data-title-layout="MODE_SELECT_V11"] .commercial-title-action.is-coming-soon {border-color:#cf9b47!important;}

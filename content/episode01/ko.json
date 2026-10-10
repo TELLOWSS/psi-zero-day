@@ -1,6 +1,11 @@
 {
   "locale": "ko",
   "messages": {
+    "ui.hub.mode_navigation": "게임 모드 선택",
+    "ui.hub.breaker_title": "시그널 브레이커",
+    "ui.hub.breaker_description": "반사·자력·장력으로 위험의 연쇄를 끊는 현장 아케이드",
+    "ui.hub.breaker_progress": "첫 챕터 5작전 · 6종 장비 · 무보상 연습",
+    "ui.hub.breaker_live": "PLAY",
     "ep01.title": "첫 타설",
     "cast.nationality.korean": "대한민국",
     "cast.player.name": "플레이어",

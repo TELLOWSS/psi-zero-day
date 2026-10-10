@@ -17,6 +17,11 @@ describe('game hub navigation', () => {
     try {
       act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={() => { throw new Error('Unreleased mode must remain a preview'); }} />));
       const actions = host.querySelector('.commercial-title-actions')!;
+      const breaker = host.querySelector<HTMLAnchorElement>('.is-breaker-entry')!;
+      expect(breaker.getAttribute('href')).toBe('/signal-breaker-dev/index.html');
+      expect(breaker.textContent).toContain('시그널 브레이커');
+      const modes = host.querySelector('.commercial-mode-navigation')!;
+      expect(modes.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       const summary = host.querySelector('.commercial-triad-dashboard')!;
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
@@ -41,7 +46,7 @@ describe('game hub navigation', () => {
     try {
       expect(session.start(session.getSnapshot().revision)).toBe(true);
       act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} />));
-      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(3);
+      expect(host.querySelectorAll('.commercial-title-action')).toHaveLength(4);
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
       const saved = JSON.stringify(session.getSnapshot().state);
       expect(session.getSnapshot().phase).toBe('playing');

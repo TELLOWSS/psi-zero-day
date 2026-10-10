@@ -2096,6 +2096,13 @@
   }
 }
 
+.commercial-mode-navigation{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;position:relative;z-index:2}
+.commercial-mode-navigation button,.commercial-mode-navigation a{display:flex;align-items:center;gap:7px;min-height:44px;padding:9px 12px;border:1px solid #73938b66;border-radius:8px;background:linear-gradient(135deg,#203e43e8,#10232ee8);color:#e5efe6;font:inherit;font-size:12px;text-decoration:none;cursor:pointer}
+.commercial-mode-navigation small{font-size:9px;color:#a3d4bc}
+.commercial-title-action.is-breaker-entry{color:inherit;text-decoration:none;border-color:#80cbb666}
+.commercial-title-action.is-breaker-entry:focus-visible,.commercial-mode-navigation a:focus-visible{outline:2px solid #92ebd1;outline-offset:3px}
+@media(max-width:600px){.commercial-mode-navigation{gap:4px}.commercial-mode-navigation button,.commercial-mode-navigation a{flex:1 1 30%;padding:7px;font-size:11px;justify-content:center}}
+
 /* Short landscape screens prioritize the title and reachable mode entries. */
 @media (orientation:landscape) and (max-height:560px) {
   .commercial-title-home[data-title-layout="PHYSICAL_PHONE_V10"] .commercial-triad-dashboard {

@@ -398,6 +398,14 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
 
+      <nav className="commercial-mode-navigation" aria-label={t('ui.hub.mode_navigation')}>
+        <button type="button" onClick={() => setModePreview('story')}>스토리 모드 <small>준비중</small></button>
+        <button type="button" disabled={!onSurvivors} onClick={() => onSurvivors?.()}>시그널 워치 <small>PLAY</small></button>
+        <a href="/signal-breaker-dev/index.html">{t('ui.hub.breaker_title')} <small>{t('ui.hub.breaker_live')}</small></a>
+        <button type="button" onClick={() => setModePreview('defense')}>디펜스 모드 <small>준비중</small></button>
+        <button type="button" onClick={openGuide}>현장도감 연구</button>
+      </nav>
+
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
           className="commercial-title-action is-survivors-entry has-mode-art"
@@ -418,6 +426,13 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           </span>
           <b>›</b>
         </button> : null}
+        <a className="commercial-title-action is-breaker-entry has-mode-art" href="/signal-breaker-dev/index.html">
+          <img src="/signal-breaker-dev/art/sb01-delivery-bay-v1.webp" alt="" aria-hidden="true" className="commercial-title-action-art" />
+          <span className="commercial-title-action-shade" aria-hidden="true" />
+          <span className="commercial-title-action-icon">↗</span>
+          <span className="commercial-title-action-copy"><strong>{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>{t('ui.hub.breaker_description')}</small></span>
+          <b>›</b>
+        </a>
         {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art is-coming-soon" data-title-primary-cta="defense" type="button" onClick={() => setModePreview('defense')}>
           <img src={MODE_PREVIEW_ART.defense} alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
@@ -448,6 +463,7 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
         </button>
       </div>
       <div className="commercial-triad-dashboard">
+        <div><span>↗ {t('ui.hub.breaker_title')}</span><strong>{t('ui.hub.breaker_progress')}</strong></div>
         <div><span>📖 스토리 모드</span><strong>준비중 · 시네마틱 프리뷰</strong></div>
         <div><span>⚡ 시그널 워치 (SURVIVORS)</span><strong>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong></div>
         <div><span>🛡️ 디펜스 모드</span><strong>준비중 · 전술 방어선 고도화</strong></div>
