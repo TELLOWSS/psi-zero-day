@@ -78,3 +78,5 @@ body{overscroll-behavior-y:contain}
 body.breaker-focus .orientation-hint{display:none}body.breaker-focus .game-card{width:min(100%,calc((100dvh - 250px)*1100/620));max-width:100%}
 @media(orientation:landscape) and (max-height:600px){body.breaker-focus .game-card{width:min(100%,calc((100dvh - 150px)*1100/620))}body.breaker-focus .chain-guide{padding:3px 10px;font-size:10px}body.breaker-focus .hud-top{height:31px}body.breaker-focus .hud-bottom{height:25px}body.breaker-focus .touch-controls button{min-height:44px}}
 @media(orientation:portrait){body.breaker-focus .game-card{width:100%}}
+
+.actor-picker{display:block;margin:12px 0;font-size:12px;color:#b9d8db}.actor-picker select{display:block;margin:7px auto;min-height:44px;max-width:100%;padding:8px 14px;background:#142c36;color:#e4f4f2;border:1px solid #55757b;border-radius:8px}
