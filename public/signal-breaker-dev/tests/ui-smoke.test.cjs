@@ -13,7 +13,7 @@ class Element {
  setPointerCapture(){}trigger(n,e={}){for(const cb of this.listeners[n]||[])cb(e)}
 }
 const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),createLinearGradient:()=>({addColorStop(){}})}, {get:(obj,key)=>key in obj?obj[key]:()=>{},set:(obj,key,v)=>(obj[key]=v,true)});
-const elements={};const document={hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
+const elements={};const document={querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
 for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
 global.window={SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
@@ -26,24 +26,24 @@ elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textConten
 elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textContent,window.SignalBreakerText['breaker.quality.low']);
 elements.motionBtn.trigger('click');assert.equal(elements.motionBtn.textContent,window.SignalBreakerText['breaker.motion.low']);
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
-elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),false);
+elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
 assert.ok(elements.overlayInner.children.length===7,'ready overlay has actor selector and action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
 elements.arena.trigger('pointerdown',touch(10));
-assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount,'drag start does not fire');
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'hold starts firing immediately');
 elements.arena.trigger('pointerdown',touch(11,900,350));
 assert.equal(window.SignalBreakerQA.engine().player.aimX,500,'second touch cannot steal aim');
 elements.arena.trigger('pointercancel',touch(10));elements.arena.trigger('pointerup',touch(10));
-assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount,'cancel cannot fire');
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'cancel cannot add a shot');
 elements.arena.trigger('pointerdown',touch(12));elements.arena.trigger('pointermove',touch(12,550,210));elements.arena.trigger('pointerup',touch(12));
 assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'release fires exactly once');
 for(let i=0;i<120;i++){const callback=queue.shift();assert.ok(callback,'requestAnimationFrame was scheduled');currentNow+=1000/60;callback(currentNow);}
 assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.textContent.length,6);
 const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');
 for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
-for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.length===7);
+for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.length===8);
 const picker=elements.overlayInner.children[3].children[0];picker.value='kang_taesik';picker.trigger('change');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
 const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');

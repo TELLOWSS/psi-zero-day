@@ -398,14 +398,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
       <p className="commercial-title-subcopy">같은 안전관리자라도 현장·공법·공정이 달라지면 읽어야 할 위험은 달라집니다.</p>
       <VisualImage uri={characterMapUri('player', resolve)} alt="" className="commercial-title-mobile-player" />
 
-      <nav className="commercial-mode-navigation" aria-label={t('ui.hub.mode_navigation')}>
-        <button type="button" onClick={() => setModePreview('story')}>스토리 모드 <small>준비중</small></button>
-        <button type="button" disabled={!onSurvivors} onClick={() => onSurvivors?.()}>시그널 워치 <small>PLAY</small></button>
-        <a href="/signal-breaker-dev/index.html">{t('ui.hub.breaker_title')} <small>{t('ui.hub.breaker_live')}</small></a>
-        <button type="button" onClick={() => setModePreview('defense')}>디펜스 모드 <small>준비중</small></button>
-        <button type="button" onClick={openGuide}>현장도감 연구</button>
-      </nav>
-
       <div className="commercial-title-actions is-defense-first">
         {onSurvivors ? <button
           className="commercial-title-action is-survivors-entry has-mode-art"
@@ -456,19 +448,8 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-copy"><strong>현장 · 공정</strong><small>공동주택 · 리모델링 · 데이터센터 확장 준비</small></span>
           <b>›</b>
         </button>
-        <button className="commercial-title-action is-quiet is-sub-entry is-coming-soon" type="button" onClick={() => setModePreview('story')}>
-          <span className="commercial-title-action-icon"><HubIcon kind="lock" /></span>
-          <span className="commercial-title-action-copy"><strong>새 스토리 · 준비중</strong><small>본편 완성 후 공개됩니다</small></span>
-          <b>›</b>
-        </button>
       </div>
-      <div className="commercial-triad-dashboard">
-        <div><span>↗ {t('ui.hub.breaker_title')}</span><strong>{t('ui.hub.breaker_progress')}</strong></div>
-        <div><span>📖 스토리 모드</span><strong>준비중 · 시네마틱 프리뷰</strong></div>
-        <div><span>⚡ 시그널 워치 (SURVIVORS)</span><strong>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length} 구역 해금</strong></div>
-        <div><span>🛡️ 디펜스 모드</span><strong>준비중 · 전술 방어선 고도화</strong></div>
-        <div><span>🔬 현장도감 연구</span><strong>{unifiedMeta.fgPoints} FG 연구 데이터</strong></div>
-      </div>
+      <div className="commercial-triad-dashboard" aria-label="누적 성장"><div><span>해금 구역</span><strong>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length}</strong></div><div><span>현장 연구</span><strong>{unifiedMeta.fgPoints} FG</strong></div></div>
     </section>
 
     {onDefense ? <button

@@ -22,6 +22,7 @@ const MIME = {
   '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp',
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
   '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg',
 };
 const clients = new Set();
@@ -48,10 +49,11 @@ const server = createServer(async (request, response) => {
   if (pathname.includes('\\') || pathname.includes('\0')) {
     response.writeHead(400); response.end('Invalid path'); return;
   }
+  const font=pathname==='/fonts/PretendardVariable.woff2';
   const shared=pathname.startsWith('/assets/');
-  const absPath = shared?resolveAssetPath(SHARED_ASSETS,pathname):resolve(ROOT, '.' + pathname, pathname.endsWith('/') ? 'index.html' : '.');
+  const absPath = font?resolve(ROOT,'../fonts/PretendardVariable.woff2'):shared?resolveAssetPath(SHARED_ASSETS,pathname):resolve(ROOT, '.' + pathname, pathname.endsWith('/') ? 'index.html' : '.');
   if(!absPath){response.writeHead(403);response.end('Forbidden');return;}
-  const rel = relative(shared?SHARED_ASSETS:ROOT, absPath);
+  const rel = relative(font?resolve(ROOT,'../fonts'):shared?SHARED_ASSETS:ROOT, absPath);
   if (rel === '..' || rel.startsWith('..' + sep) || resolve(absPath) === ROOT && pathname !== '/') {
     response.writeHead(403); response.end('Forbidden'); return;
   }

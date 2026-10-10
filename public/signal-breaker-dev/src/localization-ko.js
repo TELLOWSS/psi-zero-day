@@ -80,5 +80,10 @@
  'breaker.actor.lee':'이재훈',
  'breaker.actor.lim':'임준호',
  'breaker.actor.monitor':'안전 감시원',
+ 'breaker.settings.hold':'누른 채 조준 · 연속 발사',
+ 'breaker.settings.smart':'장비 자동 전환 (큰 코어 분리 → 작은 코어 회수)',
+ 'breaker.mobile.hold':'왼손 이동 · 오른손 누른 채 조준/발사 · 미니맵 터치로 먼 신호 조준',
+ 'breaker.smart.on':'장비 자동',
+ 'breaker.smart.off':'장비 수동',
  'breaker.shield.angle':'↗ 방호판'
 });})(typeof window!=='undefined'?window:globalThis);
