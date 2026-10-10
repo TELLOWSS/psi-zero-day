@@ -11,7 +11,7 @@ const {chromium}=req('playwright');
    assert.equal(await page.locator('.commercial-mode-navigation').getByRole('link',{name:/시그널 브레이커/}).getAttribute('href'),'/signal-breaker-dev/index.html');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
    await page.screenshot({path:path.join(out,'hub-'+width+'.png'),fullPage:true});
-   await page.locator('.commercial-mode-navigation').getByRole('link',{name:/시그널 브레이커/}).click();await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.actor()?.ready);
+   await page.locator('.commercial-mode-navigation').getByRole('link',{name:/시그널 브레이커/}).click();await page.waitForFunction(()=>!!window.SignalBreakerQA);await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>window.SignalBreakerQA?.actor()?.ready);
    const before=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);await page.locator('#fireBtn').click();assert.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),before+1);
    await page.getByRole('link',{name:'← 메인화면'}).click();await page.locator('.commercial-mode-navigation').waitFor();assert.deepEqual(errors,[]);await page.close();
   }
