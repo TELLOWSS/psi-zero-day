@@ -2,13 +2,31 @@
    Bounded oscillators/noise envelopes. Gracefully silent if audio is unavailable. */
 (function(root){'use strict';
 class SoundDirector{
- constructor(){this.context=null;this.master=null;this.noise=null;this.last=new Map();this.voices=0;this.maxVoices=24;}
+ constructor(){this.context=null;this.master=null;this.noise=null;this.last=new Map();this.voices=0;this.maxVoices=24;this.enabled=true;this.playing=false;this.epoch=0;this.recorded=new Map();this.recording=new Set();this.active=new Set();this.music=null;}
+ setSession(playing,enabled){
+  if(this.playing===playing&&this.enabled===enabled)return;
+  this.playing=playing;this.enabled=enabled;this.epoch++;
+  if(this.master)this.master.gain.value=(playing&&enabled)?0.45:0;
+  if(!playing||!enabled){for(const source of this.active){try{source.stop();}catch{}}this.music?.pause();return;}
+  if(typeof root.Audio==='function'){if(!this.music){this.music=new root.Audio('/assets/survivors/pinball/audio-candidates-v1/after-the-shift-v01.mp3');this.music.loop=true;this.music.volume=.16;this.music.preload='none';}void this.music.play().catch(()=>{});}
+ }
+ sample(event){
+  const file=event.kind==='impact'&&event.material==='metal'?'hit_metal_light_01.mp3':event.kind==='capture'?'harbor_cargo_lock.mp3':null;
+  if(!file||!root.PSIPresentationAssets||!root.fetch)return false;
+  const context=this.ensure();if(!context)return false;
+  const url='/assets/survivors/pinball/audio-phase1-v1/'+file;
+  const buffer=this.recorded.get(url);
+  if(!buffer){if(!this.recording.has(url)){this.recording.add(url);void root.PSIPresentationAssets.audio(context,url).then(value=>this.recorded.set(url,value)).catch(()=>{}).finally(()=>this.recording.delete(url));}return false;}
+  if(this.voices>=this.maxVoices)return true;
+  const source=context.createBufferSource(),gain=context.createGain();source.buffer=buffer;gain.gain.value=.4;source.connect(gain).connect(this.master);this.voices++;this.active.add(source);
+  source.onended=()=>{this.voices=Math.max(0,this.voices-1);this.active.delete(source);source.disconnect();gain.disconnect();};source.start();return true;
+ }
  ensure(){try{if(this.context)return this.context;const C=root.AudioContext||root.webkitAudioContext;if(!C)return null;const c=new C();this.context=c;this.master=c.createGain();this.master.gain.value=.45;this.master.connect(c.destination);const n=c.createBuffer(1,c.sampleRate*.18,c.sampleRate);let d=n.getChannelData(0);let seed=74793;for(let i=0;i<d.length;i++){seed=(seed*1664525+1013904223)>>>0;d[i]=(seed/4294967296*2-1);}this.noise=n;return c;}catch{return null;}}
  envGain(g,t,attack,peak,dur){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,peak),t+attack);g.gain.exponentialRampToValueAtTime(.0001,t+dur);}
  osc(freq,end,dur,shape='triangle',vol=.07){const c=this.ensure();if(!c||this.voices>=this.maxVoices)return;this.voices++;const t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type=shape;o.frequency.setValueAtTime(Math.max(20,freq),t);o.frequency.exponentialRampToValueAtTime(Math.max(20,end),t+dur);this.envGain(g,t,.009,vol,dur);o.onended=()=>{this.voices=Math.max(0,this.voices-1);o.disconnect();g.disconnect();};o.connect(g).connect(this.master);o.start(t);o.stop(t+dur+.01);}
  noiseBurst(dur=.12,volume=.08,cutoff=1000){const c=this.ensure();if(!c||!this.noise||this.voices>=this.maxVoices)return;this.voices++;const t=c.currentTime,src=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();src.buffer=this.noise;f.type='bandpass';f.frequency.setValueAtTime(cutoff,t);f.Q.value=.65;this.envGain(g,t,.004,volume,dur);src.onended=()=>{this.voices=Math.max(0,this.voices-1);src.disconnect();f.disconnect();g.disconnect();};src.connect(f).connect(g).connect(this.master);src.start(t);src.stop(t+dur+.01);}
  play(event,enabled=true){if(!enabled)return;const kind=event.kind,now=typeof performance!=='undefined'?performance.now():Date.now();if((kind==='bumper'||kind==='ricochet'||kind==='corebounce')&&now-(this.last.get(kind)||0)<60)return;this.last.set(kind,now);
- try{if(this.context?.state==='suspended')void this.context.resume();switch(kind){
+ try{if(this.context?.state==='suspended')void this.context.resume();if(this.sample(event))return;switch(kind){
  case'fire':if(event.n===2){this.osc(420,175,.24,'sine',.046);this.noiseBurst(.11,.042,1750);}else{this.osc(220,105,.14,'sawtooth',.06);this.noiseBurst(.095,.10,750);}break;
  case'impact':{const material=event.material;if(material==='power'){this.osc(470,90,.19,'sawtooth',.04);this.noiseBurst(.12,.05,3100);}else if(material==='dust'){this.osc(85,40,.16,'sine',.07);this.noiseBurst(.18,.09,470);}else if(material==='load'){this.osc(76,35,.23,'triangle',.09);this.noiseBurst(.12,.06,850);}else{this.osc(165,65,.17,'triangle',.08);this.osc(780,290,.1,'sine',.03);this.noiseBurst(.1,.06,1850);}break;}
  case'split':this.osc(445,150,.13,'square',.023);this.noiseBurst(.11,.07,2400);break;

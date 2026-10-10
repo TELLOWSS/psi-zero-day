@@ -7,8 +7,10 @@ import { createServer } from 'node:http';
 import { readFile, stat, watch } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolveAssetPath } from './shared-paths.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
+const SHARED_ASSETS = resolve(ROOT, '../assets');
 const HOST = '127.0.0.1';
 const PORT = Number(process.env.SIGNAL_BREAKER_PORT ?? '5199');
 if (!Number.isInteger(PORT) || PORT < 0 || PORT > 65535) {
@@ -46,8 +48,10 @@ const server = createServer(async (request, response) => {
   if (pathname.includes('\\') || pathname.includes('\0')) {
     response.writeHead(400); response.end('Invalid path'); return;
   }
-  const absPath = resolve(ROOT, '.' + pathname, pathname.endsWith('/') ? 'index.html' : '.');
-  const rel = relative(ROOT, absPath);
+  const shared=pathname.startsWith('/assets/');
+  const absPath = shared?resolveAssetPath(SHARED_ASSETS,pathname):resolve(ROOT, '.' + pathname, pathname.endsWith('/') ? 'index.html' : '.');
+  if(!absPath){response.writeHead(403);response.end('Forbidden');return;}
+  const rel = relative(shared?SHARED_ASSETS:ROOT, absPath);
   if (rel === '..' || rel.startsWith('..' + sep) || resolve(absPath) === ROOT && pathname !== '/') {
     response.writeHead(403); response.end('Forbidden'); return;
   }
