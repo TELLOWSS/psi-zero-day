@@ -86,3 +86,18 @@ body.breaker-focus .orientation-hint{display:none}body.breaker-focus .game-card{
 .gear-preview{display:block;width:100px;height:67px;flex-shrink:0;background-image:url('../art/breaker-six-tools-final-v3.webp');background-size:300% 200%;background-repeat:no-repeat}.weapon-contract p{display:flex;gap:8px;align-items:center}.overlay-inner>.primary-btn{bottom:0}.preparation-details{padding-bottom:15px}.chain-guide{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 .actor-preview{width:100%;height:180px;aspect-ratio:auto;background:radial-gradient(ellipse at 50% 75%,#27474e,#0d202a);border:1px solid #476f76;border-radius:8px}.preparation-details[open]{padding-bottom:55px}
+
+/* Shared industrial material treatment; no decorative layer intercepts gameplay. */
+.game-card{border-color:#637c7d;box-shadow:0 18px 55px #0007,inset 0 1px #d0d6bc55}
+.hud-top,.hud-bottom{background:linear-gradient(110deg,#142d38f5,#0b1c28f5);border-color:#849d8b44}
+.mission-card,.intel-panel,.side-panel{background:linear-gradient(145deg,#1c333ddd,#0b1d28f0);box-shadow:inset 0 1px #d8e2ce18,0 8px 22px #0003}
+.mission-card{border-left:3px solid #d8b578}
+.stage-item,.stage-list button{background:linear-gradient(115deg,#18333c,#102330);box-shadow:inset 0 1px #d8e5cb17}
+.util-btn,.weapon-btn,.move-btn,.mode-tabs button{background:linear-gradient(145deg,#294852,#142d39);box-shadow:inset 0 1px #d5e9d52b,0 3px 8px #0003;border-color:#73929288}
+.weapon-btn.selected,.util-btn.active{background:linear-gradient(130deg,#235d65,#143a46);border-color:#82d8c6;box-shadow:inset 0 1px #b1ffdf55,0 0 12px #53cfc31a}
+.fire-btn,.primary-btn{background:linear-gradient(140deg,#ffda9c,#eaa04c);color:#24271e;box-shadow:inset 0 1px #fff0c2,0 5px 15px #d38c292b}
+.overlay-inner{background:linear-gradient(135deg,#18333eee,#0b1e2aee);border-color:#99ac9955;box-shadow:0 18px 45px #0006,inset 0 1px #d4e1c526}
+.preparation-details{background:#081a2466;border-color:#78988a55}
+.actor-preview{background-image:linear-gradient(0deg,#08212bb3,#10243066),url('../art/sb01-delivery-bay-v1.webp');background-size:cover;background-position:center 72%;border-color:#78988a77}
+.status-dot{box-shadow:0 0 8px #6df5bc66}
+@media (prefers-reduced-motion:no-preference){button{transition:background-color .12s,border-color .12s,box-shadow .12s}button:active{box-shadow:inset 0 2px 7px #0005}}

@@ -5,7 +5,7 @@ const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]));
 const refs=[...src.matchAll(/\$\('([^']+)'\)/g)].map(x=>x[1]);for(const r of refs)assert.ok(ids.has(r),`missing HTML ID ${r}`);
 let queue=[], windowListeners={},documentListeners={},storage=new Map(),currentNow=0;
 class Element {
- constructor(tag='div'){this.tag=tag;this.children=[];this.style={};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
+ constructor(tag='div'){this.tag=tag;this.dataset={};this.children=[];this.style={};this.listeners={};this.textContent='';this._html='';Object.defineProperty(this,'innerHTML',{get(){return this._html},set(v){this._html=v;this.children=[]}});this.classList={state:new Set(),contains:x=>this.classList.state.has(x),add:x=>this.classList.state.add(x),remove:x=>this.classList.state.delete(x),toggle:(x,on)=>{if(on===undefined)on=!this.classList.state.has(x);if(on)this.classList.state.add(x);else this.classList.state.delete(x);return on;}};}
  addEventListener(n,fn){(this.listeners[n]??=[]).push(fn)}
  append(...es){this.children.push(...es)}appendChild(el){this.children.push(el)}replaceChildren(...es){this.children=es}
  getBoundingClientRect(){return {left:0,top:0,width:1100,height:620}}getContext(){return proxyContext}
