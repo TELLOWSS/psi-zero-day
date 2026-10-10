@@ -37,6 +37,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),1);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().cores.some(c=>c.echo)),'uncorrected source recurs');
    await button.click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),true);
+   const marker=await page.evaluate(()=>{const s=SignalBreakerQA.snapshot().source,c=SignalBreakerQA.view().camera;return {x:(s.x-c.x)*c.scale,y:(s.y-c.y)*c.scale};});
+   a.ok(marker.x>=19&&marker.x<=width-19&&marker.y>=32&&marker.y<=height-32,'source marker and label visible inside camera');
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.controlled),false);
    await page.screenshot({path:path.join(out,`observed-${width}.png`)});
    await button.click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.controlled),true);

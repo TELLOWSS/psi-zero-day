@@ -2,7 +2,7 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.SignalBreakerCausal=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const VERIFY_SECONDS=2,RECURRENCE_SECONDS=6,MAX_ECHOES=2;
-function createSource(){return {id:'delivery-stack',x:650,y:115,response:'isolate',observed:false,controlled:false,stableFor:0,verified:false,nextEmission:8,emissions:0};}
+function createSource(){return {id:'delivery-stack',x:650,y:180,response:'isolate',observed:false,controlled:false,stableFor:0,verified:false,nextEmission:8,emissions:0};}
 function observe(source){return !source||source.observed?source:{...source,observed:true};}
 function control(source,response){return !source||!source.observed||source.controlled||response!==source.response?source:{...source,controlled:true,stableFor:0};}
 function advance(source,dt,remaining,echoes){

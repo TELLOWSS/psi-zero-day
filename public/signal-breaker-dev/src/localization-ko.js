@@ -1,5 +1,9 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+ 'breaker.source.marker.hint':'반복 신호',
+ 'breaker.source.marker.revealed':'발생원 확인',
+ 'breaker.source.marker.checking':'재발 확인',
+ 'breaker.source.marker.verified':'통제 완료',
  'breaker.source.observe':'Ψ 관찰 · C',
  'breaker.source.control':'Ψ 구역 통제 · C',
  'breaker.source.closed':'Ψ 발생원 차단 완료',
