@@ -17,7 +17,7 @@ export class SurvivorsPinballEngine {
  readonly site:PinballSite;
  constructor(readonly mode:PinballMode='bonus',options:{rule?:PinballRule;clears?:number;table?:PinballTableId;completedStages?:readonly PatrolStageId[]}={}){const choice=availablePinballChoice({rule:options.rule,theme:options.table},options.clears??0,options.completedStages??(options.table?[]:undefined));this.rule=choice.rule;this.budget=pinballRewardBudget(options.clears??0);this.site=new PinballSite(choice.theme==='harbor'||choice.theme==='steelworks'?'factory':choice.theme);this.state.site=this.site;}
  private get rules(){return PINBALL_RULES[this.rule];}
- private sounds:{kind:'metal'|'rubber'|'crane'|'flipper';x:number}[]=[];
+ private sounds:{kind:'metal'|'rubber'|'crane'|'flipper'|'perfect'|'shot';x:number}[]=[];
  drainSounds(){return this.sounds.splice(0);}
  readonly state={phase:'ready' as 'ready'|'playing'|'between'|'finished',ball:0,remaining:30,
   x:480,y:650,vx:0,vy:0,score:0,earned:0,combo:0,bestCombo:0,leftAngle:.35,rightAngle:Math.PI-.35,
@@ -42,7 +42,7 @@ export class SurvivorsPinballEngine {
  private award(points:number){const s=this.state;s.score+=points;s.earned=this.mode==='practice'?0:Math.min(this.budget.cap,this.budget.base+Math.floor(s.score/100)*5);}
  private callout(kind:PinballCallout,points=0){const s=this.state,p={perfect:1,skillshot:2,rush:3,jackpot:4,tilt:5,'':0};if(s.calloutTime>0&&p[s.callout]>p[kind])return;s.callout=kind;s.calloutTime=1.4;s.calloutPoints=points;}
  private hit(x:number,y:number,kind:PinballEffect['kind']){
-  this.sounds.push({kind:kind==='perfect'?'metal':kind==='jackpot'?'crane':kind,x});if(this.sounds.length>32)this.sounds.shift();
+  this.sounds.push({kind:kind==='jackpot'?'crane':kind,x});if(this.sounds.length>32)this.sounds.shift();
   this.state.effects.push({x,y,kind,life:kind==='crane'||kind==='jackpot'?1.2:.28});if(this.state.effects.length>24)this.state.effects.shift();}
  private capsule(b:PinballBall,ax:number,ay:number,bx:number,by:number,r:number,bounce:number,wx=0,wy=0,fx=true){
   const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((b.x-ax)*dx+(b.y-ay)*dy)/(dx*dx+dy*dy||1))),cx=ax+t*dx,cy=ay+t*dy,dist=Math.hypot(b.x-cx,b.y-cy),radius=11+r;if(dist>=radius)return null;
@@ -57,7 +57,7 @@ export class SurvivorsPinballEngine {
   PINBALL_SLINGS.forEach(([ax,ay,bx,by],i)=>{const c=this.capsule(b,ax,ay,bx,by,8,.88,0,0,false);if(c&&c.relative<-120&&this.slingCooldown[i]===0){b.vx+=c.nx*120;b.vy-=150;this.slingCooldown[i]=.25;this.award(s.rushTime>0?100:50);this.hit(c.x,c.y,'rubber');}});
   for(const side of ['left','right'] as const){const p=PINBALL_PADDLES[side],angle=side==='left'?s.leftAngle:s.rightAngle,old=side==='left'?oldLeft:oldRight,dx=Math.cos(angle)*100,dy=Math.sin(angle)*100,omega=(angle-old)/dt,projection=Math.max(0,Math.min(1,((b.x-p.x)*dx+(b.y-p.y)*dy)/10000));
    const c=this.capsule(b,p.x,p.y,p.x+dx,p.y+dy,12,.88,-omega*dy*projection,omega*dx*projection);
-   if(c&&c.relative<0&&this.manual[side]&&this.pressAge[side]<.12&&!this.strokeUsed[side]&&Math.abs(omega)>8&&projection>.25&&b.vy<-250){this.strokeUsed[side]=true;s.perfects++;this.site.fire(b);this.award(this.rules.perfectPoints*(s.rushTime>0?2:1));this.hit(b.x,b.y,'perfect');this.callout('perfect',this.rules.perfectPoints*(s.rushTime>0?2:1));}}
+   if(c&&c.relative<0&&this.manual[side]&&this.pressAge[side]<.12&&!this.strokeUsed[side]&&Math.abs(omega)>8&&projection>.25&&b.vy<-250){this.strokeUsed[side]=true;s.perfects++;if(this.site.fire(b))this.sounds.push({kind:'shot',x:b.x});this.award(this.rules.perfectPoints*(s.rushTime>0?2:1));this.hit(b.x,b.y,'perfect');this.callout('perfect',this.rules.perfectPoints*(s.rushTime>0?2:1));}}
   this.site.layout.bumper.forEach((p,i)=>{const dx=b.x-p.x,dy=b.y-p.y,dist=Math.hypot(dx,dy);if(dist>=p.r+11)return;
    const nx=dist>1e-6?dx/dist:0,ny=dist>1e-6?dy/dist:-1;b.x=p.x+nx*(p.r+11+.2);b.y=p.y+ny*(p.r+11+.2);const speed=b.vx*nx+b.vy*ny;if(speed<0){b.vx-=1.85*speed*nx;b.vy-=1.85*speed*ny;}
    if((this.cooldown[i]??0)>0)return;b.vx+=nx*180;b.vy+=ny*180;this.cooldown[i]=.16;s.hits++;s.combo++;s.bestCombo=Math.max(s.bestCombo,s.combo);this.comboTime=this.rules.comboWindow;

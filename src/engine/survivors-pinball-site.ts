@@ -32,8 +32,8 @@ export class PinballSite {
   if(this.hp.every(hp=>hp<=0))this.reloadTime=1.2;
  }
  /** Only a real manually timed paddle contact calls this method. Holding/assistance never fires. */
- fire(ball:PinballBall){if(this.id==='factory')return;const target=this.id==='power'&&(this.hp[this.sequence]??0)>0?this.sequence:this.hp.findIndex(hp=>hp>0);if(target<0)return;const p=this.layout.targets[target];if(!p)return;const angle=Math.atan2(p.y-ball.y,p.x-ball.x);const fan=this.active>0&&(this.id==='foundry'||this.id==='zeroday')?[-.16,0,.16]:[0];
-  for(const offset of fan)this.shots.push({x:ball.x,y:ball.y,vx:Math.cos(angle+offset)*1100,vy:Math.sin(angle+offset)*1100,life:1.1,pierce:this.id==='tunnel'||this.id==='conveyor'||this.id==='zeroday'?4:1,hit:[]});this.shots=this.shots.slice(-16);
+ fire(ball:PinballBall):boolean{if(this.id==='factory')return false;const target=this.id==='power'&&(this.hp[this.sequence]??0)>0?this.sequence:this.hp.findIndex(hp=>hp>0);if(target<0)return false;const p=this.layout.targets[target];if(!p)return false;const angle=Math.atan2(p.y-ball.y,p.x-ball.x);const fan=this.active>0&&(this.id==='foundry'||this.id==='zeroday')?[-.16,0,.16]:[0];
+  for(const offset of fan)this.shots.push({x:ball.x,y:ball.y,vx:Math.cos(angle+offset)*1100,vy:Math.sin(angle+offset)*1100,life:1.1,pierce:this.id==='tunnel'||this.id==='conveyor'||this.id==='zeroday'?4:1,hit:[]});this.shots=this.shots.slice(-16);return true;
  }
  ball(ball:PinballBall,dt:number,award:(n:number)=>void,balls:PinballBall[],fx:(x:number,y:number,kind?:'special')=>void){if(this.id==='factory')return;
   this.layout.lanes.forEach((lane,i)=>{if((this.laneCooldown[i]??0)>0||Math.hypot(ball.x-lane.x,ball.y-lane.y)>lane.r)return;this.laneCooldown[i]=1;award(100);

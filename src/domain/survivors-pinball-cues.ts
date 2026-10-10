@@ -1,5 +1,6 @@
+import type {PinballPhase1Sample} from './survivors-pinball-audio-assets';
 import type {PinballTableId} from './survivors-pinball-tables';
-export interface PinballCueNote {sample:'metal'|'rubber'|'crane'|'flipper';at:number;rate:number;gain:number;pan:number;cutoff:number;}
+export interface PinballCueNote {sample:'metal'|'rubber'|'crane'|'flipper'|PinballPhase1Sample;at:number;rate:number;gain:number;pan:number;cutoff:number;}
 const n=(sample:PinballCueNote['sample'],at:number,rate=1,gain=.4,pan=0,cutoff=12000):PinballCueNote=>({sample,at,rate,gain,pan,cutoff});
 /** Compositions of supplied mastered recordings. Scheduling is relative to the physical success event. */
 export const PINBALL_SUCCESS_CUES:Record<PinballTableId,readonly PinballCueNote[]>={
@@ -15,3 +16,6 @@ export const PINBALL_SUCCESS_CUES:Record<PinballTableId,readonly PinballCueNote[
  demolition:[n('metal',0,.55,.4,-.3,3200),n('metal',.2,.65,.4,.3,3800),n('rubber',.45,.6,.4),n('crane',.7,.75,.5)],
  zeroday:[n('metal',0,.9,.3,-.4),n('rubber',.13,1.4,.3,.4),n('flipper',.26,1.2,.3),n('crane',.45,1.25,.5)],
 };
+
+// Cargo activation creates additional balls immediately. Entry sound follows that event, not a fabricated impact.
+export const PINBALL_HARBOR_SUCCESS_CUE:readonly PinballCueNote[]=[n('motorStart',0,1,.32),n('entry',.04,1,.55),n('motorMove',.35,1,.18,0,4500),n('lock',1.65,1,.4)];
