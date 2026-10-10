@@ -89,5 +89,12 @@
  'breaker.view.wide':'넓게 보기',
  'breaker.result.cleared':'위험 신호 해소 완료',
  'breaker.result.route_detail':'현장 위에서 발사 경로 확인',
+ 'breaker.control.label':'조작 방식',
+ 'breaker.control.linked':'이동·각도 연동',
+ 'breaker.control.precision':'정밀 조작 · 직접 조준',
+ 'breaker.mobile.linked':'패드 좌우: 이동·발사 방향 전환 / 위아래: 각도 조절 · 발사는 직접 누르세요',
+ 'breaker.gate.window':'집진 게이트 개방',
+ 'breaker.gate.wait':'다음 개방까지',
+ 'breaker.reason.gatewait':'집진 게이트 대기 중 · 포획망으로 직접 회수하거나 개방을 기다리세요',
  'breaker.shield.angle':'↗ 방호판'
 });})(typeof window!=='undefined'?window:globalThis);

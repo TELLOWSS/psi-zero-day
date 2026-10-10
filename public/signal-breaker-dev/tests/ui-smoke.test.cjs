@@ -30,11 +30,12 @@ elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.ha
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
 assert.ok(elements.overlayInner.children.length===7,'ready overlay has actor selector and action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
+assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
 elements.arena.trigger('pointerdown',touch(10));
 assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'hold starts firing immediately');
-elements.arena.trigger('pointerdown',touch(11,900,350));
-assert.equal(window.SignalBreakerQA.engine().player.aimX,500,'second touch cannot steal aim');
+const firstAim=window.SignalBreakerQA.engine().player.aimX;elements.arena.trigger('pointerdown',touch(11,900,350));
+assert.equal(window.SignalBreakerQA.engine().player.aimX,firstAim,'second touch cannot steal aim');
 elements.arena.trigger('pointercancel',touch(10));elements.arena.trigger('pointerup',touch(10));
 assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'cancel cannot add a shot');
 elements.arena.trigger('pointerdown',touch(12));elements.arena.trigger('pointermove',touch(12,550,210));elements.arena.trigger('pointerup',touch(12));

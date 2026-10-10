@@ -1,6 +1,6 @@
 /* SIGNAL BREAKER dedicated app shell; independent of SIGNAL WATCH and Vercel. */
-const CACHE = 'psi-signal-breaker-webpreview-v0.7.1-capture';
-const ASSETS = ['/fonts/PretendardVariable.woff2', './', './index.html', './src/style.css', './src/chapter-content.js', './src/engine.js', './src/app.js', '/assets/shared/presentation-cache-v1.js', '/assets/shared/signal-breaker-actors.js', './src/localization-ko.js', './src/premium-art.js', './src/premium-sound.js', './manifest.webmanifest', './icon.svg', './art/sb01-delivery-bay-v1.webp', './art/core-materials-v1.webp', './art/operator-idle-v1.webp', './art/chapter-environments-v1.webp', './art/breaker-six-tools-final-v3.webp', './art/industrial-structures-v1.webp'];
+const CACHE = 'psi-signal-breaker-webpreview-v0.8.0-onehand-art';
+const ASSETS = ['/fonts/PretendardVariable.woff2', './', './index.html', './src/style.css', './src/chapter-content.js', './src/engine.js', './src/app.js', '/assets/shared/presentation-cache-v1.js', '/assets/shared/signal-breaker-actors.js', './src/localization-ko.js', './src/premium-art.js', './src/premium-sound.js', './manifest.webmanifest', './icon-192.png', './icon-512.png', './art/sb01-delivery-bay-v1.webp', './art/core-materials-v1.webp', './art/operator-idle-v1.webp', './art/chapter-environments-v1.webp', './art/breaker-six-tools-final-v3.webp', './art/industrial-structures-v1.webp', './art/industrial-devices-v2.webp', './art/map-delivery-v2.webp', './art/map-conveyor-v2.webp', './art/map-extraction-v2.webp', './art/map-hoist-v2.webp', './art/map-power-v2.webp'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

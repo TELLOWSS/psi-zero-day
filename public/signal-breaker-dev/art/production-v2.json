@@ -1,0 +1,71 @@
+{
+  "version": "2026-10-10",
+  "generator": "built-in imagegen",
+  "finalVisualLock": false,
+  "assets": [
+    {
+      "path": "art/map-conveyor-v2.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 378282,
+      "sha256": "a0c0435aa46ae607660ecafd74acf1440a6bcb480e88c5dc215e7600102c3650",
+      "alpha": false
+    },
+    {
+      "path": "art/map-delivery-v2.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 457440,
+      "sha256": "ff3345c57b115671c8e3ab033555d1d92279ba9bb23c905d24ce91d089c99221",
+      "alpha": false
+    },
+    {
+      "path": "art/map-extraction-v2.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 418754,
+      "sha256": "00c6a237e804d94397cb4e70d55570b7d6208d5918b768dd0626fdc85cf7570a",
+      "alpha": false
+    },
+    {
+      "path": "art/map-hoist-v2.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 393552,
+      "sha256": "80e9f22e9f8113211d39703b52a8856ead718df945d3d71e2a6e4de2a44dc377",
+      "alpha": false
+    },
+    {
+      "path": "art/map-power-v2.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 475174,
+      "sha256": "0c85582f98f1c37e2c84a75e8b3aa963c49daf8029384fbe555f1af1c7ccf2e4",
+      "alpha": false
+    },
+    {
+      "path": "art/industrial-devices-v2.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 408540,
+      "sha256": "a10cc8960750a5c1568c2ce7927198ac4527b860a9ebeae3f2c18b8fced539b1",
+      "alpha": true
+    },
+    {
+      "path": "icon-192.png",
+      "width": 192,
+      "height": 192,
+      "bytes": 83286,
+      "sha256": "a86a24b88eccb12dd61261d30c7c2d73db3946f0a1f8b189970d5e69723c0482",
+      "alpha": false
+    },
+    {
+      "path": "icon-512.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 578450,
+      "sha256": "0819e867bbdc095beed03ea04374535d2471eda392ea12f16c9657a2a90ea2bb",
+      "alpha": false
+    }
+  ]
+}
