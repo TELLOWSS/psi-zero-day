@@ -1,33 +1,39 @@
+import {resolutionFragmentPose} from './survivors-hazard-animation';
 import type {SurvivorsGameState,WorkfaceSpecies} from '../domain/patrol-survivors';
-import {MATERIAL_FEEL} from '../domain/survivors-material-feel';
+import {MATERIAL_FEEL,type MaterialFeel} from '../domain/survivors-material-feel';
 import type {ProjectileFeedback} from '../domain/survivors-projectile-feedback';
 import {WORKFACE_SPECIES} from '../engine/survivors-workface-roster';
 import {drawProp} from './survivors-equipment-art';
 import {workfaceAtlas} from './survivors-industrial-art';
 import {debrisElevation} from './survivors-animation-rig';
+const FRAGMENT_VERTICES=[[-.5,-1],[.04,-1],[.5,-1],[.5,0],[-.12,0],[-.5,0]] as const;
 type Kill=NonNullable<SurvivorsGameState['lastKilledEvents']>[number];
-interface Resolution {species:WorkfaceSpecies;x:number;y:number;size:number;age:number;elevation:number;facing:number;}
+export interface ResolutionArtwork {image:HTMLImageElement;cell:number;size:number;facing:number;y:number;action?:MaterialFeel['action']|'vapor';}
+interface Resolution {art?:ResolutionArtwork;species:WorkfaceSpecies;x:number;y:number;size:number;age:number;elevation:number;facing:number;}
 interface Contact {event:ProjectileFeedback;age:number;}
-export function resolutionPose(species:WorkfaceSpecies,age:number,index=0,reduced=false){
+export function resolutionPose(species:WorkfaceSpecies,age:number,index=0,reduced=false,override?:MaterialFeel['action']|'vapor'){
  const profile=MATERIAL_FEEL[species],t=Math.max(0,Math.min(1,age/1.15));
  const delay=index*.075,p=Math.max(0,Math.min(1,(t-delay)/Math.max(.1,1-delay)));
  const settle=p*p*(3-2*p),osc=Math.sin(p*Math.PI*5)*(1-p);
- const action=profile.action;
+ const action=override??profile.action;
  return {x:reduced?0:action==='crumble'||action==='cascade'?(index-1.5)*settle*13:action==='brake'?settle*9:0,
-  y:reduced?0:action==='crumble'||action==='cascade'?settle*24:action==='hydraulic'?settle*11:action==='hose'?osc*5:action==='ring'?osc*2:settle*3,
+  y:reduced?0:action==='crumble'||action==='cascade'?settle*24:action==='vapor'?-settle*20:action==='hydraulic'?settle*11:action==='hose'?osc*5:action==='ring'?osc*2:settle*3,
   angle:reduced?0:action==='fold'?settle*.6:action==='crumble'||action==='cascade'?(index%2?1:-1)*settle*.45:action==='dent'?osc*.08:osc*.018,
-  scaleY:reduced?1:action==='dent'?1-settle*.25:action==='fold'?1-settle*.35:1,
-  alpha:t>=1?0:1-Math.max(0,(t-.55)/.45),t,p,action};
+  scaleY:reduced?1:action==='vapor'?1+settle*.15:action==='dent'?1-settle*.25:action==='fold'?1-settle*.35:1,
+  alpha:t>=1?0:action==='vapor'?(1-t)**1.4:1-Math.max(0,(t-.55)/.45),t,p,action};
 }
 /** Receipts only. No RNG, collisions, drops or score; all pools and lifetimes are bounded. */
 export class MaterialResolutionLayer {
+ private liveArtwork=new Map<string,ResolutionArtwork>();
+ captureArtwork(id:string,art:ResolutionArtwork){this.liveArtwork.delete(id);this.liveArtwork.set(id,art);while(this.liveArtwork.size>256)this.liveArtwork.delete(this.liveArtwork.keys().next().value!);}
+ get artworkSize(){return this.liveArtwork.size;}
  private resolutions:Resolution[]=[];
  private contacts:Contact[]=[];
  private marks:Array<{x:number;y:number;age:number;color:string}>=[];
  get size(){return this.resolutions.length;}
  get contactSize(){return this.contacts.length;}
- clear(){this.resolutions=[];this.contacts=[];this.marks=[];}
- observe(events:readonly ProjectileFeedback[],kills:readonly Kill[]){
+ clear(){this.liveArtwork.clear();this.resolutions=[];this.contacts=[];this.marks=[];}
+ observe(events:readonly ProjectileFeedback[],kills:readonly Kill[],artwork?:(kill:Kill)=>ResolutionArtwork|undefined){
   const seen=new Set<string>();
   for(const e of events){
    if(e.phase!=='impact'||!e.species||e.worker||e.blocked||(e.appliedDamage??0)<=0)continue;
@@ -35,7 +41,8 @@ export class MaterialResolutionLayer {
    this.contacts.push({event:e,age:0});
   }
   for(const k of kills){if(!k.species||k.type==='UNHELMETED')continue;
-   this.resolutions.push({species:k.species,x:k.x,y:k.y,size:Math.max(k.type==='GAS_LEAK'?76:58,(k.radius??18)*(k.type==='FALLING_DEBRIS'?2.4:2.6)),age:0,elevation:k.type==='FALLING_DEBRIS'?debrisElevation(k.motion?.phase??'fall',k.motion?.timer??0):0,facing:k.type==='RUNAWAY_CART'&&(k.motion?.directionX??0)<0?-1:1});
+   const painted=k.id?this.liveArtwork.get(k.id):undefined;if(k.id)this.liveArtwork.delete(k.id);
+   this.resolutions.push({art:painted??artwork?.(k),species:k.species,x:k.x,y:k.y,size:Math.max(k.type==='GAS_LEAK'?76:58,(k.radius??18)*(k.type==='FALLING_DEBRIS'?2.4:2.6)),age:0,elevation:k.type==='FALLING_DEBRIS'?debrisElevation(k.motion?.phase??'fall',k.motion?.timer??0):0,facing:k.type==='RUNAWAY_CART'&&(k.motion?.directionX??0)<0?-1:1});
    this.marks.push({x:k.x,y:k.y,age:0,color:MATERIAL_FEEL[k.species].color});
   }
   this.resolutions=this.resolutions.slice(-16);this.contacts=this.contacts.slice(-24);this.marks=this.marks.slice(-32);
@@ -51,17 +58,22 @@ export class MaterialResolutionLayer {
    ctx.beginPath();ctx.moveTo(-8,0);ctx.lineTo(-2,5);ctx.lineTo(9,-6);ctx.stroke();ctx.restore();}
  }
  draw(ctx:CanvasRenderingContext2D,base:HTMLImageElement|undefined,reduced:boolean,busy:boolean,flash=1){
-  const atlas=workfaceAtlas(base);if(!atlas)return;
+  const atlas=workfaceAtlas(base);
   for(const e of this.resolutions){
-   const cell=WORKFACE_SPECIES.indexOf(e.species),parts=['crumble','cascade','fold'].includes(MATERIAL_FEEL[e.species].action)?4:1;
+   const source=e.art?.image??atlas;if(!source)continue;
+   const cell=e.art?.cell??WORKFACE_SPECIES.indexOf(e.species),size=e.art?.size??e.size,action=e.art?.action??MATERIAL_FEEL[e.species].action,parts=['crumble','cascade'].includes(action)?6:action==='fold'?2:1;
    for(let index=0;index<parts;index++){
-    const p=resolutionPose(e.species,e.age,index,reduced);
-    const height=e.elevation*(1-p.p);
-    ctx.save();ctx.translate(e.x+p.x,e.y+p.y-height);ctx.rotate(p.angle);ctx.scale(e.facing,p.scaleY);ctx.globalAlpha=p.alpha*(busy?.65:1);
-    if(parts>1){ctx.beginPath();ctx.rect(-e.size/2+index*e.size/parts,-e.size,e.size/parts,e.size);ctx.clip();}
-    drawProp(ctx,atlas,cell,0,0,e.size);ctx.restore();
+    const p=resolutionPose(e.species,e.age,index,reduced,action);
+    const height=e.elevation*(1-p.p),fragment=parts===6?resolutionFragmentPose(e.species,e.age,index,reduced):{x:p.x,y:p.y,angle:p.angle};
+    ctx.save();ctx.translate(e.x+fragment.x,e.y+(e.art?.y??0)+fragment.y-height);ctx.rotate(fragment.angle);ctx.scale(e.art?.facing??e.facing,p.scaleY);ctx.globalAlpha=p.alpha*(busy?.65:1);
+    if(parts>1){ctx.beginPath();if(parts===6){
+      // Irregular wedges retain the original paint; avoid a visible rectangular grid.
+      const a=FRAGMENT_VERTICES[index]!,b=FRAGMENT_VERTICES[(index+1)%6]!;
+      ctx.moveTo(size*.015,-size*.5);ctx.lineTo(a[0]!*size,a[1]!*size);ctx.lineTo(b[0]!*size,b[1]!*size);ctx.closePath();
+    }else ctx.rect(-size/2+index*size/parts,-size,size/parts,size);ctx.clip();}
+    drawProp(ctx,source,cell,0,0,size);ctx.restore();
    }
-   const p=resolutionPose(e.species,e.age,0,reduced),profile=MATERIAL_FEEL[e.species];
+   const p=resolutionPose(e.species,e.age,0,reduced,e.art?.action),profile=MATERIAL_FEEL[e.species];
    if(!reduced&&!busy&&p.t<.85&&['valve','fan','seal','isolate'].includes(p.action)){
     ctx.save();ctx.translate(e.x,e.y-e.size*.5);ctx.strokeStyle=profile.color;ctx.fillStyle=profile.color;ctx.globalAlpha=p.alpha*.65;ctx.lineWidth=1.5;
     if(p.action==='fan'){

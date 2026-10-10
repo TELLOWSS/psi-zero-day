@@ -2299,6 +2299,7 @@ export class SurvivorsEngine {
         this.state.comboCount = (this.state.comboCount || 0) + 1;
         this.state.comboTimer = 2.4; // 2.4 seconds combo window
         this.state.lastKilledEvents.push({
+          id:h.id,variant:h.variant,behavior:h.behavior,signatureEventId:h.signatureEventId,
           species:h.species,radius:h.radius,motion:h.motion?{...h.motion}:undefined,
           type: h.type,
           x: h.x,

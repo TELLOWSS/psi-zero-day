@@ -9,6 +9,7 @@ import {MATERIAL_FEEL} from '../domain/survivors-material-feel';
 import { suspendedLoadPose } from './survivors-animation-rig';
 import { bossPattern } from '../engine/survivors-boss-pattern';
 import {materialContactMotion,materialFragmentMotion} from './survivors-material-contact-motion';
+import {hazardVaporPose,workfaceResolutionAction} from './survivors-hazard-animation';
 import {materialFragmentTexture} from './survivors-material-fragments';
 import {drawAuthoredMetalImpact} from './survivors-authored-metal-impact';
 import {drawAuthoredDebrisImpact} from './survivors-authored-debris-impact';
@@ -96,10 +97,10 @@ export function industrialHazardCell(h: Pick<Hazard, 'type' | 'variant'>, ground
   return null;
 }
 
-/** Presentation follows the existing hazard phase; it never changes collision or timing. */
-export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1,workfaceAtlas?:HTMLImageElement): boolean {
+/** Shared live/death art selection prevents a cleared monster from changing its identity. */
+export function industrialHazardArtwork(atlas:HTMLImageElement|undefined,h:Hazard,ground:string,theme:PatrolStageDefinition['theme'],elevation:number,carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1,workfaceAtlas?:HTMLImageElement) {
   const cell = industrialHazardCell(h, ground);
-  if (cell === null || !atlas?.naturalWidth) return false;
+  if (cell === null || !atlas?.naturalWidth) return null;
   const gas = h.type === 'GAS_LEAK';
   const bossImage=h.isStageBoss?(usesCarrierBossArt(h)?carrierBoss:materialBosses?.[h.type as keyof MaterialBossImages]):undefined;
   const boss=Boolean(bossImage?.naturalWidth);
@@ -112,17 +113,26 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   const useThreat=useWorkface||Boolean(appearance&&threatAtlas?.naturalWidth);
   const source=boss?bossImage:useWorkface?workfaceAtlas:useThreat?threatAtlas:authored?speciesAtlas:atlas;
   const sourceCell=boss?0:useWorkface?workface!.cell:useThreat?appearance!.cell:authored?speciesCell:cell;
-  const placement=industrialHazardPlacement(h,elevation,boss||authored&&gas);
+  const placement=industrialHazardPlacement(h,elevation,boss||authored&&gas&&!useThreat);
   const size=useThreat&&gas?Math.max(38,placement.size):useThreat&&h.variant==='reinforced_cart'?Math.max(70,placement.size):placement.size;
 
-  const response=industrialResponse(h,pose,reduced);
+  return {source,sourceCell,placement,size,useThreat,useWorkface,workface,authored,boss,gas,action:useWorkface?workfaceResolutionAction(h.type,workface!.subject):undefined};
+}
+
+/** Presentation follows the existing hazard phase; it never changes collision or timing. */
+export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLImageElement | undefined, h: Hazard, pose: SpritePose, ground: string, theme:PatrolStageDefinition['theme'], clock: number, reduced: boolean, elevation: number, carrierBoss?:HTMLImageElement,materialBosses?:MaterialBossImages,threatAtlas?:HTMLImageElement,stageNumber=1,workfaceAtlas?:HTMLImageElement,contactAtlas?:HTMLImageElement,busy=false,onArtwork?:(art:{image:HTMLImageElement;cell:number;size:number;facing:number;y:number;action?:ReturnType<typeof workfaceResolutionAction>})=>void): boolean {
+  const art=industrialHazardArtwork(atlas,h,ground,theme,elevation,carrierBoss,materialBosses,threatAtlas,stageNumber,workfaceAtlas);
+  if(!art)return false;
+  const {source,sourceCell,placement,size,useThreat,useWorkface,authored,boss,gas}=art;
+
+  const response=industrialResponse(h,pose,reduced);let artworkFacing=1;
   ctx.save();
   if (placement.solid) {
-    ctx.fillStyle = 'rgba(0,0,0,.28)';ctx.beginPath();
+    ctx.fillStyle = `rgba(0,0,0,${.28/(1+Math.max(0,elevation)/65)})`;ctx.beginPath();
     ctx.ellipse(0, 2, size * .4, size * .13, 0, 0, Math.PI * 2);ctx.fill();
   }
   if (h.type === 'RUNAWAY_CART') {
-    const heading=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)?Math.atan2(h.motion.directionY,h.motion.directionX):Math.atan2(pose.directionY,pose.facing);
+    const heading=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)?Math.atan2(h.motion.directionY,h.motion.directionX):Math.atan2(pose.directionY,pose.facing*Math.sqrt(Math.max(0,1-pose.directionY**2)));
     ctx.save();ctx.rotate(heading);
     const beam=ctx.createLinearGradient(size*.2,0,size*.9,0);
     beam.addColorStop(0,h.isStageBoss?'rgba(255,218,152,.24)':'rgba(255,236,194,.14)');beam.addColorStop(1,'rgba(255,236,194,0)');
@@ -134,19 +144,20 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
     ctx.restore();
     const facing=h.motion&&['warning','charge','cooldown'].includes(h.motion.phase)&&Math.abs(h.motion.directionX)>.04?(h.motion.directionX<0?-1:1):pose.facing;
     const action=cartActionPose(h,reduced);
-    ctx.scale(useThreat?-facing:facing, 1);
+    artworkFacing=useThreat?-facing:facing;ctx.scale(artworkFacing, 1);
     // Rigid metal rocks on its suspension; the chassis and wheels never squash.
     ctx.translate(0,-size*(action.compression+response.compression+response.suspension)*.28);
     ctx.rotate((pose.lean+action.lean+response.tilt)*.8);
   }
-  if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.scale(1+response.reaction*.035,1-response.reaction*.035);ctx.translate(0,elevation);}
-  const pressure = !boss&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
+  if(h.type==='FALLING_DEBRIS'&&response.reaction>0){ctx.translate(0,-elevation);ctx.rotate(response.tilt);ctx.translate(0,elevation);}
+  const pressure = !boss&&!placement.solid&&!reduced&&gas ? 1+Math.sin(clock*(h.variant==='pulse_gas'?8:2.2)+pose.cycle)*(h.variant==='pulse_gas'?.045:.022) : 1;
   ctx.scale(pressure, pressure);
-  if(gas&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
+  if(gas&&!placement.solid&&response.reaction>0)ctx.scale(1+response.reaction*.055,1-response.reaction*.055);
   if (gas&&!boss&&!authored) ctx.globalAlpha *= .82;
-  const silhouette=useWorkface?workfaceThreatPose(h,pose,clock,reduced):useThreat?threatSilhouettePose(h,clock,reduced):{x:0,y:0,rotation:0,scaleX:1,scaleY:1};
+  const silhouette=gas&&placement.solid?{x:0,y:0,rotation:0,scaleX:1,scaleY:1}:useWorkface?workfaceThreatPose(h,pose,clock,reduced):useThreat?threatSilhouettePose(h,clock,reduced):{x:0,y:0,rotation:0,scaleX:1,scaleY:1};
   ctx.save();ctx.translate(silhouette.x,silhouette.y);ctx.rotate(silhouette.rotation);ctx.scale(silhouette.scaleX,silhouette.scaleY);
   const drawn = drawProp(ctx, source, sourceCell, 0, placement.y, size);
+  if(drawn&&source)onArtwork?.({image:source,cell:sourceCell,size,facing:artworkFacing,y:placement.y+elevation,action:art.action});
   if(drawn&&h.species&&h.hp<h.maxHp&&!gas){
     const wear=Math.max(0,Math.min(1,1-h.hp/Math.max(1,h.maxHp))),profile=MATERIAL_FEEL[h.species];
     ctx.save();ctx.strokeStyle=profile.action==='crumble'?'#514b43':profile.color;ctx.globalAlpha=.35*wear;ctx.lineWidth=1.2;
@@ -155,7 +166,14 @@ export function drawIndustrialHazard(ctx: CanvasRenderingContext2D, atlas: HTMLI
   }
   if(drawn&&response.reaction>0)drawPropReaction(ctx,source,sourceCell,0,placement.y,size,response.color,response.reaction*.24);
   ctx.restore();
-
+  if(drawn&&gas&&!reduced&&contactAtlas){
+    const texture=materialFragmentTexture(contactAtlas,2,5);
+    if(texture||useThreat)for(let i=0;i<(busy?1:3);i++){
+      const flow=hazardVaporPose(h,clock,i),w=size*flow.scale;
+      ctx.save();ctx.translate(flow.x*size,placement.y-size*.55+flow.y*size);ctx.rotate(flow.rotation);ctx.globalAlpha*=flow.alpha*(busy?.55:1);
+      if(useThreat)drawProp(ctx,source,sourceCell,0,w*.35,w*1.6);else if(texture)ctx.drawImage(texture,-w*.5,-w*.5,w,w);ctx.restore();
+    }
+  }
 
   if(drawn&&h.signatureEventId&&!boss){
     const pulse=reduced?1:.72+.28*Math.sin(clock*7);

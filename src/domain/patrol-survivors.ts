@@ -298,7 +298,7 @@ export interface SurvivorsGameState {
   hitStopTimer?: number;
   comboCount: number;
   comboTimer: number;
-  lastKilledEvents?: Array<{ type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean; projectileId?: string; species?:WorkfaceSpecies; radius?:number; motion?:Hazard['motion'] }>;
+  lastKilledEvents?: Array<{ id?:string;variant?:Hazard['variant'];behavior?:Hazard['behavior'];signatureEventId?:string; type: HazardType; x: number; y: number; isCrit?: boolean; boss?: boolean; mastery?: boolean; projectileId?: string; species?:WorkfaceSpecies; radius?:number; motion?:Hazard['motion'] }>;
 
   // Stage & Level Architecture
   stageId: PatrolStageId;

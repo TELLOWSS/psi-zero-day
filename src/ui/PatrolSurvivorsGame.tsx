@@ -1,3 +1,4 @@
+import type {Hazard} from '../domain/patrol-survivors';
 import {SurvivorsPinballUnlockPreview} from './SurvivorsPinballCustomization';
 import {PINBALL_TABLE_IDS,pinballTableProgress} from '../domain/survivors-pinball-tables';
 import {drawEquipmentAura} from './survivors-equipment-aura';
@@ -115,7 +116,7 @@ import { SurvivorsEvolutionPreview } from './SurvivorsEvolutionPreview';
 import { debrisElevation, suspendedLoadPose } from './survivors-animation-rig';
 import { SpriteMotionTracker, registerSpriteBounds, drawGroundedSprite } from './survivors-sprite-motion';
 import {projectileAttackMotion} from './survivors-attack-motion';
-import { WORKFACE_HAZARD_ART, registerWorkfaceHazards, INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, INDUSTRIAL_CRANE_BOSS_ART, INDUSTRIAL_CART_BOSS_ART, drawIndustrialHazard, drawIndustrialCrane, craneArtPose, craneAttackElevation } from './survivors-industrial-art';
+import { WORKFACE_HAZARD_ART, registerWorkfaceHazards, INDUSTRIAL_HAZARD_ART, INDUSTRIAL_CONTACT_ART, INDUSTRIAL_CRANE_ART, INDUSTRIAL_CRANE_BOSS_ART, INDUSTRIAL_CART_BOSS_ART, drawIndustrialHazard, industrialHazardArtwork, drawIndustrialCrane, craneArtPose, craneAttackElevation } from './survivors-industrial-art';
 import { cacheStageFloor } from './survivors-stage-art';
 import { GameManual, gameManualText } from './GameManual';
 import combatText from '../../content/localization/survivors-combat-ko.json';
@@ -1649,7 +1650,15 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
         }
         projectileEvents=engine.drainProjectileFeedback();
         materialResolutionRef.current.advance(dt);
-        materialResolutionRef.current.observe(projectileEvents,engine.state.lastKilledEvents??[]);
+        materialResolutionRef.current.observe(projectileEvents,engine.state.lastKilledEvents??[],kill=>{
+          if(!kill.id)return undefined;
+          const stage=engine.state.stage,assets=spritesRef.current;
+          const h:Hazard={...kill,id:kill.id,hp:0,maxHp:1,speed:0,radius:kill.radius??18,damage:0,expValue:0,isStageBoss:kill.boss};
+          const art=industrialHazardArtwork(assets.industrialHazards,h,stageGroundUri(stage.id),stage.theme,0,assets.carrierBoss,assets.materialBosses,assets.stageThreats,stage.stageNumber,workfaceArtRef.current?.get(stage.stageNumber));
+          if(!art?.source)return undefined;
+          const facing=h.type==='RUNAWAY_CART'&&(h.motion?.directionX??0)<0?-1:1;
+          return {image:art.source,cell:art.sourceCell,size:art.size,facing:h.type==='RUNAWAY_CART'?(art.useThreat?-facing:facing):1,y:art.placement.y,action:art.action};
+        });
         const equippedNow=engine.state.premiumGear?.equipped??[];
         groundContactRef.current.observe(engine.state,projectileEvents,engine.state.projectiles.length>90);
         dispatchTrailRef.current.observe(engine.state,engine.state.projectiles.length>90);
@@ -2738,7 +2747,7 @@ export function PatrolSurvivorsGame({ onExit, audioMuted = false }: PatrolSurviv
           }
           if (h.motion?.phase === 'spent') ctx.globalAlpha = h.isStageBoss ? .82 : .35;
 
-          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber,workfaceAtlas)) {
+          if (drawIndustrialHazard(ctx, spritesRef.current.industrialHazards, h, hazardPose, stageGroundUri(stage.id), stage.theme, engine.state.gameTime, reducedMotionRef.current, h.type === 'FALLING_DEBRIS' ? debrisElevation(h.motion?.phase ?? 'fall',h.motion?.timer ?? 0) : 0,spritesRef.current.carrierBoss,spritesRef.current.materialBosses,spritesRef.current.stageThreats,stage.stageNumber,workfaceAtlas,spritesRef.current.industrialContacts,visualBudget.detailBusy,art=>materialResolutionRef.current.captureArtwork(h.id,art))) {
             // Actual raster materials replace the legacy shape renderer below.
           } else if (h.type === 'UNHELMETED') {
             // 2.5D Ground Ellipse Contact Shadow

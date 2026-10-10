@@ -7,16 +7,16 @@ export const PINBALL_AUDIO_FILES={
  theme:'pinball_theme_v01.mp3',shift:'after-the-shift-v01.mp3',
 } as const;
 export type PinballSound='metal'|'flipper'|'rubber'|'crane'|'perfect'|'shot'|'payout';
-export type PinballMusic='theme'|'shift';
+export type PinballMusic='theme'|'shift'|'harbor';
 /** All files decode before play. Source MP3s are preserved; processing is not a new high-resolution master. */
 export class PinballAudio {
- private context=new AudioContext();private buffers=new Map<string,AudioBuffer>();private voices=new Set<AudioBufferSourceNode>();
+ private fetchController=new AbortController();private context=new AudioContext();private buffers=new Map<string,AudioBuffer>();private voices=new Set<AudioBufferSourceNode>();
  private priorities=new Map<AudioBufferSourceNode,number>();private musicGain=this.context.createGain();private master=this.context.createDynamicsCompressor();
  private musicSource:AudioBufferSourceNode|null=null;private offset=0;private started=0;private enabled=false;private disposed=false;
- private selected:PinballMusic='shift';private lastCue=-10;private last=new Map<string,number>();private variants=new Map<PinballSound,number>();
- async load(){const sources=[...Object.entries(PINBALL_AUDIO_FILES).map(([key,file])=>[key,'/assets/survivors/pinball/audio-candidates-v1/'+file]),...Object.entries(PINBALL_PHASE1_ASSETS).filter(([key])=>!(key in PINBALL_PHASE2_ASSETS)).map(([key,file])=>[key,PINBALL_PHASE1_ROOT+file]),...Object.entries(PINBALL_PHASE2_ASSETS).map(([key,file])=>[key,PINBALL_PHASE2_ROOT+file]),...Object.entries(PINBALL_PHASE2C_ASSETS).map(([key,file])=>[key,PINBALL_PHASE2C_ROOT+file])];
-  await Promise.all(sources.map(async([key,url])=>{if(!key||!url)return;const response=await fetch(url);if(!response.ok)throw Error('Pinball audio: '+url);
-   const buffer=await this.context.decodeAudioData(await response.arrayBuffer());if(this.disposed)return;const music=key==='theme'||key==='shift';
+ private selected:PinballMusic='harbor';private lastCue=-10;private last=new Map<string,number>();private variants=new Map<PinballSound,number>();
+ async load(){const sources=[['harbor','/assets/survivors/pinball/audio-harbor-music-v1/harbor_music_full_mix.wav'],...Object.entries(PINBALL_AUDIO_FILES).map(([key,file])=>[key,'/assets/survivors/pinball/audio-candidates-v1/'+file]),...Object.entries(PINBALL_PHASE1_ASSETS).filter(([key])=>!(key in PINBALL_PHASE2_ASSETS)).map(([key,file])=>[key,PINBALL_PHASE1_ROOT+file]),...Object.entries(PINBALL_PHASE2_ASSETS).map(([key,file])=>[key,PINBALL_PHASE2_ROOT+file]),...Object.entries(PINBALL_PHASE2C_ASSETS).map(([key,file])=>[key,PINBALL_PHASE2C_ROOT+file])];
+  await Promise.all(sources.map(async([key,url])=>{if(!key||!url)return;const response=await fetch(url,{signal:this.fetchController.signal});if(!response.ok)throw Error('Pinball audio: '+url);
+   const buffer=await this.context.decodeAudioData(await response.arrayBuffer());if(this.disposed)return;const music=key==='theme'||key==='shift'||key==='harbor';
    // Short attack fade preserves contact timing; longer release reduces abrupt candidate endings.
    const attack=Math.max(1,Math.floor(buffer.sampleRate*(music?.012:.003))),release=Math.max(1,Math.floor(buffer.sampleRate*(music?.012:.025)));let peak=0,energy=0;
    for(let c=0;c<buffer.numberOfChannels;c++){const data=buffer.getChannelData(c);let dc=0;if(!music){for(const value of data)dc+=value;dc/=data.length;}
@@ -51,5 +51,5 @@ export class PinballAudio {
   pan.pan.value=Math.max(-.6,Math.min(.6,(x-300)/550+note.pan));source.connect(filter);filter.connect(gain);gain.connect(pan);pan.connect(this.master);this.voices.add(source);this.priorities.set(source,priority);
   source.onended=()=>{this.voices.delete(source);this.priorities.delete(source);source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect();};source.start(start);source.stop(start+duration);
  }
- dispose(){this.setActive(false);this.disposed=true;this.musicGain.disconnect();this.master.disconnect();void this.context.close();}
+ dispose(){this.setActive(false);this.disposed=true;this.fetchController.abort();this.musicGain.disconnect();this.master.disconnect();void this.context.close();}
 }

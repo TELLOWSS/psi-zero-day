@@ -33,7 +33,7 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
  },[settingsOpen,settingsTab]);
  const pausedRef=useRef(false),assistRef=useRef(false),muted=useRef(audioMuted);muted.current=audioMuted;
  const audio=useRef<PinballAudio|null>(null),payoutUntil=useRef(0);
- const [soundOff,setSoundOff]=useState(false),[audioReady,setAudioReady]=useState(false),[audioError,setAudioError]=useState(false),[music,setMusic]=useState<PinballMusic>('shift');
+ const [soundOff,setSoundOff]=useState(false),[audioReady,setAudioReady]=useState(false),[audioError,setAudioError]=useState(false),[music,setMusic]=useState<PinballMusic>('harbor');
  const soundOffRef=useRef(false);soundOffRef.current=soundOff;
  useEffect(()=>{let disposed=false;const player=new PinballAudio();audio.current=player;void player.load().then(()=>{if(!disposed)setAudioReady(true);}).catch(()=>{if(!disposed)setAudioError(true);});return()=>{disposed=true;player.dispose();audio.current=null;};},[]);
  useEffect(()=>{if(audioMuted||soundOff){payoutUntil.current=0;audio.current?.setActive(false);}},[audioMuted,soundOff]);
@@ -131,7 +131,7 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
     <label className="pinball-assist"><input type="checkbox" checked={assist} onChange={e=>{setAssist(e.target.checked);assistRef.current=e.target.checked;}}/>{copy.assist}</label>
     <p>{copy.manualHint}</p>{fullscreenFailed&&<p>{copy.fullscreenFallback}</p>}
     <details className="pinball-settings-guide"><summary>{copy.guide}</summary><p>{copy.controls}</p><p>{recreationText.rules[choice.rule].detail}</p><p>{copy.rewardRule}</p></details>
-    <label className="pinball-music">{copy.music}<select value={music} onChange={e=>{const value=e.target.value as PinballMusic;setMusic(value);void audio.current?.unlock();audio.current?.setMusic(value);}}><option value="shift">{copy.musicShift}</option><option value="theme">{copy.musicTheme}</option></select></label>
+    <label className="pinball-music">{copy.music}<select value={music} onChange={e=>{const value=e.target.value as PinballMusic;setMusic(value);void audio.current?.unlock();audio.current?.setMusic(value);}}><option value="harbor">{copy.musicHarbor}</option><option value="shift">{copy.musicShift}</option><option value="theme">{copy.musicTheme}</option></select></label>
     </>}<button type="button" className="survivors-btn-secondary" onClick={()=>setSettingsOpen(false)}>{copy.closeSettings}</button></section>}
   </aside></div>
  </div></div>;

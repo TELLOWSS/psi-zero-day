@@ -17,7 +17,7 @@ describe('field material contact and resolution',()=>{
   s.projectiles=[{id:'last',kind:'grout_slug',x:h.x,y:h.y,vx:0,vy:0,radius:12,damage:99,pierce:1,duration:1}];
   engine.update(1/60,{moveX:0,moveY:0});const final=engine.drainProjectileFeedback().filter(e=>e.targetId==='steel'&&e.finishing);
   expect(final).toHaveLength(1);expect(final[0]!.appliedDamage).toBe(15);
-  expect(s.lastKilledEvents?.filter(e=>e.species==='rebar_rack')).toHaveLength(1);
+  expect(s.lastKilledEvents?.filter(e=>e.species==='rebar_rack')).toHaveLength(1);expect(s.lastKilledEvents?.[0]?.id).toBe('steel');
  });
  it('has twelve distinct bounded sound signatures, with more space for finishing tails',()=>{
   const hashes=new Set<number>();
@@ -41,6 +41,7 @@ describe('field material contact and resolution',()=>{
   layer.advance(0);expect(layer.size).toBe(16);
   for(let i=0;i<8;i++)layer.advance(.25);expect(layer.size).toBe(0);expect(layer.contactSize).toBe(0);expect(JSON.stringify({events,kills})).toBe(before);
  });
+ it('keeps the last painted facing/source at death and bounds the live-art cache',()=>{const layer=new MaterialResolutionLayer(),image={naturalWidth:256} as HTMLImageElement;for(let i=0;i<300;i++)layer.captureArtwork(String(i),{image,cell:4,size:58,facing:-1,y:0});expect(layer.artworkSize).toBe(256);let fallback=false;layer.observe([],[{id:'299',type:'RUNAWAY_CART',species:'forklift',x:0,y:0}],()=>{fallback=true;return {image,cell:0,size:20,facing:1,y:0};});expect(fallback).toBe(false);expect(layer.artworkSize).toBe(255);layer.clear();expect(layer.artworkSize).toBe(0);});
  it('settles each material with reduced-motion geometry fixed and delays individual falling pieces',()=>{
   for(const species of WORKFACE_SPECIES){const p=resolutionPose(species,.6,2,true);expect(p.x).toBe(0);expect(p.y).toBe(0);expect(p.angle).toBe(0);expect(p.scaleY).toBe(1);expect(resolutionPose(species,2).alpha).toBe(0);}
   expect(resolutionPose('masonry',.2,3).p).toBeLessThan(resolutionPose('masonry',.2,0).p);
