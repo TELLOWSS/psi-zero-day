@@ -43,6 +43,7 @@ class SoundDirector{
  case'netfield':this.osc(380,190,.26,'sine',.05);this.noiseBurst(.23,.048,2600);break;
  case'bumper':case'ricochet':case'corebounce':this.osc(870,320,.055,'triangle',.042);break;
  case'node':this.osc(640,1160,.26,'triangle',.07);break;
+ case'skillshot':this.osc(680,1100,.12,'sine',.04);this.osc(1020,1500,.16,'triangle',.025);break;
  case'chain':this.osc(720,1240,.24,'sine',.065);this.osc(1100,1600,.19,'sine',.03);break;
  case'unseal':this.osc(230,1100,.55,'sawtooth',.04);this.noiseBurst(.25,.06,2300);break;
  case'boss':this.osc(70,36,.48,'sawtooth',.11);this.osc(440,880,.45,'triangle',.06);this.noiseBurst(.30,.09,850);break;

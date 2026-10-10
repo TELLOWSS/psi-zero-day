@@ -31,7 +31,7 @@ elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.ha
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
 assert.ok(elements.overlayInner.children.some(el=>el.id==='overlayPrimary'),'ready overlay has start action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
-assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
+window.SignalBreakerQA.controlMode('twin');assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
 elements.controlBtn.trigger('click');
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
 elements.arena.trigger('pointerdown',touch(10));
@@ -57,5 +57,17 @@ window.SignalBreakerQA.selectStage('SB-04');assert.equal(window.SignalBreakerQA.
 window.SignalBreakerQA.selectStage('SB-01');window.SignalBreakerQA.engine().start();window.SignalBreakerQA.engine().finish(true);currentNow+=1000/60;queue.shift()(currentNow);
 assert.equal(window.SignalBreakerQA.records()['SB-01'].won,true);
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).records['SB-01'].won,true);
+// Verify the default flow app loop, toggle and temporary direct aiming.
+window.SignalBreakerQA.selectStage('CH-01',true);window.SignalBreakerQA.controlMode('flow');
+for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>0,'flow fires automatically');
+elements.fireBtn.trigger('pointerdown',touch(91));const autoStopped=window.SignalBreakerQA.snapshot().shotsFired;
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped,'central toggle stops auto fire');
+elements.aimPad.trigger('pointerdown',touch(92,250,200));const directAim=window.SignalBreakerQA.engine().launchGeometry().direction;
+assert.ok(directAim.x<0,'right pad can override towards left');elements.aimPad.trigger('pointerup',touch(92));
+elements.fireBtn.trigger('pointerdown',touch(93));for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>autoStopped,'central toggle resumes auto fire');
+console.log('PASS default flow automatic fire, stop/resume and direct override');
 console.log('PASS offline best-score persistence after victory');
 console.log('PASS HTML ID contracts and render-path smoke');console.log('PASS ready→play→weapon→shield→pause→new stage');console.log('PASS 180 mock canvas frames without JS error');
