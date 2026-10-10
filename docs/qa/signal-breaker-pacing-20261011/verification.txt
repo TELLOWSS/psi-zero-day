@@ -1,0 +1,7 @@
+Baseline: ac457774fee311c3c6ce0f33340152f3811ea748
+Actual engine collision runs: 240 + 32 smart-weapon-off comparisons.
+Deterministic repeat JSON cmp: identical.
+No forced capture/deletion/boss completion fixtures.
+53 engine/app regression tests passed.
+No product gameplay changes.
+All durations are active game time. Human reading time and device frame time not measured.
