@@ -6,7 +6,7 @@ const b=(x:number,y:number,r=32)=>({x,y,r}),t=(x:number,y:number,hp=2)=>({x,y,hp
 const site=(id:PinballTableId,unlock:number,bumper:PinballTable['bumper'],rails:PinballTable['rails'],targets:PinballTable['targets'],lanes:PinballTable['lanes'],sprite:number,charge=3,duration=8):PinballTable=>({unlock,asset:`/assets/survivors/pinball/tables/${id}-v1.png`,bumper,rails,targets,lanes,sprite,charge,duration});
 export const PINBALL_TABLES:Record<PinballTableId,PinballTable>={
  factory:{unlock:0,asset:'/assets/survivors/pinball/factory-playfield-v2.png',bumper:[b(204,220,49),b(396,220,49),b(300,352,49)],rails:[],targets:[],lanes:[],sprite:10,charge:3,duration:10},
- conveyor:site('conveyor',5,[b(210,280),b(390,380),b(235,495)],[[140,190,140,405],[455,280,455,505]],[t(220,175),t(300,175),t(380,175)],[b(175,370,32),b(420,475,32)],0),
+ conveyor:site('conveyor',5,[b(210,280),b(390,380),b(235,495)],[[140,190,140,405],[455,280,455,505]],[t(300,175),t(300,240),t(380,175)],[b(175,370,32),b(420,475,32)],0),
  cargo:site('cargo',10,[b(210,300,38),b(360,435),b(200,520)],[[370,185,430,300],[430,300,430,430]],[t(230,180,3),t(310,180,3),t(390,180,3)],[b(450,230,32)],1,2),
  foundry:site('foundry',15,[b(220,350,38),b(390,350,38),b(305,510)],[[165,235,190,300],[435,235,410,300]],[t(240,190,3),t(310,210,3),t(380,190,3)],[b(300,270,36),b(145,465,30)],2,2),
  tunnel:site('tunnel',20,[b(205,440),b(395,440),b(300,545)],[[300,220,245,340],[300,220,355,340]],[t(195,200,2),t(300,180,3),t(405,200,2),t(300,365,2)],[b(155,340,28),b(445,340,28)],3),

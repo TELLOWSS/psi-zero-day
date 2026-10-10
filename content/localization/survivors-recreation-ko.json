@@ -112,5 +112,6 @@
     "전력",
     "수류"
   ],
-  "siteTarget": "남은 표적"
+  "siteTarget": "남은 표적",
+  "siteReload": "표적 재정비"
 }

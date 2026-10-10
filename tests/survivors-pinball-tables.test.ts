@@ -57,3 +57,9 @@ it('keeps crane balls when a generic bumper rush expires and caps combined balls
 it('retains new crane balls triggered by an extra ball during a physics step',()=>{
  const e=new SurvivorsPinballEngine('practice',{table:'cargo',clears:50,completedStages:PATROL_STAGE_IDS});e.launch();Object.assign(e.state,{x:300,y:650,vx:0,vy:0});e.site.charge=1;e.state.extraBalls=[{x:450,y:230,vx:0,vy:0,source:'site'}];e.update(.001,idle);expect(e.site.activations).toBe(1);expect(e.state.extraBalls).toHaveLength(3);
 });
+it('rebuilds destroyed targets during a special so powered shots never wait for the whole special to end',()=>{
+ const site=new PinballSite('foundry');site.hp.fill(1);site.active=8;for(let i=0;i<3;i++){const target=site.layout.targets[i]!;site.fire({x:target.x,y:target.y+50,vx:0,vy:0});site.update(.06,()=>{},[],()=>{});}expect(site.hp.every(hp=>hp===0)).toBe(true);expect(site.reloadTime).toBeGreaterThan(0);site.update(1.3,()=>{},[],()=>{});expect(site.active).toBeGreaterThan(0);expect(site.hp).toEqual(site.layout.targets.map(t=>t.hp));site.fire({x:300,y:600,vx:0,vy:0});expect(site.shots.length).toBeGreaterThanOrEqual(3);
+});
+it('conveyor plates share a physical shot line so the press penetration damages more than one plate',()=>{
+ const site=new PinballSite('conveyor');site.fire({x:300,y:600,vx:0,vy:0});for(let i=0;i<110;i++)site.update(.004,()=>{},[],()=>{});expect(site.hp.slice(0,2)).toEqual([1,1]);
+});
