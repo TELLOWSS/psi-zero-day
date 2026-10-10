@@ -1,0 +1,42 @@
+Signal Breaker final verification — 2026-10-11
+
+Engine/app tests: 53 passed, 0 failed.
+Project npm test: 2037 passed, 1 skipped; 351 passed files, 1 skipped.
+Typecheck: passed.
+Build (including required prebuild): passed. Final Vite build after polish: passed.
+Existing >500kB chunk warning remains.
+
+browser-premium-final.log
+START 390 844
+GOTO 390
+PASS 390×844: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 412 915
+GOTO 412
+PASS 412×915: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 844 390
+GOTO 844
+PASS 844×390: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 768 1024
+GOTO 768
+PASS 768×1024: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 1280 720
+GOTO 1280
+PASS 1280×720: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 1920 1080
+GOTO 1920
+PASS 1920×1080: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+Completion fixtures validate transitions, not human balance or fun.
+
+browser-polish.log
+START 390 844
+GOTO 390
+PASS 390×844: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+START 844 390
+GOTO 844
+PASS 844×390: default auto/stop/resume/pause, manual physical hit, five rounds, frozen choices, checkpoint/retry, records, exit
+Completion fixtures validate transitions, not human balance or fun.
+
+browser-twin.log
+PASS six viewports: actual chapter detail, branded loading, independent left movement/right aim, central manual fire, three simultaneous pointers/cancel, world touch no fire, main exit; five maps in two orientations
+
+Screenshots contain synthetic completion fixtures; they are layout/transition evidence, not natural clear times or balance evidence. Actual physical projectile hit, default auto fire, manual override, toggle and pause were separately checked. Real Android/iOS WebView and human fun/play duration remain unverified.
