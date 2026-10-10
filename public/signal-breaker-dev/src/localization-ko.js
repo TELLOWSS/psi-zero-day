@@ -1,5 +1,16 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+ 'breaker.source.observe':'Ψ 관찰 · C',
+ 'breaker.source.control':'Ψ 구역 통제 · C',
+ 'breaker.source.closed':'Ψ 발생원 차단 완료',
+ 'breaker.source.hint':'반복되는 신호 · 발생원 관찰',
+ 'breaker.source.revealed':'불안정 적치 확인 · 구역 통제 요청',
+ 'breaker.source.checking':'잔여 신호 회수 → 재발 확인 2초',
+ 'breaker.source.verified':'발생원 통제 · 재발 없음',
+ 'breaker.source.sourceobserved':'같은 곳에서 반복됩니다. 적치 구역을 확인했습니다.',
+ 'breaker.source.sourcecontrolled':'통제를 요청했습니다. 잔여 신호를 회수하세요.',
+ 'breaker.source.sourcerecur':'신호가 다시 생겼습니다. 발생원을 관찰하세요.',
+ 'breaker.source.sourceverified':'PSI · 사고 전 신호를 모아 다음 위험을 먼저 읽는 안전지능',
  'breaker.prepare.preview':'실제 캐릭터와 장비 장착 미리보기',
  'breaker.prepare.settings':'장비 2슬롯 · 조작 · 그래픽 · 음향 설정',
  'breaker.mode.chapter':'첫 챕터 5판',
