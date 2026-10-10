@@ -1,6 +1,6 @@
 /* SIGNAL BREAKER dedicated app shell; independent of SIGNAL WATCH and Vercel. */
-const CACHE = 'psi-signal-breaker-webpreview-v0.5.1';
-const ASSETS = ['./', './index.html', './src/style.css', './src/engine.js', './src/app.js', '/assets/shared/presentation-cache-v1.js', './src/localization-ko.js', './src/premium-art.js', './src/premium-sound.js', './manifest.webmanifest', './icon.svg', './art/sb01-delivery-bay-v1.png', './art/core-materials-v1.png', './art/operator-idle-v1.png'];
+const CACHE = 'psi-signal-breaker-webpreview-v0.5.2';
+const ASSETS = ['./', './index.html', './src/style.css', './src/engine.js', './src/app.js', '/assets/shared/presentation-cache-v1.js', '/assets/shared/signal-breaker-actors.js', './src/localization-ko.js', './src/premium-art.js', './src/premium-sound.js', './manifest.webmanifest', './icon.svg', './art/sb01-delivery-bay-v1.png', './art/core-materials-v1.png', './art/operator-idle-v1.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

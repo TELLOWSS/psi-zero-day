@@ -109,13 +109,13 @@ class PremiumArt{
  if(s.kind==='pulse'){path(c,[[14,0],[-8,-5],[-27,-2],[-33,0],[-27,2],[-8,5]],'#ffe1a5a5',col,1.2);disk(c,4,0,4,'#ffffff');}
  else{c.strokeStyle='#a8ffe0';c.lineWidth=2;for(let i=0;i<8;i++){let a=i*TAU/8;line(c,Math.cos(a)*16,Math.sin(a)*16,Math.cos(a+.1)*25,Math.sin(a+.1)*25,'#aaffdd',1.2);}disk(c,0,0,16,'#5ee1c61c','#d5ffea',2);disk(c,0,0,4,'#d2fff1');}
  c.restore();}
- player(c,p,weapon,time){
+ player(c,p,weapon,time,launch){
  if(this.operator?.complete&&this.operator.naturalWidth){
   c.save();c.translate(p.x,p.y);c.save();c.globalAlpha=.4;c.scale(1,.22);disk(c,0,135,31,'#08161c');c.restore();
   c.save();c.translate(0,31);c.scale(p.aimX<p.x?-1:1,this.reducedMotion?1:1+Math.sin(time*2)*.002);c.drawImage(this.operator,-32,-96,64,96);c.restore();
-  c.translate(0,-25);c.rotate(Math.atan2(p.aimY-p.y,p.aimX-p.x));const recoil=this.reducedMotion?0:Math.sin(this.recoil/.18*PI)*5;
+  c.translate(0,-25);c.rotate(launch?Math.atan2(launch.direction.y,launch.direction.x):Math.atan2(p.aimY-p.y,p.aimX-p.x));const recoil=this.reducedMotion?0:Math.sin(this.recoil/.18*PI)*5;
   rect(c,-27-recoil,-6,30,12,weapon==='net'?'#3d9c84':'#b98b48','#d7e8e8');rect(c,-9-recoil,-10,18,20,'#203e4f','#9bbfcb');
-  rect(c,4-recoil,-7,5,14,weapon==='net'?'#acffe1':'#ffe6a4');if(this.recoil>.12){c.globalAlpha=(this.recoil-.12)/.06;disk(c,11,0,weapon==='net'?10:7,weapon==='net'?'#a3ffe2':'#fff5c5');}c.restore();return;
+  rect(c,18,-7,4,14,weapon==='net'?'#acffe1':'#ffe6a4');if(this.recoil>.12){c.globalAlpha=(this.recoil-.12)/.06;disk(c,22,0,weapon==='net'?10:7,weapon==='net'?'#a3ffe2':'#fff5c5');}c.restore();return;
  }
  c.save();c.translate(p.x,p.y);const angle=Math.atan2(p.aimY-p.y,p.aimX-p.x);
  // shadow, boots, vest, neck, hard hat — compact but recognizable field-device operator

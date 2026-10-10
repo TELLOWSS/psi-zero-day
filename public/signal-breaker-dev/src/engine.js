@@ -21,9 +21,12 @@ class Game {
  addCore(spec){if(this.cores.length>=36)return false;const r=spec.tier===2?31:spec.tier===1?23:14;this.cores.push({id:++this.id,x:spec.x,y:spec.y,vx:spec.vx,vy:spec.vy,r,tier:spec.tier,kind:spec.kind,age:0,glow:0,stable:spec.stable||false});return true;}
  event(kind,x=W/2,y=H/2,n=0,material=null){this.events.push({kind,x,y,n,material,t:this.time});if(this.events.length>70)this.events.shift();}
  // Read-only preview uses the same projectile edge/rail collision rules as play.
+ launchGeometry(){
+  const p=this.player,grip={x:p.x,y:p.y-25};let dx=p.aimX-grip.x,dy=p.aimY-grip.y;if(dy>-18)dy=-85;const length=Math.hypot(dx,dy)||1;const direction={x:dx/length,y:dy/length};return {grip,direction,muzzle:{x:grip.x+direction.x*22,y:grip.y+direction.y*22}};
+ }
  predictShot(){
-  const p=this.player,net=this.weapon==='net';let dx=p.aimX-p.x,dy=p.aimY-p.y;if(dy>-18)dy=-85;
-  const m=Math.hypot(dx,dy)||1,s={x:p.x,y:p.y-25,vx:dx/m*(net?570:770),vy:dy/m*(net?570:770),r:net?20:8,life:net?1.85:1.6,bounces:0};
+  const launch=this.launchGeometry(),net=this.weapon==='net';
+  const s={x:launch.muzzle.x,y:launch.muzzle.y,vx:launch.direction.x*(net?570:770),vy:launch.direction.y*(net?570:770),r:net?20:8,life:net?1.85:1.6,bounces:0};
   const probe=Object.create(this);probe.events=[];probe.bounces=0;
   const points=[{x:s.x,y:s.y}],contacts=[];let target=null;
   for(let i=0;i<240&&s.life>0;i++){s.life-=DT;s.x+=s.vx*DT;s.y+=s.vy*DT;const before=s.bounces;probe.shotEdges(s);if(s.life<=0)break;probe.shotRail(s);
@@ -42,10 +45,8 @@ class Game {
  toggleMagnet(){if(this.state!=='playing'&&this.state!=='ready')return;this.magnetOn=!this.magnetOn;this.event('magnet',this.config.magnet.x,this.config.magnet.y,this.magnetOn?1:0);}
  selectWeapon(id){if(id==='pulse'||id==='net'){this.weapon=id;this.event('weapon',this.player.x,this.player.y,id==='pulse'?1:2);}}
  fire(){if(this.state==='ready')this.start();if(this.state!=='playing'||this.cooldown>0)return false;
-  let dx=this.player.aimX-this.player.x,dy=this.player.aimY-this.player.y;
-  if(dy>-18)dy=-85;
-  const m=Math.hypot(dx,dy)||1, vx=dx/m,vy=dy/m;
-  const net=this.weapon==='net';this.shots.push({id:++this.id,x:this.player.x,y:this.player.y-25,vx:vx*(net?570:770),vy:vy*(net?570:770),r:net?20:8,kind:this.weapon,life:net?1.85:1.6,bounces:0,trail:[],hit:false});this.cooldown=net?.53:.29;this.shotsFired++;this.event('fire',this.player.x,this.player.y,net?2:1);return true;
+  const launch=this.launchGeometry(),vx=launch.direction.x,vy=launch.direction.y;
+  const net=this.weapon==='net';this.shots.push({id:++this.id,x:launch.muzzle.x,y:launch.muzzle.y,vx:vx*(net?570:770),vy:vy*(net?570:770),r:net?20:8,kind:this.weapon,life:net?1.85:1.6,bounces:0,trail:[],hit:false});this.cooldown=net?.53:.29;this.shotsFired++;this.event('fire',launch.muzzle.x,launch.muzzle.y,net?2:1);return true;
  }
  update(elapsed){if(this.state!=='playing')return;let d=clamp(finite(elapsed),0,.066);this.accumulator=Math.min(.099,this.accumulator+d);let n=0;while(this.accumulator>=DT&&n<12){this.step(DT);this.accumulator-=DT;n++;}}
  step(dt){this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);this.player.invuln=Math.max(0,this.player.invuln-dt);this.shake=Math.max(0,this.shake-18*dt);this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)this.chain=0;

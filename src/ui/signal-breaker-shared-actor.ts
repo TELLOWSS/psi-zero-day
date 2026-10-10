@@ -1,4 +1,4 @@
-import {loadDirectionalActor,drawDirectionalBody,directionalSocket} from './survivors-directional-art';
+import {loadDirectionalActor,drawDirectionalBody,directionalSocket,directionalHandMasks} from './survivors-directional-art';
 import {actorTorsoPoint} from './survivors-rig-renderer';
 import {SpriteMotionTracker} from './survivors-sprite-motion';
 
@@ -19,17 +19,24 @@ export function createActor(characterId='player'){
  return {
   status:()=>({ready,failed,characterId:character.id}),
   fire(entity:object,time:number,angle:number){tracker.act(entity,time,'shot',angle);},
-  draw(ctx:CanvasRenderingContext2D,entity:object,x:number,y:number,time:number,hp:number,weapon?:string,aim?:{x:number;y:number}){
+  draw(ctx:CanvasRenderingContext2D,entity:object,x:number,y:number,time:number,hp:number,weapon?:string,launch?:{muzzle:{x:number;y:number};direction:{x:number;y:number}}){
    if(!ready)return false;
    const pose=tracker.sample(entity,x,y,time,hp);
    ctx.save();ctx.translate(x,y);const drawn=drawDirectionalBody(ctx,image,96,pose);ctx.restore();
-   if(drawn&&weapon&&aim){
+   if(drawn&&weapon&&launch){
     const wrist=directionalSocket(image,pose,96,'wrist');
     if(wrist){const point=actorTorsoPoint(wrist,{...pose,directional:true},96,true);
-     const wx=x+point.x,wy=y+point.y,angle=Math.atan2(aim.y-wy,aim.x-wx);
+     const wx=x+point.x,wy=y+point.y,angle=Math.atan2(launch.muzzle.y-wy,launch.muzzle.x-wx),length=Math.hypot(launch.muzzle.x-wx,launch.muzzle.y-wy);
      ctx.save();ctx.translate(wx,wy);ctx.rotate(angle);ctx.fillStyle='#274757';ctx.strokeStyle=weapon==='net'?'#9dffe1':'#ffe1a5';ctx.lineWidth=1;
-     ctx.beginPath();ctx.roundRect(-6,-5,28,10,3);ctx.fill();ctx.stroke();ctx.restore();
+     ctx.beginPath();ctx.roundRect(-6,-5,length+6,10,3);ctx.fill();ctx.stroke();ctx.restore();
      ctx.canvas.dataset.breakerWrist=JSON.stringify({x:wx,y:wy});
+     ctx.canvas.dataset.breakerMuzzle=JSON.stringify(launch.muzzle);
+     const masks=directionalHandMasks(image,pose,96);
+     if(masks.length){ctx.save();ctx.translate(x,y);ctx.beginPath();
+      for(const mask of masks){const corners=[[mask.x,mask.y],[mask.x+mask.width,mask.y],[mask.x+mask.width,mask.y+mask.height],[mask.x,mask.y+mask.height]];
+       corners.forEach(([px,py],i)=>{const q=actorTorsoPoint({x:px!,y:py!},{...pose,directional:true},96,true);if(i===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y);});ctx.closePath();}
+      ctx.clip();drawDirectionalBody(ctx,image,96,pose);ctx.restore();
+     }
     }
    }
    return drawn;
