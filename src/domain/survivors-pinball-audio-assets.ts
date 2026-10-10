@@ -5,3 +5,16 @@ export const PINBALL_PHASE1_ASSETS={
  motorStart:'harbor_crane_motor_start.mp3',motorMove:'harbor_crane_motor_loop.mp3',lock:'harbor_cargo_lock.mp3',entry:'harbor_multiball_entry_02.mp3',
 } as const;
 export type PinballPhase1Sample=keyof typeof PINBALL_PHASE1_ASSETS;
+
+export const PINBALL_PHASE2_ROOT='/assets/survivors/pinball/audio-phase2-v1/';
+export const PINBALL_PHASE2_ASSETS={
+ "left": "paddle_left_v02_03.mp3",
+ "right": "paddle_right_v02_03.mp3",
+ "rubber2": "hit_rubber_heavy_v02_02.mp3",
+ "motorStop": "harbor_crane_motor_stop_v02.mp3",
+ "impact": "harbor_cargo_impact_v02.mp3",
+ "debris": "harbor_cargo_debris_v02.mp3",
+ "finish": "harbor_success_finish_v02.mp3",
+ "payout": "pneumatic_payout_short_01.mp3"
+} as const;
+export type PinballPhase2Sample=keyof typeof PINBALL_PHASE2_ASSETS;

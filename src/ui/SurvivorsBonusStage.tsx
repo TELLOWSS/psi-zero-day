@@ -32,17 +32,17 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
   settingsWasOpen.current=settingsOpen;
  },[settingsOpen,settingsTab]);
  const pausedRef=useRef(false),assistRef=useRef(false),muted=useRef(audioMuted);muted.current=audioMuted;
- const audio=useRef<PinballAudio|null>(null);
+ const audio=useRef<PinballAudio|null>(null),payoutUntil=useRef(0);
  const [soundOff,setSoundOff]=useState(false),[audioReady,setAudioReady]=useState(false),[audioError,setAudioError]=useState(false),[music,setMusic]=useState<PinballMusic>('shift');
  const soundOffRef=useRef(false);soundOffRef.current=soundOff;
  useEffect(()=>{let disposed=false;const player=new PinballAudio();audio.current=player;void player.load().then(()=>{if(!disposed)setAudioReady(true);}).catch(()=>{if(!disposed)setAudioError(true);});return()=>{disposed=true;player.dispose();audio.current=null;};},[]);
- useEffect(()=>{if(audioMuted||soundOff)audio.current?.setActive(false);},[audioMuted,soundOff]);
+ useEffect(()=>{if(audioMuted||soundOff){payoutUntil.current=0;audio.current?.setActive(false);}},[audioMuted,soundOff]);
  const release=()=>{keys.current.clear();touches.current.left.clear();touches.current.right.clear();};
- const pause=(value:boolean)=>{pausedRef.current=value;setPaused(value);if(value)audio.current?.setActive(false);else void audio.current?.unlock();release();};
+ const pause=(value:boolean)=>{pausedRef.current=value;setPaused(value);if(value){payoutUntil.current=0;audio.current?.setActive(false);}else void audio.current?.unlock();release();};
  const toggleSettings=()=>{if(!settingsOpen&&engine.current.state.phase==='playing')pause(true);setSettingsTab('sound');setSettingsOpen(!settingsOpen);};
- const complete=()=>{if(paid.current)return;const e=engine.current,earned=e.finish();const ok=e.mode==='practice'||reward.current(earned);paid.current=ok;if(ok)setBest(savePinballBest({score:e.state.score,combo:e.state.bestCombo},e.mode,e.rule,e.site.id));setSaved(ok);};
+ const complete=()=>{if(paid.current)return;const e=engine.current,earned=e.finish();const ok=e.mode==='practice'||reward.current(earned);paid.current=ok;if(ok&&e.mode==='bonus'&&earned>0&&audioReady&&!muted.current&&!soundOffRef.current&&!document.hidden){payoutUntil.current=performance.now()+1200;audio.current?.setActive(true);audio.current?.play('payout');}if(ok)setBest(savePinballBest({score:e.state.score,combo:e.state.bestCombo},e.mode,e.rule,e.site.id));setSaved(ok);};
  const settle=()=>{pause(false);complete();refresh(v=>v+1);};
- const reset=(next:PinballMode)=>{audio.current?.setActive(false);release();pausedRef.current=false;setPaused(false);setSettingsOpen(false);paid.current=false;setSaved(null);engine.current=new SurvivorsPinballEngine(next,{rule:choice.rule,clears,table:choice.theme as PinballTableId,completedStages});setMode(next);setBest(readPinballBest(next,choice.rule,choice.theme));refresh(v=>v+1);};
+ const reset=(next:PinballMode)=>{payoutUntil.current=0;audio.current?.setActive(false);release();pausedRef.current=false;setPaused(false);setSettingsOpen(false);paid.current=false;setSaved(null);engine.current=new SurvivorsPinballEngine(next,{rule:choice.rule,clears,table:choice.theme as PinballTableId,completedStages});setMode(next);setBest(readPinballBest(next,choice.rule,choice.theme));refresh(v=>v+1);};
  const customize=()=>{if(engine.current.state.phase==='playing')pause(true);setSettingsTab('table');setSettingsOpen(true);};
  const changeChoice=(value:{theme:PinballTheme;rule:PinballRule})=>{if(engine.current.state.phase!=='ready')return;const next=availablePinballChoice(value,clears,completedStages);setChoice(next);setChoiceFailed(!savePinballChoice(next,clears,completedStages));engine.current=new SurvivorsPinballEngine(mode,{rule:next.rule,clears,table:next.theme as PinballTableId,completedStages});setBest(readPinballBest(mode,next.rule,next.theme));if(next.theme!==choice.theme){setLoaded(false);setAssetError(false);}};
  const enterFullscreen=async()=>{if(document.fullscreenElement===dialog.current)return;try{if(!dialog.current?.requestFullscreen)throw Error('unsupported');await dialog.current.requestFullscreen();setFullscreenFailed(false);}catch{setFullscreenFailed(true);}};
@@ -78,8 +78,8 @@ export function SurvivorsBonusStage({onReward,onClose,audioMuted=false,character
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const tick=(now:number)=>{const dt=Math.min(.05,(now-last)/1000);last=now;
    if(!document.hidden&&!pausedRef.current){const k=keys.current,t=touches.current;engine.current.update(dt,{left:k.has('KeyA')||k.has('ArrowLeft')||t.left.size>0,right:k.has('KeyD')||k.has('ArrowRight')||t.right.size>0,assist:assistRef.current});}
-   const s=engine.current.state;
-   audio.current?.setActive(audioReady&&!muted.current&&!soundOffRef.current&&!pausedRef.current&&!document.hidden&&(s.phase==='playing'||s.phase==='between'));
+   const s=engine.current.state;if(document.hidden||settingsWasOpen.current)payoutUntil.current=0;
+   audio.current?.setActive(audioReady&&!muted.current&&!soundOffRef.current&&!pausedRef.current&&!document.hidden&&!settingsWasOpen.current&&(s.phase==='playing'||s.phase==='between'||s.phase==='finished'&&now<payoutUntil.current));
    for(const event of engine.current.site?.drainEvents()??[])audio.current?.playSite(engine.current.site!.id,event.kind,event.x);
    for(const event of engine.current.drainSounds())audio.current?.play(event.kind,event.x);
    if(s.phase!=='playing')release();
