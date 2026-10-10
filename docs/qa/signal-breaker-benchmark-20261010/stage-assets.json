@@ -1,0 +1,132 @@
+[
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "stage": "CH-01",
+    "asset": "delivery",
+    "metadata": {
+      "width": 1024,
+      "height": 1536,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "stage": "CH-02",
+    "asset": "conveyor",
+    "metadata": {
+      "width": 1024,
+      "height": 1536,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "stage": "CH-03",
+    "asset": "extraction",
+    "metadata": {
+      "width": 1024,
+      "height": 1536,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "stage": "CH-04",
+    "asset": "hoist",
+    "metadata": {
+      "width": 1024,
+      "height": 1536,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "stage": "CH-05",
+    "asset": "power",
+    "metadata": {
+      "width": 1024,
+      "height": 1536,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "stage": "CH-01",
+    "asset": "delivery",
+    "metadata": {
+      "width": 1672,
+      "height": 941,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "stage": "CH-02",
+    "asset": "conveyor",
+    "metadata": {
+      "width": 1672,
+      "height": 941,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "stage": "CH-03",
+    "asset": "extraction",
+    "metadata": {
+      "width": 1672,
+      "height": 941,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "stage": "CH-04",
+    "asset": "hoist",
+    "metadata": {
+      "width": 1672,
+      "height": 941,
+      "state": "playing"
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "stage": "CH-05",
+    "asset": "power",
+    "metadata": {
+      "width": 1672,
+      "height": 941,
+      "state": "playing"
+    }
+  }
+]

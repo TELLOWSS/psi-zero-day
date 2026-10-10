@@ -28,7 +28,7 @@ elements.motionBtn.trigger('click');assert.equal(elements.motionBtn.textContent,
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),true);
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
-assert.ok(elements.overlayInner.children.length===7,'ready overlay has actor selector and action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
+assert.ok(elements.overlayInner.children.some(el=>el.id==='overlayPrimary'),'ready overlay has start action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
 assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
@@ -44,7 +44,7 @@ for(let i=0;i<120;i++){const callback=queue.shift();assert.ok(callback,'requestA
 assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.textContent.length,6);
 const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');
 for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
-for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.length===8);
+for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.length===10);
 const picker=elements.overlayInner.children[3].children[0];picker.value='kang_taesik';picker.trigger('change');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
 const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');

@@ -96,5 +96,22 @@
  'breaker.gate.window':'집진 게이트 개방',
  'breaker.gate.wait':'다음 개방까지',
  'breaker.reason.gatewait':'집진 게이트 대기 중 · 포획망으로 직접 회수하거나 개방을 기다리세요',
- 'breaker.shield.angle':'↗ 방호판'
+ 'breaker.shield.angle':'↗ 방호판',
+
+ 'breaker.session.begin':'각도를 맞춘 뒤 직접 발사하세요',
+ 'breaker.session.retry':'바로 재도전',
+ 'breaker.session.fullscreen':'전체화면 전환',
+ 'breaker.session.shots':'발사',
+ 'breaker.session.time':'작전 시간',
+ 'breaker.session.best':'이전 최고',
+ 'breaker.session.newbest':'최고 기록 경신',
+ 'breaker.session.overview':'전체 경로',
+ 'breaker.session.return':'현장 복귀',
+ 'breaker.lesson.angle':'패드 위아래로 각도 조절',
+ 'breaker.lesson.reflect':'방호판에 맞춰 반사하기',
+ 'breaker.lesson.capture':'분리된 신호를 포획하기',
+ 'breaker.lesson.done':'다음 반사 경로에 도전하세요',
+ 'breaker.mastery.chain':'연쇄',
+ 'breaker.mastery.reflect':'반사',
+ 'breaker.mastery.gear':'장비 연계',
 });})(typeof window!=='undefined'?window:globalThis);

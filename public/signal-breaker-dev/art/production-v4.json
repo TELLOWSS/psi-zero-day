@@ -1,0 +1,61 @@
+{
+  "version": 4,
+  "date": "2026-10-10",
+  "finalVisualLock": false,
+  "encoding": "WebP quality 94; native dimensions, no upscale",
+  "assets": [
+    {
+      "path": "map-delivery-v3.webp",
+      "nativeWidth": 1672,
+      "nativeHeight": 941,
+      "bytes": 426412,
+      "sha256": "f0bfcb01c3f7c73a857198346cb71ee9b1b9940f3e3c33091d94ceee924c45bc",
+      "status": "production-candidate"
+    },
+    {
+      "path": "world-conveyor-v4.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "bytes": 529118,
+      "sha256": "4ca1691d049dc9b913385e3e63ae073a269789470a520297c9e06953ef78d2e4",
+      "status": "production-candidate",
+      "platformTopFraction": 0.738
+    },
+    {
+      "path": "world-delivery-v4.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "bytes": 532978,
+      "sha256": "cb4c09b3434b84e14bbe5607c95fc83fea7e6af73a3ef20905a73a8ad9d155a7",
+      "status": "production-candidate",
+      "platformTopFraction": 0.684
+    },
+    {
+      "path": "world-extraction-v4.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "bytes": 494372,
+      "sha256": "2bb2947cfaeaee30fa839085963abf05b6dc93233465268cf5d715598086e575",
+      "status": "production-candidate",
+      "platformTopFraction": 0.695
+    },
+    {
+      "path": "world-hoist-v4.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "bytes": 504138,
+      "sha256": "8261149ff0b52518e627f07a36d989289bbebcb4c1832a5046a30fb463a8b710",
+      "status": "production-candidate",
+      "platformTopFraction": 0.684
+    },
+    {
+      "path": "world-power-v4.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "bytes": 473222,
+      "sha256": "cf8be643c0efc14edec821ae267b6e1ec402d4c11dea0dc51b197f6f524c56b3",
+      "status": "production-candidate",
+      "platformTopFraction": 0.707
+    }
+  ]
+}

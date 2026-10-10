@@ -13,7 +13,7 @@ const {chromium}=runtime('playwright');
   const manifest=await page.evaluate(async()=>await(await fetch('manifest.webmanifest')).json());assert.ok(manifest.icons.every(i=>i.type==='image/png'));
   const cdp=await context.newCDPSession(page);
   for(const [stage,asset]of [['CH-01','delivery'],['CH-02','conveyor'],['CH-03','extraction'],['CH-04','hoist'],['CH-05','power']]){
-   await page.evaluate(id=>SignalBreakerQA.selectStage(id),stage);await page.waitForFunction(name=>window.PSIPresentationAssets.image('art/map-'+name+'-v2.webp').naturalWidth===1672,asset);
+   await page.evaluate(id=>SignalBreakerQA.selectStage(id),stage);await page.waitForFunction(name=>window.PSIPresentationAssets.image((innerHeight>innerWidth?'art/world-'+name+'-v4.webp':'art/map-'+name+(name==='delivery'?'-v3.webp':'-v2.webp'))).complete&&window.PSIPresentationAssets.image(innerHeight>innerWidth?'art/world-'+name+'-v4.webp':'art/map-'+name+(name==='delivery'?'-v3.webp':'-v2.webp')).naturalWidth>0,asset);
    await page.locator('#overlayPrimary').click();await page.waitForTimeout(350);assert.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),0,'no automatic firing');
    if(stage==='CH-01'){
     const joy=await page.locator('#joystick').boundingBox(),x=joy.x+joy.width/2,y=joy.y+joy.height/2,before=await page.evaluate(()=>SignalBreakerQA.engine().player.x);
@@ -27,7 +27,7 @@ const {chromium}=runtime('playwright');
    }
    if(stage==='CH-03')await page.evaluate(()=>{SignalBreakerQA.engine().time=6;});
    await page.screenshot({path:path.join(output,`${stage}-${width}.jpg`),type:'jpeg',quality:82});
-   const metadata=await page.evaluate(name=>{const i=window.PSIPresentationAssets.image('art/map-'+name+'-v2.webp');return {width:i.naturalWidth,height:i.naturalHeight,state:SignalBreakerQA.snapshot().state};},asset);reports.push({viewport:{width,height},stage,asset,metadata});
+   const metadata=await page.evaluate(name=>{const i=window.PSIPresentationAssets.image((innerHeight>innerWidth?'art/world-'+name+'-v4.webp':'art/map-'+name+(name==='delivery'?'-v3.webp':'-v2.webp')));return {width:i.naturalWidth,height:i.naturalHeight,state:SignalBreakerQA.snapshot().state};},asset);reports.push({viewport:{width,height},stage,asset,metadata});
   }
   await page.waitForFunction(()=>window.PSIPresentationAssets.image('art/industrial-devices-v2.webp').naturalWidth===1536);assert.deepEqual(svg,[],'no active SVG images');assert.deepEqual(errors,[]);await context.close();
  }
