@@ -56,6 +56,10 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.waitForFunction(()=>SignalBreakerQA.snapshot().source.controlled);
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.verified),false);
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().support.barrierProgress),1);
+   if(width>height&&height<=500){
+    const scene=await page.evaluate(()=>{const p=SignalBreakerQA.snapshot().support,c=SignalBreakerQA.view().camera,b=document.getElementById('arena').getBoundingClientRect();const box=(x,y,w,h)=>({x:(x-c.x)*c.scale+b.x,y:(y-c.y)*c.scale+b.y,width:w*c.scale,height:h*c.scale});return [box(p.x-25,p.y-96,50,96),box(p.barrierX-65,p.barrierY-25,130,50)];});
+    for(const id of ['fireBtn','smartBtn','pulseBtn','netBtn']){const buttonBox=await page.locator('#'+id).boundingBox();a.ok(buttonBox&&buttonBox.x>=0&&buttonBox.y>=0&&buttonBox.x+buttonBox.width<=width+1&&buttonBox.y+buttonBox.height<=height+1,'landscape controls remain reachable');for(const object of scene)a.ok(buttonBox.x+buttonBox.width<=object.x||buttonBox.x>=object.x+object.width||buttonBox.y+buttonBox.height<=object.y||buttonBox.y>=object.y+object.height,'controls do not cover support or deployed barrier');}
+   }
    await page.screenshot({path:path.join(out,`controlled-${width}.png`)});
    await page.evaluate(clear);await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='intermission');
    await page.locator('[data-tuning]').first().waitFor({state:'visible'});
