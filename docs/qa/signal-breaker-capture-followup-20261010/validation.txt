@@ -1,0 +1,22 @@
+2026-10-10 · Capture follow-up validation
+
+npm test: PASS — 351 files passed, 1 skipped; 2037 tests passed, 1 skipped.
+node --test public/signal-breaker-dev/tests/*.cjs: PASS — 31 tests.
+npm run typecheck: PASS.
+npm run build --ignore-scripts: PASS (includes TypeScript checks). Existing chunk-size warning remains.
+git diff --check: PASS.
+
+verify-immersive.cjs: PASS — 6 Chromium viewports.
+390×844, 844×390, 768×1024, 1024×768, 1280×800, 1920×1080.
+Full viewport arena; no horizontal overflow; hold/release/cancel;
+simultaneous movement/aiming; pause/resume; assisted/manual equipment;
+portrait view toggle; rotation; utility/smart button separation;
+collapsed and expanded replay primary action hit target.
+
+Built home flow: PASS — 390×844, 844×390, 741×355, 1440×900.
+One Breaker entry; no duplicate mode navigation; Watch and Breaker first-screen
+visibility in short landscape; entry → ready → full viewport gameplay;
+no page errors.
+
+Evidence result screenshots use a QA win-state/route fixture for layout checks.
+Real Android/iPad interaction, FPS and production URL deployment: not verified.

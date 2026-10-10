@@ -410,8 +410,8 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon is-lightning">⚡</span>
           <span className="commercial-title-action-copy">
-            <strong className="commercial-title-survivors-title">
-              시그널 워치 (SURVIVORS)
+            <strong className="commercial-title-survivors-title" aria-label="시그널 워치 (SURVIVORS)">
+              시그널 워치 <span className="commercial-mode-genre">(SURVIVORS)</span>
               <span className="commercial-title-badge-new">LIVE</span>
             </strong>
             <small>사고 전 신호 포착 · 현장 위험 실시간 요격 · 3-Wave 시네마틱 서바이벌</small>

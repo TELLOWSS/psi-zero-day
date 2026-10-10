@@ -85,5 +85,9 @@
  'breaker.mobile.hold':'왼손 이동 · 오른손 누른 채 조준/발사 · 미니맵 터치로 먼 신호 조준',
  'breaker.smart.on':'장비 자동',
  'breaker.smart.off':'장비 수동',
+ 'breaker.view.close':'가까이 보기',
+ 'breaker.view.wide':'넓게 보기',
+ 'breaker.result.cleared':'위험 신호 해소 완료',
+ 'breaker.result.route_detail':'현장 위에서 발사 경로 확인',
  'breaker.shield.angle':'↗ 방호판'
 });})(typeof window!=='undefined'?window:globalThis);

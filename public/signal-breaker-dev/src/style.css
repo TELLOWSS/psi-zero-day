@@ -153,3 +153,14 @@ body.breaker-focus .canvas-wrap{max-width:none;margin:0;border:0}
 body.breaker-focus .toast{bottom:auto;height:auto;min-height:0}
 body.breaker-focus .overlay-inner .hub-return{display:inline-flex;margin:8px 12px 8px 0}
 @media(orientation:portrait){body.breaker-focus .app-header{align-items:flex-start}body.breaker-focus .app-header .statusbar{align-items:flex-start}body.breaker-focus .hud-top button{top:calc(env(safe-area-inset-top,0px) + 104px)}body.breaker-focus .shield-hud{display:flex;position:fixed;right:12px;top:calc(env(safe-area-inset-top,0px) + 159px);gap:6px}body.breaker-focus .heart{width:14px}body.breaker-focus .health{gap:3px}}
+/* Capture regression fixes: readable field, unobstructed actions and real map. */
+body.breaker-focus .overlay-inner>.primary-btn{position:static;bottom:auto;margin-top:14px;box-shadow:0 5px 16px #0004;min-height:48px}
+body.breaker-focus .overlay-inner{scroll-padding:16px;line-height:1.5}
+.replay-details{margin:12px 0;text-align:left;border:1px solid #8bb5b54d;border-radius:12px;padding:10px;font-size:12px}
+.replay-details summary{min-height:44px;cursor:pointer;display:flex;align-items:center}
+body.breaker-focus .route-replay{height:auto;aspect-ratio:11/5;margin-bottom:10px}
+body.breaker-focus .result-summary{font-size:12px!important;line-height:1.6}
+.view-btn{position:absolute;z-index:5;top:calc(env(safe-area-inset-top,0px) + 219px);left:18px;min-height:44px;padding:8px 12px;border:1px solid #a3d4c955;border-radius:12px;background:#102a3de0;color:#e7f7ee;font-size:11px;touch-action:manipulation}
+@media(orientation:landscape){.view-btn{display:none}body.breaker-focus .hud-bottom{bottom:12px;width:30%;left:40%;height:32px}.battle-radar{width:112px;top:68px}.battle-radar canvas{height:63px}body.breaker-focus .utility-controls{bottom:144px;right:14px}}
+@media(orientation:landscape) and (max-height:560px){body.breaker-focus .overlay-inner{width:min(740px,calc(100% - 24px));max-height:calc(100dvh - 20px);padding:16px 24px}body.breaker-focus .overlay-heading{font-size:23px;margin:4px 0}body.breaker-focus .overlay-inner p{font-size:12px;margin:6px 0 10px}body.breaker-focus .actor-picker{margin:6px 0}.actor-picker select{margin:4px auto}body.breaker-focus .preparation-details{margin:6px 0;padding:4px 10px}body.breaker-focus .mode-tabs{margin:6px 0}body.breaker-focus .overlay-inner>.primary-btn{margin-top:8px}body.breaker-focus .utility-controls{bottom:132px;right:14px}body.breaker-focus .hud-bottom{width:32%;left:40%}}
+.actor-picker select { font-family: inherit; }
