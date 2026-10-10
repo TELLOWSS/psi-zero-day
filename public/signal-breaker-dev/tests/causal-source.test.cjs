@@ -51,3 +51,10 @@ test('source rules are immutable and no event backlog appears after saturation',
  const result=C.advance(next,.25,1,1);a.equal(result.emit,true);a.equal(result.source.nextEmission,6);
  for(const dt of [-1,NaN,1])a.throws(()=>C.advance(s,dt,0,0));
 });
+
+test('later wave checkpoint restores without reviving the completed first-wave source',()=>{
+ const g=game();g.observeSource();g.controlSource('isolate');clear(g);step(g,2.1);g.chooseTuning(g.draft[0]);
+ clear(g);step(g,.1);a.equal(g.wave,2);a.equal(g.state,'intermission');a.equal(g.source,null);
+ const cp=g.checkpoint(),r=Game.restoreCheckpoint(structuredClone(cp));a.ok(r);a.equal(r.source,null);a.deepEqual(r.checkpoint(),cp);
+ r.chooseTuning(r.draft[0]);a.equal(r.wave,3);a.equal(r.source,null);
+});

@@ -20,6 +20,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    const page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
    await page.goto(url);await page.waitForFunction(()=>window.SignalBreakerQA?.snapshot().state==='playing');
+   a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),false);
    const button=page.locator('#sourceBtn');await button.waitFor({state:'visible'});
    const box=await button.boundingBox();a.ok(box&&box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1,'source command inside viewport');
@@ -46,12 +47,21 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.locator('[data-tuning]').first().waitFor({state:'visible'});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.verified),true);
    a.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'no horizontal overflow');
+   const record=page.locator('[data-psi-record=verified]');await record.waitFor({state:'visible'});
+   a.ok((await record.textContent()).includes('Proactive Safety Intelligence'));
+   const recordBox=await record.boundingBox();a.ok(recordBox&&recordBox.y>=0&&recordBox.y+recordBox.height<=height,'verified PSI record fits viewport');
+   await page.screenshot({path:path.join(out,`verified-${width}.png`)});
    const seed=await page.evaluate(()=>SignalBreakerQA.snapshot().seed);await page.reload();
-   await page.locator('#resumeRun').click();await page.locator('[data-tuning]').first().click();
+   await page.locator('#resumeRun').click();await record.waitFor({state:'visible'});await page.locator('[data-tuning]').first().click();
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),2);
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().seed),seed);
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source),null);
    await page.waitForFunction(()=>document.getElementById('sourceBtn').hidden);
+   await page.evaluate(clear);await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='intermission');
+   a.equal(await record.count(),0,'later wave has no first-wave verification claim');
+   await page.reload();await page.locator('#resumeRun').click();await page.locator('[data-tuning]').first().waitFor({state:'visible'});
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source),null);a.equal(await record.count(),0);
+   await page.locator('[data-tuning]').first().click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),3);
    a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'movement, projectile, source recurrence, observation, control, verification, checkpoint recovery'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
