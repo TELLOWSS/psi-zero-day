@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const {readFileSync,existsSync}=require('node:fs');
+const {join}=require('node:path');
+const root=join(__dirname,'..');
+const html=readFileSync(join(root,'index.html'),'utf8');
+const css=readFileSync(join(root,'src/style.css'),'utf8');
+const app=readFileSync(join(root,'src/app.js'),'utf8');
+const manifest=JSON.parse(readFileSync(join(root,'manifest.webmanifest'),'utf8'));
+for(const route of ['pointer:coarse','orientation:portrait','orientation:landscape','max-height:650px','min-width:1600px','prefers-reduced-motion'])assert.ok(css.includes(route),`no CSS: ${route}`);
+assert.ok(html.includes('orientation-hint'));assert.ok(html.includes('width="1100" height="620"'));
+assert.ok(css.includes('touch-action:none')&&css.includes('env(safe-area-inset-left)'));
+assert.ok(app.includes('window.matchMedia')&&app.includes('balanced'));
+assert.equal(manifest.scope,'./');assert.equal(manifest.orientation,'any');
+for(const f of ['responsive-platform-concept.webp','equipment-and-cores.webp','stage-boss-concept.webp'])assert.ok(existsSync(join(root,'art',f)),`missing sketch: ${f}`);
+const sw=readFileSync(join(root,'service-worker.js'),'utf8');assert.ok(sw.includes('v0.4.0'));
+console.log('PASS responsive contracts: phone / landscape / tablet / PC');
+console.log('PASS independent PWA manifest and local concept sketch files');

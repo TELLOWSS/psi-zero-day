@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "오늘도 무사히 — 시그널 브레이커",
+  "short_name": "SIGNAL BREAKER",
+  "description": "위험의 연쇄를 끊는 건설현장 물리 액션 게임 브라우저 프리뷰",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07121b",
+  "theme_color": "#07121b",
+  "orientation": "any",
+  "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
