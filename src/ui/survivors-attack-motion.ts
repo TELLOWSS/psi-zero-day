@@ -17,6 +17,8 @@ export function attackEnvelope(elapsed:number,kind:AttackMotion='shot'):number {
 export function projectileAttackMotion(kind:ProjectileKind):AttackMotion|undefined {
  if(kind==='radio'||kind==='satellite_wave')return 'shot';
  if(kind==='extinguisher'||kind==='cryo_blast'||kind==='grout_slug'||kind==='hydraulic_wave')return 'spray';
- if(kind==='shout_shockwave'||kind==='emp_pulse'||kind==='plasma_arc')return 'ultimate';
+ if(kind==='shout_shockwave')return 'ultimate';
+ // Backpack fields discharge automatically; do not play a hand-command/shout pose.
+ if(kind==='emp_pulse'||kind==='plasma_arc')return undefined;
  return undefined;
 }

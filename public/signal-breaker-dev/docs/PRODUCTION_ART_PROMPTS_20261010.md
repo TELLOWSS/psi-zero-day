@@ -1,5 +1,21 @@
 # SIGNAL BREAKER · production candidate prompts
 
+## First chapter additions — selected production candidates
+
+Built-in imagegen generation, then format-only WebP conversion with Pillow; no programmatic drawing or background removal. The following records preserve the generation requirements (normalized wording), not a byte-for-byte tool transcript. Unselected iterations and raw originals are outside public under artifacts/generated-art-source.
+
+### breaker-six-tools-final-v3.webp
+
+True alpha transparent background sprite atlas. Six isolated premium industrial hand tools in a precise 3-column × 2-row grid. Top row: pneumatic cyan air-pulse emitter; green folding net launcher; cyan horseshoe electromagnet tool. Bottom row: amber mist sprayer with canister; orange grapple/anchor launcher with cable spool; violet handheld relay scanner. Side-on horizontal rightward firing orientation, distinct physical silhouettes, engineered metal/rubber materials, warm highlights, luminous accents. Clear grip and muzzle, consistent light and scale, isolated objects with padding. No people, lettering, UI, floor or background; outside tools must be zero-alpha. Commercial game-quality detailed rendered sprites.
+
+Source: exec-b833d886-22df-43b1-bc45-e3e0d87a97e8.png. Actual output: 1536×1024 RGBA; runtime WebP 384,724 bytes. Alpha checked independently and in browser. Earlier opaque/edited candidates not used.
+
+### chapter-environments-v1.webp
+
+Premium painterly industrial arcade background atlas, four distinct side-view environments in a 2×2 grid: conveyor logistics delivery hall, dust-extraction duct workshop, crane rigging/tension bay, storm relay control yard. Detailed believable industrial landmarks, dramatic cinematic lighting, open low-contrast central projectile arena with no characters, enemies, devices, UI or text. Rich peripheral machinery, flat foreground service deck and clear floor seam. Distinct structural layouts rather than recolors. Requested floor seam approximately 86%; actual atlas floor seam measured around 78% and renderer crop aligned to simulation floor. Distant structures are static; moving functional devices are separate runtime layers.
+
+Source: exec-0d3e5d31-4a7e-4eb0-a938-b3e7800db019.png. Actual output: 2057×765 RGB; runtime WebP 405,882 bytes. One-pixel cell inset excludes atlas gutters.
+
 Built-in image_gen; originals preserved in C:/Users/user/.codex/generated_images/01a11d14-64ed-7052-a499-63110506a078/. No CLI/API fallback. Output dimensions are recorded in the implementation report, not inferred from requested dimensions.
 
 ## sb01-delivery-bay-v1.png

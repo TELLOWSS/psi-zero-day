@@ -1,0 +1,47 @@
+[
+  {
+    "path": "src/ui/survivors-sprite-motion.ts",
+    "sha256": "44dae20d3badd3a2ca7687ca5095fc38d26e57f44a5328151cb49dc6ad35aea6",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-foot-lock.ts",
+    "sha256": "702bff4a83cf0675609799928b92e0da5f3359f1cfbe422057e5e642951836c7",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-directional-art.ts",
+    "sha256": "d7308fec03738e81454999c7ee66c17fc8e6481b121bfaf2f573ec94503f81d6",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-authored-motion.ts",
+    "sha256": "bc3fd8f418820eb7750c149b55147bd52749e28477faf818c7ce1b0f58343cfb",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-contact-mesh.ts",
+    "sha256": "d033f8a5652170c513889891594e1c0d8b267733476e3a1c0c48b8bb38de8d03",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-contact-art.ts",
+    "sha256": "c5f9189330345a5af2af858744c6f63b1e5afc438ff7fd04fb5010830c021518",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-authored-joints.ts",
+    "sha256": "df749c0ed38f2706520606cbc65bd3e326cc8e957c2b0da91f889e2e4efddaf8",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-attack-motion.ts",
+    "sha256": "43909fa2effe02d234f16b31119da0e6f93f1a4a0294a7643027f0867d1f5dbc",
+    "source": "latest-local-WATCH"
+  },
+  {
+    "path": "src/ui/survivors-worn-equipment-plan.ts",
+    "sha256": "1b3374b2556757bf36ef665e94e3405b4c599d5665aa54f89e5d9418f1805671",
+    "source": "latest calibration table only"
+  }
+]
