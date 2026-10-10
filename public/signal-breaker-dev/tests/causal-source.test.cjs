@@ -73,3 +73,19 @@ test('execution completion cannot credit its whole simulation step as verified t
  const pending=C.advance(s,.25,0,0);a.deepEqual(s,original);a.equal(pending.source.controlled,false);a.equal(pending.source.stableFor,0);
  s={...s,controlRemaining:.1};const result=C.advance(s,.25,0,0);a.equal(result.source.controlled,true);a.ok(Math.abs(result.source.stableFor-.15)<1e-8);a.equal(result.emit,false);
 });
+
+test('support walks to the control point before deploying the barrier',()=>{
+ const g=game();a.equal(g.supportPose(),null);g.observeSource();a.equal(g.supportPose(),null);g.controlSource('isolate');
+ const initial=g.supportPose();a.equal(initial.phase,'moving');a.equal(initial.barrierProgress,0);step(g,1);
+ const moving=g.supportPose();a.ok(moving.x>initial.x);a.equal(moving.barrierProgress,0);
+ step(g,1.5);const installing=g.supportPose();a.equal(installing.phase,'installing');a.ok(installing.barrierProgress>0&&installing.barrierProgress<1);
+ g.pause();const frozen=g.supportPose();g.update(90);a.deepEqual(g.supportPose(),frozen);g.pause();step(g,.6);
+ const holding=g.supportPose();a.equal(holding.phase,'holding');a.equal(holding.barrierProgress,1);a.equal(holding.y,594);
+});
+test('completed control support persists through later waves and checkpoint recovery',()=>{
+ const g=game();g.observeSource();g.controlSource('isolate');clear(g);step(g,5.1);const settled=g.supportPose();
+ g.chooseTuning(g.draft[0]);a.equal(g.source,null);a.deepEqual(g.supportPose(),settled);
+ clear(g);step(g,.1);const r=Game.restoreCheckpoint(g.checkpoint());a.ok(r);a.deepEqual(r.supportPose(),settled);
+ r.chooseTuning(r.draft[0]);a.deepEqual(r.supportPose(),settled);
+ for(const [id,options] of [['CH-01',{lab:true,causal:true}],['CH-02',{causal:true}],['CH-01',{}]]){const unrelated=new Game(id,31,options);unrelated.wave=2;a.equal(unrelated.supportPose(),null);}
+});
