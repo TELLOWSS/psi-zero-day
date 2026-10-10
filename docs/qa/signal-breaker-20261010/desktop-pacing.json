@@ -1,0 +1,26 @@
+{
+  "browser": "154.0.8037.98",
+  "viewport": "1366x768",
+  "profile": "high",
+  "scope": "headless desktop RAF pacing, not GPU time or physical mobile validation",
+  "frames": 179,
+  "medianMs": 16.699999999999818,
+  "p95Ms": 16.799999999999727,
+  "maxMs": 50,
+  "state": {
+    "stage": "SB-01",
+    "state": "playing",
+    "score": 0,
+    "cleared": 0,
+    "total": 6,
+    "chain": 0,
+    "bestChain": 0,
+    "shotsFired": 0,
+    "shotsHit": 0,
+    "captureUnits": 0,
+    "life": 5,
+    "weapon": "pulse",
+    "bossPhase": null,
+    "activeCores": 2
+  }
+}

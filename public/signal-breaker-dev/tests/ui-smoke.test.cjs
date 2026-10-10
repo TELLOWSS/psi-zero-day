@@ -18,6 +18,7 @@ global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,se
 global.window={SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/localization-ko.js'),'utf8'),{filename:'src/localization-ko.js'});
 vm.runInThisContext(src,{filename:'src/app.js'});
 // Visual settings and focus screen must be operable without rerunning the game.
 elements.qualityBtn.trigger('click');assert.equal(elements.qualityBtn.textContent,'GRAPHICS · BALANCED');
@@ -27,6 +28,16 @@ elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.ha
 elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.has('breaker-focus'),false);
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,4);
 assert.ok(elements.overlayInner.children.length===4,'ready overlay has action');const startButton=elements.overlayInner.children[3];startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
+const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
+const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
+elements.arena.trigger('pointerdown',touch(10));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount,'drag start does not fire');
+elements.arena.trigger('pointerdown',touch(11,900,350));
+assert.equal(window.SignalBreakerQA.engine().player.aimX,500,'second touch cannot steal aim');
+elements.arena.trigger('pointercancel',touch(10));elements.arena.trigger('pointerup',touch(10));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount,'cancel cannot fire');
+elements.arena.trigger('pointerdown',touch(12));elements.arena.trigger('pointermove',touch(12,550,210));elements.arena.trigger('pointerup',touch(12));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotCount+1,'release fires exactly once');
 for(let i=0;i<120;i++){const callback=queue.shift();assert.ok(callback,'requestAnimationFrame was scheduled');currentNow+=1000/60;callback(currentNow);}
 assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.textContent.length,6);
 const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');

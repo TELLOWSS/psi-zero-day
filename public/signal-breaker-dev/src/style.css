@@ -72,3 +72,9 @@ body{overscroll-behavior-y:contain}
 @media (prefers-reduced-motion:reduce){
  .progress-fill,.tiny-track i,.toast{transition:none!important}
 }
+.chain-guide{padding:9px 14px;background:#14363b;color:#d4fff0;font-size:12px;line-height:1.5;border-top:1px solid #5fb69b55}.toast{top:auto;bottom:8px;font-size:11px;max-width:95%;white-space:normal;text-align:center;padding:6px 12px}
+@media(max-height:500px) and (orientation:landscape){.chain-guide{padding:3px 10px;font-size:10px}.toast{bottom:4px}}
+
+body.breaker-focus .orientation-hint{display:none}body.breaker-focus .game-card{width:min(100%,calc((100dvh - 250px)*1100/620));max-width:100%}
+@media(orientation:landscape) and (max-height:600px){body.breaker-focus .game-card{width:min(100%,calc((100dvh - 150px)*1100/620))}body.breaker-focus .chain-guide{padding:3px 10px;font-size:10px}body.breaker-focus .hud-top{height:31px}body.breaker-focus .hud-bottom{height:25px}body.breaker-focus .touch-controls button{min-height:44px}}
+@media(orientation:portrait){body.breaker-focus .game-card{width:100%}}

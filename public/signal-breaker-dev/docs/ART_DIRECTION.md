@@ -1,5 +1,9 @@
 # Original concept sketch ledger · SIGNAL BREAKER
 
+## 0.5 런타임 원화 후보
+
+SB-01 배경, 4재질 코어 아틀라스, 플레이어 정지 원화를 실제 렌더에 연결했다. [구현 검토서](IMPLEMENTATION_REVIEW_20261010.md)와 [생성 프롬프트](PRODUCTION_ART_PROMPTS_20261010.md)를 참조한다. 아래의 3개 스케치 시트와 구분하며 보행/장비 장착/보스 애니메이션 리그 완료로 계산하지 않는다.
+
 The three images below are preliminary concept sheets, **not** final in-game sprites, UI elements, animation rigs, or licensed photography. They use an original industrial-scifi safety identity with graphite/engineering-drawing texture, orange impact accents and cyan field feedback. All in-game Korean text must be re-authored as real UI text, not baked into generated imagery.
 
 ## A. Responsive display architecture

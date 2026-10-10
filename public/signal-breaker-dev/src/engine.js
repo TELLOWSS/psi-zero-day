@@ -19,7 +19,20 @@ class Game {
  constructor(stageId='SB-01',seed=20261010){this.config=STAGES.find(x=>x.id===stageId)||STAGES[0];this.seed=seed;this.random=createRng(seed);this.id=0;this.reset();}
  reset(){const c=this.config;this.time=0;this.accumulator=0;this.state='ready';this.player={x:290,y:563,life:5,invuln:0,aimX:625,aimY:245};this.weapon='pulse';this.shots=[];this.cores=[];this.particles=[];this.floaters=[];this.events=[];this.effects=[];this.score=0;this.cleared=0;this.maxUnits=c.cores.reduce((a,v)=>a+mass(v.tier),0);this.chain=0;this.bestChain=0;this.comboTime=0;this.shotsFired=0;this.shotsHit=0;this.captureUnits=0;this.bounces=0;this.shieldAngle=0;this.magnetOn=true;this.cooldown=0;this.shake=0;this.story=c.summary;this.boss=c.boss?{phase:'sealed',nodes:[{x:686,y:154,hit:false},{x:882,y:162,hit:false},{x:787,y:296,hit:false}],x:785,y:199,exposure:0}:null;this.rail=c.rail.map(x=>({...x}));for(const spec of c.cores)this.addCore({...spec});}
  addCore(spec){if(this.cores.length>=36)return false;const r=spec.tier===2?31:spec.tier===1?23:14;this.cores.push({id:++this.id,x:spec.x,y:spec.y,vx:spec.vx,vy:spec.vy,r,tier:spec.tier,kind:spec.kind,age:0,glow:0,stable:spec.stable||false});return true;}
- event(kind,x=W/2,y=H/2,n=0){this.events.push({kind,x,y,n,t:this.time});if(this.events.length>70)this.events.shift();}
+ event(kind,x=W/2,y=H/2,n=0,material=null){this.events.push({kind,x,y,n,material,t:this.time});if(this.events.length>70)this.events.shift();}
+ // Read-only preview uses the same projectile edge/rail collision rules as play.
+ predictShot(){
+  const p=this.player,net=this.weapon==='net';let dx=p.aimX-p.x,dy=p.aimY-p.y;if(dy>-18)dy=-85;
+  const m=Math.hypot(dx,dy)||1,s={x:p.x,y:p.y-25,vx:dx/m*(net?570:770),vy:dy/m*(net?570:770),r:net?20:8,life:net?1.85:1.6,bounces:0};
+  const probe=Object.create(this);probe.events=[];probe.bounces=0;
+  const points=[{x:s.x,y:s.y}],contacts=[];let target=null;
+  for(let i=0;i<240&&s.life>0;i++){s.life-=DT;s.x+=s.vx*DT;s.y+=s.vy*DT;const before=s.bounces;probe.shotEdges(s);if(s.life<=0)break;probe.shotRail(s);
+   if(s.bounces!==before)contacts.push({x:s.x,y:s.y});if(i%4===0||s.bounces!==before)points.push({x:s.x,y:s.y});
+   const core=this.cores.find(c=>Math.hypot(s.x-c.x,s.y-c.y)<s.r+c.r);
+   if(core){target={x:core.x,y:core.y,r:core.r,kind:core.kind,tier:core.tier};points.push({x:s.x,y:s.y});break;}
+  }
+  return {points,contacts,target,captureRadius:net?102:0};
+ }
  drainEvents(){return this.events.splice(0);}
  start(){if(this.state==='ready'){this.state='playing';this.event('start');}return this.state==='playing';}
  pause(){if(this.state==='playing')this.state='paused';else if(this.state==='paused')this.state='playing';return this.state;}
@@ -52,13 +65,13 @@ class Game {
  shotBoss(s){const b=this.boss;if(!b||s.life<=0)return;for(const n of b.nodes){if(n.hit||Math.hypot(s.x-n.x,s.y-n.y)>s.r+23)continue;if(s.kind==='net'){this.event('denied',n.x,n.y);s.life=-1;return;}n.hit=true;s.life=-1;this.shotsHit++;this.score+=380;this.event('node',n.x,n.y);this.emitParticles(n.x,n.y,'#93faff',18);if(b.nodes.every(x=>x.hit)){b.phase='exposed';this.event('unseal',b.x,b.y);this.floaters.push({x:b.x,y:b.y-65,label:'방호 해제!',life:1.4,color:'#d4ffe7'});}return;}
   if(b.phase!=='resolved'&&Math.hypot(s.x-b.x,s.y-b.y)<s.r+48){s.life=-1;if(b.phase==='sealed'){this.event('denied',s.x,s.y);this.emitParticles(s.x,s.y,'#7fbcf0',6);}else {b.phase='resolved';this.score+=2200;this.shake=7;this.event('boss',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',65);this.floaters.push({x:b.x,y:b.y-70,label:'ZERO CHAIN!',life:1.7,color:'#fff2aa'});}}
  }
- pulse(core,shot){const at={x:core.x,y:core.y};core.glow=.2;this.shake=Math.max(this.shake,3);this.chainAction(65+shot.bounces*35,core.x,core.y);this.emitParticles(core.x,core.y,KINDS[core.kind].color,12);this.event('impact',core.x,core.y,shot.bounces);this.cores=this.cores.filter(x=>x.id!==core.id);
-  if(core.tier>0){const speed=core.tier===2?166:205;let v=Math.atan2(shot.vy,shot.vx)+Math.PI/2;let ok1=this.addCore({x:clamp(at.x-12,30,W-30),y:at.y-8,tier:core.tier-1,kind:core.kind,stable:core.stable,vx:Math.cos(v)*speed-35,vy:Math.sin(v)*speed-90});let ok2=this.addCore({x:clamp(at.x+12,30,W-30),y:at.y-8,tier:core.tier-1,kind:core.kind,stable:core.stable,vx:-Math.cos(v)*speed+35,vy:-Math.sin(v)*speed-90});if(!ok1||!ok2){this.cleared+=(!ok1?mass(core.tier-1):0)+(!ok2?mass(core.tier-1):0);}this.event('split',at.x,at.y,core.tier);
+ pulse(core,shot){const at={x:core.x,y:core.y};core.glow=.2;this.shake=Math.max(this.shake,3);this.chainAction(65+shot.bounces*35,core.x,core.y);this.emitParticles(core.x,core.y,KINDS[core.kind].color,12);this.event('impact',core.x,core.y,shot.bounces,core.kind);this.cores=this.cores.filter(x=>x.id!==core.id);
+  if(core.tier>0){const speed=core.tier===2?166:205;let v=Math.atan2(shot.vy,shot.vx)+Math.PI/2;let ok1=this.addCore({x:clamp(at.x-12,30,W-30),y:at.y-8,tier:core.tier-1,kind:core.kind,stable:core.stable,vx:Math.cos(v)*speed-35,vy:Math.sin(v)*speed-90});let ok2=this.addCore({x:clamp(at.x+12,30,W-30),y:at.y-8,tier:core.tier-1,kind:core.kind,stable:core.stable,vx:-Math.cos(v)*speed+35,vy:-Math.sin(v)*speed-90});if(!ok1||!ok2){this.cleared+=(!ok1?mass(core.tier-1):0)+(!ok2?mass(core.tier-1):0);}this.event('split',at.x,at.y,core.tier,core.kind);
   }else{this.cleared++;this.event('resolved',at.x,at.y);this.score+=95;}
  }
  netBurst(target){const x=target.x,y=target.y;this.effects.push({x,y,life:.48});this.event('netfield',x,y);const captured=[...this.cores].filter(c=>Math.hypot(c.x-x,c.y-y)<=102+c.r);for(const core of captured)this.capture(core,true);}
  capture(core,byNet=false){const amount=mass(core.tier);if(byNet&&core.tier===2&&!core.stable){core.stable=true;core.vx*=.48;core.vy*=.48;core.glow=.8;this.event('stabilize',core.x,core.y);this.floaters.push({x:core.x,y:core.y-34,label:'안정화',life:.7,color:'#aefbdc'});return;}
-  this.cores=this.cores.filter(x=>x.id!==core.id);this.cleared+=amount;this.captureUnits+=amount;this.chainAction((core.kind==='dust'?300:200)*amount,core.x,core.y);this.emitParticles(core.x,core.y,core.kind==='dust'?'#ffd899':'#96ffe1',15+Math.min(12,amount*3));this.event('capture',core.x,core.y,amount);
+  this.cores=this.cores.filter(x=>x.id!==core.id);this.cleared+=amount;this.captureUnits+=amount;this.chainAction((core.kind==='dust'?300:200)*amount,core.x,core.y);this.emitParticles(core.x,core.y,core.kind==='dust'?'#ffd899':'#96ffe1',15+Math.min(12,amount*3));this.event('capture',core.x,core.y,amount,core.kind);
  }
  chainAction(base,x,y){this.chain++;this.bestChain=Math.max(this.chain,this.bestChain);this.comboTime=2.5;const pts=Math.round(base*(1+Math.min(this.chain-1,9)*.13));this.score+=pts;this.floaters.push({x,y:y-20,label:'+'+pts+(this.chain>=3?'  ×'+this.chain:''),life:.78,color:this.chain>=3?'#fff09e':'#b2f6ff'});if(this.chain%5===0)this.event('chain',x,y,this.chain);}
  emitParticles(x,y,color,count){for(let i=0;i<count&&this.particles.length<115;i++){const a=this.random()*Math.PI*2,s=40+this.random()*200;this.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.18+this.random()*.5,max:.68,color,size:1.4+this.random()*4});}}
