@@ -1,0 +1,5 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> psi-zero-day@0.1.0 typecheck
+> tsc --noEmit && tsc --project tsconfig.engine.json
+

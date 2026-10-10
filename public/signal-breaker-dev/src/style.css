@@ -244,3 +244,35 @@ body.linked-controls #fireBtn b{font-size:15px}
 body.linked-controls #fireBtn span{font-size:10px}
 body.linked-controls #fireBtn:active{box-shadow:0 0 0 8px #98ead71c,0 0 28px #98ead740;transform:scale(.97)}
 .hud-block:has(#collected) strong>small,#total{display:none}
+
+/* Three clear input zones; artwork is an open aperture rather than an opaque panel. */
+body.twin-controls .touch-controls button,body.twin-controls #aimPad{touch-action:none;pointer-events:auto;user-select:none}
+body.twin-controls #joystick,body.twin-controls #aimPad{display:grid;place-items:center;position:relative;width:104px;height:104px;border:0;border-radius:50%;background:transparent url('../art/control-gimbal-v1.webp') center/contain no-repeat;box-shadow:none}
+body.twin-controls #joystick span{width:34px;height:34px;border:1px solid #a5e5d963;background:#a9e9d31a;box-shadow:0 0 12px #8debd522}
+body.twin-controls .move-controls{left:14px;bottom:18px}body.twin-controls .move-controls::after{content:'이동';position:absolute;top:-14px;left:36px;color:#d6eee4;font-size:10px}
+body.twin-controls #aimPad{position:absolute;right:14px;bottom:18px;pointer-events:auto}
+.aim-pad-marker{width:12px;height:12px;border:1px solid #dbfff6;border-radius:50%;background:#8aedd946;box-shadow:0 0 12px #8aedd955;pointer-events:none}
+#aimPad small{position:absolute;top:-15px;font-size:10px;color:#d6eee4;pointer-events:none}
+body:not(.twin-controls) #aimPad{display:none}
+body.twin-controls .fire-controls{left:50%;right:auto;bottom:108px;transform:translateX(-50%);display:flex;gap:8px;width:auto}
+body.twin-controls .fire-controls .weapon-btn{width:42px;height:42px;min-height:42px;padding:3px;background:#071c2526;border:1px solid #a5e5d92b;border-radius:12px;font-size:8px;backdrop-filter:none}
+body.twin-controls .fire-controls .weapon-btn.selected{background:#8fe6ce13;border-color:#a5e5d968}
+body.twin-controls #fireBtn{position:fixed;left:calc(50% - 34px);bottom:28px;width:68px;height:68px;min-height:68px;border:0;background:transparent url('../art/control-gimbal-v1.webp') center/contain no-repeat;box-shadow:none;color:#ffe8a6;border-radius:50%;transform:none}
+body.twin-controls #fireBtn b{font-size:13px;letter-spacing:1px}body.twin-controls #fireBtn span{font-size:10px}
+body.twin-controls #fireBtn:active{filter:brightness(1.35);box-shadow:0 0 28px #ffdc8150;background-color:#ffda811a}
+body.twin-controls .utility-controls{left:50%;right:auto;bottom:160px;transform:translateX(-50%);display:flex;gap:6px}
+body.twin-controls .utility-controls .util-btn{width:44px;height:34px;min-height:34px;padding:3px;border-radius:9px;border-color:#96d8d42a;background:#09202920;font-size:8px;backdrop-filter:none}
+body.twin-controls #hudBottom{left:50%;bottom:auto;top:48px;transform:translateX(-50%);width:110px;pointer-events:none}
+.game-exit{position:fixed;z-index:15;right:66px;top:14px;display:grid;place-items:center;min-width:52px;min-height:44px;color:#c9e8e0;text-decoration:none;font-size:11px;border-radius:22px;background:#08263335;border:1px solid #91d5ca2b}
+body.overview-open #aimPad{visibility:hidden}
+@media(orientation:landscape){body.twin-controls #joystick,body.twin-controls #aimPad{width:88px;height:88px}body.twin-controls .fire-controls{bottom:20px;left:calc(50% + 90px)}body.twin-controls .utility-controls{bottom:20px;left:calc(50% - 110px)}body.twin-controls #fireBtn{bottom:24px;width:62px;height:62px;min-height:62px;left:calc(50% - 31px)}body.twin-controls #hudBottom{top:18px}}
+.brand-loading[hidden]{display:none!important}
+.brand-loading{position:fixed;inset:0;z-index:1000;background:#061521;isolation:isolate;display:flex;align-items:flex-end;padding:clamp(26px,6vw,80px);overflow:hidden;color:#effff8}
+.brand-loading>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-3}
+.brand-loading::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#03151df5,transparent 75%)}
+.loading-brand{max-width:520px}.loading-brand>small{font-size:11px;letter-spacing:.2em;color:#bce9dd}.loading-brand h1{font-size:clamp(42px,7vw,82px);letter-spacing:-2px;line-height:.95;margin:18px 0}.loading-brand h1 em{font-style:normal;color:#ffe0a0}.loading-brand p{font-size:14px;color:#c7eadd}.loading-brand progress{display:block;width:min(65vw,320px);height:3px;border:0;margin:24px 0 12px;accent-color:#9bebdb}.loading-brand>span{font-size:11px;color:#a8cac8}.loading-exit{position:absolute;right:22px;top:18px;min-height:44px;padding:12px;color:#c7eadd;text-decoration:none;font-size:12px}.loading-light{position:absolute;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(ellipse at 48% 45%,#8cefd828,transparent 45%)}
+@media(prefers-reduced-motion:no-preference){.brand-loading>img{animation:brand-depth 5s ease-out both}.loading-light{animation:brand-pulse 1.7s ease-in-out infinite}@keyframes brand-depth{from{transform:scale(1.035)}to{transform:scale(1)}}@keyframes brand-pulse{50%{opacity:.3;transform:scale(1.08)}}}
+@media(orientation:landscape) and (max-height:500px){.brand-loading{padding:24px 38px}.loading-brand h1{font-size:42px}.loading-brand progress{margin:14px 0 8px}.loading-brand p{margin:10px 0}}
+body:not(.twin-controls) #fireBtn{position:absolute;right:16px;bottom:18px}
+#aimPad #aimAngle{top:-34px;font-size:12px}
+.loading-brand progress::-webkit-progress-bar{background:#9bebdb25;border-radius:2px}.loading-brand progress::-webkit-progress-value{background:#9bebdb;border-radius:2px}.loading-brand progress::-moz-progress-bar{background:#9bebdb}

@@ -1,4 +1,3 @@
-import { PATROL_STAGE_IDS } from '../domain/patrol-survivors';
 import './shooting-entry.css';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
@@ -30,9 +29,6 @@ import {
 import { zeroBreachContent } from '../content/defense';
 import { defenseEvents } from '../content/defense-events';
 import { browserLocalStoragePort } from '../platform/browser-storage';
-import {
-  readFgPoints, readSurvivorsCredits, readUnlockedPatrolStages, subscribeUnifiedMeta,
-} from '../app/unified-meta-bridge';
 
 type HubPage = 'home' | 'site' | 'map' | 'people' | 'journal' | 'guide';
 const tabs: readonly HubPage[] = ['home', 'map', 'people', 'journal', 'guide'];
@@ -342,22 +338,6 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
     window.localStorage.setItem('psi.title.castQuotes', castQuotesEnabled ? 'on' : 'off');
   }, [castQuotesEnabled]);
 
-  const [unifiedMeta, setUnifiedMeta] = useState(() => ({
-    fgPoints: readFgPoints(),
-    unlockedStages: readUnlockedPatrolStages(),
-    credits: readSurvivorsCredits(),
-  }));
-
-  useEffect(() => {
-    return subscribeUnifiedMeta(() => {
-      setUnifiedMeta({
-        fgPoints: readFgPoints(),
-        unlockedStages: readUnlockedPatrolStages(),
-        credits: readSurvivorsCredits(),
-      });
-    });
-  }, []);
-
   if (page === 'home') return <main className="commercial-title-home" data-title-layout="MODE_SELECT_V11">
     {showSongPlayer && <WorkStopSongPlayer onClose={() => setShowSongPlayer(false)} />}
     {showManual && <GameManual onClose={() => setShowManual(false)} />}
@@ -449,7 +429,11 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           <b>›</b>
         </button>
       </div>
-      <div className="commercial-triad-dashboard" aria-label="누적 성장"><div><span>해금 구역</span><strong>{unifiedMeta.unlockedStages.length} / {PATROL_STAGE_IDS.length}</strong></div><div><span>현장 연구</span><strong>{unifiedMeta.fgPoints} FG</strong></div></div>
+      <section className="commercial-triad-dashboard chapter-record-home" aria-label="챕터별 현장 기록">
+        <header><span>EPISODE 01 / FIELD ARCHIVE</span><h2>챕터 01 · 당신이 바꾼 현장</h2><button type="button" onClick={() => setPage('journal')}>전체 기록 ↗</button></header>
+        <div className="chapter-record-path">{journey.map((step,index)=><button key={step.id} type="button" data-status={step.status} aria-pressed={detail.id===step.id} onClick={()=>setSelectedStep(step.id)}><VisualImage uri={characterPortraitUri(step.character,resolve)} alt=""/><span><small>{String(index+1).padStart(2,'0')} · {t(`ui.hub.step.${step.status}`)}</small><strong>{t(step.title)}</strong></span></button>)}</div>
+        <div className="chapter-record-detail" aria-live="polite"><VisualImage uri={characterHighResPortraitUri(detail.character,resolve)} fallbackUri={characterPortraitUri(detail.character,resolve)} alt=""/><div><small>{t(`ui.hub.step.${detail.status}`)}</small><h3>{t(detail.title)}</h3><p>{t(detail.hint)}</p>{review.some(entry=>entry.event_id===detail.completion)?<EpisodeRecord entries={review.filter(entry=>entry.event_id===detail.completion)} t={t}/>:<p className="chapter-record-empty">아직 이 장면의 선택 기록이 없습니다.</p>}<button type="button" onClick={()=>setPage('map')}>진행 경로 상세 ↗</button></div></div>
+      </section>
     </section>
 
     {onDefense ? <button

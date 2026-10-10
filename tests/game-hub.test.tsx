@@ -23,6 +23,11 @@ describe('game hub navigation', () => {
       expect(host.querySelector('.commercial-mode-navigation')).toBeNull();
       expect(host.querySelectorAll('a[href="/signal-breaker-dev/index.html?entry=play"]')).toHaveLength(1);
       const summary = host.querySelector('.commercial-triad-dashboard')!;
+      expect(summary.textContent).not.toContain('해금 구역');
+      expect(host.querySelectorAll('.chapter-record-path button')).toHaveLength(5);
+      act(() => host.querySelectorAll<HTMLButtonElement>('.chapter-record-path button')[4]!.click());
+      expect(host.querySelector('.chapter-record-detail')?.textContent).toContain('아직 이 장면의 선택 기록이 없습니다.');
+      expect(host.querySelectorAll('.chapter-record-path button')[4]?.getAttribute('aria-pressed')).toBe('true');
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);
       expect(host.querySelector('.commercial-title-worker[data-character="player"] img')?.getAttribute('src')).toContain('characters/player-map.webp');
