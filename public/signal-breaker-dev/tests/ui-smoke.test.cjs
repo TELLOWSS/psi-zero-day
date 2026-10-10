@@ -16,6 +16,7 @@ const proxyContext=new Proxy({createRadialGradient:()=>({addColorStop(){}}),crea
 const elements={};const document={querySelectorAll:()=>[],hidden:false,body:new Element('body'),getElementById(id){return elements[id]??(elements[id]=new Element(id==='arena'?'canvas':'div'));},createElement:t=>new Element(t),addEventListener(n,fn){(documentListeners[n]??=[]).push(fn)}};
 for(const id of ids)document.getElementById(id);
 global.document=document;global.localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};global.performance={now:()=>currentNow};global.requestAnimationFrame=fn=>queue.push(fn);
+global.location={search:'?entry=prepare'};
 global.window={SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});

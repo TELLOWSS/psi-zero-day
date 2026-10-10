@@ -219,3 +219,28 @@ body.overview-open .view-btn{z-index:9}
 .mastery-goals{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
 .mastery-goals span{font-size:11px;padding:6px 8px;border:1px solid #496269;color:#91a8af;border-radius:5px}
 .mastery-goals .achieved{color:#b8f5d5;border-color:#65bb9d;background:#174237}
+
+/* Flow restored: the field stays visible; results are a score moment, not a report. */
+#overlay:has(#overlayInner[data-state="won"]),#overlay:has(#overlayInner[data-state="lost"]){background:linear-gradient(0deg,#03131dc9,transparent 75%);backdrop-filter:none;align-items:flex-end;padding:24px}
+#overlayInner[data-state="won"],#overlayInner[data-state="lost"]{width:min(620px,100%);max-height:65dvh;overflow:auto;border:0;border-radius:24px 24px 8px 8px;background:linear-gradient(130deg,#082634ef,#04151cf2);box-shadow:0 18px 70px #0005;padding:26px;text-align:left}
+#overlayInner[data-state="won"] .eyebrow{font-size:10px;letter-spacing:3px;color:#98ead7}
+#overlayInner[data-state="won"] .overlay-heading{font-size:clamp(46px,8vw,72px);line-height:1;letter-spacing:-3px;margin:12px 0 6px;color:#fff0b6}
+#overlayInner[data-state="won"]>p{font-size:13px;line-height:1.4;margin:10px 0}
+#overlayInner[data-state="won"] .run-stats{font-size:12px;padding:10px 0;border:0}
+#overlayInner .mastery-goals{margin:8px 0;gap:6px}
+#overlayInner .mastery-goals span{border:0;border-radius:20px;background:#ffffff0b;padding:7px 10px;font-size:11px}
+#overlayInner .mastery-goals .achieved{background:#68dbc920;color:#a6efdf}
+#overlayInner .result-details{margin:12px 0;color:#bad0d5;font-size:12px}
+#overlayInner .result-details summary{cursor:pointer;min-height:32px;line-height:32px}
+#overlayInner .result-summary{font-size:12px;line-height:1.6}
+#overlayInner .next-route{display:none}
+#overlayInner[data-state="won"]>.iconbtn{min-height:44px;padding:10px 14px;font-size:12px;background:transparent;border:0}
+#overlayInner[data-state="won"]>.primary-btn{float:right;min-height:48px;padding:12px 18px;font-size:14px;border-radius:30px;margin:0}
+@media(orientation:landscape) and (max-height:500px){#overlay:has(#overlayInner[data-state="won"]){align-items:center;justify-content:flex-end;padding:16px}#overlayInner[data-state="won"]{width:380px;max-height:calc(100dvh - 32px);padding:18px}.overlay-heading{margin:8px 0!important}}
+@media(prefers-reduced-motion:no-preference){#overlayInner[data-state="won"]{animation:flow-arrival .45s ease-out}@keyframes flow-arrival{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}}
+body.linked-controls .move-controls::after{content:'이동';font-size:9px}
+body.linked-controls #fireBtn{touch-action:none;user-select:none}
+body.linked-controls #fireBtn b{font-size:15px}
+body.linked-controls #fireBtn span{font-size:10px}
+body.linked-controls #fireBtn:active{box-shadow:0 0 0 8px #98ead71c,0 0 28px #98ead740;transform:scale(.97)}
+.hud-block:has(#collected) strong>small,#total{display:none}

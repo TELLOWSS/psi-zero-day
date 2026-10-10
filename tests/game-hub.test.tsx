@@ -18,10 +18,10 @@ describe('game hub navigation', () => {
       act(() => root.render(<GameHub session={session} onPlay={() => {}} onNewGame={() => {}} onSurvivors={() => { launches++; }} onDefense={() => { throw new Error('Unreleased mode must remain a preview'); }} />));
       const actions = host.querySelector('.commercial-title-actions')!;
       const breaker = host.querySelector<HTMLAnchorElement>('.is-breaker-entry')!;
-      expect(breaker.getAttribute('href')).toBe('/signal-breaker-dev/index.html');
+      expect(breaker.getAttribute('href')).toBe('/signal-breaker-dev/index.html?entry=play');
       expect(breaker.textContent).toContain('시그널 브레이커');
       expect(host.querySelector('.commercial-mode-navigation')).toBeNull();
-      expect(host.querySelectorAll('a[href="/signal-breaker-dev/index.html"]')).toHaveLength(1);
+      expect(host.querySelectorAll('a[href="/signal-breaker-dev/index.html?entry=play"]')).toHaveLength(1);
       const summary = host.querySelector('.commercial-triad-dashboard')!;
       expect(actions.compareDocumentPosition(summary) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(host.querySelectorAll('.commercial-title-worker')).toHaveLength(4);

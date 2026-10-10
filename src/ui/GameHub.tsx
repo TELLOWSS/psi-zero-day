@@ -418,11 +418,11 @@ export function GameHub({ session, onPlay: _onPlay, onNewGame: _onNewGame, onDef
           </span>
           <b>›</b>
         </button> : null}
-        <a className="commercial-title-action is-breaker-entry has-mode-art" href="/signal-breaker-dev/index.html">
-          <img src="/signal-breaker-dev/art/sb01-delivery-bay-v1.webp" alt="" aria-hidden="true" className="commercial-title-action-art" />
+        <a className="commercial-title-action is-breaker-entry has-mode-art" href="/signal-breaker-dev/index.html?entry=play">
+          <img src="/signal-breaker-dev/art/map-delivery-v3.webp" alt="" aria-hidden="true" className="commercial-title-action-art" />
           <span className="commercial-title-action-shade" aria-hidden="true" />
           <span className="commercial-title-action-icon">↗</span>
-          <span className="commercial-title-action-copy"><strong>{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>{t('ui.hub.breaker_description')}</small></span>
+          <span className="commercial-title-action-copy"><em className="breaker-brand-line">SIGNAL / BREAKER</em><strong>{t('ui.hub.breaker_title')} <span className="commercial-title-badge-new">{t('ui.hub.breaker_live')}</span></strong><small>각도를 바꿔, 흐름을 끊어라. · 수동 반사 아케이드</small></span>
           <b>›</b>
         </a>
         {onDefense ? <button className="commercial-title-action is-primary is-defense-entry has-mode-art is-coming-soon" data-title-primary-cta="defense" type="button" onClick={() => setModePreview('defense')}>
