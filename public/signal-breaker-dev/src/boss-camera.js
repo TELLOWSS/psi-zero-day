@@ -11,7 +11,7 @@ function frame({width,height,worldWidth=1100,boundsHeight,player,boss}){
  // Center the action when possible, then enforce that the operator stays in frame.
  const maximum=Math.max(0,worldWidth-visible);
  let x=clamp((left+right-visible)/2,0,maximum);
- const operatorMax=clamp(player.x-44,0,maximum);
+ const operatorMax=clamp(player.x-38,0,maximum);
  const operatorMin=clamp(player.x+32-visible,0,maximum);
  x=clamp(x,Math.min(operatorMin,operatorMax),Math.max(operatorMin,operatorMax));
  // Prefer a complete boss silhouette (143 world units) while keeping the player visible.
