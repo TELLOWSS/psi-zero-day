@@ -4,7 +4,7 @@
   constructor(element,text){this.element=element;this.text=text;this.active=false;this.elapsed=0;this.paused=false;this.lastShot='';this.locked=[];}
   play(definition,record,{reducedMotion=false,quality='balanced',replay=false,onShot=()=>{},onComplete=()=>{}}={}){
    this.cancel();this.active=true;this.elapsed=0;this.paused=false;this.replay=replay;this.definition=definition;this.record=record;this.onComplete=onComplete;this.onShot=onShot;
-   const e=this.element;e.replaceChildren();e.hidden=false;e.dataset.motion=reducedMotion||quality==='low'?'still':'full';e.dataset.image='loading';
+   const e=this.element;e.replaceChildren();e.hidden=false;e.dataset.motion=reducedMotion||quality==='low'?'still':'full';e.dataset.image='loading';e.dataset.paused='false';
    const picture=document.createElement('img');picture.className='ending-art';picture.alt=this.text(definition.altId);picture.decoding='async';
    picture.onload=()=>{if(this.active&&this.picture===picture)e.dataset.image='ready';};
    picture.onerror=()=>{if(this.active&&this.picture===picture){e.dataset.image='failed';picture.hidden=true;}};
@@ -13,7 +13,7 @@
    const header=document.createElement('header');header.className='ending-header';
    const brand=document.createElement('span');brand.textContent=this.text('breaker.ending.brand');
    const tools=document.createElement('div');tools.className='ending-tools';
-   this.pauseButton=this.button('endingPause','breaker.ending.pause',()=>{this.paused=!this.paused;this.pauseButton.textContent=this.text(this.paused?'breaker.ending.resume':'breaker.ending.pause');this.pauseButton.setAttribute('aria-pressed',String(this.paused));});this.pauseButton.setAttribute('aria-pressed','false');
+   this.pauseButton=this.button('endingPause','breaker.ending.pause',()=>{this.paused=!this.paused;e.dataset.paused=String(this.paused);this.pauseButton.textContent=this.text(this.paused?'breaker.ending.resume':'breaker.ending.pause');this.pauseButton.setAttribute('aria-pressed',String(this.paused));});this.pauseButton.setAttribute('aria-pressed','false');
    const skip=this.button('endingSkip','breaker.ending.skip',()=>this.finish('skip'));
    tools.append(this.pauseButton,skip);header.append(brand,tools);
    const copy=document.createElement('div');copy.className='ending-copy';

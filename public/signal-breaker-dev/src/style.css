@@ -429,3 +429,6 @@ body.ending-open{overflow:hidden}
 @media(orientation:portrait){.ending-player{padding: max(16px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom))}.ending-art{object-position:50% 56%}.ending-header{font-size:9px;letter-spacing:.09em}.ending-tools{gap:5px}.ending-tools button{font-size:11px;padding:9px 11px}.ending-copy h2{font-size:37px}.ending-line{font-size:14px!important;max-width:25em}.ending-shade{background:linear-gradient(180deg,#08141a77 0%,transparent 28%,#07141c18 42%,#07141ce8 80%,#07141cf5 100%)}}
 @media(orientation:landscape) and (max-height:500px){.ending-player{padding:12px 22px}.ending-copy{width:62%;max-width:620px}.ending-copy h2{font-size:30px;margin-bottom:8px}.ending-label{margin-bottom:6px!important}.ending-line{font-size:12px!important;min-height:2.9em;margin-bottom:6px!important}.ending-evidence{font-size:10px;gap:2px}.ending-note{margin:7px 0 4px!important;font-size:9px!important}.ending-progress{margin-top:6px}.ending-tools button{font-size:11px}.ending-shade{background:linear-gradient(90deg,#07141cd9 0%,#07141c55 58%,transparent 90%)}}
 @media(prefers-reduced-motion:reduce){.ending-player .ending-art{animation:none!important}}
+
+.ending-player[data-paused=true] .ending-art{animation-play-state:paused}
+.operation-actions>div{flex-wrap:wrap}

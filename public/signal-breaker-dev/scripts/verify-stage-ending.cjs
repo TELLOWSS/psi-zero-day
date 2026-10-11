@@ -22,6 +22,7 @@ const terminal=()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();
    a.equal(saved.records['CH-01'].endingMemory.record.origin,'game');a.equal(saved.records['CH-01'].endingMemory.record.externalSync,false);
    a.equal(saved.records['CH-01'].endingMemory.record.evidence.verified,true);a.equal(saved.records['CH-01'].endingMemory.seen,false);
    await page.waitForFunction(()=>SignalBreakerQA.ending().shot==='memory');await page.locator('#endingPause').click();
+   a.equal(await page.locator('.ending-art').evaluate(el=>getComputedStyle(el).animationPlayState),'paused','pause freezes camera motion as well as captions');
    const frozen=await page.evaluate(()=>({game:SignalBreakerQA.snapshot(),ending:SignalBreakerQA.ending()}));
    await page.waitForTimeout(250);a.equal(await page.evaluate(()=>SignalBreakerQA.ending().elapsed),frozen.ending.elapsed);a.deepEqual(await page.evaluate(()=>SignalBreakerQA.snapshot()),frozen.game);
    await page.keyboard.press('Space');a.deepEqual(await page.evaluate(()=>SignalBreakerQA.snapshot()),frozen.game,'cinematic blocks combat keys');
