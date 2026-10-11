@@ -50,6 +50,11 @@ class SoundDirector{
  case'chain':this.osc(720,1240,.24,'sine',.065);this.osc(1100,1600,.19,'sine',.03);break;
  case'bankchain':this.osc(1000,1620,.18,'sine',.044);break;
  case'resonance':this.osc(280,70,.36,'sine',.055);this.noiseBurst(.22,.045,650);break;
+ case'gridwarning':this.osc(610,880,.32,'square',.04);this.osc(320,540,.27,'sawtooth',.033);break;
+ case'gridscan':this.osc(900,1320,.18,'sine',.043);break;
+ case'gridisolated':this.osc(620,1020,.38,'triangle',.054);this.osc(850,1250,.3,'sine',.03);break;
+ case'gridarc':this.osc(175,48,.41,'sawtooth',.078);this.noiseBurst(.29,.085,1400);break;
+ case'gridphase':this.osc(270,75,.64,'sawtooth',.064);this.osc(800,140,.55,'square',.027);break;
  case'tensionwarning':this.osc(520,310,.3,'square',.045);this.osc(790,540,.25,'triangle',.035);break;
  case'tensionsecured':this.osc(370,680,.24,'sine',.045);this.osc(610,940,.2,'triangle',.03);break;
  case'tensionsnap':this.osc(420,72,.29,'sawtooth',.082);this.noiseBurst(.24,.085,850);break;
