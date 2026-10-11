@@ -1,7 +1,7 @@
 name: Signal Breaker causal flow
 on:
   push:
-    branches: [codex/signal-break-causal-redesign-20261011]
+    branches: [main, codex/signal-break-causal-redesign-20261011]
     paths:
       - public/signal-breaker-dev/**
       - .github/workflows/verify-signal-breaker-causal.yml
