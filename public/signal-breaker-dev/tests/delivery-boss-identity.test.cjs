@@ -29,6 +29,11 @@ test('CH01 rewarded reflection doubles boss weak point damage after shield relea
  g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,bounces:1,life:1});
  assert.equal(b.hp,1,'banked precision hit takes away two armour points');
  g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,bounces:0,life:1});
+ assert.equal(b.phase,'rearming');assert.equal(b.gatePhase,2);
+ assert.equal(b.hp,b.maxHp);
+ // Regression: the fifth gate, not the first, is the final exposed core.
+ b.gatePhase=b.maxGatePhases;b.phase='exposed';b.hp=1;
+ g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,bounces:0,life:1});
  assert.equal(b.phase,'resolved');
 });
 test('CH02 baseline boss does not inherit CH01 discharge behaviour',()=>{
