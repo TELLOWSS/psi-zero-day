@@ -76,7 +76,9 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-03',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextPressureAt-1.48;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='extraction'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('분진 압력'));
+   if(height>width){await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),v=SignalBreakerQA.view(),cam=v.camera,playerX=(g.player.x-cam.x)*cam.scale,bossX=(g.boss.x-cam.x)*cam.scale;return playerX>=12&&playerX<=innerWidth-10&&bossX>=28&&bossX<=innerWidth-25;});}
    await page.screenshot({path:path.join(out,`operation-extraction-warning-${width}.png`)});
+   if(height>width)await page.screenshot({path:path.join(out,`operation-extraction-boss-framing-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.pressureVents===1);
    await page.screenshot({path:path.join(out,`operation-extraction-mist-${width}.png`)});
