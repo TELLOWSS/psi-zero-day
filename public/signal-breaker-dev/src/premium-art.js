@@ -93,6 +93,8 @@ class PremiumArt{
  equipmentLabel(b,camera,guide){
   const half=50*camera.scale,top=16*camera.scale,bottom=4*camera.scale;
   const candidates=[{x:b.x,y:b.y+66},{x:b.x+112,y:b.y+6},{x:b.x-112,y:b.y+6},{x:b.x,y:b.y-64}];
+  // Short landscape reserves the central message band even while a toast fades.
+  if(camera.width>camera.height&&camera.height<=500)[candidates[0],candidates[1]]=[candidates[1],candidates[0]];
   for(const p of candidates){const x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
    const bounds={left:x-half,right:x+half,top:y-top,bottom:y+bottom};
    const fits=bounds.left>=8&&bounds.right<=camera.width-8&&bounds.top>=8&&bounds.bottom<=camera.height-8;
