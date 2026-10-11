@@ -1,24 +1,30 @@
-/* Portrait battle framing: present player + boss silhouette in the same physical viewport.
- * Pure and read-only: no influence on aim, collision, input or saved game state. */
+/* SIGNAL BREAKER — portrait boss encounter framing.
+ * Pure presentation calculation: never modifies physics, aim, boss or operator state. */
 (function(root){'use strict';
-const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));
-function frame({width,height,worldWidth=1100,boundsHeight,player,boss}){
- const xs=[boss.x-143,boss.x+143,...(boss.nodes||[]).filter(n=>!n.hit).map(n=>n.x)];
- const left=Math.min(player.x-50,...xs),right=Math.max(player.x+50,...xs);
- const desiredSpan=Math.min(worldWidth,Math.max(600,right-left+16));
- const scale=Math.max(width/desiredSpan,height/boundsHeight);
- const visible=Math.min(worldWidth,width/scale);
- // Center the action when possible, then enforce that the operator stays in frame.
- const maximum=Math.max(0,worldWidth-visible);
- let x=clamp((left+right-visible)/2,0,maximum);
- const operatorMax=clamp(player.x-38,0,maximum);
- const operatorMin=clamp(player.x+32-visible,0,maximum);
- x=clamp(x,Math.min(operatorMin,operatorMax),Math.max(operatorMin,operatorMax));
- // Prefer a complete boss silhouette (143 world units) while keeping the player visible.
- const fullBossLeft=clamp(right-visible,0,maximum);
- x=Math.max(x,Math.min(operatorMax,fullBossLeft));
- return {scale,x,visible,playerInView:player.x>=x&&player.x<=x+visible,
-         bossInView:boss.x>=x&&boss.x<=x+visible};
+const clamp=(x,a,b)=>Math.min(Math.max(x,a),b);
+function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,ground=594,player,boss}){
+ if(!Number.isFinite(width)||!Number.isFinite(height)||width<1||height<1||!boss||!player||boss.phase==='resolved')return null;
+ // Stable composition: include all three relay nodes, even those recently cleared.
+ // Keeping them avoids distracting camera zoom jumps as armour/filters reopen.
+ const targets=[{x:player.x,r:39},{x:boss.x,r:149},
+  ...(boss.nodes||[]).map(node=>({x:node.x,r:30}))];
+ let left=clamp(Math.min(...targets.map(p=>p.x-p.r)),0,worldWidth);
+ let right=clamp(Math.max(...targets.map(p=>p.x+p.r)),0,worldWidth);
+ if(right-left<200){left=Math.max(0,left-100);right=Math.min(worldWidth,right+100);}
+ const margin=16,span=Math.max(200,right-left),fitScale=(width-2*margin)/span;
+ // IMPORTANT: existing Math.max(zoomFit, verticalCover) cropped the boss out.
+ // Allow letterbox/edge fill behind controls rather than hide a live weak point.
+ const backgroundCover=height/boundsHeight;
+ const scale=Math.max(.01,Math.min(fitScale,backgroundCover));
+ const visible=width/scale,visibleHeight=height/scale;
+ const minX=visible>=worldWidth?(worldWidth-visible)*.5:0;
+ const maxX=visible>=worldWidth?minX:worldWidth-visible;
+ const x=visible>=worldWidth?minX:clamp((left+right-visible)*.5,minX,maxX);
+ const wantedY=ground-.65*visibleHeight;
+ const maxY=boundsTop+boundsHeight-visibleHeight;
+ const y=maxY>=boundsTop?clamp(wantedY,boundsTop,maxY):boundsTop;
+ return {x,y,scale,visible,visibleHeight,targets:{left,right,player:player.x,boss:boss.x},
+         zoomFit:fitScale,verticalCover:backgroundCover};
 }
 root.SignalBreakerBossCamera={frame};
 if(typeof module==='object'&&module.exports)module.exports=root.SignalBreakerBossCamera;
