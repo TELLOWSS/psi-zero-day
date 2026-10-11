@@ -25,7 +25,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().operation),true);
    await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'spread');
    await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'precision');
-   await page.locator('#fireBtn').click();const shots0=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
+   await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'true');const shots0=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
    await page.keyboard.down('KeyD');await page.waitForFunction(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0);await page.keyboard.up('KeyD');
    a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0),'auto fire survives movement in twin mode');
    await page.locator('#netBtn').click();await page.waitForTimeout(250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().weapon),'net','manual equipment choice survives automatic fire');
@@ -37,7 +37,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
-   await page.locator('#fireBtn').click();await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
@@ -85,7 +85,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().support.barrierProgress),1);
    if(width>height&&height<=500){
     const scene=await page.evaluate(()=>{const p=SignalBreakerQA.snapshot().support,c=SignalBreakerQA.view().camera,b=document.getElementById('arena').getBoundingClientRect();const box=(x,y,w,h)=>({x:(x-c.x)*c.scale+b.x,y:(y-c.y)*c.scale+b.y,width:w*c.scale,height:h*c.scale});return [box(p.x-25,p.y-96,50,96),box(p.barrierX-65,p.barrierY-25,130,50)];});
-    for(const id of ['fireBtn','pulseBtn','netBtn']){const buttonBox=await page.locator('#'+id).boundingBox();a.ok(buttonBox&&buttonBox.x>=0&&buttonBox.y>=0&&buttonBox.x+buttonBox.width<=width+1&&buttonBox.y+buttonBox.height<=height+1,'landscape control remains reachable: '+id);for(const object of scene)a.ok(buttonBox.x+buttonBox.width<=object.x||buttonBox.x>=object.x+object.width||buttonBox.y+buttonBox.height<=object.y||buttonBox.y>=object.y+object.height,'control does not cover support or deployed barrier: '+id);}
+    for(const id of ['fireBtn','autoFireBtn','pulseBtn','netBtn']){const buttonBox=await page.locator('#'+id).boundingBox();a.ok(buttonBox&&buttonBox.x>=0&&buttonBox.y>=0&&buttonBox.x+buttonBox.width<=width+1&&buttonBox.y+buttonBox.height<=height+1,'landscape control remains reachable: '+id);for(const object of scene)a.ok(buttonBox.x+buttonBox.width<=object.x||buttonBox.x>=object.x+object.width||buttonBox.y+buttonBox.height<=object.y||buttonBox.y>=object.y+object.height,'control does not cover support or deployed barrier: '+id);}
    }
    await page.screenshot({path:path.join(out,`controlled-${width}.png`)});
    await page.evaluate(clear);await page.waitForFunction(()=>SignalBreakerQA.snapshot().state==='intermission');
@@ -112,11 +112,11 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.locator('[data-tuning]').first().click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),3);
    // Explicit blocked-lane fixture checks automatic suppression and ordinary manual/movement input.
    await page.evaluate(()=>{SignalBreakerQA.controlMode('flow');SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.operation=false;g.cores=[];g.pendingCores=[];g.boss={phase:'sealed',exposure:0,x:785,y:199,nodes:[{x:686,y:154,hit:true},{x:882,y:162,hit:false},{x:787,y:296,hit:false}]};});
-   await page.locator('#fireBtn').click();
+   await page.locator('#autoFireBtn').click();
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked);
    await page.locator('#chainGuide').waitFor({state:'visible'});
    a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
-   a.equal(await page.locator('#fireAction').textContent(),'사선 대기');
+   a.equal(await page.locator('#fireAction').textContent(),'발사','manual FIRE stays available while automatic targeting is blocked');a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'true');
    const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
    await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast'),guides=[document.getElementById('chainGuide'),toast.classList.contains('visible')?toast:null].filter(Boolean).map(el=>el.getBoundingClientRect()).filter(r=>r.width);return b&&guides.every(r=>b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
    const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
