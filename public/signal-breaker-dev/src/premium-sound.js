@@ -50,6 +50,9 @@ class SoundDirector{
  case'chain':this.osc(720,1240,.24,'sine',.065);this.osc(1100,1600,.19,'sine',.03);break;
  case'bankchain':this.osc(1000,1620,.18,'sine',.044);break;
  case'resonance':this.osc(280,70,.36,'sine',.055);this.noiseBurst(.22,.045,650);break;
+ case'beltwarning':this.osc(340,560,.27,'sawtooth',.044);this.osc(760,920,.33,'square',.028);break;
+ case'beltintercept':this.osc(390,850,.24,'sine',.05);this.osc(620,1200,.28,'triangle',.036);break;
+ case'beltsurge':this.osc(150,39,.39,'sawtooth',.08);this.noiseBurst(.3,.077,780);break;
  case'bosswarning':this.osc(680,840,.31,'square',.046);this.osc(340,450,.4,'triangle',.04);break;
  case'bossdischarge':this.osc(115,45,.38,'sawtooth',.085);this.noiseBurst(.29,.070,650);break;
  case'unseal':this.osc(230,1100,.55,'sawtooth',.04);this.noiseBurst(.25,.06,2300);break;
