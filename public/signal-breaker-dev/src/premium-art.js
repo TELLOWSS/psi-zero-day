@@ -90,6 +90,17 @@ class PremiumArt{
   const bounds=this.worldBounds(game.config),shade=c.createLinearGradient(0,bounds.top,0,bounds.top+bounds.height);shade.addColorStop(0,'#06131c33');shade.addColorStop(.25,'transparent');shade.addColorStop(.8,'transparent');shade.addColorStop(1,'#03101c44');rect(c,0,bounds.top,W,bounds.height,shade);
   c.restore();
  }
+ equipmentLabel(b,camera,guide){
+  const half=50*camera.scale,top=16*camera.scale,bottom=4*camera.scale;
+  const candidates=[{x:b.x,y:b.y+66},{x:b.x+112,y:b.y+6},{x:b.x-112,y:b.y+6},{x:b.x,y:b.y-64}];
+  for(const p of candidates){const x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
+   const bounds={left:x-half,right:x+half,top:y-top,bottom:y+bottom};
+   const fits=bounds.left>=8&&bounds.right<=camera.width-8&&bounds.top>=8&&bounds.bottom<=camera.height-8;
+   const covered=guide&&bounds.left<guide.right&&bounds.right>guide.left&&bounds.top<guide.bottom&&bounds.bottom>guide.top;
+   if(fits&&!covered)return p;
+  }
+  return candidates[0];
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');

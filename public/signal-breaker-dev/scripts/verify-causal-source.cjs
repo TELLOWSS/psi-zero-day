@@ -99,6 +99,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
    a.equal(await page.locator('#fireAction').textContent(),'사선 대기');
    const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
+   await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,r=document.getElementById('chainGuide').getBoundingClientRect();return b&&(b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
    const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
    await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),blockedShots);
    await page.screenshot({path:path.join(out,`blocked-lane-${width}.png`)});
