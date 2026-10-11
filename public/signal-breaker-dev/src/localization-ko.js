@@ -1,7 +1,10 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
 'breaker.burst.combo.recovery':'펄스 + 회수망', 'breaker.burst.combo.suppression':'펄스 + 분진 억제', 'breaker.burst.combo.guidance':'펄스 + 자력 유도',
-'breaker.burst.resolves':'위험 해소',
+...globalThis.SignalBreakerStory?.lines,
+ 'breaker.flow.circuit':'순회 완료 · 새 작업조건 · 장비 재구성',
+ 'breaker.flow.upgrade':'흐름 강화 자동 적용',
+ 'breaker.burst.resolves':'위험 해소',
  'breaker.burst.guide':'외피를 깨고 내부 위험을 다시 해소하세요. 아이템 5개마다 화력이 성장합니다. LV.2부터 펄스 + 회수망·분진억제·자력유도 조합이 발동합니다. 작전포인트 40P로 6초 연쇄강화.',
  'breaker.burst.boost':'연쇄 강화', 'breaker.burst.points':'작전 포인트',
 'breaker.burst.hazardrelease':'외피 파괴 · 내부 위험 해방',

@@ -297,3 +297,5 @@ body[data-session=won] .touch-controls,body[data-session=lost] .touch-controls,b
 @media(orientation:landscape) and (max-height:500px){body.twin-controls .fire-controls{left:auto;right:110px;transform:none}body.twin-controls #fireBtn{left:auto;right:150px;bottom:82px}}
 
 .burst-boost{position:fixed;right:12px;top:162px;z-index:6;min-width:126px;min-height:44px;padding:6px 10px;white-space:pre-line;color:#e4fff5;border:1px solid #9cf0cf66;background:#092c37e6;border-radius:10px;font-family:inherit;font-size:10px;font-weight:700;line-height:1.5;touch-action:manipulation}.burst-boost:disabled{opacity:.68}.burst-boost[hidden]{display:none}.burst-boost:focus-visible{outline:3px solid #ffe6ab;outline-offset:2px}
+
+.radio-line{position:fixed;top:216px;left:50%;transform:translateX(-50%);width:max-content;max-width:min(420px,calc(100% - 32px));box-sizing:border-box;padding:8px 12px;border-left:2px solid #b7ffe2;border-radius:6px;background:#082738dd;color:#e9fff6;font-size:12px;line-height:1.55;pointer-events:none;z-index:5;white-space:normal;text-shadow:0 1px 2px #0008}.radio-line[hidden]{display:none}
