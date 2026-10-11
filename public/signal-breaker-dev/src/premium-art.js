@@ -60,7 +60,9 @@ class PremiumArt{
   c.save();c.globalCompositeOperation='lighter';c.lineCap='round';
   if(trail.length>1){for(let i=1;i<trail.length;i++){const a=i/trail.length;c.globalAlpha=a*.5;line(c,trail[i-1].x,trail[i-1].y,trail[i].x,trail[i].y,color,(s.kind==='net'?9:5)*a);}}
   c.globalAlpha=1;c.translate(s.x,s.y);c.rotate(angle);c.shadowColor=color;c.shadowBlur=this.quality==='low'?0:12;
-  if(s.kind==='pulse'){
+  if(s.kind==='bankshot'){path(c,[[-23,0],[-6,-4],[9,-4],[19,0],[9,4],[-6,4]],'#4d95bd',color,2);line(c,-28,0,20,0,'#e8ffff',2.5);disk(c,-5,0,4,'#f4ffff');for(const sign of [-1,1])line(c,-12,sign*10,12,sign*6,color,2);
+  }else if(s.kind==='resonance'){for(let i=0;i<3;i++){c.beginPath();c.arc(0,0,6+i*5,-1.2,1.2);c.strokeStyle=i===0?'#ffffff':color;c.lineWidth=3-i*.6;c.stroke();}disk(c,4,0,7,'#ffdceb',color,2);
+  }else if(s.kind==='pulse'){
    const flame=c.createLinearGradient(-30,0,14,0);flame.addColorStop(0,'transparent');flame.addColorStop(.65,color);flame.addColorStop(1,'#fff8df');
    path(c,[[-30,0],[-4,-6],[14,0],[-4,6]],flame);line(c,-12,0,12,0,'#fff9e4',2);
   }else if(s.kind==='net'){
@@ -140,8 +142,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
