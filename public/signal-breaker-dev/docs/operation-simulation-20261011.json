@@ -142,7 +142,7 @@
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 4,
       "peakShots": 22
     },
     {
@@ -190,7 +190,7 @@
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 4,
       "peakShots": 32
     },
     {

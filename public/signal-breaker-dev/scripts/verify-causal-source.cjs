@@ -43,6 +43,17 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
     await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.boss.warningUntil=0;g.boss.nextDischargeAt=g.time+60;});
    await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
+   // CH02-specific presentation contract: live belt-warning lane and interactive mitigation.
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
+   await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='conveyor'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
+   await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('과부하'));
+   await page.screenshot({path:path.join(out,`operation-conveyor-warning-${width}.png`)});
+   await page.locator('#conveyorBtn').click();
+   await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
+   a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
+   await page.screenshot({path:path.join(out,`operation-conveyor-intercept-${width}.png`)});
+   // Restore CH01 before the following causal-source regression: CH02 intentionally has no CH01 source.
+   await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));

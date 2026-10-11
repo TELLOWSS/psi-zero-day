@@ -124,6 +124,37 @@ class PremiumArt{
   if(danger){c.globalAlpha=this.reducedMotion ? .72 : .5+.4*Math.sin(beat*13);line(c,-88,-91,88,-91,'#ffd175',4);}
   c.restore();return true;
  }
+ // CH-02 dedicated moving conveyor controller: twin drive shafts, belt teeth,
+ // variable rotation and outward opening core. Rendered procedurally for offline performance.
+ conveyorBoss(c,b,time,direction){
+  const open=b.phase==='exposed',warning=b.warningUntil>time,phase=this.reducedMotion?0:time*direction*1.7;
+  c.save();c.translate(b.x,b.y);
+  glow(c,0,0,146,warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
+  path(c,[[-131,-34],[-110,-78],[-42,-87],[25,-72],[104,-84],[132,-44],[131,60],[-124,60]],'#172f40','#87a9ae',4);
+  rect(c,-115,-57,230,111,'#203947','#a4bec4',3);
+  rect(c,-107,-33,214,78,'#122632','#536d7e',2);
+  const beltColor=direction===0?'#476f76':'#427d8a';
+  rect(c,-99,-26,198,64,beltColor,'#a4bac2',2);
+  for(let i=-4;i<=4;i++){let x=i*22+phase*8%22;if(x>100)x-=198;if(x< -100)x+=198;line(c,x-9,-22,x+10,33,'#b0cfcd53',3);}
+  for(const x of [-91,91]){
+   disk(c,x,4,31,'#193b4a','#bdd1d0',5);disk(c,x,4,23,'#517684','#e1b66d',3);
+   for(let k=0;k<8;k++){const a=k*Math.PI/4+phase;line(c,x+Math.cos(a)*8,4+Math.sin(a)*8,x+Math.cos(a)*19,4+Math.sin(a)*19,'#d4dcde',3);}
+   disk(c,x,4,7,direction===0?'#93e8d7':'#ebbc74');
+  }
+  path(c,[[-42,-65],[-16,-88],[16,-88],[43,-65],[25,-28],[-23,-28]],'#2b4e61','#c3d8d9',3);
+  const door=open?40:10;
+  for(const side of [-1,1]){
+   const x=side*door;
+   path(c,[[x-18,-19],[x+18,-19],[x+24,36],[x-24,36]],open?'#325967':'#394953',open?'#f1b66b':'#7ca2b2',2.5);
+   for(let j=0;j<3;j++)line(c,x-12,-11+j*15,x+12,-11+j*15,'#d5e7df66',2);
+  }
+  disk(c,0,7,open?24:13,open?'#ffe7ac':'#6dc9d7','#e6ebda',3);
+  for(const side of [-1,1]){const x=side*111;rect(c,x-12,-72,24,32,'#33454a','#e6ba69',2);disk(c,x,-60,7,warning?'#ff7d57':'#b19a63');}
+  rect(c,-95,65,190,12,'#192e38','#95b9bf',2);
+  c.font='800 11px sans-serif';c.fillStyle='#d9ebed';c.textAlign='center';c.fillText('CH-02 · OVERLOAD DRIVE',0,-97);
+  if(direction===0){c.fillStyle='#b5fff2';c.fillText('BELT LOCK / SAFE',0,94);}
+  c.restore();return true;
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
@@ -161,8 +192,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }

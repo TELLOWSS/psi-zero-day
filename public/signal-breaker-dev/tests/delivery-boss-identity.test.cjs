@@ -32,6 +32,6 @@ test('CH01 rewarded reflection doubles boss weak point damage after shield relea
  assert.equal(b.phase,'resolved');
 });
 test('CH02 baseline boss does not inherit CH01 discharge behaviour',()=>{
- const g=make('CH-02'),b=g.boss;assert.equal(b.identity,undefined);
+ const g=make('CH-02'),b=g.boss;assert.equal(b.identity,'conveyor');
  g.time+=40;g.step(DT);assert.equal(g.events.some(e=>e.kind==='bosswarning'||e.kind==='bossdischarge'),false);
 });
