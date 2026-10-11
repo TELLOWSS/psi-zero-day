@@ -173,7 +173,8 @@ function addEndingMemory(parent){
  const card=document.createElement('div');card.className='ending-memory-card';
  const title=document.createElement('strong');title.textContent=t('breaker.ending.memory');
  const list=document.createElement('ul');for(const id of window.SignalBreakerEndings.evidenceIds(memory.record)){const li=document.createElement('li');li.textContent=t(id);list.append(li);}
- const next=document.createElement('p');next.textContent=t('breaker.ending.ch01.hook');
+ const definition=window.SignalBreakerEndings.definition(memory.record.stageId);
+ const next=document.createElement('p');next.textContent=t(definition.nextLabelId)+' · '+t(definition.shots.at(-1).lineId);
  const replay=document.createElement('button');replay.id='replayEnding';replay.type='button';replay.className='iconbtn';replay.textContent=t('breaker.ending.replay');replay.addEventListener('click',()=>playStageEnding(memory,true));
  card.append(title,list,next,replay);parent.append(card);
 }
