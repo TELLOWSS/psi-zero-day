@@ -52,6 +52,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
    await page.screenshot({path:path.join(out,`operation-conveyor-intercept-${width}.png`)});
+   // Restore CH01 before the following causal-source regression: CH02 intentionally has no CH01 source.
+   await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
