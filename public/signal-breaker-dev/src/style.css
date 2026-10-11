@@ -306,3 +306,12 @@ body[data-session=won] .touch-controls,body[data-session=lost] .touch-controls,b
 #operationLobby .operation-actions>span{display:block}
 .operation-copy{max-width:min(760px,100%)}
 .operation-copy h1,.operation-stage strong,.operation-stage span{word-break:keep-all;text-wrap:balance}
+
+/* Breaker AUTO is a separate, explicit toggle. FIRE never changes the automatic firing setting. */
+#autoFireBtn[hidden]{display:none!important}
+body.breaker-focus .fire-controls{grid-template-columns:48px 48px 48px 72px}
+body.breaker-focus .fire-controls #autoFireBtn{display:flex;align-items:center;justify-content:center;width:48px;min-width:48px;min-height:48px;padding:3px 2px;border:1px solid #6f9798;border-radius:12px;background:#102d39db;color:#dcebf0;font-size:10px;font-weight:800;letter-spacing:0;white-space:normal;text-align:center;line-height:1.15}
+body.breaker-focus .fire-controls #autoFireBtn.active{border-color:#7df3cd;background:#164b44;color:#c9ffe9;box-shadow:0 0 12px #64efd02b}
+body.twin-controls .fire-controls #autoFireBtn{width:42px;min-width:42px;min-height:42px}
+@media(orientation:portrait){body.twin-controls .fire-controls{bottom:132px;left:50%;gap:5px}}
+@media(max-width:430px) and (orientation:portrait){body.breaker-focus:not(.twin-controls) .fire-controls{grid-template-columns:40px 40px 40px 64px;gap:5px}body.breaker-focus:not(.twin-controls) .fire-controls #autoFireBtn{width:40px;min-width:40px}}
