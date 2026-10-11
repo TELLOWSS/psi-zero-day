@@ -24,7 +24,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
    // Presentation fixtures cover every material and state without claiming player balance.
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:230+i*210,y:230,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:230+i*210,y:230,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;g.fields=[{kind:'mist',x:440,y:230,radius:95,until:g.time+1}];});
    await page.waitForTimeout(80);
    await page.screenshot({path:path.join(out,`materials-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.reset();g.start();});
