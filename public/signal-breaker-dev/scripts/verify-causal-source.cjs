@@ -114,6 +114,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready&&SignalBreakerQA.view().hazards.footprints.length===1);
    a.ok(await page.evaluate(()=>{const view=SignalBreakerQA.view(),p=view.hazards.footprints[0];return SignalBreakerQA.engine().wave===2&&!SignalBreakerQA.engine().boss&&p.kind==='metal'&&p.visual>=p.r*2&&p.pixels<=Math.max(110,p.r*2*view.camera.scale)+1;}),'CH02 flow-2 metal hazard stays inside physical collision and screen pixel budget');
    await page.screenshot({path:path.join(out,`operation-ch02-flow02-metal-budget-${width}.png`)});
+   await page.evaluate(()=>{SignalBreakerQA.engine().cores=[];});
+   await page.waitForTimeout(90);await page.screenshot({path:path.join(out,`operation-ch02-flow02-background-only-${width}.png`)});
    await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.reset();g.start();});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),false);
