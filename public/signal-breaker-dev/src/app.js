@@ -70,7 +70,22 @@ function roundRect(x,y,w,h,r,fill,stroke){cx.beginPath();cx.roundRect(x,y,w,h,r)
 let closeView=false;
 let camera={scale:1,x:0,y:0,width:W,height:H,dpr:1};
 function renderSurface(){const box=cv.getBoundingClientRect(),limit=quality==='high'?2:quality==='balanced'?1.5:1,dpr=Math.min(limit,window.devicePixelRatio||1);const width=Math.round(box.width*dpr),height=Math.round(box.height*dpr);if(cv.width!==width||cv.height!==height){cv.width=width;cv.height=height;}camera.width=box.width;camera.height=box.height;camera.dpr=dpr;cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cv.dataset.renderScale=dpr.toFixed(2);}
-function updateCamera(){const portrait=camera.height>camera.width;premium.setPortrait(portrait);const bounds=premium.worldBounds(game.config);if(portrait){const node=game.boss?.nodes.find(n=>!n.hit),focus=node?.x??game.player.aimX,span=Math.min(800,Math.max(600,Math.abs(focus-game.player.x)+180));camera.scale=Math.max(camera.width/span,camera.height/bounds.height);const visible=camera.width/camera.scale;let x=game.player.x-visible*.42;const lower=Math.max(0,focus+50-visible),upper=Math.min(W-visible,game.player.x-50);if(lower<=upper)x=Math.max(lower,Math.min(upper,x));camera.x=Math.max(0,Math.min(W-visible,x));const desired=594-(camera.height-160)/camera.scale;camera.y=Math.max(bounds.top,Math.min(bounds.top+bounds.height-camera.height/camera.scale,desired));}else{camera.scale=Math.max(camera.width/W,camera.height/H);camera.x=(W-camera.width/camera.scale)/2;camera.y=Math.max(0,H-camera.height/camera.scale);}}
+function updateCamera(){const portrait=camera.height>camera.width;premium.setPortrait(portrait);const bounds=premium.worldBounds(game.config);
+ camera.bossFraming=null;
+ if(portrait){
+  const activeBoss=game.operation&&game.boss&&game.boss.phase!=='resolved'&&['playing','paused'].includes(game.state)?game.boss:null;
+  if(activeBoss){
+   const view=window.SignalBreakerBossCamera.frame({width:camera.width,height:camera.height,worldWidth:W,boundsTop:bounds.top,boundsHeight:bounds.height,ground:GROUND,player:game.player,boss:activeBoss});
+   camera.scale=view.scale;camera.x=view.x;camera.y=view.y;camera.bossFraming=view.targets;
+  }else{
+   const focus=game.player.aimX,span=Math.min(800,Math.max(600,Math.abs(focus-game.player.x)+180));
+   camera.scale=Math.max(camera.width/span,camera.height/bounds.height);
+   const visible=camera.width/camera.scale;camera.x=Math.max(0,Math.min(W-visible,game.player.x-visible*.42));
+   const desired=594-(camera.height-160)/camera.scale;
+   camera.y=Math.max(bounds.top,Math.min(bounds.top+bounds.height-camera.height/camera.scale,desired));
+  }
+ }else{camera.scale=Math.max(camera.width/W,camera.height/H);camera.x=(W-camera.width/camera.scale)/2;camera.y=Math.max(0,H-camera.height/camera.scale);}
+}
 window.addEventListener('resize',renderSurface);
 if(typeof ResizeObserver==='function')new ResizeObserver(renderSurface).observe(cv);
 let worldTexture=null,worldTextureKey='',worldTextureTop=0,worldTextureHeight=H;
