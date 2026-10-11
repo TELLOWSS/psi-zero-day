@@ -109,6 +109,12 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForTimeout(80);
    a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.every(q=>(q.x-q.r-c.x)*c.scale>=0&&(q.x+q.r-c.x)*c.scale<=innerWidth&&(q.y-q.r-c.y)*c.scale>=0&&(q.y+q.r-c.y)*c.scale<=innerHeight);}),true,'all material fixture silhouettes inside camera');
    await page.screenshot({path:path.join(out,`materials-${width}.png`)});
+   // Reproduce CH02 FLOW 2/5 released-metal clutter independently of the actual final boss.
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=1;g.beginNextWave();g.cores=[];g.pendingCores=[];g.addCore({x:540,y:300,tier:2,kind:'metal',vx:0,vy:0});g.cores[0].released=true;g.cores[0].releaseAt=g.time-1;g.pause();});
+   await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready&&SignalBreakerQA.view().hazards.footprints.length===1);
+   a.ok(await page.evaluate(()=>{const view=SignalBreakerQA.view(),p=view.hazards.footprints[0];return SignalBreakerQA.engine().wave===2&&!SignalBreakerQA.engine().boss&&p.kind==='metal'&&p.visual>=p.r*2&&p.pixels<=Math.max(110,p.r*2*view.camera.scale)+1;}),'CH02 flow-2 metal hazard stays inside physical collision and screen pixel budget');
+   await page.screenshot({path:path.join(out,`operation-ch02-flow02-metal-budget-${width}.png`)});
+   await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.reset();g.start();});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),false);
    a.equal(await page.evaluate(()=>SignalBreakerQA.view().supportActor?.ready),true);
