@@ -80,15 +80,14 @@ function updateCamera(){const portrait=camera.height>camera.width;premium.setPor
    const view=window.SignalBreakerBossCamera.frame({width:camera.width,height:camera.height,worldWidth:W,boundsTop:bounds.top,boundsHeight:bounds.height,ground:GROUND,player:game.player,boss:activeBoss});
    camera.scale=view.scale;camera.x=view.x;camera.y=view.y;camera.bossFraming=view.targets;
   }else{
-   const focus=game.player.aimX,span=Math.min(800,Math.max(600,Math.abs(focus-game.player.x)+180));
-   camera.scale=Math.max(camera.width/span,camera.height/bounds.height);
-   const visible=camera.width/camera.scale;camera.x=Math.max(0,Math.min(W-visible,game.player.x-visible*.42));
-   const desired=594-(camera.height-160)/camera.scale;
-   camera.y=Math.max(bounds.top,Math.min(bounds.top+bounds.height-camera.height/camera.scale,desired));
+   const view=window.SignalBreakerPortraitCamera.frame({width:camera.width,height:camera.height,worldWidth:W,boundsTop:bounds.top,boundsHeight:bounds.height,ground:GROUND,playerX:game.player.x,aimX:game.player.aimX});
+   if(view){camera.scale=view.scale;camera.x=view.x;camera.y=view.y;}
   }
  }else{camera.scale=Math.max(camera.width/W,camera.height/H);camera.x=(W-camera.width/camera.scale)/2;camera.y=Math.max(0,H-camera.height/camera.scale);}
 }
 window.addEventListener('resize',renderSurface);
+// Mobile browser chrome changes viewport height without a classical window resize.
+window.visualViewport?.addEventListener('resize',renderSurface);
 if(typeof ResizeObserver==='function')new ResizeObserver(renderSurface).observe(cv);
 let worldTexture=null,worldTextureKey='',worldTextureTop=0,worldTextureHeight=H;
 function drawWorldBackground(){const bounds=premium.worldBounds(game.config),key=[game.config.id,quality,premium.backgroundRevision(game.config),bounds.top,bounds.height].join(':');if(!worldTexture||key!==worldTextureKey){worldTextureTop=bounds.top;worldTextureHeight=bounds.height;worldTexture=document.createElement('canvas');const resolution=quality==='high'?2:quality==='balanced'?1.5:1;worldTexture.width=W*resolution;worldTexture.height=bounds.height*resolution;const paint=worldTexture.getContext('2d',{alpha:false});paint.scale(resolution,resolution);paint.translate(0,-bounds.top);premium.background(paint,game.config);worldTextureKey=key;}cx.drawImage(worldTexture,0,worldTextureTop,W,worldTextureHeight);}
