@@ -108,12 +108,16 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.keyboard.down('KeyD');await page.waitForTimeout(2100);await page.keyboard.up('KeyD');
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
-   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-01',true);SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.cores=[];g.pendingCores=[];for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:220,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}g.runPoints=40;g.pickupCount=5;});
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-01',true);SignalBreakerQA.controlMode('twin');});await page.waitForTimeout(80);
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.cores=[];g.pendingCores=[];for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:cam.y+innerHeight*.38/cam.scale,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}g.runPoints=40;g.pickupCount=5;});
    await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().cores.every(c=>c.released)),true,'all four payloads released without bubbles');
    const boost=page.locator('#boostBtn'),bb=await boost.boundingBox();a.ok(bb&&bb.width>=44&&bb.height>=44&&bb.x>=0&&bb.y>=0&&bb.x+bb.width<=width&&bb.y+bb.height<=height,'boost touch target fits');
    await boost.click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().runPoints),0);a.ok(await page.evaluate(()=>SignalBreakerQA.snapshot().boostRemaining)>0,'ordinary boost button spends points');
-   await page.evaluate(()=>SignalBreakerQA.engine().pause());await page.screenshot({path:path.join(out,`released-hazards-${width}.png`)});
+   await page.waitForFunction(()=>{const a=document.getElementById('boostBtn').getBoundingClientRect(),b=document.getElementById('toast').getBoundingClientRect();return a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom;});
+   await page.waitForTimeout(500);await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.filter(q=>q.released).length===4&&SignalBreakerQA.engine().cores.every(q=>(q.x-q.r*1.675-c.x)*c.scale>=0&&(q.x+q.r*1.675-c.x)*c.scale<=innerWidth&&(q.y-q.r*1.675-c.y)*c.scale>=0&&(q.y+q.r*1.675-c.y)*c.scale<=innerHeight);}),true,'four payload art silhouettes fit actual camera');
+   await page.screenshot({path:path.join(out,`released-hazards-${width}.png`)});
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.cores=[];g.pendingCores=[];});
    // State fixtures inspect production equipment at the actual game scale; no completion claim.
    await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
