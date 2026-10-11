@@ -2,6 +2,20 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.SignalBreakerEndings=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
  'use strict';
  const VERSION='ch01-ending-v1';
+ // Focal positions are authored from the restored image, not gameplay coordinates.
+ const cameras={
+  'CH-01':{world:47,human:42,memory:47,hook:71},
+  'CH-02':{world:54,human:45,memory:54,hook:67},
+  'CH-03':{world:54,human:51,memory:54,hook:62},
+  'CH-04':{world:90,human:48,memory:78,hook:91},
+  'CH-05':{world:49,human:49,memory:49,hook:49}
+ };
+ const direct=(stageId,shot)=>Object.freeze({...shot,
+  camera:Object.freeze({portrait:shot.id.startsWith('recall')?cameras['CH-0'+shot.id.slice(-1)].world:(cameras[stageId][shot.id]||cameras[stageId].world),landscape:50}),
+  ...(shot.id==='human'?{speakerId:'breaker.ending.'+stageId.toLowerCase().replace('-','')+'.speaker'}:{}),
+  ...(stageId==='CH-05'&&shot.id==='memory'?{labelId:'breaker.ending.signal.received'}:{}),
+  ...(stageId==='CH-05'&&shot.id==='hook'?{titleId:'breaker.ending.finale.title'}:{})
+ });
  const CH01=Object.freeze({stageId:'CH-01',bossIdentity:'delivery',version:VERSION,duration:12,
   fallbackImage:'art/map-delivery-v3.webp',nextLabelId:'breaker.ending.next',
   image:'art/ending-ch01-restored-v1.webp',nextStageId:'CH-02',
@@ -12,7 +26,7 @@
    Object.freeze({until:7.5,id:'human',labelId:'breaker.ending.ch01.human',lineId:'breaker.ending.ch01.human.line'}),
    Object.freeze({until:10,id:'memory',labelId:'breaker.ending.memory',lineId:'breaker.ending.ch01.memory.line'}),
    Object.freeze({until:12,id:'hook',labelId:'breaker.ending.next',lineId:'breaker.ending.ch01.hook'})
-  ])});
+  ].map(shot=>direct('CH-01',shot)))});
  const CAMPAIGN_VERSION='campaign-ending-v1';
  const definitions={'CH-01':CH01};
  for(const [number,bossIdentity,map] of [[2,'conveyor','conveyor'],[3,'extraction','extraction'],[4,'tension','hoist'],[5,'grid','power']]){
@@ -27,7 +41,7 @@
   definitions[stageId]=Object.freeze({stageId,bossIdentity,version:CAMPAIGN_VERSION,duration:shots.at(-1).until,
    image:'art/ending-ch0'+number+'-restored-v1.webp',fallbackImage:'art/map-'+map+'-v2.webp',
    nextStageId:number===5?null:'CH-0'+(number+1),nextLabelId:prefix+'.next',titleId:prefix+'.title',altId:prefix+'.alt',
-   shots:Object.freeze(shots.map(Object.freeze))});
+   shots:Object.freeze(shots.map(shot=>direct(stageId,shot)))});
  }
  Object.freeze(definitions);
  const definition=id=>Object.hasOwn(definitions,id)?definitions[id]:null;
