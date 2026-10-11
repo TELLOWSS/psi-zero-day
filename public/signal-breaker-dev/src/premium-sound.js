@@ -40,6 +40,9 @@ class SoundDirector{
  case'impact':{const material=event.material;if(material==='power'){this.osc(470,90,.19,'sawtooth',.04);this.noiseBurst(.12,.05,3100);}else if(material==='dust'){this.osc(85,40,.16,'sine',.07);this.noiseBurst(.18,.09,470);}else if(material==='load'){this.osc(76,35,.23,'triangle',.09);this.noiseBurst(.12,.06,850);}else{this.osc(165,65,.17,'triangle',.08);this.osc(780,290,.1,'sine',.03);this.noiseBurst(.1,.06,1850);}break;}
  case'split':this.osc(445,150,.13,'square',.023);this.noiseBurst(.11,.07,2400);break;
  case'capture':this.osc(525,990,.17,'sine',.06);this.osc(760,1350,.20,'triangle',.025);break;
+ case'itemcollect':this.osc(event.material==='watch'?880:event.material==='charge'?660:520,1200,.12,'sine',.035);break;
+ case'powerup':this.osc(520,1040,.23,'triangle',.045);this.osc(780,1560,.28,'sine',.025);break;
+ case'watchsync':this.osc(660,1320,.32,'sine',.04);this.osc(990,1980,.3,'triangle',.025);break;
  case'netfield':this.osc(380,190,.26,'sine',.05);this.noiseBurst(.23,.048,2600);break;
  case'bumper':case'ricochet':case'corebounce':this.osc(870,320,.055,'triangle',.042);break;
  case'node':this.osc(640,1160,.26,'triangle',.07);break;
