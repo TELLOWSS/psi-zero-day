@@ -400,3 +400,32 @@ body.breaker-focus #overlayInner[data-state="won"]>.iconbtn:not(#resultOperation
  body.breaker-focus .burst-boost{top:44px}
  body.breaker-focus .radio-line{top:107px}
 }
+/* CH-01 ending: world-first image, compact evidence, explicit return to results. */
+.ending-player[hidden]{display:none!important}
+.ending-player{position:fixed;inset:0;z-index:180;background:#13242a url('../art/map-delivery-v3.webp') center/cover no-repeat;isolation:isolate;overflow:hidden;color:#fff8e9;display:flex;flex-direction:column;justify-content:space-between;padding:max(22px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left))}
+.ending-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 58%;z-index:-2}
+.ending-player[data-motion=full] .ending-art{animation:ending-drift 14s ease-out both}
+.ending-player[data-motion=still] .ending-art{animation:none}
+@keyframes ending-drift{from{transform:scale(1.035)}to{transform:scale(1)}}
+.ending-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#08141a88 0%,transparent 32%,#07141c18 45%,#07141cef 100%)}
+.ending-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0;border:0;font-size:11px;letter-spacing:.15em;color:#f3ddba;flex-shrink:0}
+.ending-tools{display:flex;gap:8px;letter-spacing:0}
+.ending-tools button{min-height:44px;padding:10px 14px;border:1px solid #d9e4d64a;border-radius:24px;background:#132a34c9;color:#fff8e9;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.ending-tools button:focus-visible{outline:3px solid #f7d995;outline-offset:3px}
+.ending-copy{width:min(620px,100%);align-self:flex-start;position:relative}
+.ending-label{font-size:11px!important;font-weight:750;letter-spacing:.08em;color:#b5e6d5;margin:0 0 10px!important}
+.ending-copy h2{font-size:clamp(30px,4.3vw,66px);font-weight:700;letter-spacing:-.055em;line-height:1.1;margin:0 0 14px;text-shadow:0 3px 20px #07141c66}
+.ending-line{font-size:clamp(13px,1.25vw,19px)!important;line-height:1.65;min-height:3.3em;color:#efe8d8;margin:0 0 12px!important;max-width:38em}
+.ending-evidence{list-style:none;display:none;gap:5px;margin:0;padding:0;font-size:12px;color:#bee4d5;line-height:1.55}
+.ending-player[data-shot=memory] .ending-evidence,.ending-player[data-shot=hook] .ending-evidence{display:grid}
+.ending-evidence li::before{content:'✓';margin-right:8px;color:#a6edd0}
+.ending-note{font-size:10px!important;color:#aebfc0;margin:14px 0 8px!important}
+.ending-progress{height:2px;max-width:480px;background:#dfdac733;margin-top:12px;overflow:hidden}
+.ending-progress i{height:100%;background:#cde8cd;display:block}
+body.ending-open{overflow:hidden}
+.ending-memory-card{padding:14px 0;margin:8px 0 14px;border-top:1px solid #63877b55;border-bottom:1px solid #63877b55;text-align:left}
+.ending-memory-card>strong{font-size:13px;color:#bce5d3}.ending-memory-card ul{padding-left:16px;font-size:11px;line-height:1.8;color:#bfd1d0}.ending-memory-card p{font-size:11px!important;color:#c2d0cb}
+.ending-save-warning{color:#f2ca95!important}
+@media(orientation:portrait){.ending-player{padding: max(16px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom))}.ending-art{object-position:50% 56%}.ending-header{font-size:9px;letter-spacing:.09em}.ending-tools{gap:5px}.ending-tools button{font-size:11px;padding:9px 11px}.ending-copy h2{font-size:37px}.ending-line{font-size:14px!important;max-width:25em}.ending-shade{background:linear-gradient(180deg,#08141a77 0%,transparent 28%,#07141c18 42%,#07141ce8 80%,#07141cf5 100%)}}
+@media(orientation:landscape) and (max-height:500px){.ending-player{padding:12px 22px}.ending-copy{width:62%;max-width:620px}.ending-copy h2{font-size:30px;margin-bottom:8px}.ending-label{margin-bottom:6px!important}.ending-line{font-size:12px!important;min-height:2.9em;margin-bottom:6px!important}.ending-evidence{font-size:10px;gap:2px}.ending-note{margin:7px 0 4px!important;font-size:9px!important}.ending-progress{margin-top:6px}.ending-tools button{font-size:11px}.ending-shade{background:linear-gradient(90deg,#07141cd9 0%,#07141c55 58%,transparent 90%)}}
+@media(prefers-reduced-motion:reduce){.ending-player .ending-art{animation:none!important}}

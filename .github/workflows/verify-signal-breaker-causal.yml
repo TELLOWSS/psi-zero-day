@@ -46,7 +46,9 @@ jobs:
         env:
           SIGNAL_BREAKER_PLAYWRIGHT_ROOT: ${{ runner.temp }}/signal-breaker-browser
           SIGNAL_BREAKER_QA_OUTPUT: ${{ runner.temp }}/causal-qa
-        run: node public/signal-breaker-dev/scripts/verify-causal-source.cjs
+        run: |
+          node public/signal-breaker-dev/scripts/verify-causal-source.cjs
+          node public/signal-breaker-dev/scripts/verify-stage-ending.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
