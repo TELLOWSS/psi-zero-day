@@ -21,6 +21,13 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
    await page.goto(url);await page.waitForFunction(()=>window.SignalBreakerQA?.snapshot().state==='playing');
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));
+   await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
+   a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
+   // Presentation fixtures cover every material and state without claiming player balance.
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:230+i*210,y:230,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;});
+   await page.waitForTimeout(80);
+   await page.screenshot({path:path.join(out,`materials-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.reset();g.start();});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),false);
    a.equal(await page.evaluate(()=>SignalBreakerQA.view().supportActor?.ready),true);
    const button=page.locator('#sourceBtn');await button.waitFor({state:'visible'});
