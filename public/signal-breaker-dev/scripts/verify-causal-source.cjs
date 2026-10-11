@@ -80,6 +80,15 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.pressureVents===1);
    await page.screenshot({path:path.join(out,`operation-extraction-mist-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='extraction'&&b.phase==='purging'&&b.filterStage===2;}),'CH03 first filter cannot be completed as final victory');
+   await page.waitForFunction(()=>document.getElementById('bossEncounterPhase').textContent.includes('필터 2/4'));
+   await page.screenshot({path:path.join(out,`operation-extraction-filter-purge-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;window.__beforeFilterFlush=b.purgeUntil;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.purgeMistBonus===true&&b.purgeUntil<window.__beforeFilterFlush;}),'player-applied mist advances purging filter service');
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.purgeUntil+1/120;g.step(1/120);});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.filterStage===2&&b.phase==='sealed'&&b.nodes.every(n=>!n.hit);}));
+   await page.screenshot({path:path.join(out,`operation-extraction-filter-rearmed-${width}.png`)});
    // CH04 tension relay: make warned snap visible, then deliberately lock the rail with the anchor apparatus.
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-04',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextSnapAt-1.3;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='tension'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
