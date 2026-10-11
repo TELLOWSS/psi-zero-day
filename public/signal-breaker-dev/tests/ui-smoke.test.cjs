@@ -47,7 +47,7 @@ for(let i=0;i<120;i++){const callback=queue.shift();assert.ok(callback,'requestA
 assert.ok(window.SignalBreakerQA.engine().time>1.5);assert.equal(elements.score.textContent.length,6);
 const event=(code)=>({code,repeat:false,preventDefault(){}});for(const f of windowListeners.keydown||[])f(event('Digit2'));assert.equal(window.SignalBreakerQA.snapshot().weapon,'net');
 for(const f of windowListeners.keydown||[])f(event('KeyQ'));assert.equal(window.SignalBreakerQA.engine().shieldAngle,1);
-for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.length===10);
+for(const f of windowListeners.keydown||[])f(event('KeyP'));assert.equal(window.SignalBreakerQA.snapshot().state,'paused');assert.ok(elements.overlayInner.children.some(c=>c.id==='quickRetry'));assert.ok(elements.overlayInner.children.some(c=>c.textContent===window.SignalBreakerText['breaker.lobby.operations']));
 const picker=elements.overlayInner.children[3].children[0];picker.value='kang_taesik';picker.trigger('change');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).characterId,'kang_taesik');
 const shotsBeforeSelect=window.SignalBreakerQA.snapshot().shotsFired;for(const f of windowListeners.keydown||[])f({...event('Space'),target:{matches:()=>true}});assert.equal(window.SignalBreakerQA.snapshot().shotsFired,shotsBeforeSelect);assert.equal(window.SignalBreakerQA.snapshot().state,'paused');

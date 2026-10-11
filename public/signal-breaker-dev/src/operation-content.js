@@ -1,0 +1,2 @@
+/* Authored operation identities. Existing production environments, localized copy. */
+(function(root){'use strict';const names=['delivery','conveyor','extraction','hoist','power'];root.SignalBreakerOperations=Object.freeze(names.map((name,i)=>Object.freeze({id:'CH-0'+(i+1),image:'art/map-'+name+(i===0?'-v3.webp':'-v2.webp'),portrait:'art/world-'+name+'-v4.webp',textId:'breaker.operation.'+(i+1),accent:['#9de6d0','#f1c784','#a6dcec','#d9b8ed','#facb8b'][i]})));})(typeof globalThis!=='undefined'?globalThis:this);
