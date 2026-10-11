@@ -59,6 +59,14 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
     a.ok(cockpit.fire.left>=0&&cockpit.fire.right<=cockpit.viewport.width&&cockpit.fire.bottom<=cockpit.viewport.height,'FIRE stays operable within viewport');
     await page.screenshot({path:path.join(out,`combat-hud-boss-${width}.png`)});
     await page.screenshot({path:path.join(out,`operation-boss-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH01');
+    // CH01 first cleared core MUST trigger its unique 5-lock battle, not instant victory.
+    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
+    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='rearming'&&b.gatePhase===2&&b.hp===b.maxHp;}),'CH01 first lock break re-arms instead of instant victory');
+    await page.waitForFunction(()=>document.getElementById('bossEncounterPhase').textContent.includes('반입문 2/5'));
+    await page.screenshot({path:path.join(out,`operation-delivery-gate-break-${width}.png`)});
+    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.resetUntil+1/120;g.step(1/120);});
+    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='sealed'&&b.gatePhase===2&&b.nodes.every(n=>!n.hit);}));
+    await page.screenshot({path:path.join(out,`operation-delivery-gate-rearmed-${width}.png`)});
     await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.boss.warningUntil=0;g.boss.nextDischargeAt=g.time+60;});
    await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');
    // Orientation visual QA at both sides: the authored actor faces the shot, not the joystick.
