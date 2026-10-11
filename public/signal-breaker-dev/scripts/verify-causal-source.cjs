@@ -68,7 +68,18 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
    a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine();return g.tensionLockUntil>g.time&&g.boss.secured>0;}),'CH04 rail anchor cancels predicted cable snap');
    await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});
-   // Restore CH01 before the following causal-source regression: CH02–04 omit the CH01 source.
+   // Final boss QA: three-zone electrical warning, explicit scan response, phase 2.
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextArcAt-1.36;g.step(1/120);});
+   await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='grid'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
+   await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('전력 불균형'));
+   await page.screenshot({path:path.join(out,`operation-grid-warning-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.deployField('scan',b.x,b.y);});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.isolations===1&&!b.warningUntil&&b.scannedUntil>SignalBreakerQA.engine().time;}),'manual CH05 scanner interrupts live warning');
+   await page.screenshot({path:path.join(out,`operation-grid-isolated-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});b.hp=4;g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
+   a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.combatTier===2),'CH05 final boss escalates at three HP');
+   await page.screenshot({path:path.join(out,`operation-grid-phase-two-${width}.png`)});
+   // Restore CH01 for causal source regression: CH02-05 do not have the CH01 source.
    await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
