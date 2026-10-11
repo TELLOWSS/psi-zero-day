@@ -29,6 +29,12 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.keyboard.down('KeyD');await page.waitForTimeout(600);await page.keyboard.up('KeyD');
    a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0),'auto fire survives movement in twin mode');
    await page.locator('#netBtn').click();await page.waitForTimeout(250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().weapon),'net','manual equipment choice survives automatic fire');
+   await page.evaluate(()=>SignalBreakerQA.controlMode('flow'));const ab=await page.locator('#aimPad').boundingBox();
+   await page.mouse.move(ab.x+ab.width*.2,ab.y+ab.height*.2);await page.mouse.down();
+   const aimedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);await page.keyboard.down('KeyD');await page.waitForTimeout(650);
+   a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots),'manual aim retains automatic fire');
+   a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine(),d=g.launchGeometry().direction;return d.x<0&&Number(document.getElementById('arena').dataset.breakerFacing)===(Math.round(Math.atan2(d.y,d.x)/(Math.PI/4))+8)%8;}),'body faces left shot while moving right');
+   await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
    await page.locator('#fireBtn').click();await page.evaluate(()=>SignalBreakerQA.engine().pause());
