@@ -24,8 +24,9 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
    // Presentation fixtures cover every material and state without claiming player balance.
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:230+i*210,y:230,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;g.fields=[{kind:'mist',x:440,y:230,radius:95,until:g.time+1}];});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),c=SignalBreakerQA.view().camera;g.cores=[];for(const [i,kind] of ['metal','dust','power','load'].entries())g.addCore({x:c.x+innerWidth*(.17+i*.22)/c.scale,y:c.y+innerHeight*.45/c.scale,tier:2,kind,vx:0,vy:0,stable:i===3});g.cores[1].mistExposure=.375;g.fields=[{kind:'mist',x:g.cores[1].x,y:g.cores[1].y,radius:95,until:g.time+1}];});
    await page.waitForTimeout(80);
+   a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.every(q=>(q.x-q.r-c.x)*c.scale>=0&&(q.x+q.r-c.x)*c.scale<=innerWidth&&(q.y-q.r-c.y)*c.scale>=0&&(q.y+q.r-c.y)*c.scale<=innerHeight);}),true,'all material fixture silhouettes inside camera');
    await page.screenshot({path:path.join(out,`materials-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.reset();g.start();});
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().source.observed),false);
