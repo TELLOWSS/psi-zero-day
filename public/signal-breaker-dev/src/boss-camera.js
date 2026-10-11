@@ -17,8 +17,8 @@ function frame({width,height,worldWidth=1100,boundsTop=0,boundsHeight=1650,groun
  const backgroundCover=height/boundsHeight;
  const scale=Math.max(.01,Math.min(fitScale,backgroundCover));
  const visible=width/scale,visibleHeight=height/scale;
- const minX=visible>=worldWidth?(worldWidth-visible)*.5:0;
- const maxX=visible>=worldWidth?minX:worldWidth-visible;
+ const minX=visible>=worldWidth?(worldWidth-visible)*.5:-margin/scale;
+ const maxX=visible>=worldWidth?minX:worldWidth-visible+margin/scale;
  const x=visible>=worldWidth?minX:clamp((left+right-visible)*.5,minX,maxX);
  const wantedY=ground-.65*visibleHeight;
  const maxY=boundsTop+boundsHeight-visibleHeight;
