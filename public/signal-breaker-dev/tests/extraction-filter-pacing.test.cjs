@@ -28,7 +28,7 @@ test('CH03 mist at the intake speeds the current purge only once',()=>{
 });
 test('CH03 retains unique pressure attack even while filters are purging',()=>{
  const g=make(),b=g.boss;for(const n of b.nodes)hit(g,n.x,n.y);for(let i=0;i<b.maxHp;i++)hit(g,b.x,b.y);
- a.equal(b.phase,'purging');b.nextPressureAt=g.time+1.3;g.player.x=b.x;
+ a.equal(b.phase,'purging');b.nextPressureAt=g.time+2;g.player.x=b.x;
  g.time=b.nextPressureAt-1.42;g.step(DT);a.ok(b.warningUntil>0);
  const hp=g.player.life;g.time=b.nextPressureAt-DT/2;g.step(DT);
  a.equal(b.pressureBursts,1);a.equal(g.player.life,hp-1);
