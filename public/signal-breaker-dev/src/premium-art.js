@@ -284,13 +284,24 @@ class PremiumArt{
  }
  for(const p of this.sparks){let o=sat(p.life/p.max);c.globalAlpha=o*.93;c.strokeStyle=p.color;c.fillStyle=p.color;c.lineWidth=p.kind==='shard'?2.8:1.5;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x-p.vx*(p.kind==='shard'?.036:.017),p.y-p.vy*(p.kind==='shard'?.036:.017));c.stroke();if(p.kind==='shard'&&this.quality==='high')disk(c,p.x,p.y,1.9,p.color);}
  c.restore();if(this.flash>.005){c.fillStyle=`rgba(238,252,249,${Math.min(.22,this.flash)})`;const bounds=this.worldBounds(this.activeStage);c.fillRect(0,bounds.top,W,bounds.height);}}
- hazard(c,q,time){
+ // Presentation-only size guard. Physics and capture still use q.r.
+ // Ensures mobile zoom never enlarges a small hazard into a boss-sized illustration.
+ hazardVisualSize(q,screenScale=1){
+  const radius=Math.max(1,Number(q?.r)||14),scale=Math.max(.25,Number(screenScale)||1);
+  return Math.max(radius*2,Math.min(radius*2.35,110/scale));
+ }
+ hazard(c,q,time,screenScale=1){
   if(!this.hazardAtlas&&root.PSIPresentationAssets)this.hazardAtlas=root.PSIPresentationAssets.image('art/released-hazards-v1.webp');
   const im=this.hazardAtlas;if(!im?.complete||!im.naturalWidth)return false;
   const cell=['metal','dust','power','load'].indexOf(q.kind);if(cell<0)return false;
-  const w=im.naturalWidth/2,h=im.naturalHeight/2,size=q.r*3.35,warning=time<q.releaseAt;
+  const w=im.naturalWidth/2,h=im.naturalHeight/2,size=this.hazardVisualSize(q,screenScale),warning=time<q.releaseAt;
   c.save();c.translate(q.x,q.y);if(!this.reducedMotion){c.rotate(q.kind==='load'?q.age*(q.vx>=0?1:-1)*1.8:q.kind==='metal'?Math.sin(q.age*3)*.3:q.kind==='power'?Math.sin(q.age*6)*.08:0);const pulse=q.kind==='dust'?1+Math.sin(q.age*4)*.07:1;c.scale(pulse,pulse);}c.globalAlpha=warning?.75:1;c.drawImage(im,(cell%2)*w,Math.floor(cell/2)*h,w,h,-size/2,-size/2,size,size);
-  if(warning){line(c,-size*.6,0,-size*.42,0,'#fff1bc',2);line(c,size*.42,0,size*.6,0,'#fff1bc',2);}c.restore();return true;
+  if(warning){line(c,-size*.6,0,-size*.42,0,'#fff1bc',2);line(c,size*.42,0,size*.6,0,'#fff1bc',2);}c.restore();
+  // Keep the actual collision footprint legible even when sprite scale is restrained.
+  c.save();c.translate(q.x,q.y);c.lineWidth=Math.min(2.4,3/Math.max(.7,screenScale));c.strokeStyle=warning?'#ffce8b':q.kind==='metal'?'#86e9eb':q.kind==='dust'?'#f2ca94':q.kind==='power'?'#d5adff':'#ffb992';
+  c.globalAlpha=warning?.9:.73;c.beginPath();c.arc(0,0,q.r+3,0,Math.PI*2);c.stroke();
+  if(warning){c.setLineDash([5,6]);c.beginPath();c.arc(0,0,q.r+8,0,Math.PI*2);c.stroke();}
+  c.restore();return true;
  }
  pickup(c,p,time){const type=p.type||'power',color=type==='watch'?'#b8d4ff':type==='charge'?'#ffdc89':'#a9f5d8';c.save();c.translate(p.x,p.y);if(!this.reducedMotion)c.translate(0,Math.sin(time*4+p.id)*2);c.shadowBlur=this.quality==='low'?0:12;c.shadowColor=color;const metal=c.createLinearGradient(-13,-13,13,13);metal.addColorStop(0,'#76908d');metal.addColorStop(.28,'#243b43');metal.addColorStop(.7,'#0c252e');metal.addColorStop(1,'#8da49a');path(c,[[-9,-13],[9,-13],[14,-8],[14,8],[9,13],[-9,13],[-14,8],[-14,-8]],metal,color,1.6);c.shadowBlur=0;disk(c,0,0,9,'#082128',color,1);c.fillStyle=color;c.font='800 12px system-ui';c.textAlign='center';c.fillText(type==='watch'?'W':type==='charge'?'C':'P',0,4);line(c,-6,-11,6,-11,'#eefaf1',1);c.restore();}
 
