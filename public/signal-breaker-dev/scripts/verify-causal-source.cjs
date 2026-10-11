@@ -21,7 +21,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    const page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
    await page.goto(url);await page.waitForFunction(()=>window.SignalBreakerQA?.snapshot().state==='playing');
-   a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));
+   a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
    // Presentation fixtures cover every material and state without claiming player balance.
@@ -128,7 +128,22 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForTimeout(250);await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast');if(!toast.classList.contains('visible'))return true;const r=toast.getBoundingClientRect();return b&&(b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});await page.screenshot({path:path.join(out,`equipment-exposed-${width}.png`)});
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().boss.phase),'exposed');
    if(width>height&&height<=500)a.ok(await page.evaluate(()=>{const v=SignalBreakerQA.view(),b=SignalBreakerQA.engine().boss;return v.bossLabel.left>(b.x-v.camera.x)*v.camera.scale;}),'short landscape status is beside the body');
-   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'released four-kind payload art, point boost via touch button, v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
+   // Explicit boundary fixtures test continuous UI transitions; endurance uses ordinary inputs.
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-01',true);SignalBreakerQA.continuous(true);SignalBreakerQA.controlMode('twin');});
+   await page.keyboard.down('KeyD');
+   await page.evaluate(clear);await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.source.controlled=true;g.source.verified=true;g.update(1/120);});
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().wave===2&&SignalBreakerQA.snapshot().state==='playing');
+   a.equal(await page.locator('#tuningDock').isVisible(),false,'no blocking wave upgrade');a.equal(await page.locator('#overlay').isVisible(),false,'no continuous overlay');
+   await page.locator('#radioLine').waitFor({state:'visible'});const radio=await page.locator('#radioLine').boundingBox();a.ok(radio&&radio.x>=0&&radio.y>=0&&radio.x+radio.width<=width+1&&radio.y+radio.height<=height+1,'radio fits actual viewport');
+   const moving=await page.evaluate(()=>SignalBreakerQA.engine().player.x);await page.waitForTimeout(180);a.ok(await page.evaluate(x=>SignalBreakerQA.engine().player.x>x,moving),'held movement survives wave boundary');
+   await page.keyboard.up('KeyD');await page.reload();await page.locator('#resumeRun').click();
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().wave===2&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#tuningDock').isVisible(),false,'continuous checkpoint resumes directly');
+   await page.keyboard.down('KeyD');
+   for(let wave=2;wave<=5;wave++){await page.evaluate(clear);await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#overlay').isVisible(),false,'chapter flows without result panel');
+   const continued=await page.evaluate(()=>SignalBreakerQA.engine().player.x);await page.waitForTimeout(180);a.ok(await page.evaluate(x=>SignalBreakerQA.engine().player.x>x,continued),'held movement survives chapter handoff');await page.keyboard.up('KeyD');
+   await page.screenshot({path:path.join(out,`continuous-story-${width}.png`)});
+   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'continuous wave, auto tuning, radio, direct checkpoint resume, chapter handoff and held input, released four-kind payload art, point boost via touch button, v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));
