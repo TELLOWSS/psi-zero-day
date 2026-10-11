@@ -20,6 +20,7 @@ global.location={search:'?entry=prepare'};
 global.window={SignalBreakerChapter:require('../src/chapter-content.js'),SignalBreakerActors:{characters:[{id:'player',textId:'breaker.actor.player'},{id:'kang_taesik',textId:'breaker.actor.kang'}],createActor:()=>({draw:()=>false,status:()=>({ready:false}),fire(){}})},SignalBreakerEngine:require('../src/engine.js'),addEventListener(n,fn){(windowListeners[n]??=[]).push(fn)},AudioContext:undefined};
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/firing-pose.js'),'utf8'),{filename:'src/firing-pose.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/localization-ko.js'),'utf8'),{filename:'src/localization-ko.js'});
 vm.runInThisContext(src,{filename:'src/app.js'});
 // Visual settings and focus screen must be operable without rerunning the game.
