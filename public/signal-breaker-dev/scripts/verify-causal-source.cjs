@@ -106,7 +106,15 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.keyboard.down('KeyD');await page.waitForTimeout(2100);await page.keyboard.up('KeyD');
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
-   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'v2 materials, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
+   // State fixtures inspect production equipment at the actual game scale; no completion claim.
+   await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
+   await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);
+   a.ok((await page.evaluate(()=>SignalBreakerQA.view().equipment.source)).endsWith('boss-equipment-v1.webp'));
+   await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-sealed-${width}.png`)});
+   await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;b.phase='exposed';b.exposure=2;});
+   await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-exposed-${width}.png`)});
+   a.equal(await page.evaluate(()=>SignalBreakerQA.engine().boss.phase),'exposed');
+   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));

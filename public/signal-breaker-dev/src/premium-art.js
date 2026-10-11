@@ -90,6 +90,15 @@ class PremiumArt{
   const bounds=this.worldBounds(game.config),shade=c.createLinearGradient(0,bounds.top,0,bounds.top+bounds.height);shade.addColorStop(0,'#06131c33');shade.addColorStop(.25,'transparent');shade.addColorStop(.8,'transparent');shade.addColorStop(1,'#03101c44');rect(c,0,bounds.top,W,bounds.height,shade);
   c.restore();
  }
+ equipment(c,cell,x,y,size){
+  if(!Number.isInteger(cell)||cell<0||cell>3)return false;
+  if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
+  const image=this.equipmentAtlas;if(!image?.complete||!image.naturalWidth)return false;
+  // Authored row gap is at y=600, not the mathematical half; keep every sprite isolated.
+  const sx=image.naturalWidth/1254,sy=image.naturalHeight/1254;
+  const top=cell<2?0:600,height=cell<2?600:654;
+  c.save();c.translate(x,y);c.drawImage(image,(cell%2)*627*sx,top*sy,627*sx,height*sy,-size/2,-size/2,size,size);c.restore();return true;
+ }
  structure(c,cell,x,y,w,h,angle=0){
   if(!this.structureAtlas&&typeof Image!=='undefined')this.structureAtlas=root.PSIPresentationAssets.image('art/industrial-devices-v2.webp');
   const image=this.structureAtlas;if(!image?.complete||!image.naturalWidth)return false;

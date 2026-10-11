@@ -1,5 +1,8 @@
 /* New breaker copy uses text IDs; no shared WATCH localization state. */
 (function(root){root.SignalBreakerText=Object.freeze({
+ 'breaker.boss.sealed':'방호 봉쇄',
+ 'breaker.boss.exposed':'전력실 노출',
+ 'breaker.boss.resolved':'위험 해소',
  'breaker.auto.blocked':'사선 대기',
  'breaker.assist.blocked':'방호체에 막힌 사선 · 이동하거나 직접 반사 조준',
  'breaker.assist.reposition':'진전이 없습니다 · 이동해 사선을 바꿔보세요',
