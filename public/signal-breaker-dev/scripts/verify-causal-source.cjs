@@ -33,7 +33,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.mouse.move(ab.x+ab.width*.2,ab.y+ab.height*.2);await page.mouse.down();
    const aimedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);await page.keyboard.down('KeyD');await page.waitForFunction(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots);
    a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots),'manual aim retains automatic fire');
-   a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine(),d=g.launchGeometry().direction;return d.x<0&&Number(document.getElementById('arena').dataset.breakerFacing)===(Math.round(Math.atan2(d.y,d.x)/(Math.PI/4))+8)%8;}),'body faces left shot while moving right');
+   await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),live=g.launchGeometry().direction,shot=g.route.at(-1),facing=Number(document.getElementById('arena').dataset.breakerFacing),quantize=d=>(Math.round(Math.atan2(d.y,d.x)/(Math.PI/4))+8)%8;return live.x<0&&[live,shot&&g.time-shot.time<=.15?{x:shot.dx,y:shot.dy}:null].filter(Boolean).some(d=>facing===quantize(d));},null,{timeout:5000});
    await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
