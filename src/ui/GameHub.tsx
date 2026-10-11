@@ -2,7 +2,7 @@ import './shooting-entry.css';
 import {SurvivorsGraphicsSettings} from './SurvivorsGraphicsSettings';
 import { WorkStopSongPlayer, workStopSongText } from './WorkStopSongPlayer';
 import { GameManual, gameManualText } from './GameManual';
-import { Component, lazy, Suspense, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { Component, lazy, Suspense, useEffect, useMemo, useCallback, useState, useSyncExternalStore } from 'react';
 import type { ComponentType, ErrorInfo, ReactNode } from 'react';
 import type { EpisodeSession } from '../app/episode-session';
 import { COMPANY_NAME, GAME_TITLE } from '../app/brand';
@@ -17,6 +17,7 @@ import {
 import castPlan from '../../content/episode01/character-art-production.json';
 import { VisualImage } from './VisualSlot';
 import { EpisodeRecord } from './EpisodeRecord';
+import { SignalWatchLoadingScreen } from './SignalWatchLoadingScreen';
 import { CinematicLoadingScreen } from './CinematicLoadingScreen';
 import { SiteProfileScreen } from './SiteProfileScreen';
 import { TITLE_CAST_IDS } from '../app/title-cast';
@@ -151,6 +152,11 @@ export function GameShell({ session }: { session: EpisodeSession }) {
   const [inGame, setInGame] = useState(false);
   const [inDefense, setInDefense] = useState(false);
   const [inSurvivors, setInSurvivors] = useState(false);
+  const [survivorsLoading, setSurvivorsLoading] = useState(false);
+  const enterSurvivors = useCallback(() => {
+    setSurvivorsLoading(false);
+    setInSurvivors(true);
+  }, []);
   const [defenseScenarioId, setDefenseScenarioId] = useState<string | null>(null);
   const [e1UnlockNotice, setE1UnlockNotice] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -229,6 +235,12 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     setInGame(true);
   };
 
+  if (survivorsLoading) return <SignalWatchLoadingScreen
+    loadGame={loadSurvivorsGame}
+    onComplete={enterSurvivors}
+    onExit={() => setSurvivorsLoading(false)}
+  />;
+
   if (inSurvivors) return <Suspense fallback={<GameplayChunkFallback />}>
     <PatrolSurvivorsGame onExit={() => setInSurvivors(false)} audioMuted={audioMuted} />
   </Suspense>;
@@ -282,7 +294,7 @@ export function GameShell({ session }: { session: EpisodeSession }) {
     onPlay={play}
     onNewGame={newGame}
     onDefense={scenarioId => openDefense(scenarioId ?? null)}
-    onSurvivors={() => setInSurvivors(true)}
+    onSurvivors={() => setSurvivorsLoading(true)}
   />;
 }
 

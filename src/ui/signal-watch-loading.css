@@ -1,0 +1,20 @@
+.signal-watch-loading{position:fixed;inset:0;z-index:1000;min-height:100dvh;background:#07141d;color:#fff;overflow:hidden;font-family:inherit}
+.signal-watch-loading-art{position:absolute;width:100%;height:100%;object-fit:cover;opacity:.7}
+.signal-watch-loading::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,13,22,.95),rgba(3,13,22,.25)),linear-gradient(0deg,rgba(3,13,22,.8),transparent 60%);pointer-events:none}
+.signal-watch-loading-light{position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,#60e6ef33 50%,transparent 65%);animation:watch-loading-scan 3s ease-in-out infinite}
+.signal-watch-loading-brand{position:absolute;z-index:1;left:max(7vw,env(safe-area-inset-left));top:50%;transform:translateY(-50%);width:min(540px,85vw)}
+.signal-watch-loading-brand small{font-weight:800;letter-spacing:.2em;color:#b3e4e8}
+.signal-watch-loading-brand h1{font-size:clamp(52px,9vw,112px);line-height:.9;letter-spacing:-.045em;margin:24px 0}
+.signal-watch-loading-brand em{font-style:normal;color:#71f0eb}
+.signal-watch-loading-brand p{font-size:clamp(14px,2vw,20px);margin:24px 0}
+.signal-watch-loading-brand progress{display:block;width:100%;height:6px;border:0;appearance:none;background:#ffffff25;accent-color:#71f0eb}
+.signal-watch-loading-brand progress::-webkit-progress-bar{background:#ffffff25}
+.signal-watch-loading-brand progress::-webkit-progress-value{background:#71f0eb;transition:width .3s}
+.signal-watch-loading-brand progress::-moz-progress-bar{background:#71f0eb}
+.signal-watch-loading-brand span{display:block;margin-top:14px;font-size:13px;color:#c0dade}
+.signal-watch-loading button{color:#fff;background:#102e3d;border:1px solid #a3e9ef55;border-radius:8px;padding:12px 18px;cursor:pointer}
+.signal-watch-loading-brand button{margin-top:18px}
+.signal-watch-loading-exit{position:absolute;z-index:2;right:max(24px,env(safe-area-inset-right));top:max(24px,env(safe-area-inset-top))}
+@keyframes watch-loading-scan{from{transform:translateX(-70%)}to{transform:translateX(70%)}}
+@media(max-height:460px){.signal-watch-loading-brand h1{font-size:54px;margin:12px 0}.signal-watch-loading-brand p{margin:12px 0}.signal-watch-loading-brand{width:min(430px,70vw)}}
+@media(prefers-reduced-motion:reduce){.signal-watch-loading-light{animation:none}.signal-watch-loading-brand progress::-webkit-progress-value{transition:none}}
