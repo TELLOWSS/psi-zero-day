@@ -10,13 +10,13 @@
   'CH-04':{world:90,human:48,memory:78,hook:91},
   'CH-05':{world:49,human:49,memory:49,hook:49}
  };
- const direct=(stageId,shot)=>Object.freeze({...shot,
+ const direct=(stageId,shot)=>Object.freeze({...shot,until:shot.until+(shot.id==='human'||shot.id==='memory'||shot.id==='hook'?1.5:0),
   camera:Object.freeze({portrait:shot.id.startsWith('recall')?cameras['CH-0'+shot.id.slice(-1)].world:(cameras[stageId][shot.id]||cameras[stageId].world),landscape:50}),
   ...(shot.id==='human'?{speakerId:'breaker.ending.'+stageId.toLowerCase().replace('-','')+'.speaker'}:{}),
   ...(stageId==='CH-05'&&shot.id==='memory'?{labelId:'breaker.ending.signal.received'}:{}),
   ...(stageId==='CH-05'&&shot.id==='hook'?{titleId:'breaker.ending.finale.title'}:{})
  });
- const CH01=Object.freeze({stageId:'CH-01',bossIdentity:'delivery',version:VERSION,duration:12,
+ const CH01=Object.freeze({stageId:'CH-01',bossIdentity:'delivery',version:VERSION,duration:13.5,
   fallbackImage:'art/map-delivery-v3.webp',nextLabelId:'breaker.ending.next',
   image:'art/ending-ch01-restored-v1.webp',nextStageId:'CH-02',
   titleId:'breaker.ending.ch01.title',altId:'breaker.ending.ch01.alt',
@@ -38,7 +38,7 @@
    {until:8.5+offset,id:'human',labelId:prefix+'.human',lineId:prefix+'.human.line'},
    {until:11.5+offset,id:'memory',labelId:'breaker.ending.memory',lineId:prefix+'.memory.line'},
    {until:14+offset+(number===5?1:0),id:'hook',labelId:prefix+'.next',lineId:prefix+'.hook'});
-  definitions[stageId]=Object.freeze({stageId,bossIdentity,version:CAMPAIGN_VERSION,duration:shots.at(-1).until,
+  definitions[stageId]=Object.freeze({stageId,bossIdentity,version:CAMPAIGN_VERSION,duration:shots.at(-1).until+1.5,
    image:'art/ending-ch0'+number+'-restored-v1.webp',fallbackImage:'art/map-'+map+'-v2.webp',
    nextStageId:number===5?null:'CH-0'+(number+1),nextLabelId:prefix+'.next',titleId:prefix+'.title',altId:prefix+'.alt',
    shots:Object.freeze(shots.map(shot=>direct(stageId,shot)))});

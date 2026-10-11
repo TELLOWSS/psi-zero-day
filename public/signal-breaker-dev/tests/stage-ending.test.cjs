@@ -11,7 +11,7 @@ test('ending memory is simulated evidence with no manufactured PSI scores or ext
  a.equal(Ending.valid({...r,externalSync:true}),false);a.equal(Ending.evidenceIds({...r,origin:'site'}).length,0);
 });
 test('memory identity is stable within a run and replay cannot change reward state',()=>{
- const g=winning();const r=Ending.record(g,7);a.equal(Ending.record(g,7).id,r.id);a.notEqual(Ending.record(g,8).id,r.id);a.equal(Ending.definition('CH-06'),null);a.equal(Ending.definition('CH-01').shots.at(-1).until,12);
+ const g=winning();const r=Ending.record(g,7);a.equal(Ending.record(g,7).id,r.id);a.notEqual(Ending.record(g,8).id,r.id);a.equal(Ending.definition('CH-06'),null);a.equal(Ending.definition('CH-01').shots.at(-1).until,13.5);
 });
 const campaignWin=id=>{const g=new Game(id,19,{extended:true,premiumRun:true,burst:true,continuous:true,operation:true});g.start();g.wave=4;g.beginNextWave();g.cores=[];g.pendingCores=[];for(const n of g.circuit)n.hit=true;const b=g.boss;if(b.identity==='conveyor')b.segment=b.maxSegments;if(b.identity==='extraction')b.filterStage=b.maxFilterStages;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1});g.update(DT);a.equal(g.state,'won');return g;};
 for(const id of ['CH-02','CH-03','CH-04','CH-05'])test(id+' derives only terminal combat evidence without inventing source observation',()=>{
@@ -21,7 +21,7 @@ for(const id of ['CH-02','CH-03','CH-04','CH-05'])test(id+' derives only termina
  a.equal(Ending.valid({...r,stageId:'CH-01'}),false);a.equal(Ending.valid({...r,bossIdentity:'delivery'}),false);
 });
 test('finale recalls four authored worlds and ends at selection without CH06',()=>{
- const d=Ending.definition('CH-05');a.equal(d.nextStageId,null);a.equal(d.duration,21);a.equal(d.shots.filter(s=>s.id.startsWith('recall')).length,4);
+ const d=Ending.definition('CH-05');a.equal(d.nextStageId,null);a.equal(d.duration,22.5);a.equal(d.shots.filter(s=>s.id.startsWith('recall')).length,4);
  const fs=require('node:fs'),path=require('node:path');require('../src/localization-ko.js');
  for(const id of ['CH-01','CH-02','CH-03','CH-04','CH-05']){const d=Ending.definition(id);a.equal(d.duration,d.shots.at(-1).until);for(const shot of d.shots){a.ok(global.SignalBreakerText[shot.lineId]);a.ok(global.SignalBreakerText[shot.labelId]);}a.ok(fs.existsSync(path.join(__dirname,'..',d.image)));}
 });
