@@ -27,7 +27,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
  let browser;const results=[];
  try{
   for(let i=0;i<50;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
-  browser=await chromium.launch({args:['--no-sandbox','--disable-dev-shm-usage']});
+  browser=await chromium.launch({...(process.env.SIGNAL_BREAKER_CHROMIUM_PATH?{executablePath:process.env.SIGNAL_BREAKER_CHROMIUM_PATH}:{}),args:['--no-sandbox','--disable-dev-shm-usage']});
   for(const [width,height] of [[390,844],[844,390],[768,1024],[1920,1080]]){
    const context=await browser.newContext({viewport:{width,height},hasTouch:true});
    await context.addInitScript(()=>{if(!localStorage.getItem('psi.signal-breaker.offline.v1'))localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({sound:false,settings:{controlMode:'twin',assistVersion:1,autoFire:false}}));});
@@ -82,6 +82,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='conveyor'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('과부하'));
    await page.screenshot({path:path.join(out,`operation-conveyor-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH02');
+   // Capturing the warning must not consume the player's mitigation window.
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
    await page.locator('#conveyorBtn').click();
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
@@ -100,7 +102,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    if(height>width){await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),v=SignalBreakerQA.view(),cam=v.camera,playerX=(g.player.x-cam.x)*cam.scale,bossX=(g.boss.x-cam.x)*cam.scale;return playerX>=12&&playerX<=innerWidth-10&&bossX>=28&&bossX<=innerWidth-25;});}
    await page.screenshot({path:path.join(out,`operation-extraction-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH03');
    if(height>width)await page.screenshot({path:path.join(out,`operation-extraction-boss-framing-${width}.png`)});
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextPressureAt-1.48;g.step(1/120);g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.pressureVents===1);
    await page.screenshot({path:path.join(out,`operation-extraction-mist-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
@@ -117,7 +119,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='tension'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('장력 파열'));
    await page.screenshot({path:path.join(out,`operation-tension-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH04');
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.nextSnapAt-1.3;g.step(1/120);const r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
    a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine();return g.tensionLockUntil>g.time&&g.boss.secured>0;}),'CH04 rail anchor cancels predicted cable snap');
    await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});
    // Final boss QA: three-zone electrical warning, explicit scan response, phase 2.
@@ -125,7 +127,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='grid'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('전력 불균형'));
    await page.screenshot({path:path.join(out,`operation-grid-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH05');
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.deployField('scan',b.x,b.y);});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextArcAt-1.36;g.step(1/120);g.deployField('scan',b.x,b.y);});
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.isolations===1&&!b.warningUntil&&b.scannedUntil>SignalBreakerQA.engine().time;}),'manual CH05 scanner interrupts live warning');
    await page.screenshot({path:path.join(out,`operation-grid-isolated-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});b.hp=4;g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
