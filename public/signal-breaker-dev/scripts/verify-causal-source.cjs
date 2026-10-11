@@ -97,6 +97,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked);
    await page.locator('#chainGuide').waitFor({state:'visible'});
    a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
+   a.equal(await page.locator('#fireAction').textContent(),'사선 대기');
    const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
    const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
    await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),blockedShots);
@@ -105,7 +106,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    await page.keyboard.down('KeyD');await page.waitForTimeout(2100);await page.keyboard.up('KeyD');
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
-   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'movement, projectile, source recurrence, observation, control, verification, checkpoint recovery'});
+   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'v2 materials, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));
