@@ -27,7 +27,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
  let browser;const results=[];
  try{
   for(let i=0;i<50;i++){try{if((await fetch(url)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
-  browser=await chromium.launch({args:['--no-sandbox','--disable-dev-shm-usage']});
+  browser=await chromium.launch({...(process.env.SIGNAL_BREAKER_CHROMIUM_PATH?{executablePath:process.env.SIGNAL_BREAKER_CHROMIUM_PATH}:{}),args:['--no-sandbox','--disable-dev-shm-usage']});
   for(const [width,height] of [[390,844],[844,390],[768,1024],[1920,1080]]){
    const context=await browser.newContext({viewport:{width,height},hasTouch:true});
    await context.addInitScript(()=>{if(!localStorage.getItem('psi.signal-breaker.offline.v1'))localStorage.setItem('psi.signal-breaker.offline.v1',JSON.stringify({sound:false,settings:{controlMode:'twin',assistVersion:1,autoFire:false}}));});
@@ -82,6 +82,8 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='conveyor'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('과부하'));
    await page.screenshot({path:path.join(out,`operation-conveyor-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH02');
+   // Capturing the warning must not consume the player's mitigation window.
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
    await page.locator('#conveyorBtn').click();
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
@@ -100,7 +102,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    if(height>width){await page.waitForFunction(()=>{const g=SignalBreakerQA.engine(),v=SignalBreakerQA.view(),cam=v.camera,playerX=(g.player.x-cam.x)*cam.scale,bossX=(g.boss.x-cam.x)*cam.scale;return playerX>=12&&playerX<=innerWidth-10&&bossX>=28&&bossX<=innerWidth-25;});}
    await page.screenshot({path:path.join(out,`operation-extraction-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH03');
    if(height>width)await page.screenshot({path:path.join(out,`operation-extraction-boss-framing-${width}.png`)});
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextPressureAt-1.48;g.step(1/120);g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.pressureVents===1);
    await page.screenshot({path:path.join(out,`operation-extraction-mist-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
@@ -117,7 +119,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='tension'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('장력 파열'));
    await page.screenshot({path:path.join(out,`operation-tension-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH04');
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.nextSnapAt-1.3;g.step(1/120);const r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
    a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine();return g.tensionLockUntil>g.time&&g.boss.secured>0;}),'CH04 rail anchor cancels predicted cable snap');
    await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});
    // Final boss QA: three-zone electrical warning, explicit scan response, phase 2.
@@ -125,7 +127,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='grid'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
    await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('전력 불균형'));
    await page.screenshot({path:path.join(out,`operation-grid-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH05');
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.deployField('scan',b.x,b.y);});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextArcAt-1.36;g.step(1/120);g.deployField('scan',b.x,b.y);});
    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.isolations===1&&!b.warningUntil&&b.scannedUntil>SignalBreakerQA.engine().time;}),'manual CH05 scanner interrupts live warning');
    await page.screenshot({path:path.join(out,`operation-grid-isolated-${width}.png`)});
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});b.hp=4;g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
@@ -230,11 +232,15 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-01',true);SignalBreakerQA.controlMode('twin');});await page.waitForTimeout(80);
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.operation=false;g.cores=[];g.pendingCores=[];for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:cam.y+innerHeight*.38/cam.scale,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}g.runPoints=40;g.pickupCount=5;});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.operation=false;g.cores=[];g.pendingCores=[];g.runPoints=40;g.pickupCount=5;});
+   const boost=page.locator('#boostBtn'),bb=await boost.boundingBox();a.ok(bb&&bb.width>=44&&bb.height>=44&&bb.x>=0&&bb.y>=0&&bb.x+bb.width<=width&&bb.y+bb.height<=height,'boost touch target fits');
+   // Measure the actual click transaction; live payloads may earn points during Playwright dispatch.
+   await page.evaluate(()=>{const button=document.getElementById('boostBtn');window.__boostSpend={};button.addEventListener('click',()=>{window.__boostSpend.before=SignalBreakerQA.engine().runPoints;},{capture:true,once:true});button.addEventListener('click',()=>{window.__boostSpend.after=SignalBreakerQA.engine().runPoints;},{once:true});});
+   await boost.click();a.equal(await page.evaluate(()=>window.__boostSpend.before-window.__boostSpend.after),40);a.ok(await page.evaluate(()=>SignalBreakerQA.snapshot().boostRemaining)>0,'ordinary boost button spends points');
+   // Populate the art fixture after the live button test, while physics is paused.
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.pause();const cam=SignalBreakerQA.view().camera;for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:cam.y+innerHeight*.38/cam.scale,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}});
    await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().cores.every(c=>c.released)),true,'all four payloads released without bubbles');
-   const boost=page.locator('#boostBtn'),bb=await boost.boundingBox();a.ok(bb&&bb.width>=44&&bb.height>=44&&bb.x>=0&&bb.y>=0&&bb.x+bb.width<=width&&bb.y+bb.height<=height,'boost touch target fits');
-   await boost.click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().runPoints),0);a.ok(await page.evaluate(()=>SignalBreakerQA.snapshot().boostRemaining)>0,'ordinary boost button spends points');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.waitForFunction(()=>{const a=document.getElementById('boostBtn').getBoundingClientRect(),b=document.getElementById('toast').getBoundingClientRect();return a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom;});
    await page.waitForTimeout(100);
    a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.filter(q=>q.released).length===4&&SignalBreakerQA.engine().cores.every(q=>(q.x-q.r*1.675-c.x)*c.scale>=0&&(q.x+q.r*1.675-c.x)*c.scale<=innerWidth&&(q.y-q.r*1.675-c.y)*c.scale>=0&&(q.y+q.r*1.675-c.y)*c.scale<=innerHeight);}),true,'four payload art silhouettes fit actual camera');
