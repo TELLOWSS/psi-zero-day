@@ -180,6 +180,32 @@ class PremiumArt{
   c.fillStyle=controlled?'#baffdf':'#f1d0a3';c.fillText(controlled?'PRESSURE PURGED':(gate.open?'DAMPER OPEN':'DAMPER SHUT'),0,99);
   c.restore();return true;
  }
+ // CH04 distinct counterweight/tension-drum profile; independent of three preceding boss silhouettes.
+ tensionBoss(c,b,time,secured){
+  const opened=b.phase==='exposed',warning=b.warningUntil>time,t=this.reducedMotion?0:time;
+  c.save();c.translate(b.x,b.y);
+  glow(c,0,0,154,secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
+  // Hoist head, sheave frame and separate hanging counterweights.
+  path(c,[[-82,-79],[-48,-113],[48,-113],[83,-79],[89,-10],[-90,-10]],'#263d4a','#c5d0c6',4);
+  rect(c,-74,-73,148,82,'#284958','#a9bcb9',2.5);
+  for(const side of [-1,1]){
+   const sx=side*58;disk(c,sx,-43,26,'#192f3a','#d7ccae',4);
+   for(let k=0;k<8;k++){const ang=k*Math.PI/4+(secured?0:t*.65)*side;line(c,sx+Math.cos(ang)*9,-43+Math.sin(ang)*9,sx+Math.cos(ang)*19,-43+Math.sin(ang)*19,'#e0dfcf',3);}
+   disk(c,sx,-43,7,secured?'#80edc9':'#efb277');
+   line(c,sx,-17,sx,69,secured?'#8bedcb':'#aabdc2',4);
+   rect(c,sx-18,60,36,22,'#53656b','#c7bc9c',2);
+   for(let k=0;k<3;k++)line(c,sx-13,66+k*5,sx+13,66+k*5,'#f2b66e',2);
+  }
+  path(c,[[-50,8],[-35,-5],[35,-5],[50,8],[33,57],[-33,57]],'#243d47','#d9c09e',3);
+  disk(c,0,26,opened?27:17,opened?'#f9df9e':'#7996ab','#d9dfd1',4);disk(c,0,26,8,secured?'#9bf7ca':'#d7a06d');
+  const tick=secured?0:Math.sin(t*2)*7;
+  line(c,-45,4,45,4+tick,warning?'#ffb889':'#b7cdcd',3.3);
+  for(const side of [-1,1]){const sx=side*97;rect(c,sx-12,-66,24,34,'#39434a','#d9b276',2);disk(c,sx,-55,7,warning?'#ff8c65':secured?'#91ffd1':'#a8ab83');}
+  rect(c,-60,83,120,13,'#1a313e','#d7c6a5',2);
+  c.font='800 11px sans-serif';c.textAlign='center';c.fillStyle='#ecddc3';c.fillText('CH-04 · TENSION RELAY',0,-128);
+  c.fillStyle=secured?'#aefbd3':'#f2ba83';c.fillText(secured?'ANCHOR LOCKED':'CABLE UNDER LOAD',0,111);
+  c.restore();return true;
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
@@ -217,8 +243,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','tensionwarning','tensionsecured','tensionsnap'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
