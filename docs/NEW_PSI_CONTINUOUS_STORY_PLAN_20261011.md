@@ -56,4 +56,16 @@ GitHub CI에 기존 각 80회 시뮬레이션과 신규 3시간 시뮬레이션�
 
 실행 자료: `scripts/simulate-continuous.cjs`, `docs/continuous-simulation-20261011.json`, `tests/continuous.test.cjs`, `scripts/verify-causal-source.cjs`.
 
-이 문서의 로컬 검증 이후 최신 GitHub CI와 운영 배포 결과를 확인한다. 실제 15·30·60분 플레이에서 반복 대사, 손의 피로, 캐릭터와 장비의 변화 체감, 자발적으로 쉬고 다시 하고 싶은 흐름을 확인하는 것이 다음 품질 판단이다.
+실제 15·30·60분 플레이에서 반복 대사, 손의 피로, 캐릭터와 장비의 변화 체감, 자발적으로 쉬고 다시 하고 싶은 흐름을 확인하는 것이 다음 품질 판단이다.
+
+## 최종 CI 확인
+
+- PR [#165](https://github.com/TELLOWSS/psi-zero-day/pull/165), 검증 헤드 `7ba0308f602147eadcce8f30af3b1d45769d4884`, 메인 병합 `15f41edda31058d3c756664b7e4fb4cf5e8c461c`.
+- [Signal Breaker 검증](https://github.com/TELLOWSS/psi-zero-day/actions/runs/38111721119): 규칙·회귀 83개 통과, 기존 일반/위험 연계 각 80회 결과 재현, 신규 3×1시간 결과 정확히 재현. 실제 Chromium 390×844·844×390·768×1024·1920×1080에서 연속 연결·체크포인트·누른 이동 입력·무전·기존 위험과 장비 흐름 모두 PASS. 네 화면 캡처도 직접 검토했다.
+- [전체 앱 검증](https://github.com/TELLOWSS/psi-zero-day/actions/runs/38111721095): 2,037개 통과·기존 1개 건너뜀, 타입 검사·빌드 성공. Episode 01 다섯 화면과 Survivors 모바일/태블릿 검증 성공.
+
+## 운영 동기화 확인
+
+GitHub 메인 병합본의 Vercel 운영 배포 `dpl_Hjdjyd98dX5PG9ie9uFKbYy3obt7`은 READY이며 [게임 실행](https://psi-zero-day.vercel.app/signal-breaker-dev/)에 반영됐다. 운영 도메인의 HTML·엔진·구역 연결·무전·앱·번역·CSS·서비스 워커 8개 파일은 모두 HTTP 200이고 로컬에서 검증한 파일과 바이트 및 SHA-256이 일치했다. 실제 브라우저 흐름 검증은 위 CI의 검증 헤드에서 수행했으며 운영 사이트의 사람 1시간 플레이 검증으로 해석하지 않는다.
+
+이번 연속 플레이를 확인하려면 새 챕터 작전을 시작한다. 예전 체크포인트는 기존 강화 선택 흐름으로 복원한다. 자동 연속 플레이 중에도 사용자가 일시정지할 수 있고 실패하면 직접 재도전한다.
