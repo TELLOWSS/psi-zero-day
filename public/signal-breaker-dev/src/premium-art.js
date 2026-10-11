@@ -105,6 +105,25 @@ class PremiumArt{
   }
   return candidates[0];
  }
+ // Stage 01 production-specific industrial boss vector. Unlike the shared equipment atlas,
+ // the delivery conveyor controller has its own silhouette, moving blast doors and warning lamps.
+ deliveryBoss(c,b,time){
+  const opened=b.phase==='exposed',danger=b.warningUntil>time,beat=this.reducedMotion?0:time;
+  c.save();c.translate(b.x,b.y);glow(c,0,0,142,opened?'#ffda8e55':'#7dd7ea22');
+  path(c,[[-114,-48],[-81,-84],[85,-84],[114,-45],[114,52],[80,79],[-82,79],[-114,52]],'#1a3443','#95b8c4',4);
+  rect(c,-96,-68,192,15,'#314e59','#b7d7d9',1.4);
+  for(let i=0;i<9;i++){const x=-92+i*21;path(c,[[x,-66],[x+11,-66],[x+18,-55],[x+7,-55]],i%2?'#3a3331':'#edb957');}
+  for(const side of [-1,1]){const x=side*90;rect(c,x-13,-28,26,81,'#2c5266','#9cc2cd',2);rect(c,x-7,-20,14,62,'#5d7e86');disk(c,x,-51,9,danger&&Math.floor(beat*8)%2?'#fff0bf':'#e29348','#493525',2);}
+  c.save();c.rotate(opened?0:Math.sin(beat*.55)*.08);
+  disk(c,0,2,61,'#112e41','#8199a6',5);for(let i=0;i<10;i++){const angle=i*Math.PI/5+beat*.3;line(c,Math.cos(angle)*43,Math.sin(angle)*43,Math.cos(angle)*53,Math.sin(angle)*53,'#ffb85e',4);}
+  disk(c,0,2,33,opened?'#f4b35b':'#2c6575','#d7e2dc',4);disk(c,0,2,opened?20:13,opened?'#fff0b3':'#63b7c4');
+  c.restore();
+  const retract=opened?30:0;for(const side of [-1,1]){rect(c,side*(18+retract)-27,-38,54,79,opened?'#294859':'#385b65','#c9d4d2',2);for(let i=0;i<4;i++)rect(c,side*(18+retract)-22,-30+i*18,44,7,opened?'#dc9a53':'#718d92');}
+  rect(c,-68,65,136,12,'#122b39','#b4bfbd',1.5);for(let i=-2;i<=2;i++)disk(c,i*23,70,5,'#31515f','#e1be7a',1);
+  c.font='800 11px sans-serif';c.textAlign='center';c.fillStyle='#d8edf0';c.fillText('BAY 01 · SIGNAL GATE',0,-93);
+  if(danger){c.globalAlpha=this.reducedMotion ? .72 : .5+.4*Math.sin(beat*13);line(c,-88,-91,88,-91,'#ffd175',4);}
+  c.restore();return true;
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
@@ -142,8 +161,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }

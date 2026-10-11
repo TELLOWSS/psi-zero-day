@@ -37,6 +37,10 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
+    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextDischargeAt-1.34;g.step(1/120);});
+    a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='delivery'&&b.warningUntil>SignalBreakerQA.engine().time;}),'CH01 dedicated boss shows warned discharge lane');
+    await page.screenshot({path:path.join(out,`operation-boss-warning-${width}.png`)});
+    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.boss.warningUntil=0;g.boss.nextDischargeAt=g.time+60;});
    await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
