@@ -14,12 +14,12 @@
    const offset=elapsed-this.startAt;
    // Do not begin a late download halfway through a word. Replay can try again.
    if(!this.started&&offset>.4){this.missed=true;return;}
-   if(this.paused||this.missed||!this.buffer||offset<0||offset>=this.buffer.duration){this.release();return;}
-   if(!this.source){try{const source=this.c.createBufferSource(),bus=this.c.createGain();source.buffer=this.buffer;bus.gain.value=this.gain;source.connect(bus).connect(this.c.destination);this.source=source;this.bus=bus;this.active=true;this.started=true;source.onended=()=>{if(this.source===source)this.release();};source.start(0,Math.max(0,offset));if(this.c.state==='suspended')void this.c.resume().catch(()=>{});}catch{this.failed=true;this.enabled=false;this.release();}}
+   if(this.paused||this.missed||this.completed||!this.buffer||offset<0||offset>=this.buffer.duration){this.release();return;}
+   if(!this.source){try{const source=this.c.createBufferSource(),bus=this.c.createGain();source.buffer=this.buffer;bus.gain.value=this.gain;source.connect(bus).connect(this.c.destination);this.source=source;this.bus=bus;this.active=true;this.started=true;source.onended=()=>{if(this.source===source){this.completed=true;this.release();}};source.start(0,Math.max(0,offset));if(this.c.state==='suspended')void this.c.resume().catch(()=>{});}catch{this.failed=true;this.enabled=false;this.release();}}
   }
   pause(value){this.paused=value;if(value)this.release();}
   release(){this.active=false;if(this.source){this.source.onended=null;try{this.source.stop();}catch{}this.source.disconnect();this.source=null;}this.bus?.disconnect();this.bus=null;}
-  stop(){this.generation++;this.release();this.enabled=false;this.buffer=null;this.c=null;this.started=false;this.missed=false;this.failed=false;}
+  stop(){this.generation++;this.release();this.enabled=false;this.buffer=null;this.c=null;this.started=false;this.completed=false;this.missed=false;this.failed=false;}
  }
  root.SignalBreakerEndingVoice=EndingVoice;
 })(typeof window!=='undefined'?window:globalThis);
