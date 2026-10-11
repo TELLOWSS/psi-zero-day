@@ -344,7 +344,7 @@ body.breaker-focus .chain-guide{max-width:60%;top:calc(env(safe-area-inset-top,0
 body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 168px);max-width:70%;padding:7px 10px;background:#071d2cd9;border-radius:8px;font-size:10px}
 body.breaker-focus .toast{top:calc(env(safe-area-inset-top,0px) + 126px);max-width:68%;font-size:10px}
 body.breaker-focus .view-btn{top:calc(env(safe-area-inset-top,0px) + 128px);right:10px;left:auto;min-height:36px;height:36px;padding:6px 8px}
-body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 117px);left:10px;right:auto;min-width:0;min-height:36px;max-width:108px;padding:6px 8px;border-radius:9px;border-color:#84d9be7b;background:#092b36e8;font-size:10px;white-space:nowrap}
+body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 117px);left:10px;right:auto;min-width:92px;min-height:44px;max-width:108px;padding:7px 8px;border-radius:9px;border-color:#84d9be7b;background:#092b36e8;font-size:10px;white-space:nowrap}
 body.breaker-focus .burst-boost:disabled{opacity:.67}
 body.breaker-focus #itemStatus{opacity:.9;font-size:10px;max-width:190px}
 body.breaker-focus .hud-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 156px);width:104px;height:22px;background:#07212b88;border:0}
