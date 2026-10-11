@@ -3,7 +3,7 @@ const {Game,CHAPTER,STAGES,WEAPONS,DT,mass}=require('../src/engine.js');
 const {chapterReward,availableWeapons}=require('../src/chapter-content.js');
 const core=(g,kind='metal',tier=0,x=500,y=220)=>{g.cores=[];g.addCore({x,y,vx:0,vy:0,tier,kind});return g.cores[0];};
 test('five chapter IDs preserve all four legacy records; LAB earns nothing',()=>{
- assert.equal(CHAPTER.length,5);assert.equal(new Set([...STAGES,...CHAPTER].map(c=>c.id)).size,9);assert.equal(Object.keys(WEAPONS).length,6);
+ assert.equal(CHAPTER.length,5);assert.equal(new Set([...STAGES,...CHAPTER].map(c=>c.id)).size,9);assert.equal(Object.keys(WEAPONS).length,8);for(const id of ['pulse','net','magnet','mist','anchor','scan'])assert.ok(WEAPONS[id],'original six tools still exist');
  assert.deepEqual(availableWeapons(0),['pulse','net']);assert.ok(availableWeapons(4).includes('scan'));
  assert.equal(chapterReward('CH-01',false,3,true),0);assert.equal(chapterReward('CH-01',true,3),0);assert.equal(chapterReward('SB-01',false,3),0);assert.equal(chapterReward('CH-01',false,3),95);
  const lab=new Game('CH-01',123,{lab:true});assert.ok(lab.setLoadout(['mist','scan'],3));assert.equal(new Game('CH-05').setLoadout(['anchor','scan']),false);
