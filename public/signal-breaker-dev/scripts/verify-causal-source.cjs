@@ -37,7 +37,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
    await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
-   await page.locator('#fireBtn').click();await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
