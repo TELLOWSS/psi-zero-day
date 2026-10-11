@@ -41,7 +41,14 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
     a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='delivery'&&b.warningUntil>SignalBreakerQA.engine().time;}),'CH01 dedicated boss shows warned discharge lane');
     await page.screenshot({path:path.join(out,`operation-boss-warning-${width}.png`)});
     await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.boss.warningUntil=0;g.boss.nextDischargeAt=g.time+60;});
-   await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.locator('#autoFireBtn').click();a.equal(await page.locator('#autoFireBtn').getAttribute('aria-pressed'),'false','explicit AUTO toggle stops it before manual shot QA');
+   // Orientation visual QA at both sides: the authored actor faces the shot, not the joystick.
+   for(const side of [-1,1]){
+    await page.evaluate(d=>{const g=SignalBreakerQA.engine();g.setAimDirection(d,-.9);},side);
+    await page.waitForFunction(d=>{const g=SignalBreakerQA.engine(),a=Math.atan2(g.launchGeometry().direction.y,g.launchGeometry().direction.x);return Number(document.getElementById('arena').dataset.breakerFacing)===(Math.round(a/(Math.PI/4))+8)%8&&Math.sign(g.launchGeometry().direction.x)===d;},side);
+    await page.screenshot({path:path.join(out,`operator-muzzle-${side===-1?'left':'right'}-${width}.png`)});
+   }
+   await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    // CH02-specific presentation contract: live belt-warning lane and interactive mitigation.
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-02',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextSurgeAt-1.55;g.step(1/120);});
