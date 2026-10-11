@@ -21,6 +21,6 @@
 .survivors-lab-stats dd { margin:4px 0 0; font-weight:700; color:#a1ead3; }
 @media(orientation:landscape) and (max-height:560px) {
  .survivors-equipment-workspace .survivors-store .survivors-fitting-visual { top:92px; }
- .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art { width:min(100%,180px); }
- .survivors-store .survivors-fitting-visual .survivors-fitting-art { min-width:min(100%,160px); }
+ .survivors-equipment-workspace .survivors-store .survivors-fitting-visual .survivors-fitting-art { width:min(100%,160px,max(56px,calc((100dvh - 310px)*1.125))); }
+ .survivors-store .survivors-fitting-visual .survivors-fitting-art { min-width:0; }
 }
