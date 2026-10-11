@@ -86,6 +86,29 @@ elements.aimPad.trigger('pointerup',touch(95));elements.joystick.trigger('pointe
 for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
 assert.ok(window.SignalBreakerQA.snapshot().shotsFired>duringMove,'AUTO keeps firing after fingers release');
 assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO setting persisted');
+// Combined main-branch regression: stage completion cannot consume AUTO, start the next stage,
+// or skip loadout preparation. The two independently reviewed PRs must work together.
+const autoBeforeStage=JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire;
+assert.equal(autoBeforeStage,true);
+window.SignalBreakerQA.engine().finish(true);
+currentNow+=1000/60;queue.shift()(currentNow);
+assert.equal(window.SignalBreakerQA.snapshot().state,'won');
+assert.ok(elements.overlayInner.children.some(c=>c.id==='resultOperationSelect'),'completed operation offers stage choice');
+assert.ok(elements.overlayInner.children.some(c=>c.id==='resultLoadout'),'completed operation offers loadout review');
+for(let i=0;i<12;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().stage,'CH-01','no automatic handoff after operation clear');
+const chooseNext=elements.overlayInner.children.find(c=>c.id==='overlayPrimary');
+assert.ok(chooseNext,'next operation CTA exists');
+chooseNext.trigger('click');
+assert.equal(window.SignalBreakerQA.snapshot().stage,'CH-02');
+assert.equal(window.SignalBreakerQA.snapshot().state,'ready','choosing next operation opens preparation, not combat');
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO remains enabled during stage transition');
+const launchNext=elements.overlayInner.children.find(c=>c.id==='overlayPrimary');
+assert.ok(launchNext);
+launchNext.trigger('click');
+assert.equal(window.SignalBreakerQA.snapshot().state,'playing','combat begins only after explicit player launch');
+assert.equal(elements.autoFireBtn['aria-pressed'],'true','AUTO persists on next stage');
+console.log('PASS combined AUTO + player-chosen result → next stage preparation → explicit launch');
 console.log('PASS independent AUTO toggle, manual FIRE, cancellation, movement and direct aiming');
 console.log('PASS offline best-score persistence after victory');
 console.log('PASS HTML ID contracts and render-path smoke');console.log('PASS ready→play→weapon→shield→pause→new stage');console.log('PASS 180 mock canvas frames without JS error');
