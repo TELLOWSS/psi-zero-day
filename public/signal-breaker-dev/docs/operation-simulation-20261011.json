@@ -6,11 +6,11 @@
       "seed": 1,
       "style": "rapid",
       "state": "won",
-      "time": 43.308,
+      "time": 73.5,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 2,
       "peakShots": 32
     },
     {
@@ -18,11 +18,11 @@
       "seed": 1,
       "style": "spread",
       "state": "won",
-      "time": 37.217,
+      "time": 56.825,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 3,
       "peakShots": 32
     },
     {
@@ -30,23 +30,23 @@
       "seed": 1,
       "style": "precision",
       "state": "won",
-      "time": 45.417,
+      "time": 70.033,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
-      "peakShots": 23
+      "life": 2,
+      "peakShots": 25
     },
     {
       "stage": "CH-01",
       "seed": 3,
       "style": "rapid",
       "state": "won",
-      "time": 42.933,
+      "time": 73.825,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 1,
       "peakShots": 32
     },
     {
@@ -54,11 +54,11 @@
       "seed": 3,
       "style": "spread",
       "state": "won",
-      "time": 36.958,
+      "time": 64.892,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 2,
       "peakShots": 32
     },
     {
@@ -66,11 +66,11 @@
       "seed": 3,
       "style": "precision",
       "state": "won",
-      "time": 47.642,
+      "time": 82.283,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 1,
       "peakShots": 22
     },
     {
@@ -78,11 +78,11 @@
       "seed": 8,
       "style": "rapid",
       "state": "won",
-      "time": 47.025,
+      "time": 74.008,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 1,
       "peakShots": 32
     },
     {
@@ -90,11 +90,11 @@
       "seed": 8,
       "style": "spread",
       "state": "won",
-      "time": 39.833,
+      "time": 69.367,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 2,
       "peakShots": 32
     },
     {
@@ -102,11 +102,11 @@
       "seed": 8,
       "style": "precision",
       "state": "won",
-      "time": 46.342,
+      "time": 73.667,
       "wave": 5,
       "boss": "resolved",
       "bossHP": 0,
-      "life": 5,
+      "life": 1,
       "peakShots": 26
     },
     {
