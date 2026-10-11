@@ -153,6 +153,15 @@ class PremiumArt{
  }
  for(const p of this.sparks){let o=sat(p.life/p.max);c.globalAlpha=o*.93;c.strokeStyle=p.color;c.fillStyle=p.color;c.lineWidth=p.kind==='shard'?2.8:1.5;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x-p.vx*(p.kind==='shard'?.036:.017),p.y-p.vy*(p.kind==='shard'?.036:.017));c.stroke();if(p.kind==='shard'&&this.quality==='high')disk(c,p.x,p.y,1.9,p.color);}
  c.restore();if(this.flash>.005){c.fillStyle=`rgba(238,252,249,${Math.min(.22,this.flash)})`;const bounds=this.worldBounds(this.activeStage);c.fillRect(0,bounds.top,W,bounds.height);}}
+ hazard(c,q,time){
+  if(!this.hazardAtlas&&root.PSIPresentationAssets)this.hazardAtlas=root.PSIPresentationAssets.image('art/released-hazards-v1.webp');
+  const im=this.hazardAtlas;if(!im?.complete||!im.naturalWidth)return false;
+  const cell=['metal','dust','power','load'].indexOf(q.kind);if(cell<0)return false;
+  const w=im.naturalWidth/2,h=im.naturalHeight/2,size=q.r*3.35,warning=time<q.releaseAt;
+  c.save();c.translate(q.x,q.y);if(!this.reducedMotion){c.rotate(q.kind==='load'?q.age*(q.vx>=0?1:-1)*1.8:q.kind==='metal'?Math.sin(q.age*3)*.3:q.kind==='power'?Math.sin(q.age*6)*.08:0);const pulse=q.kind==='dust'?1+Math.sin(q.age*4)*.07:1;c.scale(pulse,pulse);}c.globalAlpha=warning?.75:1;c.drawImage(im,(cell%2)*w,Math.floor(cell/2)*h,w,h,-size/2,-size/2,size,size);
+  if(warning){line(c,-size*.6,0,-size*.42,0,'#fff1bc',2);line(c,size*.42,0,size*.6,0,'#fff1bc',2);}c.restore();return true;
+ }
+ pickup(c,p,time){c.save();c.translate(p.x,p.y);if(!this.reducedMotion)c.rotate(Math.sin(time*4+p.id)*.2);path(c,[[0,-9],[8,-5],[8,5],[0,9],[-8,5],[-8,-5]],'#154f48','#c9fff0',2);line(c,0,-4,0,4,'#fff3a1',2);line(c,-3,0,3,0,'#fff3a1',2);c.restore();}
  core(c,q,time){
  if(!this.coreAtlas?.complete||!this.coreAtlas.naturalWidth)return false;
  const cell=['metal','dust','power','load'].indexOf(q.kind);if(cell<0)return false;

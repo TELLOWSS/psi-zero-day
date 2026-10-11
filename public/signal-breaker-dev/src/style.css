@@ -295,3 +295,5 @@ body[data-session=won] .touch-controls,body[data-session=lost] .touch-controls,b
 .tuning-dock .psi-source-record{border-left:2px solid #8eeedb;padding-left:10px;line-height:1.5;overflow-wrap:anywhere}.tuning-dock{max-height:calc(100dvh - 32px);overflow-y:auto}
 /* Keep the center ground plane clear for control staff in short landscape views. */
 @media(orientation:landscape) and (max-height:500px){body.twin-controls .fire-controls{left:auto;right:110px;transform:none}body.twin-controls #fireBtn{left:auto;right:150px;bottom:82px}}
+
+.burst-boost{position:fixed;right:12px;top:162px;z-index:6;min-width:126px;min-height:44px;padding:6px 10px;white-space:pre-line;color:#e4fff5;border:1px solid #9cf0cf66;background:#092c37e6;border-radius:10px;font-family:inherit;font-size:10px;font-weight:700;line-height:1.5;touch-action:manipulation}.burst-boost:disabled{opacity:.68}.burst-boost[hidden]{display:none}.burst-boost:focus-visible{outline:3px solid #ffe6ab;outline-offset:2px}
