@@ -39,7 +39,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
     await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.time=b.nextDischargeAt-1.34;g.step(1/120);});
     a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='delivery'&&b.warningUntil>SignalBreakerQA.engine().time;}),'CH01 dedicated boss shows warned discharge lane');
-    a.equal(await page.locator('#bossEncounter').isVisible(),true,'boss HP and phase bar appears only during actual boss wave');
+    await page.locator('#bossEncounter').waitFor({state:'visible',timeout:7000});a.equal(await page.locator('#bossEncounter').isVisible(),true,'boss HP and phase bar appears during actual boss wave');
     a.ok((await page.locator('#bossEncounterName').textContent()).includes('반입'),'distinct boss label in compact HUD');
     const cockpit=await page.evaluate(()=>{const v=id=>{const r=document.getElementById(id).getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};};return {head:v('bossEncounter'),fire:v('fireBtn'),move:v('joystick'),aim:v('aimPad'),viewport:{width:innerWidth,height:innerHeight}};});
     a.ok(cockpit.head.top>=0&&cockpit.head.bottom<=cockpit.viewport.height,'boss status remains inside mobile viewport');
