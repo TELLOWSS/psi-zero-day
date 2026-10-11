@@ -5,7 +5,7 @@ function warn(g){const b=g.boss;g.time=b.nextSurgeAt-1.55;g.step(DT);assert.ok(b
 test('CH02 is a conveyor boss, not a CH01-style player X-locked discharge',()=>{
  const g=make('CH-02'),b=g.boss;
  assert.equal(b.identity,'conveyor');assert.equal(b.discharges,undefined);assert.equal(b.surges,0);
- assert.equal(g.conveyorDirection,1);assert.ok(b.nextSurgeAt>g.time+7);
+ assert.equal(g.conveyorDirection,1);assert.ok(b.nextSurgeAt>g.time+2&&b.nextSurgeAt<g.time+3,'first overload appears in short boss encounters');
 });
 test('CH02 shows a timed belt-area warning and allows immediate stop intervention',()=>{
  const g=make('CH-02'),b=warn(g),old=b.nextSurgeAt;
