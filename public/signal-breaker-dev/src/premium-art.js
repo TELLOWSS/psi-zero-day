@@ -90,6 +90,28 @@ class PremiumArt{
   const bounds=this.worldBounds(game.config),shade=c.createLinearGradient(0,bounds.top,0,bounds.top+bounds.height);shade.addColorStop(0,'#06131c33');shade.addColorStop(.25,'transparent');shade.addColorStop(.8,'transparent');shade.addColorStop(1,'#03101c44');rect(c,0,bounds.top,W,bounds.height,shade);
   c.restore();
  }
+ equipmentLabel(b,camera,guide){
+  const half=50*camera.scale,top=16*camera.scale,bottom=4*camera.scale;
+  const candidates=[{x:b.x,y:b.y+66},{x:b.x+112,y:b.y+6},{x:b.x-112,y:b.y+6},{x:b.x,y:b.y-64}];
+  // Short landscape reserves the central message band even while a toast fades.
+  if(camera.width>camera.height&&camera.height<=500)[candidates[0],candidates[1]]=[candidates[1],candidates[0]];
+  for(const p of candidates){const x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
+   const bounds={left:x-half,right:x+half,top:y-top,bottom:y+bottom};
+   const fits=bounds.left>=8&&bounds.right<=camera.width-8&&bounds.top>=8&&bounds.bottom<=camera.height-8;
+   const covered=(Array.isArray(guide)?guide:[guide]).some(g=>g&&bounds.left<g.right&&bounds.right>g.left&&bounds.top<g.bottom&&bounds.bottom>g.top);
+   if(fits&&!covered)return p;
+  }
+  return candidates[0];
+ }
+ equipment(c,cell,x,y,size){
+  if(!Number.isInteger(cell)||cell<0||cell>3)return false;
+  if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
+  const image=this.equipmentAtlas;if(!image?.complete||!image.naturalWidth)return false;
+  // Authored row gap is at y=600, not the mathematical half; keep every sprite isolated.
+  const sx=image.naturalWidth/1254,sy=image.naturalHeight/1254;
+  const top=cell<2?0:600,height=cell<2?600:654;
+  c.save();c.translate(x,y);c.drawImage(image,(cell%2)*627*sx,top*sy,627*sx,height*sy,-size/2,-size/2,size,size);c.restore();return true;
+ }
  structure(c,cell,x,y,w,h,angle=0){
   if(!this.structureAtlas&&typeof Image!=='undefined')this.structureAtlas=root.PSIPresentationAssets.image('art/industrial-devices-v2.webp');
   const image=this.structureAtlas;if(!image?.complete||!image.naturalWidth)return false;
@@ -99,7 +121,7 @@ class PremiumArt{
   c.save();c.translate(x,y);c.rotate(angle);
   c.drawImage(image,left*sx,top*sy,width*sx,height*sy,-w/2,-h/2,w,h);c.restore();return true;
  }
- constructor(){this.canvas=null;this.cacheStage='';this.clock=0;this.fx=[];this.sparks=[];this.max=75;this.quality='high';this.reducedMotion=false;this.flash=0;this.hitFocus=0;this.lastEventId=0;this.recoil=0;this.recovery=[];this.scene=null;if(typeof Image!=='undefined'){this.scene=root.PSIPresentationAssets.image('art/sb01-delivery-bay-v1.webp');this.coreAtlas=root.PSIPresentationAssets.image('art/core-materials-v1.webp');this.operator=root.PSIPresentationAssets.image('art/operator-idle-v1.webp');}}
+ constructor(){this.canvas=null;this.cacheStage='';this.clock=0;this.fx=[];this.sparks=[];this.max=75;this.quality='high';this.reducedMotion=false;this.flash=0;this.hitFocus=0;this.lastEventId=0;this.recoil=0;this.recovery=[];this.scene=null;if(typeof Image!=='undefined'){this.scene=root.PSIPresentationAssets.image('art/sb01-delivery-bay-v1.webp');this.coreAtlas=root.PSIPresentationAssets.image('art/core-materials-v2.webp');this.operator=root.PSIPresentationAssets.image('art/operator-idle-v1.webp');}}
  reset(){this.fx=[];this.sparks=[];this.recovery=[];this.recoil=0;this.flash=0;}
  setQuality(q){this.quality=['high','balanced','low'].includes(q)?q:'high';this.max=this.quality==='high'?150:this.quality==='balanced'?75:30;if(this.sparks.length>this.max)this.sparks=this.sparks.slice(-this.max);}
  setReducedMotion(v){this.reducedMotion=!!v;}
@@ -133,13 +155,20 @@ class PremiumArt{
  c.restore();if(this.flash>.005){c.fillStyle=`rgba(238,252,249,${Math.min(.22,this.flash)})`;const bounds=this.worldBounds(this.activeStage);c.fillRect(0,bounds.top,W,bounds.height);}}
  core(c,q,time){
  if(!this.coreAtlas?.complete||!this.coreAtlas.naturalWidth)return false;
- const cell=['metal','dust','power','load'].indexOf(q.kind),image=this.coreAtlas,w=image.naturalWidth/4,h=image.naturalHeight;
- const size=q.r*2.45; c.save();c.translate(q.x,q.y);
- const angle=this.reducedMotion?0:q.kind==='metal'?time*.45:q.kind==='load'?Math.sin(time*.7)*.12:q.kind==='dust'?Math.sin(time*.8)*.06:Math.sin(time*1.2)*.04;
- c.rotate(angle);c.drawImage(image,cell*w,0,w,h,-size*w/h/2,-size/2,size*w/h,size);c.restore();
+ const cell=['metal','dust','power','load'].indexOf(q.kind);if(cell<0)return false;
+ const image=this.coreAtlas,w=image.naturalWidth/2,h=image.naturalHeight/2;
+ // Authored 2x2 transparent cells. Art remains inside the existing collision footprint.
+ const size=q.r*2;c.save();c.translate(q.x,q.y);
+ const angle=this.reducedMotion?0:q.kind==='metal'?time*.22:q.kind==='load'?Math.sin(time*.7)*.06:q.kind==='dust'?Math.sin(time*.8)*.03:0;
+ c.rotate(angle);c.globalAlpha=q.stable?.78:1;
+ c.drawImage(image,(cell%2)*w,Math.floor(cell/2)*h,w,h,-size/2,-size/2,size,size);c.restore();
  c.save();disk(c,q.x,q.y,q.r,null,(palette[q.kind]||palette.metal)[0]+'88',1);
+ if(!q.stable&&['dust','power'].includes(q.kind)&&q.mistExposure>0){
+  const progress=sat(q.mistExposure/.75);c.beginPath();c.arc(q.x,q.y,q.r+6,-PI/2,-PI/2+TAU*progress);c.strokeStyle='#b6ffe0';c.lineWidth=3;c.stroke();
+ }
  if(q.glow>0){c.globalAlpha=Math.min(.65,q.glow*2);disk(c,q.x,q.y,q.r+5,null,'#ffffff',3);}
- if(q.stable)disk(c,q.x,q.y,q.r+10,null,'#a4ffce',3);c.restore();return true;
+ if(q.stable){c.globalAlpha=1;disk(c,q.x,q.y,q.r+7,null,'#a4ffce',2);const x=q.x+q.r*.65,y=q.y-q.r*.65;disk(c,x,y,7,'#103c32','#a4ffce',1);line(c,x-3,y,x-1,y+2,'#dffff0',2);line(c,x-1,y+2,x+4,y-3,'#dffff0',2);}
+ c.restore();return true;
  }
  proceduralCore(c,q,time){c.save();c.translate(q.x,q.y);let rr=q.r;let kind=q.kind;const cc=palette[kind]||palette.metal;const t=time*(kind==='power'?-1:1);
  if(kind==='metal'){
