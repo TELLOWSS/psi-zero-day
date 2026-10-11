@@ -7,7 +7,7 @@ test('shield occlusion pauses assisted fire but never forbids manual fire or cle
  const g=new Game('CH-05');g.start();g.cores=[];g.boss.nodes[0].hit=true;
  const before=g.shotsFired;let target;for(let i=0;i<10;i++)target=g.assistAim();
  a.equal(target.role,'node');a.equal(target.blocked,true);a.equal(target.aligned,false);a.equal(target.hint,'blocked');
- a.equal(g.shotsFired,before);a.equal(g.boss.nodes[1].hit,false);a.equal(g.fire(),true);
+ a.equal(g.shotsFired,before);a.equal(g.boss.nodes[1].hit,false);a.equal(g.fire(),true);g.selectWeapon('scan');a.equal(g.assistAim(false).blocked,false,'scanner remains available for shield observation');
  g.player.x=1000;for(let i=0;i<10;i++)target=g.assistAim();a.equal(target.blocked,false);
 });
 test('stagnation uses simulation time, freezes on pause and resets after progress',()=>{
