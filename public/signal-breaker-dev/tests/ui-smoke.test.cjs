@@ -31,7 +31,7 @@ elements.focusBtn.trigger('click');assert.equal(document.body.classList.state.ha
 assert.ok(window.SignalBreakerQA,'QA bridge exists');assert.equal(window.SignalBreakerQA.snapshot().state,'ready');assert.equal(elements.stageList.children.length,5);
 assert.ok(elements.overlayInner.children.some(el=>el.id==='overlayPrimary'),'ready overlay has start action');const startButton=elements.overlayInner.children.at(-1);startButton.trigger('click');assert.equal(window.SignalBreakerQA.snapshot().state,'playing');
 const touch=(pointerId,clientX=500,clientY=200)=>({pointerId,clientX,clientY,pointerType:'touch',preventDefault(){}});
-window.SignalBreakerQA.controlMode('twin');assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
+window.SignalBreakerQA.continuous(false);window.SignalBreakerQA.controlMode('twin');assert.equal(elements.controlBtn['aria-pressed'],'true');for(let i=0;i<20;i++){currentNow+=1000/60;queue.shift()(currentNow);}assert.equal(window.SignalBreakerQA.snapshot().shotsFired,0,'no automatic aim or fire while idle');
 elements.controlBtn.trigger('click');
 const shotCount=window.SignalBreakerQA.snapshot().shotsFired;
 elements.arena.trigger('pointerdown',touch(10));

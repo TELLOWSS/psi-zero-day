@@ -21,6 +21,18 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    const page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
    await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready','entry stays in operation menu');a.equal(await page.locator('#resumeRun').isVisible(),false,'fresh visitor has no resume-first screen');const sources=new Set();for(let chapter=1;chapter<=5;chapter++){await page.locator('[data-lobby-stage=CH-0'+chapter+']').click();sources.add(await page.locator('#operationImage').getAttribute('src'));a.equal(await page.locator('#startOperation').isDisabled(),chapter>1,'preview does not bypass unlock');a.ok((await page.locator('#operationSignature').textContent()).length>8);}a.equal(sources.size,5);await page.screenshot({path:path.join(out,`operation-final-${width}.png`)});await page.locator('[data-lobby-stage=CH-01]').click();await page.screenshot({path:path.join(out,`operation-entry-${width}.png`)});const startBox=await page.locator('#startOperation').boundingBox();a.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=height+1,'start CTA fits viewport');a.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);await page.locator('#startOperation').click();await page.waitForFunction(()=>window.SignalBreakerQA?.snapshot().state==='playing');
+   // Fresh operation: actual controls preserve automatic fire across movement and aim overrides.
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().operation),true);
+   await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'spread');
+   await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'precision');
+   await page.locator('#fireBtn').click();const shots0=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
+   await page.keyboard.down('KeyD');await page.waitForTimeout(600);await page.keyboard.up('KeyD');
+   a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0),'auto fire survives movement in twin mode');
+   await page.locator('#netBtn').click();await page.waitForTimeout(250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().weapon),'net','manual equipment choice survives automatic fire');
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
+   await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
+   await page.locator('#fireBtn').click();await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
@@ -141,7 +153,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.snapshot().wave===2&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#tuningDock').isVisible(),false,'continuous checkpoint resumes directly');
    await page.keyboard.down('KeyD');
    for(let wave=2;wave<=5;wave++){await page.evaluate(clear);await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
-   await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#overlay').isVisible(),false,'chapter flows without result panel');
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-01'&&SignalBreakerQA.snapshot().state==='won');a.equal(await page.locator('#overlay').isVisible(),true,'stage result waits for explicit choice');await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01');await page.keyboard.up('KeyD');await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');await page.keyboard.down('KeyD');
    const continued=await page.evaluate(()=>SignalBreakerQA.engine().player.x);await page.waitForTimeout(180);a.ok(await page.evaluate(x=>SignalBreakerQA.engine().player.x>x,continued),'held movement survives chapter handoff');await page.keyboard.up('KeyD');
    await page.screenshot({path:path.join(out,`continuous-story-${width}.png`)});
    a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'five authored operation previews, optional resume, typed pickup collection and watch support, continuous wave, auto tuning, radio, direct checkpoint resume, chapter handoff and held input, released four-kind payload art, point boost via touch button, v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
