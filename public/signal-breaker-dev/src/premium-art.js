@@ -121,7 +121,7 @@ class PremiumArt{
   const retract=opened?30:0;for(const side of [-1,1]){rect(c,side*(18+retract)-27,-38,54,79,opened?'#294859':'#385b65','#c9d4d2',2);for(let i=0;i<4;i++)rect(c,side*(18+retract)-22,-30+i*18,44,7,opened?'#dc9a53':'#718d92');}
   rect(c,-68,65,136,12,'#122b39','#b4bfbd',1.5);for(let i=-2;i<=2;i++)disk(c,i*23,70,5,'#31515f','#e1be7a',1);
   c.font='800 11px sans-serif';c.textAlign='center';c.fillStyle='#d8edf0';c.fillText('BAY 01 · SIGNAL GATE',0,-93);
-  if(danger){c.globalAlpha=this.reducedMotion?.72:.5+.4*Math.sin(beat*13);line(c,-88,-91,88,-91,'#ffd175',4);}
+  if(danger){c.globalAlpha=this.reducedMotion ? .72 : .5+.4*Math.sin(beat*13);line(c,-88,-91,88,-91,'#ffd175',4);}
   c.restore();return true;
  }
  equipment(c,cell,x,y,size){
