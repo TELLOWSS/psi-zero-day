@@ -11,7 +11,9 @@ test('all five unique bosses have valid camera framing across supported portrait
  for(const width of [320,360,390,430,768])for(const playerX of [200,290,440]){
   const f=frame({width,height:width===768?1024:844,worldWidth:1100,boundsHeight:1650,player:{x:playerX},boss});
   assert.ok(f.scale>0&&Number.isFinite(f.scale));
-  assert.ok(f.x>=0&&f.x+f.visible<=1100+1e-6,'no view outside world');
+  assert.ok(Number.isFinite(f.x)&&Number.isFinite(f.visible),'camera bounds remain finite');
+  assert.ok(Math.max(0,-f.x)*f.scale<=width*.5+1e-6&&Math.max(0,f.x+f.visible-1100)*f.scale<=width*.5+1e-6,'edge letterbox stays bounded');
+  for(const n of boss.nodes){const sx=(n.x-f.x)*f.scale;assert.ok(sx>=12&&sx<=width-12,'boss relay node remains inside phone');}
   assert.ok((playerX-f.x)*f.scale>=-1e-6&&(playerX-f.x)*f.scale<=width+1e-6,'operator remains on-screen');
   assert.ok((boss.x-f.x)*f.scale>=-1e-6&&(boss.x-f.x)*f.scale<=width+1e-6,'active boss core on-screen where practical');
  }
