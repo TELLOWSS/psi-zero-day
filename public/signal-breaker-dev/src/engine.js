@@ -38,7 +38,7 @@ class Game {
  tuningOptions(){const all=['bank','capture','focus','cadence','memory','field'].filter(id=>!this.hasTuning(id)&&(id!=='bank'||this.loadout.some(isPulseWeapon))&&(id!=='capture'||this.loadout.includes('net'))&&(id!=='field'||this.loadout.some(w=>['mist','magnet','scan','anchor'].includes(w))));const rng=createRng(this.seed+this.wave*7919);return all.map(id=>({id,order:rng()})).sort((a,b)=>a.order-b.order).slice(0,3).map(v=>v.id);}
  chooseTuning(id){if(this.state!=='intermission'||!this.draft.includes(id))return false;this.tunings.push(id);this.draft=[];this.beginNextWave();return true;}
  beginNextWave(){this.wave++;this.source=null;this.nextWaveAt=0;this.shots=[];this.fields=[];this.anchors=[];this.assistTargetId=null;this.accumulator=0;this.cooldown=0;this.state='playing';this.waveStart={time:this.time,shots:this.shotsFired,life:this.player.life};if(this.burstMode)Burst.spawnWave(this,this.wavePlans[this.wave-1]);else for(const spec of this.wavePlans[this.wave-1])this.addCore({...spec});if(this.wave===this.waveCount){if(this.config.relays)this.circuit=[{x:650,y:145,hit:false},{x:875,y:200,hit:false},{x:790,y:315,hit:false}];if(this.operation){this.boss=this.operationBoss();this.circuit=[];}else if(this.config.boss)this.boss={phase:'sealed',nodes:[{x:686,y:154,hit:false},{x:882,y:162,hit:false},{x:787,y:296,hit:false}],x:785,y:199,exposure:0};}this.event('wave',W/2,160,this.wave);}
- operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0}:{})};}
+ operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0}:i===2?{identity:'extraction',nextPressureAt:this.time+2.9,warningUntil:0,mistUntil:0,pressureBursts:0,pressureVents:0}:{})};}
  cycleSupport(){if(!this.operation||!['ready','playing','paused'].includes(this.state))return false;const index=CHAPTER.findIndex(c=>c.id===this.config.id),allowed=[...new Set(CHAPTER.slice(0,index+1).flatMap(c=>c.unlock))].filter(id=>id!=='pulse'&&(!this.config.gateStable||['mist','net'].includes(id)));if(!allowed.length)return false;this.loadout[1]=allowed[(allowed.indexOf(this.loadout[1])+1)%allowed.length];this.selectWeapon(this.loadout[1]);return true;}
  setPulseStyle(style){if(!this.operation||!['rapid','spread','precision'].includes(style))return false;this.pulseStyle=style;return true;}
  recordWave(){this.waveHistory.push({wave:this.wave,time:Number((this.time-this.waveStart.time).toFixed(2)),shots:this.shotsFired-this.waveStart.shots,damage:this.waveStart.life-this.player.life});}
@@ -121,7 +121,32 @@ class Game {
    b.surges++;b.warningUntil=0;b.nextSurgeAt=this.time+8.8;
   }
  }
- step(dt){this.time+=dt;this.advanceDeliveryBoss();this.advanceConveyorBoss();if(!this.tensionReleased&&this.time>=this.tensionLockUntil){this.tensionReleased=true;this.tensionResume={from:this.tensionHeld||0,start:this.time};this.event('hoiststart',this.rail[0].x,this.rail[0].y);}if(this.shieldMotion&&this.time>=this.shieldMotion.start+this.shieldMotion.duration){this.shieldMotion=null;this.event('shieldlock',this.rail[0].x,this.rail[0].y);}
+ advanceExtractionBoss(){
+  const b=this.boss;if(!b||b.identity!=='extraction'||b.phase==='resolved')return;
+  const mistField=this.fields.some(f=>f.kind==='mist'&&f.until>this.time&&Math.hypot(f.x-b.x,f.y-b.y)<=f.radius+36);
+  if(mistField)b.mistUntil=Math.max(b.mistUntil,this.time+.25);
+  // The player deliberately places mist at the intake to release trapped dust pressure.
+  if(b.warningUntil&&b.mistUntil>this.time){
+   b.warningUntil=0;b.pressureVents++;b.nextPressureAt=this.time+6.5;
+   this.event('pressurevent',b.x,b.y,b.pressureVents,'dust');return;
+  }
+  if(!b.warningUntil&&this.time>=b.nextPressureAt-1.5&&this.time<b.nextPressureAt){
+   b.warningUntil=b.nextPressureAt;this.event('pressurewarning',b.x,GROUND-140,1,'dust');
+  }
+  if(this.time>=b.nextPressureAt){
+   if(b.mistUntil>this.time){b.pressureVents++;this.event('pressurevent',b.x,b.y,b.pressureVents,'dust');}
+   else{
+    if(Math.abs(this.player.x-b.x)<=143&&!this.lab&&this.player.invuln<=0){
+     this.player.life--;this.player.invuln=1.8;this.shake=7;
+     this.event('hurt',this.player.x,this.player.y,this.player.life);
+     if(this.player.life<=0)this.finish(false);
+    }
+    b.pressureBursts++;this.event('pressureburst',b.x,GROUND-140,b.pressureBursts,'dust');
+   }
+   b.warningUntil=0;b.nextPressureAt=this.time+7.9;
+  }
+ }
+ step(dt){this.time+=dt;this.advanceDeliveryBoss();this.advanceConveyorBoss();this.advanceExtractionBoss();if(!this.tensionReleased&&this.time>=this.tensionLockUntil){this.tensionReleased=true;this.tensionResume={from:this.tensionHeld||0,start:this.time};this.event('hoiststart',this.rail[0].x,this.rail[0].y);}if(this.shieldMotion&&this.time>=this.shieldMotion.start+this.shieldMotion.duration){this.shieldMotion=null;this.event('shieldlock',this.rail[0].x,this.rail[0].y);}
   this.fields=this.fields.filter(f=>f.until>this.time);this.anchors=this.anchors.filter(a=>a.until>this.time&&this.cores.some(c=>c.id===a.id));
   if(this.boss&&(this.config.orderedBoss||this.operation)&&this.boss.phase==='exposed'&&this.boss.exposure>=(this.operation?5+this.boss.stage:8)){this.boss.phase='sealed';this.boss.nodes.forEach(n=>n.hit=false);this.boss.exposure=0;this.event('reseal',this.boss.x,this.boss.y);}
  this.cooldown=Math.max(0,this.cooldown-dt);this.player.invuln=Math.max(0,this.player.invuln-dt);this.shake=Math.max(0,this.shake-18*dt);this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)this.chain=0;
@@ -171,7 +196,12 @@ class Game {
  bounceSegment(obj,v,r,rest){const seg=this.railSegment(v),q=closest(obj.x,obj.y,seg.ax,seg.ay,seg.bx,seg.by),dd=Math.hypot(obj.x-q.x,obj.y-q.y);if(dd>=obj.r+r)return false;let nx=dd>.0001?(obj.x-q.x)/dd:0,ny=dd>.0001?(obj.y-q.y)/dd:-1;obj.x=q.x+nx*(obj.r+r+.25);obj.y=q.y+ny*(obj.r+r+.25);const surface=this.railVelocity(v,q.x,q.y);let dot=(obj.vx-surface.x)*nx+(obj.vy-surface.y)*ny;if(dot<0){obj.vx-=(1+rest)*dot*nx;obj.vy-=(1+rest)*dot*ny;return true;}return false;}
  shotRail(s){for(const v of this.rail){if(this.bounceSegment(s,v,9,.98)){s.bounces++;this.bounces++;this.event('ricochet',s.x,s.y);if(s.bounces>4)s.life=-1;}}}
  shotBoss(s){const b=this.boss;if(!b||s.life<=0)return;for(const n of b.nodes){if(n.hit||Math.hypot(s.x-n.x,s.y-n.y)>s.r+23+1e-5)continue;if(!isPulseWeapon(s.kind)){this.event('denied',n.x,n.y);s.life=-1;return;}if((this.config.orderedBoss||this.operation&&this.config.relays)&&b.nodes.find(v=>!v.hit)!==n){this.reason('relayorder',n.x,n.y);s.life=-1;return;}n.hit=true;s.life=-1;this.shotsHit++;if(!n.credited){this.score+=380;n.credited=true;}this.event('node',n.x,n.y);this.emitParticles(n.x,n.y,'#93faff',18);if(b.nodes.every(x=>x.hit)){b.phase='exposed';this.event('unseal',b.x,b.y);this.floaters.push({x:b.x,y:b.y-65,label:'방호 해제!',life:1.4,color:'#d4ffe7'});}return;}
-  if(b.phase!=='resolved'&&Math.hypot(s.x-b.x,s.y-b.y)<=s.r+48+1e-5){s.life=-1;if(b.phase==='sealed'){this.event('denied',s.x,s.y);this.emitParticles(s.x,s.y,'#7fbcf0',6);}else if(isPulseWeapon(s.kind)){if(this.operation&&b.hp>1){const damage=b.identity==='delivery'&&s.bounces>0||b.identity==='conveyor'&&this.conveyorDirection===0?2:1;b.hp=Math.max(0,b.hp-damage);if(b.hp>0){this.event('bosshit',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',12);return;}}if(this.operation)b.hp=0;b.phase='resolved';this.score+=2200;this.shake=7;this.event('boss',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',65);this.floaters.push({x:b.x,y:b.y-70,label:'ZERO CHAIN!',life:1.7,color:'#fff2aa'});}}
+  if(b.phase!=='resolved'&&Math.hypot(s.x-b.x,s.y-b.y)<=s.r+48+1e-5){
+   if(b.identity==='extraction'&&s.kind==='mist'){
+    s.life=-1;this.deployField('mist',b.x,b.y);b.mistUntil=this.time+4;
+    this.event('pressuremist',b.x,b.y,1,'dust');this.advanceExtractionBoss();return;
+   }
+   s.life=-1;if(b.phase==='sealed'){this.event('denied',s.x,s.y);this.emitParticles(s.x,s.y,'#7fbcf0',6);}else if(isPulseWeapon(s.kind)){if(this.operation&&b.hp>1){const damage=b.identity==='delivery'&&s.bounces>0||b.identity==='conveyor'&&this.conveyorDirection===0||b.identity==='extraction'&&b.mistUntil>this.time&&this.gateStatus().open?2:1;b.hp=Math.max(0,b.hp-damage);if(b.hp>0){this.event('bosshit',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',12);return;}}if(this.operation)b.hp=0;b.phase='resolved';this.score+=2200;this.shake=7;this.event('boss',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',65);this.floaters.push({x:b.x,y:b.y-70,label:'ZERO CHAIN!',life:1.7,color:'#fff2aa'});}}
  }
  pulse(core,shot){if(!this.cores.some(c=>c.id===core.id))return;if(Burst.breakPulse(this,core,shot))return;if(core.echo){this.cores=this.cores.filter(c=>c.id!==core.id);this.event('resolved',core.x,core.y);this.emitParticles(core.x,core.y,'#8df1dc',8);return;}if(core.tier>0&&this.cores.length>=36){core.stable=true;core.vx=clamp(shot.vx*.2,-220,220);core.vy=-150;this.reason('budget',core.x,core.y);return;}const at={x:core.x,y:core.y};core.glow=.2;this.shake=Math.max(this.shake,3);this.chainAction(65+shot.bounces*35,core.x,core.y);if(shot.bounces>0){this.reflectedHits++;const bonus=this.hasTuning('bank')?Math.min(shot.bounces,4)*35:0;this.skillBonus+=bonus;this.score+=bonus;this.event('skillshot',core.x,core.y,shot.bounces,core.kind);this.floaters.push({x:core.x,y:core.y-45,label:'↗ '+shot.bounces+(bonus?' +'+bonus:''),life:.65,color:'#ffe2a6'});}this.emitParticles(core.x,core.y,KINDS[core.kind].color,12);this.event('impact',core.x,core.y,shot.bounces,core.kind);this.cores=this.cores.filter(x=>x.id!==core.id);
 

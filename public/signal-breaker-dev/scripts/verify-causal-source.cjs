@@ -52,7 +52,15 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
    await page.screenshot({path:path.join(out,`operation-conveyor-intercept-${width}.png`)});
-   // Restore CH01 before the following causal-source regression: CH02 intentionally has no CH01 source.
+   // CH03 distinct cyclone boss: warning, player-applied mist on extractor intake and cleared pressure.
+   await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-03',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextPressureAt-1.48;g.step(1/120);});
+   await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='extraction'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
+   await page.waitForFunction(()=>document.getElementById('bossState').textContent.includes('분진 압력'));
+   await page.screenshot({path:path.join(out,`operation-extraction-warning-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;g.shotBoss({kind:'mist',x:b.x,y:b.y,r:13,life:1,bounces:0});});
+   await page.waitForFunction(()=>SignalBreakerQA.engine().boss.pressureVents===1);
+   await page.screenshot({path:path.join(out,`operation-extraction-mist-${width}.png`)});
+   // Restore CH01 before the following causal-source regression: CH02 and CH03 have no CH01 source.
    await page.evaluate(()=>SignalBreakerQA.selectStage('CH-01',true));
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
