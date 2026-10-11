@@ -34,7 +34,7 @@ body.overview-open.breaker-focus .battle-radar{display:block}
  body.breaker-focus .heart{width:10px;height:11px}
  body.breaker-focus .game-exit{top:calc(env(safe-area-inset-top,0px) + 62px);right:10px;min-height:36px;min-width:58px}
  body.breaker-focus .view-btn{display:block;top:calc(env(safe-area-inset-top,0px) + 107px);right:10px;min-height:38px;height:38px}
- body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 64px);left:10px;min-width:92px;min-height:40px;max-width:110px}
+ body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 64px);left:10px;min-width:92px;min-height:44px;max-width:110px}
  body.breaker-focus .chain-guide{top:calc(env(safe-area-inset-top,0px) + 60px);left:50%;transform:translateX(-50%);max-width:calc(100% - 228px);min-width:0;padding:5px 6px;font-size:10px}
  body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 112px);left:50%;max-width:calc(100% - 170px);font-size:10px;padding:5px 8px}
  body.breaker-focus .toast{top:calc(env(safe-area-inset-top,0px) + 154px);left:50%;max-width:calc(100% - 42px);font-size:10px;transform:translateX(-50%)}
@@ -69,7 +69,7 @@ body.overview-open.breaker-focus .battle-radar{display:block}
  body.breaker-focus .hud-top .hud-block strong{font-size:13px}
  body.breaker-focus .hud-top #pauseBtn{position:static!important;margin-left:auto!important;width:40px;height:36px;min-width:40px;min-height:36px}
  body.breaker-focus .game-exit{top:calc(env(safe-area-inset-top,0px) + 54px);right:12px;min-height:35px}
- body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 56px);left:12px;min-height:36px;max-width:104px}
+ body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 56px);left:12px;min-height:44px;max-width:104px}
  body.breaker-focus .view-btn{display:none}
  body.breaker-focus .chain-guide{top:calc(env(safe-area-inset-top,0px) + 52px);left:48%;max-width:40%;padding:5px 10px;font-size:10px}
  body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 95px);left:49%;max-width:36%;font-size:10px}
