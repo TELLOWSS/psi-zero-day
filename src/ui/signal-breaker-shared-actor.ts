@@ -25,7 +25,11 @@ export function createActor(characterId='player'){
   fire(entity:object,time:number,angle:number){tracker.act(entity,time,'shot',angle);},
   draw(ctx:CanvasRenderingContext2D,entity:object,x:number,y:number,time:number,hp:number,weapon?:string,launch?:{muzzle:{x:number;y:number};direction:{x:number;y:number};cell?:number;color?:string}){
    if(!ready)return false;
-   const pose=tracker.sample(entity,x,y,time,hp);
+   const sampled=tracker.sample(entity,x,y,time,hp);
+   // Breaker permits strafing: the body and tool face the shot, not the travel direction.
+   const angle=launch?Math.atan2(launch.direction.y,launch.direction.x):undefined;
+   const pose=angle===undefined?sampled:{...sampled,direction:(Math.round(angle/(Math.PI/4))+8)%8,visualAngle:angle,facing:(launch!.direction.x<0?-1:1) as 1|-1,attackAngle:angle};
+   if(launch)ctx.canvas.dataset.breakerFacing=String(pose.direction);
    ctx.save();ctx.translate(x,y);const drawn=drawDirectionalBody(ctx,image,96,pose);ctx.restore();
    if(drawn&&weapon&&launch){
     const wrist=directionalSocket(image,pose,96,'wrist');

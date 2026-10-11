@@ -21,6 +21,24 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    const page=await context.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(20000);
    await page.goto(url);await page.locator('#operationLobby').waitFor({state:'visible'});a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().state),'ready','entry stays in operation menu');a.equal(await page.locator('#resumeRun').isVisible(),false,'fresh visitor has no resume-first screen');const sources=new Set();for(let chapter=1;chapter<=5;chapter++){await page.locator('[data-lobby-stage=CH-0'+chapter+']').click();sources.add(await page.locator('#operationImage').getAttribute('src'));a.equal(await page.locator('#startOperation').isDisabled(),chapter>1,'preview does not bypass unlock');a.ok((await page.locator('#operationSignature').textContent()).length>8);}a.equal(sources.size,5);await page.screenshot({path:path.join(out,`operation-final-${width}.png`)});await page.locator('[data-lobby-stage=CH-01]').click();await page.screenshot({path:path.join(out,`operation-entry-${width}.png`)});const startBox=await page.locator('#startOperation').boundingBox();a.ok(startBox&&startBox.y>=0&&startBox.y+startBox.height<=height+1,'start CTA fits viewport');a.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);await page.locator('#startOperation').click();await page.waitForFunction(()=>window.SignalBreakerQA?.snapshot().state==='playing');
+   // Fresh operation: actual controls preserve automatic fire across movement and aim overrides.
+   a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().operation),true);
+   await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'spread');
+   await page.locator('#pulseBtn').click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().pulseStyle),'precision');
+   await page.locator('#fireBtn').click();const shots0=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
+   await page.keyboard.down('KeyD');await page.waitForFunction(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0);await page.keyboard.up('KeyD');
+   a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,shots0),'auto fire survives movement in twin mode');
+   await page.locator('#netBtn').click();await page.waitForTimeout(250);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().weapon),'net','manual equipment choice survives automatic fire');
+   await page.evaluate(()=>SignalBreakerQA.controlMode('flow'));const ab=await page.locator('#aimPad').boundingBox();
+   await page.mouse.move(ab.x+ab.width*.2,ab.y+ab.height*.2);await page.mouse.down();
+   const aimedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);await page.keyboard.down('KeyD');await page.waitForFunction(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots);
+   a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,aimedShots),'manual aim retains automatic fire');
+   a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine(),d=g.launchGeometry().direction;return d.x<0&&Number(document.getElementById('arena').dataset.breakerFacing)===(Math.round(Math.atan2(d.y,d.x)/(Math.PI/4))+8)%8;}),'body faces left shot while moving right');
+   await page.screenshot({path:path.join(out,`operation-strafe-${width}.png`)});await page.keyboard.up('KeyD');await page.mouse.up();
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();});
+   await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);a.ok(await page.evaluate(()=>SignalBreakerQA.engine().boss.stage===1));
+   await page.locator('#fireBtn').click();await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.screenshot({path:path.join(out,`operation-boss-${width}.png`)});
    a.ok((await page.title()).includes('NEW-PSI : ZERO DAY'));await page.evaluate(()=>SignalBreakerQA.continuous(false));
    await page.waitForFunction(()=>SignalBreakerQA.view().materials.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().materials.source)).endsWith('core-materials-v2.webp'));
@@ -93,7 +111,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.view().supportDrawn);
    await page.locator('[data-tuning]').first().click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),3);
    // Explicit blocked-lane fixture checks automatic suppression and ordinary manual/movement input.
-   await page.evaluate(()=>{SignalBreakerQA.controlMode('flow');SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.cores=[];g.pendingCores=[];g.boss={phase:'sealed',exposure:0,x:785,y:199,nodes:[{x:686,y:154,hit:true},{x:882,y:162,hit:false},{x:787,y:296,hit:false}]};});
+   await page.evaluate(()=>{SignalBreakerQA.controlMode('flow');SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.operation=false;g.cores=[];g.pendingCores=[];g.boss={phase:'sealed',exposure:0,x:785,y:199,nodes:[{x:686,y:154,hit:true},{x:882,y:162,hit:false},{x:787,y:296,hit:false}]};});
    await page.locator('#fireBtn').click();
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked);
    await page.locator('#chainGuide').waitFor({state:'visible'});
@@ -109,18 +127,18 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
    a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-01',true);SignalBreakerQA.controlMode('twin');});await page.waitForTimeout(80);
-   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.cores=[];g.pendingCores=[];for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:cam.y+innerHeight*.38/cam.scale,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}g.runPoints=40;g.pickupCount=5;});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),cam=SignalBreakerQA.view().camera;g.operation=false;g.cores=[];g.pendingCores=[];for(const [i,kind] of ['metal','dust','power','load'].entries()){g.addCore({x:cam.x+(innerWidth*(.2+i*.2))/cam.scale,y:cam.y+innerHeight*.38/cam.scale,tier:0,kind,vx:40,vy:0});g.pulse(g.cores.at(-1),{vx:700,vy:-100,bounces:0});}g.runPoints=40;g.pickupCount=5;});
    await page.waitForFunction(()=>SignalBreakerQA.view().hazards.ready);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().cores.every(c=>c.released)),true,'all four payloads released without bubbles');
    const boost=page.locator('#boostBtn'),bb=await boost.boundingBox();a.ok(bb&&bb.width>=44&&bb.height>=44&&bb.x>=0&&bb.y>=0&&bb.x+bb.width<=width&&bb.y+bb.height<=height,'boost touch target fits');
-   await boost.click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().runPoints),0);a.ok(await page.evaluate(()=>SignalBreakerQA.snapshot().boostRemaining)>0,'ordinary boost button spends points');
+   await boost.click();a.equal(await page.evaluate(()=>SignalBreakerQA.engine().runPoints),0);a.ok(await page.evaluate(()=>SignalBreakerQA.snapshot().boostRemaining)>0,'ordinary boost button spends points');await page.evaluate(()=>SignalBreakerQA.engine().pause());
    await page.waitForFunction(()=>{const a=document.getElementById('boostBtn').getBoundingClientRect(),b=document.getElementById('toast').getBoundingClientRect();return a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom;});
-   await page.waitForTimeout(500);await page.evaluate(()=>SignalBreakerQA.engine().pause());
+   await page.waitForTimeout(100);
    a.equal(await page.evaluate(()=>{const c=SignalBreakerQA.view().camera;return SignalBreakerQA.engine().cores.filter(q=>q.released).length===4&&SignalBreakerQA.engine().cores.every(q=>(q.x-q.r*1.675-c.x)*c.scale>=0&&(q.x+q.r*1.675-c.x)*c.scale<=innerWidth&&(q.y-q.r*1.675-c.y)*c.scale>=0&&(q.y+q.r*1.675-c.y)*c.scale<=innerHeight);}),true,'four payload art silhouettes fit actual camera');
    await page.screenshot({path:path.join(out,`released-hazards-${width}.png`)});
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.cores=[];g.pendingCores=[];});
    // State fixtures inspect production equipment at the actual game scale; no completion claim.
-   await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
+   await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.operation=false;g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().equipment.source)).endsWith('boss-equipment-v1.webp'));
    await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-sealed-${width}.png`)});
@@ -140,11 +158,11 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.keyboard.up('KeyD');await page.reload();await page.locator('#resumeRun').click();
    await page.waitForFunction(()=>SignalBreakerQA.snapshot().wave===2&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#tuningDock').isVisible(),false,'continuous checkpoint resumes directly');
    await page.keyboard.down('KeyD');
-   for(let wave=2;wave<=5;wave++){await page.evaluate(clear);await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
-   await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');a.equal(await page.locator('#overlay').isVisible(),false,'chapter flows without result panel');
+   for(let wave=2;wave<=5;wave++){await page.evaluate(clear);if(wave===5)await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;if(b){for(const n of b.nodes)if(!n.hit)g.shotBoss({x:n.x,y:n.y,r:8,life:1,kind:'pulse'});for(let i=0;i<b.maxHp;i++)if(b.phase==='exposed')g.shotBoss({x:b.x,y:b.y,r:8,life:1,kind:'pulse'});}});await page.evaluate(()=>SignalBreakerQA.engine().update(1/120));if(wave<5)await page.waitForFunction(w=>SignalBreakerQA.snapshot().wave===w+1,wave);}
+   await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-01'&&SignalBreakerQA.snapshot().state==='won');await page.locator('#overlay').waitFor({state:'visible'});a.equal(await page.locator('#overlay').isVisible(),true,'stage result waits for explicit choice');await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().stage),'CH-01');await page.keyboard.up('KeyD');await page.locator('#overlayPrimary').click();await page.waitForFunction(()=>SignalBreakerQA.snapshot().stage==='CH-02'&&SignalBreakerQA.snapshot().state==='playing');await page.keyboard.down('KeyD');
    const continued=await page.evaluate(()=>SignalBreakerQA.engine().player.x);await page.waitForTimeout(180);a.ok(await page.evaluate(x=>SignalBreakerQA.engine().player.x>x,continued),'held movement survives chapter handoff');await page.keyboard.up('KeyD');
    await page.screenshot({path:path.join(out,`continuous-story-${width}.png`)});
-   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'five authored operation previews, optional resume, typed pickup collection and watch support, continuous wave, auto tuning, radio, direct checkpoint resume, chapter handoff and held input, released four-kind payload art, point boost via touch button, v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
+   a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'five authored operation previews, optional resume, typed pickup collection and watch support, continuous wave, auto tuning, radio, direct checkpoint resume, player-confirmed stage choice, five stage bosses, automatic fire under movement and aim override, firing-direction body pose, released four-kind payload art, point boost via touch button, v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));
