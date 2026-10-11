@@ -326,15 +326,26 @@ class PremiumArt{
  if(s.kind==='pulse'){path(c,[[14,0],[-8,-5],[-27,-2],[-33,0],[-27,2],[-8,5]],'#ffe1a5a5',col,1.2);disk(c,4,0,4,'#ffffff');}
  else{c.strokeStyle='#a8ffe0';c.lineWidth=2;for(let i=0;i<8;i++){let a=i*TAU/8;line(c,Math.cos(a)*16,Math.sin(a)*16,Math.cos(a+.1)*25,Math.sin(a+.1)*25,'#aaffdd',1.2);}disk(c,0,0,16,'#5ee1c61c','#d5ffea',2);disk(c,0,0,4,'#d2fff1');}
  c.restore();}
+ // Draw a visible forward muzzle above rear-facing sprite occlusion; never change ballistic simulation.
+ directionalMuzzle(c,launch,weapon,firing=false){
+  if(!launch?.muzzle||!launch?.direction)return;
+  const spec=root.SignalBreakerChapter?.WEAPONS[weapon],color=spec?.color||launch.color||'#e2e6f3',d=launch.direction,m=launch.muzzle;
+  c.save();c.translate(m.x,m.y);c.rotate(Math.atan2(d.y,d.x));c.lineCap='round';
+  c.strokeStyle='#172d3d';c.lineWidth=8;c.beginPath();c.moveTo(-12,0);c.lineTo(1,0);c.stroke();
+  c.lineWidth=3.5;c.strokeStyle=color;c.beginPath();c.moveTo(-11,0);c.lineTo(1,0);c.stroke();
+  c.fillStyle='#edf7fa';c.beginPath();c.arc(1,0,2.5,0,Math.PI*2);c.fill();
+  if(firing){c.globalAlpha=.8;c.strokeStyle=color;c.lineWidth=2;c.beginPath();c.moveTo(6,-4);c.lineTo(13,0);c.lineTo(6,4);c.stroke();}
+  c.restore();
+ }
  player(c,p,weapon,time,launch){
  if(this.operator?.complete&&this.operator.naturalWidth){
   c.save();c.translate(p.x,p.y);c.save();c.globalAlpha=.4;c.scale(1,.22);disk(c,0,135,31,'#08161c');c.restore();
-  c.save();c.translate(0,31);c.scale(p.aimX<p.x?-1:1,this.reducedMotion?1:1+Math.sin(time*2)*.002);c.drawImage(this.operator,-32,-96,64,96);c.restore();
+  c.save();c.translate(0,31);c.scale((launch?.direction.x??(p.aimX-p.x))<0?-1:1,this.reducedMotion?1:1+Math.sin(time*2)*.002);c.drawImage(this.operator,-32,-96,64,96);c.restore();
   c.translate(0,-25);c.rotate(launch?Math.atan2(launch.direction.y,launch.direction.x):Math.atan2(p.aimY-p.y,p.aimX-p.x));const recoil=this.reducedMotion?0:Math.sin(this.recoil/.18*PI)*5;
   rect(c,-27-recoil,-6,30,12,weapon==='net'?'#3d9c84':'#b98b48','#d7e8e8');rect(c,-9-recoil,-10,18,20,'#203e4f','#9bbfcb');
   rect(c,18,-7,4,14,weapon==='net'?'#acffe1':'#ffe6a4');if(this.recoil>.12){c.globalAlpha=(this.recoil-.12)/.06;disk(c,22,0,weapon==='net'?10:7,weapon==='net'?'#a3ffe2':'#fff5c5');}c.restore();return;
  }
- c.save();c.translate(p.x,p.y);const angle=Math.atan2(p.aimY-p.y,p.aimX-p.x);
+ c.save();c.translate(p.x,p.y);const angle=launch?.direction?Math.atan2(launch.direction.y,launch.direction.x):Math.atan2(p.aimY-(p.y-25),p.aimX-p.x);
  // shadow, boots, vest, neck, hard hat — compact but recognizable field-device operator
  c.save();c.globalAlpha=.45;c.scale(1,.28);disk(c,0,77,51,'#08161c');c.restore();
  for(const s of [-1,1]){rect(c,s*16-8,5,18,24,'#1a3240','#87a2b5');rect(c,s*16-10,22,22,9,'#36414d','#9aabac');}
