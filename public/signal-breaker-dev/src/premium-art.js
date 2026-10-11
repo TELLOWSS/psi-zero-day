@@ -127,11 +127,12 @@ class PremiumArt{
  // CH-02 dedicated moving conveyor controller: twin drive shafts, belt teeth,
  // variable rotation and outward opening core. Rendered procedurally for offline performance.
  conveyorBoss(c,b,time,direction){
-  const open=b.phase==='exposed',warning=b.warningUntil>time,phase=this.reducedMotion?0:time*direction*1.7;
+  const open=b.phase==='exposed',warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
   c.save();c.translate(b.x,b.y);
-  glow(c,0,0,146,warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
+  glow(c,0,0,146,shift?'#fdb57555':warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
   path(c,[[-131,-34],[-110,-78],[-42,-87],[25,-72],[104,-84],[132,-44],[131,60],[-124,60]],'#172f40','#87a9ae',4);
-  rect(c,-115,-57,230,111,'#203947','#a4bec4',3);
+  rect(c,-115,-57,230,111,segment>=4?'#3b4054':segment>=3?'#314d57':'#203947',segment>=4?'#f6bd9e':'#a4bec4',3);
+  for(let k=0;k<segment-1;k++){const x=-88+k*47;line(c,x,-50,x+12,-34,'#ffb983aa',3);line(c,x+12,-34,x+2,-15,'#fff0cb77',2);}
   rect(c,-107,-33,214,78,'#122632','#536d7e',2);
   const beltColor=direction===0?'#476f76':'#427d8a';
   rect(c,-99,-26,198,64,beltColor,'#a4bac2',2);
@@ -152,6 +153,7 @@ class PremiumArt{
   for(const side of [-1,1]){const x=side*111;rect(c,x-12,-72,24,32,'#33454a','#e6ba69',2);disk(c,x,-60,7,warning?'#ff7d57':'#b19a63');}
   rect(c,-95,65,190,12,'#192e38','#95b9bf',2);
   c.font='800 11px sans-serif';c.fillStyle='#d9ebed';c.textAlign='center';c.fillText('CH-02 · OVERLOAD DRIVE',0,-97);
+  c.fillStyle=shift?'#ffe8bb':'#e3edeb';c.font='900 12px sans-serif';c.fillText('CORE ARMOUR '+segment+' / '+(b.maxSegments||1)+(shift?' · REBUILDING':''),0,112);
   if(direction===0){c.fillStyle='#b5fff2';c.fillText('BELT LOCK / SAFE',0,94);}
   c.restore();return true;
  }
