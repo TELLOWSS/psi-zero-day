@@ -206,6 +206,32 @@ class PremiumArt{
   c.fillStyle=secured?'#aefbd3':'#f2ba83';c.fillText(secured?'ANCHOR LOCKED':'CABLE UNDER LOAD',0,111);
   c.restore();return true;
  }
+ // CH05 finale: multi-circuit command center with rotating armature and three live channels.
+ gridBoss(c,b,time){
+  const open=b.phase==='exposed',critical=b.combatTier===2,warning=b.warningUntil>time,isolated=b.scannedUntil>time,t=this.reducedMotion?0:time;
+  c.save();c.translate(b.x,b.y);
+  glow(c,0,0,182,critical?'#fc78ae49':isolated?'#a8f6d54c':'#bdabfb38');
+  // Spoked outer cradle is unlike the conveyor, extraction chimney or hoist pulley.
+  path(c,[[-123,-76],[-74,-125],[74,-125],[123,-76],[132,55],[77,103],[-77,103],[-132,55]],'#1b2f4b','#b0b9db',4);
+  disk(c,0,-5,90,'#162e4a','#aebde1',6);
+  disk(c,0,-5,71,'#315074','#8acbda',3);
+  c.save();c.rotate(open?0:t*(critical?.62:.32));
+  for(let j=0;j<8;j++){const a=j*Math.PI/4;line(c,Math.cos(a)*34,Math.sin(a)*34-5,Math.cos(a)*64,Math.sin(a)*64-5,critical?'#ef8fb3':'#8edbd9',4);}
+  c.restore();
+  for(let j=0;j<3;j++){
+   const a=-Math.PI/2+j*2*Math.PI/3,x=Math.cos(a)*95,y=Math.sin(a)*95-5;
+   disk(c,x,y,29,'#233750','#d9e1d9',3);
+   disk(c,x,y,19,b.band===j&&warning?'#ff8b9e':isolated?'#6fe3c7':j===0?'#e9af70':j===1?'#a9adf8':'#83d8df','#f3dfdf',2);
+   c.font='900 15px sans-serif';c.fillStyle='#f7f7ef';c.textAlign='center';c.fillText(String(j+1),x,y+5);
+  }
+  disk(c,0,-5,open?35:27,open?'#e6d7ff':'#596f9d','#eaf2df',4);
+  disk(c,0,-5,open?20:13,isolated?'#91f7d2':critical?'#ff8eab':'#9ae8e8');
+  for(const side of [-1,1]){const x=side*108;rect(c,x-12,42,24,28,'#263c57','#c9c9db',2);disk(c,x,52,8,warning?'#fe8fa7':isolated?'#8cf9d0':'#c0abc7');}
+  rect(c,-87,116,174,13,'#24394e','#c1bed0',2);
+  c.font='900 12px sans-serif';c.fillStyle=critical?'#ffd2e3':'#e0e7ff';c.textAlign='center';c.fillText('CH-05 · GRID COMMAND',0,-144);
+  c.font='800 11px sans-serif';c.fillStyle=isolated?'#a4ffde':'#f2d6f2';c.fillText(critical?'PHASE 2 · CASCADE':'PHASE 1 · TRIAGE',0,151);
+  c.restore();return true;
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
@@ -243,8 +269,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','tensionwarning','tensionsecured','tensionsnap'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','tensionwarning','tensionsecured','tensionsnap','gridwarning','gridscan','gridisolated','gridarc','gridphase'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='gridarc'?158:kind==='gridphase'?160:kind==='gridisolated'?120:kind==='gridwarning'?115:kind==='gridscan'?87:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
