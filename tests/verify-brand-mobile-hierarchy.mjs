@@ -22,16 +22,19 @@ try {
       await page.locator('.commercial-title-worker[data-character="player"] img').evaluate(async image => { if (!image.complete) await image.decode(); });
       await page.waitForTimeout(1300);
       const portrait = width <= 600 && width < height;
+      const modeSelect = await page.locator('.commercial-title-home').getAttribute('data-title-layout') === 'MODE_SELECT_V11';
+      if (modeSelect) await page.locator('.is-survivors-entry').scrollIntoViewIfNeeded();
       const result = await page.evaluate(portrait => {
         const box = element => { const b = element.getBoundingClientRect(); return { left: b.left, top: b.top, right: b.right, bottom: b.bottom, width: b.width, height: b.height }; };
         const intersects = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-        const image = document.querySelector(portrait ? '.commercial-title-mobile-player' : '.commercial-title-worker[data-character="player"] img');
+        const modeSelect = document.querySelector('.commercial-title-home').dataset.titleLayout === 'MODE_SELECT_V11';
+        const image = document.querySelector(modeSelect ? '.is-survivors-entry .commercial-title-action-art' : portrait ? '.commercial-title-mobile-player' : '.commercial-title-worker[data-character="player"] img');
         const imageBox = box(image), loaded = image.complete && image.naturalWidth > 0;
         const primary = box(document.querySelector('.is-survivors-entry'));
         const dashboard = box(document.querySelector('.commercial-triad-dashboard'));
-        const actions = [...document.querySelectorAll('.commercial-title-actions button')].map(element => ({ text: element.textContent, ...box(element) }));
+        const actions = [...document.querySelectorAll('.commercial-title-actions :is(button,a)')].map(element => ({ text: element.textContent, ...box(element) }));
         let alphaBounds = null;
-        if (portrait && loaded && imageBox.width > 0) {
+        if (!modeSelect && portrait && loaded && imageBox.width > 0) {
           const canvas = document.createElement('canvas');
           canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
           const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
@@ -53,7 +56,9 @@ try {
         const summaryVisible = dashboard.height > 0;
         const dashboardAfterActions = summaryVisible ? dashboard.top >= actions.at(-1).bottom :
           Boolean(document.querySelector('.commercial-title-actions').compareDocumentPosition(document.querySelector('.commercial-triad-dashboard')) & Node.DOCUMENT_POSITION_FOLLOWING);
-        return { loaded, identity: new URL(image.currentSrc).pathname, imageBox, alphaBounds, actorClear, primary, readyFit, actionFit, summaryVisible, dashboardAfterActions,
+        const cardStyle = getComputedStyle(document.querySelector('.is-survivors-entry'));
+        const cardArtFits = modeSelect && imageBox.width > 0 && imageBox.height > 0 && imageBox.left<=primary.left+1 && imageBox.top<=primary.top+1 && imageBox.right>=primary.right-1 && imageBox.bottom>=primary.bottom-1 && ['hidden','clip'].includes(cardStyle.overflowX) && ['hidden','clip'].includes(cardStyle.overflowY);
+        return { modeSelect, cardArtFits, loaded, identity: new URL(image.currentSrc).pathname, imageBox, alphaBounds, actorClear, primary, readyFit, actionFit, summaryVisible, dashboardAfterActions,
           overflow: document.documentElement.scrollWidth > innerWidth };
       }, portrait);
       await page.screenshot({ path: `${output}/${width}x${height}-${reducedMotion}.png` });
@@ -71,11 +76,11 @@ try {
       await page.locator('.survivors-ready-dialog').waitFor();
       const playableReady = await page.locator('.survivors-ready-launch .survivors-btn-primary').isVisible();
       rows.push({ width, height, reducedMotion, ...result, defenseLocked, storyLocked, playableReady, errors,
-        pass: Boolean(result.loaded && result.identity === '/assets/episode01/characters/player-map.webp' && result.actorClear && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
+        pass: Boolean(result.loaded && result.identity === (modeSelect ? '/mode-previews/signal-watch.webp' : '/assets/episode01/characters/player-map.webp') && (modeSelect ? result.cardArtFits : result.actorClear) && result.readyFit && result.actionFit && result.dashboardAfterActions && !result.overflow && defenseLocked && storyLocked && playableReady && !errors.length) });
       await page.close();
     }
   }
-  fs.writeFileSync(`${output}/report.json`, JSON.stringify({ url, scope: 'FRESH_SAVE_ACTUAL_UI_ALPHA_BOUNDS_NOT_DIRECTOR_ART_APPROVAL_OR_DEVICE_TEST', rows }, null, 2));
+  fs.writeFileSync(`${output}/report.json`, JSON.stringify({ url, scope: 'FRESH_SAVE_ACTUAL_UI_LAYOUT_ART_BOUNDS_NOT_DIRECTOR_ART_APPROVAL_OR_DEVICE_TEST', rows }, null, 2));
   console.log(JSON.stringify(rows));
   if (rows.some(row => !row.pass)) process.exitCode = 1;
 } finally { await browser.close(); }
