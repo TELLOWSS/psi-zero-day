@@ -38,7 +38,7 @@ class Game {
  tuningOptions(){const all=['bank','capture','focus','cadence','memory','field'].filter(id=>!this.hasTuning(id)&&(id!=='bank'||this.loadout.some(isPulseWeapon))&&(id!=='capture'||this.loadout.includes('net'))&&(id!=='field'||this.loadout.some(w=>['mist','magnet','scan','anchor'].includes(w))));const rng=createRng(this.seed+this.wave*7919);return all.map(id=>({id,order:rng()})).sort((a,b)=>a.order-b.order).slice(0,3).map(v=>v.id);}
  chooseTuning(id){if(this.state!=='intermission'||!this.draft.includes(id))return false;this.tunings.push(id);this.draft=[];this.beginNextWave();return true;}
  beginNextWave(){this.wave++;this.source=null;this.nextWaveAt=0;this.shots=[];this.fields=[];this.anchors=[];this.assistTargetId=null;this.accumulator=0;this.cooldown=0;this.state='playing';this.waveStart={time:this.time,shots:this.shotsFired,life:this.player.life};if(this.burstMode)Burst.spawnWave(this,this.wavePlans[this.wave-1]);else for(const spec of this.wavePlans[this.wave-1])this.addCore({...spec});if(this.wave===this.waveCount){if(this.config.relays)this.circuit=[{x:650,y:145,hit:false},{x:875,y:200,hit:false},{x:790,y:315,hit:false}];if(this.operation){this.boss=this.operationBoss();this.circuit=[];}else if(this.config.boss)this.boss={phase:'sealed',nodes:[{x:686,y:154,hit:false},{x:882,y:162,hit:false},{x:787,y:296,hit:false}],x:785,y:199,exposure:0};}this.event('wave',W/2,160,this.wave);}
- operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0}:i===2?{identity:'extraction',nextPressureAt:this.time+2.9,warningUntil:0,mistUntil:0,pressureBursts:0,pressureVents:0}:{})};}
+ operationBoss(){const i=CHAPTER.findIndex(c=>c.id===this.config.id),x=650+i*25,y=205;return {phase:'sealed',x,y,nodes:[{x:x-100,y:170,hit:false},{x:x+100,y:170,hit:false},{x,y:325,hit:false}],exposure:0,hp:3+i,maxHp:3+i,stage:i+1,...(i===0?{identity:'delivery',nextDischargeAt:this.time+7.5,warningUntil:0,dischargeX:x,discharges:0}:i===1?{identity:'conveyor',nextSurgeAt:this.time+2.6,warningUntil:0,surgeDirection:1,surges:0,intercepts:0}:i===2?{identity:'extraction',nextPressureAt:this.time+2.9,warningUntil:0,mistUntil:0,pressureBursts:0,pressureVents:0}:i===3?{identity:'tension',nextSnapAt:this.time+2.8,warningUntil:0,snaps:0,secured:0}:{})};}
  cycleSupport(){if(!this.operation||!['ready','playing','paused'].includes(this.state))return false;const index=CHAPTER.findIndex(c=>c.id===this.config.id),allowed=[...new Set(CHAPTER.slice(0,index+1).flatMap(c=>c.unlock))].filter(id=>id!=='pulse'&&(!this.config.gateStable||['mist','net'].includes(id)));if(!allowed.length)return false;this.loadout[1]=allowed[(allowed.indexOf(this.loadout[1])+1)%allowed.length];this.selectWeapon(this.loadout[1]);return true;}
  setPulseStyle(style){if(!this.operation||!['rapid','spread','precision'].includes(style))return false;this.pulseStyle=style;return true;}
  recordWave(){this.waveHistory.push({wave:this.wave,time:Number((this.time-this.waveStart.time).toFixed(2)),shots:this.shotsFired-this.waveStart.shots,damage:this.waveStart.life-this.player.life});}
@@ -146,7 +146,31 @@ class Game {
    b.warningUntil=0;b.nextPressureAt=this.time+7.9;
   }
  }
- step(dt){this.time+=dt;this.advanceDeliveryBoss();this.advanceConveyorBoss();this.advanceExtractionBoss();if(!this.tensionReleased&&this.time>=this.tensionLockUntil){this.tensionReleased=true;this.tensionResume={from:this.tensionHeld||0,start:this.time};this.event('hoiststart',this.rail[0].x,this.rail[0].y);}if(this.shieldMotion&&this.time>=this.shieldMotion.start+this.shieldMotion.duration){this.shieldMotion=null;this.event('shieldlock',this.rail[0].x,this.rail[0].y);}
+ advanceTensionBoss(){
+  const b=this.boss;if(!b||b.identity!=='tension'||b.phase==='resolved')return;
+  const held=this.tensionLockUntil>this.time;
+  if(held&&(b.warningUntil||this.time>=b.nextSnapAt)){
+   b.warningUntil=0;b.secured++;b.nextSnapAt=this.time+6.6;
+   this.event('tensionsecured',b.x,GROUND-128,b.secured,'load');return;
+  }
+  if(!b.warningUntil&&this.time>=b.nextSnapAt-1.35&&this.time<b.nextSnapAt){
+   b.warningUntil=b.nextSnapAt;
+   this.event('tensionwarning',b.x,GROUND-128,1,'load');
+  }
+  if(this.time>=b.nextSnapAt){
+   if(held){b.secured++;this.event('tensionsecured',b.x,GROUND-128,b.secured,'load');}
+   else{
+    if(this.player.x>=440&&this.player.x<=885&&!this.lab&&this.player.invuln<=0){
+     this.player.life--;this.player.invuln=1.8;this.shake=7;
+     this.event('hurt',this.player.x,this.player.y,this.player.life);
+     if(this.player.life<=0)this.finish(false);
+    }
+    b.snaps++;this.event('tensionsnap',b.x,GROUND-128,b.snaps,'load');
+   }
+   b.warningUntil=0;b.nextSnapAt=this.time+7.9;
+  }
+ }
+ step(dt){this.time+=dt;this.advanceDeliveryBoss();this.advanceConveyorBoss();this.advanceExtractionBoss();this.advanceTensionBoss();if(!this.tensionReleased&&this.time>=this.tensionLockUntil){this.tensionReleased=true;this.tensionResume={from:this.tensionHeld||0,start:this.time};this.event('hoiststart',this.rail[0].x,this.rail[0].y);}if(this.shieldMotion&&this.time>=this.shieldMotion.start+this.shieldMotion.duration){this.shieldMotion=null;this.event('shieldlock',this.rail[0].x,this.rail[0].y);}
   this.fields=this.fields.filter(f=>f.until>this.time);this.anchors=this.anchors.filter(a=>a.until>this.time&&this.cores.some(c=>c.id===a.id));
   if(this.boss&&(this.config.orderedBoss||this.operation)&&this.boss.phase==='exposed'&&this.boss.exposure>=(this.operation?5+this.boss.stage:8)){this.boss.phase='sealed';this.boss.nodes.forEach(n=>n.hit=false);this.boss.exposure=0;this.event('reseal',this.boss.x,this.boss.y);}
  this.cooldown=Math.max(0,this.cooldown-dt);this.player.invuln=Math.max(0,this.player.invuln-dt);this.shake=Math.max(0,this.shake-18*dt);this.comboTime=Math.max(0,this.comboTime-dt);if(this.comboTime===0)this.chain=0;
@@ -177,7 +201,7 @@ class Game {
     if(!preview){if(s.kind==='scan')this.deployField('scan',s.x,s.y);else if(hit.type==='relay'){const next=this.circuit.find(n=>!n.hit);if(isPulseWeapon(s.kind)&&next===hit.node){hit.node.hit=true;this.score+=200;this.event('node',s.x,s.y);if(this.circuit.every(n=>n.hit))this.event('unseal',this.config.gate.x,this.config.gate.y);}else this.reason('relayorder',s.x,s.y);}else this.shotBoss(s);}s.life=-1;break;
    }
    if(hit.type==='floor'){if(!preview)this.deployField(s.kind,s.x,Math.min(s.y,GROUND-65));s.life=-1;break;}
-   if(hit.type==='rail'&&s.kind==='anchor'){if(!preview){const releasing=this.time<this.tensionLockUntil;if(releasing)this.tensionLockUntil=this.time;else{this.tensionHeld=this.tensionAngle();this.tensionLockUntil=this.time+5;}this.tensionReleased=false;this.event('anchor',s.x,s.y,releasing?0:1,'tension');}s.life=-1;break;}
+   if(hit.type==='rail'&&s.kind==='anchor'){if(!preview){const releasing=this.time<this.tensionLockUntil;if(releasing)this.tensionLockUntil=this.time;else{this.tensionHeld=this.tensionAngle();this.tensionLockUntil=this.time+5;}this.tensionReleased=false;this.event('anchor',s.x,s.y,releasing?0:1,'tension');this.advanceTensionBoss();}s.life=-1;break;}
    const surface=hit.type==='rail'?this.railVelocity(hit.rail,s.x,s.y):{x:0,y:0};const vx=s.vx-surface.x,vy=s.vy-surface.y,dot=vx*hit.nx+vy*hit.ny,rest=hit.type==='rail'?.98:.9;
    s.vx=vx-(1+rest)*dot*hit.nx+surface.x;s.vy=vy-(1+rest)*dot*hit.ny+surface.y;s.x+=hit.nx*.01;s.y+=hit.ny*.01;s.bounces++;this.bounces++;const contact={x:s.x,y:s.y};contacts.push(contact);if(!preview){this.event('ricochet',s.x,s.y);Object.assign(this.events.at(-1),{nx:hit.nx,ny:hit.ny,vx:s.vx,vy:s.vy});}
    if(s.bounces>4||hit.type==='edge'&&s.bounces>2){s.life=-1;break;}left=Math.max(0,left-1e-7);
@@ -201,7 +225,7 @@ class Game {
     s.life=-1;this.deployField('mist',b.x,b.y);b.mistUntil=this.time+4;
     this.event('pressuremist',b.x,b.y,1,'dust');this.advanceExtractionBoss();return;
    }
-   s.life=-1;if(b.phase==='sealed'){this.event('denied',s.x,s.y);this.emitParticles(s.x,s.y,'#7fbcf0',6);}else if(isPulseWeapon(s.kind)){if(this.operation&&b.hp>1){const damage=b.identity==='delivery'&&s.bounces>0||b.identity==='conveyor'&&this.conveyorDirection===0||b.identity==='extraction'&&b.mistUntil>this.time&&this.gateStatus().open?2:1;b.hp=Math.max(0,b.hp-damage);if(b.hp>0){this.event('bosshit',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',12);return;}}if(this.operation)b.hp=0;b.phase='resolved';this.score+=2200;this.shake=7;this.event('boss',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',65);this.floaters.push({x:b.x,y:b.y-70,label:'ZERO CHAIN!',life:1.7,color:'#fff2aa'});}}
+   s.life=-1;if(b.phase==='sealed'){this.event('denied',s.x,s.y);this.emitParticles(s.x,s.y,'#7fbcf0',6);}else if(isPulseWeapon(s.kind)){if(this.operation&&b.hp>1){const damage=b.identity==='delivery'&&s.bounces>0||b.identity==='conveyor'&&this.conveyorDirection===0||b.identity==='extraction'&&b.mistUntil>this.time&&this.gateStatus().open||b.identity==='tension'&&this.tensionLockUntil>this.time?2:1;b.hp=Math.max(0,b.hp-damage);if(b.hp>0){this.event('bosshit',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',12);return;}}if(this.operation)b.hp=0;b.phase='resolved';this.score+=2200;this.shake=7;this.event('boss',b.x,b.y);this.emitParticles(b.x,b.y,'#f5c76e',65);this.floaters.push({x:b.x,y:b.y-70,label:'ZERO CHAIN!',life:1.7,color:'#fff2aa'});}}
  }
  pulse(core,shot){if(!this.cores.some(c=>c.id===core.id))return;if(Burst.breakPulse(this,core,shot))return;if(core.echo){this.cores=this.cores.filter(c=>c.id!==core.id);this.event('resolved',core.x,core.y);this.emitParticles(core.x,core.y,'#8df1dc',8);return;}if(core.tier>0&&this.cores.length>=36){core.stable=true;core.vx=clamp(shot.vx*.2,-220,220);core.vy=-150;this.reason('budget',core.x,core.y);return;}const at={x:core.x,y:core.y};core.glow=.2;this.shake=Math.max(this.shake,3);this.chainAction(65+shot.bounces*35,core.x,core.y);if(shot.bounces>0){this.reflectedHits++;const bonus=this.hasTuning('bank')?Math.min(shot.bounces,4)*35:0;this.skillBonus+=bonus;this.score+=bonus;this.event('skillshot',core.x,core.y,shot.bounces,core.kind);this.floaters.push({x:core.x,y:core.y-45,label:'↗ '+shot.bounces+(bonus?' +'+bonus:''),life:.65,color:'#ffe2a6'});}this.emitParticles(core.x,core.y,KINDS[core.kind].color,12);this.event('impact',core.x,core.y,shot.bounces,core.kind);this.cores=this.cores.filter(x=>x.id!==core.id);
 
