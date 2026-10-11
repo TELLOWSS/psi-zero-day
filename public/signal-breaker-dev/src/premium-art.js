@@ -155,6 +155,31 @@ class PremiumArt{
   if(direction===0){c.fillStyle='#b5fff2';c.fillText('BELT LOCK / SAFE',0,94);}
   c.restore();return true;
  }
+ // CH-03 distinct tall pressure extraction tower: cyclone duct, collector drum and fan.
+ // Pure Canvas vector geometry, keeping responsive draw budget bounded.
+ extractionBoss(c,b,time,gate){
+  const open=b.phase==='exposed',warning=b.warningUntil>time,controlled=b.mistUntil>time,t=this.reducedMotion?0:time;
+  c.save();c.translate(b.x,b.y);
+  glow(c,0,0,163,controlled?'#9cf1d848':warning?'#f7b57445':'#a3d7e42b');
+  path(c,[[-68,-97],[24,-112],[73,-75],[84,35],[55,67],[-56,67],[-83,23]],'#23434a','#b7d1cb',4);
+  // Vertical extraction vessel and narrowing collection funnel.
+  rect(c,-49,-87,98,95,'#3d626b','#a9c9c6',3);
+  path(c,[[-48,6],[48,6],[20,82],[-20,82]],'#395761','#d2bd9c',3);
+  for(let k=0;k<5;k++)line(c,-42,-69+k*16,42,-69+k*16,k%2?'#759ca0':'#bed1c9',2);
+  path(c,[[-49,-71],[-96,-71],[-117,-48],[-117,-3]],null,'#d2bb94',12);
+  disk(c,-117,-2,19,'#263e4b','#d0b994',3);disk(c,-117,-2,9,controlled?'#aaffdb':'#d5ac72');
+  // Twin-filter canisters show state without relying only on hue.
+  for(const side of [-1,1]){const x=side*66;rect(c,x-18,14,36,52,'#253e47','#d3c7a9',2);for(let j=0;j<4;j++)line(c,x-12,23+j*11,x+12,23+j*11,controlled?'#a1e2c5':'#b18d67',2);}
+  disk(c,0,-37,31,'#142e39','#cbd5c7',4);disk(c,0,-37,23,controlled?'#86e4c5':warning?'#eaa268':'#648e9c','#f0dfb7',2);
+  for(let k=0;k<5;k++){const a=t*(controlled?.6:1.1)+k*Math.PI*2/5;line(c,Math.cos(a)*6,Math.sin(a)*6-37,Math.cos(a)*19,Math.sin(a)*19-37,'#d9e3d4',3);}
+  rect(c,-34,-94,68,12,'#172c37','#b4c8c7',1.7);
+  for(const x of [-55,55])disk(c,x,-92,7,warning?'#fba06b':controlled?'#adffcf':'#d3bb86');
+  const pressure=warning?.9:controlled?.18:.45;
+  rect(c,47,-54,22,61,'#203c48','#c4d3ce',2);rect(c,54,-47+47*(1-pressure),8,47*pressure,warning?'#f7ac6b':'#83d1c2');
+  c.font='800 10px sans-serif';c.fillStyle='#e0e9dc';c.textAlign='center';c.fillText('CH-03 · FILTER CORE',0,-124);
+  c.fillStyle=controlled?'#baffdf':'#f1d0a3';c.fillText(controlled?'PRESSURE PURGED':(gate.open?'DAMPER OPEN':'DAMPER SHUT'),0,99);
+  c.restore();return true;
+ }
  equipment(c,cell,x,y,size){
   if(!Number.isInteger(cell)||cell<0||cell>3)return false;
   if(!this.equipmentAtlas&&typeof Image!=='undefined')this.equipmentAtlas=root.PSIPresentationAssets.image('art/boss-equipment-v1.webp');
@@ -192,8 +217,8 @@ class PremiumArt{
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
