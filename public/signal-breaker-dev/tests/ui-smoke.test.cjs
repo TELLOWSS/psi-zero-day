@@ -21,6 +21,7 @@ global.window={SignalBreakerChapter:require('../src/chapter-content.js'),SignalB
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-art.js'),'utf8'),{filename:'src/premium-art.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/premium-sound.js'),'utf8'),{filename:'src/premium-sound.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/firing-pose.js'),'utf8'),{filename:'src/firing-pose.js'});
+vm.runInThisContext(fs.readFileSync(path.join(dir,'src/boss-camera.js'),'utf8'),{filename:'src/boss-camera.js'});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/localization-ko.js'),'utf8'),{filename:'src/localization-ko.js'});
 vm.runInThisContext(src,{filename:'src/app.js'});
 // Visual settings and focus screen must be operable without rerunning the game.
