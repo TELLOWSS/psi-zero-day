@@ -61,13 +61,31 @@ assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).records['S
 window.SignalBreakerQA.selectStage('CH-01',true);window.SignalBreakerQA.controlMode('flow');
 for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
 assert.ok(window.SignalBreakerQA.snapshot().shotsFired>0,'flow fires automatically');
-elements.fireBtn.trigger('pointerdown',touch(91));const autoStopped=window.SignalBreakerQA.snapshot().shotsFired;
+elements.autoFireBtn.trigger('click');const autoStopped=window.SignalBreakerQA.snapshot().shotsFired;
+assert.equal(elements.autoFireBtn['aria-pressed'],'false','AUTO toggle is independent from FIRE');
 for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
-assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped,'central toggle stops auto fire');
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped,'explicit AUTO OFF stops automatic fire');
+window.SignalBreakerQA.engine().cooldown=0;
+elements.fireBtn.trigger('pointerdown',touch(91));
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped+1,'manual FIRE still works while AUTO is OFF');
+elements.fireBtn.trigger('pointercancel',touch(91));
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.equal(window.SignalBreakerQA.snapshot().shotsFired,autoStopped+1,'manual FIRE never silently enables AUTO');
 elements.aimPad.trigger('pointerdown',touch(92,250,200));const directAim=window.SignalBreakerQA.engine().launchGeometry().direction;
 assert.ok(directAim.x<0,'right pad can override towards left');elements.aimPad.trigger('pointerup',touch(92));
-elements.fireBtn.trigger('pointerdown',touch(93));for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
-assert.ok(window.SignalBreakerQA.snapshot().shotsFired>autoStopped,'central toggle resumes auto fire');
-console.log('PASS default flow automatic fire, stop/resume and direct override');
+elements.autoFireBtn.trigger('click');assert.equal(elements.autoFireBtn['aria-pressed'],'true');
+const resumed=window.SignalBreakerQA.snapshot().shotsFired;
+elements.joystick.trigger('pointerdown',touch(94));elements.joystick.trigger('pointermove',touch(94,920,250));
+elements.aimPad.trigger('pointerdown',touch(95,200,200));
+for(let i=0;i<40;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>resumed,'AUTO stays active during simultaneous movement and direct aim');
+const duringMove=window.SignalBreakerQA.snapshot().shotsFired;
+elements.fireBtn.trigger('pointerdown',touch(96));elements.fireBtn.trigger('pointercancel',touch(96));
+assert.equal(elements.autoFireBtn['aria-pressed'],'true','manual FIRE gesture never switches AUTO off');
+elements.aimPad.trigger('pointerup',touch(95));elements.joystick.trigger('pointercancel',touch(94));
+for(let i=0;i<30;i++){currentNow+=1000/60;queue.shift()(currentNow);}
+assert.ok(window.SignalBreakerQA.snapshot().shotsFired>duringMove,'AUTO keeps firing after fingers release');
+assert.equal(JSON.parse(storage.get('psi.signal-breaker.offline.v1')).settings.autoFire,true,'AUTO setting persisted');
+console.log('PASS independent AUTO toggle, manual FIRE, cancellation, movement and direct aiming');
 console.log('PASS offline best-score persistence after victory');
 console.log('PASS HTML ID contracts and render-path smoke');console.log('PASS ready→play→weapon→shield→pause→new stage');console.log('PASS 180 mock canvas frames without JS error');
