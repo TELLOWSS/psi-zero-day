@@ -304,3 +304,5 @@ body[data-session=won] .touch-controls,body[data-session=lost] .touch-controls,b
 @media(orientation:landscape) and (max-height:500px){.operation-header{padding:8px 24px}.operation-header strong{font-size:15px}.operation-hero{min-height:180px}.operation-copy{padding:16px 24px}.operation-copy h1{font-size:28px;margin:6px 0}.operation-copy p{font-size:11px;line-height:1.5;margin:6px 0}.operation-intel{margin-top:8px}.operation-intel span{display:none}.operation-stages{margin:0 24px 8px}.operation-stage{padding:8px;min-height:65px}.operation-loot{display:none}.operation-actions{padding:8px 24px}.operation-actions .primary-btn{padding:10px 16px}.operation-actions>span{font-size:10px}}
 #operationLobby .operation-actions{display:flex}
 #operationLobby .operation-actions>span{display:block}
+.operation-copy{max-width:min(760px,100%)}
+.operation-copy h1,.operation-stage strong,.operation-stage span{word-break:keep-all;text-wrap:balance}
