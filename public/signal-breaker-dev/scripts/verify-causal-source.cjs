@@ -119,7 +119,16 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`operation-tension-warning-${width}.png`)});await verifyPortraitBossFrame(page,width,height,'CH04');
    await page.evaluate(()=>{const g=SignalBreakerQA.engine(),r=g.rail[0],s={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};g.cores=[];for(let n=0;n<16&&s.life>0;n++)g.advanceShot(s,1/120);});
    a.ok(await page.evaluate(()=>{const g=SignalBreakerQA.engine();return g.tensionLockUntil>g.time&&g.boss.secured>0;}),'CH04 rail anchor cancels predicted cable snap');
-   await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});
+   await page.screenshot({path:path.join(out,`operation-tension-anchor-${width}.png`)});await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.tensionLockUntil=0;g.tensionReleased=true;});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='rebalancing'&&b.loadStage===2;}),'CH04 must re-balance after first load, not instantly win');
+   await page.waitForFunction(()=>document.getElementById('bossEncounterPhase').textContent.includes('장력 2/4'));
+   await page.screenshot({path:path.join(out,`operation-tension-load-stage-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;window.__formerCalibration=b.calibrationUntil;const r=g.rail[0],shot={x:r.x,y:r.y-135,vx:0,vy:2200,kind:'anchor',r:9,life:1,bounces:0,trail:[]};for(let n=0;n<16&&shot.life>0;n++)g.advanceShot(shot,1/120);g.step(1/120);});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.anchorResetUsed&&b.calibrationUntil<window.__formerCalibration;}),'active tension rail lock accelerates recalibration');
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.calibrationUntil+1/120;g.step(1/120);});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.phase==='sealed'&&b.loadStage===2&&b.nodes.every(n=>!n.hit);}));
+   await page.screenshot({path:path.join(out,`operation-tension-load-rearmed-${width}.png`)});
    // Final boss QA: three-zone electrical warning, explicit scan response, phase 2.
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextArcAt-1.36;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='grid'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);
