@@ -25,6 +25,8 @@ vm.runInThisContext(fs.readFileSync(path.join(dir,'src/boss-camera.js'),'utf8'),
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/localization-ko.js'),'utf8'),{filename:'src/localization-ko.js'});
 window.SignalBreakerEndings=require('../src/stage-ending-content.js');
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-sound.js'),'utf8'),{filename:'src/ending-sound.js'});
+window.SignalBreakerEndingPerformanceContent=require('../src/ending-performance-content.js');
+for(const file of ['ending-performance.js','ending-voice.js'])vm.runInThisContext(fs.readFileSync(path.join(dir,'src',file),'utf8'),{filename:file});
 vm.runInThisContext(fs.readFileSync(path.join(dir,'src/ending-player.js'),'utf8'),{filename:'src/ending-player.js'});
 vm.runInThisContext(src,{filename:'src/app.js'});
 // Visual settings and focus screen must be operable without rerunning the game.

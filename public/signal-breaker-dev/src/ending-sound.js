@@ -16,14 +16,14 @@
   }
   source(source){this.sources.add(source);source.onended=()=>{this.sources.delete(source);source.disconnect();};source.start();}
   pause(value){this.paused=value;if(this.running)this.bus.gain.setTargetAtTime(value?0:1,this.c.currentTime,.015);}
-  update(elapsed,shot){if(!this.running)return;const at=this.c.currentTime;
+  update(elapsed,shot,voiceActive=false){if(!this.running)return;const at=this.c.currentTime;
    if(shot!==this.lastShot){this.lastShot=shot;if(shot==='memory'&&!this.paused){const o=this.c.createOscillator(),g=this.c.createGain();o.type='sine';o.frequency.setValueAtTime(620,at);o.frequency.exponentialRampToValueAtTime(800,at+.22);g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(Math.max(.0002,this.mix.effects*.025),at+.012);g.gain.exponentialRampToValueAtTime(.0001,at+.22);o.connect(g).connect(this.bus);this.nodes.push(g);this.source(o);o.stop(at+.24);}}
 
    // 250 ms of space after the combat mix stops; a 1.25 s breath into the world.
    const entrance=Math.min(1,Math.max(0,(elapsed-.25)/1.25)),exit=Math.min(1,Math.max(0,(this.duration-elapsed)/.8));
-   const human=shot==='human'?.35:1;
+   const human=voiceActive?.22:shot==='human'?.35:1;
    this.music.gain.setTargetAtTime(this.mix.music*.28*entrance*exit*human,at,.08);
-   this.air.gain.setTargetAtTime(this.mix.devices*.22*entrance*exit,at,.08);
+   this.air.gain.setTargetAtTime(this.mix.devices*.22*entrance*exit*(voiceActive?.4:1),at,.08);
    this.bus.gain.setTargetAtTime(this.paused?0:1,at,.015);
   }
   stop(){this.running=false;for(const source of this.sources){source.onended=null;try{source.stop();}catch{}source.disconnect();}this.sources.clear();for(const node of this.nodes)node.disconnect();this.nodes=[];this.c=null;}

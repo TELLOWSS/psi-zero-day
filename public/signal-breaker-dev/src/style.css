@@ -449,3 +449,13 @@ body.ending-open{overflow:hidden}
 .ending-player[data-paused=true][data-motion] .ending-copy,.ending-player[data-background=true][data-motion] .ending-copy,.ending-player[data-background=true] .ending-art{animation-play-state:paused}
 @media(orientation:landscape) and (max-height:500px){.ending-player[data-shot=human] .ending-line{font-size:20px!important}.ending-player[data-stage=CH-05][data-shot=hook] .ending-copy h2{font-size:40px}}
 @media(prefers-reduced-motion:reduce){.ending-player .ending-copy{animation:none!important}}
+
+/* Reuse named character art as a restrained foreground performance, not a panel. */
+.ending-actor{position:absolute;right:7%;bottom:0;width:min(27vw,380px);overflow:hidden;pointer-events:none;transform-origin:50% 85%;filter:drop-shadow(0 8px 18px #06192288);mask-image:linear-gradient(#000 0%,#000 78%,transparent 100%)}
+.ending-actor[hidden]{display:none}
+.ending-actor img{position:absolute;height:auto;max-width:none}
+.ending-player[data-actor=visible][data-shot=human] .ending-copy{max-width:60%}
+@media(orientation:portrait){.ending-actor{width:min(58vw,380px);right:4%;bottom:26%}.ending-player[data-actor=visible][data-shot=human] .ending-copy{max-width:100%}.ending-player[data-shot=human] .ending-line{font-size:22px!important;line-height:1.55}}
+@media(orientation:landscape) and (max-height:500px){.ending-actor{width:25vw;right:5%}.ending-player[data-actor=visible][data-shot=human] .ending-copy{max-width:62%}}
+
+.ending-player[data-shot=human] .ending-line{word-break:keep-all;overflow-wrap:break-word}

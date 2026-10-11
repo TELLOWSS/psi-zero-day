@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - name: Install existing test dependencies
+        run: npm ci --ignore-scripts
       - name: Mode rules and regression
         run: node --test public/signal-breaker-dev/tests/*.cjs
       - name: Reproduce all 80 simulated input runs
@@ -51,6 +53,7 @@ jobs:
           node public/signal-breaker-dev/scripts/verify-stage-ending.cjs
           node public/signal-breaker-dev/scripts/verify-campaign-ending.cjs
           node public/signal-breaker-dev/scripts/verify-ending-sound.cjs
+          node public/signal-breaker-dev/scripts/verify-ending-voice.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
