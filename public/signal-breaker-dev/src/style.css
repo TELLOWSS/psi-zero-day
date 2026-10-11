@@ -315,3 +315,88 @@ body.breaker-focus .fire-controls #autoFireBtn.active{border-color:#7df3cd;backg
 body.twin-controls .fire-controls #autoFireBtn{width:42px;min-width:42px;min-height:42px}
 @media(orientation:portrait){body.twin-controls .fire-controls{bottom:132px;left:50%;gap:5px}}
 @media(max-width:430px) and (orientation:portrait){body.breaker-focus:not(.twin-controls) .fire-controls{grid-template-columns:40px 40px 40px 64px;gap:5px}body.breaker-focus:not(.twin-controls) .fire-controls #autoFireBtn{width:40px;min-width:40px}}
+
+/* Production P0: one information hierarchy, three touch zones, readable boss health. */
+body.breaker-focus{--combat-pane:#071b27d9;--combat-stroke:#93d7d643;--combat-glow:#98f1df}
+body.breaker-focus .hud-top{top:calc(env(safe-area-inset-top,0px) + 8px);left:12px;right:12px;gap:12px;height:47px;padding:4px 10px;align-items:center;background:linear-gradient(90deg,#061721e8,#102c39c7);border:1px solid var(--combat-stroke);border-radius:12px;box-shadow:0 8px 28px #00151f55}
+body.breaker-focus .hud-block{gap:3px}body.breaker-focus .hud-label{font-size:8px;color:#b9d5da;letter-spacing:.07em}
+body.breaker-focus .hud-block strong{font-size:14px;color:#e4f4f0;font-variant-numeric:tabular-nums}
+body.breaker-focus .hud-block strong i{display:none}
+body.breaker-focus .hud-divider{display:none}
+body.breaker-focus .hud-top .hud-block:has(#score){display:none}
+body.breaker-focus .shield-hud{display:flex;position:static;gap:3px;align-items:flex-start}
+body.breaker-focus .health{display:flex;gap:3px}
+body.breaker-focus .heart{height:10px;width:11px}
+body.breaker-focus #pauseBtn{min-height:39px;height:39px;width:39px;min-width:39px;border-radius:10px;padding:0;background:#102e3cc7;border:1px solid #afddd86b;font-size:20px}
+body.breaker-focus .game-exit{right:62px;top:calc(env(safe-area-inset-top,0px) + 65px);font-size:10px;background:var(--combat-pane);border-color:var(--combat-stroke)}
+.boss-encounter[hidden]{display:none!important}
+body.breaker-focus .boss-encounter{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 68px);transform:translateX(-50%);width:min(336px,calc(100vw - 145px));z-index:4;pointer-events:none;border:1px solid #d4cca658;background:linear-gradient(90deg,#081c2be8,#112b39d7);border-radius:11px;padding:8px 11px 9px;box-shadow:0 9px 22px #00121e88}
+body.breaker-focus .boss-encounter-title{display:flex;align-items:center;gap:7px;justify-content:space-between;font-size:10px;line-height:1.35;color:#bfe7e2}
+body.breaker-focus #bossEncounterStage{color:#ffe5aa;font-size:9px;font-weight:850;white-space:nowrap}
+body.breaker-focus #bossEncounterName{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.breaker-focus #bossEncounterPhase{color:#f8d19d;font-size:9px;white-space:nowrap}
+body.breaker-focus .boss-encounter-track{margin-top:7px;height:5px;overflow:hidden;border-radius:5px;background:#ffffff20}
+body.breaker-focus #bossEncounterFill{display:block;height:100%;width:0;background:linear-gradient(90deg,#d69f69,#fff0ad);transition:width .15s ease}
+body.breaker-focus .boss-encounter[data-phase="exposed"] #bossEncounterFill{background:linear-gradient(90deg,#58c9bc,#f0e5a6)}
+body.breaker-focus .boss-encounter[data-tier="2"]{border-color:#f78b9b88}
+body.breaker-focus .boss-encounter[data-tier="2"] #bossEncounterFill{background:linear-gradient(90deg,#d55c8c,#ffa588)}
+body.breaker-focus .chain-guide{max-width:60%;top:calc(env(safe-area-inset-top,0px) + 123px);padding:5px 9px;background:#071e2ac9;border:1px solid #a7d8cf42;border-radius:8px;font-size:10px;line-height:1.35}
+body.breaker-focus .radio-line{top:calc(env(safe-area-inset-top,0px) + 168px);max-width:70%;padding:7px 10px;background:#071d2cd9;border-radius:8px;font-size:10px}
+body.breaker-focus .toast{top:calc(env(safe-area-inset-top,0px) + 126px);max-width:68%;font-size:10px}
+body.breaker-focus .view-btn{top:calc(env(safe-area-inset-top,0px) + 128px);right:10px;left:auto;min-height:36px;height:36px;padding:6px 8px}
+body.breaker-focus .burst-boost{top:calc(env(safe-area-inset-top,0px) + 117px);left:10px;right:auto;min-width:92px;min-height:44px;max-width:108px;padding:7px 8px;border-radius:9px;border-color:#84d9be7b;background:#092b36e8;font-size:10px;white-space:nowrap}
+body.breaker-focus .burst-boost:disabled{opacity:.67}
+body.breaker-focus #itemStatus{opacity:.9;font-size:10px;max-width:190px}
+body.breaker-focus .hud-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 156px);width:104px;height:22px;background:#07212b88;border:0}
+body.breaker-focus .move-controls{left:calc(env(safe-area-inset-left,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 21px)}
+body.twin-controls #joystick,body.twin-controls #aimPad{width:88px;height:88px;opacity:.86;filter:saturate(.8)}
+body.breaker-focus .fire-controls,body.twin-controls .fire-controls{position:fixed;left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 117px);width:auto;display:flex;gap:5px;transform:translateX(-50%);padding:5px;border:1px solid #a6d4d447;background:#071c27d4;border-radius:13px;box-shadow:0 7px 24px #00141f88}
+body.breaker-focus .fire-controls .weapon-btn,body.twin-controls .fire-controls .weapon-btn{height:44px;min-height:44px;width:51px;max-width:51px;flex:0 0 51px;padding:4px;border:1px solid #a8d4d442;border-radius:9px;background:#122d3ab5;font-size:8px;gap:2px;box-shadow:none}
+body.breaker-focus #autoFireBtn{width:58px;max-width:58px;flex-basis:58px;font-size:10px;font-weight:900}
+body.breaker-focus #autoFireBtn.active{border-color:#91ead6;background:#235b59}
+body.breaker-focus .fire-controls .weapon-btn.selected{border-color:#d7f7cf;background:#2a5454}
+body.breaker-focus .utility-controls,body.twin-controls .utility-controls{position:fixed;left:50%;right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 180px);transform:translateX(-50%);width:auto;max-width:calc(100vw - 35px);gap:5px;z-index:5}
+body.breaker-focus .utility-controls .util-btn,body.twin-controls .utility-controls .util-btn{min-height:35px;height:35px;width:56px;max-width:70px;font-size:9px;padding:3px 5px;border-radius:9px;background:#071d2cda;border:1px solid #a6d3d445}
+body.breaker-focus #fireBtn,body.twin-controls #fireBtn{position:fixed;left:calc(50% - 34px);right:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);width:68px;height:68px;min-height:68px;border:1px solid #ffdc9ca0;border-radius:50%;background:radial-gradient(circle at 35% 27%,#b97d4c55,#462b3280 58%,#071c29e0 80%);box-shadow:inset 0 0 20px #ffca7f30,0 0 22px #ffd48622;color:#fff2cb;transform:none}
+body.breaker-focus #fireBtn b{font-size:16px}
+body.breaker-focus #fireBtn:active{filter:brightness(1.25);transform:scale(.96)}
+body.breaker-focus .aim-angle{font-size:11px;top:-18px}
+body.breaker-focus .overlay-inner[data-state="won"]{display:flex;flex-direction:column;gap:8px;width:min(520px,100%);max-height:min(76dvh,700px);padding:20px 20px 24px;overflow:auto;border:1px solid #8ce2d852;border-radius:22px;background:linear-gradient(150deg,#081f2def,#071722f9);box-shadow:0 24px 90px #000b;text-align:left}
+body.breaker-focus #overlay:has(#overlayInner[data-state="won"]){align-items:center;justify-content:center;background:#0515209c;backdrop-filter:blur(5px);padding:14px}
+body.breaker-focus #overlayInner[data-state="won"] .overlay-heading{font-size:clamp(38px,10vw,62px);margin:0;color:#ffeca9;letter-spacing:-.045em}
+body.breaker-focus #overlayInner[data-state="won"]>p{font-size:11px;margin:0;color:#a8c8ca}
+body.breaker-focus .result-award{display:grid;gap:4px;background:#123e4188;border-left:3px solid #82edd5;padding:10px 12px;border-radius:7px;line-height:1.4}
+body.breaker-focus .result-award strong{font-size:13px;color:#d7fff0}
+body.breaker-focus .result-award span{font-size:11px;color:#c5d9cd}
+body.breaker-focus .premium-run-record{max-height:100px;overflow:auto;font-size:10px;color:#acc4c8}
+body.breaker-focus #overlayInner[data-state="won"] .run-stats{padding:4px 0;font-size:10px;color:#bfd6d6}
+body.breaker-focus #overlayInner[data-state="won"] .mastery-goals{justify-content:flex-start}
+body.breaker-focus #overlayInner[data-state="won"]>.primary-btn{order:20;float:none;width:100%;min-height:48px;border-radius:10px;background:linear-gradient(90deg,#8becdb,#caffea);color:#072a2d;font-size:14px}
+body.breaker-focus #overlayInner[data-state="won"]>#resultOperationSelect{order:21;width:100%;text-align:center;border:1px solid #8bd7c84f;background:#153841a9;font-size:12px}
+body.breaker-focus #overlayInner[data-state="won"]>.iconbtn:not(#resultOperationSelect){order:22;min-height:34px;font-size:10px;padding:6px}
+@media(orientation:portrait) and (max-width:570px){
+ body.breaker-focus .hud-top{height:47px;right:12px;gap:9px}
+ body.breaker-focus .shield-hud{display:flex;position:static}
+ body.breaker-focus .boss-encounter{top:calc(env(safe-area-inset-top,0px) + 65px);width:min(295px,calc(100vw - 34px))}
+ body.breaker-focus .game-exit{top:calc(env(safe-area-inset-top,0px) + 110px);right:10px}
+ body.breaker-focus .view-btn{top:calc(env(safe-area-inset-top,0px) + 154px)}
+ body.breaker-focus .chain-guide{top:calc(env(safe-area-inset-top,0px) + 105px);max-width:60%}
+ body.breaker-focus #itemStatus{top:calc(env(safe-area-inset-top,0px) + 154px)}
+ body.breaker-focus .move-controls{left:calc(env(safe-area-inset-left,0px) + 14px)}
+ body.twin-controls #joystick,body.twin-controls #aimPad{width:88px;height:88px}
+ body.twin-controls #aimPad{right:calc(env(safe-area-inset-right,0px) + 14px);bottom:calc(env(safe-area-inset-bottom,0px) + 20px)}
+ body.breaker-focus .utility-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 181px)}
+ body.breaker-focus .fire-controls{bottom:calc(env(safe-area-inset-bottom,0px) + 119px)}
+ body.breaker-focus .hud-bottom{bottom:calc(env(safe-area-inset-bottom,0px) + 227px)}
+}
+@media(orientation:landscape) and (max-height:600px){
+ body.breaker-focus .hud-top{top:4px;height:35px}
+ body.breaker-focus .boss-encounter{top:43px;width:min(290px,36vw);padding:5px 8px}
+ body.breaker-focus .fire-controls,body.twin-controls .fire-controls{left:auto;right:10px;bottom:72px;transform:none;padding:3px}
+ body.breaker-focus .utility-controls,body.twin-controls .utility-controls{left:auto;right:12px;bottom:122px;transform:none}
+ body.breaker-focus #fireBtn,body.twin-controls #fireBtn{left:auto;right:92px;bottom:12px}
+ body.breaker-focus .move-controls{bottom:14px}
+ body.twin-controls #aimPad{bottom:14px;right:10px}
+ body.breaker-focus .burst-boost{top:44px}
+ body.breaker-focus .radio-line{top:107px}
+}
