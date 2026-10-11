@@ -58,6 +58,9 @@ class SoundDirector{
  case'tensionwarning':this.osc(520,310,.3,'square',.045);this.osc(790,540,.25,'triangle',.035);break;
  case'tensionsecured':this.osc(370,680,.24,'sine',.045);this.osc(610,940,.2,'triangle',.03);break;
  case'tensionsnap':this.osc(420,72,.29,'sawtooth',.082);this.noiseBurst(.24,.085,850);break;
+ case'filterpurge':this.osc(720,195,.62,'sawtooth',.05);this.noiseBurst(.35,.05,1200);break;
+ case'filterflush':this.osc(480,1040,.4,'triangle',.045);this.noiseBurst(.18,.03,800);break;
+ case'filterrearm':this.osc(260,650,.42,'triangle',.046);break;
  case'pressurewarning':this.osc(280,470,.33,'sine',.048);this.noiseBurst(.26,.032,1150);break;
  case'pressuremist':this.osc(560,930,.22,'triangle',.044);this.noiseBurst(.11,.03,2200);break;
  case'pressurevent':this.osc(220,760,.35,'sine',.055);this.noiseBurst(.32,.045,1200);break;
