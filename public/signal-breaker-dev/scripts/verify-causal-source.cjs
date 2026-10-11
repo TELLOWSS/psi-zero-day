@@ -91,6 +91,20 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().support.barrierProgress),1);
    await page.waitForFunction(()=>SignalBreakerQA.view().supportDrawn);
    await page.locator('[data-tuning]').first().click();a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().wave),3);
+   // Explicit blocked-lane fixture checks automatic suppression and ordinary manual/movement input.
+   await page.evaluate(()=>{SignalBreakerQA.controlMode('flow');SignalBreakerQA.selectStage('CH-05',true);const g=SignalBreakerQA.engine();g.cores=[];g.boss={phase:'sealed',exposure:0,x:785,y:199,nodes:[{x:686,y:154,hit:true},{x:882,y:162,hit:false},{x:787,y:296,hit:false}]};});
+   await page.locator('#fireBtn').click();
+   await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked);
+   await page.locator('#chainGuide').waitFor({state:'visible'});
+   a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
+   const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
+   const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
+   await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),blockedShots);
+   await page.screenshot({path:path.join(out,`blocked-lane-${width}.png`)});
+   await page.keyboard.press('Space');a.ok(await page.evaluate(n=>SignalBreakerQA.snapshot().shotsFired>n,blockedShots),'manual shot remains available');
+   await page.keyboard.down('KeyD');await page.waitForTimeout(2100);await page.keyboard.up('KeyD');
+   await page.waitForFunction(()=>SignalBreakerQA.view().assistance?.blocked===false);
+   a.ok(await page.evaluate(()=>SignalBreakerQA.engine().player.x>290),'player changes blocked lane by actual movement');
    a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'movement, projectile, source recurrence, observation, control, verification, checkpoint recovery'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();
   }
