@@ -99,7 +99,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.ok((await page.locator('#chainGuide').textContent()).includes('막힌 사선'));
    a.equal(await page.locator('#fireAction').textContent(),'사선 대기');
    const hintBox=await page.locator('#chainGuide').boundingBox();a.ok(hintBox&&hintBox.x>=0&&hintBox.y>=0&&hintBox.x+hintBox.width<=width+1&&hintBox.y+hintBox.height<=height+1,'blocked guide fits viewport');
-   await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,r=document.getElementById('chainGuide').getBoundingClientRect();return b&&(b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
+   await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast'),guides=[document.getElementById('chainGuide'),toast.classList.contains('visible')?toast:null].filter(Boolean).map(el=>el.getBoundingClientRect()).filter(r=>r.width);return b&&guides.every(r=>b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});
    const blockedShots=await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired);
    await page.waitForTimeout(350);a.equal(await page.evaluate(()=>SignalBreakerQA.snapshot().shotsFired),blockedShots);
    await page.screenshot({path:path.join(out,`blocked-lane-${width}.png`)});
@@ -113,7 +113,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];for(const c of [...
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().equipment.source)).endsWith('boss-equipment-v1.webp'));
    await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-sealed-${width}.png`)});
    await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;b.phase='exposed';b.exposure=2;});
-   await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-exposed-${width}.png`)});
+   await page.waitForTimeout(250);await page.waitForFunction(()=>{const b=SignalBreakerQA.view().bossLabel,toast=document.getElementById('toast');if(!toast.classList.contains('visible'))return true;const r=toast.getBoundingClientRect();return b&&(b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);});await page.screenshot({path:path.join(out,`equipment-exposed-${width}.png`)});
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().boss.phase),'exposed');
    a.deepEqual(errors,[]);results.push({width,height,status:'PASS',checks:'v2 materials, dedicated sealed/exposed equipment and relay states, movement, projectile, source recurrence, observation, control, verification, checkpoint recovery, blocked guide and waiting state, manual fire, movement clears lane'});
    console.log(`PASS ${width}x${height}: causal flow and recovery`);await context.close();

@@ -96,7 +96,7 @@ class PremiumArt{
   for(const p of candidates){const x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
    const bounds={left:x-half,right:x+half,top:y-top,bottom:y+bottom};
    const fits=bounds.left>=8&&bounds.right<=camera.width-8&&bounds.top>=8&&bounds.bottom<=camera.height-8;
-   const covered=guide&&bounds.left<guide.right&&bounds.right>guide.left&&bounds.top<guide.bottom&&bounds.bottom>guide.top;
+   const covered=(Array.isArray(guide)?guide:[guide]).some(g=>g&&bounds.left<g.right&&bounds.right>g.left&&bounds.top<g.bottom&&bounds.bottom>g.top);
    if(fits&&!covered)return p;
   }
   return candidates[0];

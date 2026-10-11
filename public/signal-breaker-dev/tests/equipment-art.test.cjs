@@ -2,9 +2,10 @@ const {test}=require('node:test'),a=require('node:assert/strict'),fs=require('no
 test('short landscape equipment label avoids the actual guide band and stays inside the viewport',()=>{
  const window={};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src/premium-art.js'),'utf8'),{window,Math});
  const art=new window.SignalBreakerPremiumArt.PremiumArt(),camera={width:844,height:390,scale:844/1100,x:0,y:134},guide={left:235,right:608,top:112,bottom:141},b={x:785,y:220};
- const p=art.equipmentLabel(b,camera,guide),x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
+ const toast={left:349,right:608,top:62,bottom:91},p=art.equipmentLabel(b,camera,[guide,toast]),x=(p.x-camera.x)*camera.scale,y=(p.y-camera.y)*camera.scale;
  a.ok(x-50*camera.scale>=8&&x+50*camera.scale<=836);
  a.ok(x+50*camera.scale<=guide.left||x-50*camera.scale>=guide.right||y+4*camera.scale<=guide.top||y-16*camera.scale>=guide.bottom);
+ a.ok(x+50*camera.scale<=toast.left||x-50*camera.scale>=toast.right||y+4*camera.scale<=toast.top||y-16*camera.scale>=toast.bottom);
  a.equal(art.equipmentLabel(b,camera,null).y,b.y+66,'ordinary label stays below equipment');
 });
 test('equipment states use authored isolated regions without changing engine data',()=>{
