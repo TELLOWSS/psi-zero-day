@@ -1,6 +1,6 @@
 # 스테이지 엔딩 전용 녹음 명세 — 2026-10-12
 
-상태: **5개 대사 모두 녹음 대기**. 기존 Episode 01 첫 만남/제보 음성 및 주인공 전투 음성은 아래 대사와 내용·화자가 달라 사용하지 않는다. URI, SHA-256 및 청취 승인값을 추측해서 넣지 않는다.
+상태: **사용자 제공 녹음 5개 기술 검수·런타임 연결 완료 / 최종 청취 승인 대기**. 기존 Episode 01 첫 만남/제보 음성 및 주인공 전투 음성은 아래 대사와 내용·화자가 달라 사용하지 않는다. URI, SHA-256 및 청취 승인값을 추측해서 넣지 않는다.
 
 | 슬롯 | 화자 | 정확한 대사 | 연기 | 장면 시간 / 녹음 상한 |
 |---|---|---|---|---|
@@ -10,7 +10,7 @@
 | CH-04 | 강태식 | 힘으로 누른 게 아니라, 순서를 맞춘 겁니다. | 베테랑의 낮고 짧은 인정. 하중을 안착시킨 뒤 어깨의 긴장이 풀린다. | 5.5–10.0초 / 4.3초 |
 | CH-05 | 이름 없는 작업자 | 잠깐만요. 여기 한번 보고 시작하죠. | 아침의 평범한 제안. 큰 영웅 연설·축하·고함 없이 주변 사람이 자연스럽게 먼저 말한다. | 11.5–16.0초 / 4.3초 |
 
-파일 제안: `PSI_V_END_CH01_LIM_v01.wav`, `PSI_V_END_CH02_YOON_v01.wav`, `PSI_V_END_CH03_LIM_v01.wav`, `PSI_V_END_CH04_KANG_v01.wav`, `PSI_V_END_CH05_WORKER_v01.wav`. 파일명은 제작 명세이며 아직 존재하는 자산 경로가 아니다.
+파일 제안: `PSI_V_END_CH01_LIM_v01.wav`, `PSI_V_END_CH02_YOON_v01.wav`, `PSI_V_END_CH03_LIM_v01.wav`, `PSI_V_END_CH04_KANG_v01.wav`, `PSI_V_END_CH05_WORKER_v01.wav`. 해당 원본 파일은 이제 `/assets/survivors/voice-ending-v1/`에 동일한 이름과 SHA-256으로 보관한다.
 
 ## 공통 제작 지시
 
@@ -20,7 +20,7 @@
 
 ## 통합 계약
 
-`src/ending-performance-content.js`의 정확한 `speakerId`, `lineId`를 기준으로 연결한다. `status: 'approved'`는 녹음 내용·화자·사용권·청취 확인 후에만 지정한다. voice에는 실제 `/assets/...wav|ogg|mp3` 경로, 원본 SHA-256, 디코딩 재생 길이, 동일한 speakerId와 lineId를 기록한다. 현재 다섯 슬롯은 `awaiting-recording`, `voice: null`이다.
+`src/ending-performance-content.js`의 정확한 `speakerId`, `lineId`를 기준으로 연결한다. `status: 'approved'`는 녹음 내용·화자·사용권·청취 확인 후에만 지정한다. voice에는 실제 `/assets/...wav|ogg|mp3` 경로, 원본 SHA-256, 디코딩 재생 길이, 동일한 speakerId와 lineId를 기록한다. 현재 다섯 슬롯은 `runtime-integrated-pending-listening`이며 사용자 제공 파일의 런타임 통합만 허용했다. `integrationAuthorized: true`, `finalListeningApproved: false`, `usageRightsVerified: false`를 구분한다. 최종 승인값을 추측해 지정하지 않는다. 제공 매니페스트와 기술 검수 결과는 `content/signal-breaker-ending-voice-v1-ingest.json`에 기록한다.
 
 런타임은 해시, 디코딩 길이(±80ms), 장면 안의 재생 여유를 확인한다. 늦은 다운로드가 human 시작에서 400ms를 넘기면 문장 중간에서 시작하지 않고 그 회차를 자막으로 유지한다. 일시정지·탭 숨김은 음원을 해제하고 재개 시 엔딩 경과 시간의 같은 지점부터 재생한다. 건너뛰기·종료·재감상 시작은 이전 음원을 정리한다. 음성 중 배경 음악과 현장 공기음을 낮춘다.
 
