@@ -189,12 +189,13 @@ class PremiumArt{
  }
  // CH04 distinct counterweight/tension-drum profile; independent of three preceding boss silhouettes.
  tensionBoss(c,b,time,secured){
-  const opened=b.phase==='exposed',warning=b.warningUntil>time,t=this.reducedMotion?0:time;
+  const opened=b.phase==='exposed',rebalancing=b.phase==='rebalancing',loadStage=b.loadStage||1,warning=b.warningUntil>time,t=this.reducedMotion?0:time;
   c.save();c.translate(b.x,b.y);
-  glow(c,0,0,154,secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
+  glow(c,0,0,154,rebalancing?'#f7d47c55':secured?'#95f5c34c':warning?'#ffae7b4a':'#c9c4a632');
   // Hoist head, sheave frame and separate hanging counterweights.
   path(c,[[-82,-79],[-48,-113],[48,-113],[83,-79],[89,-10],[-90,-10]],'#263d4a','#c5d0c6',4);
-  rect(c,-74,-73,148,82,'#284958','#a9bcb9',2.5);
+  rect(c,-74,-73,148,82,loadStage>=3?'#60564f':'#284958','#a9bcb9',2.5);
+  for(let k=1;k<loadStage;k++){const x=-56+k*26;line(c,x,-69,x+13,-48,'#ffdcac',2.5);line(c,x+13,-48,x-5,-32,'#d8a86d',2);}
   for(const side of [-1,1]){
    const sx=side*58;disk(c,sx,-43,26,'#192f3a','#d7ccae',4);
    for(let k=0;k<8;k++){const ang=k*Math.PI/4+(secured?0:t*.65)*side;line(c,sx+Math.cos(ang)*9,-43+Math.sin(ang)*9,sx+Math.cos(ang)*19,-43+Math.sin(ang)*19,'#e0dfcf',3);}
@@ -210,6 +211,7 @@ class PremiumArt{
   for(const side of [-1,1]){const sx=side*97;rect(c,sx-12,-66,24,34,'#39434a','#d9b276',2);disk(c,sx,-55,7,warning?'#ff8c65':secured?'#91ffd1':'#a8ab83');}
   rect(c,-60,83,120,13,'#1a313e','#d7c6a5',2);
   c.font='800 11px sans-serif';c.textAlign='center';c.fillStyle='#ecddc3';c.fillText('CH-04 · TENSION RELAY',0,-128);
+  c.fillStyle='#ffe2a5';c.font='900 12px sans-serif';c.fillText('LOAD TEST '+loadStage+' / '+(b.maxLoadStages||1)+(rebalancing?' · CALIBRATE':''),0,132);
   c.fillStyle=secured?'#aefbd3':'#f2ba83';c.fillText(secured?'ANCHOR LOCKED':'CABLE UNDER LOAD',0,111);
   c.restore();return true;
  }
@@ -271,13 +273,13 @@ class PremiumArt{
  for(let i=0;i<(this.quality==='high'?20:9);i++){const k=i*71.98;let xx=(k*13.9+t*(7+i%5))%W,yy=94+(k*9.9%430),r=1.1+(i%4)*.5;disk(c,xx,yy+Math.sin(t*.65+i)*4,r,i%3?'#9bddda32':'#f6ce7a20');}
  glow(c,710+Math.sin(t*.2)*55,240,250,'#78dacc0c');c.restore();}
  event(e,game){const weapon=root.SignalBreakerChapter?.WEAPONS[e.weapon];const col=e.kind==='fire'&&weapon?weapon.color:e.material&&e.kind!=='capture'?(palette[e.material]||palette.metal)[1]:e.kind==='capture'?'#8ffff2':e.kind==='split'?'#ffd292':e.kind==='ricochet'||e.kind==='corebounce'?'#f9d8a1':e.kind==='boss'||e.kind==='victory'?'#ffe7a6':e.kind==='hurt'?'#ff786d':e.kind==='node'||e.kind==='unseal'?'#d0b8ff':e.kind==='fire'?(e.n===2?'#80ffe6':'#ffe5aa'):'#8ae8f0';
- const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,bossphase:44,bossrearm:27,gatephase:39,gaterearm:21,filterpurge:37,filterflush:22,filterrearm:17,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
+ const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,bossphase:44,bossrearm:27,gatephase:39,gaterearm:21,loadstage:38,loadbalanced:25,loadrearm:20,filterpurge:37,filterflush:22,filterrearm:17,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
  if(count){const n=Math.floor(count*(this.quality==='high'?1:this.quality==='balanced'?.58:.26));for(let i=0;i<n&&this.sparks.length<this.max;i++){
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','filterpurge','filterflush','filterrearm','tensionwarning','tensionsecured','tensionsnap','gridwarning','gridscan','gridisolated','gridarc','gridphase','bossphase','bossrearm','gatephase','gaterearm'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='gatephase'?164:kind==='gaterearm'?108:kind==='bossphase'?154:kind==='bossrearm'?102:kind==='bossdischarge'?110:kind==='gridarc'?158:kind==='gridphase'?160:kind==='gridisolated'?120:kind==='gridwarning'?115:kind==='gridscan'?87:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='filterpurge'?156:kind==='filterflush'?115:kind==='filterrearm'?100:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','filterpurge','filterflush','filterrearm','tensionwarning','tensionsecured','tensionsnap','gridwarning','gridscan','gridisolated','gridarc','gridphase','bossphase','bossrearm','gatephase','gaterearm','loadstage','loadbalanced','loadrearm'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='loadstage'?161:kind==='loadbalanced'?124:kind==='loadrearm'?108:kind==='gatephase'?164:kind==='gaterearm'?108:kind==='bossphase'?154:kind==='bossrearm'?102:kind==='bossdischarge'?110:kind==='gridarc'?158:kind==='gridphase'?160:kind==='gridisolated'?120:kind==='gridwarning'?115:kind==='gridscan'?87:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='filterpurge'?156:kind==='filterflush'?115:kind==='filterrearm'?100:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
