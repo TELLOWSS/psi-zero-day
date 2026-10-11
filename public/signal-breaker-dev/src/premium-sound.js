@@ -62,6 +62,8 @@ class SoundDirector{
  case'pressuremist':this.osc(560,930,.22,'triangle',.044);this.noiseBurst(.11,.03,2200);break;
  case'pressurevent':this.osc(220,760,.35,'sine',.055);this.noiseBurst(.32,.045,1200);break;
  case'pressureburst':this.osc(95,34,.43,'sawtooth',.075);this.noiseBurst(.35,.087,450);break;
+ case'bossphase':this.osc(120,42,.65,'sawtooth',.062);this.noiseBurst(.42,.072,550);break;
+ case'bossrearm':this.osc(290,720,.38,'triangle',.058);this.osc(640,970,.28,'sine',.035);break;
  case'beltwarning':this.osc(340,560,.27,'sawtooth',.044);this.osc(760,920,.33,'square',.028);break;
  case'beltintercept':this.osc(390,850,.24,'sine',.05);this.osc(620,1200,.28,'triangle',.036);break;
  case'beltsurge':this.osc(150,39,.39,'sawtooth',.08);this.noiseBurst(.3,.077,780);break;

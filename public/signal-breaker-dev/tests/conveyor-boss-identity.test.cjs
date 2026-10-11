@@ -39,6 +39,14 @@ test('CH02 stopped conveyor turns exposed core into a two-point vulnerability',(
  g.shotBoss({kind:'bankshot',x:b.x,y:b.y,r:8,bounces:0,life:1});
  assert.equal(b.hp,1,'correct safety intervention doubles damage');
  g.shotBoss({kind:'resonance',x:b.x,y:b.y,r:8,bounces:0,life:1});
+ assert.equal(b.phase,'rebuilding','first armour cycle cannot instantly end CH02');
+ assert.equal(b.segment,2);assert.equal(b.hp,b.maxHp);
+ assert.ok(b.transitionUntil>g.time);
+ g.time=b.transitionUntil+DT;g.step(DT);
+ assert.equal(b.phase,'sealed');assert.ok(b.nodes.every(n=>!n.hit));
+ // Final armour segment still respects the original weakness and resolves normally.
+ b.segment=b.maxSegments;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,bounces:0,life:1});
+ for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,bounces:0,life:1});
  assert.equal(b.phase,'resolved');
 });
 test('CH03 and CH01 do not inherit the CH02 belt attack',()=>{

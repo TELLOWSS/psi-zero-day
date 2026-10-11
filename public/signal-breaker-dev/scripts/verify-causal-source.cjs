@@ -65,6 +65,13 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss.intercepts===1);
    a.equal(await page.evaluate(()=>SignalBreakerQA.engine().conveyorDirection),0,'CH02 belt stop blocks surge without an automatic action');
    await page.screenshot({path:path.join(out,`operation-conveyor-intercept-${width}.png`)});
+   // A boss must survive its first power-core break: record armour-transition and next-wave readout.
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine(),b=g.boss;for(const n of b.nodes)g.shotBoss({kind:'pulse',x:n.x,y:n.y,r:8,life:1,bounces:0});for(let i=0;i<b.maxHp;i++)g.shotBoss({kind:'pulse',x:b.x,y:b.y,r:8,life:1,bounces:0});});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.identity==='conveyor'&&b.segment===2&&b.phase==='rebuilding';}),'CH02 armour stage 1 break cannot finish combat');
+   await page.screenshot({path:path.join(out,`operation-conveyor-armour-break-${width}.png`)});
+   await page.evaluate(()=>{const g=SignalBreakerQA.engine();g.time=g.boss.transitionUntil+1/120;g.step(1/120);});
+   a.ok(await page.evaluate(()=>{const b=SignalBreakerQA.engine().boss;return b.segment===2&&b.phase==='sealed'&&b.nodes.every(n=>!n.hit);}));
+   await page.screenshot({path:path.join(out,`operation-conveyor-armour-two-${width}.png`)});
    // CH03 distinct cyclone boss: warning, player-applied mist on extractor intake and cleared pressure.
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-03',true);const g=SignalBreakerQA.engine();g.wave=4;g.beginNextWave();g.time=g.boss.nextPressureAt-1.48;g.step(1/120);});
    await page.waitForFunction(()=>SignalBreakerQA.engine().boss?.identity==='extraction'&&SignalBreakerQA.engine().boss.warningUntil>SignalBreakerQA.engine().time);

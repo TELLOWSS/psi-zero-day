@@ -127,11 +127,12 @@ class PremiumArt{
  // CH-02 dedicated moving conveyor controller: twin drive shafts, belt teeth,
  // variable rotation and outward opening core. Rendered procedurally for offline performance.
  conveyorBoss(c,b,time,direction){
-  const open=b.phase==='exposed',warning=b.warningUntil>time,phase=this.reducedMotion?0:time*direction*1.7;
+  const open=b.phase==='exposed',warning=b.warningUntil>time,shift=b.phase==='rebuilding',segment=b.segment||1,phase=this.reducedMotion?0:time*direction*1.7;
   c.save();c.translate(b.x,b.y);
-  glow(c,0,0,146,warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
+  glow(c,0,0,146,shift?'#fdb57555':warning?'#ff9e7647':open?'#a5f6de40':'#62adcb2b');
   path(c,[[-131,-34],[-110,-78],[-42,-87],[25,-72],[104,-84],[132,-44],[131,60],[-124,60]],'#172f40','#87a9ae',4);
-  rect(c,-115,-57,230,111,'#203947','#a4bec4',3);
+  rect(c,-115,-57,230,111,segment>=4?'#3b4054':segment>=3?'#314d57':'#203947',segment>=4?'#f6bd9e':'#a4bec4',3);
+  for(let k=0;k<segment-1;k++){const x=-88+k*47;line(c,x,-50,x+12,-34,'#ffb983aa',3);line(c,x+12,-34,x+2,-15,'#fff0cb77',2);}
   rect(c,-107,-33,214,78,'#122632','#536d7e',2);
   const beltColor=direction===0?'#476f76':'#427d8a';
   rect(c,-99,-26,198,64,beltColor,'#a4bac2',2);
@@ -152,6 +153,7 @@ class PremiumArt{
   for(const side of [-1,1]){const x=side*111;rect(c,x-12,-72,24,32,'#33454a','#e6ba69',2);disk(c,x,-60,7,warning?'#ff7d57':'#b19a63');}
   rect(c,-95,65,190,12,'#192e38','#95b9bf',2);
   c.font='800 11px sans-serif';c.fillStyle='#d9ebed';c.textAlign='center';c.fillText('CH-02 · OVERLOAD DRIVE',0,-97);
+  c.fillStyle=shift?'#ffe8bb':'#e3edeb';c.font='900 12px sans-serif';c.fillText('CORE ARMOUR '+segment+' / '+(b.maxSegments||1)+(shift?' · REBUILDING':''),0,112);
   if(direction===0){c.fillStyle='#b5fff2';c.fillText('BELT LOCK / SAFE',0,94);}
   c.restore();return true;
  }
@@ -264,13 +266,13 @@ class PremiumArt{
  for(let i=0;i<(this.quality==='high'?20:9);i++){const k=i*71.98;let xx=(k*13.9+t*(7+i%5))%W,yy=94+(k*9.9%430),r=1.1+(i%4)*.5;disk(c,xx,yy+Math.sin(t*.65+i)*4,r,i%3?'#9bddda32':'#f6ce7a20');}
  glow(c,710+Math.sin(t*.2)*55,240,250,'#78dacc0c');c.restore();}
  event(e,game){const weapon=root.SignalBreakerChapter?.WEAPONS[e.weapon];const col=e.kind==='fire'&&weapon?weapon.color:e.material&&e.kind!=='capture'?(palette[e.material]||palette.metal)[1]:e.kind==='capture'?'#8ffff2':e.kind==='split'?'#ffd292':e.kind==='ricochet'||e.kind==='corebounce'?'#f9d8a1':e.kind==='boss'||e.kind==='victory'?'#ffe7a6':e.kind==='hurt'?'#ff786d':e.kind==='node'||e.kind==='unseal'?'#d0b8ff':e.kind==='fire'?(e.n===2?'#80ffe6':'#ffe5aa'):'#8ae8f0';
- const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
+ const kind=e.kind;if(['impact','split','capture'].includes(kind)&&typeof Image!=='undefined'&&!this.sharedVfx)this.sharedVfx=root.PSIPresentationAssets.image('/assets/survivors/cinematic-vfx-v3.png');if(kind==='fire')this.recoil=.18;if(kind==='bumper'){this.bumperHits=this.bumperHits||[];this.bumperHits.push({x:e.x,y:e.y,nx:e.nx||0,ny:e.ny||1,at:game.time});this.bumperHits=this.bumperHits.slice(-6);}if(kind==='capture')this.recovery.push({x:e.x,y:e.y,age:0,gate:{...game.config.gate},units:e.n});this.recovery=this.recovery.slice(-12); const count={fire:7,impact:26,split:22,capture:21,ricochet:11,corebounce:8,netfield:17,boss:65,victory:30,waveclear:38,wave:18,chain:35,node:21,unseal:40,bossphase:44,bossrearm:27,itemcollect:14,powerup:26,watchsync:35,hurt:26,bumper:10}[kind]||0;
  if(count){const n=Math.floor(count*(this.quality==='high'?1:this.quality==='balanced'?.58:.26));for(let i=0;i<n&&this.sparks.length<this.max;i++){
  let a=i*2.39996+e.x*.01,s=45+((i*81+e.y*2)%270);
  this.sparks.push({x:e.x,y:e.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.26+((i*17)%28)/100,max:.65,size:i%4?1.2:2.7,color:col,kind:i%5===0?'shard':'spark'});
  }}
- if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','tensionwarning','tensionsecured','tensionsnap','gridwarning','gridscan','gridisolated','gridarc','gridphase'].includes(kind)){
- this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossdischarge'?110:kind==='gridarc'?158:kind==='gridphase'?160:kind==='gridisolated'?120:kind==='gridwarning'?115:kind==='gridscan'?87:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
+ if(['fire','impact','split','capture','netfield','chain','node','unseal','boss','hurt','waveclear','itemcollect','powerup','watchsync','resonance','bankchain','bosswarning','bossdischarge','beltwarning','beltintercept','beltsurge','pressurewarning','pressuremist','pressurevent','pressureburst','tensionwarning','tensionsecured','tensionsnap','gridwarning','gridscan','gridisolated','gridarc','gridphase','bossphase','bossrearm'].includes(kind)){
+ this.fx.push({x:e.x,y:e.y,age:0,material:e.material,weapon:e.weapon,angle:kind==='fire'&&game.launchGeometry?Math.atan2(e.dy??game.launchGeometry().direction.y,e.dx??game.launchGeometry().direction.x):0,duration:kind==='waveclear'?.65:kind==='boss'?.78:kind==='netfield'?.43:.31,color:col,kind,size:kind==='waveclear'?130:kind==='boss'?100:kind==='resonance'?106:kind==='bossphase'?154:kind==='bossrearm'?102:kind==='bossdischarge'?110:kind==='gridarc'?158:kind==='gridphase'?160:kind==='gridisolated'?120:kind==='gridwarning'?115:kind==='gridscan'?87:kind==='tensionsnap'?135:kind==='tensionsecured'?105:kind==='tensionwarning'?110:kind==='pressureburst'?136:kind==='pressurevent'?108:kind==='pressurewarning'?125:kind==='pressuremist'?92:kind==='beltsurge'?140:kind==='beltintercept'?95:kind==='beltwarning'?100:kind==='bosswarning'?85:kind==='bankchain'?65:kind==='netfield'?82:kind==='split'?56:30});this.fx=this.fx.slice(-22);
  }
  if(['impact','boss','node','split','hurt'].includes(kind)){this.flash=sat(this.flash+(kind==='boss'?.17:.055),0,.23);this.hitFocus=kind==='boss'?.08:.025;}
  }
