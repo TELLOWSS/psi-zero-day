@@ -138,7 +138,7 @@ const clear=()=>{const g=SignalBreakerQA.engine();g.shots=[];const burst=g.burst
    await page.screenshot({path:path.join(out,`released-hazards-${width}.png`)});
    await page.evaluate(()=>{SignalBreakerQA.selectStage('CH-05',true);SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.cores=[];g.pendingCores=[];});
    // State fixtures inspect production equipment at the actual game scale; no completion claim.
-   await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
+   await page.evaluate(()=>{SignalBreakerQA.controlMode('twin');const g=SignalBreakerQA.engine();g.operation=false;g.pause();g.player.x=785;g.boss={phase:'sealed',exposure:0,x:785,y:220,nodes:[{x:730,y:150,hit:true},{x:840,y:150,hit:false},{x:785,y:325,hit:false}]};});
    await page.waitForFunction(()=>SignalBreakerQA.view().equipment.ready);
    a.ok((await page.evaluate(()=>SignalBreakerQA.view().equipment.source)).endsWith('boss-equipment-v1.webp'));
    await page.waitForTimeout(100);await page.screenshot({path:path.join(out,`equipment-sealed-${width}.png`)});
