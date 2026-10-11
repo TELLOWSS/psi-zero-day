@@ -45,7 +45,7 @@ test('CH02 conveyor stop still defeats warning and grants double weak-point dama
  for(const n of b.nodes)fireAt(g,n.x,n.y);
  g.cycleConveyor();assert.equal(g.conveyorDirection,0);
  const hp=b.hp;fireAt(g,b.x,b.y);assert.equal(b.hp,hp-2);
- b.nextSurgeAt=g.time+DT;g.advanceConveyorBoss();
+ b.nextSurgeAt=g.time-DT;g.advanceConveyorBoss();
  assert.equal(b.intercepts,1,'belt stop continues to isolate subsequent overloads');
 });
 test('operation stages CH01 CH03 CH04 CH05 keep original single-cycle boss contract',()=>{
