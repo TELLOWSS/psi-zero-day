@@ -146,6 +146,7 @@ async function trustedClick(cdp, elementExpression, label){
   const point=await evaluate(cdp,`(()=>{
     const el=${elementExpression};
     if(!el)return null;
+    el.scrollIntoView({block:'center',behavior:'instant'});
     const r=el.getBoundingClientRect();
     return {x:r.left+r.width/2,y:r.top+r.height/2};
   })()`);
@@ -270,6 +271,7 @@ const report={
   desktop:{cases:{}},mobile:{cases:{}},
   stateCoverage:[],premiumBinaryCueCount:0,oscillatorFallbackCount:0,
   premiumMixPlaybackSuccessCount:0,premiumMixPlaybackFailureCount:0,
+  actualPlayVerified:false,modeLockVerified:false,deferredReason:null,
   failures:[],
 };
 let cdp,target;
@@ -279,9 +281,27 @@ try{
   cdp=new Cdp(target.webSocketDebuggerUrl);await cdp.send('Page.enable');await cdp.send('Runtime.enable');
 
   const cases=['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
+  let modeLocked;
   for(const cfg of [{name:'desktop',w:1440,h:900,m:false},{name:'mobile',w:390,h:844,m:true}]){
     await viewport(cdp,cfg.w,cfg.h,cfg.m);
     await navigate(cdp);
+    const locked=await evaluate(cdp,"Boolean(document.querySelector('button.is-defense-entry.is-coming-soon'))");
+    if(modeLocked!==undefined&&modeLocked!==locked)throw new Error('Defense readiness differs across desktop/mobile');
+    modeLocked=locked;
+    if(locked){
+      await trustedClick(cdp,"document.querySelector('button.is-defense-entry.is-coming-soon')",'Defense coming-soon preview');
+      await waitFor(cdp,"Boolean(document.querySelector('.mode-preview-dialog.is-defense'))");
+      const lock=await evaluate(cdp,`(()=>({
+        preview:document.querySelector('#mode-preview-title')?.textContent||'',
+        combat:Boolean(document.querySelector('[data-defense-screen]')),
+        legacyEntry:[...document.querySelectorAll('button')].some(x=>(x.textContent||'').includes('현장 디펜스 시작'))
+      }))()`);
+      if(!lock.preview.includes('디펜스 모드')||!lock.preview.includes('준비중')||lock.combat||lock.legacyEntry)throw new Error('Defense mode lock/preview mismatch');
+      report[cfg.name].modeLock=lock;
+      await trustedClick(cdp,"document.querySelector('.mode-preview-close')",'Close Defense preview');
+      await waitFor(cdp,"!document.querySelector('.mode-preview-dialog')");
+      continue;
+    }
     for(const name of cases){
       const result=await runAudioCase(cdp,name);
       report[cfg.name].cases[name]=result;
@@ -298,12 +318,18 @@ try{
     }
   }
 
+  if(modeLocked){
+    report.modeLockVerified=true;
+    report.deferredReason='Defense is intentionally coming soon in the commercial hub. Desktop/mobile preview and access lock verified; actual-play audio telemetry was not run.';
+  }else{
   const required=['READY','WAVE_BUILD','SWIFT_THREAT','CONTROL_INTERVENTION','RESOLUTION'];
   for(const state of required) if(!report.stateCoverage.includes(state)) throw new Error('Missing G8-A premium state coverage: '+state);
   if(runtimeMode && report.premiumBinaryCueCount<2) throw new Error('Insufficient premium binary cue evidence: '+report.premiumBinaryCueCount);
   if(runtimeMode && report.premiumMixPlaybackSuccessCount<8) throw new Error('Insufficient premium mix playback evidence: '+report.premiumMixPlaybackSuccessCount);
   if(runtimeMode && report.premiumMixPlaybackFailureCount!==0) throw new Error('Premium mix playback failures detected: '+report.premiumMixPlaybackFailureCount);
   if(runtimeMode && report.oscillatorFallbackCount!==0) throw new Error('Oscillator fallback count is not zero: '+report.oscillatorFallbackCount);
+  report.actualPlayVerified=true;
+  }
 }catch(error){
   report.failures.push(error instanceof Error?error.message:String(error));
 }finally{

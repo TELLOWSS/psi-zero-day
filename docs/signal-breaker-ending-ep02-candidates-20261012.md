@@ -27,3 +27,10 @@ GitHub main `bc5a4cef6f657acca0ee552bd7641e1bb20699d6`와 Vercel production `dpl
 현재 `SignalBreakerEndings.definition()`과 작전 콘텐츠는 CH-01~05만 정의하며 CH-06은 없음이 회귀 계약이다. 제공 파일만으로 CH-06~10의 장면·작전·화면·해금·저장 계약을 생성하지 않는다. 후보의 speakerId/lineId는 null, runtimeIntegrated와 finalListeningApproved는 false다.
 
 Director의 CH-06~10 엔딩 명세(대사 text_id, 화자, human shot 시간, 대응 작전)와 후보 선택이 도착하면 기존 exact speaker/transcript/hash/fit 계약에 연결한다. 목표 초과 음성은 장면 시간을 승인받아 조정하거나 재녹음해야 한다. 청취 페이지는 후보 비교용이며 게임 보상·아카이브·오프라인 프리캐시와 연결되지 않는다.
+
+## 검증 및 기존 CI 정합성 보완
+
+- 전체 회귀: 2,039 PASS / 1 SKIP, 브레이커 회귀: 198 PASS.
+- 타입 검사·운영 빌드 PASS. Chromium에서 후보 10개 디코딩과 실제 재생, 단일 재생, 모두 정지, 모바일 가로 넘침 없음 확인.
+- 기존 G8-A 오디오 브라우저 CI는 현재 준비중인 디펜스 모드에 옛 `현장 디펜스` 버튼으로 진입해 실패했다. 현재 데스크톱·모바일의 준비중 프리뷰와 전투 진입 차단을 검증하도록 보완했다. 보고서는 `modeLockVerified: true`, `actualPlayVerified: false`와 보류 사유를 기록한다. 디펜스가 다시 플레이 가능해지면 기존 실제 플레이 오디오 검증을 그대로 실행한다.
+- trusted click은 화면 밖 버튼을 먼저 스크롤한 뒤 실제 입력을 전달한다. 모바일에서도 같은 프리뷰 열기·닫기 경로를 확인했다.
