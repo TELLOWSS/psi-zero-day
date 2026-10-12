@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "date": "2026-10-13",
+  "tool": "built-in imagegen",
+  "assets": [
+    {
+      "id": "PSI-WORLD-01",
+      "path": "public/signal-breaker-dev/art/psi-rpg-world-v1.png",
+      "slot": "world-entry",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "alphaChannel": false,
+      "bytes": 2844052,
+      "gitBlobSha": "920a227c44ffda6aad0129e449250761e6e16e19",
+      "status": "final-candidate",
+      "integration": "pending"
+    },
+    {
+      "id": "PSI-BASE-01",
+      "path": "public/signal-breaker-dev/art/psi-rpg-base-v1.png",
+      "slot": "shared-base",
+      "width": 1672,
+      "height": 940,
+      "bitDepth": 8,
+      "colorType": 2,
+      "alphaChannel": false,
+      "bytes": 2351646,
+      "gitBlobSha": "0c89330e14811a0275add7ff6fc7fc6239ad2fcd",
+      "status": "final-candidate",
+      "integration": "pending"
+    },
+    {
+      "id": "PSI-LAB-01",
+      "path": "public/signal-breaker-dev/art/psi-rpg-lab-v1.png",
+      "slot": "weapon-research",
+      "width": 1672,
+      "height": 941,
+      "bitDepth": 8,
+      "colorType": 2,
+      "alphaChannel": false,
+      "bytes": 2149849,
+      "gitBlobSha": "01d69fee8d543d46ccacc37e9ebb33371be971d0",
+      "status": "final-candidate",
+      "integration": "pending"
+    },
+    {
+      "id": "PSI-UI-PARTS-01",
+      "path": "public/signal-breaker-dev/art/psi-rpg-ui-parts-v1.png",
+      "slot": "growth-ui-components",
+      "width": 1536,
+      "height": 1024,
+      "bitDepth": 8,
+      "colorType": 6,
+      "alphaChannel": true,
+      "bytes": 2345439,
+      "gitBlobSha": "9355123a88c2aa85efe0772560b589dd38783a71",
+      "status": "final-candidate",
+      "integration": "pending",
+      "atlas": {
+        "columns": 3,
+        "rows": 2,
+        "cellWidth": 512,
+        "cellHeight": 512,
+        "cells": [
+          "card",
+          "card-selected",
+          "card-locked",
+          "observation",
+          "cooperation",
+          "path-control"
+        ],
+        "nineSliceInsets": null,
+        "alphaVerification": {
+          "width": 1536,
+          "height": 1024,
+          "channels": 4,
+          "transparentPixels": 868545,
+          "transparentFraction": 0.5522,
+          "sampleAlpha": {
+            "corner": 0,
+            "frame1": 0,
+            "frame2": 0,
+            "frame3": 0
+          }
+        }
+      }
+    }
+  ]
+}
