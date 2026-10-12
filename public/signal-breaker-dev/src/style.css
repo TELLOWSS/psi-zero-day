@@ -471,8 +471,8 @@ body.ending-open{overflow:hidden}
 }
 
 @media(orientation:portrait){
- body.breaker-focus[data-boss-framing] .burst-boost{top:calc(env(safe-area-inset-top,0px) + 174px)}
- body.breaker-focus[data-boss-framing] #itemStatus{left:12px;top:calc(env(safe-area-inset-top,0px) + 226px);transform:none;max-width:calc(100vw - 24px)}
+ body.breaker-focus[data-active-boss=true] .burst-boost{top:calc(env(safe-area-inset-top,0px) + 174px)}
+ body.breaker-focus[data-active-boss=true] #itemStatus{left:12px;top:calc(env(safe-area-inset-top,0px) + 226px);transform:none;max-width:calc(100vw - 24px)}
 }
 @media(orientation:landscape) and (max-height:370px){
  body.breaker-focus[data-boss-framing="landscape"] .radio-line{top:164px}

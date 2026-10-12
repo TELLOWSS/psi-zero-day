@@ -45,4 +45,6 @@ body.breaker-focus .move-controls::after{display:none}
 @media(orientation:landscape) and (max-height:500px){body.breaker-focus .assist-hint{top:calc(env(safe-area-inset-top,0px) + 56px);left:120px;right:100px;max-width:none;font-size:10px}}
 body.breaker-focus[data-boss-framing=landscape] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 170px);left:12px;right:auto;max-width:260px}
 
-@media(orientation:portrait){body.breaker-focus[data-boss-framing] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 262px)}}
+@media(orientation:portrait){body.breaker-focus[data-active-boss=true] .assist-hint{top:calc(env(safe-area-inset-top,0px) + 262px)}}
+
+body.breaker-focus[data-guidance=action] .toast{visibility:hidden}
