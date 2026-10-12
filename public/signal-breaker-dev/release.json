@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "0.48.0-weapon-tree",
-  "cacheName": "psi-signal-breaker-webpreview-v0.48.0-weapon-tree",
-  "fingerprint": "451dbb64015f64a9545dc9a03cd8852b99d4b0e88324f785e8f5e5d3c0d71413",
+  "version": "0.48.1-psi-art",
+  "cacheName": "psi-signal-breaker-webpreview-v0.48.1-psi-art",
+  "fingerprint": "0e1b3bcd09354e70af0467dd920acf9d2261c84d313a33c4c25ef7f1ec170ffa",
   "files": [
     {
       "path": "/assets/episode01/characters/kang-taesik-map.webp",
@@ -250,6 +250,26 @@
       "sha256": "6c2a599ec6b7e409babd2baf87ec080b84e7cbf7924c770449fada2f9a733c33"
     },
     {
+      "path": "/signal-breaker-dev/art/psi-rpg-base-v1.png",
+      "bytes": 2351646,
+      "sha256": "9d42d5680bd960e2ec5fd02c8155c55fa2192c8df3968ab5926d90163e2cfc0c"
+    },
+    {
+      "path": "/signal-breaker-dev/art/psi-rpg-lab-v1.png",
+      "bytes": 2149849,
+      "sha256": "7ccd9f6f539ed28a31d3e816d07e4a206a02bdcc3d3f17a1884b4fa964105bb0"
+    },
+    {
+      "path": "/signal-breaker-dev/art/psi-rpg-ui-parts-v1.png",
+      "bytes": 2345439,
+      "sha256": "55b1768dae14d5aabbef64774443b313bb24bb0f448cbf3e9b18b7b5f6909ea1"
+    },
+    {
+      "path": "/signal-breaker-dev/art/psi-rpg-world-v1.png",
+      "bytes": 2844052,
+      "sha256": "94d155475c0bbe56ac236b672c15cd0e2ab99573f52b00dde3924fab33e85b41"
+    },
+    {
       "path": "/signal-breaker-dev/art/psi-shield-chip-v1.webp",
       "bytes": 61006,
       "sha256": "a29926fc0f0aad5e3efb9d6691b55e58fad9f15bd22e90227985b1dd8e3f5e26"
@@ -306,8 +326,8 @@
     },
     {
       "path": "/signal-breaker-dev/index.html",
-      "bytes": 14839,
-      "sha256": "619654378aca7abcb0abff1bab63d42a62c1622824ff7ec490949cbb058524b8"
+      "bytes": 14888,
+      "sha256": "45b7fff040f8c807f7a64b624ca5eb471d5d4ce7675bbb4be9653331a17fca2b"
     },
     {
       "path": "/signal-breaker-dev/manifest.webmanifest",
@@ -316,13 +336,13 @@
     },
     {
       "path": "/signal-breaker-dev/service-worker.js",
-      "bytes": 6191,
-      "sha256": "17b546001620839c44353f3f6a7bb522b6ed4ea806f944ac291f33abdf8ee659"
+      "bytes": 6327,
+      "sha256": "89d8dd81d692c9f9391e9ac82b149d4191e54311318771ac32e62b8595e159eb"
     },
     {
       "path": "/signal-breaker-dev/src/app.js",
-      "bytes": 105882,
-      "sha256": "2d90e55d7d0c8dfc1ff62aa4c0a5321186c6e449b85e7c7214333c5801845890"
+      "bytes": 105906,
+      "sha256": "3518426344e99e6c09b0d8d5cf26b41ee0e23d3a444fad591ff1f0544f5e7a19"
     },
     {
       "path": "/signal-breaker-dev/src/boss-camera.js",
@@ -423,6 +443,11 @@
       "path": "/signal-breaker-dev/src/premium-sound.js",
       "bytes": 13980,
       "sha256": "e2b9021de395d9d395133196d0c228fea9de2fd323821637bcb87932a99444e6"
+    },
+    {
+      "path": "/signal-breaker-dev/src/psi-rpg-art.css",
+      "bytes": 1146,
+      "sha256": "ce0bc02b517a235dce0866cac57532cd051212536144ed0a9ddff31fcb1043cb"
     },
     {
       "path": "/signal-breaker-dev/src/psi-workshop.css",
